@@ -9,7 +9,7 @@ import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
 import Header from 'web/pages/groups/Header';
 import RoleDetails from 'web/pages/roles/RoleDetails';
-import Row from 'web/pages/roles/RoleTableRow';
+import RoleTableRow from 'web/pages/roles/RoleTableRow';
 
 export const SORT_FIELDS = [
   {
@@ -22,7 +22,7 @@ export const SORT_FIELDS = [
 const RolesTable = createEntitiesTable({
   emptyTitle: _l('No Roles available'),
   header: Header,
-  row: Row,
+  row: RoleTableRow,
   rowDetails: withRowDetails('role')(RoleDetails),
   footer: createEntitiesFooter({
     download: 'roles.xml',

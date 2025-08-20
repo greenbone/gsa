@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import Role from 'gmp/models/role';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableRow from 'web/components/table/TableRow';
@@ -13,7 +14,25 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import {SelectionTypeType} from 'web/utils/SelectionType';
+
+export interface RoleActionsProps {
+  entity: Role;
+  selectionType?: SelectionTypeType;
+  onRoleCloneClick?: (role: Role) => void;
+  onRoleDeleteClick?: (role: Role) => void;
+  onRoleDownloadClick?: (role: Role) => void;
+  onRoleEditClick?: (role: Role) => void;
+  onEntitySelected?: (role: Role) => void;
+  onEntityDeselected?: (role: Role) => void;
+}
+
+export interface RoleTableRowProps extends RoleActionsProps {
+  actionsComponent?: React.ComponentType<RoleActionsProps>;
+  links?: boolean;
+  'data-testid'?: string;
+  onToggleDetailsClick?: (entity: Role) => void;
+}
 
 const Actions = withEntitiesActions(
   ({
@@ -22,7 +41,7 @@ const Actions = withEntitiesActions(
     onRoleDeleteClick,
     onRoleDownloadClick,
     onRoleEditClick,
-  }) => {
+  }: RoleActionsProps) => {
     const [_] = useTranslation();
 
     return (
@@ -44,7 +63,6 @@ const Actions = withEntitiesActions(
           entity={entity}
           name="role"
           title={_('Clone Role')}
-          value={entity}
           onClick={onRoleCloneClick}
         />
         <ExportIcon
@@ -57,42 +75,44 @@ const Actions = withEntitiesActions(
   },
 );
 
-Actions.propTypes = {
-  entity: PropTypes.model,
-  onRoleCloneClick: PropTypes.func,
-  onRoleDeleteClick: PropTypes.func,
-  onRoleDownloadClick: PropTypes.func,
-  onRoleEditClick: PropTypes.func,
-};
-
-const Row = ({
-  actionsComponent: ActionsComponent = Actions,
+const RoleTableRow = ({
+  actionsComponent:
+    ActionsComponent = Actions as unknown as React.ComponentType<RoleActionsProps>,
   entity,
   links = true,
   onToggleDetailsClick,
-  ...props
-}) => {
+  selectionType,
+  'data-testid': dataTestId,
+  onEntityDeselected,
+  onEntitySelected,
+  onRoleCloneClick,
+  onRoleDeleteClick,
+  onRoleDownloadClick,
+  onRoleEditClick,
+}: RoleTableRowProps) => {
   const [_] = useTranslation();
 
   return (
-    <TableRow>
+    <TableRow data-testid={dataTestId}>
       <EntityNameTableData
         displayName={_('Role')}
         entity={entity}
-        link={links}
+        links={links}
         type="role"
         onToggleDetailsClick={onToggleDetailsClick}
       />
-      <ActionsComponent {...props} entity={entity} />
+      <ActionsComponent
+        entity={entity}
+        selectionType={selectionType}
+        onEntityDeselected={onEntityDeselected}
+        onEntitySelected={onEntitySelected}
+        onRoleCloneClick={onRoleCloneClick}
+        onRoleDeleteClick={onRoleDeleteClick}
+        onRoleDownloadClick={onRoleDownloadClick}
+        onRoleEditClick={onRoleEditClick}
+      />
     </TableRow>
   );
 };
 
-Row.propTypes = {
-  actionsComponent: PropTypes.component,
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
-};
-
-export default Row;
+export default RoleTableRow;
