@@ -30,7 +30,8 @@
     "preview": "vite preview",
     "i18n-extract": "i18next",
     "type-check": "tsc --noEmit",
-    "type-check:watch": "tsc --noEmit --watch"
+    "type-check:watch": "tsc --noEmit --watch",
+    "clear:node_modules": "rm -rf node_modules && npm install"
   },
   "engines": {
     "node": ">=20.0"
