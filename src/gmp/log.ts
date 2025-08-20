@@ -5,7 +5,7 @@
 
 import {isDefined, isString} from 'gmp/utils/identity';
 
-type LogLevel = keyof typeof LogLevels;
+export type LogLevel = keyof typeof LogLevels;
 
 export const DEFAULT_LOG_LEVEL = 'error';
 export const LOG_LEVEL_DEBUG = 'debug';
