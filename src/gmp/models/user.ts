@@ -27,7 +27,7 @@ interface Hosts {
   allow?: string;
 }
 
-interface UserProperties extends ModelProperties {
+export interface UserProperties extends ModelProperties {
   roles?: Model[];
   groups?: Model[];
   hosts?: Hosts;

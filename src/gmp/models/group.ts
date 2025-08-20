@@ -10,7 +10,7 @@ interface GroupElement extends ModelElement {
   users?: string;
 }
 
-interface GroupProperties extends ModelProperties {
+export interface GroupProperties extends ModelProperties {
   users?: string[];
 }
 
