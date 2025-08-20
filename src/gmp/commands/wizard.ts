@@ -6,6 +6,7 @@
 import {feedStatusRejection} from 'gmp/commands/feedstatus';
 import HttpCommand from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
+import Rejection from 'gmp/http/rejection';
 import Response from 'gmp/http/response';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
 import Credential from 'gmp/models/credential';
@@ -178,7 +179,7 @@ class WizardCommand extends HttpCommand {
         name: 'quick_first_scan',
       });
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection);
+      await feedStatusRejection(this.http, rejection as Rejection);
     }
   }
 
@@ -220,7 +221,7 @@ class WizardCommand extends HttpCommand {
         name: 'quick_task',
       });
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection);
+      await feedStatusRejection(this.http, rejection as Rejection);
     }
   }
 

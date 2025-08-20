@@ -9,9 +9,9 @@ import {
   SCAP_FEED,
   CERT_FEED,
   GVMD_DATA_FEED,
+  Feed,
 } from 'gmp/commands/feedstatus';
-import {parseInt} from 'gmp/parser';
-import {hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {
   CertBundAdvIcon,
   CpeLogoIcon,
@@ -42,7 +42,18 @@ import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface FeedStatusProps {
+  feeds: Feed[];
+}
+
+interface FeedCheckProps {
+  feed: Feed;
+}
+
+interface FeedStatusDisplayProps {
+  feed: Feed;
+}
 
 const ToolBarIcons = () => {
   const [_] = useTranslation();
@@ -57,11 +68,11 @@ const ToolBarIcons = () => {
   );
 };
 
-const FeedCheck = ({feed}) => {
+const FeedCheck = ({feed}: FeedCheckProps) => {
   const [_] = useTranslation();
-  const age = feed.age.asDays();
+  const age = feed.age;
 
-  if (age >= 30 && !hasValue(feed.currentlySyncing)) {
+  if (age >= 30 && !feed.currentlySyncing) {
     return (
       <span>
         {_('Please check the automatic synchronization of your system.')}
@@ -72,40 +83,36 @@ const FeedCheck = ({feed}) => {
   return null;
 };
 
-FeedCheck.propTypes = {
-  feed: PropTypes.object.isRequired,
-};
-
-const FeedStatusDisplay = ({feed}) => {
+const FeedStatusDisplay = ({feed}: FeedStatusDisplayProps) => {
   const [_] = useTranslation();
 
-  if (hasValue(feed.currentlySyncing)) {
+  if (feed.currentlySyncing) {
     return <span>{_('Update in progress...')}</span>;
   }
 
-  if (hasValue(feed.syncNotAvailable)) {
-    const {error} = feed.syncNotAvailable;
-    return <span>{_('Synchronization issue: {{error}}', {error})}</span>;
+  if (isDefined(feed.syncNotAvailableError)) {
+    return (
+      <span>
+        {_('Synchronization issue: {{error}}', {
+          error: feed.syncNotAvailableError,
+        })}
+      </span>
+    );
   }
 
-  const age = parseInt(feed.age.asDays());
-
+  const {age} = feed;
   if (age >= 30) {
-    return <span>{_('Too old ({{age}} days)', {age})}</span>;
+    return <span>{_('Too old ({{age}} days)', {age: String(age)})}</span>;
   }
 
   if (age >= 2) {
-    return <span>{_('{{age}} days old', {age})}</span>;
+    return <span>{_('{{age}} days old', {age: String(age)})}</span>;
   }
 
   return <span>{_('Current')}</span>;
 };
 
-FeedStatusDisplay.propTypes = {
-  feed: PropTypes.object.isRequired,
-};
-
-const FeedStatus = ({feeds}) => {
+const FeedStatus = ({feeds}: FeedStatusProps) => {
   const [_] = useTranslation();
   return (
     <React.Fragment>
@@ -225,22 +232,17 @@ const FeedStatus = ({feeds}) => {
   );
 };
 
-FeedStatus.propTypes = {
-  feeds: PropTypes.array,
-};
-
 const FeedStatusWrapper = () => {
   const gmp = useGmp();
-  const [feeds, setFeeds] = useState([]);
+  const [feeds, setFeeds] = useState<Feed[]>([]);
 
-  const loadFeeds = () =>
-    gmp.feedstatus.readFeedInformation().then(response => {
-      const {data} = response;
-      setFeeds(data);
-    });
+  const loadFeeds = async () => {
+    const response = await gmp.feedstatus.readFeedInformation();
+    setFeeds(response.data);
+  };
 
-  const calculateSyncInterval = (feedsArray = []) => {
-    const isSyncing = feedsArray.some(feed => hasValue(feed.currentlySyncing));
+  const calculateSyncInterval = (feedsArray: Feed[] = []) => {
+    const isSyncing = feedsArray.some(feed => feed.currentlySyncing === true);
 
     return isSyncing
       ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
@@ -249,7 +251,7 @@ const FeedStatusWrapper = () => {
 
   return (
     <Reload
-      name={'feedstatus'}
+      name="feedstatus"
       reload={loadFeeds}
       reloadInterval={(feedsArray = feeds) => calculateSyncInterval(feedsArray)}
     >

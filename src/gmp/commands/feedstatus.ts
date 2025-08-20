@@ -3,12 +3,54 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import registerCommand from 'gmp/command';
 import HttpCommand from 'gmp/commands/http';
+import GmpHttp from 'gmp/http/gmp';
+import Rejection from 'gmp/http/rejection';
+import {XmlResponseData} from 'gmp/http/transform/fastxml';
 import _ from 'gmp/locale';
-import date, {duration} from 'gmp/models/date';
-import {parseDate} from 'gmp/parser';
+import logger from 'gmp/log';
+import date from 'gmp/models/date';
+import {parseBoolean, parseDate, YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+
+export interface Feed {
+  feedType: string;
+  name: string;
+  description: string;
+  status?: string;
+  currentlySyncing?: boolean;
+  syncNotAvailableError?: string;
+  version: string;
+  age: number;
+}
+
+interface FeedElement {
+  description: string;
+  name: string;
+  type: string;
+  version: number;
+  status?: string;
+  currently_syncing?: {
+    timestamp?: string;
+  };
+  sync_not_available?: {
+    error?: string;
+  };
+}
+
+export interface FeedStatusElement extends XmlResponseData {
+  get_feeds: {
+    get_feeds_response: {
+      feed: FeedElement | FeedElement[];
+      feed_owner_set?: YesNo;
+      feed_resources_access?: YesNo;
+      feed_roles_set?: YesNo;
+    };
+  };
+}
+
+const log = logger.getLogger('gmp.commands.feedstatus');
 
 export const NVT_FEED = 'NVT';
 export const CERT_FEED = 'CERT';
@@ -18,10 +60,10 @@ export const GVMD_DATA_FEED = 'GVMD_DATA';
 export const FEED_COMMUNITY = 'Greenbone Community Feed';
 export const FEED_ENTERPRISE = 'Greenbone Enterprise Feed';
 
-const convertVersion = version =>
+const convertVersion = (version: number) =>
   `${version}`.slice(0, 8) + 'T' + `${version}`.slice(8, 12);
 
-export function createFeed(feed) {
+export function createFeed(feed: FeedElement): Feed {
   const versionDate = convertVersion(feed.version);
   const lastUpdate = parseDate(versionDate);
 
@@ -30,22 +72,25 @@ export function createFeed(feed) {
     name: feed.name,
     description: feed.description,
     status: feed.status,
-    currentlySyncing: feed.currently_syncing,
-    syncNotAvailable: feed.sync_not_available,
+    currentlySyncing: isDefined(feed.currently_syncing),
+    syncNotAvailableError: feed.sync_not_available?.error,
     version: versionDate,
-    age: duration(date().diff(lastUpdate)),
+    age: date().diff(lastUpdate, 'days'),
   };
 }
 
-export const feedStatusRejection = async (http, rejection) => {
+export const feedStatusRejection = async (
+  http: GmpHttp,
+  rejection: Rejection,
+) => {
   if (rejection?.status === 404) {
-    const feedStatus = new FeedStatus(http);
-    const {isFeedOwner, isFeedResourcesAccess} =
+    const feedStatus = new FeedStatusCommand(http);
+    const {isFeedOwnerSet, isFeedResourcesAccess} =
       await feedStatus.checkFeedOwnerAndPermissions();
     const syncMessage = _(
       'This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
     );
-    if (!isFeedOwner) {
+    if (!isFeedOwnerSet) {
       rejection.setMessage(
         `${_('The feed owner is currently not set.')} ${syncMessage}`,
       );
@@ -66,27 +111,24 @@ export const feedStatusRejection = async (http, rejection) => {
   throw rejection;
 };
 
-export class FeedStatus extends HttpCommand {
-  constructor(http) {
+export class FeedStatusCommand extends HttpCommand {
+  constructor(http: GmpHttp) {
     super(http, {cmd: 'get_feeds'});
   }
 
-  readFeedInformation() {
-    return this.httpGet().then(response => {
-      const {data: envelope} = response;
-      const {get_feeds_response: feedsResponse} = envelope.get_feeds;
-
-      const feeds = map(feedsResponse.feed, feed => createFeed(feed));
-
-      return response.setData(feeds);
-    });
+  async readFeedInformation() {
+    const response = await this.httpGet();
+    const envelope = response.data as FeedStatusElement;
+    const {get_feeds_response: feedsResponse} = envelope.get_feeds;
+    const feeds = map(feedsResponse.feed, feed => createFeed(feed));
+    return response.setData(feeds);
   }
 
   /**
    * Checks if any feed is currently syncing or if required feeds are not present.
    *
-   * @returns {Promise<{isSyncing: boolean string}>} - A promise that resolves to an object indicating if any feed is syncing or if required feeds are not present or if there was an error.
-   * @throws {Error} - Throws an error if there is an issue fetching feed information.
+   * @returns A promise that resolves to an object indicating if any feed is syncing or if required feeds are not present or if there was an error.
+   * @throws Throws an error if there is an issue fetching feed information.
    */
 
   async checkFeedSync() {
@@ -94,7 +136,7 @@ export class FeedStatus extends HttpCommand {
       const response = await this.readFeedInformation();
 
       const isFeedSyncing = response.data.some(
-        feed => feed.currentlySyncing || feed.syncNotAvailable,
+        feed => feed.currentlySyncing || isDefined(feed.syncNotAvailableError),
       );
 
       const isNotPresent =
@@ -105,7 +147,7 @@ export class FeedStatus extends HttpCommand {
         isSyncing: isFeedSyncing || isNotPresent,
       };
     } catch (error) {
-      console.error('Error checking if feed is syncing:', error);
+      log.error('Error checking if feed is syncing:', error);
       throw error;
     }
   }
@@ -114,31 +156,29 @@ export class FeedStatus extends HttpCommand {
    * Checks if the current user is the owner of the feed and if they have access to feed resources.
    *
    * @async
-   * @function checkFeedOwnerAndPermissions
-   * @returns {Promise<Object>} An object containing two boolean properties:
+   * @returns An object containing two boolean properties:
    * - `isFeedOwner`: Indicates if the user is the owner of the feed.
    * - `isFeedResourcesAccess`: Indicates if the user has access to feed resources.
    * @throws Will throw an error if the HTTP request fails.
    */
   async checkFeedOwnerAndPermissions() {
     try {
-      const {
-        data: {
-          get_feeds: {
-            get_feeds_response: {
-              feed_owner_set: feedOwner,
-              feed_resources_access: feedResourcesAccess,
-            },
-          },
-        },
-      } = await this.httpGet();
+      const response = await this.httpGet();
+      const data = response.data as FeedStatusElement;
+      const isFeedOwnerSet = parseBoolean(
+        data.get_feeds.get_feeds_response.feed_owner_set,
+      );
+      const isFeedResourcesAccess = parseBoolean(
+        data.get_feeds.get_feeds_response.feed_resources_access,
+      );
 
-      const feedOwnerBoolean = Boolean(feedOwner);
-      const feedResourcesAccessBoolean = Boolean(feedResourcesAccess);
-
+      log.debug('Checking feed owner and permissions...', {
+        isFeedOwnerSet,
+        isFeedResourcesAccess,
+      });
       return {
-        isFeedOwner: feedOwnerBoolean,
-        isFeedResourcesAccess: feedResourcesAccessBoolean,
+        isFeedOwnerSet,
+        isFeedResourcesAccess,
       };
     } catch (error) {
       console.error('Error checking feed owner and permissions:', error);
@@ -158,5 +198,3 @@ export class FeedStatus extends HttpCommand {
     }
   }
 }
-
-registerCommand('feedstatus', FeedStatus);
