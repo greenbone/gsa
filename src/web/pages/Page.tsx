@@ -17,7 +17,10 @@ import Main from 'web/components/structure/Main';
 import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import CommunityFeedUsageNotification from 'web/pages/login/notifications/CommunityFeedUsageNotification';
-import PropTypes from 'web/utils/PropTypes';
+
+interface PageProps {
+  children: React.ReactNode;
+}
 
 const StyledLayout = styled(Layout)`
   height: calc(-48px + 100vh);
@@ -35,7 +38,7 @@ const ScrollableMenuContainer = styled.div`
   max-width: 250px;
 `;
 
-const Page = ({children}) => {
+const Page = ({children}: PageProps) => {
   const capabilities = useLoadCapabilities();
   const location = useLocation();
   const [_] = useTranslation();
@@ -69,10 +72,6 @@ const Page = ({children}) => {
       </StyledLayout>
     </CapabilitiesContext.Provider>
   );
-};
-
-Page.propTypes = {
-  children: PropTypes.node.isRequired,
 };
 
 export default Page;
