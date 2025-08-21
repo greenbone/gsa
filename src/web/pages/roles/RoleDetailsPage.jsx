@@ -49,6 +49,7 @@ import {
 import {selector, loadEntity} from 'web/store/entities/roles';
 import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
+
 const ToolBarIcons = ({
   entity,
   onRoleCloneClick,
@@ -156,7 +157,6 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-
   ...props
 }) => {
   const [_] = useTranslation();
@@ -172,7 +172,7 @@ const Page = ({
       onDownloaded={onDownloaded}
       onSaved={onChanged}
     >
-      {({clone, create, delete: delete_func, download, edit, save}) => (
+      {({clone, create, delete: deleteFunc, download, edit, save}) => (
         <EntityPage
           {...props}
           entity={entity}
@@ -181,7 +181,7 @@ const Page = ({
           toolBarIcons={ToolBarIcons}
           onRoleCloneClick={clone}
           onRoleCreateClick={create}
-          onRoleDeleteClick={delete_func}
+          onRoleDeleteClick={deleteFunc}
           onRoleDownloadClick={download}
           onRoleEditClick={edit}
           onRoleSaveClick={save}
