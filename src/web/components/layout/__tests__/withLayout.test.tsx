@@ -7,7 +7,9 @@ import {describe, test, expect} from '@gsa/testing';
 import {render} from 'web/testing';
 import withLayout from 'web/components/layout/withLayout';
 
-const MyComp = props => <div {...props} />;
+const MyComp = (props: React.HTMLAttributes<HTMLDivElement>) => (
+  <div {...props} />
+);
 
 describe('withLayout HOC tests', () => {
   test('should create a new component', () => {
@@ -77,13 +79,13 @@ describe('withLayout HOC tests', () => {
   });
 
   test('should create a new component with shrink: 1', () => {
-    const Comp = withLayout({shrink: 1})(MyComp);
+    const Comp = withLayout({shrink: '1'})(MyComp);
     const {element} = render(<Comp />);
     expect(element).toMatchSnapshot();
   });
 
   test('should create a new component with shrink: 666', () => {
-    const Comp = withLayout({shrink: 666})(MyComp);
+    const Comp = withLayout({shrink: '666'})(MyComp);
     const {element} = render(<Comp />);
     expect(element).toMatchSnapshot();
   });
