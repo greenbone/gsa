@@ -181,7 +181,7 @@ export class FeedStatusCommand extends HttpCommand {
         isFeedResourcesAccess,
       };
     } catch (error) {
-      console.error('Error checking feed owner and permissions:', error);
+      log.error('Error checking feed owner and permissions:', error);
       throw error;
     }
   }
@@ -192,9 +192,10 @@ export class FeedStatusCommand extends HttpCommand {
 
       const nvtFeed = data.find(feed => feed.feedType === NVT_FEED);
 
-      return nvtFeed && nvtFeed.name === FEED_ENTERPRISE;
+      return nvtFeed?.name === FEED_ENTERPRISE;
     } catch (error) {
-      console.error('Error checking if feed is enterprise:', error);
+      log.error('Error checking if feed is enterprise:', error);
+      throw error;
     }
   }
 }
