@@ -163,8 +163,11 @@ function EntitiesTable<
   const [allToggled, setAllToggled] = useState<boolean>(false);
   const [_] = useTranslation();
 
-  const handleToggleShowDetails = (entity: TEntity, entityId: string) => {
-    const rowId = entity.id ?? entityId;
+  const handleToggleShowDetails = (
+    entity: TEntity | undefined,
+    entityId: string,
+  ) => {
+    const rowId = entity?.id ?? entityId;
     setDetails(details => ({...details, [rowId]: !details[rowId]}));
   };
 
