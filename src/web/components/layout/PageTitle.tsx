@@ -7,11 +7,14 @@ import {useEffect} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import {applianceTitle} from 'web/utils/applianceData';
-import PropTypes from 'web/utils/PropTypes';
+
+interface PageTitleProps {
+  title?: string;
+}
 
 export const DEFAULT_TITLE = 'Greenbone Security Assistant';
 
-const PageTitle = ({title: pageTitle}) => {
+const PageTitle = ({title: pageTitle}: PageTitleProps) => {
   const gmp = useGmp();
   const vendorLabel = gmp?.settings?.vendorLabel || 'defaultVendorLabel';
   const vendorTitle = gmp?.settings?.vendorTitle;
@@ -30,10 +33,6 @@ const PageTitle = ({title: pageTitle}) => {
   }, [title, pageTitle]);
 
   return null;
-};
-
-PageTitle.propTypes = {
-  title: PropTypes.string,
 };
 
 export default PageTitle;
