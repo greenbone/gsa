@@ -7,13 +7,13 @@ import {SET_SYNC_STATUS, SET_ERROR} from 'web/store/feedStatus/actions';
 
 const initialState = {
   isSyncing: false,
-  error: null,
+  error: undefined,
 };
 
 const feedStatus = (state = initialState, action) => {
   switch (action.type) {
     case SET_SYNC_STATUS:
-      return {...state, isSyncing: action.payload, error: null};
+      return {...state, isSyncing: action.payload, error: undefined};
     case SET_ERROR:
       return {...state, error: action.payload};
     default:
