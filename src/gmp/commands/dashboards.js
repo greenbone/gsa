@@ -88,10 +88,10 @@ class DashboardCommand extends HttpCommand {
     });
   }
 
-  saveSetting(id, settings = {}) {
+  async saveSetting(id, settings = {}) {
     log.debug('Saving dashboard settings', id, settings);
 
-    return this.action({
+    await this.httpPost({
       setting_id: id,
       setting_value: JSON.stringify(settings),
       cmd: 'save_setting',
