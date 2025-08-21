@@ -4,11 +4,12 @@
  */
 
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import ManualLink from 'web/components/link/ManualLink';
 import {
   useFeedSyncStatus,
   useFeedSyncDialog,
-} from 'web/components/notification/FeedSyncNotification/Helpers';
+} from 'web/components/notification/FeedSyncNotification/hooks';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -31,16 +32,17 @@ const FeedSyncNotification = () => {
 
   return (
     <NotificationWrapper>
+      {/* @ts-expect-error */}
       <InfoPanel
         heading={
-          feedStatus.error
+          isDefined(feedStatus.error)
             ? _('Error fetching the feed')
             : _('Feed is currently syncing.')
         }
-        isWarning={Boolean(feedStatus.error)}
+        isWarning={isDefined(feedStatus.error)}
         onCloseClick={handleCloseFeedSyncNotification}
       >
-        {feedStatus.error ? (
+        {isDefined(feedStatus.error) ? (
           <p>
             {_(
               `There was an error fetching the feed. It will be retried in a few minutes.`,

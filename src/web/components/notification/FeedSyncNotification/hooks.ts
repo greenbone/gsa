@@ -5,8 +5,14 @@
 
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import Rejection from 'gmp/http/rejection';
 import useGmp from 'web/hooks/useGmp';
 import {setSyncStatus, setError} from 'web/store/feedStatus/actions';
+
+interface FeedStatus {
+  isSyncing?: boolean;
+  error?: string;
+}
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 const THIRTY_SECONDS = 30 * 1000;
@@ -14,7 +20,6 @@ const THIRTY_SECONDS = 30 * 1000;
 /**
  * Custom hook to check the feed sync status updating the store with the response
  * at regular intervals defined by `FIVE_MINUTES`.
- * @returns {void}
  */
 
 export const useFeedSyncStatus = () => {
@@ -27,11 +32,11 @@ export const useFeedSyncStatus = () => {
         const response = await gmp.feedstatus.checkFeedSync();
         dispatch(setSyncStatus(response.isSyncing));
       } catch (error) {
-        dispatch(setError(error.toString()));
+        dispatch(setError((error as Error | Rejection).message));
       }
     };
 
-    fetchAndDispatch();
+    void fetchAndDispatch();
     const intervalId = setInterval(fetchAndDispatch, FIVE_MINUTES);
 
     return () => clearInterval(intervalId);
@@ -45,8 +50,14 @@ export const useFeedSyncStatus = () => {
  * An array containing the dialog state, a function to set the dialog state, and the feed status.
  */
 
-export const useFeedSyncDialog = () => {
-  const feedStatus = useSelector(state => state.feedStatus);
+export const useFeedSyncDialog = (): [
+  boolean,
+  React.Dispatch<React.SetStateAction<boolean>>,
+  FeedStatus,
+] => {
+  const feedStatus = useSelector<{feedStatus: FeedStatus}, FeedStatus>(
+    state => state.feedStatus,
+  );
 
   const [isFeedSyncDialogOpened, setIsFeedSyncDialogOpened] = useState(false);
 
