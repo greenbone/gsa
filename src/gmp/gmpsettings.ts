@@ -14,18 +14,18 @@ import {
 interface GmpSettingsOptions {
   apiProtocol?: string;
   apiServer?: string;
-  enableEPSS?: boolean;
-  enableKrb5?: boolean;
-  enableGreenboneSensor?: boolean;
   disableLoginForm?: boolean;
-  enableStoreDebugLog?: boolean;
   enableAssetManagement?: boolean;
-  guestUsername?: string;
+  enableEPSS?: boolean;
+  enableGreenboneSensor?: boolean;
+  enableKrb5?: boolean;
+  enableStoreDebugLog?: boolean;
   guestPassword?: string;
+  guestUsername?: string;
   loglevel?: string;
   logLevel?: string;
-  manualUrl?: string;
   manualLanguageMapping?: LanguageMapping;
+  manualUrl?: string;
   protocol?: string;
   protocolDocUrl?: string;
   reloadInterval?: number;
@@ -35,9 +35,9 @@ interface GmpSettingsOptions {
   server?: string;
   severityRating?: SeverityRating;
   timeout?: number;
-  vendorVersion?: string;
   vendorLabel?: string;
   vendorTitle?: string;
+  vendorVersion?: string;
 }
 
 interface GmpSettingsStorage {
