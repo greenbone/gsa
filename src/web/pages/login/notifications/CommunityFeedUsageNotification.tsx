@@ -49,8 +49,15 @@ const CommunityFeedUsageNotification: React.FC = () => {
       const hasBeenShown =
         sessionStorage.getItem(NOTIFICATION_SHOWN_KEY) === NOTIFICATION_SHOWN;
 
-      // @ts-expect-error
-      const isEnterpriseFeed: boolean = await gmp.feedstatus.isEnterpriseFeed();
+      let isEnterpriseFeed = false;
+      try {
+        isEnterpriseFeed = await gmp.feedstatus.isEnterpriseFeed();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        // don't show notification in case of an error
+        // we just don't know if it's an enterprise feed or not
+        isEnterpriseFeed = false;
+      }
 
       if (!isEnterpriseFeed) {
         if (!hasBeenShown) {
