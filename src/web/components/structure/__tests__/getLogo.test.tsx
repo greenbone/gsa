@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, render} from 'web/testing';
 import getLogo from 'web/components/structure/getLogo';
+import {ApplianceLogo} from 'web/utils/applianceData';
 
 describe('getLogo', () => {
   const testCases = [
@@ -27,13 +28,13 @@ describe('getLogo', () => {
     ['gsm-tera_label.svg', 'EnterpriseTera'],
   ];
 
-  test.each(testCases)('returns %s for %s', (model, expectedTestId) => {
-    render(getLogo(model));
+  test.each(testCases)('returns %s for %s', (logo, expectedTestId) => {
+    render(getLogo(logo as ApplianceLogo));
     expect(screen.getByTestId(expectedTestId)).toBeInTheDocument();
   });
 
   test('returns undefined for unknown model', () => {
-    const result = getLogo('unknown_model.svg');
+    const result = getLogo('unknown_model.svg' as ApplianceLogo);
     expect(result).toBeUndefined();
   });
 });

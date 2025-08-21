@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, screen, userEvent, waitFor} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import Header from 'web/components/structure/Header';
 import {
   setTimezone,
@@ -16,7 +16,7 @@ const gmp = {
   settings: {
     vendorLabel: 'gsm-150_label.svg',
   },
-  doLogout: testing.fn().mockResolvedValue(),
+  doLogout: testing.fn().mockResolvedValue(undefined),
 };
 
 describe('Header', () => {
@@ -72,17 +72,11 @@ describe('Header', () => {
     render(<Header />);
 
     const settingsBtn = screen.getByText('testUser');
-    userEvent.click(settingsBtn);
-
-    await waitFor(() => {
-      expect(screen.getByText('Settings')).toBeVisible();
-    });
+    fireEvent.mouseOver(settingsBtn);
+    await waitFor(() => screen.getByText('Settings'));
 
     const logoutBtn = screen.getByText('Logout');
-    userEvent.click(logoutBtn);
-
-    await waitFor(() => {
-      expect(gmp.doLogout).toHaveBeenCalled();
-    });
+    fireEvent.click(logoutBtn);
+    expect(gmp.doLogout).toHaveBeenCalled();
   });
 });
