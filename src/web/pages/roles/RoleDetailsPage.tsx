@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {useNavigate} from 'react-router';
+import Gmp from 'gmp/gmp';
 import Filter from 'gmp/models/filter';
+import Permission from 'gmp/models/permission';
+import Role from 'gmp/models/role';
 import {RoleIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import Tab from 'web/components/tab/Tab';
@@ -30,10 +28,7 @@ import EntityNameTableData from 'web/entities/EntityNameTableData';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import CloneIcon from 'web/entity/icon/CloneIcon';
-import CreateIcon from 'web/entity/icon/CreateIcon';
-import EditIcon from 'web/entity/icon/EditIcon';
-import TrashIcon from 'web/entity/icon/TrashIcon';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
@@ -42,72 +37,49 @@ import withEntityContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import RoleComponent from 'web/pages/roles/RoleComponent';
 import RoleDetails from 'web/pages/roles/RoleDetails';
+import RoleDetailsPageToolBarIcons from 'web/pages/roles/RoleDetailsPageToolBarIcons';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/roles';
-import PropTypes from 'web/utils/PropTypes';
-import {permissionDescription} from 'web/utils/Render';
+import {
+  permissionDescription,
+  simplePermissionDescription,
+} from 'web/utils/Render';
 
-const ToolBarIcons = ({
-  entity,
-  onRoleCloneClick,
-  onRoleCreateClick,
-  onRoleDeleteClick,
-  onRoleDownloadClick,
-  onRoleEditClick,
-}) => {
-  const [_] = useTranslation();
+interface RoleDetailsPageProps {
+  entity: Role;
+  generalPermissions?: Permission[];
+  isLoading?: boolean;
+  links?: boolean;
+  permissions?: Permission[];
+  onError: (error: Error) => void;
+  onChanged: () => void;
+  onDownloaded?: OnDownloadedFunc;
+}
 
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="managing-roles"
-          page="web-interface-access"
-          title={_('Help: Roles')}
-        />
-        <ListIcon page="roles" title={_('Roles List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon entity={entity} onClick={onRoleCreateClick} />
-        <CloneIcon entity={entity} onClick={onRoleCloneClick} />
-        <EditIcon entity={entity} onClick={onRoleEditClick} />
-        <TrashIcon entity={entity} onClick={onRoleDeleteClick} />
-        <ExportIcon
-          title={_('Export Role as XML')}
-          value={entity}
-          onClick={onRoleDownloadClick}
-        />
-      </IconDivider>
-    </Divider>
-  );
-};
+interface DetailsProps {
+  entity: Role;
+}
 
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onRoleCloneClick: PropTypes.func.isRequired,
-  onRoleCreateClick: PropTypes.func.isRequired,
-  onRoleDeleteClick: PropTypes.func.isRequired,
-  onRoleDownloadClick: PropTypes.func.isRequired,
-  onRoleEditClick: PropTypes.func.isRequired,
-};
+interface GeneralPermissionsProps {
+  permissions?: Permission[];
+  links?: boolean;
+}
 
-const Details = ({entity, links}) => {
+const Details = ({entity}: DetailsProps) => {
   return (
     <Layout flex="column">
-      <RoleDetails entity={entity} links={links} />
+      <RoleDetails entity={entity} />
     </Layout>
   );
 };
 
-Details.propTypes = {
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-};
-
-const GeneralPermissions = ({permissions = [], links}) => {
+const GeneralPermissions = ({
+  permissions = [],
+  links,
+}: GeneralPermissionsProps) => {
   const [_] = useTranslation();
   return (
     <Layout title={_('General Command Permissions')}>
@@ -130,7 +102,16 @@ const GeneralPermissions = ({permissions = [], links}) => {
                     type="permission"
                   />
                   <TableData>
-                    {permissionDescription(perm.name, perm.resource)}
+                    {perm.resource
+                      ? permissionDescription(
+                          perm.name,
+                          {
+                            name: perm.resource.name || '',
+                            entityType: perm.resource.entityType || '',
+                          },
+                          undefined,
+                        )
+                      : simplePermissionDescription(perm.name || '')}
                   </TableData>
                 </TableRow>
               );
@@ -144,52 +125,52 @@ const GeneralPermissions = ({permissions = [], links}) => {
   );
 };
 
-GeneralPermissions.propTypes = {
-  links: PropTypes.bool,
-  permissions: PropTypes.array,
-};
-
-const Page = ({
+const RoleDetailsPage = ({
   entity,
   generalPermissions = [],
-  links = true,
+  isLoading = true,
   permissions = [],
   onChanged,
   onDownloaded,
   onError,
-  ...props
-}) => {
+}: RoleDetailsPageProps) => {
   const [_] = useTranslation();
-
+  const navigate = useNavigate();
   return (
     <RoleComponent
       onCloneError={onError}
-      onCloned={goToDetails('role', props)}
-      onCreated={goToDetails('role', props)}
+      onCloned={goToDetails('role', navigate)}
+      onCreated={goToDetails('role', navigate)}
       onDeleteError={onError}
-      onDeleted={goToList('roles', props)}
+      onDeleted={goToList('roles', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onSaved={onChanged}
     >
-      {({clone, create, delete: deleteFunc, download, edit, save}) => (
-        <EntityPage
-          {...props}
+      {({clone, create, delete: deleteFunc, download, edit}) => (
+        <EntityPage<Role>
           entity={entity}
+          entityType="role"
+          isLoading={isLoading}
           sectionIcon={<RoleIcon size="large" />}
           title={_('Role')}
-          toolBarIcons={ToolBarIcons}
-          onRoleCloneClick={clone}
-          onRoleCreateClick={create}
-          onRoleDeleteClick={deleteFunc}
-          onRoleDownloadClick={download}
-          onRoleEditClick={edit}
-          onRoleSaveClick={save}
+          toolBarIcons={
+            <RoleDetailsPageToolBarIcons
+              entity={entity}
+              onRoleCloneClick={clone}
+              onRoleCreateClick={create}
+              onRoleDeleteClick={deleteFunc}
+              onRoleDownloadClick={download}
+              onRoleEditClick={edit}
+            />
+          }
         >
           {() => {
             return (
-              <React.Fragment>
-                <PageTitle title={_('Role: {{name}}', {name: entity.name})} />
+              <>
+                <PageTitle
+                  title={_('Role: {{name}}', {name: entity.name || ''})}
+                />
                 <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
                     <TabList align={['start', 'stretch']}>
@@ -209,7 +190,7 @@ const Page = ({
                   <Tabs>
                     <TabPanels>
                       <TabPanel>
-                        <Details entity={entity} links={links} />
+                        <Details entity={entity} />
                       </TabPanel>
                       <TabPanel>
                         <GeneralPermissions permissions={generalPermissions} />
@@ -222,7 +203,7 @@ const Page = ({
                         />
                       </TabPanel>
                       <TabPanel>
-                        <EntityPermissions
+                        <EntityPermissions<Role>
                           entity={entity}
                           permissions={permissions}
                           onChanged={onChanged}
@@ -233,7 +214,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>
@@ -242,23 +223,13 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  generalPermissions: PropTypes.array,
-  links: PropTypes.bool,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-};
-
-const generalPermissionsFilter = id =>
+const generalPermissionsFilter = (id: string) =>
   Filter.fromString('subject_uuid=' + id + ' and resource_uuid=""').all();
 
-const load = gmp => {
+const load = (gmp: Gmp) => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
+  return (id: string) => dispatch =>
     Promise.all([
       dispatch(loadEntityFunc(id)),
       dispatch(loadPermissionsFunc(permissionsSubjectFilter(id))),
@@ -266,7 +237,7 @@ const load = gmp => {
     ]);
 };
 
-const mapStateToProps = (rootState, {id}) => {
+const mapStateToProps = (rootState: unknown, {id}: {id: string}) => {
   const permissionsSel = permissionsSelector(rootState);
   return {
     permissions: permissionsSel.getEntities(permissionsSubjectFilter(id)),
@@ -280,4 +251,4 @@ export default withEntityContainer('role', {
   entitySelector: selector,
   load,
   mapStateToProps,
-})(Page);
+})(RoleDetailsPage);
