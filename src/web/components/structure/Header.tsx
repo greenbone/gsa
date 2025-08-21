@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback} from 'react';
+import React, {useCallback} from 'react';
 import {AppHeader} from '@greenbone/opensight-ui-components-mantinev7';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
@@ -16,6 +16,8 @@ import useManualURL from 'web/hooks/useManualURL';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
+import {ApplianceLogo} from 'web/utils/applianceData';
+
 const Header = () => {
   const [_] = useTranslation();
 
@@ -23,28 +25,21 @@ const Header = () => {
   const [username] = useUserName();
   const [loggedIn] = useUserIsLoggedIn();
   const navigate = useNavigate();
-  const logoComponent = getLogo(gmp.settings.vendorLabel);
-  const timezone = useSelector(state => state.userSettings.timezone);
+  const logoComponent = getLogo(gmp?.settings?.vendorLabel as ApplianceLogo);
+  const timezone = useSelector<{userSettings: {timezone: string}}, string>(
+    state => state.userSettings.timezone,
+  );
   const manualURL = useManualURL();
 
-  const handleSettingsClick = useCallback(
-    event => {
-      event.preventDefault();
-      navigate('/usersettings');
-    },
-    [navigate],
-  );
+  const handleSettingsClick = useCallback(async () => {
+    await navigate('/usersettings');
+  }, [navigate]);
 
-  const handleLogout = useCallback(
-    event => {
-      event.preventDefault();
-
-      gmp.doLogout().then(() => {
-        navigate('/login?type=logout');
-      });
-    },
-    [gmp, navigate],
-  );
+  const handleLogout = useCallback(() => {
+    void gmp.doLogout().then(() => {
+      return navigate('/login?type=logout');
+    });
+  }, [gmp, navigate]);
 
   const menuPoints = [
     {

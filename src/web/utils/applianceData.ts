@@ -18,6 +18,8 @@ import {
   EnterpriseTera,
 } from 'web/components/icon/GreenboneApplianceLogo';
 
+export type ApplianceLogo = keyof typeof APPLIANCE_DATA;
+
 const APPLIANCE_DATA = {
   'gsm-150_label.svg': {
     title: 'Greenbone - 150',
