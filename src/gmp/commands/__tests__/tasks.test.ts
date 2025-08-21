@@ -18,8 +18,9 @@ import {
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
+import GmpHttp from 'gmp/http/gmp';
 import Rejection from 'gmp/http/rejection';
-import logger from 'gmp/log';
+import logger, {LogLevel} from 'gmp/log';
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -30,7 +31,7 @@ import {
   AUTO_DELETE_KEEP,
 } from 'gmp/models/task';
 
-let logLevel;
+let logLevel: LogLevel;
 
 beforeAll(() => {
   logLevel = logger.level;
@@ -192,7 +193,7 @@ describe('TaskCommand tests', () => {
     async ({feedsResponse, message, expectedMessage}) => {
       const xhr = {
         status: 404,
-      };
+      } as XMLHttpRequest;
       const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
@@ -204,7 +205,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      };
+      } as unknown as GmpHttp;
 
       const cmd = new TaskCommand(fakeHttp);
       await expect(
@@ -229,13 +230,10 @@ describe('TaskCommand tests', () => {
   );
 
   test('should create new container task', async () => {
-    const response = createActionResultResponse();
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
+    const mockResponse = createActionResultResponse();
+    const fakeHttp = createHttp(mockResponse);
     const cmd = new TaskCommand(fakeHttp);
-    const resp = await cmd.createContainer({
+    const response = await cmd.createContainer({
       name: 'foo',
       comment: 'comment',
     });
@@ -248,18 +246,14 @@ describe('TaskCommand tests', () => {
         usage_type: 'scan',
       },
     });
-    const {data} = resp;
-    expect(data.id).toEqual('foo');
+    expect(response.data).toEqual({id: 'foo'});
   });
 
   test('should save task', async () => {
-    const response = createActionResultResponse();
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
+    const mockResponse = createActionResultResponse();
+    const fakeHttp = createHttp(mockResponse);
     const cmd = new TaskCommand(fakeHttp);
-    const resp = await cmd.save({
+    const response = await cmd.save({
       alterable: 0,
       apply_overrides: 0,
       auto_delete: AUTO_DELETE_KEEP,
@@ -281,24 +275,23 @@ describe('TaskCommand tests', () => {
         auto_delete_data: undefined,
         cmd: 'save_task',
         comment: 'comment',
-        config_id: 0,
+        config_id: '0',
         hosts_ordering: HOSTS_ORDERING_RANDOM,
         in_assets: 0,
         max_checks: 10,
         max_hosts: 10,
         min_qod: 70,
         name: 'foo',
-        scanner_id: 0,
+        scanner_id: '0',
         scanner_type: undefined,
-        schedule_id: 0,
+        schedule_id: '0',
         schedule_periods: undefined,
         task_id: 'task1',
-        target_id: 0,
+        target_id: '0',
         usage_type: 'scan',
       },
     });
-    const {data} = resp;
-    expect(data.id).toEqual('foo');
+    expect(response).toBeUndefined();
   });
 
   test.each([
@@ -342,7 +335,11 @@ describe('TaskCommand tests', () => {
       const xhr = {
         status: 404,
       };
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new Rejection(
+        xhr as XMLHttpRequest,
+        Rejection.REASON_ERROR,
+        message,
+      );
       const feedStatusResponse = createResponse({
         get_feeds: {
           get_feeds_response: feedsResponse,
@@ -353,7 +350,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      };
+      } as unknown as GmpHttp;
 
       const cmd = new TaskCommand(fakeHttp);
       await expect(
@@ -375,13 +372,10 @@ describe('TaskCommand tests', () => {
   );
 
   test('should save task with all parameters', async () => {
-    const response = createActionResultResponse();
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
+    const mockResponse = createActionResultResponse();
+    const fakeHttp = createHttp(mockResponse);
     const cmd = new TaskCommand(fakeHttp);
-    const resp = await cmd.save({
+    const response = await cmd.save({
       alterable: 0,
       alert_ids: ['a1', 'a2'],
       apply_overrides: 0,
@@ -427,8 +421,7 @@ describe('TaskCommand tests', () => {
         usage_type: 'scan',
       },
     });
-    const {data} = resp;
-    expect(data.id).toEqual('foo');
+    expect(response).toBeUndefined();
   });
 
   test('should throw an error if feed is currently syncing', async () => {

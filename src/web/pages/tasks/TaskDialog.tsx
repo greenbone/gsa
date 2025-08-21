@@ -77,7 +77,7 @@ interface TaskDialogDefaultValues {
   max_checks?: number;
   max_hosts?: number;
   min_qod?: number;
-  name?: string;
+  name: string;
   schedule_periods?: YesNo;
   tag_id?: string;
   tags?: RenderSelectItemProps[];
@@ -204,7 +204,7 @@ const TaskDialog = ({
   max_hosts = DEFAULT_MAX_HOSTS,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   min_qod = DEFAULT_MIN_QOD,
-  name,
+  name = '',
   // eslint-disable-next-line @typescript-eslint/naming-convention
   scan_configs = [],
   // eslint-disable-next-line @typescript-eslint/naming-convention
