@@ -22,8 +22,10 @@ written in [React](https://reactjs.org/).
   - [Config Variables](#config-variables)
     - [vendorVersion](#vendorversion)
     - [vendorLabel](#vendorlabel)
+    - [vendorTitle](#vendortitle)
     - [guestUsername and guestPassword](#guestusername-and-guestpassword)
     - [disableLoginForm](#disableloginform)
+    - [enableCommunityFeedNotification](#enablecommunityfeednotification)
     - [enableEPSS](#enableepss)
     - [enableKrb5](#enablekrb5)
     - [enableStoreDebugLog](#enablestoredebuglog)
@@ -228,31 +230,33 @@ instantiated once for the [GSA application](./src/web/app.js#L53)
 
 ### Config Variables
 
-| Name                                              | Type                       | Default                                                                          | Changeable during runtime | Persistent after reload |
-| ------------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------- | ------------------------- | ----------------------- |
-| [apiProtocol](#apiprotocol)                       | String ('http' or 'https') | `global.location.protocol`                                                       | -                         | x                       |
-| [apiServer](#apiserver)                           | String                     | `global.location.host`                                                           | -                         | x                       |
-| enableGreenboneSensor                             | Boolean                    | false                                                                            | -                         | x                       |
-| [disableLoginForm](#disableloginform)             | Boolean                    | false                                                                            | -                         | x                       |
-| [enableEPSS](#enableepss)                         | Boolean                    | false                                                                            | x                         | x                       |
-| [enableKrb5](#enablekrb5)                         | Boolean                    | false                                                                            | x                         | x                       |
-| [enableStoreDebugLog](#enablestoredebuglog)       | Boolean                    | false                                                                            | x                         | x                       |
-| [guestUsername](#guestusername-and-guestpassword) | String                     | undefined                                                                        | -                         | x                       |
-| [guestPassword](#guestusername-and-guestpassword) | String                     | undefined                                                                        | -                         | x                       |
-| locale                                            | String                     | undefined                                                                        | x                         | x                       |
-| [logLevel](#loglevel)                             | String                     | [`'warn'`](./src/gmp/gmpsettings.js#L27)                                         | x                         | x                       |
-| [manualUrl](#manualurl)                           | String                     | [https://docs.greenbone.net/GSM-Manual/gos-22.04/](./src/gmp/gmpsettings.js#L24) | -                         | x                       |
-| [manualLanguageMapping](#manuallanguagemapping)   | Object                     | undefined                                                                        | -                         | x                       |
-| [protocolDocUrl](#protocoldocurl)                 | String                     | [https://docs.greenbone.net/API/GMP/gmp-22.4.html](./src/gmp/gmpsettings.js#L25) | -                         | x                       |
-| [reloadInterval](#reloadinterval)                 | Integer                    | [15 \* 1000; // fifteen seconds](./src/gmp/gmpsettings.js#L21)                   | x                         | -                       |
-| [reloadIntervalActive](#reloadintervalactive)     | Integer                    | [3 \* 1000; // three seconds](./src/gmp/gmpsettings.js#L22)                      | x                         | -                       |
-| [reloadIntervalInactive](#reloadintervalinactive) | Integer                    | [60 \* 1000; // one minute](./src/gmp/gmpsettings.js#L22)                        | x                         | -                       |
-| [reportResultsThreshold](#reportresultsthreshold) | Integer                    | [25000](./src/gmp/gmpsettings.js#L26)                                            | x                         | -                       |
-| [timeout](#timeout)                               | Integer                    | [300000; // 5 minutes](./src/gmp/gmpsettings.js#L28)                             | x                         | -                       |
-| [severityRating](#severityrating)                 | `'CVSSv2'` or `'CVSSv3'`   | `'CVSSv2'`                                                                       | -                         | x                       |
-| [vendorVersion](#vendorversion)                   | String                     | undefined                                                                        | -                         | x                       |
-| [vendorLabel](#vendorlabel)                       | String                     | undefined                                                                        | -                         | x                       |
-| [vendorTitle](#vendorTitle)                       | String                     | Greenbone Security Assistant                                                     | x                         | x                       |
+| Name                                                                | Type                       | Default                                                                          | Changeable during runtime | Persistent after reload |
+| ------------------------------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------- | ------------------------- | ----------------------- |
+| [apiProtocol](#apiprotocol)                                         | String ('http' or 'https') | `global.location.protocol`                                                       | -                         | x                       |
+| [apiServer](#apiserver)                                             | String                     | `global.location.host`                                                           | -                         | x                       |
+| enableGreenboneSensor                                               | Boolean                    | false                                                                            | -                         | x                       |
+| [disableLoginForm](#disableloginform)                               | Boolean                    | false                                                                            | -                         | x                       |
+| [enableCommunityFeedNotification](#enablecommunityfeednotification) | Boolean                    | true                                                                             | x                         | x                       |
+| [enableEPSS](#enableepss)                                           | Boolean                    | false                                                                            | x                         | x                       |
+| [enableKrb5](#enablekrb5)                                           | Boolean                    | false                                                                            | x                         | x                       |
+| [enableStoreDebugLog](#enablestoredebuglog)                         | Boolean                    | false                                                                            | x                         | x                       |
+| [guestUsername](#guestusername-and-guestpassword)                   | String                     | undefined                                                                        | -                         | x                       |
+| [guestPassword](#guestusername-and-guestpassword)                   | String                     | undefined                                                                        | -                         | x                       |
+| locale                                                              | String                     | undefined                                                                        | x                         | x                       |
+| [logLevel](#loglevel)                                               | String                     | [`'warn'`](./src/gmp/gmpsettings.js#L27)                                         | x                         | x                       |
+| [manualUrl](#manualurl)                                             | String                     | [https://docs.greenbone.net/GSM-Manual/gos-22.04/](./src/gmp/gmpsettings.js#L24) | -                         | x                       |
+| [manualLanguageMapping](#manuallanguagemapping)                     | Object                     | undefined                                                                        | -                         | x                       |
+| [protocolDocUrl](#protocoldocurl)                                   | String                     | [https://docs.greenbone.net/API/GMP/gmp-22.4.html](./src/gmp/gmpsettings.js#L25) | -                         | x                       |
+| [reloadInterval](#reloadinterval)                                   | Integer                    | [15 \* 1000; // fifteen seconds](./src/gmp/gmpsettings.js#L21)                   | x                         | -                       |
+| [reloadIntervalActive](#reloadintervalactive)                       | Integer                    | [3 \* 1000; // three seconds](./src/gmp/gmpsettings.js#L22)                      | x                         | -                       |
+| [reloadIntervalInactive](#reloadintervalinactive)                   | Integer                    | [60 \* 1000; // one minute](./src/gmp/gmpsettings.js#L22)                        | x                         | -                       |
+| [reportResultsThreshold](#reportresultsthreshold)                   | Integer                    | [25000](./src/gmp/gmpsettings.js#L26)                                            | x                         | -                       |
+| [timeout](#timeout)                                                 | Integer                    | [300000; // 5 minutes](./src/gmp/gmpsettings.js#L28)                             | x                         | -                       |
+| [severityRating](#severityrating)                                   | `'CVSSv2'` or `'CVSSv3'`   | `'CVSSv2'`                                                                       | -                         | x                       |
+| [vendorVersion](#vendorversion)                                     | String                     | undefined                                                                        | -                         | x                       |
+| [vendorLabel](#vendorlabel)                                         | String                     | undefined                                                                        | -                         | x                       |
+| [vendorTitle](#vendortitle)                                         | String                     | Greenbone Security Assistant                                                     | x                         | x                       |
+
 #### vendorVersion
 
 Allows to adjust the shown product version string at the Login and About pages.
@@ -279,6 +283,11 @@ will be shown.
 
 This setting allows to deactivate the username password form at the Login page.
 It can be used to deactivate login for _normal_ users.
+
+#### enableCommunityFeedNotification
+
+Enables the notification about using the community feed. It is enabled by
+default.
 
 #### enableEPSS
 

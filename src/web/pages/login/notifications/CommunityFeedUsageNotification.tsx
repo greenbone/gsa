@@ -59,7 +59,7 @@ const CommunityFeedUsageNotification: React.FC = () => {
         isEnterpriseFeed = false;
       }
 
-      if (!isEnterpriseFeed) {
+      if (!isEnterpriseFeed && gmp.settings.enableCommunityFeedNotification) {
         if (!hasBeenShown) {
           showNotification({
             id: COMMUNITY_FEED_USAGE_NOTIFICATION_ID,

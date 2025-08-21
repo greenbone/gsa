@@ -16,6 +16,7 @@ interface GmpSettingsOptions {
   apiServer?: string;
   disableLoginForm?: boolean;
   enableAssetManagement?: boolean;
+  enableCommunityFeedNotification?: boolean;
   enableEPSS?: boolean;
   enableGreenboneSensor?: boolean;
   enableKrb5?: boolean;
@@ -103,6 +104,7 @@ class GmpSettings {
   readonly apiServer!: string;
   readonly disableLoginForm!: boolean;
   readonly enableAssetManagement!: boolean;
+  readonly enableCommunityFeedNotification: boolean;
   readonly enableEPSS!: boolean;
   readonly enableGreenboneSensor!: boolean;
   readonly enableKrb5!: boolean;
@@ -127,6 +129,7 @@ class GmpSettings {
       disableLoginForm = false,
       enableStoreDebugLog,
       enableAssetManagement = false,
+      enableCommunityFeedNotification = true,
       guestUsername,
       guestPassword,
       loglevel,
@@ -188,6 +191,7 @@ class GmpSettings {
       severityRating = DEFAULT_SEVERITY_RATING;
     }
 
+    this.enableCommunityFeedNotification = enableCommunityFeedNotification;
     this.logLevel = logLevel;
     this.reloadInterval = reloadInterval;
     this.reloadIntervalActive = reloadIntervalActive;

@@ -38,6 +38,9 @@ describe('CommunityFeedUsageNotification', () => {
       feedstatus: {
         isEnterpriseFeed,
       },
+      settings: {
+        enableCommunityFeedNotification: true,
+      },
     };
     const notificationTitle =
       'You are currently using the free Greenbone Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.';
@@ -72,6 +75,9 @@ describe('CommunityFeedUsageNotification', () => {
       feedstatus: {
         isEnterpriseFeed,
       },
+      settings: {
+        enableCommunityFeedNotification: true,
+      },
     };
     const {render} = rendererWith({gmp});
     localStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
@@ -96,6 +102,9 @@ describe('CommunityFeedUsageNotification', () => {
       feedstatus: {
         isEnterpriseFeed,
       },
+      settings: {
+        enableCommunityFeedNotification: true,
+      },
     };
     const {render} = rendererWith({gmp});
     localStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
@@ -112,6 +121,29 @@ describe('CommunityFeedUsageNotification', () => {
     const gmp = {
       feedstatus: {
         isEnterpriseFeed,
+      },
+      settings: {
+        enableCommunityFeedNotification: true,
+      },
+    };
+    const {render} = rendererWith({gmp});
+
+    render(<CommunityFeedUsageNotification />);
+
+    await wait();
+    expect(showNotification).toHaveBeenCalledTimes(0);
+    expect(updateNotification).toHaveBeenCalledTimes(0);
+    expect(isEnterpriseFeed).toHaveBeenCalledTimes(1);
+  });
+
+  test('should not show notification if the setting is disabled', async () => {
+    const isEnterpriseFeed = testing.fn().mockResolvedValue(false);
+    const gmp = {
+      feedstatus: {
+        isEnterpriseFeed,
+      },
+      settings: {
+        enableCommunityFeedNotification: false,
       },
     };
     const {render} = rendererWith({gmp});
