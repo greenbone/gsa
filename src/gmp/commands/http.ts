@@ -113,7 +113,10 @@ class HttpCommand {
     };
   }
 
-  httpGet(params: HttpCommandInputParams, options: HttpCommandOptions = {}) {
+  httpGet(
+    params: HttpCommandInputParams = {},
+    options: HttpCommandOptions = {},
+  ) {
     const {extraParams, includeDefaultParams, ...other} = options;
     return this.http.request('get', {
       args: this.getParams(params, extraParams, {includeDefaultParams}),
@@ -121,7 +124,10 @@ class HttpCommand {
     });
   }
 
-  httpPost(params: HttpCommandInputParams, options: HttpCommandOptions = {}) {
+  httpPost(
+    params: HttpCommandInputParams = {},
+    options: HttpCommandOptions = {},
+  ) {
     const {extraParams, includeDefaultParams, ...other} = options;
     return this.http.request('post', {
       data: this.postParams(params, extraParams, {includeDefaultParams}),
