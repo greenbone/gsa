@@ -12,7 +12,11 @@ import {
   FEED_ENTERPRISE,
   FeedStatusElement,
 } from 'gmp/commands/feedstatus';
-import {createResponse, createHttp} from 'gmp/commands/testing';
+import {
+  createResponse,
+  createHttp,
+  createHttpError,
+} from 'gmp/commands/testing';
 import GmpHttp from 'gmp/http/gmp';
 import Rejection from 'gmp/http/rejection';
 import logger from 'gmp/log';
@@ -284,17 +288,14 @@ describe('FeedStatusCommand tests', () => {
   });
 
   test('should return undefined and log an error if an exception occurs', async () => {
-    const fakeHttp = createHttp(Promise.reject(new Error('Network error')));
+    const fakeHttp = createHttpError(new Error('Network error'));
     const cmd = new FeedStatusCommand(fakeHttp);
+    const log = logger.getLogger('gmp.commands.feedstatus');
+    log.error = testing.fn();
 
-    const consoleErrorSpy = testing.fn();
-    console.error = consoleErrorSpy;
+    await expect(cmd.isEnterpriseFeed()).rejects.toThrowError('Network error');
 
-    const result = await cmd.isEnterpriseFeed();
-
-    expect(result).toBeUndefined();
-
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
+    expect(log.error).toHaveBeenCalledWith(
       'Error checking if feed is enterprise:',
       expect.any(Error),
     );
