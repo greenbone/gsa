@@ -29,7 +29,7 @@ vi.mock('@mantine/notifications', () => ({
 describe('CommunityFeedUsageNotification', () => {
   beforeEach(() => {
     testing.clearAllMocks();
-    sessionStorage.clear();
+    localStorage.clear();
   });
 
   test('shows notification if it has not been shown before', async () => {
@@ -61,7 +61,7 @@ describe('CommunityFeedUsageNotification', () => {
     const {title} = notificationArgs;
     render(title);
     expect(screen.getByText(notificationTitle)).toBeVisible();
-    expect(sessionStorage.getItem(NOTIFICATION_SHOWN_KEY)).toBe(
+    expect(localStorage.getItem(NOTIFICATION_SHOWN_KEY)).toBe(
       NOTIFICATION_SHOWN,
     );
   });
@@ -74,7 +74,7 @@ describe('CommunityFeedUsageNotification', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
+    localStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
 
     render(<CommunityFeedUsageNotification />);
 
@@ -98,7 +98,7 @@ describe('CommunityFeedUsageNotification', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
+    localStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
 
     render(<CommunityFeedUsageNotification />);
 
