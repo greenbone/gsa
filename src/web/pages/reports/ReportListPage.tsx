@@ -6,6 +6,7 @@
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
+import {TaskCommandCreateContainerParams} from 'gmp/commands/tasks';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import Report from 'gmp/models/report';
 import {isActive} from 'gmp/models/task';
@@ -134,14 +135,14 @@ const ReportListPage = ({
     setContainerTaskDialogVisible(false);
   };
 
-  const handleCreateContainerTask = data => {
-    // @ts-expect-error
-    return gmp.task.createContainer(data).then(response => {
-      const {data: task} = response;
-      void loadTasks();
-      setTaskId(task.id);
-      closeContainerTaskDialog();
-    });
+  const handleCreateContainerTask = async (
+    data: TaskCommandCreateContainerParams,
+  ) => {
+    const response = await gmp.task.createContainer(data);
+    const {data: task} = response;
+    void loadTasks();
+    setTaskId(task.id);
+    closeContainerTaskDialog();
   };
 
   const handleCloseContainerTask = () => {

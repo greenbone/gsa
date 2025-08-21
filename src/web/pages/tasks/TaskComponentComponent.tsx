@@ -5,10 +5,10 @@
 
 import React, {useState, useEffect, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
+import {EntityActionData} from 'gmp/commands/entity';
 import Rejection from 'gmp/http/rejection';
 import Response from 'gmp/http/response';
 import {XmlMeta} from 'gmp/http/transform/fastxml';
-import ActionResult from 'gmp/models/actionresult';
 import date, {Date} from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
@@ -96,13 +96,13 @@ interface TaskComponentProps {
   children?: (props: TaskComponentRenderProps) => React.ReactNode;
   onAdvancedTaskWizardError?: (error: Error) => void;
   onAdvancedTaskWizardSaved?: () => void;
-  onCloned?: (response: Response<ActionResult, XmlMeta>) => void;
+  onCloned?: (response: Response<EntityActionData, XmlMeta>) => void;
   onCloneError?: (error: Rejection) => void;
-  onContainerCreated?: (response: Response<ActionResult, XmlMeta>) => void;
+  onContainerCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
   onContainerCreateError?: (error: Rejection) => void;
-  onContainerSaved?: (response: Response<ActionResult, XmlMeta>) => void;
+  onContainerSaved?: () => void;
   onContainerSaveError?: (error: Rejection) => void;
-  onCreated?: (response: Response<ActionResult, XmlMeta>) => void;
+  onCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
   onCreateError?: (error: Rejection) => void;
   onDeleted?: () => void;
   onDeleteError?: (error: Rejection) => void;
@@ -114,7 +114,7 @@ interface TaskComponentProps {
   onReportImportError?: (error: Rejection) => void;
   onResumed?: (response: Response<Task, XmlMeta>) => void;
   onResumeError?: (error: Rejection) => void;
-  onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
+  onSaved?: () => void;
   onSaveError?: (error: Rejection) => void;
   onStarted?: () => void;
   onStartError?: (error: Rejection) => void;
@@ -142,7 +142,6 @@ const TaskComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-
   onModifyTaskWizardError,
   onModifyTaskWizardSaved,
   onReportImported,
@@ -184,7 +183,6 @@ const TaskComponent = ({
   const [hostsOrdering, setHostsOrdering] = useState<
     TaskHostsOrdering | undefined
   >();
-  const [id, setId] = useState<string | undefined>();
   const [inAssets, setInAssets] = useState<YesNo | undefined>();
   const [maxChecks, setMaxChecks] = useState<number | undefined>();
   const [maxHosts, setMaxHosts] = useState<number | undefined>();
@@ -423,7 +421,6 @@ const TaskComponent = ({
     setTask(task);
     setName(task ? task.name : _('Unnamed'));
     setComment(task ? task.comment : '');
-    setId(task ? task.id : undefined);
     setInAssets(task ? task.in_assets : undefined);
     setAutoDelete(task ? task.auto_delete : undefined);
     setAutoDeleteData(task ? task.auto_delete_data : undefined);
@@ -442,22 +439,32 @@ const TaskComponent = ({
     closeContainerTaskDialog();
   };
 
-  const handleSaveContainerTask = (data: ContainerTaskDialogData) => {
-    if (isDefined(data.id)) {
-      // @ts-expect-error
+  const handleSaveContainerTask = ({
+    id,
+    comment,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    in_assets,
+    name,
+  }: ContainerTaskDialogData) => {
+    if (isDefined(id)) {
       return gmp.task
-        .saveContainer(data)
+        .saveContainer({
+          id,
+          comment,
+          in_assets,
+          name,
+        })
         .then(onContainerSaved, onContainerSaveError)
         .then(() => closeContainerTaskDialog());
     }
 
-    return (
-      // @ts-expect-error
-      gmp.task
-        .createContainer(data)
-        .then(onContainerCreated, onContainerCreateError)
-        .then(() => closeContainerTaskDialog())
-    );
+    return gmp.task
+      .createContainer({
+        comment,
+        name,
+      })
+      .then(onContainerCreated, onContainerCreateError)
+      .then(() => closeContainerTaskDialog());
   };
 
   const handleSaveTask = ({
@@ -491,7 +498,6 @@ const TaskComponent = ({
         scannerId = undefined;
         configId = undefined;
       }
-      // @ts-expect-error
       return gmp.task
         .save({
           alert_ids: alertIds,
@@ -502,7 +508,7 @@ const TaskComponent = ({
           comment,
           config_id: configId,
           hosts_ordering: hostsOrdering,
-          id,
+          id: task.id as string,
           in_assets: inAssets,
           max_checks: maxChecks,
           max_hosts: maxHosts,
@@ -517,8 +523,6 @@ const TaskComponent = ({
         .then(onSaved, onSaveError)
         .then(() => closeTaskDialog());
     }
-
-    // @ts-expect-error
     return gmp.task
       .create({
         add_tag: addTag,
@@ -567,7 +571,6 @@ const TaskComponent = ({
     fetchTags();
 
     if (isDefined(task)) {
-      setId(task.id);
       setName(task.name as string);
       setComment(task.comment);
       setAlterable(task.alterable);
@@ -593,7 +596,6 @@ const TaskComponent = ({
       setTask(task);
       setTitle(_('Edit Task {{name}}', {name: task.name as string}));
     } else {
-      setId(undefined);
       setName(undefined);
       setComment(undefined);
       setAlterable(undefined);
