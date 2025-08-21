@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import {act, rendererWith} from 'web/testing';
+import Rejection from 'gmp/http/rejection';
 import {
   useFeedSyncStatus,
   useFeedSyncDialog,
-} from 'web/components/notification/FeedSyncNotification/Helpers';
+} from 'web/components/notification/FeedSyncNotification/hooks';
 
 const mockCheckFeedSync = testing.fn();
 
@@ -21,6 +22,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 const THIRTY_SECONDS = 30 * 1000;
 
 testing.useFakeTimers();
+
 describe('FeedSyncNotification helpers', () => {
   describe('useFeedSyncStatus Hook', () => {
     beforeEach(() => {
@@ -38,8 +40,9 @@ describe('FeedSyncNotification helpers', () => {
       await act(async () => Promise.resolve());
 
       expect(store.getState().feedStatus.isSyncing).toBe(true);
-      expect(store.getState().feedStatus.error).toBeNull();
+      expect(store.getState().feedStatus.error).toBeUndefined();
     });
+
     test('should dispatch setError on API call failure', async () => {
       const errorMessage = 'Network Error';
       mockCheckFeedSync.mockRejectedValue(new Error(errorMessage));
@@ -51,7 +54,26 @@ describe('FeedSyncNotification helpers', () => {
       await act(async () => Promise.resolve());
 
       expect(store.getState().feedStatus.isSyncing).toBe(false);
-      expect(store.getState().feedStatus.error).toBe(`Error: ${errorMessage}`);
+      expect(store.getState().feedStatus.error).toEqual(errorMessage);
+    });
+
+    test('should dispatch setError with Rejection on API call failure', async () => {
+      const errorMessage = 'Network Error';
+      const rejection = new Rejection(
+        {status: 500} as XMLHttpRequest,
+        'error',
+        errorMessage,
+      );
+      mockCheckFeedSync.mockRejectedValue(rejection);
+
+      const {renderHook, store} = rendererWith({store: true, gmp});
+
+      renderHook(() => useFeedSyncStatus());
+
+      await act(async () => Promise.resolve());
+
+      expect(store.getState().feedStatus.isSyncing).toBe(false);
+      expect(store.getState().feedStatus.error).toEqual(errorMessage);
     });
 
     test('should call API periodically', async () => {
