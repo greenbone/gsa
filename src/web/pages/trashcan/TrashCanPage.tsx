@@ -318,6 +318,7 @@ const TrashCan = () => {
           <span>
             <LinkTarget id="role" />
             <h1>{_('Roles')}</h1>
+            {/* @ts-expect-error */}
             <RolesTable entities={trash.roles} {...tableProps} />
           </span>
         )}
