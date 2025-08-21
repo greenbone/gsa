@@ -46,7 +46,7 @@ interface AuthSettingsResponseData extends XmlResponseData {
   };
 }
 
-interface GetSettingsResponse extends XmlResponseData {
+export interface GetSettingsResponse extends XmlResponseData {
   get_settings: {
     get_settings_response: {
       setting: SettingElement | SettingElement[];
