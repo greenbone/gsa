@@ -47,7 +47,7 @@ const CommunityFeedUsageNotification: React.FC = () => {
   useEffect(() => {
     async function notification() {
       const hasBeenShown =
-        sessionStorage.getItem(NOTIFICATION_SHOWN_KEY) === NOTIFICATION_SHOWN;
+        localStorage.getItem(NOTIFICATION_SHOWN_KEY) === NOTIFICATION_SHOWN;
 
       let isEnterpriseFeed = false;
       try {
@@ -67,7 +67,7 @@ const CommunityFeedUsageNotification: React.FC = () => {
             title: notificationMessage,
             message: '',
           });
-          sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
+          localStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
         } else if (hasBeenShown) {
           updateNotification({
             id: COMMUNITY_FEED_USAGE_NOTIFICATION_ID,
