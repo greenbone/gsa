@@ -10,7 +10,7 @@ interface HorizontalSepProps {
   $separator?: string;
   $spacing?: string;
   $wrap?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const HorizontalSep = styled(Divider)<HorizontalSepProps>`
