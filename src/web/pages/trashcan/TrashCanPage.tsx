@@ -34,7 +34,7 @@ import FiltersTable from 'web/pages/filters/Table';
 import GroupsTable from 'web/pages/groups/Table';
 import NotesTable from 'web/pages/notes/Table';
 import OverridesTable from 'web/pages/overrides/Table';
-import PermissionsTable from 'web/pages/permissions/Table';
+import PermissionsTable from 'web/pages/permissions/PermissionTable';
 import PoliciesTable from 'web/pages/policies/Table';
 import PortListTable from 'web/pages/portlists/PortListTable';
 import ReportConfigsTable from 'web/pages/reportconfigs/Table';

@@ -8,8 +8,8 @@ import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesHeader from 'web/entities/createEntitiesHeader';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
-import PermissionDetails from 'web/pages/permissions/Details';
-import Row from 'web/pages/permissions/Row';
+import PermissionDetails from 'web/pages/permissions/PermissionDetails';
+import PermissionTableRow from 'web/pages/permissions/PermissionTableRow';
 
 export const SORT_FIELDS = [
   {
@@ -44,10 +44,10 @@ export const SORT_FIELDS = [
   },
 ];
 
-const Table = createEntitiesTable({
+const PermissionTable = createEntitiesTable({
   emptyTitle: _l('No permissions available'),
   header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
+  row: PermissionTableRow,
   rowDetails: withRowDetails('permission')(PermissionDetails),
   footer: createEntitiesFooter({
     download: 'permissions.xml',
@@ -56,4 +56,4 @@ const Table = createEntitiesTable({
   }),
 });
 
-export default Table;
+export default PermissionTable;

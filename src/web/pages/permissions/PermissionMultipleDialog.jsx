@@ -26,7 +26,7 @@ const EntityName = styled.div`
   word-break: break-all;
 `;
 
-const MultiplePermissionDialog = ({
+const PermissionMultipleDialog = ({
   entityName = '',
   entityType = '',
   groupId,
@@ -187,11 +187,11 @@ const MultiplePermissionDialog = ({
             <FormGroup title={_('related resource(s)')}>
               {hasRelated && (
                 <ul>
-                  {state.related.map(rentity => (
-                    <li key={rentity.id}>
+                  {state.related.map(relatedEntity => (
+                    <li key={relatedEntity.id}>
                       <Divider>
-                        {typeName(getEntityType(rentity))}
-                        <i>{rentity.name}</i>
+                        {typeName(getEntityType(relatedEntity))}
+                        <i>{relatedEntity.name}</i>
                       </Divider>
                     </li>
                   ))}
@@ -205,7 +205,7 @@ const MultiplePermissionDialog = ({
   );
 };
 
-MultiplePermissionDialog.propTypes = {
+PermissionMultipleDialog.propTypes = {
   entityName: PropTypes.string,
   entityType: PropTypes.string,
   groupId: PropTypes.id,
@@ -230,4 +230,4 @@ MultiplePermissionDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default MultiplePermissionDialog;
+export default PermissionMultipleDialog;

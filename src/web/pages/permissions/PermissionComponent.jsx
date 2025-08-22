@@ -12,7 +12,7 @@ import EntityComponent from 'web/entity/EntityComponent';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PermissionDialog from 'web/pages/permissions/Dialog';
+import PermissionDialog from 'web/pages/permissions/PermissionDialog';
 import PropTypes from 'web/utils/PropTypes';
 
 const PermissionsComponent = ({

@@ -22,12 +22,12 @@ import Layout from 'web/components/layout/Layout';
 import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation, {TranslateFunc} from 'web/hooks/useTranslation';
-import MultiplePermissionDialog, {
+import PermissionMultipleDialog, {
   CURRENT_RESOURCE_ONLY,
   INCLUDE_RELATED_RESOURCES,
-} from 'web/pages/permissions/MultipleDialog';
-import PermissionComponent from 'web/pages/permissions/PermissionsComponent';
-import PermissionsTable from 'web/pages/permissions/Table';
+} from 'web/pages/permissions/PermissionMultipleDialog';
+import PermissionComponent from 'web/pages/permissions/PermissionComponent';
+import PermissionsTable from 'web/pages/permissions/PermissionTable';
 import compose from 'web/utils/Compose';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
@@ -256,7 +256,7 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
           />
         )}
         {multiplePermissionDialogVisible && (
-          <MultiplePermissionDialog
+          <PermissionMultipleDialog
             entityName={entityName}
             entityType={entityType}
             groupId={groupId}
