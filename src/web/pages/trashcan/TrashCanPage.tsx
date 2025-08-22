@@ -276,6 +276,7 @@ const TrashCan = () => {
           <span>
             <LinkTarget id="permission" />
             <h1>{_('Permissions')}</h1>
+            {/* @ts-expect-error */}
             <PermissionsTable entities={trash.permissions} {...tableProps} />
           </span>
         )}
