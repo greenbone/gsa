@@ -38,8 +38,8 @@ import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
 import AuthenticationCommand from 'gmp/commands/auth';
-import {DashboardCommand} from 'gmp/commands/dashboards';
-import {FeedStatusCommand} from 'gmp/commands/feedstatus';
+import DashboardCommand from 'gmp/commands/dashboards';
+import FeedStatusCommand from 'gmp/commands/feedstatus';
 import LoginCommand from 'gmp/commands/login';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';

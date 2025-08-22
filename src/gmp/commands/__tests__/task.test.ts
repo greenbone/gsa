@@ -11,7 +11,7 @@ import {
   afterAll,
   testing,
 } from '@gsa/testing';
-import {FeedStatusCommand} from 'gmp/commands/feedstatus';
+import FeedStatusCommand from 'gmp/commands/feedstatus';
 import TaskCommand from 'gmp/commands/task';
 import {
   createActionResultResponse,

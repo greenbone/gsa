@@ -85,7 +85,7 @@ const convertLoadedSettings = <
   };
 };
 
-export class DashboardCommand extends HttpCommand {
+class DashboardCommand extends HttpCommand {
   async getSetting(id: string) {
     const response = await this.httpGet({
       cmd: 'get_setting',
@@ -127,3 +127,5 @@ export class DashboardCommand extends HttpCommand {
     });
   }
 }
+
+export default DashboardCommand;
