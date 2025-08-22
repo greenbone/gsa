@@ -169,7 +169,7 @@ const RoleDetailsPage = ({
             return (
               <>
                 <PageTitle
-                  title={_('Role: {{name}}', {name: entity.name || ''})}
+                  title={_('Role: {{name}}', {name: entity.name as string})}
                 />
                 <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">

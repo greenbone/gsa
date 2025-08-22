@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
@@ -35,7 +34,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'name' : undefined}
+          sort={sort}
+          sortBy="name"
           title={_('Name')}
           width="92%"
           onSortChange={onSortChange}
@@ -46,4 +46,4 @@ const Header = ({
   );
 };
 
-export default withEntitiesHeader()(Header);
+export default withEntitiesHeader<HeaderProps>()(Header);
