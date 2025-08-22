@@ -6,9 +6,6 @@
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import Rejection from 'gmp/http/rejection';
-import Response from 'gmp/http/response';
-import {XmlMeta} from 'gmp/http/transform/fastxml';
-import ActionResult from 'gmp/models/actionresult';
 import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
 import Role from 'gmp/models/role';
@@ -45,14 +42,16 @@ interface DeletePermissionData {
   permissionId: string;
 }
 
+interface RoleComponentRenderProps {
+  create: (role?: Role) => void;
+  edit: (role: Role) => void;
+  clone: (role: Role) => void;
+  delete: (role: Role) => Promise<void>;
+  download: (role: Role) => void;
+}
+
 interface RoleComponentProps {
-  children: (props: {
-    create: (role?: Role) => void;
-    edit: (role: Role) => void;
-    clone: (role: Role) => void;
-    delete: (role: Role) => Promise<void>;
-    download: (role: Role) => void;
-  }) => React.ReactNode;
+  children: (props: RoleComponentRenderProps) => React.ReactNode;
   onCloneError?: (error: Rejection) => void;
   onCloned?: GotoDetailsFunc;
   onCreateError?: (error: Rejection) => void;
@@ -62,7 +61,7 @@ interface RoleComponentProps {
   onDownloadError?: (error: Rejection) => void;
   onDownloaded?: OnDownloadedFunc;
   onSaveError?: (error: Rejection) => void;
-  onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
+  onSaved?: () => void;
 }
 
 const RoleComponent = ({
@@ -112,13 +111,13 @@ const RoleComponent = ({
   const openRoleDialog = (role?: Role) => {
     dispatchLoadAllUsers();
 
-    if (isDefined(role) && role.id) {
+    if (isDefined(role?.id)) {
       void loadSettings(role.id);
 
       setDialogVisible(true);
       setIsInUse(role.isInUse());
       setRole(role);
-      setTitle(_('Edit Role {{name}}', {name: role.name || ''}));
+      setTitle(_('Edit Role {{name}}', {name: role.name as string}));
     } else {
       setAllPermissions(undefined);
       setDialogVisible(true);
