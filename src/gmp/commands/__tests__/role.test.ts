@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {RoleCommand} from 'gmp/commands/roles';
+import RoleCommand from 'gmp/commands/role';
 import {createHttp, createActionResultResponse} from 'gmp/commands/testing';
 
 describe('RoleCommand tests', () => {
