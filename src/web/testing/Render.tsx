@@ -26,7 +26,7 @@ import {
 import {userEvent, PointerEventsCheckLevel} from 'web/testing/event';
 
 export interface RendererOptions {
-  capabilities?: Capabilities | true;
+  capabilities?: Capabilities | boolean;
   gmp?: Record<string, unknown>;
   store?: Store | boolean;
   license?: Record<string, unknown>;
@@ -79,6 +79,8 @@ export const rendererWith = ({
 
   if (capabilities === true) {
     capabilities = new EverythingCapabilities();
+  } else if (capabilities === false) {
+    capabilities = new Capabilities();
   }
 
   const Providers = ({children}) => (
