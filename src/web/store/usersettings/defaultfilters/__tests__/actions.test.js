@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/users';
+import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/user';
 import Filter from 'gmp/models/filter';
 import {
   defaultFilterLoadingActions,
