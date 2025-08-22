@@ -9,11 +9,10 @@ import {
   createHttp,
   createActionResultResponse,
 } from 'gmp/commands/testing';
-import {
+import UserCommand, {
   CertificateInfo,
-  UserCommand,
   transformSettingName,
-} from 'gmp/commands/users';
+} from 'gmp/commands/user';
 
 describe('UserCommand tests', () => {
   test('should parse auth settings in currentAuthSettings', async () => {
