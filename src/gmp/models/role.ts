@@ -6,7 +6,7 @@
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {parseCsv} from 'gmp/parser';
 
-interface RoleElement extends ModelElement {
+export interface RoleElement extends ModelElement {
   users?: string;
 }
 

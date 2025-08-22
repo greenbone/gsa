@@ -6,18 +6,34 @@
 import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
+import GmpHttp from 'gmp/http/gmp';
+import {XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import Role from 'gmp/models/role';
+import {Element} from 'gmp/models/model';
+import Role, {RoleElement} from 'gmp/models/role';
 import {isArray} from 'gmp/utils/identity';
+
+interface RoleCommandCreateParams {
+  name: string;
+  comment?: string;
+  users?: string[] | string;
+}
+
+interface RoleCommandSaveParams {
+  id: string;
+  name: string;
+  comment?: string;
+  users?: string[] | string;
+}
 
 const log = logger.getLogger('gmp.commands.roles');
 
-class RoleCommand extends EntityCommand {
-  constructor(http) {
+export class RoleCommand extends EntityCommand<Role, RoleElement> {
+  constructor(http: GmpHttp) {
     super(http, 'role', Role);
   }
 
-  create({name, comment = '', users = []}) {
+  async create({name, comment = '', users = []}: RoleCommandCreateParams) {
     const data = {
       cmd: 'create_role',
       name,
@@ -25,10 +41,10 @@ class RoleCommand extends EntityCommand {
       users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Creating new role', data);
-    return this.action(data);
+    return await this.entityAction(data);
   }
 
-  save({id, name, comment = '', users = []}) {
+  async save({id, name, comment = '', users = []}: RoleCommandSaveParams) {
     const data = {
       cmd: 'save_role',
       id,
@@ -37,20 +53,22 @@ class RoleCommand extends EntityCommand {
       users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Saving role', data);
-    return this.action(data);
+    await this.httpPost(data);
   }
 
-  getElementFromRoot(root) {
+  getElementFromRoot(root: XmlResponseData): RoleElement {
+    // @ts-expect-error
     return root.get_role.get_roles_response.role;
   }
 }
 
-class RolesCommand extends EntitiesCommand {
-  constructor(http) {
+export class RolesCommand extends EntitiesCommand<Role> {
+  constructor(http: GmpHttp) {
     super(http, 'role', Role);
   }
 
-  getEntitiesResponse(root) {
+  getEntitiesResponse(root: Element) {
+    // @ts-expect-error
     return root.get_roles.get_roles_response;
   }
 }
