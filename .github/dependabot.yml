@@ -6,14 +6,12 @@ updates:
     schedule:
       interval: monthly
       time: '04:00'
-    cooldown:
-      include:
-        - 'vite@^6.3.5..7.x'
-        - '@vitejs/plugin-legacy@6.1.1..7.x'
-      default-days: 7
-      semver-major-days: 14
-      semver-minor-days: 14
-      semver-patch-days: 14
+    groups:
+      patch-updates:
+        patterns:
+          - '*'
+        update-types:
+          - 'patch'
     open-pull-requests-limit: 10
     versioning-strategy: increase
     ignore:
