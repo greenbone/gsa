@@ -75,7 +75,7 @@ export const testModelFromElement = <T extends Model>(
   test('should parse user tags', () => {
     const model = modelClass.fromElement({
       user_tags: {
-        tag: [{name: 'foo'}],
+        tag: [{_id: 'tag1', name: 'foo'}],
       },
     });
     expect(model.userTags).toBeDefined();

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {z} from 'zod';
 import {Date} from 'gmp/models/date';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {parseDate, parseSeverity, parseToString} from 'gmp/parser';
@@ -14,180 +15,272 @@ import {parseCvssV4MetricsFromVector} from 'gmp/parser/cvssV4';
 import {map} from 'gmp/utils/array';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
+import {validateAndCreate} from 'gmp/utils/zodModelValidation';
 
-interface CertRefElement {
-  name: string;
-  title: string;
-  _type: string;
-}
+type CveProperties = z.infer<typeof CvePropertiesSchema> & ModelProperties;
 
-interface NvtElement {
-  _oid: string;
-  name: string;
-}
+type CveElement = z.infer<typeof CveElementSchema> & ModelElement;
 
-interface RawReferenceElement {
-  reference?: {
-    __text: string;
-    _href: string;
-  };
-  source?: string;
-  _reference_type?: string;
-}
+const CertRefElementSchema = z.object({
+  name: z.string(),
+  title: z.string(),
+  _type: z.string(),
+});
 
-interface ReferenceElement {
-  url: string;
-  tags?: {
-    tag?: string | string[];
-  };
-}
+const NvtElementSchema = z.object({
+  _oid: z.string(),
+  name: z.string(),
+});
 
-interface CveElement extends ModelElement {
-  cve?: {
-    cert?: {
-      cert_ref?: CertRefElement | CertRefElement[];
-    };
-    configuration_nodes?: {
-      node?: Array<{
-        match_string?: {
-          vulnerable?: number;
-          criteria?: string;
-          matched_cpes?: {
-            cpe?: Array<{
-              _id: string;
-              deprecated?: number;
-            }>;
-          };
-          status?: string;
-          version_end_excluding?: string;
-          version_end_including?: string;
-          version_start_excluding?: string;
-          version_start_including?: string;
-        };
-        negate?: number;
-        operator?: string;
-      }>;
-    };
-    cvss_vector?: string;
-    description?: string;
-    epss?: {
-      percentile?: number;
-      score?: number;
-    };
-    nvts?: {
-      nvt?: NvtElement | NvtElement[];
-    };
-    products?: string;
-    raw_data?: {
-      entry?: {
-        _id?: string;
-        'cve-id'?: string;
-        cvss?: {
-          base_metrics?: {
-            'access-complexity': string;
-            'access-vector': string;
-            authentication: string;
-            'availability-impact': string;
-            'confidentiality-impact': string;
-            'integrity-impact': string;
-            score: number;
-            source: string;
-            'vector-string': string;
-          };
-          'generated-on-datetime'?: string;
-        };
-        cvss3?: {
-          base_metrics?: {
-            'attack-complexity': string;
-            'attack-vector': string;
-            'availability-impact': string;
-            'base-score': number;
-            'base-severity': string;
-            'confidentiality-impact': string;
-            'integrity-impact': string;
-            'privileges-required': string;
-            scope: string;
-            'user-interaction': string;
-            'vector-string': string;
-          };
-        };
-        'published-datetime'?: string;
-        'last-modified-datetime'?: string;
-        'vulnerable-software-list'?: {
-          product?: string | Array<string>;
-        };
-        references?: RawReferenceElement | RawReferenceElement[];
-      };
-    };
-    references?: {
-      reference?: ReferenceElement | ReferenceElement[];
-    };
-    severity?: number;
-  };
-  update_time?: string;
-}
+const RawReferenceElementSchema = z.object({
+  reference: z
+    .object({
+      __text: z.string(),
+      _href: z.string(),
+    })
+    .optional(),
+  source: z.string().optional(),
+  _reference_type: z.string().optional(),
+});
 
-interface Nvt {
-  id: string;
-  oid: string;
-  name: string;
-}
+const ReferenceElementSchema = z.object({
+  url: z.string(),
+  tags: z
+    .object({
+      tag: z.union([z.string(), z.array(z.string())]).optional(),
+    })
+    .optional(),
+});
 
-interface Cert {
-  name: string;
-  title: string;
-  cert_type: string;
-}
+const NvtSchema = z.object({
+  id: z.string(),
+  oid: z.string(),
+  name: z.string(),
+});
 
-interface Reference {
-  name?: string;
-  tags?: string[];
-  href?: string;
-  source?: string;
-  reference_type?: string;
-}
+const CertSchema = z.object({
+  name: z.string(),
+  title: z.string(),
+  cert_type: z.string(),
+});
 
-interface Epss {
-  percentile?: number;
-  score?: number;
-}
+const ReferenceSchema = z.object({
+  name: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  href: z.string().optional(),
+  source: z.string().optional(),
+  reference_type: z.string().optional(),
+});
 
-interface CveProperties extends ModelProperties {
-  certs?: Cert[];
-  cvssAccessComplexity?: string;
-  cvssAccessVector?: string;
-  cvssAttackComplexity?: string;
-  cvssAttackRequirements?: string;
-  cvssAttackVector?: string;
-  cvssAuthentication?: string;
-  cvssAvailabilityImpact?: string;
-  cvssAvailabilitySS?: string;
-  cvssAvailabilityVS?: string;
-  cvssBaseVector?: string;
-  cvssConfidentialityImpact?: string;
-  cvssConfidentialitySS?: string;
-  cvssConfidentialityVS?: string;
-  cvssIntegrityImpact?: string;
-  cvssIntegritySS?: string;
-  cvssIntegrityVS?: string;
-  cvssPrivilegesRequired?: string;
-  cvssScope?: string;
-  cvssUserInteraction?: string;
-  description?: string;
-  epss?: Epss;
-  lastModifiedTime?: Date;
-  nvts?: Nvt[];
-  products?: string[];
-  publishedTime?: Date;
-  references?: Reference[];
-  severity?: number;
-  updateTime?: Date;
-}
+const EpssSchema = z.object({
+  percentile: z.number().optional(),
+  score: z.number().optional(),
+});
+
+export const CvePropertiesSchema = z.object({
+  certs: z.array(CertSchema).optional(),
+  cvssAccessComplexity: z.string().optional(),
+  cvssAccessVector: z.string().optional(),
+  cvssAttackComplexity: z.string().optional(),
+  cvssAttackRequirements: z.string().optional(),
+  cvssAttackVector: z.string().optional(),
+  cvssAuthentication: z.string().optional(),
+  cvssAvailabilityImpact: z.string().optional(),
+  cvssAvailabilitySS: z.string().optional(),
+  cvssAvailabilityVS: z.string().optional(),
+  cvssBaseVector: z.string().optional(),
+  cvssConfidentialityImpact: z.string().optional(),
+  cvssConfidentialitySS: z.string().optional(),
+  cvssConfidentialityVS: z.string().optional(),
+  cvssIntegrityImpact: z.string().optional(),
+  cvssIntegritySS: z.string().optional(),
+  cvssIntegrityVS: z.string().optional(),
+  cvssPrivilegesRequired: z.string().optional(),
+  cvssScope: z.string().optional(),
+  cvssUserInteraction: z.string().optional(),
+  description: z.string().optional(),
+  epss: EpssSchema.optional(),
+  lastModifiedTime: z.custom<Date>().optional(),
+  nvts: z.array(NvtSchema).optional(),
+  products: z.array(z.string()).optional(),
+  publishedTime: z.custom<Date>().optional(),
+  references: z.array(ReferenceSchema).optional(),
+  severity: z.number().optional(),
+  updateTime: z.custom<Date>().optional(),
+});
+
+export const CveElementSchema = z.object({
+  cve: z
+    .object({
+      cert: z
+        .object({
+          cert_ref: z
+            .union([CertRefElementSchema, z.array(CertRefElementSchema)])
+            .optional(),
+        })
+        .optional(),
+      configuration_nodes: z
+        .object({
+          node: z
+            .array(
+              z.object({
+                match_string: z
+                  .object({
+                    vulnerable: z.number().optional(),
+                    criteria: z.string().optional(),
+                    matched_cpes: z
+                      .object({
+                        cpe: z
+                          .array(
+                            z.object({
+                              _id: z.string(),
+                              deprecated: z.number().optional(),
+                            }),
+                          )
+                          .optional(),
+                      })
+                      .optional(),
+                    status: z.string().optional(),
+                    version_end_excluding: z.string().optional(),
+                    version_end_including: z.string().optional(),
+                    version_start_excluding: z.string().optional(),
+                    version_start_including: z.string().optional(),
+                  })
+                  .optional(),
+                negate: z.number().optional(),
+                operator: z.string().optional(),
+              }),
+            )
+            .optional(),
+        })
+        .optional(),
+      cvss_vector: z.string().optional(),
+      description: z.string().optional(),
+      epss: z
+        .object({
+          percentile: z.number().optional(),
+          score: z.number().optional(),
+        })
+        .optional(),
+      nvts: z
+        .object({
+          nvt: z
+            .union([NvtElementSchema, z.array(NvtElementSchema)])
+            .optional(),
+        })
+        .optional(),
+      products: z.string().optional(),
+      raw_data: z
+        .object({
+          entry: z
+            .object({
+              _id: z.string().optional(),
+              'cve-id': z.string().optional(),
+              cvss: z
+                .object({
+                  base_metrics: z
+                    .object({
+                      'access-complexity': z.string(),
+                      'access-vector': z.string(),
+                      authentication: z.string(),
+                      'availability-impact': z.string(),
+                      'confidentiality-impact': z.string(),
+                      'integrity-impact': z.string(),
+                      score: z.number(),
+                      source: z.string(),
+                      'vector-string': z.string(),
+                    })
+                    .optional(),
+                  'generated-on-datetime': z.string().optional(),
+                })
+                .optional(),
+              cvss3: z
+                .object({
+                  base_metrics: z
+                    .object({
+                      'attack-complexity': z.string(),
+                      'attack-vector': z.string(),
+                      'availability-impact': z.string(),
+                      'base-score': z.number(),
+                      'base-severity': z.string(),
+                      'confidentiality-impact': z.string(),
+                      'integrity-impact': z.string(),
+                      'privileges-required': z.string(),
+                      scope: z.string(),
+                      'user-interaction': z.string(),
+                      'vector-string': z.string(),
+                    })
+                    .optional(),
+                })
+                .optional(),
+              'published-datetime': z.string().optional(),
+              'last-modified-datetime': z.string().optional(),
+              'vulnerable-software-list': z
+                .object({
+                  product: z
+                    .union([z.string(), z.array(z.string())])
+                    .optional(),
+                })
+                .optional(),
+              references: z
+                .union([
+                  RawReferenceElementSchema,
+                  z.array(RawReferenceElementSchema),
+                ])
+                .optional(),
+            })
+            .optional(),
+        })
+        .optional(),
+      references: z
+        .object({
+          reference: z
+            .union([ReferenceElementSchema, z.array(ReferenceElementSchema)])
+            .optional(),
+        })
+        .optional(),
+      severity: z.number().optional(),
+    })
+    .optional(),
+  update_time: z.string().optional(),
+});
+
+const CveSchema = z.object({
+  certs: z.array(CertSchema).optional(),
+  cvssAccessComplexity: z.string().optional(),
+  cvssAccessVector: z.string().optional(),
+  cvssAttackComplexity: z.string().optional(),
+  cvssAttackRequirements: z.string().optional(),
+  cvssAttackVector: z.string().optional(),
+  cvssAuthentication: z.string().optional(),
+  cvssAvailabilityImpact: z.string().optional(),
+  cvssAvailabilitySS: z.string().optional(),
+  cvssAvailabilityVS: z.string().optional(),
+  cvssBaseVector: z.string().optional(),
+  cvssConfidentialityImpact: z.string().optional(),
+  cvssConfidentialitySS: z.string().optional(),
+  cvssConfidentialityVS: z.string().optional(),
+  cvssIntegrityImpact: z.string().optional(),
+  cvssIntegritySS: z.string().optional(),
+  cvssIntegrityVS: z.string().optional(),
+  cvssPrivilegesRequired: z.string().optional(),
+  cvssScope: z.string().optional(),
+  cvssUserInteraction: z.string().optional(),
+  description: z.string().optional(),
+  epss: EpssSchema.optional(),
+  lastModifiedTime: z.custom<Date>().optional(),
+  nvts: z.array(NvtSchema).optional(),
+  products: z.array(z.string()).optional(),
+  publishedTime: z.custom<Date>().optional(),
+  references: z.array(ReferenceSchema).optional(),
+  severity: z.number().optional(),
+  updateTime: z.custom<Date>().optional(),
+});
 
 class Cve extends Model {
-  static entityType = 'cve';
+  static readonly entityType = 'cve';
 
-  readonly certs: Cert[];
+  readonly certs: z.infer<typeof CertSchema>[];
   readonly cvssAccessComplexity?: string;
   readonly cvssAccessVector?: string;
   readonly cvssAttackComplexity?: string;
@@ -208,12 +301,12 @@ class Cve extends Model {
   readonly cvssScope?: string;
   readonly cvssUserInteraction?: string;
   readonly description?: string;
-  readonly epss?: Epss;
+  readonly epss?: z.infer<typeof EpssSchema>;
   readonly lastModifiedTime?: Date;
-  readonly nvts: Nvt[];
+  readonly nvts: z.infer<typeof NvtSchema>[];
   readonly products: string[];
   readonly publishedTime?: Date;
-  readonly references: Reference[];
+  readonly references: z.infer<typeof ReferenceSchema>[];
   readonly severity?: number;
   readonly updateTime?: Date;
 
@@ -283,7 +376,15 @@ class Cve extends Model {
   }
 
   static fromElement(element: CveElement = {}): Cve {
-    return new Cve(this.parseElement(element));
+    const parsedElement = this.parseElement(element);
+
+    return validateAndCreate({
+      schema: CveSchema,
+      parsedElement,
+      originalElement: element,
+      modelName: 'cve',
+      ModelClass: Cve,
+    });
   }
 
   static parseElement(element: CveElement = {}): CveProperties {

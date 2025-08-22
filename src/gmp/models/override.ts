@@ -3,45 +3,49 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {z} from 'zod';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import Nvt, {NvtNvtElement} from 'gmp/models/nvt';
+import Nvt from 'gmp/models/nvt';
 import {
   parseCsv,
   parseSeverity,
   parseTextElement,
   parseToString,
   parseYesNo,
-  TextElement,
   YES_VALUE,
   YesNo,
 } from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
+import {validateAndCreate} from 'gmp/utils/zodModelValidation';
 
-export interface OverrideElement extends ModelElement {
-  hosts?: string;
-  new_severity?: number;
-  new_thread?: string;
-  nvt?: NvtNvtElement;
-  port?: string;
-  result?: ModelElement;
-  severity?: number;
-  task?: ModelElement;
-  text?: string | TextElement;
-  thread?: string;
-  text_excerpt?: YesNo;
-}
+type OverrideElement = z.infer<typeof OverrideElementSchema> & ModelElement;
+type OverrideProperties = z.infer<typeof OverrideSchema> & ModelProperties;
 
-interface OverrideProperties extends ModelProperties {
-  hosts?: string[];
-  newSeverity?: number;
-  nvt?: Nvt;
-  port?: string;
-  result?: Model;
-  severity?: number;
-  task?: Model;
-  text?: string;
-  textExcerpt?: YesNo;
-}
+export const OverrideElementSchema = z.object({
+  hosts: z.string().optional(),
+  new_severity: z.number().optional(),
+  new_thread: z.string().optional(),
+  nvt: z.any().optional(),
+  port: z.string().optional(),
+  result: z.any().optional(),
+  severity: z.number().optional(),
+  task: z.any().optional(),
+  text: z.union([z.string(), z.any()]).optional(),
+  thread: z.string().optional(),
+  text_excerpt: z.any().optional(),
+});
+
+export const OverrideSchema = z.object({
+  hosts: z.array(z.string()).optional(),
+  newSeverity: z.number().optional(),
+  nvt: z.any().optional(),
+  port: z.string().optional(),
+  result: z.any().optional(),
+  severity: z.number().optional(),
+  task: z.any().optional(),
+  text: z.string().optional(),
+  textExcerpt: z.any().optional(),
+});
 
 export const MANUAL = '1';
 export const ANY = '0';
@@ -101,7 +105,15 @@ class Override extends Model {
   }
 
   static fromElement(element: OverrideElement = {}): Override {
-    return new Override(this.parseElement(element));
+    const parsedElement = this.parseElement(element);
+
+    return validateAndCreate({
+      schema: OverrideSchema,
+      parsedElement,
+      originalElement: element,
+      modelName: 'override',
+      ModelClass: Override,
+    });
   }
 
   static parseElement(element: OverrideElement = {}): OverrideProperties {

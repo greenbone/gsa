@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {z} from 'zod';
 import {Date} from 'gmp/models/date';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {
@@ -14,151 +15,186 @@ import {
   parseToString,
   parseYesNo,
   QoD,
-  QoDParams,
   YES_VALUE,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isArray, isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
+import {validateAndCreate} from 'gmp/utils/zodModelValidation';
 
 type Tags = Record<string, string | undefined>;
 
-export interface NvtRefElement {
-  _id: string;
-  _type?: string;
-}
+// Inferred types
+export type NvtRefElement = z.infer<typeof NvtRefElementSchema>;
+export type NvtEpssElement = z.infer<typeof NvtEpssElementSchema>;
+export type NvtSeveritiesElement = z.infer<typeof NvtSeveritiesElementSchema>;
+export type NvtNvtElement = z.infer<typeof NvtNvtElementSchema>;
+export type NvtElement = z.infer<typeof NvtElementSchema> & ModelElement;
+type Preference = z.infer<typeof PreferenceSchema>;
+type Reference = z.infer<typeof ReferenceSchema>;
+type Cert = z.infer<typeof CertSchema>;
+type Solution = z.infer<typeof SolutionSchema>;
+type Epss = z.infer<typeof EpssSchema>;
+type NvtProperties = z.infer<typeof NvtSchema> & ModelProperties;
 
-interface SeverityElement {
-  _type?: string;
-  date?: string;
-  origin?: string;
-  score?: number;
-  value?: string;
-}
+// Zod schemas for element types
+const NvtRefElementSchema = z.object({
+  _id: z.string(),
+  _type: z.string().optional(),
+});
 
-interface PreferenceElement {
-  default?: string | number;
-  hr_name?: string;
-  id?: number;
-  name?: string;
-  nvt?: {
-    _oid?: string;
-    name?: string;
-  };
-  type?: string;
-  value?: string | number;
-}
+const SeverityElementSchema = z.object({
+  _type: z.string().optional(),
+  date: z.string().optional(),
+  origin: z.string().optional(),
+  score: z.number().optional(),
+  value: z.string().optional(),
+});
 
-interface EpssElement {
-  cve?: {
-    _id?: string;
-    severity?: number;
-  };
-  percentile?: number;
-  score?: number;
-}
+const PreferenceElementSchema = z.object({
+  default: z.union([z.string(), z.number()]).optional(),
+  hr_name: z.string().optional(),
+  id: z.number().optional(),
+  name: z.string().optional(),
+  nvt: z
+    .object({
+      _oid: z.string().optional(),
+      name: z.string().optional(),
+    })
+    .optional(),
+  type: z.string().optional(),
+  value: z.union([z.string(), z.number()]).optional(),
+});
 
-export interface NvtEpssElement {
-  max_epss?: EpssElement;
-  max_severity?: EpssElement;
-}
+const EpssElementSchema = z.object({
+  cve: z
+    .object({
+      _id: z.string().optional(),
+      severity: z.number().optional(),
+    })
+    .optional(),
+  percentile: z.number().optional(),
+  score: z.number().optional(),
+});
 
-export interface NvtSeveritiesElement {
-  _score?: string;
-  severity?: SeverityElement | SeverityElement[];
-}
+const NvtEpssElementSchema = z.object({
+  max_epss: EpssElementSchema.optional(),
+  max_severity: EpssElementSchema.optional(),
+});
 
-export interface NvtNvtElement {
-  _oid?: string;
-  category?: number;
-  creation_time?: string;
-  cvss_base?: number;
-  default_timeout?: string | number;
-  epss?: NvtEpssElement;
-  family?: string;
-  modification_time?: string;
-  name?: string;
-  preference_count?: number;
-  preferences?: {
-    default_timeout?: string;
-    timeout?: string;
-    preference?: PreferenceElement | PreferenceElement[];
-  };
-  qod?: QoDParams;
-  refs?: {
-    ref?: NvtRefElement | NvtRefElement[];
-  };
-  severities?: NvtSeveritiesElement;
-  solution?: {
-    __text?: string;
-    _method?: string;
-    _type?: string;
-  };
-  tags?: string;
-  timeout?: string | number;
-}
+const NvtSeveritiesElementSchema = z.object({
+  _score: z.string().optional(),
+  severity: z
+    .union([SeverityElementSchema, z.array(SeverityElementSchema)])
+    .optional(),
+});
 
-export interface NvtElement extends ModelElement {
-  update_time?: string;
-  nvt?: NvtNvtElement;
-}
+const NvtNvtElementSchema = z.object({
+  _oid: z.string().optional(),
+  category: z.number().optional(),
+  creation_time: z.string().optional(),
+  cvss_base: z.number().optional(),
+  default_timeout: z.union([z.string(), z.number()]).optional(),
+  epss: NvtEpssElementSchema.optional(),
+  family: z.string().optional(),
+  modification_time: z.string().optional(),
+  name: z.string().optional(),
+  preference_count: z.number().optional(),
+  preferences: z
+    .object({
+      default_timeout: z.string().optional(),
+      timeout: z.string().optional(),
+      preference: z
+        .union([PreferenceElementSchema, z.array(PreferenceElementSchema)])
+        .optional(),
+    })
+    .optional(),
+  qod: z.any().optional(), // QoDParams type
+  refs: z
+    .object({
+      ref: z
+        .union([NvtRefElementSchema, z.array(NvtRefElementSchema)])
+        .optional(),
+    })
+    .optional(),
+  severities: NvtSeveritiesElementSchema.optional(),
+  solution: z
+    .object({
+      __text: z.string().optional(),
+      _method: z.string().optional(),
+      _type: z.string().optional(),
+    })
+    .optional(),
+  tags: z.string().optional(),
+  timeout: z.union([z.string(), z.number()]).optional(),
+});
 
-interface Preference {
-  default?: string | number;
-  hr_name?: string;
-  id?: number;
-  name?: string;
-  type?: string;
-  value?: string | number;
-}
+export const NvtElementSchema = z
+  .object({
+    update_time: z.string().optional(),
+    nvt: NvtNvtElementSchema.optional(),
+  })
+  .and(z.any()); // ModelElement
 
-interface Reference {
-  ref: string;
-  type: string;
-}
+// Zod schemas for processed types
+const PreferenceSchema = z.object({
+  default: z.union([z.string(), z.number()]).optional(),
+  hr_name: z.string().optional(),
+  id: z.number().optional(),
+  name: z.string().optional(),
+  type: z.string().optional(),
+  value: z.union([z.string(), z.number()]).optional(),
+});
 
-interface Cert {
-  id: string;
-  type: string;
-}
+const ReferenceSchema = z.object({
+  ref: z.string(),
+  type: z.string(),
+});
 
-interface Solution {
-  type?: string;
-  description?: string;
-  method?: string;
-}
+const CertSchema = z.object({
+  id: z.string(),
+  type: z.string(),
+});
 
-interface EpssValue {
-  percentile?: number;
-  score?: number;
-  cve?: {
-    id?: string;
-    severity?: number;
-  };
-}
+const SolutionSchema = z.object({
+  type: z.string().optional(),
+  description: z.string().optional(),
+  method: z.string().optional(),
+});
 
-interface Epss {
-  maxEpss?: EpssValue;
-  maxSeverity?: EpssValue;
-}
+const EpssValueSchema = z.object({
+  percentile: z.number().optional(),
+  score: z.number().optional(),
+  cve: z
+    .object({
+      id: z.string().optional(),
+      severity: z.number().optional(),
+    })
+    .optional(),
+});
 
-interface NvtProperties extends ModelProperties {
-  certs?: Cert[];
-  cves?: string[];
-  defaultTimeout?: number;
-  epss?: Epss;
-  family?: string;
-  oid?: string;
-  preferences?: Preference[];
-  qod?: QoD;
-  severity?: number;
-  severityDate?: Date;
-  severityOrigin?: string;
-  solution?: Solution;
-  tags?: Tags;
-  timeout?: number;
-  xrefs?: Reference[];
-}
+const EpssSchema = z.object({
+  maxEpss: EpssValueSchema.optional(),
+  maxSeverity: EpssValueSchema.optional(),
+});
+
+export const NvtSchema = z.object({
+  certs: z.array(CertSchema).optional(),
+  cves: z.array(z.string()).optional(),
+  defaultTimeout: z.number().optional(),
+  epss: EpssSchema.optional(),
+  family: z.string().optional(),
+  oid: z.string().optional(),
+  preferences: z.array(PreferenceSchema).optional(),
+  qod: z.any().optional(), // QoD type
+  severity: z.number().optional(),
+  severityDate: z.any().optional(), // Date type
+  severityOrigin: z.string().optional(),
+  solution: SolutionSchema.optional(),
+  tags: z.record(z.string(), z.string().optional()).optional(),
+  timeout: z.number().optional(),
+  xrefs: z.array(ReferenceSchema).optional(),
+});
 
 export const TAG_NA = 'N/A';
 
@@ -292,7 +328,15 @@ class Nvt extends Model {
   }
 
   static fromElement(element: NvtElement = {}): Nvt {
-    return new Nvt(this.parseElement(element));
+    const parsedElement = this.parseElement(element);
+
+    return validateAndCreate({
+      schema: NvtSchema,
+      parsedElement,
+      originalElement: element,
+      modelName: 'nvt',
+      ModelClass: Nvt,
+    });
   }
 
   static parseElement(element: NvtElement = {}): NvtProperties {
