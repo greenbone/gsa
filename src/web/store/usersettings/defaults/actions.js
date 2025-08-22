@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {transformSettingName} from 'gmp/commands/users';
+import {transformSettingName} from 'gmp/commands/user';
 import {isDefined} from 'gmp/utils/identity';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 

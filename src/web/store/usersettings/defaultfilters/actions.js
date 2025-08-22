@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/users';
+import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/user';
 import {isDefined} from 'gmp/utils/identity';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
