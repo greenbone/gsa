@@ -55,8 +55,8 @@ class User extends Model {
   constructor({
     roles = [],
     groups = [],
-    hosts,
-    authMethod,
+    hosts = {addresses: []},
+    authMethod = AUTH_METHOD_PASSWORD,
     ...properties
   }: UserProperties = {}) {
     super(properties);
