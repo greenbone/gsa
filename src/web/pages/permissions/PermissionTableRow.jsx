@@ -71,7 +71,7 @@ Actions.propTypes = {
   onPermissionEditClick: PropTypes.func.isRequired,
 };
 
-const Row = ({
+const PermissionTableRow = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
@@ -117,11 +117,11 @@ const Row = ({
   );
 };
 
-Row.propTypes = {
+PermissionTableRow.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default Row;
+export default PermissionTableRow;

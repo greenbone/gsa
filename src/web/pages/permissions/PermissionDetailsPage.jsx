@@ -28,11 +28,12 @@ import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import PermissionDetails from 'web/pages/permissions/Details';
-import PermissionComponent from 'web/pages/permissions/PermissionsComponent';
+import PermissionComponent from 'web/pages/permissions/PermissionComponent';
+import PermissionDetails from 'web/pages/permissions/PermissionDetails';
 import {selector, loadEntity} from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({
+
+const PermissionsDetailsPageToolBarIcons = ({
   entity,
   onPermissionCloneClick,
   onPermissionCreateClick,
@@ -67,7 +68,7 @@ const ToolBarIcons = ({
   );
 };
 
-ToolBarIcons.propTypes = {
+PermissionsDetailsPageToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   onPermissionCloneClick: PropTypes.func.isRequired,
   onPermissionCreateClick: PropTypes.func.isRequired,
@@ -76,12 +77,11 @@ ToolBarIcons.propTypes = {
   onPermissionEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
+const PermissionsDetailsPage = ({
   entity,
   onChanged,
   onDownloaded,
   onError,
-
   ...props
 }) => {
   const [_] = useTranslation();
@@ -102,7 +102,7 @@ const Page = ({
           entity={entity}
           sectionIcon={<PermissionIcon size="large" />}
           title={_('Permission')}
-          toolBarIcons={ToolBarIcons}
+          toolBarIcons={PermissionsDetailsPageToolBarIcons}
           onPermissionCloneClick={clone}
           onPermissionCreateClick={create}
           onPermissionDeleteClick={delete_func}
@@ -112,7 +112,7 @@ const Page = ({
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle
                   title={_('Permission: {{name}}', {name: entity.name})}
                 />
@@ -141,7 +141,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>
@@ -150,7 +150,7 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
+PermissionsDetailsPage.propTypes = {
   entity: PropTypes.model,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
@@ -160,4 +160,4 @@ Page.propTypes = {
 export default withEntityContainer('permission', {
   load: loadEntity,
   entitySelector: selector,
-})(Page);
+})(PermissionsDetailsPage);

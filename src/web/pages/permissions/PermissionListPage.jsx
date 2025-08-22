@@ -13,16 +13,16 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import PermissionComponent from 'web/pages/permissions/PermissionComponent';
 import PermissionFilterDialog from 'web/pages/permissions/PermissionFilterDialog';
-import PermissionComponent from 'web/pages/permissions/PermissionsComponent';
-import Table from 'web/pages/permissions/Table';
+import Table from 'web/pages/permissions/PermissionTable';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 
-const ToolBarIcons = ({onPermissionCreateClick}) => {
+const PermissionToolBarIcons = ({onPermissionCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
   return (
@@ -42,11 +42,11 @@ const ToolBarIcons = ({onPermissionCreateClick}) => {
   );
 };
 
-ToolBarIcons.propTypes = {
+PermissionToolBarIcons.propTypes = {
   onPermissionCreateClick: PropTypes.func,
 };
 
-const Page = ({onChanged, onDownloaded, onError, ...props}) => {
+const PermissionPage = ({onChanged, onDownloaded, onError, ...props}) => {
   const [_] = useTranslation();
   return (
     <PermissionComponent
@@ -60,7 +60,7 @@ const Page = ({onChanged, onDownloaded, onError, ...props}) => {
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit}) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Permissions')} />
           <EntitiesPage
             {...props}
@@ -69,7 +69,7 @@ const Page = ({onChanged, onDownloaded, onError, ...props}) => {
             sectionIcon={<PermissionIcon size="large" />}
             table={Table}
             title={_('Permissions')}
-            toolBarIcons={ToolBarIcons}
+            toolBarIcons={PermissionToolBarIcons}
             onError={onError}
             onPermissionCloneClick={clone}
             onPermissionCreateClick={create}
@@ -77,13 +77,13 @@ const Page = ({onChanged, onDownloaded, onError, ...props}) => {
             onPermissionDownloadClick={download}
             onPermissionEditClick={edit}
           />
-        </React.Fragment>
+        </>
       )}
     </PermissionComponent>
   );
 };
 
-Page.propTypes = {
+PermissionPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
@@ -92,4 +92,4 @@ Page.propTypes = {
 export default withEntitiesContainer('permission', {
   entitiesSelector,
   loadEntities,
-})(Page);
+})(PermissionPage);
