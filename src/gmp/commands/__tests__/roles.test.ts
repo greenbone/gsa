@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {RolesCommand} from 'gmp/commands/roles';
+import RolesCommand from 'gmp/commands/roles';
 import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
 import Role from 'gmp/models/role';
 
