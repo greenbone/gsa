@@ -5,22 +5,22 @@
 
 import {isDefined, isFunction} from 'gmp/utils/identity';
 
-type NavigateFunc = (path: string) => void;
+export type NavigateFunc = (path: string) => void;
 
-interface NavigateObj {
+export interface NavigateObj {
   navigate: NavigateFunc;
 }
 
-type Navigate = NavigateFunc | NavigateObj;
+export type Navigate = NavigateFunc | NavigateObj;
 
-interface GotoDetailsObj {
+export interface GotoDetailsObj {
   data: {
     id: string;
   };
 }
 
-type GotoDetailsFunc = ({data}: GotoDetailsObj) => void;
-type GotoListFunc = () => void;
+export type GotoDetailsFunc = ({data}: GotoDetailsObj) => void;
+export type GotoListFunc = () => void;
 
 /**
  * Navigates to the details page of a given type and data.
