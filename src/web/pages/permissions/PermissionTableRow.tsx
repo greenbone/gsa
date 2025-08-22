@@ -4,33 +4,60 @@
  */
 
 import React from 'react';
+import Permission from 'gmp/models/permission';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import EntitiesActions, {
+  EntitiesActionsProps,
+} from 'web/entities/EntitiesActions';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
-import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import EntityLink from 'web/entity/Link';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
 
-const Actions = withEntitiesActions(
-  ({
-    entity,
-    onPermissionDeleteClick,
-    onPermissionDownloadClick,
-    onPermissionCloneClick,
-    onPermissionEditClick,
-  }) => {
-    const [_] = useTranslation();
+export interface PermissionActionsProps
+  extends Omit<EntitiesActionsProps<Permission>, 'children'> {
+  onPermissionCloneClick?: (permission: Permission) => void;
+  onPermissionDeleteClick?: (permission: Permission) => void;
+  onPermissionDownloadClick?: (permission: Permission) => void;
+  onPermissionEditClick?: (permission: Permission) => void;
+}
 
-    return (
+export interface PermissionTableRowProps extends PermissionActionsProps {
+  actionsComponent?: React.ComponentType<PermissionActionsProps>;
+  links?: boolean;
+  'data-testid'?: string;
+  onToggleDetailsClick: (entity: Permission) => void;
+}
+
+const Actions = ({
+  'data-testid': dataTestId,
+  entity,
+  selectionType,
+  onEntityDeselected,
+  onEntitySelected,
+  onPermissionDeleteClick,
+  onPermissionDownloadClick,
+  onPermissionCloneClick,
+  onPermissionEditClick,
+}: PermissionActionsProps) => {
+  const [_] = useTranslation();
+
+  return (
+    <EntitiesActions
+      data-testid={dataTestId}
+      entity={entity}
+      selectionType={selectionType}
+      onEntityDeselected={onEntityDeselected}
+      onEntitySelected={onEntitySelected}
+    >
       <IconDivider grow align={['center', 'center']}>
         <TrashIcon
           displayName={_('Permission')}
@@ -50,7 +77,6 @@ const Actions = withEntitiesActions(
           mayClone={entity.isWritable()}
           name="permission"
           title={_('Clone Permission')}
-          value={entity}
           onClick={onPermissionCloneClick}
         />
         <ExportIcon
@@ -59,25 +85,18 @@ const Actions = withEntitiesActions(
           onClick={onPermissionDownloadClick}
         />
       </IconDivider>
-    );
-  },
-);
-
-Actions.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onPermissionCloneClick: PropTypes.func.isRequired,
-  onPermissionDeleteClick: PropTypes.func.isRequired,
-  onPermissionDownloadClick: PropTypes.func.isRequired,
-  onPermissionEditClick: PropTypes.func.isRequired,
+    </EntitiesActions>
+  );
 };
 
 const PermissionTableRow = ({
-  actionsComponent: ActionsComponent = Actions,
+  actionsComponent:
+    ActionsComponent = Actions as unknown as React.ComponentType<PermissionActionsProps>,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}) => {
+}: PermissionTableRowProps) => {
   const [_] = useTranslation();
 
   return (
@@ -85,12 +104,26 @@ const PermissionTableRow = ({
       <EntityNameTableData
         displayName={_('Permission')}
         entity={entity}
-        link={links}
+        links={links}
         type="permission"
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
-        {permissionDescription(entity.name, entity.resource, entity.subject)}
+        {permissionDescription(
+          entity.name,
+          entity.resource
+            ? {
+                name: entity.resource.name ?? '',
+                entityType: entity.resource.entityType ?? '',
+              }
+            : {name: '', entityType: ''},
+          entity.subject
+            ? {
+                name: entity.subject.name ?? '',
+                entityType: entity.subject.entityType ?? '',
+              }
+            : undefined,
+        )}
       </TableData>
       <TableData>
         {isDefined(entity.resource) && typeName(getEntityType(entity.resource))}
@@ -115,13 +148,6 @@ const PermissionTableRow = ({
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
-};
-
-PermissionTableRow.propTypes = {
-  actionsComponent: PropTypes.component,
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default PermissionTableRow;
