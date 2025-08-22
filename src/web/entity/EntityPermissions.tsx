@@ -172,8 +172,7 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
         groupId: selectSaveId(groups),
       });
     });
-    // @ts-expect-error
-    gmp.roles.getAll().then(response => {
+    void gmp.roles.getAll().then(response => {
       const {data: roles} = response;
       this.setState({
         roles,

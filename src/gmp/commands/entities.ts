@@ -131,7 +131,7 @@ abstract class EntitiesCommand<
     );
   }
 
-  async get(params: HttpCommandInputParams, options?: HttpCommandOptions) {
+  async get(params: HttpCommandInputParams = {}, options?: HttpCommandOptions) {
     const response = await this.httpGet(params, options);
     const {entities, filter, counts} = this.getCollectionListFromRoot(
       response.data as TRoot,

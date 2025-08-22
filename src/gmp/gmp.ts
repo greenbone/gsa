@@ -27,7 +27,6 @@ import 'gmp/commands/policies';
 import 'gmp/commands/reportconfigs';
 import 'gmp/commands/reportformats';
 import 'gmp/commands/results';
-import 'gmp/commands/roles';
 import 'gmp/commands/scanconfigs';
 import 'gmp/commands/scanners';
 import 'gmp/commands/schedules';
@@ -45,6 +44,7 @@ import LoginCommand from 'gmp/commands/login';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
 import {ReportCommand, ReportsCommand} from 'gmp/commands/reports';
+import {RoleCommand, RolesCommand} from 'gmp/commands/roles';
 import {TaskCommand, TasksCommand} from 'gmp/commands/tasks';
 import TrashCanCommand from 'gmp/commands/trashcan';
 import {UserCommand, UsersCommand} from 'gmp/commands/users';
@@ -83,6 +83,8 @@ class Gmp {
   readonly wizard: WizardCommand;
   readonly report: ReportCommand;
   readonly reports: ReportsCommand;
+  readonly role: RoleCommand;
+  readonly roles: RolesCommand;
   readonly task: TaskCommand;
   readonly tasks: TasksCommand;
 
@@ -113,6 +115,8 @@ class Gmp {
     this.wizard = new WizardCommand(this.http);
     this.report = new ReportCommand(this.http);
     this.reports = new ReportsCommand(this.http);
+    this.role = new RoleCommand(this.http);
+    this.roles = new RolesCommand(this.http);
     this.task = new TaskCommand(this.http);
     this.tasks = new TasksCommand(this.http);
 
