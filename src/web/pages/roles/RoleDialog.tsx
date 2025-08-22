@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {GroupProperties} from 'gmp/models/group';
+import Permission from 'gmp/models/permission';
+import {UserProperties} from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Button from 'web/components/form/Button';
@@ -21,10 +23,74 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
 
-const Dialog = ({
+interface CreatePermissionData {
+  roleId: string;
+  name: string;
+}
+
+interface CreateSuperPermissionData {
+  roleId: string;
+  groupId: string;
+}
+
+interface DeletePermissionData {
+  roleId: string;
+  permissionId: string;
+}
+
+interface RoleData {
+  id?: string;
+  name?: string;
+  comment?: string;
+  users?: Array<string>;
+}
+
+interface SaveRoleData {
+  id?: string;
+  name: string;
+  comment: string;
+  users: Array<string>;
+}
+
+interface RoleDialogValues {
+  permissionName?: string;
+  groupId?: string;
+}
+
+interface RoleDialogDefaultValues {
+  id?: string;
+  name: string;
+  comment?: string;
+  users?: Array<string>;
+}
+
+type ExtendedStateType = RoleDialogDefaultValues & RoleDialogValues;
+
+interface RoleDialogProps {
+  allGroups?: GroupProperties[];
+  allPermissions?: Array<string>;
+  allUsers?: UserProperties[];
+  error?: string;
+  isCreatingPermission?: boolean;
+  isCreatingSuperPermission?: boolean;
+  isInUse?: boolean;
+  isLoadingPermissions?: boolean;
+  permissions?: Permission[];
+  role?: RoleData;
+  title?: string;
+  onClose: () => void;
+  onCreatePermission: (data: CreatePermissionData) => void | Promise<void>;
+  onCreateSuperPermission: (
+    data: CreateSuperPermissionData,
+  ) => void | Promise<void>;
+  onDeletePermission: (data: DeletePermissionData) => void | Promise<void>;
+  onErrorClose?: () => void;
+  onSave: (data: SaveRoleData) => void | Promise<void>;
+}
+
+const RoleDialog = ({
   allGroups = [],
   allPermissions = [],
   allUsers = [],
@@ -42,7 +108,7 @@ const Dialog = ({
   onDeletePermission,
   onErrorClose,
   onSave,
-}) => {
+}: RoleDialogProps) => {
   const [_] = useTranslation();
   title = title || _('New Role');
   const DEFAULTS = {name: _('Unnamed')};
@@ -52,13 +118,23 @@ const Dialog = ({
   const hasPermissions = allPermissions.length > 0;
 
   const groupOptions = allGroups.map(group => ({
-    label: group.name,
-    value: group.id,
+    label: group.name ?? '',
+    value: group.id ?? '',
   }));
 
   const permissionsOptions = allPermissions.map(permission => {
     const labelString =
-      permission + ' (' + permissionDescription(permission) + ')';
+      permission +
+      ' (' +
+      permissionDescription(
+        permission,
+        {
+          name: '',
+          entityType: '',
+        },
+        undefined,
+      ) +
+      ')';
     return {
       label: labelString,
       value: permission,
@@ -66,23 +142,78 @@ const Dialog = ({
   });
 
   const usersOptions = allUsers.map(user => ({
-    label: user.name,
-    value: user.name,
+    label: user.name ?? '',
+    value: user.name ?? '',
   }));
 
-  const defaultValues = {
+  const defaultValues: RoleDialogDefaultValues = {
     ...DEFAULTS,
     ...role,
   };
 
+  const values: RoleDialogValues = {};
+
+  const handleSave = (state: ExtendedStateType) => {
+    return onSave({
+      id: state.id,
+      name: state.name,
+      comment: state.comment ?? '',
+      users: state.users ?? [],
+    });
+  };
+
+  const renderPermissionsContent = (state: ExtendedStateType) => {
+    if (isLoadingPermissions && permissions.length === 0) {
+      return <Loading />;
+    }
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{_('Name')}</TableHead>
+            <TableHead>{_('Description')}</TableHead>
+            <TableHead width="2em">{_('Actions')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {permissions.map(permission => (
+            <TableRow key={permission.id}>
+              <TableData>{permission.name}</TableData>
+              <TableData>
+                {permissionDescription(
+                  permission.name,
+                  {name: permission.resource?.name ?? '', entityType: ''},
+                  undefined,
+                )}
+              </TableData>
+              <TableData align={['center', 'center']}>
+                {!permission.isInUse() && permission.id && (
+                  <TrashcanIcon
+                    title={_('Move permission to trashcan')}
+                    value={{
+                      roleId: state.id ?? '',
+                      permissionId: permission.id,
+                    }}
+                    onClick={onDeletePermission}
+                  />
+                )}
+              </TableData>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  };
+
   return (
-    <SaveDialog
+    <SaveDialog<RoleDialogValues, RoleDialogDefaultValues>
       defaultValues={defaultValues}
       error={error}
       title={title}
+      values={values}
       onClose={onClose}
       onErrorClose={onErrorClose}
-      onSave={onSave}
+      onSave={handleSave}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -95,7 +226,7 @@ const Dialog = ({
               />
             </FormGroup>
 
-            <FormGroup flex="column" title={_('Comment')}>
+            <FormGroup title={_('Comment')}>
               <TextField
                 name="comment"
                 value={state.comment}
@@ -134,8 +265,8 @@ const Dialog = ({
                     title={_('Create Permission')}
                     onClick={() =>
                       onCreatePermission({
-                        roleId: state.id,
-                        name: state.permissionName,
+                        roleId: state.id ?? '',
+                        name: state.permissionName ?? '',
                       })
                     }
                   />
@@ -157,52 +288,15 @@ const Dialog = ({
                     title={_('Create Permission')}
                     onClick={() =>
                       onCreateSuperPermission({
-                        roleId: state.id,
-                        groupId: state.groupId,
+                        roleId: state.id ?? '',
+                        groupId: state.groupId ?? '',
                       })
                     }
                   />
                 </FormGroup>
 
                 <h2>{_('General Command Permissions')}</h2>
-                {isLoadingPermissions && permissions.length === 0 ? (
-                  <Loading />
-                ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>{_('Name')}</TableHead>
-                        <TableHead>{_('Description')}</TableHead>
-                        <TableHead width="2em">{_('Actions')}</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {permissions.map(permission => (
-                        <TableRow key={permission.id}>
-                          <TableData>{permission.name}</TableData>
-                          <TableData>
-                            {permissionDescription(
-                              permission.name,
-                              permission.resource,
-                            )}
-                          </TableData>
-                          <TableData align={['center', 'center']}>
-                            {!permission.isInUse() && (
-                              <TrashcanIcon
-                                title={_('Move permission to trashcan')}
-                                value={{
-                                  roleId: state.id,
-                                  permissionId: permission.id,
-                                }}
-                                onClick={onDeletePermission}
-                              />
-                            )}
-                          </TableData>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
+                {renderPermissionsContent(state)}
               </Layout>
             )}
           </>
@@ -212,26 +306,4 @@ const Dialog = ({
   );
 };
 
-Dialog.propTypes = {
-  allGroups: PropTypes.arrayOf(PropTypes.model),
-  allPermissions: PropTypes.arrayOf(PropTypes.string),
-  allUsers: PropTypes.arrayOf(PropTypes.model),
-  error: PropTypes.string,
-  isCreatingPermission: PropTypes.bool,
-  isCreatingSuperPermission: PropTypes.bool,
-  isInUse: PropTypes.bool,
-  isLoadingPermissions: PropTypes.bool,
-  permissionName: PropTypes.string,
-  permissions: PropTypes.array,
-  role: PropTypes.model,
-  title: PropTypes.string,
-  users: PropTypes.array,
-  onClose: PropTypes.func.isRequired,
-  onCreatePermission: PropTypes.func.isRequired,
-  onCreateSuperPermission: PropTypes.func.isRequired,
-  onDeletePermission: PropTypes.func.isRequired,
-  onErrorClose: PropTypes.func,
-  onSave: PropTypes.func.isRequired,
-};
-
-export default Dialog;
+export default RoleDialog;

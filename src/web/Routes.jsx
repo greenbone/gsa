@@ -72,8 +72,8 @@ import ReportDetailsPage from 'web/pages/reports/DetailsPage';
 import ReportsPage from 'web/pages/reports/ReportListPage';
 import ResultDetailsPage from 'web/pages/results/DetailsPage';
 import ResultsPage from 'web/pages/results/ListPage';
-import RoleDetailsPage from 'web/pages/roles/DetailsPage';
-import RolesPage from 'web/pages/roles/ListPage';
+import RoleDetailsPage from 'web/pages/roles/RoleDetailsPage';
+import RoleListPage from 'web/pages/roles/RoleListPage';
 import ScanConfigDetailsPage from 'web/pages/scanconfigs/DetailsPage';
 import ScanConfigsPage from 'web/pages/scanconfigs/ListPage';
 import ScannerDetailsPage from 'web/pages/scanners/DetailsPage';
@@ -146,7 +146,7 @@ const LoggedInRoutes = () => {
           <Route element={<ReportConfigsPage />} path="/reportconfigs" />
           <Route element={<ReportFormatsPage />} path="/reportformats" />
           <Route element={<ResultsPage />} path="/results" />
-          <Route element={<RolesPage />} path="/roles" />
+          <Route element={<RoleListPage />} path="/roles" />
           <Route element={<TagsPage />} path="/tags" />
           <Route element={<PermissionsPage />} path="/permissions" />
           <Route element={<ScannersPage />} path="/scanners" />

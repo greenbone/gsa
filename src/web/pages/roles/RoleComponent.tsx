@@ -3,16 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import Rejection from 'gmp/http/rejection';
 import Filter from 'gmp/models/filter';
+import Permission from 'gmp/models/permission';
+import Role from 'gmp/models/role';
 import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/actionFunction';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {GotoDetailsFunc} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import RoleDialog from 'web/pages/roles/Dialog';
+import RoleDialog from 'web/pages/roles/RoleDialog';
 import {
   loadAllEntities as loadAllGroups,
   selector as groupSelector,
@@ -21,7 +26,43 @@ import {
   loadAllEntities as loadAllUsers,
   selector as userSelector,
 } from 'web/store/entities/users';
-import PropTypes from 'web/utils/PropTypes';
+
+interface CreatePermissionData {
+  roleId: string;
+  name: string;
+}
+
+interface CreateSuperPermissionData {
+  roleId: string;
+  groupId: string;
+}
+
+interface DeletePermissionData {
+  roleId: string;
+  permissionId: string;
+}
+
+interface RoleComponentRenderProps {
+  create: (role?: Role) => void;
+  edit: (role: Role) => void;
+  clone: (role: Role) => void;
+  delete: (role: Role) => Promise<void>;
+  download: (role: Role) => void;
+}
+
+interface RoleComponentProps {
+  children: (props: RoleComponentRenderProps) => React.ReactNode;
+  onCloneError?: (error: Rejection) => void;
+  onCloned?: GotoDetailsFunc;
+  onCreateError?: (error: Rejection) => void;
+  onCreated?: GotoDetailsFunc;
+  onDeleteError?: (error: Rejection) => void;
+  onDeleted?: () => void;
+  onDownloadError?: (error: Rejection) => void;
+  onDownloaded?: OnDownloadedFunc;
+  onSaveError?: (error: Rejection) => void;
+  onSaved?: () => void;
+}
 
 const RoleComponent = ({
   children,
@@ -33,10 +74,9 @@ const RoleComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-
   onSaved,
   onSaveError,
-}) => {
+}: RoleComponentProps) => {
   const gmp = useGmp();
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -45,31 +85,39 @@ const RoleComponent = ({
   const allUsers = useSelector(state => userSelector(state).getAllEntities());
   const allGroups = useSelector(state => groupSelector(state).getAllEntities());
 
+  // @ts-expect-error
   const dispatchLoadAllUsers = () => dispatch(loadAllUsers(gmp)());
+  // @ts-expect-error
   const dispatchLoadAllGroups = () => dispatch(loadAllGroups(gmp)());
 
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [error, setError] = useState(undefined);
-  const [allPermissions, setAllPermissions] = useState(undefined);
-  const [isCreatingPermission, setIsCreatingPermission] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState<boolean>(false);
+  const [error, setError] = useState<Rejection | undefined>(undefined);
+  const [allPermissions, setAllPermissions] = useState<
+    Array<string> | undefined
+  >(undefined);
+  const [isCreatingPermission, setIsCreatingPermission] =
+    useState<boolean>(false);
   const [isCreatingSuperPermission, setIsCreatingSuperPermission] =
-    useState(false);
-  const [isInUse, setIsInUse] = useState(false);
-  const [isLoadingPermissions, setIsLoadingPermissions] = useState(false);
-  const [permissions, setPermissions] = useState(undefined);
-  const [role, setRole] = useState(undefined);
-  const [title, setTitle] = useState('');
+    useState<boolean>(false);
+  const [isInUse, setIsInUse] = useState<boolean>(false);
+  const [isLoadingPermissions, setIsLoadingPermissions] =
+    useState<boolean>(false);
+  const [permissions, setPermissions] = useState<Permission[] | undefined>(
+    undefined,
+  );
+  const [role, setRole] = useState<Role | undefined>(undefined);
+  const [title, setTitle] = useState<string>('');
 
-  const openRoleDialog = role => {
+  const openRoleDialog = (role?: Role) => {
     dispatchLoadAllUsers();
 
-    if (isDefined(role)) {
-      loadSettings(role.id);
+    if (isDefined(role?.id)) {
+      void loadSettings(role.id);
 
       setDialogVisible(true);
       setIsInUse(role.isInUse());
       setRole(role);
-      setTitle(_('Edit Role {{name}}', role));
+      setTitle(_('Edit Role {{name}}', {name: role.name as string}));
     } else {
       setAllPermissions(undefined);
       setDialogVisible(true);
@@ -88,44 +136,58 @@ const RoleComponent = ({
     closeRoleDialog();
   };
 
-  const handleCreateSuperPermission = ({roleId, groupId}) => {
+  const handleCreateSuperPermission = async ({
+    roleId,
+    groupId,
+  }: CreateSuperPermissionData) => {
     setIsCreatingSuperPermission(true);
 
-    return gmp.permission
-      .create({
+    try {
+      // @ts-expect-error
+      await gmp.permission.create({
         name: 'Super',
         resourceType: 'group',
         resourceId: groupId,
         roleId,
         subjectType: 'role',
-      })
-      .then(
-        () => loadSettings(roleId),
-        error => setError(error.message),
-      )
-      .then(() => setIsCreatingSuperPermission(false));
+      });
+      await loadSettings(roleId);
+    } catch (error) {
+      setError(error as Rejection);
+    } finally {
+      setIsCreatingSuperPermission(false);
+    }
   };
 
-  const handleCreatePermission = ({roleId, name}) => {
+  const handleCreatePermission = async ({
+    roleId,
+    name,
+  }: CreatePermissionData) => {
     setIsCreatingPermission(true);
 
-    return gmp.permission
-      .create({
+    try {
+      // @ts-expect-error
+      await gmp.permission.create({
         name,
         roleId,
         subjectType: 'role',
-      })
-      .then(
-        () => loadSettings(roleId),
-        error => setError(error.message),
-      )
-      .then(() => setIsCreatingPermission(false));
+      });
+      await loadSettings(roleId);
+    } catch (error) {
+      setError(error as Rejection);
+    } finally {
+      setIsCreatingPermission(false);
+    }
   };
 
-  const handleDeletePermission = ({roleId, permissionId}) => {
+  const handleDeletePermission = ({
+    roleId,
+    permissionId,
+  }: DeletePermissionData): Promise<void> => {
+    // @ts-expect-error
     return actionFunction(gmp.permission.delete({id: permissionId}), {
       onSuccess: () => loadSettings(roleId),
-      onError: error => setError(error.message),
+      onError: async error => setError(error as Rejection),
       successMessage: _('Permission deleted successfully.'),
     });
   };
@@ -134,7 +196,7 @@ const RoleComponent = ({
     setError(undefined);
   };
 
-  const loadSettings = roleId => {
+  const loadSettings = async (roleId: string): Promise<void> => {
     if (capabilities.mayAccess('groups')) {
       dispatchLoadAllGroups();
     }
@@ -142,33 +204,36 @@ const RoleComponent = ({
     if (capabilities.mayAccess('permissions')) {
       setIsLoadingPermissions(true);
 
-      gmp.permissions
-        .getAll({
+      try {
+        // @ts-expect-error
+        const response = await gmp.permissions.getAll({
           filter: Filter.fromString(
             `subject_type=role and subject_uuid=${roleId}`,
           ),
-        })
-        .then(response => {
-          const allPermissions = [];
-          const {data: permissions = []} = response;
+        });
 
-          const perm_names = new Set(
-            permissions
-              .filter(perm => !isDefined(perm.resource))
-              .map(perm => perm.name),
-          );
+        const allPermissions: string[] = [];
+        const {data: permissions = []} = response;
 
-          for (const cap of capabilities) {
-            if (cap !== 'get_version' && !perm_names.has(cap)) {
-              allPermissions.push(cap);
-            }
+        const perm_names = new Set(
+          permissions
+            .filter(perm => !isDefined(perm.resource))
+            .map(perm => perm.name),
+        );
+
+        for (const cap of capabilities) {
+          if (cap !== 'get_version' && !perm_names.has(cap)) {
+            allPermissions.push(cap);
           }
+        }
 
-          setPermissions(permissions);
-          setAllPermissions(allPermissions);
-        })
-        .catch(error => setError(error.message))
-        .then(() => setIsLoadingPermissions(false));
+        setPermissions(permissions);
+        setAllPermissions(allPermissions);
+      } catch (error) {
+        setError(error as Rejection);
+      } finally {
+        setIsLoadingPermissions(false);
+      }
     }
   };
 
@@ -198,7 +263,7 @@ const RoleComponent = ({
               allGroups={allGroups}
               allPermissions={allPermissions}
               allUsers={allUsers}
-              error={error}
+              error={error?.message}
               isCreatingPermission={isCreatingPermission}
               isCreatingSuperPermission={isCreatingSuperPermission}
               isInUse={isInUse}
@@ -221,20 +286,6 @@ const RoleComponent = ({
       )}
     </EntityComponent>
   );
-};
-
-RoleComponent.propTypes = {
-  children: PropTypes.func.isRequired,
-  onCloneError: PropTypes.func,
-  onCloned: PropTypes.func,
-  onCreateError: PropTypes.func,
-  onCreated: PropTypes.func,
-  onDeleteError: PropTypes.func,
-  onDeleted: PropTypes.func,
-  onDownloadError: PropTypes.func,
-  onDownloaded: PropTypes.func,
-  onSaveError: PropTypes.func,
-  onSaved: PropTypes.func,
 };
 
 export default RoleComponent;

@@ -11,7 +11,6 @@ import 'gmp/commands/credentials';
 import 'gmp/commands/cpes';
 import 'gmp/commands/cves';
 import 'gmp/commands/cvsscalculator';
-import 'gmp/commands/dashboards';
 import 'gmp/commands/dfncert';
 import 'gmp/commands/filters';
 import 'gmp/commands/groups';
@@ -34,18 +33,19 @@ import 'gmp/commands/scanners';
 import 'gmp/commands/schedules';
 import 'gmp/commands/tags';
 import 'gmp/commands/targets';
-import 'gmp/commands/tasks';
 import 'gmp/commands/tickets';
 import 'gmp/commands/tlscertificates';
 import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
 import AuthenticationCommand from 'gmp/commands/auth';
+import {DashboardCommand} from 'gmp/commands/dashboards';
 import {FeedStatusCommand} from 'gmp/commands/feedstatus';
 import LoginCommand from 'gmp/commands/login';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
 import {ReportCommand, ReportsCommand} from 'gmp/commands/reports';
+import {TaskCommand, TasksCommand} from 'gmp/commands/tasks';
 import TrashCanCommand from 'gmp/commands/trashcan';
 import {UserCommand, UsersCommand} from 'gmp/commands/users';
 import WizardCommand from 'gmp/commands/wizard';
@@ -72,6 +72,7 @@ class Gmp {
   _logoutListeners: Listener[];
 
   readonly auth: AuthenticationCommand;
+  readonly dashboard: DashboardCommand;
   readonly feedstatus: FeedStatusCommand;
   readonly portlist: PortListCommand;
   readonly portlists: PortListsCommand;
@@ -82,6 +83,8 @@ class Gmp {
   readonly wizard: WizardCommand;
   readonly report: ReportCommand;
   readonly reports: ReportsCommand;
+  readonly task: TaskCommand;
+  readonly tasks: TasksCommand;
 
   constructor(settings: GmpSettings, http?: GmpHttp) {
     this.settings = settings;
@@ -99,6 +102,7 @@ class Gmp {
     this._logoutListeners = [];
 
     this.auth = new AuthenticationCommand(this.http);
+    this.dashboard = new DashboardCommand(this.http);
     this.feedstatus = new FeedStatusCommand(this.http);
     this.portlist = new PortListCommand(this.http);
     this.portlists = new PortListsCommand(this.http);
@@ -109,6 +113,8 @@ class Gmp {
     this.wizard = new WizardCommand(this.http);
     this.report = new ReportCommand(this.http);
     this.reports = new ReportsCommand(this.http);
+    this.task = new TaskCommand(this.http);
+    this.tasks = new TasksCommand(this.http);
 
     this._initCommands();
   }
