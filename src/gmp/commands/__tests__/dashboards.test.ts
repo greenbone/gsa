@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {
-  DashboardCommand,
+import DashboardCommand, {
   DEFAULT_ROW_HEIGHT,
   createDisplay,
   createRow,

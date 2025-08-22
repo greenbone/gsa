@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {
-  FeedStatusCommand,
+import FeedStatusCommand, {
   NVT_FEED,
   FEED_COMMUNITY,
   feedStatusRejection,
