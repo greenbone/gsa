@@ -12,7 +12,7 @@ import {
   testing,
 } from '@gsa/testing';
 import {FeedStatusCommand} from 'gmp/commands/feedstatus';
-import {TaskCommand} from 'gmp/commands/tasks';
+import TaskCommand from 'gmp/commands/task';
 import {
   createActionResultResponse,
   createHttp,
