@@ -371,7 +371,7 @@ const ScanConfigComponent = ({
         onSaveError={onSaveError}
         onSaved={onSaved}
       >
-        {({save, ...other}) => {
+        {({save, create, ...other}) => {
           return (
             <>
               {children({
@@ -388,7 +388,8 @@ const ScanConfigComponent = ({
                   scanners={scanners}
                   onClose={handleCloseCreateConfigDialog}
                   onSave={d => {
-                    return save(d).then(() => closeCreateConfigDialog());
+                    const promise = isDefined(d.id) ? save(d) : create(d);
+                    return promise.then(() => closeCreateConfigDialog());
                   }}
                 />
               )}
