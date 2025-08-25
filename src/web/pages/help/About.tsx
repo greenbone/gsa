@@ -31,11 +31,14 @@ const About = () => {
 
   return (
     <>
-      <PageTitle title={_('About GSA')} />
+      <PageTitle title={_('About OPENVAS SCAN')} />
       <Layout flex="column">
-        <Section img={<HelpIcon size="large" />} title={_('About GSA')}>
+        <Section
+          img={<HelpIcon size="large" />}
+          title={_('About OPENVAS SCAN')}
+        >
           <StyledLayout align="center" flex="column">
-            <Img alt="GSA" src="greenbone_banner.png" width="100%" />
+            <Img alt="OPENVAS SCAN" src="greenbone_banner.png" width="100%" />
             <h1>Greenbone Security Assistant</h1>
             <h3>
               {isDefined(gmp.settings.vendorVersion)
@@ -44,13 +47,13 @@ const About = () => {
             </h3>
             <DivP>
               {_(
-                'The Greenbone Security Assistant (GSA) is the web-based ' +
+                'This application is the web-based ' +
                   'user interface of the Greenbone Community Edition.',
               )}
             </DivP>
             <DivP>
               {_(
-                'GSA uses the Greenbone Management Protocol (GMP) to connect to' +
+                'This web application uses the Greenbone Management Protocol (GMP) to connect to ' +
                   'the database backend gvmd which makes an extensive feature ' +
                   'set available, covering vulnerability scanning, vulnerability ' +
                   'management, and related activities.',
@@ -58,7 +61,7 @@ const About = () => {
             </DivP>
             <DivP>
               {_(
-                'GSA adds various smart features and forms a powerful tool ' +
+                'This web application adds various smart features and forms a powerful tool ' +
                   'to manage and maintain a high resilience level of the IT ' +
                   'infrastructures.',
               )}
