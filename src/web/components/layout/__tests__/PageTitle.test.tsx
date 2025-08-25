@@ -5,11 +5,12 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
-import PageTitle, {DEFAULT_TITLE} from 'web/components/layout/PageTitle';
+import PageTitle from 'web/components/layout/PageTitle';
+import {applianceTitle} from 'web/utils/applianceData';
 
 const gmp = {
   settings: {
-    vendorLabel: 'someVendorLabel',
+    vendorLabel: undefined,
   },
 };
 
@@ -19,7 +20,9 @@ describe('PageTitle tests', () => {
 
     render(<PageTitle />);
 
-    expect(global.window.document.title).toBe(DEFAULT_TITLE);
+    expect(global.window.document.title).toBe(
+      applianceTitle['defaultVendorLabel'],
+    );
   });
 
   test('Should render custom page title', () => {
@@ -28,7 +31,9 @@ describe('PageTitle tests', () => {
     const title = 'foo';
     render(<PageTitle title={title} />);
 
-    expect(global.window.document.title).toBe(DEFAULT_TITLE + ' - ' + title);
+    expect(global.window.document.title).toBe(
+      applianceTitle['defaultVendorLabel'] + ' - ' + title,
+    );
   });
 
   test('should update page title', () => {
@@ -38,11 +43,15 @@ describe('PageTitle tests', () => {
     const title2 = 'bar';
     const {rerender} = render(<PageTitle title={title1} />);
 
-    expect(global.window.document.title).toBe(DEFAULT_TITLE + ' - ' + title1);
+    expect(global.window.document.title).toBe(
+      applianceTitle['defaultVendorLabel'] + ' - ' + title1,
+    );
 
     rerender(<PageTitle title={title2} />);
 
-    expect(global.window.document.title).toBe(DEFAULT_TITLE + ' - ' + title2);
+    expect(global.window.document.title).toBe(
+      applianceTitle['defaultVendorLabel'] + ' - ' + title2,
+    );
   });
 
   test('should render appliance model title', () => {
@@ -55,7 +64,9 @@ describe('PageTitle tests', () => {
     });
     render(<PageTitle />);
 
-    expect(global.window.document.title).toBe('Greenbone - 150');
+    expect(global.window.document.title).toBe(
+      applianceTitle['gsm-150_label.svg'],
+    );
   });
 
   test('should render vendor title', () => {

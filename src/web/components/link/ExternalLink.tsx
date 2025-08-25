@@ -35,7 +35,7 @@ const ExternalLink = ({children, to, ...props}: ExternalLinkProps) => {
     handleCloseDialog();
   };
 
-  const dialogTitle = _('You are leaving GSA');
+  const dialogTitle = _('You are leaving OPENVAS');
   const dialogText = _(
     'This dialog will open a new window for {{- to}} ' +
       'if you click on "follow link". Following this link is on your own ' +
