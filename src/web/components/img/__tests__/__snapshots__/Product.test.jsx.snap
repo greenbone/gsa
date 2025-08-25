@@ -10,7 +10,7 @@ exports[`ProductImage tests > should render 1`] = `
 }
 
 <img
-  alt="Greenbone Security Assistant"
+  alt="OPENVAS SCAN"
   class="c0"
   src="/img/login-label.svg"
 />

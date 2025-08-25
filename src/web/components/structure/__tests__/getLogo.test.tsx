@@ -26,15 +26,12 @@ describe('getLogo', () => {
     ['gsm-exa_label.svg', 'EnterpriseExa'],
     ['gsm-peta_label.svg', 'EnterprisePeta'],
     ['gsm-tera_label.svg', 'EnterpriseTera'],
+    ['gsm-unknown_label.svg', 'GreenboneWhiteLogo'],
+    ['defaultVendorLabel', 'GreenboneWhiteLogo'],
   ];
 
   test.each(testCases)('returns %s for %s', (logo, expectedTestId) => {
     render(getLogo(logo as ApplianceLogo));
     expect(screen.getByTestId(expectedTestId)).toBeInTheDocument();
-  });
-
-  test('returns undefined for unknown model', () => {
-    const result = getLogo('unknown_model.svg' as ApplianceLogo);
-    expect(result).toBeUndefined();
   });
 });

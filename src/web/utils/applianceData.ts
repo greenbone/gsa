@@ -4,6 +4,7 @@
  */
 
 import {
+  GreenboneWhiteLogo,
   Enterprise150,
   Enterprise400,
   Enterprise450,
@@ -21,68 +22,72 @@ import {
 export type ApplianceLogo = keyof typeof APPLIANCE_DATA;
 
 const APPLIANCE_DATA = {
+  defaultVendorLabel: {
+    title: 'OPENVAS',
+    component: GreenboneWhiteLogo,
+  },
   'gsm-150_label.svg': {
-    title: 'Greenbone - 150',
+    title: 'OPENVAS SCAN - 150',
     component: Enterprise150,
   },
   'gsm-400_label.svg': {
-    title: 'Greenbone - 400',
+    title: 'OPENVAS SCAN - 400',
     component: Enterprise400,
   },
   'gsm-400r2_label.svg': {
-    title: 'Greenbone - 400',
+    title: 'OPENVAS SCAN - 400',
     component: Enterprise400,
   },
   'gsm-450_label.svg': {
-    title: 'Greenbone - 450',
+    title: 'OPENVAS SCAN - 450',
     component: Enterprise450,
   },
   'gsm-450r2_label.svg': {
-    title: 'Greenbone - 450',
+    title: 'OPENVAS SCAN - 450',
     component: Enterprise450,
   },
   'gsm-600_label.svg': {
-    title: 'Greenbone - 600',
+    title: 'OPENVAS SCAN - 600',
     component: Enterprise600,
   },
   'gsm-600r2_label.svg': {
-    title: 'Greenbone - 600',
+    title: 'OPENVAS SCAN - 600',
     component: Enterprise600,
   },
   'gsm-650_label.svg': {
-    title: 'Greenbone - 650',
+    title: 'OPENVAS SCAN - 650',
     component: Enterprise650,
   },
   'gsm-650r2_label.svg': {
-    title: 'Greenbone - 650',
+    title: 'OPENVAS SCAN - 650',
     component: Enterprise650,
   },
   'gsm-5400_label.svg': {
-    title: 'Greenbone - 5400',
+    title: 'OPENVAS SCAN - 5400',
     component: Enterprise5400,
   },
   'gsm-6500_label.svg': {
-    title: 'Greenbone - 6500',
+    title: 'OPENVAS SCAN - 6500',
     component: Enterprise6500,
   },
   'gsm-ceno_label.svg': {
-    title: 'Greenbone - CENO',
+    title: 'OPENVAS SCAN - CENO',
     component: EnterpriseCeno,
   },
   'gsm-deca_label.svg': {
-    title: 'Greenbone - DECA',
+    title: 'OPENVAS SCAN - DECA',
     component: EnterpriseDeca,
   },
   'gsm-exa_label.svg': {
-    title: 'Greenbone - EXA',
+    title: 'OPENVAS SCAN - EXA',
     component: EnterpriseExa,
   },
   'gsm-peta_label.svg': {
-    title: 'Greenbone - PETA',
+    title: 'OPENVAS SCAN - PETA',
     component: EnterprisePeta,
   },
   'gsm-tera_label.svg': {
-    title: 'Greenbone - TERA',
+    title: 'OPENVAS SCAN - TERA',
     component: EnterpriseTera,
   },
 };

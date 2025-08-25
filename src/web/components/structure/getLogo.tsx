@@ -6,7 +6,8 @@
 import {applianceComponent, ApplianceLogo} from 'web/utils/applianceData';
 
 const getLogo = (logo: ApplianceLogo) => {
-  const Component = applianceComponent[logo];
+  const Component =
+    applianceComponent[logo] ?? applianceComponent['defaultVendorLabel'];
   return Component ? <Component /> : undefined;
 };
 

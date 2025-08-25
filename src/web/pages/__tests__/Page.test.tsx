@@ -92,7 +92,7 @@ describe('Page tests', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        /You are currently using the free Greenbone Community Feed/i,
+        /You are currently using the free OPENVAS COMMUNITY FEED/i,
       ),
     ).toBeInTheDocument();
     expect(screen.getByRole('contentinfo')).toBeInTheDocument(); // footer
