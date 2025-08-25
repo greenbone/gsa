@@ -20,7 +20,7 @@ const ProductImage = props => {
   const {settings} = useGmp();
   return (
     <Image
-      alt={_('Greenbone Security Assistant')}
+      alt={_('OPENVAS SCAN')}
       {...props}
       src={
         isDefined(settings) && isDefined(settings.vendorLabel)

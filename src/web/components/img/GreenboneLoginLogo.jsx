@@ -19,7 +19,7 @@ const LoginLogo = () => {
     <Image
       alt={_('Greenbone AG')}
       data-testid="greenbone-login-logo"
-      src="greenbonehorizontal.png"
+      src="greenbonehorizontal.svg"
     />
   );
 };

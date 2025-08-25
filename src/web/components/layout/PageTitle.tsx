@@ -16,9 +16,11 @@ export const DEFAULT_TITLE = 'Greenbone Security Assistant';
 
 const PageTitle = ({title: pageTitle}: PageTitleProps) => {
   const gmp = useGmp();
-  const vendorLabel = gmp?.settings?.vendorLabel || 'defaultVendorLabel';
+  const vendorLabel = gmp?.settings?.vendorLabel ?? 'defaultVendorLabel';
+
   const vendorTitle = gmp?.settings?.vendorTitle;
-  const title = vendorTitle ?? applianceTitle[vendorLabel] ?? DEFAULT_TITLE;
+
+  const title = vendorTitle ?? applianceTitle[vendorLabel];
 
   useEffect(() => {
     if (isDefined(pageTitle)) {
