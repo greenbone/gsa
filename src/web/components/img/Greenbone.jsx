@@ -8,7 +8,7 @@ import GbLogo from 'web/components/icon/svg/greenbone.svg?url';
 
 const GreenboneLogo = props => (
   <img
-    alt="Greenbone Security Assistant"
+    alt="OPENVAS SCAN"
     {...props}
     data-testid="greenbone-logo"
     src={GbLogo}

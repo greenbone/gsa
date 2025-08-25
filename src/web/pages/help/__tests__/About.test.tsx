@@ -30,7 +30,7 @@ describe('AboutPage tests', () => {
     expect(links[1]).toHaveTextContent('(full license text)');
     expect(links[2]).toHaveTextContent('here');
 
-    expect(heading).toHaveTextContent('Greenbone Security Assistant');
+    expect(heading).toHaveTextContent('OPENVAS SCAN');
 
     expect(version).toHaveTextContent('1337.42');
 
@@ -51,7 +51,9 @@ describe('AboutPage tests', () => {
 
     fireEvent.click(links[1]);
 
-    expect(screen.getDialogTitle()).toHaveTextContent('You are leaving GSA');
+    expect(screen.getDialogTitle()).toHaveTextContent(
+      'You are leaving OPENVAS SCAN',
+    );
   });
 
   test('should have protocol documentation link', async () => {
