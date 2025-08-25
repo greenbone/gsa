@@ -6,7 +6,7 @@
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
-import {TaskCommandCreateContainerParams} from 'gmp/commands/tasks';
+import {TaskCommandCreateContainerParams} from 'gmp/commands/task';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import Report from 'gmp/models/report';
 import {isActive} from 'gmp/models/task';

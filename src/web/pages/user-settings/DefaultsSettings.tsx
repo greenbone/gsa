@@ -5,7 +5,7 @@
 
 import {useEffect, useMemo, useState} from 'react';
 
-import {DEFAULT_SETTINGS} from 'gmp/commands/users';
+import {DEFAULT_SETTINGS} from 'gmp/commands/user';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import Select from 'web/components/form/Select';
