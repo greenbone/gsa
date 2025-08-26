@@ -671,9 +671,9 @@ const mapStateToProps = rootState => {
 
 const mapDispatchToProps = (
   dispatch,
-  {gmpname, gmp}: {gmpname: string; gmp: Gmp},
+  {gmpName, gmp}: {gmpName: string; gmp: Gmp},
 ) => {
-  const deleteEntity = createDeleteEntity({entityType: gmpname});
+  const deleteEntity = createDeleteEntity({entityType: gmpName});
   return {
     deleteEntity: (id: string) => dispatch(deleteEntity(gmp)(id)),
     loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
