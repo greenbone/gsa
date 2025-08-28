@@ -73,12 +73,12 @@ interface PermissionsBaseProps<TEntity> {
 }
 
 export interface EntityPermissionsProps<TEntity = Model> {
-  entity: TEntity;
-  permissions: Permission[];
-  relatedResourcesLoaders?: RelatedResourcesLoader<TEntity>[];
-  onChanged?: () => void;
-  onDownloaded?: OnDownloadedFunc;
-  onError?: (error: Error | Rejection) => void;
+  readonly entity: TEntity;
+  readonly permissions: Permission[];
+  readonly relatedResourcesLoaders?: RelatedResourcesLoader<TEntity>[];
+  readonly onChanged?: () => void;
+  readonly onDownloaded?: OnDownloadedFunc;
+  readonly onError?: (error: Error | Rejection) => void;
 }
 
 const SectionElementDivider = styled(IconDivider)`
@@ -192,9 +192,11 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
     this.setState({multiplePermissionDialogVisible: false});
   }
 
-  handleChange(value: unknown, name: string) {
-    // @ts-expect-error
-    this.setState({[name]: value});
+  handleChange(value: unknown, name?: string) {
+    if (name) {
+      // @ts-expect-error
+      this.setState({[name]: value});
+    }
   }
 
   handleCloseMultiplePermissionDialog() {
@@ -260,19 +262,15 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
             entityName={entityName}
             entityType={entityType}
             groupId={groupId}
-            // @ts-expect-error
             groups={groups}
             // @ts-expect-error
             id={id}
             includeRelated={includeRelated}
-            // @ts-expect-error
             related={related}
             roleId={roleId}
-            // @ts-expect-error
             roles={roles}
             title={title}
             userId={userId}
-            // @ts-expect-error
             users={users}
             onChange={this.handleChange}
             onClose={this.handleCloseMultiplePermissionDialog}
