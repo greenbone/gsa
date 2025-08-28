@@ -76,7 +76,6 @@ const Actions = ({
           entity={entity}
           mayClone={entity.isWritable()}
           name="permission"
-          title={_('Clone Permission')}
           onClick={onPermissionCloneClick}
         />
         <ExportIcon
