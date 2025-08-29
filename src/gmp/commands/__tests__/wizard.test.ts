@@ -76,6 +76,7 @@ describe('Wizard Command', () => {
                 {
                   _id: 'task1',
                   name: 'Task',
+                  usage_type: 'scan',
                   target: {
                     _id: 'target1',
                   },
@@ -94,6 +95,49 @@ describe('Wizard Command', () => {
     // @ts-expect-error
     expect(settings.get('foo').value).toEqual('bar');
     expect(tasks[0].id).toEqual('task1');
+  });
+
+  test('should filter out audit tasks in modifyTask', async () => {
+    const response = createResponse({
+      wizard: {
+        run_wizard_response: {
+          response: {
+            get_settings_response: {
+              setting: [{name: 'foo', _id: '1', comment: '', value: 'bar'}],
+            },
+            get_tasks_response: {
+              task: [
+                {
+                  _id: 'scan-task',
+                  name: 'Scan Task',
+                  usage_type: 'scan',
+                  target: {
+                    _id: 'target1',
+                  },
+                },
+                {
+                  _id: 'audit-task',
+                  name: 'Audit Task',
+                  usage_type: 'audit',
+                  target: {
+                    _id: 'target2',
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    });
+    const http = createHttp(response);
+    const wizard = new WizardCommand(http);
+
+    const result = await wizard.modifyTask();
+    const {settings, tasks} = result.data;
+    // @ts-expect-error
+    expect(settings.get('foo').value).toEqual('bar');
+    expect(tasks).toHaveLength(1);
+    expect(tasks[0].id).toEqual('scan-task');
   });
 
   test('should create a quick first scan', async () => {

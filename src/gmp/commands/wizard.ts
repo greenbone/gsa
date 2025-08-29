@@ -14,7 +14,7 @@ import {Date} from 'gmp/models/date';
 import Model, {ModelElement} from 'gmp/models/model';
 import {SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
-import Task from 'gmp/models/task';
+import Task, {TaskElement} from 'gmp/models/task';
 import {YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -165,9 +165,16 @@ class WizardCommand extends HttpCommand {
         value: setting.value,
       });
     });
-    const tasks = map<ModelElement, Task>(resp.get_tasks_response.task, task =>
-      Task.fromElement(task),
-    ).filter(currentTask => !currentTask.isContainer());
+    const tasks: Task[] = [];
+    map<ModelElement, void>(resp.get_tasks_response.task, task => {
+      const taskElement = task as TaskElement;
+      if (taskElement.usage_type === 'scan') {
+        const taskObject = Task.fromElement(taskElement);
+        if (!taskObject.isContainer()) {
+          tasks.push(taskObject);
+        }
+      }
+    });
     return response.setData<ModifyTaskResponseData>({settings, tasks});
   }
 
