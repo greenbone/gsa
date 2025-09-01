@@ -239,7 +239,7 @@ const PortListsPage = () => {
         import: importFunc,
       }) => (
         <>
-          <PageTitle title={_('Portlists')} />
+          <PageTitle title={_('Port Lists')} />
           <EntitiesPage<PortList>
             createFilterType="portlist"
             entities={entities}
@@ -274,7 +274,7 @@ const PortListsPage = () => {
                 onTagsBulk={openTagsDialog}
               />
             }
-            title={_('Portlists')}
+            title={_('Port Lists')}
             toolBarIcons={
               <PortListListPageToolBarIcons
                 onPortListCreateClick={create}
