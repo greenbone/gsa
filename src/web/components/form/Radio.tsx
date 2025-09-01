@@ -4,7 +4,7 @@
  */
 
 import {RadioProps as MantineRadioProps} from '@mantine/core';
-import {RadioButton as GreenboneRadio} from '@greenbone/opensight-ui-components-mantinev7';
+import {RadioButton as GreenboneRadio} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 import useValueChange from 'web/components/form/useValueChange';
 

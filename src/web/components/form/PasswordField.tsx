@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {PasswordInput} from '@greenbone/opensight-ui-components-mantinev7';
+import {PasswordInput} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 import useValueChange from 'web/components/form/useValueChange';
 

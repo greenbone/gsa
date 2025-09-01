@@ -4,7 +4,7 @@
  */
 
 import React, {useState} from 'react';
-import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
+import {Button as OpenSightButton} from '@greenbone/ui-lib';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorMessage from 'web/components/error/ErrorMessage';

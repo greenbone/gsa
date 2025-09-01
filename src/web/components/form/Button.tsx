@@ -4,7 +4,7 @@
  */
 
 import React, {ReactNode, MouseEvent} from 'react';
-import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
+import {Button as OpenSightButton} from '@greenbone/ui-lib';
 import useValueChange from 'web/components/form/useValueChange';
 
 interface ButtonProps {

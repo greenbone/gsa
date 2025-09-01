@@ -4,7 +4,7 @@
  */
 
 import React, {useState} from 'react';
-import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
+import {TimePicker} from '@greenbone/ui-lib';
 import date, {duration as createDuration} from 'gmp/models/date';
 import Event, {RecurrenceFrequency, WeekDays} from 'gmp/models/event';
 import {DEFAULT_TIMEZONE} from 'gmp/timezones';

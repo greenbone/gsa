@@ -6,14 +6,14 @@
 import {describe, test, expect, beforeEach, testing} from '@gsa/testing';
 import {updateNotification} from '@mantine/notifications';
 import {screen, rendererWith, wait} from 'web/testing';
-import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {showNotification} from '@greenbone/ui-lib';
 import {vi} from 'vitest';
 import CommunityFeedUsageNotification, {
   NOTIFICATION_SHOWN_KEY,
   NOTIFICATION_SHOWN,
 } from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 
-vi.mock('@greenbone/opensight-ui-components-mantinev7', () => ({
+vi.mock('@greenbone/ui-lib', () => ({
   showNotification: vi.fn(),
   // eslint-disable-next-line @typescript-eslint/naming-convention
   ThemeProvider: ({children}) => children,

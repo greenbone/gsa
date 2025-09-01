@@ -4,7 +4,7 @@
  */
 
 import {useEffect} from 'react';
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useDispatch, useSelector} from 'react-redux';
 import Rejection from 'gmp/http/rejection';
 import Model from 'gmp/models/model';

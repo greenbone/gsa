@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {AppNavigation} from '@greenbone/opensight-ui-components-mantinev7';
+import {AppNavigation} from '@greenbone/ui-lib';
 import {
   BarChart3,
   Server,

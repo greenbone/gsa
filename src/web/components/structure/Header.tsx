@@ -4,7 +4,7 @@
  */
 
 import React, {useCallback} from 'react';
-import {AppHeader} from '@greenbone/opensight-ui-components-mantinev7';
+import {AppHeader} from '@greenbone/ui-lib';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {LogoutIcon, MySettingsIcon} from 'web/components/icon';

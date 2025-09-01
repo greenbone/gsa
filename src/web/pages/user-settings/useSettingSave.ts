@@ -4,7 +4,7 @@
  */
 
 import {useCallback, useState} from 'react';
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useDispatch} from 'react-redux';
 import {transformSettingName} from 'gmp/commands/users';
 import useGmp from 'web/hooks/useGmp';

@@ -4,10 +4,7 @@
  */
 
 import {useState} from 'react';
-import {
-  showInfoNotification,
-  showSuccessNotification,
-} from '@greenbone/opensight-ui-components-mantinev7';
+import {showInfoNotification, showSuccessNotification} from '@greenbone/ui-lib';
 import Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
