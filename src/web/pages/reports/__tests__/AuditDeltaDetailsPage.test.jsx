@@ -98,6 +98,8 @@ describe('Audit Delta Report Details Content tests', () => {
         showError={showError}
         showErrorMessage={showErrorMessage}
         showSuccessMessage={showSuccessMessage}
+        sortField={sorting.results.sortField}
+        sortReverse={sorting.results.sortReverse}
         sorting={sorting}
         task={entity.report.task}
         onAddToAssetsClick={onAddToAssetsClick}
@@ -269,6 +271,8 @@ describe('Audit Delta Report Details Content tests', () => {
         showError={showError}
         showErrorMessage={showErrorMessage}
         showSuccessMessage={showSuccessMessage}
+        sortField={sorting.results.sortField}
+        sortReverse={sorting.results.sortReverse}
         sorting={sorting}
         task={entity.report.task}
         onAddToAssetsClick={onAddToAssetsClick}
@@ -307,7 +311,7 @@ describe('Audit Delta Report Details Content tests', () => {
     const bars = screen.getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons.length).toEqual(34);
+    expect(icons.length).toEqual(37);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
@@ -345,7 +349,7 @@ describe('Audit Delta Report Details Content tests', () => {
     expect(header[9]).toHaveTextContent('Name');
 
     // Row 1
-    expect(rows[2]).toHaveTextContent('[ = ]');
+    expect(within(rows[2]).getByTestId('equal-icon')).toBeVisible();
     expect(rows[2]).toHaveTextContent('Result 1');
     expect(bars[1]).toHaveAttribute('title', 'Yes');
     expect(bars[1]).toHaveTextContent('Yes');
@@ -357,7 +361,7 @@ describe('Audit Delta Report Details Content tests', () => {
     );
 
     // Row 2
-    expect(rows[3]).toHaveTextContent('[ = ]');
+    expect(within(rows[3]).getByTestId('equal-icon')).toBeVisible();
     expect(rows[3]).toHaveTextContent('Result 2');
     expect(bars[2]).toHaveAttribute('title', 'Incomplete');
     expect(bars[2]).toHaveTextContent('Incomplete');

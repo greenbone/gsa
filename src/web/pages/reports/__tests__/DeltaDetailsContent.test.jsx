@@ -338,7 +338,7 @@ describe('Delta Report Details Content tests', () => {
     expect(header[9]).toHaveTextContent('Name');
 
     // Row 1
-    expect(rows[2]).toHaveTextContent('[ = ]');
+    expect(within(rows[2]).getByTestId('equal-icon')).toBeVisible();
     expect(rows[2]).toHaveTextContent('Result 1');
     expect(bars[1]).toHaveAttribute('title', 'Critical');
     expect(bars[1]).toHaveTextContent('10.0 (Critical)');
@@ -350,7 +350,7 @@ describe('Delta Report Details Content tests', () => {
     );
 
     // Row 2
-    expect(rows[3]).toHaveTextContent('[ = ]');
+    expect(within(rows[3]).getByTestId('equal-icon')).toBeVisible();
     expect(rows[3]).toHaveTextContent('Result 2');
     expect(bars[2]).toHaveAttribute('title', 'Medium');
     expect(bars[2]).toHaveTextContent('5.0 (Medium)');

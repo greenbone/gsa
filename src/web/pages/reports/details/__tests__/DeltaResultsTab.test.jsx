@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith} from 'web/testing';
+import {screen, rendererWith, within} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
@@ -83,26 +83,31 @@ describe('Delta Results Tab tests', () => {
     expect(header[9]).toHaveTextContent('Name');
 
     // Row 1
-    expect(rows[2]).toHaveTextContent('[ = ]');
-    expect(rows[2]).toHaveTextContent('Result 1');
+
+    const rowOne = rows[2];
+
+    expect(within(rowOne).getByTestId('equal-icon')).toBeVisible();
+
     expect(bars[0]).toHaveAttribute('title', 'Critical');
     expect(bars[0]).toHaveTextContent('10.0 (Critical)');
-    expect(rows[2]).toHaveTextContent('80 %');
-    expect(rows[2]).toHaveTextContent('123.456.78.910');
-    expect(rows[2]).toHaveTextContent('80/tcp');
-    expect(rows[2]).toHaveTextContent(
+    expect(rowOne).toHaveTextContent('80 %');
+    expect(rowOne).toHaveTextContent('123.456.78.910');
+    expect(rowOne).toHaveTextContent('80/tcp');
+    expect(rowOne).toHaveTextContent(
       'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
     );
 
     // Row 2
-    expect(rows[3]).toHaveTextContent('[ = ]');
-    expect(rows[3]).toHaveTextContent('Result 2');
+    const rowTwo = rows[3];
+    expect(within(rowTwo).getByTestId('equal-icon')).toBeVisible();
+
+    expect(rowTwo).toHaveTextContent('Result 2');
     expect(bars[1]).toHaveAttribute('title', 'Medium');
     expect(bars[1]).toHaveTextContent('5.0 (Medium)');
-    expect(rows[3]).toHaveTextContent('70 %');
-    expect(rows[3]).toHaveTextContent('109.876.54.321');
-    expect(rows[3]).toHaveTextContent('80/tcp');
-    expect(rows[3]).toHaveTextContent(
+    expect(rowTwo).toHaveTextContent('70 %');
+    expect(rowTwo).toHaveTextContent('109.876.54.321');
+    expect(rowTwo).toHaveTextContent('80/tcp');
+    expect(rowTwo).toHaveTextContent(
       'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
     );
 

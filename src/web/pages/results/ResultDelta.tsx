@@ -4,6 +4,7 @@
  */
 
 import {Delta} from 'gmp/models/result';
+import {DiffIcon, EqualIcon, MinusIcon, PlusIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface ResultDeltaProps {
@@ -14,13 +15,13 @@ const ResultDelta = ({delta}: ResultDeltaProps) => {
   const [_] = useTranslation();
   switch (delta?.delta_type) {
     case Delta.TYPE_NEW:
-      return <span title={_('New')}>[ + ]</span>;
+      return <PlusIcon title={_('New')} />;
     case Delta.TYPE_CHANGED:
-      return <span title={_('Changed')}>[ ~ ]</span>;
+      return <DiffIcon title={_('Changed')} />;
     case Delta.TYPE_GONE:
-      return <span title={_('Gone')}>[ &#8722; ]</span>;
+      return <MinusIcon title={_('Gone')} />;
     case Delta.TYPE_SAME:
-      return <span title={_('Same')}>[ = ]</span>;
+      return <EqualIcon title={_('Same')} />;
     default:
       return null;
   }
