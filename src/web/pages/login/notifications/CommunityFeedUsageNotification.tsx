@@ -5,7 +5,7 @@
 
 import React, {useEffect, useMemo} from 'react';
 import {updateNotification} from '@mantine/notifications';
-import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {showNotification} from '@greenbone/ui-lib';
 import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';

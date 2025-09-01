@@ -4,7 +4,7 @@
  */
 
 import {useState} from 'react';
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {showSuccessNotification} from '@greenbone/ui-lib';
 import {connect} from 'react-redux';
 import {USERS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {Spinner} from '@greenbone/opensight-ui-components-mantinev7';
+import {Spinner} from '@greenbone/ui-lib';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
 

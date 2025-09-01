@@ -4,7 +4,7 @@
  */
 
 import {useState} from 'react';
-import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
+import {TimePicker} from '@greenbone/ui-lib';
 import {Date} from 'gmp/models/date';
 import Task from 'gmp/models/task';
 import {parseYesNo, NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';

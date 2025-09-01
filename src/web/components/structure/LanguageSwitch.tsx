@@ -5,10 +5,7 @@
 
 import {useState} from 'react';
 import {ActionIcon} from '@mantine/core';
-import {
-  FlagDeIcon,
-  FlagEnIcon,
-} from '@greenbone/opensight-ui-components-mantinev7';
+import {FlagDeIcon, FlagEnIcon} from '@greenbone/ui-lib';
 import {DEFAULT_LANGUAGE} from 'gmp/locale/lang';
 import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';

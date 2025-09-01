@@ -5,7 +5,7 @@
 
 import {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {ScrollArea} from '@mantine/core';
-import {Modal} from '@greenbone/opensight-ui-components-mantinev7';
+import {Modal} from '@greenbone/ui-lib';
 import styled from 'styled-components';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 

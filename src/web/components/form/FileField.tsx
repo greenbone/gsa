@@ -4,7 +4,7 @@
  */
 
 import {useCallback} from 'react';
-import {FileInput} from '@greenbone/opensight-ui-components-mantinev7';
+import {FileInput} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 
 interface FileFieldProps

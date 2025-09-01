@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ThemeProvider} from '@greenbone/opensight-ui-components-mantinev7';
+import {ThemeProvider} from '@greenbone/ui-lib';
 import {Provider as StoreProvider} from 'react-redux';
 import {useLocation} from 'react-router';
 import {StyleSheetManager} from 'styled-components';

@@ -5,7 +5,7 @@
 
 import {useState, useCallback} from 'react';
 import {Loader} from '@mantine/core';
-import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components-mantinev7';
+import {Select as OpenSightSelect} from '@greenbone/ui-lib';
 import {_} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import useTranslation from 'web/hooks/useTranslation';

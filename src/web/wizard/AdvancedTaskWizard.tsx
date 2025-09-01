@@ -4,7 +4,7 @@
  */
 
 import {useState} from 'react';
-import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
+import {TimePicker} from '@greenbone/ui-lib';
 import {
   DONT_START_VALUE,
   IMMEDIATELY_START_VALUE,

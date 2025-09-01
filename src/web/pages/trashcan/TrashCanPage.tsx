@@ -4,7 +4,7 @@
  */
 
 import {useCallback, useEffect, useState} from 'react';
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {showSuccessNotification} from '@greenbone/ui-lib';
 import styled from 'styled-components';
 import {TrashCanGetData} from 'gmp/commands/trashcan';
 import Rejection from 'gmp/http/rejection';

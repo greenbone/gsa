@@ -5,14 +5,14 @@
 
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {render} from 'web/testing';
-import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {showNotification} from '@greenbone/ui-lib';
 import {vi} from 'vitest';
 import date from 'gmp/models/date';
 import SessionTracker, {
   NOTIFICATION_TIMEOUT,
 } from 'web/components/observer/SessionTracker';
 
-vi.mock('@greenbone/opensight-ui-components-mantinev7', () => ({
+vi.mock('@greenbone/ui-lib', () => ({
   showNotification: vi.fn(),
   // eslint-disable-next-line @typescript-eslint/naming-convention
   ThemeProvider: ({children}) => children,

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Textarea as GreenboneTextArea} from '@greenbone/opensight-ui-components-mantinev7';
+import {Textarea as GreenboneTextArea} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 import useValueChange from 'web/components/form/useValueChange';
 

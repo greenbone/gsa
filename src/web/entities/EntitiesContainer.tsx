@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {showSuccessNotification} from '@greenbone/ui-lib';
 import {connect} from 'react-redux';
 import {Location} from 'react-router';
 import CollectionCounts from 'gmp/collection/CollectionCounts';

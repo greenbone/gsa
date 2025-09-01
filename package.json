@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "type": "module",
   "scripts": {
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration": "^2.0.6",
-    "@greenbone/opensight-ui-components-mantinev7": "^0.8.1",
+    "@greenbone/ui-lib": "^1.0.0",
     "@mantine/core": "^7.17.8",
     "@mantine/dates": "^7.17.8",
     "@mantine/notifications": "^7.17.8",

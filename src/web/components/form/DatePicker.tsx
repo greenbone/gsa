@@ -4,7 +4,7 @@
  */
 
 import {useCallback} from 'react';
-import {DatePickerInput} from '@greenbone/opensight-ui-components-mantinev7';
+import {DatePickerInput} from '@greenbone/ui-lib';
 import {DateValue} from '@mantine/dates';
 import date, {Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
