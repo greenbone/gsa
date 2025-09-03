@@ -213,17 +213,11 @@ const PermissionDialog = ({
 
         let subject;
         if (state.subjectType === 'user') {
-          subject = users.find(
-            user => (user as {id: string}).id === state.userId,
-          );
+          subject = users.find(user => user.id === state.userId);
         } else if (state.subjectType === 'role') {
-          subject = roles.find(
-            role => (role as {id: string}).id === state.roleId,
-          );
+          subject = roles.find(role => role.id === state.roleId);
         } else {
-          subject = groups.find(
-            group => (group as {id: string}).id === state.groupId,
-          );
+          subject = groups.find(group => group.id === state.groupId);
         }
 
         let resourceIdTitle;

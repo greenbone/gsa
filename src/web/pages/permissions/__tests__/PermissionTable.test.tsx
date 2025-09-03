@@ -32,6 +32,7 @@ describe('PermissionTable tests', () => {
     expect(screen.getByText('No permissions available')).toBeInTheDocument();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
   });
+
   test("should not render anything if permissions aren't available", () => {
     const {render} = rendererWith({store: true, capabilities: true});
     const {container} = render(<PermissionTable />);

@@ -11,7 +11,6 @@ import {
   rendererWith,
 } from 'web/testing';
 
-import Capabilities from 'gmp/capabilities/capabilities';
 import Group from 'gmp/models/group';
 import Model from 'gmp/models/model';
 import Role from 'gmp/models/role';
@@ -52,11 +51,9 @@ const mockRelated = [
   Model.fromElement({_id: 'rel2', name: 'Related 2', type: 'target'}),
 ];
 
-const capabilities = new Capabilities(['everything']);
-
 describe('PermissionMultipleDialog component tests', () => {
   test('should render dialog with default values', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -71,7 +68,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render with custom title', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -88,7 +85,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render permission select with read and write options', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -103,7 +100,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should handle user selection change', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -133,7 +130,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render user select when user radio is selected', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -153,7 +150,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render role select when role radio is selected', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -173,7 +170,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render group select when group radio is selected', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -193,7 +190,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render entity name and type', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -209,7 +206,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render include related options with default selection', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -225,7 +222,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render related resources when provided', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -241,8 +238,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should not render subject types when capabilities do not allow', () => {
-    const limitedCapabilities = new Capabilities([]);
-    const {render} = rendererWith({gmp, capabilities: limitedCapabilities});
+    const {render} = rendererWith({gmp, capabilities: false});
 
     render(
       <PermissionMultipleDialog
@@ -260,7 +256,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should allow changing permission type', async () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -285,7 +281,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should allow changing subject type', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -311,7 +307,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should handle different include related options', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -329,7 +325,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render all include related options when related resources exist', async () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -352,7 +348,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render only some include related options when no related resources', async () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -374,7 +370,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should allow closing the dialog', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -392,7 +388,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should call onSave with correct data when save button is clicked', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -424,7 +420,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should handle onChange calls for select elements', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -440,7 +436,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should handle empty user, role, and group arrays', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -462,7 +458,7 @@ describe('PermissionMultipleDialog component tests', () => {
       User.fromElement({_id: 'u2'}),
     ];
 
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog
@@ -478,7 +474,7 @@ describe('PermissionMultipleDialog component tests', () => {
   });
 
   test('should render with default permission and subject type when not provided', () => {
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(
       <PermissionMultipleDialog

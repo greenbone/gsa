@@ -89,20 +89,7 @@ describe('PermissionDialog tests', () => {
   test('should allow to change name and comment', async () => {
     const gmp = {};
 
-    const testCapabilities = new Capabilities([
-      'everything',
-      'get_tasks',
-      'get_users',
-      'get_roles',
-      'get_groups',
-      'create_task',
-      'modify_task',
-      'delete_task',
-      'get_configs',
-      'get_scanners',
-      'get_targets',
-      'get_alerts',
-    ]);
+    const testCapabilities = new Capabilities(['get_tasks']);
 
     const {render} = rendererWith({
       gmp,
@@ -551,13 +538,7 @@ describe('PermissionDialog tests', () => {
   test('should clear resourceType when name changes from Super to another permission', async () => {
     const gmp = {};
 
-    const testCapabilities = new Capabilities([
-      'everything',
-      'get_tasks',
-      'get_users',
-      'get_roles',
-      'get_groups',
-    ]);
+    const testCapabilities = new Capabilities(['get_tasks']);
 
     const {render} = rendererWith({
       gmp,
@@ -584,7 +565,9 @@ describe('PermissionDialog tests', () => {
     const getTasksOption = selectItems.find(item =>
       item.textContent?.includes('get_tasks'),
     );
+
     expect(getTasksOption).toBeDefined();
+
     if (getTasksOption) {
       fireEvent.click(getTasksOption);
     }

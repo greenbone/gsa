@@ -11,7 +11,6 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
@@ -36,9 +35,6 @@ const permission = Permission.fromElement({
   resource: {_id: 'resource123', type: 'config'},
   subject: {_id: 'subject123', type: 'user'},
 });
-
-const caps = new Capabilities(['everything']);
-const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
@@ -201,7 +197,7 @@ describe('ToolBarIcons tests', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -229,7 +225,7 @@ describe('ToolBarIcons tests', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -252,7 +248,7 @@ describe('ToolBarIcons tests', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: wrongCaps,
+      capabilities: false,
       router: true,
     });
 
