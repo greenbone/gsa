@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Permission from 'gmp/models/permission';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import Divider from 'web/components/layout/Divider';
@@ -15,10 +15,13 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntityLink from 'web/entity/Link';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
 
-const PermissionDetails = ({entity}) => {
+interface PermissionDetailsProps {
+  entity: Permission;
+}
+
+const PermissionDetails = ({entity}: PermissionDetailsProps) => {
   const [_] = useTranslation();
   const {comment, name, resource, subject} = entity;
   return (
@@ -38,7 +41,23 @@ const PermissionDetails = ({entity}) => {
 
           <TableRow>
             <TableData>{_('Description')}</TableData>
-            <TableData>{permissionDescription(name, resource)}</TableData>
+            <TableData>
+              {permissionDescription(
+                name,
+                resource
+                  ? {
+                      name: resource.name ?? '',
+                      entityType: resource.entityType ?? '',
+                    }
+                  : {name: '', entityType: ''},
+                subject
+                  ? {
+                      name: subject.name ?? '',
+                      entityType: subject.entityType ?? '',
+                    }
+                  : undefined,
+              )}
+            </TableData>
           </TableRow>
 
           {isDefined(resource) && (
@@ -68,10 +87,6 @@ const PermissionDetails = ({entity}) => {
       </InfoTable>
     </Layout>
   );
-};
-
-PermissionDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
 };
 
 export default PermissionDetails;

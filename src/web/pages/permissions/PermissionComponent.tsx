@@ -4,16 +4,61 @@
  */
 
 import React, {useState} from 'react';
+import Rejection from 'gmp/http/rejection';
+import Group from 'gmp/models/group';
+import Permission from 'gmp/models/permission';
+import Role from 'gmp/models/role';
+import User from 'gmp/models/user';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import EntityComponent from 'web/entity/EntityComponent';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {GotoDetailsFunc} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PermissionDialog from 'web/pages/permissions/Dialog';
-import PropTypes from 'web/utils/PropTypes';
+import PermissionDialog from 'web/pages/permissions/PermissionDialog';
+
+interface PermissionComponentRenderProps {
+  create: (permission?: Permission, fixed?: boolean) => void;
+  edit: (permission: Permission, fixed?: boolean) => void;
+  clone: (permission: Permission) => void;
+  delete: (permission: Permission) => Promise<void>;
+  download: (permission: Permission) => void;
+}
+
+interface PermissionComponentProps {
+  children: (props: PermissionComponentRenderProps) => React.ReactNode;
+  onCloneError?: (error: Rejection) => void;
+  onCloned?: GotoDetailsFunc;
+  onCreateError?: (error: Rejection) => void;
+  onCreated?: GotoDetailsFunc;
+  onDeleteError?: (error: Rejection) => void;
+  onDeleted?: () => void;
+  onDownloadError?: (error: Rejection) => void;
+  onDownloaded?: OnDownloadedFunc;
+  onSaveError?: (error: Rejection) => void;
+  onSaved?: () => void;
+}
+
+type SubjectType = 'user' | 'role' | 'group';
+
+interface PermissionState {
+  id?: string;
+  name?: string;
+  comment?: string;
+  permission?: Permission;
+  resourceId?: string;
+  resourceName?: string;
+  resourceType?: string;
+  subjectType?: SubjectType;
+  userId?: string;
+  roleId?: string;
+  groupId?: string;
+  title?: string;
+}
 
 const PermissionsComponent = ({
   children,
@@ -27,33 +72,33 @@ const PermissionsComponent = ({
   onDownloadError,
   onSaved,
   onSaveError,
-}) => {
+}: PermissionComponentProps) => {
   const capabilities = useCapabilities();
   const gmp = useGmp();
   const [_] = useTranslation();
 
-  const [dialogVisible, setDialogVisible] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState<boolean>(false);
 
-  const [id, setId] = useState();
-  const [name, setName] = useState();
-  const [comment, setComment] = useState();
-  const [permission, setPermission] = useState();
+  const [id, setId] = useState<string | undefined>();
+  const [name, setName] = useState<string | undefined>();
+  const [comment, setComment] = useState<string | undefined>();
+  const [permission, setPermission] = useState<Permission | undefined>();
 
-  const [resourceId, setResourceId] = useState();
-  const [resourceName, setResourceName] = useState();
-  const [resourceType, setResourceType] = useState();
-  const [fixedResource, setFixedResource] = useState(false);
+  const [resourceId, setResourceId] = useState<string | undefined>();
+  const [resourceName, setResourceName] = useState<string | undefined>();
+  const [resourceType, setResourceType] = useState<string | undefined>();
+  const [fixedResource, setFixedResource] = useState<boolean>(false);
 
-  const [subjectType, setSubjectType] = useState();
-  const [userId, setUserId] = useState();
-  const [roleId, setRoleId] = useState();
-  const [groupId, setGroupId] = useState();
+  const [subjectType, setSubjectType] = useState<SubjectType | undefined>();
+  const [userId, setUserId] = useState<string | undefined>();
+  const [roleId, setRoleId] = useState<string | undefined>();
+  const [groupId, setGroupId] = useState<string | undefined>();
 
-  const [users, setUsers] = useState();
-  const [roles, setRoles] = useState();
-  const [groups, setGroups] = useState();
+  const [users, setUsers] = useState<User[] | undefined>();
+  const [roles, setRoles] = useState<Role[] | undefined>();
+  const [groups, setGroups] = useState<Group[] | undefined>();
 
-  const [title, setTitle] = useState();
+  const [title, setTitle] = useState<string | undefined>();
 
   const closePermissionDialog = () => {
     setDialogVisible(false);
@@ -63,13 +108,16 @@ const PermissionsComponent = ({
     closePermissionDialog();
   };
 
-  const openPermissionDialog = (permissionEntity, fixed = false) => {
-    let permState = {};
-    let opts = {};
+  const openPermissionDialog = async (
+    permissionEntity?: Permission,
+    fixed = false,
+  ) => {
+    let permState: PermissionState = {};
+    let opts: {title?: string} = {};
 
     if (isDefined(permissionEntity)) {
       const subjectTypeValue = isDefined(permissionEntity.subject)
-        ? getEntityType(permissionEntity.subject)
+        ? (getEntityType(permissionEntity.subject) as SubjectType)
         : undefined;
 
       permState = {
@@ -89,26 +137,34 @@ const PermissionsComponent = ({
           : '',
         roleId: undefined,
         subjectType: subjectTypeValue,
-        title: _('Edit Permission {{name}}', {name: permissionEntity.name}),
+        title: _('Edit Permission {{name}}', {
+          name: permissionEntity.name || '',
+        }),
         userId: undefined,
       };
 
       switch (subjectTypeValue) {
         case 'user':
-          permState.userId = permissionEntity.subject.id;
+          if (isDefined(permissionEntity.subject)) {
+            permState.userId = permissionEntity.subject.id;
+          }
           break;
         case 'role':
-          permState.roleId = permissionEntity.subject.id;
+          if (isDefined(permissionEntity.subject)) {
+            permState.roleId = permissionEntity.subject.id;
+          }
           break;
         case 'group':
-          permState.groupId = permissionEntity.subject.id;
+          if (isDefined(permissionEntity.subject)) {
+            permState.groupId = permissionEntity.subject.id;
+          }
           break;
         default:
           break;
       }
       opts = {
         title: _('Edit permission {{name}}', {
-          name: shorten(permissionEntity.name),
+          name: shorten(permissionEntity.name || ''),
         }),
       };
     } else {
@@ -147,11 +203,10 @@ const PermissionsComponent = ({
         setSubjectType('user');
       }
 
-      gmp.users.getAll().then(response => {
-        const {data: usersData} = response;
-        setUserId(selectSaveId(usersData, permState.userId));
-        setUsers(usersData);
-      });
+      const response = await gmp.users.getAll();
+      const {data: usersData} = response;
+      setUserId(selectSaveId(usersData, permState.userId));
+      setUsers(usersData);
     }
 
     if (capabilities.mayAccess('roles')) {
@@ -162,11 +217,10 @@ const PermissionsComponent = ({
         setSubjectType('role');
       }
 
-      gmp.roles.getAll().then(response => {
-        const {data: rolesData} = response;
-        setRoleId(selectSaveId(rolesData, permState.roleId));
-        setRoles(rolesData);
-      });
+      const response = await gmp.roles.getAll();
+      const {data: rolesData} = response;
+      setRoleId(selectSaveId(rolesData, permState.roleId));
+      setRoles(rolesData);
     }
 
     if (capabilities.mayAccess('groups')) {
@@ -178,11 +232,11 @@ const PermissionsComponent = ({
         setSubjectType('group');
       }
 
-      gmp.groups.getAll().then(response => {
-        const {data: groupsData} = response;
-        setGroupId(selectSaveId(groupsData, permState.groupId));
-        setGroups(groupsData);
-      });
+      // @ts-expect-error
+      const response = await gmp.groups.getAll();
+      const {data: groupsData} = response;
+      setGroupId(selectSaveId(groupsData, permState.groupId));
+      setGroups(groupsData);
     }
   };
 
@@ -236,20 +290,6 @@ const PermissionsComponent = ({
       )}
     </EntityComponent>
   );
-};
-
-PermissionsComponent.propTypes = {
-  children: PropTypes.func.isRequired,
-  onCloneError: PropTypes.func,
-  onCloned: PropTypes.func,
-  onCreateError: PropTypes.func,
-  onCreated: PropTypes.func,
-  onDeleteError: PropTypes.func,
-  onDeleted: PropTypes.func,
-  onDownloadError: PropTypes.func,
-  onDownloaded: PropTypes.func,
-  onSaveError: PropTypes.func,
-  onSaved: PropTypes.func,
 };
 
 export default PermissionsComponent;

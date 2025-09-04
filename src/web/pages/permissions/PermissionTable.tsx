@@ -4,12 +4,19 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import createEntitiesFooter from 'web/entities/createEntitiesFooter';
-import createEntitiesHeader from 'web/entities/createEntitiesHeader';
+import Permission from 'gmp/models/permission';
+import createEntitiesFooter, {
+  CreateEntitiesFooterProps,
+} from 'web/entities/createEntitiesFooter';
+import createEntitiesHeader, {
+  CreateEntitiesHeaderProps,
+} from 'web/entities/createEntitiesHeader';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
-import PermissionDetails from 'web/pages/permissions/Details';
-import Row from 'web/pages/permissions/Row';
+import PermissionDetails from 'web/pages/permissions/PermissionDetails';
+import PermissionTableRow, {
+  PermissionTableRowProps,
+} from 'web/pages/permissions/PermissionTableRow';
 
 export const SORT_FIELDS = [
   {
@@ -44,16 +51,21 @@ export const SORT_FIELDS = [
   },
 ];
 
-const Table = createEntitiesTable({
+const PermissionTable = createEntitiesTable<
+  Permission,
+  CreateEntitiesFooterProps<Permission>,
+  CreateEntitiesHeaderProps,
+  PermissionTableRowProps
+>({
   emptyTitle: _l('No permissions available'),
   header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  rowDetails: withRowDetails('permission')(PermissionDetails),
-  footer: createEntitiesFooter({
+  row: PermissionTableRow,
+  rowDetails: withRowDetails<Permission>('permission')(PermissionDetails),
+  footer: createEntitiesFooter<Permission>({
     download: 'permissions.xml',
     span: 7,
     trash: true,
   }),
 });
 
-export default Table;
+export default PermissionTable;

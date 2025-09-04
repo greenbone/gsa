@@ -14,14 +14,6 @@ import Header, {HeaderProps} from 'web/pages/groups/Header';
 import RoleDetails from 'web/pages/roles/RoleDetails';
 import RoleTableRow, {RoleTableRowProps} from 'web/pages/roles/RoleTableRow';
 
-export const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-    width: '92%',
-  },
-];
-
 const RolesTable = createEntitiesTable<
   Role,
   CreateEntitiesFooterProps<Role>,

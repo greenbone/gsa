@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {useNavigate} from 'react-router';
+import Permission from 'gmp/models/permission';
 import {PermissionIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -20,6 +21,7 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
@@ -28,18 +30,35 @@ import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import PermissionDetails from 'web/pages/permissions/Details';
-import PermissionComponent from 'web/pages/permissions/PermissionsComponent';
+import PermissionComponent from 'web/pages/permissions/PermissionComponent';
+import PermissionDetails from 'web/pages/permissions/PermissionDetails';
 import {selector, loadEntity} from 'web/store/entities/permissions';
-import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({
+
+interface PermissionDetailsPageToolBarIconsProps {
+  entity: Permission;
+  onPermissionCloneClick?: (entity: Permission) => void;
+  onPermissionCreateClick?: () => void;
+  onPermissionDeleteClick?: (entity: Permission) => void;
+  onPermissionDownloadClick?: (entity: Permission) => void;
+  onPermissionEditClick?: (entity: Permission) => void;
+}
+
+interface PermissionDetailsPageProps {
+  entity: Permission;
+  isLoading?: boolean;
+  onChanged: () => void;
+  onDownloaded?: OnDownloadedFunc;
+  onError: (error: Error) => void;
+}
+
+export const PermissionsDetailsPageToolBarIcons = ({
   entity,
   onPermissionCloneClick,
   onPermissionCreateClick,
   onPermissionDeleteClick,
   onPermissionDownloadClick,
   onPermissionEditClick,
-}) => {
+}: PermissionDetailsPageToolBarIconsProps) => {
   const [_] = useTranslation();
 
   return (
@@ -67,54 +86,51 @@ const ToolBarIcons = ({
   );
 };
 
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onPermissionCloneClick: PropTypes.func.isRequired,
-  onPermissionCreateClick: PropTypes.func.isRequired,
-  onPermissionDeleteClick: PropTypes.func.isRequired,
-  onPermissionDownloadClick: PropTypes.func.isRequired,
-  onPermissionEditClick: PropTypes.func.isRequired,
-};
-
-const Page = ({
+const PermissionsDetailsPage = ({
   entity,
+  isLoading = true,
   onChanged,
   onDownloaded,
   onError,
-
-  ...props
-}) => {
+}: PermissionDetailsPageProps) => {
   const [_] = useTranslation();
+  const navigate = useNavigate();
   return (
     <PermissionComponent
       onCloneError={onError}
-      onCloned={goToDetails('permission', props)}
-      onCreated={goToDetails('permission', props)}
+      onCloned={goToDetails('permission', navigate)}
+      onCreated={goToDetails('permission', navigate)}
       onDeleteError={onError}
-      onDeleted={goToList('permissions', props)}
+      onDeleted={goToList('permissions', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onSaved={onChanged}
     >
-      {({clone, create, delete: delete_func, download, edit, save}) => (
-        <EntityPage
-          {...props}
+      {({clone, create, delete: deleteFunc, download, edit}) => (
+        <EntityPage<Permission>
           entity={entity}
+          entityType="permission"
+          isLoading={isLoading}
           sectionIcon={<PermissionIcon size="large" />}
           title={_('Permission')}
-          toolBarIcons={ToolBarIcons}
-          onPermissionCloneClick={clone}
-          onPermissionCreateClick={create}
-          onPermissionDeleteClick={delete_func}
-          onPermissionDownloadClick={download}
-          onPermissionEditClick={edit}
-          onPermissionSaveClick={save}
+          toolBarIcons={
+            <PermissionsDetailsPageToolBarIcons
+              entity={entity}
+              onPermissionCloneClick={clone}
+              onPermissionCreateClick={create}
+              onPermissionDeleteClick={deleteFunc}
+              onPermissionDownloadClick={download}
+              onPermissionEditClick={edit}
+            />
+          }
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle
-                  title={_('Permission: {{name}}', {name: entity.name})}
+                  title={_('Permission: {{name}}', {
+                    name: entity.name as string,
+                  })}
                 />
                 <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
@@ -141,7 +157,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>
@@ -150,14 +166,12 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
+const mapStateToProps = () => {
+  return {};
 };
 
 export default withEntityContainer('permission', {
-  load: loadEntity,
   entitySelector: selector,
-})(Page);
+  load: loadEntity,
+  mapStateToProps,
+})(PermissionsDetailsPage);

@@ -3,8 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
+import Group from 'gmp/models/group';
+import Model from 'gmp/models/model';
+import Role from 'gmp/models/role';
+import User from 'gmp/models/user';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
@@ -14,8 +17,61 @@ import Divider from 'web/components/layout/Divider';
 import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-import {renderSelectItems} from 'web/utils/Render';
+import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+
+type IncludeRelatedType =
+  | typeof CURRENT_RESOURCE_ONLY
+  | typeof INCLUDE_RELATED_RESOURCES
+  | typeof RELATED_RESOURCES_ONLY;
+type PermissionType = 'read' | 'write';
+type SubjectType = 'user' | 'role' | 'group';
+
+interface PermissionMultipleDialogSaveData {
+  includeRelated?: IncludeRelatedType;
+  groupId?: string;
+  id: string;
+  entityType?: string;
+  related?: Model[];
+  roleId?: string;
+  userId?: string;
+  permission?: PermissionType;
+  subjectType?: SubjectType;
+}
+
+interface PermissionMultipleDialogProps {
+  entityName?: string;
+  entityType?: string;
+  groupId?: string;
+  groups?: Group[];
+  id: string;
+  includeRelated?: IncludeRelatedType;
+  permission?: PermissionType;
+  related?: Model[];
+  roleId?: string;
+  roles?: Role[];
+  subjectType?: SubjectType;
+  title?: string;
+  userId?: string;
+  users?: User[];
+  onChange?: (value: unknown, name?: string) => void;
+  onClose: () => void;
+  onSave: (data: PermissionMultipleDialogSaveData) => void | Promise<void>;
+}
+
+interface SaveDialogValues {
+  includeRelated?: IncludeRelatedType;
+  groupId?: string;
+  id: string;
+  entityType?: string;
+  related?: Model[];
+  roleId?: string;
+  userId?: string;
+}
+
+interface SaveDialogDefaultValues {
+  permission: PermissionType;
+  subjectType: SubjectType;
+}
 
 export const CURRENT_RESOURCE_ONLY = '0';
 export const INCLUDE_RELATED_RESOURCES = '1';
@@ -26,7 +82,7 @@ const EntityName = styled.div`
   word-break: break-all;
 `;
 
-const MultiplePermissionDialog = ({
+const PermissionMultipleDialog = ({
   entityName = '',
   entityType = '',
   groupId,
@@ -44,19 +100,19 @@ const MultiplePermissionDialog = ({
   onChange,
   onClose,
   onSave,
-}) => {
+}: PermissionMultipleDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const hasRelated = related.length > 0;
 
   title = title || _('Create Permission');
 
-  const defaultValues = {
+  const defaultValues: SaveDialogDefaultValues = {
     permission,
     subjectType,
   };
 
-  const values = {
+  const values: SaveDialogValues = {
     includeRelated,
     groupId,
     id,
@@ -66,7 +122,10 @@ const MultiplePermissionDialog = ({
     userId,
   };
 
-  const includeRelatedItems = [];
+  const includeRelatedItems: Array<{
+    label: string;
+    value: IncludeRelatedType;
+  }> = [];
   if (hasRelated || includeRelated === INCLUDE_RELATED_RESOURCES) {
     includeRelatedItems.push({
       label: _('including related resources'),
@@ -87,7 +146,7 @@ const MultiplePermissionDialog = ({
   }
 
   return (
-    <SaveDialog
+    <SaveDialog<SaveDialogValues, SaveDialogDefaultValues>
       defaultValues={defaultValues}
       title={title}
       values={values}
@@ -99,6 +158,7 @@ const MultiplePermissionDialog = ({
           <>
             <FormGroup direction="row" title={_('Grant')}>
               <Select
+                data-testid="permission-select"
                 grow="1"
                 items={[
                   {
@@ -128,7 +188,7 @@ const MultiplePermissionDialog = ({
                   />
                   <Select
                     grow="1"
-                    items={renderSelectItems(users)}
+                    items={renderSelectItems(users as RenderSelectItemProps[])}
                     name="userId"
                     value={state.userId}
                     onChange={onChange}
@@ -147,7 +207,7 @@ const MultiplePermissionDialog = ({
                   />
                   <Select
                     grow="1"
-                    items={renderSelectItems(roles)}
+                    items={renderSelectItems(roles as RenderSelectItemProps[])}
                     name="roleId"
                     value={state.roleId}
                     onChange={onChange}
@@ -166,7 +226,7 @@ const MultiplePermissionDialog = ({
                   />
                   <Select
                     grow="1"
-                    items={renderSelectItems(groups)}
+                    items={renderSelectItems(groups as RenderSelectItemProps[])}
                     name="groupId"
                     value={state.groupId}
                     onChange={onChange}
@@ -175,7 +235,9 @@ const MultiplePermissionDialog = ({
               )}
             </FormGroup>
             <FormGroup direction="row" title={_('on')}>
-              <span>{typeName(getEntityType(state))}</span>
+              <span>
+                {typeName(getEntityType({entityType: state.entityType || ''}))}
+              </span>
               <EntityName>{entityName}</EntityName>
               <Select
                 items={includeRelatedItems}
@@ -187,11 +249,11 @@ const MultiplePermissionDialog = ({
             <FormGroup title={_('related resource(s)')}>
               {hasRelated && (
                 <ul>
-                  {state.related.map(rentity => (
-                    <li key={rentity.id}>
+                  {(state.related || []).map(relatedEntity => (
+                    <li key={relatedEntity.id}>
                       <Divider>
-                        {typeName(getEntityType(rentity))}
-                        <i>{rentity.name}</i>
+                        {typeName(getEntityType(relatedEntity))}
+                        <i>{relatedEntity.name}</i>
                       </Divider>
                     </li>
                   ))}
@@ -205,29 +267,4 @@ const MultiplePermissionDialog = ({
   );
 };
 
-MultiplePermissionDialog.propTypes = {
-  entityName: PropTypes.string,
-  entityType: PropTypes.string,
-  groupId: PropTypes.id,
-  groups: PropTypes.array,
-  id: PropTypes.id.isRequired,
-  includeRelated: PropTypes.oneOf([
-    CURRENT_RESOURCE_ONLY,
-    INCLUDE_RELATED_RESOURCES,
-    RELATED_RESOURCES_ONLY,
-  ]),
-  permission: PropTypes.oneOf(['read', 'write']),
-  related: PropTypes.array, // array of models
-  roleId: PropTypes.id,
-  roles: PropTypes.array,
-  subjectType: PropTypes.oneOf(['user', 'role', 'group']),
-  title: PropTypes.string,
-  userId: PropTypes.id,
-  users: PropTypes.array,
-  visible: PropTypes.bool,
-  onChange: PropTypes.func,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-};
-
-export default MultiplePermissionDialog;
+export default PermissionMultipleDialog;
