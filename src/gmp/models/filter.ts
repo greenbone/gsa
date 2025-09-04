@@ -821,6 +821,7 @@ class Filter extends EntityModel {
 
 export const ALL_FILTER = new Filter().all();
 export const ALERTS_FILTER_FILTER = Filter.fromString('type=alert');
+export const AUDITS_FILTER_FILTER = Filter.fromString('type=task');
 export const AUDIT_REPORTS_FILTER_FILTER =
   Filter.fromString('type=audit_report');
 export const CERTBUND_FILTER_FILTER = Filter.fromString('type=info');
@@ -836,6 +837,7 @@ export const NVTS_FILTER_FILTER = Filter.fromString('type=info');
 export const OS_FILTER_FILTER = Filter.fromString('type=os');
 export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
 export const PORTLISTS_FILTER_FILTER = Filter.fromString('type=port_list');
+export const POLICIES_FILTER_FILTER = Filter.fromString('type=config');
 export const PERMISSIONS_FILTER_FILTER = Filter.fromString('type=permission');
 export const REPORT_CONFIGS_FILTER_FILTER =
   Filter.fromString('type=report_config');

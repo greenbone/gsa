@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {RESET_FILTER, TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import {AUDITS_FILTER_FILTER, RESET_FILTER} from 'gmp/models/filter';
 import {NewIcon, AuditIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -21,6 +21,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/audits';
 import PropTypes from 'web/utils/PropTypes';
+
 export const ToolBarIcons = ({onAuditCreateClick}) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -78,7 +79,7 @@ const Page = ({onChanged, onDownloaded, onError, ...props}) => {
           <PageTitle title={_('Audits')} />
           <EntitiesPage
             {...props}
-            filtersFilter={TASKS_FILTER_FILTER}
+            filtersFilter={AUDITS_FILTER_FILTER}
             gcrFormatDefined={gcrFormatDefined}
             sectionIcon={<AuditIcon size="large" />}
             table={Table}
