@@ -43,7 +43,7 @@ describe('CommunityFeedUsageNotification', () => {
       },
     };
     const notificationTitle =
-      'You are currently using the free Greenbone Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.';
+      'You are currently using the free OPENVAS COMMUNITY FEED - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.';
 
     const {render} = rendererWith({gmp});
     render(<CommunityFeedUsageNotification />);

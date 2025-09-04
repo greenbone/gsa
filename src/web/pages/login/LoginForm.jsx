@@ -106,7 +106,7 @@ const LoginForm = ({
               </StyledWarningError>
               <p>
                 {_(
-                  'The connection to this GSA is not encrypted, allowing ' +
+                  'The connection to this web application is not encrypted, allowing ' +
                     'anyone listening to the traffic to steal your credentials.',
                 )}
               </p>

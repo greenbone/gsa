@@ -2,7 +2,7 @@
 
 exports[`Img tests > should render 1`] = `
 <img
-  alt="Greenbone Security Assistant"
+  alt="OPENVAS SCAN"
   src="/img/greenbone.svg"
 />
 `;
