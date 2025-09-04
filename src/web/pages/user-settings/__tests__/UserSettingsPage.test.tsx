@@ -689,6 +689,7 @@ describe('UserSettingsPage', () => {
         policy: 'Policies',
         portlist: 'Port Lists',
         report: 'Reports',
+        reportconfig: 'Report Configs',
         reportformat: 'Report Formats',
         result: 'Results',
         role: 'Roles',
