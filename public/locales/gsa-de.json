@@ -1458,6 +1458,7 @@
   "Report Config": "Berichtkonfiguration",
   "Report Config: {{name}}": "Berichtkonfiguration: {{name}}",
   "Report Configs": "Berichtkonfigurationen",
+  "Report Configs Filter": "Berichtkonfigurationen-Filter",
   "Report Configs List": "Berichtkonfigurationsliste",
   "Report Configs using this Report Format": "Berichtkonfigurationen, die dieses Berichtformat verwenden",
   "Report Content": "Berichtinhalt",
