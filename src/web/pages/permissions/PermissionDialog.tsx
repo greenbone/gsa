@@ -3,8 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Group from 'gmp/models/group';
 import Model from 'gmp/models/model';
+import Permission from 'gmp/models/permission';
+import Role from 'gmp/models/role';
+import User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
 import SaveDialog from 'web/components/dialog/SaveDialog';
@@ -15,8 +18,32 @@ import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-import {permissionDescription, renderSelectItems} from 'web/utils/Render';
+import {
+  permissionDescription,
+  renderSelectItems,
+  RenderSelectItemProps,
+} from 'web/utils/Render';
+
+interface PermissionDialogProps {
+  comment?: string;
+  fixedResource?: boolean;
+  groupId?: string;
+  groups?: Group[];
+  id?: string;
+  name?: string;
+  permission?: Permission;
+  resourceId?: string;
+  resourceName?: string;
+  resourceType?: string;
+  roleId?: string;
+  roles?: Role[];
+  subjectType?: 'user' | 'role' | 'group';
+  title?: string;
+  userId?: string;
+  users?: User[];
+  onClose: () => void;
+  onSave: (data: Record<string, unknown>) => void;
+}
 
 const NEED_RESOURCE_ID = [
   'Super',
@@ -115,7 +142,7 @@ const PermissionDialog = ({
   users = [],
   onClose,
   onSave,
-}) => {
+}: PermissionDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
 
@@ -129,7 +156,7 @@ const PermissionDialog = ({
 
   for (const cap of capabilities) {
     permItems.push({
-      label: `${cap} ${permissionDescription(cap)}`,
+      label: `${cap} ${permissionDescription(cap, {name: '', entityType: ''}, undefined)}`,
       value: cap,
     });
   }
@@ -149,10 +176,17 @@ const PermissionDialog = ({
     userId,
   };
 
-  const handleNameValueChange = onValueChange => (name, value) => {
-    onValueChange(name, value);
-    onValueChange(undefined, 'resourceType');
-  };
+  const handleNameValueChange =
+    (
+      onValueChange: (
+        value: string | Permission | undefined,
+        name?: string,
+      ) => void,
+    ) =>
+    (value: string | Permission | undefined, name?: string) => {
+      onValueChange(value, name);
+      onValueChange(undefined, 'resourceType');
+    };
 
   return (
     <SaveDialog
@@ -176,6 +210,7 @@ const PermissionDialog = ({
         const resource = isDefined(state.resourceType)
           ? Model.fromElement({name: resourceNameOrId}, resourceTypeOrType)
           : undefined;
+
         let subject;
         if (state.subjectType === 'user') {
           subject = users.find(user => user.id === state.userId);
@@ -229,7 +264,7 @@ const PermissionDialog = ({
                   />
                   <Select
                     grow="1"
-                    items={renderSelectItems(users)}
+                    items={renderSelectItems(users as RenderSelectItemProps[])}
                     name="userId"
                     value={state.userId}
                     onChange={onValueChange}
@@ -247,7 +282,7 @@ const PermissionDialog = ({
                   />
                   <Select
                     grow="1"
-                    items={renderSelectItems(roles)}
+                    items={renderSelectItems(roles as RenderSelectItemProps[])}
                     name="roleId"
                     value={state.roleId}
                     onChange={onValueChange}
@@ -266,7 +301,7 @@ const PermissionDialog = ({
                   />
                   <Select
                     grow="1"
-                    items={renderSelectItems(groups)}
+                    items={renderSelectItems(groups as RenderSelectItemProps[])}
                     name="groupId"
                     value={state.groupId}
                     onChange={onValueChange}
@@ -315,34 +350,22 @@ const PermissionDialog = ({
               </FormGroup>
             )}
             <FormGroup title={_('Description')}>
-              {permissionDescription(state.name, resource, subject)}
+              {permissionDescription(
+                state.name,
+                resource
+                  ? {
+                      name: resource.name ?? '',
+                      entityType: resource.entityType ?? '',
+                    }
+                  : {name: '', entityType: ''},
+                subject,
+              )}
             </FormGroup>
           </>
         );
       }}
     </SaveDialog>
   );
-};
-
-PermissionDialog.propTypes = {
-  comment: PropTypes.string,
-  fixedResource: PropTypes.bool,
-  groupId: PropTypes.id,
-  groups: PropTypes.array,
-  id: PropTypes.string,
-  name: PropTypes.string,
-  permission: PropTypes.model,
-  resourceId: PropTypes.string,
-  resourceName: PropTypes.string,
-  resourceType: PropTypes.string,
-  roleId: PropTypes.id,
-  roles: PropTypes.array,
-  subjectType: PropTypes.oneOf(['user', 'role', 'group']),
-  title: PropTypes.string,
-  userId: PropTypes.id,
-  users: PropTypes.array,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default PermissionDialog;
