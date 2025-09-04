@@ -6,7 +6,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useSearchParams} from 'react-router';
-import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
+import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import Filter, {
   DEFAULT_FALLBACK_FILTER,
   DEFAULT_ROWS_PER_PAGE,

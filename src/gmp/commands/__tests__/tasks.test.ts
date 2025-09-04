@@ -3,459 +3,128 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {describe, test, expect} from '@gsa/testing';
+import TasksCommand from 'gmp/commands/tasks';
 import {
-  describe,
-  test,
-  expect,
-  beforeAll,
-  afterAll,
-  testing,
-} from '@gsa/testing';
-import {FeedStatusCommand} from 'gmp/commands/feedstatus';
-import {TaskCommand} from 'gmp/commands/tasks';
-import {
-  createActionResultResponse,
   createHttp,
-  createResponse,
+  createEntitiesResponse,
+  createAggregatesResponse,
 } from 'gmp/commands/testing';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
-import logger, {LogLevel} from 'gmp/log';
-import {
-  OPENVAS_SCANNER_TYPE,
-  OPENVAS_DEFAULT_SCANNER_ID,
-} from 'gmp/models/scanner';
-import {
-  HOSTS_ORDERING_RANDOM,
-  AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  AUTO_DELETE_KEEP,
-} from 'gmp/models/task';
+import Task from 'gmp/models/task';
 
-let logLevel: LogLevel;
-
-beforeAll(() => {
-  logLevel = logger.level;
-  logger.setDefaultLevel('silent');
-});
-
-afterAll(() => {
-  logger.setDefaultLevel(logLevel);
-});
-
-describe('TaskCommand tests', () => {
-  test('should create new task', async () => {
-    const response = createActionResultResponse();
+describe('TasksCommand tests', () => {
+  test('should fetch tasks with default params', async () => {
+    const response = createEntitiesResponse('task', [
+      {_id: '1', name: 'Scan Task 1'},
+      {_id: '2', name: 'Scan Task 2'},
+    ]);
     const fakeHttp = createHttp(response);
 
-    const cmd = new TaskCommand(fakeHttp);
-    const resp = await cmd.create({
-      alterable: 0,
-      apply_overrides: 0,
-      auto_delete: AUTO_DELETE_KEEP,
-      comment: 'comment',
-      config_id: 'c1',
-      hosts_ordering: HOSTS_ORDERING_RANDOM,
-      in_assets: 0,
-      max_checks: 10,
-      max_hosts: 10,
-      min_qod: 70,
-      name: 'foo',
-      scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-      scanner_type: OPENVAS_SCANNER_TYPE,
-      target_id: 't1',
+    const cmd = new TasksCommand(fakeHttp);
+    const result = await cmd.get();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {cmd: 'get_tasks', usage_type: 'scan'},
     });
-    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-      data: {
-        add_tag: undefined,
-        'alert_ids:': [],
-        alterable: 0,
-        apply_overrides: 0,
-        auto_delete: AUTO_DELETE_KEEP,
-        auto_delete_data: undefined,
-        cmd: 'create_task',
-        comment: 'comment',
-        config_id: 'c1',
-        hosts_ordering: HOSTS_ORDERING_RANDOM,
-        in_assets: 0,
-        max_checks: 10,
-        max_hosts: 10,
-        min_qod: 70,
-        name: 'foo',
-        scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-        scanner_type: OPENVAS_SCANNER_TYPE,
-        schedule_id: undefined,
-        schedule_periods: undefined,
-        tag_id: undefined,
-        target_id: 't1',
-        usage_type: 'scan',
-      },
-    });
-    const {data} = resp;
-    expect(data.id).toEqual('foo');
+    expect(result.data).toEqual([
+      new Task({id: '1', name: 'Scan Task 1'}),
+      new Task({id: '2', name: 'Scan Task 2'}),
+    ]);
   });
 
-  test('should create new task with all parameters', async () => {
-    const response = createActionResultResponse();
+  test('should fetch tasks with custom params', async () => {
+    const response = createEntitiesResponse('task', [
+      {_id: '3', name: 'Custom Task'},
+    ]);
     const fakeHttp = createHttp(response);
 
-    expect.hasAssertions();
-
-    const cmd = new TaskCommand(fakeHttp);
-    const resp = await cmd.create({
-      add_tag: 1,
-      alterable: 0,
-      alert_ids: ['a1', 'a2'],
-      apply_overrides: 0,
-      auto_delete: AUTO_DELETE_KEEP,
-      auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
-      comment: 'comment',
-      config_id: 'c1',
-      hosts_ordering: HOSTS_ORDERING_RANDOM,
-      in_assets: 0,
-      max_checks: 10,
-      max_hosts: 10,
-      min_qod: 70,
-      name: 'foo',
-      scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-      scanner_type: OPENVAS_SCANNER_TYPE,
-      schedule_id: 's1',
-      schedule_periods: 1,
-      tag_id: 't1',
-      target_id: 't1',
-    });
-    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-      data: {
-        add_tag: 1,
-        'alert_ids:': ['a1', 'a2'],
-        alterable: 0,
-        apply_overrides: 0,
-        auto_delete: AUTO_DELETE_KEEP,
-        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
-        cmd: 'create_task',
-        comment: 'comment',
-        config_id: 'c1',
-        hosts_ordering: HOSTS_ORDERING_RANDOM,
-        in_assets: 0,
-        max_checks: 10,
-        max_hosts: 10,
-        min_qod: 70,
-        name: 'foo',
-        scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-        scanner_type: OPENVAS_SCANNER_TYPE,
-        schedule_id: 's1',
-        schedule_periods: 1,
-        tag_id: 't1',
-        target_id: 't1',
+    const cmd = new TasksCommand(fakeHttp);
+    const result = await cmd.get({filter: "name='Custom Task'"});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_tasks',
+        filter: "name='Custom Task'",
         usage_type: 'scan',
       },
     });
-    const {data} = resp;
-    expect(data.id).toEqual('foo');
+    expect(result.data).toEqual([new Task({id: '3', name: 'Custom Task'})]);
   });
 
-  test.each([
-    {
-      name: 'resource restricted',
-      feedsResponse: {feed_owner_set: 1},
-      message: 'Some Error',
-      expectedMessage:
-        'Access to the feed resources is currently restricted. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
-    },
-    {
-      name: 'feed owner not set',
-      feedsResponse: {feed_owner_set: 0},
-      message: 'Some Error',
-      expectedMessage:
-        'The feed owner is currently not set. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
-    },
-    {
-      name: 'missing port list',
-      message: 'Failed to find port_list XYZ',
-      feedsResponse: {
-        feed_owner_set: 1,
-        feed_resources_access: 1,
-      },
-      expectedMessage:
-        'Failed to create a new Target because the default Port List is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
-    },
-    {
-      name: 'missing scan config',
-      message: 'Failed to find config XYZ',
-      feedsResponse: {
-        feed_owner_set: 1,
-        feed_resources_access: 1,
-      },
-      expectedMessage:
-        'Failed to create a new Task because the default Scan Config is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
-    },
-  ])(
-    'should not create new task while feed is not available: $name',
-    async ({feedsResponse, message, expectedMessage}) => {
-      const xhr = {
-        status: 404,
-      } as XMLHttpRequest;
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
-      const feedStatusResponse = createResponse({
-        get_feeds: {
-          get_feeds_response: feedsResponse,
-        },
-      });
-      const fakeHttp = {
-        request: testing
-          .fn()
-          .mockRejectedValueOnce(rejection)
-          .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
-
-      const cmd = new TaskCommand(fakeHttp);
-      await expect(
-        cmd.create({
-          alterable: 0,
-          apply_overrides: 0,
-          auto_delete: AUTO_DELETE_KEEP,
-          comment: 'comment',
-          config_id: 'c1',
-          hosts_ordering: HOSTS_ORDERING_RANDOM,
-          in_assets: 0,
-          max_checks: 10,
-          max_hosts: 10,
-          min_qod: 70,
-          name: 'foo',
-          scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-          scanner_type: OPENVAS_SCANNER_TYPE,
-          target_id: 't1',
-        }),
-      ).rejects.toThrow(expectedMessage);
-    },
-  );
-
-  test('should create new container task', async () => {
-    const mockResponse = createActionResultResponse();
-    const fakeHttp = createHttp(mockResponse);
-    const cmd = new TaskCommand(fakeHttp);
-    const response = await cmd.createContainer({
-      name: 'foo',
-      comment: 'comment',
-    });
-    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-      data: {
-        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
-        cmd: 'create_container_task',
-        comment: 'comment',
-        name: 'foo',
-        usage_type: 'scan',
-      },
-    });
-    expect(response.data).toEqual({id: 'foo'});
-  });
-
-  test('should save task', async () => {
-    const mockResponse = createActionResultResponse();
-    const fakeHttp = createHttp(mockResponse);
-    const cmd = new TaskCommand(fakeHttp);
-    const response = await cmd.save({
-      alterable: 0,
-      apply_overrides: 0,
-      auto_delete: AUTO_DELETE_KEEP,
-      comment: 'comment',
-      hosts_ordering: HOSTS_ORDERING_RANDOM,
-      id: 'task1',
-      in_assets: 0,
-      max_checks: 10,
-      max_hosts: 10,
-      min_qod: 70,
-      name: 'foo',
-    });
-    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-      data: {
-        'alert_ids:': [],
-        alterable: 0,
-        apply_overrides: 0,
-        auto_delete: AUTO_DELETE_KEEP,
-        auto_delete_data: undefined,
-        cmd: 'save_task',
-        comment: 'comment',
-        config_id: '0',
-        hosts_ordering: HOSTS_ORDERING_RANDOM,
-        in_assets: 0,
-        max_checks: 10,
-        max_hosts: 10,
-        min_qod: 70,
-        name: 'foo',
-        scanner_id: '0',
-        scanner_type: undefined,
-        schedule_id: '0',
-        schedule_periods: undefined,
-        task_id: 'task1',
-        target_id: '0',
-        usage_type: 'scan',
-      },
-    });
-    expect(response).toBeUndefined();
-  });
-
-  test.each([
-    {
-      name: 'resource restricted',
-      feedsResponse: {feed_owner_set: 1},
-      message: 'Some Error',
-      expectedMessage:
-        'Access to the feed resources is currently restricted. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
-    },
-    {
-      name: 'feed owner not set',
-      feedsResponse: {feed_owner_set: 0},
-      message: 'Some Error',
-      expectedMessage:
-        'The feed owner is currently not set. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
-    },
-    {
-      name: 'missing port list',
-      message: 'Failed to find port_list XYZ',
-      feedsResponse: {
-        feed_owner_set: 1,
-        feed_resources_access: 1,
-      },
-      expectedMessage:
-        'Failed to create a new Target because the default Port List is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
-    },
-    {
-      name: 'missing scan config',
-      message: 'Failed to find config XYZ',
-      feedsResponse: {
-        feed_owner_set: 1,
-        feed_resources_access: 1,
-      },
-      expectedMessage:
-        'Failed to create a new Task because the default Scan Config is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
-    },
-  ])(
-    'should not save task while feed is not available: $name',
-    async ({feedsResponse, message, expectedMessage}) => {
-      const xhr = {
-        status: 404,
-      };
-      const rejection = new Rejection(
-        xhr as XMLHttpRequest,
-        Rejection.REASON_ERROR,
-        message,
-      );
-      const feedStatusResponse = createResponse({
-        get_feeds: {
-          get_feeds_response: feedsResponse,
-        },
-      });
-      const fakeHttp = {
-        request: testing
-          .fn()
-          .mockRejectedValueOnce(rejection)
-          .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
-
-      const cmd = new TaskCommand(fakeHttp);
-      await expect(
-        cmd.save({
-          alterable: 0,
-          apply_overrides: 0,
-          auto_delete: AUTO_DELETE_KEEP,
-          comment: 'comment',
-          hosts_ordering: HOSTS_ORDERING_RANDOM,
-          id: 'task1',
-          in_assets: 0,
-          max_checks: 10,
-          max_hosts: 10,
-          min_qod: 70,
-          name: 'foo',
-        }),
-      ).rejects.toThrow(expectedMessage);
-    },
-  );
-
-  test('should save task with all parameters', async () => {
-    const mockResponse = createActionResultResponse();
-    const fakeHttp = createHttp(mockResponse);
-    const cmd = new TaskCommand(fakeHttp);
-    const response = await cmd.save({
-      alterable: 0,
-      alert_ids: ['a1', 'a2'],
-      apply_overrides: 0,
-      auto_delete: AUTO_DELETE_KEEP,
-      auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
-      comment: 'comment',
-      config_id: 'c1',
-      hosts_ordering: HOSTS_ORDERING_RANDOM,
-      id: 'task1',
-      in_assets: 0,
-      max_checks: 10,
-      max_hosts: 10,
-      min_qod: 70,
-      name: 'foo',
-      scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-      scanner_type: OPENVAS_SCANNER_TYPE,
-      schedule_id: 's1',
-      schedule_periods: 1,
-      target_id: 't1',
-    });
-    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-      data: {
-        'alert_ids:': ['a1', 'a2'],
-        alterable: 0,
-        apply_overrides: 0,
-        auto_delete: AUTO_DELETE_KEEP,
-        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
-        cmd: 'save_task',
-        comment: 'comment',
-        config_id: 'c1',
-        hosts_ordering: HOSTS_ORDERING_RANDOM,
-        in_assets: 0,
-        max_checks: 10,
-        max_hosts: 10,
-        min_qod: 70,
-        name: 'foo',
-        scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-        scanner_type: OPENVAS_SCANNER_TYPE,
-        schedule_id: 's1',
-        schedule_periods: 1,
-        task_id: 'task1',
-        target_id: 't1',
-        usage_type: 'scan',
-      },
-    });
-    expect(response).toBeUndefined();
-  });
-
-  test('should throw an error if feed is currently syncing', async () => {
-    const response = createResponse({
-      get_feeds: {
-        get_feeds_response: {
-          feed: [
-            {
-              type: 'NVT',
-              currently_syncing: true,
-              sync_not_available: false,
-              version: 202502170647,
-            },
-            {
-              type: 'SCAP',
-              currently_syncing: false,
-              sync_not_available: false,
-              version: 202502170647,
-            },
-          ],
-        },
-      },
-    });
+  test('should fetch all tasks', async () => {
+    const response = createEntitiesResponse('task', [
+      {_id: '4', name: 'All Tasks 1'},
+      {_id: '5', name: 'All Tasks 2'},
+    ]);
     const fakeHttp = createHttp(response);
 
-    const taskCmd = new TaskCommand(fakeHttp);
+    const cmd = new TasksCommand(fakeHttp);
+    const result = await cmd.getAll();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {cmd: 'get_tasks', filter: 'first=1 rows=-1', usage_type: 'scan'},
+    });
+    expect(result.data).toEqual([
+      new Task({id: '4', name: 'All Tasks 1'}),
+      new Task({id: '5', name: 'All Tasks 2'}),
+    ]);
+  });
 
-    const feedCmd = new FeedStatusCommand(fakeHttp);
+  test('should fetch severity aggregates', async () => {
+    const response = createAggregatesResponse({});
+    const fakeHttp = createHttp(response);
 
-    const result = await feedCmd.checkFeedSync();
-    expect(result.isSyncing).toBe(true);
+    const cmd = new TasksCommand(fakeHttp);
+    const result = await cmd.getSeverityAggregates();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_aggregate',
+        aggregate_type: 'task',
+        group_column: 'severity',
+        usage_type: 'scan',
+      },
+    });
+    expect(result.data).toEqual({groups: []});
+  });
 
-    await expect(taskCmd.start({id: 'task1'})).rejects.toThrow(
-      'Feed is currently syncing. Please try again later.',
-    );
+  test('should fetch status aggregates', async () => {
+    const response = createAggregatesResponse({});
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TasksCommand(fakeHttp);
+    const result = await cmd.getStatusAggregates();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_aggregate',
+        aggregate_type: 'task',
+        group_column: 'status',
+        usage_type: 'scan',
+      },
+    });
+    expect(result.data).toEqual({groups: []});
+  });
+
+  test('should fetch high results aggregates', async () => {
+    const response = createAggregatesResponse({});
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TasksCommand(fakeHttp);
+    const result = await cmd.getHighResultsAggregates();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_aggregate',
+        aggregate_type: 'task',
+        group_column: 'uuid',
+        usage_type: 'scan',
+        'sort_fields:0': 'high_per_host',
+        'sort_fields:1': 'modified',
+        'sort_orders:0': 'descending',
+        'sort_orders:1': 'descending',
+        'sort_stats:0': 'max',
+        'sort_stats:1': 'value',
+        'text_columns:0': 'name',
+        'text_columns:1': 'high_per_host',
+        'text_columns:2': 'severity',
+        'text_columns:3': 'modified',
+      },
+    });
+    expect(result.data).toEqual({groups: []});
   });
 });

@@ -3,10 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect} from '@gsa/testing';
 import EntitiesCommand from 'gmp/commands/entities';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
+import GmpHttp from 'gmp/http/gmp';
 import Filter from 'gmp/models/filter';
+import Model, {Element} from 'gmp/models/model';
+
+class Foo extends Model {}
+
+class FooCommand extends EntitiesCommand<Foo> {
+  constructor(http: GmpHttp) {
+    super(http, 'foo', Foo);
+  }
+
+  getEntitiesResponse(data: Element) {
+    return data;
+  }
+}
 
 describe('EntitiesCommand tests', () => {
   test('should add filter parameter', async () => {
@@ -16,8 +30,7 @@ describe('EntitiesCommand tests', () => {
 
     expect.hasAssertions();
 
-    const cmd = new EntitiesCommand(fakeHttp, 'foo');
-    cmd.getEntitiesResponse = testing.fn().mockReturnValue(data => data);
+    const cmd = new FooCommand(fakeHttp);
     await cmd.get({filter});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {
@@ -34,8 +47,7 @@ describe('EntitiesCommand tests', () => {
 
     expect.hasAssertions();
 
-    const cmd = new EntitiesCommand(fakeHttp, 'foo');
-    cmd.getEntitiesResponse = testing.fn().mockReturnValue(data => data);
+    const cmd = new FooCommand(fakeHttp);
     await cmd.get({filter});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {
@@ -57,10 +69,7 @@ describe('EntitiesCommand tests', () => {
 
     expect(filter.toFilterString()).toEqual('foo=bar');
 
-    expect.hasAssertions();
-
-    const cmd = new EntitiesCommand(fakeHttp, 'foo');
-    cmd.getEntitiesResponse = testing.fn().mockReturnValue(data => data);
+    const cmd = new FooCommand(fakeHttp);
     await cmd.get({filter});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {
@@ -74,13 +83,9 @@ describe('EntitiesCommand tests', () => {
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
 
-    const ids = new Set();
-    ids.add('123');
-    ids.add('456');
+    const ids = ['123', '456'];
 
-    expect.hasAssertions();
-
-    const cmd = new EntitiesCommand(fakeHttp, 'foo');
+    const cmd = new FooCommand(fakeHttp);
     await cmd.deleteByIds(ids);
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
