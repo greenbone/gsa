@@ -29,7 +29,7 @@ describe('FilterSettings', () => {
     const {render} = rendererWith({capabilities, gmp, store: true});
     render(<FilterSettings />);
     const rows = screen.getAllByRole('row');
-    expect(rows.length).toBe(31);
+    expect(rows.length).toBe(33);
   });
 
   test('renders all filter settings rows and links', async () => {
@@ -44,6 +44,7 @@ describe('FilterSettings', () => {
 
     const entityTypeToDisplayName = {
       alert: 'Alerts',
+      audit: 'Audits',
       auditreport: 'Audit Reports',
       scanconfig: 'Configs',
       credential: 'Credentials',
@@ -54,6 +55,7 @@ describe('FilterSettings', () => {
       operatingsystem: 'Operating Systems',
       override: 'Overrides',
       permission: 'Permissions',
+      policy: 'Policies',
       portlist: 'Port Lists',
       report: 'Reports',
       reportformat: 'Report Formats',

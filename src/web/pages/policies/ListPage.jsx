@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {RESET_FILTER, SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
+import {POLICIES_FILTER_FILTER, RESET_FILTER} from 'gmp/models/filter';
 import {NewIcon, PolicyIcon, UploadIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -20,6 +20,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/policies';
 import PropTypes from 'web/utils/PropTypes';
+
 export const ToolBarIcons = ({onPolicyCreateClick, onPolicyImportClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
@@ -45,13 +46,7 @@ ToolBarIcons.propTypes = {
   onPolicyImportClick: PropTypes.func.isRequired,
 };
 
-const PoliciesPage = ({
-  onChanged,
-  onDownloaded,
-  onError,
-
-  ...props
-}) => {
+const PoliciesPage = ({onChanged, onDownloaded, onError, ...props}) => {
   const [_] = useTranslation();
   return (
     <PoliciesComponent
@@ -78,7 +73,7 @@ const PoliciesPage = ({
           <PageTitle title={_('Policies')} />
           <EntitiesPage
             {...props}
-            filtersFilter={SCANCONFIGS_FILTER_FILTER}
+            filtersFilter={POLICIES_FILTER_FILTER}
             sectionIcon={<PolicyIcon size="large" />}
             table={Table}
             title={_('Policies')}

@@ -662,6 +662,7 @@ describe('UserSettingsPage', () => {
       render(<UserSettingsPage />);
       expect(screen.queryByText('Filters')).not.toBeInTheDocument();
     });
+
     test('displays filter settings headers and links in the Filters tab', async () => {
       const gmp = createGmpMock();
 
@@ -674,6 +675,7 @@ describe('UserSettingsPage', () => {
 
       const entityTypeToDisplayName = {
         alert: 'Alerts',
+        audit: 'Audits',
         auditreport: 'Audit Reports',
         scanconfig: 'Configs',
         credential: 'Credentials',
@@ -684,6 +686,7 @@ describe('UserSettingsPage', () => {
         operatingsystem: 'Operating Systems',
         override: 'Overrides',
         permission: 'Permissions',
+        policy: 'Policies',
         portlist: 'Port Lists',
         report: 'Reports',
         reportformat: 'Report Formats',
