@@ -9,8 +9,8 @@ import Img from 'web/components/img/Img';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
-const OPENVAS_LOGO = 'greenbonehorizontal.svg';
-const OPENVAS_SCAN_LOGO = 'greenbonehorizontal-scan.svg';
+const OPENVAS_LOGO = 'openvasHorizontal.svg';
+const OPENVAS_SCAN_LOGO = 'openvasHorizontal-scan.svg';
 
 const Image = styled(Img)`
   display: flex;

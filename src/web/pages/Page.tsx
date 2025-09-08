@@ -41,15 +41,16 @@ const ScrollableMenuContainer = styled.div`
   max-width: 250px;
 `;
 
-const BottomLeftAnchor = styled.div`
-  position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  pointer-events: auto;
+const MenuWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 `;
 
 const Text = styled.div`
   color: ${Theme.mediumGray};
+  padding: 1rem;
+  margin-top: auto;
 `;
 
 const Page = ({children}: PageProps) => {
@@ -70,14 +71,14 @@ const Page = ({children}: PageProps) => {
       <Header />
       <StyledLayout align={['start', 'stretch']} flex="row">
         <ScrollableMenuContainer>
-          <Menu />
-          <BottomLeftAnchor>
+          <MenuWrapper>
+            <Menu />
             <Text data-testid={'version'}>
               {isDefined(gmp.settings.vendorVersion)
                 ? gmp.settings.vendorVersion
                 : _('Version {{version}}', {version: GSA_VERSION})}
             </Text>
-          </BottomLeftAnchor>
+          </MenuWrapper>
         </ScrollableMenuContainer>
         <Main>
           <Container>
