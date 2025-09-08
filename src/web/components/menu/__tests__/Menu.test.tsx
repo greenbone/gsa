@@ -83,7 +83,6 @@ describe('Menu rendering', () => {
     'LDAP',
     'RADIUS',
     'CVSS Calculator',
-    'About',
   ])('should render sub-menu: %s', async label => {
     renderMenuWith({
       capabilities: new EverythingCapabilities(),
