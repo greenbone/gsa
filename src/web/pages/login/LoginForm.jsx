@@ -13,7 +13,7 @@ import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
 import TextField from 'web/components/form/TextField';
 import useFormValues from 'web/components/form/useFormValues';
-import GreenboneLoginLogo from 'web/components/img/GreenboneLoginLogo';
+import GreenboneLoginLogo from 'web/components/img/LoginLogo';
 import ProductImage from 'web/components/img/Product';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
