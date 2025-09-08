@@ -36,7 +36,6 @@ import FilterDetailsPage from 'web/pages/filters/DetailsPage';
 import FiltersPage from 'web/pages/filters/ListPage';
 import GroupDetailsPage from 'web/pages/groups/DetailsPage';
 import GroupsPage from 'web/pages/groups/ListPage';
-import AboutPage from 'web/pages/help/About';
 import HostDetailsPage from 'web/pages/hosts/DetailsPage';
 import HostsPage from 'web/pages/hosts/ListPage';
 import LdapPage from 'web/pages/ldap/LdapPage';
@@ -120,7 +119,6 @@ const LoggedInRoutes = () => {
       <Page>
         <Routes>
           <Route element={<StartPage />} path="/dashboards" />
-          <Route element={<AboutPage />} path="/about" />
           <Route element={<AlertsPage />} path="/alerts" />
           <Route element={<AuditsPage />} path="/audits" />
           <Route element={<CertBundsPage />} path="/certbunds" />
