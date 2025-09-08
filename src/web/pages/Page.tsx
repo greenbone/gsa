@@ -5,6 +5,7 @@
 
 import {useLocation} from 'react-router';
 import styled from 'styled-components';
+import GSA_VERSION from 'version';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import Layout from 'web/components/layout/Layout';
@@ -14,9 +15,11 @@ import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import Footer from 'web/components/structure/Footer';
 import Header from 'web/components/structure/Header';
 import Main from 'web/components/structure/Main';
+import useGmp from 'web/hooks/useGmp';
 import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import CommunityFeedUsageNotification from 'web/pages/login/notifications/CommunityFeedUsageNotification';
+import Theme from 'web/utils/Theme';
 
 interface PageProps {
   children: React.ReactNode;
@@ -38,9 +41,21 @@ const ScrollableMenuContainer = styled.div`
   max-width: 250px;
 `;
 
+const BottomLeftAnchor = styled.div`
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  pointer-events: auto;
+`;
+
+const Text = styled.div`
+  color: ${Theme.mediumGray};
+`;
+
 const Page = ({children}: PageProps) => {
   const capabilities = useLoadCapabilities();
   const location = useLocation();
+  const gmp = useGmp();
   const [_] = useTranslation();
 
   if (!isDefined(capabilities)) {
@@ -56,6 +71,13 @@ const Page = ({children}: PageProps) => {
       <StyledLayout align={['start', 'stretch']} flex="row">
         <ScrollableMenuContainer>
           <Menu />
+          <BottomLeftAnchor>
+            <Text data-testid={'version'}>
+              {isDefined(gmp.settings.vendorVersion)
+                ? gmp.settings.vendorVersion
+                : _('Version {{version}}', {version: GSA_VERSION})}
+            </Text>
+          </BottomLeftAnchor>
         </ScrollableMenuContainer>
         <Main>
           <Container>
