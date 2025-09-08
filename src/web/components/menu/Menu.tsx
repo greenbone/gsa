@@ -174,7 +174,6 @@ const Menu = () => {
   const isLdapActive = Boolean(useMatch('/ldap'));
   const isRadiusActive = Boolean(useMatch('/radius'));
   const isCvssCalculatorActive = Boolean(useMatch('/cvsscalculator'));
-  const isAboutActive = Boolean(useMatch('/about'));
 
   const mayAccessAny = (keys: string[]) =>
     keys.some(key => isDefined(capabilities) && capabilities.mayAccess(key));
@@ -544,19 +543,13 @@ const Menu = () => {
         label: _('Help'),
         key: 'help',
         icon: CircleHelp,
-        defaultOpened: [isCvssCalculatorActive, isAboutActive].some(Boolean),
+        defaultOpened: [isCvssCalculatorActive].some(Boolean),
         subNav: [
           {
             label: _('CVSS Calculator'),
             to: '/cvsscalculator',
             isPathMatch: isCvssCalculatorActive,
             active: isCvssCalculatorActive,
-          },
-          {
-            label: _('About'),
-            to: '/about',
-            isPathMatch: isAboutActive,
-            active: isAboutActive,
           },
         ],
       },
