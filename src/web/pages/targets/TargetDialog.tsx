@@ -183,6 +183,9 @@ const TargetDialog = ({
 }: TargetDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
+  const gmp = useGmp();
+  const enableKrb5 = gmp.settings.enableKrb5;
+  const hasPermissionToCreateCredential = capabilities.mayCreate('credential');
 
   name = name || _('Unnamed');
   title = title || _('New Target');
@@ -274,8 +277,6 @@ const TargetDialog = ({
     krb5CredentialId,
   };
 
-  const gmp = useGmp();
-  const enableKrb5 = gmp.settings.enableKrb5;
   return (
     <SaveDialog<TargetDialogValues, TargetDialogDefaultValues>
       defaultValues={uncontrolledValues}
@@ -460,6 +461,7 @@ const TargetDialog = ({
                   />
                   {!inUse && (
                     <NewIcon<NewCredential>
+                      data-testid="new-icon-ssh"
                       title={_('Create a new credential')}
                       value={NEW_SSH}
                       onClick={
@@ -518,7 +520,7 @@ const TargetDialog = ({
                   value={state.krb5CredentialId}
                   onChange={onKrb5CredentialChange}
                 />
-                {!inUse && capabilities.mayCreate('credentials') && (
+                {!inUse && hasPermissionToCreateCredential && (
                   <NewIcon<NewCredential>
                     title={_('Create a new credential')}
                     value={NEW_KRB5}
@@ -544,8 +546,9 @@ const TargetDialog = ({
                   value={state.smbCredentialId}
                   onChange={onSmbCredentialChange}
                 />
-                {!inUse && capabilities.mayCreate('credentials') && (
+                {!inUse && hasPermissionToCreateCredential && (
                   <NewIcon<NewCredential>
+                    data-testid="new-icon-smb"
                     title={_('Create a new credential')}
                     value={NEW_SMB}
                     onClick={
@@ -569,8 +572,9 @@ const TargetDialog = ({
                   value={state.esxiCredentialId}
                   onChange={onEsxiCredentialChange}
                 />
-                {!inUse && capabilities.mayCreate('credentials') && (
+                {!inUse && hasPermissionToCreateCredential && (
                   <NewIcon<NewCredential>
+                    data-testid="new-icon-esxi"
                     title={_('Create a new credential')}
                     value={NEW_ESXI}
                     onClick={
@@ -594,8 +598,9 @@ const TargetDialog = ({
                   value={state.snmpCredentialId}
                   onChange={onSnmpCredentialChange}
                 />
-                {!inUse && capabilities.mayCreate('credentials') && (
+                {!inUse && hasPermissionToCreateCredential && (
                   <NewIcon<NewCredential>
+                    data-testid="new-icon-snmp"
                     title={_('Create a new credential')}
                     value={NEW_SNMP}
                     onClick={
