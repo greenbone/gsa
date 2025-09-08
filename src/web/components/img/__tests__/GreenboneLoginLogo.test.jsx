@@ -4,11 +4,14 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {render} from 'web/testing';
+import {rendererWith} from 'web/testing';
 import GreenboneLoginLogo from 'web/components/img/GreenboneLoginLogo';
 
 describe('GreenboneLogo tests', () => {
   test('should render', () => {
+    const {render} = rendererWith({
+      gmp: {settings: {}},
+    });
     const {element} = render(<GreenboneLoginLogo />);
 
     expect(element).toMatchSnapshot();
