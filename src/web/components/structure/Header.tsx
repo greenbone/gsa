@@ -65,6 +65,7 @@ const Header = () => {
       manualLink={manualURL}
       menuPoints={menuPoints}
       sessionTimer={<SessionTimer />}
+      userNavWidth={150}
       username={username}
     />
   );
