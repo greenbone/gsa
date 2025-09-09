@@ -18,6 +18,10 @@ import Credential, {
   CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
   KRB5_CREDENTIAL_TYPE,
+  ESXI_CREDENTIAL_TYPES,
+  SSH_CREDENTIAL_TYPES,
+  SMB_CREDENTIAL_TYPES,
+  SNMP_CREDENTIAL_TYPES,
 } from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
 import {ALIVE_TESTS} from 'gmp/models/target';
@@ -727,5 +731,59 @@ describe('TargetDialog tests', () => {
       targetExcludeSource: 'manual',
       targetSource: 'asset_hosts',
     });
+  });
+
+  describe('New Credential Icons', () => {
+    test.each([
+      [
+        'new-icon-esxi',
+        'esxiCredentialId',
+        'Create new ESXi credential',
+        ESXI_CREDENTIAL_TYPES,
+      ],
+      [
+        'new-icon-ssh',
+        'sshCredentialId',
+        'Create new SSH credential',
+        SSH_CREDENTIAL_TYPES,
+      ],
+
+      [
+        'new-icon-smb',
+        'smbCredentialId',
+        'Create new SMB credential',
+        SMB_CREDENTIAL_TYPES,
+      ],
+      [
+        'new-icon-snmp',
+        'snmpCredentialId',
+        'Create new SNMP credential',
+        SNMP_CREDENTIAL_TYPES,
+      ],
+    ])(
+      'should render NewIcon for %s when conditions are met',
+      (testId, idField, title, types) => {
+        const handleCreate = testing.fn();
+
+        const {render} = rendererWith({gmp, capabilities: true});
+
+        render(
+          <TargetDialog
+            credentials={credentials}
+            inUse={false}
+            onNewCredentialsClick={handleCreate}
+          />,
+        );
+
+        const newIcon = screen.getByTestId(testId);
+        expect(newIcon).toBeInTheDocument();
+        fireEvent.click(newIcon);
+        expect(handleCreate).toHaveBeenCalledWith({
+          idField,
+          title,
+          types,
+        });
+      },
+    );
   });
 });
