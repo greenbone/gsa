@@ -4,16 +4,25 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith, fireEvent} from 'web/testing';
+import {screen, rendererWith, fireEvent, waitFor} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
 
 describe('NewIconMenu tests', () => {
-  test('should render', () => {
+  test('should render', async () => {
     const {render} = rendererWith({capabilities: true});
     render(<NewIconMenu />);
-    expect(screen.getByTestId('new-task-menu')).toBeInTheDocument();
-    expect(screen.getByTestId('new-container-task-menu')).toBeInTheDocument();
+
+    const button = screen.getByTestId('new-icon').closest('button');
+    expect(button).not.toBeNull();
+    if (button) {
+      fireEvent.click(button);
+    }
+
+    await waitFor(() => {
+      expect(screen.getByTestId('new-task-menu')).toBeInTheDocument();
+      expect(screen.getByTestId('new-container-task-menu')).toBeInTheDocument();
+    });
   });
 
   test('should not render when capabilities do not allow creating tasks', () => {
@@ -25,19 +34,35 @@ describe('NewIconMenu tests', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('should call onNewClick when New Task is clicked', () => {
+  test('should call onNewClick when New Task is clicked', async () => {
     const onNewClick = testing.fn();
     const {render} = rendererWith({capabilities: true});
     render(<NewIconMenu onNewClick={onNewClick} />);
-    fireEvent.click(screen.getByTestId('new-task-menu'));
+
+    const button = screen.getByTestId('new-icon').closest('button');
+    expect(button).not.toBeNull();
+    if (button) {
+      fireEvent.click(button);
+    }
+
+    const menuItem = await screen.findByTestId('new-task-menu');
+    fireEvent.click(menuItem);
     expect(onNewClick).toHaveBeenCalled();
   });
 
-  test('calls onNewContainerClick when New Container Task is clicked', () => {
+  test('calls onNewContainerClick when New Container Task is clicked', async () => {
     const onNewContainerClick = testing.fn();
     const {render} = rendererWith({capabilities: true});
     render(<NewIconMenu onNewContainerClick={onNewContainerClick} />);
-    fireEvent.click(screen.getByTestId('new-container-task-menu'));
+
+    const button = screen.getByTestId('new-icon').closest('button');
+    expect(button).not.toBeNull();
+    if (button) {
+      fireEvent.click(button);
+    }
+
+    const menuItem = await screen.findByTestId('new-container-task-menu');
+    fireEvent.click(menuItem);
     expect(onNewContainerClick).toHaveBeenCalled();
   });
 });
