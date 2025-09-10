@@ -12,8 +12,6 @@ interface PageTitleProps {
   title?: string;
 }
 
-export const DEFAULT_TITLE = 'Greenbone Security Assistant';
-
 const PageTitle = ({title: pageTitle}: PageTitleProps) => {
   const gmp = useGmp();
   const vendorLabel = gmp?.settings?.vendorLabel ?? 'defaultVendorLabel';

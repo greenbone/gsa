@@ -20,6 +20,7 @@ import GmpSettings, {
   DEFAULT_RELOAD_INTERVAL_INACTIVE,
   DEFAULT_TIMEOUT,
   DEFAULT_REPORT_RESULTS_THRESHOLD,
+  DEFAULT_TITLE,
 } from 'gmp/gmpsettings';
 import {
   DEFAULT_SEVERITY_RATING,
@@ -83,7 +84,7 @@ describe('GmpSettings tests', () => {
     expect(settings.username).toBeUndefined();
     expect(settings.vendorVersion).toBeUndefined();
     expect(settings.vendorLabel).toBeUndefined();
-    expect(settings.vendorTitle).toBeUndefined();
+    expect(settings.vendorTitle).toEqual(DEFAULT_TITLE);
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', DEFAULT_LOG_LEVEL);

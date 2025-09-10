@@ -59,6 +59,7 @@ export const DEFAULT_PROTOCOLDOC_URL = `https://docs.greenbone.net/API/GMP/gmp-2
 export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_LOG_LEVEL = 'warn';
 export const DEFAULT_TIMEOUT = 300000; // 5 minutes
+export const DEFAULT_TITLE = 'OPENVAS';
 
 const set = (
   storage: GmpSettingsStorage,
@@ -115,7 +116,7 @@ class GmpSettings {
   readonly protocolDocUrl!: string;
   readonly severityRating!: SeverityRating;
   readonly vendorLabel?: string;
-  readonly vendorTitle?: string;
+  readonly vendorTitle!: string;
   readonly vendorVersion?: string;
 
   constructor(
@@ -145,7 +146,7 @@ class GmpSettings {
       timeout = DEFAULT_TIMEOUT,
       vendorVersion,
       vendorLabel,
-      vendorTitle,
+      vendorTitle = DEFAULT_TITLE,
     } = options;
     let {
       apiProtocol = protocol,
