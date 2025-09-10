@@ -47,7 +47,7 @@ describe('TaskPage ToolBarIcons test', () => {
     );
   });
 
-  test('should call click handlers', () => {
+  test('should call click handlers', async () => {
     const handleAdvancedTaskWizardClick = testing.fn();
     const handleModifyTaskWizardClick = testing.fn();
     const handleContainerTaskCreateClick = testing.fn();
@@ -74,29 +74,54 @@ describe('TaskPage ToolBarIcons test', () => {
       />,
     );
 
-    const taskWizardMenu = screen.getByTestId('task-wizard-menu');
+    const wizardButton = screen.getByTestId('wizard-icon').closest('button');
+    expect(wizardButton).not.toBeNull();
+    if (wizardButton) {
+      fireEvent.click(wizardButton);
+    }
+
+    const taskWizardMenu = await screen.findByTestId('task-wizard-menu');
     expect(taskWizardMenu).toHaveTextContent('Task Wizard');
     fireEvent.click(taskWizardMenu);
     expect(handleTaskWizardClick).toHaveBeenCalled();
 
-    const advancedTaskWizardMenu = screen.getByTestId(
+    if (wizardButton) {
+      fireEvent.click(wizardButton);
+    }
+    const advancedTaskWizardMenu = await screen.findByTestId(
       'advanced-task-wizard-menu',
     );
     expect(advancedTaskWizardMenu).toHaveTextContent('Advanced Task Wizard');
     fireEvent.click(advancedTaskWizardMenu);
     expect(handleAdvancedTaskWizardClick).toHaveBeenCalled();
 
-    const modifyTaskWizardMenu = screen.getByTestId('modify-task-wizard-menu');
+    if (wizardButton) {
+      fireEvent.click(wizardButton);
+    }
+    const modifyTaskWizardMenu = await screen.findByTestId(
+      'modify-task-wizard-menu',
+    );
     expect(modifyTaskWizardMenu).toHaveTextContent('Modify Task Wizard');
     fireEvent.click(modifyTaskWizardMenu);
     expect(handleModifyTaskWizardClick).toHaveBeenCalled();
 
-    const newTaskMenu = screen.getByTestId('new-task-menu');
+    const newButton = screen.getByTestId('new-icon').closest('button');
+    expect(newButton).not.toBeNull();
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+
+    const newTaskMenu = await screen.findByTestId('new-task-menu');
     expect(newTaskMenu).toHaveTextContent('New Task');
     fireEvent.click(newTaskMenu);
     expect(handleTaskCreateClick).toHaveBeenCalled();
 
-    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+    const newContainerTaskMenu = await screen.findByTestId(
+      'new-container-task-menu',
+    );
     expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
     fireEvent.click(newContainerTaskMenu);
     expect(handleContainerTaskCreateClick).toHaveBeenCalled();
