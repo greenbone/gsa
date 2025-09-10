@@ -225,8 +225,8 @@ config = {
 ```
 
 It is evaluated in the `GmpSettings` object implemented in the
-[gmpsettings.js](./src/gmp/gmpsettings.js) file. The `GmpSettings` object is
-instantiated once for the [GSA application](./src/web/app.js#L53)
+[gmpsettings.ts](./src/gmp/gmpsettings.ts) file. The `GmpSettings` object is
+instantiated once for the [GSA application](./src/web/App.tsx#L29)
 
 ### Config Variables
 
