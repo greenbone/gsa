@@ -255,7 +255,7 @@ instantiated once for the [GSA application](./src/web/app.js#L53)
 | [severityRating](#severityrating)                                   | `'CVSSv2'` or `'CVSSv3'`   | `'CVSSv2'`                                                                       | -                         | x                       |
 | [vendorVersion](#vendorversion)                                     | String                     | undefined                                                                        | -                         | x                       |
 | [vendorLabel](#vendorlabel)                                         | String                     | undefined                                                                        | -                         | x                       |
-| [vendorTitle](#vendortitle)                                         | String                     | Greenbone Security Assistant                                                     | x                         | x                       |
+| [vendorTitle](#vendortitle)                                         | String                     | OPENVAS                                                                          | x                         | x                       |
 
 #### vendorVersion
 
