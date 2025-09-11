@@ -12,9 +12,14 @@ import useTranslation from 'web/hooks/useTranslation';
 interface NewIconMenuProps {
   onNewClick?: () => void;
   onNewContainerClick?: () => void;
+  onNewAgentTaskClick?: () => void;
 }
 
-const NewIconMenu = ({onNewClick, onNewContainerClick}: NewIconMenuProps) => {
+const NewIconMenu = ({
+  onNewClick,
+  onNewContainerClick,
+  onNewAgentTaskClick,
+}: NewIconMenuProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (capabilities.mayCreate('task')) {
@@ -29,6 +34,11 @@ const NewIconMenu = ({onNewClick, onNewContainerClick}: NewIconMenuProps) => {
           data-testid="new-container-task-menu"
           title={_('New Container Task')}
           onClick={onNewContainerClick}
+        />
+        <MenuEntry
+          data-testid="new-agent-task-menu"
+          title={_('New Agent Task')}
+          onClick={onNewAgentTaskClick}
         />
       </IconMenu>
     );
