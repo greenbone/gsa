@@ -652,7 +652,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(links[1]).toHaveAttribute('href', '/tasks');
   });
 
-  test('should call click handlers for new task', () => {
+  test('should call click handlers for new task', async () => {
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
     const handleContainerTaskCreate = testing.fn();
@@ -694,12 +694,23 @@ describe('Task ToolBarIcons tests', () => {
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const newTaskMenu = screen.getByTestId('new-task-menu');
+    const newButton = screen.getByTestId('new-icon').closest('button');
+    expect(newButton).not.toBeNull();
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+
+    const newTaskMenu = await screen.findByTestId('new-task-menu');
     expect(newTaskMenu).toHaveTextContent('New Task');
     fireEvent.click(newTaskMenu);
     expect(handleTaskCreate).toHaveBeenCalled();
 
-    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+    const newContainerTaskMenu = await screen.findByTestId(
+      'new-container-task-menu',
+    );
     expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
     fireEvent.click(newContainerTaskMenu);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
@@ -754,7 +765,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(badgeIcons[3]).toHaveTextContent('0');
   });
 
-  test('should call click handlers for running task', () => {
+  test('should call click handlers for running task', async () => {
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
     const handleContainerTaskCreate = testing.fn();
@@ -796,12 +807,22 @@ describe('Task ToolBarIcons tests', () => {
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const newTaskMenu = screen.getByTestId('new-task-menu');
+    const newButton = screen.getByTestId('new-icon').closest('button');
+    expect(newButton).not.toBeNull();
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+    const newTaskMenu = await screen.findByTestId('new-task-menu');
     expect(newTaskMenu).toHaveTextContent('New Task');
     fireEvent.click(newTaskMenu);
     expect(handleTaskCreate).toHaveBeenCalled();
 
-    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+    const newContainerTaskMenu = await screen.findByTestId(
+      'new-container-task-menu',
+    );
     expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
     fireEvent.click(newContainerTaskMenu);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
@@ -862,7 +883,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(badgeIcons[3]).toHaveTextContent('0');
   });
 
-  test('should call click handlers for stopped task', () => {
+  test('should call click handlers for stopped task', async () => {
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
     const handleContainerTaskCreate = testing.fn();
@@ -904,12 +925,23 @@ describe('Task ToolBarIcons tests', () => {
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const newTaskMenu = screen.getByTestId('new-task-menu');
+    const newButton = screen.getByTestId('new-icon').closest('button');
+    expect(newButton).not.toBeNull();
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+
+    const newTaskMenu = await screen.findByTestId('new-task-menu');
     expect(newTaskMenu).toHaveTextContent('New Task');
     fireEvent.click(newTaskMenu);
     expect(handleTaskCreate).toHaveBeenCalled();
 
-    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+    const newContainerTaskMenu = await screen.findByTestId(
+      'new-container-task-menu',
+    );
     expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
     fireEvent.click(newContainerTaskMenu);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
@@ -970,7 +1002,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(badgeIcons[3]).toHaveTextContent('0');
   });
 
-  test('should call click handlers for finished task', () => {
+  test('should call click handlers for finished task', async () => {
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
     const handleContainerTaskCreate = testing.fn();
@@ -1014,12 +1046,23 @@ describe('Task ToolBarIcons tests', () => {
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const newTaskMenu = screen.getByTestId('new-task-menu');
+    const newButton = screen.getByTestId('new-icon').closest('button');
+    expect(newButton).not.toBeNull();
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+
+    const newTaskMenu = await screen.findByTestId('new-task-menu');
     expect(newTaskMenu).toHaveTextContent('New Task');
     fireEvent.click(newTaskMenu);
     expect(handleTaskCreate).toHaveBeenCalled();
 
-    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+    const newContainerTaskMenu = await screen.findByTestId(
+      'new-container-task-menu',
+    );
     expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
     fireEvent.click(newContainerTaskMenu);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
@@ -1080,7 +1123,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(badgeIcons[3]).toHaveTextContent('3');
   });
 
-  test('should not call click handlers without permission', () => {
+  test('should not call click handlers without permission', async () => {
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
     const handleContainerTaskCreate = testing.fn();
@@ -1122,12 +1165,23 @@ describe('Task ToolBarIcons tests', () => {
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const newTaskMenu = screen.getByTestId('new-task-menu');
+    const newButton = screen.getByTestId('new-icon').closest('button');
+    expect(newButton).not.toBeNull();
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+
+    const newTaskMenu = await screen.findByTestId('new-task-menu');
     expect(newTaskMenu).toHaveTextContent('New Task');
     fireEvent.click(newTaskMenu);
     expect(handleTaskCreate).toHaveBeenCalled();
 
-    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+    const newContainerTaskMenu = await screen.findByTestId(
+      'new-container-task-menu',
+    );
     expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
     fireEvent.click(newContainerTaskMenu);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
@@ -1252,7 +1306,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(handleTaskResume).not.toHaveBeenCalled();
   });
 
-  test('should call click handlers for container task', () => {
+  test('should call click handlers for container task', async () => {
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
     const handleContainerTaskCreate = testing.fn();
@@ -1294,12 +1348,23 @@ describe('Task ToolBarIcons tests', () => {
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const newTaskMenu = screen.getByTestId('new-task-menu');
+    const newButton = screen.getByTestId('new-icon').closest('button');
+    expect(newButton).not.toBeNull();
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+
+    const newTaskMenu = await screen.findByTestId('new-task-menu');
     expect(newTaskMenu).toHaveTextContent('New Task');
     fireEvent.click(newTaskMenu);
     expect(handleTaskCreate).toHaveBeenCalled();
 
-    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+    const newContainerTaskMenu = await screen.findByTestId(
+      'new-container-task-menu',
+    );
     expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
     fireEvent.click(newContainerTaskMenu);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
