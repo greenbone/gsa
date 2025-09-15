@@ -48,6 +48,7 @@ interface PermissionDialogProps {
 
 const NEED_RESOURCE_ID = [
   'Super',
+  'delete_agent',
   'delete_alert',
   'delete_asset',
   'delete_config',
@@ -70,6 +71,7 @@ const NEED_RESOURCE_ID = [
   'delete_task',
   'delete_user',
   'describe_auth',
+  'get_agents',
   'get_alerts',
   'get_assets',
   'get_configs',
@@ -95,6 +97,7 @@ const NEED_RESOURCE_ID = [
   'get_targets',
   'get_tasks',
   'get_users',
+  'modify_agent',
   'modify_alert',
   'modify_asset',
   'modify_config',

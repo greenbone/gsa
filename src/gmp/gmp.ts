@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import 'gmp/commands/agent-groups';
+// import 'gmp/commands/agents';
 import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
 import 'gmp/commands/auditreports';
