@@ -6,6 +6,7 @@
 import {ensureDate} from 'gmp/locale/date';
 import {Date} from 'gmp/models/date';
 import {isDefined, hasValue} from 'gmp/utils/identity';
+import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';
 import {
   formattedUserSettingDateTimeWithTimeZone,
@@ -25,6 +26,7 @@ const DateTime = ({
   date,
   showTimezoneAsSeparateLine = false,
 }: DateTimeProps) => {
+  const [_] = useTranslation();
   const [userTimezone] = useUserTimezone();
 
   date = ensureDate(date);
@@ -33,7 +35,7 @@ const DateTime = ({
   }
 
   if (!isDefined(date) || !date.isValid()) {
-    return null;
+    return <p>{_('Invalid or no date available')}</p>;
   }
 
   if (showTimezoneAsSeparateLine) {
