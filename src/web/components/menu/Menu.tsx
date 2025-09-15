@@ -125,6 +125,10 @@ const Menu = () => {
   const alertMatch = useMatch('/alert/*');
   const isAlertsActive = Boolean(alertsMatch || alertMatch);
 
+  const agentsMatch = useMatch('/agents');
+  const agentMatch = useMatch('/agent/*');
+  const isAgentsActive = Boolean(agentsMatch || agentMatch);
+
   const schedulesMatch = useMatch('/schedules');
   const scheduleMatch = useMatch('/schedule/*');
   const isSchedulesActive = Boolean(schedulesMatch || scheduleMatch);
@@ -396,6 +400,7 @@ const Menu = () => {
           isScannersActive,
           isFiltersActive,
           isTagsActive,
+          isAgentsActive, // Added for Agents
         ].some(Boolean),
         subNav: [
           capabilities.mayAccess('target') && {
@@ -463,6 +468,12 @@ const Menu = () => {
             to: '/tags',
             isPathMatch: isTagsActive,
             active: isTagsActive,
+          },
+          {
+            label: _('Agents'),
+            to: '/agents',
+            isPathMatch: isAgentsActive,
+            active: isAgentsActive,
           },
         ].filter(Boolean),
       },

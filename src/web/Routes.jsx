@@ -16,6 +16,7 @@ import Authorized from 'web/Authorized';
 import Loading from 'web/components/loading/Loading';
 import SessionObserver from 'web/components/observer/SessionObserver';
 import SessionTracker from 'web/components/observer/SessionTracker';
+import AgentListPage from 'web/pages/agents/AgentsListPage';
 import AlertDetailsPage from 'web/pages/alerts/DetailsPage';
 import AlertsPage from 'web/pages/alerts/ListPage';
 import AuditsDetailsPage from 'web/pages/audits/DetailsPage';
@@ -119,6 +120,7 @@ const LoggedInRoutes = () => {
       <Page>
         <Routes>
           <Route element={<StartPage />} path="/dashboards" />
+          <Route element={<AgentListPage />} path="/agents" />
           <Route element={<AlertsPage />} path="/alerts" />
           <Route element={<AuditsPage />} path="/audits" />
           <Route element={<CertBundsPage />} path="/certbunds" />

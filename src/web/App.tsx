@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {ThemeProvider} from '@greenbone/ui-lib';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {Provider as StoreProvider} from 'react-redux';
 import Gmp from 'gmp/gmp';
 import GmpSettings from 'gmp/gmpsettings';
@@ -25,6 +26,7 @@ import {
 } from 'web/store/usersettings/actions';
 
 void initLocale();
+const queryClient = new QueryClient();
 
 const settings = new GmpSettings(global.localStorage, global.config);
 const gmp = new Gmp(settings);
@@ -82,11 +84,13 @@ class App extends React.Component<{}> {
         <GlobalStyles />
         <ErrorBoundary message={_('An error occurred on this page')}>
           <GmpContext.Provider value={gmp}>
-            <StoreProvider store={store}>
-              <LanguageProvider>
-                <Routes />
-              </LanguageProvider>
-            </StoreProvider>
+            <QueryClientProvider client={queryClient}>
+              <StoreProvider store={store}>
+                <LanguageProvider>
+                  <Routes />
+                </LanguageProvider>
+              </StoreProvider>
+            </QueryClientProvider>
           </GmpContext.Provider>
         </ErrorBoundary>
       </ThemeProvider>
