@@ -35,13 +35,32 @@ interface AgentModifyParams {
   comment?: string;
 }
 
-export const useGetAgents = ({filter = undefined}: {filter?: Filter}) =>
-  useGetQuery({
+export const useGetAgents = ({
+  filter = undefined,
+  scannerId = undefined,
+  enabled = true,
+}: {
+  filter?: Filter;
+  scannerId?: string;
+  enabled?: boolean;
+}) => {
+  let finalFilter = filter;
+
+  if (scannerId) {
+    const scannerFilter = Filter.fromString(`scanner=${scannerId}`);
+    finalFilter = filter
+      ? Filter.fromString(`${filter.toFilterString()} scanner=${scannerId}`)
+      : scannerFilter;
+  }
+
+  return useGetQuery({
     cmd: 'get_agents',
-    filter,
+    filter: finalFilter,
     name: 'agent',
     parseEntity: el => Agent.fromElement(el as AgentElement | undefined),
+    enabled,
   });
+};
 
 export const useModifyAgents = () =>
   useSaveMutation<AgentModifyParams, unknown>({
