@@ -57,12 +57,10 @@ export class AgentGroupCommand extends EntityCommand<
       data.scanner_id = scannerId;
     }
 
-    // Add agents - flatten the array
-    if (agents && agents.length > 0) {
-      agents.forEach((agent, index) => {
-        data[`agent_${index}_id`] = agent.id;
-      });
-    }
+    data['agent_ids:'] =
+      agents && agents.length > 0
+        ? agents.map(agent => agent.id).join(',')
+        : '';
 
     return this.action(data);
   }
@@ -88,12 +86,10 @@ export class AgentGroupCommand extends EntityCommand<
       data.comment = comment;
     }
 
-    // Add agents - flatten the array according to expected HTTP API format
-    if (agents && agents.length > 0) {
-      agents.forEach((agent, index) => {
-        data[`agent_${index}_id`] = agent.id;
-      });
-    }
+    data['agent_ids:'] =
+      agents && agents.length > 0
+        ? agents.map(agent => agent.id).join(',')
+        : '';
 
     return this.action(data);
   }

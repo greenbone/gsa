@@ -4,7 +4,7 @@
  */
 
 import 'gmp/commands/agent-groups';
-// import 'gmp/commands/agents';
+import 'gmp/commands/agents';
 import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
 import 'gmp/commands/auditreports';

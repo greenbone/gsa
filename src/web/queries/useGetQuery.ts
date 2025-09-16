@@ -26,7 +26,7 @@ export function useGetQuery<T = unknown>({
   parseEntity,
   select,
   enabled = true,
-  refetchInterval = 10000,
+  refetchInterval = undefined,
 }: UseGetQueryParams<T>) {
   const gmp = useGmp();
   const {token} = gmp.settings;
