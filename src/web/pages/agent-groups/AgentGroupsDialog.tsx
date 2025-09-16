@@ -3,7 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
+import Filter from 'gmp/models/filter';
+import Scanner, {
+  AGENT_CONTROLLER_SCANNER_TYPE,
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+  ScannerElement,
+} from 'gmp/models/scanner';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
@@ -12,13 +18,16 @@ import Select from 'web/components/form/Select';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
+import {useGetAgents} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
+import {useGetQuery} from 'web/queries/useGetQuery';
 
 interface AgentGroupsDialogProps {
   title?: string;
   onClose: () => void;
   onSave: (values: {
     name: string;
+    comment: string;
     agentController: string;
     selectedAgents: string[];
     network: string;
@@ -26,10 +35,6 @@ interface AgentGroupsDialogProps {
     manualConfiguration: string;
     filePath: string;
   }) => void;
-}
-interface AgentOption {
-  value: string;
-  label: string;
 }
 
 const AgentGroupsDialog = ({
@@ -40,30 +45,31 @@ const AgentGroupsDialog = ({
   const [_] = useTranslation();
 
   const [selectedAgentController, setSelectedAgentController] = useState('');
-  const [availableAgents, setAvailableAgents] = useState<AgentOption[]>([]);
 
   title = title || _('New Agent Group');
 
-  const agentControllers = [
-    {value: 'controller_1', label: _('Agent Controller 1')},
-    {value: 'controller_2', label: _('Agent Controller 2')},
-    {value: 'controller_3', label: _('Agent Controller 3')},
-  ];
+  const agentControllersFilter = Filter.fromString(
+    `type=${AGENT_CONTROLLER_SCANNER_TYPE} or type=${AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}`,
+  );
 
-  useEffect(() => {
-    if (selectedAgentController) {
-      /* TODO: Fetch agents for selected controller */
-      const mockAgents = [
-        {value: 'agent_1', label: _('Agent 1 (192.168.1.10)')},
-        {value: 'agent_2', label: _('Agent 2 (192.168.1.11)')},
-        {value: 'agent_3', label: _('Agent 3 (192.168.1.12)')},
-        {value: 'agent_4', label: _('Agent 4 (192.168.1.13)')},
-      ];
-      setAvailableAgents(mockAgents);
-    } else {
-      setAvailableAgents([]);
-    }
-  }, [selectedAgentController, _]);
+  const {data: scannersData} = useGetQuery<Scanner>({
+    cmd: 'get_scanners',
+    name: 'get_scanners',
+    filter: agentControllersFilter,
+    parseEntity: el => Scanner.fromElement(el as ScannerElement | undefined),
+  });
+
+  const agentControllers =
+    (scannersData as {entities?: Scanner[]})?.entities?.map(scanner => ({
+      value: scanner.id || '',
+      label: scanner.name || _('Unknown Scanner'),
+    })) || [];
+
+  const allAgentsFilter = Filter.fromString('first=1 rows=-1');
+  const {data: agentsData} = useGetAgents({
+    filter: selectedAgentController ? allAgentsFilter : undefined,
+    enabled: Boolean(selectedAgentController),
+  });
 
   const handleAgentControllerChange = (value, onValueChange) => {
     setSelectedAgentController(value);
@@ -79,6 +85,7 @@ const AgentGroupsDialog = ({
     <SaveDialog
       defaultValues={{
         name: '',
+        comment: '',
         agentController: '',
         selectedAgents: [] as string[],
         network: '',
@@ -91,6 +98,24 @@ const AgentGroupsDialog = ({
       onSave={onSave}
     >
       {({values: state, onValueChange}) => {
+        const availableAgents = agentsData
+          ? (
+              agentsData as {
+                entities?: Array<{
+                  id: string;
+                  name?: string;
+                  hostname?: string;
+                  agentId?: string;
+                }>;
+              }
+            )?.entities?.map(agent => ({
+              value: agent.id || '',
+              label: `${agent.name || agent.agentId || _('Unknown Agent')} ${
+                agent.hostname ? `(${agent.hostname})` : ''
+              }`.trim(),
+            })) || []
+          : [];
+
         return (
           <>
             <TextField
@@ -99,6 +124,15 @@ const AgentGroupsDialog = ({
               value={state.name}
               onChange={onValueChange}
             />
+
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+
             {/* TODO: Implement agent controller selection */}
             <Select
               items={agentControllers}
@@ -110,7 +144,7 @@ const AgentGroupsDialog = ({
               }
             />
 
-            {selectedAgentController && (
+            {state.agentController && (
               <MultiSelect
                 items={availableAgents}
                 label={_('Select Agents')}

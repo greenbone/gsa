@@ -120,11 +120,30 @@ const AgentGroupsComponent = ({
     },
   });
 
-  const handleSave = (data: object) => {
+  const handleSave = (data: {
+    name: string;
+    comment: string;
+    agentController: string;
+    selectedAgents: string[];
+    network: string;
+    configurationMethod: string;
+    manualConfiguration: string;
+    filePath: string;
+  }) => {
+    const backendData = {
+      name: data.name,
+      comment: data.comment,
+      scannerId: data.agentController,
+      agents: data.selectedAgents.map(id => ({id})),
+    };
+
     if (selectedAgentGroup) {
-      return saveMutation.mutateAsync(data);
+      return saveMutation.mutateAsync({
+        id: selectedAgentGroup.id,
+        ...backendData,
+      });
     } else {
-      return createMutation.mutateAsync(data);
+      return createMutation.mutateAsync(backendData);
     }
   };
 

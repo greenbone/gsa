@@ -34,7 +34,7 @@ interface ScannerParamElement {
   paramType?: string;
 }
 
-interface ScannerElement extends ModelElement {
+export interface ScannerElement extends ModelElement {
   ca_pub?: string;
   ca_pub_info?: {
     activation_time?: string;
