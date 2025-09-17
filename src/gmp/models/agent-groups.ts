@@ -9,7 +9,8 @@ import {parseDate, parseText, parseYesNo, YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 export interface AgentGroupAgent {
-  id: string;
+  _id?: string;
+  id?: string;
   name?: string;
 }
 
@@ -30,12 +31,14 @@ export interface AgentGroupElement extends ModelElement {
   inUse?: YesNo;
   scanner?: {
     _id?: string;
-    id?: string; // Allow both _id and id
+    id?: string;
     name?: string;
   };
-  agents?: {
-    agent?: AgentGroupAgent | AgentGroupAgent[];
-  };
+  agents?:
+    | {
+        agent?: AgentGroupAgent | AgentGroupAgent[];
+      }
+    | AgentGroupAgent[];
 }
 
 interface AgentGroupProperties extends ModelProperties {
@@ -109,7 +112,6 @@ class AgentGroup extends Model {
     copy.name = parseText(name);
     copy.comment = parseText(comment);
 
-    // Handle dates - prefer snake_case, fallback to camelCase
     const creationTimeValue = creation_time || creationTime;
     copy.creationTime = isDefined(creationTimeValue)
       ? typeof creationTimeValue === 'string'
@@ -134,23 +136,30 @@ class AgentGroup extends Model {
         }
       : undefined;
 
-    if (isDefined(agents) && isDefined(agents.agent)) {
-      const agentData = agents.agent;
-      if (Array.isArray(agentData)) {
-        copy.agents = agentData.map(agent => ({
-          id: agent.id || '',
+    if (isDefined(agents)) {
+      if (Array.isArray(agents)) {
+        copy.agents = agents.map(agent => ({
+          id: agent._id || agent.id || '',
           name: parseText(agent.name),
         }));
+      } else if (isDefined(agents.agent)) {
+        const agentData = agents.agent;
+        if (Array.isArray(agentData)) {
+          copy.agents = agentData.map(agent => ({
+            id: agent._id || agent.id || '',
+            name: parseText(agent.name),
+          }));
+        } else {
+          copy.agents = [
+            {
+              id: agentData._id || agentData.id || '',
+              name: parseText(agentData.name),
+            },
+          ];
+        }
       } else {
-        copy.agents = [
-          {
-            id: agentData.id || '',
-            name: parseText(agentData.name),
-          },
-        ];
+        copy.agents = [];
       }
-    } else {
-      copy.agents = [];
     }
 
     return copy;
@@ -163,7 +172,6 @@ class AgentGroup extends Model {
   isInUse(): boolean {
     return this.inUse === true;
   }
-
   getAgentCount(): number {
     return this.agents?.length || 0;
   }
