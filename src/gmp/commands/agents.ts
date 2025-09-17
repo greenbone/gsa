@@ -70,29 +70,26 @@ export class AgentCommand extends EntityCommand<Agent, AgentElement> {
       cmd: 'modify_agents',
     };
 
-    if (agents && agents.length > 0) {
-      data['agent_ids:'] = agents[0].id;
+    if (agents?.length) {
+      data['agent_ids:'] = agents.map(agent => agent.id).join(',');
     }
 
     if (authorized !== undefined) {
       data.authorized = authorized;
     }
 
-    const attempts = config?.agent_control?.retry?.attempts ?? 10;
-    const delayInSeconds = config?.agent_control?.retry?.delay_in_seconds ?? 60;
-    data.attempts = attempts;
-    data.delay_in_seconds = delayInSeconds;
-
-    const bulkSize = config?.agent_script_executor?.bulk_size ?? 8;
+    /*
+     * We expect the values to always be present from the fetch,
+     * if value is not present, we send undefined.
+     */
+    const attempts = config?.agent_control?.retry?.attempts;
+    const delayInSeconds = config?.agent_control?.retry?.delay_in_seconds;
+    const maxJitterInSeconds =
+      config?.agent_control?.retry?.max_jitter_in_seconds;
+    const bulkSize = config?.agent_script_executor?.bulk_size;
     const bulkThrottleTime =
-      config?.agent_script_executor?.bulk_throttle_time_in_ms ?? 100;
-    const indexerDirDepth =
-      config?.agent_script_executor?.indexer_dir_depth ?? 10;
-
-    data.bulk_size = bulkSize;
-    data.bulk_throttle_time_in_ms = bulkThrottleTime;
-    data.indexer_dir_depth = indexerDirDepth;
-
+      config?.agent_script_executor?.bulk_throttle_time_in_ms;
+    const indexerDirDepth = config?.agent_script_executor?.indexer_dir_depth;
     if (config?.agent_script_executor?.scheduler_cron_time?.item) {
       const cronTime = config.agent_script_executor.scheduler_cron_time.item;
       if (Array.isArray(cronTime)) {
@@ -104,8 +101,16 @@ export class AgentCommand extends EntityCommand<Agent, AgentElement> {
       data['scheduler_cron_times:'] = ['0 */12 * * *'];
     }
 
-    const intervalInSeconds = config?.heartbeat?.interval_in_seconds ?? 1024;
-    const missUntilInactive = config?.heartbeat?.miss_until_inactive ?? 1;
+    const intervalInSeconds = config?.heartbeat?.interval_in_seconds;
+    const missUntilInactive = config?.heartbeat?.miss_until_inactive;
+
+    data.attempts = attempts;
+    data.delay_in_seconds = delayInSeconds;
+    data.max_jitter_in_seconds = maxJitterInSeconds;
+
+    data.bulk_size = bulkSize;
+    data.bulk_throttle_time_in_ms = bulkThrottleTime;
+    data.indexer_dir_depth = indexerDirDepth;
 
     data.interval_in_seconds = intervalInSeconds;
     data.miss_until_inactive = missUntilInactive;
@@ -133,10 +138,8 @@ export class AgentsCommand extends EntitiesCommand<Agent> {
       cmd: 'delete_agents',
     };
 
-    if (agents && agents.length > 0) {
-      agents.forEach((agent, index) => {
-        data[`agent_${index}_id`] = agent.id;
-      });
+    if (agents?.length) {
+      data['agent_ids:'] = agents.map(agent => agent.id).join(',');
     }
 
     return this.httpPost(data);
