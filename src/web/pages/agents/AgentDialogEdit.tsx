@@ -43,6 +43,14 @@ const AgentDialogEdit = ({
   title = title || _('Edit Agent Details');
 
   const extractSchedulerCronTime = () => {
+    const cronTimes = config?.agent_script_executor?.scheduler_cron_times;
+    if (Array.isArray(cronTimes) && cronTimes.length > 0) {
+      const firstCronTime = cronTimes[0];
+      if (typeof firstCronTime === 'string' && !firstCronTime.startsWith('@')) {
+        return firstCronTime;
+      }
+    }
+
     const cronConfig = config?.agent_script_executor?.scheduler_cron_time;
 
     if (typeof cronConfig === 'string') {

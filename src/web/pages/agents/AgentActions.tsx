@@ -71,7 +71,10 @@ const AgentActions = ({
             onClick={handleAuthorizeClick}
           />
         )}
-
+        {/*
+         * TODO Check if it's active or a new button from entity has to be created because of entity.isWritable() && !entity.isInUse()
+         * src/web/entity/icon/DeleteIcon.tsx line 54
+         */}
         <DeleteIcon
           displayName={_('Agent')}
           entity={entity}
