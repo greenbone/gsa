@@ -10,8 +10,6 @@ import Filter, {AGENTS_FILTER_FILTER} from 'gmp/models/filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
-import Download from 'web/components/form/Download';
-import useDownload from 'web/components/form/useDownload';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
@@ -44,7 +42,6 @@ const AgentListPage = () => {
   const [deleteAgent, setDeleteAgent] = useState<Agent | undefined>(undefined);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
-  const [downloadRef, handleDownload] = useDownload();
   const deleteFuncRef = useRef<((agent: Agent) => Promise<unknown>) | null>(
     null,
   );
@@ -73,10 +70,6 @@ const AgentListPage = () => {
 
   const entitiesCounts = (agentsData as {entitiesCounts?: CollectionCounts})
     ?.entitiesCounts;
-
-  const listExportFileName = useShallowEqualSelector(state =>
-    getUserSettingsDefaults(state).getValueByName('listexportfilename'),
-  );
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     filter,
@@ -145,41 +138,6 @@ const AgentListPage = () => {
     handleFilterChanged,
   );
 
-  const handleBulkDownload = useCallback(async () => {
-    // @ts-expect-error
-    const entitiesCommand = gmp.agents;
-    let promise;
-
-    if (selectionType === SelectionType.SELECTION_USER) {
-      promise = entitiesCommand.export(selectedEntities);
-    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entitiesCommand.exportByFilter(filter);
-    } else {
-      promise = entitiesCommand.exportByFilter(filter.all());
-    }
-
-    try {
-      const response = await promise;
-      const filename = generateFilename({
-        fileNameFormat: listExportFileName,
-        resourceType: 'agents',
-      });
-      const {data: downloadData} = response;
-      handleDownload({filename, data: downloadData});
-    } catch (error) {
-      showError(error as Error);
-    }
-  }, [
-    handleDownload,
-    showError,
-    // @ts-expect-error
-    gmp.agents,
-    filter,
-    selectedEntities,
-    selectionType,
-    listExportFileName,
-  ]);
-
   const closeTagsDialog = useCallback(() => {
     setIsTagsDialogVisible(false);
   }, [setIsTagsDialogVisible]);
@@ -231,12 +189,10 @@ const AgentListPage = () => {
       onCreated={handleRefetch}
       onDeleteError={showError}
       onDeleted={handleRefetch}
-      onDownloadError={showError}
-      onDownloaded={handleRefetch}
       onSaveError={showError}
       onSaved={handleRefetch}
     >
-      {({create, clone, delete: deleteFunc, download, edit, authorize}) => {
+      {({create, clone, delete: deleteFunc, edit, authorize}) => {
         deleteFuncRef.current = deleteFunc;
 
         return (
@@ -268,10 +224,8 @@ const AgentListPage = () => {
                   onAgentAuthorizeClick={authorize}
                   onAgentCloneClick={clone}
                   onAgentDeleteClick={openConfirmDeleteDialog}
-                  onAgentDownloadClick={download}
                   onAgentEditClick={edit}
                   onDeleteBulk={handleBulkDelete}
-                  onDownloadBulk={handleBulkDownload}
                   onEntityDeselected={deselect}
                   onEntitySelected={select}
                   onFirstClick={getFirst}
@@ -298,7 +252,6 @@ const AgentListPage = () => {
               {...notificationDialogState}
               onCloseClick={closeNotificationDialog}
             />
-            <Download ref={downloadRef} />
             {confirmDeleteDialogVisible && deleteAgent && (
               <ConfirmationDialog
                 content={_(

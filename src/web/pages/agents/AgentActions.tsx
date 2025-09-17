@@ -19,7 +19,6 @@ export interface AgentActionsProps
   onAgentAuthorizeClick?: (entity: Agent) => void;
   onAgentCloneClick?: (entity: Agent) => void | Promise<void>;
   onAgentDeleteClick?: (entity: Agent) => void;
-  onAgentDownloadClick?: (entity: Agent) => void | Promise<void>;
   onAgentEditClick?: (entity: Agent) => void;
 }
 
@@ -32,7 +31,6 @@ const AgentActions = ({
   onAgentAuthorizeClick,
   onAgentCloneClick,
   onAgentDeleteClick,
-  onAgentDownloadClick,
   onAgentEditClick,
 }: AgentActionsProps) => {
   const [_] = useTranslation();
@@ -73,11 +71,7 @@ const AgentActions = ({
             onClick={handleAuthorizeClick}
           />
         )}
-        <ExportIcon
-          title={_('Export Agent')}
-          value={entity}
-          onClick={onAgentDownloadClick as (agent?: Agent) => void}
-        />
+
         <DeleteIcon
           displayName={_('Agent')}
           entity={entity}

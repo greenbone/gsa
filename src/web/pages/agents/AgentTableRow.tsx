@@ -27,7 +27,6 @@ const AgentTableRow = ({
   onAgentAuthorizeClick,
   onAgentCloneClick,
   onAgentDeleteClick,
-  onAgentDownloadClick,
   onAgentEditClick,
   onEntityDeselected,
   onEntitySelected,
@@ -56,7 +55,6 @@ const AgentTableRow = ({
         onAgentAuthorizeClick={onAgentAuthorizeClick}
         onAgentCloneClick={onAgentCloneClick}
         onAgentDeleteClick={onAgentDeleteClick}
-        onAgentDownloadClick={onAgentDownloadClick}
         onAgentEditClick={onAgentEditClick}
         onEntityDeselected={onEntityDeselected}
         onEntitySelected={onEntitySelected}

@@ -11,7 +11,6 @@ import ActionResult from 'gmp/models/actionresult';
 import Agent from 'gmp/models/agents';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
-import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import {useModifyAgents} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentDialogEdit from 'web/pages/agents/AgentDialogEdit';
@@ -20,7 +19,6 @@ import {useDeleteMutation} from 'web/queries/useDeleteMutation';
 interface AgentComponentProps {
   children: (actions: {
     clone: (entity: Agent) => Promise<unknown>;
-    download: (entity: Agent) => Promise<unknown>;
     delete: (entity: Agent) => Promise<unknown>;
     create: () => void;
     edit: (entity: Agent) => void;
@@ -32,8 +30,7 @@ interface AgentComponentProps {
   onCreateError?: (error: Rejection) => void;
   onDeleted?: () => void;
   onDeleteError?: (error: Rejection) => void;
-  onDownloaded?: () => void;
-  onDownloadError?: (error: Rejection) => void;
+
   onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
   onSaveError?: (error: Rejection) => void;
 }
@@ -46,8 +43,7 @@ const AgentComponent = ({
   onCreateError,
   onDeleted,
   onDeleteError,
-  onDownloaded,
-  onDownloadError,
+
   onSaved,
   onSaveError,
 }: AgentComponentProps) => {
@@ -84,11 +80,6 @@ const AgentComponent = ({
     }
     return deleteMutation.mutateAsync({id: agent.id});
   };
-
-  const handleDownload = useEntityDownload<Agent>('agent', {
-    onDownloadError,
-    onDownloaded,
-  });
 
   const handleAuthorize = async (agent: Agent) => {
     if (!agent.id) {
@@ -223,7 +214,6 @@ const AgentComponent = ({
     <>
       {children({
         clone: handleClone,
-        download: handleDownload,
         delete: handleDelete,
         create: openAgentDialog,
         edit: editAgent,
