@@ -17,7 +17,6 @@ export default createEntitiesTable<Agent>({
   rowDetails: undefined,
   header: AgentTableHeader,
   footer: createEntitiesFooter({
-    download: 'agents.xml',
     span: 8,
     delete: true,
   }),
