@@ -22,15 +22,12 @@ import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
 import {useGetAgents} from 'web/hooks/useQuery/agents';
 import useSelection from 'web/hooks/useSelection';
-import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentComponent from 'web/pages/agents/AgentComponent';
 import AgentListPageToolBarIcons from 'web/pages/agents/AgentListPageToolBarIcons';
 import AgentsFilterDialog from 'web/pages/agents/AgentsFilterDialog';
 import AgentsTable from 'web/pages/agents/AgentsTable';
 import AgentsDashboard, {AGENTS_DASHBOARD_ID} from 'web/pages/agents/dashboard';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 
 const AgentListPage = () => {
@@ -90,15 +87,15 @@ const AgentListPage = () => {
     let promise;
 
     if (selectionType === SelectionType.SELECTION_USER) {
-      const agents = selectedEntities
-        .filter(entity => entity.id !== null && entity.id !== undefined)
-        .map(entity => ({id: entity.id as string}));
-      promise = entitiesCommand.deleteAgents(agents);
+      const agents = selectedEntities.filter(
+        entity => entity.id !== null && entity.id !== undefined,
+      );
+      promise = entitiesCommand.delete(agents);
     } else {
-      const agents = allEntities
-        .filter(entity => entity.id !== null && entity.id !== undefined)
-        .map(entity => ({id: entity.id as string}));
-      promise = entitiesCommand.deleteAgents(agents);
+      const agents = allEntities.filter(
+        entity => entity.id !== null && entity.id !== undefined,
+      );
+      promise = entitiesCommand.delete(agents);
     }
 
     try {
@@ -146,13 +143,14 @@ const AgentListPage = () => {
     setIsTagsDialogVisible(true);
   }, [setIsTagsDialogVisible]);
 
-  const handleRefetch = useCallback(async () => {
+  /* Todo this should not be necessary as tanstackquery should auto invalidated and refetch */
+  /*   const handleRefetch = useCallback(async () => {
     try {
       await refetch();
     } catch (error) {
       console.error('Error refetching agents:', error);
     }
-  }, [refetch]);
+  }, [refetch]); */
 
   const openConfirmDeleteDialog = useCallback((agent: Agent) => {
     setDeleteAgent(agent);
@@ -184,13 +182,13 @@ const AgentListPage = () => {
   return (
     <AgentComponent
       onCloneError={showError}
-      onCloned={handleRefetch}
+      //    onCloned={handleRefetch}
       onCreateError={showError}
-      onCreated={handleRefetch}
+      //    onCreated={handleRefetch}
       onDeleteError={showError}
-      onDeleted={handleRefetch}
+      //    onDeleted={handleRefetch}
       onSaveError={showError}
-      onSaved={handleRefetch}
+      //    onSaved={handleRefetch}
     >
       {({create, clone, delete: deleteFunc, edit, authorize}) => {
         deleteFuncRef.current = deleteFunc;

@@ -43,7 +43,6 @@ const AgentComponent = ({
   onCreateError,
   onDeleted,
   onDeleteError,
-
   onSaved,
   onSaveError,
 }: AgentComponentProps) => {
@@ -81,20 +80,57 @@ const AgentComponent = ({
     return deleteMutation.mutateAsync({id: agent.id});
   };
 
+  const modifyAgentsMutation = useModifyAgents();
+
   const handleAuthorize = async (agent: Agent) => {
     if (!agent.id) {
-      console.error('Agent ID is required for authorization');
       throw new Error('Agent ID is required');
     }
 
     const newAuthorizedValue = agent.isAuthorized() ? NO_VALUE : YES_VALUE;
 
+    const transformedConfig = agent.config
+      ? {
+          agent_control: {
+            retry: {
+              attempts: agent.config.agent_control?.retry?.attempts,
+              delay_in_seconds:
+                agent.config.agent_control?.retry?.delay_in_seconds,
+              max_jitter_in_seconds:
+                agent.config.agent_control?.retry?.max_jitter_in_seconds,
+            },
+          },
+          agent_script_executor: {
+            bulk_size: agent.config.agent_script_executor?.bulk_size,
+            bulk_throttle_time_in_ms:
+              agent.config.agent_script_executor?.bulk_throttle_time_in_ms,
+            indexer_dir_depth:
+              agent.config.agent_script_executor?.indexer_dir_depth,
+            scheduler_cron_time: {
+              item: (() => {
+                const cronTimes =
+                  agent.config.agent_script_executor?.scheduler_cron_times;
+                if (cronTimes && cronTimes.length > 0) {
+                  return cronTimes;
+                }
+                const singleCron =
+                  agent.config.agent_script_executor?.scheduler_cron_time;
+                return singleCron || undefined;
+              })(),
+            },
+          },
+          heartbeat: {
+            interval_in_seconds: agent.config.heartbeat?.interval_in_seconds,
+            miss_until_inactive: agent.config.heartbeat?.miss_until_inactive,
+          },
+        }
+      : undefined;
+
     const saveData = {
       agents: [{id: agent.id}],
       authorized: newAuthorizedValue,
+      config: transformedConfig,
     };
-
-    console.info('Toggling agent authorization:', saveData);
 
     try {
       const result = await modifyAgentsMutation.mutateAsync(saveData);
@@ -124,7 +160,6 @@ const AgentComponent = ({
       throw new Error(errorMessage);
     }
   };
-  const modifyAgentsMutation = useModifyAgents();
 
   const openAgentDialog = () => {
     // TODO: Implement download agent installer
@@ -153,6 +188,7 @@ const AgentComponent = ({
   const handleSaveEdit = async (data: {
     id?: string;
     schedulerCronTime?: string;
+    schedulerCronExpression?: string;
     heartbeatIntervalInSeconds?: number;
     authorized?: number;
     comment?: string;
@@ -162,23 +198,68 @@ const AgentComponent = ({
       throw new Error('Agent ID is required');
     }
 
+    const transformedConfig = selectedAgent?.config
+      ? {
+          agent_control: {
+            retry: {
+              attempts: selectedAgent.config.agent_control?.retry?.attempts,
+              delay_in_seconds:
+                selectedAgent.config.agent_control?.retry?.delay_in_seconds,
+              max_jitter_in_seconds:
+                selectedAgent.config.agent_control?.retry
+                  ?.max_jitter_in_seconds,
+            },
+          },
+          agent_script_executor: {
+            bulk_size: selectedAgent.config.agent_script_executor?.bulk_size,
+            bulk_throttle_time_in_ms:
+              selectedAgent.config.agent_script_executor
+                ?.bulk_throttle_time_in_ms,
+            indexer_dir_depth:
+              selectedAgent.config.agent_script_executor?.indexer_dir_depth,
+            scheduler_cron_time: {
+              item: (() => {
+                const newCronTime =
+                  data.schedulerCronExpression || data.schedulerCronTime;
+
+                if (newCronTime) {
+                  const existingCronTimes =
+                    selectedAgent.config.agent_script_executor
+                      ?.scheduler_cron_times;
+                  if (existingCronTimes && existingCronTimes.length > 1) {
+                    return [newCronTime, ...existingCronTimes.slice(1)];
+                  }
+                  return [newCronTime];
+                }
+                const cronTimes =
+                  selectedAgent.config.agent_script_executor
+                    ?.scheduler_cron_times;
+                if (cronTimes && cronTimes.length > 0) {
+                  return cronTimes;
+                }
+                const singleCron =
+                  selectedAgent.config.agent_script_executor
+                    ?.scheduler_cron_time;
+                return singleCron ? [singleCron] : ['0 */12 * * *'];
+              })(),
+            },
+          },
+          heartbeat: {
+            interval_in_seconds:
+              data.heartbeatIntervalInSeconds ||
+              selectedAgent.config.heartbeat?.interval_in_seconds,
+            miss_until_inactive:
+              selectedAgent.config.heartbeat?.miss_until_inactive,
+          },
+        }
+      : undefined;
+
     const saveData = {
       agents: [{id: data.id}],
       authorized: selectedAgent?.isAuthorized() ? YES_VALUE : NO_VALUE,
-      config: {
-        agent_script_executor: {
-          scheduler_cron_time: {
-            item: data.schedulerCronTime,
-          },
-        },
-        heartbeat: {
-          interval_in_seconds: data.heartbeatIntervalInSeconds,
-        },
-      },
+      config: transformedConfig,
       comment: data.comment,
     };
-
-    console.info('Saving agent configuration:', saveData);
 
     try {
       const result = await modifyAgentsMutation.mutateAsync(saveData);
