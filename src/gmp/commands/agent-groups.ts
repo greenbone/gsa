@@ -112,11 +112,10 @@ export class AgentGroupsCommand extends EntitiesCommand<AgentGroup> {
       cmd: 'delete_agent_groups',
     };
 
-    // Add agent groups - flatten the array
-    if (agentGroups && agentGroups.length > 0) {
-      agentGroups.forEach((agentGroup, index) => {
-        data[`agent_group_${index}_id`] = agentGroup.id;
-      });
+    if (agentGroups?.length) {
+      data['agent_group_ids:'] = agentGroups
+        .map(agentGroup => agentGroup.id)
+        .join(',');
     }
 
     return this.httpPost(data);
