@@ -109,11 +109,11 @@ export class AgentGroupsCommand extends EntitiesCommand<AgentGroup> {
     log.debug('Deleting agent groups', {agentGroups});
 
     const data: Record<string, string | number | boolean | undefined> = {
-      cmd: 'delete_agent_groups',
+      cmd: 'delete_agent_group',
     };
 
     if (agentGroups?.length) {
-      data['agent_group_ids:'] = agentGroups
+      data['agent_group_id'] = agentGroups
         .map(agentGroup => agentGroup.id)
         .join(',');
     }
