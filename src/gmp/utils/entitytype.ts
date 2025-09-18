@@ -45,6 +45,8 @@ export const pluralizeType = (type: string): string => {
 };
 
 const NORMALIZE_TYPES = {
+  agent_group: 'agentgroup',
+  agent_installer: 'agentinstaller',
   audit_report: 'auditreport',
   config: 'scanconfig',
   cert_bund_adv: 'certbund',
@@ -71,6 +73,9 @@ export const normalizeType = (type?: NormalizeType): EntityType | undefined => {
 };
 
 const ENTITY_TYPES = {
+  agent: _l('Agent'),
+  agentgroup: _('Agent Group'),
+  agentinstaller: _('Agent Installer'),
   alert: _l('Alert'),
   asset: _l('Asset'),
   audit: _l('Audit'),
@@ -123,6 +128,8 @@ export const typeName = (type?: NormalizeType): string => {
 };
 
 const ENTITY_TO_API_TYPES = {
+  agentgroup: 'agent_group',
+  agentinstaller: 'agent_installer',
   audit: 'task',
   auditreport: 'report',
   certbund: 'info',
@@ -143,6 +150,9 @@ const ENTITY_TO_API_TYPES = {
 } as const;
 
 export const API_TYPES = [
+  'agent_group',
+  'agent_installer',
+  'agent',
   'alert',
   'asset',
   'audit_report',
