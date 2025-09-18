@@ -95,7 +95,7 @@ const parseFilterTermsFromString = (
  * Represents a filter
  */
 class Filter extends EntityModel {
-  static readonly entityType: string = 'filter';
+  static readonly entityType = 'filter';
 
   readonly alerts: Model[];
   readonly filter_type?: string;

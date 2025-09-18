@@ -46,16 +46,16 @@ describe('Permission model tests', () => {
     const permission = Permission.fromElement({
       subject: {
         _id: '123',
-        type: 'alert',
+        type: 'group',
       },
     });
     expect(permission.subject).toBeInstanceOf(Model);
     expect(permission.subject?.id).toEqual('123');
-    expect(permission.subject?.entityType).toEqual('alert');
+    expect(permission.subject?.entityType).toEqual('group');
 
     const permission2 = Permission.fromElement({
       subject: {
-        type: 'alert',
+        type: 'user',
       },
     });
     expect(permission2.subject).toBeUndefined();

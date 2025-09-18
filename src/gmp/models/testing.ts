@@ -39,7 +39,7 @@ const testId = <T extends Model>(modelClass: ModelClass<T>) => {
 
 export const testModelFromElement = <T extends Model>(
   modelClass: ModelClass<T>,
-  type: string,
+  type: string | undefined,
   {testName = true}: {testName?: boolean} = {},
 ) => {
   test('should create instance of model class in fromElement', () => {
@@ -58,12 +58,12 @@ export const testModelFromElement = <T extends Model>(
   test('should parse permissions', () => {
     const model = modelClass.fromElement({
       permissions: {
-        permission: [{name: 'everything'}, {name: 'may_foo'}],
+        permission: [{name: 'everything'}, {name: 'get_tasks'}],
       },
     });
     expect(model.userCapabilities).toBeDefined();
     expect(model.userCapabilities.length).toEqual(2);
-    expect(model.userCapabilities.mayAccess('foo')).toEqual(true);
+    expect(model.userCapabilities.mayAccess('task')).toEqual(true);
   });
 
   test('should return empty userCapabilities if no permissions are given to the constructor', () => {
@@ -224,7 +224,7 @@ export const testModelMethods = <T extends Model>(
 
 export const testModel = <T extends Model>(
   modelClass: ModelClass<T>,
-  type: string,
+  type: string | undefined,
   options?: TestOptions,
 ) => {
   testModelFromElement(modelClass, type, options);

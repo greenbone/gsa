@@ -64,7 +64,7 @@ interface CpeProperties extends ModelProperties {
 }
 
 class Cpe extends Model {
-  static entityType = 'cpe';
+  static readonly entityType = 'cpe';
 
   readonly cpeNameId?: string;
   readonly cveRefs: number;

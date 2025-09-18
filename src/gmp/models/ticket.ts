@@ -87,7 +87,7 @@ export const getTranslatableTicketStatus = (status: TicketStatus) =>
   `${TICKET_STATUS_TRANSLATIONS[status]}`;
 
 class Ticket extends Model {
-  static entityType = 'ticket';
+  static readonly entityType = 'ticket';
 
   readonly assignedTo?: Model;
   readonly closedNote?: string;

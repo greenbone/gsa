@@ -147,7 +147,7 @@ const parseScannerInfo = (info: InfoElement = {}): Info => {
 };
 
 class Scanner extends Model {
-  static entityType = 'scanner';
+  static readonly entityType = 'scanner';
 
   readonly caPub?: CaPub;
   readonly configs: Model[];

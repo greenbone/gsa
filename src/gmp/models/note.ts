@@ -43,7 +43,7 @@ export const NOTE_ACTIVE_UNLIMITED_VALUE = -2;
 export const NOTE_INACTIVE_VALUE = -1;
 
 class Note extends Model {
-  static entityType = 'note';
+  static readonly entityType = 'note';
 
   readonly hosts: string[];
   readonly nvt?: Nvt;

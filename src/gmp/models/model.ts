@@ -9,6 +9,7 @@ import EntityModel, {
   parseEntityModelProperties,
 } from 'gmp/models/entitymodel';
 import {setProperties} from 'gmp/parser';
+import {EntityType} from 'gmp/utils/entitytype';
 
 export type Element = Record<string, unknown>;
 
@@ -19,11 +20,14 @@ export type ModelProperties = EntityModelProperties;
  * A model representing an entity with a required ID
  */
 class Model extends EntityModel {
-  constructor(properties: ModelProperties = {}, entityType?: string) {
+  constructor(properties: ModelProperties = {}, entityType?: EntityType) {
     super(properties, entityType);
   }
 
-  static fromElement(element: ModelElement = {}, entityType?: string): Model {
+  static fromElement(
+    element: ModelElement = {},
+    entityType?: EntityType,
+  ): Model {
     const {
       id,
       creationTime,
@@ -80,7 +84,7 @@ class Model extends EntityModel {
 
 export const parseModelFromElement = (
   element: ModelElement,
-  entityType: string,
+  entityType: EntityType,
 ) => {
   return Model.fromElement(element as Element, entityType);
 };

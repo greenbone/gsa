@@ -43,7 +43,7 @@ interface OperatingSystemProperties extends ModelProperties {
 }
 
 class OperatingSystem extends Model {
-  static entityType = 'operatingsystem';
+  static readonly entityType = 'operatingsystem';
 
   readonly averageSeverity?: number;
   readonly highestSeverity?: number;
