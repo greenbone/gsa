@@ -111,6 +111,10 @@ const getRestorableDeletableForEntityType = {
   ticket: () => {
     return {restorable: true, deletable: true};
   },
+  agentgroup: entity => {
+    /* TODO implement functionality */
+    return {restorable: true, deletable: true};
+  },
 };
 
 const isAbleToRestoreAndDelete = entity => {

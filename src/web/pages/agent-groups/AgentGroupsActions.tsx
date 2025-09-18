@@ -10,7 +10,7 @@ import EntitiesActions, {
   EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
-import DeleteIcon from 'web/entity/icon/DeleteIcon';
+import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
 
 export interface AgentGroupsActionsProps
@@ -53,7 +53,7 @@ const AgentGroupsActions = ({
           onClick={onAgentGroupCloneClick}
         />
 
-        <DeleteIcon
+        <TrashIcon
           displayName={_('Agent Group')}
           entity={entity}
           name="agentgroup"
