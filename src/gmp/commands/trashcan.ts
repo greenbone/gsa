@@ -28,7 +28,7 @@ import Target from 'gmp/models/target';
 import Task from 'gmp/models/task';
 import Ticket from 'gmp/models/ticket';
 import {forEach, map} from 'gmp/utils/array';
-import {apiType} from 'gmp/utils/entitytype';
+import {apiType, EntityType} from 'gmp/utils/entitytype';
 
 export interface TrashCanGetData {
   alerts: Alert[];
@@ -185,14 +185,14 @@ class TrashCanCommand extends HttpCommand {
     await this.httpPost(data);
   }
 
-  async delete({id, entityType}: {id: string; entityType: string}) {
-    entityType = apiType(entityType) as string;
+  async delete({id, entityType}: {id: string; entityType: EntityType}) {
+    const cmdApiType = apiType(entityType);
     const cmd = 'delete_from_trash';
-    const typeId = entityType + '_id';
+    const typeId = cmdApiType + '_id';
     await this.httpPost({
       cmd,
       [typeId]: id,
-      resource_type: entityType,
+      resource_type: cmdApiType,
     });
   }
 
