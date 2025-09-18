@@ -15,7 +15,7 @@ export interface GroupProperties extends ModelProperties {
 }
 
 class Group extends Model {
-  static entityType = 'group';
+  static readonly entityType = 'group';
 
   readonly users: string[];
 

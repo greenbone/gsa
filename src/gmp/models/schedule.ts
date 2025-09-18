@@ -28,12 +28,12 @@ interface ScheduleProperties extends ModelProperties {
 const log = logger.getLogger('gmp.models.schedule');
 
 class Schedule extends Model {
-  static entityType = 'schedule';
+  static readonly entityType = 'schedule';
 
-  event?: Event;
-  tasks: Model[];
-  timezone?: string;
-  timezone_abbrev?: string;
+  readonly event?: Event;
+  readonly tasks: Model[];
+  readonly timezone?: string;
+  readonly timezone_abbrev?: string;
 
   constructor({
     event,

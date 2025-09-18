@@ -52,7 +52,7 @@ interface DfnCertAdvProperties extends ModelProperties {
 }
 
 class DfnCertAdv extends Model {
-  static entityType = 'dfncert';
+  static readonly entityType = 'dfncert';
 
   readonly additionalLinks: string[];
   readonly advisoryLink?: string;

@@ -45,7 +45,7 @@ export const ACCESS_DENY_ALL = '1';
 const SUPERADMIN_ROLE_ID = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5';
 
 class User extends Model {
-  static entityType: string = 'user';
+  static readonly entityType = 'user';
 
   readonly roles: Model[];
   readonly groups: Model[];

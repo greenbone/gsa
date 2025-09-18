@@ -18,7 +18,7 @@ describe('EntityModel tests', () => {
     expect(model.comment).toBeUndefined();
     expect(model.creationTime).toBeUndefined();
     expect(model.endTime).toBeUndefined();
-    expect(model.entityType).toEqual('unknown');
+    expect(model.entityType).toBeUndefined();
     expect(model.id).toBeUndefined();
     expect(model.inUse).toBeUndefined();
     expect(model.modificationTime).toBeUndefined();
@@ -40,6 +40,7 @@ describe('EntityModel tests', () => {
   });
 
   test('should allow to override entityType', () => {
+    // @ts-expect-error
     const model = new EntityModel({}, 'customType');
     expect(model.entityType).toEqual('customType');
   });

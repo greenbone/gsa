@@ -109,7 +109,7 @@ export const getTranslatableTimeStatus = (status: TimeStatus) =>
   `${TIME_STATUS_TRANSLATIONS[status]}`;
 
 class TlsCertificate extends Model {
-  static entityType = 'tlscertificate';
+  static readonly entityType = 'tlscertificate';
 
   readonly activationTime?: Date;
   readonly certificate?: string;
