@@ -7,8 +7,6 @@ import {useCallback, useMemo, useRef, useState} from 'react';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import AgentGroup from 'gmp/models/agent-groups';
 import Filter, {AGENT_GROUPS_FILTER_FILTER} from 'gmp/models/filter';
-import Download from 'web/components/form/Download';
-import useDownload from 'web/components/form/useDownload';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
@@ -28,7 +26,6 @@ import AgentGroupsFilterDialog from 'web/pages/agent-groups/AgentGroupsFilterDia
 import AgentGroupsListPageToolBarIcons from 'web/pages/agent-groups/AgentGroupsListPageToolBarIcons';
 import AgentGroupsTable from 'web/pages/agent-groups/AgentGroupsTable';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 
 const AgentGroupsListPage = () => {
@@ -36,7 +33,6 @@ const AgentGroupsListPage = () => {
   const gmp = useGmp();
 
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
-  const [downloadRef, handleDownload] = useDownload();
   const deleteFuncRef = useRef<
     ((agentGroup: AgentGroup) => Promise<unknown>) | null
   >(null);
@@ -53,7 +49,6 @@ const AgentGroupsListPage = () => {
   const {
     data: agentGroupsData,
     isLoading: isDataLoading,
-    refetch,
     error,
     isError,
   } = useGetAgentGroups({filter});
@@ -66,10 +61,6 @@ const AgentGroupsListPage = () => {
   const entitiesCounts = (
     agentGroupsData as {entitiesCounts?: CollectionCounts}
   )?.entitiesCounts;
-
-  const listExportFileName = useShallowEqualSelector(state =>
-    getUserSettingsDefaults(state).getValueByName('listexportfilename'),
-  );
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     filter,
@@ -103,7 +94,6 @@ const AgentGroupsListPage = () => {
 
     try {
       await promise;
-      void refetch();
     } catch (error) {
       showError(error as Error);
     }
@@ -113,7 +103,6 @@ const AgentGroupsListPage = () => {
     allEntities,
     // @ts-expect-error
     gmp.agentgroups,
-    refetch,
     showError,
   ]);
 
@@ -130,41 +119,6 @@ const AgentGroupsListPage = () => {
     handleFilterChanged,
   );
 
-  const handleBulkDownload = useCallback(async () => {
-    // @ts-expect-error
-    const entitiesCommand = gmp.agentgroups;
-    let promise;
-
-    if (selectionType === SelectionType.SELECTION_USER) {
-      promise = entitiesCommand.export(selectedEntities);
-    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entitiesCommand.exportByFilter(filter);
-    } else {
-      promise = entitiesCommand.exportByFilter(filter.all());
-    }
-
-    try {
-      const response = await promise;
-      const filename = generateFilename({
-        fileNameFormat: listExportFileName,
-        resourceType: 'agentgroups',
-      });
-      const {data: downloadData} = response;
-      handleDownload({filename, data: downloadData});
-    } catch (error) {
-      showError(error as Error);
-    }
-  }, [
-    handleDownload,
-    showError,
-    // @ts-expect-error
-    gmp.agentgroups,
-    filter,
-    selectedEntities,
-    selectionType,
-    listExportFileName,
-  ]);
-
   const closeTagsDialog = useCallback(() => {
     setIsTagsDialogVisible(false);
   }, [setIsTagsDialogVisible]);
@@ -172,14 +126,6 @@ const AgentGroupsListPage = () => {
   const openTagsDialog = useCallback(() => {
     setIsTagsDialogVisible(true);
   }, [setIsTagsDialogVisible]);
-
-  const handleRefetch = useCallback(async () => {
-    try {
-      await refetch();
-    } catch (error) {
-      console.error('Error refetching agent groups:', error);
-    }
-  }, [refetch]);
 
   const handleFilterReset = useCallback(() => {
     resetFilter();
@@ -199,7 +145,6 @@ const AgentGroupsListPage = () => {
         // @ts-expect-error
         const entitiesCommand = gmp.agentgroups;
         await entitiesCommand.deleteAgentGroups([{id: agentGroup.id}]);
-        void refetch();
       } catch (error) {
         showError(error as Error);
       }
@@ -207,7 +152,6 @@ const AgentGroupsListPage = () => {
     [
       // @ts-expect-error
       gmp.agentgroups,
-      refetch,
       showError,
     ],
   );
@@ -223,16 +167,10 @@ const AgentGroupsListPage = () => {
   return (
     <AgentGroupsComponent
       onCloneError={showError}
-      onCloned={handleRefetch}
-      onCreated={handleRefetch}
-      onDeleteError={() => {}}
-      onDeleted={handleRefetch}
-      onDownloadError={() => {}}
-      onDownloaded={() => {}}
-      onSaveError={() => {}}
-      onSaved={handleRefetch}
+      onDeleteError={showError}
+      onSaveError={showError}
     >
-      {({create, clone, delete: deleteFunc, download, edit}) => {
+      {({create, clone, delete: deleteFunc, edit}) => {
         deleteFuncRef.current = deleteFunc;
 
         return (
@@ -260,10 +198,8 @@ const AgentGroupsListPage = () => {
                     sortDir={sortDir}
                     onAgentGroupCloneClick={clone}
                     onAgentGroupDeleteClick={openConfirmDeleteDialog}
-                    onAgentGroupDownloadClick={download}
                     onAgentGroupEditClick={edit}
                     onDeleteBulk={handleBulkDelete}
-                    onDownloadBulk={handleBulkDownload}
                     onEntityDeselected={deselect}
                     onEntitySelected={select}
                     onFirstClick={getFirst}
@@ -291,7 +227,6 @@ const AgentGroupsListPage = () => {
               {...notificationDialogState}
               onCloseClick={closeNotificationDialog}
             />
-            <Download ref={downloadRef} />
             {isTagsDialogVisible && (
               <BulkTags
                 entities={allEntities}
