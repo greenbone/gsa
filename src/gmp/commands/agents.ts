@@ -58,15 +58,14 @@ export class AgentCommand extends EntityCommand<Agent, AgentElement> {
   async delete({id}: {id: string}) {
     log.debug('Deleting agent', {id});
     const data = {
-      cmd: 'delete_agents',
-      id,
+      cmd: 'delete_agent',
     };
-
+    data['agent_ids:'] = id;
     await this.httpPost(data);
   }
 
   save({agents, authorized, config, comment}: AgentModifyParams) {
-    log.debug('Modifying agents', {
+    log.debug('Modifying agent', {
       agents,
       authorized,
       config,
@@ -77,7 +76,7 @@ export class AgentCommand extends EntityCommand<Agent, AgentElement> {
       string,
       string | number | boolean | string[] | undefined
     > = {
-      cmd: 'modify_agents',
+      cmd: 'modify_agent',
     };
 
     if (agents?.length) {
@@ -144,9 +143,9 @@ export class AgentsCommand extends EntitiesCommand<Agent> {
   }
 
   async delete(agents: Agent[]) {
-    log.debug('Deleting agents', {agents});
+    log.debug('Deleting agent', {agents});
     const data: Record<string, string | number | boolean | undefined> = {
-      cmd: 'delete_agents',
+      cmd: 'delete_agent',
     };
 
     if (agents?.length) {
