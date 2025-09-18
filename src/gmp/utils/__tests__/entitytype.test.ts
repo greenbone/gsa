@@ -17,25 +17,25 @@ import {
 
 describe('getEntityType function tests', () => {
   test('should return entity type of object', () => {
-    const model = {entityType: 'foo'};
+    const model = {entityType: 'task' as const};
 
-    expect(getEntityType(model)).toEqual('foo');
+    expect(getEntityType(model)).toEqual('task');
   });
 
   test('should return entity type of model', () => {
-    const model = parseModelFromElement({}, 'foo');
+    const model = parseModelFromElement({}, 'task');
 
-    expect(getEntityType(model)).toEqual('foo');
+    expect(getEntityType(model)).toEqual('task');
   });
 
   test('should return entity type for info models', () => {
-    const model = Nvt.fromElement({});
+    const model = Nvt.fromElement();
 
     expect(getEntityType(model)).toEqual('nvt');
   });
 
   test('should return entity type for asset models', () => {
-    const model = Host.fromElement({});
+    const model = Host.fromElement();
 
     expect(getEntityType(model)).toEqual('host');
   });
@@ -83,6 +83,7 @@ describe('normalizeType function tests', () => {
   });
 
   test('should pass through unknown types', () => {
+    // @ts-expect-error
     expect(normalizeType('foo')).toEqual('foo');
   });
 
@@ -93,25 +94,41 @@ describe('normalizeType function tests', () => {
 
 describe('apiType function tests', () => {
   test('should convert entity types', () => {
-    expect(apiType('operatingsystem')).toEqual('os');
-    expect(apiType('certbund')).toEqual('cert_bund_adv');
-    expect(apiType('dfncert')).toEqual('dfn_cert_adv');
+    expect(apiType('audit')).toEqual('task');
+    expect(apiType('auditreport')).toEqual('report');
+    expect(apiType('certbund')).toEqual('info');
+    expect(apiType('cpe')).toEqual('info');
+    expect(apiType('cve')).toEqual('info');
+    expect(apiType('dfncert')).toEqual('info');
+    expect(apiType('host')).toEqual('asset');
+    expect(apiType('nvt')).toEqual('info');
+    expect(apiType('operatingsystem')).toEqual('asset');
+    expect(apiType('policy')).toEqual('config');
     expect(apiType('portlist')).toEqual('port_list');
     expect(apiType('portrange')).toEqual('port_range');
     expect(apiType('reportconfig')).toEqual('report_config');
     expect(apiType('reportformat')).toEqual('report_format');
     expect(apiType('scanconfig')).toEqual('config');
+    expect(apiType('tlscertificate')).toEqual('tls_certificate');
     expect(apiType('vulnerability')).toEqual('vuln');
   });
 
   test('should pass through already converted types', () => {
-    expect(apiType('task')).toEqual('task');
-    expect(apiType('target')).toEqual('target');
-    expect(apiType('report_format')).toEqual('report_format');
+    expect(apiType('asset')).toEqual('asset');
     expect(apiType('config')).toEqual('config');
+    expect(apiType('info')).toEqual('info');
+    expect(apiType('port_list')).toEqual('port_list');
+    expect(apiType('port_range')).toEqual('port_range');
+    expect(apiType('report_config')).toEqual('report_config');
+    expect(apiType('report_format')).toEqual('report_format');
+    expect(apiType('report')).toEqual('report');
+    expect(apiType('task')).toEqual('task');
+    expect(apiType('tls_certificate')).toEqual('tls_certificate');
+    expect(apiType('vuln')).toEqual('vuln');
   });
 
   test('should pass through unknown types', () => {
+    // @ts-expect-error
     expect(apiType('foo')).toEqual('foo');
   });
 
@@ -122,6 +139,7 @@ describe('apiType function tests', () => {
 
 describe('typeName function tests', () => {
   test('should return Unknown unknown types', () => {
+    // @ts-expect-error
     expect(typeName('foo')).toEqual('Unknown');
     expect(typeName()).toEqual('Unknown');
   });

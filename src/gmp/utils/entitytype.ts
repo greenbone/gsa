@@ -4,12 +4,18 @@
  */
 
 import {_l, _} from 'gmp/locale/lang';
+import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 
-export interface EntityType {
-  entityType: string;
+export interface WithEntityType {
+  entityType: EntityType;
 }
 
+export type ApiType = (typeof API_TYPES)[number];
+export type EntityType = keyof typeof ENTITY_TYPES;
+export type NormalizeType = EntityType | ApiType | keyof typeof NORMALIZE_TYPES;
+
+const log = logger.getLogger('gmp');
 /**
  * Return the entity type of a Model object
  *
@@ -17,7 +23,8 @@ export interface EntityType {
  *
  * @returns The GSA entity type of a model
  */
-export const getEntityType = (model: EntityType): string => model.entityType;
+export const getEntityType = (model: WithEntityType): EntityType =>
+  model.entityType;
 
 /**
  * Convert a type into its pluralized form
@@ -37,7 +44,7 @@ export const pluralizeType = (type: string): string => {
   return type + 's';
 };
 
-const TYPES = {
+const NORMALIZE_TYPES = {
   audit_report: 'auditreport',
   config: 'scanconfig',
   cert_bund_adv: 'certbund',
@@ -54,13 +61,13 @@ const TYPES = {
 /**
  * Convert a type to the GSA type name
  *
- * @param {String} [type] An entity type e.g. from a request
+ * @param [type] An entity type e.g. from a request
  *
- * @returns {String} Entity type name used in GSA
+ * @returns Entity type name used in GSA
  */
-export const normalizeType = (type?: string): string | undefined => {
-  const cType = TYPES[type as keyof typeof TYPES];
-  return isDefined(cType) ? cType : type;
+export const normalizeType = (type?: NormalizeType): EntityType | undefined => {
+  const cType = NORMALIZE_TYPES[type as keyof typeof NORMALIZE_TYPES];
+  return isDefined(cType) ? cType : (type as EntityType | undefined);
 };
 
 const ENTITY_TYPES = {
@@ -105,40 +112,86 @@ const ENTITY_TYPES = {
 /**
  * Get the translatable name for an entity type
  *
- * @param {String} [type] A entity type. Either an external or GSA entity type.
+ * @param type A entity type. Either an external or GSA entity type.
  *
- * @returns {String} A translated entity type name
+ * @returns A translated entity type name
  */
-export const typeName = (type?: string): string => {
+export const typeName = (type?: NormalizeType): string => {
   type = normalizeType(type);
-  const name = type
-    ? ENTITY_TYPES[type as keyof typeof ENTITY_TYPES]
-    : undefined;
+  const name = isDefined(type) ? ENTITY_TYPES[type] : undefined;
   return isDefined(name) ? String(name) : _('Unknown');
 };
 
-const CMD_TYPES = {
-  auditreport: 'audit_report',
-  scanconfig: 'config',
-  certbund: 'cert_bund_adv',
-  dfncert: 'dfn_cert_adv',
-  operatingsystem: 'os',
+const ENTITY_TO_API_TYPES = {
+  audit: 'task',
+  auditreport: 'report',
+  certbund: 'info',
+  cpe: 'info',
+  cve: 'info',
+  dfncert: 'info',
+  host: 'asset',
+  nvt: 'info',
+  operatingsystem: 'asset',
+  policy: 'config',
   portlist: 'port_list',
   portrange: 'port_range',
   reportconfig: 'report_config',
   reportformat: 'report_format',
+  scanconfig: 'config',
   tlscertificate: 'tls_certificate',
   vulnerability: 'vuln',
 } as const;
 
+export const API_TYPES = [
+  'alert',
+  'asset',
+  'audit_report',
+  'config',
+  'credential',
+  'feed',
+  'filter',
+  'group',
+  'info',
+  'note',
+  'override',
+  'permission',
+  'port_list',
+  'port_range',
+  'report_config',
+  'report_format',
+  'report',
+  'result',
+  'role',
+  'scanner',
+  'schedule',
+  'system_reports',
+  'tag',
+  'target',
+  'task',
+  'ticket',
+  'tls_certificate',
+  'user',
+  'vuln',
+] as const;
+
 /**
- * Convert a GSA entity type into a API type
+ * Convert a GSA entity type into an API type
  *
- * @param {String} type GSA entity type
+ * @param type GSA entity type
  *
- * @returns {String} API type
+ * @returns API type
  */
-export const apiType = (type?: string): string | undefined => {
-  const name = type ? CMD_TYPES[type as keyof typeof CMD_TYPES] : undefined;
-  return isDefined(name) ? name : type;
+export const apiType = (type?: EntityType | ApiType): ApiType | undefined => {
+  if (!isDefined(type) || type.length === 0) {
+    return undefined;
+  }
+  const apiType =
+    ENTITY_TO_API_TYPES[type as keyof typeof ENTITY_TO_API_TYPES] ?? type;
+
+  if (!API_TYPES.includes(apiType as ApiType)) {
+    // for now we just log a warning here and return the type as-is
+    // in future we might want to throw an error
+    log.warn(`Unknown API type '${apiType}' for entity type '${type}'`);
+  }
+  return apiType as ApiType;
 };
