@@ -126,6 +126,9 @@ const AgentDialogEdit = ({
                     />
                   </Layout>
                   <Layout basis="48%">
+                    {/*
+                     * TODO This should show IP type (IPv4/IPv6) or do not show at all if missing
+                     */}
                     <TextField
                       disabled
                       name="ipAddress"

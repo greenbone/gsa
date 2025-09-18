@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {NewIcon} from 'web/components/icon';
+import {DownloadIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 
@@ -28,8 +28,9 @@ const AgentsListPageToolBarIcons = ({
         title={_('Help: Agents Lists')}
       />
       {
-        /* capabilities.mayCreate('agent') &&  */ <NewIcon
-          title={_('New Agent')}
+        /* TODO check permissions */
+        /* capabilities.mayCreate('agent') &&  */ <DownloadIcon
+          title={_('Download Agents List')}
           onClick={onAgentCreateClick}
         />
       }
