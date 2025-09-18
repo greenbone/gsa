@@ -55,8 +55,17 @@ export class AgentCommand extends EntityCommand<Agent, AgentElement> {
     super(http, 'agent', Agent);
   }
 
+  async delete({id}: {id: string}) {
+    log.debug('Deleting agent', {id});
+    const data = {
+      cmd: 'delete_agent',
+    };
+    data['agent_ids:'] = id;
+    await this.httpPost(data);
+  }
+
   save({agents, authorized, config, comment}: AgentModifyParams) {
-    log.debug('Modifying agents', {
+    log.debug('Modifying agent', {
       agents,
       authorized,
       config,
@@ -67,7 +76,7 @@ export class AgentCommand extends EntityCommand<Agent, AgentElement> {
       string,
       string | number | boolean | string[] | undefined
     > = {
-      cmd: 'modify_agents',
+      cmd: 'modify_agent',
     };
 
     if (agents?.length) {
@@ -90,7 +99,9 @@ export class AgentCommand extends EntityCommand<Agent, AgentElement> {
     const bulkThrottleTime =
       config?.agent_script_executor?.bulk_throttle_time_in_ms;
     const indexerDirDepth = config?.agent_script_executor?.indexer_dir_depth;
-    if (config?.agent_script_executor?.scheduler_cron_time?.item) {
+    if (
+      config?.agent_script_executor?.scheduler_cron_time?.item !== undefined
+    ) {
       const cronTime = config.agent_script_executor.scheduler_cron_time.item;
       if (Array.isArray(cronTime)) {
         data['scheduler_cron_times:'] = cronTime;
@@ -131,18 +142,18 @@ export class AgentsCommand extends EntitiesCommand<Agent> {
     super(http, 'agent', Agent);
   }
 
-  deleteAgents(agents: {id: string}[]) {
-    log.debug('Deleting agents', {agents});
-
+  async delete(agents: Agent[]) {
+    log.debug('Deleting agent', {agents});
     const data: Record<string, string | number | boolean | undefined> = {
-      cmd: 'delete_agents',
+      cmd: 'delete_agent',
     };
 
     if (agents?.length) {
       data['agent_ids:'] = agents.map(agent => agent.id).join(',');
     }
 
-    return this.httpPost(data);
+    const response = await this.httpPost(data);
+    return response.setData(agents);
   }
 
   getSeverityAggregates({filter}: {filter?: Filter} = {}) {
