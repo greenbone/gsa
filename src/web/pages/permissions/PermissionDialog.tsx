@@ -5,9 +5,10 @@
 
 import Group from 'gmp/models/group';
 import Model from 'gmp/models/model';
-import Permission from 'gmp/models/permission';
+import Permission, {SubjectType} from 'gmp/models/permission';
 import Role from 'gmp/models/role';
 import User from 'gmp/models/user';
+import {EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
 import SaveDialog from 'web/components/dialog/SaveDialog';
@@ -34,10 +35,10 @@ interface PermissionDialogProps {
   permission?: Permission;
   resourceId?: string;
   resourceName?: string;
-  resourceType?: string;
+  resourceType?: EntityType;
   roleId?: string;
   roles?: Role[];
-  subjectType?: 'user' | 'role' | 'group';
+  subjectType?: SubjectType;
   title?: string;
   userId?: string;
   users?: User[];
@@ -156,7 +157,7 @@ const PermissionDialog = ({
 
   for (const cap of capabilities) {
     permItems.push({
-      label: `${cap} ${permissionDescription(cap, {name: '', entityType: ''}, undefined)}`,
+      label: `${cap} ${permissionDescription(cap)}`,
       value: cap,
     });
   }
@@ -200,18 +201,17 @@ const PermissionDialog = ({
 
         const [type] = split(name, '_', 1);
 
-        const resourceNameOrId = isDefined(state.resourceName)
-          ? state.resourceName
-          : state.resourceId;
-        const resourceTypeOrType = isDefined(state.resourceType)
-          ? state.resourceType
-          : type;
+        const resourceNameOrId = state.resourceName ?? state.resourceId;
+        const resourceTypeOrType = state.resourceType ?? type;
 
         const resource = isDefined(state.resourceType)
-          ? Model.fromElement({name: resourceNameOrId}, resourceTypeOrType)
+          ? Model.fromElement(
+              {name: resourceNameOrId},
+              resourceTypeOrType as EntityType,
+            )
           : undefined;
 
-        let subject;
+        let subject: User | Role | Group | undefined;
         if (state.subjectType === 'user') {
           subject = users.find(user => user.id === state.userId);
         } else if (state.subjectType === 'role') {
@@ -220,7 +220,7 @@ const PermissionDialog = ({
           subject = groups.find(group => group.id === state.groupId);
         }
 
-        let resourceIdTitle;
+        let resourceIdTitle: string;
         if (state.resourceType === 'user') {
           resourceIdTitle = _('User ID');
         } else if (state.resourceType === 'role') {
@@ -253,7 +253,7 @@ const PermissionDialog = ({
             </FormGroup>
 
             <FormGroup title={_('Subject')}>
-              {capabilities.mayAccess('users') && (
+              {capabilities.mayAccess('user') && (
                 <Row>
                   <Radio
                     checked={state.subjectType === 'user'}
@@ -271,7 +271,7 @@ const PermissionDialog = ({
                   />
                 </Row>
               )}
-              {capabilities.mayAccess('roles') && (
+              {capabilities.mayAccess('role') && (
                 <Row>
                   <Radio
                     checked={state.subjectType === 'role'}
@@ -289,7 +289,7 @@ const PermissionDialog = ({
                   />
                 </Row>
               )}
-              {capabilities.mayAccess('groups') && (
+              {capabilities.mayAccess('group') && (
                 <Row>
                   <Radio
                     checked={state.subjectType === 'group'}
@@ -350,16 +350,7 @@ const PermissionDialog = ({
               </FormGroup>
             )}
             <FormGroup title={_('Description')}>
-              {permissionDescription(
-                state.name,
-                resource
-                  ? {
-                      name: resource.name ?? '',
-                      entityType: resource.entityType ?? '',
-                    }
-                  : {name: '', entityType: ''},
-                subject,
-              )}
+              {permissionDescription(state.name, resource, subject)}
             </FormGroup>
           </>
         );

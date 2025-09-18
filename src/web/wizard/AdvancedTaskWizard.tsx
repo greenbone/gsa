@@ -186,8 +186,8 @@ const AdvancedTaskWizard = ({
                   {_(
                     'You can choose, whether you want to run the scan immediately',
                   )}
-                  {capabilities?.mayAccess('schedules') &&
-                    capabilities?.mayCreate('schedule') &&
+                  {capabilities.mayAccess('schedule') &&
+                    capabilities.mayCreate('schedule') &&
                     _(', schedule the task for a later date and time,')}
                   {_(
                     ' or just create the task so you can run it manually later.',
@@ -199,10 +199,10 @@ const AdvancedTaskWizard = ({
                       'select SSH and/or SMB credentials, but you can also run ' +
                       'an unauthenticated scan by not selecting any credentials.',
                   )}
-                  {capabilities?.mayAccess('alerts') &&
-                    capabilities?.mayCreate('alert') && <br />}
-                  {capabilities?.mayAccess('alerts') &&
-                    capabilities?.mayCreate('alert') &&
+                  {capabilities.mayAccess('alert') &&
+                    capabilities.mayCreate('alert') && <br />}
+                  {capabilities.mayAccess('alert') &&
+                    capabilities.mayCreate('alert') &&
                     _(
                       'If you enter an email address in the "Email report to"' +
                         ' field, a report of the scan will be sent to this ' +
@@ -257,7 +257,7 @@ const AdvancedTaskWizard = ({
                 />
 
                 {capabilities?.mayCreate('schedule') &&
-                  capabilities?.mayAccess('schedules') && (
+                  capabilities?.mayAccess('schedule') && (
                     <>
                       <Column>
                         <Radio
@@ -337,7 +337,7 @@ const AdvancedTaskWizard = ({
               </FormGroup>
 
               {capabilities?.mayCreate('alert') &&
-                capabilities?.mayAccess('alerts') && (
+                capabilities?.mayAccess('alert') && (
                   <FormGroup title={_('Email report to')}>
                     <TextField
                       grow="1"

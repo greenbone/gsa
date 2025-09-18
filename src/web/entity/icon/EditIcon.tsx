@@ -3,16 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
+import {
+  EntityType,
+  WithEntityType,
+  getEntityType,
+  typeName,
+} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {EditIcon} from 'web/components/icon';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface EntityEdit extends EntityType {
+interface EntityEdit extends WithEntityType {
   userCapabilities: {
-    mayEdit: (name: string) => boolean;
+    mayEdit: (name: EntityType) => boolean;
   };
   isWritable: () => boolean;
 }
@@ -25,7 +30,7 @@ interface EntityEditIconProps<TEntity extends EntityEdit>
   disabled?: boolean;
   displayName?: string;
   entity: TEntity;
-  name?: string;
+  name?: EntityType;
   title?: string;
   onClick?: (value: TEntity) => void | Promise<void>;
 }

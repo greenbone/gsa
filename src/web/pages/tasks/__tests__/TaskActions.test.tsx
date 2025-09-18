@@ -9,7 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import TaskActions from 'web/pages/tasks/TaskActions';
 
-const wrongCaps = new Capabilities(['get_task']);
+const wrongCaps = new Capabilities(['get_tasks']);
 
 describe('Task Actions tests', () => {
   test('should render', () => {

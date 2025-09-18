@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {Capability} from 'gmp/capabilities/capabilities';
 import {
   apiType,
-  EntityType,
+  WithEntityType,
   getEntityType,
   typeName,
 } from 'gmp/utils/entitytype';
@@ -14,11 +15,13 @@ import {VerifyIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface EntityVerify extends EntityType {
+interface EntityVerify extends WithEntityType {
   userCapabilities: {
-    mayOp: (name: string) => boolean;
+    mayOp: (name: Capability) => boolean;
   };
 }
+
+type VerifyType = 'report_format' | 'scanner';
 
 interface EntityVerifyIconProps<TEntity extends EntityVerify>
   extends Omit<
@@ -28,7 +31,7 @@ interface EntityVerifyIconProps<TEntity extends EntityVerify>
   displayName?: string;
   entity: TEntity;
   mayVerify?: boolean;
-  name?: string;
+  name?: VerifyType;
   title?: string;
   onClick?: (value: TEntity) => void | Promise<void>;
 }
@@ -44,17 +47,15 @@ const EntityVerifyIcon = <TEntity extends EntityVerify>({
 }: EntityVerifyIconProps<TEntity>) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
-  if (!isDefined(name)) {
-    name = apiType(getEntityType(entity));
-  }
+  const apiName = isDefined(name) ? name : apiType(getEntityType(entity));
 
   if (!isDefined(displayName)) {
-    displayName = typeName(name);
+    displayName = typeName(apiName);
   }
   const active =
     mayVerify &&
-    capabilities?.mayOp('verify_' + name) &&
-    entity.userCapabilities.mayOp('verify_' + name);
+    capabilities.mayOp(('verify_' + apiName) as Capability) &&
+    entity.userCapabilities.mayOp(('verify_' + apiName) as Capability);
   if (!isDefined(title)) {
     if (active) {
       title = _('Verify {{entity}}', {entity: displayName});

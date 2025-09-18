@@ -38,7 +38,7 @@ const role = Role.fromElement({
 });
 
 const caps = new Capabilities(['everything']);
-const wrongCaps = new Capabilities(['get_config']);
+const wrongCaps = new Capabilities(['get_configs']);
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
