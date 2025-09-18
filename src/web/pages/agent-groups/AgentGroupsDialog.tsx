@@ -11,7 +11,6 @@ import Scanner, {
   ScannerElement,
 } from 'gmp/models/scanner';
 import SaveDialog from 'web/components/dialog/SaveDialog';
-import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
@@ -118,13 +117,13 @@ const AgentGroupsDialog = ({
               onChange={onValueChange}
             />
 
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={state.comment}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+            <TextField
+              description={_('Optional')}
+              name="comment"
+              title={_('Comment')}
+              value={state.comment}
+              onChange={onValueChange}
+            />
 
             <Select
               items={agentControllers}

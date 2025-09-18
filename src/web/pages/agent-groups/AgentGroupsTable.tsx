@@ -18,6 +18,6 @@ export default createEntitiesTable<AgentGroup>({
   header: AgentGroupsTableHeader,
   footer: createEntitiesFooter({
     span: 5,
-    delete: true,
+    trash: true,
   }),
 });

@@ -19,13 +19,11 @@ import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
 import {useGetAgentGroups} from 'web/hooks/useQuery/agent-groups';
 import useSelection from 'web/hooks/useSelection';
-import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
 import AgentGroupsFilterDialog from 'web/pages/agent-groups/AgentGroupsFilterDialog';
 import AgentGroupsListPageToolBarIcons from 'web/pages/agent-groups/AgentGroupsListPageToolBarIcons';
 import AgentGroupsTable from 'web/pages/agent-groups/AgentGroupsTable';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import SelectionType from 'web/utils/SelectionType';
 
 const AgentGroupsListPage = () => {
