@@ -24,8 +24,7 @@ interface AgentComponentProps {
     edit: (entity: Agent) => void;
     authorize: (entity: Agent) => Promise<unknown>;
   }) => React.ReactNode;
-  onCloned?: () => void;
-  onCloneError?: (error: Rejection) => void;
+
   onCreated?: () => void;
   onCreateError?: (error: Rejection) => void;
   onDeleted?: () => void;
@@ -37,8 +36,6 @@ interface AgentComponentProps {
 
 const AgentComponent = ({
   children,
-  onCloned,
-  onCloneError,
   onCreated,
   onCreateError,
   onDeleted,
@@ -53,11 +50,6 @@ const AgentComponent = ({
   const [selectedAgent, setSelectedAgent] = useState<Agent | undefined>(
     undefined,
   );
-
-  const handleClone = useEntityClone<Agent>('agent', {
-    onCloned,
-    onCloneError,
-  });
 
   const deleteMutation = useDeleteMutation<{id: string}, void>({
     entityKey: 'agent',
@@ -294,11 +286,13 @@ const AgentComponent = ({
   return (
     <>
       {children({
-        clone: handleClone,
         delete: handleDelete,
         create: openAgentDialog,
         edit: editAgent,
         authorize: handleAuthorize,
+        clone: function (entity: Agent): Promise<unknown> {
+          throw new Error('Function not implemented.');
+        },
       })}
       {editDialogVisible && selectedAgent && (
         <AgentDialogEdit

@@ -29,7 +29,6 @@ const AgentActions = ({
   onEntityDeselected,
   onEntitySelected,
   onAgentAuthorizeClick,
-  onAgentCloneClick,
   onAgentDeleteClick,
   onAgentEditClick,
 }: AgentActionsProps) => {
@@ -57,7 +56,6 @@ const AgentActions = ({
           value={entity}
           onClick={onAgentEditClick}
         />
-        <CloneIcon entity={entity} name="agent" onClick={onAgentCloneClick} />
         {isAuthorized ? (
           <CircleMinusIcon
             title={_('Deauthorize Agent')}
