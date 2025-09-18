@@ -5,10 +5,7 @@
 
 import DateTime from 'web/components/date/DateTime';
 import SaveDialog from 'web/components/dialog/SaveDialog';
-import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
-import NumberField from 'web/components/form/NumberField';
-import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {getConnectionStatusLabel} from 'web/components/label/AgentsState';
 import Column from 'web/components/layout/Column';
@@ -18,15 +15,16 @@ import Section from 'web/components/section/Section';
 
 import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';
-import Theme from 'web/utils/Theme';
+
+import AgentConfigurationSection from 'web/pages/agents/components/AgentConfigurationSection';
 
 const AgentDialogEdit = ({
   id,
   name,
   ipAddress = '',
   version = '',
-  status = 'Active',
-  port = 8443,
+  status = '',
+  port = 0,
   schedulerCronTime = undefined,
   heartbeatIntervalInSeconds,
   config,
@@ -177,145 +175,14 @@ const AgentDialogEdit = ({
               </Column>
             </Section>
 
-            <Section title={_('Configuration Details')}>
-              <Column gap="lg">
-                {/* Port configuration */}
-                <NumberField
-                  disabled
-                  max={65535}
-                  min={1}
-                  name="port"
-                  title={_('Port')}
-                  type="int"
-                  value={state.port}
-                  onChange={onValueChange}
-                />
-
-                {/* Scheduler Cron Time */}
-                <FormGroup title={_('Scheduler Settings')}>
-                  <Column gap="md">
-                    <Checkbox
-                      checked={state.useAdvancedCron}
-                      name="useAdvancedCron"
-                      title={_('Use advanced cron expression')}
-                      onChange={onValueChange}
-                    />
-
-                    {!state.useAdvancedCron ? (
-                      <Select
-                        items={[
-                          {
-                            label: _('Every hour'),
-                            value: '0 * * * *',
-                          },
-                          {
-                            label: _('Every 2 hours'),
-                            value: '0 */2 * * *',
-                          },
-                          {
-                            label: _('Every 4 hours'),
-                            value: '0 */4 * * *',
-                          },
-                          {
-                            label: _('Every 6 hours'),
-                            value: '0 */6 * * *',
-                          },
-                          {
-                            label: _('Every 8 hours'),
-                            value: '0 */8 * * *',
-                          },
-                          {
-                            label: _('Every 12 hours'),
-                            value: '0 */12 * * *',
-                          },
-                          {
-                            label: _('Daily at midnight'),
-                            value: '0 0 * * *',
-                          },
-                          {
-                            label: _('Daily at noon'),
-                            value: '0 12 * * *',
-                          },
-                          {
-                            label: _('Daily at 6 AM and 6 PM'),
-                            value: '0 6,18 * * *',
-                          },
-                          {
-                            label: _('Weekly (Sunday at midnight)'),
-                            value: '0 0 * * 0',
-                          },
-                          {
-                            label: _('Monthly (1st day at midnight)'),
-                            value: '0 0 1 * *',
-                          },
-                          {
-                            label: _('Every 2nd day at midnight and noon'),
-                            value: '0 0,12 1 */2 *',
-                          },
-                        ]}
-                        label="Scheduler Cron Expression"
-                        name="schedulerCronExpression"
-                        placeholder={_('Select a schedule')}
-                        title={_('Schedule')}
-                        value={state.schedulerCronExpression}
-                        onChange={onValueChange}
-                      />
-                    ) : (
-                      <TextField
-                        name="schedulerCronExpression"
-                        placeholder="0 0,12 1 */2 *"
-                        title={_('Custom Cron Expression')}
-                        value={state.schedulerCronExpression}
-                        onChange={onValueChange}
-                      />
-                    )}
-
-                    <div
-                      style={{
-                        fontSize: '12px',
-                        color: Theme.darkGray,
-                        marginTop: '4px',
-                      }}
-                    >
-                      {!state.useAdvancedCron ? (
-                        <>
-                          {_(
-                            'Choose from common scheduling options above, or enable advanced mode for custom expressions.',
-                          )}
-                          <br />
-                          {_('Current expression')}:{' '}
-                          <code>{state.schedulerCronExpression}</code>
-                        </>
-                      ) : (
-                        <>
-                          {_(
-                            'Enter a custom cron expression. Format: minute hour day month weekday',
-                          )}
-                          <br />• {_('Example')}: 0 0,12 1 */2 * (at midnight
-                          and noon on the 1st day of every 2nd month)
-                          <br />• {_('Minute')}: 0-59, {_('Hour')}: 0-23,{' '}
-                          {_('Day')}: 1-31, {_('Month')}: 1-12, {_('Weekday')}:
-                          0-7
-                          <br />• * = {_('any value')}, , ={' '}
-                          {_('list separator')}, - = {_('range')}, / ={' '}
-                          {_('step values')}
-                        </>
-                      )}
-                    </div>
-                  </Column>
-                </FormGroup>
-
-                {/* Heartbeat Configuration */}
-                <NumberField
-                  min={1}
-                  name="heartbeatIntervalInSeconds"
-                  title={_('Heartbeat Interval (seconds)')}
-                  type="int"
-                  value={state.heartbeatIntervalInSeconds}
-                  onChange={onValueChange}
-                />
-              </Column>
-            </Section>
+            <AgentConfigurationSection
+              activeCronExpression={extractedSchedulerCronTime}
+              heartbeatIntervalInSeconds={state.heartbeatIntervalInSeconds}
+              port={state.port}
+              schedulerCronExpression={state.schedulerCronExpression}
+              useAdvancedCron={state.useAdvancedCron}
+              onValueChange={onValueChange}
+            />
           </Column>
         );
       }}

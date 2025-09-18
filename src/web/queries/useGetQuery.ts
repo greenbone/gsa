@@ -9,17 +9,23 @@ import Filter from 'gmp/models/filter';
 import {pluralizeType} from 'gmp/utils/entitytype';
 import useGmp from 'web/hooks/useGmp';
 
-interface UseGetQueryParams<T> {
+interface UseGetQueryParams<T, U = UseGetQueryReturn<T>> {
   cmd: string;
   filter?: Filter;
   name: string;
   parseEntity: (el: unknown) => T;
-  select?: (data: unknown) => unknown;
+  select?: (data: UseGetQueryReturn<T>) => U;
   enabled?: boolean;
   refetchInterval?: number;
 }
 
-export function useGetQuery<T = unknown>({
+export interface UseGetQueryReturn<T> {
+  entities: T[];
+  entitiesCounts: CollectionCounts;
+  filter?: Filter;
+}
+
+export function useGetQuery<T, U = UseGetQueryReturn<T>>({
   cmd,
   filter = undefined,
   name,
@@ -27,7 +33,7 @@ export function useGetQuery<T = unknown>({
   select,
   enabled = true,
   refetchInterval = undefined,
-}: UseGetQueryParams<T>) {
+}: UseGetQueryParams<T, U>) {
   const gmp = useGmp();
   const {token} = gmp.settings;
 
@@ -65,11 +71,12 @@ export function useGetQuery<T = unknown>({
     },
     select:
       select ??
-      (data => ({
-        entities: data.entities.map(parseEntity),
-        entitiesCounts: data.entitiesCounts,
-        filter: data.filter,
-      })),
+      (data =>
+        ({
+          entities: data.entities.map(parseEntity),
+          entitiesCounts: data.entitiesCounts,
+          filter: data.filter,
+        }) as U),
     refetchInterval,
   });
 }
