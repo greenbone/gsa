@@ -25,6 +25,7 @@ export interface AgentScriptExecutorConfig {
   indexer_dir_depth: number;
   period_in_seconds: number;
   scheduler_cron_time: string;
+  scheduler_cron_times?: string[];
 }
 
 export interface HeartbeatConfig {
@@ -81,7 +82,9 @@ export interface AgentElement extends ModelElement {
       bulk_throttle_time_in_ms?: number;
       indexer_dir_depth?: number;
       period_in_seconds?: number;
-      scheduler_cron_time?: string | {cron?: string | string[]};
+      scheduler_cron_time?:
+        | string
+        | {cron?: string | string[]; item?: string | string[]};
     };
     heartbeat?: {
       interval_in_seconds?: number;
@@ -254,24 +257,57 @@ class Agent extends Model {
               config.agent_script_executor?.indexer_dir_depth || 0,
             period_in_seconds:
               config.agent_script_executor?.period_in_seconds || 0,
-            scheduler_cron_time: (() => {
+            ...(() => {
+              const existingCronTimes = (
+                config.agent_script_executor as
+                  | AgentScriptExecutorConfig
+                  | undefined
+              )?.scheduler_cron_times;
+              if (
+                Array.isArray(existingCronTimes) &&
+                existingCronTimes.length > 0
+              ) {
+                return {
+                  scheduler_cron_time: existingCronTimes[0],
+                  scheduler_cron_times: existingCronTimes,
+                };
+              }
+
               const cronValue =
                 config.agent_script_executor?.scheduler_cron_time;
+
+              let allCronTimes: string[] = [];
+
               if (typeof cronValue === 'string') {
-                return cronValue;
-              }
-              if (typeof cronValue === 'object' && cronValue?.cron) {
-                if (typeof cronValue.cron === 'string') {
-                  return parseText(cronValue.cron) || '';
-                }
-                if (
-                  Array.isArray(cronValue.cron) &&
-                  cronValue.cron.length > 0
+                allCronTimes = [cronValue];
+              } else if (typeof cronValue === 'object' && cronValue) {
+                if (Array.isArray(cronValue.item)) {
+                  allCronTimes = cronValue.item
+                    .map(item => parseText(item) || '')
+                    .filter(item => item !== '');
+                } else if (
+                  cronValue.item &&
+                  typeof cronValue.item === 'string'
                 ) {
-                  return parseText(cronValue.cron[0]) || '';
+                  const parsed = parseText(cronValue.item) || '';
+                  allCronTimes = parsed !== '' ? [parsed] : [];
+                } else if (cronValue.cron) {
+                  if (typeof cronValue.cron === 'string') {
+                    const parsed = parseText(cronValue.cron) || '';
+                    allCronTimes = parsed !== '' ? [parsed] : [];
+                  } else if (Array.isArray(cronValue.cron)) {
+                    allCronTimes = cronValue.cron
+                      .map(item => parseText(item) || '')
+                      .filter(item => item !== '');
+                  }
                 }
               }
-              return '';
+
+              return {
+                scheduler_cron_time:
+                  allCronTimes.length > 0 ? allCronTimes[0] : '',
+                scheduler_cron_times: allCronTimes,
+              };
             })(),
           },
           heartbeat: {
