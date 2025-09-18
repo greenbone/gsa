@@ -152,6 +152,8 @@
   "Advisory Link": "Advisory-Link",
   "Affected Software/OS": "Betroffene Software/Betriebssystem",
   "Agent": "Agent",
+  "Agent Group": "Agent-Gruppe",
+  "Agent Installer": "Agent-Installationsprogramm",
   "Agent Scanner": "Agent-Scanner",
   "Agent Sensor": "Agent-Sensor",
   "Aggregates": "Aggregate",

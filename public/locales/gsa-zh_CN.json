@@ -152,6 +152,8 @@
   "Advisory Link": "咨询链接",
   "Affected Software/OS": "受影响的软件/操作系统",
   "Agent": "代理程序",
+  "Agent Group": "",
+  "Agent Installer": "",
   "Agent Scanner": "",
   "Agent Sensor": "",
   "Aggregates": "聚合",
