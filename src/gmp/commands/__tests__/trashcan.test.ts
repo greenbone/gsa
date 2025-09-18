@@ -44,12 +44,29 @@ describe('TrashCanCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TrashCanCommand(fakeHttp);
+    await cmd.delete({id: '1234', entityType: 'task'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'delete_from_trash',
+        task_id: '1234',
+        resource_type: 'task',
+      },
+    });
+  });
+
+  test('should allow to delete an host from the trashcan', async () => {
+    const response = createResponse({});
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new TrashCanCommand(fakeHttp);
     await cmd.delete({id: '1234', entityType: 'host'});
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'delete_from_trash',
-        host_id: '1234',
-        resource_type: 'host',
+        asset_id: '1234',
+        resource_type: 'asset',
       },
     });
   });
