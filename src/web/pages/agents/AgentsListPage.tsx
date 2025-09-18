@@ -181,8 +181,6 @@ const AgentListPage = () => {
   const isLoading = isFilterLoading || isDataLoading;
   return (
     <AgentComponent
-      onCloneError={showError}
-      //    onCloned={handleRefetch}
       onCreateError={showError}
       //    onCreated={handleRefetch}
       onDeleteError={showError}
