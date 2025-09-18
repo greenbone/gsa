@@ -10,7 +10,6 @@ import {XmlMeta} from 'gmp/http/transform/fastxml';
 import ActionResult from 'gmp/models/actionresult';
 import AgentGroup from 'gmp/models/agent-groups';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
-import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsDialog from 'web/pages/agent-groups/AgentGroupsDialog';
 import {useCreateMutation} from 'web/queries/useCreateMutation';
@@ -20,7 +19,6 @@ import {useSaveMutation} from 'web/queries/useSaveMutation';
 interface AgentGroupsComponentProps {
   children: (actions: {
     clone: (entity: AgentGroup) => Promise<unknown>;
-    download: (entity: AgentGroup) => Promise<unknown>;
     delete: (entity: AgentGroup) => Promise<unknown>;
     create: () => void;
     edit: (entity: AgentGroup) => void;
@@ -45,8 +43,6 @@ const AgentGroupsComponent = ({
   onCreateError,
   onDeleted,
   onDeleteError,
-  onDownloaded,
-  onDownloadError,
   onSaved,
   onSaveError,
 }: AgentGroupsComponentProps) => {
@@ -83,11 +79,6 @@ const AgentGroupsComponent = ({
     }
     return deleteMutation.mutateAsync({id: agentGroup.id});
   };
-
-  const handleDownload = useEntityDownload<AgentGroup>('agentgroup', {
-    onDownloadError,
-    onDownloaded,
-  });
 
   const createMutation = useCreateMutation<
     object,
@@ -160,7 +151,6 @@ const AgentGroupsComponent = ({
     <>
       {children({
         clone: handleClone,
-        download: handleDownload,
         delete: handleDelete,
         create: openAgentGroupsDialog,
         edit: editAgentGroup,

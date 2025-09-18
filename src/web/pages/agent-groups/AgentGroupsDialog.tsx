@@ -13,11 +13,8 @@ import Scanner, {
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
-import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
-import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
-import Row from 'web/components/layout/Row';
 import {useGetAgents} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
 import {useGetQuery} from 'web/queries/useGetQuery';
@@ -77,10 +74,6 @@ const AgentGroupsDialog = ({
     onValueChange([], 'selectedAgents');
   };
 
-  const handleConfigurationMethodChange = (value, onValueChange) => {
-    onValueChange(value, 'configurationMethod');
-  };
-
   return (
     <SaveDialog
       defaultValues={{
@@ -133,7 +126,6 @@ const AgentGroupsDialog = ({
               />
             </FormGroup>
 
-            {/* TODO: Implement agent controller selection */}
             <Select
               items={agentControllers}
               label={_('Agent Controller')}
@@ -150,51 +142,6 @@ const AgentGroupsDialog = ({
                 label={_('Select Agents')}
                 name="selectedAgents"
                 value={state.selectedAgents || []}
-                onChange={onValueChange}
-              />
-            )}
-
-            <FormGroup title={_('Configuration Method')}>
-              <Row>
-                <Radio
-                  checked={state.configurationMethod === 'manual'}
-                  name="configurationMethod"
-                  title={_('Manual Configuration')}
-                  value="manual"
-                  onChange={value =>
-                    handleConfigurationMethodChange(value, onValueChange)
-                  }
-                />
-                <Radio
-                  checked={state.configurationMethod === 'file'}
-                  name="configurationMethod"
-                  title={_('From File')}
-                  value="file"
-                  onChange={value =>
-                    handleConfigurationMethodChange(value, onValueChange)
-                  }
-                />
-              </Row>
-            </FormGroup>
-
-            {state.configurationMethod === 'manual' && (
-              <TextArea
-                autosize={true}
-                minRows="4"
-                name="manualConfiguration"
-                placeholder={_('Enter configuration details...')}
-                title={_('Manual Configuration')}
-                value={state.manualConfiguration}
-                onChange={onValueChange}
-              />
-            )}
-
-            {state.configurationMethod === 'file' && (
-              <TextField
-                name="filePath"
-                placeholder={_('/path/to/configuration/file.conf')}
-                title={_('Configuration File Path')}
-                value={state.filePath}
                 onChange={onValueChange}
               />
             )}

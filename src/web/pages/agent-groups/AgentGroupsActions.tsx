@@ -5,7 +5,6 @@
 
 import AgentGroup from 'gmp/models/agent-groups';
 import {EditIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
   EntitiesActionsProps,
@@ -30,7 +29,6 @@ const AgentGroupsActions = ({
   onEntitySelected,
   onAgentGroupCloneClick,
   onAgentGroupDeleteClick,
-  onAgentGroupDownloadClick,
   onAgentGroupEditClick,
 }: AgentGroupsActionsProps) => {
   const [_] = useTranslation();
@@ -54,13 +52,7 @@ const AgentGroupsActions = ({
           name="agentgroup"
           onClick={onAgentGroupCloneClick}
         />
-        <ExportIcon
-          title={_('Export Agent Group')}
-          value={entity}
-          onClick={
-            onAgentGroupDownloadClick as (agentGroup?: AgentGroup) => void
-          }
-        />
+
         <DeleteIcon
           displayName={_('Agent Group')}
           entity={entity}
