@@ -208,12 +208,6 @@ const AdvancedTaskWizard = ({
                         ' field, a report of the scan will be sent to this ' +
                         'address once it is finished.',
                     )}
-                  {capabilities?.mayAccess('slaves') && <br />}
-                  {capabilities?.mayAccess('slaves') &&
-                    _(
-                      'Finally, you can select a sensor which will run the ' +
-                        'scan.',
-                    )}
                 </p>
                 <p>
                   {_(
