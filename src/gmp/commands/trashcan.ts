@@ -6,6 +6,7 @@
 import HttpCommand from 'gmp/commands/http';
 import Response from 'gmp/http/response';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import AgentGroup from 'gmp/models/agent-groups';
 import Alert from 'gmp/models/alert';
 import Audit from 'gmp/models/audit';
 import Credential from 'gmp/models/credential';
@@ -51,6 +52,7 @@ export interface TrashCanGetData {
   targets: Target[];
   tasks: Task[];
   tickets: Ticket[];
+  agentGroups: AgentGroup[];
 }
 
 interface UsageTypeElement extends ModelElement {
@@ -165,6 +167,12 @@ interface TicketsResponseData {
   };
 }
 
+interface AgentGroupResponseData {
+  get_agent_groups_response?: {
+    agent_group: ModelElement[] | ModelElement;
+  };
+}
+
 interface TrashCanGetResponseData<TData> extends XmlResponseData {
   get_trash: TData;
 }
@@ -255,6 +263,9 @@ class TrashCanCommand extends HttpCommand {
     const ticketsRequest = this.httpGet({
       cmd: 'get_trash_tickets',
     }) as TrashCanGetPromise<TicketsResponseData>;
+    const agentGroupRequest = this.httpGet({
+      cmd: 'get_trash_agent_group',
+    }) as TrashCanGetPromise<AgentGroupResponseData>;
     const [
       alertsResponse,
       configsResponse,
@@ -274,6 +285,7 @@ class TrashCanCommand extends HttpCommand {
       targetsResponse,
       tasksResponse,
       ticketsResponse,
+      agentGroupsResponse,
     ] = await Promise.all([
       alertsRequest,
       configsRequest,
@@ -293,6 +305,7 @@ class TrashCanCommand extends HttpCommand {
       targetsRequest,
       tasksRequest,
       ticketsRequest,
+      agentGroupRequest,
     ]);
     const alertsData = alertsResponse.data.get_trash;
     const configsData = configsResponse.data.get_trash;
@@ -312,6 +325,7 @@ class TrashCanCommand extends HttpCommand {
     const targetsData = targetsResponse.data.get_trash;
     const tasksData = tasksResponse.data.get_trash;
     const ticketsData = ticketsResponse.data.get_trash;
+    const agentGroupsData = agentGroupsResponse.data.get_trash;
 
     const alerts = map(alertsData.get_alerts_response?.alert, element =>
       Alert.fromElement(element),
@@ -388,6 +402,10 @@ class TrashCanCommand extends HttpCommand {
     const tickets = map(ticketsData.get_tickets_response?.ticket, element =>
       Ticket.fromElement(element),
     );
+    const agentGroups = map(
+      agentGroupsData.get_agent_groups_response?.agent_group,
+      element => AgentGroup.fromElement(element),
+    );
 
     return targetsResponse.setData({
       alerts,
@@ -410,6 +428,7 @@ class TrashCanCommand extends HttpCommand {
       targets,
       tasks,
       tickets,
+      agentGroups,
     });
   }
 }
