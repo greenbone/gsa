@@ -5,7 +5,13 @@
 
 import {parseBoolean} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
-import {pluralizeType} from 'gmp/utils/entitytype';
+import {
+  API_TYPES,
+  ApiType,
+  apiType,
+  EntityType,
+  pluralizeType,
+} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
 interface Feature {
@@ -13,73 +19,158 @@ interface Feature {
   _enabled: string | boolean | number;
 }
 
-const types = {
-  auditreport: 'audit_report',
-  auditreports: 'audit_reports',
-  host: 'asset',
-  hosts: 'asset',
-  os: 'asset',
-  cve: 'info',
-  cves: 'info',
-  cpe: 'info',
-  cpes: 'info',
-  dfncert: 'info',
-  dfncerts: 'info',
-  nvt: 'info',
-  nvts: 'info',
-  operatingsystem: 'asset',
-  operatingsystems: 'asset',
-  certbund: 'info',
-  certbunds: 'info',
-  secinfo: 'info',
-  secinfos: 'info',
-  policy: 'config',
-  policies: 'config',
-  portlist: 'port_list',
-  portlists: 'port_list',
-  reportconfig: 'report_config',
-  reportconfigs: 'report_config',
-  reportformat: 'report_format',
-  reportformats: 'report_format',
-  scanconfig: 'config',
-  scanconfigs: 'config',
-  ticket: 'ticket',
-  tickets: 'ticket',
-  tlscertificate: 'tls_certificate',
-  tlscertificates: 'tls_certificate',
-} as const;
+export type Capability = (typeof CAPABILITY_NAMES)[number];
+export type CapabilitiesEntityType = ApiType | EntityType;
 
-const subtypes = {
-  audit: 'task',
-  audits: 'task',
-  audit_report: 'report',
-  audit_reports: 'reports',
-} as const;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const CAPABILITY_NAMES = [
+  // the list may not be complete yet
+  'everything',
+  'authenticate',
+  'create_alert',
+  'create_asset',
+  'create_config',
+  'create_credential',
+  'create_filter',
+  'create_group',
+  'create_note',
+  'create_override',
+  'create_permission',
+  'create_port_list',
+  'create_port_range',
+  'create_report',
+  'create_report_config',
+  'create_report_format',
+  'create_role',
+  'create_scanner',
+  'create_schedule',
+  'create_tag',
+  'create_target',
+  'create_task',
+  'create_ticket',
+  'create_tls_certificate',
+  'create_user',
+  'delete_alert',
+  'delete_asset',
+  'delete_config',
+  'delete_credential',
+  'delete_filter',
+  'delete_group',
+  'delete_note',
+  'delete_override',
+  'delete_permission',
+  'delete_port_list',
+  'delete_port_range',
+  'delete_report',
+  'delete_report_config',
+  'delete_report_format',
+  'delete_role',
+  'delete_scanner',
+  'delete_schedule',
+  'delete_tag',
+  'delete_target',
+  'delete_task',
+  'delete_ticket',
+  'delete_tls_certificate',
+  'delete_user',
+  'describe_auth',
+  'empty_trashcan',
+  'get_aggregates',
+  'get_alerts',
+  'get_assets',
+  'get_configs',
+  'get_credentials',
+  'get_feeds',
+  'get_filters',
+  'get_groups',
+  'get_info',
+  'get_notes',
+  'get_nvts',
+  'get_nvt_families',
+  'get_overrides',
+  'get_permissions',
+  'get_port_lists',
+  'get_preferences',
+  'get_reports',
+  'get_report_configs',
+  'get_report_formats',
+  'get_results',
+  'get_roles',
+  'get_scanners',
+  'get_schedules',
+  'get_settings',
+  'get_system_reports',
+  'get_tags',
+  'get_targets',
+  'get_tasks',
+  'get_tickets',
+  'get_tls_certificates',
+  'get_users',
+  'get_version',
+  'get_vulns',
+  'help',
+  'modify_alert',
+  'modify_asset',
+  'modify_auth',
+  'modify_config',
+  'modify_credential',
+  'modify_filter',
+  'modify_group',
+  'modify_note',
+  'modify_override',
+  'modify_permission',
+  'modify_port_list',
+  'modify_report_config',
+  'modify_report_format',
+  'modify_role',
+  'modify_scanner',
+  'modify_schedule',
+  'modify_setting',
+  'modify_tag',
+  'modify_target',
+  'modify_task',
+  'modify_ticket',
+  'modify_tls_certificate',
+  'modify_user',
+  'move_task',
+  'restore',
+  'resume_task',
+  'run_wizard',
+  'start_task',
+  'stop_task',
+  'sync_config',
+  'test_alert',
+  'verify_report_format',
+  'verify_scanner',
+] as const;
 
-const convertType = (type: string): string => {
-  const cType = types[type];
-  if (isDefined(cType)) {
-    type = cType;
+const convertType = (type: CapabilitiesEntityType): string => {
+  // for now be safe and allow using all kinds of types including plural ones
+  // despite the CapabilitiesType definition reduces the possible values
+  // to not break existing code. This can be changed later to be more strict.
+  const singularType = type.endsWith('s') ? type.slice(0, -1) : type;
+  if (singularType in API_TYPES) {
+    return singularType;
   }
-  return subtypes[type] || type;
+  const at = apiType(singularType as ApiType);
+  return at as string;
 };
 
 class Capabilities {
   private readonly _hasCaps: boolean;
   private readonly _hasFeatures: boolean;
-  private readonly _capabilities: Set<string>;
+  private readonly _capabilities: Set<Capability>;
   private readonly _featuresEnabled: Record<string, boolean>;
 
-  constructor(capNames?: string[], featuresList?: Feature[]) {
+  constructor(capNames?: Capability[], featuresList?: Feature[]) {
     this._hasCaps = isDefined(capNames);
     this._hasFeatures = isDefined(featuresList);
 
-    let caps: string[] = [];
+    const caps: Capability[] = map<Capability, Capability>(
+      capNames,
+      name => name.toLowerCase() as Capability,
+    );
     let featuresEnabled: Record<string, boolean> = {};
-
-    if (this._hasCaps) {
-      caps = map(capNames, name => name.toLowerCase());
-    }
 
     if (this._hasFeatures) {
       forEach(featuresList, feature => {
@@ -101,32 +192,34 @@ class Capabilities {
     return this._hasCaps;
   }
 
-  has(name: string) {
-    return this._capabilities.has(name.toLowerCase());
+  protected has(name: Capability) {
+    return this._capabilities.has(name.toLowerCase() as Capability);
   }
 
-  mayOp(value: string) {
+  mayOp(value: Capability) {
     return this.has(value) || this.has('everything');
   }
 
-  mayAccess(type: string) {
-    return this.mayOp('get_' + pluralizeType(convertType(type)));
+  mayAccess(type: CapabilitiesEntityType) {
+    return this.mayOp(
+      ('get_' + pluralizeType(convertType(type))) as Capability,
+    );
   }
 
-  mayClone(type: string) {
-    return this.mayOp('create_' + convertType(type));
+  mayClone(type: CapabilitiesEntityType) {
+    return this.mayOp(('create_' + convertType(type)) as Capability);
   }
 
-  mayEdit(type: string) {
-    return this.mayOp('modify_' + convertType(type));
+  mayEdit(type: CapabilitiesEntityType) {
+    return this.mayOp(('modify_' + convertType(type)) as Capability);
   }
 
-  mayDelete(type: string) {
-    return this.mayOp('delete_' + convertType(type));
+  mayDelete(type: CapabilitiesEntityType) {
+    return this.mayOp(('delete_' + convertType(type)) as Capability);
   }
 
-  mayCreate(type: string) {
-    return this.mayOp('create_' + convertType(type));
+  mayCreate(type: CapabilitiesEntityType) {
+    return this.mayOp(('create_' + convertType(type)) as Capability);
   }
 
   get length() {
@@ -137,7 +230,7 @@ class Capabilities {
     return this._featuresEnabled[feature.toUpperCase()] === true;
   }
 
-  map<T>(callbackfn: (value: string, index: number, array: string[]) => T) {
+  map<T>(callbackfn: (value: Capability, index: number, array: string[]) => T) {
     return Array.from(this._capabilities).map(callbackfn);
   }
 }
