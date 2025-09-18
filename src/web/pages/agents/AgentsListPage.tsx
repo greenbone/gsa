@@ -55,7 +55,6 @@ const AgentListPage = () => {
   const {
     data: agentsData,
     isLoading: isDataLoading,
-    refetch,
     error,
     isError,
   } = useGetAgents({filter});
@@ -100,7 +99,6 @@ const AgentListPage = () => {
 
     try {
       await promise;
-      void refetch();
     } catch (error) {
       showError(error as Error);
     }
@@ -110,7 +108,6 @@ const AgentListPage = () => {
     allEntities,
     // @ts-expect-error
     gmp.agents,
-    refetch,
     showError,
   ]);
 
@@ -143,15 +140,6 @@ const AgentListPage = () => {
     setIsTagsDialogVisible(true);
   }, [setIsTagsDialogVisible]);
 
-  /* Todo this should not be necessary as tanstackquery should auto invalidated and refetch */
-  /*   const handleRefetch = useCallback(async () => {
-    try {
-      await refetch();
-    } catch (error) {
-      console.error('Error refetching agents:', error);
-    }
-  }, [refetch]); */
-
   const openConfirmDeleteDialog = useCallback((agent: Agent) => {
     setDeleteAgent(agent);
     setConfirmDeleteDialogVisible(true);
@@ -182,11 +170,8 @@ const AgentListPage = () => {
   return (
     <AgentComponent
       onCreateError={showError}
-      //    onCreated={handleRefetch}
       onDeleteError={showError}
-      //    onDeleted={handleRefetch}
       onSaveError={showError}
-      //    onSaved={handleRefetch}
     >
       {({create, clone, delete: deleteFunc, edit, authorize}) => {
         deleteFuncRef.current = deleteFunc;
