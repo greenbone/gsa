@@ -25,7 +25,7 @@ const CertLink = ({id, textOnly = false, type}: CertLinkProps) => {
     );
   }
 
-  let info_type: string;
+  let info_type: 'certbund' | 'dfncert';
   let title: string;
 
   if (lcType === 'cert-bund') {

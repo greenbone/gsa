@@ -3,14 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
+import {
+  EntityType,
+  WithEntityType,
+  getEntityType,
+  typeName,
+} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {NewIcon} from 'web/components/icon';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface EntityCreateIconProps<TEntity extends EntityType>
+interface EntityCreateIconProps<TEntity extends WithEntityType>
   extends Omit<
     ExtendedDynamicIconProps<TEntity>,
     'onClick' | 'value' | 'active' | 'display'
@@ -19,12 +24,12 @@ interface EntityCreateIconProps<TEntity extends EntityType>
   displayName?: string;
   entity: TEntity;
   mayCreate?: boolean;
-  name?: string;
+  name?: EntityType;
   title?: string;
   onClick?: (value: TEntity) => void | Promise<void>;
 }
 
-const EntityCreateIcon = <TEntity extends EntityType>({
+const EntityCreateIcon = <TEntity extends WithEntityType>({
   display = false,
   displayName,
   entity,

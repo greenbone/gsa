@@ -3,16 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
+import {
+  EntityType,
+  WithEntityType,
+  getEntityType,
+  typeName,
+} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {TrashcanIcon} from 'web/components/icon';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface EntityTrash extends EntityType {
+interface EntityTrash extends WithEntityType {
   userCapabilities: {
-    mayDelete: (name: string) => boolean;
+    mayDelete: (name: EntityType) => boolean;
   };
   isWritable: () => boolean;
   isInUse: () => boolean;
@@ -25,7 +30,7 @@ interface EntityTrashIconProps<TEntity extends EntityTrash>
   > {
   displayName?: string;
   entity: TEntity;
-  name?: string;
+  name?: EntityType;
   title?: string;
   onClick?: (value: TEntity) => void | Promise<void>;
 }

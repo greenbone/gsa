@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {EntityType} from 'gmp/utils/entitytype';
+import {WithEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {ViewOtherIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface ObserverEntity extends EntityType {
+interface ObserverEntity extends WithEntityType {
   owner?: {
     name: string;
   };

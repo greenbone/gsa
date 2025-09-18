@@ -26,7 +26,7 @@ const TestComponent = () => {
 
 describe('useLoadCapabilities tests', () => {
   test('should load capabilities', async () => {
-    const capabilities = new Capabilities(['cap_1', 'cap_2']);
+    const capabilities = new Capabilities(['get_tasks', 'get_targets']);
     const response = {data: capabilities};
     const gmp = {
       user: {

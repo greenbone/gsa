@@ -112,8 +112,8 @@ const ModifyTaskWizard = ({
               <div>
                 {_('Please be aware that:')}
                 <ul>
-                  {capabilities?.mayCreate('schedule') &&
-                    capabilities?.mayAccess('schedules') && (
+                  {capabilities.mayCreate('schedule') &&
+                    capabilities.mayAccess('schedule') && (
                       <li>
                         {_(
                           'Setting a start time overwrites a possibly already ' +
@@ -121,8 +121,8 @@ const ModifyTaskWizard = ({
                         )}
                       </li>
                     )}
-                  {capabilities?.mayCreate('alert') &&
-                    capabilities?.mayAccess('alerts') && (
+                  {capabilities.mayCreate('alert') &&
+                    capabilities.mayAccess('alert') && (
                       <li>
                         {_(
                           'Setting an email Address means adding an additional' +
@@ -144,8 +144,8 @@ const ModifyTaskWizard = ({
               />
             </FormGroup>
 
-            {capabilities?.mayCreate('schedule') &&
-              capabilities?.mayAccess('schedules') && (
+            {capabilities.mayCreate('schedule') &&
+              capabilities.mayAccess('schedule') && (
                 <FormGroup title={_('Start Time')}>
                   <Radio
                     checked={state.reschedule === NO_VALUE}
@@ -186,8 +186,8 @@ const ModifyTaskWizard = ({
                 </FormGroup>
               )}
 
-            {capabilities?.mayCreate('alert') &&
-              capabilities?.mayAccess('alerts') && (
+            {capabilities.mayCreate('alert') &&
+              capabilities.mayAccess('alert') && (
                 <FormGroup title={_('Email report to')}>
                   <TextField
                     grow="1"

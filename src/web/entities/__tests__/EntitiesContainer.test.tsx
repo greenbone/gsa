@@ -43,7 +43,7 @@ const setup = gmp => {
       entities={[new PortList()]}
       filter={initialFilter}
       gmp={gmp}
-      gmpName="port_list"
+      gmpName="portlist"
       isLoading={false}
       notify={notify}
       reload={reload}
@@ -70,7 +70,7 @@ describe('EntitiesContainer', () => {
       .mockResolvedValue(currentSettingsResponse);
     const downloadedData = {id: '123'};
     const gmp = {
-      port_lists: {
+      portlists: {
         exportByFilter: testing.fn().mockResolvedValue({data: downloadedData}),
       },
       user: {currentSettings},
@@ -93,7 +93,7 @@ describe('EntitiesContainer', () => {
       .mockResolvedValue(currentSettingsResponse);
     const error = 'mock error';
     const gmp = {
-      port_lists: {exportByFilter: testing.fn().mockRejectedValue(error)},
+      portlists: {exportByFilter: testing.fn().mockRejectedValue(error)},
       user: {currentSettings},
     };
 

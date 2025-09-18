@@ -12,7 +12,7 @@ import Model from 'gmp/models/model';
 import Permission from 'gmp/models/permission';
 import Role from 'gmp/models/role';
 import User from 'gmp/models/user';
-import {getEntityType} from 'gmp/utils/entitytype';
+import {EntityType, getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {NewIcon} from 'web/components/icon';
@@ -45,7 +45,7 @@ type RelatedResourcesLoader<TEntity> = ({
 }) => Promise<Model[]>;
 
 interface PermissionsBaseState {
-  entityType?: string;
+  entityType?: EntityType;
   entityName?: string;
   groups?: Group[];
   groupId?: string;

@@ -5,7 +5,7 @@
 
 import {useCallback} from 'react';
 import Filter from 'gmp/models/filter';
-import {apiType} from 'gmp/utils/entitytype';
+import {EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -34,7 +34,7 @@ interface UseFilterDialogReturn {
 export type UseFilterDialogSave = [() => Promise<void>] & UseFilterDialogReturn;
 
 const useFilterDialogSave = (
-  createFilterType: string,
+  createFilterType: EntityType,
   {onClose, onFilterChanged, onFilterCreated}: UseFilterDialogSaveProps,
   {
     filterName,
@@ -53,7 +53,7 @@ const useFilterDialogSave = (
       return gmp.filter
         .create({
           term: newFilter.toFilterString(),
-          type: apiType(createFilterType),
+          type: createFilterType,
           name: filterName,
         })
         .then(response => {
