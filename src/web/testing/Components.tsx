@@ -10,6 +10,7 @@ import {StyleSheetManager} from 'styled-components';
 import {DEFAULT_LANGUAGE, getLocale} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
+import FeaturesContext from 'web/components/provider/FeaturesProvider';
 import GmpContext from 'web/components/provider/GmpProvider';
 import {LanguageContext} from 'web/components/provider/LanguageProvider';
 import LicenseProvider from 'web/components/provider/LicenseProvider';
@@ -55,6 +56,10 @@ export const TestingCapabilitiesProvider = withProvider(
   'capabilities',
   'value',
 )(CapabilitiesContext.Provider);
+export const TestingFeaturesProvider = withProvider(
+  'features',
+  'value',
+)(FeaturesContext.Provider);
 export const TestingLicenseProvider = withProvider(
   'license',
   'value',

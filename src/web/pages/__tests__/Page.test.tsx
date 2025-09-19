@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen, wait} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
+import Features from 'gmp/capabilities/features';
 import Response from 'gmp/http/response';
 import Page from 'web/pages/Page';
 import {
@@ -22,6 +23,11 @@ describe('Page tests', () => {
           .fn()
           .mockResolvedValue(
             new Response<undefined>({} as XMLHttpRequest, undefined),
+          ),
+        currentFeatures: testing
+          .fn()
+          .mockResolvedValue(
+            new Response<Features>({} as XMLHttpRequest, new Features()),
           ),
       },
     };
@@ -44,6 +50,11 @@ describe('Page tests', () => {
           .fn()
           .mockResolvedValue(
             new Response({} as XMLHttpRequest, new EverythingCapabilities()),
+          ),
+        currentFeatures: testing
+          .fn()
+          .mockResolvedValue(
+            new Response<Features>({} as XMLHttpRequest, new Features()),
           ),
       },
       feedstatus: {
