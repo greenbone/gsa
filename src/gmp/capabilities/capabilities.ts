@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseBoolean} from 'gmp/parser';
-import {forEach, map} from 'gmp/utils/array';
+import {map} from 'gmp/utils/array';
 import {
   API_TYPES,
   ApiType,
@@ -14,13 +13,18 @@ import {
 } from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
-interface Feature {
-  name: string;
-  _enabled: string | boolean | number;
-}
-
 export type Capability = (typeof CAPABILITY_NAMES)[number];
 export type CapabilitiesEntityType = ApiType | EntityType;
+export type Feature = (typeof FEATURE_NAMES)[number];
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const FEATURE_NAMES = [
+  'CVSS3_RATINGS',
+  'OPENVASD',
+  'FEED_VT_METADATA',
+  'ENABLE_AGENTS',
+  'ENABLE_CONTAINER_SCANNING',
+] as const;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CAPABILITY_NAMES = [
@@ -166,30 +170,22 @@ const convertType = (type: CapabilitiesEntityType): string => {
 
 class Capabilities {
   private readonly _hasCaps: boolean;
-  private readonly _hasFeatures: boolean;
   private readonly _capabilities: Set<Capability>;
-  private readonly _featuresEnabled: Record<string, boolean>;
+  private readonly _features: Set<Feature>;
 
   constructor(capNames?: Capability[], featuresList?: Feature[]) {
     this._hasCaps = isDefined(capNames);
-    this._hasFeatures = isDefined(featuresList);
 
     const caps: Capability[] = map<Capability, Capability>(
       capNames,
       name => name.toLowerCase() as Capability,
     );
-    let featuresEnabled: Record<string, boolean> = {};
-
-    if (this._hasFeatures) {
-      forEach(featuresList, feature => {
-        featuresEnabled[feature.name.toUpperCase()] = parseBoolean(
-          feature._enabled,
-        );
-      });
-    }
-
+    const features: Feature[] = map<Feature, Feature>(
+      featuresList,
+      name => name.toUpperCase() as Feature,
+    );
     this._capabilities = new Set(caps);
-    this._featuresEnabled = featuresEnabled;
+    this._features = new Set(features);
   }
 
   [Symbol.iterator]() {
@@ -234,8 +230,8 @@ class Capabilities {
     return this._capabilities.size;
   }
 
-  featureEnabled(feature: string) {
-    return this._featuresEnabled[feature.toUpperCase()] === true;
+  featureEnabled(feature: Feature) {
+    return this._features.has(feature.toUpperCase() as Feature);
   }
 
   map<T>(callbackfn: (value: Capability, index: number, array: string[]) => T) {
