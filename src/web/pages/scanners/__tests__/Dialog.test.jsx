@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
+import Features from 'gmp/capabilities/features';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
@@ -56,10 +57,8 @@ const cred2 = Credential.fromElement({
 const credentials = [cred1, cred2];
 
 const gmp = {settings: {enableGreenboneSensor: true}};
-const capabilities = new Capabilities(['everything'], {
-  name: 'ENABLE_AGENTS',
-  _enabled: true,
-});
+const capabilities = new Capabilities(['everything']);
+const features = new Features(['ENABLE_AGENTS']);
 
 describe('ScannerDialog component tests', () => {
   test('should render sensor scanner', () => {
@@ -156,7 +155,7 @@ describe('ScannerDialog component tests', () => {
     const handleSave = testing.fn();
     const handleScannerTypeChange = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities});
+    const {render} = rendererWith({gmp, capabilities, features});
 
     render(
       <ScannerDialog
