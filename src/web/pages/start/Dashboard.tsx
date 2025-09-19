@@ -7,6 +7,7 @@ import {TranslatedDashboardControls as DashboardControls} from 'web/components/d
 import {TranslatedDashboard as Dashboard} from 'web/components/dashboard/Dashboard';
 import {canAddDisplay} from 'web/components/dashboard/Utils';
 import Layout from 'web/components/layout/Layout';
+import {AGENTS_DISPLAYS} from 'web/pages/agents/dashboard';
 import {CERTBUND_DISPLAYS} from 'web/pages/certbund/dashboard';
 import {CPES_DISPLAYS} from 'web/pages/cpes/dashboard';
 import {CVES_DISPLAYS} from 'web/pages/cves/dashboard';
@@ -26,6 +27,7 @@ import {TICKETS_DISPLAYS} from 'web/pages/tickets/dashboard';
 import {VULNS_DISPLAYS} from 'web/pages/vulns/dashboard';
 
 const ALL_DISPLAYS = [
+  ...AGENTS_DISPLAYS,
   ...TASKS_DISPLAYS,
   ...REPORTS_DISPLAYS,
   ...RESULTS_DISPLAYS,
