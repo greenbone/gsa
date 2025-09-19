@@ -47,18 +47,19 @@ interface TaskListPageProps {
 
 interface TaskEntitiesPageProps {
   onAdvancedTaskWizardClick?: () => void;
-  onModifyTaskWizardClick?: () => void;
   onContainerTaskCreateClick?: () => void;
-  onTaskCreateClick?: () => void;
-  onTaskWizardClick?: () => void;
+  onModifyTaskWizardClick?: () => void;
+  onNewAgentTaskClick?: () => void;
+  onReportImportClick?: (task: Task) => void;
   onTaskCloneClick?: (task: Task) => void;
+  onTaskCreateClick?: () => void;
   onTaskDeleteClick?: (task: Task) => void;
+  onTaskDownloadClick?: (task: Task) => void;
   onTaskEditClick?: (task: Task) => void;
+  onTaskResumeClick?: (task: Task) => void;
   onTaskStartClick?: (task: Task) => void;
   onTaskStopClick?: (task: Task) => void;
-  onTaskResumeClick?: (task: Task) => void;
-  onTaskDownloadClick?: (task: Task) => void;
-  onReportImportClick?: (task: Task) => void;
+  onTaskWizardClick?: () => void;
 }
 
 const TaskListPage = ({
@@ -108,6 +109,7 @@ const TaskListPage = ({
         advancedTaskWizard,
         modifyTaskWizard,
         taskWizard,
+        onNewAgentTaskClick,
       }) => (
         <React.Fragment>
           <PageTitle title={_('Tasks')} />
@@ -134,6 +136,7 @@ const TaskListPage = ({
             onError={onError}
             onFilterChanged={onFilterChanged}
             onModifyTaskWizardClick={modifyTaskWizard}
+            onNewAgentTaskClick={onNewAgentTaskClick}
             onReportImportClick={reportImport}
             onTaskCloneClick={clone}
             onTaskCreateClick={create}

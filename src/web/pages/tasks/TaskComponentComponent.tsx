@@ -31,6 +31,7 @@ import ImportReportDialog, {
 } from 'web/pages/reports/ReportImportDialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import TargetComponent from 'web/pages/targets/Component';
+import AgentTaskDialog from 'web/pages/tasks/AgentTaskDialog';
 import ContainerTaskDialog, {
   ContainerTaskDialogData,
 } from 'web/pages/tasks/ContainerTaskDialog';
@@ -90,6 +91,7 @@ interface TaskComponentRenderProps {
   advancedTaskWizard: () => void;
   modifyTaskWizard: () => void;
   taskWizard: () => void;
+  onNewAgentTaskClick: () => void;
 }
 
 interface TaskComponentProps {
@@ -170,6 +172,8 @@ const TaskComponent = ({
     useState(false);
   const [taskDialogVisible, setTaskDialogVisible] = useState(false);
   const [taskWizardVisible, setTaskWizardVisible] = useState(false);
+  const [newAgentTaskDialogVisible, setNewAgentTaskDialogVisible] =
+    useState(false);
 
   const [alertIds, setAlertIds] = useState<string[]>([]);
   const [alterable, setAlterable] = useState<YesNo | undefined>();
@@ -753,6 +757,14 @@ const TaskComponent = ({
     closeReportImportDialog();
   };
 
+  const handleOpenNewAgentTaskDialog = () => {
+    setNewAgentTaskDialogVisible(true);
+  };
+
+  const handleCloseNewAgentTaskDialog = () => {
+    setNewAgentTaskDialogVisible(false);
+  };
+
   return (
     <>
       <EntityComponent
@@ -781,6 +793,7 @@ const TaskComponent = ({
                 advancedTaskWizard: openAdvancedTaskWizard,
                 modifyTaskWizard: openModifyTaskWizard,
                 taskWizard: openTaskWizard,
+                onNewAgentTaskClick: handleOpenNewAgentTaskDialog,
               })}
 
             {taskDialogVisible && (
@@ -906,6 +919,18 @@ const TaskComponent = ({
           tasks={tasks}
           onClose={handleCloseReportImportDialog}
           onSave={handleReportImport}
+        />
+      )}
+
+      {newAgentTaskDialogVisible && (
+        <AgentTaskDialog
+          comment={comment}
+          in_assets={inAssets}
+          name={name}
+          task={task}
+          title={title}
+          onClose={handleCloseNewAgentTaskDialog}
+          onSave={() => {}}
         />
       )}
     </>
