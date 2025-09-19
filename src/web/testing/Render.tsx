@@ -13,11 +13,14 @@ import {InitialEntry, MemoryRouter} from 'react-router';
 import {Store} from 'redux';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
+import Features from 'gmp/capabilities/features';
+import {isDefined} from 'gmp/utils/identity';
 import configureStore from 'web/store';
 import {
   LocationDisplay,
   Main,
   TestingCapabilitiesProvider,
+  TestingFeaturesProvider,
   TestingGmpProvider,
   TestingLanguageProvider,
   TestingLicenseProvider,
@@ -27,6 +30,7 @@ import {userEvent, PointerEventsCheckLevel} from 'web/testing/event';
 
 export interface RendererOptions {
   capabilities?: Capabilities | boolean;
+  features?: Features;
   gmp?: Record<string, unknown>;
   store?: Store | boolean;
   license?: Record<string, unknown>;
@@ -65,6 +69,7 @@ export const render = (ui: React.ReactNode) => {
 
 export const rendererWith = ({
   capabilities,
+  features,
   gmp,
   license,
   store = true,
@@ -83,25 +88,31 @@ export const rendererWith = ({
     capabilities = new Capabilities();
   }
 
+  if (!isDefined(features)) {
+    features = new Features();
+  }
+
   const Providers = ({children}) => (
     <TestingGmpProvider gmp={gmp}>
       <TestingCapabilitiesProvider capabilities={capabilities}>
-        <TestingLicenseProvider license={license}>
-          <TestingStoreProvider store={store}>
-            <TestingLanguageProvider
-              language={typeof language === 'string' ? {language} : language}
-            >
-              {router ? (
-                <MemoryRouter initialEntries={[route]}>
-                  {children}
-                  {showLocation && <LocationDisplay />}
-                </MemoryRouter>
-              ) : (
-                children
-              )}
-            </TestingLanguageProvider>
-          </TestingStoreProvider>
-        </TestingLicenseProvider>
+        <TestingFeaturesProvider features={features}>
+          <TestingLicenseProvider license={license}>
+            <TestingStoreProvider store={store}>
+              <TestingLanguageProvider
+                language={typeof language === 'string' ? {language} : language}
+              >
+                {router ? (
+                  <MemoryRouter initialEntries={[route]}>
+                    {children}
+                    {showLocation && <LocationDisplay />}
+                  </MemoryRouter>
+                ) : (
+                  children
+                )}
+              </TestingLanguageProvider>
+            </TestingStoreProvider>
+          </TestingLicenseProvider>
+        </TestingFeaturesProvider>
       </TestingCapabilitiesProvider>
     </TestingGmpProvider>
   );
