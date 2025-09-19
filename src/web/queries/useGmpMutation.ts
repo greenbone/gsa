@@ -5,6 +5,7 @@
 
 import {showSuccessNotification as mantineShowSuccessNotification} from '@greenbone/ui-lib';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {pluralizeType} from 'gmp/utils/entitytype';
 import useGmp from 'web/hooks/useGmp';
 
 interface UseGmpMutationParams<TOutput> {
@@ -29,6 +30,26 @@ export function useGmpMutation<TInput = unknown, TOutput = unknown>({
   const gmpCommand = gmpEntity?.[method];
   const queryClient = useQueryClient();
 
+  const mutatingOperations = [
+    'create',
+    'modify',
+    'delete',
+    'save',
+    'start',
+    'stop',
+    'resume',
+    'move',
+    'empty',
+    'restore',
+    'sync',
+    'test',
+    'verify',
+    'run',
+  ];
+
+  const shouldInvalidateQueries =
+    invalidateQueries && mutatingOperations.some(op => method.startsWith(op));
+
   return useMutation<TOutput, unknown, TInput>({
     mutationFn: async (input: TInput) => {
       if (!gmpEntity || !gmpCommand) {
@@ -36,10 +57,22 @@ export function useGmpMutation<TInput = unknown, TOutput = unknown>({
       }
       return await gmpCommand.call(gmpEntity, input);
     },
-    onSuccess: (data, variables, context) => {
-      if (invalidateQueries) {
-        // Invalidate all queries to ensure fresh data
-        void queryClient.invalidateQueries();
+    onSuccess: data => {
+      if (shouldInvalidateQueries) {
+        /*
+         * TODO test cache invalidation based on useGetQuery cmd queryKey: [cmd, token, filter]
+         * Invalidate queries for the specific entity type (e.g., get_agents, get_users)
+         * Transform entityKey using the same logic as useGetQuery
+         */
+
+        const pluralEntityKey = pluralizeType(entityKey).replace(/_/g, '');
+        const getCommand = `get_${pluralEntityKey}`;
+        void queryClient.invalidateQueries({
+          predicate: query => {
+            const [cmd] = query.queryKey as [string, ...unknown[]];
+            return cmd === getCommand;
+          },
+        });
       }
 
       if (successMessage) {
