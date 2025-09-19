@@ -127,7 +127,7 @@ const AgentGroupsDialog = ({
         onSave({
           ...data,
           config: agentsData?.entities?.[0]?.config,
-          authorized: agentsData?.entities?.[0]?.authorized,
+          authorized: agentsData?.entities?.[0]?.authorized === 1 ? 1 : 0,
         })
       }
     >
