@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Capabilities, {Capability} from 'gmp/capabilities/capabilities';
+import Capabilities, {Capability, Feature} from 'gmp/capabilities/capabilities';
 import EntityCommand from 'gmp/commands/entity';
 import {HttpCommandOptions} from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
@@ -20,8 +20,8 @@ import User, {
   AUTH_METHOD_RADIUS,
   UserElement,
 } from 'gmp/models/user';
-import {parseInt} from 'gmp/parser';
-import {forEach, map} from 'gmp/utils/array';
+import {parseBoolean, parseInt} from 'gmp/parser';
+import {filter, forEach, map} from 'gmp/utils/array';
 import {EntityType} from 'gmp/utils/entitytype';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
@@ -66,7 +66,7 @@ interface GetCapabilitiesResponse extends XmlResponseData {
     get_features_response: {
       feature: {
         name: string;
-        _enabled: string | number;
+        _enabled: number;
         description: string;
       }[];
     };
@@ -341,8 +341,11 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     const {data} = response as Response<GetCapabilitiesResponse, XmlMeta>;
     const {command: commands} = data.get_capabilities.help_response.schema;
     const featuresList = data.get_capabilities.get_features_response.feature;
-    const caps = map(commands, command => command.name) as Capability[];
-    return response.setData(new Capabilities(caps, featuresList));
+    const caps = map(commands, command => command.name as Capability);
+    const features = filter(featuresList, feature =>
+      parseBoolean(feature._enabled),
+    ).map(feature => feature.name.toUpperCase() as Feature);
+    return response.setData(new Capabilities(caps, features));
   }
 
   create({
