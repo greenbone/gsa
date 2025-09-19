@@ -133,12 +133,14 @@ const AgentGroupsDialog = ({
     >
       {({values: state, onValueChange}) => {
         const availableAgents = agentsData
-          ? ((agentsData as {entities?: Agent[]})?.entities?.map(agent => ({
-              value: agent.id ?? '',
-              label: `${agent.name ?? agent.agentId ?? _('Unknown Agent')} ${
-                agent.hostname ? `(${agent.hostname})` : ''
-              }`.trim(),
-            })) ?? [])
+          ? ((agentsData as {entities?: Agent[]})?.entities
+              ?.filter(agent => agent.authorized === 1)
+              ?.map(agent => ({
+                value: agent.id ?? '',
+                label: `${agent.name ?? agent.agentId ?? _('Unknown Agent')} ${
+                  agent.hostname ? `(${agent.hostname})` : ''
+                }`.trim(),
+              })) ?? [])
           : [];
 
         return (

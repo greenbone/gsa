@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Agent, {AgentElement} from 'gmp/models/agents';
 import Filter from 'gmp/models/filter';
 import {useGetQuery} from 'web/queries/useGetQuery';
