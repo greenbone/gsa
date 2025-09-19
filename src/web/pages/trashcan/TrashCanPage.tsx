@@ -26,6 +26,7 @@ import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import AgentGroupsTable from 'web/pages/agent-groups/AgentGroupsTable';
 import AlertsTable from 'web/pages/alerts/Table';
 import AuditsTable from 'web/pages/audits/Table';
 import CredentialsTable from 'web/pages/credentials/Table';
@@ -371,6 +372,13 @@ const TrashCan = () => {
             <LinkTarget id="ticket" />
             <h1>{_('Tickets')}</h1>
             <TicketsTable entities={trash.tickets} {...tableProps} />
+          </span>
+        )}
+        {hasEntities(trash?.agentGroups) && (
+          <span>
+            <LinkTarget id="agent_group" />
+            <h1>{_('Agent Groups')}</h1>
+            <AgentGroupsTable entities={trash.agentGroups} {...tableProps} />
           </span>
         )}
       </Layout>
