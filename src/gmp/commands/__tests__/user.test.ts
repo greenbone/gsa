@@ -142,58 +142,70 @@ describe('UserCommand transformSettingName() function tests', () => {
   });
 });
 
-describe('UserCommand capabilities tests', () => {
-  test('should get capabilities', async () => {
-    const response = createResponse({
-      get_capabilities: {
-        help_response: {
-          schema: {
-            command: [
-              {
-                name: 'get_reports',
-              },
-              {
-                name: 'get_tasks',
-              },
-            ],
-          },
-        },
-        get_features_response: {
-          feature: [
+test('should get capabilities', async () => {
+  const response = createResponse({
+    get_capabilities: {
+      help_response: {
+        schema: {
+          command: [
             {
-              _enabled: 1,
-              name: 'TEST_FEATURE_1',
+              name: 'get_reports',
             },
             {
-              _enabled: 1,
-              name: 'TEST_FEATURE_2',
+              name: 'get_tasks',
             },
           ],
         },
       },
-    });
-    const fakeHttp = createHttp(response);
-    const cmd = new UserCommand(fakeHttp);
-
-    const {data: caps} = await cmd.currentCapabilities();
-    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-      args: {
-        cmd: 'get_capabilities',
-      },
-    });
-
-    // @ts-expect-error
-    expect(caps._hasCaps).toBe(true);
-    expect(caps.mayAccess('report')).toBe(true);
-    expect(caps.mayAccess('task')).toBe(true);
-    expect(caps.mayAccess('user')).toBe(false);
-
-    // @ts-expect-error
-    expect(caps._hasFeatures).toBe(true);
-    expect(caps.featureEnabled('test_feature_1')).toBe(true);
-    expect(caps.featureEnabled('TEST_FEATURE_2')).toBe(true);
-    expect(caps.featureEnabled('TEST_FEATURE_3')).toBe(false);
+    },
   });
+  const fakeHttp = createHttp(response);
+  const cmd = new UserCommand(fakeHttp);
+
+  const {data: caps} = await cmd.currentCapabilities();
+  expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+    args: {
+      cmd: 'get_capabilities',
+    },
+  });
+
+  expect(caps.length).toBe(2);
+  expect(caps.mayAccess('report')).toBe(true);
+  expect(caps.mayAccess('task')).toBe(true);
+  expect(caps.mayAccess('user')).toBe(false);
+});
+
+test('should get features', async () => {
+  const response = createResponse({
+    get_capabilities: {
+      get_features_response: {
+        feature: [
+          {
+            _enabled: 1,
+            name: 'ENABLE_AGENTS',
+          },
+          {
+            _enabled: 1,
+            name: 'OPENVASD',
+          },
+        ],
+      },
+    },
+  });
+  const fakeHttp = createHttp(response);
+  const cmd = new UserCommand(fakeHttp);
+
+  const {data: features} = await cmd.currentFeatures();
+  expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+    args: {
+      cmd: 'get_capabilities',
+    },
+  });
+
+  expect(features.length).toEqual(2);
+  expect(features.featureEnabled('ENABLE_AGENTS')).toBe(true);
+  expect(features.featureEnabled('OPENVASD')).toBe(true);
+  expect(features.featureEnabled('CVSS3_RATINGS')).toBe(false);
 });
 
 describe('UserCommand saveTimezone() tests', () => {

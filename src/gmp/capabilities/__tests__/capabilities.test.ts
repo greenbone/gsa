@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Capabilities, {Capability, Feature} from 'gmp/capabilities/capabilities';
+import Capabilities, {Capability} from 'gmp/capabilities/capabilities';
 
 describe('Capabilities tests', () => {
   test('should not have capabilities', () => {
@@ -229,39 +229,9 @@ describe('Capabilities tests', () => {
     let i = 0;
     for (const cap of caps) {
       i++;
-      expect(capList).toEqual(expect.arrayContaining([cap]));
+      expect(capList).toContain(cap);
     }
     expect(i).toEqual(4);
-  });
-
-  test('should check feature enabled', () => {
-    const features: Feature[] = ['CVSS3_RATINGS', 'OPENVASD'];
-    const caps = new Capabilities(['everything'], features);
-
-    expect(caps.featureEnabled('CVSS3_RATINGS')).toBe(true);
-    expect(caps.featureEnabled('OPENVASD')).toBe(true);
-    // @ts-expect-error
-    expect(caps.featureEnabled('openvasd')).toBe(true);
-    expect(caps.featureEnabled('FEED_VT_METADATA')).toBe(false);
-    expect(caps.featureEnabled('ENABLE_AGENTS')).toBe(false);
-    // @ts-expect-error
-    expect(caps.featureEnabled('enable_agents')).toBe(false);
-  });
-
-  test('should handle unknown features', () => {
-    const features: Feature[] = [
-      // @ts-expect-error
-      'ENABLED_FEATURE_1',
-      // @ts-expect-error
-      'ENABLED_FEATURE_2',
-    ];
-    const caps = new Capabilities(['everything'], features);
-    // @ts-expect-error
-    expect(caps.featureEnabled('ENABLED_FEATURE_1')).toBe(true);
-    // @ts-expect-error
-    expect(caps.featureEnabled('enabled_feature_2')).toBe(true);
-    // @ts-expect-error
-    expect(caps.featureEnabled('UNDEFINED_FEATURE')).toBe(false);
   });
 
   test('should support ticket capabilities', () => {
