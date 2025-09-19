@@ -65,31 +65,69 @@ export class AgentGroupCommand extends EntityCommand<
     return this.action(data);
   }
 
-  save({id, name, comment, agents}: AgentGroupModifyParams) {
-    log.debug('Modifying agent group', {
-      id,
-      name,
-      comment,
+  save({agents, authorized, config, comment}) {
+    log.debug('Modifying agent', {
       agents,
+      authorized,
+      config,
+      comment,
     });
 
-    const data: Record<string, string | number | boolean | undefined> = {
-      cmd: 'modify_agent_group',
-      agent_group_id: id,
+    const data: Record<
+      string,
+      string | number | boolean | string[] | undefined
+    > = {
+      cmd: 'modify_agent',
     };
-
-    if (name !== undefined) {
-      data.name = name;
+    console.log('config', config);
+    if (agents?.length) {
+      data['agent_ids:'] = agents.map(agent => agent.id).join(',');
     }
 
-    if (comment !== undefined) {
-      data.comment = comment;
+    if (authorized !== undefined) {
+      data.authorized = authorized;
     }
 
-    data['agent_ids:'] =
-      agents && agents.length > 0
-        ? agents.map(agent => agent.id).join(',')
-        : '';
+    /*
+     * We expect the values to always be present from the fetch,
+     * if value is not present, we send undefined.
+     */
+    const attempts = config?.agent_control?.retry?.attempts;
+    const delayInSeconds = config?.agent_control?.retry?.delay_in_seconds;
+    const maxJitterInSeconds =
+      config?.agent_control?.retry?.max_jitter_in_seconds;
+    const bulkSize = config?.agent_script_executor?.bulk_size;
+    const bulkThrottleTime =
+      config?.agent_script_executor?.bulk_throttle_time_in_ms;
+    const indexerDirDepth = config?.agent_script_executor?.indexer_dir_depth;
+    if (
+      config?.agent_script_executor?.scheduler_cron_time?.item !== undefined
+    ) {
+      const cronTime = config.agent_script_executor.scheduler_cron_time.item;
+      if (Array.isArray(cronTime)) {
+        data['scheduler_cron_times:'] = cronTime;
+      } else {
+        data['scheduler_cron_times:'] = [cronTime];
+      }
+    } else {
+      data['scheduler_cron_times:'] = ['0 */12 * * *'];
+    }
+
+    const intervalInSeconds = config?.heartbeat?.interval_in_seconds;
+    const missUntilInactive = config?.heartbeat?.miss_until_inactive;
+
+    data.attempts = attempts;
+    data.delay_in_seconds = delayInSeconds;
+    data.max_jitter_in_seconds = maxJitterInSeconds;
+
+    data.bulk_size = bulkSize;
+    data.bulk_throttle_time_in_ms = bulkThrottleTime;
+    data.indexer_dir_depth = indexerDirDepth;
+
+    data.interval_in_seconds = intervalInSeconds;
+    data.miss_until_inactive = missUntilInactive;
+
+    log.debug('Final data being sent to modify_agents:', data);
 
     return this.action(data);
   }

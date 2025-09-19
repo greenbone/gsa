@@ -9,6 +9,7 @@ import Response from 'gmp/http/response';
 import {XmlMeta} from 'gmp/http/transform/fastxml';
 import ActionResult from 'gmp/models/actionresult';
 import AgentGroup from 'gmp/models/agent-groups';
+import {AgentConfig} from 'gmp/models/agents';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsDialog from 'web/pages/agent-groups/AgentGroupsDialog';
@@ -116,16 +117,16 @@ const AgentGroupsComponent = ({
     comment: string;
     agentController: string;
     selectedAgents: string[];
-    network: string;
-    configurationMethod: string;
-    manualConfiguration: string;
-    filePath: string;
+    port: number;
+    schedulerCronExpression: string | undefined;
+    useAdvancedCron: boolean;
+    heartbeatIntervalInSeconds: number | undefined;
+    config?: AgentConfig;
   }) => {
     const backendData = {
-      name: data.name,
-      comment: data.comment,
-      scannerId: data.agentController,
       agents: data.selectedAgents.map(id => ({id})),
+      config: data.config,
+      comment: data.comment,
     };
 
     if (selectedAgentGroup) {
@@ -157,6 +158,7 @@ const AgentGroupsComponent = ({
       })}
       {AgentGroupsDialogVisible && (
         <AgentGroupsDialog
+          agentGroup={selectedAgentGroup}
           title={
             selectedAgentGroup
               ? _('Edit Agent Group {{name}}', {

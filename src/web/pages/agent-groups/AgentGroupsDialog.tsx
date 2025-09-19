@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import AgentGroup from 'gmp/models/agent-groups';
+import Agent, {AgentConfig} from 'gmp/models/agents';
 import Filter from 'gmp/models/filter';
 import Scanner, {
   AGENT_CONTROLLER_SCANNER_TYPE,
@@ -16,9 +18,11 @@ import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {useGetAgents} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
+import AgentConfigurationSection from 'web/pages/agents/components/AgentConfigurationSection';
 import {useGetQuery} from 'web/queries/useGetQuery';
 
 interface AgentGroupsDialogProps {
+  agentGroup?: AgentGroup;
   title?: string;
   onClose: () => void;
   onSave: (values: {
@@ -27,22 +31,33 @@ interface AgentGroupsDialogProps {
     agentController: string;
     selectedAgents: string[];
     network: string;
-    configurationMethod: string;
-    manualConfiguration: string;
-    filePath: string;
+    port: number;
+    schedulerCronExpression: string | undefined;
+    useAdvancedCron: boolean;
+    heartbeatIntervalInSeconds: number | undefined;
+    config?: AgentConfig;
   }) => void;
 }
 
 const AgentGroupsDialog = ({
+  agentGroup,
   title,
   onClose,
   onSave,
 }: AgentGroupsDialogProps) => {
   const [_] = useTranslation();
 
-  const [selectedAgentController, setSelectedAgentController] = useState('');
+  const [selectedAgentController, setSelectedAgentController] = useState(
+    agentGroup?.scanner?.id ?? '',
+  );
 
-  title = title || _('New Agent Group');
+  useEffect(() => {
+    if (agentGroup?.scanner?.id) {
+      setSelectedAgentController(agentGroup.scanner.id);
+    }
+  }, [agentGroup?.scanner?.id]);
+
+  title = title ?? _('New Agent Group');
 
   const agentControllersFilter = Filter.fromString(
     `type=${AGENT_CONTROLLER_SCANNER_TYPE} or type=${AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}`,
@@ -57,15 +72,31 @@ const AgentGroupsDialog = ({
 
   const agentControllers =
     (scannersData as {entities?: Scanner[]})?.entities?.map(scanner => ({
-      value: scanner.id || '',
-      label: scanner.name || _('Unknown Scanner'),
-    })) || [];
+      value: scanner.id ?? '',
+      label: scanner.name ?? _('Unknown Scanner'),
+    })) ?? [];
 
   const allAgentsFilter = Filter.fromString('first=1 rows=-1');
   const {data: agentsData} = useGetAgents({
     filter: selectedAgentController ? allAgentsFilter : undefined,
     enabled: Boolean(selectedAgentController),
   });
+
+  const extractSchedulerCron = () => {
+    const cronTime =
+      agentsData?.entities?.[0].config?.agent_script_executor
+        ?.scheduler_cron_time;
+    return typeof cronTime === 'string' ? cronTime : '0 */12 * * *';
+  };
+
+  const extractHeartbeatInterval = () => {
+    const interval =
+      agentsData?.entities?.[0]?.config?.heartbeat?.interval_in_seconds;
+    return typeof interval === 'number' ? interval : 300;
+  };
+
+  const schedulerCron = agentsData ? extractSchedulerCron() : '0 */12 * * *';
+  const heartbeatInterval = agentsData ? extractHeartbeatInterval() : 300;
 
   const handleAgentControllerChange = (value, onValueChange) => {
     setSelectedAgentController(value);
@@ -76,14 +107,19 @@ const AgentGroupsDialog = ({
   return (
     <SaveDialog
       defaultValues={{
-        name: '',
-        comment: '',
-        agentController: '',
-        selectedAgents: [] as string[],
+        name: agentGroup?.name ?? '',
+        comment: agentGroup?.comment ?? '',
+        agentController: agentGroup?.scanner?.id ?? '',
+        selectedAgents:
+          (agentGroup?.agents
+            ?.map(agent => agent.id)
+            .filter(id => id !== undefined) as string[]) ?? ([] as string[]),
         network: '',
-        configurationMethod: 'manual',
-        manualConfiguration: '',
-        filePath: '',
+        port: 0,
+        schedulerCronExpression: schedulerCron,
+        useAdvancedCron: false,
+        heartbeatIntervalInSeconds: heartbeatInterval,
+        config: (agentsData as {entities?: Agent[]})?.entities?.[0].config,
       }}
       title={title}
       onClose={onClose}
@@ -91,21 +127,12 @@ const AgentGroupsDialog = ({
     >
       {({values: state, onValueChange}) => {
         const availableAgents = agentsData
-          ? (
-              agentsData as {
-                entities?: Array<{
-                  id: string;
-                  name?: string;
-                  hostname?: string;
-                  agentId?: string;
-                }>;
-              }
-            )?.entities?.map(agent => ({
-              value: agent.id || '',
-              label: `${agent.name || agent.agentId || _('Unknown Agent')} ${
+          ? ((agentsData as {entities?: Agent[]})?.entities?.map(agent => ({
+              value: agent.id ?? '',
+              label: `${agent.name ?? agent.agentId ?? _('Unknown Agent')} ${
                 agent.hostname ? `(${agent.hostname})` : ''
               }`.trim(),
-            })) || []
+            })) ?? [])
           : [];
 
         return (
@@ -140,10 +167,24 @@ const AgentGroupsDialog = ({
                 items={availableAgents}
                 label={_('Select Agents')}
                 name="selectedAgents"
-                value={state.selectedAgents || []}
+                value={state.selectedAgents}
                 onChange={onValueChange}
               />
             )}
+
+            {state.agentController && agentsData ? (
+              <AgentConfigurationSection
+                hidePort
+                activeCronExpression={schedulerCron}
+                heartbeatIntervalInSeconds={heartbeatInterval}
+                port={state.port}
+                schedulerCronExpression={schedulerCron}
+                useAdvancedCron={state.useAdvancedCron}
+                onValueChange={onValueChange}
+              />
+            ) : state.agentController ? (
+              <div>{_('Loading configuration...')}</div>
+            ) : undefined}
           </>
         );
       }}
