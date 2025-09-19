@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Agent, {AgentElement} from 'gmp/models/agents';
 import Filter from 'gmp/models/filter';
 import {useGetQuery} from 'web/queries/useGetQuery';
@@ -53,7 +54,7 @@ export const useGetAgents = ({
       : scannerFilter;
   }
 
-  return useGetQuery({
+  return useGetQuery<Agent>({
     cmd: 'get_agents',
     filter: finalFilter,
     name: 'agent',
