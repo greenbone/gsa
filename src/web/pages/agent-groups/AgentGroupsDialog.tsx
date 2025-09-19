@@ -36,6 +36,7 @@ interface AgentGroupsDialogProps {
     useAdvancedCron: boolean;
     heartbeatIntervalInSeconds: number | undefined;
     config?: AgentConfig;
+    authorized?: 0 | 1;
   }) => void;
 }
 
@@ -119,11 +120,16 @@ const AgentGroupsDialog = ({
         schedulerCronExpression: schedulerCron,
         useAdvancedCron: false,
         heartbeatIntervalInSeconds: heartbeatInterval,
-        config: (agentsData as {entities?: Agent[]})?.entities?.[0].config,
       }}
       title={title}
       onClose={onClose}
-      onSave={onSave}
+      onSave={data =>
+        onSave({
+          ...data,
+          config: agentsData?.entities?.[0]?.config,
+          authorized: agentsData?.entities?.[0]?.authorized,
+        })
+      }
     >
       {({values: state, onValueChange}) => {
         const availableAgents = agentsData
@@ -176,9 +182,9 @@ const AgentGroupsDialog = ({
               <AgentConfigurationSection
                 hidePort
                 activeCronExpression={schedulerCron}
-                heartbeatIntervalInSeconds={heartbeatInterval}
+                heartbeatIntervalInSeconds={state.heartbeatIntervalInSeconds}
                 port={state.port}
-                schedulerCronExpression={schedulerCron}
+                schedulerCronExpression={state.schedulerCronExpression}
                 useAdvancedCron={state.useAdvancedCron}
                 onValueChange={onValueChange}
               />

@@ -122,11 +122,15 @@ const AgentGroupsComponent = ({
     useAdvancedCron: boolean;
     heartbeatIntervalInSeconds: number | undefined;
     config?: AgentConfig;
+    authorized?: 0 | 1;
   }) => {
     const backendData = {
+      name: data.name,
+      scannerId: data.agentController,
       agents: data.selectedAgents.map(id => ({id})),
       config: data.config,
       comment: data.comment,
+      authorized: data.authorized,
     };
 
     if (selectedAgentGroup) {
@@ -171,13 +175,9 @@ const AgentGroupsComponent = ({
             setSelectedAgentGroup(undefined);
           }}
           onSave={async data => {
-            try {
-              await handleSave(data);
-              setAgentGroupsDialogVisible(false);
-              setSelectedAgentGroup(undefined);
-            } catch {
-              // Error handling is done in mutations
-            }
+            await handleSave(data);
+            setAgentGroupsDialogVisible(false);
+            setSelectedAgentGroup(undefined);
           }}
         />
       )}

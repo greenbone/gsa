@@ -20,13 +20,6 @@ interface AgentGroupCreateParams {
   agents?: {id: string}[];
 }
 
-interface AgentGroupModifyParams {
-  id: string;
-  name?: string;
-  comment?: string;
-  agents?: {id: string}[];
-}
-
 const log = logger.getLogger('gmp.commands.agentgroups');
 
 export class AgentGroupCommand extends EntityCommand<
@@ -65,27 +58,51 @@ export class AgentGroupCommand extends EntityCommand<
     return this.action(data);
   }
 
-  save({agents, authorized, config, comment}) {
-    log.debug('Modifying agent', {
+  async save({id, name, comment, scannerId, agents, authorized, config}) {
+    log.debug('Modifying agent group', {
+      id,
+      name,
+      comment,
+      scannerId,
       agents,
       authorized,
       config,
-      comment,
     });
 
-    const data: Record<
+    const agentGroupData: Record<
+      string,
+      string | number | boolean | undefined
+    > = {
+      cmd: 'modify_agent_group',
+      agent_group_id: id,
+    };
+
+    if (name !== undefined) {
+      agentGroupData.name = name;
+    }
+    if (comment !== undefined) {
+      agentGroupData.comment = comment;
+    }
+    if (scannerId !== undefined) {
+      agentGroupData.scanner_id = scannerId;
+    }
+    if (agents?.length) {
+      agentGroupData['agent_ids:'] = agents.map(agent => agent.id).join(',');
+    }
+
+    const agentData: Record<
       string,
       string | number | boolean | string[] | undefined
     > = {
       cmd: 'modify_agent',
     };
-    console.log('config', config);
+
     if (agents?.length) {
-      data['agent_ids:'] = agents.map(agent => agent.id).join(',');
+      agentData['agent_ids:'] = agents.map(agent => agent.id).join(',');
     }
 
     if (authorized !== undefined) {
-      data.authorized = authorized;
+      agentData.authorized = authorized;
     }
 
     /*
@@ -105,31 +122,99 @@ export class AgentGroupCommand extends EntityCommand<
     ) {
       const cronTime = config.agent_script_executor.scheduler_cron_time.item;
       if (Array.isArray(cronTime)) {
-        data['scheduler_cron_times:'] = cronTime;
+        agentData['scheduler_cron_times:'] = cronTime;
       } else {
-        data['scheduler_cron_times:'] = [cronTime];
+        agentData['scheduler_cron_times:'] = [cronTime];
       }
     } else {
-      data['scheduler_cron_times:'] = ['0 */12 * * *'];
+      agentData['scheduler_cron_times:'] = ['0 */12 * * *'];
     }
 
     const intervalInSeconds = config?.heartbeat?.interval_in_seconds;
     const missUntilInactive = config?.heartbeat?.miss_until_inactive;
 
-    data.attempts = attempts;
-    data.delay_in_seconds = delayInSeconds;
-    data.max_jitter_in_seconds = maxJitterInSeconds;
+    agentData.attempts = attempts;
+    agentData.delay_in_seconds = delayInSeconds;
+    agentData.max_jitter_in_seconds = maxJitterInSeconds;
 
-    data.bulk_size = bulkSize;
-    data.bulk_throttle_time_in_ms = bulkThrottleTime;
-    data.indexer_dir_depth = indexerDirDepth;
+    agentData.bulk_size = bulkSize;
+    agentData.bulk_throttle_time_in_ms = bulkThrottleTime;
+    agentData.indexer_dir_depth = indexerDirDepth;
 
-    data.interval_in_seconds = intervalInSeconds;
-    data.miss_until_inactive = missUntilInactive;
+    agentData.interval_in_seconds = intervalInSeconds;
+    agentData.miss_until_inactive = missUntilInactive;
 
-    log.debug('Final data being sent to modify_agents:', data);
+    log.debug('Prepared data for both calls', {
+      agentGroupData,
+      agentData,
+    });
 
-    return this.action(data);
+    const [agentGroupResult, agentResult] = await Promise.allSettled([
+      this.action(agentGroupData),
+      this.action(agentData),
+    ]);
+
+    const agentGroupSuccess = agentGroupResult.status === 'fulfilled';
+    const agentSuccess = agentResult.status === 'fulfilled';
+
+    log.debug('API call results', {
+      agentGroupSuccess,
+      agentSuccess,
+      agentGroupResult:
+        agentGroupResult.status === 'fulfilled'
+          ? 'success'
+          : agentGroupResult.reason,
+      agentResult:
+        agentResult.status === 'fulfilled' ? 'success' : agentResult.reason,
+    });
+
+    if (agentGroupSuccess && agentSuccess) {
+      log.debug('Both modify operations completed successfully');
+      return {
+        success: true,
+        agentGroupResponse: agentGroupResult.value,
+        agentResponse: agentResult.value,
+      };
+    }
+
+    if (!agentGroupSuccess && !agentSuccess) {
+      const error = new Error(
+        `Both operations failed. Agent Group: ${agentGroupResult.reason?.message || agentGroupResult.reason}. Agent: ${agentResult.reason?.message || agentResult.reason}`,
+      );
+      log.error('Both modify operations failed', {
+        agentGroupError: agentGroupResult.reason,
+        agentError: agentResult.reason,
+      });
+      throw error;
+    }
+
+    if (agentGroupSuccess && !agentSuccess) {
+      log.error('Agent group updated but agent configuration failed', {
+        agentError: agentResult.reason,
+      });
+
+      const error = new Error(
+        `Agent group was updated successfully, but agent configuration failed: ${agentResult.reason?.message || agentResult.reason}`,
+      );
+      (error as any).partialSuccess = true;
+      (error as any).agentGroupResponse = agentGroupResult.value;
+      throw error;
+    }
+
+    if (!agentGroupSuccess && agentSuccess) {
+      log.error('Agent configuration updated but agent group failed', {
+        agentGroupError: agentGroupResult.reason,
+      });
+
+      const error = new Error(
+        `Agent configuration was updated successfully, but agent group update failed: ${agentGroupResult.reason?.message || agentGroupResult.reason}`,
+      );
+      (error as any).partialSuccess = true;
+      (error as any).agentResponse = agentResult.value;
+      throw error;
+    }
+
+    throw new Error('Unexpected state in save operation');
   }
 
   getElementFromRoot(root: Element): AgentGroupElement {
