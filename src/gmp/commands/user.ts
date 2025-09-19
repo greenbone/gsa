@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Capabilities, {Capability, Feature} from 'gmp/capabilities/capabilities';
+import Capabilities, {Capability} from 'gmp/capabilities/capabilities';
+import Features, {Feature} from 'gmp/capabilities/features';
 import EntityCommand from 'gmp/commands/entity';
 import {HttpCommandOptions} from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
@@ -340,12 +341,23 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     );
     const {data} = response as Response<GetCapabilitiesResponse, XmlMeta>;
     const {command: commands} = data.get_capabilities.help_response.schema;
-    const featuresList = data.get_capabilities.get_features_response.feature;
     const caps = map(commands, command => command.name as Capability);
+    return response.setData(new Capabilities(caps));
+  }
+
+  async currentFeatures(options: HttpCommandOptions = {}) {
+    const response = await this.httpGet(
+      {
+        cmd: 'get_capabilities',
+      },
+      options,
+    );
+    const {data} = response as Response<GetCapabilitiesResponse, XmlMeta>;
+    const featuresList = data.get_capabilities.get_features_response.feature;
     const features = filter(featuresList, feature =>
       parseBoolean(feature._enabled),
     ).map(feature => feature.name.toUpperCase() as Feature);
-    return response.setData(new Capabilities(caps, features));
+    return response.setData(new Features(features));
   }
 
   create({
