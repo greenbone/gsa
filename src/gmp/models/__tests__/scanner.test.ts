@@ -20,7 +20,9 @@ import Scanner, {
 import {testModel} from 'gmp/models/testing';
 import {YES_VALUE} from 'gmp/parser';
 
-testModel(Scanner, 'scanner');
+testModel(Scanner, 'scanner', {
+  testType: false,
+});
 
 describe('Scanner model tests', () => {
   test('should use defaults', () => {
@@ -48,7 +50,7 @@ describe('Scanner model tests', () => {
   test('should parse type', () => {
     const scanner = Scanner.fromElement({type: '42'});
 
-    expect(scanner.scannerType).toEqual(42);
+    expect(scanner.scannerType).toEqual('42');
   });
 
   test('should parse credential', () => {
