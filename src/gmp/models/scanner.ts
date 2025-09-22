@@ -118,7 +118,7 @@ export const openVasScannersFilter = (config: {scannerType: ScannerType}) =>
 export function scannerTypeName(
   scannerType: number | string | undefined,
 ): string {
-  scannerType = String(scannerType);
+  scannerType = isDefined(scannerType) ? String(scannerType) : undefined;
   if (scannerType === OPENVAS_SCANNER_TYPE) {
     return _('OpenVAS Scanner');
   } else if (scannerType === CVE_SCANNER_TYPE) {
@@ -185,7 +185,10 @@ class Scanner extends Model {
   static parseElement(element: ScannerElement = {}): ScannerProperties {
     const ret = super.parseElement(element) as ScannerProperties;
 
-    ret.scannerType = String(element.type) as ScannerType;
+    ret.scannerType = isDefined(element.type)
+      ? (String(element.type) as ScannerType)
+      : undefined;
+    delete ret._type;
 
     ret.credential =
       isDefined(element.credential) && !isEmpty(element.credential._id)
