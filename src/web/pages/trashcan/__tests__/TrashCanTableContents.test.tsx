@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWithTable, within} from 'web/testing';
 import {TrashCanGetData} from 'gmp/commands/trashcan';
+import AgentGroup from 'gmp/models/agent-groups';
 import Alert from 'gmp/models/alert';
 import Audit from 'gmp/models/audit';
 import Credential from 'gmp/models/credential';
@@ -50,6 +51,7 @@ describe('TrashCanTableContents tests', () => {
     targets: [],
     tasks: [],
     tickets: [],
+    agentGroups: [],
   };
 
   test('renders rows for non-empty trash categories', () => {
@@ -76,6 +78,7 @@ describe('TrashCanTableContents tests', () => {
     expect(screen.queryByText('Targets')).not.toBeInTheDocument();
     expect(screen.queryByText('Tasks')).not.toBeInTheDocument();
     expect(screen.queryByText('Tickets')).not.toBeInTheDocument();
+    expect(screen.queryByText('Agent Groups')).not.toBeInTheDocument();
   });
 
   test('should render all categories', () => {
@@ -100,6 +103,7 @@ describe('TrashCanTableContents tests', () => {
       targets: [new Target({id: 'target1'})],
       tasks: [new Task({id: 'task1'})],
       tickets: [new Ticket({id: 'ticket1'})],
+      agentGroups: [new AgentGroup({id: 'agentgroup1'})],
     };
     const {render} = rendererWithTable();
     render(<TrashCanTableContents trash={mockAllTrashData} />);
@@ -124,6 +128,7 @@ describe('TrashCanTableContents tests', () => {
     expect(screen.queryByText('Targets')).toBeInTheDocument();
     expect(screen.queryByText('Tasks')).toBeInTheDocument();
     expect(screen.queryByText('Tickets')).toBeInTheDocument();
+    expect(screen.queryByText('Agent Groups')).toBeInTheDocument();
   });
 
   test('renders nothing when trash is undefined', () => {

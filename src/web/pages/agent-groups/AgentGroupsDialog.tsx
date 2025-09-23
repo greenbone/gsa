@@ -81,6 +81,7 @@ const AgentGroupsDialog = ({
   const {data: agentsData} = useGetAgents({
     filter: selectedAgentController ? allAgentsFilter : undefined,
     enabled: Boolean(selectedAgentController),
+    authorized: true,
   });
 
   const extractSchedulerCron = () => {

@@ -27,6 +27,8 @@ const AgentGroupsTableRow = ({
   onAgentGroupDeleteClick,
   onAgentGroupDownloadClick,
   onAgentGroupEditClick,
+  onEntityRestore,
+  onEntityDelete,
   onEntityDeselected,
   onEntitySelected,
   selectionType,
@@ -53,7 +55,9 @@ const AgentGroupsTableRow = ({
         onAgentGroupDeleteClick={onAgentGroupDeleteClick}
         onAgentGroupDownloadClick={onAgentGroupDownloadClick}
         onAgentGroupEditClick={onAgentGroupEditClick}
+        onEntityDelete={onEntityDelete}
         onEntityDeselected={onEntityDeselected}
+        onEntityRestore={onEntityRestore}
         onEntitySelected={onEntitySelected}
       />
     </TableRow>

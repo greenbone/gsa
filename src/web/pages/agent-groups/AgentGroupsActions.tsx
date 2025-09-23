@@ -19,6 +19,8 @@ export interface AgentGroupsActionsProps
   onAgentGroupDeleteClick?: (entity: AgentGroup) => void;
   onAgentGroupDownloadClick?: (entity: AgentGroup) => void | Promise<void>;
   onAgentGroupEditClick?: (entity: AgentGroup) => void;
+  onEntityRestore?: (entity: AgentGroup) => void;
+  onEntityDelete?: (entity: AgentGroup) => void;
 }
 
 const AgentGroupsActions = ({

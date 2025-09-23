@@ -14,7 +14,6 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
 import {useGetAgentGroups} from 'web/hooks/useQuery/agent-groups';
@@ -28,7 +27,6 @@ import SelectionType from 'web/utils/SelectionType';
 
 const AgentGroupsListPage = () => {
   const [_] = useTranslation();
-  const gmp = useGmp();
 
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const deleteFuncRef = useRef<
@@ -49,6 +47,7 @@ const AgentGroupsListPage = () => {
     isLoading: isDataLoading,
     error,
     isError,
+    refetch,
   } = useGetAgentGroups({filter});
 
   const allEntities = useMemo(
@@ -74,35 +73,23 @@ const AgentGroupsListPage = () => {
   } = useSelection<AgentGroup>();
 
   const handleBulkDelete = useCallback(async () => {
-    // @ts-expect-error
-    const entitiesCommand = gmp.agentgroups;
-    let promise;
-
-    if (selectionType === SelectionType.SELECTION_USER) {
-      const agentGroups = selectedEntities
-        .filter(entity => entity.id !== null && entity.id !== undefined)
-        .map(entity => ({id: entity.id as string}));
-      promise = entitiesCommand.deleteAgentGroups(agentGroups);
-    } else {
-      const agentGroups = allEntities
-        .filter(entity => entity.id !== null && entity.id !== undefined)
-        .map(entity => ({id: entity.id as string}));
-      promise = entitiesCommand.deleteAgentGroups(agentGroups);
-    }
-
     try {
-      await promise;
+      const df = deleteFuncRef.current;
+      if (!df) return;
+
+      const source =
+        selectionType === SelectionType.SELECTION_USER
+          ? selectedEntities
+          : allEntities;
+
+      const items = source.filter(e => e.id !== null) as AgentGroup[];
+      if (items.length === 0) return;
+
+      await Promise.all(items.map(e => df(e)));
     } catch (error) {
       showError(error as Error);
     }
-  }, [
-    selectionType,
-    selectedEntities,
-    allEntities,
-    // @ts-expect-error
-    gmp.agentgroups,
-    showError,
-  ]);
+  }, [selectionType, selectedEntities, allEntities, showError]);
 
   const handleFilterChanged = useCallback(
     (newFilter?: Filter) => {
@@ -135,23 +122,16 @@ const AgentGroupsListPage = () => {
 
   const handleIndividualDelete = useCallback(
     async (agentGroup: AgentGroup) => {
-      if (!agentGroup.id) {
-        return;
-      }
-
+      if (!agentGroup.id) return;
       try {
-        // @ts-expect-error
-        const entitiesCommand = gmp.agentgroups;
-        await entitiesCommand.deleteAgentGroups([{id: agentGroup.id}]);
+        const df = deleteFuncRef.current;
+        if (!df) return;
+        await df(agentGroup);
       } catch (error) {
         showError(error as Error);
       }
     },
-    [
-      // @ts-expect-error
-      gmp.agentgroups,
-      showError,
-    ],
+    [showError],
   );
 
   const openConfirmDeleteDialog = useCallback(
@@ -162,11 +142,25 @@ const AgentGroupsListPage = () => {
   );
 
   const isLoading = isFilterLoading || isDataLoading;
+
   return (
     <AgentGroupsComponent
+      // wire one-shot refreshes via callbacks
       onCloneError={showError}
+      onCloned={() => {
+        void refetch();
+      }}
+      onCreated={() => {
+        void refetch();
+      }}
       onDeleteError={showError}
+      onDeleted={() => {
+        void refetch();
+      }}
       onSaveError={showError}
+      onSaved={() => {
+        void refetch();
+      }}
     >
       {({create, clone, delete: deleteFunc, edit}) => {
         deleteFuncRef.current = deleteFunc;

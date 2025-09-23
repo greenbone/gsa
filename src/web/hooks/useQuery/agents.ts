@@ -38,19 +38,27 @@ interface AgentModifyParams {
 export const useGetAgents = ({
   filter = undefined,
   scannerId = undefined,
+  authorized = undefined,
   enabled = true,
 }: {
   filter?: Filter;
   scannerId?: string;
+  authorized?: boolean;
   enabled?: boolean;
 }) => {
   let finalFilter = filter;
 
-  if (scannerId) {
-    const scannerFilter = Filter.fromString(`scanner=${scannerId}`);
-    finalFilter = filter
-      ? Filter.fromString(`${filter.toFilterString()} scanner=${scannerId}`)
-      : scannerFilter;
+  const extraParts: string[] = [];
+  if (scannerId) extraParts.push(`scanner=${scannerId}`);
+  if (authorized !== undefined)
+    extraParts.push(`authorized=${authorized ? 1 : 0}`);
+
+  if (extraParts.length) {
+    const base = filter ? filter.toFilterString().trim() : '';
+    const merged = base
+      ? `${base} ${extraParts.join(' ')}`
+      : extraParts.join(' ');
+    finalFilter = Filter.fromString(merged);
   }
 
   return useGetQuery<Agent>({
