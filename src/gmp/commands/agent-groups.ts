@@ -64,10 +64,9 @@ export class AgentGroupCommand extends EntityCommand<
       agentGroupData.scanner_id = scannerId;
     }
 
+    // @ts-ignore
     agentGroupData['agent_ids:'] =
-      agents && agents.length > 0
-        ? agents.map(agent => agent.id).join(',')
-        : '';
+      agents && agents.length > 0 ? agents.map(agent => agent.id) : [];
 
     const agentData: Record<
       string,
@@ -77,7 +76,7 @@ export class AgentGroupCommand extends EntityCommand<
     };
 
     if (agents?.length) {
-      agentData['agent_ids:'] = agents.map(agent => agent.id).join(',');
+      agentData['agent_ids:'] = agents.map(agent => agent.id);
     }
 
     if (authorized !== undefined) {
@@ -172,7 +171,6 @@ export class AgentGroupCommand extends EntityCommand<
         agentError: agentResult.reason,
       });
 
-      // TODO: Consider implementing rollback to delete the created agent group
       const error = new Error(
         `Agent group was created successfully, but agent configuration failed: ${agentResult.reason?.message || agentResult.reason}`,
       );
@@ -197,8 +195,24 @@ export class AgentGroupCommand extends EntityCommand<
     throw new Error('Unexpected state in create operation');
   }
 
-  async save({id, name, comment, scannerId, agents, authorized, config}) {
-    log.debug('Modifying agent group', {
+  async save({
+    id,
+    name,
+    comment,
+    scannerId,
+    agents,
+    authorized,
+    config,
+  }: {
+    id: string;
+    name?: string;
+    comment?: string;
+    scannerId?: string | number;
+    agents?: Array<{id: string | number}>;
+    authorized?: boolean;
+    config?: any;
+  }) {
+    log.debug('Modifying agent group (sequential, no rollback)', {
       id,
       name,
       comment,
@@ -208,6 +222,7 @@ export class AgentGroupCommand extends EntityCommand<
       config,
     });
 
+    // Build agent group payload
     const agentGroupData: Record<
       string,
       string | number | boolean | undefined
@@ -215,146 +230,79 @@ export class AgentGroupCommand extends EntityCommand<
       cmd: 'save_agent_group',
       agent_group_id: id,
     };
-
-    if (name !== undefined) {
-      agentGroupData.name = name;
-    }
-    if (comment !== undefined) {
-      agentGroupData.comment = comment;
-    }
-    if (scannerId !== undefined) {
-      agentGroupData.scanner_id = scannerId;
-    }
+    if (name !== undefined) agentGroupData.name = name;
+    if (comment !== undefined) agentGroupData.comment = comment;
+    if (scannerId !== undefined) agentGroupData.scanner_id = scannerId;
     if (agents?.length) {
-      agentGroupData['agent_ids:'] = agents.map(agent => agent.id).join(',');
+      // @ts-ignore
+      agentGroupData['agent_ids:'] = agents.map(a => a.id);
     }
 
+    // Build agent payload
     const agentData: Record<
       string,
       string | number | boolean | string[] | undefined
     > = {
       cmd: 'modify_agent',
     };
-
     if (agents?.length) {
-      agentData['agent_ids:'] = agents.map(agent => agent.id).join(',');
+      // @ts-ignore
+      agentData['agent_ids:'] = agents.map(a => a.id);
     }
-
     if (authorized !== undefined) {
       agentData.authorized = authorized;
     }
 
-    /*
-     * We expect the values to always be present from the fetch,
-     * if value is not present, we send undefined.
-     */
-    const attempts = config?.agent_control?.retry?.attempts;
-    const delayInSeconds = config?.agent_control?.retry?.delay_in_seconds;
-    const maxJitterInSeconds =
+    const cronItem = config?.agent_script_executor?.scheduler_cron_time?.item;
+    agentData['scheduler_cron_times:'] = Array.isArray(cronItem)
+      ? cronItem
+      : [cronItem ?? '0 */12 * * *'];
+
+    agentData.attempts = config?.agent_control?.retry?.attempts;
+    agentData.delay_in_seconds = config?.agent_control?.retry?.delay_in_seconds;
+    agentData.max_jitter_in_seconds =
       config?.agent_control?.retry?.max_jitter_in_seconds;
-    const bulkSize = config?.agent_script_executor?.bulk_size;
-    const bulkThrottleTime =
+    agentData.bulk_size = config?.agent_script_executor?.bulk_size;
+    agentData.bulk_throttle_time_in_ms =
       config?.agent_script_executor?.bulk_throttle_time_in_ms;
-    const indexerDirDepth = config?.agent_script_executor?.indexer_dir_depth;
-    if (
-      config?.agent_script_executor?.scheduler_cron_time?.item !== undefined
-    ) {
-      const cronTime = config.agent_script_executor.scheduler_cron_time.item;
-      if (Array.isArray(cronTime)) {
-        agentData['scheduler_cron_times:'] = cronTime;
-      } else {
-        agentData['scheduler_cron_times:'] = [cronTime];
-      }
-    } else {
-      agentData['scheduler_cron_times:'] = ['0 */12 * * *'];
+    agentData.indexer_dir_depth =
+      config?.agent_script_executor?.indexer_dir_depth;
+    agentData.interval_in_seconds = config?.heartbeat?.interval_in_seconds;
+    agentData.miss_until_inactive = config?.heartbeat?.miss_until_inactive;
+
+    log.debug('Prepared payloads', {agentGroupData, agentData});
+
+    // First call: save_agent_group
+    let agentGroupResponse: any;
+    try {
+      agentGroupResponse = await this.action(agentGroupData);
+      log.debug('Agent group updated (step 1 OK)', {id});
+    } catch (err1) {
+      log.error('Agent group update failed (step 1)', {error: err1});
+      throw new Error(`Agent group update failed: ${err1}`);
     }
 
-    const intervalInSeconds = config?.heartbeat?.interval_in_seconds;
-    const missUntilInactive = config?.heartbeat?.miss_until_inactive;
-
-    agentData.attempts = attempts;
-    agentData.delay_in_seconds = delayInSeconds;
-    agentData.max_jitter_in_seconds = maxJitterInSeconds;
-
-    agentData.bulk_size = bulkSize;
-    agentData.bulk_throttle_time_in_ms = bulkThrottleTime;
-    agentData.indexer_dir_depth = indexerDirDepth;
-
-    agentData.interval_in_seconds = intervalInSeconds;
-    agentData.miss_until_inactive = missUntilInactive;
-
-    log.debug('Prepared data for both calls', {
-      agentGroupData,
-      agentData,
-    });
-
-    const [agentGroupResult, agentResult] = await Promise.allSettled([
-      this.action(agentGroupData),
-      this.action(agentData),
-    ]);
-
-    const agentGroupSuccess = agentGroupResult.status === 'fulfilled';
-    const agentSuccess = agentResult.status === 'fulfilled';
-
-    log.debug('API call results', {
-      agentGroupSuccess,
-      agentSuccess,
-      agentGroupResult:
-        agentGroupResult.status === 'fulfilled'
-          ? 'success'
-          : agentGroupResult.reason,
-      agentResult:
-        agentResult.status === 'fulfilled' ? 'success' : agentResult.reason,
-    });
-
-    if (agentGroupSuccess && agentSuccess) {
-      log.debug('Both modify operations completed successfully');
+    // Second call: modify_agent
+    let agentResponse: any;
+    try {
+      agentResponse = await this.action(agentData);
+      log.debug('Agent modification completed (step 2 OK)', {
+        count: agents?.length ?? 0,
+      });
       return {
         success: true,
-        agentGroupResponse: agentGroupResult.value,
-        agentResponse: agentResult.value,
+        agentGroupResponse,
+        agentResponse,
       };
-    }
-
-    if (!agentGroupSuccess && !agentSuccess) {
+    } catch (err2) {
+      log.error('Agent modification failed (step 2)', {error: err2});
       const error = new Error(
-        `Both operations failed. Agent Group: ${agentGroupResult.reason?.message || agentGroupResult.reason}. Agent: ${agentResult.reason?.message || agentResult.reason}`,
-      );
-      log.error('Both modify operations failed', {
-        agentGroupError: agentGroupResult.reason,
-        agentError: agentResult.reason,
-      });
-      throw error;
-    }
-
-    if (agentGroupSuccess && !agentSuccess) {
-      log.error('Agent group updated but agent configuration failed', {
-        agentError: agentResult.reason,
-      });
-
-      const error = new Error(
-        `Agent group was updated successfully, but agent configuration failed: ${agentResult.reason?.message || agentResult.reason}`,
+        `Agent configuration failed after agent group update: ${err2}`,
       );
       (error as any).partialSuccess = true;
-      (error as any).agentGroupResponse = agentGroupResult.value;
+      (error as any).agentGroupResponse = agentGroupResponse;
       throw error;
     }
-
-    if (!agentGroupSuccess && agentSuccess) {
-      log.error('Agent configuration updated but agent group failed', {
-        agentGroupError: agentGroupResult.reason,
-      });
-
-      // TODO: Consider implementing rollback to delete the created agent group
-      const error = new Error(
-        `Agent configuration was updated successfully, but agent group update failed: ${agentGroupResult.reason?.message || agentGroupResult.reason}`,
-      );
-      (error as any).partialSuccess = true;
-      (error as any).agentResponse = agentResult.value;
-      throw error;
-    }
-
-    throw new Error('Unexpected state in save operation');
   }
 
   getElementFromRoot(root: Element): AgentGroupElement {

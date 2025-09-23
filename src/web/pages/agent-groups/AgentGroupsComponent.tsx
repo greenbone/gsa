@@ -87,11 +87,13 @@ const AgentGroupsComponent = ({
   >({
     entityKey: 'agentgroup',
     onSuccess: data => {
+      onCreated?.();
       if (onSaved) {
         onSaved(data);
       }
     },
     onError: error => {
+      onCreateError?.(error as Rejection);
       if (onSaveError) {
         onSaveError(error as Rejection);
       }

@@ -103,10 +103,11 @@ class AgentGroup extends Model {
       modification_time,
       modificationTime,
       writable,
-      in_use,
       inUse,
       scanner,
       agents,
+      // @ts-ignore
+      userCapabilities,
     } = element;
 
     copy.name = parseText(name);
@@ -126,8 +127,14 @@ class AgentGroup extends Model {
         : modificationTimeValue
       : undefined;
 
-    copy.writable = parseYesNo(writable);
-    copy.inUse = parseYesNo(in_use || inUse) === 1;
+    if (isDefined(writable)) {
+      copy.writable = parseYesNo(writable);
+    }
+
+    if (isDefined(inUse)) {
+      // @ts-ignore
+      copy.inUse = parseYesNo(inUse);
+    }
 
     copy.scanner = isDefined(scanner)
       ? {
@@ -161,17 +168,13 @@ class AgentGroup extends Model {
         copy.agents = [];
       }
     }
+    if (isDefined(userCapabilities)) {
+      copy.userCapabilities = userCapabilities;
+    }
 
     return copy;
   }
 
-  isWritable(): boolean {
-    return this.writable === 1;
-  }
-
-  isInUse(): boolean {
-    return this.inUse === true;
-  }
   getAgentCount(): number {
     return this.agents?.length || 0;
   }

@@ -7,6 +7,7 @@ import {NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface AgentGroupsListPageToolBarIconsProps {
@@ -16,7 +17,7 @@ interface AgentGroupsListPageToolBarIconsProps {
 const AgentGroupsListPageToolBarIcons = ({
   onAgentCreateClick,
 }: AgentGroupsListPageToolBarIconsProps) => {
-  //  const capabilities = useCapabilities();
+  const capabilities = useCapabilities();
   const [_] = useTranslation();
   return (
     <IconDivider>
@@ -26,13 +27,9 @@ const AgentGroupsListPageToolBarIcons = ({
         page="scanning"
         title={_('Help: Agents Lists')}
       />
-      {
-        /* TODO add permission */
-        /* capabilities.mayCreate('agent') &&  */ <NewIcon
-          title={_('New Agent')}
-          onClick={onAgentCreateClick}
-        />
-      }
+      {capabilities.mayCreate('agent_group') && (
+        <NewIcon title={_('New Agent')} onClick={onAgentCreateClick} />
+      )}
     </IconDivider>
   );
 };

@@ -112,8 +112,7 @@ const getRestorableDeletableForEntityType = {
     return {restorable: true, deletable: true};
   },
   agentgroup: entity => {
-    /* TODO implement functionality */
-    return {restorable: true, deletable: true};
+    return {restorable: true, deletable: !entity.isInUse()};
   },
 };
 

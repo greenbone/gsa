@@ -45,6 +45,7 @@ const TrashCanTableContents = ({trash}: TrashCanContentsTableProps) => {
   const hasTickets = hasItems(trash.tickets);
   const hasTasks = hasItems(trash.tasks);
   const hasScanConfigs = hasItems(trash.scanConfigs);
+  const hasAgentGroups = hasItems(trash.agentGroups);
 
   return (
     <TableBody>
@@ -186,6 +187,13 @@ const TrashCanTableContents = ({trash}: TrashCanContentsTableProps) => {
           count={trash.tickets.length}
           title={_('Tickets')}
           type="ticket"
+        />
+      )}
+      {hasAgentGroups && (
+        <TrashCanTableRow
+          count={trash.agentGroups.length}
+          title={_('Agent Groups')}
+          type="agentgroup"
         />
       )}
     </TableBody>
