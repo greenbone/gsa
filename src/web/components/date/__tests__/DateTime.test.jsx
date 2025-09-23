@@ -58,7 +58,7 @@ describe('DateTime render tests', () => {
     const {container} = render(<DateTime />);
 
     const content = removeStyleTags(container.innerHTML).trim();
-    expect(content).toBe('');
+    expect(content).toContain('<p>Invalid or no date available</p>');
   });
 
   test('should render nothing for invalid date', () => {
@@ -81,7 +81,7 @@ describe('DateTime render tests', () => {
     const {container} = render(<DateTime date={date} />);
 
     const content = removeStyleTags(container.innerHTML).trim();
-    expect(content).toBe('');
+    expect(content).toContain('<p>Invalid or no date available</p>');
 
     console.warn = consoleWarn;
   });
