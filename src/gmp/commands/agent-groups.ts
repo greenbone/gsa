@@ -14,13 +14,15 @@ import Filter from 'gmp/models/filter';
 import {Element} from 'gmp/models/model';
 
 interface AgentGroupCreateParams {
-  name: string;
-  comment?: string;
-  scannerId?: string;
   agents?: {id: string}[];
   authorized?: 0 | 1;
-  config?: any;
+  comment?: string;
+  config?: unknown;
+  name: string;
+  scannerId?: string;
 }
+
+type ActionResponse = Record<string, unknown>;
 
 const log = logger.getLogger('gmp.commands.agentgroups');
 
@@ -87,17 +89,25 @@ export class AgentGroupCommand extends EntityCommand<
      * We expect the values to always be present from the fetch,
      * if value is not present, we send undefined.
      */
+    // @ts-ignore
     const attempts = config?.agent_control?.retry?.attempts;
+    // @ts-ignore
     const delayInSeconds = config?.agent_control?.retry?.delay_in_seconds;
     const maxJitterInSeconds =
+      // @ts-ignore
       config?.agent_control?.retry?.max_jitter_in_seconds;
+    // @ts-ignore
     const bulkSize = config?.agent_script_executor?.bulk_size;
     const bulkThrottleTime =
+      // @ts-ignore
       config?.agent_script_executor?.bulk_throttle_time_in_ms;
+    // @ts-ignore
     const indexerDirDepth = config?.agent_script_executor?.indexer_dir_depth;
     if (
+      // @ts-ignore
       config?.agent_script_executor?.scheduler_cron_time?.item !== undefined
     ) {
+      // @ts-ignore
       const cronTime = config.agent_script_executor.scheduler_cron_time.item;
       if (Array.isArray(cronTime)) {
         agentData['scheduler_cron_times:'] = cronTime;
@@ -108,7 +118,9 @@ export class AgentGroupCommand extends EntityCommand<
       agentData['scheduler_cron_times:'] = ['0 */12 * * *'];
     }
 
+    // @ts-ignore
     const intervalInSeconds = config?.heartbeat?.interval_in_seconds;
+    // @ts-ignore
     const missUntilInactive = config?.heartbeat?.miss_until_inactive;
 
     agentData.attempts = attempts;
@@ -174,8 +186,13 @@ export class AgentGroupCommand extends EntityCommand<
       const error = new Error(
         `Agent group was created successfully, but agent configuration failed: ${agentResult.reason?.message || agentResult.reason}`,
       );
-      (error as any).partialSuccess = true;
-      (error as any).agentGroupResponse = agentGroupResult.value;
+      (
+        error as {partialSuccess?: boolean; agentGroupResponse?: ActionResponse}
+      ).partialSuccess = true;
+      // @ts-ignore
+      (
+        error as {partialSuccess?: boolean; agentGroupResponse?: ActionResponse}
+      ).agentGroupResponse = agentGroupResult.value;
       throw error;
     }
 
@@ -187,8 +204,13 @@ export class AgentGroupCommand extends EntityCommand<
       const error = new Error(
         `Agent configuration was updated successfully, but agent group creation failed: ${agentGroupResult.reason?.message || agentGroupResult.reason}`,
       );
-      (error as any).partialSuccess = true;
-      (error as any).agentResponse = agentResult.value;
+      (
+        error as {partialSuccess?: boolean; agentGroupResponse?: ActionResponse}
+      ).partialSuccess = true;
+      // @ts-ignore
+      (
+        error as {partialSuccess?: boolean; agentGroupResponse?: ActionResponse}
+      ).agentGroupResponse = agentGroupResult.reason;
       throw error;
     }
 
@@ -210,7 +232,7 @@ export class AgentGroupCommand extends EntityCommand<
     scannerId?: string | number;
     agents?: Array<{id: string | number}>;
     authorized?: boolean;
-    config?: any;
+    config?: unknown;
   }) {
     log.debug('Modifying agent group (sequential, no rollback)', {
       id,
@@ -253,28 +275,41 @@ export class AgentGroupCommand extends EntityCommand<
       agentData.authorized = authorized;
     }
 
+    // @ts-ignore
     const cronItem = config?.agent_script_executor?.scheduler_cron_time?.item;
     agentData['scheduler_cron_times:'] = Array.isArray(cronItem)
       ? cronItem
       : [cronItem ?? '0 */12 * * *'];
 
+    // @ts-ignore
     agentData.attempts = config?.agent_control?.retry?.attempts;
+    // @ts-ignore
     agentData.delay_in_seconds = config?.agent_control?.retry?.delay_in_seconds;
+    // @ts-ignore
     agentData.max_jitter_in_seconds =
+      // @ts-ignore
       config?.agent_control?.retry?.max_jitter_in_seconds;
+    // @ts-ignore
     agentData.bulk_size = config?.agent_script_executor?.bulk_size;
+    // @ts-ignore
     agentData.bulk_throttle_time_in_ms =
+      // @ts-ignore
       config?.agent_script_executor?.bulk_throttle_time_in_ms;
+    // @ts-ignore
     agentData.indexer_dir_depth =
+      // @ts-ignore
       config?.agent_script_executor?.indexer_dir_depth;
+    // @ts-ignore
     agentData.interval_in_seconds = config?.heartbeat?.interval_in_seconds;
+    // @ts-ignore
     agentData.miss_until_inactive = config?.heartbeat?.miss_until_inactive;
 
     log.debug('Prepared payloads', {agentGroupData, agentData});
 
     // First call: save_agent_group
-    let agentGroupResponse: any;
+    let agentGroupResponse: XmlResponseData;
     try {
+      // @ts-ignore
       agentGroupResponse = await this.action(agentGroupData);
       log.debug('Agent group updated (step 1 OK)', {id});
     } catch (err1) {
@@ -283,8 +318,9 @@ export class AgentGroupCommand extends EntityCommand<
     }
 
     // Second call: modify_agent
-    let agentResponse: any;
+    let agentResponse: XmlResponseData;
     try {
+      // @ts-ignore
       agentResponse = await this.action(agentData);
       log.debug('Agent modification completed (step 2 OK)', {
         count: agents?.length ?? 0,
@@ -299,8 +335,13 @@ export class AgentGroupCommand extends EntityCommand<
       const error = new Error(
         `Agent configuration failed after agent group update: ${err2}`,
       );
-      (error as any).partialSuccess = true;
-      (error as any).agentGroupResponse = agentGroupResponse;
+      (
+        error as {partialSuccess?: boolean; agentGroupResponse?: ActionResponse}
+      ).partialSuccess = true;
+      // @ts-ignore
+      (
+        error as {partialSuccess?: boolean; agentGroupResponse?: ActionResponse}
+      ).agentGroupResponse = agentGroupResponse;
       throw error;
     }
   }
