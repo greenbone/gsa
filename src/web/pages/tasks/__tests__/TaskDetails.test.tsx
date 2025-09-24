@@ -101,7 +101,7 @@ describe('TaskDetails tests', () => {
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: '5678', name: 'target1'},
       alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: 2},
+      scanner: {_id: '1516', name: 'scanner1', type: '2'},
       preferences: preferences,
       schedule: schedule,
       config: config,

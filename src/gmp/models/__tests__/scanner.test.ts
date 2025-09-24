@@ -240,7 +240,7 @@ describe('Scanner model function tests', () => {
       'OpenVASD Sensor',
     );
     expect(scannerTypeName(AGENT_CONTROLLER_SCANNER_TYPE)).toEqual(
-      'Agent Scanner',
+      'Agent Controller',
     );
     expect(scannerTypeName(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)).toEqual(
       'Agent Sensor',
