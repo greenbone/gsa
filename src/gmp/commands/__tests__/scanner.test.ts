@@ -24,11 +24,11 @@ describe('ScannerCommand tests', () => {
     const result = await cmd.create({
       name: 'Test Scanner',
       host: '127.0.0.1',
-      port: '9390',
+      port: 9390,
       type: OPENVASD_SCANNER_TYPE,
       comment: 'Test comment',
-      ca_pub: 'test-ca-pub',
-      credential_id: 'test-credential-id',
+      caPub: 'test-ca-pub' as unknown as File,
+      credentialId: 'test-credential-id',
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -38,7 +38,7 @@ describe('ScannerCommand tests', () => {
         credential_id: 'test-credential-id',
         scanner_host: '127.0.0.1',
         scanner_type: OPENVASD_SCANNER_TYPE,
-        port: '9390',
+        port: 9390,
         ca_pub: 'test-ca-pub',
       },
     });
@@ -57,12 +57,11 @@ describe('ScannerCommand tests', () => {
       id: '123',
       name: 'Updated Scanner',
       host: '127.0.0.1',
-      port: '9390',
+      port: 9390,
       type: OPENVASD_SCANNER_TYPE,
       comment: 'Updated comment',
-      ca_pub: 'updated-ca-pub',
-      credential_id: 'updated-credential-id',
-      which_cert: 'cert-id',
+      caPub: 'updated-ca-pub' as unknown as File,
+      credentialId: 'updated-credential-id',
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -73,9 +72,39 @@ describe('ScannerCommand tests', () => {
         credential_id: 'updated-credential-id',
         scanner_host: '127.0.0.1',
         scanner_type: OPENVASD_SCANNER_TYPE,
-        port: '9390',
+        port: 9390,
         ca_pub: 'updated-ca-pub',
-        which_cert: 'cert-id',
+      },
+    });
+  });
+
+  test('should allow to keep credential and cert unchanged when saving a scanner', async () => {
+    const response = createActionResultResponse({
+      action: 'save_scanner',
+      id: '123',
+      message: 'Scanner updated successfully',
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new ScannerCommand(fakeHttp);
+    await cmd.save({
+      id: '123',
+      name: 'Updated Scanner',
+      host: '127.0.0.1',
+      port: 9390,
+      type: OPENVASD_SCANNER_TYPE,
+      comment: 'Updated comment',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_scanner',
+        ca_pub: undefined,
+        credential_id: undefined,
+        scanner_id: '123',
+        name: 'Updated Scanner',
+        comment: 'Updated comment',
+        scanner_host: '127.0.0.1',
+        scanner_type: OPENVASD_SCANNER_TYPE,
+        port: 9390,
       },
     });
   });

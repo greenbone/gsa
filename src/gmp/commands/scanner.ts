@@ -11,24 +11,23 @@ import Scanner, {ScannerElement, ScannerType} from 'gmp/models/scanner';
 
 interface ScannerCommandCreateParams {
   name: string;
-  ca_pub?: string;
+  caPub?: File;
   comment?: string;
-  credential_id?: string;
+  credentialId?: string;
   host: string;
-  port: string;
+  port: number;
   type: ScannerType;
 }
 
 interface ScannerCommandSaveParams {
   id: string;
   name: string;
-  ca_pub?: string;
+  caPub?: File;
   comment?: string;
-  credential_id?: string;
+  credentialId?: string;
   host: string;
-  port: string;
+  port: number;
   type: ScannerType;
-  which_cert?: string;
 }
 
 interface ScannerCommandVerifyParams {
@@ -49,11 +48,9 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
 
   create({
     name,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    ca_pub,
+    caPub,
     comment = '',
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    credential_id,
+    credentialId,
     host,
     port,
     type,
@@ -62,11 +59,11 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
       cmd: 'create_scanner',
       name,
       comment,
-      credential_id,
+      credential_id: credentialId,
       scanner_host: host,
       scanner_type: type,
       port,
-      ca_pub,
+      ca_pub: caPub,
     };
     log.debug('Creating new scanner', data);
     return this.action(data);
@@ -75,28 +72,23 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
   save({
     id,
     name,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    ca_pub = '',
+    caPub,
     comment = '',
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    credential_id,
+    credentialId,
     host,
     port,
     type,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    which_cert,
   }: ScannerCommandSaveParams) {
     const data = {
       cmd: 'save_scanner',
-      ca_pub,
+      ca_pub: caPub,
       comment,
-      credential_id,
+      credential_id: credentialId,
       id,
       name,
       port,
       scanner_host: host,
       scanner_type: type,
-      which_cert,
     };
     log.debug('Saving scanner', data);
     return this.action(data);
