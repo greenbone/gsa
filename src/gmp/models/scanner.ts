@@ -131,7 +131,7 @@ export function scannerTypeName(
   } else if (scannerType === OPENVASD_SENSOR_SCANNER_TYPE) {
     return _('OpenVASD Sensor');
   } else if (scannerType === AGENT_CONTROLLER_SCANNER_TYPE) {
-    return _('Agent Scanner');
+    return _('Agent Controller');
   } else if (scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE) {
     return _('Agent Sensor');
   } else if (isDefined(scannerType)) {
