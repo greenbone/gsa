@@ -7,7 +7,7 @@ import {_} from 'gmp/locale/lang';
 import Credential from 'gmp/models/credential';
 import {Date} from 'gmp/models/date';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import {parseYesNo, parseDate, YesNo} from 'gmp/parser';
+import {parseYesNo, parseDate, YesNo, parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -97,6 +97,7 @@ interface ScannerProperties extends ModelProperties {
   credential?: Credential;
   info?: ScannerInfo;
   host?: string;
+  port?: number;
   scannerType?: ScannerType;
   tasks?: Model[];
 }
@@ -154,6 +155,7 @@ class Scanner extends Model {
   readonly credential?: Credential;
   readonly info?: ScannerInfo;
   readonly host?: string;
+  readonly port?: number;
   readonly scannerType?: ScannerType;
   readonly tasks: Model[];
 
@@ -163,6 +165,7 @@ class Scanner extends Model {
     credential,
     info,
     host,
+    port,
     scannerType,
     tasks = [],
     ...properties
@@ -174,6 +177,7 @@ class Scanner extends Model {
     this.credential = credential;
     this.info = info;
     this.host = host;
+    this.port = port;
     this.scannerType = scannerType;
     this.tasks = tasks;
   }
@@ -189,6 +193,8 @@ class Scanner extends Model {
       ? (String(element.type) as ScannerType)
       : undefined;
     delete ret._type;
+
+    ret.port = isDefined(element.port) ? parseInt(element.port) : undefined;
 
     ret.credential =
       isDefined(element.credential) && !isEmpty(element.credential._id)
