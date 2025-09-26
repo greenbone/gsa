@@ -5,7 +5,7 @@
 
 import {v4 as uuid} from 'uuid';
 import HttpCommand from 'gmp/commands/http';
-import {GetSettingsResponse} from 'gmp/commands/users';
+import {GetSettingsResponse} from 'gmp/commands/user';
 import Response from 'gmp/http/response';
 import {XmlMeta} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
@@ -85,7 +85,7 @@ const convertLoadedSettings = <
   };
 };
 
-export class DashboardCommand extends HttpCommand {
+class DashboardCommand extends HttpCommand {
   async getSetting(id: string) {
     const response = await this.httpGet({
       cmd: 'get_setting',
@@ -127,3 +127,5 @@ export class DashboardCommand extends HttpCommand {
     });
   }
 }
+
+export default DashboardCommand;

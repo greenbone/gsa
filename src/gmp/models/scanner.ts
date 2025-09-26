@@ -7,7 +7,7 @@ import {_} from 'gmp/locale/lang';
 import Credential from 'gmp/models/credential';
 import {Date} from 'gmp/models/date';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import {parseInt, parseYesNo, parseDate, YesNo} from 'gmp/parser';
+import {parseYesNo, parseDate, YesNo, parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -34,7 +34,7 @@ interface ScannerParamElement {
   paramType?: string;
 }
 
-interface ScannerElement extends ModelElement {
+export interface ScannerElement extends ModelElement {
   ca_pub?: string;
   ca_pub_info?: {
     activation_time?: string;
@@ -97,17 +97,18 @@ interface ScannerProperties extends ModelProperties {
   credential?: Credential;
   info?: ScannerInfo;
   host?: string;
+  port?: number;
   scannerType?: ScannerType;
   tasks?: Model[];
 }
 
-export const OPENVAS_SCANNER_TYPE = 2;
-export const CVE_SCANNER_TYPE = 3;
-export const GREENBONE_SENSOR_SCANNER_TYPE = 5;
-export const OPENVASD_SCANNER_TYPE = 6;
-export const AGENT_CONTROLLER_SCANNER_TYPE = 7;
-export const OPENVASD_SENSOR_SCANNER_TYPE = 8;
-export const AGENT_CONTROLLER_SENSOR_SCANNER_TYPE = 9;
+export const OPENVAS_SCANNER_TYPE = '2';
+export const CVE_SCANNER_TYPE = '3';
+export const GREENBONE_SENSOR_SCANNER_TYPE = '5';
+export const OPENVASD_SCANNER_TYPE = '6';
+export const AGENT_CONTROLLER_SCANNER_TYPE = '7';
+export const OPENVASD_SENSOR_SCANNER_TYPE = '8';
+export const AGENT_CONTROLLER_SENSOR_SCANNER_TYPE = '9';
 
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
@@ -118,7 +119,7 @@ export const openVasScannersFilter = (config: {scannerType: ScannerType}) =>
 export function scannerTypeName(
   scannerType: number | string | undefined,
 ): string {
-  scannerType = parseInt(scannerType);
+  scannerType = isDefined(scannerType) ? String(scannerType) : undefined;
   if (scannerType === OPENVAS_SCANNER_TYPE) {
     return _('OpenVAS Scanner');
   } else if (scannerType === CVE_SCANNER_TYPE) {
@@ -130,11 +131,11 @@ export function scannerTypeName(
   } else if (scannerType === OPENVASD_SENSOR_SCANNER_TYPE) {
     return _('OpenVASD Sensor');
   } else if (scannerType === AGENT_CONTROLLER_SCANNER_TYPE) {
-    return _('Agent Scanner');
+    return _('Agent Controller');
   } else if (scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE) {
     return _('Agent Sensor');
   } else if (isDefined(scannerType)) {
-    return _('Unknown scanner type ({{type}})', {type: String(scannerType)});
+    return _('Unknown scanner type ({{type}})', {type: scannerType});
   }
   return _('Unknown scanner type');
 }
@@ -154,6 +155,7 @@ class Scanner extends Model {
   readonly credential?: Credential;
   readonly info?: ScannerInfo;
   readonly host?: string;
+  readonly port?: number;
   readonly scannerType?: ScannerType;
   readonly tasks: Model[];
 
@@ -163,6 +165,7 @@ class Scanner extends Model {
     credential,
     info,
     host,
+    port,
     scannerType,
     tasks = [],
     ...properties
@@ -174,6 +177,7 @@ class Scanner extends Model {
     this.credential = credential;
     this.info = info;
     this.host = host;
+    this.port = port;
     this.scannerType = scannerType;
     this.tasks = tasks;
   }
@@ -185,7 +189,12 @@ class Scanner extends Model {
   static parseElement(element: ScannerElement = {}): ScannerProperties {
     const ret = super.parseElement(element) as ScannerProperties;
 
-    ret.scannerType = parseInt(element.type) as ScannerType;
+    ret.scannerType = isDefined(element.type)
+      ? (String(element.type) as ScannerType)
+      : undefined;
+    delete ret._type;
+
+    ret.port = isDefined(element.port) ? parseInt(element.port) : undefined;
 
     ret.credential =
       isDefined(element.credential) && !isEmpty(element.credential._id)

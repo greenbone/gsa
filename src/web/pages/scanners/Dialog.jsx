@@ -19,11 +19,12 @@ import NumberField from 'web/components/form/NumberField';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {NewIcon} from 'web/components/icon';
-import useCapabilities from 'web/hooks/useCapabilities';
+import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
+
 const AVAILABLE_SCANNER_TYPES = [
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
@@ -51,7 +52,7 @@ const ScannerDialog = ({
   onScannerTypeChange,
 }) => {
   const [_] = useTranslation();
-  const capabilities = useCapabilities();
+  const features = useFeatures();
   const gmp = useGmp();
 
   name = name || _('Unnamed');
@@ -79,7 +80,7 @@ const ScannerDialog = ({
 
   let SCANNER_TYPES = [];
 
-  if (capabilities.featureEnabled('ENABLE_AGENTS')) {
+  if (features.featureEnabled('ENABLE_AGENTS')) {
     type = hasValue(type) ? type : AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
     SCANNER_TYPES.push(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE);
   }
@@ -88,7 +89,7 @@ const ScannerDialog = ({
     SCANNER_TYPES.push(GREENBONE_SENSOR_SCANNER_TYPE);
   }
   if (
-    !capabilities.featureEnabled('AGENT_CONTROLLER') &&
+    !features.featureEnabled('ENABLE_AGENTS') &&
     !gmp.settings.enableGreenboneSensor
   ) {
     type = hasValue(type) ? type : undefined;

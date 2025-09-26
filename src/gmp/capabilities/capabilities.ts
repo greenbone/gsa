@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseBoolean} from 'gmp/parser';
-import {forEach, map} from 'gmp/utils/array';
+import {map} from 'gmp/utils/array';
 import {
   API_TYPES,
   ApiType,
@@ -14,19 +13,14 @@ import {
 } from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
-interface Feature {
-  name: string;
-  _enabled: string | boolean | number;
-}
-
 export type Capability = (typeof CAPABILITY_NAMES)[number];
 export type CapabilitiesEntityType = ApiType | EntityType;
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CAPABILITY_NAMES = [
   // the list may not be complete yet
   'everything',
   'authenticate',
+  'create_agent_group',
   'create_alert',
   'create_asset',
   'create_config',
@@ -50,6 +44,8 @@ const CAPABILITY_NAMES = [
   'create_ticket',
   'create_tls_certificate',
   'create_user',
+  'delete_agent_group',
+  'delete_agent',
   'delete_alert',
   'delete_asset',
   'delete_config',
@@ -75,6 +71,9 @@ const CAPABILITY_NAMES = [
   'delete_user',
   'describe_auth',
   'empty_trashcan',
+  'get_agent_groups',
+  'get_agent_installers',
+  'get_agents',
   'get_aggregates',
   'get_alerts',
   'get_assets',
@@ -109,6 +108,8 @@ const CAPABILITY_NAMES = [
   'get_version',
   'get_vulns',
   'help',
+  'modify_agent_group',
+  'modify_agent',
   'modify_alert',
   'modify_asset',
   'modify_auth',
@@ -158,30 +159,16 @@ const convertType = (type: CapabilitiesEntityType): string => {
 
 class Capabilities {
   private readonly _hasCaps: boolean;
-  private readonly _hasFeatures: boolean;
   private readonly _capabilities: Set<Capability>;
-  private readonly _featuresEnabled: Record<string, boolean>;
 
-  constructor(capNames?: Capability[], featuresList?: Feature[]) {
+  constructor(capNames?: Capability[]) {
     this._hasCaps = isDefined(capNames);
-    this._hasFeatures = isDefined(featuresList);
 
     const caps: Capability[] = map<Capability, Capability>(
       capNames,
       name => name.toLowerCase() as Capability,
     );
-    let featuresEnabled: Record<string, boolean> = {};
-
-    if (this._hasFeatures) {
-      forEach(featuresList, feature => {
-        featuresEnabled[feature.name.toUpperCase()] = parseBoolean(
-          feature._enabled,
-        );
-      });
-    }
-
     this._capabilities = new Set(caps);
-    this._featuresEnabled = featuresEnabled;
   }
 
   [Symbol.iterator]() {
@@ -224,10 +211,6 @@ class Capabilities {
 
   get length() {
     return this._capabilities.size;
-  }
-
-  featureEnabled(feature: string) {
-    return this._featuresEnabled[feature.toUpperCase()] === true;
   }
 
   map<T>(callbackfn: (value: Capability, index: number, array: string[]) => T) {

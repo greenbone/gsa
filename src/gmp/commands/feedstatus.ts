@@ -111,7 +111,7 @@ export const feedStatusRejection = async (
   throw rejection;
 };
 
-export class FeedStatusCommand extends HttpCommand {
+class FeedStatusCommand extends HttpCommand {
   constructor(http: GmpHttp) {
     super(http, {cmd: 'get_feeds'});
   }
@@ -199,3 +199,5 @@ export class FeedStatusCommand extends HttpCommand {
     }
   }
 }
+
+export default FeedStatusCommand;
