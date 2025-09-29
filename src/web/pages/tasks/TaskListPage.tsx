@@ -4,9 +4,7 @@
  */
 
 import React from 'react';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Rejection from 'gmp/http/rejection';
-import Filter, {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import Task from 'gmp/models/task';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {TaskIcon} from 'web/components/icon';
@@ -16,8 +14,9 @@ import {
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import withEntitiesContainer, {
+  WithEntitiesContainerComponentProps,
+} from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskDashboard, {TASK_DASHBOARD_ID} from 'web/pages/tasks/dashboard';
 import TaskToolBarIcons from 'web/pages/tasks/icons/TaskToolBarIcons';
@@ -29,21 +28,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/tasks';
 
-interface TaskListPageProps {
-  createFilterType: string;
-  entities?: Task[];
-  entitiesCounts?: CollectionCounts;
-  entitiesError?: Error | Rejection;
-  filter?: Filter;
-  isLoading?: boolean;
-  onChanged: () => void;
-  onDownloaded: OnDownloadedFunc;
-  onError: (error: Error | Rejection) => void;
-  onFilterChanged: (filter: Filter) => void;
-  onFilterCreated: (filter: Filter) => void;
-  onFilterRemoved: () => void;
-  onFilterReset: () => void;
-}
+type TaskListPageProps = WithEntitiesContainerComponentProps<Task>;
 
 interface TaskEntitiesPageProps {
   onAdvancedTaskWizardClick?: () => void;
@@ -64,7 +49,6 @@ interface TaskEntitiesPageProps {
 const TaskListPage = ({
   filter,
   onFilterChanged,
-
   onChanged,
   onDownloaded,
   onError,

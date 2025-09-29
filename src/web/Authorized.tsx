@@ -8,9 +8,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import useGmp from 'web/hooks/useGmp';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
 import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
-import PropTypes from 'web/utils/PropTypes';
 
-const Authorized = ({children}) => {
+interface AuthorizedProps {
+  children: React.ReactNode;
+}
+
+const Authorized = ({children}: AuthorizedProps) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
 
@@ -22,7 +25,7 @@ const Authorized = ({children}) => {
   }, [dispatch, gmp]);
 
   const responseError = useCallback(
-    xhr => {
+    (xhr: XMLHttpRequest) => {
       if (xhr.status === 401) {
         logout();
         return Promise.resolve(xhr);
@@ -43,10 +46,6 @@ const Authorized = ({children}) => {
   }, [gmp, responseError]);
 
   return isLoggedIn ? children : null;
-};
-
-Authorized.propTypes = {
-  children: PropTypes.node.isRequired,
 };
 
 export default Authorized;

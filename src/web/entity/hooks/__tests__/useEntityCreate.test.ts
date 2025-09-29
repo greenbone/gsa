@@ -12,14 +12,14 @@ describe('useEntityCreate', () => {
     const entity = {name: 'foo'};
     const createEntity = testing.fn().mockResolvedValue(entity);
     const gmp = {
-      foo: {create: createEntity},
+      task: {create: createEntity},
     };
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntityCreate('foo', {
+      useEntityCreate('task', {
         onCreated,
         onCreateError,
       }),
@@ -35,14 +35,14 @@ describe('useEntityCreate', () => {
     const createEntity = testing.fn().mockRejectedValue(new Error('error'));
     const entity = {name: 'foo'};
     const gmp = {
-      foo: {create: createEntity},
+      task: {create: createEntity},
     };
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntityCreate('foo', {
+      useEntityCreate('task', {
         onCreated,
         onCreateError,
       }),

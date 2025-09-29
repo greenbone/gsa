@@ -17,6 +17,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 
 interface EntityNameTableDataProps<TEntity extends Model> {
+  'data-testid'?: string;
   entity: TEntity;
   links?: boolean;
   displayName: string;
@@ -26,6 +27,7 @@ interface EntityNameTableDataProps<TEntity extends Model> {
 }
 
 const EntityNameTableData = <TEntity extends Model>({
+  'data-testid': dataTestId,
   entity,
   links = true,
   displayName,
@@ -36,7 +38,7 @@ const EntityNameTableData = <TEntity extends Model>({
   const [_] = useTranslation();
   const [username] = useUserName();
   return (
-    <TableData>
+    <TableData data-testid={dataTestId}>
       <Layout align="space-between">
         <div>
           {entity.isOrphan() && <b>{_('Orphan')}</b>}

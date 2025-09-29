@@ -16,6 +16,7 @@ interface ModelClass<T extends Model> {
 interface TestOptions {
   testIsActive?: boolean;
   testName?: boolean;
+  testType?: boolean;
 }
 
 const testId = <T extends Model>(modelClass: ModelClass<T>) => {
@@ -40,7 +41,10 @@ const testId = <T extends Model>(modelClass: ModelClass<T>) => {
 export const testModelFromElement = <T extends Model>(
   modelClass: ModelClass<T>,
   type: string | undefined,
-  {testName = true}: {testName?: boolean} = {},
+  {
+    testName = true,
+    testType = true,
+  }: {testName?: boolean; testType?: boolean} = {},
 ) => {
   test('should create instance of model class in fromElement', () => {
     const model = modelClass.fromElement();
@@ -139,12 +143,14 @@ export const testModelFromElement = <T extends Model>(
     expect(model.modificationTime).toEqual(parseDate('2018-10-10T08:48:46Z'));
   });
 
-  test('should privatize type from Model', () => {
-    const model = modelClass.fromElement({type: 'foo'});
-    // @ts-expect-error
-    expect(model.type).toBeUndefined();
-    expect(model._type).toEqual('foo');
-  });
+  if (testType) {
+    test('should privatize type from Model', () => {
+      const model = modelClass.fromElement({type: 'foo'});
+      // @ts-expect-error
+      expect(model.type).toBeUndefined();
+      expect(model._type).toEqual('foo');
+    });
+  }
 
   if (testName) {
     test('should parse name', () => {
