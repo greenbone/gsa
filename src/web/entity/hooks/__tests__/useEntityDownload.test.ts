@@ -26,14 +26,14 @@ describe('useEntityDownload', () => {
     const onDownloadError = testing.fn();
 
     const gmp = {
-      foo: {
+      task: {
         export: testing.fn().mockResolvedValue({data: downloadedData}),
       },
       user: {currentSettings},
     };
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
-      useEntityDownload('foo', {
+      useEntityDownload('task', {
         onDownloaded,
         onDownloadError,
       }),
@@ -43,7 +43,7 @@ describe('useEntityDownload', () => {
     expect(result.current).toBeDefined();
     await result.current(entity);
     expect(onDownloaded).toHaveBeenCalledWith({
-      filename: 'foo-123.xml',
+      filename: 'task-123.xml',
       data: downloadedData,
     });
     expect(onDownloadError).not.toHaveBeenCalled();
@@ -59,12 +59,12 @@ describe('useEntityDownload', () => {
     const onDownloadError = testing.fn();
 
     const gmp = {
-      foo: {export: testing.fn().mockRejectedValue(error)},
+      task: {export: testing.fn().mockRejectedValue(error)},
       user: {currentSettings},
     };
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
-      useEntityDownload('foo', {
+      useEntityDownload('task', {
         onDownloaded,
         onDownloadError,
       }),

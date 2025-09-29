@@ -12,14 +12,14 @@ describe('useEntityDelete', () => {
     const entity = {id: '123'};
     const deleteEntity = testing.fn().mockResolvedValue(entity);
     const gmp = {
-      foo: {delete: deleteEntity},
+      task: {delete: deleteEntity},
     };
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
 
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
-      useEntityDelete('foo', {
+      useEntityDelete('task', {
         onDeleted,
         onDeleteError,
       }),
@@ -35,14 +35,14 @@ describe('useEntityDelete', () => {
     const deleteEntity = testing.fn().mockRejectedValue(new Error('error'));
     const entity = {id: '123'};
     const gmp = {
-      foo: {delete: deleteEntity},
+      task: {delete: deleteEntity},
     };
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
 
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
-      useEntityDelete('foo', {
+      useEntityDelete('task', {
         onDeleted,
         onDeleteError,
       }),

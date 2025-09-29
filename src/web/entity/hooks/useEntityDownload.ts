@@ -8,6 +8,7 @@ import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useDispatch, useSelector} from 'react-redux';
 import Rejection from 'gmp/http/rejection';
 import Model from 'gmp/models/model';
+import {EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
@@ -37,7 +38,7 @@ interface EntityDownloadCallbacks<TDownloadError = unknown> {
  * @returns Function to handle the entity download.
  */
 const useEntityDownload = <TEntity extends Model, TDownloadError = Rejection>(
-  name: string,
+  name: EntityType,
   {onDownloadError, onDownloaded}: EntityDownloadCallbacks<TDownloadError> = {},
 ) => {
   const [_] = useTranslation();

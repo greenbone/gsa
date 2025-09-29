@@ -3,19 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {getEntityType, normalizeType} from 'gmp/utils/entitytype';
+import Model from 'gmp/models/model';
+import {EntityType, getEntityType, normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import DetailsLink from 'web/components/link/DetailsLink';
-import Link from 'web/components/link/Link';
+import Link, {LinkProps} from 'web/components/link/Link';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
-const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
+interface EntityLinkProps extends LinkProps {
+  entity: Model;
+  textOnly?: boolean;
+}
+
+const EntityLink = ({entity, textOnly, ...props}: EntityLinkProps) => {
   const [_] = useTranslation();
-  const {id, name, userCapabilities, deleted} = entity;
-  const type = normalizeType(getEntityType(entity));
+  const capabilities = useCapabilities();
+  const {id, name, userCapabilities} = entity;
+  const type = normalizeType(getEntityType(entity)) as EntityType;
 
   if (entity.isInTrash()) {
     return (
@@ -29,7 +34,8 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
     );
   }
 
-  if (isDefined(deleted) && deleted !== 0) {
+  // @ts-expect-error
+  if (isDefined(entity.deleted) && entity.deleted !== 0) {
     // FIXME is this still used?
     return <b>{_('Orphan')}</b>;
   }
@@ -42,16 +48,10 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
   }
 
   return (
-    <DetailsLink {...props} id={id} textOnly={textOnly} type={type}>
+    <DetailsLink {...props} id={id as string} textOnly={textOnly} type={type}>
       {name}
     </DetailsLink>
   );
 };
 
-EntityLink.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  entity: PropTypes.model.isRequired,
-  textOnly: PropTypes.bool,
-};
-
-export default withCapabilities(EntityLink);
+export default EntityLink;
