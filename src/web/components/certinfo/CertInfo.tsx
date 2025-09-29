@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {Date as GmpDate} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import InfoTable from 'web/components/table/InfoTable';
@@ -12,11 +12,19 @@ import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const CertInfo = ({info}) => {
+interface CertInfoProps {
+  info: {
+    activationTime?: GmpDate;
+    expirationTime?: GmpDate;
+    issuer?: string;
+    md5Fingerprint?: string;
+  };
+}
+
+const CertInfo = ({info}: CertInfoProps) => {
   const [_] = useTranslation();
-  const {activationTime, expirationTime, issuer, md5_fingerprint} = info;
+  const {activationTime, expirationTime, issuer, md5Fingerprint} = info;
   return (
     <InfoTable data-testid="cert-info-table">
       <colgroup>
@@ -55,7 +63,7 @@ const CertInfo = ({info}) => {
             {_('MD5 Fingerprint')}
           </TableData>
           <TableData data-testid="cert-info-md5-data">
-            {md5_fingerprint}
+            {md5Fingerprint}
           </TableData>
         </TableRow>
 
@@ -68,10 +76,6 @@ const CertInfo = ({info}) => {
       </TableBody>
     </InfoTable>
   );
-};
-
-CertInfo.propTypes = {
-  info: PropTypes.object.isRequired,
 };
 
 export default CertInfo;

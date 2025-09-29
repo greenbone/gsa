@@ -117,7 +117,7 @@ const Details = ({entity, links = true}) => {
                 <TableData>
                   <Divider>
                     <DateTime date={cert.activationTime} />
-                    {cert.time_status === CERTIFICATE_STATUS_INACTIVE && (
+                    {cert.timeStatus === CERTIFICATE_STATUS_INACTIVE && (
                       <span>{_('inactive')}</span>
                     )}
                   </Divider>
@@ -129,7 +129,7 @@ const Details = ({entity, links = true}) => {
                 <TableData>
                   <Divider>
                     <DateTime date={cert.expirationTime} />
-                    {cert.time_status === CERTIFICATE_STATUS_EXPIRED && (
+                    {cert.timeStatus === CERTIFICATE_STATUS_EXPIRED && (
                       <span>{_('expired')}</span>
                     )}
                   </Divider>
@@ -138,7 +138,7 @@ const Details = ({entity, links = true}) => {
 
               <TableRow>
                 <TableData>{_('MD5 Fingerprint')}</TableData>
-                <TableData>{cert.md5_fingerprint}</TableData>
+                <TableData>{cert.md5Fingerprint}</TableData>
               </TableRow>
 
               <TableRow>

@@ -72,13 +72,18 @@ describe('Credential Model tests', () => {
   });
 
   test('should parse certificate_info', () => {
-    const elem = {
+    const credential = Credential.fromElement({
       certificate_info: {
         activation_time: '2018-10-10T11:41:23.022Z',
         expiration_time: '2019-10-10T11:41:23.022Z',
+        issuer: 'Some Issuer',
+        subject: 'Some Subject',
+        serial: '1234567890',
+        md5_fingerprint: 'md5-fingerprint',
+        sha256_fingerprint: 'sha256-fingerprint',
+        time_status: 'valid',
       },
-    };
-    const credential = Credential.fromElement(elem);
+    });
 
     expect(credential.certificate_info?.activationTime).toEqual(
       parseDate('2018-10-10T11:41:23.022Z'),
@@ -86,6 +91,16 @@ describe('Credential Model tests', () => {
     expect(credential.certificate_info?.expirationTime).toEqual(
       parseDate('2019-10-10T11:41:23.022Z'),
     );
+    expect(credential.certificate_info?.issuer).toEqual('Some Issuer');
+    expect(credential.certificate_info?.subject).toEqual('Some Subject');
+    expect(credential.certificate_info?.serial).toEqual('1234567890');
+    expect(credential.certificate_info?.md5Fingerprint).toEqual(
+      'md5-fingerprint',
+    );
+    expect(credential.certificate_info?.sha256Fingerprint).toEqual(
+      'sha256-fingerprint',
+    );
+    expect(credential.certificate_info?.timeStatus).toEqual('valid');
   });
 
   test('should parse type', () => {
