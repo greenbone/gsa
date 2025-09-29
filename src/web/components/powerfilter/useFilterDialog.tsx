@@ -20,6 +20,7 @@ export interface FilterDialogState {
  */
 const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
   initialFilter?: Filter,
+  initialFilterString?: string,
 ) => {
   const [originalFilter] = useState(initialFilter);
   const [filter, setFilter] = useState<Filter>(() =>
@@ -28,9 +29,14 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
   const [filterDialogState, setFilterDialogState] =
     useState<TFilterDialogState>({} as TFilterDialogState);
 
-  const [filterString, setFilterString] = useState(() =>
-    isDefined(initialFilter) ? initialFilter.toFilterCriteriaString() : '',
-  );
+  const [filterString, setFilterString] = useState(() => {
+    if (isDefined(initialFilterString)) {
+      return initialFilterString;
+    }
+    return isDefined(initialFilter)
+      ? initialFilter.toFilterCriteriaString()
+      : '';
+  });
 
   const handleFilterChange = useCallback((filter: Filter) => {
     setFilter(filter);

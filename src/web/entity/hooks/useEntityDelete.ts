@@ -5,6 +5,7 @@
 
 import {useDispatch} from 'react-redux';
 import Rejection from 'gmp/http/rejection';
+import {EntityType} from 'gmp/utils/entitytype';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -33,7 +34,7 @@ const useEntityDelete = <
   TEntity extends EntityDelete = EntityDelete,
   TDeleteError = Rejection,
 >(
-  name: string,
+  name: EntityType,
   {onDeleteError, onDeleted}: EntityDeleteCallbacks<TDeleteError> = {},
 ) => {
   const [_] = useTranslation();
@@ -44,7 +45,7 @@ const useEntityDelete = <
     dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id as string));
 
   const handleEntityDelete = async (entity: TEntity) => {
-    return actionFunction(
+    return actionFunction<void>(
       // @ts-expect-error
       deleteEntity(entity),
       {
