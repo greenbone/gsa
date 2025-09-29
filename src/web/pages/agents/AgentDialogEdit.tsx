@@ -123,18 +123,17 @@ const AgentDialogEdit = ({
                       onChange={onValueChange}
                     />
                   </Layout>
-                  <Layout basis="48%">
-                    {/*
-                     * TODO This should show IP type (IPv4/IPv6) or do not show at all if missing
-                     */}
-                    <TextField
-                      disabled
-                      name="ipAddress"
-                      title={_('IP Address')}
-                      value={state.ipAddress}
-                      onChange={onValueChange}
-                    />
-                  </Layout>
+                  {state.ipAddress && (
+                    <Layout basis="48%">
+                      <TextField
+                        disabled
+                        name="ipAddress"
+                        title={_('IP Address')}
+                        value={state.ipAddress}
+                        onChange={onValueChange}
+                      />
+                    </Layout>
+                  )}
                 </Row>
                 <Row>
                   <Layout basis="48%">

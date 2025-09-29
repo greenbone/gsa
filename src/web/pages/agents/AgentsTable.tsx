@@ -19,5 +19,7 @@ export default createEntitiesTable<Agent>({
   footer: createEntitiesFooter({
     span: 8,
     delete: true,
+    authorize: true,
+    revoke: true,
   }),
 });

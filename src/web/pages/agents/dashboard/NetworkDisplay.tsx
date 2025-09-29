@@ -23,6 +23,11 @@ interface NetworkData {
   total?: number;
 }
 
+interface TransformedNetworkRow {
+  label: string;
+  value: number;
+}
+
 const transformNetworkData = (data: NetworkData = {}) => {
   const {groups = []} = data;
   return groups.map(group => ({
@@ -31,11 +36,7 @@ const transformNetworkData = (data: NetworkData = {}) => {
   }));
 };
 
-interface TransformedNetworkRow {
-  label: string;
-  value: number;
-}
-
+// @ts-ignore
 export const AgentsNetworkTableDisplay = createDisplay({
   loaderComponent: AgentsNetworkLoader,
   displayComponent: DataTableDisplay,
@@ -49,7 +50,7 @@ export const AgentsNetworkTableDisplay = createDisplay({
   displayId: 'agent-by-network-table',
   displayName: 'AgentsNetworkTableDisplay',
   filtersFilter: AGENTS_FILTER_FILTER,
-} as any);
+});
 
 registerDisplay(
   AgentsNetworkTableDisplay.displayId,

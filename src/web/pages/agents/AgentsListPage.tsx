@@ -111,6 +111,60 @@ const AgentListPage = () => {
     showError,
   ]);
 
+  const handleBulkAuthorize = useCallback(async () => {
+    // @ts-expect-error
+    const entitiesCommand = gmp.agents;
+    let promise;
+
+    if (selectionType === SelectionType.SELECTION_USER) {
+      const agents = selectedEntities.filter(a => a.id !== null);
+      promise = entitiesCommand.authorize(agents);
+    } else {
+      const agents = allEntities.filter(a => a.id !== null);
+      promise = entitiesCommand.authorize(agents);
+    }
+
+    try {
+      await promise;
+    } catch (error) {
+      showError(error as Error);
+    }
+  }, [
+    selectionType,
+    selectedEntities,
+    allEntities,
+    // @ts-expect-error
+    gmp.agents,
+    showError,
+  ]);
+
+  const handleBulkRevoke = useCallback(async () => {
+    // @ts-expect-error
+    const entitiesCommand = gmp.agents;
+    let promise;
+
+    if (selectionType === SelectionType.SELECTION_USER) {
+      const agents = selectedEntities.filter(a => a.id !== null);
+      promise = entitiesCommand.revoke(agents);
+    } else {
+      const agents = allEntities.filter(a => a.id !== null);
+      promise = entitiesCommand.revoke(agents);
+    }
+
+    try {
+      await promise;
+    } catch (error) {
+      showError(error as Error);
+    }
+  }, [
+    selectionType,
+    selectedEntities,
+    allEntities,
+    // @ts-expect-error
+    gmp.agents,
+    showError,
+  ]);
+
   const handleFilterChanged = useCallback(
     (newFilter?: Filter) => {
       changeFilter(newFilter);
@@ -198,7 +252,7 @@ const AgentListPage = () => {
                   entities={allEntities}
                   entitiesCounts={entitiesCounts}
                   filter={filter}
-                  // @ts-expect-error
+                  //@ts-ignore
                   selectionType={selectionType}
                   sortBy={sortBy}
                   sortDir={sortDir}
@@ -206,6 +260,7 @@ const AgentListPage = () => {
                   onAgentCloneClick={clone}
                   onAgentDeleteClick={openConfirmDeleteDialog}
                   onAgentEditClick={edit}
+                  onAuthorizeBulk={handleBulkAuthorize}
                   onDeleteBulk={handleBulkDelete}
                   onEntityDeselected={deselect}
                   onEntitySelected={select}
@@ -213,6 +268,7 @@ const AgentListPage = () => {
                   onLastClick={getLast}
                   onNextClick={getNext}
                   onPreviousClick={getPrevious}
+                  onRevokeBulk={handleBulkRevoke}
                   onSelectionTypeChange={changeSelectionType}
                   onSortChange={handleSortChange}
                   onTagsBulk={openTagsDialog}

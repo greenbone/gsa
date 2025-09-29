@@ -5,12 +5,10 @@
 
 import Agent from 'gmp/models/agents';
 import {CircleMinusIcon, CirclePlusIcon, EditIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
   EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
-import CloneIcon from 'web/entity/icon/CloneIcon';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -75,8 +73,10 @@ const AgentActions = ({
          */}
         <DeleteIcon
           displayName={_('Agent')}
+          // @ts-ignore
           entity={entity}
           name="agent"
+          // @ts-ignore
           onClick={onAgentDeleteClick}
         />
       </IconDivider>

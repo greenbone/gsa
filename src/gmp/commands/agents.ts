@@ -12,6 +12,10 @@ import logger from 'gmp/log';
 import Agent, {AgentElement} from 'gmp/models/agents';
 import Filter from 'gmp/models/filter';
 import {Element} from 'gmp/models/model';
+import {
+  AGENT_CONTROLLER_SCANNER_TYPE,
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 
 interface AgentControlConfig {
   retry?: {
@@ -50,6 +54,10 @@ interface AgentModifyParams {
 
 const log = logger.getLogger('gmp.commands.agents');
 
+const AGENT_CONTROLLER_FILTER = Filter.fromString(
+  `scanner_type=${AGENT_CONTROLLER_SCANNER_TYPE} or scanner_type=${AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}`,
+);
+
 export class AgentCommand extends EntityCommand<Agent, AgentElement> {
   constructor(http: GmpHttp) {
     super(http, 'agent', Agent);
@@ -80,7 +88,7 @@ export class AgentCommand extends EntityCommand<Agent, AgentElement> {
     };
 
     if (agents?.length) {
-      data['agent_ids:'] = agents.map(agent => agent.id).join(',');
+      data['agent_ids:'] = agents.map(agent => agent.id);
     }
 
     if (authorized !== undefined) {
@@ -149,18 +157,56 @@ export class AgentsCommand extends EntitiesCommand<Agent> {
     };
 
     if (agents?.length) {
-      data['agent_ids:'] = agents.map(agent => agent.id).join(',');
+      // @ts-ignore
+      data['agent_ids:'] = agents.map(agent => agent.id);
     }
 
     const response = await this.httpPost(data);
     return response.setData(agents);
   }
 
+  // @ts-ignore
+  async authorize(agents: Agent[]) {
+    log.debug('Authorizing agent', {agents});
+    const data: Record<string, string | number | boolean | undefined> = {
+      cmd: 'modify_agent',
+    };
+
+    if (agents?.length) {
+      // @ts-ignore
+      data['agent_ids:'] = agents.map(agent => agent.id);
+    }
+    data.authorized = 1;
+    const response = await this.httpPost(data);
+    return response.setData(agents);
+  }
+
+  // @ts-ignore
+  async revoke(agents: Agent[]) {
+    log.debug('Revoking agent', {agents});
+    const data: Record<string, string | number | boolean | undefined> = {
+      cmd: 'modify_agent',
+    };
+
+    if (agents?.length) {
+      // @ts-ignore
+      data['agent_ids:'] = agents.map(agent => agent.id);
+    }
+    data.authorized = 0;
+    const response = await this.httpPost(data);
+    return response.setData(agents);
+  }
+
   getSeverityAggregates({filter}: {filter?: Filter} = {}) {
+    const combinedFilter = filter
+      ? filter.copy().and(AGENT_CONTROLLER_FILTER)
+      : AGENT_CONTROLLER_FILTER.copy();
+
     return this.getAggregates({
-      aggregate_type: 'agent',
+      aggregate_type: 'task',
       group_column: 'severity',
-      filter,
+      usage_type: 'scan',
+      filter: combinedFilter,
     });
   }
 
@@ -168,7 +214,6 @@ export class AgentsCommand extends EntitiesCommand<Agent> {
     return this.getAggregates({
       aggregate_type: 'agent',
       group_column: 'scanner',
-      filter,
     });
   }
 
