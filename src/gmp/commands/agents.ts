@@ -27,11 +27,48 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     return response.setData(agents);
   }
 
+  // @ts-ignore
+  async authorize(agents: Agent[]) {
+    log.debug('Authorizing agent', {agents});
+    const data: Record<string, string | number | boolean | undefined> = {
+      cmd: 'modify_agent',
+    };
+
+    if (agents?.length) {
+      // @ts-ignore
+      data['agent_ids:'] = agents.map(agent => agent.id);
+    }
+    data.authorized = 1;
+    const response = await this.httpPost(data);
+    return response.setData(agents);
+  }
+
+  // @ts-ignore
+  async revoke(agents: Agent[]) {
+    log.debug('Revoking agent', {agents});
+    const data: Record<string, string | number | boolean | undefined> = {
+      cmd: 'modify_agent',
+    };
+
+    if (agents?.length) {
+      // @ts-ignore
+      data['agent_ids:'] = agents.map(agent => agent.id);
+    }
+    data.authorized = 0;
+    const response = await this.httpPost(data);
+    return response.setData(agents);
+  }
+
   getSeverityAggregates({filter}: {filter?: Filter} = {}) {
+    const combinedFilter = filter
+      ? filter.copy().and(AGENT_CONTROLLER_FILTER)
+      : AGENT_CONTROLLER_FILTER.copy();
+
     return this.getAggregates({
-      aggregate_type: 'agent',
+      aggregate_type: 'task',
       group_column: 'severity',
-      filter,
+      usage_type: 'scan',
+      filter: combinedFilter,
     });
   }
 
@@ -39,7 +76,6 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     return this.getAggregates({
       aggregate_type: 'agent',
       group_column: 'scanner',
-      filter,
     });
   }
 

@@ -11,6 +11,7 @@ import SeverityClassTableDisplay from 'web/components/dashboard/display/severity
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {AgentsSeverityLoader} from 'web/pages/agents/dashboard/Loaders';
 
+// @ts-ignore
 export const AgentsSeverityDisplay = createDisplay({
   loaderComponent: AgentsSeverityLoader,
   displayComponent: SeverityClassDisplay,
@@ -22,8 +23,9 @@ export const AgentsSeverityDisplay = createDisplay({
   displayId: 'agent-by-severity-class',
   displayName: 'AgentsSeverityDisplay',
   filtersFilter: AGENTS_FILTER_FILTER,
-} as any);
+});
 
+// @ts-ignore
 export const AgentsSeverityTableDisplay = createDisplay({
   loaderComponent: AgentsSeverityLoader,
   displayComponent: SeverityClassTableDisplay,
@@ -35,7 +37,7 @@ export const AgentsSeverityTableDisplay = createDisplay({
   displayId: 'agent-by-severity-class-table',
   displayName: 'AgentsSeverityTableDisplay',
   filtersFilter: AGENTS_FILTER_FILTER,
-} as any);
+});
 
 registerDisplay(AgentsSeverityDisplay.displayId, AgentsSeverityDisplay, {
   title: _l('Chart: Agents by Severity Class'),

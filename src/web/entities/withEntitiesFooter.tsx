@@ -11,6 +11,8 @@ interface EntitiesFooterWrapperProps<TEntity> {
   entitiesCounts?: CollectionCounts;
   filter?: Filter;
   onDeleteBulk?: () => void;
+  onAuthorizeBulk?: () => void;
+  onRevokeBulk?: () => void;
   onDownloadBulk?: () => void;
   onTagsBulk?: () => void;
   onTrashBulk?: () => void;
@@ -24,6 +26,8 @@ export interface WithEntitiesFooterComponentProps<TEntity> {
   entitiesCounts?: CollectionCounts;
   filter?: Filter;
   onDeleteClick?: () => void;
+  onAuthorizeClick?: () => void;
+  onRevokeClick?: () => void;
   onDownloadClick?: (filename: string) => void;
   onTagsClick?: () => void;
   onTrashClick?: () => void;
@@ -55,6 +59,8 @@ export function withEntitiesFooter<
       onDownloadBulk,
       onDeleteBulk,
       onTagsBulk,
+      onAuthorizeBulk,
+      onRevokeBulk,
       ...props
     }: WithEntitiesFooterProps<TEntity, TProps>) => {
       return (
@@ -64,8 +70,10 @@ export function withEntitiesFooter<
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={filter}
+          onAuthorizeClick={onAuthorizeBulk}
           onDeleteClick={onDeleteBulk}
           onDownloadClick={onDownloadBulk}
+          onRevokeClick={onRevokeBulk}
           onTagsClick={onTagsBulk}
           onTrashClick={onDeleteBulk}
         />
