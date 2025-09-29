@@ -110,6 +110,7 @@ interface AgentProperties extends ModelProperties {
   config?: AgentConfig;
 }
 
+// @ts-ignore
 class Agent extends Model {
   static readonly entityType = 'agent';
 
@@ -333,4 +334,5 @@ class Agent extends Model {
   }
 }
 
+// @ts-ignore
 export default Agent;

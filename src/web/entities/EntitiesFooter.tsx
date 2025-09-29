@@ -10,6 +10,8 @@ import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import Select from 'web/components/form/Select';
+import CircleMinusIcon from 'web/components/icon/CircleMinusIcon';
+import CirclePlusIcon from 'web/components/icon/CirclePlusIcon';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import TagsIcon from 'web/components/icon/TagsIcon';
@@ -51,12 +53,16 @@ export interface EntitiesFooterProps<TEntity>
   span?: number;
   tags?: boolean;
   trash?: boolean;
+  authorize?: boolean;
+  revoke?: boolean;
   onSelectionTypeChange?: (selectionType: SelectionTypeType) => void;
 }
 
 const DIALOG_TYPES = {
   TRASH: 'trash',
   DELETE: 'delete',
+  AUTHORIZE: 'authorize',
+  REVOKE: 'revoke',
 } as const;
 
 const EntitiesFooter = <TEntity = Model,>({
@@ -69,11 +75,15 @@ const EntitiesFooter = <TEntity = Model,>({
   span,
   tags = true,
   trash,
+  authorize,
+  revoke,
   onDeleteClick,
   onDownloadClick,
   onSelectionTypeChange,
   onTagsClick,
   onTrashClick,
+  onAuthorizeClick,
+  onRevokeClick,
   dialogConfig = {useCustomDialog: false},
   delete: deleteEntities,
 }: EntitiesFooterProps<TEntity>) => {
@@ -134,7 +144,42 @@ const EntitiesFooter = <TEntity = Model,>({
           }
         },
       },
+      [DIALOG_TYPES.AUTHORIZE]: {
+        dialogText: _('Are you sure you want to authorize all selected items?'),
+        dialogTitle: _('Confirm authorization'),
+        dialogButtonTitle: _('Authorize'),
+        confirmFunction: async () => {
+          try {
+            setIsInProgress(true);
+            showInfoNotification('', _('Authorizing items'));
+            if (isDefined(propOnAction)) {
+              await propOnAction();
+            }
+            showSuccessNotification('', _('Authorization completed'));
+          } finally {
+            setIsInProgress(false);
+          }
+        },
+      },
+      [DIALOG_TYPES.REVOKE]: {
+        dialogText: _('Are you sure you want to revoke all selected items?'),
+        dialogTitle: _('Confirm revocation'),
+        dialogButtonTitle: _('Revoke'),
+        confirmFunction: async () => {
+          try {
+            setIsInProgress(true);
+            showInfoNotification('', _('Revoking items'));
+            if (isDefined(propOnAction)) {
+              await propOnAction();
+            }
+            showSuccessNotification('', _('Revocation completed'));
+          } finally {
+            setIsInProgress(false);
+          }
+        },
+      },
     } as const;
+
     setConfigDialog(configMap[type]);
     setIsDialogVisible(true);
   };
@@ -180,6 +225,24 @@ const EntitiesFooter = <TEntity = Model,>({
                   />
                 )}
                 <IconDivider>
+                  {authorize && (
+                    <CirclePlusIcon
+                      loading={isInProgress || dialogConfig.dialogProcessing}
+                      selectionType={selectionType}
+                      onClick={() =>
+                        onIconClick(DIALOG_TYPES.AUTHORIZE, onAuthorizeClick)
+                      }
+                    />
+                  )}
+                  {revoke && (
+                    <CircleMinusIcon
+                      loading={isInProgress || dialogConfig.dialogProcessing}
+                      selectionType={selectionType}
+                      onClick={() =>
+                        onIconClick(DIALOG_TYPES.REVOKE, onRevokeClick)
+                      }
+                    />
+                  )}
                   {tags && (
                     <TagsIcon
                       selectionType={selectionType}

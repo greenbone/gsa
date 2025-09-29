@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {useQuery} from '@tanstack/react-query';
+import Agents from 'gmp/models/agents';
 import Filter from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 
@@ -15,14 +16,11 @@ interface UseAgentsAggregatesParams {
 interface LoaderProps {
   filter?: Filter;
   children: (props: {
-    data: any;
+    data: Agents;
     isLoading: boolean;
     error: Error | null;
   }) => React.ReactNode;
 }
-
-export const AGENTS_SEVERITY = 'agents-severity';
-export const AGENTS_NETWORK = 'agents-network';
 
 export const useGetAgentsSeverityAggregates = ({
   filter,
