@@ -20,10 +20,22 @@ type CredentialType =
   | typeof USERNAME_PASSWORD_CREDENTIAL_TYPE
   | typeof USERNAME_SSH_KEY_CREDENTIAL_TYPE;
 
+type TimeStatus =
+  | typeof CERTIFICATE_STATUS_EXPIRED
+  | typeof CERTIFICATE_STATUS_INACTIVE
+  | typeof CERTIFICATE_STATUS_VALID
+  | typeof CERTIFICATE_STATUS_UNKNOWN;
+
 interface CredentialElement extends ModelElement {
   certificate_info?: {
     activation_time?: string;
     expiration_time?: string;
+    issuer?: string;
+    md5_fingerprint?: string;
+    sha256_fingerprint?: string;
+    subject?: string;
+    serial?: string;
+    time_status?: string;
   };
   credential_type?: CredentialType;
   allow_insecure?: number;
@@ -40,9 +52,15 @@ interface CredentialElement extends ModelElement {
   };
 }
 
-interface CertificateInfo {
+export interface CertificateInfo {
   activationTime?: Date;
   expirationTime?: Date;
+  timeStatus?: TimeStatus;
+  issuer?: string;
+  subject?: string;
+  serial?: string;
+  md5Fingerprint?: string;
+  sha256Fingerprint?: string;
 }
 
 interface CredentialProperties extends ModelProperties {
@@ -132,6 +150,8 @@ export const SNMP_PRIVACY_ALGORITHM_DES = 'des';
 
 export const CERTIFICATE_STATUS_INACTIVE = 'inactive';
 export const CERTIFICATE_STATUS_EXPIRED = 'expired';
+export const CERTIFICATE_STATUS_VALID = 'valid';
+export const CERTIFICATE_STATUS_UNKNOWN = 'unknown';
 
 const TYPE_NAMES = {
   [USERNAME_PASSWORD_CREDENTIAL_TYPE]: _l('Username + Password'),
@@ -146,6 +166,22 @@ const TYPE_NAMES = {
 
 export const getCredentialTypeName = (type: CredentialType) =>
   `${TYPE_NAMES[type]}`;
+
+const parseTimeStatus = (
+  status: string | undefined,
+): TimeStatus | undefined => {
+  if (!isDefined(status)) {
+    return undefined;
+  }
+  switch (status) {
+    case CERTIFICATE_STATUS_EXPIRED:
+    case CERTIFICATE_STATUS_INACTIVE:
+    case CERTIFICATE_STATUS_VALID:
+      return status;
+    default:
+      return CERTIFICATE_STATUS_UNKNOWN;
+  }
+};
 
 class Credential extends Model {
   static readonly entityType = 'credential';
@@ -195,6 +231,12 @@ class Credential extends Model {
       ret.certificate_info = {
         activationTime: parseDate(element.certificate_info.activation_time),
         expirationTime: parseDate(element.certificate_info.expiration_time),
+        issuer: element.certificate_info.issuer,
+        subject: element.certificate_info.subject,
+        serial: element.certificate_info.serial,
+        md5Fingerprint: element.certificate_info.md5_fingerprint,
+        sha256Fingerprint: element.certificate_info.sha256_fingerprint,
+        timeStatus: parseTimeStatus(element.certificate_info.time_status),
       };
     }
 
