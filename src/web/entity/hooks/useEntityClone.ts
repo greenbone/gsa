@@ -3,7 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {EntityActionData} from 'gmp/commands/entity';
 import Rejection from 'gmp/http/rejection';
+import Response from 'gmp/http/response';
+import {XmlMeta} from 'gmp/http/transform/fastxml';
+import {EntityType} from 'gmp/utils/entitytype';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -15,8 +19,10 @@ interface EntityClone {
   name?: string;
 }
 
+type EntityCloneResponse = Response<EntityActionData, XmlMeta>;
+
 interface EntityCloneCallbacks<
-  TCloneResponse = unknown,
+  TCloneResponse = EntityCloneResponse,
   TCloneError = Rejection | Error,
 > {
   onCloneError?: (error: TCloneError) => void;
@@ -34,10 +40,10 @@ interface EntityCloneCallbacks<
  */
 const useEntityClone = <
   TEntity extends EntityClone = EntityClone,
-  TCloneResponse = unknown,
+  TCloneResponse = EntityCloneResponse,
   TCloneError = Rejection,
 >(
-  name: string,
+  name: EntityType,
   {
     onCloneError,
     onCloned,
@@ -50,7 +56,7 @@ const useEntityClone = <
   const [_] = useTranslation();
 
   const handleEntityClone = async (entity: TEntity) => {
-    return actionFunction(cmd.clone(entity), {
+    return actionFunction<TCloneResponse, TCloneError>(cmd.clone(entity), {
       onSuccess: onCloned,
       onError: onCloneError,
       successMessage: _('{{name}} cloned successfully.', {

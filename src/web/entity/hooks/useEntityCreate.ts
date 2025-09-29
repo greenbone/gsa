@@ -4,6 +4,7 @@
  */
 
 import Rejection from 'gmp/http/rejection';
+import {EntityType} from 'gmp/utils/entitytype';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 
@@ -24,7 +25,7 @@ const useEntityCreate = <
   TCreateResponse = unknown,
   TCreateError = Rejection,
 >(
-  name: string,
+  name: EntityType,
   {
     onCreated,
     onCreateError,

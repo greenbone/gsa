@@ -12,7 +12,7 @@ describe('useEntityClone', () => {
     const entity = {id: '123'};
     const cloneEntity = testing.fn().mockResolvedValue(entity);
     const gmp = {
-      foo: {clone: cloneEntity},
+      task: {clone: cloneEntity},
     };
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
@@ -20,7 +20,7 @@ describe('useEntityClone', () => {
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntityClone('foo', {
+      useEntityClone('task', {
         onCloned,
         onCloneError,
       }),
@@ -36,7 +36,7 @@ describe('useEntityClone', () => {
     const cloneEntity = testing.fn().mockRejectedValue(new Error('error'));
     const entity = {id: '123'};
     const gmp = {
-      foo: {clone: cloneEntity},
+      task: {clone: cloneEntity},
     };
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
@@ -44,7 +44,7 @@ describe('useEntityClone', () => {
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntityClone('foo', {
+      useEntityClone('task', {
         onCloned,
         onCloneError,
       }),
