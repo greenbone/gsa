@@ -10,6 +10,7 @@ import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import Filter from 'gmp/models/filter';
+import {apiType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.commands.filters');
@@ -25,7 +26,7 @@ class FilterCommand extends EntityCommand {
       cmd: 'create_filter',
       term,
       name,
-      resource_type: type,
+      resource_type: apiType(type),
       comment,
     };
     log.debug('Creating new filter', args, data);
@@ -39,7 +40,7 @@ class FilterCommand extends EntityCommand {
       comment,
       id,
       name,
-      resource_type: type,
+      resource_type: apiType(type),
       term,
     };
     log.debug('Saving filter', args, data);

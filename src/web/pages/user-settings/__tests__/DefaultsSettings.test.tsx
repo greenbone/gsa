@@ -5,7 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, wait, rendererWith} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
+import Capabilities, {Capability} from 'gmp/capabilities/capabilities';
+import {EntityType} from 'gmp/utils/entitytype';
 import DefaultSettings from 'web/pages/user-settings/DefaultsSettings';
 
 describe('DefaultSettings', () => {
@@ -183,7 +184,11 @@ describe('DefaultSettings', () => {
       capabilityName: 'get_targets',
       expected: ['Default Target'],
     },
-  ])(
+  ] as {
+    capability: EntityType;
+    capabilityName: Capability;
+    expected: string[];
+  }[])(
     'shows fields when $capability capability is available',
     ({capabilityName, expected}) => {
       const capabilities = new Capabilities([capabilityName]);

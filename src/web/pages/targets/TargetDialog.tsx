@@ -404,7 +404,7 @@ const TargetDialog = ({
               />
             </FormGroup>
 
-            {capabilities.mayAccess('port_lists') && (
+            {capabilities.mayAccess('portlist') && (
               <FormGroup direction="row" title={_('Port List')}>
                 <Select
                   disabled={inUse}
@@ -416,7 +416,7 @@ const TargetDialog = ({
                   value={state.portListId}
                   onChange={onPortListChange}
                 />
-                {!inUse && capabilities.mayCreate('port_lists') && (
+                {!inUse && capabilities.mayCreate('portlist') && (
                   <NewIcon
                     title={_('Create a new port list')}
                     onClick={onNewPortListClick}
@@ -434,11 +434,11 @@ const TargetDialog = ({
               />
             </FormGroup>
 
-            {capabilities.mayAccess('credentials') && (
+            {capabilities.mayAccess('credential') && (
               <h4>{_('Credentials for authenticated checks')}</h4>
             )}
 
-            {capabilities.mayAccess('credentials') && (
+            {capabilities.mayAccess('credential') && (
               <FormGroup title={_('SSH')}>
                 <Row>
                   <Select
@@ -506,7 +506,7 @@ const TargetDialog = ({
               </FormGroup>
             )}
 
-            {enableKrb5 && capabilities.mayAccess('credentials') && (
+            {enableKrb5 && capabilities.mayAccess('credential') && (
               <FormGroup direction="row" title={_('SMB (Kerberos)')}>
                 <Select
                   data-testid="krb5-credential-select"
@@ -532,7 +532,7 @@ const TargetDialog = ({
               </FormGroup>
             )}
 
-            {capabilities.mayAccess('credentials') && (
+            {capabilities.mayAccess('credential') && (
               <FormGroup direction="row" title={_('SMB (NTLM)')}>
                 <Select
                   data-testid="smb-credential-select"
@@ -559,7 +559,7 @@ const TargetDialog = ({
               </FormGroup>
             )}
 
-            {capabilities.mayAccess('credentials') && (
+            {capabilities.mayAccess('credential') && (
               <FormGroup direction="row" title={_('ESXi')}>
                 <Select
                   disabled={inUse}
@@ -585,7 +585,7 @@ const TargetDialog = ({
               </FormGroup>
             )}
 
-            {capabilities.mayAccess('credentials') && (
+            {capabilities.mayAccess('credential') && (
               <FormGroup direction="row" title={_('SNMP')}>
                 <Select
                   disabled={inUse}

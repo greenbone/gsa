@@ -3,16 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {getEntityType, typeName, EntityType} from 'gmp/utils/entitytype';
+import {
+  EntityType,
+  getEntityType,
+  typeName,
+  WithEntityType,
+} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {CloneIcon} from 'web/components/icon';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface EntityClone extends EntityType {
+interface EntityClone extends WithEntityType {
   userCapabilities: {
-    mayAccess: (name: string) => boolean;
+    mayAccess: (name: EntityType) => boolean;
   };
 }
 
@@ -24,7 +29,7 @@ interface EntityCloneIconProps<TEntity extends EntityClone>
   displayName?: string;
   entity: TEntity;
   mayClone?: boolean;
-  name?: string;
+  name?: EntityType;
   title?: string;
   onClick?: (value: TEntity) => void | Promise<void>;
 }

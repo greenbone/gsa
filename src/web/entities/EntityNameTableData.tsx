@@ -5,7 +5,7 @@
 
 import React from 'react';
 import Model from 'gmp/models/model';
-import {getEntityType} from 'gmp/utils/entitytype';
+import {EntityType, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import Comment from 'web/components/comment/Comment';
 import Layout from 'web/components/layout/Layout';
@@ -20,7 +20,7 @@ interface EntityNameTableDataProps<TEntity extends Model> {
   entity: TEntity;
   links?: boolean;
   displayName: string;
-  type?: string;
+  type?: EntityType;
   children?: React.ReactNode;
   onToggleDetailsClick?: (entity: TEntity, id: string) => void;
 }

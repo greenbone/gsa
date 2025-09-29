@@ -9,7 +9,12 @@ import {getFormattedDate} from 'gmp/locale/date';
 import {_} from 'gmp/locale/lang';
 import date, {Date} from 'gmp/models/date';
 import {parseBoolean, YesNo} from 'gmp/parser';
-import {typeName, getEntityType, EntityType} from 'gmp/utils/entitytype';
+import {
+  typeName,
+  getEntityType,
+  WithEntityType,
+  ApiType,
+} from 'gmp/utils/entitytype';
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {SelectItem} from 'web/components/form/Select';
@@ -20,8 +25,8 @@ export interface RenderSelectItemProps {
   deprecated?: boolean | YesNo;
 }
 
-interface Resource extends EntityType {
-  name: string;
+interface Resource extends WithEntityType {
+  name?: string;
 }
 
 export const UNSET_VALUE = '0';
@@ -220,7 +225,11 @@ const getPermissionTypeName = (type: string) => {
   }
 };
 
-export const permissionDescription = (name, resource: Resource, subject) =>
+export const permissionDescription = (
+  name: string,
+  resource?: Resource,
+  subject?: Resource,
+) =>
   isDefined(subject)
     ? permissionDescriptionResourceWithSubject(name, resource, subject)
     : permissionDescriptionResource(name, resource);
@@ -233,7 +242,7 @@ export const permissionDescriptionResource = (
     name = name.toLowerCase();
     const resourceType = {
       type: typeName(getEntityType(resource))?.toLowerCase(),
-      name: resource.name,
+      name: resource.name as string,
     };
 
     if (name === 'super') {
@@ -270,9 +279,9 @@ export const permissionDescriptionResourceWithSubject = (
     name = name.toLowerCase();
     const type = {
       subjectType: typeName(getEntityType(subject)),
-      subjectName: subject.name,
+      subjectName: subject.name as string,
       resourceType: typeName(getEntityType(resource)),
-      resourceName: resource.name,
+      resourceName: resource.name as string,
     };
 
     if (name === 'super') {
@@ -356,7 +365,9 @@ export const simplePermissionDescription = (name: string) => {
 
   const [commandType, res] = split(name, '_', 1);
   const entityType =
-    commandType === 'get' ? getPermissionTypeName(res) : typeName(res);
+    commandType === 'get'
+      ? getPermissionTypeName(res)
+      : typeName(res as ApiType);
 
   switch (commandType) {
     case 'create':
@@ -457,9 +468,11 @@ export const simplePermissionDescriptionWithSubject = (
   const [commandType, res] = split(name, '_', 1);
   type = {
     subjectType: typeName(getEntityType(subject)),
-    subjectName: subject.name,
+    subjectName: subject.name as string,
     resourceType:
-      commandType === 'get' ? getPermissionTypeName(res) : typeName(res),
+      commandType === 'get'
+        ? getPermissionTypeName(res)
+        : typeName(res as ApiType),
   };
   switch (commandType) {
     case 'create':

@@ -197,11 +197,11 @@ const RoleComponent = ({
   };
 
   const loadSettings = async (roleId: string): Promise<void> => {
-    if (capabilities.mayAccess('groups')) {
+    if (capabilities.mayAccess('group')) {
       dispatchLoadAllGroups();
     }
 
-    if (capabilities.mayAccess('permissions')) {
+    if (capabilities.mayAccess('permission')) {
       setIsLoadingPermissions(true);
 
       try {

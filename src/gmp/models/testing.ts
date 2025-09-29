@@ -16,6 +16,7 @@ interface ModelClass<T extends Model> {
 interface TestOptions {
   testIsActive?: boolean;
   testName?: boolean;
+  testType?: boolean;
 }
 
 const testId = <T extends Model>(modelClass: ModelClass<T>) => {
@@ -39,8 +40,11 @@ const testId = <T extends Model>(modelClass: ModelClass<T>) => {
 
 export const testModelFromElement = <T extends Model>(
   modelClass: ModelClass<T>,
-  type: string,
-  {testName = true}: {testName?: boolean} = {},
+  type: string | undefined,
+  {
+    testName = true,
+    testType = true,
+  }: {testName?: boolean; testType?: boolean} = {},
 ) => {
   test('should create instance of model class in fromElement', () => {
     const model = modelClass.fromElement();
@@ -58,12 +62,12 @@ export const testModelFromElement = <T extends Model>(
   test('should parse permissions', () => {
     const model = modelClass.fromElement({
       permissions: {
-        permission: [{name: 'everything'}, {name: 'may_foo'}],
+        permission: [{name: 'everything'}, {name: 'get_tasks'}],
       },
     });
     expect(model.userCapabilities).toBeDefined();
     expect(model.userCapabilities.length).toEqual(2);
-    expect(model.userCapabilities.mayAccess('foo')).toEqual(true);
+    expect(model.userCapabilities.mayAccess('task')).toEqual(true);
   });
 
   test('should return empty userCapabilities if no permissions are given to the constructor', () => {
@@ -139,12 +143,14 @@ export const testModelFromElement = <T extends Model>(
     expect(model.modificationTime).toEqual(parseDate('2018-10-10T08:48:46Z'));
   });
 
-  test('should privatize type from Model', () => {
-    const model = modelClass.fromElement({type: 'foo'});
-    // @ts-expect-error
-    expect(model.type).toBeUndefined();
-    expect(model._type).toEqual('foo');
-  });
+  if (testType) {
+    test('should privatize type from Model', () => {
+      const model = modelClass.fromElement({type: 'foo'});
+      // @ts-expect-error
+      expect(model.type).toBeUndefined();
+      expect(model._type).toEqual('foo');
+    });
+  }
 
   if (testName) {
     test('should parse name', () => {
@@ -224,7 +230,7 @@ export const testModelMethods = <T extends Model>(
 
 export const testModel = <T extends Model>(
   modelClass: ModelClass<T>,
-  type: string,
+  type: string | undefined,
   options?: TestOptions,
 ) => {
   testModelFromElement(modelClass, type, options);

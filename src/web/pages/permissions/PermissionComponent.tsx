@@ -6,10 +6,10 @@
 import React, {useState} from 'react';
 import Rejection from 'gmp/http/rejection';
 import Group from 'gmp/models/group';
-import Permission from 'gmp/models/permission';
+import Permission, {SubjectType} from 'gmp/models/permission';
 import Role from 'gmp/models/role';
 import User from 'gmp/models/user';
-import {getEntityType} from 'gmp/utils/entitytype';
+import {EntityType, getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -43,8 +43,6 @@ interface PermissionComponentProps {
   onSaved?: () => void;
 }
 
-type SubjectType = 'user' | 'role' | 'group';
-
 interface PermissionState {
   id?: string;
   name?: string;
@@ -52,7 +50,7 @@ interface PermissionState {
   permission?: Permission;
   resourceId?: string;
   resourceName?: string;
-  resourceType?: string;
+  resourceType?: EntityType;
   subjectType?: SubjectType;
   userId?: string;
   roleId?: string;
@@ -86,7 +84,7 @@ const PermissionsComponent = ({
 
   const [resourceId, setResourceId] = useState<string | undefined>();
   const [resourceName, setResourceName] = useState<string | undefined>();
-  const [resourceType, setResourceType] = useState<string | undefined>();
+  const [resourceType, setResourceType] = useState<EntityType | undefined>();
   const [fixedResource, setFixedResource] = useState<boolean>(false);
 
   const [subjectType, setSubjectType] = useState<SubjectType | undefined>();
@@ -134,7 +132,7 @@ const PermissionsComponent = ({
           : '',
         resourceType: isDefined(permissionEntity.resource)
           ? getEntityType(permissionEntity.resource)
-          : '',
+          : undefined,
         roleId: undefined,
         subjectType: subjectTypeValue,
         title: _('Edit Permission {{name}}', {
@@ -198,7 +196,7 @@ const PermissionsComponent = ({
     setFixedResource(fixed);
     setDialogVisible(true);
 
-    if (capabilities.mayAccess('users')) {
+    if (capabilities.mayAccess('user')) {
       if (!isDefined(permState.subjectType)) {
         setSubjectType('user');
       }
@@ -209,9 +207,9 @@ const PermissionsComponent = ({
       setUsers(usersData);
     }
 
-    if (capabilities.mayAccess('roles')) {
+    if (capabilities.mayAccess('role')) {
       if (
-        !capabilities.mayAccess('users') &&
+        !capabilities.mayAccess('user') &&
         !isDefined(permState.subjectType)
       ) {
         setSubjectType('role');
@@ -223,10 +221,10 @@ const PermissionsComponent = ({
       setRoles(rolesData);
     }
 
-    if (capabilities.mayAccess('groups')) {
+    if (capabilities.mayAccess('group')) {
       if (
-        !capabilities.mayAccess('users') &&
-        !capabilities.mayAccess('roles') &&
+        !capabilities.mayAccess('user') &&
+        !capabilities.mayAccess('role') &&
         !isDefined(permState.subjectType)
       ) {
         setSubjectType('group');

@@ -20,7 +20,9 @@ import Scanner, {
 import {testModel} from 'gmp/models/testing';
 import {YES_VALUE} from 'gmp/parser';
 
-testModel(Scanner, 'scanner');
+testModel(Scanner, 'scanner', {
+  testType: false,
+});
 
 describe('Scanner model tests', () => {
   test('should use defaults', () => {
@@ -32,6 +34,7 @@ describe('Scanner model tests', () => {
     expect(scanner.host).toBeUndefined();
     expect(scanner.scannerType).toBeUndefined();
     expect(scanner.tasks).toEqual([]);
+    expect(scanner.port).toBeUndefined();
   });
 
   test('should parse empty element', () => {
@@ -43,12 +46,13 @@ describe('Scanner model tests', () => {
     expect(scanner.host).toBeUndefined();
     expect(scanner.scannerType).toBeUndefined();
     expect(scanner.tasks).toEqual([]);
+    expect(scanner.port).toBeUndefined();
   });
 
   test('should parse type', () => {
     const scanner = Scanner.fromElement({type: '42'});
 
-    expect(scanner.scannerType).toEqual(42);
+    expect(scanner.scannerType).toEqual('42');
   });
 
   test('should parse credential', () => {
@@ -167,6 +171,27 @@ describe('Scanner model tests', () => {
     expect(scanner2.info?.description).toBeUndefined();
     expect(scanner2.info?.params).toEqual([]);
   });
+
+  test('should parse port', () => {
+    const scanner = Scanner.fromElement({
+      // @ts-expect-error
+      port: '9392',
+    });
+    const scanner2 = Scanner.fromElement({
+      // @ts-expect-error
+      port: 'not-a-number',
+    });
+    const scanner3 = Scanner.fromElement({
+      // @ts-expect-error
+      port: '',
+    });
+    const scanner4 = Scanner.fromElement({port: 1234});
+
+    expect(scanner.port).toEqual(9392);
+    expect(scanner2.port).toBeUndefined();
+    expect(scanner3.port).toBeUndefined();
+    expect(scanner4.port).toEqual(1234);
+  });
 });
 
 describe('Scanner model method tests', () => {
@@ -215,7 +240,7 @@ describe('Scanner model function tests', () => {
       'OpenVASD Sensor',
     );
     expect(scannerTypeName(AGENT_CONTROLLER_SCANNER_TYPE)).toEqual(
-      'Agent Scanner',
+      'Agent Controller',
     );
     expect(scannerTypeName(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)).toEqual(
       'Agent Sensor',

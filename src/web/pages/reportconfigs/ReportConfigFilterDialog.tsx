@@ -26,7 +26,7 @@ const ReportConfigFilterDialog = ({
   const [_] = useTranslation();
   const filterDialogProps = useFilterDialog<UseFilterDialogStateProps>(filter);
   const [handleSave] = useFilterDialogSave(
-    'report_config',
+    'reportconfig',
     {
       onClose,
       onFilterChanged,

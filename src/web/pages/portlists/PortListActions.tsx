@@ -46,20 +46,20 @@ const PortListActions = ({
         <TrashIcon
           displayName={_('Port List')}
           entity={entity}
-          name="port_list"
+          name="portlist"
           onClick={onPortListDeleteClick}
         />
         <EditIcon
           disabled={entity.predefined}
           displayName={_('Port List')}
           entity={entity}
-          name="port_list"
+          name="portlist"
           onClick={onPortListEditClick}
         />
         <CloneIcon
           displayName={_('Port List')}
           entity={entity}
-          name="port_list"
+          name="portlist"
           onClick={onPortListCloneClick}
         />
         <ExportIcon

@@ -42,21 +42,7 @@ const PermissionDetails = ({entity}: PermissionDetailsProps) => {
           <TableRow>
             <TableData>{_('Description')}</TableData>
             <TableData>
-              {permissionDescription(
-                name,
-                resource
-                  ? {
-                      name: resource.name ?? '',
-                      entityType: resource.entityType ?? '',
-                    }
-                  : {name: '', entityType: ''},
-                subject
-                  ? {
-                      name: subject.name ?? '',
-                      entityType: subject.entityType ?? '',
-                    }
-                  : undefined,
-              )}
+              {permissionDescription(name as string, resource, subject)}
             </TableData>
           </TableRow>
 

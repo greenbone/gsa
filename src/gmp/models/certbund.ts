@@ -106,7 +106,7 @@ interface CertBundAdvProperties extends ModelProperties {
 }
 
 class CertBundAdv extends Model {
-  static entityType = 'certbund';
+  static readonly entityType = 'certbund';
 
   readonly additionalInformation: AdditionalInformation[];
   readonly categories: string[];

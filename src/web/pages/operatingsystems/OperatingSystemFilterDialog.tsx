@@ -26,7 +26,7 @@ const OperatingSystemFilterDialog = ({
   const [_] = useTranslation();
   const filterDialogProps = useFilterDialog<UseFilterDialogStateProps>(filter);
   const [handleSave] = useFilterDialogSave(
-    'os',
+    'operatingsystem',
     {
       onClose,
       onFilterChanged,

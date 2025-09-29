@@ -28,3 +28,6 @@ RUN npm install && npm run build
 FROM registry.community.greenbone.net/community/gsad:${VERSION}
 
 COPY --from=builder /source/build /usr/local/share/gvm/gsad/web/
+COPY --chmod=755 .docker/init.sh /usr/local/bin/init.sh
+
+CMD ["/usr/local/bin/init.sh"]

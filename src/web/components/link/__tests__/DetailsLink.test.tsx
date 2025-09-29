@@ -16,7 +16,7 @@ describe('DetailsLink tests', () => {
   test('should render DetailsLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     render(
-      <DetailsLink id="bar" title="Foo" type="foo">
+      <DetailsLink id="bar" title="Foo" type="task">
         Foo
       </DetailsLink>,
     );
@@ -32,7 +32,7 @@ describe('DetailsLink tests', () => {
       showLocation: true,
     });
     render(
-      <DetailsLink id="1" title="Foo" type="foo">
+      <DetailsLink id="1" title="Foo" type="task">
         Foo
       </DetailsLink>,
     );
@@ -42,7 +42,7 @@ describe('DetailsLink tests', () => {
 
     fireEvent.click(screen.getByText('Foo'));
 
-    expect(locationPathname).toHaveTextContent('/foo/1');
+    expect(locationPathname).toHaveTextContent('/task/1');
   });
 
   test('should url encode id', () => {
@@ -52,7 +52,7 @@ describe('DetailsLink tests', () => {
       showLocation: true,
     });
     render(
-      <DetailsLink id="cpe:/a:jenkins:jenkins:2.141" title="Foo" type="foo">
+      <DetailsLink id="cpe:/a:jenkins:jenkins:2.141" title="Foo" type="task">
         Foo
       </DetailsLink>,
     );
@@ -63,7 +63,7 @@ describe('DetailsLink tests', () => {
     fireEvent.click(screen.getByText('Foo'));
 
     expect(locationPathname).toHaveTextContent(
-      '/foo/cpe%3A%2Fa%3Ajenkins%3Ajenkins%3A2.141',
+      '/task/cpe%3A%2Fa%3Ajenkins%3Ajenkins%3A2.141',
     );
   });
 
@@ -74,7 +74,7 @@ describe('DetailsLink tests', () => {
       showLocation: true,
     });
     render(
-      <DetailsLink id="1" textOnly={true} title="Foo" type="foo">
+      <DetailsLink id="1" textOnly={true} title="Foo" type="task">
         Foo
       </DetailsLink>,
     );
@@ -95,7 +95,7 @@ describe('DetailsLink tests', () => {
       showLocation: true,
     });
     render(
-      <DetailsLink id="1" title="Foo" type="foo">
+      <DetailsLink id="1" title="Foo" type="task">
         Foo
       </DetailsLink>,
     );
@@ -111,7 +111,7 @@ describe('DetailsLink tests', () => {
   test('should render with textOnly', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(
-      <DetailsLink id="1" textOnly={true} title="Foo" type="foo">
+      <DetailsLink id="1" textOnly={true} title="Foo" type="task">
         Foo
       </DetailsLink>,
     );

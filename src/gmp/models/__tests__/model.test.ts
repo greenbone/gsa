@@ -8,7 +8,7 @@ import Model, {parseModelFromElement} from 'gmp/models/model';
 import {testModel} from 'gmp/models/testing';
 
 describe('Model tests', () => {
-  testModel(Model, 'unknown');
+  testModel(Model, undefined);
 });
 
 describe('parseModelFromElement tests', () => {
@@ -21,17 +21,17 @@ describe('parseModelFromElement tests', () => {
 
     expect(model.id).toEqual('1');
     expect(model).toBeInstanceOf(Model);
-    expect(model.entityType).toEqual('unknown');
+    expect(model.entityType).toBeUndefined();
   });
 
   test('should parse model and set entity type', () => {
     const element = {
       _id: '1',
     };
-    const model = parseModelFromElement(element, 'foo');
+    const model = parseModelFromElement(element, 'task');
 
     expect(model.id).toEqual('1');
     expect(model).toBeInstanceOf(Model);
-    expect(model.entityType).toEqual('foo');
+    expect(model.entityType).toEqual('task');
   });
 });

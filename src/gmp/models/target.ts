@@ -73,7 +73,7 @@ export const ALIVE_TESTS = {
 } as const;
 
 class Target extends Model {
-  static entityType = 'target';
+  static readonly entityType = 'target';
 
   readonly alive_tests?: AliveTests;
   readonly allowSimultaneousIPs: YesNo;

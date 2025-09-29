@@ -4,7 +4,7 @@
  */
 
 import React, {useCallback, useEffect, useState} from 'react';
-import {CertificateInfo} from 'gmp/commands/users';
+import {CertificateInfo} from 'gmp/commands/user';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import {EditIcon, LdapIcon} from 'web/components/icon';

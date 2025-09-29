@@ -185,7 +185,7 @@ interface CveProperties extends ModelProperties {
 }
 
 class Cve extends Model {
-  static entityType = 'cve';
+  static readonly entityType = 'cve';
 
   readonly certs: Cert[];
   readonly cvssAccessComplexity?: string;

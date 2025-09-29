@@ -100,7 +100,7 @@ describe('PortListsFilterDialog tests', () => {
 
     expect(gmp.filter.create).toHaveBeenCalledWith({
       term: 'foo=bar',
-      type: 'port_list',
+      type: 'portlist',
       name: 'My New Filter',
     });
     await wait();

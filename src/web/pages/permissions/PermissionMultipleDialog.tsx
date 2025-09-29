@@ -8,7 +8,7 @@ import Group from 'gmp/models/group';
 import Model from 'gmp/models/model';
 import Role from 'gmp/models/role';
 import User from 'gmp/models/user';
-import {typeName, getEntityType} from 'gmp/utils/entitytype';
+import {typeName, getEntityType, EntityType} from 'gmp/utils/entitytype';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
@@ -40,7 +40,7 @@ interface PermissionMultipleDialogSaveData {
 
 interface PermissionMultipleDialogProps {
   entityName?: string;
-  entityType?: string;
+  entityType?: EntityType;
   groupId?: string;
   groups?: Group[];
   id: string;
@@ -62,7 +62,7 @@ interface SaveDialogValues {
   includeRelated?: IncludeRelatedType;
   groupId?: string;
   id: string;
-  entityType?: string;
+  entityType?: EntityType;
   related?: Model[];
   roleId?: string;
   userId?: string;
@@ -84,7 +84,7 @@ const EntityName = styled.div`
 
 const PermissionMultipleDialog = ({
   entityName = '',
-  entityType = '',
+  entityType,
   groupId,
   groups = [],
   id,
@@ -177,7 +177,7 @@ const PermissionMultipleDialog = ({
               <span>{_('Permission')}</span>
             </FormGroup>
             <FormGroup title={_('to')}>
-              {capabilities.mayAccess('users') && (
+              {capabilities.mayAccess('user') && (
                 <Row>
                   <Radio
                     checked={state.subjectType === 'user'}
@@ -196,7 +196,7 @@ const PermissionMultipleDialog = ({
                 </Row>
               )}
 
-              {capabilities.mayAccess('roles') && (
+              {capabilities.mayAccess('role') && (
                 <Row>
                   <Radio
                     checked={state.subjectType === 'role'}
@@ -215,7 +215,7 @@ const PermissionMultipleDialog = ({
                 </Row>
               )}
 
-              {capabilities.mayAccess('groups') && (
+              {capabilities.mayAccess('group') && (
                 <Row>
                   <Radio
                     checked={state.subjectType === 'group'}
@@ -235,9 +235,7 @@ const PermissionMultipleDialog = ({
               )}
             </FormGroup>
             <FormGroup direction="row" title={_('on')}>
-              <span>
-                {typeName(getEntityType({entityType: state.entityType || ''}))}
-              </span>
+              <span>{typeName(state.entityType)}</span>
               <EntityName>{entityName}</EntityName>
               <Select
                 items={includeRelatedItems}

@@ -197,7 +197,7 @@ export class Param {
 }
 
 class ReportFormat extends Model {
-  static entityType = 'reportformat';
+  static readonly entityType = 'reportformat';
 
   readonly alerts: Model[];
   readonly configurable?: boolean;

@@ -154,7 +154,7 @@ const parseAlertData = (
 };
 
 class Alert extends Model {
-  static entityType = 'alert';
+  static readonly entityType = 'alert';
 
   readonly active?: YesNo;
   readonly condition?: AlertData;

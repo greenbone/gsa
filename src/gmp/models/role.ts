@@ -15,7 +15,7 @@ interface RoleProperties extends ModelProperties {
 }
 
 class Role extends Model {
-  static entityType = 'role';
+  static readonly entityType = 'role';
 
   readonly users: string[];
 

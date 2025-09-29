@@ -26,7 +26,7 @@ const ReportFormatFilterDialog = ({
   const [_] = useTranslation();
   const filterDialogProps = useFilterDialog<UseFilterDialogStateProps>(filter);
   const [handleSave] = useFilterDialogSave(
-    'report_format',
+    'reportformat',
     {
       onClose,
       onFilterChanged,

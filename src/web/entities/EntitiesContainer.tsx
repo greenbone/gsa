@@ -25,6 +25,7 @@ import {
   apiType,
   typeName,
   pluralizeType,
+  EntityType,
 } from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import TagsDialog, {TagsDialogData} from 'web/entities/TagsDialog';
@@ -44,7 +45,7 @@ import withTranslation from 'web/utils/withTranslation';
 type NavigateFunction = (args: {pathname: string; search?: string}) => void;
 
 export interface EntitiesContainerRenderProps<TModel extends Model = Model> {
-  createFilterType: string;
+  createFilterType: EntityType;
   entities?: TModel[];
   entitiesCounts?: CollectionCounts;
   entitiesError?: Error | Rejection;
@@ -100,7 +101,7 @@ interface EntitiesContainerProps<TModel extends Model = Model> {
   entitiesError?: Error | Rejection;
   filter: Filter;
   gmp: Gmp;
-  gmpName: string;
+  gmpName: EntityType;
   isLoading?: boolean;
   loadedFilter?: Filter;
   notify: (message: string) => () => void;
@@ -151,6 +152,12 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     const entitiesCommandName = pluralizeType(gmpName);
 
     this.entitiesCommand = gmp[entitiesCommandName];
+
+    if (!isDefined(this.entitiesCommand)) {
+      throw new Error(
+        `EntitiesContainer: gmp.${entitiesCommandName} is not defined.`,
+      );
+    }
 
     this.notifyTimer = notify(`${entitiesCommandName}.timer`);
     this.notifyChanged = notify(`${entitiesCommandName}.changed`);
@@ -567,7 +574,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
       showSuccessMessage,
     } = this.props;
 
-    let entitiesType: string | undefined;
+    let entitiesType: EntityType | undefined;
     let resourceTypes: [string, string][] | undefined;
     if (isDefined(entities) && entities.length > 0) {
       entitiesType = getEntityType(entities[0]);
@@ -595,7 +602,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     return (
       <React.Fragment>
         {children({
-          createFilterType: apiType(this.props.gmpName) as string,
+          createFilterType: this.props.gmpName,
           entities,
           entitiesCounts,
           entitiesError,

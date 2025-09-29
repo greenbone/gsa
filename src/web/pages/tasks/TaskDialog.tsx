@@ -525,7 +525,7 @@ const TaskDialog = ({
               </>
             )}
 
-            {capabilities.mayAccess('tags') &&
+            {capabilities.mayAccess('tag') &&
               capabilities.mayCreate('tag') &&
               showTagSelection && (
                 <FormGroup title={_('Tag')}>

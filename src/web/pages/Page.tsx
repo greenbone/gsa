@@ -12,11 +12,13 @@ import Layout from 'web/components/layout/Layout';
 import Menu from 'web/components/menu/Menu';
 import FeedSyncNotification from 'web/components/notification/FeedSyncNotification/FeedSyncNotification';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
+import FeaturesContext from 'web/components/provider/FeaturesProvider';
 import Footer from 'web/components/structure/Footer';
 import Header from 'web/components/structure/Header';
 import Main from 'web/components/structure/Main';
 import useGmp from 'web/hooks/useGmp';
 import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
+import useLoadFeatures from 'web/hooks/useLoadFeatures';
 import useTranslation from 'web/hooks/useTranslation';
 import CommunityFeedUsageNotification from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 import Theme from 'web/utils/Theme';
@@ -55,6 +57,7 @@ const Text = styled.div`
 
 const Page = ({children}: PageProps) => {
   const capabilities = useLoadCapabilities();
+  const features = useLoadFeatures();
   const location = useLocation();
   const gmp = useGmp();
   const [_] = useTranslation();
@@ -67,32 +70,34 @@ const Page = ({children}: PageProps) => {
 
   return (
     <CapabilitiesContext.Provider value={capabilities}>
-      <CommunityFeedUsageNotification />
-      <Header />
-      <StyledLayout align={['start', 'stretch']} flex="row">
-        <ScrollableMenuContainer>
-          <MenuWrapper>
-            <Menu />
-            <Text data-testid={'version'}>
-              {isDefined(gmp.settings.vendorVersion)
-                ? gmp.settings.vendorVersion
-                : _('Version {{version}}', {version: GSA_VERSION})}
-            </Text>
-          </MenuWrapper>
-        </ScrollableMenuContainer>
-        <Main>
-          <Container>
-            <FeedSyncNotification />
-            <ErrorBoundary
-              key={location.pathname}
-              message={_('An error occurred on this page.')}
-            >
-              {children}
-            </ErrorBoundary>
-          </Container>
-          <Footer />
-        </Main>
-      </StyledLayout>
+      <FeaturesContext.Provider value={features}>
+        <CommunityFeedUsageNotification />
+        <Header />
+        <StyledLayout align={['start', 'stretch']} flex="row">
+          <ScrollableMenuContainer>
+            <MenuWrapper>
+              <Menu />
+              <Text data-testid={'version'}>
+                {isDefined(gmp.settings.vendorVersion)
+                  ? gmp.settings.vendorVersion
+                  : _('Version {{version}}', {version: GSA_VERSION})}
+              </Text>
+            </MenuWrapper>
+          </ScrollableMenuContainer>
+          <Main>
+            <Container>
+              <FeedSyncNotification />
+              <ErrorBoundary
+                key={location.pathname}
+                message={_('An error occurred on this page.')}
+              >
+                {children}
+              </ErrorBoundary>
+            </Container>
+            <Footer />
+          </Main>
+        </StyledLayout>
+      </FeaturesContext.Provider>
     </CapabilitiesContext.Provider>
   );
 };

@@ -148,7 +148,7 @@ export const getCredentialTypeName = (type: CredentialType) =>
   `${TYPE_NAMES[type]}`;
 
 class Credential extends Model {
-  static entityType = 'credential';
+  static readonly entityType = 'credential';
 
   readonly allow_insecure?: YesNo;
   readonly certificate_info?: CertificateInfo;

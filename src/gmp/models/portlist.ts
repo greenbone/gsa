@@ -61,11 +61,12 @@ interface PortListProperties extends ModelProperties {
 }
 
 export class PortRange extends Model {
-  static entityType = 'portrange';
-  protocolType!: ProtocolType;
-  portListId!: string;
-  start!: number;
-  end!: number;
+  static readonly entityType = 'portrange';
+
+  readonly protocolType!: ProtocolType;
+  readonly portListId!: string;
+  readonly start!: number;
+  readonly end!: number;
 
   static fromElement(element: PortRangeElement): PortRange {
     return super.fromElement(element) as PortRange;
@@ -85,7 +86,7 @@ export class PortRange extends Model {
 const DEFAULT_PORT_COUNT = {all: 0, tcp: 0, udp: 0};
 
 class PortList extends Model {
-  static entityType: string = 'portlist';
+  static readonly entityType = 'portlist';
 
   readonly deprecated: boolean;
   readonly portCount: PortCount;

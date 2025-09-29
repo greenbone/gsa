@@ -258,7 +258,7 @@ class PowerFilter extends React.Component<PowerFilterProps, PowerFilterState> {
               )}
             </IconDivider>
           </LeftDivider>
-          {capabilities.mayAccess('filters') && (
+          {capabilities.mayAccess('filter') && (
             <Select
               data-testid="powerfilter-select"
               isLoading={isLoadingFilters}

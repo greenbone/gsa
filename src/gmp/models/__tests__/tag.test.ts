@@ -27,15 +27,27 @@ describe('Tag model tests', () => {
   test('should parse resources', () => {
     const tag = Tag.fromElement({
       resources: {
-        type: 'foo',
+        type: 'task',
         count: {
           total: 42,
         },
       },
     });
 
-    expect(tag.resourceType).toEqual('foo');
+    expect(tag.resourceType).toEqual('task');
     expect(tag.resourceCount).toEqual(42);
+
+    const tag2 = Tag.fromElement({
+      resources: {
+        type: 'report_format',
+        count: {
+          total: 42,
+        },
+      },
+    });
+
+    expect(tag2.resourceType).toEqual('reportformat');
+    expect(tag2.resourceCount).toEqual(42);
   });
 
   test('should parse value', () => {

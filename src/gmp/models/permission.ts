@@ -4,17 +4,20 @@
  */
 
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import {ApiType, normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
+
+export type SubjectType = 'user' | 'group' | 'role';
 
 interface PermissionElement extends ModelElement {
   resource?: {
     _id?: string;
-    type?: string;
+    type?: ApiType;
   };
   subject?: {
     _id?: string;
-    type?: string;
+    type?: SubjectType;
   };
 }
 
@@ -24,7 +27,7 @@ interface PermissionProperties extends ModelProperties {
 }
 
 class Permission extends Model {
-  static entityType = 'permission';
+  static readonly entityType = 'permission';
 
   readonly resource?: Model;
   readonly subject?: Model;
@@ -44,7 +47,10 @@ class Permission extends Model {
     const ret = super.parseElement(element) as PermissionProperties;
 
     if (isDefined(element.resource) && !isEmpty(element.resource._id)) {
-      ret.resource = Model.fromElement(element.resource, element.resource.type);
+      ret.resource = Model.fromElement(
+        element.resource,
+        normalizeType(element.resource.type),
+      );
     } else {
       delete ret.resource;
     }

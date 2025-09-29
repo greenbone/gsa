@@ -103,15 +103,8 @@ const GeneralPermissions = ({
                   />
                   <TableData>
                     {perm.resource
-                      ? permissionDescription(
-                          perm.name,
-                          {
-                            name: perm.resource.name || '',
-                            entityType: perm.resource.entityType || '',
-                          },
-                          undefined,
-                        )
-                      : simplePermissionDescription(perm.name || '')}
+                      ? permissionDescription(perm.name ?? '', perm.resource)
+                      : simplePermissionDescription(perm.name ?? '')}
                   </TableData>
                 </TableRow>
               );

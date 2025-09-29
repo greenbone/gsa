@@ -71,7 +71,7 @@ const Actions = ({
           name="permission"
           onClick={onPermissionEditClick}
         />
-        <CloneIcon
+        <CloneIcon<Permission>
           displayName={_('Permission')}
           entity={entity}
           mayClone={entity.isWritable()}
@@ -109,19 +109,9 @@ const PermissionTableRow = ({
       />
       <TableData>
         {permissionDescription(
-          entity.name,
-          entity.resource
-            ? {
-                name: entity.resource.name ?? '',
-                entityType: entity.resource.entityType ?? '',
-              }
-            : {name: '', entityType: ''},
-          entity.subject
-            ? {
-                name: entity.subject.name ?? '',
-                entityType: entity.subject.entityType ?? '',
-              }
-            : undefined,
+          entity.name as string,
+          entity.resource,
+          entity.subject,
         )}
       </TableData>
       <TableData>

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Capabilities from 'gmp/capabilities/capabilities';
+import Capabilities, {Capability} from 'gmp/capabilities/capabilities';
 import BaseModel, {
   BaseModelElement,
   BaseModelProperties,
@@ -22,6 +22,7 @@ import {
   YesNo,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
+import {EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
@@ -73,12 +74,12 @@ export interface EntityModelProperties extends BaseModelProperties {
  * A model representing an entity
  */
 class EntityModel extends BaseModel {
-  static readonly entityType: string = 'unknown';
+  static readonly entityType: EntityType;
 
   readonly active?: YesNo;
   readonly comment?: string;
   readonly endTime?: GmpDate;
-  readonly entityType: string;
+  readonly entityType: EntityType;
   readonly inUse?: boolean;
   readonly name?: string;
   readonly orphan?: YesNo;
@@ -110,7 +111,7 @@ class EntityModel extends BaseModel {
       userTags = [],
       writable,
     }: EntityModelProperties = {},
-    entityType?: string,
+    entityType?: EntityType,
   ) {
     super({id, creationTime, modificationTime, _type});
 
@@ -155,7 +156,7 @@ class EntityModel extends BaseModel {
 
   static fromElement(
     element: EntityModelElement = {},
-    entityType?: string,
+    entityType?: EntityType,
   ): EntityModel {
     return new this(parseEntityModelProperties(element), entityType);
   }
@@ -189,7 +190,10 @@ export const parseEntityModelProperties = (
 
   if (isDefined(element.permissions)) {
     // these are the permissions the current user has on the entity
-    const caps = map(element.permissions.permission, perm => perm.name);
+    const caps = map(
+      element.permissions.permission,
+      perm => perm.name,
+    ) as Capability[];
     copy.userCapabilities = new Capabilities(caps);
     // @ts-expect-error
     delete copy.permissions;

@@ -9,6 +9,7 @@ import Gmp from 'gmp/gmp';
 import Rejection from 'gmp/http/rejection';
 import Filter from 'gmp/models/filter';
 import Model from 'gmp/models/model';
+import {EntityType} from 'gmp/utils/entitytype';
 import {DownloadFunc} from 'web/components/form/useDownload';
 import withDownload from 'web/components/form/withDownload';
 import Reload from 'web/components/loading/Reload';
@@ -128,7 +129,7 @@ const noop = () => {};
  */
 const withEntitiesContainer =
   <TEntity extends Model = Model>(
-    gmpName: string,
+    gmpName: EntityType,
     {
       entitiesSelector,
       loadEntities: loadEntitiesFunc,

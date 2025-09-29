@@ -31,12 +31,6 @@ class PermissionCommand extends EntityCommand {
     resourceType,
     subjectType,
   }) {
-    if (resourceType === 'policy') {
-      resourceType = 'config';
-    } else if (resourceType === 'audit') {
-      resourceType = 'task';
-    }
-
     const data = {
       cmd: 'create_permission',
       comment,
@@ -73,7 +67,7 @@ class PermissionCommand extends EntityCommand {
       user_id: userId,
       resource_id: resourceId,
       optional_resource_type: apiType(resourceType),
-      subject_type: subjectType,
+      subject_type: apiType(subjectType),
       id_or_empty: resourceId,
     };
     log.debug('Saving permission', data);
@@ -98,12 +92,6 @@ class PermissionsCommand extends EntitiesCommand {
     includeRelated,
     related = [],
   }) {
-    if (entityType === 'policy') {
-      entityType = 'config';
-    } else if (entityType === 'audit') {
-      entityType = 'task';
-    }
-
     const data = {
       cmd: 'create_permissions',
       comment,
@@ -114,7 +102,7 @@ class PermissionsCommand extends EntitiesCommand {
       resource_id: id,
       resource_type: apiType(entityType),
       include_related: includeRelated,
-      subject_type: subjectType,
+      subject_type: apiType(subjectType),
     };
 
     related.forEach(resource => {

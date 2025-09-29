@@ -26,7 +26,7 @@ const ScanConfigFilterDialog = ({
   const [_] = useTranslation();
   const filterDialogProps = useFilterDialog<UseFilterDialogStateProps>(filter);
   const [handleSave] = useFilterDialogSave(
-    'config',
+    'scanconfig',
     {
       onClose,
       onFilterChanged,

@@ -5,13 +5,13 @@
 
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {parseInt} from 'gmp/parser';
-import {normalizeType} from 'gmp/utils/entitytype';
+import {ApiType, EntityType, normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 interface TagElement extends ModelElement {
   resources?: {
-    type: string;
+    type: ApiType;
     count: {
       total: number;
     };
@@ -21,7 +21,7 @@ interface TagElement extends ModelElement {
 
 interface TagProperties extends ModelProperties {
   resourceCount?: number;
-  resourceType?: string;
+  resourceType?: EntityType;
   value?: string;
 }
 

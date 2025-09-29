@@ -236,7 +236,7 @@ const getOtherRefs = (refs: NvtRefElement[]) => {
 };
 
 class Nvt extends Model {
-  static entityType = 'nvt';
+  static readonly entityType = 'nvt';
 
   readonly certs: Cert[];
   readonly cves: string[];

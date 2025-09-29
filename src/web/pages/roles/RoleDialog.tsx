@@ -123,18 +123,7 @@ const RoleDialog = ({
   }));
 
   const permissionsOptions = allPermissions.map(permission => {
-    const labelString =
-      permission +
-      ' (' +
-      permissionDescription(
-        permission,
-        {
-          name: '',
-          entityType: '',
-        },
-        undefined,
-      ) +
-      ')';
+    const labelString = `${permission} (${permissionDescription(permission)})`;
     return {
       label: labelString,
       value: permission,
@@ -181,9 +170,8 @@ const RoleDialog = ({
               <TableData>{permission.name}</TableData>
               <TableData>
                 {permissionDescription(
-                  permission.name,
-                  {name: permission.resource?.name ?? '', entityType: ''},
-                  undefined,
+                  permission.name ?? '',
+                  permission.resource,
                 )}
               </TableData>
               <TableData align={['center', 'center']}>

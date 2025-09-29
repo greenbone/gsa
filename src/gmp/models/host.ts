@@ -162,7 +162,7 @@ class Identifier extends BaseModel {
 }
 
 class Host extends Model {
-  static entityType = 'host';
+  static readonly entityType = 'host';
 
   readonly details?: HostDetails;
   readonly hostname?: string;
