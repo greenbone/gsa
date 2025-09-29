@@ -9,6 +9,7 @@ import styled from 'styled-components';
 interface TableProps {
   children: React.ReactNode;
   className?: string;
+  'data-testid'?: string;
   footer?: React.ReactNode;
   header?: React.ReactNode;
 }
@@ -18,9 +19,15 @@ interface StyledTableProps {
   $size?: string;
 }
 
-const Table = ({children, className, footer, header}: TableProps) => {
+const Table = ({
+  children,
+  className,
+  footer,
+  header,
+  'data-testid': dataTestId,
+}: TableProps) => {
   return (
-    <table className={className}>
+    <table className={className} data-testid={dataTestId}>
       {header}
       {children}
       {footer}
