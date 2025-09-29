@@ -9,6 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import ScanConfig from 'gmp/models/scanconfig';
+import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -97,7 +98,7 @@ const task = Task.fromElement({
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: 2},
+  scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
   config: config,
   preferences: preferences,
 });
@@ -117,7 +118,7 @@ const task2 = Task.fromElement({
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: 2},
+  scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
   config: config,
   preferences: preferences,
 });
@@ -136,7 +137,7 @@ const task3 = Task.fromElement({
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: 2},
+  scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
   config: config,
   preferences: preferences,
 });
@@ -157,7 +158,7 @@ const task4 = Task.fromElement({
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: 2},
+  scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
   config: config,
   preferences: preferences,
 });
@@ -178,7 +179,7 @@ const task5 = Task.fromElement({
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: 2},
+  scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
   config: config,
   preferences: preferences,
 });
@@ -202,7 +203,7 @@ const task6 = Task.fromElement({
   permissions: {permission: [{name: 'get_tasks'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: 2},
+  scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
   config: config,
   preferences: preferences,
 });
@@ -222,7 +223,7 @@ const task7 = Task.fromElement({
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: 2},
+  scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
   config: config,
   schedule: {
     _id: '121314',

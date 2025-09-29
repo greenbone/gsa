@@ -28,8 +28,13 @@ import {
   EntityType,
 } from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
+import {
+  OnFilterChangedFunc,
+  OnFilterCreatedFunc,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import TagsDialog, {TagsDialogData} from 'web/entities/TagsDialog';
 import actionFunction from 'web/entity/hooks/actionFunction';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import TagDialog from 'web/pages/tags/Dialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
@@ -60,12 +65,12 @@ export interface EntitiesContainerRenderProps<TModel extends Model = Model> {
   onDelete: (entity: TModel) => Promise<void>;
   onDeleteBulk: () => Promise<void>;
   onDownloadBulk: () => Promise<void>;
-  onDownloaded: (data: {filename: string; data: string}) => void;
+  onDownloaded: OnDownloadedFunc;
   onEntitySelected: (entity: TModel) => void;
   onEntityDeselected: (entity: TModel) => void;
   onError: (error: Error | Rejection) => void;
-  onFilterChanged: (filter: Filter) => void;
-  onFilterCreated: (filter: Filter) => void;
+  onFilterChanged: OnFilterChangedFunc;
+  onFilterCreated: OnFilterCreatedFunc;
   onFilterRemoved: () => void;
   onFilterReset: () => void;
   onFirstClick: () => void;

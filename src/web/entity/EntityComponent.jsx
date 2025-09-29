@@ -13,7 +13,6 @@ import PropTypes from 'web/utils/PropTypes';
 const EntityComponent = ({
   children,
   name,
-
   onDownloaded,
   onDownloadError,
   onSaved,

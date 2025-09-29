@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {EntityType} from 'gmp/utils/entitytype';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 
@@ -20,7 +21,7 @@ const useEntitySave = <
   TSaveResponse = unknown,
   TSaveError = unknown,
 >(
-  name: string,
+  name: EntityType,
   {onSaveError, onSaved}: EntitySaveCallbacks<TSaveResponse, TSaveError> = {},
 ) => {
   const gmp = useGmp();
