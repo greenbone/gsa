@@ -12,14 +12,14 @@ describe('useEntitySave', () => {
     const entity = {id: '123'};
     const saveEntity = testing.fn().mockResolvedValue(entity);
     const gmp = {
-      foo: {save: saveEntity},
+      task: {save: saveEntity},
     };
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntitySave('foo', {
+      useEntitySave('task', {
         onSaved,
         onSaveError,
       }),
@@ -35,14 +35,14 @@ describe('useEntitySave', () => {
     const saveEntity = testing.fn().mockRejectedValue(new Error('error'));
     const entity = {id: '123'};
     const gmp = {
-      foo: {save: saveEntity},
+      task: {save: saveEntity},
     };
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntitySave('foo', {
+      useEntitySave('task', {
         onSaved,
         onSaveError,
       }),
