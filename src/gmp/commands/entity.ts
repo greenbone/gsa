@@ -41,6 +41,8 @@ export interface EntityActionData {
   id: string;
 }
 
+export type EntityActionResponse = Response<EntityActionData, XmlMeta>;
+
 const log = logger.getLogger('gmp.commands.entity');
 
 abstract class EntityCommand<
