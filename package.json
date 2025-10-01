@@ -74,7 +74,7 @@
     "redux-logger": "^3.0.6",
     "resize-observer-polyfill": "^1.5.1",
     "styled-components": "^6.1.19",
-    "uuid": "^11.1.0",
+    "uuid": "^13.0.0",
     "whatwg-fetch": "^3.6.20"
   },
   "devDependencies": {
