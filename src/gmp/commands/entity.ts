@@ -66,7 +66,7 @@ abstract class EntityCommand<
 
   abstract getElementFromRoot(root: TRoot): TElement;
 
-  postParams(
+  protected postParams(
     params: EntityCommandInputParams = {},
     extraParams?: HttpCommandPostParams,
     options?: HttpCommandParamsOptions,
@@ -80,7 +80,7 @@ abstract class EntityCommand<
     return rParams;
   }
 
-  getParams(
+  protected getParams(
     params: EntityCommandInputParams = {},
     extraParams?: HttpCommandGetParams,
     options?: HttpCommandParamsOptions,
@@ -94,13 +94,13 @@ abstract class EntityCommand<
     return rParams;
   }
 
-  getModelFromResponse(response: Response<TRoot, XmlMeta>): TModel {
+  protected getModelFromResponse(response: Response<TRoot, XmlMeta>): TModel {
     return this.clazz.fromElement(
       this.getElementFromRoot(response.data),
     ) as TModel;
   }
 
-  transformResponse(
+  protected transformResponse(
     response: Response<TRoot, XmlMeta>,
   ): Response<TModel, XmlMeta> {
     let entity = this.getModelFromResponse(response);
@@ -110,6 +110,38 @@ abstract class EntityCommand<
       entity = undefined;
     }
     return response.setData(entity);
+  }
+
+  protected transformActionResult(
+    response: Response<XmlResponseData, XmlMeta>,
+  ): Response<ActionResult, XmlMeta> {
+    return response.setData(new ActionResult(response.data));
+  }
+
+  /**
+   * Creates a HTTP POST Request returning an ActionResult
+   *
+   * @returns A Promise returning a Response with an ActionResult model as data
+   */
+  protected async action(
+    params: HttpCommandPostParams,
+    options?: HttpCommandOptions,
+  ) {
+    const response = await this.httpPost(params, options);
+    return this.transformActionResult(response);
+  }
+
+  /**
+   * Creates a HTTP POST Request returning EntityActionData
+   *
+   * @returns A Promise returning a Response with EntityActionData as data
+   */
+  protected async entityAction(
+    params: HttpCommandPostParams,
+    options?: HttpCommandOptions,
+  ) {
+    const response = await this.action(params, options);
+    return response.setData<EntityActionData>({id: response.data.id});
   }
 
   async get(
@@ -162,35 +194,6 @@ abstract class EntityCommand<
       transform: DefaultTransform,
     } as HttpCommandOptions);
     return response as unknown as Response<string, Meta>;
-  }
-
-  transformActionResult(
-    response: Response<XmlResponseData, XmlMeta>,
-  ): Response<ActionResult, XmlMeta> {
-    return response.setData(new ActionResult(response.data));
-  }
-
-  /**
-   * Creates a HTTP POST Request returning an ActionResult
-   *
-   * @returns A Promise returning a Response with an ActionResult model as data
-   */
-  async action(params: HttpCommandPostParams, options?: HttpCommandOptions) {
-    const response = await this.httpPost(params, options);
-    return this.transformActionResult(response);
-  }
-
-  /**
-   * Creates a HTTP POST Request returning EntityActionData
-   *
-   * @returns A Promise returning a Response with EntityActionData as data
-   */
-  async entityAction(
-    params: HttpCommandPostParams,
-    options?: HttpCommandOptions,
-  ) {
-    const response = await this.action(params, options);
-    return response.setData<EntityActionData>({id: response.data.id});
   }
 }
 
