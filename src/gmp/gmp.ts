@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import 'gmp/commands/agents';
 import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
 import 'gmp/commands/auditreports';
@@ -37,8 +36,10 @@ import 'gmp/commands/tlscertificates';
 import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
+import AgentCommand from 'gmp/commands/agent';
 import AgentGroupCommand from 'gmp/commands/agentgroup';
 import AgentGroupsCommand from 'gmp/commands/agentgroups';
+import AgentsCommand from 'gmp/commands/agents';
 import AuthenticationCommand from 'gmp/commands/auth';
 import DashboardCommand from 'gmp/commands/dashboards';
 import FeedStatusCommand from 'gmp/commands/feedstatus';
@@ -79,6 +80,8 @@ class Gmp {
   readonly _login: LoginCommand;
   _logoutListeners: Listener[];
 
+  readonly agent: AgentCommand;
+  readonly agents: AgentsCommand;
   readonly agentgroup: AgentGroupCommand;
   readonly agentgroups: AgentGroupsCommand;
   readonly auth: AuthenticationCommand;
@@ -115,6 +118,8 @@ class Gmp {
 
     this._logoutListeners = [];
 
+    this.agent = new AgentCommand(this.http);
+    this.agents = new AgentsCommand(this.http);
     this.agentgroup = new AgentGroupCommand(this.http);
     this.agentgroups = new AgentGroupsCommand(this.http);
     this.auth = new AuthenticationCommand(this.http);

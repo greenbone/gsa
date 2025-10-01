@@ -3,156 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
-import EntityCommand from 'gmp/commands/entity';
 import GmpHttp from 'gmp/http/gmp';
 import {XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import Agent, {AgentElement} from 'gmp/models/agents';
+import Agent from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';
-import {Element} from 'gmp/models/model';
-
-interface AgentControlConfig {
-  retry?: {
-    attempts?: number;
-    delay_in_seconds?: number;
-    max_jitter_in_seconds?: number;
-  };
-}
-
-interface AgentScriptExecutorConfig {
-  bulk_size?: number;
-  bulk_throttle_time_in_ms?: number;
-  indexer_dir_depth?: number;
-  scheduler_cron_time?: {
-    item?: string | string[];
-  };
-}
-
-interface HeartbeatConfig {
-  interval_in_seconds?: number;
-  miss_until_inactive?: number;
-}
-
-interface AgentConfigParams {
-  agent_control?: AgentControlConfig;
-  agent_script_executor?: AgentScriptExecutorConfig;
-  heartbeat?: HeartbeatConfig;
-}
-
-interface AgentModifyParams {
-  agents: {id: string}[];
-  authorized?: number;
-  config?: AgentConfigParams;
-  comment?: string;
-}
+import {map} from 'gmp/utils/array';
 
 const log = logger.getLogger('gmp.commands.agents');
 
-export class AgentCommand extends EntityCommand<Agent, AgentElement> {
-  constructor(http: GmpHttp) {
-    super(http, 'agent', Agent);
-  }
-
-  async delete({id}: {id: string}) {
-    log.debug('Deleting agent', {id});
-    const data = {
-      cmd: 'delete_agent',
-    };
-    data['agent_ids:'] = id;
-    await this.httpPost(data);
-  }
-
-  save({agents, authorized, config, comment}: AgentModifyParams) {
-    log.debug('Modifying agent', {
-      agents,
-      authorized,
-      config,
-      comment,
-    });
-
-    const data: Record<
-      string,
-      string | number | boolean | string[] | undefined
-    > = {
-      cmd: 'modify_agent',
-    };
-
-    if (agents?.length) {
-      data['agent_ids:'] = agents.map(agent => agent.id).join(',');
-    }
-
-    if (authorized !== undefined) {
-      data.authorized = authorized;
-    }
-
-    /*
-     * We expect the values to always be present from the fetch,
-     * if value is not present, we send undefined.
-     */
-    const attempts = config?.agent_control?.retry?.attempts;
-    const delayInSeconds = config?.agent_control?.retry?.delay_in_seconds;
-    const maxJitterInSeconds =
-      config?.agent_control?.retry?.max_jitter_in_seconds;
-    const bulkSize = config?.agent_script_executor?.bulk_size;
-    const bulkThrottleTime =
-      config?.agent_script_executor?.bulk_throttle_time_in_ms;
-    const indexerDirDepth = config?.agent_script_executor?.indexer_dir_depth;
-    if (
-      config?.agent_script_executor?.scheduler_cron_time?.item !== undefined
-    ) {
-      const cronTime = config.agent_script_executor.scheduler_cron_time.item;
-      if (Array.isArray(cronTime)) {
-        data['scheduler_cron_times:'] = cronTime;
-      } else {
-        data['scheduler_cron_times:'] = [cronTime];
-      }
-    } else {
-      data['scheduler_cron_times:'] = ['0 */12 * * *'];
-    }
-
-    const intervalInSeconds = config?.heartbeat?.interval_in_seconds;
-    const missUntilInactive = config?.heartbeat?.miss_until_inactive;
-
-    data.attempts = attempts;
-    data.delay_in_seconds = delayInSeconds;
-    data.max_jitter_in_seconds = maxJitterInSeconds;
-
-    data.bulk_size = bulkSize;
-    data.bulk_throttle_time_in_ms = bulkThrottleTime;
-    data.indexer_dir_depth = indexerDirDepth;
-
-    data.interval_in_seconds = intervalInSeconds;
-    data.miss_until_inactive = missUntilInactive;
-
-    log.debug('Final data being sent to modify_agents:', data);
-
-    return this.action(data);
-  }
-
-  getElementFromRoot(root: Element): AgentElement {
-    // @ts-expect-error
-    return root.get_agent.get_agents_response.agent;
-  }
-}
-
-export class AgentsCommand extends EntitiesCommand<Agent> {
+class AgentsCommand extends EntitiesCommand<Agent> {
   constructor(http: GmpHttp) {
     super(http, 'agent', Agent);
   }
 
   async delete(agents: Agent[]) {
     log.debug('Deleting agent', {agents});
-    const data: Record<string, string | number | boolean | undefined> = {
+    const response = await this.httpPost({
       cmd: 'delete_agent',
-    };
-
-    if (agents?.length) {
-      data['agent_ids:'] = agents.map(agent => agent.id).join(',');
-    }
-
-    const response = await this.httpPost(data);
+      'agent_ids:': map(agents, agent => agent.id),
+    });
     return response.setData(agents);
   }
 
@@ -178,5 +49,4 @@ export class AgentsCommand extends EntitiesCommand<Agent> {
   }
 }
 
-registerCommand('agents', AgentsCommand);
-registerCommand('agent', AgentCommand);
+export default AgentsCommand;
