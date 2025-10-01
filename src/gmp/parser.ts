@@ -116,8 +116,8 @@ export const parseIntoArray = <T>(value: T | Array<T>): Array<T> =>
 export const YES_VALUE = 1;
 export const NO_VALUE = 0;
 
-export const parseYesNo = (value?: string | number): YesNo =>
-  value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
+export const parseYesNo = (value?: string | number | boolean): YesNo =>
+  value === true || value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
 
 export const parseYes = (value: string): YesNo => {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
