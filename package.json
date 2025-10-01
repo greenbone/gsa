@@ -78,7 +78,7 @@
     "whatwg-fetch": "^3.6.20"
   },
   "devDependencies": {
-    "@eslint/js": "^9.34.0",
+    "@eslint/js": "^9.36.0",
     "@pandatix/js-cvss": "^0.4.4",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
