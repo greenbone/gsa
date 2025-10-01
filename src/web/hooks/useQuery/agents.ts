@@ -3,75 +3,50 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Agent, {AgentElement} from 'gmp/models/agents';
+import {AgentModifyParams} from 'gmp/commands/agent';
+import Rejection from 'gmp/http/rejection';
+import Agent from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';
-import {useGetQuery} from 'web/queries/useGetQuery';
+import {parseYesNo} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import {useGetEntities} from 'web/queries/useGetEntities';
 import {useSaveMutation} from 'web/queries/useSaveMutation';
 
-interface AgentModifyParams {
-  agents: {id: string}[];
-  authorized?: number;
-  config?: {
-    agent_control?: {
-      retry?: {
-        attempts?: number;
-        delay_in_seconds?: number;
-        max_jitter_in_seconds?: number;
-      };
-    };
-    agent_script_executor?: {
-      bulk_size?: number;
-      bulk_throttle_time_in_ms?: number;
-      indexer_dir_depth?: number;
-      scheduler_cron_time?: {
-        item?: string | string[];
-      };
-    };
-    heartbeat?: {
-      interval_in_seconds?: number;
-      miss_until_inactive?: number;
-    };
-  };
-  comment?: string;
-}
-
-export const useGetAgents = ({
-  filter = undefined,
-  scannerId = undefined,
-  authorized = undefined,
-  enabled = true,
-}: {
+interface UseGetAgentsParams {
   filter?: Filter;
   scannerId?: string;
   authorized?: boolean;
   enabled?: boolean;
-}) => {
+}
+
+export const useGetAgents = ({
+  filter,
+  scannerId,
+  authorized,
+  enabled = true,
+}: UseGetAgentsParams) => {
   let finalFilter = filter;
 
-  const extraParts: string[] = [];
-  if (scannerId) extraParts.push(`scanner=${scannerId}`);
-  if (authorized !== undefined)
-    extraParts.push(`authorized=${authorized ? 1 : 0}`);
-
-  if (extraParts.length) {
-    const base = filter ? filter.toFilterString().trim() : '';
-    const merged = base
-      ? `${base} ${extraParts.join(' ')}`
-      : extraParts.join(' ');
-    finalFilter = Filter.fromString(merged);
+  if (isDefined(scannerId)) {
+    finalFilter = finalFilter ?? new Filter();
+    finalFilter = finalFilter.set('scanner', scannerId);
+  }
+  if (isDefined(authorized)) {
+    finalFilter = finalFilter ?? new Filter();
+    finalFilter = finalFilter.set('authorized', parseYesNo(authorized));
   }
 
-  return useGetQuery<Agent>({
-    cmd: 'get_agents',
+  return useGetEntities<Agent>({
+    queryId: 'get_agents',
     filter: finalFilter,
-    name: 'agent',
-    parseEntity: el => Agent.fromElement(el as AgentElement | undefined),
+    entityType: 'agent',
     enabled,
   });
 };
 
 export const useModifyAgents = () =>
-  useSaveMutation<AgentModifyParams, unknown>({
-    entityKey: 'agent',
+  useSaveMutation<AgentModifyParams, void, Rejection>({
+    entityType: 'agent',
     method: 'save',
+    invalidateQueryIds: ['get_agents'],
   });
