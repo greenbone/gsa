@@ -3,42 +3,58 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState, useEffect} from 'react';
-import AgentGroup from 'gmp/models/agent-groups';
-import Agent, {AgentConfig} from 'gmp/models/agents';
+import {useState} from 'react';
+import {AgentConfig} from 'gmp/models/agent';
+import AgentGroup from 'gmp/models/agentgroup';
 import Filter from 'gmp/models/filter';
 import Scanner, {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
-  ScannerElement,
 } from 'gmp/models/scanner';
+import {filter, map} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {useGetAgents} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
-import AgentConfigurationSection from 'web/pages/agents/components/AgentConfigurationSection';
-import {useGetQuery} from 'web/queries/useGetQuery';
+import AgentConfigurationSection, {
+  DEFAULT_CRON_EXPRESSION,
+  DEFAULT_HEARTBEAT_INTERVAL,
+} from 'web/pages/agents/components/AgentConfigurationSection';
+import {useGetEntities} from 'web/queries/useGetEntities';
+import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 interface AgentGroupsDialogProps {
   agentGroup?: AgentGroup;
   title?: string;
-  onClose: () => void;
-  onSave: (values: {
-    name: string;
-    comment: string;
-    agentController: string;
-    selectedAgents: string[];
-    network: string;
-    port: number;
-    schedulerCronExpression: string | undefined;
-    useAdvancedCron: boolean;
-    heartbeatIntervalInSeconds: number | undefined;
-    config?: AgentConfig;
-    authorized?: 0 | 1;
-  }) => void;
+  onClose?: () => void;
+  onSave?: (values: AgentGroupDialogData) => void | Promise<void>;
 }
+
+interface AgentGroupsDialogValues {
+  agentController: string;
+}
+
+interface AgentGroupsDialogDefaultValues {
+  agentIds: string[];
+  authorized?: boolean;
+  comment: string;
+  config?: AgentConfig;
+  heartbeatIntervalInSeconds?: number;
+  name: string;
+  network: string;
+  port: number;
+  schedulerCronExpression?: string;
+  useAdvancedCron: boolean;
+}
+
+export type AgentGroupDialogData = AgentGroupsDialogDefaultValues &
+  AgentGroupsDialogValues;
+
+const AGENT_CONTROLLERS_FILTER = Filter.fromString(
+  `type=${AGENT_CONTROLLER_SCANNER_TYPE} or type=${AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}`,
+);
 
 const AgentGroupsDialog = ({
   agentGroup,
@@ -48,34 +64,21 @@ const AgentGroupsDialog = ({
 }: AgentGroupsDialogProps) => {
   const [_] = useTranslation();
 
+  title = title ?? _('New Agent Group');
+
   const [selectedAgentController, setSelectedAgentController] = useState(
     agentGroup?.scanner?.id ?? '',
   );
 
-  useEffect(() => {
-    if (agentGroup?.scanner?.id) {
-      setSelectedAgentController(agentGroup.scanner.id);
-    }
-  }, [agentGroup?.scanner?.id]);
-
-  title = title ?? _('New Agent Group');
-
-  const agentControllersFilter = Filter.fromString(
-    `type=${AGENT_CONTROLLER_SCANNER_TYPE} or type=${AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}`,
-  );
-
-  const {data: scannersData} = useGetQuery<Scanner>({
-    cmd: 'get_scanners',
-    name: 'get_scanners',
-    filter: agentControllersFilter,
-    parseEntity: el => Scanner.fromElement(el as ScannerElement | undefined),
+  const {data: scannersData} = useGetEntities<Scanner>({
+    queryId: 'get_scanners',
+    entityType: 'scanner',
+    filter: AGENT_CONTROLLERS_FILTER,
   });
 
-  const agentControllers =
-    (scannersData as {entities?: Scanner[]})?.entities?.map(scanner => ({
-      value: scanner.id ?? '',
-      label: scanner.name ?? _('Unknown Scanner'),
-    })) ?? [];
+  const agentControllers = renderSelectItems(
+    scannersData?.entities as RenderSelectItemProps[],
+  );
 
   const allAgentsFilter = Filter.fromString('first=1 rows=-1');
   const {data: agentsData} = useGetAgents({
@@ -84,38 +87,31 @@ const AgentGroupsDialog = ({
     authorized: true,
   });
 
-  const extractSchedulerCron = () => {
-    const cronTime =
-      agentsData?.entities?.[0].config?.agent_script_executor
-        ?.scheduler_cron_time;
-    return typeof cronTime === 'string' ? cronTime : '0 */12 * * *';
-  };
+  const availableAgents = filter(agentsData?.entities, agent =>
+    Boolean(agent.authorized),
+  ).map(agent => ({
+    value: agent.id as string,
+    label: `${agent.name ?? agent.agentId} ${
+      agent.hostname ? `(${agent.hostname})` : ''
+    }`.trim(),
+  }));
+  const selectedAgents = map(agentGroup?.agents, agent => agent.id as string);
 
-  const extractHeartbeatInterval = () => {
-    const interval =
-      agentsData?.entities?.[0]?.config?.heartbeat?.interval_in_seconds;
-    return typeof interval === 'number' ? interval : 300;
-  };
-
-  const schedulerCron = agentsData ? extractSchedulerCron() : '0 */12 * * *';
-  const heartbeatInterval = agentsData ? extractHeartbeatInterval() : 300;
-
-  const handleAgentControllerChange = (value, onValueChange) => {
-    setSelectedAgentController(value);
-    onValueChange(value, 'agentController');
-    onValueChange([], 'selectedAgents');
-  };
+  const schedulerCron =
+    agentsData?.entities?.[0].config?.agentScriptExecutor
+      ?.schedulerCronTimes?.[0] ?? DEFAULT_CRON_EXPRESSION;
+  const heartbeatInterval =
+    agentsData?.entities?.[0]?.config?.heartbeat?.intervalInSeconds ??
+    DEFAULT_HEARTBEAT_INTERVAL;
 
   return (
-    <SaveDialog
+    <SaveDialog<AgentGroupsDialogValues, AgentGroupsDialogDefaultValues>
       defaultValues={{
+        config: agentsData?.entities?.[0]?.config,
+        authorized: agentsData?.entities?.[0]?.authorized,
         name: agentGroup?.name ?? '',
         comment: agentGroup?.comment ?? '',
-        agentController: agentGroup?.scanner?.id ?? '',
-        selectedAgents:
-          (agentGroup?.agents
-            ?.map(agent => agent.id)
-            .filter(id => id !== undefined) as string[]) ?? ([] as string[]),
+        agentIds: selectedAgents,
         network: '',
         port: 0,
         schedulerCronExpression: schedulerCron,
@@ -123,27 +119,13 @@ const AgentGroupsDialog = ({
         heartbeatIntervalInSeconds: heartbeatInterval,
       }}
       title={title}
+      values={{
+        agentController: selectedAgentController,
+      }}
       onClose={onClose}
-      onSave={data =>
-        onSave({
-          ...data,
-          config: agentsData?.entities?.[0]?.config,
-          authorized: agentsData?.entities?.[0]?.authorized === 1 ? 1 : 0,
-        })
-      }
+      onSave={onSave}
     >
       {({values: state, onValueChange}) => {
-        const availableAgents = agentsData
-          ? ((agentsData as {entities?: Agent[]})?.entities
-              ?.filter(agent => agent.authorized === 1)
-              ?.map(agent => ({
-                value: agent.id ?? '',
-                label: `${agent.name ?? agent.agentId ?? _('Unknown Agent')} ${
-                  agent.hostname ? `(${agent.hostname})` : ''
-                }`.trim(),
-              })) ?? [])
-          : [];
-
         return (
           <>
             <TextField
@@ -166,17 +148,18 @@ const AgentGroupsDialog = ({
               label={_('Agent Controller')}
               name="agentController"
               value={state.agentController}
-              onChange={value =>
-                handleAgentControllerChange(value, onValueChange)
-              }
+              onChange={value => {
+                setSelectedAgentController(value);
+                onValueChange([], 'selectedAgents');
+              }}
             />
 
             {state.agentController && (
               <MultiSelect
                 items={availableAgents}
                 label={_('Select Agents')}
-                name="selectedAgents"
-                value={state.selectedAgents}
+                name="agentIds"
+                value={state.agentIds}
                 onChange={onValueChange}
               />
             )}

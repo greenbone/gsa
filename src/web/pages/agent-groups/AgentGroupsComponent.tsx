@@ -4,35 +4,41 @@
  */
 
 import React, {useState} from 'react';
+import {EntityActionData} from 'gmp/commands/entity';
 import Rejection from 'gmp/http/rejection';
 import Response from 'gmp/http/response';
 import {XmlMeta} from 'gmp/http/transform/fastxml';
-import ActionResult from 'gmp/models/actionresult';
-import AgentGroup from 'gmp/models/agent-groups';
-import {AgentConfig} from 'gmp/models/agents';
+import AgentGroup from 'gmp/models/agentgroup';
+import {isDefined} from 'gmp/utils/identity';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
+import {
+  useCreateAgentGroup,
+  useSaveAgentGroup,
+} from 'web/hooks/useQuery/agentgroups';
 import useTranslation from 'web/hooks/useTranslation';
-import AgentGroupsDialog from 'web/pages/agent-groups/AgentGroupsDialog';
-import {useCreateMutation} from 'web/queries/useCreateMutation';
+import AgentGroupsDialog, {
+  AgentGroupDialogData,
+} from 'web/pages/agent-groups/AgentGroupsDialog';
 import {useDeleteMutation} from 'web/queries/useDeleteMutation';
-import {useSaveMutation} from 'web/queries/useSaveMutation';
+
+interface AgentGroupsComponentRenderProps {
+  create: () => void;
+  clone: (entity: AgentGroup) => void;
+  delete: (entity: AgentGroup) => void;
+  edit: (entity: AgentGroup) => void;
+}
 
 interface AgentGroupsComponentProps {
-  children: (actions: {
-    clone: (entity: AgentGroup) => Promise<unknown>;
-    delete: (entity: AgentGroup) => Promise<unknown>;
-    create: () => void;
-    edit: (entity: AgentGroup) => void;
-  }) => React.ReactNode;
+  children: (actions: AgentGroupsComponentRenderProps) => React.ReactNode;
   onCloned?: () => void;
   onCloneError?: (error: Rejection) => void;
-  onCreated?: () => void;
+  onCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
   onCreateError?: (error: Rejection) => void;
   onDeleted?: () => void;
   onDeleteError?: (error: Rejection) => void;
   onDownloaded?: () => void;
   onDownloadError?: (error: Rejection) => void;
-  onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
+  onSaved?: () => void;
   onSaveError?: (error: Rejection) => void;
 }
 
@@ -49,7 +55,7 @@ const AgentGroupsComponent = ({
 }: AgentGroupsComponentProps) => {
   const [_] = useTranslation();
 
-  const [AgentGroupsDialogVisible, setAgentGroupsDialogVisible] =
+  const [agentGroupsDialogVisible, setAgentGroupsDialogVisible] =
     useState(false);
   const [selectedAgentGroup, setSelectedAgentGroup] = useState<
     AgentGroup | undefined
@@ -60,96 +66,62 @@ const AgentGroupsComponent = ({
     onCloneError,
   });
 
-  const deleteMutation = useDeleteMutation<{id: string}, void>({
-    entityKey: 'agentgroup',
-    onSuccess: () => {
-      if (onDeleted) {
-        onDeleted();
-      }
-    },
-    onError: (error: unknown) => {
-      if (onDeleteError) {
-        onDeleteError(error as Rejection);
-      }
-    },
+  const deleteMutation = useDeleteMutation({
+    entityType: 'agentgroup',
+    onSuccess: onDeleted,
+    // @ts-expect-error
+    onError: onDeleteError,
   });
 
   const handleDelete = (agentGroup: AgentGroup) => {
-    if (!agentGroup.id) {
-      throw new Error('Agent Group ID is required for deletion');
-    }
-    return deleteMutation.mutateAsync({id: agentGroup.id});
+    return deleteMutation.mutateAsync({id: agentGroup.id as string});
   };
 
-  const createMutation = useCreateMutation<
-    object,
-    Response<ActionResult, XmlMeta>
-  >({
-    entityKey: 'agentgroup',
-    onSuccess: data => {
-      onCreated?.();
-      if (onSaved) {
-        onSaved(data);
-      }
-    },
-    onError: error => {
-      onCreateError?.(error as Rejection);
-      if (onSaveError) {
-        onSaveError(error as Rejection);
-      }
-    },
+  const createMutation = useCreateAgentGroup({
+    onSuccess: onCreated,
+    onError: onCreateError,
   });
 
-  const saveMutation = useSaveMutation({
-    entityKey: 'agentgroup',
-    onSuccess: (data: Response<ActionResult, XmlMeta>) => {
-      if (onSaved) {
-        onSaved(data);
-      }
-    },
-    onError: (error: unknown) => {
-      if (onSaveError) {
-        onSaveError(error as Rejection);
-      }
-    },
+  const saveMutation = useSaveAgentGroup({
+    onSuccess: onSaved,
+    onError: onSaveError,
   });
 
-  const handleSave = (data: {
-    name: string;
-    comment: string;
-    agentController: string;
-    selectedAgents: string[];
-    port: number;
-    schedulerCronExpression: string | undefined;
-    useAdvancedCron: boolean;
-    heartbeatIntervalInSeconds: number | undefined;
-    config?: AgentConfig;
-    authorized?: 0 | 1;
-  }) => {
+  const closeDialog = () => {
+    setAgentGroupsDialogVisible(false);
+    setSelectedAgentGroup(undefined);
+  };
+
+  const handleSave = async (data: AgentGroupDialogData) => {
     const backendData = {
       name: data.name,
       scannerId: data.agentController,
-      agents: data.selectedAgents.map(id => ({id})),
-      config: data.config,
+      agentsIds: data.agentIds,
       comment: data.comment,
       authorized: data.authorized,
+      attempts: data.config?.agentControl?.retry.attempts,
+      delayInSeconds: data.config?.agentControl?.retry.delayInSeconds,
+      maxJitterInSeconds: data.config?.agentControl?.retry.maxJitterInSeconds,
+      bulkSize: data.config?.agentScriptExecutor?.bulkSize,
+      bulkThrottleTime: data.config?.agentScriptExecutor?.bulkThrottleTimeInMs,
+      indexerDirDepth: data.config?.agentScriptExecutor?.indexerDirDepth,
+      intervalInSeconds: data.config?.heartbeat?.intervalInSeconds,
+      missUntilInactive: data.config?.heartbeat?.missUntilInactive,
+      schedulerCronTimes: data.schedulerCronExpression,
     };
 
-    if (selectedAgentGroup) {
-      return saveMutation.mutateAsync({
-        id: selectedAgentGroup.id,
-        ...backendData,
+    if (isDefined(selectedAgentGroup)) {
+      await saveMutation.mutateAsync({
+        ...data,
+        id: selectedAgentGroup.id as string,
       });
     } else {
-      return createMutation.mutateAsync(backendData);
+      await createMutation.mutateAsync(backendData);
     }
+    closeDialog();
   };
 
-  const openAgentGroupsDialog = () => {
-    setAgentGroupsDialogVisible(true);
-  };
-
-  const editAgentGroup = (agentGroup: AgentGroup) => {
+  const openAgentGroupsDialog = (agentGroup?: AgentGroup) => {
     setSelectedAgentGroup(agentGroup);
     setAgentGroupsDialogVisible(true);
   };
@@ -160,27 +132,20 @@ const AgentGroupsComponent = ({
         clone: handleClone,
         delete: handleDelete,
         create: openAgentGroupsDialog,
-        edit: editAgentGroup,
+        edit: openAgentGroupsDialog,
       })}
-      {AgentGroupsDialogVisible && (
+      {agentGroupsDialogVisible && (
         <AgentGroupsDialog
           agentGroup={selectedAgentGroup}
           title={
             selectedAgentGroup
               ? _('Edit Agent Group {{name}}', {
-                  name: selectedAgentGroup.name || '',
+                  name: selectedAgentGroup.name as string,
                 })
               : _('New Agent Group')
           }
-          onClose={() => {
-            setAgentGroupsDialogVisible(false);
-            setSelectedAgentGroup(undefined);
-          }}
-          onSave={async data => {
-            await handleSave(data);
-            setAgentGroupsDialogVisible(false);
-            setSelectedAgentGroup(undefined);
-          }}
+          onClose={closeDialog}
+          onSave={handleSave}
         />
       )}
     </>
