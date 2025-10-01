@@ -61,7 +61,7 @@
     "i18next": "^25.5.2",
     "i18next-http-backend": "^3.0.2",
     "ical.js": "^2.2.1",
-    "lucide-react": "^0.542.0",
+    "lucide-react": "^0.544.0",
     "memoize-one": "^6.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
