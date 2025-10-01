@@ -193,6 +193,7 @@ describe('EntityCommand tests', () => {
     const fakeHttp = createHttp(response);
 
     const cmd = new TestEntityCommand(fakeHttp);
+    // @ts-expect-error
     const cmdResponse = await cmd.entityAction(
       {cmd: 'create_foo', resource_type: 'foo'},
       {extraParams: {name: 'Test Foo'}},

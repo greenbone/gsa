@@ -52,16 +52,16 @@ class HttpCommand {
     this._params = params;
   }
 
-  getDefaultParam(name: string) {
+  protected getDefaultParam(name: string) {
     return this._params[name];
   }
 
-  setDefaultParam(name: string, value: ParamValue) {
+  protected setDefaultParam(name: string, value: ParamValue) {
     this._params[name] = value;
     return this;
   }
 
-  getParams(
+  protected getParams(
     params: HttpCommandInputParams = {},
     extraParams: HttpCommandGetParams = {},
     {includeDefaultParams = true}: HttpCommandParamsOptions = {},
@@ -87,7 +87,7 @@ class HttpCommand {
     };
   }
 
-  postParams(
+  protected postParams(
     params: HttpCommandInputParams = {},
     extraParams: HttpCommandPostParams = {},
     {includeDefaultParams = true}: HttpCommandParamsOptions = {},
@@ -113,7 +113,7 @@ class HttpCommand {
     };
   }
 
-  httpGet(
+  protected httpGet(
     params: HttpCommandInputParams = {},
     options: HttpCommandOptions = {},
   ) {
@@ -124,7 +124,7 @@ class HttpCommand {
     });
   }
 
-  httpPost(
+  protected httpPost(
     params: HttpCommandInputParams = {},
     options: HttpCommandOptions = {},
   ) {
