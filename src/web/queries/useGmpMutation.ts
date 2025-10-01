@@ -5,72 +5,54 @@
 
 import {showSuccessNotification as mantineShowSuccessNotification} from '@greenbone/ui-lib';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {pluralizeType} from 'gmp/utils/entitytype';
+import {EntityType} from 'gmp/utils/entitytype';
+import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 
-interface UseGmpMutationParams<TOutput> {
-  entityKey: string;
+interface UseGmpMutationParams<TOutput, TError> {
+  entityType: EntityType;
   method: string;
   successMessage?: string;
   onSuccess?: (data: TOutput) => void;
-  onError?: (error: unknown) => void;
-  invalidateQueries?: boolean;
+  onError?: (error: TError) => void;
+  invalidateQueryIds?: string[];
 }
 
-export function useGmpMutation<TInput = unknown, TOutput = unknown>({
-  entityKey,
+export function useGmpMutation<
+  TInput = unknown,
+  TOutput = unknown,
+  TError = Error,
+>({
+  entityType,
   method,
   successMessage,
   onSuccess,
   onError,
-  invalidateQueries = true,
-}: UseGmpMutationParams<TOutput>) {
+  invalidateQueryIds,
+}: UseGmpMutationParams<TOutput, TError>) {
   const gmp = useGmp();
-  const gmpEntity = gmp[entityKey];
-  const gmpCommand = gmpEntity?.[method];
+  const gmpCommand = gmp[entityType];
+  const gmpMethod = gmpCommand?.[method];
   const queryClient = useQueryClient();
 
-  const mutatingOperations = [
-    'create',
-    'modify',
-    'delete',
-    'save',
-    'start',
-    'stop',
-    'resume',
-    'move',
-    'empty',
-    'restore',
-    'sync',
-    'test',
-    'verify',
-    'run',
-  ];
-
-  const shouldInvalidateQueries =
-    invalidateQueries && mutatingOperations.some(op => method.startsWith(op));
-
-  return useMutation<TOutput, unknown, TInput>({
+  return useMutation<TOutput, TError, TInput>({
     mutationFn: async (input: TInput) => {
-      if (!gmpEntity || !gmpCommand) {
-        throw new Error(`GMP command for ${entityKey}.${method} not found`);
+      if (!gmpCommand || !gmpCommand) {
+        throw new Error(`GMP command for ${entityType}.${method} not found`);
       }
-      return await gmpCommand.call(gmpEntity, input);
+      return await gmpMethod.call(gmpMethod, input);
     },
     onSuccess: data => {
-      if (shouldInvalidateQueries) {
+      if (isDefined(invalidateQueryIds)) {
         /*
          * TODO test cache invalidation based on useGetQuery cmd queryKey: [cmd, token, filter]
          * Invalidate queries for the specific entity type (e.g., get_agents, get_users)
          * Transform entityKey using the same logic as useGetQuery
          */
-
-        const pluralEntityKey = pluralizeType(entityKey).replace(/_/g, '');
-        const getCommand = `get_${pluralEntityKey}`;
         void queryClient.invalidateQueries({
           predicate: query => {
-            const [cmd] = query.queryKey as [string, ...unknown[]];
-            return cmd === getCommand;
+            const [queryId] = query.queryKey as [string, ...unknown[]];
+            return queryId in invalidateQueryIds;
           },
         });
       }

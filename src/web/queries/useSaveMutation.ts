@@ -3,27 +3,37 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {EntityType, typeName} from 'gmp/utils/entitytype';
+import useTranslation from 'web/hooks/useTranslation';
 import {useGmpMutation} from 'web/queries/useGmpMutation';
 
-interface UseSaveMutationParams<TOutput> {
-  entityKey: string;
+interface UseSaveMutationParams<TOutput, TError> {
+  entityType: EntityType;
+  invalidateQueryIds?: string[];
   method?: string;
   onSuccess?: (data: TOutput) => void;
-  onError?: (error: unknown) => void;
+  onError?: (error: TError) => void;
 }
 
-export function useSaveMutation<TInput = unknown, TOutput = unknown>({
-  entityKey,
+export function useSaveMutation<
+  TInput = unknown,
+  TOutput = unknown,
+  TError = Error,
+>({
+  entityType,
+  invalidateQueryIds,
   method = 'save',
   onSuccess,
   onError,
-}: UseSaveMutationParams<TOutput>) {
-  const entityLabel = entityKey.charAt(0).toUpperCase() + entityKey.slice(1);
-
-  return useGmpMutation<TInput, TOutput>({
-    entityKey,
+}: UseSaveMutationParams<TOutput, TError>) {
+  const [_] = useTranslation();
+  return useGmpMutation<TInput, TOutput, TError>({
+    entityType,
+    invalidateQueryIds,
     method,
-    successMessage: `${entityLabel} successfully saved`,
+    successMessage: _('{{entity}} successfully saved', {
+      entity: typeName(entityType),
+    }),
     onSuccess,
     onError,
   });
