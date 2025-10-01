@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import AgentGroup from 'gmp/models/agent-groups';
+import AgentGroup from 'gmp/models/agentgroup';
 import {EditIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
@@ -15,9 +15,9 @@ import useTranslation from 'web/hooks/useTranslation';
 
 export interface AgentGroupsActionsProps
   extends Omit<EntitiesActionsProps<AgentGroup>, 'children'> {
-  onAgentGroupCloneClick?: (entity: AgentGroup) => void | Promise<void>;
+  onAgentGroupCloneClick?: (entity: AgentGroup) => void;
   onAgentGroupDeleteClick?: (entity: AgentGroup) => void;
-  onAgentGroupDownloadClick?: (entity: AgentGroup) => void | Promise<void>;
+  onAgentGroupDownloadClick?: (entity: AgentGroup) => void;
   onAgentGroupEditClick?: (entity: AgentGroup) => void;
   onEntityRestore?: (entity: AgentGroup) => void;
   onEntityDelete?: (entity: AgentGroup) => void;

@@ -5,7 +5,7 @@
 
 import {useCallback, useMemo, useRef, useState} from 'react';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
-import AgentGroup from 'gmp/models/agent-groups';
+import AgentGroup from 'gmp/models/agentgroup';
 import Filter, {AGENT_GROUPS_FILTER_FILTER} from 'gmp/models/filter';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -16,7 +16,7 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
-import {useGetAgentGroups} from 'web/hooks/useQuery/agent-groups';
+import {useGetAgentGroups} from 'web/hooks/useQuery/agentgroups';
 import useSelection from 'web/hooks/useSelection';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
@@ -30,7 +30,7 @@ const AgentGroupsListPage = () => {
 
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const deleteFuncRef = useRef<
-    ((agentGroup: AgentGroup) => Promise<unknown>) | null
+    ((agentGroup: AgentGroup) => Promise<void> | void) | null
   >(null);
 
   const {
@@ -45,19 +45,17 @@ const AgentGroupsListPage = () => {
   const {
     data: agentGroupsData,
     isLoading: isDataLoading,
+    isPending: isUpdating,
     error,
     isError,
     refetch,
   } = useGetAgentGroups({filter});
 
   const allEntities = useMemo(
-    () => (agentGroupsData as {entities?: AgentGroup[]})?.entities || [],
+    () => agentGroupsData?.entities ?? [],
     [agentGroupsData],
   );
-
-  const entitiesCounts = (
-    agentGroupsData as {entitiesCounts?: CollectionCounts}
-  )?.entitiesCounts;
+  const entitiesCounts = agentGroupsData?.entitiesCounts;
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     filter,
@@ -82,10 +80,9 @@ const AgentGroupsListPage = () => {
           ? selectedEntities
           : allEntities;
 
-      const items = source.filter(e => e.id !== null) as AgentGroup[];
-      if (items.length === 0) return;
+      if (source.length === 0) return;
 
-      await Promise.all(items.map(e => df(e)));
+      await Promise.all(source.map(e => df(e)));
     } catch (error) {
       showError(error as Error);
     }
@@ -142,7 +139,6 @@ const AgentGroupsListPage = () => {
   );
 
   const isLoading = isFilterLoading || isDataLoading;
-
   return (
     <AgentGroupsComponent
       // wire one-shot refreshes via callbacks
@@ -169,7 +165,7 @@ const AgentGroupsListPage = () => {
           <>
             <PageTitle title={_('Agent Group')} />
             <EntitiesPage
-              createFilterType="agent_group"
+              createFilterType="agentgroup"
               entities={allEntities}
               entitiesCounts={entitiesCounts}
               entitiesError={isError ? error : undefined}
@@ -177,6 +173,7 @@ const AgentGroupsListPage = () => {
               filterEditDialog={AgentGroupsFilterDialog}
               filtersFilter={AGENT_GROUPS_FILTER_FILTER}
               isLoading={isLoading}
+              isUpdating={isUpdating}
               sectionIcon={<HatAndGlassesIcon size="large" />}
               table={
                 <>
@@ -184,7 +181,6 @@ const AgentGroupsListPage = () => {
                     entities={allEntities}
                     entitiesCounts={entitiesCounts}
                     filter={filter}
-                    // @ts-expect-error
                     selectionType={selectionType}
                     sortBy={sortBy}
                     sortDir={sortDir}

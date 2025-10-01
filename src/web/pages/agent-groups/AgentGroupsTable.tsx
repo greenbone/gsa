@@ -4,14 +4,25 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import AgentGroup from 'gmp/models/agent-groups';
-import createEntitiesFooter from 'web/entities/createEntitiesFooter';
+import AgentGroup from 'gmp/models/agentgroup';
+import createEntitiesFooter, {
+  CreateEntitiesFooterProps,
+} from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 
-import AgentGroupsTableHeader from 'web/pages/agent-groups/AgentGroupsTableHeader';
-import AgentGroupsTableRow from 'web/pages/agent-groups/AgentGroupsTableRow';
+import AgentGroupsTableHeader, {
+  AgentGroupsTableHeaderProps,
+} from 'web/pages/agent-groups/AgentGroupsTableHeader';
+import AgentGroupsTableRow, {
+  AgentGroupsTableRowProps,
+} from 'web/pages/agent-groups/AgentGroupsTableRow';
 
-export default createEntitiesTable<AgentGroup>({
+export default createEntitiesTable<
+  AgentGroup,
+  CreateEntitiesFooterProps<AgentGroup>,
+  AgentGroupsTableHeaderProps,
+  AgentGroupsTableRowProps
+>({
   emptyTitle: _l('No agent groups available'),
   row: AgentGroupsTableRow,
   rowDetails: undefined,
