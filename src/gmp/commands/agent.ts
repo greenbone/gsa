@@ -1,0 +1,89 @@
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import EntityCommand from 'gmp/commands/entity';
+import GmpHttp from 'gmp/http/gmp';
+import logger from 'gmp/log';
+import Agent, {AgentElement} from 'gmp/models/agent';
+import {Element} from 'gmp/models/model';
+import {parseYesNo} from 'gmp/parser';
+import {isArray, isDefined} from 'gmp/utils/identity';
+
+export interface AgentModifyParams {
+  agentsIds: string[];
+  authorized?: boolean;
+  comment?: string;
+  attempts?: number;
+  delayInSeconds?: number;
+  maxJitterInSeconds?: number;
+  bulkSize?: number;
+  bulkThrottleTime?: number;
+  indexerDirDepth?: number;
+  schedulerCronTimes?: string | string[];
+  intervalInSeconds?: number;
+  missUntilInactive?: number;
+}
+
+const log = logger.getLogger('gmp.commands.agent');
+
+class AgentCommand extends EntityCommand<Agent, AgentElement> {
+  constructor(http: GmpHttp) {
+    super(http, 'agent', Agent);
+  }
+
+  async delete({id}: {id: string}) {
+    log.debug('Deleting agent', {id});
+    await this.httpPost({
+      cmd: 'delete_agent',
+      'agent_ids:': id,
+    });
+  }
+
+  async save({
+    agentsIds,
+    authorized,
+    comment,
+    attempts,
+    delayInSeconds,
+    maxJitterInSeconds,
+    bulkSize,
+    bulkThrottleTime,
+    indexerDirDepth,
+    schedulerCronTimes,
+    intervalInSeconds,
+    missUntilInactive,
+  }: AgentModifyParams) {
+    const data = {
+      cmd: 'modify_agent',
+      'agent_ids:': agentsIds,
+      authorized: parseYesNo(authorized),
+      attempts,
+      comment,
+      delayInSeconds,
+      maxJitterInSeconds,
+      bulkSize,
+      bulkThrottleTime,
+      indexerDirDepth,
+      schedulerCronTimes,
+      intervalInSeconds,
+      missUntilInactive,
+      'scheduler_cron_times:':
+        isArray(schedulerCronTimes) || !isDefined(schedulerCronTimes)
+          ? schedulerCronTimes
+          : [schedulerCronTimes],
+    };
+
+    log.debug('Final data being sent to modify_agents:', data);
+
+    await this.action(data);
+  }
+
+  getElementFromRoot(root: Element): AgentElement {
+    // @ts-expect-error
+    return root.get_agent.get_agents_response.agent;
+  }
+}
+
+export default AgentCommand;
