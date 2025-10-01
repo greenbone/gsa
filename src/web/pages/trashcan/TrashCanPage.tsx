@@ -378,6 +378,7 @@ const TrashCan = () => {
           <span>
             <LinkTarget id="agent_group" />
             <h1>{_('Agent Groups')}</h1>
+            {/* @ts-expect-error */}
             <AgentGroupsTable entities={trash.agentGroups} {...tableProps} />
           </span>
         )}
