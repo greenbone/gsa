@@ -18,7 +18,8 @@ const useSelection = <TSelect = {}>(
   initialSelectionType: SelectionTypeType = SelectionType.SELECTION_PAGE_CONTENTS,
 ) => {
   const [selected, setSelected] = useState<Array<TSelect>>([]);
-  const [selectionType, setSelectionType] = useState(initialSelectionType);
+  const [selectionType, setSelectionType] =
+    useState<SelectionTypeType>(initialSelectionType);
 
   const select = useCallback((obj: TSelect) => {
     // ensure the using component gets re-rendered by creating new array
