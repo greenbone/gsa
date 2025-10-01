@@ -12,19 +12,21 @@ import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import Column from 'web/components/layout/Column';
 import Section from 'web/components/section/Section';
-
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
 interface AgentConfigurationSectionProps {
   hidePort?: boolean;
-  port: number;
-  schedulerCronExpression: string;
-  useAdvancedCron: boolean;
-  heartbeatIntervalInSeconds: number;
+  port?: number;
+  schedulerCronExpression?: string;
+  useAdvancedCron?: boolean;
+  heartbeatIntervalInSeconds?: number;
   activeCronExpression?: string;
   onValueChange: (value: string | number | boolean, name?: string) => void;
 }
+
+export const DEFAULT_HEARTBEAT_INTERVAL = 300; // 5 minutes
+export const DEFAULT_CRON_EXPRESSION = '0 */12 * * *';
 
 const ActiveExpressionContainer = styled.div`
   margin-top: 8px;
@@ -43,9 +45,9 @@ const ActiveExpressionCode = styled.code`
 
 const AgentConfigurationSection = ({
   port,
-  schedulerCronExpression,
-  useAdvancedCron,
-  heartbeatIntervalInSeconds,
+  schedulerCronExpression = DEFAULT_CRON_EXPRESSION,
+  useAdvancedCron = false,
+  heartbeatIntervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
   activeCronExpression,
   onValueChange,
   hidePort = false,
