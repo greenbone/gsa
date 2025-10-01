@@ -215,6 +215,7 @@ describe('parseYesNo tests', () => {
     expect(parseYesNo('1')).toEqual(YES_VALUE);
     expect(parseYesNo(1)).toEqual(YES_VALUE);
     expect(parseYesNo(YES_VALUE)).toEqual(YES_VALUE);
+    expect(parseYesNo(true)).toEqual(YES_VALUE);
   });
 
   test('should parse other values as no value', () => {
@@ -224,6 +225,7 @@ describe('parseYesNo tests', () => {
     expect(parseYesNo('0')).toEqual(NO_VALUE);
     expect(parseYesNo(0)).toEqual(NO_VALUE);
     expect(parseYesNo(NO_VALUE)).toEqual(NO_VALUE);
+    expect(parseYesNo(false)).toEqual(NO_VALUE);
   });
 });
 
