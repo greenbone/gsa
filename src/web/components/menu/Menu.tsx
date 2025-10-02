@@ -19,12 +19,14 @@ import {EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import Link from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
 const Menu = () => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
+  const features = useFeatures();
   const gmp = useGmp();
   const tasksMatch = useMatch('/tasks');
   const taskMatch = useMatch('/task/*');
@@ -196,6 +198,8 @@ const Menu = () => {
     'note',
   ]);
   const mayOpConfiguration = mayAccessAny([
+    'agent',
+    'agentgroup',
     'target',
     'portlist',
     'credential',
@@ -474,18 +478,20 @@ const Menu = () => {
             isPathMatch: isTagsActive,
             active: isTagsActive,
           },
-          {
-            label: _('Agents'),
-            to: '/agents',
-            isPathMatch: isAgentsActive,
-            active: isAgentsActive,
-          },
-          {
-            label: _('Agent Groups'),
-            to: '/agent-groups',
-            isPathMatch: isAgentGroupsActive,
-            active: isAgentGroupsActive,
-          },
+          capabilities.mayAccess('agent') &&
+            features.featureEnabled('ENABLE_AGENTS') && {
+              label: _('Agents'),
+              to: '/agents',
+              isPathMatch: isAgentsActive,
+              active: isAgentsActive,
+            },
+          capabilities.mayAccess('agentgroup') &&
+            features.featureEnabled('ENABLE_AGENTS') && {
+              label: _('Agent Groups'),
+              to: '/agent-groups',
+              isPathMatch: isAgentGroupsActive,
+              active: isAgentGroupsActive,
+            },
         ].filter(Boolean),
       },
       {

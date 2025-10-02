@@ -7,9 +7,19 @@ import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
+import Features, {Feature} from 'gmp/capabilities/features';
+import {isDefined} from 'gmp/utils/identity';
 import Menu from 'web/components/menu/Menu';
 
-const renderMenuWith = ({capabilities, gmpSettings}) => {
+const renderMenuWith = ({
+  capabilities,
+  gmpSettings,
+  features,
+}: {
+  capabilities: true | false | Capabilities;
+  gmpSettings: Record<string, unknown>;
+  features?: Feature[];
+}) => {
   const gmp = {
     settings: gmpSettings,
   };
@@ -18,6 +28,7 @@ const renderMenuWith = ({capabilities, gmpSettings}) => {
     capabilities,
     gmp,
     router: true,
+    features: isDefined(features) ? new Features(features) : undefined,
   });
   return render(<Menu />);
 };
@@ -47,42 +58,42 @@ describe('Menu rendering', () => {
   });
 
   test.each([
-    'Tasks',
-    'Reports',
-    'Results',
-    'Vulnerabilities',
-    'Notes',
-    'Overrides',
-    'Remediation Tickets',
-    'Compliance Policies',
-    'Compliance Audits',
-    'Compliance Audit Reports',
-    'NVTs',
-    'CVEs',
-    'CPEs',
-    'CERT-Bund Advisories',
-    'DFN-CERT Advisories',
-    'Targets',
-    'Port Lists',
-    'Credentials',
-    'Scan Configs',
     'Alerts',
-    'Schedules',
+    'CERT-Bund Advisories',
+    'Compliance Audit Reports',
+    'Compliance Audits',
+    'Compliance Policies',
+    'CPEs',
+    'Credentials',
+    'CVEs',
+    'CVSS Calculator',
+    'DFN-CERT Advisories',
+    'Feed Status',
+    'Filters',
+    'Groups',
+    'LDAP',
+    'Notes',
+    'NVTs',
+    'Overrides',
+    'Performance',
+    'Permissions',
+    'Port Lists',
+    'RADIUS',
+    'Remediation Tickets',
     'Report Configs',
     'Report Formats',
-    'Scanners',
-    'Filters',
-    'Tags',
-    'Users',
-    'Groups',
+    'Reports',
+    'Results',
     'Roles',
-    'Permissions',
-    'Performance',
+    'Scan Configs',
+    'Scanners',
+    'Schedules',
+    'Tags',
+    'Targets',
+    'Tasks',
     'Trashcan',
-    'Feed Status',
-    'LDAP',
-    'RADIUS',
-    'CVSS Calculator',
+    'Users',
+    'Vulnerabilities',
   ])('should render sub-menu: %s', async label => {
     renderMenuWith({
       capabilities: new EverythingCapabilities(),
@@ -97,7 +108,36 @@ describe('Menu rendering', () => {
     expect(screen.getByText(label)).toBeInTheDocument();
   });
 
-  test.each(['Remediation Tickets', 'Configuration'])(
+  test.each(['Agents', 'Agent Groups'])(
+    'should render sub-menu: %s',
+    async label => {
+      renderMenuWith({
+        capabilities: true,
+        features: ['ENABLE_AGENTS'],
+        gmpSettings: {
+          enableAssetManagement: false,
+        },
+      });
+
+      expect(screen.getByText(label)).toBeInTheDocument();
+    },
+  );
+
+  test.each(['Agents', 'Agent Groups'])(
+    'should not render sub-menu %s if feature is missing',
+    async label => {
+      renderMenuWith({
+        capabilities: true,
+        gmpSettings: {
+          enableAssetManagement: false,
+        },
+      });
+
+      expect(screen.queryByText(label)).not.toBeInTheDocument();
+    },
+  );
+
+  test.each(['Remediation Tickets', 'Configuration', 'Agent', 'Agent Group'])(
     'should not render %s when mayAccess returns false',
     async text => {
       renderMenuWith({
