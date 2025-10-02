@@ -18,8 +18,8 @@ export type Meta = Record<string, unknown>;
  */
 class Response<TData = unknown, TMeta extends Meta = Meta> {
   _xhr: XMLHttpRequest;
-  _data: TData;
-  _meta: TMeta;
+  private _data: TData;
+  private _meta: TMeta;
 
   constructor(xhr: XMLHttpRequest, data: TData, meta: TMeta = {} as TMeta) {
     this._xhr = xhr;
