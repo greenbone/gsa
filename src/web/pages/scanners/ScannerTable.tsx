@@ -4,12 +4,17 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import createEntitiesFooter from 'web/entities/createEntitiesFooter';
-import createEntitiesHeader from 'web/entities/createEntitiesHeader';
+import Scanner from 'gmp/models/scanner';
+import createEntitiesFooter, {
+  CreateEntitiesFooterProps,
+} from 'web/entities/createEntitiesFooter';
+import createEntitiesHeader, {
+  CreateEntitiesHeaderProps,
+} from 'web/entities/createEntitiesHeader';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
-import ScannerDetails from 'web/pages/scanners/Details';
-import Row from 'web/pages/scanners/Row';
+import ScannerDetails from 'web/pages/scanners/ScannerDetails';
+import ScannerRow, {ScannerRowProps} from 'web/pages/scanners/ScannerRow';
 
 export const SORT_FIELDS = [
   {
@@ -39,11 +44,16 @@ export const SORT_FIELDS = [
   },
 ];
 
-const ScannersTable = createEntitiesTable({
+const ScannerTable = createEntitiesTable<
+  Scanner,
+  CreateEntitiesFooterProps<Scanner>,
+  CreateEntitiesHeaderProps,
+  ScannerRowProps
+>({
   emptyTitle: _l('No scanners available'),
   header: createEntitiesHeader(SORT_FIELDS),
-  row: Row,
-  rowDetails: withRowDetails('scanner')(ScannerDetails),
+  row: ScannerRow,
+  rowDetails: withRowDetails<Scanner>('scanner')(ScannerDetails),
   footer: createEntitiesFooter({
     download: 'scanners.xml',
     span: 7,
@@ -51,4 +61,4 @@ const ScannersTable = createEntitiesTable({
   }),
 });
 
-export default ScannersTable;
+export default ScannerTable;
