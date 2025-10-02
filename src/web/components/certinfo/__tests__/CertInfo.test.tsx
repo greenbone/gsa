@@ -8,6 +8,7 @@ import {screen, rendererWith} from 'web/testing';
 import Credential, {CertificateInfo} from 'gmp/models/credential';
 import date from 'gmp/models/date';
 import CertInfo from 'web/components/certinfo/CertInfo';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 describe('CertInfo tests', () => {
   test('should render cert info with all fields', () => {
@@ -21,7 +22,9 @@ describe('CertInfo tests', () => {
         md5Fingerprint: 'AA:BB:CC:DD:EE:FF',
       },
     });
-    const {render} = rendererWith();
+    const {render, store} = rendererWith({store: true});
+    store.dispatch(setTimezone('UTC'));
+
     render(<CertInfo info={credential.certificate_info as CertificateInfo} />);
 
     expect(screen.getByTestId('cert-info-table')).toBeInTheDocument();
@@ -29,13 +32,13 @@ describe('CertInfo tests', () => {
       'Activation',
     );
     expect(screen.getByTestId('cert-info-activation-data')).toHaveTextContent(
-      'Sun, Jan 1, 2023 1:00 AM',
+      'Sun, Jan 1, 2023 12:00 AM Coordinated Universal Time',
     );
     expect(screen.getByTestId('cert-info-expiration-label')).toHaveTextContent(
       'Expiration',
     );
     expect(screen.getByTestId('cert-info-expiration-data')).toHaveTextContent(
-      'Mon, Jan 1, 2024 1:00 AM',
+      'Mon, Jan 1, 2024 12:00 AM Coordinated Universal Time',
     );
     expect(screen.getByTestId('cert-info-md5-label')).toHaveTextContent(
       'MD5 Fingerprint',
