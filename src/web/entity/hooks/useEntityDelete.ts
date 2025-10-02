@@ -45,9 +45,9 @@ const useEntityDelete = <
     dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id as string));
 
   const handleEntityDelete = async (entity: TEntity) => {
-    return actionFunction<void>(
+    return actionFunction<void, TDeleteError, void>(
       // @ts-expect-error
-      deleteEntity(entity),
+      deleteEntity(entity).then(() => {}),
       {
         onSuccess: onDeleted,
         onError: onDeleteError,
