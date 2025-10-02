@@ -42,7 +42,7 @@ import ReportConfigsTable from 'web/pages/reportconfigs/Table';
 import ReportFormatsTable from 'web/pages/reportformats/Table';
 import RolesTable from 'web/pages/roles/RoleTable';
 import ScanConfigsTable from 'web/pages/scanconfigs/Table';
-import ScannersTable from 'web/pages/scanners/Table';
+import ScannerTable from 'web/pages/scanners/ScannerTable';
 import SchedulesTable from 'web/pages/schedules/Table';
 import TagsTable from 'web/pages/tags/Table';
 import TargetsTable from 'web/pages/targets/Table';
@@ -335,7 +335,8 @@ const TrashCan = () => {
           <span>
             <LinkTarget id="scanner" />
             <h1>{_('Scanners')}</h1>
-            <ScannersTable entities={trash.scanners} {...tableProps} />
+            {/* @ts-expect-error */}
+            <ScannerTable entities={trash.scanners} {...tableProps} />
           </span>
         )}
         {hasEntities(trash?.schedules) && (

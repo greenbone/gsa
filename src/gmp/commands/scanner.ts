@@ -95,7 +95,7 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
   }
 
   verify({id}: ScannerCommandVerifyParams) {
-    return this.httpPost({
+    return this.action({
       cmd: 'verify_scanner',
       id,
     });
