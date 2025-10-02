@@ -193,7 +193,7 @@ class Filter extends EntityModel {
    *
    * @return This filter
    */
-  _setTerm(term: FilterTerm) {
+  private _setTerm(term: FilterTerm) {
     const key = term.keyword;
 
     // special handling of sort. should be put into a more generic solution in
@@ -227,7 +227,7 @@ class Filter extends EntityModel {
    *
    * @return This filter
    */
-  _addTerm(...terms: FilterTerm[]) {
+  private _addTerm(...terms: FilterTerm[]) {
     this.terms.push(...terms);
     return this;
   }
@@ -239,7 +239,7 @@ class Filter extends EntityModel {
    *
    * @returns Index of the key in the FilterTerms array
    */
-  _getIndex(key: string): number {
+  private _getIndex(key: string): number {
     return this.terms.findIndex(term => term.keyword === key);
   }
 
@@ -255,7 +255,7 @@ class Filter extends EntityModel {
    * @return This filter with merged terms.
    */
 
-  _mergeExtraKeywords(filter: Filter | undefined | null) {
+  private _mergeExtraKeywords(filter: Filter | undefined | null) {
     if (hasValue(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
@@ -283,7 +283,7 @@ class Filter extends EntityModel {
    *
    * @return This filter with merged terms.
    */
-  _mergeNewKeywords(filter: Filter | undefined) {
+  private _mergeNewKeywords(filter: Filter | undefined) {
     if (hasValue(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
@@ -304,7 +304,7 @@ class Filter extends EntityModel {
    *
    * @return This filter.
    */
-  _resetFilterId() {
+  private _resetFilterId() {
     // @ts-expect-error
     this.id = undefined;
     return this;
