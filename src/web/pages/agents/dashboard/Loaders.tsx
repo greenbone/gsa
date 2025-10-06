@@ -46,7 +46,6 @@ export const useGetAgentsNetworkAggregates = ({
   const gmp = useGmp();
   const {token} = gmp.settings;
 
-
   return useQuery({
     enabled: Boolean(token),
     queryKey: ['agents-network-aggregates', token, filter],
