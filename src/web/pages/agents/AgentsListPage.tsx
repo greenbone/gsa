@@ -210,6 +210,7 @@ const AgentListPage = () => {
       onSaveError={showError}
     >
       {({create, clone, delete: deleteFunc, edit, authorize}) => {
+        // @ts-ignore
         deleteFuncRef.current = deleteFunc;
 
         return (

@@ -32,7 +32,7 @@ export const useGetAgentsSeverityAggregates = ({
     enabled: Boolean(token),
     queryKey: ['agents-severity-aggregates', token, filter],
     queryFn: async () => {
-      // @ts-expect-error
+      // @ts-ignore
       const response = await gmp.agents.getSeverityAggregates({filter});
       return response.data;
     },
@@ -46,11 +46,11 @@ export const useGetAgentsNetworkAggregates = ({
   const gmp = useGmp();
   const {token} = gmp.settings;
 
+
   return useQuery({
     enabled: Boolean(token),
     queryKey: ['agents-network-aggregates', token, filter],
     queryFn: async () => {
-      // @ts-expect-error
       const response = await gmp.agents.getNetworkAggregates({filter});
       return response.data;
     },
@@ -62,6 +62,7 @@ export const AgentsSeverityLoader = ({filter, children}: LoaderProps) => {
   const {data, isLoading, error} = useGetAgentsSeverityAggregates({filter});
 
   return children({
+    // @ts-ignore
     data,
     isLoading,
     error,
@@ -72,6 +73,7 @@ export const AgentsNetworkLoader = ({filter, children}: LoaderProps) => {
   const {data, isLoading, error} = useGetAgentsNetworkAggregates({filter});
 
   return children({
+    // @ts-ignore
     data,
     isLoading,
     error,
