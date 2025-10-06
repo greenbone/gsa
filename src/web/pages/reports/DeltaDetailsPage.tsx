@@ -450,9 +450,6 @@ const DeltaReportDetails = () => {
 
       const {data} = response;
 
-      const stringifiedData =
-        typeof data === 'string' ? data : JSON.stringify(data);
-
       const filename = generateFilename({
         creationTime: entity.creationTime,
         extension,
@@ -465,13 +462,13 @@ const DeltaReportDetails = () => {
         username,
       });
 
-      onDownload({filename, data: stringifiedData});
+      onDownload({filename, data});
     } catch (error) {
       handleError(error);
     }
   };
 
-  const handleFilterCreated = filter => {
+  const handleFilterCreated = (filter: Filter) => {
     void load(filter);
     loadFilters();
   };

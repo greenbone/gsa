@@ -6,11 +6,11 @@
 import React, {useRef, useCallback} from 'react';
 import logger from 'gmp/log';
 import {hasValue} from 'gmp/utils/identity';
-import Download from 'web/components/form/Download';
+import Download, {DownloadData} from 'web/components/form/Download';
 
 type DownloadParams = {
   filename: string;
-  data: string;
+  data: DownloadData;
   mimetype?: string;
 };
 
