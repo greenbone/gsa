@@ -81,7 +81,6 @@ const AgentListPage = () => {
   } = useSelection<Agent>();
 
   const handleBulkDelete = useCallback(async () => {
-    // @ts-expect-error
     const entitiesCommand = gmp.agents;
     let promise;
 
@@ -89,11 +88,13 @@ const AgentListPage = () => {
       const agents = selectedEntities.filter(
         entity => entity.id !== null && entity.id !== undefined,
       );
+      //@ts-expect-error
       promise = entitiesCommand.delete(agents);
     } else {
       const agents = allEntities.filter(
         entity => entity.id !== null && entity.id !== undefined,
       );
+      //@ts-expect-error
       promise = entitiesCommand.delete(agents);
     }
 
@@ -102,25 +103,19 @@ const AgentListPage = () => {
     } catch (error) {
       showError(error as Error);
     }
-  }, [
-    selectionType,
-    selectedEntities,
-    allEntities,
-    // @ts-expect-error
-    gmp.agents,
-    showError,
-  ]);
+  }, [selectionType, selectedEntities, allEntities, gmp.agents, showError]);
 
   const handleBulkAuthorize = useCallback(async () => {
-    // @ts-expect-error
     const entitiesCommand = gmp.agents;
     let promise;
 
     if (selectionType === SelectionType.SELECTION_USER) {
       const agents = selectedEntities.filter(a => a.id !== null);
+      //@ts-expect-error
       promise = entitiesCommand.authorize(agents);
     } else {
       const agents = allEntities.filter(a => a.id !== null);
+      //@ts-expect-error
       promise = entitiesCommand.authorize(agents);
     }
 
@@ -129,25 +124,19 @@ const AgentListPage = () => {
     } catch (error) {
       showError(error as Error);
     }
-  }, [
-    selectionType,
-    selectedEntities,
-    allEntities,
-    // @ts-expect-error
-    gmp.agents,
-    showError,
-  ]);
+  }, [selectionType, selectedEntities, allEntities, gmp.agents, showError]);
 
   const handleBulkRevoke = useCallback(async () => {
-    // @ts-expect-error
     const entitiesCommand = gmp.agents;
     let promise;
 
     if (selectionType === SelectionType.SELECTION_USER) {
       const agents = selectedEntities.filter(a => a.id !== null);
+      //@ts-expect-error
       promise = entitiesCommand.revoke(agents);
     } else {
       const agents = allEntities.filter(a => a.id !== null);
+      //@ts-expect-error
       promise = entitiesCommand.revoke(agents);
     }
 
@@ -156,14 +145,7 @@ const AgentListPage = () => {
     } catch (error) {
       showError(error as Error);
     }
-  }, [
-    selectionType,
-    selectedEntities,
-    allEntities,
-    // @ts-expect-error
-    gmp.agents,
-    showError,
-  ]);
+  }, [selectionType, selectedEntities, allEntities, gmp.agents, showError]);
 
   const handleFilterChanged = useCallback(
     (newFilter?: Filter) => {

@@ -16,7 +16,10 @@ import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';
 
-import AgentConfigurationSection from 'web/pages/agents/components/AgentConfigurationSection';
+import AgentConfigurationSection, {
+  DEFAULT_CRON_EXPRESSION,
+  DEFAULT_HEARTBEAT_INTERVAL,
+} from 'web/pages/agents/components/AgentConfigurationSection';
 
 const AgentDialogEdit = ({
   id,
@@ -25,8 +28,7 @@ const AgentDialogEdit = ({
   version = '',
   status = '',
   port = 0,
-  schedulerCronTime = undefined,
-  heartbeatIntervalInSeconds,
+  intervalInSeconds,
   config,
   title,
   lastContact,
@@ -40,44 +42,14 @@ const AgentDialogEdit = ({
   name = name || _('Unnamed');
   title = title || _('Edit Agent Details');
 
-  const extractSchedulerCronTime = () => {
-    const cronTimes = config?.agent_script_executor?.scheduler_cron_times;
-    if (Array.isArray(cronTimes) && cronTimes.length > 0) {
-      const firstCronTime = cronTimes[0];
-      if (typeof firstCronTime === 'string' && !firstCronTime.startsWith('@')) {
-        return firstCronTime;
-      }
-    }
-
-    const cronConfig = config?.agent_script_executor?.scheduler_cron_time;
-
-    if (typeof cronConfig === 'string') {
-      if (cronConfig.startsWith('@')) {
-        return '0 */12 * * *';
-      }
-      return cronConfig;
-    } else if (typeof cronConfig === 'object' && cronConfig?.cron) {
-      if (typeof cronConfig.cron === 'string') {
-        if (cronConfig.cron.startsWith('@')) {
-          return '0 */12 * * *';
-        }
-        return cronConfig.cron;
-      } else if (Array.isArray(cronConfig.cron)) {
-        const cronExpression = cronConfig.cron.find(
-          cron => typeof cron === 'string' && !cron.startsWith('@'),
-        );
-        return cronExpression || '0 */12 * * *';
-      }
-    }
-
-    return '0 */12 * * *';
-  };
-
   const extractedSchedulerCronTime =
-    schedulerCronTime ?? extractSchedulerCronTime();
+    config?.agentScriptExecutor?.schedulerCronTimes?.[0] ??
+    DEFAULT_CRON_EXPRESSION;
 
   const extractedHeartbeatInterval =
-    heartbeatIntervalInSeconds ?? config?.heartbeat?.interval_in_seconds ?? 300;
+    intervalInSeconds ??
+    config?.heartbeat?.intervalInSeconds ??
+    DEFAULT_HEARTBEAT_INTERVAL;
 
   const data = {
     id,
@@ -87,21 +59,29 @@ const AgentDialogEdit = ({
     status,
     port,
     schedulerCronTime: extractedSchedulerCronTime,
-    heartbeatIntervalInSeconds: extractedHeartbeatInterval,
+    intervalInSeconds: extractedHeartbeatInterval,
     lastContact,
     systemScanCompleted,
     configurationUpdated,
     heartbeatReceived,
   };
 
+  const defaultsKey = [
+    id,
+    extractedSchedulerCronTime,
+    extractedHeartbeatInterval,
+    ipAddress,
+  ].join('|');
+
   const [userTimezone] = useUserTimezone();
   return (
     <SaveDialog
+      key={defaultsKey}
       defaultValues={{
         ...data,
         schedulerCronExpression: extractedSchedulerCronTime,
         useAdvancedCron: false,
-        cronPreset: 'every-12-hours',
+        intervalInSeconds: extractedHeartbeatInterval,
       }}
       title={title}
       values={{lastContact}}
@@ -176,7 +156,7 @@ const AgentDialogEdit = ({
 
             <AgentConfigurationSection
               activeCronExpression={extractedSchedulerCronTime}
-              heartbeatIntervalInSeconds={state.heartbeatIntervalInSeconds}
+              intervalInSeconds={state.intervalInSeconds}
               port={state.port}
               schedulerCronExpression={state.schedulerCronExpression}
               useAdvancedCron={state.useAdvancedCron}

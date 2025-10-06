@@ -49,13 +49,12 @@ export const getConnectionStatusLabel = (status?: string) => {
 };
 
 export const getAuthorizationLabel = (authorized?: number) => {
-  const isAuthorized = authorized === 1;
   const Label = createLabel(
-    isAuthorized ? Theme.green : Theme.errorRed,
-    isAuthorized ? Theme.green : Theme.errorRed,
+    authorized ? Theme.green : Theme.errorRed,
+    authorized ? Theme.green : Theme.errorRed,
     'white',
     'authorization-status-label',
-    isAuthorized ? _l('Yes') : _l('No'),
+    authorized ? _l('Yes') : _l('No'),
   );
 
   return <Label />;

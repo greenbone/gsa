@@ -9,9 +9,17 @@ import {XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import Agent from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';
+import {
+  AGENT_CONTROLLER_SCANNER_TYPE,
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import {map} from 'gmp/utils/array';
 
 const log = logger.getLogger('gmp.commands.agents');
+
+const AGENT_CONTROLLER_FILTER = Filter.fromString(
+  `scanner_type=${AGENT_CONTROLLER_SCANNER_TYPE} or scanner_type=${AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}`,
+);
 
 class AgentsCommand extends EntitiesCommand<Agent> {
   constructor(http: GmpHttp) {
@@ -82,6 +90,38 @@ class AgentsCommand extends EntitiesCommand<Agent> {
   getEntitiesResponse(root: XmlResponseData): XmlResponseData {
     // @ts-expect-error
     return root.get_agents.get_agents_response;
+  }
+
+  // @ts-ignore
+  async authorize(agents: Agent[]) {
+    log.debug('Authorizing agent', {agents});
+    const data: Record<string, string | number | boolean | undefined> = {
+      cmd: 'modify_agent',
+    };
+
+    if (agents?.length) {
+      // @ts-ignore
+      data['agent_ids:'] = agents.map(agent => agent.id);
+    }
+    data.authorized = 1;
+    const response = await this.httpPost(data);
+    return response.setData(agents);
+  }
+
+  // @ts-ignore
+  async revoke(agents: Agent[]) {
+    log.debug('Revoking agent', {agents});
+    const data: Record<string, string | number | boolean | undefined> = {
+      cmd: 'modify_agent',
+    };
+
+    if (agents?.length) {
+      // @ts-ignore
+      data['agent_ids:'] = agents.map(agent => agent.id);
+    }
+    data.authorized = 0;
+    const response = await this.httpPost(data);
+    return response.setData(agents);
   }
 }
 
