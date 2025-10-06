@@ -40,7 +40,7 @@ export function useGmpMutation<
       if (!gmpCommand || !gmpCommand) {
         throw new Error(`GMP command for ${entityType}.${method} not found`);
       }
-      return await gmpMethod.call(gmpMethod, input);
+      return await gmpMethod.call(gmpCommand, input);
     },
     onSuccess: data => {
       if (isDefined(invalidateQueryIds)) {

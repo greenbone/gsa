@@ -96,7 +96,7 @@ const AgentGroupsComponent = ({
     const backendData = {
       name: data.name,
       scannerId: data.agentController,
-      agentsIds: data.agentIds,
+      agentIds: data.agentIds,
       comment: data.comment,
       authorized: data.authorized,
       attempts: data.config?.agentControl?.retry.attempts,
@@ -105,14 +105,14 @@ const AgentGroupsComponent = ({
       bulkSize: data.config?.agentScriptExecutor?.bulkSize,
       bulkThrottleTime: data.config?.agentScriptExecutor?.bulkThrottleTimeInMs,
       indexerDirDepth: data.config?.agentScriptExecutor?.indexerDirDepth,
-      intervalInSeconds: data.config?.heartbeat?.intervalInSeconds,
+      intervalInSeconds: data.intervalInSeconds,
       missUntilInactive: data.config?.heartbeat?.missUntilInactive,
       schedulerCronTimes: data.schedulerCronExpression,
     };
 
     if (isDefined(selectedAgentGroup)) {
       await saveMutation.mutateAsync({
-        ...data,
+        ...backendData,
         id: selectedAgentGroup.id as string,
       });
     } else {

@@ -20,7 +20,7 @@ interface AgentConfigurationSectionProps {
   port?: number;
   schedulerCronExpression?: string;
   useAdvancedCron?: boolean;
-  heartbeatIntervalInSeconds?: number;
+  intervalInSeconds?: number;
   activeCronExpression?: string;
   onValueChange: (value: string | number | boolean, name?: string) => void;
 }
@@ -47,7 +47,7 @@ const AgentConfigurationSection = ({
   port,
   schedulerCronExpression = DEFAULT_CRON_EXPRESSION,
   useAdvancedCron = false,
-  heartbeatIntervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
+  intervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
   activeCronExpression,
   onValueChange,
   hidePort = false,
@@ -180,10 +180,10 @@ const AgentConfigurationSection = ({
         {/* Heartbeat Configuration */}
         <NumberField
           min={1}
-          name="heartbeatIntervalInSeconds"
+          name="intervalInSeconds"
           title={_('Heartbeat Interval (seconds)')}
           type="int"
-          value={heartbeatIntervalInSeconds}
+          value={intervalInSeconds}
           onChange={onValueChange}
         />
       </Column>

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {AgentConfig} from 'gmp/models/agent';
 import AgentGroup from 'gmp/models/agentgroup';
 import Filter from 'gmp/models/filter';
@@ -41,7 +41,7 @@ interface AgentGroupsDialogDefaultValues {
   authorized?: boolean;
   comment: string;
   config?: AgentConfig;
-  heartbeatIntervalInSeconds?: number;
+  intervalInSeconds?: number;
   name: string;
   network: string;
   port: number;
@@ -96,19 +96,33 @@ const AgentGroupsDialog = ({
     }`.trim(),
   }));
   const selectedAgents = map(agentGroup?.agents, agent => agent.id as string);
-
+  const first = agentsData?.entities?.find(
+    agent => agent.id === selectedAgents[0],
+  );
+  const firstAgentFromGroup = useMemo(() => {
+    const firstId = selectedAgents[0];
+    return agentsData?.entities?.find(a => a.id === firstId);
+  }, [agentsData, selectedAgents]);
   const schedulerCron =
-    agentsData?.entities?.[0].config?.agentScriptExecutor
-      ?.schedulerCronTimes?.[0] ?? DEFAULT_CRON_EXPRESSION;
+    first?.config?.agentScriptExecutor?.schedulerCronTimes?.[0] ??
+    DEFAULT_CRON_EXPRESSION;
   const heartbeatInterval =
-    agentsData?.entities?.[0]?.config?.heartbeat?.intervalInSeconds ??
-    DEFAULT_HEARTBEAT_INTERVAL;
+    first?.config?.heartbeat?.intervalInSeconds ?? DEFAULT_HEARTBEAT_INTERVAL;
+
+  const defaultsKey = [
+    agentGroup?.id ?? 'new',
+    selectedAgentController || 'no-ctrl',
+    selectedAgents[0] || 'no-first',
+    schedulerCron,
+    heartbeatInterval,
+  ].join('|');
 
   return (
     <SaveDialog<AgentGroupsDialogValues, AgentGroupsDialogDefaultValues>
+      key={defaultsKey}
       defaultValues={{
-        config: agentsData?.entities?.[0]?.config,
-        authorized: agentsData?.entities?.[0]?.authorized,
+        config: firstAgentFromGroup?.config,
+        authorized: firstAgentFromGroup?.authorized,
         name: agentGroup?.name ?? '',
         comment: agentGroup?.comment ?? '',
         agentIds: selectedAgents,
@@ -116,14 +130,26 @@ const AgentGroupsDialog = ({
         port: 0,
         schedulerCronExpression: schedulerCron,
         useAdvancedCron: false,
-        heartbeatIntervalInSeconds: heartbeatInterval,
+        intervalInSeconds: heartbeatInterval,
       }}
       title={title}
       values={{
         agentController: selectedAgentController,
       }}
       onClose={onClose}
-      onSave={onSave}
+      onSave={values => {
+        const firstSelected = agentsData?.entities?.find(
+          a => a.id === values.agentIds?.[0],
+        );
+
+        const payload: AgentGroupDialogData = {
+          ...values,
+          authorized: firstSelected?.authorized ?? values.authorized,
+          config: firstSelected?.config ?? values.config,
+        };
+
+        return onSave?.(payload);
+      }}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -168,7 +194,7 @@ const AgentGroupsDialog = ({
               <AgentConfigurationSection
                 hidePort
                 activeCronExpression={schedulerCron}
-                heartbeatIntervalInSeconds={state.heartbeatIntervalInSeconds}
+                intervalInSeconds={state.intervalInSeconds}
                 port={state.port}
                 schedulerCronExpression={state.schedulerCronExpression}
                 useAdvancedCron={state.useAdvancedCron}
