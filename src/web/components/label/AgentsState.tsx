@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_l} from 'gmp/locale/lang';
+import {_} from 'gmp/locale/lang';
 import createLabel from 'web/components/label/Label';
 import Theme from 'web/utils/Theme';
 
@@ -54,7 +54,7 @@ export const getAuthorizationLabel = (authorized?: boolean) => {
     authorized ? Theme.green : Theme.errorRed,
     'white',
     'authorization-status-label',
-    authorized ? _l('Yes') : _l('No'),
+    authorized ? _('Yes') : _('No'),
   );
 
   return <Label />;
