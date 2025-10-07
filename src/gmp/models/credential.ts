@@ -10,7 +10,7 @@ import {parseYesNo, NO_VALUE, parseDate, YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-type CredentialType =
+export type CredentialType =
   | typeof CERTIFICATE_CREDENTIAL_TYPE
   | typeof KRB5_CREDENTIAL_TYPE
   | typeof PASSWORD_ONLY_CREDENTIAL_TYPE
@@ -20,11 +20,20 @@ type CredentialType =
   | typeof USERNAME_PASSWORD_CREDENTIAL_TYPE
   | typeof USERNAME_SSH_KEY_CREDENTIAL_TYPE;
 
-type TimeStatus =
+export type CertificateStatus =
   | typeof CERTIFICATE_STATUS_EXPIRED
   | typeof CERTIFICATE_STATUS_INACTIVE
   | typeof CERTIFICATE_STATUS_VALID
   | typeof CERTIFICATE_STATUS_UNKNOWN;
+
+export type SNMPAuthAlgorithmType =
+  | typeof SNMP_AUTH_ALGORITHM_MD5
+  | typeof SNMP_AUTH_ALGORITHM_SHA1;
+
+export type SNMPPrivacyAlgorithmType =
+  | typeof SNMP_PRIVACY_ALGORITHM_NONE
+  | typeof SNMP_PRIVACY_ALGORITHM_AES
+  | typeof SNMP_PRIVACY_ALGORITHM_DES;
 
 interface CredentialElement extends ModelElement {
   certificate_info?: {
@@ -55,7 +64,7 @@ interface CredentialElement extends ModelElement {
 export interface CertificateInfo {
   activationTime?: Date;
   expirationTime?: Date;
-  timeStatus?: TimeStatus;
+  timeStatus?: CertificateStatus;
   issuer?: string;
   subject?: string;
   serial?: string;
@@ -83,62 +92,75 @@ export const PASSWORD_ONLY_CREDENTIAL_TYPE = 'pw';
 export const CERTIFICATE_CREDENTIAL_TYPE = 'cc';
 export const KRB5_CREDENTIAL_TYPE = 'krb5';
 
-export const SSH_CREDENTIAL_TYPES = [
+export const SSH_CREDENTIAL_TYPES: readonly CredentialType[] = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 ];
 
-export const SSH_ELEVATE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
+export const SSH_ELEVATE_CREDENTIAL_TYPES: readonly CredentialType[] = [
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+];
 
-export const SMB_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
+export const SMB_CREDENTIAL_TYPES: readonly CredentialType[] = [
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+];
 
-export const ESXI_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
+export const ESXI_CREDENTIAL_TYPES: readonly CredentialType[] = [
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+];
 
-export const SNMP_CREDENTIAL_TYPES = [SNMP_CREDENTIAL_TYPE];
+export const SNMP_CREDENTIAL_TYPES: readonly CredentialType[] = [
+  SNMP_CREDENTIAL_TYPE,
+];
 
-export const KRB5_CREDENTIAL_TYPES = [KRB5_CREDENTIAL_TYPE];
+export const KRB5_CREDENTIAL_TYPES: readonly CredentialType[] = [
+  KRB5_CREDENTIAL_TYPE,
+];
 
-export const EMAIL_CREDENTIAL_TYPES = [
+export const EMAIL_CREDENTIAL_TYPES: readonly CredentialType[] = [
   SMIME_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
 ];
 
-export const VFIRE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
+export const VFIRE_CREDENTIAL_TYPES: readonly CredentialType[] = [
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+];
 
-export const ALL_CREDENTIAL_TYPES = [
+export const ALL_CREDENTIAL_TYPES: readonly CredentialType[] = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
   SMIME_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
   PASSWORD_ONLY_CREDENTIAL_TYPE,
+  CERTIFICATE_CREDENTIAL_TYPE,
   KRB5_CREDENTIAL_TYPE,
-] as const;
+];
 
-export const ssh_credential_filter = credential =>
+export const ssh_credential_filter = (credential: Credential) =>
   credential.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
   credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
-export const smb_credential_filter = credential =>
+export const smb_credential_filter = (credential: Credential) =>
   credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
-export const esxi_credential_filter = credential =>
+export const esxi_credential_filter = (credential: Credential) =>
   credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
-export const snmp_credential_filter = credential =>
+export const snmp_credential_filter = (credential: Credential) =>
   credential.credential_type === SNMP_CREDENTIAL_TYPE;
 
-export const krb5CredentialFilter = credential =>
+export const krb5CredentialFilter = (credential: Credential) =>
   credential.credential_type === KRB5_CREDENTIAL_TYPE;
 
-export const email_credential_filter = credential =>
+export const email_credential_filter = (credential: Credential) =>
   credential.credential_type === SMIME_CREDENTIAL_TYPE ||
   credential.credential_type === PGP_CREDENTIAL_TYPE;
 
-export const password_only_credential_filter = credential =>
+export const password_only_credential_filter = (credential: Credential) =>
   credential.credential_type === PASSWORD_ONLY_CREDENTIAL_TYPE;
 
-export const vFire_credential_filter = credential =>
+export const vFire_credential_filter = (credential: Credential) =>
   credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const SNMP_AUTH_ALGORITHM_MD5 = 'md5';
@@ -169,7 +191,7 @@ export const getCredentialTypeName = (type: CredentialType) =>
 
 const parseTimeStatus = (
   status: string | undefined,
-): TimeStatus | undefined => {
+): CertificateStatus | undefined => {
   if (!isDefined(status)) {
     return undefined;
   }
