@@ -59,7 +59,6 @@ const ScannerDetailsPage = ({
   const navigate = useNavigate();
   return (
     <ScannerComponent
-      onCertificateDownloaded={onDownloaded}
       onCloneError={onError}
       onCloned={goToDetails('scanner', navigate)}
       onCreated={goToDetails('scanner', navigate)}
@@ -81,7 +80,6 @@ const ScannerDetailsPage = ({
         create,
         delete: deleteFunc,
         download,
-        downloadCertificate,
         downloadCredential,
         edit,
         verify,
@@ -95,7 +93,6 @@ const ScannerDetailsPage = ({
           toolBarIcons={
             <ScannerDetailsPageToolBarIcons
               entity={entity}
-              onScannerCertificateDownloadClick={downloadCertificate}
               onScannerCloneClick={clone}
               onScannerCreateClick={create}
               onScannerCredentialDownloadClick={downloadCredential}

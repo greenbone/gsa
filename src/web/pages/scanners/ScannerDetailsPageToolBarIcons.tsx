@@ -22,7 +22,6 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface ScannerDetailsPageToolBarIconsProps {
   entity: Scanner;
-  onScannerCertificateDownloadClick?: (scanner: Scanner) => void;
   onScannerCloneClick?: (scanner: Scanner) => void;
   onScannerCreateClick?: () => void;
   onScannerCredentialDownloadClick?: (scanner: Scanner) => void;
@@ -34,7 +33,6 @@ interface ScannerDetailsPageToolBarIconsProps {
 
 const ScannerDetailsPageToolBarIcons = ({
   entity,
-  onScannerCertificateDownloadClick,
   onScannerCloneClick,
   onScannerCreateClick,
   onScannerCredentialDownloadClick,
@@ -92,13 +90,6 @@ const ScannerDetailsPageToolBarIcons = ({
             title={_('Download Certificate')}
             value={entity}
             onClick={onScannerCredentialDownloadClick}
-          />
-        )}
-        {isDefined(entity.caPub) && (
-          <DownloadKeyIcon<Scanner>
-            title={_('Download CA Certificate')}
-            value={entity}
-            onClick={onScannerCertificateDownloadClick}
           />
         )}
       </IconDivider>
