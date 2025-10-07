@@ -48,7 +48,7 @@ export const getConnectionStatusLabel = (status?: string) => {
   return <Label />;
 };
 
-export const getAuthorizationLabel = (authorized?: number) => {
+export const getAuthorizationLabel = (authorized?: boolean) => {
   const Label = createLabel(
     authorized ? Theme.green : Theme.errorRed,
     authorized ? Theme.green : Theme.errorRed,
