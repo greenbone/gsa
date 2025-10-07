@@ -88,13 +88,11 @@ const AgentListPage = () => {
       const agents = selectedEntities.filter(
         entity => entity.id !== null && entity.id !== undefined,
       );
-      //@ts-expect-error
       promise = entitiesCommand.delete(agents);
     } else {
       const agents = allEntities.filter(
         entity => entity.id !== null && entity.id !== undefined,
       );
-      //@ts-expect-error
       promise = entitiesCommand.delete(agents);
     }
 
@@ -111,11 +109,9 @@ const AgentListPage = () => {
 
     if (selectionType === SelectionType.SELECTION_USER) {
       const agents = selectedEntities.filter(a => a.id !== null);
-      //@ts-expect-error
       promise = entitiesCommand.authorize(agents);
     } else {
       const agents = allEntities.filter(a => a.id !== null);
-      //@ts-expect-error
       promise = entitiesCommand.authorize(agents);
     }
 
@@ -132,11 +128,9 @@ const AgentListPage = () => {
 
     if (selectionType === SelectionType.SELECTION_USER) {
       const agents = selectedEntities.filter(a => a.id !== null);
-      //@ts-expect-error
       promise = entitiesCommand.revoke(agents);
     } else {
       const agents = allEntities.filter(a => a.id !== null);
-      //@ts-expect-error
       promise = entitiesCommand.revoke(agents);
     }
 
