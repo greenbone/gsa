@@ -8,7 +8,12 @@ import {EntityActionData} from 'gmp/commands/entity';
 import Response from 'gmp/http/response';
 import {XmlMeta} from 'gmp/http/transform/fastxml';
 import ActionResult from 'gmp/models/actionresult';
-import Credential from 'gmp/models/credential';
+import Credential, {
+  CERTIFICATE_CREDENTIAL_TYPE,
+  CredentialType,
+} from 'gmp/models/credential';
+import Filter from 'gmp/models/filter';
+import FilterTerm from 'gmp/models/filter/filterterm';
 import Scanner, {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
@@ -66,6 +71,19 @@ interface ScannerComponentProps {
   onVerifyError?: (error: Error) => void;
 }
 
+const createCredentialsFilter = (types: CredentialType[]) => {
+  return new Filter({
+    terms: types.map(
+      credentialType =>
+        new FilterTerm({
+          keyword: 'type',
+          value: credentialType,
+          relation: '=',
+        }),
+    ),
+  });
+};
+
 const ScannerComponent = ({
   children,
   onCloneError,
@@ -99,6 +117,9 @@ const ScannerComponent = ({
     undefined,
   );
   const [credentials, setCredentials] = useState<Credential[]>([]);
+  const [credentialTypes, setCredentialTypes] = useState<CredentialType[]>([
+    CERTIFICATE_CREDENTIAL_TYPE,
+  ]);
   const [host, setHost] = useState<string | undefined>(undefined);
   const [id, setId] = useState<string | undefined>(undefined);
   const [name, setName] = useState<string | undefined>(undefined);
@@ -110,7 +131,9 @@ const ScannerComponent = ({
   const openScannerDialog = async (scanner?: Scanner) => {
     // @ts-expect-error
     const credentialsPromise = gmp.credentials
-      .getAll()
+      .getAll({
+        filter: createCredentialsFilter(credentialTypes),
+      })
       .then(response => response.data);
 
     if (isDefined(scanner)) {
@@ -163,7 +186,8 @@ const ScannerComponent = ({
     closeScannerDialog();
   };
 
-  const openCredentialsDialog = () => {
+  const openCredentialsDialog = (values: CredentialType[]) => {
+    setCredentialTypes(values);
     setCredentialDialogVisible(true);
   };
 
@@ -202,7 +226,9 @@ const ScannerComponent = ({
 
     // @ts-expect-error
     const credentials = await gmp.credentials
-      .getAll()
+      .getAll({
+        filter: createCredentialsFilter(credentialTypes),
+      })
       .then(response => response.data);
     setCredentials(credentials);
     closeCredentialsDialog();
@@ -321,7 +347,8 @@ const ScannerComponent = ({
         />
       )}
       {credentialDialogVisible && (
-        <CredentialsDialog
+        <CredentialDialog
+          types={credentialTypes}
           onClose={handleCloseCredentialsDialog}
           onSave={handleCreateCredential}
         />
