@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import Agent from 'gmp/models/agents';
+import Agent from 'gmp/models/agent';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 

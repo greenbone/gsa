@@ -5,7 +5,7 @@
 
 import {useCallback, useMemo, useRef, useState} from 'react';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Agent from 'gmp/models/agents';
+import Agent from 'gmp/models/agent';
 import Filter, {AGENTS_FILTER_FILTER} from 'gmp/models/filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';

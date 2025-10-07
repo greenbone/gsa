@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Agent from 'gmp/models/agents';
+import Agent from 'gmp/models/agent';
 import {CircleMinusIcon, CirclePlusIcon, EditIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {

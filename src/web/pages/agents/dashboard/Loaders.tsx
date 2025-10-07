@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {useQuery} from '@tanstack/react-query';
-import Agents from 'gmp/models/agents';
+import Agents from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 
