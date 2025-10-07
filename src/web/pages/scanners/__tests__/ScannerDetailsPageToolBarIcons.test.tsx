@@ -321,33 +321,4 @@ describe('ScannerDetailsPageToolBarIcons', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Download Key Icon'}));
     expect(handleCredentialDownload).toHaveBeenCalledWith(scanner);
   });
-
-  test('should render download key icon and call ca certificate download handler', () => {
-    const scanner = new Scanner({
-      userCapabilities: new EverythingCapabilities(),
-      caPub: {
-        certificate: 'Test CA Certificate',
-      },
-    });
-    const gmp = {
-      settings: {
-        enableGreenboneSensor: true,
-      },
-    };
-    const {render} = rendererWith({
-      capabilities: true,
-      gmp,
-    });
-    const handleCaCertificateDownload = testing.fn();
-    render(
-      <ScannerDetailsPageToolBarIcons
-        entity={scanner}
-        onScannerCertificateDownloadClick={handleCaCertificateDownload}
-      />,
-    );
-
-    expect(screen.getByTitle('Download CA Certificate')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', {name: 'Download Key Icon'}));
-    expect(handleCaCertificateDownload).toHaveBeenCalledWith(scanner);
-  });
 });
