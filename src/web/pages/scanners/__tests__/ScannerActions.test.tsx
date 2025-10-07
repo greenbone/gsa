@@ -31,7 +31,6 @@ describe('ScannerActions tests', () => {
     expect(screen.getByTitle('Export Scanner')).toBeInTheDocument();
     expect(screen.getByTitle('Verify Scanner')).toBeInTheDocument();
     expect(screen.getByTitle('Download Certificate')).toBeInTheDocument();
-    expect(screen.getByTitle('Download CA Certificate')).toBeInTheDocument();
   });
 
   test('should render action icons without user capabilities', () => {
@@ -59,7 +58,6 @@ describe('ScannerActions tests', () => {
     expect(screen.getByTitle('Export Scanner')).toBeInTheDocument();
     expect(screen.getByTitle('Verify Scanner')).toBeInTheDocument();
     expect(screen.getByTitle('Download Certificate')).toBeInTheDocument();
-    expect(screen.getByTitle('Download CA Certificate')).toBeInTheDocument();
   });
 
   test('should render action icons without capabilities', () => {
@@ -88,7 +86,6 @@ describe('ScannerActions tests', () => {
       screen.getByTitle('Permissions to verify Scanner denied'),
     ).toBeInTheDocument();
     expect(screen.getByTitle('Download Certificate')).toBeInTheDocument();
-    expect(screen.getByTitle('Download CA Certificate')).toBeInTheDocument();
   });
 
   test('should call onScannerDeleteClick when TrashIcon is clicked', () => {
@@ -212,31 +209,6 @@ describe('ScannerActions tests', () => {
     });
     fireEvent.click(credentialIcon);
     expect(handleScannerCredentialDownloadClick).toHaveBeenCalledWith(scanner);
-  });
-
-  test('should call onScannerCertificateDownloadClick when DownloadKeyIcon for CA certificate is clicked', () => {
-    const scanner = new Scanner({
-      id: '1234',
-      name: 'My Scanner',
-      scannerType: OPENVASD_SCANNER_TYPE,
-      userCapabilities: new EverythingCapabilities(),
-      caPub: {certificate: 'My CA Certificate'},
-    });
-    const handleScannerCertificateDownloadClick = testing.fn();
-    const {render} = rendererWithTableRow({capabilities: true});
-    render(
-      <ScannerActions
-        entity={scanner}
-        onScannerCertificateDownloadClick={
-          handleScannerCertificateDownloadClick
-        }
-      />,
-    );
-    const caCertificateIcon = screen.getByRole('button', {
-      name: /Download Key Icon/i,
-    });
-    fireEvent.click(caCertificateIcon);
-    expect(handleScannerCertificateDownloadClick).toHaveBeenCalledWith(scanner);
   });
 
   test('should allow to select and deselect the scanner', () => {

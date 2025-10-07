@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
+import Filter from 'gmp/models/filter';
 import Scanner, {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
@@ -205,7 +206,9 @@ describe('ScannerComponent tests', () => {
     const button = screen.getByRole('button', {name: 'edit'});
     fireEvent.click(button);
     expect(gmp.scanner.get).toHaveBeenCalledWith({id: '1234'});
-    expect(gmp.credentials.getAll).toHaveBeenCalledWith();
+    expect(gmp.credentials.getAll).toHaveBeenCalledWith({
+      filter: Filter.fromString('type=cc'),
+    });
 
     await wait();
 
@@ -254,9 +257,8 @@ describe('ScannerComponent tests', () => {
     await wait();
 
     expect(gmp.scanner.create).toHaveBeenCalledWith({
-      caPub: undefined,
       comment: '',
-      credentialId: '',
+      credentialId: undefined,
       host: 'localhost',
       id: undefined,
       name: 'Unnamed',
