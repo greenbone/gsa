@@ -28,7 +28,9 @@ import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
-import CredentialsDialog from 'web/pages/credentials/Dialog';
+import CredentialDialog, {
+  CredentialDialogState,
+} from 'web/pages/credentials/CredentialDialog';
 import ScannerDialog, {
   ScannerDialogState,
 } from 'web/pages/scanners/ScannerDialog';
@@ -190,7 +192,7 @@ const ScannerComponent = ({
     }
   };
 
-  const handleCreateCredential = async data => {
+  const handleCreateCredential = async (data: CredentialDialogState) => {
     // @ts-expect-error
     const credential = await gmp.credential
       .create(data)
