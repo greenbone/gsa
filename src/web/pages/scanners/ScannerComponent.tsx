@@ -41,7 +41,6 @@ interface ScannerComponentRenderProps {
   create: () => Promise<void>;
   delete: (scanner: Scanner) => Promise<void>;
   download: (scanner: Scanner) => Promise<void>;
-  downloadCertificate: (scanner: Scanner) => void;
   downloadCredential: (scanner: Scanner) => Promise<void>;
   edit: (scanner: Scanner) => Promise<void>;
   verify: (scanner: Scanner) => Promise<void>;
@@ -49,7 +48,6 @@ interface ScannerComponentRenderProps {
 
 interface ScannerComponentProps {
   children: (props: ScannerComponentRenderProps) => React.ReactNode;
-  onCertificateDownloaded?: OnDownloadedFunc;
   onCloneError?: (error: Error) => void;
   onCloned?: (response: Response<EntityActionData, XmlMeta>) => void;
   onCreateError?: (error: Error) => void;
@@ -68,7 +66,6 @@ interface ScannerComponentProps {
 
 const ScannerComponent = ({
   children,
-  onCertificateDownloaded,
   onCloneError,
   onCloned,
   onCreateError,
@@ -95,7 +92,6 @@ const ScannerComponent = ({
 
   const [credentialDialogVisible, setCredentialDialogVisible] = useState(false);
   const [scannerDialogVisible, setScannerDialogVisible] = useState(false);
-  const [caPub, setCaPub] = useState<File | undefined>(undefined);
   const [comment, setComment] = useState(undefined);
   const [credentialId, setCredentialId] = useState<string | undefined>(
     undefined,
@@ -126,11 +122,6 @@ const ScannerComponent = ({
         name: shorten(loadedScanner.name),
       });
 
-      setCaPub(
-        isDefined(loadedScanner.ca_pub)
-          ? loadedScanner.ca_pub.certificate
-          : undefined,
-      );
       setComment(loadedScanner.comment);
       setCredentials(credentials);
       setCredentialId(
@@ -148,7 +139,6 @@ const ScannerComponent = ({
       setType(loadedScanner.scannerType);
     } else {
       const credentials = await credentialsPromise;
-      setCaPub(undefined);
       setComment(undefined);
       setCredentialId(undefined);
       setCredentials(credentials);
@@ -220,28 +210,6 @@ const ScannerComponent = ({
     setCredentialId(credId);
   };
 
-  const handleDownloadCertificate = (scanner: Scanner) => {
-    if (!isDefined(onCertificateDownloaded)) {
-      return;
-    }
-    const {creationTime, entityType, id, modificationTime, name, caPub} =
-      scanner;
-    const filename = generateFilename({
-      creationTime,
-      extension: 'pem',
-      fileNameFormat: detailsExportFileName,
-      id,
-      modificationTime,
-      resourceName: name,
-      resourceType: entityType,
-      username,
-    });
-    return onCertificateDownloaded({
-      filename,
-      data: caPub?.certificate as string,
-    });
-  };
-
   const handleDownloadCredential = (scanner: Scanner) => {
     const credential = scanner.credential as Credential;
     const {creationTime, entityType, id, modificationTime, name} = credential;
@@ -285,10 +253,6 @@ const ScannerComponent = ({
     setPort(value);
   };
 
-  const handleScannerCaPubChange = (value: File) => {
-    setCaPub(value);
-  };
-
   const handleScannerDownload = useEntityDownload<Scanner>('scanner', {
     onDownloadError,
     onDownloaded,
@@ -324,14 +288,12 @@ const ScannerComponent = ({
         create: openScannerDialog,
         delete: handleScannerDelete,
         download: handleScannerDownload,
-        downloadCertificate: handleDownloadCertificate,
         downloadCredential: handleDownloadCredential,
         edit: openScannerDialog,
         verify: handleVerifyScanner as (scanner: Scanner) => Promise<void>,
       })}
       {scannerDialogVisible && (
         <ScannerDialog
-          caPub={caPub}
           comment={comment}
           credentialId={credentialId}
           credentials={credentials}
@@ -352,7 +314,6 @@ const ScannerComponent = ({
             await promise;
             return closeScannerDialog();
           }}
-          onScannerCaPubChange={handleScannerCaPubChange}
           onScannerPortChange={handleScannerPortChange}
           onScannerTypeChange={handleScannerTypeChange}
         />

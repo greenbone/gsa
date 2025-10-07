@@ -13,7 +13,6 @@ import {
 } from 'gmp/models/scanner';
 import {map} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
-import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
 import NumberField from 'web/components/form/NumberField';
 import Select from 'web/components/form/Select';
@@ -26,7 +25,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 interface ScannerDialogProps {
-  caPub?: File;
   comment?: string;
   credentialId?: string;
   credentials?: Credential[];
@@ -43,7 +41,6 @@ interface ScannerDialogProps {
   onSave?: (state: ScannerDialogState) => Promise<void> | void;
   onScannerTypeChange?: (value: ScannerType) => void;
   onScannerPortChange?: (value: number) => void;
-  onScannerCaPubChange?: (file: File) => void;
 }
 
 interface ScannerDialogDefaultValues {
@@ -54,7 +51,6 @@ interface ScannerDialogDefaultValues {
 }
 
 interface ScannerDialogValues {
-  caPub?: File;
   credentialId?: string;
   type?: ScannerType;
   port?: number;
@@ -64,7 +60,6 @@ export type ScannerDialogState = ScannerDialogValues &
   ScannerDialogDefaultValues;
 
 const ScannerDialog = ({
-  caPub,
   comment = '',
   scannerInUse = false,
   credentials = [],
@@ -79,7 +74,6 @@ const ScannerDialog = ({
   onCredentialChange,
   onNewCredentialClick,
   onSave,
-  onScannerCaPubChange,
   onScannerPortChange,
   onScannerTypeChange,
 }: ScannerDialogProps) => {
@@ -145,7 +139,6 @@ const ScannerDialog = ({
       values={{
         credentialId,
         type,
-        caPub,
         port,
       }}
       onClose={onClose}
@@ -202,18 +195,6 @@ const ScannerDialog = ({
                 }
               />
             </FormGroup>
-
-            {showCertificateField && (
-              <FormGroup title={_('Certificate')}>
-                <FileField
-                  name="caPub"
-                  value={state.caPub}
-                  onChange={(file: File) =>
-                    onScannerCaPubChange && onScannerCaPubChange(file)
-                  }
-                />
-              </FormGroup>
-            )}
 
             {showCredentialField && (
               <FormGroup direction="row" title={_('Credential')}>
