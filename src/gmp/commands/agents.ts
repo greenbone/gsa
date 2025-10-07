@@ -13,6 +13,7 @@ import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 
 const log = logger.getLogger('gmp.commands.agents');
@@ -92,36 +93,22 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     return root.get_agents.get_agents_response;
   }
 
-  // @ts-ignore
   async authorize(agents: Agent[]) {
     log.debug('Authorizing agent', {agents});
-    const data: Record<string, string | number | boolean | undefined> = {
+    await this.httpPost({
       cmd: 'modify_agent',
-    };
-
-    if (agents?.length) {
-      // @ts-ignore
-      data['agent_ids:'] = agents.map(agent => agent.id);
-    }
-    data.authorized = 1;
-    const response = await this.httpPost(data);
-    return response.setData(agents);
+      authorized: YES_VALUE,
+      'agent_ids:': map(agents, agent => agent.id),
+    });
   }
 
-  // @ts-ignore
   async revoke(agents: Agent[]) {
     log.debug('Revoking agent', {agents});
-    const data: Record<string, string | number | boolean | undefined> = {
+    await this.httpPost({
       cmd: 'modify_agent',
-    };
-
-    if (agents?.length) {
-      // @ts-ignore
-      data['agent_ids:'] = agents.map(agent => agent.id);
-    }
-    data.authorized = 0;
-    const response = await this.httpPost(data);
-    return response.setData(agents);
+      authorized: NO_VALUE,
+      'agent_ids:': map(agents, agent => agent.id),
+    });
   }
 }
 
