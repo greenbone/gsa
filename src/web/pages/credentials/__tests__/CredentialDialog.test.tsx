@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import {
   changeInputValue,
   closeDialog,
@@ -13,8 +13,12 @@ import {
   rendererWith,
   fireEvent,
 } from 'web/testing';
-import Credential, {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
-import CredentialsDialog from 'web/pages/credentials/Dialog';
+import Credential, {
+  ALL_CREDENTIAL_TYPES,
+  CERTIFICATE_CREDENTIAL_TYPE,
+} from 'gmp/models/credential';
+import {NO_VALUE} from 'gmp/parser';
+import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 
 const gmp = {
   settings: {
@@ -37,8 +41,6 @@ const credentialMock = Credential.fromElement({
   allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
-  formats: {format: 'pem'},
-  full_type: 'Username + SSH Key',
   in_use: 0,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
@@ -49,14 +51,14 @@ const credentialMock = Credential.fromElement({
   writable: 1,
 });
 
-describe('CredentialsDialog component tests', () => {
+describe('CredentialDialog tests', () => {
   test('should render', () => {
     const {render} = rendererWith({
       gmp,
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
         onErrorClose={handleErrorClose}
@@ -98,7 +100,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         allow_insecure={credentialMock.allow_insecure}
         comment={credentialMock.comment}
         credential={credentialMock}
@@ -133,7 +135,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
         onErrorClose={handleErrorClose}
@@ -157,11 +159,11 @@ describe('CredentialsDialog component tests', () => {
     expect(handleSave).toHaveBeenCalledWith({
       allow_insecure: undefined,
       auth_algorithm: 'sha1',
-      autogenerate: 0,
-      change_community: undefined,
-      change_password: undefined,
-      change_passphrase: undefined,
-      change_privacy_password: undefined,
+      autogenerate: NO_VALUE,
+      change_community: NO_VALUE,
+      change_password: NO_VALUE,
+      change_passphrase: NO_VALUE,
+      change_privacy_password: NO_VALUE,
       comment: 'bar',
       community: '',
       credential_login: '',
@@ -182,7 +184,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
         onErrorClose={handleErrorClose}
@@ -194,7 +196,7 @@ describe('CredentialsDialog component tests', () => {
     expect(select).toHaveValue('Username + Password');
 
     const selectItems = await getSelectItemElementsForSelect(select);
-    expect(selectItems.length).toEqual(6);
+    expect(selectItems.length).toEqual(7);
 
     // change to password only
     fireEvent.click(selectItems[5]);
@@ -206,11 +208,11 @@ describe('CredentialsDialog component tests', () => {
     expect(handleSave).toHaveBeenCalledWith({
       allow_insecure: undefined,
       auth_algorithm: 'sha1',
-      autogenerate: 0,
-      change_community: undefined,
-      change_passphrase: undefined,
-      change_password: undefined,
-      change_privacy_password: undefined,
+      autogenerate: NO_VALUE,
+      change_community: NO_VALUE,
+      change_passphrase: NO_VALUE,
+      change_password: NO_VALUE,
+      change_privacy_password: NO_VALUE,
       comment: '',
       community: '',
       credential_login: '',
@@ -231,7 +233,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
         onErrorClose={handleErrorClose}
@@ -249,7 +251,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         credential_type={'usk'}
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -275,7 +277,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         credential_type="snmp"
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -319,7 +321,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         credential_type="smime"
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -342,7 +344,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         credential_type={'pgp'}
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -364,7 +366,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         credential_type={'pw'}
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -389,7 +391,7 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         credential_type={'krb5'}
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -418,14 +420,47 @@ describe('CredentialsDialog component tests', () => {
     expect(kdcs).toHaveValue('');
   });
 
-  test('should render CredentialsDialog and handle replace password interactions correctly', () => {
+  test('should render form fields for Certificate', () => {
+    const {render} = rendererWith({
+      gmp,
+    });
+
+    render(
+      <CredentialDialog
+        credential_type={CERTIFICATE_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+        onClose={handleClose}
+        onErrorClose={handleErrorClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const select = screen.getSelectElement();
+    expect(select).toHaveValue('Client Certificate');
+
+    const certificate = screen.getByName('certificate');
+    expect(certificate).toHaveValue('');
+    expect(certificate).toHaveAttribute('type', 'file');
+
+    const privateKey = screen.getByName('private_key');
+    expect(privateKey).toHaveValue('');
+    expect(privateKey).toHaveAttribute('type', 'file');
+
+    const passphrase = screen.getByName('passphrase');
+    expect(passphrase).toHaveValue('');
+    expect(passphrase).toHaveAttribute('type', 'password');
+
+    const publicKey = screen.getByName('public_key');
+    expect(publicKey).toHaveValue('');
+    expect(publicKey).toHaveAttribute('type', 'file');
+  });
+
+  test('should handle replace password interactions correctly', () => {
     const credentialEntryMock = Credential.fromElement({
       _id: '9b0',
       allow_insecure: 1,
       creation_time: '2025-01-08T15:50:23.000Z',
       comment: 'MockComment',
-      formats: {format: 'exe'},
-      full_type: 'username + password',
       in_use: 0,
       login: 'user42',
       modification_time: '2025-01-09T08:58:33.000Z',
@@ -441,13 +476,13 @@ describe('CredentialsDialog component tests', () => {
     });
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         allow_insecure={credentialEntryMock.allow_insecure}
         comment={credentialEntryMock.comment}
         credential={credentialEntryMock}
         credential_type={credentialEntryMock.credential_type}
         name={credentialEntryMock.name}
-        title={'Edit Credential'}
+        title="Edit Credential"
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
         onErrorClose={handleErrorClose}
@@ -462,7 +497,6 @@ describe('CredentialsDialog component tests', () => {
     expect(passwordField).toBeDisabled();
 
     const checkbox = screen.getByLabelText('Replace existing password with');
-
     expect(checkbox).not.toBeChecked();
 
     fireEvent.click(checkbox);
@@ -478,7 +512,7 @@ describe('CredentialsDialog component tests', () => {
     const {render} = rendererWith({gmp});
 
     render(
-      <CredentialsDialog
+      <CredentialDialog
         credential_type="krb5"
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}

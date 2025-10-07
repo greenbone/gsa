@@ -42,7 +42,7 @@ import AlertDialog, {
   SECINFO_SUBJECT,
   TASK_SUBJECT,
 } from 'web/pages/alerts/Dialog';
-import CredentialsDialog from 'web/pages/credentials/Dialog';
+import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 import {
   loadReportComposerDefaults,
   saveReportComposerDefaults,
@@ -1174,7 +1174,7 @@ const AlertComponent = ({
             />
           )}
           {credentialDialogVisible && (
-            <CredentialsDialog
+            <CredentialDialog
               error={credentialError}
               title={credentialDialogTitle}
               types={credentialTypes}
