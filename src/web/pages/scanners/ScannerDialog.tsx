@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Credential from 'gmp/models/credential';
+import Credential, {
+  CERTIFICATE_CREDENTIAL_TYPE,
+  CredentialType,
+} from 'gmp/models/credential';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
@@ -37,7 +40,7 @@ interface ScannerDialogProps {
   type?: ScannerType;
   onClose?: () => void;
   onCredentialChange?: (value: string) => void;
-  onNewCredentialClick?: (value: ScannerType) => void;
+  onNewCredentialClick?: (value: CredentialType[]) => void;
   onSave?: (state: ScannerDialogState) => Promise<void> | void;
   onScannerTypeChange?: (value: ScannerType) => void;
   onScannerPortChange?: (value: number) => void;
@@ -116,15 +119,10 @@ const ScannerDialog = ({
   const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
   const isAgentControllerSensorScannerType =
     type === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
-  const isAgentControllerScanner = type === AGENT_CONTROLLER_SCANNER_TYPE;
   const showCredentialField =
-    !isGreenboneSensorType &&
-    !isAgentControllerSensorScannerType &&
-    !isAgentControllerScanner;
-  const showCertificateField =
-    isAgentControllerScanner || isAgentControllerSensorScannerType;
+    !isGreenboneSensorType && !isAgentControllerSensorScannerType;
   if (isGreenboneSensorType || isAgentControllerSensorScannerType) {
-    credentialId = '';
+    credentialId = undefined;
   }
 
   return (
@@ -163,7 +161,7 @@ const ScannerDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Type')}>
+            <FormGroup title={_('Scanner Type')}>
               <Select
                 disabled={scannerInUse}
                 items={scannerTypesOptions}
@@ -211,7 +209,7 @@ const ScannerDialog = ({
                 />
                 <NewIcon
                   title={_('Create a new Credential')}
-                  value={type}
+                  value={[CERTIFICATE_CREDENTIAL_TYPE]}
                   onClick={onNewCredentialClick}
                 />
               </FormGroup>
