@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Credential, {
-  CERTIFICATE_CREDENTIAL_TYPE,
-  CredentialType,
-} from 'gmp/models/credential';
+import Credential from 'gmp/models/credential';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
@@ -40,7 +37,7 @@ interface ScannerDialogProps {
   type?: ScannerType;
   onClose?: () => void;
   onCredentialChange?: (value: string) => void;
-  onNewCredentialClick?: (value: CredentialType[]) => void;
+  onNewCredentialClick?: () => void;
   onSave?: (state: ScannerDialogState) => Promise<void> | void;
   onScannerTypeChange?: (value: ScannerType) => void;
   onScannerPortChange?: (value: number) => void;
@@ -161,18 +158,16 @@ const ScannerDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Scanner Type')}>
-              <Select
-                disabled={scannerInUse}
-                items={scannerTypesOptions}
-                name="type"
-                value={state.type}
-                onChange={(value: string) =>
-                  onScannerTypeChange &&
-                  onScannerTypeChange(value as ScannerType)
-                }
-              />
-            </FormGroup>
+            <Select
+              disabled={scannerInUse}
+              items={scannerTypesOptions}
+              label={_('Scanner Type')}
+              name="type"
+              value={state.type}
+              onChange={(value: string) =>
+                onScannerTypeChange && onScannerTypeChange(value as ScannerType)
+              }
+            />
 
             <FormGroup title={_('Host')}>
               <TextField
@@ -197,6 +192,7 @@ const ScannerDialog = ({
             {showCredentialField && (
               <FormGroup direction="row" title={_('Credential')}>
                 <Select
+                  aria-label={_('Credential')}
                   grow="1"
                   items={renderSelectItems(
                     credentials as RenderSelectItemProps[],
@@ -209,7 +205,6 @@ const ScannerDialog = ({
                 />
                 <NewIcon
                   title={_('Create a new Credential')}
-                  value={[CERTIFICATE_CREDENTIAL_TYPE]}
                   onClick={onNewCredentialClick}
                 />
               </FormGroup>

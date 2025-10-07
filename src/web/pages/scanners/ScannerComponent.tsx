@@ -18,6 +18,7 @@ import Scanner, {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
+  OPENVASD_SCANNER_TYPE,
   ScannerType,
 } from 'gmp/models/scanner';
 import {hasId} from 'gmp/utils/id';
@@ -129,14 +130,22 @@ const ScannerComponent = ({
   const [type, setType] = useState<ScannerType | undefined>(undefined);
 
   const openScannerDialog = async (scanner?: Scanner) => {
-    // @ts-expect-error
-    const credentialsPromise = gmp.credentials
-      .getAll({
-        filter: createCredentialsFilter(credentialTypes),
-      })
-      .then(response => response.data);
-
     if (isDefined(scanner)) {
+      const credentialTypes: CredentialType[] =
+        scanner.scannerType === OPENVASD_SCANNER_TYPE ||
+        scanner.scannerType === AGENT_CONTROLLER_SCANNER_TYPE
+          ? [CERTIFICATE_CREDENTIAL_TYPE]
+          : [];
+      const credentialsPromise =
+        credentialTypes.length > 0
+          ? // @ts-expect-error
+            gmp.credentials
+              .getAll({
+                filter: createCredentialsFilter(credentialTypes),
+              })
+              .then(response => response.data)
+          : Promise.resolve([]);
+
       const [credentials, loadedScanner] = await Promise.all([
         credentialsPromise,
         gmp.scanner
@@ -154,6 +163,7 @@ const ScannerComponent = ({
           ? loadedScanner.credential.id
           : undefined,
       );
+      setCredentialTypes(credentialTypes);
       setHost(loadedScanner.host);
       setId(loadedScanner.id);
       setName(loadedScanner.name);
@@ -163,10 +173,17 @@ const ScannerComponent = ({
       setTitle(scannerTitle);
       setType(loadedScanner.scannerType);
     } else {
-      const credentials = await credentialsPromise;
+      const credentialTypes: CredentialType[] = [CERTIFICATE_CREDENTIAL_TYPE];
+      // @ts-expect-error
+      const credentials = await gmp.credentials
+        .getAll({
+          filter: createCredentialsFilter(credentialTypes),
+        })
+        .then(response => response.data);
       setComment(undefined);
       setCredentialId(undefined);
       setCredentials(credentials);
+      setCredentialTypes(credentialTypes);
       setHost(undefined);
       setId(undefined);
       setName(undefined);
@@ -186,8 +203,7 @@ const ScannerComponent = ({
     closeScannerDialog();
   };
 
-  const openCredentialsDialog = (values: CredentialType[]) => {
-    setCredentialTypes(values);
+  const openCredentialsDialog = () => {
     setCredentialDialogVisible(true);
   };
 
