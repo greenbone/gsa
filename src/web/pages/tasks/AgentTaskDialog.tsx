@@ -4,21 +4,11 @@
  */
 
 import styled from 'styled-components';
-import ScanConfig from 'gmp/models/scanconfig';
-import Scanner, {
-  OPENVAS_SCANNER_TYPE,
-  OPENVAS_DEFAULT_SCANNER_ID,
-  ScannerType,
-} from 'gmp/models/scanner';
 import Task, {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_NO,
-  DEFAULT_MAX_CHECKS,
-  DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
   TaskAutoDelete,
-  TaskHostsOrdering,
 } from 'gmp/models/task';
 import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
@@ -44,12 +34,9 @@ import {
 } from 'web/utils/Render';
 
 interface AgentTaskDialogValues {
-  alert_ids: string[];
-  configId?: string;
-  schedule_id?: string;
-  scannerId?: string;
-  scanner_type?: ScannerType;
-  target_id?: string;
+  alertIds: string[];
+  scheduleId?: string;
+  agentGroupId?: string;
 }
 
 interface AgentTaskDialogDefaultValues {
@@ -59,15 +46,11 @@ interface AgentTaskDialogDefaultValues {
   autoDelete?: TaskAutoDelete;
   autoDeleteData?: number;
   comment?: string;
-  configId?: string;
-  hostsOrdering?: TaskHostsOrdering;
   inAssets?: YesNo;
-  maxChecks?: number;
-  maxHosts?: number;
   minQod?: number;
   name: string;
   schedulePeriods?: YesNo;
-  tag_id?: string;
+  tagId?: string;
   tags?: RenderSelectItemProps[];
   task?: Task;
 }
@@ -77,110 +60,75 @@ export type AgentTaskDialogData = AgentTaskDialogValues &
 
 interface AgentTaskDialogProps {
   addTag?: YesNo;
-  alert_ids?: string[];
+  agentGroupId?: string;
+  agentGroups?: RenderSelectItemProps[];
+  alertIds?: string[];
   alerts?: RenderSelectItemProps[];
   alterable?: YesNo;
   applyOverrides?: YesNo;
   autoDelete?: TaskAutoDelete;
   autoDeleteData?: number;
   comment?: string;
-  configId?: string;
-  hostsOrdering?: TaskHostsOrdering;
   inAssets?: YesNo;
   isLoadingAlerts?: boolean;
-  isLoadingConfigs?: boolean;
   isLoadingScanners?: boolean;
   isLoadingSchedules?: boolean;
-  isLoadingTargets?: boolean;
+  isLoadingAgentGroups?: boolean;
   isLoadingTags?: boolean;
-  maxChecks?: number;
-  maxHosts?: number;
   minQod?: number;
   name?: string;
-  scanConfigs?: ScanConfig[];
-  scannerId?: string;
-  scanners?: Scanner[];
-  schedule_id?: string;
+  scheduleId?: string;
   schedulePeriods?: YesNo;
   schedules?: RenderSelectItemProps[];
   tags?: RenderSelectItemProps[];
-  target_id?: string;
-  targets?: RenderSelectItemProps[];
   task?: Task;
   title?: string;
   onAlertsChange?: (value: string[]) => void;
   onClose: () => void;
   onNewAlertClick?: () => void;
   onNewScheduleClick?: () => void;
-  onNewTargetClick?: () => void;
+  onNewAgentGroupClick?: () => void;
   onSave?: (data: AgentTaskDialogData) => void | Promise<void>;
-  onScanConfigChange?: (value: string) => void;
-  onScannerChange?: (value: string) => void;
   onScheduleChange?: (value: string) => void;
-  onTargetChange?: (value: string) => void;
+  onAgentGroupChange?: (value: string) => void;
 }
 
 const Title = styled.div`
   flex-grow: 1;
 `;
 
-const DEFAULT_SCANNER = new Scanner({
-  id: OPENVAS_DEFAULT_SCANNER_ID,
-  scannerType: OPENVAS_SCANNER_TYPE,
-});
-
-const getScanner = (scanners: Scanner[] | undefined, scanConfigs: string) => {
-  if (!isDefined(scanners)) {
-    return undefined;
-  }
-
-  return scanners.find(scanner => {
-    return scanner.id === scanConfigs;
-  });
-};
-
 const AgentTaskDialog = ({
   addTag = NO_VALUE,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  alert_ids = [],
+  alertIds = [],
   alerts = [],
   alterable = NO_VALUE,
   applyOverrides = YES_VALUE,
   autoDelete = AUTO_DELETE_NO,
   autoDeleteData = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   comment = '',
-  configId,
-  hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
   inAssets = YES_VALUE,
   isLoadingAlerts = false,
   isLoadingSchedules = false,
-  isLoadingTargets = false,
+  isLoadingAgentGroups = false,
   isLoadingTags = false,
-  maxChecks = DEFAULT_MAX_CHECKS,
-  maxHosts = DEFAULT_MAX_HOSTS,
   minQod = DEFAULT_MIN_QOD,
   name = '',
-  scanConfigs = [],
-  scannerId = OPENVAS_DEFAULT_SCANNER_ID,
-  scanners = [DEFAULT_SCANNER],
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  schedule_id = UNSET_VALUE,
+  scheduleId = UNSET_VALUE,
   schedulePeriods = NO_VALUE,
   schedules = [],
   tags = [],
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  target_id,
-  targets,
+  agentGroupId,
+  agentGroups,
   task,
   title,
   onAlertsChange,
   onClose,
   onNewAlertClick,
   onNewScheduleClick,
-  onNewTargetClick,
+  onNewAgentGroupClick,
   onSave,
   onScheduleChange,
-  onTargetChange,
+  onAgentGroupChange,
 }: AgentTaskDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -188,15 +136,12 @@ const AgentTaskDialog = ({
   name = name || _('Unnamed');
   title = title || _('New Agent Task');
 
-  const scanner = getScanner(scanners, scannerId);
-  const scannerType = isDefined(scanner) ? scanner.scannerType : undefined;
-
   const tagItems = renderSelectItems(tags);
-  const targetItems = renderSelectItems(targets);
+  const agentGroupItems = renderSelectItems(agentGroups);
   const scheduleItems = renderSelectItems(schedules, UNSET_VALUE);
 
-  const alertIds =
-    alert_ids.length === 1 && String(alert_ids[0]) === '0' ? [] : alert_ids;
+  const alertIdList =
+    alertIds.length === 1 && String(alertIds[0]) === '0' ? [] : alertIds;
 
   const alertItems = renderSelectItems(alerts);
 
@@ -218,26 +163,19 @@ const AgentTaskDialog = ({
     autoDelete,
     autoDeleteData,
     comment,
-    configId,
-    hostsOrdering,
     inAssets,
-    maxChecks,
-    maxHosts,
     minQod,
     name,
     schedulePeriods,
-    tag_id: tagId,
+    tagId,
     tags,
     task,
   };
 
   const controlledData: AgentTaskDialogValues = {
-    alert_ids: alertIds,
-    configId,
-    schedule_id,
-    scannerId,
-    scanner_type: scannerType,
-    target_id,
+    alertIds: alertIdList,
+    scheduleId,
+    agentGroupId,
   };
 
   return (
@@ -267,74 +205,79 @@ const AgentTaskDialog = ({
               />
             </FormGroup>
 
-            <FormGroup direction="row" title={_('Scan Targets')}>
-              <Title
-                title={
-                  changeTask
-                    ? undefined
-                    : _(
-                        'This setting is not alterable once task has been run at least once.',
-                      )
-                }
-              >
-                <Select
-                  disabled={!changeTask}
-                  isLoading={isLoadingTargets}
-                  items={targetItems}
-                  name="target_id"
-                  value={state.target_id}
-                  onChange={onTargetChange}
-                />
-              </Title>
-              {changeTask && (
-                <NewIcon
-                  title={_('Create a new target')}
-                  onClick={onNewTargetClick}
-                />
+            {capabilities.mayOp('get_agent_groups') &&
+              capabilities.mayCreate('agentgroup') && (
+                <FormGroup direction="row" title={_('Scan Agent Groups')}>
+                  <Title
+                    title={
+                      changeTask
+                        ? undefined
+                        : _(
+                            'This setting is not alterable once task has been run at least once.',
+                          )
+                    }
+                  >
+                    <Select
+                      disabled={!changeTask}
+                      isLoading={isLoadingAgentGroups}
+                      items={agentGroupItems}
+                      name="agentGroupId"
+                      value={state.agentGroupId}
+                      onChange={onAgentGroupChange}
+                    />
+                  </Title>
+                  {changeTask && (
+                    <NewIcon
+                      title={_('Create a new Agent Group')}
+                      onClick={onNewAgentGroupClick}
+                    />
+                  )}
+                </FormGroup>
               )}
-            </FormGroup>
 
-            {capabilities.mayOp('get_alerts') && (
-              <FormGroup direction="row" title={_('Alerts')}>
-                <MultiSelect
-                  grow="1"
-                  isLoading={isLoadingAlerts}
-                  items={alertItems}
-                  name="alert_ids"
-                  value={state.alert_ids}
-                  onChange={onAlertsChange}
-                />
-                <NewIcon
-                  title={_('Create a new alert')}
-                  onClick={onNewAlertClick}
-                />
-              </FormGroup>
-            )}
+            {capabilities.mayOp('get_alerts') &&
+              capabilities.mayCreate('alert') && (
+                <FormGroup direction="row" title={_('Alerts')}>
+                  <MultiSelect
+                    grow="1"
+                    isLoading={isLoadingAlerts}
+                    items={alertItems}
+                    name="alertIds"
+                    value={state.alertIds}
+                    onChange={onAlertsChange}
+                  />
+                  <NewIcon
+                    title={_('Create a new alert')}
+                    onClick={onNewAlertClick}
+                  />
+                </FormGroup>
+              )}
 
-            {capabilities.mayOp('get_schedules') && (
-              <FormGroup direction="row" title={_('Schedule')}>
-                <Select
-                  grow="1"
-                  isLoading={isLoadingSchedules}
-                  items={scheduleItems}
-                  name="schedule_id"
-                  value={state.schedule_id}
-                  onChange={onScheduleChange}
-                />
-                <Checkbox
-                  checked={state.schedulePeriods === YES_VALUE}
-                  checkedValue={YES_VALUE}
-                  name="schedulePeriods"
-                  title={_('Once')}
-                  unCheckedValue={NO_VALUE}
-                  onChange={onValueChange}
-                />
-                <NewIcon
-                  title={_('Create a new schedule')}
-                  onClick={onNewScheduleClick}
-                />
-              </FormGroup>
-            )}
+            {capabilities.mayOp('get_schedules') &&
+              capabilities.mayCreate('schedule') && (
+                <FormGroup direction="row" title={_('Schedule')}>
+                  <Select
+                    grow="1"
+                    isLoading={isLoadingSchedules}
+                    items={scheduleItems}
+                    name="scheduleId"
+                    value={state.scheduleId}
+                    onChange={onScheduleChange}
+                  />
+                  <Checkbox
+                    checked={state.schedulePeriods === YES_VALUE}
+                    checkedValue={YES_VALUE}
+                    name="schedulePeriods"
+                    title={_('Once')}
+                    unCheckedValue={NO_VALUE}
+                    onChange={onValueChange}
+                  />
+                  <NewIcon
+                    title={_('Create a new schedule')}
+                    onClick={onNewScheduleClick}
+                  />
+                </FormGroup>
+              )}
 
             <AddResultsToAssetsGroup
               inAssets={state.inAssets}
@@ -378,7 +321,7 @@ const AgentTaskDialog = ({
               autoDeleteData={state.autoDeleteData}
               onChange={onValueChange}
             />
-
+            {/* @ts-ignore */}
             {capabilities.mayAccess('tags') &&
               capabilities.mayCreate('tag') &&
               showTagSelection && (
@@ -397,8 +340,8 @@ const AgentTaskDialog = ({
                       grow="1"
                       isLoading={isLoadingTags}
                       items={tagItems}
-                      name="tag_id"
-                      value={state.tag_id}
+                      name="tagId"
+                      value={state.tagId}
                       onChange={onValueChange}
                     />
                   </Divider>

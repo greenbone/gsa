@@ -42,6 +42,22 @@ interface TaskCommandCreateParams {
   tag_id?: string;
   target_id?: string;
 }
+interface TaskCommandCreateAgentGroupParams {
+  add_tag?: YesNo;
+  alert_ids?: string[];
+  alterable?: YesNo;
+  apply_overrides?: YesNo;
+  auto_delete?: TaskAutoDelete;
+  auto_delete_data?: number;
+  comment?: string;
+  in_assets?: YesNo;
+  min_qod?: number;
+  name: string;
+  schedule_id?: string;
+  schedule_periods?: number;
+  tag_id?: string;
+  agent_group_id?: string;
+}
 
 export interface TaskCommandCreateContainerParams {
   name: string;
@@ -68,6 +84,22 @@ interface TaskCommandSaveParams {
   schedule_id?: string;
   schedule_periods?: number;
   target_id?: string;
+}
+
+interface TaskCommandSaveAgentGroupParams {
+  alert_ids?: string[];
+  alterable?: YesNo;
+  auto_delete?: TaskAutoDelete;
+  auto_delete_data?: Number;
+  apply_overrides?: YesNo;
+  comment?: string;
+  id: string;
+  in_assets?: YesNo;
+  min_qod?: number;
+  name: string;
+  schedule_id?: string;
+  schedule_periods?: number;
+  agent_group_id?: string;
 }
 
 interface TaskCommandSaveContainerParams {
@@ -196,6 +228,49 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     }
   }
 
+  async createAgentGroupTask({
+    add_tag,
+    alert_ids = [],
+    alterable,
+    apply_overrides,
+    auto_delete,
+    auto_delete_data,
+    comment = '',
+    in_assets,
+    min_qod,
+    name,
+    schedule_id,
+    schedule_periods,
+    tag_id,
+    agent_group_id,
+  }: TaskCommandCreateAgentGroupParams) {
+    const data = {
+      cmd: 'create_agent_group_task',
+      add_tag,
+      'alert_ids:': alert_ids,
+      alterable,
+      apply_overrides,
+      auto_delete,
+      auto_delete_data,
+      comment,
+      in_assets,
+      min_qod,
+      name,
+      schedule_id,
+      schedule_periods,
+      tag_id,
+      agent_group_id,
+    };
+    log.debug('Creating agent group task', data);
+
+    try {
+      return await this.entityAction(data);
+    } catch (rejection) {
+      await feedStatusRejection(this.http, rejection as Rejection);
+      throw rejection; // Ensure the function always returns or throws
+    }
+  }
+
   async createContainer({
     name,
     comment = '',
@@ -255,6 +330,45 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       usage_type: 'scan',
     };
     log.debug('Saving task', data);
+    try {
+      await this.httpPost(data);
+    } catch (rejection) {
+      await feedStatusRejection(this.http, rejection as Rejection);
+    }
+  }
+
+  async saveAgentGroupTask({
+    alert_ids = [],
+    alterable,
+    auto_delete,
+    auto_delete_data,
+    apply_overrides,
+    comment = '',
+    id,
+    in_assets,
+    min_qod,
+    name,
+    schedule_id = NO_VALUE_ID,
+    schedule_periods,
+    agent_group_id = NO_VALUE_ID,
+  }: TaskCommandSaveAgentGroupParams) {
+    const data = {
+      alterable,
+      'alert_ids:': alert_ids,
+      apply_overrides,
+      auto_delete,
+      auto_delete_data,
+      comment,
+      cmd: 'save_agent_group_task',
+      in_assets,
+      min_qod,
+      name,
+      schedule_id,
+      schedule_periods,
+      agent_group_id,
+      task_id: id,
+    };
+    log.debug('Saving agent task', data);
     try {
       await this.httpPost(data);
     } catch (rejection) {

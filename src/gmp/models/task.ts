@@ -143,6 +143,11 @@ export interface TaskElement extends ModelElement {
     name?: string;
     trash?: YesNo;
   };
+  agent_group?: {
+    _id?: string;
+    name?: string;
+    trash?: YesNo;
+  };
   trend?: TaskTrend;
   usage_type?: string;
 }
@@ -211,6 +216,7 @@ export interface TaskProperties extends ModelProperties {
   slave?: TaskSlave;
   status?: TaskStatus;
   target?: Model;
+  agent_group?: Model;
   trend?: TaskTrend;
   // from preferences
   apply_overrides?: YesNo;
@@ -318,6 +324,7 @@ class Task extends Model {
   readonly slave?: TaskSlave;
   readonly status: TaskStatus;
   readonly target?: Model;
+  readonly agentGroup?: Model;
   readonly trend?: TaskTrend;
   readonly usageType = USAGE_TYPE.scan;
 
@@ -361,6 +368,8 @@ class Task extends Model {
     slave,
     status = TASK_STATUS.unknown,
     target,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    agent_group,
     trend,
     ...properties
   }: TaskProperties = {}) {
@@ -392,6 +401,7 @@ class Task extends Model {
     this.status = status;
     this.target = target;
     this.trend = trend;
+    this.agentGroup = agent_group;
   }
 
   static fromElement(element?: TaskElement): Task {
@@ -496,6 +506,9 @@ class Task extends Model {
     copy.target = isEmpty(element.target?._id)
       ? undefined
       : Model.fromElement(element.target, 'target');
+    copy.agent_group = isEmpty(element.agent_group?._id)
+      ? undefined
+      : Model.fromElement(element.agent_group, 'agentgroup');
     // slave isn't really an entity type but it has an id
     copy.slave = isEmpty(element.slave?._id)
       ? undefined
@@ -603,7 +616,11 @@ class Task extends Model {
   }
 
   isContainer() {
-    return !isDefined(this.target);
+    return !isDefined(this.target) && !isDefined(this.agentGroup);
+  }
+
+  isAgent() {
+    return isDefined(this.agentGroup);
   }
 }
 
