@@ -9,20 +9,20 @@ import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents
 import useTranslation from 'web/hooks/useTranslation';
 import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
-interface CirclePlusIconProps<TValue = string>
+interface AuthorizeIconProps<TValue = string>
   extends ExtendedDynamicIconProps<TValue> {
   active?: boolean;
   selectionType?: SelectionTypeType;
   title?: string;
 }
 
-const CirclePlusIcon = <TValue = string,>({
+const AuthorizeIcon = <TValue = string,>({
   active = true,
   'data-testid': dataTestId = 'circle-plus-icon',
   selectionType,
   title,
   ...other
-}: CirclePlusIconProps<TValue>) => {
+}: AuthorizeIconProps<TValue>) => {
   const [_] = useTranslation();
 
   if (!isDefined(title)) {
@@ -45,4 +45,4 @@ const CirclePlusIcon = <TValue = string,>({
   );
 };
 
-export default CirclePlusIcon;
+export default AuthorizeIcon;
