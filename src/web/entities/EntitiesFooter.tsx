@@ -10,10 +10,10 @@ import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import Select from 'web/components/form/Select';
-import CircleMinusIcon from 'web/components/icon/CircleMinusIcon';
-import CirclePlusIcon from 'web/components/icon/CirclePlusIcon';
+import AuthorizeIcon from 'web/components/icon/AuthorizeIcon';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import RevokeIcon from 'web/components/icon/RevokeIcon';
 import TagsIcon from 'web/components/icon/TagsIcon';
 import TrashIcon from 'web/components/icon/TrashIcon';
 import Divider from 'web/components/layout/Divider';
@@ -75,8 +75,8 @@ const EntitiesFooter = <TEntity = Model,>({
   span,
   tags = true,
   trash,
-  authorize,
-  revoke,
+  authorize = false,
+  revoke = false,
   onDeleteClick,
   onDownloadClick,
   onSelectionTypeChange,
@@ -226,7 +226,7 @@ const EntitiesFooter = <TEntity = Model,>({
                 )}
                 <IconDivider>
                   {authorize && (
-                    <CirclePlusIcon
+                    <AuthorizeIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
                       onClick={() =>
@@ -235,7 +235,7 @@ const EntitiesFooter = <TEntity = Model,>({
                     />
                   )}
                   {revoke && (
-                    <CircleMinusIcon
+                    <RevokeIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
                       onClick={() =>

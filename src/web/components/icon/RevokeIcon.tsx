@@ -9,20 +9,20 @@ import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents
 import useTranslation from 'web/hooks/useTranslation';
 import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
-interface CircleMinusIconProps<TValue = string>
+interface RevokeIconProps<TValue = string>
   extends ExtendedDynamicIconProps<TValue> {
   active?: boolean;
   selectionType?: SelectionTypeType;
   title?: string;
 }
 
-const CircleMinusIcon = <TValue = string,>({
+const RevokeIcon = <TValue = string,>({
   active = true,
   'data-testid': dataTestId = 'circle-minus-icon',
   selectionType,
   title,
   ...other
-}: CircleMinusIconProps<TValue>) => {
+}: RevokeIconProps<TValue>) => {
   const [_] = useTranslation();
 
   if (!isDefined(title)) {
@@ -45,4 +45,4 @@ const CircleMinusIcon = <TValue = string,>({
   );
 };
 
-export default CircleMinusIcon;
+export default RevokeIcon;
