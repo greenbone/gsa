@@ -4,39 +4,33 @@
  */
 
 import React, {useState} from 'react';
+import {EntityCommandParams} from 'gmp/commands/entity';
 import Rejection from 'gmp/http/rejection';
 import Response from 'gmp/http/response';
 import {XmlMeta} from 'gmp/http/transform/fastxml';
 import ActionResult from 'gmp/models/actionresult';
 import Agent from 'gmp/models/agent';
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {useModifyAgents} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
-import AgentDialogEdit from 'web/pages/agents/AgentDialogEdit';
+import AgentDialog, {AgentDialogState} from 'web/pages/agents/AgentDialog';
 import {useDeleteMutation} from 'web/queries/useDeleteMutation';
 
-interface AgentComponentProps {
-  children: (actions: {
-    clone: (entity: Agent) => Promise<unknown>;
-    delete: (entity: Agent) => Promise<unknown>;
-    create: () => void;
-    edit: (entity: Agent) => void;
-    authorize: (entity: Agent) => Promise<unknown>;
-  }) => React.ReactNode;
+interface AgentComponentRenderProps {
+  delete: (entity: Agent) => Promise<void>;
+  edit: (entity: Agent) => void;
+  authorize: (entity: Agent) => Promise<void>;
+}
 
-  onCreated?: () => void;
-  onCreateError?: (error: Rejection) => void;
+interface AgentComponentProps {
+  children: (actions: AgentComponentRenderProps) => React.ReactNode;
   onDeleted?: () => void;
   onDeleteError?: (error: Rejection) => void;
-
   onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
   onSaveError?: (error: Rejection) => void;
 }
 
 const AgentComponent = ({
   children,
-  onCreated,
-  onCreateError,
   onDeleted,
   onDeleteError,
   onSaved,
@@ -50,10 +44,13 @@ const AgentComponent = ({
     undefined,
   );
 
-  const deleteMutation = useDeleteMutation<{id: string}, void>({
-    entityKey: 'agent',
+  const deleteMutation = useDeleteMutation<
+    EntityCommandParams,
+    void,
+    Rejection
+  >({
+    entityType: 'agent',
     onSuccess: onDeleted,
-    //@ts-expect-error
     onError: onDeleteError,
   });
 
@@ -72,30 +69,16 @@ const AgentComponent = ({
   });
 
   const handleAuthorize = async (agent: Agent) => {
-    if (!agent.id) {
-      throw new Error('Agent ID is required');
-    }
-
-    const newAuthorizedValue = agent.isAuthorized() ? NO_VALUE : YES_VALUE;
-
-    const saveData = {
-      agentsIds: [agent.id],
-      authorized: newAuthorizedValue,
-    };
-
-    // @ts-ignore
-    await modifyAgentsMutation.mutateAsync(saveData);
-  };
-
-  const openAgentDialog = () => {
-    // TODO: Implement download agent installer
-    console.info('Agent creation dialog not implemented yet');
+    await modifyAgentsMutation.mutateAsync({
+      agentsIds: [agent.id as string],
+      authorized: !agent.isAuthorized(),
+    });
   };
 
   const editAgent = (agent: Agent) => {
     setSelectedAgent(agent);
     setEditDialogTitle(
-      _('Agent Heartbeat - {{name}}', {
+      _('Edit Agent - {{name}}', {
         name: agent.name || agent.agentId || '',
       }),
     );
@@ -111,22 +94,10 @@ const AgentComponent = ({
     closeEditDialog();
   };
 
-  const handleSaveEdit = async (data: {
-    id?: string;
-    schedulerCronTime?: string;
-    schedulerCronExpression?: string;
-    intervalInSeconds?: number;
-    authorized?: number;
-    comment?: string;
-  }) => {
-    if (!data.id) {
-      console.error('Agent ID is required for saving');
-      throw new Error('Agent ID is required');
-    }
-
-    const saveData = {
-      agentsIds: [data.id],
-      authorized: selectedAgent?.isAuthorized() ? YES_VALUE : NO_VALUE,
+  const handleSaveEdit = async (data: AgentDialogState) => {
+    await modifyAgentsMutation.mutateAsync({
+      agentsIds: [data.id as string],
+      authorized: selectedAgent?.isAuthorized(),
       attempts: selectedAgent?.config?.agentControl?.retry?.attempts,
       delayInSeconds: selectedAgent?.config?.agentControl?.retry.delayInSeconds,
       maxJitterInSeconds:
@@ -136,14 +107,11 @@ const AgentComponent = ({
         selectedAgent?.config?.agentScriptExecutor?.bulkThrottleTimeInMs,
       indexerDirDepth:
         selectedAgent?.config?.agentScriptExecutor?.indexerDirDepth,
-      schedulerCronTimes: [data?.schedulerCronExpression],
+      schedulerCronTimes: data?.schedulerCronExpression,
       intervalInSeconds: data?.intervalInSeconds,
       missUntilInactive: selectedAgent?.config?.heartbeat?.missUntilInactive,
       comment: data.comment,
-    };
-
-    // @ts-ignore
-    await modifyAgentsMutation.mutateAsync(saveData);
+    });
     closeEditDialog();
     setSelectedAgent(undefined);
   };
@@ -152,27 +120,24 @@ const AgentComponent = ({
     <>
       {children({
         delete: handleDelete,
-        create: openAgentDialog,
         edit: editAgent,
         authorize: handleAuthorize,
-        clone: function (entity: Agent): Promise<unknown> {
-          throw new Error('Function not implemented.');
-        },
       })}
       {editDialogVisible && selectedAgent && (
-        <AgentDialogEdit
-          config={selectedAgent.config}
-          configurationUpdated={selectedAgent.modificationTime?.toString()}
-          heartbeatReceived={selectedAgent.lastUpdaterHeartbeat?.toString()}
+        <AgentDialog
+          comment={selectedAgent.comment}
+          configurationUpdated={selectedAgent.modificationTime}
+          heartbeatReceived={selectedAgent.lastUpdaterHeartbeat}
           id={selectedAgent.id}
           intervalInSeconds={selectedAgent.config?.heartbeat?.intervalInSeconds}
           ipAddress={selectedAgent.hostname}
-          lastContact={selectedAgent.lastUpdate?.toString()}
+          lastContact={selectedAgent.lastUpdate}
           name={selectedAgent.name || selectedAgent.agentId}
+          schedulerCronTime={
+            selectedAgent.config?.agentScriptExecutor?.schedulerCronTimes?.[0]
+          }
           status={selectedAgent.connectionStatus}
-          systemScanCompleted="N/A"
           title={editDialogTitle}
-          version={selectedAgent.agentVersion}
           onClose={handleCloseEditDialog}
           onSave={handleSaveEdit}
         />
