@@ -191,14 +191,6 @@ abstract class EntitiesCommand<
     return response.setData(entities);
   }
 
-  async authorize(entities: TModel[], extraParams?: HttpCommandPostParams) {
-    throw new Error('authorize() not implemented for this entity type');
-  }
-
-  async revoke(entities: TModel[], extraParams?: HttpCommandPostParams) {
-    throw new Error('revoke() not implemented for this entity type');
-  }
-
   async deleteByIds(
     ids: string[],
     extraParams: HttpCommandPostParams = {},
