@@ -64,8 +64,6 @@ export interface EntitiesContainerRenderProps<TModel extends Model = Model> {
   onChanged: () => void;
   onDelete: (entity: TModel) => Promise<void>;
   onDeleteBulk: () => Promise<void>;
-  onAuthorizeBulk: () => Promise<void> | void;
-  onRevokeBulk: () => Promise<void> | void;
   onDownloadBulk: () => Promise<void>;
   onDownloaded: OnDownloadedFunc;
   onEntitySelected: (entity: TModel) => void;
@@ -173,9 +171,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     this.handleCreateTag = this.handleCreateTag.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleDeselected = this.handleDeselected.bind(this);
-    this.handleDeleteBulk = this.handleDeleteBulk.bind(this);
-    this.handleAuthorizeBulk = this.handleAuthorizeBulk.bind(this);
-    this.handleRevokeBulk = this.handleRevokeBulk.bind(this);
     this.handleDeleteBulk = this.handleDeleteBulk.bind(this);
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -338,42 +333,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
       return await Promise.reject(
         error instanceof Error ? error : new Error(String(error)),
       );
-    }
-  }
-
-  async handleAuthorizeBulk() {
-    const {entitiesCommand} = this;
-    const {entities = [], selected, selectionType} = this.state;
-
-    try {
-      if (selectionType === SelectionType.SELECTION_USER) {
-        await entitiesCommand.authorize(Array.from(selected as Set<TModel>));
-      } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-        await entitiesCommand.authorize(entities);
-      } else {
-        await entitiesCommand.authorize(entities);
-      }
-      this.handleChanged();
-    } catch (error) {
-      this.handleError(error as Error);
-    }
-  }
-
-  async handleRevokeBulk() {
-    const {entitiesCommand} = this;
-    const {entities = [], selected, selectionType} = this.state;
-
-    try {
-      if (selectionType === SelectionType.SELECTION_USER) {
-        await entitiesCommand.revoke(Array.from(selected as Set<TModel>));
-      } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-        await entitiesCommand.revoke(entities);
-      } else {
-        await entitiesCommand.revoke(entities);
-      }
-      this.handleChanged();
-    } catch (error) {
-      this.handleError(error as Error);
     }
   }
 
@@ -662,8 +621,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
           onChanged: this.handleChanged,
           onDelete: this.handleDelete,
           onDeleteBulk: this.handleDeleteBulk,
-          onAuthorizeBulk: this.handleAuthorizeBulk,
-          onRevokeBulk: this.handleRevokeBulk,
           onDownloadBulk: this.handleDownloadBulk,
           onDownloaded: onDownload,
           onEntitySelected: this.handleSelected,
