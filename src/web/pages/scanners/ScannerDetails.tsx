@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
+import Scanner, {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import CertInfo from 'web/components/certinfo/CertInfo';
 import Layout from 'web/components/layout/Layout';
@@ -16,9 +15,16 @@ import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const ScannerDetails = ({entity}) => {
+interface ScannerDetailsProps {
+  'data-testid'?: string;
+  entity: Scanner;
+}
+
+const ScannerDetails = ({
+  entity,
+  'data-testid': dataTestId = 'scanner-details',
+}: ScannerDetailsProps) => {
   const [_] = useTranslation();
   const {
     comment,
@@ -30,7 +36,7 @@ const ScannerDetails = ({entity}) => {
     configs = [],
   } = entity;
   return (
-    <Layout grow flex="column">
+    <Layout grow data-testid={dataTestId} flex="column">
       <InfoTable>
         <colgroup>
           <TableCol width="10%" />
@@ -79,7 +85,7 @@ const ScannerDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Credential')}</TableData>
               <TableData>
-                <DetailsLink id={credential.id} type="credential">
+                <DetailsLink id={credential.id as string} type="credential">
                   {credential.name}
                 </DetailsLink>
               </TableData>
@@ -95,7 +101,7 @@ const ScannerDetails = ({entity}) => {
                 {tasks.map(task => {
                   return (
                     <span key={task.id}>
-                      <DetailsLink id={task.id} type="task">
+                      <DetailsLink id={task.id as string} type="task">
                         {task.name}
                       </DetailsLink>
                     </span>
@@ -112,7 +118,7 @@ const ScannerDetails = ({entity}) => {
                 {configs.map(config => {
                   return (
                     <span key={config.id}>
-                      <DetailsLink id={config.id} type="scanconfig">
+                      <DetailsLink id={config.id as string} type="scanconfig">
                         {config.name}
                       </DetailsLink>
                     </span>
@@ -132,10 +138,6 @@ const ScannerDetails = ({entity}) => {
         )}
     </Layout>
   );
-};
-
-ScannerDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
 };
 
 export default ScannerDetails;
