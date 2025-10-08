@@ -5,13 +5,24 @@
 
 import {_l} from 'gmp/locale/lang';
 import Agent from 'gmp/models/agent';
-import createEntitiesFooter from 'web/entities/createEntitiesFooter';
+import createEntitiesFooter, {
+  CreateEntitiesFooterProps,
+} from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 
-import AgentTableHeader from 'web/pages/agents/AgentTableHeader';
-import AgentTableRow from 'web/pages/agents/AgentTableRow';
+import AgentTableHeader, {
+  AgentTableHeaderProps,
+} from 'web/pages/agents/AgentTableHeader';
+import AgentTableRow, {
+  AgentTableRowProps,
+} from 'web/pages/agents/AgentTableRow';
 
-export default createEntitiesTable<Agent>({
+export default createEntitiesTable<
+  Agent,
+  CreateEntitiesFooterProps<Agent>,
+  AgentTableHeaderProps,
+  AgentTableRowProps
+>({
   emptyTitle: _l('No agents available'),
   row: AgentTableRow,
   rowDetails: undefined,
