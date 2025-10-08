@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useMemo} from 'react';
 import {useDispatch} from 'react-redux';
 import {EntityActionData} from 'gmp/commands/entity';
 import Rejection from 'gmp/http/rejection';
@@ -23,15 +23,19 @@ import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useGmp from 'web/hooks/useGmp';
+import {useGetAgentGroups} from 'web/hooks/useQuery/agentgroups';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
+import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
 import ImportReportDialog, {
   ReportImportDialogData,
 } from 'web/pages/reports/ReportImportDialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import TargetComponent from 'web/pages/targets/Component';
-import AgentTaskDialog from 'web/pages/tasks/AgentTaskDialog';
+import AgentTaskDialog, {
+  AgentTaskDialogData,
+} from 'web/pages/tasks/AgentTaskDialog';
 import ContainerTaskDialog, {
   ContainerTaskDialogData,
 } from 'web/pages/tasks/ContainerTaskDialog';
@@ -172,8 +176,7 @@ const TaskComponent = ({
     useState(false);
   const [taskDialogVisible, setTaskDialogVisible] = useState(false);
   const [taskWizardVisible, setTaskWizardVisible] = useState(false);
-  const [newAgentTaskDialogVisible, setNewAgentTaskDialogVisible] =
-    useState(false);
+  const [agentTaskDialogVisible, setAgentTaskDialogVisible] = useState(false);
 
   const [alertIds, setAlertIds] = useState<string[]>([]);
   const [alterable, setAlterable] = useState<YesNo | undefined>();
@@ -203,12 +206,21 @@ const TaskComponent = ({
   const [startHour, setStartHour] = useState<number>(0);
   const [startTimezone, setStartTimezone] = useState<string>(DEFAULT_TIMEZONE);
   const [targetId, setTargetId] = useState<string | undefined>();
+  const [agentGroupId, setAgentGroupId] = useState<string | undefined>();
   const [targetHosts, setTargetHosts] = useState<string | undefined>();
   const [taskId, setTaskId] = useState<string | undefined>();
   const [taskName, setTaskName] = useState<string | undefined>();
   const [task, setTask] = useState<Task | undefined>();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [title, setTitle] = useState<string>('');
+
+  const {data: agentGroupsData, isLoading: isAgentGroupsLoading} =
+    useGetAgentGroups({filter: ALL_FILTER});
+
+  const agentGroups = useMemo(
+    () => agentGroupsData?.entities ?? [],
+    [agentGroupsData],
+  );
 
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
 
@@ -348,6 +360,10 @@ const TaskComponent = ({
 
   const handleScheduleChange = (scheduleId?: string) => {
     setScheduleId(scheduleId);
+  };
+
+  const handleAgentGroupChange = (agentGroupId?: string) => {
+    setAgentGroupId(agentGroupId);
   };
 
   const handleTaskStart = (task: Task) => {
@@ -554,16 +570,84 @@ const TaskComponent = ({
       .then(() => closeTaskDialog());
   };
 
+  const handleSaveAgentTask = ({
+    addTag,
+    alertIds,
+    alterable,
+    autoDelete,
+    autoDeleteData,
+    applyOverrides,
+    comment,
+    inAssets,
+    minQod,
+    name,
+    scheduleId,
+    schedulePeriods,
+    tagId,
+    agentGroupId,
+    task,
+  }: AgentTaskDialogData) => {
+    if (isDefined(task)) {
+      // save edit part
+      if (!task.isChangeable()) {
+        // arguments need to be undefined if the task is not changeable
+        agentGroupId = undefined;
+      }
+      return gmp.task
+        .saveAgentGroupTask({
+          alert_ids: alertIds,
+          alterable,
+          auto_delete: autoDelete,
+          auto_delete_data: autoDeleteData,
+          apply_overrides: applyOverrides,
+          comment,
+          id: task.id as string,
+          in_assets: inAssets,
+          min_qod: minQod,
+          name,
+          schedule_id: scheduleId,
+          schedule_periods: schedulePeriods,
+          agent_group_id: agentGroupId,
+        })
+        .then(onSaved, onSaveError)
+        .then(() => closeAgentTaskDialog());
+    }
+    return gmp.task
+      .createAgentGroupTask({
+        add_tag: addTag,
+        alert_ids: alertIds,
+        alterable,
+        apply_overrides: applyOverrides,
+        auto_delete: autoDelete,
+        auto_delete_data: autoDeleteData,
+        comment,
+        in_assets: inAssets,
+        min_qod: minQod,
+        name,
+        schedule_id: scheduleId,
+        schedule_periods: schedulePeriods,
+        tag_id: tagId,
+        agent_group_id: agentGroupId,
+      })
+      .then(onCreated, onCreateError)
+      .then(() => closeAgentTaskDialog());
+  };
+
   const openTaskDialog = (task?: Task) => {
     if (isDefined(task) && task.isContainer()) {
       openContainerTaskDialog(task);
     } else {
-      openStandardTaskDialog(task);
+      if (task?.isAgent()) {
+        openAgentTaskDialog(task);
+      } else {
+        openStandardTaskDialog(task);
+      }
     }
   };
 
   const closeTaskDialog = () => {
     setTaskDialogVisible(false);
+    setAgentTaskDialogVisible(false);
   };
 
   const openStandardTaskDialog = (task?: Task) => {
@@ -626,6 +710,59 @@ const TaskComponent = ({
     }
 
     setTaskDialogVisible(true);
+  };
+
+  const openAgentTaskDialog = (task?: Task) => {
+    fetchAlerts();
+    fetchSchedules();
+    fetchTargets();
+    fetchTags();
+
+    if (isDefined(task)) {
+      setName(task.name as string);
+      setComment(task.comment);
+      setAlterable(task.alterable);
+      setApplyOverrides(task.apply_overrides);
+      setInAssets(task.in_assets);
+      setMinQod(task.min_qod);
+      setAutoDelete(task.auto_delete);
+      setAutoDeleteData(task.auto_delete_data);
+
+      setScheduleId(task.schedule?.id ?? UNSET_VALUE);
+      setSchedulePeriods(
+        task.schedule_periods === YES_VALUE ? YES_VALUE : NO_VALUE,
+      );
+      setAgentGroupId(task.agentGroup?.id);
+
+      setAlertIds(map(task.alerts, alert => alert.id as string));
+
+      setTask(task);
+      setTitle(_('Edit Agent Task {{name}}', {name: task.name as string}));
+    } else {
+      setName(undefined);
+      setComment(undefined);
+      setAlterable(undefined);
+      setApplyOverrides(undefined);
+      setInAssets(undefined);
+      setMinQod(undefined);
+      setAutoDelete(undefined);
+      setAutoDeleteData(undefined);
+
+      setScheduleId(defaultScheduleId);
+      setSchedulePeriods(undefined);
+      setAgentGroupId(undefined);
+
+      setAlertIds(isDefined(defaultAlertId) ? [defaultAlertId] : []);
+
+      setTask(undefined);
+      setTitle(_('New Agent Task'));
+    }
+
+    setAgentTaskDialogVisible(true);
+  };
+
+  const closeAgentTaskDialog = () => {
+    setAgentTaskDialogVisible(false);
   };
 
   const openTaskWizard = () => {
@@ -757,12 +894,12 @@ const TaskComponent = ({
     closeReportImportDialog();
   };
 
-  const handleOpenNewAgentTaskDialog = () => {
-    setNewAgentTaskDialogVisible(true);
+  const handleOpenAgentTaskDialog = (task?: Task) => {
+    openAgentTaskDialog(task);
   };
 
   const handleCloseNewAgentTaskDialog = () => {
-    setNewAgentTaskDialogVisible(false);
+    closeAgentTaskDialog();
   };
 
   return (
@@ -793,7 +930,7 @@ const TaskComponent = ({
                 advancedTaskWizard: openAdvancedTaskWizard,
                 modifyTaskWizard: openModifyTaskWizard,
                 taskWizard: openTaskWizard,
-                onNewAgentTaskClick: handleOpenNewAgentTaskDialog,
+                onNewAgentTaskClick: handleOpenAgentTaskDialog,
               })}
 
             {taskDialogVisible && (
@@ -922,16 +1059,53 @@ const TaskComponent = ({
         />
       )}
 
-      {newAgentTaskDialogVisible && (
-        <AgentTaskDialog
-          comment={comment}
-          in_assets={inAssets}
-          name={name}
-          task={task}
-          title={title}
-          onClose={handleCloseNewAgentTaskDialog}
-          onSave={() => {}}
-        />
+      {agentTaskDialogVisible && (
+        <AgentGroupsComponent>
+          {({create: createAgentGroup}) => (
+            // @ts-expect-error
+            <AlertComponent onCreated={handleAlertCreated}>
+              {({create: createAlert}) => (
+                <ScheduleComponent onCreated={handleScheduleCreated}>
+                  {({create: createSchedule}) => (
+                    <AgentTaskDialog
+                      agentGroupId={agentGroupId}
+                      //@ts-ignore
+                      agentGroups={agentGroups}
+                      alertIds={alertIds}
+                      alerts={alerts}
+                      alterable={alterable}
+                      applyOverrides={applyOverrides}
+                      autoDelete={autoDelete}
+                      autoDeleteData={autoDeleteData}
+                      comment={comment}
+                      inAssets={inAssets}
+                      isLoadingAgentGroups={isAgentGroupsLoading}
+                      isLoadingAlerts={isLoadingAlerts}
+                      isLoadingSchedules={isLoadingSchedules}
+                      isLoadingTags={isLoadingTags}
+                      minQod={minQod}
+                      name={name}
+                      scheduleId={scheduleId}
+                      schedulePeriods={schedulePeriods}
+                      schedules={schedules}
+                      tags={tags}
+                      task={task}
+                      title={title}
+                      onAgentGroupChange={handleAgentGroupChange}
+                      onAlertsChange={handleAlertsChange}
+                      onClose={handleCloseNewAgentTaskDialog}
+                      onNewAgentGroupClick={createAgentGroup}
+                      onNewAlertClick={createAlert}
+                      onNewScheduleClick={createSchedule}
+                      onSave={handleSaveAgentTask}
+                      onScheduleChange={handleScheduleChange}
+                    />
+                  )}
+                </ScheduleComponent>
+              )}
+            </AlertComponent>
+          )}
+        </AgentGroupsComponent>
       )}
     </>
   );

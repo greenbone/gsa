@@ -15,11 +15,13 @@ import {isEmpty} from 'gmp/utils/string';
 interface ReportTaskElement extends ModelElement {
   progress?: string | number | undefined | TextElement;
   target?: ModelElement;
+  agent_group?: ModelElement;
 }
 
 interface ReportTaskProperties extends ModelProperties {
   progress?: number;
   target?: Model;
+  agentGroup?: Model;
 }
 
 class ReportTask extends Model {
@@ -27,12 +29,19 @@ class ReportTask extends Model {
 
   readonly progress?: number;
   readonly target?: Model;
+  readonly agentGroup?: Model;
 
-  constructor({progress, target, ...properties}: ReportTaskProperties = {}) {
+  constructor({
+    progress,
+    target,
+    agentGroup,
+    ...properties
+  }: ReportTaskProperties = {}) {
     super(properties);
 
     this.progress = progress;
     this.target = target;
+    this.agentGroup = agentGroup;
   }
 
   static fromElement(element: ReportTaskElement = {}): ReportTask {
@@ -45,6 +54,9 @@ class ReportTask extends Model {
     copy.target = isEmpty(element.target?._id)
       ? undefined
       : Model.fromElement(element.target, 'target');
+    copy.agentGroup = isEmpty(element.agent_group?._id)
+      ? undefined
+      : Model.fromElement(element.target, 'agentgroup');
     copy.progress = isDefined(element.progress)
       ? parseProgressElement(element.progress)
       : undefined;
@@ -53,7 +65,7 @@ class ReportTask extends Model {
   }
 
   isContainer() {
-    return !isDefined(this.target);
+    return !isDefined(this.target) && !isDefined(this.agentGroup);
   }
 }
 
