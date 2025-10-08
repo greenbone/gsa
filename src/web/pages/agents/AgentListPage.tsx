@@ -24,9 +24,9 @@ import {useGetAgents} from 'web/hooks/useQuery/agents';
 import useSelection from 'web/hooks/useSelection';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentComponent from 'web/pages/agents/AgentComponent';
+import AgentsFilterDialog from 'web/pages/agents/AgentFilterDialog';
 import AgentListPageToolBarIcons from 'web/pages/agents/AgentListPageToolBarIcons';
-import AgentsFilterDialog from 'web/pages/agents/AgentsFilterDialog';
-import AgentsTable from 'web/pages/agents/AgentsTable';
+import AgentTable from 'web/pages/agents/AgentTable';
 import AgentsDashboard, {AGENTS_DASHBOARD_ID} from 'web/pages/agents/dashboard';
 import SelectionType from 'web/utils/SelectionType';
 
@@ -39,8 +39,8 @@ const AgentListPage = () => {
   const [deleteAgent, setDeleteAgent] = useState<Agent | undefined>(undefined);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
-  const deleteFuncRef = useRef<((agent: Agent) => Promise<unknown>) | null>(
-    null,
+  const deleteFuncRef = useRef<((agent: Agent) => Promise<void>) | undefined>(
+    undefined,
   );
 
   const {
@@ -60,12 +60,11 @@ const AgentListPage = () => {
   } = useGetAgents({filter});
 
   const allEntities = useMemo(
-    () => (agentsData as {entities?: Agent[]})?.entities || [],
-    [agentsData],
+    () => agentsData?.entities ?? [],
+    [agentsData?.entities],
   );
 
-  const entitiesCounts = (agentsData as {entitiesCounts?: CollectionCounts})
-    ?.entitiesCounts;
+  const entitiesCounts = agentsData?.entitiesCounts;
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     filter,
@@ -81,61 +80,38 @@ const AgentListPage = () => {
   } = useSelection<Agent>();
 
   const handleBulkDelete = useCallback(async () => {
-    const entitiesCommand = gmp.agents;
-    let promise;
-
-    if (selectionType === SelectionType.SELECTION_USER) {
-      const agents = selectedEntities.filter(
-        entity => entity.id !== null && entity.id !== undefined,
-      );
-      promise = entitiesCommand.delete(agents);
-    } else {
-      const agents = allEntities.filter(
-        entity => entity.id !== null && entity.id !== undefined,
-      );
-      promise = entitiesCommand.delete(agents);
-    }
+    const agents =
+      selectionType === SelectionType.SELECTION_USER
+        ? selectedEntities
+        : allEntities;
 
     try {
-      await promise;
+      await gmp.agents.delete(agents);
     } catch (error) {
       showError(error as Error);
     }
   }, [selectionType, selectedEntities, allEntities, gmp.agents, showError]);
 
   const handleBulkAuthorize = useCallback(async () => {
-    const entitiesCommand = gmp.agents;
-    let promise;
-
-    if (selectionType === SelectionType.SELECTION_USER) {
-      const agents = selectedEntities.filter(a => a.id !== null);
-      promise = entitiesCommand.authorize(agents);
-    } else {
-      const agents = allEntities.filter(a => a.id !== null);
-      promise = entitiesCommand.authorize(agents);
-    }
-
+    const agents =
+      selectionType === SelectionType.SELECTION_USER
+        ? selectedEntities
+        : allEntities;
     try {
-      await promise;
+      await gmp.agents.authorize(agents);
     } catch (error) {
       showError(error as Error);
     }
   }, [selectionType, selectedEntities, allEntities, gmp.agents, showError]);
 
   const handleBulkRevoke = useCallback(async () => {
-    const entitiesCommand = gmp.agents;
-    let promise;
-
-    if (selectionType === SelectionType.SELECTION_USER) {
-      const agents = selectedEntities.filter(a => a.id !== null);
-      promise = entitiesCommand.revoke(agents);
-    } else {
-      const agents = allEntities.filter(a => a.id !== null);
-      promise = entitiesCommand.revoke(agents);
-    }
+    const agents =
+      selectionType === SelectionType.SELECTION_USER
+        ? selectedEntities
+        : allEntities;
 
     try {
-      await promise;
+      await gmp.agents.revoke(agents);
     } catch (error) {
       showError(error as Error);
     }
@@ -198,15 +174,9 @@ const AgentListPage = () => {
 
   const isLoading = isFilterLoading || isDataLoading;
   return (
-    <AgentComponent
-      onCreateError={showError}
-      onDeleteError={showError}
-      onSaveError={showError}
-    >
-      {({create, clone, delete: deleteFunc, edit, authorize}) => {
-        // @ts-ignore
+    <AgentComponent onDeleteError={showError} onSaveError={showError}>
+      {({delete: deleteFunc, edit, authorize}) => {
         deleteFuncRef.current = deleteFunc;
-
         return (
           <>
             <PageTitle title={_('Agents')} />
@@ -225,16 +195,14 @@ const AgentListPage = () => {
               isLoading={isLoading}
               sectionIcon={<HatAndGlassesIcon size="large" />}
               table={
-                <AgentsTable
+                <AgentTable
                   entities={allEntities}
                   entitiesCounts={entitiesCounts}
                   filter={filter}
-                  //@ts-ignore
                   selectionType={selectionType}
                   sortBy={sortBy}
                   sortDir={sortDir}
                   onAgentAuthorizeClick={authorize}
-                  onAgentCloneClick={clone}
                   onAgentDeleteClick={openConfirmDeleteDialog}
                   onAgentEditClick={edit}
                   onAuthorizeBulk={handleBulkAuthorize}
@@ -252,9 +220,7 @@ const AgentListPage = () => {
                 />
               }
               title={_('Agents')}
-              toolBarIcons={
-                <AgentListPageToolBarIcons onAgentCreateClick={create} />
-              }
+              toolBarIcons={<AgentListPageToolBarIcons />}
               onAgentEditClick={edit}
               onError={() => {}}
               onFilterChanged={handleFilterChanged}
@@ -270,7 +236,7 @@ const AgentListPage = () => {
               <ConfirmationDialog
                 content={_(
                   'Are you certain you want to permanently remove the agent "{{name}}"?\nThis operation is irreversible.\nAfter removal, reinstalling the agent will be necessary.',
-                  {name: deleteAgent.name || 'Unknown Agent'},
+                  {name: deleteAgent.name ?? 'Unknown Agent'},
                 )}
                 loading={isDeleting}
                 rightButtonAction={DELETE_ACTION}
