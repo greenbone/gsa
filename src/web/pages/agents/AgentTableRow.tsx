@@ -25,7 +25,6 @@ const AgentTableRow = ({
   actionsComponent: ActionsComponent = AgentActions,
   entity,
   onAgentAuthorizeClick,
-  onAgentCloneClick,
   onAgentDeleteClick,
   onAgentEditClick,
   onEntityDeselected,
@@ -53,7 +52,6 @@ const AgentTableRow = ({
         entity={entity}
         selectionType={selectionType}
         onAgentAuthorizeClick={onAgentAuthorizeClick}
-        onAgentCloneClick={onAgentCloneClick}
         onAgentDeleteClick={onAgentDeleteClick}
         onAgentEditClick={onAgentEditClick}
         onEntityDeselected={onEntityDeselected}
