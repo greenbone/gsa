@@ -4,6 +4,7 @@
  */
 
 import Agent from 'gmp/models/agent';
+import {isDefined} from 'gmp/utils/identity';
 import {CircleMinusIcon, CirclePlusIcon, EditIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
@@ -15,7 +16,6 @@ import useTranslation from 'web/hooks/useTranslation';
 export interface AgentActionsProps
   extends Omit<EntitiesActionsProps<Agent>, 'children'> {
   onAgentAuthorizeClick?: (entity: Agent) => void;
-  onAgentCloneClick?: (entity: Agent) => void | Promise<void>;
   onAgentDeleteClick?: (entity: Agent) => void;
   onAgentEditClick?: (entity: Agent) => void;
 }
@@ -35,7 +35,7 @@ const AgentActions = ({
   const isAuthorized = entity.isAuthorized();
 
   const handleAuthorizeClick = () => {
-    if (onAgentAuthorizeClick) {
+    if (isDefined(onAgentAuthorizeClick)) {
       onAgentAuthorizeClick(entity);
     }
   };
@@ -49,31 +49,29 @@ const AgentActions = ({
       onEntitySelected={onEntitySelected}
     >
       <IconDivider grow align={['center', 'center']}>
-        <EditIcon
+        <EditIcon<Agent>
           title={_('Edit Agent')}
           value={entity}
           onClick={onAgentEditClick}
         />
         {isAuthorized ? (
-          <CircleMinusIcon
-            title={_('Deauthorize Agent')}
+          <CircleMinusIcon<Agent>
+            title={_('Revoke Agent')}
             value={entity}
             onClick={handleAuthorizeClick}
           />
         ) : (
-          <CirclePlusIcon
+          <CirclePlusIcon<Agent>
             title={_('Authorize Agent')}
             value={entity}
             onClick={handleAuthorizeClick}
           />
         )}
 
-        <DeleteIcon
+        <DeleteIcon<Agent>
           displayName={_('Agent')}
-          // @ts-ignore
           entity={entity}
           name="agent"
-          // @ts-ignore
           onClick={onAgentDeleteClick}
         />
       </IconDivider>
