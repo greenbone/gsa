@@ -17,7 +17,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityDelete extends WithEntityType {
   userCapabilities: {
-    mayDelete: (name: string) => boolean;
+    mayDelete: (name: EntityType) => boolean;
   };
   isWritable: () => boolean;
   isInUse: () => boolean;
