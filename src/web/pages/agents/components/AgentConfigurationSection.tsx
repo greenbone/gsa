@@ -44,13 +44,13 @@ const ActiveExpressionCode = styled.code`
 `;
 
 const AgentConfigurationSection = ({
+  activeCronExpression,
+  hidePort = false,
+  intervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
   port,
   schedulerCronExpression = DEFAULT_CRON_EXPRESSION,
   useAdvancedCron = false,
-  intervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
-  activeCronExpression,
   onValueChange,
-  hidePort = false,
 }: AgentConfigurationSectionProps) => {
   const [_] = useTranslation();
 
