@@ -10,7 +10,7 @@ import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import CredentialsDialog from 'web/pages/credentials/Dialog';
+import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 import PortListDialog from 'web/pages/portlists/PortListDialog';
 import TargetDialog from 'web/pages/targets/TargetDialog';
 import PropTypes from 'web/utils/PropTypes';
@@ -280,7 +280,7 @@ function TargetComponent(props) {
             />
           )}
           {state.credentialsDialogVisible && (
-            <CredentialsDialog
+            <CredentialDialog
               base={first(state.credentialTypes)}
               title={`${state.credentialsTitle}`}
               types={state.credentialTypes}

@@ -10,12 +10,13 @@ import {
   IMMEDIATELY_START_VALUE,
   SCHEDULE_START_VALUE,
 } from 'gmp/commands/wizard';
-import {
+import Credential, {
   esxi_credential_filter,
   smb_credential_filter,
   ssh_credential_filter,
 } from 'gmp/models/credential';
 import {Date} from 'gmp/models/date';
+import ScanConfig from 'gmp/models/scanconfig';
 import {first} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import DatePicker from 'web/components/form/DatePicker';
@@ -29,7 +30,7 @@ import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import {renderSelectItems} from 'web/utils/Render';
+import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';
 import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
 
@@ -55,16 +56,6 @@ interface AdvancedTaskWizardState {
 }
 
 export type AdvancedTaskWizardData = AdvancedTaskWizardState;
-
-interface Credential {
-  id: string;
-  name: string;
-}
-
-interface ScanConfig {
-  id: string;
-  name: string;
-}
 
 interface AdvancedTaskWizardProps {
   alertEmail?: string;
@@ -109,21 +100,21 @@ const AdvancedTaskWizard = ({
 }: AdvancedTaskWizardProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
-  const configItems = renderSelectItems(scanConfigs);
+  const configItems = renderSelectItems(scanConfigs as RenderSelectItemProps[]);
 
   const [timePickerValue, setTimePickerValue] = useState(
     formatSplitTime(startHour, startMinute),
   );
   const sshCredentialItems = renderSelectItems(
-    credentials.filter(ssh_credential_filter),
+    credentials.filter(ssh_credential_filter) as RenderSelectItemProps[],
     '',
   );
   const smbCredentialItems = renderSelectItems(
-    credentials.filter(smb_credential_filter),
+    credentials.filter(smb_credential_filter) as RenderSelectItemProps[],
     '',
   );
   const esxiCredentialItems = renderSelectItems(
-    credentials.filter(esxi_credential_filter),
+    credentials.filter(esxi_credential_filter) as RenderSelectItemProps[],
     '',
   );
 
@@ -131,7 +122,7 @@ const AdvancedTaskWizard = ({
     alertEmail,
     autoStart,
     scanConfigId:
-      scanConfigId ?? first<ScanConfig, {id: string}>(scanConfigs).id,
+      scanConfigId ?? (first<ScanConfig, ScanConfig>(scanConfigs).id as string),
     startDate,
     esxiCredential,
     smbCredential,
@@ -144,7 +135,10 @@ const AdvancedTaskWizard = ({
     taskName,
   };
 
-  const handleTimeChange = (selectedValue, onValueChange) => {
+  const handleTimeChange = (
+    selectedValue: string,
+    onValueChange: (value: number, name: string) => void,
+  ) => {
     const [startHour, startMinute] = selectedValue.split(':');
     setTimePickerValue(selectedValue);
     onValueChange(parseInt(startHour), 'startHour');

@@ -9,6 +9,8 @@ interface DownloadProps {
   filename?: string;
 }
 
+export type DownloadData = string | ArrayBuffer;
+
 class Download extends React.Component<DownloadProps> {
   obj_url: string | undefined;
   anchor: HTMLAnchorElement | null = null;
@@ -31,7 +33,7 @@ class Download extends React.Component<DownloadProps> {
     this.anchor.download = name;
   }
 
-  setData(data: string, mimetype: string = 'application/octet-stream') {
+  setData(data: DownloadData, mimetype: string = 'application/octet-stream') {
     const blob = new Blob([data], {type: mimetype});
 
     this.release();

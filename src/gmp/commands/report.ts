@@ -6,8 +6,9 @@
 import {convertBoolean} from 'gmp/commands/convert';
 import EntityCommand from 'gmp/commands/entity';
 import GmpHttp from 'gmp/http/gmp';
+import Response from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
+import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import Report, {ReportElement} from 'gmp/models/report';
@@ -82,7 +83,8 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       deltaReportId,
       filter,
     }: ReportCommandDownloadOptions,
-  ) {
+  ): Promise<Response<ArrayBuffer, XmlMeta>> {
+    // @ts-expect-error
     return this.httpGet(
       {
         cmd: 'get_report',

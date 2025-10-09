@@ -4,14 +4,18 @@
  */
 
 import {useState, useEffect, useMemo, useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router';
+import Gmp from 'gmp/gmp';
 import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
+import Report from 'gmp/models/report';
+import ReportConfig from 'gmp/models/reportconfig';
+import ReportFormat from 'gmp/models/reportformat';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
@@ -26,6 +30,7 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useGmp from 'web/hooks/useGmp';
 import useReload from 'web/hooks/useReload';
+import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
@@ -75,16 +80,16 @@ const DEFAULT_FILTER = Filter.fromString(
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
 
 const getFilter = (
-  entity: {report?: {filter?: Filter}} = {},
+  entity: {report?: {filter?: Filter}} | undefined = {},
 ): Filter | undefined => {
   const {report = {}} = entity;
   return report.filter;
 };
 
-const useReportDispatch = (gmp, params: UseReportStateParams) => {
+const useReportDispatch = (gmp: Gmp, params: UseReportStateParams) => {
   const dispatch = useDispatch();
 
-  const getReportPageName = id => `delta-report-${id}`;
+  const getReportPageName = (id: string) => `delta-report-${id}`;
   return useMemo(
     () => ({
       loadFilters: () =>
@@ -93,17 +98,18 @@ const useReportDispatch = (gmp, params: UseReportStateParams) => {
       loadSettings: () =>
         // @ts-expect-error
         dispatch(loadUserSettingDefaults(gmp)()),
-      loadTarget: targetId => gmp.target.get({id: targetId}),
+      // @ts-expect-error
+      loadTarget: (targetId: string) => gmp.target.get({id: targetId}),
       loadReportConfigs: () =>
         // @ts-expect-error
         dispatch(loadReportConfigs(gmp)(ALL_FILTER)),
       loadReportFormats: () =>
         // @ts-expect-error
         dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
-      loadReport: (id, deltaId, filter) =>
+      loadReport: (id: string, deltaId: string, filter: Filter) =>
         // @ts-expect-error
         dispatch(loadDeltaReport(gmp)(id, deltaId, filter)),
-      loadReportIfNeeded: (id, deltaId, filter) =>
+      loadReportIfNeeded: (id: string, deltaId: string, filter: Filter) =>
         // @ts-expect-error
         dispatch(loadDeltaReport(gmp)(id, deltaId, filter)),
       loadReportComposerDefaults: () =>
@@ -115,8 +121,10 @@ const useReportDispatch = (gmp, params: UseReportStateParams) => {
       saveReportComposerDefaults: reportComposerDefaults =>
         // @ts-expect-error
         dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
-      updateFilter: f => {
-        return dispatch(setPageFilter(getReportPageName(params.id), f));
+      updateFilter: (f: Filter) => {
+        return dispatch(
+          setPageFilter(getReportPageName(params.id as string), f),
+        );
       },
     }),
     [dispatch, gmp, params.id],
@@ -126,67 +134,54 @@ const useReportDispatch = (gmp, params: UseReportStateParams) => {
 const useReportState = (params: UseReportStateParams) => {
   const {id, deltaid} = params || {};
 
-  const filterSel = useSelector(state => filterSelector(state));
-
-  const deltaSel = useSelector(state => deltaReportSelector(state));
-
-  const reportFormatsSel = useSelector(state => reportFormatsSelector(state));
-
-  const reportConfigsSel = useSelector(state => reportConfigsSelector(state));
-
-  const userDefaultsSelector = useSelector(state =>
-    getUserSettingsDefaults(state),
+  const filters = useShallowEqualSelector<unknown, Filter[]>(state =>
+    filterSelector(state).getAllEntities(RESULTS_FILTER_FILTER),
   );
 
-  const userDefaultFilterSel = useSelector(state =>
-    getUserSettingsDefaultFilter(state, 'result'),
+  const entity = useShallowEqualSelector<unknown, Report | undefined>(state =>
+    deltaReportSelector(state).getEntity(id, deltaid),
+  );
+  const entityError = useShallowEqualSelector<unknown, Error | undefined>(
+    state => deltaReportSelector(state).getError(id, deltaid),
   );
 
-  const username = useSelector(state => {
-    return getUsername(state);
-  });
-
-  const entity = useSelector(() => deltaSel.getEntity(id, deltaid));
-
-  const entityError = useSelector(() => deltaSel.getError(id, deltaid));
-
-  const reportComposerDefaults = useSelector(state =>
-    getReportComposerDefaults(state),
+  const reportConfigs = useShallowEqualSelector<unknown, ReportConfig[]>(
+    state => reportConfigsSelector(state).getAllEntities(ALL_FILTER),
+  );
+  const reportFormats = useShallowEqualSelector<unknown, ReportFormat[]>(
+    state => reportFormatsSelector(state).getAllEntities(REPORT_FORMATS_FILTER),
   );
 
-  // Use useMemo to memoize the returned object
-  return useMemo(
-    () => ({
-      deltaReportId: deltaid,
-      entity,
-      entityError,
-      filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
-      isLoading: !isDefined(entity),
-      reportExportFileName: userDefaultsSelector.getValueByName(
-        'reportexportfilename',
-      ),
-      reportFilter: getFilter(entity),
-      reportConfigs: reportConfigsSel.getAllEntities(ALL_FILTER),
-      reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
-      reportId: id,
-      reportComposerDefaults,
-      resultDefaultFilter: userDefaultFilterSel.getFilter('result'),
-      username,
-    }),
-    [
-      deltaid,
-      entity,
-      entityError,
-      filterSel,
-      id,
-      reportComposerDefaults,
-      reportConfigsSel,
-      reportFormatsSel,
-      userDefaultFilterSel,
-      userDefaultsSelector,
-      username,
-    ],
+  const reportExportFileName = useShallowEqualSelector(state =>
+    getUserSettingsDefaults(state).getValueByName('reportexportfilename'),
   );
+
+  const resultDefaultFilter = useShallowEqualSelector<
+    unknown,
+    Filter | undefined
+  >(state => getUserSettingsDefaultFilter(state, 'result').getFilter('result'));
+
+  const username = useShallowEqualSelector<unknown, string>(getUsername);
+
+  const reportComposerDefaults = useShallowEqualSelector(
+    getReportComposerDefaults,
+  );
+
+  return {
+    deltaReportId: deltaid,
+    entity,
+    entityError,
+    filters,
+    isLoading: !isDefined(entity),
+    reportExportFileName,
+    reportFilter: getFilter(entity),
+    reportConfigs,
+    reportFormats,
+    reportId: id,
+    reportComposerDefaults,
+    resultDefaultFilter,
+    username,
+  };
 };
 
 const loadFilteredReport =
@@ -224,6 +219,9 @@ const DeltaReportDetails = () => {
   const {
     loadFilters,
     loadTarget,
+    loadReportConfigs,
+    loadReportFormats,
+    loadReportComposerDefaults,
     saveReportComposerDefaults,
     updateFilter,
     loadReport,
@@ -354,7 +352,7 @@ const DeltaReportDetails = () => {
 
   const handleChanged = () => load(lastFilter);
 
-  const handleError = error => {
+  const handleError = (error: Error) => {
     log.error(error);
     showError(error);
   };
@@ -366,7 +364,7 @@ const DeltaReportDetails = () => {
   const handleFilterResetClick = () => handleFilterChange(resultDefaultFilter);
 
   const handleAddToAssets = async () => {
-    if (!entity.id) {
+    if (!entity?.id) {
       throw new Error('Entity ID is undefined');
     }
 
@@ -380,7 +378,7 @@ const DeltaReportDetails = () => {
   };
 
   const handleRemoveFromAssets = async () => {
-    if (!entity.id) {
+    if (!entity?.id) {
       throw new Error('Entity ID is undefined');
     }
 
@@ -395,8 +393,12 @@ const DeltaReportDetails = () => {
 
   const handleFilterDialogClose = () => setShowFilterDialog(false);
 
-  const handleOpenDownloadReportDialog = () =>
+  const handleOpenDownloadReportDialog = () => {
+    loadReportComposerDefaults();
+    loadReportFormats();
+    loadReportConfigs();
     setShowDownloadReportDialog(true);
+  };
 
   const handleCloseDownloadReportDialog = () =>
     setShowDownloadReportDialog(false);
@@ -431,7 +433,7 @@ const DeltaReportDetails = () => {
 
     const extension = report_format?.extension || 'unknown';
 
-    if (!entity.id) {
+    if (!entity?.id) {
       throw new Error('Entity ID is undefined');
     }
 
@@ -450,9 +452,6 @@ const DeltaReportDetails = () => {
 
       const {data} = response;
 
-      const stringifiedData =
-        typeof data === 'string' ? data : JSON.stringify(data);
-
       const filename = generateFilename({
         creationTime: entity.creationTime,
         extension,
@@ -465,13 +464,13 @@ const DeltaReportDetails = () => {
         username,
       });
 
-      onDownload({filename, data: stringifiedData});
+      onDownload({filename, data});
     } catch (error) {
-      handleError(error);
+      handleError(error as Error);
     }
   };
 
-  const handleFilterCreated = filter => {
+  const handleFilterCreated = (filter: Filter) => {
     void load(filter);
     loadFilters();
   };
