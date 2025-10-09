@@ -6,36 +6,37 @@
 import {EntityCommandParams} from 'gmp/commands/entity';
 import {EntityType, typeName} from 'gmp/utils/entitytype';
 import useTranslation from 'web/hooks/useTranslation';
-import {useGmpMutation} from 'web/queries/useGmpMutation';
+import useGmpMutation from 'web/queries/useGmpMutation';
 
-interface UseDeleteMutationParams<TOutput, TError> {
+interface UseDeleteMutationParams<TInput, TOutput, TError> {
   entityType: EntityType;
+  gmpMethod: (input: TInput) => Promise<TOutput>;
   invalidateQueryIds?: string[];
-  method?: string;
   onSuccess?: (data: TOutput) => void;
   onError?: (error: TError) => void;
 }
 
-export function useDeleteMutation<
+const useDeleteMutation = <
   TInput = EntityCommandParams,
   TOutput = void,
   TError = Error,
 >({
+  gmpMethod,
   entityType,
   invalidateQueryIds,
-  method = 'delete',
   onSuccess,
   onError,
-}: UseDeleteMutationParams<TOutput, TError>) {
+}: UseDeleteMutationParams<TInput, TOutput, TError>) => {
   const [_] = useTranslation();
   return useGmpMutation<TInput, TOutput, TError>({
-    entityType,
+    gmpMethod,
     invalidateQueryIds,
-    method,
     successMessage: _('{{entity)} successfully deleted', {
       entity: typeName(entityType),
     }),
     onSuccess,
     onError,
   });
-}
+};
+
+export default useDeleteMutation;

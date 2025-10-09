@@ -26,7 +26,7 @@ interface UseGetEntitiesParams {
   refetchInterval?: number;
 }
 
-export function useGetEntities<
+const useGetEntities = <
   TModel extends Model,
   TEntityCommand extends EntitiesCommand<TModel> = EntitiesCommand<TModel>,
 >({
@@ -35,7 +35,7 @@ export function useGetEntities<
   entityType,
   enabled = true,
   refetchInterval = undefined,
-}: UseGetEntitiesParams) {
+}: UseGetEntitiesParams) => {
   const gmp = useGmp();
   const {token} = gmp.settings;
   return useQuery<UseGetEntitiesReturn<TModel>>({
@@ -60,4 +60,6 @@ export function useGetEntities<
     },
     refetchInterval,
   });
-}
+};
+
+export default useGetEntities;
