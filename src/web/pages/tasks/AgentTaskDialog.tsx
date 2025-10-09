@@ -253,7 +253,7 @@ const AgentTaskDialog = ({
                 </FormGroup>
               )}
 
-            {capabilities.mayOp('get_schedules') &&
+            {capabilities.mayAccess('schedule') &&
               capabilities.mayCreate('schedule') && (
                 <FormGroup direction="row" title={_('Schedule')}>
                   <Select
