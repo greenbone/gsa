@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Agent from 'gmp/models/agent';
 import Filter, {AGENTS_FILTER_FILTER} from 'gmp/models/filter';
+import {isDefined} from 'gmp/utils/identity';
 import DashboardControls from 'web/components/dashboard/Controls';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
@@ -17,10 +18,14 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
-import {useGetAgents} from 'web/hooks/useQuery/agents';
+import {
+  useBulkAuthorizeAgents,
+  useBulkDeleteAgents,
+  useBulkRevokeAgents,
+  useGetAgents,
+} from 'web/hooks/useQuery/agents';
 import useSelection from 'web/hooks/useSelection';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentComponent from 'web/pages/agents/AgentComponent';
@@ -32,13 +37,15 @@ import SelectionType from 'web/utils/SelectionType';
 
 const AgentListPage = () => {
   const [_] = useTranslation();
-  const gmp = useGmp();
-
   const [confirmDeleteDialogVisible, setConfirmDeleteDialogVisible] =
     useState(false);
   const [deleteAgent, setDeleteAgent] = useState<Agent | undefined>(undefined);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
+  const [agents, setAgents] = useState<Agent[] | undefined>(undefined);
+  const [entitiesCounts, setEntitiesCounts] = useState<
+    CollectionCounts | undefined
+  >(undefined);
   const deleteFuncRef = useRef<((agent: Agent) => Promise<void>) | undefined>(
     undefined,
   );
@@ -59,12 +66,18 @@ const AgentListPage = () => {
     isError,
   } = useGetAgents({filter});
 
-  const allEntities = useMemo(
-    () => agentsData?.entities ?? [],
-    [agentsData?.entities],
-  );
-
-  const entitiesCounts = agentsData?.entitiesCounts;
+  useEffect(() => {
+    setAgents(previousAgents => {
+      return isDefined(agentsData?.entities)
+        ? agentsData?.entities
+        : previousAgents;
+    });
+    setEntitiesCounts(previousCounts => {
+      return isDefined(agentsData?.entitiesCounts)
+        ? agentsData?.entitiesCounts
+        : previousCounts;
+    });
+  }, [agentsData, setAgents, setEntitiesCounts]);
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     filter,
@@ -79,43 +92,57 @@ const AgentListPage = () => {
     deselect,
   } = useSelection<Agent>();
 
+  const bulkDelete = useBulkDeleteAgents({
+    onError: showError,
+  });
+  const bulkAuthorize = useBulkAuthorizeAgents({
+    onError: showError,
+  });
+  const bulkRevoke = useBulkRevokeAgents({
+    onError: showError,
+  });
+
   const handleBulkDelete = useCallback(async () => {
-    const agents =
-      selectionType === SelectionType.SELECTION_USER
-        ? selectedEntities
-        : allEntities;
+    let input: Agent[] | Filter;
+    if (selectionType === SelectionType.SELECTION_USER) {
+      input = selectedEntities;
+    } else if (selectionType === SelectionType.SELECTION_FILTER) {
+      input = filter.all();
+    } else {
+      input = agents ?? [];
+    }
 
     try {
-      await gmp.agents.delete(agents);
+      await bulkDelete.mutateAsync(input);
     } catch (error) {
       showError(error as Error);
     }
-  }, [selectionType, selectedEntities, allEntities, gmp.agents, showError]);
+  }, [selectionType, selectedEntities, filter, agents, bulkDelete, showError]);
 
   const handleBulkAuthorize = useCallback(async () => {
-    const agents =
+    const selectedAgents =
       selectionType === SelectionType.SELECTION_USER
         ? selectedEntities
-        : allEntities;
+        : (agents ?? []);
     try {
-      await gmp.agents.authorize(agents);
+      await bulkAuthorize.mutateAsync(selectedAgents);
     } catch (error) {
       showError(error as Error);
     }
-  }, [selectionType, selectedEntities, allEntities, gmp.agents, showError]);
+  }, [selectionType, selectedEntities, agents, showError, bulkAuthorize]);
 
   const handleBulkRevoke = useCallback(async () => {
-    const agents =
+    const selectedAgents =
       selectionType === SelectionType.SELECTION_USER
         ? selectedEntities
-        : allEntities;
+        : (agents ?? []);
 
     try {
-      await gmp.agents.revoke(agents);
+      await bulkRevoke.mutateAsync(selectedAgents);
     } catch (error) {
       showError(error as Error);
     }
-  }, [selectionType, selectedEntities, allEntities, gmp.agents, showError]);
+  }, [selectionType, selectedEntities, agents, showError, bulkRevoke]);
 
   const handleFilterChanged = useCallback(
     (newFilter?: Filter) => {
@@ -172,7 +199,7 @@ const AgentListPage = () => {
     }
   }, [deleteAgent, showError, closeConfirmDeleteDialog]);
 
-  const isLoading = isFilterLoading || isDataLoading;
+  const isUpdating = isFilterLoading || isDataLoading;
   return (
     <AgentComponent onDeleteError={showError} onSaveError={showError}>
       {({delete: deleteFunc, edit, authorize}) => {
@@ -186,19 +213,21 @@ const AgentListPage = () => {
               dashboardControls={() => (
                 <DashboardControls dashboardId={AGENTS_DASHBOARD_ID} />
               )}
-              entities={allEntities}
+              entities={agents}
               entitiesCounts={entitiesCounts}
               entitiesError={isError ? error : undefined}
               filter={filter}
               filterEditDialog={AgentsFilterDialog}
               filtersFilter={AGENTS_FILTER_FILTER}
-              isLoading={isLoading}
+              isLoading={isDataLoading}
+              isLoadingFilters={isFilterLoading}
               sectionIcon={<HatAndGlassesIcon size="large" />}
               table={
                 <AgentTable
-                  entities={allEntities}
+                  entities={agents}
                   entitiesCounts={entitiesCounts}
                   filter={filter}
+                  isUpdating={isUpdating}
                   selectionType={selectionType}
                   sortBy={sortBy}
                   sortDir={sortDir}
@@ -248,7 +277,7 @@ const AgentListPage = () => {
             )}
             {isTagsDialogVisible && (
               <BulkTags
-                entities={allEntities}
+                entities={agents as Agent[]}
                 entitiesCounts={entitiesCounts as CollectionCounts}
                 filter={filter}
                 selectedEntities={selectedEntities}
