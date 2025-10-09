@@ -75,6 +75,7 @@ const AgentDialog = ({
         comment,
         id,
         intervalInSeconds,
+        schedulerCronExpression: schedulerCronTime,
         ipAddress,
         name,
         port,
