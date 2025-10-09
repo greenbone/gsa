@@ -5,36 +5,33 @@
 
 import {EntityType, typeName} from 'gmp/utils/entitytype';
 import useTranslation from 'web/hooks/useTranslation';
-import {useGmpMutation} from 'web/queries/useGmpMutation';
+import useGmpMutation from 'web/queries/useGmpMutation';
 
-interface UseSaveMutationParams<TOutput, TError> {
+interface UseSaveMutationParams<TInput, TOutput, TError> {
   entityType: EntityType;
+  gmpMethod: (input: TInput) => Promise<TOutput>;
   invalidateQueryIds?: string[];
-  method?: string;
   onSuccess?: (data: TOutput) => void;
   onError?: (error: TError) => void;
 }
 
-export function useSaveMutation<
-  TInput = unknown,
-  TOutput = unknown,
-  TError = Error,
->({
+const useSaveMutation = <TInput = unknown, TOutput = void, TError = Error>({
+  gmpMethod,
   entityType,
   invalidateQueryIds,
-  method = 'save',
   onSuccess,
   onError,
-}: UseSaveMutationParams<TOutput, TError>) {
+}: UseSaveMutationParams<TInput, TOutput, TError>) => {
   const [_] = useTranslation();
   return useGmpMutation<TInput, TOutput, TError>({
-    entityType,
+    gmpMethod,
     invalidateQueryIds,
-    method,
     successMessage: _('{{entity}} successfully saved', {
       entity: typeName(entityType),
     }),
     onSuccess,
     onError,
   });
-}
+};
+
+export default useSaveMutation;
