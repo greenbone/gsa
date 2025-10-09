@@ -42,21 +42,22 @@ interface TaskCommandCreateParams {
   tag_id?: string;
   target_id?: string;
 }
+
 interface TaskCommandCreateAgentGroupParams {
-  add_tag?: YesNo;
-  alert_ids?: string[];
+  addTag?: YesNo;
+  alertIds?: string[];
   alterable?: YesNo;
-  apply_overrides?: YesNo;
-  auto_delete?: TaskAutoDelete;
-  auto_delete_data?: number;
+  applyOverrides?: YesNo;
+  autoDelete?: TaskAutoDelete;
+  autoDeleteData?: number;
   comment?: string;
-  in_assets?: YesNo;
-  min_qod?: number;
+  inAssets?: YesNo;
+  minQod?: number;
   name: string;
-  schedule_id?: string;
-  schedule_periods?: number;
-  tag_id?: string;
-  agent_group_id?: string;
+  scheduleId?: string;
+  schedulePeriods?: number;
+  tagId?: string;
+  agentGroupId?: string;
 }
 
 export interface TaskCommandCreateContainerParams {
@@ -86,20 +87,9 @@ interface TaskCommandSaveParams {
   target_id?: string;
 }
 
-interface TaskCommandSaveAgentGroupParams {
-  alert_ids?: string[];
-  alterable?: YesNo;
-  auto_delete?: TaskAutoDelete;
-  auto_delete_data?: Number;
-  apply_overrides?: YesNo;
-  comment?: string;
+interface TaskCommandSaveAgentGroupParams
+  extends Omit<TaskCommandCreateAgentGroupParams, 'addTag'> {
   id: string;
-  in_assets?: YesNo;
-  min_qod?: number;
-  name: string;
-  schedule_id?: string;
-  schedule_periods?: number;
-  agent_group_id?: string;
 }
 
 interface TaskCommandSaveContainerParams {
@@ -229,37 +219,37 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
   }
 
   async createAgentGroupTask({
-    add_tag,
-    alert_ids = [],
+    addTag,
+    alertIds = [],
     alterable,
-    apply_overrides,
-    auto_delete,
-    auto_delete_data,
+    applyOverrides,
+    autoDelete,
+    autoDeleteData,
     comment = '',
-    in_assets,
-    min_qod,
+    inAssets,
+    minQod,
     name,
-    schedule_id,
-    schedule_periods,
-    tag_id,
-    agent_group_id,
+    scheduleId,
+    schedulePeriods,
+    tagId,
+    agentGroupId,
   }: TaskCommandCreateAgentGroupParams) {
     const data = {
       cmd: 'create_agent_group_task',
-      add_tag,
-      'alert_ids:': alert_ids,
+      add_tag: addTag,
+      'alert_ids:': alertIds,
       alterable,
-      apply_overrides,
-      auto_delete,
-      auto_delete_data,
+      apply_overrides: applyOverrides,
+      auto_delete: autoDelete,
+      auto_delete_data: autoDeleteData,
       comment,
-      in_assets,
-      min_qod,
+      in_assets: inAssets,
+      min_qod: minQod,
       name,
-      schedule_id,
-      schedule_periods,
-      tag_id,
-      agent_group_id,
+      schedule_id: scheduleId,
+      schedule_periods: schedulePeriods,
+      tag_id: tagId,
+      agent_group_id: agentGroupId,
     };
     log.debug('Creating agent group task', data);
 
@@ -338,34 +328,34 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
   }
 
   async saveAgentGroupTask({
-    alert_ids = [],
+    alertIds = [],
     alterable,
-    auto_delete,
-    auto_delete_data,
-    apply_overrides,
+    autoDelete,
+    autoDeleteData,
+    applyOverrides,
     comment = '',
     id,
-    in_assets,
-    min_qod,
+    inAssets,
+    minQod,
     name,
-    schedule_id = NO_VALUE_ID,
-    schedule_periods,
-    agent_group_id = NO_VALUE_ID,
+    scheduleId = NO_VALUE_ID,
+    schedulePeriods,
+    agentGroupId = NO_VALUE_ID,
   }: TaskCommandSaveAgentGroupParams) {
     const data = {
       alterable,
-      'alert_ids:': alert_ids,
-      apply_overrides,
-      auto_delete,
-      auto_delete_data,
+      'alert_ids:': alertIds,
+      apply_overrides: applyOverrides,
+      auto_delete: autoDelete,
+      auto_delete_data: autoDeleteData,
       comment,
       cmd: 'save_agent_group_task',
-      in_assets,
-      min_qod,
+      in_assets: inAssets,
+      min_qod: minQod,
       name,
-      schedule_id,
-      schedule_periods,
-      agent_group_id,
+      schedule_id: scheduleId,
+      schedule_periods: schedulePeriods,
+      agent_group_id: agentGroupId,
       task_id: id,
     };
     log.debug('Saving agent task', data);

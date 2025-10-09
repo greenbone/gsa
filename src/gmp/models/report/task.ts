@@ -56,7 +56,7 @@ class ReportTask extends Model {
       : Model.fromElement(element.target, 'target');
     copy.agentGroup = isEmpty(element.agent_group?._id)
       ? undefined
-      : Model.fromElement(element.target, 'agentgroup');
+      : Model.fromElement(element.agent_group, 'agentgroup');
     copy.progress = isDefined(element.progress)
       ? parseProgressElement(element.progress)
       : undefined;

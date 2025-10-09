@@ -368,8 +368,7 @@ class Task extends Model {
     slave,
     status = TASK_STATUS.unknown,
     target,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    agent_group,
+    agentGroup,
     trend,
     ...properties
   }: TaskProperties = {}) {
@@ -401,7 +400,7 @@ class Task extends Model {
     this.status = status;
     this.target = target;
     this.trend = trend;
-    this.agentGroup = agent_group;
+    this.agentGroup = agentGroup;
   }
 
   static fromElement(element?: TaskElement): Task {
@@ -506,7 +505,7 @@ class Task extends Model {
     copy.target = isEmpty(element.target?._id)
       ? undefined
       : Model.fromElement(element.target, 'target');
-    copy.agent_group = isEmpty(element.agent_group?._id)
+    copy.agentGroup = isEmpty(element.agent_group?._id)
       ? undefined
       : Model.fromElement(element.agent_group, 'agentgroup');
     // slave isn't really an entity type but it has an id

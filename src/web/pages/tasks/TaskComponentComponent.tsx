@@ -595,39 +595,39 @@ const TaskComponent = ({
       }
       return gmp.task
         .saveAgentGroupTask({
-          alert_ids: alertIds,
+          alertIds,
           alterable,
-          auto_delete: autoDelete,
-          auto_delete_data: autoDeleteData,
-          apply_overrides: applyOverrides,
+          autoDelete,
+          autoDeleteData,
+          applyOverrides,
           comment,
           id: task.id as string,
-          in_assets: inAssets,
-          min_qod: minQod,
+          inAssets,
+          minQod,
           name,
-          schedule_id: scheduleId,
-          schedule_periods: schedulePeriods,
-          agent_group_id: agentGroupId,
+          scheduleId,
+          schedulePeriods,
+          agentGroupId,
         })
         .then(onSaved, onSaveError)
         .then(() => closeAgentTaskDialog());
     }
     return gmp.task
       .createAgentGroupTask({
-        add_tag: addTag,
-        alert_ids: alertIds,
+        addTag,
+        alertIds,
         alterable,
-        apply_overrides: applyOverrides,
-        auto_delete: autoDelete,
-        auto_delete_data: autoDeleteData,
+        applyOverrides,
+        autoDelete,
+        autoDeleteData,
         comment,
-        in_assets: inAssets,
-        min_qod: minQod,
+        inAssets,
+        minQod,
         name,
-        schedule_id: scheduleId,
-        schedule_periods: schedulePeriods,
-        tag_id: tagId,
-        agent_group_id: agentGroupId,
+        scheduleId,
+        schedulePeriods,
+        tagId,
+        agentGroupId,
       })
       .then(onCreated, onCreateError)
       .then(() => closeAgentTaskDialog());
