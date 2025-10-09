@@ -235,7 +235,7 @@ const AgentTaskDialog = ({
                 </FormGroup>
               )}
 
-            {capabilities.mayOp('get_alerts') &&
+            {capabilities.mayAccess('alert') &&
               capabilities.mayCreate('alert') && (
                 <FormGroup direction="row" title={_('Alerts')}>
                   <MultiSelect
