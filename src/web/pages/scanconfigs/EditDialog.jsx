@@ -364,7 +364,7 @@ EditScanConfigDialog.propTypes = {
   isLoadingFamilies: PropTypes.bool,
   isLoadingScanners: PropTypes.bool,
   name: PropTypes.string,
-  familyTrend: PropTypes.string,
+  configFamiliesTrend: PropTypes.string,
   nvtPreferences: PropTypes.arrayOf(NvtPreferencePropType),
   scannerId: PropTypes.id,
   scannerPreferences: PropTypes.arrayOf(ScannerPreferencePropType),
