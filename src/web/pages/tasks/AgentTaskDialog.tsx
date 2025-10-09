@@ -205,7 +205,7 @@ const AgentTaskDialog = ({
               />
             </FormGroup>
 
-            {capabilities.mayOp('get_agent_groups') &&
+            {capabilities.mayAccess('agentgroup') &&
               capabilities.mayCreate('agentgroup') && (
                 <FormGroup direction="row" title={_('Scan Agent Groups')}>
                   <Title
