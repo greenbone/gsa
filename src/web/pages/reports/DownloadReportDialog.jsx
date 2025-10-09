@@ -135,7 +135,7 @@ const DownloadReportDialog = ({
               </FormGroup>
             )}
             <CheckBox
-              checked={storeAsDefault}
+              checked={values.storeAsDefault}
               checkedValue={YES_VALUE}
               name="storeAsDefault"
               title={_('Store as default')}

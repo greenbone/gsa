@@ -12,7 +12,7 @@ import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
-import CredentialsDialog from 'web/pages/credentials/Dialog';
+import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
@@ -158,7 +158,7 @@ const CredentialsComponent = ({
           })}
 
           {dialogVisible && (
-            <CredentialsDialog
+            <CredentialDialog
               {...dialogProps}
               onClose={handleCloseCredentialDialog}
               onSave={d => {
