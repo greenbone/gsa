@@ -43,36 +43,32 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     return response.setData(ids);
   }
 
-  // @ts-ignore
   async authorize(agents: Agent[]) {
     log.debug('Authorizing agent', {agents});
-    const data: Record<string, string | number | boolean | undefined> = {
+    await this.httpPost({
       cmd: 'modify_agent',
-    };
-
-    if (agents?.length) {
-      // @ts-ignore
-      data['agent_ids:'] = agents.map(agent => agent.id);
-    }
-    data.authorized = 1;
-    const response = await this.httpPost(data);
-    return response.setData(agents);
+      authorized: YES_VALUE,
+      'agent_ids:': map(agents, agent => agent.id),
+    });
   }
 
-  // @ts-ignore
+  async authorizeByFilter(filter: Filter) {
+    const response = await this.get({filter});
+    return this.authorize(response.data);
+  }
+
   async revoke(agents: Agent[]) {
     log.debug('Revoking agent', {agents});
-    const data: Record<string, string | number | boolean | undefined> = {
+    await this.httpPost({
       cmd: 'modify_agent',
-    };
+      authorized: NO_VALUE,
+      'agent_ids:': map(agents, agent => agent.id),
+    });
+  }
 
-    if (agents?.length) {
-      // @ts-ignore
-      data['agent_ids:'] = agents.map(agent => agent.id);
-    }
-    data.authorized = 0;
-    const response = await this.httpPost(data);
-    return response.setData(agents);
+  async revokeByFilter(filter: Filter) {
+    const response = await this.get({filter});
+    return this.revoke(response.data);
   }
 
   getSeverityAggregates({filter}: {filter?: Filter} = {}) {
@@ -92,30 +88,13 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     return this.getAggregates({
       aggregate_type: 'agent',
       group_column: 'scanner',
+      filter,
     });
   }
 
   getEntitiesResponse(root: XmlResponseData): XmlResponseData {
     // @ts-expect-error
     return root.get_agents.get_agents_response;
-  }
-
-  async authorize(agents: Agent[]) {
-    log.debug('Authorizing agent', {agents});
-    await this.httpPost({
-      cmd: 'modify_agent',
-      authorized: YES_VALUE,
-      'agent_ids:': map(agents, agent => agent.id),
-    });
-  }
-
-  async revoke(agents: Agent[]) {
-    log.debug('Revoking agent', {agents});
-    await this.httpPost({
-      cmd: 'modify_agent',
-      authorized: NO_VALUE,
-      'agent_ids:': map(agents, agent => agent.id),
-    });
   }
 }
 
