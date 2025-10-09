@@ -216,7 +216,7 @@ export interface TaskProperties extends ModelProperties {
   slave?: TaskSlave;
   status?: TaskStatus;
   target?: Model;
-  agent_group?: Model;
+  agentGroup?: Model;
   trend?: TaskTrend;
   // from preferences
   apply_overrides?: YesNo;
