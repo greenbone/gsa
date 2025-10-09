@@ -661,7 +661,7 @@
   "Edit Agent Details": "Agentendetails bearbeiten",
   "Edit Agent Group": "Agent-Gruppe bearbeiten",
   "Edit Agent Group {{name}}": "Agent-Gruppe {{name}} bearbeiten",
-  "Edit Agent Task {{name}}": "Agentenauftrag {{name}} bearbeiten",
+  "Edit Agent Task {{name}}": "Agent-Aufgabe {{name}} bearbeiten",
   "Edit Alert {{name}}": "Benachrichtigung {{name}} bearbeiten",
   "Edit Audit {{name}}": "Audit {{name}} bearbeiten",
   "Edit Container Task {{name}}": "Container-Aufgabe {{name}} bearbeiten",
