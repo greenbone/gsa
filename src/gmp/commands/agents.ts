@@ -4,8 +4,10 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
+import {HttpCommandPostParams} from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
+import Response from 'gmp/http/response';
+import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import Agent from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';
@@ -27,13 +29,18 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     super(http, 'agent', Agent);
   }
 
-  async delete(agents: Agent[]) {
-    log.debug('Deleting agent', {agents});
-    const response = await this.httpPost({
+  async deleteByIds(
+    ids: string[],
+    extraParams: HttpCommandPostParams = {},
+  ): Promise<Response<string[], XmlMeta>> {
+    log.debug('Deleting agent', {ids});
+    const params = {
+      ...extraParams,
       cmd: 'delete_agent',
-      'agent_ids:': map(agents, agent => agent.id),
-    });
-    return response.setData(agents);
+      'agent_ids:': ids,
+    };
+    const response = await this.httpPost(params);
+    return response.setData(ids);
   }
 
   // @ts-ignore
