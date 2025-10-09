@@ -4,16 +4,11 @@
  */
 
 import React, {useState} from 'react';
-import {EntityCommandParams} from 'gmp/commands/entity';
 import Rejection from 'gmp/http/rejection';
-import Response from 'gmp/http/response';
-import {XmlMeta} from 'gmp/http/transform/fastxml';
-import ActionResult from 'gmp/models/actionresult';
 import Agent from 'gmp/models/agent';
-import {useModifyAgents} from 'web/hooks/useQuery/agents';
+import {useDeleteAgent, useModifyAgent} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentDialog, {AgentDialogState} from 'web/pages/agents/AgentDialog';
-import {useDeleteMutation} from 'web/queries/useDeleteMutation';
 
 interface AgentComponentRenderProps {
   delete: (entity: Agent) => Promise<void>;
@@ -25,7 +20,7 @@ interface AgentComponentProps {
   children: (actions: AgentComponentRenderProps) => React.ReactNode;
   onDeleted?: () => void;
   onDeleteError?: (error: Rejection) => void;
-  onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
+  onSaved?: () => void;
   onSaveError?: (error: Rejection) => void;
 }
 
@@ -44,12 +39,7 @@ const AgentComponent = ({
     undefined,
   );
 
-  const deleteMutation = useDeleteMutation<
-    EntityCommandParams,
-    void,
-    Rejection
-  >({
-    entityType: 'agent',
+  const deleteMutation = useDeleteAgent({
     onSuccess: onDeleted,
     onError: onDeleteError,
   });
@@ -61,10 +51,8 @@ const AgentComponent = ({
     return deleteMutation.mutateAsync({id: agent.id as string});
   };
 
-  const modifyAgentsMutation = useModifyAgents({
-    onSuccess: res => {
-      onSaved?.(res);
-    },
+  const modifyAgentsMutation = useModifyAgent({
+    onSuccess: onSaved,
     onError: onSaveError,
   });
 
