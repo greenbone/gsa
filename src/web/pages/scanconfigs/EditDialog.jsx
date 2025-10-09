@@ -149,6 +149,7 @@ const EditScanConfigDialog = ({
   comment = '',
   configId,
   configFamilies = {},
+  configFamiliesTrend,
   configIsInUse = false,
   editNvtDetailsTitle,
   editNvtFamiliesTitle,
@@ -216,6 +217,7 @@ const EditScanConfigDialog = ({
     scannerPreferenceValues,
     select: selectValues,
     trend: trendValues,
+    familyTrend: configFamiliesTrend,
   };
 
   const notification =
@@ -362,6 +364,7 @@ EditScanConfigDialog.propTypes = {
   isLoadingFamilies: PropTypes.bool,
   isLoadingScanners: PropTypes.bool,
   name: PropTypes.string,
+  familyTrend: PropTypes.string,
   nvtPreferences: PropTypes.arrayOf(NvtPreferencePropType),
   scannerId: PropTypes.id,
   scannerPreferences: PropTypes.arrayOf(ScannerPreferencePropType),
