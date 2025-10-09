@@ -155,7 +155,8 @@ const EntitiesFooter = <TEntity = Model,>({
             if (isDefined(propOnAction)) {
               await propOnAction();
             }
-            showSuccessNotification('', _('Authorization completed'));
+            // in contrast to delete and trash we don't show a success message
+            // and the action is responsible for showing notifications
           } finally {
             setIsInProgress(false);
           }
@@ -172,7 +173,8 @@ const EntitiesFooter = <TEntity = Model,>({
             if (isDefined(propOnAction)) {
               await propOnAction();
             }
-            showSuccessNotification('', _('Revocation completed'));
+            // in contrast to delete and trash we don't show a success message
+            // and the action is responsible for showing notifications
           } finally {
             setIsInProgress(false);
           }
