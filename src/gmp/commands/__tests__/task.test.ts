@@ -458,4 +458,281 @@ describe('TaskCommand tests', () => {
       'Feed is currently syncing. Please try again later.',
     );
   });
+
+  test('should create new agent group task', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const resp = await cmd.createAgentGroupTask({
+      alterable: 0,
+      applyOverrides: 0,
+      autoDelete: AUTO_DELETE_KEEP,
+      comment: 'comment',
+      inAssets: 0,
+      minQod: 70,
+      name: 'foo',
+      agentGroupId: 'ag1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_agent_group_task',
+        add_tag: undefined,
+        'alert_ids:': [],
+        alterable: 0,
+        apply_overrides: 0,
+        auto_delete: AUTO_DELETE_KEEP,
+        auto_delete_data: undefined,
+        comment: 'comment',
+        in_assets: 0,
+        min_qod: 70,
+        name: 'foo',
+        schedule_id: undefined,
+        schedule_periods: undefined,
+        tag_id: undefined,
+        agent_group_id: 'ag1',
+      },
+    });
+    expect(resp.data.id).toEqual('foo');
+  });
+
+  test('should create new agent group task with all parameters', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const resp = await cmd.createAgentGroupTask({
+      addTag: 1,
+      alertIds: ['a1', 'a2'],
+      alterable: 0,
+      applyOverrides: 0,
+      autoDelete: AUTO_DELETE_KEEP,
+      autoDeleteData: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+      comment: 'comment',
+      inAssets: 0,
+      minQod: 70,
+      name: 'foo',
+      scheduleId: 's1',
+      schedulePeriods: 2,
+      tagId: 't9',
+      agentGroupId: 'ag1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_agent_group_task',
+        add_tag: 1,
+        'alert_ids:': ['a1', 'a2'],
+        alterable: 0,
+        apply_overrides: 0,
+        auto_delete: AUTO_DELETE_KEEP,
+        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+        comment: 'comment',
+        in_assets: 0,
+        min_qod: 70,
+        name: 'foo',
+        schedule_id: 's1',
+        schedule_periods: 2,
+        tag_id: 't9',
+        agent_group_id: 'ag1',
+      },
+    });
+    expect(resp.data.id).toEqual('foo');
+  });
+
+  test.each([
+    {
+      name: 'resource restricted',
+      feedsResponse: {feed_owner_set: 1},
+      message: 'Some Error',
+      expectedMessage:
+        'Access to the feed resources is currently restricted. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'feed owner not set',
+      feedsResponse: {feed_owner_set: 0},
+      message: 'Some Error',
+      expectedMessage:
+        'The feed owner is currently not set. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'missing scan config',
+      message: 'Failed to find config XYZ',
+      feedsResponse: {
+        feed_owner_set: 1,
+        feed_resources_access: 1,
+      },
+      expectedMessage:
+        'Failed to create a new Task because the default Scan Config is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+  ])(
+    'should not create new agent group task while feed is not available: $name',
+    async ({feedsResponse, message, expectedMessage}) => {
+      const xhr = {status: 404} as XMLHttpRequest;
+      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const feedStatusResponse = createResponse({
+        get_feeds: {get_feeds_response: feedsResponse},
+      });
+
+      const fakeHttp = {
+        request: testing
+          .fn()
+          .mockRejectedValueOnce(rejection)
+          .mockResolvedValueOnce(feedStatusResponse),
+      } as unknown as GmpHttp;
+
+      const cmd = new TaskCommand(fakeHttp);
+
+      await expect(
+        cmd.createAgentGroupTask({
+          alterable: 0,
+          applyOverrides: 0,
+          autoDelete: AUTO_DELETE_KEEP,
+          comment: 'comment',
+          inAssets: 0,
+          minQod: 70,
+          name: 'foo',
+          agentGroupId: 'ag1',
+        }),
+      ).rejects.toThrow(expectedMessage);
+    },
+  );
+
+  test('should save agent group task', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const result = await cmd.saveAgentGroupTask({
+      alterable: 0,
+      applyOverrides: 0,
+      autoDelete: AUTO_DELETE_KEEP,
+      comment: 'comment',
+      id: 'task1',
+      inAssets: 0,
+      minQod: 70,
+      name: 'foo',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        alterable: 0,
+        'alert_ids:': [],
+        apply_overrides: 0,
+        auto_delete: AUTO_DELETE_KEEP,
+        auto_delete_data: undefined,
+        comment: 'comment',
+        cmd: 'save_agent_group_task',
+        in_assets: 0,
+        min_qod: 70,
+        name: 'foo',
+        schedule_id: '0',
+        schedule_periods: undefined,
+        agent_group_id: '0',
+        task_id: 'task1',
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test('should save agent group task with all parameters', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const result = await cmd.saveAgentGroupTask({
+      alertIds: ['a1', 'a2'],
+      alterable: 0,
+      applyOverrides: 0,
+      autoDelete: AUTO_DELETE_KEEP,
+      autoDeleteData: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+      comment: 'comment',
+      id: 'task1',
+      inAssets: 0,
+      minQod: 70,
+      name: 'foo',
+      scheduleId: 's1',
+      schedulePeriods: 3,
+      agentGroupId: 'ag1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        alterable: 0,
+        'alert_ids:': ['a1', 'a2'],
+        apply_overrides: 0,
+        auto_delete: AUTO_DELETE_KEEP,
+        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+        comment: 'comment',
+        cmd: 'save_agent_group_task',
+        in_assets: 0,
+        min_qod: 70,
+        name: 'foo',
+        schedule_id: 's1',
+        schedule_periods: 3,
+        agent_group_id: 'ag1',
+        task_id: 'task1',
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test.each([
+    {
+      name: 'resource restricted',
+      feedsResponse: {feed_owner_set: 1},
+      message: 'Some Error',
+      expectedMessage:
+        'Access to the feed resources is currently restricted. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'feed owner not set',
+      feedsResponse: {feed_owner_set: 0},
+      message: 'Some Error',
+      expectedMessage:
+        'The feed owner is currently not set. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'missing scan config',
+      message: 'Failed to find config XYZ',
+      feedsResponse: {
+        feed_owner_set: 1,
+        feed_resources_access: 1,
+      },
+      expectedMessage:
+        'Failed to create a new Task because the default Scan Config is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+  ])(
+    'should not save agent group task while feed is not available: $name',
+    async ({feedsResponse, message, expectedMessage}) => {
+      const xhr = {status: 404} as XMLHttpRequest;
+      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const feedStatusResponse = createResponse({
+        get_feeds: {get_feeds_response: feedsResponse},
+      });
+
+      const fakeHttp = {
+        request: testing
+          .fn()
+          .mockRejectedValueOnce(rejection)
+          .mockResolvedValueOnce(feedStatusResponse),
+      } as unknown as GmpHttp;
+
+      const cmd = new TaskCommand(fakeHttp);
+
+      await expect(
+        cmd.saveAgentGroupTask({
+          alterable: 0,
+          applyOverrides: 0,
+          autoDelete: AUTO_DELETE_KEEP,
+          comment: 'comment',
+          id: 'task1',
+          inAssets: 0,
+          minQod: 70,
+          name: 'foo',
+        }),
+      ).rejects.toThrow(expectedMessage);
+    },
+  );
 });

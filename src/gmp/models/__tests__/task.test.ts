@@ -467,12 +467,19 @@ describe('Task Model parse tests', () => {
 });
 
 describe(`Task Model methods tests`, () => {
-  test('should be a container if target_id is not set', () => {
-    const task1 = Task.fromElement({});
-    const task2 = Task.fromElement({target: {_id: 'foo'}});
+  test('should be a container only if neither target nor agentGroup is set', () => {
+    const t1 = Task.fromElement({});
+    const t2 = Task.fromElement({target: {_id: 'foo'}});
+    const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
+    const t4 = Task.fromElement({
+      target: {_id: 'foo'},
+      agent_group: {_id: 'ag1'},
+    });
 
-    expect(task1.isContainer()).toEqual(true);
-    expect(task2.isContainer()).toEqual(false);
+    expect(t1.isContainer()).toEqual(true);
+    expect(t2.isContainer()).toEqual(false);
+    expect(t3.isContainer()).toEqual(false);
+    expect(t4.isContainer()).toEqual(false);
   });
 
   test('should use status for isActive', () => {
@@ -596,5 +603,53 @@ describe(`Task Model methods tests`, () => {
 
     task = new Task({status: TASK_STATUS.done, alterable: 1});
     expect(task.isChangeable()).toEqual(true);
+  });
+
+  test('should parse agent group', () => {
+    const task = Task.fromElement({
+      _id: 't1',
+      agent_group: {
+        _id: 'ag1',
+      },
+    });
+    expect(task.id).toEqual('t1');
+    expect(task.agentGroup?.id).toEqual('ag1');
+    expect(task.agentGroup?.entityType).toEqual('agentgroup');
+  });
+
+  test('container vs agent vs target parsing check', () => {
+    const t1 = Task.fromElement({});
+    expect(t1.isContainer()).toBe(true);
+    expect(t1.isAgent()).toBe(false);
+
+    const t2 = Task.fromElement({target: {_id: 'tgt1'}});
+    expect(t2.isContainer()).toBe(false);
+    expect(t2.isAgent()).toBe(false);
+
+    const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
+    expect(t3.isContainer()).toBe(false);
+    expect(t3.isAgent()).toBe(true);
+
+    const t4 = Task.fromElement({
+      target: {_id: 'tgt1'},
+      agent_group: {_id: 'ag1'},
+    });
+    expect(t4.isContainer()).toBe(false);
+    expect(t4.isAgent()).toBe(true);
+  });
+
+  test('should be agent if agentGroup is set', () => {
+    const t1 = Task.fromElement({});
+    const t2 = Task.fromElement({agent_group: {_id: 'ag1'}});
+    const t3 = Task.fromElement({target: {_id: 'tgt1'}});
+    const t4 = Task.fromElement({
+      target: {_id: 'tgt1'},
+      agent_group: {_id: 'ag1'},
+    });
+
+    expect(t1.isAgent()).toEqual(false);
+    expect(t2.isAgent()).toEqual(true);
+    expect(t3.isAgent()).toEqual(false);
+    expect(t4.isAgent()).toEqual(true);
   });
 });

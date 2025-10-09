@@ -11,12 +11,14 @@ describe('ReportTask tests', () => {
     const task = new ReportTask();
     expect(task.target).toBeUndefined();
     expect(task.progress).toBeUndefined();
+    expect(task.agentGroup).toBeUndefined();
   });
 
   test('should parse empty element', () => {
     const task = ReportTask.fromElement();
     expect(task.target).toBeUndefined();
     expect(task.progress).toBeUndefined();
+    expect(task.agentGroup).toBeUndefined();
   });
 
   test('should parse id', () => {
@@ -25,10 +27,21 @@ describe('ReportTask tests', () => {
     expect(task.id).toEqual('t1');
   });
 
-  test('should be container task without target', () => {
-    const task = ReportTask.fromElement();
+  test('container vs target vs agentGroup precedence', () => {
+    const t1 = ReportTask.fromElement({});
+    expect(t1.isContainer()).toBe(true);
 
-    expect(task.isContainer()).toEqual(true);
+    const t2 = ReportTask.fromElement({target: {_id: 'tgt1'}});
+    expect(t2.isContainer()).toBe(false);
+
+    const t3 = ReportTask.fromElement({agent_group: {_id: 'ag1'}});
+    expect(t3.isContainer()).toBe(false);
+
+    const t4 = ReportTask.fromElement({
+      target: {_id: 'tgt1'},
+      agent_group: {_id: 'ag1'},
+    });
+    expect(t4.isContainer()).toBe(false);
   });
 
   test('should parse target', () => {
@@ -55,5 +68,27 @@ describe('ReportTask tests', () => {
 
     const task4 = ReportTask.fromElement({progress: 25});
     expect(task4.progress).toEqual(25);
+  });
+
+  test('should parse agent group', () => {
+    const task = ReportTask.fromElement({
+      _id: 't1',
+      agent_group: {_id: 'ag1'},
+    });
+
+    expect(task.id).toEqual('t1');
+    expect(task.agentGroup).toBeDefined();
+    expect(task.agentGroup?.id).toEqual('ag1');
+    expect(task.agentGroup?.entityType).toEqual('agentgroup');
+    expect(task.isContainer()).toEqual(false);
+  });
+
+  test('should still parse progress with agentGroup present', () => {
+    const t = ReportTask.fromElement({
+      progress: {__text: '42'},
+      agent_group: {_id: 'ag1'},
+    });
+    expect(t.progress).toEqual(42);
+    expect(t.agentGroup?.id).toEqual('ag1');
   });
 });
