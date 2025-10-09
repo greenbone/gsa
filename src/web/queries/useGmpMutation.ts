@@ -5,13 +5,10 @@
 
 import {showSuccessNotification as mantineShowSuccessNotification} from '@greenbone/ui-lib';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import useGmp from 'web/hooks/useGmp';
 
-interface UseGmpMutationParams<TOutput, TError> {
-  entityType: EntityType;
-  method: string;
+interface UseGmpMutationParams<TInput, TOutput, TError> {
+  gmpMethod: (input: TInput) => Promise<TOutput>;
   successMessage?: string;
   onSuccess?: (data: TOutput) => void;
   onError?: (error: TError) => void;
@@ -23,25 +20,15 @@ export function useGmpMutation<
   TOutput = unknown,
   TError = Error,
 >({
-  entityType,
-  method,
+  gmpMethod,
   successMessage,
   onSuccess,
   onError,
   invalidateQueryIds,
-}: UseGmpMutationParams<TOutput, TError>) {
-  const gmp = useGmp();
-  const gmpCommand = gmp[entityType];
-  const gmpMethod = gmpCommand?.[method];
+}: UseGmpMutationParams<TInput, TOutput, TError>) {
   const queryClient = useQueryClient();
-
   return useMutation<TOutput, TError, TInput>({
-    mutationFn: async (input: TInput) => {
-      if (!gmpCommand || !gmpCommand) {
-        throw new Error(`GMP command for ${entityType}.${method} not found`);
-      }
-      return await gmpMethod.call(gmpMethod, input);
-    },
+    mutationFn: gmpMethod,
     onSuccess: data => {
       if (isDefined(invalidateQueryIds)) {
         /*
@@ -52,7 +39,7 @@ export function useGmpMutation<
         void queryClient.invalidateQueries({
           predicate: query => {
             const [queryId] = query.queryKey as [string, ...unknown[]];
-            return queryId in invalidateQueryIds;
+            return invalidateQueryIds.includes(queryId);
           },
         });
       }
@@ -68,3 +55,5 @@ export function useGmpMutation<
     onError,
   });
 }
+
+export default useGmpMutation;

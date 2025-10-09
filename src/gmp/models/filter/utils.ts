@@ -6,7 +6,7 @@
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 
-export const isFilter = (filter?: Filter | string | number): filter is Filter =>
+export const isFilter = (filter?: unknown): filter is Filter =>
   isDefined((filter as Filter)?.toFilterString);
 
 export const filterString = (filter?: Filter | number | string) =>

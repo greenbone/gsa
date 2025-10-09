@@ -59,20 +59,19 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
       cmd: 'modify_agent',
       'agent_ids:': agentsIds,
       authorized: parseYesNo(authorized),
-      attempts,
       comment,
-      delayInSeconds,
-      maxJitterInSeconds,
-      bulkSize,
-      bulkThrottleTime,
-      indexerDirDepth,
-      schedulerCronTimes,
-      intervalInSeconds,
-      missUntilInactive,
       'scheduler_cron_times:':
         isArray(schedulerCronTimes) || !isDefined(schedulerCronTimes)
           ? schedulerCronTimes
           : [schedulerCronTimes],
+      attempts,
+      delay_in_seconds: delayInSeconds,
+      max_jitter_in_seconds: maxJitterInSeconds,
+      bulk_size: bulkSize,
+      bulk_throttle_time_in_ms: bulkThrottleTime,
+      indexer_dir_depth: indexerDirDepth,
+      interval_in_seconds: intervalInSeconds,
+      miss_until_inactive: missUntilInactive,
     };
 
     log.debug('Final data being sent to modify_agents:', data);

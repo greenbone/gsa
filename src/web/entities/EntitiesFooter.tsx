@@ -10,8 +10,10 @@ import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import Select from 'web/components/form/Select';
+import AuthorizeIcon from 'web/components/icon/AuthorizeIcon';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import RevokeIcon from 'web/components/icon/RevokeIcon';
 import TagsIcon from 'web/components/icon/TagsIcon';
 import TrashIcon from 'web/components/icon/TrashIcon';
 import Divider from 'web/components/layout/Divider';
@@ -51,12 +53,16 @@ export interface EntitiesFooterProps<TEntity>
   span?: number;
   tags?: boolean;
   trash?: boolean;
+  authorize?: boolean;
+  revoke?: boolean;
   onSelectionTypeChange?: (selectionType: SelectionTypeType) => void;
 }
 
 const DIALOG_TYPES = {
   TRASH: 'trash',
   DELETE: 'delete',
+  AUTHORIZE: 'authorize',
+  REVOKE: 'revoke',
 } as const;
 
 const EntitiesFooter = <TEntity = Model,>({
@@ -69,11 +75,15 @@ const EntitiesFooter = <TEntity = Model,>({
   span,
   tags = true,
   trash,
+  authorize = false,
+  revoke = false,
   onDeleteClick,
   onDownloadClick,
   onSelectionTypeChange,
   onTagsClick,
   onTrashClick,
+  onAuthorizeClick,
+  onRevokeClick,
   dialogConfig = {useCustomDialog: false},
   delete: deleteEntities,
 }: EntitiesFooterProps<TEntity>) => {
@@ -134,7 +144,44 @@ const EntitiesFooter = <TEntity = Model,>({
           }
         },
       },
+      [DIALOG_TYPES.AUTHORIZE]: {
+        dialogText: _('Are you sure you want to authorize all selected items?'),
+        dialogTitle: _('Confirm authorization'),
+        dialogButtonTitle: _('Authorize'),
+        confirmFunction: async () => {
+          try {
+            setIsInProgress(true);
+            showInfoNotification('', _('Authorizing items'));
+            if (isDefined(propOnAction)) {
+              await propOnAction();
+            }
+            // in contrast to delete and trash we don't show a success message
+            // and the action is responsible for showing notifications
+          } finally {
+            setIsInProgress(false);
+          }
+        },
+      },
+      [DIALOG_TYPES.REVOKE]: {
+        dialogText: _('Are you sure you want to revoke all selected items?'),
+        dialogTitle: _('Confirm revocation'),
+        dialogButtonTitle: _('Revoke'),
+        confirmFunction: async () => {
+          try {
+            setIsInProgress(true);
+            showInfoNotification('', _('Revoking items'));
+            if (isDefined(propOnAction)) {
+              await propOnAction();
+            }
+            // in contrast to delete and trash we don't show a success message
+            // and the action is responsible for showing notifications
+          } finally {
+            setIsInProgress(false);
+          }
+        },
+      },
     } as const;
+
     setConfigDialog(configMap[type]);
     setIsDialogVisible(true);
   };
@@ -180,6 +227,24 @@ const EntitiesFooter = <TEntity = Model,>({
                   />
                 )}
                 <IconDivider>
+                  {authorize && (
+                    <AuthorizeIcon
+                      loading={isInProgress || dialogConfig.dialogProcessing}
+                      selectionType={selectionType}
+                      onClick={() =>
+                        onIconClick(DIALOG_TYPES.AUTHORIZE, onAuthorizeClick)
+                      }
+                    />
+                  )}
+                  {revoke && (
+                    <RevokeIcon
+                      loading={isInProgress || dialogConfig.dialogProcessing}
+                      selectionType={selectionType}
+                      onClick={() =>
+                        onIconClick(DIALOG_TYPES.REVOKE, onRevokeClick)
+                      }
+                    />
+                  )}
                   {tags && (
                     <TagsIcon
                       selectionType={selectionType}
