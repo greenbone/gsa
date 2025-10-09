@@ -76,7 +76,7 @@ export class ScanConfigCommand extends EntityCommand {
     return this.action(data);
   }
 
-  save({id, name, comment = '', trend, select, scannerPreferenceValues}) {
+  save({id, name, comment = '', trend, familyTrend, select, scannerPreferenceValues}) {
     const trendData = isDefined(trend) ? convert(trend, 'trend:') : {};
     const scannerPreferenceData = isDefined(scannerPreferenceValues)
       ? convert(scannerPreferenceValues, 'preference:scanner:scanner:scanner:')
@@ -93,6 +93,7 @@ export class ScanConfigCommand extends EntityCommand {
       id,
       comment,
       name,
+      familyTrend,
     };
     log.debug('Saving scanconfig', data);
     return this.action(data);
