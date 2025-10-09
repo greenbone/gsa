@@ -22,7 +22,7 @@ import AgentConfigurationSection, {
   DEFAULT_CRON_EXPRESSION,
   DEFAULT_HEARTBEAT_INTERVAL,
 } from 'web/pages/agents/components/AgentConfigurationSection';
-import {useGetEntities} from 'web/queries/useGetEntities';
+import useGetEntities from 'web/queries/useGetEntities';
 import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 interface AgentGroupsDialogProps {
