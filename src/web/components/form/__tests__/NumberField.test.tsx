@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {render, fireEvent, screen} from 'web/testing';
+import {render, screen, changeInputValue} from 'web/testing';
 import NumberField from 'web/components/form/NumberField';
 
 describe('NumberField tests', () => {
@@ -13,7 +13,7 @@ describe('NumberField tests', () => {
 
     const element = screen.getByTestId('input');
 
-    expect(element).toHaveAttribute('value', '1');
+    expect(element).toHaveValue('1');
   });
 
   test('should call change handler', () => {
@@ -22,10 +22,10 @@ describe('NumberField tests', () => {
 
     const element = screen.getByTestId('input');
 
-    fireEvent.change(element, {target: {value: '2'}});
+    changeInputValue(element, '2');
 
     expect(onChange).toHaveBeenCalledWith(2, undefined);
-    expect(element).toHaveAttribute('value', '2');
+    expect(element).toHaveValue('2');
   });
 
   test('should call change handler for characters with empty string', () => {
@@ -34,10 +34,10 @@ describe('NumberField tests', () => {
 
     const element = screen.getByTestId('input');
 
-    fireEvent.change(element, {target: {value: 'ABC'}});
+    changeInputValue(element, 'ABC');
 
     expect(onChange).toHaveBeenCalledWith('', undefined);
-    expect(element).toHaveAttribute('value', '');
+    expect(element).toHaveValue('');
   });
 
   test('should allow to clear input', () => {
@@ -46,10 +46,10 @@ describe('NumberField tests', () => {
 
     const element = screen.getByTestId('input');
 
-    fireEvent.change(element, {target: {value: ''}});
+    changeInputValue(element, '');
 
     expect(onChange).toHaveBeenCalledWith('', undefined);
-    expect(element).toHaveAttribute('value', '');
+    expect(element).toHaveValue('');
   });
 
   test('should call change handler with value and name', () => {
@@ -65,10 +65,10 @@ describe('NumberField tests', () => {
 
     const element = screen.getByTestId('input');
 
-    fireEvent.change(element, {target: {value: '2'}});
+    changeInputValue(element, '2');
 
     expect(onChange).toHaveBeenCalledWith(2, 'foo');
-    expect(element).toHaveAttribute('value', '2');
+    expect(element).toHaveValue('2');
   });
 
   test('should not call change handler if disabled', () => {
@@ -83,8 +83,9 @@ describe('NumberField tests', () => {
     );
 
     const element = screen.getByTestId('input');
-
-    fireEvent.change(element, {target: {value: '2'}});
+    expect(element).toBeDisabled();
+    expect(element).toHaveValue('1');
+    changeInputValue(element, '2');
 
     expect(onChange).not.toHaveBeenCalled();
   });
@@ -97,17 +98,17 @@ describe('NumberField tests', () => {
 
     const element = screen.getByTestId('input');
 
-    fireEvent.change(element, {target: {value: '2'}});
+    changeInputValue(element, '2');
 
     expect(onChange).toHaveBeenCalledWith(2, undefined);
-    expect(element).toHaveAttribute('value', '2');
+    expect(element).toHaveValue('2');
 
     rerender(<NumberField data-testid="input" value={2} onChange={onChange} />);
 
-    expect(element).toHaveAttribute('value', '2');
+    expect(element).toHaveValue('2');
 
     rerender(<NumberField data-testid="input" value={3} onChange={onChange} />);
 
-    expect(element).toHaveAttribute('value', '3');
+    expect(element).toHaveValue('3');
   });
 });
