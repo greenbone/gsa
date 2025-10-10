@@ -28,7 +28,6 @@ const ScannerListPage = ({
   entities,
   entitiesCounts,
   entitiesError,
-  entitiesSelected,
   filter,
   isLoading,
   isUpdating,
@@ -58,6 +57,7 @@ const ScannerListPage = ({
   const [_] = useTranslation();
   return (
     <ScannerComponent
+      onCertificateDownloaded={onDownloaded}
       onCloneError={onError}
       onCloned={onChanged}
       onCreated={onChanged}
@@ -79,6 +79,7 @@ const ScannerListPage = ({
         create,
         delete: deleteFunc,
         download,
+        downloadCertificate,
         downloadCredential,
         edit,
         verify,
@@ -112,6 +113,7 @@ const ScannerListPage = ({
                 onLastClick={onLastClick}
                 onNextClick={onNextClick}
                 onPreviousClick={onPreviousClick}
+                onScannerCertificateDownloadClick={downloadCertificate}
                 onScannerCloneClick={clone}
                 onScannerCredentialDownloadClick={downloadCredential}
                 onScannerDeleteClick={deleteFunc}
