@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState, useEffect, useCallback, useMemo} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 import {EntityActionData} from 'gmp/commands/entity';
 import Rejection from 'gmp/http/rejection';
@@ -23,7 +23,6 @@ import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useGmp from 'web/hooks/useGmp';
-import {useGetAgentGroups} from 'web/hooks/useQuery/agentgroups';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
@@ -207,20 +206,14 @@ const TaskComponent = ({
   const [startTimezone, setStartTimezone] = useState<string>(DEFAULT_TIMEZONE);
   const [targetId, setTargetId] = useState<string | undefined>();
   const [agentGroupId, setAgentGroupId] = useState<string | undefined>();
+  const [agentGroups, setAgentGroups] = useState<string | undefined>();
+  const [isAgentGroupsLoading, setAgentGroupsLoading] = useState<boolean>();
   const [targetHosts, setTargetHosts] = useState<string | undefined>();
   const [taskId, setTaskId] = useState<string | undefined>();
   const [taskName, setTaskName] = useState<string | undefined>();
   const [task, setTask] = useState<Task | undefined>();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [title, setTitle] = useState<string>('');
-
-  const {data: agentGroupsData, isLoading: isAgentGroupsLoading} =
-    useGetAgentGroups({filter: ALL_FILTER});
-
-  const agentGroups = useMemo(
-    () => agentGroupsData?.entities ?? [],
-    [agentGroupsData],
-  );
 
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
 
@@ -408,8 +401,8 @@ const TaskComponent = ({
     );
   };
 
-  const handleTaskWizardNewClick = () => {
-    openTaskDialog();
+  const handleTaskWizardNewClick = async () => {
+    await openTaskDialog();
     closeTaskWizard();
   };
 
@@ -633,12 +626,12 @@ const TaskComponent = ({
       .then(() => closeAgentTaskDialog());
   };
 
-  const openTaskDialog = (task?: Task) => {
+  const openTaskDialog = async (task?: Task) => {
     if (isDefined(task) && task.isContainer()) {
       openContainerTaskDialog(task);
     } else {
       if (task?.isAgent()) {
-        openAgentTaskDialog(task);
+        await openAgentTaskDialog(task);
       } else {
         openStandardTaskDialog(task);
       }
@@ -712,11 +705,16 @@ const TaskComponent = ({
     setTaskDialogVisible(true);
   };
 
-  const openAgentTaskDialog = (task?: Task) => {
+  const openAgentTaskDialog = async (task?: Task) => {
     fetchAlerts();
     fetchSchedules();
     fetchTargets();
     fetchTags();
+    setAgentGroupsLoading(true);
+    const response = await gmp.agentgroups.getAll();
+    // @ts-ignore
+    setAgentGroups(response.data);
+    setAgentGroupsLoading(false);
 
     if (isDefined(task)) {
       setName(task.name as string);
@@ -894,8 +892,8 @@ const TaskComponent = ({
     closeReportImportDialog();
   };
 
-  const handleOpenAgentTaskDialog = (task?: Task) => {
-    openAgentTaskDialog(task);
+  const handleOpenAgentTaskDialog = async (task?: Task) => {
+    await openAgentTaskDialog(task);
   };
 
   const handleCloseNewAgentTaskDialog = () => {
