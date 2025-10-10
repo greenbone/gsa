@@ -62,9 +62,9 @@ const Page = ({children}: PageProps) => {
   const gmp = useGmp();
   const [_] = useTranslation();
 
-  if (!isDefined(capabilities)) {
-    // only show content after caps have been loaded
-    // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
+  if (!isDefined(capabilities) || !isDefined(features)) {
+    // only show content after caps and features have been loaded
+    // otherwise missing capabilities or features would throw errors
     return null;
   }
 
