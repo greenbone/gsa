@@ -9,6 +9,7 @@ import {EntityActionData} from 'gmp/commands/entity';
 import Rejection from 'gmp/http/rejection';
 import Response from 'gmp/http/response';
 import {XmlMeta} from 'gmp/http/transform/fastxml';
+import AgentGroup from 'gmp/models/agentgroup';
 import date, {Date} from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
@@ -70,7 +71,7 @@ import {
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getTimezone} from 'web/store/usersettings/selectors';
-import {UNSET_VALUE} from 'web/utils/Render';
+import {RenderSelectItemProps, UNSET_VALUE} from 'web/utils/Render';
 import AdvancedTaskWizard, {
   AdvancedTaskWizardData,
 } from 'web/wizard/AdvancedTaskWizard';
@@ -206,7 +207,7 @@ const TaskComponent = ({
   const [startTimezone, setStartTimezone] = useState<string>(DEFAULT_TIMEZONE);
   const [targetId, setTargetId] = useState<string | undefined>();
   const [agentGroupId, setAgentGroupId] = useState<string | undefined>();
-  const [agentGroups, setAgentGroups] = useState<string | undefined>();
+  const [agentGroups, setAgentGroups] = useState<AgentGroup[] | undefined>();
   const [isAgentGroupsLoading, setAgentGroupsLoading] = useState<boolean>();
   const [targetHosts, setTargetHosts] = useState<string | undefined>();
   const [taskId, setTaskId] = useState<string | undefined>();
@@ -712,7 +713,6 @@ const TaskComponent = ({
     fetchTags();
     setAgentGroupsLoading(true);
     const response = await gmp.agentgroups.getAll();
-    // @ts-ignore
     setAgentGroups(response.data);
     setAgentGroupsLoading(false);
 
@@ -1067,8 +1067,9 @@ const TaskComponent = ({
                   {({create: createSchedule}) => (
                     <AgentTaskDialog
                       agentGroupId={agentGroupId}
-                      //@ts-ignore
-                      agentGroups={agentGroups}
+                      agentGroups={
+                        agentGroups as unknown as RenderSelectItemProps[]
+                      }
                       alertIds={alertIds}
                       alerts={alerts}
                       alterable={alterable}
