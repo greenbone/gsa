@@ -36,6 +36,7 @@ const ScannerActions = ({
   onEntityDeselected,
   onEntitySelected,
   onScannerCloneClick,
+  onScannerCertificateDownloadClick,
   onScannerCredentialDownloadClick,
   onScannerDeleteClick,
   onScannerDownloadClick,
@@ -86,9 +87,16 @@ const ScannerActions = ({
         />
         {isDefined(entity.credential) && (
           <DownloadKeyIcon<Scanner>
-            title={_('Download Certificate')}
+            title={_('Download Client Certificate')}
             value={entity}
             onClick={onScannerCredentialDownloadClick}
+          />
+        )}
+        {isDefined(entity.caPub) && (
+          <DownloadKeyIcon
+            title={_('Download CA Certificate')}
+            value={entity}
+            onClick={onScannerCertificateDownloadClick}
           />
         )}
       </IconDivider>
