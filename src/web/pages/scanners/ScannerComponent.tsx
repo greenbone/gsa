@@ -16,8 +16,6 @@ import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Scanner, {
   AGENT_CONTROLLER_SCANNER_TYPE,
-  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
-  GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
   ScannerType,
 } from 'gmp/models/scanner';
@@ -49,6 +47,7 @@ interface ScannerComponentRenderProps {
   create: () => Promise<void>;
   delete: (scanner: Scanner) => Promise<void>;
   download: (scanner: Scanner) => Promise<void>;
+  downloadCertificate: (scanner: Scanner) => void;
   downloadCredential: (scanner: Scanner) => Promise<void>;
   edit: (scanner: Scanner) => Promise<void>;
   verify: (scanner: Scanner) => Promise<void>;
@@ -56,6 +55,7 @@ interface ScannerComponentRenderProps {
 
 interface ScannerComponentProps {
   children: (props: ScannerComponentRenderProps) => React.ReactNode;
+  onCertificateDownloaded?: OnDownloadedFunc;
   onCloneError?: (error: Error) => void;
   onCloned?: (response: Response<EntityActionData, XmlMeta>) => void;
   onCreateError?: (error: Error) => void;
@@ -87,6 +87,7 @@ const createCredentialsFilter = (types: CredentialType[]) => {
 
 const ScannerComponent = ({
   children,
+  onCertificateDownloaded,
   onCloneError,
   onCloned,
   onCreateError,
@@ -254,6 +255,25 @@ const ScannerComponent = ({
     setCredentialId(credId);
   };
 
+  const handleDownloadCertificate = (scanner: Scanner) => {
+    const {creationTime, entityType, id, modificationTime, name, caPub} =
+      scanner;
+    const filename = generateFilename({
+      creationTime: creationTime,
+      extension: 'pem',
+      fileNameFormat: detailsExportFileName,
+      id: id,
+      modificationTime,
+      resourceName: name,
+      resourceType: entityType,
+      username,
+    });
+    onCertificateDownloaded?.({
+      filename,
+      data: caPub?.certificate as string,
+    });
+  };
+
   const handleDownloadCredential = (scanner: Scanner) => {
     const credential = scanner.credential as Credential;
     const {creationTime, entityType, id, modificationTime, name} = credential;
@@ -275,26 +295,6 @@ const ScannerComponent = ({
         return {filename, data: response.data};
       })
       .then(onCredentialDownloaded, onCredentialDownloadError);
-  };
-
-  const handleScannerTypeChange = (value: ScannerType) => {
-    setPort(() => {
-      if (
-        value === GREENBONE_SENSOR_SCANNER_TYPE ||
-        value === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE
-      ) {
-        return 22;
-      }
-      if (value === AGENT_CONTROLLER_SCANNER_TYPE) {
-        return 443;
-      }
-      return undefined;
-    });
-    setType(value);
-  };
-
-  const handleScannerPortChange = (value: number) => {
-    setPort(value);
   };
 
   const handleScannerDownload = useEntityDownload<Scanner>('scanner', {
@@ -332,6 +332,7 @@ const ScannerComponent = ({
         create: openScannerDialog,
         delete: handleScannerDelete,
         download: handleScannerDownload,
+        downloadCertificate: handleDownloadCertificate,
         downloadCredential: handleDownloadCredential,
         edit: openScannerDialog,
         verify: handleVerifyScanner as (scanner: Scanner) => Promise<void>,
@@ -358,8 +359,6 @@ const ScannerComponent = ({
             await promise;
             return closeScannerDialog();
           }}
-          onScannerPortChange={handleScannerPortChange}
-          onScannerTypeChange={handleScannerTypeChange}
         />
       )}
       {credentialDialogVisible && (
