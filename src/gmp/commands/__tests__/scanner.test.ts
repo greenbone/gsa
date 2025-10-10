@@ -27,7 +27,7 @@ describe('ScannerCommand tests', () => {
       port: 9390,
       type: OPENVASD_SCANNER_TYPE,
       comment: 'Test comment',
-      caPub: 'test-ca-pub' as unknown as File,
+      caCertificate: 'test-ca-pub' as unknown as File,
       credentialId: 'test-credential-id',
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -60,7 +60,7 @@ describe('ScannerCommand tests', () => {
       port: 9390,
       type: OPENVASD_SCANNER_TYPE,
       comment: 'Updated comment',
-      caPub: 'updated-ca-pub' as unknown as File,
+      caCertificate: 'updated-ca-pub' as unknown as File,
       credentialId: 'updated-credential-id',
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
