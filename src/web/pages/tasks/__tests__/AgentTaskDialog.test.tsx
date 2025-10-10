@@ -87,7 +87,7 @@ describe('AgentTaskDialog component tests', () => {
     expect(onAgentGroupChange).toHaveBeenCalledWith('ag-1', 'agentGroupId');
   });
 
-  test('shows Tag selector in create mode (no task)', () => {
+  test('should show Tag selector in create mode (no task)', () => {
     renderDialog();
     expect(screen.getByName('addTag')).toBeInTheDocument();
     expect(screen.getByName('tagId')).toBeInTheDocument();
