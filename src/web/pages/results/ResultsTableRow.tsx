@@ -69,8 +69,8 @@ const ResultTableRow = ({
   const deltaCompliance = entity.delta?.result?.compliance;
   const deltaHostname = entity.delta?.result?.host?.hostname;
   const deltaQoD = entity.delta?.result?.qod?.value;
-  const epssScore = entity?.information?.epss?.maxSeverity?.score;
-  const epssPercentile = entity?.information?.epss?.maxSeverity?.percentile;
+  const epssScore = entity?.information?.epss?.maxEpss?.score;
+  const epssPercentile = entity?.information?.epss?.maxEpss?.percentile;
   const gmp = useGmp();
   const enableEPSS = gmp.settings.enableEPSS;
   return (
