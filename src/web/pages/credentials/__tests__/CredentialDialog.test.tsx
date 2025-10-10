@@ -420,7 +420,7 @@ describe('CredentialDialog tests', () => {
     expect(kdcs).toHaveValue('');
   });
 
-  test('should render form fields for Certificate', () => {
+  test('should render form fields for Client Certificate', () => {
     const {render} = rendererWith({
       gmp,
     });
@@ -441,18 +441,20 @@ describe('CredentialDialog tests', () => {
     const certificate = screen.getByName('certificate');
     expect(certificate).toHaveValue('');
     expect(certificate).toHaveAttribute('type', 'file');
+    expect(
+      screen.getByRole('button', {name: 'Client Certificate'}),
+    ).toBeVisible();
 
     const privateKey = screen.getByName('private_key');
     expect(privateKey).toHaveValue('');
     expect(privateKey).toHaveAttribute('type', 'file');
+    expect(
+      screen.getByRole('button', {name: 'Client Private Key'}),
+    ).toBeVisible();
 
     const passphrase = screen.getByName('passphrase');
     expect(passphrase).toHaveValue('');
     expect(passphrase).toHaveAttribute('type', 'password');
-
-    const publicKey = screen.getByName('public_key');
-    expect(publicKey).toHaveValue('');
-    expect(publicKey).toHaveAttribute('type', 'file');
   });
 
   test('should handle replace password interactions correctly', () => {
