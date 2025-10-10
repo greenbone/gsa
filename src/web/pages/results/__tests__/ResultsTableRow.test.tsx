@@ -45,8 +45,8 @@ describe('ResultsTableRow tests', () => {
 
     render(<ResultsTableRow entity={entity} />);
     const row = screen.getByTestId('result-table-row');
-    expect(row).toHaveTextContent('87.650%');
-    expect(row).toHaveTextContent('80th');
+    expect(row).toHaveTextContent('98.760%');
+    expect(row).toHaveTextContent('90th');
   });
 
   test('should render EPSS fields 2 columns', () => {
@@ -69,8 +69,8 @@ describe('ResultsTableRow tests', () => {
             },
           },
           max_epss: {
-            score: 0.9876,
-            percentile: 90.0,
+            score: 0.87555,
+            percentile: 89.0,
             cve: {
               _id: 'CVE-2020-5678',
               severity: 2.0,
@@ -82,8 +82,8 @@ describe('ResultsTableRow tests', () => {
 
     render(<ResultsTableRow entity={entity} />);
     const row = screen.getByTestId('result-table-row');
-    expect(row).toHaveTextContent('87.650%');
-    expect(row).toHaveTextContent('83rd');
+    expect(row).toHaveTextContent('87.555%');
+    expect(row).toHaveTextContent('89th');
   });
 
   test('should render Delta V2 with changed severity, qod and hostname', () => {
