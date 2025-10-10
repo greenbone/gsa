@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import Credential from 'gmp/models/credential';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
@@ -13,7 +14,9 @@ import {
   scannerTypeName,
 } from 'gmp/models/scanner';
 import {map} from 'gmp/utils/array';
+import {isEmpty} from 'gmp/utils/string';
 import SaveDialog from 'web/components/dialog/SaveDialog';
+import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
 import NumberField from 'web/components/form/NumberField';
 import Select from 'web/components/form/Select';
@@ -40,8 +43,6 @@ interface ScannerDialogProps {
   onCredentialChange?: (value: string) => void;
   onNewCredentialClick?: () => void;
   onSave?: (state: ScannerDialogState) => Promise<void> | void;
-  onScannerTypeChange?: (value: ScannerType) => void;
-  onScannerPortChange?: (value: number) => void;
 }
 
 interface ScannerDialogDefaultValues {
@@ -52,6 +53,7 @@ interface ScannerDialogDefaultValues {
 }
 
 interface ScannerDialogValues {
+  caCertificate?: File;
   credentialId?: string;
   type?: ScannerType;
   port?: number;
@@ -59,6 +61,24 @@ interface ScannerDialogValues {
 
 export type ScannerDialogState = ScannerDialogValues &
   ScannerDialogDefaultValues;
+
+const CA_CERTIFICATE_LINE = '-----BEGIN CERTIFICATE-----';
+
+const updatePort = (scannerType: ScannerType | undefined) => {
+  if (
+    scannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
+    scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE
+  ) {
+    return 22;
+  }
+  if (
+    scannerType === AGENT_CONTROLLER_SCANNER_TYPE ||
+    scannerType === OPENVASD_SCANNER_TYPE
+  ) {
+    return 443;
+  }
+  return undefined;
+};
 
 const ScannerDialog = ({
   comment = '',
@@ -75,13 +95,20 @@ const ScannerDialog = ({
   onCredentialChange,
   onNewCredentialClick,
   onSave,
-  onScannerPortChange,
-  onScannerTypeChange,
 }: ScannerDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const features = useFeatures();
   const gmp = useGmp();
+  const [caCertificate, setCaCertificate] = useState<File | undefined>(
+    undefined,
+  );
+  const [error, setError] = useState<string | undefined>();
+  const [scannerType, setScannerType] = useState<ScannerType | undefined>(type);
+  const [userChangePort, setUserChangedPort] = useState<boolean>(false);
+  const [scannerPort, setScannerPort] = useState<number | undefined>(
+    () => port ?? updatePort(type),
+  );
 
   name = name || _('Unnamed');
   title = title || _('New Scanner');
@@ -109,6 +136,30 @@ const ScannerDialog = ({
     type = undefined;
   }
 
+  const handleCaCertificateChange = async (file?: File | null) => {
+    if (file) {
+      const content = await file.text();
+      if (!content.includes(CA_CERTIFICATE_LINE)) {
+        setError(_('Not a valid CA Certificate file.'));
+        return;
+      }
+    }
+    setCaCertificate(file ?? undefined);
+  };
+
+  const handleScannerTypeChange = (value: ScannerType) => {
+    if (!userChangePort) {
+      setScannerPort(() => updatePort(value));
+    }
+    setScannerType(value);
+  };
+
+  const handleScannerPortChange = (value: number) => {
+    // allow to update the port automatically if the field is empty
+    setUserChangedPort(!isEmpty(value));
+    setScannerPort(value);
+  };
+
   const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
     label: scannerTypeName(scannerType),
     value: scannerType,
@@ -118,6 +169,8 @@ const ScannerDialog = ({
   const isAgentControllerSensorScannerType =
     type === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
   const showCredentialField =
+    !isGreenboneSensorType && !isAgentControllerSensorScannerType;
+  const showCaCertificateField =
     !isGreenboneSensorType && !isAgentControllerSensorScannerType;
   if (isGreenboneSensorType || isAgentControllerSensorScannerType) {
     credentialId = undefined;
@@ -131,11 +184,13 @@ const ScannerDialog = ({
         id,
         name,
       }}
+      error={error}
       title={title}
       values={{
+        caCertificate,
         credentialId,
-        type,
-        port,
+        type: scannerType,
+        port: scannerPort,
       }}
       onClose={onClose}
       onSave={onSave}
@@ -165,9 +220,7 @@ const ScannerDialog = ({
               label={_('Scanner Type')}
               name="type"
               value={state.type}
-              onChange={(value: string) =>
-                onScannerTypeChange && onScannerTypeChange(value as ScannerType)
-              }
+              onChange={handleScannerTypeChange as (value: string) => void}
             />
 
             <FormGroup title={_('Host')}>
@@ -184,11 +237,18 @@ const ScannerDialog = ({
                 disabled={scannerInUse}
                 name="port"
                 value={state.port}
-                onChange={(value: number) =>
-                  onScannerPortChange && onScannerPortChange(value)
-                }
+                onChange={handleScannerPortChange}
               />
             </FormGroup>
+
+            {showCaCertificateField && (
+              <FileField
+                name="caCertificate"
+                title={_('CA Certificate')}
+                value={state.caCertificate ?? null}
+                onChange={handleCaCertificateChange}
+              />
+            )}
 
             {showCredentialField && (
               <FormGroup direction="row" title={_('Credential')}>
