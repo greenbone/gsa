@@ -101,7 +101,7 @@ export class ScanConfigCommand extends EntityCommand {
       id,
       comment,
       name,
-      familyTrend,
+      trend: familyTrend,
     };
     log.debug('Saving scanconfig', data);
     return this.action(data);
