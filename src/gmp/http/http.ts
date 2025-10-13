@@ -26,6 +26,13 @@ type Resolve<TData, TMeta extends Meta> = (
   value: Response<TData, TMeta>,
 ) => void;
 type Reject = (reason?: string | Error) => void;
+export type ResponseType =
+  | ''
+  | 'arraybuffer'
+  | 'blob'
+  | 'document'
+  | 'json'
+  | 'text';
 
 interface HandleOptions {
   method?: HttpMethod;
@@ -74,7 +81,7 @@ interface RequestOptions<
   url?: string;
   cancelToken?: CancelToken;
   force?: boolean;
-  responseType?: '' | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text';
+  responseType?: ResponseType;
   transform?: Transform<
     TSuccessDataIn,
     TSuccessMetaIn,
