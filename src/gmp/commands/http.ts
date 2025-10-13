@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import CancelToken from 'gmp/cancel';
 import GmpHttp from 'gmp/http/gmp';
-import {
+import type {ResponseType} from 'gmp/http/http';
+import type {
   Data,
   UrlParams as Params,
   UrlParamValue as ParamValue,
@@ -14,6 +16,9 @@ import {filterString, isFilter} from 'gmp/models/filter/utils';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
 export interface HttpCommandOptions {
+  cancelToken?: CancelToken;
+  force?: boolean;
+  responseType?: ResponseType;
   extraParams?: Params;
   includeDefaultParams?: boolean;
 }
