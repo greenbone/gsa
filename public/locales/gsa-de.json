@@ -397,6 +397,7 @@
   "Choose from common scheduling options above, or enable advanced mode for custom expressions.": "Wählen Sie aus den oben genannten Standardplanungsoptionen oder aktivieren Sie den erweiterten Modus für benutzerdefinierte Ausdrücke.",
   "Choose Tag": "Tag auswählen",
   "Clear": "Zurücksetzen",
+  "Clear input": "Eingabe löschen",
   "Client Certificate": "Benutzerzertifikat",
   "Client Certificate (from Credential)": "Benutzerzertifikat (aus Anmeldedaten)",
   "Client Private Key": "Privater Client-Schlüssel",
