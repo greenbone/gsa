@@ -10,22 +10,16 @@ import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 
-export interface SaveLdapArguments {
-  authdn: string;
-  certificate: File;
-  ldapEnabled: boolean;
-  ldapHost: string;
-  ldapsOnly: boolean;
-}
-
 interface LdapDialogProps {
   authdn?: string;
   ldapEnabled?: boolean;
   ldapHost?: string;
   ldapsOnly?: boolean;
   onClose: () => void;
-  onSave: (values: SaveLdapArguments) => void;
+  onSave: (values: LdapDialogState) => void;
 }
+
+export type LdapDialogState = LdapDialogDefaultValues & LdapDialogValues;
 
 interface LdapDialogDefaultValues {
   authdn: string;
@@ -35,7 +29,7 @@ interface LdapDialogDefaultValues {
 }
 
 interface LdapDialogValues {
-  certificate: File;
+  certificate?: File;
 }
 
 const LdapDialog = ({

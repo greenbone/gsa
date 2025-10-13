@@ -25,7 +25,7 @@ import Credential, {
 } from 'gmp/models/credential';
 import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
 import {first, map} from 'gmp/utils/array';
-import {hasValue, isDefined, isString} from 'gmp/utils/identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
 import FileField from 'web/components/form/FileField';
@@ -184,57 +184,57 @@ const CredentialDialog = ({
     setCredentialTypeAndAutoGenerate(type, autogenerate);
   };
 
-  const handlePublicGPGKeyChange = async (file: File | null) => {
+  const handlePublicGPGKeyChange = async (file: File | undefined) => {
     try {
-      if (hasValue(file)) {
+      if (isDefined(file)) {
         await validateFile(
           file,
           PGP_PUBLIC_KEY_LINE,
           _('Not a valid PGP file'),
         );
       }
-      setPublicKey(file ?? undefined);
+      setPublicKey(file);
     } catch (error) {
       setError((error as Error).message);
     }
   };
 
-  const handleClientCertificateChange = async (file: File | null) => {
+  const handleClientCertificateChange = async (file: File | undefined) => {
     try {
-      if (hasValue(file)) {
+      if (isDefined(file)) {
         await validateFile(
           file,
           CLIENT_CERTIFICATE_LINE,
           _('Not a valid Client Certificate file'),
         );
       }
-      setCertificate(file ?? undefined);
+      setCertificate(file);
     } catch (error) {
       setError((error as Error).message);
     }
   };
 
-  const handleCertificateChange = (file: File | null) => {
-    setCertificate(file ?? undefined);
+  const handleCertificateChange = (file: File | undefined) => {
+    setCertificate(file);
   };
 
-  const handleClientKeyChange = async (file: File | null) => {
+  const handleClientKeyChange = async (file: File | undefined) => {
     try {
-      if (hasValue(file)) {
+      if (isDefined(file)) {
         await validateFile(
           file,
           CLIENT_PRIVATE_KEY_LINE,
           _('Not a valid Client Private Key file'),
         );
       }
-      setPrivateKey(file ?? undefined);
+      setPrivateKey(file);
     } catch (error) {
       setError((error as Error).message);
     }
   };
 
-  const handlePrivateKeyChange = (file: File | null) => {
-    setPrivateKey(file ?? undefined);
+  const handlePrivateKeyChange = (file: File | undefined) => {
+    setPrivateKey(file);
   };
 
   const handleErrorClose = () => {
@@ -429,8 +429,7 @@ const CredentialDialog = ({
               <FileField
                 name="certificate"
                 title={_('Client Certificate')}
-                // the file field is used in controlled mode therefore convert undefined to null
-                value={state.certificate ?? null}
+                value={state.certificate}
                 onChange={handleClientCertificateChange}
               />
             )}
@@ -445,8 +444,7 @@ const CredentialDialog = ({
                       ? _('Private SSH Key')
                       : _('Client Private Key')
                   }
-                  // the file field is used in controlled mode therefore convert undefined to null
-                  value={state.private_key ?? null}
+                  value={state.private_key}
                   onChange={
                     state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE
                       ? handlePrivateKeyChange
@@ -568,8 +566,7 @@ const CredentialDialog = ({
               <FileField
                 name="public_key"
                 title={_('Public PGP Key')}
-                // the file field is used in controlled mode therefore convert undefined to null
-                value={state.public_key ?? null}
+                value={state.public_key}
                 onChange={handlePublicGPGKeyChange}
               />
             )}

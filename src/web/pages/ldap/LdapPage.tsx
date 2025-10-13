@@ -21,7 +21,7 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import LdapDialog, {SaveLdapArguments} from 'web/pages/ldap/LdapDialog';
+import LdapDialog, {LdapDialogState} from 'web/pages/ldap/LdapDialog';
 import {renderYesNo} from 'web/utils/Render';
 
 interface ToolBarIconsProps {
@@ -96,7 +96,7 @@ const LdapAuthentication = () => {
     ldapEnabled,
     ldapHost,
     ldapsOnly,
-  }: SaveLdapArguments) => {
+  }: LdapDialogState) => {
     await gmp.auth.saveLdap({
       authdn,
       certificate,

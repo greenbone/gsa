@@ -14,8 +14,10 @@ interface PortListImportDialogProps {
 }
 
 interface PortListImportDialogValues {
-  xmlFile: File;
+  xmlFile?: File;
 }
+
+export type PortListImportDialogState = PortListImportDialogValues;
 
 const PortListImportDialog = ({onClose, onSave}: PortListImportDialogProps) => {
   const [_] = useTranslation();

@@ -8,7 +8,7 @@ import HttpCommand from 'gmp/commands/http';
 
 interface SaveLdapArguments {
   authdn: string;
-  certificate: File;
+  certificate?: File;
   ldapEnabled: boolean;
   ldapHost: string;
   ldapsOnly?: boolean;
