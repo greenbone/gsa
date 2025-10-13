@@ -39,6 +39,8 @@ import {getCommands} from 'gmp/command';
 import AgentCommand from 'gmp/commands/agent';
 import AgentGroupCommand from 'gmp/commands/agentgroup';
 import AgentGroupsCommand from 'gmp/commands/agentgroups';
+import AgentInstallerCommand from 'gmp/commands/agentinstaller';
+import AgentInstallersCommand from 'gmp/commands/agentinstallers';
 import AgentsCommand from 'gmp/commands/agents';
 import AuthenticationCommand from 'gmp/commands/auth';
 import DashboardCommand from 'gmp/commands/dashboards';
@@ -84,6 +86,8 @@ class Gmp {
   readonly agents: AgentsCommand;
   readonly agentgroup: AgentGroupCommand;
   readonly agentgroups: AgentGroupsCommand;
+  readonly agentinstaller: AgentInstallerCommand;
+  readonly agentinstallers: AgentInstallersCommand;
   readonly auth: AuthenticationCommand;
   readonly dashboard: DashboardCommand;
   readonly feedstatus: FeedStatusCommand;
@@ -122,6 +126,8 @@ class Gmp {
     this.agents = new AgentsCommand(this.http);
     this.agentgroup = new AgentGroupCommand(this.http);
     this.agentgroups = new AgentGroupsCommand(this.http);
+    this.agentinstaller = new AgentInstallerCommand(this.http);
+    this.agentinstallers = new AgentInstallersCommand(this.http);
     this.auth = new AuthenticationCommand(this.http);
     this.dashboard = new DashboardCommand(this.http);
     this.feedstatus = new FeedStatusCommand(this.http);
