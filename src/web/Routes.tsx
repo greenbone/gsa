@@ -24,6 +24,7 @@ import AuditsDetailsPage from 'web/pages/audits/DetailsPage';
 import AuditsPage from 'web/pages/audits/ListPage';
 import CertBundDetailsPage from 'web/pages/certbund/DetailsPage';
 import CertBundsPage from 'web/pages/certbund/ListPage';
+import ContainerImageTargetsListPage from 'web/pages/container-image-targets/ContainerImageTargetsListPage';
 import CpeDetailsPage from 'web/pages/cpes/DetailsPage';
 import CpesPage from 'web/pages/cpes/ListPage';
 import CredentialDetailsPage from 'web/pages/credentials/DetailsPage';
@@ -126,6 +127,10 @@ const LoggedInRoutes = () => {
           <Route element={<AlertsPage />} path="/alerts" />
           <Route element={<AuditsPage />} path="/audits" />
           <Route element={<CertBundsPage />} path="/certbunds" />
+          <Route
+            element={<ContainerImageTargetsListPage />}
+            path="/ociimagetargets"
+          />
           <Route element={<CpesPage />} path="/cpes" />
           <Route element={<CredentialsPage />} path="/credentials" />
           <Route element={<CvesPage />} path="/cves" />
@@ -168,6 +173,7 @@ const LoggedInRoutes = () => {
           <Route element={<AlertDetailsPage />} path="/alert/:id" />
           <Route element={<AuditsDetailsPage />} path="/audit/:id" />
           <Route element={<CertBundDetailsPage />} path="/certbund/:id" />
+
           <Route element={<CpeDetailsPage />} path="/cpe/:id" />
           <Route element={<CredentialDetailsPage />} path="/credential/:id" />
           <Route element={<CveDetailsPage />} path="/cve/:id" />
