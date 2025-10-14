@@ -16,7 +16,7 @@ interface UseDeleteMutationParams<TInput, TOutput, TError> {
   onError?: (error: TError) => void;
 }
 
-const useDeleteMutation = <
+const useMoveToTrashCan = <
   TInput = EntityCommandParams,
   TOutput = void,
   TError = Error,
@@ -31,7 +31,7 @@ const useDeleteMutation = <
   return useGmpMutation<TInput, TOutput, TError>({
     gmpMethod,
     invalidateQueryIds,
-    successMessage: _('{{entity}} successfully deleted', {
+    successMessage: _('{{entity}} successfully moved to trashcan', {
       entity: typeName(entityType),
     }),
     onSuccess,
@@ -39,4 +39,4 @@ const useDeleteMutation = <
   });
 };
 
-export default useDeleteMutation;
+export default useMoveToTrashCan;

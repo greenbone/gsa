@@ -135,6 +135,12 @@ const Menu = () => {
   const agentGroupMatch = useMatch('/agent-group/*');
   const isAgentGroupsActive = Boolean(agentGroupsMatch || agentGroupMatch);
 
+  const containerImageTargetsMatch = useMatch('/ociimagetargets');
+  const containerImageTargetMatch = useMatch('/ociimagetarget/*');
+  const isContainerImageTargetsActive = Boolean(
+    containerImageTargetsMatch || containerImageTargetMatch,
+  );
+
   const schedulesMatch = useMatch('/schedules');
   const scheduleMatch = useMatch('/schedule/*');
   const isSchedulesActive = Boolean(schedulesMatch || scheduleMatch);
@@ -201,6 +207,7 @@ const Menu = () => {
     'agent',
     'agentgroup',
     'target',
+    'ociimagetarget',
     'portlist',
     'credential',
     'scanconfig',
@@ -398,6 +405,7 @@ const Menu = () => {
         key: 'configuration',
         defaultOpened: [
           isTargetsActive,
+          isContainerImageTargetsActive,
           isPortlistsActive,
           isCredentialsActive,
           isScanConfigsActive,
@@ -418,6 +426,13 @@ const Menu = () => {
             isPathMatch: isTargetsActive,
             active: isTargetsActive,
           },
+          capabilities.mayAccess('ociimagetarget') &&
+            features.featureEnabled('ENABLE_CONTAINER_SCANNING') && {
+              label: _('Container Image Targets'),
+              to: '/ociimagetargets',
+              isPathMatch: isContainerImageTargetsActive,
+              active: isContainerImageTargetsActive,
+            },
           capabilities.mayAccess('portlist') && {
             label: _('Port Lists'),
             to: '/portlists',

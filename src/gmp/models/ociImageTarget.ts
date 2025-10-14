@@ -4,15 +4,15 @@
  */
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import {parseCsv, type YesNo, parseBoolean} from 'gmp/parser';
+import {parseCsv, parseBoolean} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 interface OciImageTargetElement extends ModelElement {
   image_references?: string;
   credential?: ModelElement;
-  reverse_lookup_only?: YesNo;
-  reverse_lookup_unify?: YesNo;
+  reverse_lookup_only?: boolean;
+  reverse_lookup_unify?: boolean;
 }
 
 interface OciImageTargetProperties extends ModelProperties {
