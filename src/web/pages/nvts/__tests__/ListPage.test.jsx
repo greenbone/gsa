@@ -215,8 +215,8 @@ describe('NvtsPage tests', () => {
     expect(row[2]).toHaveTextContent('CVE-2020-1234');
     expect(row[2]).toHaveTextContent('CVE-2020-5678');
     expect(row[2]).toHaveTextContent('80 %');
-    expect(row[2]).toHaveTextContent('87.650%');
-    expect(row[2]).toHaveTextContent('90th');
+    expect(row[2]).toHaveTextContent('98.760%');
+    expect(row[2]).toHaveTextContent('80th');
   });
 
   test('should allow to bulk action on page contents', async () => {

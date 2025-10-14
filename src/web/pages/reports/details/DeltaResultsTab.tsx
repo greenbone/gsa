@@ -55,11 +55,11 @@ const resultsSortFunctions = {
   vulnerability: makeCompareString('vulnerability'),
   compliant: makeCompareString('compliance'),
   epss_score: makeCompareNumber(
-    (entity: Result) => entity?.information?.epss?.maxSeverity?.score,
+    (entity: Result) => entity?.information?.epss?.maxEpss?.score,
     0,
   ),
   epss_percentile: makeCompareNumber(
-    (entity: Result) => entity?.information?.epss?.maxSeverity?.percentile,
+    (entity: Result) => entity?.information?.epss?.maxEpss?.percentile,
     0,
   ),
 };

@@ -64,7 +64,7 @@ import withTranslation from 'web/utils/withTranslation';
 const log = logger.getLogger('web.pages.report./DetailsPage');
 
 const DEFAULT_FILTER = Filter.fromString(
-  'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity',
+  'levels=chml rows=100 min_qod=70 first=1 sort-reverse=severity',
 );
 
 export const REPORT_RESET_FILTER = RESET_FILTER.copy()
