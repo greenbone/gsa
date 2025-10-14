@@ -40,7 +40,7 @@ interface PortListCommandDeletePortRangeParams {
 }
 
 interface PortListCommandImportParams {
-  xmlFile: File;
+  xmlFile?: File;
 }
 
 const log = logger.getLogger('gmp.commands.portlists');

@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {afterEach} from '@gsa/testing';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {
   render as reactTestingRender,
   cleanup,
@@ -40,6 +42,16 @@ export interface RendererOptions {
   language?: string | Record<string, unknown>;
 }
 
+const createTestQueryClient = () =>
+  new QueryClient({
+    //@ts-expect-error
+    logger: {log: () => {}, warn: () => {}, error: () => {}},
+    defaultOptions: {
+      queries: {retry: false, gcTime: 0},
+      mutations: {retry: false},
+    },
+  });
+
 export {renderHook} from '@testing-library/react/pure';
 
 afterEach(cleanup);
@@ -54,6 +66,7 @@ export const render = (ui: React.ReactNode) => {
   const container = rtlContainer.querySelector<HTMLElement>(
     '[data-testid="main-container"]',
   ) as HTMLElement;
+
   return {
     userEvent: userEvent.setup({
       pointerEventsCheck: PointerEventsCheckLevel.Never,
@@ -92,30 +105,38 @@ export const rendererWith = ({
     features = new Features();
   }
 
-  const Providers = ({children}) => (
-    <TestingGmpProvider gmp={gmp}>
-      <TestingCapabilitiesProvider capabilities={capabilities}>
-        <TestingFeaturesProvider features={features}>
-          <TestingLicenseProvider license={license}>
-            <TestingStoreProvider store={store}>
-              <TestingLanguageProvider
-                language={typeof language === 'string' ? {language} : language}
-              >
-                {router ? (
-                  <MemoryRouter initialEntries={[route]}>
-                    {children}
-                    {showLocation && <LocationDisplay />}
-                  </MemoryRouter>
-                ) : (
-                  children
-                )}
-              </TestingLanguageProvider>
-            </TestingStoreProvider>
-          </TestingLicenseProvider>
-        </TestingFeaturesProvider>
-      </TestingCapabilitiesProvider>
-    </TestingGmpProvider>
-  );
+  const Providers: React.FC<{children: React.ReactNode}> = ({children}) => {
+    const queryClient = React.useMemo(() => createTestQueryClient(), []);
+
+    return (
+      <TestingGmpProvider gmp={gmp}>
+        <TestingCapabilitiesProvider capabilities={capabilities}>
+          <TestingFeaturesProvider features={features}>
+            <TestingLicenseProvider license={license}>
+              <TestingStoreProvider store={store}>
+                <TestingLanguageProvider
+                  language={
+                    typeof language === 'string' ? {language} : language
+                  }
+                >
+                  <QueryClientProvider client={queryClient}>
+                    {router ? (
+                      <MemoryRouter initialEntries={[route]}>
+                        {children}
+                        {showLocation && <LocationDisplay />}
+                      </MemoryRouter>
+                    ) : (
+                      children
+                    )}
+                  </QueryClientProvider>
+                </TestingLanguageProvider>
+              </TestingStoreProvider>
+            </TestingLicenseProvider>
+          </TestingFeaturesProvider>
+        </TestingCapabilitiesProvider>
+      </TestingGmpProvider>
+    );
+  };
 
   const wrapper = ({children}: {children: React.ReactNode}) => (
     <Providers>{children}</Providers>

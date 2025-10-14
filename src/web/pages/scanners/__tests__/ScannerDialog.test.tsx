@@ -10,12 +10,14 @@ import {
   rendererWith,
   fireEvent,
   getSelectItemElementsForSelect,
+  wait,
 } from 'web/testing';
 import Features from 'gmp/capabilities/features';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
+  OPENVASD_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import ScannerDialog from 'web/pages/scanners/ScannerDialog';
 
@@ -26,7 +28,6 @@ describe('ScannerDialog tests', () => {
     const handleClose = testing.fn();
     const handleCredentialChange = testing.fn();
     const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -36,7 +37,6 @@ describe('ScannerDialog tests', () => {
         onClose={handleClose}
         onCredentialChange={handleCredentialChange}
         onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
       />,
     );
 
@@ -49,7 +49,6 @@ describe('ScannerDialog tests', () => {
     const handleClose = testing.fn();
     const handleCredentialChange = testing.fn();
     const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -63,7 +62,6 @@ describe('ScannerDialog tests', () => {
         onClose={handleClose}
         onCredentialChange={handleCredentialChange}
         onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
       />,
     );
 
@@ -89,13 +87,12 @@ describe('ScannerDialog tests', () => {
     expect(inputs[2]).toHaveValue('localhost');
 
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
-    expect(scannerType).toHaveValue('Greenbone Sensor');
+    expect(scannerType).toHaveValue('');
   });
 
   test('should display defaults when agent controller is used', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -108,7 +105,6 @@ describe('ScannerDialog tests', () => {
         type={AGENT_CONTROLLER_SCANNER_TYPE}
         onClose={handleClose}
         onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
       />,
     );
 
@@ -129,7 +125,6 @@ describe('ScannerDialog tests', () => {
   test('should display defaults when agent sensor is used', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -142,7 +137,6 @@ describe('ScannerDialog tests', () => {
         type={AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}
         onClose={handleClose}
         onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
       />,
     );
 
@@ -194,7 +188,6 @@ describe('ScannerDialog tests', () => {
     const handleClose = testing.fn();
     const handleCredentialChange = testing.fn();
     const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -208,7 +201,6 @@ describe('ScannerDialog tests', () => {
         onClose={handleClose}
         onCredentialChange={handleCredentialChange}
         onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
       />,
     );
 
@@ -217,13 +209,14 @@ describe('ScannerDialog tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
+      caCertificate: undefined,
       host: 'mypc',
       name: 'john',
       comment: 'lorem ipsum',
       credentialId: undefined,
       type: GREENBONE_SENSOR_SCANNER_TYPE,
       id: '1234',
-      port: undefined,
+      port: 22,
     });
   });
 
@@ -231,8 +224,6 @@ describe('ScannerDialog tests', () => {
     const handleClose = testing.fn();
     const handleCredentialChange = testing.fn();
     const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
-    const handleScannerPortChange = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -251,8 +242,6 @@ describe('ScannerDialog tests', () => {
         onClose={handleClose}
         onCredentialChange={handleCredentialChange}
         onSave={handleSave}
-        onScannerPortChange={handleScannerPortChange}
-        onScannerTypeChange={handleScannerTypeChange}
       />,
     );
 
@@ -263,11 +252,12 @@ describe('ScannerDialog tests', () => {
     const commentInput = screen.getByName('comment');
     expect(commentInput).toHaveValue('lorem ipsum');
     changeInputValue(commentInput, 'lorem');
+    expect(commentInput).toHaveValue('lorem');
 
     const portInput = screen.getByName('port');
     expect(portInput).toHaveValue('22');
     changeInputValue(portInput, '2222');
-    expect(handleScannerPortChange).toHaveBeenCalledWith(2222);
+    expect(portInput).toHaveValue('2222');
 
     const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
       name: 'Scanner Type',
@@ -276,30 +266,26 @@ describe('ScannerDialog tests', () => {
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toBe(4); // OpenVASD Scanner, Agent Controller, Agent Sensor, Greenbone Sensor
     fireEvent.click(screen.getByRole('option', {name: 'Agent Sensor'})); // select Agent Sensor
-    expect(handleScannerTypeChange).toHaveBeenCalledWith(
-      AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
-    );
+    expect(scannerType).toHaveValue('Agent Sensor');
 
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
+      caCertificate: undefined,
       host: 'mypc',
       name: 'ipsum',
       comment: 'lorem',
       credentialId: undefined,
-      type: GREENBONE_SENSOR_SCANNER_TYPE,
+      type: AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
       id: '1234',
-      port: 22,
+      port: 2222,
     });
   });
 
   test('should not allow to change host, port and type if scanner is in use', () => {
     const handleClose = testing.fn();
-    const handleCredentialChange = testing.fn();
     const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
-    const handleScannerPortChange = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -317,21 +303,18 @@ describe('ScannerDialog tests', () => {
         scannerInUse={true}
         type={GREENBONE_SENSOR_SCANNER_TYPE}
         onClose={handleClose}
-        onCredentialChange={handleCredentialChange}
         onSave={handleSave}
-        onScannerPortChange={handleScannerPortChange}
-        onScannerTypeChange={handleScannerTypeChange}
       />,
     );
 
     const hostInput = screen.getByName('host');
     expect(hostInput).toBeDisabled();
     changeInputValue(hostInput, 'new.host');
+    expect(hostInput).toHaveValue('mypc');
 
     const portInput = screen.getByName('port');
     expect(portInput).toBeDisabled();
     changeInputValue(portInput, '2222');
-    expect(handleScannerPortChange).not.toHaveBeenCalled();
 
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
     expect(scannerType).toBeDisabled();
@@ -342,6 +325,7 @@ describe('ScannerDialog tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
+      caCertificate: undefined,
       host: 'mypc',
       name: 'john',
       comment: 'lorem ipsum',
@@ -354,20 +338,11 @@ describe('ScannerDialog tests', () => {
 
   test('should allow to close the dialog', () => {
     const handleClose = testing.fn();
-    const handleCredentialChange = testing.fn();
     const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
-    render(
-      <ScannerDialog
-        onClose={handleClose}
-        onCredentialChange={handleCredentialChange}
-        onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
-      />,
-    );
+    render(<ScannerDialog onClose={handleClose} onSave={handleSave} />);
 
     const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
@@ -376,24 +351,13 @@ describe('ScannerDialog tests', () => {
   });
 
   test('should not render agent controller in scanner selection if feature is disabled', async () => {
-    const handleClose = testing.fn();
-    const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
-
     const {render} = rendererWith({
       gmp,
       capabilities: true,
       features: new Features([]), // no ENABLE_AGENTS feature
     });
 
-    render(
-      <ScannerDialog
-        type={GREENBONE_SENSOR_SCANNER_TYPE}
-        onClose={handleClose}
-        onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
-      />,
-    );
+    render(<ScannerDialog type={GREENBONE_SENSOR_SCANNER_TYPE} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
     const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
@@ -407,24 +371,13 @@ describe('ScannerDialog tests', () => {
   });
 
   test('should not render agent controller in scanner selection if agent permission is missing', async () => {
-    const handleClose = testing.fn();
-    const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
-
     const {render} = rendererWith({
       gmp,
       capabilities: false,
       features: new Features(['ENABLE_AGENTS']),
     });
 
-    render(
-      <ScannerDialog
-        type={GREENBONE_SENSOR_SCANNER_TYPE}
-        onClose={handleClose}
-        onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
-      />,
-    );
+    render(<ScannerDialog type={GREENBONE_SENSOR_SCANNER_TYPE} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
     const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
@@ -438,24 +391,13 @@ describe('ScannerDialog tests', () => {
   });
 
   test('should only render agent controller in scanner selection if sensors are not enabled', async () => {
-    const handleClose = testing.fn();
-    const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
-
     const {render} = rendererWith({
       gmp: {settings: {enableGreenboneSensor: false}}, // no sensor
       capabilities: true,
       features: new Features(['ENABLE_AGENTS']),
     });
 
-    render(
-      <ScannerDialog
-        type={AGENT_CONTROLLER_SCANNER_TYPE}
-        onClose={handleClose}
-        onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
-      />,
-    );
+    render(<ScannerDialog type={AGENT_CONTROLLER_SCANNER_TYPE} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
     const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
@@ -466,5 +408,46 @@ describe('ScannerDialog tests', () => {
     expect(scannerTypeItems.length).toBe(2); // OpenVASD Scanner and Agent Controller
     expect(scannerTypeItems[0]).toHaveTextContent('OpenVASD Scanner');
     expect(scannerTypeItems[1]).toHaveTextContent('Agent Controller');
+  });
+
+  test('should allow to set a CA certificate of a scanner', async () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <ScannerDialog
+        type={OPENVASD_SCANNER_TYPE}
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+    const caCertificateInput = screen.getByName('caCertificate');
+    const content =
+      '-----BEGIN CERTIFICATE-----\nfoo\n-----END CERTIFICATE-----';
+    const file = new File([content], 'ca.crt', {
+      type: 'text/plain',
+    });
+    // jsdom does not implement file.text() so we need to mock it
+    file.text = testing.fn().mockResolvedValue(content);
+    fireEvent.change(caCertificateInput, {
+      target: {files: [file]},
+    });
+
+    // wait for the file to be read
+    await wait();
+
+    fireEvent.click(screen.getDialogSaveButton());
+    expect(handleSave).toHaveBeenCalledWith({
+      caCertificate: file,
+      host: 'localhost',
+      name: 'Unnamed',
+      comment: '',
+      credentialId: undefined,
+      type: OPENVASD_SCANNER_TYPE,
+      id: undefined,
+      port: 443,
+    });
   });
 });

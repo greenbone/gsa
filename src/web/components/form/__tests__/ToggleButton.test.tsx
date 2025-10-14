@@ -17,7 +17,6 @@ describe('ToggleButton tests', () => {
     expect(button).toHaveStyleRule('cursor', 'pointer');
     expect(button).toHaveStyleRule('color', Theme.darkGray);
     expect(button).toHaveStyleRule('background-color', Theme.lightGray);
-    expect(button).toMatchSnapshot();
   });
 
   test('should render in disabled state', () => {

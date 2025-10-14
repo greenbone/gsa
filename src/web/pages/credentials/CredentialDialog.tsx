@@ -41,8 +41,10 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface CredentialDialogValues {
   autogenerate?: YesNo;
+  certificate?: File;
   credential_type: CredentialType;
-  public_key?: string;
+  private_key?: File;
+  public_key?: File;
 }
 
 interface CredentialDialogDefaultValues {
@@ -55,14 +57,13 @@ interface CredentialDialogDefaultValues {
   comment?: string;
   community?: string;
   credential_login?: string;
+  id?: string;
+  kdcs?: string[];
   name: string;
   passphrase?: string;
   password?: string;
   privacy_algorithm?: SNMPPrivacyAlgorithmType;
   privacy_password?: string;
-  private_key?: File;
-  id?: string;
-  kdcs?: string[];
   realm?: string;
 }
 
@@ -94,7 +95,16 @@ interface CredentialDialogProps {
   onSave: (state: CredentialDialogState) => Promise<void> | void;
 }
 
+const validateFile = async (file: File, line: string, errorMessage: string) => {
+  const content = await file.text();
+  if (!isString(content) || !content.startsWith(line)) {
+    throw new Error(errorMessage);
+  }
+};
+
 const PGP_PUBLIC_KEY_LINE = '-----BEGIN PGP PUBLIC KEY BLOCK-----';
+const CLIENT_CERTIFICATE_LINE = '-----BEGIN CERTIFICATE-----';
+const CLIENT_PRIVATE_KEY_LINE = '-----BEGIN PRIVATE KEY-----';
 
 const CredentialDialog = ({
   credential,
@@ -141,8 +151,10 @@ const CredentialDialog = ({
   const [autogenerate, setAutogenerate] = useState<YesNo | undefined>(
     pAutogenerate,
   );
-  const [publicKey, setPublicKey] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
+  const [certificate, setCertificate] = useState<File | undefined>(undefined);
+  const [privateKey, setPrivateKey] = useState<File | undefined>(undefined);
+  const [publicKey, setPublicKey] = useState<File | undefined>(undefined);
 
   const isEdit = isDefined(credential);
 
@@ -172,22 +184,57 @@ const CredentialDialog = ({
     setCredentialTypeAndAutoGenerate(type, autogenerate);
   };
 
-  const handlePublicGPGKeyChange = (file: Blob) => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const result = e.target?.result ?? '';
-      if (isString(result) && result.startsWith(PGP_PUBLIC_KEY_LINE)) {
-        setPublicKey(result);
-      } else {
-        setError(_('Not a valid PGP file'));
+  const handlePublicGPGKeyChange = async (file: File | undefined) => {
+    try {
+      if (isDefined(file)) {
+        await validateFile(
+          file,
+          PGP_PUBLIC_KEY_LINE,
+          _('Not a valid PGP file'),
+        );
       }
-    };
-    reader.readAsText(file);
+      setPublicKey(file);
+    } catch (error) {
+      setError((error as Error).message);
+    }
   };
 
-  const handlePublicKeyChange = (file: Blob) => {
-    // @ts-expect-error
-    setPublicKey(file);
+  const handleClientCertificateChange = async (file: File | undefined) => {
+    try {
+      if (isDefined(file)) {
+        await validateFile(
+          file,
+          CLIENT_CERTIFICATE_LINE,
+          _('Not a valid Client Certificate file'),
+        );
+      }
+      setCertificate(file);
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
+
+  const handleCertificateChange = (file: File | undefined) => {
+    setCertificate(file);
+  };
+
+  const handleClientKeyChange = async (file: File | undefined) => {
+    try {
+      if (isDefined(file)) {
+        await validateFile(
+          file,
+          CLIENT_PRIVATE_KEY_LINE,
+          _('Not a valid Client Private Key file'),
+        );
+      }
+      setPrivateKey(file);
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
+
+  const handlePrivateKeyChange = (file: File | undefined) => {
+    setPrivateKey(file);
   };
 
   const handleErrorClose = () => {
@@ -255,6 +302,8 @@ const CredentialDialog = ({
         autogenerate,
         credential_type: cType as CredentialType,
         public_key: publicKey,
+        private_key: privateKey,
+        certificate,
       }}
       onClose={onClose}
       onError={handleError}
@@ -379,8 +428,9 @@ const CredentialDialog = ({
             {state.credential_type === CERTIFICATE_CREDENTIAL_TYPE && (
               <FileField
                 name="certificate"
-                title={_('CA Certificate')}
-                onChange={onValueChange}
+                title={_('Client Certificate')}
+                value={state.certificate}
+                onChange={handleClientCertificateChange}
               />
             )}
 
@@ -392,9 +442,14 @@ const CredentialDialog = ({
                   title={
                     state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE
                       ? _('Private SSH Key')
-                      : _('Private Client Certificate')
+                      : _('Client Private Key')
                   }
-                  onChange={onValueChange}
+                  value={state.private_key}
+                  onChange={
+                    state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE
+                      ? handlePrivateKeyChange
+                      : handleClientKeyChange
+                  }
                 />
 
                 <FormGroup
@@ -402,7 +457,7 @@ const CredentialDialog = ({
                   title={
                     state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE
                       ? _('Passphrase for Private SSH Key')
-                      : _('Passphrase for Private Client Certificate')
+                      : _('Passphrase for Client Private Key')
                   }
                 >
                   {isEdit && (
@@ -507,18 +562,11 @@ const CredentialDialog = ({
               </>
             )}
 
-            {state.credential_type === CERTIFICATE_CREDENTIAL_TYPE && (
-              <FileField
-                name="public_key"
-                title={_('Public Client Certificate')}
-                onChange={handlePublicKeyChange}
-              />
-            )}
-
             {state.credential_type === PGP_CREDENTIAL_TYPE && (
               <FileField
                 name="public_key"
                 title={_('Public PGP Key')}
+                value={state.public_key}
                 onChange={handlePublicGPGKeyChange}
               />
             )}
@@ -527,7 +575,7 @@ const CredentialDialog = ({
               <FileField
                 name="certificate"
                 title={_('S/MIME Certificate')}
-                onChange={onValueChange}
+                onChange={handleCertificateChange}
               />
             )}
 

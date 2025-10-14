@@ -11,7 +11,7 @@ import Scanner, {ScannerElement, ScannerType} from 'gmp/models/scanner';
 
 interface ScannerCommandCreateParams {
   name: string;
-  caPub?: File;
+  caCertificate?: File;
   comment?: string;
   credentialId?: string;
   host: string;
@@ -19,15 +19,8 @@ interface ScannerCommandCreateParams {
   type: ScannerType;
 }
 
-interface ScannerCommandSaveParams {
+interface ScannerCommandSaveParams extends ScannerCommandCreateParams {
   id: string;
-  name: string;
-  caPub?: File;
-  comment?: string;
-  credentialId?: string;
-  host: string;
-  port: number;
-  type: ScannerType;
 }
 
 interface ScannerCommandVerifyParams {
@@ -48,7 +41,7 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
 
   create({
     name,
-    caPub,
+    caCertificate,
     comment = '',
     credentialId,
     host,
@@ -57,13 +50,13 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
   }: ScannerCommandCreateParams) {
     const data = {
       cmd: 'create_scanner',
-      name,
+      ca_pub: caCertificate,
       comment,
       credential_id: credentialId,
+      name,
+      port,
       scanner_host: host,
       scanner_type: type,
-      port,
-      ca_pub: caPub,
     };
     log.debug('Creating new scanner', data);
     return this.action(data);
@@ -72,7 +65,7 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
   save({
     id,
     name,
-    caPub,
+    caCertificate,
     comment = '',
     credentialId,
     host,
@@ -81,7 +74,7 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
   }: ScannerCommandSaveParams) {
     const data = {
       cmd: 'save_scanner',
-      ca_pub: caPub,
+      ca_pub: caCertificate,
       comment,
       credential_id: credentialId,
       id,

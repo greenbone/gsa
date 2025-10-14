@@ -6,10 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import Filter from 'gmp/models/filter';
-import Scanner, {
-  GREENBONE_SENSOR_SCANNER_TYPE,
-  OPENVASD_SCANNER_TYPE,
-} from 'gmp/models/scanner';
+import Scanner, {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ScannerComponent from 'web/pages/scanners/ScannerComponent';
 
@@ -257,13 +254,14 @@ describe('ScannerComponent tests', () => {
     await wait();
 
     expect(gmp.scanner.create).toHaveBeenCalledWith({
+      caCertificate: undefined,
       comment: '',
       credentialId: undefined,
       host: 'localhost',
       id: undefined,
       name: 'Unnamed',
       port: undefined,
-      type: GREENBONE_SENSOR_SCANNER_TYPE,
+      type: undefined,
     });
     expect(handleCreated).toHaveBeenCalledWith({id: '1234'});
     expect(handleCreateError).not.toHaveBeenCalled();

@@ -24,7 +24,9 @@ import useTranslation from 'web/hooks/useTranslation';
 import PortListsDialog, {
   SavePortListData,
 } from 'web/pages/portlists/PortListDialog';
-import ImportPortListDialog from 'web/pages/portlists/PortListImportDialog';
+import ImportPortListDialog, {
+  PortListImportDialogState,
+} from 'web/pages/portlists/PortListImportDialog';
 import PortRangeDialog, {
   PortRangeDialogData,
 } from 'web/pages/portlists/PortRangeDialog';
@@ -186,7 +188,7 @@ const PortListComponent = ({
     return response.data.id;
   };
 
-  const handleImportPortList = async (data: {xmlFile: File}) => {
+  const handleImportPortList = async (data: PortListImportDialogState) => {
     try {
       const response = await gmp.portlist.import(data);
       if (isDefined(onImported)) {
