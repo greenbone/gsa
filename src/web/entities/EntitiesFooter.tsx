@@ -74,7 +74,7 @@ const EntitiesFooter = <TEntity = Model,>({
   selectionType,
   span,
   tags = true,
-  trash,
+  trash = false,
   authorize = false,
   revoke = false,
   onDeleteClick,
@@ -85,7 +85,7 @@ const EntitiesFooter = <TEntity = Model,>({
   onAuthorizeClick,
   onRevokeClick,
   dialogConfig = {useCustomDialog: false},
-  delete: deleteEntities,
+  delete: deleteEntities = false,
 }: EntitiesFooterProps<TEntity>) => {
   const [_] = useTranslation();
   const [configDialog, setConfigDialog] = useState<ConfigDialog | undefined>(
