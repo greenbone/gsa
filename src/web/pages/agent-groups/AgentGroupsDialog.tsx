@@ -16,6 +16,7 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
+import useGmp from 'web/hooks/useGmp';
 import {useGetAgents} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentConfigurationSection, {
@@ -63,6 +64,7 @@ const AgentGroupsDialog = ({
   onSave,
 }: AgentGroupsDialogProps) => {
   const [_] = useTranslation();
+  const gmp = useGmp();
 
   title = title ?? _('New Agent Group');
 
@@ -72,8 +74,8 @@ const AgentGroupsDialog = ({
 
   const {data: scannersData} = useGetEntities<Scanner>({
     queryId: 'get_scanners',
-    entityType: 'scanner',
     filter: AGENT_CONTROLLERS_FILTER,
+    gmpMethod: gmp.scanners.get.bind(gmp.scanners),
   });
 
   const agentControllers = renderSelectItems(

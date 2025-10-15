@@ -4,10 +4,10 @@
  */
 
 import {
-  AgentGroupCreateParams,
-  AgentGroupSaveParams,
+  type AgentGroupCreateParams,
+  type AgentGroupSaveParams,
 } from 'gmp/commands/agentgroup';
-import {EntityActionResponse} from 'gmp/commands/entity';
+import {type EntityActionResponse} from 'gmp/commands/entity';
 import Rejection from 'gmp/http/rejection';
 import AgentGroup from 'gmp/models/agentgroup';
 import Filter from 'gmp/models/filter';
@@ -27,12 +27,14 @@ interface UseModifyAgentGroupParams {
   onError?: (error: Rejection) => void;
 }
 
-export const useGetAgentGroups = ({filter}: {filter?: Filter}) =>
-  useGetEntities<AgentGroup>({
+export const useGetAgentGroups = ({filter}: {filter?: Filter}) => {
+  const gmp = useGmp();
+  return useGetEntities<AgentGroup>({
     queryId: 'get_agent_groups',
     filter,
-    entityType: 'agentgroup',
+    gmpMethod: gmp.agentgroups.get.bind(gmp.agentgroup),
   });
+};
 
 export const useCreateAgentGroup = ({
   onSuccess,
