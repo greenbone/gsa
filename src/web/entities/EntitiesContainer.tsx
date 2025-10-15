@@ -6,18 +6,18 @@
 import React from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import {connect} from 'react-redux';
-import {Location} from 'react-router';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import EntitiesCommand from 'gmp/commands/entities';
-import Gmp from 'gmp/gmp';
-import Rejection from 'gmp/http/rejection';
-import Response from 'gmp/http/response';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
-import {TranslateOptions} from 'gmp/locale/lang';
+import {type Location} from 'react-router';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type EntitiesCommand from 'gmp/commands/entities';
+import type Gmp from 'gmp/gmp';
+import type Rejection from 'gmp/http/rejection';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type TranslateOptions} from 'gmp/locale/lang';
 import logger from 'gmp/log';
-import Filter, {RESET_FILTER} from 'gmp/models/filter';
-import Model from 'gmp/models/model';
-import Tag from 'gmp/models/tag';
+import {type default as Filter, RESET_FILTER} from 'gmp/models/filter';
+import type Model from 'gmp/models/model';
+import type Tag from 'gmp/models/tag';
 import {YES_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {
@@ -25,16 +25,16 @@ import {
   apiType,
   typeName,
   pluralizeType,
-  EntityType,
+  type EntityType,
 } from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {
-  OnFilterChangedFunc,
-  OnFilterCreatedFunc,
+  type OnFilterChangedFunc,
+  type OnFilterCreatedFunc,
 } from 'web/components/powerfilter/useFilterDialogSave';
-import TagsDialog, {TagsDialogData} from 'web/entities/TagsDialog';
+import TagsDialog, {type TagsDialogData} from 'web/entities/TagsDialog';
 import actionFunction from 'web/entity/hooks/actionFunction';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import TagDialog from 'web/pages/tags/Dialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
@@ -42,8 +42,8 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
 import {generateFilename} from 'web/utils/Render';
-import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
-import SortDirection, {SortDirectionType} from 'web/utils/SortDirection';
+import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
+import SortDirection, {type SortDirectionType} from 'web/utils/SortDirection';
 import {withRouter} from 'web/utils/withRouter';
 import withTranslation from 'web/utils/withTranslation';
 

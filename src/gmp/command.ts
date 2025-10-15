@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import HttpCommand from 'gmp/commands/http';
+import type HttpCommand from 'gmp/commands/http';
 
 const COMMANDS: Record<string, typeof HttpCommand> = {};
 

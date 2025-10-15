@@ -4,8 +4,11 @@
  */
 
 import {useEffect, useState} from 'react';
-import Credential, {
-  CredentialType,
+import {
+  type default as Credential,
+  type CredentialType,
+  type SNMPAuthAlgorithmType,
+  type SNMPPrivacyAlgorithmType,
   CERTIFICATE_CREDENTIAL_TYPE,
   getCredentialTypeName,
   KRB5_CREDENTIAL_TYPE,
@@ -18,12 +21,10 @@ import Credential, {
   SNMP_PRIVACY_ALGORITHM_AES,
   SNMP_PRIVACY_ALGORITHM_DES,
   SNMP_PRIVACY_ALGORITHM_NONE,
-  SNMPAuthAlgorithmType,
-  SNMPPrivacyAlgorithmType,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import {first, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';

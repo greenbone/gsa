@@ -4,8 +4,8 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import GmpHttp from 'gmp/http/gmp';
-import {Element} from 'gmp/models/model';
+import type GmpHttp from 'gmp/http/gmp';
+import {type Element} from 'gmp/models/model';
 import Role from 'gmp/models/role';
 
 class RolesCommand extends EntitiesCommand<Role> {

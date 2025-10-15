@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ChangeEvent} from 'react';
+import {type ChangeEvent} from 'react';
 
 export type ClickEvent = React.MouseEvent<HTMLButtonElement | HTMLInputElement>;
 

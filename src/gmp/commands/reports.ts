@@ -4,8 +4,8 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import GmpHttp from 'gmp/http/gmp';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
+import type GmpHttp from 'gmp/http/gmp';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import Filter from 'gmp/models/filter';
 import Report from 'gmp/models/report';
 

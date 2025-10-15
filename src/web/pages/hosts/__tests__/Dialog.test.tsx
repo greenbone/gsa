@@ -7,7 +7,7 @@ import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, changeInputValue} from 'web/testing';
 import Host from 'gmp/models/host';
-import {ModelElement} from 'gmp/models/model';
+import {type ModelElement} from 'gmp/models/model';
 import HostsDialog from 'web/pages/hosts/Dialog.jsx';
 
 const host = Host.fromElement({

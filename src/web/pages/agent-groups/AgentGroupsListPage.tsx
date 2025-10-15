@@ -4,9 +4,12 @@
  */
 
 import {useCallback, useMemo, useRef, useState} from 'react';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import AgentGroup from 'gmp/models/agentgroup';
-import Filter, {AGENT_GROUPS_FILTER_FILTER} from 'gmp/models/filter';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type AgentGroup from 'gmp/models/agentgroup';
+import {
+  type default as Filter,
+  AGENT_GROUPS_FILTER_FILTER,
+} from 'gmp/models/filter';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';

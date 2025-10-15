@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import {parseInt, parseBoolean, YesNo} from 'gmp/parser';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import {parseInt, parseBoolean, type YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 

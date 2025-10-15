@@ -4,7 +4,7 @@
  */
 
 import {useSelector} from 'react-redux';
-import Task from 'gmp/models/task';
+import type Task from 'gmp/models/task';
 import {ResumeIcon, StartIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskResumeIconBase from 'web/pages/tasks/icons/TaskResumeIcon';

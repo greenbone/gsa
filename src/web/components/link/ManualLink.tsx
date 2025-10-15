@@ -4,7 +4,7 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import BlankLink, {BlankLinkProps} from 'web/components/link/BlankLink';
+import BlankLink, {type BlankLinkProps} from 'web/components/link/BlankLink';
 import useManualURL from 'web/hooks/useManualURL';
 
 export interface ManualLinkProps extends Omit<BlankLinkProps, 'to'> {

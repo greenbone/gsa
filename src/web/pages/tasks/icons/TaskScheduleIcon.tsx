@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Schedule from 'gmp/models/schedule';
+import type Schedule from 'gmp/models/schedule';
 import {isDefined} from 'gmp/utils/identity';
 import {ScheduleIcon} from 'web/components/icon';
-import {ExtendedIconSize} from 'web/components/icon/DynamicIcon';
+import {type ExtendedIconSize} from 'web/components/icon/DynamicIcon';
 import DetailsLink from 'web/components/link/DetailsLink';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';

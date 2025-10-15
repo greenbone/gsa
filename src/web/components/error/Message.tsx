@@ -8,7 +8,7 @@ import {isDefined} from 'gmp/utils/identity';
 import MessageContainer from 'web/components/error/MessageContainer';
 import {StNonAvailableIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
-import Layout, {LayoutProps} from 'web/components/layout/Layout';
+import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 
 interface MessageProps extends LayoutProps {
   children?: React.ReactNode;

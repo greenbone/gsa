@@ -4,9 +4,9 @@
  */
 
 import {useCallback} from 'react';
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import SortDirection, {SortDirectionType} from 'web/utils/SortDirection';
+import SortDirection, {type SortDirectionType} from 'web/utils/SortDirection';
 
 type ChangeFilterFunc = (filter: Filter) => void;
 type SortChangeFunc = (field: string) => void;

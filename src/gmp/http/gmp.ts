@@ -4,9 +4,12 @@
  */
 
 import Http from 'gmp/http/http';
-import {Meta} from 'gmp/http/response';
-import transform, {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
-import {buildServerUrl, UrlParams as Params} from 'gmp/http/utils';
+import {type Meta} from 'gmp/http/response';
+import transform, {
+  type XmlMeta,
+  type XmlResponseData,
+} from 'gmp/http/transform/fastxml';
+import {buildServerUrl, type UrlParams as Params} from 'gmp/http/utils';
 
 interface GmpHttpSettings {
   apiServer: string;

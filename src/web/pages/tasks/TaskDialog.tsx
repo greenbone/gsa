@@ -4,26 +4,27 @@
  */
 
 import styled from 'styled-components';
-import ScanConfig from 'gmp/models/scanconfig';
+import type ScanConfig from 'gmp/models/scanconfig';
 import Scanner, {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVASD_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVASD_SENSOR_SCANNER_TYPE,
-  ScannerType,
+  type ScannerType,
 } from 'gmp/models/scanner';
-import Task, {
+import {
+  type default as Task,
+  type TaskAutoDelete,
+  type TaskHostsOrdering,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_NO,
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
-  TaskAutoDelete,
-  TaskHostsOrdering,
 } from 'gmp/models/task';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
@@ -42,7 +43,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
 import {
-  RenderSelectItemProps,
+  type RenderSelectItemProps,
   renderSelectItems,
   UNSET_VALUE,
 } from 'web/utils/Render';

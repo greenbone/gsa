@@ -7,7 +7,7 @@ import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import TableHead from 'web/components/table/TableHead';
 import {updateDisplayName} from 'web/utils/displayName';
-import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 
 export type ActionsColumn = React.ReactElement | null;
 

@@ -4,7 +4,7 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import Scanner from 'gmp/models/scanner';
 
 class ScannersCommand extends EntitiesCommand<Scanner> {

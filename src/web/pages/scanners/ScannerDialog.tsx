@@ -4,13 +4,13 @@
  */
 
 import {useState} from 'react';
-import Credential from 'gmp/models/credential';
+import type Credential from 'gmp/models/credential';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
-  ScannerType,
+  type ScannerType,
   scannerTypeName,
 } from 'gmp/models/scanner';
 import {map} from 'gmp/utils/array';
@@ -26,7 +26,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 interface ScannerDialogProps {
   comment?: string;

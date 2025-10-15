@@ -4,10 +4,10 @@
  */
 
 import {testing} from '@gsa/testing';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
-import Response, {Meta} from 'gmp/http/response';
-import {Element} from 'gmp/models/model';
+import type GmpHttp from 'gmp/http/gmp';
+import type Rejection from 'gmp/http/rejection';
+import Response, {type Meta} from 'gmp/http/response';
+import {type Element} from 'gmp/models/model';
 
 interface ActionResultResponse {
   action?: string;

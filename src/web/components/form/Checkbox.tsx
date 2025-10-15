@@ -4,7 +4,7 @@
  */
 
 import React, {useCallback} from 'react';
-import {CheckboxProps as MantineCheckboxProps} from '@mantine/core';
+import {type CheckboxProps as MantineCheckboxProps} from '@mantine/core';
 import {Checkbox as OpenSightCheckbox} from '@greenbone/ui-lib';
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;

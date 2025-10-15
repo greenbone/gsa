@@ -6,9 +6,9 @@
 import {describe, test, expect} from '@gsa/testing';
 import EntitiesCommand from 'gmp/commands/entities';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import Filter from 'gmp/models/filter';
-import Model, {Element} from 'gmp/models/model';
+import Model, {type Element} from 'gmp/models/model';
 
 class Foo extends Model {}
 

@@ -5,20 +5,20 @@
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import EntityCommand, {EntityCommandParams} from 'gmp/commands/entity';
+import EntityCommand, {type EntityCommandParams} from 'gmp/commands/entity';
 import FeedStatusCommand, {feedStatusRejection} from 'gmp/commands/feedstatus';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
+import type GmpHttp from 'gmp/http/gmp';
+import type Rejection from 'gmp/http/rejection';
 import logger from 'gmp/log';
-import {Element} from 'gmp/models/model';
-import {ScannerType} from 'gmp/models/scanner';
+import {type Element} from 'gmp/models/model';
+import {type ScannerType} from 'gmp/models/scanner';
 import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  TaskElement,
-  TaskAutoDelete,
+  type TaskElement,
+  type TaskAutoDelete,
 } from 'gmp/models/task';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 
 interface TaskCommandCreateParams {
   add_tag?: YesNo;

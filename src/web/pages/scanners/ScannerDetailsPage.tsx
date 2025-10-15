@@ -5,9 +5,9 @@
 
 import React from 'react';
 import {useNavigate} from 'react-router';
-import Gmp from 'gmp/gmp';
-import Permission from 'gmp/models/permission';
-import Scanner from 'gmp/models/scanner';
+import type Gmp from 'gmp/gmp';
+import type Permission from 'gmp/models/permission';
+import type Scanner from 'gmp/models/scanner';
 import {ScannerIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import Tab from 'web/components/tab/Tab';
@@ -20,7 +20,7 @@ import TabsContainer from 'web/components/tab/TabsContainer';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {

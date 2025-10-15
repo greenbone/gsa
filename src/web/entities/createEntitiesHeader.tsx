@@ -8,10 +8,10 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import withEntitiesHeader, {
-  ActionsColumn,
-  WithEntitiesHeaderComponentProps,
+  type ActionsColumn,
+  type WithEntitiesHeaderComponentProps,
 } from 'web/entities/withEntitiesHeader';
-import {SortDirectionType} from 'web/utils/SortDirection';
+import {type SortDirectionType} from 'web/utils/SortDirection';
 
 interface ToString {
   toString: () => string;

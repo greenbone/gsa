@@ -6,7 +6,7 @@
 import {parseSeverity, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
-import {SeverityRating, DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
+import {type SeverityRating, DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import {
   totalCount,
   percent as percentFunc,
@@ -23,7 +23,7 @@ import {
   CRITICAL,
   severityRiskFactorToValue,
   severityRiskFactor,
-  RiskFactor,
+  type RiskFactor,
   getSeverityLevelBoundaries,
 } from 'web/utils/severity';
 

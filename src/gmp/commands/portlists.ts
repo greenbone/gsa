@@ -5,10 +5,10 @@
 
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import logger from 'gmp/log';
-import {Element} from 'gmp/models/model';
-import PortList, {PortListElement} from 'gmp/models/portlist';
+import {type Element} from 'gmp/models/model';
+import PortList, {type PortListElement} from 'gmp/models/portlist';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 export type FromFile = typeof FROM_FILE | typeof NOT_FROM_FILE;

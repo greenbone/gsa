@@ -4,7 +4,9 @@
  */
 
 import {forwardRef} from 'react';
-import NumberField, {NumberFieldProps} from 'web/components/form/NumberField';
+import NumberField, {
+  type NumberFieldProps,
+} from 'web/components/form/NumberField';
 
 interface SpinnerProps
   extends Omit<

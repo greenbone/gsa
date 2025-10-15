@@ -4,7 +4,7 @@
  */
 
 import {useSelector, useDispatch} from 'react-redux';
-import {Date} from 'gmp/models/date';
+import {type Date} from 'gmp/models/date';
 import useGmp from 'web/hooks/useGmp';
 import {setSessionTimeout} from 'web/store/usersettings/actions';
 import {getSessionTimeout} from 'web/store/usersettings/selectors';

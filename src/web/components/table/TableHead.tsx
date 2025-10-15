@@ -6,10 +6,10 @@
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon} from 'web/components/icon';
-import Layout, {LayoutProps} from 'web/components/layout/Layout';
+import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 import SortBy from 'web/components/sortby/SortBy';
 import useTranslation from 'web/hooks/useTranslation';
-import SortDirection, {SortDirectionType} from 'web/utils/SortDirection';
+import SortDirection, {type SortDirectionType} from 'web/utils/SortDirection';
 import Theme from 'web/utils/Theme';
 
 interface ToString {

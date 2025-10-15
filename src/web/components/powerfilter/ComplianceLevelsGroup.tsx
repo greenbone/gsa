@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';

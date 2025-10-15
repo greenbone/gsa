@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {MantineSpacing, StyleProp} from '@mantine/core';
+import {type MantineSpacing, type StyleProp} from '@mantine/core';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Column from 'web/components/layout/Column';

@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import {parseProgressElement, TextElement} from 'gmp/parser';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import {parseProgressElement, type TextElement} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 

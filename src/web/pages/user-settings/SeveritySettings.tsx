@@ -5,7 +5,7 @@
 
 import {useEffect, useState, useMemo} from 'react';
 
-import {NO_VALUE, parseYesNo, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, parseYesNo, YES_VALUE, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 import Checkbox from 'web/components/form/Checkbox';

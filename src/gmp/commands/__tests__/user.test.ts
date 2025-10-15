@@ -10,7 +10,7 @@ import {
   createActionResultResponse,
 } from 'gmp/commands/testing';
 import UserCommand, {
-  CertificateInfo,
+  type CertificateInfo,
   transformSettingName,
 } from 'gmp/commands/user';
 

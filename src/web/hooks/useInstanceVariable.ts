@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Dispatch, useCallback, useRef} from 'react';
+import {type Dispatch, useCallback, useRef} from 'react';
 import {isFunction} from 'gmp/utils/identity';
 
 type SetInstanceVariable<T> = T | ((previousValue: T) => T);

@@ -4,20 +4,20 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import Task from 'gmp/models/task';
+import type Task from 'gmp/models/task';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-import {EntitiesFooterProps} from 'web/entities/EntitiesFooter';
+import {type EntitiesFooterProps} from 'web/entities/EntitiesFooter';
 import withEntitiesHeader, {
-  ActionsColumn,
+  type ActionsColumn,
 } from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import TaskDetails from 'web/pages/tasks/TaskDetails';
-import TaskRow, {TaskRowProps} from 'web/pages/tasks/TaskRow';
-import {SortDirectionType} from 'web/utils/SortDirection';
+import TaskRow, {type TaskRowProps} from 'web/pages/tasks/TaskRow';
+import {type SortDirectionType} from 'web/utils/SortDirection';
 
 interface HeaderProps {
   actionsColumn?: ActionsColumn;

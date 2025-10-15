@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PortList from 'gmp/models/portlist';
+import type PortList from 'gmp/models/portlist';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import InfoTable from 'web/components/table/InfoTable';

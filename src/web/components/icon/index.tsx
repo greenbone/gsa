@@ -4,7 +4,7 @@
  */
 
 // Import LucideIcon type once
-import React from 'react';
+import type React from 'react';
 import {
   ArrowDown,
   ArrowUp,
@@ -39,7 +39,7 @@ import {
   KeyRound,
   List,
   LogOut,
-  LucideIcon,
+  type LucideIcon,
   Megaphone,
   Minus,
   Pencil,
@@ -71,7 +71,7 @@ import {
 } from 'lucide-react';
 import {
   createIconComponents,
-  IconComponentsType,
+  type IconComponentsType,
 } from 'web/components/icon/createIconComponents';
 import AddToAssets from 'web/components/icon/svg/add_to_assets.svg?react';
 import CertBundAdv from 'web/components/icon/svg/cert_bund_adv.svg?react';

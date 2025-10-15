@@ -5,7 +5,7 @@
 
 import logger from 'gmp/log';
 import createDate, {
-  Date as GmpDate,
+  type Date as GmpDate,
   setLocaleDayjs,
   isDate,
 } from 'gmp/models/date';

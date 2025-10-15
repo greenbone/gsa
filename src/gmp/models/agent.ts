@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Date as GmpDate} from 'gmp/models/date';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import {type Date as GmpDate} from 'gmp/models/date';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {
   parseBoolean,
   parseDate,
   parseText,
   parseToString,
-  YesNo,
+  type YesNo,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';

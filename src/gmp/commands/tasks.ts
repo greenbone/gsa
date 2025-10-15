@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
 import EntitiesCommand from 'gmp/commands/entities';
-import {HttpCommandOptions} from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Filter from 'gmp/models/filter';
-import {Element} from 'gmp/models/model';
-import Task, {TaskElement} from 'gmp/models/task';
-import {YesNo} from 'gmp/parser';
+import {type HttpCommandOptions} from 'gmp/commands/http';
+import type GmpHttp from 'gmp/http/gmp';
+import type Filter from 'gmp/models/filter';
+import {type Element} from 'gmp/models/model';
+import Task, {type TaskElement} from 'gmp/models/task';
+import {type YesNo} from 'gmp/parser';
 
 interface GetTasksResponse extends Element {
   apply_overrides: YesNo;

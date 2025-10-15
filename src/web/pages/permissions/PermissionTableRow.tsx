@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Permission from 'gmp/models/permission';
+import type Permission from 'gmp/models/permission';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -12,7 +12,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions, {
-  EntitiesActionsProps,
+  type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import CloneIcon from 'web/entity/icon/CloneIcon';

@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {LucideIcon} from 'lucide-react';
-import DynamicIcon, {DynamicIconProps} from 'web/components/icon/DynamicIcon';
+import {type LucideIcon} from 'lucide-react';
+import DynamicIcon, {
+  type DynamicIconProps,
+} from 'web/components/icon/DynamicIcon';
 
 export interface ExtendedDynamicIconProps<TValue = string>
   extends Omit<DynamicIconProps<TValue>, 'icon'> {

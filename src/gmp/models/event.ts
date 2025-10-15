@@ -8,8 +8,8 @@ import {v4 as uuid} from 'uuid';
 import Logger from 'gmp/log';
 import date, {
   duration as createDuration,
-  Date,
-  Duration,
+  type Date,
+  type Duration,
 } from 'gmp/models/date';
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';

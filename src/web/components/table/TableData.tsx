@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import Layout, {LayoutProps} from 'web/components/layout/Layout';
+import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 
 interface TableDataProps extends LayoutProps {
   className?: string;

@@ -9,14 +9,14 @@ import FeedStatusCommand, {
   FEED_COMMUNITY,
   feedStatusRejection,
   FEED_ENTERPRISE,
-  FeedStatusElement,
+  type FeedStatusElement,
 } from 'gmp/commands/feedstatus';
 import {
   createResponse,
   createHttp,
   createHttpError,
 } from 'gmp/commands/testing';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import Rejection from 'gmp/http/rejection';
 import logger from 'gmp/log';
 

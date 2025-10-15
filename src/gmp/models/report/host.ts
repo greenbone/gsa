@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {COMPLIANCE, ComplianceType} from 'gmp/models/compliance';
-import {Date} from 'gmp/models/date';
+import {COMPLIANCE, type ComplianceType} from 'gmp/models/compliance';
+import {type Date} from 'gmp/models/date';
 import {parseInt, parseDate, parseSeverity} from 'gmp/parser';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';

@@ -4,8 +4,8 @@
  */
 
 import {useCallback} from 'react';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Filter from 'gmp/models/filter';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type Filter from 'gmp/models/filter';
 
 interface ChangeFilterFunc {
   (filter: Filter): void;

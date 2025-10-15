@@ -4,15 +4,15 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import Response from 'gmp/http/response';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import AgentGroup from 'gmp/models/agentgroup';
 import Alert from 'gmp/models/alert';
 import Audit from 'gmp/models/audit';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
 import Group from 'gmp/models/group';
-import {ModelElement} from 'gmp/models/model';
+import {type ModelElement} from 'gmp/models/model';
 import Note from 'gmp/models/note';
 import Override from 'gmp/models/override';
 import Permission from 'gmp/models/permission';
@@ -29,7 +29,7 @@ import Target from 'gmp/models/target';
 import Task from 'gmp/models/task';
 import Ticket from 'gmp/models/ticket';
 import {forEach, map} from 'gmp/utils/array';
-import {apiType, EntityType} from 'gmp/utils/entitytype';
+import {apiType, type EntityType} from 'gmp/utils/entitytype';
 
 export interface TrashCanGetData {
   alerts: Alert[];

@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PortList from 'gmp/models/portlist';
+import type PortList from 'gmp/models/portlist';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
-  EntitiesActionsProps,
+  type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';

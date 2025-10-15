@@ -5,8 +5,8 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Capabilities from 'gmp/capabilities/capabilities';
-import Gmp from 'gmp/gmp';
+import type Capabilities from 'gmp/capabilities/capabilities';
+import type Gmp from 'gmp/gmp';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import {isFilter} from 'gmp/models/filter/utils';
 import {KeyEvent} from 'gmp/utils/event';
@@ -20,7 +20,7 @@ import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import compose from 'web/utils/Compose';
-import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';

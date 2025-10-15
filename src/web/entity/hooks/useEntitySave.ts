@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entitytype';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 

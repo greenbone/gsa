@@ -4,7 +4,7 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import Rejection from 'gmp/http/rejection';
 import _ from 'gmp/locale';
 import Login from 'gmp/models/login';

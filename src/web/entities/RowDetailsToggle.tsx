@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {HTMLAttributes, MouseEvent} from 'react';
+import {type HTMLAttributes, type MouseEvent} from 'react';
 import styled from 'styled-components';
 import useClickHandler from 'web/components/form/useClickHandler';
 import Theme from 'web/utils/Theme';

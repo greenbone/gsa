@@ -5,9 +5,9 @@
 
 import {v4 as uuid} from 'uuid';
 import HttpCommand from 'gmp/commands/http';
-import {GetSettingsResponse} from 'gmp/commands/user';
-import Response from 'gmp/http/response';
-import {XmlMeta} from 'gmp/http/transform/fastxml';
+import {type GetSettingsResponse} from 'gmp/commands/user';
+import type Response from 'gmp/http/response';
+import {type XmlMeta} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import {isArray, isDefined} from 'gmp/utils/identity';
 

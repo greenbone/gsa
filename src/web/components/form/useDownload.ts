@@ -3,10 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useRef, useCallback} from 'react';
+import {type default as React, useRef, useCallback} from 'react';
 import logger from 'gmp/log';
 import {hasValue} from 'gmp/utils/identity';
-import Download, {DownloadData} from 'web/components/form/Download';
+import {
+  type DownloadData,
+  type default as Download,
+} from 'web/components/form/Download';
 
 type DownloadParams = {
   filename: string;

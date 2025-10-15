@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import DetailsLink, {DetailsLinkProps} from 'web/components/link/DetailsLink';
+import DetailsLink, {
+  type DetailsLinkProps,
+} from 'web/components/link/DetailsLink';
 
 type CveLinkProps = Omit<DetailsLinkProps, 'type' | 'data-testid'>;
 

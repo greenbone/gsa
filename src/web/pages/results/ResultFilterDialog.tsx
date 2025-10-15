@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
@@ -18,8 +18,8 @@ import SolutionTypeGroup from 'web/components/powerfilter/SolutionTypeGroup';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave, {
-  UseFilterDialogSaveProps,
-  UseFilterDialogStateProps,
+  type UseFilterDialogSaveProps,
+  type UseFilterDialogStateProps,
 } from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 
 export const isFilter = (filter?: unknown): filter is Filter =>

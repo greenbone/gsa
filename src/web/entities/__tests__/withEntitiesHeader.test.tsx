@@ -8,7 +8,7 @@ import {rendererWithTableHeader, screen} from 'web/testing';
 import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';
 import withEntitiesHeader, {
-  WithEntitiesHeaderComponentProps,
+  type WithEntitiesHeaderComponentProps,
 } from 'web/entities/withEntitiesHeader';
 import SelectionType from 'web/utils/SelectionType';
 

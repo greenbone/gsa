@@ -6,7 +6,7 @@
 import {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_NO,
-  TaskAutoDelete,
+  type TaskAutoDelete,
 } from 'gmp/models/task';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';

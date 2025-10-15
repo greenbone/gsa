@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import Tag from 'gmp/models/tag';
+import type Tag from 'gmp/models/tag';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
@@ -12,7 +12,7 @@ import Select from 'web/components/form/Select';
 import {NewIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
-import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 export interface TagsDialogData {
   comment?: string;

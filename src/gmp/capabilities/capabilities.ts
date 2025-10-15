@@ -6,9 +6,9 @@
 import {map} from 'gmp/utils/array';
 import {
   API_TYPES,
-  ApiType,
+  type ApiType,
   apiType,
-  EntityType,
+  type EntityType,
   pluralizeType,
 } from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';

@@ -4,10 +4,11 @@
  */
 
 import {useMemo, useState} from 'react';
-import {AgentConfig} from 'gmp/models/agent';
-import AgentGroup from 'gmp/models/agentgroup';
+import {type AgentConfig} from 'gmp/models/agent';
+import type AgentGroup from 'gmp/models/agentgroup';
 import Filter from 'gmp/models/filter';
-import Scanner, {
+import {
+  type default as Scanner,
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
@@ -24,7 +25,7 @@ import AgentConfigurationSection, {
   DEFAULT_HEARTBEAT_INTERVAL,
 } from 'web/pages/agents/components/AgentConfigurationSection';
 import useGetEntities from 'web/queries/useGetEntities';
-import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 interface AgentGroupsDialogProps {
   agentGroup?: AgentGroup;

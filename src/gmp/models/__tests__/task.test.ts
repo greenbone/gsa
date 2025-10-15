@@ -9,7 +9,7 @@ import Task, {
   HOSTS_ORDERING_REVERSE,
   HOSTS_ORDERING_SEQUENTIAL,
   TASK_STATUS,
-  TaskStatus,
+  type TaskStatus,
   USAGE_TYPE,
 } from 'gmp/models/task';
 import {testModel} from 'gmp/models/testing';

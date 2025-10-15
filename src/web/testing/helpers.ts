@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {expect, Mock} from 'vitest';
+import {expect, type Mock} from 'vitest';
 import {fireEvent} from 'web/testing/event';
 import {screen} from 'web/testing/screen';
 

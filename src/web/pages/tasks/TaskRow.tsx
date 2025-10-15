@@ -4,9 +4,12 @@
  */
 
 import React from 'react';
-import {Date} from 'gmp/models/date';
+import {type Date} from 'gmp/models/date';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
-import Task, {TaskTrend as TaskTrendType} from 'gmp/models/task';
+import {
+  type default as Task,
+  type TaskTrend as TaskTrendType,
+} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
@@ -22,7 +25,7 @@ import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import TaskActions, {TaskActionsProps} from 'web/pages/tasks/TaskActions';
+import TaskActions, {type TaskActionsProps} from 'web/pages/tasks/TaskActions';
 import TaskStatus from 'web/pages/tasks/TaskStatus';
 import TaskTrend from 'web/pages/tasks/TaskTrend';
 

@@ -4,9 +4,9 @@
  */
 
 import {XMLParser} from 'fast-xml-parser';
-import Rejection from 'gmp/http/rejection';
-import Response, {Meta} from 'gmp/http/response';
-import {Transform} from 'gmp/http/transform/transform';
+import type Rejection from 'gmp/http/rejection';
+import {type default as Response, type Meta} from 'gmp/http/response';
+import {type Transform} from 'gmp/http/transform/transform';
 import {success, rejection} from 'gmp/http/transform/xml';
 import {parseXmlEncodedString} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';

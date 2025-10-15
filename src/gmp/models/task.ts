@@ -4,10 +4,10 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import {Date, Duration} from 'gmp/models/date';
-import {EntityModelPermissionElement} from 'gmp/models/entitymodel';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import Scanner, {ScannerType} from 'gmp/models/scanner';
+import {type Date, type Duration} from 'gmp/models/date';
+import {type EntityModelPermissionElement} from 'gmp/models/entitymodel';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import Scanner, {type ScannerType} from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
 import {
   parseInt,
@@ -16,7 +16,7 @@ import {
   parseYes,
   parseDuration,
   NO_VALUE,
-  YesNo,
+  type YesNo,
   parseToString,
   parseDate,
   parseSeverity,

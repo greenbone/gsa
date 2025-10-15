@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
-import {LinkProps as RLinkProps, Link as RLink} from 'react-router';
+import {type LinkProps as RLinkProps, Link as RLink} from 'react-router';
 import styled from 'styled-components';
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import {isDefined, isString} from 'gmp/utils/identity';
 import Theme from 'web/utils/Theme';
 

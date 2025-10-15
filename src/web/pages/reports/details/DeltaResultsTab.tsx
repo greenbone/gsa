@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Filter from 'gmp/models/filter';
-import Nvt from 'gmp/models/nvt';
-import Result from 'gmp/models/result';
-import {TaskStatus} from 'gmp/models/task';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type Filter from 'gmp/models/filter';
+import type Nvt from 'gmp/models/nvt';
+import type Result from 'gmp/models/result';
+import {type TaskStatus} from 'gmp/models/task';
 import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';

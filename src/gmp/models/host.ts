@@ -4,16 +4,16 @@
  */
 
 import BaseModel, {
-  BaseModelProperties,
+  type BaseModelProperties,
   parseBaseModelProperties,
 } from 'gmp/models/basemodel';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {
   parseBoolean,
   parseInt,
   parseSeverity,
   parseYesNo,
-  YesNo,
+  type YesNo,
 } from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';

@@ -16,7 +16,7 @@ import {
   parseErrors,
   parseClosedCves,
 } from 'gmp/models/report/parser';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 
 const emptyCollectionCounts = new CollectionCounts();
 

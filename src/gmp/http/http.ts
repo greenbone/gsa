@@ -3,19 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CancelToken from 'gmp/cancel';
+import type CancelToken from 'gmp/cancel';
 import Rejection from 'gmp/http/rejection';
-import Response, {Meta} from 'gmp/http/response';
+import Response, {type Meta} from 'gmp/http/response';
 import {
-  Method as HttpMethod,
-  Transform,
-  TransformOptions,
+  type Method as HttpMethod,
+  type Transform,
+  type TransformOptions,
 } from 'gmp/http/transform/transform';
 import {
   buildUrlParams,
-  Data,
+  type Data,
   formdataAppend,
-  UrlParams as Params,
+  type UrlParams as Params,
 } from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';

@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import AgentGroup from 'gmp/models/agentgroup';
+import type AgentGroup from 'gmp/models/agentgroup';
 import DateTime from 'web/components/date/DateTime';
 
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import {RowComponentProps} from 'web/entities/EntitiesTable';
+import {type RowComponentProps} from 'web/entities/EntitiesTable';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsActions, {
-  AgentGroupsActionsProps,
+  type AgentGroupsActionsProps,
 } from 'web/pages/agent-groups/AgentGroupsActions';
 
 export interface AgentGroupsTableRowProps

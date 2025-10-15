@@ -60,14 +60,14 @@ import TrashCanCommand from 'gmp/commands/trashcan';
 import UserCommand from 'gmp/commands/user';
 import UsersCommand from 'gmp/commands/users';
 import WizardCommand from 'gmp/commands/wizard';
-import GmpSettings from 'gmp/gmpsettings';
+import type GmpSettings from 'gmp/gmpsettings';
 import GmpHttp from 'gmp/http/gmp';
-import {ErrorHandler} from 'gmp/http/http';
+import {type ErrorHandler} from 'gmp/http/http';
 import DefaultTransform from 'gmp/http/transform/default';
-import {buildServerUrl, buildUrlParams, UrlParams} from 'gmp/http/utils';
+import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
 import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
-import logger, {RootLogger} from 'gmp/log';
+import logger, {type RootLogger} from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 

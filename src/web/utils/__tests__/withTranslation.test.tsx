@@ -9,7 +9,7 @@ import i18n from 'i18next';
 import _ from 'gmp/locale';
 
 import withTranslation, {
-  WithTranslationComponentProps,
+  type WithTranslationComponentProps,
 } from 'web/utils/withTranslation';
 
 interface MockComponentProps extends WithTranslationComponentProps {

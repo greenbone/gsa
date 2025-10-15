@@ -4,17 +4,17 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import Scanner from 'gmp/models/scanner';
+import type Scanner from 'gmp/models/scanner';
 import createEntitiesFooter, {
-  CreateEntitiesFooterProps,
+  type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
 import createEntitiesHeader, {
-  CreateEntitiesHeaderProps,
+  type CreateEntitiesHeaderProps,
 } from 'web/entities/createEntitiesHeader';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
 import ScannerDetails from 'web/pages/scanners/ScannerDetails';
-import ScannerRow, {ScannerRowProps} from 'web/pages/scanners/ScannerRow';
+import ScannerRow, {type ScannerRowProps} from 'web/pages/scanners/ScannerRow';
 
 export const SORT_FIELDS = [
   {

@@ -11,8 +11,8 @@ import {
   cleanup,
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
-import {InitialEntry, MemoryRouter} from 'react-router';
-import {Store} from 'redux';
+import {type InitialEntry, MemoryRouter} from 'react-router';
+import {type Store} from 'redux';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Features from 'gmp/capabilities/features';

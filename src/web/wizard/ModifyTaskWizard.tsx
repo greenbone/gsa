@@ -5,9 +5,9 @@
 
 import {useState} from 'react';
 import {TimePicker} from '@greenbone/ui-lib';
-import {Date} from 'gmp/models/date';
-import Task from 'gmp/models/task';
-import {parseYesNo, NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {type Date} from 'gmp/models/date';
+import type Task from 'gmp/models/task';
+import {parseYesNo, NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';
@@ -19,7 +19,7 @@ import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';
 import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
 

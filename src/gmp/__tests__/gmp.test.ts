@@ -13,7 +13,7 @@ import {
 } from '@gsa/testing';
 import Gmp from 'gmp/gmp';
 import GmpSettings from 'gmp/gmpsettings';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import DefaultTransform from 'gmp/http/transform/default';
 
 const createStorage = (state?: Record<string, string>) => {

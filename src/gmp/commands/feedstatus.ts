@@ -4,13 +4,13 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
+import type GmpHttp from 'gmp/http/gmp';
+import type Rejection from 'gmp/http/rejection';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import date from 'gmp/models/date';
-import {parseBoolean, parseDate, YesNo} from 'gmp/parser';
+import {parseBoolean, parseDate, type YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 

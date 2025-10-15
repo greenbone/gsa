@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Report from 'gmp/models/report';
+import type Report from 'gmp/models/report';
 import {TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -20,8 +20,8 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import withEntitiesActions, {
-  WithEntitiesActionsProps,
-  WithEntitiesActionsComponentProps,
+  type WithEntitiesActionsProps,
+  type WithEntitiesActionsComponentProps,
 } from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 

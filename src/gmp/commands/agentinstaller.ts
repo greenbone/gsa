@@ -4,7 +4,7 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import DefaultTransform from 'gmp/http/transform/default';
 import AgentInstaller, {
   type AgentInstallerElement,

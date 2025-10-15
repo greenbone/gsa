@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Filter from 'gmp/models/filter';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type Filter from 'gmp/models/filter';
 
 interface EntitiesFooterWrapperProps<TEntity> {
   entities?: TEntity[];

@@ -4,11 +4,11 @@
  */
 
 import React, {useState} from 'react';
-import Rejection from 'gmp/http/rejection';
-import Agent from 'gmp/models/agent';
+import type Rejection from 'gmp/http/rejection';
+import type Agent from 'gmp/models/agent';
 import {useDeleteAgent, useModifyAgent} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
-import AgentDialog, {AgentDialogState} from 'web/pages/agents/AgentDialog';
+import AgentDialog, {type AgentDialogState} from 'web/pages/agents/AgentDialog';
 
 interface AgentComponentRenderProps {
   delete: (entity: Agent) => Promise<void>;

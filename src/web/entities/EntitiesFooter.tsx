@@ -5,7 +5,7 @@
 
 import {useState} from 'react';
 import {showInfoNotification, showSuccessNotification} from '@greenbone/ui-lib';
-import Model from 'gmp/models/model';
+import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
@@ -21,9 +21,9 @@ import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import TableFooter from 'web/components/table/TableFooter';
 import TableRow from 'web/components/table/TableRow';
-import {WithEntitiesFooterComponentProps} from 'web/entities/withEntitiesFooter';
+import {type WithEntitiesFooterComponentProps} from 'web/entities/withEntitiesFooter';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 
 type DialogType = (typeof DIALOG_TYPES)[keyof typeof DIALOG_TYPES];
 

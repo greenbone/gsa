@@ -4,7 +4,10 @@
  */
 
 import useLanguage from 'web/hooks/useLanguage';
-import useTranslation, {I18n, TranslateFunc} from 'web/hooks/useTranslation';
+import useTranslation, {
+  type I18n,
+  type TranslateFunc,
+} from 'web/hooks/useTranslation';
 import {updateDisplayName} from 'web/utils/displayName';
 
 export interface WithTranslationComponentProps {

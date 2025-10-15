@@ -8,7 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import date from 'gmp/models/date';
 import EntityModel, {parseEntityModelProperties} from 'gmp/models/entitymodel';
 import UserTag from 'gmp/models/usertag';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 
 describe('EntityModel tests', () => {
   test('should use defaults', () => {

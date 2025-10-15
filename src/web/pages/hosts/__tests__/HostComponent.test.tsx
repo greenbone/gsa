@@ -10,12 +10,12 @@ import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
 
-import {ModelElement} from 'gmp/models/model';
+import {type ModelElement} from 'gmp/models/model';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import HostsDialog from 'web/pages/hosts/Dialog';
 import HostWithTargetComponent from 'web/pages/hosts/HostComponent';
-import SelectionType from 'web/utils/SelectionType';
+import type SelectionType from 'web/utils/SelectionType';
 
 interface SelectionDialogData {
   entities: unknown[];

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Capabilities from 'gmp/capabilities/capabilities';
+import type Capabilities from 'gmp/capabilities/capabilities';
 
 const CapabilitiesContext = React.createContext<Capabilities | undefined>(
   undefined,

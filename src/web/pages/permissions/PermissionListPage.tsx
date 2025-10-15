@@ -4,12 +4,12 @@
  */
 
 import {PERMISSIONS_FILTER_FILTER} from 'gmp/models/filter';
-import Permission from 'gmp/models/permission';
+import type Permission from 'gmp/models/permission';
 import {PermissionIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer, {
-  WithEntitiesContainerComponentProps,
+  type WithEntitiesContainerComponentProps,
 } from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import PermissionComponent from 'web/pages/permissions/PermissionComponent';

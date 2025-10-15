@@ -3,11 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model from 'gmp/models/model';
-import {EntityType, getEntityType, normalizeType} from 'gmp/utils/entitytype';
+import type Model from 'gmp/models/model';
+import {
+  type EntityType,
+  getEntityType,
+  normalizeType,
+} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import DetailsLink from 'web/components/link/DetailsLink';
-import Link, {LinkProps} from 'web/components/link/Link';
+import Link, {type LinkProps} from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
