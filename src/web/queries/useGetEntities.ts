@@ -5,12 +5,14 @@
 
 import {useQuery} from '@tanstack/react-query';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
-import EntitiesCommand from 'gmp/commands/entities';
+import {type EntitiesMeta} from 'gmp/commands/entities';
+import {type HttpCommandInputParams} from 'gmp/commands/http';
+import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import Model from 'gmp/models/model';
-import {EntityType, pluralizeType} from 'gmp/utils/entitytype';
-import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
+
+type GmpMethodParams = HttpCommandInputParams;
 
 export interface UseGetEntitiesReturn<T> {
   entities: T[];
@@ -18,37 +20,34 @@ export interface UseGetEntitiesReturn<T> {
   filter?: Filter;
 }
 
-interface UseGetEntitiesParams {
+interface UseGetEntitiesParams<
+  TModel,
+  TInput extends GmpMethodParams = GmpMethodParams,
+> {
+  gmpMethod: (input: TInput) => Promise<Response<TModel[], EntitiesMeta>>;
   queryId: string;
   filter?: Filter;
-  entityType: EntityType;
   enabled?: boolean;
   refetchInterval?: number;
 }
 
 const useGetEntities = <
   TModel extends Model,
-  TEntityCommand extends EntitiesCommand<TModel> = EntitiesCommand<TModel>,
+  TInput extends GmpMethodParams = GmpMethodParams,
 >({
+  gmpMethod,
   queryId,
   filter = undefined,
-  entityType,
   enabled = true,
   refetchInterval = undefined,
-}: UseGetEntitiesParams) => {
+}: UseGetEntitiesParams<TModel, TInput>) => {
   const gmp = useGmp();
   const {token} = gmp.settings;
   return useQuery<UseGetEntitiesReturn<TModel>>({
     enabled: enabled && !!token,
     queryKey: [queryId, token, filter?.toFilterString()],
     queryFn: async () => {
-      const entityKey = pluralizeType(entityType);
-      const gmpCommand = gmp[entityKey] as TEntityCommand | undefined;
-
-      if (!isDefined(gmpCommand)) {
-        throw new Error(`GMP command ${entityKey} not found`);
-      }
-      const response = await gmpCommand.get({filter});
+      const response = await gmpMethod({filter} as TInput);
       const entities = response.data;
       const entitiesCounts = response.meta.counts;
       const responseFilter = response.meta.filter;

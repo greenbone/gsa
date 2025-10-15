@@ -100,7 +100,7 @@ interface TransformedAggregatesResponseData {
   groups: Group[];
 }
 
-interface EntitiesMeta extends Meta {
+export interface EntitiesMeta extends Meta {
   filter: Filter;
   counts: CollectionCounts;
 }

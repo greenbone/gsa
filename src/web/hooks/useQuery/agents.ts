@@ -4,10 +4,10 @@
  */
 
 import {useQueryClient} from '@tanstack/react-query';
-import {AgentModifyParams} from 'gmp/commands/agent';
+import {type AgentModifyParams} from 'gmp/commands/agent';
 import Rejection from 'gmp/http/rejection';
 import Response from 'gmp/http/response';
-import {XmlMeta} from 'gmp/http/transform/fastxml';
+import {type XmlMeta} from 'gmp/http/transform/fastxml';
 import Agent from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';
 import {isFilter} from 'gmp/models/filter/utils';
@@ -51,10 +51,11 @@ export const useGetAgents = ({
     finalFilter = finalFilter.set('authorized', parseYesNo(authorized));
   }
 
+  const gmp = useGmp();
   return useGetEntities<Agent>({
+    gmpMethod: gmp.agents.get.bind(gmp.agents),
     queryId: 'get_agents',
     filter: finalFilter,
-    entityType: 'agent',
     enabled,
   });
 };
