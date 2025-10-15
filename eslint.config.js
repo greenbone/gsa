@@ -253,6 +253,13 @@ export default [
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/no-empty-interface': 'warn',
       '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'inline-type-imports',
+        },
+      ],
     },
   },
   {
