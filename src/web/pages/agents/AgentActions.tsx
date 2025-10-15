@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Agent from 'gmp/models/agent';
+import type Agent from 'gmp/models/agent';
 import {isDefined} from 'gmp/utils/identity';
 import {CircleMinusIcon, CirclePlusIcon, EditIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
-  EntitiesActionsProps,
+  type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import useTranslation from 'web/hooks/useTranslation';

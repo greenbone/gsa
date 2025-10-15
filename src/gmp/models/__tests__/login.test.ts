@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import Response from 'gmp/http/response';
 import {isDate} from 'gmp/models/date';
-import Login, {LoginData, LoginMeta} from 'gmp/models/login';
+import Login, {type LoginData, type LoginMeta} from 'gmp/models/login';
 
 describe('Login model tests', () => {
   test('should set all properties correctly', () => {

@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing, Mock} from '@gsa/testing';
+import {describe, test, expect, testing, type Mock} from '@gsa/testing';
 import {render, screen, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import ReportEntitiesContainer, {
-  ReportEntitiesContainerRenderProps,
+  type ReportEntitiesContainerRenderProps,
 } from 'web/pages/reports/details/ReportEntitiesContainer';
 import {makeCompareString} from 'web/utils/Sort';
 import SortDirection from 'web/utils/SortDirection';

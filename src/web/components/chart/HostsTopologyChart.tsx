@@ -12,17 +12,17 @@ import {
   forceCenter,
   forceX,
   forceY,
-  ForceLink,
-  Simulation,
+  type ForceLink,
+  type Simulation,
 } from 'd3-force';
-import {scaleLinear, ScaleLinear} from 'd3-scale';
+import {scaleLinear, type ScaleLinear} from 'd3-scale';
 import equal from 'fast-deep-equal';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import {DEFAULT_SEVERITY_RATING, SeverityRating} from 'gmp/utils/severity';
+import {DEFAULT_SEVERITY_RATING, type SeverityRating} from 'gmp/utils/severity';
 import Group from 'web/components/chart/Group';
 import Layout from 'web/components/layout/Layout';
-import {I18n, TranslateFunc} from 'web/hooks/useTranslation';
+import {type I18n, type TranslateFunc} from 'web/hooks/useTranslation';
 import {setRef} from 'web/utils/Render';
 import {
   getSeverityLevelBoundaries,

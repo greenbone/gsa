@@ -4,9 +4,9 @@
  */
 
 import {useCallback, useEffect, useRef, useState} from 'react';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Agent from 'gmp/models/agent';
-import Filter, {AGENTS_FILTER_FILTER} from 'gmp/models/filter';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type Agent from 'gmp/models/agent';
+import {type default as Filter, AGENTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import DashboardControls from 'web/components/dashboard/Controls';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';

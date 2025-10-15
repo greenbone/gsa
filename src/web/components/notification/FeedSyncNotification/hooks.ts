@@ -5,7 +5,7 @@
 
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import Rejection from 'gmp/http/rejection';
+import type Rejection from 'gmp/http/rejection';
 import useGmp from 'web/hooks/useGmp';
 import {setSyncStatus, setError} from 'web/store/feedStatus/actions';
 

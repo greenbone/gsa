@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {GroupProperties} from 'gmp/models/group';
-import Permission from 'gmp/models/permission';
-import {UserProperties} from 'gmp/models/user';
+import {type GroupProperties} from 'gmp/models/group';
+import type Permission from 'gmp/models/permission';
+import {type UserProperties} from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Button from 'web/components/form/Button';

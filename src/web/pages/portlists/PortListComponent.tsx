@@ -4,31 +4,31 @@
  */
 
 import React, {useState} from 'react';
-import {EntityCommandParams} from 'gmp/commands/entity';
-import Rejection from 'gmp/http/rejection';
-import Response from 'gmp/http/response';
-import {XmlMeta} from 'gmp/http/transform/fastxml';
-import ActionResult from 'gmp/models/actionresult';
-import PortList, {ProtocolType} from 'gmp/models/portlist';
+import {type EntityCommandParams} from 'gmp/commands/entity';
+import type Rejection from 'gmp/http/rejection';
+import type Response from 'gmp/http/response';
+import {type XmlMeta} from 'gmp/http/transform/fastxml';
+import type ActionResult from 'gmp/models/actionresult';
+import {type default as PortList, type ProtocolType} from 'gmp/models/portlist';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
 import useEntityCreate from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload, {
-  OnDownloadedFunc,
+  type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PortListsDialog, {
-  SavePortListData,
+  type SavePortListData,
 } from 'web/pages/portlists/PortListDialog';
 import ImportPortListDialog, {
-  PortListImportDialogState,
+  type PortListImportDialogState,
 } from 'web/pages/portlists/PortListImportDialog';
 import PortRangeDialog, {
-  PortRangeDialogData,
+  type PortRangeDialogData,
 } from 'web/pages/portlists/PortRangeDialog';
 
 interface PortRange {

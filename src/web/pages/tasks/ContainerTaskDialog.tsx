@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Task from 'gmp/models/task';
-import {YES_VALUE, YesNo} from 'gmp/parser';
+import type Task from 'gmp/models/task';
+import {YES_VALUE, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';

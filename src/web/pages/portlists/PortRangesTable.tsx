@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ProtocolType} from 'gmp/models/portlist';
+import {type ProtocolType} from 'gmp/models/portlist';
 import {isDefined} from 'gmp/utils/identity';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import Table from 'web/components/table/StripedTable';

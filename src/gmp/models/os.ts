@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseInt, parseSeverity} from 'gmp/parser';
 
 interface OperatingSystemElement extends ModelElement {

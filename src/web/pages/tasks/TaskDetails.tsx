@@ -6,10 +6,10 @@
 import {useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {duration} from 'gmp/models/date';
-import ScanConfig from 'gmp/models/scanconfig';
+import type ScanConfig from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
-import Schedule from 'gmp/models/schedule';
-import Task from 'gmp/models/task';
+import type Schedule from 'gmp/models/schedule';
+import type Task from 'gmp/models/task';
 import {YES_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';

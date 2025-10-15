@@ -3,27 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Capabilities, {Capability} from 'gmp/capabilities/capabilities';
-import Features, {Feature} from 'gmp/capabilities/features';
+import Capabilities, {type Capability} from 'gmp/capabilities/capabilities';
+import Features, {type Feature} from 'gmp/capabilities/features';
 import EntityCommand from 'gmp/commands/entity';
-import {HttpCommandOptions} from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Response from 'gmp/http/response';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type HttpCommandOptions} from 'gmp/commands/http';
+import type GmpHttp from 'gmp/http/gmp';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import date, {Date} from 'gmp/models/date';
-import {PortListElement} from 'gmp/models/portlist';
-import Setting, {SettingElement} from 'gmp/models/setting';
+import date, {type Date} from 'gmp/models/date';
+import {type PortListElement} from 'gmp/models/portlist';
+import Setting, {type SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_RADIUS,
-  UserElement,
+  type UserElement,
 } from 'gmp/models/user';
 import {parseBoolean, parseInt} from 'gmp/parser';
 import {filter, forEach, map} from 'gmp/utils/array';
-import {EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entitytype';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 

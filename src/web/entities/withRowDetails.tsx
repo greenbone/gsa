@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import Model from 'gmp/models/model';
+import type Model from 'gmp/models/model';
 import {isFunction} from 'gmp/utils/identity';
 import {DetailsIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';

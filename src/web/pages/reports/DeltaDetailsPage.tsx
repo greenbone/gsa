@@ -6,16 +6,16 @@
 import {useState, useEffect, useMemo, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router';
-import Gmp from 'gmp/gmp';
+import type Gmp from 'gmp/gmp';
 import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
-import Report from 'gmp/models/report';
-import ReportConfig from 'gmp/models/reportconfig';
-import ReportFormat from 'gmp/models/reportformat';
+import type Report from 'gmp/models/report';
+import type ReportConfig from 'gmp/models/reportconfig';
+import type ReportFormat from 'gmp/models/reportformat';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';

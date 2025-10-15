@@ -5,15 +5,15 @@
 
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import Rejection from 'gmp/http/rejection';
+import type Rejection from 'gmp/http/rejection';
 import Filter from 'gmp/models/filter';
-import Permission from 'gmp/models/permission';
-import Role from 'gmp/models/role';
+import type Permission from 'gmp/models/permission';
+import type Role from 'gmp/models/role';
 import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/actionFunction';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
-import {GotoDetailsFunc} from 'web/entity/navigation';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {type GotoDetailsFunc} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

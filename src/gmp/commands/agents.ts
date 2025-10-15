@@ -4,10 +4,10 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import {HttpCommandPostParams} from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Response from 'gmp/http/response';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type HttpCommandPostParams} from 'gmp/commands/http';
+import type GmpHttp from 'gmp/http/gmp';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import Agent from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';

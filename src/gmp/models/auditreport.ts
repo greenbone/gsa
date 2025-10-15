@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {ModelProperties} from 'gmp/models/model';
-import {ReportElement} from 'gmp/models/report';
+import Model, {type ModelProperties} from 'gmp/models/model';
+import {type ReportElement} from 'gmp/models/report';
 import AuditReportReport from 'gmp/models/report/auditreport';
 import {isDefined} from 'gmp/utils/identity';
 

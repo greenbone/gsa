@@ -11,12 +11,12 @@ import {
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import Response from 'gmp/http/response';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import {
-  EntityModelElement,
-  EntityModelProperties,
+  type EntityModelElement,
+  type EntityModelProperties,
 } from 'gmp/models/entitymodel';
 import Filter from 'gmp/models/filter';
 import Model from 'gmp/models/model';

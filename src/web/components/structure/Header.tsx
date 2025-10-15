@@ -16,7 +16,7 @@ import useManualURL from 'web/hooks/useManualURL';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
-import {ApplianceLogo} from 'web/utils/applianceData';
+import {type ApplianceLogo} from 'web/utils/applianceData';
 
 const Header = () => {
   const [_] = useTranslation();

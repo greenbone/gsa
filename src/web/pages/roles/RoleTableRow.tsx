@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Role from 'gmp/models/role';
+import type Role from 'gmp/models/role';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableRow from 'web/components/table/TableRow';
@@ -14,7 +14,7 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import {SelectionTypeType} from 'web/utils/SelectionType';
+import {type SelectionTypeType} from 'web/utils/SelectionType';
 
 export interface RoleActionsProps {
   entity: Role;

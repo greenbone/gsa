@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {RadioProps as MantineRadioProps} from '@mantine/core';
+import {type RadioProps as MantineRadioProps} from '@mantine/core';
 import {RadioButton as GreenboneRadio} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 import useValueChange from 'web/components/form/useValueChange';

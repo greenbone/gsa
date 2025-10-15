@@ -4,7 +4,7 @@
  */
 
 import React, {useCallback, useEffect, useState} from 'react';
-import {CertificateInfo} from 'gmp/commands/user';
+import {type CertificateInfo} from 'gmp/commands/user';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import {EditIcon, LdapIcon} from 'web/components/icon';
@@ -21,7 +21,7 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import LdapDialog, {LdapDialogState} from 'web/pages/ldap/LdapDialog';
+import LdapDialog, {type LdapDialogState} from 'web/pages/ldap/LdapDialog';
 import {renderYesNo} from 'web/utils/Render';
 
 interface ToolBarIconsProps {

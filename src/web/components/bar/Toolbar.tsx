@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ReactNode} from 'react';
+import {type ReactNode} from 'react';
 import Layout from 'web/components/layout/Layout';
 import IconSizeProvider from 'web/components/provider/IconSizeProvider';
 

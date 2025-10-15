@@ -15,7 +15,7 @@ import {
   CircleHelp,
 } from 'lucide-react';
 import {useLocation, useMatch} from 'react-router';
-import {EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import Link from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';

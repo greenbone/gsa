@@ -4,10 +4,10 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import logger from 'gmp/log';
-import Agent, {AgentElement} from 'gmp/models/agent';
-import {Element} from 'gmp/models/model';
+import Agent, {type AgentElement} from 'gmp/models/agent';
+import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
 import {isArray, isDefined} from 'gmp/utils/identity';
 

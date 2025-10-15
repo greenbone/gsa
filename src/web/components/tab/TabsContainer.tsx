@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ReactNode} from 'react';
-import withLayout, {WithLayoutProps} from 'web/components/layout/withLayout';
+import {type ReactNode} from 'react';
+import withLayout, {
+  type WithLayoutProps,
+} from 'web/components/layout/withLayout';
 import {TabProvider} from 'web/components/tab/TabContext';
 
 export type TabsContainerProps = WithLayoutProps & {

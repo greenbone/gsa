@@ -6,9 +6,9 @@
 import {useCallback, useEffect, useState} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import styled from 'styled-components';
-import {TrashCanGetData} from 'gmp/commands/trashcan';
-import Rejection from 'gmp/http/rejection';
-import Model from 'gmp/models/model';
+import {type TrashCanGetData} from 'gmp/commands/trashcan';
+import type Rejection from 'gmp/http/rejection';
+import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';

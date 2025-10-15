@@ -4,13 +4,14 @@
  */
 
 import styled from 'styled-components';
-import Task, {
+import {
+  type default as Task,
+  type TaskAutoDelete,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   AUTO_DELETE_NO,
   DEFAULT_MIN_QOD,
-  TaskAutoDelete,
 } from 'gmp/models/task';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
@@ -28,7 +29,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
 import {
-  RenderSelectItemProps,
+  type RenderSelectItemProps,
   renderSelectItems,
   UNSET_VALUE,
 } from 'web/utils/Render';

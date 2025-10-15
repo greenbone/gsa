@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type React from 'react';
 import {useQuery} from '@tanstack/react-query';
-import Agents from 'gmp/models/agent';
-import Filter from 'gmp/models/filter';
+import type Agents from 'gmp/models/agent';
+import type Filter from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 
 interface UseAgentsAggregatesParams {

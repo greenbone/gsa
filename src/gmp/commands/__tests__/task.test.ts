@@ -18,9 +18,9 @@ import {
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import Rejection from 'gmp/http/rejection';
-import logger, {LogLevel} from 'gmp/log';
+import logger, {type LogLevel} from 'gmp/log';
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,

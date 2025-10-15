@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Rejection from 'gmp/http/rejection';
-import {EntityType} from 'gmp/utils/entitytype';
+import type Rejection from 'gmp/http/rejection';
+import {type EntityType} from 'gmp/utils/entitytype';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 

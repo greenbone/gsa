@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Nvt, {NvtElement} from 'gmp/models/nvt';
+import Nvt, {type NvtElement} from 'gmp/models/nvt';
 import {parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 

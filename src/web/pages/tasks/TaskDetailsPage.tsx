@@ -5,11 +5,11 @@
 
 import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
-import Gmp from 'gmp/gmp';
+import type Gmp from 'gmp/gmp';
 import Filter from 'gmp/models/filter';
-import Permission from 'gmp/models/permission';
+import type Permission from 'gmp/models/permission';
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
-import Task, {USAGE_TYPE} from 'gmp/models/task';
+import {type default as Task, USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Badge from 'web/components/badge/Badge';
 import {
@@ -49,9 +49,9 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions, {
-  EntityPermissionsProps,
+  type EntityPermissionsProps,
 } from 'web/entity/EntityPermissions';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';

@@ -5,7 +5,7 @@
 
 import {
   getQueriesForElement,
-  Screen as TestingScreen,
+  type Screen as TestingScreen,
   screen as testingScreen,
 } from '@testing-library/dom';
 import {allQueries} from 'web/testing/allQueries';

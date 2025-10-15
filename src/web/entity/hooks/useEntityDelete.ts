@@ -4,8 +4,8 @@
  */
 
 import {useDispatch} from 'react-redux';
-import Rejection from 'gmp/http/rejection';
-import {EntityType} from 'gmp/utils/entitytype';
+import type Rejection from 'gmp/http/rejection';
+import {type EntityType} from 'gmp/utils/entitytype';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

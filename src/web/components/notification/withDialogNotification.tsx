@@ -6,7 +6,7 @@
 import React from 'react';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification, {
-  ErrorWithMessage,
+  type ErrorWithMessage,
 } from 'web/components/notification/useDialogNotification';
 import {updateDisplayName} from 'web/utils/displayName';
 

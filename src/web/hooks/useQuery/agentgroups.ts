@@ -8,9 +8,9 @@ import {
   type AgentGroupSaveParams,
 } from 'gmp/commands/agentgroup';
 import {type EntityActionResponse} from 'gmp/commands/entity';
-import Rejection from 'gmp/http/rejection';
-import AgentGroup from 'gmp/models/agentgroup';
-import Filter from 'gmp/models/filter';
+import type Rejection from 'gmp/http/rejection';
+import type AgentGroup from 'gmp/models/agentgroup';
+import type Filter from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 import useCreateMutation from 'web/queries/useCreateMutation';
 import useDeleteMutation from 'web/queries/useDeleteMutation';

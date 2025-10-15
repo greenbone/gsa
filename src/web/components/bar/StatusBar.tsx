@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import {
   getTranslatableTaskStatus,
   TASK_STATUS,
-  TaskStatus,
+  type TaskStatus,
 } from 'gmp/models/task';
 import {BACKGROUND_STATES} from 'web/components/bar/definitions';
 import ProgressBar, {adjustProgress} from 'web/components/bar/ProgressBar';

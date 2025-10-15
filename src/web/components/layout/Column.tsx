@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Flex, FlexProps} from '@mantine/core';
+import {Flex, type FlexProps} from '@mantine/core';
 
 /**
  * React component that renders a stack (column) layout

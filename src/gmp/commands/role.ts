@@ -4,10 +4,10 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
+import type GmpHttp from 'gmp/http/gmp';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import Role, {RoleElement} from 'gmp/models/role';
+import Role, {type RoleElement} from 'gmp/models/role';
 import {isArray} from 'gmp/utils/identity';
 
 interface RoleCommandCreateParams {

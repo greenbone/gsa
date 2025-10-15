@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Audit from 'gmp/models/audit';
-import Task, {USAGE_TYPE} from 'gmp/models/task';
+import type Audit from 'gmp/models/audit';
+import {type default as Task, USAGE_TYPE} from 'gmp/models/task';
 import {StopIcon} from 'web/components/icon';
-import {ExtendedIconSize} from 'web/components/icon/DynamicIcon';
+import {type ExtendedIconSize} from 'web/components/icon/DynamicIcon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 

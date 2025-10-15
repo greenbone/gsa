@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWithTable, within} from 'web/testing';
-import {TrashCanGetData} from 'gmp/commands/trashcan';
+import {type TrashCanGetData} from 'gmp/commands/trashcan';
 import AgentGroup from 'gmp/models/agentgroup';
 import Alert from 'gmp/models/alert';
 import Audit from 'gmp/models/audit';

@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Rejection from 'gmp/http/rejection';
-import Response, {Meta} from 'gmp/http/response';
+import type Rejection from 'gmp/http/rejection';
+import {type default as Response, type Meta} from 'gmp/http/response';
 import {success, rejection} from 'gmp/http/transform/xml';
 
 describe('xml base transform tests', () => {

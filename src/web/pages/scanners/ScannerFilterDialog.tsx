@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
-  ScannerType,
+  type ScannerType,
   scannerTypeName,
 } from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
@@ -23,8 +23,8 @@ import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup'
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave, {
-  UseFilterDialogSaveProps,
-  UseFilterDialogStateProps,
+  type UseFilterDialogSaveProps,
+  type UseFilterDialogStateProps,
 } from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useFeatures from 'web/hooks/useFeatures';

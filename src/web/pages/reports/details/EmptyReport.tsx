@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isActive, TASK_STATUS, TaskStatus} from 'gmp/models/task';
+import {isActive, TASK_STATUS, type TaskStatus} from 'gmp/models/task';
 import {RefreshIcon, TargetIcon, TaskIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import InfoPanel from 'web/components/panel/InfoPanel';

@@ -5,17 +5,17 @@
 
 import {feedStatusRejection} from 'gmp/commands/feedstatus';
 import HttpCommand from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
-import Response from 'gmp/http/response';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import type GmpHttp from 'gmp/http/gmp';
+import type Rejection from 'gmp/http/rejection';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import Credential from 'gmp/models/credential';
-import {Date} from 'gmp/models/date';
-import Model, {ModelElement} from 'gmp/models/model';
-import {SettingElement} from 'gmp/models/setting';
+import {type Date} from 'gmp/models/date';
+import Model, {type ModelElement} from 'gmp/models/model';
+import {type SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
-import Task, {TaskElement} from 'gmp/models/task';
-import {YesNo} from 'gmp/parser';
+import Task, {type TaskElement} from 'gmp/models/task';
+import {type YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 

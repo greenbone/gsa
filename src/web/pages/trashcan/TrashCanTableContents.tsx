@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {TrashCanGetData} from 'gmp/commands/trashcan';
-import Model from 'gmp/models/model';
+import {type TrashCanGetData} from 'gmp/commands/trashcan';
+import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import TableBody from 'web/components/table/TableBody';
 import useTranslation from 'web/hooks/useTranslation';

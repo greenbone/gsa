@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Role from 'gmp/models/role';
+import type Role from 'gmp/models/role';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import InfoTable from 'web/components/table/InfoTable';

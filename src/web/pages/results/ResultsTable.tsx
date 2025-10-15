@@ -4,26 +4,26 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import Result from 'gmp/models/result';
+import type Result from 'gmp/models/result';
 import {SolutionTypeSvgIcon} from 'web/components/icon';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-import {FooterComponentProps} from 'web/entities/EntitiesTable';
+import {type FooterComponentProps} from 'web/entities/EntitiesTable';
 import withEntitiesHeader, {
-  WithEntitiesHeaderComponentProps,
+  type WithEntitiesHeaderComponentProps,
 } from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import useGmp from 'web/hooks/useGmp';
 import ResultDetails, {
-  ResultDetailsProps,
+  type ResultDetailsProps,
 } from 'web/pages/results/ResultDetails';
 import ResultsRow, {
-  ResultTableRowProps,
+  type ResultTableRowProps,
 } from 'web/pages/results/ResultsTableRow';
-import {SortDirectionType} from 'web/utils/SortDirection';
+import {type SortDirectionType} from 'web/utils/SortDirection';
 
 interface ResultTableHeaderProps extends WithEntitiesHeaderComponentProps {
   audit?: boolean;

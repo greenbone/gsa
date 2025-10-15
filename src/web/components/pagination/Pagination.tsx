@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
 import {isDefined} from 'gmp/utils/identity';
 import {FirstIcon, LastIcon, NextIcon, PreviousIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';

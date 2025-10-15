@@ -5,17 +5,17 @@
 
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import {
-  CollectionList,
+  type CollectionList,
   parseCollectionList,
   parseReportResultEntities,
 } from 'gmp/collection/parser';
-import {ComplianceType} from 'gmp/models/compliance';
-import Filter from 'gmp/models/filter';
+import {type ComplianceType} from 'gmp/models/compliance';
+import type Filter from 'gmp/models/filter';
 import {
   getRefs,
   hasRefType,
-  NvtRefElement,
-  NvtSeveritiesElement,
+  type NvtRefElement,
+  type NvtSeveritiesElement,
 } from 'gmp/models/nvt';
 import ReportApp from 'gmp/models/report/app';
 import ReportCve from 'gmp/models/report/cve';
@@ -23,10 +23,10 @@ import ReportHost from 'gmp/models/report/host';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import ReportPort from 'gmp/models/report/port';
 import ReportTLSCertificate, {
-  ReportTLSCertificateElement,
+  type ReportTLSCertificateElement,
 } from 'gmp/models/report/tlscertificate';
 import Result from 'gmp/models/result';
-import {parseSeverity, QoDParams} from 'gmp/parser';
+import {parseSeverity, type QoDParams} from 'gmp/parser';
 import {filter as filterFunc, forEach, map} from 'gmp/utils/array';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';

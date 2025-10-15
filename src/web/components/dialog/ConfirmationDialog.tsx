@@ -6,7 +6,7 @@
 import Dialog from 'web/components/dialog/Dialog';
 import DialogContent from 'web/components/dialog/DialogContent';
 import DialogTwoButtonFooter, {
-  DELETE_ACTION,
+  type DELETE_ACTION,
 } from 'web/components/dialog/DialogTwoButtonFooter';
 import useTranslation from 'web/hooks/useTranslation';
 

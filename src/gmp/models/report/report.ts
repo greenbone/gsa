@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {CollectionList, parseFilter} from 'gmp/collection/parser';
-import {Date} from 'gmp/models/date';
-import Filter, {FilterKeyword} from 'gmp/models/filter';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import ReportApp from 'gmp/models/report/app';
-import ReportCve from 'gmp/models/report/cve';
-import ReportHost from 'gmp/models/report/host';
-import ReportOperatingSystem from 'gmp/models/report/os';
+import {type CollectionList, parseFilter} from 'gmp/collection/parser';
+import {type Date} from 'gmp/models/date';
+import Filter, {type FilterKeyword} from 'gmp/models/filter';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import type ReportApp from 'gmp/models/report/app';
+import type ReportCve from 'gmp/models/report/cve';
+import type ReportHost from 'gmp/models/report/host';
+import type ReportOperatingSystem from 'gmp/models/report/os';
 import {
   parseApps,
   parseClosedCves,
@@ -21,22 +21,22 @@ import {
   parsePorts,
   parseResults,
   parseTlsCertificates,
-  ReportResultsElement,
-  CountElement,
-  TlsCertificatesElement,
-  ReportResultCountElement,
-  PortsElement,
-  ReportHostElement,
-  ErrorsElement,
-  ReportError,
-  ReportClosedCve,
+  type ReportResultsElement,
+  type CountElement,
+  type TlsCertificatesElement,
+  type ReportResultCountElement,
+  type PortsElement,
+  type ReportHostElement,
+  type ErrorsElement,
+  type ReportError,
+  type ReportClosedCve,
 } from 'gmp/models/report/parser';
-import ReportPort from 'gmp/models/report/port';
+import type ReportPort from 'gmp/models/report/port';
 import ReportTask from 'gmp/models/report/task';
-import ReportTLSCertificate from 'gmp/models/report/tlscertificate';
-import Result from 'gmp/models/result';
-import {TaskStatus} from 'gmp/models/task';
-import {parseSeverity, parseDate, YesNo} from 'gmp/parser';
+import type ReportTLSCertificate from 'gmp/models/report/tlscertificate';
+import type Result from 'gmp/models/result';
+import {type TaskStatus} from 'gmp/models/task';
+import {parseSeverity, parseDate, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 export type ReportType = 'scan' | 'assets' | 'delta';

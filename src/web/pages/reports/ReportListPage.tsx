@@ -6,9 +6,9 @@
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
-import {TaskCommandCreateContainerParams} from 'gmp/commands/task';
+import {type TaskCommandCreateContainerParams} from 'gmp/commands/task';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
-import Report from 'gmp/models/report';
+import type Report from 'gmp/models/report';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import DashboardControls from 'web/components/dashboard/Controls';
@@ -22,7 +22,7 @@ import {
 } from 'web/components/loading/Reload';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer, {
-  WithEntitiesContainerComponentProps,
+  type WithEntitiesContainerComponentProps,
 } from 'web/entities/withEntitiesContainer';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';

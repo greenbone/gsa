@@ -3,25 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
 import {
-  CollectionList,
-  ModelClass,
+  type CollectionList,
+  type ModelClass,
   parseCollectionList,
 } from 'gmp/collection/parser';
 import HttpCommand, {
   BULK_SELECT_BY_FILTER,
   BULK_SELECT_BY_IDS,
-  HttpCommandInputParams,
-  HttpCommandOptions,
-  HttpCommandPostParams,
+  type HttpCommandInputParams,
+  type HttpCommandOptions,
+  type HttpCommandPostParams,
 } from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Response, {Meta} from 'gmp/http/response';
+import type GmpHttp from 'gmp/http/gmp';
+import {type default as Response, type Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
-import Model, {Element} from 'gmp/models/model';
+import {type default as Model, type Element} from 'gmp/models/model';
 import {map, forEach} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 

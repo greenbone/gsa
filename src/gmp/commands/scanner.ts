@@ -4,10 +4,13 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import logger from 'gmp/log';
-import {Element} from 'gmp/models/model';
-import Scanner, {ScannerElement, ScannerType} from 'gmp/models/scanner';
+import {type Element} from 'gmp/models/model';
+import Scanner, {
+  type ScannerElement,
+  type ScannerType,
+} from 'gmp/models/scanner';
 
 interface ScannerCommandCreateParams {
   name: string;

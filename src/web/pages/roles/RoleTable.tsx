@@ -4,15 +4,17 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import Role from 'gmp/models/role';
+import type Role from 'gmp/models/role';
 import createEntitiesFooter, {
-  CreateEntitiesFooterProps,
+  type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
-import Header, {HeaderProps} from 'web/pages/groups/Header';
+import Header, {type HeaderProps} from 'web/pages/groups/Header';
 import RoleDetails from 'web/pages/roles/RoleDetails';
-import RoleTableRow, {RoleTableRowProps} from 'web/pages/roles/RoleTableRow';
+import RoleTableRow, {
+  type RoleTableRowProps,
+} from 'web/pages/roles/RoleTableRow';
 
 const RolesTable = createEntitiesTable<
   Role,

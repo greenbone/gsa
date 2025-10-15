@@ -7,7 +7,7 @@ import EntityModel, {parseEntityModelProperties} from 'gmp/models/entitymodel';
 import convert from 'gmp/models/filter/convert';
 import FilterTerm, {AND} from 'gmp/models/filter/filterterm';
 import {EXTRA_KEYWORDS} from 'gmp/models/filter/keywords';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';

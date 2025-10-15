@@ -4,18 +4,18 @@
  */
 
 import {useCallback, useEffect, useState} from 'react';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Filter from 'gmp/models/filter';
-import Model from 'gmp/models/model';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type Filter from 'gmp/models/filter';
+import type Model from 'gmp/models/model';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE} from 'gmp/parser';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import TagsDialog, {TagsDialogData} from 'web/entities/TagsDialog';
+import TagsDialog, {type TagsDialogData} from 'web/entities/TagsDialog';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import TagDialog from 'web/pages/tags/Dialog';
-import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 
 interface BulkTagsProps<TEntity extends Model> {
   entities: TEntity[];

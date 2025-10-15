@@ -5,9 +5,9 @@
 
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Filter from 'gmp/models/filter';
-import Model from 'gmp/models/model';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type Filter from 'gmp/models/filter';
+import type Model from 'gmp/models/model';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {FoldState} from 'web/components/folding/Folding';
@@ -18,7 +18,7 @@ import Pagination from 'web/components/pagination/Pagination';
 import StripedTable from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
 import useTranslation from 'web/hooks/useTranslation';
-import {SortDirectionType} from 'web/utils/SortDirection';
+import {type SortDirectionType} from 'web/utils/SortDirection';
 
 export interface FooterComponentProps<TEntity> {
   entities?: TEntity[];

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {COMPLIANCE, ComplianceType} from 'gmp/models/compliance';
+import {COMPLIANCE, type ComplianceType} from 'gmp/models/compliance';
 import {isDefined} from 'gmp/utils/identity';
 
 interface Host {

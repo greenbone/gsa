@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {EntityActionData} from 'gmp/commands/entity';
-import Rejection from 'gmp/http/rejection';
-import Response from 'gmp/http/response';
-import {XmlMeta} from 'gmp/http/transform/fastxml';
-import {EntityType} from 'gmp/utils/entitytype';
+import {type EntityActionData} from 'gmp/commands/entity';
+import type Rejection from 'gmp/http/rejection';
+import type Response from 'gmp/http/response';
+import {type XmlMeta} from 'gmp/http/transform/fastxml';
+import {type EntityType} from 'gmp/utils/entitytype';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

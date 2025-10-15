@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
-import {TaskTrend} from 'gmp/models/task';
+import type Filter from 'gmp/models/filter';
+import {type TaskTrend} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';

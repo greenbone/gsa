@@ -5,41 +5,45 @@
 
 import React, {useState, useEffect, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
-import {EntityActionData} from 'gmp/commands/entity';
-import Rejection from 'gmp/http/rejection';
-import Response from 'gmp/http/response';
-import {XmlMeta} from 'gmp/http/transform/fastxml';
-import AgentGroup from 'gmp/models/agentgroup';
-import date, {Date} from 'gmp/models/date';
+import {type EntityActionData} from 'gmp/commands/entity';
+import type Rejection from 'gmp/http/rejection';
+import type Response from 'gmp/http/response';
+import {type XmlMeta} from 'gmp/http/transform/fastxml';
+import type AgentGroup from 'gmp/models/agentgroup';
+import date, {type Date} from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
-import Task, {TaskAutoDelete, TaskHostsOrdering} from 'gmp/models/task';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {
+  type default as Task,
+  type TaskAutoDelete,
+  type TaskHostsOrdering,
+} from 'gmp/models/task';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import {DEFAULT_TIMEZONE} from 'gmp/timezones';
 import {map} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/actionFunction';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
 import ImportReportDialog, {
-  ReportImportDialogData,
+  type ReportImportDialogData,
 } from 'web/pages/reports/ReportImportDialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import TargetComponent from 'web/pages/targets/Component';
 import AgentTaskDialog, {
-  AgentTaskDialogData,
+  type AgentTaskDialogData,
 } from 'web/pages/tasks/AgentTaskDialog';
 import ContainerTaskDialog, {
-  ContainerTaskDialogData,
+  type ContainerTaskDialogData,
 } from 'web/pages/tasks/ContainerTaskDialog';
-import TaskDialog, {TaskDialogData} from 'web/pages/tasks/TaskDialog';
+import TaskDialog, {type TaskDialogData} from 'web/pages/tasks/TaskDialog';
 import {
   loadEntities as loadAlerts,
   selector as alertSelector,
@@ -71,12 +75,12 @@ import {
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getTimezone} from 'web/store/usersettings/selectors';
-import {RenderSelectItemProps, UNSET_VALUE} from 'web/utils/Render';
+import {type RenderSelectItemProps, UNSET_VALUE} from 'web/utils/Render';
 import AdvancedTaskWizard, {
-  AdvancedTaskWizardData,
+  type AdvancedTaskWizardData,
 } from 'web/wizard/AdvancedTaskWizard';
 import ModifyTaskWizard, {
-  ModifyTaskWizardData,
+  type ModifyTaskWizardData,
 } from 'web/wizard/ModifyTaskWizard';
 import TaskWizard from 'web/wizard/TaskWizard';
 

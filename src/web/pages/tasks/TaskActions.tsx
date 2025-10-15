@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Task from 'gmp/models/task';
+import type Task from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
-  EntitiesActionsProps,
+  type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';

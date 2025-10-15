@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {EntityCommandParams} from 'gmp/commands/entity';
-import {EntityType, typeName} from 'gmp/utils/entitytype';
+import {type EntityCommandParams} from 'gmp/commands/entity';
+import {type EntityType, typeName} from 'gmp/utils/entitytype';
 import useTranslation from 'web/hooks/useTranslation';
 import useGmpMutation from 'web/queries/useGmpMutation';
 

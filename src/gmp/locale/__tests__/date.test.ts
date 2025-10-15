@@ -12,7 +12,7 @@ import {
   dateTimeWithTimeZone,
   dateTimeWithTimeZoneObject,
   processDateWithTimeZone,
-  DateTimeKey,
+  type DateTimeKey,
 } from 'gmp/locale/date';
 import date, {setLocaleDayjs} from 'gmp/models/date';
 

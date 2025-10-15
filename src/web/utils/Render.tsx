@@ -7,17 +7,17 @@ import React from 'react';
 import {format} from 'd3-format';
 import {getFormattedDate} from 'gmp/locale/date';
 import {_} from 'gmp/locale/lang';
-import date, {Date} from 'gmp/models/date';
-import {parseBoolean, YesNo} from 'gmp/parser';
+import date, {type Date} from 'gmp/models/date';
+import {parseBoolean, type YesNo} from 'gmp/parser';
 import {
   typeName,
   getEntityType,
-  WithEntityType,
-  ApiType,
+  type WithEntityType,
+  type ApiType,
 } from 'gmp/utils/entitytype';
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
-import {SelectItem} from 'web/components/form/Select';
+import {type SelectItem} from 'web/components/form/Select';
 
 export interface RenderSelectItemProps {
   name: string;

@@ -4,23 +4,23 @@
  */
 
 import {connect} from 'react-redux';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Gmp from 'gmp/gmp';
-import Rejection from 'gmp/http/rejection';
-import Filter from 'gmp/models/filter';
-import Model from 'gmp/models/model';
-import {EntityType} from 'gmp/utils/entitytype';
-import {DownloadFunc} from 'web/components/form/useDownload';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type Gmp from 'gmp/gmp';
+import type Rejection from 'gmp/http/rejection';
+import type Filter from 'gmp/models/filter';
+import type Model from 'gmp/models/model';
+import {type EntityType} from 'gmp/utils/entitytype';
+import {type DownloadFunc} from 'web/components/form/useDownload';
 import withDownload from 'web/components/form/withDownload';
 import Reload from 'web/components/loading/Reload';
 import withDialogNotification, {
-  DialogNotificationProps,
+  type DialogNotificationProps,
 } from 'web/components/notification/withDialogNotification';
 import SubscriptionProvider, {
-  NotifyFunc,
+  type NotifyFunc,
 } from 'web/components/provider/SubscriptionProvider';
 import EntitiesContainer, {
-  EntitiesContainerRenderProps,
+  type EntitiesContainerRenderProps,
 } from 'web/entities/EntitiesContainer';
 import FilterProvider from 'web/entities/FilterProvider';
 import {pageFilter} from 'web/store/pages/actions';

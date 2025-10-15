@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Response, {Meta} from 'gmp/http/response';
-import date, {Date} from 'gmp/models/date';
+import {type default as Response, type Meta} from 'gmp/http/response';
+import date, {type Date} from 'gmp/models/date';
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 

@@ -5,11 +5,11 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Gmp from 'gmp/gmp';
-import Rejection from 'gmp/http/rejection';
-import Filter from 'gmp/models/filter';
-import Model from 'gmp/models/model';
+import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type Gmp from 'gmp/gmp';
+import type Rejection from 'gmp/http/rejection';
+import type Filter from 'gmp/models/filter';
+import type Model from 'gmp/models/model';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import Toolbar from 'web/components/bar/Toolbar';
@@ -18,7 +18,7 @@ import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import PowerFilter from 'web/components/powerfilter/PowerFilter';
 import Section from 'web/components/section/Section';
-import {TranslateFunc} from 'web/hooks/useTranslation';
+import {type TranslateFunc} from 'web/hooks/useTranslation';
 import {loadAllEntities, selector} from 'web/store/entities/filters';
 import compose from 'web/utils/Compose';
 import withGmp from 'web/utils/withGmp';

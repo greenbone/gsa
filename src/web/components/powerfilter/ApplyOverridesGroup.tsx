@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
-import {YesNo} from 'gmp/parser';
+import type Filter from 'gmp/models/filter';
+import {type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import YesNoRadio from 'web/components/form/YesNoRadio';

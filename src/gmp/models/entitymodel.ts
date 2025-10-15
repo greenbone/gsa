@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Capabilities, {Capability} from 'gmp/capabilities/capabilities';
+import Capabilities, {type Capability} from 'gmp/capabilities/capabilities';
 import BaseModel, {
-  BaseModelElement,
-  BaseModelProperties,
+  type BaseModelElement,
+  type BaseModelProperties,
   parseBaseModelProperties,
 } from 'gmp/models/basemodel';
-import {Date as GmpDate} from 'gmp/models/date';
-import UserTag, {UserTagElement} from 'gmp/models/usertag';
+import {type Date as GmpDate} from 'gmp/models/date';
+import UserTag, {type UserTagElement} from 'gmp/models/usertag';
 import {
   NO_VALUE,
   parseBoolean,
@@ -19,10 +19,10 @@ import {
   parseToString,
   parseYesNo,
   YES_VALUE,
-  YesNo,
+  type YesNo,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
-import {EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 

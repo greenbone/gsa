@@ -4,7 +4,7 @@
  */
 
 import {ensureDate} from 'gmp/locale/date';
-import {Date} from 'gmp/models/date';
+import {type Date} from 'gmp/models/date';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';

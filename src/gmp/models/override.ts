@@ -3,17 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import Nvt, {NvtNvtElement} from 'gmp/models/nvt';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import Nvt, {type NvtNvtElement} from 'gmp/models/nvt';
 import {
   parseCsv,
   parseSeverity,
   parseTextElement,
   parseToString,
   parseYesNo,
-  TextElement,
+  type TextElement,
   YES_VALUE,
-  YesNo,
+  type YesNo,
 } from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
 

@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import useIconSize, {IconSizeType} from 'web/hooks/useIconSize';
+import useIconSize, {type IconSizeType} from 'web/hooks/useIconSize';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 

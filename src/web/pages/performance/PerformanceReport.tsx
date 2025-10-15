@@ -3,14 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState, ReactNode} from 'react';
-import {PerformanceReport as PerformanceReportModel} from 'gmp/commands/performance';
-import {Date} from 'gmp/models/date';
+import {useEffect, useState, type ReactNode} from 'react';
+import {type PerformanceReport as PerformanceReportModel} from 'gmp/commands/performance';
+import {type Date} from 'gmp/models/date';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import LinkTarget from 'web/components/link/Target';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import {Duration, getDurationInSeconds} from 'web/pages/performance/durations';
+import {
+  type Duration,
+  getDurationInSeconds,
+} from 'web/pages/performance/durations';
 
 interface PerformanceReportProps {
   name: string;

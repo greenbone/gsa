@@ -4,8 +4,11 @@
  */
 
 import Rejection from 'gmp/http//rejection';
-import Response, {Meta} from 'gmp/http/response';
-import {TransformOptions, TransformSuccess} from 'gmp/http/transform/transform';
+import {type default as Response, type Meta} from 'gmp/http/response';
+import {
+  type TransformOptions,
+  type TransformSuccess,
+} from 'gmp/http/transform/transform';
 import {_} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 

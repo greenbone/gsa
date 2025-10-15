@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
-import Model from 'gmp/models/model';
+import type Model from 'gmp/models/model';
 import EntitiesActions, {
-  EntitiesActionsProps,
+  type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import {updateDisplayName} from 'web/utils/displayName';
 

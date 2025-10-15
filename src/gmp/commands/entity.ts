@@ -5,20 +5,20 @@
 
 import HttpCommand, {
   BULK_SELECT_BY_IDS,
-  HttpCommandGetParams,
-  HttpCommandInputParams,
-  HttpCommandOptions,
-  HttpCommandParamsOptions,
-  HttpCommandPostParams,
+  type HttpCommandGetParams,
+  type HttpCommandInputParams,
+  type HttpCommandOptions,
+  type HttpCommandParamsOptions,
+  type HttpCommandPostParams,
 } from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Response, {Meta} from 'gmp/http/response';
+import type GmpHttp from 'gmp/http/gmp';
+import {type default as Response, type Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import ActionResult from 'gmp/models/actionresult';
-import Filter from 'gmp/models/filter';
-import Model from 'gmp/models/model';
+import type Filter from 'gmp/models/filter';
+import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
 interface ModelClass<TModel> {

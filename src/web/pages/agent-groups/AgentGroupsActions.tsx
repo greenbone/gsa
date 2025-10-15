@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import AgentGroup from 'gmp/models/agentgroup';
+import type AgentGroup from 'gmp/models/agentgroup';
 import {EditIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
-  EntitiesActionsProps,
+  type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';

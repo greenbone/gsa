@@ -5,14 +5,14 @@
 
 import {convertBoolean} from 'gmp/commands/convert';
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
-import Response from 'gmp/http/response';
+import type GmpHttp from 'gmp/http/gmp';
+import type Response from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
-import Report, {ReportElement} from 'gmp/models/report';
-import {YesNo} from 'gmp/parser';
+import {type default as Filter, ALL_FILTER} from 'gmp/models/filter';
+import Report, {type ReportElement} from 'gmp/models/report';
+import {type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 interface ReportCommandImportParams {

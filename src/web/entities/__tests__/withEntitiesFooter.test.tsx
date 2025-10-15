@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Task from 'gmp/models/task';
 import withEntitiesFooter, {
-  WithEntitiesFooterComponentProps,
+  type WithEntitiesFooterComponentProps,
 } from 'web/entities/withEntitiesFooter';
 
 describe('withEntitiesFooter tests', () => {

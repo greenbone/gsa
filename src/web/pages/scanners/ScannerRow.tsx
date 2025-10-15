@@ -4,7 +4,11 @@
  */
 
 import React from 'react';
-import Scanner, {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
+import {
+  type default as Scanner,
+  scannerTypeName,
+  CVE_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
@@ -12,7 +16,7 @@ import EntityNameTableData from 'web/entities/EntityNameTableData';
 import EntityLink from 'web/entity/Link';
 import useTranslation from 'web/hooks/useTranslation';
 import ScannerActions, {
-  ScannerActionsProps,
+  type ScannerActionsProps,
 } from 'web/pages/scanners/ScannerActions';
 
 export interface ScannerRowProps extends ScannerActionsProps {

@@ -4,7 +4,7 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import GmpHttp from 'gmp/http/gmp';
+import type GmpHttp from 'gmp/http/gmp';
 import type {XmlResponseData} from 'gmp/http/transform/fastxml';
 import AgentInstaller from 'gmp/models/agentinstaller';
 

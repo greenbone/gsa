@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
-import Report from 'gmp/models/report';
+import type Report from 'gmp/models/report';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityClassLabel from 'web/components/label/SeverityClass';
 import TableHead from 'web/components/table/TableHead';
@@ -14,11 +14,11 @@ import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import {
-  FooterComponentProps,
-  HeaderComponentProps,
+  type FooterComponentProps,
+  type HeaderComponentProps,
 } from 'web/entities/EntitiesTable';
 import ReportTableRow, {
-  ReportTableRowProps,
+  type ReportTableRowProps,
 } from 'web/pages/reports/ReportTableRow';
 
 interface ReportTableHeaderProps extends HeaderComponentProps {

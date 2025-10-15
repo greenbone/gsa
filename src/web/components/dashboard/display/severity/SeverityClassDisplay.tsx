@@ -7,13 +7,13 @@ import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import DonutChart from 'web/components/chart/Donut';
 import DataDisplay, {
-  DataDisplayProps,
+  type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';
 import transformSeverityData, {
-  SeverityClassData,
-  SeverityData,
-  TransformSeverityDataProps,
+  type SeverityClassData,
+  type SeverityData,
+  type TransformSeverityDataProps,
 } from 'web/components/dashboard/display/severity/severityClassTransform';
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
 import useGmp from 'web/hooks/useGmp';
