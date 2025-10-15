@@ -231,8 +231,10 @@ const EntitiesFooter = <TEntity = Model,>({
                     <AuthorizeIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
-                      onClick={() =>
-                        onIconClick(DIALOG_TYPES.AUTHORIZE, onAuthorizeClick)
+                      onClick={
+                        onAuthorizeClick &&
+                        (() =>
+                          onIconClick(DIALOG_TYPES.AUTHORIZE, onAuthorizeClick))
                       }
                     />
                   )}
@@ -240,8 +242,9 @@ const EntitiesFooter = <TEntity = Model,>({
                     <RevokeIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
-                      onClick={() =>
-                        onIconClick(DIALOG_TYPES.REVOKE, onRevokeClick)
+                      onClick={
+                        onRevokeClick &&
+                        (() => onIconClick(DIALOG_TYPES.REVOKE, onRevokeClick))
                       }
                     />
                   )}
@@ -255,8 +258,9 @@ const EntitiesFooter = <TEntity = Model,>({
                     <TrashIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
-                      onClick={() =>
-                        onIconClick(DIALOG_TYPES.TRASH, onTrashClick)
+                      onClick={
+                        onTrashClick &&
+                        (() => onIconClick(DIALOG_TYPES.TRASH, onTrashClick))
                       }
                     />
                   )}
@@ -264,8 +268,9 @@ const EntitiesFooter = <TEntity = Model,>({
                     <DeleteIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
-                      onClick={() =>
-                        onIconClick(DIALOG_TYPES.DELETE, onDeleteClick)
+                      onClick={
+                        onDeleteClick &&
+                        (() => onIconClick(DIALOG_TYPES.DELETE, onDeleteClick))
                       }
                     />
                   )}
