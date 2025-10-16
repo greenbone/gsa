@@ -50,6 +50,10 @@ export default defineConfig({
   server: {
     port: 8080,
     host: '127.0.0.1',
+    fs: {
+      strict: true,
+      allow: ['index.html', 'src', 'node_modules'],
+    },
   },
   build: {
     outDir: 'build',
