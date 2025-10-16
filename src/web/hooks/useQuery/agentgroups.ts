@@ -32,7 +32,7 @@ export const useGetAgentGroups = ({filter}: {filter?: Filter}) => {
   return useGetEntities<AgentGroup>({
     queryId: 'get_agent_groups',
     filter,
-    gmpMethod: gmp.agentgroups.get.bind(gmp.agentgroup),
+    gmpMethod: gmp.agentgroups.get.bind(gmp.agentgroups),
   });
 };
 
