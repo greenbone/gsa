@@ -17,6 +17,7 @@ describe('AgentInstaller model tests', () => {
     expect(agentInstaller.id).toBeUndefined();
     expect(agentInstaller.name).toBeUndefined();
     expect(agentInstaller.comment).toBeUndefined();
+    expect(agentInstaller.description).toBeUndefined();
     expect(agentInstaller.entityType).toEqual('agentinstaller');
     expect(agentInstaller.contentType).toBeUndefined();
     expect(agentInstaller.fileExtension).toBeUndefined();
@@ -34,6 +35,14 @@ describe('AgentInstaller model tests', () => {
     });
 
     expect(agentInstaller.contentType).toBe('application/octet-stream');
+  });
+
+  test('should parse description', () => {
+    const agentInstaller = AgentInstaller.fromElement({
+      description: 'This is a test agent installer.',
+    });
+
+    expect(agentInstaller.description).toBe('This is a test agent installer.');
   });
 
   test('should parse fileExtension', () => {
