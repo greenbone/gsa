@@ -22,6 +22,7 @@ interface CpeElement {
 
 export interface AgentInstallerElement extends ModelElement {
   content_type?: string;
+  description?: string;
   file_extension?: string;
   version?: string;
   checksum?: string;
@@ -41,6 +42,7 @@ interface Cpe {
 
 interface AgentInstallerProperties extends ModelProperties {
   contentType?: string;
+  description?: string;
   fileExtension?: string;
   version?: string;
   checksum?: string;
@@ -54,6 +56,7 @@ class AgentInstaller extends Model {
   readonly entityType: EntityType = 'agentinstaller';
 
   readonly contentType?: string;
+  readonly description?: string;
   readonly fileExtension?: string;
   readonly version?: string;
   readonly checksum?: string;
@@ -64,6 +67,7 @@ class AgentInstaller extends Model {
 
   constructor({
     contentType,
+    description,
     fileExtension,
     version,
     checksum,
@@ -76,6 +80,7 @@ class AgentInstaller extends Model {
     super(properties);
 
     this.contentType = contentType;
+    this.description = description;
     this.fileExtension = fileExtension;
     this.version = version;
     this.checksum = checksum;
@@ -96,6 +101,7 @@ class AgentInstaller extends Model {
     const copy = super.parseElement(element) as AgentInstallerProperties;
 
     copy.contentType = element.content_type;
+    copy.description = element.description;
     copy.fileExtension = element.file_extension;
     copy.version = parseToString(element.version);
     copy.checksum = element.checksum;
