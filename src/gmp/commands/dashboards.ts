@@ -87,7 +87,7 @@ const convertLoadedSettings = <
 
 class DashboardCommand extends HttpCommand {
   async getSetting(id: string) {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       cmd: 'get_setting',
       setting_id: id,
     });
@@ -120,7 +120,7 @@ class DashboardCommand extends HttpCommand {
   ) {
     log.debug('Saving dashboard settings', id, settings);
 
-    await this.httpPost({
+    await this.httpPostWithTransform({
       setting_id: id,
       setting_value: JSON.stringify(settings),
       cmd: 'save_setting',

@@ -39,13 +39,13 @@ class AgentsCommand extends EntitiesCommand<Agent> {
       cmd: 'delete_agent',
       'agent_ids:': ids,
     };
-    const response = await this.httpPost(params);
+    const response = await this.httpPostWithTransform(params);
     return response.setData(ids);
   }
 
   async authorize(agents: Agent[]) {
     log.debug('Authorizing agent', {agents});
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'modify_agent',
       authorized: YES_VALUE,
       'agent_ids:': map(agents, agent => agent.id),
@@ -59,7 +59,7 @@ class AgentsCommand extends EntitiesCommand<Agent> {
 
   async revoke(agents: Agent[]) {
     log.debug('Revoking agent', {agents});
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'modify_agent',
       authorized: NO_VALUE,
       'agent_ids:': map(agents, agent => agent.id),

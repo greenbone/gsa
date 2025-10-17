@@ -50,7 +50,7 @@ class RoleCommand extends EntityCommand<Role, RoleElement> {
       users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Saving role', data);
-    await this.httpPost(data);
+    await this.httpPostWithTransform(data);
   }
 
   getElementFromRoot(root: XmlResponseData): RoleElement {

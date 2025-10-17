@@ -38,7 +38,7 @@ describe('HttpCommand tests', () => {
 
     const cmd = new HttpCommand(http);
 
-    expect(cmd.httpGet({foo: 'bar'})).toBe(retval);
+    expect(cmd.httpGetWithTransform({foo: 'bar'})).toBe(retval);
 
     expect(http.request).toHaveBeenCalledWith('get', {args: {foo: 'bar'}});
   });
@@ -53,7 +53,7 @@ describe('HttpCommand tests', () => {
 
     cmd.setDefaultParam('lorem', 'ipsum');
 
-    expect(cmd.httpGet({foo: 'bar'})).toBe(retval);
+    expect(cmd.httpGetWithTransform({foo: 'bar'})).toBe(retval);
 
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 1, lorem: 'ipsum'},
@@ -72,7 +72,9 @@ describe('HttpCommand tests', () => {
 
     expect(cmd.getDefaultParam('foo')).toEqual('foo');
 
-    expect(cmd.httpGet({foo: 'bar', bar: 2, lorem: 'ipsum'})).toBe(retval);
+    expect(cmd.httpGetWithTransform({foo: 'bar', bar: 2, lorem: 'ipsum'})).toBe(
+      retval,
+    );
 
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 2, lorem: 'ipsum'},
@@ -87,9 +89,9 @@ describe('HttpCommand tests', () => {
 
     const cmd = new HttpCommand(http, {bar: 1});
 
-    expect(cmd.httpGet({foo: 'bar'}, {extraParams: {lorem: 'ipsum'}})).toBe(
-      retval,
-    );
+    expect(
+      cmd.httpGetWithTransform({foo: 'bar'}, {extraParams: {lorem: 'ipsum'}}),
+    ).toBe(retval);
 
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 1, lorem: 'ipsum'},
@@ -105,7 +107,7 @@ describe('HttpCommand tests', () => {
     const cmd = new HttpCommand(http, {bar: 1, a: 1});
 
     expect(
-      cmd.httpGet(
+      cmd.httpGetWithTransform(
         {foo: 'bar', b: 2},
         {extraParams: {a: 3, b: 4, lorem: 'ipsum'}},
       ),
@@ -125,7 +127,7 @@ describe('HttpCommand tests', () => {
     const cmd = new HttpCommand(http, {bar: 1});
 
     expect(
-      cmd.httpGet(
+      cmd.httpGetWithTransform(
         {foo: 'bar'},
         {
           extraParams: {
@@ -151,7 +153,7 @@ describe('HttpCommand tests', () => {
 
     cmd.setDefaultParam('lorem', 'ipsum');
 
-    expect(cmd.httpPost({foo: 'bar'})).toBe(retval);
+    expect(cmd.httpPostWithTransform({foo: 'bar'})).toBe(retval);
 
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 1, lorem: 'ipsum'},
@@ -170,7 +172,9 @@ describe('HttpCommand tests', () => {
 
     expect(cmd.getDefaultParam('foo')).toEqual('foo');
 
-    expect(cmd.httpPost({foo: 'bar', bar: 2, lorem: 'ipsum'})).toBe(retval);
+    expect(
+      cmd.httpPostWithTransform({foo: 'bar', bar: 2, lorem: 'ipsum'}),
+    ).toBe(retval);
 
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 2, lorem: 'ipsum'},
@@ -185,9 +189,9 @@ describe('HttpCommand tests', () => {
 
     const cmd = new HttpCommand(http, {bar: 1});
 
-    expect(cmd.httpPost({foo: 'bar'}, {extraParams: {lorem: 'ipsum'}})).toBe(
-      retval,
-    );
+    expect(
+      cmd.httpPostWithTransform({foo: 'bar'}, {extraParams: {lorem: 'ipsum'}}),
+    ).toBe(retval);
 
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 1, lorem: 'ipsum'},
@@ -203,7 +207,7 @@ describe('HttpCommand tests', () => {
     const cmd = new HttpCommand(http, {bar: 1, a: 1});
 
     expect(
-      cmd.httpPost(
+      cmd.httpPostWithTransform(
         {foo: 'bar', b: 2},
         {extraParams: {a: 3, b: 4, lorem: 'ipsum'}},
       ),
@@ -223,7 +227,7 @@ describe('HttpCommand tests', () => {
     const cmd = new HttpCommand(http, {bar: 1});
 
     expect(
-      cmd.httpPost(
+      cmd.httpPostWithTransform(
         {foo: 'bar'},
         {
           extraParams: {

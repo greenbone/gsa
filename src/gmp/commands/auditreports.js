@@ -48,7 +48,7 @@ export class AuditReportCommand extends EntityCommand {
   }
 
   download({id}, {reportFormatId, deltaReportId, filter}) {
-    return this.httpGet(
+    return this.httpGetWithTransform(
       {
         cmd: 'get_report',
         delta_report_id: deltaReportId,
@@ -62,7 +62,7 @@ export class AuditReportCommand extends EntityCommand {
   }
 
   addAssets({id}, {filter = ''}) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'create_asset',
       report_id: id,
       filter,
@@ -70,7 +70,7 @@ export class AuditReportCommand extends EntityCommand {
   }
 
   removeAssets({id}, {filter = ''}) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'delete_asset',
       report_id: id,
       filter,
@@ -78,7 +78,7 @@ export class AuditReportCommand extends EntityCommand {
   }
 
   alert({alert_id, report_id, filter}) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'report_alert',
       alert_id,
       report_id,
@@ -91,7 +91,7 @@ export class AuditReportCommand extends EntityCommand {
     {id: delta_report_id},
     {filter, details = true, ...options} = {},
   ) {
-    return this.httpGet(
+    return this.httpGetWithTransform(
       {
         id,
         delta_report_id,
@@ -113,7 +113,7 @@ export class AuditReportCommand extends EntityCommand {
       ...options
     } = {},
   ) {
-    return this.httpGet(
+    return this.httpGetWithTransform(
       {
         id,
         filter,

@@ -99,7 +99,7 @@ class WizardCommand extends HttpCommand {
   }
 
   async task() {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       name: 'quick_first_scan',
     });
     const {data} = response as Response<RunWizardResponseData, XmlMeta>;
@@ -122,7 +122,7 @@ class WizardCommand extends HttpCommand {
   }
 
   async advancedTask() {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       name: 'quick_task',
     });
     const {data} = response as Response<RunWizardResponseData, XmlMeta>;
@@ -151,7 +151,7 @@ class WizardCommand extends HttpCommand {
   }
 
   async modifyTask() {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       name: 'modify_task',
     });
     const {data} = response as Response<RunWizardResponseData, XmlMeta>;
@@ -180,7 +180,7 @@ class WizardCommand extends HttpCommand {
 
   async runQuickFirstScan({hosts}: RunQuickFirstScanArguments) {
     try {
-      return await this.httpPost({
+      return await this.httpPostWithTransform({
         'event_data:hosts': hosts,
         cmd: 'run_wizard',
         name: 'quick_first_scan',
@@ -206,7 +206,7 @@ class WizardCommand extends HttpCommand {
     taskName,
   }: RunQuickTaskArguments) {
     try {
-      return await this.httpPost({
+      return await this.httpPostWithTransform({
         'event_data:alert_email': alertEmail,
         'event_data:auto_start': autoStart,
         'event_data:config_id': scanConfigId,
@@ -241,7 +241,7 @@ class WizardCommand extends HttpCommand {
     startMinute,
     startTimezone,
   }: RunModifyTaskArguments) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       'event_data:alert_email': alertEmail,
       'event_data:reschedule': reschedule,
       'event_data:start_hour': startHour,

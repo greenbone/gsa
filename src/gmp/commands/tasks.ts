@@ -56,7 +56,7 @@ class TasksCommand extends EntitiesCommand<Task, GetTasksResponse> {
     options?: HttpCommandOptions,
   ) {
     const params = {filter, usage_type: 'scan'};
-    const response = await this.httpGet(params, options);
+    const response = await this.httpGetWithTransform(params, options);
     const {
       entities,
       filter: responseFilter,

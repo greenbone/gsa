@@ -30,7 +30,7 @@ class AgentGroupsCommand extends EntitiesCommand<AgentGroup> {
         .join(',');
     }
 
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 
   getSeverityAggregates({filter}: {filter?: Filter} = {}) {
