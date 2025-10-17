@@ -4,7 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {buildUrlParams, buildServerUrl, formdataAppend} from 'gmp/http/utils';
+import {
+  buildUrlParams,
+  buildServerUrl,
+  formDataAppend,
+  createFormData,
+} from 'gmp/http/utils';
 
 describe('buildUrlParams', () => {
   test('should return an empty string for an empty params object', () => {
@@ -66,35 +71,62 @@ describe('buildServerUrl', () => {
 describe('formdataAppend', () => {
   test('should append a string value to FormData', () => {
     const formdata = new FormData();
-    formdataAppend(formdata, 'key', 'value');
+    formDataAppend(formdata, 'key', 'value');
     expect(formdata.get('key')).toBe('value');
   });
 
   test('should append a number value to FormData', () => {
     const formdata = new FormData();
-    formdataAppend(formdata, 'key', 42);
+    formDataAppend(formdata, 'key', 42);
     expect(formdata.get('key')).toBe('42');
   });
 
   test('should append a boolean value to FormData', () => {
     const formdata = new FormData();
-    formdataAppend(formdata, 'key', true);
+    formDataAppend(formdata, 'key', true);
     expect(formdata.get('key')).toBe('true');
   });
 
   test('should not append undefined or null values to FormData', () => {
     const formdata = new FormData();
-    formdataAppend(formdata, 'key', undefined);
+    formDataAppend(formdata, 'key', undefined);
     expect(formdata.has('key')).toBe(false);
   });
 
   test('should append a Blob value to FormData', async () => {
     const formdata = new FormData();
     const blob = new Blob(['test'], {type: 'text/plain'});
-    formdataAppend(formdata, 'key', blob);
+    formDataAppend(formdata, 'key', blob);
     const appendedBlob = formdata.get('key') as Blob;
     expect(appendedBlob.type).toEqual('text/plain');
     expect(appendedBlob.size).toEqual(4);
     await expect(appendedBlob.text()).resolves.toEqual('test');
+  });
+});
+
+describe('createFormdata', () => {
+  test('should create FormData from a data object', async () => {
+    const blob = new File(['test'], 'foo.txt', {type: 'text/plain'});
+    const data = {
+      key1: 'value1',
+      key2: 42,
+      key3: true,
+      key4: ['arr1', 'arr2'],
+      key5: [1, 2, 3],
+      key6: [true, false],
+      key7: undefined,
+      key8: null,
+      key9: blob,
+    };
+    const formData = createFormData(data);
+    expect(formData.get('key1')).toEqual('value1');
+    expect(formData.get('key2')).toEqual('42');
+    expect(formData.get('key3')).toEqual('true');
+    expect(formData.getAll('key4')).toEqual(['arr1', 'arr2']);
+    expect(formData.getAll('key5')).toEqual(['1', '2', '3']);
+    expect(formData.getAll('key6')).toEqual(['true', 'false']);
+    expect(formData.has('key7')).toEqual(false);
+    expect(formData.has('key8')).toEqual(false);
+    expect(formData.get('key9')).toEqual(blob);
   });
 });

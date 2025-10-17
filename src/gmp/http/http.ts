@@ -13,13 +13,13 @@ import {
 } from 'gmp/http/transform/transform';
 import {
   buildUrlParams,
+  createFormData,
   type Data,
-  formdataAppend,
   type UrlParams as Params,
 } from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
-import {isDefined, isArray} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 export type ErrorHandler = (request: XMLHttpRequest) => void;
 type Resolve<TData, TMeta extends Meta> = (
@@ -132,26 +132,6 @@ class Http<
     log.debug('Using http options', options);
   }
 
-  _createFormData(data: Data) {
-    const formdata = new FormData();
-
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        // don't add undefined and null values to form
-        const value = data[key];
-        if (isArray(value)) {
-          for (const val of value) {
-            formdataAppend(formdata, key, val);
-          }
-        } else {
-          formdataAppend(formdata, key, value);
-        }
-      }
-    }
-
-    return formdata;
-  }
-
   getParams() {
     return this.params;
   }
@@ -183,7 +163,7 @@ class Http<
     }
 
     if (data && (method === 'POST' || method === 'PUT')) {
-      formdata = this._createFormData({...this.getParams(), ...data});
+      formdata = createFormData({...this.getParams(), ...data});
     }
 
     let xhr: XMLHttpRequest;
