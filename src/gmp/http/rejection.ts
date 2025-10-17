@@ -6,17 +6,14 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
-class Rejection {
+class Rejection extends Error {
   static REASON_ERROR = 'error';
   static REASON_TIMEOUT = 'timeout';
   static REASON_CANCEL = 'cancel';
   static REASON_UNAUTHORIZED = 'unauthorized';
 
-  name: 'Rejection';
-  message: string;
   reason: string;
   error?: Error;
-  stack?: string;
   _xhr: XMLHttpRequest;
 
   constructor(
@@ -25,18 +22,12 @@ class Rejection {
     message: string = _('Unknown Error'),
     error?: Error | undefined,
   ) {
+    super(message);
     this.name = 'Rejection';
-    this.message = message;
     this.reason = reason;
     this.error = error;
 
     this._xhr = xhr;
-
-    if (!isDefined(error)) {
-      error = new Error();
-    }
-
-    this.stack = error.stack;
   }
 
   plainData(
