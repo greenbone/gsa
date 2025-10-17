@@ -159,7 +159,7 @@ class Http<
     method = method.toUpperCase() as HttpMethod;
 
     if (args) {
-      url += '?' + buildUrlParams({...this.getParams(), ...args});
+      url = `${url}?${buildUrlParams({...this.getParams(), ...args})}`;
     }
 
     if (data && (method === 'POST' || method === 'PUT')) {
