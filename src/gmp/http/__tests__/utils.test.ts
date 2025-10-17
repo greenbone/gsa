@@ -8,23 +8,23 @@ import {buildUrlParams, buildServerUrl, formdataAppend} from 'gmp/http/utils';
 
 describe('buildUrlParams', () => {
   test('should return an empty string for an empty params object', () => {
-    expect(buildUrlParams({})).toBe('');
+    expect(buildUrlParams({})).toEqual('');
   });
 
   test('should build a query string from a params object', () => {
     const params = {foo: 'bar', baz: 42, qux: true};
-    expect(buildUrlParams(params)).toBe('foo=bar&baz=42&qux=true');
+    expect(String(buildUrlParams(params))).toEqual('foo=bar&baz=42&qux=true');
   });
 
   test('should skip undefined values in the params object', () => {
     const params = {foo: 'bar', baz: undefined, qux: false};
-    expect(buildUrlParams(params)).toBe('foo=bar&qux=false');
+    expect(String(buildUrlParams(params))).toEqual('foo=bar&qux=false');
   });
 
   test('should encode keys and values', () => {
     const params = {'foo bar': 'baz qux', 'special&char': 'value&test'};
-    expect(buildUrlParams(params)).toBe(
-      'foo%20bar=baz%20qux&special%26char=value%26test',
+    expect(buildUrlParams(params)).toEqual(
+      'foo+bar=baz+qux&special%26char=value%26test',
     );
   });
 });

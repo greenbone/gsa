@@ -11,19 +11,14 @@ export type UrlParams = Record<string, UrlParamValue>;
 export type DataValue = string | number | boolean | Blob | undefined;
 export type Data = Record<string, DataValue | string[] | number[] | boolean[]>;
 
-export const buildUrlParams = (params: UrlParams) => {
-  let argCount = 0;
-  let uri = '';
-
+export const buildUrlParams = (params: UrlParams): string => {
+  const urlParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (isDefined(value)) {
-      if (argCount++) {
-        uri += '&';
-      }
-      uri += encodeURIComponent(key) + '=' + encodeURIComponent(value);
+      urlParams.append(key, String(value));
     }
   }
-  return uri;
+  return String(urlParams);
 };
 
 export const buildServerUrl = (
