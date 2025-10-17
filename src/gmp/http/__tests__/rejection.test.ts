@@ -88,6 +88,7 @@ describe('Rejection tests', () => {
     rejection.setMessage('bar');
 
     expect(rejection.message).toEqual('bar');
+    expect(String(rejection)).toEqual('Rejection: bar');
   });
 
   test('should allow to get plain data', () => {
@@ -101,5 +102,15 @@ describe('Rejection tests', () => {
     expect(rejection.plainData()).toEqual('foo');
     expect(rejection.plainData('text')).toEqual('bar');
     expect(rejection.plainData('xml')).toEqual('ipsum');
+  });
+
+  test('should support toString', () => {
+    const rejection = new Rejection(
+      {} as XMLHttpRequest,
+      Rejection.REASON_ERROR,
+      'foo',
+    );
+
+    expect(String(rejection)).toEqual('Rejection: foo');
   });
 });
