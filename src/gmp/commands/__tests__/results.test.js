@@ -10,6 +10,7 @@ import {
   createEntitiesResponse,
   createAggregatesResponse,
 } from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('ResultsCommand tests', () => {
@@ -22,11 +23,7 @@ describe('ResultsCommand tests', () => {
         _id: '2',
       },
     ]);
-
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     const resp = await cmd.getAll();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -35,6 +32,7 @@ describe('ResultsCommand tests', () => {
         details: 1,
         filter: ALL_FILTER.toFilterString(),
       },
+      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -49,11 +47,7 @@ describe('ResultsCommand tests', () => {
         _id: '2',
       },
     ]);
-
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     const resp = await cmd.get();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -61,6 +55,7 @@ describe('ResultsCommand tests', () => {
         cmd: 'get_results',
         details: 1,
       },
+      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -77,9 +72,6 @@ describe('ResultsCommand tests', () => {
     ]);
 
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     await cmd.get({details: 0});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -87,15 +79,13 @@ describe('ResultsCommand tests', () => {
         cmd: 'get_results',
         details: 0,
       },
+      transform,
     });
   });
 
   test('should aggregate Description Word Counts', async () => {
     const response = createAggregatesResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     await cmd.getDescriptionWordCountsAggregates();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -106,15 +96,13 @@ describe('ResultsCommand tests', () => {
         aggregate_mode: 'word_counts',
         max_groups: '250',
       },
+      transform,
     });
   });
 
   test('should aggregate word counts', async () => {
     const response = createAggregatesResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     await cmd.getWordCountsAggregates();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -125,15 +113,13 @@ describe('ResultsCommand tests', () => {
         aggregate_mode: 'word_counts',
         max_groups: '250',
       },
+      transform,
     });
   });
 
   test('should aggregate severities', async () => {
     const response = createAggregatesResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     await cmd.getSeverityAggregates();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -142,6 +128,7 @@ describe('ResultsCommand tests', () => {
         aggregate_type: 'result',
         group_column: 'severity',
       },
+      transform,
     });
   });
 });

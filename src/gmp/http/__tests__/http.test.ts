@@ -4,20 +4,12 @@
  */
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
-import {vi} from 'vitest';
 import Http from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
 import DefaultTransform from 'gmp/http/transform/default';
 
 const mockGetFeedAccessStatusMessage = testing.fn();
 const mockFindActionInXMLString = testing.fn();
-
-vi.mock('gmp/http/utils', async () => {
-  return {
-    getFeedAccessStatusMessage: () => mockGetFeedAccessStatusMessage(),
-    findActionInXMLString: () => mockFindActionInXMLString(),
-  };
-});
 
 // @ts-expect-error
 global.XMLHttpRequest = testing.fn(() => ({
@@ -39,13 +31,16 @@ describe('Http', () => {
     let options;
 
     beforeEach(() => {
-      instance = new Http('http://www.greenbone.net', {
-        transform: DefaultTransform,
+      instance = new Http({
+        apiServer: 'https://example.com',
+        apiProtocol: 'https:',
       });
       resolve = testing.fn();
       reject = testing.fn();
       xhr = {status: 500};
-      options = {};
+      options = {
+        transform: DefaultTransform,
+      };
       testing.clearAllMocks();
     });
 

@@ -6,7 +6,7 @@
 import type CollectionCounts from 'gmp/collection/CollectionCounts';
 import EntitiesCommand from 'gmp/commands/entities';
 import {type HttpCommandOptions} from 'gmp/commands/http';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import type Filter from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import Task, {type TaskElement} from 'gmp/models/task';
@@ -42,7 +42,7 @@ interface TasksCommandGetParams {
 }
 
 class TasksCommand extends EntitiesCommand<Task, GetTasksResponse> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'task', Task);
   }
 

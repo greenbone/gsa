@@ -4,7 +4,7 @@
  */
 
 import {testing} from '@gsa/testing';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import type Rejection from 'gmp/http/rejection';
 import Response, {type Meta} from 'gmp/http/response';
 import {type Element} from 'gmp/models/model';
@@ -76,12 +76,12 @@ export const createHttp = <TData = Element, TMeta extends Meta = Meta>(
 ) =>
   ({
     request: testing.fn().mockResolvedValue(response),
-  }) as unknown as GmpHttp;
+  }) as unknown as Http;
 
 export const createHttpError = (error: Error | Rejection) =>
   ({
     request: testing.fn().mockRejectedValue(error),
-  }) as unknown as GmpHttp;
+  }) as unknown as Http;
 
 export const createHttpMany = (responses: Element[] | Response[]) => {
   let i = 0;
@@ -89,5 +89,5 @@ export const createHttpMany = (responses: Element[] | Response[]) => {
     request: testing
       .fn()
       .mockImplementation(() => Promise.resolve(responses[i++])),
-  } as unknown as GmpHttp;
+  } as unknown as Http;
 };

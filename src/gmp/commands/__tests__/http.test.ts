@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import HttpCommand from 'gmp/commands/http';
 import {createHttp} from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 
 describe('HttpCommand tests', () => {
   test('should return itself from setting default param', () => {
@@ -33,7 +34,10 @@ describe('HttpCommand tests', () => {
     // @ts-expect-error
     const response = await cmd.httpGetWithTransform({foo: 'bar'});
     expect(response).toEqual(retval);
-    expect(http.request).toHaveBeenCalledWith('get', {args: {foo: 'bar'}});
+    expect(http.request).toHaveBeenCalledWith('get', {
+      args: {foo: 'bar'},
+      transform,
+    });
   });
 
   test('should create http get request with default params', async () => {
@@ -46,6 +50,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 1},
+      transform,
     });
   });
 
@@ -66,6 +71,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 2, lorem: 'ipsum'},
+      transform,
     });
   });
 
@@ -82,6 +88,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 1, lorem: 'ipsum'},
+      transform,
     });
   });
 
@@ -98,6 +105,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 1, a: 3, b: 4, lorem: 'ipsum'},
+      transform,
     });
   });
 
@@ -119,6 +127,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', lorem: 'ipsum'},
+      transform,
     });
   });
 
@@ -135,6 +144,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 1, lorem: 'ipsum'},
+      transform,
     });
   });
 
@@ -155,6 +165,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 2, lorem: 'ipsum'},
+      transform,
     });
   });
 
@@ -171,6 +182,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 1, lorem: 'ipsum'},
+      transform,
     });
   });
 
@@ -187,6 +199,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 1, a: 3, b: 4, lorem: 'ipsum'},
+      transform,
     });
   });
 
@@ -208,6 +221,7 @@ describe('HttpCommand tests', () => {
     expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', lorem: 'ipsum'},
+      transform,
     });
   });
 });

@@ -4,7 +4,7 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import Role, {type RoleElement} from 'gmp/models/role';
@@ -26,7 +26,7 @@ interface RoleCommandSaveParams {
 const log = logger.getLogger('gmp.commands.role');
 
 class RoleCommand extends EntityCommand<Role, RoleElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'role', Role);
   }
 

@@ -10,6 +10,7 @@ import {
   createEntitiesResponse,
   createAggregatesResponse,
 } from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 import Task from 'gmp/models/task';
 
 describe('TasksCommand tests', () => {
@@ -24,6 +25,7 @@ describe('TasksCommand tests', () => {
     const result = await cmd.get();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_tasks', usage_type: 'scan'},
+      transform,
     });
     expect(result.data).toEqual([
       new Task({id: '1', name: 'Scan Task 1'}),
@@ -45,6 +47,7 @@ describe('TasksCommand tests', () => {
         filter: "name='Custom Task'",
         usage_type: 'scan',
       },
+      transform,
     });
     expect(result.data).toEqual([new Task({id: '3', name: 'Custom Task'})]);
   });
@@ -60,6 +63,7 @@ describe('TasksCommand tests', () => {
     const result = await cmd.getAll();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_tasks', filter: 'first=1 rows=-1', usage_type: 'scan'},
+      transform,
     });
     expect(result.data).toEqual([
       new Task({id: '4', name: 'All Tasks 1'}),
@@ -80,6 +84,7 @@ describe('TasksCommand tests', () => {
         group_column: 'severity',
         usage_type: 'scan',
       },
+      transform,
     });
     expect(result.data).toEqual({groups: []});
   });
@@ -97,6 +102,7 @@ describe('TasksCommand tests', () => {
         group_column: 'status',
         usage_type: 'scan',
       },
+      transform,
     });
     expect(result.data).toEqual({groups: []});
   });
@@ -124,6 +130,7 @@ describe('TasksCommand tests', () => {
         'text_columns:2': 'severity',
         'text_columns:3': 'modified',
       },
+      transform,
     });
     expect(result.data).toEqual({groups: []});
   });

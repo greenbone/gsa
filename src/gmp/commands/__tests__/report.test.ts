@@ -6,28 +6,26 @@
 import {describe, test, expect} from '@gsa/testing';
 import ReportCommand from 'gmp/commands/report';
 import {createHttp, createEntityResponse} from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 
 describe('ReportCommand tests', () => {
-  test('should request single report', () => {
+  test('should request single report', async () => {
     const response = createEntityResponse('report', {_id: 'foo'});
     const fakeHttp = createHttp(response);
 
-    expect.hasAssertions();
-
     const cmd = new ReportCommand(fakeHttp);
-    return cmd.get({id: 'foo'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_report',
-          report_id: 'foo',
-          ignore_pagination: 1,
-          details: 1,
-          lean: 1,
-        },
-      });
-
-      const {data} = resp;
-      expect(data.id).toEqual('foo');
+    const resp = await cmd.get({id: 'foo'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_report',
+        report_id: 'foo',
+        ignore_pagination: 1,
+        details: 1,
+        lean: 1,
+      },
+      transform,
     });
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
   });
 });

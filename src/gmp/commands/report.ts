@@ -5,7 +5,7 @@
 
 import {convertBoolean} from 'gmp/commands/convert';
 import EntityCommand from 'gmp/commands/entity';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
@@ -60,7 +60,7 @@ interface ReportCommandDownloadOptions {
 const log = logger.getLogger('gmp.commands.reports');
 
 class ReportCommand extends EntityCommand<Report, ReportElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'report', Report);
   }
 

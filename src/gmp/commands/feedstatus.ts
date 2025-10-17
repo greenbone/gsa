@@ -4,7 +4,7 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import type Rejection from 'gmp/http/rejection';
 import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import _ from 'gmp/locale';
@@ -79,10 +79,7 @@ export function createFeed(feed: FeedElement): Feed {
   };
 }
 
-export const feedStatusRejection = async (
-  http: GmpHttp,
-  rejection: Rejection,
-) => {
+export const feedStatusRejection = async (http: Http, rejection: Rejection) => {
   if (rejection?.status === 404) {
     const feedStatus = new FeedStatusCommand(http);
     const {isFeedOwnerSet, isFeedResourcesAccess} =
@@ -112,7 +109,7 @@ export const feedStatusRejection = async (
 };
 
 class FeedStatusCommand extends HttpCommand {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, {cmd: 'get_feeds'});
   }
 

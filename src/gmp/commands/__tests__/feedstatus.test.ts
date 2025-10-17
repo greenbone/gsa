@@ -16,8 +16,9 @@ import {
   createHttp,
   createHttpError,
 } from 'gmp/commands/testing';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
+import transform from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 
 describe('FeedStatusCommand tests', () => {
@@ -40,14 +41,13 @@ describe('FeedStatusCommand tests', () => {
 
     const fakeHttp = createHttp(response);
 
-    expect.hasAssertions();
-
     const cmd = new FeedStatusCommand(fakeHttp);
     const resp = await cmd.readFeedInformation();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {
         cmd: 'get_feeds',
       },
+      transform,
     });
     const {data} = resp;
     const feed = data[0];
@@ -206,6 +206,7 @@ describe('FeedStatusCommand tests', () => {
       args: {
         cmd: 'get_feeds',
       },
+      transform,
     });
 
     expect(result.isFeedOwnerSet).toBe(false);
@@ -303,7 +304,7 @@ describe('FeedStatusCommand tests', () => {
 
 describe('feedStatusRejection tests', () => {
   test('should pass rejection for non 404 errors', async () => {
-    const gmpHttp = {} as GmpHttp;
+    const gmpHttp = {} as Http;
     const xhr = {
       status: 500,
     } as XMLHttpRequest;

@@ -10,6 +10,7 @@ import {
   createActionResultResponse,
   createEntityResponse,
 } from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 import Scanner, {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
 
 describe('ScannerCommand tests', () => {
@@ -41,6 +42,7 @@ describe('ScannerCommand tests', () => {
         port: 9390,
         ca_pub: 'test-ca-pub',
       },
+      transform,
     });
     expect(result.data.id).toEqual('123');
   });
@@ -75,6 +77,7 @@ describe('ScannerCommand tests', () => {
         port: 9390,
         ca_pub: 'updated-ca-pub',
       },
+      transform,
     });
   });
 
@@ -106,6 +109,7 @@ describe('ScannerCommand tests', () => {
         scanner_type: OPENVASD_SCANNER_TYPE,
         port: 9390,
       },
+      transform,
     });
   });
 
@@ -123,6 +127,7 @@ describe('ScannerCommand tests', () => {
         cmd: 'verify_scanner',
         scanner_id: '123',
       },
+      transform,
     });
   });
 

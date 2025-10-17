@@ -7,7 +7,7 @@ import Capabilities, {type Capability} from 'gmp/capabilities/capabilities';
 import Features, {type Feature} from 'gmp/capabilities/features';
 import EntityCommand from 'gmp/commands/entity';
 import {type HttpCommandOptions} from 'gmp/commands/http';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
@@ -254,7 +254,7 @@ export const transformSettingName = (name: string) =>
   name.toLowerCase().replace(/ |-/g, '');
 
 class UserCommand extends EntityCommand<User, PortListElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'user', User);
   }
 

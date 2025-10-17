@@ -4,7 +4,7 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import Filter from 'gmp/models/filter';
 import Report from 'gmp/models/report';
@@ -20,7 +20,7 @@ interface ReportsCommandGetOptions {
 }
 
 class ReportsCommand extends EntitiesCommand<Report> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'report', Report);
   }
 

@@ -12,6 +12,7 @@ import {
   type TransformOptions,
 } from 'gmp/http/transform/transform';
 import {
+  buildServerUrl,
   buildUrlParams,
   createFormData,
   type Data,
@@ -34,7 +35,33 @@ export type ResponseType =
   | 'json'
   | 'text';
 
-interface HandleOptions {
+interface TransformData<
+  TSuccessDataIn,
+  TSuccessMetaIn extends Meta,
+  TSuccessDataOut,
+  TSuccessMetaOut extends Meta,
+> {
+  transform: Transform<
+    TSuccessDataIn,
+    TSuccessMetaIn,
+    TSuccessDataOut,
+    TSuccessMetaOut
+  >;
+}
+
+interface HandleOptions<
+  TSuccessDataIn = string,
+  TSuccessMetaIn extends Meta = Meta,
+  TSuccessDataOut = TSuccessDataIn,
+  TSuccessMetaOut extends Meta = TSuccessMetaIn,
+> extends TransformData<
+    TSuccessDataIn,
+    TSuccessMetaIn,
+    TSuccessDataOut,
+    TSuccessMetaOut
+  > {
+  cancelToken?: CancelToken;
+  responseType?: ResponseType;
   method?: HttpMethod;
   url?: string;
   formdata?: FormData;
@@ -42,32 +69,23 @@ interface HandleOptions {
 }
 
 interface TransformArguments<
-  TSuccessDataIn,
-  TSuccessMetaIn extends Meta,
+  TSuccessDataIn = string,
+  TSuccessMetaIn extends Meta = Meta,
   TSuccessDataOut = TSuccessDataIn,
   TSuccessMetaOut extends Meta = TSuccessMetaIn,
-> extends TransformOptions {
-  transform?: Transform<
-    TSuccessDataIn,
-    TSuccessMetaIn,
-    TSuccessDataOut,
-    TSuccessMetaOut
-  >;
-}
+> extends TransformOptions,
+    TransformData<
+      TSuccessDataIn,
+      TSuccessMetaIn,
+      TSuccessDataOut,
+      TSuccessMetaOut
+    > {}
 
-export interface HttpOptions<
-  TSuccessDataIn,
-  TSuccessMetaIn extends Meta,
-  TSuccessDataOut = TSuccessDataIn,
-  TSuccessMetaOut extends Meta = TSuccessMetaIn,
-> {
+export interface HttpOptions {
+  apiServer: string;
+  apiProtocol?: string;
   timeout?: number;
-  transform: Transform<
-    TSuccessDataIn,
-    TSuccessMetaIn,
-    TSuccessDataOut,
-    TSuccessMetaOut
-  >;
+  token?: string;
 }
 
 interface RequestOptions<
@@ -75,68 +93,54 @@ interface RequestOptions<
   TSuccessMetaIn extends Meta,
   TSuccessDataOut = TSuccessDataIn,
   TSuccessMetaOut extends Meta = TSuccessMetaIn,
-> {
+> extends TransformData<
+    TSuccessDataIn,
+    TSuccessMetaIn,
+    TSuccessDataOut,
+    TSuccessMetaOut
+  > {
   args?: Params;
   data?: Data;
   url?: string;
   cancelToken?: CancelToken;
   force?: boolean;
   responseType?: ResponseType;
-  transform?: Transform<
-    TSuccessDataIn,
-    TSuccessMetaIn,
-    TSuccessDataOut,
-    TSuccessMetaOut
-  >;
   [key: string]: unknown;
 }
 
 const log = logger.getLogger('gmp.http');
 
-class Http<
-  TSuccessDataIn,
-  TSuccessMetaIn extends Meta,
-  TSuccessDataOut = TSuccessDataIn,
-  TSuccessMetaOut extends Meta = TSuccessMetaIn,
-> {
-  url: string;
-  timeout?: number;
-  params: Params;
-  errorHandlers: Array<ErrorHandler>;
-  transform: Transform<
-    TSuccessDataIn,
-    TSuccessMetaIn,
-    TSuccessDataOut,
-    TSuccessMetaOut
-  >;
+class Http {
+  readonly url: string;
+  readonly timeout?: number;
+  private errorHandlers: Array<ErrorHandler>;
+  // we need to store an object here to allow setting the token after login
+  private readonly options: HttpOptions;
 
-  constructor(
-    url: string,
-    options: HttpOptions<
-      TSuccessDataIn,
-      TSuccessMetaIn,
-      TSuccessDataOut,
-      TSuccessMetaOut
-    >,
-  ) {
-    const {timeout, transform} = options;
+  constructor(options: HttpOptions) {
+    const {timeout, apiServer, apiProtocol} = options;
 
-    this.url = url;
-    this.params = {};
+    this.url = buildServerUrl(apiServer, 'gmp', apiProtocol);
     this.timeout = timeout;
+    this.options = options;
 
     this.errorHandlers = [];
-
-    this.transform = transform;
 
     log.debug('Using http options', options);
   }
 
   getParams() {
-    return this.params;
+    return {
+      token: this.options.token,
+    };
   }
 
-  request(
+  request<
+    TSuccessDataIn = string,
+    TSuccessMetaIn extends Meta = Meta,
+    TSuccessDataOut = TSuccessDataIn,
+    TSuccessMetaOut extends Meta = TSuccessMetaIn,
+  >(
     method: HttpMethod,
     {
       args,
@@ -151,7 +155,7 @@ class Http<
       TSuccessMetaIn,
       TSuccessDataOut,
       TSuccessMetaOut
-    > = {},
+    >,
   ): Promise<Response<TSuccessDataOut, TSuccessMetaOut>> {
     const self = this;
     let formdata: FormData | undefined;
@@ -231,11 +235,21 @@ class Http<
     return promise;
   }
 
-  handleSuccess(
+  handleSuccess<
+    TSuccessDataIn,
+    TSuccessMetaIn extends Meta,
+    TSuccessDataOut,
+    TSuccessMetaOut extends Meta,
+  >(
     resolve: Resolve<TSuccessDataOut, TSuccessMetaOut>,
     reject: Reject,
     xhr: XMLHttpRequest,
-    options: HandleOptions,
+    options: HandleOptions<
+      TSuccessDataIn,
+      TSuccessMetaIn,
+      TSuccessDataOut,
+      TSuccessMetaOut
+    >,
   ) {
     try {
       let response = new Response<TSuccessDataIn, TSuccessMetaIn>(
@@ -243,17 +257,34 @@ class Http<
         xhr.response,
       );
 
-      resolve(this.transformSuccess(response, options));
+      resolve(
+        this.transformSuccess<
+          TSuccessDataIn,
+          TSuccessMetaIn,
+          TSuccessDataOut,
+          TSuccessMetaOut
+        >(response, options),
+      );
     } catch (error) {
       reject(error as Error);
     }
   }
 
-  handleResponseError(
+  handleResponseError<
+    TSuccessDataIn,
+    TSuccessMetaIn extends Meta,
+    TSuccessDataOut,
+    TSuccessMetaOut extends Meta,
+  >(
     _resolve: Resolve<TSuccessDataOut, TSuccessMetaOut>,
     reject: Reject,
     xhr: XMLHttpRequest,
-    options: HandleOptions,
+    options: HandleOptions<
+      TSuccessDataIn,
+      TSuccessMetaIn,
+      TSuccessDataOut,
+      TSuccessMetaOut
+    >,
   ) {
     try {
       let request: XMLHttpRequest = xhr;
@@ -281,11 +312,21 @@ class Http<
     }
   }
 
-  handleRequestError(
+  handleRequestError<
+    TSuccessDataIn,
+    TSuccessMetaIn extends Meta,
+    TSuccessDataOut,
+    TSuccessMetaOut extends Meta,
+  >(
     resolve: Resolve<TSuccessDataOut, TSuccessMetaOut>,
     reject: Reject,
     xhr: XMLHttpRequest,
-    options: HandleOptions,
+    options: HandleOptions<
+      TSuccessDataIn,
+      TSuccessMetaIn,
+      TSuccessDataOut,
+      TSuccessMetaOut
+    >,
   ) {
     const rej = new Rejection(
       xhr,
@@ -302,11 +343,21 @@ class Http<
     }
   }
 
-  handleTimeout(
+  handleTimeout<
+    TSuccessDataIn,
+    TSuccessMetaIn extends Meta,
+    TSuccessDataOut,
+    TSuccessMetaOut extends Meta,
+  >(
     resolve: Resolve<TSuccessDataOut, TSuccessMetaOut>,
     reject: Reject,
     xhr: XMLHttpRequest,
-    options: HandleOptions,
+    options: HandleOptions<
+      TSuccessDataIn,
+      TSuccessMetaIn,
+      TSuccessDataOut,
+      TSuccessMetaOut
+    >,
   ) {
     const rej = new Rejection(
       xhr,
@@ -322,32 +373,42 @@ class Http<
     }
   }
 
-  transformSuccess(
+  transformSuccess<
+    TSuccessDataIn,
+    TSuccessMetaIn extends Meta,
+    TSuccessDataOut,
+    TSuccessMetaOut extends Meta,
+  >(
     response: Response<TSuccessDataIn, TSuccessMetaIn>,
     {
-      transform = this.transform,
+      transform,
       ...options
     }: TransformArguments<
       TSuccessDataIn,
       TSuccessMetaIn,
       TSuccessDataOut,
       TSuccessMetaOut
-    > = {},
+    >,
   ): Response<TSuccessDataOut, TSuccessMetaOut> {
     return transform.success(response, options);
   }
 
-  transformRejection(
+  transformRejection<
+    TSuccessDataIn,
+    TSuccessMetaIn extends Meta,
+    TSuccessDataOut,
+    TSuccessMetaOut extends Meta,
+  >(
     rejection: Rejection,
     {
-      transform = this.transform,
+      transform,
       ...options
     }: TransformArguments<
       TSuccessDataIn,
       TSuccessMetaIn,
       TSuccessDataOut,
       TSuccessMetaOut
-    > = {},
+    >,
   ) {
     return transform.rejection(rejection, options);
   }

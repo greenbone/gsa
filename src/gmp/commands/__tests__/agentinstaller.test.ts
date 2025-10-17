@@ -7,6 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import AgentInstallerCommand from 'gmp/commands/agentinstaller';
 import {createEntityResponse, createHttp} from 'gmp/commands/testing';
 import DefaultTransform from 'gmp/http/transform/default';
+import transform from 'gmp/http/transform/fastxml';
 
 describe('AgentInstallerCommand tests', () => {
   test('should allow to get an agent installer', async () => {
@@ -16,6 +17,7 @@ describe('AgentInstallerCommand tests', () => {
     const result = await command.get({id: '324'});
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_agent_installer', agent_installer_id: '324'},
+      transform,
     });
     expect(result.data.id).toEqual('324');
   });
@@ -27,6 +29,7 @@ describe('AgentInstallerCommand tests', () => {
     await command.delete({id: '324'});
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {cmd: 'delete_agent_installer', agent_installer_id: '324'},
+      transform,
     });
   });
 

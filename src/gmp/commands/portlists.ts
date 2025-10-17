@@ -5,7 +5,7 @@
 
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
 import PortList, {type PortListElement} from 'gmp/models/portlist';
@@ -49,7 +49,7 @@ export const FROM_FILE = YES_VALUE;
 export const NOT_FROM_FILE = NO_VALUE;
 
 export class PortListCommand extends EntityCommand<PortList, PortListElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'port_list', PortList);
   }
 
@@ -129,7 +129,7 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
 }
 
 export class PortListsCommand extends EntitiesCommand<PortList> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'port_list', PortList);
   }
 

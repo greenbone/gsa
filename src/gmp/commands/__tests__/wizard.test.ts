@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {createHttp, createResponse} from 'gmp/commands/testing';
 import WizardCommand, {IMMEDIATELY_START_VALUE} from 'gmp/commands/wizard';
+import transform from 'gmp/http/transform/fastxml';
 import date from 'gmp/models/date';
 
 describe('Wizard Command', () => {
@@ -151,6 +152,7 @@ describe('Wizard Command', () => {
         cmd: 'run_wizard',
         name: 'quick_first_scan',
       },
+      transform,
     });
   });
 
@@ -193,6 +195,7 @@ describe('Wizard Command', () => {
         cmd: 'run_wizard',
         name: 'quick_task',
       },
+      transform,
     });
   });
 
@@ -223,6 +226,7 @@ describe('Wizard Command', () => {
         cmd: 'run_wizard',
         name: 'modify_task',
       },
+      transform,
     });
   });
 });

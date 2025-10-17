@@ -11,14 +11,12 @@ import {
   createResponse,
 } from 'gmp/commands/testing';
 import Rejection from 'gmp/http/rejection';
+import transform from 'gmp/http/transform/fastxml';
 
 describe('TargetCommand tests', () => {
   test('should create target', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.create({
       allowSimultaneousIPs: '1',
@@ -67,6 +65,7 @@ describe('TargetCommand tests', () => {
         target_source: 'manual',
         krb5_credential_id: '0',
       },
+      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -157,9 +156,6 @@ describe('TargetCommand tests', () => {
   test('should nullify ssh_elevate_credential in create command', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.create({
       allowSimultaneousIPs: '1',
@@ -208,6 +204,7 @@ describe('TargetCommand tests', () => {
         target_source: 'manual',
         krb5_credential_id: '0',
       },
+      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -216,9 +213,6 @@ describe('TargetCommand tests', () => {
   test('should save target', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.save({
       id: 'target_id1',
@@ -271,6 +265,7 @@ describe('TargetCommand tests', () => {
         target_id: 'target_id1',
         target_source: 'manual',
       },
+      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -363,9 +358,6 @@ describe('TargetCommand tests', () => {
   test('should nullify ssh_elevate_credential in save command', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.save({
       id: 'target_id1',
@@ -418,6 +410,7 @@ describe('TargetCommand tests', () => {
         target_source: 'manual',
         krb5_credential_id: '0',
       },
+      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');

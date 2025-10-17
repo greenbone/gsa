@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
 import UsersCommand from 'gmp/commands/users';
+import transform from 'gmp/http/transform/fastxml';
 import User from 'gmp/models/user';
 
 describe('UsersCommand tests', () => {
@@ -20,6 +21,7 @@ describe('UsersCommand tests', () => {
     const result = await cmd.get();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_users'},
+      transform,
     });
     expect(result.data).toEqual([
       new User({id: '1', name: 'Alice'}),
@@ -37,6 +39,7 @@ describe('UsersCommand tests', () => {
     const result = await cmd.get({filter: "name='Charlie'"});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_users', filter: "name='Charlie'"},
+      transform,
     });
     expect(result.data).toEqual([new User({id: '3', name: 'Charlie'})]);
   });
@@ -47,11 +50,11 @@ describe('UsersCommand tests', () => {
       {_id: '5', name: 'Eve'},
     ]);
     const fakeHttp = createHttp(response);
-
     const cmd = new UsersCommand(fakeHttp);
     const result = await cmd.getAll();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_users', filter: 'first=1 rows=-1'},
+      transform,
     });
     expect(result.data).toEqual([
       new User({id: '4', name: 'Dave'}),
