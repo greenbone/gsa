@@ -16,7 +16,7 @@ import HttpCommand, {
   type HttpCommandOptions,
   type HttpCommandPostParams,
 } from 'gmp/commands/http';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import {type default as Response, type Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
@@ -113,7 +113,7 @@ abstract class EntitiesCommand<
   readonly clazz: ModelClass<Model>;
   readonly name: string;
 
-  constructor(http: GmpHttp, name: string, clazz: ModelClass<Model>) {
+  constructor(http: Http, name: string, clazz: ModelClass<Model>) {
     super(http, {cmd: 'get_' + name + 's'});
 
     this.clazz = clazz;

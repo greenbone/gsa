@@ -61,8 +61,7 @@ import UserCommand from 'gmp/commands/user';
 import UsersCommand from 'gmp/commands/users';
 import WizardCommand from 'gmp/commands/wizard';
 import type GmpSettings from 'gmp/gmpsettings';
-import GmpHttp from 'gmp/http/gmp';
-import {type ErrorHandler} from 'gmp/http/http';
+import Http, {type ErrorHandler} from 'gmp/http/http';
 import DefaultTransform from 'gmp/http/transform/default';
 import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
@@ -78,7 +77,7 @@ const log = logger.getLogger('gmp');
 class Gmp {
   readonly settings: GmpSettings;
   readonly log: RootLogger;
-  readonly http: GmpHttp;
+  readonly http: Http;
   readonly _login: LoginCommand;
   _logoutListeners: Listener[];
 
@@ -107,7 +106,7 @@ class Gmp {
   readonly users: UsersCommand;
   readonly wizard: WizardCommand;
 
-  constructor(settings: GmpSettings, http?: GmpHttp) {
+  constructor(settings: GmpSettings, http?: Http) {
     this.settings = settings;
 
     logger.init(this.settings);
@@ -116,7 +115,7 @@ class Gmp {
 
     this.log = logger;
 
-    this.http = http ?? new GmpHttp(this.settings);
+    this.http = http ?? new Http(this.settings);
 
     this._login = new LoginCommand(this.http);
 
@@ -191,7 +190,6 @@ class Gmp {
         await this.http.request('get', {
           url,
           args,
-          // @ts-expect-error
           transform: DefaultTransform,
         });
       } catch (err) {

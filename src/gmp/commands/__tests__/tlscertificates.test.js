@@ -14,83 +14,67 @@ import {
   TlsCertificateCommand,
   TlsCertificatesCommand,
 } from 'gmp/commands/tlscertificates';
-import defaults from 'gmp/http/transform/default';
+import DefaultTransform from 'gmp/http/transform/default';
+import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('TlsCertificateCommand tests', () => {
-  test('should return a single TLS certificate', () => {
+  test('should return a single TLS certificate', async () => {
     const response = createEntityResponse('tls_certificate', {
       _id: 'foo',
       certificate: {__text: 'lorem'},
     });
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TlsCertificateCommand(fakeHttp);
-    return cmd.get({id: 'foo'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_tls_certificate',
-          tls_certificate_id: 'foo',
-        },
-      });
+    const resp = await cmd.get({id: 'foo'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_tls_certificate',
+        tls_certificate_id: 'foo',
+      },
+      transform,
+    });
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
+  });
 
-      const {data} = resp;
-      expect(data.id).toEqual('foo');
+  test('should delete a TLS certificate', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new TlsCertificateCommand(fakeHttp);
+    await cmd.delete({
+      id: 'foo',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'delete_tls_certificate',
+        tls_certificate_id: 'foo',
+      },
+      transform,
     });
   });
 
-  test('should delete a TLS certificate', () => {
+  test('should export a TLS certificate', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TlsCertificateCommand(fakeHttp);
-    return cmd
-      .delete({
-        id: 'foo',
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'delete_tls_certificate',
-            tls_certificate_id: 'foo',
-          },
-        });
-      });
-  });
-
-  test('should export a TLS certificate', () => {
-    const response = createActionResultResponse();
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
-    const cmd = new TlsCertificateCommand(fakeHttp);
-    return cmd
-      .export({
-        id: 'foo',
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'bulk_export',
-            resource_type: 'tls_certificate',
-            bulk_select: 1,
-            'bulk_selected:foo': 1,
-          },
-          transform: {
-            ...defaults,
-          },
-        });
-      });
+    await cmd.export({
+      id: 'foo',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'bulk_export',
+        resource_type: 'tls_certificate',
+        bulk_select: 1,
+        'bulk_selected:foo': 1,
+      },
+      transform: DefaultTransform,
+    });
   });
 });
 
-describe('TlsCertifcatesCommand tests', () => {
-  test('should return all TLS certificates', () => {
+describe('TlsCertificatesCommand tests', () => {
+  test('should return all TLS certificates', async () => {
     const response = createEntitiesResponse('tls_certificate', [
       {
         _id: '1',
@@ -107,23 +91,20 @@ describe('TlsCertifcatesCommand tests', () => {
     ]);
 
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TlsCertificatesCommand(fakeHttp);
-    return cmd.getAll().then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_tls_certificates',
-          filter: ALL_FILTER.toFilterString(),
-        },
-      });
-      const {data} = resp;
-      expect(data.length).toEqual(2);
+    const resp = await cmd.getAll();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_tls_certificates',
+        filter: ALL_FILTER.toFilterString(),
+      },
+      transform,
     });
+    const {data} = resp;
+    expect(data.length).toEqual(2);
   });
 
-  test('should return TLS certificates', () => {
+  test('should return TLS certificates', async () => {
     const response = createEntitiesResponse('tls_certificate', [
       {
         _id: '1',
@@ -138,20 +119,16 @@ describe('TlsCertifcatesCommand tests', () => {
         },
       },
     ]);
-
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TlsCertificatesCommand(fakeHttp);
-    return cmd.get().then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_tls_certificates',
-        },
-      });
-      const {data} = resp;
-      expect(data.length).toEqual(2);
+    const resp = await cmd.get();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_tls_certificates',
+      },
+      transform,
     });
+    const {data} = resp;
+    expect(data.length).toEqual(2);
   });
 });

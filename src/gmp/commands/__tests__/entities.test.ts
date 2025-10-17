@@ -6,14 +6,15 @@
 import {describe, test, expect} from '@gsa/testing';
 import EntitiesCommand from 'gmp/commands/entities';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
+import transform from 'gmp/http/transform/fastxml';
 import Filter from 'gmp/models/filter';
 import Model, {type Element} from 'gmp/models/model';
 
 class Foo extends Model {}
 
 class FooCommand extends EntitiesCommand<Foo> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'foo', Foo);
   }
 
@@ -37,6 +38,7 @@ describe('EntitiesCommand tests', () => {
         cmd: 'get_foos',
         filter: 'foo=bar',
       },
+      transform,
     });
   });
 
@@ -54,6 +56,7 @@ describe('EntitiesCommand tests', () => {
         cmd: 'get_foos',
         filter_id: 'bar',
       },
+      transform,
     });
   });
 
@@ -76,6 +79,7 @@ describe('EntitiesCommand tests', () => {
         cmd: 'get_foos',
         filter_id: 'bar',
       },
+      transform,
     });
   });
 
@@ -94,6 +98,7 @@ describe('EntitiesCommand tests', () => {
         cmd: 'bulk_delete',
         resource_type: 'foo',
       },
+      transform,
     });
   });
 });

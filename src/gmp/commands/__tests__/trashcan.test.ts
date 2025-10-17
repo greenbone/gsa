@@ -6,14 +6,12 @@
 import {describe, test, expect} from '@gsa/testing';
 import {createResponse, createHttp} from 'gmp/commands/testing';
 import TrashCanCommand from 'gmp/commands/trashcan';
+import transform from 'gmp/http/transform/fastxml';
 
 describe('TrashCanCommand tests', () => {
   test('should allow to restore an entity', async () => {
     const response = createResponse({});
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TrashCanCommand(fakeHttp);
     await cmd.restore({id: '1234'});
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -21,28 +19,24 @@ describe('TrashCanCommand tests', () => {
         cmd: 'restore',
         target_id: '1234',
       },
+      transform,
     });
   });
 
   test('should allow to empty the trashcan', async () => {
     const response = createResponse({});
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TrashCanCommand(fakeHttp);
     await cmd.empty();
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {cmd: 'empty_trashcan'},
+      transform,
     });
   });
 
   test('should allow to delete an entity from the trashcan', async () => {
     const response = createResponse({});
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TrashCanCommand(fakeHttp);
     await cmd.delete({id: '1234', entityType: 'task'});
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -51,15 +45,13 @@ describe('TrashCanCommand tests', () => {
         task_id: '1234',
         resource_type: 'task',
       },
+      transform,
     });
   });
 
   test('should allow to delete an host from the trashcan', async () => {
     const response = createResponse({});
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TrashCanCommand(fakeHttp);
     await cmd.delete({id: '1234', entityType: 'host'});
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -68,6 +60,7 @@ describe('TrashCanCommand tests', () => {
         asset_id: '1234',
         resource_type: 'asset',
       },
+      transform,
     });
   });
 
@@ -137,9 +130,6 @@ describe('TrashCanCommand tests', () => {
       },
     });
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TrashCanCommand(fakeHttp);
     const data = await cmd.get();
     expect(data.data.alerts.length).toBe(2);

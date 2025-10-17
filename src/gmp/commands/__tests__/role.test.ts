@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import RoleCommand from 'gmp/commands/role';
 import {createHttp, createActionResultResponse} from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 
 describe('RoleCommand tests', () => {
   test('should create a new role', async () => {
@@ -28,6 +29,7 @@ describe('RoleCommand tests', () => {
         comment: 'A test role',
         users: '',
       },
+      transform,
     });
     expect(result.data).toEqual({id: '123'});
   });
@@ -54,6 +56,7 @@ describe('RoleCommand tests', () => {
         comment: 'Updated comment',
         users: '',
       },
+      transform,
     });
     expect(result).toBeUndefined();
   });

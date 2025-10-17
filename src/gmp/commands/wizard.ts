@@ -5,7 +5,7 @@
 
 import {feedStatusRejection} from 'gmp/commands/feedstatus';
 import HttpCommand from 'gmp/commands/http';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
@@ -94,7 +94,7 @@ export const SCHEDULE_START_VALUE = '1';
 export const DONT_START_VALUE = '0';
 
 class WizardCommand extends HttpCommand {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, {cmd: 'wizard'});
   }
 

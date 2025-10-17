@@ -10,141 +10,117 @@ import {
   createEntityResponse,
   createHttp,
 } from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 
 describe('TagCommand tests', () => {
-  test('should create new tag with resources', () => {
+  test('should create new tag with resources', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TagCommand(fakeHttp);
-    return cmd
-      .create({
-        name: 'name',
+    const resp = await cmd.create({
+      name: 'name',
+      comment: 'comment',
+      active: '1',
+      resource_ids: ['id1', 'id2'],
+      resource_type: 'type',
+      resources_action: 'action',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_tag',
+        tag_name: 'name',
         comment: 'comment',
         active: '1',
-        resource_ids: ['id1', 'id2'],
+        'resource_ids:': ['id1', 'id2'],
         resource_type: 'type',
         resources_action: 'action',
-      })
-      .then(resp => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'create_tag',
-            tag_name: 'name',
-            comment: 'comment',
-            active: '1',
-            'resource_ids:': ['id1', 'id2'],
-            resource_type: 'type',
-            resources_action: 'action',
-            tag_value: '',
-          },
-        });
-
-        const {data} = resp;
-        expect(data.id).toEqual('foo');
-      });
+        tag_value: '',
+      },
+      transform,
+    });
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
   });
 
-  test('should return single tag', () => {
+  test('should return single tag', async () => {
     const response = createEntityResponse('tag', {_id: 'foo'});
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TagCommand(fakeHttp);
-    return cmd.get({id: 'foo'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_tag',
-          tag_id: 'foo',
-        },
-      });
-
-      const {data} = resp;
-      expect(data.id).toEqual('foo');
+    const resp = await cmd.get({id: 'foo'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_tag',
+        tag_id: 'foo',
+      },
+      transform,
     });
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
   });
 
-  test('should save a tag', () => {
+  test('should save a tag', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TagCommand(fakeHttp);
-    return cmd
-      .save({
-        id: 'foo',
-        name: 'bar',
+    await cmd.save({
+      id: 'foo',
+      name: 'bar',
+      comment: 'ipsum',
+      active: '1',
+      filter: 'fil',
+      resource_ids: ['id1'],
+      resource_type: 'type',
+      resources_action: 'action',
+      value: 'lorem',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_tag',
+        tag_id: 'foo',
+        tag_name: 'bar',
         comment: 'ipsum',
         active: '1',
         filter: 'fil',
-        resource_ids: ['id1'],
+        'resource_ids:': ['id1'],
         resource_type: 'type',
         resources_action: 'action',
-        value: 'lorem',
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'save_tag',
-            tag_id: 'foo',
-            tag_name: 'bar',
-            comment: 'ipsum',
-            active: '1',
-            filter: 'fil',
-            'resource_ids:': ['id1'],
-            resource_type: 'type',
-            resources_action: 'action',
-            tag_value: 'lorem',
-          },
-        });
-      });
+        tag_value: 'lorem',
+      },
+      transform,
+    });
   });
 
-  test('should enable a tag', () => {
+  test('should enable a tag', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TagCommand(fakeHttp);
-    return cmd
-      .enable({
-        id: 'foo',
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'toggle_tag',
-            tag_id: 'foo',
-            enable: '1',
-          },
-        });
-      });
+    await cmd.enable({
+      id: 'foo',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'toggle_tag',
+        tag_id: 'foo',
+        enable: '1',
+      },
+      transform,
+    });
   });
 
-  test('should disable a tag', () => {
+  test('should disable a tag', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TagCommand(fakeHttp);
-    return cmd
-      .disable({
-        id: 'foo',
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'toggle_tag',
-            tag_id: 'foo',
-            enable: '0',
-          },
-        });
-      });
+    await cmd.disable({
+      id: 'foo',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'toggle_tag',
+        tag_id: 'foo',
+        enable: '0',
+      },
+      transform,
+    });
   });
 });

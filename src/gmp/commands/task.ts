@@ -7,7 +7,7 @@
 
 import EntityCommand, {type EntityCommandParams} from 'gmp/commands/entity';
 import FeedStatusCommand, {feedStatusRejection} from 'gmp/commands/feedstatus';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import type Rejection from 'gmp/http/rejection';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
@@ -104,7 +104,7 @@ const log = logger.getLogger('gmp.commands.tasks');
 const NO_VALUE_ID = String(NO_VALUE);
 
 class TaskCommand extends EntityCommand<Task, TaskElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'task', Task);
   }
 

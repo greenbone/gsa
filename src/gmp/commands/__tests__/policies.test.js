@@ -6,10 +6,11 @@
 import {describe, test, expect} from '@gsa/testing';
 import {PoliciesCommand} from 'gmp/commands/policies';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('PoliciesCommand tests', () => {
-  test('should return all policies', () => {
+  test('should return all policies', async () => {
     const response = createEntitiesResponse('config', [
       {
         _id: '1',
@@ -20,24 +21,21 @@ describe('PoliciesCommand tests', () => {
     ]);
 
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new PoliciesCommand(fakeHttp);
-    return cmd.getAll().then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_configs',
-          filter: ALL_FILTER.toFilterString(),
-          usage_type: 'policy',
-        },
-      });
-      const {data} = resp;
-      expect(data.length).toEqual(2);
+    const resp = await cmd.getAll();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_configs',
+        filter: ALL_FILTER.toFilterString(),
+        usage_type: 'policy',
+      },
+      transform,
     });
+    const {data} = resp;
+    expect(data.length).toEqual(2);
   });
 
-  test('should return policies', () => {
+  test('should return policies', async () => {
     const response = createEntitiesResponse('config', [
       {
         _id: '1',
@@ -48,19 +46,16 @@ describe('PoliciesCommand tests', () => {
     ]);
 
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new PoliciesCommand(fakeHttp);
-    return cmd.get().then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_configs',
-          usage_type: 'policy',
-        },
-      });
-      const {data} = resp;
-      expect(data.length).toEqual(2);
+    const resp = await cmd.get();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_configs',
+        usage_type: 'policy',
+      },
+      transform,
     });
+    const {data} = resp;
+    expect(data.length).toEqual(2);
   });
 });

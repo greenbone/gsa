@@ -5,7 +5,7 @@
 
 import EntitiesCommand from 'gmp/commands/entities';
 import {type HttpCommandPostParams} from 'gmp/commands/http';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
@@ -25,7 +25,7 @@ const AGENT_CONTROLLER_FILTER = Filter.fromString(
 );
 
 class AgentsCommand extends EntitiesCommand<Agent> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'agent', Agent);
   }
 

@@ -4,7 +4,7 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import date, {type Date} from 'gmp/models/date';
 import {map} from 'gmp/utils/array';
@@ -101,7 +101,7 @@ export class PerformanceReport {
 }
 
 class PerformanceCommand extends HttpCommand {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, {cmd: 'get_system_reports'});
   }
 

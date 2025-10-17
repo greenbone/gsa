@@ -7,6 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import {CredentialCommand} from 'gmp/commands/credentials.js';
 import {createHttp, createActionResultResponse} from 'gmp/commands/testing.js';
 import DefaultTransform from 'gmp/http/transform/default';
+import transform from 'gmp/http/transform/fastxml';
 
 describe('CredentialCommand tests', () => {
   test('should create credential', async () => {
@@ -39,6 +40,7 @@ describe('CredentialCommand tests', () => {
         'kdcs:': [],
         credential_type: undefined,
       },
+      transform,
     });
 
     const {data} = resp;
@@ -48,8 +50,6 @@ describe('CredentialCommand tests', () => {
   test('should save credential', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
 
     const cmd = new CredentialCommand(fakeHttp);
     const resp = await cmd.save({
@@ -101,6 +101,7 @@ describe('CredentialCommand tests', () => {
         realm: 'kerberos_realm',
         'kdcs:': ['kerberos_kdc'],
       },
+      transform,
     });
 
     const {data} = resp;
@@ -110,8 +111,6 @@ describe('CredentialCommand tests', () => {
   test('should download credential', async () => {
     const response = new ArrayBuffer(8);
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
 
     const cmd = new CredentialCommand(fakeHttp);
     const resp = await cmd.download({id: '1'}, 'pem');

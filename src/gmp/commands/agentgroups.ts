@@ -4,7 +4,7 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import AgentGroup from 'gmp/models/agentgroup';
@@ -13,7 +13,7 @@ import type Filter from 'gmp/models/filter';
 const log = logger.getLogger('gmp.commands.agentgroups');
 
 class AgentGroupsCommand extends EntitiesCommand<AgentGroup> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'agent_group', AgentGroup);
   }
 

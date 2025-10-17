@@ -18,8 +18,9 @@ import {
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
+import transform from 'gmp/http/transform/fastxml';
 import logger, {type LogLevel} from 'gmp/log';
 import {
   OPENVAS_SCANNER_TYPE,
@@ -89,6 +90,7 @@ describe('TaskCommand tests', () => {
         target_id: 't1',
         usage_type: 'scan',
       },
+      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -97,9 +99,6 @@ describe('TaskCommand tests', () => {
   test('should create new task with all parameters', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TaskCommand(fakeHttp);
     const resp = await cmd.create({
       add_tag: 1,
@@ -148,6 +147,7 @@ describe('TaskCommand tests', () => {
         target_id: 't1',
         usage_type: 'scan',
       },
+      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -205,7 +205,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
+      } as unknown as Http;
 
       const cmd = new TaskCommand(fakeHttp);
       await expect(
@@ -245,6 +245,7 @@ describe('TaskCommand tests', () => {
         name: 'foo',
         usage_type: 'scan',
       },
+      transform,
     });
     expect(response.data).toEqual({id: 'foo'});
   });
@@ -290,6 +291,7 @@ describe('TaskCommand tests', () => {
         target_id: '0',
         usage_type: 'scan',
       },
+      transform,
     });
     expect(response).toBeUndefined();
   });
@@ -350,7 +352,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
+      } as unknown as Http;
 
       const cmd = new TaskCommand(fakeHttp);
       await expect(
@@ -420,6 +422,7 @@ describe('TaskCommand tests', () => {
         target_id: 't1',
         usage_type: 'scan',
       },
+      transform,
     });
     expect(response).toBeUndefined();
   });
@@ -493,6 +496,7 @@ describe('TaskCommand tests', () => {
         tag_id: undefined,
         agent_group_id: 'ag1',
       },
+      transform,
     });
     expect(resp.data.id).toEqual('foo');
   });
@@ -537,6 +541,7 @@ describe('TaskCommand tests', () => {
         tag_id: 't9',
         agent_group_id: 'ag1',
       },
+      transform,
     });
     expect(resp.data.id).toEqual('foo');
   });
@@ -580,7 +585,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
+      } as unknown as Http;
 
       const cmd = new TaskCommand(fakeHttp);
 
@@ -632,6 +637,7 @@ describe('TaskCommand tests', () => {
         agent_group_id: '0',
         task_id: 'task1',
       },
+      transform,
     });
     expect(result).toBeUndefined();
   });
@@ -674,6 +680,7 @@ describe('TaskCommand tests', () => {
         agent_group_id: 'ag1',
         task_id: 'task1',
       },
+      transform,
     });
     expect(result).toBeUndefined();
   });
@@ -717,7 +724,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
+      } as unknown as Http;
 
       const cmd = new TaskCommand(fakeHttp);
 

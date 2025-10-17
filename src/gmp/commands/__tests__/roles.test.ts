@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import RolesCommand from 'gmp/commands/roles';
 import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 import Role from 'gmp/models/role';
 
 describe('RolesCommand tests', () => {
@@ -20,6 +21,7 @@ describe('RolesCommand tests', () => {
     const result = await cmd.get();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_roles'},
+      transform,
     });
     expect(result.data).toEqual([
       new Role({id: '1', name: 'Admin'}),
@@ -37,6 +39,7 @@ describe('RolesCommand tests', () => {
     const result = await cmd.get({filter: "name='Guest'"});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_roles', filter: "name='Guest'"},
+      transform,
     });
     expect(result.data).toEqual([new Role({id: '3', name: 'Guest'})]);
   });
@@ -52,6 +55,7 @@ describe('RolesCommand tests', () => {
     const result = await cmd.getAll();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_roles', filter: 'first=1 rows=-1'},
+      transform,
     });
     expect(result.data).toEqual([
       new Role({id: '4', name: 'Manager'}),

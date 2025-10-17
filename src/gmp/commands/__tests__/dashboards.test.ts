@@ -10,6 +10,7 @@ import DashboardCommand, {
   createRow,
 } from 'gmp/commands/dashboards';
 import {createHttp, createResponse} from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 
 describe('createRow tests', () => {
@@ -86,6 +87,7 @@ describe('DashboardCommand tests', () => {
         cmd: 'get_setting',
         setting_id: 'test-id',
       },
+      transform,
     });
   });
 
@@ -140,6 +142,7 @@ describe('DashboardCommand tests', () => {
         setting_id: 'test-id',
         setting_value: '{"name":"Test Dashboard","rows":[]}',
       },
+      transform,
     });
   });
 });

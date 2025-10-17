@@ -12,6 +12,7 @@ import {
   createHttpMany,
   createResponse,
 } from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
@@ -20,40 +21,31 @@ import {
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 describe('PolicyCommand tests', () => {
-  test('should create new policy', () => {
+  test('should create new policy', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new PolicyCommand(fakeHttp);
-    return cmd
-      .create({
+    const resp = await cmd.create({
+      comment: 'bar',
+      name: 'foo',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_config',
+        base: BASE_SCAN_CONFIG_ID,
         comment: 'bar',
         name: 'foo',
-      })
-      .then(resp => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'create_config',
-            base: BASE_SCAN_CONFIG_ID,
-            comment: 'bar',
-            name: 'foo',
-            usage_type: 'policy',
-          },
-        });
-
-        const {data} = resp;
-        expect(data.id).toEqual('foo');
-      });
+        usage_type: 'policy',
+      },
+      transform,
+    });
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
   });
 
-  test('should save policy', () => {
+  test('should save policy', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const trend = {
       'AIX Local Security Checks': SCANCONFIG_TREND_DYNAMIC,
       'Family Foo': SCANCONFIG_TREND_STATIC,
@@ -68,90 +60,75 @@ describe('PolicyCommand tests', () => {
     };
 
     const cmd = new PolicyCommand(fakeHttp);
-    return cmd
-      .save({
-        id: 'c1',
+    const resp = await cmd.save({
+      id: 'c1',
+      name: 'foo',
+      comment: 'somecomment',
+      trend,
+      select,
+      scannerPreferenceValues,
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config',
+        config_id: 'c1',
         name: 'foo',
         comment: 'somecomment',
-        trend,
-        select,
-        scannerPreferenceValues,
-      })
-      .then(resp => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'save_config',
-            config_id: 'c1',
-            name: 'foo',
-            comment: 'somecomment',
-            'preference:scanner:scanner:scanner:foo': 'bar',
-            'select:AIX Local Security Checks': 1,
-            'select:Brute force attacks': 1,
-            'trend:AIX Local Security Checks': 1,
-            'trend:Family Foo': 0,
-          },
-        });
-
-        const {data} = resp;
-        expect(data.id).toEqual('foo');
-      });
+        'preference:scanner:scanner:scanner:foo': 'bar',
+        'select:AIX Local Security Checks': 1,
+        'select:Brute force attacks': 1,
+        'trend:AIX Local Security Checks': 1,
+        'trend:Family Foo': 0,
+      },
+      transform,
+    });
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
   });
 
-  test('should save an in use policy with undefined input objects', () => {
+  test('should save an in use policy with undefined input objects', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new PolicyCommand(fakeHttp);
-    return cmd
-      .save({
-        id: 'c1',
-        name: 'foo',
+    await cmd.save({
+      id: 'c1',
+      name: 'foo',
+      comment: 'somecomment',
+      trend: undefined,
+      select: undefined,
+      scannerPreferenceValues: undefined,
+      scannerId: undefined,
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config',
         comment: 'somecomment',
-        trend: undefined,
-        select: undefined,
-        scannerPreferenceValues: undefined,
-        scannerId: undefined,
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'save_config',
-            comment: 'somecomment',
-            config_id: 'c1',
-            name: 'foo',
-          },
-        });
-      });
-  });
-
-  test('should return single policy', () => {
-    const response = createEntityResponse('config', {_id: 'foo'});
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
-    const cmd = new PolicyCommand(fakeHttp);
-    return cmd.get({id: 'foo'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_config',
-          config_id: 'foo',
-        },
-      });
-
-      const {data} = resp;
-      expect(data.id).toEqual('foo');
+        config_id: 'c1',
+        name: 'foo',
+      },
+      transform,
     });
   });
 
-  test('should save a policy nvt', () => {
+  test('should return single policy', async () => {
+    const response = createEntityResponse('config', {_id: 'foo'});
+    const fakeHttp = createHttp(response);
+    const cmd = new PolicyCommand(fakeHttp);
+    const resp = await cmd.get({id: 'foo'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_config',
+        config_id: 'foo',
+      },
+      transform,
+    });
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
+  });
+
+  test('should save a policy nvt', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const preferenceValues = {
       Foo: {
         id: 1,
@@ -166,30 +143,28 @@ describe('PolicyCommand tests', () => {
     };
 
     const cmd = new PolicyCommand(fakeHttp);
-    return cmd
-      .savePolicyNvt({
-        id: 'c1',
+    await cmd.savePolicyNvt({
+      id: 'c1',
+      oid: '1.2.3',
+      timeout: 123,
+      preferenceValues,
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config_nvt',
+        config_id: 'c1',
         oid: '1.2.3',
-        timeout: 123,
-        preferenceValues,
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'save_config_nvt',
-            config_id: 'c1',
-            oid: '1.2.3',
-            'password:1.2.3:2:password:Bar': 'yes',
-            'preference:scanner:0:scanner:timeout.1.2.3': 123,
-            'preference:1.2.3:1:entry:Foo': 'bar',
-            'preference:1.2.3:2:password:Bar': 'foo',
-            timeout: 1,
-          },
-        });
-      });
+        'password:1.2.3:2:password:Bar': 'yes',
+        'preference:scanner:0:scanner:timeout.1.2.3': 123,
+        'preference:1.2.3:1:entry:Foo': 'bar',
+        'preference:1.2.3:2:password:Bar': 'foo',
+        timeout: 1,
+      },
+      transform,
+    });
   });
 
-  test('should request policy family data', () => {
+  test('should request policy family data', async () => {
     const response = createResponse({
       get_config_family_response: {
         get_nvts_response: {
@@ -226,29 +201,26 @@ describe('PolicyCommand tests', () => {
     });
     const responses = [response, responseAll];
     const fakeHttp = createHttpMany(responses);
-
-    expect.hasAssertions();
-
     const cmd = new PolicyCommand(fakeHttp);
-    return cmd
-      .editPolicyFamilySettings({id: 'foo', familyName: 'bar'})
-      .then(resp => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-          args: {
-            cmd: 'edit_config_family',
-            config_id: 'foo',
-            family: 'bar',
-          },
-        });
-
-        const {nvts} = resp.data;
-        expect(nvts.length).toEqual(3);
-        expect(nvts[0].selected).toEqual(YES_VALUE);
-        expect(nvts[0].severity).toEqual(1.1);
-        expect(nvts[1].selected).toEqual(YES_VALUE);
-        expect(nvts[1].severity).toEqual(2.2);
-        expect(nvts[2].selected).toEqual(NO_VALUE);
-        expect(nvts[2].severity).toEqual(3.3);
-      });
+    const resp = await cmd.editPolicyFamilySettings({
+      id: 'foo',
+      familyName: 'bar',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'edit_config_family',
+        config_id: 'foo',
+        family: 'bar',
+      },
+      transform,
+    });
+    const {nvts} = resp.data;
+    expect(nvts.length).toEqual(3);
+    expect(nvts[0].selected).toEqual(YES_VALUE);
+    expect(nvts[0].severity).toEqual(1.1);
+    expect(nvts[1].selected).toEqual(YES_VALUE);
+    expect(nvts[1].severity).toEqual(2.2);
+    expect(nvts[2].selected).toEqual(NO_VALUE);
+    expect(nvts[2].severity).toEqual(3.3);
   });
 });

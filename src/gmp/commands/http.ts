@@ -4,8 +4,14 @@
  */
 
 import type CancelToken from 'gmp/cancel';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import type {ResponseType} from 'gmp/http/http';
+import type {Meta} from 'gmp/http/response';
+import transform, {
+  type XmlMeta,
+  type XmlResponseData,
+} from 'gmp/http/transform/fastxml';
+import {type Transform} from 'gmp/http/transform/transform';
 import type {
   Data,
   UrlParams as Params,
@@ -49,12 +55,14 @@ export const BULK_SELECT_BY_IDS = 1;
 export const BULK_SELECT_BY_FILTER = 0;
 
 class HttpCommand {
-  http: GmpHttp;
-  _params: HttpCommandGetParams;
+  protected readonly http: Http;
+  private readonly _params: HttpCommandGetParams;
+  private readonly transform: Transform<string, Meta, XmlResponseData, XmlMeta>;
 
-  constructor(http: GmpHttp, params: HttpCommandGetParams = {}) {
+  constructor(http: Http, params: HttpCommandGetParams = {}) {
     this.http = http;
     this._params = params;
+    this.transform = transform;
   }
 
   protected setDefaultParam(name: string, value: ParamValue) {
@@ -121,6 +129,7 @@ class HttpCommand {
     const {extraParams, includeDefaultParams, ...other} = options;
     return this.http.request('get', {
       args: this.getParams(params, extraParams, {includeDefaultParams}),
+      transform: this.transform,
       ...other,
     });
   }
@@ -132,6 +141,7 @@ class HttpCommand {
     const {extraParams, includeDefaultParams, ...other} = options;
     return this.http.request('post', {
       data: this.postParams(params, extraParams, {includeDefaultParams}),
+      transform: this.transform,
       ...other,
     });
   }

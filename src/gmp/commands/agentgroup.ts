@@ -4,7 +4,7 @@
  */
 
 import EntityCommand, {type EntityActionResponse} from 'gmp/commands/entity';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
 import AgentGroup, {type AgentGroupElement} from 'gmp/models/agentgroup';
 import {type Element} from 'gmp/models/model';
@@ -37,7 +37,7 @@ export interface AgentGroupSaveParams
 const log = logger.getLogger('gmp.commands.agentgroup');
 
 class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'agent_group', AgentGroup);
   }
 

@@ -6,9 +6,10 @@
 import {describe, test, expect} from '@gsa/testing';
 import {NvtFamiliesCommand} from 'gmp/commands/nvtfamilies';
 import {createResponse, createHttp} from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 
 describe('NvtFamiliesCommand tests', () => {
-  test('should load nvt families', () => {
+  test('should load nvt families', async () => {
     const response = createResponse({
       get_nvt_families: {
         get_nvt_families_response: {
@@ -28,24 +29,19 @@ describe('NvtFamiliesCommand tests', () => {
       },
     });
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new NvtFamiliesCommand(fakeHttp);
-    return cmd.get().then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_nvt_families',
-        },
-      });
-
-      const {data: families} = resp;
-
-      expect(families.length).toEqual(2);
-      expect(families[0].name).toEqual('foo');
-      expect(families[0].maxNvtCount).toEqual(1000);
-      expect(families[1].name).toEqual('bar');
-      expect(families[1].maxNvtCount).toEqual(666);
+    const resp = await cmd.get();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_nvt_families',
+      },
+      transform,
     });
+    const {data: families} = resp;
+    expect(families.length).toEqual(2);
+    expect(families[0].name).toEqual('foo');
+    expect(families[0].maxNvtCount).toEqual(1000);
+    expect(families[1].name).toEqual('bar');
+    expect(families[1].maxNvtCount).toEqual(666);
   });
 });

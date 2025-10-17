@@ -4,7 +4,7 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import DefaultTransform from 'gmp/http/transform/default';
 import AgentInstaller, {
   type AgentInstallerElement,
@@ -15,7 +15,7 @@ class AgentInstallerCommand extends EntityCommand<
   AgentInstaller,
   AgentInstallerElement
 > {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'agent_installer', AgentInstaller);
   }
 

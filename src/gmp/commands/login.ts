@@ -4,13 +4,13 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
 import _ from 'gmp/locale';
 import Login from 'gmp/models/login';
 
 class LoginCommand extends HttpCommand {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, {
       cmd: 'login',
     });

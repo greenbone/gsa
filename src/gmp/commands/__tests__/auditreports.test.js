@@ -10,10 +10,11 @@ import {
   createEntitiesResponse,
   createAggregatesResponse,
 } from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('AuditReportsCommand tests', () => {
-  test('should return all audit reports', () => {
+  test('should return all audit reports', async () => {
     const response = createEntitiesResponse('report', [
       {
         _id: '1',
@@ -25,24 +26,22 @@ describe('AuditReportsCommand tests', () => {
 
     const fakeHttp = createHttp(response);
 
-    expect.hasAssertions();
-
     const cmd = new AuditReportsCommand(fakeHttp);
-    return cmd.getAll().then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_reports',
-          details: 0,
-          filter: ALL_FILTER.toFilterString(),
-          usage_type: 'audit',
-        },
-      });
-      const {data} = resp;
-      expect(data.length).toEqual(2);
+    const resp = await cmd.getAll();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_reports',
+        details: 0,
+        filter: ALL_FILTER.toFilterString(),
+        usage_type: 'audit',
+      },
+      transform,
     });
+    const {data} = resp;
+    expect(data.length).toEqual(2);
   });
 
-  test('should return results', () => {
+  test('should return results', async () => {
     const response = createEntitiesResponse('report', [
       {
         _id: '1',
@@ -54,38 +53,34 @@ describe('AuditReportsCommand tests', () => {
 
     const fakeHttp = createHttp(response);
 
-    expect.hasAssertions();
-
     const cmd = new AuditReportsCommand(fakeHttp);
-    return cmd.get().then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_reports',
-          details: 0,
-          usage_type: 'audit',
-        },
-      });
-      const {data} = resp;
-      expect(data.length).toEqual(2);
+    const resp = await cmd.get();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_reports',
+        details: 0,
+        usage_type: 'audit',
+      },
+      transform,
     });
+    const {data} = resp;
+    expect(data.length).toEqual(2);
   });
 
-  test('should aggregate compliance counts', () => {
+  test('should aggregate compliance counts', async () => {
     const response = createAggregatesResponse();
     const fakeHttp = createHttp(response);
 
-    expect.hasAssertions();
-
     const cmd = new AuditReportsCommand(fakeHttp);
-    return cmd.getComplianceAggregates().then(() => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_aggregate',
-          aggregate_type: 'report',
-          group_column: 'compliant',
-          usage_type: 'audit',
-        },
-      });
+    await cmd.getComplianceAggregates();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_aggregate',
+        aggregate_type: 'report',
+        group_column: 'compliant',
+        usage_type: 'audit',
+      },
+      transform,
     });
   });
 });

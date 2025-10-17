@@ -4,7 +4,7 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import type GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
 import Scanner, {
@@ -33,7 +33,7 @@ interface ScannerCommandVerifyParams {
 const log = logger.getLogger('gmp.commands.scanner');
 
 class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'scanner', Scanner);
   }
 

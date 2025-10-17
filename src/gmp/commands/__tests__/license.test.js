@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {LicenseCommand} from 'gmp/commands/license';
 import {createResponse, createHttp} from 'gmp/commands/testing';
+import transform from 'gmp/http/transform/fastxml';
 import {parseDate} from 'gmp/parser';
 
 describe('LicenseCommand tests', () => {
@@ -46,6 +47,7 @@ describe('LicenseCommand tests', () => {
         args: {
           cmd: 'get_license',
         },
+        transform,
       });
       const {data: license} = resp;
       expect(license.id).toEqual('12345');
