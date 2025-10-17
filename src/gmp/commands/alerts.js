@@ -179,7 +179,7 @@ class AlertCommand extends EntityCommand {
 
   newAlertSettings() {
     // should be removed after all corresponding omp commands are implemented
-    return this.httpGet({
+    return this.httpGetWithTransform({
       cmd: 'new_alert',
     }).then(response => {
       const {new_alert} = response.data;
@@ -208,7 +208,7 @@ class AlertCommand extends EntityCommand {
   }
 
   editAlertSettings({id}) {
-    return this.httpGet({
+    return this.httpGetWithTransform({
       cmd: 'edit_alert',
       id,
     }).then(response => {
@@ -256,7 +256,7 @@ class AlertCommand extends EntityCommand {
   }
 
   test({id}) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'test_alert',
       id,
     });

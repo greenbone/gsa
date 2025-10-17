@@ -118,7 +118,7 @@ class HttpCommand {
     };
   }
 
-  protected httpGet(
+  protected httpGetWithTransform(
     params: HttpCommandInputParams = {},
     options: HttpCommandOptions = {},
   ) {
@@ -129,7 +129,7 @@ class HttpCommand {
     });
   }
 
-  protected httpPost(
+  protected httpPostWithTransform(
     params: HttpCommandInputParams = {},
     options: HttpCommandOptions = {},
   ) {

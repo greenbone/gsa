@@ -132,7 +132,7 @@ abstract class EntitiesCommand<
   }
 
   async get(params: HttpCommandInputParams = {}, options?: HttpCommandOptions) {
-    const response = await this.httpGet(params, options);
+    const response = await this.httpGetWithTransform(params, options);
     const {entities, filter, counts} = this.getCollectionListFromRoot(
       response.data as TRoot,
     );
@@ -166,7 +166,7 @@ abstract class EntitiesCommand<
     for (const id of ids) {
       params['bulk_selected:' + id] = 1;
     }
-    return this.httpPost(params, {
+    return this.httpPostWithTransform(params, {
       transform: DefaultTransform,
     } as HttpCommandOptions);
   }
@@ -178,7 +178,7 @@ abstract class EntitiesCommand<
       bulk_select: BULK_SELECT_BY_FILTER,
       filter,
     };
-    return this.httpPost(params, {
+    return this.httpPostWithTransform(params, {
       transform: DefaultTransform,
     } as HttpCommandOptions);
   }
@@ -203,7 +203,7 @@ abstract class EntitiesCommand<
     for (const id of ids) {
       params['bulk_selected:' + id] = 1;
     }
-    const response = await this.httpPost(params);
+    const response = await this.httpPostWithTransform(params);
     return response.setData(ids);
   }
 
@@ -306,7 +306,7 @@ abstract class EntitiesCommand<
       requestParams.subgroup_column = subgroupColumn;
     }
 
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       ...requestParams,
       ...params,
       cmd: 'get_aggregate',

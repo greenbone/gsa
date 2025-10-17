@@ -112,7 +112,7 @@ export class CredentialCommand extends EntityCommand {
   }
 
   download({id}, format = 'pem') {
-    return this.httpGet(
+    return this.httpGetWithTransform(
       {
         cmd: 'download_credential',
         package_format: format,

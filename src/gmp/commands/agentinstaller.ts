@@ -20,7 +20,7 @@ class AgentInstallerCommand extends EntityCommand<
   }
 
   async download(id: string) {
-    return await this.httpGet(
+    return await this.httpGetWithTransform(
       {
         cmd: 'get_agent_installer_file',
         agent_installer_id: id,

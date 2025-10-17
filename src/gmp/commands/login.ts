@@ -18,7 +18,7 @@ class LoginCommand extends HttpCommand {
 
   async login(username: string, password: string) {
     try {
-      const response = await this.httpPost({
+      const response = await this.httpPostWithTransform({
         login: username,
         password,
       });

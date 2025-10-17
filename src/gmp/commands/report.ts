@@ -67,7 +67,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
   import(args: ReportCommandImportParams) {
     const {task_id, in_assets = 1, xml_file} = args;
     log.debug('Creating report', args);
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'create_report',
       task_id,
       in_assets,
@@ -85,7 +85,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
     }: ReportCommandDownloadOptions,
   ): Promise<Response<ArrayBuffer, XmlMeta>> {
     // @ts-expect-error
-    return this.httpGet(
+    return this.httpGetWithTransform(
       {
         cmd: 'get_report',
         delta_report_id: deltaReportId,
@@ -101,7 +101,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
   }
 
   addAssets({id, filter = ''}: ReportCommandAddAssetsParams) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'create_asset',
       report_id: id,
       filter,
@@ -109,7 +109,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
   }
 
   removeAssets({id, filter = ''}: ReportCommandARemoveAssetsParams) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'delete_asset',
       report_id: id,
       filter,
@@ -118,7 +118,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
   alert({alert_id, report_id, filter}: ReportCommandAlertParams) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'report_alert',
       alert_id,
       report_id,
@@ -136,7 +136,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       ...options
     }: {filter?: string; details?: boolean; [key: string]: unknown} = {},
   ) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         id,
         delta_report_id,
@@ -159,7 +159,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       ...options
     }: ReportCommandGetParams = {},
   ) {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       id,
       filter,
       lean: convertBoolean(lean),

@@ -106,7 +106,7 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
     id,
     portListId,
   }: PortListCommandDeletePortRangeParams) {
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'delete_port_range',
       port_range_id: id,
       no_redirect: 1,
@@ -116,7 +116,7 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
 
   import({xmlFile}: PortListCommandImportParams) {
     log.debug('Importing port list', {xml_file: xmlFile});
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'import_port_list',
       xml_file: xmlFile,
     });

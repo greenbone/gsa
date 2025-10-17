@@ -120,7 +120,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
         throw new Error('Feed is currently syncing. Please try again later.');
       }
 
-      await this.httpPost({
+      await this.httpPostWithTransform({
         cmd: 'start_task',
         id,
       });
@@ -136,7 +136,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     log.debug('Stopping task');
 
     try {
-      await this.httpPost({
+      await this.httpPostWithTransform({
         cmd: 'stop_task',
         id,
       });
@@ -150,7 +150,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
 
   async resume({id}: EntityCommandParams) {
     try {
-      await this.httpPost({
+      await this.httpPostWithTransform({
         cmd: 'resume_task',
         id,
       });
@@ -321,7 +321,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     };
     log.debug('Saving task', data);
     try {
-      await this.httpPost(data);
+      await this.httpPostWithTransform(data);
     } catch (rejection) {
       await feedStatusRejection(this.http, rejection as Rejection);
     }
@@ -360,7 +360,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     };
     log.debug('Saving agent task', data);
     try {
-      await this.httpPost(data);
+      await this.httpPostWithTransform(data);
     } catch (rejection) {
       await feedStatusRejection(this.http, rejection as Rejection);
     }
@@ -373,7 +373,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     id,
   }: TaskCommandSaveContainerParams) {
     log.debug('Saving container task', {name, comment, in_assets, id});
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'save_container_task',
       name,
       comment,

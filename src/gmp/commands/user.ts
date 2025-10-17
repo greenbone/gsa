@@ -259,7 +259,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async currentAuthSettings(options: HttpCommandOptions = {}) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         cmd: 'auth_settings',
         name: '--', // only used in old xslt and can be any string
@@ -301,7 +301,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async getSetting(id: string) {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       cmd: 'get_setting',
       setting_id: id,
     });
@@ -316,7 +316,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async currentSettings(options: HttpCommandOptions = {}) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         cmd: 'get_settings',
       },
@@ -333,7 +333,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async currentCapabilities(options: HttpCommandOptions = {}) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         cmd: 'get_capabilities',
       },
@@ -346,7 +346,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async currentFeatures(options: HttpCommandOptions = {}) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         cmd: 'get_capabilities',
       },
@@ -448,7 +448,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
       inheritor_id: inheritorId,
     };
     log.debug('Deleting user', data);
-    await this.httpPost(data);
+    await this.httpPostWithTransform(data);
   }
 
   /**
@@ -457,7 +457,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   saveSettings(data: SaveSettingsArguments) {
     log.debug('Saving settings', data);
 
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'save_my_settings',
       text: data.timezone,
       [PARAM_KEYS.DATE]: data.userInterfaceDateFormat,
@@ -530,7 +530,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async saveSetting(settingId: string, settingValue: string | number) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'save_setting',
       setting_id: settingId,
       setting_value: settingValue,
@@ -538,7 +538,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async saveTimezone(settingValue: string | number) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'save_setting',
       setting_name: 'Timezone',
       setting_value: settingValue,
@@ -592,7 +592,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   ping() {
-    return this.httpGet({
+    return this.httpGetWithTransform({
       cmd: 'ping',
     });
   }

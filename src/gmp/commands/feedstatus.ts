@@ -117,7 +117,7 @@ class FeedStatusCommand extends HttpCommand {
   }
 
   async readFeedInformation() {
-    const response = await this.httpGet();
+    const response = await this.httpGetWithTransform();
     const envelope = response.data as FeedStatusElement;
     const {get_feeds_response: feedsResponse} = envelope.get_feeds;
     const feeds = map(feedsResponse.feed, feed => createFeed(feed));
@@ -163,7 +163,7 @@ class FeedStatusCommand extends HttpCommand {
    */
   async checkFeedOwnerAndPermissions() {
     try {
-      const response = await this.httpGet();
+      const response = await this.httpGetWithTransform();
       const data = response.data as FeedStatusElement;
       const isFeedOwnerSet = parseBoolean(
         data.get_feeds.get_feeds_response.feed_owner_set,

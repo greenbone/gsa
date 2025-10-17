@@ -127,7 +127,7 @@ abstract class EntityCommand<
     params: HttpCommandPostParams,
     options?: HttpCommandOptions,
   ) {
-    const response = await this.httpPost(params, options);
+    const response = await this.httpPostWithTransform(params, options);
     return this.transformActionResult(response);
   }
 
@@ -148,7 +148,7 @@ abstract class EntityCommand<
     {id}: EntityCommandParams,
     {filter, ...options}: EntityCommandGetParams = {},
   ) {
-    const response = await this.httpGet({id, filter}, options);
+    const response = await this.httpGetWithTransform({id, filter}, options);
     return this.transformResponse(response as Response<TRoot, XmlMeta>);
   }
 
@@ -177,7 +177,7 @@ abstract class EntityCommand<
   async delete({id}: EntityCommandParams) {
     log.debug('Deleting', this.name, id);
 
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'delete_' + this.name,
       id,
     });
@@ -190,7 +190,7 @@ abstract class EntityCommand<
       bulk_select: BULK_SELECT_BY_IDS,
       ['bulk_selected:' + id]: 1,
     };
-    const response = await this.httpPost(params, {
+    const response = await this.httpPostWithTransform(params, {
       transform: DefaultTransform,
     } as HttpCommandOptions);
     return response as unknown as Response<string, Meta>;

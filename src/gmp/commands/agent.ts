@@ -35,7 +35,7 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
 
   async delete({id}: {id: string}) {
     log.debug('Deleting agent', {id});
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'delete_agent',
       'agent_ids:': id,
     });

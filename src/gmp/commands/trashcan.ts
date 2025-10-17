@@ -190,14 +190,14 @@ class TrashCanCommand extends HttpCommand {
       cmd: 'restore',
       target_id: id,
     };
-    await this.httpPost(data);
+    await this.httpPostWithTransform(data);
   }
 
   async delete({id, entityType}: {id: string; entityType: EntityType}) {
     const cmdApiType = apiType(entityType);
     const cmd = 'delete_from_trash';
     const typeId = cmdApiType + '_id';
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd,
       [typeId]: id,
       resource_type: cmdApiType,
@@ -205,65 +205,65 @@ class TrashCanCommand extends HttpCommand {
   }
 
   async empty() {
-    await this.httpPost({cmd: 'empty_trashcan'});
+    await this.httpPostWithTransform({cmd: 'empty_trashcan'});
   }
 
   async get(): Promise<Response<TrashCanGetData, XmlMeta>> {
-    const alertsRequest = this.httpGet({
+    const alertsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_alerts',
     }) as TrashCanGetPromise<AlertResponseData>;
-    const configsRequest = this.httpGet({
+    const configsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_configs',
     }) as TrashCanGetPromise<ConfigsResponseData>;
-    const credentialsRequest = this.httpGet({
+    const credentialsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_credentials',
     }) as TrashCanGetPromise<CredentialsResponseData>;
-    const filtersRequest = this.httpGet({
+    const filtersRequest = this.httpGetWithTransform({
       cmd: 'get_trash_filters',
     }) as TrashCanGetPromise<FiltersResponseData>;
-    const groupsRequest = this.httpGet({
+    const groupsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_groups',
     }) as TrashCanGetPromise<GroupsResponseData>;
-    const notesRequest = this.httpGet({
+    const notesRequest = this.httpGetWithTransform({
       cmd: 'get_trash_notes',
     }) as TrashCanGetPromise<NotesResponseData>;
-    const overridesRequest = this.httpGet({
+    const overridesRequest = this.httpGetWithTransform({
       cmd: 'get_trash_overrides',
     }) as TrashCanGetPromise<OverridesResponseData>;
-    const permissionsRequest = this.httpGet({
+    const permissionsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_permissions',
     }) as TrashCanGetPromise<PermissionsResponseData>;
-    const portListsRequest = this.httpGet({
+    const portListsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_port_lists',
     }) as TrashCanGetPromise<PortListsResponseData>;
-    const reportConfigsRequest = this.httpGet({
+    const reportConfigsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_report_configs',
     }) as TrashCanGetPromise<ReportConfigsResponseData>;
-    const reportFormatsRequest = this.httpGet({
+    const reportFormatsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_report_formats',
     }) as TrashCanGetPromise<ReportFormatsResponseData>;
-    const rolesRequest = this.httpGet({
+    const rolesRequest = this.httpGetWithTransform({
       cmd: 'get_trash_roles',
     }) as TrashCanGetPromise<RolesResponseData>;
-    const scannersRequest = this.httpGet({
+    const scannersRequest = this.httpGetWithTransform({
       cmd: 'get_trash_scanners',
     }) as TrashCanGetPromise<ScannersResponseData>;
-    const schedulesRequest = this.httpGet({
+    const schedulesRequest = this.httpGetWithTransform({
       cmd: 'get_trash_schedules',
     }) as TrashCanGetPromise<SchedulesResponseData>;
-    const tagsRequest = this.httpGet({
+    const tagsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_tags',
     }) as TrashCanGetPromise<TagsResponseData>;
-    const targetsRequest = this.httpGet({
+    const targetsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_targets',
     }) as TrashCanGetPromise<TargetsResponseData>;
-    const tasksRequest = this.httpGet({
+    const tasksRequest = this.httpGetWithTransform({
       cmd: 'get_trash_tasks',
     }) as TrashCanGetPromise<TasksResponseData>;
-    const ticketsRequest = this.httpGet({
+    const ticketsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_tickets',
     }) as TrashCanGetPromise<TicketsResponseData>;
-    const agentGroupRequest = this.httpGet({
+    const agentGroupRequest = this.httpGetWithTransform({
       cmd: 'get_trash_agent_group',
     }) as TrashCanGetPromise<AgentGroupResponseData>;
     const [
