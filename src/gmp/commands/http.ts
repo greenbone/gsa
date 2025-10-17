@@ -57,10 +57,6 @@ class HttpCommand {
     this._params = params;
   }
 
-  protected getDefaultParam(name: string) {
-    return this._params[name];
-  }
-
   protected setDefaultParam(name: string, value: ParamValue) {
     this._params[name] = value;
     return this;
