@@ -38,11 +38,7 @@ describe('fastxml transform tests', () => {
     const expected = {
       foo: 'foo"<>&\'/\\',
     };
-    const response = new Response<string, Meta>(
-      {responseText: xmlStr} as XMLHttpRequest,
-      xmlStr,
-      {},
-    );
+    const response = new Response<string, Meta>(xmlStr, {});
     const transformedResponse = transform.success(response);
     expect(transformedResponse.data).toEqual(expected);
     expect(transformedResponse.meta).toEqual(envelopeMeta);
@@ -52,11 +48,7 @@ describe('fastxml transform tests', () => {
     const xmlStr = createEnvelopedXml(
       '<foo bar="foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;"></foo>',
     );
-    const response = new Response<string, Meta>(
-      {responseText: xmlStr} as XMLHttpRequest,
-      xmlStr,
-      {},
-    );
+    const response = new Response<string, Meta>(xmlStr, {});
 
     const transformedResponse = transform.success(response);
     expect(transformedResponse.data).toEqual({
@@ -69,13 +61,8 @@ describe('fastxml transform tests', () => {
 
   test('should create a rejection on parser errors', () => {
     const data = {foo: 'bar'};
-    const response = new Response<string, Meta>(
-      // @ts-expect-error
-      {responseText: data} as XMLHttpRequest,
-      // @ts-expect-error
-      data,
-      {},
-    );
+    // @ts-expect-error
+    const response = new Response<string>(data);
 
     expect(() => {
       transform.success(response);
@@ -118,11 +105,7 @@ describe('fastxml transform tests', () => {
   <bar>bar</bar>
 </envelope>
 `;
-    const response = new Response<string, Meta>(
-      {responseText: xmlStr} as XMLHttpRequest,
-      xmlStr,
-      {},
-    );
+    const response = new Response<string>(xmlStr);
     const transformedResponse = transform.success(response);
     expect(transformedResponse.meta).toEqual({
       version: '1.0.1',
