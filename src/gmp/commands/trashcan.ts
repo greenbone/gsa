@@ -53,6 +53,7 @@ export interface TrashCanGetData {
   tasks: Task[];
   tickets: Ticket[];
   agentGroups: AgentGroup[];
+  failedRequests?: string[];
 }
 
 interface UsageTypeElement extends ModelElement {
@@ -296,6 +297,35 @@ class TrashCanCommand extends HttpCommand {
         ? (results[index].value as T)
         : null;
 
+    const failedRequests: string[] = [];
+    const requestNames = [
+      'alerts',
+      'configs',
+      'credentials',
+      'filters',
+      'groups',
+      'notes',
+      'overrides',
+      'permissions',
+      'portLists',
+      'reportConfigs',
+      'reportFormats',
+      'roles',
+      'scanners',
+      'schedules',
+      'tags',
+      'targets',
+      'tasks',
+      'tickets',
+      'agentGroups',
+    ];
+
+    results.forEach((result, index) => {
+      if (result.status === 'rejected') {
+        failedRequests.push(requestNames[index]);
+      }
+    });
+
     const [
       alertsResponse,
       configsResponse,
@@ -486,6 +516,7 @@ class TrashCanCommand extends HttpCommand {
       tasks,
       tickets,
       agentGroups,
+      failedRequests: failedRequests.length > 0 ? failedRequests : undefined,
     });
   }
 }

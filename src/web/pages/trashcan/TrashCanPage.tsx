@@ -4,7 +4,10 @@
  */
 
 import {useCallback, useEffect, useState} from 'react';
-import {showSuccessNotification} from '@greenbone/ui-lib';
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from '@greenbone/ui-lib';
 import styled from 'styled-components';
 import {type TrashCanGetData} from 'gmp/commands/trashcan';
 import type Rejection from 'gmp/http/rejection';
@@ -90,13 +93,25 @@ const TrashCan = () => {
       response => {
         setTrash(response.data);
         setIsLoading(false);
+
+        if (
+          response.data.failedRequests &&
+          response.data.failedRequests.length > 0
+        ) {
+          response.data.failedRequests.forEach(requestType => {
+            showErrorNotification(
+              '',
+              _('Failed to load {{type}} from trashcan', {type: requestType}),
+            );
+          });
+        }
       },
       error => {
         showError(error);
         setIsLoading(false);
       },
     );
-  }, [gmp, showError]);
+  }, [gmp, showError, _]);
 
   const handleRestore = async (entity: Model) => {
     try {
