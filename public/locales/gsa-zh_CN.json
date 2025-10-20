@@ -839,6 +839,7 @@
   "Extension": "扩展名",
   "Failed to create a new Target because the default Port List is not available.": "",
   "Failed to create a new Task because the default Scan Config is not available.": "",
+  "Failed to load {{type}} from trashcan": "",
   "Failed to run alert.": "运行告警失败.",
   "Failed to save filter setting": "",
   "False Pos.": "误报",

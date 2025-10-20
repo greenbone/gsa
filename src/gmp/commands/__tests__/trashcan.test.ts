@@ -152,5 +152,26 @@ describe('TrashCanCommand tests', () => {
     expect(data.data.targets.length).toBe(2);
     expect(data.data.tasks.length).toBe(1);
     expect(data.data.tickets.length).toBe(2);
+    expect(data.data.agentGroups.length).toBe(0);
+    expect(data.data.failedRequests).toBeUndefined();
+  });
+
+  test('should handle failed requests gracefully', async () => {
+    const response = createResponse({
+      get_trash: {
+        get_alerts_response: {
+          alert: [{_id: 'alert1'}],
+        },
+      },
+    });
+
+    const fakeHttp = createHttp(response);
+    const cmd = new TrashCanCommand(fakeHttp);
+    const data = await cmd.get();
+
+    expect(data.data.alerts.length).toBe(1);
+    expect(data.data.scanConfigs.length).toBe(0);
+
+    expect(data.data).toHaveProperty('failedRequests');
   });
 });
