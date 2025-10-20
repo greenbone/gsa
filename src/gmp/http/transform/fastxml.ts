@@ -60,7 +60,7 @@ const parseEnvelopeMeta = (envelope: Envelope): XmlMeta => {
 const transformXmlData = (
   response: Response<string, Meta>,
 ): Response<XmlResponseData, XmlMeta> => {
-  const xmlString = response.plainData('text') as string;
+  const xmlString = response.data;
   const {envelope} = xmlParser.parse(xmlString);
   const meta = parseEnvelopeMeta(envelope);
   return response.set(envelope, meta);
