@@ -4,7 +4,12 @@
  */
 
 import type CancelToken from 'gmp/cancel';
-import Rejection from 'gmp/http/rejection';
+import {
+  CanceledRejection,
+  RequestRejection,
+  ResponseRejection,
+  TimeoutRejection,
+} from 'gmp/http/rejection';
 import Response, {type Meta} from 'gmp/http/response';
 import {
   type Method as HttpMethod,
@@ -49,7 +54,7 @@ interface TransformData<
   >;
 }
 
-interface HandleOptions<
+export interface HandleOptions<
   TSuccessDataIn = string,
   TSuccessMetaIn extends Meta = Meta,
   TSuccessDataOut = TSuccessDataIn,
@@ -201,16 +206,16 @@ class Http {
           if (this.status >= 200 && this.status < 300) {
             self.handleSuccess(resolve, reject, this, options);
           } else {
-            self.handleResponseError(resolve, reject, this, options);
+            self.handleResponseError(reject, this, options);
           }
         };
 
         xhr.onerror = function () {
-          self.handleRequestError(resolve, reject, this, options);
+          self.handleRequestError(reject, this);
         };
 
         xhr.ontimeout = function () {
-          self.handleTimeout(resolve, reject, this, options);
+          self.handleTimeout(reject, {url: options.url});
         };
 
         xhr.onabort = function () {
@@ -221,7 +226,7 @@ class Http {
           cancelToken.promise
             .then(reason => {
               xhr.abort();
-              reject(new Rejection(xhr, Rejection.REASON_CANCEL, reason));
+              reject(new CanceledRejection(reason));
             })
             .catch(error => {
               log.error('Error handling cancel token promise', error);
@@ -273,7 +278,6 @@ class Http {
     TSuccessDataOut,
     TSuccessMetaOut extends Meta,
   >(
-    _resolve: Resolve<TSuccessDataOut, TSuccessMetaOut>,
     reject: Reject,
     xhr: XMLHttpRequest,
     options: HandleOptions<
@@ -294,14 +298,8 @@ class Http {
         }
       }
 
-      const {status} = request;
-      const rej = new Rejection(
-        request,
-        status === 401 ? Rejection.REASON_UNAUTHORIZED : Rejection.REASON_ERROR,
-      );
-
-      let rejectedResponse = this.transformRejection(rej, options);
-
+      const rej = new ResponseRejection(xhr);
+      const rejectedResponse = this.transformRejection(rej, options);
       reject(rejectedResponse);
     } catch (error) {
       log.error('Could not handle response error', error);
@@ -309,65 +307,24 @@ class Http {
     }
   }
 
-  handleRequestError<
-    TSuccessDataIn,
-    TSuccessMetaIn extends Meta,
-    TSuccessDataOut,
-    TSuccessMetaOut extends Meta,
-  >(
-    resolve: Resolve<TSuccessDataOut, TSuccessMetaOut>,
-    reject: Reject,
-    xhr: XMLHttpRequest,
-    options: HandleOptions<
-      TSuccessDataIn,
-      TSuccessMetaIn,
-      TSuccessDataOut,
-      TSuccessMetaOut
-    >,
-  ) {
-    const rej = new Rejection(
+  handleRequestError(reject: Reject, xhr: XMLHttpRequest) {
+    const rej = new RequestRejection(
       xhr,
-      Rejection.REASON_ERROR,
       _(
         'An error occurred during making the request. Most likely the web ' +
           'server does not respond.',
       ),
     );
-    try {
-      reject(this.transformRejection(rej, options));
-    } catch {
-      reject(rej);
-    }
+    reject(rej);
   }
 
-  handleTimeout<
-    TSuccessDataIn,
-    TSuccessMetaIn extends Meta,
-    TSuccessDataOut,
-    TSuccessMetaOut extends Meta,
-  >(
-    resolve: Resolve<TSuccessDataOut, TSuccessMetaOut>,
-    reject: Reject,
-    xhr: XMLHttpRequest,
-    options: HandleOptions<
-      TSuccessDataIn,
-      TSuccessMetaIn,
-      TSuccessDataOut,
-      TSuccessMetaOut
-    >,
-  ) {
-    const rej = new Rejection(
-      xhr,
-      Rejection.REASON_TIMEOUT,
+  handleTimeout(reject: Reject, options: {url?: string}) {
+    const rejection = new TimeoutRejection(
       _('A timeout for the request to url {{- url}} occurred.', {
         url: options.url as string,
       }),
     );
-    try {
-      reject(this.transformRejection(rej, options));
-    } catch {
-      reject(rej);
-    }
+    reject(rejection);
   }
 
   transformSuccess<
@@ -396,10 +353,9 @@ class Http {
     TSuccessDataOut,
     TSuccessMetaOut extends Meta,
   >(
-    rejection: Rejection,
+    rejection: ResponseRejection,
     {
       transform,
-      ...options
     }: TransformArguments<
       TSuccessDataIn,
       TSuccessMetaIn,
@@ -407,7 +363,7 @@ class Http {
       TSuccessMetaOut
     >,
   ) {
-    return transform.rejection(rejection, options);
+    return transform.rejection(rejection);
   }
 
   addErrorHandler(handler: ErrorHandler): () => void {

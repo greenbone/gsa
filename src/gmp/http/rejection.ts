@@ -4,55 +4,59 @@
  */
 
 import _ from 'gmp/locale';
-import {isDefined} from 'gmp/utils/identity';
 
 class Rejection extends Error {
-  static REASON_ERROR = 'error';
-  static REASON_TIMEOUT = 'timeout';
-  static REASON_CANCEL = 'cancel';
-  static REASON_UNAUTHORIZED = 'unauthorized';
+  readonly error?: Error;
 
-  reason: string;
-  error?: Error;
-  _xhr: XMLHttpRequest;
-
-  constructor(
-    xhr: XMLHttpRequest,
-    reason: string = Rejection.REASON_ERROR,
-    message: string = _('Unknown Error'),
-    error?: Error | undefined,
-  ) {
+  constructor(message: string = _('Unknown Error'), error?: Error | undefined) {
     super(message);
     this.name = 'Rejection';
-    this.reason = reason;
     this.error = error;
-
-    this._xhr = xhr;
-  }
-
-  plainData(
-    type?: 'xml' | 'text' | undefined,
-  ): Document | string | ArrayBuffer | null {
-    if (type === 'xml') {
-      return this._xhr.responseXML;
-    }
-    if (type === 'text') {
-      return this._xhr.responseText;
-    }
-    return this._xhr.response;
-  }
-
-  isError() {
-    return this.reason === Rejection.REASON_ERROR;
   }
 
   setMessage(message: string) {
     this.message = message;
     return this;
   }
+}
 
-  get status() {
-    return isDefined(this._xhr) ? this._xhr.status : undefined;
+export class CanceledRejection extends Rejection {
+  constructor(message?: string) {
+    super(message ?? _('Request canceled'));
+    this.name = 'CanceledRejection';
+  }
+}
+
+export class TimeoutRejection extends Rejection {
+  constructor(message?: string) {
+    super(message ?? _('Request timed out'));
+    this.name = 'TimeoutRejection';
+  }
+}
+
+export class RequestRejection extends Rejection {
+  readonly request?: XMLHttpRequest;
+
+  constructor(request?: XMLHttpRequest, message?: string) {
+    super(message ?? _('Request failed'));
+    this.name = 'RequestRejection';
+    this.request = request;
+  }
+}
+
+export class ResponseRejection extends Rejection {
+  readonly status?: number;
+  readonly request: XMLHttpRequest;
+
+  constructor(request: XMLHttpRequest, message?: string) {
+    super(message ?? _('Response error'));
+    this.name = 'ResponseRejection';
+    this.request = request;
+    this.status = request.status;
+  }
+
+  get data(): string | undefined {
+    return this.request.responseText;
   }
 }
 

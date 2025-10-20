@@ -5,7 +5,7 @@
 
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import Rejection from 'gmp/http/rejection';
+import {ResponseRejection} from 'gmp/http/rejection';
 import _ from 'gmp/locale';
 import Login from 'gmp/models/login';
 
@@ -24,7 +24,7 @@ class LoginCommand extends HttpCommand {
       });
       return new Login(response);
     } catch (rej) {
-      if (rej instanceof Rejection && rej.isError && rej.isError()) {
+      if (rej instanceof ResponseRejection) {
         switch (rej.status) {
           case 401:
             rej.setMessage(_('Bad login information'));

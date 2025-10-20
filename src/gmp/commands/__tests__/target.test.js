@@ -10,7 +10,7 @@ import {
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
-import Rejection from 'gmp/http/rejection';
+import {ResponseRejection} from 'gmp/http/rejection';
 import transform from 'gmp/http/transform/fastxml';
 
 describe('TargetCommand tests', () => {
@@ -112,7 +112,7 @@ describe('TargetCommand tests', () => {
       const xhr = {
         status: 404,
       };
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
           get_feeds_response: feedsResponse,
@@ -312,7 +312,7 @@ describe('TargetCommand tests', () => {
       const xhr = {
         status: 404,
       };
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
           get_feeds_response: feedsResponse,

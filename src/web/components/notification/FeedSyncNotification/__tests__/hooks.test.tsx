@@ -59,11 +59,7 @@ describe('FeedSyncNotification helpers', () => {
 
     test('should dispatch setError with Rejection on API call failure', async () => {
       const errorMessage = 'Network Error';
-      const rejection = new Rejection(
-        {status: 500} as XMLHttpRequest,
-        'error',
-        errorMessage,
-      );
+      const rejection = new Rejection(errorMessage);
       mockCheckFeedSync.mockRejectedValue(rejection);
 
       const {renderHook, store} = rendererWith({store: true, gmp});

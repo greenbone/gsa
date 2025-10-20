@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Rejection from 'gmp/http/rejection';
+import {ResponseRejection} from 'gmp/http/rejection';
 import Response, {type Meta} from 'gmp/http/response';
 import transform from 'gmp/http/transform/fastxml';
 
@@ -72,11 +72,11 @@ describe('fastxml transform tests', () => {
   test('should transform rejection with action_result', () => {
     const xmlStr =
       '<envelope><action_result><message>foo</message></action_result></envelope>';
-    const rejection = new Rejection({responseText: xmlStr} as XMLHttpRequest);
+    const rejection = new ResponseRejection({
+      responseText: xmlStr,
+    } as XMLHttpRequest);
     const transformedRejection = transform.rejection(rejection);
     expect(transformedRejection).toBe(rejection);
-    expect(transformedRejection.isError()).toBe(true);
-    expect(transformedRejection.plainData('text')).toBe(xmlStr);
     expect(transformedRejection.message).toBe('foo');
   });
 
@@ -84,11 +84,11 @@ describe('fastxml transform tests', () => {
     const xmlStr =
       '<envelope><action_result><message>foo</message></action_result>' +
       '<gsad_response><message>bar</message></gsad_response></envelope>';
-    const rejection = new Rejection({responseText: xmlStr} as XMLHttpRequest);
+    const rejection = new ResponseRejection({
+      responseText: xmlStr,
+    } as XMLHttpRequest);
     const transformedRejection = transform.rejection(rejection);
     expect(transformedRejection).toBe(rejection);
-    expect(transformedRejection.isError()).toBe(true);
-    expect(transformedRejection.plainData('text')).toBe(xmlStr);
     expect(transformedRejection.message).toBe('bar');
   });
 

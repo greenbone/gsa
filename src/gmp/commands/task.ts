@@ -8,7 +8,7 @@
 import EntityCommand, {type EntityCommandParams} from 'gmp/commands/entity';
 import FeedStatusCommand, {feedStatusRejection} from 'gmp/commands/feedstatus';
 import type Http from 'gmp/http/http';
-import type Rejection from 'gmp/http/rejection';
+import {type ResponseRejection} from 'gmp/http/rejection';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
 import {type ScannerType} from 'gmp/models/scanner';
@@ -213,7 +213,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     try {
       return await this.entityAction(data);
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
       throw rejection; // Ensure the function always returns or throws
     }
   }
@@ -256,7 +256,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     try {
       return await this.entityAction(data);
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
       throw rejection; // Ensure the function always returns or throws
     }
   }
@@ -323,7 +323,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     try {
       await this.httpPostWithTransform(data);
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
     }
   }
 
@@ -362,7 +362,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     try {
       await this.httpPostWithTransform(data);
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
     }
   }
 

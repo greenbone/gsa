@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
-import Http from 'gmp/http/http';
+import Http, {type HandleOptions} from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
 import DefaultTransform from 'gmp/http/transform/default';
 
@@ -24,20 +24,18 @@ global.XMLHttpRequest = testing.fn(() => ({
 
 describe('Http', () => {
   describe('handleResponseError', () => {
-    let instance;
-    let reject;
-    let resolve;
-    let xhr;
-    let options;
+    let instance: Http;
+    let reject: (reason?: string | Error) => void;
+    let xhr: XMLHttpRequest;
+    let options: HandleOptions;
 
     beforeEach(() => {
       instance = new Http({
         apiServer: 'https://example.com',
         apiProtocol: 'https:',
       });
-      resolve = testing.fn();
       reject = testing.fn();
-      xhr = {status: 500};
+      xhr = {status: 500} as unknown as XMLHttpRequest;
       options = {
         transform: DefaultTransform,
       };
@@ -45,29 +43,29 @@ describe('Http', () => {
     });
 
     test('should handle response error without error handlers', async () => {
-      await instance.handleResponseError(xhr, reject, resolve, options);
+      instance.handleResponseError(reject, xhr, options);
       expect(reject).toHaveBeenCalledWith(expect.any(Rejection));
     });
 
     test('401 error should call error handler', async () => {
+      // @ts-expect-error
       xhr.status = 401;
-      await instance.handleResponseError(resolve, reject, xhr, options);
+      instance.handleResponseError(reject, xhr, options);
       expect(reject).toHaveBeenCalledWith(expect.any(Rejection));
-      expect(reject.mock.calls[0][0].reason).toBe(
-        Rejection.REASON_UNAUTHORIZED,
-      );
     });
 
     test('404 error should not append additional message', async () => {
+      // @ts-expect-error
       xhr.status = 404;
       mockFindActionInXMLString.mockReturnValue(false);
 
-      await instance.handleResponseError(resolve, reject, xhr, options);
+      instance.handleResponseError(reject, xhr, options);
       expect(mockGetFeedAccessStatusMessage).not.toHaveBeenCalled();
 
       expect(reject).toHaveBeenCalledWith(expect.any(Rejection));
+      // @ts-expect-error
       const rejectedResponse = reject.mock.calls[0][0];
-      expect(rejectedResponse.message).toContain('Unknown Error');
+      expect(rejectedResponse.message).toEqual('Response error');
     });
   });
 });
