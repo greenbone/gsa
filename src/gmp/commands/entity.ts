@@ -50,9 +50,9 @@ abstract class EntityCommand<
   TElement = XmlResponseData,
   TRoot extends XmlResponseData = XmlResponseData,
 > extends HttpCommand {
-  readonly clazz: ModelClass<Model>;
+  private readonly clazz: ModelClass<Model>;
+  private readonly id_name: string;
   readonly name: string;
-  readonly id_name: string;
 
   constructor(http: Http, name: string, clazz: ModelClass<Model>) {
     super(http, {cmd: 'get_' + name});
@@ -61,10 +61,10 @@ abstract class EntityCommand<
     this.name = name;
     this.id_name = name + '_id';
 
-    this.transformResponse = this.transformResponse.bind(this);
+    this.transformResponseToModel = this.transformResponseToModel.bind(this);
   }
 
-  abstract getElementFromRoot(root: TRoot): TElement;
+  protected abstract getElementFromRoot(root: TRoot): TElement;
 
   protected postParams(
     params: EntityCommandInputParams = {},
@@ -100,7 +100,7 @@ abstract class EntityCommand<
     ) as TModel;
   }
 
-  protected transformResponse(
+  protected transformResponseToModel(
     response: Response<TRoot, XmlMeta>,
   ): Response<TModel, XmlMeta> {
     let entity = this.getModelFromResponse(response);
@@ -149,7 +149,7 @@ abstract class EntityCommand<
     {filter, ...options}: EntityCommandGetParams = {},
   ) {
     const response = await this.httpGetWithTransform({id, filter}, options);
-    return this.transformResponse(response as Response<TRoot, XmlMeta>);
+    return this.transformResponseToModel(response as Response<TRoot, XmlMeta>);
   }
 
   async clone({id}: EntityCommandParams) {
