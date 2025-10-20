@@ -11,7 +11,6 @@ import Login, {type LoginData, type LoginMeta} from 'gmp/models/login';
 describe('Login model tests', () => {
   test('should set all properties correctly', () => {
     const response = new Response<LoginData, LoginMeta>(
-      {} as XMLHttpRequest,
       {
         client_address: '1.2.3.4',
         guest: false,

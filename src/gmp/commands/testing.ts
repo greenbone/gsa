@@ -27,7 +27,7 @@ const createEntitiesCounts = (entities: Element[]) => ({
 });
 
 export const createResponse = <TData = Element>(data: TData) =>
-  new Response<TData>({} as XMLHttpRequest, data);
+  new Response<TData>(data);
 
 export const createEntitiesResponse = (name: string, entities: Element[]) =>
   createResponse({

@@ -21,14 +21,10 @@ describe('Page tests', () => {
       user: {
         currentCapabilities: testing
           .fn()
-          .mockResolvedValue(
-            new Response<undefined>({} as XMLHttpRequest, undefined),
-          ),
+          .mockResolvedValue(new Response<undefined>(undefined)),
         currentFeatures: testing
           .fn()
-          .mockResolvedValue(
-            new Response<Features>({} as XMLHttpRequest, new Features()),
-          ),
+          .mockResolvedValue(new Response<Features>(new Features())),
       },
     };
 
@@ -48,14 +44,10 @@ describe('Page tests', () => {
       user: {
         currentCapabilities: testing
           .fn()
-          .mockResolvedValue(
-            new Response({} as XMLHttpRequest, new EverythingCapabilities()),
-          ),
+          .mockResolvedValue(new Response(new EverythingCapabilities())),
         currentFeatures: testing
           .fn()
-          .mockResolvedValue(
-            new Response<Features>({} as XMLHttpRequest, new Features()),
-          ),
+          .mockResolvedValue(new Response<Features>(new Features())),
       },
       feedstatus: {
         isEnterpriseFeed: testing.fn().mockResolvedValue(false),

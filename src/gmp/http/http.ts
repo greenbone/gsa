@@ -252,10 +252,7 @@ class Http {
     >,
   ) {
     try {
-      let response = new Response<TSuccessDataIn, TSuccessMetaIn>(
-        xhr,
-        xhr.response,
-      );
+      let response = new Response<TSuccessDataIn, TSuccessMetaIn>(xhr.response);
 
       resolve(
         this.transformSuccess<
