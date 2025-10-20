@@ -17,7 +17,7 @@ import {
   createHttpError,
 } from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
-import Rejection from 'gmp/http/rejection';
+import {ResponseRejection} from 'gmp/http/rejection';
 import transform from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 
@@ -308,11 +308,7 @@ describe('feedStatusRejection tests', () => {
     const xhr = {
       status: 500,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
-      xhr,
-      Rejection.REASON_ERROR,
-      'Internal Server Error',
-    );
+    const rejection = new ResponseRejection(xhr, 'Internal Server Error');
     await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
     expect(rejection.message).toEqual('Internal Server Error');
   });
@@ -327,11 +323,7 @@ describe('feedStatusRejection tests', () => {
     const xhr = {
       status: 404,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
-      xhr,
-      Rejection.REASON_ERROR,
-      'Some Message',
-    );
+    const rejection = new ResponseRejection(xhr, 'Some Message');
 
     await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
     expect(rejection.message).toEqual(
@@ -349,11 +341,7 @@ describe('feedStatusRejection tests', () => {
     const xhr = {
       status: 404,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
-      xhr,
-      Rejection.REASON_ERROR,
-      'Some Message',
-    );
+    const rejection = new ResponseRejection(xhr, 'Some Message');
 
     await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
     expect(rejection.message).toEqual(
@@ -375,9 +363,8 @@ describe('feedStatusRejection tests', () => {
     const xhr = {
       status: 404,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
+    const rejection = new ResponseRejection(
       xhr,
-      Rejection.REASON_ERROR,
       'Failed to find port_list XYZ',
     );
 
@@ -401,11 +388,7 @@ describe('feedStatusRejection tests', () => {
     const xhr = {
       status: 404,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
-      xhr,
-      Rejection.REASON_ERROR,
-      'Failed to find config XYZ',
-    );
+    const rejection = new ResponseRejection(xhr, 'Failed to find config XYZ');
 
     await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
     expect(rejection.message).toEqual(

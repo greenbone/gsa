@@ -4,7 +4,7 @@
  */
 
 import {XMLParser} from 'fast-xml-parser';
-import type Rejection from 'gmp/http/rejection';
+import {type ResponseRejection} from 'gmp/http/rejection';
 import {type default as Response, type Meta} from 'gmp/http/response';
 import {type Transform} from 'gmp/http/transform/transform';
 import {success, rejection} from 'gmp/http/transform/xml';
@@ -66,8 +66,8 @@ const transformXmlData = (
   return response.set(envelope, meta);
 };
 
-const transformRejection = (rej: Rejection) => {
-  const xmlString = rej.plainData('text') as string;
+const transformRejection = (rej: ResponseRejection) => {
+  const xmlString = rej.data;
   return isDefined(xmlString) ? xmlParser.parse(xmlString) : undefined;
 };
 

@@ -19,7 +19,7 @@ import {
   createResponse,
 } from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
-import Rejection from 'gmp/http/rejection';
+import {ResponseRejection} from 'gmp/http/rejection';
 import transform from 'gmp/http/transform/fastxml';
 import logger, {type LogLevel} from 'gmp/log';
 import {
@@ -194,7 +194,7 @@ describe('TaskCommand tests', () => {
       const xhr = {
         status: 404,
       } as XMLHttpRequest;
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
           get_feeds_response: feedsResponse,
@@ -337,11 +337,7 @@ describe('TaskCommand tests', () => {
       const xhr = {
         status: 404,
       };
-      const rejection = new Rejection(
-        xhr as XMLHttpRequest,
-        Rejection.REASON_ERROR,
-        message,
-      );
+      const rejection = new ResponseRejection(xhr as XMLHttpRequest, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
           get_feeds_response: feedsResponse,
@@ -575,7 +571,7 @@ describe('TaskCommand tests', () => {
     'should not create new agent group task while feed is not available: $name',
     async ({feedsResponse, message, expectedMessage}) => {
       const xhr = {status: 404} as XMLHttpRequest;
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {get_feeds_response: feedsResponse},
       });
@@ -714,7 +710,7 @@ describe('TaskCommand tests', () => {
     'should not save agent group task while feed is not available: $name',
     async ({feedsResponse, message, expectedMessage}) => {
       const xhr = {status: 404} as XMLHttpRequest;
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {get_feeds_response: feedsResponse},
       });

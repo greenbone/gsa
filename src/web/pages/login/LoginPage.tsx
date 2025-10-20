@@ -8,7 +8,7 @@ import {notifications} from '@mantine/notifications';
 import {useDispatch} from 'react-redux';
 import {useLocation, useNavigate} from 'react-router';
 import styled from 'styled-components';
-import Rejection from 'gmp/http/rejection';
+import {ResponseRejection} from 'gmp/http/rejection';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -27,11 +27,6 @@ import {
   setTimezone,
 } from 'web/store/usersettings/actions';
 import Theme from 'web/utils/Theme';
-
-interface ErrorType {
-  message?: string;
-  reason?: string;
-}
 
 const log = logger.getLogger('web.login');
 const StyledLayout = styled(Layout)`
@@ -69,7 +64,7 @@ const LoginPage: React.FC = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const [isLoggedIn] = useUserIsLoggedIn();
-  const [error, setError] = useState<ErrorType>();
+  const [error, setError] = useState<Error>();
   const [_] = useTranslation();
 
   useEffect(() => {
@@ -119,7 +114,7 @@ const LoginPage: React.FC = () => {
       }
     } catch (error) {
       log.error(error);
-      setError(error as ErrorType);
+      setError(error as Error);
     }
 
     try {
@@ -152,7 +147,7 @@ const LoginPage: React.FC = () => {
   let message: string | undefined;
 
   if (error) {
-    if (error.reason === Rejection.REASON_UNAUTHORIZED) {
+    if (error instanceof ResponseRejection && error.status === 401) {
       message = _('Login Failed. Invalid password or username.');
     } else if (isEmpty(error.message)) {
       message = _('Unknown error on login.');

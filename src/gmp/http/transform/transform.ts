@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Rejection from 'gmp/http/rejection';
+import {type ResponseRejection} from 'gmp/http/rejection';
 import {type default as Response, type Meta} from 'gmp/http/response';
 
 type MethodUpperCase = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -12,8 +12,6 @@ export type Method = MethodUpperCase | Lowercase<MethodUpperCase>;
 export interface TransformOptions {
   method?: Method;
   url?: string;
-  formdata?: FormData;
-  force?: boolean;
 }
 
 /**
@@ -47,9 +45,9 @@ export type TransformSuccess<
  * @returns The transformed `Rejection` object.
  */
 export type TransformRejection = (
-  rejection: Rejection,
+  rejection: ResponseRejection,
   options?: TransformOptions,
-) => Rejection;
+) => Error;
 
 /**
  * Represents a transformation process that handles success and rejection scenarios.
