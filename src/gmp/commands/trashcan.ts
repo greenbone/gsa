@@ -266,6 +266,36 @@ class TrashCanCommand extends HttpCommand {
     const agentGroupRequest = this.httpGetWithTransform({
       cmd: 'get_trash_agent_group',
     }) as TrashCanGetPromise<AgentGroupResponseData>;
+
+    const requests = [
+      alertsRequest,
+      configsRequest,
+      credentialsRequest,
+      filtersRequest,
+      groupsRequest,
+      notesRequest,
+      overridesRequest,
+      permissionsRequest,
+      portListsRequest,
+      reportConfigsRequest,
+      reportFormatsRequest,
+      rolesRequest,
+      scannersRequest,
+      schedulesRequest,
+      tagsRequest,
+      targetsRequest,
+      tasksRequest,
+      ticketsRequest,
+      agentGroupRequest,
+    ];
+
+    const results = await Promise.allSettled(requests);
+
+    const getResponse = <T>(index: number): T | null =>
+      results[index].status === 'fulfilled'
+        ? (results[index].value as T)
+        : null;
+
     const [
       alertsResponse,
       configsResponse,
@@ -286,54 +316,54 @@ class TrashCanCommand extends HttpCommand {
       tasksResponse,
       ticketsResponse,
       agentGroupsResponse,
-    ] = await Promise.all([
-      alertsRequest,
-      configsRequest,
-      credentialsRequest,
-      filtersRequest,
-      groupsRequest,
-      notesRequest,
-      overridesRequest,
-      permissionsRequest,
-      portListsRequest,
-      reportConfigsRequest,
-      reportFormatsRequest,
-      rolesRequest,
-      scannersRequest,
-      schedulesRequest,
-      tagsRequest,
-      targetsRequest,
-      tasksRequest,
-      ticketsRequest,
-      agentGroupRequest,
-    ]);
-    const alertsData = alertsResponse.data.get_trash;
-    const configsData = configsResponse.data.get_trash;
-    const credentialsData = credentialsResponse.data.get_trash;
-    const filtersData = filtersResponse.data.get_trash;
-    const groupsData = groupsResponse.data.get_trash;
-    const notesData = notesResponse.data.get_trash;
-    const overridesData = overridesResponse.data.get_trash;
-    const permissionsData = permissionsResponse.data.get_trash;
-    const portListsData = portListsResponse.data.get_trash;
-    const reportConfigsData = reportConfigsResponse.data.get_trash;
-    const reportFormatsData = reportFormatsResponse.data.get_trash;
-    const rolesData = rolesResponse.data.get_trash;
-    const scannersData = scannersResponse.data.get_trash;
-    const schedulesData = schedulesResponse.data.get_trash;
-    const tagsData = tagsResponse.data.get_trash;
-    const targetsData = targetsResponse.data.get_trash;
-    const tasksData = tasksResponse.data.get_trash;
-    const ticketsData = ticketsResponse.data.get_trash;
-    const agentGroupsData = agentGroupsResponse.data.get_trash;
+    ] = [
+      getResponse<TrashCanGetResponse<AlertResponseData>>(0),
+      getResponse<TrashCanGetResponse<ConfigsResponseData>>(1),
+      getResponse<TrashCanGetResponse<CredentialsResponseData>>(2),
+      getResponse<TrashCanGetResponse<FiltersResponseData>>(3),
+      getResponse<TrashCanGetResponse<GroupsResponseData>>(4),
+      getResponse<TrashCanGetResponse<NotesResponseData>>(5),
+      getResponse<TrashCanGetResponse<OverridesResponseData>>(6),
+      getResponse<TrashCanGetResponse<PermissionsResponseData>>(7),
+      getResponse<TrashCanGetResponse<PortListsResponseData>>(8),
+      getResponse<TrashCanGetResponse<ReportConfigsResponseData>>(9),
+      getResponse<TrashCanGetResponse<ReportFormatsResponseData>>(10),
+      getResponse<TrashCanGetResponse<RolesResponseData>>(11),
+      getResponse<TrashCanGetResponse<ScannersResponseData>>(12),
+      getResponse<TrashCanGetResponse<SchedulesResponseData>>(13),
+      getResponse<TrashCanGetResponse<TagsResponseData>>(14),
+      getResponse<TrashCanGetResponse<TargetsResponseData>>(15),
+      getResponse<TrashCanGetResponse<TasksResponseData>>(16),
+      getResponse<TrashCanGetResponse<TicketsResponseData>>(17),
+      getResponse<TrashCanGetResponse<AgentGroupResponseData>>(18),
+    ];
+    const alertsData = alertsResponse?.data.get_trash;
+    const configsData = configsResponse?.data.get_trash;
+    const credentialsData = credentialsResponse?.data.get_trash;
+    const filtersData = filtersResponse?.data.get_trash;
+    const groupsData = groupsResponse?.data.get_trash;
+    const notesData = notesResponse?.data.get_trash;
+    const overridesData = overridesResponse?.data.get_trash;
+    const permissionsData = permissionsResponse?.data.get_trash;
+    const portListsData = portListsResponse?.data.get_trash;
+    const reportConfigsData = reportConfigsResponse?.data.get_trash;
+    const reportFormatsData = reportFormatsResponse?.data.get_trash;
+    const rolesData = rolesResponse?.data.get_trash;
+    const scannersData = scannersResponse?.data.get_trash;
+    const schedulesData = schedulesResponse?.data.get_trash;
+    const tagsData = tagsResponse?.data.get_trash;
+    const targetsData = targetsResponse?.data.get_trash;
+    const tasksData = tasksResponse?.data.get_trash;
+    const ticketsData = ticketsResponse?.data.get_trash;
+    const agentGroupsData = agentGroupsResponse?.data.get_trash;
 
-    const alerts = map(alertsData.get_alerts_response?.alert, element =>
+    const alerts = map(alertsData?.get_alerts_response?.alert, element =>
       Alert.fromElement(element),
     );
 
     const scanConfigs: ScanConfig[] = [];
     const policies: Policy[] = [];
-    forEach(configsData.get_configs_response?.config, element => {
+    forEach(configsData?.get_configs_response?.config, element => {
       if (element.usage_type === 'scan')
         scanConfigs.push(ScanConfig.fromElement(element));
       else {
@@ -342,72 +372,99 @@ class TrashCanCommand extends HttpCommand {
     });
 
     const credentials = map(
-      credentialsData.get_credentials_response?.credential,
+      credentialsData?.get_credentials_response?.credential,
       element => Credential.fromElement(element),
     );
-    const filters = map(filtersData.get_filters_response?.filter, element =>
+    const filters = map(filtersData?.get_filters_response?.filter, element =>
       Filter.fromElement(element),
     );
-    const groups = map(groupsData.get_groups_response?.group, element =>
+    const groups = map(groupsData?.get_groups_response?.group, element =>
       Group.fromElement(element),
     );
-    const notes = map(notesData.get_notes_response?.note, element =>
+    const notes = map(notesData?.get_notes_response?.note, element =>
       Note.fromElement(element),
     );
     const overrides = map(
-      overridesData.get_overrides_response?.override,
+      overridesData?.get_overrides_response?.override,
       element => Override.fromElement(element),
     );
     const permissions = map(
-      permissionsData.get_permissions_response?.permission,
+      permissionsData?.get_permissions_response?.permission,
       element => Permission.fromElement(element),
     );
     const portLists = map(
-      portListsData.get_port_lists_response?.port_list,
+      portListsData?.get_port_lists_response?.port_list,
       element => PortList.fromElement(element),
     );
     const reportConfigs = map(
-      reportConfigsData.get_report_configs_response?.report_config,
+      reportConfigsData?.get_report_configs_response?.report_config,
       element => ReportConfig.fromElement(element),
     );
     const reportFormats = map(
-      reportFormatsData.get_report_formats_response?.report_format,
+      reportFormatsData?.get_report_formats_response?.report_format,
       element => ReportFormat.fromElement(element),
     );
-    const roles = map(rolesData.get_roles_response?.role, element =>
+    const roles = map(rolesData?.get_roles_response?.role, element =>
       Role.fromElement(element),
     );
-    const scanners = map(scannersData.get_scanners_response?.scanner, element =>
-      Scanner.fromElement(element),
+    const scanners = map(
+      scannersData?.get_scanners_response?.scanner,
+      element => Scanner.fromElement(element),
     );
     const schedules = map(
-      schedulesData.get_schedules_response?.schedule,
+      schedulesData?.get_schedules_response?.schedule,
       element => Schedule.fromElement(element),
     );
-    const tags = map(tagsData.get_tags_response?.tag, element =>
+    const tags = map(tagsData?.get_tags_response?.tag, element =>
       Tag.fromElement(element),
     );
-    const targets = map(targetsData.get_targets_response?.target, element =>
+    const targets = map(targetsData?.get_targets_response?.target, element =>
       Target.fromElement(element),
     );
     const tasks: Task[] = [];
     const audits: Audit[] = [];
-    forEach(tasksData.get_tasks_response?.task, element => {
+    forEach(tasksData?.get_tasks_response?.task, element => {
       if (element.usage_type === 'scan') {
         tasks.push(Task.fromElement(element));
       } else {
         audits.push(Audit.fromElement(element));
       }
     });
-    const tickets = map(ticketsData.get_tickets_response?.ticket, element =>
+    const tickets = map(ticketsData?.get_tickets_response?.ticket, element =>
       Ticket.fromElement(element),
     );
     const agentGroups = map(
-      agentGroupsData.get_agent_groups_response?.agent_group,
+      agentGroupsData?.get_agent_groups_response?.agent_group,
       element => AgentGroup.fromElement(element),
     );
 
-    return targetsResponse.setData({
+    const baseResponse =
+      targetsResponse ||
+      alertsResponse ||
+      configsResponse ||
+      credentialsResponse ||
+      filtersResponse ||
+      groupsResponse ||
+      notesResponse ||
+      overridesResponse ||
+      permissionsResponse ||
+      portListsResponse ||
+      reportConfigsResponse ||
+      reportFormatsResponse ||
+      rolesResponse ||
+      scannersResponse ||
+      schedulesResponse ||
+      tagsResponse ||
+      tasksResponse ||
+      ticketsResponse ||
+      agentGroupsResponse;
+
+    if (!baseResponse) {
+      // If all requests failed, throw an error
+      throw new Error('All trash can requests failed');
+    }
+
+    return baseResponse.setData({
       alerts,
       audits,
       scanConfigs,
