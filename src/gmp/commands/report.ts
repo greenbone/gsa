@@ -146,7 +146,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       },
       options,
     );
-    return this.transformResponse(response);
+    return this.transformResponseToModel(response);
   }
 
   async get(
@@ -168,7 +168,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       ...options,
       ...params,
     });
-    return this.transformResponse(response);
+    return this.transformResponseToModel(response);
   }
 
   getElementFromRoot(root: XmlResponseData): ReportElement {

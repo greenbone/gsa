@@ -110,7 +110,7 @@ abstract class EntitiesCommand<
   TEntitiesResponse extends Element = Element,
   TRoot extends Element = Element,
 > extends HttpCommand {
-  readonly clazz: ModelClass<Model>;
+  private readonly clazz: ModelClass<Model>;
   readonly name: string;
 
   constructor(http: Http, name: string, clazz: ModelClass<Model>) {
@@ -120,9 +120,9 @@ abstract class EntitiesCommand<
     this.name = name;
   }
 
-  abstract getEntitiesResponse(root: TRoot): TEntitiesResponse;
+  protected abstract getEntitiesResponse(root: TRoot): TEntitiesResponse;
 
-  getCollectionListFromRoot(root: TRoot): CollectionList<TModel> {
+  protected getCollectionListFromRoot(root: TRoot): CollectionList<TModel> {
     const response = this.getEntitiesResponse(root);
     return parseCollectionList<TModel>(
       response,
@@ -215,7 +215,9 @@ abstract class EntitiesCommand<
     return deleteResponse.setData(deleted);
   }
 
-  transformAggregates(response: Response<GetAggregatesResponseData, XmlMeta>) {
+  protected transformAggregates(
+    response: Response<GetAggregatesResponseData, XmlMeta>,
+  ) {
     const {data} = response;
     if (!data.get_aggregate) {
       throw new Error('Invalid response: get_aggregate not found');

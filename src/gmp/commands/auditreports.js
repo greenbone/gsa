@@ -86,12 +86,12 @@ export class AuditReportCommand extends EntityCommand {
     });
   }
 
-  getDelta(
+  async getDelta(
     {id},
     {id: delta_report_id},
     {filter, details = true, ...options} = {},
   ) {
-    return this.httpGetWithTransform(
+    const response = await this.httpGetWithTransform(
       {
         id,
         delta_report_id,
@@ -100,10 +100,11 @@ export class AuditReportCommand extends EntityCommand {
         details: convertBoolean(details),
       },
       options,
-    ).then(this.transformResponse);
+    );
+    return this.transformResponseToModel(response);
   }
 
-  get(
+  async get(
     {id},
     {
       filter,
@@ -113,7 +114,7 @@ export class AuditReportCommand extends EntityCommand {
       ...options
     } = {},
   ) {
-    return this.httpGetWithTransform(
+    const response = await this.httpGetWithTransform(
       {
         id,
         filter,
@@ -122,7 +123,8 @@ export class AuditReportCommand extends EntityCommand {
         details: convertBoolean(details),
       },
       options,
-    ).then(this.transformResponse);
+    );
+    return this.transformResponseToModel(response);
   }
 
   getElementFromRoot(root) {
