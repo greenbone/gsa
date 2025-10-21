@@ -18,7 +18,6 @@ import {
 } from 'gmp/commands/testing';
 import Gmp from 'gmp/gmp';
 import GmpSettings from 'gmp/gmpsettings';
-import DefaultTransform from 'gmp/http/transform/default';
 
 const createStorage = (state?: Record<string, string>) => {
   const store = {
@@ -194,7 +193,6 @@ describe('Gmp tests', () => {
         args: {
           token: 'foo',
         },
-        transform: DefaultTransform,
         url: 'http://localhost/logout',
       });
       expect(gmp.isLoggedIn()).toEqual(false);
