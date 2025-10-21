@@ -29,6 +29,7 @@ import Target from 'gmp/models/target';
 import Task from 'gmp/models/task';
 import Ticket from 'gmp/models/ticket';
 import TrashCanTableContents from 'web/pages/trashcan/TrashCanTableContents';
+import OciImageTarget from 'gmp/models/ociImageTarget';
 
 describe('TrashCanTableContents tests', () => {
   const mockTrashData: TrashCanGetData = {
