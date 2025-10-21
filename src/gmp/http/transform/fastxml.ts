@@ -25,6 +25,8 @@ export type XmlResponseData = Record<string, unknown>;
 
 type Envelope = Record<string, string | undefined>;
 
+type InputResponseData = string | ArrayBuffer | XmlResponseData;
+
 const PARSER_OPTIONS = {
   attributeNamePrefix: '_',
   ignoreAttributes: false,
@@ -57,21 +59,50 @@ const parseEnvelopeMeta = (envelope: Envelope): XmlMeta => {
   return meta;
 };
 
+const getStringFromData = (data: string | ArrayBuffer) => {
+  if (typeof data === 'string') {
+    return data;
+  } else if (data instanceof ArrayBuffer) {
+    const decoder = new TextDecoder('utf-8');
+    return decoder.decode(data);
+  }
+  return data;
+};
+
 const transformXmlData = (
-  response: Response<string, Meta>,
+  response: Response<InputResponseData, Meta>,
 ): Response<XmlResponseData, XmlMeta> => {
-  const xmlString = response.data;
-  const {envelope} = xmlParser.parse(xmlString);
-  const meta = parseEnvelopeMeta(envelope);
-  return response.set(envelope, meta);
+  const data = response.data;
+  let envelope: Envelope;
+  if (typeof data === 'string' || data instanceof ArrayBuffer) {
+    const xmlString = getStringFromData(data);
+    const parsed = xmlParser.parse(xmlString);
+    envelope = parsed.envelope as Envelope;
+  } else {
+    envelope = data.envelope as Envelope;
+  }
+  if (!isDefined(envelope)) {
+    throw new Error('No envelope found in response');
+  }
+  return response.set(envelope, parseEnvelopeMeta(envelope));
 };
 
 const transformRejection = (rej: ResponseRejection) => {
-  const xmlString = rej.data;
-  return isDefined(xmlString) ? xmlParser.parse(xmlString) : undefined;
+  const data = rej.data;
+  if (!isDefined(data)) {
+    return rej;
+  }
+
+  const xmlString = getStringFromData(data);
+  return xmlParser.parse(xmlString);
 };
 
-const transformObject: Transform<string, Meta, XmlResponseData, XmlMeta> = {
+const transformObject: Transform<
+  string | ArrayBuffer | XmlResponseData,
+  Meta,
+  XmlResponseData,
+  XmlMeta
+> = {
   success: success(transformXmlData),
   rejection: rejection(transformRejection),
 };
