@@ -6,16 +6,11 @@
 import {describe, test, expect} from '@gsa/testing';
 import {CredentialCommand} from 'gmp/commands/credentials.js';
 import {createHttp, createActionResultResponse} from 'gmp/commands/testing.js';
-import DefaultTransform from 'gmp/http/transform/default';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('CredentialCommand tests', () => {
   test('should create credential', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new CredentialCommand(fakeHttp);
     const resp = await cmd.create({name: 'test-credential'});
 
@@ -40,7 +35,6 @@ describe('CredentialCommand tests', () => {
         'kdcs:': [],
         credential_type: undefined,
       },
-      transform,
     });
 
     const {data} = resp;
@@ -101,7 +95,6 @@ describe('CredentialCommand tests', () => {
         realm: 'kerberos_realm',
         'kdcs:': ['kerberos_kdc'],
       },
-      transform,
     });
 
     const {data} = resp;
@@ -121,7 +114,6 @@ describe('CredentialCommand tests', () => {
         package_format: 'pem',
         credential_id: '1',
       },
-      transform: DefaultTransform,
       responseType: 'arraybuffer',
     });
 

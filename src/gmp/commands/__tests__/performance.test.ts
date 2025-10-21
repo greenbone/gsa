@@ -13,7 +13,6 @@ import {
   createHttpError,
   createResponse,
 } from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import date from 'gmp/models/date';
 
 describe('PerformanceReport', () => {
@@ -82,7 +81,6 @@ describe('PerformanceCommand', () => {
         cmd: 'get_system_reports',
         slave_id: DEFAULT_SENSOR_ID,
       },
-      transform,
     });
     expect(result.data).toEqual([
       new PerformanceReport({name: 'Report1', title: 'Title1'}),
@@ -126,7 +124,6 @@ describe('PerformanceCommand', () => {
         slave_id: DEFAULT_SENSOR_ID,
         name: 'Report1',
       },
-      transform,
     });
     const report = result.data;
     expect(report.name).toEqual('Report1');
@@ -176,7 +173,6 @@ describe('PerformanceCommand', () => {
         start_time: '2024-01-01T02:00:00+01:00',
         end_time: '2024-01-01T03:00:00+01:00',
       },
-      transform,
     });
     const report = result.data;
     expect(report.name).toEqual('Report1');

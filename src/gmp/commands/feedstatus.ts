@@ -83,7 +83,7 @@ export const feedStatusRejection = async (
   http: Http,
   rejection: ResponseRejection,
 ) => {
-  if (rejection?.status === 404) {
+  if (rejection.status === 404) {
     const feedStatus = new FeedStatusCommand(http);
     const {isFeedOwnerSet, isFeedResourcesAccess} =
       await feedStatus.checkFeedOwnerAndPermissions();

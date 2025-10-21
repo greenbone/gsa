@@ -11,7 +11,6 @@ import {
   createEntitiesResponse,
   createHttp,
 } from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {
   OPENVAS_SCANNER_TYPE,
@@ -70,7 +69,6 @@ describe('AuditCommand tests', () => {
         target_id: 't1',
         usage_type: 'audit',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -128,7 +126,6 @@ describe('AuditCommand tests', () => {
         target_id: 't1',
         usage_type: 'audit',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -176,7 +173,6 @@ describe('AuditCommand tests', () => {
         target_id: 0,
         usage_type: 'audit',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -232,7 +228,6 @@ describe('AuditCommand tests', () => {
         target_id: 't1',
         usage_type: 'audit',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -249,7 +244,6 @@ describe('AuditCommand tests', () => {
         cmd: 'get_task',
         task_id: 'foo',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -277,7 +271,6 @@ describe('AuditsCommand tests', () => {
         filter: ALL_FILTER.toFilterString(),
         usage_type: 'audit',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -302,7 +295,6 @@ describe('AuditsCommand tests', () => {
         cmd: 'get_tasks',
         usage_type: 'audit',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);

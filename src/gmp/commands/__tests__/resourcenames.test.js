@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import {ResourceNamesCommand} from 'gmp/commands/resourcenames';
 import {createResponse, createHttp} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('ResourceNamesCommand tests', () => {
   test('should return resource names', async () => {
@@ -42,7 +41,6 @@ describe('ResourceNamesCommand tests', () => {
         filter: 'first=1 rows=-1',
         resource_type: 'os',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(3);
@@ -78,7 +76,6 @@ describe('ResourceNamesCommand tests', () => {
         filter: 'first=1 rows=-1',
         resource_type: 'filter',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(1);
@@ -104,7 +101,6 @@ describe('ResourceNamesCommand tests', () => {
         filter: 'first=1 rows=-1',
         resource_type: 'note',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(0);

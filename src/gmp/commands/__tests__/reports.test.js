@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import ReportsCommand from 'gmp/commands/reports';
 import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('ReportsCommand tests', () => {
@@ -29,7 +28,6 @@ describe('ReportsCommand tests', () => {
         filter: ALL_FILTER.toFilterString(),
         usage_type: 'scan',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -53,7 +51,6 @@ describe('ReportsCommand tests', () => {
         details: 0,
         usage_type: 'scan',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);

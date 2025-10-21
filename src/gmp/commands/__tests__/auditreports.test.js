@@ -10,7 +10,6 @@ import {
   createEntitiesResponse,
   createAggregatesResponse,
 } from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('AuditReportsCommand tests', () => {
@@ -35,7 +34,6 @@ describe('AuditReportsCommand tests', () => {
         filter: ALL_FILTER.toFilterString(),
         usage_type: 'audit',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -61,7 +59,6 @@ describe('AuditReportsCommand tests', () => {
         details: 0,
         usage_type: 'audit',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -80,7 +77,6 @@ describe('AuditReportsCommand tests', () => {
         group_column: 'compliant',
         usage_type: 'audit',
       },
-      transform,
     });
   });
 });

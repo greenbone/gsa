@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import {NvtCommand} from 'gmp/commands/nvt';
 import {createResponse, createHttp} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('NvtCommand tests', () => {
   test('should request single nvt', async () => {
@@ -33,7 +32,6 @@ describe('NvtCommand tests', () => {
         details: '1',
         info_type: 'nvt',
       },
-      transform,
     });
     const {data: nvt} = resp;
     expect(nvt.id).toEqual('1.2.3');
@@ -58,7 +56,6 @@ describe('NvtCommand tests', () => {
         config_id: 'c1',
         oid: '1.2.3',
       },
-      transform,
     });
     const {data: nvt} = resp;
     expect(nvt.id).toEqual('1.2.3');

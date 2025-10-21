@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import AgentInstallersCommand from 'gmp/commands/agentinstallers';
 import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import AgentInstaller from 'gmp/models/agentinstaller';
 
 describe('AgentInstallers tests', () => {
@@ -20,7 +19,6 @@ describe('AgentInstallers tests', () => {
     const result = await cmd.get();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_agent_installers'},
-      transform,
     });
     expect(result.data).toEqual([
       new AgentInstaller({id: '1', name: 'Installer1'}),
@@ -38,7 +36,6 @@ describe('AgentInstallers tests', () => {
     const result = await cmd.get({filter: "name='Installer3'"});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_agent_installers', filter: "name='Installer3'"},
-      transform,
     });
     expect(result.data).toEqual([
       new AgentInstaller({id: '3', name: 'Installer3'}),
@@ -56,7 +53,6 @@ describe('AgentInstallers tests', () => {
     const result = await cmd.getAll();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_agent_installers', filter: 'first=1 rows=-1'},
-      transform,
     });
     expect(result.data).toEqual([
       new AgentInstaller({id: '4', name: 'Installer4'}),

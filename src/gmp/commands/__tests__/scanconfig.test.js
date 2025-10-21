@@ -12,7 +12,6 @@ import {
   createActionResultResponse,
   createResponse,
 } from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
@@ -70,7 +69,6 @@ describe('ScanConfigCommand tests', () => {
         cmd: 'get_config',
         config_id: 'foo',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -86,7 +84,6 @@ describe('ScanConfigCommand tests', () => {
         cmd: 'import_config',
         xml_file: 'content',
       },
-      transform,
     });
   });
 
@@ -107,7 +104,6 @@ describe('ScanConfigCommand tests', () => {
         name: 'foo',
         usage_type: 'scan',
       },
-      transform,
     });
   });
 
@@ -147,7 +143,6 @@ describe('ScanConfigCommand tests', () => {
         'trend:AIX Local Security Checks': 1,
         'trend:Family Foo': 0,
       },
-      transform,
     });
   });
 
@@ -170,7 +165,6 @@ describe('ScanConfigCommand tests', () => {
         config_id: 'c1',
         name: 'foo',
       },
-      transform,
     });
   });
 
@@ -196,7 +190,6 @@ describe('ScanConfigCommand tests', () => {
         'nvt:oid:1': 1,
         'nvt:oid:3': 1,
       },
-      transform,
     });
   });
 
@@ -233,7 +226,6 @@ describe('ScanConfigCommand tests', () => {
         'preference:1.2.3:2:password:Bar': 'foo',
         timeout: 1,
       },
-      transform,
     });
   });
 
@@ -285,7 +277,6 @@ describe('ScanConfigCommand tests', () => {
         config_id: 'foo',
         family: 'bar',
       },
-      transform,
     });
     const {nvts} = resp.data;
     expect(nvts.length).toEqual(3);
@@ -317,7 +308,6 @@ describe('ScanConfigCommand tests', () => {
         oid: '1.2.3',
         name: '',
       },
-      transform,
     });
     const {data: nvt} = resp;
     expect(nvt.id).toEqual('1.2.3');

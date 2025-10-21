@@ -10,7 +10,6 @@ import {
   createEntitiesResponse,
   createAggregatesResponse,
 } from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('ResultsCommand tests', () => {
@@ -32,7 +31,6 @@ describe('ResultsCommand tests', () => {
         details: 1,
         filter: ALL_FILTER.toFilterString(),
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -55,7 +53,6 @@ describe('ResultsCommand tests', () => {
         cmd: 'get_results',
         details: 1,
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -79,7 +76,6 @@ describe('ResultsCommand tests', () => {
         cmd: 'get_results',
         details: 0,
       },
-      transform,
     });
   });
 
@@ -96,7 +92,6 @@ describe('ResultsCommand tests', () => {
         aggregate_mode: 'word_counts',
         max_groups: '250',
       },
-      transform,
     });
   });
 
@@ -113,7 +108,6 @@ describe('ResultsCommand tests', () => {
         aggregate_mode: 'word_counts',
         max_groups: '250',
       },
-      transform,
     });
   });
 
@@ -128,7 +122,6 @@ describe('ResultsCommand tests', () => {
         aggregate_type: 'result',
         group_column: 'severity',
       },
-      transform,
     });
   });
 });

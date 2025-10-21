@@ -10,7 +10,6 @@ import {
   createEntityResponse,
   createActionResultResponse,
 } from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('ReportConfigCommand tests', () => {
   test('should return single report config', async () => {
@@ -26,7 +25,6 @@ describe('ReportConfigCommand tests', () => {
         cmd: 'get_report_config',
         report_config_id: 'foo',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -71,7 +69,6 @@ describe('ReportConfigCommand tests', () => {
         'param:param 4': '["option-1","option-2"]',
         'param_using_default:param 2': 1,
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -115,7 +112,6 @@ describe('ReportConfigCommand tests', () => {
         'param:param 4': '["option-1","option-2"]',
         'param_using_default:param 1': 1,
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -133,7 +129,6 @@ describe('ReportConfigCommand tests', () => {
         cmd: 'delete_report_config',
         report_config_id: 'foo',
       },
-      transform,
     });
   });
 });

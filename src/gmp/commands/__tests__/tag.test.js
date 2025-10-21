@@ -10,7 +10,6 @@ import {
   createEntityResponse,
   createHttp,
 } from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('TagCommand tests', () => {
   test('should create new tag with resources', async () => {
@@ -36,7 +35,6 @@ describe('TagCommand tests', () => {
         resources_action: 'action',
         tag_value: '',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -52,7 +50,6 @@ describe('TagCommand tests', () => {
         cmd: 'get_tag',
         tag_id: 'foo',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -86,7 +83,6 @@ describe('TagCommand tests', () => {
         resources_action: 'action',
         tag_value: 'lorem',
       },
-      transform,
     });
   });
 
@@ -103,7 +99,6 @@ describe('TagCommand tests', () => {
         tag_id: 'foo',
         enable: '1',
       },
-      transform,
     });
   });
 
@@ -120,7 +115,6 @@ describe('TagCommand tests', () => {
         tag_id: 'foo',
         enable: '0',
       },
-      transform,
     });
   });
 });

@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import AuthenticationCommand from 'gmp/commands/auth';
 import {createActionResultResponse, createHttp} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('AuthenticationCommand tests', () => {
   test('should enable ldap', async () => {
@@ -35,7 +34,6 @@ describe('AuthenticationCommand tests', () => {
         group: 'method:ldap_connect',
         ldaphost: ldapHost,
       },
-      transform,
     });
   });
 
@@ -65,7 +63,6 @@ describe('AuthenticationCommand tests', () => {
         group: 'method:ldap_connect',
         ldaphost: ldapHost,
       },
-      transform,
     });
   });
 
@@ -88,7 +85,6 @@ describe('AuthenticationCommand tests', () => {
         radiushost: radiusHost,
         radiuskey: radiusKey,
       },
-      transform,
     });
   });
 
@@ -111,7 +107,6 @@ describe('AuthenticationCommand tests', () => {
         radiushost: radiusHost,
         radiuskey: radiusKey,
       },
-      transform,
     });
   });
 });

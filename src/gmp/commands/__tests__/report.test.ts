@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import ReportCommand from 'gmp/commands/report';
 import {createHttp, createEntityResponse} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('ReportCommand tests', () => {
   test('should request single report', async () => {
@@ -23,7 +22,6 @@ describe('ReportCommand tests', () => {
         details: 1,
         lean: 1,
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');

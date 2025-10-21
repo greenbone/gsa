@@ -9,12 +9,12 @@ import {
   createActionResultResponse,
   createEntityResponse,
   createHttp,
+  createPlainResponse,
   createResponse,
 } from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
 import Response from 'gmp/http/response';
-import DefaultTransform from 'gmp/http/transform/default';
-import transform, {type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import {
   type EntityModelElement,
   type EntityModelProperties,
@@ -55,7 +55,6 @@ describe('EntityCommand tests', () => {
         foo_id: '123',
         filter: 'foo=bar',
       },
-      transform,
     });
     expect(cmdResponse).toBeInstanceOf(Response);
     expect(cmdResponse.data).toBeInstanceOf(Foo);
@@ -75,7 +74,6 @@ describe('EntityCommand tests', () => {
         foo_id: '123',
         filter: 'foo=bar',
       },
-      transform,
     });
     expect(cmdResponse).toBeInstanceOf(Response);
     expect(cmdResponse.data).toBeInstanceOf(Foo);
@@ -95,7 +93,6 @@ describe('EntityCommand tests', () => {
         foo_id: '123',
         filter_id: 'bar',
       },
-      transform,
     });
     expect(cmdResponse).toBeInstanceOf(Response);
     expect(cmdResponse.data).toBeInstanceOf(Foo);
@@ -122,7 +119,6 @@ describe('EntityCommand tests', () => {
         foo_id: '123',
         filter_id: 'bar',
       },
-      transform,
     });
     expect(cmdResponse).toBeInstanceOf(Response);
     expect(cmdResponse.data).toBeInstanceOf(Foo);
@@ -146,14 +142,14 @@ describe('EntityCommand tests', () => {
         id: '123',
         resource_type: 'foo',
       },
-      transform,
     });
     expect(cmdResponse).toBeInstanceOf(Response);
     expect(cmdResponse.data).toEqual({id: '456'});
   });
 
   test('should delete an entity', async () => {
-    const fakeHttp = createHttp();
+    const response = createResponse();
+    const fakeHttp = createHttp(response);
 
     const cmd = new TestEntityCommand(fakeHttp);
     const cmdResponse = await cmd.delete({id: '123'});
@@ -162,14 +158,13 @@ describe('EntityCommand tests', () => {
         cmd: 'delete_foo',
         foo_id: '123',
       },
-      transform,
     });
     expect(cmdResponse).toBeUndefined();
   });
 
   test('should export an entity', async () => {
     const content = '<some><xml>exported-data</xml></some>';
-    const response = createResponse(content);
+    const response = createPlainResponse(content);
     const fakeHttp = createHttp(response);
 
     const cmd = new TestEntityCommand(fakeHttp);
@@ -182,7 +177,6 @@ describe('EntityCommand tests', () => {
         bulk_select: 1,
         'bulk_selected:123': 1,
       },
-      transform: DefaultTransform,
     });
     expect(cmdResponse).toBeInstanceOf(Response);
     expect(cmdResponse.data).toEqual(content);
@@ -209,7 +203,6 @@ describe('EntityCommand tests', () => {
         resource_type: 'foo',
         name: 'Test Foo',
       },
-      transform,
     });
     expect(cmdResponse).toBeInstanceOf(Response);
     expect(cmdResponse.data).toEqual({

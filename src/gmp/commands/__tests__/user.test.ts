@@ -13,7 +13,6 @@ import UserCommand, {
   type CertificateInfo,
   transformSettingName,
 } from 'gmp/commands/user';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('UserCommand tests', () => {
   test('should parse auth settings in currentAuthSettings', async () => {
@@ -56,7 +55,6 @@ describe('UserCommand tests', () => {
         cmd: 'auth_settings',
         name: '--',
       },
-      transform,
     });
     const {data: settings} = resp;
     expect(settings.has('foo')).toEqual(true);
@@ -99,7 +97,6 @@ describe('UserCommand tests', () => {
         cmd: 'get_setting',
         setting_id: '123',
       },
-      transform,
     });
     expect(data).toBeDefined();
     expect(data?.id).toEqual('123');
@@ -120,7 +117,6 @@ describe('UserCommand tests', () => {
         old_password: 'oldPassword',
         password: 'newPassword',
       },
-      transform,
     });
   });
 });
@@ -162,7 +158,6 @@ test('should get capabilities', async () => {
     args: {
       cmd: 'get_capabilities',
     },
-    transform,
   });
 
   expect(caps.length).toBe(2);
@@ -196,7 +191,6 @@ test('should get features', async () => {
     args: {
       cmd: 'get_capabilities',
     },
-    transform,
   });
 
   expect(features.length).toEqual(2);
@@ -211,16 +205,14 @@ describe('UserCommand saveTimezone() tests', () => {
     const fakeHttp = createHttp(response);
     const cmd = new UserCommand(fakeHttp);
     const settingValue = 'Europe/Berlin';
-    const resp = await cmd.saveTimezone(settingValue);
+    await cmd.saveTimezone(settingValue);
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_setting',
         setting_name: 'Timezone',
         setting_value: settingValue,
       },
-      transform,
     });
-    expect(resp).toBe(response);
   });
 
   test('should throw and log on httpPost error', async () => {

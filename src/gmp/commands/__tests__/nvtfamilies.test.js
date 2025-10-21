@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import {NvtFamiliesCommand} from 'gmp/commands/nvtfamilies';
 import {createResponse, createHttp} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('NvtFamiliesCommand tests', () => {
   test('should load nvt families', async () => {
@@ -35,7 +34,6 @@ describe('NvtFamiliesCommand tests', () => {
       args: {
         cmd: 'get_nvt_families',
       },
-      transform,
     });
     const {data: families} = resp;
     expect(families.length).toEqual(2);

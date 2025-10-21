@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import {ResultCommand} from 'gmp/commands/results';
 import {createEntityResponse, createHttp} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('ResultCommand tests', () => {
   test('should return single result', async () => {
@@ -19,7 +18,6 @@ describe('ResultCommand tests', () => {
         cmd: 'get_result',
         result_id: 'foo',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
