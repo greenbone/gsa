@@ -70,6 +70,7 @@ describe('ResponseRejection tests', () => {
     expect(rejection.message).toEqual('Response error');
     expect(rejection.stack).toBeDefined();
     expect(rejection.status).toEqual(123);
+    expect(rejection.data).toBeUndefined();
   });
 
   test('should create error rejection with custom message', () => {
@@ -79,6 +80,40 @@ describe('ResponseRejection tests', () => {
     expect(rejection.message).toEqual('an error');
     expect(rejection.stack).toBeDefined();
     expect(rejection.status).toEqual(123);
+    expect(rejection.data).toBeUndefined();
+  });
+
+  test('should set data from response', () => {
+    const xhr = {status: 123, response: 'response data'} as XMLHttpRequest;
+    const rejection = new ResponseRejection(xhr);
+
+    expect(rejection.message).toEqual('Response error');
+    expect(rejection.stack).toBeDefined();
+    expect(rejection.status).toEqual(123);
+    expect(rejection.data).toEqual('response data');
+  });
+
+  test('should create error rejection with custom data', () => {
+    const xhr = {status: 123, response: 'response data'} as XMLHttpRequest;
+    const rejection = new ResponseRejection(xhr, 'an error', 'some data');
+
+    expect(rejection.message).toEqual('an error');
+    expect(rejection.stack).toBeDefined();
+    expect(rejection.status).toEqual(123);
+    expect(rejection.data).toEqual('some data');
+  });
+
+  test("should allow to set rejection's data", () => {
+    const xhr = {status: 123} as XMLHttpRequest;
+    const rejection = new ResponseRejection(xhr, 'an error');
+    expect(rejection.data).toBeUndefined();
+
+    const newRejection = rejection.setData('new data');
+    expect(newRejection.data).toEqual('new data');
+    expect(newRejection.message).toEqual(rejection.message);
+    expect(newRejection.status).toEqual(rejection.status);
+    expect(newRejection.request).toEqual(rejection.request);
+    expect(newRejection).not.toBe(rejection);
   });
 
   test('should support toString method', () => {
