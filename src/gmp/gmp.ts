@@ -46,6 +46,8 @@ import AuthenticationCommand from 'gmp/commands/auth';
 import DashboardCommand from 'gmp/commands/dashboards';
 import FeedStatusCommand from 'gmp/commands/feedstatus';
 import LoginCommand from 'gmp/commands/login';
+import OciImageTargetCommand from 'gmp/commands/ociImageTarget';
+import OciImageTargetsCommand from 'gmp/commands/ociImageTargets';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
 import ReportCommand from 'gmp/commands/report';
@@ -90,6 +92,8 @@ class Gmp {
   readonly auth: AuthenticationCommand;
   readonly dashboard: DashboardCommand;
   readonly feedstatus: FeedStatusCommand;
+  readonly ociimagetarget: OciImageTargetCommand;
+  readonly ociimagetargets: OciImageTargetsCommand;
   readonly performance: PerformanceCommand;
   readonly portlist: PortListCommand;
   readonly portlists: PortListsCommand;
@@ -130,6 +134,8 @@ class Gmp {
     this.auth = new AuthenticationCommand(this.http);
     this.dashboard = new DashboardCommand(this.http);
     this.feedstatus = new FeedStatusCommand(this.http);
+    this.ociimagetarget = new OciImageTargetCommand(this.http);
+    this.ociimagetargets = new OciImageTargetsCommand(this.http);
     this.performance = new PerformanceCommand(this.http);
     this.portlist = new PortListCommand(this.http);
     this.portlists = new PortListsCommand(this.http);
@@ -150,7 +156,9 @@ class Gmp {
   }
 
   _initCommands() {
-    for (const [name, cmd] of Object.entries(getCommands())) {
+    const commands = getCommands();
+
+    for (const [name, cmd] of Object.entries(commands)) {
       const instance = new cmd(this.http);
 
       Object.defineProperty(this, name, {

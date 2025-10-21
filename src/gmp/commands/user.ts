@@ -240,6 +240,11 @@ export const DEFAULT_FILTER_SETTINGS: Record<
   tlscertificate: '34a176c1-0278-4c29-b84d-3d72117b2169',
   user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
+  /**
+   * TODO: CONTAINER SCANNING
+   * filter id to be defined
+   */
+  ociimagetarget: 'to be defined',
 } as const;
 
 const PARAM_KEYS = {
