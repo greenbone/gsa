@@ -64,7 +64,6 @@ import UsersCommand from 'gmp/commands/users';
 import WizardCommand from 'gmp/commands/wizard';
 import type GmpSettings from 'gmp/gmpsettings';
 import Http, {type ErrorHandler} from 'gmp/http/http';
-import DefaultTransform from 'gmp/http/transform/default';
 import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
 import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
@@ -198,7 +197,6 @@ class Gmp {
         await this.http.request('get', {
           url,
           args,
-          transform: DefaultTransform,
         });
       } catch (err) {
         log.error('Error on logout', err);
