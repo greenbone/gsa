@@ -20,7 +20,6 @@ import {
 } from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
 import {ResponseRejection} from 'gmp/http/rejection';
-import transform from 'gmp/http/transform/fastxml';
 import logger, {type LogLevel} from 'gmp/log';
 import {
   OPENVAS_SCANNER_TYPE,
@@ -90,7 +89,6 @@ describe('TaskCommand tests', () => {
         target_id: 't1',
         usage_type: 'scan',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -147,7 +145,6 @@ describe('TaskCommand tests', () => {
         target_id: 't1',
         usage_type: 'scan',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -245,7 +242,6 @@ describe('TaskCommand tests', () => {
         name: 'foo',
         usage_type: 'scan',
       },
-      transform,
     });
     expect(response.data).toEqual({id: 'foo'});
   });
@@ -291,7 +287,6 @@ describe('TaskCommand tests', () => {
         target_id: '0',
         usage_type: 'scan',
       },
-      transform,
     });
     expect(response).toBeUndefined();
   });
@@ -418,7 +413,6 @@ describe('TaskCommand tests', () => {
         target_id: 't1',
         usage_type: 'scan',
       },
-      transform,
     });
     expect(response).toBeUndefined();
   });
@@ -492,7 +486,6 @@ describe('TaskCommand tests', () => {
         tag_id: undefined,
         agent_group_id: 'ag1',
       },
-      transform,
     });
     expect(resp.data.id).toEqual('foo');
   });
@@ -537,7 +530,6 @@ describe('TaskCommand tests', () => {
         tag_id: 't9',
         agent_group_id: 'ag1',
       },
-      transform,
     });
     expect(resp.data.id).toEqual('foo');
   });
@@ -633,7 +625,6 @@ describe('TaskCommand tests', () => {
         agent_group_id: '0',
         task_id: 'task1',
       },
-      transform,
     });
     expect(result).toBeUndefined();
   });
@@ -676,7 +667,6 @@ describe('TaskCommand tests', () => {
         agent_group_id: 'ag1',
         task_id: 'task1',
       },
-      transform,
     });
     expect(result).toBeUndefined();
   });

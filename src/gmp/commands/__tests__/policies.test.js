@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import {PoliciesCommand} from 'gmp/commands/policies';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('PoliciesCommand tests', () => {
@@ -29,7 +28,6 @@ describe('PoliciesCommand tests', () => {
         filter: ALL_FILTER.toFilterString(),
         usage_type: 'policy',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -53,7 +51,6 @@ describe('PoliciesCommand tests', () => {
         cmd: 'get_configs',
         usage_type: 'policy',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);

@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import {ReportConfigsCommand} from 'gmp/commands/reportconfigs';
 import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('ReportConfigsCommand tests', () => {
@@ -28,7 +27,6 @@ describe('ReportConfigsCommand tests', () => {
         cmd: 'get_report_configs',
         filter: ALL_FILTER.toFilterString(),
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -54,7 +52,6 @@ describe('ReportConfigsCommand tests', () => {
       args: {
         cmd: 'get_report_configs',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -78,7 +75,6 @@ describe('ReportConfigsCommand tests', () => {
         cmd: 'get_report_configs',
         filter: 'test filter',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);

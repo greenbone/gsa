@@ -18,7 +18,6 @@ import {
 } from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
 import {ResponseRejection} from 'gmp/http/rejection';
-import transform from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 
 describe('FeedStatusCommand tests', () => {
@@ -47,7 +46,6 @@ describe('FeedStatusCommand tests', () => {
       args: {
         cmd: 'get_feeds',
       },
-      transform,
     });
     const {data} = resp;
     const feed = data[0];
@@ -206,7 +204,6 @@ describe('FeedStatusCommand tests', () => {
       args: {
         cmd: 'get_feeds',
       },
-      transform,
     });
 
     expect(result.isFeedOwnerSet).toBe(false);

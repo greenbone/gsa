@@ -84,7 +84,6 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       filter,
     }: ReportCommandDownloadOptions,
   ): Promise<Response<ArrayBuffer, XmlMeta>> {
-    // @ts-expect-error
     return this.httpGetWithTransform(
       {
         cmd: 'get_report',

@@ -10,7 +10,6 @@ import {
   createHttp,
 } from 'gmp/commands/testing';
 import {TicketCommand} from 'gmp/commands/tickets';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('TicketCommand tests', () => {
   test('should trim note when creating ticket', async () => {
@@ -30,7 +29,6 @@ describe('TicketCommand tests', () => {
         user_id: 'u1',
         note: '',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -53,7 +51,6 @@ describe('TicketCommand tests', () => {
         user_id: 'u1',
         note: 'foo',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -69,7 +66,6 @@ describe('TicketCommand tests', () => {
         cmd: 'get_ticket',
         ticket_id: 'foo',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -97,7 +93,6 @@ describe('TicketCommand tests', () => {
         closed_note: 'bar',
         user_id: 'u1',
       },
-      transform,
     });
   });
 
@@ -123,7 +118,6 @@ describe('TicketCommand tests', () => {
         closed_note: 'bar',
         user_id: 'u1',
       },
-      transform,
     });
   });
 
@@ -139,7 +133,6 @@ describe('TicketCommand tests', () => {
         cmd: 'delete_ticket',
         ticket_id: 'foo',
       },
-      transform,
     });
   });
 
@@ -156,7 +149,6 @@ describe('TicketCommand tests', () => {
         id: 'foo',
         resource_type: 'ticket',
       },
-      transform,
     });
   });
 });

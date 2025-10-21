@@ -14,8 +14,6 @@ import {
   TlsCertificateCommand,
   TlsCertificatesCommand,
 } from 'gmp/commands/tlscertificates';
-import DefaultTransform from 'gmp/http/transform/default';
-import transform from 'gmp/http/transform/fastxml';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('TlsCertificateCommand tests', () => {
@@ -32,7 +30,6 @@ describe('TlsCertificateCommand tests', () => {
         cmd: 'get_tls_certificate',
         tls_certificate_id: 'foo',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -50,7 +47,6 @@ describe('TlsCertificateCommand tests', () => {
         cmd: 'delete_tls_certificate',
         tls_certificate_id: 'foo',
       },
-      transform,
     });
   });
 
@@ -68,7 +64,6 @@ describe('TlsCertificateCommand tests', () => {
         bulk_select: 1,
         'bulk_selected:foo': 1,
       },
-      transform: DefaultTransform,
     });
   });
 });
@@ -98,7 +93,6 @@ describe('TlsCertificatesCommand tests', () => {
         cmd: 'get_tls_certificates',
         filter: ALL_FILTER.toFilterString(),
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
@@ -126,7 +120,6 @@ describe('TlsCertificatesCommand tests', () => {
       args: {
         cmd: 'get_tls_certificates',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.length).toEqual(2);

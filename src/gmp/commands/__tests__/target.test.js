@@ -11,7 +11,6 @@ import {
   createResponse,
 } from 'gmp/commands/testing';
 import {ResponseRejection} from 'gmp/http/rejection';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('TargetCommand tests', () => {
   test('should create target', async () => {
@@ -65,7 +64,6 @@ describe('TargetCommand tests', () => {
         target_source: 'manual',
         krb5_credential_id: '0',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -204,7 +202,6 @@ describe('TargetCommand tests', () => {
         target_source: 'manual',
         krb5_credential_id: '0',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -265,7 +262,6 @@ describe('TargetCommand tests', () => {
         target_id: 'target_id1',
         target_source: 'manual',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -410,7 +406,6 @@ describe('TargetCommand tests', () => {
         target_source: 'manual',
         krb5_credential_id: '0',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');

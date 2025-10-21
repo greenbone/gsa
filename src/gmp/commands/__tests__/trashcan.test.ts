@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import {createResponse, createHttp} from 'gmp/commands/testing';
 import TrashCanCommand from 'gmp/commands/trashcan';
-import transform from 'gmp/http/transform/fastxml';
 
 describe('TrashCanCommand tests', () => {
   test('should allow to restore an entity', async () => {
@@ -19,7 +18,6 @@ describe('TrashCanCommand tests', () => {
         cmd: 'restore',
         target_id: '1234',
       },
-      transform,
     });
   });
 
@@ -30,7 +28,6 @@ describe('TrashCanCommand tests', () => {
     await cmd.empty();
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {cmd: 'empty_trashcan'},
-      transform,
     });
   });
 
@@ -45,7 +42,6 @@ describe('TrashCanCommand tests', () => {
         task_id: '1234',
         resource_type: 'task',
       },
-      transform,
     });
   });
 
@@ -60,7 +56,6 @@ describe('TrashCanCommand tests', () => {
         asset_id: '1234',
         resource_type: 'asset',
       },
-      transform,
     });
   });
 

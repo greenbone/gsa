@@ -12,7 +12,6 @@ import {
   createHttpMany,
   createResponse,
 } from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
@@ -37,7 +36,6 @@ describe('PolicyCommand tests', () => {
         name: 'foo',
         usage_type: 'policy',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -80,7 +78,6 @@ describe('PolicyCommand tests', () => {
         'trend:AIX Local Security Checks': 1,
         'trend:Family Foo': 0,
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -106,7 +103,6 @@ describe('PolicyCommand tests', () => {
         config_id: 'c1',
         name: 'foo',
       },
-      transform,
     });
   });
 
@@ -120,7 +116,6 @@ describe('PolicyCommand tests', () => {
         cmd: 'get_config',
         config_id: 'foo',
       },
-      transform,
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
@@ -160,7 +155,6 @@ describe('PolicyCommand tests', () => {
         'preference:1.2.3:2:password:Bar': 'foo',
         timeout: 1,
       },
-      transform,
     });
   });
 
@@ -212,7 +206,6 @@ describe('PolicyCommand tests', () => {
         config_id: 'foo',
         family: 'bar',
       },
-      transform,
     });
     const {nvts} = resp.data;
     expect(nvts.length).toEqual(3);

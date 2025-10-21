@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import {createHttp, createResponse} from 'gmp/commands/testing';
 import WizardCommand, {IMMEDIATELY_START_VALUE} from 'gmp/commands/wizard';
-import transform from 'gmp/http/transform/fastxml';
 import date from 'gmp/models/date';
 
 describe('Wizard Command', () => {
@@ -28,7 +27,6 @@ describe('Wizard Command', () => {
 
     const result = await wizard.task();
     const {settings, clientAddress} = result.data;
-    // @ts-expect-error
     expect(settings.get('foo')?.value).toEqual('bar');
     expect(clientAddress).toEqual('127.0.0.1');
   });
@@ -57,7 +55,6 @@ describe('Wizard Command', () => {
 
     const result = await wizard.advancedTask();
     const {settings, scanConfigs, credentials, clientAddress} = result.data;
-    // @ts-expect-error
     expect(settings.get('foo').value).toEqual('bar');
     expect(scanConfigs[0].id).toEqual('1');
     expect(credentials[0].id).toEqual('2');
@@ -93,7 +90,6 @@ describe('Wizard Command', () => {
 
     const result = await wizard.modifyTask();
     const {settings, tasks} = result.data;
-    // @ts-expect-error
     expect(settings.get('foo').value).toEqual('bar');
     expect(tasks[0].id).toEqual('task1');
   });
@@ -135,7 +131,6 @@ describe('Wizard Command', () => {
 
     const result = await wizard.modifyTask();
     const {settings, tasks} = result.data;
-    // @ts-expect-error
     expect(settings.get('foo').value).toEqual('bar');
     expect(tasks).toHaveLength(1);
     expect(tasks[0].id).toEqual('scan-task');
@@ -152,7 +147,6 @@ describe('Wizard Command', () => {
         cmd: 'run_wizard',
         name: 'quick_first_scan',
       },
-      transform,
     });
   });
 
@@ -195,7 +189,6 @@ describe('Wizard Command', () => {
         cmd: 'run_wizard',
         name: 'quick_task',
       },
-      transform,
     });
   });
 
@@ -226,7 +219,6 @@ describe('Wizard Command', () => {
         cmd: 'run_wizard',
         name: 'modify_task',
       },
-      transform,
     });
   });
 });

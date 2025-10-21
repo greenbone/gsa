@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import ScannersCommand from 'gmp/commands/scanners';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
 import Scanner, {
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
@@ -24,7 +23,6 @@ describe('ScannersCommand tests', () => {
     const result = await cmd.get();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_scanners'},
-      transform,
     });
     expect(result.data).toEqual([
       new Scanner({
@@ -50,7 +48,6 @@ describe('ScannersCommand tests', () => {
     const result = await cmd.get({filter: "name='Scanner 1'"});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_scanners', filter: "name='Scanner 1'"},
-      transform,
     });
     expect(result.data).toEqual([
       new Scanner({
@@ -72,7 +69,6 @@ describe('ScannersCommand tests', () => {
     const result = await cmd.getAll();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_scanners', filter: 'first=1 rows=-1'},
-      transform,
     });
     expect(result.data).toEqual([
       new Scanner({

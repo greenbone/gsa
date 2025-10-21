@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import EntitiesCommand from 'gmp/commands/entities';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
-import transform from 'gmp/http/transform/fastxml';
 import Filter from 'gmp/models/filter';
 import Model, {type Element} from 'gmp/models/model';
 
@@ -28,9 +27,6 @@ describe('EntitiesCommand tests', () => {
     const filter = Filter.fromString('foo=bar');
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new FooCommand(fakeHttp);
     await cmd.get({filter});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -38,7 +34,6 @@ describe('EntitiesCommand tests', () => {
         cmd: 'get_foos',
         filter: 'foo=bar',
       },
-      transform,
     });
   });
 
@@ -46,9 +41,6 @@ describe('EntitiesCommand tests', () => {
     const filter = Filter.fromElement({_id: 'bar'});
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new FooCommand(fakeHttp);
     await cmd.get({filter});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -56,7 +48,6 @@ describe('EntitiesCommand tests', () => {
         cmd: 'get_foos',
         filter_id: 'bar',
       },
-      transform,
     });
   });
 
@@ -79,7 +70,6 @@ describe('EntitiesCommand tests', () => {
         cmd: 'get_foos',
         filter_id: 'bar',
       },
-      transform,
     });
   });
 
@@ -98,7 +88,6 @@ describe('EntitiesCommand tests', () => {
         cmd: 'bulk_delete',
         resource_type: 'foo',
       },
-      transform,
     });
   });
 });
