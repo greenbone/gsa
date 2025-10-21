@@ -44,19 +44,23 @@ export class RequestRejection extends Rejection {
   }
 }
 
-export class ResponseRejection extends Rejection {
+export class ResponseRejection<
+  TData extends string | ArrayBuffer = string | ArrayBuffer,
+> extends Rejection {
   readonly status?: number;
   readonly request: XMLHttpRequest;
+  readonly data?: TData;
 
-  constructor(request: XMLHttpRequest, message?: string) {
+  constructor(request: XMLHttpRequest, message?: string, data?: TData) {
     super(message ?? _('Response error'));
     this.name = 'ResponseRejection';
     this.request = request;
     this.status = request.status;
+    this.data = data ?? request.response ?? undefined;
   }
 
-  get data(): string | undefined {
-    return this.request.responseText;
+  setData<TNewData extends string | ArrayBuffer>(data: TNewData) {
+    return new ResponseRejection(this.request, this.message, data);
   }
 }
 
