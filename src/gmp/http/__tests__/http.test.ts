@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
-import Http, {type HandleOptions} from 'gmp/http/http';
+import Http from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
-import DefaultTransform from 'gmp/http/transform/default';
 
 const mockGetFeedAccessStatusMessage = testing.fn();
 const mockFindActionInXMLString = testing.fn();
@@ -27,7 +26,6 @@ describe('Http', () => {
     let instance: Http;
     let reject: (reason?: string | Error) => void;
     let xhr: XMLHttpRequest;
-    let options: HandleOptions;
 
     beforeEach(() => {
       instance = new Http({
@@ -36,21 +34,18 @@ describe('Http', () => {
       });
       reject = testing.fn();
       xhr = {status: 500} as unknown as XMLHttpRequest;
-      options = {
-        transform: DefaultTransform,
-      };
       testing.clearAllMocks();
     });
 
     test('should handle response error without error handlers', async () => {
-      instance.handleResponseError(reject, xhr, options);
+      instance.handleResponseError(reject, xhr);
       expect(reject).toHaveBeenCalledWith(expect.any(Rejection));
     });
 
     test('401 error should call error handler', async () => {
       // @ts-expect-error
       xhr.status = 401;
-      instance.handleResponseError(reject, xhr, options);
+      instance.handleResponseError(reject, xhr);
       expect(reject).toHaveBeenCalledWith(expect.any(Rejection));
     });
 
@@ -59,7 +54,7 @@ describe('Http', () => {
       xhr.status = 404;
       mockFindActionInXMLString.mockReturnValue(false);
 
-      instance.handleResponseError(reject, xhr, options);
+      instance.handleResponseError(reject, xhr);
       expect(mockGetFeedAccessStatusMessage).not.toHaveBeenCalled();
 
       expect(reject).toHaveBeenCalledWith(expect.any(Rejection));
