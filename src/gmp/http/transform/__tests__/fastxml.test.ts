@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {ResponseRejection} from 'gmp/http/rejection';
 import Response, {type Meta} from 'gmp/http/response';
-import transform from 'gmp/http/transform/fastxml';
+import transform, {type XmlResponseData} from 'gmp/http/transform/fastxml';
 
 const createEnvelopedXml = (xmlStr: string) =>
   `
@@ -44,6 +44,34 @@ describe('fastxml transform tests', () => {
     expect(transformedResponse.meta).toEqual(envelopeMeta);
   });
 
+  test('should transform array buffer xml response successfully', () => {
+    const xmlStr = createEnvelopedXml('<foo>bar</foo>');
+    const encoder = new TextEncoder();
+    const xmlBuffer = encoder.encode(xmlStr).buffer;
+    const response = new Response<ArrayBuffer, Meta>(xmlBuffer, {});
+    const transformedResponse = transform.success(response);
+    expect(transformedResponse.data).toEqual({foo: 'bar'});
+    expect(transformedResponse.meta).toEqual(envelopeMeta);
+  });
+
+  test('should transform xml object response successfully', () => {
+    const xmlObj = {
+      envelope: {
+        version: 123,
+        backend_operation: 1,
+        vendor_version: 'FooBar',
+        i18n: 'en',
+        time: '',
+        timezone: 'UTC',
+        foo: 'bar',
+      },
+    };
+    const response = new Response<XmlResponseData, Meta>(xmlObj, {});
+    const transformedResponse = transform.success(response);
+    expect(transformedResponse.data).toEqual({foo: 'bar'});
+    expect(transformedResponse.meta).toEqual(envelopeMeta);
+  });
+
   test('should transform xml encoded element attribute successfully', () => {
     const xmlStr = createEnvelopedXml(
       '<foo bar="foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;"></foo>',
@@ -73,7 +101,8 @@ describe('fastxml transform tests', () => {
     const xmlStr =
       '<envelope><action_result><message>foo</message></action_result></envelope>';
     const rejection = new ResponseRejection({
-      responseText: xmlStr,
+      status: 500,
+      response: xmlStr,
     } as XMLHttpRequest);
     const transformedRejection = transform.rejection(rejection);
     expect(transformedRejection).toBe(rejection);
@@ -85,7 +114,8 @@ describe('fastxml transform tests', () => {
       '<envelope><action_result><message>foo</message></action_result>' +
       '<gsad_response><message>bar</message></gsad_response></envelope>';
     const rejection = new ResponseRejection({
-      responseText: xmlStr,
+      status: 500,
+      response: xmlStr,
     } as XMLHttpRequest);
     const transformedRejection = transform.rejection(rejection);
     expect(transformedRejection).toBe(rejection);
