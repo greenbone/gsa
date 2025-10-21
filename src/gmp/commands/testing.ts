@@ -26,8 +26,14 @@ const createEntitiesCounts = (entities: Element[]) => ({
   _page: entities.length,
 });
 
-export const createResponse = <TData = Element>(data: TData) =>
-  new Response<TData>(data);
+export const createPlainResponse = <TData = Element>(
+  data: TData = {} as TData,
+) => new Response<TData>(data);
+
+export const createResponse = <TData = Element>(data: TData = {} as TData) =>
+  createPlainResponse({
+    envelope: data,
+  });
 
 export const createEntitiesResponse = (name: string, entities: Element[]) =>
   createResponse({
