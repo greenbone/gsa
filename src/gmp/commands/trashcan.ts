@@ -14,6 +14,7 @@ import Filter from 'gmp/models/filter';
 import Group from 'gmp/models/group';
 import {type ModelElement} from 'gmp/models/model';
 import Note from 'gmp/models/note';
+import OciImageTarget from 'gmp/models/ociImageTarget';
 import Override from 'gmp/models/override';
 import Permission from 'gmp/models/permission';
 import Policy from 'gmp/models/policy';
@@ -53,6 +54,7 @@ export interface TrashCanGetData {
   tasks: Task[];
   tickets: Ticket[];
   agentGroups: AgentGroup[];
+  ociImageTargets: OciImageTarget[];
   failedRequests?: string[];
 }
 
@@ -174,6 +176,12 @@ interface AgentGroupResponseData {
   };
 }
 
+interface OciImageTargetResponseData {
+  get_oci_image_targets_response?: {
+    oci_image_target: ModelElement[] | ModelElement;
+  };
+}
+
 interface TrashCanGetResponseData<TData> extends XmlResponseData {
   get_trash: TData;
 }
@@ -267,6 +275,9 @@ class TrashCanCommand extends HttpCommand {
     const agentGroupRequest = this.httpGetWithTransform({
       cmd: 'get_trash_agent_group',
     }) as TrashCanGetPromise<AgentGroupResponseData>;
+    const ociImageTargetRequest = this.httpGetWithTransform({
+      cmd: 'get_trash_oci_image_targets',
+    }) as TrashCanGetPromise<OciImageTargetResponseData>;
 
     const requests = [
       alertsRequest,
@@ -288,6 +299,7 @@ class TrashCanCommand extends HttpCommand {
       tasksRequest,
       ticketsRequest,
       agentGroupRequest,
+      ociImageTargetRequest,
     ];
 
     const results = await Promise.allSettled(requests);
@@ -318,6 +330,7 @@ class TrashCanCommand extends HttpCommand {
       'tasks',
       'tickets',
       'agentGroups',
+      'ociImageTargets',
     ];
 
     results.forEach((result, index) => {
@@ -346,6 +359,7 @@ class TrashCanCommand extends HttpCommand {
       tasksResponse,
       ticketsResponse,
       agentGroupsResponse,
+      ociImageTargetsResponse,
     ] = [
       getResponse<TrashCanGetResponse<AlertResponseData>>(0),
       getResponse<TrashCanGetResponse<ConfigsResponseData>>(1),
@@ -366,6 +380,7 @@ class TrashCanCommand extends HttpCommand {
       getResponse<TrashCanGetResponse<TasksResponseData>>(16),
       getResponse<TrashCanGetResponse<TicketsResponseData>>(17),
       getResponse<TrashCanGetResponse<AgentGroupResponseData>>(18),
+      getResponse<TrashCanGetResponse<OciImageTargetResponseData>>(19),
     ];
     const alertsData = alertsResponse?.data.get_trash;
     const configsData = configsResponse?.data.get_trash;
@@ -386,6 +401,7 @@ class TrashCanCommand extends HttpCommand {
     const tasksData = tasksResponse?.data.get_trash;
     const ticketsData = ticketsResponse?.data.get_trash;
     const agentGroupsData = agentGroupsResponse?.data.get_trash;
+    const ociImageTargetsData = ociImageTargetsResponse?.data.get_trash;
 
     const alerts = map(alertsData?.get_alerts_response?.alert, element =>
       Alert.fromElement(element),
@@ -467,6 +483,10 @@ class TrashCanCommand extends HttpCommand {
       agentGroupsData?.get_agent_groups_response?.agent_group,
       element => AgentGroup.fromElement(element),
     );
+    const ociImageTargets = map(
+      ociImageTargetsData?.get_oci_image_targets_response?.oci_image_target,
+      element => OciImageTarget.fromElement(element),
+    );
 
     const baseResponse =
       targetsResponse ||
@@ -487,7 +507,8 @@ class TrashCanCommand extends HttpCommand {
       tagsResponse ||
       tasksResponse ||
       ticketsResponse ||
-      agentGroupsResponse;
+      agentGroupsResponse ||
+      ociImageTargetsResponse;
 
     if (!baseResponse) {
       // If all requests failed, throw an error
@@ -516,6 +537,7 @@ class TrashCanCommand extends HttpCommand {
       tasks,
       tickets,
       agentGroups,
+      ociImageTargets,
       failedRequests: failedRequests.length > 0 ? failedRequests : undefined,
     });
   }
