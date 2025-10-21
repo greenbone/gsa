@@ -114,6 +114,9 @@ const getRestorableDeletableForEntityType = {
   agentgroup: entity => {
     return {restorable: true, deletable: !entity.isInUse()};
   },
+  ociimagetarget: entity => {
+    return {restorable: true, deletable: !entity.isInUse()};
+  },
 };
 
 const isAbleToRestoreAndDelete = entity => {
