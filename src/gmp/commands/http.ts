@@ -122,28 +122,40 @@ class HttpCommand {
     };
   }
 
-  protected httpGetWithTransform(
+  protected async httpGetWithTransform(
     params: HttpCommandInputParams = {},
     options: HttpCommandOptions = {},
   ) {
-    const {extraParams, includeDefaultParams, ...other} = options;
-    return this.http.request('get', {
+    const {
+      extraParams,
+      includeDefaultParams,
+      // @ts-expect-error
+      transform = this.transform,
+      ...other
+    } = options;
+    const response = await this.http.request('get', {
       args: this.getParams(params, extraParams, {includeDefaultParams}),
-      transform: this.transform,
       ...other,
     });
+    return transform.success(response);
   }
 
-  protected httpPostWithTransform(
+  protected async httpPostWithTransform(
     params: HttpCommandInputParams = {},
     options: HttpCommandOptions = {},
   ) {
-    const {extraParams, includeDefaultParams, ...other} = options;
-    return this.http.request('post', {
+    const {
+      extraParams,
+      includeDefaultParams,
+      // @ts-expect-error
+      transform = this.transform,
+      ...other
+    } = options;
+    const response = await this.http.request('post', {
       data: this.postParams(params, extraParams, {includeDefaultParams}),
-      transform: this.transform,
       ...other,
     });
+    return transform.success(response);
   }
 }
 

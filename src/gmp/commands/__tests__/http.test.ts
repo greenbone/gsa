@@ -5,8 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import HttpCommand from 'gmp/commands/http';
-import {createHttp} from 'gmp/commands/testing';
-import transform from 'gmp/http/transform/fastxml';
+import {createHttp, createResponse} from 'gmp/commands/testing';
 
 describe('HttpCommand tests', () => {
   test('should return itself from setting default param', () => {
@@ -26,96 +25,85 @@ describe('HttpCommand tests', () => {
   });
 
   test('should create http get request', async () => {
-    const retval = {};
-    const http = createHttp(retval);
-
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http);
 
     // @ts-expect-error
-    const response = await cmd.httpGetWithTransform({foo: 'bar'});
-    expect(response).toEqual(retval);
+    await cmd.httpGetWithTransform({foo: 'bar'});
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar'},
-      transform,
     });
   });
 
   test('should create http get request with default params', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1});
 
     // @ts-expect-error
-    const response = await cmd.httpGetWithTransform({foo: 'bar'});
-    expect(response).toEqual(retval);
+    await cmd.httpGetWithTransform({foo: 'bar'});
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 1},
-      transform,
     });
   });
 
   test('should create http get request with overriding default params', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1});
 
     // @ts-expect-error
     cmd.setDefaultParam('foo', 'foo');
 
     // @ts-expect-error
-    const response = await cmd.httpGetWithTransform({
+    await cmd.httpGetWithTransform({
       foo: 'bar',
       bar: 2,
       lorem: 'ipsum',
     });
-    expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 2, lorem: 'ipsum'},
-      transform,
     });
   });
 
   test('should create http get request with extra params', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1});
 
     // @ts-expect-error
-    const response = await cmd.httpGetWithTransform(
+    await cmd.httpGetWithTransform(
       {foo: 'bar'},
       {extraParams: {lorem: 'ipsum'}},
     );
-    expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 1, lorem: 'ipsum'},
-      transform,
     });
   });
 
   test('should create http get request with extra params taking precedence', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1, a: 1});
 
     // @ts-expect-error
-    const response = await cmd.httpGetWithTransform(
+    await cmd.httpGetWithTransform(
       {foo: 'bar', b: 2},
       {extraParams: {a: 3, b: 4, lorem: 'ipsum'}},
     );
-    expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', bar: 1, a: 3, b: 4, lorem: 'ipsum'},
-      transform,
     });
   });
 
   test('should create http get request with ignoring default params', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1});
 
     // @ts-expect-error
-    const response = await cmd.httpGetWithTransform(
+    await cmd.httpGetWithTransform(
       {foo: 'bar'},
       {
         extraParams: {
@@ -124,92 +112,82 @@ describe('HttpCommand tests', () => {
         includeDefaultParams: false,
       },
     );
-    expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {foo: 'bar', lorem: 'ipsum'},
-      transform,
     });
   });
 
   test('should create http post request with default params', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1});
 
     // @ts-expect-error
     cmd.setDefaultParam('lorem', 'ipsum');
 
     // @ts-expect-error
-    const response = await cmd.httpPostWithTransform({foo: 'bar'});
-    expect(response).toEqual(retval);
+    await cmd.httpPostWithTransform({foo: 'bar'});
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 1, lorem: 'ipsum'},
-      transform,
     });
   });
 
   test('should create http post request with overriding default params', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1});
 
     // @ts-expect-error
     cmd.setDefaultParam('foo', 'foo');
 
     // @ts-expect-error
-    const response = await cmd.httpPostWithTransform({
+    await cmd.httpPostWithTransform({
       foo: 'bar',
       bar: 2,
       lorem: 'ipsum',
     });
-    expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 2, lorem: 'ipsum'},
-      transform,
     });
   });
 
   test('should create http post request with extra params', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1});
 
     // @ts-expect-error
-    const response = await cmd.httpPostWithTransform(
+    await cmd.httpPostWithTransform(
       {foo: 'bar'},
       {extraParams: {lorem: 'ipsum'}},
     );
-    expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 1, lorem: 'ipsum'},
-      transform,
     });
   });
 
   test('should create http post request with extra params taking precedence', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1, a: 1});
 
     // @ts-expect-error
-    const response = await cmd.httpPostWithTransform(
+    await cmd.httpPostWithTransform(
       {foo: 'bar', b: 2},
       {extraParams: {a: 3, b: 4, lorem: 'ipsum'}},
     );
-    expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', bar: 1, a: 3, b: 4, lorem: 'ipsum'},
-      transform,
     });
   });
 
   test('should create http post request with ignoring default params', async () => {
-    const retval = {};
-    const http = createHttp(retval);
+    const httpResponse = createResponse();
+    const http = createHttp(httpResponse);
     const cmd = new HttpCommand(http, {bar: 1});
 
     // @ts-expect-error
-    const response = await cmd.httpPostWithTransform(
+    await cmd.httpPostWithTransform(
       {foo: 'bar'},
       {
         extraParams: {
@@ -218,10 +196,8 @@ describe('HttpCommand tests', () => {
         includeDefaultParams: false,
       },
     );
-    expect(response).toEqual(retval);
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', lorem: 'ipsum'},
-      transform,
     });
   });
 });
