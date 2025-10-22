@@ -10,7 +10,7 @@ import {
 } from 'gmp/commands/oci-image-target';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta} from 'gmp/http/transform/fastxml';
 import type Filter from 'gmp/models/filter';
 import {isFilter} from 'gmp/models/filter/utils';
 import type OciImageTarget from 'gmp/models/oci-image-target';
@@ -144,11 +144,7 @@ export const useBulkExportOciImageTargets = ({
   onSuccess,
 }: UseModifyOciImageTargetParams) => {
   const gmp = useGmp();
-  return useGmpMutation<
-    OciImageTargetBulkInput,
-    Response<XmlResponseData, XmlMeta>,
-    Rejection
-  >({
+  return useGmpMutation<OciImageTargetBulkInput, Response<string>, Rejection>({
     gmpMethod: (input: OciImageTargetBulkInput) => {
       return isFilter(input)
         ? gmp.ociimagetargets.exportByFilter(input)
