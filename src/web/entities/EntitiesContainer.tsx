@@ -12,7 +12,7 @@ import type EntitiesCommand from 'gmp/commands/entities';
 import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta} from 'gmp/http/transform/fastxml';
 import {type TranslateOptions} from 'gmp/locale/lang';
 import logger from 'gmp/log';
 import {type default as Filter, RESET_FILTER} from 'gmp/models/filter';
@@ -282,7 +282,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     const {entities = [], loadedFilter, selected, selectionType} = this.state;
     const {listExportFileName, username, onDownload} = this.props;
 
-    let promise: Promise<Response<XmlResponseData, XmlMeta>>;
+    let promise: Promise<Response<string>>;
 
     if (selectionType === SelectionType.SELECTION_USER) {
       promise = entitiesCommand.export(Array.from(selected as Set<TModel>));
@@ -302,7 +302,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
         username,
       });
       const {data} = response;
-      // @ts-expect-error
       onDownload({filename, data});
       showSuccessNotification('', _('Bulk download completed.'));
     } catch (error) {
