@@ -159,7 +159,6 @@ const ContainerImageTargetsListPage = () => {
         resourceType: pluralizeType(getEntityType(allEntities[0])),
       });
       const {data} = response;
-      // @ts-expect-error
       handleDownload({filename, data});
       showSuccessNotification('', _('Bulk download completed.'));
     } catch (error) {
