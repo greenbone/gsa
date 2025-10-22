@@ -6,7 +6,7 @@
 import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fastxml';
-import OciImageTarget from 'gmp/models/ociImageTarget';
+import OciImageTarget from 'gmp/models/oci-image-target';
 
 class OciImageTargetsCommand extends EntitiesCommand<OciImageTarget> {
   constructor(http: Http) {

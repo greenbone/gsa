@@ -13,7 +13,7 @@ import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
 import Group from 'gmp/models/group';
 import Note from 'gmp/models/note';
-import OciImageTarget from 'gmp/models/ociImageTarget';
+import OciImageTarget from 'gmp/models/oci-image-target';
 import Override from 'gmp/models/override';
 import Permission from 'gmp/models/permission';
 import Policy from 'gmp/models/policy';

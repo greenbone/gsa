@@ -8,13 +8,15 @@ import {type EntityActionResponse} from 'gmp/commands/entity';
 import {
   type OciImageTargetCreateParams,
   type OciImageTargetSaveParams,
-} from 'gmp/commands/ociImageTarget';
+} from 'gmp/commands/oci-image-target';
 import {
   type default as Credential,
   type CredentialType,
 } from 'gmp/models/credential';
-import type OciImageTarget from 'gmp/models/ociImageTarget';
-import useEntityDownload from 'web/entity/hooks/useEntityDownload';
+import type OciImageTarget from 'gmp/models/oci-image-target';
+import useEntityDownload, {
+  type OnDownloadedFunc,
+} from 'web/entity/hooks/useEntityDownload';
 import useGmp from 'web/hooks/useGmp';
 import {
   useCreateOciImageTarget,
@@ -31,7 +33,7 @@ import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 interface ContainerImageTargetComponentRenderProps {
   delete: (entity: OciImageTarget) => Promise<void>;
   edit: (entity: OciImageTarget) => void;
-  create: (initial?: Record<string, unknown>) => void;
+  create: () => void;
   clone: (entity: OciImageTarget) => Promise<EntityActionResponse>;
   download: (entity: OciImageTarget) => Promise<void>;
   save: (entity: OciImageTarget) => void;
@@ -49,7 +51,7 @@ interface ContainerImageTargetsComponentProps {
   onCreateError?: (error: Error) => void;
   onCloned?: () => void;
   onCloneError?: (error: Error) => void;
-  onDownloaded?: (data: {filename: string; data: string}) => void;
+  onDownloaded?: OnDownloadedFunc;
   onDownloadError?: (error: Error) => void;
 }
 

@@ -4,7 +4,7 @@
  */
 
 import type Model from 'gmp/models/model';
-import type OciImageTarget from 'gmp/models/ociImageTarget';
+import type OciImageTarget from 'gmp/models/oci-image-target';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import ExportIcon from 'web/components/icon/ExportIcon';
