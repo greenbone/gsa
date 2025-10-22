@@ -7,13 +7,13 @@ import {type EntityActionResponse} from 'gmp/commands/entity';
 import {
   type OciImageTargetCreateParams,
   type OciImageTargetSaveParams,
-} from 'gmp/commands/ociImageTarget';
+} from 'gmp/commands/oci-image-target';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import type Filter from 'gmp/models/filter';
 import {isFilter} from 'gmp/models/filter/utils';
-import type OciImageTarget from 'gmp/models/ociImageTarget';
+import type OciImageTarget from 'gmp/models/oci-image-target';
 import {typeName} from 'gmp/utils/entitytype';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

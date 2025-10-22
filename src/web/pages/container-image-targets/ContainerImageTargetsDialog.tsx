@@ -20,11 +20,7 @@ import {NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import {
-  type RenderSelectItemProps,
-  renderSelectItems,
-  UNSET_VALUE,
-} from 'web/utils/Render';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 type TargetSource = 'manual' | 'file' | 'asset_hosts';
 type TargetExcludeSource = 'manual' | 'file';
@@ -94,7 +90,6 @@ const ContainerImageTargetsDialog = ({
   onNewCredentialsClick,
   onSave,
   onCredentialChange,
-  ...initial
 }: ContainerImageTargetsDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -114,7 +109,6 @@ const ContainerImageTargetsDialog = ({
   );
 
   const uncontrolledValues = {
-    ...initial,
     comment,
     name,
     excludeHosts,
@@ -264,7 +258,6 @@ const ContainerImageTargetsDialog = ({
                   grow="1"
                   items={renderSelectItems(
                     upCredentials as RenderSelectItemProps[],
-                    UNSET_VALUE,
                   )}
                   name="credentialId"
                   value={state.credentialId}

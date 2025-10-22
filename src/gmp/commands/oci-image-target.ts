@@ -7,7 +7,7 @@ import EntityCommand, {type EntityActionResponse} from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
 import type {Element} from 'gmp/models/model';
-import OciImageTarget from 'gmp/models/ociImageTarget';
+import OciImageTarget from 'gmp/models/oci-image-target';
 import {parseYesNo} from 'gmp/parser';
 
 export interface OciImageTargetCreateParams {

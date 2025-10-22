@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import type OciImageTarget from 'gmp/models/ociImageTarget';
+import type OciImageTarget from 'gmp/models/oci-image-target';
 import createEntitiesFooter, {
   type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
