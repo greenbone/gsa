@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState, useRef} from 'react';
+import React, {useState} from 'react';
 import {type EntityActionResponse} from 'gmp/commands/entity';
 import {
   type OciImageTargetCreateParams,
   type OciImageTargetSaveParams,
 } from 'gmp/commands/ociImageTarget';
-import type Rejection from 'gmp/http/rejection';
 import {
   type default as Credential,
   type CredentialType,
@@ -28,7 +27,6 @@ import ContainerImageTargetsDialog, {
   type ContainerImageTargetsDialogData,
 } from 'web/pages/container-image-targets/ContainerImageTargetsDialog';
 import CredentialDialog from 'web/pages/credentials/CredentialDialog';
-import {UNSET_VALUE} from 'web/utils/Render';
 
 interface ContainerImageTargetComponentRenderProps {
   delete: (entity: OciImageTarget) => Promise<void>;
@@ -44,15 +42,15 @@ interface ContainerImageTargetsComponentProps {
     actions: ContainerImageTargetComponentRenderProps,
   ) => React.ReactNode;
   onDeleted?: () => void;
-  onDeleteError?: (error: Rejection) => void;
+  onDeleteError?: (error: Error) => void;
   onSaved?: () => void;
-  onSaveError?: (error: Rejection) => void;
+  onSaveError?: (error: Error) => void;
   onCreated?: () => void;
-  onCreateError?: (error: Rejection) => void;
+  onCreateError?: (error: Error) => void;
   onCloned?: () => void;
-  onCloneError?: (error: Rejection) => void;
+  onCloneError?: (error: Error) => void;
   onDownloaded?: (data: {filename: string; data: string}) => void;
-  onDownloadError?: (error: Rejection) => void;
+  onDownloadError?: (error: Error) => void;
 }
 
 const ContainerImageTargetsComponent = ({
@@ -70,7 +68,6 @@ const ContainerImageTargetsComponent = ({
 }: ContainerImageTargetsComponentProps) => {
   const gmp = useGmp();
   const [_] = useTranslation();
-  const idFieldRef = useRef<string | null>(null);
 
   const handleEntityDownload = useEntityDownload('ociimagetarget', {
     onDownloaded,
@@ -87,7 +84,9 @@ const ContainerImageTargetsComponent = ({
   const [credentials, setCredentials] = useState<Credential[]>([]);
   const [credentialTypes, setCredentialTypes] = useState<CredentialType[]>([]);
   const [credentialsTitle, setCredentialsTitle] = useState<string>('');
-  const [credentialId, setCredentialId] = useState<string>(UNSET_VALUE);
+  const [credentialId, setCredentialId] = useState<string | undefined>(
+    undefined,
+  );
 
   const deleteMutation = useDeleteOciImageTarget({
     onSuccess: onDeleted,
@@ -133,17 +132,17 @@ const ContainerImageTargetsComponent = ({
     const creds = await loadCredentials();
     setCredentials(creds);
 
-    setCredentialId(target.credential?.id || UNSET_VALUE);
+    setCredentialId(target.credential?.id || undefined);
   };
 
-  const createTarget = async (initial: Record<string, unknown> = {}) => {
+  const createTarget = async () => {
     setSelectedTarget(undefined);
     setEditDialogTitle(_('New Container Image Target'));
     setEditDialogVisible(true);
     const creds = await loadCredentials();
     setCredentials(creds);
 
-    setCredentialId(UNSET_VALUE);
+    setCredentialId(undefined);
   };
 
   const cloneTarget = async (target: OciImageTarget) => {
@@ -160,7 +159,7 @@ const ContainerImageTargetsComponent = ({
   const closeEditDialog = () => {
     setEditDialogVisible(false);
     setSelectedTarget(undefined);
-    setCredentialId(UNSET_VALUE);
+    setCredentialId(undefined);
   };
 
   const handleCloseEditDialog = () => {
@@ -171,36 +170,16 @@ const ContainerImageTargetsComponent = ({
     if (selectedTarget?.id) {
       const saveParams: OciImageTargetSaveParams = {
         id: selectedTarget.id,
+        name: data.name,
+        comment: data.comment,
+        imageReferences: data.hosts,
+        credentialId,
+        reverseLookupOnly: data.reverseLookupOnly,
+        reverseLookupUnify: data.reverseLookupUnify,
+        inUse: data.inUse,
+        targetSource: data.targetSource,
+        targetExcludeSource: data.targetExcludeSource,
       };
-
-      saveParams.name = data.name || '';
-      saveParams.comment = data.comment || '';
-
-      if (data.hosts) {
-        saveParams.imageReferences = data.hosts;
-      }
-
-      if (credentialId && credentialId !== UNSET_VALUE) {
-        saveParams.credentialId = credentialId;
-      }
-
-      if (data.reverseLookupOnly !== undefined) {
-        saveParams.reverseLookupOnly = data.reverseLookupOnly;
-      }
-
-      if (data.reverseLookupUnify !== undefined) {
-        saveParams.reverseLookupUnify = data.reverseLookupUnify;
-      }
-
-      saveParams.inUse = data.inUse;
-
-      if (data.targetSource) {
-        saveParams.targetSource = data.targetSource;
-      }
-
-      if (data.targetExcludeSource) {
-        saveParams.targetExcludeSource = data.targetExcludeSource;
-      }
 
       await saveMutation.mutateAsync(saveParams);
     } else {
@@ -210,24 +189,23 @@ const ContainerImageTargetsComponent = ({
         imageReferences: data.hosts || '',
         targetSource: data.targetSource || 'manual',
         targetExcludeSource: data.targetExcludeSource || 'manual',
-        credentialId: credentialId !== UNSET_VALUE ? credentialId : undefined,
+        credentialId,
+        reverseLookupOnly: data.reverseLookupOnly,
+        reverseLookupUnify: data.reverseLookupUnify,
       };
-
-      if (data.reverseLookupOnly !== undefined) {
-        createParams.reverseLookupOnly = data.reverseLookupOnly;
-      }
-
-      if (data.reverseLookupUnify !== undefined) {
-        createParams.reverseLookupUnify = data.reverseLookupUnify;
-      }
 
       await createMutation.mutateAsync(createParams);
     }
     closeEditDialog();
   };
 
-  const openCredentialsDialog = ({idField, types, title}) => {
-    idFieldRef.current = idField;
+  const openCredentialsDialog = ({
+    types,
+    title,
+  }: {
+    types: CredentialType[];
+    title: string;
+  }) => {
     setCredentialTypes(types);
     setCredentialsTitle(title);
     setCredentialsDialogVisible(true);
@@ -265,26 +243,22 @@ const ContainerImageTargetsComponent = ({
       })}
       {editDialogVisible && (
         <ContainerImageTargetsDialog
-          comment={selectedTarget?.comment ?? ''}
+          comment={selectedTarget?.comment}
+          credentialId={credentialId}
           credentials={credentials}
           excludeHosts={''}
-          hosts={
-            selectedTarget?.imageReferences
-              ? selectedTarget.imageReferences.join(', ')
-              : ''
-          }
-          inUse={selectedTarget?.inUse ?? false}
+          hosts={selectedTarget?.imageReferences.join(', ')}
+          inUse={selectedTarget?.inUse}
           name={selectedTarget?.name}
-          reverseLookupOnly={selectedTarget?.reverseLookupOnly ?? false}
-          reverseLookupUnify={selectedTarget?.reverseLookupUnify ?? false}
-          smbCredentialId={credentialId}
+          reverseLookupOnly={selectedTarget?.reverseLookupOnly}
+          reverseLookupUnify={selectedTarget?.reverseLookupUnify}
           targetExcludeSource={'manual'}
           targetSource={'manual'}
           title={editDialogTitle}
           onClose={handleCloseEditDialog}
+          onCredentialChange={setCredentialId}
           onNewCredentialsClick={openCredentialsDialog}
           onSave={handleSaveEdit}
-          onSmbCredentialChange={setCredentialId}
         />
       )}
       {credentialsDialogVisible && (

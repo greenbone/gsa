@@ -19,7 +19,7 @@ import ContainerImageTargetTableHeader, {
 const Footer = createEntitiesFooter({
   span: 6,
   trash: true,
-  download: 'oci_image_targets.xml',
+  download: 'oci-image-targets.xml',
 });
 
 export default createEntitiesTable<

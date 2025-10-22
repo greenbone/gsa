@@ -173,7 +173,6 @@ const LoggedInRoutes = () => {
           <Route element={<AlertDetailsPage />} path="/alert/:id" />
           <Route element={<AuditsDetailsPage />} path="/audit/:id" />
           <Route element={<CertBundDetailsPage />} path="/certbund/:id" />
-
           <Route element={<CpeDetailsPage />} path="/cpe/:id" />
           <Route element={<CredentialDetailsPage />} path="/credential/:id" />
           <Route element={<CveDetailsPage />} path="/cve/:id" />

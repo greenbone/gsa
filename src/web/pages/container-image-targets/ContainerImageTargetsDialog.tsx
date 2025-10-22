@@ -5,7 +5,7 @@
 
 import {
   type default as Credential,
-  type ALL_CREDENTIAL_TYPES,
+  type CredentialType,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import type Filter from 'gmp/models/filter';
@@ -28,16 +28,13 @@ import {
 
 type TargetSource = 'manual' | 'file' | 'asset_hosts';
 type TargetExcludeSource = 'manual' | 'file';
-type CredentialType = (typeof ALL_CREDENTIAL_TYPES)[number];
-
 interface NewCredential {
-  idField: string;
   title: string;
   types: CredentialType[];
 }
 
 interface ContainerImageTargetsDialogValues {
-  smbCredentialId: string;
+  credentialId: string;
 }
 
 interface ContainerImageTargetsDialogDefaultValues {
@@ -68,13 +65,13 @@ interface ContainerImageTargetsDialogProps {
   name?: string;
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
-  smbCredentialId?: string;
+  credentialId?: string;
   targetSource?: TargetSource;
   targetExcludeSource?: TargetExcludeSource;
   title?: string;
   onClose?: () => void;
   onNewCredentialsClick?: (newCredential: NewCredential) => void;
-  onSmbCredentialChange?: (smbCredentialId: string) => void;
+  onCredentialChange?: (credentialId: string) => void;
   onSave?: (data: ContainerImageTargetsDialogData) => void | Promise<void>;
 }
 
@@ -89,14 +86,14 @@ const ContainerImageTargetsDialog = ({
   name,
   reverseLookupOnly = false,
   reverseLookupUnify = false,
-  smbCredentialId = UNSET_VALUE,
+  credentialId,
   targetSource = 'manual',
   targetExcludeSource = 'manual',
   title,
   onClose,
   onNewCredentialsClick,
   onSave,
-  onSmbCredentialChange,
+  onCredentialChange,
   ...initial
 }: ContainerImageTargetsDialogProps) => {
   const [_] = useTranslation();
@@ -106,8 +103,7 @@ const ContainerImageTargetsDialog = ({
   name = name || _('Unnamed');
   title = title || _('New Container Image Target');
 
-  const NEW_SMB = {
-    idField: 'smbCredentialId',
+  const NEW_CREDENTIAL = {
     title: _('Create new credential'),
     types: [USERNAME_PASSWORD_CREDENTIAL_TYPE] as CredentialType[],
   };
@@ -133,7 +129,7 @@ const ContainerImageTargetsDialog = ({
   };
 
   const controlledValues = {
-    smbCredentialId,
+    credentialId: credentialId ?? '',
   };
 
   return (
@@ -263,22 +259,22 @@ const ContainerImageTargetsDialog = ({
             {capabilities.mayAccess('credential') && (
               <FormGroup direction="row" title={_('Credential')}>
                 <Select
-                  data-testid="smb-credential-select"
+                  data-testid="credential-select"
                   disabled={inUse}
                   grow="1"
                   items={renderSelectItems(
                     upCredentials as RenderSelectItemProps[],
                     UNSET_VALUE,
                   )}
-                  name="smbCredentialId"
-                  value={state.smbCredentialId}
-                  onChange={onSmbCredentialChange}
+                  name="credentialId"
+                  value={state.credentialId}
+                  onChange={onCredentialChange}
                 />
                 {!inUse && hasPermissionToCreateCredential && (
                   <NewIcon<NewCredential>
                     data-testid="new-icon-smb"
                     title={_('Create a new credential')}
-                    value={NEW_SMB}
+                    value={NEW_CREDENTIAL}
                     onClick={
                       onNewCredentialsClick as (value?: NewCredential) => void
                     }
