@@ -37,7 +37,7 @@ export interface HttpOptions {
   token?: string;
 }
 
-interface RequestOptions {
+export interface RequestOptions {
   args?: Params;
   data?: Data;
   url?: string;

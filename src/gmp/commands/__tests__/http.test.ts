@@ -5,7 +5,15 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import HttpCommand from 'gmp/commands/http';
-import {createHttp, createResponse} from 'gmp/commands/testing';
+import {
+  createHttp,
+  createHttpError,
+  createResponse,
+} from 'gmp/commands/testing';
+import {ResponseRejection} from 'gmp/http/rejection';
+
+const createActionResult = (message: string) =>
+  `<envelope><action_result><message>${message}</message></action_result></envelope>`;
 
 describe('HttpCommand tests', () => {
   test('should return itself from setting default param', () => {
@@ -117,6 +125,20 @@ describe('HttpCommand tests', () => {
     });
   });
 
+  test('should handle errors during http get request', async () => {
+    const rejection = new ResponseRejection(
+      {status: 500} as XMLHttpRequest,
+      'Server Error',
+      createActionResult('Oops the server did something bad'),
+    );
+    const http = createHttpError(rejection);
+    const cmd = new HttpCommand(http, {bar: 1});
+    // @ts-expect-error
+    await expect(cmd.httpGetWithTransform({foo: 'bar'})).rejects.toThrowError(
+      /^Oops the server did something bad$/,
+    );
+  });
+
   test('should create http post request with default params', async () => {
     const httpResponse = createResponse();
     const http = createHttp(httpResponse);
@@ -199,5 +221,19 @@ describe('HttpCommand tests', () => {
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {foo: 'bar', lorem: 'ipsum'},
     });
+  });
+
+  test('should handle errors during http post request', async () => {
+    const rejection = new ResponseRejection(
+      {status: 500} as XMLHttpRequest,
+      'Server Error',
+      createActionResult('Oops the server did something bad'),
+    );
+    const http = createHttpError(rejection);
+    const cmd = new HttpCommand(http, {bar: 1});
+    // @ts-expect-error
+    await expect(cmd.httpPostWithTransform({foo: 'bar'})).rejects.toThrowError(
+      /^Oops the server did something bad$/,
+    );
   });
 });

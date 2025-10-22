@@ -5,7 +5,8 @@
 
 import type CancelToken from 'gmp/cancel';
 import type Http from 'gmp/http/http';
-import type {ResponseType} from 'gmp/http/http';
+import type {RequestOptions, ResponseType} from 'gmp/http/http';
+import {ResponseRejection} from 'gmp/http/rejection';
 import type {Meta} from 'gmp/http/response';
 import transform, {
   type XmlMeta,
@@ -14,6 +15,7 @@ import transform, {
 import {type Transform} from 'gmp/http/transform/transform';
 import type {
   Data,
+  HttpMethod,
   UrlParams as Params,
   UrlParamValue as ParamValue,
 } from 'gmp/http/utils';
@@ -51,13 +53,20 @@ export interface HttpCommandParamsOptions {
   includeDefaultParams?: boolean;
 }
 
+type HttpCommandSuccessData = string | ArrayBuffer;
+
 export const BULK_SELECT_BY_IDS = 1;
 export const BULK_SELECT_BY_FILTER = 0;
 
 class HttpCommand {
   protected readonly http: Http;
   private readonly _params: HttpCommandGetParams;
-  private readonly transform: Transform<string, Meta, XmlResponseData, XmlMeta>;
+  private readonly transform: Transform<
+    HttpCommandSuccessData,
+    Meta,
+    XmlResponseData,
+    XmlMeta
+  >;
 
   constructor(http: Http, params: HttpCommandGetParams = {}) {
     this.http = http;
@@ -122,40 +131,68 @@ class HttpCommand {
     };
   }
 
+  /**
+   * Sends an HTTP request using the specified method and options, and transforms
+   * any `ResponseRejection` errors using the rejection transform function.
+   *
+   * This is especially useful for handling errors for request returning plain data instead of XML.
+   * Because such requests cannot be transformed using the standard success transform,
+   * we need to ensure that any errors, which contain XML, are still properly transformed.
+   *
+   * @returns A promise that resolves with the HTTP response or rejects with a transformed error.
+   * @throws If the request fails, throws the error directly or a transformed `ResponseRejection` error.
+   */
+  protected async httpRequestWithRejectionTransform<
+    TSuccessData extends HttpCommandSuccessData = string,
+  >(method: HttpMethod, options: RequestOptions) {
+    try {
+      return await this.http.request<TSuccessData>(method, options);
+    } catch (error) {
+      if (error instanceof ResponseRejection) {
+        throw this.transform.rejection(error);
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Sends an HTTP request with the specified method and options, applies the
+   * rejection transform in case of errors, and processes the response using the
+   * success transform.
+   *
+   * @returns A promise that resolves to the transformed response.
+   * @throws If the request fails, throws the error directly or a transformed `ResponseRejection` error.
+   */
+  protected async httpRequestWithTransform<
+    TSuccessData extends HttpCommandSuccessData = string,
+  >(method: HttpMethod, options: RequestOptions) {
+    const response = await this.httpRequestWithRejectionTransform<TSuccessData>(
+      method,
+      options,
+    );
+    return this.transform.success(response);
+  }
+
   protected async httpGetWithTransform(
     params: HttpCommandInputParams = {},
     options: HttpCommandOptions = {},
   ) {
-    const {
-      extraParams,
-      includeDefaultParams,
-      // @ts-expect-error
-      transform = this.transform,
-      ...other
-    } = options;
-    const response = await this.http.request('get', {
+    const {extraParams, includeDefaultParams, ...other} = options;
+    return await this.httpRequestWithTransform('get', {
       args: this.getParams(params, extraParams, {includeDefaultParams}),
       ...other,
     });
-    return transform.success(response);
   }
 
   protected async httpPostWithTransform(
     params: HttpCommandInputParams = {},
     options: HttpCommandOptions = {},
   ) {
-    const {
-      extraParams,
-      includeDefaultParams,
-      // @ts-expect-error
-      transform = this.transform,
-      ...other
-    } = options;
-    const response = await this.http.request('post', {
+    const {extraParams, includeDefaultParams, ...other} = options;
+    return await this.httpRequestWithTransform('post', {
       data: this.postParams(params, extraParams, {includeDefaultParams}),
       ...other,
     });
-    return transform.success(response);
   }
 }
 
