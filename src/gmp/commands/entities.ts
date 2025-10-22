@@ -18,9 +18,9 @@ import HttpCommand, {
 } from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import {type default as Response, type Meta} from 'gmp/http/response';
-import DefaultTransform from 'gmp/http/transform/default';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
+import {filterString} from 'gmp/models/filter/utils';
 import {type default as Model, type Element} from 'gmp/models/model';
 import {map, forEach} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -158,29 +158,26 @@ abstract class EntitiesCommand<
   }
 
   exportByIds(ids: string[]) {
-    const params = {
+    const data = {
       cmd: 'bulk_export',
       resource_type: this.name,
       bulk_select: BULK_SELECT_BY_IDS,
     };
     for (const id of ids) {
-      params['bulk_selected:' + id] = 1;
+      data['bulk_selected:' + id] = 1;
     }
-    return this.httpPostWithTransform(params, {
-      transform: DefaultTransform,
-    } as HttpCommandOptions);
+    return this.httpRequestWithRejectionTransform('post', {data});
   }
 
   exportByFilter(filter: Filter) {
-    const params = {
-      cmd: 'bulk_export',
-      resource_type: this.name,
-      bulk_select: BULK_SELECT_BY_FILTER,
-      filter,
-    };
-    return this.httpPostWithTransform(params, {
-      transform: DefaultTransform,
-    } as HttpCommandOptions);
+    return this.httpRequestWithRejectionTransform('post', {
+      data: {
+        cmd: 'bulk_export',
+        resource_type: this.name,
+        bulk_select: BULK_SELECT_BY_FILTER,
+        filter: filterString(filter),
+      },
+    });
   }
 
   async delete(entities: TModel[], extraParams?: HttpCommandPostParams) {

@@ -7,9 +7,9 @@ import registerCommand from 'gmp/command';
 import {convertBoolean} from 'gmp/commands/convert';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import DefaultTransform from 'gmp/http/transform/default';
 import AuditReport from 'gmp/models/auditreport';
 import {ALL_FILTER} from 'gmp/models/filter';
+import {filterString} from 'gmp/models/filter/utils';
 import {isDefined} from 'gmp/utils/identity';
 
 export class AuditReportsCommand extends EntitiesCommand {
@@ -47,18 +47,19 @@ export class AuditReportCommand extends EntityCommand {
     super(http, 'report', AuditReport);
   }
 
-  download({id}, {reportFormatId, deltaReportId, filter}) {
-    return this.httpGetWithTransform(
-      {
+  async download({id}, {reportFormatId, deltaReportId, filter}) {
+    const allFilter = isDefined(filter) ? filter.all() : ALL_FILTER;
+    return this.httpRequestWithRejectionTransform('get', {
+      args: {
         cmd: 'get_report',
         delta_report_id: deltaReportId,
         details: 1,
         report_id: id,
         report_format_id: reportFormatId,
-        filter: isDefined(filter) ? filter.all() : ALL_FILTER,
+        filter: filterString(allFilter),
       },
-      {transform: DefaultTransform, responseType: 'arraybuffer'},
-    );
+      responseType: 'arraybuffer',
+    });
   }
 
   addAssets({id}, {filter = ''}) {
