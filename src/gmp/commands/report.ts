@@ -6,11 +6,10 @@
 import {convertBoolean} from 'gmp/commands/convert';
 import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
-import type Response from 'gmp/http/response';
-import DefaultTransform from 'gmp/http/transform/default';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import {type default as Filter, ALL_FILTER} from 'gmp/models/filter';
+import {filterString} from 'gmp/models/filter/utils';
 import Report, {type ReportElement} from 'gmp/models/report';
 import {type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -83,20 +82,20 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       deltaReportId,
       filter,
     }: ReportCommandDownloadOptions,
-  ): Promise<Response<ArrayBuffer, XmlMeta>> {
-    return this.httpGetWithTransform(
-      {
+  ) {
+    const allFilter = isDefined(filter) ? filter.all() : ALL_FILTER;
+    return this.httpRequestWithRejectionTransform<ArrayBuffer>('get', {
+      args: {
         cmd: 'get_report',
         delta_report_id: deltaReportId,
         details: 1,
         report_id: id,
         report_config_id: reportConfigId,
         report_format_id: reportFormatId,
-        filter: isDefined(filter) ? filter.all() : ALL_FILTER,
+        filter: filterString(allFilter),
+        responseType: 'arraybuffer',
       },
-      // @ts-expect-error
-      {transform: DefaultTransform, responseType: 'arraybuffer'},
-    );
+    });
   }
 
   addAssets({id, filter = ''}: ReportCommandAddAssetsParams) {

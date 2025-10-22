@@ -12,8 +12,7 @@ import HttpCommand, {
   type HttpCommandPostParams,
 } from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import {type default as Response, type Meta} from 'gmp/http/response';
-import DefaultTransform from 'gmp/http/transform/default';
+import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import ActionResult from 'gmp/models/actionresult';
@@ -184,16 +183,14 @@ abstract class EntityCommand<
   }
 
   async export({id}: EntityCommandParams) {
-    const params = {
-      cmd: 'bulk_export',
-      resource_type: this.name,
-      bulk_select: BULK_SELECT_BY_IDS,
-      ['bulk_selected:' + id]: 1,
-    };
-    const response = await this.httpPostWithTransform(params, {
-      transform: DefaultTransform,
-    } as HttpCommandOptions);
-    return response as unknown as Response<string, Meta>;
+    return this.httpRequestWithRejectionTransform('post', {
+      data: {
+        cmd: 'bulk_export',
+        resource_type: this.name,
+        bulk_select: BULK_SELECT_BY_IDS,
+        ['bulk_selected:' + id]: 1,
+      },
+    });
   }
 }
 

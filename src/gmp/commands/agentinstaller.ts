@@ -5,7 +5,6 @@
 
 import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
-import DefaultTransform from 'gmp/http/transform/default';
 import AgentInstaller, {
   type AgentInstallerElement,
 } from 'gmp/models/agentinstaller';
@@ -20,14 +19,13 @@ class AgentInstallerCommand extends EntityCommand<
   }
 
   async download(id: string) {
-    return await this.httpGetWithTransform(
-      {
+    return await this.httpRequestWithRejectionTransform('get', {
+      args: {
         cmd: 'get_agent_installer_file',
         agent_installer_id: id,
       },
-      // @ts-expect-error
-      {transform: DefaultTransform, responseType: 'arraybuffer'},
-    );
+      responseType: 'arraybuffer',
+    });
   }
 
   getElementFromRoot(root: Element): AgentInstallerElement {
