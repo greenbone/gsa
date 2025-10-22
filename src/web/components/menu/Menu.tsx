@@ -135,6 +135,12 @@ const Menu = () => {
   const agentGroupMatch = useMatch('/agent-group/*');
   const isAgentGroupsActive = Boolean(agentGroupsMatch || agentGroupMatch);
 
+  const agentInstallersMatch = useMatch('/agent-installers');
+  const agentInstallerMatch = useMatch('/agent-installer/*');
+  const isAgentInstallersActive = Boolean(
+    agentInstallersMatch || agentInstallerMatch,
+  );
+
   const containerImageTargetsMatch = useMatch('/ociimagetargets');
   const containerImageTargetMatch = useMatch('/ociimagetarget/*');
   const isContainerImageTargetsActive = Boolean(
@@ -206,6 +212,7 @@ const Menu = () => {
   const mayOpConfiguration = mayAccessAny([
     'agent',
     'agentgroup',
+    'agentinstaller',
     'target',
     'ociimagetarget',
     'portlist',
@@ -416,8 +423,9 @@ const Menu = () => {
           isScannersActive,
           isFiltersActive,
           isTagsActive,
-          isAgentsActive, // Added for Agents
-          isAgentGroupsActive, // Added for Agent Groups
+          isAgentsActive,
+          isAgentGroupsActive,
+          isAgentInstallersActive,
         ].some(Boolean),
         subNav: [
           capabilities.mayAccess('target') && {
@@ -506,6 +514,13 @@ const Menu = () => {
               to: '/agent-groups',
               isPathMatch: isAgentGroupsActive,
               active: isAgentGroupsActive,
+            },
+          capabilities.mayAccess('agentinstaller') &&
+            features.featureEnabled('ENABLE_AGENTS') && {
+              label: _('Agent Installers'),
+              to: '/agent-installers',
+              isPathMatch: isAgentInstallersActive,
+              active: isAgentInstallersActive,
             },
         ].filter(Boolean),
       },
