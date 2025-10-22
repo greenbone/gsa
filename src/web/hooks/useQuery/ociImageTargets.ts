@@ -27,12 +27,12 @@ type OciImageTargetBulkInput = OciImageTarget[] | Filter;
 
 interface UseCreateOciImageTargetParams {
   onSuccess?: (data: EntityActionResponse) => void;
-  onError?: (error: Rejection) => void;
+  onError?: (error: Error) => void;
 }
 
 interface UseModifyOciImageTargetParams {
   onSuccess?: () => void;
-  onError?: (error: Rejection) => void;
+  onError?: (error: Error) => void;
 }
 
 export const useGetOciImageTargets = ({filter}: {filter?: Filter}) => {
@@ -129,8 +129,8 @@ export const useBulkDeleteOciImageTargets = ({
   >({
     gmpMethod: (input: OciImageTargetBulkInput) => {
       return isFilter(input)
-        ? gmp.ociimagetargets.deleteByFilter(input as Filter)
-        : gmp.ociimagetargets.delete(input as OciImageTarget[]);
+        ? gmp.ociimagetargets.deleteByFilter(input)
+        : gmp.ociimagetargets.delete(input);
     },
     invalidateQueryIds: ['get_oci_image_targets'],
     successMessage: _('Container Image Targets successfully deleted'),
@@ -151,8 +151,8 @@ export const useBulkExportOciImageTargets = ({
   >({
     gmpMethod: (input: OciImageTargetBulkInput) => {
       return isFilter(input)
-        ? gmp.ociimagetargets.exportByFilter(input as Filter)
-        : gmp.ociimagetargets.export(input as OciImageTarget[]);
+        ? gmp.ociimagetargets.exportByFilter(input)
+        : gmp.ociimagetargets.export(input);
     },
     onSuccess,
     onError,
