@@ -11,13 +11,13 @@ import {
   TimeoutRejection,
 } from 'gmp/http/rejection';
 import Response, {type Meta} from 'gmp/http/response';
-import {type Method as HttpMethod} from 'gmp/http/transform/transform';
 import {
   buildServerUrl,
   buildUrlParams,
   createFormData,
   type Data,
   type UrlParams as Params,
+  type HttpMethod as HttpMethod,
 } from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';

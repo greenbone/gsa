@@ -5,12 +5,10 @@
 
 import {type ResponseRejection} from 'gmp/http/rejection';
 import {type default as Response, type Meta} from 'gmp/http/response';
-
-type MethodUpperCase = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-export type Method = MethodUpperCase | Lowercase<MethodUpperCase>;
+import {type HttpMethod} from 'gmp/http/utils';
 
 export interface TransformOptions {
-  method?: Method;
+  method?: HttpMethod;
   url?: string;
 }
 
