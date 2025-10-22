@@ -5,6 +5,9 @@
 
 import {hasValue, isArray, isDefined} from 'gmp/utils/identity';
 
+type HttpMethodUpperCase = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+export type HttpMethod = HttpMethodUpperCase | Lowercase<HttpMethodUpperCase>;
+
 export type UrlParamValue = string | number | boolean | undefined;
 export type UrlParams = Record<string, UrlParamValue>;
 
