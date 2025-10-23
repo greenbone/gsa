@@ -39,7 +39,7 @@ const AgentInstallerActions = ({
     >
       <IconDivider grow align={['center', 'center']}>
         <ExportIcon
-          title={_('Download Installer')}
+          title={_('Download Agent Installer')}
           value={entity}
           onClick={onAgentInstallerDownloadClick}
         />
@@ -47,8 +47,8 @@ const AgentInstallerActions = ({
           active={isDefined(entity.checksum)}
           title={
             entity.checksum
-              ? _('Copy Agent Installer Checksum')
-              : _('No Checksum Available')
+              ? _('Copy Agent Installer checksum to clipboard')
+              : _('No checksum available')
           }
           value={entity}
           onClick={onAgentInstallerChecksumClick}

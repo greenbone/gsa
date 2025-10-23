@@ -136,7 +136,7 @@ const AgentInstallerListPage = () => {
   };
   return (
     <>
-      <PageTitle title={_('Agents Installers')} />
+      <PageTitle title={_('Agent Installers')} />
       <EntitiesPage
         createFilterType="agentinstaller"
         entities={agentInstallers}
@@ -170,7 +170,7 @@ const AgentInstallerListPage = () => {
             onTagsBulk={openTagsDialog}
           />
         }
-        title={_('Agents Installers')}
+        title={_('Agent Installers')}
         toolBarIcons={<AgentInstallersListPageToolBarIcons />}
         onError={() => {}}
         onFilterChanged={changeFilter}
