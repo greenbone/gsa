@@ -1,0 +1,272 @@
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {useState} from 'react';
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from '@greenbone/ui-lib';
+import {isDefined} from 'gmp/utils/identity';
+import {CredentialIcon, EditIcon} from 'web/components/icon';
+import ManualIcon from 'web/components/icon/ManualIcon';
+import IconDivider from 'web/components/layout/IconDivider';
+import Layout from 'web/components/layout/Layout';
+import PageTitle from 'web/components/layout/PageTitle';
+import Loading from 'web/components/loading/Loading';
+import Section from 'web/components/section/Section';
+import Table from 'web/components/table/SimpleTable';
+import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
+import TableData from 'web/components/table/TableData';
+import TableRow from 'web/components/table/TableRow';
+import {
+  useGetCredentialStores,
+  useModifyCredentialStore,
+  useVerifyCredentialStore,
+} from 'web/hooks/use-query/credential-store';
+import useTranslation from 'web/hooks/useTranslation';
+import ConnectionStatusPill from 'web/pages/credential-store/ConnectionStatusPill';
+import CyberArkDialog, {
+  type CyberArkDialogState,
+} from 'web/pages/credential-store/CredentialStoreDialog';
+import {renderYesNo} from 'web/utils/Render';
+
+interface ToolBarIconsProps {
+  onOpenDialogClick: () => void;
+  onTestConnectionClick: () => void;
+  connectionStatus?: 'success' | 'failed' | 'testing' | null;
+}
+
+const ToolBarIcons = ({
+  onOpenDialogClick,
+  onTestConnectionClick,
+  connectionStatus,
+}: ToolBarIconsProps) => {
+  const [_] = useTranslation();
+
+  return (
+    <IconDivider>
+      <ManualIcon
+        anchor="ldap"
+        page="web-interface-access"
+        size="small"
+        title={_('Help: CyberArk Credential Store')}
+      />
+      <EditIcon
+        title={_('Edit CyberArk Credential Store')}
+        onClick={onOpenDialogClick}
+      />
+      <ConnectionStatusPill
+        status={connectionStatus}
+        onClick={onTestConnectionClick}
+      />
+    </IconDivider>
+  );
+};
+
+const CredentialStorePage = () => {
+  const [_] = useTranslation();
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<
+    'success' | 'failed' | 'testing' | null
+  >(null);
+
+  const {
+    data: credentialStoresData,
+    isLoading,
+    error,
+    isError,
+  } = useGetCredentialStores({});
+
+  const credentialStore = credentialStoresData?.entities?.[0];
+
+  const verifyCredentialStore = useVerifyCredentialStore({
+    onSuccess: () => {
+      setConnectionStatus('success');
+      showSuccessNotification(
+        _('Connection to CyberArk server established successfully.'),
+        _('Connection successful'),
+      );
+    },
+    onError: error => {
+      setConnectionStatus('failed');
+      showErrorNotification(
+        _('Failed to connect to CyberArk server. Please check your settings.'),
+        _('Connection failed'),
+      );
+      console.error('Credential store verification failed:', error);
+    },
+  });
+
+  const modifyCredentialStore = useModifyCredentialStore({
+    onSuccess: () => {
+      console.info('Credential store settings saved successfully');
+      closeDialog();
+    },
+    onError: error => {
+      console.error('Failed to save credential store settings:', error);
+    },
+  });
+
+  const handleSaveSettings = async ({
+    active,
+    appId,
+    comment,
+    host,
+    path,
+    port,
+    sslOnly,
+    clientCertificate,
+    clientKey,
+    pkcs12File,
+    passphrase,
+    serverCaCertificate,
+  }: CyberArkDialogState) => {
+    if (!credentialStore?.id) {
+      console.error('No credential store found to modify');
+      return;
+    }
+
+    try {
+      await modifyCredentialStore.mutateAsync({
+        id: credentialStore.id,
+        active,
+        appId,
+        comment,
+        host,
+        path,
+        port,
+        sslOnly,
+        clientCertificate,
+        clientKey,
+        pkcs12File,
+        passphrase,
+        serverCaCertificate,
+      });
+    } catch (error) {
+      console.error('Error saving credential store:', error);
+    }
+  };
+
+  const openDialog = () => {
+    setDialogVisible(true);
+  };
+
+  const closeDialog = () => {
+    setDialogVisible(false);
+  };
+
+  const handleTestConnection = async () => {
+    if (!credentialStore?.id) {
+      showErrorNotification(
+        _('No credential store found to verify.'),
+        _('Connection failed'),
+      );
+      return;
+    }
+
+    try {
+      setConnectionStatus('testing');
+      await verifyCredentialStore.mutateAsync({id: credentialStore.id});
+    } catch (error) {
+      console.error('Connection test failed:', error);
+    }
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <Layout flex="column">
+        <PageTitle title={_('CyberArk Credential Store')} />
+        <p>
+          {_('Error loading credential store: ') +
+            (error?.message || 'Unknown error')}
+        </p>
+      </Layout>
+    );
+  }
+
+  const hasCredentialStore = isDefined(credentialStore);
+
+  return (
+    <>
+      <PageTitle title={_('CyberArk Credential Store')} />
+      <Layout flex="column">
+        {hasCredentialStore && (
+          <ToolBarIcons
+            connectionStatus={connectionStatus}
+            onOpenDialogClick={openDialog}
+            onTestConnectionClick={handleTestConnection}
+          />
+        )}
+
+        {hasCredentialStore ? (
+          <Section
+            img={<CredentialIcon size="large" />}
+            title={_('CyberArk Credential Store')}
+          >
+            <Table>
+              <colgroup>
+                <TableCol width="20%" />
+                <TableCol width="80%" />
+              </colgroup>
+              <TableBody>
+                <TableRow>
+                  <TableData>{_('Name')}</TableData>
+                  <TableData>{credentialStore.name ?? _('N/A')}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Active')}</TableData>
+                  <TableData>
+                    {renderYesNo(credentialStore.active ?? false)}
+                  </TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Host')}</TableData>
+                  <TableData>{credentialStore.host ?? _('N/A')}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Path')}</TableData>
+                  <TableData>{credentialStore.path ?? _('N/A')}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Version')}</TableData>
+                  <TableData>{credentialStore.version ?? _('N/A')}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Comment')}</TableData>
+                  <TableData>{credentialStore.comment ?? _('N/A')}</TableData>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Section>
+        ) : (
+          <p>{_('No CyberArk credential store configured.')}</p>
+        )}
+      </Layout>
+
+      {dialogVisible && (
+        <CyberArkDialog
+          active={credentialStore?.active === 1}
+          appId={credentialStore?.getPreference?.('app_id')?.value}
+          comment={credentialStore?.comment}
+          host={credentialStore?.host}
+          path={credentialStore?.path}
+          port={credentialStore?.getPreference?.('port')?.value}
+          sslOnly={
+            credentialStore?.getPreference?.('ssl_only')?.value === 'true'
+          }
+          onClose={closeDialog}
+          onSave={handleSaveSettings}
+        />
+      )}
+    </>
+  );
+};
+
+export default CredentialStorePage;

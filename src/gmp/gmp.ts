@@ -43,6 +43,8 @@ import AgentGroupCommand from 'gmp/commands/agentgroup';
 import AgentGroupsCommand from 'gmp/commands/agentgroups';
 import AgentsCommand from 'gmp/commands/agents';
 import AuthenticationCommand from 'gmp/commands/auth';
+import CredentialStoreCommand from 'gmp/commands/credential-store';
+import CredentialStoresCommand from 'gmp/commands/credential-stores';
 import DashboardCommand from 'gmp/commands/dashboards';
 import FeedStatusCommand from 'gmp/commands/feedstatus';
 import LoginCommand from 'gmp/commands/login';
@@ -89,6 +91,8 @@ class Gmp {
   readonly agentinstaller: AgentInstallerCommand;
   readonly agentinstallers: AgentInstallersCommand;
   readonly auth: AuthenticationCommand;
+  readonly credentialStore: CredentialStoreCommand;
+  readonly credentialStores: CredentialStoresCommand;
   readonly dashboard: DashboardCommand;
   readonly feedstatus: FeedStatusCommand;
   readonly ociimagetarget: OciImageTargetCommand;
@@ -131,6 +135,8 @@ class Gmp {
     this.agentinstaller = new AgentInstallerCommand(this.http);
     this.agentinstallers = new AgentInstallersCommand(this.http);
     this.auth = new AuthenticationCommand(this.http);
+    this.credentialStore = new CredentialStoreCommand(this.http);
+    this.credentialStores = new CredentialStoresCommand(this.http);
     this.dashboard = new DashboardCommand(this.http);
     this.feedstatus = new FeedStatusCommand(this.http);
     this.ociimagetarget = new OciImageTargetCommand(this.http);
