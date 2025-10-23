@@ -6,7 +6,7 @@
 import React from 'react';
 import Download from 'web/components/form/Download';
 import useDownload, {type DownloadFunc} from 'web/components/form/useDownload';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 interface DownloadProps {
   onDownload: DownloadFunc;

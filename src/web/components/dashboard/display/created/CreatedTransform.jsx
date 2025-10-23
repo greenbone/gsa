@@ -4,7 +4,7 @@
  */
 
 import {parseInt, parseDate} from 'gmp/parser';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 const transformCreated = (data = {}) => {
   const {groups = []} = data;

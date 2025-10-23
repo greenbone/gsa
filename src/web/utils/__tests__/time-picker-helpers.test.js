@@ -8,7 +8,7 @@ import date from 'gmp/models/date';
 import {
   formatSplitTime,
   formatTimeForTimePicker,
-} from 'web/utils/timePickerHelpers';
+} from 'web/utils/time-picker-helpers';
 
 describe('timePickerHelpers', () => {
   describe('formatSplitTime', () => {

@@ -4,7 +4,7 @@
  */
 
 import {queries} from '@testing-library/dom';
-import * as customQueries from 'web/testing/customQueries';
+import * as customQueries from 'web/testing/custom-queries';
 
 export const allQueries = {
   ...queries,

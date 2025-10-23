@@ -7,7 +7,7 @@ import React from 'react';
 import useClickHandler, {
   type ClickEvent,
 } from 'web/components/form/useClickHandler';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 type WrappedComponent<TEvent> = React.ComponentType<{
   onClick?: (event: TEvent) => void;

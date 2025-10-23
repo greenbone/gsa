@@ -8,7 +8,7 @@ import {
   type Screen as TestingScreen,
   screen as testingScreen,
 } from '@testing-library/dom';
-import {allQueries} from 'web/testing/allQueries';
+import {allQueries} from 'web/testing/all-queries';
 
 type Screen = TestingScreen<typeof allQueries>;
 

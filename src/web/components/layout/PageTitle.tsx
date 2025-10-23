@@ -6,7 +6,7 @@
 import {useEffect} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
-import {applianceTitle} from 'web/utils/applianceData';
+import {applianceTitle} from 'web/utils/appliance-data';
 
 interface PageTitleProps {
   title?: string;

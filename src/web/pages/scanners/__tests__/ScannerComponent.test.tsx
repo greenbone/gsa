@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import Scanner, {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import ScannerComponent from 'web/pages/scanners/ScannerComponent';
 
 const createGmp = (object?: unknown) => {

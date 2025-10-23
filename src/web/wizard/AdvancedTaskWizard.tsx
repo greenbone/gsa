@@ -32,7 +32,7 @@ import Layout from 'web/components/layout/Layout';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
-import {formatSplitTime} from 'web/utils/timePickerHelpers';
+import {formatSplitTime} from 'web/utils/time-picker-helpers';
 import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
 
 type AutoStartType =

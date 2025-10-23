@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {getLangNameByCode} from 'web/pages/user-settings/helperFunctions';
+import {getLangNameByCode} from 'web/pages/user-settings/helper-functions';
 import {BROWSER_LANGUAGE} from 'web/utils/Languages';
 
 describe('getLangNameByCode', () => {

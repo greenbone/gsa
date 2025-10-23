@@ -19,7 +19,7 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {HostsModifiedLoader} from 'web/pages/hosts/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 const transformModified = (data = {}) => {
   let {groups = []} = data;

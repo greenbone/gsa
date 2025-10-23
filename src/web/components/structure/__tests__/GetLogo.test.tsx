@@ -5,8 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, render} from 'web/testing';
-import getLogo from 'web/components/structure/getLogo';
-import {type ApplianceLogo} from 'web/utils/applianceData';
+import getLogo from 'web/components/structure/GetLogo';
+import {type ApplianceLogo} from 'web/utils/appliance-data';
 
 describe('getLogo', () => {
   const testCases = [

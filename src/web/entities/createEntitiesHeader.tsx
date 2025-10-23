@@ -11,7 +11,7 @@ import withEntitiesHeader, {
   type ActionsColumn,
   type WithEntitiesHeaderComponentProps,
 } from 'web/entities/withEntitiesHeader';
-import {type SortDirectionType} from 'web/utils/SortDirection';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
 interface ToString {
   toString: () => string;

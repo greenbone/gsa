@@ -6,7 +6,7 @@
 import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import FilterSelection from 'web/components/dashboard/display/FilterSelection';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 import PropTypes from 'web/utils/PropTypes';
 
 const withFilterSelection =

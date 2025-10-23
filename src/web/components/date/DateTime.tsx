@@ -11,7 +11,7 @@ import useUserTimezone from 'web/hooks/useUserTimezone';
 import {
   formattedUserSettingDateTimeWithTimeZone,
   formattedUserSettingDateTimeObject,
-} from 'web/utils/userSettingTimeDateFormatters';
+} from 'web/utils/user-setting-time-date-formatters';
 
 interface DateTimeProps {
   date?: Date | string;

@@ -8,7 +8,7 @@ import {
   showSuccessNotification,
   showErrorNotification,
 } from '@greenbone/ui-lib';
-import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import logger from 'gmp/log';
 import type AgentInstaller from 'gmp/models/agent-installer';
 import {AGENT_INSTALLERS_FILTER_FILTER} from 'gmp/models/filter';

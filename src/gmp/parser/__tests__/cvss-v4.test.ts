@@ -9,7 +9,7 @@ import {
   parseCvssV4MetricsFromVector,
   processVector,
   removeUnusedMetrics,
-} from 'gmp/parser/cvssV4';
+} from 'gmp/parser/cvss-v4';
 
 describe('CVSSv4 parser', () => {
   describe('calculateVector', () => {

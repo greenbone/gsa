@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import actionFunction from 'web/entity/hooks/actionFunction';
+import actionFunction from 'web/entity/hooks/action-function';
 
 describe('actionFunction', () => {
   test('should call onSuccess with response and show success notification if successMessage is defined', async () => {

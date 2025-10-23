@@ -14,7 +14,7 @@ import transformSeverityData, {
   type SeverityClassData,
   type SeverityData,
   type TransformSeverityDataProps,
-} from 'web/components/dashboard/display/severity/severityClassTransform';
+} from 'web/components/dashboard/display/severity/severity-class-transform';
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
 import useGmp from 'web/hooks/useGmp';
 

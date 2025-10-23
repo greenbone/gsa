@@ -7,7 +7,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 export interface WithLayoutProps {
   align?: string | [string, string];

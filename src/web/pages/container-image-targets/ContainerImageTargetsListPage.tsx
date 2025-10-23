@@ -5,7 +5,7 @@
 
 import {useCallback, useMemo, useRef, useState} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
-import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type default as Filter, TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 import type OciImageTarget from 'gmp/models/oci-image-target';
 import {getEntityType, pluralizeType} from 'gmp/utils/entitytype';

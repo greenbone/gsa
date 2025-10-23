@@ -4,7 +4,7 @@
  */
 
 import DataTableDisplay from 'web/components/dashboard/display/DataDisplay';
-import transformSeverityClassData from 'web/components/dashboard/display/severity/severityClassTransform';
+import transformSeverityClassData from 'web/components/dashboard/display/severity/severity-class-transform';
 
 const severityClassDataRow = row => [row.label, row.value];
 

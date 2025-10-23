@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 /**
  * A higher-order component (HOC) that provides default props to a given component.

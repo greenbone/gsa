@@ -11,7 +11,7 @@ import TextArea from 'web/components/form/TextArea';
 import useFormValidation from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
 import useTranslation from 'web/hooks/useTranslation';
-import {editTicketRules as validationRules} from 'web/pages/tickets/validationrules';
+import {editTicketRules as validationRules} from 'web/pages/tickets/validation-rules';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 

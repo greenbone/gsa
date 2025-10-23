@@ -23,7 +23,7 @@ import ResultDetails, {
 import ResultsRow, {
   type ResultTableRowProps,
 } from 'web/pages/results/ResultsTableRow';
-import {type SortDirectionType} from 'web/utils/SortDirection';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
 interface ResultTableHeaderProps extends WithEntitiesHeaderComponentProps {
   audit?: boolean;
