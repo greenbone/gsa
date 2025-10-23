@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type AgentInstaller from 'gmp/models/agentinstaller';
+import type AgentInstaller from 'gmp/models/agent-installer';
 import DateTime from 'web/components/date/DateTime';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';

@@ -19,15 +19,15 @@ import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import useCapabilities from 'web/hooks/useCapabilities';
-import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import usePageFilter from 'web/hooks/usePageFilter';
-import usePagination from 'web/hooks/usePagination';
 import {
   useGetOciImageTargets,
   useBulkDeleteOciImageTargets,
   useBulkExportOciImageTargets,
-} from 'web/hooks/useQuery/ociImageTargets';
+} from 'web/hooks/use-query/oci-image-targets';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useFilterSortBy from 'web/hooks/useFilterSortBy';
+import usePageFilter from 'web/hooks/usePageFilter';
+import usePagination from 'web/hooks/usePagination';
 import useSelection from 'web/hooks/useSelection';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';

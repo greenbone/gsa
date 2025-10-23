@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import AgentInstallersCommand from 'gmp/commands/agentinstallers';
+import AgentInstallersCommand from 'gmp/commands/agent-installers';
 import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
-import AgentInstaller from 'gmp/models/agentinstaller';
+import AgentInstaller from 'gmp/models/agent-installer';
 
 describe('AgentInstallers tests', () => {
   test('should fetch agent installers with default params', async () => {

@@ -5,7 +5,6 @@
 
 import type AgentGroup from 'gmp/models/agentgroup';
 import DateTime from 'web/components/date/DateTime';
-
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import {type RowComponentProps} from 'web/entities/EntitiesTable';

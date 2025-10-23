@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import AgentInstaller from 'gmp/models/agentinstaller';
+import AgentInstaller from 'gmp/models/agent-installer';
 import date from 'gmp/models/date';
 import {testModel} from 'gmp/models/testing';
 

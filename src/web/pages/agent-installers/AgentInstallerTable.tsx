@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import type AgentInstaller from 'gmp/models/agentinstaller';
+import type AgentInstaller from 'gmp/models/agent-installer';
 import createEntitiesFooter, {
   type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
