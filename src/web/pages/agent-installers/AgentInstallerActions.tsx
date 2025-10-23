@@ -9,12 +9,10 @@ import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
   type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
-import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
 
 export interface AgentInstallerActionsProps
   extends Omit<EntitiesActionsProps<AgentInstaller>, 'children'> {
-  onAgentInstallerDeleteClick?: (entity: AgentInstaller) => void;
   onAgentInstallerDownloadClick?: (entity: AgentInstaller) => void;
 }
 
@@ -24,7 +22,6 @@ const AgentInstallerActions = ({
   selectionType,
   onEntityDeselected,
   onEntitySelected,
-  onAgentInstallerDeleteClick,
   onAgentInstallerDownloadClick,
 }: AgentInstallerActionsProps) => {
   const [_] = useTranslation();
@@ -41,12 +38,6 @@ const AgentInstallerActions = ({
           title={_('Download Installer')}
           value={entity}
           onClick={onAgentInstallerDownloadClick}
-        />
-        <TrashIcon
-          displayName={_('Agent Installer')}
-          entity={entity}
-          name="agentgroup"
-          onClick={onAgentInstallerDeleteClick}
         />
       </IconDivider>
     </EntitiesActions>

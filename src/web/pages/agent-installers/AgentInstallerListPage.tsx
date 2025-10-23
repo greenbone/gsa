@@ -134,7 +134,6 @@ const AgentInstallerListPage = () => {
             onSelectionTypeChange={changeSelectionType}
             onSortChange={handleSortChange}
             onTagsBulk={openTagsDialog}
-            onTrashBulk={undefined}
           />
         }
         title={_('Agents Installers')}

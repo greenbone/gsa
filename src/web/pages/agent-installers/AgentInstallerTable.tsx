@@ -27,6 +27,7 @@ export default createEntitiesTable<
   header: AgentInstallerTableHeader,
   footer: createEntitiesFooter({
     span: 8,
-    trash: true,
+    trash: false,
+    delete: false,
   }),
 });

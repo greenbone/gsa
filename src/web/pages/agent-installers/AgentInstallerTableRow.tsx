@@ -23,7 +23,6 @@ const AgentInstallerTableRow = ({
   actionsComponent: ActionsComponent = AgentInstallerActions,
   'data-testid': dataTestId,
   selectionType,
-  onAgentInstallerDeleteClick,
   onAgentInstallerDownloadClick,
   onEntityDeselected,
   onEntitySelected,
@@ -41,7 +40,6 @@ const AgentInstallerTableRow = ({
         {...other}
         entity={entity}
         selectionType={selectionType}
-        onAgentInstallerDeleteClick={onAgentInstallerDeleteClick}
         onAgentInstallerDownloadClick={onAgentInstallerDownloadClick}
         onEntityDeselected={onEntityDeselected}
         onEntitySelected={onEntitySelected}
