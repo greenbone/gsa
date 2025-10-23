@@ -27,6 +27,7 @@ import {
   FileOutput,
   FilePenLine,
   Filter,
+  Fingerprint,
   Folder,
   FolderOpen,
   Gauge,
@@ -574,6 +575,13 @@ export const icons: IconDefinition[] = [
     ariaLabel: 'Save Icon',
     isLucide: true,
   },
+  {
+    name: 'Fingerprint',
+    component: Fingerprint,
+    dataTestId: 'fingerprint-icon',
+    ariaLabel: 'Fingerprint Icon',
+    isLucide: true,
+  },
 
   // SVG icons
 
@@ -1027,6 +1035,7 @@ export const {
   FileCog: PolicyIcon,
   FileOutput: FileOutputIcon,
   Filter: FilterIcon,
+  Fingerprint: FingerprintIcon,
   Folder: FoldIcon,
   FolderOpen: UnfoldIcon,
   Gauge: PerformanceIcon,
