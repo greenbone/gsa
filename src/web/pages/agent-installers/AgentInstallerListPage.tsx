@@ -4,7 +4,12 @@
  */
 
 import {useCallback, useEffect, useState} from 'react';
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from '@greenbone/ui-lib';
 import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import logger from 'gmp/log';
 import type AgentInstaller from 'gmp/models/agentinstaller';
 import {AGENT_INSTALLERS_FILTER_FILTER} from 'gmp/models/filter';
 import Download from 'web/components/form/Download';
@@ -25,6 +30,10 @@ import useTranslation from 'web/hooks/useTranslation';
 import AgentInstallersFilterDialog from 'web/pages/agent-installers/AgentInstallerFilterDialog';
 import AgentInstallersListPageToolBarIcons from 'web/pages/agent-installers/AgentInstallerListPageToolBarIcons';
 import AgentInstallerTable from 'web/pages/agent-installers/AgentInstallerTable';
+
+const log = logger.getLogger(
+  'web.pages.agent-installers.AgentInstallerListPage',
+);
 
 const AgentInstallerListPage = () => {
   const [_] = useTranslation();
@@ -101,6 +110,30 @@ const AgentInstallerListPage = () => {
       showError(error as Error);
     }
   };
+
+  const handleCopyChecksum = async (agentInstaller: AgentInstaller) => {
+    const {checksum, name, version} = agentInstaller;
+    try {
+      await navigator.clipboard.writeText(checksum as string);
+      showSuccessNotification(
+        _(
+          'Checksum for agent installer {{name}} {{version}} copied to clipboard.',
+          {name: name as string, version: version ?? ''},
+        ),
+      );
+    } catch (error) {
+      log.error(
+        `Failed to copy checksum to clipboard for agent installer ${agentInstaller.id}`,
+        error,
+      );
+      showErrorNotification(
+        _(
+          'Failed to copy checksum for agent installer {{name}} {{version}} to clipboard.',
+          {name: name as string, version: version ?? ''},
+        ),
+      );
+    }
+  };
   return (
     <>
       <PageTitle title={_('Agents Installers')} />
@@ -124,6 +157,7 @@ const AgentInstallerListPage = () => {
             selectionType={selectionType}
             sortBy={sortBy}
             sortDir={sortDir}
+            onAgentInstallerChecksumClick={handleCopyChecksum}
             onAgentInstallerDownloadClick={handleDownloadInstaller}
             onEntityDeselected={deselect}
             onEntitySelected={select}
