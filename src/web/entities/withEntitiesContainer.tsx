@@ -4,7 +4,7 @@
  */
 
 import {connect} from 'react-redux';
-import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';
 import type Filter from 'gmp/models/filter';
@@ -25,7 +25,7 @@ import EntitiesContainer, {
 import FilterProvider from 'web/entities/FilterProvider';
 import {pageFilter} from 'web/store/pages/actions';
 import compose from 'web/utils/Compose';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 import withGmp from 'web/utils/withGmp';
 
 interface ReduxMapProps {

@@ -11,7 +11,7 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import {getTimezone} from 'web/store/usersettings/selectors';
-import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/user-setting-time-date-formatters';
 
 interface TaskScheduleIconProps {
   links?: boolean;

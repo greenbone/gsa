@@ -20,7 +20,7 @@ import {OsVulnScoreLoader} from 'web/pages/operatingsystems/dashboard/Loaders';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
-import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 

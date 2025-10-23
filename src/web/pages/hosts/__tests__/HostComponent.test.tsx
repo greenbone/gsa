@@ -6,13 +6,13 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
 
 import {type ModelElement} from 'gmp/models/model';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import HostsDialog from 'web/pages/hosts/Dialog';
 import HostWithTargetComponent from 'web/pages/hosts/HostComponent';
 import type SelectionType from 'web/utils/SelectionType';

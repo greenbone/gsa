@@ -9,7 +9,7 @@ import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import {type ActionsColumn} from 'web/entities/withEntitiesHeader';
 import useTranslation from 'web/hooks/useTranslation';
-import {type SortDirectionType} from 'web/utils/SortDirection';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
 export interface PortListTableHeaderProps {
   actionsColumn?: ActionsColumn;

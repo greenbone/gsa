@@ -10,7 +10,7 @@ import withEntitiesHeader, {
   type ActionsColumn,
 } from 'web/entities/withEntitiesHeader';
 import useTranslation from 'web/hooks/useTranslation';
-import {type SortDirectionType} from 'web/utils/SortDirection';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
 export interface HeaderProps {
   actionsColumn?: ActionsColumn;

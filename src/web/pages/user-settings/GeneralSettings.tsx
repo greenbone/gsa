@@ -34,7 +34,7 @@ import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
 
-import {getLangNameByCode} from 'web/pages/user-settings/helperFunctions';
+import {getLangNameByCode} from 'web/pages/user-settings/helper-functions';
 import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';
 import useSettingSave from 'web/pages/user-settings/useSettingSave';
 import {updateTimezone} from 'web/store/usersettings/actions';

@@ -4,7 +4,7 @@
  */
 
 import {useCallback, useEffect, useState} from 'react';
-import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import Tag from 'gmp/models/tag';

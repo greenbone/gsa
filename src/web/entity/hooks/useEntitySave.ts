@@ -4,7 +4,7 @@
  */
 
 import {type EntityType} from 'gmp/utils/entitytype';
-import actionFunction from 'web/entity/hooks/actionFunction';
+import actionFunction from 'web/entity/hooks/action-function';
 import useGmp from 'web/hooks/useGmp';
 
 interface EntitySaveCallbacks<TSaveResponse = unknown, TSaveError = unknown> {

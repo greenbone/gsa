@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import EntitiesCommand from 'gmp/commands/entities';
 import {type HttpCommandOptions} from 'gmp/commands/http';
 import type Http from 'gmp/http/http';

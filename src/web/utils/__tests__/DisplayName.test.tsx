@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 describe('updateDisplayName', () => {
   test('should update the displayName of the wrapper component', () => {

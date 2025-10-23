@@ -6,11 +6,11 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, wait, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import CpePage, {ToolBarIcons} from 'web/pages/cpes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

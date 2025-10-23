@@ -5,7 +5,7 @@
 
 import CollectionCounts, {
   type CollectionCountsOptions,
-} from 'gmp/collection/CollectionCounts';
+} from 'gmp/collection/collection-counts';
 import logger from 'gmp/log';
 import Filter, {type FilterModelElement} from 'gmp/models/filter';
 import Model, {type Element} from 'gmp/models/model';

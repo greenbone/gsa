@@ -8,7 +8,7 @@ import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification, {
   type ErrorWithMessage,
 } from 'web/components/notification/useDialogNotification';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 export interface DialogNotificationProps {
   showError: (error: ErrorWithMessage) => void;

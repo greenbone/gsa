@@ -4,7 +4,7 @@
  */
 
 import {useCallback, useEffect, useRef, useState} from 'react';
-import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Agent from 'gmp/models/agent';
 import {type default as Filter, AGENTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';

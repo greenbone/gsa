@@ -86,7 +86,7 @@ import {
   loadEntity as loadTask,
 } from 'web/store/entities/tasks';
 import {renderYesNo} from 'web/utils/Render';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
 interface ToolBarIconsProps {

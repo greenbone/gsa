@@ -19,7 +19,7 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TlsCertificatesModifiedLoader} from 'web/pages/tlscertificates/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 const transformModified = (data = {}) => {
   const {groups = []} = data;

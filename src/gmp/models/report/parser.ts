@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import {
   type CollectionList,
   parseCollectionList,

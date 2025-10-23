@@ -11,7 +11,7 @@ import type Permission from 'gmp/models/permission';
 import type Role from 'gmp/models/role';
 import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
-import actionFunction from 'web/entity/hooks/actionFunction';
+import actionFunction from 'web/entity/hooks/action-function';
 import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import {type GotoDetailsFunc} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';

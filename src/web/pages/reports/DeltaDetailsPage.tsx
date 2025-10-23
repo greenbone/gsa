@@ -64,7 +64,7 @@ import {
   getUsername,
 } from 'web/store/usersettings/selectors';
 import {generateFilename} from 'web/utils/Render';
-import {DESC} from 'web/utils/SortDirection';
+import {DESC} from 'web/utils/sort-direction';
 
 interface UseReportStateParams {
   id?: string;

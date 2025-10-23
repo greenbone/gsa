@@ -8,7 +8,7 @@ import useTranslation, {
   type I18n,
   type TranslateFunc,
 } from 'web/hooks/useTranslation';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 export interface WithTranslationComponentProps {
   _: TranslateFunc;

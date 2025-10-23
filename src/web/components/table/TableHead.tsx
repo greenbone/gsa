@@ -9,7 +9,7 @@ import {ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon} from 'web/components/icon';
 import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 import SortBy from 'web/components/sortby/SortBy';
 import useTranslation from 'web/hooks/useTranslation';
-import SortDirection, {type SortDirectionType} from 'web/utils/SortDirection';
+import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
 import Theme from 'web/utils/Theme';
 
 interface ToString {

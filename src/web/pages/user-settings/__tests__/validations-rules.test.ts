@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import {
   userSettingsRules,
   VALID_ROWS_PER_PAGE_ERROR_MESSAGE,
-} from 'web/pages/user-settings/validationRules';
+} from 'web/pages/user-settings/validation-rules';
 
 describe('User Settings Validation Rules', () => {
   describe('rowsPerPage validation', () => {

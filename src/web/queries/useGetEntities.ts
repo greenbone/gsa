@@ -4,7 +4,7 @@
  */
 
 import {useQuery} from '@tanstack/react-query';
-import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type EntitiesMeta} from 'gmp/commands/entities';
 import {type HttpCommandInputParams} from 'gmp/commands/http';
 import type Response from 'gmp/http/response';

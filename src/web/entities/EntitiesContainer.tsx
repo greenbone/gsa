@@ -7,7 +7,7 @@ import React from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import {connect} from 'react-redux';
 import {type Location} from 'react-router';
-import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import type EntitiesCommand from 'gmp/commands/entities';
 import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';
@@ -33,7 +33,7 @@ import {
   type OnFilterCreatedFunc,
 } from 'web/components/powerfilter/useFilterDialogSave';
 import TagsDialog, {type TagsDialogData} from 'web/entities/TagsDialog';
-import actionFunction from 'web/entity/hooks/actionFunction';
+import actionFunction from 'web/entity/hooks/action-function';
 import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import TagDialog from 'web/pages/tags/Dialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
@@ -43,7 +43,7 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
-import SortDirection, {type SortDirectionType} from 'web/utils/SortDirection';
+import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
 import {withRouter} from 'web/utils/withRouter';
 import withTranslation from 'web/utils/withTranslation';
 

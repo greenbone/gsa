@@ -6,7 +6,7 @@
 import {useDispatch} from 'react-redux';
 import type Rejection from 'gmp/http/rejection';
 import {type EntityType} from 'gmp/utils/entitytype';
-import actionFunction from 'web/entity/hooks/actionFunction';
+import actionFunction from 'web/entity/hooks/action-function';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';

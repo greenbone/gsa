@@ -8,7 +8,7 @@ import type Model from 'gmp/models/model';
 import EntitiesActions, {
   type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 /**
  * Props for component created by the `withEntitiesActions` higher-order component (HOC).

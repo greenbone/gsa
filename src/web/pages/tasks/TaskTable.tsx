@@ -17,7 +17,7 @@ import withEntitiesHeader, {
 import withRowDetails from 'web/entities/withRowDetails';
 import TaskDetails from 'web/pages/tasks/TaskDetails';
 import TaskRow, {type TaskRowProps} from 'web/pages/tasks/TaskRow';
-import {type SortDirectionType} from 'web/utils/SortDirection';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
 interface HeaderProps {
   actionsColumn?: ActionsColumn;

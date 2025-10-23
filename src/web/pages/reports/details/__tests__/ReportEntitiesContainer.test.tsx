@@ -5,14 +5,14 @@
 
 import {describe, test, expect, testing, type Mock} from '@gsa/testing';
 import {render, screen, wait} from 'web/testing';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import ReportEntitiesContainer, {
   type ReportEntitiesContainerRenderProps,
 } from 'web/pages/reports/details/ReportEntitiesContainer';
 import {makeCompareString} from 'web/utils/Sort';
-import SortDirection from 'web/utils/SortDirection';
+import SortDirection from 'web/utils/sort-direction';
 
 const getRenderProps = (
   mockChildren: Mock,

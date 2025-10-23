@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import type CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';
 import type Filter from 'gmp/models/filter';

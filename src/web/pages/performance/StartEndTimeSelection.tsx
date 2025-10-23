@@ -12,7 +12,7 @@ import FormGroup from 'web/components/form/FormGroup';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
+import {formatTimeForTimePicker} from 'web/utils/time-picker-helpers';
 
 interface StartTimeSelectionProps {
   startDate: Date;

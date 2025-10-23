@@ -14,10 +14,10 @@ import {
   wait,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Override from 'gmp/models/override';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import OverridesPage, {ToolBarIcons} from 'web/pages/overrides/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/overrides';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
