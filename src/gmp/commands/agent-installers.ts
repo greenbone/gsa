@@ -6,7 +6,7 @@
 import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
 import type {XmlResponseData} from 'gmp/http/transform/fastxml';
-import AgentInstaller from 'gmp/models/agentinstaller';
+import AgentInstaller from 'gmp/models/agent-installer';
 
 class AgentInstallersCommand extends EntitiesCommand<AgentInstaller> {
   constructor(http: Http) {

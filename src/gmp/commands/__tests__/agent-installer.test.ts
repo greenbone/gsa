@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import AgentInstallerCommand from 'gmp/commands/agentinstaller';
+import AgentInstallerCommand from 'gmp/commands/agent-installer';
 import {createEntityResponse, createHttp} from 'gmp/commands/testing';
 
 describe('AgentInstallerCommand tests', () => {

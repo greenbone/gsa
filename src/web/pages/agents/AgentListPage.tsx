@@ -17,15 +17,15 @@ import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import usePageFilter from 'web/hooks/usePageFilter';
-import usePagination from 'web/hooks/usePagination';
 import {
   useBulkAuthorizeAgents,
   useBulkDeleteAgents,
   useBulkRevokeAgents,
   useGetAgents,
-} from 'web/hooks/useQuery/agents';
+} from 'web/hooks/use-query/agents';
+import useFilterSortBy from 'web/hooks/useFilterSortBy';
+import usePageFilter from 'web/hooks/usePageFilter';
+import usePagination from 'web/hooks/usePagination';
 import useSelection from 'web/hooks/useSelection';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentComponent from 'web/pages/agents/AgentComponent';

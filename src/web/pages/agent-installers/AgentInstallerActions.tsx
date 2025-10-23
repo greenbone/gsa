@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type AgentInstaller from 'gmp/models/agentinstaller';
+import type AgentInstaller from 'gmp/models/agent-installer';
 import {isDefined} from 'gmp/utils/identity';
 import {FingerprintIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';

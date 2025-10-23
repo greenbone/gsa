@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type AgentInstaller from 'gmp/models/agentinstaller';
+import type AgentInstaller from 'gmp/models/agent-installer';
 import type Filter from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';

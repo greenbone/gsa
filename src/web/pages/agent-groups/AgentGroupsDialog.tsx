@@ -17,8 +17,8 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
+import {useGetAgents} from 'web/hooks/use-query/agents';
 import useGmp from 'web/hooks/useGmp';
-import {useGetAgents} from 'web/hooks/useQuery/agents';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentConfigurationSection, {
   DEFAULT_CRON_EXPRESSION,

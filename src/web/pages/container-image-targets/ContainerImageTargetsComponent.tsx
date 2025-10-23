@@ -17,13 +17,13 @@ import type OciImageTarget from 'gmp/models/oci-image-target';
 import useEntityDownload, {
   type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
-import useGmp from 'web/hooks/useGmp';
 import {
   useCreateOciImageTarget,
   useSaveOciImageTarget,
   useDeleteOciImageTarget,
   useCloneOciImageTarget,
-} from 'web/hooks/useQuery/ociImageTargets';
+} from 'web/hooks/use-query/oci-image-targets';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ContainerImageTargetsDialog, {
   type ContainerImageTargetsDialogData,

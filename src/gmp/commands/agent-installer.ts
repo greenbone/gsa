@@ -7,7 +7,7 @@ import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import AgentInstaller, {
   type AgentInstallerElement,
-} from 'gmp/models/agentinstaller';
+} from 'gmp/models/agent-installer';
 import type {Element} from 'gmp/models/model';
 
 class AgentInstallerCommand extends EntityCommand<
