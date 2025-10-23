@@ -195,6 +195,7 @@ const Menu = () => {
   const isTrashcanActive = Boolean(useMatch('/trashcan'));
   const isFeedStatusActive = Boolean(useMatch('/feedstatus'));
   const isLdapActive = Boolean(useMatch('/ldap'));
+  const isCredentialStoreActive = Boolean(useMatch('/credentialstore'));
   const isRadiusActive = Boolean(useMatch('/radius'));
   const isCvssCalculatorActive = Boolean(useMatch('/cvsscalculator'));
 
@@ -537,6 +538,7 @@ const Menu = () => {
           isTrashcanActive,
           isFeedStatusActive,
           isLdapActive,
+          isCredentialStoreActive,
           isRadiusActive,
         ].some(Boolean),
         subNav: [
@@ -588,6 +590,17 @@ const Menu = () => {
               to: '/ldap',
               isPathMatch: isLdapActive,
               active: isLdapActive,
+            },
+          capabilities.mayOp('describe_auth') &&
+            /**
+             * TODO: Enable Credential Store menu when the feature flag is active check flag name
+             */
+            //   features.featureEnabled('ENABLE_CREDENTIAL_STORES') &&
+            capabilities.mayOp('modify_auth') && {
+              label: _('Credential Store'),
+              to: '/credentialstore',
+              isPathMatch: isCredentialStoreActive,
+              active: isCredentialStoreActive,
             },
           capabilities.mayOp('describe_auth') &&
             capabilities.mayOp('modify_auth') && {
