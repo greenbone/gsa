@@ -45,6 +45,7 @@ import {
   Minus,
   Pencil,
   Play,
+  PlugZap,
   Plus,
   Power,
   PowerOff,
@@ -582,6 +583,13 @@ export const icons: IconDefinition[] = [
     ariaLabel: 'Fingerprint Icon',
     isLucide: true,
   },
+  {
+    name: 'PlugZap',
+    component: PlugZap,
+    dataTestId: 'plug-zap-icon',
+    ariaLabel: 'Plug Zap Icon',
+    isLucide: true,
+  },
 
   // SVG icons
 
@@ -1063,6 +1071,7 @@ export const {
   Override: OverrideIcon,
   Pencil: EditIcon,
   Play: StartIcon,
+  PlugZap: PlugZapIcon,
   Plus: PlusIcon,
   PortList: PortListIcon,
   Power: EnableIcon,
