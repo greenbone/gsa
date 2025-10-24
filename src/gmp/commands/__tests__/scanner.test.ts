@@ -45,7 +45,7 @@ describe('ScannerCommand tests', () => {
     expect(result.data.id).toEqual('123');
   });
 
-  test('should send the correct data to save a scanner', async () => {
+  test('should save a scanner', async () => {
     const response = createActionResultResponse({
       action: 'save_scanner',
       id: '123',
@@ -78,7 +78,7 @@ describe('ScannerCommand tests', () => {
     });
   });
 
-  test('should allow to keep credential and cert unchanged when saving a scanner', async () => {
+  test('should allow to keep credential when saving a scanner', async () => {
     const response = createActionResultResponse({
       action: 'save_scanner',
       id: '123',
@@ -93,12 +93,45 @@ describe('ScannerCommand tests', () => {
       port: 9390,
       type: OPENVASD_SCANNER_TYPE,
       comment: 'Updated comment',
+      caCertificate: 'updated-ca-pub' as unknown as File,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_scanner',
-        ca_pub: undefined,
+        ca_pub: 'updated-ca-pub',
         credential_id: undefined,
+        scanner_id: '123',
+        name: 'Updated Scanner',
+        comment: 'Updated comment',
+        scanner_host: '127.0.0.1',
+        scanner_type: OPENVASD_SCANNER_TYPE,
+        port: 9390,
+      },
+    });
+  });
+
+  test('should remove ca cert when saving a scanner', async () => {
+    const response = createActionResultResponse({
+      action: 'save_scanner',
+      id: '123',
+      message: 'Scanner updated successfully',
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new ScannerCommand(fakeHttp);
+    await cmd.save({
+      id: '123',
+      name: 'Updated Scanner',
+      host: '127.0.0.1',
+      port: 9390,
+      type: OPENVASD_SCANNER_TYPE,
+      comment: 'Updated comment',
+      credentialId: '123',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_scanner',
+        ca_pub: '',
+        credential_id: '123',
         scanner_id: '123',
         name: 'Updated Scanner',
         comment: 'Updated comment',

@@ -77,7 +77,8 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
   }: ScannerCommandSaveParams) {
     const data = {
       cmd: 'save_scanner',
-      ca_pub: caCertificate,
+      // send empty string if caCertificate is undefined to remove existing CA cert
+      ca_pub: caCertificate ?? '',
       comment,
       credential_id: credentialId,
       id,

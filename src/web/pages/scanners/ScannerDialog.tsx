@@ -30,6 +30,7 @@ import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 interface ScannerDialogProps {
   comment?: string;
+  caCertificate?: File;
   credentialId?: string;
   credentials?: Credential[];
   host?: string;
@@ -83,6 +84,7 @@ const updatePort = (scannerType: ScannerType | undefined) => {
 const ScannerDialog = ({
   comment = '',
   scannerInUse = false,
+  caCertificate: initialCaCertificate,
   credentials = [],
   credentialId,
   host = 'localhost',
@@ -101,7 +103,7 @@ const ScannerDialog = ({
   const features = useFeatures();
   const gmp = useGmp();
   const [caCertificate, setCaCertificate] = useState<File | undefined>(
-    undefined,
+    initialCaCertificate,
   );
   const [error, setError] = useState<string | undefined>();
   const [scannerType, setScannerType] = useState<ScannerType | undefined>(type);
