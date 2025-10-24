@@ -167,6 +167,11 @@ const ScannerDialog = ({
     value: scannerType,
   }));
 
+  const credentialOptions = renderSelectItems(
+    credentials as RenderSelectItemProps[],
+    '',
+  );
+
   const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
   const isAgentControllerSensorScannerType =
     type === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
@@ -257,11 +262,9 @@ const ScannerDialog = ({
                 <Select
                   aria-label={_('Credential')}
                   grow="1"
-                  items={renderSelectItems(
-                    credentials as RenderSelectItemProps[],
-                  )}
+                  items={credentialOptions}
                   name="credentialId"
-                  value={credentialId}
+                  value={credentialId ?? ''}
                   onChange={(value: string) =>
                     onCredentialChange && onCredentialChange(value)
                   }

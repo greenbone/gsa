@@ -78,7 +78,7 @@ describe('ScannerCommand tests', () => {
     });
   });
 
-  test('should allow to keep credential when saving a scanner', async () => {
+  test('should remove a credential when saving a scanner', async () => {
     const response = createActionResultResponse({
       action: 'save_scanner',
       id: '123',
@@ -99,7 +99,7 @@ describe('ScannerCommand tests', () => {
       data: {
         cmd: 'save_scanner',
         ca_pub: 'updated-ca-pub',
-        credential_id: undefined,
+        credential_id: '',
         scanner_id: '123',
         name: 'Updated Scanner',
         comment: 'Updated comment',

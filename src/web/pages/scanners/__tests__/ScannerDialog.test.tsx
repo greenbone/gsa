@@ -119,7 +119,7 @@ describe('ScannerDialog tests', () => {
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
     expect(scannerType).toHaveValue('Agent Controller');
     const credential = screen.getByRole('textbox', {name: 'Credential'});
-    expect(credential).toHaveValue('');
+    expect(credential).toHaveValue('--');
   });
 
   test('should display defaults when agent sensor is used', () => {

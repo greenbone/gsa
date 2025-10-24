@@ -80,7 +80,8 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
       // send empty string if caCertificate is undefined to remove existing CA cert
       ca_pub: caCertificate ?? '',
       comment,
-      credential_id: credentialId,
+      // send empty string if credentialId is undefined to remove existing credential
+      credential_id: credentialId ?? '',
       id,
       name,
       port,
