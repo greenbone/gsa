@@ -14,6 +14,7 @@ const FEATURE_NAMES = [
   'FEED_VT_METADATA',
   'ENABLE_AGENTS',
   'ENABLE_CONTAINER_SCANNING',
+  'ENABLE_CREDENTIAL_STORES',
 ] as const;
 
 class Features {
