@@ -514,7 +514,6 @@
   "Create new {{entity}}": "Create new {{entity}}",
   "Create new Container Task": "Create new Container Task",
   "Create new credential": "Create new credential",
-  "Create new Credential Store credential": "Create new Credential Store credential",
   "Create new ESXi credential": "Create new ESXi credential",
   "Create new Kerberos credential": "Create new Kerberos credential",
   "Create new SMB credential": "Create new SMB credential",
