@@ -84,7 +84,7 @@ class CredentialStoreCommand extends EntityCommand<
       comment,
       'preferences:app_id': appId,
       'preferences:port': port,
-      'preferences:ssl_only': sslOnly ? 'true' : 'false',
+      'preferences:ssl_only': sslOnly ? '1' : '0',
       'preferences:client_certificate': clientCertificate,
       'preferences:client_key': clientKey,
       'preferences:pkcs12_file': pkcs12File,
