@@ -514,7 +514,6 @@
   "Create new {{entity}}": "{{entity}} erstellen",
   "Create new Container Task": "Neue Container-Aufgabe erstellen",
   "Create new credential": "Neue Anmeldedaten erstellen",
-  "Create new Credential Store credential": "Neue Anmeldedaten für Anmeldedaten-Speicher erstellen",
   "Create new ESXi credential": "Neue ESXi-Anmeldedaten erstellen",
   "Create new Kerberos credential": "Neue Kerberos-Anmeldedaten erstellen",
   "Create new SMB credential": "Neue SMB-Anmeldedaten erstellen",

@@ -514,7 +514,6 @@
   "Create new {{entity}}": "创建新的{{entity}}",
   "Create new Container Task": "创建新的任务容器",
   "Create new credential": "",
-  "Create new Credential Store credential": "",
   "Create new ESXi credential": "",
   "Create new Kerberos credential": "",
   "Create new SMB credential": "",

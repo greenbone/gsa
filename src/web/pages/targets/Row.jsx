@@ -17,6 +17,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
@@ -101,6 +102,7 @@ export const Row = ({
   ...props
 }) => {
   const [_] = useTranslation();
+  const features = useFeatures();
   const gmp = useGmp();
 
   return (
@@ -144,6 +146,13 @@ export const Row = ({
         <Cred cred={entity.smb_credential} links={links} title={'SMB (NTLM)'} />
         <Cred cred={entity.esxi_credential} links={links} title={'ESXi'} />
         <Cred cred={entity.snmp_credential} links={links} title={'SNMP'} />
+        {features.featureEnabled('ENABLE_CREDENTIAL_STORES') && (
+          <Cred
+            cred={entity.credential_store}
+            links={links}
+            title={_('Credential Store')}
+          />
+        )}
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
