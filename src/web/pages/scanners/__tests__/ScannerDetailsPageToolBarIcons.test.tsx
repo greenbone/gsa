@@ -8,7 +8,9 @@ import {screen, rendererWith, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Features from 'gmp/capabilities/features';
 import Credential from 'gmp/models/credential';
-import Scanner, {OPENVAS_SCANNER_TYPE, OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
+import Scanner, {
+  OPENVASD_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import ScannerDetailsPageToolBarIcons from 'web/pages/scanners/ScannerDetailsPageToolBarIcons';
 
 describe('ScannerDetailsPageToolBarIcons', () => {
