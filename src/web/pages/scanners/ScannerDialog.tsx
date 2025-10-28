@@ -9,6 +9,7 @@ import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
+  OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
   ScannerType,
   scannerTypeName,
@@ -113,7 +114,7 @@ const ScannerDialog = ({
   name = name || _('Unnamed');
   title = title || _('New Scanner');
 
-  let SCANNER_TYPES: ScannerType[] = [OPENVASD_SCANNER_TYPE];
+  let SCANNER_TYPES: ScannerType[] = [OPENVAS_SCANNER_TYPE];
 
   if (
     features.featureEnabled('ENABLE_AGENTS') &&

@@ -244,7 +244,7 @@ class Scanner extends Model {
   isCloneable() {
     return (
       this.scannerType !== CVE_SCANNER_TYPE &&
-      this.scannerType !== OPENVAS_SCANNER_TYPE
+      this.scannerType !== OPENVASD_SCANNER_TYPE
     );
   }
 
@@ -252,7 +252,7 @@ class Scanner extends Model {
     return (
       super.isWritable() &&
       this.scannerType !== CVE_SCANNER_TYPE &&
-      this.scannerType !== OPENVAS_SCANNER_TYPE
+      this.scannerType !== OPENVASD_SCANNER_TYPE
     );
   }
 
