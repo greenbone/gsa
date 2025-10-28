@@ -23,6 +23,14 @@ import {
   SNMP_PRIVACY_ALGORITHM_NONE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_PGP_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import {first, map} from 'gmp/utils/array';
@@ -37,6 +45,7 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
+import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -46,6 +55,8 @@ interface CredentialDialogValues {
   credential_type: CredentialType;
   private_key?: File;
   public_key?: File;
+  vaultId?: string;
+  hostIdentifier?: string;
 }
 
 interface CredentialDialogDefaultValues {
@@ -66,6 +77,8 @@ interface CredentialDialogDefaultValues {
   privacy_algorithm?: SNMPPrivacyAlgorithmType;
   privacy_password?: string;
   realm?: string;
+  vaultId?: string;
+  hostIdentifier?: string;
 }
 
 export type CredentialDialogState = CredentialDialogValues &
@@ -91,6 +104,8 @@ interface CredentialDialogProps {
   privacy_password?: string;
   title?: string;
   types?: readonly CredentialType[];
+  vaultId?: string;
+  hostIdentifier?: string;
   onClose: () => void;
   onErrorClose?: () => void;
   onSave: (state: CredentialDialogState) => Promise<void> | void;
@@ -134,6 +149,8 @@ const CredentialDialog = ({
   privacy_algorithm = SNMP_PRIVACY_ALGORITHM_AES,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   privacy_password = '',
+  vaultId = '',
+  hostIdentifier = '',
   onClose,
   onSave,
   autogenerate: pAutogenerate,
@@ -258,8 +275,27 @@ const CredentialDialog = ({
   };
 
   const gmp = useGmp();
+  const features = useFeatures();
+
+  const isCredentialStoreType = (type: CredentialType) => {
+    return (
+      type === CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+      type === CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+      type === CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE ||
+      type === CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE ||
+      type === CREDENTIAL_STORE_PGP_CREDENTIAL_TYPE ||
+      type === CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE ||
+      type === CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE ||
+      type === CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE
+    );
+  };
+
   const enabledTypes = types.filter(type => {
-    return !(type === KRB5_CREDENTIAL_TYPE && !gmp.settings.enableKrb5);
+    return !(
+      (type === KRB5_CREDENTIAL_TYPE && !gmp.settings.enableKrb5) ||
+      (isCredentialStoreType(type) &&
+        !features.featureEnabled('ENABLE_CREDENTIAL_STORES'))
+    );
   });
 
   const typeOptions = map(enabledTypes, type => ({
@@ -296,6 +332,8 @@ const CredentialDialog = ({
         id: credential?.id,
         kdcs: credential?.kdcs,
         realm: credential?.realm,
+        vaultId,
+        hostIdentifier,
       }}
       error={error}
       title={title}
@@ -348,6 +386,23 @@ const CredentialDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
+
+            {isCredentialStoreType(state.credential_type) && (
+              <>
+                <TextField
+                  name="vaultId"
+                  title={_('Vault ID')}
+                  value={state.vaultId}
+                  onChange={onValueChange}
+                />
+                <TextField
+                  name="hostIdentifier"
+                  title={_('Host Identifier')}
+                  value={state.hostIdentifier}
+                  onChange={onValueChange}
+                />
+              </>
+            )}
 
             {(state.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
               state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE) &&

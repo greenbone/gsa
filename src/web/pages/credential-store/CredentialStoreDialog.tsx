@@ -11,7 +11,7 @@ import PasswordField from 'web/components/form/PasswordField';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface CyberArkDialogProps {
+interface CredentialStoreDialogProps {
   active?: boolean;
   appId?: string;
   comment?: string;
@@ -20,13 +20,13 @@ interface CyberArkDialogProps {
   port?: string;
   sslOnly?: boolean;
   onClose: () => void;
-  onSave: (values: CyberArkDialogState) => void;
+  onSave: (values: CredentialStoreDialogState) => void | Promise<void>;
 }
 
-export type CyberArkDialogState = CyberArkDialogDefaultValues &
-  CyberArkDialogValues;
+export type CredentialStoreDialogState = CredentialStoreDialogDefaultValues &
+  CredentialStoreDialogValues;
 
-interface CyberArkDialogDefaultValues {
+interface CredentialStoreDialogDefaultValues {
   active: boolean;
   appId: string;
   comment: string;
@@ -36,7 +36,7 @@ interface CyberArkDialogDefaultValues {
   sslOnly: boolean;
 }
 
-interface CyberArkDialogValues {
+interface CredentialStoreDialogValues {
   clientCertificate?: File;
   clientKey?: File;
   pkcs12File?: File;
@@ -44,7 +44,7 @@ interface CyberArkDialogValues {
   serverCaCertificate?: File;
 }
 
-const CyberArkDialog = ({
+const CredentialStoreDialog = ({
   active = true,
   appId = '',
   comment = '',
@@ -54,7 +54,7 @@ const CyberArkDialog = ({
   sslOnly = true,
   onClose,
   onSave,
-}: CyberArkDialogProps) => {
+}: CredentialStoreDialogProps) => {
   const [_] = useTranslation();
 
   const uncontrolledValues = {
@@ -68,10 +68,10 @@ const CyberArkDialog = ({
   };
 
   return (
-    <SaveDialog<CyberArkDialogValues, CyberArkDialogDefaultValues>
+    <SaveDialog<CredentialStoreDialogValues, CredentialStoreDialogDefaultValues>
       buttonTitle={_('Save')}
       defaultValues={uncontrolledValues}
-      title={_('Edit CyberArk Credential Store')}
+      title={_('Edit Credential Store')}
       onClose={onClose}
       onSave={onSave}
     >
@@ -142,6 +142,7 @@ const CyberArkDialog = ({
             <FileField
               name="clientCertificate"
               title={_('Upload client certificate (.pem, .crt)')}
+              value={values.clientCertificate}
               onChange={onValueChange}
             />
           </FormGroup>
@@ -149,6 +150,7 @@ const CyberArkDialog = ({
             <FileField
               name="clientKey"
               title={_('Upload private key (.pem, .key)')}
+              value={values.clientKey}
               onChange={onValueChange}
             />
           </FormGroup>
@@ -158,6 +160,7 @@ const CyberArkDialog = ({
               title={_(
                 'Upload PKCS#12 file (.p12, .pfx) - alternative to separate certificate/key',
               )}
+              value={values.pkcs12File}
               onChange={onValueChange}
             />
           </FormGroup>
@@ -165,6 +168,7 @@ const CyberArkDialog = ({
             <FileField
               name="serverCaCertificate"
               title={_('Upload server CA certificate (.pem, .crt)')}
+              value={values.serverCaCertificate}
               onChange={onValueChange}
             />
           </FormGroup>
@@ -185,4 +189,4 @@ const CyberArkDialog = ({
   );
 };
 
-export default CyberArkDialog;
+export default CredentialStoreDialog;

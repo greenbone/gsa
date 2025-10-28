@@ -18,7 +18,15 @@ export type CredentialType =
   | typeof SMIME_CREDENTIAL_TYPE
   | typeof SNMP_CREDENTIAL_TYPE
   | typeof USERNAME_PASSWORD_CREDENTIAL_TYPE
-  | typeof USERNAME_SSH_KEY_CREDENTIAL_TYPE;
+  | typeof USERNAME_SSH_KEY_CREDENTIAL_TYPE
+  | typeof CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE
+  | typeof CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE
+  | typeof CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE
+  | typeof CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE
+  | typeof CREDENTIAL_STORE_PGP_CREDENTIAL_TYPE
+  | typeof CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE
+  | typeof CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE
+  | typeof CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE;
 
 export type CertificateStatus =
   | typeof CERTIFICATE_STATUS_EXPIRED
@@ -48,6 +56,10 @@ interface CredentialElement extends ModelElement {
   };
   credential_type?: CredentialType;
   allow_insecure?: number;
+  credential_store?: {
+    host_identifier?: string;
+    vault_id?: string;
+  };
   kdcs?: {
     kdc: string | string[];
   };
@@ -72,9 +84,15 @@ export interface CertificateInfo {
   sha256Fingerprint?: string;
 }
 
+export interface CredentialStore {
+  hostIdentifier?: string;
+  vaultId?: string;
+}
+
 interface CredentialProperties extends ModelProperties {
   allow_insecure?: YesNo;
   certificate_info?: CertificateInfo;
+  credentialStore?: CredentialStore;
   credential_type?: CredentialType;
   kdcs?: string[];
   login?: string;
@@ -91,6 +109,16 @@ export const PGP_CREDENTIAL_TYPE = 'pgp';
 export const PASSWORD_ONLY_CREDENTIAL_TYPE = 'pw';
 export const CERTIFICATE_CREDENTIAL_TYPE = 'cc';
 export const KRB5_CREDENTIAL_TYPE = 'krb5';
+
+// Credential Store credential types
+export const CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE = 'cs_up';
+export const CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'cs_usk';
+export const CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE = 'cs_cc';
+export const CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE = 'cs_snmp';
+export const CREDENTIAL_STORE_PGP_CREDENTIAL_TYPE = 'cs_pgp';
+export const CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE = 'cs_pw';
+export const CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE = 'cs_smime';
+export const CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE = 'cs_krb5';
 
 export const SSH_CREDENTIAL_TYPES: readonly CredentialType[] = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -126,6 +154,17 @@ export const VFIRE_CREDENTIAL_TYPES: readonly CredentialType[] = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 ];
 
+export const CREDENTIAL_STORE_CREDENTIAL_TYPES: readonly CredentialType[] = [
+  CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_PGP_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+];
+
 export const ALL_CREDENTIAL_TYPES: readonly CredentialType[] = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
@@ -135,6 +174,14 @@ export const ALL_CREDENTIAL_TYPES: readonly CredentialType[] = [
   PASSWORD_ONLY_CREDENTIAL_TYPE,
   CERTIFICATE_CREDENTIAL_TYPE,
   KRB5_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_PGP_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
 ];
 
 export const ssh_credential_filter = (credential: Credential) =>
@@ -184,6 +231,28 @@ const TYPE_NAMES = {
   [PASSWORD_ONLY_CREDENTIAL_TYPE]: _l('Password only'),
   [SMIME_CREDENTIAL_TYPE]: _l('S/MIME Certificate'),
   [KRB5_CREDENTIAL_TYPE]: _l('SMB (Kerberos)'),
+  [CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE]: _l(
+    'Credential Store Username + Password',
+  ),
+  [CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE]: _l(
+    'Credential Store Username + SSH Key',
+  ),
+  [CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE]: _l(
+    'Credential Store Client Certificate',
+  ),
+  [CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE]: _l('Credential Store SNMP'),
+  [CREDENTIAL_STORE_PGP_CREDENTIAL_TYPE]: _l(
+    'Credential Store PGP Encryption Key',
+  ),
+  [CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE]: _l(
+    'Credential Store Password only',
+  ),
+  [CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE]: _l(
+    'Credential Store S/MIME Certificate',
+  ),
+  [CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE]: _l(
+    'Credential Store SMB (Kerberos)',
+  ),
 } as const;
 
 export const getCredentialTypeName = (type: CredentialType) =>
@@ -210,6 +279,7 @@ class Credential extends Model {
 
   readonly allow_insecure?: YesNo;
   readonly certificate_info?: CertificateInfo;
+  readonly credentialStore?: CredentialStore;
   readonly credential_type?: CredentialType;
   readonly kdcs: string[];
   readonly login: string | undefined;
@@ -222,6 +292,7 @@ class Credential extends Model {
     allow_insecure,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     certificate_info,
+    credentialStore,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     credential_type,
     kdcs = [],
@@ -234,6 +305,7 @@ class Credential extends Model {
     super(properties);
     this.allow_insecure = allow_insecure;
     this.certificate_info = certificate_info;
+    this.credentialStore = credentialStore;
     this.credential_type = credential_type;
     this.kdcs = kdcs;
     this.login = login;
@@ -259,6 +331,13 @@ class Credential extends Model {
         md5Fingerprint: element.certificate_info.md5_fingerprint,
         sha256Fingerprint: element.certificate_info.sha256_fingerprint,
         timeStatus: parseTimeStatus(element.certificate_info.time_status),
+      };
+    }
+
+    if (isDefined(element.credential_store)) {
+      ret.credentialStore = {
+        hostIdentifier: element.credential_store.host_identifier,
+        vaultId: element.credential_store.vault_id,
       };
     }
 
