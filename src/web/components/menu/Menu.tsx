@@ -592,10 +592,7 @@ const Menu = () => {
               active: isLdapActive,
             },
           capabilities.mayOp('describe_auth') &&
-            /**
-             * TODO: Enable Credential Store menu when the feature flag is active check flag name
-             */
-            //   features.featureEnabled('ENABLE_CREDENTIAL_STORES') &&
+            features.featureEnabled('ENABLE_CREDENTIAL_STORES') &&
             capabilities.mayOp('modify_auth') && {
               label: _('Credential Store'),
               to: '/credentialstore',
