@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Audit from 'gmp/models/audit';
-import Task, {USAGE_TYPE} from 'gmp/models/task';
+import {type default as Audit} from 'gmp/models/audit';
+import {type default as Task, USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import {StartIcon} from 'web/components/icon';

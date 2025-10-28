@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Gmp from 'gmp/gmp';
+import type Gmp from 'gmp/gmp';
 
 const GmpContext = React.createContext<Gmp | undefined>(undefined);
 

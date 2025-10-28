@@ -4,19 +4,22 @@
  */
 
 import {useCallback, useMemo, useRef, useState} from 'react';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import AgentGroup from 'gmp/models/agentgroup';
-import Filter, {AGENT_GROUPS_FILTER_FILTER} from 'gmp/models/filter';
+import type CollectionCounts from 'gmp/collection/collection-counts';
+import type AgentGroup from 'gmp/models/agentgroup';
+import {
+  type default as Filter,
+  AGENT_GROUPS_FILTER_FILTER,
+} from 'gmp/models/filter';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
+import {useGetAgentGroups} from 'web/hooks/use-query/agent-groups';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
-import {useGetAgentGroups} from 'web/hooks/useQuery/agentgroups';
 import useSelection from 'web/hooks/useSelection';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';

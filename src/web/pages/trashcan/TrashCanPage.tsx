@@ -4,11 +4,14 @@
  */
 
 import {useCallback, useEffect, useState} from 'react';
-import {showSuccessNotification} from '@greenbone/ui-lib';
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from '@greenbone/ui-lib';
 import styled from 'styled-components';
-import {TrashCanGetData} from 'gmp/commands/trashcan';
-import Rejection from 'gmp/http/rejection';
-import Model from 'gmp/models/model';
+import {type TrashCanGetData} from 'gmp/commands/trashcan';
+import type Rejection from 'gmp/http/rejection';
+import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
@@ -29,6 +32,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsTable from 'web/pages/agent-groups/AgentGroupsTable';
 import AlertsTable from 'web/pages/alerts/Table';
 import AuditsTable from 'web/pages/audits/Table';
+import ContainerImageTargetTable from 'web/pages/container-image-targets/ContainerImageTargetTable';
 import CredentialsTable from 'web/pages/credentials/Table';
 import TrashActions from 'web/pages/extras/TrashActions';
 import FiltersTable from 'web/pages/filters/Table';
@@ -90,13 +94,25 @@ const TrashCan = () => {
       response => {
         setTrash(response.data);
         setIsLoading(false);
+
+        if (
+          response.data.failedRequests &&
+          response.data.failedRequests.length > 0
+        ) {
+          response.data.failedRequests.forEach(requestType => {
+            showErrorNotification(
+              '',
+              _('Failed to load {{type}} from trashcan', {type: requestType}),
+            );
+          });
+        }
       },
       error => {
         showError(error);
         setIsLoading(false);
       },
     );
-  }, [gmp, showError]);
+  }, [gmp, showError, _]);
 
   const handleRestore = async (entity: Model) => {
     try {
@@ -381,6 +397,17 @@ const TrashCan = () => {
             <h1>{_('Agent Groups')}</h1>
             {/* @ts-expect-error */}
             <AgentGroupsTable entities={trash.agentGroups} {...tableProps} />
+          </span>
+        )}
+        {hasEntities(trash?.ociImageTargets) && (
+          <span>
+            <LinkTarget id="oci_image_target" />
+            <h1>{_('Container Image Targets')}</h1>
+            {/* @ts-expect-error */}
+            <ContainerImageTargetTable
+              entities={trash.ociImageTargets}
+              {...tableProps}
+            />
           </span>
         )}
       </Layout>

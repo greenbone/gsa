@@ -6,7 +6,7 @@
 import React from 'react';
 import equal from 'fast-deep-equal';
 import styled from 'styled-components';
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
@@ -19,7 +19,7 @@ import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import Theme from 'web/utils/Theme';
 import withTranslation, {
-  WithTranslationComponentProps,
+  type WithTranslationComponentProps,
 } from 'web/utils/withTranslation';
 
 export interface State {

@@ -5,17 +5,17 @@
 
 import {feedStatusRejection} from 'gmp/commands/feedstatus';
 import HttpCommand from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
-import Response from 'gmp/http/response';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import type Http from 'gmp/http/http';
+import {type ResponseRejection} from 'gmp/http/rejection';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import Credential from 'gmp/models/credential';
-import {Date} from 'gmp/models/date';
-import Model, {ModelElement} from 'gmp/models/model';
-import {SettingElement} from 'gmp/models/setting';
+import {type Date} from 'gmp/models/date';
+import Model, {type ModelElement} from 'gmp/models/model';
+import {type SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
-import Task, {TaskElement} from 'gmp/models/task';
-import {YesNo} from 'gmp/parser';
+import Task, {type TaskElement} from 'gmp/models/task';
+import {type YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -94,12 +94,12 @@ export const SCHEDULE_START_VALUE = '1';
 export const DONT_START_VALUE = '0';
 
 class WizardCommand extends HttpCommand {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, {cmd: 'wizard'});
   }
 
   async task() {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       name: 'quick_first_scan',
     });
     const {data} = response as Response<RunWizardResponseData, XmlMeta>;
@@ -122,7 +122,7 @@ class WizardCommand extends HttpCommand {
   }
 
   async advancedTask() {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       name: 'quick_task',
     });
     const {data} = response as Response<RunWizardResponseData, XmlMeta>;
@@ -151,7 +151,7 @@ class WizardCommand extends HttpCommand {
   }
 
   async modifyTask() {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       name: 'modify_task',
     });
     const {data} = response as Response<RunWizardResponseData, XmlMeta>;
@@ -180,13 +180,13 @@ class WizardCommand extends HttpCommand {
 
   async runQuickFirstScan({hosts}: RunQuickFirstScanArguments) {
     try {
-      return await this.httpPost({
+      return await this.httpPostWithTransform({
         'event_data:hosts': hosts,
         cmd: 'run_wizard',
         name: 'quick_first_scan',
       });
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
     }
   }
 
@@ -206,7 +206,7 @@ class WizardCommand extends HttpCommand {
     taskName,
   }: RunQuickTaskArguments) {
     try {
-      return await this.httpPost({
+      return await this.httpPostWithTransform({
         'event_data:alert_email': alertEmail,
         'event_data:auto_start': autoStart,
         'event_data:config_id': scanConfigId,
@@ -228,7 +228,7 @@ class WizardCommand extends HttpCommand {
         name: 'quick_task',
       });
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
     }
   }
 
@@ -241,7 +241,7 @@ class WizardCommand extends HttpCommand {
     startMinute,
     startTimezone,
   }: RunModifyTaskArguments) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       'event_data:alert_email': alertEmail,
       'event_data:reschedule': reschedule,
       'event_data:start_hour': startHour,

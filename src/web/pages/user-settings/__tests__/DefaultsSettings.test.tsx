@@ -5,8 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, wait, rendererWith} from 'web/testing';
-import Capabilities, {Capability} from 'gmp/capabilities/capabilities';
-import {EntityType} from 'gmp/utils/entitytype';
+import Capabilities, {type Capability} from 'gmp/capabilities/capabilities';
+import {type EntityType} from 'gmp/utils/entitytype';
 import DefaultSettings from 'web/pages/user-settings/DefaultsSettings';
 
 describe('DefaultSettings', () => {

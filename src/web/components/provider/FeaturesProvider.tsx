@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Features from 'gmp/capabilities/features';
+import type Features from 'gmp/capabilities/features';
 
 const FeaturesContext = React.createContext<Features | undefined>(undefined);
 

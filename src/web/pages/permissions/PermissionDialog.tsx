@@ -3,12 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Group from 'gmp/models/group';
+import type Group from 'gmp/models/group';
 import Model from 'gmp/models/model';
-import Permission, {SubjectType} from 'gmp/models/permission';
-import Role from 'gmp/models/role';
-import User from 'gmp/models/user';
-import {EntityType} from 'gmp/utils/entitytype';
+import {
+  type default as Permission,
+  type SubjectType,
+} from 'gmp/models/permission';
+import type Role from 'gmp/models/role';
+import type User from 'gmp/models/user';
+import {type EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
 import SaveDialog from 'web/components/dialog/SaveDialog';
@@ -22,7 +25,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import {
   permissionDescription,
   renderSelectItems,
-  RenderSelectItemProps,
+  type RenderSelectItemProps,
 } from 'web/utils/Render';
 
 interface PermissionDialogProps {

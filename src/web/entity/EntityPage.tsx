@@ -6,8 +6,8 @@
 import React from 'react';
 import * as ReactIs from 'react-is';
 import styled from 'styled-components';
-import Model from 'gmp/models/model';
-import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
+import type Model from 'gmp/models/model';
+import {type EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import Toolbar from 'web/components/bar/Toolbar';

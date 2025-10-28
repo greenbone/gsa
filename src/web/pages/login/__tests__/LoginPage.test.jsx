@@ -12,6 +12,7 @@ import {
   wait,
 } from 'web/testing';
 import {vi} from 'vitest';
+import {ResponseRejection} from 'gmp/http/rejection';
 import Logger from 'gmp/log';
 import LoginPage from 'web/pages/login/LoginPage';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
@@ -152,6 +153,42 @@ describe('LoginPage tests', () => {
 
     const error = await screen.findByTestId('error');
     expect(error).toHaveTextContent('Just a test');
+  });
+
+  test('should display invalid login message', async () => {
+    const login = testing
+      .fn()
+      .mockRejectedValue(new ResponseRejection({status: 401}));
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
+    const setLocale = testing.fn();
+    const setTimezone = testing.fn();
+    const gmp = {
+      setTimezone,
+      setLocale,
+      login,
+      isLoggedIn,
+      clearToken,
+      settings: {},
+    };
+    const {render} = rendererWith({gmp, router: true, store: true});
+
+    render(<LoginPage />);
+
+    const usernameField = screen.getByName('username');
+    const passwordField = screen.getByName('password');
+
+    changeInputValue(usernameField, 'foo');
+    changeInputValue(passwordField, 'bar');
+
+    const button = screen.getByTestId('login-button');
+    fireEvent.click(button);
+    expect(login).toBeCalledWith('foo', 'bar');
+
+    const error = await screen.findByTestId('error');
+    expect(error).toHaveTextContent(
+      'Login Failed. Invalid password or username.',
+    );
   });
 
   test('should redirect to main page if already logged in', () => {

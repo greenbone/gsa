@@ -5,10 +5,10 @@
 
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
-import {Element} from 'gmp/models/model';
-import PortList, {PortListElement} from 'gmp/models/portlist';
+import {type Element} from 'gmp/models/model';
+import PortList, {type PortListElement} from 'gmp/models/portlist';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 export type FromFile = typeof FROM_FILE | typeof NOT_FROM_FILE;
@@ -49,7 +49,7 @@ export const FROM_FILE = YES_VALUE;
 export const NOT_FROM_FILE = NO_VALUE;
 
 export class PortListCommand extends EntityCommand<PortList, PortListElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'port_list', PortList);
   }
 
@@ -106,7 +106,7 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
     id,
     portListId,
   }: PortListCommandDeletePortRangeParams) {
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'delete_port_range',
       port_range_id: id,
       no_redirect: 1,
@@ -116,7 +116,7 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
 
   import({xmlFile}: PortListCommandImportParams) {
     log.debug('Importing port list', {xml_file: xmlFile});
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'import_port_list',
       xml_file: xmlFile,
     });
@@ -129,7 +129,7 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
 }
 
 export class PortListsCommand extends EntitiesCommand<PortList> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'port_list', PortList);
   }
 

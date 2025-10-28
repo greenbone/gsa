@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import PortList, {PortListElement} from 'gmp/models/portlist';
-import {parseInt, parseYesNo, parseCsv, YesNo, NO_VALUE} from 'gmp/parser';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import PortList, {type PortListElement} from 'gmp/models/portlist';
+import {parseInt, parseYesNo, parseCsv, type YesNo, NO_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';

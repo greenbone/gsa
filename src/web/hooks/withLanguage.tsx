@@ -5,7 +5,7 @@
 
 import React from 'react';
 import useLanguage from 'web/hooks/useLanguage';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 type LanguageProps = {
   language: string;

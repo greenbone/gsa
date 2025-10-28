@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
-import Credential, {CertificateInfo} from 'gmp/models/credential';
+import Credential, {type CertificateInfo} from 'gmp/models/credential';
 import date from 'gmp/models/date';
 import CertInfo from 'web/components/certinfo/CertInfo';
 import {setTimezone} from 'web/store/usersettings/actions';

@@ -4,18 +4,21 @@
  */
 
 import React, {useState} from 'react';
-import Rejection from 'gmp/http/rejection';
-import Group from 'gmp/models/group';
-import Permission, {SubjectType} from 'gmp/models/permission';
-import Role from 'gmp/models/role';
-import User from 'gmp/models/user';
-import {EntityType, getEntityType} from 'gmp/utils/entitytype';
+import type Rejection from 'gmp/http/rejection';
+import type Group from 'gmp/models/group';
+import {
+  type default as Permission,
+  type SubjectType,
+} from 'gmp/models/permission';
+import type Role from 'gmp/models/role';
+import type User from 'gmp/models/user';
+import {type EntityType, getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import EntityComponent from 'web/entity/EntityComponent';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
-import {GotoDetailsFunc} from 'web/entity/navigation';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {type GotoDetailsFunc} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

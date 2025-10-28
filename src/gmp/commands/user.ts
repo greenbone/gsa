@@ -3,27 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Capabilities, {Capability} from 'gmp/capabilities/capabilities';
-import Features, {Feature} from 'gmp/capabilities/features';
+import Capabilities, {type Capability} from 'gmp/capabilities/capabilities';
+import Features, {type Feature} from 'gmp/capabilities/features';
 import EntityCommand from 'gmp/commands/entity';
-import {HttpCommandOptions} from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Response from 'gmp/http/response';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type HttpCommandOptions} from 'gmp/commands/http';
+import type Http from 'gmp/http/http';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import date, {Date} from 'gmp/models/date';
-import {PortListElement} from 'gmp/models/portlist';
-import Setting, {SettingElement} from 'gmp/models/setting';
+import date, {type Date} from 'gmp/models/date';
+import {type PortListElement} from 'gmp/models/portlist';
+import Setting, {type SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_RADIUS,
-  UserElement,
+  type UserElement,
 } from 'gmp/models/user';
 import {parseBoolean, parseInt} from 'gmp/parser';
 import {filter, forEach, map} from 'gmp/utils/array';
-import {EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entitytype';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 
@@ -240,6 +240,11 @@ export const DEFAULT_FILTER_SETTINGS: Record<
   tlscertificate: '34a176c1-0278-4c29-b84d-3d72117b2169',
   user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
+  /**
+   * TODO: CONTAINER SCANNING
+   * filter id to be defined
+   */
+  ociimagetarget: 'to be defined',
 } as const;
 
 const PARAM_KEYS = {
@@ -254,12 +259,12 @@ export const transformSettingName = (name: string) =>
   name.toLowerCase().replace(/ |-/g, '');
 
 class UserCommand extends EntityCommand<User, PortListElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'user', User);
   }
 
   async currentAuthSettings(options: HttpCommandOptions = {}) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         cmd: 'auth_settings',
         name: '--', // only used in old xslt and can be any string
@@ -301,7 +306,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async getSetting(id: string) {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       cmd: 'get_setting',
       setting_id: id,
     });
@@ -316,7 +321,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async currentSettings(options: HttpCommandOptions = {}) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         cmd: 'get_settings',
       },
@@ -333,7 +338,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async currentCapabilities(options: HttpCommandOptions = {}) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         cmd: 'get_capabilities',
       },
@@ -346,7 +351,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async currentFeatures(options: HttpCommandOptions = {}) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         cmd: 'get_capabilities',
       },
@@ -448,7 +453,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
       inheritor_id: inheritorId,
     };
     log.debug('Deleting user', data);
-    await this.httpPost(data);
+    await this.httpPostWithTransform(data);
   }
 
   /**
@@ -457,7 +462,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   saveSettings(data: SaveSettingsArguments) {
     log.debug('Saving settings', data);
 
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'save_my_settings',
       text: data.timezone,
       [PARAM_KEYS.DATE]: data.userInterfaceDateFormat,
@@ -530,7 +535,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async saveSetting(settingId: string, settingValue: string | number) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'save_setting',
       setting_id: settingId,
       setting_value: settingValue,
@@ -538,7 +543,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async saveTimezone(settingValue: string | number) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'save_setting',
       setting_name: 'Timezone',
       setting_value: settingValue,
@@ -592,7 +597,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   ping() {
-    return this.httpGet({
+    return this.httpGetWithTransform({
       cmd: 'ping',
     });
   }

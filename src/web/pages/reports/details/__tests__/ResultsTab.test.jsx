@@ -6,7 +6,7 @@
 import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, wait} from 'web/testing';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';

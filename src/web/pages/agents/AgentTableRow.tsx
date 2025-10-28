@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Agent from 'gmp/models/agent';
+import type Agent from 'gmp/models/agent';
 import DateTime from 'web/components/date/DateTime';
 import {
   getConnectionStatusLabel,
@@ -11,9 +11,11 @@ import {
 } from 'web/components/label/AgentsState';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import {RowComponentProps} from 'web/entities/EntitiesTable';
+import {type RowComponentProps} from 'web/entities/EntitiesTable';
 import useTranslation from 'web/hooks/useTranslation';
-import AgentActions, {AgentActionsProps} from 'web/pages/agents/AgentActions';
+import AgentActions, {
+  type AgentActionsProps,
+} from 'web/pages/agents/AgentActions';
 
 export interface AgentTableRowProps
   extends AgentActionsProps,

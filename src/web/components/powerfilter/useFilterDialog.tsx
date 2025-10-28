@@ -4,7 +4,7 @@
  */
 
 import {useCallback, useState} from 'react';
-import Filter, {FilterSortOrder} from 'gmp/models/filter';
+import Filter, {type FilterSortOrder} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 
 export interface FilterDialogState {

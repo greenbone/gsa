@@ -6,7 +6,6 @@
 import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import DefaultTransform from 'gmp/http/transform/default';
 import logger from 'gmp/log';
 import Credential from 'gmp/models/credential';
 
@@ -111,15 +110,15 @@ export class CredentialCommand extends EntityCommand {
     });
   }
 
-  download({id}, format = 'pem') {
-    return this.httpGet(
-      {
+  async download({id}, format = 'pem') {
+    return this.httpRequestWithRejectionTransform('get', {
+      args: {
         cmd: 'download_credential',
         package_format: format,
         credential_id: id,
       },
-      {transform: DefaultTransform, responseType: 'arraybuffer'},
-    );
+      responseType: 'arraybuffer',
+    });
   }
 
   getElementFromRoot(root) {

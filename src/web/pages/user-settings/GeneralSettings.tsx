@@ -11,13 +11,13 @@ import {
   DATE_TIME_FORMAT_OPTIONS,
   SYSTEM_DEFAULT,
 } from 'gmp/locale/date';
-import {NO_VALUE, parseYesNo, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, parseYesNo, YES_VALUE, type YesNo} from 'gmp/parser';
 import {isEmpty} from 'gmp/utils/string';
 
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
-import Select, {SelectItem} from 'web/components/form/Select';
+import Select, {type SelectItem} from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
 
@@ -34,7 +34,7 @@ import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
 
-import {getLangNameByCode} from 'web/pages/user-settings/helperFunctions';
+import {getLangNameByCode} from 'web/pages/user-settings/helper-functions';
 import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';
 import useSettingSave from 'web/pages/user-settings/useSettingSave';
 import {updateTimezone} from 'web/store/usersettings/actions';

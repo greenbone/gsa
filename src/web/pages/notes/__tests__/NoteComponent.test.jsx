@@ -16,7 +16,7 @@ import {
   RESULT_UUID,
   TASK_ANY,
 } from 'gmp/models/override';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import NoteComponent from 'web/pages/notes/NoteComponent';
 
 const currentSettings = testing

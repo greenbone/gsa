@@ -4,12 +4,12 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import GmpHttp from 'gmp/http/gmp';
-import {Element} from 'gmp/models/model';
+import type Http from 'gmp/http/http';
+import {type Element} from 'gmp/models/model';
 import User from 'gmp/models/user';
 
 class UsersCommand extends EntitiesCommand<User> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'user', User);
   }
 

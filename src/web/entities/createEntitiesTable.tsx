@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model from 'gmp/models/model';
+import type Model from 'gmp/models/model';
 import EntitiesTable, {
-  EntitiesTableComponentProps,
-  EntitiesTableProps,
-  FooterComponentProps,
-  HeaderComponentProps,
-  PaginationComponentProps,
-  RowComponentProps,
+  type EntitiesTableComponentProps,
+  type EntitiesTableProps,
+  type FooterComponentProps,
+  type HeaderComponentProps,
+  type PaginationComponentProps,
+  type RowComponentProps,
 } from 'web/entities/EntitiesTable';
 
 interface ToString {

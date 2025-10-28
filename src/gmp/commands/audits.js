@@ -20,7 +20,7 @@ export class AuditCommand extends EntityCommand {
   start({id}) {
     log.debug('Starting audit...');
 
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'start_task',
       id,
     })
@@ -37,7 +37,7 @@ export class AuditCommand extends EntityCommand {
   stop({id}) {
     log.debug('Stopping audit');
 
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'stop_task',
       id,
     })
@@ -52,7 +52,7 @@ export class AuditCommand extends EntityCommand {
   }
 
   resume({id}) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'resume_task',
       id,
     })
@@ -183,7 +183,7 @@ export class AuditsCommand extends EntitiesCommand {
 
   get(params, options) {
     params = {...params, usage_type: 'audit'};
-    return this.httpGet(params, options).then(response => {
+    return this.httpGetWithTransform(params, options).then(response => {
       const {entities, filter, counts} = this.getCollectionListFromRoot(
         response.data,
       );

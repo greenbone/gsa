@@ -4,7 +4,7 @@
  */
 
 import {TagsInput} from '@mantine/core';
-import tagStyles from 'web/components/form/tagStyles';
+import tagStyles from 'web/components/form/tag-styles';
 import Theme from 'web/utils/Theme';
 
 interface MultiValueTextFieldProps {

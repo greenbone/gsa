@@ -8,7 +8,7 @@ import {
   SEVERITY_RATING_CVSS_2,
   SEVERITY_RATING_CVSS_3,
   DEFAULT_SEVERITY_RATING,
-  SeverityRating,
+  type SeverityRating,
 } from 'gmp/utils/severity';
 
 interface GmpSettingsOptions {

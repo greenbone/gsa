@@ -8,12 +8,12 @@ import {
   MultiSelect as MantineMultiSelect,
   TextInput,
   Loader,
-  MultiSelectProps as MantineMultiSelectProps,
-  MantineSize,
+  type MultiSelectProps as MantineMultiSelectProps,
+  type MantineSize,
 } from '@mantine/core';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import {SelectItem} from 'web/components/form/Select';
+import {type SelectItem} from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
 
 type Size = MantineSize | undefined;

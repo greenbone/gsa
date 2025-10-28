@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import {act, renderHook} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import useFilterDialog, {
-  FilterDialogState,
+  type FilterDialogState,
 } from 'web/components/powerfilter/useFilterDialog';
 
 describe('useFilterDialog', () => {

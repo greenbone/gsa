@@ -3,17 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
+import {
+  CanceledRejection,
+  ResponseRejection,
+  TimeoutRejection,
+} from 'gmp/http/rejection';
 import {types} from 'web/store/entities/utils/actions';
 import {filterIdentifier} from 'web/store/utils';
 
 /**
- * Return true if error is not a Rejection class or if Rejection class has a
- * reason of error
+ * Check if the error is an actual error that should be stored
  *
+ * Cancellations and timeouts are not considered as errors.
+ * ResponseRejection with status 401 (authorization required) is also not considered as an error.
+ *
+ * @param {Error} error The error to check
  * @returns Boolean
  */
-export const isError = error => !isDefined(error.isError) || error.isError();
+export const isError = error =>
+  !(error instanceof CanceledRejection) &&
+  !(error instanceof TimeoutRejection) &&
+  (!(error instanceof ResponseRejection) || error.status !== 401);
 
 export const initialState = {
   byId: {},

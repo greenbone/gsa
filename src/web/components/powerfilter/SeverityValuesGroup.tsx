@@ -4,7 +4,7 @@
  */
 
 import {useState} from 'react';
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import {parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';

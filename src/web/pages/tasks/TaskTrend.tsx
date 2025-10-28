@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {TaskTrend as TaskTrendType} from 'gmp/models/task';
+import {type TaskTrend as TaskTrendType} from 'gmp/models/task';
 import {
   TrendDownIcon,
   TrendLessIcon,
@@ -11,7 +11,7 @@ import {
   TrendUpIcon,
   TrendNoChangeIcon,
 } from 'web/components/icon';
-import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
+import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface TaskTrendProps {

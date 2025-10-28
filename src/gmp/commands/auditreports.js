@@ -7,9 +7,9 @@ import registerCommand from 'gmp/command';
 import {convertBoolean} from 'gmp/commands/convert';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import DefaultTransform from 'gmp/http/transform/default';
 import AuditReport from 'gmp/models/auditreport';
 import {ALL_FILTER} from 'gmp/models/filter';
+import {filterString} from 'gmp/models/filter/utils';
 import {isDefined} from 'gmp/utils/identity';
 
 export class AuditReportsCommand extends EntitiesCommand {
@@ -47,22 +47,23 @@ export class AuditReportCommand extends EntityCommand {
     super(http, 'report', AuditReport);
   }
 
-  download({id}, {reportFormatId, deltaReportId, filter}) {
-    return this.httpGet(
-      {
+  async download({id}, {reportFormatId, deltaReportId, filter}) {
+    const allFilter = isDefined(filter) ? filter.all() : ALL_FILTER;
+    return this.httpRequestWithRejectionTransform('get', {
+      args: {
         cmd: 'get_report',
         delta_report_id: deltaReportId,
         details: 1,
         report_id: id,
         report_format_id: reportFormatId,
-        filter: isDefined(filter) ? filter.all() : ALL_FILTER,
+        filter: filterString(allFilter),
       },
-      {transform: DefaultTransform, responseType: 'arraybuffer'},
-    );
+      responseType: 'arraybuffer',
+    });
   }
 
   addAssets({id}, {filter = ''}) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'create_asset',
       report_id: id,
       filter,
@@ -70,7 +71,7 @@ export class AuditReportCommand extends EntityCommand {
   }
 
   removeAssets({id}, {filter = ''}) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'delete_asset',
       report_id: id,
       filter,
@@ -78,7 +79,7 @@ export class AuditReportCommand extends EntityCommand {
   }
 
   alert({alert_id, report_id, filter}) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'report_alert',
       alert_id,
       report_id,
@@ -86,12 +87,12 @@ export class AuditReportCommand extends EntityCommand {
     });
   }
 
-  getDelta(
+  async getDelta(
     {id},
     {id: delta_report_id},
     {filter, details = true, ...options} = {},
   ) {
-    return this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         id,
         delta_report_id,
@@ -100,10 +101,11 @@ export class AuditReportCommand extends EntityCommand {
         details: convertBoolean(details),
       },
       options,
-    ).then(this.transformResponse);
+    );
+    return this.transformResponseToModel(response);
   }
 
-  get(
+  async get(
     {id},
     {
       filter,
@@ -113,7 +115,7 @@ export class AuditReportCommand extends EntityCommand {
       ...options
     } = {},
   ) {
-    return this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         id,
         filter,
@@ -122,7 +124,8 @@ export class AuditReportCommand extends EntityCommand {
         details: convertBoolean(details),
       },
       options,
-    ).then(this.transformResponse);
+    );
+    return this.transformResponseToModel(response);
   }
 
   getElementFromRoot(root) {

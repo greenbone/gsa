@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {parseInfoEntities} from 'gmp/collection/parser';
-import Model, {Element} from 'gmp/models/model';
+import {type default as Model, type Element} from 'gmp/models/model';
 
 describe('parseInfoEntities test', () => {
   test('should return empty array', () => {

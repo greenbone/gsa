@@ -5,9 +5,9 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import {TagsIcon as TagsSvgIcon} from 'web/components/icon';
-import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
+import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 
 interface TagsIconProps<TValue = string>
   extends ExtendedDynamicIconProps<TValue> {

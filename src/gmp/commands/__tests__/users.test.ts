@@ -47,7 +47,6 @@ describe('UsersCommand tests', () => {
       {_id: '5', name: 'Eve'},
     ]);
     const fakeHttp = createHttp(response);
-
     const cmd = new UsersCommand(fakeHttp);
     const result = await cmd.getAll();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {

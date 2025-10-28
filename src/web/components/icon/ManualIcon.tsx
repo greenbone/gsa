@@ -4,8 +4,8 @@
  */
 
 import {HelpIcon} from 'web/components/icon';
-import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
-import ManualLink, {ManualLinkProps} from 'web/components/link/ManualLink';
+import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
+import ManualLink, {type ManualLinkProps} from 'web/components/link/ManualLink';
 
 interface ManualIconProps<TValue = string>
   extends Pick<ManualLinkProps, 'anchor' | 'page' | 'searchTerm'>,

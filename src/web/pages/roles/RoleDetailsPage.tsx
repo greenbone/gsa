@@ -4,10 +4,10 @@
  */
 
 import {useNavigate} from 'react-router';
-import Gmp from 'gmp/gmp';
+import type Gmp from 'gmp/gmp';
 import Filter from 'gmp/models/filter';
-import Permission from 'gmp/models/permission';
-import Role from 'gmp/models/role';
+import type Permission from 'gmp/models/permission';
+import type Role from 'gmp/models/role';
 import {RoleIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -28,7 +28,7 @@ import EntityNameTableData from 'web/entities/EntityNameTableData';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {

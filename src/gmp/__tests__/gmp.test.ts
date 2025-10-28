@@ -11,10 +11,13 @@ import {
   afterAll,
   testing,
 } from '@gsa/testing';
+import {
+  createHttp,
+  createHttpError,
+  createResponse,
+} from 'gmp/commands/testing';
 import Gmp from 'gmp/gmp';
 import GmpSettings from 'gmp/gmpsettings';
-import GmpHttp from 'gmp/http/gmp';
-import DefaultTransform from 'gmp/http/transform/default';
 
 const createStorage = (state?: Record<string, string>) => {
   const store = {
@@ -66,55 +69,49 @@ describe('Gmp tests', () => {
   });
 
   describe('login tests', () => {
-    test('should login user', () => {
-      const request = testing.fn().mockResolvedValue({
-        data: {
-          token: 'foo',
-        },
-      });
-      const http = {
-        request,
-      } as unknown as GmpHttp;
+    test('should login user', async () => {
+      const http = createHttp(createResponse({token: 'foo'}));
 
       const storage = createStorage();
       const settings = new GmpSettings(storage);
       const gmp = new Gmp(settings, http);
 
-      return gmp.login('foo', 'bar').then(() => {
-        expect(request).toHaveBeenCalledWith('post', {
+      await gmp.login('foo', 'bar');
+      expect(http.request).toHaveBeenCalledWith(
+        'post',
+        expect.objectContaining({
           data: {
             cmd: 'login',
             login: 'foo',
             password: 'bar',
           },
-        });
-        expect(gmp.isLoggedIn()).toEqual(true);
-      });
+        }),
+      );
+      expect(gmp.isLoggedIn()).toEqual(true);
     });
 
-    test('should not login if request fails', () => {
-      const request = testing.fn().mockRejectedValue({
-        message: 'An error',
-      });
-      const http = {
-        request,
-      } as unknown as GmpHttp;
-
+    test('should not login if request fails', async () => {
+      const http = createHttpError(new Error('An error'));
       const storage = createStorage();
       const settings = new GmpSettings(storage);
       const gmp = new Gmp(settings, http);
 
-      return gmp.login('foo', 'bar').catch(error => {
-        expect(request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'login',
-            login: 'foo',
-            password: 'bar',
-          },
-        });
-        expect(error.message).toEqual('An error');
+      try {
+        return await gmp.login('foo', 'bar');
+      } catch (error) {
+        expect(http.request).toHaveBeenCalledWith(
+          'post',
+          expect.objectContaining({
+            data: {
+              cmd: 'login',
+              login: 'foo',
+              password: 'bar',
+            },
+          }),
+        );
+        expect((error as Error).message).toEqual('An error');
         expect(gmp.isLoggedIn()).toEqual(false);
-      });
+      }
     });
   });
 
@@ -183,42 +180,27 @@ describe('Gmp tests', () => {
   });
 
   describe('doLogout tests', () => {
-    test('should logout user', () => {
-      const request = testing.fn().mockResolvedValue({
-        data: {
-          token: 'foo',
-        },
-      });
-      const http = {
-        request,
-      } as unknown as GmpHttp;
-
+    test('should logout user', async () => {
+      const http = createHttp(createResponse({token: 'foo'}));
       const storage = createStorage({token: 'foo'});
       const settings = new GmpSettings(storage, {apiServer: 'localhost'});
       const gmp = new Gmp(settings, http);
 
       expect(gmp.isLoggedIn()).toEqual(true);
 
-      return gmp.doLogout().then(() => {
-        expect(request).toHaveBeenCalledWith('get', {
-          args: {
-            token: 'foo',
-          },
-          transform: DefaultTransform,
-          url: 'http://localhost/logout',
-        });
-        expect(gmp.isLoggedIn()).toEqual(false);
-        expect(settings.token).toBeUndefined();
+      await gmp.doLogout();
+      expect(http.request).toHaveBeenCalledWith('get', {
+        args: {
+          token: 'foo',
+        },
+        url: 'http://localhost/logout',
       });
+      expect(gmp.isLoggedIn()).toEqual(false);
+      expect(settings.token).toBeUndefined();
     });
 
-    test('should notify handler on logout success', () => {
-      const request = testing.fn().mockResolvedValue({
-        data: {},
-      });
-      const http = {
-        request,
-      } as unknown as GmpHttp;
+    test('should notify handler on logout success', async () => {
+      const http = createHttp(createResponse({}));
       const handler = testing.fn();
 
       const storage = createStorage({token: 'foo'});
@@ -229,20 +211,14 @@ describe('Gmp tests', () => {
 
       expect(gmp.isLoggedIn()).toEqual(true);
 
-      return gmp.doLogout().then(() => {
-        expect(gmp.isLoggedIn()).toEqual(false);
-        expect(settings.token).toBeUndefined();
-        expect(handler).toHaveBeenCalled();
-      });
+      await gmp.doLogout();
+      expect(gmp.isLoggedIn()).toEqual(false);
+      expect(settings.token).toBeUndefined();
+      expect(handler).toHaveBeenCalled();
     });
 
-    test('should ignore logout api call failure', () => {
-      const request = testing.fn().mockRejectedValue({
-        message: 'foo',
-      });
-      const http = {
-        request,
-      } as unknown as GmpHttp;
+    test('should ignore logout api call failure', async () => {
+      const http = createHttpError(new Error('An error'));
       const handler = testing.fn();
 
       const storage = createStorage({token: 'foo'});
@@ -256,20 +232,14 @@ describe('Gmp tests', () => {
 
       expect(gmp.isLoggedIn()).toEqual(true);
 
-      return gmp.doLogout().then(() => {
-        expect(gmp.isLoggedIn()).toEqual(false);
-        expect(settings.token).toBeUndefined();
-        expect(handler).toHaveBeenCalled();
-      });
+      await gmp.doLogout();
+      expect(gmp.isLoggedIn()).toEqual(false);
+      expect(settings.token).toBeUndefined();
+      expect(handler).toHaveBeenCalled();
     });
 
-    test('should not do logout if not logged int', () => {
-      const request = testing.fn().mockResolvedValue({
-        data: {},
-      });
-      const http = {
-        request,
-      } as unknown as GmpHttp;
+    test('should not do logout if not logged int', async () => {
+      const http = createHttp(createResponse({}));
       const handler = testing.fn();
 
       const storage = createStorage();
@@ -280,11 +250,10 @@ describe('Gmp tests', () => {
 
       expect(gmp.isLoggedIn()).toEqual(false);
 
-      return gmp.doLogout().then(() => {
-        expect(gmp.isLoggedIn()).toEqual(false);
-        expect(settings.token).toBeUndefined();
-        expect(handler).not.toHaveBeenCalled();
-      });
+      await gmp.doLogout();
+      expect(gmp.isLoggedIn()).toEqual(false);
+      expect(settings.token).toBeUndefined();
+      expect(handler).not.toHaveBeenCalled();
     });
   });
 });

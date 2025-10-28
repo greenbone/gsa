@@ -12,11 +12,11 @@ import {
   wait,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Role from 'gmp/models/role';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import RoleListPage from 'web/pages/roles/RoleListPage';
 import RoleListPageToolBarIcons from 'web/pages/roles/RoleListPageToolBarIcons';
 import {entitiesLoadingActions} from 'web/store/entities/roles';

@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Rejection from 'gmp/http/rejection';
-import Response, {Meta} from 'gmp/http/response';
+import {type ResponseRejection} from 'gmp/http/rejection';
+import {type default as Response, type Meta} from 'gmp/http/response';
 import {success, rejection} from 'gmp/http/transform/xml';
 
 describe('xml base transform tests', () => {
@@ -36,19 +36,6 @@ describe('xml base transform tests', () => {
     expect(fakeTransform).toHaveBeenCalledWith(response);
   });
 
-  test('should not call rejection function for non error rejection', () => {
-    const fakeTransform = testing.fn().mockReturnValue('foo');
-    const transform = rejection(fakeTransform);
-    const isError = testing.fn().mockReturnValue(false);
-    const errorRejection = {
-      isError,
-    } as unknown as Rejection;
-
-    expect(transform(errorRejection)).toBe(errorRejection);
-    expect(isError).toHaveBeenCalled();
-    expect(fakeTransform).not.toHaveBeenCalled();
-  });
-
   test('should transform rejection with action_result', () => {
     const fakeTransform = testing.fn().mockReturnValue({
       envelope: {
@@ -58,16 +45,13 @@ describe('xml base transform tests', () => {
       },
     });
     const transform = rejection(fakeTransform);
-    const isError = testing.fn().mockReturnValue(true);
     const setMessage = testing.fn(() => errorRejection);
     const errorRejection = {
-      isError,
       setMessage,
-    } as unknown as Rejection;
+    } as unknown as ResponseRejection;
 
     expect(transform(errorRejection)).toBe(errorRejection);
     expect(fakeTransform).toHaveBeenCalledWith(errorRejection);
-    expect(isError).toHaveBeenCalled();
     expect(setMessage).toHaveBeenCalledWith('foo');
   });
 
@@ -83,16 +67,13 @@ describe('xml base transform tests', () => {
       },
     });
     const transform = rejection(fakeTransform);
-    const isError = testing.fn().mockReturnValue(true);
     const setMessage = testing.fn(() => errorRejection);
     const errorRejection = {
-      isError,
       setMessage,
-    } as unknown as Rejection;
+    } as unknown as ResponseRejection;
 
     expect(transform(errorRejection)).toBe(errorRejection);
     expect(fakeTransform).toHaveBeenCalledWith(errorRejection);
-    expect(isError).toHaveBeenCalled();
     expect(setMessage).toHaveBeenCalledWith('bar');
   });
 
@@ -101,13 +82,9 @@ describe('xml base transform tests', () => {
       envelope: {},
     });
     const transform = rejection(fakeTransform);
-    const isError = testing.fn().mockReturnValue(true);
-    const errorRejection = {
-      isError,
-    } as unknown as Rejection;
+    const errorRejection = {} as unknown as ResponseRejection;
 
     expect(transform(errorRejection)).toBe(errorRejection);
     expect(fakeTransform).toHaveBeenCalledWith(errorRejection);
-    expect(isError).toHaveBeenCalled();
   });
 });

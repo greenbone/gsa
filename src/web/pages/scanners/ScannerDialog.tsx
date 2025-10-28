@@ -4,14 +4,14 @@
  */
 
 import {useState} from 'react';
-import Credential from 'gmp/models/credential';
+import type Credential from 'gmp/models/credential';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
-  ScannerType,
+  type ScannerType,
   scannerTypeName,
 } from 'gmp/models/scanner';
 import {map} from 'gmp/utils/array';
@@ -27,10 +27,11 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 interface ScannerDialogProps {
   comment?: string;
+  caCertificate?: File;
   credentialId?: string;
   credentials?: Credential[];
   host?: string;
@@ -84,6 +85,7 @@ const updatePort = (scannerType: ScannerType | undefined) => {
 const ScannerDialog = ({
   comment = '',
   scannerInUse = false,
+  caCertificate: initialCaCertificate,
   credentials = [],
   credentialId,
   host = 'localhost',
@@ -102,7 +104,7 @@ const ScannerDialog = ({
   const features = useFeatures();
   const gmp = useGmp();
   const [caCertificate, setCaCertificate] = useState<File | undefined>(
-    undefined,
+    initialCaCertificate,
   );
   const [error, setError] = useState<string | undefined>();
   const [scannerType, setScannerType] = useState<ScannerType | undefined>(type);
@@ -165,6 +167,11 @@ const ScannerDialog = ({
     label: scannerTypeName(scannerType),
     value: scannerType,
   }));
+
+  const credentialOptions = renderSelectItems(
+    credentials as RenderSelectItemProps[],
+    '',
+  );
 
   const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
   const isAgentControllerSensorScannerType =
@@ -256,11 +263,9 @@ const ScannerDialog = ({
                 <Select
                   aria-label={_('Credential')}
                   grow="1"
-                  items={renderSelectItems(
-                    credentials as RenderSelectItemProps[],
-                  )}
+                  items={credentialOptions}
                   name="credentialId"
-                  value={credentialId}
+                  value={credentialId ?? ''}
                   onChange={(value: string) =>
                     onCredentialChange && onCredentialChange(value)
                   }

@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';

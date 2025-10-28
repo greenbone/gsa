@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {SubscriptionContext} from 'web/components/provider/SubscriptionProvider';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 const withSubscription = Component => {
   const SubscriptionWrapper = props => (

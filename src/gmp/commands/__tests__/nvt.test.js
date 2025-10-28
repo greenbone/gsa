@@ -8,7 +8,7 @@ import {NvtCommand} from 'gmp/commands/nvt';
 import {createResponse, createHttp} from 'gmp/commands/testing';
 
 describe('NvtCommand tests', () => {
-  test('should request single nvt', () => {
+  test('should request single nvt', async () => {
     const response = createResponse({
       get_info: {
         get_info_response: {
@@ -23,26 +23,21 @@ describe('NvtCommand tests', () => {
       },
     });
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new NvtCommand(fakeHttp);
-    return cmd.get({id: '1.2.3'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_info',
-          info_id: '1.2.3',
-          details: '1',
-          info_type: 'nvt',
-        },
-      });
-
-      const {data: nvt} = resp;
-      expect(nvt.id).toEqual('1.2.3');
+    const resp = await cmd.get({id: '1.2.3'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_info',
+        info_id: '1.2.3',
+        details: '1',
+        info_type: 'nvt',
+      },
     });
+    const {data: nvt} = resp;
+    expect(nvt.id).toEqual('1.2.3');
   });
 
-  test('should return config nvt', () => {
+  test('should return config nvt', async () => {
     const response = createResponse({
       get_config_nvt_response: {
         get_nvts_response: {
@@ -53,21 +48,16 @@ describe('NvtCommand tests', () => {
       },
     });
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new NvtCommand(fakeHttp);
-    return cmd.getConfigNvt({oid: '1.2.3', configId: 'c1'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_config_nvt',
-          config_id: 'c1',
-          oid: '1.2.3',
-        },
-      });
-
-      const {data: nvt} = resp;
-      expect(nvt.id).toEqual('1.2.3');
+    const resp = await cmd.getConfigNvt({oid: '1.2.3', configId: 'c1'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_config_nvt',
+        config_id: 'c1',
+        oid: '1.2.3',
+      },
     });
+    const {data: nvt} = resp;
+    expect(nvt.id).toEqual('1.2.3');
   });
 });

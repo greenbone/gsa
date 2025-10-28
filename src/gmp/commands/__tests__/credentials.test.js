@@ -6,15 +6,11 @@
 import {describe, test, expect} from '@gsa/testing';
 import {CredentialCommand} from 'gmp/commands/credentials.js';
 import {createHttp, createActionResultResponse} from 'gmp/commands/testing.js';
-import DefaultTransform from 'gmp/http/transform/default';
 
 describe('CredentialCommand tests', () => {
   test('should create credential', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new CredentialCommand(fakeHttp);
     const resp = await cmd.create({name: 'test-credential'});
 
@@ -48,8 +44,6 @@ describe('CredentialCommand tests', () => {
   test('should save credential', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
 
     const cmd = new CredentialCommand(fakeHttp);
     const resp = await cmd.save({
@@ -111,8 +105,6 @@ describe('CredentialCommand tests', () => {
     const response = new ArrayBuffer(8);
     const fakeHttp = createHttp(response);
 
-    expect.hasAssertions();
-
     const cmd = new CredentialCommand(fakeHttp);
     const resp = await cmd.download({id: '1'}, 'pem');
 
@@ -122,7 +114,6 @@ describe('CredentialCommand tests', () => {
         package_format: 'pem',
         credential_id: '1',
       },
-      transform: DefaultTransform,
       responseType: 'arraybuffer',
     });
 

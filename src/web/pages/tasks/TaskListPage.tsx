@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
-import Task from 'gmp/models/task';
+import type Task from 'gmp/models/task';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {TaskIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -15,7 +15,7 @@ import {
 } from 'web/components/loading/Reload';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer, {
-  WithEntitiesContainerComponentProps,
+  type WithEntitiesContainerComponentProps,
 } from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskDashboard, {TASK_DASHBOARD_ID} from 'web/pages/tasks/dashboard';

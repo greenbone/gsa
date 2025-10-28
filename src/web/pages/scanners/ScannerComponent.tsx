@@ -4,20 +4,22 @@
  */
 
 import {useState} from 'react';
-import {EntityActionData} from 'gmp/commands/entity';
-import Response from 'gmp/http/response';
-import {XmlMeta} from 'gmp/http/transform/fastxml';
-import ActionResult from 'gmp/models/actionresult';
-import Credential, {
+import {type EntityActionData} from 'gmp/commands/entity';
+import type Response from 'gmp/http/response';
+import {type XmlMeta} from 'gmp/http/transform/fastxml';
+import type ActionResult from 'gmp/models/actionresult';
+import {
+  type default as Credential,
+  type CredentialType,
   CERTIFICATE_CREDENTIAL_TYPE,
-  CredentialType,
 } from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Scanner, {
+import {
+  type default as Scanner,
+  type ScannerType,
   AGENT_CONTROLLER_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
-  ScannerType,
 } from 'gmp/models/scanner';
 import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
@@ -26,17 +28,17 @@ import useEntityClone from 'web/entity/hooks/useEntityClone';
 import useEntityCreate from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload, {
-  OnDownloadedFunc,
+  type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialDialog, {
-  CredentialDialogState,
+  type CredentialDialogState,
 } from 'web/pages/credentials/CredentialDialog';
 import ScannerDialog, {
-  ScannerDialogState,
+  type ScannerDialogState,
 } from 'web/pages/scanners/ScannerDialog';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
@@ -71,6 +73,11 @@ interface ScannerComponentProps {
   onVerified?: () => void;
   onVerifyError?: (error: Error) => void;
 }
+
+const MIME_TYPE_PEM = 'application/x-pem-file';
+
+const createCaCertificateFile = (name: string, certificate: string) =>
+  new File([certificate], name, {type: MIME_TYPE_PEM});
 
 const createCredentialsFilter = (types: CredentialType[]) => {
   return new Filter({
@@ -114,7 +121,7 @@ const ScannerComponent = ({
 
   const [credentialDialogVisible, setCredentialDialogVisible] = useState(false);
   const [scannerDialogVisible, setScannerDialogVisible] = useState(false);
-  const [comment, setComment] = useState(undefined);
+  const [comment, setComment] = useState<string | undefined>(undefined);
   const [credentialId, setCredentialId] = useState<string | undefined>(
     undefined,
   );
@@ -129,6 +136,9 @@ const ScannerComponent = ({
   const [scanner, setScanner] = useState<Scanner | undefined>(undefined);
   const [title, setTitle] = useState<string | undefined>(undefined);
   const [type, setType] = useState<ScannerType | undefined>(undefined);
+  const [caCertificate, setCaCertificate] = useState<File | undefined>(
+    undefined,
+  );
 
   const openScannerDialog = async (scanner?: Scanner) => {
     if (isDefined(scanner)) {
@@ -147,7 +157,9 @@ const ScannerComponent = ({
               .then(response => response.data)
           : Promise.resolve([]);
 
-      const [credentials, loadedScanner] = await Promise.all([
+      const [credentials, loadedScanner] = await Promise.all<
+        [Promise<Credential[]>, Promise<Scanner>]
+      >([
         credentialsPromise,
         gmp.scanner
           .get({id: scanner.id as string})
@@ -161,7 +173,7 @@ const ScannerComponent = ({
       setCredentials(credentials);
       setCredentialId(
         hasId(loadedScanner.credential)
-          ? loadedScanner.credential.id
+          ? loadedScanner.credential?.id
           : undefined,
       );
       setCredentialTypes(credentialTypes);
@@ -173,6 +185,14 @@ const ScannerComponent = ({
       setScanner(loadedScanner);
       setTitle(scannerTitle);
       setType(loadedScanner.scannerType);
+
+      const caCertificate = isDefined(loadedScanner.caPub?.certificate)
+        ? createCaCertificateFile(
+            `scanner-${scanner.id}.pem`,
+            loadedScanner.caPub.certificate,
+          )
+        : undefined;
+      setCaCertificate(caCertificate);
     } else {
       const credentialTypes: CredentialType[] = [CERTIFICATE_CREDENTIAL_TYPE];
       // @ts-expect-error
@@ -181,6 +201,7 @@ const ScannerComponent = ({
           filter: createCredentialsFilter(credentialTypes),
         })
         .then(response => response.data);
+      setCaCertificate(undefined);
       setComment(undefined);
       setCredentialId(undefined);
       setCredentials(credentials);
@@ -339,6 +360,7 @@ const ScannerComponent = ({
       })}
       {scannerDialogVisible && (
         <ScannerDialog
+          caCertificate={caCertificate}
           comment={comment}
           credentialId={credentialId}
           credentials={credentials}

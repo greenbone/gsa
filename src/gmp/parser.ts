@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import createDate, {Date as GmpDate, duration} from 'gmp/models/date';
+import createDate, {type Date as GmpDate, duration} from 'gmp/models/date';
 import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 

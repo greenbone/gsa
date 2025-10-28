@@ -10,7 +10,7 @@ import {
   createActionResultResponse,
 } from 'gmp/commands/testing';
 import UserCommand, {
-  CertificateInfo,
+  type CertificateInfo,
   transformSettingName,
 } from 'gmp/commands/user';
 
@@ -48,9 +48,6 @@ describe('UserCommand tests', () => {
       },
     });
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new UserCommand(fakeHttp);
     const resp = await cmd.currentAuthSettings();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -93,9 +90,6 @@ describe('UserCommand tests', () => {
       },
     });
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new UserCommand(fakeHttp);
     const {data} = await cmd.getSetting('123');
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -116,8 +110,6 @@ describe('UserCommand tests', () => {
     });
     const fakeHttp = createHttp(response);
     const cmd = new UserCommand(fakeHttp);
-
-    expect.hasAssertions();
     await cmd.changePassword('oldPassword', 'newPassword');
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -161,7 +153,6 @@ test('should get capabilities', async () => {
   });
   const fakeHttp = createHttp(response);
   const cmd = new UserCommand(fakeHttp);
-
   const {data: caps} = await cmd.currentCapabilities();
   expect(fakeHttp.request).toHaveBeenCalledWith('get', {
     args: {
@@ -213,11 +204,8 @@ describe('UserCommand saveTimezone() tests', () => {
     const response = createResponse({success: true});
     const fakeHttp = createHttp(response);
     const cmd = new UserCommand(fakeHttp);
-
-    expect.hasAssertions();
-
     const settingValue = 'Europe/Berlin';
-    const resp = await cmd.saveTimezone(settingValue);
+    await cmd.saveTimezone(settingValue);
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_setting',
@@ -225,7 +213,6 @@ describe('UserCommand saveTimezone() tests', () => {
         setting_value: settingValue,
       },
     });
-    expect(resp).toBe(response);
   });
 
   test('should throw and log on httpPost error', async () => {
@@ -236,7 +223,6 @@ describe('UserCommand saveTimezone() tests', () => {
     };
     const cmd = new UserCommand(fakeHttp);
     const settingValue = 'Europe/Berlin';
-    expect.hasAssertions();
     await expect(cmd.saveTimezone(settingValue)).rejects.toThrow('fail');
   });
 });

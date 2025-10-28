@@ -22,7 +22,7 @@ import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {makeCompareSeverity, makeCompareString} from 'web/utils/Sort';
-import SortDirection from 'web/utils/SortDirection';
+import SortDirection from 'web/utils/sort-direction';
 
 const EDIT_CONFIG_COLUMNS_SORT = {
   name: 'name',

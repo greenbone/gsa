@@ -4,12 +4,12 @@
  */
 
 import EntityModel, {
-  EntityModelElement,
-  EntityModelProperties,
+  type EntityModelElement,
+  type EntityModelProperties,
   parseEntityModelProperties,
 } from 'gmp/models/entitymodel';
 import {setProperties} from 'gmp/parser';
-import {EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entitytype';
 
 export type Element = Record<string, unknown>;
 

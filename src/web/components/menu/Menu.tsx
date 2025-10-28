@@ -15,7 +15,7 @@ import {
   CircleHelp,
 } from 'lucide-react';
 import {useLocation, useMatch} from 'react-router';
-import {EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import Link from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
@@ -135,6 +135,18 @@ const Menu = () => {
   const agentGroupMatch = useMatch('/agent-group/*');
   const isAgentGroupsActive = Boolean(agentGroupsMatch || agentGroupMatch);
 
+  const agentInstallersMatch = useMatch('/agent-installers');
+  const agentInstallerMatch = useMatch('/agent-installer/*');
+  const isAgentInstallersActive = Boolean(
+    agentInstallersMatch || agentInstallerMatch,
+  );
+
+  const containerImageTargetsMatch = useMatch('/ociimagetargets');
+  const containerImageTargetMatch = useMatch('/ociimagetarget/*');
+  const isContainerImageTargetsActive = Boolean(
+    containerImageTargetsMatch || containerImageTargetMatch,
+  );
+
   const schedulesMatch = useMatch('/schedules');
   const scheduleMatch = useMatch('/schedule/*');
   const isSchedulesActive = Boolean(schedulesMatch || scheduleMatch);
@@ -200,7 +212,9 @@ const Menu = () => {
   const mayOpConfiguration = mayAccessAny([
     'agent',
     'agentgroup',
+    'agentinstaller',
     'target',
+    'ociimagetarget',
     'portlist',
     'credential',
     'scanconfig',
@@ -398,6 +412,7 @@ const Menu = () => {
         key: 'configuration',
         defaultOpened: [
           isTargetsActive,
+          isContainerImageTargetsActive,
           isPortlistsActive,
           isCredentialsActive,
           isScanConfigsActive,
@@ -408,8 +423,9 @@ const Menu = () => {
           isScannersActive,
           isFiltersActive,
           isTagsActive,
-          isAgentsActive, // Added for Agents
-          isAgentGroupsActive, // Added for Agent Groups
+          isAgentsActive,
+          isAgentGroupsActive,
+          isAgentInstallersActive,
         ].some(Boolean),
         subNav: [
           capabilities.mayAccess('target') && {
@@ -418,6 +434,13 @@ const Menu = () => {
             isPathMatch: isTargetsActive,
             active: isTargetsActive,
           },
+          capabilities.mayAccess('ociimagetarget') &&
+            features.featureEnabled('ENABLE_CONTAINER_SCANNING') && {
+              label: _('Container Image Targets'),
+              to: '/ociimagetargets',
+              isPathMatch: isContainerImageTargetsActive,
+              active: isContainerImageTargetsActive,
+            },
           capabilities.mayAccess('portlist') && {
             label: _('Port Lists'),
             to: '/portlists',
@@ -491,6 +514,13 @@ const Menu = () => {
               to: '/agent-groups',
               isPathMatch: isAgentGroupsActive,
               active: isAgentGroupsActive,
+            },
+          capabilities.mayAccess('agentinstaller') &&
+            features.featureEnabled('ENABLE_AGENTS') && {
+              label: _('Agent Installers'),
+              to: '/agent-installers',
+              isPathMatch: isAgentInstallersActive,
+              active: isAgentInstallersActive,
             },
         ].filter(Boolean),
       },

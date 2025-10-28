@@ -6,12 +6,12 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
 import Role from 'gmp/models/role';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import RoleDetailsPage from 'web/pages/roles/RoleDetailsPage';
 import RoleDetailsPageToolBarIcons from 'web/pages/roles/RoleDetailsPageToolBarIcons';
 import {entitiesLoadingActions as permissionsLoadingActions} from 'web/store/entities/permissions';

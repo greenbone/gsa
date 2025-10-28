@@ -13,7 +13,7 @@ class CvssCalculator extends HttpCommand {
   }
 
   calculateScoreFromVector(cvss_vector) {
-    return this.httpGet({
+    return this.httpGetWithTransform({
       cvss_vector,
     }).then(response => {
       const {data: envelope} = response;

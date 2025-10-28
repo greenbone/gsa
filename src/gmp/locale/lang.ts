@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import i18next, {InitOptions, TFunction} from 'i18next';
+import i18next, {type InitOptions, type TFunction} from 'i18next';
 import HttpBackend from 'i18next-http-backend';
 import {initReactI18next} from 'react-i18next';
 import Detector from 'gmp/locale/detector';

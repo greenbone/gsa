@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import Model from 'gmp/models/model';
-import {EntityType, getEntityType} from 'gmp/utils/entitytype';
+import type Model from 'gmp/models/model';
+import {type EntityType, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import Comment from 'web/components/comment/Comment';
 import Layout from 'web/components/layout/Layout';

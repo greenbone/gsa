@@ -26,12 +26,7 @@ const useLoadCapabilities = () => {
         setCapabilities(loadedCapabilities);
       })
       .catch(rejection => {
-        if (rejection.isError()) {
-          log.error(
-            'An error occurred during fetching capabilities',
-            rejection,
-          );
-        }
+        log.error('An error occurred during fetching capabilities', rejection);
         // use empty capabilities
         setCapabilities(new Capabilities());
       });

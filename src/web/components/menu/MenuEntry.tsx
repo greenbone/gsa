@@ -7,7 +7,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import useClickHandler from 'web/components/form/useClickHandler';
-import Layout, {LayoutProps} from 'web/components/layout/Layout';
+import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 import Link from 'web/components/link/Link';
 
 interface NameValueProps<TValue> {
