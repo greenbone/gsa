@@ -28,8 +28,8 @@ import {
 } from 'web/hooks/use-query/credential-store';
 import useTranslation from 'web/hooks/useTranslation';
 import ConnectionStatusPill from 'web/pages/credential-store/ConnectionStatusPill';
-import CyberArkDialog, {
-  type CyberArkDialogState,
+import CredentialStoreDialog, {
+  type CredentialStoreDialogState,
 } from 'web/pages/credential-store/CredentialStoreDialog';
 import {renderYesNo} from 'web/utils/Render';
 
@@ -52,10 +52,10 @@ const ToolBarIcons = ({
         anchor="ldap"
         page="web-interface-access"
         size="small"
-        title={_('Help: CyberArk Credential Store')}
+        title={_('Help: Credential Store')}
       />
       <EditIcon
-        title={_('Edit CyberArk Credential Store')}
+        title={_('Edit Credential Store')}
         onClick={onOpenDialogClick}
       />
       <ConnectionStatusPill
@@ -82,33 +82,9 @@ const CredentialStorePage = () => {
 
   const credentialStore = credentialStoresData?.entities?.[0];
 
-  const verifyCredentialStore = useVerifyCredentialStore({
-    onSuccess: () => {
-      setConnectionStatus('success');
-      showSuccessNotification(
-        _('Connection to CyberArk server established successfully.'),
-        _('Connection successful'),
-      );
-    },
-    onError: error => {
-      setConnectionStatus('failed');
-      showErrorNotification(
-        _('Failed to connect to CyberArk server. Please check your settings.'),
-        _('Connection failed'),
-      );
-      console.error('Credential store verification failed:', error);
-    },
-  });
+  const verifyCredentialStore = useVerifyCredentialStore({});
 
-  const modifyCredentialStore = useModifyCredentialStore({
-    onSuccess: () => {
-      console.info('Credential store settings saved successfully');
-      closeDialog();
-    },
-    onError: error => {
-      console.error('Failed to save credential store settings:', error);
-    },
-  });
+  const modifyCredentialStore = useModifyCredentialStore({});
 
   const handleSaveSettings = async ({
     active,
@@ -123,31 +99,32 @@ const CredentialStorePage = () => {
     pkcs12File,
     passphrase,
     serverCaCertificate,
-  }: CyberArkDialogState) => {
+  }: CredentialStoreDialogState): Promise<void> => {
     if (!credentialStore?.id) {
-      console.error('No credential store found to modify');
       return;
     }
 
-    try {
-      await modifyCredentialStore.mutateAsync({
-        id: credentialStore.id,
-        active,
-        appId,
-        comment,
-        host,
-        path,
-        port,
-        sslOnly,
-        clientCertificate,
-        clientKey,
-        pkcs12File,
-        passphrase,
-        serverCaCertificate,
-      });
-    } catch (error) {
-      console.error('Error saving credential store:', error);
-    }
+    await modifyCredentialStore.mutateAsync({
+      id: credentialStore.id,
+      active,
+      appId,
+      comment,
+      host,
+      path,
+      port,
+      sslOnly,
+      clientCertificate,
+      clientKey,
+      pkcs12File,
+      passphrase,
+      serverCaCertificate,
+    });
+
+    showSuccessNotification(
+      _('Credential store settings saved successfully.'),
+      _('Settings saved'),
+    );
+    closeDialog();
   };
 
   const openDialog = () => {
@@ -169,8 +146,30 @@ const CredentialStorePage = () => {
 
     try {
       setConnectionStatus('testing');
+      if (!credentialStore?.getPreference?.('app_id')?.value) {
+        showErrorNotification(
+          _(
+            'App ID is required to verify the credential store. Please set the App ID in the edit dialog.',
+          ),
+          _('Connection failed'),
+        );
+        setConnectionStatus('failed');
+        return;
+      }
       await verifyCredentialStore.mutateAsync({id: credentialStore.id});
+      setConnectionStatus('success');
+      showSuccessNotification(
+        _('Connection to credential store server established successfully.'),
+        _('Connection successful'),
+      );
     } catch (error) {
+      setConnectionStatus('failed');
+      showErrorNotification(
+        _(
+          'Failed to connect to credential store server. Please check your settings.',
+        ),
+        _('Connection failed'),
+      );
       console.error('Connection test failed:', error);
     }
   };
@@ -182,7 +181,7 @@ const CredentialStorePage = () => {
   if (isError) {
     return (
       <Layout flex="column">
-        <PageTitle title={_('CyberArk Credential Store')} />
+        <PageTitle title={_('Credential Store')} />
         <p>
           {_('Error loading credential store: ') +
             (error?.message || 'Unknown error')}
@@ -195,7 +194,7 @@ const CredentialStorePage = () => {
 
   return (
     <>
-      <PageTitle title={_('CyberArk Credential Store')} />
+      <PageTitle title={_('Credential Store')} />
       <Layout flex="column">
         {hasCredentialStore && (
           <ToolBarIcons
@@ -208,7 +207,7 @@ const CredentialStorePage = () => {
         {hasCredentialStore ? (
           <Section
             img={<CredentialIcon size="large" />}
-            title={_('CyberArk Credential Store')}
+            title={_('Credential Store')}
           >
             <Table>
               <colgroup>
@@ -246,12 +245,12 @@ const CredentialStorePage = () => {
             </Table>
           </Section>
         ) : (
-          <p>{_('No CyberArk credential store configured.')}</p>
+          <p>{_('No credential store configured.')}</p>
         )}
       </Layout>
 
       {dialogVisible && (
-        <CyberArkDialog
+        <CredentialStoreDialog
           active={credentialStore?.active === 1}
           appId={credentialStore?.getPreference?.('app_id')?.value}
           comment={credentialStore?.comment}
