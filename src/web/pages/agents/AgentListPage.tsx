@@ -123,7 +123,7 @@ const AgentListPage = () => {
     const selectedAgents =
       selectionType === SelectionType.SELECTION_USER
         ? selectedEntities
-        : agents ?? [];
+        : (agents ?? []);
     try {
       await bulkAuthorize.mutateAsync(selectedAgents);
     } catch (error) {
@@ -135,7 +135,7 @@ const AgentListPage = () => {
     const selectedAgents =
       selectionType === SelectionType.SELECTION_USER
         ? selectedEntities
-        : agents ?? [];
+        : (agents ?? []);
 
     try {
       await bulkRevoke.mutateAsync(selectedAgents);
