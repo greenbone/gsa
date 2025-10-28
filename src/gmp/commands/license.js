@@ -13,7 +13,7 @@ export class LicenseCommand extends HttpCommand {
   }
 
   getLicenseInformation() {
-    return this.httpGet().then(response => {
+    return this.httpGetWithTransform().then(response => {
       const {data: envelope} = response;
       const {get_license_response: licenseResponse} = envelope.get_license;
       const license = License.fromElement(licenseResponse.license);

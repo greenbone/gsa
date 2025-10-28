@@ -63,7 +63,7 @@ import {
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 export const ToolBarIcons = ({
   entity,

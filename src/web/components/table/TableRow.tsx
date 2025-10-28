@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ReactNode} from 'react';
+import {type ReactNode} from 'react';
 
 interface Item {
   id?: string;

@@ -7,16 +7,53 @@ import {describe, test, expect} from '@gsa/testing';
 import Response from 'gmp/http/response';
 
 describe('Response tests', () => {
-  test('should allow to get plain data', () => {
-    const xhr = {
-      response: 'foo',
-      responseText: 'bar',
-      responseXML: 'ipsum',
-    } as unknown as XMLHttpRequest;
-    const response = new Response(xhr, {});
+  test('should create response with xhr data', () => {
+    const data = '{"foo": "bar"}';
+    const response = new Response(data);
 
-    expect(response.plainData()).toEqual('foo');
-    expect(response.plainData('text')).toEqual('bar');
-    expect(response.plainData('xml')).toEqual('ipsum');
+    expect(response.data).toEqual('{"foo": "bar"}');
+    expect(response.meta).toEqual({});
+  });
+  test('should create response with data and meta', () => {
+    const data = {foo: 'bar'};
+    const meta = {status: 200};
+    const response = new Response<typeof data, typeof meta>(data, meta);
+
+    expect(response.data).toEqual(data);
+    expect(response.meta).toEqual(meta);
+  });
+
+  test('should create response with undefined data', () => {
+    const response = new Response<undefined>(undefined);
+
+    expect(response.data).toBeUndefined();
+    expect(response.meta).toEqual({});
+  });
+
+  test('should allow to set response data', () => {
+    const response = new Response<string>('foo');
+
+    expect(response.data).toEqual('foo');
+    expect(response.meta).toEqual({});
+
+    const response2 = response.setData('bar');
+
+    expect(response2.data).toEqual('bar');
+    expect(response2.meta).toEqual({});
+    expect(response).not.toBe(response2);
+  });
+
+  test('should allow to set response meta', () => {
+    const response = new Response<string>('foo');
+
+    expect(response.data).toEqual('foo');
+    expect(response.meta).toEqual({});
+
+    const meta = {status: 200};
+    const response2 = response.setMeta(meta);
+
+    expect(response2.data).toEqual('foo');
+    expect(response2.meta).toEqual(meta);
+    expect(response).not.toBe(response2);
   });
 });

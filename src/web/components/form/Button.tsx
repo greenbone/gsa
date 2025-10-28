@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {ReactNode, MouseEvent} from 'react';
+import React, {type ReactNode, type MouseEvent} from 'react';
 import {Button as OpenSightButton} from '@greenbone/ui-lib';
 import useValueChange from 'web/components/form/useValueChange';
 

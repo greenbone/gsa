@@ -17,6 +17,7 @@ import Loading from 'web/components/loading/Loading';
 import SessionObserver from 'web/components/observer/SessionObserver';
 import SessionTracker from 'web/components/observer/SessionTracker';
 import AgentGroupsListPage from 'web/pages/agent-groups/AgentGroupsListPage';
+import AgentInstallerListPage from 'web/pages/agent-installers/AgentInstallerListPage';
 import AgentListPage from 'web/pages/agents/AgentListPage';
 import AlertDetailsPage from 'web/pages/alerts/DetailsPage';
 import AlertsPage from 'web/pages/alerts/ListPage';
@@ -24,6 +25,7 @@ import AuditsDetailsPage from 'web/pages/audits/DetailsPage';
 import AuditsPage from 'web/pages/audits/ListPage';
 import CertBundDetailsPage from 'web/pages/certbund/DetailsPage';
 import CertBundsPage from 'web/pages/certbund/ListPage';
+import ContainerImageTargetsListPage from 'web/pages/container-image-targets/ContainerImageTargetsListPage';
 import CpeDetailsPage from 'web/pages/cpes/DetailsPage';
 import CpesPage from 'web/pages/cpes/ListPage';
 import CredentialDetailsPage from 'web/pages/credentials/DetailsPage';
@@ -121,11 +123,19 @@ const LoggedInRoutes = () => {
       <Page>
         <Routes>
           <Route element={<StartPage />} path="/dashboards" />
+          <Route
+            element={<AgentInstallerListPage />}
+            path="/agent-installers"
+          />
           <Route element={<AgentListPage />} path="/agents" />
           <Route element={<AgentGroupsListPage />} path="/agent-groups" />
           <Route element={<AlertsPage />} path="/alerts" />
           <Route element={<AuditsPage />} path="/audits" />
           <Route element={<CertBundsPage />} path="/certbunds" />
+          <Route
+            element={<ContainerImageTargetsListPage />}
+            path="/ociimagetargets"
+          />
           <Route element={<CpesPage />} path="/cpes" />
           <Route element={<CredentialsPage />} path="/credentials" />
           <Route element={<CvesPage />} path="/cves" />

@@ -64,24 +64,54 @@ describe('pluralizeType function tests', () => {
 
 describe('normalizeType function tests', () => {
   test('should normalize types', () => {
-    expect(normalizeType('os')).toEqual('operatingsystem');
+    expect(normalizeType('agent_group')).toEqual('agentgroup');
+    expect(normalizeType('agent_installer')).toEqual('agentinstaller');
     expect(normalizeType('cert_bund_adv')).toEqual('certbund');
+    expect(normalizeType('config')).toEqual('scanconfig');
     expect(normalizeType('dfn_cert_adv')).toEqual('dfncert');
+    expect(normalizeType('oci_image_target')).toEqual('ociimagetarget');
+    expect(normalizeType('os')).toEqual('operatingsystem');
     expect(normalizeType('port_list')).toEqual('portlist');
     expect(normalizeType('port_range')).toEqual('portrange');
     expect(normalizeType('report_config')).toEqual('reportconfig');
     expect(normalizeType('report_format')).toEqual('reportformat');
-    expect(normalizeType('config')).toEqual('scanconfig');
+    expect(normalizeType('tls_certificate')).toEqual('tlscertificate');
     expect(normalizeType('vuln')).toEqual('vulnerability');
-    expect(normalizeType('agent_group')).toEqual('agentgroup');
-    expect(normalizeType('agent_installer')).toEqual('agentinstaller');
   });
 
   test('should pass through already normalize types', () => {
-    expect(normalizeType('task')).toEqual('task');
-    expect(normalizeType('target')).toEqual('target');
+    expect(normalizeType('agent')).toEqual('agent');
+    expect(normalizeType('agentgroup')).toEqual('agentgroup');
+    expect(normalizeType('agentinstaller')).toEqual('agentinstaller');
+    expect(normalizeType('asset')).toEqual('asset');
+    expect(normalizeType('audit')).toEqual('audit');
+    expect(normalizeType('auditreport')).toEqual('auditreport');
+    expect(normalizeType('certbund')).toEqual('certbund');
+    expect(normalizeType('cpe')).toEqual('cpe');
+    expect(normalizeType('credential')).toEqual('credential');
+    expect(normalizeType('cve')).toEqual('cve');
+    expect(normalizeType('dfncert')).toEqual('dfncert');
+    expect(normalizeType('filter')).toEqual('filter');
+    expect(normalizeType('group')).toEqual('group');
+    expect(normalizeType('host')).toEqual('host');
+    expect(normalizeType('info')).toEqual('info');
+    expect(normalizeType('nvt')).toEqual('nvt');
+    expect(normalizeType('ociimagetarget')).toEqual('ociimagetarget');
+    expect(normalizeType('operatingsystem')).toEqual('operatingsystem');
+    expect(normalizeType('note')).toEqual('note');
+    expect(normalizeType('permission')).toEqual('permission');
+    expect(normalizeType('policy')).toEqual('policy');
+    expect(normalizeType('portlist')).toEqual('portlist');
+    expect(normalizeType('portrange')).toEqual('portrange');
+    expect(normalizeType('report')).toEqual('report');
+    expect(normalizeType('reportconfig')).toEqual('reportconfig');
     expect(normalizeType('reportformat')).toEqual('reportformat');
     expect(normalizeType('scanconfig')).toEqual('scanconfig');
+    expect(normalizeType('target')).toEqual('target');
+    expect(normalizeType('task')).toEqual('task');
+    expect(normalizeType('tlscertificate')).toEqual('tlscertificate');
+    expect(normalizeType('user')).toEqual('user');
+    expect(normalizeType('vulnerability')).toEqual('vulnerability');
   });
 
   test('should pass through unknown types', () => {
@@ -96,6 +126,9 @@ describe('normalizeType function tests', () => {
 
 describe('apiType function tests', () => {
   test('should convert entity types', () => {
+    expect(apiType('agent')).toEqual('agent');
+    expect(apiType('agentgroup')).toEqual('agent_group');
+    expect(apiType('agentinstaller')).toEqual('agent_installer');
     expect(apiType('audit')).toEqual('task');
     expect(apiType('auditreport')).toEqual('report');
     expect(apiType('certbund')).toEqual('info');
@@ -104,6 +137,7 @@ describe('apiType function tests', () => {
     expect(apiType('dfncert')).toEqual('info');
     expect(apiType('host')).toEqual('asset');
     expect(apiType('nvt')).toEqual('info');
+    expect(apiType('ociimagetarget')).toEqual('oci_image_target');
     expect(apiType('operatingsystem')).toEqual('asset');
     expect(apiType('policy')).toEqual('config');
     expect(apiType('portlist')).toEqual('port_list');
@@ -116,9 +150,13 @@ describe('apiType function tests', () => {
   });
 
   test('should pass through already converted types', () => {
+    expect(apiType('agent')).toEqual('agent');
+    expect(apiType('agent_group')).toEqual('agent_group');
+    expect(apiType('agent_installer')).toEqual('agent_installer');
     expect(apiType('asset')).toEqual('asset');
     expect(apiType('config')).toEqual('config');
     expect(apiType('info')).toEqual('info');
+    expect(apiType('oci_image_target')).toEqual('oci_image_target');
     expect(apiType('port_list')).toEqual('port_list');
     expect(apiType('port_range')).toEqual('port_range');
     expect(apiType('report_config')).toEqual('report_config');
@@ -147,16 +185,59 @@ describe('typeName function tests', () => {
   });
 
   test('should convert entity types', () => {
-    expect(typeName('task')).toEqual('Task');
-    expect(typeName('operatingsystem')).toEqual('Operating System');
-    expect(typeName('os')).toEqual('Operating System');
+    expect(typeName('agent_group')).toEqual('Agent Group');
+    expect(typeName('agent_installer')).toEqual('Agent Installer');
+    expect(typeName('agent')).toEqual('Agent');
+    expect(typeName('agentgroup')).toEqual('Agent Group');
+    expect(typeName('agentinstaller')).toEqual('Agent Installer');
+    expect(typeName('alert')).toEqual('Alert');
+    expect(typeName('asset')).toEqual('Asset');
+    expect(typeName('audit_report')).toEqual('Audit Report');
+    expect(typeName('audit')).toEqual('Audit');
+    expect(typeName('auditreport')).toEqual('Audit Report');
+    expect(typeName('cert_bund_adv')).toEqual('CERT-Bund Advisory');
     expect(typeName('certbund')).toEqual('CERT-Bund Advisory');
+    expect(typeName('config')).toEqual('Scan Config');
+    expect(typeName('cpe')).toEqual('CPE');
+    expect(typeName('credential')).toEqual('Credential');
+    expect(typeName('cve')).toEqual('CVE');
+    expect(typeName('dfn_cert_adv')).toEqual('DFN-CERT Advisory');
     expect(typeName('dfncert')).toEqual('DFN-CERT Advisory');
+    expect(typeName('filter')).toEqual('Filter');
+    expect(typeName('group')).toEqual('Group');
+    expect(typeName('host')).toEqual('Host');
+    expect(typeName('info')).toEqual('Info');
+    expect(typeName('oci_image_target')).toEqual('OCI Image Target');
+    expect(typeName('ociimagetarget')).toEqual('OCI Image Target');
+    expect(typeName('operatingsystem')).toEqual('Operating System');
+    expect(typeName('override')).toEqual('Override');
+    expect(typeName('os')).toEqual('Operating System');
+    expect(typeName('note')).toEqual('Note');
+    expect(typeName('nvt')).toEqual('NVT');
+    expect(typeName('permission')).toEqual('Permission');
+    expect(typeName('policy')).toEqual('Policy');
+    expect(typeName('port_list')).toEqual('Port List');
+    expect(typeName('port_range')).toEqual('Port Range');
     expect(typeName('portlist')).toEqual('Port List');
     expect(typeName('portrange')).toEqual('Port Range');
+    expect(typeName('report')).toEqual('Report');
+    expect(typeName('report_config')).toEqual('Report Config');
     expect(typeName('reportconfig')).toEqual('Report Config');
+    expect(typeName('report_format')).toEqual('Report Format');
+    expect(typeName('reportformat')).toEqual('Report Format');
+    expect(typeName('result')).toEqual('Result');
+    expect(typeName('role')).toEqual('Role');
     expect(typeName('scanconfig')).toEqual('Scan Config');
-    expect(typeName('config')).toEqual('Scan Config');
+    expect(typeName('scanner')).toEqual('Scanner');
+    expect(typeName('schedule')).toEqual('Schedule');
+    expect(typeName('tag')).toEqual('Tag');
+    expect(typeName('target')).toEqual('Target');
+    expect(typeName('task')).toEqual('Task');
+    expect(typeName('ticket')).toEqual('Ticket');
+    expect(typeName('tls_certificate')).toEqual('TLS Certificate');
+    expect(typeName('tlscertificate')).toEqual('TLS Certificate');
+    expect(typeName('user')).toEqual('User');
+    expect(typeName('vuln')).toEqual('Vulnerability');
     expect(typeName('vulnerability')).toEqual('Vulnerability');
   });
 });

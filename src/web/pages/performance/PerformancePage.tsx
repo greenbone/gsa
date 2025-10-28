@@ -9,11 +9,14 @@ import {useSearchParams} from 'react-router';
 import styled from 'styled-components';
 import {
   DEFAULT_SENSOR_ID,
-  PerformanceReport as PerformanceReportModel,
+  type PerformanceReport as PerformanceReportModel,
 } from 'gmp/commands/performance';
-import date, {Date} from 'gmp/models/date';
+import date, {type Date} from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
-import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
+import {
+  type default as Scanner,
+  GREENBONE_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
@@ -30,7 +33,10 @@ import Section from 'web/components/section/Section';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
-import {Duration, getDurationInSeconds} from 'web/pages/performance/durations';
+import {
+  type Duration,
+  getDurationInSeconds,
+} from 'web/pages/performance/durations';
 import PerformanceReport from 'web/pages/performance/PerformanceReport';
 import StartEndTimeSelection from 'web/pages/performance/StartEndTimeSelection';
 import {

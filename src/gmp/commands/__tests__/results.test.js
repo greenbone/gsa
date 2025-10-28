@@ -22,11 +22,7 @@ describe('ResultsCommand tests', () => {
         _id: '2',
       },
     ]);
-
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     const resp = await cmd.getAll();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -49,11 +45,7 @@ describe('ResultsCommand tests', () => {
         _id: '2',
       },
     ]);
-
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     const resp = await cmd.get();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -77,9 +69,6 @@ describe('ResultsCommand tests', () => {
     ]);
 
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     await cmd.get({details: 0});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -93,9 +82,6 @@ describe('ResultsCommand tests', () => {
   test('should aggregate Description Word Counts', async () => {
     const response = createAggregatesResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     await cmd.getDescriptionWordCountsAggregates();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -112,9 +98,6 @@ describe('ResultsCommand tests', () => {
   test('should aggregate word counts', async () => {
     const response = createAggregatesResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     await cmd.getWordCountsAggregates();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
@@ -131,9 +114,6 @@ describe('ResultsCommand tests', () => {
   test('should aggregate severities', async () => {
     const response = createAggregatesResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ResultsCommand(fakeHttp);
     await cmd.getSeverityAggregates();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {

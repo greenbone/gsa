@@ -11,7 +11,7 @@ import {
   processVector,
   calculateScoreSafely,
   removeUnusedMetrics,
-} from 'gmp/parser/cvssV4';
+} from 'gmp/parser/cvss-v4';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
@@ -19,7 +19,7 @@ import {CvssIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
-import {createCvssConfigData} from 'web/pages/extras/cvssV4/cvssConfig';
+import {createCvssConfigData} from 'web/pages/extras/cvssV4/cvss-config';
 import MetricsGroups from 'web/pages/extras/cvssV4/MetricsGroups';
 const StyledTextField = styled(TextField)`
   width: 180px;

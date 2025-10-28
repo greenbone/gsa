@@ -4,11 +4,11 @@
  */
 
 import CollectionCounts, {
-  CollectionCountsOptions,
-} from 'gmp/collection/CollectionCounts';
+  type CollectionCountsOptions,
+} from 'gmp/collection/collection-counts';
 import logger from 'gmp/log';
-import Filter, {FilterModelElement} from 'gmp/models/filter';
-import Model, {Element} from 'gmp/models/model';
+import Filter, {type FilterModelElement} from 'gmp/models/filter';
+import Model, {type Element} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {hasValue, isArray, isDefined} from 'gmp/utils/identity';
 

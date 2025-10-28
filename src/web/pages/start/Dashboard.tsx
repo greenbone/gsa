@@ -21,7 +21,7 @@ import {AUDIT_REPORTS_DISPLAYS} from 'web/pages/reports/auditdashboard';
 import {REPORTS_DISPLAYS} from 'web/pages/reports/dashboard';
 import {RESULTS_DISPLAYS} from 'web/pages/results/dashboard';
 import {DEFAULT_DISPLAYS} from 'web/pages/start/NewDashboardDialog';
-import {StartDashboardProps} from 'web/pages/start/types';
+import {type StartDashboardProps} from 'web/pages/start/types';
 import {TASKS_DISPLAYS} from 'web/pages/tasks/dashboard';
 import {TICKETS_DISPLAYS} from 'web/pages/tickets/dashboard';
 import {VULNS_DISPLAYS} from 'web/pages/vulns/dashboard';

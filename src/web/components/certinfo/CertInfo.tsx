@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Date as GmpDate} from 'gmp/models/date';
+import {type Date as GmpDate} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import InfoTable from 'web/components/table/InfoTable';

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import Loading from 'web/components/loading/Loading';
 import usePageFilter from 'web/hooks/usePageFilter';
 

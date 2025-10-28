@@ -5,20 +5,19 @@
 
 import HttpCommand, {
   BULK_SELECT_BY_IDS,
-  HttpCommandGetParams,
-  HttpCommandInputParams,
-  HttpCommandOptions,
-  HttpCommandParamsOptions,
-  HttpCommandPostParams,
+  type HttpCommandGetParams,
+  type HttpCommandInputParams,
+  type HttpCommandOptions,
+  type HttpCommandParamsOptions,
+  type HttpCommandPostParams,
 } from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Response, {Meta} from 'gmp/http/response';
-import DefaultTransform from 'gmp/http/transform/default';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import type Http from 'gmp/http/http';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import ActionResult from 'gmp/models/actionresult';
-import Filter from 'gmp/models/filter';
-import Model from 'gmp/models/model';
+import type Filter from 'gmp/models/filter';
+import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
 interface ModelClass<TModel> {
@@ -50,21 +49,21 @@ abstract class EntityCommand<
   TElement = XmlResponseData,
   TRoot extends XmlResponseData = XmlResponseData,
 > extends HttpCommand {
-  readonly clazz: ModelClass<Model>;
+  private readonly clazz: ModelClass<Model>;
+  private readonly id_name: string;
   readonly name: string;
-  readonly id_name: string;
 
-  constructor(http: GmpHttp, name: string, clazz: ModelClass<Model>) {
+  constructor(http: Http, name: string, clazz: ModelClass<Model>) {
     super(http, {cmd: 'get_' + name});
 
     this.clazz = clazz;
     this.name = name;
     this.id_name = name + '_id';
 
-    this.transformResponse = this.transformResponse.bind(this);
+    this.transformResponseToModel = this.transformResponseToModel.bind(this);
   }
 
-  abstract getElementFromRoot(root: TRoot): TElement;
+  protected abstract getElementFromRoot(root: TRoot): TElement;
 
   protected postParams(
     params: EntityCommandInputParams = {},
@@ -100,7 +99,7 @@ abstract class EntityCommand<
     ) as TModel;
   }
 
-  protected transformResponse(
+  protected transformResponseToModel(
     response: Response<TRoot, XmlMeta>,
   ): Response<TModel, XmlMeta> {
     let entity = this.getModelFromResponse(response);
@@ -127,7 +126,7 @@ abstract class EntityCommand<
     params: HttpCommandPostParams,
     options?: HttpCommandOptions,
   ) {
-    const response = await this.httpPost(params, options);
+    const response = await this.httpPostWithTransform(params, options);
     return this.transformActionResult(response);
   }
 
@@ -148,8 +147,8 @@ abstract class EntityCommand<
     {id}: EntityCommandParams,
     {filter, ...options}: EntityCommandGetParams = {},
   ) {
-    const response = await this.httpGet({id, filter}, options);
-    return this.transformResponse(response as Response<TRoot, XmlMeta>);
+    const response = await this.httpGetWithTransform({id, filter}, options);
+    return this.transformResponseToModel(response as Response<TRoot, XmlMeta>);
   }
 
   async clone({id}: EntityCommandParams) {
@@ -177,23 +176,21 @@ abstract class EntityCommand<
   async delete({id}: EntityCommandParams) {
     log.debug('Deleting', this.name, id);
 
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'delete_' + this.name,
       id,
     });
   }
 
   async export({id}: EntityCommandParams) {
-    const params = {
-      cmd: 'bulk_export',
-      resource_type: this.name,
-      bulk_select: BULK_SELECT_BY_IDS,
-      ['bulk_selected:' + id]: 1,
-    };
-    const response = await this.httpPost(params, {
-      transform: DefaultTransform,
-    } as HttpCommandOptions);
-    return response as unknown as Response<string, Meta>;
+    return this.httpRequestWithRejectionTransform('post', {
+      data: {
+        cmd: 'bulk_export',
+        resource_type: this.name,
+        bulk_select: BULK_SELECT_BY_IDS,
+        ['bulk_selected:' + id]: 1,
+      },
+    });
   }
 }
 

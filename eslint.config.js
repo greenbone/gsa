@@ -11,6 +11,7 @@ import globals from 'globals';
 import allowedSnakeCase from './eslint-script/allowedSnakeCase.js';
 import noDynamicI18n from './eslint-script/no-dynamic-i18n.js';
 import tsDefinitionsTop from './eslint-script/ts-definitions-top.js';
+import filenameConvention from './eslint-script/filename-convention.js';
 
 // Create a custom plugin for our custom rules
 const customPlugin = {
@@ -19,6 +20,7 @@ const customPlugin = {
       rules: {
         'no-dynamic-i18n': noDynamicI18n,
         'ts-definitions-top': tsDefinitionsTop,
+        'filename-convention': filenameConvention,
       },
     },
   },
@@ -136,6 +138,7 @@ export default [
       'eslint.config.js',
       'vite.config.ts',
       'vitest.config.ts',
+      'eslint-script/filename-convention.js',
     ],
   },
   // JavaScript configuration
@@ -145,6 +148,7 @@ export default [
       ...commonRules,
       'custom/no-dynamic-i18n': 'warn',
       'custom/ts-definitions-top': 'warn',
+      'custom/filename-convention': 'warn',
       'react/prop-types': [
         'warn',
         {
@@ -188,6 +192,7 @@ export default [
       ...commonRules,
       'custom/no-dynamic-i18n': 'error',
       'custom/ts-definitions-top': 'warn',
+      'custom/filename-convention': 'warn',
       'react/prop-types': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
@@ -253,6 +258,13 @@ export default [
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/no-empty-interface': 'warn',
       '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'inline-type-imports',
+        },
+      ],
     },
   },
   {

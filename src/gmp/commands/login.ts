@@ -4,13 +4,13 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
+import type Http from 'gmp/http/http';
+import {ResponseRejection} from 'gmp/http/rejection';
 import _ from 'gmp/locale';
 import Login from 'gmp/models/login';
 
 class LoginCommand extends HttpCommand {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, {
       cmd: 'login',
     });
@@ -18,13 +18,13 @@ class LoginCommand extends HttpCommand {
 
   async login(username: string, password: string) {
     try {
-      const response = await this.httpPost({
+      const response = await this.httpPostWithTransform({
         login: username,
         password,
       });
       return new Login(response);
     } catch (rej) {
-      if (rej instanceof Rejection && rej.isError && rej.isError()) {
+      if (rej instanceof ResponseRejection) {
         switch (rej.status) {
           case 401:
             rej.setMessage(_('Bad login information'));

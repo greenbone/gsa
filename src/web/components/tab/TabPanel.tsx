@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {ReactNode} from 'react';
+import React, {type ReactNode} from 'react';
 
 interface TabPanelProps {
   children?: ReactNode;

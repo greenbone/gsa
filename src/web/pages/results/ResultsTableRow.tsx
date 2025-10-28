@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import Nvt from 'gmp/models/nvt';
-import Result from 'gmp/models/result';
+import type Nvt from 'gmp/models/nvt';
+import type Result from 'gmp/models/result';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
@@ -25,7 +25,7 @@ import Qod from 'web/components/qod/Qod';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions, {
-  EntitiesActionsProps,
+  type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';

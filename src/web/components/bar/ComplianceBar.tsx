@@ -5,7 +5,7 @@
 
 import {
   COMPLIANCE,
-  ComplianceType,
+  type ComplianceType,
   getTranslatableReportCompliance,
 } from 'gmp/models/compliance';
 import {isDefined} from 'gmp/utils/identity';

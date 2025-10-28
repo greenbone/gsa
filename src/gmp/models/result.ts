@@ -3,17 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ComplianceType} from 'gmp/models/compliance';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import Note, {NoteElement} from 'gmp/models/note';
-import Nvt, {NvtEpssElement} from 'gmp/models/nvt';
-import Override, {OverrideElement} from 'gmp/models/override';
+import {type ComplianceType} from 'gmp/models/compliance';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import Note, {type NoteElement} from 'gmp/models/note';
+import Nvt, {type NvtEpssElement} from 'gmp/models/nvt';
+import Override, {type OverrideElement} from 'gmp/models/override';
 import {
   parseSeverity,
   parseQod,
-  QoD,
+  type QoD,
   parseToString,
-  QoDParams,
+  type QoDParams,
   parseFloat,
 } from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';

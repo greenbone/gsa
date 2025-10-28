@@ -7,7 +7,7 @@ import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
 import SubscriptionProvider, {
-  Subscriber,
+  type Subscriber,
   SubscriptionContext,
 } from 'web/components/provider/SubscriptionProvider';
 

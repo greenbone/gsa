@@ -4,12 +4,12 @@
  */
 
 import {ROLES_FILTER_FILTER} from 'gmp/models/filter';
-import Role from 'gmp/models/role';
+import type Role from 'gmp/models/role';
 import {RoleIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer, {
-  WithEntitiesContainerComponentProps,
+  type WithEntitiesContainerComponentProps,
 } from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import RoleComponent from 'web/pages/roles/RoleComponent';

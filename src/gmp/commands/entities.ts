@@ -3,25 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import {
-  CollectionList,
-  ModelClass,
+  type CollectionList,
+  type ModelClass,
   parseCollectionList,
 } from 'gmp/collection/parser';
 import HttpCommand, {
   BULK_SELECT_BY_FILTER,
   BULK_SELECT_BY_IDS,
-  HttpCommandInputParams,
-  HttpCommandOptions,
-  HttpCommandPostParams,
+  type HttpCommandInputParams,
+  type HttpCommandOptions,
+  type HttpCommandPostParams,
 } from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Response, {Meta} from 'gmp/http/response';
-import DefaultTransform from 'gmp/http/transform/default';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import type Http from 'gmp/http/http';
+import {type default as Response, type Meta} from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
-import Model, {Element} from 'gmp/models/model';
+import {filterString} from 'gmp/models/filter/utils';
+import {type default as Model, type Element} from 'gmp/models/model';
 import {map, forEach} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 
@@ -100,7 +100,7 @@ interface TransformedAggregatesResponseData {
   groups: Group[];
 }
 
-interface EntitiesMeta extends Meta {
+export interface EntitiesMeta extends Meta {
   filter: Filter;
   counts: CollectionCounts;
 }
@@ -110,19 +110,19 @@ abstract class EntitiesCommand<
   TEntitiesResponse extends Element = Element,
   TRoot extends Element = Element,
 > extends HttpCommand {
-  readonly clazz: ModelClass<Model>;
+  private readonly clazz: ModelClass<Model>;
   readonly name: string;
 
-  constructor(http: GmpHttp, name: string, clazz: ModelClass<Model>) {
+  constructor(http: Http, name: string, clazz: ModelClass<Model>) {
     super(http, {cmd: 'get_' + name + 's'});
 
     this.clazz = clazz;
     this.name = name;
   }
 
-  abstract getEntitiesResponse(root: TRoot): TEntitiesResponse;
+  protected abstract getEntitiesResponse(root: TRoot): TEntitiesResponse;
 
-  getCollectionListFromRoot(root: TRoot): CollectionList<TModel> {
+  protected getCollectionListFromRoot(root: TRoot): CollectionList<TModel> {
     const response = this.getEntitiesResponse(root);
     return parseCollectionList<TModel>(
       response,
@@ -132,7 +132,7 @@ abstract class EntitiesCommand<
   }
 
   async get(params: HttpCommandInputParams = {}, options?: HttpCommandOptions) {
-    const response = await this.httpGet(params, options);
+    const response = await this.httpGetWithTransform(params, options);
     const {entities, filter, counts} = this.getCollectionListFromRoot(
       response.data as TRoot,
     );
@@ -158,29 +158,26 @@ abstract class EntitiesCommand<
   }
 
   exportByIds(ids: string[]) {
-    const params = {
+    const data = {
       cmd: 'bulk_export',
       resource_type: this.name,
       bulk_select: BULK_SELECT_BY_IDS,
     };
     for (const id of ids) {
-      params['bulk_selected:' + id] = 1;
+      data['bulk_selected:' + id] = 1;
     }
-    return this.httpPost(params, {
-      transform: DefaultTransform,
-    } as HttpCommandOptions);
+    return this.httpRequestWithRejectionTransform('post', {data});
   }
 
   exportByFilter(filter: Filter) {
-    const params = {
-      cmd: 'bulk_export',
-      resource_type: this.name,
-      bulk_select: BULK_SELECT_BY_FILTER,
-      filter,
-    };
-    return this.httpPost(params, {
-      transform: DefaultTransform,
-    } as HttpCommandOptions);
+    return this.httpRequestWithRejectionTransform('post', {
+      data: {
+        cmd: 'bulk_export',
+        resource_type: this.name,
+        bulk_select: BULK_SELECT_BY_FILTER,
+        filter: filterString(filter),
+      },
+    });
   }
 
   async delete(entities: TModel[], extraParams?: HttpCommandPostParams) {
@@ -203,7 +200,7 @@ abstract class EntitiesCommand<
     for (const id of ids) {
       params['bulk_selected:' + id] = 1;
     }
-    const response = await this.httpPost(params);
+    const response = await this.httpPostWithTransform(params);
     return response.setData(ids);
   }
 
@@ -215,7 +212,9 @@ abstract class EntitiesCommand<
     return deleteResponse.setData(deleted);
   }
 
-  transformAggregates(response: Response<GetAggregatesResponseData, XmlMeta>) {
+  protected transformAggregates(
+    response: Response<GetAggregatesResponseData, XmlMeta>,
+  ) {
     const {data} = response;
     if (!data.get_aggregate) {
       throw new Error('Invalid response: get_aggregate not found');
@@ -306,7 +305,7 @@ abstract class EntitiesCommand<
       requestParams.subgroup_column = subgroupColumn;
     }
 
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       ...requestParams,
       ...params,
       cmd: 'get_aggregate',

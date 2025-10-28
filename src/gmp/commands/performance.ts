@@ -4,9 +4,9 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
-import date, {Date} from 'gmp/models/date';
+import type Http from 'gmp/http/http';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
+import date, {type Date} from 'gmp/models/date';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -101,12 +101,12 @@ export class PerformanceReport {
 }
 
 class PerformanceCommand extends HttpCommand {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, {cmd: 'get_system_reports'});
   }
 
   async getAll({sensorId = DEFAULT_SENSOR_ID} = {}) {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       slave_id: sensorId,
     });
     const {get_system_reports: sys_reports = {}} =
@@ -139,7 +139,7 @@ class PerformanceCommand extends HttpCommand {
       params.start_time = startDate.format('YYYY-MM-DDTHH:mm:ssZ');
       params.end_time = endDate.format('YYYY-MM-DDTHH:mm:ssZ');
     }
-    const response = await this.httpGet(params);
+    const response = await this.httpGetWithTransform(params);
     const data = response.data as GetSystemReportResponseData;
     const report =
       data?.get_system_report?.get_system_reports_response?.system_report;

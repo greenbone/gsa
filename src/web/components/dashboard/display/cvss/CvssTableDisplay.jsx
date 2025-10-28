@@ -5,7 +5,7 @@
 
 import transformCvssData, {
   cvssDataRow,
-} from 'web/components/dashboard/display/cvss/cvssTransform';
+} from 'web/components/dashboard/display/cvss/cvss-transform';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useGmp from 'web/hooks/useGmp';
 

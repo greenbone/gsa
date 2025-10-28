@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import I18NextHttpBackend from 'i18next-http-backend';
+import type I18NextHttpBackend from 'i18next-http-backend';
 import {initLocale} from 'gmp/locale/lang';
 
 class FakeBackend {

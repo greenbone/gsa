@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {FROM_FILE, FromFile, NOT_FROM_FILE} from 'gmp/commands/portlists';
-import PortList from 'gmp/models/portlist';
-import {parseYesNo, YesNo} from 'gmp/parser';
+import {FROM_FILE, type FromFile, NOT_FROM_FILE} from 'gmp/commands/portlists';
+import type PortList from 'gmp/models/portlist';
+import {parseYesNo, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
@@ -16,7 +16,9 @@ import {NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
-import PortRangesTable, {PortRange} from 'web/pages/portlists/PortRangesTable';
+import PortRangesTable, {
+  type PortRange,
+} from 'web/pages/portlists/PortRangesTable';
 
 export interface SavePortListData<TPortRange extends PortRange> {
   id?: string;

@@ -37,15 +37,17 @@ import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
 import AgentCommand from 'gmp/commands/agent';
+import AgentInstallerCommand from 'gmp/commands/agent-installer';
+import AgentInstallersCommand from 'gmp/commands/agent-installers';
 import AgentGroupCommand from 'gmp/commands/agentgroup';
 import AgentGroupsCommand from 'gmp/commands/agentgroups';
-import AgentInstallerCommand from 'gmp/commands/agentinstaller';
-import AgentInstallersCommand from 'gmp/commands/agentinstallers';
 import AgentsCommand from 'gmp/commands/agents';
 import AuthenticationCommand from 'gmp/commands/auth';
 import DashboardCommand from 'gmp/commands/dashboards';
 import FeedStatusCommand from 'gmp/commands/feedstatus';
 import LoginCommand from 'gmp/commands/login';
+import OciImageTargetCommand from 'gmp/commands/oci-image-target';
+import OciImageTargetsCommand from 'gmp/commands/oci-image-targets';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
 import ReportCommand from 'gmp/commands/report';
@@ -60,14 +62,12 @@ import TrashCanCommand from 'gmp/commands/trashcan';
 import UserCommand from 'gmp/commands/user';
 import UsersCommand from 'gmp/commands/users';
 import WizardCommand from 'gmp/commands/wizard';
-import GmpSettings from 'gmp/gmpsettings';
-import GmpHttp from 'gmp/http/gmp';
-import {ErrorHandler} from 'gmp/http/http';
-import DefaultTransform from 'gmp/http/transform/default';
-import {buildServerUrl, buildUrlParams, UrlParams} from 'gmp/http/utils';
+import type GmpSettings from 'gmp/gmpsettings';
+import Http, {type ErrorHandler} from 'gmp/http/http';
+import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
 import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
-import logger, {RootLogger} from 'gmp/log';
+import logger, {type RootLogger} from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
@@ -78,7 +78,7 @@ const log = logger.getLogger('gmp');
 class Gmp {
   readonly settings: GmpSettings;
   readonly log: RootLogger;
-  readonly http: GmpHttp;
+  readonly http: Http;
   readonly _login: LoginCommand;
   _logoutListeners: Listener[];
 
@@ -91,6 +91,8 @@ class Gmp {
   readonly auth: AuthenticationCommand;
   readonly dashboard: DashboardCommand;
   readonly feedstatus: FeedStatusCommand;
+  readonly ociimagetarget: OciImageTargetCommand;
+  readonly ociimagetargets: OciImageTargetsCommand;
   readonly performance: PerformanceCommand;
   readonly portlist: PortListCommand;
   readonly portlists: PortListsCommand;
@@ -107,7 +109,7 @@ class Gmp {
   readonly users: UsersCommand;
   readonly wizard: WizardCommand;
 
-  constructor(settings: GmpSettings, http?: GmpHttp) {
+  constructor(settings: GmpSettings, http?: Http) {
     this.settings = settings;
 
     logger.init(this.settings);
@@ -116,7 +118,7 @@ class Gmp {
 
     this.log = logger;
 
-    this.http = http ?? new GmpHttp(this.settings);
+    this.http = http ?? new Http(this.settings);
 
     this._login = new LoginCommand(this.http);
 
@@ -131,6 +133,8 @@ class Gmp {
     this.auth = new AuthenticationCommand(this.http);
     this.dashboard = new DashboardCommand(this.http);
     this.feedstatus = new FeedStatusCommand(this.http);
+    this.ociimagetarget = new OciImageTargetCommand(this.http);
+    this.ociimagetargets = new OciImageTargetsCommand(this.http);
     this.performance = new PerformanceCommand(this.http);
     this.portlist = new PortListCommand(this.http);
     this.portlists = new PortListsCommand(this.http);
@@ -151,7 +155,9 @@ class Gmp {
   }
 
   _initCommands() {
-    for (const [name, cmd] of Object.entries(getCommands())) {
+    const commands = getCommands();
+
+    for (const [name, cmd] of Object.entries(commands)) {
       const instance = new cmd(this.http);
 
       Object.defineProperty(this, name, {
@@ -191,8 +197,6 @@ class Gmp {
         await this.http.request('get', {
           url,
           args,
-          // @ts-expect-error
-          transform: DefaultTransform,
         });
       } catch (err) {
         log.error('Error on logout', err);

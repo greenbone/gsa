@@ -14,10 +14,10 @@ import {
   wait,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import HostPage, {ToolBarIcons} from 'web/pages/hosts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -227,7 +227,7 @@ describe('Host ListPage tests', () => {
     expect(row[1]).toHaveTextContent('bar');
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('123.456.789.10');
-    expect(row[1]).toHaveTextContent('10.0 (High)');
+    expect(row[1]).toHaveTextContent('10.0 (Critical)');
     expect(row[1]).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );

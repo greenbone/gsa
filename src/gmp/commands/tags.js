@@ -80,7 +80,7 @@ export class TagCommand extends EntityCommand {
       id,
     };
     log.debug('Enabling tag', data);
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 
   disable({id}) {
@@ -90,7 +90,7 @@ export class TagCommand extends EntityCommand {
       id,
     };
     log.debug('Disabling tag', data);
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 }
 

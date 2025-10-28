@@ -4,9 +4,9 @@
  */
 
 import {useNavigate} from 'react-router';
-import Gmp from 'gmp/gmp';
-import Permission from 'gmp/models/permission';
-import PortList from 'gmp/models/portlist';
+import type Gmp from 'gmp/gmp';
+import type Permission from 'gmp/models/permission';
+import type PortList from 'gmp/models/portlist';
 import {PortListIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -20,7 +20,7 @@ import TabsContainer from 'web/components/tab/TabsContainer';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {

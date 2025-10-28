@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
-import {TICKET_STATUS, TicketStatus} from 'gmp/models/ticket';
+import type Filter from 'gmp/models/filter';
+import {TICKET_STATUS, type TicketStatus} from 'gmp/models/ticket';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';

@@ -5,7 +5,7 @@
 
 import {test, expect} from '@gsa/testing';
 import {isDate} from 'gmp/models/date';
-import Model from 'gmp/models/model';
+import type Model from 'gmp/models/model';
 import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 interface ModelClass<T extends Model> {

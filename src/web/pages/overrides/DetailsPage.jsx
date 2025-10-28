@@ -53,7 +53,7 @@ import {
 import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 export const ToolBarIcons = ({
   entity,
   onOverrideCloneClick,

@@ -9,7 +9,7 @@ import {
   DEFAULT_SEVERITY_RATING,
   SEVERITY_RATING_CVSS_2,
   SEVERITY_RATING_CVSS_3,
-  SeverityRating,
+  type SeverityRating,
 } from 'gmp/utils/severity';
 
 export type RiskFactor = keyof typeof severityRiskFactorValues;

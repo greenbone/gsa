@@ -6,10 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import Detailspage, {ToolBarIcons} from 'web/pages/schedules/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/schedules';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

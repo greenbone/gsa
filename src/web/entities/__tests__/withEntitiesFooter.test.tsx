@@ -5,11 +5,11 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, screen} from 'web/testing';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Task from 'gmp/models/task';
 import withEntitiesFooter, {
-  WithEntitiesFooterComponentProps,
+  type WithEntitiesFooterComponentProps,
 } from 'web/entities/withEntitiesFooter';
 
 describe('withEntitiesFooter tests', () => {

@@ -26,9 +26,7 @@ const useLoadFeatures = () => {
         setFeatures(loadedFeatures);
       })
       .catch(rejection => {
-        if (rejection.isError()) {
-          log.error('An error occurred during fetching features', rejection);
-        }
+        log.error('An error occurred during fetching features', rejection);
         // use empty capabilities
         setFeatures(new Features());
       });

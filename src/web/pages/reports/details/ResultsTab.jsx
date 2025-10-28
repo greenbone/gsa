@@ -25,7 +25,7 @@ import {pageFilter} from 'web/store/pages/actions';
 import getPage from 'web/store/pages/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
-import SortDirection from 'web/utils/SortDirection';
+import SortDirection from 'web/utils/sort-direction';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 

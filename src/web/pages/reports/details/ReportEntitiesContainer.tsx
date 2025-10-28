@@ -4,12 +4,12 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Filter from 'gmp/models/filter';
-import Result from 'gmp/models/result';
+import CollectionCounts from 'gmp/collection/collection-counts';
+import type Filter from 'gmp/models/filter';
+import type Result from 'gmp/models/result';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
-import SortDirection, {SortDirectionType} from 'web/utils/SortDirection';
+import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
 
 type ResultCompareFunc = (
   sortReverse?: boolean,

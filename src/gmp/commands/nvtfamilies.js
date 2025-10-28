@@ -14,7 +14,7 @@ export class NvtFamiliesCommand extends HttpCommand {
   }
 
   get(params, options) {
-    return this.httpGet(params, options).then(response => {
+    return this.httpGetWithTransform(params, options).then(response => {
       const {data} = response;
       const {family: families} =
         data.get_nvt_families.get_nvt_families_response.families;

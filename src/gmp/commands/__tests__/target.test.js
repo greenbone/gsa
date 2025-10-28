@@ -10,15 +10,12 @@ import {
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
-import Rejection from 'gmp/http/rejection';
+import {ResponseRejection} from 'gmp/http/rejection';
 
 describe('TargetCommand tests', () => {
   test('should create target', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.create({
       allowSimultaneousIPs: '1',
@@ -113,7 +110,7 @@ describe('TargetCommand tests', () => {
       const xhr = {
         status: 404,
       };
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
           get_feeds_response: feedsResponse,
@@ -157,9 +154,6 @@ describe('TargetCommand tests', () => {
   test('should nullify ssh_elevate_credential in create command', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.create({
       allowSimultaneousIPs: '1',
@@ -216,9 +210,6 @@ describe('TargetCommand tests', () => {
   test('should save target', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.save({
       id: 'target_id1',
@@ -317,7 +308,7 @@ describe('TargetCommand tests', () => {
       const xhr = {
         status: 404,
       };
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
           get_feeds_response: feedsResponse,
@@ -363,9 +354,6 @@ describe('TargetCommand tests', () => {
   test('should nullify ssh_elevate_credential in save command', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.save({
       id: 'target_id1',

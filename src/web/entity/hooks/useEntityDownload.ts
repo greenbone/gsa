@@ -6,9 +6,9 @@
 import {useEffect} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useDispatch, useSelector} from 'react-redux';
-import Rejection from 'gmp/http/rejection';
-import Model from 'gmp/models/model';
-import {EntityType} from 'gmp/utils/entitytype';
+import type Rejection from 'gmp/http/rejection';
+import type Model from 'gmp/models/model';
+import {type EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';

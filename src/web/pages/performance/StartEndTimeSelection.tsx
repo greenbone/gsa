@@ -5,14 +5,14 @@
 
 import {useState, useEffect} from 'react';
 import {TimePicker} from '@greenbone/ui-lib';
-import {Date} from 'gmp/models/date';
+import {type Date} from 'gmp/models/date';
 import Button from 'web/components/form/Button';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
+import {formatTimeForTimePicker} from 'web/utils/time-picker-helpers';
 
 interface StartTimeSelectionProps {
   startDate: Date;

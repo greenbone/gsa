@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Capability} from 'gmp/capabilities/capabilities';
+import {type Capability} from 'gmp/capabilities/capabilities';
 import {
   apiType,
-  WithEntityType,
+  type WithEntityType,
   getEntityType,
   typeName,
 } from 'gmp/utils/entitytype';

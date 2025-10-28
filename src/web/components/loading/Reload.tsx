@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Gmp from 'gmp/gmp';
+import type Gmp from 'gmp/gmp';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import withGmp from 'web/utils/withGmp';

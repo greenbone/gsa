@@ -11,11 +11,11 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import PermissionListPage from 'web/pages/permissions/PermissionListPage';
 import PermissionListPageToolBarIcons from 'web/pages/permissions/PermissionListPageToolBarIcons';
 import {entitiesLoadingActions} from 'web/store/entities/permissions';

@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import tagStyles from 'web/components/form/tagStyles';
+import tagStyles from 'web/components/form/tag-styles';
 import Layout from 'web/components/layout/Layout';
 
 interface TagListDisplayProps {

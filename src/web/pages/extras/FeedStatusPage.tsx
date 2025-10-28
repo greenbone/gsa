@@ -9,7 +9,7 @@ import {
   SCAP_FEED,
   CERT_FEED,
   GVMD_DATA_FEED,
-  Feed,
+  type Feed,
 } from 'gmp/commands/feedstatus';
 import {isDefined} from 'gmp/utils/identity';
 import {

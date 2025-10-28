@@ -4,7 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Rejection from 'gmp/http/rejection';
+import Rejection, {
+  CanceledRejection,
+  ResponseRejection,
+  TimeoutRejection,
+} from 'gmp/http/rejection';
 import Filter from 'gmp/models/filter';
 import {isFunction} from 'gmp/utils/identity';
 import {
@@ -450,7 +454,7 @@ describe('entities reducers test', () => {
       const filterId = filterIdentifier(filter);
       const otherFilter = Filter.fromString('name=foo');
       const otherFilterId = filterIdentifier(otherFilter);
-      const rejection = new Rejection({}, Rejection.REASON_UNAUTHORIZED);
+      const rejection = new ResponseRejection({status: 401}, 'Another error');
       const action = actions.error(rejection, filter);
       const state = {
         byId: {
@@ -743,6 +747,60 @@ describe('entities reducers test', () => {
       });
     });
 
+    test('should reduce errors', () => {
+      const id = 'a1';
+      const actions = createEntityLoadingActions('foo');
+      const error = new Error('An Error');
+      const action = actions.error(id, error);
+      const reducer = createReducer('foo');
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        errors: {
+          [id]: error,
+        },
+        isLoading: {
+          [id]: false,
+        },
+      });
+    });
+
+    test('should reduce rejection errors', () => {
+      const id = 'a1';
+      const actions = createEntityLoadingActions('foo');
+      const error = new Rejection('An Error');
+      const action = actions.error(id, error);
+      const reducer = createReducer('foo');
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        errors: {
+          [id]: error,
+        },
+        isLoading: {
+          [id]: false,
+        },
+      });
+    });
+
+    test('should reduce response rejection errors', () => {
+      const id = 'a1';
+      const actions = createEntityLoadingActions('foo');
+      const error = new ResponseRejection({status: 500}, 'Server Error');
+      const action = actions.error(id, error);
+      const reducer = createReducer('foo');
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        errors: {
+          [id]: error,
+        },
+        isLoading: {
+          [id]: false,
+        },
+      });
+    });
+
     test('should reset isLoading', () => {
       const id = 'a1';
       const actions = createEntityLoadingActions('foo');
@@ -825,10 +883,86 @@ describe('entities reducers test', () => {
       });
     });
 
-    test('should not reduce expected errors', () => {
+    test('should not reduce auth required errors', () => {
       const id = 'a1';
       const actions = createEntityLoadingActions('foo');
-      const rejection = new Rejection({}, Rejection.REASON_UNAUTHORIZED);
+      const rejection = new ResponseRejection({status: 401});
+      const action = actions.error(id, rejection);
+      const reducer = createReducer('foo');
+      const state = {
+        byId: {
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        errors: {
+          baz: 'Another error',
+        },
+        isLoading: {
+          bar: true,
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        errors: {
+          baz: 'Another error',
+        },
+        isLoading: {
+          [id]: false,
+          bar: true,
+        },
+      });
+    });
+
+    test('should not reduce cancellation errors', () => {
+      const id = 'a1';
+      const actions = createEntityLoadingActions('foo');
+      const rejection = new CanceledRejection();
+      const action = actions.error(id, rejection);
+      const reducer = createReducer('foo');
+      const state = {
+        byId: {
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        errors: {
+          baz: 'Another error',
+        },
+        isLoading: {
+          bar: true,
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        errors: {
+          baz: 'Another error',
+        },
+        isLoading: {
+          [id]: false,
+          bar: true,
+        },
+      });
+    });
+
+    test('should not reduce timeout errors', () => {
+      const id = 'a1';
+      const actions = createEntityLoadingActions('foo');
+      const rejection = new TimeoutRejection();
       const action = actions.error(id, rejection);
       const reducer = createReducer('foo');
       const state = {

@@ -4,9 +4,9 @@
  */
 
 import {XMLParser} from 'fast-xml-parser';
-import Rejection from 'gmp/http/rejection';
-import Response, {Meta} from 'gmp/http/response';
-import {Transform} from 'gmp/http/transform/transform';
+import {type ResponseRejection} from 'gmp/http/rejection';
+import {type default as Response, type Meta} from 'gmp/http/response';
+import {type Transform} from 'gmp/http/transform/transform';
 import {success, rejection} from 'gmp/http/transform/xml';
 import {parseXmlEncodedString} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -24,6 +24,8 @@ export interface XmlMeta {
 export type XmlResponseData = Record<string, unknown>;
 
 type Envelope = Record<string, string | undefined>;
+
+type InputResponseData = string | ArrayBuffer | XmlResponseData;
 
 const PARSER_OPTIONS = {
   attributeNamePrefix: '_',
@@ -57,21 +59,50 @@ const parseEnvelopeMeta = (envelope: Envelope): XmlMeta => {
   return meta;
 };
 
+const getStringFromData = (data: string | ArrayBuffer) => {
+  if (typeof data === 'string') {
+    return data;
+  } else if (data instanceof ArrayBuffer) {
+    const decoder = new TextDecoder('utf-8');
+    return decoder.decode(data);
+  }
+  return data;
+};
+
 const transformXmlData = (
-  response: Response<string, Meta>,
+  response: Response<InputResponseData, Meta>,
 ): Response<XmlResponseData, XmlMeta> => {
-  const xmlString = response.plainData('text') as string;
-  const {envelope} = xmlParser.parse(xmlString);
-  const meta = parseEnvelopeMeta(envelope);
-  return response.set(envelope, meta);
+  const data = response.data;
+  let envelope: Envelope;
+  if (typeof data === 'string' || data instanceof ArrayBuffer) {
+    const xmlString = getStringFromData(data);
+    const parsed = xmlParser.parse(xmlString);
+    envelope = parsed.envelope as Envelope;
+  } else {
+    envelope = data.envelope as Envelope;
+  }
+  if (!isDefined(envelope)) {
+    throw new Error('No envelope found in response');
+  }
+  return response.set(envelope, parseEnvelopeMeta(envelope));
 };
 
-const transformRejection = (rej: Rejection) => {
-  const xmlString = rej.plainData('text') as string;
-  return isDefined(xmlString) ? xmlParser.parse(xmlString) : undefined;
+const transformRejection = (rej: ResponseRejection) => {
+  const data = rej.data;
+  if (!isDefined(data)) {
+    return rej;
+  }
+
+  const xmlString = getStringFromData(data);
+  return xmlParser.parse(xmlString);
 };
 
-const transformObject: Transform<string, Meta, XmlResponseData, XmlMeta> = {
+const transformObject: Transform<
+  string | ArrayBuffer | XmlResponseData,
+  Meta,
+  XmlResponseData,
+  XmlMeta
+> = {
   success: success(transformXmlData),
   rejection: rejection(transformRejection),
 };

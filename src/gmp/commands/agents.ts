@@ -4,10 +4,10 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import {HttpCommandPostParams} from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Response from 'gmp/http/response';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type HttpCommandPostParams} from 'gmp/commands/http';
+import type Http from 'gmp/http/http';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import Agent from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';
@@ -25,7 +25,7 @@ const AGENT_CONTROLLER_FILTER = Filter.fromString(
 );
 
 class AgentsCommand extends EntitiesCommand<Agent> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'agent', Agent);
   }
 
@@ -39,13 +39,13 @@ class AgentsCommand extends EntitiesCommand<Agent> {
       cmd: 'delete_agent',
       'agent_ids:': ids,
     };
-    const response = await this.httpPost(params);
+    const response = await this.httpPostWithTransform(params);
     return response.setData(ids);
   }
 
   async authorize(agents: Agent[]) {
     log.debug('Authorizing agent', {agents});
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'modify_agent',
       authorized: YES_VALUE,
       'agent_ids:': map(agents, agent => agent.id),
@@ -59,7 +59,7 @@ class AgentsCommand extends EntitiesCommand<Agent> {
 
   async revoke(agents: Agent[]) {
     log.debug('Revoking agent', {agents});
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'modify_agent',
       authorized: NO_VALUE,
       'agent_ids:': map(agents, agent => agent.id),

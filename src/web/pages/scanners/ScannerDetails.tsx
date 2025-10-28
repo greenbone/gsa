@@ -3,7 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Scanner, {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
+import {
+  type default as Scanner,
+  scannerTypeName,
+  CVE_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import CertInfo from 'web/components/certinfo/CertInfo';
 import Layout from 'web/components/layout/Layout';

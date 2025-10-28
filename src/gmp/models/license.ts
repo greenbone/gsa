@@ -4,8 +4,8 @@
  */
 
 import _ from 'gmp/locale';
-import {Date} from 'gmp/models/date';
-import {ModelElement} from 'gmp/models/model';
+import {type Date} from 'gmp/models/date';
+import {type ModelElement} from 'gmp/models/model';
 import {parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 

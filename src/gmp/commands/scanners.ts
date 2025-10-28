@@ -4,11 +4,11 @@
  */
 
 import EntitiesCommand from 'gmp/commands/entities';
-import GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import Scanner from 'gmp/models/scanner';
 
 class ScannersCommand extends EntitiesCommand<Scanner> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'scanner', Scanner);
   }
 

@@ -12,13 +12,13 @@ import {
   wait,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import ScanConfigsPage, {ToolBarIcons} from 'web/pages/scanconfigs/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {setUsername} from 'web/store/usersettings/actions';

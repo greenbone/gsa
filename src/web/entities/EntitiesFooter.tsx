@@ -5,7 +5,7 @@
 
 import {useState} from 'react';
 import {showInfoNotification, showSuccessNotification} from '@greenbone/ui-lib';
-import Model from 'gmp/models/model';
+import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
@@ -21,9 +21,9 @@ import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import TableFooter from 'web/components/table/TableFooter';
 import TableRow from 'web/components/table/TableRow';
-import {WithEntitiesFooterComponentProps} from 'web/entities/withEntitiesFooter';
+import {type WithEntitiesFooterComponentProps} from 'web/entities/withEntitiesFooter';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 
 type DialogType = (typeof DIALOG_TYPES)[keyof typeof DIALOG_TYPES];
 
@@ -74,7 +74,7 @@ const EntitiesFooter = <TEntity = Model,>({
   selectionType,
   span,
   tags = true,
-  trash,
+  trash = false,
   authorize = false,
   revoke = false,
   onDeleteClick,
@@ -85,7 +85,7 @@ const EntitiesFooter = <TEntity = Model,>({
   onAuthorizeClick,
   onRevokeClick,
   dialogConfig = {useCustomDialog: false},
-  delete: deleteEntities,
+  delete: deleteEntities = false,
 }: EntitiesFooterProps<TEntity>) => {
   const [_] = useTranslation();
   const [configDialog, setConfigDialog] = useState<ConfigDialog | undefined>(
@@ -231,8 +231,10 @@ const EntitiesFooter = <TEntity = Model,>({
                     <AuthorizeIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
-                      onClick={() =>
-                        onIconClick(DIALOG_TYPES.AUTHORIZE, onAuthorizeClick)
+                      onClick={
+                        onAuthorizeClick &&
+                        (() =>
+                          onIconClick(DIALOG_TYPES.AUTHORIZE, onAuthorizeClick))
                       }
                     />
                   )}
@@ -240,8 +242,9 @@ const EntitiesFooter = <TEntity = Model,>({
                     <RevokeIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
-                      onClick={() =>
-                        onIconClick(DIALOG_TYPES.REVOKE, onRevokeClick)
+                      onClick={
+                        onRevokeClick &&
+                        (() => onIconClick(DIALOG_TYPES.REVOKE, onRevokeClick))
                       }
                     />
                   )}
@@ -255,8 +258,9 @@ const EntitiesFooter = <TEntity = Model,>({
                     <TrashIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
-                      onClick={() =>
-                        onIconClick(DIALOG_TYPES.TRASH, onTrashClick)
+                      onClick={
+                        onTrashClick &&
+                        (() => onIconClick(DIALOG_TYPES.TRASH, onTrashClick))
                       }
                     />
                   )}
@@ -264,8 +268,9 @@ const EntitiesFooter = <TEntity = Model,>({
                     <DeleteIcon
                       loading={isInProgress || dialogConfig.dialogProcessing}
                       selectionType={selectionType}
-                      onClick={() =>
-                        onIconClick(DIALOG_TYPES.DELETE, onDeleteClick)
+                      onClick={
+                        onDeleteClick &&
+                        (() => onIconClick(DIALOG_TYPES.DELETE, onDeleteClick))
                       }
                     />
                   )}

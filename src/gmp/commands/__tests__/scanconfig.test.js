@@ -59,75 +59,57 @@ describe('convertPreferences tests', () => {
 });
 
 describe('ScanConfigCommand tests', () => {
-  test('should return single config', () => {
+  test('should return single config', async () => {
     const response = createEntityResponse('config', {_id: 'foo'});
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd.get({id: 'foo'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_config',
-          config_id: 'foo',
-        },
-      });
+    const resp = await cmd.get({id: 'foo'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_config',
+        config_id: 'foo',
+      },
+    });
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
+  });
 
-      const {data} = resp;
-      expect(data.id).toEqual('foo');
+  test('should import a config', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new ScanConfigCommand(fakeHttp);
+    await cmd.import({xml_file: 'content'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'import_config',
+        xml_file: 'content',
+      },
     });
   });
 
-  test('should import a config', () => {
+  test('should create a config', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd.import({xml_file: 'content'}).then(() => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-        data: {
-          cmd: 'import_config',
-          xml_file: 'content',
-        },
-      });
+    await cmd.create({
+      baseScanConfig: 'uuid1',
+      name: 'foo',
+      comment: 'somecomment',
     });
-  });
-
-  test('should create a config', () => {
-    const response = createActionResultResponse();
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
-    const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd
-      .create({
-        baseScanConfig: 'uuid1',
-        name: 'foo',
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_config',
+        base: 'uuid1',
         comment: 'somecomment',
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'create_config',
-            base: 'uuid1',
-            comment: 'somecomment',
-            name: 'foo',
-            usage_type: 'scan',
-          },
-        });
-      });
+        name: 'foo',
+        usage_type: 'scan',
+      },
+    });
   });
 
-  test('should save a config', () => {
+  test('should save a config', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const trend = {
       'AIX Local Security Checks': SCANCONFIG_TREND_DYNAMIC,
       'Family Foo': SCANCONFIG_TREND_STATIC,
@@ -140,100 +122,80 @@ describe('ScanConfigCommand tests', () => {
     const scannerPreferenceValues = {
       foo: 'bar',
     };
-
     const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd
-      .save({
-        id: 'c1',
-        name: 'foo',
+    await cmd.save({
+      id: 'c1',
+      name: 'foo',
+      comment: 'somecomment',
+      trend,
+      select,
+      scannerPreferenceValues,
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config',
         comment: 'somecomment',
-        trend,
-        select,
-        scannerPreferenceValues,
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'save_config',
-            comment: 'somecomment',
-            config_id: 'c1',
-            name: 'foo',
-            'preference:scanner:scanner:scanner:foo': 'bar',
-            'select:AIX Local Security Checks': 1,
-            'select:Brute force attacks': 1,
-            'trend:AIX Local Security Checks': 1,
-            'trend:Family Foo': 0,
-          },
-        });
-      });
+        config_id: 'c1',
+        name: 'foo',
+        'preference:scanner:scanner:scanner:foo': 'bar',
+        'select:AIX Local Security Checks': 1,
+        'select:Brute force attacks': 1,
+        'trend:AIX Local Security Checks': 1,
+        'trend:Family Foo': 0,
+      },
+    });
   });
 
-  test('should save an in use config with undefined input objects', () => {
+  test('should save an in use config with undefined input objects', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd
-      .save({
-        id: 'c1',
-        name: 'foo',
+    await cmd.save({
+      id: 'c1',
+      name: 'foo',
+      comment: 'somecomment',
+      trend: undefined,
+      select: undefined,
+      scannerPreferenceValues: undefined,
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config',
         comment: 'somecomment',
-        trend: undefined,
-        select: undefined,
-        scannerPreferenceValues: undefined,
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'save_config',
-            comment: 'somecomment',
-            config_id: 'c1',
-            name: 'foo',
-          },
-        });
-      });
+        config_id: 'c1',
+        name: 'foo',
+      },
+    });
   });
 
-  test('should save a config family', () => {
+  test('should save a config family', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const selected = {
       'oid:1': YES_VALUE,
       'oid:2': NO_VALUE,
       'oid:3': YES_VALUE,
     };
-
     const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd
-      .saveScanConfigFamily({
-        id: 'c1',
-        familyName: 'foo',
-        selected,
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'save_config_family',
-            config_id: 'c1',
-            family: 'foo',
-            'nvt:oid:1': 1,
-            'nvt:oid:3': 1,
-          },
-        });
-      });
+    await cmd.saveScanConfigFamily({
+      id: 'c1',
+      familyName: 'foo',
+      selected,
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config_family',
+        config_id: 'c1',
+        family: 'foo',
+        'nvt:oid:1': 1,
+        'nvt:oid:3': 1,
+      },
+    });
   });
 
-  test('should save a config nvt', () => {
+  test('should save a config nvt', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const preferenceValues = {
       Foo: {
         id: 1,
@@ -246,32 +208,28 @@ describe('ScanConfigCommand tests', () => {
         type: 'password',
       },
     };
-
     const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd
-      .saveScanConfigNvt({
-        id: 'c1',
+    await cmd.saveScanConfigNvt({
+      id: 'c1',
+      oid: '1.2.3',
+      timeout: 123,
+      preferenceValues,
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config_nvt',
+        config_id: 'c1',
         oid: '1.2.3',
-        timeout: 123,
-        preferenceValues,
-      })
-      .then(() => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'save_config_nvt',
-            config_id: 'c1',
-            oid: '1.2.3',
-            'password:1.2.3:2:password:Bar': 'yes',
-            'preference:1.2.3:0:entry:timeout': 123,
-            'preference:1.2.3:1:entry:Foo': 'bar',
-            'preference:1.2.3:2:password:Bar': 'foo',
-            timeout: 1,
-          },
-        });
-      });
+        'password:1.2.3:2:password:Bar': 'yes',
+        'preference:1.2.3:0:entry:timeout': 123,
+        'preference:1.2.3:1:entry:Foo': 'bar',
+        'preference:1.2.3:2:password:Bar': 'foo',
+        timeout: 1,
+      },
+    });
   });
 
-  test('should request scan config family data', () => {
+  test('should request scan config family data', async () => {
     const response = createResponse({
       get_config_family_response: {
         get_nvts_response: {
@@ -308,33 +266,29 @@ describe('ScanConfigCommand tests', () => {
     });
     const responses = [response, responseAll];
     const fakeHttp = createHttpMany(responses);
-
-    expect.hasAssertions();
-
     const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd
-      .editScanConfigFamilySettings({id: 'foo', familyName: 'bar'})
-      .then(resp => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-          args: {
-            cmd: 'edit_config_family',
-            config_id: 'foo',
-            family: 'bar',
-          },
-        });
-
-        const {nvts} = resp.data;
-        expect(nvts.length).toEqual(3);
-        expect(nvts[0].selected).toEqual(YES_VALUE);
-        expect(nvts[0].severity).toEqual(1.1);
-        expect(nvts[1].selected).toEqual(YES_VALUE);
-        expect(nvts[1].severity).toEqual(2.2);
-        expect(nvts[2].selected).toEqual(NO_VALUE);
-        expect(nvts[2].severity).toEqual(3.3);
-      });
+    const resp = await cmd.editScanConfigFamilySettings({
+      id: 'foo',
+      familyName: 'bar',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'edit_config_family',
+        config_id: 'foo',
+        family: 'bar',
+      },
+    });
+    const {nvts} = resp.data;
+    expect(nvts.length).toEqual(3);
+    expect(nvts[0].selected).toEqual(YES_VALUE);
+    expect(nvts[0].severity).toEqual(1.1);
+    expect(nvts[1].selected).toEqual(YES_VALUE);
+    expect(nvts[1].severity).toEqual(2.2);
+    expect(nvts[2].selected).toEqual(NO_VALUE);
+    expect(nvts[2].severity).toEqual(3.3);
   });
 
-  test('should request scan config nvt data', () => {
+  test('should request scan config nvt data', async () => {
     const response = createResponse({
       get_config_nvt_response: {
         get_nvts_response: {
@@ -345,24 +299,17 @@ describe('ScanConfigCommand tests', () => {
       },
     });
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd
-      .editScanConfigNvtSettings({id: 'foo', oid: '1.2.3'})
-      .then(resp => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-          args: {
-            cmd: 'get_config_nvt',
-            config_id: 'foo',
-            oid: '1.2.3',
-            name: '',
-          },
-        });
-
-        const {data: nvt} = resp;
-        expect(nvt.id).toEqual('1.2.3');
-      });
+    const resp = await cmd.editScanConfigNvtSettings({id: 'foo', oid: '1.2.3'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_config_nvt',
+        config_id: 'foo',
+        oid: '1.2.3',
+        name: '',
+      },
+    });
+    const {data: nvt} = resp;
+    expect(nvt.id).toEqual('1.2.3');
   });
 });

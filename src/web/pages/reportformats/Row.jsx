@@ -16,7 +16,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 import withCapabilities from 'web/utils/withCapabilities';
 
 const Actions = compose(

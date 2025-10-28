@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import EntityCommand, {EntityActionResponse} from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
+import EntityCommand, {type EntityActionResponse} from 'gmp/commands/entity';
+import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
-import AgentGroup, {AgentGroupElement} from 'gmp/models/agentgroup';
-import {Element} from 'gmp/models/model';
+import AgentGroup, {type AgentGroupElement} from 'gmp/models/agentgroup';
+import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
 import {isArray, isDefined} from 'gmp/utils/identity';
 
@@ -37,7 +37,7 @@ export interface AgentGroupSaveParams
 const log = logger.getLogger('gmp.commands.agentgroup');
 
 class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'agent_group', AgentGroup);
   }
 

@@ -18,7 +18,7 @@ import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withRowDetails from 'web/entities/withRowDetails';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
 import PropTypes from 'web/utils/PropTypes';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 const Header = ({
   actions = true,

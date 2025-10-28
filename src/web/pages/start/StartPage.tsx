@@ -42,7 +42,10 @@ import EditDashboardDialog from 'web/pages/start/EditDashboardDialog';
 import NewDashboardDialog, {
   DEFAULT_DISPLAYS,
 } from 'web/pages/start/NewDashboardDialog';
-import {DashboardData, DashboardSettings} from 'web/pages/start/types';
+import {
+  type DashboardData,
+  type DashboardSettings,
+} from 'web/pages/start/types';
 import {loadSettings, saveSettings} from 'web/store/dashboard/settings/actions';
 import getDashboardSettingsSelector, {
   DashboardSetting,

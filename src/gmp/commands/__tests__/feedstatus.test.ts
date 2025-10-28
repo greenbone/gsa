@@ -9,15 +9,15 @@ import FeedStatusCommand, {
   FEED_COMMUNITY,
   feedStatusRejection,
   FEED_ENTERPRISE,
-  FeedStatusElement,
+  type FeedStatusElement,
 } from 'gmp/commands/feedstatus';
 import {
   createResponse,
   createHttp,
   createHttpError,
 } from 'gmp/commands/testing';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
+import type Http from 'gmp/http/http';
+import {ResponseRejection} from 'gmp/http/rejection';
 import logger from 'gmp/log';
 
 describe('FeedStatusCommand tests', () => {
@@ -39,8 +39,6 @@ describe('FeedStatusCommand tests', () => {
     });
 
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
 
     const cmd = new FeedStatusCommand(fakeHttp);
     const resp = await cmd.readFeedInformation();
@@ -303,15 +301,11 @@ describe('FeedStatusCommand tests', () => {
 
 describe('feedStatusRejection tests', () => {
   test('should pass rejection for non 404 errors', async () => {
-    const gmpHttp = {} as GmpHttp;
+    const gmpHttp = {} as Http;
     const xhr = {
       status: 500,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
-      xhr,
-      Rejection.REASON_ERROR,
-      'Internal Server Error',
-    );
+    const rejection = new ResponseRejection(xhr, 'Internal Server Error');
     await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
     expect(rejection.message).toEqual('Internal Server Error');
   });
@@ -326,11 +320,7 @@ describe('feedStatusRejection tests', () => {
     const xhr = {
       status: 404,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
-      xhr,
-      Rejection.REASON_ERROR,
-      'Some Message',
-    );
+    const rejection = new ResponseRejection(xhr, 'Some Message');
 
     await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
     expect(rejection.message).toEqual(
@@ -348,11 +338,7 @@ describe('feedStatusRejection tests', () => {
     const xhr = {
       status: 404,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
-      xhr,
-      Rejection.REASON_ERROR,
-      'Some Message',
-    );
+    const rejection = new ResponseRejection(xhr, 'Some Message');
 
     await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
     expect(rejection.message).toEqual(
@@ -374,9 +360,8 @@ describe('feedStatusRejection tests', () => {
     const xhr = {
       status: 404,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
+    const rejection = new ResponseRejection(
       xhr,
-      Rejection.REASON_ERROR,
       'Failed to find port_list XYZ',
     );
 
@@ -400,11 +385,7 @@ describe('feedStatusRejection tests', () => {
     const xhr = {
       status: 404,
     } as XMLHttpRequest;
-    const rejection = new Rejection(
-      xhr,
-      Rejection.REASON_ERROR,
-      'Failed to find config XYZ',
-    );
+    const rejection = new ResponseRejection(xhr, 'Failed to find config XYZ');
 
     await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
     expect(rejection.message).toEqual(

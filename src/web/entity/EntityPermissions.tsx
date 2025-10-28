@@ -5,23 +5,23 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Gmp from 'gmp/gmp';
-import Rejection from 'gmp/http/rejection';
-import Group from 'gmp/models/group';
-import Model from 'gmp/models/model';
-import Permission from 'gmp/models/permission';
-import Role from 'gmp/models/role';
-import User from 'gmp/models/user';
-import {EntityType, getEntityType} from 'gmp/utils/entitytype';
+import type Gmp from 'gmp/gmp';
+import type Rejection from 'gmp/http/rejection';
+import type Group from 'gmp/models/group';
+import type Model from 'gmp/models/model';
+import type Permission from 'gmp/models/permission';
+import type Role from 'gmp/models/role';
+import type User from 'gmp/models/user';
+import {type EntityType, getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
-import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation, {TranslateFunc} from 'web/hooks/useTranslation';
+import useTranslation, {type TranslateFunc} from 'web/hooks/useTranslation';
 import PermissionComponent from 'web/pages/permissions/PermissionComponent';
 import PermissionMultipleDialog, {
   CURRENT_RESOURCE_ONLY,

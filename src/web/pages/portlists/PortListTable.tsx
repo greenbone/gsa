@@ -4,18 +4,18 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import PortList from 'gmp/models/portlist';
+import type PortList from 'gmp/models/portlist';
 import createEntitiesFooter, {
-  CreateEntitiesFooterProps,
+  type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
 import PortListDetails from 'web/pages/portlists/PortListDetails';
 import PortListTableHeader, {
-  PortListTableHeaderProps,
+  type PortListTableHeaderProps,
 } from 'web/pages/portlists/PortListTableHeader';
 import PortListTableRow, {
-  PortListTableRowProps,
+  type PortListTableRowProps,
 } from 'web/pages/portlists/PortListTableRow';
 
 export default createEntitiesTable<

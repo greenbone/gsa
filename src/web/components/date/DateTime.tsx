@@ -4,14 +4,14 @@
  */
 
 import {ensureDate} from 'gmp/locale/date';
-import {Date} from 'gmp/models/date';
+import {type Date} from 'gmp/models/date';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';
 import {
   formattedUserSettingDateTimeWithTimeZone,
   formattedUserSettingDateTimeObject,
-} from 'web/utils/userSettingTimeDateFormatters';
+} from 'web/utils/user-setting-time-date-formatters';
 
 interface DateTimeProps {
   date?: Date | string;

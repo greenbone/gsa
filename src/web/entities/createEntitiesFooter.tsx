@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import EntitiesFooter, {EntitiesFooterProps} from 'web/entities/EntitiesFooter';
+import EntitiesFooter, {
+  type EntitiesFooterProps,
+} from 'web/entities/EntitiesFooter';
 import withEntitiesFooter, {
-  WithEntitiesFooterProps,
+  type WithEntitiesFooterProps,
 } from 'web/entities/withEntitiesFooter';
 
 export type CreateEntitiesFooterProps<TEntity> = WithEntitiesFooterProps<

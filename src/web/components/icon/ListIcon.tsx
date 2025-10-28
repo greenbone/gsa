@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import {ListSvgIcon} from 'web/components/icon';
-import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
+import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import Link from 'web/components/link/Link';
 
 interface ListIconProps<TValue = string>

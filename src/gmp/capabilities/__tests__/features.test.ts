@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Features, {Feature} from 'gmp/capabilities/features';
+import Features, {type Feature} from 'gmp/capabilities/features';
 
 describe('Features tests', () => {
   test('should check feature enabled', () => {

@@ -110,7 +110,7 @@ class PermissionsCommand extends EntitiesCommand {
     });
 
     log.debug('Creating new permission', data);
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 
   getEntitiesResponse(root) {

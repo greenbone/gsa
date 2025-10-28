@@ -10,7 +10,7 @@ import useIconSize, {
   ICON_SIZE_MEDIUM_PIXELS,
   ICON_SIZE_SMALL_PIXELS,
   ICON_SIZE_TINY_PIXELS,
-  IconSizeParameter,
+  type IconSizeParameter,
 } from 'web/hooks/useIconSize';
 
 describe('useIconSize', () => {
