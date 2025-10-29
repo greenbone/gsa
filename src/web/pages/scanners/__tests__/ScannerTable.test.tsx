@@ -8,6 +8,7 @@ import {screen, rendererWith, fireEvent, within} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Scanner, {
   CVE_SCANNER_TYPE,
+  OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import ScannerTable from 'web/pages/scanners/ScannerTable';
@@ -90,7 +91,7 @@ describe('ScannerTable tests', () => {
       name: 'Scanner 1',
       host: 'http://scanner1-host',
       port: 443,
-      scannerType: OPENVASD_SCANNER_TYPE,
+      scannerType: OPENVAS_SCANNER_TYPE,
       userCapabilities: new EverythingCapabilities(),
     });
     const handleCloneClick = testing.fn();

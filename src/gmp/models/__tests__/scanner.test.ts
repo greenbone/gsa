@@ -201,7 +201,7 @@ describe('Scanner model method tests', () => {
     const scanner3 = new Scanner({scannerType: GREENBONE_SENSOR_SCANNER_TYPE});
 
     expect(scanner1.isCloneable()).toEqual(false);
-    expect(scanner2.isCloneable()).toEqual(false);
+    expect(scanner2.isCloneable()).toEqual(true);
     expect(scanner3.isCloneable()).toEqual(true);
   });
 
@@ -211,7 +211,7 @@ describe('Scanner model method tests', () => {
     const scanner3 = new Scanner({scannerType: GREENBONE_SENSOR_SCANNER_TYPE});
 
     expect(scanner1.isWritable()).toEqual(false);
-    expect(scanner2.isWritable()).toEqual(false);
+    expect(scanner2.isWritable()).toEqual(true);
     expect(scanner3.isWritable()).toEqual(true);
   });
 
