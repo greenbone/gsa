@@ -4,10 +4,13 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
-import {Element} from 'gmp/models/model';
-import Scanner, {ScannerElement, ScannerType} from 'gmp/models/scanner';
+import {type Element} from 'gmp/models/model';
+import Scanner, {
+  type ScannerElement,
+  type ScannerType,
+} from 'gmp/models/scanner';
 
 interface ScannerCommandCreateParams {
   name: string;
@@ -30,7 +33,7 @@ interface ScannerCommandVerifyParams {
 const log = logger.getLogger('gmp.commands.scanner');
 
 class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'scanner', Scanner);
   }
 
@@ -74,9 +77,11 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
   }: ScannerCommandSaveParams) {
     const data = {
       cmd: 'save_scanner',
-      ca_pub: caCertificate,
+      // send empty string if caCertificate is undefined to remove existing CA cert
+      ca_pub: caCertificate ?? '',
       comment,
-      credential_id: credentialId,
+      // send empty string if credentialId is undefined to remove existing credential
+      credential_id: credentialId ?? '',
       id,
       name,
       port,

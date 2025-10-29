@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import type CollectionCounts from 'gmp/collection/collection-counts';
 import EntitiesCommand from 'gmp/commands/entities';
-import {HttpCommandOptions} from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Filter from 'gmp/models/filter';
-import {Element} from 'gmp/models/model';
-import Task, {TaskElement} from 'gmp/models/task';
-import {YesNo} from 'gmp/parser';
+import {type HttpCommandOptions} from 'gmp/commands/http';
+import type Http from 'gmp/http/http';
+import type Filter from 'gmp/models/filter';
+import {type Element} from 'gmp/models/model';
+import Task, {type TaskElement} from 'gmp/models/task';
+import {type YesNo} from 'gmp/parser';
 
 interface GetTasksResponse extends Element {
   apply_overrides: YesNo;
@@ -42,7 +42,7 @@ interface TasksCommandGetParams {
 }
 
 class TasksCommand extends EntitiesCommand<Task, GetTasksResponse> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'task', Task);
   }
 
@@ -56,7 +56,7 @@ class TasksCommand extends EntitiesCommand<Task, GetTasksResponse> {
     options?: HttpCommandOptions,
   ) {
     const params = {filter, usage_type: 'scan'};
-    const response = await this.httpGet(params, options);
+    const response = await this.httpGetWithTransform(params, options);
     const {
       entities,
       filter: responseFilter,

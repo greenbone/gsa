@@ -9,14 +9,15 @@ import {
   createActionResultResponse,
   createEntityResponse,
   createHttp,
+  createPlainResponse,
   createResponse,
 } from 'gmp/commands/testing';
-import GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import Response from 'gmp/http/response';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import {
-  EntityModelElement,
-  EntityModelProperties,
+  type EntityModelElement,
+  type EntityModelProperties,
 } from 'gmp/models/entitymodel';
 import Filter from 'gmp/models/filter';
 import Model from 'gmp/models/model';
@@ -31,7 +32,7 @@ class Foo extends Model {
 }
 
 class TestEntityCommand extends EntityCommand<Foo, FooElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'foo', Foo);
   }
   getElementFromRoot(root: XmlResponseData): FooElement {
@@ -147,7 +148,8 @@ describe('EntityCommand tests', () => {
   });
 
   test('should delete an entity', async () => {
-    const fakeHttp = createHttp();
+    const response = createResponse();
+    const fakeHttp = createHttp(response);
 
     const cmd = new TestEntityCommand(fakeHttp);
     const cmdResponse = await cmd.delete({id: '123'});
@@ -162,7 +164,7 @@ describe('EntityCommand tests', () => {
 
   test('should export an entity', async () => {
     const content = '<some><xml>exported-data</xml></some>';
-    const response = createResponse(content);
+    const response = createPlainResponse(content);
     const fakeHttp = createHttp(response);
 
     const cmd = new TestEntityCommand(fakeHttp);
@@ -174,10 +176,6 @@ describe('EntityCommand tests', () => {
         resource_type: 'foo',
         bulk_select: 1,
         'bulk_selected:123': 1,
-      },
-      transform: {
-        rejection: expect.any(Function),
-        success: expect.any(Function),
       },
     });
     expect(cmdResponse).toBeInstanceOf(Response);

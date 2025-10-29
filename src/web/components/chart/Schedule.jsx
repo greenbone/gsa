@@ -17,7 +17,7 @@ import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
-import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/user-setting-time-date-formatters';
 import withTranslation from 'web/utils/withTranslation';
 
 const ONE_DAY = 60 * 60 * 24;

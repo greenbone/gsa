@@ -4,17 +4,17 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import AgentGroup from 'gmp/models/agentgroup';
+import type AgentGroup from 'gmp/models/agentgroup';
 import createEntitiesFooter, {
-  CreateEntitiesFooterProps,
+  type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 
 import AgentGroupsTableHeader, {
-  AgentGroupsTableHeaderProps,
+  type AgentGroupsTableHeaderProps,
 } from 'web/pages/agent-groups/AgentGroupsTableHeader';
 import AgentGroupsTableRow, {
-  AgentGroupsTableRowProps,
+  type AgentGroupsTableRowProps,
 } from 'web/pages/agent-groups/AgentGroupsTableRow';
 
 export default createEntitiesTable<

@@ -7,7 +7,7 @@ import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import {TrashcanIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 
 export interface TrashIconProps {
   'data-testid'?: string;

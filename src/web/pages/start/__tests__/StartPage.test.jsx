@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {within, rendererWith, wait, screen} from 'web/testing';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import StartPage from 'web/pages/start/StartPage';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

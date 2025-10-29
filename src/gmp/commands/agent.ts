@@ -4,10 +4,10 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
+import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
-import Agent, {AgentElement} from 'gmp/models/agent';
-import {Element} from 'gmp/models/model';
+import Agent, {type AgentElement} from 'gmp/models/agent';
+import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
 import {isArray, isDefined} from 'gmp/utils/identity';
 
@@ -29,13 +29,13 @@ export interface AgentModifyParams {
 const log = logger.getLogger('gmp.commands.agent');
 
 class AgentCommand extends EntityCommand<Agent, AgentElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'agent', Agent);
   }
 
   async delete({id}: {id: string}) {
     log.debug('Deleting agent', {id});
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'delete_agent',
       'agent_ids:': id,
     });

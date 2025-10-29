@@ -119,7 +119,7 @@ describe('ScannerDialog tests', () => {
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
     expect(scannerType).toHaveValue('Agent Controller');
     const credential = screen.getByRole('textbox', {name: 'Credential'});
-    expect(credential).toHaveValue('');
+    expect(credential).toHaveValue('--');
   });
 
   test('should display defaults when agent sensor is used', () => {
@@ -366,7 +366,7 @@ describe('ScannerDialog tests', () => {
     expect(scannerType).toHaveValue('Greenbone Sensor');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toBe(2); // OpenVASD Scanner and Greenbone Sensor
-    expect(scannerTypeItems[0]).toHaveTextContent('OpenVASD Scanner');
+    expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
     expect(scannerTypeItems[1]).toHaveTextContent('Greenbone Sensor');
   });
 
@@ -385,8 +385,8 @@ describe('ScannerDialog tests', () => {
     });
     expect(scannerType).toHaveValue('Greenbone Sensor');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
-    expect(scannerTypeItems.length).toBe(2); // OpenVASDScanner and Greenbone Sensor
-    expect(scannerTypeItems[0]).toHaveTextContent('OpenVASD Scanner');
+    expect(scannerTypeItems.length).toBe(2); // OpenVASScanner and Greenbone Sensor
+    expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
     expect(scannerTypeItems[1]).toHaveTextContent('Greenbone Sensor');
   });
 
@@ -406,7 +406,7 @@ describe('ScannerDialog tests', () => {
     expect(scannerType).toHaveValue('Agent Controller');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toBe(2); // OpenVASD Scanner and Agent Controller
-    expect(scannerTypeItems[0]).toHaveTextContent('OpenVASD Scanner');
+    expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
     expect(scannerTypeItems[1]).toHaveTextContent('Agent Controller');
   });
 

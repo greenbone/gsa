@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Credential, {
+import {
+  type default as Credential,
+  type ALL_CREDENTIAL_TYPES,
   snmp_credential_filter,
   ssh_credential_filter,
   ESXI_CREDENTIAL_TYPES,
@@ -14,12 +16,11 @@ import Credential, {
   SSH_ELEVATE_CREDENTIAL_TYPES,
   KRB5_CREDENTIAL_TYPES,
   krb5CredentialFilter,
-  ALL_CREDENTIAL_TYPES,
 } from 'gmp/models/credential';
-import Filter from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
 import PortList from 'gmp/models/portlist';
-import {AliveTests} from 'gmp/models/target';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {type AliveTests} from 'gmp/models/target';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
@@ -33,7 +34,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import {
-  RenderSelectItemProps,
+  type RenderSelectItemProps,
   renderSelectItems,
   UNSET_VALUE,
 } from 'web/utils/Render';

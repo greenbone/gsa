@@ -19,7 +19,7 @@ import Scanner, {
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
   OPENVASD_SENSOR_SCANNER_TYPE,
-  ScannerType,
+  type ScannerType,
 } from 'gmp/models/scanner';
 import TaskDialog from 'web/pages/tasks/TaskDialog';
 

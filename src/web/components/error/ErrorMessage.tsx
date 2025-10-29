@@ -8,7 +8,7 @@ import {AlertCircle} from 'lucide-react';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorContainer from 'web/components/error/ErrorContainer';
 import Divider from 'web/components/layout/Divider';
-import Layout, {LayoutProps} from 'web/components/layout/Layout';
+import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 import Theme from 'web/utils/Theme';
 
 interface ErrorMessageProps extends LayoutProps {

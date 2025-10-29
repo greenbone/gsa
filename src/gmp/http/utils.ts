@@ -3,27 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {hasValue, isArray, isDefined} from 'gmp/utils/identity';
+
+type HttpMethodUpperCase = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+export type HttpMethod = HttpMethodUpperCase | Lowercase<HttpMethodUpperCase>;
 
 export type UrlParamValue = string | number | boolean | undefined;
 export type UrlParams = Record<string, UrlParamValue>;
 
-export type DataValue = string | number | boolean | Blob | undefined;
+export type DataValue = string | number | boolean | Blob | undefined | null;
 export type Data = Record<string, DataValue | string[] | number[] | boolean[]>;
 
-export const buildUrlParams = (params: UrlParams) => {
-  let argCount = 0;
-  let uri = '';
-
+export const buildUrlParams = (params: UrlParams): string => {
+  const urlParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (isDefined(value)) {
-      if (argCount++) {
-        uri += '&';
-      }
-      uri += encodeURIComponent(key) + '=' + encodeURIComponent(value);
+      urlParams.append(key, String(value));
     }
   }
-  return uri;
+  return String(urlParams);
 };
 
 export const buildServerUrl = (
@@ -43,12 +41,31 @@ export const buildServerUrl = (
 
 const isBlob = (value: unknown): value is Blob => value instanceof Blob;
 
-export const formdataAppend = (
-  formdata: FormData,
+export const formDataAppend = (
+  formData: FormData,
   key: string,
-  value: DataValue | null,
+  value: DataValue,
 ) => {
   if (hasValue(value)) {
-    formdata.append(key, isBlob(value) ? value : String(value));
+    formData.append(key, isBlob(value) ? value : String(value));
   }
+};
+
+export const createFormData = (data: Data) => {
+  const formdata = new FormData();
+
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      const value = data[key];
+      if (isArray(value)) {
+        for (const val of value) {
+          formDataAppend(formdata, key, val);
+        }
+      } else {
+        formDataAppend(formdata, key, value);
+      }
+    }
+  }
+
+  return formdata;
 };

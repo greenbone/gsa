@@ -14,7 +14,7 @@ import {
   waitFor,
   testBulkDeleteDialog,
 } from 'web/testing';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import AuditReportsPage from 'web/pages/reports/AuditReportsListPage';

@@ -5,9 +5,9 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Nvt, {TAG_NA} from 'gmp/models/nvt';
+import {type default as Nvt, TAG_NA} from 'gmp/models/nvt';
 import {DEFAULT_OID_VALUE} from 'gmp/models/override';
-import Result from 'gmp/models/result';
+import type Result from 'gmp/models/result';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import Layout from 'web/components/layout/Layout';

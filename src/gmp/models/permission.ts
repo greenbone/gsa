@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import {ApiType, normalizeType} from 'gmp/utils/entitytype';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import {type ApiType, normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 

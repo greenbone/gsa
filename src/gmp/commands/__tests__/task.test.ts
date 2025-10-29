@@ -18,9 +18,9 @@ import {
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
-import logger, {LogLevel} from 'gmp/log';
+import type Http from 'gmp/http/http';
+import {ResponseRejection} from 'gmp/http/rejection';
+import logger, {type LogLevel} from 'gmp/log';
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -97,9 +97,6 @@ describe('TaskCommand tests', () => {
   test('should create new task with all parameters', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
     const cmd = new TaskCommand(fakeHttp);
     const resp = await cmd.create({
       add_tag: 1,
@@ -194,7 +191,7 @@ describe('TaskCommand tests', () => {
       const xhr = {
         status: 404,
       } as XMLHttpRequest;
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
           get_feeds_response: feedsResponse,
@@ -205,7 +202,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
+      } as unknown as Http;
 
       const cmd = new TaskCommand(fakeHttp);
       await expect(
@@ -335,11 +332,7 @@ describe('TaskCommand tests', () => {
       const xhr = {
         status: 404,
       };
-      const rejection = new Rejection(
-        xhr as XMLHttpRequest,
-        Rejection.REASON_ERROR,
-        message,
-      );
+      const rejection = new ResponseRejection(xhr as XMLHttpRequest, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
           get_feeds_response: feedsResponse,
@@ -350,7 +343,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
+      } as unknown as Http;
 
       const cmd = new TaskCommand(fakeHttp);
       await expect(
@@ -570,7 +563,7 @@ describe('TaskCommand tests', () => {
     'should not create new agent group task while feed is not available: $name',
     async ({feedsResponse, message, expectedMessage}) => {
       const xhr = {status: 404} as XMLHttpRequest;
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {get_feeds_response: feedsResponse},
       });
@@ -580,7 +573,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
+      } as unknown as Http;
 
       const cmd = new TaskCommand(fakeHttp);
 
@@ -707,7 +700,7 @@ describe('TaskCommand tests', () => {
     'should not save agent group task while feed is not available: $name',
     async ({feedsResponse, message, expectedMessage}) => {
       const xhr = {status: 404} as XMLHttpRequest;
-      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {get_feeds_response: feedsResponse},
       });
@@ -717,7 +710,7 @@ describe('TaskCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      } as unknown as GmpHttp;
+      } as unknown as Http;
 
       const cmd = new TaskCommand(fakeHttp);
 

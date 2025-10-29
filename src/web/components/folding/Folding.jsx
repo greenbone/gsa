@@ -5,7 +5,7 @@
 
 import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 import PropTypes from 'web/utils/PropTypes';
 
 /**

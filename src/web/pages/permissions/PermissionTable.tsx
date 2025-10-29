@@ -4,18 +4,18 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import Permission from 'gmp/models/permission';
+import type Permission from 'gmp/models/permission';
 import createEntitiesFooter, {
-  CreateEntitiesFooterProps,
+  type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
 import createEntitiesHeader, {
-  CreateEntitiesHeaderProps,
+  type CreateEntitiesHeaderProps,
 } from 'web/entities/createEntitiesHeader';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
 import PermissionDetails from 'web/pages/permissions/PermissionDetails';
 import PermissionTableRow, {
-  PermissionTableRowProps,
+  type PermissionTableRowProps,
 } from 'web/pages/permissions/PermissionTableRow';
 
 export const SORT_FIELDS = [

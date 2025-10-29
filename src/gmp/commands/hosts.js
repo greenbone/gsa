@@ -39,7 +39,7 @@ class HostCommand extends EntityCommand {
 
   deleteIdentifier({id}) {
     log.debug('Deleting Host Identifier with id', id);
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'delete_asset',
       asset_id: id,
     });

@@ -4,13 +4,13 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
+import type Http from 'gmp/http/http';
+import {type ResponseRejection} from 'gmp/http/rejection';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import date from 'gmp/models/date';
-import {parseBoolean, parseDate, YesNo} from 'gmp/parser';
+import {parseBoolean, parseDate, type YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -80,10 +80,10 @@ export function createFeed(feed: FeedElement): Feed {
 }
 
 export const feedStatusRejection = async (
-  http: GmpHttp,
-  rejection: Rejection,
+  http: Http,
+  rejection: ResponseRejection,
 ) => {
-  if (rejection?.status === 404) {
+  if (rejection.status === 404) {
     const feedStatus = new FeedStatusCommand(http);
     const {isFeedOwnerSet, isFeedResourcesAccess} =
       await feedStatus.checkFeedOwnerAndPermissions();
@@ -112,12 +112,12 @@ export const feedStatusRejection = async (
 };
 
 class FeedStatusCommand extends HttpCommand {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, {cmd: 'get_feeds'});
   }
 
   async readFeedInformation() {
-    const response = await this.httpGet();
+    const response = await this.httpGetWithTransform();
     const envelope = response.data as FeedStatusElement;
     const {get_feeds_response: feedsResponse} = envelope.get_feeds;
     const feeds = map(feedsResponse.feed, feed => createFeed(feed));
@@ -163,7 +163,7 @@ class FeedStatusCommand extends HttpCommand {
    */
   async checkFeedOwnerAndPermissions() {
     try {
-      const response = await this.httpGet();
+      const response = await this.httpGetWithTransform();
       const data = response.data as FeedStatusElement;
       const isFeedOwnerSet = parseBoolean(
         data.get_feeds.get_feeds_response.feed_owner_set,

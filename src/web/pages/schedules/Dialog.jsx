@@ -29,7 +29,7 @@ import WeekDaySelect, {
   WeekDaysPropType,
 } from 'web/pages/schedules/WeekdaySelect';
 import PropTypes from 'web/utils/PropTypes';
-import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
+import {formatTimeForTimePicker} from 'web/utils/time-picker-helpers';
 
 const RECURRENCE_ONCE = 'once';
 const RECURRENCE_HOURLY = RecurrenceFrequency.HOURLY;

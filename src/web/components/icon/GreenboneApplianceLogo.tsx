@@ -4,7 +4,10 @@
  */
 
 import React from 'react';
-import {DynamicIcon, DynamicIconProps} from 'web/components/icon/DynamicIcon';
+import {
+  DynamicIcon,
+  type DynamicIconProps,
+} from 'web/components/icon/DynamicIcon';
 import Enterprise150Svg from 'web/components/icon/svg/Enterprise_150.svg?react';
 import Enterprise400Svg from 'web/components/icon/svg/Enterprise_400.svg?react';
 import Enterprise450Svg from 'web/components/icon/svg/Enterprise_450.svg?react';

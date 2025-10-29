@@ -4,7 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith, fireEvent, RendererOptions} from 'web/testing';
+import {
+  screen,
+  rendererWith,
+  fireEvent,
+  type RendererOptions,
+} from 'web/testing';
 import TableHead from 'web/components/table/TableHead';
 
 const rendererWithTableHeader = (options: RendererOptions = {}) => {

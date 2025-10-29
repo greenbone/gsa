@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PortList from 'gmp/models/portlist';
+import type PortList from 'gmp/models/portlist';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import useTranslation from 'web/hooks/useTranslation';
 import PortListActions, {
-  PortListActionsProps,
+  type PortListActionsProps,
 } from 'web/pages/portlists/PortListActions';
 
 export interface PortListTableRowProps extends PortListActionsProps {

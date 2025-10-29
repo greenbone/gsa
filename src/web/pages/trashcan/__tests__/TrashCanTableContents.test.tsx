@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWithTable, within} from 'web/testing';
-import {TrashCanGetData} from 'gmp/commands/trashcan';
+import {type TrashCanGetData} from 'gmp/commands/trashcan';
 import AgentGroup from 'gmp/models/agentgroup';
 import Alert from 'gmp/models/alert';
 import Audit from 'gmp/models/audit';
@@ -13,6 +13,7 @@ import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
 import Group from 'gmp/models/group';
 import Note from 'gmp/models/note';
+import OciImageTarget from 'gmp/models/oci-image-target';
 import Override from 'gmp/models/override';
 import Permission from 'gmp/models/permission';
 import Policy from 'gmp/models/policy';
@@ -52,6 +53,7 @@ describe('TrashCanTableContents tests', () => {
     tasks: [],
     tickets: [],
     agentGroups: [],
+    ociImageTargets: [],
   };
 
   test('renders rows for non-empty trash categories', () => {
@@ -104,6 +106,7 @@ describe('TrashCanTableContents tests', () => {
       tasks: [new Task({id: 'task1'})],
       tickets: [new Ticket({id: 'ticket1'})],
       agentGroups: [new AgentGroup({id: 'agentgroup1'})],
+      ociImageTargets: [new OciImageTarget({id: 'ociimagetarget1'})],
     };
     const {render} = rendererWithTable();
     render(<TrashCanTableContents trash={mockAllTrashData} />);

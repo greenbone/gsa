@@ -6,7 +6,7 @@
 import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import GmpContext from 'web/components/provider/GmpProvider';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 const withGmp = Component => {
   const WithGmp = props => (

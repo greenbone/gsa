@@ -9,7 +9,7 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 export const withRouter = Component => {
   function ComponentWithRouterProp(props) {

@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
-import Tab, {TabProps} from 'web/components/tab/Tab';
+import Tab, {type TabProps} from 'web/components/tab/Tab';
 
 interface EntitiesTabProps extends TabProps {
   children: React.ReactNode;

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 import PropTypes from 'web/utils/PropTypes';
 
 export const withPrefix = Component => {

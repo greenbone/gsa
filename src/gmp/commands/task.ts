@@ -5,20 +5,20 @@
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import EntityCommand, {EntityCommandParams} from 'gmp/commands/entity';
+import EntityCommand, {type EntityCommandParams} from 'gmp/commands/entity';
 import FeedStatusCommand, {feedStatusRejection} from 'gmp/commands/feedstatus';
-import GmpHttp from 'gmp/http/gmp';
-import Rejection from 'gmp/http/rejection';
+import type Http from 'gmp/http/http';
+import {type ResponseRejection} from 'gmp/http/rejection';
 import logger from 'gmp/log';
-import {Element} from 'gmp/models/model';
-import {ScannerType} from 'gmp/models/scanner';
+import {type Element} from 'gmp/models/model';
+import {type ScannerType} from 'gmp/models/scanner';
 import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  TaskElement,
-  TaskAutoDelete,
+  type TaskElement,
+  type TaskAutoDelete,
 } from 'gmp/models/task';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 
 interface TaskCommandCreateParams {
   add_tag?: YesNo;
@@ -104,7 +104,7 @@ const log = logger.getLogger('gmp.commands.tasks');
 const NO_VALUE_ID = String(NO_VALUE);
 
 class TaskCommand extends EntityCommand<Task, TaskElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'task', Task);
   }
 
@@ -120,7 +120,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
         throw new Error('Feed is currently syncing. Please try again later.');
       }
 
-      await this.httpPost({
+      await this.httpPostWithTransform({
         cmd: 'start_task',
         id,
       });
@@ -136,7 +136,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     log.debug('Stopping task');
 
     try {
-      await this.httpPost({
+      await this.httpPostWithTransform({
         cmd: 'stop_task',
         id,
       });
@@ -150,7 +150,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
 
   async resume({id}: EntityCommandParams) {
     try {
-      await this.httpPost({
+      await this.httpPostWithTransform({
         cmd: 'resume_task',
         id,
       });
@@ -213,7 +213,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     try {
       return await this.entityAction(data);
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
       throw rejection; // Ensure the function always returns or throws
     }
   }
@@ -256,7 +256,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     try {
       return await this.entityAction(data);
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
       throw rejection; // Ensure the function always returns or throws
     }
   }
@@ -321,9 +321,9 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     };
     log.debug('Saving task', data);
     try {
-      await this.httpPost(data);
+      await this.httpPostWithTransform(data);
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
     }
   }
 
@@ -360,9 +360,9 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     };
     log.debug('Saving agent task', data);
     try {
-      await this.httpPost(data);
+      await this.httpPostWithTransform(data);
     } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as Rejection);
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
     }
   }
 
@@ -373,7 +373,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     id,
   }: TaskCommandSaveContainerParams) {
     log.debug('Saving container task', {name, comment, in_assets, id});
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd: 'save_container_task',
       name,
       comment,

@@ -40,27 +40,18 @@ const gvmdDataFeed = createFeed({
   currently_syncing: {timestamp: 'foo'},
 });
 
-const data = [nvtFeed, scapFeed, certFeed, gvmdDataFeed];
-
-const xhr = {
-  response: 'foo',
-  responseText: 'bar',
-  responseXML: 'ipsum',
-} as unknown as XMLHttpRequest;
-
-const response = new Response(xhr, data);
-
-const gmp = {
-  feedstatus: {
-    readFeedInformation: testing.fn(() => Promise.resolve(response)),
-  },
-  settings: {
-    manualUrl: 'http://foo.bar',
-  },
-};
-
 describe('Feed status page tests', () => {
   test('should render', async () => {
+    const response = new Response([nvtFeed, scapFeed, certFeed, gvmdDataFeed]);
+    const gmp = {
+      feedstatus: {
+        readFeedInformation: testing.fn(() => Promise.resolve(response)),
+      },
+      settings: {
+        manualUrl: 'http://foo.bar',
+      },
+    };
+
     const {render} = rendererWith({gmp, router: true});
     const {element} = render(<FeedStatus />);
 

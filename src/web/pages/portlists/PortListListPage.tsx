@@ -5,8 +5,12 @@
 
 import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import Filter, {PORTLISTS_FILTER_FILTER, RESET_FILTER} from 'gmp/models/filter';
-import PortList from 'gmp/models/portlist';
+import {
+  type default as Filter,
+  PORTLISTS_FILTER_FILTER,
+  RESET_FILTER,
+} from 'gmp/models/filter';
+import type PortList from 'gmp/models/portlist';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
@@ -31,7 +35,7 @@ import PortListsFilterDialog from 'web/pages/portlists/PortListFilterDialog';
 import PortListListPageToolBarIcons from 'web/pages/portlists/PortListListPageToolBarIcons';
 import PortListsTable from 'web/pages/portlists/PortListTable';
 import {loadEntities, selector} from 'web/store/entities/portlists';
-import {EntitiesSelector} from 'web/store/entities/utils/selectors';
+import {type EntitiesSelector} from 'web/store/entities/utils/selectors';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';

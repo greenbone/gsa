@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Permission from 'gmp/models/permission';
+import type Permission from 'gmp/models/permission';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import Divider from 'web/components/layout/Divider';

@@ -10,7 +10,7 @@ import {
   getMultiSelectElement,
   getSelectElement,
   getSelectItemElements,
-} from 'web/testing/customQueries';
+} from 'web/testing/custom-queries';
 import {userEvent, fireEvent} from 'web/testing/event';
 
 /**

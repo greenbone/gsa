@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {TrashCanGetData} from 'gmp/commands/trashcan';
-import Model from 'gmp/models/model';
+import {type TrashCanGetData} from 'gmp/commands/trashcan';
+import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import TableBody from 'web/components/table/TableBody';
 import useTranslation from 'web/hooks/useTranslation';
@@ -46,6 +46,7 @@ const TrashCanTableContents = ({trash}: TrashCanContentsTableProps) => {
   const hasTasks = hasItems(trash.tasks);
   const hasScanConfigs = hasItems(trash.scanConfigs);
   const hasAgentGroups = hasItems(trash.agentGroups);
+  const hasOciImageTargets = hasItems(trash.ociImageTargets);
 
   return (
     <TableBody>
@@ -194,6 +195,13 @@ const TrashCanTableContents = ({trash}: TrashCanContentsTableProps) => {
           count={trash.agentGroups.length}
           title={_('Agent Groups')}
           type="agentgroup"
+        />
+      )}
+      {hasOciImageTargets && (
+        <TrashCanTableRow
+          count={trash.ociImageTargets.length}
+          title={_('Container Image Targets')}
+          type="oci_image_target"
         />
       )}
     </TableBody>

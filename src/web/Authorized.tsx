@@ -28,9 +28,7 @@ const Authorized = ({children}: AuthorizedProps) => {
     (xhr: XMLHttpRequest) => {
       if (xhr.status === 401) {
         logout();
-        return Promise.resolve(xhr);
       }
-      return Promise.reject(xhr);
     },
     [logout],
   );

@@ -8,7 +8,7 @@ import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import {isDefined} from 'gmp/utils/identity';
 import BarChart from 'web/components/chart/Bar';
-import transformCvssData from 'web/components/dashboard/display/cvss/cvssTransform';
+import transformCvssData from 'web/components/dashboard/display/cvss/cvss-transform';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

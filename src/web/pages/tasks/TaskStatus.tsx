@@ -4,8 +4,8 @@
  */
 
 import styled from 'styled-components';
-import Audit from 'gmp/models/audit';
-import Task, {TASK_STATUS, USAGE_TYPE} from 'gmp/models/task';
+import type Audit from 'gmp/models/audit';
+import {type default as Task, TASK_STATUS, USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
 import DetailsLink from 'web/components/link/DetailsLink';

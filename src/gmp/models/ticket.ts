@@ -4,9 +4,9 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import {Date} from 'gmp/models/date';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import {parseSeverity, parseDate, parseText, YesNo} from 'gmp/parser';
+import {type Date} from 'gmp/models/date';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import {parseSeverity, parseDate, parseText, type YesNo} from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 

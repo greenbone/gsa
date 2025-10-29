@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter, {FilterSortOrder} from 'gmp/models/filter';
+import {type default as Filter, type FilterSortOrder} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';

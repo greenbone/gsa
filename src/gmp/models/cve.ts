@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Date} from 'gmp/models/date';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import {type Date} from 'gmp/models/date';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseDate, parseSeverity, parseToString} from 'gmp/parser';
 import {
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
 } from 'gmp/parser/cvss';
-import {parseCvssV4MetricsFromVector} from 'gmp/parser/cvssV4';
+import {parseCvssV4MetricsFromVector} from 'gmp/parser/cvss-v4';
 import {map} from 'gmp/utils/array';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';

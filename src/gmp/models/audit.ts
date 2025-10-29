@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Duration} from 'gmp/models/date';
+import {type Duration} from 'gmp/models/date';
 import Model from 'gmp/models/model';
-import Report from 'gmp/models/report';
-import Scanner from 'gmp/models/scanner';
-import Schedule from 'gmp/models/schedule';
+import type Report from 'gmp/models/report';
+import type Scanner from 'gmp/models/scanner';
+import type Schedule from 'gmp/models/schedule';
 import Task, {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_NO,
@@ -21,19 +21,19 @@ import Task, {
   TASK_STATUS as AUDIT_STATUS,
   getTranslatableTaskStatus as getTranslatableAuditStatus,
   isActive,
-  TaskElement,
-  TaskProperties,
-  TaskTrend,
-  ReportCount,
-  TaskSlave,
-  TaskObservers,
-  TaskPreferences,
-  TaskHostsOrdering,
-  TaskAutoDelete,
+  type TaskElement,
+  type TaskProperties,
+  type TaskTrend,
+  type ReportCount,
+  type TaskSlave,
+  type TaskObservers,
+  type TaskPreferences,
+  type TaskHostsOrdering,
+  type TaskAutoDelete,
   USAGE_TYPE,
-  TaskReport,
+  type TaskReport,
 } from 'gmp/models/task';
-import {NO_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 export type AuditStatus = (typeof AUDIT_STATUS)[keyof typeof AUDIT_STATUS];

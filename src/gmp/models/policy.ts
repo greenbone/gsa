@@ -3,18 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {
   parseCount,
   parseTrend,
-  ScanConfigFamilies,
-  ScanConfigFamily,
-  ScanConfigFamilyElement,
-  ScanConfigNvts,
-  ScanConfigPreferenceElement,
-  ScanConfigScannerElement,
+  type ScanConfigFamilies,
+  type ScanConfigFamily,
+  type ScanConfigFamilyElement,
+  type ScanConfigNvts,
+  type ScanConfigPreferenceElement,
+  type ScanConfigScannerElement,
 } from 'gmp/models/scanconfig';
-import {parseBoolean, YesNo} from 'gmp/parser';
+import {parseBoolean, type YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';

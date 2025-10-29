@@ -17,7 +17,7 @@ export class NvtCommand extends InfoEntityCommand {
   }
 
   getConfigNvt({oid, configId}) {
-    return this.httpGet(
+    return this.httpGetWithTransform(
       {
         cmd: 'get_config_nvt',
         config_id: configId,

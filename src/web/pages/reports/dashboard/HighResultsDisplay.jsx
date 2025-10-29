@@ -18,7 +18,7 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {ReportsHighResultsLoader} from 'web/pages/reports/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
-import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
 const transformHighResults = (data = {}) => {
   const {groups = []} = data;

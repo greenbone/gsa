@@ -5,12 +5,12 @@
 
 import React from 'react';
 import {SCANNERS_FILTER_FILTER} from 'gmp/models/filter';
-import Scanner from 'gmp/models/scanner';
+import type Scanner from 'gmp/models/scanner';
 import {ScannerIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer, {
-  WithEntitiesContainerComponentProps,
+  type WithEntitiesContainerComponentProps,
 } from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import ScannerComponent from 'web/pages/scanners/ScannerComponent';

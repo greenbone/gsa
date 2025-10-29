@@ -4,10 +4,11 @@
  */
 
 import {useMemo, useState} from 'react';
-import {AgentConfig} from 'gmp/models/agent';
-import AgentGroup from 'gmp/models/agentgroup';
+import {type AgentConfig} from 'gmp/models/agent';
+import type AgentGroup from 'gmp/models/agentgroup';
 import Filter from 'gmp/models/filter';
-import Scanner, {
+import {
+  type default as Scanner,
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
@@ -16,14 +17,15 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
-import {useGetAgents} from 'web/hooks/useQuery/agents';
+import {useGetAgents} from 'web/hooks/use-query/agents';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentConfigurationSection, {
   DEFAULT_CRON_EXPRESSION,
   DEFAULT_HEARTBEAT_INTERVAL,
 } from 'web/pages/agents/components/AgentConfigurationSection';
 import useGetEntities from 'web/queries/useGetEntities';
-import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 interface AgentGroupsDialogProps {
   agentGroup?: AgentGroup;
@@ -63,6 +65,7 @@ const AgentGroupsDialog = ({
   onSave,
 }: AgentGroupsDialogProps) => {
   const [_] = useTranslation();
+  const gmp = useGmp();
 
   title = title ?? _('New Agent Group');
 
@@ -72,8 +75,8 @@ const AgentGroupsDialog = ({
 
   const {data: scannersData} = useGetEntities<Scanner>({
     queryId: 'get_scanners',
-    entityType: 'scanner',
     filter: AGENT_CONTROLLERS_FILTER,
+    gmpMethod: gmp.scanners.get.bind(gmp.scanners),
   });
 
   const agentControllers = renderSelectItems(

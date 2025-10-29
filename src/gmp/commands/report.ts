@@ -5,14 +5,13 @@
 
 import {convertBoolean} from 'gmp/commands/convert';
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
-import Response from 'gmp/http/response';
-import DefaultTransform from 'gmp/http/transform/default';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import type Http from 'gmp/http/http';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
-import Report, {ReportElement} from 'gmp/models/report';
-import {YesNo} from 'gmp/parser';
+import {type default as Filter, ALL_FILTER} from 'gmp/models/filter';
+import {filterString} from 'gmp/models/filter/utils';
+import Report, {type ReportElement} from 'gmp/models/report';
+import {type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 interface ReportCommandImportParams {
@@ -60,14 +59,14 @@ interface ReportCommandDownloadOptions {
 const log = logger.getLogger('gmp.commands.reports');
 
 class ReportCommand extends EntityCommand<Report, ReportElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'report', Report);
   }
 
   import(args: ReportCommandImportParams) {
     const {task_id, in_assets = 1, xml_file} = args;
     log.debug('Creating report', args);
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'create_report',
       task_id,
       in_assets,
@@ -83,25 +82,24 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       deltaReportId,
       filter,
     }: ReportCommandDownloadOptions,
-  ): Promise<Response<ArrayBuffer, XmlMeta>> {
-    // @ts-expect-error
-    return this.httpGet(
-      {
+  ) {
+    const allFilter = isDefined(filter) ? filter.all() : ALL_FILTER;
+    return this.httpRequestWithRejectionTransform<ArrayBuffer>('get', {
+      args: {
         cmd: 'get_report',
         delta_report_id: deltaReportId,
         details: 1,
         report_id: id,
         report_config_id: reportConfigId,
         report_format_id: reportFormatId,
-        filter: isDefined(filter) ? filter.all() : ALL_FILTER,
+        filter: filterString(allFilter),
+        responseType: 'arraybuffer',
       },
-      // @ts-expect-error
-      {transform: DefaultTransform, responseType: 'arraybuffer'},
-    );
+    });
   }
 
   addAssets({id, filter = ''}: ReportCommandAddAssetsParams) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'create_asset',
       report_id: id,
       filter,
@@ -109,7 +107,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
   }
 
   removeAssets({id, filter = ''}: ReportCommandARemoveAssetsParams) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'delete_asset',
       report_id: id,
       filter,
@@ -118,7 +116,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
   alert({alert_id, report_id, filter}: ReportCommandAlertParams) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'report_alert',
       alert_id,
       report_id,
@@ -136,7 +134,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       ...options
     }: {filter?: string; details?: boolean; [key: string]: unknown} = {},
   ) {
-    const response = await this.httpGet(
+    const response = await this.httpGetWithTransform(
       {
         id,
         delta_report_id,
@@ -146,7 +144,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       },
       options,
     );
-    return this.transformResponse(response);
+    return this.transformResponseToModel(response);
   }
 
   async get(
@@ -159,7 +157,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       ...options
     }: ReportCommandGetParams = {},
   ) {
-    const response = await this.httpGet({
+    const response = await this.httpGetWithTransform({
       id,
       filter,
       lean: convertBoolean(lean),
@@ -168,7 +166,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       ...options,
       ...params,
     });
-    return this.transformResponse(response);
+    return this.transformResponseToModel(response);
   }
 
   getElementFromRoot(root: XmlResponseData): ReportElement {

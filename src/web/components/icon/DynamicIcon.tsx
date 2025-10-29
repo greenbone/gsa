@@ -4,10 +4,10 @@
  */
 
 import React, {useState} from 'react';
-import {ActionIcon, ActionIconProps} from '@mantine/core';
-import {LucideIcon} from 'lucide-react';
+import {ActionIcon, type ActionIconProps} from '@mantine/core';
+import {type LucideIcon} from 'lucide-react';
 import {isDefined} from 'gmp/utils/identity';
-import useIconSize, {IconSizeType} from 'web/hooks/useIconSize';
+import useIconSize, {type IconSizeType} from 'web/hooks/useIconSize';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 

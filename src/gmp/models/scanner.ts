@@ -5,9 +5,9 @@
 
 import {_} from 'gmp/locale/lang';
 import Credential from 'gmp/models/credential';
-import {Date} from 'gmp/models/date';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import {parseYesNo, parseDate, YesNo, parseInt} from 'gmp/parser';
+import {type Date} from 'gmp/models/date';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import {parseYesNo, parseDate, type YesNo, parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -244,7 +244,7 @@ class Scanner extends Model {
   isCloneable() {
     return (
       this.scannerType !== CVE_SCANNER_TYPE &&
-      this.scannerType !== OPENVAS_SCANNER_TYPE
+      this.scannerType !== OPENVASD_SCANNER_TYPE
     );
   }
 
@@ -252,7 +252,7 @@ class Scanner extends Model {
     return (
       super.isWritable() &&
       this.scannerType !== CVE_SCANNER_TYPE &&
-      this.scannerType !== OPENVAS_SCANNER_TYPE
+      this.scannerType !== OPENVASD_SCANNER_TYPE
     );
   }
 

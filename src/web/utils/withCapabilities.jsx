@@ -6,7 +6,7 @@
 import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
-import {updateDisplayName} from 'web/utils/displayName';
+import {updateDisplayName} from 'web/utils/display-name';
 
 const withCapabilities = Component => {
   const CapabilitiesWrapper = props => (

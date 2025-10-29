@@ -4,11 +4,11 @@
  */
 
 import styled from 'styled-components';
-import Group from 'gmp/models/group';
-import Model from 'gmp/models/model';
-import Role from 'gmp/models/role';
-import User from 'gmp/models/user';
-import {typeName, getEntityType, EntityType} from 'gmp/utils/entitytype';
+import type Group from 'gmp/models/group';
+import type Model from 'gmp/models/model';
+import type Role from 'gmp/models/role';
+import type User from 'gmp/models/user';
+import {typeName, getEntityType, type EntityType} from 'gmp/utils/entitytype';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
@@ -17,7 +17,7 @@ import Divider from 'web/components/layout/Divider';
 import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
 type IncludeRelatedType =
   | typeof CURRENT_RESOURCE_ONLY

@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent} from 'web/testing';
 import withClickHandler, {
-  WithClickHandlerProps,
+  type WithClickHandlerProps,
 } from 'web/components/form/withClickHandler';
 
 interface TestComponentProps extends WithClickHandlerProps<string> {

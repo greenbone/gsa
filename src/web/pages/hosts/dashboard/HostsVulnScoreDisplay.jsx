@@ -21,7 +21,7 @@ import useGmp from 'web/hooks/useGmp';
 import {HostsVulnScoreLoader} from 'web/pages/hosts/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
-import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
+import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
 const ToolTip = styled.div`
   font-weight: normal;

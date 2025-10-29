@@ -8,7 +8,7 @@ import {ResourceNamesCommand} from 'gmp/commands/resourcenames';
 import {createResponse, createHttp} from 'gmp/commands/testing';
 
 describe('ResourceNamesCommand tests', () => {
-  test('should return resource names', () => {
+  test('should return resource names', async () => {
     const response = createResponse({
       get_resource_names: {
         get_resource_names_response: {
@@ -34,31 +34,28 @@ describe('ResourceNamesCommand tests', () => {
     const fakeHttp = createHttp(response);
 
     const cmd = new ResourceNamesCommand(fakeHttp);
-    return cmd.getAll({resource_type: 'os'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_resource_names',
-          filter: 'first=1 rows=-1',
-          resource_type: 'os',
-        },
-      });
-      const {data} = resp;
-      expect(data.length).toEqual(3);
-      expect(data[0].id).toEqual('5b6b6aef-b320-42ca-899f-3161ee2a4195');
-      expect(data[0].name).toEqual('cpe:/o:canonical:ubuntu_linux:18.04');
-      expect(data[0].type).toEqual('os');
-
-      expect(data[1].id).toEqual('f2fa6833-fe34-4e04-a60c-6c5dc1ed0fcf');
-      expect(data[1].name).toEqual('cpe:/o:debian:debian_linux');
-      expect(data[1].type).toEqual('os');
-
-      expect(data[2].id).toEqual('19c091f0-a687-4dc3-b482-7d191ead4bb3');
-      expect(data[2].name).toEqual('cpe:/o:microsoft:windows');
-      expect(data[2].type).toEqual('os');
+    const resp = await cmd.getAll({resource_type: 'os'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_resource_names',
+        filter: 'first=1 rows=-1',
+        resource_type: 'os',
+      },
     });
+    const {data} = resp;
+    expect(data.length).toEqual(3);
+    expect(data[0].id).toEqual('5b6b6aef-b320-42ca-899f-3161ee2a4195');
+    expect(data[0].name).toEqual('cpe:/o:canonical:ubuntu_linux:18.04');
+    expect(data[0].type).toEqual('os');
+    expect(data[1].id).toEqual('f2fa6833-fe34-4e04-a60c-6c5dc1ed0fcf');
+    expect(data[1].name).toEqual('cpe:/o:debian:debian_linux');
+    expect(data[1].type).toEqual('os');
+    expect(data[2].id).toEqual('19c091f0-a687-4dc3-b482-7d191ead4bb3');
+    expect(data[2].name).toEqual('cpe:/o:microsoft:windows');
+    expect(data[2].type).toEqual('os');
   });
 
-  test('should return names from one resource', () => {
+  test('should return names from one resource', async () => {
     const response = createResponse({
       get_resource_names: {
         get_resource_names_response: {
@@ -70,27 +67,24 @@ describe('ResourceNamesCommand tests', () => {
         },
       },
     });
-
     const fakeHttp = createHttp(response);
-
     const cmd = new ResourceNamesCommand(fakeHttp);
-    return cmd.getAll({resource_type: 'filter'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_resource_names',
-          filter: 'first=1 rows=-1',
-          resource_type: 'filter',
-        },
-      });
-      const {data} = resp;
-      expect(data.length).toEqual(1);
-      expect(data[0].id).toEqual('b0059c62-ce13-4ef0-adb7-75a04757668b');
-      expect(data[0].name).toEqual('Filter_1');
-      expect(data[0].type).toEqual('filter');
+    const resp = await cmd.getAll({resource_type: 'filter'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_resource_names',
+        filter: 'first=1 rows=-1',
+        resource_type: 'filter',
+      },
     });
+    const {data} = resp;
+    expect(data.length).toEqual(1);
+    expect(data[0].id).toEqual('b0059c62-ce13-4ef0-adb7-75a04757668b');
+    expect(data[0].name).toEqual('Filter_1');
+    expect(data[0].type).toEqual('filter');
   });
 
-  test('should return no names', () => {
+  test('should return no names', async () => {
     const response = createResponse({
       get_resource_names: {
         get_resource_names_response: {
@@ -98,21 +92,18 @@ describe('ResourceNamesCommand tests', () => {
         },
       },
     });
-
     const fakeHttp = createHttp(response);
-
     const cmd = new ResourceNamesCommand(fakeHttp);
-    return cmd.getAll({resource_type: 'note'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_resource_names',
-          filter: 'first=1 rows=-1',
-          resource_type: 'note',
-        },
-      });
-      const {data} = resp;
-      expect(data.length).toEqual(0);
+    const resp = await cmd.getAll({resource_type: 'note'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_resource_names',
+        filter: 'first=1 rows=-1',
+        resource_type: 'note',
+      },
     });
+    const {data} = resp;
+    expect(data.length).toEqual(0);
   });
 
   test('should throw not implemented exception', () => {

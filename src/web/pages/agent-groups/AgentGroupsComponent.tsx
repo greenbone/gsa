@@ -4,21 +4,21 @@
  */
 
 import React, {useState} from 'react';
-import {EntityActionData} from 'gmp/commands/entity';
-import Rejection from 'gmp/http/rejection';
-import Response from 'gmp/http/response';
-import {XmlMeta} from 'gmp/http/transform/fastxml';
-import AgentGroup from 'gmp/models/agentgroup';
+import {type EntityActionData} from 'gmp/commands/entity';
+import type Rejection from 'gmp/http/rejection';
+import type Response from 'gmp/http/response';
+import {type XmlMeta} from 'gmp/http/transform/fastxml';
+import type AgentGroup from 'gmp/models/agentgroup';
 import {isDefined} from 'gmp/utils/identity';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
 import {
   useCreateAgentGroup,
   useDeleteAgentGroup,
   useSaveAgentGroup,
-} from 'web/hooks/useQuery/agentgroups';
+} from 'web/hooks/use-query/agent-groups';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsDialog, {
-  AgentGroupDialogData,
+  type AgentGroupDialogData,
 } from 'web/pages/agent-groups/AgentGroupsDialog';
 
 interface AgentGroupsComponentRenderProps {

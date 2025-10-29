@@ -9,7 +9,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {
   withFolding,
   withFoldToggle,
-  FoldState,
+  type FoldState,
 } from 'web/components/folding/Folding';
 import FoldStateIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';

@@ -6,9 +6,9 @@
 import {useCallback, forwardRef} from 'react';
 import {
   NumberInput,
-  NumberInputProps as MantineNumberInputProps,
+  type NumberInputProps as MantineNumberInputProps,
 } from '@mantine/core';
-import {NumberFormatValues} from 'react-number-format';
+import {type NumberFormatValues} from 'react-number-format';
 import styled from 'styled-components';
 import {parseFloat, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';

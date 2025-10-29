@@ -4,16 +4,17 @@
  */
 
 import HttpCommand from 'gmp/commands/http';
-import Response from 'gmp/http/response';
-import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import type Response from 'gmp/http/response';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import AgentGroup from 'gmp/models/agentgroup';
 import Alert from 'gmp/models/alert';
 import Audit from 'gmp/models/audit';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
 import Group from 'gmp/models/group';
-import {ModelElement} from 'gmp/models/model';
+import {type ModelElement} from 'gmp/models/model';
 import Note from 'gmp/models/note';
+import OciImageTarget from 'gmp/models/oci-image-target';
 import Override from 'gmp/models/override';
 import Permission from 'gmp/models/permission';
 import Policy from 'gmp/models/policy';
@@ -29,7 +30,7 @@ import Target from 'gmp/models/target';
 import Task from 'gmp/models/task';
 import Ticket from 'gmp/models/ticket';
 import {forEach, map} from 'gmp/utils/array';
-import {apiType, EntityType} from 'gmp/utils/entitytype';
+import {apiType, type EntityType} from 'gmp/utils/entitytype';
 
 export interface TrashCanGetData {
   alerts: Alert[];
@@ -53,6 +54,8 @@ export interface TrashCanGetData {
   tasks: Task[];
   tickets: Ticket[];
   agentGroups: AgentGroup[];
+  ociImageTargets: OciImageTarget[];
+  failedRequests?: string[];
 }
 
 interface UsageTypeElement extends ModelElement {
@@ -173,6 +176,12 @@ interface AgentGroupResponseData {
   };
 }
 
+interface OciImageTargetResponseData {
+  get_oci_image_targets_response?: {
+    oci_image_target: ModelElement[] | ModelElement;
+  };
+}
+
 interface TrashCanGetResponseData<TData> extends XmlResponseData {
   get_trash: TData;
 }
@@ -190,14 +199,14 @@ class TrashCanCommand extends HttpCommand {
       cmd: 'restore',
       target_id: id,
     };
-    await this.httpPost(data);
+    await this.httpPostWithTransform(data);
   }
 
   async delete({id, entityType}: {id: string; entityType: EntityType}) {
     const cmdApiType = apiType(entityType);
     const cmd = 'delete_from_trash';
     const typeId = cmdApiType + '_id';
-    await this.httpPost({
+    await this.httpPostWithTransform({
       cmd,
       [typeId]: id,
       resource_type: cmdApiType,
@@ -205,67 +214,131 @@ class TrashCanCommand extends HttpCommand {
   }
 
   async empty() {
-    await this.httpPost({cmd: 'empty_trashcan'});
+    await this.httpPostWithTransform({cmd: 'empty_trashcan'});
   }
 
   async get(): Promise<Response<TrashCanGetData, XmlMeta>> {
-    const alertsRequest = this.httpGet({
+    const alertsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_alerts',
     }) as TrashCanGetPromise<AlertResponseData>;
-    const configsRequest = this.httpGet({
+    const configsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_configs',
     }) as TrashCanGetPromise<ConfigsResponseData>;
-    const credentialsRequest = this.httpGet({
+    const credentialsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_credentials',
     }) as TrashCanGetPromise<CredentialsResponseData>;
-    const filtersRequest = this.httpGet({
+    const filtersRequest = this.httpGetWithTransform({
       cmd: 'get_trash_filters',
     }) as TrashCanGetPromise<FiltersResponseData>;
-    const groupsRequest = this.httpGet({
+    const groupsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_groups',
     }) as TrashCanGetPromise<GroupsResponseData>;
-    const notesRequest = this.httpGet({
+    const notesRequest = this.httpGetWithTransform({
       cmd: 'get_trash_notes',
     }) as TrashCanGetPromise<NotesResponseData>;
-    const overridesRequest = this.httpGet({
+    const overridesRequest = this.httpGetWithTransform({
       cmd: 'get_trash_overrides',
     }) as TrashCanGetPromise<OverridesResponseData>;
-    const permissionsRequest = this.httpGet({
+    const permissionsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_permissions',
     }) as TrashCanGetPromise<PermissionsResponseData>;
-    const portListsRequest = this.httpGet({
+    const portListsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_port_lists',
     }) as TrashCanGetPromise<PortListsResponseData>;
-    const reportConfigsRequest = this.httpGet({
+    const reportConfigsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_report_configs',
     }) as TrashCanGetPromise<ReportConfigsResponseData>;
-    const reportFormatsRequest = this.httpGet({
+    const reportFormatsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_report_formats',
     }) as TrashCanGetPromise<ReportFormatsResponseData>;
-    const rolesRequest = this.httpGet({
+    const rolesRequest = this.httpGetWithTransform({
       cmd: 'get_trash_roles',
     }) as TrashCanGetPromise<RolesResponseData>;
-    const scannersRequest = this.httpGet({
+    const scannersRequest = this.httpGetWithTransform({
       cmd: 'get_trash_scanners',
     }) as TrashCanGetPromise<ScannersResponseData>;
-    const schedulesRequest = this.httpGet({
+    const schedulesRequest = this.httpGetWithTransform({
       cmd: 'get_trash_schedules',
     }) as TrashCanGetPromise<SchedulesResponseData>;
-    const tagsRequest = this.httpGet({
+    const tagsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_tags',
     }) as TrashCanGetPromise<TagsResponseData>;
-    const targetsRequest = this.httpGet({
+    const targetsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_targets',
     }) as TrashCanGetPromise<TargetsResponseData>;
-    const tasksRequest = this.httpGet({
+    const tasksRequest = this.httpGetWithTransform({
       cmd: 'get_trash_tasks',
     }) as TrashCanGetPromise<TasksResponseData>;
-    const ticketsRequest = this.httpGet({
+    const ticketsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_tickets',
     }) as TrashCanGetPromise<TicketsResponseData>;
-    const agentGroupRequest = this.httpGet({
+    const agentGroupRequest = this.httpGetWithTransform({
       cmd: 'get_trash_agent_group',
     }) as TrashCanGetPromise<AgentGroupResponseData>;
+    const ociImageTargetRequest = this.httpGetWithTransform({
+      cmd: 'get_trash_oci_image_targets',
+    }) as TrashCanGetPromise<OciImageTargetResponseData>;
+
+    const requests = [
+      alertsRequest,
+      configsRequest,
+      credentialsRequest,
+      filtersRequest,
+      groupsRequest,
+      notesRequest,
+      overridesRequest,
+      permissionsRequest,
+      portListsRequest,
+      reportConfigsRequest,
+      reportFormatsRequest,
+      rolesRequest,
+      scannersRequest,
+      schedulesRequest,
+      tagsRequest,
+      targetsRequest,
+      tasksRequest,
+      ticketsRequest,
+      agentGroupRequest,
+      ociImageTargetRequest,
+    ];
+
+    const results = await Promise.allSettled(requests);
+
+    const getResponse = <T>(index: number): T | null =>
+      results[index].status === 'fulfilled'
+        ? (results[index].value as T)
+        : null;
+
+    const failedRequests: string[] = [];
+    const requestNames = [
+      'alerts',
+      'configs',
+      'credentials',
+      'filters',
+      'groups',
+      'notes',
+      'overrides',
+      'permissions',
+      'portLists',
+      'reportConfigs',
+      'reportFormats',
+      'roles',
+      'scanners',
+      'schedules',
+      'tags',
+      'targets',
+      'tasks',
+      'tickets',
+      'agentGroups',
+      'ociImageTargets',
+    ];
+
+    results.forEach((result, index) => {
+      if (result.status === 'rejected') {
+        failedRequests.push(requestNames[index]);
+      }
+    });
+
     const [
       alertsResponse,
       configsResponse,
@@ -286,54 +359,57 @@ class TrashCanCommand extends HttpCommand {
       tasksResponse,
       ticketsResponse,
       agentGroupsResponse,
-    ] = await Promise.all([
-      alertsRequest,
-      configsRequest,
-      credentialsRequest,
-      filtersRequest,
-      groupsRequest,
-      notesRequest,
-      overridesRequest,
-      permissionsRequest,
-      portListsRequest,
-      reportConfigsRequest,
-      reportFormatsRequest,
-      rolesRequest,
-      scannersRequest,
-      schedulesRequest,
-      tagsRequest,
-      targetsRequest,
-      tasksRequest,
-      ticketsRequest,
-      agentGroupRequest,
-    ]);
-    const alertsData = alertsResponse.data.get_trash;
-    const configsData = configsResponse.data.get_trash;
-    const credentialsData = credentialsResponse.data.get_trash;
-    const filtersData = filtersResponse.data.get_trash;
-    const groupsData = groupsResponse.data.get_trash;
-    const notesData = notesResponse.data.get_trash;
-    const overridesData = overridesResponse.data.get_trash;
-    const permissionsData = permissionsResponse.data.get_trash;
-    const portListsData = portListsResponse.data.get_trash;
-    const reportConfigsData = reportConfigsResponse.data.get_trash;
-    const reportFormatsData = reportFormatsResponse.data.get_trash;
-    const rolesData = rolesResponse.data.get_trash;
-    const scannersData = scannersResponse.data.get_trash;
-    const schedulesData = schedulesResponse.data.get_trash;
-    const tagsData = tagsResponse.data.get_trash;
-    const targetsData = targetsResponse.data.get_trash;
-    const tasksData = tasksResponse.data.get_trash;
-    const ticketsData = ticketsResponse.data.get_trash;
-    const agentGroupsData = agentGroupsResponse.data.get_trash;
+      ociImageTargetsResponse,
+    ] = [
+      getResponse<TrashCanGetResponse<AlertResponseData>>(0),
+      getResponse<TrashCanGetResponse<ConfigsResponseData>>(1),
+      getResponse<TrashCanGetResponse<CredentialsResponseData>>(2),
+      getResponse<TrashCanGetResponse<FiltersResponseData>>(3),
+      getResponse<TrashCanGetResponse<GroupsResponseData>>(4),
+      getResponse<TrashCanGetResponse<NotesResponseData>>(5),
+      getResponse<TrashCanGetResponse<OverridesResponseData>>(6),
+      getResponse<TrashCanGetResponse<PermissionsResponseData>>(7),
+      getResponse<TrashCanGetResponse<PortListsResponseData>>(8),
+      getResponse<TrashCanGetResponse<ReportConfigsResponseData>>(9),
+      getResponse<TrashCanGetResponse<ReportFormatsResponseData>>(10),
+      getResponse<TrashCanGetResponse<RolesResponseData>>(11),
+      getResponse<TrashCanGetResponse<ScannersResponseData>>(12),
+      getResponse<TrashCanGetResponse<SchedulesResponseData>>(13),
+      getResponse<TrashCanGetResponse<TagsResponseData>>(14),
+      getResponse<TrashCanGetResponse<TargetsResponseData>>(15),
+      getResponse<TrashCanGetResponse<TasksResponseData>>(16),
+      getResponse<TrashCanGetResponse<TicketsResponseData>>(17),
+      getResponse<TrashCanGetResponse<AgentGroupResponseData>>(18),
+      getResponse<TrashCanGetResponse<OciImageTargetResponseData>>(19),
+    ];
+    const alertsData = alertsResponse?.data.get_trash;
+    const configsData = configsResponse?.data.get_trash;
+    const credentialsData = credentialsResponse?.data.get_trash;
+    const filtersData = filtersResponse?.data.get_trash;
+    const groupsData = groupsResponse?.data.get_trash;
+    const notesData = notesResponse?.data.get_trash;
+    const overridesData = overridesResponse?.data.get_trash;
+    const permissionsData = permissionsResponse?.data.get_trash;
+    const portListsData = portListsResponse?.data.get_trash;
+    const reportConfigsData = reportConfigsResponse?.data.get_trash;
+    const reportFormatsData = reportFormatsResponse?.data.get_trash;
+    const rolesData = rolesResponse?.data.get_trash;
+    const scannersData = scannersResponse?.data.get_trash;
+    const schedulesData = schedulesResponse?.data.get_trash;
+    const tagsData = tagsResponse?.data.get_trash;
+    const targetsData = targetsResponse?.data.get_trash;
+    const tasksData = tasksResponse?.data.get_trash;
+    const ticketsData = ticketsResponse?.data.get_trash;
+    const agentGroupsData = agentGroupsResponse?.data.get_trash;
+    const ociImageTargetsData = ociImageTargetsResponse?.data.get_trash;
 
-    const alerts = map(alertsData.get_alerts_response?.alert, element =>
+    const alerts = map(alertsData?.get_alerts_response?.alert, element =>
       Alert.fromElement(element),
     );
 
     const scanConfigs: ScanConfig[] = [];
     const policies: Policy[] = [];
-    forEach(configsData.get_configs_response?.config, element => {
+    forEach(configsData?.get_configs_response?.config, element => {
       if (element.usage_type === 'scan')
         scanConfigs.push(ScanConfig.fromElement(element));
       else {
@@ -342,72 +418,104 @@ class TrashCanCommand extends HttpCommand {
     });
 
     const credentials = map(
-      credentialsData.get_credentials_response?.credential,
+      credentialsData?.get_credentials_response?.credential,
       element => Credential.fromElement(element),
     );
-    const filters = map(filtersData.get_filters_response?.filter, element =>
+    const filters = map(filtersData?.get_filters_response?.filter, element =>
       Filter.fromElement(element),
     );
-    const groups = map(groupsData.get_groups_response?.group, element =>
+    const groups = map(groupsData?.get_groups_response?.group, element =>
       Group.fromElement(element),
     );
-    const notes = map(notesData.get_notes_response?.note, element =>
+    const notes = map(notesData?.get_notes_response?.note, element =>
       Note.fromElement(element),
     );
     const overrides = map(
-      overridesData.get_overrides_response?.override,
+      overridesData?.get_overrides_response?.override,
       element => Override.fromElement(element),
     );
     const permissions = map(
-      permissionsData.get_permissions_response?.permission,
+      permissionsData?.get_permissions_response?.permission,
       element => Permission.fromElement(element),
     );
     const portLists = map(
-      portListsData.get_port_lists_response?.port_list,
+      portListsData?.get_port_lists_response?.port_list,
       element => PortList.fromElement(element),
     );
     const reportConfigs = map(
-      reportConfigsData.get_report_configs_response?.report_config,
+      reportConfigsData?.get_report_configs_response?.report_config,
       element => ReportConfig.fromElement(element),
     );
     const reportFormats = map(
-      reportFormatsData.get_report_formats_response?.report_format,
+      reportFormatsData?.get_report_formats_response?.report_format,
       element => ReportFormat.fromElement(element),
     );
-    const roles = map(rolesData.get_roles_response?.role, element =>
+    const roles = map(rolesData?.get_roles_response?.role, element =>
       Role.fromElement(element),
     );
-    const scanners = map(scannersData.get_scanners_response?.scanner, element =>
-      Scanner.fromElement(element),
+    const scanners = map(
+      scannersData?.get_scanners_response?.scanner,
+      element => Scanner.fromElement(element),
     );
     const schedules = map(
-      schedulesData.get_schedules_response?.schedule,
+      schedulesData?.get_schedules_response?.schedule,
       element => Schedule.fromElement(element),
     );
-    const tags = map(tagsData.get_tags_response?.tag, element =>
+    const tags = map(tagsData?.get_tags_response?.tag, element =>
       Tag.fromElement(element),
     );
-    const targets = map(targetsData.get_targets_response?.target, element =>
+    const targets = map(targetsData?.get_targets_response?.target, element =>
       Target.fromElement(element),
     );
     const tasks: Task[] = [];
     const audits: Audit[] = [];
-    forEach(tasksData.get_tasks_response?.task, element => {
+    forEach(tasksData?.get_tasks_response?.task, element => {
       if (element.usage_type === 'scan') {
         tasks.push(Task.fromElement(element));
       } else {
         audits.push(Audit.fromElement(element));
       }
     });
-    const tickets = map(ticketsData.get_tickets_response?.ticket, element =>
+    const tickets = map(ticketsData?.get_tickets_response?.ticket, element =>
       Ticket.fromElement(element),
     );
     const agentGroups = map(
-      agentGroupsData.get_agent_groups_response?.agent_group,
+      agentGroupsData?.get_agent_groups_response?.agent_group,
       element => AgentGroup.fromElement(element),
     );
+    const ociImageTargets = map(
+      ociImageTargetsData?.get_oci_image_targets_response?.oci_image_target,
+      element => OciImageTarget.fromElement(element),
+    );
 
-    return targetsResponse.setData({
+    const baseResponse =
+      targetsResponse ||
+      alertsResponse ||
+      configsResponse ||
+      credentialsResponse ||
+      filtersResponse ||
+      groupsResponse ||
+      notesResponse ||
+      overridesResponse ||
+      permissionsResponse ||
+      portListsResponse ||
+      reportConfigsResponse ||
+      reportFormatsResponse ||
+      rolesResponse ||
+      scannersResponse ||
+      schedulesResponse ||
+      tagsResponse ||
+      tasksResponse ||
+      ticketsResponse ||
+      agentGroupsResponse ||
+      ociImageTargetsResponse;
+
+    if (!baseResponse) {
+      // If all requests failed, throw an error
+      throw new Error('All trash can requests failed');
+    }
+
+    return baseResponse.setData({
       alerts,
       audits,
       scanConfigs,
@@ -429,6 +537,8 @@ class TrashCanCommand extends HttpCommand {
       tasks,
       tickets,
       agentGroups,
+      ociImageTargets,
+      failedRequests: failedRequests.length > 0 ? failedRequests : undefined,
     });
   }
 }

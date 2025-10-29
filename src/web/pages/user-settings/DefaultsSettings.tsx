@@ -7,7 +7,7 @@ import {useEffect, useMemo, useState} from 'react';
 
 import {DEFAULT_SETTINGS} from 'gmp/commands/user';
 import {ALL_FILTER} from 'gmp/models/filter';
-import {EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import Select from 'web/components/form/Select';
 import Layout from 'web/components/layout/Layout';

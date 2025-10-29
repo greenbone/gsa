@@ -61,7 +61,7 @@ export class ScanConfigCommand extends EntityCommand {
       xml_file,
     };
     log.debug('Importing scan config', data);
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 
   create({baseScanConfig, name, comment}) {
@@ -115,16 +115,16 @@ export class ScanConfigCommand extends EntityCommand {
       family: familyName,
     };
     log.debug('Saving scanconfigfamily', data);
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 
   editScanConfigFamilySettings({id, familyName}) {
-    const get = this.httpGet({
+    const get = this.httpGetWithTransform({
       cmd: 'edit_config_family',
       id,
       family: familyName,
     });
-    const all = this.httpGet({
+    const all = this.httpGetWithTransform({
       cmd: 'edit_config_family_all',
       id,
       family: familyName,
@@ -171,11 +171,11 @@ export class ScanConfigCommand extends EntityCommand {
       : '';
 
     log.debug('Saving scanconfignvt', data);
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 
   editScanConfigNvtSettings({id, oid}) {
-    return this.httpGet({
+    return this.httpGetWithTransform({
       cmd: 'get_config_nvt',
       id,
       oid,
@@ -206,7 +206,7 @@ class ScanConfigsCommand extends EntitiesCommand {
 
   get(params, options) {
     params = {...params, usage_type: 'scan'};
-    return this.httpGet(params, options).then(response => {
+    return this.httpGetWithTransform(params, options).then(response => {
       const {entities, filter, counts} = this.getCollectionListFromRoot(
         response.data,
       );

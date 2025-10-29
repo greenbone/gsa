@@ -10,7 +10,7 @@ import Audit, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUDIT_STATUS,
   USAGE_TYPE,
-  AuditStatus,
+  type AuditStatus,
 } from 'gmp/models/audit';
 import {testModel} from 'gmp/models/testing';
 import {parseDate, parseDuration} from 'gmp/parser';

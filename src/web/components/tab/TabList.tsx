@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {ReactNode} from 'react';
+import React, {type ReactNode} from 'react';
 import Layout from 'web/components/layout/Layout';
 import {useTab} from 'web/components/tab/TabContext';
 

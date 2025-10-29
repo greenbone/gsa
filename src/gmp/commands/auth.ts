@@ -28,7 +28,7 @@ class AuthenticationCommand extends HttpCommand {
     ldapHost,
     ldapsOnly,
   }: SaveLdapArguments) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'save_auth',
       group: 'method:ldap_connect',
       authdn,
@@ -40,7 +40,7 @@ class AuthenticationCommand extends HttpCommand {
   }
 
   saveRadius({radiusEnabled, radiusHost, radiusKey}: SaveRadiusArguments) {
-    return this.httpPost({
+    return this.httpPostWithTransform({
       cmd: 'save_auth',
       group: 'method:radius_connect',
       enable: convertBoolean(radiusEnabled),

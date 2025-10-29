@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {ReactNode, MouseEvent} from 'react';
+import React, {type ReactNode, type MouseEvent} from 'react';
 import styled from 'styled-components';
 import Theme from 'web/utils/Theme';
 

@@ -31,7 +31,7 @@ export class PolicyCommand extends EntityCommand {
       xml_file,
     };
     log.debug('Importing policy', data);
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 
   create({name, comment}) {
@@ -76,16 +76,16 @@ export class PolicyCommand extends EntityCommand {
       family: familyName,
     };
     log.debug('Saving scanconfigfamily', data);
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 
   editPolicyFamilySettings({id, familyName}) {
-    const get = this.httpGet({
+    const get = this.httpGetWithTransform({
       cmd: 'edit_config_family',
       id,
       family: familyName,
     });
-    const all = this.httpGet({
+    const all = this.httpGetWithTransform({
       cmd: 'edit_config_family_all',
       id,
       family: familyName,
@@ -132,7 +132,7 @@ export class PolicyCommand extends EntityCommand {
       : '';
 
     log.debug('Saving policynvt', data);
-    return this.httpPost(data);
+    return this.httpPostWithTransform(data);
   }
 
   getElementFromRoot(root) {
@@ -151,7 +151,7 @@ export class PoliciesCommand extends EntitiesCommand {
 
   get(params, options) {
     params = {...params, usage_type: 'policy'};
-    return this.httpGet(params, options).then(response => {
+    return this.httpGetWithTransform(params, options).then(response => {
       const {entities, filter, counts} = this.getCollectionListFromRoot(
         response.data,
       );

@@ -3,31 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {CollectionList, parseFilter} from 'gmp/collection/parser';
-import {AuditStatus} from 'gmp/models/audit';
-import {ComplianceType} from 'gmp/models/compliance';
-import {Date} from 'gmp/models/date';
-import Filter from 'gmp/models/filter';
-import Model, {ModelProperties} from 'gmp/models/model';
-import ReportHost from 'gmp/models/report/host';
-import ReportOperatingSystem from 'gmp/models/report/os';
+import {type CollectionList, parseFilter} from 'gmp/collection/parser';
+import {type AuditStatus} from 'gmp/models/audit';
+import {type ComplianceType} from 'gmp/models/compliance';
+import {type Date} from 'gmp/models/date';
+import type Filter from 'gmp/models/filter';
+import Model, {type ModelProperties} from 'gmp/models/model';
+import type ReportHost from 'gmp/models/report/host';
+import type ReportOperatingSystem from 'gmp/models/report/os';
 import {
   parseErrors,
   parseHosts,
   parseOperatingSystems,
   parseResults,
   parseTlsCertificates,
-  ReportComplianceCountElement,
-  ReportError,
+  type ReportComplianceCountElement,
+  type ReportError,
 } from 'gmp/models/report/parser';
 import {
-  DeltaReport,
-  ReportReportElement,
-  ReportType,
+  type DeltaReport,
+  type ReportReportElement,
+  type ReportType,
 } from 'gmp/models/report/report';
 import ReportTask from 'gmp/models/report/task';
-import ReportTLSCertificate from 'gmp/models/report/tlscertificate';
-import Result from 'gmp/models/result';
+import type ReportTLSCertificate from 'gmp/models/report/tlscertificate';
+import type Result from 'gmp/models/result';
 import {parseDate, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 

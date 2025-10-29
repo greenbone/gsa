@@ -4,13 +4,13 @@
  */
 
 import {
-  EntityType,
-  WithEntityType,
+  type EntityType,
+  type WithEntityType,
   getEntityType,
   typeName,
 } from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
+import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';

@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import CheckBox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import useTranslation from 'web/hooks/useTranslation';

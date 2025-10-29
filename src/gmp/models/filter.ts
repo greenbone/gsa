@@ -7,7 +7,7 @@ import EntityModel, {parseEntityModelProperties} from 'gmp/models/entitymodel';
 import convert from 'gmp/models/filter/convert';
 import FilterTerm, {AND} from 'gmp/models/filter/filterterm';
 import {EXTRA_KEYWORDS} from 'gmp/models/filter/keywords';
-import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
@@ -822,6 +822,9 @@ class Filter extends EntityModel {
 export const ALL_FILTER = new Filter().all();
 export const AGENTS_FILTER_FILTER = Filter.fromString('type=agent');
 export const AGENT_GROUPS_FILTER_FILTER = Filter.fromString('type=agent_group');
+export const AGENT_INSTALLERS_FILTER_FILTER = Filter.fromString(
+  'type=agent_installer',
+);
 export const ALERTS_FILTER_FILTER = Filter.fromString('type=alert');
 export const AUDITS_FILTER_FILTER = Filter.fromString('type=task');
 export const AUDIT_REPORTS_FILTER_FILTER =

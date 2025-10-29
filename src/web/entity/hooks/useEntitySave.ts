@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {EntityType} from 'gmp/utils/entitytype';
-import actionFunction from 'web/entity/hooks/actionFunction';
+import {type EntityType} from 'gmp/utils/entitytype';
+import actionFunction from 'web/entity/hooks/action-function';
 import useGmp from 'web/hooks/useGmp';
 
 interface EntitySaveCallbacks<TSaveResponse = unknown, TSaveError = unknown> {

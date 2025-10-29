@@ -4,10 +4,10 @@
  */
 
 import EntityCommand from 'gmp/commands/entity';
-import GmpHttp from 'gmp/http/gmp';
-import {XmlResponseData} from 'gmp/http/transform/fastxml';
+import type Http from 'gmp/http/http';
+import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import Role, {RoleElement} from 'gmp/models/role';
+import Role, {type RoleElement} from 'gmp/models/role';
 import {isArray} from 'gmp/utils/identity';
 
 interface RoleCommandCreateParams {
@@ -26,7 +26,7 @@ interface RoleCommandSaveParams {
 const log = logger.getLogger('gmp.commands.role');
 
 class RoleCommand extends EntityCommand<Role, RoleElement> {
-  constructor(http: GmpHttp) {
+  constructor(http: Http) {
     super(http, 'role', Role);
   }
 
@@ -50,7 +50,7 @@ class RoleCommand extends EntityCommand<Role, RoleElement> {
       users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Saving role', data);
-    await this.httpPost(data);
+    await this.httpPostWithTransform(data);
   }
 
   getElementFromRoot(root: XmlResponseData): RoleElement {
