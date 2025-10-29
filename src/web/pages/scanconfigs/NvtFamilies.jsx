@@ -34,12 +34,13 @@ const WHOLE_SELECTION_FAMILIES = [
   'Fedora Local Security Checks',
   'FreeBSD Local Security Checks',
   'Gentoo Local Security Checks',
+  'HCE Local Security Checks',
   'HP-UX Local Security Checks',
   'Huawei EulerOS Local Security Checks',
   'Mageia Linux Local Security Checks',
   'Mandrake Local Security Checks',
-  'openSUSE Local Security Checks',
   'openEuler Local Security Checks',
+  'openSUSE Local Security Checks',
   'Oracle Linux Local Security Checks',
   'Red Hat Local Security Checks',
   'Rocky Linux Local Security Checks',
@@ -47,6 +48,7 @@ const WHOLE_SELECTION_FAMILIES = [
   'Solaris Local Security Checks',
   'SuSE Local Security Checks',
   'Ubuntu Local Security Checks',
+  'Windows Local Security Checks',
 ];
 
 const NvtFamily = ({
