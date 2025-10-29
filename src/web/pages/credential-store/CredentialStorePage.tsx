@@ -93,7 +93,6 @@ const CredentialStorePage = () => {
     host,
     path,
     port,
-    sslOnly,
     clientCertificate,
     clientKey,
     pkcs12File,
@@ -112,7 +111,6 @@ const CredentialStorePage = () => {
       host,
       path,
       port,
-      sslOnly,
       clientCertificate,
       clientKey,
       pkcs12File,
@@ -257,9 +255,6 @@ const CredentialStorePage = () => {
           host={credentialStore?.host}
           path={credentialStore?.path}
           port={credentialStore?.getPreference?.('port')?.value}
-          sslOnly={
-            credentialStore?.getPreference?.('ssl_only')?.value === 'true'
-          }
           onClose={closeDialog}
           onSave={handleSaveSettings}
         />

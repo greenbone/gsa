@@ -18,7 +18,6 @@ interface CredentialStoreDialogProps {
   host?: string;
   path?: string;
   port?: string;
-  sslOnly?: boolean;
   onClose: () => void;
   onSave: (values: CredentialStoreDialogState) => void | Promise<void>;
 }
@@ -33,7 +32,6 @@ interface CredentialStoreDialogDefaultValues {
   host: string;
   path: string;
   port: string;
-  sslOnly: boolean;
 }
 
 interface CredentialStoreDialogValues {
@@ -51,7 +49,6 @@ const CredentialStoreDialog = ({
   host = '',
   path = '',
   port = '',
-  sslOnly = true,
   onClose,
   onSave,
 }: CredentialStoreDialogProps) => {
@@ -64,7 +61,6 @@ const CredentialStoreDialog = ({
     host,
     path,
     port,
-    sslOnly,
   };
 
   return (
@@ -129,15 +125,6 @@ const CredentialStoreDialog = ({
               onChange={onValueChange}
             />
           </FormGroup>
-          <CheckBox<boolean>
-            checked={values.sslOnly}
-            checkedValue={true}
-            data-testid="sslOnly-checkbox"
-            name="sslOnly"
-            title={_('Use SSL only')}
-            unCheckedValue={false}
-            onChange={onValueChange}
-          />
           <FormGroup title={_('Client Certificate')}>
             <FileField
               name="clientCertificate"

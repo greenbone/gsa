@@ -20,7 +20,6 @@ export interface CredentialStoreModifyParams {
   comment?: string;
   // Preferences - these will be passed as preferences:key format
   port?: string;
-  sslOnly?: boolean;
   clientCertificate?: File;
   clientKey?: File;
   pkcs12File?: File;
@@ -52,7 +51,6 @@ class CredentialStoreCommand extends EntityCommand<
     path,
     comment,
     port,
-    sslOnly,
     clientCertificate,
     clientKey,
     pkcs12File,
@@ -67,7 +65,6 @@ class CredentialStoreCommand extends EntityCommand<
       path,
       comment,
       port,
-      sslOnly,
       clientCertificate: Boolean(clientCertificate),
       clientKey: Boolean(clientKey),
       pkcs12File: Boolean(pkcs12File),
@@ -84,7 +81,6 @@ class CredentialStoreCommand extends EntityCommand<
       comment,
       'preferences:app_id': appId,
       'preferences:port': port,
-      'preferences:ssl_only': sslOnly ? '1' : '0',
       'preferences:client_certificate': clientCertificate,
       'preferences:client_key': clientKey,
       'preferences:pkcs12_file': pkcs12File,
