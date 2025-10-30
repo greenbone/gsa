@@ -232,6 +232,10 @@ const CredentialStorePage = () => {
                   <TableData>{credentialStore.path ?? _('N/A')}</TableData>
                 </TableRow>
                 <TableRow>
+                  <TableData>{_('Port')}</TableData>
+                  <TableData>{credentialStore.port ?? _('N/A')}</TableData>
+                </TableRow>
+                <TableRow>
                   <TableData>{_('Version')}</TableData>
                   <TableData>{credentialStore.version ?? _('N/A')}</TableData>
                 </TableRow>
@@ -254,7 +258,7 @@ const CredentialStorePage = () => {
           comment={credentialStore?.comment}
           host={credentialStore?.host}
           path={credentialStore?.path}
-          port={credentialStore?.getPreference?.('port')?.value}
+          port={credentialStore?.port}
           onClose={closeDialog}
           onSave={handleSaveSettings}
         />
