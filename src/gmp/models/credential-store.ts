@@ -39,6 +39,7 @@ export interface CredentialStoreElement extends ModelElement {
   active?: YesNo;
   host?: string;
   path?: string;
+  port?: string;
   preferences?: PreferencesElement;
   selectors?: SelectorsElement;
 }
@@ -65,6 +66,7 @@ interface CredentialStoreProperties extends ModelProperties {
   active?: YesNo;
   host?: string;
   path?: string;
+  port?: string;
   preferences?: Preference[];
   selectors?: Selector[];
 }
@@ -76,6 +78,7 @@ class CredentialStore extends Model {
   readonly active?: YesNo;
   readonly host?: string;
   readonly path?: string;
+  readonly port?: string;
   readonly preferences?: Preference[];
   readonly selectors?: Selector[];
 
@@ -84,6 +87,7 @@ class CredentialStore extends Model {
     active,
     host,
     path,
+    port,
     preferences,
     selectors,
     ...properties
@@ -94,6 +98,7 @@ class CredentialStore extends Model {
     this.active = active;
     this.host = host;
     this.path = path;
+    this.port = port;
     this.preferences = preferences;
     this.selectors = selectors;
   }
@@ -115,6 +120,7 @@ class CredentialStore extends Model {
     copy.active = element.active;
     copy.host = parseToString(element.host);
     copy.path = parseToString(element.path);
+    copy.port = parseToString(element.port);
 
     // Parse preferences
     if (isDefined(preferences?.preference)) {
