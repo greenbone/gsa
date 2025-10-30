@@ -6,7 +6,6 @@
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import CheckBox from 'web/components/form/Checkbox';
 import FileField from 'web/components/form/FileField';
-import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
@@ -18,6 +17,7 @@ interface CredentialStoreDialogProps {
   host?: string;
   path?: string;
   port?: string;
+  sslOnly?: boolean;
   onClose: () => void;
   onSave: (values: CredentialStoreDialogState) => void | Promise<void>;
 }
@@ -32,6 +32,7 @@ interface CredentialStoreDialogDefaultValues {
   host: string;
   path: string;
   port: string;
+  sslOnly: boolean;
 }
 
 interface CredentialStoreDialogValues {
@@ -49,6 +50,7 @@ const CredentialStoreDialog = ({
   host = '',
   path = '',
   port = '',
+  sslOnly = true,
   onClose,
   onSave,
 }: CredentialStoreDialogProps) => {
@@ -61,6 +63,7 @@ const CredentialStoreDialog = ({
     host,
     path,
     port,
+    sslOnly,
   };
 
   return (
@@ -82,94 +85,83 @@ const CredentialStoreDialog = ({
             unCheckedValue={false}
             onChange={onValueChange}
           />
-          <FormGroup title={_('Application ID')}>
-            <TextField
-              data-testid="appid-textfield"
-              name="appId"
-              title={_(
-                'Unique ID of the application issuing password requests (required)',
-              )}
-              value={values.appId}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Host')}>
-            <TextField
-              data-testid="host-textfield"
-              name="host"
-              value={values.host}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Path')}>
-            <TextField
-              data-testid="path-textfield"
-              name="path"
-              value={values.path}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Port')}>
-            <TextField
-              data-testid="port-textfield"
-              name="port"
-              value={values.port}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Comment')}>
-            <TextField
-              data-testid="comment-textfield"
-              name="comment"
-              value={values.comment}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Client Certificate')}>
-            <FileField
-              name="clientCertificate"
-              title={_('Upload client certificate (.pem, .crt)')}
-              value={values.clientCertificate}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Client Private Key')}>
-            <FileField
-              name="clientKey"
-              title={_('Upload private key (.pem, .key)')}
-              value={values.clientKey}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('PKCS#12 File')}>
-            <FileField
-              name="pkcs12File"
-              title={_(
-                'Upload PKCS#12 file (.p12, .pfx) - alternative to separate certificate/key',
-              )}
-              value={values.pkcs12File}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Server CA Certificate')}>
-            <FileField
-              name="serverCaCertificate"
-              title={_('Upload server CA certificate (.pem, .crt)')}
-              value={values.serverCaCertificate}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Passphrase')}>
-            <PasswordField
-              data-testid="passphrase-field"
-              name="passphrase"
-              title={_(
-                'Passphrase for private key or PKCS#12 file (if encrypted)',
-              )}
-              value={values.passphrase || ''}
-              onChange={onValueChange}
-            />
-          </FormGroup>
+
+          <TextField
+            data-testid="appid-textfield"
+            description={_(
+              'Unique ID of the application issuing password requests (required)',
+            )}
+            name="appId"
+            title={_('Application ID')}
+            value={values.appId}
+            onChange={onValueChange}
+          />
+          <TextField
+            data-testid="host-textfield"
+            name="host"
+            title={_('Host')}
+            onChange={onValueChange}
+          />
+          <TextField
+            data-testid="path-textfield"
+            name="path"
+            title={_('Path')}
+            value={values.path}
+            onChange={onValueChange}
+          />
+          <TextField
+            data-testid="port-textfield"
+            name="port"
+            title={_('Port')}
+            value={values.port}
+            onChange={onValueChange}
+          />
+          <TextField
+            data-testid="comment-textfield"
+            name="comment"
+            title={_('Comment')}
+            value={values.comment}
+            onChange={onValueChange}
+          />
+
+          <FileField
+            name="clientCertificate"
+            placeholder={_('Upload client certificate (.pem, .crt)')}
+            title={_('Client Certificate')}
+            value={values.clientCertificate}
+            onChange={onValueChange}
+          />
+          <FileField
+            name="clientKey"
+            placeholder={_('Upload private key (.pem, .key)')}
+            title={_('Client Private Key')}
+            value={values.clientKey}
+            onChange={onValueChange}
+          />
+          <FileField
+            name="pkcs12File"
+            placeholder={_('Upload PKCS#12 file (.p12, .pfx)  ')}
+            title={_('PKCS#12 File - alternative to separate certificate/key')}
+            value={values.pkcs12File}
+            onChange={onValueChange}
+          />
+          <FileField
+            name="serverCaCertificate"
+            placeholder={_('Upload server CA certificate (.pem, .crt)')}
+            title={_('Server CA Certificate')}
+            value={values.serverCaCertificate}
+            onChange={onValueChange}
+          />
+          <PasswordField
+            data-testid="passphrase-field"
+            name="passphrase"
+            placeholder={_(
+              'Passphrase for private key or PKCS#12 file (if encrypted)',
+            )}
+            title={_('Passphrase')}
+            value={values.passphrase || ''}
+            onChange={onValueChange}
+          />
         </>
       )}
     </SaveDialog>
