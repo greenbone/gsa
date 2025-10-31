@@ -175,6 +175,8 @@ describe('CredentialDialog tests', () => {
       privacy_algorithm: 'aes',
       privacy_password: '',
       public_key: undefined,
+      vaultId: '',
+      hostIdentifier: '',
     });
   });
 
@@ -224,6 +226,8 @@ describe('CredentialDialog tests', () => {
       privacy_algorithm: 'aes',
       privacy_password: '',
       public_key: undefined,
+      vaultId: '',
+      hostIdentifier: '',
     });
   });
 

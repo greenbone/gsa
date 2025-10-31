@@ -28,6 +28,7 @@ import CertBundsPage from 'web/pages/certbund/ListPage';
 import ContainerImageTargetsListPage from 'web/pages/container-image-targets/ContainerImageTargetsListPage';
 import CpeDetailsPage from 'web/pages/cpes/DetailsPage';
 import CpesPage from 'web/pages/cpes/ListPage';
+import CredentialStorePage from 'web/pages/credential-store/CredentialStorePage';
 import CredentialDetailsPage from 'web/pages/credentials/DetailsPage';
 import CredentialsPage from 'web/pages/credentials/ListPage';
 import CveDetailsPage from 'web/pages/cves/DetailsPage';
@@ -138,6 +139,7 @@ const LoggedInRoutes = () => {
           />
           <Route element={<CpesPage />} path="/cpes" />
           <Route element={<CredentialsPage />} path="/credentials" />
+          <Route element={<CredentialStorePage />} path="/credentialstore" />
           <Route element={<CvesPage />} path="/cves" />
           <Route element={<DfnCertsPage />} path="/dfncerts" />
           <Route element={<FeedStatusPage />} path="/feedstatus" />
