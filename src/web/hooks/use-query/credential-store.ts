@@ -27,7 +27,7 @@ export const useGetCredentialStores = ({filter}: {filter?: Filter}) => {
   return useGetEntities<CredentialStore>({
     queryId: 'get_credential_stores',
     filter,
-    gmpMethod: gmp.credentialStores.get.bind(gmp.credentialStores),
+    gmpMethod: gmp.credentialstores.get.bind(gmp.credentialstores),
   });
 };
 
@@ -42,7 +42,7 @@ export const useModifyCredentialStore = ({
     EntityActionResponse,
     Rejection
   >({
-    gmpMethod: gmp.credentialStore.modify.bind(gmp.credentialStore),
+    gmpMethod: gmp.credentialstore.modify.bind(gmp.credentialstore),
     invalidateQueryIds: ['get_credential_stores'],
     onError,
     onSuccess,
@@ -56,7 +56,7 @@ export const useVerifyCredentialStore = ({
   const gmp = useGmp();
 
   return useGmpMutation<{id: string}, EntityActionResponse, Rejection>({
-    gmpMethod: gmp.credentialStore.verify.bind(gmp.credentialStore),
+    gmpMethod: gmp.credentialstore.verify.bind(gmp.credentialstore),
     onError,
     onSuccess,
   });

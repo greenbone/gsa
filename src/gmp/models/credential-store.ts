@@ -5,7 +5,7 @@
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseBoolean, parseToString, type YesNo} from 'gmp/parser';
-import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
 interface PreferenceElement {
   _secret?: YesNo;
@@ -49,7 +49,7 @@ interface Preference {
   name: string;
   type: string;
   pattern?: string;
-  passphraseeName?: string;
+  passphraseName?: string;
   value?: string;
   defaultValue?: string;
 }
@@ -88,8 +88,8 @@ class CredentialStore extends Model {
     host,
     path,
     port,
-    preferences,
-    selectors,
+    preferences = [],
+    selectors = [],
     ...properties
   }: CredentialStoreProperties = {}) {
     super(properties);
@@ -123,39 +123,28 @@ class CredentialStore extends Model {
     copy.port = parseToString(element.port);
 
     // Parse preferences
-    if (isDefined(preferences?.preference)) {
-      const preferencesList = Array.isArray(preferences.preference)
-        ? preferences.preference
-        : [preferences.preference];
-      copy.preferences = preferencesList.map(pref => ({
-        secret: parseBoolean(pref._secret),
-        name: parseToString(pref.name) || '',
-        type: parseToString(pref.type) || '',
-        pattern: parseToString(pref.pattern),
-        passphraseeName: parseToString(pref.passphrase_name),
-        value: parseToString(pref.value),
-        defaultValue: parseToString(pref.default_value),
-      }));
-    }
-
+    copy.preferences = map(preferences?.preference, pref => ({
+      secret: parseBoolean(pref._secret),
+      name: parseToString(pref.name) || '',
+      type: parseToString(pref.type) || '',
+      pattern: parseToString(pref.pattern),
+      passphraseName: parseToString(pref.passphrase_name),
+      value: parseToString(pref.value),
+      defaultValue: parseToString(pref.default_value),
+    }));
     // Parse selectors
-    if (isDefined(selectors?.selector)) {
-      const selectorsList = Array.isArray(selectors.selector)
-        ? selectors.selector
-        : [selectors.selector];
-      copy.selectors = selectorsList.map(sel => ({
-        name: parseToString(sel.name) || '',
-        pattern: parseToString(sel.pattern),
-        defaultValue: parseToString(sel.default_value),
-        credentialTypes: sel.credential_types
-          ? Array.isArray(sel.credential_types.credential_type)
-            ? sel.credential_types.credential_type
-            : sel.credential_types.credential_type
-              ? [sel.credential_types.credential_type]
-              : []
-          : [],
-      }));
-    }
+    copy.selectors = map(selectors?.selector, sel => ({
+      name: parseToString(sel.name) || '',
+      pattern: parseToString(sel.pattern),
+      defaultValue: parseToString(sel.default_value),
+      credentialTypes: sel.credential_types
+        ? Array.isArray(sel.credential_types.credential_type)
+          ? sel.credential_types.credential_type
+          : sel.credential_types.credential_type
+            ? [sel.credential_types.credential_type]
+            : []
+        : [],
+    }));
 
     return copy;
   }

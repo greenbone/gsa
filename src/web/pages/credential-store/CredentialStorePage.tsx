@@ -36,7 +36,7 @@ import {renderYesNo} from 'web/utils/Render';
 interface ToolBarIconsProps {
   onOpenDialogClick: () => void;
   onTestConnectionClick: () => void;
-  connectionStatus?: 'success' | 'failed' | 'testing' | null;
+  connectionStatus?: 'success' | 'failed' | 'testing' | undefined;
 }
 
 const ToolBarIcons = ({
@@ -70,8 +70,8 @@ const CredentialStorePage = () => {
   const [_] = useTranslation();
   const [dialogVisible, setDialogVisible] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<
-    'success' | 'failed' | 'testing' | null
-  >(null);
+    'success' | 'failed' | 'testing' | undefined
+  >(undefined);
 
   const {
     data: credentialStoresData,

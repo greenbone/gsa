@@ -10,6 +10,7 @@ import CredentialStore, {
   type CredentialStoreElement,
 } from 'gmp/models/credential-store';
 import {type Element} from 'gmp/models/model';
+import {parseYesNo} from 'gmp/parser';
 
 export interface CredentialStoreModifyParams {
   id: string; // Maps to credential_store_id
@@ -75,7 +76,7 @@ class CredentialStoreCommand extends EntityCommand<
     return this.entityAction({
       cmd: 'modify_credential_store',
       credential_store_id: id,
-      active: active ? '1' : '0',
+      active: parseYesNo(active),
       host,
       path,
       port,

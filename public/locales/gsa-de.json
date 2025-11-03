@@ -466,7 +466,7 @@
   "Connection test failed. Click to retry test.": "Verbindungstest fehlgeschlagen. Klicken Sie, um den Test zu wiederholen.",
   "Connection test in progress. Please wait.": "Verbindungstest läuft. Bitte warten.",
   "Connection test successful. Click to test again.": "Verbindungstest erfolgreich. Klicken Sie, um den Test erneut durchzuführen.",
-  "Connection to credential store server established successfully.": "Verbindung zum Anmeldedaten-Servers erfolgreich hergestellt.",
+  "Connection to credential store server established successfully.": "Verbindung zum Anmeldedaten-Server erfolgreich hergestellt.",
   "Container": "Container",
   "Container Image Target": "Container-Image-Ziel",
   "Container Image Targets": "Container-Image-Ziele",

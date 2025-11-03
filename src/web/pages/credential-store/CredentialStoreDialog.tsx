@@ -17,13 +17,11 @@ interface CredentialStoreDialogProps {
   host?: string;
   path?: string;
   port?: string;
-  sslOnly?: boolean;
   onClose: () => void;
   onSave: (values: CredentialStoreDialogState) => void | Promise<void>;
 }
 
-export type CredentialStoreDialogState = CredentialStoreDialogDefaultValues &
-  CredentialStoreDialogValues;
+export type CredentialStoreDialogState = CredentialStoreDialogDefaultValues;
 
 interface CredentialStoreDialogDefaultValues {
   active: boolean;
@@ -32,10 +30,6 @@ interface CredentialStoreDialogDefaultValues {
   host: string;
   path: string;
   port: string;
-  sslOnly: boolean;
-}
-
-interface CredentialStoreDialogValues {
   clientCertificate?: File;
   clientKey?: File;
   pkcs12File?: File;
@@ -50,7 +44,6 @@ const CredentialStoreDialog = ({
   host = '',
   path = '',
   port = '',
-  sslOnly = true,
   onClose,
   onSave,
 }: CredentialStoreDialogProps) => {
@@ -61,13 +54,13 @@ const CredentialStoreDialog = ({
     appId,
     comment,
     host,
+    passphrase: '',
     path,
     port,
-    sslOnly,
   };
 
   return (
-    <SaveDialog<CredentialStoreDialogValues, CredentialStoreDialogDefaultValues>
+    <SaveDialog<{}, CredentialStoreDialogDefaultValues>
       buttonTitle={_('Save')}
       defaultValues={uncontrolledValues}
       title={_('Edit Credential Store')}
@@ -159,7 +152,7 @@ const CredentialStoreDialog = ({
               'Passphrase for private key or PKCS#12 file (if encrypted)',
             )}
             title={_('Passphrase')}
-            value={values.passphrase || ''}
+            value={values.passphrase}
             onChange={onValueChange}
           />
         </>

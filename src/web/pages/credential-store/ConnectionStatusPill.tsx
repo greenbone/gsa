@@ -13,7 +13,7 @@ import {
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
-type ConnectionStatus = 'success' | 'failed' | 'testing' | null;
+type ConnectionStatus = 'success' | 'failed' | 'testing' | undefined;
 
 interface ConnectionStatusPillProps {
   status?: ConnectionStatus;

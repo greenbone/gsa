@@ -91,8 +91,8 @@ class Gmp {
   readonly agentinstaller: AgentInstallerCommand;
   readonly agentinstallers: AgentInstallersCommand;
   readonly auth: AuthenticationCommand;
-  readonly credentialStore: CredentialStoreCommand;
-  readonly credentialStores: CredentialStoresCommand;
+  readonly credentialstore: CredentialStoreCommand;
+  readonly credentialstores: CredentialStoresCommand;
   readonly dashboard: DashboardCommand;
   readonly feedstatus: FeedStatusCommand;
   readonly ociimagetarget: OciImageTargetCommand;
@@ -135,8 +135,8 @@ class Gmp {
     this.agentinstaller = new AgentInstallerCommand(this.http);
     this.agentinstallers = new AgentInstallersCommand(this.http);
     this.auth = new AuthenticationCommand(this.http);
-    this.credentialStore = new CredentialStoreCommand(this.http);
-    this.credentialStores = new CredentialStoresCommand(this.http);
+    this.credentialstore = new CredentialStoreCommand(this.http);
+    this.credentialstores = new CredentialStoresCommand(this.http);
     this.dashboard = new DashboardCommand(this.http);
     this.feedstatus = new FeedStatusCommand(this.http);
     this.ociimagetarget = new OciImageTargetCommand(this.http);
