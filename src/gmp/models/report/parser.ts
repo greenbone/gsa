@@ -162,6 +162,10 @@ export interface ReportResultCountElement {
   };
   full?: number;
   filtered?: number;
+  critical?: {
+    filtered?: number;
+    full?: number;
+  };
   high?: {
     filtered?: number;
     full?: number;

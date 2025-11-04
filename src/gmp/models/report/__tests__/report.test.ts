@@ -465,6 +465,10 @@ describe('ReportReport tests', () => {
       result_count: {
         full: 10,
         filtered: 5,
+        critical: {
+          filtered: 4,
+          full: 8,
+        },
         high: {
           filtered: 3,
           full: 6,
@@ -500,6 +504,8 @@ describe('ReportReport tests', () => {
     expect(report.result_count?.log?.filtered).toEqual(0);
     expect(report.result_count?.false_positive?.full).toEqual(2);
     expect(report.result_count?.false_positive?.filtered).toEqual(1);
+    expect(report.result_count?.critical?.full).toEqual(8);
+    expect(report.result_count?.critical?.filtered).toEqual(4);
   });
 
   test('should parse timezone', () => {
