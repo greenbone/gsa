@@ -27,6 +27,7 @@ import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/action-function';
 import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
@@ -83,8 +84,6 @@ import ModifyTaskWizard, {
   type ModifyTaskWizardData,
 } from 'web/wizard/ModifyTaskWizard';
 import TaskWizard from 'web/wizard/TaskWizard';
-import Features from 'gmp/capabilities/features';
-import useFeatures from 'web/hooks/useFeatures';
 
 interface TaskComponentRenderProps {
   create: () => void;
