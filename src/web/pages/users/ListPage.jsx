@@ -204,7 +204,6 @@ const UsersPage = ({
             entitiesSelected={entitiesSelected}
             filter={filter}
             filterEditDialog={UserFilterDialog}
-            onFilterChanged={onFilterChanged}
             filtersFilter={USERS_FILTER_FILTER}
             sectionIcon={<UserIcon size="large" />}
             selectionType={selectionType}
@@ -215,6 +214,7 @@ const UsersPage = ({
             onDeleteBulk={openConfirmDeleteDialog}
             onDownloaded={onDownloaded}
             onError={onError}
+            onFilterChanged={onFilterChanged}
             onUserCloneClick={clone}
             onUserCreateClick={create}
             onUserDeleteClick={openConfirmDeleteDialog}
@@ -236,6 +236,7 @@ UsersPage.propTypes = {
   loadAll: PropTypes.func.isRequired,
   selectionType: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
 };
