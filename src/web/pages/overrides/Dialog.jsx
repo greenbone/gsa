@@ -30,6 +30,7 @@ import Spinner from 'web/components/form/Spinner';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {
@@ -49,6 +50,8 @@ import {
   _MEDIUM,
   _HIGH,
   translatedResultSeverityRiskFactor,
+  CRITICAL_VALUE,
+  _CRITICAL,
 } from 'web/utils/severity';
 
 const OverrideDialog = ({
@@ -80,7 +83,9 @@ const OverrideDialog = ({
   onSave,
 }) => {
   const [_] = useTranslation();
-  const is_edit = isDefined(override);
+  const gmp = useGmp();
+  const isEdit = isDefined(override);
+  const isCVSSv3 = gmp.settings.severityRating === 'CVSSv3';
 
   title = title || _('New Override');
 
@@ -106,7 +111,23 @@ const OverrideDialog = ({
     text,
   };
 
-  let severity_from_list_items = [
+  const severityFromListItems = [];
+
+  if (isEdit) {
+    severityFromListItems.push({
+      label: '--',
+      value: '',
+    });
+  }
+
+  if (isCVSSv3) {
+    severityFromListItems.push({
+      value: CRITICAL_VALUE,
+      label: `${_CRITICAL}`,
+    });
+  }
+
+  severityFromListItems.push(
     {
       value: HIGH_VALUE,
       label: `${_HIGH}`,
@@ -127,17 +148,8 @@ const OverrideDialog = ({
       value: FALSE_POSITIVE_VALUE,
       label: `${_FALSE_POSITIVE}`,
     },
-  ];
+  );
 
-  if (is_edit) {
-    severity_from_list_items = [
-      {
-        label: '--',
-        value: '',
-      },
-      ...severity_from_list_items,
-    ];
-  }
   return (
     <SaveDialog
       defaultValues={data}
@@ -159,7 +171,7 @@ const OverrideDialog = ({
                 <span>{renderNvtName(state.oid, nvt_name)}</span>
               </FormGroup>
             )}
-            {is_edit && !fixed && (
+            {isEdit && !fixed && (
               <FormGroup title={_('NVT')}>
                 <Radio
                   checked={state.oid === oid}
@@ -184,7 +196,7 @@ const OverrideDialog = ({
                 </Row>
               </FormGroup>
             )}
-            {!is_edit && !fixed && (
+            {!isEdit && !fixed && (
               <FormGroup title={_('NVT OID')}>
                 <TextField
                   grow="1"
@@ -203,20 +215,18 @@ const OverrideDialog = ({
                 value={ACTIVE_YES_ALWAYS_VALUE}
                 onChange={onValueChange}
               />
-              {is_edit &&
-                override.isActive() &&
-                isDefined(override.endTime) && (
-                  <Row>
-                    <Radio
-                      checked={state.active === ACTIVE_YES_UNTIL_VALUE}
-                      name="active"
-                      title={_('yes, until')}
-                      value={ACTIVE_YES_UNTIL_VALUE}
-                      onChange={onValueChange}
-                    />
-                    <DateTime date={override.endTime} />
-                  </Row>
-                )}
+              {isEdit && override.isActive() && isDefined(override.endTime) && (
+                <Row>
+                  <Radio
+                    checked={state.active === ACTIVE_YES_UNTIL_VALUE}
+                    name="active"
+                    title={_('yes, until')}
+                    value={ACTIVE_YES_UNTIL_VALUE}
+                    onChange={onValueChange}
+                  />
+                  <DateTime date={override.endTime} />
+                </Row>
+              )}
               <Row>
                 <Radio
                   checked={state.active === ACTIVE_YES_FOR_NEXT_VALUE}
@@ -355,7 +365,7 @@ const OverrideDialog = ({
                 <Select
                   convert={parseFloat}
                   disabled={state.custom_severity === YES_VALUE}
-                  items={severity_from_list_items}
+                  items={severityFromListItems}
                   name="new_severity_from_list"
                   value={state.new_severity_from_list}
                   onChange={onValueChange}
