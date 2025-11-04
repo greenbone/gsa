@@ -23,6 +23,7 @@ import withEntitiesActions, {
   type WithEntitiesActionsProps,
   type WithEntitiesActionsComponentProps,
 } from 'web/entities/withEntitiesActions';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface ReportActionsProps extends WithEntitiesActionsComponentProps<Report> {
@@ -96,6 +97,7 @@ const ReportTableRow = ({
   links = true,
   ...props
 }: ReportTableRowProps) => {
+  const gmp = useGmp();
   const {report} = entity;
   const scan_run_status = report?.scan_run_status;
   const task = report?.task;
@@ -115,6 +117,7 @@ const ReportTableRow = ({
     progress = task.progress;
   }
 
+  const useCVSSv3 = gmp.settings.severityRating === 'CVSSv3';
   return (
     <TableRow>
       <TableData>
@@ -137,6 +140,9 @@ const ReportTableRow = ({
       <TableData>
         <SeverityBar severity={report?.severity?.filtered} />
       </TableData>
+      {useCVSSv3 && (
+        <TableData>{report?.result_count?.critical?.filtered}</TableData>
+      )}
       <TableData align="end">{report?.result_count?.high?.filtered}</TableData>
       <TableData align="end">
         {report?.result_count?.medium?.filtered}
