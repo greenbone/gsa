@@ -127,6 +127,10 @@ interface ReportReportSeverity {
 interface ReportResultCounts {
   filtered?: number;
   full?: number;
+  critical?: {
+    filtered?: number;
+    full?: number;
+  };
   high?: {
     filtered?: number;
     full?: number;
@@ -307,6 +311,10 @@ class ReportReport extends Model {
       copy.result_count = {
         filtered: element.result_count.filtered,
         full: element.result_count.full,
+        critical: {
+          filtered: element.result_count.critical?.filtered,
+          full: element.result_count.critical?.full,
+        },
         false_positive: {
           filtered: element.result_count.false_positive?.filtered,
           full: element.result_count.false_positive?.full,
