@@ -34,6 +34,12 @@ interface ScannerParamElement {
   paramType?: string;
 }
 
+interface ScannerTaskElement {
+  _id: string;
+  name?: string;
+  usage_type: 'scan' | 'audit';
+}
+
 export interface ScannerElement extends ModelElement {
   ca_pub?: string;
   ca_pub_info?: {
@@ -58,7 +64,7 @@ export interface ScannerElement extends ModelElement {
   relay_host?: string;
   relay_port?: number;
   tasks?: {
-    task?: ModelElement | ModelElement[];
+    task?: ScannerTaskElement | ScannerTaskElement[];
   };
 }
 
@@ -91,6 +97,12 @@ interface CaPub {
   };
 }
 
+interface ScannerTask {
+  id: string;
+  name?: string;
+  usageType: 'scan' | 'audit';
+}
+
 interface ScannerProperties extends ModelProperties {
   caPub?: CaPub;
   configs?: Model[];
@@ -99,7 +111,7 @@ interface ScannerProperties extends ModelProperties {
   host?: string;
   port?: number;
   scannerType?: ScannerType;
-  tasks?: Model[];
+  tasks?: ScannerTask[];
 }
 
 export const OPENVAS_SCANNER_TYPE = '2';
@@ -157,7 +169,7 @@ class Scanner extends Model {
   readonly host?: string;
   readonly port?: number;
   readonly scannerType?: ScannerType;
-  readonly tasks: Model[];
+  readonly tasks: ScannerTask[];
 
   constructor({
     caPub,
@@ -214,9 +226,13 @@ class Scanner extends Model {
       }
     }
 
-    ret.tasks = map(element.tasks?.task, task =>
-      Model.fromElement(task, 'task'),
-    );
+    ret.tasks = map(element.tasks?.task, task => {
+      return {
+        id: task._id as string,
+        name: task.name,
+        usageType: task.usage_type as 'scan' | 'audit',
+      };
+    });
     ret.configs = map(element.configs?.config, config =>
       Model.fromElement(config, 'scanconfig'),
     );

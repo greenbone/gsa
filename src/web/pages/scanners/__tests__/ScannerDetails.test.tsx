@@ -12,7 +12,6 @@ import Scanner, {
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
 } from 'gmp/models/scanner';
-import Task from 'gmp/models/task';
 import ScannerDetails from 'web/pages/scanners/ScannerDetails';
 
 describe('ScannerDetails tests', () => {
@@ -26,8 +25,8 @@ describe('ScannerDetails tests', () => {
       caPub: {certificate: 'Test CA Certificate'},
       credential: new Credential({id: '5678', name: 'Test Credential'}),
       tasks: [
-        new Task({id: '1', name: 'Task 1'}),
-        new Task({id: '2', name: 'Task 2'}),
+        {id: '1', name: 'Task 1', usageType: 'scan'},
+        {id: '2', name: 'Task 2', usageType: 'scan'},
       ],
       configs: [
         new ScanConfig({id: '1', name: 'Config 1'}),
@@ -76,8 +75,8 @@ describe('ScannerDetails tests', () => {
         certificate_info: {issuer: 'Test Issuer'},
       }),
       tasks: [
-        new Task({id: '1', name: 'Task 1'}),
-        new Task({id: '2', name: 'Task 2'}),
+        {id: '1', name: 'Task 1', usageType: 'scan'},
+        {id: '2', name: 'Task 2', usageType: 'scan'},
       ],
       configs: [
         new ScanConfig({id: '1', name: 'Config 1'}),
@@ -119,8 +118,8 @@ describe('ScannerDetails tests', () => {
       name: 'Test Scanner',
       scannerType: CVE_SCANNER_TYPE,
       tasks: [
-        new Task({id: '1', name: 'Task 1'}),
-        new Task({id: '2', name: 'Task 2'}),
+        {id: '1', name: 'Task 1', usageType: 'scan'},
+        {id: '2', name: 'Task 2', usageType: 'scan'},
       ],
       configs: [
         new ScanConfig({id: '1', name: 'Config 1'}),

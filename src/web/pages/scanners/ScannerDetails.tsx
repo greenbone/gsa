@@ -105,7 +105,10 @@ const ScannerDetails = ({
                 {tasks.map(task => {
                   return (
                     <span key={task.id}>
-                      <DetailsLink id={task.id as string} type="task">
+                      <DetailsLink
+                        id={task.id as string}
+                        type={task.usageType === 'audit' ? 'audit' : 'task'}
+                      >
                         {task.name}
                       </DetailsLink>
                     </span>
