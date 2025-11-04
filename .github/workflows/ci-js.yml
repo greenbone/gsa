@@ -4,15 +4,13 @@ on:
   push:
     branches:
       - main
-      - oldstable
   pull_request:
     branches:
       - main
-      - oldstable
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true 
+  cancel-in-progress: true
 
 jobs:
   testing:
@@ -25,6 +23,7 @@ jobs:
         node-version:
           - 20
           - 22
+          - 24
     steps:
       - uses: actions/checkout@v5
       - name: Set up node ${{ matrix.node-version }}
@@ -73,6 +72,7 @@ jobs:
         node-version:
           - 20
           - 22
+          - 24
     steps:
       - uses: actions/checkout@v5
       - name: Set up node ${{ matrix.node-version }}
@@ -99,6 +99,7 @@ jobs:
         node-version:
           - 20
           - 22
+          - 24
     steps:
       - uses: actions/checkout@v5
       - name: Set up node ${{ matrix.node-version }}
