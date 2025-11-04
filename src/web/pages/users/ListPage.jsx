@@ -60,6 +60,7 @@ const UsersPage = ({
   filter,
   loadAll,
   selectionType,
+  onFilterChanged,
   onChanged,
   onDownloaded,
   onError,
@@ -203,6 +204,7 @@ const UsersPage = ({
             entitiesSelected={entitiesSelected}
             filter={filter}
             filterEditDialog={UserFilterDialog}
+            onFilterChanged={onFilterChanged}
             filtersFilter={USERS_FILTER_FILTER}
             sectionIcon={<UserIcon size="large" />}
             selectionType={selectionType}
