@@ -25,6 +25,7 @@ describe('ReportTableRow tests', () => {
         scan_run_status: TASK_STATUS.running,
         severity: {filtered: 5},
         result_count: {
+          critical: {filtered: 5},
           high: {filtered: 10},
           medium: {filtered: 20},
           low: {filtered: 30},
@@ -51,6 +52,7 @@ describe('ReportTableRow tests', () => {
       'href',
       '/task/task-1',
     );
+    expect(screen.getByText('5')).toBeInTheDocument(); // Critical results
     expect(screen.getByText('10')).toBeInTheDocument(); // High results
     expect(screen.getByText('20')).toBeInTheDocument(); // Medium results
     expect(screen.getByText('30')).toBeInTheDocument(); // Low results

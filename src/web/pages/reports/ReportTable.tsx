@@ -17,6 +17,7 @@ import {
   type FooterComponentProps,
   type HeaderComponentProps,
 } from 'web/entities/EntitiesTable';
+import useGmp from 'web/hooks/useGmp';
 import ReportTableRow, {
   type ReportTableRowProps,
 } from 'web/pages/reports/ReportTableRow';
@@ -33,6 +34,8 @@ const ReportTableHeader = ({
   currentSortDir,
   onSortChange,
 }: ReportTableHeaderProps) => {
+  const gmp = useGmp();
+  const useCVSSv3 = gmp.settings.severityRating === 'CVSSv3';
   return (
     <TableHeader>
       <TableRow>
@@ -72,6 +75,19 @@ const ReportTableHeader = ({
           width="8%"
           onSortChange={onSortChange}
         />
+        {useCVSSv3 && (
+          <TableHead
+            currentSortBy={currentSortBy}
+            currentSortDir={currentSortDir}
+            sort={sort}
+            sortBy="critical"
+            title={_('Critical')}
+            width="3%"
+            onSortChange={onSortChange}
+          >
+            <SeverityClassLabel.Critical />
+          </TableHead>
+        )}
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
