@@ -83,6 +83,8 @@ import ModifyTaskWizard, {
   type ModifyTaskWizardData,
 } from 'web/wizard/ModifyTaskWizard';
 import TaskWizard from 'web/wizard/TaskWizard';
+import Features from 'gmp/capabilities/features';
+import useFeatures from 'web/hooks/useFeatures';
 
 interface TaskComponentRenderProps {
   create: () => void;
@@ -170,6 +172,7 @@ const TaskComponent = ({
   const gmp = useGmp();
   const [_] = useTranslation();
   const dispatch = useDispatch();
+  const features = useFeatures();
 
   const [advancedTaskWizardVisible, setAdvancedTaskWizardVisible] =
     useState(false);
@@ -212,7 +215,8 @@ const TaskComponent = ({
   const [targetId, setTargetId] = useState<string | undefined>();
   const [agentGroupId, setAgentGroupId] = useState<string | undefined>();
   const [agentGroups, setAgentGroups] = useState<AgentGroup[] | undefined>();
-  const [isAgentGroupsLoading, setAgentGroupsLoading] = useState<boolean>();
+  const [isAgentGroupsLoading, setIsAgentGroupsLoading] =
+    useState<boolean>(false);
   const [targetHosts, setTargetHosts] = useState<string | undefined>();
   const [taskId, setTaskId] = useState<string | undefined>();
   const [taskName, setTaskName] = useState<string | undefined>();
@@ -715,10 +719,10 @@ const TaskComponent = ({
     fetchSchedules();
     fetchTargets();
     fetchTags();
-    setAgentGroupsLoading(true);
+    setIsAgentGroupsLoading(true);
     const response = await gmp.agentgroups.getAll();
     setAgentGroups(response.data);
-    setAgentGroupsLoading(false);
+    setIsAgentGroupsLoading(false);
 
     if (isDefined(task)) {
       setName(task.name as string);
@@ -1061,7 +1065,7 @@ const TaskComponent = ({
         />
       )}
 
-      {agentTaskDialogVisible && (
+      {features.featureEnabled('ENABLE_AGENTS') && agentTaskDialogVisible && (
         <AgentGroupsComponent>
           {({create: createAgentGroup}) => (
             // @ts-expect-error
