@@ -20,7 +20,7 @@ import withEntitiesContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import TaskDashboard, {TASK_DASHBOARD_ID} from 'web/pages/tasks/dashboard';
 import TaskToolBarIcons from 'web/pages/tasks/icons/TaskToolBarIcons';
-import TaskComponent from 'web/pages/tasks/TaskComponentComponent';
+import TaskComponent from 'web/pages/tasks/TaskComponent';
 import TaskFilterDialog from 'web/pages/tasks/TaskFilterDialog';
 import TaskTable from 'web/pages/tasks/TaskTable';
 import {

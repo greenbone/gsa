@@ -66,7 +66,7 @@ import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconWithSync';
 import TaskImportReportIcon from 'web/pages/tasks/icons/TaskImportReportIcon';
 import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
 import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
-import TaskComponent from 'web/pages/tasks/TaskComponentComponent';
+import TaskComponent from 'web/pages/tasks/TaskComponent';
 import TaskDetails from 'web/pages/tasks/TaskDetails';
 import TaskStatus from 'web/pages/tasks/TaskStatus';
 import {
