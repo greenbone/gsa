@@ -107,7 +107,29 @@ const ScannerDialog = ({
     initialCaCertificate,
   );
   const [error, setError] = useState<string | undefined>();
-  const [scannerType, setScannerType] = useState<ScannerType | undefined>(type);
+  const [scannerType, setScannerType] = useState<ScannerType | undefined>(
+    () => {
+      // don't allow selecting agent types initially if the feature is disabled or the user has no access
+      if (
+        (!features.featureEnabled('ENABLE_AGENTS') ||
+          !capabilities.mayAccess('agent')) &&
+        (type === AGENT_CONTROLLER_SCANNER_TYPE ||
+          type === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)
+      ) {
+        return undefined;
+      }
+
+      // don't allow selecting sensor types initially if the setting is disabled
+      if (
+        !gmp.settings.enableGreenboneSensor &&
+        (type === GREENBONE_SENSOR_SCANNER_TYPE ||
+          type === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)
+      ) {
+        return undefined;
+      }
+      return type;
+    },
+  );
   const [userChangePort, setUserChangedPort] = useState<boolean>(false);
   const [scannerPort, setScannerPort] = useState<number | undefined>(
     () => port ?? updatePort(type),
@@ -116,27 +138,22 @@ const ScannerDialog = ({
   name = name || _('Unnamed');
   title = title || _('New Scanner');
 
-  let SCANNER_TYPES: ScannerType[] = [OPENVAS_SCANNER_TYPE];
+  const scannerTypes: ScannerType[] = [
+    OPENVAS_SCANNER_TYPE,
+    OPENVASD_SCANNER_TYPE,
+  ];
 
   if (
     features.featureEnabled('ENABLE_AGENTS') &&
     capabilities.mayAccess('agent')
   ) {
-    type = type ?? AGENT_CONTROLLER_SCANNER_TYPE;
-    SCANNER_TYPES.push(AGENT_CONTROLLER_SCANNER_TYPE);
+    scannerTypes.push(AGENT_CONTROLLER_SCANNER_TYPE);
     if (gmp.settings.enableGreenboneSensor) {
-      SCANNER_TYPES.push(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE);
-    } else if (type === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE) {
-      type = undefined;
+      scannerTypes.push(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE);
     }
-  } else if (type === AGENT_CONTROLLER_SCANNER_TYPE) {
-    type = undefined;
   }
   if (gmp.settings.enableGreenboneSensor) {
-    type = type ?? GREENBONE_SENSOR_SCANNER_TYPE;
-    SCANNER_TYPES.push(GREENBONE_SENSOR_SCANNER_TYPE);
-  } else if (type === GREENBONE_SENSOR_SCANNER_TYPE) {
-    type = undefined;
+    scannerTypes.push(GREENBONE_SENSOR_SCANNER_TYPE);
   }
 
   const handleCaCertificateChange = async (file?: File | null) => {
@@ -163,7 +180,7 @@ const ScannerDialog = ({
     setScannerPort(value);
   };
 
-  const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
+  const scannerTypesOptions = map(scannerTypes, scannerType => ({
     label: scannerTypeName(scannerType),
     value: scannerType,
   }));
@@ -173,9 +190,9 @@ const ScannerDialog = ({
     '',
   );
 
-  const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
+  const isGreenboneSensorType = scannerType === GREENBONE_SENSOR_SCANNER_TYPE;
   const isAgentControllerSensorScannerType =
-    type === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
+    scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
   const showCredentialField =
     !isGreenboneSensorType && !isAgentControllerSensorScannerType;
   const showCaCertificateField =
