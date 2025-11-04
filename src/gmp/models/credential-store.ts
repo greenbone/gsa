@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type CredentialType} from 'gmp/models/credential';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseBoolean, parseToString, type YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
@@ -26,7 +27,7 @@ interface SelectorElement {
   pattern?: string;
   default_value?: string;
   credential_types?: {
-    credential_type?: string | string[];
+    credential_type?: CredentialType | CredentialType[];
   };
 }
 
@@ -36,7 +37,6 @@ interface SelectorsElement {
 
 export interface CredentialStoreElement extends ModelElement {
   version?: string;
-  active?: YesNo;
   host?: string;
   path?: string;
   port?: string;
@@ -58,12 +58,11 @@ interface Selector {
   name: string;
   pattern?: string;
   defaultValue?: string;
-  credentialTypes: string[];
+  credentialTypes: CredentialType[];
 }
 
 interface CredentialStoreProperties extends ModelProperties {
   version?: string;
-  active?: YesNo;
   host?: string;
   path?: string;
   port?: string;
@@ -75,7 +74,6 @@ class CredentialStore extends Model {
   static readonly entityType = 'credential';
 
   readonly version?: string;
-  readonly active?: YesNo;
   readonly host?: string;
   readonly path?: string;
   readonly port?: string;
@@ -84,7 +82,6 @@ class CredentialStore extends Model {
 
   constructor({
     version,
-    active,
     host,
     path,
     port,
@@ -95,7 +92,6 @@ class CredentialStore extends Model {
     super(properties);
 
     this.version = version;
-    this.active = active;
     this.host = host;
     this.path = path;
     this.port = port;
@@ -117,7 +113,6 @@ class CredentialStore extends Model {
 
     // Parse basic fields
     copy.version = parseToString(element.version);
-    copy.active = element.active;
     copy.host = parseToString(element.host);
     copy.path = parseToString(element.path);
     copy.port = parseToString(element.port);
