@@ -37,8 +37,8 @@ import withTranslation from 'web/utils/withTranslation';
 
 const log = Logger.getLogger('web.components.dashboard');
 
-const DEFAULT_MAX_ITEMS_PER_ROW = 4;
-const DEFAULT_MAX_ROWS = 4;
+export const DEFAULT_MAX_ITEMS_PER_ROW = 4;
+export const DEFAULT_MAX_ROWS = 4;
 
 const ownPropNames = [
   'defaultDisplays',

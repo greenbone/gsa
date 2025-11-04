@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {v4 as uuid} from 'uuid';
 import {isDefined} from 'gmp/utils/identity';
+import {DEFAULT_MAX_ITEMS_PER_ROW} from 'web/components/dashboard/Dashboard';
 import {
   addDisplayToSettings,
   canAddDisplay,
@@ -120,7 +121,11 @@ const StartPage = () => {
     if (!dashboardSelector) {
       return {};
     }
-    return dashboardSelector.getById(dashboardId);
+
+    return {
+      maxItemsPerRow: DEFAULT_MAX_ITEMS_PER_ROW,
+      ...dashboardSelector.getById(dashboardId),
+    };
   };
 
   const [showConfirmRemoveDialog, setShowConfirmRemoveDialog] = useState(false);

@@ -202,6 +202,7 @@ const ReportListPage = ({
           <ReportsTable
             {...props}
             entities={entities}
+            filter={filter}
             selectedDeltaReport={selectedDeltaReport}
             onReportDeleteClick={handleReportDeleteClick}
             onReportDeltaSelect={handleReportDeltaSelect}

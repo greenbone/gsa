@@ -30,9 +30,11 @@ import {
   HIGH_VALUE,
   MEDIUM_VALUE,
   LOW_VALUE,
+  CRITICAL_VALUE,
 } from 'web/utils/severity';
 
 const SEVERITIES_LIST = [
+  CRITICAL_VALUE,
   HIGH_VALUE,
   MEDIUM_VALUE,
   LOW_VALUE,
