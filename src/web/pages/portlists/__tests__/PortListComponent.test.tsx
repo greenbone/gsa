@@ -12,7 +12,7 @@ import {
   wait,
   fireEvent,
 } from 'web/testing';
-import PortList from 'gmp/models/portlist';
+import PortList from 'gmp/models/port-list';
 import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import PortListComponent from 'web/pages/portlists/PortListComponent';

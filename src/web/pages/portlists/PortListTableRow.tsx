@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type PortList from 'gmp/models/portlist';
+import type PortList from 'gmp/models/port-list';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntityNameTableData from 'web/entities/EntityNameTableData';

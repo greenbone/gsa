@@ -12,7 +12,7 @@ import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import date, {type Date} from 'gmp/models/date';
-import {type PortListElement} from 'gmp/models/portlist';
+import {type PortListElement} from 'gmp/models/port-list';
 import Setting, {type SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
 import User, {

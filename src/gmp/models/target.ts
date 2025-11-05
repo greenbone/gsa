@@ -4,7 +4,7 @@
  */
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import PortList, {type PortListElement} from 'gmp/models/portlist';
+import PortList, {type PortListElement} from 'gmp/models/port-list';
 import {parseInt, parseYesNo, parseCsv, type YesNo, NO_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';

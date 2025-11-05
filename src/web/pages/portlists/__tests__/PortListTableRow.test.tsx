@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWithTableBody, screen, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
-import PortList from 'gmp/models/portlist';
+import PortList from 'gmp/models/port-list';
 import PortListTableRow from 'web/pages/portlists/PortListTableRow';
 import {setUsername} from 'web/store/usersettings/actions';
 

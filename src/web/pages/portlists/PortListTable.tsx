@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import type PortList from 'gmp/models/portlist';
+import type PortList from 'gmp/models/port-list';
 import createEntitiesFooter, {
   type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';

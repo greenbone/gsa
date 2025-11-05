@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
-import PortList from 'gmp/models/portlist';
+import PortList from 'gmp/models/port-list';
 import PortListTable from 'web/pages/portlists/PortListTable';
 
 describe('PortListTable tests', () => {

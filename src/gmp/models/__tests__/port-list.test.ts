@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Model from 'gmp/models/model';
-import PortList, {type ProtocolType} from 'gmp/models/portlist';
+import PortList, {type ProtocolType} from 'gmp/models/port-list';
 import {testModel} from 'gmp/models/testing';
 
 testModel(PortList, 'portlist');

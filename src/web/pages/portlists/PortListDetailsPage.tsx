@@ -6,7 +6,7 @@
 import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
 import type Permission from 'gmp/models/permission';
-import type PortList from 'gmp/models/portlist';
+import type PortList from 'gmp/models/port-list';
 import {PortListIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';

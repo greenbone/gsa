@@ -22,7 +22,7 @@ import {
   krb5CredentialFilter,
 } from 'gmp/models/credential';
 import type Filter from 'gmp/models/filter';
-import PortList from 'gmp/models/portlist';
+import PortList from 'gmp/models/port-list';
 import {type AliveTests} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import SaveDialog from 'web/components/dialog/SaveDialog';
