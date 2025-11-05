@@ -19,7 +19,7 @@ import 'gmp/commands/license';
 import 'gmp/commands/resourcenames';
 import 'gmp/commands/notes';
 import 'gmp/commands/nvt';
-import 'gmp/commands/nvtfamilies';
+import 'gmp/commands/nvt-families';
 import 'gmp/commands/os';
 import 'gmp/commands/overrides';
 import 'gmp/commands/permissions';
