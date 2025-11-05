@@ -38,6 +38,8 @@ interface TicketElement extends ModelElement {
   result?: {
     _id?: string;
   };
+  host?: string;
+  location?: string;
   severity?: number;
   solution_type?: string;
   status?: TicketStatus;
