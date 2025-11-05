@@ -12,7 +12,7 @@ import {type XmlMeta} from 'gmp/http/transform/fastxml';
 import type AgentGroup from 'gmp/models/agent-group';
 import date, {type Date} from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
-import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scan-config';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 import {
   type default as Task,

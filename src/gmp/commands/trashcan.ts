@@ -22,7 +22,7 @@ import PortList from 'gmp/models/port-list';
 import ReportConfig from 'gmp/models/report-config';
 import ReportFormat from 'gmp/models/report-format';
 import Role from 'gmp/models/role';
-import ScanConfig from 'gmp/models/scanconfig';
+import ScanConfig from 'gmp/models/scan-config';
 import Scanner from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
 import Tag from 'gmp/models/tag';

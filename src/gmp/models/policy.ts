@@ -13,7 +13,7 @@ import {
   type ScanConfigNvts,
   type ScanConfigPreferenceElement,
   type ScanConfigScannerElement,
-} from 'gmp/models/scanconfig';
+} from 'gmp/models/scan-config';
 import {parseBoolean, type YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';

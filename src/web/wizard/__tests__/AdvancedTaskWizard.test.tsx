@@ -11,7 +11,7 @@ import Credential, {
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import Date from 'gmp/models/date';
-import ScanConfig from 'gmp/models/scanconfig';
+import ScanConfig from 'gmp/models/scan-config';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);

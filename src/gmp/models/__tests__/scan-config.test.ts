@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import ScanConfig, {
   filterEmptyScanConfig,
   SCANCONFIG_TREND_DYNAMIC,
-} from 'gmp/models/scanconfig';
+} from 'gmp/models/scan-config';
 import {testModel} from 'gmp/models/testing';
 
 describe('ScanConfig model tests', () => {

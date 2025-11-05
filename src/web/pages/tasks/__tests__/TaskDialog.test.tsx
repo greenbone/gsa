@@ -12,7 +12,7 @@ import {
   wait,
   screen,
 } from 'web/testing';
-import ScanConfig from 'gmp/models/scanconfig';
+import ScanConfig from 'gmp/models/scan-config';
 import Scanner, {
   CVE_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,

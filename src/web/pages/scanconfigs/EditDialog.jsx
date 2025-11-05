@@ -11,7 +11,7 @@ import {
   memo,
   useRef,
 } from 'react';
-import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
+import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import DialogInlineNotification from 'web/components/dialog/DialogInlineNotification';
