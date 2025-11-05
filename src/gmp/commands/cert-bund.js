@@ -6,7 +6,7 @@
 import registerCommand from 'gmp/command';
 import InfoEntitiesCommand from 'gmp/commands/info-entities';
 import InfoEntityCommand from 'gmp/commands/info-entity';
-import CertBundAdv from 'gmp/models/certbund';
+import CertBundAdv from 'gmp/models/cert-bund';
 import {isDefined} from 'gmp/utils/identity';
 
 const info_filter = info => isDefined(info.cert_bund_adv);
