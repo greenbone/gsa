@@ -41,4 +41,30 @@ describe('IconMenu', () => {
       expect(screen.getByText('Child')).toBeInTheDocument();
     });
   });
+
+  test('filters out null and falsy children', async () => {
+    const showHiddenChild = false;
+    render(
+      <IconMenu>
+        <div>Child 1</div>
+        {undefined}
+        {showHiddenChild && <div>Hidden Child</div>}
+        <div>Child 2</div>
+        {undefined}
+      </IconMenu>,
+    );
+
+    const button = screen.getByRole('button', {name: /menu/i});
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByText('Child 1')).toBeVisible();
+      expect(screen.getByText('Child 2')).toBeVisible();
+      expect(screen.queryByText('Hidden Child')).not.toBeInTheDocument();
+    });
+
+    // Verify only 2 menu items are rendered (not 5 including the falsy ones)
+    const menuItems = screen.getAllByRole('menuitem');
+    expect(menuItems).toHaveLength(2);
+  });
 });

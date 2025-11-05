@@ -13,9 +13,10 @@ interface IconMenuProps {
 }
 
 const IconMenu = ({children, icon}: IconMenuProps) => {
-  const menuEntries = React.Children.map(children, child => (
-    <Menu.Item>{child}</Menu.Item>
-  ));
+  const menuEntries = React.Children.map(children, child => {
+    if (!child) return undefined;
+    return <Menu.Item>{child}</Menu.Item>;
+  })?.filter(Boolean);
 
   return (
     <Menu>
