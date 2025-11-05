@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import date from 'gmp/models/date';
 import EntityModel, {parseEntityModelProperties} from 'gmp/models/entity-model';
-import UserTag from 'gmp/models/usertag';
+import UserTag from 'gmp/models/user-tag';
 import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 
 describe('EntityModel tests', () => {

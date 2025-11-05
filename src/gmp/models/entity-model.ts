@@ -10,7 +10,7 @@ import BaseModel, {
   parseBaseModelProperties,
 } from 'gmp/models/base-model';
 import {type Date as GmpDate} from 'gmp/models/date';
-import UserTag, {type UserTagElement} from 'gmp/models/usertag';
+import UserTag, {type UserTagElement} from 'gmp/models/user-tag';
 import {
   NO_VALUE,
   parseBoolean,

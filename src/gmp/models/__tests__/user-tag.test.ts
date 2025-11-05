@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import UserTag from 'gmp/models/usertag';
+import UserTag from 'gmp/models/user-tag';
 
 describe('UserTag tests', () => {
   test('should create an instance of UserTag', () => {
