@@ -24,7 +24,7 @@ import ReportOperatingSystem from 'gmp/models/report/os';
 import ReportPort from 'gmp/models/report/port';
 import ReportTLSCertificate, {
   type ReportTLSCertificateElement,
-} from 'gmp/models/report/tlscertificate';
+} from 'gmp/models/report/tls-certificate';
 import Result from 'gmp/models/result';
 import {parseSeverity, type QoDParams} from 'gmp/parser';
 import {filter as filterFunc, forEach, map} from 'gmp/utils/array';
