@@ -6,7 +6,7 @@
 import {
   type AgentGroupCreateParams,
   type AgentGroupSaveParams,
-} from 'gmp/commands/agentgroup';
+} from 'gmp/commands/agent-group';
 import {type EntityActionResponse} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type AgentGroup from 'gmp/models/agentgroup';
