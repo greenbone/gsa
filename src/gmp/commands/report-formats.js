@@ -7,7 +7,7 @@ import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
-import ReportFormat from 'gmp/models/reportformat';
+import ReportFormat from 'gmp/models/report-format';
 
 const log = logger.getLogger('gmp.commands.reportformats');
 
