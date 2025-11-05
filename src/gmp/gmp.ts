@@ -6,7 +6,7 @@
 import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
 import 'gmp/commands/audit-reports';
-import 'gmp/commands/certbund';
+import 'gmp/commands/cert-bund';
 import 'gmp/commands/credentials';
 import 'gmp/commands/cpes';
 import 'gmp/commands/cves';
