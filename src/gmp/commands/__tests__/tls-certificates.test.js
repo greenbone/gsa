@@ -13,7 +13,7 @@ import {
 import {
   TlsCertificateCommand,
   TlsCertificatesCommand,
-} from 'gmp/commands/tlscertificates';
+} from 'gmp/commands/tls-certificates';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('TlsCertificateCommand tests', () => {
