@@ -7,7 +7,7 @@ import registerCommand from 'gmp/command';
 import {convertBoolean} from 'gmp/commands/convert';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import AuditReport from 'gmp/models/auditreport';
+import AuditReport from 'gmp/models/audit-report';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import {isDefined} from 'gmp/utils/identity';

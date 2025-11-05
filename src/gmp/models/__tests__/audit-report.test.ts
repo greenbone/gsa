@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import AuditReport from 'gmp/models/auditreport';
+import AuditReport from 'gmp/models/audit-report';
 import {testModel} from 'gmp/models/testing';
 
 describe('AuditReport tests', () => {
