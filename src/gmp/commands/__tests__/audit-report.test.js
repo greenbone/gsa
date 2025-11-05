@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {AuditReportCommand} from 'gmp/commands/auditreports';
+import {AuditReportCommand} from 'gmp/commands/audit-reports';
 import {createHttp, createEntityResponse} from 'gmp/commands/testing';
 
 describe('AuditReportCommand tests', () => {
