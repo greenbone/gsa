@@ -16,7 +16,7 @@ import 'gmp/commands/filters';
 import 'gmp/commands/groups';
 import 'gmp/commands/hosts';
 import 'gmp/commands/license';
-import 'gmp/commands/resourcenames';
+import 'gmp/commands/resource-names';
 import 'gmp/commands/notes';
 import 'gmp/commands/nvt';
 import 'gmp/commands/nvt-families';
