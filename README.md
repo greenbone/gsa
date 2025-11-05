@@ -224,8 +224,8 @@ config = {
 };
 ```
 
-It is evaluated in the `GmpSettings` object implemented in the
-[settings.ts](./src/gmp/settings.ts) file. The `GmpSettings` object is
+It is evaluated in the `Settings` object implemented in the
+[settings.ts](./src/gmp/settings.ts) file. The `Settings` object is
 instantiated once for the [GSA application](./src/web/App.tsx#L29)
 
 ### Config Variables

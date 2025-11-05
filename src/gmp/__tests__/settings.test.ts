@@ -11,7 +11,7 @@ import {
   afterAll,
   testing,
 } from '@gsa/testing';
-import GmpSettings, {
+import Settings, {
   DEFAULT_MANUAL_URL,
   DEFAULT_RELOAD_INTERVAL,
   DEFAULT_PROTOCOLDOC_URL,
@@ -40,7 +40,7 @@ const createStorage = (state?: Record<string, string>) => {
 
 let origLocation: Location;
 
-describe('GmpSettings tests', () => {
+describe('Settings tests', () => {
   beforeAll(() => {
     origLocation = global.location;
     // @ts-expect-error
@@ -53,7 +53,7 @@ describe('GmpSettings tests', () => {
 
   test('should init with defaults', () => {
     const storage = createStorage();
-    const settings = new GmpSettings(storage);
+    const settings = new Settings(storage);
 
     expect(settings.apiProtocol).toEqual('http:');
     expect(settings.apiServer).toEqual('localhost:9392');
@@ -92,7 +92,7 @@ describe('GmpSettings tests', () => {
 
   test('should init with passed options', () => {
     const storage = createStorage();
-    const settings = new GmpSettings(storage, {
+    const settings = new Settings(storage, {
       apiProtocol: 'http',
       apiServer: 'localhost',
       disableLoginForm: true,
@@ -162,7 +162,7 @@ describe('GmpSettings tests', () => {
       token: 'atoken',
       username: 'foo',
     });
-    const settings = new GmpSettings(storage, {
+    const settings = new Settings(storage, {
       // pass server and protocol. location defaults may not reliable on
       // different test environments
       apiProtocol: 'http',
@@ -219,7 +219,7 @@ describe('GmpSettings tests', () => {
       vendorLabel: 'foo.bar',
       vendorTitle: 'test title',
     });
-    const settings = new GmpSettings(storage, {
+    const settings = new Settings(storage, {
       apiProtocol: 'http',
       apiServer: 'localhost',
       enableStoreDebugLog: true,
@@ -276,7 +276,7 @@ describe('GmpSettings tests', () => {
       timezone: 'cet',
       username: 'foo',
     });
-    const settings = new GmpSettings(storage, {});
+    const settings = new Settings(storage, {});
 
     expect(settings.enableStoreDebugLog).toEqual(true);
     expect(settings.locale).toEqual('en');
@@ -309,7 +309,7 @@ describe('GmpSettings tests', () => {
 
   test('should freeze properties', () => {
     const storage = createStorage();
-    const settings = new GmpSettings(storage, {
+    const settings = new Settings(storage, {
       apiProtocol: 'http',
       apiServer: 'localhost',
       disableLoginForm: true,
@@ -403,18 +403,18 @@ describe('GmpSettings tests', () => {
 
   test('should only allow setting severity rating to CVSS 2 or 3', () => {
     const storage = createStorage();
-    let settings = new GmpSettings(storage, {
+    let settings = new Settings(storage, {
       // @ts-expect-error
       severityRating: 'foo',
     });
     expect(settings.severityRating).toEqual(DEFAULT_SEVERITY_RATING);
 
-    settings = new GmpSettings(storage, {
+    settings = new Settings(storage, {
       severityRating: SEVERITY_RATING_CVSS_2,
     });
     expect(settings.severityRating).toEqual(SEVERITY_RATING_CVSS_2);
 
-    settings = new GmpSettings(storage, {
+    settings = new Settings(storage, {
       severityRating: SEVERITY_RATING_CVSS_3,
     });
     expect(settings.severityRating).toEqual(SEVERITY_RATING_CVSS_3);

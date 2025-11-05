@@ -11,7 +11,7 @@ import {
   type SeverityRating,
 } from 'gmp/utils/severity';
 
-interface GmpSettingsOptions {
+interface SettingsOptions {
   apiProtocol?: string;
   apiServer?: string;
   disableLoginForm?: boolean;
@@ -41,7 +41,7 @@ interface GmpSettingsOptions {
   vendorVersion?: string;
 }
 
-interface GmpSettingsStorage {
+interface SettingsStorage {
   setItem(name: string, value: string): void;
   getItem(name: string): string | null;
   removeItem(name: string): void;
@@ -62,7 +62,7 @@ export const DEFAULT_TIMEOUT = 300000; // 5 minutes
 export const DEFAULT_TITLE = 'OPENVAS';
 
 const set = (
-  storage: GmpSettingsStorage,
+  storage: SettingsStorage,
   name: string,
   value: string | undefined,
 ) => {
@@ -94,8 +94,8 @@ const warnDeprecatedSetting = (oldName: string, newName: string) => {
   );
 };
 
-class GmpSettings {
-  storage: GmpSettingsStorage;
+class Settings {
+  storage: SettingsStorage;
   reloadInterval: number;
   reloadIntervalActive: number;
   reloadIntervalInactive: number;
@@ -120,8 +120,8 @@ class GmpSettings {
   readonly vendorVersion?: string;
 
   constructor(
-    storage: GmpSettingsStorage = global.localStorage,
-    options: GmpSettingsOptions = {},
+    storage: SettingsStorage = global.localStorage,
+    options: SettingsOptions = {},
   ) {
     const {
       enableEPSS = true,
@@ -272,4 +272,4 @@ class GmpSettings {
   }
 }
 
-export default GmpSettings;
+export default Settings;
