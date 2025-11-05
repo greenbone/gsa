@@ -8,7 +8,7 @@ import {rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import TlsCertificate from 'gmp/models/tlscertificate';
+import TlsCertificate from 'gmp/models/tls-certificate';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import DetailsPage from 'web/pages/tlscertificates/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tlscertificates';
