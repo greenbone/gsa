@@ -18,7 +18,7 @@ import HttpCommand, {
 } from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import {type default as Response, type Meta} from 'gmp/http/response';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import {type default as Model, type Element} from 'gmp/models/model';

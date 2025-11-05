@@ -7,7 +7,7 @@ import React, {useState} from 'react';
 import {type EntityCommandParams} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
-import {type XmlMeta} from 'gmp/http/transform/fastxml';
+import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type ActionResult from 'gmp/models/action-result';
 import {
   type default as PortList,

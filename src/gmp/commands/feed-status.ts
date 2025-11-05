@@ -6,7 +6,7 @@
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import {type ResponseRejection} from 'gmp/http/rejection';
-import {type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import date from 'gmp/models/date';

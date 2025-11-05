@@ -8,7 +8,7 @@ import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import {type ResponseRejection} from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import Credential from 'gmp/models/credential';
 import {type Date} from 'gmp/models/date';
 import Model, {type ModelElement} from 'gmp/models/model';

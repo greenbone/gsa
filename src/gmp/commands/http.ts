@@ -11,7 +11,7 @@ import type {Meta} from 'gmp/http/response';
 import transform, {
   type XmlMeta,
   type XmlResponseData,
-} from 'gmp/http/transform/fastxml';
+} from 'gmp/http/transform/fast-xml';
 import {type Transform} from 'gmp/http/transform/transform';
 import type {
   Data,

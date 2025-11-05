@@ -13,7 +13,7 @@ import HttpCommand, {
 } from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import ActionResult from 'gmp/models/action-result';
 import type Filter from 'gmp/models/filter';

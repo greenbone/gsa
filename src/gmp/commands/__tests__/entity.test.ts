@@ -14,7 +14,7 @@ import {
 } from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
 import Response from 'gmp/http/response';
-import {type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import {
   type EntityModelElement,
   type EntityModelProperties,
