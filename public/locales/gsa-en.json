@@ -1949,6 +1949,7 @@
   "Task List": "Task List",
   "Task made visible for:\n{{user}}\n{{role}}\n{{group}}": "Task made visible for:\n{{user}}\n{{role}}\n{{group}}",
   "Task Name": "Task Name",
+  "Task run status changed": "Task run status changed",
   "Task run status changed to": "Task run status changed to",
   "Task run status changed to {{status}}": "Task run status changed to {{status}}",
   "Task Wizard": "Task Wizard",
