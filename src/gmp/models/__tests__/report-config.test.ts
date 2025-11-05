@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import ReportConfig from 'gmp/models/reportconfig';
+import ReportConfig from 'gmp/models/report-config';
 import {testModel} from 'gmp/models/testing';
 
 describe('Report Config model tests', () => {

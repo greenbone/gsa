@@ -8,7 +8,7 @@ import {convertBoolean} from 'gmp/commands/convert';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
-import ReportConfig from 'gmp/models/reportconfig';
+import ReportConfig from 'gmp/models/report-config';
 import {isArray} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.commands.reportconfigs');

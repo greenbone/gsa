@@ -8,7 +8,7 @@ import {rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import ReportConfig from 'gmp/models/reportconfig';
+import ReportConfig from 'gmp/models/report-config';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
 import DetailsPage from 'web/pages/reportconfigs/DetailsPage';

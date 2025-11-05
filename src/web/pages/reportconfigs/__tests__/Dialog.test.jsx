@@ -13,7 +13,7 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
-import ReportConfig from 'gmp/models/reportconfig';
+import ReportConfig from 'gmp/models/report-config';
 import ReportFormat from 'gmp/models/reportformat';
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
 import {mockReportFormats} from 'web/pages/reportconfigs/__mocks__/MockReportFormats';

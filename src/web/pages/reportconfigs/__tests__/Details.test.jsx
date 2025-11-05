@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import ReportConfig from 'gmp/models/reportconfig';
+import ReportConfig from 'gmp/models/report-config';
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
 import Details from 'web/pages/reportconfigs/Details';
 
