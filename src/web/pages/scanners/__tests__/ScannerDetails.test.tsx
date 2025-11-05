@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Credential from 'gmp/models/credential';
-import ScanConfig from 'gmp/models/scanconfig';
+import ScanConfig from 'gmp/models/scan-config';
 import Scanner, {
   CVE_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,

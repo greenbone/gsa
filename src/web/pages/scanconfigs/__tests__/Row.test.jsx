@@ -9,7 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
-} from 'gmp/models/scanconfig';
+} from 'gmp/models/scan-config';
 import Row from 'web/pages/scanconfigs/Row';
 import {setUsername} from 'web/store/usersettings/actions';
 

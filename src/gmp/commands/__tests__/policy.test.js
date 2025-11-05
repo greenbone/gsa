@@ -16,7 +16,7 @@ import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
   BASE_SCAN_CONFIG_ID,
-} from 'gmp/models/scanconfig';
+} from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 describe('PolicyCommand tests', () => {

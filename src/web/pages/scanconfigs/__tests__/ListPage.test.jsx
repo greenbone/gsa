@@ -17,7 +17,7 @@ import Filter from 'gmp/models/filter';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
-} from 'gmp/models/scanconfig';
+} from 'gmp/models/scan-config';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import ScanConfigsPage, {ToolBarIcons} from 'web/pages/scanconfigs/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';

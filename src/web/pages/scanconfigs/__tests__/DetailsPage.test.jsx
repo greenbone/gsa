@@ -9,7 +9,7 @@ import {vi} from 'vitest';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import ScanConfig from 'gmp/models/scanconfig';
+import ScanConfig from 'gmp/models/scan-config';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import DetailsPage, {ToolBarIcons} from 'web/pages/scanconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';

@@ -13,7 +13,7 @@ import {
 } from 'gmp/commands/scan-configs';
 import logger from 'gmp/log';
 import Policy from 'gmp/models/policy';
-import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';

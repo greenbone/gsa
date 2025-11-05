@@ -8,7 +8,7 @@ import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
   EMPTY_SCAN_CONFIG_ID,
   BASE_SCAN_CONFIG_ID,
-} from 'gmp/models/scanconfig';
+} from 'gmp/models/scan-config';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';

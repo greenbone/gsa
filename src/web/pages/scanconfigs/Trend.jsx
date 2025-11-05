@@ -7,7 +7,7 @@ import React from 'react';
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
-} from 'gmp/models/scanconfig';
+} from 'gmp/models/scan-config';
 import {TrendMoreIcon, TrendNoChangeIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';

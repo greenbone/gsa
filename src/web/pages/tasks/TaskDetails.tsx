@@ -6,7 +6,7 @@
 import {useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {duration} from 'gmp/models/date';
-import type ScanConfig from 'gmp/models/scanconfig';
+import type ScanConfig from 'gmp/models/scan-config';
 import {scannerTypeName} from 'gmp/models/scanner';
 import type Schedule from 'gmp/models/schedule';
 import type Task from 'gmp/models/task';

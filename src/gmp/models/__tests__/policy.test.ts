@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Policy from 'gmp/models/policy';
-import {SCANCONFIG_TREND_DYNAMIC} from 'gmp/models/scanconfig';
+import {SCANCONFIG_TREND_DYNAMIC} from 'gmp/models/scan-config';
 import {testModel} from 'gmp/models/testing';
 
 describe('Policy model tests', () => {

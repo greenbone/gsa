@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
-} from 'gmp/models/scanconfig';
+} from 'gmp/models/scan-config';
 import Table from 'web/pages/scanconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
 

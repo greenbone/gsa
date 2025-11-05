@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import ScanConfig from 'gmp/models/scanconfig';
+import ScanConfig from 'gmp/models/scan-config';
 import Schedule from 'gmp/models/schedule';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import Details from 'web/pages/tasks/TaskDetails';

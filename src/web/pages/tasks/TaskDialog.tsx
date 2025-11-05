@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import type ScanConfig from 'gmp/models/scanconfig';
+import type ScanConfig from 'gmp/models/scan-config';
 import Scanner, {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,

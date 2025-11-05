@@ -15,7 +15,7 @@ import {
 import {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
-} from 'gmp/models/scanconfig';
+} from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 describe('convertPreferences tests', () => {
