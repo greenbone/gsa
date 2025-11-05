@@ -9,7 +9,7 @@ import {TLS_CERTIFICATES_FILTER_FILTER} from 'gmp/models/filter';
 import {
   TIME_STATUS,
   getTranslatableTimeStatus,
-} from 'gmp/models/tlscertificate';
+} from 'gmp/models/tls-certificate';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';

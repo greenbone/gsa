@@ -8,7 +8,7 @@ import {rendererWith, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import TlsCertificate from 'gmp/models/tlscertificate';
+import TlsCertificate from 'gmp/models/tls-certificate';
 import Table from 'web/pages/tlscertificates/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
