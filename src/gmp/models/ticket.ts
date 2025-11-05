@@ -25,7 +25,6 @@ interface TicketElement extends ModelElement {
   fixed_time?: string;
   fix_verified_report?: ModelElement;
   fix_verified_time?: string;
-  location?: string;
   nvt?: {
     _oid?: string;
   };
