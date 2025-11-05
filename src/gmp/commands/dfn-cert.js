@@ -6,7 +6,7 @@
 import registerCommand from 'gmp/command';
 import InfoEntitiesCommand from 'gmp/commands/info-entities';
 import InfoEntityCommand from 'gmp/commands/info-entity';
-import DfnCertAdv from 'gmp/models/dfncert';
+import DfnCertAdv from 'gmp/models/dfn-cert';
 import {isDefined} from 'gmp/utils/identity';
 
 const info_filter = info => isDefined(info.dfn_cert_adv);
