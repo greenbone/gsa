@@ -7,7 +7,7 @@ import React, {useState} from 'react';
 import {TimePicker} from '@greenbone/ui-lib';
 import date, {duration as createDuration} from 'gmp/models/date';
 import Event, {RecurrenceFrequency, WeekDays} from 'gmp/models/event';
-import {DEFAULT_TIMEZONE} from 'gmp/timezones';
+import {DEFAULT_TIMEZONE} from 'gmp/time-zones';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Button from 'web/components/form/Button';

@@ -4,7 +4,7 @@
  */
 
 import {useMemo} from 'react';
-import timezones, {DEFAULT_TIMEZONE} from 'gmp/timezones';
+import timezones, {DEFAULT_TIMEZONE} from 'gmp/time-zones';
 import Select, {type SelectProps} from 'web/components/form/Select';
 
 interface TimeZoneSelectProps extends Omit<SelectProps, 'items' | 'value'> {
