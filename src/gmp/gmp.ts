@@ -51,7 +51,7 @@ import LoginCommand from 'gmp/commands/login';
 import OciImageTargetCommand from 'gmp/commands/oci-image-target';
 import OciImageTargetsCommand from 'gmp/commands/oci-image-targets';
 import PerformanceCommand from 'gmp/commands/performance';
-import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
+import {PortListCommand, PortListsCommand} from 'gmp/commands/port-lists';
 import ReportCommand from 'gmp/commands/report';
 import ReportsCommand from 'gmp/commands/reports';
 import RoleCommand from 'gmp/commands/role';

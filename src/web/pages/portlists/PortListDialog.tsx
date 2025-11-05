@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {FROM_FILE, type FromFile, NOT_FROM_FILE} from 'gmp/commands/portlists';
+import {FROM_FILE, type FromFile, NOT_FROM_FILE} from 'gmp/commands/port-lists';
 import type PortList from 'gmp/models/portlist';
 import {parseYesNo, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
