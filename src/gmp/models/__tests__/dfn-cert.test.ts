@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import DfnCertAdv from 'gmp/models/dfncert';
+import DfnCertAdv from 'gmp/models/dfn-cert';
 import {testModel} from 'gmp/models/testing';
 
 testModel(DfnCertAdv, 'dfncert');
