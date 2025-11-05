@@ -11,14 +11,17 @@ import type Http from 'gmp/http/http';
 import {type ResponseRejection} from 'gmp/http/rejection';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
-import {type ScannerType} from 'gmp/models/scanner';
+import {
+  type ContainerImageScannerType,
+  type ScannerType,
+} from 'gmp/models/scanner';
 import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   type TaskElement,
   type TaskAutoDelete,
 } from 'gmp/models/task';
-import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, parseYesNo, type YesNo} from 'gmp/parser';
 
 interface TaskCommandCreateParams {
   add_tag?: YesNo;
@@ -65,11 +68,32 @@ export interface TaskCommandCreateContainerParams {
   comment?: string;
 }
 
+interface TaskCommandCreateContainerImageParams {
+  acceptInvalidCerts?: boolean;
+  addTag?: boolean;
+  alertIds?: string[];
+  alterable?: boolean;
+  applyOverrides?: boolean;
+  autoDelete?: TaskAutoDelete;
+  autoDeleteData?: number;
+  comment?: string;
+  inAssets?: boolean;
+  minQod?: number;
+  name: string;
+  ociImageTargetId?: string;
+  registryAllowInsecure?: boolean;
+  scannerId?: string;
+  scannerType?: ContainerImageScannerType;
+  scheduleId?: string;
+  schedulePeriods?: boolean;
+  tagId?: string;
+}
+
 interface TaskCommandSaveParams {
   alert_ids?: string[];
   alterable?: YesNo;
   auto_delete?: TaskAutoDelete;
-  auto_delete_data?: Number;
+  auto_delete_data?: number;
   apply_overrides?: YesNo;
   comment?: string;
   config_id?: string;
@@ -97,6 +121,26 @@ interface TaskCommandSaveContainerParams {
   comment?: string;
   in_assets?: YesNo;
   id: string;
+}
+
+interface TaskCommandSaveContainerImageParams {
+  acceptInvalidCerts?: boolean;
+  alertIds?: string[];
+  alterable?: boolean;
+  applyOverrides?: boolean;
+  autoDelete?: TaskAutoDelete;
+  autoDeleteData?: number;
+  comment?: string;
+  id: string;
+  inAssets?: boolean;
+  minQod?: number;
+  name: string;
+  ociImageTargetId?: string;
+  registryAllowInsecure?: boolean;
+  scannerId?: string;
+  scannerType?: ContainerImageScannerType;
+  scheduleId?: string;
+  schedulePeriods?: boolean;
 }
 
 const log = logger.getLogger('gmp.commands.tasks');
@@ -212,9 +256,9 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
 
     try {
       return await this.entityAction(data);
-    } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as ResponseRejection);
-      throw rejection; // Ensure the function always returns or throws
+    } catch (error_) {
+      await feedStatusRejection(this.http, error_ as ResponseRejection);
+      throw error_;
     }
   }
 
@@ -255,10 +299,75 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
 
     try {
       return await this.entityAction(data);
-    } catch (rejection) {
-      await feedStatusRejection(this.http, rejection as ResponseRejection);
-      throw rejection; // Ensure the function always returns or throws
+    } catch (error_) {
+      await feedStatusRejection(this.http, error_ as ResponseRejection);
+      throw error_;
     }
+  }
+
+  async createContainerImageTask({
+    acceptInvalidCerts,
+    addTag,
+    alertIds = [],
+    alterable,
+    applyOverrides,
+    autoDelete,
+    autoDeleteData,
+    comment = '',
+    inAssets,
+    minQod,
+    name,
+    ociImageTargetId,
+    registryAllowInsecure,
+    scannerId,
+    scannerType,
+    scheduleId,
+    schedulePeriods,
+    tagId,
+  }: TaskCommandCreateContainerImageParams) {
+    log.debug('Creating container image task', {
+      acceptInvalidCerts,
+      addTag,
+      alertIds,
+      alterable,
+      applyOverrides,
+      autoDelete,
+      autoDeleteData,
+      comment,
+      inAssets,
+      minQod,
+      name,
+      ociImageTargetId,
+      registryAllowInsecure,
+      scannerId,
+      scannerType,
+      scheduleId,
+      schedulePeriods,
+      tagId,
+    });
+
+    return this.entityAction({
+      cmd: 'create_oci_image_task',
+      add_tag: parseYesNo(addTag),
+      'alert_ids:': alertIds,
+      'preferences:accept_invalid_certs': parseYesNo(acceptInvalidCerts),
+      'preferences:registry_allow_insecure': parseYesNo(registryAllowInsecure),
+      alterable: parseYesNo(alterable),
+      apply_overrides: parseYesNo(applyOverrides),
+      auto_delete_data: autoDeleteData,
+      auto_delete: autoDelete,
+      comment,
+      in_assets: parseYesNo(inAssets),
+      min_qod: minQod,
+      name,
+      oci_image_target_id: ociImageTargetId,
+      scanner_id: scannerId,
+      scanner_type: scannerType,
+      schedule_id: scheduleId,
+      schedule_periods: parseYesNo(schedulePeriods),
+      tag_id: tagId,
+      usage_type: 'scan',
+    });
   }
 
   async createContainer({
@@ -364,6 +473,68 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     } catch (rejection) {
       await feedStatusRejection(this.http, rejection as ResponseRejection);
     }
+  }
+
+  async saveContainerImageTask({
+    acceptInvalidCerts,
+    alertIds = [],
+    alterable,
+    applyOverrides,
+    autoDelete,
+    autoDeleteData,
+    comment = '',
+    id,
+    inAssets,
+    minQod,
+    name,
+    ociImageTargetId,
+    registryAllowInsecure,
+    scannerId,
+    scannerType,
+    scheduleId,
+    schedulePeriods,
+  }: TaskCommandSaveContainerImageParams) {
+    log.debug('Saving container image task', {
+      acceptInvalidCerts,
+      alertIds,
+      alterable,
+      applyOverrides,
+      autoDelete,
+      autoDeleteData,
+      comment,
+      id,
+      inAssets,
+      minQod,
+      name,
+      ociImageTargetId,
+      registryAllowInsecure,
+      scannerId,
+      scannerType,
+      scheduleId,
+      schedulePeriods,
+    });
+
+    return this.httpPostWithTransform({
+      cmd: 'save_oci_image_task',
+      'alert_ids:': alertIds,
+      'preferences:accept_invalid_certs': parseYesNo(acceptInvalidCerts),
+      'preferences:registry_allow_insecure': parseYesNo(registryAllowInsecure),
+      alterable: parseYesNo(alterable),
+      apply_overrides: parseYesNo(applyOverrides),
+      auto_delete_data: autoDeleteData,
+      auto_delete: autoDelete,
+      comment,
+      in_assets: parseYesNo(inAssets),
+      min_qod: minQod,
+      name,
+      oci_image_target_id: ociImageTargetId,
+      scanner_id: scannerId,
+      scanner_type: scannerType,
+      schedule_id: scheduleId,
+      schedule_periods: parseYesNo(schedulePeriods),
+      task_id: id,
+      usage_type: 'scan',
+    });
   }
 
   async saveContainer({

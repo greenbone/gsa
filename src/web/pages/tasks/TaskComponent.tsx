@@ -44,9 +44,11 @@ import TargetComponent from 'web/pages/targets/Component';
 import AgentTaskDialog, {
   type AgentTaskDialogData,
 } from 'web/pages/tasks/AgentTaskDialog';
+import ContainerImageTaskDialog from 'web/pages/tasks/ContainerImageTaskDialog';
 import ContainerTaskDialog, {
   type ContainerTaskDialogData,
 } from 'web/pages/tasks/ContainerTaskDialog';
+import {useContainerImageTaskDialog} from 'web/pages/tasks/hooks/useContainerImageTaskDialog';
 import TaskDialog, {type TaskDialogData} from 'web/pages/tasks/TaskDialog';
 import {
   loadEntities as loadAlerts,
@@ -91,6 +93,7 @@ import TaskWizard from 'web/wizard/TaskWizard';
 interface TaskComponentRenderProps {
   create: () => void;
   createContainer: () => void;
+  createContainerImage: () => void;
   clone: (task: Task) => void;
   delete: (task: Task) => void;
   download: (task: Task) => void;
@@ -103,6 +106,7 @@ interface TaskComponentRenderProps {
   modifyTaskWizard: () => void;
   taskWizard: () => void;
   onNewAgentTaskClick: () => void;
+  onNewContainerImageClick: () => void;
 }
 
 interface TaskComponentProps {
@@ -185,6 +189,31 @@ const TaskComponent = ({
   const [taskDialogVisible, setTaskDialogVisible] = useState(false);
   const [taskWizardVisible, setTaskWizardVisible] = useState(false);
   const [agentTaskDialogVisible, setAgentTaskDialogVisible] = useState(false);
+
+  const {
+    containerImageTaskDialogVisible,
+    task: containerImageTask,
+    name: containerImageName,
+    comment: containerImageComment,
+    addTag: containerImageAddTag,
+    alterable: containerImageAlterable,
+    applyOverrides: containerImageApplyOverrides,
+    inAssets: containerImageInAssets,
+    schedulePeriods: containerImageSchedulePeriods,
+    ociImageTargetId: containerImageOciImageTargetId,
+    scannerId: containerImageScannerId,
+    title: containerImageTitle,
+    openContainerImageTaskDialog,
+    closeContainerImageTaskDialog,
+    handleSaveContainerImageTask,
+    handleOciImageTargetChange,
+    handleScannerChange: handleContainerImageScannerChange,
+  } = useContainerImageTaskDialog({
+    onContainerCreated,
+    onContainerCreateError,
+    onContainerSaved,
+    onContainerSaveError,
+  });
 
   const [alertIds, setAlertIds] = useState<string[]>([]);
   const [alterable, setAlterable] = useState<YesNo | undefined>();
@@ -905,6 +934,12 @@ const TaskComponent = ({
     await openAgentTaskDialog(task);
   };
 
+  const handleOpenContainerImageTaskDialog = (task?: Task) => {
+    fetchAlerts();
+    fetchSchedules();
+    openContainerImageTaskDialog(task);
+  };
+
   const handleCloseNewAgentTaskDialog = () => {
     closeAgentTaskDialog();
   };
@@ -1018,6 +1053,45 @@ const TaskComponent = ({
           onClose={handleCloseContainerTaskDialog}
           onSave={handleSaveContainerTask}
         />
+      )}
+
+      {containerImageTaskDialogVisible && (
+        // @ts-expect-error
+        <AlertComponent onCreated={handleAlertCreated}>
+          {({create: createAlert}) => (
+            <ScheduleComponent onCreated={handleScheduleCreated}>
+              {({create: createSchedule}) => (
+                <ContainerImageTaskDialog
+                  addTag={containerImageAddTag}
+                  alertIds={alertIds}
+                  alerts={alerts as RenderSelectItemProps[]}
+                  alterable={containerImageAlterable}
+                  applyOverrides={containerImageApplyOverrides}
+                  comment={containerImageComment}
+                  inAssets={containerImageInAssets}
+                  isLoadingAlerts={isLoadingAlerts}
+                  isLoadingSchedules={isLoadingSchedules}
+                  name={containerImageName}
+                  ociImageTargetId={containerImageOciImageTargetId}
+                  scannerId={containerImageScannerId}
+                  scheduleId={scheduleId}
+                  schedulePeriods={containerImageSchedulePeriods}
+                  schedules={schedules as RenderSelectItemProps[]}
+                  task={containerImageTask}
+                  title={containerImageTitle}
+                  onAlertsChange={handleAlertsChange}
+                  onClose={closeContainerImageTaskDialog}
+                  onNewAlertClick={createAlert}
+                  onNewScheduleClick={createSchedule}
+                  onOciImageTargetChange={handleOciImageTargetChange}
+                  onSave={handleSaveContainerImageTask}
+                  onScannerChange={handleContainerImageScannerChange}
+                  onScheduleChange={handleScheduleChange}
+                />
+              )}
+            </ScheduleComponent>
+          )}
+        </AlertComponent>
       )}
 
       {taskWizardVisible && (
