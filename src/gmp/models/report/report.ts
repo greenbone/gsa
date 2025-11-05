@@ -33,7 +33,7 @@ import {
 } from 'gmp/models/report/parser';
 import type ReportPort from 'gmp/models/report/port';
 import ReportTask from 'gmp/models/report/task';
-import type ReportTLSCertificate from 'gmp/models/report/tlscertificate';
+import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import type Result from 'gmp/models/result';
 import {type TaskStatus} from 'gmp/models/task';
 import {parseSeverity, parseDate, type YesNo} from 'gmp/parser';

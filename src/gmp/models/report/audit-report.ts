@@ -26,7 +26,7 @@ import {
   type ReportType,
 } from 'gmp/models/report/report';
 import ReportTask from 'gmp/models/report/task';
-import type ReportTLSCertificate from 'gmp/models/report/tlscertificate';
+import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import type Result from 'gmp/models/result';
 import {parseDate, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
