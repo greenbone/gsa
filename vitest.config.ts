@@ -8,7 +8,7 @@ export default defineConfig({
         test: {
           name: 'web',
           environment: 'jsdom',
-          setupFiles: './src/web/setupTests.ts',
+          setupFiles: './src/web/setup-tests.ts',
           include: [
             'src/web/**/*.{test,spec}.?(c|m)[jt]s?(x)',
             'src/web/**/__tests__/*.?(c|m)[jt]s?(x)',
@@ -26,7 +26,7 @@ export default defineConfig({
         test: {
           name: 'gmp',
           environment: 'node',
-          setupFiles: './src/gmp/setupTests.ts',
+          setupFiles: './src/gmp/setup-tests.ts',
           include: [
             'src/gmp/**/*.{test,spec}.?(c|m)[jt]s?(x)',
             'src/gmp/**/__tests__/*.?(c|m)[jt]s?(x)',
