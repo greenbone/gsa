@@ -9,7 +9,7 @@ import {
 } from 'gmp/commands/agent-group';
 import {type EntityActionResponse} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
-import type AgentGroup from 'gmp/models/agentgroup';
+import type AgentGroup from 'gmp/models/agent-group';
 import type Filter from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 import useCreateMutation from 'web/queries/useCreateMutation';

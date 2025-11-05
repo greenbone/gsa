@@ -6,7 +6,7 @@
 import EntityCommand, {type EntityActionResponse} from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
-import AgentGroup, {type AgentGroupElement} from 'gmp/models/agentgroup';
+import AgentGroup, {type AgentGroupElement} from 'gmp/models/agent-group';
 import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
 import {isArray, isDefined} from 'gmp/utils/identity';

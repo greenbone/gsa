@@ -8,7 +8,7 @@ import {type EntityActionData} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fastxml';
-import type AgentGroup from 'gmp/models/agentgroup';
+import type AgentGroup from 'gmp/models/agent-group';
 import {isDefined} from 'gmp/utils/identity';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
 import {

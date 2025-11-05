@@ -5,7 +5,7 @@
 
 import {useMemo, useState} from 'react';
 import {type AgentConfig} from 'gmp/models/agent';
-import type AgentGroup from 'gmp/models/agentgroup';
+import type AgentGroup from 'gmp/models/agent-group';
 import Filter from 'gmp/models/filter';
 import {
   type default as Scanner,
