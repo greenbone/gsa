@@ -8,7 +8,7 @@ import {
   type EntityType,
   getEntityType,
   normalizeType,
-} from 'gmp/utils/entitytype';
+} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link, {type LinkProps} from 'web/components/link/Link';

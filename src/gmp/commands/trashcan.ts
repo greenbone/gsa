@@ -30,7 +30,7 @@ import Target from 'gmp/models/target';
 import Task from 'gmp/models/task';
 import Ticket from 'gmp/models/ticket';
 import {forEach, map} from 'gmp/utils/array';
-import {apiType, type EntityType} from 'gmp/utils/entitytype';
+import {apiType, type EntityType} from 'gmp/utils/entity-type';
 
 export interface TrashCanGetData {
   alerts: Alert[];

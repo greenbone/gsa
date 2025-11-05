@@ -22,7 +22,7 @@ import {
   type YesNo,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
-import {type EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 

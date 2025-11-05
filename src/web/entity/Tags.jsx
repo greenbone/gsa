@@ -5,7 +5,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import {typeName, getEntityType} from 'gmp/utils/entitytype';
+import {typeName, getEntityType} from 'gmp/utils/entity-type';
 import {
   TrashcanIcon,
   DisableIcon,

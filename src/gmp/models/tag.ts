@@ -9,7 +9,7 @@ import {
   type ApiType,
   type EntityType,
   normalizeType,
-} from 'gmp/utils/entitytype';
+} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 

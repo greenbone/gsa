@@ -12,7 +12,7 @@ import type Model from 'gmp/models/model';
 import type Permission from 'gmp/models/permission';
 import type Role from 'gmp/models/role';
 import type User from 'gmp/models/user';
-import {type EntityType, getEntityType} from 'gmp/utils/entitytype';
+import {type EntityType, getEntityType} from 'gmp/utils/entity-type';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {NewIcon} from 'web/components/icon';

@@ -8,7 +8,7 @@ import type Group from 'gmp/models/group';
 import type Model from 'gmp/models/model';
 import type Role from 'gmp/models/role';
 import type User from 'gmp/models/user';
-import {typeName, getEntityType, type EntityType} from 'gmp/utils/entitytype';
+import {typeName, getEntityType, type EntityType} from 'gmp/utils/entity-type';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';

@@ -8,7 +8,7 @@ import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import Permission from 'gmp/models/permission';
-import {apiType} from 'gmp/utils/entitytype';
+import {apiType} from 'gmp/utils/entity-type';
 
 const log = logger.getLogger('gmp.commands.permissions');
 

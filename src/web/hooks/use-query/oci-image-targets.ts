@@ -14,7 +14,7 @@ import {type XmlMeta} from 'gmp/http/transform/fastxml';
 import type Filter from 'gmp/models/filter';
 import {isFilter} from 'gmp/models/filter/utils';
 import type OciImageTarget from 'gmp/models/oci-image-target';
-import {typeName} from 'gmp/utils/entitytype';
+import {typeName} from 'gmp/utils/entity-type';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import useCreateMutation from 'web/queries/useCreateMutation';

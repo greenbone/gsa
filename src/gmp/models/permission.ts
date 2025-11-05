@@ -4,7 +4,7 @@
  */
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import {type ApiType, normalizeType} from 'gmp/utils/entitytype';
+import {type ApiType, normalizeType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 

@@ -8,7 +8,7 @@ import {
   type WithEntityType,
   getEntityType,
   typeName,
-} from 'gmp/utils/entitytype';
+} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {NewIcon} from 'web/components/icon';
 import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';

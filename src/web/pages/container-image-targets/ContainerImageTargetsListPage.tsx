@@ -8,7 +8,7 @@ import {showSuccessNotification} from '@greenbone/ui-lib';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type default as Filter, TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 import type OciImageTarget from 'gmp/models/oci-image-target';
-import {getEntityType, pluralizeType} from 'gmp/utils/entitytype';
+import {getEntityType, pluralizeType} from 'gmp/utils/entity-type';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {NewIcon, TargetIcon} from 'web/components/icon';

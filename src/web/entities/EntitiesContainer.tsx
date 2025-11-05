@@ -26,7 +26,7 @@ import {
   typeName,
   pluralizeType,
   type EntityType,
-} from 'gmp/utils/entitytype';
+} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {
   type OnFilterChangedFunc,

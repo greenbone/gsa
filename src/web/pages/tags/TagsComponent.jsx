@@ -6,7 +6,7 @@
 import React, {useState} from 'react';
 import {YES_VALUE} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
-import {getEntityType, pluralizeType, typeName} from 'gmp/utils/entitytype';
+import {getEntityType, pluralizeType, typeName} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import EntityComponent from 'web/entity/EntityComponent';

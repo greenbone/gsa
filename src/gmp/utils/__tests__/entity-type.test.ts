@@ -13,7 +13,7 @@ import {
   normalizeType,
   apiType,
   typeName,
-} from 'gmp/utils/entitytype';
+} from 'gmp/utils/entity-type';
 
 describe('getEntityType function tests', () => {
   test('should return entity type of object', () => {

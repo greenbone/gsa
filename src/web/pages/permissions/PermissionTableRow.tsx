@@ -5,7 +5,7 @@
 
 import React from 'react';
 import type Permission from 'gmp/models/permission';
-import {typeName, getEntityType} from 'gmp/utils/entitytype';
+import {typeName, getEntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
