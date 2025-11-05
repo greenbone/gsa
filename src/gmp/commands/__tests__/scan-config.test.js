@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {convertPreferences, ScanConfigCommand} from 'gmp/commands/scanconfigs';
+import {convertPreferences, ScanConfigCommand} from 'gmp/commands/scan-configs';
 import {
   createEntityResponse,
   createHttp,

@@ -10,7 +10,7 @@ import {
   convert,
   convertSelect,
   convertPreferences,
-} from 'gmp/commands/scanconfigs';
+} from 'gmp/commands/scan-configs';
 import logger from 'gmp/log';
 import Policy from 'gmp/models/policy';
 import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
