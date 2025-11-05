@@ -18,7 +18,7 @@ import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import {
   type EntityModelElement,
   type EntityModelProperties,
-} from 'gmp/models/entitymodel';
+} from 'gmp/models/entity-model';
 import Filter from 'gmp/models/filter';
 import Model from 'gmp/models/model';
 

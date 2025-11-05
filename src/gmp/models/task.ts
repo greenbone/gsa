@@ -5,7 +5,7 @@
 
 import {_l} from 'gmp/locale/lang';
 import {type Date, type Duration} from 'gmp/models/date';
-import {type EntityModelPermissionElement} from 'gmp/models/entitymodel';
+import {type EntityModelPermissionElement} from 'gmp/models/entity-model';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import Scanner, {type ScannerType} from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
