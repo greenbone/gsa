@@ -4,4 +4,4 @@
  */
 
 // eslint-disable-next-line no-restricted-imports
-import '../setupTests';
+import '../setup-tests';
