@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import BaseModel, {parseBaseModelProperties} from 'gmp/models/basemodel';
+import BaseModel, {parseBaseModelProperties} from 'gmp/models/base-model';
 import date from 'gmp/models/date';
 
 describe('BaseModel tests', () => {

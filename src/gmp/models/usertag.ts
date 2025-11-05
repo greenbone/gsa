@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type BaseModelElement} from 'gmp/models/basemodel';
+import {type BaseModelElement} from 'gmp/models/base-model';
 
 export interface UserTagElement extends BaseModelElement {
   _id: string;

@@ -8,7 +8,7 @@ import BaseModel, {
   type BaseModelElement,
   type BaseModelProperties,
   parseBaseModelProperties,
-} from 'gmp/models/basemodel';
+} from 'gmp/models/base-model';
 import {type Date as GmpDate} from 'gmp/models/date';
 import UserTag, {type UserTagElement} from 'gmp/models/usertag';
 import {

@@ -6,7 +6,7 @@
 import BaseModel, {
   type BaseModelProperties,
   parseBaseModelProperties,
-} from 'gmp/models/basemodel';
+} from 'gmp/models/base-model';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {
   parseBoolean,
