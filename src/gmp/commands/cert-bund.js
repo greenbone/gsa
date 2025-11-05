@@ -4,8 +4,8 @@
  */
 
 import registerCommand from 'gmp/command';
-import InfoEntitiesCommand from 'gmp/commands/infoentities';
-import InfoEntityCommand from 'gmp/commands/infoentity';
+import InfoEntitiesCommand from 'gmp/commands/info-entities';
+import InfoEntityCommand from 'gmp/commands/info-entity';
 import CertBundAdv from 'gmp/models/certbund';
 import {isDefined} from 'gmp/utils/identity';
 
