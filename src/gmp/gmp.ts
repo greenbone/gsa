@@ -37,10 +37,10 @@ import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
 import AgentCommand from 'gmp/commands/agent';
+import AgentGroupCommand from 'gmp/commands/agent-group';
+import AgentGroupsCommand from 'gmp/commands/agent-groups';
 import AgentInstallerCommand from 'gmp/commands/agent-installer';
 import AgentInstallersCommand from 'gmp/commands/agent-installers';
-import AgentGroupCommand from 'gmp/commands/agentgroup';
-import AgentGroupsCommand from 'gmp/commands/agentgroups';
 import AgentsCommand from 'gmp/commands/agents';
 import AuthenticationCommand from 'gmp/commands/auth';
 import CredentialStoreCommand from 'gmp/commands/credential-store';
