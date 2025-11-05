@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import ResourceName from 'gmp/models/resourcename';
+import ResourceName from 'gmp/models/resource-name';
 
 describe('ResourceName tests', () => {
   test('should init data via constructor', () => {
