@@ -27,7 +27,7 @@ import 'gmp/commands/policies';
 import 'gmp/commands/report-configs';
 import 'gmp/commands/report-formats';
 import 'gmp/commands/results';
-import 'gmp/commands/scanconfigs';
+import 'gmp/commands/scan-configs';
 import 'gmp/commands/schedules';
 import 'gmp/commands/tags';
 import 'gmp/commands/targets';
