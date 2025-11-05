@@ -5,7 +5,7 @@
 
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import {type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import date, {type Date} from 'gmp/models/date';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';

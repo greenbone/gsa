@@ -12,7 +12,7 @@ import type EntitiesCommand from 'gmp/commands/entities';
 import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
-import {type XmlMeta} from 'gmp/http/transform/fastxml';
+import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import {type TranslateOptions} from 'gmp/locale/lang';
 import logger from 'gmp/log';
 import {type default as Filter, RESET_FILTER} from 'gmp/models/filter';

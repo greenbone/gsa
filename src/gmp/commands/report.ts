@@ -6,7 +6,7 @@
 import {convertBoolean} from 'gmp/commands/convert';
 import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
-import {type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import {type default as Filter, ALL_FILTER} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';

@@ -7,7 +7,7 @@ import EntitiesCommand from 'gmp/commands/entities';
 import {type HttpCommandPostParams} from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import Agent from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';

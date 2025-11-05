@@ -5,7 +5,7 @@
 
 import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
-import {type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import Filter from 'gmp/models/filter';
 import Report from 'gmp/models/report';
 

@@ -5,7 +5,7 @@
 
 import HttpCommand from 'gmp/commands/http';
 import type Response from 'gmp/http/response';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import AgentGroup from 'gmp/models/agent-group';
 import Alert from 'gmp/models/alert';
 import Audit from 'gmp/models/audit';

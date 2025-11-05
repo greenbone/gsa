@@ -9,7 +9,7 @@ import EntityCommand from 'gmp/commands/entity';
 import {type HttpCommandOptions} from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fastxml';
+import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import date, {type Date} from 'gmp/models/date';
 import {type PortListElement} from 'gmp/models/port-list';

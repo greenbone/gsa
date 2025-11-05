@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {ResponseRejection} from 'gmp/http/rejection';
 import Response, {type Meta} from 'gmp/http/response';
-import transform, {type XmlResponseData} from 'gmp/http/transform/fastxml';
+import transform, {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 
 const createEnvelopedXml = (xmlStr: string) =>
   `
