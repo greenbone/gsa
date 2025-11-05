@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {COMPLIANCE} from 'gmp/models/compliance';
 import Filter from 'gmp/models/filter';
-import AuditReportReport from 'gmp/models/report/auditreport';
+import AuditReportReport from 'gmp/models/report/audit-report';
 import {emptyCollectionList} from 'gmp/models/report/parser';
 import {parseDate} from 'gmp/parser';
 

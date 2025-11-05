@@ -5,7 +5,7 @@
 
 import Model, {type ModelProperties} from 'gmp/models/model';
 import {type ReportElement} from 'gmp/models/report';
-import AuditReportReport from 'gmp/models/report/auditreport';
+import AuditReportReport from 'gmp/models/report/audit-report';
 import {isDefined} from 'gmp/utils/identity';
 
 type AuditReportElement = ReportElement;
