@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import AgentGroup from 'gmp/models/agentgroup';
+import AgentGroup from 'gmp/models/agent-group';
 import {testModel} from 'gmp/models/testing';
 
 testModel(AgentGroup, 'agentgroup');

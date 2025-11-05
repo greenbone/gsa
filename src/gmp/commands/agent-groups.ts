@@ -7,7 +7,7 @@ import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import AgentGroup from 'gmp/models/agentgroup';
+import AgentGroup from 'gmp/models/agent-group';
 import type Filter from 'gmp/models/filter';
 
 const log = logger.getLogger('gmp.commands.agentgroups');

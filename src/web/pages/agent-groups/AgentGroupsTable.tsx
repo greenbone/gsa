@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import type AgentGroup from 'gmp/models/agentgroup';
+import type AgentGroup from 'gmp/models/agent-group';
 import createEntitiesFooter, {
   type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
