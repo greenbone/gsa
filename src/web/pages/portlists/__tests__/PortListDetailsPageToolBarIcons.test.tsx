@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
-import PortList from 'gmp/models/portlist';
+import PortList from 'gmp/models/port-list';
 import PortListDetailsPageToolBarIcons from 'web/pages/portlists/PortListDetailsPageToolBarIcons';
 
 const portList = new PortList({

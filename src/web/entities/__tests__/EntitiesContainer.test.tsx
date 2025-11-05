@@ -13,7 +13,7 @@ import {
   wait,
 } from 'web/testing';
 import Filter from 'gmp/models/filter';
-import PortList from 'gmp/models/portlist';
+import PortList from 'gmp/models/port-list';
 import EntitiesContainer from 'web/entities/EntitiesContainer';
 
 const currentSettingsResponse = {

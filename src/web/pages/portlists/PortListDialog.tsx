@@ -4,7 +4,7 @@
  */
 
 import {FROM_FILE, type FromFile, NOT_FROM_FILE} from 'gmp/commands/port-lists';
-import type PortList from 'gmp/models/portlist';
+import type PortList from 'gmp/models/port-list';
 import {parseYesNo, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';

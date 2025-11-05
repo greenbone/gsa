@@ -10,7 +10,7 @@ import {
   PORTLISTS_FILTER_FILTER,
   RESET_FILTER,
 } from 'gmp/models/filter';
-import type PortList from 'gmp/models/portlist';
+import type PortList from 'gmp/models/port-list';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';

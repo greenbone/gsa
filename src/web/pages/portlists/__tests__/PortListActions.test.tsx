@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWithTableRow, screen, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
-import PortList from 'gmp/models/portlist';
+import PortList from 'gmp/models/port-list';
 import PortListActions from 'web/pages/portlists/PortListActions';
 import SelectionType from 'web/utils/SelectionType';
 

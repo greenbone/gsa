@@ -9,7 +9,10 @@ import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fastxml';
 import type ActionResult from 'gmp/models/action-result';
-import {type default as PortList, type ProtocolType} from 'gmp/models/portlist';
+import {
+  type default as PortList,
+  type ProtocolType,
+} from 'gmp/models/port-list';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import useEntityClone from 'web/entity/hooks/useEntityClone';

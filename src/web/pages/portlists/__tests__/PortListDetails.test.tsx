@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import Model from 'gmp/models/model';
-import PortList from 'gmp/models/portlist';
+import PortList from 'gmp/models/port-list';
 import PortListDetails from 'web/pages/portlists/PortListDetails';
 
 describe('PortListDetails tests', () => {

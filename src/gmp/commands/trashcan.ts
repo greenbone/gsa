@@ -18,7 +18,7 @@ import OciImageTarget from 'gmp/models/oci-image-target';
 import Override from 'gmp/models/override';
 import Permission from 'gmp/models/permission';
 import Policy from 'gmp/models/policy';
-import PortList from 'gmp/models/portlist';
+import PortList from 'gmp/models/port-list';
 import ReportConfig from 'gmp/models/reportconfig';
 import ReportFormat from 'gmp/models/reportformat';
 import Role from 'gmp/models/role';
