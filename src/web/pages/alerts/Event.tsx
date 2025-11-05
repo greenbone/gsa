@@ -10,12 +10,21 @@ import {
   EVENT_TYPE_TICKET_RECEIVED,
   EVENT_TYPE_ASSIGNED_TICKET_CHANGED,
   EVENT_TYPE_OWNED_TICKET_CHANGED,
+  type AlertData,
 } from 'gmp/models/alert';
 import {isDefined} from 'gmp/utils/identity';
-import useTranslation from 'web/hooks/useTranslation';
+import useTranslation, {type TranslateFunc} from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
-const secInfoTypeName = (type, _, unknown) => {
+interface EventProps {
+  event?: AlertData;
+}
+
+const secInfoTypeName = (
+  type: string | undefined,
+  _: TranslateFunc,
+  unknown: string,
+) => {
   if (!isDefined(type)) {
     return unknown;
   }
@@ -35,35 +44,36 @@ const secInfoTypeName = (type, _, unknown) => {
   }
 };
 
-const Event = ({event = {}}) => {
+const Event = ({event = {}}: EventProps) => {
   const [_] = useTranslation();
   if (!isDefined(event.type) || !isDefined(event.data)) {
     return null;
   }
 
-  let type = _('undefined');
-
   if (event.type === EVENT_TYPE_NEW_SECINFO) {
-    if (isDefined(event.data.secinfo_type)) {
-      type = secInfoTypeName(event.data.secinfo_type.value, _, _('SecInfo'));
-    }
+    const type = secInfoTypeName(
+      event.data?.secinfo_type?.value as string | undefined,
+      _,
+      _('SecInfo'),
+    );
     return _('New {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
   if (event.type === EVENT_TYPE_UPDATED_SECINFO) {
-    if (isDefined(event.data.secinfo_type)) {
-      type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
-    }
+    const type = secInfoTypeName(
+      event.data?.secinfo_type?.value as string | undefined,
+      _,
+      _('SecInfo'),
+    );
     return _('Updated {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
-  if (
-    event.type === EVENT_TYPE_TASK_RUN_STATUS_CHANGED &&
-    isDefined(event.data.status)
-  ) {
-    return _('Task run status changed to {{status}}', {
-      status: event.data.status.value,
-    });
+  if (event.type === EVENT_TYPE_TASK_RUN_STATUS_CHANGED) {
+    return isDefined(event.data.status)
+      ? _('Task run status changed to {{status}}', {
+          status: event.data.status.value as string,
+        })
+      : _('Task run status changed');
   }
   if (event.type === EVENT_TYPE_TICKET_RECEIVED) {
     return _('Ticket received');
