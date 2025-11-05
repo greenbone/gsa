@@ -5,8 +5,18 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, fireEvent} from 'web/testing';
+import {vi} from 'vitest';
 import Capabilities from 'gmp/capabilities/capabilities';
 import TaskToolBarIcons from 'web/pages/tasks/icons/TaskToolBarIcons';
+
+vi.mock('web/hooks/useFeatures', () => {
+  return {
+    default: () => ({
+      featureEnabled: (feature: string) =>
+        feature === 'ENABLE_CONTAINER_SCANNING',
+    }),
+  };
+});
 
 const manualUrl = 'test/';
 
@@ -125,6 +135,39 @@ describe('TaskPage ToolBarIcons test', () => {
     expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
     fireEvent.click(newContainerTaskMenu);
     expect(handleContainerTaskCreateClick).toHaveBeenCalled();
+  });
+
+  test('should call onNewContainerImageClick handler', async () => {
+    const handleNewContainerImageClick = testing.fn();
+
+    const gmp = {
+      settings: {manualUrl},
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+    });
+
+    render(
+      <TaskToolBarIcons
+        onNewContainerImageClick={handleNewContainerImageClick}
+      />,
+    );
+
+    const newButton = screen.getByTestId('new-icon').closest('button');
+    expect(newButton).not.toBeNull();
+    if (newButton) {
+      fireEvent.click(newButton);
+    }
+
+    const newContainerImageMenu = await screen.findByTestId(
+      'new-container-image-menu',
+    );
+    expect(newContainerImageMenu).toHaveTextContent('New Container Image');
+    fireEvent.click(newContainerImageMenu);
+    expect(handleNewContainerImageClick).toHaveBeenCalled();
   });
 
   test('should not show icons if user does not have the right permissions', () => {

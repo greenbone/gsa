@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import type Task from 'gmp/models/task';
 import DashboardControls from 'web/components/dashboard/Controls';
@@ -35,6 +34,7 @@ interface TaskEntitiesPageProps {
   onContainerTaskCreateClick?: () => void;
   onModifyTaskWizardClick?: () => void;
   onNewAgentTaskClick?: () => void;
+  onNewContainerImageClick?: () => void;
   onReportImportClick?: (task: Task) => void;
   onTaskCloneClick?: (task: Task) => void;
   onTaskCreateClick?: () => void;
@@ -94,8 +94,9 @@ const TaskListPage = ({
         modifyTaskWizard,
         taskWizard,
         onNewAgentTaskClick,
+        onNewContainerImageClick,
       }) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Tasks')} />
           <EntitiesPage<Task, TaskEntitiesPageProps>
             {...props}
@@ -121,6 +122,7 @@ const TaskListPage = ({
             onFilterChanged={onFilterChanged}
             onModifyTaskWizardClick={modifyTaskWizard}
             onNewAgentTaskClick={onNewAgentTaskClick}
+            onNewContainerImageClick={onNewContainerImageClick}
             onReportImportClick={reportImport}
             onTaskCloneClick={clone}
             onTaskCreateClick={create}
@@ -132,7 +134,7 @@ const TaskListPage = ({
             onTaskStopClick={stop}
             onTaskWizardClick={taskWizard}
           />
-        </React.Fragment>
+        </>
       )}
     </TaskComponent>
   );

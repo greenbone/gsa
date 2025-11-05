@@ -24,6 +24,7 @@ import logger, {type LogLevel} from 'gmp/log';
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
+  CONTAINER_IMAGE_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {
   HOSTS_ORDERING_RANDOM,
@@ -728,4 +729,196 @@ describe('TaskCommand tests', () => {
       ).rejects.toThrow(expectedMessage);
     },
   );
+
+  test('should create new container image task', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const resp = await cmd.createContainerImageTask({
+      alterable: false,
+      applyOverrides: false,
+      autoDelete: AUTO_DELETE_KEEP,
+      comment: 'comment',
+      inAssets: false,
+      minQod: 70,
+      name: 'foo',
+      ociImageTargetId: 'oit1',
+      scannerId: 's1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_oci_image_task',
+        add_tag: 0,
+        'alert_ids:': [],
+        'preferences:accept_invalid_certs': 0,
+        'preferences:registry_allow_insecure': 0,
+        alterable: 0,
+        apply_overrides: 0,
+        auto_delete: AUTO_DELETE_KEEP,
+        auto_delete_data: undefined,
+        comment: 'comment',
+        in_assets: 0,
+        min_qod: 70,
+        name: 'foo',
+        oci_image_target_id: 'oit1',
+        scanner_id: 's1',
+        scanner_type: undefined,
+        schedule_id: undefined,
+        schedule_periods: 0,
+        tag_id: undefined,
+        usage_type: 'scan',
+      },
+    });
+    expect(resp.data.id).toEqual('foo');
+  });
+
+  test('should create new container image task with all parameters', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const resp = await cmd.createContainerImageTask({
+      acceptInvalidCerts: true,
+      addTag: true,
+      alertIds: ['a1', 'a2'],
+      alterable: false,
+      applyOverrides: false,
+      autoDelete: AUTO_DELETE_KEEP,
+      autoDeleteData: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+      comment: 'comment',
+      inAssets: false,
+      minQod: 70,
+      name: 'foo',
+      ociImageTargetId: 'oit1',
+      registryAllowInsecure: true,
+      scannerId: 's1',
+      scannerType: CONTAINER_IMAGE_SCANNER_TYPE,
+      scheduleId: 'sched1',
+      schedulePeriods: true,
+      tagId: 't1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_oci_image_task',
+        add_tag: 1,
+        'alert_ids:': ['a1', 'a2'],
+        'preferences:accept_invalid_certs': 1,
+        'preferences:registry_allow_insecure': 1,
+        alterable: 0,
+        apply_overrides: 0,
+        auto_delete: AUTO_DELETE_KEEP,
+        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+        comment: 'comment',
+        in_assets: 0,
+        min_qod: 70,
+        name: 'foo',
+        oci_image_target_id: 'oit1',
+        scanner_id: 's1',
+        scanner_type: CONTAINER_IMAGE_SCANNER_TYPE,
+        schedule_id: 'sched1',
+        schedule_periods: 1,
+        tag_id: 't1',
+        usage_type: 'scan',
+      },
+    });
+    expect(resp.data.id).toEqual('foo');
+  });
+
+  test('should save container image task', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const result = await cmd.saveContainerImageTask({
+      alterable: false,
+      applyOverrides: false,
+      autoDelete: AUTO_DELETE_KEEP,
+      comment: 'comment',
+      id: 'task1',
+      inAssets: false,
+      minQod: 70,
+      name: 'foo',
+      ociImageTargetId: 'oit1',
+      scannerId: 's1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_oci_image_task',
+        'alert_ids:': [],
+        'preferences:accept_invalid_certs': 0,
+        'preferences:registry_allow_insecure': 0,
+        alterable: 0,
+        apply_overrides: 0,
+        auto_delete: AUTO_DELETE_KEEP,
+        auto_delete_data: undefined,
+        comment: 'comment',
+        in_assets: 0,
+        min_qod: 70,
+        name: 'foo',
+        oci_image_target_id: 'oit1',
+        scanner_id: 's1',
+        scanner_type: undefined,
+        schedule_id: undefined,
+        schedule_periods: 0,
+        task_id: 'task1',
+        usage_type: 'scan',
+      },
+    });
+    expect(result).toBeDefined();
+  });
+
+  test('should save container image task with all parameters', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const result = await cmd.saveContainerImageTask({
+      acceptInvalidCerts: true,
+      alertIds: ['a1', 'a2'],
+      alterable: false,
+      applyOverrides: false,
+      autoDelete: AUTO_DELETE_KEEP,
+      autoDeleteData: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+      comment: 'comment',
+      id: 'task1',
+      inAssets: false,
+      minQod: 70,
+      name: 'foo',
+      ociImageTargetId: 'oit1',
+      registryAllowInsecure: false,
+      scannerId: 's1',
+      scannerType: CONTAINER_IMAGE_SCANNER_TYPE,
+      scheduleId: 'sched1',
+      schedulePeriods: true,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_oci_image_task',
+        'alert_ids:': ['a1', 'a2'],
+        'preferences:accept_invalid_certs': 1,
+        'preferences:registry_allow_insecure': 0,
+        alterable: 0,
+        apply_overrides: 0,
+        auto_delete: AUTO_DELETE_KEEP,
+        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+        comment: 'comment',
+        in_assets: 0,
+        min_qod: 70,
+        name: 'foo',
+        oci_image_target_id: 'oit1',
+        scanner_id: 's1',
+        scanner_type: CONTAINER_IMAGE_SCANNER_TYPE,
+        schedule_id: 'sched1',
+        schedule_periods: 1,
+        task_id: 'task1',
+        usage_type: 'scan',
+      },
+    });
+    expect(result).toBeDefined();
+  });
 });
