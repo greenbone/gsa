@@ -32,7 +32,7 @@ import 'gmp/commands/schedules';
 import 'gmp/commands/tags';
 import 'gmp/commands/targets';
 import 'gmp/commands/tickets';
-import 'gmp/commands/tlscertificates';
+import 'gmp/commands/tls-certificates';
 import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
