@@ -21,7 +21,7 @@ import GmpSettings, {
   DEFAULT_TIMEOUT,
   DEFAULT_REPORT_RESULTS_THRESHOLD,
   DEFAULT_TITLE,
-} from 'gmp/gmpsettings';
+} from 'gmp/settings';
 import {
   DEFAULT_SEVERITY_RATING,
   SEVERITY_RATING_CVSS_2,

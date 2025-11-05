@@ -8,7 +8,7 @@ import {ThemeProvider} from '@greenbone/ui-lib';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {Provider as StoreProvider} from 'react-redux';
 import Gmp from 'gmp/gmp';
-import GmpSettings from 'gmp/gmpsettings';
+import GmpSettings from 'gmp/settings';
 import {_, initLocale} from 'gmp/locale/lang';
 import {LOG_LEVEL_DEBUG} from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';

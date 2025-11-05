@@ -17,7 +17,7 @@ import {
   createResponse,
 } from 'gmp/commands/testing';
 import Gmp from 'gmp/gmp';
-import GmpSettings from 'gmp/gmpsettings';
+import GmpSettings from 'gmp/settings';
 
 const createStorage = (state?: Record<string, string>) => {
   const store = {

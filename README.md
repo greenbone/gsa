@@ -225,37 +225,37 @@ config = {
 ```
 
 It is evaluated in the `GmpSettings` object implemented in the
-[gmpsettings.ts](./src/gmp/gmpsettings.ts) file. The `GmpSettings` object is
+[settings.ts](./src/gmp/settings.ts) file. The `GmpSettings` object is
 instantiated once for the [GSA application](./src/web/App.tsx#L29)
 
 ### Config Variables
 
-| Name                                                                | Type                       | Default                                                                          | Changeable during runtime | Persistent after reload |
-| ------------------------------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------- | ------------------------- | ----------------------- |
-| [apiProtocol](#apiprotocol)                                         | String ('http' or 'https') | `global.location.protocol`                                                       | -                         | x                       |
-| [apiServer](#apiserver)                                             | String                     | `global.location.host`                                                           | -                         | x                       |
-| enableGreenboneSensor                                               | Boolean                    | false                                                                            | -                         | x                       |
-| [disableLoginForm](#disableloginform)                               | Boolean                    | false                                                                            | -                         | x                       |
-| [enableCommunityFeedNotification](#enablecommunityfeednotification) | Boolean                    | true                                                                             | x                         | x                       |
-| [enableEPSS](#enableepss)                                           | Boolean                    | false                                                                            | x                         | x                       |
-| [enableKrb5](#enablekrb5)                                           | Boolean                    | false                                                                            | x                         | x                       |
-| [enableStoreDebugLog](#enablestoredebuglog)                         | Boolean                    | false                                                                            | x                         | x                       |
-| [guestUsername](#guestusername-and-guestpassword)                   | String                     | undefined                                                                        | -                         | x                       |
-| [guestPassword](#guestusername-and-guestpassword)                   | String                     | undefined                                                                        | -                         | x                       |
-| locale                                                              | String                     | undefined                                                                        | x                         | x                       |
-| [logLevel](#loglevel)                                               | String                     | [`'warn'`](./src/gmp/gmpsettings.js#L27)                                         | x                         | x                       |
-| [manualUrl](#manualurl)                                             | String                     | [https://docs.greenbone.net/GSM-Manual/gos-22.04/](./src/gmp/gmpsettings.js#L24) | -                         | x                       |
-| [manualLanguageMapping](#manuallanguagemapping)                     | Object                     | undefined                                                                        | -                         | x                       |
-| [protocolDocUrl](#protocoldocurl)                                   | String                     | [https://docs.greenbone.net/API/GMP/gmp-22.4.html](./src/gmp/gmpsettings.js#L25) | -                         | x                       |
-| [reloadInterval](#reloadinterval)                                   | Integer                    | [15 \* 1000; // fifteen seconds](./src/gmp/gmpsettings.js#L21)                   | x                         | -                       |
-| [reloadIntervalActive](#reloadintervalactive)                       | Integer                    | [3 \* 1000; // three seconds](./src/gmp/gmpsettings.js#L22)                      | x                         | -                       |
-| [reloadIntervalInactive](#reloadintervalinactive)                   | Integer                    | [60 \* 1000; // one minute](./src/gmp/gmpsettings.js#L22)                        | x                         | -                       |
-| [reportResultsThreshold](#reportresultsthreshold)                   | Integer                    | [25000](./src/gmp/gmpsettings.js#L26)                                            | x                         | -                       |
-| [timeout](#timeout)                                                 | Integer                    | [300000; // 5 minutes](./src/gmp/gmpsettings.js#L28)                             | x                         | -                       |
-| [severityRating](#severityrating)                                   | `'CVSSv2'` or `'CVSSv3'`   | `'CVSSv3'`                                                                       | -                         | x                       |
-| [vendorVersion](#vendorversion)                                     | String                     | undefined                                                                        | -                         | x                       |
-| [vendorLabel](#vendorlabel)                                         | String                     | undefined                                                                        | -                         | x                       |
-| [vendorTitle](#vendortitle)                                         | String                     | OPENVAS                                                                          | x                         | x                       |
+| Name                                                                | Type                       | Default                                                                       | Changeable during runtime | Persistent after reload |
+| ------------------------------------------------------------------- | -------------------------- | ----------------------------------------------------------------------------- | ------------------------- | ----------------------- |
+| [apiProtocol](#apiprotocol)                                         | String ('http' or 'https') | `global.location.protocol`                                                    | -                         | x                       |
+| [apiServer](#apiserver)                                             | String                     | `global.location.host`                                                        | -                         | x                       |
+| enableGreenboneSensor                                               | Boolean                    | false                                                                         | -                         | x                       |
+| [disableLoginForm](#disableloginform)                               | Boolean                    | false                                                                         | -                         | x                       |
+| [enableCommunityFeedNotification](#enablecommunityfeednotification) | Boolean                    | true                                                                          | x                         | x                       |
+| [enableEPSS](#enableepss)                                           | Boolean                    | false                                                                         | x                         | x                       |
+| [enableKrb5](#enablekrb5)                                           | Boolean                    | false                                                                         | x                         | x                       |
+| [enableStoreDebugLog](#enablestoredebuglog)                         | Boolean                    | false                                                                         | x                         | x                       |
+| [guestUsername](#guestusername-and-guestpassword)                   | String                     | undefined                                                                     | -                         | x                       |
+| [guestPassword](#guestusername-and-guestpassword)                   | String                     | undefined                                                                     | -                         | x                       |
+| locale                                                              | String                     | undefined                                                                     | x                         | x                       |
+| [logLevel](#loglevel)                                               | String                     | [`'warn'`](./src/gmp/settings.js#L27)                                         | x                         | x                       |
+| [manualUrl](#manualurl)                                             | String                     | [https://docs.greenbone.net/GSM-Manual/gos-22.04/](./src/gmp/settings.js#L24) | -                         | x                       |
+| [manualLanguageMapping](#manuallanguagemapping)                     | Object                     | undefined                                                                     | -                         | x                       |
+| [protocolDocUrl](#protocoldocurl)                                   | String                     | [https://docs.greenbone.net/API/GMP/gmp-22.4.html](./src/gmp/settings.ts#L25) | -                         | x                       |
+| [reloadInterval](#reloadinterval)                                   | Integer                    | [15 \* 1000; // fifteen seconds](./src/gmp/settings.ts#L21)                   | x                         | -                       |
+| [reloadIntervalActive](#reloadintervalactive)                       | Integer                    | [3 \* 1000; // three seconds](./src/gmp/settings.ts#L22)                      | x                         | -                       |
+| [reloadIntervalInactive](#reloadintervalinactive)                   | Integer                    | [60 \* 1000; // one minute](./src/gmp/settings.ts#L22)                        | x                         | -                       |
+| [reportResultsThreshold](#reportresultsthreshold)                   | Integer                    | [25000](./src/gmp/settings.ts#L26)                                            | x                         | -                       |
+| [timeout](#timeout)                                                 | Integer                    | [300000; // 5 minutes](./src/gmp/settings.ts#L28)                             | x                         | -                       |
+| [severityRating](#severityrating)                                   | `'CVSSv2'` or `'CVSSv3'`   | `'CVSSv3'`                                                                    | -                         | x                       |
+| [vendorVersion](#vendorversion)                                     | String                     | undefined                                                                     | -                         | x                       |
+| [vendorLabel](#vendorlabel)                                         | String                     | undefined                                                                     | -                         | x                       |
+| [vendorTitle](#vendortitle)                                         | String                     | OPENVAS                                                                       | x                         | x                       |
 
 #### vendorVersion
 
