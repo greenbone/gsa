@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import AuditReport from 'gmp/models/auditreport';
+import AuditReport from 'gmp/models/audit-report';
 
 // Task
 const task1 = {
