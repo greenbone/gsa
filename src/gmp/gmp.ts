@@ -11,7 +11,7 @@ import 'gmp/commands/credentials';
 import 'gmp/commands/cpes';
 import 'gmp/commands/cves';
 import 'gmp/commands/cvss-calculator';
-import 'gmp/commands/dfncert';
+import 'gmp/commands/dfn-cert';
 import 'gmp/commands/filters';
 import 'gmp/commands/groups';
 import 'gmp/commands/hosts';
