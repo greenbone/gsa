@@ -66,53 +66,65 @@ describe('NewIconMenu tests', () => {
     expect(onNewContainerClick).toHaveBeenCalled();
   });
 
-  test('should show agent task menu when ENABLE_AGENTS feature is enabled', async () => {
-    const features = new Features(['ENABLE_AGENTS']);
-    const {render} = rendererWith({capabilities: true, features});
-    render(<NewIconMenu />);
+  describe.each([
+    [
+      'ENABLE_CONTAINER_SCANNING' as
+        | 'ENABLE_CONTAINER_SCANNING'
+        | 'ENABLE_AGENTS',
+      'new-container-image-menu',
+      'onNewContainerImageClick',
+    ],
+    [
+      'ENABLE_AGENTS' as 'ENABLE_CONTAINER_SCANNING' | 'ENABLE_AGENTS',
+      'new-agent-task-menu',
+      'onNewAgentTaskClick',
+    ],
+  ])('%s feature', (feature, menuTestId, callbackName) => {
+    test('should show menu when the feature is enabled', async () => {
+      const features = new Features([feature]);
+      const {render} = rendererWith({capabilities: true, features});
+      render(<NewIconMenu />);
 
-    const button = screen.getByTestId('new-icon').closest('button');
-    expect(button).not.toBeNull();
-    if (button) {
-      fireEvent.click(button);
-    }
+      const button = screen.getByTestId('new-icon').closest('button');
+      expect(button).not.toBeUndefined();
+      if (button) {
+        fireEvent.click(button);
+      }
 
-    await screen.findByTestId('new-agent-task-menu');
-    expect(screen.getByTestId('new-agent-task-menu')).toBeInTheDocument();
-  });
+      await screen.findByTestId(menuTestId);
+      expect(screen.getByTestId(menuTestId)).toBeInTheDocument();
+    });
 
-  test('should hide agent task menu when ENABLE_AGENTS feature is disabled', async () => {
-    const features = new Features();
-    const {render} = rendererWith({capabilities: true, features});
-    render(<NewIconMenu />);
+    test('should hide menu when the feature is disabled', async () => {
+      const features = new Features();
+      const {render} = rendererWith({capabilities: true, features});
+      render(<NewIconMenu />);
 
-    const button = screen.getByTestId('new-icon').closest('button');
-    expect(button).not.toBeNull();
-    if (button) {
-      fireEvent.click(button);
-    }
+      const button = screen.getByTestId('new-icon').closest('button');
+      expect(button).not.toBeUndefined();
+      if (button) {
+        fireEvent.click(button);
+      }
 
-    await screen.findByTestId('new-task-menu');
-    expect(screen.getByTestId('new-task-menu')).toBeInTheDocument();
-    expect(screen.getByTestId('new-container-task-menu')).toBeInTheDocument();
+      expect(screen.queryByTestId(menuTestId)).not.toBeInTheDocument();
+    });
 
-    expect(screen.queryByTestId('new-agent-task-menu')).not.toBeInTheDocument();
-  });
+    test(`calls ${callbackName} when menu item is clicked`, async () => {
+      const callback = testing.fn();
+      const features = new Features([feature]);
+      const props = {[callbackName]: callback};
+      const {render} = rendererWith({capabilities: true, features});
+      render(<NewIconMenu {...props} />);
 
-  test('calls onNewAgentTaskClick when New Agent Task is clicked', async () => {
-    const onNewAgentTaskClick = testing.fn();
-    const features = new Features(['ENABLE_AGENTS']);
-    const {render} = rendererWith({capabilities: true, features});
-    render(<NewIconMenu onNewAgentTaskClick={onNewAgentTaskClick} />);
+      const button = screen.getByTestId('new-icon').closest('button');
+      expect(button).not.toBeUndefined();
+      if (button) {
+        fireEvent.click(button);
+      }
 
-    const button = screen.getByTestId('new-icon').closest('button');
-    expect(button).not.toBeNull();
-    if (button) {
-      fireEvent.click(button);
-    }
-
-    const menuItem = await screen.findByTestId('new-agent-task-menu');
-    fireEvent.click(menuItem);
-    expect(onNewAgentTaskClick).toHaveBeenCalled();
+      const menuItem = await screen.findByTestId(menuTestId);
+      fireEvent.click(menuItem);
+      expect(callback).toHaveBeenCalled();
+    });
   });
 });
