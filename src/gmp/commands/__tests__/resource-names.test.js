@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {ResourceNamesCommand} from 'gmp/commands/resourcenames';
+import {ResourceNamesCommand} from 'gmp/commands/resource-names';
 import {createResponse, createHttp} from 'gmp/commands/testing';
 
 describe('ResourceNamesCommand tests', () => {
