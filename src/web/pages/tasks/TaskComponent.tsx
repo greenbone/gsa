@@ -20,7 +20,7 @@ import {
   type TaskHostsOrdering,
 } from 'gmp/models/task';
 import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
-import {DEFAULT_TIMEZONE} from 'gmp/timezones';
+import {DEFAULT_TIMEZONE} from 'gmp/time-zones';
 import {map} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
