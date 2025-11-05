@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {FROM_FILE, PortListCommand} from 'gmp/commands/portlists';
+import {FROM_FILE, PortListCommand} from 'gmp/commands/port-lists';
 import {
   createHttp,
   createActionResultResponse,
