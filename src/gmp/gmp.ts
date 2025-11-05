@@ -46,7 +46,7 @@ import AuthenticationCommand from 'gmp/commands/auth';
 import CredentialStoreCommand from 'gmp/commands/credential-store';
 import CredentialStoresCommand from 'gmp/commands/credential-stores';
 import DashboardCommand from 'gmp/commands/dashboards';
-import FeedStatusCommand from 'gmp/commands/feedstatus';
+import FeedStatusCommand from 'gmp/commands/feed-status';
 import LoginCommand from 'gmp/commands/login';
 import OciImageTargetCommand from 'gmp/commands/oci-image-target';
 import OciImageTargetsCommand from 'gmp/commands/oci-image-targets';

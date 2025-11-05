@@ -10,7 +10,7 @@ import {
   CERT_FEED,
   GVMD_DATA_FEED,
   type Feed,
-} from 'gmp/commands/feedstatus';
+} from 'gmp/commands/feed-status';
 import {isDefined} from 'gmp/utils/identity';
 import {
   CertBundAdvIcon,
