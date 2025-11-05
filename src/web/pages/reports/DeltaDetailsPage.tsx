@@ -14,7 +14,7 @@ import Filter, {
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
-import type ReportConfig from 'gmp/models/reportconfig';
+import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/reportformat';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';

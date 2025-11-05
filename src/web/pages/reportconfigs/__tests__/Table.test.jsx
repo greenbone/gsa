@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import ReportConfig from 'gmp/models/reportconfig';
+import ReportConfig from 'gmp/models/report-config';
 import Table from 'web/pages/reportconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
 

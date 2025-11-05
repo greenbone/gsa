@@ -12,7 +12,7 @@ import {
   rendererWith,
   wait,
 } from 'web/testing';
-import ReportConfig from 'gmp/models/reportconfig';
+import ReportConfig from 'gmp/models/report-config';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import ReportFormatComponent from 'web/pages/reportconfigs/ReportConfigsComponent';
 
