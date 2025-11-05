@@ -4,7 +4,7 @@
  */
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import {Param, type ParamElement} from 'gmp/models/reportformat';
+import {Param, type ParamElement} from 'gmp/models/report-format';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 

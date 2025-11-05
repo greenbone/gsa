@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import ReportFormat from 'gmp/models/reportformat';
+import ReportFormat from 'gmp/models/report-format';
 import VerifyIcon from 'web/entity/icon/VerifyIcon';
 import Theme from 'web/utils/Theme';
 

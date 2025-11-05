@@ -14,7 +14,7 @@ import {
   wait,
 } from 'web/testing';
 import ReportConfig from 'gmp/models/report-config';
-import ReportFormat from 'gmp/models/reportformat';
+import ReportFormat from 'gmp/models/report-format';
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
 import {mockReportFormats} from 'web/pages/reportconfigs/__mocks__/MockReportFormats';
 import ReportConfigDialog from 'web/pages/reportconfigs/Dialog';
