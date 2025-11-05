@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import CertBundAdv from 'gmp/models/certbund';
+import CertBundAdv from 'gmp/models/cert-bund';
 import {testModel} from 'gmp/models/testing';
 import {parseDate} from 'gmp/parser';
 
