@@ -38,7 +38,7 @@ interface AlertElement extends ModelElement {
   };
 }
 
-interface AlertData {
+export interface AlertData {
   type?: string;
   data?: Record<string, {value?: string | number}>;
 }
