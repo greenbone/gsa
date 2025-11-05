@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {typeName} from 'gmp/utils/entitytype';
+import {typeName} from 'gmp/utils/entity-type';
 import DateTime from 'web/components/date/DateTime';
 import {DisableIcon, EnableIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';

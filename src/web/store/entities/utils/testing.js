@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-import {pluralizeType} from 'gmp/utils/entitytype';
+import {pluralizeType} from 'gmp/utils/entity-type';
 import {isFunction} from 'gmp/utils/identity';
 import {types} from 'web/store/entities/utils/actions';
 import {filterIdentifier} from 'web/store/utils';

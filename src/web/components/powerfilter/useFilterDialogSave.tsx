@@ -5,7 +5,7 @@
 
 import {useCallback} from 'react';
 import Filter from 'gmp/models/filter';
-import {type EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {getEntityType, typeName} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {Settings2Icon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';

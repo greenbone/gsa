@@ -9,7 +9,7 @@ import type Filter from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE} from 'gmp/parser';
-import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
+import {apiType, getEntityType, typeName} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import TagsDialog, {type TagsDialogData} from 'web/entities/TagsDialog';
 import useGmp from 'web/hooks/useGmp';

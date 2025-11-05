@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {getEntityType} from 'gmp/utils/entitytype';
+import {getEntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {RestoreIcon} from 'web/components/icon';
 import TrashDeleteIcon from 'web/components/icon/TrashDeleteIcon';

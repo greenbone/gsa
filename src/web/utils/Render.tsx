@@ -14,7 +14,7 @@ import {
   getEntityType,
   type WithEntityType,
   type ApiType,
-} from 'gmp/utils/entitytype';
+} from 'gmp/utils/entity-type';
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {type SelectItem} from 'web/components/form/Select';

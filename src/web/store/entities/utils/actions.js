@@ -4,7 +4,7 @@
  */
 
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
-import {pluralizeType} from 'gmp/utils/entitytype';
+import {pluralizeType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 
 export const types = {

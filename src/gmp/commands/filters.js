@@ -10,7 +10,7 @@ import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import Filter from 'gmp/models/filter';
-import {apiType} from 'gmp/utils/entitytype';
+import {apiType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.commands.filters');

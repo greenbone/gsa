@@ -7,7 +7,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
 import Filter from 'gmp/models/filter';
-import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
+import {pluralizeType, normalizeType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import ListIcon from 'web/components/icon/ListIcon';
 import Divider from 'web/components/layout/Divider';

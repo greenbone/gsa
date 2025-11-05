@@ -9,7 +9,7 @@ import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';
 import type Filter from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
-import {type EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entity-type';
 import {type DownloadFunc} from 'web/components/form/useDownload';
 import withDownload from 'web/components/form/withDownload';
 import Reload from 'web/components/loading/Reload';

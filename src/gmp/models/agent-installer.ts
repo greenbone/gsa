@@ -7,7 +7,7 @@ import type {Date as GmpDate} from 'gmp/models/date';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseDate, parseInt, parseToString} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
-import {type EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entity-type';
 
 // Possible values for file_validity are 'valid' or a string describing why the file is not valid
 type FileValidity = 'valid' | string;

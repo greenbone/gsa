@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {typeName} from 'gmp/utils/entitytype';
+import {typeName} from 'gmp/utils/entity-type';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/TableData';

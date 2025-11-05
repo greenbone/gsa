@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {typeName} from 'gmp/utils/entitytype';
+import {typeName} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import Layout from 'web/components/layout/Layout';
 import InfoTable from 'web/components/table/InfoTable';

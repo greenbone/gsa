@@ -11,7 +11,7 @@ import {
 } from 'gmp/models/permission';
 import type Role from 'gmp/models/role';
 import type User from 'gmp/models/user';
-import {type EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
 import SaveDialog from 'web/components/dialog/SaveDialog';

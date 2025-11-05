@@ -10,7 +10,7 @@ import {
   apiType,
   type EntityType,
   pluralizeType,
-} from 'gmp/utils/entitytype';
+} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 
 export type Capability = (typeof CAPABILITY_NAMES)[number];

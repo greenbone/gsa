@@ -9,7 +9,7 @@ import EntityModel, {
   parseEntityModelProperties,
 } from 'gmp/models/entitymodel';
 import {setProperties} from 'gmp/parser';
-import {type EntityType} from 'gmp/utils/entitytype';
+import {type EntityType} from 'gmp/utils/entity-type';
 
 export type Element = Record<string, unknown>;
 

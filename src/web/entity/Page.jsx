@@ -5,7 +5,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import {typeName} from 'gmp/utils/entitytype';
+import {typeName} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import Toolbar from 'web/components/bar/Toolbar';
