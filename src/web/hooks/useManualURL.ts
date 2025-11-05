@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {DEFAULT_MANUAL_URL} from 'gmp/gmpsettings';
+import {DEFAULT_MANUAL_URL} from 'gmp/settings';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';

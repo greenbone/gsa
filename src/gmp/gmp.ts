@@ -64,7 +64,7 @@ import TrashCanCommand from 'gmp/commands/trashcan';
 import UserCommand from 'gmp/commands/user';
 import UsersCommand from 'gmp/commands/users';
 import WizardCommand from 'gmp/commands/wizard';
-import type GmpSettings from 'gmp/gmpsettings';
+import type GmpSettings from 'gmp/settings';
 import Http, {type ErrorHandler} from 'gmp/http/http';
 import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
