@@ -25,7 +25,7 @@ import 'gmp/commands/overrides';
 import 'gmp/commands/permissions';
 import 'gmp/commands/policies';
 import 'gmp/commands/report-configs';
-import 'gmp/commands/reportformats';
+import 'gmp/commands/report-formats';
 import 'gmp/commands/results';
 import 'gmp/commands/scanconfigs';
 import 'gmp/commands/schedules';
