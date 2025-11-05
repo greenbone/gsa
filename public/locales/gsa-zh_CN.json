@@ -1949,6 +1949,7 @@
   "Task List": "任务列表",
   "Task made visible for:\n{{user}}\n{{role}}\n{{group}}": "任务对以下对象可见:\n{{user}}\n{{role}}\n{{group}}",
   "Task Name": "任务名称",
+  "Task run status changed": "",
   "Task run status changed to": "任务运行状态变更为",
   "Task run status changed to {{status}}": "任务运行状态变更为 {{status}}",
   "Task Wizard": "任务向导",

@@ -1949,6 +1949,7 @@
   "Task List": "作業清單",
   "Task made visible for:\n{{user}}\n{{role}}\n{{group}}": "",
   "Task Name": "作業名稱",
+  "Task run status changed": "",
   "Task run status changed to": "",
   "Task run status changed to {{status}}": "",
   "Task Wizard": "",

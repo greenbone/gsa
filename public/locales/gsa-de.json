@@ -1949,6 +1949,7 @@
   "Task List": "Aufgabenliste",
   "Task made visible for:\n{{user}}\n{{role}}\n{{group}}": "Aufgabe sichtbar gemacht für:\n{{user}}\n{{role}}\n{{group}}",
   "Task Name": "Name der Aufgabe",
+  "Task run status changed": "Status der Aufgabe hat sich geändert",
   "Task run status changed to": "Status der Aufgabe hat sich geändert zu",
   "Task run status changed to {{status}}": "Aufgaben-Status geändert zu {{status}}",
   "Task Wizard": "Aufgaben-Wizard",
