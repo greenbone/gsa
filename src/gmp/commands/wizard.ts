@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {feedStatusRejection} from 'gmp/commands/feedstatus';
+import {feedStatusRejection} from 'gmp/commands/feed-status';
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import {type ResponseRejection} from 'gmp/http/rejection';

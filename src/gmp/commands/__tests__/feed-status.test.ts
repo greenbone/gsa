@@ -10,7 +10,7 @@ import FeedStatusCommand, {
   feedStatusRejection,
   FEED_ENTERPRISE,
   type FeedStatusElement,
-} from 'gmp/commands/feedstatus';
+} from 'gmp/commands/feed-status';
 import {
   createResponse,
   createHttp,
