@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import EntityModel, {parseEntityModelProperties} from 'gmp/models/entitymodel';
+import EntityModel, {parseEntityModelProperties} from 'gmp/models/entity-model';
 import convert from 'gmp/models/filter/convert';
 import FilterTerm, {AND} from 'gmp/models/filter/filterterm';
 import {EXTRA_KEYWORDS} from 'gmp/models/filter/keywords';

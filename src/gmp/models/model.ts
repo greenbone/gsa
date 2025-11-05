@@ -7,7 +7,7 @@ import EntityModel, {
   type EntityModelElement,
   type EntityModelProperties,
   parseEntityModelProperties,
-} from 'gmp/models/entitymodel';
+} from 'gmp/models/entity-model';
 import {setProperties} from 'gmp/parser';
 import {type EntityType} from 'gmp/utils/entity-type';
 

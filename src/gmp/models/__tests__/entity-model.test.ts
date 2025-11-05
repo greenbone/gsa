@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import date from 'gmp/models/date';
-import EntityModel, {parseEntityModelProperties} from 'gmp/models/entitymodel';
+import EntityModel, {parseEntityModelProperties} from 'gmp/models/entity-model';
 import UserTag from 'gmp/models/usertag';
 import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 
