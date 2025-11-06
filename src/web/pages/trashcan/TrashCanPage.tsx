@@ -313,7 +313,7 @@ const TrashCan = () => {
         )}
         {hasEntities(trash?.portLists) && (
           <span>
-            <LinkTarget id="port_list" />
+            <LinkTarget id="port-list" />
             <h1>{_('Port Lists')}</h1>
             {/* @ts-expect-error */}
             <PortListTable entities={trash.portLists} {...tableProps} />
@@ -321,7 +321,7 @@ const TrashCan = () => {
         )}
         {hasEntities(trash?.reportConfigs) && (
           <span>
-            <LinkTarget id="report_config" />
+            <LinkTarget id="report-config" />
             <h1>{_('Report Configs')}</h1>
             <ReportConfigsTable
               entities={trash.reportConfigs}
@@ -331,7 +331,7 @@ const TrashCan = () => {
         )}
         {hasEntities(trash?.reportFormats) && (
           <span>
-            <LinkTarget id="report_format" />
+            <LinkTarget id="report-format" />
             <h1>{_('Report Formats')}</h1>
             <ReportFormatsTable
               entities={trash.reportFormats}
@@ -349,7 +349,7 @@ const TrashCan = () => {
         )}
         {hasEntities(trash?.scanConfigs) && (
           <span>
-            <LinkTarget id="config" />
+            <LinkTarget id="scan-config" />
             <h1>{_('Scan Configs')}</h1>
             <ScanConfigsTable entities={trash.scanConfigs} {...tableProps} />
           </span>
@@ -400,7 +400,7 @@ const TrashCan = () => {
         )}
         {hasEntities(trash?.agentGroups) && (
           <span>
-            <LinkTarget id="agent_group" />
+            <LinkTarget id="agent-group" />
             <h1>{_('Agent Groups')}</h1>
             {/* @ts-expect-error */}
             <AgentGroupsTable entities={trash.agentGroups} {...tableProps} />
@@ -408,7 +408,7 @@ const TrashCan = () => {
         )}
         {hasEntities(trash?.ociImageTargets) && (
           <span>
-            <LinkTarget id="oci_image_target" />
+            <LinkTarget id="oci-image-target" />
             <h1>{_('Container Image Targets')}</h1>
             {/* @ts-expect-error */}
             <ContainerImageTargetTable
