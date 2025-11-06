@@ -46,10 +46,20 @@ export const createEntitiesResponse = (name: string, entities: Element[]) =>
     },
   });
 
-export const createEntityResponse = (name: string, entity?: Element) =>
+export const createEntityResponse = (
+  name: string,
+  entity?: Element,
+  {
+    getName = `get_${name}`,
+    responseName = `get_${name}s_response`,
+  }: {
+    getName?: string;
+    responseName?: string;
+  } = {},
+) =>
   createResponse({
-    [`get_${name}`]: {
-      [`get_${name}s_response`]: {
+    [getName]: {
+      [responseName]: {
         [name]: entity,
       },
     },
