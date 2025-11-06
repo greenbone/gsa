@@ -197,7 +197,9 @@ class Agent extends Model {
 
     copy.hostname = parseToString(element.hostname);
     copy.agentId = parseToString(element.agent_id);
-    copy.authorized = parseBoolean(element.authorized);
+    copy.authorized = isDefined(element.authorized)
+      ? parseBoolean(element.authorized)
+      : undefined;
     copy.connectionStatus = parseToString(element.connection_status);
     copy.lastUpdate = parseDate(element.last_update);
     copy.lastUpdaterHeartbeat = parseDate(element.last_updater_heartbeat);
@@ -205,7 +207,9 @@ class Agent extends Model {
     copy.agentVersion = parseToString(element.agent_version);
     copy.operatingSystem = parseToString(element.operating_system);
     copy.architecture = parseToString(element.architecture);
-    copy.updateToLatest = parseBoolean(element.update_to_latest);
+    copy.updateToLatest = isDefined(element.update_to_latest)
+      ? parseBoolean(element.update_to_latest)
+      : undefined;
     copy.schedule = parseText(element.schedule);
 
     copy.scanner = isDefined(scanner)
