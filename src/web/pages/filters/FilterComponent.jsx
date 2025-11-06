@@ -14,6 +14,9 @@ import FilterDialog from 'web/pages/filters/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 
 const FILTER_OPTIONS = [
+  ['agent', _l('Agent')],
+  ['agent_group', _l('Agent Group')],
+  ['agent_installer', _l('Agent Installer')],
   ['alert', _l('Alert')],
   ['audit_report', _l('Audit Report')],
   ['credential', _l('Credential')],

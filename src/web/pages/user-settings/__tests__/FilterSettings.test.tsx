@@ -29,7 +29,7 @@ describe('FilterSettings', () => {
     const {render} = rendererWith({capabilities, gmp, store: true});
     render(<FilterSettings />);
     const rows = screen.getAllByRole('row');
-    expect(rows.length).toBe(34);
+    expect(rows.length).toBe(37);
   });
 
   test('renders all filter settings rows and links', async () => {
@@ -43,6 +43,9 @@ describe('FilterSettings', () => {
     });
 
     const entityTypeToDisplayName = {
+      agentgroup: 'Agent Groups',
+      agentinstaller: 'Agent Installers',
+      agent: 'Agents',
       alert: 'Alerts',
       audit: 'Audits',
       auditreport: 'Audit Reports',
@@ -189,55 +192,56 @@ describe('FilterSettings', () => {
     render(<FilterSettings />);
     await wait();
 
-    const editButtons = screen.getAllByRole('button', {name: /edit/i});
-    expect(editButtons.length).toBeGreaterThanOrEqual(2);
+    const alertsHeader = screen.getByText('Alerts Filter');
+    const alertsRow = alertsHeader.closest('tr') as HTMLTableRowElement;
 
-    editButtons[0].click();
+    fireEvent.click(within(alertsRow).getByRole('button', {name: /edit/i}));
     await wait();
-    const selectAlert = screen.getByTestId('form-select');
-    expect(selectAlert).toBeVisible();
-    (selectAlert as HTMLSelectElement).value = 'alert-filter-uuid-2';
-    fireEvent.change(selectAlert, {target: {value: 'alert-filter-uuid-2'}});
+
+    const alertsSelect = within(alertsRow).getByTestId('form-select');
+    (alertsSelect as HTMLInputElement).value = 'alert-filter-uuid-2';
+    fireEvent.change(alertsSelect, {target: {value: 'alert-filter-uuid-2'}});
     await wait();
-    const saveButtonAlert = screen.getByRole('button', {name: /save/i});
-    fireEvent.click(saveButtonAlert);
+
+    fireEvent.click(within(alertsRow).getByRole('button', {name: /save/i}));
     await wait();
+
     store.dispatch({
       type: USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS,
       entityType: 'alert',
       filter: mockFilters[1],
     });
     await wait();
-    const links = await screen.findAllByTestId('details-link');
-    const alertLink = links.find(
-      link => link.getAttribute('href') === '/filter/alert-filter-uuid-2',
-    );
-    expect(alertLink).toBeTruthy();
-    expect(alertLink).toHaveTextContent('alert Filter');
 
-    editButtons[1].click();
+    expect(
+      within(alertsRow).getByRole('link', {name: 'alert Filter'}),
+    ).toHaveAttribute('href', '/filter/alert-filter-uuid-2');
+
+    const credsHeader = screen.getByText('Credentials Filter');
+    const credsRow = credsHeader.closest('tr') as HTMLTableRowElement;
+
+    fireEvent.click(within(credsRow).getByRole('button', {name: /edit/i}));
     await wait();
-    const selectCredential = screen.getByTestId('form-select');
-    expect(selectCredential).toBeVisible();
-    (selectCredential as HTMLSelectElement).value = 'credential-filter-uuid-2';
-    fireEvent.change(selectCredential, {
+
+    const credsSelect = within(credsRow).getByTestId('form-select');
+    (credsSelect as HTMLInputElement).value = 'credential-filter-uuid-2';
+    fireEvent.change(credsSelect, {
       target: {value: 'credential-filter-uuid-2'},
     });
     await wait();
-    const saveButtonCredential = screen.getByRole('button', {name: /save/i});
-    fireEvent.click(saveButtonCredential);
+
+    fireEvent.click(within(credsRow).getByRole('button', {name: /save/i}));
     await wait();
+
     store.dispatch({
       type: USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS,
       entityType: 'credential',
       filter: mockFilters[3],
     });
     await wait();
-    const linksAfter = await screen.findAllByTestId('details-link');
-    const credentialLink = linksAfter.find(
-      link => link.getAttribute('href') === '/filter/credential-filter-uuid-2',
-    );
-    expect(credentialLink).toBeTruthy();
-    expect(credentialLink).toHaveTextContent('credential Filter');
+
+    expect(
+      within(credsRow).getByRole('link', {name: 'credential Filter'}),
+    ).toHaveAttribute('href', '/filter/credential-filter-uuid-2');
   });
 });
