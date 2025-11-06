@@ -6,31 +6,12 @@
 import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
-import logger from 'gmp/log';
 import AgentGroup from 'gmp/models/agent-group';
 import type Filter from 'gmp/models/filter';
-
-const log = logger.getLogger('gmp.commands.agentgroups');
 
 class AgentGroupsCommand extends EntitiesCommand<AgentGroup> {
   constructor(http: Http) {
     super(http, 'agent_group', AgentGroup);
-  }
-
-  deleteAgentGroups(agentGroups: {id: string}[]) {
-    log.debug('Deleting agent groups', {agentGroups});
-
-    const data: Record<string, string | number | boolean | undefined> = {
-      cmd: 'delete_agent_group',
-    };
-
-    if (agentGroups?.length) {
-      data['agent_group_id'] = agentGroups
-        .map(agentGroup => agentGroup.id)
-        .join(',');
-    }
-
-    return this.httpPostWithTransform(data);
   }
 
   getSeverityAggregates({filter}: {filter?: Filter} = {}) {
