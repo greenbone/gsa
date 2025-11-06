@@ -117,21 +117,21 @@ const TrashCanTableContents = ({trash}: TrashCanContentsTableProps) => {
         <TrashCanTableRow
           count={trash.portLists.length}
           title={_('Port Lists')}
-          type="port_list"
+          type="port-list"
         />
       )}
       {hasReportConfigs && (
         <TrashCanTableRow
           count={trash.reportConfigs.length}
           title={_('Report Configs')}
-          type="report_config"
+          type="report-config"
         />
       )}
       {hasReportFormats && (
         <TrashCanTableRow
           count={trash.reportFormats.length}
           title={_('Report Formats')}
-          type="report_format"
+          type="report-format"
         />
       )}
       {hasRoles && (
@@ -145,7 +145,7 @@ const TrashCanTableContents = ({trash}: TrashCanContentsTableProps) => {
         <TrashCanTableRow
           count={trash.scanConfigs.length}
           title={_('Scan Configs')}
-          type="config"
+          type="scan-config"
         />
       )}
       {hasScanners && (
@@ -194,14 +194,14 @@ const TrashCanTableContents = ({trash}: TrashCanContentsTableProps) => {
         <TrashCanTableRow
           count={trash.agentGroups.length}
           title={_('Agent Groups')}
-          type="agentgroup"
+          type="agent-group"
         />
       )}
       {hasOciImageTargets && (
         <TrashCanTableRow
           count={trash.ociImageTargets.length}
           title={_('Container Image Targets')}
-          type="oci_image_target"
+          type="oci-image-target"
         />
       )}
     </TableBody>
