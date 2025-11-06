@@ -11,6 +11,8 @@ import {
 } from 'gmp/commands/testing';
 import UserCommand, {
   type CertificateInfo,
+  DEFAULT_FILTER_SETTINGS,
+  saveDefaultFilterSettingId,
   transformSettingName,
 } from 'gmp/commands/user';
 
@@ -224,5 +226,127 @@ describe('UserCommand saveTimezone() tests', () => {
     const cmd = new UserCommand(fakeHttp);
     const settingValue = 'Europe/Berlin';
     await expect(cmd.saveTimezone(settingValue)).rejects.toThrow('fail');
+  });
+});
+
+describe('UserCommand saveSetting() agent defaults', () => {
+  test('posts agent/agentgroup/agentinstaller default filter IDs with provided values', async () => {
+    const fakeHttp = createHttp(createResponse({success: true}));
+    const cmd = new UserCommand(fakeHttp);
+
+    const agentsFilterValue = 'agents-filter-id-123';
+    const agentGroupsFilterValue = 'agent-groups-filter-id-456';
+    const agentInstallersFilterValue = 'agent-installers-filter-id-789';
+
+    await cmd.saveSetting(
+      saveDefaultFilterSettingId('agent'),
+      agentsFilterValue,
+    );
+
+    await cmd.saveSetting(
+      saveDefaultFilterSettingId('agentgroup'),
+      agentGroupsFilterValue,
+    );
+
+    await cmd.saveSetting(
+      saveDefaultFilterSettingId('agentinstaller'),
+      agentInstallersFilterValue,
+    );
+
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {
+      data: {
+        cmd: 'save_setting',
+        setting_id: `settings_filter:${DEFAULT_FILTER_SETTINGS.agent}`,
+        setting_value: agentsFilterValue,
+      },
+    });
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {
+      data: {
+        cmd: 'save_setting',
+        setting_id: `settings_filter:${DEFAULT_FILTER_SETTINGS.agentgroup}`,
+        setting_value: agentGroupsFilterValue,
+      },
+    });
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(3, 'post', {
+      data: {
+        cmd: 'save_setting',
+        setting_id: `settings_filter:${DEFAULT_FILTER_SETTINGS.agentinstaller}`,
+        setting_value: agentInstallersFilterValue,
+      },
+    });
+  });
+
+  test('does not overwrite unrelated defaults when only agent fields are provided', async () => {
+    const fakeHttp = createHttp(createResponse({success: true}));
+    const cmd = new UserCommand(fakeHttp);
+
+    await cmd.saveSetting(saveDefaultFilterSettingId('agent'), 'A');
+    await cmd.saveSetting(saveDefaultFilterSettingId('agentgroup'), 'B');
+    await cmd.saveSetting(saveDefaultFilterSettingId('agentinstaller'), 'C');
+
+    expect(fakeHttp.request).toHaveBeenCalledTimes(3);
+
+    const post = 'post';
+    const expectData = (settingId: string, value: string) =>
+      expect.objectContaining({
+        cmd: 'save_setting',
+        setting_id: settingId,
+        setting_value: value,
+      });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith(post, {
+      data: expectData(`settings_filter:${DEFAULT_FILTER_SETTINGS.agent}`, 'A'),
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith(post, {
+      data: expectData(
+        `settings_filter:${DEFAULT_FILTER_SETTINGS.agentgroup}`,
+        'B',
+      ),
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith(post, {
+      data: expectData(
+        `settings_filter:${DEFAULT_FILTER_SETTINGS.agentinstaller}`,
+        'C',
+      ),
+    });
+
+    expect(fakeHttp.request).not.toHaveBeenCalledWith(post, {
+      data: expect.objectContaining({
+        setting_id: `settings_filter:${DEFAULT_FILTER_SETTINGS.alert}`,
+      }),
+    });
+    expect(fakeHttp.request).not.toHaveBeenCalledWith(post, {
+      data: expect.objectContaining({
+        setting_id: `settings_filter:${DEFAULT_FILTER_SETTINGS.target}`,
+      }),
+    });
+  });
+});
+
+describe('UserCommand currentSettings() naming normalization', () => {
+  test('normalizes keys for agent-related defaults', async () => {
+    const response = createResponse({
+      get_settings: {
+        get_settings_response: {
+          setting: [
+            {_id: 'x1', name: 'Agent Groups Filter', value: 'foo'},
+            {_id: 'x2', name: 'Agent-Installers Filter', value: 'bar'},
+            {_id: 'x3', name: 'Agents Filter', value: 'baz'},
+          ],
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new UserCommand(fakeHttp);
+
+    const {data: settings} = await cmd.currentSettings();
+
+    expect(settings['agentgroupsfilter']).toBeDefined();
+    expect(settings['agentinstallersfilter']).toBeDefined();
+    expect(settings['agentsfilter']).toBeDefined();
+
+    expect(settings['agentgroupsfilter'].value).toBe('foo');
+    expect(settings['agentinstallersfilter'].value).toBe('bar');
+    expect(settings['agentsfilter'].value).toBe('baz');
   });
 });

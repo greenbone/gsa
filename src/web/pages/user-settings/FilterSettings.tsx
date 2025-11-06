@@ -37,6 +37,9 @@ interface FilterSettingsProps {
 type FilterName = (typeof FILTER_NAMES)[number];
 
 const FILTER_NAMES = [
+  'agentGroupsFilter',
+  'agentInstallersFilter',
+  'agentsFilter',
   'alertsFilter',
   'auditsFilter',
   'auditReportsFilter',
@@ -73,6 +76,9 @@ const FILTER_NAMES = [
 ] as const;
 
 const FILTER_NAME_TO_ENTITY_TYPE: Record<FilterName, string> = {
+  agentGroupsFilter: 'agentgroup',
+  agentInstallersFilter: 'agentinstaller',
+  agentsFilter: 'agent',
   alertsFilter: 'alert',
   auditReportsFilter: 'auditreport',
   auditsFilter: 'audit',
@@ -119,6 +125,9 @@ const getFilterSettingId = (filterName: FilterName): string => {
 };
 
 const FILTER_TYPE_MAP: Record<string, string> = {
+  agentGroups: 'agent_group',
+  agentInstallers: 'agent_installer',
+  agents: 'agent',
   alerts: 'alert',
   auditReports: 'audit_report',
   audits: 'task',
@@ -171,6 +180,9 @@ const getFilterTypeFromKey = (key: string): string => {
 
 const getFilterTitle = (key: string, _: (text: string) => string): string => {
   const titleMap: Record<string, string> = {
+    agentGroupsFilter: _('Agent Groups Filter'),
+    agentInstallersFilter: _('Agent Installers Filter'),
+    agentsFilter: _('Agents Filter'),
     alertsFilter: _('Alerts Filter'),
     auditsFilter: _('Audits Filter'),
     auditReportsFilter: _('Audit Reports Filter'),

@@ -142,6 +142,9 @@ interface SaveSettingsArguments {
   defaultOspScanner?: string;
   defaultSchedule?: string;
   defaultTarget?: string;
+  agentGroupsFilter?: string;
+  agentInstallersFilter?: string;
+  agentsFilter?: string;
   alertsFilter?: string;
   assetsFilter?: string;
   auditReportsFilter?: string;
@@ -201,11 +204,13 @@ export const DEFAULT_FILTER_SETTINGS: Record<
   Exclude<
     EntityType,
     // info and portrange do not have filter settings
-    // agent, agentgroup, agentinstaller default filters will be added later
-    'info' | 'portrange' | 'agent' | 'agentgroup' | 'agentinstaller'
+    'info' | 'portrange'
   >,
   string
 > = {
+  agent: 'c544a310-dc13-49c6-858e-f3160d75e221',
+  agentgroup: '391fc4f4-9f6c-4f0e-a689-37dd7d70d144',
+  agentinstaller: 'a39a719a-e6bc-4d9f-a1e6-a53e5b014b05',
   alert: 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092',
   asset: '0f040d06-abf9-43a2-8f94-9de178b0e978',
   audit: 'aaf1b63b-55a6-40ee-ae06-e8e50726f55a',
@@ -240,11 +245,7 @@ export const DEFAULT_FILTER_SETTINGS: Record<
   tlscertificate: '34a176c1-0278-4c29-b84d-3d72117b2169',
   user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
-  /**
-   * TODO: CONTAINER SCANNING
-   * filter id to be defined
-   */
-  ociimagetarget: 'to be defined',
+  ociimagetarget: 'db61a364-de40-4552-b1bc-a518744f847a',
 } as const;
 
 const PARAM_KEYS = {
@@ -252,7 +253,7 @@ const PARAM_KEYS = {
   TIME: 'time_format',
 } as const;
 
-const saveDefaultFilterSettingId = (entityType: string) =>
+export const saveDefaultFilterSettingId = (entityType: string) =>
   `settings_filter:${DEFAULT_FILTER_SETTINGS[entityType]}`;
 
 export const transformSettingName = (name: string) =>
@@ -497,6 +498,11 @@ class UserCommand extends EntityCommand<User, PortListElement> {
         data.defaultSchedule,
       [`settings_default:${DEFAULT_SETTINGS.defaulttarget}`]:
         data.defaultTarget,
+      [saveDefaultFilterSettingId('agent')]: data.agentsFilter,
+      [saveDefaultFilterSettingId('agentgroup')]: data.agentGroupsFilter,
+      [saveDefaultFilterSettingId('agentinstaller')]:
+        data.agentInstallersFilter,
+      [saveDefaultFilterSettingId('alert')]: data.alertsFilter,
       [saveDefaultFilterSettingId('alert')]: data.alertsFilter,
       [saveDefaultFilterSettingId('asset')]: data.assetsFilter,
       [saveDefaultFilterSettingId('auditreport')]: data.auditReportsFilter,
