@@ -674,6 +674,9 @@ describe('UserSettingsPage', () => {
       });
 
       const entityTypeToDisplayName = {
+        agentgroup: 'Agent Groups',
+        agentinstaller: 'Agent Installers',
+        agent: 'Agents',
         alert: 'Alerts',
         audit: 'Audits',
         auditreport: 'Audit Reports',
