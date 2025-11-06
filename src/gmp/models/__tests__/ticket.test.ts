@@ -20,6 +20,8 @@ describe('Ticket Model tests', () => {
     expect(ticket.fixedTime).toBeUndefined();
     expect(ticket.fixVerifiedReport).toBeUndefined();
     expect(ticket.fixVerifiedTime).toBeUndefined();
+    expect(ticket.host).toBeUndefined();
+    expect(ticket.location).toBeUndefined();
     expect(ticket.nvt).toBeUndefined();
     expect(ticket.openNote).toBeUndefined();
     expect(ticket.openTime).toBeUndefined();
@@ -40,6 +42,8 @@ describe('Ticket Model tests', () => {
     expect(ticket.fixedTime).toBeUndefined();
     expect(ticket.fixVerifiedReport).toBeUndefined();
     expect(ticket.fixVerifiedTime).toBeUndefined();
+    expect(ticket.host).toBeUndefined();
+    expect(ticket.location).toBeUndefined();
     expect(ticket.nvt).toBeUndefined();
     expect(ticket.openNote).toBeUndefined();
     expect(ticket.openTime).toBeUndefined();
@@ -107,6 +111,16 @@ describe('Ticket Model tests', () => {
   test('should parse closedTime', () => {
     const ticket = Ticket.fromElement({closed_time: '2019-01-01T12:00:00Z'});
     expect(ticket.closedTime).toEqual(parseDate('2019-01-01T12:00:00Z'));
+  });
+
+  test('should parse host', () => {
+    const ticket = Ticket.fromElement({host: 'foo'});
+    expect(ticket.host).toEqual('foo');
+  });
+
+  test('should parse location', () => {
+    const ticket = Ticket.fromElement({location: 'foo'});
+    expect(ticket.location).toEqual('foo');
   });
 
   test('should parse solutionType', () => {

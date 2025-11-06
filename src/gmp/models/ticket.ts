@@ -25,7 +25,6 @@ interface TicketElement extends ModelElement {
   fixed_time?: string;
   fix_verified_report?: ModelElement;
   fix_verified_time?: string;
-  location?: string;
   nvt?: {
     _oid?: string;
   };
@@ -38,6 +37,8 @@ interface TicketElement extends ModelElement {
   result?: {
     _id?: string;
   };
+  host?: string;
+  location?: string;
   severity?: number;
   solution_type?: string;
   status?: TicketStatus;
@@ -63,6 +64,8 @@ interface TicketProperties extends ModelProperties {
   openTime?: Date;
   result?: Model;
   report?: Model;
+  host?: string;
+  location?: string;
   severity?: number;
   solutionType?: string;
   status?: TicketStatus;
@@ -101,6 +104,8 @@ class Ticket extends Model {
   readonly openTime?: Date;
   readonly result?: Model;
   readonly report?: Model;
+  readonly host?: string;
+  readonly location?: string;
   readonly severity?: number;
   readonly solutionType?: string;
   readonly status?: TicketStatus;
@@ -114,6 +119,8 @@ class Ticket extends Model {
     fixedTime,
     fixVerifiedReport,
     fixVerifiedTime,
+    host,
+    location,
     nvt,
     openNote,
     openTime,
@@ -134,6 +141,8 @@ class Ticket extends Model {
     this.fixedTime = fixedTime;
     this.fixVerifiedReport = fixVerifiedReport;
     this.fixVerifiedTime = fixVerifiedTime;
+    this.host = host;
+    this.location = location;
     this.nvt = nvt;
     this.openNote = openNote;
     this.openTime = openTime;
@@ -203,6 +212,8 @@ class Ticket extends Model {
       ret.closedTime = parseDate(element.closed_time);
     }
 
+    ret.host = element.host;
+    ret.location = element.location;
     ret.solutionType = element.solution_type;
 
     const openNote = parseText(element.open_note);
