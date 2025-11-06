@@ -27,6 +27,7 @@ import Table from 'web/components/table/StripedTable';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
+import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsTable from 'web/pages/agent-groups/AgentGroupsTable';
@@ -75,6 +76,7 @@ const hasEntities = (entities: Model[] | undefined): entities is Model[] => {
 
 const TrashCan = () => {
   const gmp = useGmp();
+  const features = useFeatures();
   const [isLoading, setIsLoading] = useState(false);
   const [isEmptyTrashDialogVisible, setIsEmptyTrashDialogVisible] =
     useState(false);
@@ -90,29 +92,34 @@ const TrashCan = () => {
 
   const loadTrash = useCallback(() => {
     setIsLoading(true);
-    gmp.trashcan.get().then(
-      response => {
-        setTrash(response.data);
-        setIsLoading(false);
+    gmp.trashcan
+      .get({
+        agentGroups: features.featureEnabled('ENABLE_AGENTS'),
+        ociImageTargets: features.featureEnabled('ENABLE_CONTAINER_SCANNING'),
+      })
+      .then(
+        response => {
+          setTrash(response.data);
+          setIsLoading(false);
 
-        if (
-          response.data.failedRequests &&
-          response.data.failedRequests.length > 0
-        ) {
-          response.data.failedRequests.forEach(requestType => {
-            showErrorNotification(
-              '',
-              _('Failed to load {{type}} from trashcan', {type: requestType}),
-            );
-          });
-        }
-      },
-      error => {
-        showError(error);
-        setIsLoading(false);
-      },
-    );
-  }, [gmp, showError, _]);
+          if (
+            response.data.failedRequests &&
+            response.data.failedRequests.length > 0
+          ) {
+            response.data.failedRequests.forEach(requestType => {
+              showErrorNotification(
+                '',
+                _('Failed to load {{type}} from trashcan', {type: requestType}),
+              );
+            });
+          }
+        },
+        error => {
+          showError(error);
+          setIsLoading(false);
+        },
+      );
+  }, [gmp.trashcan, features, _, showError]);
 
   const handleRestore = async (entity: Model) => {
     try {

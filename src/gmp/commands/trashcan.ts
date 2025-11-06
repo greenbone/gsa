@@ -217,7 +217,13 @@ class TrashCanCommand extends HttpCommand {
     await this.httpPostWithTransform({cmd: 'empty_trashcan'});
   }
 
-  async get(): Promise<Response<TrashCanGetData, XmlMeta>> {
+  async get({
+    agentGroups: requestAgentGroups = false,
+    ociImageTargets: requestOciImageTargets = false,
+  }: {
+    agentGroups?: boolean;
+    ociImageTargets?: boolean;
+  } = {}): Promise<Response<TrashCanGetData, XmlMeta>> {
     const alertsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_alerts',
     }) as TrashCanGetPromise<AlertResponseData>;
@@ -272,12 +278,16 @@ class TrashCanCommand extends HttpCommand {
     const ticketsRequest = this.httpGetWithTransform({
       cmd: 'get_trash_tickets',
     }) as TrashCanGetPromise<TicketsResponseData>;
-    const agentGroupRequest = this.httpGetWithTransform({
-      cmd: 'get_trash_agent_group',
-    }) as TrashCanGetPromise<AgentGroupResponseData>;
-    const ociImageTargetRequest = this.httpGetWithTransform({
-      cmd: 'get_trash_oci_image_targets',
-    }) as TrashCanGetPromise<OciImageTargetResponseData>;
+    const agentGroupRequest = requestAgentGroups
+      ? (this.httpGetWithTransform({
+          cmd: 'get_trash_agent_group',
+        }) as TrashCanGetPromise<AgentGroupResponseData>)
+      : Promise.resolve();
+    const ociImageTargetRequest = requestOciImageTargets
+      ? (this.httpGetWithTransform({
+          cmd: 'get_trash_oci_image_targets',
+        }) as TrashCanGetPromise<OciImageTargetResponseData>)
+      : Promise.resolve();
 
     const requests = [
       alertsRequest,
