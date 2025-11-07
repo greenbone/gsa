@@ -8,6 +8,7 @@ import {
   type EntityActionData,
   type EntityCommandParams,
 } from 'gmp/commands/entity';
+import {type PortListCommandSaveParams} from 'gmp/commands/port-lists';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
@@ -97,7 +98,10 @@ const PortListComponent = ({
   const [createdPortRanges, setCreatedPortRanges] = useState<PortRange[]>([]);
   const [deletedPortRanges, setDeletedPortRanges] = useState<PortRange[]>([]);
 
-  const handleSave = useEntitySave('portlist', {
+  const handleSave = useEntitySave<
+    PortListCommandSaveParams,
+    Response<ActionResult, XmlMeta>
+  >(data => gmp.portlist.save(data), {
     onSaveError,
     onSaved,
   });
@@ -255,7 +259,11 @@ const PortListComponent = ({
         }
         throw error;
       }
-      await handleSave(data);
+      await handleSave({
+        id: data.id,
+        name: data.name,
+        comment: data.comment,
+      });
     } else {
       await handleCreate(data);
     }

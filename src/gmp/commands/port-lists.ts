@@ -21,7 +21,7 @@ interface PortListCommandCreateParams {
   file?: string;
 }
 
-interface PortListCommandSaveParams {
+export interface PortListCommandSaveParams {
   id: string;
   name: string;
   comment?: string;

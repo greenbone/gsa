@@ -18,11 +18,11 @@ interface ScannerCommandCreateParams {
   comment?: string;
   credentialId?: string;
   host: string;
-  port: number;
+  port: number | '';
   type: ScannerType;
 }
 
-interface ScannerCommandSaveParams extends ScannerCommandCreateParams {
+export interface ScannerCommandSaveParams extends ScannerCommandCreateParams {
   id: string;
 }
 

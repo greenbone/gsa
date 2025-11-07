@@ -58,7 +58,7 @@ interface ScannerDialogValues {
   caCertificate?: File;
   credentialId?: string;
   type?: ScannerType;
-  port?: number;
+  port: number | '';
 }
 
 export type ScannerDialogState = ScannerDialogValues &
@@ -79,7 +79,7 @@ const updatePort = (scannerType: ScannerType | undefined) => {
   ) {
     return 443;
   }
-  return undefined;
+  return '';
 };
 
 const ScannerDialog = ({
@@ -131,7 +131,7 @@ const ScannerDialog = ({
     },
   );
   const [userChangePort, setUserChangedPort] = useState<boolean>(false);
-  const [scannerPort, setScannerPort] = useState<number | undefined>(
+  const [scannerPort, setScannerPort] = useState<number | ''>(
     () => port ?? updatePort(type),
   );
 

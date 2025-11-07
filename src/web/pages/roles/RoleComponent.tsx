@@ -5,6 +5,7 @@
 
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {type RoleCommandSaveParams} from 'gmp/commands/role';
 import type Rejection from 'gmp/http/rejection';
 import Filter from 'gmp/models/filter';
 import type Permission from 'gmp/models/permission';
@@ -260,10 +261,13 @@ const RoleComponent = ({
     onCreateError,
   });
 
-  const handleEntitySave = useEntitySave('role', {
-    onSaved,
-    onSaveError,
-  });
+  const handleEntitySave = useEntitySave<RoleCommandSaveParams, void>(
+    entity => gmp.role.save(entity),
+    {
+      onSaved,
+      onSaveError,
+    },
+  );
 
   const handleEntityDelete = useEntityDelete(
     entity => gmp.role.delete(entity),
@@ -300,11 +304,15 @@ const RoleComponent = ({
           onCreateSuperPermission={handleCreateSuperPermission}
           onDeletePermission={handleDeletePermission}
           onErrorClose={handleErrorClose}
-          onSave={d => {
+          onSave={async d => {
             const promise = isDefined(d.id)
-              ? handleEntitySave(d)
+              ? handleEntitySave({
+                  ...d,
+                  id: d.id as string,
+                })
               : handleEntityCreate(d);
-            return promise.then(() => closeRoleDialog());
+            await promise;
+            return closeRoleDialog();
           }}
         />
       )}

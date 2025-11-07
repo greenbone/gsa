@@ -3,34 +3,34 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type EntityType} from 'gmp/utils/entity-type';
+import type Response from 'gmp/http/response';
+import {type XmlMeta} from 'gmp/http/transform/fast-xml';
+import type ActionResult from 'gmp/models/action-result';
 import actionFunction from 'web/entity/hooks/action-function';
-import useGmp from 'web/hooks/useGmp';
 
-interface EntitySaveCallbacks<TSaveResponse = unknown, TSaveError = unknown> {
-  onSaveError?: (error: TSaveError) => void;
+interface EntitySaveCallbacks<TSaveResponse = unknown> {
+  onSaveError?: (error: Error) => void;
   onSaved?: (response: TSaveResponse) => void;
 }
+
+type EntitySaveFunction<TSaveData, TSaveResponse> = (
+  data: TSaveData,
+) => Promise<TSaveResponse>;
 
 /**
  * Custom hook to handle saving or creating an entity.
  *
  */
+
 const useEntitySave = <
   TSaveData = {},
-  TSaveResponse = unknown,
-  TSaveError = unknown,
+  TSaveResponse = Response<ActionResult, XmlMeta>,
 >(
-  name: EntityType,
-  {onSaveError, onSaved}: EntitySaveCallbacks<TSaveResponse, TSaveError> = {},
+  gmpMethod: EntitySaveFunction<TSaveData, TSaveResponse>,
+  {onSaveError, onSaved}: EntitySaveCallbacks<TSaveResponse> = {},
 ) => {
-  const gmp = useGmp();
-  const cmd = gmp[name] as {
-    save: (data: TSaveData) => Promise<TSaveResponse>;
-  };
-
   const handleEntitySave = async (data: TSaveData) => {
-    return actionFunction(cmd.save(data as TSaveData), {
+    return actionFunction(gmpMethod(data), {
       onSuccess: onSaved,
       onError: onSaveError,
     });

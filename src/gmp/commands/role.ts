@@ -16,7 +16,7 @@ interface RoleCommandCreateParams {
   users?: string[] | string;
 }
 
-interface RoleCommandSaveParams {
+export interface RoleCommandSaveParams {
   id: string;
   name: string;
   comment?: string;

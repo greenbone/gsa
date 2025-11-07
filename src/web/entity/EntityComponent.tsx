@@ -14,22 +14,40 @@ import useEntityDownload, {
 import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 
-interface EntityComponentRenderProps<TEntity, TCreateData, TCreateResponse> {
+interface EntityComponentRenderProps<
+  TEntity,
+  TCreateData,
+  TCreateResponse,
+  TSaveData,
+  TSaveResponse,
+> {
   delete: (entity: TEntity) => Promise<void>;
   create: (data: TCreateData) => Promise<TCreateResponse | void>;
   clone: (entity: TEntity) => Promise<unknown>;
   download: (entity: TEntity) => Promise<void>;
-  save: (entity: TEntity) => void;
+  save: (entity: TSaveData) => Promise<TSaveResponse | void>;
 }
 
-interface EntityComponentProps<TEntity, TCreateData, TCreateResponse> {
+interface EntityComponentProps<
+  TEntity,
+  TCreateData,
+  TCreateResponse,
+  TSaveData,
+  TSaveResponse,
+> {
   name: EntityType;
   children: (
-    props: EntityComponentRenderProps<TEntity, TCreateData, TCreateResponse>,
+    props: EntityComponentRenderProps<
+      TEntity,
+      TCreateData,
+      TCreateResponse,
+      TSaveData,
+      TSaveResponse
+    >,
   ) => React.ReactNode;
   onDownloaded?: OnDownloadedFunc;
   onDownloadError?: (error: Error) => void;
-  onSaved?: (entity: TEntity) => void;
+  onSaved?: (response: TSaveResponse) => void;
   onSaveError?: (error: Error) => void;
   onCreated?: (response: TCreateResponse) => void;
   onCreateError?: (error: Error) => void;
@@ -43,6 +61,8 @@ const EntityComponent = <
   TEntity extends Model,
   TCreateData = {},
   TCreateResponse = unknown,
+  TSaveData = {},
+  TSaveResponse = unknown,
 >({
   children,
   name,
@@ -56,7 +76,13 @@ const EntityComponent = <
   onDeleteError,
   onCloned,
   onCloneError,
-}: EntityComponentProps<TEntity, TCreateData, TCreateResponse>) => {
+}: EntityComponentProps<
+  TEntity,
+  TCreateData,
+  TCreateResponse,
+  TSaveData,
+  TSaveResponse
+>) => {
   const gmp = useGmp();
   const cmd = gmp[name];
   const handleEntityDownload = useEntityDownload(entity => cmd.export(entity), {
@@ -64,10 +90,13 @@ const EntityComponent = <
     onDownloaded,
   });
 
-  const handleEntitySave = useEntitySave(name, {
-    onSaveError,
-    onSaved,
-  });
+  const handleEntitySave = useEntitySave<TSaveData, TSaveResponse>(
+    data => cmd.save(data),
+    {
+      onSaveError,
+      onSaved,
+    },
+  );
 
   const handleEntityCreate = useEntityCreate<TCreateData, TCreateResponse>(
     name,

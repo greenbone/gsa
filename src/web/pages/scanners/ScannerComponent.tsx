@@ -5,6 +5,7 @@
 
 import {useState} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
+import {type ScannerCommandSaveParams} from 'gmp/commands/scanner';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type ActionResult from 'gmp/models/action-result';
@@ -325,14 +326,13 @@ const ScannerComponent = ({
       onDownloaded,
     },
   );
-  const handleScannerSave = useEntitySave<
-    ScannerDialogState,
-    Response<ActionResult, XmlMeta>,
-    Error
-  >('scanner', {
-    onSaveError,
-    onSaved,
-  });
+  const handleScannerSave = useEntitySave<ScannerCommandSaveParams>(
+    entity => gmp.scanner.save(entity),
+    {
+      onSaveError,
+      onSaved,
+    },
+  );
   const handleScannerCreate = useEntityCreate<
     ScannerDialogState,
     Response<ActionResult, XmlMeta>,
@@ -385,7 +385,11 @@ const ScannerComponent = ({
           onNewCredentialClick={openCredentialsDialog}
           onSave={async d => {
             const promise = isDefined(d.id)
-              ? handleScannerSave(d)
+              ? handleScannerSave({
+                  ...d,
+                  id: d.id as string,
+                  type: d.type as ScannerType,
+                })
               : handleScannerCreate(d);
             await promise;
             return closeScannerDialog();
