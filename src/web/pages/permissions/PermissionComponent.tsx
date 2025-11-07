@@ -273,10 +273,14 @@ const PermissionsComponent = ({
     onCreated,
   });
 
-  const handleEntityDelete = useEntityDelete('permission', {
-    onDeleteError,
-    onDeleted,
-  });
+  const handleEntityDelete = useEntityDelete(
+    // @ts-expect-error
+    entity => gmp.permission.delete(entity),
+    {
+      onDeleteError,
+      onDeleted,
+    },
+  );
 
   return (
     <>

@@ -265,10 +265,13 @@ const RoleComponent = ({
     onSaveError,
   });
 
-  const handleEntityDelete = useEntityDelete('role', {
-    onDeleteError,
-    onDeleted,
-  });
+  const handleEntityDelete = useEntityDelete(
+    entity => gmp.role.delete(entity),
+    {
+      onDeleteError,
+      onDeleted,
+    },
+  );
 
   return (
     <>
