@@ -17,12 +17,13 @@ const currentSettingsResponse = {
   },
 };
 
-describe('EntityComponent', () => {
+describe('EntityComponent tests', () => {
   test('should render', () => {
+    const exportFunc = testing.fn();
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsResponse);
-    const gmp = {foo: {}, user: {currentSettings}};
+    const gmp = {foo: {export: exportFunc}, user: {currentSettings}};
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -46,6 +47,7 @@ describe('EntityComponent', () => {
   });
 
   test('should allow cloning an entity', async () => {
+    const exportFunc = testing.fn();
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsResponse);
@@ -54,7 +56,10 @@ describe('EntityComponent', () => {
     const onCloneError = testing.fn();
 
     const gmp = {
-      foo: {clone: testing.fn().mockResolvedValue(clonedData)},
+      foo: {
+        clone: testing.fn().mockResolvedValue(clonedData),
+        export: exportFunc,
+      },
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
@@ -77,6 +82,7 @@ describe('EntityComponent', () => {
   });
 
   test('should call onCloneError when cloning an entity fails', async () => {
+    const exportFunc = testing.fn();
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsResponse);
@@ -85,7 +91,7 @@ describe('EntityComponent', () => {
     const onCloneError = testing.fn();
 
     const gmp = {
-      foo: {clone: testing.fn().mockRejectedValue(error)},
+      foo: {clone: testing.fn().mockRejectedValue(error), export: exportFunc},
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
@@ -108,6 +114,7 @@ describe('EntityComponent', () => {
   });
 
   test('should allow deleting an entity', async () => {
+    const exportFunc = testing.fn();
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsResponse);
@@ -118,6 +125,7 @@ describe('EntityComponent', () => {
     const gmp = {
       foo: {
         delete: testing.fn().mockResolvedValue(deletedData),
+        export: exportFunc,
       },
       user: {currentSettings},
     };
@@ -141,6 +149,7 @@ describe('EntityComponent', () => {
   });
 
   test('should call onDeleteError when deleting an entity fails', async () => {
+    const exportFunc = testing.fn();
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsResponse);
@@ -149,7 +158,7 @@ describe('EntityComponent', () => {
     const onDeleteError = testing.fn();
 
     const gmp = {
-      foo: {delete: testing.fn().mockRejectedValue(error)},
+      foo: {delete: testing.fn().mockRejectedValue(error), export: exportFunc},
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
@@ -172,6 +181,7 @@ describe('EntityComponent', () => {
   });
 
   test('should allow saving an entity', async () => {
+    const exportFunc = testing.fn();
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsResponse);
@@ -182,6 +192,7 @@ describe('EntityComponent', () => {
     const gmp = {
       foo: {
         save: testing.fn().mockResolvedValue(savedData),
+        export: exportFunc,
       },
       user: {currentSettings},
     };
@@ -201,6 +212,7 @@ describe('EntityComponent', () => {
   });
 
   test('should call onSaveError when saving an entity fails', async () => {
+    const exportFunc = testing.fn();
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsResponse);
@@ -209,7 +221,7 @@ describe('EntityComponent', () => {
     const onSaveError = testing.fn();
 
     const gmp = {
-      foo: {save: testing.fn().mockRejectedValue(error)},
+      foo: {save: testing.fn().mockRejectedValue(error), export: exportFunc},
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
@@ -228,6 +240,7 @@ describe('EntityComponent', () => {
   });
 
   test('should allow to create an entity', async () => {
+    const exportFunc = testing.fn();
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsResponse);
@@ -238,6 +251,7 @@ describe('EntityComponent', () => {
     const gmp = {
       foo: {
         create: testing.fn().mockResolvedValue(createdData),
+        export: exportFunc,
       },
       user: {currentSettings},
     };
@@ -261,6 +275,7 @@ describe('EntityComponent', () => {
   });
 
   test('should call onCreateError when creating an entity fails', async () => {
+    const exportFunc = testing.fn();
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsResponse);
@@ -269,7 +284,7 @@ describe('EntityComponent', () => {
     const onCreateError = testing.fn();
 
     const gmp = {
-      foo: {create: testing.fn().mockRejectedValue(error)},
+      foo: {create: testing.fn().mockRejectedValue(error), export: exportFunc},
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
@@ -300,6 +315,7 @@ describe('EntityComponent', () => {
       name: 'foo',
       creationTime: '2025-01-01T00:00:00Z',
       modificationTime: '2025-01-01T00:00:00Z',
+      entityType: 'foo',
     };
     const downloadedData = {id: '123'};
     const onDownloaded = testing.fn();
