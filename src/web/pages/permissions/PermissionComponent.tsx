@@ -263,10 +263,14 @@ const PermissionsComponent = ({
     },
   );
 
-  const handleEntitySave = useEntitySave('permission', {
-    onSaveError,
-    onSaved,
-  });
+  const handleEntitySave = useEntitySave(
+    // @ts-expect-error
+    data => gmp.permission.save(data),
+    {
+      onSaveError,
+      onSaved,
+    },
+  );
 
   const handleEntityCreate = useEntityCreate('permission', {
     onCreateError,

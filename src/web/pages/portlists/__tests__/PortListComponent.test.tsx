@@ -315,20 +315,8 @@ describe('PortListComponent tests', () => {
     });
     expect(save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
-      fromFile: 0,
       id: '123',
       name: 'foo',
-      portRange: 'T:1-5,7,9,U:1-3,5,7,9',
-      portRanges: [
-        {
-          end: 20,
-          id: 1234,
-          start: 1,
-          isTmp: false,
-          portListId: '123',
-          protocolType: 'tcp',
-        },
-      ],
     });
     expect(onSaved).toHaveBeenCalledExactlyOnceWith(portList);
     expect(onSaveError).not.toHaveBeenCalled();
@@ -394,11 +382,8 @@ describe('PortListComponent tests', () => {
     expect(onSaveError).not.toHaveBeenCalled();
     expect(save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
-      fromFile: 0,
       id: '123',
       name: 'foo',
-      portRange: 'T:1-5,7,9,U:1-3,5,7,9',
-      portRanges: [],
     });
     expect(onSaved).toHaveBeenCalledExactlyOnceWith(portList);
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();

@@ -19,7 +19,7 @@ describe('useEntitySave', () => {
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntitySave('task', {
+      useEntitySave(saveEntity, {
         onSaved,
         onSaveError,
       }),
@@ -42,7 +42,7 @@ describe('useEntitySave', () => {
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntitySave('task', {
+      useEntitySave(saveEntity, {
         onSaved,
         onSaveError,
       }),

@@ -260,7 +260,7 @@ describe('ScannerComponent tests', () => {
       host: 'localhost',
       id: undefined,
       name: 'Unnamed',
-      port: undefined,
+      port: '',
       type: undefined,
     });
     expect(handleCreated).toHaveBeenCalledWith({id: '1234'});
