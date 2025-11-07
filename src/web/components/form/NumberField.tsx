@@ -26,7 +26,7 @@ export interface NumberFieldProps
   precision?: number | string;
   type?: 'int' | 'float';
   size?: 'sm' | 'md' | 'lg';
-  value?: number;
+  value?: number | '';
 }
 
 const getSize = (size: string) => (size === 'lg' ? '40px' : '32px');
