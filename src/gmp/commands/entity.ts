@@ -156,7 +156,7 @@ abstract class EntityCommand<
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
     try {
-      let response = await this.action(
+      const response = await this.entityAction(
         {
           cmd: 'clone',
           resource_type: this.name,
@@ -166,7 +166,7 @@ abstract class EntityCommand<
         },
       );
       log.debug('Cloned', this.name, id);
-      return response.setData({id: response.data.id});
+      return response;
     } catch (err) {
       log.error('An error occurred while cloning', this.name, id, err);
       throw err;
