@@ -10,9 +10,14 @@ import Filter from 'gmp/models/filter';
 import type Permission from 'gmp/models/permission';
 import type Role from 'gmp/models/role';
 import {isDefined} from 'gmp/utils/identity';
-import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/action-function';
-import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import useEntityClone from 'web/entity/hooks/useEntityClone';
+import useEntityCreate from 'web/entity/hooks/useEntityCreate';
+import useEntityDelete from 'web/entity/hooks/useEntityDelete';
+import useEntityDownload, {
+  type OnDownloadedFunc,
+} from 'web/entity/hooks/useEntityDownload';
+import useEntitySave from 'web/entity/hooks/useEntitySave';
 import {type GotoDetailsFunc} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
@@ -52,15 +57,15 @@ interface RoleComponentRenderProps {
 
 interface RoleComponentProps {
   children: (props: RoleComponentRenderProps) => React.ReactNode;
-  onCloneError?: (error: Rejection) => void;
+  onCloneError?: (error: Error) => void;
   onCloned?: GotoDetailsFunc;
-  onCreateError?: (error: Rejection) => void;
+  onCreateError?: (error: Error) => void;
   onCreated?: GotoDetailsFunc;
-  onDeleteError?: (error: Rejection) => void;
+  onDeleteError?: (error: Error) => void;
   onDeleted?: () => void;
-  onDownloadError?: (error: Rejection) => void;
+  onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
-  onSaveError?: (error: Rejection) => void;
+  onSaveError?: (error: Error) => void;
   onSaved?: () => void;
 }
 
@@ -237,54 +242,70 @@ const RoleComponent = ({
     }
   };
 
+  const handleEntityClone = useEntityClone(entity => gmp.role.clone(entity), {
+    onCloneError,
+    onCloned,
+  });
+
+  const handleEntityDownload = useEntityDownload(
+    entity => gmp.role.export(entity),
+    {
+      onDownloadError,
+      onDownloaded,
+    },
+  );
+
+  const handleEntityCreate = useEntityCreate('role', {
+    onCreated,
+    onCreateError,
+  });
+
+  const handleEntitySave = useEntitySave('role', {
+    onSaved,
+    onSaveError,
+  });
+
+  const handleEntityDelete = useEntityDelete('role', {
+    onDeleteError,
+    onDeleted,
+  });
+
   return (
-    <EntityComponent
-      name="role"
-      onCloneError={onCloneError}
-      onCloned={onCloned}
-      onCreateError={onCreateError}
-      onCreated={onCreated}
-      onDeleteError={onDeleteError}
-      onDeleted={onDeleted}
-      onDownloadError={onDownloadError}
-      onDownloaded={onDownloaded}
-      onSaveError={onSaveError}
-      onSaved={onSaved}
-    >
-      {({save, create, ...other}) => (
-        <>
-          {children({
-            ...other,
-            create: openRoleDialog,
-            edit: openRoleDialog,
-          })}
-          {dialogVisible && (
-            <RoleDialog
-              allGroups={allGroups}
-              allPermissions={allPermissions}
-              allUsers={allUsers}
-              error={error?.message}
-              isCreatingPermission={isCreatingPermission}
-              isCreatingSuperPermission={isCreatingSuperPermission}
-              isInUse={isInUse}
-              isLoadingPermissions={isLoadingPermissions}
-              permissions={permissions}
-              role={role}
-              title={title}
-              onClose={handleCloseRoleDialog}
-              onCreatePermission={handleCreatePermission}
-              onCreateSuperPermission={handleCreateSuperPermission}
-              onDeletePermission={handleDeletePermission}
-              onErrorClose={handleErrorClose}
-              onSave={d => {
-                const promise = isDefined(d.id) ? save(d) : create(d);
-                return promise.then(() => closeRoleDialog());
-              }}
-            />
-          )}
-        </>
+    <>
+      {children({
+        clone: handleEntityClone,
+        create: openRoleDialog,
+        delete: handleEntityDelete,
+        download: handleEntityDownload,
+        edit: openRoleDialog,
+      })}
+      {dialogVisible && (
+        <RoleDialog
+          allGroups={allGroups}
+          allPermissions={allPermissions}
+          allUsers={allUsers}
+          error={error?.message}
+          isCreatingPermission={isCreatingPermission}
+          isCreatingSuperPermission={isCreatingSuperPermission}
+          isInUse={isInUse}
+          isLoadingPermissions={isLoadingPermissions}
+          permissions={permissions}
+          role={role}
+          title={title}
+          onClose={handleCloseRoleDialog}
+          onCreatePermission={handleCreatePermission}
+          onCreateSuperPermission={handleCreateSuperPermission}
+          onDeletePermission={handleDeletePermission}
+          onErrorClose={handleErrorClose}
+          onSave={d => {
+            const promise = isDefined(d.id)
+              ? handleEntitySave(d)
+              : handleEntityCreate(d);
+            return promise.then(() => closeRoleDialog());
+          }}
+        />
       )}
-    </EntityComponent>
+    </>
   );
 };
 

@@ -82,7 +82,7 @@ const EntityComponent = <
     onDeleted,
   });
 
-  const handleEntityClone = useEntityClone(name, {
+  const handleEntityClone = useEntityClone(entity => cmd.clone(entity), {
     onCloneError,
     onCloned,
   });

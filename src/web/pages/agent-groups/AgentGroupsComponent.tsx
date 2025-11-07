@@ -5,7 +5,6 @@
 
 import React, {useState} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
-import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type AgentGroup from 'gmp/models/agent-group';
@@ -16,6 +15,7 @@ import {
   useDeleteAgentGroup,
   useSaveAgentGroup,
 } from 'web/hooks/use-query/agent-groups';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsDialog, {
   type AgentGroupDialogData,
@@ -31,15 +31,15 @@ interface AgentGroupsComponentRenderProps {
 interface AgentGroupsComponentProps {
   children: (actions: AgentGroupsComponentRenderProps) => React.ReactNode;
   onCloned?: () => void;
-  onCloneError?: (error: Rejection) => void;
+  onCloneError?: (error: Error) => void;
   onCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
-  onCreateError?: (error: Rejection) => void;
+  onCreateError?: (error: Error) => void;
   onDeleted?: () => void;
-  onDeleteError?: (error: Rejection) => void;
+  onDeleteError?: (error: Error) => void;
   onDownloaded?: () => void;
-  onDownloadError?: (error: Rejection) => void;
+  onDownloadError?: (error: Error) => void;
   onSaved?: () => void;
-  onSaveError?: (error: Rejection) => void;
+  onSaveError?: (error: Error) => void;
 }
 
 const AgentGroupsComponent = ({
@@ -54,16 +54,20 @@ const AgentGroupsComponent = ({
   onSaveError,
 }: AgentGroupsComponentProps) => {
   const [_] = useTranslation();
+  const gmp = useGmp();
   const [agentGroupsDialogVisible, setAgentGroupsDialogVisible] =
     useState(false);
   const [selectedAgentGroup, setSelectedAgentGroup] = useState<
     AgentGroup | undefined
   >(undefined);
 
-  const handleClone = useEntityClone<AgentGroup>('agentgroup', {
-    onCloned,
-    onCloneError,
-  });
+  const handleClone = useEntityClone<AgentGroup>(
+    gmp.agentgroup.clone.bind(gmp),
+    {
+      onCloned,
+      onCloneError,
+    },
+  );
 
   const deleteMutation = useDeleteAgentGroup({
     onSuccess: onDeleted,

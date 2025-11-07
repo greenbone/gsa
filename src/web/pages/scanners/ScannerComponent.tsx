@@ -345,10 +345,13 @@ const ScannerComponent = ({
     onDeleteError,
     onDeleted,
   });
-  const handleEntityClone = useEntityClone<Scanner>('scanner', {
-    onCloneError,
-    onCloned,
-  });
+  const handleEntityClone = useEntityClone<Scanner>(
+    entity => gmp.scanner.clone(entity),
+    {
+      onCloneError,
+      onCloned,
+    },
+  );
   return (
     <>
       {children({
