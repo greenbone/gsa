@@ -71,10 +71,13 @@ const ContainerImageTargetsComponent = ({
   const gmp = useGmp();
   const [_] = useTranslation();
 
-  const handleEntityDownload = useEntityDownload('ociimagetarget', {
-    onDownloaded,
-    onDownloadError,
-  });
+  const handleEntityDownload = useEntityDownload(
+    entity => gmp.ociimagetarget.export(entity),
+    {
+      onDownloaded,
+      onDownloadError,
+    },
+  );
 
   const [editDialogVisible, setEditDialogVisible] = useState(false);
   const [editDialogTitle, setEditDialogTitle] = useState<string | undefined>();

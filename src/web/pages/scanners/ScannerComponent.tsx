@@ -318,10 +318,13 @@ const ScannerComponent = ({
       .then(onCredentialDownloaded, onCredentialDownloadError);
   };
 
-  const handleScannerDownload = useEntityDownload<Scanner>('scanner', {
-    onDownloadError,
-    onDownloaded,
-  });
+  const handleScannerDownload = useEntityDownload<Scanner>(
+    entity => gmp.scanner.export(entity),
+    {
+      onDownloadError,
+      onDownloaded,
+    },
+  );
   const handleScannerSave = useEntitySave<
     ScannerDialogState,
     Response<ActionResult, XmlMeta>,

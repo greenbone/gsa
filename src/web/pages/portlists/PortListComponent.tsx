@@ -52,17 +52,17 @@ interface PortListComponentProps {
     edit: (entity: PortList) => void;
     import: () => void;
   }) => React.ReactNode;
-  onCloneError?: (error: Rejection) => void;
+  onCloneError?: (error: Error) => void;
   onCloned?: (response: Response<ActionResult, XmlMeta>) => void;
-  onCreateError?: (error: Rejection) => void;
+  onCreateError?: (error: Error) => void;
   onCreated?: (response: Response<ActionResult, XmlMeta>) => void;
-  onDeleteError?: (error: Rejection) => void;
+  onDeleteError?: (error: Error) => void;
   onDeleted?: () => void;
-  onDownloadError?: (error: Rejection) => void;
+  onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
-  onImportError?: (error: Rejection) => void;
+  onImportError?: (error: Error) => void;
   onImported?: (response: unknown) => void;
-  onSaveError?: (error: Rejection) => void;
+  onSaveError?: (error: Error) => void;
   onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
 }
 
@@ -109,10 +109,13 @@ const PortListComponent = ({
       onCloneError,
     },
   );
-  const handleDownload = useEntityDownload<PortList>('portlist', {
-    onDownloadError,
-    onDownloaded,
-  });
+  const handleDownload = useEntityDownload<PortList>(
+    entity => gmp.portlist.export(entity),
+    {
+      onDownloadError,
+      onDownloaded,
+    },
+  );
   const handleDelete = useEntityDelete<PortList>('portlist', {
     onDeleteError,
     onDeleted,
