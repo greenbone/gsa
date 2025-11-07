@@ -3,18 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Rejection from 'gmp/http/rejection';
-import {type EntityType} from 'gmp/utils/entity-type';
+import {type EntityActionData} from 'gmp/commands/entity';
+import type Response from 'gmp/http/response';
+import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import actionFunction from 'web/entity/hooks/action-function';
-import useGmp from 'web/hooks/useGmp';
 
-interface EntityCreateCallbacks<
-  TCreateResponse = unknown,
-  TCreateError = Rejection,
-> {
+interface EntityCreateCallbacks<TCreateResponse> {
   onCreated?: (entity: TCreateResponse) => void;
-  onCreateError?: (error: TCreateError) => void;
+  onCreateError?: (error: Error) => void;
 }
+
+type EntityCreateFunction<TCreateData, TCreateResponse> = (
+  data: TCreateData,
+) => Promise<TCreateResponse>;
 
 /**
  * Custom hook to handle creating an entity.
@@ -22,22 +23,13 @@ interface EntityCreateCallbacks<
  */
 const useEntityCreate = <
   TCreateData = {},
-  TCreateResponse = unknown,
-  TCreateError = Rejection,
+  TCreateResponse = Response<EntityActionData, XmlMeta>,
 >(
-  name: EntityType,
-  {
-    onCreated,
-    onCreateError,
-  }: EntityCreateCallbacks<TCreateResponse, TCreateError> = {},
+  gmpMethod: EntityCreateFunction<TCreateData, TCreateResponse>,
+  {onCreated, onCreateError}: EntityCreateCallbacks<TCreateResponse> = {},
 ) => {
-  const gmp = useGmp();
-  const cmd = gmp[name] as {
-    create: (data: TCreateData) => Promise<TCreateResponse>;
-  };
-
   const handleEntitySave = async (data: TCreateData) => {
-    return actionFunction(cmd.create(data as TCreateData), {
+    return actionFunction(gmpMethod(data), {
       onSuccess: onCreated,
       onError: onCreateError,
     });

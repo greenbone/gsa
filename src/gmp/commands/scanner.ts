@@ -12,7 +12,7 @@ import Scanner, {
   type ScannerType,
 } from 'gmp/models/scanner';
 
-interface ScannerCommandCreateParams {
+export interface ScannerCommandCreateParams {
   name: string;
   caCertificate?: File;
   comment?: string;

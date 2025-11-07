@@ -10,17 +10,14 @@ import logger from 'gmp/log';
 import Role, {type RoleElement} from 'gmp/models/role';
 import {isArray} from 'gmp/utils/identity';
 
-interface RoleCommandCreateParams {
+export interface RoleCommandCreateParams {
   name: string;
   comment?: string;
   users?: string[] | string;
 }
 
-export interface RoleCommandSaveParams {
+export interface RoleCommandSaveParams extends RoleCommandCreateParams {
   id: string;
-  name: string;
-  comment?: string;
-  users?: string[] | string;
 }
 
 const log = logger.getLogger('gmp.commands.role');

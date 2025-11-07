@@ -272,10 +272,14 @@ const PermissionsComponent = ({
     },
   );
 
-  const handleEntityCreate = useEntityCreate('permission', {
-    onCreateError,
-    onCreated,
-  });
+  const handleEntityCreate = useEntityCreate(
+    // @ts-expect-error
+    data => gmp.permission.create(data),
+    {
+      onCreateError,
+      onCreated,
+    },
+  );
 
   const handleEntityDelete = useEntityDelete(
     // @ts-expect-error

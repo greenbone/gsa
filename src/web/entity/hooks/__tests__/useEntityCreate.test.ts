@@ -19,7 +19,7 @@ describe('useEntityCreate', () => {
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntityCreate('task', {
+      useEntityCreate(createEntity, {
         onCreated,
         onCreateError,
       }),
@@ -42,7 +42,7 @@ describe('useEntityCreate', () => {
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntityCreate('task', {
+      useEntityCreate(createEntity, {
         onCreated,
         onCreateError,
       }),
