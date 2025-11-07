@@ -5,7 +5,10 @@
 
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {type RoleCommandSaveParams} from 'gmp/commands/role';
+import {
+  type RoleCommandCreateParams,
+  type RoleCommandSaveParams,
+} from 'gmp/commands/role';
 import type Rejection from 'gmp/http/rejection';
 import Filter from 'gmp/models/filter';
 import type Permission from 'gmp/models/permission';
@@ -256,10 +259,13 @@ const RoleComponent = ({
     },
   );
 
-  const handleEntityCreate = useEntityCreate('role', {
-    onCreated,
-    onCreateError,
-  });
+  const handleEntityCreate = useEntityCreate<RoleCommandCreateParams>(
+    data => gmp.role.create(data),
+    {
+      onCreated,
+      onCreateError,
+    },
+  );
 
   const handleEntitySave = useEntitySave<RoleCommandSaveParams, void>(
     entity => gmp.role.save(entity),

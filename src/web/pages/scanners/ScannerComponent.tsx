@@ -5,7 +5,10 @@
 
 import {useState} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
-import {type ScannerCommandSaveParams} from 'gmp/commands/scanner';
+import {
+  type ScannerCommandCreateParams,
+  type ScannerCommandSaveParams,
+} from 'gmp/commands/scanner';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type ActionResult from 'gmp/models/action-result';
@@ -38,9 +41,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import CredentialDialog, {
   type CredentialDialogState,
 } from 'web/pages/credentials/CredentialDialog';
-import ScannerDialog, {
-  type ScannerDialogState,
-} from 'web/pages/scanners/ScannerDialog';
+import ScannerDialog from 'web/pages/scanners/ScannerDialog';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
 import {generateFilename} from 'web/utils/Render';
@@ -334,10 +335,9 @@ const ScannerComponent = ({
     },
   );
   const handleScannerCreate = useEntityCreate<
-    ScannerDialogState,
-    Response<ActionResult, XmlMeta>,
-    Error
-  >('scanner', {
+    ScannerCommandCreateParams,
+    Response<ActionResult, XmlMeta>
+  >(data => gmp.scanner.create(data), {
     onCreated,
     onCreateError,
   });
@@ -390,7 +390,10 @@ const ScannerComponent = ({
                   id: d.id as string,
                   type: d.type as ScannerType,
                 })
-              : handleScannerCreate(d);
+              : handleScannerCreate({
+                  ...d,
+                  type: d.type as ScannerType,
+                });
             await promise;
             return closeScannerDialog();
           }}

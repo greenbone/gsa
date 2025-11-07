@@ -99,7 +99,7 @@ const EntityComponent = <
   );
 
   const handleEntityCreate = useEntityCreate<TCreateData, TCreateResponse>(
-    name,
+    data => cmd.create(data),
     {
       onCreated,
       onCreateError,

@@ -49,7 +49,7 @@ describe('PortListCommand', () => {
       name: 'Test Port List',
       comment: 'This is a test port list',
       fromFile: FROM_FILE,
-      file: 'some file content',
+      file: new File(['some file content'], 'portlist.txt'),
     });
     expect(result.data).toEqual({
       id: '12345',

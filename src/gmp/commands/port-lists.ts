@@ -13,12 +13,12 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 export type FromFile = typeof FROM_FILE | typeof NOT_FROM_FILE;
 
-interface PortListCommandCreateParams {
+export interface PortListCommandCreateParams {
   name: string;
   comment?: string;
   fromFile?: FromFile;
   portRange?: string;
-  file?: string;
+  file?: File;
 }
 
 export interface PortListCommandSaveParams {
