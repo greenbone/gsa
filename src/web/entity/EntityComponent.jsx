@@ -8,6 +8,7 @@ import useEntityCreate from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
+import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 
 const EntityComponent = ({
@@ -24,7 +25,9 @@ const EntityComponent = ({
   onCloned,
   onCloneError,
 }) => {
-  const handleEntityDownload = useEntityDownload(name, {
+  const gmp = useGmp();
+  const cmd = gmp[name];
+  const handleEntityDownload = useEntityDownload(entity => cmd.export(entity), {
     onDownloadError,
     onDownloaded,
   });
