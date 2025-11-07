@@ -4,7 +4,6 @@
  */
 
 import React, {useState} from 'react';
-import type Rejection from 'gmp/http/rejection';
 import type Group from 'gmp/models/group';
 import {
   type default as Permission,
@@ -16,8 +15,13 @@ import {type EntityType, getEntityType} from 'gmp/utils/entity-type';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import EntityComponent from 'web/entity/EntityComponent';
-import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import useEntityClone from 'web/entity/hooks/useEntityClone';
+import useEntityCreate from 'web/entity/hooks/useEntityCreate';
+import useEntityDelete from 'web/entity/hooks/useEntityDelete';
+import useEntityDownload, {
+  type OnDownloadedFunc,
+} from 'web/entity/hooks/useEntityDownload';
+import useEntitySave from 'web/entity/hooks/useEntitySave';
 import {type GotoDetailsFunc} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
@@ -34,15 +38,15 @@ interface PermissionComponentRenderProps {
 
 interface PermissionComponentProps {
   children: (props: PermissionComponentRenderProps) => React.ReactNode;
-  onCloneError?: (error: Rejection) => void;
+  onCloneError?: (error: Error) => void;
   onCloned?: GotoDetailsFunc;
-  onCreateError?: (error: Rejection) => void;
+  onCreateError?: (error: Error) => void;
   onCreated?: GotoDetailsFunc;
-  onDeleteError?: (error: Rejection) => void;
+  onDeleteError?: (error: Error) => void;
   onDeleted?: () => void;
-  onDownloadError?: (error: Rejection) => void;
+  onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
-  onSaveError?: (error: Rejection) => void;
+  onSaveError?: (error: Error) => void;
   onSaved?: () => void;
 }
 
@@ -241,55 +245,77 @@ const PermissionsComponent = ({
     }
   };
 
+  const handleEntityClone = useEntityClone(
+    // @ts-expect-error
+    entity => gmp.permission.clone(entity),
+    {
+      onCloneError,
+      onCloned,
+    },
+  );
+
+  const handleEntityDownload = useEntityDownload(
+    // @ts-expect-error
+    entity => gmp.permission.export(entity),
+    {
+      onDownloadError,
+      onDownloaded,
+    },
+  );
+
+  const handleEntitySave = useEntitySave('permission', {
+    onSaveError,
+    onSaved,
+  });
+
+  const handleEntityCreate = useEntityCreate('permission', {
+    onCreateError,
+    onCreated,
+  });
+
+  const handleEntityDelete = useEntityDelete('permission', {
+    onDeleteError,
+    onDeleted,
+  });
+
   return (
-    <EntityComponent
-      name="permission"
-      onCloneError={onCloneError}
-      onCloned={onCloned}
-      onCreateError={onCreateError}
-      onCreated={onCreated}
-      onDeleteError={onDeleteError}
-      onDeleted={onDeleted}
-      onDownloadError={onDownloadError}
-      onDownloaded={onDownloaded}
-      onSaveError={onSaveError}
-      onSaved={onSaved}
-    >
-      {({save, create, ...other}) => (
-        <>
-          {children({
-            ...other,
-            create: openPermissionDialog,
-            edit: openPermissionDialog,
-          })}
-          {dialogVisible && (
-            <PermissionDialog
-              comment={comment}
-              fixedResource={fixedResource}
-              groupId={groupId}
-              groups={groups}
-              id={id}
-              name={name}
-              permission={permission}
-              resourceId={resourceId}
-              resourceName={resourceName}
-              resourceType={resourceType}
-              roleId={roleId}
-              roles={roles}
-              subjectType={subjectType}
-              title={title}
-              userId={userId}
-              users={users}
-              onClose={handleClosePermissionDialog}
-              onSave={d => {
-                const promise = isDefined(d.id) ? save(d) : create(d);
-                return promise.then(() => closePermissionDialog());
-              }}
-            />
-          )}
-        </>
+    <>
+      {children({
+        clone: handleEntityClone,
+        delete: handleEntityDelete,
+        download: handleEntityDownload,
+        create: openPermissionDialog,
+        edit: openPermissionDialog,
+      })}
+      {dialogVisible && (
+        <PermissionDialog
+          comment={comment}
+          fixedResource={fixedResource}
+          groupId={groupId}
+          groups={groups}
+          id={id}
+          name={name}
+          permission={permission}
+          resourceId={resourceId}
+          resourceName={resourceName}
+          resourceType={resourceType}
+          roleId={roleId}
+          roles={roles}
+          subjectType={subjectType}
+          title={title}
+          userId={userId}
+          users={users}
+          onClose={handleClosePermissionDialog}
+          onSave={async d => {
+            const promise = isDefined(d.id)
+              ? handleEntitySave(d)
+              : handleEntityCreate(d);
+            await promise;
+            return closePermissionDialog();
+          }}
+        />
       )}
-    </EntityComponent>
+    </>
   );
 };
 

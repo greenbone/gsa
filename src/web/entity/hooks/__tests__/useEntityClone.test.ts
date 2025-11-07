@@ -20,7 +20,7 @@ describe('useEntityClone', () => {
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntityClone('task', {
+      useEntityClone(cloneEntity, {
         onCloned,
         onCloneError,
       }),
@@ -44,7 +44,7 @@ describe('useEntityClone', () => {
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
-      useEntityClone('task', {
+      useEntityClone(cloneEntity, {
         onCloned,
         onCloneError,
       }),

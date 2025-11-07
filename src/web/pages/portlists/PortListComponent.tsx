@@ -4,7 +4,10 @@
  */
 
 import React, {useState} from 'react';
-import {type EntityCommandParams} from 'gmp/commands/entity';
+import {
+  type EntityActionData,
+  type EntityCommandParams,
+} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
@@ -53,7 +56,7 @@ interface PortListComponentProps {
     import: () => void;
   }) => React.ReactNode;
   onCloneError?: (error: Error) => void;
-  onCloned?: (response: Response<ActionResult, XmlMeta>) => void;
+  onCloned?: (response: Response<EntityActionData, XmlMeta>) => void;
   onCreateError?: (error: Error) => void;
   onCreated?: (response: Response<ActionResult, XmlMeta>) => void;
   onDeleteError?: (error: Error) => void;
@@ -102,8 +105,8 @@ const PortListComponent = ({
     onCreated,
     onCreateError,
   });
-  const handleClone = useEntityClone<PortList, Response<ActionResult, XmlMeta>>(
-    'portlist',
+  const handleClone = useEntityClone<PortList>(
+    entity => gmp.portlist.clone(entity),
     {
       onCloned,
       onCloneError,

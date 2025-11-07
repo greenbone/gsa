@@ -921,7 +921,7 @@ const TaskComponent = ({
     onDeleted,
   });
 
-  const handleEntityClone = useEntityClone('task', {
+  const handleEntityClone = useEntityClone(entity => gmp.task.clone(entity), {
     onCloneError,
     onCloned,
   });
