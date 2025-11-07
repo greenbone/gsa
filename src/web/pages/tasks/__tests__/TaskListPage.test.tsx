@@ -99,6 +99,9 @@ const getReportFormats = testing.fn().mockResolvedValue({
 describe('TaskListPage tests', () => {
   test('should render full page', async () => {
     const gmp = {
+      task: {
+        export: testing.fn(),
+      },
       tasks: {
         get: getTasks,
         getSeverityAggregates: getAggregates,
@@ -247,6 +250,9 @@ describe('TaskListPage tests', () => {
     });
 
     const gmp = {
+      task: {
+        export: testing.fn(),
+      },
       tasks: {
         get: getTasks,
         getSeverityAggregates: getAggregates,

@@ -24,9 +24,12 @@ import {DEFAULT_TIMEZONE} from 'gmp/time-zones';
 import {map} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
-import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/action-function';
-import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import useEntityClone from 'web/entity/hooks/useEntityClone';
+import useEntityDelete from 'web/entity/hooks/useEntityDelete';
+import useEntityDownload, {
+  type OnDownloadedFunc,
+} from 'web/entity/hooks/useEntityDownload';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
@@ -91,7 +94,6 @@ interface TaskComponentRenderProps {
   clone: (task: Task) => void;
   delete: (task: Task) => void;
   download: (task: Task) => void;
-  save: (task: Task) => void;
   edit: (task: Task) => void;
   start: (task: Task) => void;
   stop: (task: Task) => void;
@@ -108,30 +110,30 @@ interface TaskComponentProps {
   onAdvancedTaskWizardError?: (error: Error) => void;
   onAdvancedTaskWizardSaved?: () => void;
   onCloned?: (response: Response<EntityActionData, XmlMeta>) => void;
-  onCloneError?: (error: Rejection) => void;
+  onCloneError?: (error: Error) => void;
   onContainerCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
-  onContainerCreateError?: (error: Rejection) => void;
+  onContainerCreateError?: (error: Error) => void;
   onContainerSaved?: () => void;
-  onContainerSaveError?: (error: Rejection) => void;
+  onContainerSaveError?: (error: Error) => void;
   onCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
-  onCreateError?: (error: Rejection) => void;
+  onCreateError?: (error: Error) => void;
   onDeleted?: () => void;
-  onDeleteError?: (error: Rejection) => void;
+  onDeleteError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
-  onDownloadError?: (error: Rejection) => void;
-  onModifyTaskWizardError?: (error: Rejection) => void;
+  onDownloadError?: (error: Error) => void;
+  onModifyTaskWizardError?: (error: Error) => void;
   onModifyTaskWizardSaved?: () => void;
   onReportImported?: () => void;
-  onReportImportError?: (error: Rejection) => void;
+  onReportImportError?: (error: Error) => void;
   onResumed?: (response: Response<Task, XmlMeta>) => void;
-  onResumeError?: (error: Rejection) => void;
+  onResumeError?: (error: Error) => void;
   onSaved?: () => void;
-  onSaveError?: (error: Rejection) => void;
+  onSaveError?: (error: Error) => void;
   onStarted?: () => void;
-  onStartError?: (error: Rejection) => void;
-  onStopError?: (error: Rejection) => void;
+  onStartError?: (error: Error) => void;
+  onStopError?: (error: Error) => void;
   onStopped?: () => void;
-  onTaskWizardError?: (error: Rejection) => void;
+  onTaskWizardError?: (error: Error) => void;
   onTaskWizardSaved?: () => void;
 }
 
@@ -906,99 +908,102 @@ const TaskComponent = ({
   const handleCloseNewAgentTaskDialog = () => {
     closeAgentTaskDialog();
   };
+  const handleEntityDownload = useEntityDownload(
+    entity => gmp.task.export(entity),
+    {
+      onDownloadError,
+      onDownloaded,
+    },
+  );
+
+  const handleEntityDelete = useEntityDelete('task', {
+    onDeleteError,
+    onDeleted,
+  });
+
+  const handleEntityClone = useEntityClone('task', {
+    onCloneError,
+    onCloned,
+  });
 
   return (
     <>
-      <EntityComponent
-        name="task"
-        onCloneError={onCloneError}
-        onCloned={onCloned}
-        onCreateError={onCreateError}
-        onCreated={onCreated}
-        onDeleteError={onDeleteError}
-        onDeleted={onDeleted}
-        onDownloadError={onDownloadError}
-        onDownloaded={onDownloaded}
-      >
-        {other => (
-          <>
-            {children &&
-              children({
-                ...other,
-                create: openTaskDialog,
-                createContainer: openContainerTaskDialog,
-                edit: openTaskDialog,
-                start: handleTaskStart,
-                stop: handleTaskStop,
-                resume: handleTaskResume,
-                reportImport: openReportImportDialog,
-                advancedTaskWizard: openAdvancedTaskWizard,
-                modifyTaskWizard: openModifyTaskWizard,
-                taskWizard: openTaskWizard,
-                onNewAgentTaskClick: handleOpenAgentTaskDialog,
-              })}
+      {children &&
+        children({
+          clone: handleEntityClone,
+          delete: handleEntityDelete,
+          download: handleEntityDownload,
+          create: openTaskDialog,
+          createContainer: openContainerTaskDialog,
+          edit: openTaskDialog,
+          start: handleTaskStart,
+          stop: handleTaskStop,
+          resume: handleTaskResume,
+          reportImport: openReportImportDialog,
+          advancedTaskWizard: openAdvancedTaskWizard,
+          modifyTaskWizard: openModifyTaskWizard,
+          taskWizard: openTaskWizard,
+          onNewAgentTaskClick: handleOpenAgentTaskDialog,
+        })}
 
-            {taskDialogVisible && (
-              <TargetComponent onCreated={handleTargetCreated}>
-                {({create: createTarget}) => (
-                  // @ts-expect-error
-                  <AlertComponent onCreated={handleAlertCreated}>
-                    {({create: createAlert}) => (
-                      <ScheduleComponent onCreated={handleScheduleCreated}>
-                        {({create: createSchedule}) => (
-                          <TaskDialog
-                            alert_ids={alertIds}
-                            alerts={alerts}
-                            alterable={alterable}
-                            apply_overrides={applyOverrides}
-                            auto_delete={autoDelete}
-                            auto_delete_data={autoDeleteData}
-                            comment={comment}
-                            config_id={scanConfigId}
-                            hosts_ordering={hostsOrdering}
-                            in_assets={inAssets}
-                            isLoadingAlerts={isLoadingAlerts}
-                            isLoadingConfigs={isLoadingConfigs}
-                            isLoadingScanners={isLoadingScanners}
-                            isLoadingSchedules={isLoadingSchedules}
-                            isLoadingTags={isLoadingTags}
-                            isLoadingTargets={isLoadingTargets}
-                            max_checks={maxChecks}
-                            max_hosts={maxHosts}
-                            min_qod={minQod}
-                            name={name}
-                            scan_configs={scanConfigs}
-                            scanner_id={scannerId}
-                            scanners={scanners}
-                            schedule_id={scheduleId}
-                            schedule_periods={schedulePeriods}
-                            schedules={schedules}
-                            tags={tags}
-                            target_id={targetId}
-                            targets={targets}
-                            task={task}
-                            title={title}
-                            onAlertsChange={handleAlertsChange}
-                            onClose={handleCloseTaskDialog}
-                            onNewAlertClick={createAlert}
-                            onNewScheduleClick={createSchedule}
-                            onNewTargetClick={createTarget}
-                            onSave={handleSaveTask}
-                            onScanConfigChange={handleScanConfigChange}
-                            onScannerChange={handleScannerChange}
-                            onScheduleChange={handleScheduleChange}
-                            onTargetChange={handleTargetChange}
-                          />
-                        )}
-                      </ScheduleComponent>
-                    )}
-                  </AlertComponent>
-                )}
-              </TargetComponent>
-            )}
-          </>
-        )}
-      </EntityComponent>
+      {taskDialogVisible && (
+        <TargetComponent onCreated={handleTargetCreated}>
+          {({create: createTarget}) => (
+            // @ts-expect-error
+            <AlertComponent onCreated={handleAlertCreated}>
+              {({create: createAlert}) => (
+                <ScheduleComponent onCreated={handleScheduleCreated}>
+                  {({create: createSchedule}) => (
+                    <TaskDialog
+                      alert_ids={alertIds}
+                      alerts={alerts}
+                      alterable={alterable}
+                      apply_overrides={applyOverrides}
+                      auto_delete={autoDelete}
+                      auto_delete_data={autoDeleteData}
+                      comment={comment}
+                      config_id={scanConfigId}
+                      hosts_ordering={hostsOrdering}
+                      in_assets={inAssets}
+                      isLoadingAlerts={isLoadingAlerts}
+                      isLoadingConfigs={isLoadingConfigs}
+                      isLoadingScanners={isLoadingScanners}
+                      isLoadingSchedules={isLoadingSchedules}
+                      isLoadingTags={isLoadingTags}
+                      isLoadingTargets={isLoadingTargets}
+                      max_checks={maxChecks}
+                      max_hosts={maxHosts}
+                      min_qod={minQod}
+                      name={name}
+                      scan_configs={scanConfigs}
+                      scanner_id={scannerId}
+                      scanners={scanners}
+                      schedule_id={scheduleId}
+                      schedule_periods={schedulePeriods}
+                      schedules={schedules}
+                      tags={tags}
+                      target_id={targetId}
+                      targets={targets}
+                      task={task}
+                      title={title}
+                      onAlertsChange={handleAlertsChange}
+                      onClose={handleCloseTaskDialog}
+                      onNewAlertClick={createAlert}
+                      onNewScheduleClick={createSchedule}
+                      onNewTargetClick={createTarget}
+                      onSave={handleSaveTask}
+                      onScanConfigChange={handleScanConfigChange}
+                      onScannerChange={handleScannerChange}
+                      onScheduleChange={handleScheduleChange}
+                      onTargetChange={handleTargetChange}
+                    />
+                  )}
+                </ScheduleComponent>
+              )}
+            </AlertComponent>
+          )}
+        </TargetComponent>
+      )}
 
       {containerTaskDialogVisible && (
         <ContainerTaskDialog
