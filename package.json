@@ -13,14 +13,13 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "type": "module",
   "scripts": {
     "test": "vitest",
     "test:web-fast": "vitest --pool=vmForks --project web --project store",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui",
     "dev": "vite",
     "start": "npm run dev",
     "build": "tsc && vite build",
@@ -96,7 +95,6 @@
     "@vitejs/plugin-react": "^5.1.0",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/eslint-plugin": "^1.4.0",
-    "@vitest/ui": "^3.1.4",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-header": "^3.1.1",
