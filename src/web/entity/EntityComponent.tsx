@@ -77,7 +77,7 @@ const EntityComponent = <
     },
   );
 
-  const handleEntityDelete = useEntityDelete(name, {
+  const handleEntityDelete = useEntityDelete(entity => cmd.delete(entity), {
     onDeleteError,
     onDeleted,
   });

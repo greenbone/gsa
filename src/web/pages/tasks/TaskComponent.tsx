@@ -916,10 +916,13 @@ const TaskComponent = ({
     },
   );
 
-  const handleEntityDelete = useEntityDelete('task', {
-    onDeleteError,
-    onDeleted,
-  });
+  const handleEntityDelete = useEntityDelete(
+    entity => gmp.task.delete(entity),
+    {
+      onDeleteError,
+      onDeleted,
+    },
+  );
 
   const handleEntityClone = useEntityClone(entity => gmp.task.clone(entity), {
     onCloneError,

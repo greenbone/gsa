@@ -4,58 +4,55 @@
  */
 
 import {useDispatch} from 'react-redux';
-import type Rejection from 'gmp/http/rejection';
+import {type EntityCommandParams} from 'gmp/commands/entity';
 import {type EntityType} from 'gmp/utils/entity-type';
 import actionFunction from 'web/entity/hooks/action-function';
-import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import {createDeleteEntity} from 'web/store/entities/utils/actions';
+import {entityDeleteActions} from 'web/store/entities/utils/actions';
+
+interface EntityDeleteCallbacks {
+  onDeleteError?: (error: Error) => void;
+  onDeleted?: () => void;
+}
+
+type EntityDeleteFunction = (entity: EntityCommandParams) => Promise<void>;
 
 interface EntityDelete {
   // allow for current model classes to be used
   // id and name are currently optional but are always present in the model
   id?: string;
   name?: string;
-}
-
-interface EntityDeleteCallbacks<TDeleteError = unknown> {
-  onDeleteError?: (error: TDeleteError) => void;
-  onDeleted?: () => void;
+  entityType: EntityType;
 }
 
 /**
  * Custom hook to handle the deletion of an entity.
  *
- * @param {string} name - The name of the entity type to be deleted.
- * @param {EntityDeleteCallbacks} [callbacks] - Optional callbacks for handling delete events.
+ * @param gmpMethod - A function that performs the deletion of the entity.
+ * @param callbacks - Optional callbacks for handling delete events.
+ *
  * @returns A function to handle the deletion of an entity.
  */
-const useEntityDelete = <
-  TEntity extends EntityDelete = EntityDelete,
-  TDeleteError = Rejection,
->(
-  name: EntityType,
-  {onDeleteError, onDeleted}: EntityDeleteCallbacks<TDeleteError> = {},
+const useEntityDelete = <TEntity extends EntityDelete = EntityDelete>(
+  gmpMethod: EntityDeleteFunction,
+  {onDeleteError, onDeleted}: EntityDeleteCallbacks = {},
 ) => {
   const [_] = useTranslation();
-  const gmp = useGmp();
   const dispatch = useDispatch();
-  const deleteEntity = (entity: TEntity) =>
-    // @ts-expect-error
-    dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id as string));
+  const deleteEntity = async (entity: TEntity) => {
+    await gmpMethod({id: entity.id as string});
+    const action = entityDeleteActions.success(entity.entityType, entity.id);
+    dispatch(action);
+  };
 
   const handleEntityDelete = async (entity: TEntity) => {
-    return actionFunction<void, TDeleteError, void>(
-      // @ts-expect-error
-      deleteEntity(entity).then(() => {}),
-      {
-        onSuccess: onDeleted,
-        onError: onDeleteError,
-        successMessage: _('{{name}} deleted successfully.', {
-          name: entity.name as string,
-        }),
-      },
-    );
+    return actionFunction<void, Error, void>(deleteEntity(entity), {
+      onSuccess: onDeleted,
+      onError: onDeleteError,
+      successMessage: _('{{name}} deleted successfully.', {
+        name: entity.name as string,
+      }),
+    });
   };
   return handleEntityDelete;
 };

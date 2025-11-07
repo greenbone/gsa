@@ -119,10 +119,13 @@ const PortListComponent = ({
       onDownloaded,
     },
   );
-  const handleDelete = useEntityDelete<PortList>('portlist', {
-    onDeleteError,
-    onDeleted,
-  });
+  const handleDelete = useEntityDelete<PortList>(
+    entity => gmp.portlist.delete(entity),
+    {
+      onDeleteError,
+      onDeleted,
+    },
+  );
 
   const openPortListDialog = async (entity?: PortList) => {
     if (entity) {
