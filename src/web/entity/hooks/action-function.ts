@@ -31,7 +31,7 @@ interface ActionFunctionOptions<
  */
 const actionFunction = async <
   ResponseType = unknown,
-  ErrorType = unknown,
+  ErrorType = Error,
   ReturnType = void,
 >(
   promise: Promise<ResponseType>,
