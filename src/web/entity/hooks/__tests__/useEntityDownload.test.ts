@@ -15,25 +15,29 @@ describe('useEntityDownload', () => {
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsDefaultResponse);
-    const entity = new Model({
-      id: '123',
-      name: 'foo',
-      creationTime: date('2025-01-01T00:00:00Z'),
-      modificationTime: date('2025-01-01T00:00:00Z'),
-    });
+    const entity = new Model(
+      {
+        id: '123',
+        name: 'foo',
+        creationTime: date('2025-01-01T00:00:00Z'),
+        modificationTime: date('2025-01-01T00:00:00Z'),
+      },
+      'task',
+    );
     const downloadedData = {id: '123'};
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
+    const exportFunc = testing.fn().mockResolvedValue({data: downloadedData});
 
     const gmp = {
       task: {
-        export: testing.fn().mockResolvedValue({data: downloadedData}),
+        export: exportFunc,
       },
       user: {currentSettings},
     };
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
-      useEntityDownload('task', {
+      useEntityDownload(exportFunc, {
         onDownloaded,
         onDownloadError,
       }),
@@ -57,14 +61,15 @@ describe('useEntityDownload', () => {
     const entity = new Model({id: '123'});
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
+    const exportFunc = testing.fn().mockRejectedValue(error);
 
     const gmp = {
-      task: {export: testing.fn().mockRejectedValue(error)},
+      task: {export: exportFunc},
       user: {currentSettings},
     };
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
-      useEntityDownload('task', {
+      useEntityDownload(exportFunc, {
         onDownloaded,
         onDownloadError,
       }),

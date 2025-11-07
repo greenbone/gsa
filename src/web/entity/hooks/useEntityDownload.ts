@@ -6,9 +6,9 @@
 import {useEffect} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useDispatch, useSelector} from 'react-redux';
-import type Rejection from 'gmp/http/rejection';
+import {type EntityCommandParams} from 'gmp/commands/entity';
+import {type Meta, type default as Response} from 'gmp/http/response';
 import type Model from 'gmp/models/model';
-import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
@@ -25,28 +25,46 @@ interface EntityDownload {
   data: string;
 }
 
-interface EntityDownloadCallbacks<TDownloadError = unknown> {
-  onDownloadError?: (error: TDownloadError) => void;
+interface EntityDownloadCallbacks {
+  onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
 }
+
+type EntityDownloadFunction = (
+  entity: EntityCommandParams,
+) => Promise<Response<string, Meta>>;
 
 /**
  * Custom hook to handle the download of an entity.
  *
- * @param {string} name - The name of the entity to download.
- * @param {EntityDownloadCallbacks} options - Options for handling download events.
+ * @param gmpMethod - A function that performs the entity download operation.
+ * @param callbacks - Callbacks for handling download events.
+ * @param callbacks.onDownloadError - A callback function invoked when an error occurs during the download.
+ * @param callbacks.onDownloaded - A callback function invoked when the download is successful.
+ *
  * @returns Function to handle the entity download.
+ * @example
+ * ```typescript
+ * const handleDownload = useEntityDownload<MyEntity>(
+ *   myGmpMethod,
+ *   {
+ *     onDownloadError: (error: Error) => console.error('Download failed:', error),
+ *     onDownloaded: ({ filename, data }: EntityDownload) => console.log('Downloaded:', filename),
+ *   }
+ * );
+ *
+ * handleDownload(entity);
+ * ```
  */
-const useEntityDownload = <TEntity extends Model, TDownloadError = Rejection>(
-  name: EntityType,
-  {onDownloadError, onDownloaded}: EntityDownloadCallbacks<TDownloadError> = {},
+const useEntityDownload = <TEntity extends Model>(
+  gmpMethod: EntityDownloadFunction,
+  {onDownloadError, onDownloaded}: EntityDownloadCallbacks = {},
 ) => {
   const [_] = useTranslation();
   const username = useSelector(getUsername);
   const dispatch = useDispatch();
   const gmp = useGmp();
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
-  const cmd = gmp[name];
 
   useEffect(() => {
     const detailsExportFileName = userDefaultsSelector.getValueByName(
@@ -63,7 +81,7 @@ const useEntityDownload = <TEntity extends Model, TDownloadError = Rejection>(
     ) {
       loadSettings();
     }
-  }, [name, dispatch, gmp, userDefaultsSelector]);
+  }, [dispatch, gmp, userDefaultsSelector]);
 
   const handleEntityDownload = async (entity: TEntity) => {
     const detailsExportFileName = userDefaultsSelector.getValueByName(
@@ -76,12 +94,12 @@ const useEntityDownload = <TEntity extends Model, TDownloadError = Rejection>(
       id: entity.id,
       modificationTime: entity.modificationTime,
       resourceName: entity.name,
-      resourceType: name,
+      resourceType: entity.entityType,
       username,
     });
 
     try {
-      const response = await cmd.export(entity);
+      const response = await gmpMethod(entity as EntityCommandParams);
 
       if (isDefined(onDownloaded)) {
         showSuccessNotification(
@@ -92,7 +110,7 @@ const useEntityDownload = <TEntity extends Model, TDownloadError = Rejection>(
       }
     } catch (error) {
       if (isDefined(onDownloadError)) {
-        return onDownloadError(error as TDownloadError);
+        return onDownloadError(error as Error);
       }
     }
   };
