@@ -10,7 +10,7 @@ import {isEmpty} from 'gmp/utils/string';
 
 export type SubjectType = 'user' | 'group' | 'role';
 
-interface PermissionElement extends ModelElement {
+export interface PermissionElement extends ModelElement {
   resource?: {
     _id?: string;
     type?: ApiType;
