@@ -4,11 +4,11 @@
  */
 
 import registerCommand from 'gmp/command';
-import {convertBoolean} from 'gmp/commands/convert';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import ReportConfig from 'gmp/models/report-config';
+import {parseYesNo} from 'gmp/parser';
 import {isArray} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.commands.reportconfigs');
@@ -49,7 +49,7 @@ export class ReportConfigCommand extends EntityCommand {
 
     for (const param_name in paramsUsingDefault) {
       if (paramsUsingDefault[param_name]) {
-        data['param_using_default:' + param_name] = convertBoolean(
+        data['param_using_default:' + param_name] = parseYesNo(
           paramsUsingDefault[param_name],
         );
       }
@@ -78,7 +78,7 @@ export class ReportConfigCommand extends EntityCommand {
 
     for (const paramName in paramsUsingDefault) {
       if (paramsUsingDefault[paramName]) {
-        data['param_using_default:' + paramName] = convertBoolean(
+        data['param_using_default:' + paramName] = parseYesNo(
           paramsUsingDefault[paramName],
         );
       }
