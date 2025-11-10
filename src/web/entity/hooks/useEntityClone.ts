@@ -45,8 +45,8 @@ type EntityCloneFunction<TCloneResponse> = (
  *   onCloned: (response) => console.log('Clone succeeded:', response),
  * });
  *
- * const response = await cloneEntity(myEntity);
- * console.log('Cloning completed:', response);
+ * await cloneEntity(myEntity);
+ * console.log('Cloning completed');
  * ```
  */
 const useEntityClone = <
@@ -55,11 +55,11 @@ const useEntityClone = <
 >(
   gmpMethod: EntityCloneFunction<TCloneResponse>,
   {onCloneError, onCloned}: EntityCloneCallbacks<TCloneResponse> = {},
-): ((entity: TEntity) => Promise<TCloneResponse | void>) => {
+) => {
   const [_] = useTranslation();
 
-  const handleEntityClone = async (entity: TEntity) => {
-    return actionFunction<TCloneResponse>(
+  return async (entity: TEntity) => {
+    await actionFunction<TCloneResponse>(
       gmpMethod(entity as EntityCommandParams),
       {
         onSuccess: onCloned,
@@ -70,7 +70,6 @@ const useEntityClone = <
       },
     );
   };
-  return handleEntityClone;
 };
 
 export default useEntityClone;

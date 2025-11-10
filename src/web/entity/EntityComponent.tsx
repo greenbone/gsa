@@ -23,7 +23,7 @@ interface EntityComponentRenderProps<
 > {
   delete: (entity: TEntity) => Promise<void>;
   create: (data: TCreateData) => Promise<TCreateResponse | void>;
-  clone: (entity: TEntity) => Promise<unknown>;
+  clone: (entity: TEntity) => Promise<void>;
   download: (entity: TEntity) => Promise<void>;
   save: (entity: TSaveData) => Promise<TSaveResponse | void>;
 }
