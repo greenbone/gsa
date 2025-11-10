@@ -130,7 +130,7 @@ const ScannerDialog = ({
       return type;
     },
   );
-  const [userChangePort, setUserChangedPort] = useState<boolean>(false);
+  const [userChangedPort, setUserChangedPort] = useState<boolean>(false);
   const [scannerPort, setScannerPort] = useState<number | ''>(
     () => port ?? updatePort(type),
   );
@@ -168,7 +168,7 @@ const ScannerDialog = ({
   };
 
   const handleScannerTypeChange = (value: ScannerType) => {
-    if (!userChangePort) {
+    if (!userChangedPort) {
       setScannerPort(() => updatePort(value));
     }
     setScannerType(value);
