@@ -3,44 +3,42 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {
-  beforeEach,
-  describe,
-  expect,
-  test,
-  testing,
-  afterEach,
-} from '@gsa/testing';
-import {
-  rendererWith,
-  fireEvent,
   changeInputValue,
-  wait,
+  fireEvent,
+  rendererWith,
   screen,
+  wait,
   within,
 } from 'web/testing';
-import {vi} from 'vitest';
-import {CONTAINER_IMAGE_TASK_SCANNER_ID} from 'gmp/models/scanner';
-import Task, {TASK_STATUS, AUTO_DELETE_NO} from 'gmp/models/task';
+import {CONTAINER_IMAGE_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
+import Task, {AUTO_DELETE_NO, TASK_STATUS} from 'gmp/models/task';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import ContainerImageTaskDialog from 'web/pages/tasks/ContainerImageTaskDialog';
 
-const mockUseGetOciImageTargets = vi.fn();
-
-vi.mock('web/hooks/use-query/oci-image-targets', () => ({
-  useGetOciImageTargets: () => mockUseGetOciImageTargets(),
-}));
-
 describe('ContainerImageTaskDialog component tests', () => {
+  const getMockFn = testing.fn().mockResolvedValue({
+    data: [
+      {id: 'oci-1', name: 'Registry Target 1'},
+      {id: 'oci-2', name: 'Registry Target 2'},
+    ],
+    meta: {
+      counts: {
+        filtered: 2,
+        first: 1,
+        length: 2,
+        rows: 2,
+      },
+    },
+  });
+
   const gmp = {
-    settings: {},
+    settings: {
+      token: 'test-token',
+    },
     ociimagetargets: {
-      get: testing.fn().mockResolvedValue({
-        data: [
-          {id: 'oci-1', name: 'Registry Target 1'},
-          {id: 'oci-2', name: 'Registry Target 2'},
-        ],
-      }),
+      get: getMockFn,
     },
   };
 
@@ -51,6 +49,10 @@ describe('ContainerImageTaskDialog component tests', () => {
   const schedules = [{id: 'sc-1', name: 'Daily 09:00'}];
   const tags = [{id: 'tg-1', name: 'Important'}];
 
+  beforeEach(() => {
+    getMockFn.mockClear();
+  });
+
   const commonHandlers = () => ({
     onClose: testing.fn(),
     onSave: testing.fn(),
@@ -60,22 +62,6 @@ describe('ContainerImageTaskDialog component tests', () => {
     onScheduleChange: testing.fn(),
     onScannerChange: testing.fn(),
     onOciImageTargetChange: testing.fn(),
-  });
-
-  beforeEach(() => {
-    mockUseGetOciImageTargets.mockReturnValue({
-      data: {
-        entities: [
-          {id: 'oci-1', name: 'Registry Target 1'},
-          {id: 'oci-2', name: 'Registry Target 2'},
-        ],
-      },
-      isLoading: false,
-    });
-  });
-
-  afterEach(() => {
-    testing.clearAllMocks();
   });
 
   const renderDialog = (
@@ -145,8 +131,19 @@ describe('ContainerImageTaskDialog component tests', () => {
     const {onOciImageTargetChange} = commonHandlers();
     renderDialog({onOciImageTargetChange});
 
+    // Wait for the OCI targets to load
+    await wait();
+
     const ociTargetSelect = screen.getByTestId('oci-image-target-select');
     expect(ociTargetSelect).toBeInTheDocument();
+
+    expect(getMockFn).toHaveBeenCalled();
+
+    fireEvent.click(ociTargetSelect);
+    const option1 = await screen.findByText('Registry Target 1');
+    const option2 = await screen.findByText('Registry Target 2');
+    expect(option1).toBeInTheDocument();
+    expect(option2).toBeInTheDocument();
   });
 
   test('should show Tag selector in create mode (no task)', () => {
@@ -209,7 +206,7 @@ describe('ContainerImageTaskDialog component tests', () => {
 
     const scannerSelect = screen.getByName('scannerId');
     expect(scannerSelect).toBeDisabled();
-    expect(scannerSelect).toHaveValue(CONTAINER_IMAGE_TASK_SCANNER_ID);
+    expect(scannerSelect).toHaveValue(CONTAINER_IMAGE_DEFAULT_SCANNER_ID);
   });
 
   test('should handle scanner preferences checkboxes', () => {
@@ -297,10 +294,7 @@ describe('ContainerImageTaskDialog component tests', () => {
   });
 
   test('should handle loading states', () => {
-    mockUseGetOciImageTargets.mockReturnValue({
-      data: undefined,
-      isLoading: true,
-    });
+    gmp.ociimagetargets.get.mockReturnValueOnce(new Promise(() => {}));
 
     renderDialog({
       isLoadingAlerts: true,

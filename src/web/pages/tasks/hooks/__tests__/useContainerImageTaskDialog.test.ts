@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
 import {act} from '@testing-library/react';
 import {
-  CONTAINER_IMAGE_TASK_SCANNER_ID,
+  CONTAINER_IMAGE_DEFAULT_SCANNER_ID,
   CONTAINER_IMAGE_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import Task, {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
@@ -42,7 +42,7 @@ describe('useContainerImageTaskDialog', () => {
     expect(result.current.inAssets).toBeUndefined();
     expect(result.current.schedulePeriods).toBeUndefined();
     expect(result.current.ociImageTargetId).toBeUndefined();
-    expect(result.current.scannerId).toBe(CONTAINER_IMAGE_TASK_SCANNER_ID);
+    expect(result.current.scannerId).toBe(CONTAINER_IMAGE_DEFAULT_SCANNER_ID);
     expect(result.current.title).toBe('');
   });
 
@@ -64,7 +64,7 @@ describe('useContainerImageTaskDialog', () => {
     expect(result.current.inAssets).toBe(true);
     expect(result.current.schedulePeriods).toBe(false);
     expect(result.current.ociImageTargetId).toBeUndefined();
-    expect(result.current.scannerId).toBe(CONTAINER_IMAGE_TASK_SCANNER_ID);
+    expect(result.current.scannerId).toBe(CONTAINER_IMAGE_DEFAULT_SCANNER_ID);
     expect(result.current.title).toBe('New Container Image Task');
   });
 

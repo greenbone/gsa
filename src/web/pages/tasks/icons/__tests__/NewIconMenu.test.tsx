@@ -72,7 +72,7 @@ describe('NewIconMenu tests', () => {
         | 'ENABLE_CONTAINER_SCANNING'
         | 'ENABLE_AGENTS',
       'new-container-image-menu',
-      'onNewContainerImageClick',
+      'onNewContainerImageTaskClick',
     ],
     [
       'ENABLE_AGENTS' as 'ENABLE_CONTAINER_SCANNING' | 'ENABLE_AGENTS',
@@ -109,7 +109,7 @@ describe('NewIconMenu tests', () => {
       expect(screen.queryByTestId(menuTestId)).not.toBeInTheDocument();
     });
 
-    test(`calls ${callbackName} when menu item is clicked`, async () => {
+    test(`should call ${callbackName} when menu item is clicked`, async () => {
       const callback = testing.fn();
       const features = new Features([feature]);
       const props = {[callbackName]: callback};

@@ -128,7 +128,7 @@ export const CONTAINER_IMAGE_SCANNER_TYPE = '10';
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
 
-export const CONTAINER_IMAGE_TASK_SCANNER_ID =
+export const CONTAINER_IMAGE_DEFAULT_SCANNER_ID =
   '1facb485-10e8-4520-9110-66f929d9ac2e';
 
 export const openVasScannersFilter = (config: {scannerType: ScannerType}) =>

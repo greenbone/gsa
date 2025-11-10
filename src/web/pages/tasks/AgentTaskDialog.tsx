@@ -322,8 +322,8 @@ const AgentTaskDialog = ({
               autoDeleteData={state.autoDeleteData}
               onChange={onValueChange}
             />
-            {/* @ts-ignore */}
-            {capabilities.mayAccess('tags') &&
+
+            {capabilities.mayAccess('tag') &&
               capabilities.mayCreate('tag') &&
               showTagSelection && (
                 <FormGroup title={_('Tag')}>

@@ -5,18 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, fireEvent} from 'web/testing';
-import {vi} from 'vitest';
 import Capabilities from 'gmp/capabilities/capabilities';
+import Features from 'gmp/capabilities/features';
 import TaskToolBarIcons from 'web/pages/tasks/icons/TaskToolBarIcons';
-
-vi.mock('web/hooks/useFeatures', () => {
-  return {
-    default: () => ({
-      featureEnabled: (feature: string) =>
-        feature === 'ENABLE_CONTAINER_SCANNING',
-    }),
-  };
-});
 
 const manualUrl = 'test/';
 
@@ -137,7 +128,7 @@ describe('TaskPage ToolBarIcons test', () => {
     expect(handleContainerTaskCreateClick).toHaveBeenCalled();
   });
 
-  test('should call onNewContainerImageClick handler', async () => {
+  test('should call onNewContainerImageTaskClick handler', async () => {
     const handleNewContainerImageClick = testing.fn();
 
     const gmp = {
@@ -147,12 +138,13 @@ describe('TaskPage ToolBarIcons test', () => {
     const {render} = rendererWith({
       gmp,
       capabilities: true,
+      features: new Features(['ENABLE_CONTAINER_SCANNING']),
       router: true,
     });
 
     render(
       <TaskToolBarIcons
-        onNewContainerImageClick={handleNewContainerImageClick}
+        onNewContainerImageTaskClick={handleNewContainerImageClick}
       />,
     );
 

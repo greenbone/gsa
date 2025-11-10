@@ -350,8 +350,8 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       cmd: 'create_oci_image_task',
       add_tag: parseYesNo(addTag),
       'alert_ids:': alertIds,
-      'preferences:accept_invalid_certs': parseYesNo(acceptInvalidCerts),
-      'preferences:registry_allow_insecure': parseYesNo(registryAllowInsecure),
+      accept_invalid_certs: parseYesNo(acceptInvalidCerts),
+      registry_allow_insecure: parseYesNo(registryAllowInsecure),
       alterable: parseYesNo(alterable),
       apply_overrides: parseYesNo(applyOverrides),
       auto_delete_data: autoDeleteData,
@@ -514,11 +514,11 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       schedulePeriods,
     });
 
-    return this.httpPostWithTransform({
+    await this.httpPostWithTransform({
       cmd: 'save_oci_image_task',
       'alert_ids:': alertIds,
-      'preferences:accept_invalid_certs': parseYesNo(acceptInvalidCerts),
-      'preferences:registry_allow_insecure': parseYesNo(registryAllowInsecure),
+      accept_invalid_certs: parseYesNo(acceptInvalidCerts),
+      registry_allow_insecure: parseYesNo(registryAllowInsecure),
       alterable: parseYesNo(alterable),
       apply_overrides: parseYesNo(applyOverrides),
       auto_delete_data: autoDeleteData,
