@@ -4,12 +4,12 @@
  */
 
 import registerCommand from 'gmp/command';
-import {convertBoolean} from 'gmp/commands/convert';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import AuditReport from 'gmp/models/audit-report';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
+import {parseYesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 export class AuditReportsCommand extends EntitiesCommand {
@@ -98,7 +98,7 @@ export class AuditReportCommand extends EntityCommand {
         delta_report_id,
         filter,
         ignore_pagination: 1,
-        details: convertBoolean(details),
+        details: parseYesNo(details),
       },
       options,
     );
@@ -119,9 +119,9 @@ export class AuditReportCommand extends EntityCommand {
       {
         id,
         filter,
-        lean: convertBoolean(lean),
-        ignore_pagination: convertBoolean(ignorePagination),
-        details: convertBoolean(details),
+        lean: parseYesNo(lean),
+        ignore_pagination: parseYesNo(ignorePagination),
+        details: parseYesNo(details),
       },
       options,
     );

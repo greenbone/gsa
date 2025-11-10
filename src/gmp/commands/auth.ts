@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {convertBoolean} from 'gmp/commands/convert';
 import HttpCommand from 'gmp/commands/http';
+import {parseYesNo} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 interface SaveLdapArguments {
   authdn: string;
@@ -33,9 +34,9 @@ class AuthenticationCommand extends HttpCommand {
       group: 'method:ldap_connect',
       authdn,
       certificate,
-      enable: convertBoolean(ldapEnabled),
+      enable: parseYesNo(ldapEnabled),
       ldaphost: ldapHost,
-      ldaps_only: convertBoolean(ldapsOnly),
+      ldaps_only: isDefined(ldapsOnly) ? parseYesNo(ldapsOnly) : undefined,
     });
   }
 
@@ -43,7 +44,7 @@ class AuthenticationCommand extends HttpCommand {
     return this.httpPostWithTransform({
       cmd: 'save_auth',
       group: 'method:radius_connect',
-      enable: convertBoolean(radiusEnabled),
+      enable: parseYesNo(radiusEnabled),
       radiushost: radiusHost,
       radiuskey: radiusKey,
     });

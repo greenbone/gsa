@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {convertBoolean} from 'gmp/commands/convert';
 import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
@@ -11,7 +10,7 @@ import logger from 'gmp/log';
 import {type default as Filter, ALL_FILTER} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import Report, {type ReportElement} from 'gmp/models/report';
-import {type YesNo} from 'gmp/parser';
+import {parseYesNo, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 interface ReportCommandImportParams {
@@ -140,7 +139,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
         delta_report_id,
         filter,
         ignore_pagination: 1,
-        details: convertBoolean(details),
+        details: parseYesNo(details),
       },
       options,
     );
@@ -160,9 +159,9 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
     const response = await this.httpGetWithTransform({
       id,
       filter,
-      lean: convertBoolean(lean),
-      ignore_pagination: convertBoolean(ignorePagination),
-      details: convertBoolean(details),
+      lean: parseYesNo(lean),
+      ignore_pagination: parseYesNo(ignorePagination),
+      details: parseYesNo(details),
       ...options,
       ...params,
     });
