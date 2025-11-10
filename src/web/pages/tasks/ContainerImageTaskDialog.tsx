@@ -197,8 +197,10 @@ const ContainerImageTaskDialog = ({
     tags,
     task,
     id: isEdit ? task.id : undefined,
-    acceptInvalidCerts,
-    registryAllowInsecure,
+    acceptInvalidCerts: isEdit ? task.accept_invalid_certs : acceptInvalidCerts,
+    registryAllowInsecure: isEdit
+      ? task.registry_allow_insecure
+      : registryAllowInsecure,
     scannerType: CONTAINER_IMAGE_SCANNER_TYPE,
   };
 
@@ -232,6 +234,28 @@ const ContainerImageTaskDialog = ({
               title={_('Comment')}
               value={state.comment}
               onChange={onValueChange}
+            />
+
+            <Select
+              data-testid="oci-image-target-select"
+              grow="1"
+              isLoading={isOciImageTargetsLoading}
+              items={ociImageTargetItems}
+              label={_('Container Image Target')}
+              name="ociImageTargetId"
+              value={state.ociImageTargetId}
+              onChange={onOciImageTargetChange}
+            />
+
+            <Select
+              disabled={true}
+              grow="1"
+              isLoading={false}
+              items={scannerItems}
+              label={_('Scanner')}
+              name="scannerId"
+              value={state.scannerId}
+              onChange={onScannerChange}
             />
 
             {capabilities.mayAccess('alert') &&
@@ -335,28 +359,6 @@ const ContainerImageTaskDialog = ({
               autoDelete={state.autoDelete}
               autoDeleteData={state.autoDeleteData}
               onChange={onValueChange}
-            />
-
-            <Select
-              disabled={true}
-              grow="1"
-              isLoading={false}
-              items={scannerItems}
-              label={_('Scanner')}
-              name="scannerId"
-              value={state.scannerId}
-              onChange={onScannerChange}
-            />
-
-            <Select
-              data-testid="oci-image-target-select"
-              grow="1"
-              isLoading={isOciImageTargetsLoading}
-              items={ociImageTargetItems}
-              label={_('Container Image Target')}
-              name="ociImageTargetId"
-              value={state.ociImageTargetId}
-              onChange={onOciImageTargetChange}
             />
 
             {capabilities.mayAccess('tag') &&

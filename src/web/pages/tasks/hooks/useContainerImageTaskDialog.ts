@@ -41,12 +41,20 @@ export const useContainerImageTaskDialog = ({
   const [applyOverrides, setApplyOverrides] = useState<boolean | undefined>();
   const [inAssets, setInAssets] = useState<boolean | undefined>();
   const [schedulePeriods, setSchedulePeriods] = useState<boolean | undefined>();
+  const [scheduleId, setScheduleId] = useState<string | undefined>();
   const [ociImageTargetId, setOciImageTargetId] = useState<
     string | undefined
   >();
+
   const [scannerId, setScannerId] = useState<string>(
     CONTAINER_IMAGE_DEFAULT_SCANNER_ID,
   );
+  const [acceptInvalidCerts, setAcceptInvalidCerts] = useState<
+    boolean | undefined
+  >();
+  const [registryAllowInsecure, setRegistryAllowInsecure] = useState<
+    boolean | undefined
+  >();
   const [title, setTitle] = useState<string>('');
 
   const openContainerImageTaskDialog = useCallback(
@@ -60,8 +68,11 @@ export const useContainerImageTaskDialog = ({
       setApplyOverrides(task ? parseBoolean(task.apply_overrides) : true);
       setInAssets(task ? parseBoolean(task.in_assets) : true);
       setSchedulePeriods(task ? parseBoolean(task.schedule_periods) : false);
-      setOciImageTargetId(undefined);
+      setScheduleId(task?.schedule?.id);
+      setOciImageTargetId(task?.oci_image_target?.id);
       setScannerId(CONTAINER_IMAGE_DEFAULT_SCANNER_ID);
+      setAcceptInvalidCerts(task ? task.accept_invalid_certs : true);
+      setRegistryAllowInsecure(task ? task.registry_allow_insecure : false);
       setTitle(
         task
           ? _('Edit Container Image Task {{name}}', {
@@ -83,6 +94,10 @@ export const useContainerImageTaskDialog = ({
 
   const handleScannerChange = useCallback((value: string) => {
     setScannerId(value);
+  }, []);
+
+  const handleScheduleChange = useCallback((value: string) => {
+    setScheduleId(value);
   }, []);
 
   const handleSaveContainerImageTask = useCallback(
@@ -179,8 +194,11 @@ export const useContainerImageTaskDialog = ({
     applyOverrides,
     inAssets,
     schedulePeriods,
+    scheduleId,
     ociImageTargetId,
     scannerId,
+    acceptInvalidCerts,
+    registryAllowInsecure,
     title,
 
     // Actions
@@ -189,5 +207,6 @@ export const useContainerImageTaskDialog = ({
     handleSaveContainerImageTask,
     handleOciImageTargetChange,
     handleScannerChange,
+    handleScheduleChange,
   };
 };

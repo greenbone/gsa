@@ -200,14 +200,18 @@ const TaskComponent = ({
     applyOverrides: containerImageApplyOverrides,
     inAssets: containerImageInAssets,
     schedulePeriods: containerImageSchedulePeriods,
+    scheduleId: containerImageScheduleId,
     ociImageTargetId: containerImageOciImageTargetId,
     scannerId: containerImageScannerId,
+    acceptInvalidCerts: containerImageAcceptInvalidCerts,
+    registryAllowInsecure: containerImageRegistryAllowInsecure,
     title: containerImageTitle,
     openContainerImageTaskDialog,
     closeContainerImageTaskDialog,
     handleSaveContainerImageTask,
     handleOciImageTargetChange,
     handleScannerChange: handleContainerImageScannerChange,
+    handleScheduleChange: handleContainerImageScheduleChange,
   } = useContainerImageTaskDialog({
     onContainerCreated,
     onContainerCreateError,
@@ -943,6 +947,15 @@ const TaskComponent = ({
   const handleCloseNewAgentTaskDialog = () => {
     closeAgentTaskDialog();
   };
+
+  const handleEditTask = (task: Task) => {
+    if ((task.scanner?.scannerType as string) === '10') {
+      handleOpenContainerImageTaskDialog(task);
+    } else {
+      openStandardTaskDialog(task);
+    }
+  };
+
   const handleEntityDownload = useEntityDownload(
     entity => gmp.task.export(entity),
     {
@@ -974,7 +987,7 @@ const TaskComponent = ({
           create: openTaskDialog,
           createContainer: openContainerTaskDialog,
           createContainerImage: openContainerImageTaskDialog,
-          edit: openTaskDialog,
+          edit: handleEditTask,
           start: handleTaskStart,
           stop: handleTaskStop,
           resume: handleTaskResume,
@@ -1064,6 +1077,7 @@ const TaskComponent = ({
             <ScheduleComponent onCreated={handleScheduleCreated}>
               {({create: createSchedule}) => (
                 <ContainerImageTaskDialog
+                  acceptInvalidCerts={containerImageAcceptInvalidCerts}
                   addTag={containerImageAddTag}
                   alertIds={alertIds}
                   alerts={alerts as RenderSelectItemProps[]}
@@ -1075,8 +1089,9 @@ const TaskComponent = ({
                   isLoadingSchedules={isLoadingSchedules}
                   name={containerImageName}
                   ociImageTargetId={containerImageOciImageTargetId}
+                  registryAllowInsecure={containerImageRegistryAllowInsecure}
                   scannerId={containerImageScannerId}
-                  scheduleId={scheduleId}
+                  scheduleId={containerImageScheduleId}
                   schedulePeriods={containerImageSchedulePeriods}
                   schedules={schedules as RenderSelectItemProps[]}
                   task={containerImageTask}
@@ -1088,7 +1103,7 @@ const TaskComponent = ({
                   onOciImageTargetChange={handleOciImageTargetChange}
                   onSave={handleSaveContainerImageTask}
                   onScannerChange={handleContainerImageScannerChange}
-                  onScheduleChange={handleScheduleChange}
+                  onScheduleChange={handleContainerImageScheduleChange}
                 />
               )}
             </ScheduleComponent>

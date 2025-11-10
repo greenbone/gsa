@@ -27,6 +27,26 @@ const createMockTask = (): Task => {
   return task;
 };
 
+const createMockContainerImageTask = (): Task => {
+  return Task.fromElement({
+    _id: 'container-task-123',
+    name: 'Container Test Task',
+    comment: 'Container test comment',
+    alterable: 1,
+    schedule_periods: 1,
+    oci_image_target: {
+      _id: 'oci-target-456',
+      name: 'Test OCI Target',
+      trash: 0,
+    },
+    schedule: {
+      _id: 'schedule-789',
+      name: 'Test Schedule',
+      trash: 0,
+    },
+  });
+};
+
 describe('useContainerImageTaskDialog', () => {
   test('should initialize with correct default state', () => {
     const {renderHook} = rendererWith({gmp: {}, store: true});
@@ -42,6 +62,7 @@ describe('useContainerImageTaskDialog', () => {
     expect(result.current.inAssets).toBeUndefined();
     expect(result.current.schedulePeriods).toBeUndefined();
     expect(result.current.ociImageTargetId).toBeUndefined();
+    expect(result.current.scheduleId).toBeUndefined();
     expect(result.current.scannerId).toBe(CONTAINER_IMAGE_DEFAULT_SCANNER_ID);
     expect(result.current.title).toBe('');
   });
@@ -64,6 +85,7 @@ describe('useContainerImageTaskDialog', () => {
     expect(result.current.inAssets).toBe(true);
     expect(result.current.schedulePeriods).toBe(false);
     expect(result.current.ociImageTargetId).toBeUndefined();
+    expect(result.current.scheduleId).toBeUndefined();
     expect(result.current.scannerId).toBe(CONTAINER_IMAGE_DEFAULT_SCANNER_ID);
     expect(result.current.title).toBe('New Container Image Task');
   });
@@ -89,6 +111,26 @@ describe('useContainerImageTaskDialog', () => {
     expect(result.current.title).toBe('Edit Container Image Task Test Task');
   });
 
+  test('should open dialog for editing container image task with oci_image_target', () => {
+    const mockContainerTask = createMockContainerImageTask();
+    const {renderHook} = rendererWith({gmp: {}, store: true});
+    const {result} = renderHook(() => useContainerImageTaskDialog({}));
+
+    act(() => {
+      result.current.openContainerImageTaskDialog(mockContainerTask);
+    });
+
+    expect(result.current.containerImageTaskDialogVisible).toBe(true);
+    expect(result.current.task).toBe(mockContainerTask);
+    expect(result.current.name).toBe('Container Test Task');
+    expect(result.current.comment).toBe('Container test comment');
+    expect(result.current.ociImageTargetId).toBe('oci-target-456');
+    expect(result.current.scheduleId).toBe('schedule-789');
+    expect(result.current.title).toBe(
+      'Edit Container Image Task Container Test Task',
+    );
+  });
+
   test('should close dialog', () => {
     const {renderHook} = rendererWith({gmp: {}, store: true});
     const {result} = renderHook(() => useContainerImageTaskDialog({}));
@@ -104,6 +146,53 @@ describe('useContainerImageTaskDialog', () => {
       result.current.closeContainerImageTaskDialog();
     });
     expect(result.current.containerImageTaskDialogVisible).toBe(false);
+  });
+
+  test('should correctly set boolean preferences when editing task', () => {
+    const mockTask = Task.fromElement({
+      _id: 'task-with-preferences',
+      name: 'Task with Preferences',
+      comment: 'Task comment',
+      oci_image_target: {
+        _id: 'oci-target-123',
+        name: 'Test OCI Target',
+        trash: 0,
+      },
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'accept_invalid_certs',
+            value: '1',
+          },
+          {
+            scanner_name: 'registry_allow_insecure',
+            value: '0',
+          },
+        ],
+      },
+    });
+
+    const {renderHook} = rendererWith({gmp: {}, store: true});
+    const {result} = renderHook(() => useContainerImageTaskDialog({}));
+
+    act(() => {
+      result.current.openContainerImageTaskDialog(mockTask);
+    });
+
+    expect(result.current.acceptInvalidCerts).toBe(true);
+    expect(result.current.registryAllowInsecure).toBe(false);
+  });
+
+  test('should use default boolean preference values for new task', () => {
+    const {renderHook} = rendererWith({gmp: {}, store: true});
+    const {result} = renderHook(() => useContainerImageTaskDialog({}));
+
+    act(() => {
+      result.current.openContainerImageTaskDialog();
+    });
+
+    expect(result.current.acceptInvalidCerts).toBe(true);
+    expect(result.current.registryAllowInsecure).toBe(false);
   });
 
   test('should handle OCI image target change', () => {
@@ -126,6 +215,17 @@ describe('useContainerImageTaskDialog', () => {
     });
 
     expect(result.current.scannerId).toBe('scanner-456');
+  });
+
+  test('should handle schedule change', () => {
+    const {renderHook} = rendererWith({gmp: {}, store: true});
+    const {result} = renderHook(() => useContainerImageTaskDialog({}));
+
+    act(() => {
+      result.current.handleScheduleChange('schedule-789');
+    });
+
+    expect(result.current.scheduleId).toBe('schedule-789');
   });
 
   test('should create new container image task successfully', async () => {
