@@ -54,9 +54,9 @@ interface DeletePermissionData {
 interface RoleComponentRenderProps {
   create: (role?: Role) => void;
   edit: (role: Role) => void;
-  clone: (role: Role) => void;
+  clone: (role: Role) => Promise<void>;
   delete: (role: Role) => Promise<void>;
-  download: (role: Role) => void;
+  download: (role: Role) => Promise<void>;
 }
 
 interface RoleComponentProps {
