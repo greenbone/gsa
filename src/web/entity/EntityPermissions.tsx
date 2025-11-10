@@ -5,6 +5,10 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import {
+  INCLUDE_RELATED_ALL_RESOURCES,
+  INCLUDE_RELATED_CURRENT_RESOURCE_ONLY,
+} from 'gmp/commands/permissions';
 import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';
 import type Group from 'gmp/models/group';
@@ -24,8 +28,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation, {type TranslateFunc} from 'web/hooks/useTranslation';
 import PermissionComponent from 'web/pages/permissions/PermissionComponent';
 import PermissionMultipleDialog, {
-  CURRENT_RESOURCE_ONLY,
-  INCLUDE_RELATED_RESOURCES,
+  type PermissionMultipleDialogSaveData,
 } from 'web/pages/permissions/PermissionMultipleDialog';
 import PermissionsTable from 'web/pages/permissions/PermissionTable';
 import compose from 'web/utils/Compose';
@@ -51,8 +54,8 @@ interface PermissionsBaseState {
   groupId?: string;
   id?: string;
   includeRelated?:
-    | typeof CURRENT_RESOURCE_ONLY
-    | typeof INCLUDE_RELATED_RESOURCES;
+    | typeof INCLUDE_RELATED_CURRENT_RESOURCE_ONLY
+    | typeof INCLUDE_RELATED_ALL_RESOURCES;
   multiplePermissionDialogVisible: boolean;
   related?: Model[];
   roles?: Role[];
@@ -140,11 +143,9 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
 
     const {gmp, relatedResourcesLoaders = [], entity} = this.props;
 
-    const entityType = getEntityType(entity);
-
     this.setState({
       multiplePermissionDialogVisible: true,
-      entityType,
+      entityType: getEntityType(entity),
       entityName: entity.name,
       id: entity.id,
       title: _('Create Multiple Permissions'),
@@ -159,8 +160,8 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
         related,
         includeRelated:
           loaded.length === 0
-            ? CURRENT_RESOURCE_ONLY
-            : INCLUDE_RELATED_RESOURCES,
+            ? INCLUDE_RELATED_CURRENT_RESOURCE_ONLY
+            : INCLUDE_RELATED_ALL_RESOURCES,
       });
     });
 
@@ -203,10 +204,9 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
     this.closeMultiplePermissionDialog();
   }
 
-  handleMultipleSave(data) {
+  handleMultipleSave(data: PermissionMultipleDialogSaveData) {
     const {gmp, onChanged} = this.props;
 
-    // @ts-expect-error
     return gmp.permissions
       .create(data)
       .then(onChanged)
@@ -260,11 +260,10 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
         {multiplePermissionDialogVisible && (
           <PermissionMultipleDialog
             entityName={entityName}
-            entityType={entityType}
+            entityType={entityType as EntityType}
             groupId={groupId}
             groups={groups}
-            // @ts-expect-error
-            id={id}
+            id={id as string}
             includeRelated={includeRelated}
             related={related}
             roleId={roleId}

@@ -100,7 +100,7 @@ const RoleComponent = ({
   const dispatchLoadAllGroups = () => dispatch(loadAllGroups(gmp)());
 
   const [dialogVisible, setDialogVisible] = useState<boolean>(false);
-  const [error, setError] = useState<Rejection | undefined>(undefined);
+  const [error, setError] = useState<Error | undefined>(undefined);
   const [allPermissions, setAllPermissions] = useState<
     Array<string> | undefined
   >(undefined);
@@ -152,7 +152,6 @@ const RoleComponent = ({
     setIsCreatingSuperPermission(true);
 
     try {
-      // @ts-expect-error
       await gmp.permission.create({
         name: 'Super',
         resourceType: 'group',
@@ -175,7 +174,6 @@ const RoleComponent = ({
     setIsCreatingPermission(true);
 
     try {
-      // @ts-expect-error
       await gmp.permission.create({
         name,
         roleId,
@@ -189,14 +187,13 @@ const RoleComponent = ({
     }
   };
 
-  const handleDeletePermission = ({
+  const handleDeletePermission = async ({
     roleId,
     permissionId,
   }: DeletePermissionData): Promise<void> => {
-    // @ts-expect-error
-    return actionFunction(gmp.permission.delete({id: permissionId}), {
+    await actionFunction(gmp.permission.delete({id: permissionId}), {
       onSuccess: () => loadSettings(roleId),
-      onError: async error => setError(error as Rejection),
+      onError: async error => setError(error),
       successMessage: _('Permission deleted successfully.'),
     });
   };
@@ -214,7 +211,6 @@ const RoleComponent = ({
       setIsLoadingPermissions(true);
 
       try {
-        // @ts-expect-error
         const response = await gmp.permissions.getAll({
           filter: Filter.fromString(
             `subject_type=role and subject_uuid=${roleId}`,

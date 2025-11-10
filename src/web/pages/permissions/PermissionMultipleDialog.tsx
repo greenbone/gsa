@@ -4,8 +4,14 @@
  */
 
 import styled from 'styled-components';
+import {
+  INCLUDE_RELATED_CURRENT_RESOURCE_ONLY,
+  type PermissionType,
+  type IncludeRelatedType,
+} from 'gmp/commands/permissions';
 import type Group from 'gmp/models/group';
 import type Model from 'gmp/models/model';
+import {type SubjectType} from 'gmp/models/permission';
 import type Role from 'gmp/models/role';
 import type User from 'gmp/models/user';
 import {typeName, getEntityType, type EntityType} from 'gmp/utils/entity-type';
@@ -19,28 +25,9 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
-type IncludeRelatedType =
-  | typeof CURRENT_RESOURCE_ONLY
-  | typeof INCLUDE_RELATED_RESOURCES
-  | typeof RELATED_RESOURCES_ONLY;
-type PermissionType = 'read' | 'write';
-type SubjectType = 'user' | 'role' | 'group';
-
-interface PermissionMultipleDialogSaveData {
-  includeRelated?: IncludeRelatedType;
-  groupId?: string;
-  id: string;
-  entityType?: string;
-  related?: Model[];
-  roleId?: string;
-  userId?: string;
-  permission?: PermissionType;
-  subjectType?: SubjectType;
-}
-
 interface PermissionMultipleDialogProps {
   entityName?: string;
-  entityType?: EntityType;
+  entityType: EntityType;
   groupId?: string;
   groups?: Group[];
   id: string;
@@ -62,7 +49,7 @@ interface SaveDialogValues {
   includeRelated?: IncludeRelatedType;
   groupId?: string;
   id: string;
-  entityType?: EntityType;
+  entityType: EntityType;
   related?: Model[];
   roleId?: string;
   userId?: string;
@@ -72,6 +59,9 @@ interface SaveDialogDefaultValues {
   permission: PermissionType;
   subjectType: SubjectType;
 }
+
+export type PermissionMultipleDialogSaveData = SaveDialogValues &
+  SaveDialogDefaultValues;
 
 export const CURRENT_RESOURCE_ONLY = '0';
 export const INCLUDE_RELATED_RESOURCES = '1';
@@ -135,7 +125,7 @@ const PermissionMultipleDialog = ({
 
   includeRelatedItems.push({
     label: _('for current resource only'),
-    value: CURRENT_RESOURCE_ONLY,
+    value: INCLUDE_RELATED_CURRENT_RESOURCE_ONLY,
   });
 
   if (hasRelated || includeRelated === RELATED_RESOURCES_ONLY) {
