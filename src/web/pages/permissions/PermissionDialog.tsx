@@ -46,8 +46,25 @@ interface PermissionDialogProps {
   userId?: string;
   users?: User[];
   onClose: () => void;
-  onSave: (data: Record<string, unknown>) => void;
+  onSave: (data: PermissionDialogState) => void;
 }
+
+interface PermissionDialogDefaultValues {
+  comment: string;
+  groupId?: string;
+  id?: string;
+  name: string;
+  permission?: Permission;
+  resourceId: string;
+  resourceName?: string;
+  resourceType?: EntityType;
+  roleId?: string;
+  subjectType?: SubjectType;
+  title?: string;
+  userId?: string;
+}
+
+export type PermissionDialogState = PermissionDialogDefaultValues;
 
 const NEED_RESOURCE_ID = [
   'Super',
@@ -196,7 +213,7 @@ const PermissionDialog = ({
     };
 
   return (
-    <SaveDialog
+    <SaveDialog<{}, PermissionDialogDefaultValues>
       defaultValues={data}
       title={title}
       onClose={onClose}

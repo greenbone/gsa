@@ -57,6 +57,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         onClose={handleClose}
         onSave={handleSave}
@@ -72,6 +73,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         title="Custom Permission Title"
         onClose={handleClose}
@@ -89,6 +91,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         onClose={handleClose}
         onSave={handleSave}
@@ -104,6 +107,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         groups={mockGroups}
         id="test-id"
         roles={mockRoles}
@@ -134,6 +138,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         subjectType="user"
         users={mockUsers}
@@ -154,6 +159,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         roles={mockRoles}
         subjectType="role"
@@ -174,6 +180,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         groups={mockGroups}
         id="test-id"
         subjectType="group"
@@ -210,6 +217,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         onClose={handleClose}
         onSave={handleSave}
@@ -226,6 +234,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         related={mockRelated}
         onClose={handleClose}
@@ -242,6 +251,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         groups={mockGroups}
         id="test-id"
         roles={mockRoles}
@@ -260,6 +270,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         onClose={handleClose}
         onSave={handleSave}
@@ -285,6 +296,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         groups={mockGroups}
         id="test-id"
         roles={mockRoles}
@@ -311,6 +323,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         includeRelated={CURRENT_RESOURCE_ONLY}
         related={mockRelated}
@@ -329,6 +342,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         related={mockRelated}
         onClose={handleClose}
@@ -352,6 +366,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         includeRelated={CURRENT_RESOURCE_ONLY}
         related={[]}
@@ -374,6 +389,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         onClose={handleClose}
         onSave={handleSave}
@@ -424,6 +440,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         users={mockUsers}
         onChange={handleChange}
@@ -440,6 +457,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         groups={[]}
         id="test-id"
         roles={[]}
@@ -462,6 +480,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         subjectType="user"
         users={usersWithEmptyNames}
@@ -478,6 +497,7 @@ describe('PermissionMultipleDialog component tests', () => {
 
     render(
       <PermissionMultipleDialog
+        entityType="task"
         id="test-id"
         onClose={handleClose}
         onSave={handleSave}

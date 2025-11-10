@@ -4,6 +4,11 @@
  */
 
 import React, {useState} from 'react';
+import {type EntityActionResponse} from 'gmp/commands/entity';
+import {
+  type PermissionCommandCreateParams,
+  type PermissionCommandSaveParams,
+} from 'gmp/commands/permission';
 import type Group from 'gmp/models/group';
 import {
   type default as Permission,
@@ -31,9 +36,9 @@ import PermissionDialog from 'web/pages/permissions/PermissionDialog';
 interface PermissionComponentRenderProps {
   create: (permission?: Permission, fixed?: boolean) => void;
   edit: (permission: Permission, fixed?: boolean) => void;
-  clone: (permission: Permission) => void;
+  clone: (permission: Permission) => Promise<void>;
   delete: (permission: Permission) => Promise<void>;
-  download: (permission: Permission) => void;
+  download: (permission: Permission) => Promise<void>;
 }
 
 interface PermissionComponentProps {
@@ -246,7 +251,6 @@ const PermissionsComponent = ({
   };
 
   const handleEntityClone = useEntityClone(
-    // @ts-expect-error
     entity => gmp.permission.clone(entity),
     {
       onCloneError,
@@ -255,7 +259,6 @@ const PermissionsComponent = ({
   );
 
   const handleEntityDownload = useEntityDownload(
-    // @ts-expect-error
     entity => gmp.permission.export(entity),
     {
       onDownloadError,
@@ -263,17 +266,15 @@ const PermissionsComponent = ({
     },
   );
 
-  const handleEntitySave = useEntitySave(
-    // @ts-expect-error
-    data => gmp.permission.save(data),
-    {
-      onSaveError,
-      onSaved,
-    },
-  );
+  const handleEntitySave = useEntitySave<
+    PermissionCommandSaveParams,
+    EntityActionResponse
+  >(data => gmp.permission.save(data), {
+    onSaveError,
+    onSaved,
+  });
 
-  const handleEntityCreate = useEntityCreate(
-    // @ts-expect-error
+  const handleEntityCreate = useEntityCreate<PermissionCommandCreateParams>(
     data => gmp.permission.create(data),
     {
       onCreateError,
@@ -282,7 +283,6 @@ const PermissionsComponent = ({
   );
 
   const handleEntityDelete = useEntityDelete(
-    // @ts-expect-error
     entity => gmp.permission.delete(entity),
     {
       onDeleteError,
@@ -320,7 +320,7 @@ const PermissionsComponent = ({
           onClose={handleClosePermissionDialog}
           onSave={async d => {
             const promise = isDefined(d.id)
-              ? handleEntitySave(d)
+              ? handleEntitySave({...d, id: d.id as string})
               : handleEntityCreate(d);
             await promise;
             return closePermissionDialog();
