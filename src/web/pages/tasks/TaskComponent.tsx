@@ -106,7 +106,7 @@ interface TaskComponentRenderProps {
   modifyTaskWizard: () => void;
   taskWizard: () => void;
   onNewAgentTaskClick: () => void;
-  onNewContainerImageClick: () => void;
+  onNewContainerImageTaskClick: () => void;
 }
 
 interface TaskComponentProps {
@@ -973,6 +973,7 @@ const TaskComponent = ({
           download: handleEntityDownload,
           create: openTaskDialog,
           createContainer: openContainerTaskDialog,
+          createContainerImage: openContainerImageTaskDialog,
           edit: openTaskDialog,
           start: handleTaskStart,
           stop: handleTaskStop,
@@ -982,6 +983,7 @@ const TaskComponent = ({
           modifyTaskWizard: openModifyTaskWizard,
           taskWizard: openTaskWizard,
           onNewAgentTaskClick: handleOpenAgentTaskDialog,
+          onNewContainerImageTaskClick: handleOpenContainerImageTaskDialog,
         })}
 
       {taskDialogVisible && (

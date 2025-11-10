@@ -4,7 +4,7 @@
  */
 
 import {
-  CONTAINER_IMAGE_TASK_SCANNER_ID,
+  CONTAINER_IMAGE_DEFAULT_SCANNER_ID,
   CONTAINER_IMAGE_SCANNER_TYPE,
   type ContainerImageScannerType,
 } from 'gmp/models/scanner';
@@ -119,7 +119,7 @@ const ContainerImageTaskDialog = ({
   minQod = DEFAULT_MIN_QOD,
   name = '',
   ociImageTargetId = UNSET_VALUE,
-  scannerId = CONTAINER_IMAGE_TASK_SCANNER_ID,
+  scannerId = CONTAINER_IMAGE_DEFAULT_SCANNER_ID,
   scheduleId = UNSET_VALUE,
   schedulePeriods = false,
   schedules = [],
@@ -167,7 +167,7 @@ const ContainerImageTaskDialog = ({
 
   const scannerItems = renderSelectItems([
     {
-      id: CONTAINER_IMAGE_TASK_SCANNER_ID,
+      id: CONTAINER_IMAGE_DEFAULT_SCANNER_ID,
       name: 'Container Image Scanner',
     },
   ]);
@@ -359,8 +359,7 @@ const ContainerImageTaskDialog = ({
               onChange={onOciImageTargetChange}
             />
 
-            {/* @ts-ignore */}
-            {capabilities.mayAccess('tags') &&
+            {capabilities.mayAccess('tag') &&
               capabilities.mayCreate('tag') &&
               showTagSelection && (
                 <FormGroup title={_('Tag')}>

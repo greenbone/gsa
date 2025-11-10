@@ -5,10 +5,9 @@
 
 import {useState, useCallback} from 'react';
 import type {EntityActionData} from 'gmp/commands/entity';
-import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import type {XmlMeta} from 'gmp/http/transform/fast-xml';
-import {CONTAINER_IMAGE_TASK_SCANNER_ID} from 'gmp/models/scanner';
+import {CONTAINER_IMAGE_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 import type {default as Task} from 'gmp/models/task';
 import {parseBoolean} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -18,9 +17,9 @@ import type {ContainerImageTaskDialogData} from 'web/pages/tasks/ContainerImageT
 
 interface UseContainerImageTaskDialogProps {
   onContainerCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
-  onContainerCreateError?: (error: Rejection) => void;
+  onContainerCreateError?: (error: Error) => void;
   onContainerSaved?: () => void;
-  onContainerSaveError?: (error: Rejection) => void;
+  onContainerSaveError?: (error: Error) => void;
 }
 
 export const useContainerImageTaskDialog = ({
@@ -46,7 +45,7 @@ export const useContainerImageTaskDialog = ({
     string | undefined
   >();
   const [scannerId, setScannerId] = useState<string>(
-    CONTAINER_IMAGE_TASK_SCANNER_ID,
+    CONTAINER_IMAGE_DEFAULT_SCANNER_ID,
   );
   const [title, setTitle] = useState<string>('');
 
@@ -62,7 +61,7 @@ export const useContainerImageTaskDialog = ({
       setInAssets(task ? parseBoolean(task.in_assets) : true);
       setSchedulePeriods(task ? parseBoolean(task.schedule_periods) : false);
       setOciImageTargetId(undefined);
-      setScannerId(CONTAINER_IMAGE_TASK_SCANNER_ID);
+      setScannerId(CONTAINER_IMAGE_DEFAULT_SCANNER_ID);
       setTitle(
         task
           ? _('Edit Container Image Task {{name}}', {

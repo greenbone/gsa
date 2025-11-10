@@ -14,14 +14,14 @@ interface NewIconMenuProps {
   onNewClick?: () => void;
   onNewContainerClick?: () => void;
   onNewAgentTaskClick?: () => void;
-  onNewContainerImageClick?: () => void;
+  onNewContainerImageTaskClick?: () => void;
 }
 
 const NewIconMenu = ({
   onNewClick,
   onNewContainerClick,
   onNewAgentTaskClick,
-  onNewContainerImageClick,
+  onNewContainerImageTaskClick,
 }: NewIconMenuProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -50,7 +50,7 @@ const NewIconMenu = ({
           <MenuEntry
             data-testid="new-container-image-menu"
             title={_('New Container Image Task')}
-            onClick={onNewContainerImageClick}
+            onClick={onNewContainerImageTaskClick}
           />
         )}
       </IconMenu>

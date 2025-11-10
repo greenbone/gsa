@@ -752,8 +752,8 @@ describe('TaskCommand tests', () => {
         cmd: 'create_oci_image_task',
         add_tag: 0,
         'alert_ids:': [],
-        'preferences:accept_invalid_certs': 0,
-        'preferences:registry_allow_insecure': 0,
+        accept_invalid_certs: 0,
+        registry_allow_insecure: 0,
         alterable: 0,
         apply_overrides: 0,
         auto_delete: AUTO_DELETE_KEEP,
@@ -805,8 +805,8 @@ describe('TaskCommand tests', () => {
         cmd: 'create_oci_image_task',
         add_tag: 1,
         'alert_ids:': ['a1', 'a2'],
-        'preferences:accept_invalid_certs': 1,
-        'preferences:registry_allow_insecure': 1,
+        accept_invalid_certs: 1,
+        registry_allow_insecure: 1,
         alterable: 0,
         apply_overrides: 0,
         auto_delete: AUTO_DELETE_KEEP,
@@ -849,8 +849,8 @@ describe('TaskCommand tests', () => {
       data: {
         cmd: 'save_oci_image_task',
         'alert_ids:': [],
-        'preferences:accept_invalid_certs': 0,
-        'preferences:registry_allow_insecure': 0,
+        accept_invalid_certs: 0,
+        registry_allow_insecure: 0,
         alterable: 0,
         apply_overrides: 0,
         auto_delete: AUTO_DELETE_KEEP,
@@ -868,7 +868,7 @@ describe('TaskCommand tests', () => {
         usage_type: 'scan',
       },
     });
-    expect(result).toBeDefined();
+    expect(result).toBeUndefined();
   });
 
   test('should save container image task with all parameters', async () => {
@@ -900,8 +900,8 @@ describe('TaskCommand tests', () => {
       data: {
         cmd: 'save_oci_image_task',
         'alert_ids:': ['a1', 'a2'],
-        'preferences:accept_invalid_certs': 1,
-        'preferences:registry_allow_insecure': 0,
+        accept_invalid_certs: 1,
+        registry_allow_insecure: 0,
         alterable: 0,
         apply_overrides: 0,
         auto_delete: AUTO_DELETE_KEEP,
@@ -919,6 +919,6 @@ describe('TaskCommand tests', () => {
         usage_type: 'scan',
       },
     });
-    expect(result).toBeDefined();
+    expect(result).toBeUndefined();
   });
 });
