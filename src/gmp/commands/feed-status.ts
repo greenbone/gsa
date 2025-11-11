@@ -5,7 +5,7 @@
 
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import {type ResponseRejection} from 'gmp/http/rejection';
+import {ResponseRejection} from 'gmp/http/rejection';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
@@ -81,9 +81,9 @@ export function createFeed(feed: FeedElement): Feed {
 
 export const feedStatusRejection = async (
   http: Http,
-  rejection: ResponseRejection,
-) => {
-  if (rejection.status === 404) {
+  rejection: Error,
+): Promise<never> => {
+  if (rejection instanceof ResponseRejection && rejection.status === 404) {
     const feedStatus = new FeedStatusCommand(http);
     const {isFeedOwnerSet, isFeedResourcesAccess} =
       await feedStatus.checkFeedOwnerAndPermissions();
