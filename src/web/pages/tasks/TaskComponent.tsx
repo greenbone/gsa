@@ -45,7 +45,7 @@ import ImportReportDialog, {
   type ReportImportDialogData,
 } from 'web/pages/reports/ReportImportDialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
-import TargetComponent from 'web/pages/targets/Component';
+import TargetComponent from 'web/pages/targets/TargetComponent';
 import AgentTaskDialog, {
   type AgentTaskDialogData,
 } from 'web/pages/tasks/AgentTaskDialog';

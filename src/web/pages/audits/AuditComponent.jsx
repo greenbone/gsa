@@ -26,7 +26,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
 import AuditDialog from 'web/pages/audits/Dialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
-import TargetComponent from 'web/pages/targets/Component';
+import TargetComponent from 'web/pages/targets/TargetComponent';
 import {
   loadEntities as loadAlerts,
   selector as alertSelector,

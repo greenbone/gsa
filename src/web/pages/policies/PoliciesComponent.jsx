@@ -29,7 +29,7 @@ import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import ImportDialog from 'web/pages/scanconfigs/ImportDialog';
 import {createSelectedNvts} from 'web/pages/scanconfigs/ScanConfigComponent';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
-import TargetComponent from 'web/pages/targets/Component';
+import TargetComponent from 'web/pages/targets/TargetComponent';
 import {
   loadEntities as loadAlerts,
   selector as alertSelector,
