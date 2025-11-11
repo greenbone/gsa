@@ -5,7 +5,6 @@
 
 import React, {useState, useEffect, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
-import {type EntityActionData} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
@@ -13,7 +12,10 @@ import type AgentGroup from 'gmp/models/agent-group';
 import date, {type Date} from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scan-config';
-import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
+import {
+  CONTAINER_IMAGE_SCANNER_TYPE,
+  OPENVAS_DEFAULT_SCANNER_ID,
+} from 'gmp/models/scanner';
 import {
   type default as Task,
   type TaskAutoDelete,
@@ -25,7 +27,10 @@ import {map} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/action-function';
-import useEntityClone from 'web/entity/hooks/useEntityClone';
+import useEntityClone, {
+  type EntityCloneResponse,
+} from 'web/entity/hooks/useEntityClone';
+import {type EntityCreateResponse} from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload, {
   type OnDownloadedFunc,
@@ -113,13 +118,13 @@ interface TaskComponentProps {
   children?: (props: TaskComponentRenderProps) => React.ReactNode;
   onAdvancedTaskWizardError?: (error: Error) => void;
   onAdvancedTaskWizardSaved?: () => void;
-  onCloned?: (response: Response<EntityActionData, XmlMeta>) => void;
+  onCloned?: (response: EntityCloneResponse) => void;
   onCloneError?: (error: Error) => void;
-  onContainerCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
+  onContainerCreated?: (response: EntityCreateResponse) => void;
   onContainerCreateError?: (error: Error) => void;
   onContainerSaved?: () => void;
   onContainerSaveError?: (error: Error) => void;
-  onCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
+  onCreated?: (response: EntityCreateResponse) => void;
   onCreateError?: (error: Error) => void;
   onDeleted?: () => void;
   onDeleteError?: (error: Error) => void;
@@ -949,14 +954,14 @@ const TaskComponent = ({
   };
 
   const handleEditTask = (task: Task) => {
-    if ((task.scanner?.scannerType as string) === '10') {
+    if (task.scanner?.scannerType === CONTAINER_IMAGE_SCANNER_TYPE) {
       handleOpenContainerImageTaskDialog(task);
     } else {
       openStandardTaskDialog(task);
     }
   };
 
-  const handleEntityDownload = useEntityDownload(
+  const handleEntityDownload = useEntityDownload<Task>(
     entity => gmp.task.export(entity),
     {
       onDownloadError,
@@ -964,7 +969,7 @@ const TaskComponent = ({
     },
   );
 
-  const handleEntityDelete = useEntityDelete(
+  const handleEntityDelete = useEntityDelete<Task>(
     entity => gmp.task.delete(entity),
     {
       onDeleteError,
@@ -972,10 +977,13 @@ const TaskComponent = ({
     },
   );
 
-  const handleEntityClone = useEntityClone(entity => gmp.task.clone(entity), {
-    onCloneError,
-    onCloned,
-  });
+  const handleEntityClone = useEntityClone<Task>(
+    entity => gmp.task.clone(entity),
+    {
+      onCloneError,
+      onCloned,
+    },
+  );
 
   return (
     <>

@@ -17,15 +17,14 @@ type EntitySaveFunction<TSaveData, TSaveResponse> = (
   data: TSaveData,
 ) => Promise<TSaveResponse>;
 
+export type EntitySaveResponse = Response<ActionResult, XmlMeta>;
+
 /**
  * Custom hook to handle saving or creating an entity.
  *
  */
 
-const useEntitySave = <
-  TSaveData = {},
-  TSaveResponse = Response<ActionResult, XmlMeta>,
->(
+const useEntitySave = <TSaveData = {}, TSaveResponse = EntitySaveResponse>(
   gmpMethod: EntitySaveFunction<TSaveData, TSaveResponse>,
   {onSaveError, onSaved}: EntitySaveCallbacks<TSaveResponse> = {},
 ) => {

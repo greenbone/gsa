@@ -62,7 +62,7 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
       scanner_type: type,
     };
     log.debug('Creating new scanner', data);
-    return this.action(data);
+    return this.entityAction(data);
   }
 
   save({

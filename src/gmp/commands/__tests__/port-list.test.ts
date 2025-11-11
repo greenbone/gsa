@@ -15,7 +15,6 @@ import {
 describe('PortListCommand', () => {
   test('should allow to create a port list', async () => {
     const response = createActionResultResponse({
-      action: 'create_port_list',
       id: '12345',
     });
 
@@ -32,14 +31,11 @@ describe('PortListCommand', () => {
 
     expect(result.data).toEqual({
       id: '12345',
-      message: 'OK',
-      action: 'create_port_list',
     });
   });
 
   test('should allow to create port list from file', async () => {
     const response = createActionResultResponse({
-      action: 'create_port_list',
       id: '12345',
     });
     const http = createHttp(response);
@@ -52,8 +48,6 @@ describe('PortListCommand', () => {
     });
     expect(result.data).toEqual({
       id: '12345',
-      message: 'OK',
-      action: 'create_port_list',
     });
   });
 

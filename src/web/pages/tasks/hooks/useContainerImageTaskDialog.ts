@@ -4,19 +4,17 @@
  */
 
 import {useState, useCallback} from 'react';
-import type {EntityActionData} from 'gmp/commands/entity';
-import type Response from 'gmp/http/response';
-import type {XmlMeta} from 'gmp/http/transform/fast-xml';
 import {CONTAINER_IMAGE_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 import type {default as Task} from 'gmp/models/task';
 import {parseBoolean} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {type EntityCreateResponse} from 'web/entity/hooks/useEntityCreate';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import type {ContainerImageTaskDialogData} from 'web/pages/tasks/ContainerImageTaskDialog';
 
 interface UseContainerImageTaskDialogProps {
-  onContainerCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
+  onContainerCreated?: (response: EntityCreateResponse) => void;
   onContainerCreateError?: (error: Error) => void;
   onContainerSaved?: () => void;
   onContainerSaveError?: (error: Error) => void;

@@ -5,7 +5,6 @@
 
 import React, {useState} from 'react';
 import {
-  type EntityActionData,
   type EntityActionResponse,
   type EntityCommandParams,
 } from 'gmp/commands/entity';
@@ -14,22 +13,25 @@ import {
   type PortListCommandSaveParams,
 } from 'gmp/commands/port-lists';
 import type Rejection from 'gmp/http/rejection';
-import type Response from 'gmp/http/response';
-import {type XmlMeta} from 'gmp/http/transform/fast-xml';
-import type ActionResult from 'gmp/models/action-result';
 import {
   type default as PortList,
   type ProtocolType,
 } from 'gmp/models/port-list';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import useEntityClone from 'web/entity/hooks/useEntityClone';
-import useEntityCreate from 'web/entity/hooks/useEntityCreate';
+import useEntityClone, {
+  type EntityCloneResponse,
+} from 'web/entity/hooks/useEntityClone';
+import useEntityCreate, {
+  type EntityCreateResponse,
+} from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload, {
   type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
-import useEntitySave from 'web/entity/hooks/useEntitySave';
+import useEntitySave, {
+  type EntitySaveResponse,
+} from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PortListsDialog, {
@@ -63,9 +65,9 @@ interface PortListComponentRenderProps {
 interface PortListComponentProps {
   children: (props: PortListComponentRenderProps) => React.ReactNode;
   onCloneError?: (error: Error) => void;
-  onCloned?: (response: Response<EntityActionData, XmlMeta>) => void;
+  onCloned?: (response: EntityCloneResponse) => void;
   onCreateError?: (error: Error) => void;
-  onCreated?: (response: Response<ActionResult, XmlMeta>) => void;
+  onCreated?: (response: EntityCreateResponse) => void;
   onDeleteError?: (error: Error) => void;
   onDeleted?: () => void;
   onDownloadError?: (error: Error) => void;
@@ -73,7 +75,7 @@ interface PortListComponentProps {
   onImportError?: (error: Error) => void;
   onImported?: (response: EntityActionResponse) => void;
   onSaveError?: (error: Error) => void;
-  onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
+  onSaved?: (response: EntitySaveResponse) => void;
 }
 
 const PortListComponent = ({
@@ -104,20 +106,20 @@ const PortListComponent = ({
   const [createdPortRanges, setCreatedPortRanges] = useState<PortRange[]>([]);
   const [deletedPortRanges, setDeletedPortRanges] = useState<PortRange[]>([]);
 
-  const handleSave = useEntitySave<
-    PortListCommandSaveParams,
-    Response<ActionResult, XmlMeta>
-  >(data => gmp.portlist.save(data), {
-    onSaveError,
-    onSaved,
-  });
-  const handleCreate = useEntityCreate<
-    PortListCommandCreateParams,
-    Response<ActionResult, XmlMeta>
-  >(data => gmp.portlist.create(data), {
-    onCreated,
-    onCreateError,
-  });
+  const handleSave = useEntitySave<PortListCommandSaveParams>(
+    data => gmp.portlist.save(data),
+    {
+      onSaveError,
+      onSaved,
+    },
+  );
+  const handleCreate = useEntityCreate<PortListCommandCreateParams>(
+    data => gmp.portlist.create(data),
+    {
+      onCreated,
+      onCreateError,
+    },
+  );
   const handleClone = useEntityClone<PortList>(
     entity => gmp.portlist.clone(entity),
     {

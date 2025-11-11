@@ -67,7 +67,7 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
       port_range: portRange,
       file,
     });
-    return this.action({
+    return this.entityAction({
       cmd: 'create_port_list',
       name,
       comment,
