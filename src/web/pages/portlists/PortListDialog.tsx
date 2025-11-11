@@ -39,10 +39,10 @@ interface PortListsDialogProps<TPortRange extends PortRange> {
   portRange?: string;
   portRanges?: TPortRange[];
   title?: string;
-  onClose: () => void;
-  onNewPortRangeClick: () => void;
-  onSave: (data: SavePortListData<TPortRange>) => void | Promise<void>;
-  onTmpDeletePortRange: (portRange: TPortRange) => void;
+  onClose?: () => void;
+  onNewPortRangeClick?: () => void;
+  onSave?: (data: SavePortListData<TPortRange>) => void | Promise<void>;
+  onTmpDeletePortRange?: (portRange: TPortRange) => void;
 }
 
 interface PortListDialogValues<TPortRange extends PortRange> {
