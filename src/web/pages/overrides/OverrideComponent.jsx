@@ -27,20 +27,10 @@ import PropTypes from 'web/utils/PropTypes';
 import {
   FALSE_POSITIVE_VALUE,
   LOG_VALUE,
-  HIGH_VALUE,
   MEDIUM_VALUE,
   LOW_VALUE,
-  CRITICAL_VALUE,
+  getSeverityLevelBoundaries,
 } from 'web/utils/severity';
-
-const SEVERITIES_LIST = [
-  CRITICAL_VALUE,
-  HIGH_VALUE,
-  MEDIUM_VALUE,
-  LOW_VALUE,
-  LOG_VALUE,
-  FALSE_POSITIVE_VALUE,
-];
 
 const OverrideComponent = ({
   children,
@@ -57,6 +47,19 @@ const OverrideComponent = ({
 }) => {
   const gmp = useGmp();
   const [_] = useTranslation();
+
+  const severityBoundaries = getSeverityLevelBoundaries(
+    gmp.settings.severityRating,
+  );
+
+  const SEVERITIES_LIST = new Set([
+    ...(severityBoundaries.minCritical ? [severityBoundaries.minCritical] : []),
+    severityBoundaries.minHigh,
+    MEDIUM_VALUE,
+    LOW_VALUE,
+    LOG_VALUE,
+    FALSE_POSITIVE_VALUE,
+  ]);
 
   const [dialogVisible, setDialogVisible] = useState(false);
 
@@ -118,7 +121,7 @@ const OverrideComponent = ({
       let newSeverityFromListValue;
       let newSeverityValue;
 
-      if (SEVERITIES_LIST.includes(overrideEntity.newSeverity)) {
+      if (SEVERITIES_LIST.has(overrideEntity.newSeverity)) {
         newSeverityFromListValue = overrideEntity.newSeverity;
       } else {
         customSeverityValue = YES_VALUE;

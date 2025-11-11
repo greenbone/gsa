@@ -41,7 +41,6 @@ import {
 import {
   FALSE_POSITIVE_VALUE,
   LOG_VALUE,
-  HIGH_VALUE,
   MEDIUM_VALUE,
   LOW_VALUE,
   _FALSE_POSITIVE,
@@ -50,8 +49,8 @@ import {
   _MEDIUM,
   _HIGH,
   translatedResultSeverityRiskFactor,
-  CRITICAL_VALUE,
   _CRITICAL,
+  getSeverityLevelBoundaries,
 } from 'web/utils/severity';
 
 const OverrideDialog = ({
@@ -85,7 +84,9 @@ const OverrideDialog = ({
   const [_] = useTranslation();
   const gmp = useGmp();
   const isEdit = isDefined(override);
-  const isCVSSv3 = gmp.settings.severityRating === 'CVSSv3';
+  const severityBoundaries = getSeverityLevelBoundaries(
+    gmp.settings.severityRating,
+  );
 
   title = title || _('New Override');
 
@@ -120,16 +121,16 @@ const OverrideDialog = ({
     });
   }
 
-  if (isCVSSv3) {
+  if (severityBoundaries.minCritical) {
     severityFromListItems.push({
-      value: CRITICAL_VALUE,
+      value: severityBoundaries.minCritical,
       label: `${_CRITICAL}`,
     });
   }
 
   severityFromListItems.push(
     {
-      value: HIGH_VALUE,
+      value: severityBoundaries.minHigh,
       label: `${_HIGH}`,
     },
     {
@@ -342,7 +343,7 @@ const OverrideDialog = ({
                     onChange={onValueChange}
                   />
                   <Radio
-                    checked={state.severity === 0.0}
+                    checked={state.severity === 0}
                     convert={parseFloat}
                     name="severity"
                     title={_('Log')}
