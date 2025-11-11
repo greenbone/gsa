@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type TargetExcludeSource, type TargetSource} from 'gmp/commands/target';
 import {
   type default as Credential,
   type ALL_CREDENTIAL_TYPES,
@@ -44,8 +45,6 @@ import {
   UNSET_VALUE,
 } from 'web/utils/Render';
 
-type TargetSource = 'manual' | 'file' | 'asset_hosts';
-type TargetExcludeSource = 'manual' | 'file';
 type CredentialType = (typeof ALL_CREDENTIAL_TYPES)[number];
 
 interface NewCredential {
