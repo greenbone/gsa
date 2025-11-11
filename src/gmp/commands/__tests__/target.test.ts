@@ -4,13 +4,16 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {TargetCommand} from 'gmp/commands/targets';
+import TargetCommand from 'gmp/commands/target';
 import {
   createActionResultResponse,
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
+import type Http from 'gmp/http/http';
 import {ResponseRejection} from 'gmp/http/rejection';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {UNSET_VALUE} from 'web/utils/Render';
 
 describe('TargetCommand tests', () => {
   test('should create target', async () => {
@@ -18,17 +21,16 @@ describe('TargetCommand tests', () => {
     const fakeHttp = createHttp(response);
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.create({
-      allowSimultaneousIPs: '1',
+      allowSimultaneousIPs: YES_VALUE,
       name: 'name',
       comment: 'comment',
       targetSource: 'manual',
       targetExcludeSource: 'manual',
       hostsFilter: undefined,
-      inUse: false,
       hosts: '123.456, 678.9',
       excludeHosts: '',
-      reverseLookupOnly: '0',
-      reverseLookupUnify: '1',
+      reverseLookupOnly: NO_VALUE,
+      reverseLookupUnify: YES_VALUE,
       portListId: 'pl_id1',
       aliveTests: 'Scan Config Default',
       port: 22,
@@ -42,7 +44,7 @@ describe('TargetCommand tests', () => {
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'create_target',
-        allow_simultaneous_ips: '1',
+        allow_simultaneous_ips: 1,
         alive_tests: 'Scan Config Default',
         comment: 'comment',
         esxi_credential_id: '0',
@@ -54,8 +56,8 @@ describe('TargetCommand tests', () => {
         name: 'name',
         port: 22,
         port_list_id: 'pl_id1',
-        reverse_lookup_unify: '1',
-        reverse_lookup_only: '0',
+        reverse_lookup_unify: YES_VALUE,
+        reverse_lookup_only: NO_VALUE,
         smb_credential_id: '0',
         snmp_credential_id: '0',
         ssh_credential_id: 'ssh_id',
@@ -65,8 +67,7 @@ describe('TargetCommand tests', () => {
         krb5_credential_id: '0',
       },
     });
-    const {data} = resp;
-    expect(data.id).toEqual('foo');
+    expect(resp.data.id).toEqual('foo');
   });
 
   test.each([
@@ -109,7 +110,7 @@ describe('TargetCommand tests', () => {
     async ({feedsResponse, message, expectedMessage}) => {
       const xhr = {
         status: 404,
-      };
+      } as XMLHttpRequest;
       const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
@@ -121,22 +122,21 @@ describe('TargetCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      };
+      } as unknown as Http;
 
       const cmd = new TargetCommand(fakeHttp);
       await expect(
         cmd.create({
-          allowSimultaneousIPs: '1',
+          allowSimultaneousIPs: YES_VALUE,
           name: 'name',
           comment: 'comment',
           targetSource: 'manual',
           targetExcludeSource: 'manual',
           hostsFilter: undefined,
-          inUse: false,
           hosts: '123.456, 678.9',
           excludeHosts: '',
-          reverseLookupOnly: '0',
-          reverseLookupUnify: '1',
+          reverseLookupOnly: NO_VALUE,
+          reverseLookupUnify: YES_VALUE,
           portListId: 'pl_id1',
           aliveTests: 'Scan Config Default',
           port: 22,
@@ -156,17 +156,16 @@ describe('TargetCommand tests', () => {
     const fakeHttp = createHttp(response);
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.create({
-      allowSimultaneousIPs: '1',
+      allowSimultaneousIPs: YES_VALUE,
       name: 'name',
       comment: 'comment',
       targetSource: 'manual',
       targetExcludeSource: 'manual',
       hostsFilter: undefined,
-      inUse: false,
       hosts: '123.456, 678.9',
       excludeHosts: '',
-      reverseLookupOnly: '0',
-      reverseLookupUnify: '1',
+      reverseLookupOnly: NO_VALUE,
+      reverseLookupUnify: YES_VALUE,
       portListId: 'pl_id1',
       aliveTests: 'Scan Config Default',
       port: 22,
@@ -180,7 +179,7 @@ describe('TargetCommand tests', () => {
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'create_target',
-        allow_simultaneous_ips: '1',
+        allow_simultaneous_ips: YES_VALUE,
         alive_tests: 'Scan Config Default',
         comment: 'comment',
         esxi_credential_id: '0',
@@ -192,8 +191,8 @@ describe('TargetCommand tests', () => {
         name: 'name',
         port: 22,
         port_list_id: 'pl_id1',
-        reverse_lookup_unify: '1',
-        reverse_lookup_only: '0',
+        reverse_lookup_unify: YES_VALUE,
+        reverse_lookup_only: NO_VALUE,
         smb_credential_id: '0',
         snmp_credential_id: '0',
         ssh_credential_id: '0',
@@ -213,18 +212,18 @@ describe('TargetCommand tests', () => {
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.save({
       id: 'target_id1',
-      allowSimultaneousIPs: '1',
+      allowSimultaneousIPs: YES_VALUE,
       name: 'name',
       comment: 'comment',
       targetSource: 'manual',
       targetExcludeSource: 'manual',
       hostsFilter: undefined,
       excludeFile: undefined,
-      inUse: false,
+      inUse: NO_VALUE,
       hosts: '123.456, 678.9',
       excludeHosts: '',
-      reverseLookupOnly: '0',
-      reverseLookupUnify: '1',
+      reverseLookupOnly: NO_VALUE,
+      reverseLookupUnify: YES_VALUE,
       portListId: 'pl_id1',
       aliveTests: 'Scan Config Default',
       port: 22,
@@ -238,7 +237,7 @@ describe('TargetCommand tests', () => {
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_target',
-        allow_simultaneous_ips: '1',
+        allow_simultaneous_ips: YES_VALUE,
         alive_tests: 'Scan Config Default',
         comment: 'comment',
         esxi_credential_id: '0',
@@ -247,12 +246,12 @@ describe('TargetCommand tests', () => {
         file: undefined,
         hosts: '123.456, 678.9',
         hosts_filter: undefined,
-        in_use: '0',
+        in_use: NO_VALUE,
         name: 'name',
         port: 22,
         port_list_id: 'pl_id1',
-        reverse_lookup_unify: '1',
-        reverse_lookup_only: '0',
+        reverse_lookup_unify: YES_VALUE,
+        reverse_lookup_only: NO_VALUE,
         smb_credential_id: '0',
         snmp_credential_id: '0',
         ssh_credential_id: 'ssh_id',
@@ -307,7 +306,7 @@ describe('TargetCommand tests', () => {
     async ({feedsResponse, message, expectedMessage}) => {
       const xhr = {
         status: 404,
-      };
+      } as XMLHttpRequest;
       const rejection = new ResponseRejection(xhr, message);
       const feedStatusResponse = createResponse({
         get_feeds: {
@@ -319,33 +318,33 @@ describe('TargetCommand tests', () => {
           .fn()
           .mockRejectedValueOnce(rejection)
           .mockResolvedValueOnce(feedStatusResponse),
-      };
+      } as unknown as Http;
 
       const cmd = new TargetCommand(fakeHttp);
       await expect(
         cmd.save({
           id: 'target_id1',
-          allowSimultaneousIPs: '1',
+          allowSimultaneousIPs: YES_VALUE,
           name: 'name',
           comment: 'comment',
           targetSource: 'manual',
           targetExcludeSource: 'manual',
           hostsFilter: undefined,
           excludeFile: undefined,
-          inUse: false,
+          inUse: NO_VALUE,
           hosts: '123.456, 678.9',
           excludeHosts: '',
-          reverseLookupOnly: '0',
-          reverseLookupUnify: '1',
+          reverseLookupOnly: NO_VALUE,
+          reverseLookupUnify: YES_VALUE,
           portListId: 'pl_id1',
           aliveTests: 'Scan Config Default',
           port: 22,
-          sshCredentialId: '0',
+          sshCredentialId: UNSET_VALUE,
           sshElevateCredentialId: 'ssh_elevate_id',
-          smbCredentialId: '0',
-          esxiCredentialId: '0',
-          snmpCredentialId: '0',
-          krb5CredentialId: '0',
+          smbCredentialId: UNSET_VALUE,
+          esxiCredentialId: UNSET_VALUE,
+          snmpCredentialId: UNSET_VALUE,
+          krb5CredentialId: UNSET_VALUE,
         }),
       ).rejects.toThrow(expectedMessage);
     },
@@ -357,18 +356,18 @@ describe('TargetCommand tests', () => {
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.save({
       id: 'target_id1',
-      allowSimultaneousIPs: '1',
+      allowSimultaneousIPs: YES_VALUE,
       name: 'name',
       comment: 'comment',
       targetSource: 'manual',
       targetExcludeSource: 'manual',
       hostsFilter: undefined,
       excludeFile: undefined,
-      inUse: false,
+      inUse: NO_VALUE,
       hosts: '123.456, 678.9',
       excludeHosts: '',
-      reverseLookupOnly: '0',
-      reverseLookupUnify: '1',
+      reverseLookupOnly: NO_VALUE,
+      reverseLookupUnify: YES_VALUE,
       portListId: 'pl_id1',
       aliveTests: 'Scan Config Default',
       port: 22,
@@ -382,21 +381,21 @@ describe('TargetCommand tests', () => {
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_target',
-        allow_simultaneous_ips: '1',
+        allow_simultaneous_ips: YES_VALUE,
         alive_tests: 'Scan Config Default',
         comment: 'comment',
-        esxi_credential_id: '0',
+        esxi_credential_id: UNSET_VALUE,
         exclude_file: undefined,
         exclude_hosts: '',
         file: undefined,
         hosts: '123.456, 678.9',
         hosts_filter: undefined,
-        in_use: '0',
+        in_use: NO_VALUE,
         name: 'name',
         port: 22,
         port_list_id: 'pl_id1',
-        reverse_lookup_unify: '1',
-        reverse_lookup_only: '0',
+        reverse_lookup_unify: YES_VALUE,
+        reverse_lookup_only: NO_VALUE,
         smb_credential_id: '0',
         snmp_credential_id: '0',
         ssh_credential_id: '0',
