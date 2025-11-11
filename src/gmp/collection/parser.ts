@@ -22,13 +22,15 @@ export interface CollectionList<TModel> {
   counts: CollectionCounts;
 }
 
+export type EntitiesParseFunc<TModel extends Model, TElement = Element> = (
+  element: TElement,
+  name: string,
+  modelClass: ModelClass<TModel>,
+) => TModel[];
+
 interface ParseCollectionListOptions<TModel extends Model, TElement = Element> {
   pluralName?: string;
-  entitiesParseFunc?: (
-    element: TElement,
-    name: string,
-    modelClass: ModelClass<TModel>,
-  ) => TModel[];
+  entitiesParseFunc?: EntitiesParseFunc<TModel, TElement>;
   collectionCountParseFunc?: (
     element: TElement,
     name: string,
@@ -37,7 +39,7 @@ interface ParseCollectionListOptions<TModel extends Model, TElement = Element> {
   filterParseFunc?: (element: FilterElement) => Filter;
 }
 
-interface InfoElement {
+export interface InfoElement {
   info?: Element[];
 }
 
@@ -68,13 +70,19 @@ interface InfoWithCounts extends InfoElement {
   info_count?: ElementCounts;
 }
 
+export type InfoEntitiesFilterFunc = (
+  value: Element,
+  index: number,
+  array: Element[],
+) => boolean;
+
 const log = logger.getLogger('gmp.collection.parser');
 
 export function parseInfoEntities<TModel extends Model>(
   response: InfoElement,
   _name: string,
   modelClass: ModelClass<TModel>,
-  filterFunc: (value: Element, index: number, array: Element[]) => boolean,
+  filterFunc: InfoEntitiesFilterFunc,
 ) {
   if (!isArray(response.info)) {
     return [];
