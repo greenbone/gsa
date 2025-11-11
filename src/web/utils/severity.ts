@@ -224,8 +224,8 @@ export const getSeverityLevelBoundaries = (
 export const renderPercentile = (percentile?: number): string => {
   if (isNumber(percentile)) {
     const value = percentile.toFixed(0);
-    const rest1 = parseInt(value) % 10;
-    const rest2 = parseInt(value) % 100;
+    const rest1 = Number.parseInt(value) % 10;
+    const rest2 = Number.parseInt(value) % 100;
     if (rest1 === 1 && rest2 !== 11) {
       return `${value}st`;
     }
