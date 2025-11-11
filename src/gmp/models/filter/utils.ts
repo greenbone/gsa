@@ -10,4 +10,8 @@ export const isFilter = (filter?: unknown): filter is Filter =>
   isDefined((filter as Filter)?.toFilterString);
 
 export const filterString = (filter?: Filter | number | string) =>
-  isFilter(filter) ? filter.toFilterString() : String(filter);
+  isFilter(filter)
+    ? filter.toFilterString()
+    : isDefined(filter)
+      ? String(filter)
+      : undefined;
