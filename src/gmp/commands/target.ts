@@ -9,7 +9,8 @@ import type Http from 'gmp/http/http';
 import type Filter from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import Target, {type AliveTests} from 'gmp/models/target';
-import {type YesNo} from 'gmp/parser';
+import {parseYesNo, type YesNo} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 import {UNSET_VALUE} from 'web/utils/Render';
 
 export type TargetSource = 'manual' | 'file' | 'asset_hosts';
@@ -41,7 +42,7 @@ interface TargetCommandCreateParams {
 
 interface TargetCommandSaveParams extends TargetCommandCreateParams {
   id: string;
-  inUse?: YesNo;
+  inUse?: boolean;
 }
 
 class TargetCommand extends EntityCommand<Target> {
@@ -143,7 +144,7 @@ class TargetCommand extends EntityCommand<Target> {
         file,
         exclude_file: excludeFile,
         hosts,
-        in_use: inUse,
+        in_use: isDefined(inUse) ? parseYesNo(inUse) : undefined,
         name,
         port,
         port_list_id: portListId,
