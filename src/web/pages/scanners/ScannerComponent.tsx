@@ -4,14 +4,10 @@
  */
 
 import {useState} from 'react';
-import {type EntityActionData} from 'gmp/commands/entity';
 import {
   type ScannerCommandCreateParams,
   type ScannerCommandSaveParams,
 } from 'gmp/commands/scanner';
-import type Response from 'gmp/http/response';
-import {type XmlMeta} from 'gmp/http/transform/fast-xml';
-import type ActionResult from 'gmp/models/action-result';
 import {
   type default as Credential,
   type CredentialType,
@@ -28,8 +24,12 @@ import {
 import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import useEntityClone from 'web/entity/hooks/useEntityClone';
-import useEntityCreate from 'web/entity/hooks/useEntityCreate';
+import useEntityClone, {
+  type EntityCloneResponse,
+} from 'web/entity/hooks/useEntityClone';
+import useEntityCreate, {
+  type EntityCreateResponse,
+} from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload, {
   type OnDownloadedFunc,
@@ -61,9 +61,9 @@ interface ScannerComponentProps {
   children: (props: ScannerComponentRenderProps) => React.ReactNode;
   onCertificateDownloaded?: OnDownloadedFunc;
   onCloneError?: (error: Error) => void;
-  onCloned?: (response: Response<EntityActionData, XmlMeta>) => void;
+  onCloned?: (response: EntityCloneResponse) => void;
   onCreateError?: (error: Error) => void;
-  onCreated?: (response: Response<ActionResult, XmlMeta>) => void;
+  onCreated?: (response: EntityCreateResponse) => void;
   onCredentialDownloadError?: (error: Error) => void;
   onCredentialDownloaded?: OnDownloadedFunc;
   onDeleteError?: (error: Error) => void;
@@ -334,13 +334,13 @@ const ScannerComponent = ({
       onSaved,
     },
   );
-  const handleScannerCreate = useEntityCreate<
-    ScannerCommandCreateParams,
-    Response<ActionResult, XmlMeta>
-  >(data => gmp.scanner.create(data), {
-    onCreated,
-    onCreateError,
-  });
+  const handleScannerCreate = useEntityCreate<ScannerCommandCreateParams>(
+    data => gmp.scanner.create(data),
+    {
+      onCreated,
+      onCreateError,
+    },
+  );
   const handleScannerDelete = useEntityDelete<Scanner>(
     entity => gmp.scanner.delete(entity),
     {

@@ -6,12 +6,16 @@
 import type Model from 'gmp/models/model';
 import {type EntityType} from 'gmp/utils/entity-type';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
-import useEntityCreate from 'web/entity/hooks/useEntityCreate';
+import useEntityCreate, {
+  type EntityCreateResponse,
+} from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload, {
   type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
-import useEntitySave from 'web/entity/hooks/useEntitySave';
+import useEntitySave, {
+  type EntitySaveResponse,
+} from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 
 interface EntityComponentRenderProps<
@@ -60,9 +64,9 @@ interface EntityComponentProps<
 const EntityComponent = <
   TEntity extends Model,
   TCreateData = {},
-  TCreateResponse = unknown,
+  TCreateResponse = EntityCreateResponse,
   TSaveData = {},
-  TSaveResponse = unknown,
+  TSaveResponse = EntitySaveResponse,
 >({
   children,
   name,

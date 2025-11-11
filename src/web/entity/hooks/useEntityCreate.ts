@@ -17,13 +17,15 @@ type EntityCreateFunction<TCreateData, TCreateResponse> = (
   data: TCreateData,
 ) => Promise<TCreateResponse>;
 
+export type EntityCreateResponse = Response<EntityActionData, XmlMeta>;
+
 /**
  * Custom hook to handle creating an entity.
  *
  */
 const useEntityCreate = <
   TCreateData = {},
-  TCreateResponse = Response<EntityActionData, XmlMeta>,
+  TCreateResponse = EntityCreateResponse,
 >(
   gmpMethod: EntityCreateFunction<TCreateData, TCreateResponse>,
   {onCreated, onCreateError}: EntityCreateCallbacks<TCreateResponse> = {},

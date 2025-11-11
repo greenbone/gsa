@@ -19,7 +19,7 @@ interface EntityClone {
   name?: string;
 }
 
-type EntityCloneResponse = Response<EntityActionData, XmlMeta>;
+export type EntityCloneResponse = Response<EntityActionData, XmlMeta>;
 
 interface EntityCloneCallbacks<TCloneResponse = EntityCloneResponse> {
   onCloneError?: (error: Error) => void;
