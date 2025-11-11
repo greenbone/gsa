@@ -26,7 +26,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import Page from 'web/pages/reports/DeltaDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
-import TargetComponent from 'web/pages/targets/Component';
+import TargetComponent from 'web/pages/targets/TargetComponent';
 import {
   loadAllEntities as loadFilters,
   selector as filterSelector,

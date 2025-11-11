@@ -35,7 +35,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
-import TargetComponent from 'web/pages/targets/Component';
+import TargetComponent from 'web/pages/targets/TargetComponent';
 import {
   loadAllEntities as loadFilters,
   selector as filterSelector,
@@ -98,7 +98,6 @@ const useReportDispatch = (gmp: Gmp, params: UseReportStateParams) => {
       loadSettings: () =>
         // @ts-expect-error
         dispatch(loadUserSettingDefaults(gmp)()),
-      // @ts-expect-error
       loadTarget: (targetId: string) => gmp.target.get({id: targetId}),
       loadReportConfigs: () =>
         // @ts-expect-error
@@ -555,7 +554,7 @@ const DeltaReportDetails = () => {
               const targetId = entity?.task?.id;
               if (targetId) {
                 const response = await loadTarget(targetId);
-                edit(response);
+                await edit(response.data);
               } else {
                 console.error('Target ID is missing');
               }

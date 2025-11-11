@@ -29,6 +29,7 @@ import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
+import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
@@ -47,13 +48,22 @@ import {
 
 type CredentialType = (typeof ALL_CREDENTIAL_TYPES)[number];
 
-interface NewCredential {
-  idField: string;
+export type ReferenceCredentialId =
+  | 'sshCredentialId'
+  | 'sshElevateCredentialId'
+  | 'smbCredentialId'
+  | 'esxiCredentialId'
+  | 'snmpCredentialId'
+  | 'krb5CredentialId';
+
+export interface NewCredentialData {
+  idField: ReferenceCredentialId;
   title: string;
   types: CredentialType[];
 }
 
 interface TargetDialogValues {
+  id?: string;
   esxiCredentialId: string;
   krb5CredentialId: string;
   portListId: string;
@@ -73,14 +83,14 @@ interface TargetDialogDefaultValues {
   hostsFilter?: Filter;
   inUse: boolean;
   name: string;
-  port: number | string;
+  port: number;
   reverseLookupOnly: YesNo;
   reverseLookupUnify: YesNo;
   targetExcludeSource: TargetExcludeSource;
   targetSource: TargetSource;
 }
 
-type TargetDialogData = TargetDialogValues & TargetDialogDefaultValues;
+export type TargetDialogData = TargetDialogValues & TargetDialogDefaultValues;
 
 interface TargetDialogProps {
   aliveTests?: AliveTests;
@@ -92,9 +102,10 @@ interface TargetDialogProps {
   hosts?: string;
   hostsCount?: number;
   hostsFilter?: Filter;
+  id?: string;
   inUse?: boolean;
   name?: string;
-  port?: number | string;
+  port?: number;
   portListId?: string;
   portLists?: PortList[];
   reverseLookupOnly?: YesNo;
@@ -108,7 +119,7 @@ interface TargetDialogProps {
   targetExcludeSource?: TargetExcludeSource;
   title?: string;
   onClose?: () => void;
-  onNewCredentialsClick?: (newCredential: NewCredential) => void;
+  onNewCredentialsClick?: (data: NewCredentialData) => void;
   onNewPortListClick?: () => void;
   onPortListChange?: (portListId: string) => void;
   onSshCredentialChange?: (sshCredentialId: string) => void;
@@ -156,6 +167,7 @@ const TargetDialog = ({
   hosts = '',
   hostsCount,
   hostsFilter,
+  id,
   inUse = false,
   name,
   port = DEFAULT_PORT,
@@ -182,9 +194,6 @@ const TargetDialog = ({
   onKrb5CredentialChange,
   onSnmpCredentialChange,
   onSshElevateCredentialChange,
-  // initial should be removed when all users of the TargetDialog are converted
-  // to typescript and all additional props are known
-  ...initial
 }: TargetDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -273,7 +282,7 @@ const TargetDialog = ({
     return [...baseCredentials, ...storeCredentials];
   };
 
-  const NEW_SSH = {
+  const NEW_SSH: NewCredentialData = {
     idField: 'sshCredentialId',
     types: getCredentialTypesForNewCredential(
       SSH_CREDENTIAL_TYPES as CredentialType[],
@@ -282,7 +291,7 @@ const TargetDialog = ({
     title: _('Create new SSH credential'),
   };
 
-  const NEW_SSH_ELEVATE = {
+  const NEW_SSH_ELEVATE: NewCredentialData = {
     idField: 'sshElevateCredentialId',
     types: getCredentialTypesForNewCredential(
       SSH_ELEVATE_CREDENTIAL_TYPES as CredentialType[],
@@ -291,7 +300,7 @@ const TargetDialog = ({
     title: _('Create new SSH elevate credential'),
   };
 
-  const NEW_SMB = {
+  const NEW_SMB: NewCredentialData = {
     idField: 'smbCredentialId',
     title: _('Create new SMB credential'),
     types: getCredentialTypesForNewCredential(
@@ -300,7 +309,7 @@ const TargetDialog = ({
     ),
   };
 
-  const NEW_ESXI = {
+  const NEW_ESXI: NewCredentialData = {
     idField: 'esxiCredentialId',
     title: _('Create new ESXi credential'),
     types: getCredentialTypesForNewCredential(
@@ -309,7 +318,7 @@ const TargetDialog = ({
     ),
   };
 
-  const NEW_SNMP = {
+  const NEW_SNMP: NewCredentialData = {
     idField: 'snmpCredentialId',
     title: _('Create new SNMP credential'),
     types: getCredentialTypesForNewCredential(
@@ -318,7 +327,7 @@ const TargetDialog = ({
     ),
   };
 
-  const NEW_KRB5 = {
+  const NEW_KRB5: NewCredentialData = {
     idField: 'krb5CredentialId',
     title: _('Create new Kerberos credential'),
     types: getCredentialTypesForNewCredential(
@@ -361,39 +370,35 @@ const TargetDialog = ({
     'krb5',
   );
 
-  const uncontrolledValues = {
-    ...initial,
-    aliveTests,
-    comment,
-    name,
-    port,
-    excludeHosts,
-    hosts,
-    hostsCount,
-    hostsFilter,
-    inUse,
-    reverseLookupOnly,
-    reverseLookupUnify,
-    targetSource,
-    targetExcludeSource,
-    allowSimultaneousIPs,
-  };
-
-  const controlledValues = {
-    portListId,
-    esxiCredentialId,
-    smbCredentialId,
-    snmpCredentialId,
-    sshCredentialId,
-    sshElevateCredentialId,
-    krb5CredentialId,
-  };
-
   return (
     <SaveDialog<TargetDialogValues, TargetDialogDefaultValues>
-      defaultValues={uncontrolledValues}
+      defaultValues={{
+        aliveTests,
+        comment,
+        name,
+        port,
+        excludeHosts,
+        hosts,
+        hostsCount,
+        hostsFilter,
+        inUse,
+        reverseLookupOnly,
+        reverseLookupUnify,
+        targetSource,
+        targetExcludeSource,
+        allowSimultaneousIPs,
+      }}
       title={title}
-      values={controlledValues}
+      values={{
+        id,
+        portListId,
+        esxiCredentialId,
+        smbCredentialId,
+        snmpCredentialId,
+        sshCredentialId,
+        sshElevateCredentialId,
+        krb5CredentialId,
+      }}
       onClose={onClose}
       onSave={onSave}
     >
@@ -565,19 +570,21 @@ const TargetDialog = ({
                     onChange={onSshCredentialChange}
                   />
                   {_('on port')}
-                  <TextField
+                  <NumberField
                     disabled={inUse}
                     name="port"
                     value={state.port}
                     onChange={onValueChange}
                   />
                   {!inUse && (
-                    <NewIcon<NewCredential>
+                    <NewIcon<NewCredentialData>
                       data-testid="new-icon-ssh"
                       title={_('Create a new credential')}
                       value={NEW_SSH}
                       onClick={
-                        onNewCredentialsClick as (value?: NewCredential) => void
+                        onNewCredentialsClick as (
+                          value?: NewCredentialData,
+                        ) => void
                       }
                     />
                   )}
@@ -603,12 +610,12 @@ const TargetDialog = ({
                       onChange={onSshElevateCredentialChange}
                     />
                     {!inUse && (
-                      <NewIcon<NewCredential>
+                      <NewIcon<NewCredentialData>
                         title={_('Create a new credential')}
                         value={NEW_SSH_ELEVATE}
                         onClick={
                           onNewCredentialsClick as (
-                            value?: NewCredential,
+                            value?: NewCredentialData,
                           ) => void
                         }
                       />
@@ -633,11 +640,13 @@ const TargetDialog = ({
                   onChange={onKrb5CredentialChange}
                 />
                 {!inUse && hasPermissionToCreateCredential && (
-                  <NewIcon<NewCredential>
+                  <NewIcon<NewCredentialData>
                     title={_('Create a new credential')}
                     value={NEW_KRB5}
                     onClick={
-                      onNewCredentialsClick as (value?: NewCredential) => void
+                      onNewCredentialsClick as (
+                        value?: NewCredentialData,
+                      ) => void
                     }
                   />
                 )}
@@ -659,12 +668,14 @@ const TargetDialog = ({
                   onChange={onSmbCredentialChange}
                 />
                 {!inUse && hasPermissionToCreateCredential && (
-                  <NewIcon<NewCredential>
+                  <NewIcon<NewCredentialData>
                     data-testid="new-icon-smb"
                     title={_('Create a new credential')}
                     value={NEW_SMB}
                     onClick={
-                      onNewCredentialsClick as (value?: NewCredential) => void
+                      onNewCredentialsClick as (
+                        value?: NewCredentialData,
+                      ) => void
                     }
                   />
                 )}
@@ -685,12 +696,14 @@ const TargetDialog = ({
                   onChange={onEsxiCredentialChange}
                 />
                 {!inUse && hasPermissionToCreateCredential && (
-                  <NewIcon<NewCredential>
+                  <NewIcon<NewCredentialData>
                     data-testid="new-icon-esxi"
                     title={_('Create a new credential')}
                     value={NEW_ESXI}
                     onClick={
-                      onNewCredentialsClick as (value?: NewCredential) => void
+                      onNewCredentialsClick as (
+                        value?: NewCredentialData,
+                      ) => void
                     }
                   />
                 )}
@@ -711,12 +724,14 @@ const TargetDialog = ({
                   onChange={onSnmpCredentialChange}
                 />
                 {!inUse && hasPermissionToCreateCredential && (
-                  <NewIcon<NewCredential>
+                  <NewIcon<NewCredentialData>
                     data-testid="new-icon-snmp"
                     title={_('Create a new credential')}
                     value={NEW_SNMP}
                     onClick={
-                      onNewCredentialsClick as (value?: NewCredential) => void
+                      onNewCredentialsClick as (
+                        value?: NewCredentialData,
+                      ) => void
                     }
                   />
                 )}

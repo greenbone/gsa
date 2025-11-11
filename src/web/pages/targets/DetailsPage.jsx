@@ -38,8 +38,8 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import TargetComponent from 'web/pages/targets/Component';
 import TargetDetails from 'web/pages/targets/Details';
+import TargetComponent from 'web/pages/targets/TargetComponent';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,

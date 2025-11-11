@@ -13,8 +13,8 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import TargetComponent from 'web/pages/targets/Component';
 import TargetsTable from 'web/pages/targets/Table';
+import TargetComponent from 'web/pages/targets/TargetComponent';
 import TargetFilterDialog from 'web/pages/targets/TargetFilterDialog';
 import {
   loadEntities,
