@@ -5,7 +5,6 @@
 
 import {testing} from '@gsa/testing';
 import type Http from 'gmp/http/http';
-import type Rejection from 'gmp/http/rejection';
 import Response, {type Meta} from 'gmp/http/response';
 import {type Element} from 'gmp/models/model';
 
@@ -94,7 +93,7 @@ export const createHttp = <TData = Element, TMeta extends Meta = Meta>(
     request: testing.fn().mockResolvedValue(response),
   }) as unknown as Http;
 
-export const createHttpError = (error: Error | Rejection) =>
+export const createHttpError = (error: Error) =>
   ({
     request: testing.fn().mockRejectedValue(error),
   }) as unknown as Http;
