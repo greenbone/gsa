@@ -8,10 +8,13 @@ import Filter from 'gmp/models/filter';
 import {filterString, isFilter} from 'gmp/models/filter/utils';
 
 describe('filterString function tests', () => {
+  test('should return undefined for undefined input', () => {
+    expect(filterString()).toBeUndefined();
+    expect(filterString(undefined)).toBeUndefined();
+  });
   test('should return string for non Filter objects', () => {
     expect(filterString(1)).toEqual('1');
     expect(filterString('foo')).toEqual('foo');
-    expect(filterString()).toEqual('undefined');
   });
 
   test('should return the filter string from Filters', () => {
