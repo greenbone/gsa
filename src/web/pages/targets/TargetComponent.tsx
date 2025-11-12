@@ -36,6 +36,7 @@ import CredentialDialog, {
 } from 'web/pages/credentials/CredentialDialog';
 import PortListDialog from 'web/pages/portlists/PortListDialog';
 import TargetDialog, {
+  DEFAULT_PORT_LIST_ID,
   type NewCredentialData,
   type ReferenceCredentialId,
   type TargetDialogData,
@@ -68,8 +69,6 @@ interface TargetComponentProps {
   onSaved?: (response: EntitySaveResponse) => void;
   onSaveError?: (error: Error) => void;
 }
-
-const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
 const getIdOrDefault = (value?: Model) =>
   isDefined(value) ? (value.id as string) : UNSET_VALUE;

@@ -28,6 +28,7 @@ import {ALIVE_TESTS} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import TargetDialog, {
   ALIVE_TESTS_DEFAULT,
+  DEFAULT_PORT_LIST_ID,
   DEFAULT_PORT_LIST_NAME,
 } from 'web/pages/targets/TargetDialog';
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/Render';
@@ -349,7 +350,7 @@ describe('TargetDialog tests', () => {
       inUse: false,
       name: 'ross',
       port: 22,
-      portListId: 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5',
+      portListId: DEFAULT_PORT_LIST_ID,
       reverseLookupOnly: 0,
       reverseLookupUnify: YES_VALUE,
       smbCredentialId: '2345',
@@ -632,7 +633,7 @@ describe('TargetDialog tests', () => {
     const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
 
-    expect(selects[0]).toHaveValue('OpenVAS Default');
+    expect(selects[0]).toHaveValue(DEFAULT_PORT_LIST_NAME);
     expect(selects[0]).toBeDisabled();
 
     expect(selects[1]).toHaveValue(ALIVE_TESTS.SCAN_CONFIG_DEFAULT);
@@ -720,7 +721,7 @@ describe('TargetDialog tests', () => {
       inUse: false,
       name: 'Unnamed',
       port: 22,
-      portListId: 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5',
+      portListId: DEFAULT_PORT_LIST_ID,
       reverseLookupOnly: 0,
       reverseLookupUnify: 0,
       smbCredentialId: UNSET_VALUE,

@@ -133,8 +133,8 @@ interface TargetDialogProps {
 
 export const DEFAULT_PORT = 22;
 
-const DEFAULT_PORT_LIST_ID = 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5';
-export const DEFAULT_PORT_LIST_NAME = 'OpenVAS Default';
+export const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP
+export const DEFAULT_PORT_LIST_NAME = 'All IANA assigned TCP';
 
 const DEFAULT_PORT_LISTS = [
   new PortList({
