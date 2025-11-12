@@ -66,7 +66,7 @@ interface PermissionDialogDefaultValues {
 
 export type PermissionDialogState = PermissionDialogDefaultValues;
 
-const NEED_RESOURCE_ID = [
+const NEED_RESOURCE_ID = new Set([
   'Super',
   'delete_agent',
   'delete_alert',
@@ -145,7 +145,7 @@ const NEED_RESOURCE_ID = [
   'test_alert',
   'verify_report_format',
   'verify_scanner',
-];
+]);
 
 const PermissionDialog = ({
   comment = '',
@@ -220,7 +220,7 @@ const PermissionDialog = ({
       onSave={onSave}
     >
       {({values: state, onValueChange}) => {
-        const showResourceId = NEED_RESOURCE_ID.includes(state.name);
+        const showResourceId = NEED_RESOURCE_ID.has(state.name);
 
         const [type] = split(name, '_', 1);
 
