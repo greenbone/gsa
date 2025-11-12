@@ -12,7 +12,7 @@ import {type ResponseRejection} from 'gmp/http/rejection';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
 import {
-  type ContainerImageScannerType,
+  CONTAINER_IMAGE_SCANNER_TYPE,
   type ScannerType,
 } from 'gmp/models/scanner';
 import Task, {
@@ -83,7 +83,6 @@ interface TaskCommandCreateContainerImageParams {
   ociImageTargetId?: string;
   registryAllowInsecure?: boolean;
   scannerId?: string;
-  scannerType?: ContainerImageScannerType;
   scheduleId?: string;
   schedulePeriods?: boolean;
   tagId?: string;
@@ -138,7 +137,6 @@ interface TaskCommandSaveContainerImageParams {
   ociImageTargetId?: string;
   registryAllowInsecure?: boolean;
   scannerId?: string;
-  scannerType?: ContainerImageScannerType;
   scheduleId?: string;
   schedulePeriods?: boolean;
 }
@@ -320,7 +318,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     ociImageTargetId,
     registryAllowInsecure,
     scannerId,
-    scannerType,
     scheduleId,
     schedulePeriods,
     tagId,
@@ -340,7 +337,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       ociImageTargetId,
       registryAllowInsecure,
       scannerId,
-      scannerType,
       scheduleId,
       schedulePeriods,
       tagId,
@@ -362,7 +358,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       name,
       oci_image_target_id: ociImageTargetId,
       scanner_id: scannerId,
-      scanner_type: scannerType,
+      scanner_type: CONTAINER_IMAGE_SCANNER_TYPE,
       schedule_id: scheduleId,
       schedule_periods: parseYesNo(schedulePeriods),
       tag_id: tagId,
@@ -490,7 +486,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     ociImageTargetId,
     registryAllowInsecure,
     scannerId,
-    scannerType,
     scheduleId,
     schedulePeriods,
   }: TaskCommandSaveContainerImageParams) {
@@ -509,7 +504,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       ociImageTargetId,
       registryAllowInsecure,
       scannerId,
-      scannerType,
       scheduleId,
       schedulePeriods,
     });
@@ -529,7 +523,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       name,
       oci_image_target_id: ociImageTargetId,
       scanner_id: scannerId,
-      scanner_type: scannerType,
+      scanner_type: CONTAINER_IMAGE_SCANNER_TYPE,
       schedule_id: scheduleId,
       schedule_periods: parseYesNo(schedulePeriods),
       task_id: id,

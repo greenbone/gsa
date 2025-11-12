@@ -121,7 +121,6 @@ export const useContainerImageTaskDialog = ({
         schedulePeriods,
         acceptInvalidCerts,
         registryAllowInsecure,
-        scannerType,
       } = data;
 
       if (isDefined(id)) {
@@ -143,7 +142,6 @@ export const useContainerImageTaskDialog = ({
             schedulePeriods,
             acceptInvalidCerts,
             registryAllowInsecure,
-            scannerType,
           })
           .then(onContainerSaved, onContainerSaveError)
           .then(() => closeContainerImageTaskDialog());
@@ -168,7 +166,6 @@ export const useContainerImageTaskDialog = ({
           schedulePeriods,
           acceptInvalidCerts,
           registryAllowInsecure,
-          scannerType,
         })
         .then(onContainerCreated, onContainerCreateError)
         .then(() => closeContainerImageTaskDialog());

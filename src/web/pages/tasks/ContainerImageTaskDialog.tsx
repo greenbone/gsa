@@ -3,11 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {
-  CONTAINER_IMAGE_DEFAULT_SCANNER_ID,
-  CONTAINER_IMAGE_SCANNER_TYPE,
-  type ContainerImageScannerType,
-} from 'gmp/models/scanner';
+import {CONTAINER_IMAGE_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 import {
   type default as Task,
   type TaskAutoDelete,
@@ -45,7 +41,7 @@ interface ContainerImageTaskDialogValues {
   scannerId?: string;
 }
 
-interface ContainerImageTaskDialogState {
+interface ContainerImageTaskDialogDefaultValues {
   addTag?: boolean;
   alterable?: boolean;
   applyOverrides?: boolean;
@@ -62,11 +58,10 @@ interface ContainerImageTaskDialogState {
   id?: string;
   acceptInvalidCerts?: boolean;
   registryAllowInsecure?: boolean;
-  scannerType?: ContainerImageScannerType;
 }
 
 export type ContainerImageTaskDialogData = ContainerImageTaskDialogValues &
-  ContainerImageTaskDialogState;
+  ContainerImageTaskDialogDefaultValues;
 
 interface ContainerImageTaskDialogProps {
   addTag?: boolean;
@@ -182,7 +177,7 @@ const ContainerImageTaskDialog = ({
     ? first<RenderSelectItemProps, {id: undefined}>(tags).id
     : undefined;
 
-  const uncontrolledData: ContainerImageTaskDialogState = {
+  const uncontrolledData: ContainerImageTaskDialogDefaultValues = {
     addTag,
     alterable,
     applyOverrides,
@@ -201,7 +196,6 @@ const ContainerImageTaskDialog = ({
     registryAllowInsecure: isEdit
       ? task.registryAllowInsecure
       : registryAllowInsecure,
-    scannerType: CONTAINER_IMAGE_SCANNER_TYPE,
   };
 
   const controlledData: ContainerImageTaskDialogValues = {
@@ -212,7 +206,10 @@ const ContainerImageTaskDialog = ({
   };
 
   return (
-    <SaveDialog<ContainerImageTaskDialogValues, ContainerImageTaskDialogState>
+    <SaveDialog<
+      ContainerImageTaskDialogValues,
+      ContainerImageTaskDialogDefaultValues
+    >
       defaultValues={uncontrolledData}
       title={title}
       values={controlledData}
