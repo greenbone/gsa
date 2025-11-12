@@ -6,10 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
 import {act} from '@testing-library/react';
-import {
-  CONTAINER_IMAGE_DEFAULT_SCANNER_ID,
-  CONTAINER_IMAGE_SCANNER_TYPE,
-} from 'gmp/models/scanner';
+import {CONTAINER_IMAGE_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 import Task, {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {useContainerImageTaskDialog} from 'web/pages/tasks/hooks/useContainerImageTaskDialog';
@@ -268,8 +265,6 @@ describe('useContainerImageTaskDialog', () => {
       schedulePeriods: true,
       acceptInvalidCerts: true,
       registryAllowInsecure: false,
-      scannerType:
-        CONTAINER_IMAGE_SCANNER_TYPE as typeof CONTAINER_IMAGE_SCANNER_TYPE,
     };
 
     await act(async () => {
@@ -294,7 +289,6 @@ describe('useContainerImageTaskDialog', () => {
       schedulePeriods: true,
       acceptInvalidCerts: true,
       registryAllowInsecure: false,
-      scannerType: CONTAINER_IMAGE_SCANNER_TYPE,
     });
 
     expect(onContainerCreated).toHaveBeenCalledWith(createResponse);
@@ -339,8 +333,6 @@ describe('useContainerImageTaskDialog', () => {
       schedulePeriods: false,
       acceptInvalidCerts: false,
       registryAllowInsecure: true,
-      scannerType:
-        CONTAINER_IMAGE_SCANNER_TYPE as typeof CONTAINER_IMAGE_SCANNER_TYPE,
     };
 
     await act(async () => {
@@ -364,7 +356,6 @@ describe('useContainerImageTaskDialog', () => {
       schedulePeriods: false,
       acceptInvalidCerts: false,
       registryAllowInsecure: true,
-      scannerType: CONTAINER_IMAGE_SCANNER_TYPE,
     });
 
     expect(onContainerSaved).toHaveBeenCalledWith(saveResponse);
