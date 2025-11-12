@@ -222,7 +222,7 @@ export interface TaskProperties extends ModelProperties {
   slave?: TaskSlave;
   status?: TaskStatus;
   target?: Model;
-  oci_image_target?: Model;
+  ociImageTarget?: Model;
   agentGroup?: Model;
   trend?: TaskTrend;
   // from preferences
@@ -233,8 +233,8 @@ export interface TaskProperties extends ModelProperties {
   max_checks?: number;
   max_hosts?: number;
   min_qod?: number;
-  accept_invalid_certs?: boolean;
-  registry_allow_insecure?: boolean;
+  acceptInvalidCerts?: boolean;
+  registryAllowInsecure?: boolean;
 }
 
 export const AUTO_DELETE_KEEP = 'keep';
@@ -322,8 +322,8 @@ class Task extends Model {
   readonly max_checks?: number;
   readonly max_hosts?: number;
   readonly min_qod?: number;
-  readonly accept_invalid_certs?: boolean;
-  readonly registry_allow_insecure?: boolean;
+  readonly acceptInvalidCerts?: boolean;
+  readonly registryAllowInsecure?: boolean;
   readonly observers?: TaskObservers;
   readonly preferences: TaskPreferences;
   readonly progress?: number;
@@ -335,7 +335,7 @@ class Task extends Model {
   readonly slave?: TaskSlave;
   readonly status: TaskStatus;
   readonly target?: Model;
-  readonly oci_image_target?: Model;
+  readonly ociImageTarget?: Model;
   readonly agentGroup?: Model;
   readonly trend?: TaskTrend;
   readonly usageType = USAGE_TYPE.scan;
@@ -366,10 +366,8 @@ class Task extends Model {
     max_hosts,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     min_qod,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    accept_invalid_certs,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    registry_allow_insecure,
+    acceptInvalidCerts,
+    registryAllowInsecure,
     observers,
     preferences = {},
     progress,
@@ -384,8 +382,7 @@ class Task extends Model {
     slave,
     status = TASK_STATUS.unknown,
     target,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    oci_image_target,
+    ociImageTarget,
     agentGroup,
     trend,
     ...properties
@@ -406,8 +403,8 @@ class Task extends Model {
     this.max_checks = max_checks;
     this.max_hosts = max_hosts;
     this.min_qod = min_qod;
-    this.accept_invalid_certs = accept_invalid_certs;
-    this.registry_allow_insecure = registry_allow_insecure;
+    this.acceptInvalidCerts = acceptInvalidCerts;
+    this.registryAllowInsecure = registryAllowInsecure;
     this.observers = observers;
     this.preferences = preferences;
     this.progress = progress;
@@ -419,7 +416,7 @@ class Task extends Model {
     this.slave = slave;
     this.status = status;
     this.target = target;
-    this.oci_image_target = oci_image_target;
+    this.ociImageTarget = ociImageTarget;
     this.trend = trend;
     this.agentGroup = agentGroup;
   }
@@ -526,7 +523,7 @@ class Task extends Model {
     copy.target = isEmpty(element.target?._id)
       ? undefined
       : Model.fromElement(element.target, 'target');
-    copy.oci_image_target = isEmpty(element.oci_image_target?._id)
+    copy.ociImageTarget = isEmpty(element.oci_image_target?._id)
       ? undefined
       : Model.fromElement(element.oci_image_target, 'target');
     copy.agentGroup = isEmpty(element.agent_group?._id)
@@ -584,10 +581,10 @@ class Task extends Model {
             copy[pref.scanner_name] = parseInt(pref.value);
             break;
           case 'accept_invalid_certs':
-            copy.accept_invalid_certs = parseYesNo(pref.value) === YES_VALUE;
+            copy.acceptInvalidCerts = parseYesNo(pref.value) === YES_VALUE;
             break;
           case 'registry_allow_insecure':
-            copy.registry_allow_insecure = parseYesNo(pref.value) === YES_VALUE;
+            copy.registryAllowInsecure = parseYesNo(pref.value) === YES_VALUE;
             break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
@@ -648,12 +645,12 @@ class Task extends Model {
     return (
       !isDefined(this.target) &&
       !isDefined(this.agentGroup) &&
-      !isDefined(this.oci_image_target)
+      !isDefined(this.ociImageTarget)
     );
   }
 
   isContainerImage() {
-    return isDefined(this.oci_image_target);
+    return isDefined(this.ociImageTarget);
   }
 
   isAgent() {
