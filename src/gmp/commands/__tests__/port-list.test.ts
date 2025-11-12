@@ -10,7 +10,6 @@ import {
   createActionResultResponse,
   createHttpMany,
   createEntityResponse,
-  createResponse,
 } from 'gmp/commands/testing';
 
 describe('PortListCommand', () => {
@@ -121,12 +120,12 @@ describe('PortListCommand', () => {
   });
 
   test('should allow to import a port list', async () => {
-    const response = createResponse({});
+    const response = createActionResultResponse({id: '123'});
     const http = createHttp(response);
     const command = new PortListCommand(http);
     const result = await command.import({
       xmlFile: new File(['some file content'], 'portlist.xml'),
     });
-    expect(result.data).toEqual({});
+    expect(result.data).toEqual({id: '123'});
   });
 });
