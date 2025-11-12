@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-// Import LucideIcon type once
 import type React from 'react';
 import {
+  AlertCircle,
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
@@ -71,10 +71,9 @@ import {
   X,
   ZoomIn,
 } from 'lucide-react';
-import {
-  createIconComponents,
-  type IconComponentsType,
-} from 'web/components/icon/createIconComponents';
+import DynamicIcon, {
+  type DynamicIconProps,
+} from 'web/components/icon/DynamicIcon';
 import AddToAssets from 'web/components/icon/svg/add_to_assets.svg?react';
 import CertBundAdv from 'web/components/icon/svg/cert_bund_adv.svg?react';
 import Clone from 'web/components/icon/svg/clone.svg?react';
@@ -132,998 +131,437 @@ import TrendUp from 'web/components/icon/svg/trend_up.svg?react';
 import Vulnerability from 'web/components/icon/svg/vulnerability.svg?react';
 import Wizard from 'web/components/icon/svg/wizard.svg?react';
 
-export interface IconDefinition {
-  name: string;
-  component: LucideIcon | React.FC<React.SVGProps<SVGSVGElement>>;
-  dataTestId: string;
-  ariaLabel: string;
-  isLucide: boolean;
+type IconComponent = {
+  <TValue = string | undefined>(
+    props: Omit<DynamicIconProps<TValue>, 'icon' | 'isLucide' | 'ariaLabel'> & {
+      'data-testid'?: string;
+    },
+  ): React.ReactNode;
+  displayName?: string;
+};
+
+let _iconCache: Record<string, IconComponent> | null = null;
+
+function createIcon(
+  Icon: LucideIcon | React.FC<React.SVGProps<SVGSVGElement>>,
+  dataTestId: string,
+  ariaLabel: string,
+  isLucide = true,
+): IconComponent {
+  const IconWrapper = <TValue extends string | undefined>(
+    props: Omit<DynamicIconProps<TValue>, 'icon' | 'isLucide' | 'ariaLabel'> & {
+      'data-testid'?: string;
+    },
+  ) => {
+    const {'data-testid': testId = dataTestId, ...rest} = props;
+    return (
+      <DynamicIcon
+        ariaLabel={ariaLabel}
+        dataTestId={testId}
+        icon={Icon}
+        isLucide={isLucide}
+        {...rest}
+      />
+    );
+  };
+  IconWrapper.displayName = `${ariaLabel.replaceAll(' ', '')}`;
+  return IconWrapper as IconComponent;
 }
 
-export const icons: IconDefinition[] = [
-  // Lucide icons
-  {
-    name: 'Plus',
-    component: Plus,
-    dataTestId: 'plus-icon',
-    ariaLabel: 'Plus Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Diff',
-    component: Diff,
-    dataTestId: 'diff-icon',
-    ariaLabel: 'Diff Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Equal',
-    component: Equal,
-    dataTestId: 'equal-icon',
-    ariaLabel: 'Equal Icon',
-    isLucide: true,
-  },
-  {
-    name: 'CirclePlus',
-    component: CirclePlus,
-    dataTestId: 'circle-plus-icon',
-    ariaLabel: 'Circle Plus Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Minus',
-    component: Minus,
-    dataTestId: 'minus-icon',
-    ariaLabel: 'Minus Icon',
-    isLucide: true,
-  },
-  {
-    name: 'CircleMinus',
-    component: CircleMinus,
-    dataTestId: 'circle-minus-icon',
-    ariaLabel: 'Circle Minus Icon',
-    isLucide: true,
-  },
-  {
-    name: 'HatAndGlasses',
-    component: HatGlasses,
-    dataTestId: 'hat-and-glasses-icon',
-    ariaLabel: 'Hat and Glasses Icon',
-    isLucide: true,
-  },
-  {
-    name: 'FileOutput',
-    component: FileOutput,
-    dataTestId: 'export-icon',
-    ariaLabel: 'Export Icon',
-    isLucide: true,
-  },
-  {
-    name: 'CircleX',
-    component: CircleX,
-    dataTestId: 'delete-icon',
-    ariaLabel: 'Delete Icon',
-    isLucide: true,
-  },
-  {
-    name: 'RefreshCcw',
-    component: RefreshCcw,
-    dataTestId: 'refresh-ccw-icon',
-    ariaLabel: 'Refresh CCW Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Megaphone',
-    component: Megaphone,
-    dataTestId: 'alert-icon',
-    ariaLabel: 'Alert Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Audit',
-    component: ClipboardCheck,
-    dataTestId: 'audit-icon',
-    ariaLabel: 'Audit Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ArrowDown',
-    component: ArrowDown,
-    dataTestId: 'arrow-down-icon',
-    ariaLabel: 'Arrow Down Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ArrowUpDown',
-    component: ArrowUpDown,
-    dataTestId: 'arrow-up-down-icon',
-    ariaLabel: 'Arrow Up Down Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ArrowUp',
-    component: ArrowUp,
-    dataTestId: 'arrow-up-icon',
-    ariaLabel: 'Arrow Up Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Calendar',
-    component: Calendar,
-    dataTestId: 'calendar-icon',
-    ariaLabel: 'Calendar Icon',
-    isLucide: true,
-  },
-  {
-    name: 'KeyRound',
-    component: KeyRound,
-    dataTestId: 'credential-icon',
-    ariaLabel: 'Credential Icon',
-    isLucide: true,
-  },
-  {
-    name: 'BarChart3',
-    component: BarChart3,
-    dataTestId: 'dashboard-icon',
-    ariaLabel: 'Dashboard Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Trash2',
-    component: Trash2,
-    dataTestId: 'trashcan-icon',
-    ariaLabel: 'Delete Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Disabled',
-    component: PowerOff,
-    dataTestId: 'disable-icon',
-    ariaLabel: 'Disable Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ZoomIn',
-    component: ZoomIn,
-    dataTestId: 'details-icon',
-    ariaLabel: 'Details Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Download',
-    component: Download,
-    dataTestId: 'download-icon',
-    ariaLabel: 'Download Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Pencil',
-    component: Pencil,
-    dataTestId: 'edit-icon',
-    ariaLabel: 'Edit Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Power',
-    component: Power,
-    dataTestId: 'enable-icon',
-    ariaLabel: 'Enable Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Rss',
-    component: Rss,
-    dataTestId: 'feed-icon',
-    ariaLabel: 'Feed Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Filter',
-    component: Filter,
-    dataTestId: 'filter-icon',
-    ariaLabel: 'Filter Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ChevronFirst',
-    component: ChevronFirst,
-    dataTestId: 'first-icon',
-    ariaLabel: 'First Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Folder',
-    component: Folder,
-    dataTestId: 'fold-icon',
-    ariaLabel: 'Fold Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Users',
-    component: Users,
-    dataTestId: 'group-icon',
-    ariaLabel: 'Group Icon',
-    isLucide: true,
-  },
-  {
-    name: 'HelpCircle',
-    component: HelpCircle,
-    dataTestId: 'help-icon',
-    ariaLabel: 'Help Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Import',
-    component: Import,
-    dataTestId: 'import-icon',
-    ariaLabel: 'Import Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Info',
-    component: Info,
-    dataTestId: 'info-icon',
-    ariaLabel: 'Info Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Key',
-    component: Key,
-    dataTestId: 'key-icon',
-    ariaLabel: 'Key Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ChevronLast',
-    component: ChevronLast,
-    dataTestId: 'last-icon',
-    ariaLabel: 'Last Icon',
-    isLucide: true,
-  },
-  {
-    name: 'List',
-    component: List,
-    dataTestId: 'list-icon',
-    ariaLabel: 'List Icon',
-    isLucide: true,
-  },
-  {
-    name: 'LogOut',
-    component: LogOut,
-    dataTestId: 'logout-icon',
-    ariaLabel: 'Logout Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Settings',
-    component: Settings,
-    dataTestId: 'my-settings-icon',
-    ariaLabel: 'My Settings Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ChevronRight',
-    component: ChevronRight,
-    dataTestId: 'next-icon',
-    ariaLabel: 'Next Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Gauge',
-    component: Gauge,
-    dataTestId: 'performance-icon',
-    ariaLabel: 'Performance Icon',
-    isLucide: true,
-  },
-  {
-    name: 'UserCheck',
-    component: UserCheck,
-    dataTestId: 'permission-icon',
-    ariaLabel: 'Permission Icon',
-    isLucide: true,
-  },
-  {
-    name: 'FileCog',
-    component: FileCog,
-    dataTestId: 'policy-icon',
-    ariaLabel: 'Policy Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ChevronLeft',
-    component: ChevronLeft,
-    dataTestId: 'previous-icon',
-    ariaLabel: 'Previous Icon',
-    isLucide: true,
-  },
-  {
-    name: 'RefreshCcw',
-    component: RefreshCcw,
-    dataTestId: 'refresh-icon',
-    ariaLabel: 'Refresh Icon',
-    isLucide: true,
-  },
-  {
-    name: 'RotateCcw',
-    component: RotateCcw,
-    dataTestId: 'reset-icon',
-    ariaLabel: 'Reset Icon',
-    isLucide: true,
-  },
-  {
-    name: 'StepForward',
-    component: StepForward,
-    dataTestId: 'resume-icon',
-    ariaLabel: 'Resume Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Alterable',
-    component: FilePenLine,
-    dataTestId: 'alterable-icon',
-    ariaLabel: 'Alterable Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Clock3',
-    component: Clock3,
-    dataTestId: 'schedule-icon',
-    ariaLabel: 'Schedule Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Search',
-    component: Search,
-    dataTestId: 'search-icon',
-    ariaLabel: 'Search Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Settings2',
-    component: Settings2,
-    dataTestId: 'settings-2-icon',
-    ariaLabel: 'Settings Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Puzzle',
-    component: Puzzle,
-    dataTestId: 'solution-type-icon',
-    ariaLabel: 'Solution Type Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Play',
-    component: Play,
-    dataTestId: 'start-icon',
-    ariaLabel: 'Start Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Square',
-    component: Square,
-    dataTestId: 'stop-icon',
-    ariaLabel: 'Stop Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Tag',
-    component: Tag,
-    dataTestId: 'tag-icon',
-    ariaLabel: 'Tag Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Tags',
-    component: Tags,
-    dataTestId: 'tags-icon',
-    ariaLabel: 'Tags Icon',
-    isLucide: true,
-  },
-  {
-    name: 'FolderOpen',
-    component: FolderOpen,
-    dataTestId: 'unfold-icon',
-    ariaLabel: 'Unfold Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Upload',
-    component: Upload,
-    dataTestId: 'upload-icon',
-    ariaLabel: 'Upload Icon',
-    isLucide: true,
-  },
-  {
-    name: 'User',
-    component: User,
-    dataTestId: 'user-icon',
-    ariaLabel: 'User Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ShieldCheck',
-    component: ShieldCheck,
-    dataTestId: 'verify-icon',
-    ariaLabel: 'Verify Icon',
-    isLucide: true,
-  },
-  {
-    name: 'ShieldX',
-    component: ShieldX,
-    dataTestId: 'verify-no-icon',
-    ariaLabel: 'Verify No Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Glasses',
-    component: Glasses,
-    dataTestId: 'view-other-icon',
-    ariaLabel: 'View Other Icon',
-    isLucide: true,
-  },
-  {
-    name: 'X',
-    component: X,
-    dataTestId: 'X-icon',
-    ariaLabel: 'Close Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Save',
-    component: Save,
-    dataTestId: 'save-icon',
-    ariaLabel: 'Save Icon',
-    isLucide: true,
-  },
-  {
-    name: 'Fingerprint',
-    component: Fingerprint,
-    dataTestId: 'fingerprint-icon',
-    ariaLabel: 'Fingerprint Icon',
-    isLucide: true,
-  },
-  {
-    name: 'PlugZap',
-    component: PlugZap,
-    dataTestId: 'plug-zap-icon',
-    ariaLabel: 'Plug Zap Icon',
-    isLucide: true,
-  },
+const getIcons = (): Record<string, IconComponent> => {
+  if (_iconCache) return _iconCache;
 
-  // SVG icons
+  _iconCache = {
+    // Lucide icons
+    AlertCircle: createIcon(
+      AlertCircle,
+      'alert-circle-icon',
+      'Alert Circle Icon',
+    ),
+    Plus: createIcon(Plus, 'plus-icon', 'Plus Icon'),
+    Diff: createIcon(Diff, 'diff-icon', 'Diff Icon'),
+    Equal: createIcon(Equal, 'equal-icon', 'Equal Icon'),
+    CirclePlus: createIcon(CirclePlus, 'circle-plus-icon', 'Circle Plus Icon'),
+    Minus: createIcon(Minus, 'minus-icon', 'Minus Icon'),
+    CircleMinus: createIcon(
+      CircleMinus,
+      'circle-minus-icon',
+      'Circle Minus Icon',
+    ),
+    HatAndGlasses: createIcon(
+      HatGlasses,
+      'hat-and-glasses-icon',
+      'Hat and Glasses Icon',
+    ),
+    FileOutput: createIcon(FileOutput, 'export-icon', 'Export Icon'),
+    CircleX: createIcon(CircleX, 'delete-icon', 'Delete Icon'),
+    RefreshCcw: createIcon(RefreshCcw, 'refresh-ccw-icon', 'Refresh CCW Icon'),
+    Megaphone: createIcon(Megaphone, 'alert-icon', 'Alert Icon'),
+    Audit: createIcon(ClipboardCheck, 'audit-icon', 'Audit Icon'),
+    ArrowDown: createIcon(ArrowDown, 'arrow-down-icon', 'Arrow Down Icon'),
+    ArrowUpDown: createIcon(
+      ArrowUpDown,
+      'arrow-up-down-icon',
+      'Arrow Up Down Icon',
+    ),
+    ArrowUp: createIcon(ArrowUp, 'arrow-up-icon', 'Arrow Up Icon'),
+    Calendar: createIcon(Calendar, 'calendar-icon', 'Calendar Icon'),
+    KeyRound: createIcon(KeyRound, 'credential-icon', 'Credential Icon'),
+    BarChart3: createIcon(BarChart3, 'dashboard-icon', 'Dashboard Icon'),
+    Trash2: createIcon(Trash2, 'trashcan-icon', 'Delete Icon'),
+    Disabled: createIcon(PowerOff, 'disable-icon', 'Disable Icon'),
+    ZoomIn: createIcon(ZoomIn, 'details-icon', 'Details Icon'),
+    Download: createIcon(Download, 'download-icon', 'Download Icon'),
+    Pencil: createIcon(Pencil, 'edit-icon', 'Edit Icon'),
+    Power: createIcon(Power, 'enable-icon', 'Enable Icon'),
+    Rss: createIcon(Rss, 'feed-icon', 'Feed Icon'),
+    Filter: createIcon(Filter, 'filter-icon', 'Filter Icon'),
+    ChevronFirst: createIcon(ChevronFirst, 'first-icon', 'First Icon'),
+    Folder: createIcon(Folder, 'fold-icon', 'Fold Icon'),
+    Users: createIcon(Users, 'group-icon', 'Group Icon'),
+    HelpCircle: createIcon(HelpCircle, 'help-icon', 'Help Icon'),
+    Import: createIcon(Import, 'import-icon', 'Import Icon'),
+    Info: createIcon(Info, 'info-icon', 'Info Icon'),
+    Key: createIcon(Key, 'key-icon', 'Key Icon'),
+    ChevronLast: createIcon(ChevronLast, 'last-icon', 'Last Icon'),
+    List: createIcon(List, 'list-icon', 'List Icon'),
+    LogOut: createIcon(LogOut, 'logout-icon', 'Logout Icon'),
+    Settings: createIcon(Settings, 'my-settings-icon', 'My Settings Icon'),
+    ChevronRight: createIcon(ChevronRight, 'next-icon', 'Next Icon'),
+    Gauge: createIcon(Gauge, 'performance-icon', 'Performance Icon'),
+    UserCheck: createIcon(UserCheck, 'permission-icon', 'Permission Icon'),
+    FileCog: createIcon(FileCog, 'policy-icon', 'Policy Icon'),
+    ChevronLeft: createIcon(ChevronLeft, 'previous-icon', 'Previous Icon'),
+    RotateCcw: createIcon(RotateCcw, 'reset-icon', 'Reset Icon'),
+    StepForward: createIcon(StepForward, 'resume-icon', 'Resume Icon'),
+    Alterable: createIcon(FilePenLine, 'alterable-icon', 'Alterable Icon'),
+    Clock3: createIcon(Clock3, 'schedule-icon', 'Schedule Icon'),
+    Search: createIcon(Search, 'search-icon', 'Search Icon'),
+    Settings2: createIcon(Settings2, 'settings-2-icon', 'Settings Icon'),
+    Puzzle: createIcon(Puzzle, 'solution-type-icon', 'Solution Type Icon'),
+    Play: createIcon(Play, 'start-icon', 'Start Icon'),
+    Square: createIcon(Square, 'stop-icon', 'Stop Icon'),
+    Tag: createIcon(Tag, 'tag-icon', 'Tag Icon'),
+    Tags: createIcon(Tags, 'tags-icon', 'Tags Icon'),
+    FolderOpen: createIcon(FolderOpen, 'unfold-icon', 'Unfold Icon'),
+    Upload: createIcon(Upload, 'upload-icon', 'Upload Icon'),
+    User: createIcon(User, 'user-icon', 'User Icon'),
+    ShieldCheck: createIcon(ShieldCheck, 'verify-icon', 'Verify Icon'),
+    ShieldX: createIcon(ShieldX, 'verify-no-icon', 'Verify No Icon'),
+    Glasses: createIcon(Glasses, 'view-other-icon', 'View Other Icon'),
+    X: createIcon(X, 'X-icon', 'Close Icon'),
+    Save: createIcon(Save, 'save-icon', 'Save Icon'),
+    Fingerprint: createIcon(
+      Fingerprint,
+      'fingerprint-icon',
+      'Fingerprint Icon',
+    ),
+    PlugZap: createIcon(PlugZap, 'plug-zap-icon', 'Plug Zap Icon'),
 
-  {
-    name: 'AddToAssets',
-    component: AddToAssets,
-    dataTestId: 'add-to-assets-icon',
-    ariaLabel: 'Add To Assets Icon',
-    isLucide: false,
-  },
-  {
-    name: 'CertBundAdv',
-    component: CertBundAdv,
-    dataTestId: 'cert-bund-adv-icon',
-    ariaLabel: 'Cert Bund Adv Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Clone',
-    component: Clone,
-    dataTestId: 'clone-icon',
-    ariaLabel: 'Clone Icon',
-    isLucide: false,
-  },
-  {
-    name: 'ReportConfig',
-    component: ReportFormat,
-    dataTestId: 'report-config-icon',
-    ariaLabel: 'Report Config Icon',
-    isLucide: false,
-  },
-  {
-    name: 'CpeLogo',
-    component: Cpe,
-    dataTestId: 'cpe-logo-icon',
-    ariaLabel: 'CPE Logo Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Cve',
-    component: Cve,
-    dataTestId: 'cve-icon',
-    ariaLabel: 'CVE Icon',
-    isLucide: false,
-  },
-  {
-    name: 'CvssCalculator',
-    component: CvssCalculator,
-    dataTestId: 'cvss-icon',
-    ariaLabel: 'CVSS Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Delta',
-    component: Delta,
-    dataTestId: 'delta-icon',
-    ariaLabel: 'Delta Icon',
-    isLucide: false,
-  },
-  {
-    name: 'DeltaSecond',
-    component: DeltaSecond,
-    dataTestId: 'delta-second-icon',
-    ariaLabel: 'Delta Second Icon',
-    isLucide: false,
-  },
-  {
-    name: 'DeltaDifference',
-    component: DeltaSecond,
-    dataTestId: 'delta-difference-icon',
-    ariaLabel: 'Delta Difference Icon',
-    isLucide: false,
-  },
-  {
-    name: 'DfnCertAdv',
-    component: DfnCertAdv,
-    dataTestId: 'dfn-cert-adv-icon',
-    ariaLabel: 'DFN-CERT Adv Icon',
-    isLucide: false,
-  },
-  {
-    name: 'DlCsv',
-    component: DlCsv,
-    dataTestId: 'download-csv-icon',
-    ariaLabel: 'Download CSV Icon',
-    isLucide: false,
-  },
-  {
-    name: 'DlDeb',
-    component: DlDeb,
-    dataTestId: 'download-deb-icon',
-    ariaLabel: 'Download DEB Icon',
-    isLucide: false,
-  },
-  {
-    name: 'DlExe',
-    component: DlExe,
-    dataTestId: 'download-exe-icon',
-    ariaLabel: 'Download EXE Icon',
-    isLucide: false,
-  },
-  {
-    name: 'DlKey',
-    component: DlKey,
-    dataTestId: 'download-key-icon',
-    ariaLabel: 'Download Key Icon',
-    isLucide: false,
-  },
-  {
-    name: 'DlRpm',
-    component: DlRpm,
-    dataTestId: 'download-rpm-icon',
-    ariaLabel: 'Download RPM Icon',
-    isLucide: false,
-  },
-  {
-    name: 'DlSvg',
-    component: DlSvg,
-    dataTestId: 'download-svg-icon',
-    ariaLabel: 'Download SVG Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Host',
-    component: Host,
-    dataTestId: 'host-icon',
-    ariaLabel: 'Host Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Ldap',
-    component: Ldap,
-    dataTestId: 'ldap-icon',
-    ariaLabel: 'LDAP Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Legend',
-    component: Legend,
-    dataTestId: 'legend-icon',
-    ariaLabel: 'Legend Icon',
-    isLucide: false,
-  },
-  {
-    name: 'New',
-    component: New,
-    dataTestId: 'new-icon',
-    ariaLabel: 'New Icon',
-    isLucide: false,
-  },
-  {
-    name: 'NewNote',
-    component: NewNote,
-    dataTestId: 'new-note-icon',
-    ariaLabel: 'New Note Icon',
-    isLucide: false,
-  },
-  {
-    name: 'NewTicket',
-    component: NewTicket,
-    dataTestId: 'new-ticket-icon',
-    ariaLabel: 'New Ticket Icon',
-    isLucide: false,
-  },
-  {
-    name: 'NewOverride',
-    component: NewOverride,
-    dataTestId: 'new-override-icon',
-    ariaLabel: 'New Override Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Note',
-    component: Note,
-    dataTestId: 'note-icon',
-    ariaLabel: 'Note Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Nvt',
-    component: Nvt,
-    dataTestId: 'nvt-icon',
-    ariaLabel: 'NVT Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Os',
-    component: Os,
-    dataTestId: 'os-svg-icon',
-    ariaLabel: 'OS Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Override',
-    component: Override,
-    dataTestId: 'override-icon',
-    ariaLabel: 'Override Icon',
-    isLucide: false,
-  },
-  {
-    name: 'PortList',
-    component: PortList,
-    dataTestId: 'port-list-icon',
-    ariaLabel: 'Port List Icon',
-    isLucide: false,
-  },
-  {
-    name: 'ProvideView',
-    component: ProvideView,
-    dataTestId: 'provide-view-icon',
-    ariaLabel: 'Provide View Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Radius',
-    component: Radius,
-    dataTestId: 'radius-icon',
-    ariaLabel: 'Radius Icon',
-    isLucide: false,
-  },
-  {
-    name: 'RemoveFromAssets',
-    component: RemoveFromAssets,
-    dataTestId: 'remove-from-assets-icon',
-    ariaLabel: 'Remove From Assets Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Report',
-    component: Report,
-    dataTestId: 'report-icon',
-    ariaLabel: 'Report Icon',
-    isLucide: false,
-  },
-  {
-    name: 'ReportFormat',
-    component: ReportFormat,
-    dataTestId: 'report-format-icon',
-    ariaLabel: 'Report Format Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Restore',
-    component: Restore,
-    dataTestId: 'restore-icon',
-    ariaLabel: 'Restore Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Result',
-    component: Result,
-    dataTestId: 'result-icon',
-    ariaLabel: 'Result Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Role',
-    component: Role,
-    dataTestId: 'role-icon',
-    ariaLabel: 'Role Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Scanner',
-    component: Scanner,
-    dataTestId: 'scanner-icon',
-    ariaLabel: 'Scanner Icon',
-    isLucide: false,
-  },
-  {
-    name: 'ScanConfig',
-    component: Config,
-    dataTestId: 'scan-config-icon',
-    ariaLabel: 'Scan Config Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Sensor',
-    component: Sensor,
-    dataTestId: 'sensor-icon',
-    ariaLabel: 'Sensor Icon',
-    isLucide: false,
-  },
-  {
-    name: 'StMitigate',
-    component: StMitigate,
-    dataTestId: 'st-mitigate-icon',
-    ariaLabel: 'ST Mitigate Icon',
-    isLucide: false,
-  },
-  {
-    name: 'StNonavailable',
-    component: StNonavailable,
-    dataTestId: 'st-nonavailable-icon',
-    ariaLabel: 'ST Nonavailable Icon',
-    isLucide: false,
-  },
-  {
-    name: 'StUnknown',
-    component: StUnknown,
-    dataTestId: 'st-unknown-icon',
-    ariaLabel: 'ST Unknown Icon',
-    isLucide: false,
-  },
-  {
-    name: 'StVendorfix',
-    component: StVendorfix,
-    dataTestId: 'st-vendorfix-icon',
-    ariaLabel: 'ST Vendorfix Icon',
-    isLucide: false,
-  },
-  {
-    name: 'StWillnotfix',
-    component: StWillnotfix,
-    dataTestId: 'st-willnotfix-icon',
-    ariaLabel: 'ST Willnotfix Icon',
-    isLucide: false,
-  },
-  {
-    name: 'StWorkaround',
-    component: StWorkaround,
-    dataTestId: 'st-workaround-icon',
-    ariaLabel: 'ST Workaround Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Target',
-    component: Target,
-    dataTestId: 'target-icon',
-    ariaLabel: 'Target Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Task',
-    component: Task,
-    dataTestId: 'task-icon',
-    ariaLabel: 'Task Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Ticket',
-    component: Ticket,
-    dataTestId: 'ticket-icon',
-    ariaLabel: 'Ticket Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Tlscertificate',
-    component: Tlscertificate,
-    dataTestId: 'tls-certificate-icon',
-    ariaLabel: 'TLS Certificate Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Toggle3d',
-    component: Toggle3d,
-    dataTestId: 'toggle-3d-icon',
-    ariaLabel: 'Toggle 3D Icon',
-    isLucide: false,
-  },
-  {
-    name: 'TrendDown',
-    component: TrendDown,
-    dataTestId: 'trend-down-icon',
-    ariaLabel: 'Trend Down Icon',
-    isLucide: false,
-  },
-  {
-    name: 'TrendLess',
-    component: TrendLess,
-    dataTestId: 'trend-less-icon',
-    ariaLabel: 'Trend Less Icon',
-    isLucide: false,
-  },
-  {
-    name: 'TrendMore',
-    component: TrendMore,
-    dataTestId: 'trend-more-icon',
-    ariaLabel: 'Trend More Icon',
-    isLucide: false,
-  },
-  {
-    name: 'TrendNochange',
-    component: TrendNochange,
-    dataTestId: 'trend-nochange-icon',
-    ariaLabel: 'Trend Nochange Icon',
-    isLucide: false,
-  },
-  {
-    name: 'TrendUp',
-    component: TrendUp,
-    dataTestId: 'trend-up-icon',
-    ariaLabel: 'Trend Up Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Vulnerability',
-    component: Vulnerability,
-    dataTestId: 'vulnerability-icon',
-    ariaLabel: 'Vulnerability Icon',
-    isLucide: false,
-  },
-  {
-    name: 'Wizard',
-    component: Wizard,
-    dataTestId: 'wizard-icon',
-    ariaLabel: 'Wizard Icon',
-    isLucide: false,
-  },
-];
+    // SVG icons
+    AddToAssets: createIcon(
+      AddToAssets,
+      'add-to-assets-icon',
+      'Add To Assets Icon',
+      false,
+    ),
+    CertBundAdv: createIcon(
+      CertBundAdv,
+      'cert-bund-adv-icon',
+      'Cert Bund Adv Icon',
+      false,
+    ),
+    Clone: createIcon(Clone, 'clone-icon', 'Clone Icon', false),
+    ReportConfig: createIcon(
+      ReportFormat,
+      'report-config-icon',
+      'Report Config Icon',
+      false,
+    ),
+    CpeLogo: createIcon(Cpe, 'cpe-logo-icon', 'CPE Logo Icon', false),
+    Cve: createIcon(Cve, 'cve-icon', 'CVE Icon', false),
+    CvssCalculator: createIcon(CvssCalculator, 'cvss-icon', 'CVSS Icon', false),
+    Delta: createIcon(Delta, 'delta-icon', 'Delta Icon', false),
+    DeltaSecond: createIcon(
+      DeltaSecond,
+      'delta-second-icon',
+      'Delta Second Icon',
+      false,
+    ),
+    DeltaDifference: createIcon(
+      DeltaSecond,
+      'delta-difference-icon',
+      'Delta Difference Icon',
+      false,
+    ),
+    DfnCertAdv: createIcon(
+      DfnCertAdv,
+      'dfn-cert-adv-icon',
+      'DFN-CERT Adv Icon',
+      false,
+    ),
+    DlCsv: createIcon(DlCsv, 'download-csv-icon', 'Download CSV Icon', false),
+    DlDeb: createIcon(DlDeb, 'download-deb-icon', 'Download DEB Icon', false),
+    DlExe: createIcon(DlExe, 'download-exe-icon', 'Download EXE Icon', false),
+    DlKey: createIcon(DlKey, 'download-key-icon', 'Download Key Icon', false),
+    DlRpm: createIcon(DlRpm, 'download-rpm-icon', 'Download RPM Icon', false),
+    DlSvg: createIcon(DlSvg, 'download-svg-icon', 'Download SVG Icon', false),
+    Host: createIcon(Host, 'host-icon', 'Host Icon', false),
+    Ldap: createIcon(Ldap, 'ldap-icon', 'LDAP Icon', false),
+    Legend: createIcon(Legend, 'legend-icon', 'Legend Icon', false),
+    New: createIcon(New, 'new-icon', 'New Icon', false),
+    NewNote: createIcon(NewNote, 'new-note-icon', 'New Note Icon', false),
+    NewTicket: createIcon(
+      NewTicket,
+      'new-ticket-icon',
+      'New Ticket Icon',
+      false,
+    ),
+    NewOverride: createIcon(
+      NewOverride,
+      'new-override-icon',
+      'New Override Icon',
+      false,
+    ),
+    Note: createIcon(Note, 'note-icon', 'Note Icon', false),
+    Nvt: createIcon(Nvt, 'nvt-icon', 'NVT Icon', false),
+    Os: createIcon(Os, 'os-svg-icon', 'OS Icon', false),
+    Override: createIcon(Override, 'override-icon', 'Override Icon', false),
+    PortList: createIcon(PortList, 'port-list-icon', 'Port List Icon', false),
+    ProvideView: createIcon(
+      ProvideView,
+      'provide-view-icon',
+      'Provide View Icon',
+      false,
+    ),
+    Radius: createIcon(Radius, 'radius-icon', 'Radius Icon', false),
+    RemoveFromAssets: createIcon(
+      RemoveFromAssets,
+      'remove-from-assets-icon',
+      'Remove From Assets Icon',
+      false,
+    ),
+    Report: createIcon(Report, 'report-icon', 'Report Icon', false),
+    ReportFormat: createIcon(
+      ReportFormat,
+      'report-format-icon',
+      'Report Format Icon',
+      false,
+    ),
+    Restore: createIcon(Restore, 'restore-icon', 'Restore Icon', false),
+    Result: createIcon(Result, 'result-icon', 'Result Icon', false),
+    Role: createIcon(Role, 'role-icon', 'Role Icon', false),
+    Scanner: createIcon(Scanner, 'scanner-icon', 'Scanner Icon', false),
+    ScanConfig: createIcon(
+      Config,
+      'scan-config-icon',
+      'Scan Config Icon',
+      false,
+    ),
+    Sensor: createIcon(Sensor, 'sensor-icon', 'Sensor Icon', false),
+    StMitigate: createIcon(
+      StMitigate,
+      'st-mitigate-icon',
+      'ST Mitigate Icon',
+      false,
+    ),
+    StNonavailable: createIcon(
+      StNonavailable,
+      'st-nonavailable-icon',
+      'ST Nonavailable Icon',
+      false,
+    ),
+    StUnknown: createIcon(
+      StUnknown,
+      'st-unknown-icon',
+      'ST Unknown Icon',
+      false,
+    ),
+    StVendorfix: createIcon(
+      StVendorfix,
+      'st-vendorfix-icon',
+      'ST Vendorfix Icon',
+      false,
+    ),
+    StWillnotfix: createIcon(
+      StWillnotfix,
+      'st-willnotfix-icon',
+      'ST Willnotfix Icon',
+      false,
+    ),
+    StWorkaround: createIcon(
+      StWorkaround,
+      'st-workaround-icon',
+      'ST Workaround Icon',
+      false,
+    ),
+    Target: createIcon(Target, 'target-icon', 'Target Icon', false),
+    Task: createIcon(Task, 'task-icon', 'Task Icon', false),
+    Ticket: createIcon(Ticket, 'ticket-icon', 'Ticket Icon', false),
+    Tlscertificate: createIcon(
+      Tlscertificate,
+      'tls-certificate-icon',
+      'TLS Certificate Icon',
+      false,
+    ),
+    Toggle3d: createIcon(Toggle3d, 'toggle-3d-icon', 'Toggle 3D Icon', false),
+    TrendDown: createIcon(
+      TrendDown,
+      'trend-down-icon',
+      'Trend Down Icon',
+      false,
+    ),
+    TrendLess: createIcon(
+      TrendLess,
+      'trend-less-icon',
+      'Trend Less Icon',
+      false,
+    ),
+    TrendMore: createIcon(
+      TrendMore,
+      'trend-more-icon',
+      'Trend More Icon',
+      false,
+    ),
+    TrendNochange: createIcon(
+      TrendNochange,
+      'trend-nochange-icon',
+      'Trend Nochange Icon',
+      false,
+    ),
+    TrendUp: createIcon(TrendUp, 'trend-up-icon', 'Trend Up Icon', false),
+    Vulnerability: createIcon(
+      Vulnerability,
+      'vulnerability-icon',
+      'Vulnerability Icon',
+      false,
+    ),
+    Wizard: createIcon(Wizard, 'wizard-icon', 'Wizard Icon', false),
+  };
 
-const IconComponents: IconComponentsType = createIconComponents(icons);
+  return _iconCache;
+};
 
-export const {
-  AddToAssets: AddToAssetsIcon,
-  Alterable: AlterableIcon,
-  ArrowDown: ArrowDownIcon,
-  ArrowUp: ArrowUpIcon,
-  ArrowUpDown: ArrowUpDownIcon,
-  Audit: AuditIcon,
-  BarChart3: DashboardIcon,
-  Calendar: CalendarIcon,
-  CertBundAdv: CertBundAdvIcon,
-  ChevronFirst: FirstIcon,
-  ChevronLast: LastIcon,
-  ChevronLeft: PreviousIcon,
-  ChevronRight: NextIcon,
-  CircleMinus: CircleMinusIcon,
-  CirclePlus: CirclePlusIcon,
-  CircleX: CircleXDeleteIcon,
-  Clock3: ScheduleIcon,
-  Clone: CloneIcon,
-  Config: ConfigIcon,
-  CpeLogo: CpeLogoIcon,
-  Cve: CveIcon,
-  CvssCalculator: CvssIcon,
-  Delta: DeltaIcon,
-  DeltaDifference: DeltaDifferenceIcon,
-  DeltaSecond: DeltaSecondIcon,
-  DfnCertAdv: DfnCertAdvIcon,
-  Diff: DiffIcon,
-  Disabled: DisableIcon,
-  DlCsv: DownloadCsvIcon,
-  DlDeb: DownloadDebIcon,
-  DlExe: DownloadExeIcon,
-  DlKey: DownloadKeyIcon,
-  DlRpm: DownloadRpmIcon,
-  DlSvg: DownloadSvgIcon,
-  Download: DownloadIcon,
-  Equal: EqualIcon,
-  FileCog: PolicyIcon,
-  FileOutput: FileOutputIcon,
-  Filter: FilterIcon,
-  Fingerprint: FingerprintIcon,
-  Folder: FoldIcon,
-  FolderOpen: UnfoldIcon,
-  Gauge: PerformanceIcon,
-  Glasses: ViewOtherIcon,
-  HatAndGlasses: HatAndGlassesIcon,
-  HelpCircle: HelpIcon,
-  Host: HostIcon,
-  Import: ImportIcon,
-  Info: InfoIcon,
-  Key: KeyIcon,
-  KeyRound: CredentialIcon,
-  Ldap: LdapIcon,
-  Legend: LegendIcon,
-  List: ListSvgIcon,
-  LogOut: LogoutIcon,
-  Megaphone: AlertIcon,
-  Minus: MinusIcon,
-  New: NewIcon,
-  NewNote: NewNoteIcon,
-  NewOverride: NewOverrideIcon,
-  NewTicket: NewTicketIcon,
-  Note: NoteIcon,
-  Nvt: NvtIcon,
-  Os: OsSvgIcon,
-  Override: OverrideIcon,
-  Pencil: EditIcon,
-  Play: StartIcon,
-  PlugZap: PlugZapIcon,
-  Plus: PlusIcon,
-  PortList: PortListIcon,
-  Power: EnableIcon,
-  ProvideView: ProvideViewIcon,
-  Puzzle: SolutionTypeSvgIcon,
-  Radius: RadiusIcon,
-  RefreshCcw: RefreshIcon,
-  RemoveFromAssets: RemoveFromAssetsIcon,
-  Report: ReportIcon,
-  ReportConfig: ReportConfigIcon,
-  ReportFormat: ReportFormatIcon,
-  Restore: RestoreIcon,
-  Result: ResultIcon,
-  Role: RoleIcon,
-  RotateCcw: ResetIcon,
-  Rss: FeedIcon,
-  Save: SaveIcon,
-  ScanConfig: ScanConfigIcon,
-  Scanner: ScannerIcon,
-  Search: SearchIcon,
-  Sensor: SensorIcon,
-  Settings: MySettingsIcon,
-  Settings2: Settings2Icon,
-  ShieldCheck: VerifyIcon,
-  ShieldX: VerifyNoIcon,
-  Square: StopIcon,
-  StepForward: ResumeIcon,
-  StMitigate: StMitigateIcon,
-  StNonavailable: StNonAvailableIcon,
-  StUnknown: StUnknownIcon,
-  StVendorfix: StVendorFixIcon,
-  StWillnotfix: StWillNotFixIcon,
-  StWorkaround: StWorkaroundIcon,
-  Tag: TagIcon,
-  Tags: TagsIcon,
-  Target: TargetIcon,
-  Task: TaskIcon,
-  Ticket: TicketIcon,
-  Tlscertificate: TlsCertificateIcon,
-  Toggle3d: Toggle3dIcon,
-  Trash2: TrashcanIcon,
-  TrendDown: TrendDownIcon,
-  TrendLess: TrendLessIcon,
-  TrendMore: TrendMoreIcon,
-  TrendNochange: TrendNoChangeIcon,
-  TrendUp: TrendUpIcon,
-  Upload: UploadIcon,
-  User: UserIcon,
-  UserCheck: PermissionIcon,
-  Users: GroupIcon,
-  Vulnerability: VulnerabilityIcon,
-  Wizard: WizardIcon,
-  X: XIcon,
-  ZoomIn: DetailsIcon,
-} = IconComponents;
+export const AlertCircleIcon = getIcons().AlertCircle;
+export const AddToAssetsIcon = getIcons().AddToAssets;
+export const AlterableIcon = getIcons().Alterable;
+export const ArrowDownIcon = getIcons().ArrowDown;
+export const ArrowUpIcon = getIcons().ArrowUp;
+export const ArrowUpDownIcon = getIcons().ArrowUpDown;
+export const AuditIcon = getIcons().Audit;
+export const DashboardIcon = getIcons().BarChart3;
+export const CalendarIcon = getIcons().Calendar;
+export const CertBundAdvIcon = getIcons().CertBundAdv;
+export const FirstIcon = getIcons().ChevronFirst;
+export const LastIcon = getIcons().ChevronLast;
+export const PreviousIcon = getIcons().ChevronLeft;
+export const NextIcon = getIcons().ChevronRight;
+export const CircleMinusIcon = getIcons().CircleMinus;
+export const CirclePlusIcon = getIcons().CirclePlus;
+export const CircleXDeleteIcon = getIcons().CircleX;
+export const ScheduleIcon = getIcons().Clock3;
+export const CloneIcon = getIcons().Clone;
+export const ConfigIcon = getIcons().ScanConfig;
+export const CpeLogoIcon = getIcons().CpeLogo;
+export const CveIcon = getIcons().Cve;
+export const CvssIcon = getIcons().CvssCalculator;
+export const DeltaIcon = getIcons().Delta;
+export const DeltaDifferenceIcon = getIcons().DeltaDifference;
+export const DeltaSecondIcon = getIcons().DeltaSecond;
+export const DfnCertAdvIcon = getIcons().DfnCertAdv;
+export const DiffIcon = getIcons().Diff;
+export const DisableIcon = getIcons().Disabled;
+export const DownloadCsvIcon = getIcons().DlCsv;
+export const DownloadDebIcon = getIcons().DlDeb;
+export const DownloadExeIcon = getIcons().DlExe;
+export const DownloadKeyIcon = getIcons().DlKey;
+export const DownloadRpmIcon = getIcons().DlRpm;
+export const DownloadSvgIcon = getIcons().DlSvg;
+export const DownloadIcon = getIcons().Download;
+export const EqualIcon = getIcons().Equal;
+export const PolicyIcon = getIcons().FileCog;
+export const FileOutputIcon = getIcons().FileOutput;
+export const FilterIcon = getIcons().Filter;
+export const FingerprintIcon = getIcons().Fingerprint;
+export const FoldIcon = getIcons().Folder;
+export const UnfoldIcon = getIcons().FolderOpen;
+export const PerformanceIcon = getIcons().Gauge;
+export const ViewOtherIcon = getIcons().Glasses;
+export const HatAndGlassesIcon = getIcons().HatAndGlasses;
+export const HelpIcon = getIcons().HelpCircle;
+export const HostIcon = getIcons().Host;
+export const ImportIcon = getIcons().Import;
+export const InfoIcon = getIcons().Info;
+export const KeyIcon = getIcons().Key;
+export const CredentialIcon = getIcons().KeyRound;
+export const LdapIcon = getIcons().Ldap;
+export const LegendIcon = getIcons().Legend;
+export const ListSvgIcon = getIcons().List;
+export const LogoutIcon = getIcons().LogOut;
+export const AlertIcon = getIcons().Megaphone;
+export const MinusIcon = getIcons().Minus;
+export const NewIcon = getIcons().New;
+export const NewNoteIcon = getIcons().NewNote;
+export const NewOverrideIcon = getIcons().NewOverride;
+export const NewTicketIcon = getIcons().NewTicket;
+export const NoteIcon = getIcons().Note;
+export const NvtIcon = getIcons().Nvt;
+export const OsSvgIcon = getIcons().Os;
+export const OverrideIcon = getIcons().Override;
+export const EditIcon = getIcons().Pencil;
+export const StartIcon = getIcons().Play;
+export const PlugZapIcon = getIcons().PlugZap;
+export const PlusIcon = getIcons().Plus;
+export const PortListIcon = getIcons().PortList;
+export const EnableIcon = getIcons().Power;
+export const ProvideViewIcon = getIcons().ProvideView;
+export const SolutionTypeSvgIcon = getIcons().Puzzle;
+export const RadiusIcon = getIcons().Radius;
+export const RefreshIcon = getIcons().RefreshCcw;
+export const RemoveFromAssetsIcon = getIcons().RemoveFromAssets;
+export const ReportIcon = getIcons().Report;
+export const ReportConfigIcon = getIcons().ReportConfig;
+export const ReportFormatIcon = getIcons().ReportFormat;
+export const RestoreIcon = getIcons().Restore;
+export const ResultIcon = getIcons().Result;
+export const RoleIcon = getIcons().Role;
+export const ResetIcon = getIcons().RotateCcw;
+export const FeedIcon = getIcons().Rss;
+export const SaveIcon = getIcons().Save;
+export const ScanConfigIcon = getIcons().ScanConfig;
+export const ScannerIcon = getIcons().Scanner;
+export const SearchIcon = getIcons().Search;
+export const SensorIcon = getIcons().Sensor;
+export const MySettingsIcon = getIcons().Settings;
+export const Settings2Icon = getIcons().Settings2;
+export const VerifyIcon = getIcons().ShieldCheck;
+export const VerifyNoIcon = getIcons().ShieldX;
+export const StopIcon = getIcons().Square;
+export const ResumeIcon = getIcons().StepForward;
+export const StMitigateIcon = getIcons().StMitigate;
+export const StNonAvailableIcon = getIcons().StNonavailable;
+export const StUnknownIcon = getIcons().StUnknown;
+export const StVendorFixIcon = getIcons().StVendorfix;
+export const StWillNotFixIcon = getIcons().StWillnotfix;
+export const StWorkaroundIcon = getIcons().StWorkaround;
+export const TagIcon = getIcons().Tag;
+export const TagsIcon = getIcons().Tags;
+export const TargetIcon = getIcons().Target;
+export const TaskIcon = getIcons().Task;
+export const TicketIcon = getIcons().Ticket;
+export const TlsCertificateIcon = getIcons().Tlscertificate;
+export const Toggle3dIcon = getIcons().Toggle3d;
+export const TrashcanIcon = getIcons().Trash2;
+export const TrendDownIcon = getIcons().TrendDown;
+export const TrendLessIcon = getIcons().TrendLess;
+export const TrendMoreIcon = getIcons().TrendMore;
+export const TrendNoChangeIcon = getIcons().TrendNochange;
+export const TrendUpIcon = getIcons().TrendUp;
+export const UploadIcon = getIcons().Upload;
+export const UserIcon = getIcons().User;
+export const PermissionIcon = getIcons().UserCheck;
+export const GroupIcon = getIcons().Users;
+export const VulnerabilityIcon = getIcons().Vulnerability;
+export const WizardIcon = getIcons().Wizard;
+export const XIcon = getIcons().X;
+export const DetailsIcon = getIcons().ZoomIn;

@@ -20,7 +20,7 @@ const gmp = {
 };
 
 describe('Header', () => {
-  test('renders component', () => {
+  test('renders component', async () => {
     const {render, store} = rendererWith({
       gmp,
       router: true,
@@ -40,7 +40,7 @@ describe('Header', () => {
     expect(langBtn).toBeVisible();
 
     const renewBtn = screen.getByRole('button', {
-      name: 'Refresh Icon',
+      name: 'Refresh CCW Icon',
     });
     expect(renewBtn).toBeVisible();
 
@@ -53,8 +53,10 @@ describe('Header', () => {
 
     expect(themeSwitch).not.toBeInTheDocument();
 
-    const logo = screen.getByTestId('Enterprise150');
-    expect(logo).toBeVisible();
+    await waitFor(() => {
+      const logo = screen.getByTestId('Enterprise150');
+      expect(logo).toBeVisible();
+    });
 
     const manualLink = screen.getByTestId('manual-link');
     expect(manualLink).toBeVisible();
