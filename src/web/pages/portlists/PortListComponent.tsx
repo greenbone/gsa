@@ -6,6 +6,7 @@
 import React, {useState} from 'react';
 import {
   type EntityActionData,
+  type EntityActionResponse,
   type EntityCommandParams,
 } from 'gmp/commands/entity';
 import {
@@ -50,15 +51,17 @@ interface PortRange {
   end: number;
 }
 
+interface PortListComponentRenderProps {
+  clone: (entity: PortList) => void;
+  download: (entity: PortList) => void;
+  delete: (entity: PortList) => void;
+  create: () => void;
+  edit: (entity: PortList) => void;
+  import: () => void;
+}
+
 interface PortListComponentProps {
-  children: (props: {
-    clone: (entity: PortList) => void;
-    download: (entity: PortList) => void;
-    delete: (entity: PortList) => void;
-    create: () => void;
-    edit: (entity: PortList) => void;
-    import: () => void;
-  }) => React.ReactNode;
+  children: (props: PortListComponentRenderProps) => React.ReactNode;
   onCloneError?: (error: Error) => void;
   onCloned?: (response: Response<EntityActionData, XmlMeta>) => void;
   onCreateError?: (error: Error) => void;
@@ -68,7 +71,7 @@ interface PortListComponentProps {
   onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
   onImportError?: (error: Error) => void;
-  onImported?: (response: unknown) => void;
+  onImported?: (response: EntityActionResponse) => void;
   onSaveError?: (error: Error) => void;
   onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
 }

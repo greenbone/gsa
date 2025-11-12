@@ -116,7 +116,7 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
 
   import({xmlFile}: PortListCommandImportParams) {
     log.debug('Importing port list', {xml_file: xmlFile});
-    return this.httpPostWithTransform({
+    return this.entityAction({
       cmd: 'import_port_list',
       xml_file: xmlFile,
     });
