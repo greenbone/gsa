@@ -55,6 +55,10 @@ export default defineConfig({
       allow: ['index.html', 'src', 'node_modules'],
     },
   },
+  preview: {
+    port: 8080,
+    host: '127.0.0.1',
+  },
   build: {
     outDir: 'build',
     minify: 'terser',
