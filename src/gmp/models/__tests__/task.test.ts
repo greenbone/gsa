@@ -45,11 +45,11 @@ describe('Task Model parse tests', () => {
     expect(task.slave).toBeUndefined();
     expect(task.status).toEqual(TASK_STATUS.unknown);
     expect(task.target).toBeUndefined();
-    expect(task.oci_image_target).toBeUndefined();
+    expect(task.ociImageTarget).toBeUndefined();
     expect(task.trend).toBeUndefined();
     expect(task.usageType).toEqual(USAGE_TYPE.scan);
-    expect(task.accept_invalid_certs).toBeUndefined();
-    expect(task.registry_allow_insecure).toBeUndefined();
+    expect(task.acceptInvalidCerts).toBeUndefined();
+    expect(task.registryAllowInsecure).toBeUndefined();
   });
 
   test('should parse empty element', () => {
@@ -79,11 +79,11 @@ describe('Task Model parse tests', () => {
     expect(task.slave).toBeUndefined();
     expect(task.status).toEqual(TASK_STATUS.unknown);
     expect(task.target).toBeUndefined();
-    expect(task.oci_image_target).toBeUndefined();
+    expect(task.ociImageTarget).toBeUndefined();
     expect(task.trend).toBeUndefined();
     expect(task.usageType).toEqual(USAGE_TYPE.scan);
-    expect(task.accept_invalid_certs).toBeUndefined();
-    expect(task.registry_allow_insecure).toBeUndefined();
+    expect(task.acceptInvalidCerts).toBeUndefined();
+    expect(task.registryAllowInsecure).toBeUndefined();
   });
 
   test('should parse hosts ordering', () => {
@@ -213,9 +213,9 @@ describe('Task Model parse tests', () => {
       },
     });
     expect(task.id).toEqual('t1');
-    expect(task.oci_image_target?.id).toEqual('oci1');
-    expect(task.oci_image_target?.entityType).toEqual('target');
-    expect(task.oci_image_target?.name).toEqual('Test OCI Target');
+    expect(task.ociImageTarget?.id).toEqual('oci1');
+    expect(task.ociImageTarget?.entityType).toEqual('target');
+    expect(task.ociImageTarget?.name).toEqual('Test OCI Target');
   });
 
   test('should parse alerts', () => {
@@ -369,8 +369,8 @@ describe('Task Model parse tests', () => {
     expect(task1.auto_delete).toEqual('keep');
     expect(task1.max_hosts).toEqual(20);
     expect(task1.max_checks).toEqual(4);
-    expect(task1.accept_invalid_certs).toEqual(true);
-    expect(task1.registry_allow_insecure).toEqual(false);
+    expect(task1.acceptInvalidCerts).toEqual(true);
+    expect(task1.registryAllowInsecure).toEqual(false);
     expect(task1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
 
     const task2 = Task.fromElement({
@@ -408,8 +408,8 @@ describe('Task Model parse tests', () => {
     expect(task2.apply_overrides).toEqual(0);
     expect(task2.auto_delete).toEqual('no');
     expect(task2.auto_delete_data).toEqual(3);
-    expect(task2.accept_invalid_certs).toEqual(false);
-    expect(task2.registry_allow_insecure).toEqual(true);
+    expect(task2.acceptInvalidCerts).toEqual(false);
+    expect(task2.registryAllowInsecure).toEqual(true);
   });
 
   test('should parse preferences with numeric boolean values', () => {
@@ -428,8 +428,8 @@ describe('Task Model parse tests', () => {
         ],
       },
     });
-    expect(task.accept_invalid_certs).toEqual(true);
-    expect(task.registry_allow_insecure).toEqual(false);
+    expect(task.acceptInvalidCerts).toEqual(true);
+    expect(task.registryAllowInsecure).toEqual(false);
 
     const task2 = Task.fromElement({
       _id: 't2',
@@ -446,8 +446,8 @@ describe('Task Model parse tests', () => {
         ],
       },
     });
-    expect(task2.accept_invalid_certs).toEqual(false);
-    expect(task2.registry_allow_insecure).toEqual(true);
+    expect(task2.acceptInvalidCerts).toEqual(false);
+    expect(task2.registryAllowInsecure).toEqual(true);
   });
 
   test('should parse observers', () => {
@@ -546,7 +546,7 @@ describe('Task Model parse tests', () => {
 });
 
 describe(`Task Model methods tests`, () => {
-  test('should be a container only if neither target nor agentGroup nor oci_image_target is set', () => {
+  test('should be a container only if neither target nor agentGroup nor ociImageTarget is set', () => {
     const t1 = Task.fromElement({});
     const t2 = Task.fromElement({target: {_id: 'foo'}});
     const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
@@ -565,7 +565,7 @@ describe(`Task Model methods tests`, () => {
     expect(t5.isContainer()).toEqual(false);
   });
 
-  test('should be a container image if oci_image_target is set', () => {
+  test('should be a container image if ociImageTarget is set', () => {
     const t1 = Task.fromElement({});
     const t2 = Task.fromElement({target: {_id: 'foo'}});
     const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});

@@ -197,9 +197,9 @@ const ContainerImageTaskDialog = ({
     tags,
     task,
     id: isEdit ? task.id : undefined,
-    acceptInvalidCerts: isEdit ? task.accept_invalid_certs : acceptInvalidCerts,
+    acceptInvalidCerts: isEdit ? task.acceptInvalidCerts : acceptInvalidCerts,
     registryAllowInsecure: isEdit
-      ? task.registry_allow_insecure
+      ? task.registryAllowInsecure
       : registryAllowInsecure,
     scannerType: CONTAINER_IMAGE_SCANNER_TYPE,
   };
