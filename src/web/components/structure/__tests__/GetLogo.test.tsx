@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {screen, render} from 'web/testing';
+import {screen, render, waitFor} from 'web/testing';
 import getLogo from 'web/components/structure/GetLogo';
 import {type ApplianceLogo} from 'web/utils/appliance-data';
 
@@ -30,8 +30,10 @@ describe('getLogo', () => {
     ['defaultVendorLabel', 'GreenboneWhiteLogo'],
   ];
 
-  test.each(testCases)('returns %s for %s', (logo, expectedTestId) => {
+  test.each(testCases)('returns %s for %s', async (logo, expectedTestId) => {
     render(getLogo(logo as ApplianceLogo));
-    expect(screen.getByTestId(expectedTestId)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId(expectedTestId)).toBeInTheDocument();
+    });
   });
 });
