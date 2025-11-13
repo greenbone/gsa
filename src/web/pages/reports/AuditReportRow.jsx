@@ -22,7 +22,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
-const Actions = withEntitiesActions(
+const AuditReportActions = withEntitiesActions(
   ({entity, selectedDeltaReport, onReportDeleteClick, onReportDeltaSelect}) => {
     const {report} = entity;
 
@@ -64,15 +64,15 @@ const Actions = withEntitiesActions(
   },
 );
 
-Actions.propTypes = {
+AuditReportActions.propTypes = {
   entity: PropTypes.model.isRequired,
   selectedDeltaReport: PropTypes.model,
   onReportDeleteClick: PropTypes.func.isRequired,
   onReportDeltaSelect: PropTypes.func.isRequired,
 };
 
-const AuditRow = ({
-  actionsComponent: ActionsComponent = Actions,
+const AuditReportRow = ({
+  actionsComponent: ActionsComponent = AuditReportActions,
   entity,
   links = true,
   ...props
@@ -127,10 +127,10 @@ const AuditRow = ({
   );
 };
 
-AuditRow.propTypes = {
+AuditReportRow.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };
 
-export default AuditRow;
+export default AuditReportRow;

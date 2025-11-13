@@ -9,7 +9,7 @@ import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
-import DetailsContent from 'web/pages/reports/AuditDetailsContent';
+import AuditReportDetailsContent from 'web/pages/reports/AuditReportDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
@@ -38,7 +38,7 @@ const getReportComposerDefaults = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-describe('Audit Report Details Content tests', () => {
+describe('AuditReportDetailsContent tests', () => {
   test('should render Audit Report Details Content', () => {
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
@@ -89,7 +89,7 @@ describe('Audit Report Details Content tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      <DetailsContent
+      <AuditReportDetailsContent
         applicationsCounts={{all: 4, filtered: 4}}
         closedCvesCounts={{all: 2, filtered: 2}}
         cvesCounts={{all: 2, filtered: 2}}
@@ -251,7 +251,7 @@ describe('Audit Report Details Content tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      <DetailsContent
+      <AuditReportDetailsContent
         applicationsCounts={{all: 4, filtered: 4}}
         closedCvesCounts={{all: 2, filtered: 2}}
         cvesCounts={{all: 2, filtered: 2}}

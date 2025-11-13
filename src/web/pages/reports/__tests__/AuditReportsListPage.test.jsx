@@ -17,7 +17,7 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
-import AuditReportsPage from 'web/pages/reports/AuditReportsListPage';
+import AuditReportListPage from 'web/pages/reports/AuditReportsListPage';
 import {entitiesActions} from 'web/store/entities/auditreports';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -138,7 +138,7 @@ describe('AuditReportsPage tests', () => {
       entitiesActions.success([entity], filter, loadedFilter, counts),
     );
 
-    const {baseElement} = render(<AuditReportsPage />);
+    const {baseElement} = render(<AuditReportListPage />);
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 
@@ -259,7 +259,7 @@ describe('AuditReportsPage tests', () => {
       entitiesActions.success([entity], filter, loadedFilter, counts),
     );
 
-    const {baseElement} = render(<AuditReportsPage />);
+    const {baseElement} = render(<AuditReportListPage />);
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 

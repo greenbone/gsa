@@ -33,6 +33,7 @@ import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
+
 const Span = styled.span`
   margin-top: 2px;
 `;

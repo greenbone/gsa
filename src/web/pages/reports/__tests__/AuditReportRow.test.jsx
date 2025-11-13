@@ -7,7 +7,7 @@ import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, screen} from 'web/testing';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
-import AuditRow from 'web/pages/reports/AuditReportRow';
+import AuditReportRow from 'web/pages/reports/AuditReportRow';
 import {setTimezone} from 'web/store/usersettings/actions';
 
 describe('Audit report row', () => {
@@ -25,7 +25,7 @@ describe('Audit report row', () => {
     store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
-      <AuditRow
+      <AuditReportRow
         entity={entity}
         onReportDeleteClick={onReportDeleteClick}
         onReportDeltaSelect={onReportDeltaSelect}
