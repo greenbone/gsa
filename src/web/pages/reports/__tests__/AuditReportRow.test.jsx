@@ -41,7 +41,7 @@ describe('Audit report row', () => {
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
     expect(rows[0]).toHaveTextContent('foo');
-    expect(links[1]).toHaveAttribute('href', '/task/314');
+    expect(links[1]).toHaveAttribute('href', '/audit/314');
     expect(bars[1]).toHaveAttribute('title', 'No');
     expect(bars[1]).toHaveTextContent('No');
     expect(rows[0]).toHaveTextContent('321'); // yes: 3, no: 2, incomplete: 1
