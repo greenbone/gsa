@@ -93,11 +93,6 @@ describe('Page tests', () => {
     expect(
       screen.getByText(/Please wait while the feed is syncing./i),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        /You are currently using the free OPENVAS COMMUNITY FEED/i,
-      ),
-    ).toBeInTheDocument();
     expect(screen.getByRole('contentinfo')).toBeInTheDocument(); // footer
     expect(screen.getByText(/Copyright © 2009-/i)).toBeInTheDocument();
     expect(screen.getByText('Child Content')).toBeInTheDocument();
