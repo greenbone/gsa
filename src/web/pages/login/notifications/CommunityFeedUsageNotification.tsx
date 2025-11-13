@@ -51,6 +51,7 @@ const CommunityFeedUsageNotification: React.FC = () => {
 
       let isEnterpriseFeed = false;
       try {
+        // FIXME should check if feed is available before checking if it's enterprise
         isEnterpriseFeed = await gmp.feedstatus.isEnterpriseFeed();
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {

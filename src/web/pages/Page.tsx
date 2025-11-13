@@ -20,7 +20,6 @@ import useGmp from 'web/hooks/useGmp';
 import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
 import useLoadFeatures from 'web/hooks/useLoadFeatures';
 import useTranslation from 'web/hooks/useTranslation';
-import CommunityFeedUsageNotification from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 import Theme from 'web/utils/Theme';
 
 interface PageProps {
@@ -71,7 +70,6 @@ const Page = ({children}: PageProps) => {
   return (
     <CapabilitiesContext.Provider value={capabilities}>
       <FeaturesContext.Provider value={features}>
-        <CommunityFeedUsageNotification />
         <Header />
         <StyledLayout align={['start', 'stretch']} flex="row">
           <ScrollableMenuContainer>
