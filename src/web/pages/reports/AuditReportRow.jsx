@@ -109,7 +109,7 @@ const AuditRow = ({
       </TableData>
       <TableData>
         <span>
-          <DetailsLink id={entity.task.id} textOnly={!links} type="task">
+          <DetailsLink id={entity.task.id} textOnly={!links} type="audit">
             {entity.task.name}
           </DetailsLink>
         </span>
