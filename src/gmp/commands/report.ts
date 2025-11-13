@@ -92,8 +92,8 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
         report_config_id: reportConfigId,
         report_format_id: reportFormatId,
         filter: filterString(allFilter),
-        responseType: 'arraybuffer',
       },
+      responseType: 'arraybuffer',
     });
   }
 
