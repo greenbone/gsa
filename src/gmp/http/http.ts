@@ -54,6 +54,8 @@ class Http {
   // we need to store an object here to allow setting the token after login
   private readonly options: HttpOptions;
 
+  private static readonly XHR = global.XMLHttpRequest;
+
   constructor(options: HttpOptions) {
     const {timeout, apiServer, apiProtocol} = options;
 
@@ -94,7 +96,7 @@ class Http {
       resolve,
       reject,
     ) {
-      xhr = new XMLHttpRequest();
+      xhr = new Http.XHR();
 
       xhr.onloadstart = function () {
         // defer setting the responseType to avoid InvalidStateError with IE 11
