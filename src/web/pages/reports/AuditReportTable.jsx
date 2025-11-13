@@ -16,7 +16,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import AuditReportRow from 'web/pages/reports/AuditReportRow';
 import PropTypes from 'web/utils/PropTypes';
 
-const Header = ({
+const AuditReportTableHeader = ({
   actionsColumn,
   sort = true,
   currentSortBy,
@@ -101,7 +101,7 @@ const Header = ({
   );
 };
 
-Header.propTypes = {
+AuditReportTableHeader.propTypes = {
   actionsColumn: PropTypes.element,
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
@@ -109,15 +109,15 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Footer = createEntitiesFooter({
+const AuditReportTableFooter = createEntitiesFooter({
   span: 10,
   delete: true,
 });
 
 export default createEntitiesTable({
   emptyTitle: _l('No reports available'),
-  header: Header,
-  footer: Footer,
+  header: AuditReportTableHeader,
+  footer: AuditReportTableFooter,
   row: AuditReportRow,
   toggleDetailsIcon: false,
 });

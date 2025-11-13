@@ -24,7 +24,7 @@ import AuditReportsDashboard, {
   AUDIT_REPORTS_DASHBOARD_ID,
 } from 'web/pages/reports/auditdashboard';
 import AuditReportFilterDialog from 'web/pages/reports/AuditReportFilterDialog';
-import AuditReportsTable from 'web/pages/reports/AuditReportsTable';
+import AuditReportsTable from 'web/pages/reports/AuditReportTable';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -44,13 +44,7 @@ const ToolBarIcons = () => {
   );
 };
 
-const AuditReportsPage = ({
-  filter,
-  onFilterChanged,
-
-  onDelete,
-  ...props
-}) => {
+const AuditReportListPage = ({filter, onFilterChanged, onDelete, ...props}) => {
   const [selectedDeltaReport, setSelectedDeltaReport] = useState();
   const [beforeSelectFilter, setBeforeSelectFilter] = useState();
   const navigate = useNavigate();
@@ -122,7 +116,7 @@ const AuditReportsPage = ({
   );
 };
 
-AuditReportsPage.propTypes = {
+AuditReportListPage.propTypes = {
   filter: PropTypes.filter,
   navigate: PropTypes.func.isRequired,
   onChanged: PropTypes.func.isRequired,
@@ -145,4 +139,4 @@ export default withEntitiesContainer('auditreport', {
   entitiesSelector,
   loadEntities,
   reloadInterval: reportsReloadInterval,
-})(AuditReportsPage);
+})(AuditReportListPage);

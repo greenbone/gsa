@@ -39,11 +39,12 @@ import TabTitle from 'web/pages/reports/details/TabTitle';
 import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
+
 const Span = styled.span`
   margin-top: 2px;
 `;
 
-const PageContent = ({
+const AuditReportDetailsContent = ({
   entity,
   errorsCounts,
   filters,
@@ -73,7 +74,6 @@ const PageContent = ({
   onFilterEditClick,
   onFilterRemoveClick,
   onFilterResetClick,
-
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onSortChange,
@@ -371,7 +371,7 @@ const PageContent = ({
   );
 };
 
-PageContent.propTypes = {
+AuditReportDetailsContent.propTypes = {
   applicationsCounts: PropTypes.counts,
   closedCvesCounts: PropTypes.counts,
   cvesCounts: PropTypes.counts,
@@ -412,4 +412,4 @@ PageContent.propTypes = {
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
-export default PageContent;
+export default AuditReportDetailsContent;

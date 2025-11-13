@@ -113,10 +113,10 @@ const ReportFormatsPage = lazy(
   () => import('web/pages/reportformats/ListPage'),
 );
 const DeltaAuditReportDetailsPage = lazy(
-  () => import('web/pages/reports/AuditDeltaDetailsPage'),
+  () => import('web/pages/reports/AuditDeltaReportDetailsPage'),
 );
 const AuditReportDetailsPage = lazy(
-  () => import('web/pages/reports/AuditDetailsPage'),
+  () => import('web/pages/reports/AuditReportDetailsPage'),
 );
 const AuditReportsPage = lazy(
   () => import('web/pages/reports/AuditReportsListPage'),
