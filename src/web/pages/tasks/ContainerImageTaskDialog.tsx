@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ALL_FILTER} from 'gmp/models/filter';
 import {CONTAINER_IMAGE_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 import {
   type default as Task,
@@ -137,7 +138,9 @@ const ContainerImageTaskDialog = ({
   const isEdit = isDefined(task);
 
   const {data: ociImageTargetsData, isLoading: isOciImageTargetsLoading} =
-    useGetOciImageTargets({});
+    useGetOciImageTargets({
+      filter: ALL_FILTER,
+    });
 
   title = title || _('New Container Image Task');
 

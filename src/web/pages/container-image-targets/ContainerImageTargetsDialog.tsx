@@ -278,7 +278,7 @@ const ContainerImageTargetsDialog = ({
 
             <FormGroup title={_('Reverse Lookup Only')}>
               <YesNoRadio
-                convert={val => (val === 'true' ? true : false)}
+                convert={val => val === 'true'}
                 disabled={inUse}
                 name="reverseLookupOnly"
                 noValue={false}
@@ -290,7 +290,7 @@ const ContainerImageTargetsDialog = ({
 
             <FormGroup title={_('Reverse Lookup Unify')}>
               <YesNoRadio
-                convert={val => (val === 'true' ? true : false)}
+                convert={val => val === 'true'}
                 disabled={inUse}
                 name="reverseLookupUnify"
                 noValue={false}

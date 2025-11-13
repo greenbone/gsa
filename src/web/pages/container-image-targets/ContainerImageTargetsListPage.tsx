@@ -270,6 +270,10 @@ const ContainerImageTargetsListPage = () => {
                   onDownloadBulk={handleBulkDownload}
                   onEntityDeselected={deselect}
                   onEntitySelected={select}
+                  onFirstClick={getFirst}
+                  onLastClick={getLast}
+                  onNextClick={getNext}
+                  onPreviousClick={getPrevious}
                   onSelectionTypeChange={changeSelectionType}
                   onSortChange={handleSortChange}
                   onTagsBulk={openTagsDialog}
@@ -288,10 +292,6 @@ const ContainerImageTargetsListPage = () => {
               onFilterCreated={handleFilterChanged}
               onFilterRemoved={handleFilterRemoved}
               onFilterReset={handleFilterReset}
-              onFirstClick={getFirst}
-              onLastClick={getLast}
-              onNextClick={getNext}
-              onPreviousClick={getPrevious}
               onTagsBulk={openTagsDialog}
             />
             <Download ref={downloadRef} />
