@@ -17,44 +17,64 @@ import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
 
-const getPortListResponse = {
+const defaultGetPortListResponse = {
   data: PortList.fromElement({id: '123', name: 'foo'}),
 };
 const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
-const getPortList = testing.fn().mockResolvedValue(getPortListResponse);
+const createGmp = ({
+  getPortListResponse = defaultGetPortListResponse,
+  createPortListResponse = {id: '123'},
+  deletePortListResponse = undefined,
+  savePortListResponse = {id: '123'},
+  clonePortListResponse = {id: '123'},
+  createPortRangeResponse = {id: '1234'},
+  getPortList = testing.fn().mockResolvedValue(getPortListResponse),
+  createPortList = testing.fn().mockResolvedValue(createPortListResponse),
+  deletePortList = testing.fn().mockResolvedValue(deletePortListResponse),
+  savePortList = testing.fn().mockResolvedValue(savePortListResponse),
+  clonePortList = testing.fn().mockResolvedValue(clonePortListResponse),
+  createPortRange = testing
+    .fn()
+    .mockResolvedValue({data: createPortRangeResponse}),
+  deletePortRange = testing.fn().mockResolvedValue(undefined),
+} = {}) => {
+  return {
+    portlist: {
+      get: getPortList,
+      create: createPortList,
+      delete: deletePortList,
+      save: savePortList,
+      clone: clonePortList,
+      createPortRange,
+      deletePortRange,
+    },
+    user: {currentSettings},
+  };
+};
 
 describe('PortListComponent tests', () => {
-  test('should render without crashing', () => {
-    const gmp = {
-      portlist: {
-        get: getPortList,
-      },
-      user: {currentSettings},
-    };
-
+  test('should render without crashing', async () => {
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <PortListComponent>{() => <div>Some Content</div>}</PortListComponent>,
     );
+    await wait();
     expect(screen.getByText('Some Content')).toBeInTheDocument();
   });
 
-  test('should open and close PortListDialog', () => {
-    const gmp = {
-      portlist: {
-        get: getPortList,
-      },
-      user: {currentSettings},
-    };
-
+  test('should open and close PortListDialog', async () => {
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <PortListComponent>
         {({create}) => <Button data-testid="open" onClick={create} />}
       </PortListComponent>,
     );
+
+    await wait();
 
     fireEvent.click(screen.getByTestId('open'));
     expect(screen.getByText('New Port List')).toBeInTheDocument();
@@ -64,14 +84,8 @@ describe('PortListComponent tests', () => {
     expect(screen.queryByText('New Port List')).not.toBeInTheDocument();
   });
 
-  test('should open and close ImportPortListDialog', () => {
-    const gmp = {
-      portlist: {
-        get: getPortList,
-      },
-      user: {currentSettings},
-    };
-
+  test('should open and close ImportPortListDialog', async () => {
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <PortListComponent>
@@ -81,6 +95,7 @@ describe('PortListComponent tests', () => {
       </PortListComponent>,
     );
 
+    await wait();
     fireEvent.click(screen.getByTestId('import'));
     expect(screen.getByText('Import Port List')).toBeInTheDocument();
 
@@ -90,13 +105,7 @@ describe('PortListComponent tests', () => {
   });
 
   test('should open and close PortRangeDialog', async () => {
-    const gmp = {
-      portlist: {
-        get: getPortList,
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <PortListComponent>
@@ -128,14 +137,7 @@ describe('PortListComponent tests', () => {
   });
 
   test('should allow creating a new port list', async () => {
-    const newPortList = PortList.fromElement({id: '123'});
-    const gmp = {
-      portlist: {
-        create: testing.fn().mockResolvedValue(newPortList),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
     const {render} = rendererWith({gmp});
@@ -153,19 +155,15 @@ describe('PortListComponent tests', () => {
     await wait();
 
     expect(screen.queryByText('New Port List')).not.toBeInTheDocument();
-    expect(onCreated).toHaveBeenCalledWith(newPortList);
     expect(onCreateError).not.toHaveBeenCalled();
+    expect(onCreated).toHaveBeenCalledWith({id: '123'});
   });
 
   test('should call onCreateError if creating a new port list fails', async () => {
     const error = new Error('error');
-    const gmp = {
-      portlist: {
-        create: testing.fn().mockRejectedValue(error),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      createPortList: testing.fn().mockRejectedValue(error),
+    });
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
     const {render} = rendererWith({gmp});
@@ -183,19 +181,15 @@ describe('PortListComponent tests', () => {
     fireEvent.click(saveButton);
     await wait();
     expect(screen.queryByText('New Port List')).not.toBeInTheDocument();
-    expect(onCreated).not.toHaveBeenCalled();
     expect(onCreateError).toHaveBeenCalledWith(error);
+    expect(onCreated).not.toHaveBeenCalled();
   });
 
   test('should show error in dialog if creating a new port list fails', async () => {
     const error = new Error('some error');
-    const gmp = {
-      portlist: {
-        create: testing.fn().mockRejectedValue(error),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      createPortList: testing.fn().mockRejectedValue(error),
+    });
     const onCreated = testing.fn();
     const {render} = rendererWith({gmp});
     render(
@@ -217,16 +211,7 @@ describe('PortListComponent tests', () => {
   });
 
   test('should allow editing a port list', async () => {
-    const portList = PortList.fromElement({id: '123', name: 'foo'});
-    const portListResponse = {data: portList};
-    const gmp = {
-      portlist: {
-        get: testing.fn().mockResolvedValue(portListResponse),
-        save: testing.fn().mockResolvedValue(portList),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp});
@@ -249,24 +234,12 @@ describe('PortListComponent tests', () => {
     fireEvent.click(saveButton);
     await wait();
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
-    expect(onSaved).toHaveBeenCalledWith(portList);
     expect(onSaveError).not.toHaveBeenCalled();
+    expect(onSaved).toHaveBeenCalledWith({id: '123'});
   });
 
   test('should allow editing a port list to add a port range', async () => {
-    const portList = PortList.fromElement({id: '123', name: 'foo'});
-    const portListResponse = {data: portList};
-    const createPortRange = testing.fn().mockResolvedValue({data: {id: 1234}});
-    const save = testing.fn().mockResolvedValue(portList);
-    const gmp = {
-      portlist: {
-        get: testing.fn().mockResolvedValue(portListResponse),
-        save,
-        createPortRange,
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp});
@@ -307,19 +280,19 @@ describe('PortListComponent tests', () => {
     const savePortListButton = portListDialog.getDialogSaveButton();
     fireEvent.click(savePortListButton);
     await wait();
-    expect(createPortRange).toHaveBeenCalledExactlyOnceWith({
+    expect(gmp.portlist.createPortRange).toHaveBeenCalledExactlyOnceWith({
       portListId: '123',
       portRangeEnd: 20,
       portRangeStart: 1,
       portType: 'tcp',
     });
-    expect(save).toHaveBeenCalledExactlyOnceWith({
+    expect(gmp.portlist.save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
       id: '123',
       name: 'foo',
     });
-    expect(onSaved).toHaveBeenCalledExactlyOnceWith(portList);
     expect(onSaveError).not.toHaveBeenCalled();
+    expect(onSaved).toHaveBeenCalledExactlyOnceWith({id: '123'});
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
   });
 
@@ -340,17 +313,11 @@ describe('PortListComponent tests', () => {
       },
     });
     const portListResponse = {data: portList};
-    const save = testing.fn().mockResolvedValue(portList);
     const deletePortRange = testing.fn().mockResolvedValue(portListResponse);
-    const gmp = {
-      portlist: {
-        get: testing.fn().mockResolvedValue(portListResponse),
-        save,
-        deletePortRange,
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      getPortListResponse: portListResponse,
+      deletePortRange,
+    });
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp});
@@ -380,12 +347,12 @@ describe('PortListComponent tests', () => {
       portListId: portList.id,
     });
     expect(onSaveError).not.toHaveBeenCalled();
-    expect(save).toHaveBeenCalledExactlyOnceWith({
+    expect(gmp.portlist.save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
       id: '123',
       name: 'foo',
     });
-    expect(onSaved).toHaveBeenCalledExactlyOnceWith(portList);
+    expect(onSaved).toHaveBeenCalledExactlyOnceWith({id: '123'});
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
   });
 
@@ -393,14 +360,10 @@ describe('PortListComponent tests', () => {
     const portList = PortList.fromElement({id: '123', name: 'foo'});
     const portListResponse = {data: portList};
     const error = new Error('error');
-    const gmp = {
-      portlist: {
-        get: testing.fn().mockResolvedValue(portListResponse),
-        save: testing.fn().mockRejectedValue(error),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      getPortListResponse: portListResponse,
+      savePortList: testing.fn().mockRejectedValue(error),
+    });
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp});
@@ -432,13 +395,10 @@ describe('PortListComponent tests', () => {
     const portList = PortList.fromElement({id: '123', name: 'foo'});
     const portListResponse = {data: portList};
     const error = new Error('some error');
-    const gmp = {
-      portlist: {
-        get: testing.fn().mockResolvedValue(portListResponse),
-        save: testing.fn().mockRejectedValue(error),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      getPortListResponse: portListResponse,
+      savePortList: testing.fn().mockRejectedValue(error),
+    });
 
     const onSaved = testing.fn();
     const {render} = rendererWith({gmp});
@@ -467,13 +427,7 @@ describe('PortListComponent tests', () => {
   });
 
   test('should allow cloning a port list', async () => {
-    const cloned = PortList.fromElement({id: '123'});
-    const gmp = {
-      portlist: {
-        clone: testing.fn().mockResolvedValue(cloned),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
 
@@ -491,21 +445,17 @@ describe('PortListComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onCloned).toHaveBeenCalledExactlyOnceWith(cloned);
     expect(onCloneError).not.toHaveBeenCalled();
+    expect(onCloned).toHaveBeenCalledExactlyOnceWith({id: '123'});
   });
 
   test('should call onCloneError when cloning a port list fails', async () => {
     const error = new Error('error');
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
-
-    const gmp = {
-      portlist: {
-        clone: testing.fn().mockRejectedValue(error),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      clonePortList: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp});
     render(
       <PortListComponent onCloneError={onCloneError} onCloned={onCloned}>
@@ -520,21 +470,14 @@ describe('PortListComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onCloneError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onCloned).not.toHaveBeenCalled();
+    expect(onCloneError).toHaveBeenCalledExactlyOnceWith(error);
   });
 
   test('should allow deleting a port list', async () => {
-    const deleted = {id: '123'};
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
-
-    const gmp = {
-      portlist: {
-        delete: testing.fn().mockResolvedValue(deleted),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <PortListComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
@@ -549,19 +492,17 @@ describe('PortListComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onDeleted).toHaveBeenCalledOnce();
     expect(onDeleteError).not.toHaveBeenCalled();
+    expect(onDeleted).toHaveBeenCalledOnce();
   });
 
   test('should call onDeleteError when deleting a port list fails', async () => {
     const error = new Error('error');
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
-
-    const gmp = {
-      portlist: {delete: testing.fn().mockRejectedValue(error)},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      deletePortList: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp});
     render(
       <PortListComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
@@ -576,7 +517,7 @@ describe('PortListComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onDeleteError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onDeleted).not.toHaveBeenCalled();
+    expect(onDeleteError).toHaveBeenCalledExactlyOnceWith(error);
   });
 });

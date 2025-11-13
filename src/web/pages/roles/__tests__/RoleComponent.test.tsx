@@ -10,66 +10,71 @@ import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import RoleComponent from 'web/pages/roles/RoleComponent';
 
-const getRoleResponse = {
+const defaultGetRoleResponse = {
   data: Role.fromElement({_id: '123', name: 'foo'}),
 };
 const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
-const getRole = testing.fn().mockResolvedValue(getRoleResponse);
+const createGmp = ({
+  getRoleResponse = defaultGetRoleResponse,
+  createRoleResponse = {id: '123'},
+  saveRoleResponse = {id: '123'},
+  cloneRoleResponse = {id: '123'},
+  exportRoleResponse = {data: 'some data'},
+  createRole = testing.fn().mockResolvedValue(createRoleResponse),
+  getRole = testing.fn().mockResolvedValue(getRoleResponse),
+  saveRole = testing.fn().mockResolvedValue(saveRoleResponse),
+  cloneRole = testing.fn().mockResolvedValue(cloneRoleResponse),
+  deleteRole = testing.fn().mockResolvedValue(undefined),
+  exportRole = testing.fn().mockResolvedValue(exportRoleResponse),
+} = {}) => {
+  return {
+    role: {
+      get: getRole,
+      create: createRole,
+      save: saveRole,
+      clone: cloneRole,
+      delete: deleteRole,
+      export: exportRole,
+    },
+    users: {
+      get: testing.fn().mockResolvedValue({
+        data: [],
+        meta: {filter: {}, counts: {}},
+      }),
+    },
+    groups: {
+      get: testing.fn().mockResolvedValue({
+        data: [],
+        meta: {filter: {}, counts: {}},
+      }),
+    },
+    user: {currentSettings},
+  };
+};
 
 describe('RoleComponent tests', () => {
-  test('should render without crashing', () => {
-    const gmp = {
-      role: {
-        get: getRole,
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
-
+  test('should render without crashing', async () => {
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
+
+    await wait();
+
     render(<RoleComponent>{() => <div>Some Content</div>}</RoleComponent>);
     expect(screen.getByText('Some Content')).toBeInTheDocument();
   });
 
-  test('should open and close RoleDialog', () => {
-    const gmp = {
-      role: {
-        get: getRole,
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
-
+  test('should open and close RoleDialog', async () => {
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
     render(
       <RoleComponent>
         {({create}) => <Button data-testid="open" onClick={() => create()} />}
       </RoleComponent>,
     );
+
+    await wait();
 
     fireEvent.click(screen.getByTestId('open'));
     expect(screen.getByText('New Role')).toBeInTheDocument();
@@ -80,26 +85,7 @@ describe('RoleComponent tests', () => {
   });
 
   test('should allow creating a new role', async () => {
-    const newRole = Role.fromElement({_id: '123'});
-    const gmp = {
-      role: {
-        create: testing.fn().mockResolvedValue(newRole),
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
@@ -117,30 +103,15 @@ describe('RoleComponent tests', () => {
     await wait();
 
     expect(screen.queryByText('New Role')).not.toBeInTheDocument();
-    expect(onCreated).toHaveBeenCalledWith(newRole);
     expect(onCreateError).not.toHaveBeenCalled();
+    expect(onCreated).toHaveBeenCalledWith({id: '123'});
   });
 
   test('should call onCreateError if creating a new role fails', async () => {
     const error = new Error('error');
-    const gmp = {
-      role: {
-        create: testing.fn().mockRejectedValue(error),
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      createRole: testing.fn().mockRejectedValue(error),
+    });
 
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
@@ -165,24 +136,9 @@ describe('RoleComponent tests', () => {
 
   test('should show error in dialog if creating a new role fails', async () => {
     const error = new Error('some error');
-    const gmp = {
-      role: {
-        create: testing.fn().mockRejectedValue(error),
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      createRole: testing.fn().mockRejectedValue(error),
+    });
 
     const onCreated = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
@@ -205,34 +161,7 @@ describe('RoleComponent tests', () => {
   });
 
   test('should allow editing a role', async () => {
-    const role = Role.fromElement({_id: '123', name: 'foo'});
-    const roleResponse = {data: role};
-    const gmp = {
-      role: {
-        get: testing.fn().mockResolvedValue(roleResponse),
-        save: testing.fn().mockResolvedValue(role),
-      },
-      capabilities: {
-        mayAccess: testing.fn().mockReturnValue(true),
-      },
-      permissions: {
-        getAll: testing.fn().mockResolvedValue({data: []}),
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
@@ -255,39 +184,15 @@ describe('RoleComponent tests', () => {
     fireEvent.click(saveButton);
     await wait();
     expect(screen.queryByText('Edit Role foo')).not.toBeInTheDocument();
-    expect(onSaved).toHaveBeenCalledWith(role);
     expect(onSaveError).not.toHaveBeenCalled();
+    expect(onSaved).toHaveBeenCalledWith({id: '123'});
   });
 
   test('should call onSaveError if saving a role fails', async () => {
-    const role = Role.fromElement({_id: '123', name: 'foo'});
-    const roleResponse = {data: role};
     const error = new Error('error');
-    const gmp = {
-      role: {
-        get: testing.fn().mockResolvedValue(roleResponse),
-        save: testing.fn().mockRejectedValue(error),
-      },
-      capabilities: {
-        mayAccess: testing.fn().mockReturnValue(true),
-      },
-      permissions: {
-        getAll: testing.fn().mockResolvedValue({data: []}),
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      saveRole: testing.fn().mockRejectedValue(error),
+    });
 
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
@@ -312,39 +217,15 @@ describe('RoleComponent tests', () => {
     await wait();
 
     expect(screen.queryByText('Edit Role foo')).not.toBeInTheDocument();
-    expect(onSaved).not.toHaveBeenCalled();
     expect(onSaveError).toHaveBeenCalledExactlyOnceWith(error);
+    expect(onSaved).not.toHaveBeenCalled();
   });
 
   test('should show error in dialog if saving a role fails', async () => {
-    const role = Role.fromElement({_id: '123', name: 'foo'});
-    const roleResponse = {data: role};
     const error = new Error('some error');
-    const gmp = {
-      role: {
-        get: testing.fn().mockResolvedValue(roleResponse),
-        save: testing.fn().mockRejectedValue(error),
-      },
-      capabilities: {
-        mayAccess: testing.fn().mockReturnValue(true),
-      },
-      permissions: {
-        getAll: testing.fn().mockResolvedValue({data: []}),
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      saveRole: testing.fn().mockRejectedValue(error),
+    });
 
     const onSaved = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
@@ -373,25 +254,7 @@ describe('RoleComponent tests', () => {
   });
 
   test('should allow cloning a role', async () => {
-    const cloned = Role.fromElement({_id: '123'});
-    const gmp = {
-      role: {
-        clone: testing.fn().mockResolvedValue(cloned),
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
 
@@ -409,8 +272,8 @@ describe('RoleComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onCloned).toHaveBeenCalledExactlyOnceWith(cloned);
     expect(onCloneError).not.toHaveBeenCalled();
+    expect(onCloned).toHaveBeenCalledExactlyOnceWith({id: '123'});
   });
 
   test('should call onCloneError when cloning a role fails', async () => {
@@ -418,24 +281,9 @@ describe('RoleComponent tests', () => {
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
 
-    const gmp = {
-      role: {
-        clone: testing.fn().mockRejectedValue(error),
-      },
-      users: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      groups: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {filter: {}, counts: {}},
-        }),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      cloneRole: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp, capabilities: true, store: true});
     render(
       <RoleComponent onCloneError={onCloneError} onCloned={onCloned}>
@@ -450,21 +298,14 @@ describe('RoleComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onCloneError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onCloned).not.toHaveBeenCalled();
+    expect(onCloneError).toHaveBeenCalledExactlyOnceWith(error);
   });
 
   test('should allow deleting a role', async () => {
-    const deleted = {id: '123'};
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
-
-    const gmp = {
-      role: {
-        delete: testing.fn().mockResolvedValue(deleted),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <RoleComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
@@ -479,8 +320,8 @@ describe('RoleComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onDeleted).toHaveBeenCalledOnce();
     expect(onDeleteError).not.toHaveBeenCalled();
+    expect(onDeleted).toHaveBeenCalledOnce();
   });
 
   test('should call onDeleteError when deleting a role fails', async () => {
@@ -488,10 +329,9 @@ describe('RoleComponent tests', () => {
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
 
-    const gmp = {
-      role: {delete: testing.fn().mockRejectedValue(error)},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      deleteRole: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <RoleComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
@@ -506,21 +346,15 @@ describe('RoleComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onDeleteError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onDeleted).not.toHaveBeenCalled();
+    expect(onDeleteError).toHaveBeenCalledExactlyOnceWith(error);
   });
 
   test('should allow downloading a role', async () => {
-    const exported = {data: 'xml data'};
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
 
-    const gmp = {
-      role: {
-        export: testing.fn().mockResolvedValue(exported),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <RoleComponent
@@ -538,19 +372,17 @@ describe('RoleComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onDownloaded).toHaveBeenCalledOnce();
     expect(onDownloadError).not.toHaveBeenCalled();
+    expect(onDownloaded).toHaveBeenCalledOnce();
   });
 
   test('should call onDownloadError when downloading a role fails', async () => {
     const error = new Error('error');
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
-
-    const gmp = {
-      role: {export: testing.fn().mockRejectedValue(error)},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      exportRole: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <RoleComponent
@@ -568,7 +400,7 @@ describe('RoleComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onDownloadError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onDownloaded).not.toHaveBeenCalled();
+    expect(onDownloadError).toHaveBeenCalledExactlyOnceWith(error);
   });
 });
