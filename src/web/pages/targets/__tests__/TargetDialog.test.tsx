@@ -24,10 +24,14 @@ import Credential, {
   SNMP_CREDENTIAL_TYPES,
 } from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
-import {ALIVE_TESTS} from 'gmp/models/target';
+import {
+  ARP_PING,
+  CONSIDER_ALIVE,
+  ICMP_PING,
+  SCAN_CONFIG_DEFAULT,
+} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import TargetDialog, {
-  ALIVE_TESTS_DEFAULT,
   DEFAULT_PORT_LIST_ID,
   DEFAULT_PORT_LIST_NAME,
 } from 'web/pages/targets/TargetDialog';
@@ -147,14 +151,20 @@ describe('TargetDialog tests', () => {
       'Elevate privileges',
     ); // elevate privileges should not be rendered without valid sshCredentialId
 
-    const selects = screen.queryAllSelectElements();
-    expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
-    expect(selects[0]).toHaveValue(DEFAULT_PORT_LIST_NAME); // alive test select
-    expect(selects[1]).toHaveValue(ALIVE_TESTS_DEFAULT); // alive test select
-    expect(selects[2]).toHaveValue(UNSET_LABEL); // ssh credential select
-    expect(selects[3]).toHaveValue(UNSET_LABEL); // elevate privilege select
-    expect(selects[4]).toHaveValue(UNSET_LABEL); // smb credential select
-    expect(selects[5]).toHaveValue(UNSET_LABEL); // esxi credential select
+    expect(screen.getByName('aliveTests')).toHaveValue('');
+
+    const aliveTestsRadios = screen.getAllByName('baseAliveTests');
+    expect(aliveTestsRadios[0]).toHaveAttribute('value', 'Scan Config Default');
+    expect(aliveTestsRadios[0]).toBeChecked();
+    expect(aliveTestsRadios[1]).toHaveAttribute('value', 'Consider Alive');
+    expect(aliveTestsRadios[1]).not.toBeChecked();
+    expect(aliveTestsRadios[2]).toHaveAttribute('value', 'custom');
+    expect(aliveTestsRadios[2]).not.toBeChecked();
+
+    expect(screen.getByName('portListId')).toHaveValue(DEFAULT_PORT_LIST_ID);
+    expect(screen.getByName('sshCredentialId')).toHaveValue(UNSET_VALUE);
+    expect(screen.getByName('smbCredentialId')).toHaveValue(UNSET_VALUE);
+    expect(screen.getByName('esxiCredentialId')).toHaveValue(UNSET_VALUE);
 
     expect(screen.getByTitle('Create a new port list')).toBeInTheDocument();
     const createCredentialIcons = screen.getAllByTitle(
@@ -185,7 +195,7 @@ describe('TargetDialog tests', () => {
 
     render(
       <TargetDialog
-        aliveTests={ALIVE_TESTS.SCAN_CONFIG_DEFAULT}
+        aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={NO_VALUE}
         comment="hello world"
         credentials={credentials}
@@ -259,14 +269,20 @@ describe('TargetDialog tests', () => {
       'Elevate privileges',
     ); // elevate privileges should not be rendered without valid sshCredentialId
 
-    const selects = screen.queryAllSelectElements();
-    expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
-    expect(selects[0]).toHaveValue(DEFAULT_PORT_LIST_NAME); // alive test select
-    expect(selects[1]).toHaveValue(ALIVE_TESTS_DEFAULT); // alive test select
-    expect(selects[2]).toHaveValue(UNSET_LABEL); // ssh credential select
-    expect(selects[3]).toHaveValue('username+password'); // elevate privilege select
-    expect(selects[4]).toHaveValue(UNSET_LABEL); // smb credential select
-    expect(selects[5]).toHaveValue(UNSET_LABEL); // esxi credential select
+    expect(screen.getByName('aliveTests')).toHaveValue('');
+
+    const aliveTestsRadios = screen.getAllByName('baseAliveTests');
+    expect(aliveTestsRadios[0]).toHaveAttribute('value', 'Scan Config Default');
+    expect(aliveTestsRadios[0]).toBeChecked();
+    expect(aliveTestsRadios[1]).toHaveAttribute('value', 'Consider Alive');
+    expect(aliveTestsRadios[1]).not.toBeChecked();
+    expect(aliveTestsRadios[2]).toHaveAttribute('value', 'custom');
+    expect(aliveTestsRadios[2]).not.toBeChecked();
+
+    expect(screen.getByName('portListId')).toHaveValue(DEFAULT_PORT_LIST_ID);
+    expect(screen.getByName('sshCredentialId')).toHaveValue(UNSET_VALUE);
+    expect(screen.getByName('smbCredentialId')).toHaveValue('2345');
+    expect(screen.getByName('esxiCredentialId')).toHaveValue(UNSET_VALUE);
 
     expect(screen.getByTitle('Create a new port list')).toBeInTheDocument();
     const createCredentialIcons = screen.getAllByTitle(
@@ -297,7 +313,7 @@ describe('TargetDialog tests', () => {
 
     render(
       <TargetDialog
-        aliveTests={ALIVE_TESTS.SCAN_CONFIG_DEFAULT}
+        aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={NO_VALUE}
         comment="hello world"
         credentials={credentials}
@@ -340,7 +356,7 @@ describe('TargetDialog tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      aliveTests: ALIVE_TESTS.SCAN_CONFIG_DEFAULT,
+      aliveTests: [SCAN_CONFIG_DEFAULT],
       allowSimultaneousIPs: YES_VALUE,
       comment: 'hello world',
       esxiCredentialId: UNSET_VALUE,
@@ -372,7 +388,7 @@ describe('TargetDialog tests', () => {
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <TargetDialog
-        aliveTests={ALIVE_TESTS.SCAN_CONFIG_DEFAULT}
+        aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={NO_VALUE}
         comment="hello world"
         credentials={credentials}
@@ -401,7 +417,7 @@ describe('TargetDialog tests', () => {
     expect(screen.getDialogContent()).toHaveTextContent('Elevate privileges');
 
     const selects = screen.queryAllSelectElements();
-    expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
+    expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
 
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
@@ -418,7 +434,7 @@ describe('TargetDialog tests', () => {
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <TargetDialog
-        aliveTests={ALIVE_TESTS.SCAN_CONFIG_DEFAULT}
+        aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={NO_VALUE}
         comment="hello world"
         credentials={credentials}
@@ -447,9 +463,9 @@ describe('TargetDialog tests', () => {
     expect(screen.getDialogContent()).toHaveTextContent('Elevate privileges');
 
     const selects = screen.queryAllSelectElements();
-    expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
+    expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
 
-    const selectItems = await getSelectItemElementsForSelect(selects[3]);
+    const selectItems = await getSelectItemElementsForSelect(selects[2]);
     expect(selectItems.length).toBe(2); // "original" ssh option removed
 
     expect(selectItems[0]).toHaveTextContent('--'); // null option
@@ -499,7 +515,7 @@ describe('TargetDialog tests', () => {
 
       render(
         <TargetDialog
-          aliveTests={ALIVE_TESTS.SCAN_CONFIG_DEFAULT}
+          aliveTests={[SCAN_CONFIG_DEFAULT]}
           allowSimultaneousIPs={NO_VALUE}
           comment="hello world"
           credentials={credentials}
@@ -550,7 +566,7 @@ describe('TargetDialog tests', () => {
 
     render(
       <TargetDialog
-        aliveTests={ALIVE_TESTS.SCAN_CONFIG_DEFAULT}
+        aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={NO_VALUE}
         comment="hello world"
         credentials={credentials}
@@ -579,9 +595,9 @@ describe('TargetDialog tests', () => {
     expect(screen.getDialogContent()).toHaveTextContent('Elevate privileges');
 
     const selects = screen.queryAllSelectElements();
-    expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
+    expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
 
-    const selectItems = await getSelectItemElementsForSelect(selects[2]);
+    const selectItems = await getSelectItemElementsForSelect(selects[1]);
     expect(selectItems.length).toBe(3); // ssh elevate option removed
 
     expect(selectItems[0]).toHaveTextContent(UNSET_LABEL); // null option
@@ -599,7 +615,7 @@ describe('TargetDialog tests', () => {
 
     render(
       <TargetDialog
-        aliveTests={ALIVE_TESTS.SCAN_CONFIG_DEFAULT}
+        aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={NO_VALUE}
         comment="hello world"
         credentials={credentials}
@@ -631,12 +647,12 @@ describe('TargetDialog tests', () => {
     expect(newIcons.length).toBe(0); // no new credential can be created
 
     const selects = screen.queryAllSelectElements();
-    expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
+    expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
 
     expect(selects[0]).toHaveValue(DEFAULT_PORT_LIST_NAME);
     expect(selects[0]).toBeDisabled();
 
-    expect(selects[1]).toHaveValue(ALIVE_TESTS.SCAN_CONFIG_DEFAULT);
+    expect(selects[1]).toHaveValue(SCAN_CONFIG_DEFAULT);
     expect(selects[2]).toHaveValue('username+password');
     expect(selects[2]).toBeDisabled();
 
@@ -710,7 +726,7 @@ describe('TargetDialog tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
-      aliveTests: ALIVE_TESTS.SCAN_CONFIG_DEFAULT,
+      aliveTests: [SCAN_CONFIG_DEFAULT],
       allowSimultaneousIPs: YES_VALUE,
       comment: '',
       esxiCredentialId: UNSET_VALUE,
@@ -786,5 +802,55 @@ describe('TargetDialog tests', () => {
         });
       },
     );
+  });
+
+  test('should allow to render consider alive alive tests', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetDialog
+        aliveTests={[CONSIDER_ALIVE]}
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    expect(screen.getByName('aliveTests')).toHaveValue('');
+
+    const aliveTestsRadios = screen.getAllByName('baseAliveTests');
+    expect(aliveTestsRadios[0]).toHaveAttribute('value', 'Scan Config Default');
+    expect(aliveTestsRadios[0]).not.toBeChecked();
+    expect(aliveTestsRadios[1]).toHaveAttribute('value', 'Consider Alive');
+    expect(aliveTestsRadios[1]).toBeChecked();
+    expect(aliveTestsRadios[2]).toHaveAttribute('value', 'custom');
+    expect(aliveTestsRadios[2]).not.toBeChecked();
+  });
+
+  test('should allow to render custom alive tests', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetDialog
+        aliveTests={[ICMP_PING, ARP_PING]}
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    expect(screen.getByName('aliveTests')).toHaveValue('ICMP Ping,ARP Ping');
+
+    const aliveTestsRadios = screen.getAllByName('baseAliveTests');
+    expect(aliveTestsRadios[0]).toHaveAttribute('value', 'Scan Config Default');
+    expect(aliveTestsRadios[0]).not.toBeChecked();
+    expect(aliveTestsRadios[1]).toHaveAttribute('value', 'Consider Alive');
+    expect(aliveTestsRadios[1]).not.toBeChecked();
+    expect(aliveTestsRadios[2]).toHaveAttribute('value', 'custom');
+    expect(aliveTestsRadios[2]).toBeChecked();
   });
 });

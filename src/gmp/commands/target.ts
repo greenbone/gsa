@@ -8,7 +8,7 @@ import {feedStatusRejection} from 'gmp/commands/feed-status';
 import type Http from 'gmp/http/http';
 import type Filter from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
-import Target, {type AliveTests} from 'gmp/models/target';
+import Target, {type AliveTest} from 'gmp/models/target';
 import {parseYesNo, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {UNSET_VALUE} from 'web/utils/Render';
@@ -17,7 +17,7 @@ export type TargetSource = 'manual' | 'file' | 'asset_hosts';
 export type TargetExcludeSource = 'manual' | 'file';
 
 interface TargetCommandCreateParams {
-  aliveTests?: AliveTests;
+  aliveTests?: AliveTest[];
   allowSimultaneousIPs?: YesNo;
   comment?: string;
   esxiCredentialId?: string;
@@ -86,7 +86,7 @@ class TargetCommand extends EntityCommand<Target> {
         reverse_lookup_only: reverseLookupOnly,
         reverse_lookup_unify: reverseLookupUnify,
         port_list_id: portListId,
-        alive_tests: aliveTests,
+        'alive_tests:': aliveTests,
         port,
         ssh_credential_id: sshCredentialId,
         ssh_elevate_credential_id:
@@ -136,7 +136,7 @@ class TargetCommand extends EntityCommand<Target> {
       return await this.action({
         cmd: 'save_target',
         target_id: id,
-        alive_tests: aliveTests,
+        'alive_tests:': aliveTests,
         allow_simultaneous_ips: allowSimultaneousIPs,
         comment,
         esxi_credential_id: esxiCredentialId,

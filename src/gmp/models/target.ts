@@ -10,8 +10,12 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
+interface AliveTestsElement {
+  alive_test?: AliveTest | AliveTest[];
+}
+
 interface TargetElement extends ModelElement {
-  alive_tests?: string;
+  alive_tests?: AliveTestsElement;
   allow_simultaneous_ips?: YesNo;
   esxi_credential?: ModelElement;
   exclude_hosts?: string;
@@ -31,7 +35,7 @@ interface TargetElement extends ModelElement {
 }
 
 interface TargetProperties extends ModelProperties {
-  alive_tests?: AliveTests;
+  alive_tests?: AliveTest[];
   allowSimultaneousIPs?: YesNo;
   esxi_credential?: Model;
   exclude_hosts?: string[];
@@ -48,7 +52,13 @@ interface TargetProperties extends ModelProperties {
   tasks?: Model[];
 }
 
-export type AliveTests = (typeof ALIVE_TESTS)[keyof typeof ALIVE_TESTS];
+export type AliveTest =
+  | typeof ARP_PING
+  | typeof CONSIDER_ALIVE
+  | typeof ICMP_PING
+  | typeof SCAN_CONFIG_DEFAULT
+  | typeof TCP_ACK
+  | typeof TCP_SYN;
 
 export const TARGET_CREDENTIAL_NAMES = [
   'smb_credential',
@@ -59,23 +69,17 @@ export const TARGET_CREDENTIAL_NAMES = [
   'krb5_credential',
 ];
 
-export const ALIVE_TESTS = {
-  SCAN_CONFIG_DEFAULT: 'Scan Config Default',
-  ICMP_PING: 'ICMP Ping',
-  TCP_ACK: 'TCP-ACK Service Ping',
-  TCP_SYN: 'TCP-SYN Service Ping',
-  ARP_PING: 'ARP Ping',
-  ICMP_TCP_ACK: 'ICMP & TCP-ACK Service Ping',
-  ICMP_ARP_PING: 'ICMP & ARP Ping',
-  TCP_ACK_ARP_PING: 'TCP-ACK Service & ARP Ping',
-  ICMP_TCP_ACK_ARP_PING: 'ICMP, TCP-ACK Service & ARP Ping',
-  CONSIDER_ALIVE: 'Consider Alive',
-} as const;
+export const SCAN_CONFIG_DEFAULT = 'Scan Config Default';
+export const ICMP_PING = 'ICMP Ping';
+export const TCP_ACK = 'TCP-ACK Service Ping';
+export const TCP_SYN = 'TCP-SYN Service Ping';
+export const ARP_PING = 'ARP Ping';
+export const CONSIDER_ALIVE = 'Consider Alive';
 
 class Target extends Model {
   static readonly entityType = 'target';
 
-  readonly alive_tests?: AliveTests;
+  readonly alive_tests: AliveTest[];
   readonly allowSimultaneousIPs: YesNo;
   readonly esxi_credential?: Model;
   readonly exclude_hosts: string[];
@@ -93,7 +97,7 @@ class Target extends Model {
 
   constructor({
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    alive_tests,
+    alive_tests = [],
     allowSimultaneousIPs = NO_VALUE,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     esxi_credential,
@@ -143,6 +147,7 @@ class Target extends Model {
   static fromElement(element: TargetElement = {}): Target {
     return new Target(this.parseElement(element));
   }
+
   static parseElement(element: TargetElement): TargetProperties {
     const ret = super.parseElement(element) as TargetProperties;
 
@@ -152,9 +157,10 @@ class Target extends Model {
       delete ret.port_list;
     }
 
-    if (isDefined(element.alive_tests)) {
-      ret.alive_tests = element.alive_tests as AliveTests;
-    }
+    ret.alive_tests = map(
+      element.alive_tests?.alive_test,
+      aliveTest => aliveTest as AliveTest,
+    );
 
     for (const name of TARGET_CREDENTIAL_NAMES) {
       const cred = ret[name];
