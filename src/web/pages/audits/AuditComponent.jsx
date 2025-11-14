@@ -63,7 +63,6 @@ const REPORT_FORMATS_FILTER = Filter.fromString(
 
 const AuditComponent = ({
   children,
-
   onStarted,
   onStartError,
   onStopped,
@@ -526,7 +525,6 @@ const AuditComponent = ({
         },
       );
 
-      const {data} = response;
       const filename = generateFilename({
         extension,
         fileNameFormat: reportExportFileName,
@@ -539,12 +537,8 @@ const AuditComponent = ({
 
       download({
         filename,
-        data: data.report,
+        data: response.data,
       });
-
-      if (onDownloaded) {
-        onDownloaded();
-      }
     } catch (error) {
       if (onDownloadError) {
         onDownloadError(error);
