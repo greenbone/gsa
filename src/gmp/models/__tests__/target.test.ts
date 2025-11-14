@@ -6,12 +6,53 @@
 import {describe, test, expect} from '@gsa/testing';
 import Model from 'gmp/models/model';
 import PortList from 'gmp/models/port-list';
-import Target from 'gmp/models/target';
+import Target, {ARP_PING, ICMP_PING} from 'gmp/models/target';
 import {testModel} from 'gmp/models/testing';
+import {NO_VALUE} from 'gmp/parser';
 
 testModel(Target, 'target');
 
 describe('Target model tests', () => {
+  test('should use defaults', () => {
+    const target = new Target();
+
+    expect(target.alive_tests).toEqual([]);
+    expect(target.allowSimultaneousIPs).toEqual(NO_VALUE);
+    expect(target.esxi_credential).toBeUndefined();
+    expect(target.exclude_hosts).toEqual([]);
+    expect(target.hosts).toEqual([]);
+    expect(target.krb5_credential).toBeUndefined();
+    expect(target.max_hosts).toEqual(0);
+    expect(target.port_list).toBeUndefined();
+    expect(target.reverse_lookup_only).toEqual(NO_VALUE);
+    expect(target.reverse_lookup_unify).toEqual(NO_VALUE);
+    expect(target.smb_credential).toBeUndefined();
+    expect(target.snmp_credential).toBeUndefined();
+    expect(target.ssh_credential).toBeUndefined();
+    expect(target.ssh_elevate_credential).toBeUndefined();
+    expect(target.tasks).toEqual([]);
+  });
+
+  test('should parse defaults', () => {
+    const target = Target.fromElement({});
+
+    expect(target.alive_tests).toEqual([]);
+    expect(target.allowSimultaneousIPs).toEqual(NO_VALUE);
+    expect(target.esxi_credential).toBeUndefined();
+    expect(target.exclude_hosts).toEqual([]);
+    expect(target.hosts).toEqual([]);
+    expect(target.krb5_credential).toBeUndefined();
+    expect(target.max_hosts).toEqual(0);
+    expect(target.port_list).toBeUndefined();
+    expect(target.reverse_lookup_only).toEqual(NO_VALUE);
+    expect(target.reverse_lookup_unify).toEqual(NO_VALUE);
+    expect(target.smb_credential).toBeUndefined();
+    expect(target.snmp_credential).toBeUndefined();
+    expect(target.ssh_credential).toBeUndefined();
+    expect(target.ssh_elevate_credential).toBeUndefined();
+    expect(target.tasks).toEqual([]);
+  });
+
   test('should parse port list', () => {
     const elem1 = {
       port_list: {
@@ -174,8 +215,18 @@ describe('Target model tests', () => {
   });
 
   test('should parse alive_tests', () => {
-    const target = Target.fromElement({alive_tests: 'ping'});
+    const target = Target.fromElement({alive_tests: {alive_test: ICMP_PING}});
+    expect(target.alive_tests).toEqual([ICMP_PING]);
 
-    expect(target.alive_tests).toEqual('ping');
+    const target1 = Target.fromElement({
+      alive_tests: {alive_test: [ICMP_PING, ARP_PING]},
+    });
+    expect(target1.alive_tests).toEqual([ICMP_PING, ARP_PING]);
+
+    const target2 = Target.fromElement({alive_tests: {}});
+    expect(target2.alive_tests).toEqual([]);
+
+    const target3 = Target.fromElement({alive_tests: {alive_test: []}});
+    expect(target3.alive_tests).toEqual([]);
   });
 });

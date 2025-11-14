@@ -12,6 +12,7 @@ import {
 } from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
 import {ResponseRejection} from 'gmp/http/rejection';
+import {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {UNSET_VALUE} from 'web/utils/Render';
 
@@ -32,7 +33,7 @@ describe('TargetCommand tests', () => {
       reverseLookupOnly: NO_VALUE,
       reverseLookupUnify: YES_VALUE,
       portListId: 'pl_id1',
-      aliveTests: 'Scan Config Default',
+      aliveTests: [SCAN_CONFIG_DEFAULT],
       port: 22,
       sshCredentialId: 'ssh_id',
       sshElevateCredentialId: '0',
@@ -45,7 +46,7 @@ describe('TargetCommand tests', () => {
       data: {
         cmd: 'create_target',
         allow_simultaneous_ips: 1,
-        alive_tests: 'Scan Config Default',
+        'alive_tests:': ['Scan Config Default'],
         comment: 'comment',
         esxi_credential_id: '0',
         exclude_file: undefined,
@@ -138,7 +139,7 @@ describe('TargetCommand tests', () => {
           reverseLookupOnly: NO_VALUE,
           reverseLookupUnify: YES_VALUE,
           portListId: 'pl_id1',
-          aliveTests: 'Scan Config Default',
+          aliveTests: [SCAN_CONFIG_DEFAULT],
           port: 22,
           sshCredentialId: 'ssh_id',
           sshElevateCredentialId: '0',
@@ -167,7 +168,7 @@ describe('TargetCommand tests', () => {
       reverseLookupOnly: NO_VALUE,
       reverseLookupUnify: YES_VALUE,
       portListId: 'pl_id1',
-      aliveTests: 'Scan Config Default',
+      aliveTests: [SCAN_CONFIG_DEFAULT],
       port: 22,
       sshCredentialId: '0',
       sshElevateCredentialId: 'ssh_elevate_id',
@@ -180,7 +181,7 @@ describe('TargetCommand tests', () => {
       data: {
         cmd: 'create_target',
         allow_simultaneous_ips: YES_VALUE,
-        alive_tests: 'Scan Config Default',
+        'alive_tests:': ['Scan Config Default'],
         comment: 'comment',
         esxi_credential_id: '0',
         exclude_file: undefined,
@@ -225,7 +226,7 @@ describe('TargetCommand tests', () => {
       reverseLookupOnly: NO_VALUE,
       reverseLookupUnify: YES_VALUE,
       portListId: 'pl_id1',
-      aliveTests: 'Scan Config Default',
+      aliveTests: [SCAN_CONFIG_DEFAULT],
       port: 22,
       sshCredentialId: 'ssh_id',
       sshElevateCredentialId: '0',
@@ -238,7 +239,7 @@ describe('TargetCommand tests', () => {
       data: {
         cmd: 'save_target',
         allow_simultaneous_ips: YES_VALUE,
-        alive_tests: 'Scan Config Default',
+        'alive_tests:': ['Scan Config Default'],
         comment: 'comment',
         esxi_credential_id: '0',
         exclude_file: undefined,
@@ -337,7 +338,7 @@ describe('TargetCommand tests', () => {
           reverseLookupOnly: NO_VALUE,
           reverseLookupUnify: YES_VALUE,
           portListId: 'pl_id1',
-          aliveTests: 'Scan Config Default',
+          aliveTests: [SCAN_CONFIG_DEFAULT],
           port: 22,
           sshCredentialId: UNSET_VALUE,
           sshElevateCredentialId: 'ssh_elevate_id',
@@ -369,7 +370,7 @@ describe('TargetCommand tests', () => {
       reverseLookupOnly: NO_VALUE,
       reverseLookupUnify: YES_VALUE,
       portListId: 'pl_id1',
-      aliveTests: 'Scan Config Default',
+      aliveTests: [SCAN_CONFIG_DEFAULT],
       port: 22,
       sshCredentialId: '0',
       sshElevateCredentialId: 'ssh_elevate_id',
@@ -382,7 +383,7 @@ describe('TargetCommand tests', () => {
       data: {
         cmd: 'save_target',
         allow_simultaneous_ips: YES_VALUE,
-        alive_tests: 'Scan Config Default',
+        'alive_tests:': ['Scan Config Default'],
         comment: 'comment',
         esxi_credential_id: UNSET_VALUE,
         exclude_file: undefined,
