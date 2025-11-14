@@ -90,10 +90,6 @@ const APPLIANCE_DATA = {
     title: 'OPENVAS SCAN - TERA',
     component: EnterpriseTera,
   },
-  'gsm-unknown_label.svg': {
-    title: 'OPENVAS',
-    component: GreenboneWhiteLogo,
-  },
 };
 
 export const applianceTitle = Object.fromEntries(
