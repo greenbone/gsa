@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {YES_VALUE} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
@@ -48,7 +48,6 @@ const ScanConfigComponent = ({
   onDownloadError,
   onSaved,
   onSaveError,
-
   onImported,
   onImportError,
 }) => {
@@ -140,21 +139,21 @@ const ScanConfigComponent = ({
     ]);
   };
 
-  const loadFamily = (familyNameValue, silent = false) => {
+  const loadFamily = (familyNameValue, configData = config, silent = false) => {
     if (!silent) {
       setIsLoadingFamily(true);
     }
 
     return gmp.scanconfig
       .editScanConfigFamilySettings({
-        id: config.id,
+        id: configData.id,
         familyName: familyNameValue,
       })
       .then(response => {
         const {data} = response;
         const {nvts} = data;
 
-        const configFamily = config.families[familyNameValue];
+        const configFamily = configData.families[familyNameValue];
         const selected = createSelectedNvts(configFamily, nvts);
 
         if (!hasSelection) {
@@ -251,7 +250,10 @@ const ScanConfigComponent = ({
     closeImportDialog();
   };
 
-  const openEditConfigFamilyDialog = familyNameValue => {
+  const openEditConfigFamilyDialog = async (
+    familyNameValue,
+    configData = config,
+  ) => {
     setHasSelection(false);
     setEditConfigFamilyDialogVisible(true);
     setEditConfigFamilyDialogTitle(
@@ -261,13 +263,19 @@ const ScanConfigComponent = ({
     );
     setFamilyName(familyNameValue);
 
-    return loadFamily(familyNameValue);
+    try {
+      return await loadFamily(familyNameValue, configData);
+    } catch (error) {
+      closeEditConfigFamilyDialog();
+      throw error;
+    }
   };
 
   const closeEditConfigFamilyDialog = () => {
     setEditConfigFamilyDialogVisible(false);
     setFamilyName(undefined);
     setFamilySelectedNvts(undefined);
+    setHasSelection(false);
   };
 
   const handleCloseEditConfigFamilyDialog = () => {
@@ -353,7 +361,7 @@ const ScanConfigComponent = ({
 
     await loadEditScanConfigSettings(configData.id);
 
-    openEditConfigFamilyDialog('Settings');
+    openEditConfigFamilyDialog('Settings', configData);
   };
 
   return (
