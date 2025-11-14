@@ -12,7 +12,11 @@ import {
 import type Filter from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import type PortList from 'gmp/models/port-list';
-import {type default as Target, type AliveTests} from 'gmp/models/target';
+import {
+  type default as Target,
+  type AliveTest,
+  SCAN_CONFIG_DEFAULT,
+} from 'gmp/models/target';
 import {YES_VALUE, type YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -103,9 +107,9 @@ const TargetComponent = ({
   const [portLists, setPortLists] = useState<PortList[]>([]);
   const [portListsTitle, setPortListsTitle] = useState('');
   const [port, setPort] = useState<number | undefined>(undefined);
-  const [aliveTests, setAliveTests] = useState<AliveTests | undefined>(
-    undefined,
-  );
+  const [aliveTests, setAliveTests] = useState<AliveTest[]>([
+    SCAN_CONFIG_DEFAULT,
+  ]);
   const [allowSimultaneousIPs, setAllowSimultaneousIPs] =
     useState<YesNo>(YES_VALUE);
   const [comment, setComment] = useState<string | undefined>(undefined);
@@ -224,7 +228,7 @@ const TargetComponent = ({
       setTargetExcludeSource('manual');
       setTargetId(entity.id);
     } else {
-      setAliveTests(undefined);
+      setAliveTests([SCAN_CONFIG_DEFAULT]);
       setAllowSimultaneousIPs(YES_VALUE);
       setPort(undefined);
       setComment(undefined);
