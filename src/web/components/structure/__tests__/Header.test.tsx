@@ -20,7 +20,7 @@ const gmp = {
 };
 
 describe('Header', () => {
-  test('renders component', async () => {
+  test('renders component', () => {
     const {render, store} = rendererWith({
       gmp,
       router: true,
@@ -53,10 +53,8 @@ describe('Header', () => {
 
     expect(themeSwitch).not.toBeInTheDocument();
 
-    await waitFor(() => {
-      const logo = screen.getByTestId('Enterprise150');
-      expect(logo).toBeVisible();
-    });
+    const logo = screen.getByTestId('Enterprise150');
+    expect(logo).toBeVisible();
 
     const manualLink = screen.getByTestId('manual-link');
     expect(manualLink).toBeVisible();
