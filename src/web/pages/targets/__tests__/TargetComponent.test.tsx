@@ -9,7 +9,7 @@ import {createActionResultResponse} from 'gmp/commands/testing';
 import Response from 'gmp/http/response';
 import type Model from 'gmp/models/model';
 import Setting from 'gmp/models/setting';
-import Target from 'gmp/models/target';
+import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
 import Button from 'web/components/form/Button';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {DEFAULT_PORT_LIST_ID} from 'web/pages/targets/TargetDialog';
@@ -89,7 +89,7 @@ describe('TargetComponent tests', () => {
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(gmp.target.create).toHaveBeenCalledWith({
-      aliveTests: 'Scan Config Default',
+      aliveTests: [SCAN_CONFIG_DEFAULT],
       allowSimultaneousIPs: 1,
       comment: '',
       esxiCredentialId: '0',
@@ -152,7 +152,7 @@ describe('TargetComponent tests', () => {
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(gmp.target.save).toHaveBeenCalledWith({
-      aliveTests: 'Scan Config Default',
+      aliveTests: [],
       allowSimultaneousIPs: 0,
       comment: '',
       esxiCredentialId: '0',

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import {type TargetExcludeSource, type TargetSource} from 'gmp/commands/target';
 import {
   type default as Credential,
@@ -24,11 +25,20 @@ import {
 } from 'gmp/models/credential';
 import type Filter from 'gmp/models/filter';
 import PortList from 'gmp/models/port-list';
-import {type AliveTests} from 'gmp/models/target';
+import {
+  type AliveTest,
+  ARP_PING,
+  CONSIDER_ALIVE,
+  ICMP_PING,
+  SCAN_CONFIG_DEFAULT,
+  TCP_ACK,
+  TCP_SYN,
+} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
+import MultiSelect from 'web/components/form/MultiSelect';
 import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
@@ -63,6 +73,7 @@ export interface NewCredentialData {
 }
 
 interface TargetDialogValues {
+  aliveTests: AliveTest[];
   id?: string;
   esxiCredentialId: string;
   krb5CredentialId: string;
@@ -74,7 +85,6 @@ interface TargetDialogValues {
 }
 
 interface TargetDialogDefaultValues {
-  aliveTests: AliveTests;
   allowSimultaneousIPs: YesNo;
   comment: string;
   excludeHosts: string;
@@ -93,7 +103,7 @@ interface TargetDialogDefaultValues {
 export type TargetDialogData = TargetDialogValues & TargetDialogDefaultValues;
 
 interface TargetDialogProps {
-  aliveTests?: AliveTests;
+  aliveTests?: AliveTest[];
   allowSimultaneousIPs?: YesNo;
   comment?: string;
   credentials?: Credential[];
@@ -143,22 +153,11 @@ const DEFAULT_PORT_LISTS = [
   }),
 ];
 
-export const ALIVE_TESTS_DEFAULT = 'Scan Config Default' as AliveTests;
-
-const ALIVE_TESTS = [
-  'ICMP Ping',
-  'TCP-ACK Service Ping',
-  'TCP-SYN Service Ping',
-  'ARP Ping',
-  'ICMP & TCP-ACK Service Ping',
-  'ICMP & ARP Ping',
-  'TCP-ACK Service & ARP Ping',
-  'ICMP, TCP-ACK Service & ARP Ping',
-  'Consider Alive',
-] as AliveTests[];
+const ALIVE_TESTS: AliveTest[] = [ICMP_PING, TCP_ACK, TCP_SYN, ARP_PING];
+const ALIVE_TESTS_ITEMS = ALIVE_TESTS.map(value => ({value, label: value}));
 
 const TargetDialog = ({
-  aliveTests = ALIVE_TESTS_DEFAULT,
+  aliveTests: initialAliveTests = [SCAN_CONFIG_DEFAULT],
   allowSimultaneousIPs = YES_VALUE,
   comment = '',
   credentials = [],
@@ -201,6 +200,7 @@ const TargetDialog = ({
   const gmp = useGmp();
   const enableKrb5 = gmp.settings.enableKrb5;
   const hasPermissionToCreateCredential = capabilities.mayCreate('credential');
+  const [aliveTests, setAliveTests] = useState<AliveTest[]>(initialAliveTests);
 
   // Feature flag configuration
   const isCredentialStoresEnabled = features.featureEnabled(
@@ -232,14 +232,6 @@ const TargetDialog = ({
 
   name = name || _('Unnamed');
   title = title || _('New Target');
-
-  const ALIVE_TESTS_ITEMS = [
-    {
-      value: ALIVE_TESTS_DEFAULT,
-      label: _('Scan Config Default'),
-    },
-    ...ALIVE_TESTS.map(value => ({value, label: value})),
-  ];
 
   /**
    * Returns credential types for new credential dialogs, including store types
@@ -370,10 +362,20 @@ const TargetDialog = ({
     'krb5',
   );
 
+  const handleCustomAliveTestsChange = (values: string[]) => {
+    setAliveTests(values as AliveTest[]);
+  };
+
+  const handleBaseAliveTestsChange = (value: string) => {
+    if (value === 'custom') {
+      setAliveTests([]);
+    } else {
+      setAliveTests([value as AliveTest]);
+    }
+  };
   return (
     <SaveDialog<TargetDialogValues, TargetDialogDefaultValues>
       defaultValues={{
-        aliveTests,
         comment,
         name,
         port,
@@ -390,6 +392,7 @@ const TargetDialog = ({
       }}
       title={title}
       values={{
+        aliveTests,
         id,
         portListId,
         esxiCredentialId,
@@ -543,11 +546,51 @@ const TargetDialog = ({
             )}
 
             <FormGroup title={_('Alive Test')}>
-              <Select
+              <Row>
+                <Radio
+                  checked={
+                    aliveTests.length === 1 &&
+                    aliveTests[0] === SCAN_CONFIG_DEFAULT
+                  }
+                  name="baseAliveTests"
+                  title={_('Use Scan Config Default')}
+                  value={SCAN_CONFIG_DEFAULT}
+                  onChange={handleBaseAliveTestsChange}
+                />
+                <Radio
+                  checked={
+                    aliveTests.length === 1 && aliveTests[0] === CONSIDER_ALIVE
+                  }
+                  name="baseAliveTests"
+                  title={_('Consider Hosts as Alive')}
+                  value={CONSIDER_ALIVE}
+                  onChange={handleBaseAliveTestsChange}
+                />
+                <Radio
+                  checked={
+                    aliveTests.length > 1 ||
+                    (aliveTests[0] !== SCAN_CONFIG_DEFAULT &&
+                      aliveTests[0] !== CONSIDER_ALIVE)
+                  }
+                  name="baseAliveTests"
+                  title={_('Custom')}
+                  value="custom"
+                  onChange={handleBaseAliveTestsChange}
+                />
+              </Row>
+              <MultiSelect
+                disabled={
+                  aliveTests.length === 1 &&
+                  (aliveTests[0] === SCAN_CONFIG_DEFAULT ||
+                    aliveTests[0] === CONSIDER_ALIVE)
+                }
                 items={ALIVE_TESTS_ITEMS}
                 name="aliveTests"
-                value={state.aliveTests}
-                onChange={onValueChange}
+                value={aliveTests.filter(
+                  value =>
+                    value !== SCAN_CONFIG_DEFAULT && value !== CONSIDER_ALIVE,
+                )}
+                onChange={handleCustomAliveTestsChange}
               />
             </FormGroup>
 
