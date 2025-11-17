@@ -9,7 +9,7 @@ import type Http from 'gmp/http/http';
 import type Filter from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import Target, {type AliveTest} from 'gmp/models/target';
-import {parseYesNo, type YesNo} from 'gmp/parser';
+import {type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {UNSET_VALUE} from 'web/utils/Render';
 
@@ -40,9 +40,8 @@ interface TargetCommandCreateParams {
   targetSource?: TargetSource;
 }
 
-interface TargetCommandSaveParams extends TargetCommandCreateParams {
+export interface TargetCommandSaveParams extends TargetCommandCreateParams {
   id: string;
-  inUse?: boolean;
 }
 
 class TargetCommand extends EntityCommand<Target> {
@@ -111,7 +110,7 @@ class TargetCommand extends EntityCommand<Target> {
   async save({
     id,
     name,
-    comment = '',
+    comment,
     targetSource,
     targetExcludeSource,
     hosts,
@@ -121,16 +120,15 @@ class TargetCommand extends EntityCommand<Target> {
     portListId,
     aliveTests,
     allowSimultaneousIPs,
-    sshCredentialId = UNSET_VALUE,
-    sshElevateCredentialId = UNSET_VALUE,
+    sshCredentialId,
+    sshElevateCredentialId,
     port,
-    smbCredentialId = UNSET_VALUE,
-    esxiCredentialId = UNSET_VALUE,
-    snmpCredentialId = UNSET_VALUE,
-    krb5CredentialId = UNSET_VALUE,
+    smbCredentialId,
+    esxiCredentialId,
+    snmpCredentialId,
+    krb5CredentialId,
     file,
     excludeFile,
-    inUse,
   }: TargetCommandSaveParams) {
     try {
       return await this.action({
@@ -144,7 +142,6 @@ class TargetCommand extends EntityCommand<Target> {
         file,
         exclude_file: excludeFile,
         hosts,
-        in_use: isDefined(inUse) ? parseYesNo(inUse) : undefined,
         name,
         port,
         port_list_id: portListId,
@@ -153,10 +150,9 @@ class TargetCommand extends EntityCommand<Target> {
         smb_credential_id: smbCredentialId,
         snmp_credential_id: snmpCredentialId,
         ssh_credential_id: sshCredentialId,
-        ssh_elevate_credential_id:
-          sshCredentialId === UNSET_VALUE
-            ? UNSET_VALUE
-            : sshElevateCredentialId,
+        ssh_elevate_credential_id: isDefined(sshCredentialId)
+          ? sshElevateCredentialId
+          : undefined,
         krb5_credential_id: krb5CredentialId,
         target_source: targetSource,
         target_exclude_source: targetExcludeSource,
