@@ -8,7 +8,7 @@ import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import Target from 'gmp/models/target';
+import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import DetailsPage, {ToolBarIcons} from 'web/pages/targets/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/targets';
@@ -61,7 +61,10 @@ const target = Target.fromElement({
   reverse_lookup_only: 1,
   reverse_lookup_unify: 0,
   tasks: {task: {_id: '465', name: 'foo'}},
-  alive_tests: 'Scan Config Default',
+  alive_tests: {
+    // eslint-disable-next-line camelcase
+    alive_test: SCAN_CONFIG_DEFAULT,
+  },
   allow_simultaneous_ips: 1,
   port_range: '1-5',
   krb5_credential: {
@@ -116,7 +119,10 @@ const targetInUse = Target.fromElement({
   reverse_lookup_only: 1,
   reverse_lookup_unify: 0,
   tasks: {task: {_id: '465', name: 'foo'}},
-  alive_tests: 'Scan Config Default',
+  alive_tests: {
+    // eslint-disable-next-line camelcase
+    alive_test: SCAN_CONFIG_DEFAULT,
+  },
   allow_simultaneous_ips: 1,
   port_range: '1-5',
 });
@@ -141,7 +147,10 @@ const noPermTarget = Target.fromElement({
   reverse_lookup_only: 1,
   reverse_lookup_unify: 0,
   tasks: {task: {_id: '465', name: 'foo'}},
-  alive_tests: 'Scan Config Default',
+  alive_tests: {
+    // eslint-disable-next-line camelcase
+    alive_test: SCAN_CONFIG_DEFAULT,
+  },
   allow_simultaneous_ips: 1,
   port_range: '1-5',
 });
