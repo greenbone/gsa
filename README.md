@@ -237,7 +237,7 @@ instantiated once for the [GSA application](./src/web/App.tsx#L29)
 | enableGreenboneSensor                                               | Boolean                    | false                                                                         | -                         | x                       |
 | [disableLoginForm](#disableloginform)                               | Boolean                    | false                                                                         | -                         | x                       |
 | [enableCommunityFeedNotification](#enablecommunityfeednotification) | Boolean                    | true                                                                          | x                         | x                       |
-| [enableEPSS](#enableepss)                                           | Boolean                    | false                                                                         | x                         | x                       |
+| [enableEPSS](#enableepss)                                           | Boolean                    | true                                                                          | x                         | x                       |
 | [enableKrb5](#enablekrb5)                                           | Boolean                    | false                                                                         | x                         | x                       |
 | [enableStoreDebugLog](#enablestoredebuglog)                         | Boolean                    | false                                                                         | x                         | x                       |
 | [guestUsername](#guestusername-and-guestpassword)                   | String                     | undefined                                                                     | -                         | x                       |
@@ -291,9 +291,8 @@ default.
 
 #### enableEPSS
 
-Enables the display of EPSS scores and percentiles in CVEs and NVTs.
-
-The data required for this is not available in the feed yet, so this is disabled by default.
+Enables the display of EPSS scores and percentiles in CVEs and VTs. It is
+enabled by default.
 
 #### enableKrb5
 
