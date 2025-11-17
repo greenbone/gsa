@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import Target from 'gmp/models/target';
+import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
 import Details from 'web/pages/targets/Details';
 
 const gmp = {
@@ -15,112 +15,60 @@ const gmp = {
   },
 };
 
-const targetElevate = Target.fromElement({
-  _id: 'foo',
-  name: 'target',
-  owner: {name: 'admin'},
-  alive_tests: 'Scan Config Default',
-  comment: 'hello world',
-  writable: '1',
-  in_use: '1',
-  permissions: {permission: [{name: 'Everything'}]},
-  hosts: '127.0.0.1, 192.168.0.1',
-  exclude_hosts: '',
-  max_hosts: '2',
-  reverse_lookup_only: '1',
-  reverse_lookup_unify: '0',
-  port_list: {
-    _id: 'pl_id1',
-    name: 'pl1',
-    trash: '0',
-  },
-  ssh_credential: {
-    _id: '1235',
-    name: 'ssh',
-    port: '22',
-    trash: '0',
-  },
-  ssh_elevate_credential: {
-    _id: '3456',
-    name: 'ssh_elevate',
-    trash: '0',
-  },
-  smb_credential: {
-    _id: '4784',
-    name: 'smb_credential',
-  },
-  esxi_credential: {
-    _id: '',
-    name: '',
-    trash: '0',
-  },
-  snmp_credential: {
-    _id: '',
-    name: '',
-    trash: '0',
-  },
-  tasks: {
-    task: [
-      {
-        _id: 'task_id',
-        name: 'task1',
-      },
-    ],
-  },
-});
-
-const targetNoElevate = Target.fromElement({
-  _id: 'foo',
-  name: 'target',
-  owner: {name: 'admin'},
-  alive_tests: 'Scan Config Default',
-  comment: 'hello world',
-  writable: '1',
-  in_use: '0',
-  permissions: {permission: [{name: 'Everything'}]},
-  hosts: '127.0.0.1, 192.168.0.1',
-  exclude_hosts: '',
-  max_hosts: '2',
-  port_list: {
-    _id: 'pl_id1',
-    name: 'pl1',
-    trash: '0',
-  },
-  krb5_credential: {
-    _id: 'krb5_id',
-    name: 'krb5',
-    trash: '0',
-  },
-  ssh_credential: {
-    _id: '',
-    name: '',
-    port: '',
-    trash: '0',
-  },
-  ssh_elevate_credential: {
-    _id: '',
-    name: '',
-    trash: '0',
-  },
-  smb_credential: {
-    _id: '4784',
-    name: 'smb_credential',
-  },
-  esxi_credential: {
-    _id: '',
-    name: '',
-    trash: '0',
-  },
-  snmp_credential: {
-    _id: '',
-    name: '',
-    trash: '0',
-  },
-});
-
 describe('Target Details tests', () => {
   test('should render full target details', () => {
     const caps = new Capabilities(['everything']);
+    const target = Target.fromElement({
+      _id: 'foo',
+      name: 'target',
+      owner: {name: 'admin'},
+      alive_tests: {
+        // eslint-disable-next-line camelcase
+        alive_test: SCAN_CONFIG_DEFAULT,
+      },
+      comment: 'hello world',
+      writable: '1',
+      in_use: '0',
+      permissions: {permission: [{name: 'Everything'}]},
+      hosts: '127.0.0.1, 192.168.0.1',
+      exclude_hosts: '',
+      max_hosts: '2',
+      port_list: {
+        _id: 'pl_id1',
+        name: 'pl1',
+        trash: '0',
+      },
+      krb5_credential: {
+        _id: 'krb5_id',
+        name: 'krb5',
+        trash: '0',
+      },
+      ssh_credential: {
+        _id: '',
+        name: '',
+        port: '',
+        trash: '0',
+      },
+      ssh_elevate_credential: {
+        _id: '',
+        name: '',
+        trash: '0',
+      },
+      smb_credential: {
+        _id: '4784',
+        name: 'smb_credential',
+      },
+      esxi_credential: {
+        _id: '',
+        name: '',
+        trash: '0',
+      },
+      snmp_credential: {
+        _id: '',
+        name: '',
+        trash: '0',
+      },
+    });
 
     const {render} = rendererWith({
       gmp,
@@ -128,7 +76,7 @@ describe('Target Details tests', () => {
       router: true,
     });
 
-    render(<Details entity={targetNoElevate} />);
+    render(<Details entity={target} />);
 
     const headings = screen.getAllByRole('heading', {level: 2});
     const detailsLinks = screen.getAllByTestId('details-link');
@@ -173,14 +121,69 @@ describe('Target Details tests', () => {
 
   test('should render full target details with elevate credentials and tasks', () => {
     const caps = new Capabilities(['everything']);
-
+    const target = Target.fromElement({
+      _id: 'foo',
+      name: 'target',
+      owner: {name: 'admin'},
+      alive_tests: {
+        // eslint-disable-next-line camelcase
+        alive_test: SCAN_CONFIG_DEFAULT,
+      },
+      comment: 'hello world',
+      writable: '1',
+      in_use: '1',
+      permissions: {permission: [{name: 'Everything'}]},
+      hosts: '127.0.0.1, 192.168.0.1',
+      exclude_hosts: '',
+      max_hosts: '2',
+      reverse_lookup_only: '1',
+      reverse_lookup_unify: '0',
+      port_list: {
+        _id: 'pl_id1',
+        name: 'pl1',
+        trash: '0',
+      },
+      ssh_credential: {
+        _id: '1235',
+        name: 'ssh',
+        port: '22',
+        trash: '0',
+      },
+      ssh_elevate_credential: {
+        _id: '3456',
+        name: 'ssh_elevate',
+        trash: '0',
+      },
+      smb_credential: {
+        _id: '4784',
+        name: 'smb_credential',
+      },
+      esxi_credential: {
+        _id: '',
+        name: '',
+        trash: '0',
+      },
+      snmp_credential: {
+        _id: '',
+        name: '',
+        trash: '0',
+      },
+      tasks: {
+        task: [
+          {
+            _id: 'task_id',
+            name: 'task1',
+          },
+        ],
+      },
+    });
     const {render} = rendererWith({
       gmp,
       capabilities: caps,
       router: true,
     });
 
-    render(<Details entity={targetElevate} />);
+    render(<Details entity={target} />);
 
     const headings = screen.getAllByRole('heading', {level: 2});
     const detailsLinks = screen.getAllByTestId('details-link');

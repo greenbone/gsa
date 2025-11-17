@@ -652,20 +652,19 @@ describe('TargetDialog tests', () => {
     expect(selects[0]).toHaveValue(DEFAULT_PORT_LIST_NAME);
     expect(selects[0]).toBeDisabled();
 
-    expect(selects[1]).toHaveValue(SCAN_CONFIG_DEFAULT);
-    expect(selects[2]).toHaveValue('username+password');
-    expect(selects[2]).toBeDisabled();
+    expect(selects[1]).toHaveValue('username+password');
+    expect(selects[1]).toBeDisabled();
 
-    expect(selects[3]).toHaveValue('up2');
+    expect(selects[2]).toHaveValue('up2');
+    expect(selects[2]).toBeDisabled();
+    expect(selects[3]).toHaveValue('--');
     expect(selects[3]).toBeDisabled();
+
     expect(selects[4]).toHaveValue('--');
     expect(selects[4]).toBeDisabled();
 
     expect(selects[5]).toHaveValue('--');
     expect(selects[5]).toBeDisabled();
-
-    expect(selects[6]).toHaveValue('--');
-    expect(selects[6]).toBeDisabled();
   });
 
   test('should allow to close the dialog', () => {
