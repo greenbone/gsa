@@ -518,6 +518,7 @@ const TargetDialog = ({
               title={_('Allow simultaneous scanning via multiple IPs')}
             >
               <YesNoRadio
+                disabled={inUse}
                 name="allowSimultaneousIPs"
                 value={state.allowSimultaneousIPs}
                 onChange={onValueChange}
