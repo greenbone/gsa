@@ -4,7 +4,11 @@
  */
 
 import {useState, useRef} from 'react';
-import {type TargetExcludeSource, type TargetSource} from 'gmp/commands/target';
+import {
+  type TargetCommandSaveParams,
+  type TargetExcludeSource,
+  type TargetSource,
+} from 'gmp/commands/target';
 import {
   type default as Credential,
   type CredentialType,
@@ -341,12 +345,8 @@ const TargetComponent = ({
     },
   );
 
-  const handleEntitySave = useEntitySave<TargetDialogData>(
-    data =>
-      gmp.target.save({
-        ...data,
-        id: data.id as string,
-      }),
+  const handleEntitySave = useEntitySave<TargetCommandSaveParams>(
+    data => gmp.target.save(data),
     {
       onSaved,
       onSaveError,
@@ -363,7 +363,19 @@ const TargetComponent = ({
 
   const handleSaveClick = async (data: TargetDialogData) => {
     const promise = isDefined(data.id)
-      ? handleEntitySave(data)
+      ? handleEntitySave(
+          data.inUse
+            ? {
+                id: data.id as string,
+                comment: data.comment,
+                aliveTests: data.aliveTests,
+                name: data.name,
+              }
+            : {
+                ...data,
+                id: data.id as string,
+              },
+        )
       : handleEntityCreate(data);
     await promise;
     closeTargetDialog();
