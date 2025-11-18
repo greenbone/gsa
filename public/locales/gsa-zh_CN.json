@@ -1758,6 +1758,7 @@
   "Security Information": "",
   "Security note: The SMB protocol does not offer a fingerprint to establish complete mutual trust. Thus a man-in-the-middle attack can not be fully prevented.": "安全提示: SMB协议没有提供指纹来建立完全的双向信任.因此,无法完全防止中间人攻击.",
   "Select": "选择",
+  "Select a Credential": "",
   "Select a schedule": "选择一个计划",
   "Select Agents": "选择代理",
   "Select all NVTs": "",
