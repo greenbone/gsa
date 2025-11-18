@@ -259,4 +259,69 @@ describe('Select component tests', () => {
       },
     );
   });
+
+  test('should allow to deselect items', async () => {
+    const handleChange = testing.fn();
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
+
+    render(
+      <Select
+        allowDeselect
+        items={items}
+        name="foo"
+        value="bar"
+        onChange={handleChange}
+      />,
+    );
+
+    const input = screen.getSelectElement();
+    expect(input).toHaveValue('Bar');
+
+    const selectItems = await getSelectItemElementsForSelect(input);
+    fireEvent.click(selectItems[0]);
+    expect(input).toHaveValue('');
+    expect(handleChange).toHaveBeenCalledWith(undefined, 'foo');
+  });
+
+  test('should allow to clear items', async () => {
+    const handleChange = testing.fn();
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
+
+    render(
+      <Select
+        clearable
+        items={items}
+        name="foo"
+        value="bar"
+        onChange={handleChange}
+      />,
+    );
+
+    const input = screen.getSelectElement();
+    expect(input).toHaveValue('Bar');
+    const clearButton = document.body.querySelector<HTMLElement>(
+      'button',
+    ) as HTMLElement;
+    fireEvent.click(clearButton);
+    expect(input).toHaveValue('');
+    expect(handleChange).toHaveBeenCalledWith(undefined, 'foo');
+  });
 });

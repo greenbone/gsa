@@ -16,10 +16,10 @@ export interface SelectItem {
   deprecated?: boolean;
 }
 
-export interface SelectProps
+export interface SelectProps<TValue>
   extends Omit<
     React.ComponentPropsWithoutRef<typeof OpenSightSelect>,
-    'onChange'
+    'onChange' | 'value'
   > {
   allowDeselect?: boolean;
   'data-testid'?: string;
@@ -34,9 +34,9 @@ export interface SelectProps
   placeholder?: string;
   searchable?: boolean;
   toolTipTitle?: string;
-  value?: string;
+  value?: TValue;
   width?: string;
-  onChange?: (value: string, name?: string) => void;
+  onChange?: (value: TValue, name?: string) => void;
 }
 
 const renderSelectOption = ({
@@ -51,7 +51,7 @@ const renderSelectOption = ({
   return label;
 };
 
-const Select = ({
+const Select = <TValue extends string | undefined = string>({
   allowDeselect = false,
   'data-testid': dataTestId = 'form-select',
   disabled,
@@ -73,14 +73,14 @@ const Select = ({
   },
   onChange,
   ...props
-}: SelectProps) => {
+}: SelectProps<TValue>) => {
   const [_] = useTranslation();
   const [searchValue, setSearchValue] = useState('');
 
   const handleChange = useCallback(
     (newValue: string | null) => {
       if (isDefined(onChange)) {
-        onChange(newValue as string, name);
+        onChange((newValue ?? undefined) as TValue, name);
       }
       setSearchValue('');
     },
