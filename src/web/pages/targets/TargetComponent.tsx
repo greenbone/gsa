@@ -14,14 +14,13 @@ import {
   type CredentialType,
 } from 'gmp/models/credential';
 import type Filter from 'gmp/models/filter';
-import type Model from 'gmp/models/model';
 import type PortList from 'gmp/models/port-list';
 import {
   type default as Target,
   type AliveTest,
   SCAN_CONFIG_DEFAULT,
 } from 'gmp/models/target';
-import {YES_VALUE, type YesNo} from 'gmp/parser';
+import {type YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import useEntityClone, {
@@ -77,9 +76,6 @@ interface TargetComponentProps {
   onSaved?: (response: EntitySaveResponse) => void;
   onSaveError?: (error: Error) => void;
 }
-
-const getIdOrDefault = (value?: Model) =>
-  isDefined(value) ? (value.id as string) : UNSET_VALUE;
 
 const TargetComponent = ({
   children,
@@ -215,12 +211,12 @@ const TargetComponent = ({
       setAllowSimultaneousIPs(entity.allowSimultaneousIPs);
       setComment(entity.comment);
       setTargetTitle(_('Edit Target {{name}}', {name: entity.name as string}));
-      setEsxiCredentialId(getIdOrDefault(entity.esxi_credential));
-      setKrb5CredentialId(getIdOrDefault(entity.krb5_credential));
-      setSmbCredentialId(getIdOrDefault(entity.smb_credential));
-      setSnmpCredentialId(getIdOrDefault(entity.snmp_credential));
-      setSshCredentialId(getIdOrDefault(entity.ssh_credential));
-      setSshElevateCredentialId(getIdOrDefault(entity.ssh_elevate_credential));
+      setEsxiCredentialId(entity.esxi_credential?.id);
+      setKrb5CredentialId(entity.krb5_credential?.id);
+      setSmbCredentialId(entity.smb_credential?.id);
+      setSnmpCredentialId(entity.snmp_credential?.id);
+      setSshCredentialId(entity.ssh_credential?.id);
+      setSshElevateCredentialId(entity.ssh_elevate_credential?.id);
       setPortListId(entity.port_list?.id);
       setName(entity.name);
       setInUse(entity.isInUse());
@@ -300,20 +296,13 @@ const TargetComponent = ({
     await loadPortLists();
   };
 
-  const handlePortListChange = (portListId: string) => {
+  const handlePortListChange = (portListId: string | undefined) => {
     setPortListId(portListId);
   };
 
-  const handleEsxiCredentialChange = (esxiCredentialId: string) => {
-    setEsxiCredentialId(esxiCredentialId);
-  };
+  const handleSshCredentialChange = (sshCredentialId: string | undefined) => {
+    sshCredentialId = sshCredentialId ?? UNSET_VALUE;
 
-  /**
-   * if ssh_credential_id is changed to UNSET_VALUE, elevate privileges option will not be rendered anymore.
-   * If we don't reset ssh_elevate_credential_id, then the previously set ssh_elevate_credential_id will never be available for the SSH dropdown again because it will still be set in the dialog state.
-   * ssh_elevate_credential_id should be available again if we ever unset ssh_credential_id
-   */
-  const handleSshCredentialChange = (sshCredentialId: string) => {
     setSshCredentialId(sshCredentialId);
 
     if (sshCredentialId === UNSET_VALUE) {
@@ -321,20 +310,26 @@ const TargetComponent = ({
     }
   };
 
-  const handleSshElevateCredentialChange = (sshElevateCredentialId: string) => {
-    setSshElevateCredentialId(sshElevateCredentialId);
+  const handleSshElevateCredentialChange = (
+    sshElevateCredentialId: string | undefined,
+  ) => {
+    setSshElevateCredentialId(sshElevateCredentialId ?? UNSET_VALUE);
   };
 
-  const handleSnmpCredentialChange = (snmpCredentialId: string) => {
-    setSnmpCredentialId(snmpCredentialId);
+  const handleSmbCredentialChange = (smbCredentialId: string | undefined) => {
+    setSmbCredentialId(smbCredentialId ?? UNSET_VALUE);
   };
 
-  const handleSmbCredentialChange = (smbCredentialId: string) => {
-    setSmbCredentialId(smbCredentialId);
+  const handleSnmpCredentialChange = (snmpCredentialId: string | undefined) => {
+    setSnmpCredentialId(snmpCredentialId ?? UNSET_VALUE);
   };
 
-  const handleKrb5CredentialChange = (krb5CredentialId: string) => {
-    setKrb5CredentialId(krb5CredentialId);
+  const handleEsxiCredentialChange = (esxiCredentialId: string | undefined) => {
+    setEsxiCredentialId(esxiCredentialId ?? UNSET_VALUE);
+  };
+
+  const handleKrb5CredentialChange = (krb5CredentialId: string | undefined) => {
+    setKrb5CredentialId(krb5CredentialId ?? UNSET_VALUE);
   };
 
   const handleEntityClone = useEntityClone<Target>(

@@ -35,7 +35,7 @@ import TargetDialog, {
   DEFAULT_PORT_LIST_ID,
   DEFAULT_PORT_LIST_NAME,
 } from 'web/pages/targets/TargetDialog';
-import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/Render';
+import {UNSET_LABEL} from 'web/utils/Render';
 
 const cred1 = new Credential({
   id: '5678',
@@ -89,16 +89,10 @@ describe('TargetDialog tests', () => {
       <TargetDialog
         credentials={credentials}
         onClose={handleClose}
-        onEsxiCredentialChange={handleChange}
-        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
         onSave={handleSave}
-        onSmbCredentialChange={handleChange}
-        onSnmpCredentialChange={handleChange}
-        onSshCredentialChange={handleChange}
-        onSshElevateCredentialChange={handleChange}
       />,
     );
 
@@ -160,9 +154,9 @@ describe('TargetDialog tests', () => {
     expect(aliveTestsRadios[2]).not.toBeChecked();
 
     expect(screen.getByName('portListId')).toHaveValue(DEFAULT_PORT_LIST_ID);
-    expect(screen.getByName('sshCredentialId')).toHaveValue(UNSET_VALUE);
-    expect(screen.getByName('smbCredentialId')).toHaveValue(UNSET_VALUE);
-    expect(screen.getByName('esxiCredentialId')).toHaveValue(UNSET_VALUE);
+    expect(screen.getByName('sshCredentialId')).toHaveValue(undefined);
+    expect(screen.getByName('smbCredentialId')).toHaveValue(undefined);
+    expect(screen.getByName('esxiCredentialId')).toHaveValue(undefined);
 
     expect(screen.getByTitle('Create a new port list')).toBeInTheDocument();
     const createCredentialIcons = screen.getAllByTitle(
@@ -205,16 +199,10 @@ describe('TargetDialog tests', () => {
         reverseLookupUnify={NO_VALUE}
         smbCredentialId="2345"
         onClose={handleClose}
-        onEsxiCredentialChange={handleChange}
-        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
         onSave={handleSave}
-        onSmbCredentialChange={handleChange}
-        onSnmpCredentialChange={handleChange}
-        onSshCredentialChange={handleChange}
-        onSshElevateCredentialChange={handleChange}
       />,
     );
 
@@ -276,9 +264,9 @@ describe('TargetDialog tests', () => {
     expect(aliveTestsRadios[2]).not.toBeChecked();
 
     expect(screen.getByName('portListId')).toHaveValue(DEFAULT_PORT_LIST_ID);
-    expect(screen.getByName('sshCredentialId')).toHaveValue(UNSET_VALUE);
+    expect(screen.getByName('sshCredentialId')).toHaveValue(undefined);
     expect(screen.getByName('smbCredentialId')).toHaveValue('2345');
-    expect(screen.getByName('esxiCredentialId')).toHaveValue(UNSET_VALUE);
+    expect(screen.getByName('esxiCredentialId')).toHaveValue(undefined);
 
     expect(screen.getByTitle('Create a new port list')).toBeInTheDocument();
     const createCredentialIcons = screen.getAllByTitle(
@@ -321,16 +309,10 @@ describe('TargetDialog tests', () => {
         reverseLookupUnify={YES_VALUE}
         smbCredentialId="2345"
         onClose={handleClose}
-        onEsxiCredentialChange={handleChange}
-        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
         onSave={handleSave}
-        onSmbCredentialChange={handleChange}
-        onSnmpCredentialChange={handleChange}
-        onSshCredentialChange={handleChange}
-        onSshElevateCredentialChange={handleChange}
       />,
     );
 
@@ -350,10 +332,11 @@ describe('TargetDialog tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
+      id: undefined,
       aliveTests: [SCAN_CONFIG_DEFAULT],
       allowSimultaneousIPs: true,
       comment: 'hello world',
-      esxiCredentialId: UNSET_VALUE,
+      esxiCredentialId: undefined,
       excludeHosts: '',
       hosts: '123.455.67.434',
       hostsCount: undefined,
@@ -364,10 +347,10 @@ describe('TargetDialog tests', () => {
       reverseLookupOnly: 0,
       reverseLookupUnify: YES_VALUE,
       smbCredentialId: '2345',
-      snmpCredentialId: UNSET_VALUE,
-      sshCredentialId: UNSET_VALUE,
-      sshElevateCredentialId: UNSET_VALUE,
-      krb5CredentialId: UNSET_VALUE,
+      snmpCredentialId: undefined,
+      sshCredentialId: undefined,
+      sshElevateCredentialId: undefined,
+      krb5CredentialId: undefined,
       targetExcludeSource: 'manual',
       targetSource: 'manual',
     });
@@ -395,16 +378,10 @@ describe('TargetDialog tests', () => {
         smbCredentialId="2345"
         sshCredentialId="2345"
         onClose={handleClose}
-        onEsxiCredentialChange={handleChange}
-        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
         onSave={handleSave}
-        onSmbCredentialChange={handleChange}
-        onSnmpCredentialChange={handleChange}
-        onSshCredentialChange={handleChange}
-        onSshElevateCredentialChange={handleChange}
       />,
     );
 
@@ -441,16 +418,10 @@ describe('TargetDialog tests', () => {
         smbCredentialId="5463"
         sshCredentialId="2345"
         onClose={handleClose}
-        onEsxiCredentialChange={handleChange}
-        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
         onSave={handleSave}
-        onSmbCredentialChange={handleChange}
-        onSnmpCredentialChange={handleChange}
-        onSshCredentialChange={handleChange}
-        onSshElevateCredentialChange={handleChange}
       />,
     );
 
@@ -460,10 +431,8 @@ describe('TargetDialog tests', () => {
     expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
 
     const selectItems = await getSelectItemElementsForSelect(selects[2]);
-    expect(selectItems.length).toBe(2); // "original" ssh option removed
-
-    expect(selectItems[0]).toHaveTextContent('--'); // null option
-    expect(selectItems[1]).toHaveTextContent('up2');
+    expect(selectItems.length).toBe(1);
+    expect(selectItems[0]).toHaveTextContent('up2');
   });
 
   test.each([
@@ -522,16 +491,10 @@ describe('TargetDialog tests', () => {
           reverseLookupUnify={NO_VALUE}
           smbCredentialId="5463"
           onClose={handleClose}
-          onEsxiCredentialChange={handleChange}
-          onKrb5CredentialChange={handleChange}
           onNewCredentialsClick={handleCreate}
           onNewPortListClick={handleCreate}
           onPortListChange={handleChange}
           onSave={handleSave}
-          onSmbCredentialChange={handleChange}
-          onSnmpCredentialChange={handleChange}
-          onSshCredentialChange={handleChange}
-          onSshElevateCredentialChange={handleChange}
         />,
       );
 
@@ -573,16 +536,10 @@ describe('TargetDialog tests', () => {
         sshCredentialId="2345"
         sshElevateCredentialId="5463"
         onClose={handleClose}
-        onEsxiCredentialChange={handleChange}
-        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
         onSave={handleSave}
-        onSmbCredentialChange={handleChange}
-        onSnmpCredentialChange={handleChange}
-        onSshCredentialChange={handleChange}
-        onSshElevateCredentialChange={handleChange}
       />,
     );
 
@@ -592,11 +549,10 @@ describe('TargetDialog tests', () => {
     expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
 
     const selectItems = await getSelectItemElementsForSelect(selects[1]);
-    expect(selectItems.length).toBe(3); // ssh elevate option removed
+    expect(selectItems.length).toBe(2); // ssh elevate option removed
 
-    expect(selectItems[0]).toHaveTextContent(UNSET_LABEL); // null option
-    expect(selectItems[1]).toHaveTextContent('username+password');
-    expect(selectItems[2]).toHaveTextContent('ssh_key');
+    expect(selectItems[0]).toHaveTextContent('username+password');
+    expect(selectItems[1]).toHaveTextContent('ssh_key');
   });
 
   test('should disable editing certain fields if target is in use', () => {
@@ -622,16 +578,10 @@ describe('TargetDialog tests', () => {
         sshCredentialId="2345"
         sshElevateCredentialId="5463"
         onClose={handleClose}
-        onEsxiCredentialChange={handleChange}
-        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
         onSave={handleSave}
-        onSmbCredentialChange={handleChange}
-        onSnmpCredentialChange={handleChange}
-        onSshCredentialChange={handleChange}
-        onSshElevateCredentialChange={handleChange}
       />,
     );
 
@@ -651,13 +601,14 @@ describe('TargetDialog tests', () => {
 
     expect(selects[2]).toHaveValue('up2');
     expect(selects[2]).toBeDisabled();
-    expect(selects[3]).toHaveValue('--');
+
+    expect(selects[3]).toHaveValue('');
     expect(selects[3]).toBeDisabled();
 
-    expect(selects[4]).toHaveValue('--');
+    expect(selects[4]).toHaveValue('');
     expect(selects[4]).toBeDisabled();
 
-    expect(selects[5]).toHaveValue('--');
+    expect(selects[5]).toHaveValue('');
     expect(selects[5]).toBeDisabled();
   });
 
@@ -673,16 +624,10 @@ describe('TargetDialog tests', () => {
       <TargetDialog
         credentials={credentials}
         onClose={handleClose}
-        onEsxiCredentialChange={handleChange}
-        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
         onSave={handleSave}
-        onSmbCredentialChange={handleChange}
-        onSnmpCredentialChange={handleChange}
-        onSshCredentialChange={handleChange}
-        onSshElevateCredentialChange={handleChange}
       />,
     );
 
@@ -722,22 +667,23 @@ describe('TargetDialog tests', () => {
       aliveTests: [SCAN_CONFIG_DEFAULT],
       allowSimultaneousIPs: true,
       comment: '',
-      esxiCredentialId: UNSET_VALUE,
+      esxiCredentialId: undefined,
       excludeHosts: '',
       hosts: '',
       hostsCount: 10,
       hostsFilter,
+      id: undefined,
       inUse: false,
       name: 'Unnamed',
       port: 22,
       portListId: DEFAULT_PORT_LIST_ID,
       reverseLookupOnly: 0,
       reverseLookupUnify: 0,
-      smbCredentialId: UNSET_VALUE,
-      snmpCredentialId: UNSET_VALUE,
-      sshCredentialId: UNSET_VALUE,
-      sshElevateCredentialId: UNSET_VALUE,
-      krb5CredentialId: UNSET_VALUE,
+      smbCredentialId: undefined,
+      snmpCredentialId: undefined,
+      sshCredentialId: undefined,
+      sshElevateCredentialId: undefined,
+      krb5CredentialId: undefined,
       targetExcludeSource: 'manual',
       targetSource: 'asset_hosts',
     });

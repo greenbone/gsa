@@ -34,7 +34,8 @@ import {
   TCP_ACK,
   TCP_SYN,
 } from 'gmp/models/target';
-import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
+import {NO_VALUE, parseBoolean, type YesNo} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
@@ -74,14 +75,14 @@ export interface NewCredentialData {
 
 interface TargetDialogValues {
   aliveTests: AliveTest[];
+  esxiCredentialId?: string;
   id?: string;
-  esxiCredentialId: string;
-  krb5CredentialId: string;
+  krb5CredentialId?: string;
   portListId: string;
-  smbCredentialId: string;
-  snmpCredentialId: string;
-  sshCredentialId: string;
-  sshElevateCredentialId: string;
+  smbCredentialId?: string;
+  snmpCredentialId?: string;
+  sshCredentialId?: string;
+  sshElevateCredentialId?: string;
 }
 
 interface TargetDialogDefaultValues {
@@ -129,16 +130,16 @@ interface TargetDialogProps {
   targetExcludeSource?: TargetExcludeSource;
   title?: string;
   onClose?: () => void;
+  onEsxiCredentialChange?: (esxiCredentialId?: string) => void;
+  onKrb5CredentialChange?: (krb5CredentialId?: string) => void;
   onNewCredentialsClick?: (data: NewCredentialData) => void;
   onNewPortListClick?: () => void;
   onPortListChange?: (portListId: string) => void;
-  onSshCredentialChange?: (sshCredentialId: string) => void;
-  onSmbCredentialChange?: (smbCredentialId: string) => void;
-  onEsxiCredentialChange?: (esxiCredentialId: string) => void;
-  onKrb5CredentialChange?: (krb5CredentialId: string) => void;
-  onSnmpCredentialChange?: (snmpCredentialId: string) => void;
-  onSshElevateCredentialChange?: (sshElevateCredentialId: string) => void;
   onSave?: (data: TargetDialogData) => void | Promise<void>;
+  onSmbCredentialChange?: (smbCredentialId?: string) => void;
+  onSnmpCredentialChange?: (snmpCredentialId?: string) => void;
+  onSshCredentialChange?: (sshCredentialId?: string) => void;
+  onSshElevateCredentialChange?: (sshElevateCredentialId?: string) => void;
 }
 
 export const DEFAULT_PORT = 22;
@@ -161,7 +162,7 @@ const TargetDialog = ({
   allowSimultaneousIPs = true,
   comment = '',
   credentials = [],
-  esxiCredentialId = UNSET_VALUE,
+  esxiCredentialId,
   excludeHosts = '',
   hosts = '',
   hostsCount,
@@ -174,24 +175,24 @@ const TargetDialog = ({
   portLists = DEFAULT_PORT_LISTS,
   reverseLookupOnly = NO_VALUE,
   reverseLookupUnify = NO_VALUE,
-  smbCredentialId = UNSET_VALUE,
-  snmpCredentialId = UNSET_VALUE,
-  sshCredentialId = UNSET_VALUE,
-  sshElevateCredentialId = UNSET_VALUE,
-  krb5CredentialId = UNSET_VALUE,
+  smbCredentialId,
+  snmpCredentialId,
+  sshCredentialId,
+  sshElevateCredentialId,
+  krb5CredentialId,
   targetSource = 'manual',
   targetExcludeSource = 'manual',
   title,
   onClose,
-  onNewCredentialsClick,
-  onNewPortListClick,
-  onSave,
-  onPortListChange,
-  onSshCredentialChange,
-  onSmbCredentialChange,
   onEsxiCredentialChange,
   onKrb5CredentialChange,
+  onNewCredentialsClick,
+  onNewPortListClick,
+  onPortListChange,
+  onSave,
+  onSmbCredentialChange,
   onSnmpCredentialChange,
+  onSshCredentialChange,
   onSshElevateCredentialChange,
 }: TargetDialogProps) => {
   const [_] = useTranslation();
@@ -378,29 +379,29 @@ const TargetDialog = ({
       defaultValues={{
         allowSimultaneousIPs,
         comment,
-        name,
-        port,
         excludeHosts,
         hosts,
         hostsCount,
         hostsFilter,
         inUse,
+        name,
+        port,
         reverseLookupOnly,
         reverseLookupUnify,
-        targetSource,
         targetExcludeSource,
+        targetSource,
       }}
       title={title}
       values={{
         aliveTests,
-        id,
-        portListId,
         esxiCredentialId,
+        id,
+        krb5CredentialId,
+        portListId,
         smbCredentialId,
         snmpCredentialId,
         sshCredentialId,
         sshElevateCredentialId,
-        krb5CredentialId,
       }}
       onClose={onClose}
       onSave={onSave}
@@ -605,14 +606,19 @@ const TargetDialog = ({
             {capabilities.mayAccess('credential') && (
               <FormGroup title={_('SSH')}>
                 <Row>
-                  <Select
+                  <Select<string | undefined>
+                    allowDeselect
+                    clearable={
+                      isDefined(state.sshCredentialId) &&
+                      state.sshCredentialId !== UNSET_VALUE
+                    }
                     disabled={inUse}
                     grow="1"
                     items={renderSelectItems(
                       sshCredentials as RenderSelectItemProps[],
-                      UNSET_VALUE,
                     )}
                     name="sshCredentialId"
+                    placeholder={_('Select a Credential')}
                     value={state.sshCredentialId}
                     onChange={onSshCredentialChange}
                   />
@@ -636,53 +642,68 @@ const TargetDialog = ({
                     />
                   )}
                 </Row>
-                {state.sshCredentialId !== UNSET_VALUE && (
-                  <Row>
-                    <InfoIcon
-                      title={_(
-                        'This feature is experimental and may ' +
-                          'not work reliable under all circumstances.',
-                      )}
-                    />
-                    <span>{_('Elevate privileges')}</span>
-                    <Select
-                      disabled={inUse}
-                      grow="1"
-                      items={renderSelectItems(
-                        elevateUpCredentials as RenderSelectItemProps[],
-                        UNSET_VALUE,
-                      )}
-                      name="sshElevateCredentialId"
-                      value={state.sshElevateCredentialId}
-                      onChange={onSshElevateCredentialChange}
-                    />
-                    {!inUse && (
-                      <NewIcon<NewCredentialData>
-                        title={_('Create a new credential')}
-                        value={NEW_SSH_ELEVATE}
-                        onClick={
-                          onNewCredentialsClick as (
-                            value?: NewCredentialData,
-                          ) => void
-                        }
+                {isDefined(state.sshCredentialId) &&
+                  state.sshCredentialId !== UNSET_VALUE && (
+                    <Row>
+                      <InfoIcon
+                        title={_(
+                          'This feature is experimental and may ' +
+                            'not work reliable under all circumstances.',
+                        )}
                       />
-                    )}
-                  </Row>
-                )}
+                      <span>{_('Elevate privileges')}</span>
+                      <Select<string | undefined>
+                        allowDeselect
+                        clearable={
+                          isDefined(state.sshElevateCredentialId) &&
+                          state.sshElevateCredentialId !== UNSET_VALUE
+                        }
+                        disabled={inUse}
+                        grow="1"
+                        items={renderSelectItems(
+                          elevateUpCredentials as RenderSelectItemProps[],
+                        )}
+                        name="sshElevateCredentialId"
+                        placeholder={_('Select a Credential')}
+                        value={state.sshElevateCredentialId}
+                        onChange={onSshElevateCredentialChange}
+                      />
+                      {!inUse && (
+                        <NewIcon<NewCredentialData>
+                          title={_('Create a new credential')}
+                          value={NEW_SSH_ELEVATE}
+                          onClick={
+                            onNewCredentialsClick as (
+                              value?: NewCredentialData,
+                            ) => void
+                          }
+                        />
+                      )}
+                    </Row>
+                  )}
               </FormGroup>
             )}
 
             {enableKrb5 && capabilities.mayAccess('credential') && (
               <FormGroup direction="row" title={_('SMB (Kerberos)')}>
-                <Select
+                <Select<string | undefined>
+                  allowDeselect
+                  clearable={
+                    isDefined(state.krb5CredentialId) &&
+                    state.krb5CredentialId !== UNSET_VALUE
+                  }
                   data-testid="krb5-credential-select"
-                  disabled={inUse || state.smbCredentialId !== UNSET_VALUE}
+                  disabled={
+                    inUse ||
+                    (isDefined(state.smbCredentialId) &&
+                      state.smbCredentialId !== UNSET_VALUE)
+                  }
                   grow="1"
                   items={renderSelectItems(
                     krb5Credentials as RenderSelectItemProps[],
-                    UNSET_VALUE,
                   )}
                   name="krb5CredentialId"
+                  placeholder={_('Select a Credential')}
                   value={state.krb5CredentialId}
                   onChange={onKrb5CredentialChange}
                 />
@@ -702,15 +723,24 @@ const TargetDialog = ({
 
             {capabilities.mayAccess('credential') && (
               <FormGroup direction="row" title={_('SMB (NTLM)')}>
-                <Select
+                <Select<string | undefined>
+                  allowDeselect
+                  clearable={
+                    isDefined(state.smbCredentialId) &&
+                    state.smbCredentialId !== UNSET_VALUE
+                  }
                   data-testid="smb-credential-select"
-                  disabled={inUse || state.krb5CredentialId !== UNSET_VALUE}
+                  disabled={
+                    inUse ||
+                    (isDefined(state.krb5CredentialId) &&
+                      state.krb5CredentialId !== UNSET_VALUE)
+                  }
                   grow="1"
                   items={renderSelectItems(
                     upCredentials as RenderSelectItemProps[],
-                    UNSET_VALUE,
                   )}
                   name="smbCredentialId"
+                  placeholder={_('Select a Credential')}
                   value={state.smbCredentialId}
                   onChange={onSmbCredentialChange}
                 />
@@ -731,14 +761,19 @@ const TargetDialog = ({
 
             {capabilities.mayAccess('credential') && (
               <FormGroup direction="row" title={_('ESXi')}>
-                <Select
+                <Select<string | undefined>
+                  allowDeselect
+                  clearable={
+                    isDefined(state.esxiCredentialId) &&
+                    state.esxiCredentialId !== UNSET_VALUE
+                  }
                   disabled={inUse}
                   grow="1"
                   items={renderSelectItems(
                     upCredentials as RenderSelectItemProps[],
-                    UNSET_VALUE,
                   )}
                   name="esxiCredentialId"
+                  placeholder={_('Select a Credential')}
                   value={state.esxiCredentialId}
                   onChange={onEsxiCredentialChange}
                 />
@@ -759,14 +794,19 @@ const TargetDialog = ({
 
             {capabilities.mayAccess('credential') && (
               <FormGroup direction="row" title={_('SNMP')}>
-                <Select
+                <Select<string | undefined>
+                  allowDeselect
+                  clearable={
+                    isDefined(state.snmpCredentialId) &&
+                    state.snmpCredentialId !== UNSET_VALUE
+                  }
                   disabled={inUse}
                   grow="1"
                   items={renderSelectItems(
                     snmpCredentials as RenderSelectItemProps[],
-                    UNSET_VALUE,
                   )}
                   name="snmpCredentialId"
+                  placeholder={_('Select a Credential')}
                   value={state.snmpCredentialId}
                   onChange={onSnmpCredentialChange}
                 />
