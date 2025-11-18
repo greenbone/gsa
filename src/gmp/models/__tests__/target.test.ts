@@ -17,7 +17,7 @@ describe('Target model tests', () => {
     const target = new Target();
 
     expect(target.alive_tests).toEqual([]);
-    expect(target.allowSimultaneousIPs).toEqual(NO_VALUE);
+    expect(target.allowSimultaneousIPs).toEqual(false);
     expect(target.esxi_credential).toBeUndefined();
     expect(target.exclude_hosts).toEqual([]);
     expect(target.hosts).toEqual([]);
@@ -37,7 +37,7 @@ describe('Target model tests', () => {
     const target = Target.fromElement({});
 
     expect(target.alive_tests).toEqual([]);
-    expect(target.allowSimultaneousIPs).toEqual(NO_VALUE);
+    expect(target.allowSimultaneousIPs).toEqual(false);
     expect(target.esxi_credential).toBeUndefined();
     expect(target.exclude_hosts).toEqual([]);
     expect(target.hosts).toEqual([]);
@@ -179,8 +179,8 @@ describe('Target model tests', () => {
     const target = Target.fromElement({allow_simultaneous_ips: 1});
     const target2 = Target.fromElement({allow_simultaneous_ips: 0});
 
-    expect(target.allowSimultaneousIPs).toEqual(1);
-    expect(target2.allowSimultaneousIPs).toEqual(0);
+    expect(target.allowSimultaneousIPs).toEqual(true);
+    expect(target2.allowSimultaneousIPs).toEqual(false);
   });
 
   test('should parse reverse_lookup_only', () => {

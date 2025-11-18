@@ -9,7 +9,7 @@ import type Http from 'gmp/http/http';
 import type Filter from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import Target, {type AliveTest} from 'gmp/models/target';
-import {type YesNo} from 'gmp/parser';
+import {parseYesNo, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {UNSET_VALUE} from 'web/utils/Render';
 
@@ -18,7 +18,7 @@ export type TargetExcludeSource = 'manual' | 'file';
 
 interface TargetCommandCreateParams {
   aliveTests?: AliveTest[];
-  allowSimultaneousIPs?: YesNo;
+  allowSimultaneousIPs?: boolean;
   comment?: string;
   esxiCredentialId?: string;
   excludeFile?: string;
@@ -77,7 +77,9 @@ class TargetCommand extends EntityCommand<Target> {
         cmd: 'create_target',
         name,
         comment,
-        allow_simultaneous_ips: allowSimultaneousIPs,
+        allow_simultaneous_ips: isDefined(allowSimultaneousIPs)
+          ? parseYesNo(allowSimultaneousIPs)
+          : undefined,
         target_source: targetSource,
         target_exclude_source: targetExcludeSource,
         hosts,
@@ -135,7 +137,9 @@ class TargetCommand extends EntityCommand<Target> {
         cmd: 'save_target',
         target_id: id,
         'alive_tests:': aliveTests,
-        allow_simultaneous_ips: allowSimultaneousIPs,
+        allow_simultaneous_ips: isDefined(allowSimultaneousIPs)
+          ? parseYesNo(allowSimultaneousIPs)
+          : undefined,
         comment,
         esxi_credential_id: esxiCredentialId,
         exclude_hosts: excludeHosts,

@@ -142,9 +142,7 @@ describe('TargetDialog tests', () => {
     const allowSimultaneousIPsInputs = screen.getAllByName(
       'allowSimultaneousIPs',
     );
-    expect(allowSimultaneousIPsInputs[0]).toHaveAttribute('value', '1');
     expect(allowSimultaneousIPsInputs[0]).toBeChecked();
-    expect(allowSimultaneousIPsInputs[1]).toHaveAttribute('value', '0');
     expect(allowSimultaneousIPsInputs[1]).not.toBeChecked();
 
     expect(screen.getDialogContent()).not.toHaveTextContent(
@@ -196,7 +194,7 @@ describe('TargetDialog tests', () => {
     render(
       <TargetDialog
         aliveTests={[SCAN_CONFIG_DEFAULT]}
-        allowSimultaneousIPs={NO_VALUE}
+        allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
         excludeHosts={''}
@@ -260,9 +258,7 @@ describe('TargetDialog tests', () => {
     const allowSimultaneousIPsInputs = screen.getAllByName(
       'allowSimultaneousIPs',
     );
-    expect(allowSimultaneousIPsInputs[0]).toHaveAttribute('value', '1');
     expect(allowSimultaneousIPsInputs[0]).not.toBeChecked();
-    expect(allowSimultaneousIPsInputs[1]).toHaveAttribute('value', '0');
     expect(allowSimultaneousIPsInputs[1]).toBeChecked();
 
     expect(screen.getDialogContent()).not.toHaveTextContent(
@@ -314,7 +310,7 @@ describe('TargetDialog tests', () => {
     render(
       <TargetDialog
         aliveTests={[SCAN_CONFIG_DEFAULT]}
-        allowSimultaneousIPs={NO_VALUE}
+        allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
         excludeHosts=""
@@ -346,9 +342,7 @@ describe('TargetDialog tests', () => {
     const simultaneousIPInput = screen.getAllByName('allowSimultaneousIPs');
     expect(simultaneousIPInput.length).toBe(2);
     expect(simultaneousIPInput[0]).not.toBeChecked();
-    expect(simultaneousIPInput[0]).toHaveAttribute('value', '1');
     expect(simultaneousIPInput[1]).toBeChecked();
-    expect(simultaneousIPInput[1]).toHaveAttribute('value', '0');
 
     fireEvent.click(simultaneousIPInput[0]); // radio button check yes
 
@@ -357,7 +351,7 @@ describe('TargetDialog tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       aliveTests: [SCAN_CONFIG_DEFAULT],
-      allowSimultaneousIPs: YES_VALUE,
+      allowSimultaneousIPs: true,
       comment: 'hello world',
       esxiCredentialId: UNSET_VALUE,
       excludeHosts: '',
@@ -389,7 +383,7 @@ describe('TargetDialog tests', () => {
     render(
       <TargetDialog
         aliveTests={[SCAN_CONFIG_DEFAULT]}
-        allowSimultaneousIPs={NO_VALUE}
+        allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
         excludeHosts=""
@@ -435,7 +429,7 @@ describe('TargetDialog tests', () => {
     render(
       <TargetDialog
         aliveTests={[SCAN_CONFIG_DEFAULT]}
-        allowSimultaneousIPs={NO_VALUE}
+        allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
         excludeHosts=""
@@ -516,7 +510,7 @@ describe('TargetDialog tests', () => {
       render(
         <TargetDialog
           aliveTests={[SCAN_CONFIG_DEFAULT]}
-          allowSimultaneousIPs={NO_VALUE}
+          allowSimultaneousIPs={false}
           comment="hello world"
           credentials={credentials}
           excludeHosts=""
@@ -567,7 +561,7 @@ describe('TargetDialog tests', () => {
     render(
       <TargetDialog
         aliveTests={[SCAN_CONFIG_DEFAULT]}
-        allowSimultaneousIPs={NO_VALUE}
+        allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
         excludeHosts=""
@@ -616,7 +610,7 @@ describe('TargetDialog tests', () => {
     render(
       <TargetDialog
         aliveTests={[SCAN_CONFIG_DEFAULT]}
-        allowSimultaneousIPs={NO_VALUE}
+        allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
         excludeHosts=""
@@ -726,7 +720,7 @@ describe('TargetDialog tests', () => {
     fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
       aliveTests: [SCAN_CONFIG_DEFAULT],
-      allowSimultaneousIPs: YES_VALUE,
+      allowSimultaneousIPs: true,
       comment: '',
       esxiCredentialId: UNSET_VALUE,
       excludeHosts: '',

@@ -90,7 +90,7 @@ describe('TargetComponent tests', () => {
 
     expect(gmp.target.create).toHaveBeenCalledWith({
       aliveTests: [SCAN_CONFIG_DEFAULT],
-      allowSimultaneousIPs: 1,
+      allowSimultaneousIPs: true,
       comment: '',
       esxiCredentialId: '0',
       excludeHosts: '',
@@ -153,7 +153,7 @@ describe('TargetComponent tests', () => {
 
     expect(gmp.target.save).toHaveBeenCalledWith({
       aliveTests: [],
-      allowSimultaneousIPs: 0,
+      allowSimultaneousIPs: false,
       comment: '',
       esxiCredentialId: '0',
       excludeHosts: '',

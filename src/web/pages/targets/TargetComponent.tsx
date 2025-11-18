@@ -115,7 +115,7 @@ const TargetComponent = ({
     SCAN_CONFIG_DEFAULT,
   ]);
   const [allowSimultaneousIPs, setAllowSimultaneousIPs] =
-    useState<YesNo>(YES_VALUE);
+    useState<boolean>(true);
   const [comment, setComment] = useState<string | undefined>(undefined);
   const [esxiCredentialId, setEsxiCredentialId] = useState<string | undefined>(
     undefined,
@@ -233,7 +233,7 @@ const TargetComponent = ({
       setTargetId(entity.id);
     } else {
       setAliveTests([SCAN_CONFIG_DEFAULT]);
-      setAllowSimultaneousIPs(YES_VALUE);
+      setAllowSimultaneousIPs(true);
       setPort(undefined);
       setComment(undefined);
       setName(undefined);
