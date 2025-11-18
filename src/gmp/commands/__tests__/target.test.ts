@@ -22,7 +22,7 @@ describe('TargetCommand tests', () => {
     const fakeHttp = createHttp(response);
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.create({
-      allowSimultaneousIPs: YES_VALUE,
+      allowSimultaneousIPs: true,
       name: 'name',
       comment: 'comment',
       targetSource: 'manual',
@@ -128,7 +128,7 @@ describe('TargetCommand tests', () => {
       const cmd = new TargetCommand(fakeHttp);
       await expect(
         cmd.create({
-          allowSimultaneousIPs: YES_VALUE,
+          allowSimultaneousIPs: true,
           name: 'name',
           comment: 'comment',
           targetSource: 'manual',
@@ -157,7 +157,7 @@ describe('TargetCommand tests', () => {
     const fakeHttp = createHttp(response);
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.create({
-      allowSimultaneousIPs: YES_VALUE,
+      allowSimultaneousIPs: true,
       name: 'name',
       comment: 'comment',
       targetSource: 'manual',
@@ -213,7 +213,7 @@ describe('TargetCommand tests', () => {
     const cmd = new TargetCommand(fakeHttp);
     const resp = await cmd.save({
       id: 'target_id1',
-      allowSimultaneousIPs: YES_VALUE,
+      allowSimultaneousIPs: true,
       name: 'name',
       comment: 'comment',
       targetSource: 'manual',
@@ -323,7 +323,7 @@ describe('TargetCommand tests', () => {
       await expect(
         cmd.save({
           id: 'target_id1',
-          allowSimultaneousIPs: YES_VALUE,
+          allowSimultaneousIPs: true,
           name: 'name',
           comment: 'comment',
           targetSource: 'manual',

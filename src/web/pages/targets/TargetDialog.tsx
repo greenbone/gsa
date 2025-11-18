@@ -85,7 +85,7 @@ interface TargetDialogValues {
 }
 
 interface TargetDialogDefaultValues {
-  allowSimultaneousIPs: YesNo;
+  allowSimultaneousIPs: boolean;
   comment: string;
   excludeHosts: string;
   hosts: string;
@@ -104,7 +104,7 @@ export type TargetDialogData = TargetDialogValues & TargetDialogDefaultValues;
 
 interface TargetDialogProps {
   aliveTests?: AliveTest[];
-  allowSimultaneousIPs?: YesNo;
+  allowSimultaneousIPs?: boolean;
   comment?: string;
   credentials?: Credential[];
   esxiCredentialId?: string;
@@ -158,7 +158,7 @@ const ALIVE_TESTS_ITEMS = ALIVE_TESTS.map(value => ({value, label: value}));
 
 const TargetDialog = ({
   aliveTests: initialAliveTests = [SCAN_CONFIG_DEFAULT],
-  allowSimultaneousIPs = YES_VALUE,
+  allowSimultaneousIPs = true,
   comment = '',
   credentials = [],
   esxiCredentialId = UNSET_VALUE,
@@ -376,6 +376,7 @@ const TargetDialog = ({
   return (
     <SaveDialog<TargetDialogValues, TargetDialogDefaultValues>
       defaultValues={{
+        allowSimultaneousIPs,
         comment,
         name,
         port,
@@ -388,7 +389,6 @@ const TargetDialog = ({
         reverseLookupUnify,
         targetSource,
         targetExcludeSource,
-        allowSimultaneousIPs,
       }}
       title={title}
       values={{
@@ -517,10 +517,13 @@ const TargetDialog = ({
             <FormGroup
               title={_('Allow simultaneous scanning via multiple IPs')}
             >
-              <YesNoRadio
+              <YesNoRadio<boolean>
+                convert={parseBoolean}
                 disabled={inUse}
                 name="allowSimultaneousIPs"
+                noValue={false}
                 value={state.allowSimultaneousIPs}
+                yesValue={true}
                 onChange={onValueChange}
               />
             </FormGroup>

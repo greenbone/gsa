@@ -5,7 +5,14 @@
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import PortList, {type PortListElement} from 'gmp/models/port-list';
-import {parseInt, parseYesNo, parseCsv, type YesNo, NO_VALUE} from 'gmp/parser';
+import {
+  parseInt,
+  parseYesNo,
+  parseCsv,
+  type YesNo,
+  NO_VALUE,
+  parseBoolean,
+} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -36,7 +43,7 @@ interface TargetElement extends ModelElement {
 
 interface TargetProperties extends ModelProperties {
   alive_tests?: AliveTest[];
-  allowSimultaneousIPs?: YesNo;
+  allowSimultaneousIPs?: boolean;
   esxi_credential?: Model;
   exclude_hosts?: string[];
   hosts?: string[];
@@ -80,7 +87,7 @@ class Target extends Model {
   static readonly entityType = 'target';
 
   readonly alive_tests: AliveTest[];
-  readonly allowSimultaneousIPs: YesNo;
+  readonly allowSimultaneousIPs: boolean;
   readonly esxi_credential?: Model;
   readonly exclude_hosts: string[];
   readonly hosts: string[];
@@ -98,7 +105,7 @@ class Target extends Model {
   constructor({
     // eslint-disable-next-line @typescript-eslint/naming-convention
     alive_tests = [],
-    allowSimultaneousIPs = NO_VALUE,
+    allowSimultaneousIPs = false,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     esxi_credential,
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -185,7 +192,9 @@ class Target extends Model {
       );
     }
 
-    ret.allowSimultaneousIPs = parseYesNo(element.allow_simultaneous_ips);
+    ret.allowSimultaneousIPs = isDefined(element.allow_simultaneous_ips)
+      ? parseBoolean(element.allow_simultaneous_ips)
+      : undefined;
 
     return ret;
   }
