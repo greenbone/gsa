@@ -205,7 +205,6 @@ const TargetComponent = ({
     {hostsCount, hostsFilter}: OpenTargetDialogData = {},
   ) => {
     if (isDefined(entity)) {
-      // @ts-expect-error
       setPort(entity?.ssh_credential?.port);
       setAliveTests(entity.alive_tests);
       setAllowSimultaneousIPs(entity.allowSimultaneousIPs);

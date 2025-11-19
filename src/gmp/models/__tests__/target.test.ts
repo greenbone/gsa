@@ -103,12 +103,19 @@ describe('Target model tests', () => {
     const target1 = Target.fromElement({ssh_credential: {_id: '123'}});
     const target2 = Target.fromElement({ssh_credential: {_id: ''}});
     const target3 = Target.fromElement({});
+    const target4 = Target.fromElement({
+      ssh_credential: {_id: '456', port: 2222},
+    });
 
     expect(target1.ssh_credential).toBeInstanceOf(Model);
     expect(target1.ssh_credential?.entityType).toEqual('credential');
     expect(target1.ssh_credential?.id).toEqual('123');
     expect(target2.ssh_credential).toBeUndefined();
     expect(target3.ssh_credential).toBeUndefined();
+    expect(target4.ssh_credential).toBeInstanceOf(Model);
+    expect(target4.ssh_credential?.entityType).toEqual('credential');
+    expect(target4.ssh_credential?.id).toEqual('456');
+    expect(target4.ssh_credential?.port).toEqual(2222);
   });
 
   test('should parse ssh elevate credentials', () => {
