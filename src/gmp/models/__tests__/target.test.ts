@@ -177,7 +177,7 @@ describe('Target model tests', () => {
   });
 
   test('should parse max_hosts', () => {
-    const target = Target.fromElement({max_hosts: '42'});
+    const target = Target.fromElement({max_hosts: 42});
 
     expect(target.max_hosts).toEqual(42);
   });

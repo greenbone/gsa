@@ -32,7 +32,7 @@ interface TargetElement extends ModelElement {
   exclude_hosts?: string;
   hosts?: string;
   krb5_credential?: ModelElement;
-  max_hosts?: string;
+  max_hosts?: number;
   port_list?: PortListElement;
   reverse_lookup_only?: YesNo;
   reverse_lookup_unify?: YesNo;
