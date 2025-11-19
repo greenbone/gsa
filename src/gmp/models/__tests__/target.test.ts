@@ -10,46 +10,46 @@ import Target, {ARP_PING, ICMP_PING} from 'gmp/models/target';
 import {testModel} from 'gmp/models/testing';
 import {NO_VALUE} from 'gmp/parser';
 
-testModel(Target, 'target');
-
 describe('Target model tests', () => {
+  testModel(Target, 'target');
+
   test('should use defaults', () => {
     const target = new Target();
 
-    expect(target.alive_tests).toEqual([]);
+    expect(target.aliveTests).toEqual([]);
     expect(target.allowSimultaneousIPs).toEqual(false);
-    expect(target.esxi_credential).toBeUndefined();
-    expect(target.exclude_hosts).toEqual([]);
+    expect(target.esxiCredential).toBeUndefined();
+    expect(target.excludeHosts).toEqual([]);
     expect(target.hosts).toEqual([]);
-    expect(target.krb5_credential).toBeUndefined();
-    expect(target.max_hosts).toEqual(0);
-    expect(target.port_list).toBeUndefined();
-    expect(target.reverse_lookup_only).toEqual(NO_VALUE);
-    expect(target.reverse_lookup_unify).toEqual(NO_VALUE);
-    expect(target.smb_credential).toBeUndefined();
-    expect(target.snmp_credential).toBeUndefined();
-    expect(target.ssh_credential).toBeUndefined();
-    expect(target.ssh_elevate_credential).toBeUndefined();
+    expect(target.krb5Credential).toBeUndefined();
+    expect(target.maxHosts).toEqual(0);
+    expect(target.portList).toBeUndefined();
+    expect(target.reverseLookupOnly).toEqual(NO_VALUE);
+    expect(target.reverseLookupUnify).toEqual(NO_VALUE);
+    expect(target.smbCredential).toBeUndefined();
+    expect(target.snmpCredential).toBeUndefined();
+    expect(target.sshCredential).toBeUndefined();
+    expect(target.sshElevateCredential).toBeUndefined();
     expect(target.tasks).toEqual([]);
   });
 
   test('should parse defaults', () => {
     const target = Target.fromElement({});
 
-    expect(target.alive_tests).toEqual([]);
+    expect(target.aliveTests).toEqual([]);
     expect(target.allowSimultaneousIPs).toEqual(false);
-    expect(target.esxi_credential).toBeUndefined();
-    expect(target.exclude_hosts).toEqual([]);
+    expect(target.esxiCredential).toBeUndefined();
+    expect(target.excludeHosts).toEqual([]);
     expect(target.hosts).toEqual([]);
-    expect(target.krb5_credential).toBeUndefined();
-    expect(target.max_hosts).toEqual(0);
-    expect(target.port_list).toBeUndefined();
-    expect(target.reverse_lookup_only).toEqual(NO_VALUE);
-    expect(target.reverse_lookup_unify).toEqual(NO_VALUE);
-    expect(target.smb_credential).toBeUndefined();
-    expect(target.snmp_credential).toBeUndefined();
-    expect(target.ssh_credential).toBeUndefined();
-    expect(target.ssh_elevate_credential).toBeUndefined();
+    expect(target.krb5Credential).toBeUndefined();
+    expect(target.maxHosts).toEqual(0);
+    expect(target.portList).toBeUndefined();
+    expect(target.reverseLookupOnly).toEqual(NO_VALUE);
+    expect(target.reverseLookupUnify).toEqual(NO_VALUE);
+    expect(target.smbCredential).toBeUndefined();
+    expect(target.snmpCredential).toBeUndefined();
+    expect(target.sshCredential).toBeUndefined();
+    expect(target.sshElevateCredential).toBeUndefined();
     expect(target.tasks).toEqual([]);
   });
 
@@ -68,11 +68,11 @@ describe('Target model tests', () => {
     const target2 = Target.fromElement(elem2);
     const target3 = Target.fromElement({});
 
-    expect(target1.port_list).toBeInstanceOf(PortList);
-    expect(target1.port_list?.entityType).toEqual('portlist');
-    expect(target1.port_list?.id).toEqual('123');
-    expect(target2.port_list).toBeUndefined();
-    expect(target3.port_list).toBeUndefined();
+    expect(target1.portList).toBeInstanceOf(PortList);
+    expect(target1.portList?.entityType).toEqual('portlist');
+    expect(target1.portList?.id).toEqual('123');
+    expect(target2.portList).toBeUndefined();
+    expect(target3.portList).toBeUndefined();
   });
 
   test('should parse smb credentials', () => {
@@ -80,11 +80,11 @@ describe('Target model tests', () => {
     const target2 = Target.fromElement({smb_credential: {_id: ''}});
     const target3 = Target.fromElement({});
 
-    expect(target1.smb_credential).toBeInstanceOf(Model);
-    expect(target1.smb_credential?.entityType).toEqual('credential');
-    expect(target1.smb_credential?.id).toEqual('123');
-    expect(target2.smb_credential).toBeUndefined();
-    expect(target3.smb_credential).toBeUndefined();
+    expect(target1.smbCredential).toBeInstanceOf(Model);
+    expect(target1.smbCredential?.entityType).toEqual('credential');
+    expect(target1.smbCredential?.id).toEqual('123');
+    expect(target2.smbCredential).toBeUndefined();
+    expect(target3.smbCredential).toBeUndefined();
   });
 
   test('should parse snmp credentials', () => {
@@ -92,11 +92,11 @@ describe('Target model tests', () => {
     const target2 = Target.fromElement({snmp_credential: {_id: ''}});
     const target3 = Target.fromElement({});
 
-    expect(target1.snmp_credential).toBeInstanceOf(Model);
-    expect(target1.snmp_credential?.entityType).toEqual('credential');
-    expect(target1.snmp_credential?.id).toEqual('123');
-    expect(target2.snmp_credential).toBeUndefined();
-    expect(target3.snmp_credential).toBeUndefined();
+    expect(target1.snmpCredential).toBeInstanceOf(Model);
+    expect(target1.snmpCredential?.entityType).toEqual('credential');
+    expect(target1.snmpCredential?.id).toEqual('123');
+    expect(target2.snmpCredential).toBeUndefined();
+    expect(target3.snmpCredential).toBeUndefined();
   });
 
   test('should parse ssh credentials', () => {
@@ -107,15 +107,15 @@ describe('Target model tests', () => {
       ssh_credential: {_id: '456', port: 2222},
     });
 
-    expect(target1.ssh_credential).toBeInstanceOf(Model);
-    expect(target1.ssh_credential?.entityType).toEqual('credential');
-    expect(target1.ssh_credential?.id).toEqual('123');
-    expect(target2.ssh_credential).toBeUndefined();
-    expect(target3.ssh_credential).toBeUndefined();
-    expect(target4.ssh_credential).toBeInstanceOf(Model);
-    expect(target4.ssh_credential?.entityType).toEqual('credential');
-    expect(target4.ssh_credential?.id).toEqual('456');
-    expect(target4.ssh_credential?.port).toEqual(2222);
+    expect(target1.sshCredential).toBeInstanceOf(Model);
+    expect(target1.sshCredential?.entityType).toEqual('credential');
+    expect(target1.sshCredential?.id).toEqual('123');
+    expect(target2.sshCredential).toBeUndefined();
+    expect(target3.sshCredential).toBeUndefined();
+    expect(target4.sshCredential).toBeInstanceOf(Model);
+    expect(target4.sshCredential?.entityType).toEqual('credential');
+    expect(target4.sshCredential?.id).toEqual('456');
+    expect(target4.sshCredential?.port).toEqual(2222);
   });
 
   test('should parse ssh elevate credentials', () => {
@@ -123,11 +123,11 @@ describe('Target model tests', () => {
     const target2 = Target.fromElement({ssh_elevate_credential: {_id: ''}});
     const target3 = Target.fromElement({});
 
-    expect(target1.ssh_elevate_credential).toBeInstanceOf(Model);
-    expect(target1.ssh_elevate_credential?.entityType).toEqual('credential');
-    expect(target1.ssh_elevate_credential?.id).toEqual('123');
-    expect(target2.ssh_elevate_credential).toBeUndefined();
-    expect(target3.ssh_elevate_credential).toBeUndefined();
+    expect(target1.sshElevateCredential).toBeInstanceOf(Model);
+    expect(target1.sshElevateCredential?.entityType).toEqual('credential');
+    expect(target1.sshElevateCredential?.id).toEqual('123');
+    expect(target2.sshElevateCredential).toBeUndefined();
+    expect(target3.sshElevateCredential).toBeUndefined();
   });
 
   test('should parse esxi credentials', () => {
@@ -135,11 +135,11 @@ describe('Target model tests', () => {
     const target2 = Target.fromElement({esxi_credential: {_id: ''}});
     const target3 = Target.fromElement({});
 
-    expect(target1.esxi_credential).toBeInstanceOf(Model);
-    expect(target1.esxi_credential?.entityType).toEqual('credential');
-    expect(target1.esxi_credential?.id).toEqual('123');
-    expect(target2.esxi_credential).toBeUndefined();
-    expect(target3.esxi_credential).toBeUndefined();
+    expect(target1.esxiCredential).toBeInstanceOf(Model);
+    expect(target1.esxiCredential?.entityType).toEqual('credential');
+    expect(target1.esxiCredential?.id).toEqual('123');
+    expect(target2.esxiCredential).toBeUndefined();
+    expect(target3.esxiCredential).toBeUndefined();
   });
 
   test('should parse krb5 credentials', () => {
@@ -147,11 +147,11 @@ describe('Target model tests', () => {
     const target2 = Target.fromElement({krb5_credential: {_id: ''}});
     const target3 = Target.fromElement({});
 
-    expect(target1.krb5_credential).toBeInstanceOf(Model);
-    expect(target1.krb5_credential?.entityType).toEqual('credential');
-    expect(target1.krb5_credential?.id).toEqual('123');
-    expect(target2.krb5_credential).toBeUndefined();
-    expect(target3.krb5_credential).toBeUndefined();
+    expect(target1.krb5Credential).toBeInstanceOf(Model);
+    expect(target1.krb5Credential?.entityType).toEqual('credential');
+    expect(target1.krb5Credential?.id).toEqual('123');
+    expect(target2.krb5Credential).toBeUndefined();
+    expect(target3.krb5Credential).toBeUndefined();
   });
 
   test('should parse hosts or return empty array', () => {
@@ -172,14 +172,14 @@ describe('Target model tests', () => {
     const target1 = Target.fromElement(elem);
     const target2 = Target.fromElement({exclude_hosts: ''});
 
-    expect(target1.exclude_hosts).toEqual(['123.456.789.42', '987.654.321.1']);
-    expect(target2.exclude_hosts).toEqual([]);
+    expect(target1.excludeHosts).toEqual(['123.456.789.42', '987.654.321.1']);
+    expect(target2.excludeHosts).toEqual([]);
   });
 
   test('should parse max_hosts', () => {
     const target = Target.fromElement({max_hosts: 42});
 
-    expect(target.max_hosts).toEqual(42);
+    expect(target.maxHosts).toEqual(42);
   });
 
   test('should parse allowSimultaneousIps', () => {
@@ -193,13 +193,13 @@ describe('Target model tests', () => {
   test('should parse reverse_lookup_only', () => {
     const target = Target.fromElement({reverse_lookup_only: 0});
 
-    expect(target.reverse_lookup_only).toEqual(0);
+    expect(target.reverseLookupOnly).toEqual(0);
   });
 
   test('should parse reverse_lookup_unify', () => {
     const target = Target.fromElement({reverse_lookup_unify: 1});
 
-    expect(target.reverse_lookup_unify).toEqual(1);
+    expect(target.reverseLookupUnify).toEqual(1);
   });
 
   test('should parse tasks', () => {
@@ -233,17 +233,17 @@ describe('Target model tests', () => {
 
   test('should parse alive_tests', () => {
     const target = Target.fromElement({alive_tests: {alive_test: ICMP_PING}});
-    expect(target.alive_tests).toEqual([ICMP_PING]);
+    expect(target.aliveTests).toEqual([ICMP_PING]);
 
     const target1 = Target.fromElement({
       alive_tests: {alive_test: [ICMP_PING, ARP_PING]},
     });
-    expect(target1.alive_tests).toEqual([ICMP_PING, ARP_PING]);
+    expect(target1.aliveTests).toEqual([ICMP_PING, ARP_PING]);
 
     const target2 = Target.fromElement({alive_tests: {}});
-    expect(target2.alive_tests).toEqual([]);
+    expect(target2.aliveTests).toEqual([]);
 
     const target3 = Target.fromElement({alive_tests: {alive_test: []}});
-    expect(target3.alive_tests).toEqual([]);
+    expect(target3.aliveTests).toEqual([]);
   });
 });

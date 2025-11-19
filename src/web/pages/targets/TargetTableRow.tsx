@@ -69,49 +69,41 @@ const TargetTableRow = ({
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
-      <TableData>{entity.max_hosts}</TableData>
+      <TableData>{entity.maxHosts}</TableData>
       <TableData>
-        {isDefined(entity.port_list) && (
+        {isDefined(entity.portList) && (
           <span>
             <DetailsLink
-              id={entity.port_list.id as string}
+              id={entity.portList.id as string}
               textOnly={!links}
               type="portlist"
             >
-              {entity.port_list.name}
+              {entity.portList.name}
             </DetailsLink>
           </span>
         )}
       </TableData>
       <TableData align="center" flex="column">
-        <Cred credential={entity.ssh_credential} links={links} title={'SSH'} />
+        <Cred credential={entity.sshCredential} links={links} title={'SSH'} />
         <Cred
-          credential={entity.ssh_elevate_credential}
+          credential={entity.sshElevateCredential}
           links={links}
           title={_('SSH Elevate')}
         />
         {isKerberosEnabled && (
           <Cred
-            credential={entity.krb5_credential}
+            credential={entity.krb5Credential}
             links={links}
             title={'SMB (Kerberos)'}
           />
         )}
         <Cred
-          credential={entity.smb_credential}
+          credential={entity.smbCredential}
           links={links}
           title={'SMB (NTLM)'}
         />
-        <Cred
-          credential={entity.esxi_credential}
-          links={links}
-          title={'ESXi'}
-        />
-        <Cred
-          credential={entity.snmp_credential}
-          links={links}
-          title={'SNMP'}
-        />
+        <Cred credential={entity.esxiCredential} links={links} title={'ESXi'} />
+        <Cred credential={entity.snmpCredential} links={links} title={'SNMP'} />
         {features.featureEnabled('ENABLE_CREDENTIAL_STORES') && (
           <Cred
             // @ts-expect-error

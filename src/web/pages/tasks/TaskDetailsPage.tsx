@@ -7,10 +7,10 @@ import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
 import Filter from 'gmp/models/filter';
+import type Model from 'gmp/models/model';
 import type Note from 'gmp/models/note';
 import type Override from 'gmp/models/override';
 import type Permission from 'gmp/models/permission';
-import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 import {type default as Task, USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import {TaskIcon} from 'web/components/icon';
@@ -45,6 +45,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import {TARGET_RESOURCE_PROPERTIES_NAMES} from 'web/pages/targets/TargetComponent';
 import TaskDetailsPageToolBarIcons from 'web/pages/tasks/icons/TaskDetailsPageToolBarIcons';
 import TaskComponent from 'web/pages/tasks/TaskComponent';
 import TaskDetails from 'web/pages/tasks/TaskDetails';
@@ -267,19 +268,20 @@ export const TaskPermissions = withComponentDefaults<
     },
     ({entity, gmp}: {entity: Task; gmp: Gmp}) => {
       if (isDefined(entity.target)) {
-        // @ts-expect-error
-        return gmp.target.get(entity.target).then(response => {
-          const target = response.data;
-          const resources = [target];
+        return gmp.target
+          .get({id: entity.target.id as string})
+          .then(response => {
+            const target = response.data;
+            const resources: Model[] = [target];
 
-          for (const name of ['port_list', ...TARGET_CREDENTIAL_NAMES]) {
-            const cred = target[name];
-            if (isDefined(cred)) {
-              resources.push(cred);
+            for (const name of TARGET_RESOURCE_PROPERTIES_NAMES) {
+              const cred = target[name];
+              if (isDefined(cred)) {
+                resources.push(cred);
+              }
             }
-          }
-          return resources;
-        });
+            return resources;
+          });
       }
       return Promise.resolve([]);
     },
