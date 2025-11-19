@@ -7,10 +7,7 @@ import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
 import type Model from 'gmp/models/model';
 import type Permission from 'gmp/models/permission';
-import {
-  type default as Target,
-  TARGET_CREDENTIAL_NAMES,
-} from 'gmp/models/target';
+import type Target from 'gmp/models/target';
 import {isDefined} from 'gmp/utils/identity';
 import {TargetIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
@@ -36,7 +33,9 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import TargetComponent from 'web/pages/targets/TargetComponent';
+import TargetComponent, {
+  TARGET_RESOURCE_PROPERTIES_NAMES,
+} from 'web/pages/targets/TargetComponent';
 import TargetDetails from 'web/pages/targets/TargetDetails';
 import TargetDetailsToolBarIcons from 'web/pages/targets/TargetDetailsTooBarIcons';
 import {
@@ -61,7 +60,7 @@ interface TargetDetailsPageProps {
 const relatedResourcesLoaders = [
   ({entity}: EntityProps) => {
     const resources: Model[] = [];
-    for (const name of ['port_list', ...TARGET_CREDENTIAL_NAMES]) {
+    for (const name of TARGET_RESOURCE_PROPERTIES_NAMES) {
       const cred = entity[name];
       if (isDefined(cred)) {
         resources.push(cred);

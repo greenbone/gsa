@@ -50,20 +50,20 @@ interface SSHCredentialProperties extends ModelProperties {
 }
 
 interface TargetProperties extends ModelProperties {
-  alive_tests?: AliveTest[];
+  aliveTests?: AliveTest[];
   allowSimultaneousIPs?: boolean;
-  esxi_credential?: Model;
-  exclude_hosts?: string[];
+  esxiCredential?: Model;
+  excludeHosts?: string[];
   hosts?: string[];
-  krb5_credential?: Model;
-  max_hosts?: number;
-  port_list?: PortList;
-  reverse_lookup_only?: YesNo;
-  reverse_lookup_unify?: YesNo;
-  smb_credential?: Model;
-  snmp_credential?: Model;
-  ssh_credential?: SSHCredential;
-  ssh_elevate_credential?: Model;
+  krb5Credential?: Model;
+  maxHosts?: number;
+  portList?: PortList;
+  reverseLookupOnly?: YesNo;
+  reverseLookupUnify?: YesNo;
+  smbCredential?: Model;
+  snmpCredential?: Model;
+  sshCredential?: SSHCredential;
+  sshElevateCredential?: Model;
   tasks?: Model[];
 }
 
@@ -74,14 +74,6 @@ export type AliveTest =
   | typeof SCAN_CONFIG_DEFAULT
   | typeof TCP_ACK
   | typeof TCP_SYN;
-
-export const TARGET_CREDENTIAL_NAMES = [
-  'smb_credential',
-  'snmp_credential',
-  'esxi_credential',
-  'ssh_elevate_credential',
-  'krb5_credential',
-];
 
 export const SCAN_CONFIG_DEFAULT = 'Scan Config Default';
 export const ICMP_PING = 'ICMP Ping';
@@ -114,68 +106,56 @@ class SSHCredential extends Model {
 class Target extends Model {
   static readonly entityType = 'target';
 
-  readonly alive_tests: AliveTest[];
+  readonly aliveTests: AliveTest[];
   readonly allowSimultaneousIPs: boolean;
-  readonly esxi_credential?: Model;
-  readonly exclude_hosts: string[];
+  readonly esxiCredential?: Model;
+  readonly excludeHosts: string[];
   readonly hosts: string[];
-  readonly krb5_credential?: Model;
-  readonly max_hosts: number;
-  readonly port_list?: PortList;
-  readonly reverse_lookup_only: YesNo;
-  readonly reverse_lookup_unify: YesNo;
-  readonly smb_credential?: Model;
-  readonly snmp_credential?: Model;
-  readonly ssh_credential?: SSHCredential;
-  readonly ssh_elevate_credential?: Model;
+  readonly krb5Credential?: Model;
+  readonly maxHosts: number;
+  readonly portList?: PortList;
+  readonly reverseLookupOnly: YesNo;
+  readonly reverseLookupUnify: YesNo;
+  readonly smbCredential?: Model;
+  readonly snmpCredential?: Model;
+  readonly sshCredential?: SSHCredential;
+  readonly sshElevateCredential?: Model;
   readonly tasks?: Model[];
 
   constructor({
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    alive_tests = [],
+    aliveTests = [],
     allowSimultaneousIPs = false,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    esxi_credential,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    exclude_hosts = [],
+    esxiCredential,
+    excludeHosts = [],
     hosts = [],
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    krb5_credential,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    max_hosts = 0,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_list,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    reverse_lookup_only = NO_VALUE,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    reverse_lookup_unify = NO_VALUE,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    smb_credential,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    snmp_credential,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    ssh_credential,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    ssh_elevate_credential,
+    krb5Credential,
+    maxHosts = 0,
+    portList,
+    reverseLookupOnly = NO_VALUE,
+    reverseLookupUnify = NO_VALUE,
+    smbCredential,
+    snmpCredential,
+    sshCredential,
+    sshElevateCredential,
     tasks = [],
     ...properties
   }: TargetProperties = {}) {
     super(properties);
 
-    this.alive_tests = alive_tests;
+    this.aliveTests = aliveTests;
     this.allowSimultaneousIPs = allowSimultaneousIPs;
-    this.esxi_credential = esxi_credential;
-    this.exclude_hosts = exclude_hosts;
+    this.esxiCredential = esxiCredential;
+    this.excludeHosts = excludeHosts;
     this.hosts = hosts;
-    this.krb5_credential = krb5_credential;
-    this.max_hosts = max_hosts;
-    this.port_list = port_list;
-    this.reverse_lookup_only = reverse_lookup_only;
-    this.reverse_lookup_unify = reverse_lookup_unify;
-    this.smb_credential = smb_credential;
-    this.snmp_credential = snmp_credential;
-    this.ssh_credential = ssh_credential;
-    this.ssh_elevate_credential = ssh_elevate_credential;
+    this.krb5Credential = krb5Credential;
+    this.maxHosts = maxHosts;
+    this.portList = portList;
+    this.reverseLookupOnly = reverseLookupOnly;
+    this.reverseLookupUnify = reverseLookupUnify;
+    this.smbCredential = smbCredential;
+    this.snmpCredential = snmpCredential;
+    this.sshCredential = sshCredential;
+    this.sshElevateCredential = sshElevateCredential;
     this.tasks = tasks;
   }
 
@@ -187,12 +167,12 @@ class Target extends Model {
     const ret = super.parseElement(element) as TargetProperties;
 
     if (isDefined(element.port_list) && !isEmpty(element.port_list._id)) {
-      ret.port_list = PortList.fromElement(element.port_list);
+      ret.portList = PortList.fromElement(element.port_list);
     } else {
-      delete ret.port_list;
+      delete ret.portList;
     }
 
-    ret.alive_tests = map(
+    ret.aliveTests = map(
       element.alive_tests?.alive_test,
       aliveTest => aliveTest as AliveTest,
     );
@@ -201,27 +181,73 @@ class Target extends Model {
       isDefined(element.ssh_credential) &&
       !isEmpty(element.ssh_credential._id)
     ) {
-      ret.ssh_credential = SSHCredential.fromElement(element.ssh_credential);
+      ret.sshCredential = SSHCredential.fromElement(element.ssh_credential);
     } else {
-      delete ret.ssh_credential;
+      delete ret.sshCredential;
     }
-
-    for (const name of TARGET_CREDENTIAL_NAMES) {
-      const cred = ret[name];
-      if (isDefined(cred) && !isEmpty(cred._id)) {
-        ret[name] = Model.fromElement(cred, 'credential');
-      } else {
-        delete ret[name];
-      }
+    if (
+      isDefined(element.esxi_credential) &&
+      !isEmpty(element.esxi_credential._id)
+    ) {
+      ret.esxiCredential = Model.fromElement(
+        element.esxi_credential,
+        'credential',
+      );
+    } else {
+      delete ret.esxiCredential;
+    }
+    if (
+      isDefined(element.smb_credential) &&
+      !isEmpty(element.smb_credential._id)
+    ) {
+      ret.smbCredential = Model.fromElement(
+        element.smb_credential,
+        'credential',
+      );
+    } else {
+      delete ret.smbCredential;
+    }
+    if (
+      isDefined(element.snmp_credential) &&
+      !isEmpty(element.snmp_credential._id)
+    ) {
+      ret.snmpCredential = Model.fromElement(
+        element.snmp_credential,
+        'credential',
+      );
+    } else {
+      delete ret.snmpCredential;
+    }
+    if (
+      isDefined(element.ssh_elevate_credential) &&
+      !isEmpty(element.ssh_elevate_credential._id)
+    ) {
+      ret.sshElevateCredential = Model.fromElement(
+        element.ssh_elevate_credential,
+        'credential',
+      );
+    } else {
+      delete ret.sshElevateCredential;
+    }
+    if (
+      isDefined(element.krb5_credential) &&
+      !isEmpty(element.krb5_credential._id)
+    ) {
+      ret.krb5Credential = Model.fromElement(
+        element.krb5_credential,
+        'credential',
+      );
+    } else {
+      delete ret.krb5Credential;
     }
 
     ret.hosts = parseCsv(element.hosts);
-    ret.exclude_hosts = parseCsv(element.exclude_hosts);
+    ret.excludeHosts = parseCsv(element.exclude_hosts);
 
-    ret.max_hosts = parseInt(element.max_hosts);
+    ret.maxHosts = parseInt(element.max_hosts);
 
-    ret.reverse_lookup_only = parseYesNo(element.reverse_lookup_only);
-    ret.reverse_lookup_unify = parseYesNo(element.reverse_lookup_unify);
+    ret.reverseLookupOnly = parseYesNo(element.reverse_lookup_only);
+    ret.reverseLookupUnify = parseYesNo(element.reverse_lookup_unify);
 
     if (isDefined(element.tasks)) {
       ret.tasks = map(element.tasks.task, task =>
