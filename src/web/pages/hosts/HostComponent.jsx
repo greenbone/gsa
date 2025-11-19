@@ -66,7 +66,7 @@ const HostComponent = ({
   };
 
   const openCreateTargetDialog = host => {
-    _openTargetDialog(1, 'uuid=' + host.id);
+    _openTargetDialog(1, 'uuid=' + host.id, `Target for host ${host.name}`);
   };
 
   const openCreateTargetSelectionDialog = data => {
@@ -89,11 +89,12 @@ const HostComponent = ({
     _openTargetDialog(size, filterString);
   };
 
-  const _openTargetDialog = (count, filterString) => {
+  const _openTargetDialog = (count, filterString, name) => {
     createtarget({
       targetSource: 'asset_hosts',
       hostsCount: count,
       hostsFilter: filterString,
+      name,
     });
   };
 

@@ -53,6 +53,8 @@ import {UNSET_VALUE} from 'web/utils/Render';
 interface OpenTargetDialogData {
   hostsCount?: number;
   hostsFilter?: Filter;
+  targetSource?: TargetSource;
+  name?: string;
 }
 
 interface TargetComponentRenderProps {
@@ -202,7 +204,7 @@ const TargetComponent = ({
 
   const openTargetDialog = async (
     entity?: Target,
-    {hostsCount, hostsFilter}: OpenTargetDialogData = {},
+    {hostsCount, hostsFilter, targetSource, name}: OpenTargetDialogData = {},
   ) => {
     if (isDefined(entity)) {
       setPort(entity?.ssh_credential?.port);
@@ -231,7 +233,7 @@ const TargetComponent = ({
       setAllowSimultaneousIPs(true);
       setPort(undefined);
       setComment(undefined);
-      setName(undefined);
+      setName(name);
       setTargetTitle(_('New Target'));
       setEsxiCredentialId(undefined);
       setKrb5CredentialId(undefined);
@@ -245,7 +247,7 @@ const TargetComponent = ({
       setHosts(undefined);
       setReverseLookupOnly(undefined);
       setReverseLookupUnify(undefined);
-      setTargetSource(undefined);
+      setTargetSource(targetSource);
       setTargetExcludeSource(undefined);
       setTargetId(undefined);
     }
