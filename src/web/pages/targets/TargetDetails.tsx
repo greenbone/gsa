@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Target from 'gmp/models/target';
 import {isDefined} from 'gmp/utils/identity';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
@@ -14,16 +14,20 @@ import TableCol from 'web/components/table/TableCol';
 import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-import withCapabilities from 'web/utils/withCapabilities';
+
+interface TargetDetailsProps {
+  entity: Target;
+}
 
 const MAX_HOSTS_LISTINGS = 70;
 
-const TargetDetails = ({capabilities, entity}) => {
+const TargetDetails = ({entity}: TargetDetailsProps) => {
   const [_] = useTranslation();
+  const capabilities = useCapabilities();
   const {
     alive_tests,
     esxi_credential,
@@ -114,8 +118,8 @@ const TargetDetails = ({capabilities, entity}) => {
               <TableData>{_('Port List')}</TableData>
               <TableData>
                 <span>
-                  <DetailsLink id={port_list.id} type="portlist">
-                    {port_list.name}
+                  <DetailsLink id={port_list?.id as string} type="portlist">
+                    {port_list?.name}
                   </DetailsLink>
                 </span>
               </TableData>
@@ -123,7 +127,7 @@ const TargetDetails = ({capabilities, entity}) => {
           </TableBody>
         </InfoTable>
       </DetailsBlock>
-      {capabilities.mayAccess('credentials') &&
+      {capabilities.mayAccess('credential') &&
         (isDefined(ssh_credential) ||
           isDefined(snmp_credential) ||
           isDefined(smb_credential) ||
@@ -137,11 +141,16 @@ const TargetDetails = ({capabilities, entity}) => {
                     <TableData>{_('SSH')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={ssh_credential.id} type="credential">
+                        <DetailsLink
+                          id={ssh_credential.id as string}
+                          type="credential"
+                        >
                           {ssh_credential.name}
                         </DetailsLink>
                       </span>
-                      {_(' on Port {{port}}', {port: ssh_credential.port})}
+                      {_(' on Port {{port}}', {
+                        port: String(ssh_credential.port ?? ''),
+                      })}
                     </TableData>
                   </TableRow>
                 )}
@@ -154,7 +163,7 @@ const TargetDetails = ({capabilities, entity}) => {
                         <span>
                           {_('SSH elevate credential ')}
                           <DetailsLink
-                            id={ssh_elevate_credential.id}
+                            id={ssh_elevate_credential.id as string}
                             type="credential"
                           >
                             {ssh_elevate_credential.name}
@@ -169,7 +178,10 @@ const TargetDetails = ({capabilities, entity}) => {
                     <TableData>{_('SMB (Kerberos)')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={krb5Credential.id} type="credential">
+                        <DetailsLink
+                          id={krb5Credential.id as string}
+                          type="credential"
+                        >
                           {krb5Credential.name}
                         </DetailsLink>
                       </span>
@@ -182,7 +194,10 @@ const TargetDetails = ({capabilities, entity}) => {
                     <TableData>{_('SMB (NTLM)')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={smb_credential.id} type="credential">
+                        <DetailsLink
+                          id={smb_credential.id as string}
+                          type="credential"
+                        >
                           {smb_credential.name}
                         </DetailsLink>
                       </span>
@@ -195,7 +210,10 @@ const TargetDetails = ({capabilities, entity}) => {
                     <TableData>{_('ESXi')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={esxi_credential.id} type="credential">
+                        <DetailsLink
+                          id={esxi_credential.id as string}
+                          type="credential"
+                        >
                           {esxi_credential.name}
                         </DetailsLink>
                       </span>
@@ -208,7 +226,10 @@ const TargetDetails = ({capabilities, entity}) => {
                     <TableData>{_('SNMP')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={snmp_credential.id} type="credential">
+                        <DetailsLink
+                          id={snmp_credential.id as string}
+                          type="credential"
+                        >
                           {snmp_credential.name}
                         </DetailsLink>
                       </span>
@@ -229,7 +250,7 @@ const TargetDetails = ({capabilities, entity}) => {
             {tasks.map(task => {
               return (
                 <span key={task.id}>
-                  <DetailsLink id={task.id} type="task">
+                  <DetailsLink id={task.id as string} type="task">
                     {task.name}
                   </DetailsLink>
                 </span>
@@ -242,9 +263,4 @@ const TargetDetails = ({capabilities, entity}) => {
   );
 };
 
-TargetDetails.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  entity: PropTypes.model.isRequired,
-};
-
-export default withCapabilities(TargetDetails);
+export default TargetDetails;

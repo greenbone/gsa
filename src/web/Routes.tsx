@@ -145,7 +145,9 @@ const SchedulesPage = lazy(() => import('web/pages/schedules/ListPage'));
 const StartPage = lazy(() => import('web/pages/start/StartPage'));
 const TagDetailsPage = lazy(() => import('web/pages/tags/DetailsPage'));
 const TagsPage = lazy(() => import('web/pages/tags/ListPage'));
-const TargetDetailsPage = lazy(() => import('web/pages/targets/DetailsPage'));
+const TargetDetailsPage = lazy(
+  () => import('web/pages/targets/TargetDetailsPage'),
+);
 const TargetsPage = lazy(() => import('web/pages/targets/TargetListPage'));
 const TaskDetailsPage = lazy(() => import('web/pages/tasks/TaskDetailsPage'));
 const TasksPage = lazy(() => import('web/pages/tasks/TaskListPage'));
