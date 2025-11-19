@@ -75,8 +75,8 @@ export const normalizeType = (type?: NormalizeType): EntityType | undefined => {
 
 const ENTITY_TYPES = {
   agent: _l('Agent'),
-  agentgroup: _('Agent Group'),
-  agentinstaller: _('Agent Installer'),
+  agentgroup: _l('Agent Group'),
+  agentinstaller: _l('Agent Installer'),
   alert: _l('Alert'),
   asset: _l('Asset'),
   audit: _l('Audit'),
