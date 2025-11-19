@@ -10,7 +10,7 @@ import createEntitiesFooter, {
 } from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
-import TargetDetails from 'web/pages/targets/Details';
+import TargetDetails from 'web/pages/targets/TargetDetails';
 import TargetTableHeader, {
   type TargetTableHeaderProps,
 } from 'web/pages/targets/TargetTableHeader';
