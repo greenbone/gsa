@@ -25,7 +25,7 @@ export interface RenderSelectItemProps {
   deprecated?: boolean | YesNo;
 }
 
-interface Resource extends WithEntityType {
+export interface Resource extends WithEntityType {
   name?: string;
 }
 
