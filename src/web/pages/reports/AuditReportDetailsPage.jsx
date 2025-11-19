@@ -465,7 +465,7 @@ const AuditReportDetailsPage = props => {
   return (
     <React.Fragment>
       <PageTitle title={_('Report Details')} />
-      <TargetComponent onError={handleError}>
+      <TargetComponent onSaveError={handleError}>
         {({edit}) => (
           <Page
             audit={true}
