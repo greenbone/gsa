@@ -534,7 +534,7 @@ class ReportDetails extends React.Component {
     return (
       <React.Fragment>
         <PageTitle title={_('Report Details')} />
-        <TargetComponent onError={this.handleError}>
+        <TargetComponent onSaveError={this.handleError}>
           {({edit}) => (
             <Page
               applicationsCounts={applicationsCounts}
