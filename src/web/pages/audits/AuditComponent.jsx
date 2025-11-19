@@ -580,11 +580,11 @@ const AuditComponent = ({
 
           {auditDialogVisible && (
             <TargetComponent onCreated={handleTargetCreated}>
-              {({create: createtarget}) => (
+              {({create: createTarget}) => (
                 <AlertComponent onCreated={handleAlertCreated}>
-                  {({create: createalert}) => (
+                  {({create: createAlert}) => (
                     <ScheduleComponent onCreated={handleScheduleCreated}>
-                      {({create: createschedule}) => (
+                      {({create: createSchedule}) => (
                         <AuditDialog
                           alertIds={alertIds}
                           alerts={alerts}
@@ -612,9 +612,9 @@ const AuditComponent = ({
                           title={title}
                           onChange={handleChange}
                           onClose={handleCloseAuditDialog}
-                          onNewAlertClick={createalert}
-                          onNewScheduleClick={createschedule}
-                          onNewTargetClick={createtarget}
+                          onNewAlertClick={createAlert}
+                          onNewScheduleClick={createSchedule}
+                          onNewTargetClick={createTarget}
                           onSave={handleSaveAudit}
                           onScannerChange={handleScannerChange}
                         />
