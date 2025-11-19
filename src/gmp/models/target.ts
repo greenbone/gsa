@@ -41,7 +41,7 @@ interface TargetElement extends ModelElement {
   ssh_credential?: SSHCredentialElement;
   ssh_elevate_credential?: ModelElement;
   tasks?: {
-    task: ModelElement[];
+    task: ModelElement | ModelElement[];
   };
 }
 
