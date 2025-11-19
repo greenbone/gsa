@@ -3,33 +3,38 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {_, _l} from 'gmp/locale/lang';
+import {isDefined} from 'gmp/utils/identity';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import createEntitiesFooter from 'web/entities/createEntitiesFooter';
-import createEntitiesTable from 'web/entities/createEntitiesTable';
-import withEntitiesHeader from 'web/entities/withEntitiesHeader';
-import withRowDetails from 'web/entities/withRowDetails';
-import TargetDetails from 'web/pages/targets/Details';
-import TargetRow from 'web/pages/targets/Row';
-import PropTypes from 'web/utils/PropTypes';
+import {type ActionsColumn} from 'web/entities/withEntitiesHeader';
+import useTranslation from 'web/hooks/useTranslation';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
-const Header = ({
+export interface TargetTableHeaderProps {
+  actionsColumn?: ActionsColumn;
+  sort?: boolean;
+  currentSortBy?: string;
+  currentSortDir?: SortDirectionType;
+  onSortChange?: (sortBy: string) => void;
+}
+
+const TargetTableHeader = ({
   actionsColumn,
   sort = true,
   currentSortBy,
   currentSortDir,
   onSortChange,
-}) => {
+}: TargetTableHeaderProps) => {
+  const [_] = useTranslation();
   return (
     <TableHeader>
       <TableRow>
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'name' : false}
+          sort={sort}
+          sortBy="name"
           title={_('Name')}
           width="30%"
           onSortChange={onSortChange}
@@ -37,7 +42,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'hosts' : false}
+          sort={sort}
+          sortBy="hosts"
           title={_('Hosts')}
           width="20%"
           onSortChange={onSortChange}
@@ -45,7 +51,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'ips' : false}
+          sort={sort}
+          sortBy="ips"
           title={_('IPs')}
           width="5%"
           onSortChange={onSortChange}
@@ -53,38 +60,23 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'port_list' : false}
+          sort={sort}
+          sortBy="port_list"
           title={_('Port List')}
           width="15%"
           onSortChange={onSortChange}
         />
         <TableHead width="15%">{_('Credentials')}</TableHead>
-        {actionsColumn}
+        {isDefined(actionsColumn) ? (
+          actionsColumn
+        ) : (
+          <TableHead align="center" rowSpan={2} width="6em">
+            {_('Actions')}
+          </TableHead>
+        )}
       </TableRow>
     </TableHeader>
   );
 };
 
-Header.propTypes = {
-  actionsColumn: PropTypes.element,
-  currentSortBy: PropTypes.string,
-  currentSortDir: PropTypes.string,
-  sort: PropTypes.bool,
-  onSortChange: PropTypes.func,
-};
-
-const TargetsHeader = withEntitiesHeader()(Header);
-
-const Footer = createEntitiesFooter({
-  span: 6,
-  trash: true,
-  download: 'targets.xml',
-});
-
-export default createEntitiesTable({
-  emptyTitle: _l('No targets available'),
-  row: TargetRow,
-  header: TargetsHeader,
-  footer: Footer,
-  rowDetails: withRowDetails('target', 10)(TargetDetails),
-});
+export default TargetTableHeader;
