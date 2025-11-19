@@ -21,6 +21,10 @@ interface AliveTestsElement {
   alive_test?: AliveTest | AliveTest[];
 }
 
+interface SSHCredentialElement extends ModelElement {
+  port?: number;
+}
+
 interface TargetElement extends ModelElement {
   alive_tests?: AliveTestsElement;
   allow_simultaneous_ips?: YesNo;
@@ -34,11 +38,15 @@ interface TargetElement extends ModelElement {
   reverse_lookup_unify?: YesNo;
   smb_credential?: ModelElement;
   snmp_credential?: ModelElement;
-  ssh_credential?: ModelElement;
+  ssh_credential?: SSHCredentialElement;
   ssh_elevate_credential?: ModelElement;
   tasks?: {
     task: ModelElement[];
   };
+}
+
+interface SSHCredentialProperties extends ModelProperties {
+  port?: number;
 }
 
 interface TargetProperties extends ModelProperties {
@@ -54,7 +62,7 @@ interface TargetProperties extends ModelProperties {
   reverse_lookup_unify?: YesNo;
   smb_credential?: Model;
   snmp_credential?: Model;
-  ssh_credential?: Model;
+  ssh_credential?: SSHCredential;
   ssh_elevate_credential?: Model;
   tasks?: Model[];
 }
@@ -70,7 +78,6 @@ export type AliveTest =
 export const TARGET_CREDENTIAL_NAMES = [
   'smb_credential',
   'snmp_credential',
-  'ssh_credential',
   'esxi_credential',
   'ssh_elevate_credential',
   'krb5_credential',
@@ -82,6 +89,27 @@ export const TCP_ACK = 'TCP-ACK Service Ping';
 export const TCP_SYN = 'TCP-SYN Service Ping';
 export const ARP_PING = 'ARP Ping';
 export const CONSIDER_ALIVE = 'Consider Alive';
+
+class SSHCredential extends Model {
+  static readonly entityType = 'credential';
+
+  readonly port?: number;
+
+  constructor({port, ...properties}: SSHCredentialProperties = {}) {
+    super(properties);
+    this.port = port;
+  }
+
+  static fromElement(element: SSHCredentialElement = {}): SSHCredential {
+    return new SSHCredential(this.parseElement(element));
+  }
+
+  static parseElement(element: SSHCredentialElement): SSHCredentialProperties {
+    const ret = super.parseElement(element) as SSHCredentialProperties;
+    ret.port = parseInt(element.port);
+    return ret;
+  }
+}
 
 class Target extends Model {
   static readonly entityType = 'target';
@@ -98,7 +126,7 @@ class Target extends Model {
   readonly reverse_lookup_unify: YesNo;
   readonly smb_credential?: Model;
   readonly snmp_credential?: Model;
-  readonly ssh_credential?: Model;
+  readonly ssh_credential?: SSHCredential;
   readonly ssh_elevate_credential?: Model;
   readonly tasks?: Model[];
 
@@ -168,6 +196,15 @@ class Target extends Model {
       element.alive_tests?.alive_test,
       aliveTest => aliveTest as AliveTest,
     );
+
+    if (
+      isDefined(element.ssh_credential) &&
+      !isEmpty(element.ssh_credential._id)
+    ) {
+      ret.ssh_credential = SSHCredential.fromElement(element.ssh_credential);
+    } else {
+      delete ret.ssh_credential;
+    }
 
     for (const name of TARGET_CREDENTIAL_NAMES) {
       const cred = ret[name];
