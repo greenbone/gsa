@@ -203,7 +203,7 @@ describe('Target model tests', () => {
   });
 
   test('should parse tasks', () => {
-    const elem = {
+    const target1 = Target.fromElement({
       tasks: {
         task: [
           {
@@ -211,14 +211,24 @@ describe('Target model tests', () => {
           },
         ],
       },
-    };
-    const target = Target.fromElement(elem);
+    });
+    const target2 = Target.fromElement({
+      tasks: {
+        task: {_id: '123'},
+      },
+    });
 
-    const task = target.tasks ? target.tasks[0] : undefined;
-    expect(task).toBeDefined();
-    expect(task).toBeInstanceOf(Model);
-    expect(task?.entityType).toEqual('task');
-    expect(task?.id).toEqual('123');
+    const task1 = target1?.tasks?.[0];
+    expect(task1).toBeDefined();
+    expect(task1).toBeInstanceOf(Model);
+    expect(task1?.entityType).toEqual('task');
+    expect(task1?.id).toEqual('123');
+
+    const task2 = target2?.tasks?.[0];
+    expect(task2).toBeDefined();
+    expect(task2).toBeInstanceOf(Model);
+    expect(task2?.entityType).toEqual('task');
+    expect(task2?.id).toEqual('123');
   });
 
   test('should parse alive_tests', () => {
