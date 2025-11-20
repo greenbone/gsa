@@ -100,7 +100,6 @@ const Row = ({
           <FootNote>({entity.credential_type})</FootNote>
         </Divider>
       </TableData>
-      <TableData>{entity.isAllowInsecure() ? _('Yes') : _('No')}</TableData>
       <TableData>{entity.login}</TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>

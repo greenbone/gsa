@@ -22,7 +22,7 @@ import Credential, {
 } from 'gmp/models/credential';
 import Model from 'gmp/models/model';
 import {testModel} from 'gmp/models/testing';
-import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {parseDate} from 'gmp/parser';
 
 const USERNAME_PASSWORD_CREDENTIAL = Credential.fromElement({
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -44,12 +44,11 @@ const createAllCredentials = () => [
   KRB5_CREDENTIAL,
 ];
 
-testModel(Credential, 'credential');
-
 describe('Credential Model tests', () => {
+  testModel(Credential, 'credential');
+
   test('should use defaults', () => {
     const credential = new Credential();
-    expect(credential.allow_insecure).toBeUndefined();
     expect(credential.certificate_info).toBeUndefined();
     expect(credential.credential_type).toBeUndefined();
     expect(credential.targets).toEqual([]);
@@ -61,7 +60,6 @@ describe('Credential Model tests', () => {
 
   test('should parse empty element', () => {
     const credential = Credential.fromElement({});
-    expect(credential.allow_insecure).toEqual(NO_VALUE);
     expect(credential.certificate_info).toBeUndefined();
     expect(credential.credential_type).toBeUndefined();
     expect(credential.targets).toEqual([]);
@@ -109,14 +107,6 @@ describe('Credential Model tests', () => {
     expect(credential.credential_type).toEqual('foo');
   });
 
-  test('should parse allow insecure ', () => {
-    const cred1 = Credential.fromElement({allow_insecure: 1});
-    const cred2 = Credential.fromElement({allow_insecure: 0});
-
-    expect(cred1.allow_insecure).toEqual(YES_VALUE);
-    expect(cred2.allow_insecure).toEqual(NO_VALUE);
-  });
-
   test('should parse targets', () => {
     const credential = Credential.fromElement({
       targets: {
@@ -141,16 +131,6 @@ describe('Credential Model tests', () => {
     expect(scanner).toBeInstanceOf(Model);
     expect(scanner.id).toEqual('s1');
     expect(scanner.entityType).toEqual('scanner');
-  });
-});
-
-describe('Credential model method tests', () => {
-  test('isAllowInsecure() should return correct true/false', () => {
-    const cred1 = new Credential({allow_insecure: 0});
-    const cred2 = new Credential({allow_insecure: 1});
-
-    expect(cred1.isAllowInsecure()).toBe(false);
-    expect(cred2.isAllowInsecure()).toBe(true);
   });
 });
 

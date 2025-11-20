@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
 import {
   changeInputValue,
   closeDialog,
@@ -20,25 +20,15 @@ import Credential, {
 import {NO_VALUE} from 'gmp/parser';
 import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 
-const gmp = {
+const createGmp = (settings = {}) => ({
   settings: {
     enableKrb5: false,
+    ...settings,
   },
-};
-
-let handleSave;
-let handleClose;
-let handleErrorClose;
-
-beforeEach(() => {
-  handleSave = testing.fn();
-  handleClose = testing.fn();
-  handleErrorClose = testing.fn();
 });
 
-const credentialMock = Credential.fromElement({
+const credential = Credential.fromElement({
   _id: 'foo',
-  allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
   in_use: 0,
@@ -54,17 +44,10 @@ const credentialMock = Credential.fromElement({
 describe('CredentialDialog tests', () => {
   test('should render', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
 
-    render(
-      <CredentialDialog
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
-    );
+    render(<CredentialDialog types={ALL_CREDENTIAL_TYPES} />);
 
     const dialog = within(screen.getDialog());
     const dialogTitle = dialog.queryDialogTitle();
@@ -95,21 +78,17 @@ describe('CredentialDialog tests', () => {
 
   test('should render with default values', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
     });
 
     render(
       <CredentialDialog
-        allow_insecure={credentialMock.allow_insecure}
-        comment={credentialMock.comment}
-        credential={credentialMock}
-        credential_type={credentialMock.credential_type}
-        name={credentialMock.name}
+        comment={credential.comment}
+        credential={credential}
+        credential_type={credential.credential_type}
+        name={credential.name}
         types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
       />,
     );
 
@@ -122,25 +101,16 @@ describe('CredentialDialog tests', () => {
     expect(commentInput).toHaveValue('blah');
 
     expect(select).toHaveValue('Username + SSH Key');
-
-    const allowInsecure = screen.getAllByName('allow_insecure');
-    expect(allowInsecure[0]).toHaveAttribute('value', '1');
-    expect(allowInsecure[0]).toBeChecked();
-    expect(allowInsecure[1]).toHaveAttribute('value', '0');
   });
 
   test('should allow to change text field', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
+    const handleSave = testing.fn();
 
     render(
-      <CredentialDialog
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
+      <CredentialDialog types={ALL_CREDENTIAL_TYPES} onSave={handleSave} />,
     );
 
     const nameInput = screen.getByName('name');
@@ -182,16 +152,12 @@ describe('CredentialDialog tests', () => {
 
   test('should allow changing select values', async () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
+    const handleSave = testing.fn();
 
     render(
-      <CredentialDialog
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
+      <CredentialDialog types={ALL_CREDENTIAL_TYPES} onSave={handleSave} />,
     );
 
     const select = screen.getSelectElement();
@@ -233,16 +199,12 @@ describe('CredentialDialog tests', () => {
 
   test('should allow to close the dialog', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
+    const handleClose = testing.fn();
 
     render(
-      <CredentialDialog
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
+      <CredentialDialog types={ALL_CREDENTIAL_TYPES} onClose={handleClose} />,
     );
 
     closeDialog();
@@ -251,17 +213,11 @@ describe('CredentialDialog tests', () => {
 
   test('should render form fields for Username + SSH', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
 
     render(
-      <CredentialDialog
-        credential_type={'usk'}
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
+      <CredentialDialog credential_type={'usk'} types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -277,17 +233,11 @@ describe('CredentialDialog tests', () => {
 
   test('should render form fields for SNMP', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
 
     render(
-      <CredentialDialog
-        credential_type="snmp"
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
+      <CredentialDialog credential_type="snmp" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -321,17 +271,11 @@ describe('CredentialDialog tests', () => {
 
   test('should render form fields for S/MIME Certificate', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
 
     render(
-      <CredentialDialog
-        credential_type="smime"
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
+      <CredentialDialog credential_type="smime" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -344,17 +288,11 @@ describe('CredentialDialog tests', () => {
 
   test('should render form fields for PGP Encryption Key', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
 
     render(
-      <CredentialDialog
-        credential_type={'pgp'}
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
+      <CredentialDialog credential_type={'pgp'} types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -366,17 +304,11 @@ describe('CredentialDialog tests', () => {
 
   test('should render form fields for Password Only', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
 
     render(
-      <CredentialDialog
-        credential_type={'pw'}
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
+      <CredentialDialog credential_type={'pw'} types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -388,27 +320,19 @@ describe('CredentialDialog tests', () => {
   });
 
   test('should render form fields for KRB5', () => {
-    gmp.settings.enableKrb5 = true;
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp({enableKrb5: true}),
     });
 
     render(
       <CredentialDialog
         credential_type={'krb5'}
         types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
       />,
     );
 
     const select = screen.getSelectElement();
     expect(select).toHaveValue('SMB (Kerberos)');
-
-    const allowInsecure = screen.getByName('allow_insecure');
-    expect(allowInsecure).toHaveAttribute('value', '1');
 
     const username = screen.getByName('credential_login');
     expect(username).toHaveValue('');
@@ -426,16 +350,13 @@ describe('CredentialDialog tests', () => {
 
   test('should render form fields for Client Certificate', () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
 
     render(
       <CredentialDialog
         credential_type={CERTIFICATE_CREDENTIAL_TYPE}
         types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
       />,
     );
 
@@ -464,7 +385,6 @@ describe('CredentialDialog tests', () => {
   test('should handle replace password interactions correctly', () => {
     const credentialEntryMock = Credential.fromElement({
       _id: '9b0',
-      allow_insecure: 1,
       creation_time: '2025-01-08T15:50:23.000Z',
       comment: 'MockComment',
       in_use: 0,
@@ -478,21 +398,17 @@ describe('CredentialDialog tests', () => {
     });
 
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
     });
 
     render(
       <CredentialDialog
-        allow_insecure={credentialEntryMock.allow_insecure}
         comment={credentialEntryMock.comment}
         credential={credentialEntryMock}
         credential_type={credentialEntryMock.credential_type}
         name={credentialEntryMock.name}
         title="Edit Credential"
         types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
       />,
     );
 
@@ -513,18 +429,12 @@ describe('CredentialDialog tests', () => {
   });
 
   test('should render MultiValueTextField for KRB5 KDCs', () => {
-    gmp.settings.enableKrb5 = true;
-
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({
+      gmp: createGmp({enableKrb5: true}),
+    });
 
     render(
-      <CredentialDialog
-        credential_type="krb5"
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onErrorClose={handleErrorClose}
-        onSave={handleSave}
-      />,
+      <CredentialDialog credential_type="krb5" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const kdcInput = screen.getByPlaceholderText(

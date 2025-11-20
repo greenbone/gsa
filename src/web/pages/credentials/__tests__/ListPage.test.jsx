@@ -25,7 +25,6 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
 const credential = Credential.fromElement({
   _id: '6575',
-  allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
   formats: {format: 'pem'},
@@ -141,16 +140,14 @@ describe('CredentialPage tests', () => {
 
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Type');
-    expect(header[2]).toHaveTextContent('Allow insecure use');
-    expect(header[3]).toHaveTextContent('Login');
-    expect(header[4]).toHaveTextContent('Actions');
+    expect(header[2]).toHaveTextContent('Login');
+    expect(header[3]).toHaveTextContent('Actions');
 
     const row = baseElement.querySelectorAll('tr');
 
     expect(row[1]).toHaveTextContent('credential 1');
     expect(row[1]).toHaveTextContent('(blah)');
     expect(row[1]).toHaveTextContent('Username + SSH Key');
-    expect(row[1]).toHaveTextContent('Yes');
 
     expect(
       screen.getAllByTitle('Move Credential to trashcan')[0],
