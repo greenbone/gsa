@@ -130,7 +130,7 @@ jobs:
         run: npm install
       - name: Check if translations need an update
         id: check
-        run: npm run i18n-extract -- --fail-on-update
+        run: npm run i18n-extract -- --ci
       - if: ${{ failure() && steps.check.outcome == 'failure' }}
         run: |
           echo "Translations are not up to date." >> $GITHUB_STEP_SUMMARY

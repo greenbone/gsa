@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "type": "module",
   "scripts": {
@@ -27,7 +27,7 @@
     "format": "prettier --write src",
     "format-check": "prettier -l src",
     "preview": "vite preview",
-    "i18n-extract": "i18next",
+    "i18n-extract": "i18next-cli extract",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
     "clear:node_modules": "rm -rf node_modules && npm install"
@@ -103,7 +103,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^16.4.0",
-    "i18next-parser": "^9.3.0",
+    "i18next-cli": "^1.24.20",
     "jest-styled-components": "^7.2.0",
     "jsdom": "^26.1.0",
     "prettier": "^3.6.2",
