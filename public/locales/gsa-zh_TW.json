@@ -195,8 +195,6 @@
   "Allow all and deny": "",
   "Allow all and deny from {{addresses}}": "",
   "Allow Insecure Registry": "",
-  "Allow insecure use": "",
-  "Allow Insecure Use": "",
   "Allow simultaneous scanning via multiple IPs": "",
   "Alterable": "",
   "Alterable Audit": "",

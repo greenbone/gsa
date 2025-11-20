@@ -6,7 +6,7 @@
 import {_l} from 'gmp/locale/lang';
 import {type Date} from 'gmp/models/date';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import {parseYesNo, NO_VALUE, parseDate, type YesNo} from 'gmp/parser';
+import {parseDate} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -55,7 +55,6 @@ interface CredentialElement extends ModelElement {
     time_status?: string;
   };
   credential_type?: CredentialType;
-  allow_insecure?: number;
   credential_store?: {
     host_identifier?: string;
     vault_id?: string;
@@ -90,7 +89,6 @@ export interface CredentialStore {
 }
 
 interface CredentialProperties extends ModelProperties {
-  allow_insecure?: YesNo;
   certificate_info?: CertificateInfo;
   credentialStore?: CredentialStore;
   credential_type?: CredentialType;
@@ -277,7 +275,6 @@ const parseTimeStatus = (
 class Credential extends Model {
   static readonly entityType = 'credential';
 
-  readonly allow_insecure?: YesNo;
   readonly certificate_info?: CertificateInfo;
   readonly credentialStore?: CredentialStore;
   readonly credential_type?: CredentialType;
@@ -288,8 +285,6 @@ class Credential extends Model {
   readonly scanners: Model[];
 
   constructor({
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    allow_insecure,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     certificate_info,
     credentialStore,
@@ -303,7 +298,6 @@ class Credential extends Model {
     ...properties
   }: CredentialProperties = {}) {
     super(properties);
-    this.allow_insecure = allow_insecure;
     this.certificate_info = certificate_info;
     this.credentialStore = credentialStore;
     this.credential_type = credential_type;
@@ -343,8 +337,6 @@ class Credential extends Model {
 
     ret.credential_type = element.type as CredentialType;
 
-    ret.allow_insecure = parseYesNo(element.allow_insecure);
-
     if (isDefined(element.kdcs?.kdc)) {
       ret.kdcs = Array.isArray(element.kdcs.kdc)
         ? element.kdcs.kdc
@@ -367,10 +359,6 @@ class Credential extends Model {
     );
 
     return ret;
-  }
-
-  isAllowInsecure() {
-    return this.allow_insecure !== NO_VALUE;
   }
 }
 

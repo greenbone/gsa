@@ -45,10 +45,6 @@ const CredentialFilterDialog = ({
       displayName: _('Type'),
     },
     {
-      name: 'allow_insecure',
-      displayName: _('Allow insecure use'),
-    },
-    {
       name: 'login',
       displayName: _('Login'),
     },

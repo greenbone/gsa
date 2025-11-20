@@ -23,11 +23,6 @@ export const SORT_FIELDS = [
     width: '31%',
   },
   {
-    name: 'allow_insecure',
-    displayName: _l('Allow insecure use'),
-    width: '10%',
-  },
-  {
     name: 'login',
     displayName: _l('Login'),
     width: '15%',
