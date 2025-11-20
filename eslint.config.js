@@ -135,6 +135,7 @@ export default [
   {
     ignores: [
       'build',
+      'i18next.config.ts',
       'eslint.config.js',
       'vite.config.ts',
       'vitest.config.ts',
