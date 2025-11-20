@@ -20,7 +20,6 @@ import {
   type AliveTest,
   SCAN_CONFIG_DEFAULT,
 } from 'gmp/models/target';
-import {type YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import useEntityClone, {
@@ -148,11 +147,11 @@ const TargetComponent = ({
     undefined,
   );
   const [hosts, setHosts] = useState<string | undefined>(undefined);
-  const [reverseLookupOnly, setReverseLookupOnly] = useState<YesNo | undefined>(
-    undefined,
-  );
+  const [reverseLookupOnly, setReverseLookupOnly] = useState<
+    boolean | undefined
+  >(undefined);
   const [reverseLookupUnify, setReverseLookupUnify] = useState<
-    YesNo | undefined
+    boolean | undefined
   >(undefined);
   const [targetExcludeSource, setTargetExcludeSource] = useState<
     TargetExcludeSource | undefined

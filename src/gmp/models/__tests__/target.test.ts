@@ -8,7 +8,6 @@ import Model from 'gmp/models/model';
 import PortList from 'gmp/models/port-list';
 import Target, {ARP_PING, ICMP_PING} from 'gmp/models/target';
 import {testModel} from 'gmp/models/testing';
-import {NO_VALUE} from 'gmp/parser';
 
 describe('Target model tests', () => {
   testModel(Target, 'target');
@@ -24,8 +23,8 @@ describe('Target model tests', () => {
     expect(target.krb5Credential).toBeUndefined();
     expect(target.maxHosts).toEqual(0);
     expect(target.portList).toBeUndefined();
-    expect(target.reverseLookupOnly).toEqual(NO_VALUE);
-    expect(target.reverseLookupUnify).toEqual(NO_VALUE);
+    expect(target.reverseLookupOnly).toEqual(false);
+    expect(target.reverseLookupUnify).toEqual(false);
     expect(target.smbCredential).toBeUndefined();
     expect(target.snmpCredential).toBeUndefined();
     expect(target.sshCredential).toBeUndefined();
@@ -44,8 +43,8 @@ describe('Target model tests', () => {
     expect(target.krb5Credential).toBeUndefined();
     expect(target.maxHosts).toEqual(0);
     expect(target.portList).toBeUndefined();
-    expect(target.reverseLookupOnly).toEqual(NO_VALUE);
-    expect(target.reverseLookupUnify).toEqual(NO_VALUE);
+    expect(target.reverseLookupOnly).toEqual(false);
+    expect(target.reverseLookupUnify).toEqual(false);
     expect(target.smbCredential).toBeUndefined();
     expect(target.snmpCredential).toBeUndefined();
     expect(target.sshCredential).toBeUndefined();
@@ -183,23 +182,36 @@ describe('Target model tests', () => {
   });
 
   test('should parse allowSimultaneousIps', () => {
-    const target = Target.fromElement({allow_simultaneous_ips: 1});
+    const target1 = Target.fromElement({allow_simultaneous_ips: 1});
     const target2 = Target.fromElement({allow_simultaneous_ips: 0});
+    // @ts-expect-error
+    const target3 = Target.fromElement({allow_simultaneous_ips: 'foo'});
 
-    expect(target.allowSimultaneousIPs).toEqual(true);
+    expect(target1.allowSimultaneousIPs).toEqual(true);
     expect(target2.allowSimultaneousIPs).toEqual(false);
+    expect(target3.allowSimultaneousIPs).toEqual(false);
   });
 
   test('should parse reverse_lookup_only', () => {
-    const target = Target.fromElement({reverse_lookup_only: 0});
+    const target1 = Target.fromElement({reverse_lookup_only: 0});
+    const target2 = Target.fromElement({reverse_lookup_only: 1});
+    // @ts-expect-error
+    const target3 = Target.fromElement({reverse_lookup_only: 'foo'});
 
-    expect(target.reverseLookupOnly).toEqual(0);
+    expect(target1.reverseLookupOnly).toEqual(false);
+    expect(target2.reverseLookupOnly).toEqual(true);
+    expect(target3.reverseLookupOnly).toEqual(false);
   });
 
   test('should parse reverse_lookup_unify', () => {
-    const target = Target.fromElement({reverse_lookup_unify: 1});
+    const target1 = Target.fromElement({reverse_lookup_unify: 0});
+    const target2 = Target.fromElement({reverse_lookup_unify: 1});
+    // @ts-expect-error
+    const target3 = Target.fromElement({reverse_lookup_unify: 'foo'});
 
-    expect(target.reverseLookupUnify).toEqual(1);
+    expect(target1.reverseLookupUnify).toEqual(false);
+    expect(target2.reverseLookupUnify).toEqual(true);
+    expect(target3.reverseLookupUnify).toEqual(false);
   });
 
   test('should parse tasks', () => {

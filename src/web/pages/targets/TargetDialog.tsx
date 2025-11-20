@@ -34,7 +34,7 @@ import {
   TCP_ACK,
   TCP_SYN,
 } from 'gmp/models/target';
-import {NO_VALUE, parseBoolean, type YesNo} from 'gmp/parser';
+import {parseBoolean} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
@@ -95,8 +95,8 @@ interface TargetDialogDefaultValues {
   inUse: boolean;
   name: string;
   port: number;
-  reverseLookupOnly: YesNo;
-  reverseLookupUnify: YesNo;
+  reverseLookupOnly: boolean;
+  reverseLookupUnify: boolean;
   targetExcludeSource: TargetExcludeSource;
   targetSource: TargetSource;
 }
@@ -119,8 +119,8 @@ interface TargetDialogProps {
   port?: number;
   portListId?: string;
   portLists?: PortList[];
-  reverseLookupOnly?: YesNo;
-  reverseLookupUnify?: YesNo;
+  reverseLookupOnly?: boolean;
+  reverseLookupUnify?: boolean;
   smbCredentialId?: string;
   snmpCredentialId?: string;
   sshCredentialId?: string;
@@ -173,8 +173,8 @@ const TargetDialog = ({
   port = DEFAULT_PORT,
   portListId = DEFAULT_PORT_LIST_ID,
   portLists = DEFAULT_PORT_LISTS,
-  reverseLookupOnly = NO_VALUE,
-  reverseLookupUnify = NO_VALUE,
+  reverseLookupOnly = false,
+  reverseLookupUnify = false,
   smbCredentialId,
   snmpCredentialId,
   sshCredentialId,
@@ -826,19 +826,25 @@ const TargetDialog = ({
             )}
 
             <FormGroup title={_('Reverse Lookup Only')}>
-              <YesNoRadio
+              <YesNoRadio<boolean>
+                convert={parseBoolean}
                 disabled={inUse}
                 name="reverseLookupOnly"
+                noValue={false}
                 value={state.reverseLookupOnly}
+                yesValue={true}
                 onChange={onValueChange}
               />
             </FormGroup>
 
             <FormGroup title={_('Reverse Lookup Unify')}>
-              <YesNoRadio
+              <YesNoRadio<boolean>
+                convert={parseBoolean}
                 disabled={inUse}
                 name="reverseLookupUnify"
+                noValue={false}
                 value={state.reverseLookupUnify}
+                yesValue={true}
                 onChange={onValueChange}
               />
             </FormGroup>

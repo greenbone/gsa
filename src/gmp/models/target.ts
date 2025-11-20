@@ -5,14 +5,7 @@
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import PortList, {type PortListElement} from 'gmp/models/port-list';
-import {
-  parseInt,
-  parseYesNo,
-  parseCsv,
-  type YesNo,
-  NO_VALUE,
-  parseBoolean,
-} from 'gmp/parser';
+import {parseInt, parseCsv, type YesNo, parseBoolean} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -58,8 +51,8 @@ interface TargetProperties extends ModelProperties {
   krb5Credential?: Model;
   maxHosts?: number;
   portList?: PortList;
-  reverseLookupOnly?: YesNo;
-  reverseLookupUnify?: YesNo;
+  reverseLookupOnly?: boolean;
+  reverseLookupUnify?: boolean;
   smbCredential?: Model;
   snmpCredential?: Model;
   sshCredential?: SSHCredential;
@@ -114,8 +107,8 @@ class Target extends Model {
   readonly krb5Credential?: Model;
   readonly maxHosts: number;
   readonly portList?: PortList;
-  readonly reverseLookupOnly: YesNo;
-  readonly reverseLookupUnify: YesNo;
+  readonly reverseLookupOnly: boolean;
+  readonly reverseLookupUnify: boolean;
   readonly smbCredential?: Model;
   readonly snmpCredential?: Model;
   readonly sshCredential?: SSHCredential;
@@ -131,8 +124,8 @@ class Target extends Model {
     krb5Credential,
     maxHosts = 0,
     portList,
-    reverseLookupOnly = NO_VALUE,
-    reverseLookupUnify = NO_VALUE,
+    reverseLookupOnly = false,
+    reverseLookupUnify = false,
     smbCredential,
     snmpCredential,
     sshCredential,
@@ -246,18 +239,16 @@ class Target extends Model {
 
     ret.maxHosts = parseInt(element.max_hosts);
 
-    ret.reverseLookupOnly = parseYesNo(element.reverse_lookup_only);
-    ret.reverseLookupUnify = parseYesNo(element.reverse_lookup_unify);
+    ret.reverseLookupOnly = parseBoolean(element.reverse_lookup_only);
+    ret.reverseLookupUnify = parseBoolean(element.reverse_lookup_unify);
+
+    ret.allowSimultaneousIPs = parseBoolean(element.allow_simultaneous_ips);
 
     if (isDefined(element.tasks)) {
       ret.tasks = map(element.tasks.task, task =>
         Model.fromElement(task, 'task'),
       );
     }
-
-    ret.allowSimultaneousIPs = isDefined(element.allow_simultaneous_ips)
-      ? parseBoolean(element.allow_simultaneous_ips)
-      : undefined;
 
     return ret;
   }
