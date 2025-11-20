@@ -45,7 +45,6 @@ const CredentialsComponent = ({
 
   const [dialogVisible, setDialogVisible] = useState(false);
 
-  const [allowInsecure, setAllowInsecure] = useState();
   const [comment, setComment] = useState();
   const [credential, setCredential] = useState();
   const [credentialType, setCredentialType] = useState();
@@ -62,7 +61,6 @@ const CredentialsComponent = ({
         name: shorten(credential.name),
       });
 
-      setAllowInsecure(credential.allow_insecure);
       setComment(credential.comment);
       setCredential(credential);
       setCredentialType(credential.credential_type);
@@ -78,7 +76,6 @@ const CredentialsComponent = ({
       setTitle(dialogTitle);
     } else {
       // reset all values in state to not show values from last edit
-      setAllowInsecure(undefined);
       setComment(undefined);
       setCredential(undefined);
       setCredentialType(undefined);
@@ -122,7 +119,6 @@ const CredentialsComponent = ({
   };
 
   const dialogProps = {
-    allow_insecure: allowInsecure,
     comment,
     credential,
     credential_type: credentialType,

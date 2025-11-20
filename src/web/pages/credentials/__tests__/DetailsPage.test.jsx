@@ -41,7 +41,6 @@ const manualUrl = 'test/';
 
 const credential = Credential.fromElement({
   _id: '6575',
-  allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
   full_type: 'Username + SSH Key',
@@ -57,7 +56,6 @@ const credential = Credential.fromElement({
 
 const noPermCredential = Credential.fromElement({
   _id: '6575',
-  allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
   full_type: 'Username + SSH Key',
@@ -145,9 +143,6 @@ describe('Credential Detailspage tests', () => {
 
     expect(container).toHaveTextContent('Type');
     expect(container).toHaveTextContent('Username + SSH Key');
-
-    expect(container).toHaveTextContent('Allow Insecure Use');
-    expect(container).toHaveTextContent('Yes');
 
     expect(container).toHaveTextContent('Login');
   });

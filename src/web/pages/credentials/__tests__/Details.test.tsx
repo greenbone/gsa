@@ -16,7 +16,6 @@ const defaultEntity = Credential.fromElement({
   comment: 'Test credential comment',
   type: 'krb5',
   credential_type: 'krb5',
-  allow_insecure: 1,
   login: 'testuser',
   realm: 'EXAMPLE.REALM',
   kdcs: {
@@ -41,7 +40,6 @@ describe('CredentialDetails', () => {
     const {render} = rendererWith({capabilities});
     render(<CredentialDetails entity={defaultEntity} />);
     expect(screen.getByText('Test credential comment')).toBeVisible();
-    expect(screen.getByText('Yes')).toBeVisible();
     expect(screen.getByText('testuser')).toBeVisible();
   });
 
