@@ -20,7 +20,6 @@ export class CredentialCommand extends EntityCommand {
     const {
       name,
       comment = '',
-      allow_insecure = 0,
       autogenerate = 0,
       community = '',
       credential_login = '',
@@ -44,7 +43,6 @@ export class CredentialCommand extends EntityCommand {
       name,
       comment,
       credential_type,
-      allow_insecure,
       autogenerate,
       community,
       credential_login,
@@ -65,7 +63,6 @@ export class CredentialCommand extends EntityCommand {
 
   save(args) {
     const {
-      allow_insecure = 0,
       auth_algorithm,
       certificate,
       change_community = 0,
@@ -92,7 +89,6 @@ export class CredentialCommand extends EntityCommand {
     log.debug('Saving credential', args);
     return this.action({
       cmd: 'save_credential',
-      allow_insecure,
       auth_algorithm,
       certificate,
       change_community,

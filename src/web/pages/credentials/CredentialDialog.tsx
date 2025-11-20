@@ -60,7 +60,6 @@ interface CredentialDialogValues {
 }
 
 interface CredentialDialogDefaultValues {
-  allow_insecure?: YesNo;
   auth_algorithm?: SNMPAuthAlgorithmType;
   change_community?: YesNo;
   change_passphrase?: YesNo;
@@ -85,7 +84,6 @@ export type CredentialDialogState = CredentialDialogValues &
   CredentialDialogDefaultValues;
 
 interface CredentialDialogProps {
-  allow_insecure?: YesNo;
   auth_algorithm?: SNMPAuthAlgorithmType;
   autogenerate?: YesNo;
   change_community?: YesNo;
@@ -106,9 +104,9 @@ interface CredentialDialogProps {
   types?: readonly CredentialType[];
   vaultId?: string;
   hostIdentifier?: string;
-  onClose: () => void;
+  onClose?: () => void;
   onErrorClose?: () => void;
-  onSave: (state: CredentialDialogState) => Promise<void> | void;
+  onSave?: (state: CredentialDialogState) => Promise<void> | void;
 }
 
 const validateFile = async (file: File, line: string, errorMessage: string) => {
@@ -126,8 +124,6 @@ const CredentialDialog = ({
   credential,
   title,
   types = [],
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  allow_insecure,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   auth_algorithm = SNMP_AUTH_ALGORITHM_SHA1,
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -315,7 +311,6 @@ const CredentialDialog = ({
   return (
     <SaveDialog<CredentialDialogValues, CredentialDialogDefaultValues>
       defaultValues={{
-        allow_insecure,
         auth_algorithm,
         change_community,
         change_passphrase,
@@ -378,14 +373,6 @@ const CredentialDialog = ({
                 )
               }
             />
-
-            <FormGroup title={_('Allow insecure use')}>
-              <YesNoRadio
-                name="allow_insecure"
-                value={state.allow_insecure}
-                onChange={onValueChange}
-              />
-            </FormGroup>
 
             {isCredentialStoreType(state.credential_type) && (
               <>

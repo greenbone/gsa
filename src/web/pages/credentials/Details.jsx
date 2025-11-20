@@ -92,13 +92,6 @@ const CredentialDetails = ({entity}) => {
             </TableData>
           </TableRow>
 
-          <TableRow>
-            <TableData>{_('Allow Insecure Use')}</TableData>
-            <TableData>
-              {entity.isAllowInsecure() ? _('Yes') : _('No')}
-            </TableData>
-          </TableRow>
-
           {/* Credential Store specific fields */}
           {isCredentialStore && (
             <>
