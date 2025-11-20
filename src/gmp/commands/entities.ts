@@ -110,10 +110,10 @@ abstract class EntitiesCommand<
   TEntitiesResponse extends Element = Element,
   TRoot extends Element = Element,
 > extends HttpCommand {
-  private readonly clazz: ModelClass<Model>;
+  protected readonly clazz: ModelClass<TModel>;
   readonly name: string;
 
-  constructor(http: Http, name: string, clazz: ModelClass<Model>) {
+  constructor(http: Http, name: string, clazz: ModelClass<TModel>) {
     super(http, {cmd: 'get_' + name + 's'});
 
     this.clazz = clazz;
