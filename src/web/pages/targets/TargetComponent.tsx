@@ -53,6 +53,8 @@ import {UNSET_VALUE} from 'web/utils/Render';
 interface OpenTargetDialogData {
   hostsCount?: number;
   hostsFilter?: Filter;
+  targetSource?: TargetSource;
+  name?: string;
 }
 
 interface TargetComponentRenderProps {
@@ -76,6 +78,15 @@ interface TargetComponentProps {
   onSaved?: (response: EntitySaveResponse) => void;
   onSaveError?: (error: Error) => void;
 }
+
+export const TARGET_RESOURCE_PROPERTIES_NAMES = [
+  'portList',
+  'smbCredential',
+  'snmpCredential',
+  'esxiCredential',
+  'sshElevateCredential',
+  'krb5Credential',
+] as const;
 
 const TargetComponent = ({
   children,
@@ -202,28 +213,27 @@ const TargetComponent = ({
 
   const openTargetDialog = async (
     entity?: Target,
-    {hostsCount, hostsFilter}: OpenTargetDialogData = {},
+    {hostsCount, hostsFilter, targetSource, name}: OpenTargetDialogData = {},
   ) => {
     if (isDefined(entity)) {
-      // @ts-expect-error
-      setPort(entity?.ssh_credential?.port);
-      setAliveTests(entity.alive_tests);
+      setPort(entity?.sshCredential?.port);
+      setAliveTests(entity.aliveTests);
       setAllowSimultaneousIPs(entity.allowSimultaneousIPs);
       setComment(entity.comment);
       setTargetTitle(_('Edit Target {{name}}', {name: entity.name as string}));
-      setEsxiCredentialId(entity.esxi_credential?.id);
-      setKrb5CredentialId(entity.krb5_credential?.id);
-      setSmbCredentialId(entity.smb_credential?.id);
-      setSnmpCredentialId(entity.snmp_credential?.id);
-      setSshCredentialId(entity.ssh_credential?.id);
-      setSshElevateCredentialId(entity.ssh_elevate_credential?.id);
-      setPortListId(entity.port_list?.id);
+      setEsxiCredentialId(entity.esxiCredential?.id);
+      setKrb5CredentialId(entity.krb5Credential?.id);
+      setSmbCredentialId(entity.smbCredential?.id);
+      setSnmpCredentialId(entity.snmpCredential?.id);
+      setSshCredentialId(entity.sshCredential?.id);
+      setSshElevateCredentialId(entity.sshElevateCredential?.id);
+      setPortListId(entity.portList?.id);
       setName(entity.name);
       setInUse(entity.isInUse());
-      setExcludeHosts(entity.exclude_hosts?.join(', '));
+      setExcludeHosts(entity.excludeHosts?.join(', '));
       setHosts(entity.hosts.join(', '));
-      setReverseLookupOnly(entity.reverse_lookup_only);
-      setReverseLookupUnify(entity.reverse_lookup_unify);
+      setReverseLookupOnly(entity.reverseLookupOnly);
+      setReverseLookupUnify(entity.reverseLookupUnify);
       setTargetSource('manual');
       setTargetExcludeSource('manual');
       setTargetId(entity.id);
@@ -232,7 +242,7 @@ const TargetComponent = ({
       setAllowSimultaneousIPs(true);
       setPort(undefined);
       setComment(undefined);
-      setName(undefined);
+      setName(name);
       setTargetTitle(_('New Target'));
       setEsxiCredentialId(undefined);
       setKrb5CredentialId(undefined);
@@ -246,7 +256,7 @@ const TargetComponent = ({
       setHosts(undefined);
       setReverseLookupOnly(undefined);
       setReverseLookupUnify(undefined);
-      setTargetSource(undefined);
+      setTargetSource(targetSource);
       setTargetExcludeSource(undefined);
       setTargetId(undefined);
     }

@@ -50,7 +50,7 @@ import ScanConfigsTable from 'web/pages/scanconfigs/Table';
 import ScannerTable from 'web/pages/scanners/ScannerTable';
 import SchedulesTable from 'web/pages/schedules/Table';
 import TagsTable from 'web/pages/tags/Table';
-import TargetsTable from 'web/pages/targets/Table';
+import TargetsTable from 'web/pages/targets/TargetTable';
 import TasksTable from 'web/pages/tasks/TaskTable';
 import TicketsTable from 'web/pages/tickets/Table';
 import EmptyTrashButton from 'web/pages/trashcan/EmptyTrashButton';
@@ -380,6 +380,7 @@ const TrashCan = () => {
           <span>
             <LinkTarget id="target" />
             <h1>{_('Targets')}</h1>
+            {/* @ts-expect-error */}
             <TargetsTable entities={trash.targets} {...tableProps} />
           </span>
         )}

@@ -351,7 +351,7 @@ const AuditDeltaReportDetails = props => {
 
   return (
     <React.Fragment>
-      <TargetComponent onError={handleError}>
+      <TargetComponent onSaveError={handleError}>
         {({edit}) => (
           <Page
             audit={true}

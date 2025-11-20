@@ -6,42 +6,40 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import Target from 'gmp/models/target';
-import Row from 'web/pages/targets/Row';
+import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import TargetTableRow from 'web/pages/targets/TargetTableRow';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
-const target_elevate = Target.fromElement({
+const targetElevate = Target.fromElement({
   _id: 'foo',
   name: 'target',
   owner: {name: 'admin'},
-  alive_tests: 'Scan Config Default',
+  alive_tests: {alive_test: SCAN_CONFIG_DEFAULT},
   comment: 'hello world',
-  writable: '1',
-  in_use: '1',
+  writable: YES_VALUE,
+  in_use: YES_VALUE,
   permissions: {permission: [{name: 'Everything'}]},
   hosts: '127.0.0.1, 192.168.0.1',
   exclude_hosts: '',
-  max_hosts: '2',
-  reverse_lookup_only: '1',
-  reverse_lookup_unify: '0',
+  max_hosts: 2,
+  reverse_lookup_only: YES_VALUE,
+  reverse_lookup_unify: NO_VALUE,
   port_list: {
     _id: 'pl_id1',
     name: 'pl1',
-    trash: '0',
   },
   ssh_credential: {
     _id: '1235',
     name: 'ssh',
-    port: '22',
-    trash: '0',
+    port: 22,
   },
   ssh_elevate_credential: {
     _id: '3456',
     name: 'ssh_elevate',
-    trash: '0',
   },
   smb_credential: {
     _id: '4784',
@@ -50,12 +48,10 @@ const target_elevate = Target.fromElement({
   esxi_credential: {
     _id: '',
     name: '',
-    trash: '0',
   },
   snmp_credential: {
     _id: '',
     name: '',
-    trash: '0',
   },
   tasks: {
     task: [
@@ -67,30 +63,28 @@ const target_elevate = Target.fromElement({
   },
 });
 
-const target_no_portlist = Target.fromElement({
+const targetNoPortlist = Target.fromElement({
   _id: 'foo',
   name: 'target',
   owner: {name: 'admin'},
-  alive_tests: 'Scan Config Default',
+  alive_tests: {alive_test: SCAN_CONFIG_DEFAULT},
   comment: 'hello world',
-  writable: '1',
-  in_use: '1',
+  writable: YES_VALUE,
+  in_use: YES_VALUE,
   permissions: {permission: [{name: 'Everything'}]},
   hosts: '127.0.0.1, 192.168.0.1',
   exclude_hosts: '',
-  max_hosts: '2',
-  reverse_lookup_only: '1',
-  reverse_lookup_unify: '0',
+  max_hosts: 2,
+  reverse_lookup_only: YES_VALUE,
+  reverse_lookup_unify: NO_VALUE,
   ssh_credential: {
     _id: '1235',
     name: 'ssh',
-    port: '22',
-    trash: '0',
+    port: 22,
   },
   ssh_elevate_credential: {
     _id: '3456',
     name: 'ssh_elevate',
-    trash: '0',
   },
   smb_credential: {
     _id: '4784',
@@ -99,12 +93,10 @@ const target_no_portlist = Target.fromElement({
   esxi_credential: {
     _id: '',
     name: '',
-    trash: '0',
   },
   snmp_credential: {
     _id: '',
     name: '',
-    trash: '0',
   },
   tasks: {
     task: [
@@ -116,38 +108,34 @@ const target_no_portlist = Target.fromElement({
   },
 });
 
-const target_no_elevate = Target.fromElement({
+const targetNoElevate = Target.fromElement({
   _id: 'foo',
   name: 'target',
   owner: {name: 'admin'},
-  alive_tests: 'Scan Config Default',
+  alive_tests: {alive_test: SCAN_CONFIG_DEFAULT},
   comment: 'hello world',
-  writable: '1',
-  in_use: '0',
+  writable: YES_VALUE,
+  in_use: NO_VALUE,
   permissions: {permission: [{name: 'Everything'}]},
   hosts: '127.0.0.1, 192.168.0.1',
   exclude_hosts: '',
-  max_hosts: '2',
+  max_hosts: 2,
   port_list: {
     _id: 'pl_id1',
     name: 'pl1',
-    trash: '0',
   },
   krb5_credential: {
     _id: 'krb5_id',
     name: 'krb5',
-    trash: '0',
   },
   ssh_credential: {
     _id: '',
     name: '',
-    port: '',
-    trash: '0',
+    port: undefined,
   },
   ssh_elevate_credential: {
     _id: '',
     name: '',
-    trash: '0',
   },
   smb_credential: {
     _id: '4784',
@@ -156,16 +144,14 @@ const target_no_elevate = Target.fromElement({
   esxi_credential: {
     _id: '',
     name: '',
-    trash: '0',
   },
   snmp_credential: {
     _id: '',
     name: '',
-    trash: '0',
   },
 });
 
-describe('Target row tests', () => {
+describe('TargetRow tests', () => {
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
     const handleTargetCloneClick = testing.fn();
@@ -184,8 +170,8 @@ describe('Target row tests', () => {
     store.dispatch(setUsername('admin'));
 
     render(
-      <Row
-        entity={target_no_elevate}
+      <TargetTableRow
+        entity={targetNoElevate}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
@@ -213,13 +199,15 @@ describe('Target row tests', () => {
   });
 
   test('should render Kerberos credentials, when KRB5 is enabled', () => {
+    const gmp = {
+      settings: {enableKrb5: true},
+    };
+
     const handleToggleDetailsClick = testing.fn();
     const handleTargetCloneClick = testing.fn();
     const handleTargetDeleteClick = testing.fn();
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
-
-    gmp.settings.enableKrb5 = true;
 
     const {render, store} = rendererWithTableBody({
       gmp,
@@ -232,8 +220,8 @@ describe('Target row tests', () => {
     store.dispatch(setUsername('admin'));
 
     render(
-      <Row
-        entity={target_no_elevate}
+      <TargetTableRow
+        entity={targetNoElevate}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
@@ -265,8 +253,8 @@ describe('Target row tests', () => {
     store.dispatch(setUsername('admin'));
 
     render(
-      <Row
-        entity={target_elevate}
+      <TargetTableRow
+        entity={targetElevate}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
@@ -313,8 +301,8 @@ describe('Target row tests', () => {
     store.dispatch(setUsername('admin'));
 
     render(
-      <Row
-        entity={target_no_portlist}
+      <TargetTableRow
+        entity={targetNoPortlist}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
@@ -349,8 +337,8 @@ describe('Target row tests', () => {
     store.dispatch(setTimezone('UTC'));
 
     render(
-      <Row
-        entity={target_no_elevate}
+      <TargetTableRow
+        entity={targetNoElevate}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
@@ -362,21 +350,21 @@ describe('Target row tests', () => {
     // Name
     fireEvent.click(screen.getByText('target'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(
-      target_no_elevate,
+      targetNoElevate,
       'foo',
     );
 
     // Actions
     fireEvent.click(screen.getAllByTitle('Clone Target')[0]);
-    expect(handleTargetCloneClick).toHaveBeenCalledWith(target_no_elevate);
+    expect(handleTargetCloneClick).toHaveBeenCalledWith(targetNoElevate);
 
     fireEvent.click(screen.getAllByTitle('Move Target to trashcan')[0]);
-    expect(handleTargetDeleteClick).toHaveBeenCalledWith(target_no_elevate);
+    expect(handleTargetDeleteClick).toHaveBeenCalledWith(targetNoElevate);
 
     fireEvent.click(screen.getAllByTitle('Edit Target')[0]);
-    expect(handleTargetEditClick).toHaveBeenCalledWith(target_no_elevate);
+    expect(handleTargetEditClick).toHaveBeenCalledWith(targetNoElevate);
 
     fireEvent.click(screen.getAllByTitle('Export Target')[0]);
-    expect(handleTargetDownloadClick).toHaveBeenCalledWith(target_no_elevate);
+    expect(handleTargetDownloadClick).toHaveBeenCalledWith(targetNoElevate);
   });
 });

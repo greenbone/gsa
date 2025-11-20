@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import {
   getSelectItemElementsForSelect,
   screen,
@@ -13,12 +13,11 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import Target from 'gmp/models/target';
+import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
-import TargetPage, {ToolBarIcons} from 'web/pages/targets/ListPage';
+import TargetPage from 'web/pages/targets/TargetListPage';
 import {entitiesLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -78,30 +77,26 @@ const target = Target.fromElement({
   reverse_lookup_only: 1,
   reverse_lookup_unify: 0,
   tasks: {task: {_id: '465', name: 'foo'}},
-  alive_tests: 'Scan Config Default',
+  alive_tests: {
+    alive_test: SCAN_CONFIG_DEFAULT,
+  },
   allow_simultaneous_ips: 1,
-  port_range: '1-5',
   ssh_credential: {
     _id: '1235',
     name: 'ssh',
-    port: '22',
-    trash: '0',
+    port: 22,
   },
   ssh_elevate_credential: {
     _id: '3456',
     name: 'ssh_elevate',
-    trash: '0',
   },
 });
-
-const caps = new Capabilities(['everything']);
-const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
 describe('TargetsListPage tests', () => {
-  test('should render full TargetPage', async () => {
+  test('should render full TargetListPage', async () => {
     const gmp = {
       targets: {
         get: getTargets,
@@ -146,7 +141,7 @@ describe('TargetsListPage tests', () => {
 
     await wait();
 
-    const powerFilter = within(screen.queryPowerFilter());
+    const powerFilter = within(screen.getPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
     const inputs = powerFilter.queryTextInputs();
 
@@ -318,14 +313,14 @@ describe('TargetsListPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = within(screen.queryTableFooter());
+    const tableFooter = within(screen.queryTableFooter() as HTMLElement);
     const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
     fireEvent.click(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select an target
-    const tableBody = within(screen.queryTableBody());
+    const tableBody = within(screen.queryTableBody() as HTMLElement);
     const inputs = tableBody.queryCheckBoxes();
     fireEvent.click(inputs[0]);
 
@@ -397,7 +392,7 @@ describe('TargetsListPage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = within(screen.queryTableFooter());
+    const tableFooter = within(screen.queryTableFooter() as HTMLElement);
     const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
     fireEvent.click(selectItems[2]);
@@ -412,73 +407,5 @@ describe('TargetsListPage tests', () => {
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
-  });
-});
-
-describe('TargetPage ToolBarIcons test', () => {
-  test('should render', () => {
-    const handleTargetCreateClick = testing.fn();
-
-    const gmp = {
-      settings: {manualUrl},
-    };
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    const {element} = render(
-      <ToolBarIcons onTargetCreateClick={handleTargetCreateClick} />,
-    );
-
-    const links = element.querySelectorAll('a');
-
-    expect(screen.getAllByTitle('Help: Targets')[0]).toBeInTheDocument();
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/scanning.html#managing-targets',
-    );
-  });
-
-  test('should call click handlers', () => {
-    const handleTargetCreateClick = testing.fn();
-
-    const gmp = {
-      settings: {manualUrl},
-    };
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    render(<ToolBarIcons onTargetCreateClick={handleTargetCreateClick} />);
-
-    const newIcon = screen.getByTestId('new-icon');
-    expect(newIcon).toHaveAttribute('title', 'New Target');
-    fireEvent.click(newIcon);
-    expect(handleTargetCreateClick).toHaveBeenCalled();
-  });
-
-  test('should not show icons if user does not have the right permissions', () => {
-    const handleTargetCreateClick = testing.fn();
-
-    const gmp = {
-      settings: {manualUrl},
-    };
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: wrongCaps,
-      router: true,
-    });
-
-    render(<ToolBarIcons onTargetCreateClick={handleTargetCreateClick} />);
-
-    const newIcon = screen.queryByTestId('new-icon');
-    expect(newIcon).toBeNull();
   });
 });

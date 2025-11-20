@@ -5,9 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
-import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
-import Details from 'web/pages/targets/Details';
+import Target, {type AliveTest, SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
+import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
+import Details from 'web/pages/targets/TargetDetails';
 
 const gmp = {
   settings: {
@@ -17,42 +17,36 @@ const gmp = {
 
 describe('Target Details tests', () => {
   test('should render full target details', () => {
-    const caps = new Capabilities(['everything']);
     const target = Target.fromElement({
       _id: 'foo',
       name: 'target',
       owner: {name: 'admin'},
       alive_tests: {
-        // eslint-disable-next-line camelcase
         alive_test: SCAN_CONFIG_DEFAULT,
       },
       comment: 'hello world',
-      writable: '1',
-      in_use: '0',
+      writable: YES_VALUE,
+      in_use: NO_VALUE,
       permissions: {permission: [{name: 'Everything'}]},
       hosts: '127.0.0.1, 192.168.0.1',
       exclude_hosts: '',
-      max_hosts: '2',
+      max_hosts: 2,
       port_list: {
         _id: 'pl_id1',
         name: 'pl1',
-        trash: '0',
       },
       krb5_credential: {
         _id: 'krb5_id',
         name: 'krb5',
-        trash: '0',
       },
       ssh_credential: {
         _id: '',
         name: '',
-        port: '',
-        trash: '0',
+        port: undefined,
       },
       ssh_elevate_credential: {
         _id: '',
         name: '',
-        trash: '0',
       },
       smb_credential: {
         _id: '4784',
@@ -61,18 +55,16 @@ describe('Target Details tests', () => {
       esxi_credential: {
         _id: '',
         name: '',
-        trash: '0',
       },
       snmp_credential: {
         _id: '',
         name: '',
-        trash: '0',
       },
     });
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -120,39 +112,34 @@ describe('Target Details tests', () => {
   });
 
   test('should render full target details with elevate credentials and tasks', () => {
-    const caps = new Capabilities(['everything']);
     const target = Target.fromElement({
       _id: 'foo',
       name: 'target',
       owner: {name: 'admin'},
       alive_tests: {
-        // eslint-disable-next-line camelcase
         alive_test: SCAN_CONFIG_DEFAULT,
       },
       comment: 'hello world',
-      writable: '1',
-      in_use: '1',
+      writable: YES_VALUE,
+      in_use: NO_VALUE,
       permissions: {permission: [{name: 'Everything'}]},
       hosts: '127.0.0.1, 192.168.0.1',
       exclude_hosts: '',
-      max_hosts: '2',
-      reverse_lookup_only: '1',
-      reverse_lookup_unify: '0',
+      max_hosts: 2,
+      reverse_lookup_only: YES_VALUE,
+      reverse_lookup_unify: NO_VALUE,
       port_list: {
         _id: 'pl_id1',
         name: 'pl1',
-        trash: '0',
       },
       ssh_credential: {
         _id: '1235',
         name: 'ssh',
-        port: '22',
-        trash: '0',
+        port: 22,
       },
       ssh_elevate_credential: {
         _id: '3456',
         name: 'ssh_elevate',
-        trash: '0',
       },
       smb_credential: {
         _id: '4784',
@@ -161,12 +148,10 @@ describe('Target Details tests', () => {
       esxi_credential: {
         _id: '',
         name: '',
-        trash: '0',
       },
       snmp_credential: {
         _id: '',
         name: '',
-        trash: '0',
       },
       tasks: {
         task: [
@@ -179,7 +164,7 @@ describe('Target Details tests', () => {
     });
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -250,7 +235,6 @@ describe('Target Details tests', () => {
         esxi_credential: {
           _id: 'esxi_id',
           name: 'esxi_cred',
-          trash: '0',
         },
       },
       enableKrb5: false,
@@ -274,7 +258,6 @@ describe('Target Details tests', () => {
         krb5_credential: {
           _id: 'krb5_id',
           name: 'krb5_cred',
-          trash: '0',
         },
       },
       enableKrb5: true,
@@ -298,7 +281,6 @@ describe('Target Details tests', () => {
         krb5_credential: {
           _id: 'krb5_id',
           name: 'krb5_cred',
-          trash: '0',
         },
       },
       enableKrb5: false,
@@ -320,13 +302,11 @@ describe('Target Details tests', () => {
         ssh_credential: {
           _id: 'ssh_id',
           name: 'ssh_cred',
-          port: '22',
-          trash: '0',
+          port: 22,
         },
         ssh_elevate_credential: {
           _id: 'ssh_elevate_id',
           name: 'ssh_elevate_cred',
-          trash: '0',
         },
       },
       enableKrb5: false,
@@ -372,7 +352,6 @@ describe('Target Details tests', () => {
         snmp_credential: {
           _id: 'snmp_id',
           name: 'snmp_cred',
-          trash: '0',
         },
       },
       enableKrb5: false,
@@ -400,30 +379,26 @@ describe('Target Details tests', () => {
       expectedText = [],
       notExpectedLabels = [],
     }) => {
-      const caps = new Capabilities(['everything']);
-
       const baseTarget = {
         owner: {name: 'admin'},
-        alive_tests: 'Scan Config Default',
-        writable: '1',
-        in_use: '0',
+        alive_tests: {
+          alive_test: SCAN_CONFIG_DEFAULT as AliveTest,
+        },
+        writable: YES_VALUE as YesNo,
+        in_use: NO_VALUE as YesNo,
         permissions: {permission: [{name: 'Everything'}]},
         hosts: '127.0.0.1',
         port_list: {
           _id: 'pl_id1',
           name: 'pl1',
-          trash: '0',
         },
         ssh_credential: {
           _id: '',
           name: '',
-          port: '',
-          trash: '0',
         },
         ssh_elevate_credential: {
           _id: '',
           name: '',
-          trash: '0',
         },
         smb_credential: {
           _id: '',
@@ -432,17 +407,14 @@ describe('Target Details tests', () => {
         esxi_credential: {
           _id: '',
           name: '',
-          trash: '0',
         },
         snmp_credential: {
           _id: '',
           name: '',
-          trash: '0',
         },
         krb5_credential: {
           _id: '',
           name: '',
-          trash: '0',
         },
       };
 
@@ -457,7 +429,7 @@ describe('Target Details tests', () => {
             enableKrb5,
           },
         },
-        capabilities: caps,
+        capabilities: true,
         router: true,
       });
 
