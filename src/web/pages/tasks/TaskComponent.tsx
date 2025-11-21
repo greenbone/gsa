@@ -50,10 +50,10 @@ import AgentTaskDialog, {
   type AgentTaskDialogData,
 } from 'web/pages/tasks/AgentTaskDialog';
 import ContainerImageTaskDialog from 'web/pages/tasks/ContainerImageTaskDialog';
-import ContainerTaskDialog, {
-  type ContainerTaskDialogData,
-} from 'web/pages/tasks/ContainerTaskDialog';
 import {useContainerImageTaskDialog} from 'web/pages/tasks/hooks/useContainerImageTaskDialog';
+import ImportTaskDialog, {
+  type ImportTaskDialogData,
+} from 'web/pages/tasks/ImportTaskDialog';
 import TaskDialog, {type TaskDialogData} from 'web/pages/tasks/TaskDialog';
 import {
   loadEntities as loadAlerts,
@@ -97,7 +97,7 @@ import TaskWizard from 'web/wizard/TaskWizard';
 
 interface TaskComponentRenderProps {
   create: () => void;
-  createContainer: () => void;
+  createImportTask: () => void;
   createContainerImage: () => void;
   clone: (task: Task) => void;
   delete: (task: Task) => void;
@@ -120,16 +120,16 @@ interface TaskComponentProps {
   onAdvancedTaskWizardSaved?: () => void;
   onCloned?: (response: EntityCloneResponse) => void;
   onCloneError?: (error: Error) => void;
-  onContainerCreated?: (response: EntityCreateResponse) => void;
-  onContainerCreateError?: (error: Error) => void;
-  onContainerSaved?: () => void;
-  onContainerSaveError?: (error: Error) => void;
   onCreated?: (response: EntityCreateResponse) => void;
   onCreateError?: (error: Error) => void;
   onDeleted?: () => void;
   onDeleteError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
   onDownloadError?: (error: Error) => void;
+  onImportTaskCreated?: (response: EntityCreateResponse) => void;
+  onImportTaskCreateError?: (error: Error) => void;
+  onImportTaskSaved?: () => void;
+  onImportTaskSaveError?: (error: Error) => void;
   onModifyTaskWizardError?: (error: Error) => void;
   onModifyTaskWizardSaved?: () => void;
   onReportImported?: () => void;
@@ -154,10 +154,10 @@ const TaskComponent = ({
   onAdvancedTaskWizardSaved,
   onCloned,
   onCloneError,
-  onContainerCreated,
-  onContainerCreateError,
-  onContainerSaved,
-  onContainerSaveError,
+  onImportTaskCreated,
+  onImportTaskCreateError,
+  onImportTaskSaved,
+  onImportTaskSaveError,
   onCreated,
   onCreateError,
   onDeleted,
@@ -186,8 +186,7 @@ const TaskComponent = ({
 
   const [advancedTaskWizardVisible, setAdvancedTaskWizardVisible] =
     useState(false);
-  const [containerTaskDialogVisible, setContainerTaskDialogVisible] =
-    useState(false);
+  const [importTaskDialogVisible, setImportTaskDialogVisible] = useState(false);
   const [modifyTaskWizardVisible, setModifyTaskWizardVisible] = useState(false);
   const [reportImportDialogVisible, setReportImportDialogVisible] =
     useState(false);
@@ -218,10 +217,10 @@ const TaskComponent = ({
     handleScannerChange: handleContainerImageScannerChange,
     handleScheduleChange: handleContainerImageScheduleChange,
   } = useContainerImageTaskDialog({
-    onContainerCreated,
-    onContainerCreateError,
-    onContainerSaved,
-    onContainerSaveError,
+    onContainerCreated: onImportTaskCreated,
+    onContainerCreateError: onImportTaskCreateError,
+    onContainerSaved: onImportTaskSaved,
+    onContainerSaveError: onImportTaskSaveError,
   });
 
   const [alertIds, setAlertIds] = useState<string[]>([]);
@@ -477,8 +476,8 @@ const TaskComponent = ({
     setTargetId(data.id);
   };
 
-  const openContainerTaskDialog = (task?: Task) => {
-    setContainerTaskDialogVisible(true);
+  const openImportTaskDialog = (task?: Task) => {
+    setImportTaskDialogVisible(true);
     setTask(task);
     setName(task ? task.name : _('Unnamed'));
     setComment(task ? task.comment : '');
@@ -487,45 +486,45 @@ const TaskComponent = ({
     setAutoDeleteData(task ? task.auto_delete_data : undefined);
     setTitle(
       task
-        ? _('Edit Container Task {{name}}', {name: task.name as string})
-        : _('New Container Task'),
+        ? _('Edit Import Task {{name}}', {name: task.name as string})
+        : _('New Import Task'),
     );
   };
 
-  const closeContainerTaskDialog = () => {
-    setContainerTaskDialogVisible(false);
+  const closeImportTaskDialog = () => {
+    setImportTaskDialogVisible(false);
   };
 
-  const handleCloseContainerTaskDialog = () => {
-    closeContainerTaskDialog();
+  const handleCloseImportTaskDialog = () => {
+    closeImportTaskDialog();
   };
 
-  const handleSaveContainerTask = ({
+  const handleSaveImportTask = ({
     id,
     comment,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     in_assets,
     name,
-  }: ContainerTaskDialogData) => {
+  }: ImportTaskDialogData) => {
     if (isDefined(id)) {
       return gmp.task
-        .saveContainer({
+        .saveImportTask({
           id,
           comment,
           in_assets,
           name,
         })
-        .then(onContainerSaved, onContainerSaveError)
-        .then(() => closeContainerTaskDialog());
+        .then(onImportTaskSaved, onImportTaskSaveError)
+        .then(() => closeImportTaskDialog());
     }
 
     return gmp.task
-      .createContainer({
+      .createImportTask({
         comment,
         name,
       })
-      .then(onContainerCreated, onContainerCreateError)
-      .then(() => closeContainerTaskDialog());
+      .then(onImportTaskCreated, onImportTaskCreateError)
+      .then(() => closeImportTaskDialog());
   };
 
   const handleSaveTask = ({
@@ -675,8 +674,8 @@ const TaskComponent = ({
   };
 
   const openTaskDialog = async (task?: Task) => {
-    if (isDefined(task) && task.isContainer()) {
-      openContainerTaskDialog(task);
+    if (isDefined(task) && task.isImport()) {
+      openImportTaskDialog(task);
     } else {
       if (task?.isAgent()) {
         await openAgentTaskDialog(task);
@@ -993,7 +992,7 @@ const TaskComponent = ({
           delete: handleEntityDelete,
           download: handleEntityDownload,
           create: openTaskDialog,
-          createContainer: openContainerTaskDialog,
+          createImportTask: openImportTaskDialog,
           createContainerImage: openContainerImageTaskDialog,
           edit: handleEditTask,
           start: handleTaskStart,
@@ -1066,15 +1065,15 @@ const TaskComponent = ({
         </TargetComponent>
       )}
 
-      {containerTaskDialogVisible && (
-        <ContainerTaskDialog
+      {importTaskDialogVisible && (
+        <ImportTaskDialog
           comment={comment}
           in_assets={inAssets}
           name={name}
           task={task}
           title={title}
-          onClose={handleCloseContainerTaskDialog}
-          onSave={handleSaveContainerTask}
+          onClose={handleCloseImportTaskDialog}
+          onSave={handleSaveImportTask}
         />
       )}
 

@@ -5,14 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import TaskRow from 'web/pages/tasks/TaskRow';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 const gmp = {settings: {}};
-const caps = new Capabilities(['everything']);
 
 const lastReport = {
   report: {
@@ -29,7 +27,7 @@ const currentReport = {
   },
 };
 
-describe('Task Row tests', () => {
+describe('TaskRow tests', () => {
   test('should render', () => {
     const task = Task.fromElement({
       _id: '314',
@@ -57,7 +55,7 @@ describe('Task Row tests', () => {
 
     const {render, store} = rendererWithTableBody({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       store: true,
       router: true,
     });
@@ -171,7 +169,7 @@ describe('Task Row tests', () => {
 
     const {render, store} = rendererWithTableBody({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       store: true,
       router: true,
     });
@@ -236,7 +234,7 @@ describe('Task Row tests', () => {
 
     const {render, store} = rendererWithTableBody({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       store: true,
       router: true,
     });
@@ -332,7 +330,7 @@ describe('Task Row tests', () => {
 
     const {render, store} = rendererWithTableBody({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       store: true,
       router: true,
     });
@@ -446,7 +444,7 @@ describe('Task Row tests', () => {
 
     const {render, store} = rendererWithTableBody({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       store: true,
       router: true,
     });
@@ -563,7 +561,7 @@ describe('Task Row tests', () => {
 
     const {render, store} = rendererWithTableBody({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       store: true,
       router: true,
     });
@@ -680,7 +678,7 @@ describe('Task Row tests', () => {
 
     const {render, store} = rendererWithTableBody({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       store: true,
       router: true,
     });
@@ -804,7 +802,7 @@ describe('Task Row tests', () => {
 
     const {render, store} = rendererWithTableBody({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       store: true,
       router: true,
     });
@@ -834,11 +832,11 @@ describe('Task Row tests', () => {
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
-    expect(bars[0]).toHaveAttribute('title', 'Container');
-    expect(bars[0]).toHaveTextContent('Container');
+    expect(bars[0]).toHaveAttribute('title', 'Import Task');
+    expect(bars[0]).toHaveTextContent('Import Task');
 
     const detailsLinks = screen.getAllByTestId('details-link');
-    expect(detailsLinks[0]).toHaveTextContent('Container');
+    expect(detailsLinks[0]).toHaveTextContent('Import Task');
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Reports
@@ -871,7 +869,7 @@ describe('Task Row tests', () => {
     expect(handleTaskStart).not.toHaveBeenCalled();
 
     const resumeIcon = screen.getByTestId('resume-icon');
-    expect(resumeIcon).toHaveAttribute('title', 'Task is a container');
+    expect(resumeIcon).toHaveAttribute('title', 'Task is for import only');
     fireEvent.click(resumeIcon);
     expect(handleTaskResume).not.toHaveBeenCalled();
 

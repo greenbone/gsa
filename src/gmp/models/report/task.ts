@@ -72,7 +72,7 @@ class ReportTask extends Model {
     return copy;
   }
 
-  isContainer() {
+  isImport() {
     return (
       !isDefined(this.target) &&
       !isDefined(this.agentGroup) &&

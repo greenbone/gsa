@@ -231,7 +231,7 @@ describe('TaskCommand tests', () => {
     const mockResponse = createActionResultResponse();
     const fakeHttp = createHttp(mockResponse);
     const cmd = new TaskCommand(fakeHttp);
-    const response = await cmd.createContainer({
+    const response = await cmd.createImportTask({
       name: 'foo',
       comment: 'comment',
     });

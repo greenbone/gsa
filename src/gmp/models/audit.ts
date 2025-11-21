@@ -212,7 +212,10 @@ class Audit extends Model {
     return this.alterable !== NO_VALUE;
   }
 
-  isContainer() {
+  /**
+   * Returns true if the audit is an import audit (formerly known as container task)
+   */
+  isImport() {
     return !isDefined(this.target);
   }
 }

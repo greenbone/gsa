@@ -28,6 +28,7 @@ import {
 import ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import type Result from 'gmp/models/result';
+import {type TaskStatus} from 'gmp/models/task';
 import {parseDate, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -210,7 +211,7 @@ class AuditReportReport extends Model {
     if (isDefined(delta?.report)) {
       copy.delta_report = {
         id: delta.report._id,
-        scan_run_status: delta.report.scan_run_status,
+        scan_run_status: delta.report.scan_run_status as TaskStatus,
         scan_end: parseDate(delta.report.scan_end),
         scan_start: parseDate(delta.report.scan_start),
         timestamp: parseDate(delta.report.timestamp),
