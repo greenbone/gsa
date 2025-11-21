@@ -7,28 +7,15 @@ import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
 import Filter from 'gmp/models/filter';
+import type Note from 'gmp/models/note';
+import type Override from 'gmp/models/override';
 import type Permission from 'gmp/models/permission';
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 import {type default as Task, USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import Badge from 'web/components/badge/Badge';
-import {
-  AlterableIcon,
-  NoteIcon,
-  OverrideIcon,
-  ReportIcon,
-  ResultIcon,
-  TaskIcon,
-} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
+import {TaskIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
-import DetailsLink from 'web/components/link/DetailsLink';
-import Link from 'web/components/link/Link';
 import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL,
@@ -52,20 +39,13 @@ import EntityPermissions, {
   type EntityPermissionsProps,
 } from 'web/entity/EntityPermissions';
 import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
-import CloneIcon from 'web/entity/icon/CloneIcon';
-import EditIcon from 'web/entity/icon/EditIcon';
-import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
-import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconWithSync';
-import TaskImportReportIcon from 'web/pages/tasks/icons/TaskImportReportIcon';
-import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
-import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
+import TaskDetailsPageToolBarIcons from 'web/pages/tasks/icons/TaskDetailsPageToolBarIcons';
 import TaskComponent from 'web/pages/tasks/TaskComponent';
 import TaskDetails from 'web/pages/tasks/TaskDetails';
 import TaskStatus from 'web/pages/tasks/TaskStatus';
@@ -86,25 +66,7 @@ import {
   loadEntity as loadTask,
 } from 'web/store/entities/tasks';
 import {renderYesNo} from 'web/utils/Render';
-import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
-
-interface ToolBarIconsProps {
-  entity: Task;
-  links?: boolean;
-  notes?: Array<unknown>;
-  overrides?: Array<unknown>;
-  onContainerTaskCreateClick?: () => void | Promise<void>;
-  onReportImportClick?: (value: Task) => void | Promise<void>;
-  onTaskCloneClick?: (value: Task) => void | Promise<void>;
-  onTaskCreateClick?: () => void | Promise<void>;
-  onTaskDeleteClick?: (value: Task) => void | Promise<void>;
-  onTaskDownloadClick?: () => void | Promise<void>;
-  onTaskEditClick?: (value: Task) => void | Promise<void>;
-  onTaskResumeClick?: (value: Task) => void | Promise<void>;
-  onTaskStartClick?: (value: Task) => void | Promise<void>;
-  onTaskStopClick?: (value: Task) => void | Promise<void>;
-}
 
 interface DetailsProps {
   entity: Task;
@@ -113,178 +75,14 @@ interface DetailsProps {
 
 interface TaskDetailsPageProps {
   entity: Task;
-  permissions: Permission[];
+  overrides?: Override[];
+  notes?: Note[];
+  permissions?: Permission[];
+  isLoading?: boolean;
   onChanged?: () => void;
   onDownloaded?: OnDownloadedFunc;
   onError?: (error: unknown) => void;
 }
-
-export const ToolBarIcons = ({
-  entity,
-  links,
-  notes = [],
-  overrides = [],
-  onTaskDeleteClick,
-  onTaskCloneClick,
-  onTaskDownloadClick,
-  onTaskEditClick,
-  onReportImportClick,
-  onTaskCreateClick,
-  onContainerTaskCreateClick,
-  onTaskStartClick,
-  onTaskStopClick,
-  onTaskResumeClick,
-}: ToolBarIconsProps) => {
-  const [_] = useTranslation();
-  const {
-    current_report: currentReport,
-    last_report: lastReport,
-    report_count: reportCount,
-    result_count: resultCount,
-  } = entity;
-  return (
-    <Divider margin="10px">
-      <IconDivider align={['start', 'start']}>
-        <ManualIcon
-          anchor="managing-tasks"
-          page="scanning"
-          title={_('Help: Tasks')}
-        />
-        <ListIcon page="tasks" title={_('Task List')} />
-        {entity.isAlterable() && !entity.isNew() && (
-          <AlterableIcon
-            title={_(
-              'This is an Alterable Task. Reports may not relate to ' +
-                'current Scan Config or Target!',
-            )}
-          />
-        )}
-      </IconDivider>
-
-      <IconDivider>
-        <NewIconMenu
-          onNewClick={onTaskCreateClick}
-          onNewContainerClick={onContainerTaskCreateClick}
-        />
-        <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
-        <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-        <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
-        <ExportIcon
-          title={_('Export Task as XML')}
-          value={entity}
-          onClick={onTaskDownloadClick}
-        />
-      </IconDivider>
-
-      <IconDivider>
-        {isDefined(entity.schedule) && (
-          <TaskScheduleIcon links={links} schedule={entity.schedule} />
-        )}
-        <TaskIconWithSync
-          task={entity}
-          type="start"
-          onClick={onTaskStartClick}
-        />
-
-        <TaskImportReportIcon task={entity} onClick={onReportImportClick} />
-
-        <TaskStopIcon task={entity} onClick={onTaskStopClick} />
-
-        {!entity.isContainer() && (
-          <TaskIconWithSync
-            task={entity}
-            type="resume"
-            onClick={onTaskResumeClick}
-          />
-        )}
-      </IconDivider>
-
-      <Divider margin="10px">
-        <IconDivider>
-          {isDefined(currentReport) && (
-            <DetailsLink
-              id={currentReport.id}
-              title={_('Current Report for Task {{- name}} from {{- date}}', {
-                name: entity.name as string,
-                date: formattedUserSettingShortDate(
-                  currentReport.scan_start,
-                ) as string,
-              })}
-              type="report"
-            >
-              <ReportIcon />
-            </DetailsLink>
-          )}
-
-          {!isDefined(currentReport) && isDefined(lastReport) && (
-            <DetailsLink
-              id={lastReport.id}
-              title={_('Last Report for Task {{- name}} from {{- date}}', {
-                name: entity.name as string,
-                date: formattedUserSettingShortDate(
-                  lastReport.scan_start,
-                ) as string,
-              })}
-              type="report"
-            >
-              <ReportIcon />
-            </DetailsLink>
-          )}
-
-          <Link
-            filter={'task_id=' + entity.id}
-            title={_('Total Reports for Task {{- name}}', {
-              name: entity.name as string,
-            })}
-            to="reports"
-          >
-            <Badge content={reportCount?.total ?? 0}>
-              <ReportIcon />
-            </Badge>
-          </Link>
-        </IconDivider>
-
-        <Link
-          filter={'task_id=' + entity.id}
-          title={_('Results for Task {{- name}}', {
-            name: entity.name as string,
-          })}
-          to="results"
-        >
-          <Badge content={resultCount}>
-            <ResultIcon />
-          </Badge>
-        </Link>
-
-        <IconDivider>
-          <Link
-            filter={'task_id=' + entity.id}
-            title={_('Notes for Task {{- name}}', {
-              name: entity.name as string,
-            })}
-            to="notes"
-          >
-            <Badge content={notes.length}>
-              <NoteIcon />
-            </Badge>
-          </Link>
-
-          <Link
-            filter={'task_id=' + entity.id}
-            title={_('Overrides for Task {{- name}}', {
-              name: entity.name as string,
-            })}
-            to="overrides"
-          >
-            <Badge content={overrides.length}>
-              <OverrideIcon />
-            </Badge>
-          </Link>
-        </IconDivider>
-      </Divider>
-    </Divider>
-  );
-};
 
 const Details = ({entity, links}: DetailsProps) => {
   const [_] = useTranslation();
@@ -328,6 +126,9 @@ const Details = ({entity, links}: DetailsProps) => {
 const TaskDetailsPage = ({
   entity,
   permissions = [],
+  notes = [],
+  overrides = [],
+  isLoading = false,
   onChanged,
   onDownloaded,
   onError,
@@ -346,13 +147,13 @@ const TaskDetailsPage = ({
     <TaskComponent
       onCloneError={onError}
       onCloned={goToDetails('task', navigate)}
-      onContainerCreated={goToDetails('task', navigate)}
-      onContainerSaved={onChanged}
       onCreated={goToDetails('task', navigate)}
       onDeleteError={onError}
       onDeleted={goToList('tasks', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
+      onImportTaskCreated={goToDetails('task', navigate)}
+      onImportTaskSaved={onChanged}
       onReportImported={onChanged}
       onResumeError={onError}
       onResumed={onChanged}
@@ -365,7 +166,7 @@ const TaskDetailsPage = ({
       {({
         clone,
         create,
-        createContainer,
+        createImportTask,
         delete: deleteFunc,
         download,
         edit,
@@ -377,22 +178,26 @@ const TaskDetailsPage = ({
         <EntityPage
           {...props}
           entity={entity}
+          isLoading={isLoading}
           sectionIcon={<TaskIcon size="large" />}
           title={_('Task')}
-          // @ts-expect-error
-          toolBarIcons={ToolBarIcons}
-          onChanged={onChanged}
-          onContainerTaskCreateClick={createContainer}
-          onError={onError}
-          onReportImportClick={reportImport}
-          onTaskCloneClick={clone}
-          onTaskCreateClick={create}
-          onTaskDeleteClick={deleteFunc}
-          onTaskDownloadClick={download}
-          onTaskEditClick={edit}
-          onTaskResumeClick={resume}
-          onTaskStartClick={start}
-          onTaskStopClick={stop}
+          toolBarIcons={
+            <TaskDetailsPageToolBarIcons
+              entity={entity}
+              notesCount={notes.length}
+              overridesCount={overrides.length}
+              onImportTaskCreateClick={createImportTask}
+              onReportImportClick={reportImport}
+              onTaskCloneClick={clone}
+              onTaskCreateClick={create}
+              onTaskDeleteClick={deleteFunc}
+              onTaskDownloadClick={download}
+              onTaskEditClick={edit}
+              onTaskResumeClick={resume}
+              onTaskStartClick={start}
+              onTaskStopClick={stop}
+            />
+          }
         >
           {() => {
             return (
@@ -509,7 +314,7 @@ const load = (gmp: Gmp) => {
 };
 
 export const reloadInterval = ({entity}: {entity: Task}) => {
-  if (!isDefined(entity) || entity.isContainer()) {
+  if (!isDefined(entity) || entity.isImport()) {
     return NO_RELOAD;
   }
   return entity.isActive()

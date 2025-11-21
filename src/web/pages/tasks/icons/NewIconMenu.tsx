@@ -12,14 +12,14 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface NewIconMenuProps {
   onNewClick?: () => void;
-  onNewContainerClick?: () => void;
+  onNewImportTaskClick?: () => void;
   onNewAgentTaskClick?: () => void;
   onNewContainerImageTaskClick?: () => void;
 }
 
 const NewIconMenu = ({
   onNewClick,
-  onNewContainerClick,
+  onNewImportTaskClick,
   onNewAgentTaskClick,
   onNewContainerImageTaskClick,
 }: NewIconMenuProps) => {
@@ -35,9 +35,9 @@ const NewIconMenu = ({
           onClick={onNewClick}
         />
         <MenuEntry
-          data-testid="new-container-task-menu"
-          title={_('New Container Task')}
-          onClick={onNewContainerClick}
+          data-testid="new-import-task-menu"
+          title={_('New Import Task')}
+          onClick={onNewImportTaskClick}
         />
         {features.featureEnabled('ENABLE_AGENTS') && (
           <MenuEntry

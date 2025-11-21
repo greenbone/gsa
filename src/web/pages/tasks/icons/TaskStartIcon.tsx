@@ -16,16 +16,19 @@ interface TaskStartIconProps<TTask extends Audit | Task> {
   onClick?: (task: TTask) => void | Promise<void>;
 }
 
+const isTask = (taskOrAudit: Task | Audit): taskOrAudit is Task =>
+  (taskOrAudit as Task).usageType === USAGE_TYPE.scan;
+
 const TaskStartIcon = <TTask extends Audit | Task>({
   task,
   onClick,
 }: TaskStartIconProps<TTask>) => {
   const [_] = useTranslation();
-  const type = task.usageType === USAGE_TYPE.audit ? _('audit') : _('task');
+  const type = isTask(task) ? _('task') : _('audit');
 
   const capabilities = useCapabilities();
 
-  if (task.isRunning() || task.isContainer()) {
+  if (task.isRunning() || task.isImport()) {
     return null;
   }
 

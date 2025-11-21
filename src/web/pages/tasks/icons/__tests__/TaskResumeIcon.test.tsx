@@ -144,8 +144,7 @@ describe('Task ResumeIcon component tests', () => {
     expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
-  test('should render in inactive state if task is a container', () => {
-    const caps = new Capabilities(['everything']);
+  test('should render in inactive state if task is a import task', () => {
     const elem = {
       status: TASK_STATUS.new,
       permissions: {permission: [{name: 'everything'}]},
@@ -153,17 +152,16 @@ describe('Task ResumeIcon component tests', () => {
     const task = Task.fromElement(elem);
     const clickHandler = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: true});
 
     const {element} = render(<ResumeIcon task={task} />);
 
-    expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
 
     fireEvent.click(element);
 
     expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveAttribute('title', 'Task is a container');
+    expect(element).toHaveAttribute('title', 'Task is for import only');
     expect(element).toHaveAttribute('disabled');
     expect(element).toHaveAttribute('data-disabled', 'true');
   });

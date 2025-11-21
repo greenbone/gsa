@@ -16,23 +16,26 @@ interface TaskResumeIconProps<TTask extends Audit | Task> {
   onClick?: (task: TTask) => void | Promise<void>;
 }
 
+const isTask = (taskOrAudit: Task | Audit): taskOrAudit is Task =>
+  (taskOrAudit as Task).usageType === USAGE_TYPE.scan;
+
 const TaskResumeIcon = <TTask extends Audit | Task>({
   task,
   onClick,
 }: TaskResumeIconProps<TTask>) => {
   const [_] = useTranslation();
-  const type = task.usageType === USAGE_TYPE.audit ? _('audit') : _('task');
+  const type = isTask(task) ? _('task') : _('audit');
   const capabilities = useCapabilities();
 
   if (task.isQueued()) {
     return null;
   }
 
-  if (task.isContainer()) {
+  if (task.isImport()) {
     return (
       <ResumeIcon
         active={false}
-        title={_('{{type}} is a container', {
+        title={_('{{type}} is for import only', {
           type: capitalizeFirstLetter(type),
         })}
       />

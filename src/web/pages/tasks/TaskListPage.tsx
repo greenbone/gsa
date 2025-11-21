@@ -18,7 +18,7 @@ import withEntitiesContainer, {
 } from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskDashboard, {TASK_DASHBOARD_ID} from 'web/pages/tasks/dashboard';
-import TaskToolBarIcons from 'web/pages/tasks/icons/TaskToolBarIcons';
+import TaskToolBarIcons from 'web/pages/tasks/icons/TaskListPageToolBarIcons';
 import TaskComponent from 'web/pages/tasks/TaskComponent';
 import TaskFilterDialog from 'web/pages/tasks/TaskFilterDialog';
 import TaskTable from 'web/pages/tasks/TaskTable';
@@ -31,7 +31,7 @@ type TaskListPageProps = WithEntitiesContainerComponentProps<Task>;
 
 interface TaskEntitiesPageProps {
   onAdvancedTaskWizardClick?: () => void;
-  onContainerTaskCreateClick?: () => void;
+  onImportTaskCreateClick?: () => void;
   onModifyTaskWizardClick?: () => void;
   onNewAgentTaskClick?: () => void;
   onNewContainerImageTaskClick?: () => void;
@@ -61,13 +61,13 @@ const TaskListPage = ({
       onAdvancedTaskWizardSaved={onChanged}
       onCloneError={onError}
       onCloned={onChanged}
-      onContainerCreated={onChanged}
-      onContainerSaved={onChanged}
       onCreated={onChanged}
       onDeleteError={onError}
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
+      onImportTaskCreated={onChanged}
+      onImportTaskSaved={onChanged}
       onModifyTaskWizardSaved={onChanged}
       onReportImported={onChanged}
       onResumeError={onError}
@@ -82,7 +82,7 @@ const TaskListPage = ({
       {({
         clone,
         create,
-        createContainer,
+        createImportTask,
         delete: deleteFunc,
         download,
         edit,
@@ -117,9 +117,9 @@ const TaskListPage = ({
             title={_('Tasks')}
             toolBarIcons={TaskToolBarIcons}
             onAdvancedTaskWizardClick={advancedTaskWizard}
-            onContainerTaskCreateClick={createContainer}
             onError={onError}
             onFilterChanged={onFilterChanged}
+            onImportTaskCreateClick={createImportTask}
             onModifyTaskWizardClick={modifyTaskWizard}
             onNewAgentTaskClick={onNewAgentTaskClick}
             onNewContainerImageTaskClick={onNewContainerImageTaskClick}

@@ -21,6 +21,9 @@ const StyledDetailsLink = styled(DetailsLink)`
   }
 `;
 
+const isTask = (taskOrAudit: Task | Audit): taskOrAudit is Task =>
+  (taskOrAudit as Task).usageType === USAGE_TYPE.scan;
+
 const TaskStatus = ({task, links = true}: TaskStatusProps) => {
   let report_id: string | undefined;
   if (isDefined(task.current_report)) {
@@ -31,22 +34,23 @@ const TaskStatus = ({task, links = true}: TaskStatusProps) => {
     report_id = '';
     links = false;
   }
+  const isImport = task.isImport();
   return (
     <StyledDetailsLink
       id={report_id}
       textOnly={!links}
-      type={task.usageType === USAGE_TYPE.audit ? 'auditreport' : 'report'}
+      type={isTask(task) ? 'report' : 'auditreport'}
     >
       <StatusBar
         progress={task.progress}
         status={
-          task.isContainer()
+          isImport
             ? task.status === TASK_STATUS.interrupted
               ? TASK_STATUS.uploadinginterrupted
               : task.status === TASK_STATUS.running ||
                   task.status === TASK_STATUS.processing
                 ? TASK_STATUS.processing
-                : TASK_STATUS.container
+                : TASK_STATUS.import
             : task.status
         }
       />

@@ -5,7 +5,6 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
@@ -16,7 +15,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
-const caps = new Capabilities(['everything']);
 const gmp = {
   settings: {
     severityRating: SEVERITY_RATING_CVSS_3,
@@ -31,7 +29,7 @@ describe('Report Hosts Tab tests', () => {
 
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -130,7 +128,7 @@ describe('Audit Report Hosts Tab tests', () => {
 
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });

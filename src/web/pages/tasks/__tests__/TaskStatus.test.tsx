@@ -5,13 +5,10 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import Status from 'web/pages/tasks/TaskStatus';
 
-const caps = new Capabilities(['everything']);
-
-describe('Task Status tests', () => {
+describe('TaskStatus tests', () => {
   test('should render', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.new,
@@ -20,7 +17,7 @@ describe('Task Status tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: true});
     render(<Status task={task} />);
 
     const bar = screen.getByTestId('progressbar-box');
@@ -40,7 +37,7 @@ describe('Task Status tests', () => {
       last_report: {report: {_id: '42'}},
     });
 
-    const {render} = rendererWith({capabilities: caps, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
     render(<Status task={task} />);
 
     const bar = screen.getByTestId('progressbar-box');
@@ -62,7 +59,7 @@ describe('Task Status tests', () => {
       current_report: {report: {_id: '1234'}},
     });
 
-    const {render} = rendererWith({capabilities: caps, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
     render(<Status task={task} />);
 
     const bar = screen.getByTestId('progressbar-box');
@@ -74,31 +71,31 @@ describe('Task Status tests', () => {
     expect(detailslink).toHaveAttribute('href', '/report/1234');
   });
 
-  test('should render container', () => {
+  test('should render import task', () => {
     const task = Task.fromElement({
       permissions: {permission: [{name: 'everything'}]},
       last_report: {report: {_id: '42'}},
     });
 
-    const {render} = rendererWith({capabilities: caps, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
     render(<Status task={task} />);
 
     const bar = screen.getByTestId('progressbar-box');
-    expect(bar).toHaveAttribute('title', 'Container');
-    expect(bar).toHaveTextContent('Container');
+    expect(bar).toHaveAttribute('title', 'Import Task');
+    expect(bar).toHaveTextContent('Import Task');
 
     const detailslink = screen.queryByTestId('details-link');
-    expect(detailslink).toHaveTextContent('Container');
+    expect(detailslink).toHaveTextContent('Import Task');
     expect(detailslink).toHaveAttribute('href', '/report/42');
   });
 
-  test('should render container with status interrupted', () => {
+  test('should render import task with status interrupted', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.interrupted,
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: true});
     render(<Status task={task} />);
 
     const bar = screen.getByTestId('progressbar-box');
@@ -106,13 +103,13 @@ describe('Task Status tests', () => {
     expect(bar).toHaveTextContent(TASK_STATUS.interrupted);
   });
 
-  test('should render running container task as processing', () => {
+  test('should render running import task as processing', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.running,
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: true});
     render(<Status task={task} />);
 
     const bar = screen.getByTestId('progressbar-box');
@@ -120,13 +117,13 @@ describe('Task Status tests', () => {
     expect(bar).toHaveTextContent(TASK_STATUS.processing);
   });
 
-  test('should render processing container task as processing', () => {
+  test('should render processing import task as processing', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.processing,
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: true});
     render(<Status task={task} />);
 
     const bar = screen.getByTestId('progressbar-box');

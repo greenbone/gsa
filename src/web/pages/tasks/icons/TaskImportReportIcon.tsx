@@ -22,7 +22,7 @@ const TaskImportReportIcon = ({
 }: TaskImportReportIconProps) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
-  if (!task.isContainer() || !capabilities.mayCreate('report')) {
+  if (!task.isImport() || !capabilities.mayCreate('report')) {
     return null;
   }
 

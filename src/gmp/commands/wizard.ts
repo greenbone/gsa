@@ -170,7 +170,7 @@ class WizardCommand extends HttpCommand {
       const taskElement = task as TaskElement;
       if (taskElement.usage_type === 'scan') {
         const taskObject = Task.fromElement(taskElement);
-        if (!taskObject.isContainer()) {
+        if (!taskObject.isImport()) {
           tasks.push(taskObject);
         }
       }

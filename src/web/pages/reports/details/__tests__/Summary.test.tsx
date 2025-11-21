@@ -5,7 +5,6 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
@@ -16,14 +15,12 @@ const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
-const caps = new Capabilities(['everything']);
-
 describe('Report Summary tests', () => {
   test('should render Report Summary', () => {
     const {report} = getMockReport();
 
     const {render, store} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -36,7 +33,7 @@ describe('Report Summary tests', () => {
         filter={filter}
         isUpdating={false}
         report={report}
-        reportId={report.id}
+        reportId={report.id as string}
       />,
     );
 
@@ -78,7 +75,7 @@ describe('Report Summary tests', () => {
     const {report} = getMockDeltaReport();
 
     const {render, store} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -87,7 +84,11 @@ describe('Report Summary tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element} = render(
-      <Summary filter={filter} report={report} reportId={report.id} />,
+      <Summary
+        filter={filter}
+        report={report}
+        reportId={report.id as string}
+      />,
     );
 
     const tableData = element.querySelectorAll('td');

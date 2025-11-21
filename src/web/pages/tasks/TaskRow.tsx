@@ -174,12 +174,12 @@ const TaskRow = ({
         <TaskReport links={links} report={lastReport} />
       </TableData>
       <TableData>
-        {!entity.isContainer() && isDefined(lastReport) && (
+        {!entity.isImport() && isDefined(lastReport) && (
           <SeverityBar severity={lastReport.severity} />
         )}
       </TableData>
       <TableData align="center">
-        {!entity.isContainer() && (
+        {!entity.isImport() && (
           <TaskTrend name={entity.trend as TaskTrendType} />
         )}
       </TableData>

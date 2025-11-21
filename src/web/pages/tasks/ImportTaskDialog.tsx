@@ -12,26 +12,26 @@ import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
 
-interface ContainerTaskDialogState {
+interface ImportTaskDialogState {
   comment: string;
   in_assets: YesNo;
   name: string;
   id?: string;
 }
 
-export type ContainerTaskDialogData = ContainerTaskDialogState;
+export type ImportTaskDialogData = ImportTaskDialogState;
 
-interface ContainerTaskDialogProps {
+interface ImportTaskDialogProps {
   comment?: string;
   in_assets?: YesNo;
   name?: string;
   task?: Task;
   title?: string;
   onClose: () => void | Promise<void>;
-  onSave: (data: ContainerTaskDialogData) => void | Promise<void>;
+  onSave: (data: ImportTaskDialogData) => void | Promise<void>;
 }
 
-const ContainerTaskDialog = ({
+const ImportTaskDialog = ({
   comment = '',
   // eslint-disable-next-line @typescript-eslint/naming-convention
   in_assets = YES_VALUE,
@@ -40,13 +40,13 @@ const ContainerTaskDialog = ({
   title,
   onClose,
   onSave,
-}: ContainerTaskDialogProps) => {
+}: ImportTaskDialogProps) => {
   const [_] = useTranslation();
   const isEdit = isDefined(task);
 
-  title = title || _('New Container Task');
+  title = title || _('New Import Task');
 
-  const data: ContainerTaskDialogState = {
+  const data: ImportTaskDialogState = {
     comment,
     in_assets,
     name,
@@ -54,7 +54,7 @@ const ContainerTaskDialog = ({
   };
 
   return (
-    <SaveDialog<{}, ContainerTaskDialogState>
+    <SaveDialog<{}, ImportTaskDialogState>
       defaultValues={data}
       title={title}
       onClose={onClose}
@@ -91,4 +91,4 @@ const ContainerTaskDialog = ({
   );
 };
 
-export default ContainerTaskDialog;
+export default ImportTaskDialog;

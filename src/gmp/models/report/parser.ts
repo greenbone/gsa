@@ -58,7 +58,7 @@ export interface ErrorsElement extends CountElement {
   error: ErrorElement | ErrorElement[];
 }
 
-interface ReportResultElement {
+export interface ReportResultElement {
   _id?: string;
   compliance?: ComplianceType; // only for compliance reports
   creation_time?: string;
@@ -214,7 +214,7 @@ interface TlsCertificatesReportElement {
   tls_certificates?: TlsCertificatesElement;
 }
 
-interface PortElement {
+export interface PortElement {
   __text?: string;
   host?: string;
   severity?: number;
@@ -236,6 +236,16 @@ interface PageCountElement {
   page?: number;
 }
 
+interface ReportHostDetailElement {
+  name?: string;
+  source?: {
+    description?: string;
+    name?: string;
+  };
+  value?: string | number;
+  extra?: number; // only for closed cves. contains severity
+}
+
 export interface ReportHostElement {
   asset?: {
     _asset_id?: string;
@@ -248,15 +258,7 @@ export interface ReportHostElement {
     incomplete?: PageCountElement;
     undefined?: PageCountElement;
   };
-  detail?: {
-    name?: string;
-    source?: {
-      description?: string;
-      name?: string;
-    };
-    value?: string | number;
-    extra?: number; // only for closed cves. contains severity
-  }[];
+  detail?: ReportHostDetailElement[];
   end?: string; // date
   ip?: string;
   host_compliance?: ComplianceType; // only for compliance reports

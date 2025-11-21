@@ -137,8 +137,8 @@ const PageContent = ({
   const showThresholdMessage =
     !isLoading && hasReport && results.counts.filtered > threshold;
 
-  const isContainer = isDefined(task) && task.isContainer();
-  const status = isContainer ? TASK_STATUS.container : scan_run_status;
+  const isImport = isDefined(task) && task.isImport();
+  const status = isImport ? TASK_STATUS.import : scan_run_status;
   const progress = isDefined(task) ? task.progress : 0;
 
   const showIsLoading = isLoading && !hasReport;
@@ -282,7 +282,7 @@ const PageContent = ({
                   </TabPanel>
                   <TabPanel>
                     <ResultsTab
-                      hasTarget={!isContainer}
+                      hasTarget={!isImport}
                       progress={progress}
                       reportFilter={reportFilter}
                       reportId={reportId}

@@ -119,7 +119,7 @@ const ToolBarIcons = ({
                 <TlsCertificateIcon />
               </Link>
             )}
-            {isDefined(task) && !task.isContainer() && (
+            {isDefined(task) && !task.isImport() && (
               <Link
                 query={{
                   start: isDefined(report.scan_start)

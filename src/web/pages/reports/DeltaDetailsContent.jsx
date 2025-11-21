@@ -89,8 +89,8 @@ const PageContent = ({
     return <ErrorMessage message={entityError.message} />;
   }
 
-  const isContainer = isDefined(task) && task.isContainer();
-  const status = isContainer ? TASK_STATUS.container : scan_run_status;
+  const isImport = isDefined(task) && task.isImport();
+  const status = isImport ? TASK_STATUS.import : scan_run_status;
   const progress = isDefined(task) ? task.progress : 0;
 
   const header_title = (
@@ -185,7 +185,7 @@ const PageContent = ({
                       counts={isDefined(results.counts) ? results.counts : {}}
                       delta={true}
                       filter={filter}
-                      hasTarget={!isContainer}
+                      hasTarget={!isImport}
                       isUpdating={isUpdating}
                       progress={progress}
                       results={isDefined(results) ? results.entities : {}}

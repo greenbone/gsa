@@ -29,19 +29,19 @@ describe('ReportTask tests', () => {
 
   test('container vs target vs agentGroup precedence', () => {
     const t1 = ReportTask.fromElement({});
-    expect(t1.isContainer()).toBe(true);
+    expect(t1.isImport()).toBe(true);
 
     const t2 = ReportTask.fromElement({target: {_id: 'tgt1'}});
-    expect(t2.isContainer()).toBe(false);
+    expect(t2.isImport()).toBe(false);
 
     const t3 = ReportTask.fromElement({agent_group: {_id: 'ag1'}});
-    expect(t3.isContainer()).toBe(false);
+    expect(t3.isImport()).toBe(false);
 
     const t4 = ReportTask.fromElement({
       target: {_id: 'tgt1'},
       agent_group: {_id: 'ag1'},
     });
-    expect(t4.isContainer()).toBe(false);
+    expect(t4.isImport()).toBe(false);
   });
 
   test('should parse target', () => {
@@ -53,7 +53,7 @@ describe('ReportTask tests', () => {
 
     expect(task.target).toBeDefined();
     expect(task.target?.id).toEqual('t1');
-    expect(task.isContainer()).toEqual(false);
+    expect(task.isImport()).toEqual(false);
   });
 
   test('should parse progress', () => {
@@ -80,7 +80,7 @@ describe('ReportTask tests', () => {
     expect(task.agentGroup).toBeDefined();
     expect(task.agentGroup?.id).toEqual('ag1');
     expect(task.agentGroup?.entityType).toEqual('agentgroup');
-    expect(task.isContainer()).toEqual(false);
+    expect(task.isImport()).toEqual(false);
   });
 
   test('should still parse progress with agentGroup present', () => {

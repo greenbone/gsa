@@ -22,7 +22,7 @@ describe('NewIconMenu tests', () => {
 
     await screen.findByTestId('new-task-menu');
     expect(screen.getByTestId('new-task-menu')).toBeInTheDocument();
-    expect(screen.getByTestId('new-container-task-menu')).toBeInTheDocument();
+    expect(screen.getByTestId('new-import-task-menu')).toBeInTheDocument();
   });
 
   test('should not render when capabilities do not allow creating tasks', () => {
@@ -30,7 +30,7 @@ describe('NewIconMenu tests', () => {
     render(<NewIconMenu />);
     expect(screen.queryByTestId('new-task-menu')).not.toBeInTheDocument();
     expect(
-      screen.queryByTestId('new-container-task-menu'),
+      screen.queryByTestId('new-import-task-menu'),
     ).not.toBeInTheDocument();
   });
 
@@ -53,7 +53,7 @@ describe('NewIconMenu tests', () => {
   test('calls onNewContainerClick when New Container Task is clicked', async () => {
     const onNewContainerClick = testing.fn();
     const {render} = rendererWith({capabilities: true});
-    render(<NewIconMenu onNewContainerClick={onNewContainerClick} />);
+    render(<NewIconMenu onNewImportTaskClick={onNewContainerClick} />);
 
     const button = screen.getByTestId('new-icon').closest('button');
     expect(button).not.toBeNull();
@@ -61,7 +61,7 @@ describe('NewIconMenu tests', () => {
       fireEvent.click(button);
     }
 
-    const menuItem = await screen.findByTestId('new-container-task-menu');
+    const menuItem = await screen.findByTestId('new-import-task-menu');
     fireEvent.click(menuItem);
     expect(onNewContainerClick).toHaveBeenCalled();
   });

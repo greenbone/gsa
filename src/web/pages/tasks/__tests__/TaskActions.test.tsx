@@ -11,7 +11,7 @@ import TaskActions from 'web/pages/tasks/TaskActions';
 
 const wrongCaps = new Capabilities(['get_tasks']);
 
-describe('Task Actions tests', () => {
+describe('TaskActions tests', () => {
   test('should render', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.new,
@@ -555,7 +555,7 @@ describe('Task Actions tests', () => {
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
   });
 
-  test('should call click handlers for container task', () => {
+  test('should call click handlers for import task', () => {
     const task = Task.fromElement({
       permissions: {permission: [{name: 'everything'}]},
     });
@@ -591,7 +591,7 @@ describe('Task Actions tests', () => {
     expect(handleReportImport).toHaveBeenCalledWith(task);
 
     const resumeIcon = screen.getByTestId('resume-icon');
-    expect(resumeIcon).toHaveAttribute('title', 'Task is a container');
+    expect(resumeIcon).toHaveAttribute('title', 'Task is for import only');
     fireEvent.click(resumeIcon);
     expect(handleTaskResume).not.toHaveBeenCalled();
 

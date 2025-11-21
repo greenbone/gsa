@@ -73,4 +73,13 @@ describe('StatusBar tests', () => {
     const text = screen.getByTestId('statusbar-text');
     expect(text).toHaveTextContent('Interrupted at 50 %');
   });
+
+  test('should render import status correctly', () => {
+    const {element} = render(
+      <StatusBar progress="75" status={TASK_STATUS.import} />,
+    );
+    expect(element).toHaveTextContent('Import');
+    const progress = screen.getByTestId('progress');
+    expect(progress).toHaveStyleRule('width', '100%');
+  });
 });

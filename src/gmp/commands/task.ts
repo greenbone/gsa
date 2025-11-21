@@ -63,7 +63,7 @@ interface TaskCommandCreateAgentGroupParams {
   agentGroupId?: string;
 }
 
-export interface TaskCommandCreateContainerParams {
+export interface TaskCommandCreateImportTaskParams {
   name: string;
   comment?: string;
 }
@@ -115,7 +115,7 @@ interface TaskCommandSaveAgentGroupParams
   id: string;
 }
 
-interface TaskCommandSaveContainerParams {
+interface TaskCommandSaveImportTaskParams {
   name: string;
   comment?: string;
   in_assets?: YesNo;
@@ -366,11 +366,11 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     });
   }
 
-  async createContainer({
+  async createImportTask({
     name,
     comment = '',
-  }: TaskCommandCreateContainerParams) {
-    log.debug('Creating container task', name, comment);
+  }: TaskCommandCreateImportTaskParams) {
+    log.debug('Creating import task', name, comment);
     return await this.entityAction({
       cmd: 'create_container_task',
       auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
@@ -531,13 +531,13 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     });
   }
 
-  async saveContainer({
+  async saveImportTask({
     name,
     comment = '',
     in_assets = YES_VALUE,
     id,
-  }: TaskCommandSaveContainerParams) {
-    log.debug('Saving container task', {name, comment, in_assets, id});
+  }: TaskCommandSaveImportTaskParams) {
+    log.debug('Saving import task', {name, comment, in_assets, id});
     await this.httpPostWithTransform({
       cmd: 'save_container_task',
       name,

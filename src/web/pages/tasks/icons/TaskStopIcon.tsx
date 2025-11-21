@@ -25,7 +25,7 @@ const TaskStopIcon = <TTask extends Audit | Task>({
   const [_] = useTranslation();
   const type = task.usageType === USAGE_TYPE.audit ? _('audit') : _('task');
 
-  if ((task.isRunning() || task.isQueued()) && !task.isContainer()) {
+  if ((task.isRunning() || task.isQueued()) && !task.isImport()) {
     if (
       !capabilities.mayOp('stop_task') ||
       !task.userCapabilities.mayOp('stop_task')

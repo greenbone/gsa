@@ -15,7 +15,7 @@ import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
 interface TaskToolBarIconsProps {
   onAdvancedTaskWizardClick?: () => void;
   onModifyTaskWizardClick?: () => void;
-  onContainerTaskCreateClick?: () => void;
+  onImportTaskCreateClick?: () => void;
   onTaskCreateClick?: () => void;
   onTaskWizardClick?: () => void;
   onNewAgentTaskClick?: () => void;
@@ -25,7 +25,7 @@ interface TaskToolBarIconsProps {
 const TaskToolBarIcons = ({
   onAdvancedTaskWizardClick,
   onModifyTaskWizardClick,
-  onContainerTaskCreateClick,
+  onImportTaskCreateClick,
   onTaskCreateClick,
   onTaskWizardClick,
   onNewAgentTaskClick,
@@ -72,8 +72,8 @@ const TaskToolBarIcons = ({
       <NewIconMenu
         onNewAgentTaskClick={onNewAgentTaskClick}
         onNewClick={onTaskCreateClick}
-        onNewContainerClick={onContainerTaskCreateClick}
         onNewContainerImageTaskClick={onNewContainerImageTaskClick}
+        onNewImportTaskClick={onImportTaskCreateClick}
       />
     </IconDivider>
   );
