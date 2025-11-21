@@ -85,11 +85,11 @@ interface ComplianceCounts {
 }
 
 interface ResultCounts {
-  false_positive: number;
   high: number;
-  info: number;
+  medium: number;
+  low: number;
   log: number;
-  warning: number;
+  false_positive: number;
   total: number;
 }
 
@@ -171,9 +171,9 @@ class ReportHost {
     this.result_counts = result_counts ?? {
       false_positive: 0,
       high: 0,
-      info: 0,
+      medium: 0,
       log: 0,
-      warning: 0,
+      low: 0,
       total: 0,
     };
     this.severity = severity;
@@ -209,20 +209,20 @@ class ReportHost {
 
     if (isDefined(result_count)) {
       copy.result_counts = {
-        high: parsePageCount(result_count.hole),
-        warning: parsePageCount(result_count.warning),
-        info: parsePageCount(result_count.info),
+        high: parsePageCount(result_count.high),
+        medium: parsePageCount(result_count.medium),
+        low: parsePageCount(result_count.low),
         log: parsePageCount(result_count.log),
         false_positive: parsePageCount(result_count.false_positive),
         total: parsePageCount(result_count),
       };
     } else {
       copy.result_counts = {
-        false_positive: 0,
         high: 0,
-        info: 0,
+        medium: 0,
+        low: 0,
         log: 0,
-        warning: 0,
+        false_positive: 0,
         total: 0,
       };
     }

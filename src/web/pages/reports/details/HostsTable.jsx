@@ -317,12 +317,12 @@ const Row = ({entity, links = true, audit = false}) => {
       {audit ? (
         <TableData>{complianceCounts.no}</TableData>
       ) : (
-        <TableData>{result_counts.warning}</TableData>
+        <TableData>{result_counts.medium}</TableData>
       )}
       {audit ? (
         <TableData>{complianceCounts.incomplete}</TableData>
       ) : (
-        <TableData>{result_counts.info}</TableData>
+        <TableData>{result_counts.low}</TableData>
       )}
       {!audit && <TableData>{result_counts.log}</TableData>}
       {!audit && <TableData>{result_counts.false_positive}</TableData>}
