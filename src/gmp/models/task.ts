@@ -260,7 +260,7 @@ export const TASK_STATUS = {
   stopped: 'Stopped',
   new: 'New',
   interrupted: 'Interrupted',
-  container: 'Container',
+  import: 'Import',
   uploading: 'Uploading',
   uploadinginterrupted: 'Uploading Interrupted',
   processing: 'Processing',
@@ -283,7 +283,7 @@ const TASK_STATUS_TRANSLATIONS = {
   Stopped: _l('Stopped'),
   New: _l('New'),
   Interrupted: _l('Interrupted'),
-  Container: _l('Container'),
+  Import: _l('Import Task'),
   Uploading: _l('Uploading'),
   Done: _l('Done'),
   Queued: _l('Queued'),
@@ -641,7 +641,10 @@ class Task extends Model {
     return this.alterable !== NO_VALUE;
   }
 
-  isContainer() {
+  /**
+   * Returns true if the task is an import task (formerly known as container task)
+   */
+  isImport() {
     return (
       !isDefined(this.target) &&
       !isDefined(this.agentGroup) &&

@@ -60,7 +60,7 @@ interface ReportDeltaElement {
   };
 }
 
-interface ReportReportTaskElement {
+export interface ReportReportTaskElement {
   _id?: string;
   comment?: string;
   name?: string;
@@ -113,7 +113,7 @@ export interface ReportReportElement extends ModelElement {
 
 export interface DeltaReport {
   id?: string;
-  scan_run_status?: string;
+  scan_run_status?: TaskStatus;
   scan_start?: Date;
   scan_end?: Date;
   timestamp?: Date;
@@ -300,7 +300,7 @@ class ReportReport extends Model {
     if (isDefined(delta?.report)) {
       copy.delta_report = {
         id: delta.report._id,
-        scan_run_status: delta.report.scan_run_status,
+        scan_run_status: delta.report.scan_run_status as TaskStatus,
         scan_end: parseDate(delta.report.scan_end),
         scan_start: parseDate(delta.report.scan_start),
         timestamp: parseDate(delta.report.timestamp),

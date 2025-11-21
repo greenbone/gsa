@@ -7,15 +7,15 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Features from 'gmp/capabilities/features';
-import TaskToolBarIcons from 'web/pages/tasks/icons/TaskToolBarIcons';
+import TaskToolBarIcons from 'web/pages/tasks/icons/TaskListPageToolBarIcons';
 
 const manualUrl = 'test/';
 
-describe('TaskPage ToolBarIcons test', () => {
+describe('TaskListPageToolBarIcons test', () => {
   test('should render', () => {
     const handleAdvancedTaskWizardClick = testing.fn();
     const handleModifyTaskWizardClick = testing.fn();
-    const handleContainerTaskCreateClick = testing.fn();
+    const handleImportTaskCreateClick = testing.fn();
     const handleTaskCreateClick = testing.fn();
     const handleTaskWizardClick = testing.fn();
 
@@ -32,7 +32,7 @@ describe('TaskPage ToolBarIcons test', () => {
     render(
       <TaskToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
+        onImportTaskCreateClick={handleImportTaskCreateClick}
         onModifyTaskWizardClick={handleModifyTaskWizardClick}
         onTaskCreateClick={handleTaskCreateClick}
         onTaskWizardClick={handleTaskWizardClick}
@@ -51,7 +51,7 @@ describe('TaskPage ToolBarIcons test', () => {
   test('should call click handlers', async () => {
     const handleAdvancedTaskWizardClick = testing.fn();
     const handleModifyTaskWizardClick = testing.fn();
-    const handleContainerTaskCreateClick = testing.fn();
+    const handleImportTaskCreateClick = testing.fn();
     const handleTaskCreateClick = testing.fn();
     const handleTaskWizardClick = testing.fn();
 
@@ -68,7 +68,7 @@ describe('TaskPage ToolBarIcons test', () => {
     render(
       <TaskToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
+        onImportTaskCreateClick={handleImportTaskCreateClick}
         onModifyTaskWizardClick={handleModifyTaskWizardClick}
         onTaskCreateClick={handleTaskCreateClick}
         onTaskWizardClick={handleTaskWizardClick}
@@ -120,12 +120,10 @@ describe('TaskPage ToolBarIcons test', () => {
     if (newButton) {
       fireEvent.click(newButton);
     }
-    const newContainerTaskMenu = await screen.findByTestId(
-      'new-container-task-menu',
-    );
-    expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
-    fireEvent.click(newContainerTaskMenu);
-    expect(handleContainerTaskCreateClick).toHaveBeenCalled();
+    const newImportTaskMenu = await screen.findByTestId('new-import-task-menu');
+    expect(newImportTaskMenu).toHaveTextContent('New Import Task');
+    fireEvent.click(newImportTaskMenu);
+    expect(handleImportTaskCreateClick).toHaveBeenCalled();
   });
 
   test('should call onNewContainerImageTaskClick handler', async () => {
@@ -165,7 +163,7 @@ describe('TaskPage ToolBarIcons test', () => {
   test('should not show icons if user does not have the right permissions', () => {
     const handleAdvancedTaskWizardClick = testing.fn();
     const handleModifyTaskWizardClick = testing.fn();
-    const handleContainerTaskCreateClick = testing.fn();
+    const handleImportTaskCreateClick = testing.fn();
     const handleTaskCreateClick = testing.fn();
     const handleTaskWizardClick = testing.fn();
 
@@ -181,7 +179,7 @@ describe('TaskPage ToolBarIcons test', () => {
     render(
       <TaskToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
+        onImportTaskCreateClick={handleImportTaskCreateClick}
         onModifyTaskWizardClick={handleModifyTaskWizardClick}
         onTaskCreateClick={handleTaskCreateClick}
         onTaskWizardClick={handleTaskWizardClick}
@@ -204,9 +202,7 @@ describe('TaskPage ToolBarIcons test', () => {
     const newTaskMenu = screen.queryByTestId('new-task-menu');
     expect(newTaskMenu).toBeNull();
 
-    const newContainerTaskMenu = screen.queryByTestId(
-      'new-container-task-menu',
-    );
-    expect(newContainerTaskMenu).toBeNull();
+    const newImportTaskMenu = screen.queryByTestId('new-container-task-menu');
+    expect(newImportTaskMenu).toBeNull();
   });
 });

@@ -5,12 +5,18 @@
 
 import {setLocale} from 'gmp/locale/lang';
 import Report from 'gmp/models/report';
+import {type ReportResultElement} from 'gmp/models/report/parser';
+import {
+  type ReportReportElement,
+  type default as ReportReport,
+  type ReportReportTaskElement,
+} from 'gmp/models/report/report';
 import {host1, host2} from 'web/pages/reports/__mocks__/MockReport';
 
 setLocale('en');
 
 // Task
-const task1 = {
+const task1: ReportReportTaskElement = {
   _id: '314',
   name: 'foo',
   comment: 'bar',
@@ -19,19 +25,15 @@ const task1 = {
 };
 
 // Results
-const result1 = {
+const result1: ReportResultElement = {
   _id: '101',
   name: 'Result 1',
-  owner: {name: 'admin'},
-  comment: 'Comment 1',
   creation_time: '2019-06-03T11:06:31Z',
-  modification_time: '2019-06-03T11:06:31Z',
   host: {__text: '123.456.78.910'},
   port: '80/tcp',
   nvt: {
     type: 'nvt',
     name: 'nvt1',
-    cve: 'CVE-2019-1234',
     tags: 'solution_type=Mitigation',
     solution: {
       _type: 'Mitigation',
@@ -43,19 +45,15 @@ const result1 = {
   delta: 'same',
 };
 
-const result2 = {
+const result2: ReportResultElement = {
   _id: '102',
   name: 'Result 2',
-  owner: {name: 'admin'},
-  comment: 'Comment 2',
   creation_time: '2019-06-03T11:06:31Z',
-  modification_time: '2019-06-03T11:06:31Z',
   host: {__text: '109.876.54.321'},
   port: '80/tcp',
   nvt: {
     type: 'nvt',
     name: 'nvt2',
-    cve: 'CVE-2019-5678',
     tags: 'solution_type=VendorFix',
     solution: {
       _type: 'VendorFix',
@@ -68,7 +66,7 @@ const result2 = {
 };
 
 export const getMockDeltaReport = () => {
-  const report = {
+  const report: ReportReportElement = {
     _type: 'delta',
     _id: '1234',
     delta: {
@@ -91,14 +89,14 @@ export const getMockDeltaReport = () => {
     apps: {count: 2},
     os: {count: 2},
     ssl_certs: {count: 2},
-    result_count: {__text: 2, full: 2, filtered: 2},
+    result_count: {full: 2, filtered: 2},
     results: {result: [result1, result2]},
     hosts: {count: 2},
     host: [host1, host2],
   };
 
   const entity = Report.fromElement({
-    report: report,
+    report,
     creation_time: '2019-06-03T11:00:22Z',
     modification_time: '2019-06-03T11:00:22Z',
     name: '2019-06-03T11:00:22Z',
@@ -108,8 +106,8 @@ export const getMockDeltaReport = () => {
 
   return {
     entity,
-    report: entity.report,
-    results: entity.report.results,
-    task: entity.report.task,
+    report: entity.report as ReportReport,
+    results: entity.report?.results,
+    task: entity.report?.task,
   };
 };

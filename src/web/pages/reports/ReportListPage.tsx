@@ -6,7 +6,7 @@
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
-import {type TaskCommandCreateContainerParams} from 'gmp/commands/task';
+import {type TaskCommandCreateImportTaskParams} from 'gmp/commands/task';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import {isActive} from 'gmp/models/task';
@@ -33,7 +33,7 @@ import ReportsDashboard, {
 import ReportFilterDialog from 'web/pages/reports/ReportFilterDialog';
 import ReportImportDialog from 'web/pages/reports/ReportImportDialog';
 import ReportsTable from 'web/pages/reports/ReportTable';
-import ContainerTaskDialog from 'web/pages/tasks/ContainerTaskDialog';
+import ImportTaskDialog from 'web/pages/tasks/ImportTaskDialog';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -136,9 +136,9 @@ const ReportListPage = ({
   };
 
   const handleCreateContainerTask = async (
-    data: TaskCommandCreateContainerParams,
+    data: TaskCommandCreateImportTaskParams,
   ) => {
-    const response = await gmp.task.createContainer(data);
+    const response = await gmp.task.createImportTask(data);
     const {data: task} = response;
     void loadTasks();
     setTaskId(task.id);
@@ -224,7 +224,7 @@ const ReportListPage = ({
         />
       )}
       {containerTaskDialogVisible && (
-        <ContainerTaskDialog
+        <ImportTaskDialog
           onClose={handleCloseContainerTask}
           onSave={handleCreateContainerTask}
         />

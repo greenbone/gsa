@@ -3,27 +3,34 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {setLocale} from 'gmp/locale/lang';
-import Report from 'gmp/models/report';
-
-setLocale('en');
+import AuditReport from 'gmp/models/audit-report';
+import {
+  type PortElement,
+  type ReportHostElement,
+  type ReportResultElement,
+} from 'gmp/models/report/parser';
+import {
+  type default as ReportReport,
+  type ReportReportElement,
+  type ReportReportTaskElement,
+} from 'gmp/models/report/report';
+import {type ReportTLSCertificateElement} from 'gmp/models/report/tls-certificate';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 // Task
-const task1 = {
+const task1: ReportReportTaskElement = {
   _id: '314',
   name: 'foo',
   comment: 'bar',
   target: {_id: '159'},
+  progress: 0,
 };
 
 // Results
-const result1 = {
+const result1: ReportResultElement = {
   _id: '101',
   name: 'Result 1',
-  owner: {name: 'admin'},
-  comment: 'Comment 1',
   creation_time: '2019-06-03T11:06:31Z',
-  modification_time: '2019-06-03T11:06:31Z',
   host: {__text: '123.456.78.910'},
   port: '80/tcp',
   nvt: {
@@ -43,15 +50,13 @@ const result1 = {
       },
     },
   },
+  compliance: 'yes',
 };
 
-const result2 = {
+const result2: ReportResultElement = {
   _id: '102',
   name: 'Result 2',
-  owner: {name: 'admin'},
-  comment: 'Comment 2',
   creation_time: '2019-06-03T11:06:31Z',
-  modification_time: '2019-06-03T11:06:31Z',
   host: {__text: '109.876.54.321'},
   port: '80/tcp',
   nvt: {
@@ -71,15 +76,13 @@ const result2 = {
       },
     },
   },
+  compliance: 'incomplete',
 };
 
-const result3 = {
+const result3: ReportResultElement = {
   _id: '103',
   name: 'Result 3',
-  owner: {name: 'admin'},
-  comment: 'Comment 3',
   creation_time: '2019-06-03T11:06:31Z',
-  modification_time: '2019-06-03T11:06:31Z',
   host: {__text: '109.876.54.321'},
   port: '80/tcp',
   nvt: {
@@ -95,23 +98,24 @@ const result3 = {
   threat: 'Medium',
   severity: 5.0,
   qod: {value: 80},
+  compliance: 'no',
 };
 
 // Hosts
-export const host1 = {
+export const host1: ReportHostElement = {
   ip: '123.456.78.910',
   asset: {_asset_id: '123'},
   start: '2019-06-03T11:00:22Z',
   end: '2019-06-03T11:15:14Z',
   port_count: {page: 10},
-  result_count: {
+  compliance_count: {
     page: 50,
-    hole: {page: 14},
-    warning: {page: 30},
-    info: {page: 5},
-    log: {page: 0},
-    false_positive: {page: 1},
+    incomplete: {page: 14},
+    no: {page: 30},
+    undefined: {page: 5},
+    yes: {page: 7},
   },
+  host_compliance: 'no',
   detail: [
     {name: 'best_os_cpe', value: 'cpe:/foo/bar'},
     {name: 'best_os_txt', value: 'Foo OS'},
@@ -133,28 +137,27 @@ export const host1 = {
       name: 'Closed CVE',
       value: 'CVE-2000-1234',
       source: {
-        type: 'openvas',
         name: '201',
         description: 'This is a description',
       },
-      extra: '10.0',
+      extra: 10.0,
     },
   ],
 };
 
-export const host2 = {
+export const host2: ReportHostElement = {
   ip: '109.876.54.321',
   start: '2019-06-03T11:15:14Z',
   end: '2019-06-03T11:31:23Z',
   port_count: {page: 15},
-  result_count: {
+  compliance_count: {
     page: 40,
-    hole: {page: 5},
-    warning: {page: 30},
-    info: {page: 0},
-    log: {page: 5},
-    false_positive: {page: 0},
+    incomplete: {page: 5},
+    no: {page: 0},
+    undefined: {page: 6},
+    yes: {page: 17},
   },
+  host_compliance: 'incomplete',
   detail: [
     {name: 'best_os_cpe', value: 'cpe:/lorem/ipsum'},
     {name: 'best_os_txt', value: 'Lorem OS'},
@@ -173,23 +176,66 @@ export const host2 = {
       name: 'Closed CVE',
       value: 'CVE-2000-5678',
       source: {
-        type: 'openvas',
         name: '202',
         description: 'This is another description',
       },
-      extra: '5.0',
+      extra: 5.0,
+    },
+  ],
+};
+
+// Hosts
+export const host3: ReportHostElement = {
+  ip: '123.456.78.810',
+  asset: {_asset_id: '123'},
+  start: '2019-06-03T11:00:22Z',
+  end: '2019-06-03T11:15:14Z',
+  port_count: {page: 10},
+  compliance_count: {
+    page: 20,
+    incomplete: {page: 0},
+    no: {page: 0},
+    undefined: {page: 0},
+    yes: {page: 20},
+  },
+  host_compliance: 'yes',
+  detail: [
+    {name: 'best_os_cpe', value: 'cpe:/foo/bar'},
+    {name: 'best_os_txt', value: 'Foo OS'},
+    {name: 'App', value: 'cpe:/a: 123'},
+    {name: 'App', value: 'cpe:/a: 789'},
+    {name: 'App', value: 'cpe:/a: 101'},
+    {name: 'cpe:/a: 123', value: 'ab'},
+    {name: 'cpe:/a: 123', value: 'cd'},
+    {name: 'traceroute', value: '1.1.1.1,2.2.2.2,3.3.3.3'},
+    {name: 'hostname', value: 'foo.bar'},
+    {name: 'Auth-SSH-Success'},
+    {name: 'SSLInfo', value: '1234::123456'},
+    {
+      name: 'SSLDetails:123456',
+      value:
+        'issuer:CN=foo|serial:abcd|notBefore:20190130T201714|notAfter:20190801T201714',
+    },
+    {
+      name: 'Closed CVE',
+      value: 'CVE-2000-1234',
+      source: {
+        name: '201',
+        description: 'This is a description',
+      },
+      extra: 10.0,
     },
   ],
 };
 
 // Ports
-const port1 = {
+const port1: PortElement = {
   host: '1.1.1.1',
   __text: '123/tcp',
   severity: 10.0,
   threat: 'High',
 };
-const port2 = {
+const port2: PortElement = {
   host: '2.2.2.2',
   __text: '456/tcp',
   severity: 5.0,
@@ -224,26 +270,25 @@ const error2 = {
 };
 
 // TLS certificates
-const tlsCertificate1 = {
+const tlsCertificate1: ReportTLSCertificateElement = {
   name: '57610B6A3C73866870678E638C7825743145B24',
   certificate: {
     __text: '66870678E638C7825743145B247554E0D92C94',
     _format: 'DER',
   },
-  data: 'MIIDSzCCAjOgAwIBAgIJALScVB/zqOLZMA0GCSqGSIb3DQ',
   sha256_fingerprint: '57610B6A3C73866870678E638C78',
   md5_fingerprint: 'fa:a9:9d:f2:28:cc:2c:c0:80:16',
   activation_time: '2019-08-10T12:51:27Z',
   expiration_time: '2019-09-10T12:51:27Z',
-  valid: true,
+  valid: YES_VALUE,
   subject_dn: 'CN=LoremIpsumSubject1 C=Dolor',
   issuer_dn: 'CN=LoremIpsumIssuer1 C=Dolor',
   serial: '00B49C541FF5A8E1D9',
   host: {ip: '192.168.9.90', hostname: 'foo.bar'},
-  ports: {port: ['4021', '4023']},
+  ports: {port: [4021, 4023]},
 };
 
-const tlsCertificate2 = {
+const tlsCertificate2: ReportTLSCertificateElement = {
   name: 'C137E9D559CC95ED130011FE4012DE56CAE2F8',
   certificate: {
     __text: 'MIICGTCCAYICCQDDh8Msu4YfXDANBgkqhkiG9w0B',
@@ -253,16 +298,16 @@ const tlsCertificate2 = {
   md5_fingerprint: '63:70:d6:65:17:32:01:66:9e:7d:c4',
   activation_time: 'unlimited',
   expiration_time: 'undefined',
-  valid: false,
+  valid: NO_VALUE,
   subject_dn: 'CN=LoremIpsumSubject2 C=Dolor',
   issuer_dn: 'CN=LoremIpsumIssuer2 C=Dolor',
   serial: '00C387C32CBB861F5C',
   host: {ip: '191.164.9.93', hostname: ''},
-  ports: {port: ['8445', '5061']},
+  ports: {port: [8445, 5061]},
 };
 
-export const getMockReport = () => {
-  const report = {
+export const getMockAuditReport = () => {
+  const report: ReportReportElement = {
     _id: '1234',
     scan_run_status: 'Done',
     scan_start: '2019-06-03T11:00:22Z',
@@ -276,10 +321,20 @@ export const getMockReport = () => {
     apps: {count: 4},
     os: {count: 2},
     ssl_certs: {count: 2},
-    result_count: {__text: 3, full: 3, filtered: 2},
+    // @ts-expect-error missing in type
+    compliance: {filtered: 'no', full: 'no'},
+    compliance_count: {
+      __text: 3,
+      full: 3,
+      filtered: 2,
+      yes: {full: 5, filtered: 3},
+      no: {full: 3, filtered: 2},
+      incomplete: {full: 2, filtered: 1},
+      undefined: {full: 0, filtered: 0},
+    },
     results: {result: [result1, result2, result3]},
-    hosts: {count: 2},
-    host: [host1, host2],
+    hosts: {count: 3},
+    host: [host1, host2, host3],
     tls_certificates: {
       tls_certificate: [tlsCertificate1, tlsCertificate2],
     },
@@ -293,27 +348,24 @@ export const getMockReport = () => {
     },
   };
 
-  const entity = Report.fromElement({
+  const entity = AuditReport.fromElement({
     report: report,
     creation_time: '2019-06-02T12:00:22Z',
     modification_time: '2019-06-03T11:00:22Z',
     name: '2019-06-03T11:00:22Z',
     owner: {name: 'admin'},
     _id: '1234',
+    task: task1,
   });
 
   return {
     entity,
-    report: entity.report,
-    results: entity.report.results,
-    hosts: entity.report.hosts,
-    ports: entity.report.ports,
-    applications: entity.report.applications,
-    operatingsystems: entity.report.operatingsystems,
-    cves: entity.report.cves,
-    closedCves: entity.report.closedCves,
-    tlsCertificates: entity.report.tlsCertificates,
-    errors: entity.report.errors,
-    task: entity.report.task,
+    report: entity.report as ReportReport,
+    results: entity.report?.results,
+    hosts: entity.report?.hosts,
+    operatingsystems: entity.report?.operatingSystems,
+    tlsCertificates: entity.report?.tlsCertificates,
+    errors: entity.report?.errors,
+    task: entity.report?.task,
   };
 };

@@ -558,11 +558,11 @@ describe(`Task Model methods tests`, () => {
       oci_image_target: {_id: 'oci1'},
     });
 
-    expect(t1.isContainer()).toEqual(true);
-    expect(t2.isContainer()).toEqual(false);
-    expect(t3.isContainer()).toEqual(false);
-    expect(t4.isContainer()).toEqual(false);
-    expect(t5.isContainer()).toEqual(false);
+    expect(t1.isImport()).toEqual(true);
+    expect(t2.isImport()).toEqual(false);
+    expect(t3.isImport()).toEqual(false);
+    expect(t4.isImport()).toEqual(false);
+    expect(t5.isImport()).toEqual(false);
   });
 
   test('should be a container image if ociImageTarget is set', () => {
@@ -595,7 +595,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.stopped]: false,
       [TASK_STATUS.new]: false,
       [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
+      [TASK_STATUS.import]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
       [TASK_STATUS.unknown]: false,
@@ -618,7 +618,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.stopped]: false,
       [TASK_STATUS.new]: false,
       [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
+      [TASK_STATUS.import]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
       [TASK_STATUS.unknown]: false,
@@ -641,7 +641,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.stopped]: true,
       [TASK_STATUS.new]: false,
       [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
+      [TASK_STATUS.import]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
       [TASK_STATUS.unknown]: false,
@@ -664,7 +664,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.stopped]: false,
       [TASK_STATUS.new]: false,
       [TASK_STATUS.interrupted]: true,
-      [TASK_STATUS.container]: false,
+      [TASK_STATUS.import]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
       [TASK_STATUS.unknown]: false,
@@ -687,7 +687,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.stopped]: false,
       [TASK_STATUS.new]: true,
       [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
+      [TASK_STATUS.import]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
       [TASK_STATUS.unknown]: false,
@@ -721,17 +721,17 @@ describe(`Task Model methods tests`, () => {
 
   test('container vs agent vs target vs container image parsing check', () => {
     const t1 = Task.fromElement({});
-    expect(t1.isContainer()).toBe(true);
+    expect(t1.isImport()).toBe(true);
     expect(t1.isAgent()).toBe(false);
     expect(t1.isContainerImage()).toBe(false);
 
     const t2 = Task.fromElement({target: {_id: 'tgt1'}});
-    expect(t2.isContainer()).toBe(false);
+    expect(t2.isImport()).toBe(false);
     expect(t2.isAgent()).toBe(false);
     expect(t2.isContainerImage()).toBe(false);
 
     const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
-    expect(t3.isContainer()).toBe(false);
+    expect(t3.isImport()).toBe(false);
     expect(t3.isAgent()).toBe(true);
     expect(t3.isContainerImage()).toBe(false);
 
@@ -739,14 +739,14 @@ describe(`Task Model methods tests`, () => {
       target: {_id: 'tgt1'},
       agent_group: {_id: 'ag1'},
     });
-    expect(t4.isContainer()).toBe(false);
+    expect(t4.isImport()).toBe(false);
     expect(t4.isAgent()).toBe(true);
     expect(t4.isContainerImage()).toBe(false);
 
     const t5 = Task.fromElement({
       oci_image_target: {_id: 'oci1'},
     });
-    expect(t5.isContainer()).toBe(false);
+    expect(t5.isImport()).toBe(false);
     expect(t5.isAgent()).toBe(false);
     expect(t5.isContainerImage()).toBe(true);
   });
