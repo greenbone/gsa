@@ -55,6 +55,18 @@ export interface GetSettingsResponse extends XmlResponseData {
   };
 }
 
+interface GetFeaturesResponse extends XmlResponseData {
+  get_features: {
+    get_features_response: {
+      feature: {
+        name: string;
+        _enabled: number;
+        description: string;
+      }[];
+    };
+  };
+}
+
 interface GetCapabilitiesResponse extends XmlResponseData {
   get_capabilities: {
     help_response: {
@@ -63,13 +75,6 @@ interface GetCapabilitiesResponse extends XmlResponseData {
           name: string;
         }[];
       };
-    };
-    get_features_response: {
-      feature: {
-        name: string;
-        _enabled: number;
-        description: string;
-      }[];
     };
   };
 }
@@ -354,12 +359,12 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   async currentFeatures(options: HttpCommandOptions = {}) {
     const response = await this.httpGetWithTransform(
       {
-        cmd: 'get_capabilities',
+        cmd: 'get_features',
       },
       options,
     );
-    const {data} = response as Response<GetCapabilitiesResponse, XmlMeta>;
-    const featuresList = data.get_capabilities.get_features_response.feature;
+    const {data} = response as Response<GetFeaturesResponse, XmlMeta>;
+    const featuresList = data.get_features.get_features_response.feature;
     const features = filter(featuresList, feature =>
       parseBoolean(feature._enabled),
     ).map(feature => feature.name.toUpperCase() as Feature);
