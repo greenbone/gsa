@@ -170,7 +170,7 @@ test('should get capabilities', async () => {
 
 test('should get features', async () => {
   const response = createResponse({
-    get_capabilities: {
+    get_features: {
       get_features_response: {
         feature: [
           {
@@ -191,7 +191,7 @@ test('should get features', async () => {
   const {data: features} = await cmd.currentFeatures();
   expect(fakeHttp.request).toHaveBeenCalledWith('get', {
     args: {
-      cmd: 'get_capabilities',
+      cmd: 'get_features',
     },
   });
 

@@ -5,17 +5,13 @@
 
 import {map} from 'gmp/utils/array';
 
-export type Feature = (typeof FEATURE_NAMES)[number];
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FEATURE_NAMES = [
-  'CVSS3_RATINGS',
-  'OPENVASD',
-  'FEED_VT_METADATA',
-  'ENABLE_AGENTS',
-  'ENABLE_CONTAINER_SCANNING',
-  'ENABLE_CREDENTIAL_STORES',
-] as const;
+export type Feature =
+  | 'CVSS3_RATINGS'
+  | 'FEED_VT_METADATA'
+  | 'OPENVASD'
+  | 'ENABLE_AGENTS'
+  | 'ENABLE_CONTAINER_SCANNING'
+  | 'ENABLE_CREDENTIAL_STORES';
 
 class Features {
   private readonly _features: Set<Feature>;
