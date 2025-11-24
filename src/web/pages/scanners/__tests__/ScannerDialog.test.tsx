@@ -18,6 +18,7 @@ import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
+  OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import ScannerDialog from 'web/pages/scanners/ScannerDialog';
@@ -283,11 +284,11 @@ describe('ScannerDialog tests', () => {
     });
   });
 
-  test('should allow to select all scanner types if sensors and agents are enabled', async () => {
+  test('should allow to select all scanner types if sensors, openvasd and agents are enabled', async () => {
     const {render} = rendererWith({
       gmp,
       capabilities: true,
-      features: new Features(['ENABLE_AGENTS']),
+      features: new Features(['ENABLE_AGENTS', 'OPENVASD']),
     });
 
     render(<ScannerDialog />);
@@ -383,10 +384,9 @@ describe('ScannerDialog tests', () => {
     });
     expect(scannerType).toHaveValue('Greenbone Sensor');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
-    expect(scannerTypeItems.length).toBe(3); // OpenVAS Scanner, OpenVASD Scanner and Greenbone Sensor
+    expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner and Greenbone Sensor
     expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
-    expect(scannerTypeItems[1]).toHaveTextContent('OpenVASD Scanner');
-    expect(scannerTypeItems[2]).toHaveTextContent('Greenbone Sensor');
+    expect(scannerTypeItems[1]).toHaveTextContent('Greenbone Sensor');
   });
 
   test('should not render agent controller in scanner selection if agent permission is missing', async () => {
@@ -404,10 +404,9 @@ describe('ScannerDialog tests', () => {
     });
     expect(scannerType).toHaveValue('Greenbone Sensor');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
-    expect(scannerTypeItems.length).toBe(3); // OpenVAS Scanner, OpenVASD Scanner and Greenbone Sensor
+    expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner, OpenVASD Scanner and Greenbone Sensor
     expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
-    expect(scannerTypeItems[1]).toHaveTextContent('OpenVASD Scanner');
-    expect(scannerTypeItems[2]).toHaveTextContent('Greenbone Sensor');
+    expect(scannerTypeItems[1]).toHaveTextContent('Greenbone Sensor');
   });
 
   test('should only render agent controller in scanner selection if sensors are not enabled', async () => {
@@ -425,10 +424,9 @@ describe('ScannerDialog tests', () => {
     });
     expect(scannerType).toHaveValue('Agent Controller');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
-    expect(scannerTypeItems.length).toBe(3); // OpenVAS Scanner, OpenVASD Scanner and Agent Controller
+    expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner and Agent Controller
     expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
-    expect(scannerTypeItems[1]).toHaveTextContent('OpenVASD Scanner');
-    expect(scannerTypeItems[2]).toHaveTextContent('Agent Controller');
+    expect(scannerTypeItems[1]).toHaveTextContent('Agent Controller');
   });
 
   test('should allow to set a CA certificate of a scanner', async () => {
@@ -439,7 +437,7 @@ describe('ScannerDialog tests', () => {
 
     render(
       <ScannerDialog
-        type={OPENVASD_SCANNER_TYPE}
+        type={OPENVAS_SCANNER_TYPE}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -466,9 +464,49 @@ describe('ScannerDialog tests', () => {
       name: 'Unnamed',
       comment: '',
       credentialId: undefined,
-      type: OPENVASD_SCANNER_TYPE,
+      type: OPENVAS_SCANNER_TYPE,
       id: undefined,
-      port: 443,
+      port: '',
     });
+  });
+
+  test('should render openvasd in scanner selection if feature is enabled', async () => {
+    const {render} = rendererWith({
+      gmp: {settings: {enableGreenboneSensor: false}}, // no sensor
+      capabilities: true,
+      features: new Features(['OPENVASD']),
+    });
+
+    render(<ScannerDialog type={OPENVASD_SCANNER_TYPE} />);
+
+    expect(screen.getDialog()).toBeInTheDocument();
+    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Scanner Type',
+    });
+    expect(scannerType).toHaveValue('OpenVASD Scanner');
+    const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
+    expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner and OpenVASD Scanner
+    expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
+    expect(scannerTypeItems[1]).toHaveTextContent('OpenVASD Scanner');
+  });
+
+  test('should not render openvasd in scanner selection if feature is disabled', async () => {
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      features: new Features([]), // no OPENVASD feature
+    });
+
+    render(<ScannerDialog type={OPENVASD_SCANNER_TYPE} />);
+
+    expect(screen.getDialog()).toBeInTheDocument();
+    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Scanner Type',
+    });
+    expect(scannerType).toHaveValue('');
+    const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
+    expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner and Greenbone Sensor
+    expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
+    expect(scannerTypeItems[1]).toHaveTextContent('Greenbone Sensor');
   });
 });

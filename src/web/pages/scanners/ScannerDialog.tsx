@@ -127,6 +127,13 @@ const ScannerDialog = ({
       ) {
         return undefined;
       }
+
+      if (
+        !features.featureEnabled('OPENVASD') &&
+        type === OPENVASD_SCANNER_TYPE
+      ) {
+        return undefined;
+      }
       return type;
     },
   );
@@ -138,10 +145,11 @@ const ScannerDialog = ({
   name = name || _('Unnamed');
   title = title || _('New Scanner');
 
-  const scannerTypes: ScannerType[] = [
-    OPENVAS_SCANNER_TYPE,
-    OPENVASD_SCANNER_TYPE,
-  ];
+  const scannerTypes: ScannerType[] = [OPENVAS_SCANNER_TYPE];
+
+  if (features.featureEnabled('OPENVASD')) {
+    scannerTypes.push(OPENVASD_SCANNER_TYPE);
+  }
 
   if (
     features.featureEnabled('ENABLE_AGENTS') &&
