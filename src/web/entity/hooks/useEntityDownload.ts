@@ -18,21 +18,23 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {getUsername} from 'web/store/usersettings/selectors';
 import {generateFilename} from 'web/utils/Render';
 
-export type OnDownloadedFunc = (data: EntityDownload) => void;
+export type OnDownloadedFunc<TData = string | ArrayBuffer> = (
+  data: EntityDownload<TData>,
+) => void;
 
-interface EntityDownload {
+export interface EntityDownload<TData = string | ArrayBuffer> {
   filename: string;
-  data: string;
+  data: TData;
 }
 
-interface EntityDownloadCallbacks {
+interface EntityDownloadCallbacks<TData> {
   onDownloadError?: (error: Error) => void;
-  onDownloaded?: OnDownloadedFunc;
+  onDownloaded?: OnDownloadedFunc<TData>;
 }
 
-type EntityDownloadFunction = (
+type EntityDownloadFunction<TData> = (
   entity: EntityCommandParams,
-) => Promise<Response<string, Meta>>;
+) => Promise<Response<TData, Meta>>;
 
 /**
  * Custom hook to handle the download of an entity.
@@ -56,9 +58,9 @@ type EntityDownloadFunction = (
  * handleDownload(entity);
  * ```
  */
-const useEntityDownload = <TEntity extends Model>(
-  gmpMethod: EntityDownloadFunction,
-  {onDownloadError, onDownloaded}: EntityDownloadCallbacks = {},
+const useEntityDownload = <TEntity extends Model, TData = string | ArrayBuffer>(
+  gmpMethod: EntityDownloadFunction<TData>,
+  {onDownloadError, onDownloaded}: EntityDownloadCallbacks<TData> = {},
 ) => {
   const [_] = useTranslation();
   const username = useSelector(getUsername);
