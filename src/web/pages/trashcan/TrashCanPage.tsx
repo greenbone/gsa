@@ -34,7 +34,7 @@ import AgentGroupsTable from 'web/pages/agent-groups/AgentGroupsTable';
 import AlertsTable from 'web/pages/alerts/Table';
 import AuditsTable from 'web/pages/audits/Table';
 import ContainerImageTargetTable from 'web/pages/container-image-targets/ContainerImageTargetTable';
-import CredentialsTable from 'web/pages/credentials/Table';
+import CredentialTable from 'web/pages/credentials/CredentialTable';
 import TrashActions from 'web/pages/extras/TrashActions';
 import FiltersTable from 'web/pages/filters/Table';
 import GroupsTable from 'web/pages/groups/Table';
@@ -264,7 +264,8 @@ const TrashCan = () => {
           <span>
             <LinkTarget id="credential" />
             <h1>{_('Credentials')}</h1>
-            <CredentialsTable entities={trash.credentials} {...tableProps} />
+            {/* @ts-expect-error */}
+            <CredentialTable entities={trash.credentials} {...tableProps} />
           </span>
         )}
         {hasEntities(trash?.filters) && (
