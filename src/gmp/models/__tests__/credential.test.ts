@@ -49,6 +49,7 @@ describe('Credential Model tests', () => {
 
   test('should use defaults', () => {
     const credential = new Credential();
+    expect(credential.authAlgorithm).toBeUndefined();
     expect(credential.certificateInfo).toBeUndefined();
     expect(credential.credentialType).toBeUndefined();
     expect(credential.targets).toEqual([]);
@@ -61,6 +62,7 @@ describe('Credential Model tests', () => {
 
   test('should parse empty element', () => {
     const credential = Credential.fromElement({});
+    expect(credential.authAlgorithm).toBeUndefined();
     expect(credential.certificateInfo).toBeUndefined();
     expect(credential.credentialType).toBeUndefined();
     expect(credential.targets).toEqual([]);
@@ -69,6 +71,13 @@ describe('Credential Model tests', () => {
     expect(credential.login).toBeUndefined();
     expect(credential.privacyAlgorithm).toBeUndefined();
     expect(credential.realm).toBeUndefined();
+  });
+
+  test('should parse auth_algorithm', () => {
+    const credential = Credential.fromElement({
+      auth_algorithm: 'md5',
+    });
+    expect(credential.authAlgorithm).toEqual('md5');
   });
 
   test('should parse certificate_info', () => {
