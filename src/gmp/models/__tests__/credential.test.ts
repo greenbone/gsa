@@ -49,8 +49,8 @@ describe('Credential Model tests', () => {
 
   test('should use defaults', () => {
     const credential = new Credential();
-    expect(credential.certificate_info).toBeUndefined();
-    expect(credential.credential_type).toBeUndefined();
+    expect(credential.certificateInfo).toBeUndefined();
+    expect(credential.credentialType).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
     expect(credential.kdcs).toEqual([]);
@@ -60,8 +60,8 @@ describe('Credential Model tests', () => {
 
   test('should parse empty element', () => {
     const credential = Credential.fromElement({});
-    expect(credential.certificate_info).toBeUndefined();
-    expect(credential.credential_type).toBeUndefined();
+    expect(credential.certificateInfo).toBeUndefined();
+    expect(credential.credentialType).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
     expect(credential.kdcs).toEqual([]);
@@ -83,28 +83,28 @@ describe('Credential Model tests', () => {
       },
     });
 
-    expect(credential.certificate_info?.activationTime).toEqual(
+    expect(credential.certificateInfo?.activationTime).toEqual(
       parseDate('2018-10-10T11:41:23.022Z'),
     );
-    expect(credential.certificate_info?.expirationTime).toEqual(
+    expect(credential.certificateInfo?.expirationTime).toEqual(
       parseDate('2019-10-10T11:41:23.022Z'),
     );
-    expect(credential.certificate_info?.issuer).toEqual('Some Issuer');
-    expect(credential.certificate_info?.subject).toEqual('Some Subject');
-    expect(credential.certificate_info?.serial).toEqual('1234567890');
-    expect(credential.certificate_info?.md5Fingerprint).toEqual(
+    expect(credential.certificateInfo?.issuer).toEqual('Some Issuer');
+    expect(credential.certificateInfo?.subject).toEqual('Some Subject');
+    expect(credential.certificateInfo?.serial).toEqual('1234567890');
+    expect(credential.certificateInfo?.md5Fingerprint).toEqual(
       'md5-fingerprint',
     );
-    expect(credential.certificate_info?.sha256Fingerprint).toEqual(
+    expect(credential.certificateInfo?.sha256Fingerprint).toEqual(
       'sha256-fingerprint',
     );
-    expect(credential.certificate_info?.timeStatus).toEqual('valid');
+    expect(credential.certificateInfo?.timeStatus).toEqual('valid');
   });
 
   test('should parse type', () => {
     const credential = Credential.fromElement({type: 'foo'});
 
-    expect(credential.credential_type).toEqual('foo');
+    expect(credential.credentialType).toEqual('foo');
   });
 
   test('should parse targets', () => {

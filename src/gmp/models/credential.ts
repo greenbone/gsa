@@ -89,9 +89,9 @@ export interface CredentialStore {
 }
 
 interface CredentialProperties extends ModelProperties {
-  certificate_info?: CertificateInfo;
+  certificateInfo?: CertificateInfo;
   credentialStore?: CredentialStore;
-  credential_type?: CredentialType;
+  credentialType?: CredentialType;
   kdcs?: string[];
   login?: string;
   realm?: string;
@@ -183,30 +183,30 @@ export const ALL_CREDENTIAL_TYPES: readonly CredentialType[] = [
 ];
 
 export const ssh_credential_filter = (credential: Credential) =>
-  credential.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+  credential.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const smb_credential_filter = (credential: Credential) =>
-  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const esxi_credential_filter = (credential: Credential) =>
-  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const snmp_credential_filter = (credential: Credential) =>
-  credential.credential_type === SNMP_CREDENTIAL_TYPE;
+  credential.credentialType === SNMP_CREDENTIAL_TYPE;
 
 export const krb5CredentialFilter = (credential: Credential) =>
-  credential.credential_type === KRB5_CREDENTIAL_TYPE;
+  credential.credentialType === KRB5_CREDENTIAL_TYPE;
 
 export const email_credential_filter = (credential: Credential) =>
-  credential.credential_type === SMIME_CREDENTIAL_TYPE ||
-  credential.credential_type === PGP_CREDENTIAL_TYPE;
+  credential.credentialType === SMIME_CREDENTIAL_TYPE ||
+  credential.credentialType === PGP_CREDENTIAL_TYPE;
 
 export const password_only_credential_filter = (credential: Credential) =>
-  credential.credential_type === PASSWORD_ONLY_CREDENTIAL_TYPE;
+  credential.credentialType === PASSWORD_ONLY_CREDENTIAL_TYPE;
 
 export const vFire_credential_filter = (credential: Credential) =>
-  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const SNMP_AUTH_ALGORITHM_MD5 = 'md5';
 export const SNMP_AUTH_ALGORITHM_SHA1 = 'sha1';
@@ -275,21 +275,19 @@ const parseTimeStatus = (
 class Credential extends Model {
   static readonly entityType = 'credential';
 
-  readonly certificate_info?: CertificateInfo;
+  readonly certificateInfo?: CertificateInfo;
   readonly credentialStore?: CredentialStore;
-  readonly credential_type?: CredentialType;
+  readonly credentialType?: CredentialType;
   readonly kdcs: string[];
-  readonly login: string | undefined;
-  readonly realm: string | undefined;
+  readonly login?: string;
+  readonly realm?: string;
   readonly targets: Model[];
   readonly scanners: Model[];
 
   constructor({
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    certificate_info,
+    certificateInfo,
     credentialStore,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    credential_type,
+    credentialType,
     kdcs = [],
     login,
     realm,
@@ -298,9 +296,9 @@ class Credential extends Model {
     ...properties
   }: CredentialProperties = {}) {
     super(properties);
-    this.certificate_info = certificate_info;
+    this.certificateInfo = certificateInfo;
     this.credentialStore = credentialStore;
-    this.credential_type = credential_type;
+    this.credentialType = credentialType;
     this.kdcs = kdcs;
     this.login = login;
     this.realm = realm;
@@ -316,7 +314,7 @@ class Credential extends Model {
     const ret = super.parseElement(element) as CredentialProperties;
 
     if (isDefined(element.certificate_info)) {
-      ret.certificate_info = {
+      ret.certificateInfo = {
         activationTime: parseDate(element.certificate_info.activation_time),
         expirationTime: parseDate(element.certificate_info.expiration_time),
         issuer: element.certificate_info.issuer,
@@ -335,7 +333,7 @@ class Credential extends Model {
       };
     }
 
-    ret.credential_type = element.type as CredentialType;
+    ret.credentialType = element.type as CredentialType;
 
     if (isDefined(element.kdcs?.kdc)) {
       ret.kdcs = Array.isArray(element.kdcs.kdc)
