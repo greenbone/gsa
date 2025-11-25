@@ -115,7 +115,7 @@ interface EntitiesContainerProps<TModel extends Model = Model> {
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
   updateFilter: (filter?: Filter) => void;
-  onDownload: (data: {filename: string; data: string}) => void;
+  onDownload: OnDownloadedFunc;
 }
 
 interface EntitiesContainerPropsWithHOCs<TModel extends Model = Model>
