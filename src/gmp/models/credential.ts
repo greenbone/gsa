@@ -43,7 +43,8 @@ export type SNMPPrivacyAlgorithmType =
   | typeof SNMP_PRIVACY_ALGORITHM_AES
   | typeof SNMP_PRIVACY_ALGORITHM_DES;
 
-interface CredentialElement extends ModelElement {
+export interface CredentialElement extends ModelElement {
+  auth_algorithm?: SNMPAuthAlgorithmType;
   certificate_info?: {
     activation_time?: string;
     expiration_time?: string;
@@ -92,6 +93,7 @@ export interface CredentialStore {
 }
 
 interface CredentialProperties extends ModelProperties {
+  authAlgorithm?: SNMPAuthAlgorithmType;
   certificateInfo?: CertificateInfo;
   credentialStore?: CredentialStore;
   credentialType?: CredentialType;
@@ -279,6 +281,7 @@ const parseTimeStatus = (
 class Credential extends Model {
   static readonly entityType = 'credential';
 
+  readonly authAlgorithm?: SNMPAuthAlgorithmType;
   readonly certificateInfo?: CertificateInfo;
   readonly credentialStore?: CredentialStore;
   readonly credentialType?: CredentialType;
@@ -290,6 +293,7 @@ class Credential extends Model {
   readonly scanners: Model[];
 
   constructor({
+    authAlgorithm,
     certificateInfo,
     credentialStore,
     credentialType,
@@ -302,6 +306,8 @@ class Credential extends Model {
     ...properties
   }: CredentialProperties = {}) {
     super(properties);
+
+    this.authAlgorithm = authAlgorithm;
     this.certificateInfo = certificateInfo;
     this.credentialStore = credentialStore;
     this.credentialType = credentialType;
@@ -319,6 +325,8 @@ class Credential extends Model {
 
   static parseElement(element: CredentialElement = {}): CredentialProperties {
     const ret = super.parseElement(element) as CredentialProperties;
+
+    ret.authAlgorithm = element.auth_algorithm;
 
     if (isDefined(element.certificate_info)) {
       ret.certificateInfo = {
@@ -348,17 +356,13 @@ class Credential extends Model {
         : [element.kdcs.kdc];
     }
 
-    if (isDefined(element.login)) {
-      ret.login = element.login;
-    }
+    ret.login = element.login;
 
     if (isDefined(element.privacy?.algorithm)) {
       ret.privacyAlgorithm = element.privacy.algorithm;
     }
 
-    if (isDefined(element.realm)) {
-      ret.realm = element.realm;
-    }
+    ret.realm = element.realm;
 
     ret.targets = map(element.targets?.target, target =>
       Model.fromElement(target, 'target'),
