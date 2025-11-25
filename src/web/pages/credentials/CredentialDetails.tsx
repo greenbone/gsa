@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {
+  type default as Credential,
   getCredentialTypeName,
   KRB5_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
@@ -17,6 +17,7 @@ import {
   CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+  type CredentialType,
 } from 'gmp/models/credential';
 import Footnote from 'web/components/footnote/Footnote';
 import TagListDisplay from 'web/components/form/TagListDisplay.js';
@@ -31,13 +32,16 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useFeatures from 'web/hooks/useFeatures';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const CredentialDetails = ({entity}) => {
+interface CredentialDetailsProps {
+  entity: Credential;
+}
+
+const CredentialDetails = ({entity}: CredentialDetailsProps) => {
   const [_] = useTranslation();
   const features = useFeatures();
 
-  const isCredentialStoreType = type => {
+  const isCredentialStoreType = (type: CredentialType) => {
     return (
       type === CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE ||
       type === CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
@@ -51,23 +55,22 @@ const CredentialDetails = ({entity}) => {
   };
 
   const {
+    authAlgorithm,
     comment,
-    credential_type,
     credentialStore,
     kdcs = [],
-    realm,
     login,
-    auth_algorithm,
-    privacy = {
-      algorithm: SNMP_PRIVACY_ALGORITHM_NONE,
-    },
-    targets = [],
+    privacyAlgorithm,
+    realm,
     scanners = [],
+    targets = [],
   } = entity;
+
+  const credentialType = entity.credentialType as CredentialType;
 
   const isCredentialStore =
     features.featureEnabled('ENABLE_CREDENTIAL_STORES') &&
-    isCredentialStoreType(credential_type);
+    isCredentialStoreType(credentialType);
 
   return (
     <Layout grow flex="column">
@@ -86,8 +89,8 @@ const CredentialDetails = ({entity}) => {
             <TableData>{_('Type')}</TableData>
             <TableData>
               <Divider>
-                <span>{getCredentialTypeName(credential_type)}</span>
-                <Footnote>({credential_type})</Footnote>
+                <span>{getCredentialTypeName(credentialType)}</span>
+                <Footnote>({credentialType})</Footnote>
               </Divider>
             </TableData>
           </TableRow>
@@ -114,24 +117,24 @@ const CredentialDetails = ({entity}) => {
                 <TableData>{login}</TableData>
               </TableRow>
 
-              {credential_type === SNMP_CREDENTIAL_TYPE && (
+              {credentialType === SNMP_CREDENTIAL_TYPE && (
                 <>
                   <TableRow>
                     <TableData>{_('Auth Algorithm')}</TableData>
-                    <TableData>{auth_algorithm}</TableData>
+                    <TableData>{authAlgorithm}</TableData>
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Privacy Algorithm')}</TableData>
                     <TableData>
-                      {privacy.algorithm === SNMP_PRIVACY_ALGORITHM_NONE
+                      {privacyAlgorithm === SNMP_PRIVACY_ALGORITHM_NONE
                         ? _('None')
-                        : privacy.algorithm}
+                        : privacyAlgorithm}
                     </TableData>
                   </TableRow>
                 </>
               )}
 
-              {credential_type === KRB5_CREDENTIAL_TYPE && (
+              {credentialType === KRB5_CREDENTIAL_TYPE && (
                 <>
                   <TableRow>
                     <TableData>{_('Realm')}</TableData>
@@ -156,7 +159,7 @@ const CredentialDetails = ({entity}) => {
                   {targets.map(target => {
                     return (
                       <span key={target.id}>
-                        <DetailsLink id={target.id} type="target">
+                        <DetailsLink id={target.id as string} type="target">
                           {target.name}
                         </DetailsLink>
                       </span>
@@ -175,7 +178,7 @@ const CredentialDetails = ({entity}) => {
                   {scanners.map(scanner => {
                     return (
                       <span key={scanner.id}>
-                        <DetailsLink id={scanner.id} type="scanner">
+                        <DetailsLink id={scanner.id as string} type="scanner">
                           {scanner.name}
                         </DetailsLink>
                       </span>
@@ -189,10 +192,6 @@ const CredentialDetails = ({entity}) => {
       </InfoTable>
     </Layout>
   );
-};
-
-CredentialDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
 };
 
 export default CredentialDetails;

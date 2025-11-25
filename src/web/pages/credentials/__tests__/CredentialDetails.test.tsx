@@ -5,11 +5,12 @@
 
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import EverythingCapabilities from 'gmp/capabilities/everything';
-import Credential, {SNMP_CREDENTIAL_TYPE} from 'gmp/models/credential';
-import CredentialDetails from 'web/pages/credentials/Details';
+import Credential, {
+  SNMP_CREDENTIAL_TYPE,
+  SNMP_PRIVACY_ALGORITHM_NONE,
+} from 'gmp/models/credential';
+import CredentialDetails from 'web/pages/credentials/CredentialDetails';
 
-const capabilities = new EverythingCapabilities();
 const defaultEntity = Credential.fromElement({
   _id: 'c1',
   name: 'test-cred',
@@ -37,14 +38,14 @@ const defaultEntity = Credential.fromElement({
 
 describe('CredentialDetails', () => {
   test('should render basic credential details', () => {
-    const {render} = rendererWith({capabilities});
+    const {render} = rendererWith({capabilities: true});
     render(<CredentialDetails entity={defaultEntity} />);
     expect(screen.getByText('Test credential comment')).toBeVisible();
     expect(screen.getByText('testuser')).toBeVisible();
   });
 
   test('should render realm and kdcs when credential type is KRB5', () => {
-    const {render} = rendererWith({capabilities});
+    const {render} = rendererWith({capabilities: true});
     render(<CredentialDetails entity={defaultEntity} />);
     expect(screen.getByText('EXAMPLE.REALM')).toBeVisible();
     expect(screen.getByText('kdc1.example.com')).toBeVisible();
@@ -58,21 +59,20 @@ describe('CredentialDetails', () => {
       comment: 'SNMP cred',
       login: 'snmp-user',
       credential_type: SNMP_CREDENTIAL_TYPE,
+      auth_algorithm: 'sha1',
+      privacy: {
+        algorithm: SNMP_PRIVACY_ALGORITHM_NONE,
+      },
     });
 
-    // @ts-expect-error: test override
-    entity.auth_algorithm = 'sha1';
-    // @ts-expect-error: test override
-    entity.privacy = {algorithm: ''};
-
-    const {render} = rendererWith({capabilities});
+    const {render} = rendererWith({capabilities: true});
     render(<CredentialDetails entity={entity} />);
     expect(screen.getByText('sha1')).toBeVisible();
     expect(screen.getByText('None')).toBeVisible();
   });
 
   test('should render targets and scanners as links', () => {
-    const {render} = rendererWith({capabilities});
+    const {render} = rendererWith({capabilities: true});
     render(<CredentialDetails entity={defaultEntity} />);
     expect(screen.getByText('Target One')).toBeVisible();
     expect(screen.getByText('Target Two')).toBeVisible();
@@ -89,8 +89,8 @@ describe('CredentialDetails', () => {
       realm: undefined,
       kdcs: undefined,
     });
-    const {render} = rendererWith({capabilities});
+    const {render} = rendererWith({capabilities: true});
     render(<CredentialDetails entity={entity} />);
-    expect(screen.queryByText('Key Distribution Center')).not.toBeNull();
+    expect(screen.getByText('Key Distribution Center')).toBeVisible();
   });
 });
