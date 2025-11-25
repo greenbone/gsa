@@ -63,6 +63,9 @@ interface CredentialElement extends ModelElement {
     kdc: string | string[];
   };
   login?: string;
+  privacy?: {
+    algorithm?: SNMPPrivacyAlgorithmType;
+  };
   realm?: string;
   targets?: {
     target?: ModelElement | ModelElement[];
@@ -94,6 +97,7 @@ interface CredentialProperties extends ModelProperties {
   credentialType?: CredentialType;
   kdcs?: string[];
   login?: string;
+  privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   realm?: string;
   targets?: Model[];
   scanners?: Model[];
@@ -281,6 +285,7 @@ class Credential extends Model {
   readonly kdcs: string[];
   readonly login?: string;
   readonly realm?: string;
+  readonly privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   readonly targets: Model[];
   readonly scanners: Model[];
 
@@ -290,6 +295,7 @@ class Credential extends Model {
     credentialType,
     kdcs = [],
     login,
+    privacyAlgorithm,
     realm,
     targets = [],
     scanners = [],
@@ -301,6 +307,7 @@ class Credential extends Model {
     this.credentialType = credentialType;
     this.kdcs = kdcs;
     this.login = login;
+    this.privacyAlgorithm = privacyAlgorithm;
     this.realm = realm;
     this.targets = targets;
     this.scanners = scanners;
@@ -343,6 +350,10 @@ class Credential extends Model {
 
     if (isDefined(element.login)) {
       ret.login = element.login;
+    }
+
+    if (isDefined(element.privacy?.algorithm)) {
+      ret.privacyAlgorithm = element.privacy.algorithm;
     }
 
     if (isDefined(element.realm)) {

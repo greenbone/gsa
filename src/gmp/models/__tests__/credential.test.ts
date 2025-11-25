@@ -55,6 +55,7 @@ describe('Credential Model tests', () => {
     expect(credential.scanners).toEqual([]);
     expect(credential.kdcs).toEqual([]);
     expect(credential.login).toBeUndefined();
+    expect(credential.privacyAlgorithm).toBeUndefined();
     expect(credential.realm).toBeUndefined();
   });
 
@@ -66,6 +67,7 @@ describe('Credential Model tests', () => {
     expect(credential.scanners).toEqual([]);
     expect(credential.kdcs).toEqual([]);
     expect(credential.login).toBeUndefined();
+    expect(credential.privacyAlgorithm).toBeUndefined();
     expect(credential.realm).toBeUndefined();
   });
 
@@ -220,6 +222,13 @@ describe('Credential model function tests', () => {
       login: 'test-user',
     });
     expect(credential.login).toEqual('test-user');
+  });
+
+  test('should parse privacy_algorithm', () => {
+    const credential = Credential.fromElement({
+      privacy: {algorithm: 'aes'},
+    });
+    expect(credential.privacyAlgorithm).toEqual('aes');
   });
 
   test('should parse realm', () => {
