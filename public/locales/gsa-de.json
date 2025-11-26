@@ -1335,6 +1335,7 @@
   "Not a valid Client Certificate file": "Keine gültige Datei für Client-Zertifikat",
   "Not a valid Client Private Key file": "Keine gültige Datei für privaten Client-Schlüssel",
   "Not a valid PGP file": "Keine gültige PGP-Datei",
+  "Not a valid Private SSH Key file": "Kein gültige Datei für privaten SSH-Schlüssel",
   "not available for orphaned report configs": "nicht verfügbar für verwaiste Berichtkonfigurationen",
   "Not Compliant": "Nicht konform",
   "Not Defined": "Nicht definiert",

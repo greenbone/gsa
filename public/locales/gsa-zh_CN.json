@@ -1335,6 +1335,7 @@
   "Not a valid Client Certificate file": "",
   "Not a valid Client Private Key file": "",
   "Not a valid PGP file": "不是有效的PGP文件",
+  "Not a valid Private SSH Key file": "",
   "not available for orphaned report configs": "",
   "Not Compliant": "",
   "Not Defined": "",
