@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {
   type default as Credential,
   type CredentialType,
@@ -32,7 +32,7 @@ import {
   CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
+import {parseBoolean} from 'gmp/parser';
 import {first, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
@@ -50,56 +50,48 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface CredentialDialogValues {
-  autogenerate?: YesNo;
+  autogenerate: boolean;
   certificate?: File;
-  credential_type: CredentialType;
-  private_key?: File;
-  public_key?: File;
-  vaultId?: string;
+  credentialType: CredentialType;
   hostIdentifier?: string;
+  privateKey?: File;
+  publicKey?: File;
+  vaultId?: string;
 }
 
 interface CredentialDialogDefaultValues {
-  auth_algorithm?: SNMPAuthAlgorithmType;
-  change_community?: YesNo;
-  change_passphrase?: YesNo;
-  change_password?: YesNo;
-  change_privacy_password?: YesNo;
+  authAlgorithm?: SNMPAuthAlgorithmType;
   comment?: string;
   community?: string;
-  credential_login?: string;
+  credentialLogin?: string;
+  hostIdentifier?: string;
   id?: string;
   kdcs?: string[];
   name: string;
   passphrase?: string;
   password?: string;
-  privacy_algorithm?: SNMPPrivacyAlgorithmType;
-  privacy_password?: string;
+  privacyAlgorithm?: SNMPPrivacyAlgorithmType;
+  privacyPassword?: string;
   realm?: string;
   vaultId?: string;
-  hostIdentifier?: string;
 }
 
 export type CredentialDialogState = CredentialDialogValues &
   CredentialDialogDefaultValues;
 
 interface CredentialDialogProps {
-  auth_algorithm?: SNMPAuthAlgorithmType;
-  autogenerate?: YesNo;
-  change_community?: YesNo;
-  change_passphrase?: YesNo;
-  change_password?: YesNo;
-  change_privacy_password?: YesNo;
+  authAlgorithm?: SNMPAuthAlgorithmType;
+  autogenerate?: boolean;
   comment?: string;
   community?: string;
   credential?: Credential;
-  credential_login?: string;
-  credential_type?: CredentialType;
+  credentialLogin?: string;
+  credentialType?: CredentialType;
   name?: string;
   passphrase?: string;
   password?: string;
-  privacy_algorithm?: SNMPPrivacyAlgorithmType;
-  privacy_password?: string;
+  privacyAlgorithm?: SNMPPrivacyAlgorithmType;
+  privacyPassword?: string;
   title?: string;
   types?: readonly CredentialType[];
   vaultId?: string;
@@ -129,40 +121,28 @@ const validateFile = async (
 const PGP_PUBLIC_KEY_LINE = '-----BEGIN PGP PUBLIC KEY BLOCK-----';
 const CLIENT_CERTIFICATE_LINE = '-----BEGIN CERTIFICATE-----';
 const CLIENT_PRIVATE_KEY_LINE = '-----BEGIN PRIVATE KEY-----';
+const SSH_KEY_REGEX = /-----BEGIN \w+ PRIVATE KEY-----/;
 
 const CredentialDialog = ({
+  authAlgorithm = SNMP_AUTH_ALGORITHM_SHA1,
+  autogenerate: initialAutogenerate = false,
+  comment = '',
+  community,
   credential,
+  credentialLogin,
+  credentialType: initialCredentialType,
+  hostIdentifier,
+  name,
+  passphrase,
+  password,
+  privacyAlgorithm = SNMP_PRIVACY_ALGORITHM_AES,
+  privacyPassword,
   title,
   types = [],
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  auth_algorithm = SNMP_AUTH_ALGORITHM_SHA1,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  change_community = NO_VALUE,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  change_passphrase = NO_VALUE,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  change_password = NO_VALUE,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  change_privacy_password = NO_VALUE,
-  comment = '',
-  community = '',
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  credential_login = '',
-  name,
-  passphrase = '',
-  password = '',
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  privacy_algorithm = SNMP_PRIVACY_ALGORITHM_AES,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  privacy_password = '',
-  vaultId = '',
-  hostIdentifier = '',
+  vaultId,
   onClose,
-  onSave,
-  autogenerate: pAutogenerate,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  credential_type,
   onErrorClose,
+  onSave,
 }: CredentialDialogProps) => {
   const [_] = useTranslation();
 
@@ -171,41 +151,37 @@ const CredentialDialog = ({
 
   const [credentialType, setCredentialType] = useState<
     CredentialType | undefined
-  >();
-  const [autogenerate, setAutogenerate] = useState<YesNo | undefined>(
-    pAutogenerate,
+  >(initialCredentialType);
+  const [autogenerate, setAutogenerate] = useState<boolean>(
+    initialAutogenerate &&
+      (initialCredentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+        initialCredentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE),
   );
   const [error, setError] = useState<string | undefined>();
   const [certificate, setCertificate] = useState<File | undefined>(undefined);
   const [privateKey, setPrivateKey] = useState<File | undefined>(undefined);
   const [publicKey, setPublicKey] = useState<File | undefined>(undefined);
+  const [changeCommunity, setChangeCommunity] = useState<boolean>(false);
+  const [changePassphrase, setChangePassphrase] = useState<boolean>(false);
+  const [changePassword, setChangePassword] = useState<boolean>(false);
+  const [changePrivacyPassword, setChangePrivacyPassword] =
+    useState<boolean>(false);
 
   const isEdit = isDefined(credential);
 
-  useEffect(() => {
-    setCredentialTypeAndAutoGenerate(credential_type, pAutogenerate);
-  }, [credential_type, pAutogenerate]);
-
   const setCredentialTypeAndAutoGenerate = (
     type: CredentialType | undefined,
-    autogenerate?: YesNo,
+    autogenerate: boolean = false,
   ) => {
     if (
       type !== USERNAME_PASSWORD_CREDENTIAL_TYPE &&
       type !== USERNAME_SSH_KEY_CREDENTIAL_TYPE
     ) {
       // autogenerate is only possible with username+password and username+ssh
-      autogenerate = NO_VALUE;
+      autogenerate = false;
     }
     setCredentialType(type);
     setAutogenerate(autogenerate);
-  };
-
-  const handleCredentialTypeChange = (
-    type: CredentialType,
-    autogenerate?: YesNo,
-  ) => {
-    setCredentialTypeAndAutoGenerate(type, autogenerate);
   };
 
   const handlePublicGPGKeyChange = async (file: File | undefined) => {
@@ -332,19 +308,15 @@ const CredentialDialog = ({
   return (
     <SaveDialog<CredentialDialogValues, CredentialDialogDefaultValues>
       defaultValues={{
-        auth_algorithm,
-        change_community,
-        change_passphrase,
-        change_password,
-        change_privacy_password,
+        authAlgorithm,
         comment,
         community,
-        credential_login,
+        credentialLogin,
         name,
         passphrase,
         password,
-        privacy_algorithm,
-        privacy_password,
+        privacyAlgorithm,
+        privacyPassword,
         id: credential?.id,
         kdcs: credential?.kdcs,
         realm: credential?.realm,
@@ -355,9 +327,9 @@ const CredentialDialog = ({
       title={title}
       values={{
         autogenerate,
-        credential_type: cType as CredentialType,
-        public_key: publicKey,
-        private_key: privateKey,
+        credentialType: cType as CredentialType,
+        publicKey,
+        privateKey,
         certificate,
       }}
       onClose={onClose}
@@ -386,16 +358,16 @@ const CredentialDialog = ({
               disabled={isEdit || types.length < 2}
               items={typeOptions}
               label={_('Type')}
-              value={state.credential_type}
+              value={state.credentialType}
               onChange={value =>
-                handleCredentialTypeChange(
+                setCredentialTypeAndAutoGenerate(
                   value as CredentialType,
                   state.autogenerate,
                 )
               }
             />
 
-            {isCredentialStoreType(state.credential_type) && (
+            {isCredentialStoreType(state.credentialType) && (
               <>
                 <TextField
                   name="vaultId"
@@ -412,34 +384,40 @@ const CredentialDialog = ({
               </>
             )}
 
-            {(state.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-              state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE) &&
+            {(state.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+              state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE) &&
               !isEdit && (
                 <FormGroup title={_('Auto-generate')}>
-                  <YesNoRadio
+                  <YesNoRadio<boolean>
+                    convert={parseBoolean}
                     name="autogenerate"
+                    noValue={false}
                     value={state.autogenerate}
+                    yesValue={true}
                     onChange={value =>
-                      handleCredentialTypeChange(state.credential_type, value)
+                      setCredentialTypeAndAutoGenerate(
+                        state.credentialType,
+                        value,
+                      )
                     }
                   />
                 </FormGroup>
               )}
 
-            {state.credential_type === SNMP_CREDENTIAL_TYPE && (
+            {state.credentialType === SNMP_CREDENTIAL_TYPE && (
               <FormGroup direction="row" title={_('SNMP Community')}>
                 {isEdit && (
-                  <Checkbox
-                    checked={state.change_community === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    name="change_community"
+                  <Checkbox<boolean>
+                    checked={changeCommunity}
+                    checkedValue={true}
+                    name="changeCommunity"
                     title={_('Replace existing SNMP community with')}
-                    unCheckedValue={NO_VALUE}
-                    onChange={onValueChange}
+                    unCheckedValue={false}
+                    onChange={value => setChangeCommunity(value)}
                   />
                 )}
                 <PasswordField
-                  disabled={state.change_community === NO_VALUE}
+                  disabled={isEdit && changeCommunity}
                   grow="1"
                   name="community"
                   value={state.community}
@@ -448,39 +426,36 @@ const CredentialDialog = ({
               </FormGroup>
             )}
 
-            {(state.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-              state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-              state.credential_type === SNMP_CREDENTIAL_TYPE ||
-              state.credential_type === KRB5_CREDENTIAL_TYPE) && (
+            {(state.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+              state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+              state.credentialType === SNMP_CREDENTIAL_TYPE ||
+              state.credentialType === KRB5_CREDENTIAL_TYPE) && (
               <TextField
-                name="credential_login"
+                name="credentialLogin"
                 title={_('Username')}
-                value={state.credential_login}
+                value={state.credentialLogin}
                 onChange={onValueChange}
               />
             )}
 
-            {(state.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-              state.credential_type === SNMP_CREDENTIAL_TYPE ||
-              state.credential_type === KRB5_CREDENTIAL_TYPE ||
-              state.credential_type === PASSWORD_ONLY_CREDENTIAL_TYPE) && (
+            {(state.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
+              state.credentialType === SNMP_CREDENTIAL_TYPE ||
+              state.credentialType === KRB5_CREDENTIAL_TYPE ||
+              state.credentialType === PASSWORD_ONLY_CREDENTIAL_TYPE) && (
               <FormGroup direction="row" title={_('Password')}>
                 {isEdit && (
-                  <Checkbox<YesNo>
-                    checked={state.change_password === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    name="change_password"
+                  <Checkbox<boolean>
+                    checked={changePassword}
+                    checkedValue={true}
+                    name="changePassword"
                     title={_('Replace existing password with')}
-                    unCheckedValue={NO_VALUE}
-                    onChange={onValueChange}
+                    unCheckedValue={false}
+                    onChange={value => setChangePassword(value)}
                   />
                 )}
                 <PasswordField
                   autoComplete="new-password"
-                  disabled={
-                    state.autogenerate === YES_VALUE ||
-                    (isEdit && state.change_password !== YES_VALUE)
-                  }
+                  disabled={state.autogenerate || (isEdit && !changePassword)}
                   grow="1"
                   name="password"
                   value={state.password}
@@ -489,7 +464,7 @@ const CredentialDialog = ({
               </FormGroup>
             )}
 
-            {state.credential_type === CERTIFICATE_CREDENTIAL_TYPE && (
+            {state.credentialType === CERTIFICATE_CREDENTIAL_TYPE && (
               <FileField
                 name="certificate"
                 title={_('Client Certificate')}
@@ -498,19 +473,19 @@ const CredentialDialog = ({
               />
             )}
 
-            {(state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-              state.credential_type === CERTIFICATE_CREDENTIAL_TYPE) && (
+            {(state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+              state.credentialType === CERTIFICATE_CREDENTIAL_TYPE) && (
               <>
                 <FileField
-                  name="private_key"
+                  name="privateKey"
                   title={
-                    state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE
+                    state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE
                       ? _('Private SSH Key')
                       : _('Client Private Key')
                   }
-                  value={state.private_key}
+                  value={state.privateKey}
                   onChange={
-                    state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE
+                    state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE
                       ? handlePrivateKeyChange
                       : handleClientKeyChange
                   }
@@ -519,28 +494,27 @@ const CredentialDialog = ({
                 <FormGroup
                   direction="row"
                   title={
-                    state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE
+                    state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE
                       ? _('Passphrase for Private SSH Key')
                       : _('Passphrase for Client Private Key')
                   }
                 >
                   {isEdit && (
-                    <Checkbox
-                      checked={state.change_passphrase === YES_VALUE}
-                      checkedValue={YES_VALUE}
-                      name="change_passphrase"
+                    <Checkbox<boolean>
+                      checked={changePassphrase}
+                      checkedValue={true}
+                      name="changePassphrase"
                       title={_('Replace existing passphrase with')}
-                      unCheckedValue={NO_VALUE}
-                      onChange={onValueChange}
+                      unCheckedValue={false}
+                      onChange={value => setChangePassphrase(value)}
                     />
                   )}
                   <PasswordField
                     autoComplete="new-password"
                     disabled={
-                      (state.autogenerate === YES_VALUE &&
-                        state.credential_type !==
-                          CERTIFICATE_CREDENTIAL_TYPE) ||
-                      (isEdit && state.change_passphrase !== YES_VALUE)
+                      (state.autogenerate &&
+                        state.credentialType !== CERTIFICATE_CREDENTIAL_TYPE) ||
+                      (isEdit && !changePassphrase)
                     }
                     grow="1"
                     name="passphrase"
@@ -551,43 +525,42 @@ const CredentialDialog = ({
               </>
             )}
 
-            {state.credential_type === SNMP_CREDENTIAL_TYPE && (
+            {state.credentialType === SNMP_CREDENTIAL_TYPE && (
               <>
                 <FormGroup direction="row" title={_('Privacy Password')}>
                   {isEdit && (
-                    <Checkbox
-                      checked={state.change_privacy_password === YES_VALUE}
-                      checkedValue={YES_VALUE}
-                      name="change_privacy_password"
+                    <Checkbox<boolean>
+                      checked={changePrivacyPassword}
+                      checkedValue={true}
+                      name="changePrivacyPassword"
                       title={_('Replace existing privacy password with')}
-                      unCheckedValue={NO_VALUE}
-                      onChange={onValueChange}
+                      unCheckedValue={false}
+                      onChange={value => setChangePrivacyPassword(value)}
                     />
                   )}
                   <PasswordField
                     autoComplete="new-password"
                     disabled={
-                      state.autogenerate === YES_VALUE ||
-                      (isEdit && state.change_privacy_password !== YES_VALUE)
+                      state.autogenerate || (isEdit && !changePrivacyPassword)
                     }
                     grow="1"
-                    name="privacy_password"
-                    value={state.privacy_password}
+                    name="privacyPassword"
+                    value={state.privacyPassword}
                     onChange={onValueChange}
                   />
                 </FormGroup>
 
                 <FormGroup direction="row" title={_('Auth Algorithm')}>
                   <Radio
-                    checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_MD5}
-                    name="auth_algorithm"
+                    checked={state.authAlgorithm === SNMP_AUTH_ALGORITHM_MD5}
+                    name="authAlgorithm"
                     title="MD5"
                     value={SNMP_AUTH_ALGORITHM_MD5}
                     onChange={onValueChange}
                   />
                   <Radio
-                    checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_SHA1}
-                    name="auth_algorithm"
+                    checked={state.authAlgorithm === SNMP_AUTH_ALGORITHM_SHA1}
+                    name="authAlgorithm"
                     title="SHA1"
                     value={SNMP_AUTH_ALGORITHM_SHA1}
                     onChange={onValueChange}
@@ -597,27 +570,27 @@ const CredentialDialog = ({
                 <FormGroup direction="row" title={_('Privacy Algorithm')}>
                   <Radio
                     checked={
-                      state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_AES
+                      state.privacyAlgorithm === SNMP_PRIVACY_ALGORITHM_AES
                     }
-                    name="privacy_algorithm"
+                    name="privacyAlgorithm"
                     title="AES"
                     value={SNMP_PRIVACY_ALGORITHM_AES}
                     onChange={onValueChange}
                   />
                   <Radio
                     checked={
-                      state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_DES
+                      state.privacyAlgorithm === SNMP_PRIVACY_ALGORITHM_DES
                     }
-                    name="privacy_algorithm"
+                    name="privacyAlgorithm"
                     title="DES"
                     value={SNMP_PRIVACY_ALGORITHM_DES}
                     onChange={onValueChange}
                   />
                   <Radio
                     checked={
-                      state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_NONE
+                      state.privacyAlgorithm === SNMP_PRIVACY_ALGORITHM_NONE
                     }
-                    name="privacy_algorithm"
+                    name="privacyAlgorithm"
                     title={_('None')}
                     value={SNMP_PRIVACY_ALGORITHM_NONE}
                     onChange={onValueChange}
@@ -626,16 +599,16 @@ const CredentialDialog = ({
               </>
             )}
 
-            {state.credential_type === PGP_CREDENTIAL_TYPE && (
+            {state.credentialType === PGP_CREDENTIAL_TYPE && (
               <FileField
-                name="public_key"
+                name="publicKey"
                 title={_('Public PGP Key')}
-                value={state.public_key}
+                value={state.publicKey}
                 onChange={handlePublicGPGKeyChange}
               />
             )}
 
-            {state.credential_type === SMIME_CREDENTIAL_TYPE && (
+            {state.credentialType === SMIME_CREDENTIAL_TYPE && (
               <FileField
                 name="certificate"
                 title={_('S/MIME Certificate')}
@@ -643,7 +616,7 @@ const CredentialDialog = ({
               />
             )}
 
-            {state.credential_type === KRB5_CREDENTIAL_TYPE && (
+            {state.credentialType === KRB5_CREDENTIAL_TYPE && (
               <>
                 <TextField
                   name="realm"
