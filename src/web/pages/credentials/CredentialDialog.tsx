@@ -109,9 +109,19 @@ interface CredentialDialogProps {
   onSave?: (state: CredentialDialogState) => Promise<void> | void;
 }
 
-const validateFile = async (file: File, line: string, errorMessage: string) => {
+const validateFile = async (
+  file: File,
+  line: string | RegExp,
+  errorMessage: string,
+) => {
   const content = await file.text();
-  if (!isString(content) || !content.startsWith(line)) {
+  if (!isString(content)) {
+    throw new Error(errorMessage);
+  }
+  if (isString(line) && !content.startsWith(line)) {
+    throw new Error(errorMessage);
+  }
+  if (line instanceof RegExp && !line.test(content)) {
     throw new Error(errorMessage);
   }
 };
@@ -247,8 +257,19 @@ const CredentialDialog = ({
     }
   };
 
-  const handlePrivateKeyChange = (file: File | undefined) => {
-    setPrivateKey(file);
+  const handlePrivateKeyChange = async (file: File | undefined) => {
+    try {
+      if (isDefined(file)) {
+        await validateFile(
+          file,
+          SSH_KEY_REGEX,
+          _('Not a valid Private SSH Key file'),
+        );
+      }
+      setPrivateKey(file);
+    } catch (error) {
+      setError((error as Error).message);
+    }
   };
 
   const handleErrorClose = () => {
