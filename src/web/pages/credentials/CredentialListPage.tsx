@@ -8,7 +8,9 @@ import {CREDENTIALS_FILTER_FILTER} from 'gmp/models/filter';
 import {CredentialIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer, {
+  type WithEntitiesContainerComponentProps,
+} from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialComponent from 'web/pages/credentials/CredentialComponent';
 import CredentialFilterDialog from 'web/pages/credentials/CredentialFilterDialog';
@@ -19,7 +21,36 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/credentials';
 
-const CredentialsPage = ({onChanged, onDownloaded, onError, ...props}) => {
+type CredentialListPageProps = WithEntitiesContainerComponentProps<Credential>;
+
+const CredentialsPage = ({
+  entities,
+  entitiesCounts,
+  filter,
+  selectionType,
+  sortBy,
+  sortDir,
+  isLoading,
+  isUpdating,
+  onChanged,
+  onDeleteBulk,
+  onDownloadBulk,
+  onDownloaded,
+  onEntityDeselected,
+  onEntitySelected,
+  onError,
+  onFirstClick,
+  onLastClick,
+  onNextClick,
+  onPreviousClick,
+  onFilterChanged,
+  onFilterCreated,
+  onFilterRemoved,
+  onFilterReset,
+  onSelectionTypeChange,
+  onSortChange,
+  onTagsBulk,
+}: CredentialListPageProps) => {
   const [_] = useTranslation();
   return (
     <CredentialComponent
@@ -45,22 +76,52 @@ const CredentialsPage = ({onChanged, onDownloaded, onError, ...props}) => {
         <>
           <PageTitle title={_('Credentials')} />
           <EntitiesPage<Credential>
-            {...props}
+            createFilterType="credential"
+            entities={entities}
+            entitiesCounts={entitiesCounts}
+            filter={filter}
             filterEditDialog={CredentialFilterDialog}
             filtersFilter={CREDENTIALS_FILTER_FILTER}
+            isLoading={isLoading}
             sectionIcon={<CredentialIcon size="large" />}
-            table={CredentialTable}
+            table={
+              <CredentialTable
+                entities={entities}
+                entitiesCounts={entitiesCounts}
+                filter={filter}
+                isUpdating={isUpdating}
+                selectionType={selectionType}
+                sortBy={sortBy}
+                sortDir={sortDir}
+                onCredentialCloneClick={clone}
+                onCredentialDeleteClick={deleteFunc}
+                onCredentialDownloadClick={download}
+                onCredentialEditClick={edit}
+                onCredentialInstallerDownloadClick={downloadInstaller}
+                onDeleteBulk={onDeleteBulk}
+                onDownloadBulk={onDownloadBulk}
+                onEntityDeselected={onEntityDeselected}
+                onEntitySelected={onEntitySelected}
+                onFirstClick={onFirstClick}
+                onLastClick={onLastClick}
+                onNextClick={onNextClick}
+                onPreviousClick={onPreviousClick}
+                onSelectionTypeChange={onSelectionTypeChange}
+                onSortChange={onSortChange}
+                onTagsBulk={onTagsBulk}
+              />
+            }
             title={_('Credentials')}
-            toolBarIcons={CredentialListPageToolBarIcons}
-            onChanged={onChanged}
-            onCredentialCloneClick={clone}
-            onCredentialCreateClick={create}
-            onCredentialDeleteClick={deleteFunc}
-            onCredentialDownloadClick={download}
-            onCredentialEditClick={edit}
-            onCredentialInstallerDownloadClick={downloadInstaller}
-            onDownloaded={onDownloaded}
+            toolBarIcons={
+              <CredentialListPageToolBarIcons
+                onCredentialCreateClick={create}
+              />
+            }
             onError={onError}
+            onFilterChanged={onFilterChanged}
+            onFilterCreated={onFilterCreated}
+            onFilterRemoved={onFilterRemoved}
+            onFilterReset={onFilterReset}
           />
         </>
       )}
@@ -68,7 +129,7 @@ const CredentialsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   );
 };
 
-export default withEntitiesContainer('credential', {
+export default withEntitiesContainer<Credential>('credential', {
   entitiesSelector,
   loadEntities,
 })(CredentialsPage);
