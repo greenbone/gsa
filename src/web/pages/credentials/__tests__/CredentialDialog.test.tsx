@@ -17,7 +17,6 @@ import Credential, {
   ALL_CREDENTIAL_TYPES,
   CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import {NO_VALUE} from 'gmp/parser';
 import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 
 const createGmp = (settings = {}) => ({
@@ -66,7 +65,7 @@ describe('CredentialDialog tests', () => {
 
     expect(select).toHaveValue('Username + Password');
 
-    const credentialLogin = dialog.getByName('credential_login');
+    const credentialLogin = dialog.getByName('credentialLogin');
     expect(credentialLogin).toHaveValue('');
 
     const password = dialog.getByName('password');
@@ -86,7 +85,7 @@ describe('CredentialDialog tests', () => {
       <CredentialDialog
         comment={credential.comment}
         credential={credential}
-        credential_type={credential.credential_type}
+        credentialType={credential.credentialType}
         name={credential.name}
         types={ALL_CREDENTIAL_TYPES}
       />,
@@ -127,26 +126,22 @@ describe('CredentialDialog tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      allow_insecure: undefined,
-      auth_algorithm: 'sha1',
-      autogenerate: NO_VALUE,
-      change_community: NO_VALUE,
-      change_password: NO_VALUE,
-      change_passphrase: NO_VALUE,
-      change_privacy_password: NO_VALUE,
+      authAlgorithm: 'sha1',
+      autogenerate: false,
+      certificate: undefined,
       comment: 'bar',
-      community: '',
-      credential_login: '',
-      credential_type: 'up',
+      community: undefined,
+      credentialLogin: undefined,
+      credentialType: 'up',
       id: undefined,
       name: 'foo',
-      passphrase: '',
-      password: '',
-      privacy_algorithm: 'aes',
-      privacy_password: '',
-      public_key: undefined,
-      vaultId: '',
-      hostIdentifier: '',
+      passphrase: undefined,
+      password: undefined,
+      privacyAlgorithm: 'aes',
+      privacyPassword: undefined,
+      publicKey: undefined,
+      vaultId: undefined,
+      hostIdentifier: undefined,
     });
   });
 
@@ -174,26 +169,22 @@ describe('CredentialDialog tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      allow_insecure: undefined,
-      auth_algorithm: 'sha1',
-      autogenerate: NO_VALUE,
-      change_community: NO_VALUE,
-      change_passphrase: NO_VALUE,
-      change_password: NO_VALUE,
-      change_privacy_password: NO_VALUE,
+      authAlgorithm: 'sha1',
+      autogenerate: false,
+      certificate: undefined,
       comment: '',
-      community: '',
-      credential_login: '',
-      credential_type: 'pw',
+      community: undefined,
+      credentialLogin: undefined,
+      credentialType: 'pw',
       id: undefined,
       name: 'Unnamed',
-      passphrase: '',
-      password: '',
-      privacy_algorithm: 'aes',
-      privacy_password: '',
-      public_key: undefined,
-      vaultId: '',
-      hostIdentifier: '',
+      passphrase: undefined,
+      password: undefined,
+      privacyAlgorithm: 'aes',
+      privacyPassword: undefined,
+      publicKey: undefined,
+      vaultId: undefined,
+      hostIdentifier: undefined,
     });
   });
 
@@ -217,7 +208,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type={'usk'} types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="usk" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -227,7 +218,7 @@ describe('CredentialDialog tests', () => {
     const password = screen.getByName('passphrase');
     expect(password).toHaveValue('');
 
-    const privateKey = screen.getByName('private_key');
+    const privateKey = screen.getByName('privateKey');
     expect(privateKey).toHaveAttribute('type', 'file');
   });
 
@@ -237,7 +228,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type="snmp" types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="snmp" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -246,23 +237,23 @@ describe('CredentialDialog tests', () => {
     const snmpCommunity = screen.getByName('community');
     expect(snmpCommunity).toHaveValue('');
 
-    const username = screen.getByName('credential_login');
+    const username = screen.getByName('credentialLogin');
     expect(username).toHaveValue('');
 
     const password = screen.getByName('password');
     expect(password).toHaveValue('');
     expect(password).toHaveAttribute('type', 'password');
 
-    const privacyPassword = screen.getByName('privacy_password');
+    const privacyPassword = screen.getByName('privacyPassword');
     expect(privacyPassword).toHaveValue('');
     expect(privacyPassword).toHaveAttribute('type', 'password');
 
-    const authAlgorithm = screen.getAllByName('auth_algorithm');
+    const authAlgorithm = screen.getAllByName('authAlgorithm');
     expect(authAlgorithm[0]).toHaveAttribute('value', 'md5');
     expect(authAlgorithm[1]).toHaveAttribute('value', 'sha1');
     expect(authAlgorithm[1]).toBeChecked();
 
-    const privacyAlgorithm = screen.getAllByName('privacy_algorithm');
+    const privacyAlgorithm = screen.getAllByName('privacyAlgorithm');
     expect(privacyAlgorithm[0]).toHaveAttribute('value', 'aes');
     expect(privacyAlgorithm[0]).toBeChecked();
     expect(privacyAlgorithm[1]).toHaveAttribute('value', 'des');
@@ -275,7 +266,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type="smime" types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="smime" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -292,13 +283,13 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type={'pgp'} types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="pgp" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
     expect(select).toHaveValue('PGP Encryption Key');
 
-    const certificate = screen.getByName('public_key');
+    const certificate = screen.getByName('publicKey');
     expect(certificate).toHaveAttribute('type', 'file');
   });
 
@@ -308,7 +299,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type={'pw'} types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="pw" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -325,16 +316,13 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog
-        credential_type={'krb5'}
-        types={ALL_CREDENTIAL_TYPES}
-      />,
+      <CredentialDialog credentialType="krb5" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
     expect(select).toHaveValue('SMB (Kerberos)');
 
-    const username = screen.getByName('credential_login');
+    const username = screen.getByName('credentialLogin');
     expect(username).toHaveValue('');
 
     const password = screen.getByName('password');
@@ -355,7 +343,7 @@ describe('CredentialDialog tests', () => {
 
     render(
       <CredentialDialog
-        credential_type={CERTIFICATE_CREDENTIAL_TYPE}
+        credentialType={CERTIFICATE_CREDENTIAL_TYPE}
         types={ALL_CREDENTIAL_TYPES}
       />,
     );
@@ -370,7 +358,7 @@ describe('CredentialDialog tests', () => {
       screen.getByRole('button', {name: 'Client Certificate'}),
     ).toBeVisible();
 
-    const privateKey = screen.getByName('private_key');
+    const privateKey = screen.getByName('privateKey');
     expect(privateKey).toHaveValue('');
     expect(privateKey).toHaveAttribute('type', 'file');
     expect(
@@ -405,7 +393,7 @@ describe('CredentialDialog tests', () => {
       <CredentialDialog
         comment={credentialEntryMock.comment}
         credential={credentialEntryMock}
-        credential_type={credentialEntryMock.credential_type}
+        credentialType={credentialEntryMock.credentialType}
         name={credentialEntryMock.name}
         title="Edit Credential"
         types={ALL_CREDENTIAL_TYPES}
@@ -434,7 +422,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type="krb5" types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="krb5" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const kdcInput = screen.getByPlaceholderText(
