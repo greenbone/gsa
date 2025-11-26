@@ -39,31 +39,31 @@ import {UNSET_LABEL} from 'web/utils/Render';
 const cred1 = new Credential({
   id: '5678',
   name: 'client certificate',
-  credential_type: CERTIFICATE_CREDENTIAL_TYPE,
+  credentialType: CERTIFICATE_CREDENTIAL_TYPE,
 });
 
 const cred2 = new Credential({
   id: '2345',
   name: 'username+password',
-  credential_type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  credentialType: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
 
 const cred3 = new Credential({
   id: '5463',
   name: 'up2',
-  credential_type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  credentialType: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
 
 const cred4 = new Credential({
   id: '6536',
   name: 'ssh_key',
-  credential_type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  credentialType: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 });
 
 const cred5 = new Credential({
   id: '2345',
   name: 'krb5_key',
-  credential_type: KRB5_CREDENTIAL_TYPE,
+  credentialType: KRB5_CREDENTIAL_TYPE,
 });
 
 const credentials = [cred1, cred2, cred3, cred4, cred5];

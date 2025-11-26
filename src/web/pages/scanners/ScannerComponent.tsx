@@ -151,8 +151,7 @@ const ScannerComponent = ({
           : [];
       const credentialsPromise =
         credentialTypes.length > 0
-          ? // @ts-expect-error
-            gmp.credentials
+          ? gmp.credentials
               .getAll({
                 filter: createCredentialsFilter(credentialTypes),
               })
@@ -197,7 +196,6 @@ const ScannerComponent = ({
       setCaCertificate(caCertificate);
     } else {
       const credentialTypes: CredentialType[] = [CERTIFICATE_CREDENTIAL_TYPE];
-      // @ts-expect-error
       const credentials = await gmp.credentials
         .getAll({
           filter: createCredentialsFilter(credentialTypes),
@@ -257,14 +255,12 @@ const ScannerComponent = ({
   };
 
   const handleCreateCredential = async (data: CredentialDialogState) => {
-    // @ts-expect-error
     const credential = await gmp.credential
       .create(data)
       .then(response => response.data);
 
     setCredentialId(credential.id);
 
-    // @ts-expect-error
     const credentials = await gmp.credentials
       .getAll({
         filter: createCredentialsFilter(credentialTypes),
@@ -300,16 +296,14 @@ const ScannerComponent = ({
   const handleDownloadCredential = (scanner: Scanner) => {
     const credential = scanner.credential as Credential;
     const {creationTime, entityType, id, modificationTime, name} = credential;
-
-    // @ts-expect-error
     return gmp.credential
-      .download(credential, 'pem')
+      .download({id}, 'pem')
       .then(response => {
         const filename = generateFilename({
           creationTime,
           extension: 'pem',
           fileNameFormat: detailsExportFileName,
-          id: id,
+          id,
           modificationTime,
           resourceName: name,
           resourceType: entityType,

@@ -105,7 +105,7 @@ const ContainerImageTargetsDialog = ({
 
   // filter for username+password credentials only
   const upCredentials = credentials.filter(
-    value => value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
+    value => value.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE,
   );
 
   const uncontrolledValues = {

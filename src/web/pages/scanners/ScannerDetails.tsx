@@ -138,9 +138,9 @@ const ScannerDetails = ({
       </InfoTable>
       {!entity.hasUnixSocket() &&
         isDefined(credential) &&
-        isDefined(credential.certificate_info) && (
+        isDefined(credential.certificateInfo) && (
           <DetailsBlock title={_('Client Certificate (from Credential)')}>
-            <CertInfo info={credential.certificate_info} />
+            <CertInfo info={credential.certificateInfo} />
           </DetailsBlock>
         )}
     </Layout>

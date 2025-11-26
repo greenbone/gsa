@@ -269,7 +269,7 @@ const TargetDialog = ({
     }
     const storeCredentials = credentials.filter(value =>
       CREDENTIAL_STORE_TYPES[storeKey].includes(
-        value.credential_type as CredentialType,
+        value.credentialType as CredentialType,
       ),
     );
     return [...baseCredentials, ...storeCredentials];
@@ -340,7 +340,7 @@ const TargetDialog = ({
 
   // filter out ssh_elevate_credential_id. If ssh_elevate_credential_id is UNSET_VALUE, this is ok. Because the Select will add back the UNSET_VALUE
   const baseUpCredentials = credentials.filter(
-    value => value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
+    value => value.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE,
   );
   const upCredentials = getCredentialsWithStoreSupport(
     baseUpCredentials,

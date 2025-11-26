@@ -13,7 +13,7 @@ import CredentialTable from 'web/pages/credentials/CredentialTable';
 
 describe('CredentialTable tests', () => {
   test('should render without crashing', () => {
-    const portLists = [
+    const credentials = [
       new Credential({
         id: '1',
         name: 'Credential 1',
@@ -24,7 +24,7 @@ describe('CredentialTable tests', () => {
       }),
     ];
     const {render} = rendererWith({capabilities: true});
-    render(<CredentialTable entities={portLists} />);
+    render(<CredentialTable entities={credentials} />);
     expect(screen.getByTestId('entities-table')).toBeInTheDocument();
   });
 

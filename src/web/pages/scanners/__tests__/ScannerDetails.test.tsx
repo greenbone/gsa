@@ -72,7 +72,7 @@ describe('ScannerDetails tests', () => {
       credential: new Credential({
         id: '5678',
         name: 'Test Credential',
-        certificate_info: {issuer: 'Test Issuer'},
+        certificateInfo: {issuer: 'Test Issuer'},
       }),
       tasks: [
         {id: '1', name: 'Task 1', usageType: 'scan'},

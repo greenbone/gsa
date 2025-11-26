@@ -45,9 +45,11 @@ const CredentialStorePage = lazy(
   () => import('web/pages/credential-store/CredentialStorePage'),
 );
 const CredentialDetailsPage = lazy(
-  () => import('web/pages/credentials/DetailsPage'),
+  () => import('web/pages/credentials/CredentialDetailsPage'),
 );
-const CredentialsPage = lazy(() => import('web/pages/credentials/ListPage'));
+const CredentialsPage = lazy(
+  () => import('web/pages/credentials/CredentialListPage'),
+);
 const CveDetailsPage = lazy(() => import('web/pages/cves/DetailsPage'));
 const CvesPage = lazy(() => import('web/pages/cves/ListPage'));
 const DfnCertDetailsPage = lazy(() => import('web/pages/dfncert/DetailsPage'));
