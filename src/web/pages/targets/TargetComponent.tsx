@@ -164,7 +164,6 @@ const TargetComponent = ({
   const [hostsFilter, setHostsFilter] = useState<Filter | undefined>(undefined);
 
   const loadCredentials = async () => {
-    // @ts-expect-error
     const response = await gmp.credentials.getAll();
     setCredentials(response.data);
   };
@@ -278,7 +277,6 @@ const TargetComponent = ({
   };
 
   const handleCreateCredential = async (data: CredentialDialogState) => {
-    // @ts-expect-error
     const response = await gmp.credential.create(data);
     const credentialId = response.data.id;
     closeCredentialsDialog();
@@ -452,7 +450,7 @@ const TargetComponent = ({
       )}
       {credentialsDialogVisible && (
         <CredentialDialog
-          credential_type={first(credentialTypes)}
+          credentialType={first(credentialTypes)}
           title={`${credentialsTitle}`}
           types={credentialTypes}
           onClose={handleCloseCredentialsDialog}

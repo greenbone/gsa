@@ -15,7 +15,7 @@ describe('CertInfo tests', () => {
     const credential = new Credential({
       id: '5678',
       name: 'Test Credential',
-      certificate_info: {
+      certificateInfo: {
         activationTime: date('2023-01-01T00:00:00Z'),
         expirationTime: date('2024-01-01T00:00:00Z'),
         issuer: 'Test Issuer',
@@ -25,7 +25,7 @@ describe('CertInfo tests', () => {
     const {render, store} = rendererWith({store: true});
     store.dispatch(setTimezone('UTC'));
 
-    render(<CertInfo info={credential.certificate_info as CertificateInfo} />);
+    render(<CertInfo info={credential.certificateInfo as CertificateInfo} />);
 
     expect(screen.getByTestId('cert-info-table')).toBeInTheDocument();
     expect(screen.getByTestId('cert-info-activation-label')).toHaveTextContent(
