@@ -288,7 +288,7 @@ describe('ScannerDialog tests', () => {
     const {render} = rendererWith({
       gmp,
       capabilities: true,
-      features: new Features(['ENABLE_AGENTS', 'OPENVASD']),
+      features: new Features(['ENABLE_AGENTS', 'ENABLE_OPENVASD']),
     });
 
     render(<ScannerDialog />);
@@ -474,7 +474,7 @@ describe('ScannerDialog tests', () => {
     const {render} = rendererWith({
       gmp: {settings: {enableGreenboneSensor: false}}, // no sensor
       capabilities: true,
-      features: new Features(['OPENVASD']),
+      features: new Features(['ENABLE_OPENVASD']),
     });
 
     render(<ScannerDialog type={OPENVASD_SCANNER_TYPE} />);

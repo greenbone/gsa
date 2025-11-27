@@ -129,7 +129,7 @@ const ScannerDialog = ({
       }
 
       if (
-        !features.featureEnabled('OPENVASD') &&
+        !features.featureEnabled('ENABLE_OPENVASD') &&
         type === OPENVASD_SCANNER_TYPE
       ) {
         return undefined;
@@ -147,7 +147,7 @@ const ScannerDialog = ({
 
   const scannerTypes: ScannerType[] = [OPENVAS_SCANNER_TYPE];
 
-  if (features.featureEnabled('OPENVASD')) {
+  if (features.featureEnabled('ENABLE_OPENVASD')) {
     scannerTypes.push(OPENVASD_SCANNER_TYPE);
   }
 
