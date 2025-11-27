@@ -15,6 +15,7 @@ import {
   scannerTypeName,
 } from 'gmp/models/scanner';
 import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
@@ -93,7 +94,7 @@ const ScannerDialog = ({
   name,
   port,
   title,
-  type,
+  type: initialScannerType,
   onClose,
   onCredentialChange,
   onNewCredentialClick,
@@ -109,12 +110,17 @@ const ScannerDialog = ({
   const [error, setError] = useState<string | undefined>();
   const [scannerType, setScannerType] = useState<ScannerType | undefined>(
     () => {
+      if (isDefined(id)) {
+        // don't change the type of existing scanners
+        return initialScannerType;
+      }
+
       // don't allow selecting agent types initially if the feature is disabled or the user has no access
       if (
         (!features.featureEnabled('ENABLE_AGENTS') ||
           !capabilities.mayAccess('agent')) &&
-        (type === AGENT_CONTROLLER_SCANNER_TYPE ||
-          type === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)
+        (initialScannerType === AGENT_CONTROLLER_SCANNER_TYPE ||
+          initialScannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)
       ) {
         return undefined;
       }
@@ -122,24 +128,24 @@ const ScannerDialog = ({
       // don't allow selecting sensor types initially if the setting is disabled
       if (
         !gmp.settings.enableGreenboneSensor &&
-        (type === GREENBONE_SENSOR_SCANNER_TYPE ||
-          type === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)
+        (initialScannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
+          initialScannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)
       ) {
         return undefined;
       }
 
       if (
         !features.featureEnabled('ENABLE_OPENVASD') &&
-        type === OPENVASD_SCANNER_TYPE
+        initialScannerType === OPENVASD_SCANNER_TYPE
       ) {
         return undefined;
       }
-      return type;
+      return initialScannerType;
     },
   );
   const [userChangedPort, setUserChangedPort] = useState<boolean>(false);
   const [scannerPort, setScannerPort] = useState<number | ''>(
-    () => port ?? updatePort(type),
+    () => port ?? updatePort(initialScannerType),
   );
 
   name = name || _('Unnamed');
@@ -147,20 +153,34 @@ const ScannerDialog = ({
 
   const scannerTypes: ScannerType[] = [OPENVAS_SCANNER_TYPE];
 
-  if (features.featureEnabled('ENABLE_OPENVASD')) {
+  if (
+    scannerType === OPENVASD_SCANNER_TYPE ||
+    features.featureEnabled('ENABLE_OPENVASD')
+  ) {
     scannerTypes.push(OPENVASD_SCANNER_TYPE);
   }
 
   if (
-    features.featureEnabled('ENABLE_AGENTS') &&
-    capabilities.mayAccess('agent')
+    scannerType === AGENT_CONTROLLER_SCANNER_TYPE ||
+    (features.featureEnabled('ENABLE_AGENTS') &&
+      capabilities.mayAccess('agent'))
   ) {
     scannerTypes.push(AGENT_CONTROLLER_SCANNER_TYPE);
-    if (gmp.settings.enableGreenboneSensor) {
-      scannerTypes.push(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE);
-    }
   }
-  if (gmp.settings.enableGreenboneSensor) {
+
+  if (
+    scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE ||
+    (features.featureEnabled('ENABLE_AGENTS') &&
+      capabilities.mayAccess('agent') &&
+      gmp.settings.enableGreenboneSensor)
+  ) {
+    scannerTypes.push(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE);
+  }
+
+  if (
+    scannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
+    gmp.settings.enableGreenboneSensor
+  ) {
     scannerTypes.push(GREENBONE_SENSOR_SCANNER_TYPE);
   }
 
@@ -193,22 +213,21 @@ const ScannerDialog = ({
     value: scannerType,
   }));
 
-  const credentialOptions = renderSelectItems(
-    credentials as RenderSelectItemProps[],
-    '',
-  );
-
   const isGreenboneSensorType = scannerType === GREENBONE_SENSOR_SCANNER_TYPE;
   const isAgentControllerSensorScannerType =
     scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
+  const showScannerDetails = isDefined(scannerType);
   const showCredentialField =
-    !isGreenboneSensorType && !isAgentControllerSensorScannerType;
+    !isGreenboneSensorType &&
+    !isAgentControllerSensorScannerType &&
+    showScannerDetails;
   const showCaCertificateField =
-    !isGreenboneSensorType && !isAgentControllerSensorScannerType;
+    !isGreenboneSensorType &&
+    !isAgentControllerSensorScannerType &&
+    showScannerDetails;
   if (isGreenboneSensorType || isAgentControllerSensorScannerType) {
     credentialId = undefined;
   }
-
   return (
     <SaveDialog<ScannerDialogValues, ScannerDialogDefaultValues>
       defaultValues={{
@@ -231,52 +250,56 @@ const ScannerDialog = ({
       {({values: state, onValueChange}) => {
         return (
           <>
-            <FormGroup title={_('Name')}>
-              <TextField
-                name="name"
-                value={state.name}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+            <TextField
+              name="name"
+              title={_('Name')}
+              value={state.name}
+              onChange={onValueChange}
+            />
 
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={state.comment}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+            <TextField
+              name="comment"
+              title={_('Comment')}
+              value={state.comment}
+              onChange={onValueChange}
+            />
 
             <Select
               disabled={scannerInUse}
               items={scannerTypesOptions}
               label={_('Scanner Type')}
               name="type"
+              placeholder={_('Select a Scanner Type')}
               value={state.type}
               onChange={handleScannerTypeChange as (value: string) => void}
             />
 
-            <FormGroup title={_('Host')}>
+            {showScannerDetails && (
               <TextField
                 disabled={scannerInUse}
                 name="host"
+                placeholder={_('Insert a Host name or IP address')}
+                title={_('Host')}
                 value={state.host}
                 onChange={onValueChange}
               />
-            </FormGroup>
+            )}
 
-            <FormGroup title={_('Port')}>
+            {showScannerDetails && (
               <NumberField
                 disabled={scannerInUse}
                 name="port"
+                placeholder={_('Insert a Port number')}
+                title={_('Port')}
                 value={state.port}
                 onChange={handleScannerPortChange}
               />
-            </FormGroup>
+            )}
 
             {showCaCertificateField && (
               <FileField
                 name="caCertificate"
+                placeholder={_('Upload CA Certificate')}
                 title={_('CA Certificate')}
                 value={state.caCertificate ?? null}
                 onChange={handleCaCertificateChange}
@@ -286,10 +309,15 @@ const ScannerDialog = ({
             {showCredentialField && (
               <FormGroup direction="row" title={_('Credential')}>
                 <Select
+                  allowDeselect
+                  clearable
                   aria-label={_('Credential')}
                   grow="1"
-                  items={credentialOptions}
+                  items={renderSelectItems(
+                    credentials as RenderSelectItemProps[],
+                  )}
                   name="credentialId"
+                  placeholder={_('Select a Credential')}
                   value={credentialId ?? ''}
                   onChange={(value: string) =>
                     onCredentialChange && onCredentialChange(value)
