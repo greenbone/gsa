@@ -10,13 +10,13 @@ import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
-import TableCol from 'web/components/table/TableCol';
 import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import TargetDetailsColGroup from 'web/pages/targets/TargetDetailsColGroup';
 import {renderYesNo} from 'web/utils/Render';
 
 interface TargetDetailsProps {
@@ -60,10 +60,7 @@ const TargetDetails = ({entity}: TargetDetailsProps) => {
     <Layout flex="column" grow="1">
       <DetailsBlock title={_('Hosts')}>
         <InfoTable size="full">
-          <colgroup>
-            <TableCol width="15%" />
-            <TableCol width="85%" />
-          </colgroup>
+          <TargetDetailsColGroup />
           <TableBody>
             <TableRow>
               <TableDataAlignTop>{_('Included')}</TableDataAlignTop>
@@ -134,7 +131,8 @@ const TargetDetails = ({entity}: TargetDetailsProps) => {
           isDefined(esxiCredential) ||
           (gmp.settings.enableKrb5 && isDefined(krb5Credential))) && (
           <DetailsBlock title={_('Credentials')}>
-            <InfoTable>
+            <InfoTable size="full">
+              <TargetDetailsColGroup />
               <TableBody>
                 {isDefined(sshCredential) && (
                   <TableRow>
