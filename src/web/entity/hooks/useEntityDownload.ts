@@ -16,7 +16,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
-import {generateFilename} from 'web/utils/Render';
+import {generateFilename, type GenerateFilenameParams} from 'web/utils/Render';
 
 export type OnDownloadedFunc<TData = string | ArrayBuffer> = (
   data: EntityDownload<TData>,
@@ -32,8 +32,9 @@ interface EntityDownloadCallbacks<TData> {
   onDownloaded?: OnDownloadedFunc<TData>;
 }
 
-type EntityDownloadFunction<TData> = (
+type EntityDownloadFunction<TData, TOptions> = (
   entity: EntityCommandParams,
+  options?: TOptions,
 ) => Promise<Response<TData, Meta>>;
 
 /**
@@ -58,8 +59,12 @@ type EntityDownloadFunction<TData> = (
  * handleDownload(entity);
  * ```
  */
-const useEntityDownload = <TEntity extends Model, TData = string | ArrayBuffer>(
-  gmpMethod: EntityDownloadFunction<TData>,
+const useEntityDownload = <
+  TEntity extends Model,
+  TData = string | ArrayBuffer,
+  TDataOptions extends object = {},
+>(
+  gmpMethod: EntityDownloadFunction<TData, TDataOptions>,
   {onDownloadError, onDownloaded}: EntityDownloadCallbacks<TData> = {},
 ) => {
   const [_] = useTranslation();
@@ -85,7 +90,10 @@ const useEntityDownload = <TEntity extends Model, TData = string | ArrayBuffer>(
     }
   }, [dispatch, gmp, userDefaultsSelector]);
 
-  const handleEntityDownload = async (entity: TEntity) => {
+  const handleEntityDownload = async (
+    entity: TEntity,
+    options?: TDataOptions & GenerateFilenameParams,
+  ) => {
     const detailsExportFileName = userDefaultsSelector.getValueByName(
       'detailsexportfilename',
     );
@@ -98,10 +106,11 @@ const useEntityDownload = <TEntity extends Model, TData = string | ArrayBuffer>(
       resourceName: entity.name,
       resourceType: entity.entityType,
       username,
+      ...options,
     });
 
     try {
-      const response = await gmpMethod(entity as EntityCommandParams);
+      const response = await gmpMethod(entity as EntityCommandParams, options);
 
       if (isDefined(onDownloaded)) {
         showSuccessNotification(
