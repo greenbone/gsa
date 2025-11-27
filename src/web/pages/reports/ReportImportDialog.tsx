@@ -64,7 +64,7 @@ const ReportImportDialog = ({
           <FormGroup title={_('Report')}>
             <FileField grow="1" name="xml_file" onChange={onValueChange} />
           </FormGroup>
-          <FormGroup direction="row" title={_('Container Task')}>
+          <FormGroup direction="row" title={_('Import Task')}>
             <Select
               grow="1"
               items={renderSelectItems(tasks as RenderSelectItemProps[])}
@@ -74,8 +74,8 @@ const ReportImportDialog = ({
             />
             {newContainerTask && (
               <NewIcon
-                data-testid="new-container-task"
-                title={_('Create new Container Task')}
+                data-testid="new-import-task"
+                title={_('Create new Import Task')}
                 onClick={onNewContainerTaskClick}
               />
             )}
