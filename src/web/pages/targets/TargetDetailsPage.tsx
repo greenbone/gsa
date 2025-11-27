@@ -37,6 +37,7 @@ import TargetComponent, {
   TARGET_RESOURCE_PROPERTIES_NAMES,
 } from 'web/pages/targets/TargetComponent';
 import TargetDetails from 'web/pages/targets/TargetDetails';
+import TargetDetailsColGroup from 'web/pages/targets/TargetDetailsColGroup';
 import TargetDetailsToolBarIcons from 'web/pages/targets/TargetDetailsTooBarIcons';
 import {
   selector as permissionsSelector,
@@ -74,7 +75,8 @@ const Details = ({entity}: EntityProps) => {
   const [_] = useTranslation();
   return (
     <Layout flex="column">
-      <InfoTable>
+      <InfoTable size="full">
+        <TargetDetailsColGroup />
         <TableBody>
           <TableRow>
             <TableData>{_('Name')}</TableData>
