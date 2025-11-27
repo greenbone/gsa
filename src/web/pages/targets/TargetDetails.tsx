@@ -5,6 +5,7 @@
 
 import type Target from 'gmp/models/target';
 import {isDefined} from 'gmp/utils/identity';
+import TagListDisplay from 'web/components/form/TagListDisplay';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -108,7 +109,9 @@ const TargetDetails = ({entity}: TargetDetailsProps) => {
 
             <TableRow>
               <TableData>{_('Alive Test')}</TableData>
-              <TableData>{aliveTests}</TableData>
+              <TableData>
+                <TagListDisplay color="gray" values={aliveTests} />
+              </TableData>
             </TableRow>
 
             <TableRow>
