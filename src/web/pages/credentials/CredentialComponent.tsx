@@ -4,7 +4,6 @@
  */
 
 import {useState} from 'react';
-import {useSelector} from 'react-redux';
 import {type CredentialDownloadFormat} from 'gmp/commands/credential';
 import {type EntityCommandParams} from 'gmp/commands/entity';
 import {
@@ -30,14 +29,10 @@ import useEntitySave, {
   type EntitySaveResponse,
 } from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
-import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialDialog, {
   type CredentialDialogState,
 } from 'web/pages/credentials/CredentialDialog';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUsername} from 'web/store/usersettings/selectors';
-import {generateFilename} from 'web/utils/Render';
 
 interface CredentialComponentRenderProps {
   clone: (credential: Credential) => Promise<void>;
@@ -84,12 +79,6 @@ const CredentialComponent = ({
 }: CredentialComponentProps) => {
   const gmp = useGmp();
   const [_] = useTranslation();
-
-  const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
-  const username = useSelector(getUsername);
-  const detailsExportFileName = userDefaultsSelector.getValueByName(
-    'detailsexportfilename',
-  );
 
   const [dialogVisible, setDialogVisible] = useState(false);
 
@@ -145,31 +134,24 @@ const CredentialComponent = ({
     setDialogVisible(false);
   };
 
-  const handleCloseCredentialDialog = () => {
-    closeCredentialDialog();
-  };
+  const handleEntityDownloadInstaller = useEntityDownload<
+    Credential,
+    ArrayBuffer,
+    {format: CredentialDownloadFormat}
+  >(
+    (cred, options) =>
+      gmp.credential.download({id: cred.id as string}, options?.format),
+    {
+      onDownloadError: onInstallerDownloadError,
+      onDownloaded: onInstallerDownloaded,
+    },
+  );
 
   const handleDownloadInstaller = (
     cred: Credential,
     format: CredentialDownloadFormat,
   ) => {
-    return gmp.credential
-      .download({id: cred.id as string}, format)
-      .then(response => {
-        const {creationTime, entityType, id, modificationTime, name} = cred;
-        const filename = generateFilename({
-          creationTime: creationTime,
-          extension: format,
-          fileNameFormat: detailsExportFileName,
-          id: id,
-          modificationTime,
-          resourceName: name,
-          resourceType: entityType,
-          username,
-        });
-        return {filename, data: response.data};
-      })
-      .then(onInstallerDownloaded, onInstallerDownloadError);
+    return handleEntityDownloadInstaller(cred, {format, extension: format});
   };
 
   const handleEntitySave = useEntitySave(
@@ -232,7 +214,7 @@ const CredentialComponent = ({
           privacyAlgorithm={privacyAlgorithm}
           title={title}
           types={types}
-          onClose={handleCloseCredentialDialog}
+          onClose={closeCredentialDialog}
           onSave={handleSave}
         />
       )}
