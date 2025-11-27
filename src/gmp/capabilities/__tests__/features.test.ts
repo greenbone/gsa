@@ -8,13 +8,13 @@ import Features, {type Feature} from 'gmp/capabilities/features';
 
 describe('Features tests', () => {
   test('should check feature enabled', () => {
-    const featureList: Feature[] = ['CVSS3_RATINGS', 'OPENVASD'];
+    const featureList: Feature[] = ['CVSS3_RATINGS', 'ENABLE_OPENVASD'];
     const features = new Features(featureList);
 
     expect(features.featureEnabled('CVSS3_RATINGS')).toBe(true);
-    expect(features.featureEnabled('OPENVASD')).toBe(true);
+    expect(features.featureEnabled('ENABLE_OPENVASD')).toBe(true);
     // @ts-expect-error
-    expect(features.featureEnabled('openvasd')).toBe(true);
+    expect(features.featureEnabled('enable_openvasd')).toBe(true);
     expect(features.featureEnabled('FEED_VT_METADATA')).toBe(false);
     expect(features.featureEnabled('ENABLE_AGENTS')).toBe(false);
     // @ts-expect-error
@@ -38,7 +38,7 @@ describe('Features tests', () => {
   });
 
   test('should allow iterating', () => {
-    const featureList: Feature[] = ['CVSS3_RATINGS', 'OPENVASD'];
+    const featureList: Feature[] = ['CVSS3_RATINGS', 'ENABLE_OPENVASD'];
     const features = new Features(featureList);
 
     expect(features.length).toEqual(2);
@@ -52,11 +52,11 @@ describe('Features tests', () => {
   });
 
   test('should allow mapping', () => {
-    const features = new Features(['CVSS3_RATINGS', 'OPENVASD']);
+    const features = new Features(['CVSS3_RATINGS', 'ENABLE_OPENVASD']);
 
     expect(features.map(feature => feature)).toEqual([
       'CVSS3_RATINGS',
-      'OPENVASD',
+      'ENABLE_OPENVASD',
     ]);
   });
 });

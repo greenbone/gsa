@@ -8,7 +8,7 @@ import {map} from 'gmp/utils/array';
 export type Feature =
   | 'CVSS3_RATINGS'
   | 'FEED_VT_METADATA'
-  | 'OPENVASD'
+  | 'ENABLE_OPENVASD'
   | 'ENABLE_AGENTS'
   | 'ENABLE_CONTAINER_SCANNING'
   | 'ENABLE_CREDENTIAL_STORES';
