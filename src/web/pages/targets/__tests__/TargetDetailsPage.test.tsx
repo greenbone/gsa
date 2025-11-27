@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
+import Target, {ICMP_PING, TCP_SYN} from 'gmp/models/target';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import TargetDetailsPage from 'web/pages/targets/TargetDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/targets';
@@ -16,6 +16,7 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 const target = Target.fromElement({
   _id: '46264',
   name: 'target 1',
+  comment: 'some comment',
   creation_time: '2020-12-23T14:14:11Z',
   modification_time: '2021-01-04T11:54:12Z',
   in_use: 0,
@@ -34,7 +35,7 @@ const target = Target.fromElement({
   reverse_lookup_unify: 0,
   tasks: {task: {_id: '465', name: 'foo'}},
   alive_tests: {
-    alive_test: SCAN_CONFIG_DEFAULT,
+    alive_test: [ICMP_PING, TCP_SYN],
   },
   allow_simultaneous_ips: 1,
   krb5_credential: {
@@ -117,75 +118,126 @@ describe('TargetDetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    const {baseElement} = render(<TargetDetailsPage id="46264" />);
+    render(<TargetDetailsPage id="46264" />);
 
-    expect(baseElement).toHaveTextContent('Target: target 1');
-
-    const links = baseElement.querySelectorAll('a');
-
-    expect(screen.getAllByTitle('Help: Targets')[0]).toBeInTheDocument();
-    expect(links[0]).toHaveAttribute(
+    expect(screen.getByTitle('Help: Targets')).toBeInTheDocument();
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-targets',
     );
 
-    expect(screen.getAllByTitle('Target List')[0]).toBeInTheDocument();
-    expect(links[1]).toHaveAttribute('href', '/targets');
+    expect(screen.getByTitle('Target List')).toBeInTheDocument();
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/targets',
+    );
 
-    expect(baseElement).toHaveTextContent('ID:46264');
-    expect(baseElement).toHaveTextContent(
+    const entityInfo = screen.getByTestId('entity-info');
+    expect(entityInfo).toHaveTextContent('ID:46264');
+    expect(entityInfo).toHaveTextContent(
       'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
     );
-    expect(baseElement).toHaveTextContent(
+    expect(entityInfo).toHaveTextContent(
       'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
     );
-    expect(baseElement).toHaveTextContent('Owner:admin');
+    expect(entityInfo).toHaveTextContent('Owner:admin');
 
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[9]).toHaveTextContent('User Tags');
-    expect(spans[11]).toHaveTextContent('Permissions');
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^permissions/i}),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('Included');
-    expect(baseElement).toHaveTextContent('127.0.0.1');
-    expect(baseElement).toHaveTextContent('123.456.574.64');
+    expect(
+      screen.getByRole('row', {name: /^name target 1/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^comment some comment/i}),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('Excluded');
-    expect(baseElement).toHaveTextContent('192.168.0.1');
+    expect(
+      screen.getByRole('row', {
+        name: /^included 127\.0\.0\.1 123\.456\.574\.64/i,
+      }),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('Maximum Number of Hosts');
-    expect(baseElement).toHaveTextContent('2');
+    expect(
+      screen.getByRole('row', {name: /^excluded 192\.168\.0\.1/i}),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('Reverse Lookup Only');
-    expect(baseElement).toHaveTextContent('Yes');
+    expect(
+      screen.getByRole('row', {
+        name: /^allow simultaneous scanning via multiple ips yes/i,
+      }),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('Reverse Lookup Unify');
-    expect(baseElement).toHaveTextContent('No');
+    expect(
+      screen.getByRole('row', {name: /^maximum number of hosts 2/i}),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('Alive Test');
-    expect(baseElement).toHaveTextContent('Scan Config Default');
+    expect(
+      screen.getByRole('row', {name: /^reverse lookup only yes/i}),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('Port List');
-    expect(links[2]).toHaveAttribute('href', '/portlist/32323');
-    expect(baseElement).toHaveTextContent('All IANA assigned TCP');
+    expect(
+      screen.getByRole('row', {name: /^reverse lookup unify no/i}),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('Credentials');
+    expect(
+      screen.getByRole('row', {
+        name: /^alive test icmp ping tcp-syn service ping/i,
+      }),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('SSH');
-    expect(baseElement).toHaveTextContent('ssh');
-    expect(links[3]).toHaveAttribute('href', '/credential/1235');
-    expect(baseElement).toHaveTextContent('on Port 22');
+    expect(
+      screen.getByRole('row', {
+        name: /^port list all iana assigned tcp/i,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', {name: /iana assigned tcp/i}),
+    ).toHaveAttribute('href', '/portlist/32323');
 
-    expect(baseElement).toHaveTextContent('SSH elevate credential');
-    expect(baseElement).toHaveTextContent('ssh_elevate');
-    expect(links[4]).toHaveAttribute('href', '/credential/3456');
+    expect(
+      screen.getByRole('row', {
+        name: /^ssh ssh on port 22/i,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', {name: 'ssh'})).toHaveAttribute(
+      'href',
+      '/credential/1235',
+    );
 
-    expect(baseElement).toHaveTextContent('SMB (NTLM)');
-    expect(baseElement).toHaveTextContent('smb_credential');
-    expect(links[5]).toHaveAttribute('href', '/credential/4784');
+    expect(
+      screen.getByRole('row', {
+        name: /^ssh elevate credential ssh_elevate/i,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', {name: /^ssh_elevate/i})).toHaveAttribute(
+      'href',
+      '/credential/3456',
+    );
 
-    expect(baseElement).toHaveTextContent('Tasks using this Target (1)');
-    expect(links[6]).toHaveAttribute('href', '/task/465');
-    expect(baseElement).toHaveTextContent('foo');
+    expect(
+      screen.getByRole('row', {
+        name: /^smb \(ntlm\) smb_credential/i,
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('link', {name: /^smb_credential/i}),
+    ).toHaveAttribute('href', '/credential/4784');
+
+    expect(
+      screen.getByRole('heading', {name: /^tasks using this target \(1\)/i}),
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole('link', {name: /^foo/i})).toHaveAttribute(
+      'href',
+      '/task/465',
+    );
   });
 
   test('should render full DetailsPage with Kerberos, when KRB5 is enabled', () => {
@@ -202,12 +254,15 @@ describe('TargetDetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    const {baseElement} = render(<TargetDetailsPage id="46264" />);
-    const kerberosLink = baseElement.querySelectorAll('a')[5];
+    render(<TargetDetailsPage id="46264" />);
 
-    expect(baseElement).toHaveTextContent('SMB (Kerberos)');
-    expect(baseElement).toHaveTextContent('krb5');
-    expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
+    expect(
+      screen.getByRole('row', {name: /smb \(kerberos\) krb5/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', {name: /^krb5/i})).toHaveAttribute(
+      'href',
+      '/credential/krb5_id',
+    );
   });
 
   test('should render user tags tab', () => {
@@ -224,14 +279,11 @@ describe('TargetDetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', target));
 
-    const {baseElement} = render(<TargetDetailsPage id="12345" />);
+    const {container} = render(<TargetDetailsPage id="12345" />);
 
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[9]).toHaveTextContent('User Tags');
-
-    fireEvent.click(spans[9]);
-
-    expect(baseElement).toHaveTextContent('No user tags available');
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
   });
 
   test('should render permissions tab', () => {
@@ -248,14 +300,11 @@ describe('TargetDetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    const {baseElement} = render(<TargetDetailsPage id="46264" />);
+    const {container} = render(<TargetDetailsPage id="46264" />);
 
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[11]).toHaveTextContent('Permissions');
-
-    fireEvent.click(spans[11]);
-
-    expect(baseElement).toHaveTextContent('No permissions available');
+    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    fireEvent.click(permissionsTab);
+    expect(container).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
@@ -276,28 +325,16 @@ describe('TargetDetailsPage tests', () => {
 
     await wait();
 
-    const cloneIcon = screen.getAllByTitle('Clone Target');
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-
-    await wait();
-
+    const cloneIcon = screen.getByTitle('Clone Target');
+    fireEvent.click(cloneIcon);
     expect(gmp.target.clone).toHaveBeenCalledWith(target);
 
-    const exportIcon = screen.getAllByTitle('Export Target as XML');
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getByTitle('Export Target as XML');
+    fireEvent.click(exportIcon);
     expect(gmp.target.export).toHaveBeenCalledWith(target);
 
-    const deleteIcon = screen.getAllByTitle('Move Target to trashcan');
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
+    const deleteIcon = screen.getByTitle('Move Target to trashcan');
+    fireEvent.click(deleteIcon);
     expect(gmp.target.delete).toHaveBeenCalledWith({id: target.id});
   });
 });
