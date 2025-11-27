@@ -676,12 +676,10 @@ const TaskComponent = ({
   const openTaskDialog = async (task?: Task) => {
     if (isDefined(task) && task.isImport()) {
       openImportTaskDialog(task);
+    } else if (task?.isAgent()) {
+      await openAgentTaskDialog(task);
     } else {
-      if (task?.isAgent()) {
-        await openAgentTaskDialog(task);
-      } else {
-        openStandardTaskDialog(task);
-      }
+      openStandardTaskDialog(task);
     }
   };
 
@@ -952,11 +950,11 @@ const TaskComponent = ({
     closeAgentTaskDialog();
   };
 
-  const handleEditTask = (task: Task) => {
+  const handleEditTask = async (task: Task) => {
     if (task.scanner?.scannerType === CONTAINER_IMAGE_SCANNER_TYPE) {
       handleOpenContainerImageTaskDialog(task);
     } else {
-      openStandardTaskDialog(task);
+      await openTaskDialog(task);
     }
   };
 

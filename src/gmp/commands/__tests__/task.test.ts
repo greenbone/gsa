@@ -227,7 +227,7 @@ describe('TaskCommand tests', () => {
     },
   );
 
-  test('should create new container task', async () => {
+  test('should create new import task', async () => {
     const mockResponse = createActionResultResponse();
     const fakeHttp = createHttp(mockResponse);
     const cmd = new TaskCommand(fakeHttp);
