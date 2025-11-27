@@ -343,6 +343,7 @@ describe('CredentialComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
+    expect(gmp.credential.download).toHaveBeenCalledWith({id: '123'}, 'rpm');
     expect(onDownloadError).not.toHaveBeenCalled();
     expect(onDownloaded).toHaveBeenCalledWith({
       data: 'some-data',
