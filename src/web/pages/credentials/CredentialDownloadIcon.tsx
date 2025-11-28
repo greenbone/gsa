@@ -5,6 +5,7 @@
 
 import {type CredentialDownloadFormat} from 'gmp/commands/credential';
 import {
+  CERTIFICATE_CREDENTIAL_TYPE,
   type default as Credential,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
@@ -59,6 +60,15 @@ const CredentialDownloadIcon = ({
           value={credential}
           onClick={
             isDefined(onDownload) ? cred => onDownload(cred, 'key') : undefined
+          }
+        />
+      )}
+      {type === CERTIFICATE_CREDENTIAL_TYPE && (
+        <DownloadKeyIcon
+          title={_('Download Client Certificate')}
+          value={credential}
+          onClick={
+            isDefined(onDownload) ? cred => onDownload(cred, 'pem') : undefined
           }
         />
       )}

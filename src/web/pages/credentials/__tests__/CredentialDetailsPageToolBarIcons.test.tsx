@@ -8,6 +8,7 @@ import {rendererWith, screen, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Credential, {
+  CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
@@ -297,6 +298,50 @@ describe('CredentialDetailsPageToolBarIcons tests', () => {
     expect(handleCredentialInstallerDownloadClick).toHaveBeenCalledWith(
       credential,
       'key',
+    );
+  });
+
+  test('should allow to download client certificate', () => {
+    const credential = new Credential({
+      id: '6575',
+      name: 'Credential 1',
+      credentialType: CERTIFICATE_CREDENTIAL_TYPE,
+      inUse: true,
+      userCapabilities: new EverythingCapabilities(),
+    });
+    const gmp = {settings: {manualUrl}};
+    const handleCredentialCloneClick = testing.fn();
+    const handleCredentialDeleteClick = testing.fn();
+    const handleCredentialDownloadClick = testing.fn();
+    const handleCredentialEditClick = testing.fn();
+    const handleCredentialCreateClick = testing.fn();
+    const handleCredentialInstallerDownloadClick = testing.fn();
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+    });
+
+    render(
+      <CredentialDetailsPageToolBarIcons
+        entity={credential}
+        onCredentialCloneClick={handleCredentialCloneClick}
+        onCredentialCreateClick={handleCredentialCreateClick}
+        onCredentialDeleteClick={handleCredentialDeleteClick}
+        onCredentialDownloadClick={handleCredentialDownloadClick}
+        onCredentialEditClick={handleCredentialEditClick}
+        onCredentialInstallerDownloadClick={
+          handleCredentialInstallerDownloadClick
+        }
+      />,
+    );
+    const clientCertDownloadIcon = screen.getByTitle(
+      'Download Client Certificate',
+    );
+    fireEvent.click(clientCertDownloadIcon);
+    expect(handleCredentialInstallerDownloadClick).toHaveBeenCalledWith(
+      credential,
+      'pem',
     );
   });
 });
