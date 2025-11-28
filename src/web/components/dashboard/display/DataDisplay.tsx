@@ -16,12 +16,10 @@ import Display, {
 } from 'web/components/dashboard/display/Display';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
-import Loading from 'web/components/loading/Loading';
 import Theme from 'web/utils/Theme';
 import withTranslation, {
   type WithTranslationComponentProps,
 } from 'web/utils/withTranslation';
-
 export interface State {
   showLegend?: boolean;
 }
@@ -441,25 +439,30 @@ class DataDisplay<
     const showContent = height > 0 && width > 0; // > 0 also checks for null, undefined and null
     const state = this.getCurrentState();
     return (
-      <Display title={`${title}`} onRemoveClick={onRemoveClick} {...otherProps}>
+      <Display
+        isLoading={isLoading}
+        title={`${title}`}
+        onRemoveClick={onRemoveClick}
+        {...otherProps}
+      >
         <DisplayBox>
           <Layout flex="column" grow="1">
-            {isLoading ? (
-              <Loading />
-            ) : (
-              showContent && (
-                <>
-                  {children({
-                    id,
-                    data: transformedData,
-                    width,
-                    height,
-                    svgRef: this.svgRef,
-                    state,
-                    setState: this.handleSetState,
-                  })}
-                </>
-              )
+            {showContent && (
+              <div style={{height, width}}>
+                {!isLoading && (
+                  <>
+                    {children({
+                      id,
+                      data: transformedData,
+                      width,
+                      height,
+                      svgRef: this.svgRef,
+                      state,
+                      setState: this.handleSetState,
+                    })}
+                  </>
+                )}
+              </div>
             )}
             <IconBar>
               <IconDivider flex="column">

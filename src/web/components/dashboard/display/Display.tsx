@@ -7,24 +7,31 @@ import React from 'react';
 import styled from 'styled-components';
 import DialogCloseButton from 'web/components/dialog/DialogCloseButton';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
+import Loading from 'web/components/loading/Loading';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
+
+export interface DisplayProps {
+  children: React.ReactNode;
+  dragHandleProps?: Record<string, unknown>;
+  title?: string;
+  onRemoveClick: () => void;
+  isLoading?: boolean;
+}
 
 export const DISPLAY_HEADER_HEIGHT = 20;
 export const DISPLAY_BORDER_WIDTH = 2;
 
-/*
- * Position the Menu relative to this element
- *
- * This allows to not consider the padding and border of the Header
- */
 const HeaderContainer = styled.div`
   position: relative;
   z-index: ${Theme.Layers.higher};
   height: ${DISPLAY_HEADER_HEIGHT}px;
   display: flex;
   flex-shrink: 0;
+  cursor: grab;
+  &:active {
+    cursor: grabbing;
+  }
 `;
 
 const Header = styled.div`
@@ -57,6 +64,7 @@ const DisplayView = styled.div`
   flex-shrink: 1;
   flex-basis: 0;
   background-color: ${Theme.white};
+  position: relative;
 `;
 
 const DisplayContent = styled.div`
@@ -67,6 +75,16 @@ const DisplayContent = styled.div`
   border-right: 1px solid ${Theme.lightGray};
   border-bottom: 1px solid ${Theme.lightGray};
   overflow: hidden;
+`;
+
+const DisplayOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${Theme.white};
+  z-index: ${Theme.Layers.aboveAll};
 `;
 
 const DisplayTitle = styled.div`
@@ -80,7 +98,8 @@ const DisplayTitle = styled.div`
   text-align: center;
 `;
 
-const Display = ({children, dragHandleProps, title, onRemoveClick}) => {
+const Display = (props: DisplayProps) => {
+  const {children, dragHandleProps, title, onRemoveClick, isLoading} = props;
   const [_] = useTranslation();
   return (
     <DisplayView>
@@ -101,14 +120,13 @@ const Display = ({children, dragHandleProps, title, onRemoveClick}) => {
           {children}
         </ErrorBoundary>
       </DisplayContent>
+      {isLoading && (
+        <DisplayOverlay>
+          <Loading />
+        </DisplayOverlay>
+      )}
     </DisplayView>
   );
-};
-
-Display.propTypes = {
-  dragHandleProps: PropTypes.object,
-  title: PropTypes.string,
-  onRemoveClick: PropTypes.func.isRequired,
 };
 
 export default Display;
