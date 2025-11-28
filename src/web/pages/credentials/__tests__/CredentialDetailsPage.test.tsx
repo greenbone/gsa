@@ -7,6 +7,8 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen, fireEvent, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Credential, {
+  CERTIFICATE_CREDENTIAL_TYPE,
+  CERTIFICATE_STATUS_VALID,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
@@ -23,7 +25,7 @@ const credential = Credential.fromElement({
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'some comment',
   in_use: 0,
-  login: '',
+  login: 'Admin',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
@@ -72,7 +74,7 @@ const createGmp = ({
 };
 
 describe('CredentialDetailsPage tests', () => {
-  test('should render full DetailsPage', async () => {
+  test('should render usk credential', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
@@ -118,15 +120,96 @@ describe('CredentialDetailsPage tests', () => {
       screen.getByRole('tab', {name: /^permissions/i}),
     ).toBeInTheDocument();
 
-    expect(screen.getByRole('cell', {name: /^comment/i})).toBeInTheDocument();
     expect(
-      screen.getByRole('cell', {name: /^some comment/i}),
+      screen.getByRole('row', {name: /^comment some comment/i}),
     ).toBeInTheDocument();
-    expect(screen.getByRole('cell', {name: /^type/i})).toBeInTheDocument();
     expect(
-      screen.getByRole('cell', {name: /username \+ ssh key/i}),
+      screen.getByRole('row', {name: /^type username \+ ssh key/i}),
     ).toBeInTheDocument();
-    expect(screen.getByRole('cell', {name: /^login/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^login admin/i}),
+    ).toBeInTheDocument();
+  });
+
+  test('should render client certificate credential', async () => {
+    const credential = Credential.fromElement({
+      _id: '6575',
+      creation_time: '2020-12-16T15:23:59Z',
+      comment: 'some comment',
+      in_use: 0,
+      login: 'Admin',
+      modification_time: '2021-03-02T10:28:15Z',
+      name: 'credential 1',
+      owner: {name: 'admin'},
+      permissions: {permission: {name: 'Everything'}},
+      type: CERTIFICATE_CREDENTIAL_TYPE,
+      writable: 1,
+      certificate_info: {
+        subject: 'CN=example.com,O=Example Corp,C=US',
+        issuer: 'CN=Example CA,O=Example Corp,C=US',
+        activation_time: '2021-01-01T00:00:00Z',
+        expiration_time: '2023-01-01T00:00:00Z',
+        md5_fingerprint: 'md5_fingerprint_value',
+        sha256_fingerprint: 'sha256_fingerprint_value',
+        time_status: CERTIFICATE_STATUS_VALID,
+      },
+    });
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(entityLoadingActions.success('6575', credential));
+
+    render(<CredentialDetailsPage id={credential.id} />);
+
+    expect(
+      screen.getByRole('row', {name: /^comment some comment/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^type client certificate \(cc\)/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^login admin/i}),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^credential/i}),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('row', {
+        name: /^activation fri, jan 1, 2021 1:00 am central european standard time/i,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {
+        name: /^expiration sun, jan 1, 2023 1:00 am central european standard time/i,
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('row', {
+        name: /^md5 fingerprint md5_fingerprint_value/i,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {
+        name: /^sha-256 fingerprint sha256_fingerprint_value/i,
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('row', {
+        name: /^issued by cn=example ca,O=example corp,c=us/i,
+      }),
+    ).toBeInTheDocument();
   });
 
   test('should render user tags tab', async () => {

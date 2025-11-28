@@ -101,6 +101,11 @@ const Details = ({entity}: DetailsProps) => {
               </TableRow>
 
               <TableRow>
+                <TableData>{_('SHA-256 Fingerprint')}</TableData>
+                <TableData>{cert.sha256Fingerprint}</TableData>
+              </TableRow>
+
+              <TableRow>
                 <TableData>{_('Issued By')}</TableData>
                 <TableData>{cert.issuer}</TableData>
               </TableRow>
