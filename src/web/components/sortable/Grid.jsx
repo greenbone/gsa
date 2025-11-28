@@ -4,7 +4,13 @@
  */
 
 import {useState} from 'react';
-import {DragDropContext} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration';
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import {v4 as uuid} from 'uuid';
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import {isDefined} from 'gmp/utils/identity';
@@ -24,6 +30,14 @@ const createNewRow = item => ({
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
 const Grid = props => {
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // Require 8px of movement before dragging starts
+      },
+    }),
+    useSensor(KeyboardSensor),
+  );
   const [isDragging, setIsDragging] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
   const [dragSourceRowId, setDragSourceRowId] = useState(undefined);
@@ -42,70 +56,86 @@ const Grid = props => {
     }
   };
 
-  const handleOnBeforeCapture = () => {
-    setIsInteracting(true);
-  };
-
-  const handleDragStart = drag => {
-    const {droppableId: rowId} = drag.source;
+  const handleDragStart = ({active}) => {
     setIsDragging(true);
-    setDragSourceRowId(rowId);
+    setIsInteracting(true);
+    const {items = []} = props;
+    const srcRow = items.find(r => (r.items || []).includes(active.id));
+    setDragSourceRowId(srcRow ? srcRow.id : undefined);
   };
 
-  const handleDragEnd = result => {
+  const handleDragEnd = ({active, over}) => {
     setIsDragging(false);
     setDragSourceRowId(undefined);
-    setIsInteracting(false);
 
-    // dropped outside the list or at same position
-    if (!result.destination) {
+    setTimeout(() => {
+      setIsInteracting(false);
+    }, 200);
+
+    if (!over) {
       return;
     }
 
     let {items = []} = props;
-    // we are mutating the items => create copy
     items = [...items];
 
-    const {droppableId: destrowId} = result.destination;
-    const {droppableId: sourcerowId} = result.source;
-    const {index: destIndex} = result.destination;
-    const {index: sourceIndex} = result.source;
+    // Find source row/index from active id
+    const sourceRowIndex = items.findIndex(r =>
+      (r.items || []).includes(active.id),
+    );
+    if (sourceRowIndex < 0) {
+      return;
+    }
+    const sourceRow = items[sourceRowIndex];
+    const sourceIndex = (sourceRow.items || []).indexOf(active.id);
 
-    const destrowIndex = findRowIndex(items, destrowId);
-    const destRow = items[destrowIndex];
-    const sourcerowIndex = findRowIndex(items, sourcerowId);
-    const sourceRow = items[sourcerowIndex];
-    // we are mutating the row => create copy
+    // Remove from source
     const sourceRowItems = [...sourceRow.items];
-    // remove from source row. removed item is returned in an array
     const [item] = sourceRowItems.splice(sourceIndex, 1);
 
-    if (destrowId === 'empty') {
-      // create new row with the removed item
-      items = [...items, createNewRow(item)];
-    } else if (destrowId === sourcerowId) {
-      // add at position destindex
-      sourceRowItems.splice(destIndex, 0, item);
-    } else {
-      // add to destination row
-      const destrowItems = [...destRow.items];
-      destrowItems.splice(destIndex, 0, item);
+    // Determine destination row + index
+    let destinationRowId;
+    let destinationIndex;
 
-      items[destrowIndex] = {
+    if (over.id === 'empty') {
+      destinationRowId = 'empty';
+    } else if (typeof over.id === 'string' && over.id.includes('--')) {
+      // over id encoded as `${rowId}--${index}` from Item droppable
+      const [rid, idxStr] = over.id.split('--');
+      destinationRowId = rid;
+      destinationIndex = Number.parseInt(idxStr, 10);
+    } else {
+      // over a row: append to end
+      destinationRowId = String(over.id);
+      const destRowTmp = items[findRowIndex(items, destinationRowId)];
+      destinationIndex = destRowTmp?.items?.length ?? 0;
+    }
+
+    if (destinationRowId === 'empty') {
+      items = [...items, createNewRow(item)];
+    } else if (destinationRowId === sourceRow.id) {
+      sourceRowItems.splice(destinationIndex, 0, item);
+    } else {
+      const destinationRowIndex = findRowIndex(items, destinationRowId);
+      if (destinationRowIndex < 0) {
+        return;
+      }
+      const destRow = items[destinationRowIndex];
+      const destinationRowItems = [...destRow.items];
+      destinationRowItems.splice(destinationIndex, 0, item);
+      items[destinationRowIndex] = {
         ...destRow,
-        id: destrowId,
-        items: destrowItems,
+        id: destinationRowId,
+        items: destinationRowItems,
       };
     }
 
-    // update source row to actually remove the element
-    items[sourcerowIndex] = {
+    items[sourceRowIndex] = {
       ...sourceRow,
-      id: sourcerowId,
+      id: sourceRow.id,
       items: sourceRowItems,
     };
 
-    // remove empty rows
     items = items.filter(row => row.items.length > 0);
 
     notifyChange(items);
@@ -123,8 +153,8 @@ const Grid = props => {
   const getRowHeight = row => row.height;
   const getRowItems = row => row.items;
   return (
-    <DragDropContext
-      onBeforeCapture={handleOnBeforeCapture}
+    <DndContext
+      sensors={sensors}
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
     >
@@ -168,6 +198,7 @@ const Grid = props => {
                       height={itemHeight}
                       id={id}
                       index={index}
+                      rowId={rowId}
                       width={itemWidth}
                     >
                       {children}
@@ -182,7 +213,7 @@ const Grid = props => {
           </Layout>
         )}
       </AutoSize>
-    </DragDropContext>
+    </DndContext>
   );
 };
 
