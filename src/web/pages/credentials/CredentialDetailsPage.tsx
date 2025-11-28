@@ -41,6 +41,7 @@ import withEntityContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialComponent from 'web/pages/credentials/CredentialComponent';
 import CredentialDetails from 'web/pages/credentials/CredentialDetails';
+import CredentialDetailsColGroup from 'web/pages/credentials/CredentialDetailsColGroup';
 import CredentialDetailsPageToolBarIcons from 'web/pages/credentials/CredentialDetailsPageToolBarIcons';
 import {selector, loadEntity} from 'web/store/entities/credentials';
 import {
@@ -69,7 +70,8 @@ const Details = ({entity}: DetailsProps) => {
       <CredentialDetails entity={entity} />
       {isDefined(cert) && (
         <DetailsBlock title={_('Certificate')}>
-          <InfoTable>
+          <InfoTable size="full">
+            <CredentialDetailsColGroup />
             <TableBody>
               <TableRow>
                 <TableData>{_('Activation')}</TableData>
