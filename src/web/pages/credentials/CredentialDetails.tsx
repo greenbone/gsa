@@ -27,11 +27,11 @@ import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
-import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useFeatures from 'web/hooks/useFeatures';
 import useTranslation from 'web/hooks/useTranslation';
+import CredentialDetailsColGroup from 'web/pages/credentials/CredentialDetailsColGroup';
 
 interface CredentialDetailsProps {
   entity: Credential;
@@ -74,11 +74,8 @@ const CredentialDetails = ({entity}: CredentialDetailsProps) => {
 
   return (
     <Layout grow flex="column">
-      <InfoTable>
-        <colgroup>
-          <TableCol width="10%" />
-          <TableCol width="90%" />
-        </colgroup>
+      <InfoTable size="full">
+        <CredentialDetailsColGroup />
         <TableBody>
           <TableRow>
             <TableData>{_('Comment')}</TableData>
