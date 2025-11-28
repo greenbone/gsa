@@ -7,6 +7,7 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWithTableRow, screen, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Credential, {
+  CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import CredentialActions from 'web/pages/credentials/CredentialActions';
@@ -199,6 +200,30 @@ describe('CredentialActions tests', () => {
     });
     fireEvent.click(keyIcon);
     expect(handleDownloadInstaller).toHaveBeenCalledWith(credential, 'key');
+  });
+
+  test('should allow to download client certificate', () => {
+    const {render} = rendererWithTableRow({capabilities: true});
+    const credential = new Credential({
+      id: '1',
+      name: 'Test Credential',
+      credentialType: CERTIFICATE_CREDENTIAL_TYPE,
+      userCapabilities: new EverythingCapabilities(),
+    });
+    const handleDownloadInstaller = testing.fn();
+
+    render(
+      <CredentialActions
+        entity={credential}
+        onCredentialInstallerDownloadClick={handleDownloadInstaller}
+      />,
+    );
+
+    const clientCertDownloadIcon = screen.getByTitle(
+      'Download Client Certificate',
+    );
+    fireEvent.click(clientCertDownloadIcon);
+    expect(handleDownloadInstaller).toHaveBeenCalledWith(credential, 'pem');
   });
 
   test('should render user selection', () => {
