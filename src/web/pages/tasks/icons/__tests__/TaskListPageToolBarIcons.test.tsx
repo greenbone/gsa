@@ -75,20 +75,15 @@ describe('TaskListPageToolBarIcons test', () => {
       />,
     );
 
-    const wizardButton = screen.getByTestId('wizard-icon').closest('button');
-    expect(wizardButton).not.toBeNull();
-    if (wizardButton) {
-      fireEvent.click(wizardButton);
-    }
+    const wizardButton = screen.getByTitle('Task Wizards Menu');
+    fireEvent.click(wizardButton);
 
     const taskWizardMenu = await screen.findByTestId('task-wizard-menu');
     expect(taskWizardMenu).toHaveTextContent('Task Wizard');
     fireEvent.click(taskWizardMenu);
     expect(handleTaskWizardClick).toHaveBeenCalled();
 
-    if (wizardButton) {
-      fireEvent.click(wizardButton);
-    }
+    fireEvent.click(wizardButton);
     const advancedTaskWizardMenu = await screen.findByTestId(
       'advanced-task-wizard-menu',
     );
@@ -96,9 +91,7 @@ describe('TaskListPageToolBarIcons test', () => {
     fireEvent.click(advancedTaskWizardMenu);
     expect(handleAdvancedTaskWizardClick).toHaveBeenCalled();
 
-    if (wizardButton) {
-      fireEvent.click(wizardButton);
-    }
+    fireEvent.click(wizardButton);
     const modifyTaskWizardMenu = await screen.findByTestId(
       'modify-task-wizard-menu',
     );
@@ -106,20 +99,15 @@ describe('TaskListPageToolBarIcons test', () => {
     fireEvent.click(modifyTaskWizardMenu);
     expect(handleModifyTaskWizardClick).toHaveBeenCalled();
 
-    const newButton = screen.getByTestId('new-icon').closest('button');
-    expect(newButton).not.toBeNull();
-    if (newButton) {
-      fireEvent.click(newButton);
-    }
+    const newButton = screen.getByTitle('New Task Menu');
+    fireEvent.click(newButton);
 
     const newTaskMenu = await screen.findByTestId('new-task-menu');
     expect(newTaskMenu).toHaveTextContent('New Task');
     fireEvent.click(newTaskMenu);
     expect(handleTaskCreateClick).toHaveBeenCalled();
 
-    if (newButton) {
-      fireEvent.click(newButton);
-    }
+    fireEvent.click(newButton);
     const newImportTaskMenu = await screen.findByTestId('new-import-task-menu');
     expect(newImportTaskMenu).toHaveTextContent('New Import Task');
     fireEvent.click(newImportTaskMenu);
@@ -146,11 +134,8 @@ describe('TaskListPageToolBarIcons test', () => {
       />,
     );
 
-    const newButton = screen.getByTestId('new-icon').closest('button');
-    expect(newButton).not.toBeNull();
-    if (newButton) {
-      fireEvent.click(newButton);
-    }
+    const newButton = screen.getByTitle('New Task Menu');
+    fireEvent.click(newButton);
 
     const newContainerImageMenu = await screen.findByTestId(
       'new-container-image-menu',

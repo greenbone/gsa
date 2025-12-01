@@ -14,11 +14,9 @@ describe('NewIconMenu tests', () => {
     const {render} = rendererWith({capabilities: true});
     render(<NewIconMenu />);
 
-    const button = screen.getByTestId('new-icon').closest('button');
+    const button = screen.getByTitle('New Task Menu');
     expect(button).not.toBeNull();
-    if (button) {
-      fireEvent.click(button);
-    }
+    fireEvent.click(button);
 
     await screen.findByTestId('new-task-menu');
     expect(screen.getByTestId('new-task-menu')).toBeInTheDocument();
@@ -39,11 +37,9 @@ describe('NewIconMenu tests', () => {
     const {render} = rendererWith({capabilities: true});
     render(<NewIconMenu onNewClick={onNewClick} />);
 
-    const button = screen.getByTestId('new-icon').closest('button');
+    const button = screen.getByTitle('New Task Menu');
     expect(button).not.toBeNull();
-    if (button) {
-      fireEvent.click(button);
-    }
+    fireEvent.click(button);
 
     const menuItem = await screen.findByTestId('new-task-menu');
     fireEvent.click(menuItem);
@@ -55,11 +51,9 @@ describe('NewIconMenu tests', () => {
     const {render} = rendererWith({capabilities: true});
     render(<NewIconMenu onNewImportTaskClick={onNewContainerClick} />);
 
-    const button = screen.getByTestId('new-icon').closest('button');
+    const button = screen.getByTitle('New Task Menu');
     expect(button).not.toBeNull();
-    if (button) {
-      fireEvent.click(button);
-    }
+    fireEvent.click(button);
 
     const menuItem = await screen.findByTestId('new-import-task-menu');
     fireEvent.click(menuItem);
@@ -85,11 +79,9 @@ describe('NewIconMenu tests', () => {
       const {render} = rendererWith({capabilities: true, features});
       render(<NewIconMenu />);
 
-      const button = screen.getByTestId('new-icon').closest('button');
+      const button = screen.getByTitle('New Task Menu');
       expect(button).not.toBeUndefined();
-      if (button) {
-        fireEvent.click(button);
-      }
+      fireEvent.click(button);
 
       await screen.findByTestId(menuTestId);
       expect(screen.getByTestId(menuTestId)).toBeInTheDocument();
@@ -100,11 +92,9 @@ describe('NewIconMenu tests', () => {
       const {render} = rendererWith({capabilities: true, features});
       render(<NewIconMenu />);
 
-      const button = screen.getByTestId('new-icon').closest('button');
+      const button = screen.getByTitle('New Task Menu');
       expect(button).not.toBeUndefined();
-      if (button) {
-        fireEvent.click(button);
-      }
+      fireEvent.click(button);
 
       expect(screen.queryByTestId(menuTestId)).not.toBeInTheDocument();
     });
@@ -116,11 +106,9 @@ describe('NewIconMenu tests', () => {
       const {render} = rendererWith({capabilities: true, features});
       render(<NewIconMenu {...props} />);
 
-      const button = screen.getByTestId('new-icon').closest('button');
+      const button = screen.getByTitle('New Task Menu');
       expect(button).not.toBeUndefined();
-      if (button) {
-        fireEvent.click(button);
-      }
+      fireEvent.click(button);
 
       const menuItem = await screen.findByTestId(menuTestId);
       fireEvent.click(menuItem);
