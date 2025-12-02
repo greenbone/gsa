@@ -226,6 +226,7 @@ const AuditReportDetailsContent = ({
                 <TabPanels>
                   <TabPanel>
                     <Summary
+                      audit={true}
                       filter={reportFilter}
                       isUpdating={isUpdating}
                       report={report}
