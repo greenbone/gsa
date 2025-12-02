@@ -171,7 +171,7 @@ describe('AuditReportDetailsContent tests', () => {
 
     // Summary
     expect(tableData[0]).toHaveTextContent('Task Name');
-    expect(links[7]).toHaveAttribute('href', '/task/314');
+    expect(links[7]).toHaveAttribute('href', '/audit/314');
     expect(tableData[1]).toHaveTextContent('foo');
 
     expect(tableData[2]).toHaveTextContent('Comment');
