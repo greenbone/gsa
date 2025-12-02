@@ -148,7 +148,7 @@ describe('DynamicIcon', () => {
       );
       const disabledIcon = screen.getByTestId('disabled-icon');
       expect(disabledIcon.querySelector('svg')).toBeVisible();
-      expect(disabledIcon).toHaveStyle('color: GrayText');
+      expect(disabledIcon).toHaveStyle('color: rgb(0, 0, 0)');
     });
 
     test('renders custom action icon', () => {
@@ -215,7 +215,7 @@ describe('DynamicIcon', () => {
         'disabled-non-lucide-icon',
       );
       expect(disabledNonLucideIcon.querySelector('svg')).toBeVisible();
-      expect(disabledNonLucideIcon).toHaveStyle('color: GrayText');
+      expect(disabledNonLucideIcon).toHaveStyle('color: rgb(0, 0, 0)');
     });
 
     test('renders custom action icon', () => {

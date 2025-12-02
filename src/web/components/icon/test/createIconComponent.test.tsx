@@ -32,7 +32,7 @@ describe('createIconComponents', () => {
       expect(iconElement).toHaveAttribute('data-testid', 'dummy-lucide-icon');
       const svgElement = within(iconElement).getByText('', {selector: 'svg'});
       expect(svgElement).toBeVisible();
-      expect(iconElement).toHaveStyle('color: red(255, 0, 0)');
+      expect(iconElement).toHaveStyle('color: rgb(0, 0, 0)');
     });
 
     test('should create action icon components with default props', () => {
@@ -63,7 +63,7 @@ describe('createIconComponents', () => {
       const iconElement = screen.getByTestId('custom-icon');
       expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
       expect(iconElement).toHaveAttribute('data-testid', 'custom-icon');
-      expect(iconElement).toHaveStyle('color: GrayText');
+      expect(iconElement).toHaveStyle('color: rgb(0, 0, 0)');
     });
   });
 
@@ -119,7 +119,7 @@ describe('createIconComponents', () => {
       const iconElement = screen.getByTestId('custom-icon');
       expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
       expect(iconElement).toHaveAttribute('data-testid', 'custom-icon');
-      expect(iconElement).toHaveStyle('color: GrayText');
+      expect(iconElement).toHaveStyle('color: rgb(0, 0, 0)');
     });
   });
 });

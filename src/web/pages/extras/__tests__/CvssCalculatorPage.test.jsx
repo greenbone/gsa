@@ -35,7 +35,7 @@ const location = {
 
 describe('CvssCalculator page tests', () => {
   beforeEach(() => {
-    window.history.pushState({}, 'Test Title', '/');
+    globalThis.history.pushState({}, 'Test Title', '/');
   });
   test('Should render with default values', async () => {
     const {render} = rendererWith({
