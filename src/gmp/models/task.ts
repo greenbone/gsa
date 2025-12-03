@@ -54,6 +54,7 @@ export interface TaskElement extends ModelElement {
     name?: string;
     trash?: YesNo;
   };
+  csAllowFailedRetrieval?: YesNo;
   current_report?: {
     // only available for a running task
     report?: {
@@ -235,6 +236,7 @@ export interface TaskProperties extends ModelProperties {
   min_qod?: number;
   acceptInvalidCerts?: boolean;
   registryAllowInsecure?: boolean;
+  csAllowFailedRetrieval?: YesNo;
 }
 
 export const AUTO_DELETE_KEEP = 'keep';
@@ -324,6 +326,7 @@ class Task extends Model {
   readonly min_qod?: number;
   readonly acceptInvalidCerts?: boolean;
   readonly registryAllowInsecure?: boolean;
+  readonly csAllowFailedRetrieval?: YesNo;
   readonly observers?: TaskObservers;
   readonly preferences: TaskPreferences;
   readonly progress?: number;
@@ -368,6 +371,7 @@ class Task extends Model {
     min_qod,
     acceptInvalidCerts,
     registryAllowInsecure,
+    csAllowFailedRetrieval,
     observers,
     preferences = {},
     progress,
@@ -405,6 +409,7 @@ class Task extends Model {
     this.min_qod = min_qod;
     this.acceptInvalidCerts = acceptInvalidCerts;
     this.registryAllowInsecure = registryAllowInsecure;
+    this.csAllowFailedRetrieval = csAllowFailedRetrieval;
     this.observers = observers;
     this.preferences = preferences;
     this.progress = progress;
@@ -585,6 +590,9 @@ class Task extends Model {
             break;
           case 'registry_allow_insecure':
             copy.registryAllowInsecure = parseYesNo(pref.value) === YES_VALUE;
+            break;
+          case 'cs_allow_failed_retrieval':
+            copy.csAllowFailedRetrieval = parseYesNo(pref.value);
             break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};

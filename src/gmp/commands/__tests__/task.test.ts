@@ -64,6 +64,7 @@ describe('TaskCommand tests', () => {
       scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
       scanner_type: OPENVAS_SCANNER_TYPE,
       target_id: 't1',
+      csAllowFailedRetrieval: 1,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -89,6 +90,7 @@ describe('TaskCommand tests', () => {
         tag_id: undefined,
         target_id: 't1',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     const {data} = resp;
@@ -120,6 +122,7 @@ describe('TaskCommand tests', () => {
       schedule_periods: 1,
       tag_id: 't1',
       target_id: 't1',
+      csAllowFailedRetrieval: 1,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -145,6 +148,7 @@ describe('TaskCommand tests', () => {
         tag_id: 't1',
         target_id: 't1',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     const {data} = resp;
@@ -222,6 +226,7 @@ describe('TaskCommand tests', () => {
           scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
           scanner_type: OPENVAS_SCANNER_TYPE,
           target_id: 't1',
+          csAllowFailedRetrieval: 1,
         }),
       ).rejects.toThrow(expectedMessage);
     },
@@ -286,6 +291,7 @@ describe('TaskCommand tests', () => {
       max_hosts: 10,
       min_qod: 70,
       name: 'foo',
+      csAllowFailedRetrieval: 1,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -310,6 +316,7 @@ describe('TaskCommand tests', () => {
         task_id: 'task1',
         target_id: '0',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     expect(response).toBeUndefined();
@@ -383,6 +390,7 @@ describe('TaskCommand tests', () => {
           max_hosts: 10,
           min_qod: 70,
           name: 'foo',
+          csAllowFailedRetrieval: 1,
         }),
       ).rejects.toThrow(expectedMessage);
     },
@@ -412,6 +420,7 @@ describe('TaskCommand tests', () => {
       schedule_id: 's1',
       schedule_periods: 1,
       target_id: 't1',
+      csAllowFailedRetrieval: 1,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -436,6 +445,7 @@ describe('TaskCommand tests', () => {
         task_id: 'task1',
         target_id: 't1',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     expect(response).toBeUndefined();

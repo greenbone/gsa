@@ -195,6 +195,7 @@
   "Allow all and deny": "允许所有并拒绝",
   "Allow all and deny from {{addresses}}": "允许所有但拒绝 {{addresses}}",
   "Allow Insecure Registry": "",
+  "Allow scan when credential store retrieval fails": "",
   "Allow simultaneous scanning via multiple IPs": "",
   "Alterable": "可修改",
   "Alterable Audit": "可修改",

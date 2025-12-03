@@ -12,6 +12,8 @@ import {
   wait,
   screen,
 } from 'web/testing';
+import {within} from '@testing-library/react';
+import Features from 'gmp/capabilities/features';
 import ScanConfig from 'gmp/models/scan-config';
 import Scanner, {
   CVE_SCANNER_TYPE,
@@ -166,5 +168,39 @@ describe('TaskDialog component tests', () => {
 
     fireEvent.click(screen.getDialogCloseButton());
     expect(onClose).toHaveBeenCalled();
+  });
+
+  test('should render credential store option when feature is enabled', () => {
+    const features = new Features(['ENABLE_CREDENTIAL_STORES']);
+    rendererWith({gmp, capabilities: true, features}).render(
+      <TaskDialog
+        alerts={[]}
+        comment="hello world"
+        config_id="config-1"
+        name="target"
+        scan_configs={[scanConfig]}
+        scanner_id="scanner-id"
+        scanners={[
+          new Scanner({
+            id: 'scanner-id',
+            scannerType: OPENVAS_SCANNER_TYPE,
+            name: 'Test Scanner',
+          }),
+        ]}
+        schedules={[]}
+        tags={[]}
+        targets={[]}
+        {...commonHandlers()}
+      />,
+    );
+
+    const label = screen.getByText(
+      'Allow scan when credential store retrieval fails',
+    );
+    expect(label).toBeInTheDocument();
+    const container = label.closest('div');
+    const radioGroup = within(container as HTMLElement);
+    expect(radioGroup.getByLabelText('Yes')).toBeInTheDocument();
+    expect(radioGroup.getByLabelText('No')).toBeInTheDocument();
   });
 });
