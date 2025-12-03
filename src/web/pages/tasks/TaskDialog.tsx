@@ -39,6 +39,7 @@ import YesNoRadio from 'web/components/form/YesNoRadio';
 import {NewIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useFeatures from 'web/hooks/useFeatures';
 import useTranslation from 'web/hooks/useTranslation';
 import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
@@ -73,6 +74,7 @@ interface TaskDialogDefaultValues {
   auto_delete_data?: number;
   comment?: string;
   config_id?: string;
+  csAllowFailedRetrieval?: YesNo;
   hosts_ordering?: TaskHostsOrdering;
   in_assets?: YesNo;
   max_checks?: number;
@@ -97,6 +99,7 @@ interface TaskDialogProps {
   auto_delete_data?: number;
   comment?: string;
   config_id?: string;
+  csAllowFailedRetrieval?: YesNo;
   hosts_ordering?: TaskHostsOrdering;
   in_assets?: YesNo;
   isLoadingAlerts?: boolean;
@@ -189,6 +192,7 @@ const TaskDialog = ({
   comment = '',
   // eslint-disable-next-line @typescript-eslint/naming-convention
   config_id,
+  csAllowFailedRetrieval = NO_VALUE,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -235,6 +239,9 @@ const TaskDialog = ({
 }: TaskDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
+  const features = useFeatures();
+
+  const isCredentialStore = features.featureEnabled('ENABLE_CREDENTIAL_STORES');
 
   name = name || _('Unnamed');
   title = title || _('New Task');
@@ -273,6 +280,7 @@ const TaskDialog = ({
     auto_delete_data,
     comment,
     config_id,
+    csAllowFailedRetrieval,
     hosts_ordering,
     in_assets,
     max_checks,
@@ -411,6 +419,18 @@ const TaskDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
+
+            {isCredentialStore && (
+              <FormGroup
+                title={_('Allow scan when credential store retrieval fails')}
+              >
+                <YesNoRadio
+                  name="csAllowFailedRetrieval"
+                  value={state.csAllowFailedRetrieval}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            )}
 
             <FormGroup title={_('Min QoD')}>
               <Spinner

@@ -195,6 +195,7 @@
   "Allow all and deny": "Erlaube alle und verweigere",
   "Allow all and deny from {{addresses}}": "Alle erlauben und von {{addresses}} verweigern",
   "Allow Insecure Registry": "Unsichere Registry erlauben",
+  "Allow scan when credential store retrieval fails": "Scan erlauben, wenn das Abrufen aus dem Anmeldedatenspeicher fehlschlägt",
   "Allow simultaneous scanning via multiple IPs": "Erlaube das gleichzeitige Scannen über verschiedene IPs",
   "Alterable": "Veränderbar",
   "Alterable Audit": "Änderbares Audit",
