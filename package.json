@@ -13,12 +13,12 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:web-fast": "vitest --pool=vmForks --project web --project store",
+    "test:web-fast": "vitest --pool=forks --project web --project store",
     "test:coverage": "vitest run --coverage",
     "dev": "vite",
     "start": "npm run dev",
@@ -94,7 +94,7 @@
     "@typescript-eslint/parser": "^8.46.2",
     "@vitejs/plugin-legacy": "^7.2.1",
     "@vitejs/plugin-react": "^5.1.1",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "^4.0.14",
     "@vitest/eslint-plugin": "^1.4.0",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
@@ -106,13 +106,13 @@
     "globals": "^16.4.0",
     "i18next-cli": "^1.24.20",
     "jest-styled-components": "^7.2.0",
-    "jsdom": "^26.1.0",
+    "jsdom": "^27.2.0",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2",
     "vite": "^7.2.6",
     "vite-plugin-eslint2": "^5.0.4",
     "vite-plugin-svgr": "^4.5.0",
-    "vitest": "^3.1.4"
+    "vitest": "^4.0.14"
   }
 }

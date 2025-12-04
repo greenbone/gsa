@@ -2,6 +2,9 @@ import {defineConfig} from 'vitest/config';
 
 export default defineConfig({
   test: {
+    testTimeout: 30000,
+    hookTimeout: 10000,
+    teardownTimeout: 10000,
     projects: [
       {
         extends: './vite.config.ts',
@@ -19,6 +22,8 @@ export default defineConfig({
               classNameStrategy: 'non-scoped',
             },
           },
+          testTimeout: 30000,
+          hookTimeout: 10000,
         },
       },
       {
