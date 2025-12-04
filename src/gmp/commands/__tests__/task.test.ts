@@ -238,13 +238,36 @@ describe('TaskCommand tests', () => {
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
-        cmd: 'create_container_task',
+        cmd: 'create_import_task',
         comment: 'comment',
         name: 'foo',
         usage_type: 'scan',
       },
     });
     expect(response.data).toEqual({id: 'foo'});
+  });
+
+  test('should update the import task', async () => {
+    const mockResponse = createActionResultResponse();
+    const fakeHttp = createHttp(mockResponse);
+    const cmd = new TaskCommand(fakeHttp);
+    await cmd.saveImportTask({
+      name: 'foo',
+      comment: 'comment',
+      id: 'test',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_import_task',
+        comment: 'comment',
+        name: 'foo',
+        auto_delete: 'no',
+        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+        task_id: 'test',
+        usage_type: 'scan',
+        in_assets: 1,
+      },
+    });
   });
 
   test('should save task', async () => {
