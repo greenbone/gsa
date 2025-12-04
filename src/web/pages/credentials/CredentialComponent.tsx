@@ -95,6 +95,9 @@ const CredentialComponent = ({
   const [privacyAlgorithm, setPrivacyAlgorithm] = useState<
     SNMPPrivacyAlgorithmType | undefined
   >();
+  const [privacyHostIdentifier, setPrivacyHostIdentifier] = useState<
+    string | undefined
+  >();
   const [types, setTypes] =
     useState<readonly CredentialType[]>(ALL_CREDENTIAL_TYPES);
   const [title, setTitle] = useState<string>('');
@@ -112,6 +115,7 @@ const CredentialComponent = ({
       setName(credential.name);
       setCredentialLogin(credential.login);
       setPrivacyAlgorithm(credential.privacyAlgorithm);
+      setPrivacyHostIdentifier(credential.privacyHostIdentifier);
       setTypes([credential.credentialType as CredentialType]);
       setTitle(dialogTitle);
     } else {
@@ -123,6 +127,7 @@ const CredentialComponent = ({
       setName(undefined);
       setCredentialLogin(undefined);
       setPrivacyAlgorithm(undefined);
+      setPrivacyHostIdentifier(undefined);
       setTypes(ALL_CREDENTIAL_TYPES);
       setTitle(_('New Credential'));
     }
@@ -212,6 +217,7 @@ const CredentialComponent = ({
           credentialType={credentialType}
           name={name}
           privacyAlgorithm={privacyAlgorithm}
+          privacyHostIdentifier={privacyHostIdentifier}
           title={title}
           types={types}
           onClose={closeCredentialDialog}

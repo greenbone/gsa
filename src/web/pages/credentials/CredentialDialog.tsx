@@ -55,6 +55,7 @@ interface CredentialDialogValues {
   credentialType: CredentialType;
   hostIdentifier?: string;
   privateKey?: File;
+  privacyHostIdentifier?: string;
   publicKey?: File;
   vaultId?: string;
 }
@@ -71,6 +72,7 @@ interface CredentialDialogDefaultValues {
   passphrase?: string;
   password?: string;
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
+  privacyHostIdentifier?: string;
   privacyPassword?: string;
   realm?: string;
   vaultId?: string;
@@ -91,6 +93,7 @@ interface CredentialDialogProps {
   passphrase?: string;
   password?: string;
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
+  privacyHostIdentifier?: string;
   privacyPassword?: string;
   title?: string;
   types?: readonly CredentialType[];
@@ -136,6 +139,7 @@ const CredentialDialog = ({
   passphrase,
   password,
   privacyAlgorithm = SNMP_PRIVACY_ALGORITHM_AES,
+  privacyHostIdentifier,
   privacyPassword,
   title,
   types = [],
@@ -316,6 +320,7 @@ const CredentialDialog = ({
         passphrase,
         password,
         privacyAlgorithm,
+        privacyHostIdentifier,
         privacyPassword,
         id: credential?.id,
         kdcs: credential?.kdcs,
@@ -381,6 +386,87 @@ const CredentialDialog = ({
                   value={state.hostIdentifier}
                   onChange={onValueChange}
                 />
+                {state.credentialType ===
+                  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE && (
+                  <>
+                    <TextField
+                      name="realm"
+                      title={_('Realm')}
+                      value={state.realm}
+                      onChange={onValueChange}
+                    />
+                    <MultiValueTextField
+                      name="kdcs"
+                      placeholder={_(
+                        'Enter hostname or IP address, then press Enter to add KDC',
+                      )}
+                      title={_('Key Distribution Center')}
+                      validate={validateKdc}
+                      value={state.kdcs}
+                      onChange={onValueChange}
+                    />
+                  </>
+                )}
+                {state.credentialType ===
+                  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE && (
+                  <>
+                    <TextField
+                      name="privacyHostIdentifier"
+                      title={_('Privacy Host Identifier')}
+                      value={state.privacyHostIdentifier}
+                      onChange={onValueChange}
+                    />
+                    <FormGroup direction="row" title={_('Privacy Algorithm')}>
+                      <Radio
+                        checked={
+                          state.privacyAlgorithm === SNMP_PRIVACY_ALGORITHM_AES
+                        }
+                        name="privacyAlgorithm"
+                        title="AES"
+                        value={SNMP_PRIVACY_ALGORITHM_AES}
+                        onChange={onValueChange}
+                      />
+                      <Radio
+                        checked={
+                          state.privacyAlgorithm === SNMP_PRIVACY_ALGORITHM_DES
+                        }
+                        name="privacyAlgorithm"
+                        title="DES"
+                        value={SNMP_PRIVACY_ALGORITHM_DES}
+                        onChange={onValueChange}
+                      />
+                      <Radio
+                        checked={
+                          state.privacyAlgorithm === SNMP_PRIVACY_ALGORITHM_NONE
+                        }
+                        name="privacyAlgorithm"
+                        title={_('None')}
+                        value={SNMP_PRIVACY_ALGORITHM_NONE}
+                        onChange={onValueChange}
+                      />
+                    </FormGroup>
+                    <FormGroup direction="row" title={_('Auth Algorithm')}>
+                      <Radio
+                        checked={
+                          state.authAlgorithm === SNMP_AUTH_ALGORITHM_MD5
+                        }
+                        name="authAlgorithm"
+                        title="MD5"
+                        value={SNMP_AUTH_ALGORITHM_MD5}
+                        onChange={onValueChange}
+                      />
+                      <Radio
+                        checked={
+                          state.authAlgorithm === SNMP_AUTH_ALGORITHM_SHA1
+                        }
+                        name="authAlgorithm"
+                        title="SHA1"
+                        value={SNMP_AUTH_ALGORITHM_SHA1}
+                        onChange={onValueChange}
+                      />
+                    </FormGroup>
+                  </>
+                )}
               </>
             )}
 
