@@ -372,7 +372,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
   }: TaskCommandCreateImportTaskParams) {
     log.debug('Creating import task', name, comment);
     return await this.entityAction({
-      cmd: 'create_container_task',
+      cmd: 'create_import_task',
       auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       name,
       comment,
@@ -539,7 +539,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
   }: TaskCommandSaveImportTaskParams) {
     log.debug('Saving import task', {name, comment, in_assets, id});
     await this.httpPostWithTransform({
-      cmd: 'save_container_task',
+      cmd: 'save_import_task',
       name,
       comment,
       in_assets,
