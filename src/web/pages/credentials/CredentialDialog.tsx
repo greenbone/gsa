@@ -45,9 +45,11 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
+import useCredentialStore from 'web/hooks/useCredentialStore';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import CredentialStoreDialogFields from 'web/pages/credentials/CredentialStoreDialogFields';
 
 interface CredentialDialogValues {
   autogenerate: boolean;
@@ -55,6 +57,7 @@ interface CredentialDialogValues {
   credentialType: CredentialType;
   hostIdentifier?: string;
   privateKey?: File;
+  privacyHostIdentifier?: string;
   publicKey?: File;
   vaultId?: string;
 }
@@ -71,6 +74,7 @@ interface CredentialDialogDefaultValues {
   passphrase?: string;
   password?: string;
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
+  privacyHostIdentifier?: string;
   privacyPassword?: string;
   realm?: string;
   vaultId?: string;
@@ -91,6 +95,7 @@ interface CredentialDialogProps {
   passphrase?: string;
   password?: string;
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
+  privacyHostIdentifier?: string;
   privacyPassword?: string;
   title?: string;
   types?: readonly CredentialType[];
@@ -136,6 +141,7 @@ const CredentialDialog = ({
   passphrase,
   password,
   privacyAlgorithm = SNMP_PRIVACY_ALGORITHM_AES,
+  privacyHostIdentifier,
   privacyPassword,
   title,
   types = [],
@@ -270,6 +276,7 @@ const CredentialDialog = ({
   const gmp = useGmp();
   const features = useFeatures();
 
+  // Create a local function for type checking that doesn't require feature check
   const isCredentialStoreType = (type: CredentialType) => {
     return (
       type === CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE ||
@@ -305,6 +312,10 @@ const CredentialDialog = ({
       cType = first(types as CredentialType[]);
     }
   }
+
+  // Check if the current credential type is a credential store type with feature enabled
+  const isCredentialStoreEnabled = useCredentialStore(cType as CredentialType);
+
   return (
     <SaveDialog<CredentialDialogValues, CredentialDialogDefaultValues>
       defaultValues={{
@@ -316,6 +327,7 @@ const CredentialDialog = ({
         passphrase,
         password,
         privacyAlgorithm,
+        privacyHostIdentifier,
         privacyPassword,
         id: credential?.id,
         kdcs: credential?.kdcs,
@@ -367,21 +379,25 @@ const CredentialDialog = ({
               }
             />
 
-            {isCredentialStoreType(state.credentialType) && (
-              <>
-                <TextField
-                  name="vaultId"
-                  title={_('Vault ID')}
-                  value={state.vaultId}
-                  onChange={onValueChange}
-                />
-                <TextField
-                  name="hostIdentifier"
-                  title={_('Host Identifier')}
-                  value={state.hostIdentifier}
-                  onChange={onValueChange}
-                />
-              </>
+            {isCredentialStoreEnabled && (
+              <CredentialStoreDialogFields
+                _={_}
+                authAlgorithm={state.authAlgorithm}
+                credentialType={state.credentialType}
+                hostIdentifier={state.hostIdentifier}
+                kdcs={state.kdcs}
+                privacyAlgorithm={state.privacyAlgorithm}
+                privacyHostIdentifier={state.privacyHostIdentifier}
+                realm={state.realm}
+                validateKdc={validateKdc}
+                vaultId={state.vaultId}
+                onValueChange={(value, name) =>
+                  onValueChange(
+                    value as string | boolean | string[] | File | undefined,
+                    name,
+                  )
+                }
+              />
             )}
 
             {(state.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE ||

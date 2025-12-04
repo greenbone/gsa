@@ -103,6 +103,7 @@ interface CredentialProperties extends ModelProperties {
   realm?: string;
   targets?: Model[];
   scanners?: Model[];
+  privacyHostIdentifier?: string;
 }
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
@@ -291,6 +292,7 @@ class Credential extends Model {
   readonly privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   readonly targets: Model[];
   readonly scanners: Model[];
+  readonly privacyHostIdentifier?: string;
 
   constructor({
     authAlgorithm,
@@ -303,6 +305,7 @@ class Credential extends Model {
     realm,
     targets = [],
     scanners = [],
+    privacyHostIdentifier,
     ...properties
   }: CredentialProperties = {}) {
     super(properties);
@@ -317,6 +320,7 @@ class Credential extends Model {
     this.realm = realm;
     this.targets = targets;
     this.scanners = scanners;
+    this.privacyHostIdentifier = privacyHostIdentifier;
   }
 
   static fromElement(element: CredentialElement = {}): Credential {
@@ -370,6 +374,10 @@ class Credential extends Model {
     ret.scanners = map(element.scanners?.scanner, scanner =>
       Model.fromElement(scanner, 'scanner'),
     );
+
+    if (isDefined(element.credential_store?.host_identifier)) {
+      ret.privacyHostIdentifier = element.credential_store.host_identifier;
+    }
 
     return ret;
   }
