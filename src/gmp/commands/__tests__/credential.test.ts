@@ -6,7 +6,11 @@
 import {describe, test, expect} from '@gsa/testing';
 import CredentialCommand from 'gmp/commands/credential';
 import {createHttp, createActionResultResponse} from 'gmp/commands/testing';
-import {CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
+import {
+  CERTIFICATE_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+} from 'gmp/models/credential';
 
 const certificate = new File(['cert'], 'cert.pem');
 const privateKey = new File(['private_key'], 'key.pem');
@@ -97,6 +101,101 @@ describe('CredentialCommand tests', () => {
     expect(resp.data.id).toEqual('foo');
   });
 
+  test('should create KRB5 credential store type', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+
+    const resp = await cmd.create({
+      name: 'krb5-credential',
+      comment: 'KRB5 credential',
+      credentialType: CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+      credentialLogin: 'krb5user',
+      password: 'krb5password',
+      realm: 'EXAMPLE.COM',
+      kdcs: ['kdc1.example.com', 'kdc2.example.com'],
+      hostIdentifier: 'host123',
+      vaultId: 'vault456',
+      certificate,
+      privateKey,
+      publicKey,
+      passphrase: 'test-passphrase',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_credential',
+        autogenerate: 0,
+        certificate,
+        comment: 'KRB5 credential',
+        community: undefined,
+        credential_login: 'krb5user',
+        credential_type: CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+        host_identifier: 'host123',
+        lsc_password: 'krb5password',
+        name: 'krb5-credential',
+        passphrase: 'test-passphrase',
+        private_key: privateKey,
+        public_key: publicKey,
+        vault_id: 'vault456',
+        realm: 'EXAMPLE.COM',
+        'kdcs:': ['kdc1.example.com', 'kdc2.example.com'],
+      },
+    });
+
+    expect(resp.data.id).toEqual('foo');
+  });
+
+  test('should create SNMP credential store type', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+
+    const resp = await cmd.create({
+      name: 'snmp-credential',
+      comment: 'SNMP credential',
+      credentialType: CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+      credentialLogin: 'snmpuser',
+      password: 'snmppassword',
+      authAlgorithm: 'md5',
+      privacyAlgorithm: 'des',
+      privacyPassword: 'privacypass',
+      hostIdentifier: 'snmp-host',
+      privacyHostIdentifier: 'privacy-host',
+      vaultId: 'snmp-vault',
+      community: 'public',
+      certificate,
+      privateKey,
+      publicKey,
+      passphrase: 'snmp-passphrase',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_credential',
+        auth_algorithm: 'md5',
+        autogenerate: 0,
+        certificate,
+        comment: 'SNMP credential',
+        community: 'public',
+        credential_login: 'snmpuser',
+        credential_type: CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+        host_identifier: 'snmp-host',
+        lsc_password: 'snmppassword',
+        name: 'snmp-credential',
+        passphrase: 'snmp-passphrase',
+        privacy_algorithm: 'des',
+        privacy_password: 'privacypass',
+        private_key: privateKey,
+        public_key: publicKey,
+        vault_id: 'snmp-vault',
+        privacy_host_identifier: 'privacy-host',
+      },
+    });
+
+    expect(resp.data.id).toEqual('foo');
+  });
+
   test('should save credential with minimal params', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
@@ -177,6 +276,103 @@ describe('CredentialCommand tests', () => {
         'kdcs:': ['kerberos_kdc'],
       },
     });
+    expect(resp.data.id).toEqual('foo');
+  });
+
+  test('should save KRB5 credential store type', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+
+    const resp = await cmd.save({
+      id: 'krb5-id',
+      name: 'updated-krb5-credential',
+      comment: 'Updated KRB5 credential',
+      credentialType: CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+      credentialLogin: 'updated-krb5user',
+      password: 'updated-password',
+      realm: 'UPDATED.COM',
+      kdcs: ['new-kdc.example.com'],
+      hostIdentifier: 'new-host',
+      vaultId: 'new-vault',
+      certificate,
+      privateKey,
+      publicKey,
+      passphrase: 'new-passphrase',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_credential',
+        certificate,
+        comment: 'Updated KRB5 credential',
+        community: undefined,
+        credential_login: 'updated-krb5user',
+        credential_type: CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+        credential_id: 'krb5-id',
+        password: 'updated-password',
+        name: 'updated-krb5-credential',
+        passphrase: 'new-passphrase',
+        private_key: privateKey,
+        public_key: publicKey,
+        vault_id: 'new-vault',
+        host_identifier: 'new-host',
+        realm: 'UPDATED.COM',
+        'kdcs:': ['new-kdc.example.com'],
+      },
+    });
+
+    expect(resp.data.id).toEqual('foo');
+  });
+
+  test('should save SNMP credential store type', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+
+    const resp = await cmd.save({
+      id: 'snmp-id',
+      name: 'updated-snmp-credential',
+      comment: 'Updated SNMP credential',
+      credentialType: CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+      credentialLogin: 'updated-snmpuser',
+      password: 'updated-snmppassword',
+      authAlgorithm: 'sha1',
+      privacyAlgorithm: 'aes',
+      privacyPassword: 'updated-privacypass',
+      hostIdentifier: 'updated-snmp-host',
+      privacyHostIdentifier: 'updated-privacy-host',
+      vaultId: 'updated-snmp-vault',
+      community: 'private',
+      certificate,
+      privateKey,
+      publicKey,
+      passphrase: 'updated-snmp-passphrase',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_credential',
+        auth_algorithm: 'sha1',
+        certificate,
+        comment: 'Updated SNMP credential',
+        community: 'private',
+        credential_login: 'updated-snmpuser',
+        credential_type: CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+        credential_id: 'snmp-id',
+        password: 'updated-snmppassword',
+        name: 'updated-snmp-credential',
+        passphrase: 'updated-snmp-passphrase',
+        privacy_algorithm: 'aes',
+        privacy_password: 'updated-privacypass',
+        private_key: privateKey,
+        public_key: publicKey,
+        vault_id: 'updated-snmp-vault',
+        host_identifier: 'updated-snmp-host',
+        privacy_host_identifier: 'updated-privacy-host',
+      },
+    });
+
     expect(resp.data.id).toEqual('foo');
   });
 
