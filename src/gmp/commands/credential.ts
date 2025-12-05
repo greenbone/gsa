@@ -10,6 +10,8 @@ import Credential, {
   type CredentialElement,
   type SNMPAuthAlgorithmType,
   type SNMPPrivacyAlgorithmType,
+  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
@@ -30,6 +32,7 @@ interface CredentialCommandCreateArgs {
   passphrase?: string;
   password?: string;
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
+  privacyHostIdentifier?: string;
   privacyPassword?: string;
   privateKey?: File;
   publicKey?: File;
@@ -70,10 +73,54 @@ class CredentialCommand extends EntityCommand<
     kdcs,
     vaultId,
     hostIdentifier,
+    privacyHostIdentifier,
   }: CredentialCommandCreateArgs) {
+    if (credentialType === CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE) {
+      return this.action({
+        cmd: 'create_credential',
+        autogenerate: parseYesNo(autogenerate),
+        certificate,
+        comment,
+        community,
+        credential_login: credentialLogin,
+        credential_type: credentialType,
+        host_identifier: hostIdentifier,
+        lsc_password: password,
+        name,
+        passphrase,
+        private_key: privateKey,
+        public_key: publicKey,
+        vault_id: vaultId,
+        realm,
+        'kdcs:': kdcs,
+      });
+    }
+
+    if (credentialType === CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE) {
+      return this.action({
+        cmd: 'create_credential',
+        auth_algorithm: authAlgorithm,
+        autogenerate: parseYesNo(autogenerate),
+        certificate,
+        comment,
+        community,
+        credential_login: credentialLogin,
+        credential_type: credentialType,
+        host_identifier: hostIdentifier,
+        lsc_password: password,
+        name,
+        passphrase,
+        privacy_algorithm: privacyAlgorithm,
+        privacy_password: privacyPassword,
+        private_key: privateKey,
+        public_key: publicKey,
+        vault_id: vaultId,
+        privacy_host_identifier: privacyHostIdentifier,
+      });
+    }
+
     return this.action({
       cmd: 'create_credential',
-      'kdcs:': kdcs,
       auth_algorithm: authAlgorithm,
       autogenerate: parseYesNo(autogenerate),
       certificate,
@@ -89,8 +136,10 @@ class CredentialCommand extends EntityCommand<
       privacy_password: privacyPassword,
       private_key: privateKey,
       public_key: publicKey,
-      realm,
       vault_id: vaultId,
+      realm,
+      'kdcs:': kdcs,
+      privacy_host_identifier: privacyHostIdentifier,
     });
   }
 
@@ -113,7 +162,52 @@ class CredentialCommand extends EntityCommand<
     realm,
     vaultId,
     hostIdentifier,
+    privacyHostIdentifier,
   }: CredentialCommandSaveArgs) {
+    if (credentialType === CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE) {
+      return this.action({
+        cmd: 'save_credential',
+        certificate,
+        comment,
+        community,
+        credential_login: credentialLogin,
+        credential_type: credentialType,
+        id,
+        password,
+        name,
+        passphrase,
+        private_key: privateKey,
+        public_key: publicKey,
+        vault_id: vaultId,
+        host_identifier: hostIdentifier,
+        realm,
+        'kdcs:': kdcs,
+      });
+    }
+
+    if (credentialType === CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE) {
+      return this.action({
+        cmd: 'save_credential',
+        auth_algorithm: authAlgorithm,
+        certificate,
+        comment,
+        community,
+        credential_login: credentialLogin,
+        credential_type: credentialType,
+        id,
+        password,
+        name,
+        passphrase,
+        privacy_algorithm: privacyAlgorithm,
+        privacy_password: privacyPassword,
+        private_key: privateKey,
+        public_key: publicKey,
+        vault_id: vaultId,
+        host_identifier: hostIdentifier,
+        privacy_host_identifier: privacyHostIdentifier,
+      });
+    }
+
     return this.action({
       cmd: 'save_credential',
       auth_algorithm: authAlgorithm,
@@ -130,10 +224,11 @@ class CredentialCommand extends EntityCommand<
       privacy_password: privacyPassword,
       private_key: privateKey,
       public_key: publicKey,
-      'kdcs:': kdcs,
-      realm,
       vault_id: vaultId,
       host_identifier: hostIdentifier,
+      realm,
+      'kdcs:': kdcs,
+      privacy_host_identifier: privacyHostIdentifier,
     });
   }
 

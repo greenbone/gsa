@@ -13,9 +13,12 @@ import {
   rendererWith,
   fireEvent,
 } from 'web/testing';
+import Features from 'gmp/capabilities/features';
 import Credential, {
   ALL_CREDENTIAL_TYPES,
   CERTIFICATE_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 
@@ -432,5 +435,205 @@ describe('CredentialDialog tests', () => {
 
     const label = screen.getByText('Key Distribution Center');
     expect(label).toBeVisible();
+  });
+
+  test('should render form fields for KRB5 credential store type', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    const select = screen.getSelectElement();
+    expect(select).toHaveValue('Credential Store SMB (Kerberos)');
+
+    const vaultId = screen.getByName('vaultId');
+    expect(vaultId).toBeVisible();
+    expect(vaultId).toHaveValue('');
+
+    const hostIdentifier = screen.getByName('hostIdentifier');
+    expect(hostIdentifier).toBeVisible();
+    expect(hostIdentifier).toHaveValue('');
+
+    const realm = screen.getByName('realm');
+    expect(realm).toBeVisible();
+    expect(realm).toHaveValue('');
+
+    const kdcInput = screen.getByPlaceholderText(
+      'Enter hostname or IP address, then press Enter to add KDC',
+    );
+    expect(kdcInput).toBeVisible();
+
+    const kdcLabel = screen.getByText('Key Distribution Center');
+    expect(kdcLabel).toBeVisible();
+  });
+
+  test('should render form fields for SNMP credential store type', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    const select = screen.getSelectElement();
+    expect(select).toHaveValue('Credential Store SNMP');
+
+    const vaultId = screen.getByName('vaultId');
+    expect(vaultId).toBeVisible();
+    expect(vaultId).toHaveValue('');
+
+    const hostIdentifier = screen.getByName('hostIdentifier');
+    expect(hostIdentifier).toBeVisible();
+    expect(hostIdentifier).toHaveValue('');
+
+    const privacyHostIdentifier = screen.getByName('privacyHostIdentifier');
+    expect(privacyHostIdentifier).toBeVisible();
+    expect(privacyHostIdentifier).toHaveValue('');
+
+    const privacyAlgorithms = screen.getAllByName('privacyAlgorithm');
+    expect(privacyAlgorithms[0]).toHaveAttribute('value', 'aes');
+    expect(privacyAlgorithms[0]).toBeChecked();
+    expect(privacyAlgorithms[1]).toHaveAttribute('value', 'des');
+    expect(privacyAlgorithms[2]).toHaveAttribute('value', '');
+
+    const authAlgorithms = screen.getAllByName('authAlgorithm');
+    expect(authAlgorithms[0]).toHaveAttribute('value', 'md5');
+    expect(authAlgorithms[1]).toHaveAttribute('value', 'sha1');
+    expect(authAlgorithms[1]).toBeChecked();
+
+    expect(screen.getByText('Privacy Algorithm')).toBeVisible();
+    expect(screen.getByText('Auth Algorithm')).toBeVisible();
+  });
+
+  test('should save KRB5 credential store with proper values', async () => {
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+        onSave={handleSave}
+      />,
+    );
+
+    const nameInput = screen.getByName('name');
+    changeInputValue(nameInput, 'KRB5 Credential Store');
+
+    const vaultIdInput = screen.getByName('vaultId');
+    changeInputValue(vaultIdInput, 'vault123');
+
+    const hostIdentifierInput = screen.getByName('hostIdentifier');
+    changeInputValue(hostIdentifierInput, 'host456');
+
+    const realmInput = screen.getByName('realm');
+    changeInputValue(realmInput, 'EXAMPLE.COM');
+
+    const saveButton = screen.getDialogSaveButton();
+    fireEvent.click(saveButton);
+
+    expect(handleSave).toHaveBeenCalledWith({
+      authAlgorithm: 'sha1',
+      autogenerate: false,
+      certificate: undefined,
+      comment: '',
+      community: undefined,
+      credentialLogin: undefined,
+      credentialType: CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+      hostIdentifier: 'host456',
+      id: undefined,
+      kdcs: undefined,
+      name: 'KRB5 Credential Store',
+      passphrase: undefined,
+      password: undefined,
+      privacyAlgorithm: 'aes',
+      privacyHostIdentifier: undefined,
+      privacyPassword: undefined,
+      publicKey: undefined,
+      realm: 'EXAMPLE.COM',
+      vaultId: 'vault123',
+    });
+  });
+
+  test('should save SNMP credential store with proper values', async () => {
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+        onSave={handleSave}
+      />,
+    );
+
+    const nameInput = screen.getByName('name');
+    changeInputValue(nameInput, 'SNMP Credential Store');
+
+    const vaultIdInput = screen.getByName('vaultId');
+    changeInputValue(vaultIdInput, 'snmp-vault');
+
+    const hostIdentifierInput = screen.getByName('hostIdentifier');
+    changeInputValue(hostIdentifierInput, 'snmp-host');
+
+    const privacyHostIdentifierInput = screen.getByName(
+      'privacyHostIdentifier',
+    );
+    changeInputValue(privacyHostIdentifierInput, 'privacy-host');
+
+    const privacyAlgorithms = screen.getAllByName('privacyAlgorithm');
+    fireEvent.click(privacyAlgorithms[1]);
+
+    const authAlgorithms = screen.getAllByName('authAlgorithm');
+    fireEvent.click(authAlgorithms[0]);
+
+    const saveButton = screen.getDialogSaveButton();
+    fireEvent.click(saveButton);
+
+    expect(handleSave).toHaveBeenCalledWith({
+      authAlgorithm: 'md5',
+      autogenerate: false,
+      certificate: undefined,
+      comment: '',
+      community: undefined,
+      credentialLogin: undefined,
+      credentialType: CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+      hostIdentifier: 'snmp-host',
+      id: undefined,
+      kdcs: undefined,
+      name: 'SNMP Credential Store',
+      passphrase: undefined,
+      password: undefined,
+      privacyAlgorithm: 'des',
+      privacyHostIdentifier: 'privacy-host',
+      privacyPassword: undefined,
+      publicKey: undefined,
+      realm: undefined,
+      vaultId: 'snmp-vault',
+    });
   });
 });
