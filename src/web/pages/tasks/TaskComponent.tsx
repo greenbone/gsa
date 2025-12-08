@@ -229,6 +229,9 @@ const TaskComponent = ({
   const [autoDelete, setAutoDelete] = useState<TaskAutoDelete | undefined>();
   const [autoDeleteData, setAutoDeleteData] = useState<number | undefined>();
   const [comment, setComment] = useState<string | undefined>();
+  const [csAllowFailedRetrieval, setCsAllowFailedRetrieval] = useState<
+    boolean | undefined
+  >();
   const [scanConfigId, setScanConfigId] = useState<string | undefined>();
   const [esxiCredential, setEsxiCredential] = useState();
   const [hosts, setHosts] = useState<string | undefined>();
@@ -536,6 +539,7 @@ const TaskComponent = ({
     apply_overrides: applyOverrides,
     comment,
     config_id: configId,
+    csAllowFailedRetrieval,
     hosts_ordering: hostsOrdering,
     in_assets: inAssets,
     min_qod: minQod,
@@ -567,6 +571,7 @@ const TaskComponent = ({
           apply_overrides: applyOverrides,
           comment,
           config_id: configId,
+          csAllowFailedRetrieval,
           hosts_ordering: hostsOrdering,
           id: task.id as string,
           in_assets: inAssets,
@@ -593,6 +598,7 @@ const TaskComponent = ({
         auto_delete_data: autoDeleteData,
         comment,
         config_id: configId,
+        csAllowFailedRetrieval,
         hosts_ordering: hostsOrdering,
         in_assets: inAssets,
         max_checks: maxChecks,
@@ -708,6 +714,7 @@ const TaskComponent = ({
       setMaxChecks(task.max_checks);
       setMaxHosts(task.max_hosts);
       setHostsOrdering(task.hosts_ordering);
+      setCsAllowFailedRetrieval(task.csAllowFailedRetrieval);
 
       setScanConfigId(task.config?.id);
       setScannerId(task.scanner?.id);
@@ -733,6 +740,7 @@ const TaskComponent = ({
       setMaxChecks(undefined);
       setMaxHosts(undefined);
       setHostsOrdering(undefined);
+      setCsAllowFailedRetrieval(undefined);
 
       setScanConfigId(defaultScanConfigId || FULL_AND_FAST_SCAN_CONFIG_ID);
       setScannerId(defaultScannerId || OPENVAS_DEFAULT_SCANNER_ID);
@@ -1021,6 +1029,7 @@ const TaskComponent = ({
                       auto_delete_data={autoDeleteData}
                       comment={comment}
                       config_id={scanConfigId}
+                      csAllowFailedRetrieval={csAllowFailedRetrieval}
                       hosts_ordering={hostsOrdering}
                       in_assets={inAssets}
                       isLoadingAlerts={isLoadingAlerts}
