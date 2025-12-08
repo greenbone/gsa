@@ -64,7 +64,7 @@ describe('TaskCommand tests', () => {
       scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
       scanner_type: OPENVAS_SCANNER_TYPE,
       target_id: 't1',
-      csAllowFailedRetrieval: 1,
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -122,7 +122,7 @@ describe('TaskCommand tests', () => {
       schedule_periods: 1,
       tag_id: 't1',
       target_id: 't1',
-      csAllowFailedRetrieval: 1,
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -226,7 +226,7 @@ describe('TaskCommand tests', () => {
           scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
           scanner_type: OPENVAS_SCANNER_TYPE,
           target_id: 't1',
-          csAllowFailedRetrieval: 1,
+          csAllowFailedRetrieval: true,
         }),
       ).rejects.toThrow(expectedMessage);
     },
@@ -291,7 +291,7 @@ describe('TaskCommand tests', () => {
       max_hosts: 10,
       min_qod: 70,
       name: 'foo',
-      csAllowFailedRetrieval: 1,
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -390,7 +390,7 @@ describe('TaskCommand tests', () => {
           max_hosts: 10,
           min_qod: 70,
           name: 'foo',
-          csAllowFailedRetrieval: 1,
+          csAllowFailedRetrieval: true,
         }),
       ).rejects.toThrow(expectedMessage);
     },
@@ -420,7 +420,7 @@ describe('TaskCommand tests', () => {
       schedule_id: 's1',
       schedule_periods: 1,
       target_id: 't1',
-      csAllowFailedRetrieval: 1,
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {

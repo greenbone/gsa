@@ -549,17 +549,31 @@ describe('Task Model parse tests', () => {
   test('should parse csAllowFailedRetrieval', () => {
     const task1 = Task.fromElement({
       _id: 't1',
-      csAllowFailedRetrieval: 1,
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'cs_allow_failed_retrieval',
+            value: 1,
+          },
+        ],
+      },
     });
     expect(task1.id).toEqual('t1');
-    expect(task1.csAllowFailedRetrieval).toEqual(1);
+    expect(task1.csAllowFailedRetrieval).toEqual(true);
 
     const task2 = Task.fromElement({
       _id: 't2',
-      csAllowFailedRetrieval: 0,
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'cs_allow_failed_retrieval',
+            value: 0,
+          },
+        ],
+      },
     });
     expect(task2.id).toEqual('t2');
-    expect(task2.csAllowFailedRetrieval).toEqual(0);
+    expect(task2.csAllowFailedRetrieval).toEqual(false);
 
     const task3 = Task.fromElement({
       _id: 't3',

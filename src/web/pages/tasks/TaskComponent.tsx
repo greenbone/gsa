@@ -230,7 +230,7 @@ const TaskComponent = ({
   const [autoDeleteData, setAutoDeleteData] = useState<number | undefined>();
   const [comment, setComment] = useState<string | undefined>();
   const [csAllowFailedRetrieval, setCsAllowFailedRetrieval] = useState<
-    YesNo | undefined
+    boolean | undefined
   >();
   const [scanConfigId, setScanConfigId] = useState<string | undefined>();
   const [esxiCredential, setEsxiCredential] = useState();

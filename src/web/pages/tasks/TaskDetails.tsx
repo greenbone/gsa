@@ -249,9 +249,7 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
                 <TableData>
                   {_('Allow scan when credential store retrieval fails')}
                 </TableData>
-                <TableData>
-                  {renderYesNo(csAllowFailedRetrieval as number)}
-                </TableData>
+                <TableData>{renderYesNo(csAllowFailedRetrieval)}</TableData>
               </TableRow>
             )}
           </TableBody>

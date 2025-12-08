@@ -24,7 +24,7 @@ import {
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
 } from 'gmp/models/task';
-import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
+import {NO_VALUE, parseBoolean, YES_VALUE, type YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
@@ -74,7 +74,7 @@ interface TaskDialogDefaultValues {
   auto_delete_data?: number;
   comment?: string;
   config_id?: string;
-  csAllowFailedRetrieval?: YesNo;
+  csAllowFailedRetrieval?: boolean;
   hosts_ordering?: TaskHostsOrdering;
   in_assets?: YesNo;
   max_checks?: number;
@@ -99,7 +99,7 @@ interface TaskDialogProps {
   auto_delete_data?: number;
   comment?: string;
   config_id?: string;
-  csAllowFailedRetrieval?: YesNo;
+  csAllowFailedRetrieval?: boolean;
   hosts_ordering?: TaskHostsOrdering;
   in_assets?: YesNo;
   isLoadingAlerts?: boolean;
@@ -192,7 +192,7 @@ const TaskDialog = ({
   comment = '',
   // eslint-disable-next-line @typescript-eslint/naming-convention
   config_id,
-  csAllowFailedRetrieval = NO_VALUE,
+  csAllowFailedRetrieval = false,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -424,9 +424,12 @@ const TaskDialog = ({
               <FormGroup
                 title={_('Allow scan when credential store retrieval fails')}
               >
-                <YesNoRadio
+                <YesNoRadio<boolean>
+                  convert={parseBoolean}
                   name="csAllowFailedRetrieval"
+                  noValue={false}
                   value={state.csAllowFailedRetrieval}
+                  yesValue={true}
                   onChange={onValueChange}
                 />
               </FormGroup>

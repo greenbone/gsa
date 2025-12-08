@@ -21,6 +21,7 @@ import {
   parseToString,
   parseDate,
   parseSeverity,
+  parseBoolean,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
@@ -54,7 +55,6 @@ export interface TaskElement extends ModelElement {
     name?: string;
     trash?: YesNo;
   };
-  csAllowFailedRetrieval?: YesNo;
   current_report?: {
     // only available for a running task
     report?: {
@@ -236,7 +236,7 @@ export interface TaskProperties extends ModelProperties {
   min_qod?: number;
   acceptInvalidCerts?: boolean;
   registryAllowInsecure?: boolean;
-  csAllowFailedRetrieval?: YesNo;
+  csAllowFailedRetrieval?: boolean;
 }
 
 export const AUTO_DELETE_KEEP = 'keep';
@@ -326,7 +326,7 @@ class Task extends Model {
   readonly min_qod?: number;
   readonly acceptInvalidCerts?: boolean;
   readonly registryAllowInsecure?: boolean;
-  readonly csAllowFailedRetrieval?: YesNo;
+  readonly csAllowFailedRetrieval?: boolean;
   readonly observers?: TaskObservers;
   readonly preferences: TaskPreferences;
   readonly progress?: number;
@@ -592,7 +592,7 @@ class Task extends Model {
             copy.registryAllowInsecure = parseYesNo(pref.value) === YES_VALUE;
             break;
           case 'cs_allow_failed_retrieval':
-            copy.csAllowFailedRetrieval = parseYesNo(pref.value);
+            copy.csAllowFailedRetrieval = parseBoolean(pref.value);
             break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};

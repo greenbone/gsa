@@ -22,6 +22,7 @@ import Task, {
   type TaskAutoDelete,
 } from 'gmp/models/task';
 import {NO_VALUE, YES_VALUE, parseYesNo, type YesNo} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 interface TaskCommandCreateParams {
   add_tag?: YesNo;
@@ -32,7 +33,7 @@ interface TaskCommandCreateParams {
   auto_delete_data?: number;
   comment?: string;
   config_id?: string;
-  csAllowFailedRetrieval?: YesNo;
+  csAllowFailedRetrieval?: boolean;
   hosts_ordering?: string;
   in_assets?: YesNo;
   max_checks?: number;
@@ -97,7 +98,7 @@ interface TaskCommandSaveParams {
   apply_overrides?: YesNo;
   comment?: string;
   config_id?: string;
-  csAllowFailedRetrieval?: YesNo;
+  csAllowFailedRetrieval?: boolean;
   hosts_ordering?: string;
   id: string;
   in_assets?: YesNo;
@@ -239,7 +240,9 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       auto_delete_data,
       comment,
       config_id,
-      cs_allow_failed_retrieval: csAllowFailedRetrieval,
+      cs_allow_failed_retrieval: isDefined(csAllowFailedRetrieval)
+        ? parseYesNo(csAllowFailedRetrieval)
+        : undefined,
       hosts_ordering,
       in_assets,
       max_checks,
@@ -415,7 +418,9 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       comment,
       config_id,
       cmd: 'save_task',
-      cs_allow_failed_retrieval: csAllowFailedRetrieval,
+      cs_allow_failed_retrieval: isDefined(csAllowFailedRetrieval)
+        ? parseYesNo(csAllowFailedRetrieval)
+        : undefined,
       hosts_ordering,
       in_assets,
       max_checks,

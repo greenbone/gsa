@@ -128,7 +128,7 @@ const Details = ({entity, links}: DetailsProps) => {
                 {_('Allow scan when credential store retrieval fails')}
               </TableData>
               <TableData>
-                {renderYesNo(entity.csAllowFailedRetrieval as number)}
+                {renderYesNo(entity.csAllowFailedRetrieval)}
               </TableData>
             </TableRow>
           )}
