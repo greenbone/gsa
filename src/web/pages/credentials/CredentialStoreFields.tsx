@@ -11,6 +11,7 @@ import {
 import TagListDisplay from 'web/components/form/TagListDisplay.js';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface CredentialStoreFieldsProps {
   credentialType: CredentialType;
@@ -20,20 +21,19 @@ interface CredentialStoreFieldsProps {
   authAlgorithm?: string;
   privacyAlgorithm?: string;
   privacyHostIdentifier?: string;
-  _: (s: string) => string;
 }
 
-const CredentialStoreFields = (props: Readonly<CredentialStoreFieldsProps>) => {
-  const {
-    credentialType,
-    credentialStore,
-    realm,
-    kdcs = [],
-    authAlgorithm,
-    privacyAlgorithm,
-    privacyHostIdentifier,
-    _,
-  } = props;
+const CredentialStoreFields = ({
+  credentialType,
+  credentialStore,
+  realm,
+  kdcs = [],
+  authAlgorithm,
+  privacyAlgorithm,
+  privacyHostIdentifier,
+}: Readonly<CredentialStoreFieldsProps>) => {
+  const [_] = useTranslation();
+
   return (
     <>
       <TableRow>

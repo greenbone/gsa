@@ -16,7 +16,6 @@ import {
 } from 'gmp/models/credential';
 import CredentialStoreDialogFields from 'web/pages/credentials/CredentialStoreDialogFields';
 
-const mockTranslate = (str: string) => str;
 const mockValidateKdc = testing.fn().mockReturnValue(true);
 const mockOnValueChange = testing.fn();
 
@@ -28,7 +27,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should render basic vault and host identifier fields', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         credentialType={CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE}
         hostIdentifier="host.example.com"
         validateKdc={mockValidateKdc}
@@ -46,7 +44,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should call onValueChange when vault ID is changed', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         credentialType={CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE}
         validateKdc={mockValidateKdc}
         vaultId="vault-123"
@@ -63,7 +60,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should call onValueChange when host identifier is changed', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         credentialType={CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE}
         hostIdentifier="host.example.com"
         validateKdc={mockValidateKdc}
@@ -83,7 +79,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should render KRB5 specific fields for Kerberos credential store', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         credentialType={CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE}
         kdcs={['kdc1.example.com', 'kdc2.example.com']}
         realm="EXAMPLE.COM"
@@ -103,7 +98,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should call onValueChange when realm is changed for KRB5', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         credentialType={CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE}
         realm="EXAMPLE.COM"
         validateKdc={mockValidateKdc}
@@ -120,7 +114,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should render SNMP specific fields for SNMP credential store', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         authAlgorithm={SNMP_AUTH_ALGORITHM_SHA1}
         credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
         privacyAlgorithm={SNMP_PRIVACY_ALGORITHM_AES}
@@ -142,7 +135,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should call onValueChange when privacy host identifier is changed for SNMP', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
         privacyHostIdentifier="privacy.example.com"
         validateKdc={mockValidateKdc}
@@ -164,7 +156,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should handle privacy algorithm radio button changes for SNMP', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         authAlgorithm={SNMP_AUTH_ALGORITHM_SHA1}
         credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
         privacyAlgorithm={SNMP_PRIVACY_ALGORITHM_AES}
@@ -185,7 +176,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should handle auth algorithm radio button changes for SNMP', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         authAlgorithm={SNMP_AUTH_ALGORITHM_SHA1}
         credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
         privacyAlgorithm={SNMP_PRIVACY_ALGORITHM_AES}
@@ -206,7 +196,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should show correct checked state for privacy algorithm radios', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
         privacyAlgorithm={SNMP_PRIVACY_ALGORITHM_DES}
         validateKdc={mockValidateKdc}
@@ -226,7 +215,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should show correct checked state for auth algorithm radios', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         authAlgorithm={SNMP_AUTH_ALGORITHM_MD5}
         credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
         privacyAlgorithm={SNMP_PRIVACY_ALGORITHM_AES}
@@ -245,7 +233,6 @@ describe('CredentialStoreDialogFields', () => {
   test('should not render type-specific fields for basic credential store types', () => {
     render(
       <CredentialStoreDialogFields
-        _={mockTranslate}
         credentialType={CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE}
         validateKdc={mockValidateKdc}
         onValueChange={mockOnValueChange}

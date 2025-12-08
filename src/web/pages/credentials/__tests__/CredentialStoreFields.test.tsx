@@ -12,8 +12,6 @@ import {
 } from 'gmp/models/credential';
 import CredentialStoreFields from 'web/pages/credentials/CredentialStoreFields';
 
-const mockTranslate = (str: string) => str;
-
 describe('CredentialStoreFields', () => {
   test('should render basic vault and host identifier fields', () => {
     const credentialStore = {
@@ -24,7 +22,6 @@ describe('CredentialStoreFields', () => {
     const {render} = rendererWithTableBody();
     render(
       <CredentialStoreFields
-        _={mockTranslate}
         credentialStore={credentialStore}
         credentialType={CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE}
       />,
@@ -45,7 +42,6 @@ describe('CredentialStoreFields', () => {
     const {render} = rendererWithTableBody();
     render(
       <CredentialStoreFields
-        _={mockTranslate}
         authAlgorithm="SHA1"
         credentialStore={credentialStore}
         credentialType={CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE}
@@ -72,7 +68,6 @@ describe('CredentialStoreFields', () => {
     const {render} = rendererWithTableBody();
     render(
       <CredentialStoreFields
-        _={mockTranslate}
         authAlgorithm="MD5"
         credentialStore={credentialStore}
         credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
@@ -95,7 +90,6 @@ describe('CredentialStoreFields', () => {
     const {render} = rendererWithTableBody();
     render(
       <CredentialStoreFields
-        _={mockTranslate}
         credentialStore={{}}
         credentialType={CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE}
       />,
@@ -110,7 +104,6 @@ describe('CredentialStoreFields', () => {
     const {render} = rendererWithTableBody();
     render(
       <CredentialStoreFields
-        _={mockTranslate}
         credentialType={CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE}
       />,
     );
@@ -124,7 +117,6 @@ describe('CredentialStoreFields', () => {
     const {render} = rendererWithTableBody();
     render(
       <CredentialStoreFields
-        _={mockTranslate}
         credentialStore={{vaultId: 'vault-123'}}
         credentialType={CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE}
         kdcs={[]}

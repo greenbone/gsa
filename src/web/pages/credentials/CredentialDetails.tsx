@@ -73,7 +73,6 @@ const CredentialDetails = ({entity}: CredentialDetailsProps) => {
           {/* Credential Store specific fields */}
           {isCredentialStore && (
             <CredentialStoreFields
-              _={_}
               authAlgorithm={authAlgorithm}
               credentialStore={credentialStore}
               credentialType={credentialType}

@@ -19,6 +19,7 @@ import FormGroup from 'web/components/form/FormGroup';
 import MultiValueTextField from 'web/components/form/MultiValueTextField';
 import Radio from 'web/components/form/Radio';
 import TextField from 'web/components/form/TextField';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface CredentialStoreDialogFieldsProps {
   credentialType: CredentialType;
@@ -30,26 +31,23 @@ interface CredentialStoreDialogFieldsProps {
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   authAlgorithm?: SNMPAuthAlgorithmType;
   onValueChange: (value: unknown, name?: string) => void;
-  _: (s: string) => string;
   validateKdc: (val: string) => boolean;
 }
 
-const CredentialStoreDialogFields = (
-  props: Readonly<CredentialStoreDialogFieldsProps>,
-) => {
-  const {
-    credentialType,
-    vaultId,
-    hostIdentifier,
-    realm,
-    kdcs = [],
-    privacyHostIdentifier,
-    privacyAlgorithm,
-    authAlgorithm,
-    onValueChange,
-    _,
-    validateKdc,
-  } = props;
+const CredentialStoreDialogFields = ({
+  credentialType,
+  vaultId,
+  hostIdentifier,
+  realm,
+  kdcs = [],
+  privacyHostIdentifier,
+  privacyAlgorithm,
+  authAlgorithm,
+  onValueChange,
+  validateKdc,
+}: Readonly<CredentialStoreDialogFieldsProps>) => {
+  const [_] = useTranslation();
+
   return (
     <>
       <TextField

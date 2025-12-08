@@ -360,7 +360,6 @@ const CredentialDialog = ({
 
             {isCredentialStoreEnabled && (
               <CredentialStoreDialogFields
-                _={_}
                 authAlgorithm={state.authAlgorithm}
                 credentialType={state.credentialType}
                 hostIdentifier={state.hostIdentifier}
