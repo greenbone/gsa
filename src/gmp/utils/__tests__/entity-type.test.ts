@@ -13,6 +13,7 @@ import {
   normalizeType,
   apiType,
   typeName,
+  resourceType,
 } from 'gmp/utils/entity-type';
 
 describe('getEntityType function tests', () => {
@@ -239,5 +240,62 @@ describe('typeName function tests', () => {
     expect(typeName('user')).toEqual('User');
     expect(typeName('vuln')).toEqual('Vulnerability');
     expect(typeName('vulnerability')).toEqual('Vulnerability');
+  });
+});
+
+describe('resourceType function tests', () => {
+  test('should return undefined for undefined or empty type', () => {
+    expect(resourceType(undefined)).toBeUndefined();
+    // @ts-expect-error
+    expect(resourceType('')).toBeUndefined();
+  });
+
+  test('should return resource type for known types', () => {
+    expect(resourceType('audit')).toEqual('audit');
+    expect(resourceType('auditreport')).toEqual('audit_report');
+    expect(resourceType('certbund')).toEqual('cert_bund_adv');
+    expect(resourceType('cpe')).toEqual('cpe');
+    expect(resourceType('cve')).toEqual('cve');
+    expect(resourceType('dfncert')).toEqual('dfn_cert_adv');
+    expect(resourceType('operatingsystem')).toEqual('os');
+    expect(resourceType('host')).toEqual('host');
+    expect(resourceType('nvt')).toEqual('nvt');
+    expect(resourceType('policy')).toEqual('policy');
+    expect(resourceType('scanconfig')).toEqual('config');
+  });
+
+  test('should support other valid resource types', () => {
+    expect(resourceType('credential')).toEqual('credential');
+    expect(resourceType('filter')).toEqual('filter');
+    expect(resourceType('group')).toEqual('group');
+    expect(resourceType('note')).toEqual('note');
+    expect(resourceType('permission')).toEqual('permission');
+    expect(resourceType('portlist')).toEqual('port_list');
+    expect(resourceType('report')).toEqual('report');
+    expect(resourceType('reportconfig')).toEqual('report_config');
+    expect(resourceType('reportformat')).toEqual('report_format');
+    expect(resourceType('target')).toEqual('target');
+    expect(resourceType('task')).toEqual('task');
+    expect(resourceType('tlscertificate')).toEqual('tls_certificate');
+    expect(resourceType('vulnerability')).toEqual('vuln');
+  });
+
+  test('should convert non supported resource types', () => {
+    // the following types are not valid resource types for get_resource_names at the moment
+    expect(resourceType('agent')).toEqual('agent');
+    expect(resourceType('agentgroup')).toEqual('agent_group');
+    expect(resourceType('agentinstaller')).toEqual('agent_installer');
+    expect(resourceType('asset')).toEqual('asset');
+    expect(resourceType('info')).toEqual('info');
+    expect(resourceType('ociimagetarget')).toEqual('oci_image_target');
+    expect(resourceType('portrange')).toEqual('port_range');
+    expect(resourceType('user')).toEqual('user');
+  });
+
+  test('should pass through unknown types', () => {
+    // @ts-expect-error
+    expect(resourceType('foo')).toEqual('foo');
+    // @ts-expect-error
+    expect(resourceType('bar')).toEqual('bar');
   });
 });
