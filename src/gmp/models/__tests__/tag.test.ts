@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import Tag from 'gmp/models/tag';
 import {testModel} from 'gmp/models/testing';
-import {ApiType} from 'gmp/utils/entity-type';
+import {type ApiType} from 'gmp/utils/entity-type';
 
 describe('Tag model tests', () => {
   testModel(Tag, 'tag');
