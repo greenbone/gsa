@@ -58,7 +58,7 @@ class Tag extends Model {
 
     if (isDefined(element.resources)) {
       ret.resourceType = normalizeType(element.resources.type);
-      ret.resourceCount = parseInt(element.resources.count.total);
+      ret.resourceCount = parseInt(element.resources.count?.total);
     } else {
       ret.resourceCount = 0;
     }
