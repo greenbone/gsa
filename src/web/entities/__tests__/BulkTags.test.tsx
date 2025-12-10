@@ -122,7 +122,7 @@ describe('BulkTags tests', () => {
     const newTag = tagsDialog.getByTitle('Create a new Tag');
     fireEvent.click(newTag);
     expect(getAllResourceNames).toHaveBeenCalledWith({
-      resource_type: 'task',
+      resourceType: 'task',
     });
 
     const dialogs = screen.getAllByRole('dialog');
@@ -135,12 +135,11 @@ describe('BulkTags tests', () => {
     await wait();
 
     expect(createTag).toHaveBeenCalledWith({
-      active: 1,
+      active: true,
       comment: '',
       name: 'default:unnamed',
-      resource_ids: [],
-      resource_type: 'task',
-      resources: [],
+      resourceIds: [],
+      resourceType: 'task',
       value: '',
     });
     expect(getTag).toHaveBeenCalledWith({id: '2'});
@@ -149,14 +148,14 @@ describe('BulkTags tests', () => {
     fireEvent.click(saveTagsButton);
 
     expect(saveTag).toHaveBeenCalledWith({
-      active: 1,
+      active: true,
       comment: '',
       filter: undefined,
       id: '2',
       name: undefined,
-      resource_ids: ['1', '2'],
-      resource_type: 'task',
-      resources_action: 'add',
+      resourceIds: ['1', '2'],
+      resourceType: 'task',
+      resourcesAction: 'add',
       value: '',
     });
   });
