@@ -5,7 +5,9 @@
 
 import type Model from 'gmp/models/model';
 import {type EntityType} from 'gmp/utils/entity-type';
-import useEntityClone from 'web/entity/hooks/useEntityClone';
+import useEntityClone, {
+  type EntityCloneResponse,
+} from 'web/entity/hooks/useEntityClone';
 import useEntityCreate, {
   type EntityCreateResponse,
 } from 'web/entity/hooks/useEntityCreate';
@@ -38,6 +40,7 @@ interface EntityComponentProps<
   TCreateResponse,
   TSaveData,
   TSaveResponse,
+  TCloneResponse,
 > {
   name: EntityType;
   children: (
@@ -57,7 +60,7 @@ interface EntityComponentProps<
   onCreateError?: (error: Error) => void;
   onDeleted?: () => void;
   onDeleteError?: (error: Error) => void;
-  onCloned?: (entity: TEntity) => void;
+  onCloned?: (response: TCloneResponse) => void;
   onCloneError?: (error: Error) => void;
 }
 
@@ -67,6 +70,7 @@ const EntityComponent = <
   TCreateResponse = EntityCreateResponse,
   TSaveData = {},
   TSaveResponse = EntitySaveResponse,
+  TCloneResponse = EntityCloneResponse,
 >({
   children,
   name,
@@ -85,14 +89,18 @@ const EntityComponent = <
   TCreateData,
   TCreateResponse,
   TSaveData,
-  TSaveResponse
+  TSaveResponse,
+  TCloneResponse
 >) => {
   const gmp = useGmp();
   const cmd = gmp[name];
-  const handleEntityDownload = useEntityDownload(entity => cmd.export(entity), {
-    onDownloadError,
-    onDownloaded,
-  });
+  const handleEntityDownload = useEntityDownload<TEntity>(
+    entity => cmd.export(entity),
+    {
+      onDownloadError,
+      onDownloaded,
+    },
+  );
 
   const handleEntitySave = useEntitySave<TSaveData, TSaveResponse>(
     data => cmd.save(data),
@@ -110,15 +118,21 @@ const EntityComponent = <
     },
   );
 
-  const handleEntityDelete = useEntityDelete(entity => cmd.delete(entity), {
-    onDeleteError,
-    onDeleted,
-  });
+  const handleEntityDelete = useEntityDelete<TEntity>(
+    entity => cmd.delete(entity),
+    {
+      onDeleteError,
+      onDeleted,
+    },
+  );
 
-  const handleEntityClone = useEntityClone(entity => cmd.clone(entity), {
-    onCloneError,
-    onCloned,
-  });
+  const handleEntityClone = useEntityClone<TEntity, TCloneResponse>(
+    entity => cmd.clone(entity),
+    {
+      onCloneError,
+      onCloned,
+    },
+  );
 
   return children({
     create: handleEntityCreate,
