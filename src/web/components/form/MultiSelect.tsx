@@ -96,10 +96,13 @@ const MultiSelect = ({
     return (
       <TextInput
         data-testid="text-input"
+        label={label}
+        name={name}
         placeholder={_('Loading...')}
         readOnly={true}
         rightSection={<Loader size="xs" />}
         styles={{root: {flexGrow: grow}}}
+        title={toolTipTitle}
       />
     );
   }
