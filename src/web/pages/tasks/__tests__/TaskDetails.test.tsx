@@ -95,6 +95,37 @@ const gmp = {
 };
 
 describe('TaskDetails tests', () => {
+  test('should render container image target link when container scanning is enabled', () => {
+    const task = Task.fromElement({
+      _id: 'cscan1',
+      owner: {name: 'username'},
+      name: 'container scan',
+      status: TASK_STATUS.done,
+      oci_image_target: {_id: 'oci123', name: 'my-container-image'},
+    });
+    const features = new Features(['ENABLE_CONTAINER_SCANNING']);
+
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      store: true,
+      gmp,
+      features,
+    });
+
+    render(<Details entity={task} />);
+
+    expect(task.ociImageTarget?.name).toBe('my-container-image');
+
+    const containerImageTargetHeading = screen.getByText(
+      'Container Image Target',
+    );
+    expect(containerImageTargetHeading).toBeVisible();
+
+    const link = screen.getByText('my-container-image');
+    expect(link).toBeVisible();
+    expect(link.closest('a')).toHaveAttribute('href', '/ociimagetargets');
+  });
   test('should render full task details', () => {
     const task = Task.fromElement({
       _id: '12345',

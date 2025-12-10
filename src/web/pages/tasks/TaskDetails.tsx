@@ -16,6 +16,7 @@ import DateTime from 'web/components/date/DateTime';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
+import Link from 'web/components/link/Link';
 import DetailsTable from 'web/components/table/DetailsTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
@@ -63,6 +64,9 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
   const features = useFeatures();
 
   const isCredentialStore = features.featureEnabled('ENABLE_CREDENTIAL_STORES');
+  const isContainerScanning = features.featureEnabled(
+    'ENABLE_CONTAINER_SCANNING',
+  );
 
   const scanConfig = useShallowEqualSelector<unknown, ScanConfig | undefined>(
     state => scanConfigSelector(state).getEntity(entity.config?.id),
@@ -108,6 +112,7 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
     target,
     max_checks: maxChecks,
     max_hosts: maxHosts,
+    ociImageTarget,
   } = entity;
 
   const {scan_end: scanEnd, scan_start: scanStart} = lastReport ?? {};
@@ -136,6 +141,14 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
           <DetailsLink id={target.id} textOnly={!links} type="target">
             {target.name}
           </DetailsLink>
+        </DetailsBlock>
+      )}
+
+      {isContainerScanning && isDefined(ociImageTarget?.name) && (
+        <DetailsBlock title={_('Container Image Target')}>
+          <Link textOnly={!links} to="/ociimagetargets">
+            {ociImageTarget.name}
+          </Link>
         </DetailsBlock>
       )}
 
