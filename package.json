@@ -23,7 +23,7 @@
     "dev": "vite",
     "start": "npm run dev",
     "build": "tsc && vite build",
-    "lint": "eslint src --max-warnings 0 --cache --cache-location .eslintcache",
+    "lint": "eslint src --max-warnings 0 --cache --cache-location .eslintcache --cache-strategy content",
     "format": "prettier --write src",
     "format-check": "prettier -l src",
     "preview": "vite preview",
