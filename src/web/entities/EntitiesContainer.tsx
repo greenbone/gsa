@@ -18,12 +18,10 @@ import logger from 'gmp/log';
 import {type default as Filter, RESET_FILTER} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import type Tag from 'gmp/models/tag';
-import {YES_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {
   getEntityType,
   apiType,
-  typeName,
   pluralizeType,
   type EntityType,
 } from 'gmp/utils/entity-type';
@@ -35,7 +33,7 @@ import {
 import TagsDialog, {type TagsDialogData} from 'web/entities/TagsDialog';
 import actionFunction from 'web/entity/hooks/action-function';
 import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
-import TagDialog from 'web/pages/tags/Dialog';
+import TagDialog from 'web/pages/tags/TagDialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -449,30 +447,24 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     const {gmp} = this.props;
     const {tags} = this.state;
 
-    return (
-      // @ts-expect-error
-      gmp.tag
-        .create(data)
-        // @ts-expect-error
-        .then(response => gmp.tag.get(response.data))
-        .then(response => {
-          this.closeTagDialog();
-          this.setState({
-            tag: response.data,
-            tags: [...tags, response.data],
-          });
-        })
-    );
+    return gmp.tag
+      .create(data)
+      .then(response => gmp.tag.get(response.data))
+      .then(response => {
+        this.closeTagDialog();
+        this.setState({
+          tag: response.data,
+          tags: [...tags, response.data],
+        });
+      });
   }
 
-  handleTagChange(id: string) {
+  async handleTagChange(id: string) {
     const {gmp} = this.props;
 
-    // @ts-expect-error
-    gmp.tag.get({id}).then(response => {
-      this.setState({
-        tag: response.data,
-      });
+    const response = await gmp.tag.get({id});
+    this.setState({
+      tag: response.data,
     });
   }
 
@@ -483,7 +475,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     const entitiesType = getEntityType(entities[0]);
 
     let resourceIds: string[] | undefined;
-    let filter;
+    let filter: Filter | undefined;
     if (selectionType === SelectionType.SELECTION_USER) {
       resourceIds = map(selected, res => res.id as string);
       filter = undefined;
@@ -493,17 +485,16 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
       filter = (loadedFilter as Filter).all();
     }
 
-    // @ts-expect-error
     return gmp.tag
       .save({
-        active: YES_VALUE,
+        active: true,
         comment,
         filter,
-        id,
-        name,
-        resource_ids: resourceIds,
-        resource_type: entitiesType,
-        resources_action: 'add',
+        id: id as string,
+        name: name as string,
+        resourceIds,
+        resourceType: entitiesType,
+        resourcesAction: 'add',
         value,
       })
       .then(() => this.closeTagsDialog());
@@ -531,8 +522,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
 
     if (entities.length > 0) {
       const filter = 'resource_type=' + apiType(getEntityType(entities[0]));
-      // @ts-expect-error
-      gmp.tags.getAll({filter}).then(response => {
+      void gmp.tags.getAll({filter}).then(response => {
         const {data: tags} = response;
         this.setState({tags});
       });
@@ -579,13 +569,13 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     } = this.props;
 
     let entitiesType: EntityType | undefined;
-    let resourceTypes: [string, string][] | undefined;
+    let resourceTypes: EntityType[] = [];
     if (isDefined(entities) && entities.length > 0) {
       entitiesType = getEntityType(entities[0]);
-      resourceTypes = [[entitiesType, typeName(entitiesType)]];
+      resourceTypes = [entitiesType];
     }
 
-    let title;
+    let title: string;
     if (selectionType === SelectionType.SELECTION_USER) {
       title = _('Add Tag to Selection');
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
@@ -604,7 +594,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
         : (loadedFilter.get('sort') as string);
     const sortDir = reverse ? SortDirection.DESC : SortDirection.ASC;
     return (
-      <React.Fragment>
+      <>
         {children({
           createFilterType: this.props.gmpName,
           entities,
@@ -657,14 +647,13 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
         {tagDialogVisible && (
           <TagDialog
             fixed={true}
-            resource_type={entitiesType}
-            resource_types={resourceTypes}
-            resources={selected}
+            resourceType={entitiesType}
+            resourceTypes={resourceTypes}
             onClose={this.handleCloseTagDialog}
             onSave={this.handleCreateTag}
           />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
