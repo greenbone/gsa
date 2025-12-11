@@ -93,4 +93,20 @@ describe('CredentialDetails', () => {
     render(<CredentialDetails entity={entity} />);
     expect(screen.getByText('Key Distribution Center')).toBeVisible();
   });
+
+  test('should not render login row when login is undefined', () => {
+    const entity = Credential.fromElement({
+      _id: 'c-no-login',
+      name: 'no-login-cred',
+      comment: 'Credential without login',
+      credential_type: 'snmp',
+      type: 'snmp',
+      // login is undefined
+    });
+    const {render} = rendererWith({capabilities: true});
+    render(<CredentialDetails entity={entity} />);
+    expect(
+      screen.queryByRole('row', {name: /^login/i}),
+    ).not.toBeInTheDocument();
+  });
 });
