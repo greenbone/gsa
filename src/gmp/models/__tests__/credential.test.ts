@@ -58,6 +58,7 @@ describe('Credential Model tests', () => {
     expect(credential.login).toBeUndefined();
     expect(credential.privacyAlgorithm).toBeUndefined();
     expect(credential.realm).toBeUndefined();
+    expect(credential.privateKeyInfo).toBeUndefined();
   });
 
   test('should parse empty element', () => {
@@ -71,6 +72,7 @@ describe('Credential Model tests', () => {
     expect(credential.login).toBeUndefined();
     expect(credential.privacyAlgorithm).toBeUndefined();
     expect(credential.realm).toBeUndefined();
+    expect(credential.privateKeyInfo).toBeUndefined();
   });
 
   test('should parse auth_algorithm', () => {
@@ -110,6 +112,28 @@ describe('Credential Model tests', () => {
       'sha256-fingerprint',
     );
     expect(credential.certificateInfo?.timeStatus).toEqual('valid');
+  });
+
+  test('should parse private key info', () => {
+    const credential = Credential.fromElement({
+      private_key_info: {
+        sha256_hash: 'sha256-hash-value',
+        type: 'ssh-rsa',
+      },
+    });
+
+    expect(credential.privateKeyInfo?.sha256Hash).toEqual('sha256-hash-value');
+    expect(credential.privateKeyInfo?.keyType).toEqual('rsa');
+
+    const credential2 = Credential.fromElement({
+      private_key_info: {
+        sha256_hash: 'sha256-hash-value',
+        type: 'rsa-ssh',
+      },
+    });
+
+    expect(credential2.privateKeyInfo?.sha256Hash).toEqual('sha256-hash-value');
+    expect(credential2.privateKeyInfo?.keyType).toEqual('rsa-ssh');
   });
 
   test('should parse type', () => {

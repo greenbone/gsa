@@ -67,6 +67,10 @@ export interface CredentialElement extends ModelElement {
   privacy?: {
     algorithm?: SNMPPrivacyAlgorithmType;
   };
+  private_key_info?: {
+    sha256_hash?: string;
+    type?: string;
+  };
   realm?: string;
   targets?: {
     target?: ModelElement | ModelElement[];
@@ -92,6 +96,11 @@ export interface CredentialStore {
   vaultId?: string;
 }
 
+interface PrivateKeyInfo {
+  sha256Hash?: string;
+  keyType?: string;
+}
+
 interface CredentialProperties extends ModelProperties {
   authAlgorithm?: SNMPAuthAlgorithmType;
   certificateInfo?: CertificateInfo;
@@ -104,6 +113,7 @@ interface CredentialProperties extends ModelProperties {
   targets?: Model[];
   scanners?: Model[];
   privacyHostIdentifier?: string;
+  privateKeyInfo?: PrivateKeyInfo;
 }
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
@@ -293,6 +303,7 @@ class Credential extends Model {
   readonly targets: Model[];
   readonly scanners: Model[];
   readonly privacyHostIdentifier?: string;
+  readonly privateKeyInfo?: PrivateKeyInfo;
 
   constructor({
     authAlgorithm,
@@ -306,6 +317,7 @@ class Credential extends Model {
     targets = [],
     scanners = [],
     privacyHostIdentifier,
+    privateKeyInfo,
     ...properties
   }: CredentialProperties = {}) {
     super(properties);
@@ -321,6 +333,7 @@ class Credential extends Model {
     this.targets = targets;
     this.scanners = scanners;
     this.privacyHostIdentifier = privacyHostIdentifier;
+    this.privateKeyInfo = privateKeyInfo;
   }
 
   static fromElement(element: CredentialElement = {}): Credential {
@@ -377,6 +390,13 @@ class Credential extends Model {
 
     if (isDefined(element.credential_store?.host_identifier)) {
       ret.privacyHostIdentifier = element.credential_store.host_identifier;
+    }
+
+    if (isDefined(element.private_key_info)) {
+      ret.privateKeyInfo = {
+        sha256Hash: element.private_key_info.sha256_hash,
+        keyType: element.private_key_info.type?.replace(/^ssh-/, ''),
+      };
     }
 
     return ret;
