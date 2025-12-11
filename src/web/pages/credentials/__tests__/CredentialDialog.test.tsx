@@ -19,6 +19,8 @@ import Credential, {
   CERTIFICATE_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+  PGP_CREDENTIAL_TYPE,
+  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 
@@ -635,5 +637,81 @@ describe('CredentialDialog tests', () => {
       realm: undefined,
       vaultId: 'snmp-vault',
     });
+  });
+
+  test('should render with initial files for client certificate credential', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+    });
+
+    const certificate = new File(['cert-content'], 'certificate.pem', {
+      type: 'application/x-pem-file',
+    });
+    const privateKey = new File(['key-content'], 'private-key.key', {
+      type: 'application/x-pem-file',
+    });
+
+    render(
+      <CredentialDialog
+        certificate={certificate}
+        credentialType={CERTIFICATE_CREDENTIAL_TYPE}
+        privateKey={privateKey}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', {name: 'Client Private Key'}),
+    ).toHaveTextContent('private-key.key');
+    expect(
+      screen.getByRole('button', {name: 'Client Certificate'}),
+    ).toHaveTextContent('certificate.pem');
+  });
+
+  test('should render with initial file for username+ssh credential', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+    });
+
+    const privateKey = new File(['key-content'], 'private-key.key', {
+      type: 'application/x-pem-file',
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={USERNAME_SSH_KEY_CREDENTIAL_TYPE}
+        privateKey={privateKey}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', {name: 'Private SSH Key'}),
+    ).toHaveTextContent('private-key.key');
+  });
+
+  test('should render with initial file for pgp credential', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+    });
+
+    const publicKey = new File(['key-content'], 'public-key.key', {
+      type: 'application/x-pem-file',
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={PGP_CREDENTIAL_TYPE}
+        publicKey={publicKey}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', {name: 'Public PGP Key'}),
+    ).toHaveTextContent('public-key.key');
   });
 });
