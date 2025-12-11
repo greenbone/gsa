@@ -47,12 +47,12 @@ import CredentialStoreDialogFields from 'web/pages/credentials/CredentialStoreDi
 
 interface CredentialDialogValues {
   autogenerate: boolean;
-  certificate?: File;
+  certificate?: File | null;
   credentialType: CredentialType;
   hostIdentifier?: string;
-  privateKey?: File;
+  privateKey?: File | null;
   privacyHostIdentifier?: string;
-  publicKey?: File;
+  publicKey?: File | null;
   vaultId?: string;
 }
 
@@ -80,6 +80,7 @@ export type CredentialDialogState = CredentialDialogValues &
 interface CredentialDialogProps {
   authAlgorithm?: SNMPAuthAlgorithmType;
   autogenerate?: boolean;
+  certificate?: File;
   comment?: string;
   community?: string;
   credential?: Credential;
@@ -88,9 +89,11 @@ interface CredentialDialogProps {
   name?: string;
   passphrase?: string;
   password?: string;
+  publicKey?: File;
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   privacyHostIdentifier?: string;
   privacyPassword?: string;
+  privateKey?: File;
   title?: string;
   types?: readonly CredentialType[];
   vaultId?: string;
@@ -125,6 +128,7 @@ const SSH_KEY_REGEX = /-----BEGIN \w+ PRIVATE KEY-----/;
 const CredentialDialog = ({
   authAlgorithm = SNMP_AUTH_ALGORITHM_SHA1,
   autogenerate: initialAutogenerate = false,
+  certificate: initialCertificate,
   comment = '',
   community,
   credential,
@@ -134,9 +138,11 @@ const CredentialDialog = ({
   name,
   passphrase,
   password,
+  publicKey: initialPublicKey,
   privacyAlgorithm = SNMP_PRIVACY_ALGORITHM_AES,
   privacyHostIdentifier,
   privacyPassword,
+  privateKey: initialPrivateKey,
   title,
   types = [],
   vaultId,
@@ -158,9 +164,15 @@ const CredentialDialog = ({
         initialCredentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE),
   );
   const [error, setError] = useState<string | undefined>();
-  const [certificate, setCertificate] = useState<File | undefined>(undefined);
-  const [privateKey, setPrivateKey] = useState<File | undefined>(undefined);
-  const [publicKey, setPublicKey] = useState<File | undefined>(undefined);
+  const [certificate, setCertificate] = useState<File | undefined | null>(
+    initialCertificate,
+  );
+  const [privateKey, setPrivateKey] = useState<File | undefined | null>(
+    initialPrivateKey,
+  );
+  const [publicKey, setPublicKey] = useState<File | undefined | null>(
+    initialPublicKey,
+  );
   const [changeCommunity, setChangeCommunity] = useState<boolean>(false);
   const [changePassphrase, setChangePassphrase] = useState<boolean>(false);
   const [changePassword, setChangePassword] = useState<boolean>(false);
@@ -193,7 +205,7 @@ const CredentialDialog = ({
           _('Not a valid PGP file'),
         );
       }
-      setPublicKey(file);
+      setPublicKey(file ?? null);
     } catch (error) {
       setError((error as Error).message);
     }
@@ -208,14 +220,14 @@ const CredentialDialog = ({
           _('Not a valid Client Certificate file'),
         );
       }
-      setCertificate(file);
+      setCertificate(file ?? null);
     } catch (error) {
       setError((error as Error).message);
     }
   };
 
   const handleCertificateChange = (file: File | undefined) => {
-    setCertificate(file);
+    setCertificate(file ?? null);
   };
 
   const handleClientKeyChange = async (file: File | undefined) => {
@@ -227,7 +239,7 @@ const CredentialDialog = ({
           _('Not a valid Client Private Key file'),
         );
       }
-      setPrivateKey(file);
+      setPrivateKey(file ?? null);
     } catch (error) {
       setError((error as Error).message);
     }
@@ -242,7 +254,7 @@ const CredentialDialog = ({
           _('Not a valid Private SSH Key file'),
         );
       }
-      setPrivateKey(file);
+      setPrivateKey(file ?? null);
     } catch (error) {
       setError((error as Error).message);
     }
