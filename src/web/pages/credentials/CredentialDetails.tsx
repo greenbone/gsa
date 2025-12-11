@@ -11,6 +11,7 @@ import {
   SNMP_PRIVACY_ALGORITHM_NONE,
   type CredentialType,
 } from 'gmp/models/credential';
+import {isDefined} from 'gmp/utils/identity';
 import Footnote from 'web/components/footnote/Footnote';
 import TagListDisplay from 'web/components/form/TagListDisplay.js';
 import Divider from 'web/components/layout/Divider';
@@ -86,10 +87,12 @@ const CredentialDetails = ({entity}: CredentialDetailsProps) => {
           {/* Traditional credential fields */}
           {!isCredentialStore && (
             <>
-              <TableRow>
-                <TableData>{_('Login')}</TableData>
-                <TableData>{login}</TableData>
-              </TableRow>
+              {isDefined(login) && (
+                <TableRow>
+                  <TableData>{_('Login')}</TableData>
+                  <TableData>{login}</TableData>
+                </TableRow>
+              )}
 
               {credentialType === SNMP_CREDENTIAL_TYPE && (
                 <>
