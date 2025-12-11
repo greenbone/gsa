@@ -10,8 +10,8 @@ import '../setup-tests';
 import '@testing-library/jest-dom/vitest';
 import * as ResizeObserverModule from 'resize-observer-polyfill';
 
-global.beforeEach = beforeEach;
-global.expect = expect;
+globalThis.beforeEach = beforeEach;
+globalThis.expect = expect;
 
 // Avoid "Error: Not implemented: navigation (except hash changes)"
 // It is caused by clicking on <a> elements in tests
@@ -22,12 +22,12 @@ HTMLAnchorElement.prototype.click = testing.fn();
 Element.prototype.scrollIntoView = testing.fn();
 
 // createObjectURL is not implemented in JSDOM and required for the Download component
-window.URL.createObjectURL = testing.fn();
+globalThis.URL.createObjectURL = testing.fn();
 
-global.ResizeObserver = ResizeObserverModule.default;
+globalThis.ResizeObserver = ResizeObserverModule.default;
 
 // avoid TypeError: window.matchMedia is not a function for @mantine/core/Select
-window.matchMedia = testing.fn().mockImplementation(query => {
+globalThis.matchMedia = testing.fn().mockImplementation(query => {
   return {
     matches: false,
     media: query,
