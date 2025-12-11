@@ -874,7 +874,6 @@ describe('TaskCommand tests', () => {
       minQod: 70,
       name: 'foo',
       ociImageTargetId: 'oit1',
-      scannerId: 's1',
     });
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -892,9 +891,9 @@ describe('TaskCommand tests', () => {
         min_qod: 70,
         name: 'foo',
         oci_image_target_id: 'oit1',
-        scanner_id: 's1',
+        /* on edit scanner_id should be '0' */
+        scanner_id: '0',
         scanner_type: CONTAINER_IMAGE_SCANNER_TYPE,
-        schedule_id: undefined,
         schedule_periods: 0,
         task_id: 'task1',
         usage_type: 'scan',
