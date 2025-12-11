@@ -26,6 +26,7 @@ type CredentialListPageProps = WithEntitiesContainerComponentProps<Credential>;
 const CredentialsPage = ({
   entities,
   entitiesCounts,
+  entitiesError,
   filter,
   selectionType,
   sortBy,
@@ -79,6 +80,7 @@ const CredentialsPage = ({
             createFilterType="credential"
             entities={entities}
             entitiesCounts={entitiesCounts}
+            entitiesError={entitiesError}
             filter={filter}
             filterEditDialog={CredentialFilterDialog}
             filtersFilter={CREDENTIALS_FILTER_FILTER}
