@@ -473,6 +473,7 @@
   "Connection test successful. Click to test again.": "Verbindungstest erfolgreich. Klicken Sie, um den Test erneut durchzuführen.",
   "Connection to credential store server established successfully.": "Verbindung zum Anmeldedaten-Server erfolgreich hergestellt.",
   "Consider Hosts as Alive": "Host als erreichbar betrachten",
+  "Container Image Scanner": "Container-Image-Scanner",
   "Container Image Target": "Container-Image-Ziel",
   "Container Image Targets": "Container-Image-Ziele",
   "Container Image Targets successfully deleted": "Container-Image-Ziel erfolgreich gelöscht",

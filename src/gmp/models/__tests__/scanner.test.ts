@@ -16,6 +16,7 @@ import Scanner, {
   OPENVASD_SENSOR_SCANNER_TYPE,
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+  CONTAINER_IMAGE_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {testModel} from 'gmp/models/testing';
 import {YES_VALUE} from 'gmp/parser';
@@ -252,6 +253,9 @@ describe('Scanner model function tests', () => {
     );
     expect(scannerTypeName(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)).toEqual(
       'Agent Sensor',
+    );
+    expect(scannerTypeName(CONTAINER_IMAGE_SCANNER_TYPE)).toEqual(
+      'Container Image Scanner',
     );
     expect(scannerTypeName(undefined)).toEqual('Unknown scanner type');
   });
