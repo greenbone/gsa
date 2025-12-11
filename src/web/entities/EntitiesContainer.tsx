@@ -195,9 +195,9 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     props: EntitiesContainerPropsWithHOCs,
     state: EntitiesContainerState,
   ) {
-    if (isDefined(props.entities)) {
+    if (isDefined(props.entities) || isDefined(props.entitiesError)) {
       // update only if new entities are available to avoid having no entities
-      // when the filter changes
+      // when the filter changes or when an error occurs during loading
       return {
         entities: props.entities,
         entitiesCounts: props.entitiesCounts,
