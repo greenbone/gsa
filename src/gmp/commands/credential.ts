@@ -13,13 +13,14 @@ import Credential, {
 } from 'gmp/models/credential';
 import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 export type CredentialDownloadFormat = 'pem' | 'key' | 'rpm' | 'deb' | 'exe';
 
 interface CredentialCommandCreateArgs {
   authAlgorithm?: SNMPAuthAlgorithmType;
   autogenerate?: boolean;
-  certificate?: File;
+  certificate?: File | null;
   comment?: string;
   community?: string;
   credentialLogin?: string;
@@ -32,8 +33,8 @@ interface CredentialCommandCreateArgs {
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   privacyHostIdentifier?: string;
   privacyPassword?: string;
-  privateKey?: File;
-  publicKey?: File;
+  privateKey?: File | null;
+  publicKey?: File | null;
   realm?: string;
   vaultId?: string;
 }
@@ -42,6 +43,18 @@ interface CredentialCommandSaveArgs
   extends Omit<CredentialCommandCreateArgs, 'autogenerate'> {
   id: string;
 }
+
+const saveFile = (file: File | undefined | null): File | undefined | string => {
+  if (file === null) {
+    // remove file from backend
+    return '';
+  }
+  if (!isDefined(file) || file.size === 0) {
+    // keep existing file on backend
+    return undefined;
+  }
+  return file;
+};
 
 class CredentialCommand extends EntityCommand<
   Credential,
@@ -122,7 +135,7 @@ class CredentialCommand extends EntityCommand<
       cmd: 'save_credential',
       'kdcs:': kdcs,
       auth_algorithm: authAlgorithm,
-      certificate,
+      certificate: saveFile(certificate),
       comment,
       community,
       credential_login: credentialLogin,
@@ -135,8 +148,8 @@ class CredentialCommand extends EntityCommand<
       privacy_algorithm: privacyAlgorithm,
       privacy_host_identifier: privacyHostIdentifier,
       privacy_password: privacyPassword,
-      private_key: privateKey,
-      public_key: publicKey,
+      private_key: saveFile(privateKey),
+      public_key: saveFile(publicKey),
       realm,
       vault_id: vaultId,
     });

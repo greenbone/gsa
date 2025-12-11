@@ -279,6 +279,83 @@ describe('CredentialCommand tests', () => {
     expect(resp.data.id).toEqual('foo');
   });
 
+  test('should keep files when saving credential', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new CredentialCommand(fakeHttp);
+    const resp = await cmd.save({
+      id: '2',
+      name: 'keep-files-credential',
+      certificate: new File([], 'empty.pem'),
+      privateKey: new File([], 'empty.key'),
+      publicKey: new File([], 'empty.pub'),
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_credential',
+        'kdcs:': undefined,
+        auth_algorithm: undefined,
+        certificate: undefined,
+        comment: undefined,
+        community: undefined,
+        credential_id: '2',
+        credential_login: undefined,
+        credential_type: undefined,
+        host_identifier: undefined,
+        name: 'keep-files-credential',
+        passphrase: undefined,
+        password: undefined,
+        privacy_algorithm: undefined,
+        privacy_password: undefined,
+        private_key: undefined,
+        public_key: undefined,
+        realm: undefined,
+        vault_id: undefined,
+      },
+    });
+    expect(resp.data.id).toEqual('foo');
+  });
+
+  test('should remove files when saving credential', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new CredentialCommand(fakeHttp);
+    const resp = await cmd.save({
+      id: '2',
+      name: 'remove-files-credential',
+      certificate: null,
+      privateKey: null,
+      publicKey: null,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_credential',
+        'kdcs:': undefined,
+        auth_algorithm: undefined,
+        certificate: '',
+        comment: undefined,
+        community: undefined,
+        credential_id: '2',
+        credential_login: undefined,
+        credential_type: undefined,
+        name: 'remove-files-credential',
+        passphrase: undefined,
+        password: undefined,
+        privacy_algorithm: undefined,
+        privacy_password: undefined,
+        private_key: '',
+        public_key: '',
+        realm: undefined,
+        vault_id: undefined,
+      },
+    });
+    expect(resp.data.id).toEqual('foo');
+  });
+
   test('should save KRB5 credential store type', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
