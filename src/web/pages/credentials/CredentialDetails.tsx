@@ -9,14 +9,6 @@ import {
   KRB5_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
   SNMP_PRIVACY_ALGORITHM_NONE,
-  CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE,
-  CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE,
-  CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE,
-  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
-  CREDENTIAL_STORE_PGP_CREDENTIAL_TYPE,
-  CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE,
-  CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE,
-  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
   type CredentialType,
 } from 'gmp/models/credential';
 import Footnote from 'web/components/footnote/Footnote';
@@ -29,9 +21,10 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import useFeatures from 'web/hooks/useFeatures';
+import useCredentialStore from 'web/hooks/useCredentialStore';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialDetailsColGroup from 'web/pages/credentials/CredentialDetailsColGroup';
+import CredentialStoreFields from 'web/pages/credentials/CredentialStoreFields';
 
 interface CredentialDetailsProps {
   entity: Credential;
@@ -39,20 +32,7 @@ interface CredentialDetailsProps {
 
 const CredentialDetails = ({entity}: CredentialDetailsProps) => {
   const [_] = useTranslation();
-  const features = useFeatures();
-
-  const isCredentialStoreType = (type: CredentialType) => {
-    return (
-      type === CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-      type === CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-      type === CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE ||
-      type === CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE ||
-      type === CREDENTIAL_STORE_PGP_CREDENTIAL_TYPE ||
-      type === CREDENTIAL_STORE_PASSWORD_ONLY_CREDENTIAL_TYPE ||
-      type === CREDENTIAL_STORE_SMIME_CREDENTIAL_TYPE ||
-      type === CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE
-    );
-  };
+  // useCredentialStore hook encapsulates feature flag and type logic
 
   const {
     authAlgorithm,
@@ -68,9 +48,7 @@ const CredentialDetails = ({entity}: CredentialDetailsProps) => {
 
   const credentialType = entity.credentialType as CredentialType;
 
-  const isCredentialStore =
-    features.featureEnabled('ENABLE_CREDENTIAL_STORES') &&
-    isCredentialStoreType(credentialType);
+  const isCredentialStore = useCredentialStore(credentialType);
 
   return (
     <Layout grow flex="column">
@@ -94,16 +72,15 @@ const CredentialDetails = ({entity}: CredentialDetailsProps) => {
 
           {/* Credential Store specific fields */}
           {isCredentialStore && (
-            <>
-              <TableRow>
-                <TableData>{_('Vault ID')}</TableData>
-                <TableData>{credentialStore?.vaultId}</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Host Identifier')}</TableData>
-                <TableData>{credentialStore?.hostIdentifier}</TableData>
-              </TableRow>
-            </>
+            <CredentialStoreFields
+              authAlgorithm={authAlgorithm}
+              credentialStore={credentialStore}
+              credentialType={credentialType}
+              kdcs={kdcs}
+              privacyAlgorithm={privacyAlgorithm}
+              privacyHostIdentifier={entity.privacyHostIdentifier}
+              realm={realm}
+            />
           )}
 
           {/* Traditional credential fields */}

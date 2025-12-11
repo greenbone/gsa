@@ -32,7 +32,7 @@ import withEntityContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import TagDetails from 'web/pages/tags/Details';
 import ResourceList from 'web/pages/tags/ResourceList';
-import TagComponent from 'web/pages/tags/TagsComponent';
+import TagComponent from 'web/pages/tags/TagComponent';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,

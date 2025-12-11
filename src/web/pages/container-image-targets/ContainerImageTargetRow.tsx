@@ -17,6 +17,7 @@ import EntitiesActions, {
   type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import {type RowComponentProps} from 'web/entities/EntitiesTable';
+import EntityNameTableData from 'web/entities/EntityNameTableData';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
@@ -123,7 +124,12 @@ const ContainerImageTargetRow = ({
 
   return (
     <TableRow data-testid={dataTestId}>
-      <TableData>{entity.name}</TableData>
+      <EntityNameTableData
+        displayName={_('Target')}
+        entity={entity}
+        links={!links}
+        type="target"
+      />
       <TableData>{shorten(entity.imageReferences.join(', '), 500)}</TableData>
       <TableData>
         <Cred cred={entity.credential} links={links} title={_('Credential')} />

@@ -99,7 +99,7 @@ const PortListsPage = () => {
     fetch(filter);
   }, [filter, fetch]);
 
-  const {entities, entitiesCounts, isLoading} = getData(
+  const {entities, entitiesCounts, entitiesError, isLoading} = getData(
     filter,
     // @ts-expect-error
     portListsSelector,
@@ -248,6 +248,7 @@ const PortListsPage = () => {
             createFilterType="portlist"
             entities={entities}
             entitiesCounts={entitiesCounts}
+            entitiesError={entitiesError}
             filter={filter}
             filterEditDialog={PortListsFilterDialog}
             filtersFilter={PORTLISTS_FILTER_FILTER}

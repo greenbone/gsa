@@ -50,6 +50,7 @@ describe('Task Model parse tests', () => {
     expect(task.usageType).toEqual(USAGE_TYPE.scan);
     expect(task.acceptInvalidCerts).toBeUndefined();
     expect(task.registryAllowInsecure).toBeUndefined();
+    expect(task.csAllowFailedRetrieval).toBeUndefined();
   });
 
   test('should parse empty element', () => {
@@ -84,6 +85,7 @@ describe('Task Model parse tests', () => {
     expect(task.usageType).toEqual(USAGE_TYPE.scan);
     expect(task.acceptInvalidCerts).toBeUndefined();
     expect(task.registryAllowInsecure).toBeUndefined();
+    expect(task.csAllowFailedRetrieval).toBeUndefined();
   });
 
   test('should parse hosts ordering', () => {
@@ -542,6 +544,42 @@ describe('Task Model parse tests', () => {
         usage_type: 'invalid',
       });
     }).toThrow("Task.parseElement: usage_type must be 'scan'");
+  });
+
+  test('should parse csAllowFailedRetrieval', () => {
+    const task1 = Task.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'cs_allow_failed_retrieval',
+            value: 1,
+          },
+        ],
+      },
+    });
+    expect(task1.id).toEqual('t1');
+    expect(task1.csAllowFailedRetrieval).toEqual(true);
+
+    const task2 = Task.fromElement({
+      _id: 't2',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'cs_allow_failed_retrieval',
+            value: 0,
+          },
+        ],
+      },
+    });
+    expect(task2.id).toEqual('t2');
+    expect(task2.csAllowFailedRetrieval).toEqual(false);
+
+    const task3 = Task.fromElement({
+      _id: 't3',
+    });
+    expect(task3.id).toEqual('t3');
+    expect(task3.csAllowFailedRetrieval).toBeUndefined();
   });
 });
 

@@ -25,7 +25,7 @@ import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import TagComponent from 'web/pages/tags/TagsComponent';
+import TagComponent from 'web/pages/tags/TagComponent';
 import PropTypes from 'web/utils/PropTypes';
 import withTranslation from 'web/utils/withTranslation';
 const SectionElementDivider = styled(Divider)`

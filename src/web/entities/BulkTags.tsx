@@ -8,13 +8,12 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import Tag from 'gmp/models/tag';
-import {YES_VALUE} from 'gmp/parser';
-import {apiType, getEntityType, typeName} from 'gmp/utils/entity-type';
+import {apiType, type EntityType, getEntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import TagsDialog, {type TagsDialogData} from 'web/entities/TagsDialog';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import TagDialog from 'web/pages/tags/Dialog';
+import TagDialog, {type TagDialogState} from 'web/pages/tags/TagDialog';
 import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 
 interface BulkTagsProps<TEntity extends Model> {
@@ -69,19 +68,16 @@ const BulkTags = <TEntity extends Model>({
 
   const fetchTagsByType = useCallback(() => {
     const tagFilter = `resource_type=${apiType(entitiesType)}`;
-
-    // @ts-expect-error
     return gmp.tags
       .getAll({filter: tagFilter})
       .then(resp => {
         setTags(resp.data);
       })
       .catch(setError);
-    // @ts-expect-error
   }, [gmp.tags, entitiesType]);
 
   useEffect(() => {
-    fetchTagsByType();
+    void fetchTagsByType();
   }, [fetchTagsByType]);
 
   const multiTagEntitiesCount = getMultiTagEntitiesCount(
@@ -100,23 +96,25 @@ const BulkTags = <TEntity extends Model>({
   }, []);
 
   const handleCreateTag = useCallback(
-    data => {
-      return (
-        // @ts-expect-error
-        gmp.tag
-          .create(data)
-          // @ts-expect-error
-          .then(response => gmp.tag.get(response.data))
-          .then(response => {
-            const newTags = [...tags, response.data];
-            setTags(newTags);
-            setTag(response.data);
-          })
-          .then(closeTagDialog)
-          .catch(setError)
-      );
+    (data: TagDialogState) => {
+      return gmp.tag
+        .create({
+          active: data.active,
+          comment: data.comment,
+          name: data.name as string,
+          resourceIds: data.resourceIds,
+          resourceType: data.resourceType as EntityType,
+          value: data.value as string,
+        })
+        .then(response => gmp.tag.get(response.data))
+        .then(response => {
+          const newTags = [...tags, response.data];
+          setTags(newTags);
+          setTag(response.data);
+        })
+        .then(closeTagDialog)
+        .catch(setError);
     },
-    // @ts-expect-error
     [closeTagDialog, gmp.tag, tags],
   );
 
@@ -126,7 +124,6 @@ const BulkTags = <TEntity extends Model>({
 
   const handleTagChange = useCallback(
     (id: string) => {
-      // @ts-expect-error
       return gmp.tag
         .get({id})
         .then(resp => {
@@ -134,7 +131,6 @@ const BulkTags = <TEntity extends Model>({
         })
         .catch(setError);
     },
-    // @ts-expect-error
     [gmp.tag],
   );
 
@@ -159,17 +155,16 @@ const BulkTags = <TEntity extends Model>({
         loadedFilter = filter.all().toFilterString();
       }
 
-      // @ts-expect-error
       return gmp.tag
         .save({
-          active: YES_VALUE,
+          active: true,
           comment,
           filter: loadedFilter,
-          id,
-          name,
-          resource_ids: tagEntitiesIds,
-          resource_type: entitiesType,
-          resources_action: 'add',
+          id: id as string,
+          name: name as string,
+          resourceIds: tagEntitiesIds,
+          resourceType: entitiesType,
+          resourcesAction: 'add',
           value,
         })
         .then(onClose)
@@ -179,7 +174,6 @@ const BulkTags = <TEntity extends Model>({
       entities,
       entitiesType,
       filter,
-      // @ts-expect-error
       gmp.tag,
       onClose,
       selectedEntities,
@@ -187,7 +181,7 @@ const BulkTags = <TEntity extends Model>({
     ],
   );
 
-  const resourceTypes = [[entitiesType, typeName(entitiesType)]];
+  const resourceTypes = [entitiesType];
 
   let title: string;
   if (selectionType === SelectionType.SELECTION_USER) {
@@ -218,9 +212,9 @@ const BulkTags = <TEntity extends Model>({
       {tagDialogVisible && (
         <TagDialog
           fixed={true}
-          resource_type={entitiesType}
-          resource_types={resourceTypes}
-          resources={selectedEntities}
+          resourceIds={selectedEntities.map(entity => entity.id as string)}
+          resourceType={entitiesType}
+          resourceTypes={resourceTypes}
           onClose={handleCloseTagDialog}
           onSave={handleCreateTag}
         />

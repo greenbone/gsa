@@ -44,6 +44,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useFeatures from 'web/hooks/useFeatures';
 import useTranslation from 'web/hooks/useTranslation';
 import {TARGET_RESOURCE_PROPERTIES_NAMES} from 'web/pages/targets/TargetComponent';
 import TaskDetailsPageToolBarIcons from 'web/pages/tasks/icons/TaskDetailsPageToolBarIcons';
@@ -87,6 +88,10 @@ interface TaskDetailsPageProps {
 
 const Details = ({entity, links}: DetailsProps) => {
   const [_] = useTranslation();
+  const features = useFeatures();
+
+  const isCredentialStore = features.featureEnabled('ENABLE_CREDENTIAL_STORES');
+
   return (
     <Layout flex="column">
       <InfoTable>
@@ -116,6 +121,17 @@ const Details = ({entity, links}: DetailsProps) => {
               <TaskStatus task={entity} />
             </TableData>
           </TableRow>
+
+          {isCredentialStore && (
+            <TableRow>
+              <TableData>
+                {_('Allow scan when credential store retrieval fails')}
+              </TableData>
+              <TableData>
+                {renderYesNo(entity.csAllowFailedRetrieval)}
+              </TableData>
+            </TableRow>
+          )}
         </TableBody>
       </InfoTable>
 

@@ -209,3 +209,34 @@ export const apiType = (type?: EntityType | ApiType): ApiType | undefined => {
   }
   return apiType as ApiType;
 };
+
+const RESOURCE_TYPES = {
+  audit: 'audit',
+  auditreport: 'audit_report',
+  certbund: 'cert_bund_adv',
+  cpe: 'cpe',
+  cve: 'cve',
+  dfncert: 'dfn_cert_adv',
+  operatingsystem: 'os',
+  host: 'host',
+  nvt: 'nvt',
+  policy: 'policy',
+  scanconfig: 'config',
+};
+
+/**
+ * Determines the resource type string for a given entity type.
+ *
+ * @param type - The entity type to resolve. If undefined or an empty string, the function returns `undefined`.
+ * @returns The corresponding resource type string if it exists
+ */
+export const resourceType = (type?: EntityType): string | undefined => {
+  if (!isDefined(type) || type.length === 0) {
+    return undefined;
+  }
+  const rType = RESOURCE_TYPES[type];
+  if (isDefined(rType)) {
+    return rType;
+  }
+  return apiType(type);
+};

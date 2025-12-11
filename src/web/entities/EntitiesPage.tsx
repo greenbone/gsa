@@ -7,7 +7,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Gmp from 'gmp/gmp';
-import type Rejection from 'gmp/http/rejection';
 import type Filter from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import {isDefined, hasValue} from 'gmp/utils/identity';
@@ -44,7 +43,7 @@ interface PowerFilterComponentProps {
   isLoading?: boolean;
   isLoadingFilters?: boolean;
   onEditClick?: () => void;
-  onError?: (error: Error | Rejection) => void;
+  onError?: (error: Error) => void;
   onRemoveClick?: () => void;
   onResetClick?: () => void;
   onUpdate?: (filter: Filter) => void;
@@ -68,7 +67,7 @@ export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
   dashboardControls?: () => React.ReactNode;
   entities?: TModel[];
   entitiesCounts?: CollectionCounts;
-  entitiesError?: Error | Rejection;
+  entitiesError?: Error;
   filter?: Filter;
   filterEditDialog: React.ComponentType<FilterDialogComponentProps>;
   filtersFilter: Filter;
@@ -81,7 +80,7 @@ export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
     | React.ReactElement<TableComponentProps<TModel> & TProps>;
   title: string;
   toolBarIcons?: React.ComponentType<TProps> | React.ReactElement<TProps>;
-  onError: (error: Error | Rejection) => void;
+  onError: (error: Error) => void;
   onFilterChanged: (newFilter: Filter) => void;
   onFilterCreated: (newFilter: Filter) => void;
   onFilterRemoved: () => void;

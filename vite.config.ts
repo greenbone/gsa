@@ -25,7 +25,10 @@ export default defineConfig({
       },
       include: ['**/*.svg?react', '**/*.svg'],
     }),
-    eslintPlugin(),
+    eslintPlugin({
+      cache: true,
+      cacheLocation: '.eslintcache',
+    }),
   ],
   resolve: {
     alias: [

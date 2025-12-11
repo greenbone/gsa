@@ -64,6 +64,7 @@ describe('TaskCommand tests', () => {
       scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
       scanner_type: OPENVAS_SCANNER_TYPE,
       target_id: 't1',
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -89,6 +90,7 @@ describe('TaskCommand tests', () => {
         tag_id: undefined,
         target_id: 't1',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     const {data} = resp;
@@ -120,6 +122,7 @@ describe('TaskCommand tests', () => {
       schedule_periods: 1,
       tag_id: 't1',
       target_id: 't1',
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -145,6 +148,7 @@ describe('TaskCommand tests', () => {
         tag_id: 't1',
         target_id: 't1',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     const {data} = resp;
@@ -222,6 +226,7 @@ describe('TaskCommand tests', () => {
           scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
           scanner_type: OPENVAS_SCANNER_TYPE,
           target_id: 't1',
+          csAllowFailedRetrieval: true,
         }),
       ).rejects.toThrow(expectedMessage);
     },
@@ -238,13 +243,36 @@ describe('TaskCommand tests', () => {
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
-        cmd: 'create_container_task',
+        cmd: 'create_import_task',
         comment: 'comment',
         name: 'foo',
         usage_type: 'scan',
       },
     });
     expect(response.data).toEqual({id: 'foo'});
+  });
+
+  test('should update the import task', async () => {
+    const mockResponse = createActionResultResponse();
+    const fakeHttp = createHttp(mockResponse);
+    const cmd = new TaskCommand(fakeHttp);
+    await cmd.saveImportTask({
+      name: 'foo',
+      comment: 'comment',
+      id: 'test',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_import_task',
+        comment: 'comment',
+        name: 'foo',
+        auto_delete: 'no',
+        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+        task_id: 'test',
+        usage_type: 'scan',
+        in_assets: 1,
+      },
+    });
   });
 
   test('should save task', async () => {
@@ -263,6 +291,7 @@ describe('TaskCommand tests', () => {
       max_hosts: 10,
       min_qod: 70,
       name: 'foo',
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -287,6 +316,7 @@ describe('TaskCommand tests', () => {
         task_id: 'task1',
         target_id: '0',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     expect(response).toBeUndefined();
@@ -360,6 +390,7 @@ describe('TaskCommand tests', () => {
           max_hosts: 10,
           min_qod: 70,
           name: 'foo',
+          csAllowFailedRetrieval: true,
         }),
       ).rejects.toThrow(expectedMessage);
     },
@@ -389,6 +420,7 @@ describe('TaskCommand tests', () => {
       schedule_id: 's1',
       schedule_periods: 1,
       target_id: 't1',
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -413,6 +445,7 @@ describe('TaskCommand tests', () => {
         task_id: 'task1',
         target_id: 't1',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     expect(response).toBeUndefined();

@@ -10,6 +10,7 @@ import {
   type TransformSuccess,
 } from 'gmp/http/transform/transform';
 import {_} from 'gmp/locale/lang';
+import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 
 interface Envelope {
@@ -34,6 +35,8 @@ type SuccessTransformFunc<
 
 type RejectionTransformFunc = (rejection: ResponseRejection) => RejectionData;
 
+const log = logger.getLogger('gmp.http.transform.xml');
+
 export const success =
   <
     TDataIn,
@@ -50,6 +53,7 @@ export const success =
     try {
       return transform(response);
     } catch (error) {
+      log.error('An error occurred while converting gmp response', error);
       throw new Rejection(
         _(
           'An error occurred while converting gmp response to js for ' +
