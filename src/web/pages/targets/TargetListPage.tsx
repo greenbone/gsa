@@ -28,6 +28,7 @@ const TargetsPage = ({
   filter,
   entities,
   entitiesCounts,
+  entitiesError,
   isLoading,
   selectionType,
   sortDir,
@@ -67,6 +68,7 @@ const TargetsPage = ({
             createFilterType="target"
             entities={entities}
             entitiesCounts={entitiesCounts}
+            entitiesError={entitiesError}
             filter={filter}
             filterEditDialog={TargetFilterDialog}
             filtersFilter={TARGETS_FILTER_FILTER}
