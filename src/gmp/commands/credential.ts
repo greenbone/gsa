@@ -10,8 +10,6 @@ import Credential, {
   type CredentialElement,
   type SNMPAuthAlgorithmType,
   type SNMPPrivacyAlgorithmType,
-  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
-  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
@@ -75,50 +73,6 @@ class CredentialCommand extends EntityCommand<
     hostIdentifier,
     privacyHostIdentifier,
   }: CredentialCommandCreateArgs) {
-    if (credentialType === CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE) {
-      return this.action({
-        cmd: 'create_credential',
-        autogenerate: parseYesNo(autogenerate),
-        certificate,
-        comment,
-        community,
-        credential_login: credentialLogin,
-        credential_type: credentialType,
-        host_identifier: hostIdentifier,
-        lsc_password: password,
-        name,
-        passphrase,
-        private_key: privateKey,
-        public_key: publicKey,
-        vault_id: vaultId,
-        realm,
-        'kdcs:': kdcs,
-      });
-    }
-
-    if (credentialType === CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE) {
-      return this.action({
-        cmd: 'create_credential',
-        auth_algorithm: authAlgorithm,
-        autogenerate: parseYesNo(autogenerate),
-        certificate,
-        comment,
-        community,
-        credential_login: credentialLogin,
-        credential_type: credentialType,
-        host_identifier: hostIdentifier,
-        lsc_password: password,
-        name,
-        passphrase,
-        privacy_algorithm: privacyAlgorithm,
-        privacy_password: privacyPassword,
-        private_key: privateKey,
-        public_key: publicKey,
-        vault_id: vaultId,
-        privacy_host_identifier: privacyHostIdentifier,
-      });
-    }
-
     return this.action({
       cmd: 'create_credential',
       auth_algorithm: authAlgorithm,
@@ -164,71 +118,27 @@ class CredentialCommand extends EntityCommand<
     hostIdentifier,
     privacyHostIdentifier,
   }: CredentialCommandSaveArgs) {
-    if (credentialType === CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE) {
-      return this.action({
-        cmd: 'save_credential',
-        certificate,
-        comment,
-        community,
-        credential_login: credentialLogin,
-        credential_type: credentialType,
-        id,
-        password,
-        name,
-        passphrase,
-        private_key: privateKey,
-        public_key: publicKey,
-        vault_id: vaultId,
-        host_identifier: hostIdentifier,
-        realm,
-        'kdcs:': kdcs,
-      });
-    }
-
-    if (credentialType === CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE) {
-      return this.action({
-        cmd: 'save_credential',
-        auth_algorithm: authAlgorithm,
-        certificate,
-        comment,
-        community,
-        credential_login: credentialLogin,
-        credential_type: credentialType,
-        id,
-        password,
-        name,
-        passphrase,
-        privacy_algorithm: privacyAlgorithm,
-        privacy_password: privacyPassword,
-        private_key: privateKey,
-        public_key: publicKey,
-        vault_id: vaultId,
-        host_identifier: hostIdentifier,
-        privacy_host_identifier: privacyHostIdentifier,
-      });
-    }
-
     return this.action({
       cmd: 'save_credential',
+      'kdcs:': kdcs,
       auth_algorithm: authAlgorithm,
       certificate,
       comment,
       community,
       credential_login: credentialLogin,
       credential_type: credentialType,
+      host_identifier: hostIdentifier,
       id,
-      password,
       name,
       passphrase,
+      password,
       privacy_algorithm: privacyAlgorithm,
+      privacy_host_identifier: privacyHostIdentifier,
       privacy_password: privacyPassword,
       private_key: privateKey,
       public_key: publicKey,
-      vault_id: vaultId,
-      host_identifier: hostIdentifier,
       realm,
-      'kdcs:': kdcs,
-      privacy_host_identifier: privacyHostIdentifier,
+      vault_id: vaultId,
     });
   }
 
