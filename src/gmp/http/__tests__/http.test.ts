@@ -24,6 +24,9 @@ const createXHR = (status: number, response = '') => {
     response,
     open: testing.fn(),
     send: testing.fn(),
+    onload: testing.fn(),
+    onerror: testing.fn(),
+    ontimeout: testing.fn(),
   } as unknown as XMLHttpRequest;
 };
 
@@ -104,7 +107,7 @@ describe('Http', () => {
   test('should allow to create get requests', async () => {
     const xhr = createXHR(200, 'some data');
     // @ts-expect-error
-    Http.XHR = testing.fn(() => {
+    Http.XHR = testing.fn().mockImplementation(function () {
       return xhr;
     });
 
@@ -130,7 +133,7 @@ describe('Http', () => {
     formData.append('cmd', 'get_tasks');
     const xhr = createXHR(200, 'some data');
     // @ts-expect-error
-    Http.XHR = testing.fn(() => {
+    Http.XHR = testing.fn().mockImplementation(function () {
       return xhr;
     });
 
@@ -154,7 +157,7 @@ describe('Http', () => {
   test('should allow to handle a request with timeout', async () => {
     const xhr = createXHR(200, 'some data');
     // @ts-expect-error
-    Http.XHR = testing.fn(() => {
+    Http.XHR = testing.fn().mockImplementation(function () {
       return xhr;
     });
 
@@ -177,7 +180,7 @@ describe('Http', () => {
   test('should allow to handle an error during a request', async () => {
     const xhr = createXHR(200, 'some data');
     // @ts-expect-error
-    Http.XHR = testing.fn(() => {
+    Http.XHR = testing.fn().mockImplementation(function () {
       return xhr;
     });
 
