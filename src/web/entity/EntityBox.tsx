@@ -3,18 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
+import {type Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
-import Layout from 'web/components/layout/Layout';
+import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
+
+interface EntityBoxProps extends LayoutProps {
+  end?: Date;
+  modified?: Date;
+  text?: string;
+  title: string;
+  toolbox?: React.ReactElement;
+}
 
 const Pre = styled.pre`
   white-space: pre-wrap;
@@ -39,7 +46,7 @@ const EntityBox = ({
   title,
   toolbox,
   ...props
-}) => {
+}: EntityBoxProps) => {
   const [_] = useTranslation();
   return (
     <BoxLayout {...props} align="space-between" flex="column">
@@ -69,14 +76,6 @@ const EntityBox = ({
       </InfoTable>
     </BoxLayout>
   );
-};
-
-EntityBox.propTypes = {
-  end: PropTypes.date,
-  modified: PropTypes.date,
-  text: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  toolbox: PropTypes.element,
 };
 
 export default EntityBox;

@@ -6,13 +6,13 @@
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
 import Date from 'gmp/models/date';
-import EntityBox from 'web/entity/Box';
+import EntityBox from 'web/entity/EntityBox';
 import {setTimezone} from 'web/store/usersettings/actions';
 
 const date1 = Date('2019-01-01T12:00:00Z');
 const date2 = Date('2019-02-02T12:00:00Z');
 
-describe('EntityBox component tests', () => {
+describe('EntityBox tests', () => {
   test('should render', () => {
     const {render, store} = rendererWith({
       store: true,

@@ -7,21 +7,21 @@ import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Override from 'gmp/models/override';
-import OverrideBox from 'web/entity/Override';
+import OverrideBox from 'web/entity/OverrideBox';
 import {setTimezone} from 'web/store/usersettings/actions';
 
 const caps = new Capabilities(['everything']);
 
 const override = Override.fromElement({
   _id: '123',
-  severity: '5.0',
-  new_severity: '10',
+  severity: 5.0,
+  new_severity: 10,
   text: 'foo',
   end_time: '2019-01-01T12:00:00Z',
   modification_time: '2019-02-02T12:00:00Z',
 });
 
-describe('OverrideBox component tests', () => {
+describe('OverrideBox tests', () => {
   test('should render with DetailsLink', () => {
     const {render, store} = rendererWith({
       capabilities: caps,

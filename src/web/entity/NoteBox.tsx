@@ -3,24 +3,35 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Note from 'gmp/models/note';
 import {DetailsIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
-import EntityBox from 'web/entity/Box';
+import EntityBox from 'web/entity/EntityBox';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-const NoteBox = ({note, detailsLink = true}) => {
+
+interface NoteBoxProps {
+  note: Note;
+  detailsLink?: boolean;
+  'data-testid'?: string;
+}
+
+const NoteBox = ({
+  note,
+  detailsLink = true,
+  'data-testid': dataTestId = 'note-box',
+}: NoteBoxProps) => {
   const [_] = useTranslation();
   const toolbox = detailsLink ? (
     <IconDivider>
-      <DetailsLink id={note.id} title={_('Note Details')} type="note">
+      <DetailsLink id={note.id as string} title={_('Note Details')} type="note">
         <DetailsIcon />
       </DetailsLink>
     </IconDivider>
   ) : undefined;
   return (
     <EntityBox
+      data-testid={dataTestId}
       end={note.endTime}
       modified={note.modificationTime}
       text={note.text}
@@ -28,11 +39,6 @@ const NoteBox = ({note, detailsLink = true}) => {
       toolbox={toolbox}
     />
   );
-};
-
-NoteBox.propTypes = {
-  detailsLink: PropTypes.bool,
-  note: PropTypes.model.isRequired,
 };
 
 export default NoteBox;
