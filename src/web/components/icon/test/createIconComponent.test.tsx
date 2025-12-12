@@ -30,9 +30,10 @@ describe('createIconComponents', () => {
       const iconElement = screen.getByTestId('dummy-lucide-icon');
       expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
       expect(iconElement).toHaveAttribute('data-testid', 'dummy-lucide-icon');
-      const svgElement = within(iconElement).getByText('', {selector: 'svg'});
+
+      const svgElement = within(iconElement).getByTestId('mock-icon');
       expect(svgElement).toBeVisible();
-      expect(iconElement).toHaveStyle('color: red(255, 0, 0)');
+      expect(svgElement).toHaveAttribute('color', 'red');
     });
 
     test('should create action icon components with default props', () => {
