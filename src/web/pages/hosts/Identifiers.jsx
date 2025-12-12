@@ -144,7 +144,7 @@ const Identifiers = props => {
 
   displayActions = displayActions && isDefined(onDelete);
   return (
-    <DetailsBlock title={title}>
+    <DetailsBlock data-testid="host-identifiers" title={title}>
       <Table footer={footer}>
         <colgroup>
           <Col width="15%" />
