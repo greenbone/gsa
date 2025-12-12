@@ -62,6 +62,9 @@ interface CredentialComponentProps {
   onSaved?: (entity: EntitySaveResponse) => void;
 }
 
+const createFakeFile = (name: string, id: string, extension: string) =>
+  new File([], `${name}-${id}.${extension}`);
+
 const CredentialComponent = ({
   children,
   onCloneError,
@@ -83,6 +86,7 @@ const CredentialComponent = ({
   const [dialogVisible, setDialogVisible] = useState(false);
 
   const [comment, setComment] = useState<string | undefined>();
+  const [certificate, setCertificate] = useState<File | undefined>();
   const [credential, setCredential] = useState<Credential | undefined>();
   const [credentialType, setCredentialType] = useState<
     CredentialType | undefined
@@ -98,18 +102,32 @@ const CredentialComponent = ({
   const [privacyHostIdentifier, setPrivacyHostIdentifier] = useState<
     string | undefined
   >();
+  const [privateKey, setPrivateKey] = useState<File | undefined>();
+  const [publicKey, setPublicKey] = useState<File | undefined>();
   const [vaultId, setVaultId] = useState<string | undefined>();
   const [hostIdentifier, setHostIdentifier] = useState<string | undefined>();
   const [types, setTypes] =
     useState<readonly CredentialType[]>(ALL_CREDENTIAL_TYPES);
   const [title, setTitle] = useState<string>('');
 
-  const openCredentialsDialog = (credential?: Credential) => {
-    if (isDefined(credential)) {
+  const openCredentialsDialog = async (cred?: Credential) => {
+    if (isDefined(cred)) {
+      const response = await gmp.credential.get({id: cred.id as string});
+      const credential = response.data;
       const dialogTitle = _('Edit Credential {{name}}', {
         name: shorten(credential.name),
       });
-
+      setCertificate(
+        isDefined(credential.certificateInfo)
+          ? createFakeFile('certificate', credential.id as string, 'pem')
+          : undefined,
+      );
+      setPrivateKey(
+        isDefined(credential.privateKeyInfo)
+          ? createFakeFile('private-key', credential.id as string, 'key')
+          : undefined,
+      );
+      setPublicKey(undefined);
       setComment(credential.comment);
       setCredential(credential);
       setCredentialType(credential.credentialType);
@@ -124,18 +142,21 @@ const CredentialComponent = ({
       setTitle(dialogTitle);
     } else {
       // reset all values in state to not show values from last edit
+      setAuthAlgorithm(undefined);
+      setCertificate(undefined);
       setComment(undefined);
       setCredential(undefined);
-      setCredentialType(undefined);
-      setAuthAlgorithm(undefined);
-      setName(undefined);
       setCredentialLogin(undefined);
+      setCredentialType(undefined);
+      setHostIdentifier(undefined);
+      setName(undefined);
       setPrivacyAlgorithm(undefined);
       setPrivacyHostIdentifier(undefined);
-      setVaultId(undefined);
-      setHostIdentifier(undefined);
-      setTypes(ALL_CREDENTIAL_TYPES);
+      setPrivateKey(undefined);
+      setPublicKey(undefined);
       setTitle(_('New Credential'));
+      setTypes(ALL_CREDENTIAL_TYPES);
+      setVaultId(undefined);
     }
 
     setDialogVisible(true);
@@ -167,10 +188,7 @@ const CredentialComponent = ({
 
   const handleEntitySave = useEntitySave(
     (data: CredentialDialogState) =>
-      gmp.credential.save({
-        ...data,
-        id: data.id as string,
-      }),
+      gmp.credential.save({id: data.id as string, ...data}),
     {onSaveError, onSaved},
   );
 
@@ -217,6 +235,7 @@ const CredentialComponent = ({
       {dialogVisible && (
         <CredentialDialog
           authAlgorithm={authAlgorithm}
+          certificate={certificate}
           comment={comment}
           credential={credential}
           credentialLogin={credentialLogin}
@@ -225,6 +244,8 @@ const CredentialComponent = ({
           name={name}
           privacyAlgorithm={privacyAlgorithm}
           privacyHostIdentifier={privacyHostIdentifier}
+          privateKey={privateKey}
+          publicKey={publicKey}
           title={title}
           types={types}
           vaultId={vaultId}
