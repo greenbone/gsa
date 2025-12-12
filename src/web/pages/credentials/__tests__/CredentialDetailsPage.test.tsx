@@ -153,6 +153,10 @@ describe('CredentialDetailsPage tests', () => {
         sha256_fingerprint: 'sha256_fingerprint_value',
         time_status: CERTIFICATE_STATUS_VALID,
       },
+      private_key_info: {
+        sha256_hash: 'sha256_hash_value',
+        type: 'ssh-rsa',
+      },
     });
     const gmp = createGmp();
     const {render, store} = rendererWith({
@@ -209,6 +213,16 @@ describe('CredentialDetailsPage tests', () => {
       screen.getByRole('row', {
         name: /^issued by cn=example ca,O=example corp,c=us/i,
       }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^private key/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^sha-256 hash sha256_hash_value/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^key type rsa/i}),
     ).toBeInTheDocument();
   });
 
