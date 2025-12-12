@@ -64,7 +64,7 @@ interface CredentialDetailsPageProps {
 
 const Details = ({entity}: DetailsProps) => {
   const [_] = useTranslation();
-  const {certificateInfo: cert} = entity;
+  const {certificateInfo: cert, privateKeyInfo} = entity;
   return (
     <Layout flex="column">
       <CredentialDetails entity={entity} />
@@ -110,6 +110,23 @@ const Details = ({entity}: DetailsProps) => {
               <TableRow>
                 <TableData>{_('Issued By')}</TableData>
                 <TableData>{cert.issuer}</TableData>
+              </TableRow>
+            </TableBody>
+          </InfoTable>
+        </DetailsBlock>
+      )}
+      {isDefined(privateKeyInfo) && (
+        <DetailsBlock title={_('Private Key')}>
+          <InfoTable size="full">
+            <CredentialDetailsColGroup />
+            <TableBody>
+              <TableRow>
+                <TableData>{_('SHA-256 Hash')}</TableData>
+                <TableData>{privateKeyInfo.sha256Hash}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Key Type')}</TableData>
+                <TableData>{privateKeyInfo.keyType}</TableData>
               </TableRow>
             </TableBody>
           </InfoTable>
