@@ -59,6 +59,7 @@ export interface CredentialElement extends ModelElement {
   credential_store?: {
     host_identifier?: string;
     vault_id?: string;
+    privacy_host_identifier?: string;
   };
   kdcs?: {
     kdc: string | string[];
@@ -365,6 +366,11 @@ class Credential extends Model {
       };
     }
 
+    if (isDefined(element.credential_store?.privacy_host_identifier)) {
+      ret.privacyHostIdentifier =
+        element.credential_store.privacy_host_identifier;
+    }
+
     ret.credentialType = element.type as CredentialType;
 
     if (isDefined(element.kdcs?.kdc)) {
@@ -387,10 +393,6 @@ class Credential extends Model {
     ret.scanners = map(element.scanners?.scanner, scanner =>
       Model.fromElement(scanner, 'scanner'),
     );
-
-    if (isDefined(element.credential_store?.host_identifier)) {
-      ret.privacyHostIdentifier = element.credential_store.host_identifier;
-    }
 
     if (isDefined(element.private_key_info)) {
       ret.privateKeyInfo = {

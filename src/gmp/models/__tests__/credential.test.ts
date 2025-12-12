@@ -270,6 +270,33 @@ describe('Credential model function tests', () => {
     });
     expect(credential.realm).toEqual('test-realm');
   });
+
+  test('should parse credential store with privacy host identifier', () => {
+    const credential = Credential.fromElement({
+      credential_store: {
+        vault_id: 'test-vault',
+        host_identifier: 'host-123',
+        privacy_host_identifier: 'privacy-host-456',
+      },
+    });
+
+    expect(credential.credentialStore?.vaultId).toEqual('test-vault');
+    expect(credential.credentialStore?.hostIdentifier).toEqual('host-123');
+    expect(credential.privacyHostIdentifier).toEqual('privacy-host-456');
+  });
+
+  test('should parse credential store without privacy host identifier', () => {
+    const credential = Credential.fromElement({
+      credential_store: {
+        vault_id: 'test-vault',
+        host_identifier: 'host-123',
+      },
+    });
+
+    expect(credential.credentialStore?.vaultId).toEqual('test-vault');
+    expect(credential.credentialStore?.hostIdentifier).toEqual('host-123');
+    expect(credential.privacyHostIdentifier).toBeUndefined();
+  });
 });
 
 describe('getCredentialTypeName tests', () => {
