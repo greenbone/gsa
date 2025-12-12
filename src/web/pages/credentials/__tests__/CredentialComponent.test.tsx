@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {screen, rendererWith, wait, fireEvent} from 'web/testing';
 import Response from 'gmp/http/response';
-import Credential from 'gmp/models/credential';
+import Credential, {CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import CredentialComponent from 'web/pages/credentials/CredentialComponent';
@@ -106,6 +106,56 @@ describe('CredentialComponent tests', () => {
     expect(screen.queryByText('New Credential')).not.toBeInTheDocument();
     expect(onCreateError).not.toHaveBeenCalled();
     expect(onCreated).toHaveBeenCalledWith({id: '123'});
+  });
+
+  test('should allow to edit a credential', async () => {
+    const onCreated = testing.fn();
+    const onCreateError = testing.fn();
+    const credential = new Credential({
+      id: '123',
+      name: 'foo',
+      comment: 'A comment',
+      credentialType: CERTIFICATE_CREDENTIAL_TYPE,
+      certificateInfo: {
+        subject: 'CN=Test Certificate',
+        serial: '1234567890',
+        md5Fingerprint: 'md5-fingerprint',
+        sha256Fingerprint: 'sha256-fingerprint',
+        timeStatus: 'valid',
+      },
+      privateKeyInfo: {
+        sha256Hash: 'sha256-hash-value',
+        keyType: 'rsa',
+      },
+    });
+    const gmp = createGmp({
+      getCredentialResponse: new Response(credential),
+    });
+    const {render} = rendererWith({gmp});
+    render(
+      <CredentialComponent onCreateError={onCreateError} onCreated={onCreated}>
+        {({edit}) => (
+          <Button data-testid="open" onClick={() => edit(credential)} />
+        )}
+      </CredentialComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await wait();
+    expect(screen.getDialogTitle()).toHaveTextContent('Edit Credential foo');
+    expect(screen.getByRole('textbox', {name: 'Name'})).toHaveValue('foo');
+    expect(screen.getByRole('textbox', {name: 'Comment'})).toHaveValue(
+      'A comment',
+    );
+    expect(screen.getByRole('textbox', {name: 'Type'})).toHaveValue(
+      'Client Certificate',
+    );
+    expect(
+      screen.getByRole('button', {name: 'Client Certificate'}),
+    ).toHaveTextContent('certificate-123.pem');
+    expect(
+      screen.getByRole('button', {name: 'Client Private Key'}),
+    ).toHaveTextContent('private-key-123.key');
   });
 
   test('should call onCreateError if creating a new credential fails', async () => {
