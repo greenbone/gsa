@@ -46,14 +46,16 @@ const DateTime = ({
     }
 
     return (
-      <div>
+      <div title={`${formattedDate.datetime} ${formattedDate.timezone}`}>
         <p>{formattedDate.datetime}</p>
         <p>{formattedDate.timezone}</p>
       </div>
     );
   }
 
-  return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
+  const formattedDate = formatter(date, timezone);
+
+  return <span title={formattedDate}>{formattedDate}</span>;
 };
 
 export default DateTime;
