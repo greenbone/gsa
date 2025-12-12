@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Note from 'gmp/models/note';
-import NoteBox from 'web/entity/Note';
+import NoteBox from 'web/entity/NoteBox';
 import {setTimezone} from 'web/store/usersettings/actions';
 
 const caps = new Capabilities(['everything']);
@@ -17,7 +17,6 @@ const note = Note.fromElement({
   nvt: {
     _oid: '1.2.3',
     tags: 'bv=A:P|st=vf',
-    type: 'nvt',
     refs: {ref: [{_type: 'cve', _id: 'CVE-2019-5678'}]},
   },
   text: 'foo',
@@ -25,7 +24,7 @@ const note = Note.fromElement({
   modification_time: '2019-02-02T12:00:00Z',
 });
 
-describe('NoteBox component tests', () => {
+describe('NoteBox tests', () => {
   test('should render with DetailsLink', () => {
     const {render, store} = rendererWith({
       capabilities: caps,
