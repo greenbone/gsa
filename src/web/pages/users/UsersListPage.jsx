@@ -25,15 +25,15 @@ import UsersTable from 'web/pages/users/Table';
 import UserComponent from 'web/pages/users/UserComponent';
 import UserFilterDialog from 'web/pages/users/UserFilterDialog';
 import {
-  loadEntities,
-  loadAllEntities,
   selector as entitiesSelector,
+  loadAllEntities,
+  loadEntities,
 } from 'web/store/entities/users';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 
-const ToolBarIcons = ({onUserCreateClick}) => {
+export const UsersListPageToolBarIcons = ({onUserCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
   return (
@@ -50,22 +50,33 @@ const ToolBarIcons = ({onUserCreateClick}) => {
   );
 };
 
-ToolBarIcons.propTypes = {
+UsersListPageToolBarIcons.propTypes = {
   onUserCreateClick: PropTypes.func.isRequired,
 };
 
-const UsersPage = ({
+const UsersListPage = ({
   allUsers = [],
   entities,
   entitiesCounts,
+  entitiesError,
   entitiesSelected,
   filter,
+  isLoading: isLoadingEntities,
   loadAll,
   selectionType,
-  onFilterChanged,
   onChanged,
+  onDeleteBulk,
+  onDownloadBulk,
   onDownloaded,
+  onEntityDeselected,
+  onEntitySelected,
   onError,
+  onFilterChanged,
+  onFilterCreated,
+  onFilterRemoved,
+  onFilterReset,
+  onSelectionTypeChange,
+  onTagsBulk,
 }) => {
   const [_] = useTranslation();
   const gmp = useGmp();
@@ -111,7 +122,11 @@ const UsersPage = ({
 
   const openConfirmDeleteDialog = async user => {
     setDeleteDialogError(undefined);
-    loadAll();
+    try {
+      loadAll();
+    } catch (error) {
+      onError(error);
+    }
 
     if (isDefined(user)) {
       setConfirmDeleteDialogVisible(true);
@@ -186,6 +201,7 @@ const UsersPage = ({
         <>
           <PageTitle title={_('Users')} />
           <EntitiesPage
+            createFilterType="user"
             dialogConfig={{
               useCustomDialog: true,
               dialogProcessing: isLoading,
@@ -210,24 +226,34 @@ const UsersPage = ({
             }}
             entities={entities}
             entitiesCounts={entitiesCounts}
+            entitiesError={entitiesError}
             entitiesSelected={entitiesSelected}
             filter={filter}
             filterEditDialog={UserFilterDialog}
             filtersFilter={USERS_FILTER_FILTER}
+            isLoading={isLoadingEntities}
             sectionIcon={<UserIcon size="large" />}
             selectionType={selectionType}
             table={UsersTable}
             title={_('Users')}
-            toolBarIcons={ToolBarIcons}
+            toolBarIcons={UsersListPageToolBarIcons}
             onChanged={onChanged}
             onDeleteBulk={openConfirmDeleteDialog}
+            onDownloadBulk={onDownloadBulk}
             onDownloaded={onDownloaded}
+            onEntityDeselected={onEntityDeselected}
+            onEntitySelected={onEntitySelected}
             onError={onError}
             onFilterChanged={onFilterChanged}
+            onFilterCreated={onFilterCreated}
+            onFilterRemoved={onFilterRemoved}
+            onFilterReset={onFilterReset}
             onFirstClick={getFirst}
             onLastClick={getLast}
             onNextClick={getNext}
             onPreviousClick={getPrevious}
+            onSelectionTypeChange={onSelectionTypeChange}
+            onTagsBulk={onTagsBulk}
             onUserCloneClick={clone}
             onUserCreateClick={create}
             onUserDeleteClick={openConfirmDeleteDialog}
@@ -241,18 +267,29 @@ const UsersPage = ({
   );
 };
 
-UsersPage.propTypes = {
+UsersListPage.propTypes = {
   allUsers: PropTypes.array,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.object,
+  entitiesError: PropTypes.object,
   entitiesSelected: PropTypes.set,
   filter: PropTypes.filter,
+  isLoading: PropTypes.bool,
   loadAll: PropTypes.func.isRequired,
   selectionType: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
+  onDeleteBulk: PropTypes.func,
+  onDownloadBulk: PropTypes.func,
   onDownloaded: PropTypes.func.isRequired,
+  onEntityDeselected: PropTypes.func,
+  onEntitySelected: PropTypes.func,
   onError: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onFilterCreated: PropTypes.func,
+  onFilterRemoved: PropTypes.func,
+  onFilterReset: PropTypes.func,
+  onSelectionTypeChange: PropTypes.func,
+  onTagsBulk: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -272,4 +309,4 @@ export default compose(
     loadEntities,
   }),
   connect(mapStateToProps, mapDispatchToProps),
-)(UsersPage);
+)(UsersListPage);
