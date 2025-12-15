@@ -18,6 +18,7 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
+import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
 import ConfirmDeleteDialog from 'web/pages/users/ConfirmDeleteDialog';
 import UsersTable from 'web/pages/users/Table';
@@ -56,6 +57,7 @@ ToolBarIcons.propTypes = {
 const UsersPage = ({
   allUsers = [],
   entities,
+  entitiesCounts,
   entitiesSelected,
   filter,
   loadAll,
@@ -75,6 +77,12 @@ const UsersPage = ({
   const [deleteUsers, setDeleteUsers] = useState([]);
   const [title, setTitle] = useState();
   const [deleteDialogError, setDeleteDialogError] = useState();
+
+  const [getFirst, getLast, getNext, getPrevious] = usePagination(
+    filter,
+    entitiesCounts,
+    onFilterChanged,
+  );
 
   const closeConfirmDeleteDialog = () => {
     setConfirmDeleteDialogVisible(false);
@@ -201,6 +209,7 @@ const UsersPage = ({
               ),
             }}
             entities={entities}
+            entitiesCounts={entitiesCounts}
             entitiesSelected={entitiesSelected}
             filter={filter}
             filterEditDialog={UserFilterDialog}
@@ -215,6 +224,10 @@ const UsersPage = ({
             onDownloaded={onDownloaded}
             onError={onError}
             onFilterChanged={onFilterChanged}
+            onFirstClick={getFirst}
+            onLastClick={getLast}
+            onNextClick={getNext}
+            onPreviousClick={getPrevious}
             onUserCloneClick={clone}
             onUserCreateClick={create}
             onUserDeleteClick={openConfirmDeleteDialog}
@@ -231,6 +244,7 @@ const UsersPage = ({
 UsersPage.propTypes = {
   allUsers: PropTypes.array,
   entities: PropTypes.array,
+  entitiesCounts: PropTypes.object,
   entitiesSelected: PropTypes.set,
   filter: PropTypes.filter,
   loadAll: PropTypes.func.isRequired,
