@@ -56,16 +56,18 @@ const OverrideBox = ({
       </DetailsLink>
     </IconDivider>
   ) : undefined;
+  const title = _('Override from {{- severity}} to {{- newSeverity}}', {
+    severity,
+    newSeverity,
+  });
   return (
     <EntityBox
+      aria-label={title}
       data-testid={dataTestId}
       end={override.endTime}
       modified={override.modificationTime}
       text={override.text}
-      title={_('Override from {{- severity}} to {{- newSeverity}}', {
-        severity,
-        newSeverity,
-      })}
+      title={title}
       toolbox={toolbox}
     />
   );
