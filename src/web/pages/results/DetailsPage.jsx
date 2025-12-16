@@ -7,29 +7,14 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
-import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
-import {
-  NewNoteIcon,
-  NewTicketIcon,
-  OverrideIcon,
-  ReportIcon,
-  ResultIcon,
-  TaskIcon,
-  TicketIcon,
-  NewOverrideIcon,
-} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
+import {OverrideIcon, ResultIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import CveLink from 'web/components/link/CveLink';
 import DetailsLink from 'web/components/link/DetailsLink';
 import InnerLink from 'web/components/link/InnerLink';
-import Link from 'web/components/link/Link';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
 import TabList from 'web/components/tab/TabList';
@@ -50,12 +35,12 @@ import NoteBox from 'web/entity/NoteBox';
 import OverrideBox from 'web/entity/OverrideBox';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
-import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import NoteComponent from 'web/pages/notes/NoteComponent';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import ResultDetails from 'web/pages/results/ResultDetails';
+import ResultDetailsPageToolBarIcons from 'web/pages/results/ResultDetailsPageToolBarIcons';
 import TicketComponent from 'web/pages/tickets/TicketComponent';
 import {loadEntity, selector} from 'web/store/entities/results';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
@@ -67,120 +52,30 @@ import {generateFilename} from 'web/utils/Render';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 import withTranslation from 'web/utils/withTranslation';
 
-export const ToolBarIcons = ({
-  entity,
-  onNoteCreateClick,
-  onOverrideCreateClick,
-  onResultDownloadClick,
-  onTicketCreateClick,
-}) => {
-  const capabilities = useCapabilities();
-  const [_] = useTranslation();
+const activeFilter = entity => entity.isActive();
 
-  const isMissingPermissions =
-    !capabilities.mayCreate('permission') || !capabilities.mayAccess('users');
-  const createTicketIconTitle = isMissingPermissions
-    ? _(
-        'Permissions to create a ticket are insufficient. You need the ' +
-          'create_permission and get_users permissions.',
-      )
-    : _('Create new Ticket');
-
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="displaying-all-existing-results"
-          page="reports"
-          title={_('Help: Results')}
-        />
-        <ListIcon page="results" title={_('Results List')} />
-        <ExportIcon
-          title={_('Export Result as XML')}
-          value={entity}
-          onClick={onResultDownloadClick}
-        />
-      </IconDivider>
-      <IconDivider>
-        {capabilities.mayCreate('note') && (
-          <NewNoteIcon
-            title={_('Add new Note')}
-            value={entity}
-            onClick={onNoteCreateClick}
-          />
-        )}
-        {capabilities.mayCreate('override') && (
-          <NewOverrideIcon
-            title={_('Add new Override')}
-            value={entity}
-            onClick={onOverrideCreateClick}
-          />
-        )}
-        {capabilities.mayCreate('ticket') && (
-          <NewTicketIcon
-            disabled={isMissingPermissions}
-            title={createTicketIconTitle}
-            value={entity}
-            onClick={onTicketCreateClick}
-          />
-        )}
-      </IconDivider>
-      <IconDivider>
-        {capabilities.mayAccess('tasks') && isDefined(entity.task) && (
-          <DetailsLink id={entity.task.id} type="task">
-            <TaskIcon title={_('Corresponding Task ({{name}})', entity.task)} />
-          </DetailsLink>
-        )}
-        {capabilities.mayAccess('reports') && isDefined(entity.report) && (
-          <DetailsLink id={entity.report.id} type="report">
-            <ReportIcon title={_('Corresponding Report')} />
-          </DetailsLink>
-        )}
-        {capabilities.mayAccess('tickets') && entity.tickets.length > 0 && (
-          <Link
-            filter={'result_id=' + entity.id}
-            title={_('Corresponding Tickets')}
-            to="tickets"
-          >
-            <Badge content={entity.tickets.length}>
-              <TicketIcon />
-            </Badge>
-          </Link>
-        )}
-      </IconDivider>
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onNoteCreateClick: PropTypes.func.isRequired,
-  onOverrideCreateClick: PropTypes.func.isRequired,
-  onResultDownloadClick: PropTypes.func.isRequired,
-  onTicketCreateClick: PropTypes.func.isRequired,
-};
-
-const active_filter = entity => entity.isActive();
+const ResultDetailsColGroup = () => (
+  <colgroup>
+    <TableCol width="10%" />
+    <TableCol width="90%" />
+  </colgroup>
+);
 
 const Details = ({entity, ...props}) => {
   const {notes, overrides, qod, host, userTags} = entity;
-  const active_notes = notes.filter(active_filter);
-  const active_overrides = overrides.filter(active_filter);
+  const active_notes = notes.filter(activeFilter);
+  const active_overrides = overrides.filter(activeFilter);
   const epss = entity?.information?.epss;
   const gmp = useGmp();
   const [_] = useTranslation();
-
   return (
-    <React.Fragment>
+    <>
       <PageTitle title={_('Result: {{name}}', {name: entity.name})} />
       <Layout flex="column">
         <DetailsBlock title={_('Vulnerability')}>
           <Layout flex="column">
             <InfoTable>
-              <colgroup>
-                <TableCol width="10%" />
-                <TableCol width="90%" />
-              </colgroup>
+              <ResultDetailsColGroup />
               <TableBody>
                 <TableRow>
                   <TableData>{_('Name')}</TableData>
@@ -223,11 +118,14 @@ const Details = ({entity, ...props}) => {
                   <TableData>{_('Location')}</TableData>
                   <TableData>{entity.port}</TableData>
                 </TableRow>
-                {gmp.settings.enableEPSS && isDefined(epss?.maxSeverity) && (
-                  <>
-                    <TableData colSpan="2">
-                      <b>{_('EPSS (CVE with highest severity)')}</b>
-                    </TableData>
+              </TableBody>
+            </InfoTable>
+            {gmp.settings.enableEPSS && isDefined(epss?.maxSeverity) && (
+              <>
+                <h3>{_('EPSS (CVE with highest severity)')}</h3>
+                <InfoTable>
+                  <ResultDetailsColGroup />
+                  <TableBody>
                     <TableRow>
                       <TableData>{_('EPSS Score')}</TableData>
                       <TableData>
@@ -260,13 +158,16 @@ const Details = ({entity, ...props}) => {
                         />
                       </TableData>
                     </TableRow>
-                  </>
-                )}
-                {gmp.settings.enableEPSS && isDefined(epss?.maxEpss) && (
-                  <>
-                    <TableData colSpan="2">
-                      <b>{_('EPSS (highest EPSS score)')}</b>
-                    </TableData>
+                  </TableBody>
+                </InfoTable>
+              </>
+            )}
+            {gmp.settings.enableEPSS && isDefined(epss?.maxEpss) && (
+              <>
+                <h3>{_('EPSS (highest EPSS score)')}</h3>
+                <InfoTable>
+                  <ResultDetailsColGroup />
+                  <TableBody>
                     <TableRow>
                       <TableData>{_('EPSS Score')}</TableData>
                       <TableData>{renderScore(epss?.maxEpss?.score)}</TableData>
@@ -297,10 +198,10 @@ const Details = ({entity, ...props}) => {
                         />
                       </TableData>
                     </TableRow>
-                  </>
-                )}
-              </TableBody>
-            </InfoTable>
+                  </TableBody>
+                </InfoTable>
+              </>
+            )}
           </Layout>
         </DetailsBlock>
 
@@ -341,7 +242,7 @@ const Details = ({entity, ...props}) => {
           </DetailsBlock>
         )}
       </Layout>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -380,9 +281,9 @@ class Page extends React.Component {
       .then(onDownloaded, onError);
   }
 
-  openDialog(result = {}, createfunc) {
+  openDialog(result = {}, createFunc) {
     const {information = {}, task = {}, host = {}} = result;
-    createfunc({
+    createFunc({
       fixed: true,
       oid: information.id,
       nvt_name: information.name,
@@ -406,25 +307,25 @@ class Page extends React.Component {
     const {entity, onChanged, onError} = this.props;
     return (
       <NoteComponent onCreated={onChanged}>
-        {({create: createnote}) => (
+        {({create: createNote}) => (
           <OverrideComponent onCreated={onChanged}>
-            {({create: createoverride}) => (
+            {({create: createOverride}) => (
               <TicketComponent onCreated={goToDetails('ticket', this.props)}>
-                {({createFromResult: createticket}) => (
+                {({createFromResult: createTicket}) => (
                   <EntityPage
                     {...this.props}
                     entity={entity}
                     sectionIcon={<ResultIcon size="large" />}
                     title={_('Result')}
-                    toolBarIcons={ToolBarIcons}
+                    toolBarIcons={ResultDetailsPageToolBarIcons}
                     onNoteCreateClick={result =>
-                      this.openDialog(result, createnote)
+                      this.openDialog(result, createNote)
                     }
                     onOverrideCreateClick={result =>
-                      this.openDialog(result, createoverride)
+                      this.openDialog(result, createOverride)
                     }
                     onResultDownloadClick={this.handleDownload}
-                    onTicketCreateClick={createticket}
+                    onTicketCreateClick={createTicket}
                   >
                     {() => (
                       <TabsContainer flex="column" grow="1">
