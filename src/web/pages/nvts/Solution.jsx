@@ -7,7 +7,7 @@ import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import SolutionTypeIcon from 'web/components/icon/SolutionTypeIcon';
 import IconDivider from 'web/components/layout/IconDivider';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
 import Pre from 'web/pages/nvts/Preformatted';
 import PropTypes from 'web/utils/PropTypes';

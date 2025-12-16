@@ -16,7 +16,7 @@ import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import useGmp from 'web/hooks/useGmp';
-import NvtDetails from 'web/pages/nvts/Details';
+import NvtDetails from 'web/pages/nvts/NvtDetails';
 import NvtRow from 'web/pages/nvts/Row';
 import PropTypes from 'web/utils/PropTypes';
 

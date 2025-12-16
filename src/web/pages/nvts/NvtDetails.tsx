@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {TAG_NA} from 'gmp/models/nvt';
+import {type default as Nvt, TAG_NA} from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 import Severitybar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
@@ -13,19 +12,31 @@ import CveLink from 'web/components/link/CveLink';
 import Link from 'web/components/link/Link';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import NvtReferences from 'web/pages/nvts/NvtReferences';
 import Pre from 'web/pages/nvts/Preformatted';
-import References from 'web/pages/nvts/References';
 import Solution from 'web/pages/nvts/Solution';
-import PropTypes from 'web/utils/PropTypes';
 import {na, getTranslatableSeverityOrigin} from 'web/utils/Render';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 
-const NvtDetails = ({entity, links = true}) => {
+interface NvtDetailsProps {
+  entity: Nvt;
+  links?: boolean;
+}
+
+const NvtDetailsColGroup = () => (
+  <colgroup>
+    <TableCol width="15%" />
+    <TableCol width="85%" />
+  </colgroup>
+);
+
+const NvtDetails = ({entity, links = true}: NvtDetailsProps) => {
   const [_] = useTranslation();
   const {
     epss,
@@ -48,11 +59,10 @@ const NvtDetails = ({entity, links = true}) => {
       )}
 
       <DetailsBlock title={_('Scoring')}>
+        <h3>{_('CVSS')}</h3>
         <InfoTable>
+          <NvtDetailsColGroup />
           <TableBody>
-            <TableData>
-              <b>{_('CVSS')}</b>
-            </TableData>
             <TableRow>
               <TableData>{_('CVSS Base')}</TableData>
               <TableData>
@@ -77,7 +87,7 @@ const NvtDetails = ({entity, links = true}) => {
             <TableRow>
               <TableData>{_('CVSS Origin')}</TableData>
               <TableData>
-                {na(getTranslatableSeverityOrigin(severityOrigin))}
+                {na(getTranslatableSeverityOrigin(severityOrigin as string))}
               </TableData>
             </TableRow>
             <TableRow>
@@ -90,11 +100,15 @@ const NvtDetails = ({entity, links = true}) => {
                 )}
               </TableData>
             </TableRow>
-            {gmp.settings.enableEPSS && isDefined(epss?.maxSeverity) && (
-              <>
-                <TableData colSpan="2">
-                  <b>{_('EPSS (CVE with highest severity)')}</b>
-                </TableData>
+          </TableBody>
+        </InfoTable>
+        {gmp.settings.enableEPSS && isDefined(epss?.maxSeverity) && (
+          <>
+            <h3>{_('EPSS (CVE with highest severity)')}</h3>
+            <InfoTable>
+              <NvtDetailsColGroup />
+              <TableBody>
+                <TableData colSpan={2}></TableData>
                 <TableRow>
                   <TableData>{_('EPSS Score')}</TableData>
                   <TableData>{renderScore(epss?.maxSeverity?.score)}</TableData>
@@ -108,8 +122,8 @@ const NvtDetails = ({entity, links = true}) => {
                 <TableRow>
                   <TableData>{_('CVE')}</TableData>
                   <TableData>
-                    <CveLink id={epss?.maxSeverity?.cve?.id}>
-                      {epss?.maxSeverity?.cve?.id}
+                    <CveLink id={epss.maxSeverity.cve?.id as string}>
+                      {epss.maxSeverity.cve?.id}
                     </CveLink>
                   </TableData>
                 </TableRow>
@@ -118,35 +132,39 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>
                     <Severitybar
                       severity={
-                        isDefined(epss?.maxSeverity?.cve?.severity)
-                          ? epss?.maxSeverity?.cve?.severity
+                        isDefined(epss.maxSeverity.cve?.severity)
+                          ? epss.maxSeverity.cve?.severity
                           : _('N/A')
                       }
                     />
                   </TableData>
                 </TableRow>
-              </>
-            )}
-            {gmp.settings.enableEPSS && isDefined(epss?.maxEpss) && (
-              <>
-                <TableData colSpan="2">
-                  <b>{_('EPSS (highest EPSS score)')}</b>
-                </TableData>
+              </TableBody>
+            </InfoTable>
+          </>
+        )}
+        {gmp.settings.enableEPSS && isDefined(epss?.maxEpss) && (
+          <>
+            <h3>{_('EPSS (highest EPSS score)')}</h3>
+            <InfoTable>
+              <NvtDetailsColGroup />
+              <TableBody>
+                <TableData colSpan={2}></TableData>
                 <TableRow>
                   <TableData>{_('EPSS Score')}</TableData>
-                  <TableData>{renderScore(epss?.maxEpss?.score)}</TableData>
+                  <TableData>{renderScore(epss.maxEpss.score)}</TableData>
                 </TableRow>
                 <TableRow>
                   <TableData>{_('EPSS Percentile')}</TableData>
                   <TableData>
-                    {renderPercentile(epss?.maxEpss?.percentile)}
+                    {renderPercentile(epss.maxEpss.percentile)}
                   </TableData>
                 </TableRow>
                 <TableRow>
                   <TableData>{_('CVE')}</TableData>
                   <TableData>
-                    <CveLink id={epss?.maxEpss?.cve?.id}>
-                      {epss?.maxEpss?.cve?.id}
+                    <CveLink id={epss.maxEpss.cve?.id as string}>
+                      {epss?.maxEpss.cve?.id}
                     </CveLink>
                   </TableData>
                 </TableRow>
@@ -162,10 +180,10 @@ const NvtDetails = ({entity, links = true}) => {
                     />
                   </TableData>
                 </TableRow>
-              </>
-            )}
-          </TableBody>
-        </InfoTable>
+              </TableBody>
+            </InfoTable>
+          </>
+        )}
       </DetailsBlock>
 
       {isDefined(tags.insight) && tags.insight !== TAG_NA && (
@@ -216,14 +234,9 @@ const NvtDetails = ({entity, links = true}) => {
         </DetailsBlock>
       )}
 
-      <References links={links} nvt={entity} />
+      <NvtReferences links={links} nvt={entity} />
     </Layout>
   );
-};
-
-NvtDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default NvtDetails;

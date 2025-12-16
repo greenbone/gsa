@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type Preference} from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 import Table from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
@@ -12,9 +12,16 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const Preferences = ({preferences = [], defaultTimeout}) => {
+interface NvtPreferencesProps {
+  preferences?: Preference[];
+  defaultTimeout?: number;
+}
+
+const NvtPreferences = ({
+  preferences = [],
+  defaultTimeout,
+}: NvtPreferencesProps) => {
   const [_] = useTranslation();
   return (
     <Table>
@@ -44,9 +51,4 @@ const Preferences = ({preferences = [], defaultTimeout}) => {
   );
 };
 
-Preferences.propTypes = {
-  defaultTimeout: PropTypes.number,
-  preferences: PropTypes.array,
-};
-
-export default Preferences;
+export default NvtPreferences;
