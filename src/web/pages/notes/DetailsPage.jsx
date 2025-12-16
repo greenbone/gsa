@@ -7,11 +7,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {isDefined} from 'gmp/utils/identity';
 import {NoteIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -30,10 +25,6 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import CloneIcon from 'web/entity/icon/CloneIcon';
-import CreateIcon from 'web/entity/icon/CreateIcon';
-import EditIcon from 'web/entity/icon/EditIcon';
-import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
@@ -42,6 +33,7 @@ import withEntityContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import NoteDetails from 'web/pages/notes/Details';
 import NoteComponent from 'web/pages/notes/NoteComponent';
+import NoteDetailsPageToolBarIcons from 'web/pages/notes/NoteDetailsPageToolBarIcons';
 import {selector as notesSelector, loadEntity} from 'web/store/entities/notes';
 import {
   selector as permissionsSelector,
@@ -51,49 +43,6 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
-export const ToolBarIcons = ({
-  entity,
-  onNoteCloneClick,
-  onNoteCreateClick,
-  onNoteDeleteClick,
-  onNoteDownloadClick,
-  onNoteEditClick,
-}) => {
-  const [_] = useTranslation();
-
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="managing-notes"
-          page="reports"
-          title={_('Help: Notes')}
-        />
-        <ListIcon page="notes" title={_('Note List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon entity={entity} onClick={onNoteCreateClick} />
-        <CloneIcon entity={entity} onClick={onNoteCloneClick} />
-        <EditIcon entity={entity} onClick={onNoteEditClick} />
-        <TrashIcon entity={entity} onClick={onNoteDeleteClick} />
-        <ExportIcon
-          title={_('Export Note as XML')}
-          value={entity}
-          onClick={onNoteDownloadClick}
-        />
-      </IconDivider>
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onNoteCloneClick: PropTypes.func.isRequired,
-  onNoteCreateClick: PropTypes.func.isRequired,
-  onNoteDeleteClick: PropTypes.func.isRequired,
-  onNoteDownloadClick: PropTypes.func.isRequired,
-  onNoteEditClick: PropTypes.func.isRequired,
-};
 
 const Details = connect(rootState => ({
   timezone: getTimezone(rootState),
@@ -183,7 +132,7 @@ const Page = ({
           entity={entity}
           sectionIcon={<NoteIcon size="large" />}
           title={_('Note')}
-          toolBarIcons={ToolBarIcons}
+          toolBarIcons={NoteDetailsPageToolBarIcons}
           onChanged={onChanged}
           onDownloaded={onDownloaded}
           onError={onError}
