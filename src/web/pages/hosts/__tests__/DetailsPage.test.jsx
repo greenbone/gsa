@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, wait} from 'web/testing';
+import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
@@ -194,108 +194,99 @@ describe('Host DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    const {baseElement} = render(<DetailsPage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    // Toolbar Icons
-    const links = baseElement.querySelectorAll('a');
+    expect(screen.getByTitle('Help: Hosts')).toBeInTheDocument();
+    expect(screen.getByTitle('Host List')).toBeInTheDocument();
 
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: Hosts',
-    );
-    expect(links[0]).toHaveAttribute(
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/managing-assets.html#managing-hosts',
     );
-
-    expect(screen.getByTestId('list-icon')).toHaveAttribute(
-      'title',
-      'Host List',
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/hosts',
     );
-    expect(links[1]).toHaveAttribute('href', '/hosts');
 
-    expect(screen.getAllByTitle('Create new Host')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Host')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Delete Host')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export Host as XML')[0]).toBeInTheDocument();
+    expect(screen.getByTitle('Create new Host')).toBeInTheDocument();
+    expect(screen.getByTitle('Edit Host')).toBeInTheDocument();
+    expect(screen.getByTitle('Delete Host')).toBeInTheDocument();
+    expect(screen.getByTitle('Export Host as XML')).toBeInTheDocument();
+    expect(screen.getByTitle('Results for this Host')).toBeInTheDocument();
     expect(
-      screen.getAllByTitle('Results for this Host')[0],
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('TLS Certificates for this Host')[0],
+      screen.getByTitle('TLS Certificates for this Host'),
     ).toBeInTheDocument();
 
-    // Header
-    expect(baseElement).toHaveTextContent('Host: Foo');
-    expect(baseElement).toHaveTextContent('ID:12345');
-    expect(baseElement).toHaveTextContent(
+    expect(
+      screen.getByRole('heading', {name: /host: foo/i}),
+    ).toBeInTheDocument();
+
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /id/i})).toHaveTextContent(
+      'ID:12345',
+    );
+    expect(entityInfo.getByRole('row', {name: /created/i})).toHaveTextContent(
       'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
-    expect(baseElement).toHaveTextContent(
+    expect(entityInfo.getByRole('row', {name: /modified/i})).toHaveTextContent(
       'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
-    expect(baseElement).toHaveTextContent('Owner:admin');
+    expect(entityInfo.getByRole('row', {name: /owner/i})).toHaveTextContent(
+      'Owner:admin',
+    );
 
     // Tabs
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[10]).toHaveTextContent('User Tags');
-    expect(spans[12]).toHaveTextContent('Permissions');
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^permissions/i}),
+    ).toBeInTheDocument();
 
     // Details
-    const table = baseElement.querySelectorAll('table');
-
-    expect(table[0]).toHaveTextContent('Hostname');
-    expect(table[0]).toHaveTextContent('foo');
-
-    expect(table[0]).toHaveTextContent('IP Address');
-    expect(table[0]).toHaveTextContent('123.456.789.10');
-
-    expect(table[0]).toHaveTextContent('Comment');
-    expect(table[0]).toHaveTextContent('bar');
-
-    expect(table[0]).toHaveTextContent('OS');
-    expect(table[0]).toHaveTextContent('Linux Kernel');
-    const osImage = baseElement.querySelector('img');
+    expect(
+      screen.getByRole('row', {name: /^Hostname foo/}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^IP Address 123.456.789.10/}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^comment bar/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^os linux kernel/i}),
+    ).toBeInTheDocument();
+    const osImage = screen
+      .getByRole('row', {name: /^os linux kernel/i})
+      .querySelector('img');
     expect(osImage).toHaveAttribute('src', '/img/os_linux.svg');
 
-    expect(table[0]).toHaveTextContent('Route');
-    expect(table[0]).toHaveTextContent('123.456.789.10123.456.789.11');
-
-    expect(table[0]).toHaveTextContent('Severity');
-    expect(table[0]).toHaveTextContent('10.0 (Critical)');
+    expect(screen.getByRole('row', {name: /^route/i})).toHaveTextContent(
+      /123\.456\.789\.10123\.456\.789\.11/,
+    );
+    expect(screen.getByRole('row', {name: /^severity/i})).toHaveTextContent(
+      /10\.0 \(Critical\)/,
+    );
 
     // Identifier Table
-    const header = baseElement.querySelectorAll('th');
-
-    expect(header[0]).toHaveTextContent('Name');
-    expect(header[1]).toHaveTextContent('Value');
-    expect(header[2]).toHaveTextContent('Created');
-    expect(header[3]).toHaveTextContent('Source');
-    expect(header[4]).toHaveTextContent('Actions');
+    expect(
+      screen.getByRole('heading', {name: /^all identifiers/i}),
+    ).toBeInTheDocument();
+    const identifiersTable = within(screen.getByTestId('host-identifiers'));
 
     // Rows
-    const row = table[1].querySelectorAll('tr');
-
-    expect(row[1]).toHaveTextContent('hostname');
-    expect(row[1]).toHaveTextContent('foo');
-    expect(row[1]).toHaveTextContent(
-      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    expect(
+      identifiersTable.getByRole('row', {name: /^hostname/i}),
+    ).toHaveTextContent(
+      'hostnamefooSun, Jun 2, 2019 2:00 PM Central European Summer TimeReport 910 (NVT 1.2.3.4.5)',
     );
-    expect(row[1]).toHaveTextContent('Report 910 (NVT 1.2.3.4.5)');
-
-    expect(row[2]).toHaveTextContent('ip');
-    expect(row[2]).toHaveTextContent('123.456.789.10');
-    expect(row[2]).toHaveTextContent(
-      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    expect(identifiersTable.getByRole('row', {name: /^ip/i})).toHaveTextContent(
+      'ip123.456.789.10Sun, Jun 2, 2019 2:00 PM Central European Summer TimeReport 910 (NVT 1.2.3.4.5)',
     );
-    expect(row[2]).toHaveTextContent('Report 910 (NVT 1.2.3.4.5)');
-
-    expect(row[3]).toHaveTextContent('OS');
-    expect(row[3]).toHaveTextContent('cpe:/o:linux:kernel');
-    expect(row[3]).toHaveTextContent(
-      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    expect(identifiersTable.getByRole('row', {name: /^os/i})).toHaveTextContent(
+      'OScpe:/o:linux:kernelSun, Jun 2, 2019 2:00 PM Central European Summer TimeReport 910 (NVT 1.2.3.4.5)',
     );
-    expect(row[3]).toHaveTextContent('Report 910 (NVT 1.2.3.4.5)');
   });
 
   test('should render user tags tab', () => {
@@ -324,14 +315,11 @@ describe('Host DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    const {baseElement} = render(<DetailsPage id="12345" />);
+    const {container} = render(<DetailsPage id="12345" />);
 
-    const spans = baseElement.querySelectorAll('span');
-
-    expect(spans[10]).toHaveTextContent('User Tags');
-    fireEvent.click(spans[10]);
-
-    expect(baseElement).toHaveTextContent('No user tags available');
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
   });
 
   test('should render permissions tab', () => {
@@ -360,14 +348,11 @@ describe('Host DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    const {baseElement} = render(<DetailsPage id="12345" />);
+    const {container} = render(<DetailsPage id="12345" />);
 
-    const spans = baseElement.querySelectorAll('span');
-
-    expect(spans[12]).toHaveTextContent('Permissions');
-    fireEvent.click(spans[12]);
-
-    expect(baseElement).toHaveTextContent('No permissions available');
+    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    fireEvent.click(permissionsTab);
+    expect(container).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
