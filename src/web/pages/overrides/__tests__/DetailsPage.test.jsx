@@ -4,17 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, wait} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
+import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import Override from 'gmp/models/override';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
-import DetailsPage, {ToolBarIcons} from 'web/pages/overrides/DetailsPage';
+import DetailsPage from 'web/pages/overrides/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/overrides';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -26,16 +24,15 @@ const override = Override.fromElement({
   hosts: '127.0.0.1',
   in_use: 0,
   modification_time: '2021-01-04T11:54:12Z',
-  new_severity: '-1', // false positive
+  new_severity: -1, // false positive
   nvt: {
     _oid: '123',
     name: 'foo nvt',
-    type: 'nvt',
   },
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
   port: '666',
-  severity: '0.1',
+  severity: 0.1,
   task: {
     name: 'task x',
     _id: '42',
@@ -44,281 +41,47 @@ const override = Override.fromElement({
   writable: 1,
 });
 
-const overrideInUse = Override.fromElement({
-  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-  active: 1,
-  creation_time: '2020-12-23T14:14:11Z',
-  hosts: '127.0.0.1',
-  in_use: 1,
-  modification_time: '2021-01-04T11:54:12Z',
-  new_severity: '-1', // false positive
-  nvt: {
-    _oid: '123',
-    name: 'foo nvt',
-    type: 'nvt',
-  },
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
-  port: '666',
-  severity: '0.1',
-  text: 'override text',
-  writable: 1,
-});
-
-const noPermOverride = Override.fromElement({
-  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-  active: 1,
-  creation_time: '2020-12-23T14:14:11Z',
-  hosts: '127.0.0.1',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
-  new_severity: '-1', // false positive
-  nvt: {
-    _oid: '123',
-    name: 'foo nvt',
-    type: 'nvt',
-  },
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'get_overrides'}},
-  port: '666',
-  severity: '0.1',
-  text: 'override text',
-  writable: 1,
-});
-
-const getOverride = testing.fn().mockResolvedValue({
-  data: override,
-});
-
-const getEntities = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
+const createGmp = ({
+  currentSettingsResponse = currentSettingsDefaultResponse,
+  getOverrideResponse = new Response(override),
+  getPermissionsResponse = new Response([], {
     filter: Filter.fromString(),
     counts: new CollectionCounts(),
-  },
-});
+  }),
+  cloneOverrideResponse = new Response({data: {id: 'foo'}}),
+  deleteOverrideResponse = new Response({foo: 'bar'}),
+  exportOverrideResponse = new Response({foo: 'bar'}),
+  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+  getEntities = testing.fn().mockResolvedValue(getPermissionsResponse),
+  getOverride = testing.fn().mockResolvedValue(getOverrideResponse),
+  getPermissions = testing.fn().mockResolvedValue(getPermissionsResponse),
+  cloneOverride = testing.fn().mockResolvedValue(cloneOverrideResponse),
+  deleteOverride = testing.fn().mockResolvedValue(deleteOverrideResponse),
+  exportOverride = testing.fn().mockResolvedValue(exportOverrideResponse),
+} = {}) => {
+  return {
+    override: {
+      get: getOverride,
+      clone: cloneOverride,
+      delete: deleteOverride,
+      export: exportOverride,
+    },
+    permissions: {
+      get: getPermissions,
+    },
+    settings: {manualUrl, reloadInterval},
+    user: {
+      currentSettings,
+    },
+  };
+};
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-describe('Override DetailsPage tests', () => {
-  test('should render full /DetailsPage', () => {
-    const gmp = {
-      override: {
-        get: getOverride,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
+describe('OverrideDetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
+    const gmp = createGmp();
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
-      router: true,
-      store: true,
-    });
-
-    store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(
-      entityLoadingActions.success(
-        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-        override,
-      ),
-    );
-
-    const {baseElement} = render(
-      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
-    );
-
-    expect(baseElement).toHaveTextContent('override text');
-
-    const links = baseElement.querySelectorAll('a');
-
-    expect(screen.getAllByTitle('Help: Overrides')[0]).toBeInTheDocument();
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/reports.html#managing-overrides',
-    );
-
-    expect(screen.getAllByTitle('Override List')[0]).toBeInTheDocument();
-    expect(links[1]).toHaveAttribute('href', '/overrides');
-
-    expect(baseElement).toHaveTextContent(
-      'ID:6d00d22f-551b-4fbe-8215-d8615eff73ea',
-    );
-    expect(baseElement).toHaveTextContent(
-      'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
-    );
-    expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
-    );
-    expect(baseElement).toHaveTextContent('Owner:admin');
-
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[9]).toHaveTextContent('User Tags');
-    expect(spans[11]).toHaveTextContent('Permissions');
-
-    expect(baseElement).toHaveTextContent('NVT Name');
-    expect(baseElement).toHaveTextContent('foo nvt');
-
-    expect(baseElement).toHaveTextContent('NVT OID');
-    expect(baseElement).toHaveTextContent('123');
-
-    expect(baseElement).toHaveTextContent('Active');
-    expect(baseElement).toHaveTextContent('Yes');
-
-    expect(baseElement).toHaveTextContent('Application');
-
-    expect(baseElement).toHaveTextContent('Hosts');
-    expect(baseElement).toHaveTextContent('127.0.0.1');
-
-    expect(baseElement).toHaveTextContent('Port');
-    expect(baseElement).toHaveTextContent('666');
-
-    expect(baseElement).toHaveTextContent('Severity');
-    expect(baseElement).toHaveTextContent('Any');
-
-    expect(baseElement).toHaveTextContent('Task');
-    expect(baseElement).toHaveTextContent('task x');
-
-    expect(baseElement).toHaveTextContent('Result');
-    expect(baseElement).toHaveTextContent('Any');
-
-    expect(baseElement).toHaveTextContent('Appearance');
-
-    expect(baseElement).toHaveTextContent(
-      'Override from Severity > 0.0 to False Positive',
-    );
-
-    expect(baseElement).toHaveTextContent('override text');
-  });
-
-  test('should render user tags tab', () => {
-    const gmp = {
-      override: {
-        get: getOverride,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
-    const {render, store} = rendererWith({
-      capabilities: caps,
-      gmp,
-      router: true,
-      store: true,
-    });
-
-    store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(
-      entityLoadingActions.success(
-        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-        override,
-      ),
-    );
-
-    const {baseElement} = render(
-      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
-    );
-
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[9]).toHaveTextContent('User Tags');
-
-    fireEvent.click(spans[9]);
-
-    expect(baseElement).toHaveTextContent('No user tags available');
-  });
-
-  test('should render permissions tab', () => {
-    const gmp = {
-      override: {
-        get: getOverride,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
-    const {render, store} = rendererWith({
-      capabilities: caps,
-      gmp,
-      router: true,
-      store: true,
-    });
-
-    store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(
-      entityLoadingActions.success(
-        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-        override,
-      ),
-    );
-
-    const {baseElement} = render(
-      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
-    );
-
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[11]).toHaveTextContent('Permissions');
-
-    fireEvent.click(spans[11]);
-
-    expect(baseElement).toHaveTextContent('No permissions available');
-  });
-
-  test('should call commands', async () => {
-    const clone = testing.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      override: {
-        get: getOverride,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
-    const {render, store} = rendererWith({
-      capabilities: caps,
-      gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -335,225 +98,171 @@ describe('Override DetailsPage tests', () => {
 
     render(<DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />);
 
-    await wait();
-
-    const cloneIcon = screen.getAllByTitle('Clone Override');
-    expect(cloneIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(cloneIcon[0]);
-
-    await wait();
-
-    expect(clone).toHaveBeenCalledWith(override);
-
-    const exportIcon = screen.getAllByTitle('Export Override as XML');
-    expect(exportIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportFunc).toHaveBeenCalledWith(override);
-
-    const deleteIcon = screen.getAllByTitle('Move Override to trashcan');
-    expect(deleteIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
-    expect(deleteFunc).toHaveBeenCalledWith({id: override.id});
-  });
-});
-
-describe('Override ToolBarIcons tests', () => {
-  test('should render', () => {
-    const handleOverrideCloneClick = testing.fn();
-    const handleOverrideDeleteClick = testing.fn();
-    const handleOverrideDownloadClick = testing.fn();
-    const handleOverrideEditClick = testing.fn();
-    const handleOverrideCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    const {element} = render(
-      <ToolBarIcons
-        entity={override}
-        onOverrideCloneClick={handleOverrideCloneClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
-        onOverrideDeleteClick={handleOverrideDeleteClick}
-        onOverrideDownloadClick={handleOverrideDownloadClick}
-        onOverrideEditClick={handleOverrideEditClick}
-      />,
-    );
-
-    const links = element.querySelectorAll('a');
-
-    expect(links[0]).toHaveAttribute(
+    expect(screen.getByTitle('Help: Overrides')).toBeInTheDocument();
+    expect(screen.getByTitle('Override List')).toBeInTheDocument();
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/reports.html#managing-overrides',
     );
-    expect(screen.getAllByTitle('Help: Overrides')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/overrides',
+    );
 
-    expect(links[1]).toHaveAttribute('href', '/overrides');
-    expect(screen.getAllByTitle('Override List')[0]).toBeInTheDocument();
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /ID:/})).toHaveTextContent(
+      'ID:6d00d22f-551b-4fbe-8215-d8615eff73ea',
+    );
+    expect(entityInfo.getByRole('row', {name: /Created:/})).toHaveTextContent(
+      'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
+    );
+    expect(entityInfo.getByRole('row', {name: /Modified:/})).toHaveTextContent(
+      'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
+    );
+    expect(entityInfo.getByRole('row', {name: /Owner:/})).toHaveTextContent(
+      'Owner:admin',
+    );
+
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^permissions/i}),
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole('row', {name: /^NVT Name/i})).toHaveTextContent(
+      'foo nvt',
+    );
+    expect(screen.getByRole('row', {name: /^NVT OID/i})).toHaveTextContent(
+      '123',
+    );
+    expect(screen.getByRole('row', {name: /^Active/i})).toHaveTextContent(
+      'Yes',
+    );
+
+    expect(
+      screen.getByRole('heading', {name: /^Application/i}),
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole('row', {name: /^Hosts/i})).toHaveTextContent(
+      '127.0.0.1',
+    );
+    expect(screen.getByRole('row', {name: /^Port/i})).toHaveTextContent('666');
+    expect(screen.getByRole('row', {name: /^Severity/i})).toHaveTextContent(
+      '> 0.0',
+    );
+    expect(screen.getByRole('row', {name: /^Task/i})).toHaveTextContent(
+      'task x',
+    );
+    expect(screen.getByRole('row', {name: /^Result/i})).toHaveTextContent(
+      'Any',
+    );
+
+    expect(
+      screen.getByRole('heading', {name: /^Appearance/i}),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {
+        name: /^Override from Severity > 0\.0 to False Positive/i,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('override-box')).toHaveTextContent(
+      'override text',
+    );
   });
 
-  test('should call click handlers', () => {
-    const handleOverrideCloneClick = testing.fn();
-    const handleOverrideDeleteClick = testing.fn();
-    const handleOverrideDownloadClick = testing.fn();
-    const handleOverrideEditClick = testing.fn();
-    const handleOverrideCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
-    const {render} = rendererWith({
+  test('should render user tags tab', () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
+      store: true,
     });
 
-    render(
-      <ToolBarIcons
-        entity={override}
-        onOverrideCloneClick={handleOverrideCloneClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
-        onOverrideDeleteClick={handleOverrideDeleteClick}
-        onOverrideDownloadClick={handleOverrideDownloadClick}
-        onOverrideEditClick={handleOverrideEditClick}
-      />,
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(
+      entityLoadingActions.success(
+        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+        override,
+      ),
     );
 
-    const cloneIcon = screen.getAllByTitle('Clone Override');
-    const editIcon = screen.getAllByTitle('Edit Override');
-    const deleteIcon = screen.getAllByTitle('Move Override to trashcan');
-    const exportIcon = screen.getAllByTitle('Export Override as XML');
+    const {container} = render(
+      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+    );
 
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-    expect(handleOverrideCloneClick).toHaveBeenCalledWith(override);
-
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
-    expect(handleOverrideEditClick).toHaveBeenCalledWith(override);
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-    expect(handleOverrideDeleteClick).toHaveBeenCalledWith(override);
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-    expect(handleOverrideDownloadClick).toHaveBeenCalledWith(override);
+    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    fireEvent.click(permissionsTab);
+    expect(container).toHaveTextContent('No permissions available');
   });
 
-  test('should not call click handlers without permission', () => {
-    const handleOverrideCloneClick = testing.fn();
-    const handleOverrideDeleteClick = testing.fn();
-    const handleOverrideDownloadClick = testing.fn();
-    const handleOverrideEditClick = testing.fn();
-    const handleOverrideCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
-    const {render} = rendererWith({
+  test('should render permissions tab', () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
+      store: true,
     });
 
-    render(
-      <ToolBarIcons
-        entity={noPermOverride}
-        onOverrideCloneClick={handleOverrideCloneClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
-        onOverrideDeleteClick={handleOverrideDeleteClick}
-        onOverrideDownloadClick={handleOverrideDownloadClick}
-        onOverrideEditClick={handleOverrideEditClick}
-      />,
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(
+      entityLoadingActions.success(
+        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+        override,
+      ),
     );
 
-    const cloneIcon = screen.getAllByTitle('Clone Override');
-    const editIcon = screen.getAllByTitle('Permission to edit Override denied');
-    const deleteIcon = screen.getAllByTitle(
-      'Permission to move Override to trashcan denied',
+    const {container} = render(
+      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
     );
-    const exportIcon = screen.getAllByTitle('Export Override as XML');
 
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-
-    expect(handleOverrideCloneClick).toHaveBeenCalledWith(noPermOverride);
-
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
-
-    expect(handleOverrideEditClick).not.toHaveBeenCalled();
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    expect(handleOverrideDeleteClick).not.toHaveBeenCalled();
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    expect(handleOverrideDownloadClick).toHaveBeenCalledWith(noPermOverride);
+    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    fireEvent.click(permissionsTab);
+    expect(container).toHaveTextContent('No permissions available');
   });
 
-  test('should call correct click handlers for override in use', () => {
-    const handleOverrideCloneClick = testing.fn();
-    const handleOverrideDeleteClick = testing.fn();
-    const handleOverrideDownloadClick = testing.fn();
-    const handleOverrideEditClick = testing.fn();
-    const handleOverrideCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
-    const {render} = rendererWith({
+  test('should call commands', async () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
+      store: true,
     });
 
-    render(
-      <ToolBarIcons
-        entity={overrideInUse}
-        onOverrideCloneClick={handleOverrideCloneClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
-        onOverrideDeleteClick={handleOverrideDeleteClick}
-        onOverrideDownloadClick={handleOverrideDownloadClick}
-        onOverrideEditClick={handleOverrideEditClick}
-      />,
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(
+      entityLoadingActions.success(
+        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+        override,
+      ),
     );
-    const cloneIcon = screen.getAllByTitle('Clone Override');
-    const editIcon = screen.getAllByTitle('Edit Override');
-    const deleteIcon = screen.getAllByTitle('Override is still in use');
-    const exportIcon = screen.getAllByTitle('Export Override as XML');
 
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
+    render(<DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />);
 
-    expect(handleOverrideCloneClick).toHaveBeenCalledWith(overrideInUse);
+    const cloneIcon = screen.getByTitle('Clone Override');
+    expect(cloneIcon).toBeInTheDocument();
+    fireEvent.click(cloneIcon);
+    expect(gmp.override.clone).toHaveBeenCalledWith(override);
 
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
+    const exportIcon = screen.getByTitle('Export Override as XML');
+    expect(exportIcon).toBeInTheDocument();
+    fireEvent.click(exportIcon);
+    expect(gmp.override.export).toHaveBeenCalledWith(override);
 
-    expect(handleOverrideEditClick).toHaveBeenCalled();
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-    expect(handleOverrideDeleteClick).not.toHaveBeenCalled();
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    expect(handleOverrideDownloadClick).toHaveBeenCalledWith(overrideInUse);
+    const deleteIcon = screen.getByTitle('Move Override to trashcan');
+    expect(deleteIcon).toBeInTheDocument();
+    fireEvent.click(deleteIcon);
+    expect(gmp.override.delete).toHaveBeenCalledWith({id: override.id});
   });
 });
