@@ -29,13 +29,15 @@ const NoteBox = ({
       </DetailsLink>
     </IconDivider>
   ) : undefined;
+  const title = _('Note');
   return (
     <EntityBox
+      aria-label={title}
       data-testid={dataTestId}
       end={note.endTime}
       modified={note.modificationTime}
       text={note.text}
-      title={_('Note')}
+      title={title}
       toolbox={toolbox}
     />
   );
