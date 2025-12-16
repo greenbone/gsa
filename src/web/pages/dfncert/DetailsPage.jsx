@@ -22,7 +22,7 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityComponent from 'web/entity/EntityComponent';
 import EntityPage from 'web/entity/EntityPage';

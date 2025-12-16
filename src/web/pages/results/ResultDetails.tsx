@@ -17,10 +17,10 @@ import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
+import NvtReferences from 'web/pages/nvts/NvtReferences';
 import P from 'web/pages/nvts/Preformatted';
-import References from 'web/pages/nvts/References';
 import Solution from 'web/pages/nvts/Solution';
 import ResultDiff, {Added, Removed} from 'web/pages/results/ResultDiff';
 import {renderNvtName} from 'web/utils/Render';
@@ -336,7 +336,7 @@ const ResultDetails = ({
       />
 
       {isDefined(information) && (information as Nvt)?.entityType === 'nvt' && (
-        <References links={links} nvt={information as Nvt} />
+        <NvtReferences links={links} nvt={information as Nvt} />
       )}
     </Layout>
   );

@@ -13,7 +13,7 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
