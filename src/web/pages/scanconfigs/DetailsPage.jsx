@@ -5,12 +5,8 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import {UploadIcon, ScanConfigIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
+import {ScanConfigIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -31,19 +27,15 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import CloneIcon from 'web/entity/icon/CloneIcon';
-import CreateIcon from 'web/entity/icon/CreateIcon';
-import EditIcon from 'web/entity/icon/EditIcon';
-import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import ScanConfigDetails from 'web/pages/scanconfigs/Details';
 import ScanConfigComponent from 'web/pages/scanconfigs/ScanConfigComponent';
+import ScanConfigDetailsPageToolBarIcons from 'web/pages/scanconfigs/ScanConfigDetailsPageToolBarIcons';
 import Trend from 'web/pages/scanconfigs/Trend';
 import {
   selector as permissionsSelector,
@@ -51,61 +43,6 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = ({
-  entity,
-  onScanConfigCloneClick,
-  onScanConfigCreateClick,
-  onScanConfigDeleteClick,
-  onScanConfigDownloadClick,
-  onScanConfigEditClick,
-  onScanConfigImportClick,
-}) => {
-  const [_] = useTranslation();
-  const capabilities = useCapabilities();
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="managing-scan-configurations"
-          page="scanning"
-          title={_('Help: ScanConfigs')}
-        />
-        <ListIcon page="scanconfigs" title={_('ScanConfig List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon entity={entity} onClick={onScanConfigCreateClick} />
-        <CloneIcon entity={entity} onClick={onScanConfigCloneClick} />
-        <EditIcon
-          disabled={entity.predefined}
-          entity={entity}
-          onClick={onScanConfigEditClick}
-        />
-        <TrashIcon entity={entity} onClick={onScanConfigDeleteClick} />
-        <ExportIcon
-          title={_('Export Scan Config as XML')}
-          value={entity}
-          onClick={onScanConfigDownloadClick}
-        />
-        {capabilities.mayCreate('config') && (
-          <UploadIcon
-            title={_('Import Scan Config')}
-            onClick={onScanConfigImportClick}
-          />
-        )}
-      </IconDivider>
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onScanConfigCloneClick: PropTypes.func.isRequired,
-  onScanConfigCreateClick: PropTypes.func.isRequired,
-  onScanConfigDeleteClick: PropTypes.func.isRequired,
-  onScanConfigDownloadClick: PropTypes.func.isRequired,
-  onScanConfigEditClick: PropTypes.func.isRequired,
-  onScanConfigImportClick: PropTypes.func.isRequired,
-};
 
 export const NvtFamilies = ({entity}) => {
   const [_] = useTranslation();
@@ -285,7 +222,6 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-
   ...props
 }) => {
   const [_] = useTranslation();
@@ -304,10 +240,10 @@ const Page = ({
       {({
         clone,
         create,
-        delete: delete_func,
+        delete: deleteFunc,
         download,
         edit,
-        import: import_func,
+        import: importFunc,
         save,
       }) => (
         <EntityPage
@@ -315,19 +251,19 @@ const Page = ({
           entity={entity}
           sectionIcon={<ScanConfigIcon size="large" />}
           title={_('Scan Config')}
-          toolBarIcons={ToolBarIcons}
+          toolBarIcons={ScanConfigDetailsPageToolBarIcons}
           onScanConfigCloneClick={clone}
           onScanConfigCreateClick={create}
-          onScanConfigDeleteClick={delete_func}
+          onScanConfigDeleteClick={deleteFunc}
           onScanConfigDownloadClick={download}
           onScanConfigEditClick={edit}
-          onScanConfigImportClick={import_func}
+          onScanConfigImportClick={importFunc}
           onScanConfigSaveClick={save}
         >
           {() => {
             const {preferences} = entity;
             return (
-              <React.Fragment>
+              <>
                 <PageTitle
                   title={_('Scan Config: {{name}}', {name: entity.name})}
                 />
@@ -386,7 +322,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>
