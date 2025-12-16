@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, screen, fireEvent, wait} from 'web/testing';
+import {rendererWith, screen, fireEvent, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Credential, {
   CERTIFICATE_CREDENTIAL_TYPE,
@@ -102,15 +102,19 @@ describe('CredentialDetailsPage tests', () => {
       '/credentials',
     );
 
-    const entityInfo = screen.getByTestId('entity-info');
-    expect(entityInfo).toHaveTextContent('ID:6575');
-    expect(entityInfo).toHaveTextContent(
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /ID:/})).toHaveTextContent(
+      'ID:6575',
+    );
+    expect(entityInfo.getByRole('row', {name: /Created:/})).toHaveTextContent(
       'Created:Wed, Dec 16, 2020 4:23 PM Central European Standard',
     );
-    expect(entityInfo).toHaveTextContent(
+    expect(entityInfo.getByRole('row', {name: /Modified:/})).toHaveTextContent(
       'Modified:Tue, Mar 2, 2021 11:28 AM Central European Standard',
     );
-    expect(entityInfo).toHaveTextContent('Owner:admin');
+    expect(entityInfo.getByRole('row', {name: /Owner:/})).toHaveTextContent(
+      'Owner:admin',
+    );
 
     expect(
       screen.getByRole('tab', {name: /^information/i}),
