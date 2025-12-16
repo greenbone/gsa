@@ -3,35 +3,33 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import {type Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
-import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
 interface Owner {
-  name: string;
+  name?: string;
 }
 
 interface OwnerInfoProps {
-  owner: Owner;
+  owner?: Owner;
 }
 
 interface Entity {
-  id: string;
-  owner: Owner;
-  creationTime: Date;
-  modificationTime: Date;
+  id?: string;
+  owner?: Owner;
+  creationTime?: Date;
+  modificationTime?: Date;
 }
 
 interface EntityInfoProps {
   entity: Entity;
 }
 
-const OwnerInfo: React.FC<OwnerInfoProps> = ({owner}: OwnerInfoProps) => {
+const OwnerInfo = ({owner}: OwnerInfoProps) => {
   const [_] = useTranslation();
   return isDefined(owner) ? (
     <span>{owner.name}</span>
@@ -40,37 +38,49 @@ const OwnerInfo: React.FC<OwnerInfoProps> = ({owner}: OwnerInfoProps) => {
   );
 };
 
-export const InfoLayout = styled(Layout)`
+export const EntityInfoTable = styled.table`
   border-spacing: 0px;
   color: ${Theme.mediumGray};
   font-size: 10px;
-
-  & :nth-child(even) {
-    margin-left: 3px;
+  tr {
+    display: inline-table;
+    margin-right: 20px;
   }
-  & :nth-child(odd) {
-    margin-left: 30px;
+  td:nth-child(2) {
+    user-select: all;
   }
 `;
 
-const EntityInfo: React.FC<EntityInfoProps> = ({entity}: EntityInfoProps) => {
+const EntityInfo = ({entity}: EntityInfoProps) => {
   const [_] = useTranslation();
   const {id, owner, creationTime, modificationTime} = entity;
   return (
-    <InfoLayout data-testid="entity-info">
-      <div>{_('ID:')}</div>
-      <div>{id}</div>
-      <div>{_('Created:')}</div>
-      <div>
-        <DateTime date={creationTime} />
-      </div>
-      <div>{_('Modified:')}</div>
-      <div>
-        <DateTime date={modificationTime} />
-      </div>
-      <div>{_('Owner:')}</div>
-      <OwnerInfo owner={owner} />
-    </InfoLayout>
+    <EntityInfoTable data-testid="entity-info">
+      <tbody>
+        <tr>
+          <td>{_('ID:')}</td>
+          <td>{id}</td>
+        </tr>
+        <tr>
+          <td>{_('Created:')}</td>
+          <td>
+            <DateTime date={creationTime} />
+          </td>
+        </tr>
+        <tr>
+          <td>{_('Modified:')}</td>
+          <td>
+            <DateTime date={modificationTime} />
+          </td>
+        </tr>
+        <tr>
+          <td>{_('Owner:')}</td>
+          <td>
+            <OwnerInfo owner={owner} />
+          </td>
+        </tr>
+      </tbody>
+    </EntityInfoTable>
   );
 };
 
