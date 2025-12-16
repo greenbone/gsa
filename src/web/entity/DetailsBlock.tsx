@@ -5,7 +5,14 @@
 
 import React from 'react';
 import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
+
+interface DetailsBlockProps {
+  id?: string;
+  children: React.ReactNode;
+  className?: string;
+  title: string;
+  'data-testid'?: string;
+}
 
 const DetailsBlock = ({
   id,
@@ -13,18 +20,11 @@ const DetailsBlock = ({
   className,
   title,
   'data-testid': dataTestId,
-}) => (
+}: DetailsBlockProps) => (
   <Layout className={className} data-testid={dataTestId} flex="column" id={id}>
     <h2>{title}</h2>
     <div>{children}</div>
   </Layout>
 );
-
-DetailsBlock.propTypes = {
-  className: PropTypes.string,
-  'data-testid': PropTypes.string,
-  id: PropTypes.string,
-  title: PropTypes.string.isRequired,
-};
 
 export default DetailsBlock;
