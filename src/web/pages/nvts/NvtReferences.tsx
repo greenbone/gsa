@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Nvt from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 import CertLink from 'web/components/link/CertLink';
 import CveLink from 'web/components/link/CveLink';
@@ -12,32 +12,41 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const References = ({nvt, links = true}) => {
+interface NvtReferencesProps {
+  nvt: Nvt;
+  links?: boolean;
+  'data-testid'?: string;
+}
+
+const NvtReferences = ({
+  nvt,
+  links = true,
+  'data-testid': dataTestId = 'nvt-references',
+}: NvtReferencesProps) => {
   const [_] = useTranslation();
   const {cves = [], certs = [], xrefs = []} = nvt;
-  const has_reference = cves.length > 0 || certs.length > 0 || xrefs.length > 0;
-  if (!has_reference) {
+  const hasReference = cves.length > 0 || certs.length > 0 || xrefs.length > 0;
+  if (!hasReference) {
     return null;
   }
   return (
-    <DetailsBlock title={_('References')}>
+    <DetailsBlock data-testid={dataTestId} title={_('References')}>
       <InfoTable>
         <TableBody>
           {cves.length > 0 && (
             <TableRow>
               <TableDataAlignTop>{_('CVE')}</TableDataAlignTop>
               <TableData>
-                {cves.map(cve_id => {
+                {cves.map(cveId => {
                   return (
-                    <span key={cve_id}>
+                    <span key={cveId}>
                       <CveLink
-                        id={cve_id}
+                        id={cveId}
                         textOnly={!links}
-                        title={_('View Details of {{cve_id}}', {cve_id})}
+                        title={_('View Details of {{cve_id}}', {cve_id: cveId})}
                       />
                     </span>
                   );
@@ -93,9 +102,4 @@ const References = ({nvt, links = true}) => {
   );
 };
 
-References.propTypes = {
-  links: PropTypes.bool,
-  nvt: PropTypes.model.isRequired,
-};
-
-export default References;
+export default NvtReferences;

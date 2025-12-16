@@ -16,7 +16,6 @@ describe('NvtPreference', () => {
         <tbody>
           <NvtPreference
             preference={preference}
-            title="Edit NVT Details"
             value={value}
             onChange={mockOnChange}
           />

@@ -103,7 +103,7 @@ export interface NvtElement extends ModelElement {
   nvt?: NvtNvtElement;
 }
 
-interface Preference {
+export interface Preference {
   default?: string | number;
   hr_name?: string;
   id?: number;
