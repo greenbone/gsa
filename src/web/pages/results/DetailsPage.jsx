@@ -42,12 +42,12 @@ import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import {goToDetails} from 'web/entity/navigation';
-import Note from 'web/entity/Note';
-import Override from 'web/entity/Override';
+import NoteBox from 'web/entity/NoteBox';
+import OverrideBox from 'web/entity/OverrideBox';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
@@ -66,6 +66,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 import withTranslation from 'web/utils/withTranslation';
+
 export const ToolBarIcons = ({
   entity,
   onNoteCreateClick,
@@ -324,7 +325,7 @@ const Details = ({entity, ...props}) => {
           <DetailsBlock id="overrides" title={_('Overrides')}>
             <Divider wrap align={['start', 'stretch']} width="15px">
               {active_overrides.map(override => (
-                <Override key={override.id} override={override} />
+                <OverrideBox key={override.id} override={override} />
               ))}
             </Divider>
           </DetailsBlock>
@@ -334,7 +335,7 @@ const Details = ({entity, ...props}) => {
           <DetailsBlock id="notes" title={_('Notes')}>
             <Divider wrap align={['start', 'stretch']} width="15px">
               {active_notes.map(note => (
-                <Note key={note.id} note={note} />
+                <NoteBox key={note.id} note={note} />
               ))}
             </Divider>
           </DetailsBlock>
