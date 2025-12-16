@@ -4,25 +4,21 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, wait} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
+import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
-import DetailsPage, {ToolBarIcons} from 'web/pages/results/DetailsPage';
+import DetailsPage from 'web/pages/results/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-// setup
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
 const enableEPSS = true;
 
-// mock entity
-
-export const result = Result.fromElement({
+const result = Result.fromElement({
   _id: '12345',
   name: 'foo',
   owner: {name: 'admin'},
@@ -67,14 +63,14 @@ export const result = Result.fromElement({
       __text: 'Keep writing tests',
     },
   },
-  description: 'This is a description',
+  description: 'This is a result description',
   threat: 'Medium',
   severity: 5.0,
   qod: {value: 80},
-  task: {id: '314', name: 'task 1'},
-  report: {id: '159'},
+  task: {_id: '314', name: 'task 1'},
+  report: {_id: '159'},
   tickets: {
-    ticket: [{id: '265'}],
+    ticket: [{_id: '265'}],
   },
   scan_nvt_version: '2019-02-14T07:33:50Z',
   notes: {
@@ -101,228 +97,48 @@ export const result = Result.fromElement({
   },
 });
 
-// mock gmp commands
-let getResult;
-let getPermissions;
-let currentSettings;
-
-beforeEach(() => {
-  getResult = testing.fn().mockResolvedValue({
-    data: result,
-  });
-
-  getPermissions = testing.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
+const createGmp = ({
+  getResultResponse = new Response(result),
+  getPermissionsResponse = new Response([], {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  }),
+  getUsersResponse = new Response([], {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  }),
+  currentSettingsResponse = currentSettingsDefaultResponse,
+  exportResultResponse = new Response({foo: 'bar'}),
+  getResult = testing.fn().mockResolvedValue(getResultResponse),
+  getPermissions = testing.fn().mockResolvedValue(getPermissionsResponse),
+  getUsers = testing.fn().mockResolvedValue(getUsersResponse),
+  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+  exportResult = testing.fn().mockResolvedValue(exportResultResponse),
+} = {}) => {
+  return {
+    result: {
+      get: getResult,
+      export: exportResult,
     },
-  });
+    permissions: {
+      get: getPermissions,
+    },
+    settings: {manualUrl, reloadInterval, enableEPSS},
+    user: {
+      currentSettings,
+    },
+    users: {
+      get: getUsers,
+    },
+  };
+};
 
-  currentSettings = testing
-    .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
-});
-
-describe('Result DetailsPage tests', () => {
-  test('should render full Detailspage', () => {
-    const gmp = {
-      result: {
-        get: getResult,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      settings: {manualUrl, reloadInterval, enableEPSS},
-      user: {currentSettings},
-    };
-
+describe('ResultDetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
-      router: true,
-      store: true,
-    });
-
-    store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('12345', result));
-
-    const {baseElement} = render(<DetailsPage id="12345" />);
-
-    // Toolbar Icons
-    const links = baseElement.querySelectorAll('a');
-
-    expect(screen.getAllByTitle('Help: Results')[0]).toBeInTheDocument();
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/reports.html#displaying-all-existing-results',
-    );
-
-    expect(screen.getAllByTitle('Results List')[0]).toBeInTheDocument();
-    expect(links[1]).toHaveAttribute('href', '/results');
-
-    expect(screen.getAllByTitle('Export Result as XML')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Add new Note')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Add new Override')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Create new Ticket')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Corresponding Task (task 1)')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Corresponding Report')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Corresponding Tickets')[0],
-    ).toBeInTheDocument();
-
-    // Header
-    expect(baseElement).toHaveTextContent('Result: foo');
-    expect(baseElement).toHaveTextContent('ID:12345');
-    expect(baseElement).toHaveTextContent(
-      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
-    );
-    expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
-    );
-    expect(baseElement).toHaveTextContent('Owner:admin');
-
-    // Tabs
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[12]).toHaveTextContent('User Tags');
-
-    // Details
-    const heading = baseElement.querySelectorAll('h2');
-
-    expect(heading[1]).toHaveTextContent('Vulnerability');
-    expect(baseElement).toHaveTextContent('Namefoo');
-    expect(baseElement).toHaveTextContent('Severity5.0 (Medium)');
-    expect(
-      screen.getAllByTitle('There are overrides for this result')[0],
-    ).toBeInTheDocument();
-    expect(baseElement).toHaveTextContent('QoD80 %');
-    expect(baseElement).toHaveTextContent('Host109.876.54.321');
-    expect(baseElement).toHaveTextContent('Location80/tcp');
-    expect(baseElement).toHaveTextContent('EPSS (CVE with highest severity)');
-    expect(baseElement).toHaveTextContent('EPSS Score87.650%');
-    expect(baseElement).toHaveTextContent('EPSS Percentile80th');
-    expect(baseElement).toHaveTextContent('CVECVE-2019-1234');
-    expect(baseElement).toHaveTextContent('CVE Severity5.0 (Medium)');
-    expect(baseElement).toHaveTextContent('EPSS (highest EPSS score)');
-    expect(baseElement).toHaveTextContent('EPSS Score98.760%');
-    expect(baseElement).toHaveTextContent('EPSS Percentile90th');
-    expect(baseElement).toHaveTextContent('CVECVE-2020-5678');
-    expect(baseElement).toHaveTextContent('CVE Severity2.0 (Low)');
-    expect(heading[2]).toHaveTextContent('Summary');
-    expect(baseElement).toHaveTextContent('This is a mock result');
-
-    expect(heading[3]).toHaveTextContent('Detection Result');
-    expect(baseElement).toHaveTextContent('This is a description');
-
-    expect(heading[4]).toHaveTextContent('Insight');
-    expect(baseElement).toHaveTextContent('This is just a test');
-
-    expect(heading[5]).toHaveTextContent('Detection Method');
-    expect(baseElement).toHaveTextContent('This is the detection method');
-    expect(baseElement).toHaveTextContent(
-      'Details: nvt1 OID: 1.3.6.1.4.1.25623.1.12345',
-    );
-    expect(baseElement).toHaveTextContent('Version used: 2019-02-14T07:33:50Z');
-
-    expect(heading[6]).toHaveTextContent('Affected Software/OS');
-    expect(baseElement).toHaveTextContent('Affects test cases only');
-
-    expect(heading[7]).toHaveTextContent('Impact');
-    expect(baseElement).toHaveTextContent('No real impact');
-
-    expect(heading[8]).toHaveTextContent('Solution');
-    expect(baseElement).toHaveTextContent('Keep writing tests');
-
-    expect(heading[9]).toHaveTextContent('References');
-    expect(
-      screen.getByTitle('View Details of CVE-2019-1234'),
-    ).toHaveTextContent('CVE-2019-1234');
-    expect(
-      screen.getByTitle('View details of DFN-CERT Advisory DFN-CERT-2019-1234'),
-    ).toHaveTextContent('DFN-CERT-2019-1234');
-
-    expect(
-      screen.getByTitle('View details of CERT-Bund Advisory CB-K12&#x2F;3456'),
-    ).toHaveTextContent('CB-K12/3456');
-    expect(baseElement).toHaveTextContent('Otherhttp://www.foo.bar');
-
-    expect(screen.getAllByTitle('Override Details')[0]).toBeInTheDocument();
-    expect(baseElement).toHaveTextContent('TestOverride');
-    expect(baseElement).toHaveTextContent('ModifiedFri, Mar 12, 2021 2:00 PM');
-
-    expect(screen.getAllByTitle('Note Details')[0]).toBeInTheDocument();
-    expect(baseElement).toHaveTextContent('TestNote');
-    expect(baseElement).toHaveTextContent('ModifiedThu, Mar 11, 2021 2:00 PM');
-  });
-
-  test('should render user tags tab', () => {
-    const gmp = {
-      result: {
-        get: getResult,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      settings: {manualUrl, reloadInterval, enableEPSS},
-      user: {currentSettings},
-    };
-
-    const {render, store} = rendererWith({
-      capabilities: true,
-      gmp,
-      router: true,
-      store: true,
-    });
-
-    store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('12345', result));
-
-    const {baseElement} = render(<DetailsPage id="12345" />);
-
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[12]).toHaveTextContent('User Tags');
-    fireEvent.click(spans[12]);
-
-    expect(baseElement).toHaveTextContent('No user tags available');
-  });
-
-  test('should call commands', async () => {
-    const exportFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const getUsers = testing.fn().mockResolvedValue({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    });
-
-    const gmp = {
-      result: {
-        get: getResult,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      users: {
-        get: getUsers,
-      },
-      settings: {manualUrl, reloadInterval, enableEPSS},
-      user: {currentSettings},
-    };
-
-    const {render, store} = rendererWith({
-      capabilities: true,
-      gmp,
       router: true,
       store: true,
     });
@@ -334,178 +150,232 @@ describe('Result DetailsPage tests', () => {
 
     render(<DetailsPage id="12345" />);
 
-    await wait();
+    // Toolbar Icons
+    expect(screen.getByTitle('Help: Results')).toBeInTheDocument();
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
+      'href',
+      'test/en/reports.html#displaying-all-existing-results',
+    );
+    expect(screen.getByTitle('Results List')).toBeInTheDocument();
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/results',
+    );
+
+    expect(screen.getByTitle('Export Result as XML')).toBeInTheDocument();
+    expect(screen.getByTitle('Add new Note')).toBeInTheDocument();
+    expect(screen.getByTitle('Add new Override')).toBeInTheDocument();
+    expect(screen.getByTitle('Create new Ticket')).toBeInTheDocument();
+    expect(
+      screen.getByTitle('Corresponding Task (task 1)'),
+    ).toBeInTheDocument();
+    expect(screen.getByTitle('Corresponding Report')).toBeInTheDocument();
+    expect(screen.getByTitle('Corresponding Tickets')).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /Result: foo/}),
+    ).toBeInTheDocument();
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
+      '12345',
+    );
+    expect(screen.getByRole('row', {name: /^Created:/})).toHaveTextContent(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    );
+    expect(screen.getByRole('row', {name: /^Modified:/})).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+    );
+    expect(screen.getByRole('row', {name: /^Owner/})).toHaveTextContent(
+      'admin',
+    );
+
+    // Tabs
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+
+    // Details
+    expect(
+      screen.getByRole('heading', {name: /^Vulnerability/}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /^Name/})).toHaveTextContent('foo');
+    expect(screen.getByRole('row', {name: /^Severity/})).toHaveTextContent(
+      '5.0 (Medium)',
+    );
+    expect(
+      screen.getByTitle('There are overrides for this result'),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /^QoD/})).toHaveTextContent('80 %');
+    expect(screen.getByRole('row', {name: /^Host/})).toHaveTextContent(
+      '109.876.54.321',
+    );
+    expect(screen.getByRole('row', {name: /^Location/})).toHaveTextContent(
+      '80/tcp',
+    );
+
+    const epssCVSS = within(
+      screen.getByRole('heading', {
+        name: /^EPSS \(CVE with highest severity\)/,
+      }).nextSibling,
+    );
+    expect(epssCVSS.getByRole('row', {name: /^EPSS Score/})).toHaveTextContent(
+      '87.650%',
+    );
+    expect(
+      epssCVSS.getByRole('row', {name: /^EPSS Percentile/}),
+    ).toHaveTextContent('80th');
+    expect(epssCVSS.getByRole('row', {name: /^CVE CVE/})).toHaveTextContent(
+      'CVE-2019-1234',
+    );
+    expect(
+      epssCVSS.getByRole('row', {name: /^CVE Severity/}),
+    ).toHaveTextContent('5.0 (Medium)');
+
+    const epssScore = within(
+      screen.getByRole('heading', {
+        name: /^EPSS \(highest EPSS score\)/,
+      }).nextSibling,
+    );
+    expect(epssScore.getByRole('row', {name: /^EPSS Score/})).toHaveTextContent(
+      '98.760%',
+    );
+    expect(
+      epssScore.getByRole('row', {name: /^EPSS Percentile/}),
+    ).toHaveTextContent('90th');
+    expect(epssScore.getByRole('row', {name: /^CVE CVE/})).toHaveTextContent(
+      'CVE-2020-5678',
+    );
+    expect(
+      epssScore.getByRole('row', {name: /^CVE Severity/}),
+    ).toHaveTextContent('2.0 (Low)');
+
+    expect(screen.getByRole('heading', {name: /^Summary/})).toBeInTheDocument();
+    expect(screen.getByText('This is a mock result')).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^Detection Result/}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('This is a result description'),
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole('heading', {name: /^Insight/})).toBeInTheDocument();
+    expect(screen.getByText('This is just a test')).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^Detection Method/}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('This is the detection method'),
+    ).toBeInTheDocument();
+
+    const detectionMethodBlock = within(
+      screen.getByRole('heading', {
+        name: /^Detection Method/,
+      }).parentElement,
+    );
+    expect(
+      detectionMethodBlock.getByRole('row', {name: /^Details/}),
+    ).toHaveTextContent('nvt1 OID: 1.3.6.1.4.1.25623.1.12345');
+    expect(
+      detectionMethodBlock.getByRole('row', {name: /^Version used:/}),
+    ).toHaveTextContent('2019-02-14T07:33:50Z');
+
+    const affectedSoftware = screen.getByRole('heading', {
+      name: /^Affected Software\/OS/,
+    });
+    expect(affectedSoftware.nextSibling).toHaveTextContent(
+      'Affects test cases only',
+    );
+
+    const impact = screen.getByRole('heading', {name: /^Impact/});
+    expect(impact.nextSibling).toHaveTextContent('No real impact');
+
+    const solution = screen.getByRole('heading', {name: /^Solution/});
+    expect(solution.nextSibling).toHaveTextContent('Keep writing tests');
+
+    const nvtReferences = within(screen.getByTestId('nvt-references'));
+    expect(
+      nvtReferences.getByRole('heading', {name: /^References/}),
+    ).toBeInTheDocument();
+    expect(
+      nvtReferences.getByTitle('View Details of CVE-2019-1234'),
+    ).toHaveTextContent('CVE-2019-1234');
+    expect(
+      nvtReferences.getByTitle(
+        'View details of DFN-CERT Advisory DFN-CERT-2019-1234',
+      ),
+    ).toHaveTextContent('DFN-CERT-2019-1234');
+    expect(
+      nvtReferences.getByTitle(
+        'View details of CERT-Bund Advisory CB-K12&#x2F;3456',
+      ),
+    ).toHaveTextContent('CB-K12/3456');
+    expect(nvtReferences.getByRole('row', {name: /^Other/})).toHaveTextContent(
+      'http://www.foo.bar',
+    );
+
+    const overrides = within(
+      screen.getByRole('heading', {name: /^Overrides/}).parentNode,
+    );
+    expect(overrides.getByText(/^TestOverride/)).toBeInTheDocument();
+    expect(overrides.getByRole('row', {name: /^Modified/})).toHaveTextContent(
+      'Fri, Mar 12, 2021 2:00 PM',
+    );
+
+    const notes = within(
+      screen.getByRole('heading', {name: /^Notes/}).parentNode,
+    );
+    expect(notes.getByText(/^TestNote/)).toBeInTheDocument();
+    expect(notes.getByRole('row', {name: /^Modified/})).toHaveTextContent(
+      'Thu, Mar 11, 2021 2:00 PM',
+    );
+  });
+
+  test('should render user tags tab', () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      capabilities: true,
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(entityLoadingActions.success('12345', result));
+
+    const {container} = render(<DetailsPage id="12345" />);
+
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
+  });
+
+  test('should call commands', async () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(entityLoadingActions.success('12345', result));
+
+    render(<DetailsPage id="12345" />);
 
     // export result
-
-    fireEvent.click(screen.getAllByTitle('Export Result as XML')[0]);
-
-    await wait();
-
-    expect(exportFunc).toHaveBeenCalledWith(result);
+    fireEvent.click(screen.getByTitle('Export Result as XML'));
+    expect(gmp.result.export).toHaveBeenCalledWith(result);
 
     // load users for create ticket dialog
-
-    fireEvent.click(screen.getAllByTitle('Create new Ticket')[0]);
-
-    await wait();
-
-    expect(getUsers).toHaveBeenCalled();
-  });
-});
-
-describe('Result ToolBarIcons tests', () => {
-  test('should render', () => {
-    const handleNoteCreateClick = testing.fn();
-    const handleOverrideCreateClick = testing.fn();
-    const handleResultDownloadClick = testing.fn();
-    const handleTicketCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl, enableEPSS}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: true,
-      router: true,
-    });
-
-    const {element} = render(
-      <ToolBarIcons
-        entity={result}
-        onNoteCreateClick={handleNoteCreateClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
-        onResultDownloadClick={handleResultDownloadClick}
-        onTicketCreateClick={handleTicketCreateClick}
-      />,
-    );
-
-    const links = element.querySelectorAll('a');
-
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: Results',
-    );
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/reports.html#displaying-all-existing-results',
-    );
-
-    expect(screen.getByTestId('list-icon')).toHaveAttribute(
-      'title',
-      'Results List',
-    );
-    expect(links[1]).toHaveAttribute('href', '/results');
-
-    expect(screen.getAllByTitle('Export Result as XML')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Add new Note')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Add new Override')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Create new Ticket')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Corresponding Task (task 1)')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Corresponding Report')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Corresponding Tickets')[0],
-    ).toBeInTheDocument();
-  });
-
-  test('should call click handlers', () => {
-    const handleNoteCreateClick = testing.fn();
-    const handleOverrideCreateClick = testing.fn();
-    const handleResultDownloadClick = testing.fn();
-    const handleTicketCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl, enableEPSS}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: true,
-      router: true,
-    });
-
-    render(
-      <ToolBarIcons
-        entity={result}
-        onNoteCreateClick={handleNoteCreateClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
-        onResultDownloadClick={handleResultDownloadClick}
-        onTicketCreateClick={handleTicketCreateClick}
-      />,
-    );
-
-    const exportIcon = screen.getByTestId('export-icon');
-    expect(exportIcon).toHaveAttribute('title', 'Export Result as XML');
-    fireEvent.click(exportIcon);
-    expect(handleResultDownloadClick).toHaveBeenCalledWith(result);
-
-    const newNoteIcon = screen.getByTestId('new-note-icon');
-    expect(newNoteIcon).toHaveAttribute('title', 'Add new Note');
-    fireEvent.click(newNoteIcon);
-
-    const newOverrideIcon = screen.getByTestId('new-override-icon');
-    expect(newOverrideIcon).toHaveAttribute('title', 'Add new Override');
-    fireEvent.click(newOverrideIcon);
-    expect(handleOverrideCreateClick).toHaveBeenCalledWith(result);
-
-    const newTicketIcon = screen.getByTestId('new-ticket-icon');
-    expect(newTicketIcon).toHaveAttribute('title', 'Create new Ticket');
-    fireEvent.click(newTicketIcon);
-    expect(handleTicketCreateClick).toHaveBeenCalledWith(result);
-  });
-
-  test('should not show icons without permission', () => {
-    const wrongCapabilities = new Capabilities(['get_results']);
-
-    const handleNoteCreateClick = testing.fn();
-    const handleOverrideCreateClick = testing.fn();
-    const handleResultDownloadClick = testing.fn();
-    const handleTicketCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: wrongCapabilities,
-      router: true,
-    });
-
-    const {element} = render(
-      <ToolBarIcons
-        entity={result}
-        onNoteCreateClick={handleNoteCreateClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
-        onResultDownloadClick={handleResultDownloadClick}
-        onTicketCreateClick={handleTicketCreateClick}
-      />,
-    );
-
-    const links = element.querySelectorAll('a');
-
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: Results',
-    );
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/reports.html#displaying-all-existing-results',
-    );
-
-    expect(screen.getByTestId('list-icon')).toHaveAttribute(
-      'title',
-      'Results List',
-    );
-    expect(links[1]).toHaveAttribute('href', '/results');
-
-    screen.getAllByTitle('Export Result as XML');
-    expect(screen.queryByTitle('Add new Note')).not.toBeInTheDocument();
-    expect(screen.queryByTitle('Add new Override')).not.toBeInTheDocument();
-    expect(screen.queryByTitle('Create new Ticket')).not.toBeInTheDocument();
-    expect(
-      screen.queryByTitle('Corresponding Task (task 1)'),
-    ).not.toBeInTheDocument();
-    expect(screen.queryByTitle('Corresponding Report')).not.toBeInTheDocument();
-    expect(
-      screen.queryByTitle('Corresponding Tickets'),
-    ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTitle('Create new Ticket'));
+    expect(gmp.users.get).toHaveBeenCalled();
   });
 });
