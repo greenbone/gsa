@@ -4,15 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
+import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import Cve from 'gmp/models/cve';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
 import CvePage from 'web/pages/cves/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-const entity_v2 = Cve.fromElement({
+const cve = Cve.fromElement({
   _id: 'CVE-2020-9997',
   owner: {
     name: '',
@@ -111,38 +110,39 @@ const entity_v2 = Cve.fromElement({
   },
 });
 
-const caps = new Capabilities(['everything']);
-
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-describe('CVE DetailsPage tests', () => {
+const createGmp = ({
+  getCveResponse = new Response(cve),
+  currentSettingsResponse = currentSettingsDefaultResponse,
+  exportCveResponse = new Response({foo: 'bar'}),
+  getCve = testing.fn().mockResolvedValue(getCveResponse),
+  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+  exportCve = testing.fn().mockResolvedValue(exportCveResponse),
+} = {}) => {
+  return {
+    cve: {
+      get: getCve,
+      export: exportCve,
+    },
+    reloadInterval,
+    settings: {
+      manualUrl,
+      enableEPSS: true,
+    },
+    user: {
+      currentSettings,
+    },
+  };
+};
+
+describe('CveDetailsPage tests', () => {
   test('should render full DetailsPage', () => {
-    const getCve = testing.fn().mockResolvedValue({
-      data: entity_v2,
-    });
-
-    const gmp = {
-      cve: {
-        get: getCve,
-      },
-      reloadInterval,
-      settings: {
-        manualUrl,
-        enableEPSS: true,
-      },
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -150,74 +150,158 @@ describe('CVE DetailsPage tests', () => {
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('CVE-2020-9997', entity_v2));
+    store.dispatch(entityLoadingActions.success('CVE-2020-9997', cve));
 
-    const {baseElement} = render(<CvePage id="CVE-2020-9997" />);
+    render(<CvePage id="CVE-2020-9997" />);
 
-    expect(baseElement).toHaveTextContent('Score50.000%');
-    expect(baseElement).toHaveTextContent('Percentile75th');
-
-    const links = baseElement.querySelectorAll('a');
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: CVEs',
-    );
-    expect(links[0]).toHaveAttribute(
+    expect(screen.getByTitle('CVE List')).toBeInTheDocument();
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/managing-secinfo.html#cve',
     );
-
-    expect(screen.getByTestId('list-icon')).toHaveAttribute(
-      'title',
-      'CVE List',
-    );
-    expect(links[1]).toHaveAttribute('href', '/cves');
-
-    expect(screen.getByTestId('export-icon')).toHaveAttribute(
-      'title',
-      'Export CVE',
+    expect(screen.getByTitle('CVE List')).toBeInTheDocument();
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/cves',
     );
 
-    expect(baseElement).toHaveTextContent('CVE: CVE-2020-9997');
+    expect(screen.getByTitle('Export CVE')).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('CVE-2020-9997');
-    expect(baseElement).toHaveTextContent(
-      'Published:Thu, Oct 22, 2020 7:15 PM Coordinated Universal Time',
+    expect(
+      screen.getByRole('heading', {name: /CVE: CVE-2020-9997/}),
+    ).toBeInTheDocument();
+
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
+      'CVE-2020-9997',
     );
-    expect(baseElement).toHaveTextContent(
-      'Modified:Fri, Oct 30, 2020 11:44 AM Coordinated Universal Time',
+    expect(
+      entityInfo.getByRole('row', {name: /^Published:/}),
+    ).toHaveTextContent('Thu, Oct 22, 2020 7:15 PM Coordinated Universal Time');
+    expect(entityInfo.getByRole('row', {name: /^Modified:/})).toHaveTextContent(
+      'Fri, Oct 30, 2020 11:44 AM Coordinated Universal Time',
     );
-    expect(baseElement).toHaveTextContent(
-      'Last updated:Mon, Oct 26, 2020 8:27 PM Coordinated Universal Time',
+    expect(
+      entityInfo.getByRole('row', {name: /^Last updated:/}),
+    ).toHaveTextContent('Mon, Oct 26, 2020 8:27 PM Coordinated Universal Time');
+
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^Description/}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/^An information disclosure issue/i),
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole('heading', {name: /^CVSS/})).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /^Base Score/})).toHaveTextContent(
+      '5.5 (Medium)',
+    );
+    expect(screen.getByRole('row', {name: /^Base Vector/})).toHaveTextContent(
+      'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N',
+    );
+    expect(screen.getByRole('row', {name: /^Attack Vector/})).toHaveTextContent(
+      'Local',
+    );
+    expect(
+      screen.getByRole('row', {name: /^Attack Complexity/}),
+    ).toHaveTextContent('Low');
+    expect(
+      screen.getByRole('row', {name: /^Privileges Required/}),
+    ).toHaveTextContent('None');
+    expect(
+      screen.getByRole('row', {name: /^User Interaction/}),
+    ).toHaveTextContent('Required');
+    expect(screen.getByRole('row', {name: /^Scope/})).toHaveTextContent(
+      'Unchanged',
+    );
+    expect(
+      screen.getByRole('row', {name: /^Confidentiality Impact/}),
+    ).toHaveTextContent('High');
+    expect(
+      screen.getByRole('row', {name: /^Integrity Impact/}),
+    ).toHaveTextContent('None');
+    expect(
+      screen.getByRole('row', {name: /^Availability Impact/}),
+    ).toHaveTextContent('None');
+
+    expect(screen.getByRole('heading', {name: /^EPSS/})).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /^Score/})).toHaveTextContent(
+      '50.000%',
+    );
+    expect(screen.getByRole('row', {name: /Percentile/})).toHaveTextContent(
+      '75th',
     );
 
-    expect(baseElement).toHaveTextContent('Attack VectorLocal');
-    expect(baseElement).toHaveTextContent('Attack ComplexityLow');
-    expect(baseElement).toHaveTextContent('Privileges RequiredNone');
-    expect(baseElement).toHaveTextContent('User InteractionRequired');
-    expect(baseElement).toHaveTextContent('ScopeUnchanged');
-    expect(baseElement).toHaveTextContent('Confidentiality ImpactHigh');
-    expect(baseElement).toHaveTextContent('Integrity ImpactNone');
-    expect(baseElement).toHaveTextContent('Availability ImpactNone');
-    const progressBars = screen.getAllByTestId('progressbar-box');
-    expect(progressBars[0]).toHaveAttribute('title', 'Medium');
-    expect(progressBars[0]).toHaveTextContent('5.5 (Medium)');
-    expect(baseElement).toHaveTextContent('References');
-    expect(baseElement).toHaveTextContent(
-      'MISChttps://support.apple.com/kb/HT211289',
+    expect(
+      screen.getByRole('heading', {name: 'References'}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /MISC.*HT211289/})).toHaveTextContent(
+      'https://support.apple.com/kb/HT211289',
     );
-    expect(baseElement).toHaveTextContent(
-      'MISChttps://support.apple.com/kb/HT211291',
+    expect(screen.getByRole('row', {name: /MISC.*HT211291/})).toHaveTextContent(
+      'https://support.apple.com/kb/HT211291',
     );
-    expect(baseElement).toHaveTextContent(
-      'CERT Advisories referencing this CVE',
-    );
-    expect(baseElement).toHaveTextContent('CB-K20/0730');
-    expect(baseElement).toHaveTextContent(
+
+    expect(
+      screen.getByRole('heading', {
+        name: /CERT Advisories referencing this CVE/,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /^CB-K20\/0730/})).toHaveTextContent(
       'Apple macOS: Mehrere Schwachstellen',
     );
-    expect(baseElement).toHaveTextContent('Vulnerable Products');
-    expect(baseElement).toHaveTextContent('cpe:/o:apple:mac_os_x:10.15.5');
-    expect(baseElement).toHaveTextContent('cpe:/o:apple:watchos:6.2.8');
+
+    expect(
+      screen.getByRole('heading', {name: /^Vulnerable Products/}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('cpe:/o:apple:mac_os_x:10.15.5'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('cpe:/o:apple:watchos:6.2.8')).toBeInTheDocument();
+  });
+
+  test('should render user tags tab', async () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+    store.dispatch(entityLoadingActions.success('CVE-2020-9997', cve));
+
+    const {container} = render(<CvePage id="CVE-2020-9997" />);
+
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
+  });
+
+  test('should call commands', async () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+    store.dispatch(entityLoadingActions.success('CVE-2020-9997', cve));
+
+    render(<CvePage id="CVE-2020-9997" />);
+
+    const exportIcon = screen.getByTitle('Export CVE');
+    fireEvent.click(exportIcon);
+    expect(gmp.cve.export).toHaveBeenCalledWith(cve);
   });
 });
