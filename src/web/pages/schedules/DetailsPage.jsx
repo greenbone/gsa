@@ -5,11 +5,6 @@
 
 import React from 'react';
 import {ScheduleIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
@@ -21,10 +16,6 @@ import TabsContainer from 'web/components/tab/TabsContainer';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import CloneIcon from 'web/entity/icon/CloneIcon';
-import CreateIcon from 'web/entity/icon/CreateIcon';
-import EditIcon from 'web/entity/icon/EditIcon';
-import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
@@ -33,55 +24,13 @@ import withEntityContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import ScheduleDetails from 'web/pages/schedules/Details';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
+import ScheduleDetailsPageToolBarIcons from 'web/pages/schedules/ScheduleDetailsPageToolBarIcons';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/schedules';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = ({
-  entity,
-  onScheduleCloneClick,
-  onScheduleCreateClick,
-  onScheduleDeleteClick,
-  onScheduleDownloadClick,
-  onScheduleEditClick,
-}) => {
-  const [_] = useTranslation();
-
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="managing-schedules"
-          page="scanning"
-          title={_('Help: Schedules')}
-        />
-        <ListIcon page="schedules" title={_('Schedules List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon entity={entity} onClick={onScheduleCreateClick} />
-        <CloneIcon entity={entity} onClick={onScheduleCloneClick} />
-        <EditIcon entity={entity} onClick={onScheduleEditClick} />
-        <TrashIcon entity={entity} onClick={onScheduleDeleteClick} />
-        <ExportIcon
-          title={_('Export Schedule as XML')}
-          value={entity}
-          onClick={onScheduleDownloadClick}
-        />
-      </IconDivider>
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onScheduleCloneClick: PropTypes.func.isRequired,
-  onScheduleCreateClick: PropTypes.func.isRequired,
-  onScheduleDeleteClick: PropTypes.func.isRequired,
-  onScheduleDownloadClick: PropTypes.func.isRequired,
-  onScheduleEditClick: PropTypes.func.isRequired,
-};
 
 const Page = ({
   entity,
@@ -89,7 +38,6 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-
   ...props
 }) => {
   const [_] = useTranslation();
@@ -111,7 +59,7 @@ const Page = ({
           entity={entity}
           sectionIcon={<ScheduleIcon size="large" />}
           title={_('Schedule')}
-          toolBarIcons={ToolBarIcons}
+          toolBarIcons={ScheduleDetailsPageToolBarIcons}
           onScheduleCloneClick={clone}
           onScheduleCreateClick={create}
           onScheduleDeleteClick={delete_func}
