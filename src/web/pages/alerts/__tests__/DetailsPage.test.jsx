@@ -117,47 +117,61 @@ describe('Alert DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 
-    const {baseElement} = render(<DetailsPage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    expect(baseElement).toHaveTextContent('Alert: foo');
+    expect(
+      screen.getByRole('heading', {name: /alert: foo/i}),
+    ).toBeInTheDocument();
 
-    const links = baseElement.querySelectorAll('a');
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: Alerts',
-    );
-    expect(links[0]).toHaveAttribute(
+    expect(screen.getByTitle('Help: Alerts')).toBeInTheDocument();
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-alerts',
     );
-
     expect(screen.getByTestId('list-icon')).toHaveAttribute(
       'title',
       'Alerts List',
     );
-    expect(links[1]).toHaveAttribute('href', '/alerts');
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/alerts',
+    );
 
-    expect(baseElement).toHaveTextContent('ID:1234');
-    expect(baseElement).toHaveTextContent(
+    const entityInfo = screen.getByTestId('entity-info');
+    expect(entityInfo).toHaveTextContent('ID:1234');
+    expect(entityInfo).toHaveTextContent(
       'Created:Tue, Jul 16, 2019 8:31 AM Central European Summer Time',
     );
-    expect(baseElement).toHaveTextContent(
+    expect(entityInfo).toHaveTextContent(
       'Modified:Tue, Jul 16, 2019 8:44 AM Central European Summer Time',
     );
-    expect(baseElement).toHaveTextContent('Owner:admin');
+    expect(entityInfo).toHaveTextContent('Owner:admin');
 
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[9]).toHaveTextContent('User Tags');
-    expect(spans[11]).toHaveTextContent('Permissions');
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^permissions/i}),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('foo');
-    expect(baseElement).toHaveTextContent('bar');
+    expect(
+      screen.getByRole('row', {name: /^comment bar/i}),
+    ).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('Task run status changed to Done');
-    expect(baseElement).toHaveTextContent('Always');
-    expect(baseElement).toHaveTextContent('SMB');
-    expect(baseElement).toHaveTextContent('report results filter');
-    expect(baseElement).toHaveTextContent('Yes');
+    expect(
+      screen.getByRole('row', {
+        name: /^event task run status changed to done/i,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^condition always/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /^method smb/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^results filter report results filter/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /^active yes/i})).toBeInTheDocument();
   });
 
   test('should render user tags tab', () => {
@@ -192,14 +206,11 @@ describe('Alert DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 
-    const {baseElement} = render(<DetailsPage id="12345" />);
+    const {container} = render(<DetailsPage id="12345" />);
 
-    const spans = baseElement.querySelectorAll('span');
-
-    expect(spans[9]).toHaveTextContent('User Tags');
-    fireEvent.click(spans[9]);
-
-    expect(baseElement).toHaveTextContent('No user tags available');
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
   });
 
   test('should render permissions tab', () => {
@@ -234,14 +245,11 @@ describe('Alert DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 
-    const {baseElement} = render(<DetailsPage id="12345" />);
+    const {container} = render(<DetailsPage id="12345" />);
 
-    const spans = baseElement.querySelectorAll('span');
-
-    expect(spans[11]).toHaveTextContent('Permissions');
-    fireEvent.click(spans[11]);
-
-    expect(baseElement).toHaveTextContent('No permissions available');
+    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    fireEvent.click(permissionsTab);
+    expect(container).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
