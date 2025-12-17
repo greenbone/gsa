@@ -18,6 +18,11 @@ import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 
+const OptionsList = styled.ul`
+  margin: 0;
+  padding-left: 1em;
+`;
+
 export const ReportConfigParamValue = ({
   param,
   value = param.value,
@@ -41,10 +46,6 @@ export const ReportConfigParamValue = ({
       );
     });
   } else if (param.type === 'multi_selection') {
-    const OptionsList = styled.ul`
-      margin: 0;
-      padding-left: 1em;
-    `;
     return (
       <OptionsList>
         {value.map(option => {
@@ -67,6 +68,13 @@ ReportConfigParamValue.propTypes = {
   value: PropTypes.any,
   valueLabels: PropTypes.object,
 };
+
+const ReportConfigColGroup = () => (
+  <colgroup>
+    <TableCol width="10%" />
+    <TableCol width="90%" />
+  </colgroup>
+);
 
 const ReportConfigDetails = ({entity, links = true}) => {
   const [_] = useTranslation();
@@ -101,10 +109,7 @@ const ReportConfigDetails = ({entity, links = true}) => {
   return (
     <Layout grow flex="column">
       <InfoTable>
-        <colgroup>
-          <TableCol width="10%" />
-          <TableCol width="90%" />
-        </colgroup>
+        <ReportConfigColGroup />
         <TableBody>
           <TableRow>
             <TableData>{_('Report Format')}</TableData>
@@ -112,38 +117,31 @@ const ReportConfigDetails = ({entity, links = true}) => {
               <span>{reportFormatLink}</span>
             </TableData>
           </TableRow>
-
-          <TableRow>
-            <TableDataAlignTop>{_('Parameters')}</TableDataAlignTop>
-            <TableData>
-              <Layout>
-                <InfoTable>
-                  <TableBody>{paramRows}</TableBody>
-                </InfoTable>
-              </Layout>
-            </TableData>
-          </TableRow>
-
-          {alerts.length > 0 && (
-            <TableRow>
-              <TableDataAlignTop>
-                {_('Alerts using this Report Config')}
-              </TableDataAlignTop>
-              <TableData>
-                {alerts.map(alert => {
-                  return (
-                    <span key={alert.id}>
-                      <DetailsLink id={alert.id} type="alert">
-                        {alert.name}
-                      </DetailsLink>
-                    </span>
-                  );
-                })}
-              </TableData>
-            </TableRow>
-          )}
         </TableBody>
       </InfoTable>
+
+      <h3>{_('Parameters')}</h3>
+      <InfoTable aria-label={_('Parameters')}>
+        <ReportConfigColGroup />
+        <TableBody>{paramRows}</TableBody>
+      </InfoTable>
+
+      {alerts.length > 0 && (
+        <>
+          <h3>{_('Alerts using this Report Config')}</h3>
+          <OptionsList aria-label={_('Alerts using this Report Config')}>
+            {alerts.map(alert => {
+              return (
+                <li key={alert.id}>
+                  <DetailsLink id={alert.id} type="alert">
+                    {alert.name}
+                  </DetailsLink>
+                </li>
+              );
+            })}
+          </OptionsList>
+        </>
+      )}
     </Layout>
   );
 };

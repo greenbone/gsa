@@ -5,10 +5,6 @@
 
 import React from 'react';
 import {ReportConfigIcon} from 'web/components/icon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import Tab from 'web/components/tab/Tab';
@@ -27,10 +23,6 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import CloneIcon from 'web/entity/icon/CloneIcon';
-import CreateIcon from 'web/entity/icon/CreateIcon';
-import EditIcon from 'web/entity/icon/EditIcon';
-import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
@@ -40,6 +32,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import ReportConfigDetails, {
   ReportConfigParamValue,
 } from 'web/pages/reportconfigs/Details';
+import ReportConfigDetailsPageToolBarIcons from 'web/pages/reportconfigs/ReportConfigDetailsPageToolBarIcons';
 import ReportConfigComponent from 'web/pages/reportconfigs/ReportConfigsComponent';
 import {
   selector as permissionsSelector,
@@ -48,55 +41,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/reportconfigs';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-const ToolBarIcons = ({
-  entity,
-  onReportConfigCloneClick,
-  onReportConfigCreateClick,
-  onReportConfigDeleteClick,
-  onReportConfigEditClick,
-}) => {
-  const [_] = useTranslation();
-
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="customizing-report-formats-with-report-configurations"
-          page="reports"
-          title={_('Help: Report Configs')}
-        />
-        <ListIcon page="reportconfigs" title={_('Report Configs List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon
-          displayName={_('Report Config')}
-          entity={entity}
-          onClick={onReportConfigCreateClick}
-        />
-        <CloneIcon entity={entity} onClick={onReportConfigCloneClick} />
-        <EditIcon
-          disabled={entity.predefined}
-          displayName={_('Report Config')}
-          entity={entity}
-          onClick={onReportConfigEditClick}
-        />
-        <TrashIcon
-          displayName={_('Report Config')}
-          entity={entity}
-          onClick={onReportConfigDeleteClick}
-        />
-      </IconDivider>
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onReportConfigCloneClick: PropTypes.func.isRequired,
-  onReportConfigCreateClick: PropTypes.func.isRequired,
-  onReportConfigDeleteClick: PropTypes.func.isRequired,
-  onReportConfigEditClick: PropTypes.func.isRequired,
-};
 
 const Details = ({entity, links = true}) => {
   return (
@@ -189,7 +133,7 @@ const Page = ({
           entity={entity}
           sectionIcon={<ReportConfigIcon size="large" />}
           title={_('Report Config')}
-          toolBarIcons={ToolBarIcons}
+          toolBarIcons={ReportConfigDetailsPageToolBarIcons}
           onReportConfigCloneClick={clone}
           onReportConfigCreateClick={create_func}
           onReportConfigDeleteClick={delete_func}
