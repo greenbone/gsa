@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
+import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/report-config';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
@@ -15,48 +15,43 @@ import DetailsPage from 'web/pages/reportconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/reportconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-const entityType = 'reportconfig';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
+const reportConfig = ReportConfig.fromElement(mockReportConfig);
 
-const getPermissions = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
+const createGmp = ({
+  getReportConfigResponse = new Response(reportConfig),
+  getPermissionsResponse = new Response([], {
     filter: Filter.fromString(),
     counts: new CollectionCounts(),
-  },
-});
+  }),
+  currentSettingsResponse = currentSettingsDefaultResponse,
+  getReportConfig = testing.fn().mockResolvedValue(getReportConfigResponse),
+  getPermissions = testing.fn().mockResolvedValue(getPermissionsResponse),
+  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+} = {}) => {
+  return {
+    reportconfig: {
+      get: getReportConfig,
+    },
+    permissions: {
+      get: getPermissions,
+    },
+    reloadInterval,
+    settings: {manualUrl},
+    user: {
+      currentSettings,
+    },
+  };
+};
 
-const config = ReportConfig.fromElement(mockReportConfig);
-describe('Report Config Details Page tests', () => {
+describe('ReportConfigDetailsPage tests', () => {
   test('should render full Details page with param details', () => {
-    const getReportConfig = testing.fn().mockResolvedValue({
-      data: config,
-    });
-
-    const gmp = {
-      [entityType]: {
-        get: getReportConfig,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {
-        currentSettings,
-      },
-    };
-
-    const caps = new Capabilities(['everything']);
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -64,86 +59,160 @@ describe('Report Config Details Page tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', config));
+    store.dispatch(entityLoadingActions.success('12345', reportConfig));
 
-    const {container} = render(<DetailsPage id="12345" />);
-    expect(container).toBeVisible();
+    render(<DetailsPage id="12345" />);
 
-    // Test parameter details
-    const spans = container.querySelectorAll('span');
-    expect(spans[8]).toHaveTextContent('Parameter Details');
-    fireEvent.click(spans[8]);
+    expect(screen.getByTitle('Help: Report Configs')).toBeInTheDocument();
+    expect(screen.getByTitle('Report Configs List')).toBeInTheDocument();
 
-    const paramTableRows = container.querySelectorAll('tr');
-    expect(paramTableRows.length).toBe(7);
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
+      'href',
+      'test/en/reports.html#customizing-report-formats-with-report-configurations',
+    );
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/reportconfigs',
+    );
 
-    let columns = paramTableRows[0].querySelectorAll('th');
-    expect(columns.length).toBe(6);
-    expect(columns[0]).toHaveTextContent('Name');
-    expect(columns[1]).toHaveTextContent('Value');
-    expect(columns[2]).toHaveTextContent('Using Default');
-    expect(columns[3]).toHaveTextContent('Default Value');
-    expect(columns[4]).toHaveTextContent('Minimum');
-    expect(columns[5]).toHaveTextContent('Maximum');
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
+      '12345',
+    );
+    expect(entityInfo.getByRole('row', {name: /^Created:/})).toHaveTextContent(
+      'Tue, Jul 16, 2019 8:31 AM Central European Summer Time',
+    );
+    expect(entityInfo.getByRole('row', {name: /^Modified:/})).toHaveTextContent(
+      'Tue, Jul 16, 2019 8:44 AM Central European Summer Time',
+    );
+    expect(entityInfo.getByRole('row', {name: /Owner:/})).toHaveTextContent(
+      'admin',
+    );
 
-    columns = paramTableRows[1].querySelectorAll('td');
-    expect(columns.length).toBe(6);
-    expect(columns[0]).toHaveTextContent('StringParam');
-    expect(columns[1]).toHaveTextContent('StringValue');
-    expect(columns[2]).toHaveTextContent('Yes');
-    expect(columns[3]).toHaveTextContent('StringValue');
-    expect(columns[4]).toHaveTextContent('0');
-    expect(columns[5]).toHaveTextContent('1');
+    expect(
+      screen.getByRole('heading', {name: /Report Config: foo$/}),
+    ).toBeInTheDocument();
 
-    columns = paramTableRows[2].querySelectorAll('td');
-    expect(columns.length).toBe(6);
-    expect(columns[0]).toHaveTextContent('TextParam');
-    expect(columns[1]).toHaveTextContent('TextValue');
-    expect(columns[2]).toHaveTextContent('No');
-    expect(columns[3]).toHaveTextContent('TextDefault');
-    expect(columns[4]).toHaveTextContent('0');
-    expect(columns[5]).toHaveTextContent('1');
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^parameter details/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^permissions/i}),
+    ).toBeInTheDocument();
 
-    columns = paramTableRows[3].querySelectorAll('td');
-    expect(columns.length).toBe(6);
-    expect(columns[0]).toHaveTextContent('IntegerParam');
-    expect(columns[1]).toHaveTextContent('12');
-    expect(columns[2]).toHaveTextContent('Yes');
-    expect(columns[3]).toHaveTextContent('12');
-    expect(columns[4]).toHaveTextContent('0');
-    expect(columns[5]).toHaveTextContent('50');
+    expect(screen.getByRole('row', {name: /^Report Format/})).toHaveTextContent(
+      'example-configurable-1',
+    );
 
-    columns = paramTableRows[4].querySelectorAll('td');
-    expect(columns.length).toBe(6);
-    expect(columns[0]).toHaveTextContent('BooleanParam');
-    expect(columns[1]).toHaveTextContent('Yes');
-    expect(columns[2]).toHaveTextContent('No');
-    expect(columns[3]).toHaveTextContent('No');
-    expect(columns[4]).toHaveTextContent('0');
-    expect(columns[5]).toHaveTextContent('1');
+    const paramTable = within(screen.getByRole('table', {name: /parameters/i}));
+    expect(
+      paramTable.getByRole('row', {name: /StringParam/}),
+    ).toHaveTextContent('StringValue');
+    expect(paramTable.getByRole('row', {name: /TextParam/})).toHaveTextContent(
+      'TextValue',
+    );
+    expect(
+      paramTable.getByRole('row', {name: /IntegerParam/}),
+    ).toHaveTextContent('12');
+    expect(
+      paramTable.getByRole('row', {name: /BooleanParam/}),
+    ).toHaveTextContent('Yes');
+    expect(
+      paramTable.getByRole('row', {name: /SelectionParam/}),
+    ).toHaveTextContent('OptionB');
+    expect(
+      paramTable.getByRole('row', {name: /ReportFormatListParam/}),
+    ).toHaveTextContent('non-configurable-1non-configurable-2');
 
-    columns = paramTableRows[5].querySelectorAll('td');
-    expect(columns.length).toBe(6);
-    expect(columns[0]).toHaveTextContent('SelectionParam');
-    expect(columns[1]).toHaveTextContent('OptionB');
-    expect(columns[2]).toHaveTextContent('No');
-    expect(columns[3]).toHaveTextContent('OptionA');
+    const alertsList = within(
+      screen.getByRole('list', {
+        name: /alerts using this report config/i,
+      }),
+    );
+    expect(alertsList.getByRole('link', {name: 'ABC'})).toHaveAttribute(
+      'href',
+      '/alert/321',
+    );
+    expect(alertsList.getByRole('link', {name: 'XYZ'})).toHaveAttribute(
+      'href',
+      '/alert/789',
+    );
+  });
 
-    columns = paramTableRows[6].querySelectorAll('td');
-    expect(columns.length).toBe(6);
-    expect(columns[0]).toHaveTextContent('ReportFormatListParam');
-    let detailsLinks = columns[1].querySelectorAll('a');
-    expect(detailsLinks).toHaveLength(2);
-    expect(detailsLinks[0]).toHaveTextContent('non-configurable-1');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/reportformat/654321');
-    expect(detailsLinks[1]).toHaveTextContent('non-configurable-2');
-    expect(detailsLinks[1]).toHaveAttribute('href', '/reportformat/7654321');
-    expect(columns[2]).toHaveTextContent('No');
-    detailsLinks = columns[3].querySelectorAll('a');
-    expect(detailsLinks).toHaveLength(2);
-    expect(detailsLinks[0]).toHaveTextContent('non-configurable-2');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/reportformat/7654321');
-    expect(detailsLinks[1]).toHaveTextContent('configurable-2');
-    expect(detailsLinks[1]).toHaveAttribute('href', '/reportformat/1234567');
+  test('should render parameter details', async () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(entityLoadingActions.success('12345', reportConfig));
+
+    render(<DetailsPage id="12345" />);
+
+    const parameterDetailsTab = screen.getByRole('tab', {
+      name: /^parameter details/i,
+    });
+    fireEvent.click(parameterDetailsTab);
+
+    // table heading
+    expect(
+      screen.getByRole('row', {
+        name: /^Name Value Using Default Default Value Minimum Maximum$/i,
+      }),
+    ).toBeInTheDocument();
+
+    // first param row
+    expect(screen.getByRole('row', {name: /StringParam/})).toHaveTextContent(
+      /StringValueYesStringValue0100$/,
+    );
+
+    // second param row
+    expect(screen.getByRole('row', {name: /^TextParam/})).toHaveTextContent(
+      /TextValueNoTextDefault01000$/,
+    );
+
+    // third param row
+    expect(screen.getByRole('row', {name: /^IntegerParam/})).toHaveTextContent(
+      /12Yes12050$/,
+    );
+
+    // fourth param row
+    expect(screen.getByRole('row', {name: /^BooleanParam/})).toHaveTextContent(
+      /YesNoNo01$/,
+    );
+
+    // fifth param row
+    expect(
+      screen.getByRole('row', {name: /^SelectionParam/}),
+    ).toHaveTextContent(/OptionBNoOptionA01$/);
+
+    // sixth param row
+    expect(
+      screen.getByRole('row', {name: /^ReportFormatListParam/}),
+    ).toHaveTextContent(
+      /ListParamnon-configurable-1non-configurable-2Nonon-configurable-2example-configurable-201$/,
+    );
+    expect(
+      screen.getByRole('link', {name: /^non-configurable-1$/}),
+    ).toHaveAttribute('href', '/reportformat/654321');
+    expect(
+      screen.getAllByRole('link', {name: /^non-configurable-2$/})[0],
+    ).toHaveAttribute('href', '/reportformat/7654321');
+    expect(
+      screen.getAllByRole('link', {name: /^non-configurable-2$/})[1],
+    ).toHaveAttribute('href', '/reportformat/7654321');
+    expect(
+      screen.getByRole('link', {name: /^example-configurable-2$/}),
+    ).toHaveAttribute('href', '/reportformat/1234567');
   });
 });

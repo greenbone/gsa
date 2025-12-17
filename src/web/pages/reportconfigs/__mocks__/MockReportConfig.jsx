@@ -21,7 +21,7 @@ export const mockReportConfig = {
       name: 'StringParam',
       value: {
         __text: 'StringValue',
-        _using_default: '1',
+        _using_default: 1,
       },
       default: 'StringValue',
       type: {
@@ -34,7 +34,7 @@ export const mockReportConfig = {
       name: 'TextParam',
       value: {
         __text: 'TextValue',
-        _using_default: '0',
+        _using_default: 0,
       },
       default: 'TextDefault',
       type: {
@@ -46,10 +46,10 @@ export const mockReportConfig = {
     {
       name: 'IntegerParam',
       value: {
-        __text: '12',
-        _using_default: '1',
+        __text: 12,
+        _using_default: 1,
       },
-      default: '12',
+      default: 12,
       type: {
         __text: 'integer',
         min: 0,
@@ -59,10 +59,10 @@ export const mockReportConfig = {
     {
       name: 'BooleanParam',
       value: {
-        __text: '1',
-        _using_default: '0',
+        __text: 1,
+        _using_default: 0,
       },
-      default: '0',
+      default: 0,
       type: {
         __text: 'boolean',
         min: 0,
@@ -73,7 +73,7 @@ export const mockReportConfig = {
       name: 'SelectionParam',
       value: {
         __text: 'OptionB',
-        _using_default: '0',
+        _using_default: 0,
       },
       default: 'OptionA',
       options: {
@@ -121,6 +121,7 @@ export const mockReportConfig = {
       },
     },
   ],
+  permissions: {permission: [{name: 'everything'}]},
   alerts: {
     alert: [
       {
