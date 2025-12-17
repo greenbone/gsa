@@ -27,6 +27,7 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
 import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
@@ -42,7 +43,7 @@ import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
 import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
-import withGmp from 'web/utils/withGmp';
+
 const Span = styled.span`
   margin-top: 2px;
 `;
@@ -64,7 +65,6 @@ const PageContent = ({
   entity,
   errorsCounts,
   filters,
-  gmp,
   hostsCounts,
   isLoading = true,
   isLoadingFilters = true,
@@ -94,13 +94,13 @@ const PageContent = ({
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
   onFilterResetClick,
-
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onSortChange,
   onTagSuccess,
   onTargetEditClick,
 }) => {
+  const gmp = useGmp();
   const [_] = useTranslation();
   const hasReport = isDefined(entity);
 
@@ -526,7 +526,6 @@ PageContent.propTypes = {
   entity: PropTypes.model,
   errorsCounts: PropTypes.counts,
   filters: PropTypes.array,
-  gmp: PropTypes.gmp.isRequired,
   hostsCounts: PropTypes.counts,
   isLoading: PropTypes.bool,
   isLoadingFilters: PropTypes.bool,
@@ -563,4 +562,4 @@ PageContent.propTypes = {
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
-export default withGmp(PageContent);
+export default PageContent;
