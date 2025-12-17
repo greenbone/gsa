@@ -5,11 +5,6 @@
 
 import React from 'react';
 import {PolicyIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import Tab from 'web/components/tab/Tab';
@@ -22,9 +17,6 @@ import TabsContainer from 'web/components/tab/TabsContainer';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import CloneIcon from 'web/entity/icon/CloneIcon';
-import EditIcon from 'web/entity/icon/EditIcon';
-import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import withEntityContainer, {
   permissionsResourceFilter,
@@ -32,6 +24,7 @@ import withEntityContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import PolicyDetails from 'web/pages/policies/Details';
 import PolicyComponent from 'web/pages/policies/PoliciesComponent';
+import PolicyDetailsPageToolBarIcons from 'web/pages/policies/PolicyDetailsPageToolBarIcons';
 import {
   NvtFamilies,
   ScannerPreferences,
@@ -43,62 +36,6 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/policies';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
-export const ToolBarIcons = withCapabilities(
-  ({
-    entity,
-    onPolicyCloneClick,
-    onPolicyDeleteClick,
-    onPolicyDownloadClick,
-    onPolicyEditClick,
-  }) => {
-    const [_] = useTranslation();
-
-    return (
-      <Divider margin="10px">
-        <IconDivider>
-          <ManualIcon
-            anchor="configuring-and-managing-policies"
-            page="compliance-and-special-scans"
-            title={_('Help: Policies')}
-          />
-          <ListIcon page="policies" title={_('Policies List')} />
-        </IconDivider>
-        <IconDivider>
-          <CloneIcon
-            displayName={_('Policy')}
-            entity={entity}
-            onClick={onPolicyCloneClick}
-          />
-          <EditIcon
-            disabled={entity.predefined}
-            displayName={_('Policy')}
-            entity={entity}
-            onClick={onPolicyEditClick}
-          />
-          <TrashIcon
-            displayName={_('Policy')}
-            entity={entity}
-            onClick={onPolicyDeleteClick}
-          />
-          <ExportIcon
-            title={_('Export Policy as XML')}
-            value={entity}
-            onClick={onPolicyDownloadClick}
-          />
-        </IconDivider>
-      </Divider>
-    );
-  },
-);
-
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onPolicyCloneClick: PropTypes.func.isRequired,
-  onPolicyDeleteClick: PropTypes.func.isRequired,
-  onPolicyDownloadClick: PropTypes.func.isRequired,
-  onPolicyEditClick: PropTypes.func.isRequired,
-};
 
 const Details = ({entity, ...props}) => {
   return (
@@ -138,7 +75,7 @@ const Page = ({
           entity={entity}
           sectionIcon={<PolicyIcon size="large" />}
           title={_('Policy')}
-          toolBarIcons={ToolBarIcons}
+          toolBarIcons={PolicyDetailsPageToolBarIcons}
           onPolicyCloneClick={clone}
           onPolicyDeleteClick={delete_func}
           onPolicyDownloadClick={download}
