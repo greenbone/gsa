@@ -3,22 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Table from 'web/components/table/Table';
+import Table, {type TableProps} from 'web/components/table/Table';
 
-interface SimpleTableProps {
+interface SimpleTableProps extends TableProps {
   size?: string;
-  children?: React.ReactNode;
-  'data-testid'?: string;
 }
 
-const SimpleTable = ({
-  size = 'auto',
-  children,
-  'data-testid': dataTestId,
-}: SimpleTableProps) => (
-  <Table $size={size} data-testid={dataTestId}>
-    {children}
-  </Table>
+const SimpleTable = ({size = 'auto', ...other}: SimpleTableProps) => (
+  <Table {...other} $size={size} />
 );
 
 export default SimpleTable;
