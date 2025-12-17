@@ -351,11 +351,11 @@ describe('TaskDetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task2));
 
-    const {baseElement} = render(<TaskDetailsPage id="12345" />);
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[22]);
+    const {container} = render(<TaskDetailsPage id="12345" />);
 
-    expect(baseElement).toHaveTextContent('No user tags available');
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
   });
 
   test('should render permissions tab', () => {
@@ -405,11 +405,11 @@ describe('TaskDetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task2));
 
-    const {baseElement} = render(<TaskDetailsPage id="12345" />);
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[24]);
+    const {container} = render(<TaskDetailsPage id="12345" />);
 
-    expect(baseElement).toHaveTextContent('No permissions available');
+    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    fireEvent.click(permissionsTab);
+    expect(container).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
