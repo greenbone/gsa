@@ -9,6 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Credential, {
   CERTIFICATE_CREDENTIAL_TYPE,
   CERTIFICATE_STATUS_VALID,
+  PGP_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
@@ -228,6 +229,56 @@ describe('CredentialDetailsPage tests', () => {
     expect(
       screen.getByRole('row', {name: /^key type rsa/i}),
     ).toBeInTheDocument();
+  });
+
+  test('should render pgp certificate credential', async () => {
+    const credential = Credential.fromElement({
+      _id: '6575',
+      creation_time: '2020-12-16T15:23:59Z',
+      comment: 'some comment',
+      in_use: 0,
+      modification_time: '2021-03-02T10:28:15Z',
+      name: 'credential 1',
+      owner: {name: 'admin'},
+      permissions: {permission: {name: 'Everything'}},
+      type: PGP_CREDENTIAL_TYPE,
+      writable: 1,
+      public_key_info: {
+        fingerprint: 'sha256_hash_value',
+      },
+    });
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(entityLoadingActions.success('6575', credential));
+
+    render(<CredentialDetailsPage id={credential.id} />);
+
+    expect(
+      screen.getByRole('row', {name: /^comment some comment/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^type pgp encryption key \(pgp\)/i}),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^credential/i}),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^public key/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /^fingerprint/i})).toHaveTextContent(
+      'sha256_hash_value',
+    );
   });
 
   test('should render user tags tab', async () => {
