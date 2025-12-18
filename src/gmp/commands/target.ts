@@ -21,9 +21,9 @@ interface TargetCommandCreateParams {
   allowSimultaneousIPs?: boolean;
   comment?: string;
   esxiCredentialId?: string;
-  excludeFile?: string;
+  excludeFile?: File;
   excludeHosts?: string;
-  file?: string;
+  file?: File;
   hosts?: string;
   hostsFilter?: Filter;
   krb5CredentialId?: string;
