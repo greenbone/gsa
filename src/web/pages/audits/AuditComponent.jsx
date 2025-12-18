@@ -93,7 +93,6 @@ const AuditComponent = ({
   const [autoDeleteData, setAutoDeleteData] = useState(undefined);
   const [policyId, setPolicyId] = useState('');
   const [comment, setComment] = useState('');
-  const [hostsOrdering, setHostsOrdering] = useState(undefined);
   const [id, setId] = useState(undefined);
   const [inAssets, setInAssets] = useState(undefined);
   const [maxChecks, setMaxChecks] = useState(undefined);
@@ -238,9 +237,6 @@ const AuditComponent = ({
         break;
       case 'comment':
         setComment(value);
-        break;
-      case 'hostsOrdering':
-        setHostsOrdering(value);
         break;
       case 'id':
         setId(value);
@@ -437,7 +433,6 @@ const AuditComponent = ({
         auto_delete_data,
         comment,
         config,
-        hosts_ordering,
         id,
         in_assets,
         max_checks,
@@ -461,7 +456,6 @@ const AuditComponent = ({
       setAutoDeleteData(auto_delete_data);
       setPolicyId(hasId(config) ? config.id : undefined);
       setComment(comment);
-      setHostsOrdering(hosts_ordering);
       setId(id);
       setInAssets(in_assets);
       setMaxChecks(max_checks);
@@ -483,7 +477,6 @@ const AuditComponent = ({
       setAutoDeleteData(undefined);
       setComment(undefined);
       setPolicyId(undefined);
-      setHostsOrdering(undefined);
       setId(undefined);
       setInAssets(undefined);
       setMaxChecks(undefined);
@@ -593,7 +586,6 @@ const AuditComponent = ({
                           auto_delete={autoDelete}
                           auto_delete_data={autoDeleteData}
                           comment={comment}
-                          hostsOrdering={hostsOrdering}
                           id={id}
                           in_assets={inAssets}
                           isLoadingScanners={isLoadingScanners}
