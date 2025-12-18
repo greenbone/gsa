@@ -88,7 +88,9 @@ interface TargetDialogValues {
 interface TargetDialogDefaultValues {
   allowSimultaneousIPs: boolean;
   comment: string;
+  excludeFile?: File;
   excludeHosts: string;
+  file?: File;
   hosts: string;
   hostsCount?: number;
   hostsFilter?: Filter;
@@ -457,6 +459,7 @@ const TargetDialog = ({
                   disabled={inUse || state.targetSource !== 'file'}
                   grow="1"
                   name="file"
+                  value={state.file}
                   onChange={
                     onValueChange as (value?: File, name?: string) => void
                   }
@@ -508,6 +511,7 @@ const TargetDialog = ({
                   disabled={inUse || state.targetExcludeSource !== 'file'}
                   grow="1"
                   name="excludeFile"
+                  value={state.excludeFile}
                   onChange={
                     onValueChange as (value?: File, name?: string) => void
                   }
