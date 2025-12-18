@@ -6,7 +6,6 @@
 import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import AuditReportDetailsContent from 'web/pages/reports/AuditReportDetailsContent';
@@ -26,17 +25,28 @@ const resetFilter = Filter.fromString(
   'first=1 compliance_levels=ynui sort=compliant',
 );
 
-const caps = new Capabilities(['everything']);
-
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
-const getReportComposerDefaults = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const createGmp = ({
+  currentSettingsResponse = {foo: 'bar'},
+  getReportComposerDefaultsResponse = {foo: 'bar'},
+  reportResultsThreshold = 10,
+  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+  getReportComposerDefaults = testing
+    .fn()
+    .mockResolvedValue(getReportComposerDefaultsResponse),
+} = {}) => {
+  return {
+    settings: {
+      manualUrl,
+      reportResultsThreshold,
+    },
+    user: {
+      currentSettings,
+      getReportComposerDefaults,
+    },
+  };
+};
 
 describe('AuditReportDetailsContent tests', () => {
   test('should render Audit Report Details Content', () => {
@@ -50,7 +60,6 @@ describe('AuditReportDetailsContent tests', () => {
     const onFilterRemoveSeverityClick = testing.fn();
     const onFilterResetClick = testing.fn();
     const onFilterRemoveClick = testing.fn();
-
     const onRemoveFromAssetsClick = testing.fn();
     const onReportDownloadClick = testing.fn();
     const showError = testing.fn();
@@ -60,7 +69,6 @@ describe('AuditReportDetailsContent tests', () => {
     const onTagSuccess = testing.fn();
     const onTargetEditClick = testing.fn();
     const onTlsCertificateDownloadClick = testing.fn();
-
     const sorting = {
       errors: {sortField: 'error', sortReverse: true},
       hosts: {sortField: 'compliant', sortReverse: true},
@@ -68,19 +76,12 @@ describe('AuditReportDetailsContent tests', () => {
       results: {sortField: 'compliant', sortReverse: true},
       tlscerts: {sortField: 'dn', sortReverse: true},
     };
-
     const {entity} = getMockAuditReport();
-
     const filters = [filterWithName];
-
-    const gmp = {
-      settings: {manualUrl, reportResultsThreshold: 10},
-      user: {currentSettings, getReportComposerDefaults},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -88,7 +89,7 @@ describe('AuditReportDetailsContent tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(
+    render(
       <AuditReportDetailsContent
         applicationsCounts={{all: 4, filtered: 4}}
         closedCvesCounts={{all: 2, filtered: 2}}
@@ -131,77 +132,110 @@ describe('AuditReportDetailsContent tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-    const inputs = baseElement.querySelectorAll('input');
-    const links = baseElement.querySelectorAll('a');
-    const tableData = baseElement.querySelectorAll('td');
-    const powerFilter = within(screen.queryPowerFilter());
-    const bars = screen.getAllByTestId('progressbar-box');
+    // buttons
+    const helpIcon = screen.getByTitle('Help: Audit Reports');
+    expect(helpIcon.closest('a')).toHaveAttribute(
+      'href',
+      'test/en/compliance-and-special-scans.html#using-and-managing-audit-reports',
+    );
+    expect(screen.getByTitle('Audit Reports List')).toBeInTheDocument();
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/auditreports',
+    );
 
-    // Toolbar Icons
-    expect(icons.length).toEqual(16);
+    expect(screen.getByTitle(/^Add to Assets/)).toBeInTheDocument();
+    expect(screen.getByTitle(/^Remove from Assets/)).toBeInTheDocument();
+    const correspondingTask = screen.getByTitle(/^Corresponding Task/);
+    expect(correspondingTask).toHaveAttribute('href', '/task/314');
+    const correspondingResults = screen.getByTitle(/^Corresponding Results/);
+    expect(correspondingResults).toHaveAttribute(
+      'href',
+      '/results?filter=report_id%3D1234',
+    );
+    const correspondingTlsCertificates = screen.getByTitle(
+      /^Corresponding TLS Certificates/,
+    );
+    expect(correspondingTlsCertificates).toHaveAttribute(
+      'href',
+      '/tlscertificates?filter=report_id%3D1234',
+    );
+    expect(screen.getByTitle(/^Corresponding Performance/)).toBeInTheDocument();
+    expect(screen.getByTitle(/^Download filtered Report/)).toBeInTheDocument();
+    expect(screen.getByTitle(/^Trigger Alert/)).toBeInTheDocument();
+
+    const powerFilter = within(screen.queryPowerFilter());
+    const inputs = powerFilter.queryTextInputs();
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
     const input = powerFilter.getByTitle('Loaded filter');
     expect(input).toHaveAttribute('placeholder', 'Loading...');
 
-    // Header
-    expect(baseElement).toHaveTextContent(
-      'Report:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+    expect(screen.getByRole('heading', {name: /Report:/})).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer TimeDone',
     );
-    expect(bars[0]).toHaveAttribute('title', 'Done');
-    expect(bars[0]).toHaveTextContent('Done');
-    expect(baseElement).toHaveTextContent(
-      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /^Created:/})).toHaveTextContent(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
-    expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+    expect(entityInfo.getByRole('row', {name: /^Modified:/})).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
-    expect(baseElement).toHaveTextContent('Owner:admin');
+    expect(entityInfo.getByRole('row', {name: /^Owner:/})).toHaveTextContent(
+      'admin',
+    );
 
     // Tabs
-    expect(baseElement).toHaveTextContent('Information');
-    expect(baseElement).toHaveTextContent('Results(2 of 3)');
-    expect(baseElement).toHaveTextContent('Hosts(2 of 2)');
-    expect(baseElement).toHaveTextContent('Operating Systems(2 of 2)');
-    expect(baseElement).toHaveTextContent('TLS Certificates(2 of 2)');
-    expect(baseElement).toHaveTextContent('Error Messages(2 of 2)');
-    expect(baseElement).toHaveTextContent('User Tags(0)');
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^results/i})).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^hosts/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^operating systems/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^tls certificates/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^error messages/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
 
     // Summary
-    expect(tableData[0]).toHaveTextContent('Task Name');
-    expect(links[7]).toHaveAttribute('href', '/audit/314');
-    expect(tableData[1]).toHaveTextContent('foo');
-
-    expect(tableData[2]).toHaveTextContent('Comment');
-    expect(tableData[3]).toHaveTextContent('bar');
-
-    expect(tableData[4]).toHaveTextContent('Scan Time');
-    expect(tableData[5]).toHaveTextContent(
+    const taskName = screen.getByRole('row', {name: /^Task Name/});
+    expect(taskName).toHaveTextContent('foo');
+    expect(within(taskName).getByRole('link')).toHaveAttribute(
+      'href',
+      '/audit/314',
+    );
+    expect(screen.getByRole('row', {name: /^Comment/})).toHaveTextContent(
+      'bar',
+    );
+    expect(screen.getByRole('row', {name: /^Scan Time/})).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time - Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
-
-    expect(tableData[6]).toHaveTextContent('Scan Duration');
-    expect(tableData[7]).toHaveTextContent('0:31 h');
-
-    expect(tableData[8]).toHaveTextContent('Scan Status');
-    expect(bars[1]).toHaveAttribute('title', 'Done');
-    expect(bars[1]).toHaveTextContent('Done');
-
-    expect(tableData[10]).toHaveTextContent('Hosts scanned');
-    expect(tableData[11]).toHaveTextContent('3');
-
-    expect(tableData[12]).toHaveTextContent('Filter');
-    expect(tableData[13]).toHaveTextContent(
-      'apply_overrides=0 compliance_levels=ynui min_qod=70',
+    expect(screen.getByRole('row', {name: /^Scan Duration/})).toHaveTextContent(
+      '0:31 h',
     );
+    expect(screen.getByRole('row', {name: /^Scan Status/})).toHaveTextContent(
+      'Done',
+    );
+    expect(screen.getByRole('row', {name: /^Hosts scanned/})).toHaveTextContent(
+      '3',
+    );
+    expect(
+      screen.getByRole('row', {name: /^Filter apply_overrides/}),
+    ).toHaveTextContent('apply_overrides=0 compliance_levels=ynui min_qod=70');
 
-    expect(tableData[14]).toHaveTextContent('Timezone');
-    expect(tableData[15]).toHaveTextContent('UTC (UTC)');
+    expect(screen.getByRole('row', {name: /^Timezone/})).toHaveTextContent(
+      'UTC (UTC)',
+    );
   });
 
-  test('should render audit threshold panel', () => {
+  test('should render hosts tab', () => {
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
@@ -212,7 +246,6 @@ describe('AuditReportDetailsContent tests', () => {
     const onFilterRemoveSeverityClick = testing.fn();
     const onFilterResetClick = testing.fn();
     const onFilterRemoveClick = testing.fn();
-
     const onRemoveFromAssetsClick = testing.fn();
     const onReportDownloadClick = testing.fn();
     const showError = testing.fn();
@@ -222,7 +255,6 @@ describe('AuditReportDetailsContent tests', () => {
     const onTagSuccess = testing.fn();
     const onTargetEditClick = testing.fn();
     const onTlsCertificateDownloadClick = testing.fn();
-
     const sorting = {
       errors: {sortField: 'error', sortReverse: true},
       hosts: {sortField: 'compliant', sortReverse: true},
@@ -230,19 +262,12 @@ describe('AuditReportDetailsContent tests', () => {
       results: {sortField: 'compliant', sortReverse: true},
       tlscerts: {sortField: 'dn', sortReverse: true},
     };
-
     const {entity} = getMockAuditReport();
-
     const filters = [filterWithName];
-
-    const gmp = {
-      settings: {manualUrl, reportResultsThreshold: 1},
-      user: {currentSettings, getReportComposerDefaults},
-    };
-
+    const gmp = createGmp({reportResultsThreshold: 1});
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -374,7 +399,7 @@ describe('AuditReportDetailsContent tests', () => {
     );
 
     // // Should not Include
-    expect(baseElement).not.toHaveTextContent('IP-Adress');
+    expect(baseElement).not.toHaveTextContent('IP-Address');
     expect(baseElement).not.toHaveTextContent('Hostname');
     expect(baseElement).not.toHaveTextContent('Apps');
     expect(baseElement).not.toHaveTextContent('Distance');
