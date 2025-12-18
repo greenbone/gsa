@@ -132,6 +132,19 @@ const Details = ({entity}: DetailsProps) => {
           </InfoTable>
         </DetailsBlock>
       )}
+      {isDefined(entity.publicKeyInfo) && (
+        <DetailsBlock title={_('Public Key')}>
+          <InfoTable size="full">
+            <CredentialDetailsColGroup />
+            <TableBody>
+              <TableRow>
+                <TableData>{_('Fingerprint')}</TableData>
+                <TableData>{entity.publicKeyInfo?.fingerprint}</TableData>
+              </TableRow>
+            </TableBody>
+          </InfoTable>
+        </DetailsBlock>
+      )}
     </Layout>
   );
 };
