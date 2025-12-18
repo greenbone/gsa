@@ -127,7 +127,11 @@ const CredentialComponent = ({
           ? createFakeFile('private-key', credential.id as string, 'key')
           : undefined,
       );
-      setPublicKey(undefined);
+      setPublicKey(
+        isDefined(credential.publicKeyInfo)
+          ? createFakeFile('public-key', credential.id as string, 'key')
+          : undefined,
+      );
       setComment(credential.comment);
       setCredential(credential);
       setCredentialType(credential.credentialType);
