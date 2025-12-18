@@ -59,6 +59,7 @@ describe('Credential Model tests', () => {
     expect(credential.privacyAlgorithm).toBeUndefined();
     expect(credential.realm).toBeUndefined();
     expect(credential.privateKeyInfo).toBeUndefined();
+    expect(credential.publicKeyInfo).toBeUndefined();
   });
 
   test('should parse empty element', () => {
@@ -73,6 +74,7 @@ describe('Credential Model tests', () => {
     expect(credential.privacyAlgorithm).toBeUndefined();
     expect(credential.realm).toBeUndefined();
     expect(credential.privateKeyInfo).toBeUndefined();
+    expect(credential.publicKeyInfo).toBeUndefined();
   });
 
   test('should parse auth_algorithm', () => {
@@ -134,6 +136,31 @@ describe('Credential Model tests', () => {
 
     expect(credential2.privateKeyInfo?.sha256Hash).toEqual('sha256-hash-value');
     expect(credential2.privateKeyInfo?.keyType).toEqual('rsa-ssh');
+
+    const credential3 = Credential.fromElement({
+      // @ts-expect-error
+      private_key_info: '',
+    });
+    expect(credential3.privateKeyInfo?.sha256Hash).toBeUndefined();
+    expect(credential3.privateKeyInfo?.keyType).toBeUndefined();
+  });
+
+  test('should parse public key info', () => {
+    const credential = Credential.fromElement({
+      public_key_info: {
+        fingerprint: 'public-key-fingerprint',
+      },
+    });
+
+    expect(credential.publicKeyInfo?.fingerprint).toEqual(
+      'public-key-fingerprint',
+    );
+
+    const credential2 = Credential.fromElement({
+      // @ts-expect-error
+      public_key_info: '',
+    });
+    expect(credential2.publicKeyInfo).toBeUndefined();
   });
 
   test('should parse type', () => {
@@ -153,6 +180,12 @@ describe('Credential Model tests', () => {
     const [target] = credential.targets;
     expect(target.id).toEqual('t1');
     expect(target.entityType).toEqual('target');
+
+    const credential2 = Credential.fromElement({
+      // @ts-expect-error
+      targets: '',
+    });
+    expect(credential2.targets).toEqual([]);
   });
 
   test('should parse scanners', () => {
@@ -166,6 +199,12 @@ describe('Credential Model tests', () => {
     expect(scanner).toBeInstanceOf(Model);
     expect(scanner.id).toEqual('s1');
     expect(scanner.entityType).toEqual('scanner');
+
+    const credential2 = Credential.fromElement({
+      // @ts-expect-error
+      scanners: '',
+    });
+    expect(credential2.scanners).toEqual([]);
   });
 });
 

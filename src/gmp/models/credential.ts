@@ -72,6 +72,9 @@ export interface CredentialElement extends ModelElement {
     sha256_hash?: string;
     type?: string;
   };
+  public_key_info?: {
+    fingerprint?: string;
+  };
   realm?: string;
   targets?: {
     target?: ModelElement | ModelElement[];
@@ -102,6 +105,10 @@ interface PrivateKeyInfo {
   keyType?: string;
 }
 
+interface PublicKeyInfo {
+  fingerprint?: string;
+}
+
 interface CredentialProperties extends ModelProperties {
   authAlgorithm?: SNMPAuthAlgorithmType;
   certificateInfo?: CertificateInfo;
@@ -115,6 +122,7 @@ interface CredentialProperties extends ModelProperties {
   scanners?: Model[];
   privacyHostIdentifier?: string;
   privateKeyInfo?: PrivateKeyInfo;
+  publicKeyInfo?: PublicKeyInfo;
 }
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
@@ -305,6 +313,7 @@ class Credential extends Model {
   readonly scanners: Model[];
   readonly privacyHostIdentifier?: string;
   readonly privateKeyInfo?: PrivateKeyInfo;
+  readonly publicKeyInfo?: PublicKeyInfo;
 
   constructor({
     authAlgorithm,
@@ -319,6 +328,7 @@ class Credential extends Model {
     scanners = [],
     privacyHostIdentifier,
     privateKeyInfo,
+    publicKeyInfo,
     ...properties
   }: CredentialProperties = {}) {
     super(properties);
@@ -335,6 +345,7 @@ class Credential extends Model {
     this.scanners = scanners;
     this.privacyHostIdentifier = privacyHostIdentifier;
     this.privateKeyInfo = privateKeyInfo;
+    this.publicKeyInfo = publicKeyInfo;
   }
 
   static fromElement(element: CredentialElement = {}): Credential {
@@ -398,6 +409,12 @@ class Credential extends Model {
       ret.privateKeyInfo = {
         sha256Hash: element.private_key_info.sha256_hash,
         keyType: element.private_key_info.type?.replace(/^ssh-/, ''),
+      };
+    }
+
+    if (isDefined(element.public_key_info?.fingerprint)) {
+      ret.publicKeyInfo = {
+        fingerprint: element.public_key_info.fingerprint,
       };
     }
 
