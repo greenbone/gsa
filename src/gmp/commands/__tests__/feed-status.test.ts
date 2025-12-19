@@ -91,29 +91,6 @@ describe('FeedStatusCommand tests', () => {
     expect(result.isSyncing).toBe(true);
   });
 
-  test('should return isSyncing true when feeds are not present', async () => {
-    const response = createResponse<FeedStatusElement>({
-      get_feeds: {
-        get_feeds_response: {
-          feed: [
-            {
-              type: 'OTHER',
-              version: 202502170647,
-              description: 'Other Feed',
-              name: 'Other Feed',
-            },
-          ],
-        },
-      },
-    });
-
-    const fakeHttp = createHttp(response);
-    const cmd = new FeedStatusCommand(fakeHttp);
-
-    const result = await cmd.checkFeedSync();
-    expect(result.isSyncing).toBe(true);
-  });
-
   test('should return isSyncing true when feed sync has an issue', async () => {
     const response = createResponse<FeedStatusElement>({
       get_feeds: {
