@@ -77,7 +77,8 @@ const updatePort = (scannerType: ScannerType | undefined) => {
   }
   if (
     scannerType === AGENT_CONTROLLER_SCANNER_TYPE ||
-    scannerType === OPENVASD_SCANNER_TYPE
+    scannerType === OPENVASD_SCANNER_TYPE ||
+    scannerType === CONTAINER_IMAGE_SCANNER_TYPE
   ) {
     return 443;
   }
