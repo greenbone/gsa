@@ -233,6 +233,7 @@ const ScannerDialog = ({
   const isAgentControllerSensorScannerType =
     scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
   const showScannerDetails = isDefined(scannerType);
+  const showPort = showScannerDetails && !isGreenboneSensorType;
   const showCredentialField =
     !isGreenboneSensorType &&
     !isAgentControllerSensorScannerType &&
@@ -301,7 +302,7 @@ const ScannerDialog = ({
               />
             )}
 
-            {showScannerDetails && (
+            {showPort && (
               <NumberField
                 disabled={scannerInUse}
                 name="port"
