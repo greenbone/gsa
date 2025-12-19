@@ -220,11 +220,11 @@ class ScheduleChart extends React.Component {
               let end = start.clone();
               const hasDuration = duration > 0;
               if (hasDuration) {
-                end.add(d.duration, 'seconds');
+                end = end.add(d.duration, 'seconds');
               } else if (period > 0) {
-                end.add(Math.min(period, ONE_DAY), 'seconds');
+                end = end.add(Math.min(period, ONE_DAY), 'seconds');
               } else {
-                end.add(1, 'day');
+                end = end.add(1, 'day');
               }
 
               if (end.isAfter(endDate)) {
