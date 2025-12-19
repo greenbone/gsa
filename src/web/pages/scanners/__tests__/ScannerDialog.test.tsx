@@ -270,7 +270,7 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('name')).toHaveValue('Unnamed');
     expect(screen.getByName('comment')).toHaveValue('');
     expect(screen.getByName('host')).toHaveValue('localhost');
-    expect(screen.getByName('port')).toHaveValue('');
+    expect(screen.getByName('port')).toHaveValue('443');
 
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
     expect(scannerType).toHaveValue('Container Image Scanner');
@@ -286,7 +286,7 @@ describe('ScannerDialog tests', () => {
       credentialId: undefined,
       type: CONTAINER_IMAGE_SCANNER_TYPE,
       id: undefined,
-      port: '',
+      port: 443,
     });
   });
 
