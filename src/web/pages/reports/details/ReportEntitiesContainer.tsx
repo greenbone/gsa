@@ -6,21 +6,20 @@
 import React, {useEffect, useState} from 'react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
-import type Result from 'gmp/models/result';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
 import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
 
-type ResultCompareFunc = (
+type EntityCompareFunc<TEntity> = (
   sortReverse?: boolean,
-) => (a: Result, b: Result) => number;
+) => (a: TEntity, b: TEntity) => number;
 
-type SortFunctions = {
-  [key: string]: ResultCompareFunc;
+type SortFunctions<TEntity> = {
+  [key: string]: EntityCompareFunc<TEntity>;
 };
 
-export interface ReportEntitiesContainerRenderProps {
-  entities: Result[];
+export interface ReportEntitiesContainerRenderProps<TEntity> {
+  entities: TEntity[];
   entitiesCounts: CollectionCounts;
   sortBy: string;
   sortDir: SortDirectionType;
@@ -30,29 +29,31 @@ export interface ReportEntitiesContainerRenderProps {
   onPreviousClick: () => void;
 }
 
-interface ReportEntitiesContainerProps {
-  children: (props: ReportEntitiesContainerRenderProps) => React.JSX.Element;
+interface ReportEntitiesContainerProps<TEntity> {
+  children: (
+    props: ReportEntitiesContainerRenderProps<TEntity>,
+  ) => React.JSX.Element;
   filter?: Filter;
   counts?: CollectionCounts;
-  entities?: Result[];
+  entities?: TEntity[];
   sortField: string;
-  sortFunctions?: SortFunctions;
+  sortFunctions?: SortFunctions<TEntity>;
   sortReverse: boolean;
 }
 
-interface SortEntitiesProps {
-  entities: Result[];
-  sortFunctions?: SortFunctions;
+interface SortEntitiesProps<TEntity> {
+  entities: TEntity[];
+  sortFunctions?: SortFunctions<TEntity>;
   sortField: string;
   sortReverse: boolean;
 }
 
-const sortEntities = ({
+const sortEntities = <TEntity,>({
   entities,
   sortFunctions = {},
   sortField,
   sortReverse,
-}: SortEntitiesProps) => {
+}: SortEntitiesProps<TEntity>) => {
   const compareFunc = sortFunctions[sortField];
 
   if (!isDefined(compareFunc)) {
@@ -72,7 +73,7 @@ const getRows = (filter?: Filter, counts?: CollectionCounts) => {
   return rows;
 };
 
-const ReportEntitiesContainer = ({
+const ReportEntitiesContainer = <TEntity,>({
   children,
   counts,
   entities,
@@ -80,7 +81,7 @@ const ReportEntitiesContainer = ({
   sortField,
   sortFunctions,
   sortReverse,
-}: ReportEntitiesContainerProps) => {
+}: ReportEntitiesContainerProps<TEntity>) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
@@ -135,7 +136,7 @@ const ReportEntitiesContainer = ({
     return <Loading />;
   }
 
-  const sortedEntities = sortEntities({
+  const sortedEntities = sortEntities<TEntity>({
     entities,
     sortFunctions,
     sortReverse,

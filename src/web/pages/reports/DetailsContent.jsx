@@ -33,7 +33,7 @@ import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
 import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
 import CvesTab from 'web/pages/reports/details/CvesTab';
 import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
-import HostsTab from 'web/pages/reports/details/HostsTab';
+import HostsTabContent from 'web/pages/reports/details/HostsTabContent';
 import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
 import PortsTab from 'web/pages/reports/details/PortsTab';
 import ResultsTab from 'web/pages/reports/details/ResultsTab';
@@ -105,6 +105,8 @@ const PageContent = ({
   const hasReport = isDefined(entity);
 
   const report = hasReport ? entity.report : undefined;
+  const isContainerScanning =
+    hasReport && isDefined(entity.report.task.ociImageTarget?.id);
 
   const userTags = hasReport ? report.userTags : undefined;
   const userTagsCount = isDefined(userTags) ? userTags.length : 0;
@@ -303,30 +305,19 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    {showInitialLoading ? (
-                      <Loading />
-                    ) : showThresholdMessage ? (
-                      <ThresholdPanel
-                        entityType={_('Hosts')}
-                        filter={reportFilter}
-                        isUpdating={isUpdating}
-                        threshold={threshold}
-                        onFilterChanged={onFilterChanged}
-                        onFilterEditClick={onFilterEditClick}
-                      />
-                    ) : (
-                      <HostsTab
-                        counts={hosts.counts}
-                        filter={reportFilter}
-                        hosts={hosts.entities}
-                        isUpdating={isUpdating}
-                        sortField={sorting.hosts.sortField}
-                        sortReverse={sorting.hosts.sortReverse}
-                        onSortChange={sortField =>
-                          onSortChange('hosts', sortField)
-                        }
-                      />
-                    )}
+                    <HostsTabContent
+                      hosts={hosts}
+                      isContainerScanning={isContainerScanning}
+                      isUpdating={isUpdating}
+                      reportFilter={reportFilter}
+                      showInitialLoading={showInitialLoading}
+                      showThresholdMessage={showThresholdMessage}
+                      sorting={sorting}
+                      threshold={threshold}
+                      onFilterChanged={onFilterChanged}
+                      onFilterEditClick={onFilterEditClick}
+                      onSortChange={onSortChange}
+                    />
                   </TabPanel>
                   <TabPanel>
                     {showInitialLoading ? (
