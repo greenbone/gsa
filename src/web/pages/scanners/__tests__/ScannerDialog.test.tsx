@@ -83,7 +83,7 @@ describe('ScannerDialog tests', () => {
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
     expect(scannerType).toHaveValue('Greenbone Sensor');
     expect(screen.getByName('host')).toHaveValue('localhost');
-    expect(screen.getByName('port')).toHaveValue('22');
+    expect(screen.queryByName('port')).not.toBeInTheDocument();
     expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
     expect(
       screen.queryByRole('textbox', {name: 'Credential'}),
