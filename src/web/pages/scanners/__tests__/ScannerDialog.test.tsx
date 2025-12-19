@@ -379,7 +379,7 @@ describe('ScannerDialog tests', () => {
         id="1234"
         name="john"
         port={22}
-        type={GREENBONE_SENSOR_SCANNER_TYPE}
+        type={AGENT_CONTROLLER_SCANNER_TYPE}
         onClose={handleClose}
         onCredentialChange={handleCredentialChange}
         onSave={handleSave}
@@ -403,7 +403,7 @@ describe('ScannerDialog tests', () => {
     const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
       name: 'Scanner Type',
     });
-    expect(scannerType).toHaveValue('Greenbone Sensor');
+    expect(scannerType).toHaveValue('Agent Controller');
     await openSelectElement(scannerType);
     fireEvent.click(screen.getByRole('option', {name: 'Agent Sensor'})); // select Agent Sensor
     expect(scannerType).toHaveValue('Agent Sensor');
@@ -461,7 +461,7 @@ describe('ScannerDialog tests', () => {
         name="john"
         port={22}
         scannerInUse={true}
-        type={GREENBONE_SENSOR_SCANNER_TYPE}
+        type={OPENVASD_SCANNER_TYPE}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -490,7 +490,7 @@ describe('ScannerDialog tests', () => {
       name: 'john',
       comment: 'lorem ipsum',
       credentialId: undefined,
-      type: GREENBONE_SENSOR_SCANNER_TYPE,
+      type: OPENVASD_SCANNER_TYPE,
       id: '1234',
       port: 22,
     });
