@@ -152,7 +152,7 @@ const ScannerDialog = ({
   );
   const [userChangedPort, setUserChangedPort] = useState<boolean>(false);
   const [scannerPort, setScannerPort] = useState<number | ''>(
-    () => port ?? updatePort(initialScannerType),
+    () => port ?? updatePort(scannerType),
   );
 
   name = name || _('Unnamed');
