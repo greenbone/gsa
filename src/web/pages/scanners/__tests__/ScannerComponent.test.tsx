@@ -263,7 +263,7 @@ describe('ScannerComponent tests', () => {
       host: 'localhost',
       id: undefined,
       name: 'Unnamed',
-      port: '',
+      port: 22,
       type: GREENBONE_SENSOR_SCANNER_TYPE,
     });
     expect(handleCreated).toHaveBeenCalledWith({id: '1234'});
