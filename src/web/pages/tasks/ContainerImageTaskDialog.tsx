@@ -20,7 +20,6 @@ import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
-import Spinner from 'web/components/form/Spinner';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import {NewIcon} from 'web/components/icon';
@@ -306,40 +305,6 @@ const ContainerImageTaskDialog = ({
                   />
                 </FormGroup>
               )}
-
-            <FormGroup title={_('Add results to Assets')}>
-              <YesNoRadio
-                convert={parseBoolean}
-                name="inAssets"
-                noValue={false}
-                value={state.inAssets}
-                yesValue={true}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Apply Overrides')}>
-              <YesNoRadio
-                convert={parseBoolean}
-                disabled={!state.inAssets}
-                name="applyOverrides"
-                noValue={false}
-                value={state.applyOverrides}
-                yesValue={true}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('Min QoD')}>
-              <Spinner
-                disabled={!state.inAssets}
-                max={100}
-                min={0}
-                name="minQod"
-                type="int"
-                value={state.minQod}
-                onChange={onValueChange}
-              />
-            </FormGroup>
 
             {changeTask && (
               <FormGroup title={_('Alterable Task')}>
