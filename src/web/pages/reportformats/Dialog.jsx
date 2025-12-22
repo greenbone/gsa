@@ -236,7 +236,7 @@ const Dialog = ({
   }
   return (
     <SaveDialog title={title} onClose={onClose} onSave={onSave}>
-      {({values: onValueChange}) => {
+      {({values, onValueChange}) => {
         return (
           <FormGroup title={_('Import XML Report Format')}>
             <FileField name="xml_file" onChange={onValueChange} />
@@ -248,13 +248,10 @@ const Dialog = ({
 };
 
 Dialog.propTypes = {
-  active: PropTypes.yesno,
   formats: PropTypes.array,
   id_lists: PropTypes.object,
-  name: PropTypes.string,
   preferences: PropTypes.object,
   reportformat: PropTypes.model,
-  summary: PropTypes.string,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
