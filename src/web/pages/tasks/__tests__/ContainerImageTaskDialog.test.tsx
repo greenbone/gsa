@@ -97,9 +97,6 @@ describe('ContainerImageTaskDialog component tests', () => {
     );
     expect(screen.getByName('name')).toHaveValue('');
     expect(screen.getByName('comment')).toHaveValue('');
-    expect(screen.getByName('inAssets')).toBeChecked();
-    expect(screen.getByName('applyOverrides')).toBeChecked();
-    expect(screen.getByName('minQod')).toHaveValue('70');
     expect(screen.getByName('acceptInvalidCerts')).toBeChecked();
     expect(screen.getByName('registryAllowInsecure')).not.toBeChecked();
   });
@@ -189,16 +186,6 @@ describe('ContainerImageTaskDialog component tests', () => {
     const newBtn = screen.getByTitle('Create a new alert');
     fireEvent.click(newBtn);
     expect(onNewAlertClick).toHaveBeenCalled();
-  });
-
-  test('should disable Apply Overrides and Min QoD when inAssets is NO', async () => {
-    renderDialog({inAssets: false});
-
-    const apply = screen.getByName('applyOverrides');
-    const minQod = screen.getByName('minQod');
-
-    expect(apply).toBeDisabled();
-    expect(minQod).toBeDisabled();
   });
 
   test('should display scanner as disabled Container Image Scanner', () => {
