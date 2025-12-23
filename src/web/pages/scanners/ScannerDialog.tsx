@@ -8,6 +8,7 @@ import type Credential from 'gmp/models/credential';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+  CONTAINER_IMAGE_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
@@ -76,7 +77,8 @@ const updatePort = (scannerType: ScannerType | undefined) => {
   }
   if (
     scannerType === AGENT_CONTROLLER_SCANNER_TYPE ||
-    scannerType === OPENVASD_SCANNER_TYPE
+    scannerType === OPENVASD_SCANNER_TYPE ||
+    scannerType === CONTAINER_IMAGE_SCANNER_TYPE
   ) {
     return 443;
   }
@@ -152,7 +154,7 @@ const ScannerDialog = ({
   );
   const [userChangedPort, setUserChangedPort] = useState<boolean>(false);
   const [scannerPort, setScannerPort] = useState<number | ''>(
-    () => port ?? updatePort(initialScannerType),
+    () => port ?? updatePort(scannerType),
   );
 
   name = name || _('Unnamed');
@@ -191,6 +193,13 @@ const ScannerDialog = ({
     scannerTypes.push(GREENBONE_SENSOR_SCANNER_TYPE);
   }
 
+  if (
+    scannerType === CONTAINER_IMAGE_SCANNER_TYPE ||
+    features.featureEnabled('ENABLE_CONTAINER_SCANNING')
+  ) {
+    scannerTypes.push(CONTAINER_IMAGE_SCANNER_TYPE);
+  }
+
   const handleCaCertificateChange = async (file?: File | null) => {
     if (file) {
       const content = await file.text();
@@ -224,6 +233,7 @@ const ScannerDialog = ({
   const isAgentControllerSensorScannerType =
     scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
   const showScannerDetails = isDefined(scannerType);
+  const showPort = showScannerDetails && !isGreenboneSensorType;
   const showCredentialField =
     !isGreenboneSensorType &&
     !isAgentControllerSensorScannerType &&
@@ -292,7 +302,7 @@ const ScannerDialog = ({
               />
             )}
 
-            {showScannerDetails && (
+            {showPort && (
               <NumberField
                 disabled={scannerInUse}
                 name="port"
