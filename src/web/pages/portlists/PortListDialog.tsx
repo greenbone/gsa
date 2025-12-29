@@ -150,6 +150,7 @@ const PortListsDialog = <TPortRange extends PortRange>({
                     disabled={parseYesNo(state.fromFile) !== FROM_FILE}
                     grow="1"
                     name="file"
+                    value={state.file}
                     onChange={onValueChange}
                   />
                 </Row>
