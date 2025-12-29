@@ -28,10 +28,14 @@ const PortListImportDialog = ({onClose, onSave}: PortListImportDialogProps) => {
       onClose={onClose}
       onSave={onSave}
     >
-      {({onValueChange}) => {
+      {({values, onValueChange}) => {
         return (
           <FormGroup title={_('Import XML Port List')}>
-            <FileField name="xmlFile" onChange={onValueChange} />
+            <FileField
+              name="xmlFile"
+              value={values.xmlFile}
+              onChange={onValueChange}
+            />
           </FormGroup>
         );
       }}

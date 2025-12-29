@@ -618,6 +618,7 @@ const CredentialDialog = ({
               <FileField
                 name="certificate"
                 title={_('S/MIME Certificate')}
+                value={state.certificate}
                 onChange={handleCertificateChange}
               />
             )}
