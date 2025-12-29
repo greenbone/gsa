@@ -16,7 +16,7 @@ import {
   type ScannerType,
 } from 'gmp/models/scanner';
 import Task, {
-  HOSTS_ORDERING_SEQUENTIAL,
+  HOSTS_ORDERING_RANDOM,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   type TaskElement,
   type TaskAutoDelete,
@@ -34,7 +34,6 @@ interface TaskCommandCreateParams {
   comment?: string;
   config_id?: string;
   csAllowFailedRetrieval?: boolean;
-  hosts_ordering?: string;
   in_assets?: YesNo;
   max_checks?: number;
   max_hosts?: number;
@@ -99,7 +98,6 @@ interface TaskCommandSaveParams {
   comment?: string;
   config_id?: string;
   csAllowFailedRetrieval?: boolean;
-  hosts_ordering?: string;
   id: string;
   in_assets?: YesNo;
   max_checks?: number;
@@ -217,7 +215,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     comment = '',
     config_id,
     csAllowFailedRetrieval,
-    hosts_ordering,
     in_assets,
     max_checks,
     max_hosts,
@@ -243,7 +240,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       cs_allow_failed_retrieval: isDefined(csAllowFailedRetrieval)
         ? parseYesNo(csAllowFailedRetrieval)
         : undefined,
-      hosts_ordering,
+      hosts_ordering: HOSTS_ORDERING_RANDOM,
       in_assets,
       max_checks,
       max_hosts,
@@ -396,7 +393,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     comment = '',
     config_id = NO_VALUE_ID,
     csAllowFailedRetrieval,
-    hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
     id,
     in_assets,
     max_checks,
@@ -421,7 +417,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       cs_allow_failed_retrieval: isDefined(csAllowFailedRetrieval)
         ? parseYesNo(csAllowFailedRetrieval)
         : undefined,
-      hosts_ordering,
+      hosts_ordering: HOSTS_ORDERING_RANDOM,
       in_assets,
       max_checks,
       max_hosts,

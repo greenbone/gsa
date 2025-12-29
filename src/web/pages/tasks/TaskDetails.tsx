@@ -103,7 +103,6 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
     average_duration: averageDuration,
     config,
     csAllowFailedRetrieval,
-    hosts_ordering: hostsOrdering,
     in_assets: inAssets,
     last_report: lastReport,
     min_qod: minQod,
@@ -206,12 +205,6 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
                       </DetailsLink>
                     </span>
                   </TableData>
-                </TableRow>
-              )}
-              {isDefined(scanConfig) && (
-                <TableRow>
-                  <TableData>{_('Order for target hosts')}</TableData>
-                  <TableData>{hostsOrdering}</TableData>
                 </TableRow>
               )}
               {isDefined(scanConfig) && isDefined(maxChecks) && (

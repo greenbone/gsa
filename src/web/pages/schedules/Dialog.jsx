@@ -51,7 +51,7 @@ const ScheduleDialog = ({
   duration,
   timezone: initialTimezone = DEFAULT_TIMEZONE,
   startDate: initialStartDate = date()
-    .tz(initialTimezone)
+    .tz(initialTimezone, true)
     .startOf('hour')
     .add(1, 'hour'),
   freq: initialFrequency,

@@ -12,9 +12,7 @@ import Task, {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_NO,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
   HOSTS_ORDERING_RANDOM,
-  HOSTS_ORDERING_REVERSE,
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
@@ -28,7 +26,6 @@ import Task, {
   type TaskSlave,
   type TaskObservers,
   type TaskPreferences,
-  type TaskHostsOrdering,
   type TaskAutoDelete,
   USAGE_TYPE,
   type TaskReport,
@@ -48,9 +45,7 @@ export {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_NO,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
   HOSTS_ORDERING_RANDOM,
-  HOSTS_ORDERING_REVERSE,
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
@@ -72,7 +67,6 @@ class Audit extends Model {
   readonly config?: Model;
   readonly current_report?: TaskReport;
   readonly first_report?: Report;
-  readonly hosts_ordering?: TaskHostsOrdering;
   readonly in_assets?: YesNo;
   readonly last_report?: TaskReport;
   readonly max_checks?: number;
@@ -107,8 +101,6 @@ class Audit extends Model {
     config,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     current_report,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    hosts_ordering,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     in_assets,
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -146,7 +138,6 @@ class Audit extends Model {
     this.average_duration = average_duration;
     this.config = config;
     this.current_report = current_report;
-    this.hosts_ordering = hosts_ordering;
     this.in_assets = in_assets;
     this.last_report = last_report;
     this.max_checks = max_checks;

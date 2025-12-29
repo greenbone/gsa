@@ -7,7 +7,6 @@ import React from 'react';
 import styled from 'styled-components';
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_NO,
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
@@ -34,6 +33,7 @@ import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
+
 const Title = styled.div`
   flex-grow: 1;
 `;
@@ -89,7 +89,6 @@ const AuditDialog = ({
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   comment = '',
   fromPolicy = false,
-  hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
   isLoadingScanners = false,
   maxChecks = DEFAULT_MAX_CHECKS,
@@ -153,7 +152,6 @@ const AuditDialog = ({
     auto_delete,
     auto_delete_data,
     comment,
-    hostsOrdering,
     in_assets,
     maxChecks,
     maxHosts,
@@ -303,28 +301,6 @@ const AuditDialog = ({
                 onChange={onChange}
               />
             </FormGroup>
-
-            <FormGroup title={_('Order for target hosts')} titleSize="4">
-              <Select
-                items={[
-                  {
-                    value: 'sequential',
-                    label: _('Sequential'),
-                  },
-                  {
-                    value: 'random',
-                    label: _('Random'),
-                  },
-                  {
-                    value: 'reverse',
-                    label: _('Reverse'),
-                  },
-                ]}
-                name="hostsOrdering"
-                value={state.hostsOrdering}
-                onChange={onValueChange}
-              />
-            </FormGroup>
             <FormGroup title={_('Maximum concurrently executed NVTs per host')}>
               <Spinner
                 min="0"
@@ -359,7 +335,6 @@ AuditDialog.propTypes = {
   auto_delete_data: PropTypes.number,
   comment: PropTypes.string,
   fromPolicy: PropTypes.bool,
-  hostsOrdering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
   in_assets: PropTypes.yesno,
   isLoadingScanners: PropTypes.bool,
   maxChecks: PropTypes.number,

@@ -4,14 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Task, {
-  HOSTS_ORDERING_RANDOM,
-  HOSTS_ORDERING_REVERSE,
-  HOSTS_ORDERING_SEQUENTIAL,
-  TASK_STATUS,
-  type TaskStatus,
-  USAGE_TYPE,
-} from 'gmp/models/task';
+import Task, {TASK_STATUS, type TaskStatus, USAGE_TYPE} from 'gmp/models/task';
 import {testModel} from 'gmp/models/testing';
 import {parseDate, parseDuration} from 'gmp/parser';
 
@@ -28,7 +21,6 @@ describe('Task Model parse tests', () => {
     expect(task.average_duration).toBeUndefined();
     expect(task.config).toBeUndefined();
     expect(task.current_report).toBeUndefined();
-    expect(task.hosts_ordering).toBeUndefined();
     expect(task.in_assets).toBeUndefined();
     expect(task.last_report).toBeUndefined();
     expect(task.max_checks).toBeUndefined();
@@ -63,7 +55,6 @@ describe('Task Model parse tests', () => {
     expect(task.average_duration).toBeUndefined();
     expect(task.config).toBeUndefined();
     expect(task.current_report).toBeUndefined();
-    expect(task.hosts_ordering).toBeUndefined();
     expect(task.in_assets).toBeUndefined();
     expect(task.last_report).toBeUndefined();
     expect(task.max_checks).toBeUndefined();
@@ -86,21 +77,6 @@ describe('Task Model parse tests', () => {
     expect(task.acceptInvalidCerts).toBeUndefined();
     expect(task.registryAllowInsecure).toBeUndefined();
     expect(task.csAllowFailedRetrieval).toBeUndefined();
-  });
-
-  test('should parse hosts ordering', () => {
-    // @ts-expect-error
-    const task = Task.fromElement({hosts_ordering: 'foo'});
-    expect(task.hosts_ordering).toBeUndefined();
-
-    const task2 = Task.fromElement({hosts_ordering: HOSTS_ORDERING_RANDOM});
-    expect(task2.hosts_ordering).toEqual(HOSTS_ORDERING_RANDOM);
-
-    const task3 = Task.fromElement({hosts_ordering: HOSTS_ORDERING_REVERSE});
-    expect(task3.hosts_ordering).toEqual(HOSTS_ORDERING_REVERSE);
-
-    const task4 = Task.fromElement({hosts_ordering: HOSTS_ORDERING_SEQUENTIAL});
-    expect(task4.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
   });
 
   test('should parse last report', () => {

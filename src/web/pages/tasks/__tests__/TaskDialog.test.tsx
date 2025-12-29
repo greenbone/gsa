@@ -76,7 +76,7 @@ describe('TaskDialog component tests', () => {
   test('should render scan config section for OPENVAS_SCANNER_TYPE', async () => {
     renderDialog(OPENVAS_SCANNER_TYPE);
     const selects = screen.queryAllSelectElements();
-    expect(selects.length).toEqual(5);
+    expect(selects.length).toEqual(4);
 
     const scanConfigSelect = selects[3];
     fireEvent.click(scanConfigSelect);
@@ -88,7 +88,7 @@ describe('TaskDialog component tests', () => {
   test('should render scan config section for OPENVASD_SCANNER_TYPE', async () => {
     renderDialog(OPENVASD_SCANNER_TYPE);
     const selects = screen.queryAllSelectElements();
-    expect(selects.length).toEqual(5);
+    expect(selects.length).toEqual(4);
 
     const scanConfigSelect = selects[3];
     fireEvent.click(scanConfigSelect);
@@ -100,7 +100,7 @@ describe('TaskDialog component tests', () => {
   test('should render scan config section for OPENVASD_SENSOR_SCANNER_TYPE', async () => {
     renderDialog(OPENVASD_SENSOR_SCANNER_TYPE);
     const selects = screen.queryAllSelectElements();
-    expect(selects.length).toEqual(5);
+    expect(selects.length).toEqual(4);
 
     const scanConfigSelect = selects[3];
     fireEvent.click(scanConfigSelect);

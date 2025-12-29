@@ -5,9 +5,6 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Audit, {
-  HOSTS_ORDERING_RANDOM,
-  HOSTS_ORDERING_REVERSE,
-  HOSTS_ORDERING_SEQUENTIAL,
   AUDIT_STATUS,
   USAGE_TYPE,
   type AuditStatus,
@@ -29,7 +26,6 @@ describe('Audit model tests', () => {
     expect(audit.config).toBeUndefined();
     expect(audit.current_report).toBeUndefined();
     expect(audit.first_report).toBeUndefined();
-    expect(audit.hosts_ordering).toBeUndefined();
     expect(audit.in_assets).toBeUndefined();
     expect(audit.last_report).toBeUndefined();
     expect(audit.max_checks).toBeUndefined();
@@ -62,7 +58,6 @@ describe('Audit model tests', () => {
     expect(audit.config).toBeUndefined();
     expect(audit.current_report).toBeUndefined();
     expect(audit.first_report).toBeUndefined();
-    expect(audit.hosts_ordering).toBeUndefined();
     expect(audit.in_assets).toBeUndefined();
     expect(audit.last_report).toBeUndefined();
     expect(audit.max_checks).toBeUndefined();
@@ -82,23 +77,6 @@ describe('Audit model tests', () => {
     expect(audit.target).toBeUndefined();
     expect(audit.trend).toBeUndefined();
     expect(audit.usageType).toEqual(USAGE_TYPE.audit);
-  });
-
-  test('should parse hosts ordering', () => {
-    // @ts-expect-error
-    const audit = Audit.fromElement({hosts_ordering: 'foo'});
-    expect(audit.hosts_ordering).toBeUndefined();
-
-    const audit2 = Audit.fromElement({hosts_ordering: HOSTS_ORDERING_RANDOM});
-    expect(audit2.hosts_ordering).toEqual(HOSTS_ORDERING_RANDOM);
-
-    const audit3 = Audit.fromElement({hosts_ordering: HOSTS_ORDERING_REVERSE});
-    expect(audit3.hosts_ordering).toEqual(HOSTS_ORDERING_REVERSE);
-
-    const audit4 = Audit.fromElement({
-      hosts_ordering: HOSTS_ORDERING_SEQUENTIAL,
-    });
-    expect(audit4.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
   });
 
   test('should parse last report', () => {

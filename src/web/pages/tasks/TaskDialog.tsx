@@ -16,9 +16,7 @@ import Scanner, {
 import {
   type default as Task,
   type TaskAutoDelete,
-  type TaskHostsOrdering,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_NO,
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
@@ -75,7 +73,6 @@ interface TaskDialogDefaultValues {
   comment?: string;
   config_id?: string;
   csAllowFailedRetrieval?: boolean;
-  hosts_ordering?: TaskHostsOrdering;
   in_assets?: YesNo;
   max_checks?: number;
   max_hosts?: number;
@@ -100,7 +97,6 @@ interface TaskDialogProps {
   comment?: string;
   config_id?: string;
   csAllowFailedRetrieval?: boolean;
-  hosts_ordering?: TaskHostsOrdering;
   in_assets?: YesNo;
   isLoadingAlerts?: boolean;
   isLoadingConfigs?: boolean;
@@ -194,8 +190,6 @@ const TaskDialog = ({
   config_id,
   csAllowFailedRetrieval = false,
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   in_assets = YES_VALUE,
   isLoadingAlerts = false,
   isLoadingConfigs = false,
@@ -281,7 +275,6 @@ const TaskDialog = ({
     comment,
     config_id,
     csAllowFailedRetrieval,
-    hosts_ordering,
     in_assets,
     max_checks,
     max_hosts,
@@ -505,27 +498,6 @@ const TaskDialog = ({
                       }}
                     />
                   </Title>
-                </FormGroup>
-                <FormGroup title={_('Order for target hosts')}>
-                  <Select
-                    items={[
-                      {
-                        value: 'sequential',
-                        label: _('Sequential'),
-                      },
-                      {
-                        value: 'random',
-                        label: _('Random'),
-                      },
-                      {
-                        value: 'reverse',
-                        label: _('Reverse'),
-                      },
-                    ]}
-                    name="hosts_ordering"
-                    value={state.hosts_ordering}
-                    onChange={onValueChange}
-                  />
                 </FormGroup>
                 <FormGroup
                   title={_('Maximum concurrently executed NVTs per host')}

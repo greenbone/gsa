@@ -210,7 +210,6 @@ export interface TaskProperties extends ModelProperties {
   average_duration?: Duration;
   config?: Model;
   current_report?: TaskReport;
-  hosts_ordering?: TaskHostsOrdering;
   last_report?: TaskReport;
   observers?: TaskObservers;
   preferences?: TaskPreferences;
@@ -318,7 +317,6 @@ class Task extends Model {
   readonly average_duration?: Duration;
   readonly config?: Model;
   readonly current_report?: TaskReport;
-  readonly hosts_ordering?: TaskHostsOrdering;
   readonly in_assets?: YesNo;
   readonly last_report?: TaskReport;
   readonly max_checks?: number;
@@ -357,8 +355,6 @@ class Task extends Model {
     config,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     current_report,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    hosts_ordering,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     in_assets,
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -401,7 +397,6 @@ class Task extends Model {
     this.average_duration = average_duration;
     this.config = config;
     this.current_report = current_report;
-    this.hosts_ordering = hosts_ordering;
     this.in_assets = in_assets;
     this.last_report = last_report;
     this.max_checks = max_checks;
@@ -604,16 +599,6 @@ class Task extends Model {
     copy.preferences = prefs;
 
     copy.average_duration = parseDuration(element.average_duration);
-
-    if (
-      element.hosts_ordering === HOSTS_ORDERING_RANDOM ||
-      element.hosts_ordering === HOSTS_ORDERING_REVERSE ||
-      element.hosts_ordering === HOSTS_ORDERING_SEQUENTIAL
-    ) {
-      copy.hosts_ordering = element.hosts_ordering as TaskHostsOrdering;
-    } else {
-      delete copy.hosts_ordering;
-    }
 
     return copy;
   }

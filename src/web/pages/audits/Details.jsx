@@ -54,7 +54,6 @@ class AuditDetails extends React.Component {
       auto_delete_data,
       average_duration,
       config,
-      hosts_ordering,
       in_assets,
       last_report,
       scanner,
@@ -141,12 +140,6 @@ class AuditDetails extends React.Component {
                         </DetailsLink>
                       </span>
                     </TableData>
-                  </TableRow>
-                )}
-                {isDefined(policy) && (
-                  <TableRow>
-                    <TableData>{_('Order for target hosts')}</TableData>
-                    <TableData>{hosts_ordering}</TableData>
                   </TableRow>
                 )}
                 {isDefined(policy) && isDefined(max_checks) && (

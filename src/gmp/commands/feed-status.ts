@@ -139,12 +139,8 @@ class FeedStatusCommand extends HttpCommand {
         feed => feed.currentlySyncing || isDefined(feed.syncNotAvailableError),
       );
 
-      const isNotPresent =
-        !response.data.some(feed => feed.feedType === NVT_FEED) ||
-        !response.data.some(feed => feed.feedType === SCAP_FEED);
-
       return {
-        isSyncing: isFeedSyncing || isNotPresent,
+        isSyncing: isFeedSyncing,
       };
     } catch (error) {
       log.error('Error checking if feed is syncing:', error);
