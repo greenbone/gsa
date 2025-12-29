@@ -52,7 +52,7 @@ import SeverityChangedConditionPart from 'web/pages/alerts/SeverityChangedCondit
 import SeverityLeastConditionPart from 'web/pages/alerts/SeverityLeastConditionPart';
 import SmbMethodPart from 'web/pages/alerts/SmbMethodPart';
 import SnmpMethodPart from 'web/pages/alerts/SnmpMethodPart';
-import SourcefireMethodPart from 'web/pages/alerts/SourceFireMethodPart';
+import SourceFireMethodPart from 'web/pages/alerts/SourceFireMethodPart';
 import StartTaskMethodPart from 'web/pages/alerts/StartTaskMethodPart';
 import TaskEventPart from 'web/pages/alerts/TaskEventPart';
 import TicketEventPart from 'web/pages/alerts/TicketEventPart';
@@ -760,13 +760,14 @@ class AlertDialog extends React.Component {
               )}
 
               {values.method === METHOD_TYPE_SOURCEFIRE && (
-                <SourcefireMethodPart
+                <SourceFireMethodPart
                   credentials={credentials}
                   defenseCenterIp={values.method_data_defense_center_ip}
                   defenseCenterPort={parseInt(
                     values.method_data_defense_center_port,
                   )}
                   pkcs12Credential={values.method_data_pkcs12_credential}
+                  pkcs12File={values.method_data_pkcs12}
                   prefix="method_data"
                   onChange={onValueChange}
                   onCredentialChange={onPasswordOnlyCredentialChange}
@@ -802,6 +803,9 @@ class AlertDialog extends React.Component {
                   prefix="method_data"
                   tpSmsCredential={values.method_data_tp_sms_credential}
                   tpSmsHostname={values.method_data_tp_sms_hostname}
+                  tpSmsTlsCertificate={
+                    values.method_data_tp_sms_tls_certificate
+                  }
                   tpSmsTlsWorkaround={values.method_data_tp_sms_tls_workaround}
                   onChange={onValueChange}
                   onCredentialChange={onTippingPointCredentialChange}

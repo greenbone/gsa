@@ -20,9 +20,14 @@ const ImportDialog = ({title, text, onClose, onSave}) => {
       onClose={onClose}
       onSave={onSave}
     >
-      {({onValueChange}) => (
+      {({values, onValueChange}) => (
         <FormGroup title={text}>
-          <FileField grow="1" name="xml_file" onChange={onValueChange} />
+          <FileField
+            grow="1"
+            name="xml_file"
+            value={values.xml_file}
+            onChange={onValueChange}
+          />
         </FormGroup>
       )}
     </SaveDialog>

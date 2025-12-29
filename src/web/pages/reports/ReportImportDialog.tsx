@@ -62,7 +62,12 @@ const ReportImportDialog = ({
       {({values, onValueChange}) => (
         <>
           <FormGroup title={_('Report')}>
-            <FileField grow="1" name="xml_file" onChange={onValueChange} />
+            <FileField
+              grow="1"
+              name="xml_file"
+              value={values.xml_file}
+              onChange={onValueChange}
+            />
           </FormGroup>
           <FormGroup direction="row" title={_('Import Task')}>
             <Select
