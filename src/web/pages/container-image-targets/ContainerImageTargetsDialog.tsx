@@ -36,6 +36,8 @@ interface ContainerImageTargetsDialogValues {
 interface ContainerImageTargetsDialogDefaultValues {
   comment: string;
   excludeHosts: string;
+  file?: File;
+  excludeFile?: File;
   hosts: string;
   hostsCount?: number;
   hostsFilter?: Filter;
@@ -53,7 +55,9 @@ export type ContainerImageTargetsDialogData =
 interface ContainerImageTargetsDialogProps {
   comment?: string;
   credentials?: Credential[];
+  excludeFile?: File;
   excludeHosts?: string;
+  file?: File;
   hosts?: string;
   hostsCount?: number;
   hostsFilter?: Filter;
@@ -74,7 +78,9 @@ interface ContainerImageTargetsDialogProps {
 const ContainerImageTargetsDialog = ({
   comment = '',
   credentials = [],
+  excludeFile,
   excludeHosts = '',
+  file,
   hosts = '',
   hostsCount,
   hostsFilter,
@@ -111,7 +117,9 @@ const ContainerImageTargetsDialog = ({
   const uncontrolledValues = {
     comment,
     name,
+    excludeFile,
     excludeHosts,
+    file,
     hosts,
     hostsCount,
     hostsFilter,
@@ -188,6 +196,7 @@ const ContainerImageTargetsDialog = ({
                   disabled={inUse || state.targetSource !== 'file'}
                   grow="1"
                   name="file"
+                  value={state.file}
                   onChange={
                     onValueChange as (value?: File, name?: string) => void
                   }
@@ -239,6 +248,7 @@ const ContainerImageTargetsDialog = ({
                   disabled={inUse || state.targetExcludeSource !== 'file'}
                   grow="1"
                   name="excludeFile"
+                  value={state.excludeFile}
                   onChange={
                     onValueChange as (value?: File, name?: string) => void
                   }

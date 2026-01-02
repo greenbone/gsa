@@ -20,9 +20,11 @@ import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
 import withPrefix from 'web/utils/withPrefix';
-const SourcefireMethodPart = ({
+
+const SourceFireMethodPart = ({
   credentials,
   pkcs12Credential,
+  pkcs12File,
   prefix,
   defenseCenterIp,
   defenseCenterPort,
@@ -42,7 +44,6 @@ const SourcefireMethodPart = ({
           onChange={onChange}
         />
       </FormGroup>
-
       <FormGroup title={_('Defense Center Port')}>
         <Spinner
           max="65535"
@@ -53,7 +54,6 @@ const SourcefireMethodPart = ({
           onChange={onChange}
         />
       </FormGroup>
-
       <FormGroup title={_('PKCS12 Credential')}>
         <Divider>
           <Select
@@ -70,23 +70,27 @@ const SourcefireMethodPart = ({
           />
         </Divider>
       </FormGroup>
-
       <FormGroup title={_('PKCS12 File')}>
-        <FileField name={prefix + 'pkcs12'} onChange={onChange} />
+        <FileField
+          name={prefix + 'pkcs12'}
+          value={pkcs12File}
+          onChange={onChange}
+        />
       </FormGroup>
     </Layout>
   );
 };
 
-SourcefireMethodPart.propTypes = {
+SourceFireMethodPart.propTypes = {
   credentials: PropTypes.array.isRequired,
   defenseCenterIp: PropTypes.string.isRequired,
   defenseCenterPort: PropTypes.numberOrNumberString.isRequired,
   pkcs12Credential: PropTypes.id,
+  pkcs12File: PropTypes.instanceOf(File),
   prefix: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func.isRequired,
 };
 
-export default withPrefix(SourcefireMethodPart);
+export default withPrefix(SourceFireMethodPart);

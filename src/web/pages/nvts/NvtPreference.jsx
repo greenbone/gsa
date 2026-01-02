@@ -84,7 +84,11 @@ const NvtPreference = ({preference, value = '', onChange}) => {
           }
           onChange={onCheckedChange}
         />
-        <FileField disabled={!checked} onChange={onPreferenceChange} />
+        <FileField
+          disabled={!checked}
+          value={value}
+          onChange={onPreferenceChange}
+        />
       </Column>
     );
   } else if (type === 'radio') {

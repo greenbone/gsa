@@ -21,6 +21,7 @@ const TippingPointMethodPart = ({
   credentials = [],
   prefix,
   tpSmsCredential,
+  tpSmsTlsCertificate,
   tpSmsHostname,
   tpSmsTlsWorkaround,
   onChange,
@@ -59,6 +60,7 @@ const TippingPointMethodPart = ({
       <FormGroup title={_('SSL / TLS Certificate')}>
         <FileField
           name={prefix + 'tp_sms_tls_certificate'}
+          value={tpSmsTlsCertificate}
           onChange={onChange}
         />
       </FormGroup>
@@ -78,6 +80,7 @@ TippingPointMethodPart.propTypes = {
   prefix: PropTypes.string,
   tpSmsCredential: PropTypes.id,
   tpSmsHostname: PropTypes.string,
+  tpSmsTlsCertificate: PropTypes.instanceOf(File),
   tpSmsTlsWorkaround: PropTypes.yesno.isRequired,
   onChange: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,

@@ -85,7 +85,11 @@ const LdapDialog = ({
             />
           </FormGroup>
           <FormGroup title={_('CA Certificate')}>
-            <FileField name="certificate" onChange={onValueChange} />
+            <FileField
+              name="certificate"
+              value={values.certificate}
+              onChange={onValueChange}
+            />
           </FormGroup>
           <CheckBox<boolean>
             checked={values.ldapsOnly}
