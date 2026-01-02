@@ -33,7 +33,8 @@ interface ReportActionsProps extends WithEntitiesActionsComponentProps<Report> {
 }
 
 export interface ReportTableRowProps
-  extends WithEntitiesActionsProps<Report, ReportActionsProps>,
+  extends
+    WithEntitiesActionsProps<Report, ReportActionsProps>,
     ReportActionsProps {
   actionsComponent?: React.ComponentType<ReportActionsProps>;
   links?: boolean;

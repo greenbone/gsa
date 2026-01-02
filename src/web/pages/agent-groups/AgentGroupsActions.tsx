@@ -13,8 +13,10 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
 
-export interface AgentGroupsActionsProps
-  extends Omit<EntitiesActionsProps<AgentGroup>, 'children'> {
+export interface AgentGroupsActionsProps extends Omit<
+  EntitiesActionsProps<AgentGroup>,
+  'children'
+> {
   onAgentGroupCloneClick?: (entity: AgentGroup) => void;
   onAgentGroupDeleteClick?: (entity: AgentGroup) => void;
   onAgentGroupDownloadClick?: (entity: AgentGroup) => void;

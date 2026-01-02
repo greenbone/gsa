@@ -14,8 +14,10 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
 
-export interface PortListActionsProps
-  extends Omit<EntitiesActionsProps<PortList>, 'children'> {
+export interface PortListActionsProps extends Omit<
+  EntitiesActionsProps<PortList>,
+  'children'
+> {
   onPortListDeleteClick?: (entity: PortList) => void;
   onPortListDownloadClick?: (entity: PortList) => void;
   onPortListCloneClick?: (entity: PortList) => void;

@@ -8,8 +8,10 @@ import styled from 'styled-components';
 import useClickHandler from 'web/components/form/useClickHandler';
 import Theme from 'web/utils/Theme';
 
-interface RowDetailsToggleProps<TValue>
-  extends Omit<HTMLAttributes<HTMLSpanElement>, 'onClick'> {
+interface RowDetailsToggleProps<TValue> extends Omit<
+  HTMLAttributes<HTMLSpanElement>,
+  'onClick'
+> {
   'data-testid'?: string;
   name?: string;
   value?: TValue;

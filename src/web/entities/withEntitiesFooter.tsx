@@ -48,8 +48,8 @@ export type WithEntitiesFooterProps<
 
 export function withEntitiesFooter<
   TEntity,
-  TProps extends
-    WithEntitiesFooterComponentProps<TEntity> = WithEntitiesFooterComponentProps<TEntity>,
+  TProps extends WithEntitiesFooterComponentProps<TEntity> =
+    WithEntitiesFooterComponentProps<TEntity>,
 >(options: Partial<TProps> = {}) {
   return (Component: React.ComponentType<TProps>) => {
     const EntitiesFooterWrapper = ({

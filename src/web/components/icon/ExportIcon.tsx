@@ -9,8 +9,10 @@ import {type DynamicIconProps} from 'web/components/icon/DynamicIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 
-export interface ExportIconProps<TValue = string>
-  extends Omit<DynamicIconProps<TValue>, 'icon'> {
+export interface ExportIconProps<TValue = string> extends Omit<
+  DynamicIconProps<TValue>,
+  'icon'
+> {
   'data-testid'?: string;
   selectionType?: SelectionTypeType;
   title?: string;

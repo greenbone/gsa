@@ -116,8 +116,9 @@ interface EntitiesContainerProps<TModel extends Model = Model> {
   onDownload: OnDownloadedFunc;
 }
 
-interface EntitiesContainerPropsWithHOCs<TModel extends Model = Model>
-  extends EntitiesContainerProps<TModel> {
+interface EntitiesContainerPropsWithHOCs<
+  TModel extends Model = Model,
+> extends EntitiesContainerProps<TModel> {
   deleteEntity: (id: string) => Promise<void>;
   loadSettings: () => void;
   location: Location;

@@ -21,11 +21,10 @@ interface EntityClone extends WithEntityType {
   };
 }
 
-interface EntityCloneIconProps<TEntity extends EntityClone>
-  extends Omit<
-    ExtendedDynamicIconProps<TEntity>,
-    'onClick' | 'value' | 'active'
-  > {
+interface EntityCloneIconProps<TEntity extends EntityClone> extends Omit<
+  ExtendedDynamicIconProps<TEntity>,
+  'onClick' | 'value' | 'active'
+> {
   displayName?: string;
   entity: TEntity;
   mayClone?: boolean;
