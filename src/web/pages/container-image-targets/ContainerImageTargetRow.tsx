@@ -29,8 +29,10 @@ interface CredProps {
   links?: boolean;
 }
 
-export interface ContainerImageTargetActionsProps
-  extends Omit<EntitiesActionsProps<OciImageTarget>, 'children'> {
+export interface ContainerImageTargetActionsProps extends Omit<
+  EntitiesActionsProps<OciImageTarget>,
+  'children'
+> {
   onContainerImageTargeEditClick?: (target: OciImageTarget) => void;
   onContainerImageTargetCloneClick?: (target: OciImageTarget) => void;
   onContainerImageTargetDownloadClick?: (target: OciImageTarget) => void;
@@ -38,8 +40,7 @@ export interface ContainerImageTargetActionsProps
 }
 
 export interface ContainerImageTargetTableRowProps
-  extends ContainerImageTargetActionsProps,
-    RowComponentProps<OciImageTarget> {
+  extends ContainerImageTargetActionsProps, RowComponentProps<OciImageTarget> {
   actionsComponent?: React.ComponentType<ContainerImageTargetActionsProps>;
   links?: boolean;
   'data-testid'?: string;

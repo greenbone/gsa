@@ -21,8 +21,7 @@ export interface PermissionCommandCreateParams {
   subjectType?: EntityType | ApiType;
 }
 
-export interface PermissionCommandSaveParams
-  extends PermissionCommandCreateParams {
+export interface PermissionCommandSaveParams extends PermissionCommandCreateParams {
   id: string;
 }
 

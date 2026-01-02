@@ -13,8 +13,10 @@ import Theme from 'web/utils/Theme';
 
 export type ExtendedIconSize = IconSizeType | [string, string];
 
-export interface DynamicIconProps<TValue = string | undefined>
-  extends Omit<ActionIconProps, 'size' | 'children'> {
+export interface DynamicIconProps<TValue = string | undefined> extends Omit<
+  ActionIconProps,
+  'size' | 'children'
+> {
   icon: LucideIcon | React.ComponentType<React.SVGProps<SVGSVGElement>>;
   ariaLabel?: string;
   size?: ExtendedIconSize;

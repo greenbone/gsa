@@ -19,18 +19,18 @@ interface ToString {
 
 interface CreateEntitiesTableOptions<
   TEntity,
-  TFooterProps extends
-    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
+  TFooterProps extends FooterComponentProps<TEntity> =
+    FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
 > extends EntitiesTableComponentProps<
-    TEntity,
-    TFooterProps,
-    THeaderProps,
-    TRowProps,
-    TPaginationProps
-  > {
+  TEntity,
+  TFooterProps,
+  THeaderProps,
+  TRowProps,
+  TPaginationProps
+> {
   emptyTitle?: ToString;
 }
 
@@ -57,8 +57,8 @@ type CreateEntitiesTableProps<
 
 function createEntitiesTable<
   TEntity extends Model,
-  TFooterProps extends
-    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
+  TFooterProps extends FooterComponentProps<TEntity> =
+    FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,

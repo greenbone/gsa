@@ -8,11 +8,10 @@ import NumberField, {
   type NumberFieldProps,
 } from 'web/components/form/NumberField';
 
-interface SpinnerProps
-  extends Omit<
-    NumberFieldProps,
-    'fixedDecimalScale' | 'hideControls' | 'onChange' | 'value' | 'allowEmpty'
-  > {
+interface SpinnerProps extends Omit<
+  NumberFieldProps,
+  'fixedDecimalScale' | 'hideControls' | 'onChange' | 'value' | 'allowEmpty'
+> {
   value?: number;
   onChange?: (value: number, name?: string) => void;
 }

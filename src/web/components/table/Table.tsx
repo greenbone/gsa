@@ -6,8 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export interface TableProps
-  extends React.TableHTMLAttributes<HTMLTableElement> {
+export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
   children?: React.ReactNode;
   className?: string;
   'data-testid'?: string;

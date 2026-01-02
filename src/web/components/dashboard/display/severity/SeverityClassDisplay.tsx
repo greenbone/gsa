@@ -18,13 +18,12 @@ import transformSeverityData, {
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
 import useGmp from 'web/hooks/useGmp';
 
-interface SeverityClassDisplayProps
-  extends DataDisplayProps<
-    SeverityData,
-    SeverityClassDisplayState,
-    SeverityClassData,
-    TransformSeverityDataProps
-  > {
+interface SeverityClassDisplayProps extends DataDisplayProps<
+  SeverityData,
+  SeverityClassDisplayState,
+  SeverityClassData,
+  TransformSeverityDataProps
+> {
   filter?: Filter;
   onFilterChanged?: (filter: Filter) => void;
 }
@@ -34,13 +33,12 @@ interface SeverityClassDisplayState {
   showLegend?: boolean;
 }
 
-interface SeverityClassDataDisplayProps
-  extends DataDisplayProps<
-    SeverityData,
-    SeverityClassDisplayState,
-    SeverityClassData,
-    TransformSeverityDataProps
-  > {
+interface SeverityClassDataDisplayProps extends DataDisplayProps<
+  SeverityData,
+  SeverityClassDisplayState,
+  SeverityClassData,
+  TransformSeverityDataProps
+> {
   severityRating: string;
 }
 

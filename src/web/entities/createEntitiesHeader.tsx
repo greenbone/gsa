@@ -17,8 +17,7 @@ interface ToString {
   toString: () => string;
 }
 
-export interface CreateEntitiesHeaderProps
-  extends WithEntitiesHeaderComponentProps {
+export interface CreateEntitiesHeaderProps extends WithEntitiesHeaderComponentProps {
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;
   sort?: boolean;

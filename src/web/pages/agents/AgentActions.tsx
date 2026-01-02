@@ -13,8 +13,10 @@ import EntitiesActions, {
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import useTranslation from 'web/hooks/useTranslation';
 
-export interface AgentActionsProps
-  extends Omit<EntitiesActionsProps<Agent>, 'children'> {
+export interface AgentActionsProps extends Omit<
+  EntitiesActionsProps<Agent>,
+  'children'
+> {
   onAgentAuthorizeClick?: (entity: Agent) => void;
   onAgentDeleteClick?: (entity: Agent) => void;
   onAgentEditClick?: (entity: Agent) => void;

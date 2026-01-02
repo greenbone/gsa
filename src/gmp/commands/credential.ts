@@ -39,8 +39,10 @@ interface CredentialCommandCreateArgs {
   vaultId?: string;
 }
 
-interface CredentialCommandSaveArgs
-  extends Omit<CredentialCommandCreateArgs, 'autogenerate'> {
+interface CredentialCommandSaveArgs extends Omit<
+  CredentialCommandCreateArgs,
+  'autogenerate'
+> {
   id: string;
 }
 

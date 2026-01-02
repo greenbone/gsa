@@ -14,8 +14,10 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 
-export interface TargetTableActionsProps
-  extends Omit<EntitiesActionsProps<Target>, 'children'> {
+export interface TargetTableActionsProps extends Omit<
+  EntitiesActionsProps<Target>,
+  'children'
+> {
   onTargetEditClick?: (target: Target) => void;
   onTargetCloneClick?: (target: Target) => void;
   onTargetDownloadClick?: (target: Target) => void;

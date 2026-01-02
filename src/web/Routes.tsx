@@ -145,9 +145,7 @@ const loggedInRoutes = [
         path: 'ociimagetargets',
         lazy: async () => ({
           Component: (
-            await import(
-              'web/pages/container-image-targets/ContainerImageTargetsListPage'
-            )
+            await import('web/pages/container-image-targets/ContainerImageTargetsListPage')
           ).default,
         }),
       },
