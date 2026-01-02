@@ -40,7 +40,7 @@ describe('ComplianceBar tests', () => {
     render(<ComplianceBar compliance="no" />);
     const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyle(
-      'background: linear-gradient(90deg, pink 0%, pink 100%)',
+      'background: linear-gradient(90deg, #D80000 0%, #D80000 100%)',
     );
   });
 
@@ -48,7 +48,7 @@ describe('ComplianceBar tests', () => {
     render(<ComplianceBar compliance="incomplete" />);
     const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyle(
-      'background: linear-gradient(90deg, yellow 0%, yellow 100%)',
+      'background: linear-gradient(90deg, orange 0%, orange 100%)',
     );
   });
 
@@ -56,7 +56,7 @@ describe('ComplianceBar tests', () => {
     render(<ComplianceBar compliance="yes" />);
     const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyle(
-      'background: linear-gradient(90deg, lightgreen 0%, lightgreen 100%)',
+      'background: linear-gradient(90deg, #4cb045 0%, #4cb045 100%)',
     );
   });
 
@@ -64,7 +64,7 @@ describe('ComplianceBar tests', () => {
     render(<ComplianceBar compliance="undefined" />);
     const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyle(
-      'background: linear-gradient(90deg, gray 0%, gray 100%)',
+      'background: linear-gradient(90deg, silver 0%, silver 100%)',
     );
   });
 });
