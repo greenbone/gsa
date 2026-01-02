@@ -38,7 +38,7 @@
   "dependencies": {
     "@dnd-kit/accessibility": "^3.1.1",
     "@dnd-kit/core": "^6.3.1",
-    "@greenbone/ui-lib": "^1.0.0",
+    "@greenbone/ui-lib": "^1.5.0",
     "@mantine/core": "^7.17.8",
     "@mantine/dates": "^7.17.8",
     "@mantine/notifications": "^7.17.8",
@@ -62,7 +62,7 @@
     "i18next": "^25.6.3",
     "i18next-http-backend": "^3.0.2",
     "ical.js": "^2.2.1",
-    "lucide-react": "^0.546.0",
+    "lucide-react": "^0.562.0",
     "memoize-one": "^6.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
