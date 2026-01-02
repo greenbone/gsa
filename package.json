@@ -42,7 +42,7 @@
     "@mantine/core": "^7.17.8",
     "@mantine/dates": "^7.17.8",
     "@mantine/notifications": "^7.17.8",
-    "@reduxjs/toolkit": "^2.9.2",
+    "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-query": "^5.90.16",
     "@visx/axis": "^3.12.0",
     "@visx/gradient": "^3.12.0",
