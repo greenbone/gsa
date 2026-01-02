@@ -33,7 +33,7 @@ const GreenboneFooter = () => {
 
   return (
     <Footer>
-      Copyright © 2009-2025 by Greenbone AG,&nbsp;
+      Copyright © 2009-2026 by Greenbone AG,&nbsp;
       <Link href={linkHref} rel="noopener noreferrer" target="_blank">
         www.greenbone.net
       </Link>

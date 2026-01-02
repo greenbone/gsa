@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {rendererWith} from 'web/testing';
+import {rendererWith, screen} from 'web/testing';
 import date from 'gmp/models/date';
 import Footer from 'web/components/structure/Footer';
 
@@ -13,13 +13,14 @@ describe('Footer tests', () => {
     const {render} = rendererWith({store: true});
 
     const currentYear = date().year();
-    const {element} = render(<Footer />);
+    render(<Footer />);
 
-    expect(element).toHaveTextContent(
-      'Copyright © 2009-' +
-        currentYear +
-        ' by Greenbone AG, www.greenbone.net',
-    );
+    const copyrightText = `Copyright © 2009-${currentYear} by Greenbone AG,`;
+    expect(screen.getByText(copyrightText)).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('link', {name: 'www.greenbone.net'}),
+    ).toHaveAttribute('href', 'https://www.greenbone.net/en');
   });
 
   test.each([
@@ -33,8 +34,8 @@ describe('Footer tests', () => {
       },
     });
 
-    const {element} = render(<Footer />);
+    render(<Footer />);
 
-    expect(element.querySelector('a')).toHaveAttribute('href', expectedHref);
+    expect(screen.getByRole('link')).toHaveAttribute('href', expectedHref);
   });
 });
