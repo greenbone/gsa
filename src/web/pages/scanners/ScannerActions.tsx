@@ -17,8 +17,10 @@ import TrashIcon from 'web/entity/icon/TrashIcon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
-export interface ScannerActionsProps
-  extends Omit<EntitiesActionsProps<Scanner>, 'children'> {
+export interface ScannerActionsProps extends Omit<
+  EntitiesActionsProps<Scanner>,
+  'children'
+> {
   links?: boolean;
   onScannerDeleteClick?: (scanner: Scanner) => void;
   onScannerEditClick?: (scanner: Scanner) => void;

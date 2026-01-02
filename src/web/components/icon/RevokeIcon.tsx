@@ -9,8 +9,9 @@ import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconCompo
 import useTranslation from 'web/hooks/useTranslation';
 import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 
-interface RevokeIconProps<TValue = string>
-  extends ExtendedDynamicIconProps<TValue> {
+interface RevokeIconProps<
+  TValue = string,
+> extends ExtendedDynamicIconProps<TValue> {
   active?: boolean;
   selectionType?: SelectionTypeType;
   title?: string;

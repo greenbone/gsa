@@ -8,11 +8,10 @@ import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {withTextOnly} from 'web/components/link/Link';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface ExternalLinkProps
-  extends Omit<
-    React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    'href' | 'onClick'
-  > {
+interface ExternalLinkProps extends Omit<
+  React.AnchorHTMLAttributes<HTMLAnchorElement>,
+  'href' | 'onClick'
+> {
   to: string;
   children?: React.ReactNode;
 }

@@ -51,8 +51,9 @@ interface EntitiesContainerWrapperProps {
   notify: NotifyFunc;
 }
 
-interface OtherProps<TEntity extends Model = Model>
-  extends DialogNotificationProps {
+interface OtherProps<
+  TEntity extends Model = Model,
+> extends DialogNotificationProps {
   gmp: Gmp;
   entities: TEntity[];
   entitiesCounts: CollectionCounts;

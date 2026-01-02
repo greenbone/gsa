@@ -87,8 +87,10 @@ export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
   onFilterReset: () => void;
 }
 
-interface EntitiesPagePropsWithHOCs<TModel extends Model = Model, TProps = {}>
-  extends EntitiesPageProps<TModel, TProps> {
+interface EntitiesPagePropsWithHOCs<
+  TModel extends Model = Model,
+  TProps = {},
+> extends EntitiesPageProps<TModel, TProps> {
   filters: Filter[];
   gmp: Gmp;
   loadFilters: () => void;

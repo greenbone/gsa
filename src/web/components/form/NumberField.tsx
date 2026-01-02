@@ -18,8 +18,10 @@ interface StyledNumberInputProps {
   errorContent?: string;
 }
 
-export interface NumberFieldProps
-  extends Omit<MantineNumberInputProps, 'type' | 'onChange'> {
+export interface NumberFieldProps extends Omit<
+  MantineNumberInputProps,
+  'type' | 'onChange'
+> {
   allowEmpty?: boolean;
   errorContent?: string;
   onChange?: (value: number, name?: string) => void;

@@ -7,11 +7,10 @@ import {Textarea as GreenboneTextArea} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 import useValueChange from 'web/components/form/useValueChange';
 
-interface TextAreaProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof GreenboneTextArea>,
-    'onChange' | 'value'
-  > {
+interface TextAreaProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof GreenboneTextArea>,
+  'onChange' | 'value'
+> {
   autosize?: boolean;
   disabled?: boolean;
   errorContent?: string;

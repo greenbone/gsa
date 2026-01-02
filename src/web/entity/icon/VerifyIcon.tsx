@@ -23,11 +23,10 @@ interface EntityVerify extends WithEntityType {
 
 type VerifyType = 'report_format' | 'scanner';
 
-interface EntityVerifyIconProps<TEntity extends EntityVerify>
-  extends Omit<
-    React.ComponentProps<typeof VerifyIcon>,
-    'onClick' | 'value' | 'active'
-  > {
+interface EntityVerifyIconProps<TEntity extends EntityVerify> extends Omit<
+  React.ComponentProps<typeof VerifyIcon>,
+  'onClick' | 'value' | 'active'
+> {
   displayName?: string;
   entity: TEntity;
   mayVerify?: boolean;

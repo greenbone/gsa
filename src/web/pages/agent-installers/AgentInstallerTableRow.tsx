@@ -13,8 +13,7 @@ import AgentInstallerActions, {
 } from 'web/pages/agent-installers/AgentInstallerActions';
 
 export interface AgentInstallerTableRowProps
-  extends AgentInstallerActionsProps,
-    RowComponentProps<AgentInstaller> {
+  extends AgentInstallerActionsProps, RowComponentProps<AgentInstaller> {
   actionsComponent?: React.ComponentType<AgentInstallerActionsProps>;
 }
 

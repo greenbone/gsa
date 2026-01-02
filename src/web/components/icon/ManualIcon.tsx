@@ -8,7 +8,8 @@ import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconCompo
 import ManualLink, {type ManualLinkProps} from 'web/components/link/ManualLink';
 
 interface ManualIconProps<TValue = string>
-  extends Pick<ManualLinkProps, 'anchor' | 'page' | 'searchTerm'>,
+  extends
+    Pick<ManualLinkProps, 'anchor' | 'page' | 'searchTerm'>,
     ExtendedDynamicIconProps<TValue> {}
 
 const ManualIcon = ({anchor, page, searchTerm, ...props}: ManualIconProps) => {
