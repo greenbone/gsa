@@ -74,7 +74,7 @@ interface UseReportStateParams {
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
 const DEFAULT_FILTER = Filter.fromString(
-  'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity',
+  'levels=chml rows=100 min_qod=70 first=1 sort-reverse=severity',
 );
 
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
