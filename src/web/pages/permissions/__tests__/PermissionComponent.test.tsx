@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, wait, fireEvent} from 'web/testing';
 import Permission from 'gmp/models/permission';
 import Button from 'web/components/form/Button';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import PermissionComponent from 'web/pages/permissions/PermissionComponent';
 
 const getPermissionResponse = {

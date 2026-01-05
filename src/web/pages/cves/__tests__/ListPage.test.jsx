@@ -16,7 +16,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Cve from 'gmp/models/cve';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CvesPage, {ToolBarIcons} from 'web/pages/cves/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

@@ -11,7 +11,7 @@ import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
 import Role from 'gmp/models/role';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import RoleDetailsPage from 'web/pages/roles/RoleDetailsPage';
 import RoleDetailsPageToolBarIcons from 'web/pages/roles/RoleDetailsPageToolBarIcons';
 import {entitiesLoadingActions as permissionsLoadingActions} from 'web/store/entities/permissions';

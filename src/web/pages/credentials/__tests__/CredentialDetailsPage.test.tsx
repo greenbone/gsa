@@ -13,7 +13,7 @@ import Credential, {
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialDetailsPage from 'web/pages/credentials/CredentialDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/credentials';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

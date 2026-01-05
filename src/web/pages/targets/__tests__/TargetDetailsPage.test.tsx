@@ -8,7 +8,7 @@ import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Target, {ICMP_PING, TCP_SYN} from 'gmp/models/target';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TargetDetailsPage from 'web/pages/targets/TargetDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

@@ -15,7 +15,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import PoliciesPage, {ToolBarIcons} from 'web/pages/policies/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {setUsername} from 'web/store/usersettings/actions';

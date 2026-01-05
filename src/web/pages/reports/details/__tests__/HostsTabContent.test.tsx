@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
+import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import HostsTabContent from 'web/pages/reports/details/HostsTabContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 

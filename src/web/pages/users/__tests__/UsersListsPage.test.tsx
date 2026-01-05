@@ -16,7 +16,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import User from 'gmp/models/user';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import UsersListPage, {
   UsersListPageToolBarIcons,
 } from 'web/pages/users/UsersListPage';

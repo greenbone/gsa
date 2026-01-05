@@ -11,7 +11,7 @@ import {
   type default as ReportReport,
   type ReportReportTaskElement,
 } from 'gmp/models/report/report';
-import {host1, host2} from 'web/pages/reports/__mocks__/MockReport';
+import {host1, host2} from 'web/pages/reports/__fixtures__/MockReport';
 
 setLocale('en');
 

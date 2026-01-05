@@ -8,7 +8,7 @@ import {screen, rendererWith, wait, fireEvent} from 'web/testing';
 import Response from 'gmp/http/response';
 import Credential, {CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import Button from 'web/components/form/Button';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialComponent from 'web/pages/credentials/CredentialComponent';
 
 const currentSettings = testing
