@@ -12,6 +12,7 @@ import {
   type default as Credential,
   type CredentialType,
   type SNMPPrivacyAlgorithmType,
+  KRB5_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -28,6 +29,7 @@ import useEntityDownload, {
 import useEntitySave, {
   type EntitySaveResponse,
 } from 'web/entity/hooks/useEntitySave';
+import {isCredentialStoreType} from 'web/hooks/useCredentialStore';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialDialog, {
@@ -191,13 +193,33 @@ const CredentialComponent = ({
   };
 
   const handleEntitySave = useEntitySave(
-    (data: CredentialDialogState) =>
-      gmp.credential.save({id: data.id as string, ...data}),
+    (data: CredentialDialogState) => {
+      if (isCredentialStoreType(data.credentialType)) {
+        return gmp.credential.saveCredentialStore({
+          id: data.id as string,
+          ...data,
+        });
+      }
+      if (data.credentialType === KRB5_CREDENTIAL_TYPE) {
+        return gmp.credential.saveKrb5({id: data.id as string, ...data});
+      }
+      // Regular credentials use the clean base save method
+      return gmp.credential.save({id: data.id as string, ...data});
+    },
     {onSaveError, onSaved},
   );
 
   const handleEntityCreate = useEntityCreate(
-    (data: CredentialDialogState) => gmp.credential.create(data),
+    (data: CredentialDialogState) => {
+      if (isCredentialStoreType(data.credentialType)) {
+        return gmp.credential.createCredentialStore(data);
+      }
+      if (data.credentialType === KRB5_CREDENTIAL_TYPE) {
+        return gmp.credential.createKrb5(data);
+      }
+      // Regular credentials use the clean base create method
+      return gmp.credential.create(data);
+    },
     {onCreateError, onCreated},
   );
 

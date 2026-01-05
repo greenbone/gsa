@@ -17,7 +17,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 export type CredentialDownloadFormat = 'pem' | 'key' | 'rpm' | 'deb' | 'exe';
 
-interface CredentialCommandCreateArgs {
+interface CredentialCommandBaseArgs {
   authAlgorithm?: SNMPAuthAlgorithmType;
   autogenerate?: boolean;
   certificate?: File | null;
@@ -25,24 +25,69 @@ interface CredentialCommandCreateArgs {
   community?: string;
   credentialLogin?: string;
   credentialType?: CredentialType;
-  hostIdentifier?: string;
-  kdcs?: string[];
   name: string;
   passphrase?: string;
   password?: string;
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
-  privacyHostIdentifier?: string;
   privacyPassword?: string;
   privateKey?: File | null;
   publicKey?: File | null;
+}
+
+interface CredentialCommandKrb5Fields {
+  kdcs?: string[];
   realm?: string;
+}
+
+interface CredentialCommandCredentialStoreFields {
+  hostIdentifier?: string;
   vaultId?: string;
 }
 
-interface CredentialCommandSaveArgs
-  extends Omit<CredentialCommandCreateArgs, 'autogenerate'> {
-  id: string;
+interface CredentialCommandSnmpFields {
+  privacyHostIdentifier?: string;
 }
+
+// Create operation interfaces
+type CredentialCommandCreateArgs = CredentialCommandBaseArgs;
+
+interface CredentialCommandKrb5Args
+  extends CredentialCommandBaseArgs,
+    CredentialCommandKrb5Fields {}
+
+interface CredentialCommandCredentialStoreArgs
+  extends CredentialCommandBaseArgs,
+    CredentialCommandCredentialStoreFields {}
+
+interface CredentialCommandCredentialStoreKrb5Args
+  extends CredentialCommandBaseArgs,
+    CredentialCommandCredentialStoreFields,
+    CredentialCommandKrb5Fields {}
+
+interface CredentialCommandCredentialStoreSnmpArgs
+  extends CredentialCommandBaseArgs,
+    CredentialCommandCredentialStoreFields,
+    CredentialCommandSnmpFields {}
+
+// Save operation interfaces (using utility types)
+type CredentialCommandSaveArgs = Omit<
+  CredentialCommandBaseArgs,
+  'autogenerate'
+> & {id: string};
+
+type CredentialCommandSaveKrb5Args = CredentialCommandSaveArgs &
+  CredentialCommandKrb5Fields;
+
+type CredentialCommandSaveCredentialStoreArgs = CredentialCommandSaveArgs &
+  CredentialCommandCredentialStoreFields;
+
+type CredentialCommandSaveCredentialStoreKrb5Args = CredentialCommandSaveArgs &
+  CredentialCommandCredentialStoreFields &
+  CredentialCommandKrb5Fields;
+
+type CredentialCommandSaveCredentialStoreSnmpArgs = CredentialCommandSaveArgs &
+  CredentialCommandCredentialStoreFields &
+  CredentialCommandSnmpFields;
 
 const saveFile = (file: File | undefined | null): File | undefined | string => {
   if (file === null) {
@@ -65,7 +110,7 @@ class CredentialCommand extends EntityCommand<
     super(http, 'credential', Credential);
   }
 
-  create({
+  private createBase({
     name,
     comment,
     autogenerate,
@@ -80,13 +125,8 @@ class CredentialCommand extends EntityCommand<
     privacyAlgorithm,
     privateKey,
     publicKey,
-    realm,
-    kdcs,
-    vaultId,
-    hostIdentifier,
-    privacyHostIdentifier,
-  }: CredentialCommandCreateArgs) {
-    return this.action({
+  }: CredentialCommandBaseArgs) {
+    return {
       cmd: 'create_credential',
       auth_algorithm: authAlgorithm,
       autogenerate: parseYesNo(autogenerate),
@@ -95,7 +135,6 @@ class CredentialCommand extends EntityCommand<
       community,
       credential_login: credentialLogin,
       credential_type: credentialType,
-      host_identifier: hostIdentifier,
       lsc_password: password,
       name,
       passphrase,
@@ -103,14 +142,61 @@ class CredentialCommand extends EntityCommand<
       privacy_password: privacyPassword,
       private_key: privateKey,
       public_key: publicKey,
-      vault_id: vaultId,
-      realm,
-      'kdcs:': kdcs,
-      privacy_host_identifier: privacyHostIdentifier,
+    };
+  }
+
+  create(args: CredentialCommandCreateArgs) {
+    const baseData = this.createBase(args);
+    return this.action(baseData);
+  }
+
+  createKrb5(args: CredentialCommandKrb5Args) {
+    const baseData = this.createBase(args);
+
+    return this.action({
+      ...baseData,
+      realm: args.realm,
+      'kdcs:': args.kdcs?.length ? args.kdcs : '',
     });
   }
 
-  save({
+  private createCredentialStoreBase(
+    args: CredentialCommandCredentialStoreArgs,
+  ) {
+    const baseData = this.createBase(args);
+
+    return {
+      ...baseData,
+      vault_id: args.vaultId,
+      host_identifier: args.hostIdentifier,
+    };
+  }
+
+  createCredentialStore(args: CredentialCommandCredentialStoreArgs) {
+    const baseData = this.createCredentialStoreBase(args);
+    return this.action(baseData);
+  }
+
+  createCredentialStoreKrb5(args: CredentialCommandCredentialStoreKrb5Args) {
+    const baseData = this.createCredentialStoreBase(args);
+
+    return this.action({
+      ...baseData,
+      realm: args.realm,
+      'kdcs:': args.kdcs?.length ? args.kdcs : '',
+    });
+  }
+
+  createCredentialStoreSnmp(args: CredentialCommandCredentialStoreSnmpArgs) {
+    const baseData = this.createCredentialStoreBase(args);
+
+    return this.action({
+      ...baseData,
+      privacy_host_identifier: args.privacyHostIdentifier,
+    });
+  }
+
+  private saveBase({
     authAlgorithm,
     certificate,
     comment,
@@ -125,33 +211,74 @@ class CredentialCommand extends EntityCommand<
     privacyPassword,
     privateKey,
     publicKey,
-    kdcs,
-    realm,
-    vaultId,
-    hostIdentifier,
-    privacyHostIdentifier,
   }: CredentialCommandSaveArgs) {
-    return this.action({
+    return {
       cmd: 'save_credential',
-      'kdcs:': kdcs,
       auth_algorithm: authAlgorithm,
       certificate: saveFile(certificate),
       comment,
       community,
       credential_login: credentialLogin,
       credential_type: credentialType,
-      host_identifier: hostIdentifier,
-      id,
+      credential_id: id,
       name,
       passphrase,
       password,
       privacy_algorithm: privacyAlgorithm,
-      privacy_host_identifier: privacyHostIdentifier,
       privacy_password: privacyPassword,
       private_key: saveFile(privateKey),
       public_key: saveFile(publicKey),
-      realm,
-      vault_id: vaultId,
+    };
+  }
+
+  save(args: CredentialCommandSaveArgs) {
+    const baseData = this.saveBase(args);
+    return this.action(baseData);
+  }
+
+  saveKrb5(args: CredentialCommandSaveKrb5Args) {
+    const baseData = this.saveBase(args);
+
+    return this.action({
+      ...baseData,
+      realm: args.realm,
+      'kdcs:': args.kdcs?.length ? args.kdcs : '',
+    });
+  }
+
+  private saveCredentialStoreBase(
+    args: CredentialCommandSaveCredentialStoreArgs,
+  ) {
+    const baseData = this.saveBase(args);
+
+    return {
+      ...baseData,
+      vault_id: args.vaultId,
+      host_identifier: args.hostIdentifier,
+    };
+  }
+
+  saveCredentialStore(args: CredentialCommandSaveCredentialStoreArgs) {
+    const baseData = this.saveCredentialStoreBase(args);
+    return this.action(baseData);
+  }
+
+  saveCredentialStoreKrb5(args: CredentialCommandSaveCredentialStoreKrb5Args) {
+    const baseData = this.saveCredentialStoreBase(args);
+
+    return this.action({
+      ...baseData,
+      realm: args.realm,
+      'kdcs:': args.kdcs?.length ? args.kdcs : '',
+    });
+  }
+
+  saveCredentialStoreSnmp(args: CredentialCommandSaveCredentialStoreSnmpArgs) {
+    const baseData = this.saveCredentialStoreBase(args);
+
+    return this.action({
+      ...baseData,
+      privacy_host_identifier: args.privacyHostIdentifier,
     });
   }
 
