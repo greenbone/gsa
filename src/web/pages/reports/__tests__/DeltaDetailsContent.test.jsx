@@ -12,11 +12,11 @@ import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
-  'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+  'apply_overrides=0 levels=chml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
 const filterWithName = Filter.fromElement({
-  term: 'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+  term: 'apply_overrides=0 levels=chml rows=2 min_qod=70 first=1 sort-reverse=severity',
   name: 'foo',
   id: '123',
 });
@@ -241,7 +241,7 @@ describe('DeltaReportDetailsContent tests', () => {
       '2',
     );
     expect(screen.getByRole('row', {name: /^Filter/})).toHaveTextContent(
-      'apply_overrides=0 levels=hml min_qod=70',
+      'apply_overrides=0 levels=chml min_qod=70',
     );
     expect(screen.getByRole('row', {name: /^Timezone/})).toHaveTextContent(
       'UTC (UTC)',
@@ -357,7 +357,7 @@ describe('DeltaReportDetailsContent tests', () => {
     // displayed filter
     expect(
       screen.getByText(
-        '(Applied filter: apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity)',
+        '(Applied filter: apply_overrides=0 levels=chml rows=2 min_qod=70 first=1 sort-reverse=severity)',
       ),
     ).toBeInTheDocument();
   });
