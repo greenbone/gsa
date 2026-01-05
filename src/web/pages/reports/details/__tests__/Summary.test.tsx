@@ -6,8 +6,8 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Filter from 'gmp/models/filter';
-import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
-import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
+import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
+import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import Summary from 'web/pages/reports/details/Summary';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 

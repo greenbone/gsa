@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, wait, fireEvent} from 'web/testing';
 import Role from 'gmp/models/role';
 import Button from 'web/components/form/Button';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import RoleComponent from 'web/pages/roles/RoleComponent';
 
 const defaultGetRoleResponse = {

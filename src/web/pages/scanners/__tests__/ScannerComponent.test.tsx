@@ -10,7 +10,7 @@ import Scanner, {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
 } from 'gmp/models/scanner';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScannerComponent from 'web/pages/scanners/ScannerComponent';
 
 const createGmp = (object?: unknown) => {

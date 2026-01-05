@@ -10,7 +10,7 @@ import Response from 'gmp/http/response';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CpePage from 'web/pages/cpes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

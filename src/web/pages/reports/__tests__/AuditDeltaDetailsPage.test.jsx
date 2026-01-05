@@ -7,8 +7,8 @@ import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Filter from 'gmp/models/filter';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
-import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/MockAuditDeltaReport';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
+import {getMockAuditDeltaReport} from 'web/pages/reports/__fixtures__/MockAuditDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 

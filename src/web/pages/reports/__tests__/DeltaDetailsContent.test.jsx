@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
+import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 

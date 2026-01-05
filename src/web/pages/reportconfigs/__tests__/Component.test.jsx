@@ -13,7 +13,7 @@ import {
   wait,
 } from 'web/testing';
 import ReportConfig from 'gmp/models/report-config';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ReportFormatComponent from 'web/pages/reportconfigs/ReportConfigsComponent';
 
 describe('Report Config Component tests', () => {

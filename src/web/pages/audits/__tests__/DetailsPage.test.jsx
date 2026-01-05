@@ -11,7 +11,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/audits/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

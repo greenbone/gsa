@@ -8,7 +8,7 @@ import {rendererWith, wait} from 'web/testing';
 import date from 'gmp/models/date';
 import Model from 'gmp/models/model';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 
 describe('useEntityDownload', () => {
   test('should allow to download an entity', async () => {

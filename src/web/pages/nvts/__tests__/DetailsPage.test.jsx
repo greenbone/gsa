@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 import NVT from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/nvts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

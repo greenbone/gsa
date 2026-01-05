@@ -16,7 +16,7 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TargetPage from 'web/pages/targets/TargetListPage';
 import {entitiesLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

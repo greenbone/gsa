@@ -8,7 +8,7 @@ import {screen, rendererWith, within} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
+import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 

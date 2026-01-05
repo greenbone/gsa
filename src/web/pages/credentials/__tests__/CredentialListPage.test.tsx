@@ -16,7 +16,7 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialPage from 'web/pages/credentials/CredentialListPage';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';

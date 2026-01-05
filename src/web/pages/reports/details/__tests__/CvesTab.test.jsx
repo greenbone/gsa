@@ -8,7 +8,7 @@ import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
+import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import CvesTab from 'web/pages/reports/details/CvesTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 

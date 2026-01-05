@@ -6,7 +6,7 @@
 import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, screen} from 'web/testing';
-import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
+import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import AuditReportRow from 'web/pages/reports/AuditReportRow';
 import {setTimezone} from 'web/store/usersettings/actions';
 

@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/results/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

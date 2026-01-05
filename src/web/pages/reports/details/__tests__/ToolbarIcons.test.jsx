@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
+import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 
 const filter = Filter.fromString(

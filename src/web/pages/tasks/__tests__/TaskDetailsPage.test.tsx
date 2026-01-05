@@ -12,7 +12,7 @@ import ScanConfig from 'gmp/models/scan-config';
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TaskDetailsPage from 'web/pages/tasks/TaskDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

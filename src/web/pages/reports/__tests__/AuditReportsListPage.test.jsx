@@ -16,7 +16,7 @@ import {
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
+import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import AuditReportListPage from 'web/pages/reports/AuditReportsListPage';
 import {entitiesActions} from 'web/store/entities/auditreports';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
+import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 

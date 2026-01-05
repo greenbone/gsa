@@ -8,7 +8,7 @@ import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScheduleDetailsPage from 'web/pages/schedules/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/schedules';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

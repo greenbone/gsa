@@ -12,7 +12,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ReportConfig from 'gmp/models/report-config';
-import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
+import {mockReportConfig} from 'web/pages/reportconfigs/__fixtures__/MockReportConfig';
 import ReportConfigDetailsPageToolBarIcons from 'web/pages/reportconfigs/ReportConfigDetailsPageToolBarIcons';
 
 const manualUrl = 'test/';
