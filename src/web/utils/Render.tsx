@@ -547,7 +547,7 @@ export const simplePermissionDescriptionWithSubject = (
 };
 
 export const setRef =
-  <TRef,>(...refs: React.Ref<TRef>[]) =>
+  <TRef,>(...refs: (React.Ref<TRef> | null | undefined)[]) =>
   (ref: TRef) => {
     for (const rf of refs) {
       if (isFunction(rf)) {
