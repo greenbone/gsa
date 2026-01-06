@@ -3,16 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type ReactNode} from 'react';
+import Label from 'web/components/chart/base/Label';
+import ToolTip from 'web/components/chart/base/Tooltip';
 import Pie from 'web/components/chart/donut/Pie';
-import {DataPropType} from 'web/components/chart/donut/PropTypes';
-import Label from 'web/components/chart/Label';
-import ToolTip from 'web/components/chart/Tooltip';
-import PropTypes from 'web/utils/PropTypes';
+
+interface LabelData {
+  value: number;
+  toolTip?: ReactNode;
+}
+
+interface LabelsProps<TData extends LabelData> {
+  data: TData[];
+  centerX: number;
+  centerY: number;
+  innerRadiusX?: number;
+  outerRadiusX: number;
+  innerRadiusY?: number;
+  outerRadiusY?: number;
+}
 
 const MIN_ANGLE_FOR_LABELS = 0.15;
 
-const Labels = ({
+const Labels = <TData extends LabelData = LabelData>({
   data,
   centerX,
   centerY,
@@ -20,7 +33,7 @@ const Labels = ({
   outerRadiusX,
   innerRadiusY,
   outerRadiusY,
-}) => (
+}: LabelsProps<TData>) => (
   <Pie
     data={data}
     innerRadiusX={innerRadiusX}
@@ -41,7 +54,7 @@ const Labels = ({
           {({targetRef, hide, show}) => (
             <Label
               key={index}
-              ref={targetRef}
+              ref={targetRef as React.Ref<SVGElement>}
               x={x}
               y={y}
               onMouseEnter={show}
@@ -55,15 +68,5 @@ const Labels = ({
     }}
   </Pie>
 );
-
-Labels.propTypes = {
-  centerX: PropTypes.number.isRequired,
-  centerY: PropTypes.number.isRequired,
-  data: DataPropType,
-  innerRadiusX: PropTypes.number,
-  innerRadiusY: PropTypes.number,
-  outerRadiusX: PropTypes.number.isRequired,
-  outerRadiusY: PropTypes.number,
-};
 
 export default Labels;

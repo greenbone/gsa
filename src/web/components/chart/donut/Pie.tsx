@@ -6,7 +6,7 @@
 import React from 'react';
 import {pie as d3pie} from 'd3-shape';
 import {isDefined} from 'gmp/utils/identity';
-import Group from 'web/components/chart/Group';
+import Group from 'web/components/chart/base/Group';
 import arc from 'web/components/chart/utils/Arc';
 import PropTypes from 'web/utils/PropTypes';
 

@@ -3,21 +3,38 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {color as d3color} from 'd3-color';
+import {color as d3color, type HSLColor, type RGBColor} from 'd3-color';
 import {isDefined} from 'gmp/utils/identity';
+import Group from 'web/components/chart/base/Group';
+import {type LegendData} from 'web/components/chart/base/Legend';
+import ToolTip from 'web/components/chart/base/Tooltip';
 import {
   PieOuterPath,
   PieTopPath,
   PieInnerPath,
 } from 'web/components/chart/donut/Paths';
-import {ArcDataPropType} from 'web/components/chart/donut/PropTypes';
-import Group from 'web/components/chart/Group';
-import ToolTip from 'web/components/chart/Tooltip';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-const Arc3d = ({
+interface Arc3dData extends LegendData {
+  value: number;
+}
+
+interface Arc3dProps<TData extends Arc3dData> {
+  data: TData;
+  innerRadiusX: number;
+  innerRadiusY: number;
+  outerRadiusX: number;
+  outerRadiusY: number;
+  donutHeight: number;
+  path: string;
+  startAngle: number;
+  endAngle: number;
+  x: number;
+  y: number;
+  onDataClick?: (data: TData) => void;
+}
+
+const Arc3d = <TData extends Arc3dData = Arc3dData>({
   data,
   innerRadiusX,
   innerRadiusY,
@@ -30,9 +47,13 @@ const Arc3d = ({
   x,
   y,
   onDataClick,
-}) => {
+}: Arc3dProps<TData>) => {
   const {color = Theme.lightGray, toolTip} = data;
-  const darker = d3color(color).darker();
+  let d3Color = d3color(String(color));
+  if (!d3Color) {
+    d3Color = d3color(Theme.lightGray);
+  }
+  const darker = (d3Color as HSLColor | RGBColor).darker();
   return (
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
@@ -59,7 +80,7 @@ const Arc3d = ({
             startAngle={startAngle}
           />
           <circle // used as positioning ref for tooltips
-            ref={targetRef}
+            ref={targetRef as React.Ref<SVGCircleElement>}
             cx={x}
             cy={y}
             r="1"
@@ -69,21 +90,6 @@ const Arc3d = ({
       )}
     </ToolTip>
   );
-};
-
-Arc3d.propTypes = {
-  data: ArcDataPropType,
-  donutHeight: PropTypes.number.isRequired,
-  endAngle: PropTypes.number.isRequired,
-  innerRadiusX: PropTypes.number.isRequired,
-  innerRadiusY: PropTypes.number.isRequired,
-  outerRadiusX: PropTypes.number.isRequired,
-  outerRadiusY: PropTypes.number.isRequired,
-  path: PropTypes.toString.isRequired,
-  startAngle: PropTypes.number.isRequired,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  onDataClick: PropTypes.func,
 };
 
 export default Arc3d;

@@ -3,22 +3,46 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {forwardRef, type Ref} from 'react';
+import {type ToString} from 'gmp/types';
 import path from 'web/components/chart/utils/Path';
-import PropTypes from 'web/utils/PropTypes';
+
+interface PieToPathProps {
+  color: ToString;
+  path: ToString;
+}
+
+interface PieInnerPathProps {
+  color: ToString;
+  donutHeight: number;
+  endAngle?: number;
+  innerRadiusX: number;
+  innerRadiusY: number;
+  startAngle?: number;
+}
+
+interface PieOuterPathProps {
+  startAngle?: number;
+  endAngle?: number;
+  donutHeight: number;
+  color: ToString;
+  outerRadiusX: number;
+  outerRadiusY: number;
+}
 
 const PI2 = 2 * Math.PI;
 
-export const PieTopPath = ({color, path}) => (
-  <path d={path} fill={color} stroke={color} />
+export const PieTopPath = ({color, path}: PieToPathProps) => (
+  <path d={String(path)} fill={String(color)} stroke={String(color)} />
 );
 
-PieTopPath.propTypes = {
-  color: PropTypes.toString.isRequired,
-  path: PropTypes.toString.isRequired,
-};
-
-const pieInnerPath = (sa, ea, irx, iry, h) => {
+const pieInnerPath = (
+  sa: number,
+  ea: number,
+  irx: number,
+  iry: number,
+  h: number,
+) => {
   const startAngle = sa < Math.PI ? Math.PI : sa;
   const endAngle = ea < Math.PI ? Math.PI : ea;
   const sx = irx * Math.cos(startAngle);
@@ -34,7 +58,7 @@ const pieInnerPath = (sa, ea, irx, iry, h) => {
   paths.arc(irx, iry, sx, sy + h, {sweep: 0});
   paths.close();
 
-  return paths;
+  return String(paths);
 };
 
 export const PieInnerPath = ({
@@ -44,7 +68,7 @@ export const PieInnerPath = ({
   donutHeight,
   innerRadiusX,
   innerRadiusY,
-}) => (
+}: PieInnerPathProps) => (
   <path
     d={pieInnerPath(
       startAngle,
@@ -53,20 +77,17 @@ export const PieInnerPath = ({
       innerRadiusY,
       donutHeight,
     )}
-    fill={color}
+    fill={String(color)}
   />
 );
 
-PieInnerPath.propTypes = {
-  color: PropTypes.toString.isRequired,
-  donutHeight: PropTypes.number.isRequired,
-  endAngle: PropTypes.number,
-  innerRadiusX: PropTypes.number.isRequired,
-  innerRadiusY: PropTypes.number.isRequired,
-  startAngle: PropTypes.number,
-};
-
-const pieOuterPath = (sa, ea, rx, ry, h) => {
+const pieOuterPath = (
+  sa: number,
+  ea: number,
+  rx: number,
+  ry: number,
+  h: number,
+) => {
   const startAngle = sa > Math.PI ? Math.PI : sa;
   const endAngle = ea > Math.PI ? Math.PI : ea;
 
@@ -83,10 +104,10 @@ const pieOuterPath = (sa, ea, rx, ry, h) => {
   paths.arc(rx, ry, sx, sy, {sweep: 0});
   paths.close();
 
-  return paths;
+  return String(paths);
 };
 
-export const PieOuterPath = React.forwardRef(
+export const PieOuterPath = forwardRef(
   (
     {
       startAngle = 0,
@@ -95,8 +116,8 @@ export const PieOuterPath = React.forwardRef(
       color,
       outerRadiusX,
       outerRadiusY,
-    },
-    ref,
+    }: PieOuterPathProps,
+    ref: Ref<SVGPathElement>,
   ) => (
     <path
       ref={ref}
@@ -107,16 +128,7 @@ export const PieOuterPath = React.forwardRef(
         outerRadiusY,
         donutHeight,
       )}
-      fill={color}
+      fill={String(color)}
     />
   ),
 );
-
-PieOuterPath.propTypes = {
-  color: PropTypes.toString.isRequired,
-  donutHeight: PropTypes.number.isRequired,
-  endAngle: PropTypes.number,
-  outerRadiusX: PropTypes.number.isRequired,
-  outerRadiusY: PropTypes.number.isRequired,
-  startAngle: PropTypes.number,
-};
