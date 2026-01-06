@@ -4,27 +4,16 @@
  */
 
 import {type RefObject, type ReactNode, type Ref} from 'react';
-import {Line as VxLine} from '@visx/shape';
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
+import LegendLabel from 'web/components/chart/base/LagendLabel';
+import {DEFAULT_SHAPE_SIZE} from 'web/components/chart/base/LegendLine';
 import ToolTip, {type ToolTipRef} from 'web/components/chart/base/Tooltip';
 import Theme from 'web/utils/Theme';
 
-interface StyledDivProps {
-  height?: number;
-}
-
 interface RectProps {
   color: string;
-}
-
-interface LineProps {
-  width?: number;
-  height?: number;
-  color: ToString;
-  lineWidth?: number;
-  dashArray?: string;
 }
 
 export interface LegendData {
@@ -52,8 +41,6 @@ interface LegendProps<TData extends LegendData = LegendData> {
 
 export type LegendRef = RefObject<HTMLElement>;
 
-const DEFAULT_SHAPE_SIZE = 15;
-
 const StyledLegend = styled.div`
   padding: 5px 10px;
   margin: 10px 5px;
@@ -77,50 +64,13 @@ export const Item = styled.div`
       : undefined};
 `;
 
-export const Label = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  flex-grow: 1;
-  margin-left: 10px;
-`;
-
-export const Rect = styled.div<RectProps>`
+const Rect = styled.div<RectProps>`
   display: flex;
   align-items: center;
   width: ${DEFAULT_SHAPE_SIZE}px;
   height: 10px;
   background-color: ${props => props.color};
 `;
-
-const StyledDiv = styled.div<StyledDivProps>`
-  height: ${props => props.height}px;
-  background-color: ${Theme.white};
-  padding: 0 2px;
-`;
-
-export const LegendLine = ({
-  width = DEFAULT_SHAPE_SIZE + 5,
-  height = DEFAULT_SHAPE_SIZE,
-  color,
-  lineWidth = 1,
-  dashArray,
-}: LineProps) => {
-  const y = height / 2;
-  return (
-    <StyledDiv>
-      <svg height={height} width={width}>
-        <VxLine
-          from={{x: 0, y}}
-          stroke={String(color)}
-          strokeDasharray={dashArray}
-          strokeWidth={lineWidth}
-          to={{x: width, y}}
-        />
-      </svg>
-    </StyledDiv>
-  );
-};
 
 const Legend = <TData extends LegendData = LegendData>({
   data,
@@ -152,7 +102,7 @@ const Legend = <TData extends LegendData = LegendData>({
               onMouseLeave={hide}
             >
               <Rect color={String(d.color)} />
-              <Label>{d.label}</Label>
+              <LegendLabel>{d.label}</LegendLabel>
             </Item>
           )
         }

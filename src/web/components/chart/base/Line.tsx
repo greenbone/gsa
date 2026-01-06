@@ -13,13 +13,13 @@ import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/base/Axis';
 import Group from 'web/components/chart/base/Group';
+import LegendLabel from 'web/components/chart/base/LagendLabel';
 import Legend, {
   Item,
-  Label,
   type LegendData,
-  LegendLine,
   type LegendRef,
 } from 'web/components/chart/base/Legend';
+import LegendLine from 'web/components/chart/base/LegendLine';
 import Svg from 'web/components/chart/base/Svg';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
@@ -627,9 +627,9 @@ class LineChart extends React.Component<LineChartProps, LineChartState> {
                   dashArray={d.dashArray}
                   lineWidth={d.width}
                 />
-                <Label>
+                <LegendLabel>
                   {React.isValidElement(d.label) ? d.label : `${d.label}`}
-                </Label>
+                </LegendLabel>
               </Item>
             )}
           </Legend>
