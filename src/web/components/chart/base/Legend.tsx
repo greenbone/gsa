@@ -8,7 +8,7 @@ import {Line as VxLine} from '@visx/shape';
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
-import ToolTip, {type ToolTipRef} from 'web/components/chart/Tooltip';
+import ToolTip, {type ToolTipRef} from 'web/components/chart/base/Tooltip';
 import Theme from 'web/utils/Theme';
 
 interface StyledDivProps {
