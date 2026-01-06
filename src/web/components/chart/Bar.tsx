@@ -7,15 +7,39 @@ import React from 'react';
 import {scaleBand, scaleLinear} from 'd3-scale';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import Axis from 'web/components/chart/Axis';
-import Group from 'web/components/chart/Group';
-import Legend from 'web/components/chart/Legend';
-import Svg from 'web/components/chart/Svg';
-import ToolTip from 'web/components/chart/Tooltip';
+import Axis from 'web/components/chart/base/Axis';
+import Group from 'web/components/chart/base/Group';
+import Legend, {
+  type LegendData,
+  type LegendRef,
+} from 'web/components/chart/base/Legend';
+import Svg from 'web/components/chart/base/Svg';
+import ToolTip from 'web/components/chart/base/Tooltip';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
+
+interface BarChartDataPoint extends LegendData {
+  x: number;
+  y: number;
+}
+
+interface BarChartProps {
+  width: number;
+  height: number;
+  showLegend?: boolean;
+  horizontal?: boolean;
+  xLabel?: string;
+  yLabel?: string;
+  svgRef?: React.Ref<SVGSVGElement>;
+  data: BarChartDataPoint[];
+  onDataClick?: (dataPoint: BarChartDataPoint) => void;
+  onLegendItemClick?: (dataPoint: BarChartDataPoint) => void;
+}
+
+interface BarChartState {
+  width: number;
+}
 
 const StyledLayout = styled(Layout)`
   overflow: hidden;
@@ -35,8 +59,8 @@ const LABEL_HEIGHT = 20;
 const MIN_WIDTH = 250;
 const MIN_TICK_WIDTH = 20;
 
-const tickFormat = val => {
-  const valStr = val.toString();
+const tickFormat = (val: number | string) => {
+  const valStr = String(val);
   if (valStr.length > MAX_LABEL_LENGTH) {
     // prevent cycling through the string
     return '...' + valStr.slice(valStr.length - MAX_LABEL_LENGTH);
@@ -44,9 +68,11 @@ const tickFormat = val => {
   return valStr;
 };
 
-class BarChart extends React.Component {
-  constructor(...args) {
-    super(...args);
+class BarChart extends React.Component<BarChartProps, BarChartState> {
+  legendRef: LegendRef;
+
+  constructor(props: BarChartProps) {
+    super(props);
 
     this.legendRef = React.createRef();
 
@@ -55,7 +81,7 @@ class BarChart extends React.Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps: BarChartProps, nextState: BarChartState) {
     return (
       shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width
@@ -132,7 +158,7 @@ class BarChart extends React.Component {
       maxHeight = maxHeight - LABEL_HEIGHT;
     }
 
-    const xScale = scaleBand()
+    const xScale = scaleBand<number>()
       .rangeRound(horizontal ? [maxHeight, 0] : [0, maxWidth])
       .domain(xValues)
       .padding(0.125);
@@ -182,8 +208,8 @@ class BarChart extends React.Component {
                     }
                   >
                     <rect
-                      ref={targetRef}
-                      fill={d.color}
+                      ref={targetRef as React.Ref<SVGRectElement>}
+                      fill={String(d.color)}
                       height={
                         horizontal
                           ? xScale.bandwidth()
@@ -202,9 +228,9 @@ class BarChart extends React.Component {
           </Group>
         </Svg>
         {showLegend && data.length > 0 && (
-          <Legend
-            ref={this.legendRef}
+          <Legend<BarChartDataPoint>
             data={data}
+            legendRef={this.legendRef}
             onItemClick={onLegendItemClick}
           />
         )}
@@ -212,37 +238,5 @@ class BarChart extends React.Component {
     );
   }
 }
-
-BarChart.propTypes = {
-  /*
-    Required array structure for data:
-
-    [{
-      x: ...,
-      y: ...,
-      toolTip: ...,
-      color: ...,
-      label: ...,
-    }]
-  */
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      x: PropTypes.toString.isRequired,
-      y: PropTypes.number.isRequired,
-      label: PropTypes.any,
-      color: PropTypes.toString.isRequired,
-      toolTip: PropTypes.elementOrString,
-    }),
-  ).isRequired,
-  height: PropTypes.number.isRequired,
-  horizontal: PropTypes.bool,
-  showLegend: PropTypes.bool,
-  svgRef: PropTypes.ref,
-  width: PropTypes.number.isRequired,
-  xLabel: PropTypes.toString,
-  yLabel: PropTypes.toString,
-  onDataClick: PropTypes.func,
-  onLegendItemClick: PropTypes.func,
-};
 
 export default BarChart;

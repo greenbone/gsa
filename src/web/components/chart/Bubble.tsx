@@ -3,31 +3,60 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {pack, hierarchy} from 'd3-hierarchy';
 import {isDefined} from 'gmp/utils/identity';
-import Group from 'web/components/chart/Group';
-import Svg from 'web/components/chart/Svg';
-import ToolTip from 'web/components/chart/Tooltip';
-import PropTypes from 'web/utils/PropTypes';
+import Group from 'web/components/chart/base/Group';
+import {type LegendData} from 'web/components/chart/base/Legend';
+import Svg from 'web/components/chart/base/Svg';
+import ToolTip from 'web/components/chart/base/Tooltip';
 import Theme from 'web/utils/Theme';
+
+interface BubbleChartData extends LegendData {
+  value: number;
+}
+
+interface BubbleChartProps {
+  data?: BubbleChartData[];
+  width: number;
+  height: number;
+  svgRef?: React.Ref<SVGSVGElement>;
+  onDataClick?: (data: BubbleChartData) => void;
+}
+
+interface BubbleChartHierarchyData extends BubbleChartData {
+  children: BubbleChartData[];
+}
 
 const margin = {
   top: 5,
   right: 5,
   bottom: 5,
   left: 5,
-};
+} as const;
 
-const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
+const BubbleChart = ({
+  data = [],
+  width,
+  height,
+  svgRef,
+  onDataClick,
+}: BubbleChartProps) => {
   const maxWidth = width - margin.left - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
 
   const hasBubbles = data.length > 0;
 
-  const bubbles = pack().size([maxWidth, maxHeight]).padding(1.5);
+  const bubbles = pack<BubbleChartHierarchyData>()
+    .size([maxWidth, maxHeight])
+    .padding(1.5);
 
-  const root = hierarchy({children: data}).sum(d => d.value);
+  const root = hierarchy<BubbleChartHierarchyData>({
+    children: data,
+    // dummy root node
+    color: '',
+    label: '',
+    value: 0,
+  }).sum(d => d.value);
 
   const nodes = bubbles(root).leaves();
   return (
@@ -52,7 +81,7 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
                       onMouseEnter={show}
                       onMouseLeave={hide}
                     >
-                      <circle fill={d.color} r={r} />
+                      <circle fill={String(d.color)} r={r} />
 
                       <clipPath id={clippathId}>
                         {/* cut of text overflowing the circle */}
@@ -60,7 +89,7 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
                       </clipPath>
 
                       <text
-                        ref={targetRef}
+                        ref={targetRef as React.Ref<SVGTextElement>}
                         clipPath={`url(#${clippathId})`}
                         dominantBaseline="middle"
                         fontSize="10px"
@@ -86,21 +115,6 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
       </Group>
     </Svg>
   );
-};
-
-BubbleChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.number.isRequired,
-      color: PropTypes.toString.isRequired,
-      label: PropTypes.toString.isRequired,
-      toolTip: PropTypes.elementOrString,
-    }),
-  ),
-  height: PropTypes.number.isRequired,
-  svgRef: PropTypes.ref,
-  width: PropTypes.number.isRequired,
-  onDataClick: PropTypes.func,
 };
 
 export default BubbleChart;
