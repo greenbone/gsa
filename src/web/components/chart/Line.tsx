@@ -3,19 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {type MouseEvent} from 'react';
 import {Line, LinePath} from '@visx/shape';
 import {scaleLinear, scaleUtc} from 'd3-scale';
 import memoize from 'memoize-one';
 import styled from 'styled-components';
-import date from 'gmp/models/date';
+import date, {type Date as GmpDate} from 'gmp/models/date';
+import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/Axis';
 import Group from 'web/components/chart/Group';
 import Legend, {
   Item,
   Label,
-  Line as LegendLine,
+  type LegendData,
+  LegendLine,
+  type LegendRef,
 } from 'web/components/chart/Legend';
 import Svg from 'web/components/chart/Svg';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
@@ -25,6 +28,53 @@ import PropTypes from 'web/utils/PropTypes';
 import {setRef} from 'web/utils/Render';
 import Theme from 'web/utils/Theme';
 
+interface LineData {
+  x: number | GmpDate;
+  y: number;
+  y2: number;
+  label?: string;
+}
+
+interface CrossProps {
+  x: number;
+  y: number;
+  color: ToString;
+  dashArray?: string;
+  lineWidth?: number;
+}
+
+interface LineProps extends LegendData {
+  dashArray?: string;
+  lineWidth?: number;
+  width?: number;
+}
+
+interface LineChartProps {
+  data: LineData[];
+  height: number;
+  numTicks?: number;
+  showLegend?: boolean;
+  svgRef?: React.Ref<SVGSVGElement>;
+  timeline?: boolean;
+  width: number;
+  xAxisLabel?: React.ReactNode;
+  yAxisLabel?: React.ReactNode;
+  y2AxisLabel?: React.ReactNode;
+  yLine?: LineProps;
+  y2Line?: LineProps;
+  onRangeSelected?: (start: LineData, end: LineData) => void;
+}
+
+interface LineChartState {
+  data?: LineData[];
+  displayInfo: boolean;
+  infoX?: number | GmpDate;
+  mouseX?: number;
+  mouseY?: number;
+  rangeX?: number | GmpDate;
+  width: number;
+}
+
 const LEGEND_MARGIN = 20;
 
 const margin = {
@@ -32,13 +82,23 @@ const margin = {
   right: 60,
   bottom: 55,
   left: 60,
-};
+} as const;
 
 const MIN_WIDTH = 100 + margin.right + margin.left;
 const MIN_TICK_WIDTH = 75;
 
-const findX = (timeline, value) => d =>
-  timeline ? d.x.isSame(value) : d.x === value;
+export const lineDataPropType = PropTypes.shape({
+  color: PropTypes.toString.isRequired,
+  dashArray: PropTypes.string,
+  label: PropTypes.any.isRequired,
+  lineWidth: PropTypes.number,
+  width: PropTypes.number,
+});
+
+const findX =
+  (timeline: boolean, value: number | GmpDate) =>
+  (d: LineData): d is LineData =>
+    timeline ? (d.x as GmpDate).isSame(value) : d.x === value;
 
 const CrispEdgesLine = styled(Line)`
   shape-rendering: crisp-edges;
@@ -57,55 +117,57 @@ const LabelTitle = styled.text`
   font-family: monospace;
 `;
 
-const xValue = (d, timeline = false) => (timeline ? d.x.toDate() : d.x);
+const xValue = (d: LineData) => Number(d.x);
 
-const maxWidth = memoize(width => width - margin.left - margin.right);
+const maxWidth = memoize((width: number) => width - margin.left - margin.right);
 
-const maxHeight = memoize(height => height - margin.top - margin.bottom);
+const maxHeight = memoize(
+  (height: number) => height - margin.top - margin.bottom,
+);
 
-const getXAxisTicks = memoize((width, numTicks = 10) => {
+const getXAxisTicks = memoize((width: number, numTicks: number = 10) => {
   while (width / numTicks < MIN_TICK_WIDTH) {
     numTicks--;
   }
   return numTicks;
 });
 
-const getXValues = memoize((data = [], timeline = false) =>
-  data.map(d => xValue(d, timeline)),
+const getXValues = memoize((data: LineData[] = []) => data.map(d => xValue(d)));
+
+const getXMin = memoize((xValues: number[]) => Math.min(...xValues));
+const getXMax = memoize((xValues: number[]) => Math.max(...xValues));
+
+const getXScale = memoize(
+  (data: LineData[] = [], timeline: boolean = false, width: number) => {
+    const xValues = getXValues(data);
+
+    const xMin = getXMin(xValues);
+    const xMax = getXMax(xValues);
+
+    let xDomain: [number, number];
+    if (timeline) {
+      xDomain =
+        data.length === 1
+          ? [
+              Number(date(data[0].x).subtract(1, 'day')),
+              Number(date(data[0].x).add(1, 'day')),
+            ]
+          : [xMin, xMax];
+    } else {
+      xDomain = data.length > 1 ? [xMin, xMax] : [xMin - 1, xMax + 1];
+    }
+
+    return timeline
+      ? scaleUtc()
+          .range([0, maxWidth(width)])
+          .domain(xDomain)
+      : scaleLinear()
+          .range([0, maxWidth(width)])
+          .domain(xDomain);
+  },
 );
 
-const getXMin = memoize(xValues => Math.min(...xValues));
-const getXMax = memoize(xValues => Math.max(...xValues));
-
-const getXScale = memoize((data = [], timeline = false, width) => {
-  const xValues = getXValues(data, timeline);
-
-  const xMin = getXMin(xValues);
-  const xMax = getXMax(xValues);
-
-  let xDomain;
-  if (timeline) {
-    xDomain =
-      data.length === 1
-        ? [
-            date(data[0].x).subtract(1, 'day').toDate(),
-            date(data[0].x).add(1, 'day').toDate(),
-          ]
-        : [date(xMin).toDate(), date(xMax).toDate()];
-  } else {
-    xDomain = data.length > 1 ? [xMin, xMax] : [xMin - 1, xMax + 1];
-  }
-
-  return timeline
-    ? scaleUtc()
-        .range([0, maxWidth(width)])
-        .domain(xDomain)
-    : scaleLinear()
-        .range([0, maxWidth(width)])
-        .domain(xDomain);
-});
-
-const getYScale = memoize((data = [], height) => {
+const getYScale = memoize((data: LineData[] = [], height: number) => {
   const yValues = data.map(d => d.y);
   const yMax = Math.max(...yValues);
   const yDomain = data.length > 1 ? [0, yMax] : [0, yMax * 2];
@@ -115,7 +177,7 @@ const getYScale = memoize((data = [], height) => {
     .nice();
 });
 
-const getY2Scale = memoize((data = [], height) => {
+const getY2Scale = memoize((data: LineData[] = [], height: number) => {
   const y2Values = data.map(d => d.y2);
   const y2Max = Math.max(...y2Values);
 
@@ -126,34 +188,18 @@ const getY2Scale = memoize((data = [], height) => {
     .nice();
 });
 
-export const lineDataPropType = PropTypes.shape({
-  color: PropTypes.toString.isRequired,
-  dashArray: PropTypes.string,
-  label: PropTypes.any.isRequired,
-  lineWidth: PropTypes.number,
-  width: PropTypes.number,
-});
-
-const crossPropTypes = {
-  color: PropTypes.toString.isRequired,
-  dashArray: PropTypes.toString,
-  lineWidth: PropTypes.number,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-};
-
-const Cross = ({x, y, color, dashArray, lineWidth = 1}) => (
+const Cross = ({x, y, color, dashArray, lineWidth = 1}: CrossProps) => (
   <Group>
     <Line
       from={{x: x - 5, y: y - 5}}
-      stroke={color}
+      stroke={String(color)}
       strokeDasharray={dashArray}
       strokeWidth={lineWidth}
       to={{x: x + 5, y: y + 5}}
     />
     <Line
       from={{x: x + 5, y: y - 5}}
-      stroke={color}
+      stroke={String(color)}
       strokeDasharray={dashArray}
       strokeWidth={lineWidth}
       to={{x: x - 5, y: y + 5}}
@@ -161,32 +207,31 @@ const Cross = ({x, y, color, dashArray, lineWidth = 1}) => (
   </Group>
 );
 
-Cross.propTypes = crossPropTypes;
-
-const CrossY2 = ({x, y, color, lineWidth = 1}) => (
+const CrossY2 = ({x, y, color, dashArray, lineWidth = 1}: CrossProps) => (
   <Group>
     <Line
       from={{x: x - 6, y}}
-      stroke={color}
-      strokeDasharray={[2, 1]}
+      stroke={String(color)}
+      strokeDasharray={dashArray}
       strokeWidth={lineWidth}
       to={{x: x + 6, y}}
     />
     <Line
       from={{x, y: y - 6}}
-      stroke={color}
-      strokeDasharray={[2, 1]}
+      stroke={String(color)}
+      strokeDasharray={dashArray}
       strokeWidth={lineWidth}
       to={{x, y: y + 6}}
     />
   </Group>
 );
 
-CrossY2.propTypes = crossPropTypes;
+class LineChart extends React.Component<LineChartProps, LineChartState> {
+  legendRef: LegendRef;
+  svg: SVGSVGElement | null = null;
 
-class LineChart extends React.Component {
-  constructor(...args) {
-    super(...args);
+  constructor(props: LineChartProps) {
+    super(props);
 
     this.legendRef = React.createRef();
 
@@ -212,7 +257,7 @@ class LineChart extends React.Component {
     this.update();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps: LineChartProps, nextState: LineChartState) {
     return (
       shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width ||
@@ -233,7 +278,7 @@ class LineChart extends React.Component {
     this.setState({displayInfo: true});
   }
 
-  handleMouseMove(event) {
+  handleMouseMove(event: MouseEvent<SVGSVGElement>) {
     if (!this.svg) {
       return;
     }
@@ -248,7 +293,11 @@ class LineChart extends React.Component {
     });
   }
 
-  startRangeSelection(event) {
+  startRangeSelection(event: MouseEvent<SVGSVGElement>) {
+    if (!this.svg) {
+      return;
+    }
+
     const box = this.svg.getBoundingClientRect();
     const mouseX = event.clientX - box.left - margin.left - 1;
 
@@ -259,10 +308,12 @@ class LineChart extends React.Component {
     const {rangeX, infoX} = this.state;
     const {onRangeSelected, timeline = false, data} = this.props;
 
-    if (onRangeSelected) {
+    if (onRangeSelected && isDefined(rangeX) && isDefined(infoX)) {
       const direction = infoX >= rangeX;
-      const start = {...data.find(findX(timeline, rangeX))};
-      const end = {...data.find(findX(timeline, infoX))};
+      const start = {
+        ...data.find<LineData>(findX(timeline, rangeX)),
+      } as LineData;
+      const end = {...data.find<LineData>(findX(timeline, infoX))} as LineData;
 
       if (direction) {
         onRangeSelected(start, end);
@@ -274,11 +325,11 @@ class LineChart extends React.Component {
     this.setState({rangeX: undefined});
   }
 
-  getXValueForPixel(px) {
+  getXValueForPixel(px: number) {
     const {data = [], timeline = false} = this.props;
     const {width} = this.state;
 
-    const xValues = getXValues(data, timeline);
+    const xValues = getXValues(data);
 
     if (xValues.length === 1) {
       return xValues[0];
@@ -295,7 +346,7 @@ class LineChart extends React.Component {
     const values = [...xValues].sort((a, b) => a - b); // sort copy of x values
 
     const xScale = getXScale(data, timeline, width);
-    const xV = xScale.invert(px); // x value for pixel position
+    const xV = Number(xScale.invert(px)); // x value for pixel position
 
     const index = values.findIndex(x => xV <= x); // get index of the first x value bigger then xV
 
@@ -331,7 +382,7 @@ class LineChart extends React.Component {
   }
 
   renderInfo() {
-    const {data, height, timeline, yLine, y2Line} = this.props;
+    const {data, height, timeline = false, yLine, y2Line} = this.props;
     const {displayInfo, infoX, mouseY, width} = this.state;
 
     const lines = (isDefined(yLine) ? 1 : 0) + (isDefined(y2Line) ? 1 : 0);
@@ -379,30 +430,34 @@ class LineChart extends React.Component {
             <LabelTitle fontWeight="bold" x={infoWidth} y={0}>
               {label}
             </LabelTitle>
-            <Group>
-              <Line
-                from={{x: 0, y: lineY}}
-                stroke={yLine.color}
-                strokeDasharray={yLine.dashArray}
-                strokeWidth={yLine.lineWidth}
-                to={{x: lineLength, y: lineY}}
-              />
-              <Text x={infoWidth} y={LINE_HEIGHT - 1}>
-                {y}
-              </Text>
-            </Group>
-            <Group top={LINE_HEIGHT}>
-              <Line
-                from={{x: 0, y: lineY}}
-                stroke={y2Line.color}
-                strokeDasharray={y2Line.dashArray}
-                strokeWidth={y2Line.lineWidth}
-                to={{x: lineLength, y: lineY}}
-              />
-              <Text x={infoWidth} y={LINE_HEIGHT - 1}>
-                {y2}
-              </Text>
-            </Group>
+            {isDefined(yLine) && (
+              <Group>
+                <Line
+                  from={{x: 0, y: lineY}}
+                  stroke={String(yLine.color)}
+                  strokeDasharray={yLine.dashArray}
+                  strokeWidth={yLine.lineWidth}
+                  to={{x: lineLength, y: lineY}}
+                />
+                <Text x={infoWidth} y={LINE_HEIGHT - 1}>
+                  {y}
+                </Text>
+              </Group>
+            )}
+            {isDefined(y2Line) && (
+              <Group top={LINE_HEIGHT}>
+                <Line
+                  from={{x: 0, y: lineY}}
+                  stroke={String(y2Line.color)}
+                  strokeDasharray={y2Line.dashArray}
+                  strokeWidth={y2Line.lineWidth}
+                  to={{x: lineLength, y: lineY}}
+                />
+                <Text x={infoWidth} y={LINE_HEIGHT - 1}>
+                  {y2}
+                </Text>
+              </Group>
+            )}
           </Group>
         </Group>
       </Group>
@@ -496,7 +551,7 @@ class LineChart extends React.Component {
               scale={xScale}
               top={maxHeight(height)}
             />
-            {y2Line && (
+            {isDefined(y2Line) && (
               <Axis
                 label={`${y2AxisLabel}`}
                 left={maxWidth(width)}
@@ -508,24 +563,30 @@ class LineChart extends React.Component {
             )}
             {hasValues && (
               <Group>
-                <LinePath
-                  data={data}
-                  stroke={yLine.color}
-                  strokeDasharray={yLine.dashArray}
-                  strokeWidth={isDefined(yLine.lineWidth) ? yLine.lineWidth : 1}
-                  x={d => xScale(xValue(d, timeline))}
-                  y={d => yScale(d.y)}
-                />
-                <LinePath
-                  data={data}
-                  stroke={y2Line.color}
-                  strokeDasharray={y2Line.dashArray}
-                  strokeWidth={
-                    isDefined(y2Line.lineWidth) ? y2Line.lineWidth : 1
-                  }
-                  x={d => xScale(xValue(d, timeline))}
-                  y={d => y2Scale(d.y2)}
-                />
+                {isDefined(yLine) && (
+                  <LinePath
+                    data={data}
+                    stroke={String(yLine.color)}
+                    strokeDasharray={yLine.dashArray}
+                    strokeWidth={
+                      isDefined(yLine.lineWidth) ? yLine.lineWidth : 1
+                    }
+                    x={d => xScale(xValue(d))}
+                    y={d => yScale(d.y)}
+                  />
+                )}
+                {isDefined(y2Line) && (
+                  <LinePath
+                    data={data}
+                    stroke={String(y2Line.color)}
+                    strokeDasharray={y2Line.dashArray}
+                    strokeWidth={
+                      isDefined(y2Line.lineWidth) ? y2Line.lineWidth : 1
+                    }
+                    x={d => xScale(xValue(d))}
+                    y={d => y2Scale(d.y2)}
+                  />
+                )}
               </Group>
             )}
             {hasOneValue && (
@@ -535,7 +596,7 @@ class LineChart extends React.Component {
                     color={yLine.color}
                     dashArray={yLine.dashArray}
                     lineWidth={yLine.lineWidth}
-                    x={xScale(xValue(data[0], timeline))}
+                    x={xScale(xValue(data[0]))}
                     y={yScale(data[0].y)}
                   />
                 )}
@@ -544,7 +605,7 @@ class LineChart extends React.Component {
                     color={y2Line.color}
                     dashArray={y2Line.dashArray}
                     lineWidth={y2Line.lineWidth}
-                    x={xScale(xValue(data[0], timeline))}
+                    x={xScale(xValue(data[0]))}
                     y={y2Scale(data[0].y2)}
                   />
                 )}
@@ -555,9 +616,12 @@ class LineChart extends React.Component {
           </Group>
         </Svg>
         {hasLines && showLegend && (
-          <Legend ref={this.legendRef} data={[yLine, y2Line]}>
+          <Legend<LineProps> data={[yLine, y2Line]} legendRef={this.legendRef}>
             {({d, toolTipProps}) => (
-              <Item {...toolTipProps}>
+              <Item
+                {...toolTipProps}
+                ref={toolTipProps.ref as React.Ref<HTMLDivElement>}
+              >
                 <LegendLine
                   color={d.color}
                   dashArray={d.dashArray}
@@ -574,27 +638,5 @@ class LineChart extends React.Component {
     );
   }
 }
-
-LineChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      x: PropTypes.oneOfType([PropTypes.number, PropTypes.date]).isRequired,
-      y: PropTypes.number.isRequired,
-      y2: PropTypes.number.isRequired,
-    }),
-  ),
-  height: PropTypes.number.isRequired,
-  numTicks: PropTypes.number,
-  showLegend: PropTypes.bool,
-  svgRef: PropTypes.ref,
-  timeline: PropTypes.bool,
-  width: PropTypes.number.isRequired,
-  xAxisLabel: PropTypes.toString,
-  y2AxisLabel: PropTypes.toString,
-  y2Line: lineDataPropType,
-  yAxisLabel: PropTypes.toString,
-  yLine: lineDataPropType,
-  onRangeSelected: PropTypes.func,
-};
 
 export default LineChart;

@@ -6,9 +6,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
 
-const StyledGroup = styled.g`
+type SVGGroupProps = React.SVGProps<SVGGElement>;
+
+interface GroupProps extends SVGGroupProps {
+  left?: number;
+  top?: number;
+  scale?: number;
+}
+
+const StyledGroup = styled.g<SVGGroupProps>`
   ${props =>
     isDefined(props.onClick)
       ? {
@@ -17,17 +24,11 @@ const StyledGroup = styled.g`
       : undefined};
 `;
 
-const Group = ({left = 0, top = 0, scale = 1, ...props}) => (
+const Group = ({left = 0, top = 0, scale = 1, ...props}: GroupProps) => (
   <StyledGroup
     transform={`translate(${left}, ${top}),scale(${scale})`}
     {...props}
   />
 );
-
-Group.propTypes = {
-  left: PropTypes.number,
-  scale: PropTypes.number,
-  top: PropTypes.number,
-};
 
 export default Group;
