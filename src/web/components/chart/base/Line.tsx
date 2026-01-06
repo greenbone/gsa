@@ -11,16 +11,16 @@ import styled from 'styled-components';
 import date, {type Date as GmpDate} from 'gmp/models/date';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
-import Axis from 'web/components/chart/Axis';
-import Group from 'web/components/chart/Group';
+import Axis from 'web/components/chart/base/Axis';
+import Group from 'web/components/chart/base/Group';
 import Legend, {
   Item,
   Label,
   type LegendData,
   LegendLine,
   type LegendRef,
-} from 'web/components/chart/Legend';
-import Svg from 'web/components/chart/Svg';
+} from 'web/components/chart/base/Legend';
+import Svg from 'web/components/chart/base/Svg';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
