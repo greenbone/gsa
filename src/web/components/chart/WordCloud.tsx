@@ -4,32 +4,65 @@
  */
 
 import React from 'react';
-import d3cloud from 'd3-cloud';
+import type d3 from 'd3';
+import d3cloud, {type Word as d3Word} from 'd3-cloud';
 import {scaleLinear} from 'd3-scale';
 import {isDefined} from 'gmp/utils/identity';
-import Group from 'web/components/chart/Group';
-import Svg from 'web/components/chart/Svg';
-import PropTypes from 'web/utils/PropTypes';
+import Group from 'web/components/chart/base/Group';
+import {type LegendData} from 'web/components/chart/base/Legend';
+import Svg from 'web/components/chart/base/Svg';
+
+interface Word extends d3Word {
+  color?: string;
+  filterValue: string;
+}
+
+type Cloud = d3.layout.Cloud<Word>;
+
+interface WordCloudChartData extends LegendData {
+  value: number;
+  filterValue?: string;
+}
+
+interface WordCloudChartProps {
+  data: WordCloudChartData[];
+  width: number;
+  height: number;
+  svgRef?: React.RefObject<SVGSVGElement>;
+  onDataClick?: (filterValue: string) => void;
+}
+
+interface WordCloudChartState {
+  width?: number;
+  height?: number;
+  words?: Word[];
+  data?: WordCloudChartData[];
+}
 
 const margin = {
   top: 5,
   right: 5,
   bottom: 5,
   left: 5,
-};
+} as const;
 
 const DEFAULT_MAX_WORDS = 50;
 const MIN_FONT_SIZE = 8;
 const MAX_FONT_SIZE = 20;
 
-class WordCloudChart extends React.Component {
-  constructor(...args) {
-    super(...args);
+class WordCloudChart extends React.Component<
+  WordCloudChartProps,
+  WordCloudChartState
+> {
+  private cloud: Cloud;
+
+  constructor(props: WordCloudChartProps) {
+    super(props);
 
     this.state = {};
 
-    this.cloud = d3cloud()
-      .fontSize(d => d.size)
+    this.cloud = d3cloud<Word>()
+      .fontSize(d => d.size as number)
       .rotate(0)
       .padding(2)
       .font('Sans')
@@ -53,7 +86,7 @@ class WordCloudChart extends React.Component {
       this.updateSize();
     }
     if (this.state.data !== this.props.data) {
-      // data has been changed => recalcuate words
+      // data has been changed => recalculate words
       this.updateWords();
     }
     if (
@@ -86,7 +119,7 @@ class WordCloudChart extends React.Component {
       text: word.label,
       color: word.color,
       filterValue: word.filterValue,
-    }));
+    })) as Word[];
 
     // store to be rendered data in state
     // this allows to check if we need to update words on next render phase
@@ -148,19 +181,5 @@ class WordCloudChart extends React.Component {
     );
   }
 }
-
-WordCloudChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.number.isRequired,
-      color: PropTypes.toString.isRequired,
-      label: PropTypes.toString.isRequired,
-    }),
-  ),
-  height: PropTypes.number.isRequired,
-  svgRef: PropTypes.ref,
-  width: PropTypes.number.isRequired,
-  onDataClick: PropTypes.func,
-};
 
 export default WordCloudChart;

@@ -6,19 +6,57 @@
 import React from 'react';
 import {LinearGradient} from '@visx/gradient';
 import {scaleBand, scaleUtc} from 'd3-scale';
-import date from 'gmp/models/date';
+import {type TranslateFunc} from 'gmp/locale';
+import date, {type Date as GmpDate} from 'gmp/models/date';
 import {shorten} from 'gmp/utils/string';
-import Axis from 'web/components/chart/Axis';
-import Group from 'web/components/chart/Group';
-import Svg from 'web/components/chart/Svg';
-import ToolTip from 'web/components/chart/Tooltip';
+import Axis from 'web/components/chart/base/Axis';
+import Group from 'web/components/chart/base/Group';
+import {type LegendData} from 'web/components/chart/base/Legend';
+import Svg from 'web/components/chart/base/Svg';
+import ToolTip from 'web/components/chart/base/Tooltip';
 import path from 'web/components/chart/utils/Path';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/user-setting-time-date-formatters';
-import withTranslation from 'web/utils/withTranslation';
+import withTranslation, {
+  type WithTranslationComponentProps,
+} from 'web/utils/withTranslation';
+
+interface FutureRun {
+  label: string;
+  futureRun: number;
+}
+
+interface TriangleProps {
+  x?: number;
+  y?: number;
+  height: number;
+  width?: number;
+  toolTip?: React.ReactNode;
+}
+
+interface ScheduleData extends LegendData {
+  starts: GmpDate[];
+  isInfinite?: boolean;
+  duration?: number;
+  period?: number;
+}
+
+interface ClonedScheduleData extends ScheduleData {
+  start: GmpDate;
+}
+
+interface ScheduleChartProps extends WithTranslationComponentProps {
+  data: ScheduleData[];
+  height: number;
+  svgRef?: React.Ref<SVGSVGElement>;
+  width: number;
+  yAxisLabel?: string;
+  startDate?: GmpDate;
+  endDate?: GmpDate;
+  _: TranslateFunc;
+}
 
 const ONE_DAY = 60 * 60 * 24;
 
@@ -28,17 +66,17 @@ const margin = {
   bottom: 40,
   left: 60,
   triangle: 10,
-};
+} as const;
 
 const MAX_LABEL_LENGTH = 25;
 
-const tickFormat = val => {
-  return shorten(val.toString(), MAX_LABEL_LENGTH);
+const tickFormat = (value: string | number) => {
+  return shorten(String(value), MAX_LABEL_LENGTH);
 };
 
 const STROKE_GRADIENT_ID = 'green_stroke_gradient';
 
-const getFutureRunLabel = (runs, _) => {
+const getFutureRunLabel = (runs: number, _: TranslateFunc) => {
   if (runs === Number.POSITIVE_INFINITY) {
     return _('More runs not shown');
   }
@@ -48,26 +86,26 @@ const getFutureRunLabel = (runs, _) => {
   return _('{{num}} more runs not shown', {num: runs});
 };
 
-const cloneSchedule = (d, start, _) => {
+const cloneSchedule = (d: ScheduleData, start: GmpDate, _: TranslateFunc) => {
   const {duration = 0} = d;
   const toolTip =
     duration === 0
       ? _('{{name}} Start: {{date}}', {
           name: d.label,
-          date: formattedUserSettingDateTimeWithTimeZone(start),
+          date: formattedUserSettingDateTimeWithTimeZone(start) as string,
         })
-      : _('{{name}} Start: {{startdate}} End: {{enddate}}', {
+      : _('{{name}} Start: {{startDate}} End: {{endDate}}', {
           name: d.label,
-          startdate: formattedUserSettingDateTimeWithTimeZone(start),
-          enddate: formattedUserSettingDateTimeWithTimeZone(
+          startDate: formattedUserSettingDateTimeWithTimeZone(start) as string,
+          endDate: formattedUserSettingDateTimeWithTimeZone(
             start.clone().add(duration, 'seconds'),
-          ),
+          ) as string,
         });
   return {
     ...d,
     start,
     toolTip,
-  };
+  } as ClonedScheduleData;
 };
 
 const StrokeGradient = () => (
@@ -94,7 +132,13 @@ const fillGradientUrl = `url(#${FILL_GRADIENT_ID})`;
 
 const TRIANGLE_WIDTH = 20;
 
-const Triangle = ({x = 0, y = 0, height, width = TRIANGLE_WIDTH, toolTip}) => {
+const Triangle = ({
+  x = 0,
+  y = 0,
+  height,
+  width = TRIANGLE_WIDTH,
+  toolTip,
+}: TriangleProps) => {
   const d = path()
     .move(x, y)
     .line(x, y + height)
@@ -104,8 +148,8 @@ const Triangle = ({x = 0, y = 0, height, width = TRIANGLE_WIDTH, toolTip}) => {
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <path
-          ref={targetRef}
-          d={d}
+          ref={targetRef as React.Ref<SVGPathElement>}
+          d={String(d)}
           fill={Theme.darkGreen}
           opacity="0.5"
           stroke={Theme.darkGreen}
@@ -117,16 +161,8 @@ const Triangle = ({x = 0, y = 0, height, width = TRIANGLE_WIDTH, toolTip}) => {
   );
 };
 
-Triangle.propTypes = {
-  height: PropTypes.number.isRequired,
-  toolTip: PropTypes.toString,
-  width: PropTypes.number,
-  x: PropTypes.number,
-  y: PropTypes.number,
-};
-
-class ScheduleChart extends React.Component {
-  shouldComponentUpdate(nextProps) {
+class ScheduleChart extends React.Component<ScheduleChartProps> {
+  shouldComponentUpdate(nextProps: ScheduleChartProps) {
     return shouldUpdate(nextProps, this.props);
   }
 
@@ -167,8 +203,8 @@ class ScheduleChart extends React.Component {
       .domain(yValues)
       .padding(0.125);
 
-    const futureRuns = [];
-    let schedules = [];
+    const futureRuns: FutureRun[] = [];
+    let schedules: ClonedScheduleData[] = [];
 
     for (const d of data) {
       const {label, isInfinite = false, starts} = d;
@@ -220,7 +256,7 @@ class ScheduleChart extends React.Component {
               let end = start.clone();
               const hasDuration = duration > 0;
               if (hasDuration) {
-                end = end.add(d.duration, 'seconds');
+                end = end.add(d.duration as number, 'seconds');
               } else if (period > 0) {
                 end = end.add(Math.min(period, ONE_DAY), 'seconds');
               } else {
@@ -237,7 +273,7 @@ class ScheduleChart extends React.Component {
                 <ToolTip key={i} content={d.toolTip}>
                   {({targetRef, show, hide}) => (
                     <rect
-                      ref={targetRef}
+                      ref={targetRef as React.Ref<SVGRectElement>}
                       fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
                       height={bandwidth}
                       stroke={hasDuration ? Theme.darkGreen : strokeGradientUrl}
@@ -271,23 +307,4 @@ class ScheduleChart extends React.Component {
   }
 }
 
-ScheduleChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      starts: PropTypes.arrayOf(PropTypes.date).isRequired,
-      label: PropTypes.toString.isRequired,
-      isInfinite: PropTypes.bool,
-      duration: PropTypes.number,
-      period: PropTypes.number,
-    }),
-  ).isRequired,
-  endDate: PropTypes.date,
-  height: PropTypes.number.isRequired,
-  startDate: PropTypes.date,
-  svgRef: PropTypes.ref,
-  width: PropTypes.number.isRequired,
-  yAxisLabel: PropTypes.string,
-  _: PropTypes.func,
-};
-
-export default withTranslation(ScheduleChart);
+export default withTranslation<ScheduleChartProps>(ScheduleChart);
