@@ -3,10 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {color as d3color} from 'd3-color';
+import React, {type Ref} from 'react';
+import {color as d3color, type HSLColor, type RGBColor} from 'd3-color';
 import styled from 'styled-components';
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
+import Group from 'web/components/chart/base/Group';
+import Legend, {
+  type LegendData,
+  type LegendRef,
+} from 'web/components/chart/base/Legend';
+import Svg from 'web/components/chart/base/Svg';
 import Arc2d from 'web/components/chart/donut/Arc2d';
 import Arc3d from 'web/components/chart/donut/Arc3d';
 import Labels from 'web/components/chart/donut/Labels';
@@ -16,17 +22,42 @@ import {
   PieOuterPath,
 } from 'web/components/chart/donut/Paths';
 import Pie from 'web/components/chart/donut/Pie';
-import {DataPropType} from 'web/components/chart/donut/PropTypes';
-import Group from 'web/components/chart/Group';
-import Legend from 'web/components/chart/Legend';
-import Svg from 'web/components/chart/Svg';
 import arc from 'web/components/chart/utils/Arc';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
 import {setRef} from 'web/utils/Render';
 import Theme from 'web/utils/Theme';
+
+interface EmptyDonutProps {
+  left: number;
+  top: number;
+  innerRadiusX: number;
+  innerRadiusY: number;
+  outerRadiusX: number;
+  outerRadiusY: number;
+  donutHeight: number;
+}
+
+export interface DonutChartData extends LegendData {
+  value: number;
+}
+
+interface DonutChartProps<TData extends DonutChartData> {
+  width: number;
+  height: number;
+  data?: TData[];
+  innerRadius?: number;
+  svgRef?: React.RefObject<SVGSVGElement>;
+  show3d?: boolean;
+  showLegend?: boolean;
+  onDataClick?: (data: TData) => void;
+  onLegendItemClick?: (item: TData) => void;
+}
+
+interface DonutChartState {
+  width: number;
+}
 
 const LEGEND_MARGIN = 20;
 const MIN_RATIO = 2.0;
@@ -44,7 +75,7 @@ const margin = {
 };
 
 const emptyColor = Theme.lightGray;
-const darkEmptyColor = d3color(emptyColor).darker();
+const darkEmptyColor = (d3color(emptyColor) as HSLColor | RGBColor).darker();
 
 const EmptyDonut = ({
   left,
@@ -54,8 +85,8 @@ const EmptyDonut = ({
   outerRadiusX,
   outerRadiusY,
   donutHeight,
-}) => {
-  const donutarc = arc()
+}: EmptyDonutProps) => {
+  const donutArc = arc()
     .innerRadiusX(innerRadiusX)
     .innerRadiusY(innerRadiusY)
     .outerRadiusX(outerRadiusX)
@@ -68,7 +99,7 @@ const EmptyDonut = ({
         innerRadiusX={innerRadiusX}
         innerRadiusY={innerRadiusY}
       />
-      <PieTopPath color={emptyColor} path={donutarc.path()} />
+      <PieTopPath color={emptyColor} path={donutArc.path()} />
       <PieOuterPath
         color={darkEmptyColor}
         donutHeight={donutHeight}
@@ -79,19 +110,14 @@ const EmptyDonut = ({
   );
 };
 
-EmptyDonut.propTypes = {
-  donutHeight: PropTypes.number.isRequired,
-  innerRadiusX: PropTypes.number.isRequired,
-  innerRadiusY: PropTypes.number.isRequired,
-  left: PropTypes.number.isRequired,
-  outerRadiusX: PropTypes.number.isRequired,
-  outerRadiusY: PropTypes.number.isRequired,
-  top: PropTypes.number.isRequired,
-};
+class DonutChart<
+  TData extends DonutChartData = DonutChartData,
+> extends React.Component<DonutChartProps<TData>, DonutChartState> {
+  legendRef: LegendRef;
+  svg: SVGSVGElement | null = null;
 
-class DonutChart extends React.Component {
-  constructor(...args) {
-    super(...args);
+  constructor(props: DonutChartProps<TData>) {
+    super(props);
 
     this.legendRef = React.createRef();
 
@@ -118,9 +144,12 @@ class DonutChart extends React.Component {
     return width;
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(
+    nextProps: DonutChartProps<TData>,
+    nextState: DonutChartState,
+  ) {
     return (
-      shouldUpdate(nextProps, this.props) ||
+      shouldUpdate<DonutChartProps<TData>>(nextProps, this.props) ||
       nextState.width !== this.state.width ||
       nextProps.show3d !== this.props.show3d
     );
@@ -160,7 +189,9 @@ class DonutChart extends React.Component {
     let comparisonY;
 
     const SPACING = 15;
-    const labels = [...this.svg.querySelectorAll('.pie-label')];
+    const labels = hasValue(this.svg)
+      ? [...this.svg.querySelectorAll('.pie-label')]
+      : [];
 
     labels.forEach(label => {
       target = label;
@@ -250,11 +281,11 @@ class DonutChart extends React.Component {
       innerRadiusY,
     };
 
-    const Arc = show3d ? Arc3d : Arc2d;
+    const Arc = show3d ? Arc3d<TData> : Arc2d<TData>;
     return (
       <StyledLayout align={['start', 'start']}>
         <Svg
-          ref={setRef(svgRef, ref => (this.svg = ref))}
+          ref={setRef(svgRef as Ref<SVGSVGElement>, ref => (this.svg = ref))}
           height={height}
           width={width}
         >
@@ -281,7 +312,6 @@ class DonutChart extends React.Component {
                     data={arcData}
                     donutHeight={donutThickness}
                     endAngle={endAngle}
-                    index={index}
                     path={arcPath}
                     startAngle={startAngle}
                     x={x}
@@ -291,7 +321,7 @@ class DonutChart extends React.Component {
                   />
                 )}
               </Pie>
-              <Labels
+              <Labels<TData>
                 centerX={centerX}
                 centerY={centerY}
                 data={data}
@@ -308,9 +338,9 @@ class DonutChart extends React.Component {
           )}
         </Svg>
         {data.length > 0 && showLegend && (
-          <Legend
-            ref={this.legendRef}
+          <Legend<TData>
             data={data}
+            legendRef={this.legendRef}
             onItemClick={onLegendItemClick}
           />
         )}
@@ -318,17 +348,5 @@ class DonutChart extends React.Component {
     );
   }
 }
-
-DonutChart.propTypes = {
-  data: DataPropType,
-  height: PropTypes.number.isRequired,
-  innerRadius: PropTypes.number,
-  show3d: PropTypes.bool,
-  showLegend: PropTypes.bool,
-  svgRef: PropTypes.ref,
-  width: PropTypes.number.isRequired,
-  onDataClick: PropTypes.func,
-  onLegendItemClick: PropTypes.func,
-};
 
 export default DonutChart;
