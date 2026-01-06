@@ -26,6 +26,8 @@ interface InitLocaleOptions {
   options?: InitOptions;
 }
 
+export type TranslateFunc = (key: string, options?: TranslateOptions) => string;
+
 const log = logger.getLogger('gmp.locale.lang');
 
 declare module 'i18next' {
