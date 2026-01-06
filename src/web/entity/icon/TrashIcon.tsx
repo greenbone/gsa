@@ -23,11 +23,10 @@ interface EntityTrash extends WithEntityType {
   isInUse: () => boolean;
 }
 
-interface EntityTrashIconProps<TEntity extends EntityTrash>
-  extends Omit<
-    ExtendedDynamicIconProps<TEntity>,
-    'onClick' | 'value' | 'active'
-  > {
+interface EntityTrashIconProps<TEntity extends EntityTrash> extends Omit<
+  ExtendedDynamicIconProps<TEntity>,
+  'onClick' | 'value' | 'active'
+> {
   displayName?: string;
   entity: TEntity;
   name?: EntityType;

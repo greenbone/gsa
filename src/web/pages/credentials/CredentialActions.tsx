@@ -16,8 +16,10 @@ import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialDownloadIcon from 'web/pages/credentials/CredentialDownloadIcon';
 
-export interface CredentialActionsProps
-  extends Omit<EntitiesActionsProps<Credential>, 'children'> {
+export interface CredentialActionsProps extends Omit<
+  EntitiesActionsProps<Credential>,
+  'children'
+> {
   onCredentialDeleteClick?: (entity: Credential) => void;
   onCredentialDownloadClick?: (entity: Credential) => void;
   onCredentialCloneClick?: (entity: Credential) => void;

@@ -16,7 +16,8 @@ interface NameValueProps<TValue> {
 }
 
 interface MenuEntryProps<TValue>
-  extends Omit<LayoutProps, 'onClick' | 'align' | 'grow' | 'title'>,
+  extends
+    Omit<LayoutProps, 'onClick' | 'align' | 'grow' | 'title'>,
     NameValueProps<TValue> {
   title?: React.ReactNode;
   to?: string;

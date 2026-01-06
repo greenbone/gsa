@@ -16,11 +16,10 @@ export interface SelectItem {
   deprecated?: boolean;
 }
 
-export interface SelectProps<TValue>
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof OpenSightSelect>,
-    'onChange' | 'value'
-  > {
+export interface SelectProps<TValue> extends Omit<
+  React.ComponentPropsWithoutRef<typeof OpenSightSelect>,
+  'onChange' | 'value'
+> {
   allowDeselect?: boolean;
   'data-testid'?: string;
   disabled?: boolean;

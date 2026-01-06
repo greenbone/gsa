@@ -71,18 +71,18 @@ export interface EntitiesTableComponentProps<
 
 export interface EntitiesTableProps<
   TEntity = Model,
-  TFooterProps extends
-    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
+  TFooterProps extends FooterComponentProps<TEntity> =
+    FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
 > extends EntitiesTableComponentProps<
-    TEntity,
-    TFooterProps,
-    THeaderProps,
-    TRowProps,
-    TPaginationProps
-  > {
+  TEntity,
+  TFooterProps,
+  THeaderProps,
+  TRowProps,
+  TPaginationProps
+> {
   'data-testid'?: string;
   doubleRow?: boolean;
   emptyTitle?: string;
@@ -122,8 +122,8 @@ const EmptyTitle = styled(Layout)`
 
 function EntitiesTable<
   TEntity extends Model = Model,
-  TFooterProps extends
-    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
+  TFooterProps extends FooterComponentProps<TEntity> =
+    FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,

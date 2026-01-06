@@ -111,8 +111,10 @@ interface TaskCommandSaveParams {
   target_id?: string;
 }
 
-interface TaskCommandSaveAgentGroupParams
-  extends Omit<TaskCommandCreateAgentGroupParams, 'addTag'> {
+interface TaskCommandSaveAgentGroupParams extends Omit<
+  TaskCommandCreateAgentGroupParams,
+  'addTag'
+> {
   id: string;
 }
 

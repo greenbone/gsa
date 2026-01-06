@@ -28,8 +28,10 @@ export interface AgentGroupCreateParams {
   schedulerCronTimes?: string | string[];
 }
 
-export interface AgentGroupSaveParams
-  extends Omit<AgentGroupCreateParams, 'name'> {
+export interface AgentGroupSaveParams extends Omit<
+  AgentGroupCreateParams,
+  'name'
+> {
   id: string;
   name?: string;
 }

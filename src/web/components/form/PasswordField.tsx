@@ -7,11 +7,10 @@ import {PasswordInput} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 import useValueChange from 'web/components/form/useValueChange';
 
-interface PasswordFieldProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof PasswordInput>,
-    'onChange'
-  > {
+interface PasswordFieldProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof PasswordInput>,
+  'onChange'
+> {
   autoComplete?: string;
   disabled?: boolean;
   errorContent?: string;

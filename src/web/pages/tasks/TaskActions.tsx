@@ -19,8 +19,10 @@ import TaskImportReportIcon from 'web/pages/tasks/icons/TaskImportReportIcon';
 import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
 import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
 
-export interface TaskActionsProps
-  extends Omit<EntitiesActionsProps<Task>, 'children'> {
+export interface TaskActionsProps extends Omit<
+  EntitiesActionsProps<Task>,
+  'children'
+> {
   links?: boolean;
   onReportImportClick?: (task: Task) => void | Promise<void>;
   onTaskCloneClick?: (task: Task) => void | Promise<void>;

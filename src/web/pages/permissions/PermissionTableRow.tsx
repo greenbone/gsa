@@ -22,8 +22,10 @@ import EntityLink from 'web/entity/Link';
 import useTranslation from 'web/hooks/useTranslation';
 import {permissionDescription} from 'web/utils/Render';
 
-export interface PermissionActionsProps
-  extends Omit<EntitiesActionsProps<Permission>, 'children'> {
+export interface PermissionActionsProps extends Omit<
+  EntitiesActionsProps<Permission>,
+  'children'
+> {
   onPermissionCloneClick?: (permission: Permission) => void;
   onPermissionDeleteClick?: (permission: Permission) => void;
   onPermissionDownloadClick?: (permission: Permission) => void;

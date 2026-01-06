@@ -52,20 +52,20 @@ interface CredentialCommandSnmpFields {
 type CredentialCommandCreateArgs = CredentialCommandBaseArgs;
 
 interface CredentialCommandKrb5Args
-  extends CredentialCommandBaseArgs,
-    CredentialCommandKrb5Fields {}
+  extends CredentialCommandBaseArgs, CredentialCommandKrb5Fields {}
 
 interface CredentialCommandCredentialStoreArgs
-  extends CredentialCommandBaseArgs,
-    CredentialCommandCredentialStoreFields {}
+  extends CredentialCommandBaseArgs, CredentialCommandCredentialStoreFields {}
 
 interface CredentialCommandCredentialStoreKrb5Args
-  extends CredentialCommandBaseArgs,
+  extends
+    CredentialCommandBaseArgs,
     CredentialCommandCredentialStoreFields,
     CredentialCommandKrb5Fields {}
 
 interface CredentialCommandCredentialStoreSnmpArgs
-  extends CredentialCommandBaseArgs,
+  extends
+    CredentialCommandBaseArgs,
     CredentialCommandCredentialStoreFields,
     CredentialCommandSnmpFields {}
 

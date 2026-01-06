@@ -13,8 +13,10 @@ import EntitiesActions, {
 } from 'web/entities/EntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 
-export interface AgentInstallerActionsProps
-  extends Omit<EntitiesActionsProps<AgentInstaller>, 'children'> {
+export interface AgentInstallerActionsProps extends Omit<
+  EntitiesActionsProps<AgentInstaller>,
+  'children'
+> {
   onAgentInstallerChecksumClick?: (entity: AgentInstaller) => void;
   onAgentInstallerDownloadClick?: (entity: AgentInstaller) => void;
 }

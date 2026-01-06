@@ -13,8 +13,7 @@ import useFilterDialogSave, {
 } from 'web/components/powerfilter/useFilterDialogSave';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface ContainerImageTargetFilterDialogProps
-  extends UseFilterDialogSaveProps {
+interface ContainerImageTargetFilterDialogProps extends UseFilterDialogSaveProps {
   filter?: Filter;
 }
 

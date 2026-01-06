@@ -8,8 +8,10 @@ import DynamicIcon, {
   type DynamicIconProps,
 } from 'web/components/icon/DynamicIcon';
 
-export interface ExtendedDynamicIconProps<TValue = string>
-  extends Omit<DynamicIconProps<TValue>, 'icon'> {
+export interface ExtendedDynamicIconProps<TValue = string> extends Omit<
+  DynamicIconProps<TValue>,
+  'icon'
+> {
   'data-testid'?: string;
 }
 
