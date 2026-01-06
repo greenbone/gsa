@@ -7,6 +7,7 @@ import {parseSeverity, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 import {type SeverityRating, DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
+import {type LegendData} from 'web/components/chart/base/Legend';
 import {
   totalCount,
   percent as percentFunc,
@@ -48,11 +49,8 @@ interface FilterValue {
   end?: string;
 }
 
-export interface SeverityClassData {
+export interface SeverityClassData extends LegendData {
   value: number;
-  label: string;
-  toolTip: string;
-  color: string;
   filterValue: FilterValue;
 }
 
