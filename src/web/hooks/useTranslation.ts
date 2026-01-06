@@ -5,10 +5,9 @@
 
 import {useMemo} from 'react';
 import i18next from 'i18next';
-import _ from 'gmp/locale';
+import _, {type TranslateFunc} from 'gmp/locale';
 import useLanguage from 'web/hooks/useLanguage';
 
-export type TranslateFunc = typeof _;
 export type I18n = typeof i18next;
 
 type TranslationHook = {
@@ -16,6 +15,8 @@ type TranslationHook = {
   i18n: I18n;
   ready: boolean;
 } & [TranslateFunc, I18n, boolean];
+
+export type {TranslateFunc};
 
 /**
  * Hook to get the translation function, an i18next instance and a boolean
