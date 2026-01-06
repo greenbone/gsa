@@ -39,7 +39,7 @@
   "{{name}} downloaded successfully.": "{{name}} erfolgreich heruntergeladen.",
   "{{name}} restored successfully.": "{{name}} erfolgreich wiederhergestellt.",
   "{{name}} Start: {{date}}": "{{name}} Start: {{date}}",
-  "{{name}} Start: {{startdate}} End: {{enddate}}": "{{name}} Start: {{startdate}} Ende: {{enddate}}",
+  "{{name}} Start: {{startDate}} End: {{endDate}}": "{{name}} Start: {{startDate}} Ende: {{endDate}}",
   "{{nr}} more times": "{{nr}} weitere Male",
   "{{nth}} {{weekday}} every {{interval}} months": "{{nth}} {{weekday}} alle {{interval}} Monate",
   "{{nth}} {{weekday}} every month": "{{nth}} {{weekday}} jeden Monat",
