@@ -3,10 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {Axis as VxAxis} from '@visx/axis';
-import PropTypes from 'web/utils/PropTypes';
+import {type AxisScale, Axis as VxAxis} from '@visx/axis';
+import {type TextProps} from '@visx/text/lib/Text';
 import Theme from 'web/utils/Theme';
+
+interface AxisProps {
+  hideTickLabels?: boolean;
+  label?: string;
+  labelOffset?: number;
+  left?: number;
+  orientation?: 'bottom' | 'top' | 'left' | 'right';
+  numTicks?: number;
+  rangePadding?: number;
+  scale: AxisScale;
+  tickFormat?: (value: number) => string;
+  tickLabelProps?: () => Partial<TextProps>;
+  tickValues?: number[];
+  tickLength?: number;
+  top?: number;
+}
+
+type TextAnchor = 'start' | 'middle' | 'end' | 'inherit';
 
 const FONT_SIZE = 10;
 
@@ -21,26 +38,26 @@ const DEFAULT_TICK_PROPS = {
 const left = () => ({
   dx: -0.25 * FONT_SIZE,
   dy: 0.25 * FONT_SIZE,
-  textAnchor: 'end',
+  textAnchor: 'end' as TextAnchor,
   ...DEFAULT_TICK_PROPS,
 });
 
 const right = () => ({
   dy: 0.25 * FONT_SIZE,
   dx: 0.25 * FONT_SIZE,
-  textAnchor: 'start',
+  textAnchor: 'start' as TextAnchor,
   ...DEFAULT_TICK_PROPS,
 });
 
 const top = () => ({
   dy: -0.25 * FONT_SIZE,
-  textAnchor: 'middle',
+  textAnchor: 'middle' as TextAnchor,
   ...DEFAULT_TICK_PROPS,
 });
 
 const bottom = () => ({
   dy: 0.25 * FONT_SIZE,
-  textAnchor: 'middle',
+  textAnchor: 'middle' as TextAnchor,
   ...DEFAULT_TICK_PROPS,
 });
 
@@ -61,7 +78,7 @@ const Axis = ({
     ? tickLength
     : -tickLength,
   ...props
-}) => (
+}: AxisProps) => (
   <VxAxis
     {...props}
     axisLineClassName="axis-line"
@@ -77,14 +94,5 @@ const Axis = ({
     tickLength={tickLength}
   />
 );
-
-Axis.propTypes = {
-  hideTickLabels: PropTypes.bool,
-  labelOffset: PropTypes.number,
-  orientation: PropTypes.oneOf(['bottom', 'top', 'left', 'right']),
-  rangePadding: PropTypes.number,
-  tickLabelProps: PropTypes.func,
-  tickLength: PropTypes.number,
-};
 
 export default Axis;

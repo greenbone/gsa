@@ -6,6 +6,11 @@
 import {describe, test, expect} from '@gsa/testing';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 
+interface FooProps {
+  foo: boolean;
+  data?: number;
+}
+
 describe('shouldUpdate tests', () => {
   test('should update if data identity has changed', () => {
     expect(shouldUpdate({data: {}}, {data: {}})).toEqual(true);
@@ -41,6 +46,6 @@ describe('shouldUpdate tests', () => {
   });
 
   test('should not update if unknown prop has changed', () => {
-    expect(shouldUpdate({foo: false}, {foo: true})).toEqual(false);
+    expect(shouldUpdate<FooProps>({foo: false}, {foo: true})).toEqual(false);
   });
 });

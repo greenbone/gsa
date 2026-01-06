@@ -10,27 +10,32 @@ const EPSILON = 1e-12; // 1 * 10^(-12)
 
 const PI2 = Math.PI * 2;
 
-class Arc {
+export class Arc {
+  _innerRadiusX: number;
+  _outerRadiusX?: number;
+  _innerRadiusY?: number;
+  _outerRadiusY?: number;
+
   constructor() {
     this._innerRadiusX = 0;
   }
 
-  innerRadiusX(radius) {
+  innerRadiusX(radius: number) {
     this._innerRadiusX = radius;
     return this;
   }
 
-  outerRadiusX(radius) {
+  outerRadiusX(radius: number) {
     this._outerRadiusX = radius;
     return this;
   }
 
-  innerRadiusY(radius) {
+  innerRadiusY(radius: number) {
     this._innerRadiusY = radius;
     return this;
   }
 
-  outerRadiusY(radius) {
+  outerRadiusY(radius: number) {
     this._outerRadiusY = radius;
     return this;
   }
@@ -38,7 +43,7 @@ class Arc {
   centroid({startAngle = 0, endAngle = PI2} = {}) {
     this._checkRadius();
 
-    const outerRadiusX = this._outerRadiusX;
+    const outerRadiusX = this._outerRadiusX as number;
     const outerRadiusY = isDefined(this._outerRadiusY)
       ? this._outerRadiusY
       : outerRadiusX;
@@ -75,7 +80,7 @@ class Arc {
 
     this._checkRadius();
 
-    const outerRadiusX = this._outerRadiusX;
+    const outerRadiusX = this._outerRadiusX as number;
     const outerRadiusY = isDefined(this._outerRadiusY)
       ? this._outerRadiusY
       : outerRadiusX;

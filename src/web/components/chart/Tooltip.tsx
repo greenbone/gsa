@@ -7,8 +7,26 @@ import React from 'react';
 import styled from 'styled-components';
 import {hasValue} from 'gmp/utils/identity';
 import Portal from 'web/components/portal/Portal';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
+
+type ToolTipDisplayProps = React.HTMLAttributes<HTMLDivElement>;
+type ToolTipTargetElement = HTMLElement | SVGElement;
+export type ToolTipRef = React.Ref<ToolTipTargetElement>;
+
+interface ToolTipRenderProps {
+  show: () => void;
+  hide: () => void;
+  targetRef?: ToolTipRef;
+}
+
+interface ToolTipProps {
+  content?: React.ReactNode;
+  children: (args: ToolTipRenderProps) => React.ReactNode;
+}
+
+interface ToolTipState {
+  visible: boolean;
+}
 
 const ToolTipText = styled.div`
   box-sizing: border-box;
@@ -43,21 +61,21 @@ const ToolTipContainer = styled.div`
 
 ToolTipContainer.displayName = 'ToolTipContainer';
 
-const ToolTipDisplay = React.forwardRef(({children, ...props}, ref) => (
-  <ToolTipContainer ref={ref} {...props}>
-    <ToolTipText>{children}</ToolTipText>
-    <ToolTipArrow>▼</ToolTipArrow>
-  </ToolTipContainer>
-));
+const ToolTipDisplay = React.forwardRef(
+  ({children, ...props}: ToolTipDisplayProps, ref: React.Ref<HTMLElement>) => (
+    <ToolTipContainer ref={ref as React.RefObject<HTMLDivElement>} {...props}>
+      <ToolTipText>{children}</ToolTipText>
+      <ToolTipArrow>▼</ToolTipArrow>
+    </ToolTipContainer>
+  ),
+);
 
-class ToolTip extends React.Component {
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-    content: PropTypes.elementOrString,
-  };
+class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
+  target: React.RefObject<ToolTipTargetElement>;
+  tooltip: React.RefObject<HTMLElement>;
 
-  constructor(...args) {
-    super(...args);
+  constructor(props: ToolTipProps) {
+    super(props);
 
     this.state = {
       visible: false,
@@ -106,7 +124,7 @@ class ToolTip extends React.Component {
     const {children, content} = this.props;
     const {visible} = this.state;
     return (
-      <React.Fragment>
+      <>
         {content && visible && (
           <Portal>
             <ToolTipDisplay ref={this.tooltip}>{content}</ToolTipDisplay>
@@ -117,7 +135,7 @@ class ToolTip extends React.Component {
           hide: this.hide,
           targetRef: this.target,
         })}
-      </React.Fragment>
+      </>
     );
   }
 }
