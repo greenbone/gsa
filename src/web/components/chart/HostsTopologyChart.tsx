@@ -20,7 +20,7 @@ import equal from 'fast-deep-equal';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING, type SeverityRating} from 'gmp/utils/severity';
-import Group from 'web/components/chart/Group';
+import Group from 'web/components/chart/base/Group';
 import Layout from 'web/components/layout/Layout';
 import {type I18n, type TranslateFunc} from 'web/hooks/useTranslation';
 import {setRef} from 'web/utils/Render';
