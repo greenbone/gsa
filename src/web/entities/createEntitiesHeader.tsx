@@ -13,8 +13,7 @@ import withEntitiesHeader, {
 } from 'web/entities/withEntitiesHeader';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
-export interface CreateEntitiesHeaderProps
-  extends WithEntitiesHeaderComponentProps {
+export interface CreateEntitiesHeaderProps extends WithEntitiesHeaderComponentProps {
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;
   sort?: boolean;
