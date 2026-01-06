@@ -4,15 +4,12 @@
  */
 
 import styled from 'styled-components';
+import {type ToString} from 'gmp/types';
 
 interface StyledLabelProps {
   $backgroundColor: string;
   $borderColor: string;
   $textColor: string;
-}
-
-interface ToString {
-  toString(): string;
 }
 
 const Label = styled.div<StyledLabelProps>`
@@ -56,7 +53,7 @@ const createLabel = (
   borderColor: string,
   textColor: string,
   testId: string,
-  text: string | ToString,
+  text: ToString,
 ): React.FC<React.HTMLAttributes<HTMLDivElement>> => {
   return (props: React.HTMLAttributes<HTMLDivElement>) => (
     <Label
