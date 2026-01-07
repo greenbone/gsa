@@ -6,7 +6,6 @@
 import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
 import 'gmp/commands/audit-reports';
-import 'gmp/commands/cert-bund';
 import 'gmp/commands/dfn-cert';
 import 'gmp/commands/filters';
 import 'gmp/commands/groups';
@@ -35,6 +34,8 @@ import AgentInstallerCommand from 'gmp/commands/agent-installer';
 import AgentInstallersCommand from 'gmp/commands/agent-installers';
 import AgentsCommand from 'gmp/commands/agents';
 import AuthenticationCommand from 'gmp/commands/auth';
+import CertBundAdvisoriesCommand from 'gmp/commands/cert-bund-advisories';
+import CertBundAdvisoryCommand from 'gmp/commands/cert-bund-advisory';
 import CpeCommand from 'gmp/commands/cpe';
 import CpesCommand from 'gmp/commands/cpes';
 import CredentialCommand from 'gmp/commands/credential';
@@ -96,6 +97,8 @@ class Gmp {
   readonly agentinstaller: AgentInstallerCommand;
   readonly agentinstallers: AgentInstallersCommand;
   readonly auth: AuthenticationCommand;
+  readonly certbund: CertBundAdvisoryCommand;
+  readonly certbunds: CertBundAdvisoriesCommand;
   readonly credential: CredentialCommand;
   readonly credentials: CredentialsCommand;
   readonly cpe: CpeCommand;
@@ -153,6 +156,8 @@ class Gmp {
     this.agentinstaller = new AgentInstallerCommand(this.http);
     this.agentinstallers = new AgentInstallersCommand(this.http);
     this.auth = new AuthenticationCommand(this.http);
+    this.certbund = new CertBundAdvisoryCommand(this.http);
+    this.certbunds = new CertBundAdvisoriesCommand(this.http);
     this.credential = new CredentialCommand(this.http);
     this.credentials = new CredentialsCommand(this.http);
     this.cpe = new CpeCommand(this.http);
