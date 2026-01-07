@@ -6,7 +6,6 @@
 import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
 import 'gmp/commands/audit-reports';
-import 'gmp/commands/dfn-cert';
 import 'gmp/commands/filters';
 import 'gmp/commands/groups';
 import 'gmp/commands/hosts';
@@ -45,6 +44,8 @@ import CredentialsCommand from 'gmp/commands/credentials';
 import CveCommand from 'gmp/commands/cve';
 import CvesCommand from 'gmp/commands/cves';
 import DashboardCommand from 'gmp/commands/dashboards';
+import DfnCertAdvisoriesCommand from 'gmp/commands/dfn-cert-advisories';
+import DfnCertAdvisoryCommand from 'gmp/commands/dfn-cert-advisory';
 import FeedStatusCommand from 'gmp/commands/feed-status';
 import LoginCommand from 'gmp/commands/login';
 import OciImageTargetCommand from 'gmp/commands/oci-image-target';
@@ -108,6 +109,8 @@ class Gmp {
   readonly cve: CveCommand;
   readonly cves: CvesCommand;
   readonly dashboard: DashboardCommand;
+  readonly dfncert: DfnCertAdvisoryCommand;
+  readonly dfncerts: DfnCertAdvisoriesCommand;
   readonly feedstatus: FeedStatusCommand;
   readonly ociimagetarget: OciImageTargetCommand;
   readonly ociimagetargets: OciImageTargetsCommand;
@@ -167,6 +170,8 @@ class Gmp {
     this.cve = new CveCommand(this.http);
     this.cves = new CvesCommand(this.http);
     this.dashboard = new DashboardCommand(this.http);
+    this.dfncert = new DfnCertAdvisoryCommand(this.http);
+    this.dfncerts = new DfnCertAdvisoriesCommand(this.http);
     this.feedstatus = new FeedStatusCommand(this.http);
     this.ociimagetarget = new OciImageTargetCommand(this.http);
     this.ociimagetargets = new OciImageTargetsCommand(this.http);
