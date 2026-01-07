@@ -4,8 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {NvtCommand} from 'gmp/commands/nvt';
-import {createResponse, createHttp} from 'gmp/commands/testing';
+import NvtCommand from 'gmp/commands/nvt';
+import {
+  createResponse,
+  createHttp,
+  createActionResultResponse,
+} from 'gmp/commands/testing';
 
 describe('NvtCommand tests', () => {
   test('should request single nvt', async () => {
@@ -59,5 +63,38 @@ describe('NvtCommand tests', () => {
     });
     const {data: nvt} = resp;
     expect(nvt.id).toEqual('1.2.3');
+  });
+
+  test('should allow to clone a nvt', async () => {
+    const response = createActionResultResponse({id: '456'});
+    const fakeHttp = createHttp(response);
+    const cmd = new NvtCommand(fakeHttp);
+    const result = await cmd.clone({id: '123'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'clone',
+        details: '1',
+        info_type: 'nvt',
+        id: '123',
+        resource_type: 'info',
+      },
+    });
+    expect(result.data.id).toEqual('456');
+  });
+
+  test('should allow to delete a nvt', async () => {
+    const response = createActionResultResponse({id: '123'});
+    const fakeHttp = createHttp(response);
+    const cmd = new NvtCommand(fakeHttp);
+    const result = await cmd.delete({id: '123'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'delete_info',
+        details: '1',
+        info_type: 'nvt',
+        info_id: '123',
+      },
+    });
+    expect(result).toBeUndefined();
   });
 });
