@@ -248,7 +248,7 @@ class ScheduleChart extends React.Component<ScheduleChartProps> {
             />
             <StrokeGradient />
             <FillGradient />
-            {schedules.map((d, i) => {
+            {schedules.map(d => {
               const {duration = 0, period = 0, start, label} = d;
 
               const startX = xScale(start);
@@ -270,7 +270,7 @@ class ScheduleChart extends React.Component<ScheduleChartProps> {
               const endX = xScale(end.toDate());
               const rwidth = endX - startX;
               return (
-                <ToolTip key={i} content={d.toolTip}>
+                <ToolTip key={d.label} content={d.toolTip}>
                   {({targetRef, show, hide}) => (
                     <rect
                       ref={targetRef as React.Ref<SVGRectElement>}

@@ -199,8 +199,8 @@ class BarChart extends React.Component<BarChartProps, BarChartState> {
               tickValues={tickValues}
               top={maxHeight}
             />
-            {data.map((d, i) => (
-              <ToolTip key={i} content={d.toolTip}>
+            {data.map(d => (
+              <ToolTip key={horizontal ? d.y : d.x} content={d.toolTip}>
                 {({targetRef, hide, show}) => (
                   <Group
                     onClick={
