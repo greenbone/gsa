@@ -79,8 +79,8 @@ const Legend = <TData extends LegendData = LegendData>({
   legendRef,
 }: LegendProps<TData>) => (
   <StyledLegend ref={legendRef as Ref<HTMLDivElement>}>
-    {data.map((d, i) => (
-      <ToolTip key={i} content={d.toolTip}>
+    {data.map(d => (
+      <ToolTip key={d.label} content={d.toolTip}>
         {({targetRef, hide, show}) =>
           isDefined(children) ? (
             children({
