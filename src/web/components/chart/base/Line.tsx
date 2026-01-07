@@ -57,9 +57,9 @@ interface LineChartProps {
   svgRef?: React.Ref<SVGSVGElement>;
   timeline?: boolean;
   width: number;
-  xAxisLabel?: React.ReactNode;
-  yAxisLabel?: React.ReactNode;
-  y2AxisLabel?: React.ReactNode;
+  xAxisLabel?: ToString;
+  yAxisLabel?: ToString;
+  y2AxisLabel?: ToString;
   yLine?: LineProps;
   y2Line?: LineProps;
   onRangeSelected?: (start: LineData, end: LineData) => void;
@@ -536,7 +536,7 @@ class LineChart extends React.Component<LineChartProps, LineChartState> {
           <Group left={margin.left} top={margin.top}>
             {isDefined(yLine) && (
               <Axis
-                label={`${yAxisLabel}`}
+                label={String(yAxisLabel)}
                 left={0}
                 numTicks={10}
                 orientation="left"
@@ -545,7 +545,7 @@ class LineChart extends React.Component<LineChartProps, LineChartState> {
               />
             )}
             <Axis
-              label={`${xAxisLabel}`}
+              label={String(xAxisLabel)}
               numTicks={xAxisTicks}
               orientation="bottom"
               scale={xScale}
@@ -553,7 +553,7 @@ class LineChart extends React.Component<LineChartProps, LineChartState> {
             />
             {isDefined(y2Line) && (
               <Axis
-                label={`${y2AxisLabel}`}
+                label={String(y2AxisLabel)}
                 left={maxWidth(width)}
                 numTicks={10}
                 orientation="right"
