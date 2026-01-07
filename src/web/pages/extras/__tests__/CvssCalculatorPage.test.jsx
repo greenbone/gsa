@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
+import {describe, test, expect, beforeEach} from '@gsa/testing';
 import {
   changeInputValue,
   getSelectItemElementsForSelect,
@@ -14,16 +14,7 @@ import {
 } from 'web/testing';
 import CvssCalculator from 'web/pages/extras/CvssCalculatorPage';
 
-const calculateScoreFromVector = testing.fn().mockReturnValue(
-  Promise.resolve({
-    data: 7.5,
-  }),
-);
-
 const gmp = {
-  cvsscalculator: {
-    calculateScoreFromVector,
-  },
   settings: {
     manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
   },

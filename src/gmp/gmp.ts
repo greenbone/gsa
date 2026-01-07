@@ -9,7 +9,6 @@ import 'gmp/commands/audit-reports';
 import 'gmp/commands/cert-bund';
 import 'gmp/commands/cpes';
 import 'gmp/commands/cves';
-import 'gmp/commands/cvss-calculator';
 import 'gmp/commands/dfn-cert';
 import 'gmp/commands/filters';
 import 'gmp/commands/groups';
