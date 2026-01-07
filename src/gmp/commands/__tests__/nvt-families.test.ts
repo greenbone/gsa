@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {NvtFamiliesCommand} from 'gmp/commands/nvt-families';
+import NvtFamiliesCommand from 'gmp/commands/nvt-families';
 import {createResponse, createHttp} from 'gmp/commands/testing';
 
 describe('NvtFamiliesCommand tests', () => {
