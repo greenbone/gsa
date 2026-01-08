@@ -48,6 +48,7 @@ interface HostElement {
   };
   result_count?: {
     page?: number;
+    critical?: PageCountElement;
     false_positive?: PageCountElement;
     high?: PageCountElement;
     hole?: {
@@ -85,6 +86,7 @@ interface ComplianceCounts {
 }
 
 interface ResultCounts {
+  critical?: number;
   high: number;
   medium: number;
   low: number;
@@ -169,6 +171,7 @@ class ReportHost {
     this.ip = ip;
     this.portsCount = portsCount;
     this.result_counts = result_counts ?? {
+      critical: 0,
       false_positive: 0,
       high: 0,
       medium: 0,
@@ -209,6 +212,7 @@ class ReportHost {
 
     if (isDefined(result_count)) {
       copy.result_counts = {
+        critical: parsePageCount(result_count.critical),
         high: parsePageCount(result_count.high),
         medium: parsePageCount(result_count.medium),
         low: parsePageCount(result_count.low),
@@ -218,6 +222,7 @@ class ReportHost {
       };
     } else {
       copy.result_counts = {
+        critical: 0,
         high: 0,
         medium: 0,
         low: 0,

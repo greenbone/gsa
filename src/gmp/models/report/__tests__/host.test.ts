@@ -30,6 +30,7 @@ describe('ReportHost tests', () => {
     expect(host.details).toEqual({});
     expect(host.result_counts).toBeDefined();
     expect(host.result_counts.false_positive).toEqual(0);
+    expect(host.result_counts.critical).toEqual(0);
     expect(host.result_counts.high).toEqual(0);
     expect(host.result_counts.medium).toEqual(0);
     expect(host.result_counts.log).toEqual(0);
@@ -58,6 +59,7 @@ describe('ReportHost tests', () => {
     expect(host.details).toEqual({});
     expect(host.result_counts).toBeDefined();
     expect(host.result_counts.false_positive).toEqual(0);
+    expect(host.result_counts.critical).toEqual(0);
     expect(host.result_counts.high).toEqual(0);
     expect(host.result_counts.medium).toEqual(0);
     expect(host.result_counts.log).toEqual(0);
@@ -152,6 +154,17 @@ describe('ReportHost tests', () => {
     expect(host2.result_counts.low).toEqual(3);
     expect(host2.result_counts.log).toEqual(4);
     expect(host2.result_counts.false_positive).toEqual(5);
+
+    const host3 = ReportHost.fromElement({
+      result_count: {
+        page: 7,
+        critical: {
+          page: 1,
+        },
+      },
+    });
+    expect(host3.result_counts.total).toEqual(7);
+    expect(host3.result_counts.critical).toEqual(1);
   });
 
   test('should parse start', () => {
