@@ -451,15 +451,17 @@ class DataDisplay<
               <div style={{height, width}}>
                 {!isLoading && (
                   <>
-                    {children({
-                      id,
-                      data: transformedData,
-                      width,
-                      height,
-                      svgRef: this.svgRef,
-                      state,
-                      setState: this.handleSetState,
-                    })}
+                    {typeof children === 'function'
+                      ? children({
+                          id,
+                          data: transformedData,
+                          width,
+                          height,
+                          svgRef: this.svgRef,
+                          state,
+                          setState: this.handleSetState,
+                        })
+                      : null}
                   </>
                 )}
               </div>
