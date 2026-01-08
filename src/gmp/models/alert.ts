@@ -140,8 +140,11 @@ const createValues = (data: DataElement) => {
 
 const parseAlertData = (
   alertElement: AlertDataElement | string | undefined,
-): AlertData => {
+): AlertData | undefined => {
   const data = {};
+  if (!isDefined(alertElement)) {
+    return undefined;
+  }
   if (isObject(alertElement)) {
     forEach(alertElement.data, value => {
       data[value.name] = createValues(value);
@@ -201,23 +204,27 @@ class Alert extends Model {
       Model.fromElement(task, 'task'),
     );
 
-    // @ts-expect-error
-    const methodDataReportFormat = ret.method?.data?.report_formats?.value as
-      | string
-      | undefined;
+    if (isDefined(ret.method?.data?.report_formats)) {
+      // @ts-expect-error
+      const methodDataReportFormat = ret.method?.data?.report_formats?.value as
+        | string
+        | undefined;
 
-    ret.method.data.report_formats = map(
-      methodDataReportFormat?.split(','),
-      rf => rf.trim(),
-    );
+      ret.method.data.report_formats = map(
+        methodDataReportFormat?.split(','),
+        rf => rf.trim(),
+      );
+    }
 
-    if (isDefined(ret.method.data.notice)) {
+    if (isDefined(ret.method?.data?.notice)) {
       ret.method.data.notice = {
         value: parseToString(ret.method?.data?.notice?.value),
       };
     }
 
-    ret.active = parseYesNo(element.active);
+    ret.active = isDefined(element.active)
+      ? parseYesNo(element.active)
+      : undefined;
 
     return ret;
   }
