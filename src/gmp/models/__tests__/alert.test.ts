@@ -16,11 +16,10 @@ import Alert, {
   isTicketEvent,
 } from 'gmp/models/alert';
 import {testModel} from 'gmp/models/testing';
-import {NO_VALUE} from 'gmp/parser';
-
-testModel(Alert, 'alert', {testIsActive: false});
 
 describe('Alert Model tests', () => {
+  testModel(Alert, 'alert', {testIsActive: false});
+
   test('should use defaults', () => {
     const alert = new Alert();
     expect(alert.active).toBeUndefined();
@@ -33,11 +32,11 @@ describe('Alert Model tests', () => {
 
   test('should parse empty element', () => {
     const alert = Alert.fromElement();
-    expect(alert.active).toEqual(NO_VALUE);
-    expect(alert.condition).toEqual({data: {}});
-    expect(alert.event).toEqual({data: {}});
+    expect(alert.active).toBeUndefined();
+    expect(alert.condition).toBeUndefined();
+    expect(alert.event).toBeUndefined();
     expect(alert.filter).toBeUndefined();
-    expect(alert.method).toEqual({data: {report_formats: []}});
+    expect(alert.method).toBeUndefined();
     expect(alert.tasks).toEqual([]);
   });
 
@@ -76,7 +75,6 @@ describe('Alert Model tests', () => {
     expect(alert.method).toEqual({
       data: {
         bar: {value: '42'},
-        report_formats: [],
       },
       type: 'foo',
     });
@@ -107,7 +105,82 @@ describe('Alert Model tests', () => {
           },
           value: '42',
         },
-        report_formats: [],
+      },
+      type: 'foo',
+    });
+  });
+
+  test('should parse method data with report formats', () => {
+    const elem = {
+      method: {
+        __text: 'foo',
+        data: [
+          {
+            __text: '42',
+            name: 'bar',
+            foo: {
+              _id: 'a1',
+              lorem: 'ipsum',
+            },
+          },
+          {
+            name: 'report_formats',
+            __text: 'format1, format2',
+          },
+        ],
+      },
+    };
+
+    const alert = Alert.fromElement(elem);
+    expect(alert.method).toEqual({
+      data: {
+        bar: {
+          foo: {
+            id: 'a1',
+            lorem: 'ipsum',
+          },
+          value: '42',
+        },
+        report_formats: ['format1', 'format2'],
+      },
+      type: 'foo',
+    });
+  });
+
+  test('should parse method data with notice', () => {
+    const elem = {
+      method: {
+        __text: 'foo',
+        data: [
+          {
+            __text: '42',
+            name: 'bar',
+            foo: {
+              _id: 'a1',
+              lorem: 'ipsum',
+            },
+          },
+          {
+            name: 'notice',
+            __text: 'some message',
+          },
+        ],
+      },
+    };
+
+    const alert = Alert.fromElement(elem);
+    expect(alert.method).toEqual({
+      data: {
+        bar: {
+          foo: {
+            id: 'a1',
+            lorem: 'ipsum',
+          },
+          value: '42',
+        },
+        notice: {
+          value: 'some message',
+        },
       },
       type: 'foo',
     });
