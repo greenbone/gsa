@@ -115,6 +115,11 @@ const TableBox = styled(Layout)`
   margin-top: 10px;
 `;
 
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+`;
+
 const EmptyTitle = styled(Layout)`
   margin-top: 10px;
   margin-bottom: 20px;
@@ -319,13 +324,15 @@ function EntitiesTable<
       ) : (
         pagination
       )}
-      <UpdatingStripedTable
-        $isUpdating={isUpdating}
-        footer={footer}
-        header={header}
-      >
-        {body}
-      </UpdatingStripedTable>
+      <TableWrapper>
+        <UpdatingStripedTable
+          $isUpdating={isUpdating}
+          footer={footer}
+          header={header}
+        >
+          {body}
+        </UpdatingStripedTable>
+      </TableWrapper>
       {footnote ? (
         <Layout align="space-between">
           <FootNote>
