@@ -30,7 +30,7 @@ const createDisplay = ({
         >
           {isDefined(Chart)
             ? displayProps => <Chart {...displayProps} />
-            : undefined}
+            : null}
         </Display>
       )}
     </Loader>
