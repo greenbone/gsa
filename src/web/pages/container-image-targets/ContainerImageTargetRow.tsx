@@ -33,7 +33,7 @@ export interface ContainerImageTargetActionsProps extends Omit<
   EntitiesActionsProps<OciImageTarget>,
   'children'
 > {
-  onContainerImageTargeEditClick?: (target: OciImageTarget) => void;
+  onContainerImageTargetEditClick?: (target: OciImageTarget) => void;
   onContainerImageTargetCloneClick?: (target: OciImageTarget) => void;
   onContainerImageTargetDownloadClick?: (target: OciImageTarget) => void;
   onContainerImageTargetDeleteClick?: (target: OciImageTarget) => void;
@@ -52,7 +52,7 @@ const Actions = ({
   selectionType,
   onEntityDeselected,
   onEntitySelected,
-  onContainerImageTargeEditClick,
+  onContainerImageTargetEditClick,
   onContainerImageTargetCloneClick,
   onContainerImageTargetDownloadClick,
   onContainerImageTargetDeleteClick,
@@ -78,7 +78,7 @@ const Actions = ({
           displayName={_('Container Image Target')}
           entity={entity}
           name="ociimagetarget"
-          onClick={onContainerImageTargeEditClick}
+          onClick={onContainerImageTargetEditClick}
         />
         <CloneIcon
           displayName={_('Container Image Target')}
