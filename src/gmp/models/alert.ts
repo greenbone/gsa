@@ -60,6 +60,39 @@ interface AlertProperties extends ModelProperties {
   tasks?: Model[];
 }
 
+export type AlertEventType =
+  | typeof EVENT_TYPE_NEW_SECINFO
+  | typeof EVENT_TYPE_UPDATED_SECINFO
+  | typeof EVENT_TYPE_TASK_RUN_STATUS_CHANGED
+  | typeof EVENT_TYPE_TICKET_RECEIVED
+  | typeof EVENT_TYPE_ASSIGNED_TICKET_CHANGED
+  | typeof EVENT_TYPE_OWNED_TICKET_CHANGED;
+
+export type AlertConditionType =
+  | typeof CONDITION_TYPE_FILTER_COUNT_AT_LEAST
+  | typeof CONDITION_TYPE_FILTER_COUNT_CHANGED
+  | typeof CONDITION_TYPE_SEVERITY_AT_LEAST
+  | typeof CONDITION_TYPE_ALWAYS;
+
+export type AlertConditionDirection =
+  | typeof CONDITION_DIRECTION_DECREASED
+  | typeof CONDITION_DIRECTION_INCREASED
+  | typeof CONDITION_DIRECTION_CHANGED;
+
+export type AlertMethodType =
+  | typeof METHOD_TYPE_ALEMBA_VFIRE
+  | typeof METHOD_TYPE_SCP
+  | typeof METHOD_TYPE_SEND
+  | typeof METHOD_TYPE_SMB
+  | typeof METHOD_TYPE_SNMP
+  | typeof METHOD_TYPE_SYSLOG
+  | typeof METHOD_TYPE_EMAIL
+  | typeof METHOD_TYPE_START_TASK
+  | typeof METHOD_TYPE_HTTP_GET
+  | typeof METHOD_TYPE_SOURCEFIRE
+  | typeof METHOD_TYPE_VERINICE
+  | typeof METHOD_TYPE_TIPPING_POINT;
+
 export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
 export const EVENT_TYPE_TASK_RUN_STATUS_CHANGED = 'Task run status changed';
