@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
 import 'gmp/commands/audit-reports';
 import 'gmp/commands/filters';
@@ -30,6 +29,8 @@ import AgentGroupsCommand from 'gmp/commands/agent-groups';
 import AgentInstallerCommand from 'gmp/commands/agent-installer';
 import AgentInstallersCommand from 'gmp/commands/agent-installers';
 import AgentsCommand from 'gmp/commands/agents';
+import AlertCommand from 'gmp/commands/alert';
+import AlertsCommand from 'gmp/commands/alerts';
 import AuthenticationCommand from 'gmp/commands/auth';
 import CertBundAdvisoriesCommand from 'gmp/commands/cert-bund-advisories';
 import CertBundAdvisoryCommand from 'gmp/commands/cert-bund-advisory';
@@ -98,6 +99,8 @@ class Gmp {
   readonly agentgroups: AgentGroupsCommand;
   readonly agentinstaller: AgentInstallerCommand;
   readonly agentinstallers: AgentInstallersCommand;
+  readonly alert: AlertCommand;
+  readonly alerts: AlertsCommand;
   readonly auth: AuthenticationCommand;
   readonly certbund: CertBundAdvisoryCommand;
   readonly certbunds: CertBundAdvisoriesCommand;
@@ -162,6 +165,8 @@ class Gmp {
     this.agentgroups = new AgentGroupsCommand(this.http);
     this.agentinstaller = new AgentInstallerCommand(this.http);
     this.agentinstallers = new AgentInstallersCommand(this.http);
+    this.alert = new AlertCommand(this.http);
+    this.alerts = new AlertsCommand(this.http);
     this.auth = new AuthenticationCommand(this.http);
     this.certbund = new CertBundAdvisoryCommand(this.http);
     this.certbunds = new CertBundAdvisoriesCommand(this.http);
