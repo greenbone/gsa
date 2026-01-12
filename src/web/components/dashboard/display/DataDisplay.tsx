@@ -7,7 +7,7 @@ import React from 'react';
 import equal from 'fast-deep-equal';
 import styled from 'styled-components';
 import type Filter from 'gmp/models/filter';
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import Display, {
@@ -451,7 +451,7 @@ class DataDisplay<
               <div style={{height, width}}>
                 {!isLoading && (
                   <>
-                    {typeof children === 'function'
+                    {isFunction(children)
                       ? children({
                           id,
                           data: transformedData,
