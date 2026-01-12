@@ -262,10 +262,10 @@ const ContainerImageTargetsListPage = () => {
                   selectionType={selectionType}
                   sortBy={sortBy}
                   sortDir={sortDir}
-                  onContainerImageTargeEditClick={edit}
                   onContainerImageTargetCloneClick={clone}
                   onContainerImageTargetDeleteClick={openConfirmDeleteDialog}
                   onContainerImageTargetDownloadClick={download}
+                  onContainerImageTargetEditClick={edit}
                   onDeleteBulk={handleBulkDelete}
                   onDownloadBulk={handleBulkDownload}
                   onEntityDeselected={deselect}
