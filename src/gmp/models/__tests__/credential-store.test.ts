@@ -111,4 +111,41 @@ describe('CredentialStore model tests', () => {
       {name: 'selector2', pattern: 'some-pattern', credentialTypes: []},
     ]);
   });
+
+  test('should parse selector with single credential_type and default_value', () => {
+    const credentialStore = CredentialStore.fromElement({
+      selectors: {
+        selector: {
+          name: 'selector-single',
+          default_value: 'defval',
+          credential_types: {
+            credential_type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
+          },
+        },
+      },
+    });
+
+    expect(credentialStore.selectors).toEqual([
+      {
+        name: 'selector-single',
+        defaultValue: 'defval',
+        credentialTypes: [USERNAME_PASSWORD_CREDENTIAL_TYPE],
+      },
+    ]);
+  });
+
+  test('should parse selector with credential_types but no credential_type property', () => {
+    const credentialStore = CredentialStore.fromElement({
+      selectors: {
+        selector: {
+          name: 'selector-empty',
+          credential_types: {},
+        },
+      },
+    });
+
+    expect(credentialStore.selectors).toEqual([
+      {name: 'selector-empty', credentialTypes: []},
+    ]);
+  });
 });
