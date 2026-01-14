@@ -26,7 +26,7 @@ const TestComponent = () => {
 
 describe('useLoadFeatures tests', () => {
   test('should load features', async () => {
-    const features = new Features(['CVSS3_RATINGS', 'OPENVASD']);
+    const features = new Features(['CVSS3_RATINGS', 'ENABLE_OPENVASD']);
     const response = {data: features};
     const gmp = {
       user: {

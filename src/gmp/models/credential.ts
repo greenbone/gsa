@@ -43,7 +43,8 @@ export type SNMPPrivacyAlgorithmType =
   | typeof SNMP_PRIVACY_ALGORITHM_AES
   | typeof SNMP_PRIVACY_ALGORITHM_DES;
 
-interface CredentialElement extends ModelElement {
+export interface CredentialElement extends ModelElement {
+  auth_algorithm?: SNMPAuthAlgorithmType;
   certificate_info?: {
     activation_time?: string;
     expiration_time?: string;
@@ -58,11 +59,22 @@ interface CredentialElement extends ModelElement {
   credential_store?: {
     host_identifier?: string;
     vault_id?: string;
+    privacy_host_identifier?: string;
   };
   kdcs?: {
     kdc: string | string[];
   };
   login?: string;
+  privacy?: {
+    algorithm?: SNMPPrivacyAlgorithmType;
+  };
+  private_key_info?: {
+    sha256_hash?: string;
+    type?: string;
+  };
+  public_key_info?: {
+    fingerprint?: string;
+  };
   realm?: string;
   targets?: {
     target?: ModelElement | ModelElement[];
@@ -88,15 +100,29 @@ export interface CredentialStore {
   vaultId?: string;
 }
 
+interface PrivateKeyInfo {
+  sha256Hash?: string;
+  keyType?: string;
+}
+
+interface PublicKeyInfo {
+  fingerprint?: string;
+}
+
 interface CredentialProperties extends ModelProperties {
-  certificate_info?: CertificateInfo;
+  authAlgorithm?: SNMPAuthAlgorithmType;
+  certificateInfo?: CertificateInfo;
   credentialStore?: CredentialStore;
-  credential_type?: CredentialType;
+  credentialType?: CredentialType;
   kdcs?: string[];
   login?: string;
+  privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   realm?: string;
   targets?: Model[];
   scanners?: Model[];
+  privacyHostIdentifier?: string;
+  privateKeyInfo?: PrivateKeyInfo;
+  publicKeyInfo?: PublicKeyInfo;
 }
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
@@ -183,30 +209,30 @@ export const ALL_CREDENTIAL_TYPES: readonly CredentialType[] = [
 ];
 
 export const ssh_credential_filter = (credential: Credential) =>
-  credential.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+  credential.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const smb_credential_filter = (credential: Credential) =>
-  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const esxi_credential_filter = (credential: Credential) =>
-  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const snmp_credential_filter = (credential: Credential) =>
-  credential.credential_type === SNMP_CREDENTIAL_TYPE;
+  credential.credentialType === SNMP_CREDENTIAL_TYPE;
 
 export const krb5CredentialFilter = (credential: Credential) =>
-  credential.credential_type === KRB5_CREDENTIAL_TYPE;
+  credential.credentialType === KRB5_CREDENTIAL_TYPE;
 
 export const email_credential_filter = (credential: Credential) =>
-  credential.credential_type === SMIME_CREDENTIAL_TYPE ||
-  credential.credential_type === PGP_CREDENTIAL_TYPE;
+  credential.credentialType === SMIME_CREDENTIAL_TYPE ||
+  credential.credentialType === PGP_CREDENTIAL_TYPE;
 
 export const password_only_credential_filter = (credential: Credential) =>
-  credential.credential_type === PASSWORD_ONLY_CREDENTIAL_TYPE;
+  credential.credentialType === PASSWORD_ONLY_CREDENTIAL_TYPE;
 
 export const vFire_credential_filter = (credential: Credential) =>
-  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const SNMP_AUTH_ALGORITHM_MD5 = 'md5';
 export const SNMP_AUTH_ALGORITHM_SHA1 = 'sha1';
@@ -275,37 +301,51 @@ const parseTimeStatus = (
 class Credential extends Model {
   static readonly entityType = 'credential';
 
-  readonly certificate_info?: CertificateInfo;
+  readonly authAlgorithm?: SNMPAuthAlgorithmType;
+  readonly certificateInfo?: CertificateInfo;
   readonly credentialStore?: CredentialStore;
-  readonly credential_type?: CredentialType;
+  readonly credentialType?: CredentialType;
   readonly kdcs: string[];
-  readonly login: string | undefined;
-  readonly realm: string | undefined;
+  readonly login?: string;
+  readonly realm?: string;
+  readonly privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   readonly targets: Model[];
   readonly scanners: Model[];
+  readonly privacyHostIdentifier?: string;
+  readonly privateKeyInfo?: PrivateKeyInfo;
+  readonly publicKeyInfo?: PublicKeyInfo;
 
   constructor({
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    certificate_info,
+    authAlgorithm,
+    certificateInfo,
     credentialStore,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    credential_type,
+    credentialType,
     kdcs = [],
     login,
+    privacyAlgorithm,
     realm,
     targets = [],
     scanners = [],
+    privacyHostIdentifier,
+    privateKeyInfo,
+    publicKeyInfo,
     ...properties
   }: CredentialProperties = {}) {
     super(properties);
-    this.certificate_info = certificate_info;
+
+    this.authAlgorithm = authAlgorithm;
+    this.certificateInfo = certificateInfo;
     this.credentialStore = credentialStore;
-    this.credential_type = credential_type;
+    this.credentialType = credentialType;
     this.kdcs = kdcs;
     this.login = login;
+    this.privacyAlgorithm = privacyAlgorithm;
     this.realm = realm;
     this.targets = targets;
     this.scanners = scanners;
+    this.privacyHostIdentifier = privacyHostIdentifier;
+    this.privateKeyInfo = privateKeyInfo;
+    this.publicKeyInfo = publicKeyInfo;
   }
 
   static fromElement(element: CredentialElement = {}): Credential {
@@ -315,8 +355,10 @@ class Credential extends Model {
   static parseElement(element: CredentialElement = {}): CredentialProperties {
     const ret = super.parseElement(element) as CredentialProperties;
 
+    ret.authAlgorithm = element.auth_algorithm;
+
     if (isDefined(element.certificate_info)) {
-      ret.certificate_info = {
+      ret.certificateInfo = {
         activationTime: parseDate(element.certificate_info.activation_time),
         expirationTime: parseDate(element.certificate_info.expiration_time),
         issuer: element.certificate_info.issuer,
@@ -335,7 +377,12 @@ class Credential extends Model {
       };
     }
 
-    ret.credential_type = element.type as CredentialType;
+    if (isDefined(element.credential_store?.privacy_host_identifier)) {
+      ret.privacyHostIdentifier =
+        element.credential_store.privacy_host_identifier;
+    }
+
+    ret.credentialType = element.type as CredentialType;
 
     if (isDefined(element.kdcs?.kdc)) {
       ret.kdcs = Array.isArray(element.kdcs.kdc)
@@ -343,13 +390,13 @@ class Credential extends Model {
         : [element.kdcs.kdc];
     }
 
-    if (isDefined(element.login)) {
-      ret.login = element.login;
+    ret.login = element.login;
+
+    if (isDefined(element.privacy?.algorithm)) {
+      ret.privacyAlgorithm = element.privacy.algorithm;
     }
 
-    if (isDefined(element.realm)) {
-      ret.realm = element.realm;
-    }
+    ret.realm = element.realm;
 
     ret.targets = map(element.targets?.target, target =>
       Model.fromElement(target, 'target'),
@@ -357,6 +404,19 @@ class Credential extends Model {
     ret.scanners = map(element.scanners?.scanner, scanner =>
       Model.fromElement(scanner, 'scanner'),
     );
+
+    if (isDefined(element.private_key_info)) {
+      ret.privateKeyInfo = {
+        sha256Hash: element.private_key_info.sha256_hash,
+        keyType: element.private_key_info.type?.replace(/^ssh-/, ''),
+      };
+    }
+
+    if (isDefined(element.public_key_info?.fingerprint)) {
+      ret.publicKeyInfo = {
+        fingerprint: element.public_key_info.fingerprint,
+      };
+    }
 
     return ret;
   }

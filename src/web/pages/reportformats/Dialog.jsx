@@ -126,6 +126,8 @@ const Dialog = ({
   reportformat: reportFormat,
   title,
   onClose,
+  onError,
+  error,
   onSave,
   onValueChange,
 }) => {
@@ -163,8 +165,10 @@ const Dialog = ({
     return (
       <SaveDialog
         defaultValues={reportFormat}
+        error={error}
         title={title}
         onClose={onClose}
+        onError={onError}
         onSave={onSave}
       >
         {({values: state, onValueChange}) => {
@@ -235,11 +239,21 @@ const Dialog = ({
     );
   }
   return (
-    <SaveDialog title={title} onClose={onClose} onSave={onSave}>
-      {({values: onValueChange}) => {
+    <SaveDialog
+      error={error}
+      title={title}
+      onClose={onClose}
+      onError={onError}
+      onSave={onSave}
+    >
+      {({values, onValueChange}) => {
         return (
           <FormGroup title={_('Import XML Report Format')}>
-            <FileField name="xml_file" onChange={onValueChange} />
+            <FileField
+              name="xml_file"
+              value={values.xml_file}
+              onChange={onValueChange}
+            />
           </FormGroup>
         );
       }}
@@ -248,15 +262,14 @@ const Dialog = ({
 };
 
 Dialog.propTypes = {
-  active: PropTypes.yesno,
+  error: PropTypes.string,
   formats: PropTypes.array,
   id_lists: PropTypes.object,
-  name: PropTypes.string,
   preferences: PropTypes.object,
   reportformat: PropTypes.model,
-  summary: PropTypes.string,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
+  onError: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };

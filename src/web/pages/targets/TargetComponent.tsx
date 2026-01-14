@@ -20,7 +20,6 @@ import {
   type AliveTest,
   SCAN_CONFIG_DEFAULT,
 } from 'gmp/models/target';
-import {type YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import useEntityClone, {
@@ -53,6 +52,8 @@ import {UNSET_VALUE} from 'web/utils/Render';
 interface OpenTargetDialogData {
   hostsCount?: number;
   hostsFilter?: Filter;
+  targetSource?: TargetSource;
+  name?: string;
 }
 
 interface TargetComponentRenderProps {
@@ -76,6 +77,15 @@ interface TargetComponentProps {
   onSaved?: (response: EntitySaveResponse) => void;
   onSaveError?: (error: Error) => void;
 }
+
+export const TARGET_RESOURCE_PROPERTIES_NAMES = [
+  'portList',
+  'smbCredential',
+  'snmpCredential',
+  'esxiCredential',
+  'sshElevateCredential',
+  'krb5Credential',
+] as const;
 
 const TargetComponent = ({
   children,
@@ -137,11 +147,11 @@ const TargetComponent = ({
     undefined,
   );
   const [hosts, setHosts] = useState<string | undefined>(undefined);
-  const [reverseLookupOnly, setReverseLookupOnly] = useState<YesNo | undefined>(
-    undefined,
-  );
+  const [reverseLookupOnly, setReverseLookupOnly] = useState<
+    boolean | undefined
+  >(undefined);
   const [reverseLookupUnify, setReverseLookupUnify] = useState<
-    YesNo | undefined
+    boolean | undefined
   >(undefined);
   const [targetExcludeSource, setTargetExcludeSource] = useState<
     TargetExcludeSource | undefined
@@ -154,7 +164,6 @@ const TargetComponent = ({
   const [hostsFilter, setHostsFilter] = useState<Filter | undefined>(undefined);
 
   const loadCredentials = async () => {
-    // @ts-expect-error
     const response = await gmp.credentials.getAll();
     setCredentials(response.data);
   };
@@ -202,28 +211,27 @@ const TargetComponent = ({
 
   const openTargetDialog = async (
     entity?: Target,
-    {hostsCount, hostsFilter}: OpenTargetDialogData = {},
+    {hostsCount, hostsFilter, targetSource, name}: OpenTargetDialogData = {},
   ) => {
     if (isDefined(entity)) {
-      // @ts-expect-error
-      setPort(entity?.ssh_credential?.port);
-      setAliveTests(entity.alive_tests);
+      setPort(entity?.sshCredential?.port);
+      setAliveTests(entity.aliveTests);
       setAllowSimultaneousIPs(entity.allowSimultaneousIPs);
       setComment(entity.comment);
       setTargetTitle(_('Edit Target {{name}}', {name: entity.name as string}));
-      setEsxiCredentialId(entity.esxi_credential?.id);
-      setKrb5CredentialId(entity.krb5_credential?.id);
-      setSmbCredentialId(entity.smb_credential?.id);
-      setSnmpCredentialId(entity.snmp_credential?.id);
-      setSshCredentialId(entity.ssh_credential?.id);
-      setSshElevateCredentialId(entity.ssh_elevate_credential?.id);
-      setPortListId(entity.port_list?.id);
+      setEsxiCredentialId(entity.esxiCredential?.id);
+      setKrb5CredentialId(entity.krb5Credential?.id);
+      setSmbCredentialId(entity.smbCredential?.id);
+      setSnmpCredentialId(entity.snmpCredential?.id);
+      setSshCredentialId(entity.sshCredential?.id);
+      setSshElevateCredentialId(entity.sshElevateCredential?.id);
+      setPortListId(entity.portList?.id);
       setName(entity.name);
       setInUse(entity.isInUse());
-      setExcludeHosts(entity.exclude_hosts?.join(', '));
+      setExcludeHosts(entity.excludeHosts?.join(', '));
       setHosts(entity.hosts.join(', '));
-      setReverseLookupOnly(entity.reverse_lookup_only);
-      setReverseLookupUnify(entity.reverse_lookup_unify);
+      setReverseLookupOnly(entity.reverseLookupOnly);
+      setReverseLookupUnify(entity.reverseLookupUnify);
       setTargetSource('manual');
       setTargetExcludeSource('manual');
       setTargetId(entity.id);
@@ -232,7 +240,7 @@ const TargetComponent = ({
       setAllowSimultaneousIPs(true);
       setPort(undefined);
       setComment(undefined);
-      setName(undefined);
+      setName(name);
       setTargetTitle(_('New Target'));
       setEsxiCredentialId(undefined);
       setKrb5CredentialId(undefined);
@@ -246,7 +254,7 @@ const TargetComponent = ({
       setHosts(undefined);
       setReverseLookupOnly(undefined);
       setReverseLookupUnify(undefined);
-      setTargetSource(undefined);
+      setTargetSource(targetSource);
       setTargetExcludeSource(undefined);
       setTargetId(undefined);
     }
@@ -269,7 +277,6 @@ const TargetComponent = ({
   };
 
   const handleCreateCredential = async (data: CredentialDialogState) => {
-    // @ts-expect-error
     const response = await gmp.credential.create(data);
     const credentialId = response.data.id;
     closeCredentialsDialog();
@@ -443,7 +450,7 @@ const TargetComponent = ({
       )}
       {credentialsDialogVisible && (
         <CredentialDialog
-          credential_type={first(credentialTypes)}
+          credentialType={first(credentialTypes)}
           title={`${credentialsTitle}`}
           types={credentialTypes}
           onClose={handleCloseCredentialsDialog}

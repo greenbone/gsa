@@ -8,7 +8,7 @@ import {rendererWith, wait} from 'web/testing';
 import date from 'gmp/models/date';
 import Model from 'gmp/models/model';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 
 describe('useEntityDownload', () => {
   test('should allow to download an entity', async () => {
@@ -80,5 +80,44 @@ describe('useEntityDownload', () => {
     await result.current(entity);
     expect(onDownloadError).toHaveBeenCalledWith(error);
     expect(onDownloaded).not.toHaveBeenCalled();
+  });
+
+  test('should allow to pass optional arguments to gmp method', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsDefaultResponse);
+    const entity = new Model({id: '123'}, 'task');
+    const downloadedData = {id: '123'};
+    const onDownloaded = testing.fn();
+    const onDownloadError = testing.fn();
+    const exportFunc = testing.fn().mockResolvedValue({data: downloadedData});
+
+    const gmp = {
+      task: {
+        export: exportFunc,
+      },
+      user: {currentSettings},
+    };
+    const {renderHook} = rendererWith({gmp, store: true});
+    const {result} = renderHook(() =>
+      useEntityDownload(exportFunc, {
+        onDownloaded,
+        onDownloadError,
+      }),
+    );
+    await wait(); // wait for currentSettings to be resolved and put into the store
+    expect(result.current).toBeDefined();
+    const options = {foo: 'bar', resourceType: 'custom'};
+    await result.current(entity, options);
+    expect(exportFunc).toHaveBeenCalledWith(
+      entity,
+      // should pass options to gmp method
+      options,
+    );
+    expect(onDownloaded).toHaveBeenCalledWith({
+      filename: 'custom-123.xml',
+      data: downloadedData,
+    });
+    expect(onDownloadError).not.toHaveBeenCalled();
   });
 });

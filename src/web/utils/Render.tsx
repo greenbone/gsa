@@ -29,6 +29,18 @@ export interface Resource extends WithEntityType {
   name?: string;
 }
 
+export interface GenerateFilenameParams {
+  creationTime?: Date;
+  extension?: string;
+  fileNameFormat?: string;
+  reportFormat?: string;
+  id?: string;
+  modificationTime?: Date;
+  resourceName?: string;
+  resourceType?: string;
+  username?: string;
+}
+
 export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
 
@@ -535,7 +547,7 @@ export const simplePermissionDescriptionWithSubject = (
 };
 
 export const setRef =
-  <TRef,>(...refs: React.Ref<TRef>[]) =>
+  <TRef,>(...refs: (React.Ref<TRef> | null | undefined)[]) =>
   (ref: TRef) => {
     for (const rf of refs) {
       if (isFunction(rf)) {
@@ -557,17 +569,7 @@ export const generateFilename = ({
   resourceName,
   resourceType,
   username,
-}: {
-  creationTime?: Date;
-  extension?: string;
-  fileNameFormat?: string;
-  reportFormat?: string;
-  id?: string;
-  modificationTime?: Date;
-  resourceName?: string;
-  resourceType?: string;
-  username?: string;
-}) => {
+}: GenerateFilenameParams) => {
   const currentTime = date();
   const cTime = isDefined(creationTime) ? creationTime : currentTime;
 

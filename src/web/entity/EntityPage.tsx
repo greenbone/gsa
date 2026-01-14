@@ -99,7 +99,6 @@ const EntityPage = <TEntity extends Model>({
 
   const renderInfo = () => {
     if (!isDefined(InfoComponent)) {
-      // @ts-expect-error
       InfoComponent = EntityInfo;
     }
 

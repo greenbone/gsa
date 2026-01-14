@@ -28,7 +28,9 @@ import useTranslation from 'web/hooks/useTranslation';
 import ContainerImageTargetsDialog, {
   type ContainerImageTargetsDialogData,
 } from 'web/pages/container-image-targets/ContainerImageTargetsDialog';
-import CredentialDialog from 'web/pages/credentials/CredentialDialog';
+import CredentialDialog, {
+  type CredentialDialogState,
+} from 'web/pages/credentials/CredentialDialog';
 
 interface ContainerImageTargetComponentRenderProps {
   delete: (entity: OciImageTarget) => Promise<void>;
@@ -121,7 +123,6 @@ const ContainerImageTargetsComponent = ({
   });
 
   const loadCredentials = async () => {
-    // @ts-expect-error
     const response = await gmp.credentials.getAll();
     return response.data;
   };
@@ -224,8 +225,7 @@ const ContainerImageTargetsComponent = ({
     closeCredentialsDialog();
   };
 
-  const handleCreateCredential = async data => {
-    // @ts-expect-error
+  const handleCreateCredential = async (data: CredentialDialogState) => {
     const response = await gmp.credential.create(data);
     closeCredentialsDialog();
     const newCredentials = await loadCredentials();

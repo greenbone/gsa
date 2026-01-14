@@ -44,7 +44,7 @@ const TaskToolBarIcons = ({
         title={_('Help: Tasks')}
       />
       {capabilities.mayOp('run_wizard') && (
-        <IconMenu icon={<WizardIcon />}>
+        <IconMenu icon={<WizardIcon />} title={_('Task Wizards Menu')}>
           {capabilities.mayCreate('task') && (
             <MenuEntry
               data-testid="task-wizard-menu"

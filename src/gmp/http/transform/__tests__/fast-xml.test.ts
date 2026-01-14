@@ -146,4 +146,13 @@ describe('fastxml transform tests', () => {
       timezone: 'Europe/Berlin',
     });
   });
+
+  test('should transform elements with long values', () => {
+    const longValue = 'a'.repeat(100000);
+    const xmlStr = createEnvelopedXml(`<foo>${longValue}</foo>`);
+    const response = new Response<string, Meta>(xmlStr, {});
+    const transformedResponse = transform.success(response);
+    expect(transformedResponse.data).toEqual({foo: longValue});
+    expect(transformedResponse.meta).toEqual(envelopeMeta);
+  });
 });

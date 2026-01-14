@@ -1,0 +1,54 @@
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {type Preference} from 'gmp/models/nvt';
+import {isDefined} from 'gmp/utils/identity';
+import Table from 'web/components/table/StripedTable';
+import TableBody from 'web/components/table/TableBody';
+import TableData from 'web/components/table/TableData';
+import TableHead from 'web/components/table/TableHead';
+import TableHeader from 'web/components/table/TableHeader';
+import TableRow from 'web/components/table/TableRow';
+import useTranslation from 'web/hooks/useTranslation';
+
+interface NvtPreferencesProps {
+  preferences?: Preference[];
+  defaultTimeout?: number;
+}
+
+const NvtPreferences = ({
+  preferences = [],
+  defaultTimeout,
+}: NvtPreferencesProps) => {
+  const [_] = useTranslation();
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{_('Name')}</TableHead>
+          <TableHead>{_('Default Value')}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableData>{_('Timeout')}</TableData>
+          <TableData>
+            {isDefined(defaultTimeout) ? defaultTimeout : _('default')}
+          </TableData>
+        </TableRow>
+        {preferences.map(pref => {
+          return (
+            <TableRow key={pref.name}>
+              <TableData>{pref.hr_name}</TableData>
+              <TableData>{pref.default}</TableData>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
+  );
+};
+
+export default NvtPreferences;

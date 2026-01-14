@@ -21,6 +21,7 @@ import {
   parseToString,
   parseDate,
   parseSeverity,
+  parseBoolean,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
@@ -209,7 +210,6 @@ export interface TaskProperties extends ModelProperties {
   average_duration?: Duration;
   config?: Model;
   current_report?: TaskReport;
-  hosts_ordering?: TaskHostsOrdering;
   last_report?: TaskReport;
   observers?: TaskObservers;
   preferences?: TaskPreferences;
@@ -235,6 +235,7 @@ export interface TaskProperties extends ModelProperties {
   min_qod?: number;
   acceptInvalidCerts?: boolean;
   registryAllowInsecure?: boolean;
+  csAllowFailedRetrieval?: boolean;
 }
 
 export const AUTO_DELETE_KEEP = 'keep';
@@ -316,7 +317,6 @@ class Task extends Model {
   readonly average_duration?: Duration;
   readonly config?: Model;
   readonly current_report?: TaskReport;
-  readonly hosts_ordering?: TaskHostsOrdering;
   readonly in_assets?: YesNo;
   readonly last_report?: TaskReport;
   readonly max_checks?: number;
@@ -324,6 +324,7 @@ class Task extends Model {
   readonly min_qod?: number;
   readonly acceptInvalidCerts?: boolean;
   readonly registryAllowInsecure?: boolean;
+  readonly csAllowFailedRetrieval?: boolean;
   readonly observers?: TaskObservers;
   readonly preferences: TaskPreferences;
   readonly progress?: number;
@@ -355,8 +356,6 @@ class Task extends Model {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     current_report,
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    hosts_ordering,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     in_assets,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     last_report,
@@ -368,6 +367,7 @@ class Task extends Model {
     min_qod,
     acceptInvalidCerts,
     registryAllowInsecure,
+    csAllowFailedRetrieval,
     observers,
     preferences = {},
     progress,
@@ -397,7 +397,6 @@ class Task extends Model {
     this.average_duration = average_duration;
     this.config = config;
     this.current_report = current_report;
-    this.hosts_ordering = hosts_ordering;
     this.in_assets = in_assets;
     this.last_report = last_report;
     this.max_checks = max_checks;
@@ -405,6 +404,7 @@ class Task extends Model {
     this.min_qod = min_qod;
     this.acceptInvalidCerts = acceptInvalidCerts;
     this.registryAllowInsecure = registryAllowInsecure;
+    this.csAllowFailedRetrieval = csAllowFailedRetrieval;
     this.observers = observers;
     this.preferences = preferences;
     this.progress = progress;
@@ -586,6 +586,9 @@ class Task extends Model {
           case 'registry_allow_insecure':
             copy.registryAllowInsecure = parseYesNo(pref.value) === YES_VALUE;
             break;
+          case 'cs_allow_failed_retrieval':
+            copy.csAllowFailedRetrieval = parseBoolean(pref.value);
+            break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
             break;
@@ -596,16 +599,6 @@ class Task extends Model {
     copy.preferences = prefs;
 
     copy.average_duration = parseDuration(element.average_duration);
-
-    if (
-      element.hosts_ordering === HOSTS_ORDERING_RANDOM ||
-      element.hosts_ordering === HOSTS_ORDERING_REVERSE ||
-      element.hosts_ordering === HOSTS_ORDERING_SEQUENTIAL
-    ) {
-      copy.hosts_ordering = element.hosts_ordering as TaskHostsOrdering;
-    } else {
-      delete copy.hosts_ordering;
-    }
 
     return copy;
   }

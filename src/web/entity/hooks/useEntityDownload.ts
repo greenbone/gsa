@@ -16,23 +16,26 @@ import useTranslation from 'web/hooks/useTranslation';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
-import {generateFilename} from 'web/utils/Render';
+import {generateFilename, type GenerateFilenameParams} from 'web/utils/Render';
 
-export type OnDownloadedFunc = (data: EntityDownload) => void;
+export type OnDownloadedFunc<TData = string | ArrayBuffer> = (
+  data: EntityDownload<TData>,
+) => void;
 
-interface EntityDownload {
+export interface EntityDownload<TData = string | ArrayBuffer> {
   filename: string;
-  data: string;
+  data: TData;
 }
 
-interface EntityDownloadCallbacks {
+interface EntityDownloadCallbacks<TData> {
   onDownloadError?: (error: Error) => void;
-  onDownloaded?: OnDownloadedFunc;
+  onDownloaded?: OnDownloadedFunc<TData>;
 }
 
-type EntityDownloadFunction = (
+type EntityDownloadFunction<TData, TOptions> = (
   entity: EntityCommandParams,
-) => Promise<Response<string, Meta>>;
+  options?: TOptions,
+) => Promise<Response<TData, Meta>>;
 
 /**
  * Custom hook to handle the download of an entity.
@@ -56,9 +59,13 @@ type EntityDownloadFunction = (
  * handleDownload(entity);
  * ```
  */
-const useEntityDownload = <TEntity extends Model>(
-  gmpMethod: EntityDownloadFunction,
-  {onDownloadError, onDownloaded}: EntityDownloadCallbacks = {},
+const useEntityDownload = <
+  TEntity extends Model,
+  TData = string | ArrayBuffer,
+  TDataOptions extends object = {},
+>(
+  gmpMethod: EntityDownloadFunction<TData, TDataOptions>,
+  {onDownloadError, onDownloaded}: EntityDownloadCallbacks<TData> = {},
 ) => {
   const [_] = useTranslation();
   const username = useSelector(getUsername);
@@ -83,7 +90,10 @@ const useEntityDownload = <TEntity extends Model>(
     }
   }, [dispatch, gmp, userDefaultsSelector]);
 
-  const handleEntityDownload = async (entity: TEntity) => {
+  const handleEntityDownload = async (
+    entity: TEntity,
+    options?: TDataOptions & GenerateFilenameParams,
+  ) => {
     const detailsExportFileName = userDefaultsSelector.getValueByName(
       'detailsexportfilename',
     );
@@ -96,10 +106,11 @@ const useEntityDownload = <TEntity extends Model>(
       resourceName: entity.name,
       resourceType: entity.entityType,
       username,
+      ...options,
     });
 
     try {
-      const response = await gmpMethod(entity as EntityCommandParams);
+      const response = await gmpMethod(entity as EntityCommandParams, options);
 
       if (isDefined(onDownloaded)) {
         showSuccessNotification(

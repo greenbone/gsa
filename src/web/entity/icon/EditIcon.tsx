@@ -22,11 +22,10 @@ interface EntityEdit extends WithEntityType {
   isWritable: () => boolean;
 }
 
-interface EntityEditIconProps<TEntity extends EntityEdit>
-  extends Omit<
-    ExtendedDynamicIconProps<TEntity>,
-    'onClick' | 'value' | 'active'
-  > {
+interface EntityEditIconProps<TEntity extends EntityEdit> extends Omit<
+  ExtendedDynamicIconProps<TEntity>,
+  'onClick' | 'value' | 'active'
+> {
   disabled?: boolean;
   displayName?: string;
   entity: TEntity;

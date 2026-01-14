@@ -7,7 +7,7 @@ import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
-import Audit, {HOSTS_ORDERING_SEQUENTIAL} from 'gmp/models/audit';
+import Audit, {HOSTS_ORDERING_RANDOM} from 'gmp/models/audit';
 import {NO_VALUE} from 'gmp/parser';
 
 const log = logger.getLogger('gmp.commands.audits');
@@ -76,7 +76,6 @@ export class AuditCommand extends EntityCommand {
       autoDeleteData,
       comment = '',
       policyId,
-      hostsOrdering,
       inAssets,
       maxChecks,
       maxHosts,
@@ -100,7 +99,7 @@ export class AuditCommand extends EntityCommand {
       auto_delete_data: autoDeleteData,
       comment,
       config_id: policyId,
-      hosts_ordering: hostsOrdering,
+      hosts_ordering: HOSTS_ORDERING_RANDOM,
       in_assets: inAssets,
       max_checks: maxChecks,
       max_hosts: maxHosts,
@@ -127,7 +126,6 @@ export class AuditCommand extends EntityCommand {
       applyOverrides,
       comment = '',
       policyId = NO_VALUE,
-      hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
       id,
       inAssets,
       maxChecks,
@@ -149,7 +147,7 @@ export class AuditCommand extends EntityCommand {
       comment,
       config_id: policyId,
       cmd: 'save_task',
-      hosts_ordering: hostsOrdering,
+      hosts_ordering: HOSTS_ORDERING_RANDOM,
       in_assets: inAssets,
       max_checks: maxChecks,
       max_hosts: maxHosts,

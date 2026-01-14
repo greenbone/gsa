@@ -16,7 +16,7 @@ import DetailsTable from 'web/components/table/DetailsTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import {compareAlerts} from 'web/pages/tasks/TaskDetails';
 import {
   loadEntity as loadPolicy,
@@ -54,7 +54,6 @@ class AuditDetails extends React.Component {
       auto_delete_data,
       average_duration,
       config,
-      hosts_ordering,
       in_assets,
       last_report,
       scanner,
@@ -141,12 +140,6 @@ class AuditDetails extends React.Component {
                         </DetailsLink>
                       </span>
                     </TableData>
-                  </TableRow>
-                )}
-                {isDefined(policy) && (
-                  <TableRow>
-                    <TableData>{_('Order for target hosts')}</TableData>
-                    <TableData>{hosts_ordering}</TableData>
                   </TableRow>
                 )}
                 {isDefined(policy) && isDefined(max_checks) && (

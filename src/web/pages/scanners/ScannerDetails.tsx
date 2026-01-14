@@ -17,7 +17,7 @@ import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
 import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface ScannerDetailsProps {
@@ -138,9 +138,9 @@ const ScannerDetails = ({
       </InfoTable>
       {!entity.hasUnixSocket() &&
         isDefined(credential) &&
-        isDefined(credential.certificate_info) && (
+        isDefined(credential.certificateInfo) && (
           <DetailsBlock title={_('Client Certificate (from Credential)')}>
-            <CertInfo info={credential.certificate_info} />
+            <CertInfo info={credential.certificateInfo} />
           </DetailsBlock>
         )}
     </Layout>

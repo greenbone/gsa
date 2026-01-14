@@ -17,6 +17,7 @@ import EntitiesActions, {
   type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import {type RowComponentProps} from 'web/entities/EntitiesTable';
+import EntityNameTableData from 'web/entities/EntityNameTableData';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
@@ -28,17 +29,18 @@ interface CredProps {
   links?: boolean;
 }
 
-export interface ContainerImageTargetActionsProps
-  extends Omit<EntitiesActionsProps<OciImageTarget>, 'children'> {
-  onContainerImageTargeEditClick?: (target: OciImageTarget) => void;
+export interface ContainerImageTargetActionsProps extends Omit<
+  EntitiesActionsProps<OciImageTarget>,
+  'children'
+> {
+  onContainerImageTargetEditClick?: (target: OciImageTarget) => void;
   onContainerImageTargetCloneClick?: (target: OciImageTarget) => void;
   onContainerImageTargetDownloadClick?: (target: OciImageTarget) => void;
   onContainerImageTargetDeleteClick?: (target: OciImageTarget) => void;
 }
 
 export interface ContainerImageTargetTableRowProps
-  extends ContainerImageTargetActionsProps,
-    RowComponentProps<OciImageTarget> {
+  extends ContainerImageTargetActionsProps, RowComponentProps<OciImageTarget> {
   actionsComponent?: React.ComponentType<ContainerImageTargetActionsProps>;
   links?: boolean;
   'data-testid'?: string;
@@ -50,7 +52,7 @@ const Actions = ({
   selectionType,
   onEntityDeselected,
   onEntitySelected,
-  onContainerImageTargeEditClick,
+  onContainerImageTargetEditClick,
   onContainerImageTargetCloneClick,
   onContainerImageTargetDownloadClick,
   onContainerImageTargetDeleteClick,
@@ -76,7 +78,7 @@ const Actions = ({
           displayName={_('Container Image Target')}
           entity={entity}
           name="ociimagetarget"
-          onClick={onContainerImageTargeEditClick}
+          onClick={onContainerImageTargetEditClick}
         />
         <CloneIcon
           displayName={_('Container Image Target')}
@@ -123,7 +125,12 @@ const ContainerImageTargetRow = ({
 
   return (
     <TableRow data-testid={dataTestId}>
-      <TableData>{entity.name}</TableData>
+      <EntityNameTableData
+        displayName={_('Target')}
+        entity={entity}
+        links={!links}
+        type="target"
+      />
       <TableData>{shorten(entity.imageReferences.join(', '), 500)}</TableData>
       <TableData>
         <Cred cred={entity.credential} links={links} title={_('Credential')} />

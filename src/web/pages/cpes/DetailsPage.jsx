@@ -8,11 +8,6 @@ import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import {CpeLogoIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -30,73 +25,61 @@ import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityComponent from 'web/entity/EntityComponent';
-import {InfoLayout} from 'web/entity/EntityInfo';
+import {EntityInfoTable} from 'web/entity/EntityInfo';
 import EntityPage from 'web/entity/EntityPage';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import CpeDetailsPageToolBarIcons from 'web/pages/cpes/CpeDetailsPageToolBarIcons';
 import CpeDetails from 'web/pages/cpes/Details';
 import {selector, loadEntity} from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
 
-export const ToolBarIcons = ({entity, onCpeDownloadClick}) => {
-  const [_] = useTranslation();
-
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="cpe"
-          page="managing-secinfo"
-          title={_('Help: CPEs')}
-        />
-        <ListIcon page="cpes" title={_('CPE List')} />
-      </IconDivider>
-      <ExportIcon
-        title={_('Export CPE')}
-        value={entity}
-        onClick={onCpeDownloadClick}
-      />
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onCpeDownloadClick: PropTypes.func.isRequired,
-};
-
-const EntityInfo = ({entity}) => {
+const CpeEntityInfo = ({entity}) => {
   const [_] = useTranslation();
   const {id, modificationTime, creationTime, updateTime} = entity;
   return (
-    <InfoLayout>
-      <div>{_('ID:')}</div>
-      <div>{id}</div>
-      <div>{_('Modified:')}</div>
-      <div>
-        {isDefined(modificationTime) ? (
-          <DateTime date={modificationTime} />
-        ) : (
-          _('N/A')
-        )}
-      </div>
-      <div>{_('Created:')}</div>
-      <div>
-        {isDefined(creationTime) ? <DateTime date={creationTime} /> : _('N/A')}
-      </div>
-      <div>{_('Last updated:')}</div>
-      <div>
-        {isDefined(updateTime) ? <DateTime date={updateTime} /> : _('N/A')}
-      </div>
-    </InfoLayout>
+    <EntityInfoTable data-testid="entity-info">
+      <tbody>
+        <tr>
+          <td>{_('ID:')}</td>
+          <td>{id}</td>
+        </tr>
+        <tr>
+          <td>{_('Modified:')}</td>
+          <td>
+            {isDefined(modificationTime) ? (
+              <DateTime date={modificationTime} />
+            ) : (
+              _('N/A')
+            )}
+          </td>
+        </tr>
+        <tr>
+          <td>{_('Created:')}</td>
+          <td>
+            {isDefined(creationTime) ? (
+              <DateTime date={creationTime} />
+            ) : (
+              _('N/A')
+            )}
+          </td>
+        </tr>
+        <tr>
+          <td>{_('Last updated:')}</td>
+          <td>
+            {isDefined(updateTime) ? <DateTime date={updateTime} /> : _('N/A')}
+          </td>
+        </tr>
+      </tbody>
+    </EntityInfoTable>
   );
 };
 
-EntityInfo.propTypes = {
+CpeEntityInfo.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
@@ -149,14 +132,7 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const CpePage = ({
-  entity,
-  onChanged,
-  onDownloaded,
-  onError,
-
-  ...props
-}) => {
+const CpePage = ({entity, onChanged, onDownloaded, onError, ...props}) => {
   const [_] = useTranslation();
 
   return (
@@ -169,10 +145,10 @@ const CpePage = ({
         <EntityPage
           {...props}
           entity={entity}
-          infoComponent={EntityInfo}
+          infoComponent={CpeEntityInfo}
           sectionIcon={<CpeLogoIcon size="large" />}
           title={_('CPE')}
-          toolBarIcons={ToolBarIcons}
+          toolBarIcons={CpeDetailsPageToolBarIcons}
           onCpeDownloadClick={download}
         >
           {() => {

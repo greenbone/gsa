@@ -16,7 +16,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import AuditPage, {ToolBarIcons} from 'web/pages/audits/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';

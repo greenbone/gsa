@@ -60,6 +60,39 @@ interface AlertProperties extends ModelProperties {
   tasks?: Model[];
 }
 
+export type AlertEventType =
+  | typeof EVENT_TYPE_NEW_SECINFO
+  | typeof EVENT_TYPE_UPDATED_SECINFO
+  | typeof EVENT_TYPE_TASK_RUN_STATUS_CHANGED
+  | typeof EVENT_TYPE_TICKET_RECEIVED
+  | typeof EVENT_TYPE_ASSIGNED_TICKET_CHANGED
+  | typeof EVENT_TYPE_OWNED_TICKET_CHANGED;
+
+export type AlertConditionType =
+  | typeof CONDITION_TYPE_FILTER_COUNT_AT_LEAST
+  | typeof CONDITION_TYPE_FILTER_COUNT_CHANGED
+  | typeof CONDITION_TYPE_SEVERITY_AT_LEAST
+  | typeof CONDITION_TYPE_ALWAYS;
+
+export type AlertConditionDirection =
+  | typeof CONDITION_DIRECTION_DECREASED
+  | typeof CONDITION_DIRECTION_INCREASED
+  | typeof CONDITION_DIRECTION_CHANGED;
+
+export type AlertMethodType =
+  | typeof METHOD_TYPE_ALEMBA_VFIRE
+  | typeof METHOD_TYPE_SCP
+  | typeof METHOD_TYPE_SEND
+  | typeof METHOD_TYPE_SMB
+  | typeof METHOD_TYPE_SNMP
+  | typeof METHOD_TYPE_SYSLOG
+  | typeof METHOD_TYPE_EMAIL
+  | typeof METHOD_TYPE_START_TASK
+  | typeof METHOD_TYPE_HTTP_GET
+  | typeof METHOD_TYPE_SOURCEFIRE
+  | typeof METHOD_TYPE_VERINICE
+  | typeof METHOD_TYPE_TIPPING_POINT;
+
 export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
 export const EVENT_TYPE_TASK_RUN_STATUS_CHANGED = 'Task run status changed';
@@ -140,8 +173,11 @@ const createValues = (data: DataElement) => {
 
 const parseAlertData = (
   alertElement: AlertDataElement | string | undefined,
-): AlertData => {
+): AlertData | undefined => {
   const data = {};
+  if (!isDefined(alertElement)) {
+    return undefined;
+  }
   if (isObject(alertElement)) {
     forEach(alertElement.data, value => {
       data[value.name] = createValues(value);
@@ -201,23 +237,27 @@ class Alert extends Model {
       Model.fromElement(task, 'task'),
     );
 
-    // @ts-expect-error
-    const methodDataReportFormat = ret.method?.data?.report_formats?.value as
-      | string
-      | undefined;
+    if (isDefined(ret.method?.data?.report_formats)) {
+      // @ts-expect-error
+      const methodDataReportFormat = ret.method?.data?.report_formats?.value as
+        | string
+        | undefined;
 
-    ret.method.data.report_formats = map(
-      methodDataReportFormat?.split(','),
-      rf => rf.trim(),
-    );
+      ret.method.data.report_formats = map(
+        methodDataReportFormat?.split(','),
+        rf => rf.trim(),
+      );
+    }
 
-    if (isDefined(ret.method.data.notice)) {
+    if (isDefined(ret.method?.data?.notice)) {
       ret.method.data.notice = {
         value: parseToString(ret.method?.data?.notice?.value),
       };
     }
 
-    ret.active = parseYesNo(element.active);
+    ret.active = isDefined(element.active)
+      ? parseYesNo(element.active)
+      : undefined;
 
     return ret;
   }

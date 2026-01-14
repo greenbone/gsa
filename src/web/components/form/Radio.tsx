@@ -8,8 +8,10 @@ import {RadioButton as GreenboneRadio} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 import useValueChange from 'web/components/form/useValueChange';
 
-interface RadioProps<TValue>
-  extends Omit<MantineRadioProps, 'onChange' | 'value'> {
+interface RadioProps<TValue> extends Omit<
+  MantineRadioProps,
+  'onChange' | 'value'
+> {
   checked?: boolean;
   convert?: (value: string) => TValue;
   disabled?: boolean;

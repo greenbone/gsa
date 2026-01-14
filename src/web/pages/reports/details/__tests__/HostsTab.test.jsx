@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith} from 'web/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
+import {rendererWith, screen, within} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
-import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
+import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
+import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import HostsTab from 'web/pages/reports/details/HostsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -37,7 +37,7 @@ describe('Report Hosts Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(
+    render(
       <HostsTab
         counts={hosts.counts}
         filter={filter}
@@ -49,70 +49,115 @@ describe('Report Hosts Tab tests', () => {
       />,
     );
 
-    const images = baseElement.querySelectorAll('img');
-    const links = baseElement.querySelectorAll('a');
-    const header = baseElement.querySelectorAll('th');
-    const rows = baseElement.querySelectorAll('tr');
-    const bars = screen.getAllByTestId('progressbar-box');
-
+    // Use accessible queries instead of DOM index lookups
     // Headings
-    expect(header[0]).toHaveTextContent('IP Address');
-    expect(header[1]).toHaveTextContent('Hostname');
-    expect(header[2]).toHaveTextContent('OS');
-    expect(header[3]).toHaveTextContent('Ports');
-    expect(header[4]).toHaveTextContent('Apps');
-    expect(header[5]).toHaveTextContent('Distance');
-    expect(header[6]).toHaveTextContent('Auth');
-    expect(header[7]).toHaveTextContent('Start');
-    expect(header[8]).toHaveTextContent('End');
-    expect(header[9]).toHaveTextContent('High');
-    expect(header[10]).toHaveTextContent('Medium');
-    expect(header[11]).toHaveTextContent('Low');
-    expect(header[12]).toHaveTextContent('Log');
-    expect(header[13]).toHaveTextContent('False Positive');
-    expect(header[14]).toHaveTextContent('Total');
-    expect(header[15]).toHaveTextContent('Severity');
+    expect(
+      screen.getByRole('columnheader', {name: /IP Address/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Hostname/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /^OS/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Ports/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Apps/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Distance/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Auth/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Start/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /End/i}),
+    ).toBeInTheDocument();
+    // CVSSv3 shows Critical column
+    expect(
+      screen.getByRole('columnheader', {name: /Critical/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /High/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Medium/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Low/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Log/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /False Pos/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Total/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Severity/i}),
+    ).toBeInTheDocument();
 
-    // Row 1
-    expect(links[0]).toHaveAttribute('href', '/host/123');
+    // Row 1 (host with asset id)
+    const host1Link = screen.getByRole('link', {name: '123.456.78.910'});
+    expect(host1Link).toHaveAttribute('href', '/host/123');
 
-    expect(links[0]).toHaveTextContent('123.456.78.910');
-    expect(rows[1]).toHaveTextContent('foo.bar');
-    expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(rows[1]).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance
-    expect(rows[1]).toHaveTextContent(
+    const row1 = host1Link.closest('tr');
+    expect(row1).toHaveTextContent('foo.bar');
+    // image src may be absolute; match substring
+    expect(row1.querySelector('img').getAttribute('src')).toContain(
+      '/img/os_unknown.svg',
+    );
+    expect(row1).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance
+    expect(row1).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
-    expect(rows[1]).toHaveTextContent(
+    expect(row1).toHaveTextContent(
       'Mon, Jun 3, 2019 1:15 PM Central European Summer Time',
     );
-    expect(rows[1]).toHaveTextContent('143050150'); // 14 High, 30 Medium, 5 Low, 0 Log, 1 False Positive, 50 Total
-    expect(bars[0]).toHaveAttribute('title', 'Critical');
-    expect(bars[0]).toHaveTextContent('10.0 (Critical)');
+    expect(row1).toHaveTextContent('143050150'); // 14 High, 30 Medium, 5 Low, 0 Log, 1 False Positive, 50 Total
 
-    // Row 2
-    expect(links[1]).toHaveAttribute(
+    const bar1 = within(row1).getByTestId('progressbar-box');
+    expect(bar1).toHaveAttribute('title', 'Critical');
+    expect(bar1).toHaveTextContent('10.0 (Critical)');
+
+    // Row 2 (host without asset id)
+    const host2Link = screen.getByRole('link', {name: '109.876.54.321'});
+    expect(host2Link).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D109.876.54.321',
-    ); // filter by name because host has no asset id
-    expect(links[1]).toHaveTextContent('109.876.54.321');
-    expect(rows[2]).toHaveTextContent('lorem.ipsum');
-    expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(rows[2]).toHaveTextContent('1521'); // 15 Ports, 2 Apps, 1 Distance
-    expect(rows[2]).toHaveTextContent(
+    );
+
+    const row2 = host2Link.closest('tr');
+    expect(row2).toHaveTextContent('lorem.ipsum');
+    expect(row2.querySelector('img').getAttribute('src')).toContain(
+      '/img/os_unknown.svg',
+    );
+    expect(row2).toHaveTextContent('1521'); // 15 Ports, 2 Apps, 1 Distance
+    expect(row2).toHaveTextContent(
       'Mon, Jun 3, 2019 1:15 PM Central European Summer Time',
     );
-    expect(rows[2]).toHaveTextContent(
+    expect(row2).toHaveTextContent(
       'Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
-    expect(rows[2]).toHaveTextContent('53005040'); // 5 High, 30 Medium, 0 Low, 5 Log, 0 False Positive, 40 Total
-    expect(bars[1]).toHaveAttribute('title', 'Medium');
-    expect(bars[1]).toHaveTextContent('5.0 (Medium)');
+    expect(row2).toHaveTextContent('53005040'); // 5 High, 30 Medium, 0 Low, 5 Log, 0 False Positive, 40 Total
+
+    const bar2 = within(row2).getByTestId('progressbar-box');
+    expect(bar2).toHaveAttribute('title', 'Medium');
+    expect(bar2).toHaveTextContent('5.0 (Medium)');
 
     // Filter
-    expect(baseElement).toHaveTextContent(
-      '(Applied filter: apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity)',
-    );
+    expect(
+      screen.getByText(
+        '(Applied filter: apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity)',
+      ),
+    ).toBeInTheDocument();
   });
 });
 
@@ -136,7 +181,7 @@ describe('Audit Report Hosts Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(
+    render(
       <HostsTab
         audit={true}
         counts={hosts.counts}
@@ -149,83 +194,128 @@ describe('Audit Report Hosts Tab tests', () => {
       />,
     );
 
-    const images = baseElement.querySelectorAll('img');
-    const links = baseElement.querySelectorAll('a');
-    const header = baseElement.querySelectorAll('th');
-    const rows = baseElement.querySelectorAll('tr');
-
-    const bars = screen.getAllByTestId('progressbar-box');
-
-    // Headings
-    expect(header[0]).toHaveTextContent('IP Address');
-    expect(header[1]).toHaveTextContent('Hostname');
-    expect(header[2]).toHaveTextContent('OS');
-    expect(header[3]).toHaveTextContent('Ports');
-    expect(header[4]).toHaveTextContent('Apps');
-    expect(header[5]).toHaveTextContent('Distance');
-    expect(header[6]).toHaveTextContent('Auth');
-    expect(header[7]).toHaveTextContent('Start');
-    expect(header[8]).toHaveTextContent('End');
-    expect(header[9]).toHaveTextContent('Yes');
-    expect(header[10]).toHaveTextContent('No');
-    expect(header[11]).toHaveTextContent('Incomplete');
-    expect(header[12]).toHaveTextContent('Total');
-    expect(header[13]).toHaveTextContent('Compliant');
+    // Headings (audit)
+    expect(
+      screen.getByRole('columnheader', {name: /IP Address/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Hostname/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /^OS/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Ports/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Apps/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Distance/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Auth/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Start/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /End/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Yes/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', {name: /No/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Incomplete/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Total/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', {name: /Compliant/i}),
+    ).toBeInTheDocument();
 
     // Row 1
-    expect(links[0]).toHaveAttribute(
+    const auditHost1 = screen.getByRole('link', {name: '109.876.54.321'});
+    expect(auditHost1).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D109.876.54.321',
-    ); // filter by name because host has no asset id
-    expect(links[0]).toHaveTextContent('109.876.54.321');
-    expect(rows[1]).toHaveTextContent('lorem.ipsum');
-    expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(rows[1]).toHaveTextContent('1521'); // 15 Ports, 2 Apps, 1 Distance
-    expect(rows[1]).toHaveTextContent(
+    );
+    const auditRow1 = auditHost1.closest('tr');
+    expect(auditRow1).toHaveTextContent('lorem.ipsum');
+    expect(auditRow1.querySelector('img').getAttribute('src')).toContain(
+      '/img/os_unknown.svg',
+    );
+    expect(auditRow1).toHaveTextContent('1521');
+    expect(auditRow1).toHaveTextContent(
       'Mon, Jun 3, 2019 1:15 PM Central European Summer Time',
     );
-    expect(rows[1]).toHaveTextContent(
+    expect(auditRow1).toHaveTextContent(
       'Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
-    expect(rows[1]).toHaveTextContent('170540'); // 17 Yes, 0 No, 5 Incomplete, 40 Total
-    expect(bars[0]).toHaveAttribute('title', 'Incomplete');
-    expect(bars[0]).toHaveTextContent('Incomplete');
+    expect(auditRow1).toHaveTextContent('170540');
+    expect(within(auditRow1).getByTestId('progressbar-box')).toHaveAttribute(
+      'title',
+      'Incomplete',
+    );
+    expect(within(auditRow1).getByTestId('progressbar-box')).toHaveTextContent(
+      'Incomplete',
+    );
 
     // Row 2
-    expect(links[1]).toHaveAttribute('href', '/host/123');
-    expect(links[1]).toHaveTextContent('123.456.78.910');
-    expect(rows[2]).toHaveTextContent('foo.bar');
-    expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(rows[2]).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance
-    expect(rows[2]).toHaveTextContent(
+    const auditHost2 = screen.getByRole('link', {name: '123.456.78.910'});
+    expect(auditHost2).toHaveAttribute('href', '/host/123');
+    const auditRow2 = auditHost2.closest('tr');
+    expect(auditRow2).toHaveTextContent('foo.bar');
+    expect(auditRow2.querySelector('img').getAttribute('src')).toContain(
+      '/img/os_unknown.svg',
+    );
+    expect(auditRow2).toHaveTextContent('1032');
+    expect(auditRow2).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
-    expect(rows[2]).toHaveTextContent(
+    expect(auditRow2).toHaveTextContent(
       'Mon, Jun 3, 2019 1:15 PM Central European Summer Time',
     );
-    expect(rows[2]).toHaveTextContent('7301450'); // 7 Yes, 30 No, 14 Incomplete, 50 Total
-    expect(bars[1]).toHaveAttribute('title', 'No');
-    expect(bars[1]).toHaveTextContent('No');
+    expect(auditRow2).toHaveTextContent('7301450');
+    expect(within(auditRow2).getByTestId('progressbar-box')).toHaveAttribute(
+      'title',
+      'No',
+    );
+    expect(within(auditRow2).getByTestId('progressbar-box')).toHaveTextContent(
+      'No',
+    );
 
     // Row 3
-    expect(links[2]).toHaveAttribute('href', '/host/123');
-    expect(links[2]).toHaveTextContent('123.456.78.810');
-    expect(rows[3]).toHaveTextContent('foo.bar');
-    expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(rows[3]).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance
-    expect(rows[3]).toHaveTextContent(
+    const auditHost3 = screen.getByRole('link', {name: '123.456.78.810'});
+    expect(auditHost3).toHaveAttribute('href', '/host/123');
+    const auditRow3 = auditHost3.closest('tr');
+    expect(auditRow3).toHaveTextContent('foo.bar');
+    expect(auditRow3.querySelector('img').getAttribute('src')).toContain(
+      '/img/os_unknown.svg',
+    );
+    expect(auditRow3).toHaveTextContent('1032');
+    expect(auditRow3).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
-    expect(rows[3]).toHaveTextContent(
+    expect(auditRow3).toHaveTextContent(
       'Mon, Jun 3, 2019 1:15 PM Central European Summer Time',
     );
-    expect(rows[3]).toHaveTextContent('200020'); // 20 Yes, 0 No, 0 Incomplete, 20 Total
-    expect(bars[2]).toHaveAttribute('title', 'Yes');
-    expect(bars[2]).toHaveTextContent('Yes');
+    expect(auditRow3).toHaveTextContent('200020');
+    expect(within(auditRow3).getByTestId('progressbar-box')).toHaveAttribute(
+      'title',
+      'Yes',
+    );
+    expect(within(auditRow3).getByTestId('progressbar-box')).toHaveTextContent(
+      'Yes',
+    );
 
     // Filter
-    expect(baseElement).toHaveTextContent(
-      '(Applied filter: apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant)',
-    );
+    expect(
+      screen.getByText(
+        '(Applied filter: apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant)',
+      ),
+    ).toBeInTheDocument();
   });
 });

@@ -79,24 +79,17 @@ const ReportFormatComponent = ({
   };
 
   const handleSave = async data => {
-    try {
-      if (isDefined(data.id)) {
-        const response = await gmp.reportformat.save(data);
-        if (onSaved) {
-          onSaved(response);
-        }
-      } else {
-        const response = await gmp.reportformat.import(data);
-        if (onImported) {
-          onImported(response);
-        }
-      }
+    if (isDefined(data.id)) {
+      const response = await gmp.reportformat.save(data);
       closeReportFormatDialog();
-    } catch (error) {
-      if (isDefined(data.id) && onSaveError) {
-        onSaveError(error);
-      } else if (!isDefined(data.id) && onImportError) {
-        onImportError(error);
+      if (onSaved) {
+        onSaved(response);
+      }
+    } else {
+      const response = await gmp.reportformat.import(data);
+      closeReportFormatDialog();
+      if (onImported) {
+        onImported(response);
       }
     }
   };
@@ -121,6 +114,7 @@ const ReportFormatComponent = ({
               reportformat={reportFormat}
               title={title}
               onClose={handleCloseReportFormatDialog}
+              onError={isDefined(reportFormat) ? onSaveError : onImportError}
               onSave={handleSave}
             />
           )}

@@ -20,7 +20,7 @@ const tagStyles = {
   },
   gray: {
     bg: Theme.dialogGray,
-    color: Theme.mediumGray,
+    color: Theme.darkGray,
   },
 };
 

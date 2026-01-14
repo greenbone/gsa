@@ -14,8 +14,8 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import TagsTable from 'web/pages/tags/Table';
+import TagComponent from 'web/pages/tags/TagComponent';
 import TagFilterDialog from 'web/pages/tags/TagFilterDialog';
-import TagComponent from 'web/pages/tags/TagsComponent';
 import {
   loadEntities,
   selector as entitiesSelector,

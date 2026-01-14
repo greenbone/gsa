@@ -7,11 +7,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {isDefined} from 'gmp/utils/identity';
 import {OverrideIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -30,10 +25,6 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import CloneIcon from 'web/entity/icon/CloneIcon';
-import CreateIcon from 'web/entity/icon/CreateIcon';
-import EditIcon from 'web/entity/icon/EditIcon';
-import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
@@ -42,6 +33,7 @@ import withEntityContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import OverrideDetails from 'web/pages/overrides/Details';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
+import OverrideDetailsPageToolBarIcons from 'web/pages/overrides/OverrideDetailsPageToolBarIcons';
 import {
   selector as overridesSelector,
   loadEntity,
@@ -54,49 +46,6 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
-export const ToolBarIcons = ({
-  entity,
-  onOverrideCloneClick,
-  onOverrideCreateClick,
-  onOverrideDeleteClick,
-  onOverrideDownloadClick,
-  onOverrideEditClick,
-}) => {
-  const [_] = useTranslation();
-
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="managing-overrides"
-          page="reports"
-          title={_('Help: Overrides')}
-        />
-        <ListIcon page="overrides" title={_('Override List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon entity={entity} onClick={onOverrideCreateClick} />
-        <CloneIcon entity={entity} onClick={onOverrideCloneClick} />
-        <EditIcon entity={entity} onClick={onOverrideEditClick} />
-        <TrashIcon entity={entity} onClick={onOverrideDeleteClick} />
-        <ExportIcon
-          title={_('Export Override as XML')}
-          value={entity}
-          onClick={onOverrideDownloadClick}
-        />
-      </IconDivider>
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onOverrideCloneClick: PropTypes.func.isRequired,
-  onOverrideCreateClick: PropTypes.func.isRequired,
-  onOverrideDeleteClick: PropTypes.func.isRequired,
-  onOverrideDownloadClick: PropTypes.func.isRequired,
-  onOverrideEditClick: PropTypes.func.isRequired,
-};
 
 const Details = connect(rootState => ({
   timezone: getTimezone(rootState),
@@ -188,7 +137,7 @@ const Page = ({
             entity={entity}
             sectionIcon={<OverrideIcon size="large" />}
             title={_('Override')}
-            toolBarIcons={ToolBarIcons}
+            toolBarIcons={OverrideDetailsPageToolBarIcons}
             onChanged={onChanged}
             onDownloaded={onDownloaded}
             onError={onError}

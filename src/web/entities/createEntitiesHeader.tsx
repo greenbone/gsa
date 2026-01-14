@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type ToString} from 'gmp/types';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
@@ -13,12 +13,7 @@ import withEntitiesHeader, {
 } from 'web/entities/withEntitiesHeader';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
-interface ToString {
-  toString: () => string;
-}
-
-export interface CreateEntitiesHeaderProps
-  extends WithEntitiesHeaderComponentProps {
+export interface CreateEntitiesHeaderProps extends WithEntitiesHeaderComponentProps {
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;
   sort?: boolean;

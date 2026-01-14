@@ -8,8 +8,9 @@ import {ListSvgIcon} from 'web/components/icon';
 import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import Link from 'web/components/link/Link';
 
-interface ListIconProps<TValue = string>
-  extends ExtendedDynamicIconProps<TValue> {
+interface ListIconProps<
+  TValue = string,
+> extends ExtendedDynamicIconProps<TValue> {
   'data-testid'?: string;
   page?: string;
   filter?: string | Filter;

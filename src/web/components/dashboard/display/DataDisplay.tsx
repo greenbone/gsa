@@ -7,7 +7,7 @@ import React from 'react';
 import equal from 'fast-deep-equal';
 import styled from 'styled-components';
 import type Filter from 'gmp/models/filter';
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import Display, {
@@ -16,12 +16,10 @@ import Display, {
 } from 'web/components/dashboard/display/Display';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
-import Loading from 'web/components/loading/Loading';
 import Theme from 'web/utils/Theme';
 import withTranslation, {
   type WithTranslationComponentProps,
 } from 'web/utils/withTranslation';
-
 export interface State {
   showLegend?: boolean;
 }
@@ -441,25 +439,32 @@ class DataDisplay<
     const showContent = height > 0 && width > 0; // > 0 also checks for null, undefined and null
     const state = this.getCurrentState();
     return (
-      <Display title={`${title}`} onRemoveClick={onRemoveClick} {...otherProps}>
+      <Display
+        isLoading={isLoading}
+        title={`${title}`}
+        onRemoveClick={onRemoveClick}
+        {...otherProps}
+      >
         <DisplayBox>
           <Layout flex="column" grow="1">
-            {isLoading ? (
-              <Loading />
-            ) : (
-              showContent && (
-                <>
-                  {children({
-                    id,
-                    data: transformedData,
-                    width,
-                    height,
-                    svgRef: this.svgRef,
-                    state,
-                    setState: this.handleSetState,
-                  })}
-                </>
-              )
+            {showContent && (
+              <div style={{height, width}}>
+                {!isLoading && (
+                  <>
+                    {isFunction(children)
+                      ? children({
+                          id,
+                          data: transformedData,
+                          width,
+                          height,
+                          svgRef: this.svgRef,
+                          state,
+                          setState: this.handleSetState,
+                        })
+                      : null}
+                  </>
+                )}
+              </div>
             )}
             <IconBar>
               <IconDivider flex="column">

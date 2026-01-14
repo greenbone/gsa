@@ -73,7 +73,10 @@ describe('EntityComponent tests', () => {
         onCloned={onCloned}
       >
         {({clone}) => (
-          <button data-testid="button" onClick={() => clone({id: '123'})} />
+          <button
+            data-testid="button"
+            onClick={() => clone(new Model({id: '123'}))}
+          />
         )}
       </EntityComponent>,
     );
@@ -105,7 +108,10 @@ describe('EntityComponent tests', () => {
         onCloned={onCloned}
       >
         {({clone}) => (
-          <button data-testid="button" onClick={() => clone({id: '123'})} />
+          <button
+            data-testid="button"
+            onClick={() => clone(new Model({id: '123'}))}
+          />
         )}
       </EntityComponent>,
     );

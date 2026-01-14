@@ -30,7 +30,6 @@ import {
   ICMP_PING,
   SCAN_CONFIG_DEFAULT,
 } from 'gmp/models/target';
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import TargetDialog, {
   DEFAULT_PORT_LIST_ID,
   DEFAULT_PORT_LIST_NAME,
@@ -40,31 +39,31 @@ import {UNSET_LABEL} from 'web/utils/Render';
 const cred1 = new Credential({
   id: '5678',
   name: 'client certificate',
-  credential_type: CERTIFICATE_CREDENTIAL_TYPE,
+  credentialType: CERTIFICATE_CREDENTIAL_TYPE,
 });
 
 const cred2 = new Credential({
   id: '2345',
   name: 'username+password',
-  credential_type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  credentialType: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
 
 const cred3 = new Credential({
   id: '5463',
   name: 'up2',
-  credential_type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  credentialType: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
 
 const cred4 = new Credential({
   id: '6536',
   name: 'ssh_key',
-  credential_type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  credentialType: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 });
 
 const cred5 = new Credential({
   id: '2345',
   name: 'krb5_key',
-  credential_type: KRB5_CREDENTIAL_TYPE,
+  credentialType: KRB5_CREDENTIAL_TYPE,
 });
 
 const credentials = [cred1, cred2, cred3, cred4, cred5];
@@ -165,15 +164,11 @@ describe('TargetDialog tests', () => {
     expect(createCredentialIcons.length).toEqual(4); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
 
     const reverseLookupOnlyInputs = screen.getAllByName('reverseLookupOnly');
-    expect(reverseLookupOnlyInputs[0]).toHaveAttribute('value', '1');
     expect(reverseLookupOnlyInputs[0]).not.toBeChecked();
-    expect(reverseLookupOnlyInputs[1]).toHaveAttribute('value', '0');
     expect(reverseLookupOnlyInputs[1]).toBeChecked();
 
     const reverseLookupUnifyInputs = screen.getAllByName('reverseLookupUnify');
-    expect(reverseLookupUnifyInputs[0]).toHaveAttribute('value', '1');
     expect(reverseLookupUnifyInputs[0]).not.toBeChecked();
-    expect(reverseLookupUnifyInputs[1]).toHaveAttribute('value', '0');
     expect(reverseLookupUnifyInputs[1]).toBeChecked();
   });
 
@@ -195,8 +190,8 @@ describe('TargetDialog tests', () => {
         hosts="123.455.67.434"
         inUse={false}
         name="target"
-        reverseLookupOnly={NO_VALUE}
-        reverseLookupUnify={NO_VALUE}
+        reverseLookupOnly={false}
+        reverseLookupUnify={false}
         smbCredentialId="2345"
         onClose={handleClose}
         onNewCredentialsClick={handleCreate}
@@ -275,15 +270,11 @@ describe('TargetDialog tests', () => {
     expect(createCredentialIcons.length).toEqual(4); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
 
     const reverseLookupOnlyInputs = screen.getAllByName('reverseLookupOnly');
-    expect(reverseLookupOnlyInputs[0]).toHaveAttribute('value', '1');
     expect(reverseLookupOnlyInputs[0]).not.toBeChecked();
-    expect(reverseLookupOnlyInputs[1]).toHaveAttribute('value', '0');
     expect(reverseLookupOnlyInputs[1]).toBeChecked();
 
     const reverseLookupUnifyInputs = screen.getAllByName('reverseLookupUnify');
-    expect(reverseLookupUnifyInputs[0]).toHaveAttribute('value', '1');
     expect(reverseLookupUnifyInputs[0]).not.toBeChecked();
-    expect(reverseLookupUnifyInputs[1]).toHaveAttribute('value', '0');
     expect(reverseLookupUnifyInputs[1]).toBeChecked();
   });
 
@@ -305,8 +296,8 @@ describe('TargetDialog tests', () => {
         hosts="123.455.67.434"
         inUse={false}
         name="target"
-        reverseLookupOnly={NO_VALUE}
-        reverseLookupUnify={YES_VALUE}
+        reverseLookupOnly={false}
+        reverseLookupUnify={true}
         smbCredentialId="2345"
         onClose={handleClose}
         onNewCredentialsClick={handleCreate}
@@ -344,8 +335,8 @@ describe('TargetDialog tests', () => {
       name: 'ross',
       port: 22,
       portListId: DEFAULT_PORT_LIST_ID,
-      reverseLookupOnly: 0,
-      reverseLookupUnify: YES_VALUE,
+      reverseLookupOnly: false,
+      reverseLookupUnify: true,
       smbCredentialId: '2345',
       snmpCredentialId: undefined,
       sshCredentialId: undefined,
@@ -373,8 +364,8 @@ describe('TargetDialog tests', () => {
         hosts="123.455.67.434"
         inUse={false}
         name="target"
-        reverseLookupOnly={NO_VALUE}
-        reverseLookupUnify={NO_VALUE}
+        reverseLookupOnly={false}
+        reverseLookupUnify={false}
         smbCredentialId="2345"
         sshCredentialId="2345"
         onClose={handleClose}
@@ -413,8 +404,8 @@ describe('TargetDialog tests', () => {
         hosts="123.455.67.434"
         inUse={false}
         name="target"
-        reverseLookupOnly={NO_VALUE}
-        reverseLookupUnify={NO_VALUE}
+        reverseLookupOnly={false}
+        reverseLookupUnify={false}
         smbCredentialId="5463"
         sshCredentialId="2345"
         onClose={handleClose}
@@ -487,8 +478,8 @@ describe('TargetDialog tests', () => {
           inUse={false}
           krb5CredentialId="2345"
           name="target"
-          reverseLookupOnly={NO_VALUE}
-          reverseLookupUnify={NO_VALUE}
+          reverseLookupOnly={false}
+          reverseLookupUnify={false}
           smbCredentialId="5463"
           onClose={handleClose}
           onNewCredentialsClick={handleCreate}
@@ -531,8 +522,8 @@ describe('TargetDialog tests', () => {
         hosts="123.455.67.434"
         inUse={false}
         name="target"
-        reverseLookupOnly={NO_VALUE}
-        reverseLookupUnify={NO_VALUE}
+        reverseLookupOnly={false}
+        reverseLookupUnify={false}
         sshCredentialId="2345"
         sshElevateCredentialId="5463"
         onClose={handleClose}
@@ -573,8 +564,8 @@ describe('TargetDialog tests', () => {
         hosts="123.455.67.434"
         inUse={true}
         name="target"
-        reverseLookupOnly={NO_VALUE}
-        reverseLookupUnify={NO_VALUE}
+        reverseLookupOnly={false}
+        reverseLookupUnify={false}
         sshCredentialId="2345"
         sshElevateCredentialId="5463"
         onClose={handleClose}
@@ -677,8 +668,8 @@ describe('TargetDialog tests', () => {
       name: 'Unnamed',
       port: 22,
       portListId: DEFAULT_PORT_LIST_ID,
-      reverseLookupOnly: 0,
-      reverseLookupUnify: 0,
+      reverseLookupOnly: false,
+      reverseLookupUnify: false,
       smbCredentialId: undefined,
       snmpCredentialId: undefined,
       sshCredentialId: undefined,

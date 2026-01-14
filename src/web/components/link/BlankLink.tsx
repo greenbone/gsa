@@ -6,11 +6,10 @@
 import React from 'react';
 import PropTypes from 'web/utils/PropTypes';
 
-export interface BlankLinkProps
-  extends Omit<
-    React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    'href' | 'target' | 'rel'
-  > {
+export interface BlankLinkProps extends Omit<
+  React.AnchorHTMLAttributes<HTMLAnchorElement>,
+  'href' | 'target' | 'rel'
+> {
   to: string;
   children?: React.ReactNode;
   'data-testid'?: string;

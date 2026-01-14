@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-interface InnerLinkProps
-  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
+interface InnerLinkProps extends Omit<
+  React.AnchorHTMLAttributes<HTMLAnchorElement>,
+  'href'
+> {
   to: string;
   children?: React.ReactNode;
 }

@@ -30,7 +30,7 @@ describe('ReportImportDialog tests', () => {
     expect(screen.getByText('Import Report')).toBeInTheDocument();
     expect(screen.getByRole('button', {name: 'Import'})).toBeInTheDocument();
     expect(screen.getByName('task_id')).toHaveValue('1');
-    expect(screen.getByTestId('new-container-task')).toBeInTheDocument();
+    expect(screen.getByTestId('new-import-task')).toBeInTheDocument();
     expect(screen.getByName('in_assets')).toBeChecked();
   });
 

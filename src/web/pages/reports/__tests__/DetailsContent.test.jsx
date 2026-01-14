@@ -5,9 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
+import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import DetailsContent from 'web/pages/reports/DetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -23,20 +22,31 @@ const filterWithName = Filter.fromElement({
 
 const resetFilter = Filter.fromString('first=1 sort-reverse=severity');
 
-const caps = new Capabilities(['everything']);
-
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const createGmp = ({
+  currentSettingsResponse = {foo: 'bar'},
+  getReportComposerDefaultsResponse = {foo: 'bar'},
+  reportResultsThreshold = 10,
+  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+  getReportComposerDefaults = testing
+    .fn()
+    .mockResolvedValue(getReportComposerDefaultsResponse),
+} = {}) => {
+  return {
+    settings: {
+      manualUrl,
+      reportResultsThreshold,
+    },
+    user: {
+      currentSettings,
+      getReportComposerDefaults,
+    },
+  };
+};
 
-const getReportComposerDefaults = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
-describe('Report Details Content tests', () => {
-  test('should render Report Details Content', () => {
+describe('ReportDetailsContent tests', () => {
+  test('should render', () => {
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
@@ -57,7 +67,6 @@ describe('Report Details Content tests', () => {
     const onTagSuccess = testing.fn();
     const onTargetEditClick = testing.fn();
     const onTlsCertificateDownloadClick = testing.fn();
-
     const sorting = {
       apps: {sortField: 'severity', sortReverse: true},
       closedcves: {sortField: 'severity', sortReverse: true},
@@ -69,19 +78,12 @@ describe('Report Details Content tests', () => {
       results: {sortField: 'severity', sortReverse: true},
       tlscerts: {sortField: 'dn', sortReverse: true},
     };
-
     const {entity} = getMockReport();
-
     const filters = [filterWithName];
-
-    const gmp = {
-      settings: {manualUrl, reportResultsThreshold: 10},
-      user: {currentSettings, getReportComposerDefaults},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -89,7 +91,7 @@ describe('Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(
+    render(
       <DetailsContent
         applicationsCounts={{all: 4, filtered: 4}}
         closedCvesCounts={{all: 2, filtered: 2}}
@@ -132,77 +134,124 @@ describe('Report Details Content tests', () => {
       />,
     );
 
-    const links = baseElement.querySelectorAll('a');
-    const tableData = baseElement.querySelectorAll('td');
-    const bars = screen.getAllByTestId('progressbar-box');
     const powerFilter = within(screen.queryPowerFilter());
     const inputs = powerFilter.queryTextInputs();
 
+    // buttons
+    const helpIcon = screen.getByTitle('Help: Reading Reports');
+    expect(helpIcon.closest('a')).toHaveAttribute(
+      'href',
+      'test/en/reports.html#reading-a-report',
+    );
+
+    expect(screen.getByTitle('Reports List')).toBeInTheDocument();
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/reports',
+    );
+
+    expect(screen.getByTitle(/^Add to Assets/)).toBeInTheDocument();
+    expect(screen.getByTitle(/^Remove from Assets/)).toBeInTheDocument();
+    const correspondingTask = screen.getByTitle(/^Corresponding Task/);
+    expect(correspondingTask).toHaveAttribute('href', '/task/314');
+    const correspondingResults = screen.getByTitle(/^Corresponding Results/);
+    expect(correspondingResults).toHaveAttribute(
+      'href',
+      '/results?filter=report_id%3D1234',
+    );
+    const correspondingVulnerabilities = screen.getByTitle(
+      /^Corresponding Vulnerabilities/,
+    );
+    expect(correspondingVulnerabilities).toHaveAttribute(
+      'href',
+      '/vulnerabilities?filter=report_id%3D1234',
+    );
+    const correspondingTlsCertificates = screen.getByTitle(
+      /^Corresponding TLS Certificates/,
+    );
+    expect(correspondingTlsCertificates).toHaveAttribute(
+      'href',
+      '/tlscertificates?filter=report_id%3D1234',
+    );
+    expect(screen.getByTitle(/^Corresponding Performance/)).toBeInTheDocument();
+    expect(screen.getByTitle(/^Download filtered Report/)).toBeInTheDocument();
+    expect(screen.getByTitle(/^Trigger Alert/)).toBeInTheDocument();
+
     // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-
     const input = powerFilter.getByTitle('Loaded filter');
     expect(input).toHaveAttribute('placeholder', 'Loading...');
 
-    // Header
-    screen.getByText('Report:');
-    screen.getByText('Mon, Jun 3, 2019 1:00 PM Central European Summer Time');
-    expect(bars[0]).toHaveAttribute('title', 'Done');
-    expect(bars[0]).toHaveTextContent('Done');
-    expect(baseElement).toHaveTextContent(
-      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    expect(screen.getByRole('heading', {name: /Report:/})).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:00 PMCentral European Summer TimeDone',
     );
-    expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /^Created:/})).toHaveTextContent(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
-    expect(baseElement).toHaveTextContent('Owner:admin');
+    expect(screen.getByRole('row', {name: /^Modified:/})).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+    );
+    expect(screen.getByRole('row', {name: /^Owner:/})).toHaveTextContent(
+      'admin',
+    );
 
     // Tabs
-    expect(baseElement).toHaveTextContent('Information');
-    expect(baseElement).toHaveTextContent('Results(2 of 3)');
-    expect(baseElement).toHaveTextContent('Hosts(2 of 2)');
-    expect(baseElement).toHaveTextContent('Ports(2 of 2)');
-    expect(baseElement).toHaveTextContent('Applications(4 of 4)');
-    expect(baseElement).toHaveTextContent('Operating Systems(2 of 2)');
-    expect(baseElement).toHaveTextContent('CVEs(2 of 2)');
-    expect(baseElement).toHaveTextContent('Closed CVEs(2 of 2)');
-    expect(baseElement).toHaveTextContent('TLS Certificates(2 of 2)');
-    expect(baseElement).toHaveTextContent('Error Messages(2 of 2)');
-    expect(baseElement).toHaveTextContent('User Tags(0)');
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^results/i})).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^hosts/i})).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^ports/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^applications/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^operating systems/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^cves/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^closed cves/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^tls certificates/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^error messages/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
 
-    // Summary
-    expect(tableData[0]).toHaveTextContent('Task Name');
-    expect(links[8]).toHaveAttribute('href', '/task/314');
-    expect(tableData[1]).toHaveTextContent('foo');
-
-    expect(tableData[2]).toHaveTextContent('Comment');
-    expect(tableData[3]).toHaveTextContent('bar');
-
-    expect(tableData[4]).toHaveTextContent('Scan Time');
-    expect(tableData[5]).toHaveTextContent(
+    const taskName = screen.getByRole('row', {name: /^Task Name/});
+    expect(taskName).toHaveTextContent('foo');
+    expect(within(taskName).getByRole('link')).toHaveAttribute(
+      'href',
+      '/task/314',
+    );
+    expect(screen.getByRole('row', {name: /^Comment/})).toHaveTextContent(
+      'bar',
+    );
+    expect(screen.getByRole('row', {name: /^Scan Time/})).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time - Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
-
-    expect(tableData[6]).toHaveTextContent('Scan Duration');
-    expect(tableData[7]).toHaveTextContent('0:31 h');
-
-    expect(tableData[8]).toHaveTextContent('Scan Status');
-    expect(bars[1]).toHaveAttribute('title', 'Done');
-    expect(bars[1]).toHaveTextContent('Done');
-
-    expect(tableData[10]).toHaveTextContent('Hosts scanned');
-    expect(tableData[11]).toHaveTextContent('2');
-
-    expect(tableData[12]).toHaveTextContent('Filter');
-    expect(tableData[13]).toHaveTextContent(
-      'apply_overrides=0 levels=hml min_qod=70',
+    expect(screen.getByRole('row', {name: /^Scan Duration/})).toHaveTextContent(
+      '0:31 h',
     );
-
-    expect(tableData[14]).toHaveTextContent('Timezone');
-    expect(tableData[15]).toHaveTextContent('UTC (UTC)');
+    expect(screen.getByRole('row', {name: /^Scan Status/})).toHaveTextContent(
+      'Done',
+    );
+    expect(screen.getByRole('row', {name: /^Hosts scanned/})).toHaveTextContent(
+      '2',
+    );
+    expect(
+      screen.getByRole('row', {name: /^Filter apply_overrides/}),
+    ).toHaveTextContent('apply_overrides=0 levels=hml min_qod=70');
+    expect(screen.getByRole('row', {name: /^Timezone/})).toHaveTextContent(
+      'UTC (UTC)',
+    );
   });
 
-  test('should render threshold panel', async () => {
+  test('should render hosts tab', async () => {
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
@@ -223,7 +272,6 @@ describe('Report Details Content tests', () => {
     const onTagSuccess = testing.fn();
     const onTargetEditClick = testing.fn();
     const onTlsCertificateDownloadClick = testing.fn();
-
     const sorting = {
       apps: {sortField: 'severity', sortReverse: true},
       closedcves: {sortField: 'severity', sortReverse: true},
@@ -235,19 +283,14 @@ describe('Report Details Content tests', () => {
       results: {sortField: 'severity', sortReverse: true},
       tlscerts: {sortField: 'dn', sortReverse: true},
     };
-
     const {entity} = getMockReport();
-
     const filters = [filterWithName];
-
-    const gmp = {
-      settings: {manualUrl, reportResultsThreshold: 1},
-      user: {currentSettings, getReportComposerDefaults},
-    };
-
+    const gmp = createGmp({
+      reportResultsThreshold: 1,
+    });
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -298,7 +341,7 @@ describe('Report Details Content tests', () => {
       />,
     );
 
-    const hostsTab = screen.getByRole('tab', {name: /Hosts/});
+    const hostsTab = screen.getByRole('tab', {name: /^Hosts/});
     fireEvent.click(hostsTab);
 
     const bars = screen.getAllByTestId('progressbar-box');
@@ -369,7 +412,7 @@ describe('Report Details Content tests', () => {
     );
 
     // Should not Include
-    expect(baseElement).not.toHaveTextContent('IP-Adress');
+    expect(baseElement).not.toHaveTextContent('IP-Address');
     expect(baseElement).not.toHaveTextContent('Hostname');
     expect(baseElement).not.toHaveTextContent('Apps');
     expect(baseElement).not.toHaveTextContent('Distance');

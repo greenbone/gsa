@@ -28,7 +28,7 @@ import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityComponent from 'web/entity/EntityComponent';
 import EntityPage from 'web/entity/EntityPage';
@@ -38,9 +38,9 @@ import useTranslation from 'web/hooks/useTranslation';
 import CertBundAdvDetails from 'web/pages/certbund/Details';
 import {selector, loadEntity} from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => {
   const [_] = useTranslation();
-
   return (
     <Divider margin="10px">
       <IconDivider>

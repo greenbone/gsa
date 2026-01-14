@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState, useEffect, Suspense, lazy} from 'react';
+import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
+  createBrowserRouter,
+  RouterProvider,
   Navigate,
+  Outlet,
   useLocation,
 } from 'react-router';
 import Authorized from 'web/Authorized';
@@ -19,303 +19,653 @@ import SessionTracker from 'web/components/observer/SessionTracker';
 import Page from 'web/pages/Page';
 import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
 
-// Lazy loaded components
-const AgentGroupsListPage = lazy(
-  () => import('web/pages/agent-groups/AgentGroupsListPage'),
-);
-const AgentInstallerListPage = lazy(
-  () => import('web/pages/agent-installers/AgentInstallerListPage'),
-);
-const AgentListPage = lazy(() => import('web/pages/agents/AgentListPage'));
-const AlertDetailsPage = lazy(() => import('web/pages/alerts/DetailsPage'));
-const AlertsPage = lazy(() => import('web/pages/alerts/ListPage'));
-const AuditsDetailsPage = lazy(() => import('web/pages/audits/DetailsPage'));
-const AuditsPage = lazy(() => import('web/pages/audits/ListPage'));
-const CertBundDetailsPage = lazy(
-  () => import('web/pages/certbund/DetailsPage'),
-);
-const CertBundsPage = lazy(() => import('web/pages/certbund/ListPage'));
-const ContainerImageTargetsListPage = lazy(
-  () =>
-    import('web/pages/container-image-targets/ContainerImageTargetsListPage'),
-);
-const CpeDetailsPage = lazy(() => import('web/pages/cpes/DetailsPage'));
-const CpesPage = lazy(() => import('web/pages/cpes/ListPage'));
-const CredentialStorePage = lazy(
-  () => import('web/pages/credential-store/CredentialStorePage'),
-);
-const CredentialDetailsPage = lazy(
-  () => import('web/pages/credentials/DetailsPage'),
-);
-const CredentialsPage = lazy(() => import('web/pages/credentials/ListPage'));
-const CveDetailsPage = lazy(() => import('web/pages/cves/DetailsPage'));
-const CvesPage = lazy(() => import('web/pages/cves/ListPage'));
-const DfnCertDetailsPage = lazy(() => import('web/pages/dfncert/DetailsPage'));
-const DfnCertsPage = lazy(() => import('web/pages/dfncert/ListPage'));
-const CvssCalculatorPage = lazy(
-  () => import('web/pages/extras/CvssCalculatorPage'),
-);
-const FeedStatusPage = lazy(() => import('web/pages/extras/FeedStatusPage'));
-const FilterDetailsPage = lazy(() => import('web/pages/filters/DetailsPage'));
-const FiltersPage = lazy(() => import('web/pages/filters/ListPage'));
-const GroupDetailsPage = lazy(() => import('web/pages/groups/DetailsPage'));
-const GroupsPage = lazy(() => import('web/pages/groups/ListPage'));
-const HostDetailsPage = lazy(() => import('web/pages/hosts/DetailsPage'));
-const HostsPage = lazy(() => import('web/pages/hosts/ListPage'));
-const LdapPage = lazy(() => import('web/pages/ldap/LdapPage'));
-const LoginPage = lazy(() => import('web/pages/login/LoginPage'));
-const NoteDetailsPage = lazy(() => import('web/pages/notes/DetailsPage'));
-const NotesPage = lazy(() => import('web/pages/notes/ListPage'));
-const PageNotFound = lazy(() => import('web/pages/NotFoundPage'));
-const NvtDetailsPage = lazy(() => import('web/pages/nvts/DetailsPage'));
-const NvtsPage = lazy(() => import('web/pages/nvts/ListPage'));
-const LegacyOmpPage = lazy(() => import('web/pages/Omp'));
-const OperatingSystemDetailsPage = lazy(
-  () => import('web/pages/operatingsystems/DetailsPage'),
-);
-const OperatingSystemsPage = lazy(
-  () => import('web/pages/operatingsystems/ListPage'),
-);
-const OverrideDetailsPage = lazy(
-  () => import('web/pages/overrides/DetailsPage'),
-);
-const OverridesPage = lazy(() => import('web/pages/overrides/ListPage'));
-const PerformancePage = lazy(
-  () => import('web/pages/performance/PerformancePage'),
-);
-const PermissionDetailsPage = lazy(
-  () => import('web/pages/permissions/PermissionDetailsPage'),
-);
-const PermissionsPage = lazy(
-  () => import('web/pages/permissions/PermissionListPage'),
-);
-const PoliciesDetailsPage = lazy(
-  () => import('web/pages/policies/DetailsPage'),
-);
-const PoliciesPage = lazy(() => import('web/pages/policies/ListPage'));
-const PortListDetailsPage = lazy(
-  () => import('web/pages/portlists/PortListDetailsPage'),
-);
-const PortListsPage = lazy(
-  () => import('web/pages/portlists/PortListListPage'),
-);
-const RadiusPage = lazy(() => import('web/pages/radius/RadiusPage'));
-const ReportConfigDetailsPage = lazy(
-  () => import('web/pages/reportconfigs/DetailsPage'),
-);
-const ReportConfigsPage = lazy(
-  () => import('web/pages/reportconfigs/ListPage'),
-);
-const ReportFormatDetailsPage = lazy(
-  () => import('web/pages/reportformats/DetailsPage'),
-);
-const ReportFormatsPage = lazy(
-  () => import('web/pages/reportformats/ListPage'),
-);
-const DeltaAuditReportDetailsPage = lazy(
-  () => import('web/pages/reports/AuditDeltaReportDetailsPage'),
-);
-const AuditReportDetailsPage = lazy(
-  () => import('web/pages/reports/AuditReportDetailsPage'),
-);
-const AuditReportsPage = lazy(
-  () => import('web/pages/reports/AuditReportsListPage'),
-);
-const DeltaReportDetailsPage = lazy(
-  () => import('web/pages/reports/DeltaDetailsPage'),
-);
-const ReportDetailsPage = lazy(() => import('web/pages/reports/DetailsPage'));
-const ReportsPage = lazy(() => import('web/pages/reports/ReportListPage'));
-const ResultDetailsPage = lazy(() => import('web/pages/results/DetailsPage'));
-const ResultsPage = lazy(() => import('web/pages/results/ListPage'));
-const RoleDetailsPage = lazy(() => import('web/pages/roles/RoleDetailsPage'));
-const RoleListPage = lazy(() => import('web/pages/roles/RoleListPage'));
-const ScanConfigDetailsPage = lazy(
-  () => import('web/pages/scanconfigs/DetailsPage'),
-);
-const ScanConfigsPage = lazy(() => import('web/pages/scanconfigs/ListPage'));
-const ScannerDetailsPage = lazy(
-  () => import('web/pages/scanners/ScannerDetailsPage'),
-);
-const ScannersPage = lazy(() => import('web/pages/scanners/ScannerListPage'));
-const ScheduleDetailsPage = lazy(
-  () => import('web/pages/schedules/DetailsPage'),
-);
-const SchedulesPage = lazy(() => import('web/pages/schedules/ListPage'));
-const StartPage = lazy(() => import('web/pages/start/StartPage'));
-const TagDetailsPage = lazy(() => import('web/pages/tags/DetailsPage'));
-const TagsPage = lazy(() => import('web/pages/tags/ListPage'));
-const TargetDetailsPage = lazy(() => import('web/pages/targets/DetailsPage'));
-const TargetsPage = lazy(() => import('web/pages/targets/ListPage'));
-const TaskDetailsPage = lazy(() => import('web/pages/tasks/TaskDetailsPage'));
-const TasksPage = lazy(() => import('web/pages/tasks/TaskListPage'));
-const TicketDetailsPage = lazy(() => import('web/pages/tickets/DetailsPage'));
-const TicketsPage = lazy(() => import('web/pages/tickets/ListPage'));
-const TlsCertificateDetailsPage = lazy(
-  () => import('web/pages/tlscertificates/DetailsPage'),
-);
-const TlsCertificatesPage = lazy(
-  () => import('web/pages/tlscertificates/ListPage'),
-);
-const TrashcanPage = lazy(() => import('web/pages/trashcan/TrashCanPage'));
-const UserSettingsPage = lazy(
-  () => import('web/pages/user-settings/UserSettingsPage'),
-);
-const UserDetailsPage = lazy(() => import('web/pages/users/DetailsPage'));
-const UsersPage = lazy(() => import('web/pages/users/ListPage'));
-const VulnerabilitiesPage = lazy(() => import('web/pages/vulns/ListPage'));
+// Layout components
+const LoggedOutLayout = () => <Outlet />;
 
-const LoggedOutRoutes = () => {
+const LoggedInLayout = () => (
+  <Authorized>
+    <SessionTracker />
+    <SessionObserver />
+    <Page>
+      <Outlet />
+    </Page>
+  </Authorized>
+);
+
+// Custom redirect component that preserves location state
+const RedirectToLogin = () => {
   const location = useLocation();
-  return (
-    <Suspense fallback={<Loading />}>
-      <Routes>
-        <Route element={<LoginPage />} path="/login" />
-        <Route element={<LegacyOmpPage />} path="/omp" />
-        <Route
-          element={<Navigate state={{from: location}} to="/login" />}
-          path="*"
-        />
-      </Routes>
-    </Suspense>
-  );
+  return <Navigate replace state={{from: location}} to="/login" />;
 };
 
-const LoggedInRoutes = () => {
-  return (
-    <Authorized>
-      <SessionTracker />
-      <SessionObserver />
-      <Page>
-        <Suspense fallback={<Loading />}>
-          <Routes>
-            <Route element={<StartPage />} path="/dashboards" />
-            <Route
-              element={<AgentInstallerListPage />}
-              path="/agent-installers"
-            />
-            <Route element={<AgentListPage />} path="/agents" />
-            <Route element={<AgentGroupsListPage />} path="/agent-groups" />
-            <Route element={<AlertsPage />} path="/alerts" />
-            <Route element={<AuditsPage />} path="/audits" />
-            <Route element={<CertBundsPage />} path="/certbunds" />
-            <Route
-              element={<ContainerImageTargetsListPage />}
-              path="/ociimagetargets"
-            />
-            <Route element={<CpesPage />} path="/cpes" />
-            <Route element={<CredentialsPage />} path="/credentials" />
-            <Route element={<CredentialStorePage />} path="/credentialstore" />
-            <Route element={<CvesPage />} path="/cves" />
-            <Route element={<DfnCertsPage />} path="/dfncerts" />
-            <Route element={<FeedStatusPage />} path="/feedstatus" />
-            <Route element={<FiltersPage />} path="/filters" />
-            <Route element={<GroupsPage />} path="/groups" />
-            <Route element={<HostsPage />} path="/hosts" />
-            <Route element={<LdapPage />} path="/ldap" />
-            <Route element={<NotesPage />} path="/notes" />
-            <Route
-              element={<OperatingSystemsPage />}
-              path="/operatingsystems"
-            />
-            <Route element={<NvtsPage />} path="/nvts" />
-            <Route element={<OverridesPage />} path="/overrides" />
-            <Route element={<PerformancePage />} path="/performance" />
-            <Route element={<PermissionsPage />} path="/permissions" />
-            <Route element={<PoliciesPage />} path="/policies" />
-            <Route element={<PortListsPage />} path="/portlists" />
-            <Route element={<RadiusPage />} path="/radius" />
-            <Route element={<ReportsPage />} path="/reports" />
-            <Route element={<ReportConfigsPage />} path="/reportconfigs" />
-            <Route element={<ReportFormatsPage />} path="/reportformats" />
-            <Route element={<ResultsPage />} path="/results" />
-            <Route element={<RoleListPage />} path="/roles" />
-            <Route element={<TagsPage />} path="/tags" />
-            <Route element={<PermissionsPage />} path="/permissions" />
-            <Route element={<ScannersPage />} path="/scanners" />
-            <Route element={<ScanConfigsPage />} path="/scanconfigs" />
-            <Route element={<ScannersPage />} path="/scanners" />
-            <Route element={<SchedulesPage />} path="/schedules" />
-            <Route element={<TagsPage />} path="/tags" />
-            <Route element={<TargetsPage />} path="/targets" />
-            <Route element={<TasksPage />} path="/tasks" />
-            <Route element={<TicketsPage />} path="/tickets" />
-            <Route element={<TrashcanPage />} path="/trashcan" />
-            <Route element={<TlsCertificatesPage />} path="/tlscertificates" />
-            <Route element={<UsersPage />} path="/users" />
-            <Route element={<UserSettingsPage />} path="/usersettings" />
-            <Route element={<VulnerabilitiesPage />} path="/vulnerabilities" />
-            <Route element={<CvssCalculatorPage />} path="/cvsscalculator" />
-            <Route element={<AlertDetailsPage />} path="/alert/:id" />
-            <Route element={<AuditsDetailsPage />} path="/audit/:id" />
-            <Route element={<CertBundDetailsPage />} path="/certbund/:id" />
-            <Route element={<CpeDetailsPage />} path="/cpe/:id" />
-            <Route element={<CredentialDetailsPage />} path="/credential/:id" />
-            <Route element={<CveDetailsPage />} path="/cve/:id" />
-            <Route element={<DfnCertDetailsPage />} path="/dfncert/:id" />
-            <Route element={<FilterDetailsPage />} path="/filter/:id" />
-            <Route element={<GroupDetailsPage />} path="/group/:id" />
-            <Route element={<HostDetailsPage />} path="/host/:id" />
-            <Route element={<NoteDetailsPage />} path="/note/:id" />
-            <Route element={<NvtDetailsPage />} path="/nvt/:id" />
-            <Route element={<PortListDetailsPage />} path="/portlist/:id" />
-            <Route
-              element={<OperatingSystemDetailsPage />}
-              path="/operatingsystem/:id"
-            />
-            <Route element={<OverrideDetailsPage />} path="/override/:id" />
-            <Route element={<PermissionDetailsPage />} path="/permission/:id" />
-            <Route element={<PoliciesDetailsPage />} path="/policy/:id" />
-            <Route
-              element={<DeltaReportDetailsPage />}
-              path="/report/delta/:id/:deltaid"
-            />
-            <Route element={<ReportDetailsPage />} path="/report/:id" />
-            <Route
-              element={<ReportConfigDetailsPage />}
-              path="/reportconfig/:id"
-            />
-            <Route
-              element={<ReportFormatDetailsPage />}
-              path="/reportformat/:id"
-            />
-            <Route element={<ResultDetailsPage />} path="/result/:id" />
-            <Route element={<RoleDetailsPage />} path="/role/:id" />
-            <Route element={<FilterDetailsPage />} path="/filter/:id" />
-            <Route element={<TagDetailsPage />} path="/tag/:id" />
-            <Route element={<PermissionDetailsPage />} path="/permission/:id" />
-            <Route element={<ScanConfigDetailsPage />} path="/scanconfig/:id" />
-            <Route element={<ScannerDetailsPage />} path="/scanner/:id" />
-            <Route element={<ScheduleDetailsPage />} path="/schedule/:id" />
-            <Route element={<TagDetailsPage />} path="/tag/:id" />
-            <Route element={<TargetDetailsPage />} path="/target/:id" />
-            <Route element={<TaskDetailsPage />} path="/task/:id" />
-            <Route element={<TicketDetailsPage />} path="/ticket/:id" />
-            <Route
-              element={<TlsCertificateDetailsPage />}
-              path="/tlscertificate/:id"
-            />
-            <Route element={<UserDetailsPage />} path="/user/:id" />
+const loggedInRoutes = [
+  {
+    path: '/',
+    element: <LoggedInLayout />,
+    HydrateFallback: Loading,
+    children: [
+      // Dashboard
+      {
+        path: 'dashboards',
+        lazy: async () => ({
+          Component: (await import('web/pages/start/StartPage')).default,
+        }),
+      },
 
-            <Route element={<PageNotFound />} path="/notfound" />
-            <Route element={<AuditReportsPage />} path="/auditreports" />
-            <Route
-              element={<DeltaAuditReportDetailsPage />}
-              path="/auditreport/delta/:id/:deltaid"
-            />
-            <Route
-              element={<AuditReportDetailsPage />}
-              path="/auditreport/:id"
-            />
-            <Route element={<Navigate to="/dashboards" />} path="/" />
+      // Agent routes
+      {
+        path: 'agent-installers',
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/agent-installers/AgentInstallerListPage')
+          ).default,
+        }),
+      },
+      {
+        path: 'agents',
+        lazy: async () => ({
+          Component: (await import('web/pages/agents/AgentListPage')).default,
+        }),
+      },
+      {
+        path: 'agent-groups',
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/agent-groups/AgentGroupsListPage')
+          ).default,
+        }),
+      },
 
-            <Route element={<PageNotFound />} path="*" />
-          </Routes>
-        </Suspense>
-      </Page>
-    </Authorized>
-  );
-};
+      // Alert routes
+      {
+        path: 'alerts',
+        lazy: async () => ({
+          Component: (await import('web/pages/alerts/ListPage')).default,
+        }),
+      },
+      {
+        path: 'alert/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/alerts/DetailsPage')).default,
+        }),
+      },
+
+      // Audit routes
+      {
+        path: 'audits',
+        lazy: async () => ({
+          Component: (await import('web/pages/audits/ListPage')).default,
+        }),
+      },
+      {
+        path: 'audit/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/audits/DetailsPage')).default,
+        }),
+      },
+      {
+        path: 'auditreports',
+        lazy: async () => ({
+          Component: (await import('web/pages/reports/AuditReportsListPage'))
+            .default,
+        }),
+      },
+      {
+        path: 'auditreport/delta/:id/:deltaid',
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/reports/AuditDeltaReportDetailsPage')
+          ).default,
+        }),
+      },
+      {
+        path: 'auditreport/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/reports/AuditReportDetailsPage'))
+            .default,
+        }),
+      },
+
+      // CERT-Bund routes
+      {
+        path: 'certbunds',
+        lazy: async () => ({
+          Component: (await import('web/pages/certbund/ListPage')).default,
+        }),
+      },
+      {
+        path: 'certbund/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/certbund/DetailsPage')).default,
+        }),
+      },
+
+      // Container Image Target routes
+      {
+        path: 'ociimagetargets',
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/container-image-targets/ContainerImageTargetsListPage')
+          ).default,
+        }),
+      },
+
+      // CPE routes
+      {
+        path: 'cpes',
+        lazy: async () => ({
+          Component: (await import('web/pages/cpes/ListPage')).default,
+        }),
+      },
+      {
+        path: 'cpe/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/cpes/DetailsPage')).default,
+        }),
+      },
+
+      // Credential routes
+      {
+        path: 'credentials',
+        lazy: async () => ({
+          Component: (await import('web/pages/credentials/CredentialListPage'))
+            .default,
+        }),
+      },
+      {
+        path: 'credential/:id',
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/credentials/CredentialDetailsPage')
+          ).default,
+        }),
+      },
+      {
+        path: 'credentialstore',
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/credential-store/CredentialStorePage')
+          ).default,
+        }),
+      },
+
+      // CVE routes
+      {
+        path: 'cves',
+        lazy: async () => ({
+          Component: (await import('web/pages/cves/ListPage')).default,
+        }),
+      },
+      {
+        path: 'cve/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/cves/DetailsPage')).default,
+        }),
+      },
+
+      // DFN-CERT routes
+      {
+        path: 'dfncerts',
+        lazy: async () => ({
+          Component: (await import('web/pages/dfncert/ListPage')).default,
+        }),
+      },
+      {
+        path: 'dfncert/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/dfncert/DetailsPage')).default,
+        }),
+      },
+
+      // Feed Status route
+      {
+        path: 'feedstatus',
+        lazy: async () => ({
+          Component: (await import('web/pages/extras/FeedStatusPage')).default,
+        }),
+      },
+
+      // Filter routes
+      {
+        path: 'filters',
+        lazy: async () => ({
+          Component: (await import('web/pages/filters/ListPage')).default,
+        }),
+      },
+      {
+        path: 'filter/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/filters/DetailsPage')).default,
+        }),
+      },
+
+      // Group routes
+      {
+        path: 'groups',
+        lazy: async () => ({
+          Component: (await import('web/pages/groups/ListPage')).default,
+        }),
+      },
+      {
+        path: 'group/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/groups/DetailsPage')).default,
+        }),
+      },
+
+      // Host routes
+      {
+        path: 'hosts',
+        lazy: async () => ({
+          Component: (await import('web/pages/hosts/ListPage')).default,
+        }),
+      },
+      {
+        path: 'host/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/hosts/DetailsPage')).default,
+        }),
+      },
+
+      // LDAP route
+      {
+        path: 'ldap',
+        lazy: async () => ({
+          Component: (await import('web/pages/ldap/LdapPage')).default,
+        }),
+      },
+
+      // Note routes
+      {
+        path: 'notes',
+        lazy: async () => ({
+          Component: (await import('web/pages/notes/ListPage')).default,
+        }),
+      },
+      {
+        path: 'note/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/notes/DetailsPage')).default,
+        }),
+      },
+
+      // NVT routes
+      {
+        path: 'nvts',
+        lazy: async () => ({
+          Component: (await import('web/pages/nvts/ListPage')).default,
+        }),
+      },
+      {
+        path: 'nvt/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/nvts/DetailsPage')).default,
+        }),
+      },
+
+      // Operating System routes
+      {
+        path: 'operatingsystems',
+        lazy: async () => ({
+          Component: (await import('web/pages/operatingsystems/ListPage'))
+            .default,
+        }),
+      },
+      {
+        path: 'operatingsystem/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/operatingsystems/DetailsPage'))
+            .default,
+        }),
+      },
+
+      // Override routes
+      {
+        path: 'overrides',
+        lazy: async () => ({
+          Component: (await import('web/pages/overrides/ListPage')).default,
+        }),
+      },
+      {
+        path: 'override/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/overrides/DetailsPage')).default,
+        }),
+      },
+
+      // Performance route
+      {
+        path: 'performance',
+        lazy: async () => ({
+          Component: (await import('web/pages/performance/PerformancePage'))
+            .default,
+        }),
+      },
+
+      // Permission routes
+      {
+        path: 'permissions',
+        lazy: async () => ({
+          Component: (await import('web/pages/permissions/PermissionListPage'))
+            .default,
+        }),
+      },
+      {
+        path: 'permission/:id',
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/permissions/PermissionDetailsPage')
+          ).default,
+        }),
+      },
+
+      // Policy routes
+      {
+        path: 'policies',
+        lazy: async () => ({
+          Component: (await import('web/pages/policies/ListPage')).default,
+        }),
+      },
+      {
+        path: 'policy/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/policies/DetailsPage')).default,
+        }),
+      },
+
+      // Port List routes
+      {
+        path: 'portlists',
+        lazy: async () => ({
+          Component: (await import('web/pages/portlists/PortListListPage'))
+            .default,
+        }),
+      },
+      {
+        path: 'portlist/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/portlists/PortListDetailsPage'))
+            .default,
+        }),
+      },
+
+      // RADIUS route
+      {
+        path: 'radius',
+        lazy: async () => ({
+          Component: (await import('web/pages/radius/RadiusPage')).default,
+        }),
+      },
+
+      // Report routes
+      {
+        path: 'reports',
+        lazy: async () => ({
+          Component: (await import('web/pages/reports/ReportListPage')).default,
+        }),
+      },
+      {
+        path: 'report/delta/:id/:deltaid',
+        lazy: async () => ({
+          Component: (await import('web/pages/reports/DeltaDetailsPage'))
+            .default,
+        }),
+      },
+      {
+        path: 'report/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/reports/DetailsPage')).default,
+        }),
+      },
+
+      // Report Config routes
+      {
+        path: 'reportconfigs',
+        lazy: async () => ({
+          Component: (await import('web/pages/reportconfigs/ListPage')).default,
+        }),
+      },
+      {
+        path: 'reportconfig/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/reportconfigs/DetailsPage'))
+            .default,
+        }),
+      },
+
+      // Report Format routes
+      {
+        path: 'reportformats',
+        lazy: async () => ({
+          Component: (await import('web/pages/reportformats/ListPage')).default,
+        }),
+      },
+      {
+        path: 'reportformat/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/reportformats/DetailsPage'))
+            .default,
+        }),
+      },
+
+      // Result routes
+      {
+        path: 'results',
+        lazy: async () => ({
+          Component: (await import('web/pages/results/ListPage')).default,
+        }),
+      },
+      {
+        path: 'result/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/results/DetailsPage')).default,
+        }),
+      },
+
+      // Role routes
+      {
+        path: 'roles',
+        lazy: async () => ({
+          Component: (await import('web/pages/roles/RoleListPage')).default,
+        }),
+      },
+      {
+        path: 'role/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/roles/RoleDetailsPage')).default,
+        }),
+      },
+
+      // Scan Config routes
+      {
+        path: 'scanconfigs',
+        lazy: async () => ({
+          Component: (await import('web/pages/scanconfigs/ListPage')).default,
+        }),
+      },
+      {
+        path: 'scanconfig/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/scanconfigs/DetailsPage'))
+            .default,
+        }),
+      },
+
+      // Scanner routes
+      {
+        path: 'scanners',
+        lazy: async () => ({
+          Component: (await import('web/pages/scanners/ScannerListPage'))
+            .default,
+        }),
+      },
+      {
+        path: 'scanner/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/scanners/ScannerDetailsPage'))
+            .default,
+        }),
+      },
+
+      // Schedule routes
+      {
+        path: 'schedules',
+        lazy: async () => ({
+          Component: (await import('web/pages/schedules/ListPage')).default,
+        }),
+      },
+      {
+        path: 'schedule/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/schedules/DetailsPage')).default,
+        }),
+      },
+
+      // Tag routes
+      {
+        path: 'tags',
+        lazy: async () => ({
+          Component: (await import('web/pages/tags/ListPage')).default,
+        }),
+      },
+      {
+        path: 'tag/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/tags/DetailsPage')).default,
+        }),
+      },
+
+      // Target routes
+      {
+        path: 'targets',
+        lazy: async () => ({
+          Component: (await import('web/pages/targets/TargetListPage')).default,
+        }),
+      },
+      {
+        path: 'target/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/targets/TargetDetailsPage'))
+            .default,
+        }),
+      },
+
+      // Task routes
+      {
+        path: 'tasks',
+        lazy: async () => ({
+          Component: (await import('web/pages/tasks/TaskListPage')).default,
+        }),
+      },
+      {
+        path: 'task/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/tasks/TaskDetailsPage')).default,
+        }),
+      },
+
+      // Ticket routes
+      {
+        path: 'tickets',
+        lazy: async () => ({
+          Component: (await import('web/pages/tickets/ListPage')).default,
+        }),
+      },
+      {
+        path: 'ticket/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/tickets/DetailsPage')).default,
+        }),
+      },
+
+      // TLS Certificate routes
+      {
+        path: 'tlscertificates',
+        lazy: async () => ({
+          Component: (await import('web/pages/tlscertificates/ListPage'))
+            .default,
+        }),
+      },
+      {
+        path: 'tlscertificate/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/tlscertificates/DetailsPage'))
+            .default,
+        }),
+      },
+
+      // Trashcan route
+      {
+        path: 'trashcan',
+        lazy: async () => ({
+          Component: (await import('web/pages/trashcan/TrashCanPage')).default,
+        }),
+      },
+
+      // User routes
+      {
+        path: 'users',
+        lazy: async () => ({
+          Component: (await import('web/pages/users/UsersListPage')).default,
+        }),
+      },
+      {
+        path: 'user/:id',
+        lazy: async () => ({
+          Component: (await import('web/pages/users/DetailsPage')).default,
+        }),
+      },
+
+      // User Settings route
+      {
+        path: 'usersettings',
+        lazy: async () => ({
+          Component: (await import('web/pages/user-settings/UserSettingsPage'))
+            .default,
+        }),
+      },
+
+      // Vulnerability routes
+      {
+        path: 'vulnerabilities',
+        lazy: async () => ({
+          Component: (await import('web/pages/vulns/ListPage')).default,
+        }),
+      },
+
+      // CVSS Calculator route
+      {
+        path: 'cvsscalculator',
+        lazy: async () => ({
+          Component: (await import('web/pages/extras/CvssCalculatorPage'))
+            .default,
+        }),
+      },
+
+      // Special routes
+      {
+        path: 'notfound',
+        lazy: async () => ({
+          Component: (await import('web/pages/NotFoundPage')).default,
+        }),
+      },
+
+      // Root redirect for logged-in users
+      {
+        index: true,
+        element: <Navigate to="/dashboards" />,
+      },
+
+      // Catch all for logged-in users
+      {
+        path: '*',
+        lazy: async () => ({
+          Component: (await import('web/pages/NotFoundPage')).default,
+        }),
+      },
+    ],
+  },
+];
 
 const AppRoutes = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -331,9 +681,47 @@ const AppRoutes = () => {
     return <Loading />;
   }
 
-  return (
-    <Router>{isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}</Router>
-  );
+  // Create router dynamically based on login state
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <LoggedOutLayout />,
+      HydrateFallback: Loading,
+      children: [
+        {
+          index: true,
+          element: isLoggedIn ? (
+            <Navigate to="/dashboards" />
+          ) : (
+            <RedirectToLogin />
+          ),
+        },
+        {
+          path: 'login',
+          lazy: async () => ({
+            Component: (await import('web/pages/login/LoginPage')).default,
+          }),
+        },
+        {
+          path: 'omp',
+          lazy: async () => ({
+            Component: (await import('web/pages/Omp')).default,
+          }),
+        },
+        {
+          path: '*',
+          element: isLoggedIn ? (
+            <Navigate to="/dashboards" />
+          ) : (
+            <RedirectToLogin />
+          ),
+        },
+      ],
+    },
+    ...(isLoggedIn ? loggedInRoutes : []),
+  ]);
+
+  return <RouterProvider router={router} />;
 };
 
 export default AppRoutes;

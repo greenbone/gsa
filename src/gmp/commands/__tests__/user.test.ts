@@ -179,7 +179,7 @@ test('should get features', async () => {
           },
           {
             _enabled: 1,
-            name: 'OPENVASD',
+            name: 'ENABLE_OPENVASD',
           },
         ],
       },
@@ -197,7 +197,7 @@ test('should get features', async () => {
 
   expect(features.length).toEqual(2);
   expect(features.featureEnabled('ENABLE_AGENTS')).toBe(true);
-  expect(features.featureEnabled('OPENVASD')).toBe(true);
+  expect(features.featureEnabled('ENABLE_OPENVASD')).toBe(true);
   expect(features.featureEnabled('CVSS3_RATINGS')).toBe(false);
 });
 

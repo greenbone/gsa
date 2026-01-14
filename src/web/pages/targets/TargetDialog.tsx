@@ -34,7 +34,7 @@ import {
   TCP_ACK,
   TCP_SYN,
 } from 'gmp/models/target';
-import {NO_VALUE, parseBoolean, type YesNo} from 'gmp/parser';
+import {parseBoolean} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
@@ -88,15 +88,17 @@ interface TargetDialogValues {
 interface TargetDialogDefaultValues {
   allowSimultaneousIPs: boolean;
   comment: string;
+  excludeFile?: File;
   excludeHosts: string;
+  file?: File;
   hosts: string;
   hostsCount?: number;
   hostsFilter?: Filter;
   inUse: boolean;
   name: string;
   port: number;
-  reverseLookupOnly: YesNo;
-  reverseLookupUnify: YesNo;
+  reverseLookupOnly: boolean;
+  reverseLookupUnify: boolean;
   targetExcludeSource: TargetExcludeSource;
   targetSource: TargetSource;
 }
@@ -119,8 +121,8 @@ interface TargetDialogProps {
   port?: number;
   portListId?: string;
   portLists?: PortList[];
-  reverseLookupOnly?: YesNo;
-  reverseLookupUnify?: YesNo;
+  reverseLookupOnly?: boolean;
+  reverseLookupUnify?: boolean;
   smbCredentialId?: string;
   snmpCredentialId?: string;
   sshCredentialId?: string;
@@ -173,8 +175,8 @@ const TargetDialog = ({
   port = DEFAULT_PORT,
   portListId = DEFAULT_PORT_LIST_ID,
   portLists = DEFAULT_PORT_LISTS,
-  reverseLookupOnly = NO_VALUE,
-  reverseLookupUnify = NO_VALUE,
+  reverseLookupOnly = false,
+  reverseLookupUnify = false,
   smbCredentialId,
   snmpCredentialId,
   sshCredentialId,
@@ -269,7 +271,7 @@ const TargetDialog = ({
     }
     const storeCredentials = credentials.filter(value =>
       CREDENTIAL_STORE_TYPES[storeKey].includes(
-        value.credential_type as CredentialType,
+        value.credentialType as CredentialType,
       ),
     );
     return [...baseCredentials, ...storeCredentials];
@@ -340,7 +342,7 @@ const TargetDialog = ({
 
   // filter out ssh_elevate_credential_id. If ssh_elevate_credential_id is UNSET_VALUE, this is ok. Because the Select will add back the UNSET_VALUE
   const baseUpCredentials = credentials.filter(
-    value => value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
+    value => value.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE,
   );
   const upCredentials = getCredentialsWithStoreSupport(
     baseUpCredentials,
@@ -457,6 +459,7 @@ const TargetDialog = ({
                   disabled={inUse || state.targetSource !== 'file'}
                   grow="1"
                   name="file"
+                  value={state.file}
                   onChange={
                     onValueChange as (value?: File, name?: string) => void
                   }
@@ -508,6 +511,7 @@ const TargetDialog = ({
                   disabled={inUse || state.targetExcludeSource !== 'file'}
                   grow="1"
                   name="excludeFile"
+                  value={state.excludeFile}
                   onChange={
                     onValueChange as (value?: File, name?: string) => void
                   }
@@ -826,19 +830,25 @@ const TargetDialog = ({
             )}
 
             <FormGroup title={_('Reverse Lookup Only')}>
-              <YesNoRadio
+              <YesNoRadio<boolean>
+                convert={parseBoolean}
                 disabled={inUse}
                 name="reverseLookupOnly"
+                noValue={false}
                 value={state.reverseLookupOnly}
+                yesValue={true}
                 onChange={onValueChange}
               />
             </FormGroup>
 
             <FormGroup title={_('Reverse Lookup Unify')}>
-              <YesNoRadio
+              <YesNoRadio<boolean>
+                convert={parseBoolean}
                 disabled={inUse}
                 name="reverseLookupUnify"
+                noValue={false}
                 value={state.reverseLookupUnify}
+                yesValue={true}
                 onChange={onValueChange}
               />
             </FormGroup>

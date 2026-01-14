@@ -121,6 +121,7 @@ const Summary = ({
   const isEnded = isDefined(scan_end) && scan_end.isValid();
 
   const reportType = audit ? 'auditreport' : 'report';
+  const linkType = audit ? 'audit' : 'task';
 
   return (
     <Layout flex="column">
@@ -140,7 +141,11 @@ const Summary = ({
             <TableData>{_('Task Name')}</TableData>
             <TableData>
               <span>
-                <DetailsLink id={id as string} textOnly={!links} type="task">
+                <DetailsLink
+                  id={id as string}
+                  textOnly={!links}
+                  type={linkType}
+                >
                   {name}
                 </DetailsLink>
               </span>

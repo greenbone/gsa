@@ -34,13 +34,27 @@ export const createResponse = <TData = Element>(data: TData = {} as TData) =>
     envelope: data,
   });
 
-export const createEntitiesResponse = (name: string, entities: Element[]) =>
+export const createEntitiesResponse = (
+  name: string,
+  entities: Element[],
+  {
+    getName = `get_${name}s`,
+    responseName = `get_${name}s_response`,
+    pluralName = `${name}s`,
+    countName = `${name}_count`,
+  }: {
+    getName?: string;
+    responseName?: string;
+    pluralName?: string;
+    countName?: string;
+  } = {},
+) =>
   createResponse({
-    [`get_${name}s`]: {
-      [`get_${name}s_response`]: {
+    [getName]: {
+      [responseName]: {
         [name]: entities,
-        [`${name}s`]: entitiesRange,
-        [`${name}_count`]: createEntitiesCounts(entities),
+        [pluralName]: entitiesRange,
+        [countName]: createEntitiesCounts(entities),
       },
     },
   });
@@ -84,6 +98,17 @@ export const createAggregatesResponse = (data = {}) =>
         aggregate: data,
       },
     },
+  });
+
+export const createInfoResponse = (infoData: Element) =>
+  createEntityResponse('info', [infoData] as unknown as Element, {
+    responseName: 'get_info_response',
+  });
+
+export const createInfoEntitiesResponse = (entities: Element[]) =>
+  createEntitiesResponse('info', entities, {
+    getName: 'get_info',
+    responseName: 'get_info_response',
   });
 
 export const createHttp = <TData = Element, TMeta extends Meta = Meta>(

@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_} from 'gmp/locale/lang';
+import {_, type TranslateFunc} from 'gmp/locale/lang';
+
+export type {TranslateFunc};
 
 export default _;

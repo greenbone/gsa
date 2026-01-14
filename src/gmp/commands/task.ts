@@ -16,12 +16,13 @@ import {
   type ScannerType,
 } from 'gmp/models/scanner';
 import Task, {
-  HOSTS_ORDERING_SEQUENTIAL,
+  HOSTS_ORDERING_RANDOM,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   type TaskElement,
   type TaskAutoDelete,
 } from 'gmp/models/task';
 import {NO_VALUE, YES_VALUE, parseYesNo, type YesNo} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 interface TaskCommandCreateParams {
   add_tag?: YesNo;
@@ -32,7 +33,7 @@ interface TaskCommandCreateParams {
   auto_delete_data?: number;
   comment?: string;
   config_id?: string;
-  hosts_ordering?: string;
+  csAllowFailedRetrieval?: boolean;
   in_assets?: YesNo;
   max_checks?: number;
   max_hosts?: number;
@@ -96,7 +97,7 @@ interface TaskCommandSaveParams {
   apply_overrides?: YesNo;
   comment?: string;
   config_id?: string;
-  hosts_ordering?: string;
+  csAllowFailedRetrieval?: boolean;
   id: string;
   in_assets?: YesNo;
   max_checks?: number;
@@ -110,8 +111,10 @@ interface TaskCommandSaveParams {
   target_id?: string;
 }
 
-interface TaskCommandSaveAgentGroupParams
-  extends Omit<TaskCommandCreateAgentGroupParams, 'addTag'> {
+interface TaskCommandSaveAgentGroupParams extends Omit<
+  TaskCommandCreateAgentGroupParams,
+  'addTag'
+> {
   id: string;
 }
 
@@ -213,7 +216,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     auto_delete_data,
     comment = '',
     config_id,
-    hosts_ordering,
+    csAllowFailedRetrieval,
     in_assets,
     max_checks,
     max_hosts,
@@ -236,7 +239,10 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       auto_delete_data,
       comment,
       config_id,
-      hosts_ordering,
+      cs_allow_failed_retrieval: isDefined(csAllowFailedRetrieval)
+        ? parseYesNo(csAllowFailedRetrieval)
+        : undefined,
+      hosts_ordering: HOSTS_ORDERING_RANDOM,
       in_assets,
       max_checks,
       max_hosts,
@@ -312,8 +318,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     autoDelete,
     autoDeleteData,
     comment = '',
-    inAssets,
-    minQod,
     name,
     ociImageTargetId,
     registryAllowInsecure,
@@ -331,8 +335,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       autoDelete,
       autoDeleteData,
       comment,
-      inAssets,
-      minQod,
       name,
       ociImageTargetId,
       registryAllowInsecure,
@@ -349,12 +351,9 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       accept_invalid_certs: parseYesNo(acceptInvalidCerts),
       registry_allow_insecure: parseYesNo(registryAllowInsecure),
       alterable: parseYesNo(alterable),
-      apply_overrides: parseYesNo(applyOverrides),
       auto_delete_data: autoDeleteData,
       auto_delete: autoDelete,
       comment,
-      in_assets: parseYesNo(inAssets),
-      min_qod: minQod,
       name,
       oci_image_target_id: ociImageTargetId,
       scanner_id: scannerId,
@@ -372,7 +371,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
   }: TaskCommandCreateImportTaskParams) {
     log.debug('Creating import task', name, comment);
     return await this.entityAction({
-      cmd: 'create_container_task',
+      cmd: 'create_import_task',
       auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       name,
       comment,
@@ -388,7 +387,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     apply_overrides,
     comment = '',
     config_id = NO_VALUE_ID,
-    hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
+    csAllowFailedRetrieval,
     id,
     in_assets,
     max_checks,
@@ -410,7 +409,10 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       comment,
       config_id,
       cmd: 'save_task',
-      hosts_ordering,
+      cs_allow_failed_retrieval: isDefined(csAllowFailedRetrieval)
+        ? parseYesNo(csAllowFailedRetrieval)
+        : undefined,
+      hosts_ordering: HOSTS_ORDERING_RANDOM,
       in_assets,
       max_checks,
       max_hosts,
@@ -475,17 +477,14 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     acceptInvalidCerts,
     alertIds = [],
     alterable,
-    applyOverrides,
     autoDelete,
     autoDeleteData,
     comment = '',
     id,
-    inAssets,
-    minQod,
     name,
     ociImageTargetId,
     registryAllowInsecure,
-    scannerId,
+    scannerId = NO_VALUE_ID,
     scheduleId,
     schedulePeriods,
   }: TaskCommandSaveContainerImageParams) {
@@ -493,13 +492,10 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       acceptInvalidCerts,
       alertIds,
       alterable,
-      applyOverrides,
       autoDelete,
       autoDeleteData,
       comment,
       id,
-      inAssets,
-      minQod,
       name,
       ociImageTargetId,
       registryAllowInsecure,
@@ -514,12 +510,9 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       accept_invalid_certs: parseYesNo(acceptInvalidCerts),
       registry_allow_insecure: parseYesNo(registryAllowInsecure),
       alterable: parseYesNo(alterable),
-      apply_overrides: parseYesNo(applyOverrides),
       auto_delete_data: autoDeleteData,
       auto_delete: autoDelete,
       comment,
-      in_assets: parseYesNo(inAssets),
-      min_qod: minQod,
       name,
       oci_image_target_id: ociImageTargetId,
       scanner_id: scannerId,
@@ -539,7 +532,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
   }: TaskCommandSaveImportTaskParams) {
     log.debug('Saving import task', {name, comment, in_assets, id});
     await this.httpPostWithTransform({
-      cmd: 'save_container_task',
+      cmd: 'save_import_task',
       name,
       comment,
       in_assets,

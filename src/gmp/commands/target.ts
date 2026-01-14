@@ -9,7 +9,7 @@ import type Http from 'gmp/http/http';
 import type Filter from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import Target, {type AliveTest} from 'gmp/models/target';
-import {parseYesNo, type YesNo} from 'gmp/parser';
+import {parseYesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {UNSET_VALUE} from 'web/utils/Render';
 
@@ -21,17 +21,17 @@ interface TargetCommandCreateParams {
   allowSimultaneousIPs?: boolean;
   comment?: string;
   esxiCredentialId?: string;
-  excludeFile?: string;
+  excludeFile?: File;
   excludeHosts?: string;
-  file?: string;
+  file?: File;
   hosts?: string;
   hostsFilter?: Filter;
   krb5CredentialId?: string;
   name: string;
   port?: number;
   portListId?: string;
-  reverseLookupOnly?: YesNo;
-  reverseLookupUnify?: YesNo;
+  reverseLookupOnly?: boolean;
+  reverseLookupUnify?: boolean;
   smbCredentialId?: string;
   snmpCredentialId?: string;
   sshCredentialId?: string;
@@ -84,8 +84,12 @@ class TargetCommand extends EntityCommand<Target> {
         target_exclude_source: targetExcludeSource,
         hosts,
         exclude_hosts: excludeHosts,
-        reverse_lookup_only: reverseLookupOnly,
-        reverse_lookup_unify: reverseLookupUnify,
+        reverse_lookup_only: isDefined(reverseLookupOnly)
+          ? parseYesNo(reverseLookupOnly)
+          : undefined,
+        reverse_lookup_unify: isDefined(reverseLookupUnify)
+          ? parseYesNo(reverseLookupUnify)
+          : undefined,
         port_list_id: portListId,
         'alive_tests:': aliveTests,
         port,
@@ -149,8 +153,12 @@ class TargetCommand extends EntityCommand<Target> {
         name,
         port,
         port_list_id: portListId,
-        reverse_lookup_only: reverseLookupOnly,
-        reverse_lookup_unify: reverseLookupUnify,
+        reverse_lookup_only: isDefined(reverseLookupOnly)
+          ? parseYesNo(reverseLookupOnly)
+          : undefined,
+        reverse_lookup_unify: isDefined(reverseLookupUnify)
+          ? parseYesNo(reverseLookupUnify)
+          : undefined,
         smb_credential_id: smbCredentialId,
         snmp_credential_id: snmpCredentialId,
         ssh_credential_id: sshCredentialId,

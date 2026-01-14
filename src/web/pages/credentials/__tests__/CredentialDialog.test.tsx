@@ -13,11 +13,15 @@ import {
   rendererWith,
   fireEvent,
 } from 'web/testing';
+import Features from 'gmp/capabilities/features';
 import Credential, {
   ALL_CREDENTIAL_TYPES,
   CERTIFICATE_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+  CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+  PGP_CREDENTIAL_TYPE,
+  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import {NO_VALUE} from 'gmp/parser';
 import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 
 const createGmp = (settings = {}) => ({
@@ -66,7 +70,7 @@ describe('CredentialDialog tests', () => {
 
     expect(select).toHaveValue('Username + Password');
 
-    const credentialLogin = dialog.getByName('credential_login');
+    const credentialLogin = dialog.getByName('credentialLogin');
     expect(credentialLogin).toHaveValue('');
 
     const password = dialog.getByName('password');
@@ -86,7 +90,7 @@ describe('CredentialDialog tests', () => {
       <CredentialDialog
         comment={credential.comment}
         credential={credential}
-        credential_type={credential.credential_type}
+        credentialType={credential.credentialType}
         name={credential.name}
         types={ALL_CREDENTIAL_TYPES}
       />,
@@ -127,26 +131,22 @@ describe('CredentialDialog tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      allow_insecure: undefined,
-      auth_algorithm: 'sha1',
-      autogenerate: NO_VALUE,
-      change_community: NO_VALUE,
-      change_password: NO_VALUE,
-      change_passphrase: NO_VALUE,
-      change_privacy_password: NO_VALUE,
+      authAlgorithm: 'sha1',
+      autogenerate: false,
+      certificate: undefined,
       comment: 'bar',
-      community: '',
-      credential_login: '',
-      credential_type: 'up',
+      community: undefined,
+      credentialLogin: undefined,
+      credentialType: 'up',
       id: undefined,
       name: 'foo',
-      passphrase: '',
-      password: '',
-      privacy_algorithm: 'aes',
-      privacy_password: '',
-      public_key: undefined,
-      vaultId: '',
-      hostIdentifier: '',
+      passphrase: undefined,
+      password: undefined,
+      privacyAlgorithm: 'aes',
+      privacyPassword: undefined,
+      publicKey: undefined,
+      vaultId: undefined,
+      hostIdentifier: undefined,
     });
   });
 
@@ -174,26 +174,22 @@ describe('CredentialDialog tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      allow_insecure: undefined,
-      auth_algorithm: 'sha1',
-      autogenerate: NO_VALUE,
-      change_community: NO_VALUE,
-      change_passphrase: NO_VALUE,
-      change_password: NO_VALUE,
-      change_privacy_password: NO_VALUE,
+      authAlgorithm: 'sha1',
+      autogenerate: false,
+      certificate: undefined,
       comment: '',
-      community: '',
-      credential_login: '',
-      credential_type: 'pw',
+      community: undefined,
+      credentialLogin: undefined,
+      credentialType: 'pw',
       id: undefined,
       name: 'Unnamed',
-      passphrase: '',
-      password: '',
-      privacy_algorithm: 'aes',
-      privacy_password: '',
-      public_key: undefined,
-      vaultId: '',
-      hostIdentifier: '',
+      passphrase: undefined,
+      password: undefined,
+      privacyAlgorithm: 'aes',
+      privacyPassword: undefined,
+      publicKey: undefined,
+      vaultId: undefined,
+      hostIdentifier: undefined,
     });
   });
 
@@ -217,7 +213,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type={'usk'} types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="usk" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -227,7 +223,7 @@ describe('CredentialDialog tests', () => {
     const password = screen.getByName('passphrase');
     expect(password).toHaveValue('');
 
-    const privateKey = screen.getByName('private_key');
+    const privateKey = screen.getByName('privateKey');
     expect(privateKey).toHaveAttribute('type', 'file');
   });
 
@@ -237,7 +233,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type="snmp" types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="snmp" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -246,23 +242,23 @@ describe('CredentialDialog tests', () => {
     const snmpCommunity = screen.getByName('community');
     expect(snmpCommunity).toHaveValue('');
 
-    const username = screen.getByName('credential_login');
+    const username = screen.getByName('credentialLogin');
     expect(username).toHaveValue('');
 
     const password = screen.getByName('password');
     expect(password).toHaveValue('');
     expect(password).toHaveAttribute('type', 'password');
 
-    const privacyPassword = screen.getByName('privacy_password');
+    const privacyPassword = screen.getByName('privacyPassword');
     expect(privacyPassword).toHaveValue('');
     expect(privacyPassword).toHaveAttribute('type', 'password');
 
-    const authAlgorithm = screen.getAllByName('auth_algorithm');
+    const authAlgorithm = screen.getAllByName('authAlgorithm');
     expect(authAlgorithm[0]).toHaveAttribute('value', 'md5');
     expect(authAlgorithm[1]).toHaveAttribute('value', 'sha1');
     expect(authAlgorithm[1]).toBeChecked();
 
-    const privacyAlgorithm = screen.getAllByName('privacy_algorithm');
+    const privacyAlgorithm = screen.getAllByName('privacyAlgorithm');
     expect(privacyAlgorithm[0]).toHaveAttribute('value', 'aes');
     expect(privacyAlgorithm[0]).toBeChecked();
     expect(privacyAlgorithm[1]).toHaveAttribute('value', 'des');
@@ -275,7 +271,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type="smime" types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="smime" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -292,13 +288,13 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type={'pgp'} types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="pgp" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
     expect(select).toHaveValue('PGP Encryption Key');
 
-    const certificate = screen.getByName('public_key');
+    const certificate = screen.getByName('publicKey');
     expect(certificate).toHaveAttribute('type', 'file');
   });
 
@@ -308,7 +304,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type={'pw'} types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="pw" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
@@ -325,16 +321,13 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog
-        credential_type={'krb5'}
-        types={ALL_CREDENTIAL_TYPES}
-      />,
+      <CredentialDialog credentialType="krb5" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const select = screen.getSelectElement();
     expect(select).toHaveValue('SMB (Kerberos)');
 
-    const username = screen.getByName('credential_login');
+    const username = screen.getByName('credentialLogin');
     expect(username).toHaveValue('');
 
     const password = screen.getByName('password');
@@ -355,7 +348,7 @@ describe('CredentialDialog tests', () => {
 
     render(
       <CredentialDialog
-        credential_type={CERTIFICATE_CREDENTIAL_TYPE}
+        credentialType={CERTIFICATE_CREDENTIAL_TYPE}
         types={ALL_CREDENTIAL_TYPES}
       />,
     );
@@ -370,7 +363,7 @@ describe('CredentialDialog tests', () => {
       screen.getByRole('button', {name: 'Client Certificate'}),
     ).toBeVisible();
 
-    const privateKey = screen.getByName('private_key');
+    const privateKey = screen.getByName('privateKey');
     expect(privateKey).toHaveValue('');
     expect(privateKey).toHaveAttribute('type', 'file');
     expect(
@@ -405,7 +398,7 @@ describe('CredentialDialog tests', () => {
       <CredentialDialog
         comment={credentialEntryMock.comment}
         credential={credentialEntryMock}
-        credential_type={credentialEntryMock.credential_type}
+        credentialType={credentialEntryMock.credentialType}
         name={credentialEntryMock.name}
         title="Edit Credential"
         types={ALL_CREDENTIAL_TYPES}
@@ -434,7 +427,7 @@ describe('CredentialDialog tests', () => {
     });
 
     render(
-      <CredentialDialog credential_type="krb5" types={ALL_CREDENTIAL_TYPES} />,
+      <CredentialDialog credentialType="krb5" types={ALL_CREDENTIAL_TYPES} />,
     );
 
     const kdcInput = screen.getByPlaceholderText(
@@ -444,5 +437,281 @@ describe('CredentialDialog tests', () => {
 
     const label = screen.getByText('Key Distribution Center');
     expect(label).toBeVisible();
+  });
+
+  test('should render form fields for KRB5 credential store type', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    const select = screen.getSelectElement();
+    expect(select).toHaveValue('Credential Store SMB (Kerberos)');
+
+    const vaultId = screen.getByName('vaultId');
+    expect(vaultId).toBeVisible();
+    expect(vaultId).toHaveValue('');
+
+    const hostIdentifier = screen.getByName('hostIdentifier');
+    expect(hostIdentifier).toBeVisible();
+    expect(hostIdentifier).toHaveValue('');
+
+    const realm = screen.getByName('realm');
+    expect(realm).toBeVisible();
+    expect(realm).toHaveValue('');
+
+    const kdcInput = screen.getByPlaceholderText(
+      'Enter hostname or IP address, then press Enter to add KDC',
+    );
+    expect(kdcInput).toBeVisible();
+
+    const kdcLabel = screen.getByText('Key Distribution Center');
+    expect(kdcLabel).toBeVisible();
+  });
+
+  test('should render form fields for SNMP credential store type', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    const select = screen.getSelectElement();
+    expect(select).toHaveValue('Credential Store SNMP');
+
+    const vaultId = screen.getByName('vaultId');
+    expect(vaultId).toBeVisible();
+    expect(vaultId).toHaveValue('');
+
+    const hostIdentifier = screen.getByName('hostIdentifier');
+    expect(hostIdentifier).toBeVisible();
+    expect(hostIdentifier).toHaveValue('');
+
+    const privacyHostIdentifier = screen.getByName('privacyHostIdentifier');
+    expect(privacyHostIdentifier).toBeVisible();
+    expect(privacyHostIdentifier).toHaveValue('');
+
+    const privacyAlgorithms = screen.getAllByName('privacyAlgorithm');
+    expect(privacyAlgorithms[0]).toHaveAttribute('value', 'aes');
+    expect(privacyAlgorithms[0]).toBeChecked();
+    expect(privacyAlgorithms[1]).toHaveAttribute('value', 'des');
+    expect(privacyAlgorithms[2]).toHaveAttribute('value', '');
+
+    const authAlgorithms = screen.getAllByName('authAlgorithm');
+    expect(authAlgorithms[0]).toHaveAttribute('value', 'md5');
+    expect(authAlgorithms[1]).toHaveAttribute('value', 'sha1');
+    expect(authAlgorithms[1]).toBeChecked();
+
+    expect(screen.getByText('Privacy Algorithm')).toBeVisible();
+    expect(screen.getByText('Auth Algorithm')).toBeVisible();
+  });
+
+  test('should save KRB5 credential store with proper values', async () => {
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+        onSave={handleSave}
+      />,
+    );
+
+    const nameInput = screen.getByName('name');
+    changeInputValue(nameInput, 'KRB5 Credential Store');
+
+    const vaultIdInput = screen.getByName('vaultId');
+    changeInputValue(vaultIdInput, 'vault123');
+
+    const hostIdentifierInput = screen.getByName('hostIdentifier');
+    changeInputValue(hostIdentifierInput, 'host456');
+
+    const realmInput = screen.getByName('realm');
+    changeInputValue(realmInput, 'EXAMPLE.COM');
+
+    const saveButton = screen.getDialogSaveButton();
+    fireEvent.click(saveButton);
+
+    expect(handleSave).toHaveBeenCalledWith({
+      authAlgorithm: 'sha1',
+      autogenerate: false,
+      certificate: undefined,
+      comment: '',
+      community: undefined,
+      credentialLogin: undefined,
+      credentialType: CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+      hostIdentifier: 'host456',
+      id: undefined,
+      kdcs: undefined,
+      name: 'KRB5 Credential Store',
+      passphrase: undefined,
+      password: undefined,
+      privacyAlgorithm: 'aes',
+      privacyHostIdentifier: undefined,
+      privacyPassword: undefined,
+      publicKey: undefined,
+      realm: 'EXAMPLE.COM',
+      vaultId: 'vault123',
+    });
+  });
+
+  test('should save SNMP credential store with proper values', async () => {
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+        onSave={handleSave}
+      />,
+    );
+
+    const nameInput = screen.getByName('name');
+    changeInputValue(nameInput, 'SNMP Credential Store');
+
+    const vaultIdInput = screen.getByName('vaultId');
+    changeInputValue(vaultIdInput, 'snmp-vault');
+
+    const hostIdentifierInput = screen.getByName('hostIdentifier');
+    changeInputValue(hostIdentifierInput, 'snmp-host');
+
+    const privacyHostIdentifierInput = screen.getByName(
+      'privacyHostIdentifier',
+    );
+    changeInputValue(privacyHostIdentifierInput, 'privacy-host');
+
+    const privacyAlgorithms = screen.getAllByName('privacyAlgorithm');
+    fireEvent.click(privacyAlgorithms[1]);
+
+    const authAlgorithms = screen.getAllByName('authAlgorithm');
+    fireEvent.click(authAlgorithms[0]);
+
+    const saveButton = screen.getDialogSaveButton();
+    fireEvent.click(saveButton);
+
+    expect(handleSave).toHaveBeenCalledWith({
+      authAlgorithm: 'md5',
+      autogenerate: false,
+      certificate: undefined,
+      comment: '',
+      community: undefined,
+      credentialLogin: undefined,
+      credentialType: CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+      hostIdentifier: 'snmp-host',
+      id: undefined,
+      kdcs: undefined,
+      name: 'SNMP Credential Store',
+      passphrase: undefined,
+      password: undefined,
+      privacyAlgorithm: 'des',
+      privacyHostIdentifier: 'privacy-host',
+      privacyPassword: undefined,
+      publicKey: undefined,
+      realm: undefined,
+      vaultId: 'snmp-vault',
+    });
+  });
+
+  test('should render with initial files for client certificate credential', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+    });
+
+    const certificate = new File(['cert-content'], 'certificate.pem', {
+      type: 'application/x-pem-file',
+    });
+    const privateKey = new File(['key-content'], 'private-key.key', {
+      type: 'application/x-pem-file',
+    });
+
+    render(
+      <CredentialDialog
+        certificate={certificate}
+        credentialType={CERTIFICATE_CREDENTIAL_TYPE}
+        privateKey={privateKey}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', {name: 'Client Private Key'}),
+    ).toHaveTextContent('private-key.key');
+    expect(
+      screen.getByRole('button', {name: 'Client Certificate'}),
+    ).toHaveTextContent('certificate.pem');
+  });
+
+  test('should render with initial file for username+ssh credential', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+    });
+
+    const privateKey = new File(['key-content'], 'private-key.key', {
+      type: 'application/x-pem-file',
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={USERNAME_SSH_KEY_CREDENTIAL_TYPE}
+        privateKey={privateKey}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', {name: 'Private SSH Key'}),
+    ).toHaveTextContent('private-key.key');
+  });
+
+  test('should render with initial file for pgp credential', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+    });
+
+    const publicKey = new File(['key-content'], 'public-key.key', {
+      type: 'application/x-pem-file',
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={PGP_CREDENTIAL_TYPE}
+        publicKey={publicKey}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', {name: 'Public PGP Key'}),
+    ).toHaveTextContent('public-key.key');
   });
 });

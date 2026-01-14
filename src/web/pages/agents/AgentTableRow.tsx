@@ -18,8 +18,7 @@ import AgentActions, {
 } from 'web/pages/agents/AgentActions';
 
 export interface AgentTableRowProps
-  extends AgentActionsProps,
-    RowComponentProps<Agent> {
+  extends AgentActionsProps, RowComponentProps<Agent> {
   actionsComponent?: React.ComponentType<AgentActionsProps>;
 }
 

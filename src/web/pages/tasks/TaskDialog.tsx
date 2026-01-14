@@ -16,15 +16,13 @@ import Scanner, {
 import {
   type default as Task,
   type TaskAutoDelete,
-  type TaskHostsOrdering,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_NO,
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
 } from 'gmp/models/task';
-import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
+import {NO_VALUE, parseBoolean, YES_VALUE, type YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
@@ -39,6 +37,7 @@ import YesNoRadio from 'web/components/form/YesNoRadio';
 import {NewIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useFeatures from 'web/hooks/useFeatures';
 import useTranslation from 'web/hooks/useTranslation';
 import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
@@ -73,7 +72,7 @@ interface TaskDialogDefaultValues {
   auto_delete_data?: number;
   comment?: string;
   config_id?: string;
-  hosts_ordering?: TaskHostsOrdering;
+  csAllowFailedRetrieval?: boolean;
   in_assets?: YesNo;
   max_checks?: number;
   max_hosts?: number;
@@ -97,7 +96,7 @@ interface TaskDialogProps {
   auto_delete_data?: number;
   comment?: string;
   config_id?: string;
-  hosts_ordering?: TaskHostsOrdering;
+  csAllowFailedRetrieval?: boolean;
   in_assets?: YesNo;
   isLoadingAlerts?: boolean;
   isLoadingConfigs?: boolean;
@@ -189,8 +188,7 @@ const TaskDialog = ({
   comment = '',
   // eslint-disable-next-line @typescript-eslint/naming-convention
   config_id,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
+  csAllowFailedRetrieval = false,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   in_assets = YES_VALUE,
   isLoadingAlerts = false,
@@ -235,6 +233,9 @@ const TaskDialog = ({
 }: TaskDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
+  const features = useFeatures();
+
+  const isCredentialStore = features.featureEnabled('ENABLE_CREDENTIAL_STORES');
 
   name = name || _('Unnamed');
   title = title || _('New Task');
@@ -273,7 +274,7 @@ const TaskDialog = ({
     auto_delete_data,
     comment,
     config_id,
-    hosts_ordering,
+    csAllowFailedRetrieval,
     in_assets,
     max_checks,
     max_hosts,
@@ -412,6 +413,21 @@ const TaskDialog = ({
               />
             </FormGroup>
 
+            {isCredentialStore && (
+              <FormGroup
+                title={_('Allow scan when credential store retrieval fails')}
+              >
+                <YesNoRadio<boolean>
+                  convert={parseBoolean}
+                  name="csAllowFailedRetrieval"
+                  noValue={false}
+                  value={state.csAllowFailedRetrieval}
+                  yesValue={true}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            )}
+
             <FormGroup title={_('Min QoD')}>
               <Spinner
                 disabled={state.in_assets !== YES_VALUE}
@@ -482,27 +498,6 @@ const TaskDialog = ({
                       }}
                     />
                   </Title>
-                </FormGroup>
-                <FormGroup title={_('Order for target hosts')}>
-                  <Select
-                    items={[
-                      {
-                        value: 'sequential',
-                        label: _('Sequential'),
-                      },
-                      {
-                        value: 'random',
-                        label: _('Random'),
-                      },
-                      {
-                        value: 'reverse',
-                        label: _('Reverse'),
-                      },
-                    ]}
-                    name="hosts_ordering"
-                    value={state.hosts_ordering}
-                    onChange={onValueChange}
-                  />
                 </FormGroup>
                 <FormGroup
                   title={_('Maximum concurrently executed NVTs per host')}

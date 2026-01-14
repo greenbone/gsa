@@ -13,7 +13,7 @@ import {
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-interface TagElement extends ModelElement {
+export interface TagElement extends ModelElement {
   resources?: {
     type: ApiType;
     count: {
@@ -33,7 +33,7 @@ class Tag extends Model {
   static readonly entityType = 'tag';
 
   readonly resourceCount?: number;
-  readonly resourceType?: string;
+  readonly resourceType?: EntityType;
   readonly value?: string;
 
   constructor({
@@ -58,7 +58,7 @@ class Tag extends Model {
 
     if (isDefined(element.resources)) {
       ret.resourceType = normalizeType(element.resources.type);
-      ret.resourceCount = parseInt(element.resources.count.total);
+      ret.resourceCount = parseInt(element.resources.count?.total);
     } else {
       ret.resourceCount = 0;
     }

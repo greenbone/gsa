@@ -16,11 +16,7 @@ import {
   CONTAINER_IMAGE_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
 } from 'gmp/models/scanner';
-import {
-  type default as Task,
-  type TaskAutoDelete,
-  type TaskHostsOrdering,
-} from 'gmp/models/task';
+import {type default as Task, type TaskAutoDelete} from 'gmp/models/task';
 import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import {DEFAULT_TIMEZONE} from 'gmp/time-zones';
 import {map} from 'gmp/utils/array';
@@ -229,12 +225,12 @@ const TaskComponent = ({
   const [autoDelete, setAutoDelete] = useState<TaskAutoDelete | undefined>();
   const [autoDeleteData, setAutoDeleteData] = useState<number | undefined>();
   const [comment, setComment] = useState<string | undefined>();
+  const [csAllowFailedRetrieval, setCsAllowFailedRetrieval] = useState<
+    boolean | undefined
+  >();
   const [scanConfigId, setScanConfigId] = useState<string | undefined>();
   const [esxiCredential, setEsxiCredential] = useState();
   const [hosts, setHosts] = useState<string | undefined>();
-  const [hostsOrdering, setHostsOrdering] = useState<
-    TaskHostsOrdering | undefined
-  >();
   const [inAssets, setInAssets] = useState<YesNo | undefined>();
   const [maxChecks, setMaxChecks] = useState<number | undefined>();
   const [maxHosts, setMaxHosts] = useState<number | undefined>();
@@ -536,7 +532,7 @@ const TaskComponent = ({
     apply_overrides: applyOverrides,
     comment,
     config_id: configId,
-    hosts_ordering: hostsOrdering,
+    csAllowFailedRetrieval,
     in_assets: inAssets,
     min_qod: minQod,
     max_checks: maxChecks,
@@ -567,7 +563,7 @@ const TaskComponent = ({
           apply_overrides: applyOverrides,
           comment,
           config_id: configId,
-          hosts_ordering: hostsOrdering,
+          csAllowFailedRetrieval,
           id: task.id as string,
           in_assets: inAssets,
           max_checks: maxChecks,
@@ -593,7 +589,7 @@ const TaskComponent = ({
         auto_delete_data: autoDeleteData,
         comment,
         config_id: configId,
-        hosts_ordering: hostsOrdering,
+        csAllowFailedRetrieval,
         in_assets: inAssets,
         max_checks: maxChecks,
         max_hosts: maxHosts,
@@ -676,12 +672,10 @@ const TaskComponent = ({
   const openTaskDialog = async (task?: Task) => {
     if (isDefined(task) && task.isImport()) {
       openImportTaskDialog(task);
+    } else if (task?.isAgent()) {
+      await openAgentTaskDialog(task);
     } else {
-      if (task?.isAgent()) {
-        await openAgentTaskDialog(task);
-      } else {
-        openStandardTaskDialog(task);
-      }
+      openStandardTaskDialog(task);
     }
   };
 
@@ -709,8 +703,7 @@ const TaskComponent = ({
       setAutoDeleteData(task.auto_delete_data);
       setMaxChecks(task.max_checks);
       setMaxHosts(task.max_hosts);
-      setHostsOrdering(task.hosts_ordering);
-
+      setCsAllowFailedRetrieval(task.csAllowFailedRetrieval);
       setScanConfigId(task.config?.id);
       setScannerId(task.scanner?.id);
       setScheduleId(task.schedule?.id ?? UNSET_VALUE);
@@ -734,17 +727,13 @@ const TaskComponent = ({
       setAutoDeleteData(undefined);
       setMaxChecks(undefined);
       setMaxHosts(undefined);
-      setHostsOrdering(undefined);
-
+      setCsAllowFailedRetrieval(undefined);
       setScanConfigId(defaultScanConfigId || FULL_AND_FAST_SCAN_CONFIG_ID);
       setScannerId(defaultScannerId || OPENVAS_DEFAULT_SCANNER_ID);
-
       setScheduleId(defaultScheduleId);
       setSchedulePeriods(undefined);
       setTargetId(defaultTargetId);
-
       setAlertIds(isDefined(defaultAlertId) ? [defaultAlertId] : []);
-
       setTask(undefined);
       setTitle(_('New Task'));
     }
@@ -952,11 +941,11 @@ const TaskComponent = ({
     closeAgentTaskDialog();
   };
 
-  const handleEditTask = (task: Task) => {
+  const handleEditTask = async (task: Task) => {
     if (task.scanner?.scannerType === CONTAINER_IMAGE_SCANNER_TYPE) {
       handleOpenContainerImageTaskDialog(task);
     } else {
-      openStandardTaskDialog(task);
+      await openTaskDialog(task);
     }
   };
 
@@ -1023,7 +1012,7 @@ const TaskComponent = ({
                       auto_delete_data={autoDeleteData}
                       comment={comment}
                       config_id={scanConfigId}
-                      hosts_ordering={hostsOrdering}
+                      csAllowFailedRetrieval={csAllowFailedRetrieval}
                       in_assets={inAssets}
                       isLoadingAlerts={isLoadingAlerts}
                       isLoadingConfigs={isLoadingConfigs}

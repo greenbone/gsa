@@ -28,7 +28,7 @@ const NewIconMenu = ({
   const features = useFeatures();
   if (capabilities.mayCreate('task')) {
     return (
-      <IconMenu icon={<NewIcon />}>
+      <IconMenu icon={<NewIcon />} title={_('New Task Menu')}>
         <MenuEntry
           data-testid="new-task-menu"
           title={_('New Task')}

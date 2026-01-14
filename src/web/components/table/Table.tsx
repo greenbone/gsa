@@ -6,15 +6,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-interface TableProps {
-  children: React.ReactNode;
+export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
+  children?: React.ReactNode;
   className?: string;
   'data-testid'?: string;
   footer?: React.ReactNode;
   header?: React.ReactNode;
 }
 
-interface StyledTableProps {
+interface StyledTableProps extends TableProps {
   $fixed?: boolean;
   $size?: string;
 }
@@ -25,9 +25,10 @@ const Table = ({
   footer,
   header,
   'data-testid': dataTestId,
+  ...other
 }: TableProps) => {
   return (
-    <table className={className} data-testid={dataTestId}>
+    <table {...other} className={className} data-testid={dataTestId}>
       {header}
       {children}
       {footer}

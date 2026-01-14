@@ -23,11 +23,10 @@ interface EntityDelete extends WithEntityType {
   isInUse: () => boolean;
 }
 
-interface EntityDeleteIconProps<TEntity extends EntityDelete>
-  extends Omit<
-    ExtendedDynamicIconProps<TEntity>,
-    'onClick' | 'value' | 'active'
-  > {
+interface EntityDeleteIconProps<TEntity extends EntityDelete> extends Omit<
+  ExtendedDynamicIconProps<TEntity>,
+  'onClick' | 'value' | 'active'
+> {
   displayName?: string;
   entity: TEntity;
   name?: EntityType;

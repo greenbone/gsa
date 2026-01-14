@@ -55,7 +55,6 @@ describe('TaskCommand tests', () => {
       auto_delete: AUTO_DELETE_KEEP,
       comment: 'comment',
       config_id: 'c1',
-      hosts_ordering: HOSTS_ORDERING_RANDOM,
       in_assets: 0,
       max_checks: 10,
       max_hosts: 10,
@@ -64,6 +63,7 @@ describe('TaskCommand tests', () => {
       scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
       scanner_type: OPENVAS_SCANNER_TYPE,
       target_id: 't1',
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -89,6 +89,7 @@ describe('TaskCommand tests', () => {
         tag_id: undefined,
         target_id: 't1',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     const {data} = resp;
@@ -108,7 +109,6 @@ describe('TaskCommand tests', () => {
       auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       comment: 'comment',
       config_id: 'c1',
-      hosts_ordering: HOSTS_ORDERING_RANDOM,
       in_assets: 0,
       max_checks: 10,
       max_hosts: 10,
@@ -120,6 +120,7 @@ describe('TaskCommand tests', () => {
       schedule_periods: 1,
       tag_id: 't1',
       target_id: 't1',
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -145,6 +146,7 @@ describe('TaskCommand tests', () => {
         tag_id: 't1',
         target_id: 't1',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     const {data} = resp;
@@ -213,7 +215,6 @@ describe('TaskCommand tests', () => {
           auto_delete: AUTO_DELETE_KEEP,
           comment: 'comment',
           config_id: 'c1',
-          hosts_ordering: HOSTS_ORDERING_RANDOM,
           in_assets: 0,
           max_checks: 10,
           max_hosts: 10,
@@ -222,12 +223,13 @@ describe('TaskCommand tests', () => {
           scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
           scanner_type: OPENVAS_SCANNER_TYPE,
           target_id: 't1',
+          csAllowFailedRetrieval: true,
         }),
       ).rejects.toThrow(expectedMessage);
     },
   );
 
-  test('should create new container task', async () => {
+  test('should create new import task', async () => {
     const mockResponse = createActionResultResponse();
     const fakeHttp = createHttp(mockResponse);
     const cmd = new TaskCommand(fakeHttp);
@@ -238,13 +240,36 @@ describe('TaskCommand tests', () => {
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
-        cmd: 'create_container_task',
+        cmd: 'create_import_task',
         comment: 'comment',
         name: 'foo',
         usage_type: 'scan',
       },
     });
     expect(response.data).toEqual({id: 'foo'});
+  });
+
+  test('should update the import task', async () => {
+    const mockResponse = createActionResultResponse();
+    const fakeHttp = createHttp(mockResponse);
+    const cmd = new TaskCommand(fakeHttp);
+    await cmd.saveImportTask({
+      name: 'foo',
+      comment: 'comment',
+      id: 'test',
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_import_task',
+        comment: 'comment',
+        name: 'foo',
+        auto_delete: 'no',
+        auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
+        task_id: 'test',
+        usage_type: 'scan',
+        in_assets: 1,
+      },
+    });
   });
 
   test('should save task', async () => {
@@ -256,13 +281,13 @@ describe('TaskCommand tests', () => {
       apply_overrides: 0,
       auto_delete: AUTO_DELETE_KEEP,
       comment: 'comment',
-      hosts_ordering: HOSTS_ORDERING_RANDOM,
       id: 'task1',
       in_assets: 0,
       max_checks: 10,
       max_hosts: 10,
       min_qod: 70,
       name: 'foo',
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -287,6 +312,7 @@ describe('TaskCommand tests', () => {
         task_id: 'task1',
         target_id: '0',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     expect(response).toBeUndefined();
@@ -353,13 +379,13 @@ describe('TaskCommand tests', () => {
           apply_overrides: 0,
           auto_delete: AUTO_DELETE_KEEP,
           comment: 'comment',
-          hosts_ordering: HOSTS_ORDERING_RANDOM,
           id: 'task1',
           in_assets: 0,
           max_checks: 10,
           max_hosts: 10,
           min_qod: 70,
           name: 'foo',
+          csAllowFailedRetrieval: true,
         }),
       ).rejects.toThrow(expectedMessage);
     },
@@ -377,7 +403,6 @@ describe('TaskCommand tests', () => {
       auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       comment: 'comment',
       config_id: 'c1',
-      hosts_ordering: HOSTS_ORDERING_RANDOM,
       id: 'task1',
       in_assets: 0,
       max_checks: 10,
@@ -389,6 +414,7 @@ describe('TaskCommand tests', () => {
       schedule_id: 's1',
       schedule_periods: 1,
       target_id: 't1',
+      csAllowFailedRetrieval: true,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -413,6 +439,7 @@ describe('TaskCommand tests', () => {
         task_id: 'task1',
         target_id: 't1',
         usage_type: 'scan',
+        cs_allow_failed_retrieval: 1,
       },
     });
     expect(response).toBeUndefined();
@@ -737,11 +764,8 @@ describe('TaskCommand tests', () => {
     const cmd = new TaskCommand(fakeHttp);
     const resp = await cmd.createContainerImageTask({
       alterable: false,
-      applyOverrides: false,
       autoDelete: AUTO_DELETE_KEEP,
       comment: 'comment',
-      inAssets: false,
-      minQod: 70,
       name: 'foo',
       ociImageTargetId: 'oit1',
       scannerId: 's1',
@@ -755,12 +779,9 @@ describe('TaskCommand tests', () => {
         accept_invalid_certs: 0,
         registry_allow_insecure: 0,
         alterable: 0,
-        apply_overrides: 0,
         auto_delete: AUTO_DELETE_KEEP,
         auto_delete_data: undefined,
         comment: 'comment',
-        in_assets: 0,
-        min_qod: 70,
         name: 'foo',
         oci_image_target_id: 'oit1',
         scanner_id: 's1',
@@ -784,12 +805,9 @@ describe('TaskCommand tests', () => {
       addTag: true,
       alertIds: ['a1', 'a2'],
       alterable: false,
-      applyOverrides: false,
       autoDelete: AUTO_DELETE_KEEP,
       autoDeleteData: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       comment: 'comment',
-      inAssets: false,
-      minQod: 70,
       name: 'foo',
       ociImageTargetId: 'oit1',
       registryAllowInsecure: true,
@@ -807,12 +825,9 @@ describe('TaskCommand tests', () => {
         accept_invalid_certs: 1,
         registry_allow_insecure: 1,
         alterable: 0,
-        apply_overrides: 0,
         auto_delete: AUTO_DELETE_KEEP,
         auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
         comment: 'comment',
-        in_assets: 0,
-        min_qod: 70,
         name: 'foo',
         oci_image_target_id: 'oit1',
         scanner_id: 's1',
@@ -833,15 +848,11 @@ describe('TaskCommand tests', () => {
     const cmd = new TaskCommand(fakeHttp);
     const result = await cmd.saveContainerImageTask({
       alterable: false,
-      applyOverrides: false,
       autoDelete: AUTO_DELETE_KEEP,
       comment: 'comment',
       id: 'task1',
-      inAssets: false,
-      minQod: 70,
       name: 'foo',
       ociImageTargetId: 'oit1',
-      scannerId: 's1',
     });
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -851,17 +862,14 @@ describe('TaskCommand tests', () => {
         accept_invalid_certs: 0,
         registry_allow_insecure: 0,
         alterable: 0,
-        apply_overrides: 0,
         auto_delete: AUTO_DELETE_KEEP,
         auto_delete_data: undefined,
         comment: 'comment',
-        in_assets: 0,
-        min_qod: 70,
         name: 'foo',
         oci_image_target_id: 'oit1',
-        scanner_id: 's1',
+        /* on edit scanner_id should be '0' */
+        scanner_id: '0',
         scanner_type: CONTAINER_IMAGE_SCANNER_TYPE,
-        schedule_id: undefined,
         schedule_periods: 0,
         task_id: 'task1',
         usage_type: 'scan',
@@ -879,13 +887,10 @@ describe('TaskCommand tests', () => {
       acceptInvalidCerts: true,
       alertIds: ['a1', 'a2'],
       alterable: false,
-      applyOverrides: false,
       autoDelete: AUTO_DELETE_KEEP,
       autoDeleteData: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       comment: 'comment',
       id: 'task1',
-      inAssets: false,
-      minQod: 70,
       name: 'foo',
       ociImageTargetId: 'oit1',
       registryAllowInsecure: false,
@@ -901,12 +906,9 @@ describe('TaskCommand tests', () => {
         accept_invalid_certs: 1,
         registry_allow_insecure: 0,
         alterable: 0,
-        apply_overrides: 0,
         auto_delete: AUTO_DELETE_KEEP,
         auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
         comment: 'comment',
-        in_assets: 0,
-        min_qod: 70,
         name: 'foo',
         oci_image_target_id: 'oit1',
         scanner_id: 's1',

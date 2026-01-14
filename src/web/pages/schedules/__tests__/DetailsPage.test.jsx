@@ -4,17 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, wait} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
+import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
-import Detailspage, {ToolBarIcons} from 'web/pages/schedules/DetailsPage';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
+import ScheduleDetailsPage from 'web/pages/schedules/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/schedules';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -34,36 +31,6 @@ const schedule = Schedule.fromElement({
   _id: '12345',
 });
 
-const scheduleInUse = Schedule.fromElement({
-  comment: 'hello world',
-  creation_time: '2020-12-23T14:14:11Z',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
-  in_use: 1,
-  modification_time: '2021-01-04T11:54:12Z',
-  name: 'schedule 1',
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
-  timezone: 'UTC',
-  writable: 1,
-  _id: '23456',
-});
-
-const noPermSchedule = Schedule.fromElement({
-  comment: 'hello world',
-  creation_time: '2020-12-23T14:14:11Z',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
-  name: 'schedule 1',
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'get_schedules'}},
-  timezone: 'UTC',
-  writable: 1,
-  _id: '23456',
-});
-
 const getSchedule = testing.fn().mockResolvedValue({
   data: schedule,
 });
@@ -80,8 +47,8 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-describe('Schedule Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('ScheduleDetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const gmp = {
       schedule: {
         get: getSchedule,
@@ -96,8 +63,8 @@ describe('Schedule Detailspage tests', () => {
     };
 
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -107,53 +74,64 @@ describe('Schedule Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
-    const {baseElement, container} = render(<Detailspage id="12345" />);
+    render(<ScheduleDetailsPage id="12345" />);
 
-    expect(container).toHaveTextContent('Schedule: schedule 1');
+    expect(
+      screen.getByRole('heading', {name: /Schedule: schedule 1/}),
+    ).toBeInTheDocument();
 
-    const links = baseElement.querySelectorAll('a');
-
-    expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
-    expect(links[0]).toHaveAttribute(
+    expect(screen.getByTitle('Help: Schedules')).toBeInTheDocument();
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-schedules',
     );
 
-    expect(screen.getAllByTitle('Schedules List')[0]).toBeInTheDocument();
-    expect(links[1]).toHaveAttribute('href', '/schedules');
+    expect(screen.getByTitle('Schedules List')).toBeInTheDocument();
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/schedules',
+    );
 
-    expect(container).toHaveTextContent('ID:1234');
-    expect(container).toHaveTextContent(
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /^id/i})).toHaveTextContent(
+      'ID:1234',
+    );
+    expect(entityInfo.getByRole('row', {name: /^created/i})).toHaveTextContent(
       'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
     );
-    expect(container).toHaveTextContent(
+    expect(entityInfo.getByRole('row', {name: /^modified/i})).toHaveTextContent(
       'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
     );
-    expect(container).toHaveTextContent('Owner:admin');
-
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[9]).toHaveTextContent('User Tags');
-    expect(spans[11]).toHaveTextContent('Permissions');
-
-    expect(container).toHaveTextContent('Comment');
-    expect(container).toHaveTextContent('hello world');
-
-    expect(container).toHaveTextContent('First Run');
-    expect(container).toHaveTextContent(
-      'Mon, Jan 4, 2021 11:54 AM Coordinated Universal Time',
+    expect(entityInfo.getByRole('row', {name: /^owner/i})).toHaveTextContent(
+      'Owner:admin',
     );
 
-    expect(container).toHaveTextContent('Next Run');
-    expect(container).toHaveTextContent('-');
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^permissions/i}),
+    ).toBeInTheDocument();
 
-    expect(container).toHaveTextContent('Timezone');
-    expect(container).toHaveTextContent('Coordinated Universal Time');
-
-    expect(container).toHaveTextContent('Recurrence');
-    expect(container).toHaveTextContent('Once');
-
-    expect(container).toHaveTextContent('Duration');
-    expect(container).toHaveTextContent('Entire Operation');
+    expect(
+      screen.getByRole('row', {name: /^comment hello world/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /^first run/i})).toHaveTextContent(
+      'Mon, Jan 4, 2021 11:54 AM Coordinated Universal Time',
+    );
+    expect(screen.getByRole('row', {name: /^next run/i})).toHaveTextContent(
+      '-',
+    );
+    expect(screen.getByRole('row', {name: /^timezone/i})).toHaveTextContent(
+      'UTC',
+    );
+    expect(screen.getByRole('row', {name: /^recurrence/i})).toHaveTextContent(
+      'Once',
+    );
+    expect(screen.getByRole('row', {name: /^duration/i})).toHaveTextContent(
+      'Entire Operation',
+    );
   });
 
   test('should render user tags tab', () => {
@@ -171,8 +149,8 @@ describe('Schedule Detailspage tests', () => {
     };
 
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -182,14 +160,11 @@ describe('Schedule Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {container} = render(<ScheduleDetailsPage id="12345" />);
 
-    const spans = baseElement.querySelectorAll('span');
-
-    expect(spans[9]).toHaveTextContent('User Tags');
-    fireEvent.click(spans[9]);
-
-    expect(baseElement).toHaveTextContent('No user tags available');
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
   });
 
   test('should render permissions tab', () => {
@@ -207,8 +182,8 @@ describe('Schedule Detailspage tests', () => {
     };
 
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -218,11 +193,10 @@ describe('Schedule Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
-    const {container, baseElement} = render(<Detailspage id="12345" />);
+    const {container} = render(<ScheduleDetailsPage id="12345" />);
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[11]);
-
+    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    fireEvent.click(permissionsTab);
     expect(container).toHaveTextContent('No permissions available');
   });
 
@@ -256,8 +230,8 @@ describe('Schedule Detailspage tests', () => {
     };
 
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -267,224 +241,23 @@ describe('Schedule Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
-    render(<Detailspage id="12345" />);
+    render(<ScheduleDetailsPage id="12345" />);
 
     await wait();
 
-    const cloneIcon = screen.getAllByTitle('Clone Schedule');
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-
-    await wait();
-
+    const cloneIcon = screen.getByTitle('Clone Schedule');
+    expect(cloneIcon).toBeInTheDocument();
+    fireEvent.click(cloneIcon);
     expect(clone).toHaveBeenCalledWith(schedule);
 
-    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getByTitle('Export Schedule as XML');
+    expect(exportIcon).toBeInTheDocument();
+    fireEvent.click(exportIcon);
     expect(exportFunc).toHaveBeenCalledWith(schedule);
 
-    const deleteIcon = screen.getAllByTitle('Move Schedule to trashcan');
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
+    const deleteIcon = screen.getByTitle('Move Schedule to trashcan');
+    expect(deleteIcon).toBeInTheDocument();
+    fireEvent.click(deleteIcon);
     expect(deleteFunc).toHaveBeenCalledWith({id: schedule.id});
-  });
-});
-
-describe('Schedule ToolBarIcons tests', () => {
-  test('should render', () => {
-    const handleScheduleCloneClick = testing.fn();
-    const handleScheduleDeleteClick = testing.fn();
-    const handleScheduleDownloadClick = testing.fn();
-    const handleScheduleEditClick = testing.fn();
-    const handleScheduleCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    const {element} = render(
-      <ToolBarIcons
-        entity={schedule}
-        onScheduleCloneClick={handleScheduleCloneClick}
-        onScheduleCreateClick={handleScheduleCreateClick}
-        onScheduleDeleteClick={handleScheduleDeleteClick}
-        onScheduleDownloadClick={handleScheduleDownloadClick}
-        onScheduleEditClick={handleScheduleEditClick}
-      />,
-    );
-
-    const links = element.querySelectorAll('a');
-
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/scanning.html#managing-schedules',
-    );
-    expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
-
-    expect(links[1]).toHaveAttribute('href', '/schedules');
-    expect(screen.getAllByTitle('Schedules List')[0]).toBeInTheDocument();
-  });
-
-  test('should call click handlers', () => {
-    const handleScheduleCloneClick = testing.fn();
-    const handleScheduleDeleteClick = testing.fn();
-    const handleScheduleDownloadClick = testing.fn();
-    const handleScheduleEditClick = testing.fn();
-    const handleScheduleCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    render(
-      <ToolBarIcons
-        entity={schedule}
-        onScheduleCloneClick={handleScheduleCloneClick}
-        onScheduleCreateClick={handleScheduleCreateClick}
-        onScheduleDeleteClick={handleScheduleDeleteClick}
-        onScheduleDownloadClick={handleScheduleDownloadClick}
-        onScheduleEditClick={handleScheduleEditClick}
-      />,
-    );
-
-    const cloneIcon = screen.getAllByTitle('Clone Schedule');
-    const editIcon = screen.getAllByTitle('Edit Schedule');
-    const deleteIcon = screen.getAllByTitle('Move Schedule to trashcan');
-    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
-
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-    expect(handleScheduleCloneClick).toHaveBeenCalledWith(schedule);
-
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
-    expect(handleScheduleEditClick).toHaveBeenCalledWith(schedule);
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-    expect(handleScheduleDeleteClick).toHaveBeenCalledWith(schedule);
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-    expect(handleScheduleDownloadClick).toHaveBeenCalledWith(schedule);
-  });
-
-  test('should not call click handlers without permission', () => {
-    const handleScheduleCloneClick = testing.fn();
-    const handleScheduleDeleteClick = testing.fn();
-    const handleScheduleDownloadClick = testing.fn();
-    const handleScheduleEditClick = testing.fn();
-    const handleScheduleCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    render(
-      <ToolBarIcons
-        entity={noPermSchedule}
-        onScheduleCloneClick={handleScheduleCloneClick}
-        onScheduleCreateClick={handleScheduleCreateClick}
-        onScheduleDeleteClick={handleScheduleDeleteClick}
-        onScheduleDownloadClick={handleScheduleDownloadClick}
-        onScheduleEditClick={handleScheduleEditClick}
-      />,
-    );
-
-    const cloneIcon = screen.getAllByTitle('Clone Schedule');
-    const editIcon = screen.getAllByTitle('Permission to edit Schedule denied');
-    const deleteIcon = screen.getAllByTitle(
-      'Permission to move Schedule to trashcan denied',
-    );
-    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
-
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-
-    expect(handleScheduleCloneClick).toHaveBeenCalledWith(noPermSchedule);
-
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
-
-    expect(handleScheduleEditClick).not.toHaveBeenCalled();
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    expect(handleScheduleDeleteClick).not.toHaveBeenCalled();
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    expect(handleScheduleDownloadClick).toHaveBeenCalledWith(noPermSchedule);
-  });
-
-  test('should (not) call click handlers for schedule in use', () => {
-    const handleScheduleCloneClick = testing.fn();
-    const handleScheduleDeleteClick = testing.fn();
-    const handleScheduleDownloadClick = testing.fn();
-    const handleScheduleEditClick = testing.fn();
-    const handleScheduleCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    render(
-      <ToolBarIcons
-        entity={scheduleInUse}
-        onScheduleCloneClick={handleScheduleCloneClick}
-        onScheduleCreateClick={handleScheduleCreateClick}
-        onScheduleDeleteClick={handleScheduleDeleteClick}
-        onScheduleDownloadClick={handleScheduleDownloadClick}
-        onScheduleEditClick={handleScheduleEditClick}
-      />,
-    );
-    const cloneIcon = screen.getAllByTitle('Clone Schedule');
-    const editIcon = screen.getAllByTitle('Edit Schedule');
-    const deleteIcon = screen.getAllByTitle('Schedule is still in use');
-    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
-
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-
-    expect(handleScheduleCloneClick).toHaveBeenCalledWith(scheduleInUse);
-
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
-
-    expect(handleScheduleEditClick).toHaveBeenCalled();
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-    expect(handleScheduleDeleteClick).not.toHaveBeenCalled();
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    expect(handleScheduleDownloadClick).toHaveBeenCalledWith(scheduleInUse);
   });
 });

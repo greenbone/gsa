@@ -40,8 +40,9 @@ interface ConfigDialog {
   confirmFunction: () => Promise<void>;
 }
 
-export interface EntitiesFooterProps<TEntity>
-  extends WithEntitiesFooterComponentProps<TEntity> {
+export interface EntitiesFooterProps<
+  TEntity,
+> extends WithEntitiesFooterComponentProps<TEntity> {
   actions?: boolean;
   children?: React.ReactNode;
   'data-testid'?: string;

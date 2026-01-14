@@ -4,14 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, wait, fireEvent, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
+import {rendererWith, wait, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import Response from 'gmp/http/response';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
-import CpePage, {ToolBarIcons} from 'web/pages/cpes/DetailsPage';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
+import CpePage from 'web/pages/cpes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -22,7 +22,7 @@ const cpe = CPE.fromElement({
   modification_time: '2019-06-24T10:12:27Z',
   update_time: '2019-06-24T10:12:27Z',
   cpe: {
-    cve_refs: '3',
+    cve_refs: 3,
     cves: {
       cve: [
         {entry: {cvss: {base_metrics: {score: 9.7}}, _id: 'CVE-2020-1234'}},
@@ -32,44 +32,48 @@ const cpe = CPE.fromElement({
     },
     title: 'bar',
     severity: 9.8,
-    status: 'FINAL',
     nvd_id: '',
   },
 });
 
-const caps = new Capabilities(['everything']);
-
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-let currentSettings;
+const createGmp = ({
+  currentSettingsResponse = currentSettingsDefaultResponse,
+  getCpeResponse = new Response(cpe),
+  getTagsResponse = new Response([], {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  }),
+  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+  exportCpeResponse = new Response({foo: 'bar'}),
+  getCpe = testing.fn().mockResolvedValue(getCpeResponse),
+  getTags = testing.fn().mockResolvedValue(getTagsResponse),
+  exportCpe = testing.fn().mockResolvedValue(exportCpeResponse),
+} = {}) => {
+  return {
+    cpe: {
+      get: getCpe,
+      export: exportCpe,
+    },
+    tags: {
+      get: getTags,
+    },
+    reloadInterval,
+    settings: {manualUrl, severityRating: SEVERITY_RATING_CVSS_3},
+    user: {
+      currentSettings,
+    },
+  };
+};
 
-beforeEach(() => {
-  currentSettings = testing
-    .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
-});
-
-describe('CPE DetailsPage tests', () => {
+describe('CpeDetailsPage tests', () => {
   test('should render full DetailsPage', () => {
-    const getCpe = testing.fn().mockResolvedValue({
-      data: cpe,
-    });
-
-    const gmp = {
-      cpe: {
-        get: getCpe,
-      },
-      reloadInterval,
-      settings: {manualUrl, severityRating: SEVERITY_RATING_CVSS_3},
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -79,90 +83,65 @@ describe('CPE DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
 
-    const {baseElement} = render(<CpePage id="cpe:/a:foo" />);
+    render(<CpePage id="cpe:/a:foo" />);
 
-    const links = baseElement.querySelectorAll('a');
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: CPEs',
-    );
-    expect(links[0]).toHaveAttribute(
+    expect(screen.getByTitle('Help: CPEs')).toBeInTheDocument();
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/managing-secinfo.html#cpe',
     );
 
-    expect(screen.getByTestId('list-icon')).toHaveAttribute(
-      'title',
-      'CPE List',
+    expect(screen.getByTitle('CPE List')).toBeInTheDocument();
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/cpes',
     );
-    expect(links[1]).toHaveAttribute('href', '/cpes');
+
     expect(screen.getByTestId('export-icon')).toHaveAttribute(
       'title',
       'Export CPE',
     );
 
     // test title bar
-    expect(baseElement).toHaveTextContent('CPE: foo');
+    expect(screen.getByRole('heading', {name: /CPE: foo/})).toBeInTheDocument();
 
-    expect(baseElement).toHaveTextContent('cpe:/a:foo');
-    expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
+      'cpe:/a:foo',
     );
-    expect(baseElement).toHaveTextContent(
-      'Created:Mon, Jun 24, 2019 11:55 AM Coordinated Universal Time',
+    expect(
+      entityInfo.getByRole('row', {name: /^modified:/i}),
+    ).toHaveTextContent(
+      'Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
     );
-
-    expect(baseElement).toHaveTextContent(
+    expect(entityInfo.getByRole('row', {name: /^created:/i})).toHaveTextContent(
+      'Mon, Jun 24, 2019 11:55 AM Coordinated Universal Time',
+    );
+    expect(
+      entityInfo.getByRole('row', {name: /^last updated:/i}),
+    ).toHaveTextContent(
       'Last updated:Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
     );
-
-    // severity bar(s)
-    const progressBars = screen.getAllByTestId('progressbar-box');
-    expect(progressBars[0]).toHaveAttribute('title', 'Critical');
-    expect(progressBars[0]).toHaveTextContent('9.8 (Critical)');
-    expect(progressBars[1]).toHaveAttribute('title', 'Critical');
-    expect(progressBars[1]).toHaveTextContent('9.7 (Critical)');
-    expect(progressBars[2]).toHaveAttribute('title', 'Medium');
-    expect(progressBars[2]).toHaveTextContent('5.4 (Medium)');
-    expect(progressBars[3]).toHaveAttribute('title', 'Low');
-    expect(progressBars[3]).toHaveTextContent('1.8 (Low)');
+    const severityRow = screen.getByRole('row', {name: /^severity/i});
+    expect(within(severityRow).getByText('9.8 (Critical)')).toBeInTheDocument();
 
     // details
-    expect(baseElement).toHaveTextContent('Reported Vulnerabilities');
-    expect(baseElement).toHaveTextContent('CVE-2020-1234');
-    expect(baseElement).toHaveTextContent('CVE-2020-5678');
-    expect(baseElement).toHaveTextContent('CVE-2019-5678');
+    expect(
+      screen.getByRole('heading', {name: /^Reported Vulnerabilities/}),
+    ).toBeInTheDocument();
+    const firstCVE = screen.getByRole('row', {name: /^CVE-2020-1234/});
+    expect(within(firstCVE).getByText('9.7 (Critical)')).toBeInTheDocument();
+    const secondCVE = screen.getByRole('row', {name: /^CVE-2020-5678/});
+    expect(within(secondCVE).getByText('5.4 (Medium)')).toBeInTheDocument();
+    const thirdCVE = screen.getByRole('row', {name: /^CVE-2019-5678/});
+    expect(within(thirdCVE).getByText('1.8 (Low)')).toBeInTheDocument();
   });
 
   test('should render user tags tab', async () => {
-    const getCpe = testing.fn().mockResolvedValue({
-      data: cpe,
-    });
-
-    const getTags = testing.fn().mockResolvedValue({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    });
-
-    const gmp = {
-      cpe: {
-        get: getCpe,
-      },
-      tags: {
-        get: getTags,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -171,39 +150,18 @@ describe('CPE DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
 
-    const {baseElement} = render(<CpePage id="cpe:/a:foo" />);
+    const {container} = render(<CpePage id="cpe:/a:foo" />);
 
-    const spans = baseElement.querySelectorAll('span');
-
-    expect(spans[4]).toHaveTextContent('User Tags');
-    fireEvent.click(spans[4]);
-
-    expect(baseElement).toHaveTextContent('No user tags available');
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
   });
 
   test('should call commands', async () => {
-    const exportFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const getCpe = testing.fn().mockResolvedValue({
-      data: cpe,
-    });
-
-    const gmp = {
-      cpe: {
-        get: getCpe,
-        export: exportFunc,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -213,79 +171,10 @@ describe('CPE DetailsPage tests', () => {
     store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
 
     render(<CpePage id="cpe:/a:foo" />);
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: CPEs',
-    );
-    expect(screen.getByTestId('list-icon')).toHaveAttribute(
-      'title',
-      'CPE List',
-    );
-
     const exportIcon = screen.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export CPE');
     fireEvent.click(exportIcon);
     await wait();
-    expect(exportFunc).toHaveBeenCalledWith(cpe);
-  });
-});
-
-describe('CPEs ToolBarIcons tests', () => {
-  test('should render', () => {
-    const handleCpeDownload = testing.fn();
-
-    const {render} = rendererWith({
-      gmp: {settings: {manualUrl}},
-      capabilities: caps,
-      router: true,
-    });
-
-    const {element} = render(
-      <ToolBarIcons entity={cpe} onCpeDownloadClick={handleCpeDownload} />,
-    );
-
-    const links = element.querySelectorAll('a');
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: CPEs',
-    );
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/managing-secinfo.html#cpe',
-    );
-
-    expect(links[1]).toHaveAttribute('href', '/cpes');
-    expect(screen.getByTestId('list-icon')).toHaveAttribute(
-      'title',
-      'CPE List',
-    );
-  });
-
-  test('should call click handlers', () => {
-    const handleCpeDownload = testing.fn();
-
-    const {render} = rendererWith({
-      gmp: {settings: {manualUrl}},
-      capabilities: caps,
-      router: true,
-    });
-
-    render(
-      <ToolBarIcons entity={cpe} onCpeDownloadClick={handleCpeDownload} />,
-    );
-
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: CPEs',
-    );
-    expect(screen.getByTestId('list-icon')).toHaveAttribute(
-      'title',
-      'CPE List',
-    );
-
-    const exportIcon = screen.getByTestId('export-icon');
-    fireEvent.click(exportIcon);
-    expect(handleCpeDownload).toHaveBeenCalledWith(cpe);
-    expect(exportIcon).toHaveAttribute('title', 'Export CPE');
+    expect(gmp.cpe.export).toHaveBeenCalledWith(cpe);
   });
 });

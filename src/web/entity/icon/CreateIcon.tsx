@@ -15,11 +15,10 @@ import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconCompo
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface EntityCreateIconProps<TEntity extends WithEntityType>
-  extends Omit<
-    ExtendedDynamicIconProps<TEntity>,
-    'onClick' | 'value' | 'active' | 'display'
-  > {
+interface EntityCreateIconProps<TEntity extends WithEntityType> extends Omit<
+  ExtendedDynamicIconProps<TEntity>,
+  'onClick' | 'value' | 'active' | 'display'
+> {
   display?: boolean;
   displayName?: string;
   entity: TEntity;

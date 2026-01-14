@@ -22,6 +22,7 @@ const hostsSortFunctions = {
   appsCount: makeCompareNumber(entity => entity.details.appsCount),
   distance: makeCompareNumber(entity => entity.details.distance),
   os: makeCompareString(entity => entity.details.best_os_cpe),
+  critical: makeCompareNumber(entity => entity.result_counts.critical),
   high: makeCompareNumber(entity => entity.result_counts.high),
   medium: makeCompareNumber(entity => entity.result_counts.warning),
   low: makeCompareNumber(entity => entity.result_counts.info),

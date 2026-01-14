@@ -17,10 +17,10 @@ import SortDirection from 'web/utils/sort-direction';
 const getRenderProps = (
   mockChildren: Mock,
   call: number = 1,
-): ReportEntitiesContainerRenderProps => {
+): ReportEntitiesContainerRenderProps<Result> => {
   return mockChildren.mock.calls[
     call - 1
-  ][0] as ReportEntitiesContainerRenderProps;
+  ][0] as ReportEntitiesContainerRenderProps<Result>;
 };
 
 describe('ReportEntitiesContainer tests', () => {

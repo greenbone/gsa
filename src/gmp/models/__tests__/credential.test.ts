@@ -49,24 +49,39 @@ describe('Credential Model tests', () => {
 
   test('should use defaults', () => {
     const credential = new Credential();
-    expect(credential.certificate_info).toBeUndefined();
-    expect(credential.credential_type).toBeUndefined();
+    expect(credential.authAlgorithm).toBeUndefined();
+    expect(credential.certificateInfo).toBeUndefined();
+    expect(credential.credentialType).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
     expect(credential.kdcs).toEqual([]);
     expect(credential.login).toBeUndefined();
+    expect(credential.privacyAlgorithm).toBeUndefined();
     expect(credential.realm).toBeUndefined();
+    expect(credential.privateKeyInfo).toBeUndefined();
+    expect(credential.publicKeyInfo).toBeUndefined();
   });
 
   test('should parse empty element', () => {
     const credential = Credential.fromElement({});
-    expect(credential.certificate_info).toBeUndefined();
-    expect(credential.credential_type).toBeUndefined();
+    expect(credential.authAlgorithm).toBeUndefined();
+    expect(credential.certificateInfo).toBeUndefined();
+    expect(credential.credentialType).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
     expect(credential.kdcs).toEqual([]);
     expect(credential.login).toBeUndefined();
+    expect(credential.privacyAlgorithm).toBeUndefined();
     expect(credential.realm).toBeUndefined();
+    expect(credential.privateKeyInfo).toBeUndefined();
+    expect(credential.publicKeyInfo).toBeUndefined();
+  });
+
+  test('should parse auth_algorithm', () => {
+    const credential = Credential.fromElement({
+      auth_algorithm: 'md5',
+    });
+    expect(credential.authAlgorithm).toEqual('md5');
   });
 
   test('should parse certificate_info', () => {
@@ -83,28 +98,75 @@ describe('Credential Model tests', () => {
       },
     });
 
-    expect(credential.certificate_info?.activationTime).toEqual(
+    expect(credential.certificateInfo?.activationTime).toEqual(
       parseDate('2018-10-10T11:41:23.022Z'),
     );
-    expect(credential.certificate_info?.expirationTime).toEqual(
+    expect(credential.certificateInfo?.expirationTime).toEqual(
       parseDate('2019-10-10T11:41:23.022Z'),
     );
-    expect(credential.certificate_info?.issuer).toEqual('Some Issuer');
-    expect(credential.certificate_info?.subject).toEqual('Some Subject');
-    expect(credential.certificate_info?.serial).toEqual('1234567890');
-    expect(credential.certificate_info?.md5Fingerprint).toEqual(
+    expect(credential.certificateInfo?.issuer).toEqual('Some Issuer');
+    expect(credential.certificateInfo?.subject).toEqual('Some Subject');
+    expect(credential.certificateInfo?.serial).toEqual('1234567890');
+    expect(credential.certificateInfo?.md5Fingerprint).toEqual(
       'md5-fingerprint',
     );
-    expect(credential.certificate_info?.sha256Fingerprint).toEqual(
+    expect(credential.certificateInfo?.sha256Fingerprint).toEqual(
       'sha256-fingerprint',
     );
-    expect(credential.certificate_info?.timeStatus).toEqual('valid');
+    expect(credential.certificateInfo?.timeStatus).toEqual('valid');
+  });
+
+  test('should parse private key info', () => {
+    const credential = Credential.fromElement({
+      private_key_info: {
+        sha256_hash: 'sha256-hash-value',
+        type: 'ssh-rsa',
+      },
+    });
+
+    expect(credential.privateKeyInfo?.sha256Hash).toEqual('sha256-hash-value');
+    expect(credential.privateKeyInfo?.keyType).toEqual('rsa');
+
+    const credential2 = Credential.fromElement({
+      private_key_info: {
+        sha256_hash: 'sha256-hash-value',
+        type: 'rsa-ssh',
+      },
+    });
+
+    expect(credential2.privateKeyInfo?.sha256Hash).toEqual('sha256-hash-value');
+    expect(credential2.privateKeyInfo?.keyType).toEqual('rsa-ssh');
+
+    const credential3 = Credential.fromElement({
+      // @ts-expect-error
+      private_key_info: '',
+    });
+    expect(credential3.privateKeyInfo?.sha256Hash).toBeUndefined();
+    expect(credential3.privateKeyInfo?.keyType).toBeUndefined();
+  });
+
+  test('should parse public key info', () => {
+    const credential = Credential.fromElement({
+      public_key_info: {
+        fingerprint: 'public-key-fingerprint',
+      },
+    });
+
+    expect(credential.publicKeyInfo?.fingerprint).toEqual(
+      'public-key-fingerprint',
+    );
+
+    const credential2 = Credential.fromElement({
+      // @ts-expect-error
+      public_key_info: '',
+    });
+    expect(credential2.publicKeyInfo).toBeUndefined();
   });
 
   test('should parse type', () => {
     const credential = Credential.fromElement({type: 'foo'});
 
-    expect(credential.credential_type).toEqual('foo');
+    expect(credential.credentialType).toEqual('foo');
   });
 
   test('should parse targets', () => {
@@ -118,6 +180,12 @@ describe('Credential Model tests', () => {
     const [target] = credential.targets;
     expect(target.id).toEqual('t1');
     expect(target.entityType).toEqual('target');
+
+    const credential2 = Credential.fromElement({
+      // @ts-expect-error
+      targets: '',
+    });
+    expect(credential2.targets).toEqual([]);
   });
 
   test('should parse scanners', () => {
@@ -131,6 +199,12 @@ describe('Credential Model tests', () => {
     expect(scanner).toBeInstanceOf(Model);
     expect(scanner.id).toEqual('s1');
     expect(scanner.entityType).toEqual('scanner');
+
+    const credential2 = Credential.fromElement({
+      // @ts-expect-error
+      scanners: '',
+    });
+    expect(credential2.scanners).toEqual([]);
   });
 });
 
@@ -222,11 +296,45 @@ describe('Credential model function tests', () => {
     expect(credential.login).toEqual('test-user');
   });
 
+  test('should parse privacy_algorithm', () => {
+    const credential = Credential.fromElement({
+      privacy: {algorithm: 'aes'},
+    });
+    expect(credential.privacyAlgorithm).toEqual('aes');
+  });
+
   test('should parse realm', () => {
     const credential = Credential.fromElement({
       realm: 'test-realm',
     });
     expect(credential.realm).toEqual('test-realm');
+  });
+
+  test('should parse credential store with privacy host identifier', () => {
+    const credential = Credential.fromElement({
+      credential_store: {
+        vault_id: 'test-vault',
+        host_identifier: 'host-123',
+        privacy_host_identifier: 'privacy-host-456',
+      },
+    });
+
+    expect(credential.credentialStore?.vaultId).toEqual('test-vault');
+    expect(credential.credentialStore?.hostIdentifier).toEqual('host-123');
+    expect(credential.privacyHostIdentifier).toEqual('privacy-host-456');
+  });
+
+  test('should parse credential store without privacy host identifier', () => {
+    const credential = Credential.fromElement({
+      credential_store: {
+        vault_id: 'test-vault',
+        host_identifier: 'host-123',
+      },
+    });
+
+    expect(credential.credentialStore?.vaultId).toEqual('test-vault');
+    expect(credential.credentialStore?.hostIdentifier).toEqual('host-123');
+    expect(credential.privacyHostIdentifier).toBeUndefined();
   });
 });
 

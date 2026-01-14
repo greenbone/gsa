@@ -5,13 +5,14 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
+import Features from 'gmp/capabilities/features';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import ScanConfig from 'gmp/models/scan-config';
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TaskDetailsPage from 'web/pages/tasks/TaskDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -78,6 +79,11 @@ const preferences = {
       name: 'Auto Delete Reports Data',
       scanner_name: 'auto_delete_data',
       value: '5',
+    },
+    {
+      name: 'Allow Failed Credential Store Retrieval',
+      scanner_name: 'cs_allow_failed_retrieval',
+      value: '1',
     },
   ],
 };
@@ -210,6 +216,7 @@ describe('TaskDetailsPage tests', () => {
       capabilities: true,
       router: true,
       store: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
     });
 
     store.dispatch(setTimezone('CET'));
@@ -246,6 +253,16 @@ describe('TaskDetailsPage tests', () => {
 
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('bar');
+    // Use container for more reliable assertion
+    const detailsText = baseElement.textContent;
+    expect(detailsText).toContain(
+      'Allow scan when credential store retrieval fails',
+    );
+    expect(detailsText).toContain('Yes');
+    expect(baseElement).toHaveTextContent(
+      'Allow scan when credential store retrieval fails',
+    );
+    expect(baseElement).toHaveTextContent('Yes');
 
     const progressBars = screen.getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Done');
@@ -326,6 +343,7 @@ describe('TaskDetailsPage tests', () => {
       capabilities: true,
       router: true,
       store: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
     });
 
     store.dispatch(setTimezone('CET'));
@@ -333,11 +351,11 @@ describe('TaskDetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task2));
 
-    const {baseElement} = render(<TaskDetailsPage id="12345" />);
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[22]);
+    const {container} = render(<TaskDetailsPage id="12345" />);
 
-    expect(baseElement).toHaveTextContent('No user tags available');
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
   });
 
   test('should render permissions tab', () => {
@@ -379,6 +397,7 @@ describe('TaskDetailsPage tests', () => {
       capabilities: true,
       router: true,
       store: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
     });
 
     store.dispatch(setTimezone('CET'));
@@ -386,11 +405,11 @@ describe('TaskDetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task2));
 
-    const {baseElement} = render(<TaskDetailsPage id="12345" />);
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[24]);
+    const {container} = render(<TaskDetailsPage id="12345" />);
 
-    expect(baseElement).toHaveTextContent('No permissions available');
+    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    fireEvent.click(permissionsTab);
+    expect(container).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
@@ -457,6 +476,7 @@ describe('TaskDetailsPage tests', () => {
       capabilities: true,
       router: true,
       store: true,
+      features: new Features(['ENABLE_CREDENTIAL_STORES']),
     });
 
     store.dispatch(setTimezone('CET'));

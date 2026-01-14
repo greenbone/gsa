@@ -16,7 +16,7 @@ import TableFooter from 'web/components/table/TableFooter';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/Block';
+import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Action = styled.a`
@@ -144,7 +144,7 @@ const Identifiers = props => {
 
   displayActions = displayActions && isDefined(onDelete);
   return (
-    <DetailsBlock title={title}>
+    <DetailsBlock data-testid="host-identifiers" title={title}>
       <Table footer={footer}>
         <colgroup>
           <Col width="15%" />

@@ -23,7 +23,7 @@ interface StyledMultiSelectProps extends MantineMultiSelectProps {
   size?: Size;
 }
 
-interface MultiSelectProps extends StyledMultiSelectProps {
+interface MultiSelectProps extends Omit<StyledMultiSelectProps, 'title'> {
   disabled?: boolean;
   dropdownPosition?: 'top' | 'bottom';
   errorContent?: string;
@@ -34,7 +34,7 @@ interface MultiSelectProps extends StyledMultiSelectProps {
   name?: string;
   placeholder?: string;
   searchable?: boolean;
-  title?: string;
+  toolTipTitle?: string;
   value?: string[];
   onChange?: (value: string[], name?: string) => void;
 }
@@ -76,7 +76,7 @@ const MultiSelect = ({
   name,
   placeholder,
   searchable = true,
-  title,
+  toolTipTitle,
   value,
   size = 'md',
   onChange,
@@ -96,10 +96,13 @@ const MultiSelect = ({
     return (
       <TextInput
         data-testid="text-input"
+        label={label}
+        name={name}
         placeholder={_('Loading...')}
         readOnly={true}
         rightSection={<Loader size="xs" />}
         styles={{root: {flexGrow: grow}}}
+        title={toolTipTitle}
       />
     );
   }
@@ -118,7 +121,7 @@ const MultiSelect = ({
       searchable={searchable}
       size={size}
       styles={{root: {flexGrow: grow}}}
-      title={title}
+      title={toolTipTitle}
       value={value}
       onChange={handleChange}
     />

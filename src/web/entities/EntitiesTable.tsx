@@ -71,18 +71,18 @@ export interface EntitiesTableComponentProps<
 
 export interface EntitiesTableProps<
   TEntity = Model,
-  TFooterProps extends
-    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
+  TFooterProps extends FooterComponentProps<TEntity> =
+    FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
 > extends EntitiesTableComponentProps<
-    TEntity,
-    TFooterProps,
-    THeaderProps,
-    TRowProps,
-    TPaginationProps
-  > {
+  TEntity,
+  TFooterProps,
+  THeaderProps,
+  TRowProps,
+  TPaginationProps
+> {
   'data-testid'?: string;
   doubleRow?: boolean;
   emptyTitle?: string;
@@ -115,6 +115,11 @@ const TableBox = styled(Layout)`
   margin-top: 10px;
 `;
 
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+`;
+
 const EmptyTitle = styled(Layout)`
   margin-top: 10px;
   margin-bottom: 20px;
@@ -122,8 +127,8 @@ const EmptyTitle = styled(Layout)`
 
 function EntitiesTable<
   TEntity extends Model = Model,
-  TFooterProps extends
-    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
+  TFooterProps extends FooterComponentProps<TEntity> =
+    FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
@@ -319,13 +324,15 @@ function EntitiesTable<
       ) : (
         pagination
       )}
-      <UpdatingStripedTable
-        $isUpdating={isUpdating}
-        footer={footer}
-        header={header}
-      >
-        {body}
-      </UpdatingStripedTable>
+      <TableWrapper>
+        <UpdatingStripedTable
+          $isUpdating={isUpdating}
+          footer={footer}
+          header={header}
+        >
+          {body}
+        </UpdatingStripedTable>
+      </TableWrapper>
       {footnote ? (
         <Layout align="space-between">
           <FootNote>

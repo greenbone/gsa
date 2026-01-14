@@ -27,12 +27,13 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
 import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
 import CvesTab from 'web/pages/reports/details/CvesTab';
 import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
-import HostsTab from 'web/pages/reports/details/HostsTab';
+import HostsTabContent from 'web/pages/reports/details/HostsTabContent';
 import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
 import PortsTab from 'web/pages/reports/details/PortsTab';
 import ResultsTab from 'web/pages/reports/details/ResultsTab';
@@ -42,7 +43,7 @@ import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
 import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
-import withGmp from 'web/utils/withGmp';
+
 const Span = styled.span`
   margin-top: 2px;
 `;
@@ -64,7 +65,6 @@ const PageContent = ({
   entity,
   errorsCounts,
   filters,
-  gmp,
   hostsCounts,
   isLoading = true,
   isLoadingFilters = true,
@@ -94,17 +94,19 @@ const PageContent = ({
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
   onFilterResetClick,
-
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onSortChange,
   onTagSuccess,
   onTargetEditClick,
 }) => {
+  const gmp = useGmp();
   const [_] = useTranslation();
   const hasReport = isDefined(entity);
 
   const report = hasReport ? entity.report : undefined;
+  const isContainerScanning =
+    hasReport && isDefined(entity.report.task.ociImageTarget?.id);
 
   const userTags = hasReport ? report.userTags : undefined;
   const userTagsCount = isDefined(userTags) ? userTags.length : 0;
@@ -303,30 +305,19 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    {showInitialLoading ? (
-                      <Loading />
-                    ) : showThresholdMessage ? (
-                      <ThresholdPanel
-                        entityType={_('Hosts')}
-                        filter={reportFilter}
-                        isUpdating={isUpdating}
-                        threshold={threshold}
-                        onFilterChanged={onFilterChanged}
-                        onFilterEditClick={onFilterEditClick}
-                      />
-                    ) : (
-                      <HostsTab
-                        counts={hosts.counts}
-                        filter={reportFilter}
-                        hosts={hosts.entities}
-                        isUpdating={isUpdating}
-                        sortField={sorting.hosts.sortField}
-                        sortReverse={sorting.hosts.sortReverse}
-                        onSortChange={sortField =>
-                          onSortChange('hosts', sortField)
-                        }
-                      />
-                    )}
+                    <HostsTabContent
+                      hosts={hosts}
+                      isContainerScanning={isContainerScanning}
+                      isUpdating={isUpdating}
+                      reportFilter={reportFilter}
+                      showInitialLoading={showInitialLoading}
+                      showThresholdMessage={showThresholdMessage}
+                      sorting={sorting}
+                      threshold={threshold}
+                      onFilterChanged={onFilterChanged}
+                      onFilterEditClick={onFilterEditClick}
+                      onSortChange={onSortChange}
+                    />
                   </TabPanel>
                   <TabPanel>
                     {showInitialLoading ? (
@@ -526,7 +517,6 @@ PageContent.propTypes = {
   entity: PropTypes.model,
   errorsCounts: PropTypes.counts,
   filters: PropTypes.array,
-  gmp: PropTypes.gmp.isRequired,
   hostsCounts: PropTypes.counts,
   isLoading: PropTypes.bool,
   isLoadingFilters: PropTypes.bool,
@@ -563,4 +553,4 @@ PageContent.propTypes = {
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
-export default withGmp(PageContent);
+export default PageContent;

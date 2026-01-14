@@ -13,14 +13,7 @@ import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 export type ScannerType =
-  | typeof OPENVAS_SCANNER_TYPE
-  | typeof CVE_SCANNER_TYPE
-  | typeof GREENBONE_SENSOR_SCANNER_TYPE
-  | typeof OPENVASD_SCANNER_TYPE
-  | typeof AGENT_CONTROLLER_SCANNER_TYPE
-  | typeof OPENVASD_SENSOR_SCANNER_TYPE
-  | typeof AGENT_CONTROLLER_SENSOR_SCANNER_TYPE
-  | typeof CONTAINER_IMAGE_SCANNER_TYPE;
+  (typeof SCANNER_TYPE_DEFINITIONS)[keyof typeof SCANNER_TYPE_DEFINITIONS]['value'];
 
 export type ContainerImageScannerType = typeof CONTAINER_IMAGE_SCANNER_TYPE;
 
@@ -117,14 +110,42 @@ interface ScannerProperties extends ModelProperties {
   tasks?: ScannerTask[];
 }
 
-export const OPENVAS_SCANNER_TYPE = '2';
-export const CVE_SCANNER_TYPE = '3';
-export const GREENBONE_SENSOR_SCANNER_TYPE = '5';
-export const OPENVASD_SCANNER_TYPE = '6';
-export const AGENT_CONTROLLER_SCANNER_TYPE = '7';
-export const OPENVASD_SENSOR_SCANNER_TYPE = '8';
-export const AGENT_CONTROLLER_SENSOR_SCANNER_TYPE = '9';
-export const CONTAINER_IMAGE_SCANNER_TYPE = '10';
+// Scanner type definitions - add new scanner types here with their display names
+export const SCANNER_TYPE_DEFINITIONS = {
+  OPENVAS_SCANNER_TYPE: {value: '2', name: _('OpenVAS Scanner')},
+  CVE_SCANNER_TYPE: {value: '3', name: _('CVE Scanner')},
+  GREENBONE_SENSOR_SCANNER_TYPE: {value: '5', name: _('Greenbone Sensor')},
+  OPENVASD_SCANNER_TYPE: {value: '6', name: _('OpenVASD Scanner')},
+  OPENVASD_SENSOR_SCANNER_TYPE: {value: '8', name: _('OpenVASD Sensor')},
+  AGENT_CONTROLLER_SCANNER_TYPE: {value: '7', name: _('Agent Controller')},
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE: {value: '9', name: _('Agent Sensor')},
+  CONTAINER_IMAGE_SCANNER_TYPE: {
+    value: '10',
+    name: _('Container Image Scanner'),
+  },
+} as const;
+
+// Extract individual constants
+export const OPENVAS_SCANNER_TYPE =
+  SCANNER_TYPE_DEFINITIONS.OPENVAS_SCANNER_TYPE.value;
+export const CVE_SCANNER_TYPE = SCANNER_TYPE_DEFINITIONS.CVE_SCANNER_TYPE.value;
+export const GREENBONE_SENSOR_SCANNER_TYPE =
+  SCANNER_TYPE_DEFINITIONS.GREENBONE_SENSOR_SCANNER_TYPE.value;
+export const OPENVASD_SCANNER_TYPE =
+  SCANNER_TYPE_DEFINITIONS.OPENVASD_SCANNER_TYPE.value;
+export const AGENT_CONTROLLER_SCANNER_TYPE =
+  SCANNER_TYPE_DEFINITIONS.AGENT_CONTROLLER_SCANNER_TYPE.value;
+export const OPENVASD_SENSOR_SCANNER_TYPE =
+  SCANNER_TYPE_DEFINITIONS.OPENVASD_SENSOR_SCANNER_TYPE.value;
+export const AGENT_CONTROLLER_SENSOR_SCANNER_TYPE =
+  SCANNER_TYPE_DEFINITIONS.AGENT_CONTROLLER_SENSOR_SCANNER_TYPE.value;
+export const CONTAINER_IMAGE_SCANNER_TYPE =
+  SCANNER_TYPE_DEFINITIONS.CONTAINER_IMAGE_SCANNER_TYPE.value;
+
+// Mapping of scanner types to their display names (automatically generated)
+export const SCANNER_TYPE_NAMES = Object.fromEntries(
+  Object.values(SCANNER_TYPE_DEFINITIONS).map(def => [def.value, def.name]),
+) as Record<string, string>;
 
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
@@ -139,21 +160,12 @@ export function scannerTypeName(
   scannerType: number | string | undefined,
 ): string {
   scannerType = isDefined(scannerType) ? String(scannerType) : undefined;
-  if (scannerType === OPENVAS_SCANNER_TYPE) {
-    return _('OpenVAS Scanner');
-  } else if (scannerType === CVE_SCANNER_TYPE) {
-    return _('CVE Scanner');
-  } else if (scannerType === GREENBONE_SENSOR_SCANNER_TYPE) {
-    return _('Greenbone Sensor');
-  } else if (scannerType === OPENVASD_SCANNER_TYPE) {
-    return _('OpenVASD Scanner');
-  } else if (scannerType === OPENVASD_SENSOR_SCANNER_TYPE) {
-    return _('OpenVASD Sensor');
-  } else if (scannerType === AGENT_CONTROLLER_SCANNER_TYPE) {
-    return _('Agent Controller');
-  } else if (scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE) {
-    return _('Agent Sensor');
-  } else if (isDefined(scannerType)) {
+
+  if (isDefined(scannerType) && scannerType in SCANNER_TYPE_NAMES) {
+    return SCANNER_TYPE_NAMES[scannerType];
+  }
+
+  if (isDefined(scannerType)) {
     return _('Unknown scanner type ({{type}})', {type: scannerType});
   }
   return _('Unknown scanner type');

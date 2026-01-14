@@ -16,6 +16,32 @@ import {
 import {isDefined} from 'gmp/utils/identity';
 
 /**
+ * Creates a query function that retrieves an element and throws an error if the element is not found.
+ *
+ * @param queryFunction - A function that takes an optional HTMLElement and returns the queried HTMLElement or null.
+ * @param elementName - A descriptive name of the element being queried, used in the error message.
+ * @returns A function that takes an optional HTMLElement, queries the element using the provided queryFunction,
+ *          and returns the queried element. Throws an error if the element is not found.
+ *
+ * @throws Will throw an error if the queried element is not found.
+ */
+const createGetQuery = (
+  queryFunction: (element?: HTMLElement) => HTMLElement | null,
+  elementName: string,
+) => {
+  return (element?: HTMLElement) => {
+    const queriedElement = queryFunction(element);
+    if (!queriedElement) {
+      throw getElementError(
+        `Unable to find ${elementName}.`,
+        element ?? document.body,
+      );
+    }
+    return queriedElement;
+  };
+};
+
+/**
  * Returns the provided element if it is defined, otherwise returns the document body.
  *
  * @param element - The element to check.
@@ -179,13 +205,10 @@ export const queryDialogContent = (dialog?: HTMLElement) => {
  * @returns The dialog content as an `HTMLElement`.
  * @throws Will throw an error if the dialog content cannot be found.
  */
-export const getDialogContent = (dialog?: HTMLElement) => {
-  const queryDialog = queryDialogContent(dialog);
-  if (!queryDialog) {
-    throw getElementError('Unable to find dialog content.', document.body);
-  }
-  return queryDialog;
-};
+export const getDialogContent = createGetQuery(
+  queryDialogContent,
+  'dialog content',
+);
 
 /**
  * Retrieves the title element from a dialog.
@@ -205,13 +228,7 @@ export const queryDialogTitle = (dialog?: HTMLElement) => {
  * @returns The dialog title element if found.
  * @throws Throws an error if the dialog title cannot be found.
  */
-export const getDialogTitle = (dialog?: HTMLElement) => {
-  const dialogTitle = queryDialogTitle(dialog);
-  if (!dialogTitle) {
-    throw getElementError('Unable to find dialog title.', document.body);
-  }
-  return dialogTitle;
-};
+export const getDialogTitle = createGetQuery(queryDialogTitle, 'dialog title');
 
 /**
  * Retrieves the save button of a dialog (in the footer)
@@ -270,16 +287,7 @@ export const queryPowerFilter = (element?: HTMLElement) => {
  * @returns The power filter HTMLElement.
  * @throws Will throw an error if the power filter element cannot be found.
  */
-export const getPowerFilter = (element?: HTMLElement) => {
-  const powerFilter = queryPowerFilter(element);
-  if (!powerFilter) {
-    throw getElementError(
-      'Unable to find powerfilter.',
-      element ?? document.body,
-    );
-  }
-  return powerFilter;
-};
+export const getPowerFilter = createGetQuery(queryPowerFilter, 'powerfilter');
 
 /**
  * Get text inputs
@@ -316,6 +324,8 @@ export const queryTableBody = (element?: HTMLElement) => {
   return element.querySelector('tbody');
 };
 
+export const getTableBody = createGetQuery(queryTableBody, 'table body');
+
 /**
  * Queries the table footer element.
  *
@@ -327,6 +337,8 @@ export const queryTableFooter = (element?: HTMLElement) => {
   return element.querySelector('tfoot');
 };
 
+export const getTableFooter = createGetQuery(queryTableFooter, 'table footer');
+
 /**
  * Queries the table header element.
  *
@@ -337,6 +349,8 @@ export const queryTableHeader = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
   return element.querySelector('thead');
 };
+
+export const getTableHeader = createGetQuery(queryTableHeader, 'table header');
 
 /**
  * Queries and returns all checkbox input elements

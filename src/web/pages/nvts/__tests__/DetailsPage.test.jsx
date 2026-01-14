@@ -4,19 +4,16 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, wait} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
+import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 import NVT from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/current-settings';
-import DetailsPage, {ToolBarIcons} from 'web/pages/nvts/DetailsPage';
+import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
+import DetailsPage from 'web/pages/nvts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -38,16 +35,16 @@ const nvt = NVT.fromElement({
   nvt: {
     _oid: '12345',
     name: 'foo',
-    family: 'bar',
+    family: 'A Family',
     cvss_base: 4.9,
     qod: {
       value: 80,
       type: 'remote_banner',
     },
-    tags: 'cvss_base_vector=AV:N/AC:M/Au:S/C:P/I:N/A:P|summary=This is a description|solution_type=VendorFix|insight=Foo|impact=Bar|vuldetect=Baz|affected=foo',
+    tags: 'cvss_base_vector=AV:N/AC:M/Au:S/C:P/I:N/A:P|summary=This is a CVSS description|solution_type=VendorFix|insight=An Insight|impact=An Impact|vuldetect=A VulDetect|affected=It is affected',
     solution: {
       _type: 'VendorFix',
-      __text: 'This is a description',
+      __text: 'This is a solution description',
     },
     epss: {
       max_severity: {
@@ -165,8 +162,8 @@ const override2 = Override.fromElement({
   end_time: '2021-02-13T12:35:20+01:00',
   modification_time: '2020-02-14T06:35:57Z',
   timezone: 'UTC',
-  new_severity: -1,
-  new_threat: 'False Positive',
+  new_severity: 1,
+  new_threat: 'Low',
   nvt: {
     _oid: '12345',
     name: 'foo',
@@ -255,7 +252,7 @@ describe('Nvt DetailsPage tests', () => {
     };
 
     const {render, store} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
       gmp,
       router: true,
       store: true,
@@ -266,107 +263,155 @@ describe('Nvt DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
-    const {baseElement} = render(<DetailsPage id="12345" />);
+    render(<DetailsPage id="12345" />);
     await wait();
 
-    expect(baseElement).toHaveTextContent('NVT: foo');
+    expect(
+      screen.getByRole('heading', {name: /NVT: foo/i}),
+    ).toBeInTheDocument();
 
-    const links = baseElement.querySelectorAll('a');
-
-    expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
-    expect(links[0]).toHaveAttribute(
+    expect(screen.getByTitle('Help: NVTs')).toBeInTheDocument();
+    expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/managing-secinfo.html#vulnerability-tests-vt',
     );
 
     expect(screen.getAllByTitle('NVT List')[0]).toBeInTheDocument();
-    expect(links[1]).toHaveAttribute('href', '/nvts');
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/nvts',
+    );
 
-    expect(baseElement).toHaveTextContent('ID:12345');
-    expect(baseElement).toHaveTextContent(
+    const entityInfo = within(screen.getByTestId('entity-info'));
+    expect(entityInfo.getByRole('row', {name: /ID:/})).toHaveTextContent(
+      'ID:12345',
+    );
+    expect(entityInfo.getByRole('row', {name: /Created:/})).toHaveTextContent(
       'Mon, Jun 24, 2019 11:55 AM Coordinated Universal Time',
     );
-    expect(baseElement).toHaveTextContent(
+    expect(entityInfo.getByRole('row', {name: /Modified:/})).toHaveTextContent(
       'Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
     );
-    expect(baseElement).toHaveTextContent('Owner:(Global Object)');
-
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[8]).toHaveTextContent('Preferences');
-    expect(spans[10]).toHaveTextContent('User Tags');
-
-    expect(baseElement).toHaveTextContent('Summary');
-    expect(baseElement).toHaveTextContent('This is a description');
-
-    expect(baseElement).toHaveTextContent('Scoring');
-    expect(baseElement).toHaveTextContent('CVSS Base');
-    expect(baseElement).toHaveTextContent('4.9 (Medium)');
-    expect(baseElement).toHaveTextContent('CVSS Base Vector');
-    expect(baseElement).toHaveTextContent('AV:N/AC:M/Au:S/C:P/I:N/A:P');
-    expect(baseElement).toHaveTextContent('CVSS Origin');
-    expect(baseElement).toHaveTextContent('N/A');
-
-    expect(baseElement).toHaveTextContent('EPSS (CVE with highest severity)');
-    expect(baseElement).toHaveTextContent('EPSS Score');
-    expect(baseElement).toHaveTextContent('87.650%');
-    expect(baseElement).toHaveTextContent('EPSS Percentile');
-    expect(baseElement).toHaveTextContent('90th');
-    expect(baseElement).toHaveTextContent('EPSS (highest EPSS score)');
-    expect(baseElement).toHaveTextContent('98.760%');
-
-    expect(baseElement).toHaveTextContent('Insight');
-    expect(baseElement).toHaveTextContent('Foo');
-
-    expect(baseElement).toHaveTextContent('Detection Method');
-    expect(baseElement).toHaveTextContent('Baz');
-
-    expect(baseElement).toHaveTextContent('Affected Software/OS');
-    expect(baseElement).toHaveTextContent('foo');
-
-    expect(baseElement).toHaveTextContent('Impact');
-    expect(baseElement).toHaveTextContent('Bar');
-
-    expect(baseElement).toHaveTextContent('Solution');
-
-    expect(baseElement).toHaveTextContent('Family');
-    expect(baseElement).toHaveTextContent('bar');
-
-    expect(baseElement).toHaveTextContent('References');
-    expect(baseElement).toHaveTextContent('CVECVE-2020-1234');
-
-    expect(baseElement).toHaveTextContent('Overrides');
-    expect(baseElement).toHaveTextContent(
-      'Override from Any to False Positive',
+    expect(entityInfo.getByRole('row', {name: /Owner:/})).toHaveTextContent(
+      'Owner:(Global Object)',
     );
-    expect(baseElement).toHaveTextContent('test_override_1');
-    expect(baseElement).toHaveTextContent('Active until');
-    expect(baseElement).toHaveTextContent(
+
+    expect(
+      screen.getByRole('tab', {name: /^information/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', {name: /^preferences/i}),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^summary/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('This is a solution description'),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^scoring/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^cvss base 4\.9/i}),
+    ).toHaveTextContent('4.9 (Medium)');
+    expect(
+      screen.getByRole('row', {name: /^cvss base vector/i}),
+    ).toHaveTextContent('AV:N/AC:M/Au:S/C:P/I:N/A:P');
+    expect(screen.getByRole('row', {name: /^cvss origin/i})).toHaveTextContent(
+      'N/A',
+    );
+
+    expect(
+      screen.getByRole('heading', {name: /^epss \(cve/i}),
+    ).toHaveTextContent('EPSS (CVE with highest severity)');
+    expect(
+      screen.getByRole('row', {name: /^EPSS Score 87/i}),
+    ).toHaveTextContent('87.650%');
+    expect(
+      screen.getByRole('row', {name: /^EPSS Percentile 9/i}),
+    ).toHaveTextContent('90th');
+    expect(
+      screen.getByRole('heading', {name: /^epss \(highest/i}),
+    ).toHaveTextContent('EPSS (highest EPSS score)');
+    expect(
+      screen.getByRole('row', {name: /^EPSS Score 98/i}),
+    ).toHaveTextContent('98.760%');
+    expect(
+      screen.getByRole('row', {name: /^EPSS Percentile 8/i}),
+    ).toHaveTextContent('80th');
+
+    expect(
+      screen.getByRole('heading', {name: /^insight/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/^An Insight$/)).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^detection method/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/^A VulDetect$/)).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^affected software\/os/i}),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/^It is affected$/)).toBeInTheDocument();
+
+    expect(screen.getByRole('heading', {name: /^impact/i})).toBeInTheDocument();
+    expect(screen.getByText(/^An Impact$/)).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^solution/i}),
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole('heading', {name: /^family/i})).toBeInTheDocument();
+    expect(screen.getByText('A Family')).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^references/i}),
+    ).toBeInTheDocument();
+    const nvtReferences = within(screen.getByTestId('nvt-references'));
+    expect(nvtReferences.getByText('CVE-2020-1234')).toBeInTheDocument();
+    expect(nvtReferences.getByText('CVE-2020-5678')).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^overrides$/i}),
+    ).toBeInTheDocument();
+
+    const overrideBox1 = screen.getByLabelText(
+      /^Override from Any to False Positive/,
+    );
+    expect(overrideBox1).toHaveTextContent('test_override_1');
+    expect(overrideBox1).toHaveTextContent('Active until');
+    expect(overrideBox1).toHaveTextContent(
       'Sat, Mar 13, 2021 10:35 AM Coordinated Universal Time',
     );
-    expect(baseElement).toHaveTextContent('Modified');
-    expect(baseElement).toHaveTextContent(
+    expect(overrideBox1).toHaveTextContent('Modified');
+    expect(overrideBox1).toHaveTextContent(
       'Thu, Jan 14, 2021 6:20 AM Coordinated Universal Time',
     );
 
-    expect(baseElement).toHaveTextContent('test_override_2');
-    expect(baseElement).toHaveTextContent('Active until');
-    expect(baseElement).toHaveTextContent(
+    const overrideBox2 = screen.getByLabelText(/^Override from Any to 1: Low/);
+    expect(overrideBox2).toHaveTextContent('test_override_2');
+    expect(overrideBox2).toHaveTextContent('Active until');
+    expect(overrideBox2).toHaveTextContent(
       'Sat, Feb 13, 2021 11:35 AM Coordinated Universal Time',
     );
-    expect(baseElement).toHaveTextContent('Modified');
-    expect(baseElement).toHaveTextContent(
+    expect(overrideBox2).toHaveTextContent('Modified');
+    expect(overrideBox2).toHaveTextContent(
       'Fri, Feb 14, 2020 6:35 AM Coordinated Universal Time',
     );
 
-    expect(baseElement).toHaveTextContent('Notes');
-    expect(baseElement).toHaveTextContent('Note');
-    expect(baseElement).toHaveTextContent('test_note');
-    expect(baseElement).toHaveTextContent('Active until');
-    expect(baseElement).toHaveTextContent(
+    expect(screen.getByRole('heading', {name: /^notes$/i})).toBeInTheDocument();
+    const noteBox = screen.getByLabelText(/^Note/);
+    expect(noteBox).toHaveTextContent('test_note');
+    expect(noteBox).toHaveTextContent('Active until');
+    expect(noteBox).toHaveTextContent(
       'Sat, Feb 13, 2021 6:35 AM Coordinated Universal Time',
     );
-    expect(baseElement).toHaveTextContent('Modified');
-    expect(baseElement).toHaveTextContent(
+    expect(noteBox).toHaveTextContent('Modified');
+    expect(noteBox).toHaveTextContent(
       'Thu, Jan 14, 2021 6:35 AM Coordinated Universal Time',
     );
   });
@@ -389,8 +434,8 @@ describe('Nvt DetailsPage tests', () => {
     };
 
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -400,18 +445,19 @@ describe('Nvt DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
-    const {baseElement} = render(<DetailsPage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[8]).toHaveTextContent('Preferences');
+    const preferencesTab = screen.getByRole('tab', {name: /^preferences/i});
+    fireEvent.click(preferencesTab);
 
-    expect(spans[8]).toHaveTextContent('Preferences');
-    fireEvent.click(spans[8]);
-
-    expect(baseElement).toHaveTextContent('Name');
-    expect(baseElement).toHaveTextContent('Timeout');
-    expect(baseElement).toHaveTextContent('Default Value');
-    expect(baseElement).toHaveTextContent('default');
+    expect(screen.getByRole('columnheader', {name: /^name/i}))
+      .toBeInTheDocument;
+    expect(
+      screen.getByRole('columnheader', {name: /^default value/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('row', {name: /^Timeout default/}),
+    ).toBeInTheDocument();
   });
 
   test('should render user tags tab', () => {
@@ -432,7 +478,7 @@ describe('Nvt DetailsPage tests', () => {
     };
 
     const {render, store} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
       gmp,
       router: true,
       store: true,
@@ -443,98 +489,10 @@ describe('Nvt DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
-    const {baseElement} = render(<DetailsPage id="12345" />);
+    const {container} = render(<DetailsPage id="12345" />);
 
-    const spans = baseElement.querySelectorAll('span');
-    expect(spans[10]).toHaveTextContent('User Tags');
-
-    fireEvent.click(spans[10]);
-
-    expect(baseElement).toHaveTextContent('No user tags available');
-  });
-});
-
-describe('Nvt ToolBarIcons tests', () => {
-  test('should render', () => {
-    const handleNvtDownloadClick = testing.fn();
-    const handleOnNoteCreateClick = testing.fn();
-    const handleOnOverrideCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl, enableEPSS: true}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    const {element} = render(
-      <ToolBarIcons
-        entity={nvt}
-        onNoteCreateClick={handleOnNoteCreateClick}
-        onNvtDownloadClick={handleNvtDownloadClick}
-        onOverrideCreateClick={handleOnOverrideCreateClick}
-      />,
-    );
-
-    const links = element.querySelectorAll('a');
-
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/managing-secinfo.html#vulnerability-tests-vt',
-    );
-    expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
-
-    expect(links[1]).toHaveAttribute('href', '/nvts');
-    expect(screen.getAllByTitle('NVT List')[0]).toBeInTheDocument();
-
-    expect(links[2]).toHaveAttribute('href', '/results?filter=nvt%3D12345');
-    expect(
-      screen.getAllByTitle('Corresponding Results')[0],
-    ).toBeInTheDocument();
-
-    expect(links[3]).toHaveAttribute(
-      'href',
-      '/vulnerabilities?filter=uuid%3D12345',
-    );
-    expect(
-      screen.getAllByTitle('Corresponding Vulnerabilities')[0],
-    ).toBeInTheDocument();
-  });
-
-  test('should call click handlers', () => {
-    const handleNvtDownloadClick = testing.fn();
-    const handleOnNoteCreateClick = testing.fn();
-    const handleOnOverrideCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl, enableEPSS: true}};
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    render(
-      <ToolBarIcons
-        entity={nvt}
-        onNoteCreateClick={handleOnNoteCreateClick}
-        onNvtDownloadClick={handleNvtDownloadClick}
-        onOverrideCreateClick={handleOnOverrideCreateClick}
-      />,
-    );
-
-    const exportIcon = screen.getAllByTitle('Export NVT')[0];
-    const addNewNoteIcon = screen.getAllByTitle('Add new Note')[0];
-    const addNewOverrideIcon = screen.getAllByTitle('Add new Override')[0];
-
-    fireEvent.click(exportIcon);
-    expect(handleNvtDownloadClick).toHaveBeenCalledWith(nvt);
-
-    fireEvent.click(addNewNoteIcon);
-    expect(handleOnNoteCreateClick).toHaveBeenCalledWith(nvt);
-
-    fireEvent.click(addNewOverrideIcon);
-    expect(handleOnOverrideCreateClick).toHaveBeenCalledWith(nvt);
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    fireEvent.click(userTagsTab);
+    expect(container).toHaveTextContent('No user tags available');
   });
 });
