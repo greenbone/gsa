@@ -36,7 +36,7 @@ import {renderYesNo} from 'web/utils/Render';
 interface ToolBarIconsProps {
   onOpenDialogClick: () => void;
   onTestConnectionClick: () => void;
-  connectionStatus?: 'success' | 'failed' | 'testing' | undefined;
+  connectionStatus: 'success' | 'failed' | 'testing' | undefined;
 }
 
 const ToolBarIcons = ({
