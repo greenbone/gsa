@@ -38,12 +38,12 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const modify = testing.fn().mockResolvedValue({});
+    const edit = testing.fn().mockResolvedValue({});
     const verify = testing.fn().mockResolvedValue({});
 
     const gmp = {
       credentialstores: {get},
-      credentialstore: {modify, verify},
+      credentialstore: {edit, verify},
       settings: {token: 'token'},
     };
 
@@ -61,8 +61,8 @@ describe('CredentialStorePage tests', () => {
     await screen.findByText('8080');
 
     // open edit dialog
-    const edit = await screen.findByTitle('Edit Credential Store');
-    fireEvent.click(edit);
+    const editButton = await screen.findByTitle('Edit Credential Store');
+    fireEvent.click(editButton);
 
     // dialog opened with app id prefilled
     await screen.findByText('Edit Credential Store');
@@ -79,8 +79,8 @@ describe('CredentialStorePage tests', () => {
     await wait();
 
     // mutate should be called with expected params (first arg only)
-    expect(modify).toHaveBeenCalled();
-    expect(modify.mock.calls[0][0]).toEqual({
+    expect(edit).toHaveBeenCalled();
+    expect(edit.mock.calls[0][0]).toEqual({
       id: 'cs1',
       active: true,
       appId: 'new-app',
@@ -116,12 +116,12 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const modify = testing.fn().mockResolvedValue({});
+    const edit = testing.fn().mockResolvedValue({});
     const verify = testing.fn().mockResolvedValue({});
 
     const gmp = {
       credentialstores: {get},
-      credentialstore: {modify, verify},
+      credentialstore: {edit, verify},
       settings: {token: 'token'},
     };
 
@@ -159,12 +159,12 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const modify = testing.fn().mockResolvedValue({});
+    const edit = testing.fn().mockResolvedValue({});
     const verify = testing.fn().mockResolvedValue({});
 
     const gmp = {
       credentialstores: {get},
-      credentialstore: {modify, verify},
+      credentialstore: {edit, verify},
       settings: {token: 'token'},
     };
 
@@ -202,12 +202,12 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const modify = testing.fn().mockResolvedValue({});
+    const edit = testing.fn().mockResolvedValue({});
     const verify = testing.fn().mockRejectedValue(new Error('boom'));
 
     const gmp = {
       credentialstores: {get},
-      credentialstore: {modify, verify},
+      credentialstore: {edit, verify},
       settings: {token: 'token'},
     };
 
@@ -242,12 +242,12 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const modify = testing.fn().mockResolvedValue({});
+    const edit = testing.fn().mockResolvedValue({});
     const verify = testing.fn().mockResolvedValue({});
 
     const gmp = {
       credentialstores: {get},
-      credentialstore: {modify, verify},
+      credentialstore: {edit, verify},
       settings: {token: 'token'},
     };
 
@@ -265,7 +265,7 @@ describe('CredentialStorePage tests', () => {
     expect(verify).not.toHaveBeenCalled();
   });
 
-  test('should not call modify when saving and credential store has no id', async () => {
+  test('should not call edit when saving and credential store has no id', async () => {
     const credentialStore = CredentialStore.fromElement({
       name: 'No ID Store',
       active: 1,
@@ -281,12 +281,12 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const modify = testing.fn().mockResolvedValue({});
+    const edit = testing.fn().mockResolvedValue({});
     const verify = testing.fn().mockResolvedValue({});
 
     const gmp = {
       credentialstores: {get},
-      credentialstore: {modify, verify},
+      credentialstore: {edit, verify},
       settings: {token: 'token'},
     };
 
@@ -297,8 +297,8 @@ describe('CredentialStorePage tests', () => {
     await wait();
 
     // open edit dialog
-    const edit = await screen.findByTitle('Edit Credential Store');
-    fireEvent.click(edit);
+    const editButton = await screen.findByTitle('Edit Credential Store');
+    fireEvent.click(editButton);
 
     // dialog opened
     await screen.findByText('Edit Credential Store');
@@ -306,9 +306,9 @@ describe('CredentialStorePage tests', () => {
     const save = screen.getDialogSaveButton();
     fireEvent.click(save);
 
-    // ensure modify wasn't called due to missing id
+    // ensure edit wasn't called due to missing id
     await wait();
-    expect(modify).not.toHaveBeenCalled();
+    expect(edit).not.toHaveBeenCalled();
   });
 
   test('should render error state when fetching credential stores fails', async () => {
@@ -316,7 +316,7 @@ describe('CredentialStorePage tests', () => {
 
     const gmp = {
       credentialstores: {get},
-      credentialstore: {modify: testing.fn(), verify: testing.fn()},
+      credentialstore: {edit: testing.fn(), verify: testing.fn()},
       settings: {token: 'token'},
     };
 
@@ -336,7 +336,7 @@ describe('CredentialStorePage tests', () => {
 
     const gmp = {
       credentialstores: {get},
-      credentialstore: {modify: testing.fn(), verify: testing.fn()},
+      credentialstore: {edit: testing.fn(), verify: testing.fn()},
       settings: {token: 'token'},
     };
 

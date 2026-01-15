@@ -12,7 +12,7 @@ import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
-interface UseModifyCredentialStoreParams {
+interface UseEditCredentialStoreParams {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 }
@@ -31,10 +31,10 @@ export const useGetCredentialStores = ({filter}: {filter?: Filter}) => {
   });
 };
 
-export const useModifyCredentialStore = ({
+export const useEditCredentialStore = ({
   onError,
   onSuccess,
-}: UseModifyCredentialStoreParams) => {
+}: UseEditCredentialStoreParams) => {
   const gmp = useGmp();
 
   return useGmpMutation<
@@ -42,7 +42,7 @@ export const useModifyCredentialStore = ({
     EntityActionResponse,
     Rejection
   >({
-    gmpMethod: gmp.credentialstore.modify.bind(gmp.credentialstore),
+    gmpMethod: gmp.credentialstore.edit.bind(gmp.credentialstore),
     invalidateQueryIds: ['get_credential_stores'],
     onError,
     onSuccess,
