@@ -47,7 +47,7 @@ describe('CredentialStoreCommand tests', () => {
     const pkcs12File = new File(['pkcs12'], 'cert.p12');
     const serverCaCertificate = new File(['ca'], 'ca.pem');
 
-    await command.modify({
+    await command.edit({
       id: '123',
       active: true,
       appId: 'app123',
@@ -86,7 +86,7 @@ describe('CredentialStoreCommand tests', () => {
     const http = createHttp(response);
     const command = new CredentialStoreCommand(http);
 
-    await command.modify({
+    await command.edit({
       id: '123',
       active: false,
     });

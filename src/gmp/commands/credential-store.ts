@@ -44,7 +44,7 @@ class CredentialStoreCommand extends EntityCommand<
       .credential_store;
   }
 
-  async modify({
+  async edit({
     id,
     active,
     appId,
@@ -58,7 +58,7 @@ class CredentialStoreCommand extends EntityCommand<
     passphrase,
     serverCaCertificate,
   }: CredentialStoreModifyParams): Promise<EntityActionResponse> {
-    log.debug('Modifying credential store', {
+    log.debug('Editing credential store', {
       id,
       active,
       appId,

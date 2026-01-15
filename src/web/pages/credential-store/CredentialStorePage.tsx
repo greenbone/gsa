@@ -23,7 +23,7 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import {
   useGetCredentialStores,
-  useModifyCredentialStore,
+  useEditCredentialStore,
   useVerifyCredentialStore,
 } from 'web/hooks/use-query/credential-store';
 import useTranslation from 'web/hooks/useTranslation';
@@ -84,7 +84,7 @@ const CredentialStorePage = () => {
 
   const verifyCredentialStore = useVerifyCredentialStore({});
 
-  const modifyCredentialStore = useModifyCredentialStore({});
+  const editCredentialStore = useEditCredentialStore({});
 
   const handleSaveSettings = async ({
     active,
@@ -103,7 +103,7 @@ const CredentialStorePage = () => {
       return;
     }
 
-    await modifyCredentialStore.mutateAsync({
+    await editCredentialStore.mutateAsync({
       id: credentialStore.id,
       active,
       appId,
