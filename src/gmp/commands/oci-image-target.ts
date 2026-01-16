@@ -17,6 +17,7 @@ export interface OciImageTargetCreateParams {
   imageReferences: string;
   credentialId?: string;
   excludeHosts?: string;
+  excludeImages?: string;
   hosts?: string;
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
@@ -33,6 +34,8 @@ export interface OciImageTargetSaveParams {
   comment?: string;
   imageReferences?: string;
   credentialId?: string;
+  excludeImages?: string;
+  excludeFile?: string;
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
   inUse?: boolean;
@@ -57,6 +60,7 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
     targetExcludeSource,
     hosts,
     excludeHosts,
+    excludeImages,
     reverseLookupOnly,
     reverseLookupUnify,
     file,
@@ -70,6 +74,7 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
       imageReferences,
       credentialId,
       excludeHosts,
+      excludeImages,
       hosts,
       reverseLookupOnly,
       reverseLookupUnify,
@@ -86,6 +91,7 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
       hosts,
       image_references: imageReferences,
       exclude_hosts: excludeHosts,
+      exclude_images: excludeImages,
       reverse_lookup_only: parseYesNo(reverseLookupOnly),
       reverse_lookup_unify: parseYesNo(reverseLookupUnify),
       credential_id: credentialId,
@@ -101,6 +107,8 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
     comment,
     imageReferences,
     credentialId,
+    excludeImages,
+    excludeFile,
     reverseLookupOnly,
     reverseLookupUnify,
     inUse,
@@ -113,6 +121,8 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
       comment,
       imageReferences,
       credentialId,
+      excludeImages,
+      excludeFile,
       reverseLookupOnly,
       reverseLookupUnify,
       inUse,
@@ -127,6 +137,8 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
       comment,
       image_references: imageReferences,
       credential_id: credentialId,
+      exclude_images: excludeImages,
+      exclude_file: excludeFile,
       reverse_lookup_only: parseYesNo(reverseLookupOnly),
       reverse_lookup_unify: parseYesNo(reverseLookupUnify),
       in_use: parseYesNo(inUse),

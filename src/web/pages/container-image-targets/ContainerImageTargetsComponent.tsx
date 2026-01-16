@@ -179,6 +179,8 @@ const ContainerImageTargetsComponent = ({
         name: data.name,
         comment: data.comment,
         imageReferences: data.hosts,
+        excludeImages: data.excludeImages,
+        excludeFile: data.excludeFile ? data.excludeFile.name : undefined,
         credentialId,
         reverseLookupOnly: data.reverseLookupOnly,
         reverseLookupUnify: data.reverseLookupUnify,
@@ -193,6 +195,9 @@ const ContainerImageTargetsComponent = ({
         name: data.name || '',
         comment: data.comment || '',
         imageReferences: data.hosts || '',
+        excludeImages: data.excludeImages || '',
+        file: data.file ? data.file.name : undefined,
+        excludeFile: data.excludeFile ? data.excludeFile.name : undefined,
         targetSource: data.targetSource || 'manual',
         targetExcludeSource: data.targetExcludeSource || 'manual',
         credentialId,
@@ -251,7 +256,10 @@ const ContainerImageTargetsComponent = ({
           comment={selectedTarget?.comment}
           credentialId={credentialId}
           credentials={credentials}
+          excludeFile={undefined}
           excludeHosts={''}
+          excludeImages={selectedTarget?.excludeImages.join(', ') || ''}
+          file={undefined}
           hosts={selectedTarget?.imageReferences.join(', ')}
           inUse={selectedTarget?.inUse}
           name={selectedTarget?.name}

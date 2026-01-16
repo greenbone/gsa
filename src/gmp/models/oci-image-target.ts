@@ -10,6 +10,7 @@ import {isEmpty} from 'gmp/utils/string';
 
 interface OciImageTargetElement extends ModelElement {
   image_references?: string;
+  exclude_images?: string;
   credential?: ModelElement;
   reverse_lookup_only?: YesNo;
   reverse_lookup_unify?: YesNo;
@@ -17,6 +18,7 @@ interface OciImageTargetElement extends ModelElement {
 
 interface OciImageTargetProperties extends ModelProperties {
   imageReferences?: string[];
+  excludeImages?: string[];
   credential?: Model;
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
@@ -26,12 +28,14 @@ class OciImageTarget extends Model {
   static readonly entityType = 'ociimagetarget';
 
   readonly imageReferences: string[];
+  readonly excludeImages: string[];
   readonly credential?: Model;
   readonly reverseLookupOnly: boolean;
   readonly reverseLookupUnify: boolean;
 
   constructor({
     imageReferences = [],
+    excludeImages = [],
     credential,
     reverseLookupOnly = false,
     reverseLookupUnify = false,
@@ -40,6 +44,7 @@ class OciImageTarget extends Model {
     super(properties);
 
     this.imageReferences = imageReferences;
+    this.excludeImages = excludeImages;
     this.credential = credential;
     this.reverseLookupOnly = reverseLookupOnly;
     this.reverseLookupUnify = reverseLookupUnify;
@@ -61,6 +66,7 @@ class OciImageTarget extends Model {
     }
 
     ret.imageReferences = parseCsv(element.image_references);
+    ret.excludeImages = parseCsv(element.exclude_images);
     ret.reverseLookupOnly = parseBoolean(element.reverse_lookup_only);
     ret.reverseLookupUnify = parseBoolean(element.reverse_lookup_unify);
 
