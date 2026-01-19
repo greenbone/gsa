@@ -131,7 +131,9 @@ const ContainerImageTargetRow = ({
         links={!links}
         type="target"
       />
-      <TableData>{shorten(entity.imageReferences.join(', '), 500)}</TableData>
+      <TableData>
+        {shorten((entity.imageReferences ?? []).join(', '), 500)}
+      </TableData>
       <TableData>
         <Cred cred={entity.credential} links={links} title={_('Credential')} />
       </TableData>

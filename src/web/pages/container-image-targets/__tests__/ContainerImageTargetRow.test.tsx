@@ -80,4 +80,37 @@ describe('ContainerImageTargetRow tests', () => {
     render(<ContainerImageTargetRow entity={entityNoCred} />);
     expect(screen.queryByText('Credential:')).not.toBeInTheDocument();
   });
+
+  test('should render with undefined imageReferences without throwing error', () => {
+    const entityNoImages = new OciImageTarget({
+      id: 'target-1',
+      name: 'Test Container Image Target',
+      credential: new Model({id: 'cred-1', name: 'Test Credential'}),
+      reverseLookupOnly: false,
+      reverseLookupUnify: false,
+      userCapabilities: new EverythingCapabilities(),
+    });
+    const {render} = rendererWithTableBody({capabilities: true});
+    render(<ContainerImageTargetRow entity={entityNoImages} />);
+    expect(screen.getByText('Test Container Image Target')).toBeInTheDocument();
+    // Should render empty cell instead of erroring
+    expect(screen.getByText('Credential:')).toBeInTheDocument();
+  });
+
+  test('should handle empty imageReferences array', () => {
+    const entityEmptyImages = new OciImageTarget({
+      id: 'target-1',
+      name: 'Test Container Image Target',
+      imageReferences: [],
+      credential: new Model({id: 'cred-1', name: 'Test Credential'}),
+      reverseLookupOnly: false,
+      reverseLookupUnify: false,
+      userCapabilities: new EverythingCapabilities(),
+    });
+    const {render} = rendererWithTableBody({capabilities: true});
+    render(<ContainerImageTargetRow entity={entityEmptyImages} />);
+    expect(screen.getByText('Test Container Image Target')).toBeInTheDocument();
+    // Should render empty string from joining empty array
+    expect(screen.getByText('Credential:')).toBeInTheDocument();
+  });
 });

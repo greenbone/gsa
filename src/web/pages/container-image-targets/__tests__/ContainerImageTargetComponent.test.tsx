@@ -477,4 +477,89 @@ describe('ContainerImageTargetsComponent tests', () => {
     expect(gmp.credentials.getAll).toHaveBeenCalled();
     expect(gmp.credential.create).toHaveBeenCalled();
   });
+
+  test('should handle editing target with undefined imageReferences', async () => {
+    const gmp = createGmp();
+    const onSaved = testing.fn();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    const target = makeTarget('123', 'foo'); // no image_references provided
+
+    render(
+      <ContainerImageTargetsComponent onSaved={onSaved}>
+        {({edit}) => <Button data-testid="open" onClick={() => edit(target)} />}
+      </ContainerImageTargetsComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    expect(
+      await screen.findByText('Edit Container Image Target - foo'),
+    ).toBeInTheDocument();
+
+    const saveButton = screen.getDialogSaveButton();
+    fireEvent.click(saveButton);
+    await wait();
+
+    expect(
+      screen.queryByText('Edit Container Image Target - foo'),
+    ).not.toBeInTheDocument();
+    expect(onSaved).toHaveBeenCalledWith({id: 'saved-id'});
+  });
+
+  test('should handle editing target with undefined excludeImages', async () => {
+    const gmp = createGmp();
+    const onSaved = testing.fn();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    // Create a target without excludeImages field
+    const target = OciImageTarget.fromElement({
+      _id: '123',
+      name: 'foo',
+      image_references: 'img1, img2',
+    });
+
+    render(
+      <ContainerImageTargetsComponent onSaved={onSaved}>
+        {({edit}) => <Button data-testid="open" onClick={() => edit(target)} />}
+      </ContainerImageTargetsComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    expect(
+      await screen.findByText('Edit Container Image Target - foo'),
+    ).toBeInTheDocument();
+
+    const saveButton = screen.getDialogSaveButton();
+    fireEvent.click(saveButton);
+    await wait();
+
+    expect(
+      screen.queryByText('Edit Container Image Target - foo'),
+    ).not.toBeInTheDocument();
+    expect(onSaved).toHaveBeenCalledWith({id: 'saved-id'});
+  });
+
+  test('should render edit dialog when both imageReferences and excludeImages are undefined', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    const target = OciImageTarget.fromElement({
+      _id: '123',
+      name: 'foo',
+    });
+
+    render(
+      <ContainerImageTargetsComponent>
+        {({edit}) => <Button data-testid="open" onClick={() => edit(target)} />}
+      </ContainerImageTargetsComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    expect(
+      await screen.findByText('Edit Container Image Target - foo'),
+    ).toBeInTheDocument();
+
+    // Dialog should render without errors
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
 });
