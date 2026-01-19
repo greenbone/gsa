@@ -138,20 +138,18 @@ const AgentConfigurationSection = ({
               </ActiveExpressionCode>
             </ActiveExpressionContainer>
             {!useAdvancedCron ? (
-              <>
-                <Select
-                  description={_(
-                    'Choose from common scheduling options above, or enable advanced mode for custom expressions.',
-                  )}
-                  items={cronScheduleItems}
-                  label="Scheduler Cron Expression"
-                  name="schedulerCronExpression"
-                  placeholder={_('Select a schedule')}
-                  title={_('Schedule')}
-                  value={schedulerCronExpression}
-                  onChange={onValueChange}
-                />
-              </>
+              <Select
+                description={_(
+                  'Choose from common scheduling options above, or enable advanced mode for custom expressions.',
+                )}
+                items={cronScheduleItems}
+                label="Scheduler Cron Expression"
+                name="schedulerCronExpression"
+                placeholder={_('Select a schedule')}
+                title={_('Schedule')}
+                value={schedulerCronExpression}
+                onChange={onValueChange}
+              />
             ) : (
               <TextField
                 description={
