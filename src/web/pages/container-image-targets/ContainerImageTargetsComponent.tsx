@@ -34,11 +34,11 @@ import CredentialDialog, {
 
 interface ContainerImageTargetComponentRenderProps {
   delete: (entity: OciImageTarget) => Promise<void>;
-  edit: (entity: OciImageTarget) => void;
-  create: () => void;
+  edit: (entity: OciImageTarget) => Promise<void>;
+  create: () => Promise<void>;
   clone: (entity: OciImageTarget) => Promise<EntityActionResponse>;
   download: (entity: OciImageTarget) => Promise<void>;
-  save: (entity: OciImageTarget) => void;
+  save: (entity: OciImageTarget) => Promise<void>;
 }
 
 interface ContainerImageTargetsComponentProps {
@@ -86,6 +86,7 @@ const ContainerImageTargetsComponent = ({
   const [selectedTarget, setSelectedTarget] = useState<
     OciImageTarget | undefined
   >(undefined);
+
   const [credentialsDialogVisible, setCredentialsDialogVisible] =
     useState(false);
   const [credentials, setCredentials] = useState<Credential[]>([]);
@@ -178,7 +179,10 @@ const ContainerImageTargetsComponent = ({
         id: selectedTarget.id,
         name: data.name,
         comment: data.comment,
-        imageReferences: data.hosts,
+        imageReferences: data.imageReferences,
+        excludeImages: data.excludeImages,
+        file: data.file,
+        excludeFile: data.excludeFile,
         credentialId,
         reverseLookupOnly: data.reverseLookupOnly,
         reverseLookupUnify: data.reverseLookupUnify,
@@ -192,7 +196,10 @@ const ContainerImageTargetsComponent = ({
       const createParams: OciImageTargetCreateParams = {
         name: data.name || '',
         comment: data.comment || '',
-        imageReferences: data.hosts || '',
+        imageReferences: data.imageReferences || '',
+        excludeImages: data.excludeImages,
+        file: data.file,
+        excludeFile: data.excludeFile,
         targetSource: data.targetSource || 'manual',
         targetExcludeSource: data.targetExcludeSource || 'manual',
         credentialId,
@@ -251,8 +258,10 @@ const ContainerImageTargetsComponent = ({
           comment={selectedTarget?.comment}
           credentialId={credentialId}
           credentials={credentials}
-          excludeHosts={''}
-          hosts={selectedTarget?.imageReferences.join(', ')}
+          excludeFile={undefined}
+          excludeImages={(selectedTarget?.excludeImages ?? []).join(', ')}
+          file={undefined}
+          imageReferences={(selectedTarget?.imageReferences ?? []).join(', ')}
           inUse={selectedTarget?.inUse}
           name={selectedTarget?.name}
           reverseLookupOnly={selectedTarget?.reverseLookupOnly}

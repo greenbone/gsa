@@ -35,10 +35,10 @@ interface ContainerImageTargetsDialogValues {
 
 interface ContainerImageTargetsDialogDefaultValues {
   comment: string;
-  excludeHosts: string;
+  excludeImages: string;
   file?: File;
   excludeFile?: File;
-  hosts: string;
+  imageReferences: string;
   hostsCount?: number;
   hostsFilter?: Filter;
   inUse: boolean;
@@ -56,9 +56,9 @@ interface ContainerImageTargetsDialogProps {
   comment?: string;
   credentials?: Credential[];
   excludeFile?: File;
-  excludeHosts?: string;
+  excludeImages?: string;
   file?: File;
-  hosts?: string;
+  imageReferences?: string;
   hostsCount?: number;
   hostsFilter?: Filter;
   inUse?: boolean;
@@ -79,9 +79,9 @@ const ContainerImageTargetsDialog = ({
   comment = '',
   credentials = [],
   excludeFile,
-  excludeHosts = '',
+  excludeImages = '',
   file,
-  hosts = '',
+  imageReferences = '',
   hostsCount,
   hostsFilter,
   inUse = false,
@@ -118,9 +118,9 @@ const ContainerImageTargetsDialog = ({
     comment,
     name,
     excludeFile,
-    excludeHosts,
+    excludeImages,
     file,
-    hosts,
+    imageReferences,
     hostsCount,
     hostsFilter,
     inUse,
@@ -165,7 +165,7 @@ const ContainerImageTargetsDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Hosts')}>
+            <FormGroup title={_('Image References')}>
               <Row>
                 <Radio
                   checked={state.targetSource === 'manual'}
@@ -178,8 +178,8 @@ const ContainerImageTargetsDialog = ({
                 <TextField
                   disabled={inUse || state.targetSource !== 'manual'}
                   grow="1"
-                  name="hosts"
-                  value={state.hosts}
+                  name="imageReferences"
+                  value={state.imageReferences}
                   onChange={onValueChange}
                 />
               </Row>
@@ -217,7 +217,7 @@ const ContainerImageTargetsDialog = ({
               </Row>
             </FormGroup>
 
-            <FormGroup title={_('Exclude Hosts')}>
+            <FormGroup title={_('Exclude Images')}>
               <Row>
                 <Radio
                   checked={state.targetExcludeSource === 'manual'}
@@ -230,8 +230,8 @@ const ContainerImageTargetsDialog = ({
                 <TextField
                   disabled={inUse || state.targetExcludeSource !== 'manual'}
                   grow="1"
-                  name="excludeHosts"
-                  value={state.excludeHosts}
+                  name="excludeImages"
+                  value={state.excludeImages}
                   onChange={onValueChange}
                 />
               </Row>

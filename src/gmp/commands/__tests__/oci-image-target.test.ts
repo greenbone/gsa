@@ -36,12 +36,15 @@ describe('OciImageTargetCommand tests', () => {
     const entityResponse = createActionResultResponse({id: 'oci-123'});
     const http = createHttp(entityResponse);
     const command = new OciImageTargetCommand(http);
+    const fileObj = new File(['dummy content'], 'exclude-file.txt');
     const result = await command.save({
       id: 'oci-123',
       name: 'Test Target',
       comment: 'Test comment',
       imageReferences: 'ref1,ref2',
       credentialId: 'cred-1',
+      excludeImages: 'exclude-ref1',
+      excludeFile: fileObj,
       reverseLookupOnly: true,
       reverseLookupUnify: false,
       inUse: true,
@@ -56,6 +59,9 @@ describe('OciImageTargetCommand tests', () => {
         comment: 'Test comment',
         image_references: 'ref1,ref2',
         credential_id: 'cred-1',
+        exclude_images: 'exclude-ref1',
+        exclude_file: fileObj,
+        file: undefined,
         reverse_lookup_only: YES_VALUE,
         reverse_lookup_unify: 0,
         in_use: YES_VALUE,
@@ -70,19 +76,21 @@ describe('OciImageTargetCommand tests', () => {
     const entityResponse = createActionResultResponse({id: 'oci-456'});
     const http = createHttp(entityResponse);
     const command = new OciImageTargetCommand(http);
+    const fileObj = new File(['dummy content'], 'file.txt');
+    const excludeFileObj = new File(['dummy content'], 'exfile.txt');
     const result = await command.create({
       name: 'New Target',
       comment: 'A new target',
       imageReferences: 'img1',
       credentialId: 'cred-2',
       hosts: 'host1',
-      excludeHosts: 'host2',
+      excludeImages: 'exclude-img1,exclude-img2',
       reverseLookupOnly: false,
       reverseLookupUnify: true,
       targetSource: 'src2',
       targetExcludeSource: 'ex-src2',
-      file: 'file.txt',
-      excludeFile: 'exfile.txt',
+      file: fileObj,
+      excludeFile: excludeFileObj,
       hostsFilter: 'filter',
     });
     expect(http.request).toHaveBeenCalledWith('post', {
@@ -94,12 +102,12 @@ describe('OciImageTargetCommand tests', () => {
         target_exclude_source: 'ex-src2',
         hosts: 'host1',
         image_references: 'img1',
-        exclude_hosts: 'host2',
+        exclude_images: 'exclude-img1,exclude-img2',
         reverse_lookup_only: 0,
         reverse_lookup_unify: YES_VALUE,
         credential_id: 'cred-2',
-        file: 'file.txt',
-        exclude_file: 'exfile.txt',
+        file: fileObj,
+        exclude_file: excludeFileObj,
         hosts_filter: 'filter',
       },
     });

@@ -14,8 +14,8 @@ describe('ContainerImageTargetsDialog tests', () => {
     expect(screen.getByText('New Container Image Target')).toBeInTheDocument();
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Comment')).toBeInTheDocument();
-    expect(screen.getByText('Hosts')).toBeInTheDocument();
-    expect(screen.getByText('Exclude Hosts')).toBeInTheDocument();
+    expect(screen.getByText('Image References')).toBeInTheDocument();
+    expect(screen.getByText('Exclude Images')).toBeInTheDocument();
     expect(screen.getByText('Credential')).toBeInTheDocument();
     expect(screen.getByText('Reverse Lookup Only')).toBeInTheDocument();
     expect(screen.getByText('Reverse Lookup Unify')).toBeInTheDocument();

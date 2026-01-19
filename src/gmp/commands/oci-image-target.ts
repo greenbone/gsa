@@ -16,14 +16,14 @@ export interface OciImageTargetCreateParams {
   copy?: string;
   imageReferences: string;
   credentialId?: string;
-  excludeHosts?: string;
+  excludeImages?: string;
   hosts?: string;
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
   targetSource?: string;
   targetExcludeSource?: string;
-  file?: string;
-  excludeFile?: string;
+  file?: File;
+  excludeFile?: File;
   hostsFilter?: string;
 }
 
@@ -33,6 +33,9 @@ export interface OciImageTargetSaveParams {
   comment?: string;
   imageReferences?: string;
   credentialId?: string;
+  excludeImages?: string;
+  excludeFile?: File;
+  file?: File;
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
   inUse?: boolean;
@@ -56,7 +59,7 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
     targetSource,
     targetExcludeSource,
     hosts,
-    excludeHosts,
+    excludeImages,
     reverseLookupOnly,
     reverseLookupUnify,
     file,
@@ -69,7 +72,7 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
       copy,
       imageReferences,
       credentialId,
-      excludeHosts,
+      excludeImages,
       hosts,
       reverseLookupOnly,
       reverseLookupUnify,
@@ -85,13 +88,13 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
       target_exclude_source: targetExcludeSource,
       hosts,
       image_references: imageReferences,
-      exclude_hosts: excludeHosts,
       reverse_lookup_only: parseYesNo(reverseLookupOnly),
       reverse_lookup_unify: parseYesNo(reverseLookupUnify),
       credential_id: credentialId,
       file,
       exclude_file: excludeFile,
       hosts_filter: hostsFilter,
+      exclude_images: excludeImages || undefined,
     });
   }
 
@@ -101,6 +104,9 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
     comment,
     imageReferences,
     credentialId,
+    excludeImages,
+    excludeFile,
+    file,
     reverseLookupOnly,
     reverseLookupUnify,
     inUse,
@@ -113,6 +119,9 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
       comment,
       imageReferences,
       credentialId,
+      excludeImages,
+      excludeFile,
+      file,
       reverseLookupOnly,
       reverseLookupUnify,
       inUse,
@@ -127,11 +136,14 @@ class OciImageTargetCommand extends EntityCommand<OciImageTarget> {
       comment,
       image_references: imageReferences,
       credential_id: credentialId,
+      exclude_file: excludeFile,
+      file,
       reverse_lookup_only: parseYesNo(reverseLookupOnly),
       reverse_lookup_unify: parseYesNo(reverseLookupUnify),
       in_use: parseYesNo(inUse),
       target_source: targetSource,
       target_exclude_source: targetExcludeSource,
+      exclude_images: excludeImages || undefined,
     });
   }
 
