@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {isDefined} from 'gmp/utils/identity';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTable from 'web/components/dashboard/display/DataTable';
 import PropTypes from 'web/utils/PropTypes';
@@ -18,7 +17,7 @@ const DataTableDisplay = ({children, dataRow, dataTitles, ...props}) => (
     showToggleLegend={false}
   >
     {({data}) =>
-      isDefined(children) ? (
+      typeof children === 'function' ? (
         children({
           data,
           dataRow,
