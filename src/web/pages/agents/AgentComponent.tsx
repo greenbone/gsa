@@ -86,6 +86,7 @@ const AgentComponent = ({
     await modifyAgentsMutation.mutateAsync({
       agentsIds: [data.id as string],
       authorized: selectedAgent?.isAuthorized(),
+      updateToLatest: data?.updateToLatest,
       attempts: selectedAgent?.config?.agentControl?.retry?.attempts,
       delayInSeconds: selectedAgent?.config?.agentControl?.retry.delayInSeconds,
       maxJitterInSeconds:
@@ -126,6 +127,7 @@ const AgentComponent = ({
           }
           status={selectedAgent.connectionStatus}
           title={editDialogTitle}
+          updateToLatest={selectedAgent.updateToLatest}
           onClose={handleCloseEditDialog}
           onSave={handleSaveEdit}
         />

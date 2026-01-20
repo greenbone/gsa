@@ -14,6 +14,7 @@ import {isArray, isDefined} from 'gmp/utils/identity';
 export interface AgentModifyParams {
   agentsIds: string[];
   authorized?: boolean;
+  updateToLatest?: boolean;
   comment?: string;
   attempts?: number;
   delayInSeconds?: number;
@@ -44,6 +45,7 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
   async save({
     agentsIds,
     authorized,
+    updateToLatest,
     comment,
     attempts,
     delayInSeconds,
@@ -59,6 +61,7 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
       cmd: 'modify_agent',
       'agent_ids:': agentsIds,
       authorized: parseYesNo(authorized),
+      update_to_latest: parseYesNo(updateToLatest),
       comment,
       'scheduler_cron_times:':
         isArray(schedulerCronTimes) || !isDefined(schedulerCronTimes)

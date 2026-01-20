@@ -45,6 +45,7 @@ describe('AgentCommand tests', () => {
     const result = await command.save({
       agentsIds: ['324'],
       authorized: true,
+      updateToLatest: true,
       attempts: 5,
       comment: 'Test agent',
       delayInSeconds: 10,
@@ -61,6 +62,7 @@ describe('AgentCommand tests', () => {
         cmd: 'modify_agent',
         'agent_ids:': ['324'],
         authorized: YES_VALUE,
+        update_to_latest: YES_VALUE,
         comment: 'Test agent',
         attempts: 5,
         delay_in_seconds: 10,
