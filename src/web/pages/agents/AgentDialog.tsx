@@ -6,6 +6,7 @@
 import {type Date as GmpDate} from 'gmp/models/date';
 import DateTime from 'web/components/date/DateTime';
 import SaveDialog from 'web/components/dialog/SaveDialog';
+import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import {getConnectionStatusLabel} from 'web/components/label/AgentsState';
@@ -29,6 +30,7 @@ interface AgentDialogDefaultValues {
   port: number;
   schedulerCronExpression?: string;
   useAdvancedCron?: boolean;
+  updateToLatest?: boolean;
 }
 
 export type AgentDialogState = AgentDialogDefaultValues;
@@ -46,6 +48,7 @@ interface AgentDialogProps {
   schedulerCronTime?: string;
   status?: string;
   title?: string;
+  updateToLatest?: boolean;
   onClose: () => void;
   onSave: (values: AgentDialogState) => void | Promise<void>;
 }
@@ -63,6 +66,7 @@ const AgentDialog = ({
   schedulerCronTime = DEFAULT_CRON_EXPRESSION,
   status = '',
   title,
+  updateToLatest,
   onClose,
   onSave,
 }: AgentDialogProps) => {
@@ -79,6 +83,7 @@ const AgentDialog = ({
         ipAddress,
         name,
         port,
+        updateToLatest: updateToLatest ?? false,
         useAdvancedCron: false,
       }}
       title={title}
@@ -150,6 +155,17 @@ const AgentDialog = ({
               useAdvancedCron={state.useAdvancedCron}
               onValueChange={onValueChange}
             />
+
+            <Column gap="md">
+              <FormGroup title={_('Automatic Update Settings')}>
+                <Checkbox
+                  checked={state.updateToLatest}
+                  name="updateToLatest"
+                  title={_('Enable automatic updates')}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            </Column>
           </Column>
         );
       }}
