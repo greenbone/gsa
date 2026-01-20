@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith, within} from 'web/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
+import {rendererWith, screen, within} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
@@ -54,13 +54,17 @@ describe('Container Scanning Hosts Tab tests', () => {
       true,
     );
     expect(columnHeaders.some(th => /OS/i.exec(th.textContent))).toBe(true);
+    // CVSSv3 shows Critical column
+    expect(columnHeaders.some(th => /Critical/i.exec(th.textContent))).toBe(
+      true,
+    );
     expect(columnHeaders.some(th => /High/i.exec(th.textContent))).toBe(true);
     expect(columnHeaders.some(th => /Medium/i.exec(th.textContent))).toBe(true);
     expect(columnHeaders.some(th => /Low/i.exec(th.textContent))).toBe(true);
     expect(columnHeaders.some(th => /Log/i.exec(th.textContent))).toBe(true);
-    expect(
-      columnHeaders.some(th => /False Positive/i.exec(th.textContent)),
-    ).toBe(true);
+    expect(columnHeaders.some(th => /False Pos\./i.exec(th.textContent))).toBe(
+      true,
+    );
     expect(columnHeaders.some(th => /Total/i.exec(th.textContent))).toBe(true);
     expect(columnHeaders.some(th => /Severity/i.exec(th.textContent))).toBe(
       true,
@@ -81,6 +85,7 @@ describe('Container Scanning Hosts Tab tests', () => {
     expect(firstRow).toBeTruthy();
     if (firstRow) {
       const cells = within(firstRow).getAllByRole('cell');
+      expect(cells.some(cell => cell.textContent === '1')).toBe(true); // Critical
       expect(cells.some(cell => cell.textContent === '14')).toBe(true); // High
       expect(cells.some(cell => cell.textContent === '30')).toBe(true); // Medium
       expect(cells.some(cell => cell.textContent === '5')).toBe(true); // Low
@@ -100,6 +105,7 @@ describe('Container Scanning Hosts Tab tests', () => {
     expect(secondRow).toBeTruthy();
     if (secondRow) {
       const cells = within(secondRow).getAllByRole('cell');
+      expect(cells.some(cell => cell.textContent === '0')).toBe(true); // Critical
       expect(cells.some(cell => cell.textContent === '5')).toBe(true); // High
       expect(cells.some(cell => cell.textContent === '30')).toBe(true); // Medium
       expect(cells.some(cell => cell.textContent === '0')).toBe(true); // Low
