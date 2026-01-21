@@ -52,6 +52,8 @@ export interface AgentElement extends ModelElement {
   operating_system?: string;
   architecture?: string;
   update_to_latest?: YesNo;
+  agent_update_available?: YesNo;
+  updater_update_available?: YesNo;
   schedule?: string;
   scanner?: {
     _id: string;
@@ -105,6 +107,8 @@ interface AgentProperties extends ModelProperties {
   operatingSystem?: string;
   architecture?: string;
   updateToLatest?: boolean;
+  agentUpdateAvailable?: boolean;
+  updaterUpdateAvailable?: boolean;
   schedule?: string;
   scanner?: Scanner;
   config?: AgentConfig;
@@ -146,6 +150,8 @@ class Agent extends Model {
   readonly operatingSystem?: string;
   readonly architecture?: string;
   readonly updateToLatest?: boolean;
+  readonly agentUpdateAvailable?: boolean;
+  readonly updaterUpdateAvailable?: boolean;
   readonly schedule?: string;
   readonly scanner?: Scanner;
   readonly config?: AgentConfig;
@@ -162,6 +168,8 @@ class Agent extends Model {
     operatingSystem,
     architecture,
     updateToLatest,
+    agentUpdateAvailable,
+    updaterUpdateAvailable,
     schedule,
     scanner,
     config,
@@ -180,6 +188,8 @@ class Agent extends Model {
     this.operatingSystem = operatingSystem;
     this.architecture = architecture;
     this.updateToLatest = updateToLatest;
+    this.agentUpdateAvailable = agentUpdateAvailable;
+    this.updaterUpdateAvailable = updaterUpdateAvailable;
     this.schedule = schedule;
     this.scanner = scanner;
     this.config = config;
@@ -209,6 +219,12 @@ class Agent extends Model {
     copy.architecture = parseToString(element.architecture);
     copy.updateToLatest = isDefined(element.update_to_latest)
       ? parseBoolean(element.update_to_latest)
+      : undefined;
+    copy.agentUpdateAvailable = isDefined(element.agent_update_available)
+      ? parseBoolean(element.agent_update_available)
+      : undefined;
+    copy.updaterUpdateAvailable = isDefined(element.updater_update_available)
+      ? parseBoolean(element.updater_update_available)
       : undefined;
     copy.schedule = parseText(element.schedule);
 

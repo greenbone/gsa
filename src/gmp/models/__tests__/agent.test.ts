@@ -29,6 +29,8 @@ describe('Agent model tests', () => {
     expect(agent.operatingSystem).toBeUndefined();
     expect(agent.architecture).toBeUndefined();
     expect(agent.updateToLatest).toBeUndefined();
+    expect(agent.agentUpdateAvailable).toBeUndefined();
+    expect(agent.updaterUpdateAvailable).toBeUndefined();
     expect(agent.schedule).toBeUndefined();
     expect(agent.scanner).toBeUndefined();
     expect(agent.config).toBeUndefined();
@@ -51,6 +53,8 @@ describe('Agent model tests', () => {
     expect(agent.operatingSystem).toBeUndefined();
     expect(agent.architecture).toBeUndefined();
     expect(agent.updateToLatest).toBeUndefined();
+    expect(agent.agentUpdateAvailable).toBeUndefined();
+    expect(agent.updaterUpdateAvailable).toBeUndefined();
     expect(agent.schedule).toBeUndefined();
     expect(agent.scanner).toBeUndefined();
     expect(agent.config).toBeUndefined();
@@ -72,6 +76,22 @@ describe('Agent model tests', () => {
 
     const agentFalse = Agent.fromElement({authorized: NO_VALUE});
     expect(agentFalse.authorized).toEqual(false);
+  });
+
+  test('should parse agent_update_available', () => {
+    const agentTrue = Agent.fromElement({agent_update_available: YES_VALUE});
+    expect(agentTrue.agentUpdateAvailable).toEqual(true);
+
+    const agentFalse = Agent.fromElement({agent_update_available: NO_VALUE});
+    expect(agentFalse.agentUpdateAvailable).toEqual(false);
+  });
+
+  test('should parse updater_update_available', () => {
+    const agentTrue = Agent.fromElement({updater_update_available: YES_VALUE});
+    expect(agentTrue.updaterUpdateAvailable).toEqual(true);
+
+    const agentFalse = Agent.fromElement({updater_update_available: NO_VALUE});
+    expect(agentFalse.updaterUpdateAvailable).toEqual(false);
   });
 
   test('should parse connectionStatus', () => {
