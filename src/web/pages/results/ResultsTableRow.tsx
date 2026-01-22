@@ -141,22 +141,20 @@ const ResultTableRow = ({
           )}
         </IconDivider>
       </TableData>
-      <TableData>
+      <TableData title={host?.name}>
         <span>
           {isDefined(host?.id) ? (
             <DetailsLink id={host.id} textOnly={!links} type="host">
-              {host.name}
+              {shorten(host.name, 40)}
             </DetailsLink>
           ) : (
-            host?.name
+            shorten(host?.name, 40)
           )}
         </span>
       </TableData>
-      <TableData>
+      <TableData title={host?.hostname}>
         <IconDivider>
-          {isDefined(host?.hostname) && (
-            <span title={host.hostname}>{shorten(host.hostname, 40)}</span>
-          )}
+          {isDefined(host?.hostname) && shorten(host.hostname, 40)}
           {isDefined(deltaHostname) &&
             deltaHostname.length > 0 &&
             host?.hostname !== deltaHostname && (
