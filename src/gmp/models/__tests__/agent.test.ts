@@ -32,6 +32,7 @@ describe('Agent model tests', () => {
     expect(agent.agentUpdateAvailable).toBeUndefined();
     expect(agent.updaterUpdateAvailable).toBeUndefined();
     expect(agent.schedule).toBeUndefined();
+    expect(agent.ipAddresses).toBeUndefined();
     expect(agent.scanner).toBeUndefined();
     expect(agent.config).toBeUndefined();
   });
@@ -56,6 +57,7 @@ describe('Agent model tests', () => {
     expect(agent.agentUpdateAvailable).toBeUndefined();
     expect(agent.updaterUpdateAvailable).toBeUndefined();
     expect(agent.schedule).toBeUndefined();
+    expect(agent.ipAddresses).toBeUndefined();
     expect(agent.scanner).toBeUndefined();
     expect(agent.config).toBeUndefined();
   });
@@ -63,6 +65,16 @@ describe('Agent model tests', () => {
   test('should parse hostname', () => {
     const agent = Agent.fromElement({hostname: 'agent-hostname'});
     expect(agent.hostname).toEqual('agent-hostname');
+  });
+
+  test('should parse ipAddresses', () => {
+    const agent = Agent.fromElement({ip: ['192.168.1.1', '192.168.1.2']});
+    expect(agent.ipAddresses).toEqual(['192.168.1.1', '192.168.1.2']);
+  });
+
+  test('should parse single ipAddress', () => {
+    const agent = Agent.fromElement({ip: '192.168.1.1'});
+    expect(agent.ipAddresses).toEqual(['192.168.1.1']);
   });
 
   test('should parse agentId', () => {
@@ -197,5 +209,32 @@ describe('Agent model tests', () => {
     expect(agent.config?.agentScriptExecutor?.schedulerCronTimes).toEqual([
       '0 0 * * *',
     ]);
+  });
+
+  test('should check if agent is authorized', () => {
+    const authorizedAgent = new Agent({authorized: true});
+    expect(authorizedAgent.isAuthorized()).toEqual(true);
+
+    const unauthorizedAgent = new Agent({authorized: false});
+    expect(unauthorizedAgent.isAuthorized()).toEqual(false);
+
+    const undefinedAgent = new Agent();
+    expect(undefinedAgent.isAuthorized()).toEqual(false);
+  });
+
+  test('should check if agent should update to latest', () => {
+    const updateAgent = new Agent({updateToLatest: true});
+    expect(updateAgent.isUpdateToLatest()).toEqual(true);
+
+    const noUpdateAgent = new Agent({updateToLatest: false});
+    expect(noUpdateAgent.isUpdateToLatest()).toEqual(false);
+  });
+
+  test('should get connection status', () => {
+    const connectedAgent = new Agent({connectionStatus: 'connected'});
+    expect(connectedAgent.getConnectionStatus()).toEqual('connected');
+
+    const undefinedStatusAgent = new Agent();
+    expect(undefinedStatusAgent.getConnectionStatus()).toEqual('unknown');
   });
 });

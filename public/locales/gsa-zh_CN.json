@@ -2151,6 +2151,7 @@
   "Unreported": "",
   "until {{- enddate}}": "直到 {{- enddate}}",
   "Update": "更新",
+  "Update available to:": "",
   "Update Filter": "更新筛选",
   "Update in progress...": "更新正在进行中...",
   "Updated": "已更新",

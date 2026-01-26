@@ -54,16 +54,16 @@ const AgentTableHeader = ({
           sort={sort}
           sortBy={'agent_version'}
           title={_('Version')}
-          width="8%"
+          width="15%"
           onSortChange={onSortChange}
         />
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
           sort={sort}
-          sortBy={'last_update'}
-          title={_('Last Contact')}
-          width="12%"
+          sortBy={'operating_system'}
+          title={_('Operating System')}
+          width="8%"
           onSortChange={onSortChange}
         />
         <TableHead

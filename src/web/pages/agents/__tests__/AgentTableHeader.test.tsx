@@ -15,11 +15,11 @@ describe('AgentTableHeader tests', () => {
     expect(screen.getByText('Agent')).toBeInTheDocument();
     expect(screen.getByText('Network')).toBeInTheDocument();
     expect(screen.getByText('Version')).toBeInTheDocument();
-    expect(screen.getByText('Last Contact')).toBeInTheDocument();
+    expect(screen.getByText('Operating System')).toBeInTheDocument();
     expect(screen.getByText('Status')).toBeInTheDocument();
     expect(screen.getByText('Authorized')).toBeInTheDocument();
     expect(screen.getByText('Actions')).toBeInTheDocument();
     const headers = screen.getAllByRole('columnheader');
-    expect(headers).toHaveLength(7); // Agent, Network, Version, Last Contact, Status, Authorized, Actions
+    expect(headers).toHaveLength(7); // Agent, Network, Version, Operating System, Status, Authorized, Actions
   });
 });

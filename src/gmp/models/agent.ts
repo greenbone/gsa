@@ -55,6 +55,7 @@ export interface AgentElement extends ModelElement {
   agent_update_available?: YesNo;
   updater_update_available?: YesNo;
   schedule?: string;
+  ip?: string | string[];
   scanner?: {
     _id: string;
     name?: string;
@@ -110,6 +111,7 @@ interface AgentProperties extends ModelProperties {
   agentUpdateAvailable?: boolean;
   updaterUpdateAvailable?: boolean;
   schedule?: string;
+  ipAddresses?: string[];
   scanner?: Scanner;
   config?: AgentConfig;
 }
@@ -153,6 +155,7 @@ class Agent extends Model {
   readonly agentUpdateAvailable?: boolean;
   readonly updaterUpdateAvailable?: boolean;
   readonly schedule?: string;
+  readonly ipAddresses?: string[];
   readonly scanner?: Scanner;
   readonly config?: AgentConfig;
 
@@ -171,6 +174,7 @@ class Agent extends Model {
     agentUpdateAvailable,
     updaterUpdateAvailable,
     schedule,
+    ipAddresses,
     scanner,
     config,
     ...properties
@@ -191,6 +195,7 @@ class Agent extends Model {
     this.agentUpdateAvailable = agentUpdateAvailable;
     this.updaterUpdateAvailable = updaterUpdateAvailable;
     this.schedule = schedule;
+    this.ipAddresses = ipAddresses;
     this.scanner = scanner;
     this.config = config;
   }
@@ -227,6 +232,11 @@ class Agent extends Model {
       ? parseBoolean(element.updater_update_available)
       : undefined;
     copy.schedule = parseText(element.schedule);
+    const parsedIpAddresses = map(element.ip, item =>
+      parseToString(item),
+    ).filter(isDefined);
+    copy.ipAddresses =
+      parsedIpAddresses.length > 0 ? parsedIpAddresses : undefined;
 
     copy.scanner = isDefined(scanner)
       ? {

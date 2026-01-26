@@ -30,7 +30,7 @@ describe('AgentTableRow tests', () => {
 
     expect(screen.getByText('OpenVAS Scanner')).toBeInTheDocument();
     expect(screen.getByText('22.4.0')).toBeInTheDocument();
-    expect(screen.getByText(/Thu, Jan 1, 2026/)).toBeInTheDocument();
+    expect(screen.getByTitle(/Thu.*Jan.*2026/)).toBeInTheDocument();
   });
 
   test('should call action handlers when icons are clicked', () => {
@@ -80,7 +80,25 @@ describe('AgentTableRow tests', () => {
     const {render} = rendererWith({capabilities: true});
     render(<AgentTableRow entity={agent} />);
 
-    const lastUpdateCell = screen.getByText('Never');
+    const lastUpdateCell = screen.getByTitle('Never');
     expect(lastUpdateCell).toBeInTheDocument();
+  });
+
+  test('should render agent version and updater version with Divider', () => {
+    const agent = new Agent({
+      id: '1',
+      name: 'Agent 1',
+      authorized: true,
+      agentVersion: '22.4.0',
+      updaterVersion: '22.4.1',
+      userCapabilities: new EverythingCapabilities(),
+    });
+
+    const {render} = rendererWith({capabilities: true});
+    render(<AgentTableRow entity={agent} />);
+
+    expect(screen.getByText('22.4.0')).toBeInTheDocument();
+    expect(screen.getByText(/Update available to:/)).toBeInTheDocument();
+    expect(screen.getByText(/22\.4\.1/)).toBeInTheDocument();
   });
 });

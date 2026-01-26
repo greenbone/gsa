@@ -4,11 +4,11 @@
  */
 
 import type Agent from 'gmp/models/agent';
-import DateTime from 'web/components/date/DateTime';
 import {
   getConnectionStatusLabel,
   getAuthorizationLabel,
 } from 'web/components/label/AgentsState';
+import Divider from 'web/components/layout/Divider';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import {type RowComponentProps} from 'web/entities/EntitiesTable';
@@ -35,19 +35,28 @@ const AgentTableRow = ({
 }: AgentTableRowProps) => {
   const [_] = useTranslation();
 
-  const lastUpdate = entity.lastUpdate ? (
-    <DateTime date={entity.lastUpdate} />
-  ) : (
-    _('Never')
-  );
+  const lastUpdateTitle = entity.lastUpdate?.toString() ?? _('Never');
 
   return (
     <TableRow data-testid={dataTestId}>
-      <TableData>{entity.name}</TableData>
+      <TableData title={entity.ipAddresses?.join(', ')}>
+        {entity.name}
+      </TableData>
       <TableData>{entity.scanner?.name}</TableData>
-      <TableData>{entity.agentVersion}</TableData>
-      <TableData>{lastUpdate}</TableData>
-      <TableData>{getConnectionStatusLabel(entity.connectionStatus)}</TableData>
+      <TableData>
+        <Divider flex="column">
+          <span>{entity.agentVersion}</span>
+          {entity.updaterVersion && (
+            <span>
+              {_('Update available to:')} {entity.updaterVersion}
+            </span>
+          )}
+        </Divider>
+      </TableData>
+      <TableData>{entity.operatingSystem}</TableData>
+      <TableData title={lastUpdateTitle}>
+        {getConnectionStatusLabel(entity.connectionStatus)}
+      </TableData>
       <TableData>{getAuthorizationLabel(entity.authorized)}</TableData>
       <ActionsComponent
         entity={entity}
