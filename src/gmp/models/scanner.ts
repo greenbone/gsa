@@ -125,6 +125,25 @@ export const SCANNER_TYPE_DEFINITIONS = {
   },
 } as const;
 
+//  Runtime translation map for scanner type labels.
+const SCANNER_TYPE_LABELS: Record<string, () => string> = {
+  [SCANNER_TYPE_DEFINITIONS.OPENVAS_SCANNER_TYPE.value]: () =>
+    _('OpenVAS Scanner'),
+  [SCANNER_TYPE_DEFINITIONS.CVE_SCANNER_TYPE.value]: () => _('CVE Scanner'),
+  [SCANNER_TYPE_DEFINITIONS.GREENBONE_SENSOR_SCANNER_TYPE.value]: () =>
+    _('Greenbone Sensor'),
+  [SCANNER_TYPE_DEFINITIONS.OPENVASD_SCANNER_TYPE.value]: () =>
+    _('OpenVASD Scanner'),
+  [SCANNER_TYPE_DEFINITIONS.OPENVASD_SENSOR_SCANNER_TYPE.value]: () =>
+    _('OpenVASD Sensor'),
+  [SCANNER_TYPE_DEFINITIONS.AGENT_CONTROLLER_SCANNER_TYPE.value]: () =>
+    _('Agent Controller'),
+  [SCANNER_TYPE_DEFINITIONS.AGENT_CONTROLLER_SENSOR_SCANNER_TYPE.value]: () =>
+    _('Agent Sensor'),
+  [SCANNER_TYPE_DEFINITIONS.CONTAINER_IMAGE_SCANNER_TYPE.value]: () =>
+    _('Container Image Scanner'),
+};
+
 // Extract individual constants
 export const OPENVAS_SCANNER_TYPE =
   SCANNER_TYPE_DEFINITIONS.OPENVAS_SCANNER_TYPE.value;
@@ -159,16 +178,18 @@ export const openVasScannersFilter = (config: {scannerType: ScannerType}) =>
 export function scannerTypeName(
   scannerType: number | string | undefined,
 ): string {
-  scannerType = isDefined(scannerType) ? String(scannerType) : undefined;
+  const typeStr = isDefined(scannerType) ? String(scannerType) : undefined;
 
-  if (isDefined(scannerType) && scannerType in SCANNER_TYPE_NAMES) {
-    return SCANNER_TYPE_NAMES[scannerType];
+  if (!isDefined(typeStr) || typeStr.length === 0) {
+    return _('Unknown scanner type');
   }
 
-  if (isDefined(scannerType)) {
-    return _('Unknown scanner type ({{type}})', {type: scannerType});
+  const getLabel = SCANNER_TYPE_LABELS[typeStr];
+  if (isDefined(getLabel)) {
+    return getLabel();
   }
-  return _('Unknown scanner type');
+
+  return _('Unknown scanner type ({{type}})', {type: typeStr});
 }
 
 const parseScannerInfo = (info: InfoElement = {}): Info => {
