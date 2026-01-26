@@ -2151,6 +2151,7 @@
   "Unreported": "Unberichtet",
   "until {{- enddate}}": "bis {{- enddate}}",
   "Update": "Aktualisieren",
+  "Update available to:": "Update verfügbar für:",
   "Update Filter": "Filter aktualisieren",
   "Update in progress...": "Aktualisierung läuft...",
   "Updated": "Aktualisiert",
