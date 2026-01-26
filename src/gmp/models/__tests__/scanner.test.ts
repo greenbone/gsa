@@ -270,4 +270,11 @@ describe('Scanner model function tests', () => {
       true,
     );
   });
+
+  test('scannerTypeName() should never return undefined', () => {
+    const res = scannerTypeName(OPENVAS_SCANNER_TYPE);
+    expect(res).toBeDefined();
+    expect(typeof res).toBe('string');
+    expect(res.length).toBeGreaterThan(0);
+  });
 });
