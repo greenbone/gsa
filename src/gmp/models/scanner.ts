@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_} from 'gmp/locale/lang';
+import {_, _l} from 'gmp/locale/lang';
 import Credential from 'gmp/models/credential';
 import {type Date} from 'gmp/models/date';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseYesNo, parseDate, type YesNo, parseInt} from 'gmp/parser';
+import {type ToString} from 'gmp/types';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -112,37 +113,18 @@ interface ScannerProperties extends ModelProperties {
 
 // Scanner type definitions - add new scanner types here with their display names
 export const SCANNER_TYPE_DEFINITIONS = {
-  OPENVAS_SCANNER_TYPE: {value: '2', name: _('OpenVAS Scanner')},
-  CVE_SCANNER_TYPE: {value: '3', name: _('CVE Scanner')},
-  GREENBONE_SENSOR_SCANNER_TYPE: {value: '5', name: _('Greenbone Sensor')},
-  OPENVASD_SCANNER_TYPE: {value: '6', name: _('OpenVASD Scanner')},
-  OPENVASD_SENSOR_SCANNER_TYPE: {value: '8', name: _('OpenVASD Sensor')},
-  AGENT_CONTROLLER_SCANNER_TYPE: {value: '7', name: _('Agent Controller')},
-  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE: {value: '9', name: _('Agent Sensor')},
+  OPENVAS_SCANNER_TYPE: {value: '2', name: _l('OpenVAS Scanner')},
+  CVE_SCANNER_TYPE: {value: '3', name: _l('CVE Scanner')},
+  GREENBONE_SENSOR_SCANNER_TYPE: {value: '5', name: _l('Greenbone Sensor')},
+  OPENVASD_SCANNER_TYPE: {value: '6', name: _l('OpenVASD Scanner')},
+  OPENVASD_SENSOR_SCANNER_TYPE: {value: '8', name: _l('OpenVASD Sensor')},
+  AGENT_CONTROLLER_SCANNER_TYPE: {value: '7', name: _l('Agent Controller')},
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE: {value: '9', name: _l('Agent Sensor')},
   CONTAINER_IMAGE_SCANNER_TYPE: {
     value: '10',
-    name: _('Container Image Scanner'),
+    name: _l('Container Image Scanner'),
   },
 } as const;
-
-//  Runtime translation map for scanner type labels.
-const SCANNER_TYPE_LABELS: Record<string, () => string> = {
-  [SCANNER_TYPE_DEFINITIONS.OPENVAS_SCANNER_TYPE.value]: () =>
-    _('OpenVAS Scanner'),
-  [SCANNER_TYPE_DEFINITIONS.CVE_SCANNER_TYPE.value]: () => _('CVE Scanner'),
-  [SCANNER_TYPE_DEFINITIONS.GREENBONE_SENSOR_SCANNER_TYPE.value]: () =>
-    _('Greenbone Sensor'),
-  [SCANNER_TYPE_DEFINITIONS.OPENVASD_SCANNER_TYPE.value]: () =>
-    _('OpenVASD Scanner'),
-  [SCANNER_TYPE_DEFINITIONS.OPENVASD_SENSOR_SCANNER_TYPE.value]: () =>
-    _('OpenVASD Sensor'),
-  [SCANNER_TYPE_DEFINITIONS.AGENT_CONTROLLER_SCANNER_TYPE.value]: () =>
-    _('Agent Controller'),
-  [SCANNER_TYPE_DEFINITIONS.AGENT_CONTROLLER_SENSOR_SCANNER_TYPE.value]: () =>
-    _('Agent Sensor'),
-  [SCANNER_TYPE_DEFINITIONS.CONTAINER_IMAGE_SCANNER_TYPE.value]: () =>
-    _('Container Image Scanner'),
-};
 
 // Extract individual constants
 export const OPENVAS_SCANNER_TYPE =
@@ -164,7 +146,7 @@ export const CONTAINER_IMAGE_SCANNER_TYPE =
 // Mapping of scanner types to their display names (automatically generated)
 export const SCANNER_TYPE_NAMES = Object.fromEntries(
   Object.values(SCANNER_TYPE_DEFINITIONS).map(def => [def.value, def.name]),
-) as Record<string, string>;
+) as Record<string, ToString>;
 
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
@@ -184,9 +166,8 @@ export function scannerTypeName(
     return _('Unknown scanner type');
   }
 
-  const getLabel = SCANNER_TYPE_LABELS[typeStr];
-  if (isDefined(getLabel)) {
-    return getLabel();
+  if (isDefined(scannerType) && scannerType in SCANNER_TYPE_NAMES) {
+    return String(SCANNER_TYPE_NAMES[typeStr]);
   }
 
   return _('Unknown scanner type ({{type}})', {type: typeStr});
