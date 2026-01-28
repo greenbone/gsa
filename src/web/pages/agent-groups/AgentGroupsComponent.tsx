@@ -9,13 +9,12 @@ import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type AgentGroup from 'gmp/models/agent-group';
 import {isDefined} from 'gmp/utils/identity';
-import useEntityClone from 'web/entity/hooks/useEntityClone';
 import {
+  useCloneAgentGroup,
   useCreateAgentGroup,
   useDeleteAgentGroup,
   useSaveAgentGroup,
 } from 'web/hooks/use-query/agent-groups';
-import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsDialog, {
   type AgentGroupDialogData,
@@ -23,8 +22,8 @@ import AgentGroupsDialog, {
 
 interface AgentGroupsComponentRenderProps {
   create: () => void;
-  clone: (entity: AgentGroup) => void;
-  delete: (entity: AgentGroup) => void;
+  clone: (entity: AgentGroup) => Promise<Response<EntityActionData, XmlMeta>>;
+  delete: (entity: AgentGroup) => Promise<void>;
   edit: (entity: AgentGroup) => void;
 }
 
@@ -36,8 +35,6 @@ interface AgentGroupsComponentProps {
   onCreateError?: (error: Error) => void;
   onDeleted?: () => void;
   onDeleteError?: (error: Error) => void;
-  onDownloaded?: () => void;
-  onDownloadError?: (error: Error) => void;
   onSaved?: () => void;
   onSaveError?: (error: Error) => void;
 }
@@ -54,20 +51,20 @@ const AgentGroupsComponent = ({
   onSaveError,
 }: AgentGroupsComponentProps) => {
   const [_] = useTranslation();
-  const gmp = useGmp();
   const [agentGroupsDialogVisible, setAgentGroupsDialogVisible] =
     useState(false);
   const [selectedAgentGroup, setSelectedAgentGroup] = useState<
     AgentGroup | undefined
   >(undefined);
 
-  const handleClone = useEntityClone<AgentGroup>(
-    gmp.agentgroup.clone.bind(gmp),
-    {
-      onCloned,
-      onCloneError,
-    },
-  );
+  const cloneMutation = useCloneAgentGroup({
+    onSuccess: onCloned,
+    onError: onCloneError,
+  });
+
+  const handleClone = (agentGroup: AgentGroup) => {
+    return cloneMutation.mutateAsync({id: agentGroup.id as string});
+  };
 
   const deleteMutation = useDeleteAgentGroup({
     onSuccess: onDeleted,

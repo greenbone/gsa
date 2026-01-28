@@ -19,6 +19,7 @@
   "{{count}} users will be deleted": "",
   "{{days}} day {{hours}}:{{minutes}} h": "{{days}} 天 {{hours}}:{{minutes}}",
   "{{days}} days {{hours}}:{{minutes}} h": "{{days}} 天 {{hours}}:{{minutes}}",
+  "{{entity}} cloned successfully": "",
   "{{entity}} is not writable": "禁止编辑{{entity}}",
   "{{entity}} is still in use": "{{entity}}正在使用",
   "{{entity}} may not be cloned": "{{entity}}可能无法复制",

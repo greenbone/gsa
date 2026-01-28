@@ -19,6 +19,7 @@
   "{{count}} users will be deleted": "",
   "{{days}} day {{hours}}:{{minutes}} h": "",
   "{{days}} days {{hours}}:{{minutes}} h": "",
+  "{{entity}} cloned successfully": "",
   "{{entity}} is not writable": "",
   "{{entity}} is still in use": "",
   "{{entity}} may not be cloned": "",

@@ -9,9 +9,10 @@ import {
 } from 'gmp/commands/agent-group';
 import {type EntityActionResponse} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
-import type AgentGroup from 'gmp/models/agent-group';
+import AgentGroup from 'gmp/models/agent-group';
 import type Filter from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
+import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
 import useDeleteMutation from 'web/queries/useDeleteMutation';
 import useGetEntities from 'web/queries/useGetEntities';
@@ -47,7 +48,21 @@ export const useCreateAgentGroup = ({
     Rejection
   >({
     gmpMethod: gmp.agentgroup.create.bind(gmp.agentgroup),
-    entityType: 'agentgroup',
+    entityType: AgentGroup.entityType,
+    invalidateQueryIds: ['get_agent_groups'],
+    onError,
+    onSuccess,
+  });
+};
+
+export const useCloneAgentGroup = ({
+  onError,
+  onSuccess,
+}: UseCreateAgentGroupParams) => {
+  const gmp = useGmp();
+  return useCloneMutation<EntityActionResponse, Rejection>({
+    gmpMethod: gmp.agentgroup.clone.bind(gmp.agentgroup),
+    entityType: AgentGroup.entityType,
     invalidateQueryIds: ['get_agent_groups'],
     onError,
     onSuccess,
@@ -61,7 +76,7 @@ export const useSaveAgentGroup = ({
   const gmp = useGmp();
   return useSaveMutation<AgentGroupSaveParams, void, Rejection>({
     gmpMethod: gmp.agentgroup.save.bind(gmp.agentgroup),
-    entityType: 'agentgroup',
+    entityType: AgentGroup.entityType,
     invalidateQueryIds: ['get_agent_groups'],
     onError,
     onSuccess,
@@ -75,7 +90,7 @@ export const useDeleteAgentGroup = ({
   const gmp = useGmp();
   return useDeleteMutation({
     gmpMethod: gmp.agentgroup.delete.bind(gmp.agentgroup),
-    entityType: 'agentgroup',
+    entityType: AgentGroup.entityType,
     invalidateQueryIds: ['get_agent_groups'],
     onSuccess,
     onError,
