@@ -3,45 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import styled from 'styled-components';
-
-import Checkbox from 'web/components/form/Checkbox';
-import FormGroup from 'web/components/form/FormGroup';
 import NumberField from 'web/components/form/NumberField';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import Column from 'web/components/layout/Column';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
 
 interface AgentConfigurationSectionProps {
+  activeCronExpression: string;
   hidePort?: boolean;
   port?: number;
   schedulerCronExpression?: string;
-  useAdvancedCron?: boolean;
   intervalInSeconds?: number;
-  activeCronExpression?: string;
   onValueChange: (value: string | number | boolean, name?: string) => void;
 }
 
 export const DEFAULT_HEARTBEAT_INTERVAL = 300; // 5 minutes
 export const DEFAULT_CRON_EXPRESSION = '0 */12 * * *';
-
-const ActiveExpressionContainer = styled.div`
-  margin-top: 8px;
-  padding: 8px;
-  background-color: ${Theme.lightGray};
-  border: 1px solid ${Theme.mediumGray};
-  border-radius: 4px;
-`;
-
-const ActiveExpressionCode = styled.code`
-  background-color: ${Theme.white};
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-weight: bold;
-`;
 
 const AgentConfigurationSection = ({
   activeCronExpression,
@@ -49,12 +28,11 @@ const AgentConfigurationSection = ({
   intervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
   port,
   schedulerCronExpression = DEFAULT_CRON_EXPRESSION,
-  useAdvancedCron = false,
   onValueChange,
 }: AgentConfigurationSectionProps) => {
   const [_] = useTranslation();
 
-  const cronScheduleItems = [
+  const PREDEFINED_CRON_SCHEDULES = [
     {
       label: _('Every hour'),
       value: '0 * * * *',
@@ -105,6 +83,38 @@ const AgentConfigurationSection = ({
     },
   ];
 
+  const cronScheduleItems = [
+    ...PREDEFINED_CRON_SCHEDULES,
+    {
+      label: _('Custom cron expression'),
+      value: '__custom__',
+    },
+  ];
+
+  const isCurrentValueCustom = !PREDEFINED_CRON_SCHEDULES.some(
+    item => item.value === schedulerCronExpression,
+  );
+
+  const isActiveCronCustom = !PREDEFINED_CRON_SCHEDULES.some(
+    item => item.value === activeCronExpression,
+  );
+
+  const handleSelectChange = (value, name) => {
+    if (value === '__custom__') {
+      // When selecting custom, restore the original custom value if it exists
+      // This preserves the user's custom cron expression when switching back from predefined
+      if (!isCurrentValueCustom) {
+        // If the active/original value was custom, restore it; otherwise use empty string
+        const restoredValue = isActiveCronCustom ? activeCronExpression : '';
+        onValueChange(restoredValue, name);
+      }
+      // If already custom, do nothing - TextField will show with current value
+    } else {
+      // User selected a predefined schedule, update the value
+      onValueChange(value, name);
+    }
+  };
+
   return (
     <Section title={_('Configuration Details')}>
       <Column gap="lg">
@@ -122,58 +132,46 @@ const AgentConfigurationSection = ({
           />
         )}
 
-        {/* Scheduler Cron Time */}
-        <FormGroup title={_('Scheduler Settings')}>
-          <Column gap="md">
-            <Checkbox
-              checked={useAdvancedCron}
-              name="useAdvancedCron"
-              title={_('Use advanced cron expression')}
+        {/* Scheduler Options */}
+        <Column gap="md">
+          <Select
+            description={_(
+              "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
+            )}
+            items={cronScheduleItems}
+            label="Scheduler Options"
+            name="schedulerCronExpression"
+            placeholder={_('Select a schedule')}
+            title={_('Schedule')}
+            value={
+              isCurrentValueCustom ? '__custom__' : schedulerCronExpression
+            }
+            onChange={handleSelectChange}
+          />
+
+          {isCurrentValueCustom && (
+            <TextField
+              description={
+                <>
+                  {_(
+                    'Enter a custom cron expression. Format: minute hour day month weekday',
+                  )}
+                  <br />• {_('Example')}: 0 0,12 1 */2 * (at midnight and noon
+                  on the 1st day of every 2nd month)
+                  <br />• {_('Minute')}: 0-59, {_('Hour')}: 0-23, {_('Day')}:
+                  1-31, {_('Month')}: 1-12, {_('Weekday')}: 0-7
+                  <br />• * = {_('any value')}, , = {_('list separator')}, - ={' '}
+                  {_('range')}, / = {_('step values')}
+                </>
+              }
+              name="schedulerCronExpression"
+              placeholder="0 0,12 1 */2 *"
+              title={_('Custom cron expression')}
+              value={schedulerCronExpression}
               onChange={onValueChange}
             />
-            <ActiveExpressionContainer>
-              <strong>{_('Active Scheduler Cron Expression')}:</strong>
-              <ActiveExpressionCode>
-                {activeCronExpression}
-              </ActiveExpressionCode>
-            </ActiveExpressionContainer>
-            {!useAdvancedCron ? (
-              <Select
-                description={_(
-                  'Choose from common scheduling options above, or enable advanced mode for custom expressions.',
-                )}
-                items={cronScheduleItems}
-                label="Scheduler Cron Expression"
-                name="schedulerCronExpression"
-                placeholder={_('Select a schedule')}
-                title={_('Schedule')}
-                value={schedulerCronExpression}
-                onChange={onValueChange}
-              />
-            ) : (
-              <TextField
-                description={
-                  <>
-                    {_(
-                      'Enter a custom cron expression. Format: minute hour day month weekday',
-                    )}
-                    <br />• {_('Example')}: 0 0,12 1 */2 * (at midnight and noon
-                    on the 1st day of every 2nd month)
-                    <br />• {_('Minute')}: 0-59, {_('Hour')}: 0-23, {_('Day')}:
-                    1-31, {_('Month')}: 1-12, {_('Weekday')}: 0-7
-                    <br />• * = {_('any value')}, , = {_('list separator')}, - ={' '}
-                    {_('range')}, / = {_('step values')}
-                  </>
-                }
-                name="schedulerCronExpression"
-                placeholder="0 0,12 1 */2 *"
-                title={_('Custom Cron Expression')}
-                value={schedulerCronExpression}
-                onChange={onValueChange}
-              />
-            )}
-          </Column>
-        </FormGroup>
+          )}
+        </Column>
 
         {/* Heartbeat Configuration */}
         <NumberField

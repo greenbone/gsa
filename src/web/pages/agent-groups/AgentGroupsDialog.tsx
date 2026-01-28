@@ -48,7 +48,6 @@ interface AgentGroupsDialogDefaultValues {
   network: string;
   port: number;
   schedulerCronExpression?: string;
-  useAdvancedCron: boolean;
 }
 
 export type AgentGroupDialogData = AgentGroupsDialogDefaultValues &
@@ -132,7 +131,6 @@ const AgentGroupsDialog = ({
         network: '',
         port: 0,
         schedulerCronExpression: schedulerCron,
-        useAdvancedCron: false,
         intervalInSeconds: heartbeatInterval,
       }}
       title={title}
@@ -200,7 +198,6 @@ const AgentGroupsDialog = ({
                 intervalInSeconds={state.intervalInSeconds}
                 port={state.port}
                 schedulerCronExpression={state.schedulerCronExpression}
-                useAdvancedCron={state.useAdvancedCron}
                 onValueChange={onValueChange}
               />
             ) : state.agentController ? (
