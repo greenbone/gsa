@@ -214,6 +214,19 @@ describe('ReportHost tests', () => {
     expect(host.details?.appsCount).toEqual(2);
   });
 
+  test('should parse agentID', () => {
+    const host = ReportHost.fromElement({
+      detail: [
+        {
+          name: 'agentID',
+          value: 'agent-123',
+        },
+      ],
+    });
+
+    expect(host.details?.agentId).toEqual('agent-123');
+  });
+
   test('should parse detail information', () => {
     const host = ReportHost.fromElement({
       detail: [
