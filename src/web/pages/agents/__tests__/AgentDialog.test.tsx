@@ -43,7 +43,6 @@ describe('AgentDialog tests', () => {
       port: 0,
       schedulerCronExpression: '0 */12 * * *',
       updateToLatest: false,
-      useAdvancedCron: false,
     });
   });
 
@@ -87,7 +86,6 @@ describe('AgentDialog tests', () => {
       port: 0,
       schedulerCronExpression: '0 */12 * * *',
       updateToLatest: false,
-      useAdvancedCron: false,
     });
   });
 
@@ -182,7 +180,6 @@ describe('AgentDialog tests', () => {
       name: 'Unnamed',
       port: 0,
       schedulerCronExpression: '0 */12 * * *',
-      useAdvancedCron: false,
       updateToLatest: true,
     });
   });
@@ -217,7 +214,6 @@ describe('AgentDialog tests', () => {
       name: 'Test Agent',
       port: 0,
       schedulerCronExpression: '0 */12 * * *',
-      useAdvancedCron: false,
       updateToLatest: true,
     });
   });
