@@ -20,6 +20,7 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
+import {AgentIdTableData} from 'web/pages/agents/components/AgentIdColumn';
 import PropTypes from 'web/utils/PropTypes';
 
 const AuditReportActions = withEntitiesActions(
@@ -114,6 +115,7 @@ const AuditReportRow = ({
           </DetailsLink>
         </span>
       </TableData>
+      <AgentIdTableData agentId={task?.agentGroup?.id} />
       <TableData>
         <ComplianceBar compliance={report.compliance.filtered} />
       </TableData>

@@ -14,6 +14,7 @@ interface PageCountElement {
 }
 
 interface HostDetails {
+  agentId?: string;
   best_os_cpe?: string;
   best_os_txt?: string;
   distance?: number;
@@ -275,6 +276,9 @@ class ReportHost {
             break;
           case 'App':
             appsCount++;
+            break;
+          case 'agentID':
+            hostDetails.agentId = value as string;
             break;
           default:
             break;
