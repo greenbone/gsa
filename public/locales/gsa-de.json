@@ -19,6 +19,7 @@
   "{{count}} users will be deleted": "{{count}} Benutzer werden gelöscht",
   "{{days}} day {{hours}}:{{minutes}} h": "{{days}} Tag {{hours}}:{{minutes}} h",
   "{{days}} days {{hours}}:{{minutes}} h": "{{days}} Tage {{hours}}:{{minutes}} h",
+  "{{entity}} cloned successfully": "{{entity}} erfolgreich geklont",
   "{{entity}} is not writable": "{{entity}} ist nicht schreibbar",
   "{{entity}} is still in use": "{{entity}} wird noch genutzt",
   "{{entity}} may not be cloned": "{{entity}} kann nicht geklont werden",

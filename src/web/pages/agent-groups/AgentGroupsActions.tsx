@@ -19,10 +19,7 @@ export interface AgentGroupsActionsProps extends Omit<
 > {
   onAgentGroupCloneClick?: (entity: AgentGroup) => void;
   onAgentGroupDeleteClick?: (entity: AgentGroup) => void;
-  onAgentGroupDownloadClick?: (entity: AgentGroup) => void;
   onAgentGroupEditClick?: (entity: AgentGroup) => void;
-  onEntityRestore?: (entity: AgentGroup) => void;
-  onEntityDelete?: (entity: AgentGroup) => void;
 }
 
 const AgentGroupsActions = ({
