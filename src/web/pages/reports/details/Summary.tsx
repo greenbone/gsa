@@ -74,8 +74,13 @@ const Summary = ({
     const dur = createDuration(end.diff(start));
     const hours = dur.hours();
     const days = dur.days();
+    const mins = dur.minutes();
 
-    let minutes: string | number = dur.minutes();
+    if (hours === 0 && days === 0 && mins === 0 && dur.asSeconds() > 0) {
+      return dur.humanize();
+    }
+
+    let minutes: string | number = mins;
     if (minutes < 10) {
       minutes = '0' + minutes;
     }
