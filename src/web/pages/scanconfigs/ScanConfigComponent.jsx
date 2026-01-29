@@ -86,6 +86,7 @@ const ScanConfigComponent = ({
   const [editConfigFamilyDialogTitle, setEditConfigFamilyDialogTitle] =
     useState();
   const [editNvtDetailsDialogTitle, setEditNvtDetailsDialogTitle] = useState();
+  const [editScanConfigDialogError, setEditScanConfigDialogError] = useState();
 
   const loadScanners = () => {
     setIsLoadingScanners(true);
@@ -267,7 +268,7 @@ const ScanConfigComponent = ({
       return await loadFamily(familyNameValue, configData);
     } catch (error) {
       closeEditConfigFamilyDialog();
-      throw error;
+      setEditScanConfigDialogError(error?.message);
     }
   };
 
@@ -282,13 +283,17 @@ const ScanConfigComponent = ({
     closeEditConfigFamilyDialog();
   };
 
-  const openEditNvtDetailsDialog = nvtOid => {
+  const openEditNvtDetailsDialog = async nvtOid => {
     setEditNvtDetailsDialogVisible(true);
     setEditNvtDetailsDialogTitle(
       _('Edit Scan Config NVT {{nvtOid}}', {nvtOid}),
     );
 
-    loadNvt(nvtOid);
+    try {
+      await loadNvt(nvtOid);
+    } catch (error) {
+      setEditScanConfigDialogError(error?.message);
+    }
   };
 
   const closeEditNvtDetailsDialog = () => {
@@ -359,9 +364,13 @@ const ScanConfigComponent = ({
   const openSettingsConfigDialog = async configData => {
     setConfig(configData);
 
-    await loadEditScanConfigSettings(configData.id);
+    try {
+      await loadEditScanConfigSettings(configData.id);
 
-    openEditConfigFamilyDialog('Settings', configData);
+      await openEditConfigFamilyDialog('Settings', configData);
+    } catch (error) {
+      setEditScanConfigDialogError(error?.message);
+    }
   };
 
   return (
@@ -410,6 +419,7 @@ const ScanConfigComponent = ({
                   configIsInUse={config.isInUse()}
                   editNvtDetailsTitle={_('Edit Scan Config NVT Details')}
                   editNvtFamiliesTitle={_('Edit Scan Config Family')}
+                  error={editScanConfigDialogError}
                   families={families}
                   isLoadingConfig={isLoadingConfig}
                   isLoadingFamilies={isLoadingFamilies}

@@ -153,6 +153,7 @@ const EditScanConfigDialog = ({
   configIsInUse = false,
   editNvtDetailsTitle,
   editNvtFamiliesTitle,
+  error,
   families = [],
   isLoadingConfig = true,
   isLoadingFamilies = true,
@@ -281,6 +282,7 @@ const EditScanConfigDialog = ({
   return (
     <SaveDialog
       defaultValues={uncontrolledData}
+      error={error}
       loading={isLoadingConfig}
       title={title}
       values={controlledData}
@@ -354,6 +356,7 @@ EditScanConfigDialog.propTypes = {
   configIsInUse: PropTypes.bool,
   editNvtDetailsTitle: PropTypes.string.isRequired,
   editNvtFamiliesTitle: PropTypes.string.isRequired,
+  error: PropTypes.any,
   families: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
