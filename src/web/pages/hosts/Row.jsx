@@ -19,6 +19,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import useTranslation from 'web/hooks/useTranslation';
+import {AgentIdTableData} from 'web/pages/agents/components/AgentIdColumn';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -100,6 +101,7 @@ const Row = ({
         <Comment text={entity.comment} />
       </TableData>
       <TableData>{entity.hostname}</TableData>
+      <AgentIdTableData agentId={details.agentID?.value} />
       <TableData>{entity.ip}</TableData>
       <TableData>
         <OsIcon osCpe={os_cpe} osTxt={os_txt} />

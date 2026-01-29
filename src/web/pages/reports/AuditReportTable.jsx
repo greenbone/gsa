@@ -13,6 +13,7 @@ import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import useTranslation from 'web/hooks/useTranslation';
+import {AgentIdTableHead} from 'web/pages/agents/components/AgentIdColumn';
 import AuditReportRow from 'web/pages/reports/AuditReportRow';
 import PropTypes from 'web/utils/PropTypes';
 
@@ -49,6 +50,12 @@ const AuditReportTableHeader = ({
           sortBy={sort ? 'task' : false}
           title={_('Task')}
           width="33%"
+          onSortChange={onSortChange}
+        />
+        <AgentIdTableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sort={sort}
           onSortChange={onSortChange}
         />
         <TableHead

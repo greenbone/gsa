@@ -21,6 +21,10 @@ import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import useGmp from 'web/hooks/useGmp';
+import {
+  AgentIdTableData,
+  AgentIdTableHead,
+} from 'web/pages/agents/components/AgentIdColumn';
 import PropTypes from 'web/utils/PropTypes';
 
 const Header = ({
@@ -49,6 +53,13 @@ const Header = ({
           sortBy={sort ? 'hostname' : false}
           title={_('Hostname')}
           width="20%"
+          onSortChange={onSortChange}
+        />
+        <AgentIdTableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sort={sort}
+          width="8%"
           onSortChange={onSortChange}
         />
         <TableHead
@@ -301,7 +312,7 @@ const Row = ({entity, links = true, audit = false}) => {
     portsCount,
   } = entity;
 
-  const {appsCount, best_os_cpe, best_os_txt, distance} = details;
+  const {agentId, appsCount, best_os_cpe, best_os_txt, distance} = details;
   const gmp = useGmp();
   const useCVSSv3 = gmp.settings.severityRating === 'CVSSv3';
   return (
@@ -322,6 +333,7 @@ const Row = ({entity, links = true, audit = false}) => {
       <TableData>
         <i>{entity.hostname}</i>
       </TableData>
+      <AgentIdTableData agentId={agentId} />
       <TableData align="center">
         <OsIcon osCpe={best_os_cpe} osTxt={best_os_txt} />
       </TableData>
