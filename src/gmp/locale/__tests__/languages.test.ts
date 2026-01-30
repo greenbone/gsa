@@ -9,7 +9,7 @@ import {isString} from 'gmp/utils/identity';
 
 describe('Language tests', () => {
   test('should contain list of languages', () => {
-    expect(Object.keys(Languages).length).toEqual(3);
+    expect(Object.keys(Languages).length).toEqual(4);
 
     let called = false;
 
@@ -28,7 +28,7 @@ describe('getLanguageCodes test', () => {
   test('should return list of language codes', () => {
     const codes = getLanguageCodes();
 
-    expect(codes.length).toEqual(3);
+    expect(codes.length).toEqual(4);
 
     let called = false;
 
