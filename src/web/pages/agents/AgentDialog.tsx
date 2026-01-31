@@ -29,7 +29,6 @@ interface AgentDialogDefaultValues {
   name: string;
   port: number;
   schedulerCronExpression?: string;
-  useAdvancedCron?: boolean;
   updateToLatest?: boolean;
 }
 
@@ -84,7 +83,6 @@ const AgentDialog = ({
         name,
         port,
         updateToLatest: updateToLatest ?? false,
-        useAdvancedCron: false,
       }}
       title={title}
       onClose={onClose}
@@ -152,7 +150,6 @@ const AgentDialog = ({
               intervalInSeconds={state.intervalInSeconds}
               port={state.port}
               schedulerCronExpression={state.schedulerCronExpression}
-              useAdvancedCron={state.useAdvancedCron}
               onValueChange={onValueChange}
             />
 
