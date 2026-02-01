@@ -109,7 +109,7 @@
     "i18next-cli": "^1.36.1",
     "jest-styled-components": "^7.2.0",
     "jsdom": "^26.1.0",
-    "prettier": "^3.7.4",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.52.0",
     "vite": "^7.3.1",
