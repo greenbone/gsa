@@ -11,6 +11,7 @@ import {
   Navigate,
   Outlet,
   useLocation,
+  redirect,
 } from 'react-router';
 import Authorized from 'web/Authorized';
 import Loading from 'web/components/loading/Loading';
@@ -103,15 +104,22 @@ const loggedInRoutes = [
           Component: (await import('web/pages/audits/DetailsPage')).default,
         }),
       },
+
       {
         path: 'auditreports',
+        loader: () => {
+          throw redirect('/audit-reports');
+        },
+      },
+      {
+        path: 'audit-reports',
         lazy: async () => ({
           Component: (await import('web/pages/reports/AuditReportsListPage'))
             .default,
         }),
       },
       {
-        path: 'auditreport/delta/:id/:deltaid',
+        path: 'audit-report/delta/:id/:deltaid',
         lazy: async () => ({
           Component: (
             await import('web/pages/reports/AuditDeltaReportDetailsPage')
@@ -120,6 +128,12 @@ const loggedInRoutes = [
       },
       {
         path: 'auditreport/:id',
+        loader: ({params}) => {
+          throw redirect(`/audit-report/${params.id}`);
+        },
+      },
+      {
+        path: 'audit-report/:id',
         lazy: async () => ({
           Component: (await import('web/pages/reports/AuditReportDetailsPage'))
             .default,
@@ -129,12 +143,24 @@ const loggedInRoutes = [
       // CERT-Bund routes
       {
         path: 'certbunds',
+        loader: () => {
+          throw redirect('/cert-bund-advisories');
+        },
+      },
+      {
+        path: 'cert-bund-advisories',
         lazy: async () => ({
           Component: (await import('web/pages/certbund/ListPage')).default,
         }),
       },
       {
         path: 'certbund/:id',
+        loader: ({params}) => {
+          throw redirect(`/cert-bund-advisory/${params.id}`);
+        },
+      },
+      {
+        path: 'cert-bund-advisory/:id',
         lazy: async () => ({
           Component: (await import('web/pages/certbund/DetailsPage')).default,
         }),
@@ -143,6 +169,12 @@ const loggedInRoutes = [
       // Container Image Target routes
       {
         path: 'ociimagetargets',
+        loader: () => {
+          throw redirect('/oci-image-targets');
+        },
+      },
+      {
+        path: 'oci-image-targets',
         lazy: async () => ({
           Component: (
             await import('web/pages/container-image-targets/ContainerImageTargetsListPage')
@@ -180,8 +212,15 @@ const loggedInRoutes = [
           ).default,
         }),
       },
+
       {
         path: 'credentialstore',
+        loader: () => {
+          throw redirect('/credential-store');
+        },
+      },
+      {
+        path: 'credential-store',
         lazy: async () => ({
           Component: (
             await import('web/pages/credential-store/CredentialStorePage')
@@ -206,12 +245,24 @@ const loggedInRoutes = [
       // DFN-CERT routes
       {
         path: 'dfncerts',
+        loader: () => {
+          throw redirect('/dfn-cert-advisories');
+        },
+      },
+      {
+        path: 'dfn-cert-advisories',
         lazy: async () => ({
           Component: (await import('web/pages/dfncert/ListPage')).default,
         }),
       },
       {
         path: 'dfncert/:id',
+        loader: ({params}) => {
+          throw redirect(`/dfn-cert-advisory/${params.id}`);
+        },
+      },
+      {
+        path: 'dfn-cert-advisory/:id',
         lazy: async () => ({
           Component: (await import('web/pages/dfncert/DetailsPage')).default,
         }),
@@ -220,6 +271,12 @@ const loggedInRoutes = [
       // Feed Status route
       {
         path: 'feedstatus',
+        loader: () => {
+          throw redirect('/feed-status');
+        },
+      },
+      {
+        path: 'feed-status',
         lazy: async () => ({
           Component: (await import('web/pages/extras/FeedStatusPage')).default,
         }),
@@ -306,6 +363,12 @@ const loggedInRoutes = [
       // Operating System routes
       {
         path: 'operatingsystems',
+        loader: () => {
+          throw redirect('/operating-systems');
+        },
+      },
+      {
+        path: 'operating-systems',
         lazy: async () => ({
           Component: (await import('web/pages/operatingsystems/ListPage'))
             .default,
@@ -313,6 +376,12 @@ const loggedInRoutes = [
       },
       {
         path: 'operatingsystem/:id',
+        loader: ({params}) => {
+          throw redirect(`/operating-system/${params.id}`);
+        },
+      },
+      {
+        path: 'operating-system/:id',
         lazy: async () => ({
           Component: (await import('web/pages/operatingsystems/DetailsPage'))
             .default,
@@ -376,6 +445,12 @@ const loggedInRoutes = [
       // Port List routes
       {
         path: 'portlists',
+        loader: () => {
+          throw redirect('/port-lists');
+        },
+      },
+      {
+        path: 'port-lists',
         lazy: async () => ({
           Component: (await import('web/pages/portlists/PortListListPage'))
             .default,
@@ -383,6 +458,12 @@ const loggedInRoutes = [
       },
       {
         path: 'portlist/:id',
+        loader: ({params}) => {
+          throw redirect(`/port-list/${params.id}`);
+        },
+      },
+      {
+        path: 'port-list/:id',
         lazy: async () => ({
           Component: (await import('web/pages/portlists/PortListDetailsPage'))
             .default,
@@ -421,12 +502,24 @@ const loggedInRoutes = [
       // Report Config routes
       {
         path: 'reportconfigs',
+        loader: () => {
+          throw redirect('/report-configs');
+        },
+      },
+      {
+        path: 'report-configs',
         lazy: async () => ({
           Component: (await import('web/pages/reportconfigs/ListPage')).default,
         }),
       },
       {
         path: 'reportconfig/:id',
+        loader: ({params}) => {
+          throw redirect(`/report-config/${params.id}`);
+        },
+      },
+      {
+        path: 'report-config/:id',
         lazy: async () => ({
           Component: (await import('web/pages/reportconfigs/DetailsPage'))
             .default,
@@ -436,12 +529,24 @@ const loggedInRoutes = [
       // Report Format routes
       {
         path: 'reportformats',
+        loader: () => {
+          throw redirect('/report-formats');
+        },
+      },
+      {
+        path: 'report-formats',
         lazy: async () => ({
           Component: (await import('web/pages/reportformats/ListPage')).default,
         }),
       },
       {
         path: 'reportformat/:id',
+        loader: ({params}) => {
+          throw redirect(`/report-format/${params.id}`);
+        },
+      },
+      {
+        path: 'report-format/:id',
         lazy: async () => ({
           Component: (await import('web/pages/reportformats/DetailsPage'))
             .default,
@@ -479,12 +584,24 @@ const loggedInRoutes = [
       // Scan Config routes
       {
         path: 'scanconfigs',
+        loader: () => {
+          throw redirect('/scan-configs');
+        },
+      },
+      {
+        path: 'scan-configs',
         lazy: async () => ({
           Component: (await import('web/pages/scanconfigs/ListPage')).default,
         }),
       },
       {
         path: 'scanconfig/:id',
+        loader: ({params}) => {
+          throw redirect(`/scan-config/${params.id}`);
+        },
+      },
+      {
+        path: 'scan-config/:id',
         lazy: async () => ({
           Component: (await import('web/pages/scanconfigs/DetailsPage'))
             .default,
@@ -581,6 +698,12 @@ const loggedInRoutes = [
       // TLS Certificate routes
       {
         path: 'tlscertificates',
+        loader: () => {
+          throw redirect('/tls-certificates');
+        },
+      },
+      {
+        path: 'tls-certificates',
         lazy: async () => ({
           Component: (await import('web/pages/tlscertificates/ListPage'))
             .default,
@@ -588,6 +711,12 @@ const loggedInRoutes = [
       },
       {
         path: 'tlscertificate/:id',
+        loader: ({params}) => {
+          throw redirect(`/tls-certificate/${params.id}`);
+        },
+      },
+      {
+        path: 'tls-certificate/:id',
         lazy: async () => ({
           Component: (await import('web/pages/tlscertificates/DetailsPage'))
             .default,
@@ -619,6 +748,12 @@ const loggedInRoutes = [
       // User Settings route
       {
         path: 'usersettings',
+        loader: () => {
+          throw redirect('/user-settings');
+        },
+      },
+      {
+        path: 'user-settings',
         lazy: async () => ({
           Component: (await import('web/pages/user-settings/UserSettingsPage'))
             .default,
@@ -636,6 +771,12 @@ const loggedInRoutes = [
       // CVSS Calculator route
       {
         path: 'cvsscalculator',
+        loader: () => {
+          throw redirect('/cvss-calculator');
+        },
+      },
+      {
+        path: 'cvss-calculator',
         lazy: async () => ({
           Component: (await import('web/pages/extras/CvssCalculatorPage'))
             .default,
@@ -645,6 +786,12 @@ const loggedInRoutes = [
       // Special routes
       {
         path: 'notfound',
+        loader: () => {
+          throw redirect('/not-found');
+        },
+      },
+      {
+        path: 'not-found',
         lazy: async () => ({
           Component: (await import('web/pages/NotFoundPage')).default,
         }),

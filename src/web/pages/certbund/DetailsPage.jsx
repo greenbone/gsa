@@ -49,7 +49,10 @@ const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => {
           page="managing-secinfo"
           title={_('Help:  CERT-Bund Advisories')}
         />
-        <ListIcon page="certbunds" title={_('CERT-Bund Advisories')} />
+        <ListIcon
+          page="cert-bund-advisories"
+          title={_('CERT-Bund Advisories')}
+        />
       </IconDivider>
       <ExportIcon
         title={_('Export CERT-Bund Advisory')}

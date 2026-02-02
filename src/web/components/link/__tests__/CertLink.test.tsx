@@ -41,7 +41,7 @@ describe('CertLink tests', () => {
 
     fireEvent.click(screen.getByText('foo'));
 
-    expect(locationPathname).toHaveTextContent('/certbund/foo');
+    expect(locationPathname).toHaveTextContent('/cert-bund-advisory/foo');
   });
 
   test('should route to dfncert details', () => {
@@ -57,7 +57,7 @@ describe('CertLink tests', () => {
 
     fireEvent.click(screen.getByText('foo'));
 
-    expect(locationPathname).toHaveTextContent('/dfncert/foo');
+    expect(locationPathname).toHaveTextContent('/dfn-cert-advisory/foo');
   });
 
   test('should not route to unknown type', () => {

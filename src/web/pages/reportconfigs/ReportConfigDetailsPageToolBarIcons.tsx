@@ -29,7 +29,7 @@ const ReportConfigDetailsPageToolBarIcons = ({
           page="reports"
           title={_('Help: Report Configs')}
         />
-        <ListIcon page="reportconfigs" title={_('Report Configs List')} />
+        <ListIcon page="report-configs" title={_('Report Configs List')} />
       </IconDivider>
       <IconDivider>
         <CreateIcon

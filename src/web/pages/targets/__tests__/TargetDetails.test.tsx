@@ -102,7 +102,7 @@ describe('Target Details tests', () => {
     expect(aliveTestRow).toHaveTextContent('Scan Config Default');
 
     expect(screen.getByText('Port List')).toBeInTheDocument();
-    expect(detailsLinks[0]).toHaveAttribute('href', '/portlist/pl_id1');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/port-list/pl_id1');
 
     expect(headings[1]).toHaveTextContent('Credentials');
 
@@ -203,7 +203,7 @@ describe('Target Details tests', () => {
     expect(aliveTestRow).toHaveTextContent('Scan Config Default');
 
     expect(screen.getByText('Port List')).toBeInTheDocument();
-    expect(detailsLinks[0]).toHaveAttribute('href', '/portlist/pl_id1');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/port-list/pl_id1');
     expect(detailsLinks[0]).toHaveTextContent('pl1');
 
     expect(headings[1]).toHaveTextContent('Credentials');

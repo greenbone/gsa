@@ -105,7 +105,7 @@ describe('TLS Certificate DetailsPage tests', () => {
       'title',
       'TLS Certificates List',
     );
-    expect(links[1]).toHaveAttribute('href', '/tlscertificates');
+    expect(links[1]).toHaveAttribute('href', '/tls-certificates');
 
     const entityInfo = screen.getByTestId('entity-info');
     expect(entityInfo).toHaveTextContent('1234');

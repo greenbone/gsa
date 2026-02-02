@@ -14,6 +14,8 @@ import {
   apiType,
   typeName,
   resourceType,
+  type EntityType,
+  entityURL,
 } from 'gmp/utils/entity-type';
 
 describe('getEntityType function tests', () => {
@@ -298,4 +300,54 @@ describe('resourceType function tests', () => {
     // @ts-expect-error
     expect(resourceType('bar')).toEqual('bar');
   });
+});
+
+describe('entityURL function tests', () => {
+  test.each([
+    {type: 'agent', id: '1', expected: '/agent/1'},
+    {type: 'agentgroup', id: '2', expected: '/agent-group/2'},
+    {type: 'agentinstaller', id: '3', expected: '/agent-installer/3'},
+    {type: 'audit', id: '4', expected: '/audit/4'},
+    {type: 'auditreport', id: '5', expected: '/audit-report/5'},
+    {type: 'certbund', id: '6', expected: '/cert-bund-advisory/6'},
+    {type: 'cpe', id: '7', expected: '/cpe/7'},
+    {type: 'cve', id: '8', expected: '/cve/8'},
+    {type: 'dfncert', id: '9', expected: '/dfn-cert-advisory/9'},
+    {type: 'host', id: '10', expected: '/host/10'},
+    {type: 'nvt', id: '11', expected: '/nvt/11'},
+    {type: 'ociimagetarget', id: '12', expected: '/oci-image-target/12'},
+    {type: 'operatingsystem', id: '13', expected: '/operating-system/13'},
+    {type: 'policy', id: '14', expected: '/policy/14'},
+    {type: 'portlist', id: '15', expected: '/port-list/15'},
+    {type: 'portrange', id: '16', expected: '/port-range/16'},
+    {type: 'reportconfig', id: '17', expected: '/report-config/17'},
+    {type: 'reportformat', id: '18', expected: '/report-format/18'},
+    {type: 'scanconfig', id: '19', expected: '/scan-config/19'},
+    {type: 'tlscertificate', id: '20', expected: '/tls-certificate/20'},
+    {type: 'vulnerability', id: '21', expected: '/vulnerability/21'},
+    {type: 'alert', id: '22', expected: '/alert/22'},
+    {type: 'asset', id: '23', expected: '/asset/23'},
+    {type: 'credential', id: '24', expected: '/credential/24'},
+    {type: 'filter', id: '25', expected: '/filter/25'},
+    {type: 'group', id: '26', expected: '/group/26'},
+    {type: 'info', id: '27', expected: '/info/27'},
+    {type: 'note', id: '28', expected: '/note/28'},
+    {type: 'override', id: '29', expected: '/override/29'},
+    {type: 'permission', id: '30', expected: '/permission/30'},
+    {type: 'report', id: '31', expected: '/report/31'},
+    {type: 'result', id: '32', expected: '/result/32'},
+    {type: 'role', id: '33', expected: '/role/33'},
+    {type: 'scanner', id: '34', expected: '/scanner/34'},
+    {type: 'schedule', id: '35', expected: '/schedule/35'},
+    {type: 'tag', id: '36', expected: '/tag/36'},
+    {type: 'target', id: '37', expected: '/target/37'},
+    {type: 'task', id: '38', expected: '/task/38'},
+    {type: 'ticket', id: '39', expected: '/ticket/39'},
+    {type: 'user', id: '40', expected: '/user/40'},
+  ])(
+    'should return correct URL for $type with id $id',
+    ({type, id, expected}) => {
+      expect(entityURL(type as EntityType, id)).toEqual(expected);
+    },
+  );
 });

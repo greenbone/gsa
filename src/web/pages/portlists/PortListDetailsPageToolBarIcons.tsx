@@ -41,7 +41,7 @@ const PortListDetailsPageToolBarIcons = ({
           page="scanning"
           title={_('Help: Port Lists')}
         />
-        <ListIcon page="portlists" title={_('PortList List')} />
+        <ListIcon page="port-lists" title={_('PortList List')} />
       </IconDivider>
       <IconDivider>
         <CreateIcon entity={entity} onClick={onPortListCreateClick} />

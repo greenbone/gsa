@@ -154,7 +154,7 @@ describe('Summary', () => {
     expect(taskLink).toHaveAttribute('href', '/audit/task-1');
 
     const reportLinks = links.filter(link =>
-      (link as HTMLAnchorElement).href.includes('/auditreport/'),
+      (link as HTMLAnchorElement).href.includes('/audit-report/'),
     ) as HTMLAnchorElement[];
     expect(reportLinks.length).toBeGreaterThanOrEqual(1);
   });

@@ -168,7 +168,7 @@ describe('PortListDetailsPageToolBarIcons', () => {
     expect(listIcon).toBeInTheDocument();
     expect(screen.getByRole('link', {name: /list/i})).toHaveAttribute(
       'href',
-      '/portlists',
+      '/port-lists',
     );
   });
 });

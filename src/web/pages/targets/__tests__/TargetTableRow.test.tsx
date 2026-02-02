@@ -184,7 +184,7 @@ describe('TargetRow tests', () => {
     expect(screen.getByText('(hello world)')).toBeVisible();
 
     const portlistLink = screen.getByText('pl1');
-    expect(portlistLink).toHaveAttribute('href', '/portlist/pl_id1');
+    expect(portlistLink).toHaveAttribute('href', '/port-list/pl_id1');
 
     expect(screen.getByText('127.0.0.1, 192.168.0.1')).toBeVisible();
 
@@ -266,7 +266,7 @@ describe('TargetRow tests', () => {
     expect(screen.getByText('target')).toBeVisible();
 
     const portlistLink = screen.getByText('pl1');
-    expect(portlistLink).toHaveAttribute('href', '/portlist/pl_id1');
+    expect(portlistLink).toHaveAttribute('href', '/port-list/pl_id1');
 
     expect(screen.getByText('127.0.0.1, 192.168.0.1')).toBeVisible();
 

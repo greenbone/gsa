@@ -8,8 +8,8 @@
 - [React Components](#react-components)
 - [React Hooks](#react-hooks)
 - [React HOCs](#react-hocs)
-- [Entity Types](#entity-types)
 - [URLs](#urls)
+- [Entity Types](#entity-types)
 
 This document summarizes the to be used naming conventions in the GSA code base.
 
@@ -88,6 +88,11 @@ New code added to GSA has to follow the rules defined in this document.
 - If a module contains several HOC the naming should use kebab-case according to
   the [module](#modules) specification.
 
-## Entity Types
-
 ## URLs
+
+- URLs should use kebab-case names. For example `/scan-configs`.
+- Single entity pages (aka. *Details Pages*) use singular terms for example `/task/id`.
+- Pages for displaying a list of entities (aka. *List Pages*) should use plural
+  terms for example `/targets`.
+
+## Entity Types

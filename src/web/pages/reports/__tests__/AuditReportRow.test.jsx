@@ -36,7 +36,7 @@ describe('Audit report row', () => {
     const links = baseElement.querySelectorAll('a');
     const rows = baseElement.querySelectorAll('tr');
 
-    expect(links[0]).toHaveAttribute('href', '/auditreport/1234');
+    expect(links[0]).toHaveAttribute('href', '/audit-report/1234');
     expect(rows[0]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM');
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');

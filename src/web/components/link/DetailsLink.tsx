@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type EntityType} from 'gmp/utils/entity-type';
+import {entityURL, type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import Link, {type LinkProps} from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
@@ -29,7 +29,7 @@ const DetailsLink = ({
       {...props}
       data-testid="details-link"
       textOnly={textOnly}
-      to={`/${type}/${encodeURIComponent(id)}`}
+      to={entityURL(type, id)}
     />
   );
 };
