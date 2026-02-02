@@ -96,13 +96,13 @@ describe('Audit Row tests', () => {
     const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/1234');
 
     // Report
     expect(detailsLinks[1]).toHaveTextContent(
       'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
     );
-    expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/audit-report/1234');
 
     // Compliance Status
     expect(bars[1]).toHaveAttribute('title', '50%');
@@ -380,7 +380,7 @@ describe('Audit Row tests', () => {
     const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('0 %');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/5678');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/5678');
 
     // Report
     expect(detailsLinks.length).toBe(1);
@@ -494,13 +494,13 @@ describe('Audit Row tests', () => {
     const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Stopped');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/5678');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/5678');
 
     // Report
     expect(detailsLinks[1]).toHaveTextContent(
       'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
     );
-    expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/audit-report/1234');
 
     // Compliance Status
     expect(bars[1]).toHaveAttribute('title', '50%');
@@ -609,13 +609,13 @@ describe('Audit Row tests', () => {
     const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/1234');
 
     // Report
     expect(detailsLinks[1]).toHaveTextContent(
       'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
     );
-    expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/audit-report/1234');
 
     // Compliance Status
     expect(bars[1]).toHaveAttribute('title', '50%');
@@ -730,13 +730,13 @@ describe('Audit Row tests', () => {
     const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/1234');
 
     // Report
     expect(detailsLinks[1]).toHaveTextContent(
       'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
     );
-    expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/audit-report/1234');
 
     // Compliance Status
     expect(bars[1]).toHaveAttribute('title', '50%');

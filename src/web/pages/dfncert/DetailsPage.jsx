@@ -43,7 +43,7 @@ const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => {
           page="managing-secinfo"
           title={_('Help: DFN-CERT Advisories')}
         />
-        <ListIcon page="dfncerts" title={_('DFN-CERT Advisories')} />
+        <ListIcon page="dfn-cert-advisories" title={_('DFN-CERT Advisories')} />
       </IconDivider>
       <ExportIcon
         title={_('Export DFN-CERT Advisory')}

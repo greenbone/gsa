@@ -59,14 +59,14 @@ const Menu = () => {
   const hostDetailsMatch = useMatch('/host/*');
   const isHostsActive = Boolean(hostsMatch || hostDetailsMatch);
 
-  const operatingSystemsMatch = useMatch('/operatingsystems');
-  const operatingSystemMatch = useMatch('/operatingsystem/*');
+  const operatingSystemsMatch = useMatch('/operating-systems');
+  const operatingSystemMatch = useMatch('/operating-system/*');
   const isOperatingSystemsActive = Boolean(
     operatingSystemsMatch || operatingSystemMatch,
   );
 
-  const tlsCertificatesMatch = useMatch('/tlscertificates');
-  const tlsCertificateMatch = useMatch('/tlscertificate/*');
+  const tlsCertificatesMatch = useMatch('/tls-certificates');
+  const tlsCertificateMatch = useMatch('/tls-certificate/*');
   const isTlsCertificatesActive = Boolean(
     tlsCertificatesMatch || tlsCertificateMatch,
   );
@@ -83,8 +83,8 @@ const Menu = () => {
   const auditMatch = useMatch('/audit/*');
   const isAuditsActive = Boolean(auditsMatch || auditMatch);
 
-  const auditReportsMatch = useMatch('/auditreports');
-  const auditReportMatch = useMatch('/auditreport/*');
+  const auditReportsMatch = useMatch('/audit-reports');
+  const auditReportMatch = useMatch('/audit-report/*');
   const isAuditReportsActive = Boolean(auditReportsMatch || auditReportMatch);
 
   const nvtsMatch = useMatch('/nvts');
@@ -99,28 +99,28 @@ const Menu = () => {
   const cpeMatch = useMatch('/cpe/*');
   const isCpesActive = Boolean(cpesMatch || cpeMatch);
 
-  const certbundsMatch = useMatch('/certbunds');
-  const certbundMatch = useMatch('/certbund/*');
+  const certbundsMatch = useMatch('/cert-bund-advisories');
+  const certbundMatch = useMatch('/cert-bund-advisory/*');
   const isCertbundsActive = Boolean(certbundsMatch || certbundMatch);
 
-  const dfncertsMatch = useMatch('/dfncerts');
-  const dfncertMatch = useMatch('/dfncert/*');
+  const dfncertsMatch = useMatch('/dfn-cert-advisories');
+  const dfncertMatch = useMatch('/dfn-cert-advisory/*');
   const isDfncertsActive = Boolean(dfncertsMatch || dfncertMatch);
 
   const targetsMatch = useMatch('/targets');
   const targetMatch = useMatch('/target/*');
   const isTargetsActive = Boolean(targetsMatch || targetMatch);
 
-  const portlistsMatch = useMatch('/portlists');
-  const portlistMatch = useMatch('/portlist/*');
+  const portlistsMatch = useMatch('/port-lists');
+  const portlistMatch = useMatch('/port-list/*');
   const isPortlistsActive = Boolean(portlistsMatch || portlistMatch);
 
   const credentialsMatch = useMatch('/credentials');
   const credentialMatch = useMatch('/credential/*');
   const isCredentialsActive = Boolean(credentialsMatch || credentialMatch);
 
-  const scanConfigsMatch = useMatch('/scanconfigs');
-  const scanConfigMatch = useMatch('/scanconfig/*');
+  const scanConfigsMatch = useMatch('/scan-configs');
+  const scanConfigMatch = useMatch('/scan-config/*');
   const isScanConfigsActive = Boolean(scanConfigsMatch || scanConfigMatch);
 
   const alertsMatch = useMatch('/alerts');
@@ -141,8 +141,8 @@ const Menu = () => {
     agentInstallersMatch || agentInstallerMatch,
   );
 
-  const containerImageTargetsMatch = useMatch('/ociimagetargets');
-  const containerImageTargetMatch = useMatch('/ociimagetarget/*');
+  const containerImageTargetsMatch = useMatch('/oci-image-targets');
+  const containerImageTargetMatch = useMatch('/oci-image-target/*');
   const isContainerImageTargetsActive = Boolean(
     containerImageTargetsMatch || containerImageTargetMatch,
   );
@@ -151,14 +151,14 @@ const Menu = () => {
   const scheduleMatch = useMatch('/schedule/*');
   const isSchedulesActive = Boolean(schedulesMatch || scheduleMatch);
 
-  const reportConfigsMatch = useMatch('/reportconfigs');
-  const reportConfigMatch = useMatch('/reportconfig/*');
+  const reportConfigsMatch = useMatch('/report-configs');
+  const reportConfigMatch = useMatch('/report-config/*');
   const isReportConfigsActive = Boolean(
     reportConfigsMatch || reportConfigMatch,
   );
 
-  const reportFormatsMatch = useMatch('/reportformats');
-  const reportFormatMatch = useMatch('/reportformat/*');
+  const reportFormatsMatch = useMatch('/report-formats');
+  const reportFormatMatch = useMatch('/report-format/*');
   const isReportFormatsActive = Boolean(
     reportFormatsMatch || reportFormatMatch,
   );
@@ -193,11 +193,11 @@ const Menu = () => {
 
   const isPerformanceActive = Boolean(useMatch('/performance'));
   const isTrashcanActive = Boolean(useMatch('/trashcan'));
-  const isFeedStatusActive = Boolean(useMatch('/feedstatus'));
+  const isFeedStatusActive = Boolean(useMatch('/feed-status'));
   const isLdapActive = Boolean(useMatch('/ldap'));
-  const isCredentialStoreActive = Boolean(useMatch('/credentialstore'));
+  const isCredentialStoreActive = Boolean(useMatch('/credential-store'));
   const isRadiusActive = Boolean(useMatch('/radius'));
-  const isCvssCalculatorActive = Boolean(useMatch('/cvsscalculator'));
+  const isCvssCalculatorActive = Boolean(useMatch('/cvss-calculator'));
 
   const mayAccessAny = (keys: EntityType[]) =>
     keys.some(key => isDefined(capabilities) && capabilities.mayAccess(key));
@@ -314,13 +314,13 @@ const Menu = () => {
           },
           capabilities.mayAccess('operatingsystem') && {
             label: _('Operating Systems'),
-            to: '/operatingsystems',
+            to: '/operating-systems',
             isPathMatch: Boolean(operatingSystemsMatch),
             active: isOperatingSystemsActive,
           },
           capabilities.mayAccess('tlscertificate') && {
             label: _('TLS Certificates'),
-            to: '/tlscertificates',
+            to: '/tls-certificates',
             isPathMatch: Boolean(tlsCertificatesMatch),
             active: isTlsCertificatesActive,
           },
@@ -357,7 +357,7 @@ const Menu = () => {
           },
           capabilities.mayAccess('auditreport') && {
             label: _('Compliance Audit Reports'),
-            to: '/auditreports',
+            to: '/audit-reports',
             isPathMatch: Boolean(auditReportsMatch),
             active: isAuditReportsActive,
           },
@@ -395,13 +395,13 @@ const Menu = () => {
           },
           {
             label: _('CERT-Bund Advisories'),
-            to: '/certbunds',
+            to: '/cert-bund-advisories',
             isPathMatch: Boolean(certbundsMatch),
             active: isCertbundsActive,
           },
           {
             label: _('DFN-CERT Advisories'),
-            to: '/dfncerts',
+            to: '/dfn-cert-advisories',
             isPathMatch: Boolean(dfncertsMatch),
             active: isDfncertsActive,
           },
@@ -438,13 +438,13 @@ const Menu = () => {
           capabilities.mayAccess('ociimagetarget') &&
             features.featureEnabled('ENABLE_CONTAINER_SCANNING') && {
               label: _('Container Image Targets'),
-              to: '/ociimagetargets',
+              to: '/oci-image-targets',
               isPathMatch: Boolean(containerImageTargetsMatch),
               active: isContainerImageTargetsActive,
             },
           capabilities.mayAccess('portlist') && {
             label: _('Port Lists'),
-            to: '/portlists',
+            to: '/port-lists',
             isPathMatch: Boolean(portlistsMatch),
             active: isPortlistsActive,
           },
@@ -456,7 +456,7 @@ const Menu = () => {
           },
           capabilities.mayAccess('scanconfig') && {
             label: _('Scan Configs'),
-            to: '/scanconfigs',
+            to: '/scan-configs',
             isPathMatch: Boolean(scanConfigsMatch),
             active: isScanConfigsActive,
           },
@@ -474,13 +474,13 @@ const Menu = () => {
           },
           capabilities.mayAccess('reportconfig') && {
             label: _('Report Configs'),
-            to: '/reportconfigs',
+            to: '/report-configs',
             isPathMatch: Boolean(reportConfigsMatch),
             active: isReportConfigsActive,
           },
           capabilities.mayAccess('reportformat') && {
             label: _('Report Formats'),
-            to: '/reportformats',
+            to: '/report-formats',
             isPathMatch: Boolean(reportFormatsMatch),
             active: isReportFormatsActive,
           },
@@ -580,7 +580,7 @@ const Menu = () => {
           },
           capabilities.mayOp('get_feeds') && {
             label: _('Feed Status'),
-            to: '/feedstatus',
+            to: '/feed-status',
             isPathMatch: isFeedStatusActive,
             active: isFeedStatusActive,
           },
@@ -595,7 +595,7 @@ const Menu = () => {
             features.featureEnabled('ENABLE_CREDENTIAL_STORES') &&
             capabilities.mayOp('modify_auth') && {
               label: _('Credential Store'),
-              to: '/credentialstore',
+              to: '/credential-store',
               isPathMatch: isCredentialStoreActive,
               active: isCredentialStoreActive,
             },
@@ -616,7 +616,7 @@ const Menu = () => {
         subNav: [
           {
             label: _('CVSS Calculator'),
-            to: '/cvsscalculator',
+            to: '/cvss-calculator',
             isPathMatch: isCvssCalculatorActive,
             active: isCvssCalculatorActive,
           },

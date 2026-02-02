@@ -140,7 +140,7 @@ describe('ScanConfigDetailPageToolBarIcons tests', () => {
     expect(screen.getByTitle('ScanConfig List')).toBeInTheDocument();
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
-      '/scanconfigs',
+      '/scan-configs',
     );
 
     expect(screen.getByTitle('Create new Scan Config')).toBeInTheDocument();

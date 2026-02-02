@@ -72,7 +72,7 @@ describe('ReportConfigDetailsPage tests', () => {
     );
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
-      '/reportconfigs',
+      '/report-configs',
     );
 
     const entityInfo = within(screen.getByTestId('entity-info'));
@@ -204,15 +204,15 @@ describe('ReportConfigDetailsPage tests', () => {
     );
     expect(
       screen.getByRole('link', {name: /^non-configurable-1$/}),
-    ).toHaveAttribute('href', '/reportformat/654321');
+    ).toHaveAttribute('href', '/report-format/654321');
     expect(
       screen.getAllByRole('link', {name: /^non-configurable-2$/})[0],
-    ).toHaveAttribute('href', '/reportformat/7654321');
+    ).toHaveAttribute('href', '/report-format/7654321');
     expect(
       screen.getAllByRole('link', {name: /^non-configurable-2$/})[1],
-    ).toHaveAttribute('href', '/reportformat/7654321');
+    ).toHaveAttribute('href', '/report-format/7654321');
     expect(
       screen.getByRole('link', {name: /^example-configurable-2$/}),
-    ).toHaveAttribute('href', '/reportformat/1234567');
+    ).toHaveAttribute('href', '/report-format/1234567');
   });
 });

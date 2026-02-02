@@ -48,7 +48,7 @@ describe('ReportConfigDetailsPageToolBarIcons tests', () => {
     );
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
-      '/reportconfigs',
+      '/report-configs',
     );
     expect(screen.getByTitle('Create new Report Config')).toBeInTheDocument();
     expect(screen.getByTitle('Clone Report Config')).toBeInTheDocument();

@@ -46,7 +46,7 @@ const ScanConfigDetailsPageToolBarIcons = ({
           page="scanning"
           title={_('Help: ScanConfigs')}
         />
-        <ListIcon page="scanconfigs" title={_('ScanConfig List')} />
+        <ListIcon page="scan-configs" title={_('ScanConfig List')} />
       </IconDivider>
       <IconDivider>
         <CreateIcon entity={entity} onClick={onScanConfigCreateClick} />

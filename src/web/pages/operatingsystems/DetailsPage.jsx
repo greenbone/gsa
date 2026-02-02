@@ -67,7 +67,7 @@ const ToolBarIcons = ({
           page="managing-assets"
           title={_('Help: Operating Systems')}
         />
-        <ListIcon page="operatingsystems" title={_('Operating System List')} />
+        <ListIcon page="operating-systems" title={_('Operating System List')} />
       </IconDivider>
       <IconDivider>
         {capabilities.mayDelete('os') &&

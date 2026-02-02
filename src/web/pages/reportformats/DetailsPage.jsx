@@ -65,7 +65,7 @@ const ToolBarIcons = ({
           page="reports"
           title={_('Help: Report Formats')}
         />
-        <ListIcon page="reportformats" title={_('Report Formats List')} />
+        <ListIcon page="report-formats" title={_('Report Formats List')} />
       </IconDivider>
       <IconDivider>
         <CreateIcon

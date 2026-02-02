@@ -38,14 +38,13 @@ describe('Report Config Details tests', () => {
 
     // Report format of the config
     expect(detailsLinks[0]).toHaveTextContent('example-configurable-1');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/reportformat/123456');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/report-format/123456');
 
     // Report format params
     expect(detailsLinks[1]).toHaveTextContent('non-configurable-1');
-    expect(detailsLinks[1]).toHaveAttribute('href', '/reportformat/654321');
-
+    expect(detailsLinks[1]).toHaveAttribute('href', '/report-format/654321');
     expect(detailsLinks[2]).toHaveTextContent('non-configurable-2');
-    expect(detailsLinks[2]).toHaveAttribute('href', '/reportformat/7654321');
+    expect(detailsLinks[2]).toHaveAttribute('href', '/report-format/7654321');
 
     // Alerts
     expect(detailsLinks[3]).toHaveTextContent('ABC');

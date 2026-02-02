@@ -198,7 +198,7 @@ describe('TargetDetailsPage tests', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole('link', {name: /iana assigned tcp/i}),
-    ).toHaveAttribute('href', '/portlist/32323');
+    ).toHaveAttribute('href', '/port-list/32323');
 
     expect(
       screen.getByRole('row', {

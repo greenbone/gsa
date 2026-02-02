@@ -198,7 +198,7 @@ describe('AuditDeltaDetailsContent tests', () => {
     expect(reportRow1).toHaveTextContent('1234');
     expect(within(reportRow1).getByRole('link')).toHaveAttribute(
       'href',
-      '/auditreport/1234',
+      '/audit-report/1234',
     );
     expect(
       screen.getByRole('row', {name: /^Scan Time Report 1/}),
@@ -216,7 +216,7 @@ describe('AuditDeltaDetailsContent tests', () => {
     expect(reportRow2).toHaveTextContent('5678');
     expect(within(reportRow2).getByRole('link')).toHaveAttribute(
       'href',
-      '/auditreport/5678',
+      '/audit-report/5678',
     );
     expect(
       screen.getByRole('row', {name: /^Scan Time Report 2/}),

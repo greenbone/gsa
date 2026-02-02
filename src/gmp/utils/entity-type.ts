@@ -240,3 +240,24 @@ export const resourceType = (type?: EntityType): string | undefined => {
   }
   return apiType(type);
 };
+
+const ENTITY_URLS = {
+  agentgroup: 'agent-group',
+  agentinstaller: 'agent-installer',
+  auditreport: 'audit-report',
+  certbund: 'cert-bund-advisory',
+  dfncert: 'dfn-cert-advisory',
+  ociimagetarget: 'oci-image-target',
+  operatingsystem: 'operating-system',
+  portlist: 'port-list',
+  portrange: 'port-range',
+  reportconfig: 'report-config',
+  reportformat: 'report-format',
+  scanconfig: 'scan-config',
+  tlscertificate: 'tls-certificate',
+} as Record<EntityType, string>;
+
+export const entityURL = (type: EntityType, id: string): string => {
+  const urlType = ENTITY_URLS[type] ?? type;
+  return `/${urlType}/${encodeURIComponent(id)}`;
+};

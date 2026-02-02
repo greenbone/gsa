@@ -62,7 +62,7 @@ const ToolBarIcons = ({
           page="managing-assets"
           title={_('Help: TLS Certificate Assets')}
         />
-        <ListIcon page="tlscertificates" title={_('TLS Certificates List')} />
+        <ListIcon page="tls-certificates" title={_('TLS Certificates List')} />
       </IconDivider>
       <IconDivider>
         <DeleteIcon entity={entity} onClick={onTlsCertificateDeleteClick} />

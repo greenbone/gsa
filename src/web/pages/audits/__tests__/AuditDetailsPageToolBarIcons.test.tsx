@@ -514,7 +514,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const report = screen.getByTitle(
       'Last Report for Audit foo from 07/30/2019',
     );
-    expect(report).toHaveAttribute('href', '/auditreport/1234');
+    expect(report).toHaveAttribute('href', '/audit-report/1234');
 
     const totalReports = screen.getByTitle('Total Reports for Audit foo');
     expect(totalReports).toHaveAttribute(
@@ -625,7 +625,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const report = screen.getByTitle(
       'Last Report for Audit foo from 07/30/2019',
     );
-    expect(report).toHaveAttribute('href', '/auditreport/1234');
+    expect(report).toHaveAttribute('href', '/audit-report/1234');
 
     const totalReports = screen.getByTitle('Total Reports for Audit foo');
     expect(totalReports).toHaveAttribute(
