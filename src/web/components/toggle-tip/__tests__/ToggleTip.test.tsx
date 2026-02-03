@@ -5,11 +5,11 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
-import Toggletip from 'web/components/toggletip/Toggletip';
+import ToggleTip from 'web/components/toggle-tip/ToggleTip';
 
-describe('Toggletip tests', () => {
+describe('ToggleTip tests', () => {
   test('should render with default aria-label and correct initial state', () => {
-    render(<Toggletip id="test-tip">Test content</Toggletip>);
+    render(<ToggleTip id="test-tip">Test content</ToggleTip>);
 
     const button = screen.getByRole('button', {name: 'More information'});
     expect(button).toBeInTheDocument();
@@ -22,9 +22,9 @@ describe('Toggletip tests', () => {
 
   test('should toggle content visibility on button click and update aria-expanded', () => {
     render(
-      <Toggletip ariaLabel="Help info" id="test-tip">
+      <ToggleTip ariaLabel="Help info" id="test-tip">
         Test content
-      </Toggletip>,
+      </ToggleTip>,
     );
 
     const button = screen.getByRole('button', {name: 'Help info'});
@@ -47,9 +47,9 @@ describe('Toggletip tests', () => {
 
   test('should close when Escape key is pressed', () => {
     render(
-      <Toggletip ariaLabel="Help info" id="test-tip">
+      <ToggleTip ariaLabel="Help info" id="test-tip">
         Test content
-      </Toggletip>,
+      </ToggleTip>,
     );
 
     const button = screen.getByRole('button', {name: 'Help info'});
@@ -69,9 +69,9 @@ describe('Toggletip tests', () => {
 
   test('should close when backdrop is clicked', () => {
     render(
-      <Toggletip ariaLabel="Help info" id="test-tip">
+      <ToggleTip ariaLabel="Help info" id="test-tip">
         Test content
-      </Toggletip>,
+      </ToggleTip>,
     );
 
     const button = screen.getByRole('button', {name: 'Help info'});
@@ -88,9 +88,9 @@ describe('Toggletip tests', () => {
 
   test('should render multiline content with proper whitespace', () => {
     render(
-      <Toggletip ariaLabel="Help info" id="test-tip">
+      <ToggleTip ariaLabel="Help info" id="test-tip">
         Line 1{'\n'}Line 2{'\n'}Line 3
-      </Toggletip>,
+      </ToggleTip>,
     );
 
     const button = screen.getByRole('button', {name: 'Help info'});
@@ -110,13 +110,13 @@ describe('Toggletip tests', () => {
     'should position content correctly for position %s',
     (position, expectedStyles) => {
       render(
-        <Toggletip
+        <ToggleTip
           ariaLabel="Help info"
           id="test-tip"
           position={position as 'top' | 'bottom' | 'left' | 'right'}
         >
           Test content
-        </Toggletip>,
+        </ToggleTip>,
       );
 
       const button = screen.getByRole('button', {name: 'Help info'});
@@ -129,13 +129,13 @@ describe('Toggletip tests', () => {
 
   test('should apply custom data-testid when provided', () => {
     render(
-      <Toggletip
+      <ToggleTip
         ariaLabel="Help info"
         dataTestId="custom-toggletip"
         id="test-tip"
       >
         Test content
-      </Toggletip>,
+      </ToggleTip>,
     );
 
     const container = screen.getByTestId('custom-toggletip');
@@ -150,13 +150,13 @@ describe('Toggletip tests', () => {
         <div ref={el => (relatedRef.current = el)}>
           <input data-testid="related-input" type="text" />
         </div>
-        <Toggletip
+        <ToggleTip
           ariaLabel="Help info"
           id="test-tip"
           relatedRefs={[relatedRef]}
         >
           Test content
-        </Toggletip>
+        </ToggleTip>
       </>,
     );
 

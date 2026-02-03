@@ -4,11 +4,11 @@
  */
 
 import {type ReactNode, type ReactElement, useRef, cloneElement} from 'react';
-import Toggletip, {
-  type ToggletipPosition,
-} from 'web/components/toggletip/Toggletip';
+import ToggleTip, {
+  type ToggleTipPosition,
+} from 'web/components/toggle-tip/ToggleTip';
 
-interface ComponentWithToggletipProps {
+interface ComponentWithToggleTipProps {
   /** The component (TextField, NumberField, etc.) */
   slot: ReactElement;
   /** The help content to display in the toggletip */
@@ -16,7 +16,7 @@ interface ComponentWithToggletipProps {
   /** Aria label for the help button */
   helpAriaLabel?: string;
   /** Position of the toggletip relative to the help icon */
-  position?: ToggletipPosition;
+  position?: ToggleTipPosition;
   /** Data test ID for the toggletip */
   dataTestId?: string;
 }
@@ -33,13 +33,13 @@ interface ComponentWithToggletipProps {
  *   helpAriaLabel="More info about cron format"
  * />
  */
-const ComponentWithToggletip = ({
+const ComponentWithToggleTip = ({
   slot,
   helpContent,
   helpAriaLabel = 'More information',
   position = 'top',
   dataTestId,
-}: ComponentWithToggletipProps) => {
+}: ComponentWithToggleTipProps) => {
   const slotContainerRef = useRef<HTMLDivElement>(null);
 
   // Clone the slot element and provide a safe title that includes the toggletip.
@@ -48,28 +48,28 @@ const ComponentWithToggletip = ({
     title: slot.props.title ? (
       <>
         {slot.props.title}
-        <Toggletip
+        <ToggleTip
           ariaLabel={helpAriaLabel}
           dataTestId={dataTestId}
           position={position}
           relatedRefs={[slotContainerRef]}
         >
           {helpContent}
-        </Toggletip>
+        </ToggleTip>
       </>
     ) : (
-      <Toggletip
+      <ToggleTip
         ariaLabel={helpAriaLabel}
         dataTestId={dataTestId}
         position={position}
         relatedRefs={[slotContainerRef]}
       >
         {helpContent}
-      </Toggletip>
+      </ToggleTip>
     ),
   });
 
   return <div ref={slotContainerRef}>{slotWithToggletip}</div>;
 };
 
-export default ComponentWithToggletip;
+export default ComponentWithToggleTip;

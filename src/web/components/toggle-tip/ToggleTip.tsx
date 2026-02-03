@@ -15,14 +15,14 @@ import styled from 'styled-components';
 import {HelpIcon} from 'web/components/icon';
 import Theme from 'web/utils/Theme';
 
-export type ToggletipPosition = 'top' | 'bottom' | 'left' | 'right';
+export type ToggleTipPosition = 'top' | 'bottom' | 'left' | 'right';
 
-interface ToggletipProps {
+interface ToggleTipProps {
   ariaLabel?: string;
   children: ReactNode;
   dataTestId?: string;
   id?: string;
-  position?: ToggletipPosition;
+  position?: ToggleTipPosition;
   /** Refs to elements that should not close the toggletip when clicked */
   relatedRefs?: RefObject<HTMLElement>[];
 }
@@ -61,7 +61,7 @@ const Backdrop = styled.div<{$isOpen: boolean}>`
   pointer-events: none;
 `;
 
-const positionStyles: Record<ToggletipPosition, string> = {
+const positionStyles: Record<ToggleTipPosition, string> = {
   top: `
     bottom: 100%;
     left: 0;
@@ -84,7 +84,7 @@ const positionStyles: Record<ToggletipPosition, string> = {
   `,
 };
 
-const Content = styled.output<{$isOpen: boolean; $position: ToggletipPosition}>`
+const Content = styled.output<{$isOpen: boolean; $position: ToggleTipPosition}>`
   display: ${props => (props.$isOpen ? 'block' : 'none')};
   position: absolute;
   padding: 12px;
@@ -108,17 +108,17 @@ const Content = styled.output<{$isOpen: boolean; $position: ToggletipPosition}>`
 `;
 
 /**
- * Toggletip component - an accessible alternative to tooltips for touch devices
+ * ToggleTip component - an accessible alternative to tooltips for touch devices
  * Displays information when a help button is clicked, dismissible via Escape or outside click
  */
-const Toggletip = ({
+const ToggleTip = ({
   ariaLabel = 'More information',
   children,
   dataTestId,
   id = 'toggletip',
   position = 'top',
   relatedRefs = [],
-}: ToggletipProps) => {
+}: ToggleTipProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef<HTMLOutputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -145,7 +145,7 @@ const Toggletip = ({
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
 
-      // Don't close if clicking on the toggletip itself
+      // Don't close if clicking on the toggle tip itself
       if (containerRef.current?.contains(target)) {
         return;
       }
@@ -199,4 +199,4 @@ const Toggletip = ({
   );
 };
 
-export default Toggletip;
+export default ToggleTip;

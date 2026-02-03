@@ -8,7 +8,7 @@ import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import Column from 'web/components/layout/Column';
 import Section from 'web/components/section/Section';
-import ComponentWithToggletip from 'web/components/toggletip/ComponentWithToggletip';
+import ComponentWithToggleTip from 'web/components/toggle-tip/ComponentWithToggleTip';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface AgentConfigurationSectionProps {
@@ -159,7 +159,7 @@ const AgentConfigurationSection = ({
           />
 
           {isCurrentValueCustom && (
-            <ComponentWithToggletip
+            <ComponentWithToggleTip
               dataTestId="cron-help-toggletip"
               helpAriaLabel={_('More info about cron format')}
               helpContent={cronHelp}
