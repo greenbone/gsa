@@ -6,14 +6,14 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
 import TextField from 'web/components/form/TextField';
-import ComponentWithToggletip from 'web/components/toggletip/ComponentWithToggletip';
+import ComponentWithToggleTip from 'web/components/toggle-tip/ComponentWithToggleTip';
 
 const onChange = testing.fn();
 
-describe('ComponentWithToggletip tests', () => {
-  test('should not close toggletip when clicking on the field', () => {
+describe('ComponentWithToggleTip tests', () => {
+  test('should not close toggle tip when clicking on the field', () => {
     render(
-      <ComponentWithToggletip
+      <ComponentWithToggleTip
         helpAriaLabel="More info"
         helpContent="This is help text"
         slot={
@@ -27,7 +27,7 @@ describe('ComponentWithToggletip tests', () => {
       />,
     );
 
-    // Open the toggletip
+    // Open the toggle tip
     const helpButton = screen.getByRole('button', {name: 'More info'});
     fireEvent.click(helpButton);
 
@@ -40,13 +40,13 @@ describe('ComponentWithToggletip tests', () => {
 
     fireEvent.click(field);
 
-    // Toggletip should still be visible
+    // Toggle tip should still be visible
     expect(helpContent).toBeVisible();
   });
 
-  test('should close toggletip when clicking outside', () => {
+  test('should close toggle tip when clicking outside', () => {
     render(
-      <ComponentWithToggletip
+      <ComponentWithToggleTip
         helpAriaLabel="More info"
         helpContent="This is help text"
         slot={
@@ -60,7 +60,7 @@ describe('ComponentWithToggletip tests', () => {
       />,
     );
 
-    // Open the toggletip
+    // Open the toggle tip
     const helpButton = screen.getByRole('button', {name: 'More info'});
     fireEvent.click(helpButton);
 
@@ -70,7 +70,7 @@ describe('ComponentWithToggletip tests', () => {
     // Click outside (using mousedown on document body)
     fireEvent.mouseDown(document.body);
 
-    // Toggletip should be closed
+    // Toggle tip should be closed
     expect(helpContent).not.toBeVisible();
   });
 
@@ -78,7 +78,7 @@ describe('ComponentWithToggletip tests', () => {
     const multilineHelp = 'Line 1\nLine 2\nLine 3';
 
     render(
-      <ComponentWithToggletip
+      <ComponentWithToggleTip
         helpAriaLabel="More info"
         helpContent={multilineHelp}
         slot={
@@ -101,7 +101,7 @@ describe('ComponentWithToggletip tests', () => {
 
   test('should apply custom data-testid when provided', () => {
     render(
-      <ComponentWithToggletip
+      <ComponentWithToggleTip
         dataTestId="custom-help"
         helpAriaLabel="More info"
         helpContent="Help text"
@@ -116,7 +116,7 @@ describe('ComponentWithToggletip tests', () => {
       />,
     );
 
-    // The Container element in Toggletip has the data-testid
+    // The Container element in ToggleTip has the data-testid
     // We need to open it first to access it
     const helpButton = screen.getByRole('button', {name: 'More info'});
     fireEvent.click(helpButton);
@@ -127,7 +127,7 @@ describe('ComponentWithToggletip tests', () => {
 
   test('should position toggletip according to position prop', () => {
     render(
-      <ComponentWithToggletip
+      <ComponentWithToggleTip
         helpAriaLabel="More info"
         helpContent="Help text"
         position="bottom"
