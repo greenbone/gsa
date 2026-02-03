@@ -8,6 +8,7 @@ import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import Column from 'web/components/layout/Column';
 import Section from 'web/components/section/Section';
+import ComponentWithToggletip from 'web/components/toggletip/ComponentWithToggletip';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface AgentConfigurationSectionProps {
@@ -115,6 +116,14 @@ const AgentConfigurationSection = ({
     }
   };
 
+  const cronHelp = [
+    `${_('Enter a custom cron expression.')}`,
+    `${_('Format: minute hour day month weekday')}  `,
+    `${_('Example')}: 0 0,12 1 */2 * (at midnight and noon on the 1st day of every 2nd month)`,
+    `${_('Minute')}: 0-59, ${_('Hour')}: 0-23, ${_('Day')}: 1-31, ${_('Month')}: 1-12, ${_('Weekday')}: 0-7`,
+    `* = ${_('any value')}, , = ${_('list separator')}, - = ${_('range')}, / = ${_('step values')}`,
+  ].join('\n');
+
   return (
     <Section title={_('Configuration Details')}>
       <Column gap="lg">
@@ -150,25 +159,19 @@ const AgentConfigurationSection = ({
           />
 
           {isCurrentValueCustom && (
-            <TextField
-              description={
-                <>
-                  {_(
-                    'Enter a custom cron expression. Format: minute hour day month weekday',
-                  )}
-                  <br />• {_('Example')}: 0 0,12 1 */2 * (at midnight and noon
-                  on the 1st day of every 2nd month)
-                  <br />• {_('Minute')}: 0-59, {_('Hour')}: 0-23, {_('Day')}:
-                  1-31, {_('Month')}: 1-12, {_('Weekday')}: 0-7
-                  <br />• * = {_('any value')}, , = {_('list separator')}, - ={' '}
-                  {_('range')}, / = {_('step values')}
-                </>
+            <ComponentWithToggletip
+              dataTestId="cron-help-toggletip"
+              helpAriaLabel={_('More info about cron format')}
+              helpContent={cronHelp}
+              slot={
+                <TextField
+                  name="schedulerCronExpression"
+                  placeholder="0 0,12 1 */2 *"
+                  title={_('Custom cron expression')}
+                  value={schedulerCronExpression}
+                  onChange={onValueChange}
+                />
               }
-              name="schedulerCronExpression"
-              placeholder="0 0,12 1 */2 *"
-              title={_('Custom cron expression')}
-              value={schedulerCronExpression}
-              onChange={onValueChange}
             />
           )}
         </Column>
