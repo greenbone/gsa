@@ -54,6 +54,8 @@ export interface AgentElement extends ModelElement {
   update_to_latest?: YesNo;
   agent_update_available?: YesNo;
   updater_update_available?: YesNo;
+  latest_agent_version?: string;
+  latest_updater_version?: string;
   schedule?: string;
   ip?: string | string[];
   scanner?: {
@@ -110,6 +112,8 @@ interface AgentProperties extends ModelProperties {
   updateToLatest?: boolean;
   agentUpdateAvailable?: boolean;
   updaterUpdateAvailable?: boolean;
+  latestAgentVersion?: string;
+  latestUpdaterVersion?: string;
   schedule?: string;
   ipAddresses?: string[];
   scanner?: Scanner;
@@ -157,6 +161,8 @@ class Agent extends Model {
   readonly schedule?: string;
   readonly ipAddresses?: string[];
   readonly scanner?: Scanner;
+  readonly latestAgentVersion?: string;
+  readonly latestUpdaterVersion?: string;
   readonly config?: AgentConfig;
 
   constructor({
@@ -176,6 +182,8 @@ class Agent extends Model {
     schedule,
     ipAddresses,
     scanner,
+    latestAgentVersion,
+    latestUpdaterVersion,
     config,
     ...properties
   }: AgentProperties = {}) {
@@ -197,6 +205,8 @@ class Agent extends Model {
     this.schedule = schedule;
     this.ipAddresses = ipAddresses;
     this.scanner = scanner;
+    this.latestAgentVersion = latestAgentVersion;
+    this.latestUpdaterVersion = latestUpdaterVersion;
     this.config = config;
   }
 
@@ -244,6 +254,9 @@ class Agent extends Model {
           name: parseToString(scanner.name),
         }
       : undefined;
+
+    copy.latestAgentVersion = parseToString(element.latest_agent_version);
+    copy.latestUpdaterVersion = parseToString(element.latest_updater_version);
 
     if (isDefined(config)) {
       const {

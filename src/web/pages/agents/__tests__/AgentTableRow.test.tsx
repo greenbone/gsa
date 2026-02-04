@@ -90,7 +90,7 @@ describe('AgentTableRow tests', () => {
       name: 'Agent 1',
       authorized: true,
       agentVersion: '22.4.0',
-      updaterVersion: '22.4.1',
+      latestAgentVersion: '22.4.1',
       userCapabilities: new EverythingCapabilities(),
     });
 
