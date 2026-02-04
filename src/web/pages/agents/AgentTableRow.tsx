@@ -46,9 +46,9 @@ const AgentTableRow = ({
       <TableData>
         <Divider flex="column">
           <span>{entity.agentVersion}</span>
-          {entity.updaterVersion && (
+          {entity.latestAgentVersion && (
             <span>
-              {_('Update available to:')} {entity.updaterVersion}
+              {_('Update available to:')} {entity.latestAgentVersion}
             </span>
           )}
         </Divider>

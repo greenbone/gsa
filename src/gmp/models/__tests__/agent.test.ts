@@ -34,6 +34,8 @@ describe('Agent model tests', () => {
     expect(agent.schedule).toBeUndefined();
     expect(agent.ipAddresses).toBeUndefined();
     expect(agent.scanner).toBeUndefined();
+    expect(agent.latestAgentVersion).toBeUndefined();
+    expect(agent.latestUpdaterVersion).toBeUndefined();
     expect(agent.config).toBeUndefined();
   });
 
@@ -59,6 +61,8 @@ describe('Agent model tests', () => {
     expect(agent.schedule).toBeUndefined();
     expect(agent.ipAddresses).toBeUndefined();
     expect(agent.scanner).toBeUndefined();
+    expect(agent.latestAgentVersion).toBeUndefined();
+    expect(agent.latestUpdaterVersion).toBeUndefined();
     expect(agent.config).toBeUndefined();
   });
 
@@ -168,6 +172,16 @@ describe('Agent model tests', () => {
 
     expect(agent.scanner?.id).toEqual('3b4be213-281f-49ee-b457-5a5f34f71510');
     expect(agent.scanner?.name).toEqual('Agent1');
+  });
+
+  test('should parse latest_agent_version', () => {
+    const agent = Agent.fromElement({latest_agent_version: 'v1'});
+    expect(agent.latestAgentVersion).toEqual('v1');
+  });
+
+  test('should parse latest_updater_version', () => {
+    const agent = Agent.fromElement({latest_updater_version: 'v1'});
+    expect(agent.latestUpdaterVersion).toEqual('v1');
   });
 
   test('should parse config', () => {
