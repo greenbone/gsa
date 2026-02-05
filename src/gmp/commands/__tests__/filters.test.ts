@@ -5,10 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {FilterCommand} from 'gmp/commands/filters';
-import {
-  createHttp,
-  createActionResultResponse,
-} from 'gmp/commands/testing';
+import {createHttp, createActionResultResponse} from 'gmp/commands/testing';
 
 describe('FilterCommand tests', () => {
   test('should create a new filter', async () => {
