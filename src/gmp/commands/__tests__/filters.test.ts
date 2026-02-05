@@ -8,7 +8,6 @@ import {FilterCommand} from 'gmp/commands/filters';
 import {
   createHttp,
   createActionResultResponse,
-  createEntitiesResponse,
 } from 'gmp/commands/testing';
 
 describe('FilterCommand tests', () => {
