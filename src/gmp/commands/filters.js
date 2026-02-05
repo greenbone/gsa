@@ -15,7 +15,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.commands.filters');
 
-class FilterCommand extends EntityCommand {
+export class FilterCommand extends EntityCommand {
   constructor(http) {
     super(http, 'filter', Filter);
   }
