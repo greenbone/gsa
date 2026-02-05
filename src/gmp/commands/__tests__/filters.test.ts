@@ -8,7 +8,7 @@ import {FilterCommand} from 'gmp/commands/filters';
 import {
   createHttp,
   createActionResultResponse,
-  createEntitiesResponse
+  createEntitiesResponse,
 } from 'gmp/commands/testing';
 
 describe('FilterCommand tests', () => {
@@ -67,28 +67,27 @@ describe('FilterCommand tests', () => {
   });
 
   test.each([
-    {entityType: "host", resourceType: "host"},
-    {entityType: "os", resourceType: "os"},
-    {entityType: "report", resourceType: "report"},
-    {entityType: "result", resourceType: "result"},
-    {entityType: "task", resourceType: "task"},
+    {entityType: 'host', resourceType: 'host'},
+    {entityType: 'os', resourceType: 'os'},
+    {entityType: 'report', resourceType: 'report'},
+    {entityType: 'result', resourceType: 'result'},
+    {entityType: 'task', resourceType: 'task'},
   ])(
     'should create $entityType filter with $resourceType',
-    async ({entityType, resourceType}) =>
-  {
-    const response = createActionResultResponse({
-      action: 'create_filter',
-      id: '123',
-      message: 'Filter created successfully',
-    });
-    const fakeHttp = createHttp(response);
+    async ({entityType, resourceType}) => {
+      const response = createActionResultResponse({
+        action: 'create_filter',
+        id: '123',
+        message: 'Filter created successfully',
+      });
+      const fakeHttp = createHttp(response);
 
-    const cmd = new FilterCommand(fakeHttp);
-    const result = await cmd.create({type: entityType});
-    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-      data: {cmd: 'create_filter', comment: "", resource_type: resourceType},
-    });
-    expect(result.data.id).toEqual('123');
-  });
-
+      const cmd = new FilterCommand(fakeHttp);
+      const result = await cmd.create({type: entityType});
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: {cmd: 'create_filter', comment: '', resource_type: resourceType},
+      });
+      expect(result.data.id).toEqual('123');
+    },
+  );
 });
