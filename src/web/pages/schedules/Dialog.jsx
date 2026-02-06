@@ -47,6 +47,28 @@ const RepeatMonthly = {
 
 const getNthWeekday = cdate => Math.ceil(cdate.date() / 7);
 
+// Helper: Preserve time components when changing date
+const preserveTimeOnDateChange = (newDate, currentDate, timezone) => {
+  const dateInTimezone = newDate.tz(timezone, true);
+  return dateInTimezone
+    .hour(currentDate.hour())
+    .minute(currentDate.minute())
+    .second(currentDate.second())
+    .millisecond(currentDate.millisecond());
+};
+
+// Helper: Update date with new time
+const updateDateWithTime = (currentDate, timeString) => {
+  const parsedTime = date(timeString, 'HH:mm');
+  if (!parsedTime.isValid()) {
+    return null;
+  }
+  return currentDate
+    .clone()
+    .hour(parsedTime.hour())
+    .minute(parsedTime.minute());
+};
+
 const ScheduleDialog = ({
   duration,
   timezone: initialTimezone = DEFAULT_TIMEZONE,
@@ -199,8 +221,9 @@ const ScheduleDialog = ({
     : isDefined(endDate) && createDuration(endDate.diff(startDate));
 
   const handleNowButtonClick = () => {
-    setStartDate(date().tz(timezone));
-    setStartTime(formatTimeForTimePicker(date().tz(timezone)));
+    const now = date().tz(timezone);
+    setStartDate(now);
+    setStartTime(formatTimeForTimePicker(now));
   };
 
   const handleTimezoneChange = value => {
@@ -212,18 +235,15 @@ const ScheduleDialog = ({
   };
 
   const handleTimeChange = (selectedTime, type) => {
-    if (type === 'startTime') {
-      const newStartDate = date(selectedTime, 'HH:mm');
-      if (newStartDate.isValid()) {
-        setStartDate(newStartDate);
-        setStartTime(selectedTime);
-      }
-    } else if (type === 'endTime') {
-      const newEndDate = date(selectedTime, 'HH:mm');
-      if (newEndDate.isValid()) {
-        setEndDate(newEndDate);
-        setEndTime(selectedTime);
-      }
+    const updateState =
+      type === 'startTime'
+        ? {currentDate: startDate, setDate: setStartDate, setTime: setStartTime}
+        : {currentDate: endDate, setDate: setEndDate, setTime: setEndTime};
+
+    const newDate = updateDateWithTime(updateState.currentDate, selectedTime);
+    if (newDate) {
+      updateState.setDate(newDate);
+      updateState.setTime(selectedTime);
     }
   };
 
@@ -362,159 +382,184 @@ const ScheduleDialog = ({
       onClose={onClose}
       onSave={handleSave}
     >
-      {({values: state, onValueChange}) => (
-        <>
-          <FormGroup title={_('Name')}>
-            <TextField
-              name="name"
-              value={state.name}
-              onChange={onValueChange}
-            />
-          </FormGroup>
+      {({values: state, onValueChange}) => {
+        // Date change handlers with timezone preservation
+        const handleStartDateChange = newDate => {
+          const updatedDate = preserveTimeOnDateChange(
+            newDate,
+            startDate,
+            timezone,
+          );
+          setStartDate(updatedDate);
+          setStartTime(formatTimeForTimePicker(updatedDate));
+          onValueChange(updatedDate, 'startDate');
+        };
 
-          <FormGroup title={_('Comment')}>
-            <TextField
-              name="comment"
-              value={state.comment}
-              onChange={onValueChange}
-            />
-          </FormGroup>
+        const handleEndDateChange = newDate => {
+          const updatedDate = preserveTimeOnDateChange(
+            newDate,
+            endDate,
+            timezone,
+          );
+          setEndDate(updatedDate);
+          setEndTime(formatTimeForTimePicker(updatedDate));
+          onValueChange(updatedDate, 'endDate');
+        };
 
-          <Row align={'end'} flex="row" gap={'lg'}>
-            <DatePicker
-              label={_('Start Date')}
-              name="startDate"
-              timezone={timezone}
-              value={startDate}
-              onChange={setStartDate}
-            />
-            <TimePicker
-              label={_('Start Time')}
-              name="startDate"
-              value={startTime}
-              onChange={newStartTime =>
-                handleTimeChange(newStartTime, 'startTime')
-              }
-            />
-            <Button title={_('Now')} onClick={handleNowButtonClick} />
-          </Row>
-          <FormGroup title={_('Timezone')}>
-            <TimeZoneSelect
-              name="timezone"
-              value={timezone}
-              onChange={handleTimezoneChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Run Until')}>
-            <CheckBox
-              checked={state.endOpen}
-              name="endOpen"
-              title={_('Open End')}
-              onChange={setEndOpen}
-            />
+        return (
+          <>
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                value={state.name}
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-            <DatePicker
-              disabled={state.endOpen}
-              label={_('End Date')}
-              name="endDate"
-              value={state.endDate}
-              onChange={setEndDate}
-            />
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-            <TimePicker
-              disabled={state.endOpen}
-              label={_('End Time')}
-              name="endTime"
-              value={endTime}
-              onChange={newEndTime => handleTimeChange(newEndTime, 'endTime')}
-            />
-          </FormGroup>
+            <Row align={'end'} flex="row" gap={'lg'}>
+              <DatePicker
+                label={_('Start Date')}
+                name="startDate"
+                timezone={timezone}
+                value={startDate}
+                onChange={handleStartDateChange}
+              />
+              <TimePicker
+                label={_('Start Time')}
+                name="startDate"
+                value={startTime}
+                onChange={newStartTime =>
+                  handleTimeChange(newStartTime, 'startTime')
+                }
+              />
+              <Button title={_('Now')} onClick={handleNowButtonClick} />
+            </Row>
+            <FormGroup title={_('Timezone')}>
+              <TimeZoneSelect
+                name="timezone"
+                value={timezone}
+                onChange={handleTimezoneChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Run Until')}>
+              <CheckBox
+                checked={state.endOpen}
+                name="endOpen"
+                title={_('Open End')}
+                onChange={setEndOpen}
+              />
 
-          <FormGroup title={_('Duration')}>
-            <span>{renderDuration(duration)}</span>
-          </FormGroup>
+              <DatePicker
+                disabled={state.endOpen}
+                label={_('End Date')}
+                name="endDate"
+                value={state.endDate}
+                onChange={handleEndDateChange}
+              />
 
-          <FormGroup title={_('Recurrence')}>
-            <Select
-              items={RECURRENCE_TYPE_ITEMS}
-              name="recurrenceType"
-              value={state.recurrenceType}
-              onChange={setRecurrenceType}
-            />
-          </FormGroup>
+              <TimePicker
+                disabled={state.endOpen}
+                label={_('End Time')}
+                name="endTime"
+                value={endTime}
+                onChange={newEndTime => handleTimeChange(newEndTime, 'endTime')}
+              />
+            </FormGroup>
 
-          {state.recurrenceType === RECURRENCE_CUSTOM && (
-            <>
-              <FormGroup direction="row" title={_('Repeat')}>
-                <span>{_('Every')}</span>
-                <Spinner
-                  min="1"
-                  name="interval"
-                  type="int"
-                  value={state.interval}
-                  onChange={setInterval}
-                />
-                <TimeUnitSelect
-                  name="freq"
-                  value={state.freq}
-                  onChange={setFreq}
-                />
-              </FormGroup>
+            <FormGroup title={_('Duration')}>
+              <span>{renderDuration(duration)}</span>
+            </FormGroup>
 
-              {state.freq === RECURRENCE_WEEKLY && (
-                <FormGroup title={_('Repeat at')}>
-                  <WeekDaySelect
-                    name="weekdays"
-                    value={weekdays}
-                    onChange={setWeekdays}
+            <FormGroup title={_('Recurrence')}>
+              <Select
+                items={RECURRENCE_TYPE_ITEMS}
+                name="recurrenceType"
+                value={state.recurrenceType}
+                onChange={setRecurrenceType}
+              />
+            </FormGroup>
+
+            {state.recurrenceType === RECURRENCE_CUSTOM && (
+              <>
+                <FormGroup direction="row" title={_('Repeat')}>
+                  <span>{_('Every')}</span>
+                  <Spinner
+                    min="1"
+                    name="interval"
+                    type="int"
+                    value={state.interval}
+                    onChange={setInterval}
+                  />
+                  <TimeUnitSelect
+                    name="freq"
+                    value={state.freq}
+                    onChange={setFreq}
                   />
                 </FormGroup>
-              )}
 
-              {state.freq === RECURRENCE_MONTHLY && (
-                <FormGroup title={_('Repeat at')}>
-                  <Row>
-                    <Radio
-                      checked={state.monthly === RepeatMonthly.nth}
-                      name="monthly"
-                      value={RepeatMonthly.nth}
-                      onChange={setMonthly}
+                {state.freq === RECURRENCE_WEEKLY && (
+                  <FormGroup title={_('Repeat at')}>
+                    <WeekDaySelect
+                      name="weekdays"
+                      value={weekdays}
+                      onChange={setWeekdays}
                     />
-                    <Select
-                      disabled={state.monthly !== RepeatMonthly.nth}
-                      items={NTH_DAY_ITEMS}
-                      name="monthlyNth"
-                      value={state.monthlyNth}
-                      onChange={setMonthlyNth}
-                    />
-                    <DaySelect
-                      disabled={state.monthly !== RepeatMonthly.nth}
-                      name="monthlyDay"
-                      value={state.monthlyDay}
-                      onChange={setMonthlyDay}
-                    />
-                  </Row>
-                  <Row>
-                    <Radio
-                      checked={state.monthly === RepeatMonthly.days}
-                      name="monthly"
-                      title={_('Recur on day(s)')}
-                      value={RepeatMonthly.days}
-                      onChange={setMonthly}
-                    />
-                    <MonthDaysSelect
-                      disabled={state.monthly !== RepeatMonthly.days}
-                      name="monthdays"
-                      value={state.monthdays}
-                      onChange={setMonthdays}
-                    />
-                  </Row>
-                </FormGroup>
-              )}
-            </>
-          )}
-        </>
-      )}
+                  </FormGroup>
+                )}
+
+                {state.freq === RECURRENCE_MONTHLY && (
+                  <FormGroup title={_('Repeat at')}>
+                    <Row>
+                      <Radio
+                        checked={state.monthly === RepeatMonthly.nth}
+                        name="monthly"
+                        value={RepeatMonthly.nth}
+                        onChange={setMonthly}
+                      />
+                      <Select
+                        disabled={state.monthly !== RepeatMonthly.nth}
+                        items={NTH_DAY_ITEMS}
+                        name="monthlyNth"
+                        value={state.monthlyNth}
+                        onChange={setMonthlyNth}
+                      />
+                      <DaySelect
+                        disabled={state.monthly !== RepeatMonthly.nth}
+                        name="monthlyDay"
+                        value={state.monthlyDay}
+                        onChange={setMonthlyDay}
+                      />
+                    </Row>
+                    <Row>
+                      <Radio
+                        checked={state.monthly === RepeatMonthly.days}
+                        name="monthly"
+                        title={_('Recur on day(s)')}
+                        value={RepeatMonthly.days}
+                        onChange={setMonthly}
+                      />
+                      <MonthDaysSelect
+                        disabled={state.monthly !== RepeatMonthly.days}
+                        name="monthdays"
+                        value={state.monthdays}
+                        onChange={setMonthdays}
+                      />
+                    </Row>
+                  </FormGroup>
+                )}
+              </>
+            )}
+          </>
+        );
+      }}
     </SaveDialog>
   );
 };
