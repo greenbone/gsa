@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
 import {createFeed} from 'gmp/commands/feed-status';
 import Response from 'gmp/http/response';
-import FeedStatus from 'web/pages/extras/FeedStatusPage';
+import FeedStatus from 'web/pages/feed-configuration/FeedConfigurationPage';
 
 testing.setSystemTime(new Date('2020-07-25T07:00:00Z'));
 
@@ -59,7 +59,7 @@ describe('Feed status page tests', () => {
 
     expect(screen.getByTestId('help-icon')).toHaveAttribute(
       'title',
-      'Help: Feed Status',
+      'Help: Feed Configuration',
     );
 
     // Should render all links
@@ -69,7 +69,7 @@ describe('Feed status page tests', () => {
 
     expect(links[0]).toHaveAttribute(
       'href',
-      'http://foo.bar/en/web-interface.html#displaying-the-feed-status',
+      'http://foo.bar/en/web-interface.html#displaying-the-feed-configuration',
     );
     expect(links[1]).toHaveAttribute('href', '/nvts');
     expect(links[2]).toHaveAttribute('href', '/cves');
@@ -119,7 +119,7 @@ describe('Feed status page tests', () => {
     expect(element).toHaveTextContent('20200523T1003');
     expect(element).toHaveTextContent('20200622T1009');
 
-    // Feed Status
+    // Feed Configuration
 
     const ageText = element.querySelectorAll('strong');
     const updateMsgs = screen.getAllByTestId('update-msg');
