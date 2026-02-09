@@ -16,8 +16,8 @@ describe('DialogCloseButton tests', () => {
     const {element} = render(<DialogCloseButton onClick={() => {}} />);
 
     expect(element).toHaveAttribute('title', 'Close');
-    expect(element).toHaveStyleRule('height', ICON_SIZE_MEDIUM_PIXELS);
-    expect(element).toHaveStyleRule('width', ICON_SIZE_MEDIUM_PIXELS);
+    expect(element).toHaveComputedStyle('height', ICON_SIZE_MEDIUM_PIXELS);
+    expect(element).toHaveComputedStyle('width', ICON_SIZE_MEDIUM_PIXELS);
   });
 
   test('should call close handler', () => {
@@ -35,7 +35,7 @@ describe('DialogCloseButton tests', () => {
       <DialogCloseButton size="large" onClick={() => {}} />,
     );
 
-    expect(element).toHaveStyleRule('height', ICON_SIZE_LARGE_PIXELS);
-    expect(element).toHaveStyleRule('width', ICON_SIZE_LARGE_PIXELS);
+    expect(element).toHaveComputedStyle('height', ICON_SIZE_LARGE_PIXELS);
+    expect(element).toHaveComputedStyle('width', ICON_SIZE_LARGE_PIXELS);
   });
 });

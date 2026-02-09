@@ -158,7 +158,7 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).toHaveTextContent(
       'The Greenbone Enterprise License for this system will expire in 26 days',
     );
-    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
+    expect(heading).toHaveBackgroundColor(Theme.lightBlue);
   });
 
   test('should render if <=30 days active for User user', async () => {
@@ -191,7 +191,7 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).toHaveTextContent(
       'The Greenbone Enterprise License for this system will expire in 26 days',
     );
-    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
+    expect(heading).toHaveBackgroundColor(Theme.lightBlue);
   });
 
   test('should render if <=30 days active for Admin user Trial', async () => {
@@ -226,7 +226,7 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).toHaveTextContent(
       'The trial period for this system will end in 13 days',
     );
-    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
+    expect(heading).toHaveBackgroundColor(Theme.lightBlue);
   });
 
   test('should render if <=30 days active for User user Trial', async () => {
@@ -258,7 +258,7 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).toHaveTextContent(
       'The trial period for this system will end in 13 days',
     );
-    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
+    expect(heading).toHaveBackgroundColor(Theme.lightBlue);
   });
 
   test('should not render if >30 days and active for Admin user', async () => {
@@ -351,7 +351,7 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your Greenbone Enterprise License has expired 1 days ago!',
     );
-    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
+    expect(heading).toHaveBackgroundColor(Theme.mediumLightRed);
   });
 
   test('should render warning if expired for User user', async () => {
@@ -386,7 +386,7 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your Greenbone Enterprise License has expired 1 days ago!',
     );
-    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
+    expect(heading).toHaveBackgroundColor(Theme.mediumLightRed);
   });
 
   test('should render warning if corrupt for Admin user', async () => {
@@ -427,7 +427,7 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your Greenbone Enterprise License is invalid!',
     );
-    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
+    expect(heading).toHaveBackgroundColor(Theme.mediumLightRed);
   });
 
   test('should render warning if corrupt for User user', async () => {
@@ -462,7 +462,7 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your Greenbone Enterprise License is invalid!',
     );
-    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
+    expect(heading).toHaveBackgroundColor(Theme.mediumLightRed);
   });
 
   test('should not render if status is no_license for Admin user', async () => {

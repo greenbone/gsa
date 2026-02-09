@@ -51,10 +51,8 @@ describe('Entity VerifyIcon component tests', () => {
       />,
     );
 
-    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).not.toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).not.toHaveComputedStyle('fill', Theme.inputBorderGray);
+    expect(element).not.toHaveColor(Theme.inputBorderGray);
 
     expect(entity.userCapabilities.mayOp('verify_report_format')).toEqual(true);
 

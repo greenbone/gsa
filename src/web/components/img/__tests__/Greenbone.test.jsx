@@ -11,6 +11,8 @@ describe('GreenboneLogo tests', () => {
   test('should render', () => {
     const {element} = render(<GreenboneLogo />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toHaveAttribute('alt', 'OPENVAS');
+    expect(element).toHaveAttribute('data-testid', 'greenbone-logo');
+    expect(element).toHaveAttribute('src');
   });
 });

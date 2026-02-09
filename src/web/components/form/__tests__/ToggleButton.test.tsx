@@ -13,28 +13,28 @@ describe('ToggleButton tests', () => {
     render(<ToggleButton />);
 
     const button = screen.getByTestId('toggle-button');
-    expect(button).toHaveStyleRule('width', '32px');
-    expect(button).toHaveStyleRule('cursor', 'pointer');
-    expect(button).toHaveStyleRule('color', Theme.darkGray);
-    expect(button).toHaveStyleRule('background-color', Theme.lightGray);
+    expect(button).toHaveComputedStyle('width', '32px');
+    expect(button).toHaveComputedStyle('cursor', 'pointer');
+    expect(button).toHaveColor(Theme.darkGray);
+    expect(button).toHaveBackgroundColor(Theme.lightGray);
   });
 
   test('should render in disabled state', () => {
     render(<ToggleButton disabled={true} />);
 
     const button = screen.getByTestId('toggle-button');
-    expect(button).toHaveStyleRule('cursor', 'default');
-    expect(button).toHaveStyleRule('color', Theme.mediumGray);
-    expect(button).toHaveStyleRule('background-color', Theme.lightGray);
+    expect(button).toHaveComputedStyle('cursor', 'default');
+    expect(button).toHaveColor(Theme.mediumGray);
+    expect(button).toHaveBackgroundColor(Theme.lightGray);
   });
 
   test('should render in checked state', () => {
     render(<ToggleButton checked={true} />);
 
     const button = screen.getByTestId('toggle-button');
-    expect(button).toHaveStyleRule('cursor', 'pointer');
-    expect(button).toHaveStyleRule('color', Theme.white);
-    expect(button).toHaveStyleRule('background-color', Theme.lightGreen);
+    expect(button).toHaveComputedStyle('cursor', 'pointer');
+    expect(button).toHaveColor(Theme.white);
+    expect(button).toHaveBackgroundColor(Theme.lightGreen);
   });
 
   test('should call onToggle handler', () => {

@@ -32,9 +32,7 @@ describe('Task ResumeIcon component tests', () => {
 
     expect(clickHandler).toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Resume');
-    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).not.toHaveComputedStyle('fill', Theme.inputBorderGray);
   });
 
   test('should render in inactive state if wrong command level permissions are given', () => {

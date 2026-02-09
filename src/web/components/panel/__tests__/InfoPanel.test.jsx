@@ -59,7 +59,7 @@ describe('InfoPanel tests', () => {
     expect(element).toHaveTextContent('heading text');
     expect(element).toHaveTextContent('footer text');
     expect(closeButton).toBeInTheDocument();
-    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
+    expect(heading).toHaveBackgroundColor(Theme.lightBlue);
   });
 
   test('should render red if warning', () => {
@@ -79,7 +79,7 @@ describe('InfoPanel tests', () => {
     expect(element).toHaveTextContent('heading text');
     expect(element).toHaveTextContent('footer text');
     expect(closeButton).toBeInTheDocument();
-    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
+    expect(heading).toHaveBackgroundColor(Theme.mediumLightRed);
   });
 
   test('should call click handler', async () => {

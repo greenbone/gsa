@@ -20,6 +20,9 @@ describe('Qod tests', () => {
 
   test('should prevent linebreaks', () => {
     render(<Qod value={42} />);
-    expect(screen.getByTestId('qod')).toHaveStyleRule('white-space', 'nowrap');
+    expect(screen.getByTestId('qod')).toHaveComputedStyle(
+      'white-space',
+      'nowrap',
+    );
   });
 });

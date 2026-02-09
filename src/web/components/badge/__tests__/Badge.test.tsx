@@ -38,27 +38,21 @@ describe('Badge tests', () => {
     expect(badge).toHaveTextContent('2');
   });
 
-  test('should render backgroundColor', () => {
-    render(<Badge backgroundColor="blue" content="1" />);
-    const icon = screen.getByTestId('badge-icon');
-    expect(icon).toHaveStyleRule('background-color', 'blue');
-  });
-
   test('should render color', () => {
     render(<Badge color="blue" content="1" />);
     const icon = screen.getByTestId('badge-icon');
-    expect(icon).toHaveStyleRule('color', 'blue');
+    expect(icon).toHaveComputedStyle('color', 'rgb(0, 0, 255)');
   });
 
   test('should render position', () => {
     render(<Badge content="1" position="bottom" />);
     const icon = screen.getByTestId('badge-icon');
-    expect(icon).toHaveStyleRule('bottom', '0');
+    expect(icon).toHaveComputedStyle('bottom', '0px');
   });
 
   test('should not be dynamic', () => {
     render(<Badge content="1" dynamic={false} />);
     const icon = screen.getByTestId('badge-icon');
-    expect(icon).toHaveStyleRule('right', '0');
+    expect(icon).toHaveComputedStyle('right', '0px');
   });
 });

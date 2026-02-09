@@ -131,7 +131,7 @@ describe('SeverityBar tests', () => {
     const {render} = rendererWith({gmp});
     render(<SeverityBar severity="9.5" />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '95%');
+    expect(progress).toHaveComputedStyle('width', '95%');
   });
 
   test('should not render progress > 100', () => {
@@ -143,7 +143,7 @@ describe('SeverityBar tests', () => {
     const {render} = rendererWith({gmp});
     render(<SeverityBar severity="10.1" />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '100%');
+    expect(progress).toHaveComputedStyle('width', '100%');
   });
 
   test('should not render progress < 0', () => {
@@ -155,7 +155,7 @@ describe('SeverityBar tests', () => {
     const {render} = rendererWith({gmp});
     render(<SeverityBar severity="-0.1" />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '0%');
+    expect(progress).toHaveComputedStyle('width', '0%');
   });
 
   test('should render background with high severity', () => {
@@ -167,8 +167,9 @@ describe('SeverityBar tests', () => {
     const {render} = rendererWith({gmp});
     render(<SeverityBar severity="9.5" />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule(
-      'background',
+    const actualValue =
+      getComputedStyle(progress).getPropertyValue('background');
+    expect(actualValue).toContain(
       `linear-gradient(90deg, ${Theme.severityClassHigh} 0%, ${Theme.severityClassHigh} 100%)`,
     );
   });
@@ -182,8 +183,9 @@ describe('SeverityBar tests', () => {
     const {render} = rendererWith({gmp});
     render(<SeverityBar severity="5" />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule(
-      'background',
+    const actualValue =
+      getComputedStyle(progress).getPropertyValue('background');
+    expect(actualValue).toContain(
       `linear-gradient(90deg, ${Theme.severityClassMedium} 0%, ${Theme.severityClassMedium} 100%)`,
     );
   });
@@ -197,8 +199,9 @@ describe('SeverityBar tests', () => {
     const {render} = rendererWith({gmp});
     render(<SeverityBar severity="9" />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule(
-      'background',
+    const actualValue =
+      getComputedStyle(progress).getPropertyValue('background');
+    expect(actualValue).toContain(
       `linear-gradient(90deg, ${Theme.severityClassCritical} 0%, ${Theme.severityClassCritical} 100%)`,
     );
   });
@@ -212,10 +215,11 @@ describe('SeverityBar tests', () => {
     const {render} = rendererWith({gmp});
     render(<SeverityBar />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule(
-      'background',
+    const actualValue =
+      getComputedStyle(progress).getPropertyValue('background');
+    expect(actualValue).toContain(
       `linear-gradient(90deg, ${Theme.severityClassLow} 0%, ${Theme.severityClassLow} 100%)`,
     );
-    expect(progress).toHaveStyleRule('width', '0%');
+    expect(progress).toHaveComputedStyle('width', '0%');
   });
 });

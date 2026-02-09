@@ -11,7 +11,15 @@ describe('InfoPanel button tests', () => {
   test('should render', () => {
     const {element} = render(<Button />);
 
-    expect(element).toMatchSnapshot();
+    expect(element.tagName).toBe('BUTTON');
+    expect(element).toHaveStyle({
+      display: 'flex', // from withLayout
+      padding: '5px 7px',
+      fontSize: '11px',
+      fontWeight: 'bold',
+      border: '1px solid #bfbfbf', // Theme.inputBorderGray
+      cursor: 'pointer',
+    });
   });
 
   test('should call click handler', () => {

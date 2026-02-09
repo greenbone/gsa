@@ -15,6 +15,12 @@ describe('Target tests', () => {
 
   test('should apply styling', () => {
     const {element} = render(<Target id="foo" />);
-    expect(element).toMatchSnapshot();
+    expect(element).toHaveStyle({
+      content: "''",
+      display: 'block',
+      height: '35px',
+      margin: '-35px 0px 0px 0px',
+      position: 'relative',
+    });
   });
 });
