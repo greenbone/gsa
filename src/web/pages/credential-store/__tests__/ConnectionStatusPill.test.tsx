@@ -5,7 +5,6 @@
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import {screen, fireEvent, render} from 'web/testing';
-import 'jest-styled-components';
 import ConnectionStatusPill from 'web/pages/credential-store/ConnectionStatusPill';
 
 describe('ConnectionStatusPill', () => {
@@ -37,7 +36,7 @@ describe('ConnectionStatusPill', () => {
       const plugZapIcon = screen.getByLabelText('Plug Zap Icon');
       expect(plugZapIcon).toBeVisible();
 
-      expect(button).toHaveStyleRule('cursor', 'pointer');
+      expect(button).toHaveComputedStyle('cursor', 'pointer');
     });
 
     test('handles interactions correctly', () => {
@@ -83,7 +82,7 @@ describe('ConnectionStatusPill', () => {
       const scheduleIcon = screen.getByLabelText('Schedule Icon');
       expect(scheduleIcon).toBeVisible();
 
-      expect(button).toHaveStyleRule('cursor', 'not-allowed');
+      expect(button).toHaveComputedStyle('cursor', 'not-allowed');
     });
 
     test('is non-interactive', () => {
@@ -122,7 +121,7 @@ describe('ConnectionStatusPill', () => {
       const verifyIcon = screen.getByLabelText('Verify Icon');
       expect(verifyIcon).toBeVisible();
 
-      expect(button).toHaveStyleRule('cursor', 'pointer');
+      expect(button).toHaveComputedStyle('cursor', 'pointer');
     });
 
     test('handles interactions correctly', () => {
@@ -163,7 +162,7 @@ describe('ConnectionStatusPill', () => {
       const verifyNoIcon = screen.getByLabelText('Verify No Icon');
       expect(verifyNoIcon).toBeVisible();
 
-      expect(button).toHaveStyleRule('cursor', 'pointer');
+      expect(button).toHaveComputedStyle('cursor', 'pointer');
     });
 
     test('handles interactions correctly', () => {
@@ -191,7 +190,7 @@ describe('ConnectionStatusPill', () => {
 
       expect(button).toBeVisible();
       expect(button).toBeDisabled();
-      expect(button).toHaveStyleRule('cursor', 'not-allowed');
+      expect(button).toHaveComputedStyle('cursor', 'not-allowed');
 
       fireEvent.click(button);
       expect(handleClick).not.toHaveBeenCalled();

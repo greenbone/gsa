@@ -32,7 +32,7 @@ describe('StatusBar tests', () => {
   test('should render progress', () => {
     render(<StatusBar progress="90" status={TASK_STATUS.stopped} />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '90%');
+    expect(progress).toHaveComputedStyle('width', '90%');
   });
 
   test('should not render progress > 100', () => {
@@ -40,7 +40,7 @@ describe('StatusBar tests', () => {
       <StatusBar progress="101" status={TASK_STATUS.stopped} />,
     );
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '100%');
+    expect(progress).toHaveComputedStyle('width', '100%');
     expect(element).toHaveTextContent('Stopped at 100 %');
   });
 
@@ -49,15 +49,16 @@ describe('StatusBar tests', () => {
       <StatusBar progress="-1" status={TASK_STATUS.stopped} />,
     );
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '0%');
+    expect(progress).toHaveComputedStyle('width', '0%');
     expect(element).toHaveTextContent('Stopped at 0 %');
   });
 
   test('should render background', () => {
     render(<StatusBar progress="90" status={TASK_STATUS.stopped} />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule(
-      'background',
+    const actualValue =
+      getComputedStyle(progress).getPropertyValue('background');
+    expect(actualValue).toContain(
       `linear-gradient(90deg, ${Theme.severityWarnYellow} 0%, ${Theme.severityWarnYellow} 100%)`,
     );
   });
@@ -65,11 +66,12 @@ describe('StatusBar tests', () => {
   test('should render error background for interrupted status', () => {
     render(<StatusBar progress="50" status={TASK_STATUS.interrupted} />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule(
-      'background',
+    const actualValue =
+      getComputedStyle(progress).getPropertyValue('background');
+    expect(actualValue).toContain(
       `linear-gradient(90deg, ${Theme.errorRed} 0%, ${Theme.errorRed} 100%)`,
     );
-    expect(progress).toHaveStyleRule('width', '50%');
+    expect(progress).toHaveComputedStyle('width', '50%');
     const text = screen.getByTestId('statusbar-text');
     expect(text).toHaveTextContent('Interrupted at 50 %');
   });
@@ -80,6 +82,6 @@ describe('StatusBar tests', () => {
     );
     expect(element).toHaveTextContent('Import');
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '100%');
+    expect(progress).toHaveComputedStyle('width', '100%');
   });
 });

@@ -13,6 +13,16 @@ describe('ProductImage tests', () => {
     const {render} = rendererWith({gmp});
     const {element} = render(<ProductImage />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toHaveAttribute('alt', 'OPENVAS SCAN');
+    expect(element).toHaveAttribute('src', '/img/login-label.svg');
+  });
+
+  test('should render with vendorLabel', () => {
+    const gmp = {settings: {vendorLabel: 'custom-label.svg'}};
+    const {render} = rendererWith({gmp});
+    const {element} = render(<ProductImage />);
+
+    expect(element).toHaveAttribute('alt', 'OPENVAS SCAN');
+    expect(element).toHaveAttribute('src', '/img/custom-label.svg');
   });
 });

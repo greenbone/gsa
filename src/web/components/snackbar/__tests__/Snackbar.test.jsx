@@ -9,13 +9,22 @@ import SnackbarCreator from 'web/components/snackbar/Snackbar';
 
 describe('Snackbar tests', () => {
   test('should render', () => {
-    const {rerender, element} = render(
-      <SnackbarCreator message={{text: undefined}} />,
-    );
+    const {rerender} = render(<SnackbarCreator message={{text: undefined}} />);
 
     rerender(<SnackbarCreator message={{text: 'foo'}} />);
 
-    expect(element).toMatchSnapshot();
+    const snackbar = screen.getByTestId('snackbar-container');
+    expect(snackbar).toHaveStyle({
+      position: 'fixed',
+      bottom: '0px',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      height: '100px',
+      backgroundColor: '#4C4C4C', // Theme.darkGray
+      color: '#fff', // Theme.white
+    });
   });
 
   test('should not render if text is undefined', () => {

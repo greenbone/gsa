@@ -27,10 +27,8 @@ describe('Entity CreateIcon component tests', () => {
     fireEvent.click(element);
 
     expect(clickHandler).toHaveBeenCalled();
-    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).not.toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).not.toHaveComputedStyle('fill', Theme.inputBorderGray);
+    expect(element).not.toHaveColor(Theme.inputBorderGray);
   });
 
   test('should not be rendered if wrong command level permissions are given', () => {

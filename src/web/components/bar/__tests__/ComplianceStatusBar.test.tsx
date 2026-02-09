@@ -29,20 +29,20 @@ describe('ComplianceStatusBar tests', () => {
   test('should render progress', () => {
     render(<ComplianceStatusBar complianceStatus={75} />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '75%');
+    expect(progress).toHaveComputedStyle('width', '75%');
   });
 
   test('should not render progress > 100', () => {
     const {element} = render(<ComplianceStatusBar complianceStatus={101} />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '100%');
+    expect(progress).toHaveComputedStyle('width', '100%');
     expect(element).toHaveTextContent('N/A');
   });
 
   test('should not render progress < 0', () => {
     const {element} = render(<ComplianceStatusBar complianceStatus={-1} />);
     const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyleRule('width', '0%');
+    expect(progress).toHaveComputedStyle('width', '0%');
     expect(element).toHaveTextContent('N/A');
   });
 
@@ -51,11 +51,12 @@ describe('ComplianceStatusBar tests', () => {
     const progress = screen.getByTestId('progress');
     const progressbarBox = screen.getByTestId('progressbar-box');
 
-    expect(progress).toHaveStyleRule(
-      'background',
+    const actualValue =
+      getComputedStyle(progress).getPropertyValue('background');
+    expect(actualValue).toContain(
       `linear-gradient(90deg, ${Theme.statusRunGreen} 0%, ${Theme.statusRunGreen} 100%)`,
     );
-    expect(progressbarBox).toHaveStyleRule('background', Theme.errorRed);
+    expect(progressbarBox).toHaveBackgroundColor(Theme.errorRed);
   });
 
   test('should render gray background for N/A', () => {
@@ -63,11 +64,12 @@ describe('ComplianceStatusBar tests', () => {
     const progress = screen.getByTestId('progress');
     const progressbarBox = screen.getByTestId('progressbar-box');
 
-    expect(progress).toHaveStyleRule(
-      'background',
+    const actualValue =
+      getComputedStyle(progress).getPropertyValue('background');
+    expect(actualValue).toContain(
       `linear-gradient(90deg, ${Theme.statusRunGreen} 0%, ${Theme.statusRunGreen} 100%)`,
     );
-    expect(progress).toHaveStyleRule('width', '0%');
-    expect(progressbarBox).toHaveStyleRule('background', Theme.darkGray);
+    expect(progress).toHaveComputedStyle('width', '0%');
+    expect(progressbarBox).toHaveBackgroundColor(Theme.darkGray);
   });
 });

@@ -53,6 +53,6 @@ describe('EntityBox tests', () => {
     expect(element).toHaveTextContent(
       'ModifiedSat, Feb 2, 2019 1:00 PM Central European Standard',
     );
-    expect(element).toHaveStyleRule('width', '400px');
+    expect(element).toHaveComputedStyle('width', '400px');
   });
 });
