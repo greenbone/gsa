@@ -34,6 +34,43 @@ describe('AgentConfigurationSection tests', () => {
     ).toBeInTheDocument();
   });
 
+  test('should not render InfoTip when isEdit is false', () => {
+    const {render} = rendererWith({});
+
+    render(
+      <AgentConfigurationSection
+        activeCronExpression={DEFAULT_CRON_EXPRESSION}
+        isEdit={false}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole('button', {name: 'More information about scheduler'}),
+    ).not.toBeInTheDocument();
+  });
+
+  test('should render InfoTip when isEdit is true', () => {
+    const {render} = rendererWith({});
+
+    render(
+      <AgentConfigurationSection
+        activeCronExpression={DEFAULT_CRON_EXPRESSION}
+        isEdit={true}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
+
+    const helpRegion = screen.getByRole('region', {
+      name: 'More information about scheduler',
+    });
+    expect(helpRegion).toBeInTheDocument();
+  });
+
   test('should render port field when hidePort is false', () => {
     const {render} = rendererWith({});
 
@@ -98,11 +135,8 @@ describe('AgentConfigurationSection tests', () => {
     // Check the TextField input is rendered (not the Select option)
     expect(
       screen.getByRole('textbox', {
-        name: /Custom cron expression Help Icon/,
+        name: /Custom cron expression More info about cron format/,
       }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/Enter a custom cron expression/),
     ).toBeInTheDocument();
     expect(screen.getByPlaceholderText('0 0,12 1 */2 *')).toBeInTheDocument();
     expect(screen.getByDisplayValue(customCron)).toBeInTheDocument();
@@ -141,7 +175,7 @@ describe('AgentConfigurationSection tests', () => {
     expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
     expect(
       screen.getByRole('textbox', {
-        name: /Custom cron expression Help Icon/,
+        name: /Custom cron expression More info about cron format/,
       }),
     ).toBeInTheDocument();
     expect(screen.getByDisplayValue(customCron)).toBeInTheDocument();
