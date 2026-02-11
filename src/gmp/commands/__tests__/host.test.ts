@@ -5,13 +5,13 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {HostCommand, HostsCommand} from 'gmp/commands/hosts';
-import Host from 'gmp/models/host';
 import {
   createEntitiesResponse,
   createPlainResponse,
   createHttp,
 } from 'gmp/commands/testing';
 import Response from 'gmp/http/response';
+import Host from 'gmp/models/host';
 
 describe('HostsCommand tests', () => {
   test('should include asset_type=host in exportByIds', async () => {
