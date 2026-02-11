@@ -22,6 +22,17 @@ class FooCommand extends EntitiesCommand<Foo> {
   }
 }
 
+class FooWithAssetTypeCommand extends EntitiesCommand<Foo> {
+  constructor(http: Http) {
+    super(http, 'foo', Foo);
+    this.setDefaultParam('asset_type', 'test_asset');
+  }
+
+  getEntitiesResponse(data: Element) {
+    return data;
+  }
+}
+
 describe('EntitiesCommand tests', () => {
   test('should add filter parameter', async () => {
     const filter = Filter.fromString('foo=bar');
@@ -142,6 +153,66 @@ describe('EntitiesCommand tests', () => {
         'bulk_selected:456': 1,
         cmd: 'bulk_export',
         resource_type: 'foo',
+        bulk_select: 1,
+      },
+    });
+  });
+
+  test('should include asset_type when defined via setDefaultParam in export by filter', async () => {
+    const response = createEntitiesResponse('foo', []);
+    const fakeHttp = createHttp(response);
+
+    const filter = Filter.fromString('foo=bar');
+
+    const cmd = new FooWithAssetTypeCommand(fakeHttp);
+    await cmd.exportByFilter(filter);
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'bulk_export',
+        resource_type: 'foo',
+        asset_type: 'test_asset',
+        bulk_select: 0,
+        filter: 'foo=bar',
+      },
+    });
+  });
+
+  test('should include asset_type when defined via setDefaultParam in exportByIds', async () => {
+    const response = createEntitiesResponse('foo', []);
+    const fakeHttp = createHttp(response);
+
+    const cmd = new FooWithAssetTypeCommand(fakeHttp);
+    const ids = ['123', '456'];
+    await cmd.exportByIds(ids);
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        'bulk_selected:123': 1,
+        'bulk_selected:456': 1,
+        cmd: 'bulk_export',
+        resource_type: 'foo',
+        asset_type: 'test_asset',
+        bulk_select: 1,
+      },
+    });
+  });
+
+  test('should include asset_type when defined via setDefaultParam in export of entities', async () => {
+    const response = createEntitiesResponse('foo', []);
+    const fakeHttp = createHttp(response);
+
+    const entities = [new Foo({id: '123'}), new Foo({id: '456'})];
+
+    const cmd = new FooWithAssetTypeCommand(fakeHttp);
+    await cmd.export(entities);
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        'bulk_selected:123': 1,
+        'bulk_selected:456': 1,
+        cmd: 'bulk_export',
+        resource_type: 'foo',
+        asset_type: 'test_asset',
         bulk_select: 1,
       },
     });

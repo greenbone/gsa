@@ -41,6 +41,18 @@ class TestEntityCommand extends EntityCommand<Foo, FooElement> {
   }
 }
 
+class TestEntityWithAssetTypeCommand extends EntityCommand<Foo> {
+  constructor(http: Http) {
+    super(http, 'foo', Foo);
+    this.setDefaultParam('asset_type', 'test_asset');
+  }
+
+  getElementFromRoot(root: XmlResponseData): FooElement {
+    // @ts-expect-error
+    return root.get_foo.get_foos_response.foo;
+  }
+}
+
 describe('EntityCommand tests', () => {
   test('should get entity with filter string parameter', async () => {
     const filterString = 'foo=bar';
@@ -174,6 +186,27 @@ describe('EntityCommand tests', () => {
       data: {
         cmd: 'bulk_export',
         resource_type: 'foo',
+        bulk_select: 1,
+        'bulk_selected:123': 1,
+      },
+    });
+    expect(cmdResponse).toBeInstanceOf(Response);
+    expect(cmdResponse.data).toEqual(content);
+  });
+
+  test('should include asset_type when defined via setDefaultParam in export of entity', async () => {
+    const content = '<some><xml>exported-data</xml></some>';
+    const response = createPlainResponse(content);
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TestEntityWithAssetTypeCommand(fakeHttp);
+    const cmdResponse = await cmd.export({id: '123'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'bulk_export',
+        resource_type: 'foo',
+        asset_type: 'test_asset',
         bulk_select: 1,
         'bulk_selected:123': 1,
       },
