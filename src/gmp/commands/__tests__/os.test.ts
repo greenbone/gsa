@@ -5,13 +5,13 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {OperatingSystemCommand, OperatingSystemsCommand} from 'gmp/commands/os';
-import OperatingSystem from 'gmp/models/os';
 import {
   createEntitiesResponse,
   createPlainResponse,
   createHttp,
 } from 'gmp/commands/testing';
 import Response from 'gmp/http/response';
+import OperatingSystem from 'gmp/models/os';
 
 describe('OperatingSystemsCommand tests', () => {
   test('should include asset_type=os in exportByIds', async () => {
