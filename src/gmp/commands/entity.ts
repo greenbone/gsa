@@ -187,6 +187,7 @@ abstract class EntityCommand<
       data: {
         cmd: 'bulk_export',
         resource_type: this.name,
+        asset_type: this._params.asset_type,
         bulk_select: BULK_SELECT_BY_IDS,
         ['bulk_selected:' + id]: 1,
       },

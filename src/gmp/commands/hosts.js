@@ -102,3 +102,5 @@ class HostsCommand extends EntitiesCommand {
 
 registerCommand('host', HostCommand);
 registerCommand('hosts', HostsCommand);
+
+export {HostCommand, HostsCommand};
