@@ -28,6 +28,10 @@ const Menu = () => {
   const capabilities = useCapabilities();
   const features = useFeatures();
   const gmp = useGmp();
+
+  const dashboardsMatch = useMatch('/dashboards');
+  const isDashboardsActive = Boolean(dashboardsMatch);
+
   const tasksMatch = useMatch('/tasks');
   const taskMatch = useMatch('/task/*');
   const isTasksActive = Boolean(tasksMatch || taskMatch);
@@ -242,6 +246,8 @@ const Menu = () => {
         label: _('Dashboards'),
         to: '/dashboards',
         key: 'dashboards',
+        isPathMatch: Boolean(dashboardsMatch),
+        active: isDashboardsActive,
       },
     ],
     [
