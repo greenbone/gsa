@@ -12,8 +12,10 @@ import {
 import HttpCommand, {
   BULK_SELECT_BY_FILTER,
   BULK_SELECT_BY_IDS,
+  type HttpCommandGetParams,
   type HttpCommandInputParams,
   type HttpCommandOptions,
+  type HttpCommandParamsOptions,
   type HttpCommandPostParams,
 } from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
@@ -96,6 +98,10 @@ interface Group {
   c_count: number;
 }
 
+interface EntityCommandInputParams extends HttpCommandInputParams {
+  id?: string;
+}
+
 interface TransformedAggregatesResponseData {
   groups: Group[];
 }
@@ -131,6 +137,17 @@ abstract class EntitiesCommand<
     );
   }
 
+  protected getParams(
+    params: EntityCommandInputParams = {},
+    extraParams?: HttpCommandGetParams,
+    options?: HttpCommandParamsOptions,
+  ): HttpCommandGetParams {
+    const {id, ...other} = params;
+    const rParams = super.getParams(other, extraParams, options);
+
+    return rParams;
+  }
+
   async get(params: HttpCommandInputParams = {}, options?: HttpCommandOptions) {
     const response = await this.httpGetWithTransform(params, options);
     const {entities, filter, counts} = this.getCollectionListFromRoot(
@@ -161,7 +178,7 @@ abstract class EntitiesCommand<
     const data = {
       cmd: 'bulk_export',
       resource_type: this.name,
-      asset_type: this._params.asset_type,
+      asset_type: this.getParams().asset_type,
       bulk_select: BULK_SELECT_BY_IDS,
     };
     for (const id of ids) {
@@ -175,7 +192,7 @@ abstract class EntitiesCommand<
       data: {
         cmd: 'bulk_export',
         resource_type: this.name,
-        asset_type: this._params.asset_type,
+        asset_type: this.getParams().asset_type,
         bulk_select: BULK_SELECT_BY_FILTER,
         filter: filterString(filter),
       },
