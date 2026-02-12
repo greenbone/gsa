@@ -41,7 +41,7 @@ class TestEntityCommand extends EntityCommand<Foo, FooElement> {
   }
 }
 
-class TestEntityWithAssetTypeCommand extends EntityCommand<Foo> {
+class TestEntityWithAssetTypeCommand extends EntityCommand<Foo, FooElement> {
   constructor(http: Http) {
     super(http, 'foo', Foo);
     this.setDefaultParam('asset_type', 'test_asset');
