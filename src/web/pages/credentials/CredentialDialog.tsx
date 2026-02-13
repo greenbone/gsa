@@ -483,6 +483,7 @@ const CredentialDialog = ({
               state.credentialType === CERTIFICATE_CREDENTIAL_TYPE) && (
               <>
                 <FileField
+                  disabled={state.autogenerate}
                   name="privateKey"
                   title={
                     state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE

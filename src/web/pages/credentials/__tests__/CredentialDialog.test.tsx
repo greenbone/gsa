@@ -227,6 +227,26 @@ describe('CredentialDialog tests', () => {
     expect(privateKey).toHaveAttribute('type', 'file');
   });
 
+  test('should disable private key field when autogenerate is enabled for Username + SSH Key', () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+    });
+
+    render(
+      <CredentialDialog
+        autogenerate={true}
+        credentialType="usk"
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    const fileInput = screen.getByTestId('file-input');
+    expect(fileInput).toBeDisabled();
+
+    const passphrase = screen.getByName('passphrase');
+    expect(passphrase).toBeDisabled();
+  });
+
   test('should render form fields for SNMP', () => {
     const {render} = rendererWith({
       gmp: createGmp(),
