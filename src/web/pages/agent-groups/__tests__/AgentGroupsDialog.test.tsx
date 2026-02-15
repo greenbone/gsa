@@ -58,7 +58,7 @@ describe('AgentGroupsDialog tests', () => {
     // onSave should be called with the dialog defaults
     expect(onSave).toHaveBeenCalledWith(
       expect.objectContaining({
-        name: '',
+        name: 'Unnamed',
         comment: '',
         agentIds: [],
         network: '',

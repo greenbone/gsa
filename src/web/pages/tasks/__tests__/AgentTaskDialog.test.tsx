@@ -116,6 +116,18 @@ describe('AgentTaskDialog component tests', () => {
     expect(once.checked).toBe(true);
   });
 
+  test('should render InfoTip for Schedule field', () => {
+    renderDialog();
+
+    expect(screen.getByText('Schedule')).toBeInTheDocument();
+
+    // InfoTip wrapper has aria-label
+    const helpRegion = screen.getByRole('region', {
+      name: 'More information about schedules',
+    });
+    expect(helpRegion).toBeInTheDocument();
+  });
+
   test('should list alerts (MultiSelect) and call onNewAlertClick', async () => {
     const {onNewAlertClick, onAlertsChange} = commonHandlers();
     renderDialog({onNewAlertClick, onAlertsChange});

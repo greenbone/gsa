@@ -3,17 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import FormGroup from 'web/components/form/FormGroup';
 import NumberField from 'web/components/form/NumberField';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
+import ComponentWithInfoTip from 'web/components/info-tip/ComponentWithInfoTip';
+import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
 import Section from 'web/components/section/Section';
-import ComponentWithToggleTip from 'web/components/toggle-tip/ComponentWithToggleTip';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface AgentConfigurationSectionProps {
   activeCronExpression: string;
   hidePort?: boolean;
+  isEdit?: boolean;
   port?: number;
   schedulerCronExpression?: string;
   intervalInSeconds?: number;
@@ -26,6 +29,7 @@ export const DEFAULT_CRON_EXPRESSION = '0 */12 * * *';
 const AgentConfigurationSection = ({
   activeCronExpression,
   hidePort = false,
+  isEdit = false,
   intervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
   port,
   schedulerCronExpression = DEFAULT_CRON_EXPRESSION,
@@ -143,24 +147,38 @@ const AgentConfigurationSection = ({
 
         {/* Scheduler Options */}
         <Column gap="md">
-          <Select
-            description={_(
-              "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
-            )}
-            items={cronScheduleItems}
-            label="Scheduler Options"
-            name="schedulerCronExpression"
-            placeholder={_('Select a schedule')}
-            title={_('Schedule')}
-            value={
-              isCurrentValueCustom ? '__custom__' : schedulerCronExpression
+          <FormGroup
+            title={
+              <>
+                {_('Scheduler Options')}
+                {isEdit && (
+                  <InfoTip ariaLabel={_('More information about scheduler')}>
+                    {_(
+                      'This will set when the Agents scan the systems.\nA report is not automatically generated and needs to be set up as a "New Agent Task".',
+                    )}
+                  </InfoTip>
+                )}
+              </>
             }
-            onChange={handleSelectChange}
-          />
+          >
+            <Select
+              description={_(
+                "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
+              )}
+              items={cronScheduleItems}
+              name="schedulerCronExpression"
+              placeholder={_('Select a schedule')}
+              title={_('Schedule')}
+              value={
+                isCurrentValueCustom ? '__custom__' : schedulerCronExpression
+              }
+              onChange={handleSelectChange}
+            />
+          </FormGroup>
 
           {isCurrentValueCustom && (
-            <ComponentWithToggleTip
-              dataTestId="cron-help-toggletip"
+            <ComponentWithInfoTip
+              dataTestId="cron-help-infotip"
               helpAriaLabel={_('More info about cron format')}
               helpContent={cronHelp}
               slot={

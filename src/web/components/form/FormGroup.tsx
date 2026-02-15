@@ -14,7 +14,7 @@ interface FormGroupProps {
   'data-testid'?: string;
   direction?: 'row' | 'column';
   gap?: StyleProp<MantineSpacing>;
-  title?: string;
+  title?: React.ReactNode;
 }
 
 const Wrapper = styled.div`
