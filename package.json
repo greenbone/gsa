@@ -107,7 +107,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^17.3.0",
     "i18next-cli": "^1.41.4",
-    "jsdom": "^26.1.0",
+    "jsdom": "^28.1.0",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.54.0",
