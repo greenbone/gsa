@@ -62,3 +62,5 @@ class OperatingSystemsCommand extends EntitiesCommand {
 
 registerCommand('operatingsystem', OperatingSystemCommand);
 registerCommand('operatingsystems', OperatingSystemsCommand);
+
+export {OperatingSystemCommand, OperatingSystemsCommand};
