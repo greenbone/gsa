@@ -91,6 +91,7 @@ interface ContainerImageTaskDialogProps {
   onAlertsChange?: (value: string[]) => void;
   onClose: () => void | Promise<void>;
   onNewAlertClick?: () => void;
+  onNewOciImageTargetClick?: () => void;
   onNewScheduleClick?: () => void;
   onOciImageTargetChange?: (value: string) => void;
   onSave: (data: ContainerImageTaskDialogData) => void | Promise<void>;
@@ -126,6 +127,7 @@ const ContainerImageTaskDialog = ({
   onAlertsChange,
   onClose,
   onNewAlertClick,
+  onNewOciImageTargetClick,
   onNewScheduleClick,
   onOciImageTargetChange,
   onSave,
@@ -235,16 +237,26 @@ const ContainerImageTaskDialog = ({
               onChange={onValueChange}
             />
 
-            <Select
-              data-testid="oci-image-target-select"
-              grow="1"
-              isLoading={isOciImageTargetsLoading}
-              items={ociImageTargetItems}
-              label={_('Container Image Target')}
-              name="ociImageTargetId"
-              value={state.ociImageTargetId}
-              onChange={onOciImageTargetChange}
-            />
+            <FormGroup direction="row" title={_('Container Image Target')}>
+              <Select
+                data-testid="oci-image-target-select"
+                disabled={!changeTask}
+                grow="1"
+                isLoading={isOciImageTargetsLoading}
+                items={ociImageTargetItems}
+                name="ociImageTargetId"
+                value={state.ociImageTargetId}
+                onChange={onOciImageTargetChange}
+              />
+              {changeTask &&
+                capabilities.mayAccess('oci_image_target') &&
+                capabilities.mayCreate('oci_image_target') && (
+                  <NewIcon
+                    title={_('Create a new OCI image target')}
+                    onClick={onNewOciImageTargetClick}
+                  />
+                )}
+            </FormGroup>
 
             <Select
               disabled={true}
