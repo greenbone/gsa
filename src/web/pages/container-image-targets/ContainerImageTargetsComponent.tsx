@@ -49,7 +49,7 @@ interface ContainerImageTargetsComponentProps {
   onDeleteError?: (error: Error) => void;
   onSaved?: () => void;
   onSaveError?: (error: Error) => void;
-  onCreated?: () => void;
+  onCreated?: (response: EntityActionResponse) => void;
   onCreateError?: (error: Error) => void;
   onCloned?: () => void;
   onCloneError?: (error: Error) => void;

@@ -37,6 +37,7 @@ import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
+import ContainerImageTargetsComponent from 'web/pages/container-image-targets/ContainerImageTargetsComponent';
 import ImportReportDialog, {
   type ReportImportDialogData,
 } from 'web/pages/reports/ReportImportDialog';
@@ -206,6 +207,7 @@ const TaskComponent = ({
     acceptInvalidCerts: containerImageAcceptInvalidCerts,
     registryAllowInsecure: containerImageRegistryAllowInsecure,
     title: containerImageTitle,
+    setOciImageTargetId,
     openContainerImageTaskDialog,
     closeContainerImageTaskDialog,
     handleSaveContainerImageTask,
@@ -470,6 +472,12 @@ const TaskComponent = ({
     fetchTargets();
 
     setTargetId(data.id);
+  };
+
+  const handleOciImageTargetCreated = (resp: {data: {id?: string}}) => {
+    const {data} = resp;
+
+    setOciImageTargetId(data.id);
   };
 
   const openImportTaskDialog = (task?: Task) => {
@@ -1072,35 +1080,44 @@ const TaskComponent = ({
           {({create: createAlert}) => (
             <ScheduleComponent onCreated={handleScheduleCreated}>
               {({create: createSchedule}) => (
-                <ContainerImageTaskDialog
-                  acceptInvalidCerts={containerImageAcceptInvalidCerts}
-                  addTag={containerImageAddTag}
-                  alertIds={alertIds}
-                  alerts={alerts as RenderSelectItemProps[]}
-                  alterable={containerImageAlterable}
-                  applyOverrides={containerImageApplyOverrides}
-                  comment={containerImageComment}
-                  inAssets={containerImageInAssets}
-                  isLoadingAlerts={isLoadingAlerts}
-                  isLoadingSchedules={isLoadingSchedules}
-                  name={containerImageName}
-                  ociImageTargetId={containerImageOciImageTargetId}
-                  registryAllowInsecure={containerImageRegistryAllowInsecure}
-                  scannerId={containerImageScannerId}
-                  scheduleId={containerImageScheduleId}
-                  schedulePeriods={containerImageSchedulePeriods}
-                  schedules={schedules as RenderSelectItemProps[]}
-                  task={containerImageTask}
-                  title={containerImageTitle}
-                  onAlertsChange={handleAlertsChange}
-                  onClose={closeContainerImageTaskDialog}
-                  onNewAlertClick={createAlert}
-                  onNewScheduleClick={createSchedule}
-                  onOciImageTargetChange={handleOciImageTargetChange}
-                  onSave={handleSaveContainerImageTask}
-                  onScannerChange={handleContainerImageScannerChange}
-                  onScheduleChange={handleContainerImageScheduleChange}
-                />
+                <ContainerImageTargetsComponent
+                  onCreated={handleOciImageTargetCreated}
+                >
+                  {({create: createOciImageTarget}) => (
+                    <ContainerImageTaskDialog
+                      acceptInvalidCerts={containerImageAcceptInvalidCerts}
+                      addTag={containerImageAddTag}
+                      alertIds={alertIds}
+                      alerts={alerts as RenderSelectItemProps[]}
+                      alterable={containerImageAlterable}
+                      applyOverrides={containerImageApplyOverrides}
+                      comment={containerImageComment}
+                      inAssets={containerImageInAssets}
+                      isLoadingAlerts={isLoadingAlerts}
+                      isLoadingSchedules={isLoadingSchedules}
+                      name={containerImageName}
+                      ociImageTargetId={containerImageOciImageTargetId}
+                      registryAllowInsecure={
+                        containerImageRegistryAllowInsecure
+                      }
+                      scannerId={containerImageScannerId}
+                      scheduleId={containerImageScheduleId}
+                      schedulePeriods={containerImageSchedulePeriods}
+                      schedules={schedules as RenderSelectItemProps[]}
+                      task={containerImageTask}
+                      title={containerImageTitle}
+                      onAlertsChange={handleAlertsChange}
+                      onClose={closeContainerImageTaskDialog}
+                      onNewAlertClick={createAlert}
+                      onNewOciImageTargetClick={createOciImageTarget}
+                      onNewScheduleClick={createSchedule}
+                      onOciImageTargetChange={handleOciImageTargetChange}
+                      onSave={handleSaveContainerImageTask}
+                      onScannerChange={handleContainerImageScannerChange}
+                      onScheduleChange={handleContainerImageScheduleChange}
+                    />
+                  )}
+                </ContainerImageTargetsComponent>
               )}
             </ScheduleComponent>
           )}

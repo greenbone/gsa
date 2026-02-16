@@ -196,6 +196,9 @@ export const useContainerImageTaskDialog = ({
     registryAllowInsecure,
     title,
 
+    // Setters
+    setOciImageTargetId,
+
     // Actions
     openContainerImageTaskDialog,
     closeContainerImageTaskDialog,
