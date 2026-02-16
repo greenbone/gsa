@@ -3,15 +3,32 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState, useEffect, useCallback} from 'react';
-import styled from 'styled-components';
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  type ChangeEvent,
+} from 'react';
 import {Spinner} from '@greenbone/ui-lib';
+import DOMPurify from 'dompurify';
+import styled from 'styled-components';
+import {
+  type default as Scanner,
+  AGENT_CONTROLLER_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
-import useTranslation from 'web/hooks/useTranslation';
-import useLanguage from 'web/hooks/useLanguage';
 import useGmp from 'web/hooks/useGmp';
-import {AGENT_CONTROLLER_SCANNER_TYPE} from 'gmp/models/scanner';
+import useLanguage from 'web/hooks/useLanguage';
+import useTranslation from 'web/hooks/useTranslation';
+
+interface AgentController {
+  id: string;
+  name: string;
+  host: string;
+  port: number;
+}
 
 const extractStyles = (html: string): string => {
   const match = html.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
@@ -22,13 +39,6 @@ const extractBody = (html: string): string => {
   const match = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
   return match ? match[1] : html;
 };
-
-interface AgentController {
-  id: string;
-  name: string;
-  host: string;
-  port: number;
-}
 
 const CenteredLayout = styled(Layout)`
   display: flex;
@@ -109,6 +119,7 @@ const AgentInstallInstructionsPage = () => {
   const [controllers, setControllers] = useState<AgentController[]>([]);
   const [selectedController, setSelectedController] = useState<string>('');
   const [controllersLoading, setControllersLoading] = useState(true);
+  const instructionsContainerRef = useRef<HTMLDivElement>(null);
 
   // Fetch agent-controller scanners on mount
   useEffect(() => {
@@ -118,16 +129,19 @@ const AgentInstallInstructionsPage = () => {
         const scanners = response?.data ?? [];
         const agentControllers: AgentController[] = scanners
           .filter(
-            (s: any) =>
-              String(s.scannerType) === AGENT_CONTROLLER_SCANNER_TYPE,
+            (s: Scanner) =>
+              String(s.scannerType) === AGENT_CONTROLLER_SCANNER_TYPE &&
+              s.id !== undefined &&
+              s.name !== undefined &&
+              s.host !== undefined,
           )
-          .map((s: any) => ({
-            id: s.id,
-            name: s.name,
-            host: s.host,
+          .map((s: Scanner) => ({
+            id: s.id as string,
+            name: s.name as string,
+            host: s.host as string,
             port: s.port ?? 443,
           }))
-          .sort((a: AgentController, b: AgentController) => {
+          .sort((a, b) => {
             // Local agent-control first (matches docker hostname)
             const aLocal = a.host === 'agentcontrol' ? 0 : 1;
             const bLocal = b.host === 'agentcontrol' ? 0 : 1;
@@ -145,18 +159,21 @@ const AgentInstallInstructionsPage = () => {
         setControllersLoading(false);
       }
     };
-    fetchScanners();
+    void fetchScanners();
   }, [gmp]);
 
   const getInstructionsUrl = useCallback(
     (langCode: string) => {
       const controller = controllers.find(c => c.id === selectedController);
+      const encodedLang = encodeURIComponent(langCode);
       if (controller) {
         // Proxy through nginx: /agent-proxy/{host}/{port}/api/v1/...
-        return `/agent-proxy/${controller.host}/${controller.port}/api/v1/install-instructions?lang=${langCode}`;
+        // Encode host to handle IPv6 addresses and special characters safely
+        const encodedHost = encodeURIComponent(controller.host);
+        return `/agent-proxy/${encodedHost}/${controller.port}/api/v1/install-instructions?lang=${encodedLang}`;
       }
       // Fallback to local agent-control
-      return `/api/v1/install-instructions?lang=${langCode}`;
+      return `/api/v1/install-instructions?lang=${encodedLang}`;
     },
     [controllers, selectedController],
   );
@@ -179,7 +196,15 @@ const AgentInstallInstructionsPage = () => {
         const html = await response.text();
         const styles = extractStyles(html);
         const body = extractBody(html);
-        setInstructionsHtml(styles + body);
+        // Sanitize only the body HTML to prevent XSS attacks
+        // Styles are kept as-is (CSS injection is low risk compared to HTML/JS)
+        const sanitizedBody = DOMPurify.sanitize(body, {
+          ADD_ATTR: ['class', 'data-clipboard-text'],
+          FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'style'],
+          FORBID_ATTR: ['onerror', 'onclick', 'onload', 'onmouseover'],
+        });
+        // Combine styles with sanitized body
+        setInstructionsHtml(styles + sanitizedBody);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : _('Unknown error occurred'),
@@ -194,21 +219,23 @@ const AgentInstallInstructionsPage = () => {
   // Fetch instructions when language or selected controller changes
   useEffect(() => {
     if (language && !controllersLoading) {
-      fetchInstructions(language);
+      void fetchInstructions(language);
     }
   }, [language, selectedController, controllersLoading, fetchInstructions]);
 
   // Attach click handlers to copy buttons after HTML is rendered
+  // Scoped to the instructions container to avoid global event handling
   useEffect(() => {
-    if (!instructionsHtml || loading) return;
+    const container = instructionsContainerRef.current;
+    if (!instructionsHtml || loading || !container) return;
 
     const copyToClipboard = async (btn: HTMLButtonElement) => {
       const pre = btn.previousElementSibling;
       if (!pre) return;
 
       const text = pre.textContent || '';
-      const originalText = btn.textContent || 'Copy';
-      const copiedText = language.startsWith('de') ? 'Kopiert!' : 'Copied!';
+      const originalText = btn.textContent || _('Copy');
+      const copiedText = _('Copied!');
 
       try {
         await navigator.clipboard.writeText(text);
@@ -234,15 +261,15 @@ const AgentInstallInstructionsPage = () => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target.classList.contains('copy-btn')) {
-        copyToClipboard(target as HTMLButtonElement);
+        void copyToClipboard(target as HTMLButtonElement);
       }
     };
 
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
-  }, [instructionsHtml, loading, language]);
+    container.addEventListener('click', handleClick);
+    return () => container.removeEventListener('click', handleClick);
+  }, [_, instructionsHtml, loading]);
 
-  const handleControllerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleControllerChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedController(e.target.value);
   };
 
@@ -252,11 +279,14 @@ const AgentInstallInstructionsPage = () => {
       <Layout flex="column">
         {controllers.length > 1 && (
           <SelectorBar>
-            <SelectorLabel>{_('Agent Controller')}:</SelectorLabel>
+            <SelectorLabel htmlFor="agent-controller-select">
+              {_('Agent Controller')}:
+            </SelectorLabel>
             <SelectorSelect
+              disabled={loading}
+              id="agent-controller-select"
               value={selectedController}
               onChange={handleControllerChange}
-              disabled={loading}
             >
               {controllers.map(c => (
                 <option key={c.id} value={c.id}>
@@ -285,6 +315,7 @@ const AgentInstallInstructionsPage = () => {
 
         {!loading && !controllersLoading && !error && (
           <InstructionsContainer
+            ref={instructionsContainerRef}
             dangerouslySetInnerHTML={{__html: instructionsHtml}}
           />
         )}
