@@ -125,7 +125,7 @@ const AgentGroupsDialog = ({
       defaultValues={{
         config: firstAgentFromGroup?.config,
         authorized: firstAgentFromGroup?.authorized,
-        name: agentGroup?.name ?? '',
+        name: agentGroup?.name ?? 'Unnamed',
         comment: agentGroup?.comment ?? '',
         agentIds: selectedAgents,
         network: '',
@@ -191,18 +191,21 @@ const AgentGroupsDialog = ({
               />
             )}
 
-            {state.agentController && agentsData ? (
+            {state.agentController && agentsData && (
               <AgentConfigurationSection
                 hidePort
                 activeCronExpression={schedulerCron}
                 intervalInSeconds={state.intervalInSeconds}
+                isEdit={Boolean(agentGroup)}
                 port={state.port}
                 schedulerCronExpression={state.schedulerCronExpression}
                 onValueChange={onValueChange}
               />
-            ) : state.agentController ? (
+            )}
+
+            {state.agentController && !agentsData && (
               <div>{_('Loading configuration...')}</div>
-            ) : undefined}
+            )}
           </>
         );
       }}
