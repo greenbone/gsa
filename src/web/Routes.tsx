@@ -58,7 +58,7 @@ const loggedInRoutes = [
         path: 'agent-installers',
         lazy: async () => ({
           Component: (
-            await import('web/pages/agent-installers/AgentInstallerListPage')
+            await import('web/pages/agent-remote-installer/AgentInstallInstructionsPage')
           ).default,
         }),
       },
