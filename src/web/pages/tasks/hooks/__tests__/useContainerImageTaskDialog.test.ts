@@ -225,6 +225,17 @@ describe('useContainerImageTaskDialog', () => {
     expect(result.current.scheduleId).toBe('schedule-789');
   });
 
+  test('should update OCI image target ID directly via setOciImageTargetId', () => {
+    const {renderHook} = rendererWith({gmp: {}, store: true});
+    const {result} = renderHook(() => useContainerImageTaskDialog({}));
+
+    act(() => {
+      result.current.setOciImageTargetId('target-direct-123');
+    });
+
+    expect(result.current.ociImageTargetId).toBe('target-direct-123');
+  });
+
   test('should create new container image task successfully', async () => {
     const createResponse = {id: 'new-task-123'};
     const createContainerImageTask = testing

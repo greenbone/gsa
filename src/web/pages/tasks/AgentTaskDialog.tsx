@@ -23,6 +23,7 @@ import Spinner from 'web/components/form/Spinner';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import {NewIcon} from 'web/components/icon';
+import ComponentWithInfoTip from 'web/components/info-tip/ComponentWithInfoTip';
 import Divider from 'web/components/layout/Divider';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
@@ -256,28 +257,36 @@ const AgentTaskDialog = ({
 
             {capabilities.mayAccess('schedule') &&
               capabilities.mayCreate('schedule') && (
-                <FormGroup direction="row" title={_('Schedule')}>
-                  <Select
-                    grow="1"
-                    isLoading={isLoadingSchedules}
-                    items={scheduleItems}
-                    name="scheduleId"
-                    value={state.scheduleId}
-                    onChange={onScheduleChange}
-                  />
-                  <Checkbox
-                    checked={state.schedulePeriods === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    name="schedulePeriods"
-                    title={_('Once')}
-                    unCheckedValue={NO_VALUE}
-                    onChange={onValueChange}
-                  />
-                  <NewIcon
-                    title={_('Create a new schedule')}
-                    onClick={onNewScheduleClick}
-                  />
-                </FormGroup>
+                <ComponentWithInfoTip
+                  helpAriaLabel={_('More information about schedules')}
+                  helpContent={_(
+                    'Note that the Agent Task refers to generating the report with stored data.\nIf you want to change when the Scan Agents scan, go to the Agent Groups page.',
+                  )}
+                  slot={
+                    <FormGroup direction="row" title={_('Schedule')}>
+                      <Select
+                        grow="1"
+                        isLoading={isLoadingSchedules}
+                        items={scheduleItems}
+                        name="scheduleId"
+                        value={state.scheduleId}
+                        onChange={onScheduleChange}
+                      />
+                      <Checkbox
+                        checked={state.schedulePeriods === YES_VALUE}
+                        checkedValue={YES_VALUE}
+                        name="schedulePeriods"
+                        title={_('Once')}
+                        unCheckedValue={NO_VALUE}
+                        onChange={onValueChange}
+                      />
+                      <NewIcon
+                        title={_('Create a new schedule')}
+                        onClick={onNewScheduleClick}
+                      />
+                    </FormGroup>
+                  }
+                />
               )}
 
             <AddResultsToAssetsGroup

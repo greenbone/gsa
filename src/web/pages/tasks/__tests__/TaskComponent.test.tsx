@@ -122,6 +122,9 @@ const createGmp = ({
       save: testing
         .fn()
         .mockResolvedValue(createActionResultResponse({id: 'saved-oci-id'})),
+      clone: testing
+        .fn()
+        .mockResolvedValue(createActionResultResponse({id: 'cloned-oci-id'})),
       delete: testing.fn().mockResolvedValue(new Response({})),
     },
     agentgroups: {

@@ -58,6 +58,7 @@ describe('ContainerImageTaskDialog component tests', () => {
     onSave: testing.fn(),
     onAlertsChange: testing.fn(),
     onNewAlertClick: testing.fn(),
+    onNewOciImageTargetClick: testing.fn(),
     onNewScheduleClick: testing.fn(),
     onScheduleChange: testing.fn(),
     onScannerChange: testing.fn(),
