@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
+import Response from 'gmp/http/response';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
@@ -54,6 +55,21 @@ const startMinute = 10;
 const startHour = 12;
 const startTimezone = 'UTC';
 
+const mockedTimezones = [
+  'UTC',
+  'Europe/Berlin',
+  'America/New_York',
+  'Asia/Tokyo',
+];
+
+const createGmp = () => ({
+  settings: {token: 'token'},
+
+  timezones: {
+    get: testing.fn().mockResolvedValue(new Response(mockedTimezones, {})),
+  },
+});
+
 const getFormGroupTitles = () => {
   return screen.getAllByTestId('form-group-label');
 };
@@ -66,9 +82,11 @@ describe('AdvancedTaskWizard component tests', () => {
   test('should render full advanced wizard', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: true,
+      gmp,
     });
 
     render(
@@ -139,9 +157,11 @@ describe('AdvancedTaskWizard component tests', () => {
   test('should not render schedule without permission', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: alertCapabilities,
+      gmp,
     });
 
     const {baseElement} = render(
@@ -196,9 +216,11 @@ describe('AdvancedTaskWizard component tests', () => {
   test('should not render alert without permission', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: scheduleCapabilities,
+      gmp,
     });
 
     const {baseElement} = render(
@@ -256,9 +278,11 @@ describe('AdvancedTaskWizard component tests', () => {
   test('should allow to close the advanced wizard', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: true,
+      gmp,
     });
 
     render(
@@ -288,9 +312,11 @@ describe('AdvancedTaskWizard component tests', () => {
   test('should allow to cancel the advanced wizard', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: true,
+      gmp,
     });
 
     render(
@@ -320,9 +346,11 @@ describe('AdvancedTaskWizard component tests', () => {
   test('should allow to save the advanced wizard', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: true,
+      gmp,
     });
 
     render(
