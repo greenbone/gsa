@@ -9,7 +9,7 @@ import {
   closeDialog,
   fireEvent,
   getSelectItemElementsForSelect,
-  render,
+  rendererWith,
   screen,
 } from 'web/testing';
 import date from 'gmp/models/date';
@@ -77,8 +77,28 @@ const {
   weekdays: scheduleWeekDays,
 } = recurrence;
 
+const mockedTimezones = [
+  'UTC',
+  'Europe/Berlin',
+  'America/New_York',
+  'Asia/Tokyo',
+];
+
+const createGmp = () => ({
+  settings: {token: 'token'},
+
+  timezones: {
+    get: testing.fn().mockResolvedValue(new Response(mockedTimezones, {})),
+  },
+});
+
 describe('ScheduleDialog component tests', () => {
   test('should render with default values', () => {
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(),
+    });
+
     render(
       <ScheduleDialog
         comment={scheduleComment}
@@ -130,6 +150,10 @@ describe('ScheduleDialog component tests', () => {
 
   test('should allow to change text field', () => {
     const mockCurrentTime = date('2021-02-08T14:37:04+00:00');
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ScheduleDialog
@@ -159,6 +183,10 @@ describe('ScheduleDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <ScheduleDialog
         title={'New Schedule'}
@@ -173,6 +201,10 @@ describe('ScheduleDialog component tests', () => {
 
   test('should allow changing select values', async () => {
     handleSave.mockResolvedValue({});
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ScheduleDialog
@@ -238,6 +270,10 @@ describe('ScheduleDialog component tests', () => {
     'should allow changing $description',
     async ({startTime, endTime, expectedIcal}) => {
       handleSave.mockResolvedValue({});
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(),
+      });
 
       render(
         <ScheduleDialog
@@ -289,6 +325,10 @@ describe('ScheduleDialog component tests', () => {
 
   test('should preserve date when changing only time', async () => {
     handleSave.mockResolvedValue({});
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ScheduleDialog
@@ -330,6 +370,10 @@ describe('ScheduleDialog component tests', () => {
     // Use a schedule with a specific start date and time
     // Using a date in February to avoid DST timezone issues
     const testStartDate = date('2021-02-15T15:00:00Z').tz('UTC');
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ScheduleDialog
@@ -383,6 +427,10 @@ describe('ScheduleDialog component tests', () => {
 
   test('should prevent changing start and end times when value is invalid', async () => {
     handleSave.mockResolvedValue({});
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ScheduleDialog
@@ -449,6 +497,10 @@ describe('ScheduleDialog component tests', () => {
   describe('Timezone handling', () => {
     test('should preserve date and time when changing timezone', async () => {
       handleSave.mockResolvedValue({});
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(),
+      });
 
       // Start with scheduleStartDate in UTC (20210208T150000Z)
       render(
@@ -551,6 +603,10 @@ describe('ScheduleDialog component tests', () => {
       'should preserve date when changing time in $description',
       async ({timezone, newTime}) => {
         handleSave.mockResolvedValue({});
+        const {render} = rendererWith({
+          capabilities: true,
+          gmp: createGmp(),
+        });
 
         render(
           <ScheduleDialog
@@ -621,6 +677,10 @@ describe('ScheduleDialog component tests', () => {
       'should handle both date and time changes in $description timezone',
       async ({timezone, startTime, endTime}) => {
         handleSave.mockResolvedValue({});
+        const {render} = rendererWith({
+          capabilities: true,
+          gmp: createGmp(),
+        });
 
         render(
           <ScheduleDialog
@@ -693,6 +753,10 @@ describe('ScheduleDialog component tests', () => {
       'should handle DST correctly in $description',
       async ({timezone, testDate, newTime, expectedDate}) => {
         handleSave.mockResolvedValue({});
+        const {render} = rendererWith({
+          capabilities: true,
+          gmp: createGmp(),
+        });
 
         render(
           <ScheduleDialog
