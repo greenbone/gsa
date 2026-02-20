@@ -18,7 +18,7 @@ class TimezonesCommand extends HttpCommand {
     const {timezone: timezones} =
       // @ts-expect-error
       data.get_timezones.get_timezones_response;
-    return response.set(map(timezones, tz => tz));
+    return response.set(map(timezones, tz => tz.name));
   }
 }
 
