@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Response from 'gmp/http/response';
 import {openSelectElement, screen, fireEvent, rendererWith} from 'web/testing';
+import Response from 'gmp/http/response';
 import timezones from 'gmp/time-zones';
 import TimezoneSelect from 'web/components/form/TimeZoneSelect';
 
