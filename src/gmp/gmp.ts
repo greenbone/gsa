@@ -69,6 +69,7 @@ import TargetCommand from 'gmp/commands/target';
 import TargetsCommand from 'gmp/commands/targets';
 import TaskCommand from 'gmp/commands/task';
 import TasksCommand from 'gmp/commands/tasks';
+import TimezonesCommand from 'gmp/commands/timezones';
 import TrashCanCommand from 'gmp/commands/trashcan';
 import UserCommand from 'gmp/commands/user';
 import UsersCommand from 'gmp/commands/users';
@@ -139,6 +140,7 @@ class Gmp {
   readonly targets: TargetsCommand;
   readonly task: TaskCommand;
   readonly tasks: TasksCommand;
+  readonly timezones: TimezonesCommand;
   readonly trashcan: TrashCanCommand;
   readonly user: UserCommand;
   readonly users: UsersCommand;
@@ -205,6 +207,7 @@ class Gmp {
     this.targets = new TargetsCommand(this.http);
     this.task = new TaskCommand(this.http);
     this.tasks = new TasksCommand(this.http);
+    this.timezones = new TimezonesCommand(this.http);
     this.trashcan = new TrashCanCommand(this.http);
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);

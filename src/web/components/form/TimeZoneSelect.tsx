@@ -6,6 +6,7 @@
 import {useMemo} from 'react';
 import timezones, {DEFAULT_TIMEZONE} from 'gmp/time-zones';
 import Select, {type SelectProps} from 'web/components/form/Select';
+import {useGetTimezones} from 'web/hooks/use-query/timezones';
 
 interface TimeZoneSelectProps extends Omit<
   SelectProps<string>,
@@ -18,13 +19,18 @@ const TimeZoneSelectComponent = ({
   value = DEFAULT_TIMEZONE,
   ...props
 }: TimeZoneSelectProps) => {
+  const {data: fetchedTimezones} = useGetTimezones();
+
+  // Use fetched timezones if available, otherwise fall back to hardcoded list
+  const timezoneList = fetchedTimezones ?? timezones;
+
   const timezoneItems = useMemo(
     () =>
-      timezones.map(name => ({
+      timezoneList.map(name => ({
         label: name,
         value: name,
       })),
-    [],
+    [timezoneList],
   );
 
   return <Select {...props} items={timezoneItems} value={value} />;

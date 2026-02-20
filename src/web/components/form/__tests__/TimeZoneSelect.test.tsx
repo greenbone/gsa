@@ -4,18 +4,33 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {openSelectElement, screen, fireEvent, render} from 'web/testing';
+import Response from 'gmp/http/response';
+import {openSelectElement, screen, fireEvent, rendererWith} from 'web/testing';
 import timezones from 'gmp/time-zones';
 import TimezoneSelect from 'web/components/form/TimeZoneSelect';
 
 describe('TimezoneSelect tests', () => {
   test('should render', () => {
+    const gmp = {
+      settings: {token: 'token'},
+      timezones: {
+        get: testing.fn().mockResolvedValue(new Response(timezones)),
+      },
+    };
+    const {render} = rendererWith({gmp});
     const {element} = render(<TimezoneSelect />);
 
     expect(element).toBeInTheDocument();
   });
 
   test('should render all timezones in selection', async () => {
+    const gmp = {
+      settings: {token: 'token'},
+      timezones: {
+        get: testing.fn().mockResolvedValue(new Response(timezones)),
+      },
+    };
+    const {render} = rendererWith({gmp});
     render(<TimezoneSelect />);
 
     await openSelectElement();
@@ -25,6 +40,13 @@ describe('TimezoneSelect tests', () => {
 
   test('should call onChange handler', async () => {
     const handler = testing.fn();
+    const gmp = {
+      settings: {token: 'token'},
+      timezones: {
+        get: testing.fn().mockResolvedValue(new Response(timezones)),
+      },
+    };
+    const {render} = rendererWith({gmp});
     render(<TimezoneSelect onChange={handler} />);
 
     await openSelectElement();
@@ -37,6 +59,13 @@ describe('TimezoneSelect tests', () => {
 
   test('should call onChange handler with name', async () => {
     const handler = testing.fn();
+    const gmp = {
+      settings: {token: 'token'},
+      timezones: {
+        get: testing.fn().mockResolvedValue(new Response(timezones)),
+      },
+    };
+    const {render} = rendererWith({gmp});
     render(<TimezoneSelect name="foo" onChange={handler} />);
 
     await openSelectElement();
@@ -49,6 +78,13 @@ describe('TimezoneSelect tests', () => {
 
   test('should render selected value', () => {
     const timezone = timezones[1];
+    const gmp = {
+      settings: {token: 'token'},
+      timezones: {
+        get: testing.fn().mockResolvedValue(new Response(timezones)),
+      },
+    };
+    const {render} = rendererWith({gmp});
     render(<TimezoneSelect value={timezone} />);
 
     const input = screen.getSelectElement();
