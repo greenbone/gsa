@@ -29,6 +29,7 @@ interface UseGetEntitiesParams<
   filter?: Filter;
   enabled?: boolean;
   refetchInterval?: number;
+  keepPreviousData?: boolean;
 }
 
 const useGetEntities = <
@@ -40,6 +41,7 @@ const useGetEntities = <
   filter = undefined,
   enabled = true,
   refetchInterval = undefined,
+  keepPreviousData = false,
 }: UseGetEntitiesParams<TModel, TInput>) => {
   const gmp = useGmp();
   const {token} = gmp.settings;
@@ -58,6 +60,9 @@ const useGetEntities = <
       };
     },
     refetchInterval,
+    placeholderData: keepPreviousData
+      ? previousData => previousData
+      : undefined,
   });
 };
 

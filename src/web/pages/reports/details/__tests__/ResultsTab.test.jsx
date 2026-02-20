@@ -6,12 +6,12 @@
 import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, wait} from 'web/testing';
+import {waitFor, screen} from '@testing-library/react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import ResultsTab from 'web/pages/reports/details/ResultsTab';
-import {entitiesLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
@@ -141,13 +141,26 @@ beforeEach(() => {
 
 describe('Report Results Tab tests', () => {
   test('should render Results Tab with compliance information', async () => {
-    const reload = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
     const onFilterDecreaseMinQoDClick = testing.fn();
     const onFilterEditClick = testing.fn();
     const onFilterRemoveClick = testing.fn();
     const onFilterRemoveSeverityClick = testing.fn();
     const onTargetEditClick = testing.fn();
+
+    getResults = testing.fn().mockResolvedValue({
+      data: results,
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts({
+          first: 1,
+          all: 3,
+          filtered: 3,
+          length: 3,
+          rows: 10,
+        }),
+      },
+    });
 
     const gmp = {
       results: {
@@ -165,6 +178,7 @@ describe('Report Results Tab tests', () => {
         manualUrl,
         reloadInterval,
         severityRating: SEVERITY_RATING_CVSS_3,
+        token: 'test-token',
       },
       user: {currentSettings},
     };
@@ -185,29 +199,23 @@ describe('Report Results Tab tests', () => {
       defaultFilterLoadingActions.success('result', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
+    const filter = Filter.fromString('first=1 rows=10');
+    const reportResultsCounts = new CollectionCounts({
       first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
+      all: 3,
+      filtered: 3,
+      length: 3,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success(results, filter, loadedFilter, counts),
-    );
 
     const {baseElement} = render(
       <ResultsTab
         audit={true}
-        isLoading={true}
+        hasTarget={true}
         progress={100}
-        reload={reload}
         reportFilter={filter}
         reportId={'123'}
-        results={results}
-        resultsFilter={filter}
+        reportResultsCounts={reportResultsCounts}
         status={'Stopped'}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -219,6 +227,11 @@ describe('Report Results Tab tests', () => {
     );
 
     await wait();
+
+    // Wait for the table to be rendered
+    await waitFor(() => {
+      expect(screen.getByTestId('entities-table')).toBeInTheDocument();
+    });
 
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');
@@ -262,14 +275,27 @@ describe('Report Results Tab tests', () => {
     );
   });
 
-  test('should render Results Tab with compliance information', async () => {
-    const reload = testing.fn();
+  test('should render Results Tab with severity information', async () => {
     const onFilterAddLogLevelClick = testing.fn();
     const onFilterDecreaseMinQoDClick = testing.fn();
     const onFilterEditClick = testing.fn();
     const onFilterRemoveClick = testing.fn();
     const onFilterRemoveSeverityClick = testing.fn();
     const onTargetEditClick = testing.fn();
+
+    getResults = testing.fn().mockResolvedValue({
+      data: results,
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts({
+          first: 1,
+          all: 3,
+          filtered: 3,
+          length: 3,
+          rows: 10,
+        }),
+      },
+    });
 
     const gmp = {
       results: {
@@ -287,6 +313,7 @@ describe('Report Results Tab tests', () => {
         manualUrl,
         reloadInterval,
         severityRating: SEVERITY_RATING_CVSS_3,
+        token: 'test-token',
       },
       user: {currentSettings},
     };
@@ -307,29 +334,23 @@ describe('Report Results Tab tests', () => {
       defaultFilterLoadingActions.success('result', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
+    const filter = Filter.fromString('first=1 rows=10');
+    const reportResultsCounts = new CollectionCounts({
       first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
+      all: 3,
+      filtered: 3,
+      length: 3,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success(results, filter, loadedFilter, counts),
-    );
 
     const {baseElement} = render(
       <ResultsTab
         audit={false}
-        isLoading={true}
+        hasTarget={true}
         progress={100}
-        reload={reload}
         reportFilter={filter}
         reportId={'123'}
-        results={results}
-        resultsFilter={filter}
+        reportResultsCounts={reportResultsCounts}
         status={'Stopped'}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -341,6 +362,11 @@ describe('Report Results Tab tests', () => {
     );
 
     await wait();
+
+    // Wait for the table to be rendered
+    await waitFor(() => {
+      expect(screen.getByTestId('entities-table')).toBeInTheDocument();
+    });
 
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');

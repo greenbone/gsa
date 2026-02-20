@@ -123,6 +123,9 @@ interface ResultElement extends ModelElement {
       _asset_id?: string;
     };
     hostname?: string;
+    image?: string;
+    path?: string;
+    registry?: string;
   };
   notes?: {
     note?: NoteElement | NoteElement[];
@@ -154,6 +157,9 @@ interface ResultHost {
   name?: string;
   id?: string;
   hostname?: string;
+  image?: string;
+  path?: string;
+  registry?: string;
 }
 
 interface ResultDetectionResult {
@@ -346,6 +352,9 @@ class Result extends Model {
         name: parseToString(host.__text),
         id: parseToString(host.asset?._asset_id),
         hostname: parseToString(host.hostname),
+        image: parseToString(host.image),
+        path: parseToString(host.path),
+        registry: parseToString(host.registry),
       };
     }
 
