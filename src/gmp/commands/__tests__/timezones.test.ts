@@ -12,7 +12,12 @@ describe('TimezonesCommand tests', () => {
     const response = createResponse({
       get_timezones: {
         get_timezones_response: {
-          timezone: ['UTC', 'Europe/Berlin', 'America/New_York', 'Asia/Tokyo'],
+          timezone: [
+            {name: 'UTC'},
+            {name: 'Europe/Berlin'},
+            {name: 'America/New_York'},
+            {name: 'Asia/Tokyo'},
+          ],
         },
       },
     });
