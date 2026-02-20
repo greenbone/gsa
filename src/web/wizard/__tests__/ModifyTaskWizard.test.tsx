@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
+import Response from 'gmp/http/response';
 import date from 'gmp/models/date';
 import Task from 'gmp/models/task';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
@@ -35,13 +36,30 @@ const getRadioTitles = () => {
   return document.body.querySelectorAll('.mantine-Radio-label');
 };
 
+const mockedTimezones = [
+  'UTC',
+  'Europe/Berlin',
+  'America/New_York',
+  'Asia/Tokyo',
+];
+
+const createGmp = () => ({
+  settings: {token: 'token'},
+
+  timezones: {
+    get: testing.fn().mockResolvedValue(new Response(mockedTimezones, {})),
+  },
+});
+
 describe('ModifyTaskWizard component tests', () => {
   test('should render full modify wizard', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: true,
+      gmp,
     });
 
     const {baseElement} = render(
@@ -97,9 +115,11 @@ describe('ModifyTaskWizard component tests', () => {
   test('should not render schedule without permission', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: alertCapabilities,
+      gmp,
     });
 
     const {baseElement} = render(
@@ -134,9 +154,11 @@ describe('ModifyTaskWizard component tests', () => {
   test('should not render alert without permission', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: scheduleCapabilities,
+      gmp,
     });
 
     const {baseElement} = render(
@@ -178,9 +200,11 @@ describe('ModifyTaskWizard component tests', () => {
   test('should allow to close the modify wizard', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: true,
+      gmp,
     });
 
     render(
@@ -232,9 +256,11 @@ describe('ModifyTaskWizard component tests', () => {
   test('should allow to save the modify wizard', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: true,
+      gmp,
     });
 
     render(
