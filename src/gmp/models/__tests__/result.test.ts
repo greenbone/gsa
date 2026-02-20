@@ -91,6 +91,37 @@ describe('Result model tests', () => {
     });
   });
 
+  test('should parse host with container image fields', () => {
+    const result = Result.fromElement({
+      host: {
+        __text: 'sha256:abc123',
+        asset: {
+          _asset_id: '456',
+        },
+        hostname: 'oci://registry.example.com/repo/image:tag',
+      },
+      oci_image: {
+        name: 'oci://registry.example.com/repo/image:tag',
+        digest: 'sha256:abc123',
+        registry: 'registry.example.com',
+        path: 'repo/',
+        short_name: 'image:tag',
+      },
+    });
+    expect(result.host).toEqual({
+      name: 'sha256:abc123',
+      id: '456',
+      hostname: 'oci://registry.example.com/repo/image:tag',
+    });
+    expect(result.ociImage).toEqual({
+      name: 'oci://registry.example.com/repo/image:tag',
+      digest: 'sha256:abc123',
+      registry: 'registry.example.com',
+      path: 'repo/',
+      short_name: 'image:tag',
+    });
+  });
+
   test('should parse NVT', () => {
     const result = Result.fromElement({
       nvt: {
