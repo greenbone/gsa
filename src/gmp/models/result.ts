@@ -128,6 +128,13 @@ interface ResultElement extends ModelElement {
     note?: NoteElement | NoteElement[];
   };
   nvt?: ResultNvtElement | ResultCveElement;
+  oci_image?: {
+    name?: string;
+    digest?: string;
+    registry?: string;
+    path?: string;
+    short_name?: string;
+  };
   original_severity?: number;
   original_threat?: string;
   overrides?: {
@@ -148,6 +155,14 @@ interface ResultElement extends ModelElement {
     ticket?: TicketElement | TicketElement[];
   };
   qod?: QoDParams;
+}
+
+interface OciImage {
+  name?: string;
+  digest?: string;
+  registry?: string;
+  path?: string;
+  short_name?: string;
 }
 
 interface ResultHost {
@@ -173,6 +188,7 @@ interface ResultProperties extends ModelProperties {
   host?: ResultHost;
   information?: Nvt | CveResult;
   notes?: Note[];
+  ociImage?: OciImage;
   original_severity?: number;
   overrides?: Override[];
   port?: string;
@@ -262,6 +278,7 @@ class Result extends Model {
   readonly host?: ResultHost;
   readonly information?: Nvt | CveResult;
   readonly notes?: Note[];
+  readonly ociImage?: OciImage;
   readonly original_severity?: number;
   readonly overrides: Override[];
   readonly port?: string;
@@ -284,6 +301,7 @@ class Result extends Model {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     original_severity,
     overrides = [],
+    ociImage,
     port,
     qod,
     report,
@@ -304,6 +322,7 @@ class Result extends Model {
     this.host = host;
     this.information = information;
     this.notes = notes;
+    this.ociImage = ociImage;
     this.original_severity = original_severity;
     this.overrides = overrides;
     this.port = port;
@@ -331,6 +350,7 @@ class Result extends Model {
       name,
       notes,
       nvt: information,
+      oci_image,
       original_severity,
       overrides,
       report,
@@ -346,6 +366,16 @@ class Result extends Model {
         name: parseToString(host.__text),
         id: parseToString(host.asset?._asset_id),
         hostname: parseToString(host.hostname),
+      };
+    }
+
+    if (isDefined(oci_image)) {
+      copy.ociImage = {
+        name: parseToString(oci_image.name),
+        digest: parseToString(oci_image.digest),
+        registry: parseToString(oci_image.registry),
+        path: parseToString(oci_image.path),
+        short_name: parseToString(oci_image.short_name),
       };
     }
 

@@ -36,7 +36,7 @@ import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
 import HostsTabContent from 'web/pages/reports/details/HostsTabContent';
 import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
 import PortsTab from 'web/pages/reports/details/PortsTab';
-import ResultsTab from 'web/pages/reports/details/ResultsTab';
+import ResultsTabContent from 'web/pages/reports/details/ResultsTabContent';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
 import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
@@ -283,24 +283,23 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ResultsTab
+                    <ResultsTabContent
                       hasTarget={!isImport}
+                      isContainerScanning={isContainerScanning}
+                      isLoading={isLoading}
+                      isUpdating={isUpdating}
                       progress={progress}
                       reportFilter={reportFilter}
                       reportId={reportId}
                       reportResultsCounts={resultsCounts}
-                      results={results.entities}
-                      sortField={sorting.results.sortField}
-                      sortReverse={sorting.results.sortReverse}
+                      results={results}
+                      sorting={sorting}
                       status={status}
                       onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                       onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
                       onFilterEditClick={onFilterEditClick}
                       onFilterRemoveClick={onFilterRemoveClick}
                       onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-                      onSortChange={sortField =>
-                        onSortChange('results', sortField)
-                      }
                       onTargetEditClick={onTargetEditClick}
                     />
                   </TabPanel>
