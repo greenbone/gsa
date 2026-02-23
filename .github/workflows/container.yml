@@ -29,6 +29,13 @@ jobs:
         include:
           - build:
               name: default
+              base-image: greenbone/gsad
+          - build:
+              name: slim
+              suffix: slim
+              build-args: |
+                BASE_IMAGE=busybox:stable
+              base-image: busybox:stable
     name: Build and Push Container Images (${{ matrix.build.name }})
     uses: greenbone/workflows/.github/workflows/container-build-push-gea.yml@main
     with:
@@ -37,12 +44,13 @@ jobs:
       name: ${{ matrix.build.name }}
       labels: |
         org.opencontainers.image.vendor=Greenbone
-        org.opencontainers.image.base.name=greenbone/gsad
+        org.opencontainers.image.base.name=${{ matrix.build.base-image }}
       build-args: ${{ matrix.build.build-args }}
       prefix: ${{ matrix.build.prefix }}
+      suffix: ${{ matrix.build.suffix }}
       images: |
         ghcr.io/${{ github.repository }},enable=true
-        ${{ vars.GREENBONE_REGISTRY }}/community/${{ github.event.repository.name }},enable=${{ github.event_name != 'pull_request' && matrix.build.name == 'default' }}
+        ${{ vars.GREENBONE_REGISTRY }}/community/${{ github.event.repository.name }},enable=${{ github.event_name != 'pull_request' }}
         ${{ vars.GREENBONE_REGISTRY }}/openvas-scan-dev/${{ github.event.repository.name }},enable=${{ github.event_name != 'pull_request' && matrix.build.name == 'default' }}
     secrets: inherit
 

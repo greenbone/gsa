@@ -1,4 +1,4 @@
-ARG VERSION=stable
+ARG BASE_IMAGE=ghcr.io/greenbone/gsad:stable
 ARG DEBIAN_FRONTEND=noninteractive
 
 FROM debian:stable-slim AS builder
@@ -25,7 +25,7 @@ WORKDIR /source
 
 RUN npm install && npm run build
 
-FROM registry.community.greenbone.net/community/gsad:${VERSION}
+FROM ${BASE_IMAGE}
 
 COPY --from=builder /source/build /usr/local/share/gvm/gsad/web/
 COPY --chmod=755 .docker/init.sh /usr/local/bin/init.sh
