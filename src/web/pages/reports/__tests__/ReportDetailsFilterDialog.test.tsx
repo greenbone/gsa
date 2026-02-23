@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, screen, within} from 'web/testing';
+import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
@@ -164,5 +164,86 @@ describe('Details Filter Dialog for Audit report', () => {
     const updateButton = screen.getByText('Update');
     expect(cancelButton).toBeInTheDocument();
     expect(updateButton).toBeInTheDocument();
+  });
+
+  test('toggling result_hosts_only and clicking Update propagates the change', () => {
+    const onFilterChanged = testing.fn();
+    const onFilterCreated = testing.fn();
+    const onClose = testing.fn();
+
+    const filter = Filter.fromString(
+      'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity result_hosts_only=0',
+    );
+
+    const gmp = {settings: {manualUrl, reportResultsThreshold: 10}};
+    const {render} = rendererWith({gmp, capabilities: caps});
+
+    render(
+      <ReportDetailsFilterDialog
+        audit={false}
+        delta={false}
+        filter={filter}
+        onClose={onClose}
+        onFilterChanged={onFilterChanged}
+        onFilterCreated={onFilterCreated}
+      />,
+    );
+
+    const cb = screen.getByRole('checkbox', {
+      name: 'Only show hosts that have results',
+    });
+
+    // starts unchecked because filter explicitly sets 0
+    expect(cb).not.toBeChecked();
+
+    // set checked
+    fireEvent.click(cb);
+    expect(cb).toBeChecked();
+
+    // save
+    fireEvent.click(screen.getByText('Update'));
+
+    expect(onFilterChanged).toHaveBeenCalled();
+
+    const updatedFilter = onFilterChanged.mock.calls[0][0];
+    expect(Number(updatedFilter.get('result_hosts_only'))).toBe(1);
+  });
+
+  test('unchecking result_hosts_only and clicking Update sets it to 0', () => {
+    const onFilterChanged = testing.fn();
+    const onFilterCreated = testing.fn();
+    const onClose = testing.fn();
+
+    const filter = Filter.fromString(
+      'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity result_hosts_only=1',
+    );
+
+    const gmp = {settings: {manualUrl, reportResultsThreshold: 10}};
+    const {render} = rendererWith({gmp, capabilities: caps});
+
+    render(
+      <ReportDetailsFilterDialog
+        audit={false}
+        delta={false}
+        filter={filter}
+        onClose={onClose}
+        onFilterChanged={onFilterChanged}
+        onFilterCreated={onFilterCreated}
+      />,
+    );
+
+    const cb = screen.getByRole('checkbox', {
+      name: 'Only show hosts that have results',
+    });
+
+    expect(cb).toBeChecked();
+
+    fireEvent.click(cb);
+    expect(cb).not.toBeChecked();
+
+    fireEvent.click(screen.getByText('Update'));
+
+    const updatedFilter = onFilterChanged.mock.calls[0][0];
+    expect(Number(updatedFilter.get('result_hosts_only'))).toBe(0);
   });
 });
