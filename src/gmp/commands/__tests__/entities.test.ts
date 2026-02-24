@@ -177,44 +177,4 @@ describe('EntitiesCommand tests', () => {
       },
     });
   });
-
-  test('should include asset_type when defined via setDefaultParam in exportByIds', async () => {
-    const response = createEntitiesResponse('foo', []);
-    const fakeHttp = createHttp(response);
-
-    const cmd = new FooWithAssetTypeCommand(fakeHttp);
-    const ids = ['123', '456'];
-    await cmd.exportByIds(ids);
-
-    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-      data: {
-        'bulk_selected:123': 1,
-        'bulk_selected:456': 1,
-        cmd: 'bulk_export',
-        resource_type: 'foo',
-        asset_type: 'test_asset',
-        bulk_select: 1,
-      },
-    });
-  });
-
-  test('should include asset_type when defined via setDefaultParam in export of entities', async () => {
-    const response = createEntitiesResponse('foo', []);
-    const fakeHttp = createHttp(response);
-
-    const entities = [new Foo({id: '123'}), new Foo({id: '456'})];
-
-    const cmd = new FooWithAssetTypeCommand(fakeHttp);
-    await cmd.export(entities);
-    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-      data: {
-        'bulk_selected:123': 1,
-        'bulk_selected:456': 1,
-        cmd: 'bulk_export',
-        resource_type: 'foo',
-        asset_type: 'test_asset',
-        bulk_select: 1,
-      },
-    });
-  });
 });

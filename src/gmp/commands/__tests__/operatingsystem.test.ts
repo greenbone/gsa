@@ -4,29 +4,29 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {HostCommand, HostsCommand} from 'gmp/commands/hosts';
+import {OperatingSystemCommand, OperatingSystemsCommand} from 'gmp/commands/os';
 import {
   createEntitiesResponse,
   createPlainResponse,
   createHttp,
 } from 'gmp/commands/testing';
 import Response from 'gmp/http/response';
-import Host from 'gmp/models/host';
+import OperatingSystem from 'gmp/models/os';
 
-describe('HostCommand tests', () => {
-  test('should include asset_type=host in export of host', async () => {
+describe('OperatingSystemCommand tests', () => {
+  test('should include asset_type=os in export of operating system', async () => {
     const content = '<some><xml>exported-data</xml></some>';
     const response = createPlainResponse(content);
     const fakeHttp = createHttp(response);
 
-    const cmd = new HostCommand(fakeHttp);
+    const cmd = new OperatingSystemCommand(fakeHttp);
     const cmdResponse = await cmd.export({id: '123'});
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'bulk_export',
         resource_type: 'asset',
-        asset_type: 'host',
+        asset_type: 'os',
         bulk_select: 1,
         'bulk_selected:123': 1,
       },

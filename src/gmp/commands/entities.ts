@@ -178,7 +178,6 @@ abstract class EntitiesCommand<
     const data = {
       cmd: 'bulk_export',
       resource_type: this.name,
-      asset_type: this.getParams().asset_type,
       bulk_select: BULK_SELECT_BY_IDS,
     };
     for (const id of ids) {
@@ -189,13 +188,12 @@ abstract class EntitiesCommand<
 
   exportByFilter(filter: Filter) {
     return this.httpRequestWithRejectionTransform('post', {
-      data: {
+      data: this.postParams({
         cmd: 'bulk_export',
         resource_type: this.name,
-        asset_type: this.getParams().asset_type,
         bulk_select: BULK_SELECT_BY_FILTER,
         filter: filterString(filter),
-      },
+      }),
     });
   }
 

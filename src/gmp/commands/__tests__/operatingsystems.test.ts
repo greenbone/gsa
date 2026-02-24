@@ -21,7 +21,8 @@ describe('OperatingSystemsCommand tests', () => {
     const cmd = new OperatingSystemsCommand(fakeHttp);
 
     const ids = ['123', '456'];
-    await cmd.exportByIds(ids);
+    const asset_type = 'os';
+    await cmd.exportByIds(ids, asset_type);
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -45,7 +46,8 @@ describe('OperatingSystemsCommand tests', () => {
       new OperatingSystem({id: '123'}),
       new OperatingSystem({id: '456'}),
     ];
-    await cmd.export(entities);
+    const asset_type = 'os';
+    await cmd.export(entities, asset_type);
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -57,26 +59,5 @@ describe('OperatingSystemsCommand tests', () => {
         bulk_select: 1,
       },
     });
-  });
-
-  test('should include asset_type=os in export of operating system', async () => {
-    const content = '<some><xml>exported-data</xml></some>';
-    const response = createPlainResponse(content);
-    const fakeHttp = createHttp(response);
-
-    const cmd = new OperatingSystemCommand(fakeHttp);
-    const cmdResponse = await cmd.export({id: '123'});
-
-    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-      data: {
-        cmd: 'bulk_export',
-        resource_type: 'asset',
-        asset_type: 'os',
-        bulk_select: 1,
-        'bulk_selected:123': 1,
-      },
-    });
-    expect(cmdResponse).toBeInstanceOf(Response);
-    expect(cmdResponse.data).toEqual(content);
   });
 });
