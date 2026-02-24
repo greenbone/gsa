@@ -4,14 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {HostCommand, HostsCommand} from 'gmp/commands/hosts';
-import {
-  createEntitiesResponse,
-  createPlainResponse,
-  createHttp,
-} from 'gmp/commands/testing';
+import {HostCommand} from 'gmp/commands/hosts';
+import {createPlainResponse, createHttp} from 'gmp/commands/testing';
 import Response from 'gmp/http/response';
-import Host from 'gmp/models/host';
 
 describe('HostCommand tests', () => {
   test('should include asset_type=host in export of host', async () => {
