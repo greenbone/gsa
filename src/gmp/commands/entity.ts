@@ -184,13 +184,12 @@ abstract class EntityCommand<
 
   async export({id}: EntityCommandParams) {
     return this.httpRequestWithRejectionTransform('post', {
-      data: {
+      data: this.postParams({
         cmd: 'bulk_export',
         resource_type: this.name,
-        asset_type: this.getParams().asset_type,
         bulk_select: BULK_SELECT_BY_IDS,
         ['bulk_selected:' + id]: 1,
-      },
+      }),
     });
   }
 }
