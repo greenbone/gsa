@@ -6,7 +6,7 @@
 import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import HttpCommand, {BULK_SELECT_BY_IDS,} from 'gmp/commands/http';
+import {BULK_SELECT_BY_IDS} from 'gmp/commands/http';
 import OperatingSystem from 'gmp/models/os';
 
 class OperatingSystemCommand extends EntityCommand {
@@ -38,11 +38,11 @@ class OperatingSystemsCommand extends EntitiesCommand {
     });
   }
 
-  exportByIds(ids, asset_type) {
+  exportByIds(ids, assetType) {
     const data = {
       cmd: 'bulk_export',
       resource_type: this.name,
-      asset_type: asset_type,
+      assetType: assetType,
       bulk_select: BULK_SELECT_BY_IDS,
     };
     for (const id of ids) {
@@ -51,8 +51,13 @@ class OperatingSystemsCommand extends EntitiesCommand {
     return this.httpRequestWithRejectionTransform('post', {data});
   }
 
-  export(entities, asset_type) {
-    return this.exportByIds(entities.map((element) => {return element.id}), asset_type);
+  export(entities, assetType) {
+    return this.exportByIds(
+      entities.map(element => {
+        return element.id;
+      }),
+      assetType,
+    );
   }
 
   getVulnScoreAggregates({filter, max} = {}) {

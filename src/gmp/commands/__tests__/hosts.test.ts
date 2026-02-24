@@ -4,26 +4,21 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {HostCommand, HostsCommand} from 'gmp/commands/hosts';
-import {
-  createEntitiesResponse,
-  createPlainResponse,
-  createHttp,
-} from 'gmp/commands/testing';
-import Response from 'gmp/http/response';
+import {HostsCommand} from 'gmp/commands/hosts';
+import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
 import Host from 'gmp/models/host';
 
 describe('HostsCommand tests', () => {
-  test('should include asset_type=host in exportByIds', async () => {
+  test('should include assetType=host in exportByIds', async () => {
     const response = createEntitiesResponse('asset', []);
     const fakeHttp = createHttp(response);
 
     const cmd = new HostsCommand(fakeHttp);
 
     const ids = ['123', '456'];
-    const asset_type = 'host';
+    const assetType = 'host';
 
-    await cmd.exportByIds(ids, asset_type);
+    await cmd.exportByIds(ids, assetType);
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -31,22 +26,22 @@ describe('HostsCommand tests', () => {
         'bulk_selected:456': 1,
         cmd: 'bulk_export',
         resource_type: 'asset',
-        asset_type: 'host',
+        assetType: 'host',
         bulk_select: 1,
       },
     });
   });
 
-  test('should include asset_type=host in export of hosts', async () => {
+  test('should include assetType=host in export of hosts', async () => {
     const response = createEntitiesResponse('asset', []);
     const fakeHttp = createHttp(response);
 
     const cmd = new HostsCommand(fakeHttp);
 
     const entities = [new Host({id: '123'}), new Host({id: '456'})];
-    const asset_type = 'host';
+    const assetType = 'host';
 
-    await cmd.export(entities, asset_type);
+    await cmd.export(entities, assetType);
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
@@ -54,7 +49,7 @@ describe('HostsCommand tests', () => {
         'bulk_selected:456': 1,
         cmd: 'bulk_export',
         resource_type: 'asset',
-        asset_type: 'host',
+        assetType: 'host',
         bulk_select: 1,
       },
     });
