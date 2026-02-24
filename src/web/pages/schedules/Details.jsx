@@ -92,7 +92,7 @@ const ScheduleDetails = ({entity}) => {
                 {tasks.map(task => {
                   return (
                     <span key={task.id}>
-                      <DetailsLink id={task.id} type="task">
+                      <DetailsLink id={task.id} type={task.entityType}>
                         {task.name}
                       </DetailsLink>
                     </span>

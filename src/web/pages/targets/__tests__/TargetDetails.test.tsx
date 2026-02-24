@@ -462,4 +462,58 @@ describe('Target Details tests', () => {
       });
     },
   );
+
+  test('should render tasks and audits with correct entity types', () => {
+    const target = Target.fromElement({
+      _id: 'target123',
+      name: 'Test Target',
+      port_list: {
+        _id: 'pl1',
+        name: 'Port List 1',
+      },
+      tasks: {
+        task: [
+          {
+            _id: 'task1',
+            name: 'Scan Task',
+            usage_type: 'scan',
+          },
+          {
+            _id: 'audit1',
+            name: 'Compliance Audit',
+            usage_type: 'audit',
+          },
+        ],
+      },
+    });
+
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+    });
+
+    render(<Details entity={target} />);
+
+    const heading = screen.getByRole('heading', {
+      name: /Tasks using this Target \(2\)/i,
+    });
+    expect(heading).toBeInTheDocument();
+
+    const detailsLinks = screen.getAllByTestId('details-link');
+
+    // Find the task link - should point to /task/task1
+    const taskLink = detailsLinks.find(
+      link => link.textContent === 'Scan Task',
+    );
+    expect(taskLink).toBeDefined();
+    expect(taskLink).toHaveAttribute('href', '/task/task1');
+
+    // Find the audit link - should point to /audit/audit1
+    const auditLink = detailsLinks.find(
+      link => link.textContent === 'Compliance Audit',
+    );
+    expect(auditLink).toBeDefined();
+    expect(auditLink).toHaveAttribute('href', '/audit/audit1');
+  });
 });

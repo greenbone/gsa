@@ -251,7 +251,7 @@ const TargetDetails = ({entity}: TargetDetailsProps) => {
             {tasks.map(task => {
               return (
                 <span key={task.id}>
-                  <DetailsLink id={task.id as string} type="task">
+                  <DetailsLink id={task.id as string} type={task.entityType}>
                     {task.name}
                   </DetailsLink>
                 </span>

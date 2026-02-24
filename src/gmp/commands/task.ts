@@ -9,7 +9,10 @@ import EntityCommand, {type EntityCommandParams} from 'gmp/commands/entity';
 import FeedStatusCommand, {feedStatusRejection} from 'gmp/commands/feed-status';
 import type Http from 'gmp/http/http';
 import {type ResponseRejection} from 'gmp/http/rejection';
+import type Response from 'gmp/http/response';
+import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
+import Audit from 'gmp/models/audit';
 import {type Element} from 'gmp/models/model';
 import {
   CONTAINER_IMAGE_SCANNER_TYPE,
@@ -20,6 +23,7 @@ import Task, {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   type TaskElement,
   type TaskAutoDelete,
+  USAGE_TYPE,
 } from 'gmp/models/task';
 import {NO_VALUE, YES_VALUE, parseYesNo, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -546,6 +550,17 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
   getElementFromRoot(root: Element): TaskElement {
     // @ts-expect-error
     return root.get_task.get_tasks_response.task;
+  }
+
+  protected getModelFromResponse(response: Response<Element, XmlMeta>): Task {
+    const element = this.getElementFromRoot(response.data);
+
+    // Check if this is actually an audit based on usage_type
+    if (element.usage_type === USAGE_TYPE.audit) {
+      return Audit.fromElement(element) as unknown as Task;
+    }
+
+    return Task.fromElement(element);
   }
 }
 
