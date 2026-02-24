@@ -243,6 +243,41 @@ describe('Target model tests', () => {
     expect(task2?.id).toEqual('123');
   });
 
+  test('should parse tasks with usage_type', () => {
+    const target = Target.fromElement({
+      tasks: {
+        task: [
+          {
+            _id: '123',
+            name: 'task1',
+            usage_type: 'scan',
+          },
+          {
+            _id: '456',
+            name: 'audit1',
+            usage_type: 'audit',
+          },
+        ],
+      },
+    });
+
+    expect(target.tasks?.length).toEqual(2);
+
+    const task = target.tasks?.[0];
+    expect(task).toBeDefined();
+    expect(task).toBeInstanceOf(Model);
+    expect(task?.entityType).toEqual('task');
+    expect(task?.id).toEqual('123');
+    expect(task?.name).toEqual('task1');
+
+    const audit = target.tasks?.[1];
+    expect(audit).toBeDefined();
+    expect(audit).toBeInstanceOf(Model);
+    expect(audit?.entityType).toEqual('audit');
+    expect(audit?.id).toEqual('456');
+    expect(audit?.name).toEqual('audit1');
+  });
+
   test('should parse alive_tests', () => {
     const target = Target.fromElement({alive_tests: {alive_test: ICMP_PING}});
     expect(target.aliveTests).toEqual([ICMP_PING]);

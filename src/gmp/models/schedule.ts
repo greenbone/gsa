@@ -9,10 +9,14 @@ import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
+interface ScheduleTaskElement extends ModelElement {
+  usage_type?: 'scan' | 'audit';
+}
+
 interface ScheduleElement extends ModelElement {
   icalendar?: string;
   tasks?: {
-    task?: ModelElement | ModelElement[];
+    task?: ScheduleTaskElement | ScheduleTaskElement[];
   };
   timezone?: string;
   timezone_abbrev?: string;
@@ -76,9 +80,11 @@ class Schedule extends Model {
       }
     }
 
-    ret.tasks = map(element.tasks?.task, task =>
-      Model.fromElement(task, 'task'),
-    );
+    ret.tasks = map(element.tasks?.task, task => {
+      // Use 'audit' entity type for audits, 'task' for scans
+      const entityType = task.usage_type === 'audit' ? 'audit' : 'task';
+      return Model.fromElement(task, entityType);
+    });
 
     return ret;
   }
