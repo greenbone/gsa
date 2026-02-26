@@ -3,32 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  type ChangeEvent,
-} from 'react';
-import {Spinner} from '@greenbone/ui-lib';
+import {useState, useEffect, useCallback, useRef} from 'react';
 import DOMPurify from 'dompurify';
 import styled from 'styled-components';
+import Filter from 'gmp/models/filter';
 import {
   type default as Scanner,
   AGENT_CONTROLLER_SCANNER_TYPE,
 } from 'gmp/models/scanner';
-import Layout from 'web/components/layout/Layout';
+import ErrorMessage from 'web/components/error/ErrorMessage';
+import Button from 'web/components/form/Button';
+import Select from 'web/components/form/Select';
 import PageTitle from 'web/components/layout/PageTitle';
+import Row from 'web/components/layout/Row';
+import Loading from 'web/components/loading/Loading';
+import Section from 'web/components/section/Section';
 import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';
-
-interface AgentController {
-  id: string;
-  name: string;
-  host: string;
-  port: number;
-}
 
 const extractStyles = (html: string): string => {
   const match = html.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
@@ -40,13 +32,6 @@ const extractBody = (html: string): string => {
   return match ? match[1] : html;
 };
 
-const CenteredLayout = styled(Layout)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-`;
-
 const InstructionsContainer = styled.div`
   padding: 16px;
   background: white;
@@ -54,138 +39,53 @@ const InstructionsContainer = styled.div`
   width: 100%;
 `;
 
-const SelectorBar = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: #f5f5f5;
-  border-radius: 8px;
-  margin-bottom: 16px;
-`;
-
 const SelectorLabel = styled.label`
   font-weight: 500;
   white-space: nowrap;
 `;
 
-const SelectorSelect = styled.select`
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  min-width: 250px;
-`;
-
-const ErrorContainer = styled.div`
-  padding: 24px;
-  background: #ffebee;
-  border: 1px solid #ef5350;
-  border-radius: 8px;
-  margin: 16px 0;
-`;
-
-const ErrorTitle = styled.h3`
-  color: #c62828;
-  margin: 0 0 8px 0;
-`;
-
-const ErrorMessage = styled.p`
-  color: #b71c1c;
-  margin: 0 0 16px 0;
-`;
-
-const RetryButton = styled.button`
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-
-  &:hover {
-    background: #45a049;
+const getInstructionsUrl = (
+  langCode: string,
+  host: string | undefined,
+  port: number | undefined,
+): string => {
+  const encodedLang = encodeURIComponent(langCode);
+  if (host && port) {
+    // Proxy through nginx: /agent-proxy/{host}/{port}/api/v1/...
+    // Encode host to handle IPv6 addresses and special characters safely
+    const encodedHost = encodeURIComponent(host);
+    return `/agent-proxy/${encodedHost}/${port}/api/v1/install-instructions?lang=${encodedLang}`;
   }
-`;
+  // Fallback to local agent-control
+  return `/api/v1/install-instructions?lang=${encodedLang}`;
+};
 
 const AgentInstallInstructionsPage = () => {
   const [_] = useTranslation();
   const [language] = useLanguage();
   const gmp = useGmp();
   const [instructionsHtml, setInstructionsHtml] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [controllers, setControllers] = useState<AgentController[]>([]);
-  const [selectedController, setSelectedController] = useState<string>('');
-  const [controllersLoading, setControllersLoading] = useState(true);
+  const [instructionsLoading, setInstructionsLoading] = useState(false);
+  const [controllersLoading, setControllersLoading] = useState(false);
+  const [controllers, setControllers] = useState<Scanner[]>([]);
+  const [error, setError] = useState<Error | undefined>(undefined);
+  const [selectedController, setSelectedController] = useState<
+    string | undefined
+  >(undefined);
   const instructionsContainerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch agent-controller scanners on mount
-  useEffect(() => {
-    const fetchScanners = async () => {
-      try {
-        const response = await gmp.scanners.getAll();
-        const scanners = response?.data ?? [];
-        const agentControllers: AgentController[] = scanners
-          .filter(
-            (s: Scanner) =>
-              String(s.scannerType) === AGENT_CONTROLLER_SCANNER_TYPE &&
-              s.id !== undefined &&
-              s.name !== undefined &&
-              s.host !== undefined,
-          )
-          .map((s: Scanner) => ({
-            id: s.id as string,
-            name: s.name as string,
-            host: s.host as string,
-            port: s.port ?? 443,
-          }))
-          .sort((a, b) => {
-            // Local agent-control first (matches docker hostname)
-            const aLocal = a.host === 'agentcontrol' ? 0 : 1;
-            const bLocal = b.host === 'agentcontrol' ? 0 : 1;
-            if (aLocal !== bLocal) return aLocal - bLocal;
-            return a.name.localeCompare(b.name);
-          });
-        setControllers(agentControllers);
-        if (agentControllers.length > 0) {
-          setSelectedController(agentControllers[0].id);
-        }
-      } catch {
-        // If scanner fetch fails, fall back to local agent-control
-        setControllers([]);
-      } finally {
-        setControllersLoading(false);
-      }
-    };
-    void fetchScanners();
-  }, [gmp]);
-
-  const getInstructionsUrl = useCallback(
-    (langCode: string) => {
-      const controller = controllers.find(c => c.id === selectedController);
-      const encodedLang = encodeURIComponent(langCode);
-      if (controller) {
-        // Proxy through nginx: /agent-proxy/{host}/{port}/api/v1/...
-        // Encode host to handle IPv6 addresses and special characters safely
-        const encodedHost = encodeURIComponent(controller.host);
-        return `/agent-proxy/${encodedHost}/${controller.port}/api/v1/install-instructions?lang=${encodedLang}`;
-      }
-      // Fallback to local agent-control
-      return `/api/v1/install-instructions?lang=${encodedLang}`;
-    },
-    [controllers, selectedController],
-  );
-
   const fetchInstructions = useCallback(
-    async (lang: string) => {
+    async (lang: string, controller: Scanner | undefined) => {
       const langCode = lang.split(/[-_]/)[0] || 'en';
-      const url = getInstructionsUrl(langCode);
+      const url = getInstructionsUrl(
+        langCode,
+        controller?.host,
+        controller?.port,
+      );
 
       try {
-        setLoading(true);
-        setError(null);
+        setInstructionsLoading(true);
+        setError(undefined);
 
         const response = await fetch(url);
 
@@ -206,28 +106,51 @@ const AgentInstallInstructionsPage = () => {
         // Combine styles with sanitized body
         setInstructionsHtml(styles + sanitizedBody);
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : _('Unknown error occurred'),
-        );
+        setError(err as Error);
       } finally {
-        setLoading(false);
+        setInstructionsLoading(false);
       }
     },
-    [_, getInstructionsUrl],
+    [],
   );
 
-  // Fetch instructions when language or selected controller changes
-  useEffect(() => {
-    if (language && !controllersLoading) {
-      void fetchInstructions(language);
+  const fetchControllers = useCallback(async () => {
+    try {
+      setControllersLoading(true);
+      const response = await gmp.scanners.getAll({
+        filter: Filter.fromString(`type=${AGENT_CONTROLLER_SCANNER_TYPE}`),
+      });
+      const scanners = response?.data ?? [];
+      const agentControllers = scanners.sort((a, b) => {
+        // Local agent-control first (matches docker hostname)
+        const aLocal = a.host === 'agentcontrol' ? 0 : 1;
+        const bLocal = b.host === 'agentcontrol' ? 0 : 1;
+        if (aLocal !== bLocal) return aLocal - bLocal;
+        return a?.name?.localeCompare(b?.name ?? '') ?? 0;
+      });
+      setControllers(agentControllers);
+      const firstController = agentControllers?.[0];
+      setSelectedController(firstController?.id);
+      void fetchInstructions(language, firstController);
+    } catch (err) {
+      // If scanner fetch fails, fall back to local agent-control
+      setControllers([]);
+      setError(err as Error);
+    } finally {
+      setControllersLoading(false);
     }
-  }, [language, selectedController, controllersLoading, fetchInstructions]);
+  }, [gmp, fetchInstructions, language]);
+
+  // Fetch agent-controller scanners on mount
+  useEffect(() => {
+    void fetchControllers();
+  }, [fetchControllers]);
 
   // Attach click handlers to copy buttons after HTML is rendered
   // Scoped to the instructions container to avoid global event handling
   useEffect(() => {
     const container = instructionsContainerRef.current;
-    if (!instructionsHtml || loading || !container) return;
+    if (!instructionsHtml || instructionsLoading || !container) return;
 
     const copyToClipboard = async (btn: HTMLButtonElement) => {
       const pre = btn.previousElementSibling;
@@ -267,59 +190,64 @@ const AgentInstallInstructionsPage = () => {
 
     container.addEventListener('click', handleClick);
     return () => container.removeEventListener('click', handleClick);
-  }, [_, instructionsHtml, loading]);
+  }, [_, instructionsHtml, instructionsLoading]);
 
-  const handleControllerChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedController(e.target.value);
+  const handleControllerChange = (value: string) => {
+    setSelectedController(value);
+    const controller = controllers.find(c => c.id === value);
+    void fetchInstructions(language, controller);
   };
 
   return (
     <>
       <PageTitle title={_('Agents Installation')} />
-      <Layout flex="column">
-        {controllers.length > 1 && (
-          <SelectorBar>
+      <Section title={_('Agents Installation')}>
+        {error && !instructionsLoading && (
+          <ErrorMessage
+            details={error.message ?? _('Unknown error occurred')}
+            message={_('Could not load install instructions')}
+          >
+            <Button onClick={() => fetchInstructions(language, undefined)}>
+              {_('Retry')}
+            </Button>
+          </ErrorMessage>
+        )}
+
+        {controllers.length > 0 && (
+          <Row>
             <SelectorLabel htmlFor="agent-controller-select">
               {_('Agent Controller')}:
             </SelectorLabel>
-            <SelectorSelect
-              disabled={loading}
+            <Select
+              disabled={
+                instructionsLoading ||
+                controllersLoading ||
+                controllers.length <= 1
+              }
+              grow="1"
               id="agent-controller-select"
+              isLoading={controllersLoading}
+              items={controllers.map(controller => ({
+                label: `${controller.name} (${controller.host}:${controller.port})`,
+                value: controller.id as string,
+              }))}
               value={selectedController}
               onChange={handleControllerChange}
-            >
-              {controllers.map(c => (
-                <option key={c.id} value={c.id}>
-                  {c.name} ({c.host}:{c.port})
-                </option>
-              ))}
-            </SelectorSelect>
-          </SelectorBar>
+            />
+          </Row>
         )}
-
-        {(loading || controllersLoading) && (
-          <CenteredLayout>
-            <Spinner />
-          </CenteredLayout>
+        {!controllersLoading && controllers.length === 0 && (
+          <p>{_('No agent controllers available')}</p>
         )}
+        {instructionsLoading && <Loading />}
 
-        {error && !loading && (
-          <ErrorContainer>
-            <ErrorTitle>{_('Could not load install instructions')}</ErrorTitle>
-            <ErrorMessage>{error}</ErrorMessage>
-            <RetryButton onClick={() => fetchInstructions(language)}>
-              {_('Retry')}
-            </RetryButton>
-          </ErrorContainer>
-        )}
-
-        {!loading && !controllersLoading && !error && (
+        {!instructionsLoading && !controllersLoading && !error && (
           <InstructionsContainer
             ref={instructionsContainerRef}
             dangerouslySetInnerHTML={{__html: instructionsHtml}}
           />
         )}
-      </Layout>
+      </Section>
     </>
   );
 };
