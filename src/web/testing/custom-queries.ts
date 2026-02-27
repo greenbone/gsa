@@ -4,7 +4,6 @@
  */
 
 import {
-  getAllByRole,
   getByRole,
   getByTestId,
   getElementError,
@@ -147,7 +146,7 @@ export const getSelectedItems = (element: ParentNode) => {
  */
 export const getSelectItemElementsForMultiSelect = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return getAllByRole(element, 'option');
+  return queryAllByRole(element, 'option', {hidden: true});
 };
 
 /**

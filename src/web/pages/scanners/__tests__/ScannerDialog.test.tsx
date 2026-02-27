@@ -11,7 +11,6 @@ import {
   fireEvent,
   getSelectItemElementsForSelect,
   wait,
-  openSelectElement,
 } from 'web/testing';
 import Features from 'gmp/capabilities/features';
 import {
@@ -404,8 +403,8 @@ describe('ScannerDialog tests', () => {
       name: 'Scanner Type',
     });
     expect(scannerType).toHaveValue('Agent Controller');
-    await openSelectElement(scannerType);
-    fireEvent.click(screen.getByRole('option', {name: 'Agent Sensor'})); // select Agent Sensor
+    const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
+    fireEvent.click(scannerTypeItems[2]); // select Agent Sensor
     expect(scannerType).toHaveValue('Agent Sensor');
 
     const saveButton = screen.getDialogSaveButton();

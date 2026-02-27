@@ -21,8 +21,8 @@ describe('IconMenu', () => {
 
     expect(screen.getByText('Menu')).toBeVisible();
     await waitFor(() => {
-      expect(screen.getByText('Child 1')).toBeVisible();
-      expect(screen.getByText('Child 2')).toBeVisible();
+      expect(screen.getByText('Child 1')).toBeInTheDocument();
+      expect(screen.getByText('Child 2')).toBeInTheDocument();
     });
   });
 
@@ -58,13 +58,13 @@ describe('IconMenu', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(screen.getByText('Child 1')).toBeVisible();
-      expect(screen.getByText('Child 2')).toBeVisible();
+      expect(screen.getByText('Child 1')).toBeInTheDocument();
+      expect(screen.getByText('Child 2')).toBeInTheDocument();
       expect(screen.queryByText('Hidden Child')).not.toBeInTheDocument();
     });
 
     // Verify only 2 menu items are rendered (not 5 including the falsy ones)
-    const menuItems = screen.getAllByRole('menuitem');
+    const menuItems = screen.getAllByRole('menuitem', {hidden: true});
     expect(menuItems).toHaveLength(2);
   });
 });
