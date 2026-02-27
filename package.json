@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "type": "module",
   "scripts": {
@@ -38,10 +38,10 @@
   "dependencies": {
     "@dnd-kit/accessibility": "^3.1.1",
     "@dnd-kit/core": "^6.3.1",
-    "@greenbone/ui-lib": "^2.0.2",
-    "@mantine/core": "^7.17.8",
-    "@mantine/dates": "^7.17.8",
-    "@mantine/notifications": "^7.17.8",
+    "@greenbone/ui-lib": "^2.1.0",
+    "@mantine/core": "^8.3.14",
+    "@mantine/dates": "^8.3.14",
+    "@mantine/notifications": "^8.3.14",
     "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-query": "^5.90.21",
     "@visx/axis": "^3.12.0",
