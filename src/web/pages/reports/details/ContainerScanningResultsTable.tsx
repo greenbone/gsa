@@ -133,7 +133,7 @@ const getColumns = (enableEPSS = false, onToggleDetailsClick?: () => void) => [
     headerGroup: _('OCI Image'),
     render: (entity: Result) => {
       const {host} = entity;
-      const shortName = entity.ociImage?.short_name;
+      const shortName = entity.ociImage?.shortName;
       const sha = host?.name;
       const displayName =
         isDefined(shortName) && shortName !== '' ? shortName : sha;

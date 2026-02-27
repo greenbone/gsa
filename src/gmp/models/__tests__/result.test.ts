@@ -118,7 +118,7 @@ describe('Result model tests', () => {
       digest: 'sha256:abc123',
       registry: 'registry.example.com',
       path: 'repo/',
-      short_name: 'image:tag',
+      shortName: 'image:tag',
     });
   });
 
