@@ -232,7 +232,7 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('name')).toHaveValue('Unnamed');
     expect(screen.getByName('comment')).toHaveValue('');
     expect(screen.getByName('host')).toHaveValue('localhost');
-    expect(screen.getByName('port')).toHaveValue('443');
+    expect(screen.getByName('port')).toHaveValue('8080');
 
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
     expect(scannerType).toHaveValue('Agent Controller');
@@ -248,7 +248,7 @@ describe('ScannerDialog tests', () => {
       credentialId: undefined,
       type: AGENT_CONTROLLER_SCANNER_TYPE,
       id: undefined,
-      port: 443,
+      port: 8080,
     });
   });
 
