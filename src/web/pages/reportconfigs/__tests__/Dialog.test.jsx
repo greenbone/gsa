@@ -427,8 +427,13 @@ describe('New Report Config Dialog component tests', () => {
     });
 
     fireEvent.click(closeBtnElement);
-    const multiSelectMenuItems = screen.getSelectItemElementsForMultiSelect();
-    fireEvent.click(multiSelectMenuItems[1]);
+
+    // Reopen the multiselect dropdown after removing an item
+    fireEvent.click(multiSelect);
+
+    // Select 'non-configurable-1' (id: 654321)
+    const option = await screen.findByText('non-configurable-1');
+    fireEvent.click(option);
 
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);

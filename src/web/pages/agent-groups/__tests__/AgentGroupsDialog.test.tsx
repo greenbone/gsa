@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {
   fireEvent,
-  openSelectElement,
+  getSelectItemElementsForSelect,
   rendererWith,
   screen,
   wait,
@@ -99,8 +99,7 @@ describe('AgentGroupsDialog tests', () => {
 
     // open agent controller select and choose controller
     const select = screen.getByName('agentController') as HTMLSelectElement;
-    await openSelectElement(select);
-    const items = screen.getSelectItemElements();
+    const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
       i.textContent?.includes('Controller One'),
     ) as HTMLElement;
@@ -112,10 +111,7 @@ describe('AgentGroupsDialog tests', () => {
     const multi = multiElements[0];
     fireEvent.click(multi);
 
-    const options = screen.getSelectItemElementsForMultiSelect();
-    const agentOption = options.find(o =>
-      o.textContent?.includes('Agent One'),
-    ) as HTMLElement;
+    const agentOption = await screen.findByText(/Agent One/);
     fireEvent.click(agentOption);
 
     const save = screen.getDialogSaveButton();
@@ -157,8 +153,7 @@ describe('AgentGroupsDialog tests', () => {
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
 
     const select = screen.getByName('agentController') as HTMLSelectElement;
-    await openSelectElement(select);
-    const items = screen.getSelectItemElements();
+    const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
       i.textContent?.includes('Controller One'),
     ) as HTMLElement;
@@ -199,8 +194,7 @@ describe('AgentGroupsDialog tests', () => {
 
     // select a controller
     const select = screen.getByName('agentController') as HTMLSelectElement;
-    await openSelectElement(select);
-    const items = screen.getSelectItemElements();
+    const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
       i.textContent?.includes('Controller One'),
     ) as HTMLElement;
