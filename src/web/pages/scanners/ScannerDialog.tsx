@@ -75,8 +75,10 @@ const updatePort = (scannerType: ScannerType | undefined) => {
   ) {
     return 22;
   }
+  if (scannerType === AGENT_CONTROLLER_SCANNER_TYPE) {
+    return 8080;
+  }
   if (
-    scannerType === AGENT_CONTROLLER_SCANNER_TYPE ||
     scannerType === OPENVASD_SCANNER_TYPE ||
     scannerType === CONTAINER_IMAGE_SCANNER_TYPE
   ) {
