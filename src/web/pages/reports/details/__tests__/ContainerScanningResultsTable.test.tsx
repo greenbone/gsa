@@ -285,7 +285,7 @@ describe('ContainerScanningResultsTable', () => {
     expect(dataRow).toBeInTheDocument();
   });
 
-  test('should render Short Name column with short_name from backend', () => {
+  test('should render Short Name column with shortName from backend', () => {
     const entities = [createMockResult()];
     const counts = new CollectionCounts({
       filtered: 1,

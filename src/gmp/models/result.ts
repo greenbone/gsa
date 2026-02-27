@@ -162,7 +162,7 @@ interface OciImage {
   digest?: string;
   registry?: string;
   path?: string;
-  short_name?: string;
+  shortName?: string;
 }
 
 interface ResultHost {
@@ -375,7 +375,7 @@ class Result extends Model {
         digest: parseToString(oci_image.digest),
         registry: parseToString(oci_image.registry),
         path: parseToString(oci_image.path),
-        short_name: parseToString(oci_image.short_name),
+        shortName: parseToString(oci_image.short_name),
       };
     }
 
