@@ -103,8 +103,6 @@ const AgentGroupsComponent = ({
       bulkSize: data.config?.agentScriptExecutor?.bulkSize,
       bulkThrottleTime: data.config?.agentScriptExecutor?.bulkThrottleTimeInMs,
       indexerDirDepth: data.config?.agentScriptExecutor?.indexerDirDepth,
-      intervalInSeconds: data.intervalInSeconds,
-      missUntilInactive: data.config?.heartbeat?.missUntilInactive,
       schedulerCronTimes: data.schedulerCronExpression,
     };
 
