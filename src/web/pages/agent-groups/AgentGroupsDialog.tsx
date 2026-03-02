@@ -113,7 +113,6 @@ const AgentGroupsDialog = ({
 
   const defaultsKey = [
     agentGroup?.id ?? 'new',
-    selectedAgentController || 'no-ctrl',
     selectedAgents[0] || 'no-first',
     schedulerCron,
     heartbeatInterval,
@@ -177,7 +176,11 @@ const AgentGroupsDialog = ({
               value={state.agentController}
               onChange={value => {
                 setSelectedAgentController(value);
-                onValueChange([], 'selectedAgents');
+                onValueChange([], 'agentIds');
+                onValueChange(
+                  DEFAULT_CRON_EXPRESSION,
+                  'schedulerCronExpression',
+                );
               }}
             />
 
