@@ -18,6 +18,10 @@ interface SSHCredentialElement extends ModelElement {
   port?: number;
 }
 
+interface TargetTaskElement extends ModelElement {
+  usage_type?: 'scan' | 'audit';
+}
+
 interface TargetElement extends ModelElement {
   alive_tests?: AliveTestsElement;
   allow_simultaneous_ips?: YesNo;
@@ -34,7 +38,7 @@ interface TargetElement extends ModelElement {
   ssh_credential?: SSHCredentialElement;
   ssh_elevate_credential?: ModelElement;
   tasks?: {
-    task: ModelElement | ModelElement[];
+    task: TargetTaskElement | TargetTaskElement[];
   };
 }
 
@@ -245,9 +249,11 @@ class Target extends Model {
     ret.allowSimultaneousIPs = parseBoolean(element.allow_simultaneous_ips);
 
     if (isDefined(element.tasks)) {
-      ret.tasks = map(element.tasks.task, task =>
-        Model.fromElement(task, 'task'),
-      );
+      ret.tasks = map(element.tasks.task, task => {
+        // Use 'audit' entity type for audits, 'task' for scans
+        const entityType = task.usage_type === 'audit' ? 'audit' : 'task';
+        return Model.fromElement(task, entityType);
+      });
     }
 
     return ret;

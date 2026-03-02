@@ -27,6 +27,10 @@ interface AlertDataElement {
   data?: DataElement | DataElement[];
 }
 
+interface AlertTaskElement extends ModelElement {
+  usage_type?: 'scan' | 'audit';
+}
+
 interface AlertElement extends ModelElement {
   active?: YesNo;
   condition?: string | AlertDataElement;
@@ -34,7 +38,7 @@ interface AlertElement extends ModelElement {
   filter?: ModelElement;
   method?: AlertDataElement;
   tasks?: {
-    task: ModelElement | ModelElement[];
+    task: AlertTaskElement | AlertTaskElement[];
   };
 }
 
@@ -233,9 +237,11 @@ class Alert extends Model {
       ret.filter = Model.fromElement(element.filter, 'filter');
     }
 
-    ret.tasks = map(element.tasks?.task, task =>
-      Model.fromElement(task, 'task'),
-    );
+    ret.tasks = map(element.tasks?.task, task => {
+      // Use 'audit' entity type for audits, 'task' for scans
+      const entityType = task.usage_type === 'audit' ? 'audit' : 'task';
+      return Model.fromElement(task, entityType);
+    });
 
     if (isDefined(ret.method?.data?.report_formats)) {
       // @ts-expect-error

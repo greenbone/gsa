@@ -37,6 +37,39 @@ describe('Schedule model tests', () => {
     expect(schedule.tasks[0].id).toEqual('123');
   });
 
+  test('should parse tasks with usage_type', () => {
+    const schedule = Schedule.fromElement({
+      tasks: {
+        task: [
+          {
+            _id: '123',
+            name: 'task1',
+            usage_type: 'scan',
+          },
+          {
+            _id: '456',
+            name: 'audit1',
+            usage_type: 'audit',
+          },
+        ],
+      },
+    });
+
+    expect(schedule.tasks?.length).toEqual(2);
+
+    const task = schedule.tasks?.[0];
+    expect(task).toBeDefined();
+    expect(task?.entityType).toEqual('task');
+    expect(task?.id).toEqual('123');
+    expect(task?.name).toEqual('task1');
+
+    const audit = schedule.tasks?.[1];
+    expect(audit).toBeDefined();
+    expect(audit?.entityType).toEqual('audit');
+    expect(audit?.id).toEqual('456');
+    expect(audit?.name).toEqual('audit1');
+  });
+
   test('should handle invalid ical data safely', () => {
     // eslint-disable-next-line no-console
     const consoleError = console.log;
