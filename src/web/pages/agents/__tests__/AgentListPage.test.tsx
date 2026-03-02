@@ -96,9 +96,7 @@ describe('AgentListPage tests', () => {
 
     render(<AgentListPage />);
 
-    const entitiesLoading = screen.getAllByTestId('loading')[1];
-
-    expect(entitiesLoading).toBeInTheDocument();
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
 
   test('should render empty state when no agents are available', async () => {
