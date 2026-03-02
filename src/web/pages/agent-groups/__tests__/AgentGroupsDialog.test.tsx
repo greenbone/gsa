@@ -172,4 +172,42 @@ describe('AgentGroupsDialog tests', () => {
     expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
     expect(screen.getByName('schedulerCronExpression')).toBeInTheDocument();
   });
+
+  test('should keep name when agent controller is changed', async () => {
+    const onSave = testing.fn();
+    const onClose = testing.fn();
+
+    const scanner1 = {id: 's1', name: 'Controller One'};
+    const scanner2 = {id: 's2', name: 'Controller Two'};
+
+    const gmp = {
+      settings: {token: 'token'},
+      scanners: {
+        get: testing
+          .fn()
+          .mockResolvedValue(new Response([scanner1, scanner2], {})),
+      },
+      agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
+    };
+
+    const {render} = rendererWith({gmp});
+    render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
+
+    // type a custom name
+    const nameField = screen.getByName('name');
+    fireEvent.change(nameField, {target: {value: 'Custom Group'}});
+
+    // select a controller
+    const select = screen.getByName('agentController') as HTMLSelectElement;
+    await openSelectElement(select);
+    const items = screen.getSelectItemElements();
+    const item = items.find(i =>
+      i.textContent?.includes('Controller One'),
+    ) as HTMLElement;
+    fireEvent.click(item);
+    await wait();
+
+    // name should NOT have been reset
+    expect(screen.getByName('name')).toHaveValue('Custom Group');
+  });
 });
