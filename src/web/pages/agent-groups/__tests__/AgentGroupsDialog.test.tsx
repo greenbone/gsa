@@ -131,6 +131,46 @@ describe('AgentGroupsDialog tests', () => {
         }),
       }),
     );
+
+    // intervalInSeconds is removed from the payload since the field is hidden
+    expect(onSave).toHaveBeenCalledWith(
+      expect.not.objectContaining({intervalInSeconds: expect.anything()}),
+    );
+  });
+
+  test('should hide heartbeat interval field and show scheduler when agent controller is selected', async () => {
+    const onSave = testing.fn();
+    const onClose = testing.fn();
+
+    const scanner = {id: 's1', name: 'Controller One'};
+
+    const gmp = {
+      settings: {token: 'token'},
+      scanners: {
+        get: testing.fn().mockResolvedValue(new Response([scanner], {})),
+      },
+      agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
+    };
+
+    const {render} = rendererWith({gmp});
+
+    render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
+
+    const select = screen.getByName('agentController') as HTMLSelectElement;
+    await openSelectElement(select);
+    const items = screen.getSelectItemElements();
+    const item = items.find(i =>
+      i.textContent?.includes('Controller One'),
+    ) as HTMLElement;
+    fireEvent.click(item);
+    await wait();
+
+    expect(
+      screen.queryByText('Heartbeat Interval (seconds)'),
+    ).not.toBeInTheDocument();
+
+    expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
+    expect(screen.getByName('schedulerCronExpression')).toBeInTheDocument();
   });
 
   test('should keep name when agent controller is changed', async () => {

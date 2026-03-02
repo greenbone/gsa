@@ -246,4 +246,40 @@ describe('AgentConfigurationSection tests', () => {
 
     expect(screen.getByDisplayValue('600')).toBeInTheDocument();
   });
+
+  test('should render heartbeat interval field when hideIntervalInSeconds is false', () => {
+    const {render} = rendererWith({});
+
+    render(
+      <AgentConfigurationSection
+        activeCronExpression={DEFAULT_CRON_EXPRESSION}
+        hideIntervalInSeconds={false}
+        intervalInSeconds={300}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    expect(
+      screen.getByText('Heartbeat Interval (seconds)'),
+    ).toBeInTheDocument();
+    expect(screen.getByDisplayValue('300')).toBeInTheDocument();
+  });
+
+  test('should not render heartbeat interval field when hideIntervalInSeconds is true', () => {
+    const {render} = rendererWith({});
+
+    render(
+      <AgentConfigurationSection
+        hideIntervalInSeconds
+        activeCronExpression={DEFAULT_CRON_EXPRESSION}
+        intervalInSeconds={300}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    expect(
+      screen.queryByText('Heartbeat Interval (seconds)'),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByDisplayValue('300')).not.toBeInTheDocument();
+  });
 });
