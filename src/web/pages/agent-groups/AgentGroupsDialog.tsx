@@ -22,7 +22,6 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentConfigurationSection, {
   DEFAULT_CRON_EXPRESSION,
-  DEFAULT_HEARTBEAT_INTERVAL,
 } from 'web/pages/agents/components/AgentConfigurationSection';
 import useGetEntities from 'web/queries/useGetEntities';
 import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
@@ -43,7 +42,6 @@ interface AgentGroupsDialogDefaultValues {
   authorized?: boolean;
   comment: string;
   config?: AgentConfig;
-  intervalInSeconds?: number;
   name: string;
   network: string;
   port: number;
@@ -108,15 +106,11 @@ const AgentGroupsDialog = ({
   const schedulerCron =
     first?.config?.agentScriptExecutor?.schedulerCronTimes?.[0] ??
     DEFAULT_CRON_EXPRESSION;
-  const heartbeatInterval =
-    first?.config?.heartbeat?.intervalInSeconds ?? DEFAULT_HEARTBEAT_INTERVAL;
-
   const defaultsKey = [
     agentGroup?.id ?? 'new',
     selectedAgentController || 'no-ctrl',
     selectedAgents[0] || 'no-first',
     schedulerCron,
-    heartbeatInterval,
   ].join('|');
 
   return (
@@ -131,7 +125,6 @@ const AgentGroupsDialog = ({
         network: '',
         port: 0,
         schedulerCronExpression: schedulerCron,
-        intervalInSeconds: heartbeatInterval,
       }}
       title={title}
       values={{
@@ -193,9 +186,9 @@ const AgentGroupsDialog = ({
 
             {state.agentController && agentsData && (
               <AgentConfigurationSection
+                hideIntervalInSeconds
                 hidePort
                 activeCronExpression={schedulerCron}
-                intervalInSeconds={state.intervalInSeconds}
                 isEdit={Boolean(agentGroup)}
                 port={state.port}
                 schedulerCronExpression={state.schedulerCronExpression}
