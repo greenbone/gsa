@@ -115,7 +115,9 @@ const useEntityDownload = <
       if (isDefined(onDownloaded)) {
         showSuccessNotification(
           '',
-          _('{{- name}} downloaded successfully.', {name: entity.name as string}),
+          _('{{- name}} downloaded successfully.', {
+            name: entity.name as string,
+          }),
         );
         return onDownloaded({filename, data: response.data});
       }

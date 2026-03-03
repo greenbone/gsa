@@ -438,7 +438,10 @@ export const simplePermissionDescriptionWithSubject = (
     case 'everything':
       return _('{{subjectType}} {{- subjectName}} has all permissions', type);
     case 'empty_trashcan':
-      return _('{{subjectType}} {{- subjectName}} may empty the trashcan', type);
+      return _(
+        '{{subjectType}} {{- subjectName}} may empty the trashcan',
+        type,
+      );
     case 'get_dependencies':
       return _(
         '{{subjectType}} {{- subjectName}} may get the dependencies of NVTs',
@@ -519,7 +522,10 @@ export const simplePermissionDescriptionWithSubject = (
         );
       }
       if (res === 'feed') {
-        return _('{{subjectType}} {{- subjectName}} may sync the NVT feed', type);
+        return _(
+          '{{subjectType}} {{- subjectName}} may sync the NVT feed',
+          type,
+        );
       }
       if (res === 'scap') {
         return _(
