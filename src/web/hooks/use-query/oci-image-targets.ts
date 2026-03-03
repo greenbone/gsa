@@ -108,7 +108,7 @@ export const useCloneOciImageTarget = ({
   return useGmpMutation<{id: string}, EntityActionResponse, Rejection>({
     gmpMethod: gmp.ociimagetarget.clone.bind(gmp.ociimagetarget),
     invalidateQueryIds: ['get_oci_image_targets'],
-    successMessage: _('{{entity}} successfully cloned', {
+    successMessage: _('{{- entity}} successfully cloned', {
       entity: typeName('ociimagetarget'),
     }),
     onError,

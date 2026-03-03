@@ -60,7 +60,7 @@ const ReportConfigComponent = ({
           setFormats(formatsData);
           setPreferences(preferencesData);
           setReportConfig(config);
-          setTitle(_('Edit Report Config {{name}}', {name: config.name}));
+          setTitle(_('Edit Report Config {{- name}}', {name: config.name}));
         });
       });
     } else {

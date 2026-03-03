@@ -166,7 +166,7 @@ const ScannerComponent = ({
           .get({id: scanner.id as string})
           .then(response => response.data),
       ]);
-      const scannerTitle = _('Edit Scanner {{name}}', {
+      const scannerTitle = _('Edit Scanner {{- name}}', {
         name: shorten(loadedScanner.name),
       });
 

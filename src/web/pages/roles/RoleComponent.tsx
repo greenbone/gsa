@@ -126,7 +126,7 @@ const RoleComponent = ({
       setDialogVisible(true);
       setIsInUse(role.isInUse());
       setRole(role);
-      setTitle(_('Edit Role {{name}}', {name: role.name as string}));
+      setTitle(_('Edit Role {{- name}}', {name: role.name as string}));
     } else {
       setAllPermissions(undefined);
       setDialogVisible(true);

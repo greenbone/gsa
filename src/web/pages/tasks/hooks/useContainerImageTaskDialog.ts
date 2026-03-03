@@ -73,7 +73,7 @@ export const useContainerImageTaskDialog = ({
       setRegistryAllowInsecure(task ? task.registryAllowInsecure : false);
       setTitle(
         task
-          ? _('Edit Container Image Task {{name}}', {
+          ? _('Edit Container Image Task {{- name}}', {
               name: task.name as string,
             })
           : _('New Container Image Task'),

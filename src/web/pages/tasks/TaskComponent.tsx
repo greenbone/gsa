@@ -411,7 +411,7 @@ const TaskComponent = ({
       {
         onSuccess: onStarted,
         onError: onStartError,
-        successMessage: _('Task {{name}} started successfully.', {
+        successMessage: _('Task {{- name}} started successfully.', {
           name: task.name as string,
         }),
       },
@@ -425,7 +425,7 @@ const TaskComponent = ({
       {
         onSuccess: onStopped,
         onError: onStopError,
-        successMessage: _('Task {{name}} stopped successfully.', {
+        successMessage: _('Task {{- name}} stopped successfully.', {
           name: task.name as string,
         }),
       },
@@ -439,7 +439,7 @@ const TaskComponent = ({
       {
         onSuccess: onResumed,
         onError: onResumeError,
-        successMessage: _('Task {{name}} resumed successfully.', {
+        successMessage: _('Task {{- name}} resumed successfully.', {
           name: task.name as string,
         }),
       },
@@ -490,7 +490,7 @@ const TaskComponent = ({
     setAutoDeleteData(task ? task.auto_delete_data : undefined);
     setTitle(
       task
-        ? _('Edit Import Task {{name}}', {name: task.name as string})
+        ? _('Edit Import Task {{- name}}', {name: task.name as string})
         : _('New Import Task'),
     );
   };
@@ -723,7 +723,7 @@ const TaskComponent = ({
       setAlertIds(map(task.alerts, alert => alert.id as string));
 
       setTask(task);
-      setTitle(_('Edit Task {{name}}', {name: task.name as string}));
+      setTitle(_('Edit Task {{- name}}', {name: task.name as string}));
     } else {
       setName(undefined);
       setComment(undefined);
@@ -778,7 +778,7 @@ const TaskComponent = ({
       setAlertIds(map(task.alerts, alert => alert.id as string));
 
       setTask(task);
-      setTitle(_('Edit Agent Task {{name}}', {name: task.name as string}));
+      setTitle(_('Edit Agent Task {{- name}}', {name: task.name as string}));
     } else {
       setName(undefined);
       setComment(undefined);

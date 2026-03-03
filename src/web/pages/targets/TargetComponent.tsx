@@ -218,7 +218,7 @@ const TargetComponent = ({
       setAliveTests(entity.aliveTests);
       setAllowSimultaneousIPs(entity.allowSimultaneousIPs);
       setComment(entity.comment);
-      setTargetTitle(_('Edit Target {{name}}', {name: entity.name as string}));
+      setTargetTitle(_('Edit Target {{- name}}', {name: entity.name as string}));
       setEsxiCredentialId(entity.esxiCredential?.id);
       setKrb5CredentialId(entity.krb5Credential?.id);
       setSmbCredentialId(entity.smbCredential?.id);

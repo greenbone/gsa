@@ -200,7 +200,7 @@ const ScanConfigComponent = ({
   const openEditConfigDialog = configData => {
     setConfig(configData); // put config from list with reduced data in state
     setEditConfigDialogVisible(true);
-    setTitle(_('Edit Scan Config {{name}}', {name: shorten(configData.name)}));
+    setTitle(_('Edit Scan Config {{- name}}', {name: shorten(configData.name)}));
 
     loadEditScanConfigSettings(configData.id);
     loadScanners();

@@ -79,7 +79,7 @@ const UserComponent = props => {
         setName(user.name);
         setOldName(user.name);
         setRoleIds(newRoleIds);
-        setTitle(_('Edit User {{name}}', user));
+        setTitle(_('Edit User {{- name}}', user));
         setUser(user);
       } else {
         setAccessHosts(undefined);

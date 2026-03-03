@@ -68,7 +68,7 @@ const ScheduleComponent = ({
       setInterval(recInterval);
       setMonthDays(recMonthdays);
       setName(schedule.name);
-      setTitle(_('Edit Schedule {{name}}', {name: schedule.name}));
+      setTitle(_('Edit Schedule {{- name}}', {name: schedule.name}));
       setScheduleTimezone(schedule.timezone);
       setWeekdays(recWeekdays);
     } else {

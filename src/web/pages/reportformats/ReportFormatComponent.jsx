@@ -66,7 +66,7 @@ const ReportFormatComponent = ({
         setPreferences(newPreferences);
         setIdLists(idLists);
         setReportFormat(format);
-        setTitle(_('Edit Report Format {{name}}', {name: format.name}));
+        setTitle(_('Edit Report Format {{- name}}', {name: format.name}));
       } catch (error) {
         // Handle error if needed
         console.error('Error loading report format:', error);

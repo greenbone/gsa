@@ -116,7 +116,7 @@ const CredentialComponent = ({
     if (isDefined(cred)) {
       const response = await gmp.credential.get({id: cred.id as string});
       const credential = response.data;
-      const dialogTitle = _('Edit Credential {{name}}', {
+      const dialogTitle = _('Edit Credential {{- name}}', {
         name: shorten(credential.name),
       });
       setCertificate(

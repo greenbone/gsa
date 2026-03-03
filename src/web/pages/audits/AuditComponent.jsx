@@ -214,7 +214,7 @@ const AuditComponent = ({
 
   useEffect(() => {
     if (audit) {
-      setTitle(_('Edit Audit {{name}}', {name: audit.name}));
+      setTitle(_('Edit Audit {{- name}}', {name: audit.name}));
     }
   }, [audit, _]);
 
@@ -466,7 +466,7 @@ const AuditComponent = ({
       setSchedulePeriods(schedulePeriods);
       setTargetId(hasId(target) ? target.id : undefined);
       setAudit(audit);
-      setTitle(_('Edit Audit {{name}}', {name}));
+      setTitle(_('Edit Audit {{- name}}', {name}));
     } else {
       const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 

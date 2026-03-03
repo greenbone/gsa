@@ -106,7 +106,7 @@ const FilterComponent = ({
         filter_type = first(filterTypes, [])[0];
       }
 
-      const filterTitle = _('Edit Filter {{name}}', {
+      const filterTitle = _('Edit Filter {{- name}}', {
         name: shorten(filter.name),
       });
 

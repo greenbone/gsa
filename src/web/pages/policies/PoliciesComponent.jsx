@@ -332,7 +332,7 @@ const PolicyComponent = ({
   const openEditPolicyDialog = policy => {
     setPolicy(policy); // put policy from list with reduced data in state
     setEditPolicyDialogVisible(true);
-    setTitle(_('Edit Policy {{name}}', {name: shorten(policy.name)}));
+    setTitle(_('Edit Policy {{- name}}', {name: shorten(policy.name)}));
 
     loadEditPolicySettings(policy.id);
     loadComponentScanners();
