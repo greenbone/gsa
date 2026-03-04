@@ -8,6 +8,7 @@ import type Filter from 'gmp/models/filter';
 import type ReportHost from 'gmp/models/report/host';
 import Loading from 'web/components/loading/Loading';
 import useTranslation from 'web/hooks/useTranslation';
+import AgentScanningHostsTab from 'web/pages/reports/details/AgentScanningHostsTab';
 import ContainerScanningHostsTab from 'web/pages/reports/details/ContainerScanningHostsTab';
 import HostsTab from 'web/pages/reports/details/HostsTab';
 import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
@@ -25,7 +26,9 @@ interface SortingData {
 }
 
 interface HostsTabContentProps {
+  audit?: boolean;
   hosts: HostsData;
+  isAgentScanning?: boolean;
   isContainerScanning: boolean;
   reportFilter: Filter;
   isUpdating: boolean;
@@ -39,7 +42,9 @@ interface HostsTabContentProps {
 }
 
 const HostsTabContent = ({
+  audit = false,
   hosts,
+  isAgentScanning,
   isContainerScanning,
   reportFilter,
   isUpdating,
@@ -70,9 +75,25 @@ const HostsTabContent = ({
     );
   }
 
+  if (isAgentScanning) {
+    return (
+      <AgentScanningHostsTab
+        audit={audit}
+        counts={hosts.counts}
+        filter={reportFilter}
+        hosts={hosts.entities}
+        isUpdating={isUpdating}
+        sortField={sorting.hosts.sortField}
+        sortReverse={sorting.hosts.sortReverse}
+        onSortChange={(sortField: string) => onSortChange('hosts', sortField)}
+      />
+    );
+  }
+
   if (isContainerScanning) {
     return (
       <ContainerScanningHostsTab
+        audit={audit}
         counts={hosts.counts}
         filter={reportFilter}
         hosts={hosts.entities}
@@ -86,6 +107,7 @@ const HostsTabContent = ({
 
   return (
     <HostsTab
+      audit={audit}
       counts={hosts.counts}
       filter={reportFilter}
       hosts={hosts.entities}

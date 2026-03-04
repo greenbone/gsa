@@ -7,7 +7,10 @@ import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import type Report from 'gmp/models/report';
 import {isDefined} from 'gmp/utils/identity';
-import SeverityClassLabel from 'web/components/label/SeverityClass';
+import {
+  getSeverityColumnsConfig,
+  getSeverityLabel,
+} from 'web/components/table/SeverityColumns';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
@@ -37,6 +40,8 @@ const ReportTableHeader = ({
 }: ReportTableHeaderProps) => {
   const gmp = useGmp();
   const useCVSSv3 = gmp.settings.severityRating === 'CVSSv3';
+  const severityColumns = getSeverityColumnsConfig(useCVSSv3, '3%');
+
   return (
     <TableHeader>
       <TableRow>
@@ -82,74 +87,20 @@ const ReportTableHeader = ({
           width="8%"
           onSortChange={onSortChange}
         />
-        {useCVSSv3 && (
+        {severityColumns.map(column => (
           <TableHead
+            key={column.key}
             currentSortBy={currentSortBy}
             currentSortDir={currentSortDir}
             sort={sort}
-            sortBy="critical"
-            title={_('Critical')}
-            width="3%"
+            sortBy={column.sortBy}
+            title={column.title}
+            width={column.width}
             onSortChange={onSortChange}
           >
-            <SeverityClassLabel.Critical />
+            {getSeverityLabel(column.key)}
           </TableHead>
-        )}
-        <TableHead
-          currentSortBy={currentSortBy}
-          currentSortDir={currentSortDir}
-          sort={sort}
-          sortBy="high"
-          title={_('High')}
-          width="3%"
-          onSortChange={onSortChange}
-        >
-          <SeverityClassLabel.High />
-        </TableHead>
-        <TableHead
-          currentSortBy={currentSortBy}
-          currentSortDir={currentSortDir}
-          sort={sort}
-          sortBy="medium"
-          title={_('Medium')}
-          width="3%"
-          onSortChange={onSortChange}
-        >
-          <SeverityClassLabel.Medium />
-        </TableHead>
-        <TableHead
-          currentSortBy={currentSortBy}
-          currentSortDir={currentSortDir}
-          sort={sort}
-          sortBy="low"
-          title={_('Low')}
-          width="3%"
-          onSortChange={onSortChange}
-        >
-          <SeverityClassLabel.Low />
-        </TableHead>
-        <TableHead
-          currentSortBy={currentSortBy}
-          currentSortDir={currentSortDir}
-          sort={sort}
-          sortBy="log"
-          title={_('Log')}
-          width="3%"
-          onSortChange={onSortChange}
-        >
-          <SeverityClassLabel.Log />
-        </TableHead>
-        <TableHead
-          currentSortBy={currentSortBy}
-          currentSortDir={currentSortDir}
-          sort={sort}
-          sortBy="false_positive"
-          title={_('False Positive')}
-          width="3%"
-          onSortChange={onSortChange}
-        >
-          <SeverityClassLabel.FalsePositive />
-        </TableHead>
+        ))}
         {isDefined(actionsColumn) ? (
           actionsColumn
         ) : (

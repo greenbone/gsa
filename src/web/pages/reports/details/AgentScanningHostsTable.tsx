@@ -1,13 +1,18 @@
-/* SPDX-FileCopyrightText: 2025 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import {_, _l} from 'gmp/locale/lang';
 import type ReportHost from 'gmp/models/report/host';
+import {isDefined} from 'gmp/utils/identity';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
 import SeverityBar from 'web/components/bar/SeverityBar';
+import {VerifyIcon, VerifyNoIcon} from 'web/components/icon';
 import OsIcon from 'web/components/icon/OsIcon';
+import IconDivider from 'web/components/layout/IconDivider';
+import DetailsLink from 'web/components/link/DetailsLink';
+import Link from 'web/components/link/Link';
 import {
   getComplianceColumnsConfig,
   getSeverityColumnsConfig,
@@ -29,13 +34,82 @@ interface HeaderProps {
   onSortChange?: (sortBy: string) => void;
 }
 
+const renderAuthIcons = authSuccess => {
+  const {smb, snmp, esxi, ssh} = authSuccess;
+  const showSmbSuccess = smb === true;
+  const showSmbFailure = smb === false;
+  const showSnmpSuccess = snmp === true;
+  const showSnmpFailure = snmp === false;
+  const showEsxiSuccess = esxi === true;
+  const showEsxiFailure = esxi === false;
+  const showSshSuccess = ssh === true;
+  const showSshFailure = ssh === false;
+  return (
+    <IconDivider>
+      {showSmbSuccess && (
+        <VerifyIcon title={_('SMB authentication was successful')} />
+      )}
+      {showSmbFailure && (
+        <VerifyNoIcon title={_('SMB authentication was unsuccessful')} />
+      )}
+      {showSnmpSuccess && (
+        <VerifyIcon title={_('SNMP authentication was successful')} />
+      )}
+      {showSnmpFailure && (
+        <VerifyNoIcon title={_('SNMP authentication was unsuccessful')} />
+      )}
+      {showEsxiSuccess && (
+        <VerifyIcon title={_('ESXi authentication was successful')} />
+      )}
+      {showEsxiFailure && (
+        <VerifyNoIcon title={_('ESXi authentication was unsuccessful')} />
+      )}
+      {showSshSuccess && (
+        <VerifyIcon title={_('SSH authentication was successful')} />
+      )}
+      {showSshFailure && (
+        <VerifyNoIcon title={_('SSH authentication was unsuccessful')} />
+      )}
+    </IconDivider>
+  );
+};
+
 const getColumns = (audit = false, useCVSSv3 = false) => [
   {
     key: 'ip',
     title: _('IP Address'),
     width: '10%',
     sortBy: 'ip',
-    render: (entity: ReportHost) => <span>{entity.ip}</span>,
+    render: (entity: ReportHost, links = true) => {
+      const {asset = {}, ip} = entity;
+      return (
+        <span>
+          {isDefined(asset.id) ? (
+            <DetailsLink id={asset.id} textOnly={!links} type="host">
+              {ip}
+            </DetailsLink>
+          ) : (
+            <Link filter={'name=' + ip} textOnly={!links} to="hosts">
+              {ip}
+            </Link>
+          )}
+        </span>
+      );
+    },
+  },
+  {
+    key: 'hostname',
+    title: _('Hostname'),
+    width: '20%',
+    sortBy: 'hostname',
+    render: (entity: ReportHost) => <i>{entity.hostname}</i>,
+  },
+  {
+    key: 'agentId',
+    title: _('Agent ID'),
+    width: '8%',
+    sortBy: 'agentId',
+    render: (entity: ReportHost) => entity.details?.agentId,
   },
   {
     key: 'os',
@@ -48,6 +122,33 @@ const getColumns = (audit = false, useCVSSv3 = false) => [
       const {best_os_cpe, best_os_txt} = details;
       return <OsIcon osCpe={best_os_cpe} osTxt={best_os_txt} />;
     },
+  },
+  {
+    key: 'portsCount',
+    title: _('Ports'),
+    width: '3%',
+    sortBy: 'portsCount',
+    render: (entity: ReportHost) => entity.portsCount,
+  },
+  {
+    key: 'appsCount',
+    title: _('Apps'),
+    width: '3%',
+    sortBy: 'appsCount',
+    render: (entity: ReportHost) => entity.details?.appsCount,
+  },
+  {
+    key: 'distance',
+    title: _('Distance'),
+    width: '3%',
+    sortBy: 'distance',
+    render: (entity: ReportHost) => entity.details?.distance,
+  },
+  {
+    key: 'auth',
+    title: _('Auth'),
+    width: '8%',
+    render: (entity: ReportHost) => renderAuthIcons(entity.authSuccess),
   },
   ...(audit
     ? getComplianceColumnsConfig()
@@ -107,6 +208,7 @@ const Header = ({
       <TableRow>
         {columns.map(column => {
           const severityLabel = getSeverityLabel(column.key);
+
           return (
             <TableHead
               key={column.key}
@@ -126,7 +228,7 @@ const Header = ({
   );
 };
 
-const Row = ({entity, audit = false}) => {
+const Row = ({entity, audit = false, links = true}) => {
   const gmp = useGmp();
   const useCVSSv3 = gmp.settings.severityRating === 'CVSSv3';
   const columns = getColumns(audit, useCVSSv3);
@@ -135,7 +237,7 @@ const Row = ({entity, audit = false}) => {
     <TableRow>
       {columns.map(column => (
         <TableData key={column.key} align={column.align}>
-          {column.render(entity)}
+          {column.render(entity, links)}
         </TableData>
       ))}
     </TableRow>

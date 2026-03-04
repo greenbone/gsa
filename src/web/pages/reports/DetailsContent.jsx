@@ -107,6 +107,8 @@ const PageContent = ({
   const report = hasReport ? entity.report : undefined;
   const isContainerScanning =
     hasReport && isDefined(entity.report.task.ociImageTarget?.id);
+  const isAgentScanning =
+    hasReport && isDefined(entity.report.task.agentGroup?.id);
 
   const userTags = hasReport ? report.userTags : undefined;
   const userTagsCount = isDefined(userTags) ? userTags.length : 0;
@@ -306,6 +308,7 @@ const PageContent = ({
                   <TabPanel>
                     <HostsTabContent
                       hosts={hosts}
+                      isAgentScanning={isAgentScanning}
                       isContainerScanning={isContainerScanning}
                       isUpdating={isUpdating}
                       reportFilter={reportFilter}
