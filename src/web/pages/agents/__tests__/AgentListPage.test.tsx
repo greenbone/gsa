@@ -5,8 +5,10 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import dayjs from 'dayjs';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Agent from 'gmp/models/agent';
+import {type Date as GmpDate} from 'gmp/models/date';
 import AgentListPage from 'web/pages/agents/AgentListPage';
 
 const makeAgent = (
@@ -14,6 +16,7 @@ const makeAgent = (
   name = 'Agent 1',
   authorized = false,
   hostname = '192.168.1.1',
+  modificationTime?: GmpDate,
 ) =>
   new Agent({
     id,
@@ -21,11 +24,13 @@ const makeAgent = (
     comment: 'Test agent',
     authorized,
     hostname,
+    modificationTime,
     userCapabilities: new EverythingCapabilities(),
   });
 
 const authorizeMock = testing.fn().mockResolvedValue(undefined);
 const revokeMock = testing.fn().mockResolvedValue(undefined);
+const syncMock = testing.fn().mockResolvedValue(undefined);
 
 const createMockGmp = ({
   getAgents = testing.fn().mockResolvedValue({
@@ -37,6 +42,7 @@ const createMockGmp = ({
   }),
   authorize = authorizeMock,
   revoke = revokeMock,
+  sync = syncMock,
 } = {}) => ({
   settings: {
     token: 'token',
@@ -47,6 +53,7 @@ const createMockGmp = ({
     get: getAgents,
     authorize,
     revoke,
+    sync,
   },
   agent: {
     delete: testing.fn().mockResolvedValue(undefined),
@@ -213,5 +220,45 @@ describe('AgentListPage tests', () => {
     const errorDialog = await screen.findByRole('dialog');
     expect(errorDialog).toBeVisible();
     expect(errorDialog.textContent).toMatch(/boom|An error occurred/i);
+  });
+
+  test('should not show last updated when agents have no modificationTime', async () => {
+    const gmp = createMockGmp({
+      getAgents: testing.fn().mockResolvedValue({
+        data: [makeAgent('1', 'Agent 1'), makeAgent('2', 'Agent 2')],
+        meta: {},
+      }),
+    });
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(<AgentListPage />);
+
+    await screen.findByText(/Agent 1/i);
+
+    expect(screen.queryByText(/Last updated/i)).not.toBeInTheDocument();
+  });
+
+  test('should show last updated using the most recent modificationTime', async () => {
+    const olderDate = dayjs('2026-01-01T10:00:00Z');
+    const newerDate = dayjs('2026-02-01T10:00:00Z');
+
+    const gmp = createMockGmp({
+      getAgents: testing.fn().mockResolvedValue({
+        data: [
+          makeAgent('1', 'Agent 1', false, '192.168.1.1', olderDate),
+          makeAgent('2', 'Agent 2', false, '192.168.1.2', newerDate),
+        ],
+        meta: {},
+      }),
+    });
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(<AgentListPage />);
+
+    await screen.findByText(/Agent 1/i);
+
+    expect(screen.getByText(/Last updated/i)).toBeInTheDocument();
   });
 });

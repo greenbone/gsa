@@ -43,6 +43,14 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     return response.setData(ids);
   }
 
+  async sync() {
+    log.debug('Sync agent');
+    await this.httpPostWithTransform({
+      cmd: 'sync_agents',
+      authorized: YES_VALUE,
+    });
+  }
+
   async authorize(agents: Agent[]) {
     log.debug('Authorizing agent', {agents});
     await this.httpPostWithTransform({
