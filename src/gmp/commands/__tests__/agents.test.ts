@@ -197,6 +197,20 @@ describe('AgentsCommand tests', () => {
     expect(result).toBeUndefined();
   });
 
+  test('should allow to sync agents', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new AgentsCommand(fakeHttp);
+    const result = await cmd.sync();
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'sync_agents',
+        authorized: YES_VALUE,
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
   test('should allow to revoke agents by filter', async () => {
     const response1 = createEntitiesResponse('agent', [
       {_id: '3', name: 'Agent3'},

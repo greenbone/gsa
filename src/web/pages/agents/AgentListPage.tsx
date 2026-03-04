@@ -22,6 +22,7 @@ import {
   useBulkDeleteAgents,
   useBulkRevokeAgents,
   useGetAgents,
+  useSyncAgents,
 } from 'web/hooks/use-query/agents';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePageFilter from 'web/hooks/usePageFilter';
@@ -34,6 +35,13 @@ import AgentListPageToolBarIcons from 'web/pages/agents/AgentListPageToolBarIcon
 import AgentTable from 'web/pages/agents/AgentTable';
 import AgentsDashboard, {AGENTS_DASHBOARD_ID} from 'web/pages/agents/dashboard';
 import SelectionType from 'web/utils/SelectionType';
+
+const getLastAgentModificationTime = (agents: Agent[] | undefined) =>
+  agents
+    ?.map(a => a.modificationTime)
+    .filter(isDefined)
+    .sort((a, b) => b.valueOf() - a.valueOf())
+    .at(0);
 
 const AgentListPage = () => {
   const [_] = useTranslation();
@@ -91,6 +99,8 @@ const AgentListPage = () => {
     select,
     deselect,
   } = useSelection<Agent>();
+
+  const {mutate: syncAgents} = useSyncAgents({onError: showError});
 
   const bulkDelete = useBulkDeleteAgents({
     onError: showError,
@@ -249,7 +259,12 @@ const AgentListPage = () => {
                 />
               }
               title={_('Agents')}
-              toolBarIcons={<AgentListPageToolBarIcons />}
+              toolBarIcons={
+                <AgentListPageToolBarIcons
+                  lastUpdatedAt={getLastAgentModificationTime(agents)}
+                  onSyncClick={syncAgents}
+                />
+              }
               onAgentEditClick={edit}
               onError={() => {}}
               onFilterChanged={handleFilterChanged}

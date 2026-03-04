@@ -159,3 +159,18 @@ export const useBulkRevokeAgents = ({
     onError,
   });
 };
+
+export const useSyncAgents = ({
+  onError,
+  onSuccess,
+}: UseModifyAgentParams = {}) => {
+  const [_] = useTranslation();
+  const gmp = useGmp();
+  return useGmpMutation<void, void, Rejection>({
+    gmpMethod: () => gmp.agents.sync(),
+    invalidateQueryIds: ['get_agents'],
+    successMessage: _('Agents successfully synced'),
+    onSuccess,
+    onError,
+  });
+};
