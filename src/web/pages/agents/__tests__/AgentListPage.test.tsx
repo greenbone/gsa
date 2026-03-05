@@ -5,10 +5,9 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
-import dayjs from 'dayjs';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Agent from 'gmp/models/agent';
-import {type Date as GmpDate} from 'gmp/models/date';
+import Date, {type Date as GmpDate} from 'gmp/models/date';
 import AgentListPage from 'web/pages/agents/AgentListPage';
 
 const makeAgent = (
@@ -240,8 +239,8 @@ describe('AgentListPage tests', () => {
   });
 
   test('should show last updated using the most recent modificationTime', async () => {
-    const olderDate = dayjs('2026-01-01T10:00:00Z');
-    const newerDate = dayjs('2026-02-01T10:00:00Z');
+    const olderDate = Date('2026-01-01T10:00:00Z');
+    const newerDate = Date('2026-02-01T10:00:00Z');
 
     const gmp = createMockGmp({
       getAgents: testing.fn().mockResolvedValue({
