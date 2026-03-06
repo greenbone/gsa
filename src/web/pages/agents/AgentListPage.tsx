@@ -8,7 +8,6 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Agent from 'gmp/models/agent';
 import {type default as Filter, AGENTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import DashboardControls from 'web/components/dashboard/Controls';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import {HatAndGlassesIcon} from 'web/components/icon';
@@ -32,7 +31,6 @@ import AgentComponent from 'web/pages/agents/AgentComponent';
 import AgentsFilterDialog from 'web/pages/agents/AgentFilterDialog';
 import AgentListPageToolBarIcons from 'web/pages/agents/AgentListPageToolBarIcons';
 import AgentTable from 'web/pages/agents/AgentTable';
-import AgentsDashboard, {AGENTS_DASHBOARD_ID} from 'web/pages/agents/dashboard';
 import SelectionType from 'web/utils/SelectionType';
 
 const AgentListPage = () => {
@@ -209,10 +207,6 @@ const AgentListPage = () => {
             <PageTitle title={_('Agents')} />
             <EntitiesPage
               createFilterType="agent"
-              dashboard={() => <AgentsDashboard filter={filter} />}
-              dashboardControls={() => (
-                <DashboardControls dashboardId={AGENTS_DASHBOARD_ID} />
-              )}
               entities={agents}
               entitiesCounts={entitiesCounts}
               entitiesError={isError ? error : undefined}
