@@ -236,7 +236,10 @@ export interface TaskProperties extends ModelProperties {
   acceptInvalidCerts?: boolean;
   registryAllowInsecure?: boolean;
   csAllowFailedRetrieval?: boolean;
+  usageType?: TaskUsageType;
 }
+
+export type TaskUsageType = (typeof USAGE_TYPE)[keyof typeof USAGE_TYPE];
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
@@ -339,7 +342,7 @@ class Task extends Model {
   readonly ociImageTarget?: Model;
   readonly agentGroup?: Model;
   readonly trend?: TaskTrend;
-  readonly usageType = USAGE_TYPE.scan;
+  readonly usageType: TaskUsageType;
 
   constructor({
     alerts = [],
@@ -385,6 +388,7 @@ class Task extends Model {
     ociImageTarget,
     agentGroup,
     trend,
+    usageType = USAGE_TYPE.scan,
     ...properties
   }: TaskProperties = {}) {
     super(properties);
@@ -419,20 +423,25 @@ class Task extends Model {
     this.ociImageTarget = ociImageTarget;
     this.trend = trend;
     this.agentGroup = agentGroup;
+    this.usageType = usageType;
   }
 
   static fromElement(element?: TaskElement): Task {
-    if (
-      isDefined(element?.usage_type) &&
-      element.usage_type !== USAGE_TYPE.scan
-    ) {
-      throw new Error("Task.parseElement: usage_type must be 'scan'");
-    }
     return new Task(this.parseElement(element));
   }
 
   static parseElement(element: TaskElement = {}): TaskProperties {
     const copy = super.parseElement(element) as TaskProperties;
+
+    const usageType = (element.usage_type ?? USAGE_TYPE.scan) as
+      | typeof USAGE_TYPE.scan
+      | typeof USAGE_TYPE.audit;
+
+    if (!Object.values(USAGE_TYPE).includes(usageType)) {
+      throw new Error("Task.parseElement: usage_type must be 'scan'");
+    }
+
+    copy.usageType = usageType;
 
     const {report_count} = element;
 
