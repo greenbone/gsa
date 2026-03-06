@@ -272,13 +272,21 @@ const loggedInRoutes = [
       {
         path: 'feedstatus',
         loader: () => {
-          throw redirect('/feed-status');
+          throw redirect('/feed-configuration');
         },
       },
       {
         path: 'feed-status',
+        loader: () => {
+          throw redirect('/feed-configuration');
+        },
+      },
+      {
+        path: 'feed-configuration',
         lazy: async () => ({
-          Component: (await import('web/pages/extras/FeedStatusPage')).default,
+          Component: (
+            await import('web/pages/feed-configuration/FeedConfigurationPage')
+          ).default,
         }),
       },
 
