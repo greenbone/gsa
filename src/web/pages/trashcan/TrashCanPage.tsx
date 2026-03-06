@@ -126,7 +126,7 @@ const TrashCan = () => {
       await gmp.trashcan.restore({id: entity.id as string});
       loadTrash();
       showSuccessNotification(
-        _('{{name}} restored successfully.', {name: entity.name as string}),
+        _('{{- name}} restored successfully.', {name: entity.name as string}),
       );
     } catch (error) {
       showError(error as Rejection);
@@ -141,7 +141,7 @@ const TrashCan = () => {
       });
       loadTrash();
       showSuccessNotification(
-        _('{{name}} deleted successfully.', {name: entity.name as string}),
+        _('{{- name}} deleted successfully.', {name: entity.name as string}),
       );
     } catch (error) {
       showError(error as Rejection);

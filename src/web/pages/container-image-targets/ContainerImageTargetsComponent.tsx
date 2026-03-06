@@ -131,7 +131,7 @@ const ContainerImageTargetsComponent = ({
   const editTarget = async (target: OciImageTarget) => {
     setSelectedTarget(target);
     setEditDialogTitle(
-      _('Edit Container Image Target - {{name}}', {
+      _('Edit Container Image Target - {{- name}}', {
         name: target.name || target.id || '',
       }),
     );

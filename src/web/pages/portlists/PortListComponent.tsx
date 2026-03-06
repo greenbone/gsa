@@ -150,7 +150,7 @@ const PortListComponent = ({
       setCreatedPortRanges([]);
       setDeletedPortRanges([]);
       setPortListDialogTitle(
-        _('Edit Port List {{name}}', {name: shorten(portList.name)}),
+        _('Edit Port List {{- name}}', {name: shorten(portList.name)}),
       );
       setPortList(portList);
       setPortListDialogVisible(true);

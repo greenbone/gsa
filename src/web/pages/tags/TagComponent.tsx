@@ -188,7 +188,7 @@ const TagComponent = ({
       setResourceIds(resources.map(res => res.id as string));
       setResourceType(tag.resourceType);
       setResourceTypes(resourceTypesArray);
-      setTitle(_('Edit Tag {{name}}', {name: shorten(loadedTag.name)}));
+      setTitle(_('Edit Tag {{- name}}', {name: shorten(loadedTag.name)}));
       setValue(loadedTag.value);
       setDialogVisible(true);
     } else {

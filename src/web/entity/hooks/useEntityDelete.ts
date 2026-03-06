@@ -49,7 +49,7 @@ const useEntityDelete = <TEntity extends EntityDelete = EntityDelete>(
     return actionFunction<void, Error, void>(deleteEntity(entity), {
       onSuccess: onDeleted,
       onError: onDeleteError,
-      successMessage: _('{{name}} deleted successfully.', {
+      successMessage: _('{{- name}} deleted successfully.', {
         name: entity.name as string,
       }),
     });

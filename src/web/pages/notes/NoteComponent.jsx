@@ -111,7 +111,7 @@ const NoteComponent = ({
       setResultUuid(hasId(result) ? result.id : undefined);
       setSeverity(note.severity);
       setText(note.text);
-      setTitle(_('Edit Note {{name}}', {name: shorten(note.text, 20)}));
+      setTitle(_('Edit Note {{- name}}', {name: shorten(note.text, 20)}));
     } else {
       setDialogVisible(true);
       setActive(initial.active);

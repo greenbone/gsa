@@ -762,7 +762,7 @@ const AlertComponent = ({
             getValue(alertObj.method.data.delta_report_id, ''),
           );
           setTasks(tasks);
-          setTitle(_('Edit Alert {{name}}', {name: shorten(alertObj.name)}));
+          setTitle(_('Edit Alert {{- name}}', {name: shorten(alertObj.name)}));
         },
       );
     } else {

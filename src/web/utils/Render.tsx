@@ -298,7 +298,7 @@ export const permissionDescriptionResourceWithSubject = (
 
     if (name === 'super') {
       return _(
-        '{{subjectType}} {{subjectName}} has super access to ' +
+        '{{subjectType}} {{- subjectName}} has super access to ' +
           'all resources of {{resourceType}} {{resourceName}}',
         type,
       );
@@ -308,25 +308,25 @@ export const permissionDescriptionResourceWithSubject = (
     switch (commandType) {
       case 'create':
         return _(
-          '{{subjectType}} {{subjectName}} may create a new ' +
+          '{{subjectType}} {{- subjectName}} may create a new ' +
             '{{resourceType}}',
           type,
         );
       case 'delete':
         return _(
-          '{{subjectType}} {{subjectName}} may delete ' +
+          '{{subjectType}} {{- subjectName}} may delete ' +
             '{{resourceType}} {{resourceName}}',
           type,
         );
       case 'get':
         return _(
-          '{{subjectType}} {{subjectName}} has read access to ' +
+          '{{subjectType}} {{- subjectName}} has read access to ' +
             '{{resourceType}} {{resourceName}}',
           type,
         );
       case 'modify':
         return _(
-          '{{subjectType}} {{subjectName}} has write access to ' +
+          '{{subjectType}} {{- subjectName}} has write access to ' +
             '{{resourceType}} {{resourceName}}',
           type,
         );
@@ -426,53 +426,56 @@ export const simplePermissionDescriptionWithSubject = (
 
   switch (name) {
     case 'super':
-      return _('{{subjectType}} {{subjectName}} has super access', type);
+      return _('{{subjectType}} {{- subjectName}} has super access', type);
     case 'authenticate':
-      return _('{{subjectType}} {{subjectName}} may login', type);
+      return _('{{subjectType}} {{- subjectName}} may login', type);
     case 'commands':
       return _(
-        '{{subjectType}} {{subjectName}} may run multiple GMP ' +
+        '{{subjectType}} {{- subjectName}} may run multiple GMP ' +
           'commands in one',
         type,
       );
     case 'everything':
-      return _('{{subjectType}} {{subjectName}} has all permissions', type);
+      return _('{{subjectType}} {{- subjectName}} has all permissions', type);
     case 'empty_trashcan':
-      return _('{{subjectType}} {{subjectName}} may empty the trashcan', type);
+      return _(
+        '{{subjectType}} {{- subjectName}} may empty the trashcan',
+        type,
+      );
     case 'get_dependencies':
       return _(
-        '{{subjectType}} {{subjectName}} may get the dependencies of NVTs',
+        '{{subjectType}} {{- subjectName}} may get the dependencies of NVTs',
         type,
       );
     case 'get_version':
       return _(
-        '{{subjectType}} {{subjectName}} may get version information',
+        '{{subjectType}} {{- subjectName}} may get version information',
         type,
       );
     case 'help':
-      return _('{{subjectType}} {{subjectName}} may get the help text', type);
+      return _('{{subjectType}} {{- subjectName}} may get the help text', type);
     case 'modify_auth':
       return _(
-        '{{subjectType}} {{subjectName}} has write access to the ' +
+        '{{subjectType}} {{- subjectName}} has write access to the ' +
           'authentication configuration',
         type,
       );
     case 'restore':
       return _(
-        '{{subjectType}} {{subjectName}} may restore items from ' +
+        '{{subjectType}} {{- subjectName}} may restore items from ' +
           'the trashcan',
         type,
       );
     case 'resume_task':
-      return _('{{subjectType}} {{subjectName}} may resume Task', type);
+      return _('{{subjectType}} {{- subjectName}} may resume Task', type);
     case 'start_task':
-      return _('{{subjectType}} {{subjectName}} may start Task', type);
+      return _('{{subjectType}} {{- subjectName}} may start Task', type);
     case 'stop_task':
-      return _('{{subjectType}} {{subjectName}} may stop Task', type);
+      return _('{{subjectType}} {{- subjectName}} may stop Task', type);
     case 'run_wizard':
-      return _('{{subjectType}} {{subjectName}} may run Wizard', type);
+      return _('{{subjectType}} {{- subjectName}} may run Wizard', type);
     case 'test_alert':
-      return _('{{subjectType}} {{subjectName}} may test Alert', type);
+      return _('{{subjectType}} {{- subjectName}} may test Alert', type);
     default:
       break;
   }
@@ -489,56 +492,59 @@ export const simplePermissionDescriptionWithSubject = (
   switch (commandType) {
     case 'create':
       return _(
-        '{{subjectType}} {{subjectName}} may create a new ' +
+        '{{subjectType}} {{- subjectName}} may create a new ' +
           '{{resourceType}}',
         type,
       );
     case 'delete':
       return _(
-        '{{subjectType}} {{subjectName}} may delete an existing ' +
+        '{{subjectType}} {{- subjectName}} may delete an existing ' +
           '{{resourceType}}',
         type,
       );
     case 'get':
       return _(
-        '{{subjectType}} {{subjectName}} has read access to ' +
+        '{{subjectType}} {{- subjectName}} has read access to ' +
           '{{resourceType}}',
         type,
       );
     case 'modify':
       return _(
-        '{{subjectType}} {{subjectName}} has write access to ' +
+        '{{subjectType}} {{- subjectName}} has write access to ' +
           '{{resourceType}}',
         type,
       );
     case 'sync':
       if (res === 'cert') {
         return _(
-          '{{subjectType}} {{subjectName}} may sync the CERT feed',
+          '{{subjectType}} {{- subjectName}} may sync the CERT feed',
           type,
         );
       }
       if (res === 'feed') {
-        return _('{{subjectType}} {{subjectName}} may sync the NVT feed', type);
+        return _(
+          '{{subjectType}} {{- subjectName}} may sync the NVT feed',
+          type,
+        );
       }
       if (res === 'scap') {
         return _(
-          '{{subjectType}} {{subjectName}} may sync the SCAP feed',
+          '{{subjectType}} {{- subjectName}} may sync the SCAP feed',
           type,
         );
       }
       return _(
-        '{{subjectType}} {{subjectName}} may sync {{resourceType}}',
+        '{{subjectType}} {{- subjectName}} may sync {{resourceType}}',
         type,
       );
     case 'move':
       return _(
-        '{{subjectType}} {{subjectName}} may move {{resourceType}}',
+        '{{subjectType}} {{- subjectName}} may move {{resourceType}}',
         type,
       );
     case 'verify':
       return _(
-        '{{subjectType}} {{subjectName}} may verify {{resourceType}}',
+        '{{subjectType}} {{- subjectName}} may verify {{resourceType}}',
         type,
       );
     default:

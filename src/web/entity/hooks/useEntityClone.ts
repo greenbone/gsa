@@ -64,7 +64,7 @@ const useEntityClone = <
       {
         onSuccess: onCloned,
         onError: onCloneError,
-        successMessage: _('{{name}} cloned successfully.', {
+        successMessage: _('{{- name}} cloned successfully.', {
           name: entity.name as string,
         }),
       },

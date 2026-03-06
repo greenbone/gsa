@@ -31,7 +31,7 @@ const useMoveToTrashCan = <
   return useGmpMutation<TInput, TOutput, TError>({
     gmpMethod,
     invalidateQueryIds,
-    successMessage: _('{{entity}} successfully moved to trashcan', {
+    successMessage: _('{{- entity}} successfully moved to trashcan', {
       entity: typeName(entityType),
     }),
     onSuccess,

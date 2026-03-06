@@ -49,7 +49,7 @@ const GroupComponent = ({
     });
 
     if (isDefined(group)) {
-      const groupTitle = _('Edit Group {{name}}', group);
+      const groupTitle = _('Edit Group {{- name}}', group);
 
       setAllUsers(usersList);
       setDialogVisible(true);

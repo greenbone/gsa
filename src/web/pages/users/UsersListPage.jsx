@@ -131,7 +131,7 @@ const UsersListPage = ({
     if (isDefined(user)) {
       setConfirmDeleteDialogVisible(true);
       setDeleteUsers([user]);
-      setTitle(_(`Confirm deletion of user {{name}}`, user));
+      setTitle(_(`Confirm deletion of user {{- name}}`, user));
     } else {
       let deleteUsers;
       if (selectionType === SelectionType.SELECTION_USER) {
