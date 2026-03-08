@@ -27,6 +27,7 @@ import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
+import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
@@ -91,6 +92,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [, setLanguage] = useLanguage();
   const gmp = useGmp();
   const dispatch = useDispatch();
+  const features = useFeatures();
 
   const {getErrorMessage, saveSetting, setErrorMessage, clearErrorMessage} =
     useSettingSave();
@@ -126,6 +128,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     () => userDefaultsSelector.getByName('reportexportfilename') ?? {},
     [userDefaultsSelector],
   );
+  const exportReportsOsi = useMemo(
+    () => userDefaultsSelector.getByName('exportreportsosi') ?? {},
+    [userDefaultsSelector],
+  );
 
   const maxRowsPerPage = userDefaultsSelector.getByName('maxrowsperpage') ?? {};
 
@@ -143,6 +149,8 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [listExportFileNameEditMode, setListExportFileNameEditMode] =
     useState(false);
   const [reportExportFileNameEditMode, setReportExportFileNameEditMode] =
+    useState(false);
+  const [exportReportsOsiEditMode, setExportReportsOsiEditMode] =
     useState(false);
   const [autoCacheRebuildEditMode, setAutoCacheRebuildEditMode] =
     useState(false);
@@ -178,6 +186,9 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [reportExportFileNameState, setReportExportFileNameState] = useState(
     reportExportFileName.value,
   );
+  const [exportReportsOsiState, setExportReportsOsiState] = useState(
+    exportReportsOsi.value,
+  );
   const [autoCacheRebuildState, setAutoCacheRebuildState] = useState(
     autoCacheRebuild.value,
   );
@@ -200,6 +211,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setDetailsExportFileNameState(detailsExportFileName.value);
     setListExportFileNameState(listExportFileName.value);
     setReportExportFileNameState(reportExportFileName.value);
+    setExportReportsOsiState(exportReportsOsi.value);
     setAutoCacheRebuildState(autoCacheRebuild.value);
   }, [
     storeTimezone,
@@ -210,6 +222,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     detailsExportFileName.value,
     listExportFileName.value,
     reportExportFileName.value,
+    exportReportsOsi.value,
     autoCacheRebuild.value,
   ]);
 
@@ -476,6 +489,36 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
 
   const handleReportExportFileNameChange = (value: string): void => {
     setReportExportFileNameState(value);
+  };
+
+  const toggleExportReportsOsiEditMode = (): void => {
+    setExportReportsOsiEditMode(!exportReportsOsiEditMode);
+  };
+
+  const saveExportReportsOsi = async (): Promise<void> => {
+    if (!exportReportsOsi?.id) {
+      setErrorMessage(
+        'exportReportsOsi',
+        _('Cannot save export report osi: missing setting ID.'),
+      );
+      return;
+    }
+    await saveSetting(
+      exportReportsOsi.id,
+      'exportReportsOsi',
+      exportReportsOsiState as string,
+      setExportReportsOsiEditMode,
+    );
+  };
+
+  const cancelExportReportsOsiEdit = (): void => {
+    setExportReportsOsiState(exportReportsOsi.value);
+    setExportReportsOsiEditMode(false);
+    clearErrorMessage('exportReportsOsi');
+  };
+
+  const handleExportReportsOsiChange = (value: string): void => {
+    setExportReportsOsiState(value);
   };
 
   const toggleAutoCacheRebuildEditMode = (): void => {
@@ -810,6 +853,29 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           onCancel={cancelReportExportFileNameEdit}
           onEdit={toggleReportExportFileNameEditMode}
           onSave={saveReportExportFileName}
+        />
+
+        <EditableSettingRow
+          disableEditIcon={disableEditIcon}
+          editComponent={
+            <Checkbox<string>
+              checked={parseYesNo(exportReportsOsiState) === YES_VALUE}
+              checkedValue={String(YES_VALUE)}
+              name="exportReportsOsi"
+              title={_('Export Reports to OPENVAS INTELLIGENCE')}
+              unCheckedValue={String(NO_VALUE)}
+              onChange={handleExportReportsOsiChange}
+            />
+          }
+          enabled={features.featureEnabled('ENABLE_OSI_EXPORT')}
+          errorMessage={getErrorMessage('exportReportsOsi')}
+          isEditMode={exportReportsOsiEditMode}
+          label={_('Export Reports to OPENVAS INTELLIGENCE')}
+          title={exportReportsOsi.comment}
+          viewComponent={<span>{getYesNoValue(exportReportsOsi.value)}</span>}
+          onCancel={cancelExportReportsOsiEdit}
+          onEdit={toggleExportReportsOsiEditMode}
+          onSave={saveExportReportsOsi}
         />
 
         <EditableSettingRow

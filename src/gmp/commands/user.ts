@@ -134,6 +134,7 @@ interface SaveSettingsArguments {
   detailsExportFileName?: string;
   listExportFileName?: string;
   reportExportFileName?: string;
+  exportReportsOsi?: string;
   dynamicSeverity?: string;
   defaultSeverity?: string;
   defaultAlert?: string;
@@ -542,6 +543,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
       [saveDefaultFilterSettingId('certbund')]: data.certBundFilter,
       [saveDefaultFilterSettingId('dfncert')]: data.dfnCertFilter,
       auto_cache_rebuild: data.autoCacheRebuild,
+      export_reports_osi: data.exportReportsOsi,
     });
   }
 
