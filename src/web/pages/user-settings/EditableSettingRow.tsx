@@ -17,6 +17,7 @@ interface EditableSettingRowProps {
   title?: string;
   label: string;
   isEditMode: boolean;
+  enabled?: boolean;
   disableEditIcon?: boolean;
   editComponent: ReactNode;
   viewComponent: ReactNode;
@@ -45,6 +46,7 @@ const EditableSettingRow = ({
   title,
   label,
   isEditMode,
+  enabled = true,
   disableEditIcon = false,
   editComponent,
   viewComponent,
@@ -54,6 +56,8 @@ const EditableSettingRow = ({
   onEdit,
 }: EditableSettingRowProps) => {
   const [_] = useTranslation();
+
+  if (!enabled) return null;
 
   return (
     <StyledTableRow title={title}>
