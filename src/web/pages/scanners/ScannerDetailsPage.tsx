@@ -3,11 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
 import type Permission from 'gmp/models/permission';
-import type Scanner from 'gmp/models/scanner';
+import {
+  type default as Scanner,
+  AGENT_CONTROLLER_SCANNER_TYPE,
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import {ScannerIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import Tab from 'web/components/tab/Tab';
@@ -26,7 +29,9 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useFeatures from 'web/hooks/useFeatures';
 import useTranslation from 'web/hooks/useTranslation';
+import ScannerAgentConfigSettings from 'web/pages/scanners/ScannerAgentConfigSettings';
 import ScannerComponent from 'web/pages/scanners/ScannerComponent';
 import ScannerDetails from 'web/pages/scanners/ScannerDetails';
 import ScannerDetailsPageToolBarIcons from 'web/pages/scanners/ScannerDetailsPageToolBarIcons';
@@ -57,6 +62,14 @@ const ScannerDetailsPage = ({
 }: ScannerDetailsPageProps) => {
   const [_] = useTranslation();
   const navigate = useNavigate();
+  const features = useFeatures();
+
+  const showAgentConfigTab =
+    entity &&
+    (entity.scannerType === AGENT_CONTROLLER_SCANNER_TYPE ||
+      entity.scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE) &&
+    features.featureEnabled('ENABLE_AGENTS');
+
   return (
     <ScannerComponent
       onCloneError={onError}
@@ -70,7 +83,7 @@ const ScannerDetailsPage = ({
       onDownloaded={onDownloaded}
       onSaved={onChanged}
       onVerified={() => {
-        onChanged && onChanged();
+        onChanged?.();
         showSuccess(_('Scanner Verified'));
       }}
       onVerifyError={onError}
@@ -118,7 +131,10 @@ const ScannerDetailsPage = ({
                       </EntitiesTab>
                       <EntitiesTab entities={permissions}>
                         {_('Permissions')}
-                      </EntitiesTab>
+                      </EntitiesTab>{' '}
+                      {showAgentConfigTab && (
+                        <Tab>{_('Agent Configuration')}</Tab>
+                      )}
                     </TabList>
                   </TabLayout>
 
@@ -142,7 +158,16 @@ const ScannerDetailsPage = ({
                           onDownloaded={onDownloaded}
                           onError={onError}
                         />
-                      </TabPanel>
+                      </TabPanel>{' '}
+                      {showAgentConfigTab && (
+                        <TabPanel>
+                          <ScannerAgentConfigSettings
+                            scanner={entity}
+                            onChanged={onChanged}
+                            onError={onError}
+                          />
+                        </TabPanel>
+                      )}
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>

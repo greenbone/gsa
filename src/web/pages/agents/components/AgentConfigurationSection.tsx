@@ -3,12 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import FormGroup from 'web/components/form/FormGroup';
 import NumberField from 'web/components/form/NumberField';
-import Select from 'web/components/form/Select';
-import TextField from 'web/components/form/TextField';
-import ComponentWithInfoTip from 'web/components/info-tip/ComponentWithInfoTip';
-import InfoTip from 'web/components/info-tip/InfoTip';
+import SchedulerCronField from 'web/components/form/SchedulerCronField';
 import Column from 'web/components/layout/Column';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
@@ -32,103 +28,12 @@ const AgentConfigurationSection = ({
   hidePort = false,
   isEdit = false,
   intervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
-  hideIntervalInSeconds: hideIntervalInSeconds = false,
+  hideIntervalInSeconds = false,
   port,
   schedulerCronExpression = DEFAULT_CRON_EXPRESSION,
   onValueChange,
 }: AgentConfigurationSectionProps) => {
   const [_] = useTranslation();
-
-  const PREDEFINED_CRON_SCHEDULES = [
-    {
-      label: _('Every hour'),
-      value: '0 * * * *',
-    },
-    {
-      label: _('Every 2 hours'),
-      value: '0 */2 * * *',
-    },
-    {
-      label: _('Every 4 hours'),
-      value: '0 */4 * * *',
-    },
-    {
-      label: _('Every 6 hours'),
-      value: '0 */6 * * *',
-    },
-    {
-      label: _('Every 8 hours'),
-      value: '0 */8 * * *',
-    },
-    {
-      label: _('Every 12 hours'),
-      value: '0 */12 * * *',
-    },
-    {
-      label: _('Daily at midnight'),
-      value: '0 0 * * *',
-    },
-    {
-      label: _('Daily at noon'),
-      value: '0 12 * * *',
-    },
-    {
-      label: _('Daily at 6 AM and 6 PM'),
-      value: '0 6,18 * * *',
-    },
-    {
-      label: _('Weekly (Sunday at midnight)'),
-      value: '0 0 * * 0',
-    },
-    {
-      label: _('Monthly (1st day at midnight)'),
-      value: '0 0 1 * *',
-    },
-    {
-      label: _('Every 2nd day at midnight and noon'),
-      value: '0 0,12 1 */2 *',
-    },
-  ];
-
-  const cronScheduleItems = [
-    ...PREDEFINED_CRON_SCHEDULES,
-    {
-      label: _('Custom cron expression'),
-      value: '__custom__',
-    },
-  ];
-
-  const isCurrentValueCustom = !PREDEFINED_CRON_SCHEDULES.some(
-    item => item.value === schedulerCronExpression,
-  );
-
-  const isActiveCronCustom = !PREDEFINED_CRON_SCHEDULES.some(
-    item => item.value === activeCronExpression,
-  );
-
-  const handleSelectChange = (value, name) => {
-    if (value === '__custom__') {
-      // When selecting custom, restore the original custom value if it exists
-      // This preserves the user's custom cron expression when switching back from predefined
-      if (!isCurrentValueCustom) {
-        // If the active/original value was custom, restore it; otherwise use empty string
-        const restoredValue = isActiveCronCustom ? activeCronExpression : '';
-        onValueChange(restoredValue, name);
-      }
-      // If already custom, do nothing - TextField will show with current value
-    } else {
-      // User selected a predefined schedule, update the value
-      onValueChange(value, name);
-    }
-  };
-
-  const cronHelp = [
-    `${_('Enter a custom cron expression.')}`,
-    `${_('Format: minute hour day month weekday')}  `,
-    `${_('Example')}: 0 0,12 1 */2 * (at midnight and noon on the 1st day of every 2nd month)`,
-    `${_('Minute')}: 0-59, ${_('Hour')}: 0-23, ${_('Day')}: 1-31, ${_('Month')}: 1-12, ${_('Weekday')}: 0-7`,
-    `* = ${_('any value')}, , = ${_('list separator')}, - = ${_('range')}, / = ${_('step values')}`,
-  ].join('\n');
 
   return (
     <Section title={_('Configuration Details')}>
@@ -148,53 +53,21 @@ const AgentConfigurationSection = ({
         )}
 
         {/* Scheduler Options */}
-        <Column gap="md">
-          <FormGroup
-            title={
-              <>
-                {_('Scheduler Options')}
-                {isEdit && (
-                  <InfoTip ariaLabel={_('More information about scheduler')}>
-                    {_(
-                      'This will set when the Agents scan the systems.\nA report is not automatically generated and needs to be set up as a "New Agent Task".',
-                    )}
-                  </InfoTip>
-                )}
-              </>
-            }
-          >
-            <Select
-              description={_(
-                "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
-              )}
-              items={cronScheduleItems}
-              name="schedulerCronExpression"
-              placeholder={_('Select a schedule')}
-              title={_('Schedule')}
-              value={
-                isCurrentValueCustom ? '__custom__' : schedulerCronExpression
-              }
-              onChange={handleSelectChange}
-            />
-          </FormGroup>
-
-          {isCurrentValueCustom && (
-            <ComponentWithInfoTip
-              dataTestId="cron-help-infotip"
-              helpAriaLabel={_('More info about cron format')}
-              helpContent={cronHelp}
-              slot={
-                <TextField
-                  name="schedulerCronExpression"
-                  placeholder="0 0,12 1 */2 *"
-                  title={_('Custom cron expression')}
-                  value={schedulerCronExpression}
-                  onChange={onValueChange}
-                />
-              }
-            />
-          )}
-        </Column>
+        <SchedulerCronField
+          activeCronExpression={activeCronExpression}
+          infoTip={
+            isEdit
+              ? _(
+                  'This will set when the Agents scan the systems.\nA report is not automatically generated and needs to be set up as a "New Agent Task".',
+                )
+              : undefined
+          }
+          infoTipAriaLabel={_('More information about scheduler')}
+          name="schedulerCronExpression"
+          title={_('Scheduler Options')}
+          value={schedulerCronExpression ?? ''}
+          onChange={value => onValueChange(value, 'schedulerCronExpression')}
+        />
 
         {/* Heartbeat Configuration */}
         {!hideIntervalInSeconds && (

@@ -7,7 +7,13 @@ import {_, _l} from 'gmp/locale/lang';
 import Credential from 'gmp/models/credential';
 import {type Date} from 'gmp/models/date';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import {parseYesNo, parseDate, type YesNo, parseInt} from 'gmp/parser';
+import {
+  parseYesNo,
+  parseDate,
+  type YesNo,
+  parseInt,
+  parseBoolean,
+} from 'gmp/parser';
 import {type ToString} from 'gmp/types';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -21,6 +27,45 @@ export type ContainerImageScannerType = typeof CONTAINER_IMAGE_SCANNER_TYPE;
 interface InfoElement {
   name?: string;
   version?: string;
+}
+
+interface AgentControlRetryElement {
+  attempts?: number;
+  delay_in_seconds?: number;
+  max_jitter_in_seconds?: number;
+}
+
+interface AgentControlElement {
+  retry?: AgentControlRetryElement;
+}
+
+interface AgentScriptExecutorElement {
+  bulk_size?: number;
+  bulk_throttle_time_in_ms?: number;
+  indexer_dir_depth?: number;
+  scheduler_cron_time?: {
+    item?: string | string[];
+  };
+}
+
+interface HeartbeatElement {
+  interval_in_seconds?: number;
+  miss_until_inactive?: number;
+}
+
+interface AgentDefaultsElement {
+  agent_control?: AgentControlElement;
+  agent_script_executor?: AgentScriptExecutorElement;
+  heartbeat?: HeartbeatElement;
+}
+
+interface AgentControlDefaultsElement {
+  update_to_latest?: YesNo;
+}
+
+interface AgentControlConfigElement {
+  agent_defaults?: AgentDefaultsElement;
+  agent_control_defaults?: AgentControlDefaultsElement;
 }
 
 interface ScannerParamElement {
@@ -63,6 +108,7 @@ export interface ScannerElement extends ModelElement {
   tasks?: {
     task?: ScannerTaskElement | ScannerTaskElement[];
   };
+  agent_control_config_defaults?: AgentControlConfigElement;
 }
 
 interface Info {
@@ -100,6 +146,43 @@ interface ScannerTask {
   usageType: 'scan' | 'audit';
 }
 
+interface AgentControlRetry {
+  attempts: number;
+  delayInSeconds: number;
+  maxJitterInSeconds: number;
+}
+
+interface AgentControl {
+  retry: AgentControlRetry;
+}
+
+interface AgentScriptExecutor {
+  bulkSize: number;
+  bulkThrottleTimeInMs: number;
+  indexerDirDepth: number;
+  schedulerCronTimes: string[];
+}
+
+interface Heartbeat {
+  intervalInSeconds: number;
+  missUntilInactive: number;
+}
+
+interface AgentDefaults {
+  agentControl: AgentControl;
+  agentScriptExecutor: AgentScriptExecutor;
+  heartbeat: Heartbeat;
+}
+
+interface AgentControlDefaults {
+  updateToLatest: boolean;
+}
+
+export interface AgentControlConfig {
+  agentDefaults: AgentDefaults;
+  agentControlDefaults: AgentControlDefaults;
+}
+
 interface ScannerProperties extends ModelProperties {
   caPub?: CaPub;
   configs?: Model[];
@@ -109,6 +192,7 @@ interface ScannerProperties extends ModelProperties {
   port?: number;
   scannerType?: ScannerType;
   tasks?: ScannerTask[];
+  agentControlConfig?: AgentControlConfig;
 }
 
 // Scanner type definitions - add new scanner types here with their display names
@@ -191,6 +275,7 @@ class Scanner extends Model {
   readonly port?: number;
   readonly scannerType?: ScannerType;
   readonly tasks: ScannerTask[];
+  readonly agentControlConfig?: AgentControlConfig;
 
   constructor({
     caPub,
@@ -201,6 +286,7 @@ class Scanner extends Model {
     port,
     scannerType,
     tasks = [],
+    agentControlConfig,
     ...properties
   }: ScannerProperties = {}) {
     super(properties);
@@ -213,6 +299,7 @@ class Scanner extends Model {
     this.port = port;
     this.scannerType = scannerType;
     this.tasks = tasks;
+    this.agentControlConfig = agentControlConfig;
   }
 
   static fromElement(element?: ScannerElement): Scanner {
@@ -273,6 +360,59 @@ class Scanner extends Model {
           default: param.default,
         })),
       };
+    }
+
+    if (isDefined(element.agent_control_config_defaults)) {
+      const {
+        agent_defaults: agentDefaults,
+        agent_control_defaults: agentControlDefaults,
+      } = element.agent_control_config_defaults;
+
+      if (isDefined(agentDefaults) || isDefined(agentControlDefaults)) {
+        const cronTimes =
+          agentDefaults?.agent_script_executor?.scheduler_cron_time?.item;
+        let schedulerCronTimes: string[] = [];
+        if (isDefined(cronTimes)) {
+          schedulerCronTimes = Array.isArray(cronTimes)
+            ? cronTimes
+            : [cronTimes];
+        }
+
+        ret.agentControlConfig = {
+          agentDefaults: {
+            agentControl: {
+              retry: {
+                attempts: agentDefaults?.agent_control?.retry?.attempts ?? 0,
+                delayInSeconds:
+                  agentDefaults?.agent_control?.retry?.delay_in_seconds ?? 0,
+                maxJitterInSeconds:
+                  agentDefaults?.agent_control?.retry?.max_jitter_in_seconds ??
+                  0,
+              },
+            },
+            agentScriptExecutor: {
+              bulkSize: agentDefaults?.agent_script_executor?.bulk_size ?? 0,
+              bulkThrottleTimeInMs:
+                agentDefaults?.agent_script_executor
+                  ?.bulk_throttle_time_in_ms ?? 0,
+              indexerDirDepth:
+                agentDefaults?.agent_script_executor?.indexer_dir_depth ?? 0,
+              schedulerCronTimes,
+            },
+            heartbeat: {
+              intervalInSeconds:
+                agentDefaults?.heartbeat?.interval_in_seconds ?? 0,
+              missUntilInactive:
+                agentDefaults?.heartbeat?.miss_until_inactive ?? 0,
+            },
+          },
+          agentControlDefaults: {
+            updateToLatest: parseBoolean(
+              agentControlDefaults?.update_to_latest,
+            ),
+          },
+        };
+      }
     }
 
     return ret;

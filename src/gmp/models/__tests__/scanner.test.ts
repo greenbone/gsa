@@ -277,4 +277,140 @@ describe('Scanner model function tests', () => {
     expect(typeof res).toBe('string');
     expect(res.length).toBeGreaterThan(0);
   });
+
+  test('should parse agent_control_config_defaults with all fields', () => {
+    const scanner = Scanner.fromElement({
+      agent_control_config_defaults: {
+        agent_defaults: {
+          agent_control: {
+            retry: {
+              attempts: 3,
+              delay_in_seconds: 10,
+              max_jitter_in_seconds: 5,
+            },
+          },
+          agent_script_executor: {
+            bulk_size: 100,
+            bulk_throttle_time_in_ms: 500,
+            indexer_dir_depth: 3,
+            scheduler_cron_time: {
+              item: ['0 0 * * *', '0 12 * * *'],
+            },
+          },
+          heartbeat: {
+            interval_in_seconds: 60,
+            miss_until_inactive: 3,
+          },
+        },
+        agent_control_defaults: {
+          update_to_latest: YES_VALUE,
+        },
+      },
+    });
+
+    expect(scanner.agentControlConfig).toBeDefined();
+    expect(scanner.agentControlConfig?.agentDefaults).toBeDefined();
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentControl.retry.attempts,
+    ).toEqual(3);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentControl.retry
+        .delayInSeconds,
+    ).toEqual(10);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentControl.retry
+        .maxJitterInSeconds,
+    ).toEqual(5);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentScriptExecutor.bulkSize,
+    ).toEqual(100);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentScriptExecutor
+        .bulkThrottleTimeInMs,
+    ).toEqual(500);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentScriptExecutor
+        .indexerDirDepth,
+    ).toEqual(3);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentScriptExecutor
+        .schedulerCronTimes,
+    ).toEqual(['0 0 * * *', '0 12 * * *']);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.heartbeat.intervalInSeconds,
+    ).toEqual(60);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.heartbeat.missUntilInactive,
+    ).toEqual(3);
+    expect(
+      scanner.agentControlConfig?.agentControlDefaults.updateToLatest,
+    ).toEqual(true);
+  });
+
+  test('should parse agent_control_config_defaults with single scheduler_cron_time', () => {
+    const scanner = Scanner.fromElement({
+      agent_control_config_defaults: {
+        agent_defaults: {
+          agent_script_executor: {
+            scheduler_cron_time: {
+              item: '0 3 * * *',
+            },
+          },
+        },
+      },
+    });
+
+    expect(scanner.agentControlConfig).toBeDefined();
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentScriptExecutor
+        .schedulerCronTimes,
+    ).toEqual(['0 3 * * *']);
+  });
+
+  test('should handle missing agent_control_config_defaults', () => {
+    const scanner = Scanner.fromElement({
+      type: AGENT_CONTROLLER_SCANNER_TYPE,
+    });
+
+    expect(scanner.agentControlConfig).toBeUndefined();
+  });
+
+  test('should handle empty agent_control_config_defaults', () => {
+    const scanner = Scanner.fromElement({
+      agent_control_config_defaults: {},
+    });
+
+    expect(scanner.agentControlConfig).toBeUndefined();
+  });
+
+  test('should use defaults for missing fields in agent_control_config_defaults', () => {
+    const scanner = Scanner.fromElement({
+      agent_control_config_defaults: {
+        agent_defaults: {
+          agent_control: {
+            retry: {},
+          },
+          agent_script_executor: {},
+          heartbeat: {},
+        },
+        agent_control_defaults: {},
+      },
+    });
+
+    expect(scanner.agentControlConfig).toBeDefined();
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentControl.retry.attempts,
+    ).toEqual(0);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentControl.retry
+        .delayInSeconds,
+    ).toEqual(0);
+    expect(
+      scanner.agentControlConfig?.agentDefaults.agentScriptExecutor
+        .schedulerCronTimes,
+    ).toEqual([]);
+    expect(
+      scanner.agentControlConfig?.agentControlDefaults.updateToLatest,
+    ).toEqual(false);
+  });
 });
