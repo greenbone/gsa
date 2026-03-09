@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
 import type Permission from 'gmp/models/permission';
 import {
   type default as Scanner,
   AGENT_CONTROLLER_SCANNER_TYPE,
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {ScannerIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -65,9 +65,10 @@ const ScannerDetailsPage = ({
   const features = useFeatures();
 
   const showAgentConfigTab =
-    entity.scannerType === AGENT_CONTROLLER_SCANNER_TYPE &&
-    features.featureEnabled('ENABLE_AGENTS') &&
-    entity.agentControlConfig !== undefined;
+    entity &&
+    (entity.scannerType === AGENT_CONTROLLER_SCANNER_TYPE ||
+      entity.scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE) &&
+    features.featureEnabled('ENABLE_AGENTS');
 
   return (
     <ScannerComponent
