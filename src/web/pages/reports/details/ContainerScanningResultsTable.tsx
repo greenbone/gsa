@@ -162,7 +162,7 @@ const getColumns = (enableEPSS = false, onToggleDetailsClick?: () => void) => [
     headerGroup: _('OCI Image'),
     render: (entity: Result) => {
       const path = entity.ociImage?.path;
-      return <>{isDefined(path) && path !== '' ? path : entity.port}</>;
+      return <>{isDefined(path) && path !== '' ? path : ''}</>;
     },
   },
   {
