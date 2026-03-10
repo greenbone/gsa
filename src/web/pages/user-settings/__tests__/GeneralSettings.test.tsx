@@ -5,8 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith, within, fireEvent} from 'web/testing';
-import GeneralSettings from 'web/pages/user-settings/GeneralSettings';
 import Features from 'gmp/capabilities/features';
+import GeneralSettings from 'web/pages/user-settings/GeneralSettings';
 
 describe('General tab', () => {
   test('displays user settings in the General tab', async () => {
