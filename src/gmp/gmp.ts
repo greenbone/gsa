@@ -46,6 +46,7 @@ import CvesCommand from 'gmp/commands/cves';
 import DashboardCommand from 'gmp/commands/dashboards';
 import DfnCertAdvisoriesCommand from 'gmp/commands/dfn-cert-advisories';
 import DfnCertAdvisoryCommand from 'gmp/commands/dfn-cert-advisory';
+import FeedKeyCommand from 'gmp/commands/feed-key';
 import FeedStatusCommand from 'gmp/commands/feed-status';
 import LoginCommand from 'gmp/commands/login';
 import NvtCommand from 'gmp/commands/nvt';
@@ -121,6 +122,7 @@ class Gmp {
   readonly dashboard: DashboardCommand;
   readonly dfncert: DfnCertAdvisoryCommand;
   readonly dfncerts: DfnCertAdvisoriesCommand;
+  readonly feedkey: FeedKeyCommand;
   readonly feedstatus: FeedStatusCommand;
   readonly nvt: NvtCommand;
   readonly nvtfamilies: NvtFamiliesCommand;
@@ -192,6 +194,7 @@ class Gmp {
     this.dashboard = new DashboardCommand(this.http);
     this.dfncert = new DfnCertAdvisoryCommand(this.http);
     this.dfncerts = new DfnCertAdvisoriesCommand(this.http);
+    this.feedkey = new FeedKeyCommand(this.http);
     this.feedstatus = new FeedStatusCommand(this.http);
     this.nvt = new NvtCommand(this.http);
     this.nvtfamilies = new NvtFamiliesCommand(this.http);
