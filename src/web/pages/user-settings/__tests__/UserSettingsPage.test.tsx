@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
+import Features from 'gmp/capabilities/features';
 import Filter from 'gmp/models/filter';
 import Setting from 'gmp/models/setting';
 import UserSettingsPage, {
@@ -14,7 +15,6 @@ import UserSettingsPage, {
 import {setTimezone} from 'web/store/usersettings/actions';
 import {USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS} from 'web/store/usersettings/defaultfilters/actions';
 import {USER_SETTINGS_DEFAULTS_LOADING_SUCCESS} from 'web/store/usersettings/defaults/actions';
-import Features from 'gmp/capabilities/features';
 
 const manualUrl = 'test/';
 
