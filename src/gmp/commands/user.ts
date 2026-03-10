@@ -543,7 +543,8 @@ class UserCommand extends EntityCommand<User, PortListElement> {
       [saveDefaultFilterSettingId('certbund')]: data.certBundFilter,
       [saveDefaultFilterSettingId('dfncert')]: data.dfnCertFilter,
       auto_cache_rebuild: data.autoCacheRebuild,
-      export_reports_openvas_intelligence: data.exportReportsOpenvasIntelligence,
+      export_reports_openvas_intelligence:
+        data.exportReportsOpenvasIntelligence,
     });
   }
 
