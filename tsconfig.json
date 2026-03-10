@@ -21,6 +21,6 @@
       "e2e/*": ["./e2e/*"]
     }
   },
-  "include": ["src", "e2e", "vitest.projects.ts"],
+  "include": ["src", "e2e", "vitest.projects.ts", "scripts"],
   "exclude": ["node_modules", "build", "coverage"]
 }
