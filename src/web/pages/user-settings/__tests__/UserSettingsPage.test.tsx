@@ -177,6 +177,13 @@ describe('UserSettingsPage', () => {
         comment: 'Auto cache rebuild comment',
       });
 
+      const exportReportsOpenvasIntelligenceSetting = Setting.fromElement({
+        _id: 'g10',
+        name: 'exportreportsopenvasintelligence',
+        value: '0',
+        comment: 'Export reports openvas intelligence',
+      });
+
       const settingsData = {
         userInterfaceDateFormat: dateFormatSetting,
         userInterfaceTimeFormat: timeFormatSetting,
@@ -187,6 +194,8 @@ describe('UserSettingsPage', () => {
         maxrowsperpage: maxRowsPerPageSetting,
         userinterfacelanguage: languageSetting,
         autocacherebuild: autoCacheRebuildSetting,
+        exportreportsopenvasintelligence:
+          exportReportsOpenvasIntelligenceSetting,
       };
 
       const gmp = createGmpMock();
@@ -254,6 +263,11 @@ describe('UserSettingsPage', () => {
 
       expect(screen.getByText('Auto Cache Rebuild')).toBeVisible();
       expect(screen.getByText('Yes')).toBeVisible();
+
+      expect(
+        screen.getByText('Export Reports to OPENVAS SECURITY INTELLIGENCE'),
+      ).toBeVisible();
+      expect(screen.getByText(/No/i)).toBeVisible();
     });
   });
 

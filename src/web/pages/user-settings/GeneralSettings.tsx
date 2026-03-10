@@ -128,8 +128,9 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     () => userDefaultsSelector.getByName('reportexportfilename') ?? {},
     [userDefaultsSelector],
   );
-  const exportReportsOsi = useMemo(
-    () => userDefaultsSelector.getByName('exportreportsosi') ?? {},
+  const exportReportsOpenvasIntelligence = useMemo(
+    () =>
+      userDefaultsSelector.getByName('exportreportsopenvasintelligence') ?? {},
     [userDefaultsSelector],
   );
 
@@ -150,8 +151,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     useState(false);
   const [reportExportFileNameEditMode, setReportExportFileNameEditMode] =
     useState(false);
-  const [exportReportsOsiEditMode, setExportReportsOsiEditMode] =
-    useState(false);
+  const [
+    exportReportsOpenvasIntelligenceEditMode,
+    setExportReportsOpenvasIntelligenceEditMode,
+  ] = useState(false);
   const [autoCacheRebuildEditMode, setAutoCacheRebuildEditMode] =
     useState(false);
   const [passwordEditMode, setPasswordEditMode] = useState(false);
@@ -186,9 +189,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [reportExportFileNameState, setReportExportFileNameState] = useState(
     reportExportFileName.value,
   );
-  const [exportReportsOsiState, setExportReportsOsiState] = useState(
-    exportReportsOsi.value,
-  );
+  const [
+    exportReportsOpenvasIntelligenceState,
+    setExportReportsOpenvasIntelligenceState,
+  ] = useState(exportReportsOpenvasIntelligence.value);
   const [autoCacheRebuildState, setAutoCacheRebuildState] = useState(
     autoCacheRebuild.value,
   );
@@ -211,7 +215,9 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setDetailsExportFileNameState(detailsExportFileName.value);
     setListExportFileNameState(listExportFileName.value);
     setReportExportFileNameState(reportExportFileName.value);
-    setExportReportsOsiState(exportReportsOsi.value);
+    setExportReportsOpenvasIntelligenceState(
+      exportReportsOpenvasIntelligence.value,
+    );
     setAutoCacheRebuildState(autoCacheRebuild.value);
   }, [
     storeTimezone,
@@ -222,7 +228,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     detailsExportFileName.value,
     listExportFileName.value,
     reportExportFileName.value,
-    exportReportsOsi.value,
+    exportReportsOpenvasIntelligence.value,
     autoCacheRebuild.value,
   ]);
 
@@ -491,34 +497,42 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setReportExportFileNameState(value);
   };
 
-  const toggleExportReportsOsiEditMode = (): void => {
-    setExportReportsOsiEditMode(!exportReportsOsiEditMode);
+  const toggleExportReportsOpenvasIntelligenceEditMode = (): void => {
+    setExportReportsOpenvasIntelligenceEditMode(
+      !exportReportsOpenvasIntelligenceEditMode,
+    );
   };
 
-  const saveExportReportsOsi = async (): Promise<void> => {
-    if (!exportReportsOsi?.id) {
+  const saveExportReportsOpenvasIntelligence = async (): Promise<void> => {
+    if (!exportReportsOpenvasIntelligence?.id) {
       setErrorMessage(
-        'exportReportsOsi',
-        _('Cannot save export report osi: missing setting ID.'),
+        'exportReportsOpenvasIntelligence',
+        _(
+          'Cannot save export report openvas intelligence: missing setting ID.',
+        ),
       );
       return;
     }
     await saveSetting(
-      exportReportsOsi.id,
-      'exportReportsOsi',
-      exportReportsOsiState as string,
-      setExportReportsOsiEditMode,
+      exportReportsOpenvasIntelligence.id,
+      'exportReportsOpenvasIntelligence',
+      exportReportsOpenvasIntelligenceState as string,
+      setExportReportsOpenvasIntelligenceEditMode,
     );
   };
 
-  const cancelExportReportsOsiEdit = (): void => {
-    setExportReportsOsiState(exportReportsOsi.value);
-    setExportReportsOsiEditMode(false);
-    clearErrorMessage('exportReportsOsi');
+  const cancelExportReportsOpenvasIntelligenceEdit = (): void => {
+    setExportReportsOpenvasIntelligenceState(
+      exportReportsOpenvasIntelligence.value,
+    );
+    setExportReportsOpenvasIntelligenceEditMode(false);
+    clearErrorMessage('exportReportsOpenvasIntelligence');
   };
 
-  const handleExportReportsOsiChange = (value: string): void => {
-    setExportReportsOsiState(value);
+  const handleExportReportsOpenvasIntelligenceChange = (
+    value: string,
+  ): void => {
+    setExportReportsOpenvasIntelligenceState(value);
   };
 
   const toggleAutoCacheRebuildEditMode = (): void => {
@@ -859,23 +873,27 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           disableEditIcon={disableEditIcon}
           editComponent={
             <Checkbox<string>
-              checked={parseYesNo(exportReportsOsiState) === YES_VALUE}
+              checked={
+                parseYesNo(exportReportsOpenvasIntelligenceState) === YES_VALUE
+              }
               checkedValue={String(YES_VALUE)}
-              name="exportReportsOsi"
-              title={_('Export Reports to OPENVAS INTELLIGENCE')}
+              name="exportReportsOpenvasIntelligence"
+              title={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
               unCheckedValue={String(NO_VALUE)}
-              onChange={handleExportReportsOsiChange}
+              onChange={handleExportReportsOpenvasIntelligenceChange}
             />
           }
           enabled={features.featureEnabled('ENABLE_OSI_EXPORT')}
-          errorMessage={getErrorMessage('exportReportsOsi')}
-          isEditMode={exportReportsOsiEditMode}
-          label={_('Export Reports to OPENVAS INTELLIGENCE')}
-          title={exportReportsOsi.comment}
-          viewComponent={<span>{getYesNoValue(exportReportsOsi.value)}</span>}
-          onCancel={cancelExportReportsOsiEdit}
-          onEdit={toggleExportReportsOsiEditMode}
-          onSave={saveExportReportsOsi}
+          errorMessage={getErrorMessage('exportReportsOpenvasIntelligence')}
+          isEditMode={exportReportsOpenvasIntelligenceEditMode}
+          label={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
+          title={exportReportsOpenvasIntelligence.comment}
+          viewComponent={
+            <span>{getYesNoValue(exportReportsOpenvasIntelligence.value)}</span>
+          }
+          onCancel={cancelExportReportsOpenvasIntelligenceEdit}
+          onEdit={toggleExportReportsOpenvasIntelligenceEditMode}
+          onSave={saveExportReportsOpenvasIntelligence}
         />
 
         <EditableSettingRow
