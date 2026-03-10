@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith, within, fireEvent} from 'web/testing';
 import GeneralSettings from 'web/pages/user-settings/GeneralSettings';
+import Features from 'gmp/capabilities/features';
 
 describe('General tab', () => {
   test('displays user settings in the General tab', async () => {
@@ -97,12 +98,14 @@ describe('General tab', () => {
     const setTimezone = tz => ({type: 'SET_TIMEZONE', timezone: tz});
     const createGmpMock = () => ({settings: {manualUrl: 'test/'}});
     const UserSettingsPage = GeneralSettings;
+    const features = new Features(['ENABLE_OSI_EXPORT']);
 
     const {render, store} = rendererWith({
       capabilities: true,
       router: true,
       gmp: createGmpMock(),
       store: true,
+      features,
     });
 
     store.dispatch(setTimezone('UTC'));
@@ -181,6 +184,7 @@ describe('General tab', () => {
       router: true,
       gmp: createGmpMock(),
       store: true,
+      features: new Features(['ENABLE_OSI_EXPORT']),
     });
     store.dispatch(setTimezone('UTC'));
     store.dispatch({

@@ -14,6 +14,7 @@ import UserSettingsPage, {
 import {setTimezone} from 'web/store/usersettings/actions';
 import {USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS} from 'web/store/usersettings/defaultfilters/actions';
 import {USER_SETTINGS_DEFAULTS_LOADING_SUCCESS} from 'web/store/usersettings/defaults/actions';
+import Features from 'gmp/capabilities/features';
 
 const manualUrl = 'test/';
 
@@ -181,7 +182,7 @@ describe('UserSettingsPage', () => {
         _id: 'g10',
         name: 'exportreportsopenvasintelligence',
         value: '0',
-        comment: 'Export reports openvas intelligence',
+        comment: 'Export reports openvas intelligence comment',
       });
 
       const settingsData = {
@@ -199,12 +200,14 @@ describe('UserSettingsPage', () => {
       };
 
       const gmp = createGmpMock();
+      const features = new Features(['ENABLE_OSI_EXPORT']);
 
       const {render, store} = rendererWith({
         capabilities: true,
         router: true,
         gmp,
         store: true,
+        features,
       });
 
       store.dispatch(setTimezone('UTC'));
