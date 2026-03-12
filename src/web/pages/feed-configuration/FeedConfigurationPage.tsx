@@ -24,45 +24,41 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import {FeedKeyProvider} from 'web/pages/feed-configuration/FeedKeyComponent';
-import FeedKeyTab from 'web/pages/feed-configuration/FeedKeyTab';
-import FeedStatusTab from 'web/pages/feed-configuration/FeedStatusTab';
+import FeedKeyTab from 'web/pages/feed-configuration/tabs/FeedKeyTab';
+import FeedStatusTab from 'web/pages/feed-configuration/tabs/FeedStatusTab';
 
-interface FeedStatusProps {
+interface FeedConfigurationPageContentProps {
   feeds: Feed[];
 }
 
-interface FeedStatusContentProps {
-  feeds: Feed[];
-}
-
-const ToolBarIcons = () => {
+const FeedConfigurationPageContent = ({
+  feeds,
+}: FeedConfigurationPageContentProps) => {
   const [_] = useTranslation();
 
-  return (
-    <IconDivider>
-      <ManualIcon
-        anchor="displaying-the-feed-configuration"
-        page="web-interface"
-        size="small"
-        title={_('Help: Feed Configuration')}
-      />
-    </IconDivider>
-  );
-};
-
-const FeedStatusContent = ({feeds}: FeedStatusContentProps) => {
-  const [_] = useTranslation();
+  const tabs = [
+    {
+      key: 'status',
+      label: _('Feed Status'),
+      panel: <FeedStatusTab feeds={feeds} />,
+    },
+    {key: 'key', label: _('Feed Key'), panel: <FeedKeyTab />},
+  ];
 
   return (
     <>
       <PageTitle title={_('Feed Configuration')} />
       <Layout flex="column">
-        <span>
-          {' '}
-          {/* span prevents Toolbar from growing */}
-          <ToolBarIcons />
-        </span>
+        <Layout align={['start', 'start']}>
+          <IconDivider>
+            <ManualIcon
+              anchor="displaying-the-feed-configuration"
+              page="web-interface"
+              size="small"
+              title={_('Help: Feed Configuration')}
+            />
+          </IconDivider>
+        </Layout>
         <Section
           img={<FeedIcon size="large" />}
           title={_('Feed Configuration')}
@@ -70,19 +66,17 @@ const FeedStatusContent = ({feeds}: FeedStatusContentProps) => {
         <TabsContainer flex="column" grow="1">
           <TabLayout align={['start', 'end']} grow="1">
             <TabList align={['start', 'stretch']}>
-              <Tab>{_('Feed Status')}</Tab>
-              <Tab>{_('Feed Key')}</Tab>
+              {tabs.map(t => (
+                <Tab key={t.key}>{t.label}</Tab>
+              ))}
             </TabList>
           </TabLayout>
 
           <Tabs>
             <TabPanels>
-              <TabPanel>
-                <FeedStatusTab feeds={feeds} />
-              </TabPanel>
-              <TabPanel>
-                <FeedKeyTab />
-              </TabPanel>
+              {tabs.map(t => (
+                <TabPanel key={t.key}>{t.panel}</TabPanel>
+              ))}
             </TabPanels>
           </Tabs>
         </TabsContainer>
@@ -91,15 +85,7 @@ const FeedStatusContent = ({feeds}: FeedStatusContentProps) => {
   );
 };
 
-const FeedStatus = ({feeds}: FeedStatusProps) => {
-  return (
-    <FeedKeyProvider>
-      <FeedStatusContent feeds={feeds} />
-    </FeedKeyProvider>
-  );
-};
-
-const FeedStatusWrapper = () => {
+const FeedConfigurationPage = () => {
   const gmp = useGmp();
   const [feeds, setFeeds] = useState<Feed[]>([]);
 
@@ -122,9 +108,9 @@ const FeedStatusWrapper = () => {
       reload={loadFeeds}
       reloadInterval={(feedsArray = feeds) => calculateSyncInterval(feedsArray)}
     >
-      {() => <FeedStatus feeds={feeds} />}
+      {() => <FeedConfigurationPageContent feeds={feeds} />}
     </Reload>
   );
 };
 
-export default FeedStatusWrapper;
+export default FeedConfigurationPage;

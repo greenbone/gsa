@@ -22,7 +22,7 @@ const log = logger.getLogger('gmp.commands.feedKey');
 
 const API_BASE_URL = 'http://127.0.0.1:9392/service/feed-key/api/v1';
 const AUTH_TOKEN =
-  'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNzczMjYxMDQ5LCJpYXQiOjE3NzMyNTc0NDl9.ShyC-0ZyTisH2dhEaJJWyXYwVYY4ofRrjXubBnY_wI8';
+  'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxODA0ODYyNDQ1LCJpYXQiOjE3NzMzMjY0NDV9.XodFlXW17yGhdwaZ1KGQD77HusTlWPnjrtKwei0Y_eQ';
 
 class FeedKeyCommand extends HttpCommand {
   constructor(http: Http) {
@@ -37,8 +37,7 @@ class FeedKeyCommand extends HttpCommand {
   async get(): Promise<GetKeyResponse> {
     log.debug('Getting feed key');
 
-    const token =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNzczMjYxMDQ5LCJpYXQiOjE3NzMyNTc0NDl9.ShyC-0ZyTisH2dhEaJJWyXYwVYY4ofRrjXubBnY_wI8';
+    const token = AUTH_TOKEN;
     const response = await fetch(`${API_BASE_URL}/key`, {
       headers: {
         Authorization: token,
