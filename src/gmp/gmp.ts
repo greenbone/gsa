@@ -194,7 +194,7 @@ class Gmp {
     this.dashboard = new DashboardCommand(this.http);
     this.dfncert = new DfnCertAdvisoryCommand(this.http);
     this.dfncerts = new DfnCertAdvisoriesCommand(this.http);
-    this.feedkey = new FeedKeyCommand(this.http);
+    this.feedkey = new FeedKeyCommand(this.http, this.settings);
     this.feedstatus = new FeedStatusCommand(this.http);
     this.nvt = new NvtCommand(this.http);
     this.nvtfamilies = new NvtFamiliesCommand(this.http);
@@ -245,14 +245,13 @@ class Gmp {
   }
 
   async login(username: string, password: string) {
-    const {token, timezone, locale, sessionTimeout} = await this._login.login(
-      username,
-      password,
-    );
+    const {token, jwt, timezone, locale, sessionTimeout} =
+      await this._login.login(username, password);
 
     this.settings.username = username;
     this.settings.timezone = timezone;
     this.settings.token = token;
+    this.settings.jwt = jwt;
     this.settings.locale = locale;
 
     return {
@@ -324,6 +323,7 @@ class Gmp {
 
   clearToken() {
     this.settings.token = undefined;
+    this.settings.jwt = undefined;
   }
 
   setLocale(lang?: string) {
