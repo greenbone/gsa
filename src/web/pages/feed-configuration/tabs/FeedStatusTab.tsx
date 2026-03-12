@@ -32,7 +32,7 @@ import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface FeedInformationTabProps {
+interface FeedStatusTabProps {
   feeds: Feed[];
 }
 
@@ -88,7 +88,7 @@ const FeedStatusDisplay = ({feed}: FeedStatusDisplayProps) => {
   return <span>{_('Current')}</span>;
 };
 
-const FeedInformationTab = ({feeds}: FeedInformationTabProps) => {
+const FeedStatusTab = ({feeds}: FeedStatusTabProps) => {
   const [_] = useTranslation();
 
   return (
@@ -198,4 +198,4 @@ const FeedInformationTab = ({feeds}: FeedInformationTabProps) => {
   );
 };
 
-export default FeedInformationTab;
+export default FeedStatusTab;
