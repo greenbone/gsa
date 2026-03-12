@@ -444,10 +444,15 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     const response = await this.action({
       cmd: 'renew_session',
     });
+
     const seconds = parseInt(response.data.message);
-    return response.setData(
-      isDefined(seconds) ? date().add(seconds, 'seconds') : undefined,
-    );
+    const timeout = isDefined(seconds) ? date.unix(seconds) : undefined;
+
+    // If backend returns a jwt in the response, include it so callers can update settings.jwt
+    // @ts-expect-error - response.data shape may vary across backends
+    const jwt: string | undefined = response.data?.jwt ?? response.data?.token;
+
+    return response.setData({timeout, jwt});
   }
 
   changePassword(oldPassword: string, newPassword: string) {

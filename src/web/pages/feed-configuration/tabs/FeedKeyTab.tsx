@@ -13,7 +13,7 @@ import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import actionFunction from 'web/entity/hooks/action-function';
-import {useDeleteKey, useGetKey} from 'web/hooks/use-query/feed-key';
+import {useDeleteKey, useGetKeyStatus} from 'web/hooks/use-query/feed-key';
 import useTranslation from 'web/hooks/useTranslation';
 import FeedKeyUploadDialog from 'web/pages/feed-configuration/FeedKeyUploadDialog';
 import Theme from 'web/utils/Theme';
@@ -27,15 +27,15 @@ const FeedKeyCard = styled(Layout)`
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
-const IconContainer = styled.div<{hasKey: boolean}>`
+const IconContainer = styled.div<{$hasKey: boolean}>`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: ${({hasKey}) => (hasKey ? Theme.lightGreen : Theme.lightGray)};
-  color: ${({hasKey}) => (hasKey ? Theme.green : Theme.mediumGray)};
+  background: ${({$hasKey}) => ($hasKey ? Theme.lightGreen : Theme.lightGray)};
+  color: ${({$hasKey}) => ($hasKey ? Theme.green : Theme.mediumGray)};
   flex-shrink: 0;
 `;
 
@@ -55,14 +55,14 @@ const Description = styled.p`
 const FeedKeyTab = () => {
   const [_] = useTranslation();
 
-  const {data: keyData, isLoading, error} = useGetKey();
+  const {data, isLoading, error} = useGetKeyStatus();
   const deleteKeyMutation = useDeleteKey();
 
   const [uploadDialogVisible, setUploadDialogVisible] = useState(false);
   const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const hasKey = Boolean(keyData) && !error;
+  const hasKey = data?.hasKey === true && !error;
 
   const handleDeleteClick = () => {
     setDeleteConfirmVisible(true);
@@ -114,7 +114,7 @@ const FeedKeyTab = () => {
             variant="danger"
             onClick={handleDeleteClick}
           >
-            {deleteKeyMutation.isPending ? _('Deleting...') : _('Delete Key')}
+            {deleteKeyMutation.isPending ? _('Deleting') : _('Delete Key')}
           </Button>
         ),
       }
@@ -139,7 +139,7 @@ const FeedKeyTab = () => {
   return (
     <>
       <FeedKeyCard align={['start', 'center']}>
-        <IconContainer hasKey={hasKey}>{feedKeyData.icon}</IconContainer>
+        <IconContainer $hasKey={hasKey}>{feedKeyData.icon}</IconContainer>
 
         <Layout grow flex="column">
           <Title>{feedKeyData.title}</Title>

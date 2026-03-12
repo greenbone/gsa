@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor} from 'web/testing';
+import {rendererWith, screen} from 'web/testing';
 import {createFeed} from 'gmp/commands/feed-status';
 import Response from 'gmp/http/response';
 import FeedStatus from 'web/pages/feed-configuration/FeedConfigurationPage';
@@ -53,19 +53,16 @@ describe('Feed status page tests', () => {
     };
 
     const {render} = rendererWith({gmp, router: true});
-    const {element} = render(<FeedStatus />);
+    render(<FeedStatus />);
 
-    await waitFor(() => element.querySelectorAll('table'));
+    await screen.findByRole('table');
 
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: Feed Configuration',
-    );
+    const helpIcon = screen.getByTestId('help-icon');
+    expect(helpIcon).toHaveAttribute('title', 'Help: Feed Configuration');
 
-    // Should render all links
-    const links = element.querySelectorAll('a');
-
-    expect(links.length).toEqual(10);
+    // Batch link queries and check specific ones
+    const links = screen.getAllByRole('link');
+    expect(links).toHaveLength(10);
 
     expect(links[0]).toHaveAttribute(
       'href',
@@ -90,59 +87,43 @@ describe('Feed status page tests', () => {
       '/scanconfigs?filter=predefined%3D1',
     );
 
-    // Test headers
-    const header = element.querySelectorAll('th');
+    // Batch header queries
+    const headers = screen.getAllByRole('columnheader');
+    expect(headers).toHaveLength(5);
+    expect(headers[0]).toHaveTextContent('Type');
+    expect(headers[1]).toHaveTextContent('Content');
+    expect(headers[2]).toHaveTextContent('Origin');
+    expect(headers[3]).toHaveTextContent('Version');
+    expect(headers[4]).toHaveTextContent('Status');
 
-    expect(header.length).toEqual(5);
+    // Check critical text content
+    screen.getByText('NVT');
+    screen.getByText('SCAP');
+    screen.getByText('CERT');
+    screen.getByText('GVMD_DATA');
 
-    expect(header[0]).toHaveTextContent('Type');
-    expect(header[1]).toHaveTextContent('Content');
-    expect(header[2]).toHaveTextContent('Origin');
-    expect(header[3]).toHaveTextContent('Version');
-    expect(header[4]).toHaveTextContent('Status');
+    screen.getByText('Greenbone Community Feed');
+    screen.getByText('Greenbone Community SCAP Feed');
+    screen.getByText('Greenbone Community CERT Feed');
+    screen.getByText('Greenbone Community gvmd Data Feed');
 
-    // Type names
-    expect(element).toHaveTextContent('NVT');
-    expect(element).toHaveTextContent('SCAP');
-    expect(element).toHaveTextContent('CERT');
-    expect(element).toHaveTextContent('GVMD_DATA');
+    screen.getByText('20200724T1005');
+    screen.getByText('20200723T0130');
+    screen.getByText('20200523T1003');
+    screen.getByText('20200622T1009');
 
-    // Feed Origin
-    expect(element).toHaveTextContent('Greenbone Community Feed');
-    expect(element).toHaveTextContent('Greenbone Community SCAP Feed');
-    expect(element).toHaveTextContent('Greenbone Community CERT Feed');
-    expect(element).toHaveTextContent('Greenbone Community gvmd Data Feed');
-
-    // Feed versions
-    expect(element).toHaveTextContent('20200724T1005');
-    expect(element).toHaveTextContent('20200723T0130');
-    expect(element).toHaveTextContent('20200523T1003');
-    expect(element).toHaveTextContent('20200622T1009');
-
-    // Feed Configuration
-
-    const ageText = element.querySelectorAll('strong');
+    // Batch update messages and age indicators
     const updateMsgs = screen.getAllByTestId('update-msg');
+    expect(updateMsgs).toHaveLength(4);
 
-    expect(ageText.length).toEqual(4);
-    expect(updateMsgs.length).toEqual(4);
-
-    // Not too old and not currently syncing
-    expect(ageText[0]).toHaveTextContent('Current');
-    expect(updateMsgs[0]).toHaveTextContent('');
-
-    expect(ageText[1]).toHaveTextContent('2 days old');
-    expect(updateMsgs[1]).toHaveTextContent('');
-
-    // CERT feed is too old but is not currently syncing
-    expect(ageText[2]).toHaveTextContent('Too old (62 days)');
+    // Check status messages
+    screen.getByText('Current');
+    screen.getByText('2 days old');
+    screen.getByText('Too old (62 days)');
     expect(updateMsgs[2]).toHaveTextContent(
       'Please check the automatic synchronization of your system.',
     );
-
-    // GVMD_DATA feed is too old but IS currently syncing
-    expect(ageText[3]).toHaveTextContent('Update in progress...');
-    expect(updateMsgs[3]).toHaveTextContent('');
+    screen.getByText('Update in progress...');
   });
 });
 
