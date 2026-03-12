@@ -7,51 +7,140 @@ import type {Components, Operations} from 'gmp/commands/feed-key-types';
 
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
+import {buildServerUrl} from 'gmp/http/utils';
 import logger from 'gmp/log';
+import type Settings from 'gmp/settings';
 
-export type KeyResponse = Components['schemas']['JsonResponse'];
-
-type GetKeyResponse =
+export type KeyResponse =
   Operations['download_key']['responses']['200']['content']['application/octet-stream'];
-type DeleteKeyResponse =
+
+export interface KeyStatusResponse {
+  hasKey: boolean;
+}
+
+export type DeleteKeyResponse =
   Operations['delete_key']['responses']['200']['content']['application/json'];
-type UploadKeyResponse =
+export type UploadKeyResponse =
   Operations['upload_key_multipart']['responses']['200']['content']['application/json'];
 
 const log = logger.getLogger('gmp.commands.feedKey');
 
-const API_BASE_URL = 'http://127.0.0.1:9392/service/feed-key/api/v1';
-const AUTH_TOKEN =
-  'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxODA0ODYyNDQ1LCJpYXQiOjE3NzMzMjY0NDV9.XodFlXW17yGhdwaZ1KGQD77HusTlWPnjrtKwei0Y_eQ';
+const API_BASE_PATH = 'service/feed-key/api/v1';
 
 class FeedKeyCommand extends HttpCommand {
-  constructor(http: Http) {
+  private readonly settings: Settings;
+  private readonly baseUrl: string;
+
+  constructor(http: Http, settings: Settings) {
     super(http);
+    this.settings = settings;
+    if (this.settings.apiServer) {
+      this.baseUrl = buildServerUrl(
+        this.settings.apiServer,
+        API_BASE_PATH,
+        this.settings.apiProtocol,
+      );
+    } else {
+      this.baseUrl = `/${API_BASE_PATH}`;
+    }
+  }
+
+  private getAuthHeaders(): HeadersInit {
+    const jwt = this.settings.jwt;
+    if (!jwt) {
+      throw new Error('Not authenticated');
+    }
+
+    return {
+      Authorization: `Bearer ${jwt}`,
+    };
+  }
+
+  private async getErrorMessage(
+    response: Response,
+    fallback: string,
+  ): Promise<string> {
+    if (typeof response.text !== 'function') {
+      try {
+        const data = await response.json();
+        return data?.message || fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    const text = await response.text();
+
+    if (!text) {
+      return fallback;
+    }
+
+    try {
+      const data = JSON.parse(text) as Components['schemas']['JsonResponse'];
+      return data.message || fallback;
+    } catch {
+      return text;
+    }
+  }
+
+  /**
+   * Get the feed key status
+   * @returns Promise resolving to {hasKey: boolean}
+   * @throws Error if the request fails
+   */
+  async getStatus(): Promise<KeyStatusResponse> {
+    log.debug('Getting feed key status');
+
+    const response = await fetch(`${this.baseUrl}/key/status`, {
+      headers: this.getAuthHeaders(),
+    });
+
+    if (response.status === 404) {
+      return {hasKey: false};
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        await this.getErrorMessage(
+          response,
+          `Request failed: ${response.status}`,
+        ),
+      );
+    }
+
+    return response.json() as Promise<KeyStatusResponse>;
   }
 
   /**
    * Get the feed key
-   * @returns Promise resolving to the key content as a string (PEM format)
-   * @throws Error if no key is found (404) or request fails
+   * @returns Promise resolving to the key response data
+   * @throws Error if the request fails
    */
-  async get(): Promise<GetKeyResponse> {
+  async get(): Promise<KeyResponse> {
     log.debug('Getting feed key');
 
-    const token = AUTH_TOKEN;
-    const response = await fetch(`${API_BASE_URL}/key`, {
-      headers: {
-        Authorization: token,
-      },
+    const response = await fetch(`${this.baseUrl}/key`, {
+      headers: this.getAuthHeaders(),
     });
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error('No key found');
-      }
-      throw new Error(`Request failed: ${response.status}`);
+    if (response.status === 404) {
+      return '';
     }
 
-    return response.text();
+    if (!response.ok) {
+      throw new Error(
+        await this.getErrorMessage(
+          response,
+          `Request failed: ${response.status}`,
+        ),
+      );
+    }
+
+    try {
+      return await response.json();
+    } catch {
+      return response.text();
+    }
   }
 
   /**
@@ -62,17 +151,15 @@ class FeedKeyCommand extends HttpCommand {
   async delete(): Promise<DeleteKeyResponse> {
     log.debug('Deleting feed key');
 
-    const token = AUTH_TOKEN;
-    const response = await fetch(`${API_BASE_URL}/key`, {
+    const response = await fetch(`${this.baseUrl}/key`, {
       method: 'DELETE',
-      headers: {
-        Authorization: token,
-      },
+      headers: this.getAuthHeaders(),
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Key deletion failed');
+      throw new Error(
+        await this.getErrorMessage(response, 'Key deletion failed'),
+      );
     }
 
     return response.json();
@@ -90,18 +177,14 @@ class FeedKeyCommand extends HttpCommand {
     const formData = new FormData();
     formData.append('file', file);
 
-    const token = AUTH_TOKEN;
-    const response = await fetch(`${API_BASE_URL}/key`, {
+    const response = await fetch(`${this.baseUrl}/key`, {
       method: 'POST',
-      headers: {
-        Authorization: token,
-      },
+      headers: this.getAuthHeaders(),
       body: formData,
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Key save failed');
+      throw new Error(await this.getErrorMessage(response, 'Key save failed'));
     }
 
     return response.json();
