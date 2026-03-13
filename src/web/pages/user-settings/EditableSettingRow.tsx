@@ -17,7 +17,6 @@ interface EditableSettingRowProps {
   title?: string;
   label: string;
   isEditMode: boolean;
-  visible?: boolean;
   disableEditIcon?: boolean;
   editComponent: ReactNode;
   viewComponent: ReactNode;
@@ -46,7 +45,6 @@ const EditableSettingRow = ({
   title,
   label,
   isEditMode,
-  visible = true,
   disableEditIcon = false,
   editComponent,
   viewComponent,
@@ -58,29 +56,27 @@ const EditableSettingRow = ({
   const [_] = useTranslation();
 
   return (
-    visible && (
-      <StyledTableRow title={title}>
-        <TableData>{label}</TableData>
-        <TableData>
-          {isEditMode ? editComponent : viewComponent}
-          {isEditMode && errorMessage && (
-            <ErrorMessage>{errorMessage}</ErrorMessage>
+    <StyledTableRow title={title}>
+      <TableData>{label}</TableData>
+      <TableData>
+        {isEditMode ? editComponent : viewComponent}
+        {isEditMode && errorMessage && (
+          <ErrorMessage>{errorMessage}</ErrorMessage>
+        )}
+      </TableData>
+      <TableData>
+        <Layout>
+          {isEditMode ? (
+            <StyledIconsRow>
+              <SaveIcon title={_('Save')} onClick={onSave} />
+              <XIcon title={_('Cancel')} onClick={onCancel} />
+            </StyledIconsRow>
+          ) : (
+            !disableEditIcon && <EditIcon title={label} onClick={onEdit} />
           )}
-        </TableData>
-        <TableData>
-          <Layout>
-            {isEditMode ? (
-              <StyledIconsRow>
-                <SaveIcon title={_('Save')} onClick={onSave} />
-                <XIcon title={_('Cancel')} onClick={onCancel} />
-              </StyledIconsRow>
-            ) : (
-              !disableEditIcon && <EditIcon title={label} onClick={onEdit} />
-            )}
-          </Layout>
-        </TableData>
-      </StyledTableRow>
-    )
+        </Layout>
+      </TableData>
+    </StyledTableRow>
   );
 };
 

@@ -869,32 +869,36 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           onSave={saveReportExportFileName}
         />
 
-        <EditableSettingRow
-          disableEditIcon={disableEditIcon}
-          editComponent={
-            <Checkbox<string>
-              checked={
-                parseYesNo(exportReportsOpenvasIntelligenceState) === YES_VALUE
-              }
-              checkedValue={String(YES_VALUE)}
-              name="exportReportsOpenvasIntelligence"
-              title={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
-              unCheckedValue={String(NO_VALUE)}
-              onChange={handleExportReportsOpenvasIntelligenceChange}
-            />
-          }
-          errorMessage={getErrorMessage('exportReportsOpenvasIntelligence')}
-          isEditMode={exportReportsOpenvasIntelligenceEditMode}
-          label={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
-          title={exportReportsOpenvasIntelligence.comment}
-          viewComponent={
-            <span>{getYesNoValue(exportReportsOpenvasIntelligence.value)}</span>
-          }
-          visible={features.featureEnabled('ENABLE_OSI_EXPORT')}
-          onCancel={cancelExportReportsOpenvasIntelligenceEdit}
-          onEdit={toggleExportReportsOpenvasIntelligenceEditMode}
-          onSave={saveExportReportsOpenvasIntelligence}
-        />
+        {features.featureEnabled('ENABLE_OSI_EXPORT') && (
+          <EditableSettingRow
+            disableEditIcon={disableEditIcon}
+            editComponent={
+              <Checkbox<string>
+                checked={
+                  parseYesNo(exportReportsOpenvasIntelligenceState) ===
+                  YES_VALUE
+                }
+                checkedValue={String(YES_VALUE)}
+                name="exportReportsOpenvasIntelligence"
+                title={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
+                unCheckedValue={String(NO_VALUE)}
+                onChange={handleExportReportsOpenvasIntelligenceChange}
+              />
+            }
+            errorMessage={getErrorMessage('exportReportsOpenvasIntelligence')}
+            isEditMode={exportReportsOpenvasIntelligenceEditMode}
+            label={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
+            title={exportReportsOpenvasIntelligence.comment}
+            viewComponent={
+              <span>
+                {getYesNoValue(exportReportsOpenvasIntelligence.value)}
+              </span>
+            }
+            onCancel={cancelExportReportsOpenvasIntelligenceEdit}
+            onEdit={toggleExportReportsOpenvasIntelligenceEditMode}
+            onSave={saveExportReportsOpenvasIntelligence}
+          />
+        )}
 
         <EditableSettingRow
           disableEditIcon={disableEditIcon}
