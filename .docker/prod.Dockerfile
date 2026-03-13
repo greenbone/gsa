@@ -3,7 +3,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 FROM debian:stable-slim AS builder
 
-ENV NODE_VERSION=node_24.x
+ENV NODE_VERSION=node_26.x
 ENV NODE_KEYRING=/usr/share/keyrings/nodesource.gpg
 
 RUN apt-get update && \
