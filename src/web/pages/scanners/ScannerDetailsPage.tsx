@@ -133,7 +133,7 @@ const ScannerDetailsPage = ({
                         {_('Permissions')}
                       </EntitiesTab>{' '}
                       {showAgentConfigTab && (
-                        <Tab>{_('Agent Configuration')}</Tab>
+                        <Tab>{_('Agent Default Configuration')}</Tab>
                       )}
                     </TabList>
                   </TabLayout>
