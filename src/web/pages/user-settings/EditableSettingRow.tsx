@@ -17,7 +17,7 @@ interface EditableSettingRowProps {
   title?: string;
   label: string;
   isEditMode: boolean;
-  enabled?: boolean;
+  visible?: boolean;
   disableEditIcon?: boolean;
   editComponent: ReactNode;
   viewComponent: ReactNode;
@@ -46,7 +46,7 @@ const EditableSettingRow = ({
   title,
   label,
   isEditMode,
-  enabled = true,
+  visible = true,
   disableEditIcon = false,
   editComponent,
   viewComponent,
@@ -57,30 +57,30 @@ const EditableSettingRow = ({
 }: EditableSettingRowProps) => {
   const [_] = useTranslation();
 
-  if (!enabled) return null;
-
   return (
-    <StyledTableRow title={title}>
-      <TableData>{label}</TableData>
-      <TableData>
-        {isEditMode ? editComponent : viewComponent}
-        {isEditMode && errorMessage && (
-          <ErrorMessage>{errorMessage}</ErrorMessage>
-        )}
-      </TableData>
-      <TableData>
-        <Layout>
-          {isEditMode ? (
-            <StyledIconsRow>
-              <SaveIcon title={_('Save')} onClick={onSave} />
-              <XIcon title={_('Cancel')} onClick={onCancel} />
-            </StyledIconsRow>
-          ) : (
-            !disableEditIcon && <EditIcon title={label} onClick={onEdit} />
+    visible && (
+      <StyledTableRow title={title}>
+        <TableData>{label}</TableData>
+        <TableData>
+          {isEditMode ? editComponent : viewComponent}
+          {isEditMode && errorMessage && (
+            <ErrorMessage>{errorMessage}</ErrorMessage>
           )}
-        </Layout>
-      </TableData>
-    </StyledTableRow>
+        </TableData>
+        <TableData>
+          <Layout>
+            {isEditMode ? (
+              <StyledIconsRow>
+                <SaveIcon title={_('Save')} onClick={onSave} />
+                <XIcon title={_('Cancel')} onClick={onCancel} />
+              </StyledIconsRow>
+            ) : (
+              !disableEditIcon && <EditIcon title={label} onClick={onEdit} />
+            )}
+          </Layout>
+        </TableData>
+      </StyledTableRow>
+    )
   );
 };
 
