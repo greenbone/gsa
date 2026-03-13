@@ -883,7 +883,6 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
               onChange={handleExportReportsOpenvasIntelligenceChange}
             />
           }
-          enabled={features.featureEnabled('ENABLE_OSI_EXPORT')}
           errorMessage={getErrorMessage('exportReportsOpenvasIntelligence')}
           isEditMode={exportReportsOpenvasIntelligenceEditMode}
           label={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
@@ -891,6 +890,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           viewComponent={
             <span>{getYesNoValue(exportReportsOpenvasIntelligence.value)}</span>
           }
+          visible={features.featureEnabled('ENABLE_OSI_EXPORT')}
           onCancel={cancelExportReportsOpenvasIntelligenceEdit}
           onEdit={toggleExportReportsOpenvasIntelligenceEditMode}
           onSave={saveExportReportsOpenvasIntelligence}
