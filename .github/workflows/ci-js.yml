@@ -23,6 +23,7 @@ jobs:
         node-version:
           - 22
           - 24
+          - 26
     steps:
       - uses: actions/checkout@v6
       - name: Set up node ${{ matrix.node-version }}
@@ -71,6 +72,7 @@ jobs:
         node-version:
           - 22
           - 24
+          - 26
     steps:
       - uses: actions/checkout@v6
       - name: Set up node ${{ matrix.node-version }}
@@ -104,6 +106,7 @@ jobs:
         node-version:
           - 22
           - 24
+          - 26
     steps:
       - uses: actions/checkout@v6
       - name: Set up node ${{ matrix.node-version }}

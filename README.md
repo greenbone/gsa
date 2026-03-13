@@ -62,7 +62,7 @@ Prerequisites for GSA:
 To install nodejs the following commands can be used
 
 ```bash
-export VERSION=22
+export VERSION=26
 export KEYRING=/usr/share/keyrings/nodesource.gpg
 
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null
