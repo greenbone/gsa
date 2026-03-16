@@ -97,6 +97,7 @@ const AgentGroupsComponent = ({
       agentIds: data.agentIds,
       comment: data.comment,
       authorized: data.authorized,
+      updateToLatest: data.updateToLatest,
       attempts: data.config?.agentControl?.retry.attempts,
       delayInSeconds: data.config?.agentControl?.retry.delayInSeconds,
       maxJitterInSeconds: data.config?.agentControl?.retry.maxJitterInSeconds,

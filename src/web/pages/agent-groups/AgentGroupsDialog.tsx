@@ -14,6 +14,8 @@ import {
 } from 'gmp/models/scanner';
 import {filter, map} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
+import Checkbox from 'web/components/form/Checkbox';
+import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
@@ -45,6 +47,7 @@ interface AgentGroupsDialogDefaultValues {
   name: string;
   network: string;
   port: number;
+  updateToLatest?: boolean;
   schedulerCronExpression?: string;
 }
 
@@ -70,18 +73,20 @@ const AgentGroupsDialog = ({
     agentGroup?.scanner?.id ?? '',
   );
 
-  const {data: scannersData} = useGetEntities<Scanner>({
-    queryId: 'get_scanners',
-    filter: AGENT_CONTROLLERS_FILTER,
-    gmpMethod: gmp.scanners.get.bind(gmp.scanners),
-  });
+  const {data: scannersData, isLoading: isLoadingScanners} =
+    useGetEntities<Scanner>({
+      queryId: 'get_scanners',
+      filter: AGENT_CONTROLLERS_FILTER,
+      gmpMethod: gmp.scanners.get.bind(gmp.scanners),
+      keepPreviousData: true,
+    });
 
   const agentControllers = renderSelectItems(
     scannersData?.entities as RenderSelectItemProps[],
   );
 
   const allAgentsFilter = Filter.fromString('first=1 rows=-1');
-  const {data: agentsData} = useGetAgents({
+  const {data: agentsData, isLoading: isLoadingAgents} = useGetAgents({
     filter: selectedAgentController ? allAgentsFilter : undefined,
     enabled: Boolean(selectedAgentController),
     authorized: true,
@@ -124,6 +129,7 @@ const AgentGroupsDialog = ({
         network: '',
         port: 0,
         schedulerCronExpression: schedulerCron,
+        updateToLatest: firstAgentFromGroup?.updateToLatest ?? false,
       }}
       title={title}
       values={{
@@ -139,6 +145,8 @@ const AgentGroupsDialog = ({
           ...values,
           authorized: firstSelected?.authorized ?? values.authorized,
           config: firstSelected?.config ?? values.config,
+          updateToLatest:
+            firstSelected?.updateToLatest ?? values.updateToLatest,
         };
 
         return onSave?.(payload);
@@ -153,7 +161,6 @@ const AgentGroupsDialog = ({
               value={state.name}
               onChange={onValueChange}
             />
-
             <TextField
               description={_('Optional')}
               name="comment"
@@ -161,8 +168,8 @@ const AgentGroupsDialog = ({
               value={state.comment}
               onChange={onValueChange}
             />
-
             <Select
+              isLoading={isLoadingScanners}
               items={agentControllers}
               label={_('Agent Controller')}
               name="agentController"
@@ -176,9 +183,9 @@ const AgentGroupsDialog = ({
                 );
               }}
             />
-
             {state.agentController && (
               <MultiSelect
+                isLoading={isLoadingAgents}
                 items={availableAgents}
                 label={_('Select Agents')}
                 name="agentIds"
@@ -188,15 +195,26 @@ const AgentGroupsDialog = ({
             )}
 
             {state.agentController && agentsData && (
-              <AgentConfigurationSection
-                hideIntervalInSeconds
-                hidePort
-                activeCronExpression={schedulerCron}
-                isEdit={Boolean(agentGroup)}
-                port={state.port}
-                schedulerCronExpression={state.schedulerCronExpression}
-                onValueChange={onValueChange}
-              />
+              <>
+                <AgentConfigurationSection
+                  hideIntervalInSeconds
+                  hidePort
+                  activeCronExpression={schedulerCron}
+                  isEdit={Boolean(agentGroup)}
+                  port={state.port}
+                  schedulerCronExpression={state.schedulerCronExpression}
+                  onValueChange={onValueChange}
+                />
+
+                <FormGroup title={_('Automatic Update Settings')}>
+                  <Checkbox
+                    checked={state.updateToLatest}
+                    name="updateToLatest"
+                    title={_('Enable automatic updates')}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+              </>
             )}
 
             {state.agentController && !agentsData && (
