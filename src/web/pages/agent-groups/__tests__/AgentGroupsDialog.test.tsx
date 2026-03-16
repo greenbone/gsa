@@ -10,6 +10,7 @@ import {
   rendererWith,
   screen,
   wait,
+  waitFor,
   within,
 } from 'web/testing';
 import Response from 'gmp/http/response';
@@ -63,6 +64,7 @@ describe('AgentGroupsDialog tests', () => {
         agentIds: [],
         network: '',
         port: 0,
+        updateToLatest: false,
       }),
     );
   });
@@ -77,6 +79,7 @@ describe('AgentGroupsDialog tests', () => {
       name: 'Agent One',
       hostname: 'host1',
       authorized: true,
+      updateToLatest: true,
       config: {
         agentScriptExecutor: {schedulerCronTimes: ['0 0 1 * *']},
         heartbeat: {intervalInSeconds: 77},
@@ -105,10 +108,14 @@ describe('AgentGroupsDialog tests', () => {
     ) as HTMLElement;
     fireEvent.click(item);
     await wait();
-    // now the MultiSelect for agents should be visible and selectable
+    // wait for agents data to load and MultiSelect to render
     const dialogContent = screen.getDialogContent();
-    const multiElements = within(dialogContent).getMultiSelectElements();
-    const multi = multiElements[0];
+    let multi: HTMLElement = document.createElement('div');
+    await waitFor(() => {
+      const multiElements = within(dialogContent).getMultiSelectElements();
+      expect(multiElements.length).toBeGreaterThan(0);
+      multi = multiElements[0];
+    });
     fireEvent.click(multi);
 
     const agentOption = await screen.findByText(/Agent One/);
@@ -122,6 +129,7 @@ describe('AgentGroupsDialog tests', () => {
         agentController: 's1',
         agentIds: ['a1'],
         authorized: true,
+        updateToLatest: true,
         config: expect.objectContaining({
           heartbeat: expect.objectContaining({intervalInSeconds: 77}),
         }),
@@ -160,11 +168,15 @@ describe('AgentGroupsDialog tests', () => {
     fireEvent.click(item);
     await wait();
 
+    // wait for agents data to load so AgentConfigurationSection renders
+    await waitFor(() => {
+      expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
+    });
+
     expect(
       screen.queryByText('Heartbeat Interval (seconds)'),
     ).not.toBeInTheDocument();
 
-    expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
     expect(screen.getByName('schedulerCronExpression')).toBeInTheDocument();
   });
 
