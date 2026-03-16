@@ -50,9 +50,7 @@ describe('Container Scanning Hosts Tab tests', () => {
     const table = screen.getByRole('table');
     // Headings - Use getAllByRole for headers that may appear more than once
     const columnHeaders = within(table).getAllByRole('columnheader');
-    expect(columnHeaders.some(th => /IP Address/i.exec(th.textContent))).toBe(
-      true,
-    );
+    expect(columnHeaders.some(th => /Image/i.exec(th.textContent))).toBe(true);
     expect(columnHeaders.some(th => /OS/i.exec(th.textContent))).toBe(true);
     // CVSSv3 shows Critical column
     expect(columnHeaders.some(th => /Critical/i.exec(th.textContent))).toBe(
@@ -79,9 +77,7 @@ describe('Container Scanning Hosts Tab tests', () => {
 
     // Row assertions by cell content, not index
     // Row with IP '123.456.78.910'
-    const firstRow = dataRows.find(row =>
-      within(row).queryByText(/123\.456\.78\.910/),
-    );
+    const firstRow = dataRows.find(row => within(row).queryByText('foo.bar'));
     expect(firstRow).toBeTruthy();
     if (firstRow) {
       const cells = within(firstRow).getAllByRole('cell');
@@ -100,7 +96,7 @@ describe('Container Scanning Hosts Tab tests', () => {
     }
 
     const secondRow = dataRows.find(row =>
-      within(row).queryByText(/109\.876\.54\.321/),
+      within(row).queryByText('lorem.ipsum'),
     );
     expect(secondRow).toBeTruthy();
     if (secondRow) {
