@@ -73,11 +73,11 @@ describe('General tab', () => {
       value: '1',
       comment: 'Auto cache rebuild comment',
     });
-    const exportReportsOpenvasIntelligenceSetting = Setting.fromElement({
+    const securityIntelligenceExportSetting = Setting.fromElement({
       _id: 'g10',
-      name: 'exportreportsopenvasintelligence',
+      name: 'securityintelligenceexport',
       value: '0',
-      comment: 'Export reports openvas intelligence',
+      comment: 'Security intelligence export comment',
     });
 
     const settingsData = {
@@ -90,7 +90,7 @@ describe('General tab', () => {
       maxrowsperpage: maxRowsPerPageSetting,
       userinterfacelanguage: languageSetting,
       autocacherebuild: autoCacheRebuildSetting,
-      exportreportsopenvasintelligence: exportReportsOpenvasIntelligenceSetting,
+      securityintelligenceexport: securityIntelligenceExportSetting,
     };
 
     const USER_SETTINGS_DEFAULTS_LOADING_SUCCESS =
@@ -445,25 +445,25 @@ describe('General tab', () => {
     expect((autoCacheInput as HTMLInputElement).checked).toBe(true);
   });
 
-  test('can edit and save Export Reports Openvas Intelligence', async () => {
+  test('can edit and save Security Intelligence Export', async () => {
     const settingsData = {
-      exportreportsopenvasintelligence: Setting.fromElement({
+      securityintelligenceexport: Setting.fromElement({
         _id: 'g10',
-        name: 'exportreportsopenvasintelligence',
+        name: 'securityintelligenceexport',
         value: '0',
-        comment: 'Export reports openvas intelligence',
+        comment: 'Security intelligence export comment',
       }),
     };
     const store = setupStore(settingsData);
     const rows = screen.getAllByRole('row');
-    const exportReportsOpenvasIntelligenceRow = rows.find(row =>
+    const securityIntelligenceExportRow = rows.find(row =>
       row.textContent?.includes(
         'Export Reports to OPENVAS SECURITY INTELLIGENCE',
       ),
     );
-    expect(exportReportsOpenvasIntelligenceRow).toBeTruthy();
+    expect(securityIntelligenceExportRow).toBeTruthy();
     const editButton = within(
-      exportReportsOpenvasIntelligenceRow as HTMLElement,
+      securityIntelligenceExportRow as HTMLElement,
     ).getByTestId('edit-icon');
     expect(editButton).toBeTruthy();
     editButton.click();
@@ -477,18 +477,18 @@ describe('General tab', () => {
     store.dispatch({
       type: USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
       data: {
-        exportreportsopenvasintelligence: Setting.fromElement({
+        securityintelligenceexport: Setting.fromElement({
           _id: 'g10',
-          name: 'exportreportsopenvasintelligence',
+          name: 'securityintelligenceexport',
           value: '1',
-          comment: 'Export reports openvas intelligence',
+          comment: 'Security intelligence export comment',
         }),
       },
     });
-    const exportReportsOpenvasIntelligenceInput =
+    const securityIntelligenceExportInput =
       await screen.findByTestId('opensight-checkbox');
-    expect(
-      (exportReportsOpenvasIntelligenceInput as HTMLInputElement).checked,
-    ).toBe(true);
+    expect((securityIntelligenceExportInput as HTMLInputElement).checked).toBe(
+      true,
+    );
   });
 });

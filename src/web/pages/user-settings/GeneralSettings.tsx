@@ -128,9 +128,8 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     () => userDefaultsSelector.getByName('reportexportfilename') ?? {},
     [userDefaultsSelector],
   );
-  const exportReportsOpenvasIntelligence = useMemo(
-    () =>
-      userDefaultsSelector.getByName('exportreportsopenvasintelligence') ?? {},
+  const securityIntelligenceExport = useMemo(
+    () => userDefaultsSelector.getByName('securityintelligenceexport') ?? {},
     [userDefaultsSelector],
   );
 
@@ -152,8 +151,8 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [reportExportFileNameEditMode, setReportExportFileNameEditMode] =
     useState(false);
   const [
-    exportReportsOpenvasIntelligenceEditMode,
-    setExportReportsOpenvasIntelligenceEditMode,
+    securityIntelligenceExportEditMode,
+    setSecurityIntelligenceExportEditMode,
   ] = useState(false);
   const [autoCacheRebuildEditMode, setAutoCacheRebuildEditMode] =
     useState(false);
@@ -189,10 +188,8 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [reportExportFileNameState, setReportExportFileNameState] = useState(
     reportExportFileName.value,
   );
-  const [
-    exportReportsOpenvasIntelligenceState,
-    setExportReportsOpenvasIntelligenceState,
-  ] = useState(exportReportsOpenvasIntelligence.value);
+  const [securityIntelligenceExportState, setSecurityIntelligenceExportState] =
+    useState(securityIntelligenceExport.value);
   const [autoCacheRebuildState, setAutoCacheRebuildState] = useState(
     autoCacheRebuild.value,
   );
@@ -215,9 +212,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setDetailsExportFileNameState(detailsExportFileName.value);
     setListExportFileNameState(listExportFileName.value);
     setReportExportFileNameState(reportExportFileName.value);
-    setExportReportsOpenvasIntelligenceState(
-      exportReportsOpenvasIntelligence.value,
-    );
+    setSecurityIntelligenceExportState(securityIntelligenceExport.value);
     setAutoCacheRebuildState(autoCacheRebuild.value);
   }, [
     storeTimezone,
@@ -228,7 +223,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     detailsExportFileName.value,
     listExportFileName.value,
     reportExportFileName.value,
-    exportReportsOpenvasIntelligence.value,
+    securityIntelligenceExport.value,
     autoCacheRebuild.value,
   ]);
 
@@ -497,42 +492,34 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setReportExportFileNameState(value);
   };
 
-  const toggleExportReportsOpenvasIntelligenceEditMode = (): void => {
-    setExportReportsOpenvasIntelligenceEditMode(
-      !exportReportsOpenvasIntelligenceEditMode,
-    );
+  const toggleSecurityIntelligenceExportEditMode = (): void => {
+    setSecurityIntelligenceExportEditMode(!securityIntelligenceExportEditMode);
   };
 
-  const saveExportReportsOpenvasIntelligence = async (): Promise<void> => {
-    if (!exportReportsOpenvasIntelligence?.id) {
+  const saveSecurityIntelligenceExport = async (): Promise<void> => {
+    if (!securityIntelligenceExport?.id) {
       setErrorMessage(
-        'exportReportsOpenvasIntelligence',
-        _(
-          'Cannot save export report openvas intelligence: missing setting ID.',
-        ),
+        'securityIntelligenceExport',
+        _('Cannot save security intelligence export: missing setting ID.'),
       );
       return;
     }
     await saveSetting(
-      exportReportsOpenvasIntelligence.id,
-      'exportReportsOpenvasIntelligence',
-      exportReportsOpenvasIntelligenceState as string,
-      setExportReportsOpenvasIntelligenceEditMode,
+      securityIntelligenceExport.id,
+      'securityIntelligenceExport',
+      securityIntelligenceExportState as string,
+      setSecurityIntelligenceExportEditMode,
     );
   };
 
-  const cancelExportReportsOpenvasIntelligenceEdit = (): void => {
-    setExportReportsOpenvasIntelligenceState(
-      exportReportsOpenvasIntelligence.value,
-    );
-    setExportReportsOpenvasIntelligenceEditMode(false);
-    clearErrorMessage('exportReportsOpenvasIntelligence');
+  const cancelSecurityIntelligenceExportEdit = (): void => {
+    setSecurityIntelligenceExportState(securityIntelligenceExport.value);
+    setSecurityIntelligenceExportEditMode(false);
+    clearErrorMessage('securityIntelligenceExport');
   };
 
-  const handleExportReportsOpenvasIntelligenceChange = (
-    value: string,
-  ): void => {
-    setExportReportsOpenvasIntelligenceState(value);
+  const handleSecurityIntelligenceExportChange = (value: string): void => {
+    setSecurityIntelligenceExportState(value);
   };
 
   const toggleAutoCacheRebuildEditMode = (): void => {
@@ -875,28 +862,25 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
             editComponent={
               <Checkbox<string>
                 checked={
-                  parseYesNo(exportReportsOpenvasIntelligenceState) ===
-                  YES_VALUE
+                  parseYesNo(securityIntelligenceExportState) === YES_VALUE
                 }
                 checkedValue={String(YES_VALUE)}
-                name="exportReportsOpenvasIntelligence"
+                name="securityIntelligenceExport"
                 title={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
                 unCheckedValue={String(NO_VALUE)}
-                onChange={handleExportReportsOpenvasIntelligenceChange}
+                onChange={handleSecurityIntelligenceExportChange}
               />
             }
-            errorMessage={getErrorMessage('exportReportsOpenvasIntelligence')}
-            isEditMode={exportReportsOpenvasIntelligenceEditMode}
+            errorMessage={getErrorMessage('securityIntelligenceExport')}
+            isEditMode={securityIntelligenceExportEditMode}
             label={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
-            title={exportReportsOpenvasIntelligence.comment}
+            title={securityIntelligenceExport.comment}
             viewComponent={
-              <span>
-                {getYesNoValue(exportReportsOpenvasIntelligence.value)}
-              </span>
+              <span>{getYesNoValue(securityIntelligenceExport.value)}</span>
             }
-            onCancel={cancelExportReportsOpenvasIntelligenceEdit}
-            onEdit={toggleExportReportsOpenvasIntelligenceEditMode}
-            onSave={saveExportReportsOpenvasIntelligence}
+            onCancel={cancelSecurityIntelligenceExportEdit}
+            onEdit={toggleSecurityIntelligenceExportEditMode}
+            onSave={saveSecurityIntelligenceExport}
           />
         )}
 
