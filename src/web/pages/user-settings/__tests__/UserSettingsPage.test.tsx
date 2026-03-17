@@ -178,11 +178,11 @@ describe('UserSettingsPage', () => {
         comment: 'Auto cache rebuild comment',
       });
 
-      const exportReportsOpenvasIntelligenceSetting = Setting.fromElement({
+      const securityIntelligenceExportSetting = Setting.fromElement({
         _id: 'g10',
-        name: 'exportreportsopenvasintelligence',
+        name: 'securityintelligenceexport',
         value: '0',
-        comment: 'Export reports openvas intelligence comment',
+        comment: 'Security intelligence export comment',
       });
 
       const settingsData = {
@@ -195,8 +195,7 @@ describe('UserSettingsPage', () => {
         maxrowsperpage: maxRowsPerPageSetting,
         userinterfacelanguage: languageSetting,
         autocacherebuild: autoCacheRebuildSetting,
-        exportreportsopenvasintelligence:
-          exportReportsOpenvasIntelligenceSetting,
+        securityintelligenceexport: securityIntelligenceExportSetting,
       };
 
       const gmp = createGmpMock();
