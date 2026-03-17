@@ -295,7 +295,11 @@ class ReportHost {
     }
 
     copy.details = hostDetails;
-    copy.id = element.ip; // use ip as id. we need an id for react key prop
+    // use ip as id. we need an id for react key prop
+    // append hostname since for container scanner ip might not be unique.
+    copy.id = isDefined(element.ip)
+      ? element.ip + (copy.hostname ? `-${copy.hostname}` : '')
+      : undefined;
     copy.ip = element.ip;
     copy.authSuccess = authSuccess;
     copy.severity = parseSeverity(element.severity);
