@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState, useCallback} from 'react';
+import {useCallback} from 'react';
 import {Loader} from '@mantine/core';
 import {Select as OpenSightSelect} from '@greenbone/ui-lib';
 import {_} from 'gmp/locale/lang';
@@ -74,14 +74,12 @@ const Select = <TValue extends string | undefined = string>({
   ...props
 }: SelectProps<TValue>) => {
   const [_] = useTranslation();
-  const [searchValue, setSearchValue] = useState('');
 
   const handleChange = useCallback(
     (newValue: string | null) => {
       if (isDefined(onChange)) {
         onChange((newValue ?? undefined) as TValue, name);
       }
-      setSearchValue('');
     },
     [name, onChange],
   );
@@ -95,7 +93,15 @@ const Select = <TValue extends string | undefined = string>({
         label: item.label,
         deprecated: item.deprecated,
       }));
-  const selectedValue = isLoading ? undefined : String(value);
+
+  let selectedValue: string | undefined;
+  if (isLoading) {
+    selectedValue = undefined;
+  } else if (isDefined(value)) {
+    selectedValue = String(value);
+  } else {
+    selectedValue = undefined;
+  }
 
   return (
     <OpenSightSelect
@@ -112,13 +118,11 @@ const Select = <TValue extends string | undefined = string>({
       renderOption={renderSelectOption}
       rightSection={rightSection}
       scrollAreaProps={scrollAreaProps}
-      searchValue={searchValue}
       searchable={searchable}
       styles={{root: {flexGrow: grow}}}
       title={toolTipTitle}
       value={selectedValue}
       onChange={handleChange}
-      onSearchChange={setSearchValue}
     />
   );
 };

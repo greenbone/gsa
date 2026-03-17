@@ -47,7 +47,7 @@ describe('TagDialog tests', () => {
     expect(screen.getByLabelText('Comment')).toHaveValue('');
     expect(screen.getByLabelText('Value')).toHaveValue('');
 
-    expect(screen.getByName('resourceType')).toHaveValue(undefined);
+    expect(screen.getByName('resourceType')).toHaveValue('');
     expect(screen.getByName('resourceIds')).toHaveValue('');
     expect(screen.getByName('resourceIdText')).toHaveValue('');
     const activeOptions = screen.getAllByName('active');
