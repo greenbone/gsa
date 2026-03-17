@@ -869,7 +869,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           onSave={saveReportExportFileName}
         />
 
-        {features.featureEnabled('ENABLE_OSI_EXPORT') && (
+        {features.featureEnabled('ENABLE_SECURITY_INTELLIGENCE_EXPORT') && (
           <EditableSettingRow
             disableEditIcon={disableEditIcon}
             editComponent={

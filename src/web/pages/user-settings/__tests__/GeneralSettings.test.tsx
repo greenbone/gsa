@@ -98,7 +98,7 @@ describe('General tab', () => {
     const setTimezone = tz => ({type: 'SET_TIMEZONE', timezone: tz});
     const createGmpMock = () => ({settings: {manualUrl: 'test/'}});
     const UserSettingsPage = GeneralSettings;
-    const features = new Features(['ENABLE_OSI_EXPORT']);
+    const features = new Features(['ENABLE_SECURITY_INTELLIGENCE_EXPORT']);
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -184,7 +184,7 @@ describe('General tab', () => {
       router: true,
       gmp: createGmpMock(),
       store: true,
-      features: new Features(['ENABLE_OSI_EXPORT']),
+      features: new Features(['ENABLE_SECURITY_INTELLIGENCE_EXPORT']),
     });
     store.dispatch(setTimezone('UTC'));
     store.dispatch({
