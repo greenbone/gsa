@@ -5,6 +5,8 @@
 
 import {_, _l} from 'gmp/locale/lang';
 import type ReportHost from 'gmp/models/report/host';
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import OsIcon from 'web/components/icon/OsIcon';
@@ -31,11 +33,15 @@ interface HeaderProps {
 
 const getColumns = (audit = false, useCVSSv3 = false) => [
   {
-    key: 'ip',
-    title: _('IP Address'),
+    key: 'hostname',
+    title: _('Image'),
     width: '10%',
-    sortBy: 'ip',
-    render: (entity: ReportHost) => <span>{entity.ip}</span>,
+    sortBy: 'hostname',
+    render: (entity: ReportHost) => (
+      <span title={entity.ip}>
+        {isDefined(entity.hostname) ? shorten(entity.hostname, 80) : entity.ip}
+      </span>
+    ),
   },
   {
     key: 'os',

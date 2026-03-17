@@ -1079,6 +1079,7 @@
   "If the scan got interrupted you can try to re-start the task.": "If the scan got interrupted you can try to re-start the task.",
   "If you enter an email address in the \"Email report to\" field, a report of the scan will be sent to this address once it is finished.": "If you enter an email address in the \"Email report to\" field, a report of the scan will be sent to this address once it is finished.",
   "Ignore Pagination": "Ignore Pagination",
+  "Image": "Image",
   "Image References": "Image References",
   "Impact": "Impact",
   "Import": "Import",

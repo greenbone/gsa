@@ -73,9 +73,7 @@ describe('ContainerScanningHostsTable', () => {
     const columnHeaders = within(table).getAllByRole('columnheader');
 
     // Check all expected columns
-    expect(columnHeaders.some(th => /IP Address/i.exec(th.textContent))).toBe(
-      true,
-    );
+    expect(columnHeaders.some(th => /Image/i.exec(th.textContent))).toBe(true);
     expect(columnHeaders.some(th => /OS/i.exec(th.textContent))).toBe(true);
     // CVSSv3 shows Critical column
     expect(columnHeaders.some(th => /Critical/i.exec(th.textContent))).toBe(
@@ -235,16 +233,16 @@ describe('ContainerScanningHostsTable', () => {
         entities={entities as unknown as Model[]}
         entitiesCounts={counts}
         filter={filter}
-        sortBy="ip"
+        sortBy="hostname"
         sortDir="asc"
         onSortChange={onSortChange}
       />,
     );
 
-    const ipHeader = screen.getByTestId('table-header-sort-by-ip');
-    await userEvent.click(ipHeader);
+    const hostnameHeader = screen.getByTestId('table-header-sort-by-hostname');
+    await userEvent.click(hostnameHeader);
 
-    expect(onSortChange).toHaveBeenCalledWith('ip');
+    expect(onSortChange).toHaveBeenCalledWith('hostname');
   });
 
   test('should render compliance columns in audit mode', () => {

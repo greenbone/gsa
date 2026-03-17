@@ -1079,6 +1079,7 @@
   "If the scan got interrupted you can try to re-start the task.": "如果扫描中断,您可以尝试重新启动任务.",
   "If you enter an email address in the \"Email report to\" field, a report of the scan will be sent to this address once it is finished.": "如果您在\"发送邮件至\"字段中输入电子邮件地址,则扫描完成后将向该地址发送扫描报告.",
   "Ignore Pagination": "忽略分页",
+  "Image": "",
   "Image References": "镜像引用",
   "Impact": "影响",
   "Import": "导入",

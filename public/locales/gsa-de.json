@@ -1079,6 +1079,7 @@
   "If the scan got interrupted you can try to re-start the task.": "Wenn der Scan unterbrochen wurde, können Sie versuchen die Aufgabe neu zu starten.",
   "If you enter an email address in the \"Email report to\" field, a report of the scan will be sent to this address once it is finished.": "Wenn Sie eine Email-Adresse in das Feld \"Email-Bericht an\" eintragen, wird ein Bericht des Scans an diese Adresse gesendet, sobald der Scan abgeschlossen ist.",
   "Ignore Pagination": "Paginierung ignorieren",
+  "Image": "Image",
   "Image References": "Image-Referenzen",
   "Impact": "Auswirkungen",
   "Import": "Importieren",
