@@ -200,7 +200,7 @@ describe('UserSettingsPage', () => {
       };
 
       const gmp = createGmpMock();
-      const features = new Features(['ENABLE_OSI_EXPORT']);
+      const features = new Features(['ENABLE_SECURITY_INTELLIGENCE_EXPORT']);
 
       const {render, store} = rendererWith({
         capabilities: true,

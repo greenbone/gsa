@@ -12,7 +12,7 @@ export type Feature =
   | 'ENABLE_AGENTS'
   | 'ENABLE_CONTAINER_SCANNING'
   | 'ENABLE_CREDENTIAL_STORES'
-  | 'ENABLE_OSI_EXPORT';
+  | 'ENABLE_SECURITY_INTELLIGENCE_EXPORT';
 
 class Features {
   private readonly _features: Set<Feature>;
