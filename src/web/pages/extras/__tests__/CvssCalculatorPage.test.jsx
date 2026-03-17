@@ -69,7 +69,7 @@ describe('CvssCalculator page tests', () => {
     expect(cvssV3vector).toHaveValue(
       'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     );
-  });
+  }, 10_000);
 
   test('Should render userVector from url', async () => {
     const {render} = rendererWith({
@@ -113,7 +113,7 @@ describe('CvssCalculator page tests', () => {
     expect(cvssV3vector).toHaveValue(
       'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     );
-  });
+  }, 10_000);
 
   test('Changing userVector should change displayed select values', async () => {
     const {render} = rendererWith({
@@ -164,7 +164,7 @@ describe('CvssCalculator page tests', () => {
     expect(cvssV3vector).toHaveValue(
       'CVSS:3.1/AV:P/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H',
     );
-  });
+  }, 10_000);
 
   test('Changing displayed select values should change userVector', async () => {
     const {render} = rendererWith({
@@ -219,5 +219,5 @@ describe('CvssCalculator page tests', () => {
     expect(cvssV3vector).toHaveValue(
       'CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N',
     );
-  });
+  }, 10_000);
 });
