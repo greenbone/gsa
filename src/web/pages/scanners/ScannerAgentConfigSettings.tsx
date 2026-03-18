@@ -30,19 +30,145 @@ type FormValue = number | string | string[] | boolean;
 
 interface ConfigFieldDefinition {
   key: string;
-  errorKey: string;
   label: string;
   title: string;
-  defaultValue: FormValue;
-  getValue: (
-    scanner: Scanner,
-  ) => number | string | boolean | string[] | undefined;
+  getValue: (scanner: Scanner) => FormValue;
   renderEdit: (
     value: FormValue,
     onChange: (value: FormValue) => void,
+    activeCronExpression?: string,
   ) => ReactNode;
   renderView: (value: FormValue) => ReactNode;
 }
+
+interface EditableConfigFieldProps {
+  field: ConfigFieldDefinition;
+  activeCronExpression?: string;
+  fieldValue: FormValue;
+  editValue: FormValue | undefined;
+  isEditMode: boolean;
+  errorMessage?: string;
+  onEdit: (value: FormValue) => void;
+  onCancel: () => void;
+  onSave: () => Promise<void>;
+  onChangeValue: (value: FormValue) => void;
+}
+
+const getScannerPayload = (scanner: Scanner) => {
+  const agentDefaults = scanner.agentControlConfig?.agentDefaults;
+  const agentControlDefaults = scanner.agentControlConfig?.agentControlDefaults;
+  const cronTimes = agentDefaults?.agentScriptExecutor.schedulerCronTimes;
+  const firstCronTime =
+    Array.isArray(cronTimes) && cronTimes.length > 0 ? cronTimes[0] : undefined;
+
+  return {
+    attempts: agentDefaults?.agentControl.retry.attempts ?? 0,
+    delayInSeconds: agentDefaults?.agentControl.retry.delayInSeconds ?? 0,
+    maxJitterInSeconds:
+      agentDefaults?.agentControl.retry.maxJitterInSeconds ?? 0,
+    bulkSize: agentDefaults?.agentScriptExecutor.bulkSize ?? 0,
+    bulkThrottleTimeInMs:
+      agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs ?? 0,
+    indexerDirDepth: agentDefaults?.agentScriptExecutor.indexerDirDepth ?? 0,
+    schedulerCronTimes: firstCronTime ? [firstCronTime] : [],
+    intervalInSeconds: agentDefaults?.heartbeat.intervalInSeconds ?? 0,
+    missUntilInactive: agentDefaults?.heartbeat.missUntilInactive ?? 0,
+    updateToLatest: agentControlDefaults?.updateToLatest ?? false,
+  };
+};
+
+const renderNumberField = (
+  key: string,
+  min: number,
+  value: FormValue,
+  onChange: (value: FormValue) => void,
+) => (
+  <NumberField
+    min={min}
+    name={key}
+    type="int"
+    value={value as number}
+    onChange={onChange as (value: number) => void}
+  />
+);
+
+const renderCronField = (
+  activeCronExpression: string,
+  value: FormValue,
+  onChange: (value: FormValue) => void,
+) => {
+  const cronValue = Array.isArray(value) ? (value[0] ?? '') : (value as string);
+  const handleChange = (newValue: string) => {
+    // Store as array with single value
+    onChange([newValue]);
+  };
+  return (
+    <SchedulerCronField
+      activeCronExpression={activeCronExpression}
+      name="schedulerCronTimes"
+      title=""
+      value={cronValue}
+      onChange={handleChange}
+    />
+  );
+};
+
+const renderRadioField = (
+  value: FormValue,
+  onChange: (value: FormValue) => void,
+) => (
+  <Row gap="md">
+    <Radio
+      checked={value === true}
+      name="updateToLatest"
+      title="Yes"
+      value={true}
+      onChange={() => onChange(true)}
+    />
+    <Radio
+      checked={value === false}
+      name="updateToLatest"
+      title="No"
+      value={false}
+      onChange={() => onChange(false)}
+    />
+  </Row>
+);
+
+const EditableConfigField = ({
+  field,
+  activeCronExpression = '',
+  fieldValue,
+  editValue,
+  isEditMode,
+  errorMessage,
+  onEdit,
+  onCancel,
+  onSave,
+  onChangeValue,
+}: EditableConfigFieldProps) => {
+  const displayValue = isEditMode ? (editValue ?? fieldValue) : fieldValue;
+
+  const editComponent = field.renderEdit(
+    displayValue,
+    onChangeValue,
+    activeCronExpression,
+  );
+
+  return (
+    <EditableSettingRow
+      editComponent={editComponent}
+      errorMessage={errorMessage}
+      isEditMode={isEditMode}
+      label={field.label}
+      title={field.title}
+      viewComponent={field.renderView(fieldValue)}
+      onCancel={onCancel}
+      onEdit={() => onEdit(fieldValue)}
+      onSave={onSave}
+    />
+  );
+};
 
 const ScannerAgentConfigSettings = ({
   scanner,
@@ -59,33 +185,26 @@ const ScannerAgentConfigSettings = ({
 
   const agentDefaults = scanner.agentControlConfig?.agentDefaults;
   const agentControlDefaults = scanner.agentControlConfig?.agentControlDefaults;
-  const activeCronExpressions =
-    agentDefaults?.agentScriptExecutor.schedulerCronTimes ?? [];
-  const activeCronExpression = activeCronExpressions[0] ?? '';
+  const activeCronExpression =
+    agentDefaults?.agentScriptExecutor.schedulerCronTimes?.[0] ?? '';
 
-  const [formValues, setFormValues] = useState({
-    attempts: agentDefaults?.agentControl.retry.attempts ?? 0,
-    delayInSeconds: agentDefaults?.agentControl.retry.delayInSeconds ?? 0,
-    maxJitterInSeconds:
-      agentDefaults?.agentControl.retry.maxJitterInSeconds ?? 0,
-    bulkSize: agentDefaults?.agentScriptExecutor.bulkSize ?? 0,
-    bulkThrottleTimeInMs:
-      agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs ?? 0,
-    indexerDirDepth: agentDefaults?.agentScriptExecutor.indexerDirDepth ?? 0,
-    schedulerCronTimes:
-      agentDefaults?.agentScriptExecutor.schedulerCronTimes ?? [],
-    intervalInSeconds: agentDefaults?.heartbeat.intervalInSeconds ?? 0,
-    missUntilInactive: agentDefaults?.heartbeat.missUntilInactive ?? 0,
-    updateToLatest: agentControlDefaults?.updateToLatest ?? false,
-  });
-
+  // Persistent state for field values (synced with scanner prop via useEffect)
+  const [fieldValues, setFieldValues] = useState<Record<string, FormValue>>({});
+  const [editValues, setEditValues] = useState<Record<string, FormValue>>({});
   const [editModes, setEditModes] = useState<Record<string, boolean>>({});
   const [errorMessages, setErrorMessages] = useState<Record<string, string>>(
     {},
   );
 
+  // Sync field values with scanner prop when it changes
   useEffect(() => {
-    setFormValues({
+    const cronTimes = agentDefaults?.agentScriptExecutor.schedulerCronTimes;
+    const firstCronTime =
+      Array.isArray(cronTimes) && cronTimes.length > 0
+        ? cronTimes[0]
+        : undefined;
+
+    setFieldValues({
       attempts: agentDefaults?.agentControl.retry.attempts ?? 0,
       delayInSeconds: agentDefaults?.agentControl.retry.delayInSeconds ?? 0,
       maxJitterInSeconds:
@@ -94,114 +213,77 @@ const ScannerAgentConfigSettings = ({
       bulkThrottleTimeInMs:
         agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs ?? 0,
       indexerDirDepth: agentDefaults?.agentScriptExecutor.indexerDirDepth ?? 0,
-      schedulerCronTimes:
-        agentDefaults?.agentScriptExecutor.schedulerCronTimes ?? [],
+      schedulerCronTimes: firstCronTime ? [firstCronTime] : [],
       intervalInSeconds: agentDefaults?.heartbeat.intervalInSeconds ?? 0,
       missUntilInactive: agentDefaults?.heartbeat.missUntilInactive ?? 0,
       updateToLatest: agentControlDefaults?.updateToLatest ?? false,
     });
-  }, [agentDefaults, agentControlDefaults]);
+  }, [
+    agentDefaults?.agentControl.retry.attempts,
+    agentDefaults?.agentControl.retry.delayInSeconds,
+    agentDefaults?.agentControl.retry.maxJitterInSeconds,
+    agentDefaults?.agentScriptExecutor.bulkSize,
+    agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs,
+    agentDefaults?.agentScriptExecutor.indexerDirDepth,
+    agentDefaults?.agentScriptExecutor.schedulerCronTimes,
+    agentDefaults?.heartbeat.intervalInSeconds,
+    agentDefaults?.heartbeat.missUntilInactive,
+    agentControlDefaults?.updateToLatest,
+  ]);
 
-  const updateField = (key: string, value: FormValue) => {
-    setFormValues(prev => ({...prev, [key]: value}));
+  const setEditValue = (key: string, value: FormValue) => {
+    setEditValues(prev => ({...prev, [key]: value}));
   };
 
-  const setError = (field: string, message: string) => {
-    setErrorMessages(prev => ({...prev, [field]: message}));
+  const handleEdit = (key: string, currentValue: FormValue) => {
+    setEditValue(key, currentValue);
+    setEditModes(prev => ({...prev, [key]: true}));
   };
 
-  const clearError = (field: string) => {
-    setErrorMessages(prev => ({...prev, [field]: ''}));
-  };
-
-  const setEditMode = (key: string, value: boolean) => {
-    setEditModes(prev => ({...prev, [key]: value}));
+  const handleCancel = (key: string) => {
+    setEditValues(prev => {
+      const next = {...prev};
+      delete next[key];
+      return next;
+    });
+    setEditModes(prev => ({...prev, [key]: false}));
+    setErrorMessages(prev => ({...prev, [key]: ''}));
   };
 
   const handleSave = async (key: string) => {
     if (!scanner.id) {
-      setError(key, _('Cannot save: scanner ID is missing.'));
+      setErrorMessages(prev => ({
+        ...prev,
+        [key]: _('Cannot save: scanner ID is missing.'),
+      }));
       return;
     }
+
+    const payload = getScannerPayload(scanner);
+    const editedValue = editValues[key];
+    const updateToLatest =
+      key === 'updateToLatest' ? editedValue : payload.updateToLatest;
 
     try {
       await modifyAgentControlConfig({
         id: scanner.id,
-        ...formValues,
-        updateToLatest: formValues.updateToLatest ? 1 : 0,
+        ...payload,
+        [key]: editedValue,
+        updateToLatest: updateToLatest ? 1 : 0,
       });
-      setEditMode(key, false);
-      clearError(key);
+      // Update field state with the saved value
+      if (editedValue !== undefined) {
+        setFieldValues(prev => ({...prev, [key]: editedValue}));
+      }
+      handleCancel(key);
     } catch (error) {
       const message =
         error instanceof Error
           ? error.message
           : _('An error occurred while saving the setting, please try again.');
-      setError(key, message);
+      setErrorMessages(prev => ({...prev, [key]: message}));
     }
   };
-
-  const handleCancel = (key: string, defaultValue: FormValue) => {
-    updateField(key, defaultValue);
-    setEditMode(key, false);
-    clearError(key);
-  };
-
-  const renderNumberField =
-    (key: string, min: number = 0) =>
-    (value: FormValue, onChange: (value: FormValue) => void) => (
-      <NumberField
-        min={min}
-        name={key}
-        type="int"
-        value={value as number}
-        onChange={onChange as (value: number) => void}
-      />
-    );
-
-  const renderCronField = (
-    value: FormValue,
-    onChange: (value: FormValue) => void,
-  ) => {
-    const cronValue = Array.isArray(value)
-      ? (value[0] ?? '')
-      : (value as string);
-    const handleChange = (newValue: string) => {
-      // Store as array with single value
-      onChange([newValue]);
-    };
-    return (
-      <SchedulerCronField
-        activeCronExpression={activeCronExpression}
-        name="schedulerCronTimes"
-        title={_('Schedule')}
-        value={cronValue}
-        onChange={handleChange}
-      />
-    );
-  };
-
-  const renderRadioField = (
-    value: FormValue,
-    onChange: (value: FormValue) => void,
-  ) => (
-    <Row gap="md">
-      <Radio
-        checked={value === true}
-        name="updateToLatest"
-        title={_('Yes')}
-        value={true}
-        onChange={() => onChange(true)}
-      />
-      <Radio
-        checked={value === false}
-        name="updateToLatest"
-        title={_('No')}
-        value={false}
-        onChange={() => onChange(false)}
-      />
-    </Row>
-  );
 
   const sections: Array<{
     title: string;
@@ -212,38 +294,35 @@ const ScannerAgentConfigSettings = ({
       fields: [
         {
           key: 'attempts',
-          errorKey: 'attempts',
           label: _('Retry Attempts'),
           title: _('Number of retry attempts'),
-          defaultValue: agentDefaults?.agentControl.retry.attempts ?? 0,
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentDefaults?.agentControl.retry.attempts,
-          renderEdit: renderNumberField('attempts'),
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentDefaults?.agentControl.retry
+              .attempts ?? 0,
+          renderEdit: (value, onChange) =>
+            renderNumberField('attempts', 0, value, onChange),
           renderView: val => <Layout>{val}</Layout>,
         },
         {
           key: 'delayInSeconds',
-          errorKey: 'delay',
           label: _('Retry Delay (seconds)'),
           title: _('Delay between retries in seconds'),
-          defaultValue: agentDefaults?.agentControl.retry.delayInSeconds ?? 0,
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentDefaults?.agentControl.retry
-              .delayInSeconds,
-          renderEdit: renderNumberField('delayInSeconds'),
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentDefaults?.agentControl.retry
+              .delayInSeconds ?? 0,
+          renderEdit: (value, onChange) =>
+            renderNumberField('delayInSeconds', 0, value, onChange),
           renderView: val => <Layout>{val}</Layout>,
         },
         {
           key: 'maxJitterInSeconds',
-          errorKey: 'jitter',
           label: _('Max Jitter (seconds)'),
           title: _('Maximum jitter in seconds for retry delays'),
-          defaultValue:
-            agentDefaults?.agentControl.retry.maxJitterInSeconds ?? 0,
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentDefaults?.agentControl.retry
-              .maxJitterInSeconds,
-          renderEdit: renderNumberField('maxJitterInSeconds'),
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentDefaults?.agentControl.retry
+              .maxJitterInSeconds ?? 0,
+          renderEdit: (value, onChange) =>
+            renderNumberField('maxJitterInSeconds', 0, value, onChange),
           renderView: val => <Layout>{val}</Layout>,
         },
       ],
@@ -253,51 +332,46 @@ const ScannerAgentConfigSettings = ({
       fields: [
         {
           key: 'bulkSize',
-          errorKey: 'bulkSize',
           label: _('Bulk Size'),
           title: _('Bulk operation size'),
-          defaultValue: agentDefaults?.agentScriptExecutor.bulkSize ?? 0,
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentDefaults?.agentScriptExecutor.bulkSize,
-          renderEdit: renderNumberField('bulkSize'),
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentDefaults?.agentScriptExecutor
+              .bulkSize ?? 0,
+          renderEdit: (value, onChange) =>
+            renderNumberField('bulkSize', 0, value, onChange),
           renderView: val => <Layout>{val}</Layout>,
         },
         {
           key: 'bulkThrottleTimeInMs',
-          errorKey: 'bulkThrottle',
           label: _('Bulk Throttle Time (ms)'),
           title: _('Bulk operation throttle time in milliseconds'),
-          defaultValue:
-            agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs ?? 0,
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentDefaults?.agentScriptExecutor
-              .bulkThrottleTimeInMs,
-          renderEdit: renderNumberField('bulkThrottleTimeInMs'),
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentDefaults?.agentScriptExecutor
+              .bulkThrottleTimeInMs ?? 0,
+          renderEdit: (value, onChange) =>
+            renderNumberField('bulkThrottleTimeInMs', 0, value, onChange),
           renderView: val => <Layout>{val}</Layout>,
         },
         {
           key: 'indexerDirDepth',
-          errorKey: 'indexerDirDepth',
           label: _('Indexer Directory Depth'),
           title: _('Directory depth for indexer'),
-          defaultValue: agentDefaults?.agentScriptExecutor.indexerDirDepth ?? 0,
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentDefaults?.agentScriptExecutor
-              .indexerDirDepth,
-          renderEdit: renderNumberField('indexerDirDepth'),
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentDefaults?.agentScriptExecutor
+              .indexerDirDepth ?? 0,
+          renderEdit: (value, onChange) =>
+            renderNumberField('indexerDirDepth', 0, value, onChange),
           renderView: val => <Layout>{val}</Layout>,
         },
         {
           key: 'schedulerCronTimes',
-          errorKey: 'schedulerCron',
           label: _('Scheduler Cron Time'),
           title: _('Cron expression for scheduler'),
-          defaultValue:
-            agentDefaults?.agentScriptExecutor.schedulerCronTimes ?? [],
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentDefaults?.agentScriptExecutor
-              .schedulerCronTimes,
-          renderEdit: renderCronField,
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentDefaults?.agentScriptExecutor
+              .schedulerCronTimes ?? [],
+          renderEdit: (value, onChange, cronExpr = '') =>
+            renderCronField(cronExpr, value, onChange),
           renderView: val => {
             const displayValue = Array.isArray(val)
               ? val.join(', ') || _('Not set')
@@ -312,24 +386,24 @@ const ScannerAgentConfigSettings = ({
       fields: [
         {
           key: 'intervalInSeconds',
-          errorKey: 'interval',
           label: _('Interval (seconds)'),
           title: _('Heartbeat interval in seconds'),
-          defaultValue: agentDefaults?.heartbeat.intervalInSeconds ?? 0,
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentDefaults?.heartbeat.intervalInSeconds,
-          renderEdit: renderNumberField('intervalInSeconds', 1),
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentDefaults?.heartbeat
+              .intervalInSeconds ?? 0,
+          renderEdit: (value, onChange) =>
+            renderNumberField('intervalInSeconds', 1, value, onChange),
           renderView: val => <Layout>{val}</Layout>,
         },
         {
           key: 'missUntilInactive',
-          errorKey: 'missUntilInactive',
           label: _('Miss Until Inactive'),
           title: _('Number of missed heartbeats until inactive'),
-          defaultValue: agentDefaults?.heartbeat.missUntilInactive ?? 0,
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentDefaults?.heartbeat.missUntilInactive,
-          renderEdit: renderNumberField('missUntilInactive'),
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentDefaults?.heartbeat
+              .missUntilInactive ?? 0,
+          renderEdit: (value, onChange) =>
+            renderNumberField('missUntilInactive', 0, value, onChange),
           renderView: val => <Layout>{val}</Layout>,
         },
       ],
@@ -339,13 +413,12 @@ const ScannerAgentConfigSettings = ({
       fields: [
         {
           key: 'updateToLatest',
-          errorKey: 'updateToLatest',
           label: _('Update to Latest'),
           title: _('Automatically update agents to latest version'),
-          defaultValue: agentControlDefaults?.updateToLatest ?? false,
-          getValue: (s: Scanner) =>
-            s.agentControlConfig?.agentControlDefaults?.updateToLatest,
-          renderEdit: renderRadioField,
+          getValue: (scanner: Scanner) =>
+            scanner.agentControlConfig?.agentControlDefaults?.updateToLatest ??
+            false,
+          renderEdit: (value, onChange) => renderRadioField(value, onChange),
           renderView: val => (
             <Layout>{val === true ? _('Yes') : _('No')}</Layout>
           ),
@@ -372,21 +445,17 @@ const ScannerAgentConfigSettings = ({
           </TableHeader>
           <TableBody>
             {section.fields.map(field => (
-              <EditableSettingRow
+              <EditableConfigField
                 key={field.key}
-                editComponent={field.renderEdit(
-                  formValues[field.key as keyof typeof formValues],
-                  (value: FormValue) => updateField(field.key, value),
-                )}
-                errorMessage={errorMessages[field.errorKey]}
-                isEditMode={editModes[field.key] || false}
-                label={field.label}
-                title={field.title}
-                viewComponent={field.renderView(
-                  formValues[field.key as keyof typeof formValues],
-                )}
-                onCancel={() => handleCancel(field.key, field.defaultValue)}
-                onEdit={() => setEditMode(field.key, true)}
+                activeCronExpression={activeCronExpression}
+                editValue={editValues[field.key]}
+                errorMessage={errorMessages[field.key]}
+                field={field}
+                fieldValue={fieldValues[field.key] ?? field.getValue(scanner)}
+                isEditMode={editModes[field.key] ?? false}
+                onCancel={() => handleCancel(field.key)}
+                onChangeValue={value => setEditValue(field.key, value)}
+                onEdit={value => handleEdit(field.key, value)}
                 onSave={() => handleSave(field.key)}
               />
             ))}
