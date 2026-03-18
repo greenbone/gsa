@@ -11,7 +11,8 @@ export type Feature =
   | 'ENABLE_OPENVASD'
   | 'ENABLE_AGENTS'
   | 'ENABLE_CONTAINER_SCANNING'
-  | 'ENABLE_CREDENTIAL_STORES';
+  | 'ENABLE_CREDENTIAL_STORES'
+  | 'ENABLE_SECURITY_INTELLIGENCE_EXPORT';
 
 class Features {
   private readonly _features: Set<Feature>;

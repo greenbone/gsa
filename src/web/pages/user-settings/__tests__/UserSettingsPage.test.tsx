@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
+import Features from 'gmp/capabilities/features';
 import Filter from 'gmp/models/filter';
 import Setting from 'gmp/models/setting';
 import UserSettingsPage, {
@@ -177,6 +178,13 @@ describe('UserSettingsPage', () => {
         comment: 'Auto cache rebuild comment',
       });
 
+      const securityIntelligenceExportSetting = Setting.fromElement({
+        _id: 'g10',
+        name: 'securityintelligenceexport',
+        value: '0',
+        comment: 'Security intelligence export comment',
+      });
+
       const settingsData = {
         userInterfaceDateFormat: dateFormatSetting,
         userInterfaceTimeFormat: timeFormatSetting,
@@ -187,15 +195,18 @@ describe('UserSettingsPage', () => {
         maxrowsperpage: maxRowsPerPageSetting,
         userinterfacelanguage: languageSetting,
         autocacherebuild: autoCacheRebuildSetting,
+        securityintelligenceexport: securityIntelligenceExportSetting,
       };
 
       const gmp = createGmpMock();
+      const features = new Features(['ENABLE_SECURITY_INTELLIGENCE_EXPORT']);
 
       const {render, store} = rendererWith({
         capabilities: true,
         router: true,
         gmp,
         store: true,
+        features,
       });
 
       store.dispatch(setTimezone('UTC'));
@@ -254,6 +265,11 @@ describe('UserSettingsPage', () => {
 
       expect(screen.getByText('Auto Cache Rebuild')).toBeVisible();
       expect(screen.getByText('Yes')).toBeVisible();
+
+      expect(
+        screen.getByText('Export Reports to OPENVAS SECURITY INTELLIGENCE'),
+      ).toBeVisible();
+      expect(screen.getByText(/No/i)).toBeVisible();
     });
   });
 

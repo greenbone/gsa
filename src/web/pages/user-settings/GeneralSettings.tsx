@@ -27,6 +27,7 @@ import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
+import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
@@ -91,6 +92,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [, setLanguage] = useLanguage();
   const gmp = useGmp();
   const dispatch = useDispatch();
+  const features = useFeatures();
 
   const {getErrorMessage, saveSetting, setErrorMessage, clearErrorMessage} =
     useSettingSave();
@@ -126,6 +128,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     () => userDefaultsSelector.getByName('reportexportfilename') ?? {},
     [userDefaultsSelector],
   );
+  const securityIntelligenceExport = useMemo(
+    () => userDefaultsSelector.getByName('securityintelligenceexport') ?? {},
+    [userDefaultsSelector],
+  );
 
   const maxRowsPerPage = userDefaultsSelector.getByName('maxrowsperpage') ?? {};
 
@@ -144,6 +150,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     useState(false);
   const [reportExportFileNameEditMode, setReportExportFileNameEditMode] =
     useState(false);
+  const [
+    securityIntelligenceExportEditMode,
+    setSecurityIntelligenceExportEditMode,
+  ] = useState(false);
   const [autoCacheRebuildEditMode, setAutoCacheRebuildEditMode] =
     useState(false);
   const [passwordEditMode, setPasswordEditMode] = useState(false);
@@ -178,6 +188,8 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [reportExportFileNameState, setReportExportFileNameState] = useState(
     reportExportFileName.value,
   );
+  const [securityIntelligenceExportState, setSecurityIntelligenceExportState] =
+    useState(securityIntelligenceExport.value);
   const [autoCacheRebuildState, setAutoCacheRebuildState] = useState(
     autoCacheRebuild.value,
   );
@@ -200,6 +212,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setDetailsExportFileNameState(detailsExportFileName.value);
     setListExportFileNameState(listExportFileName.value);
     setReportExportFileNameState(reportExportFileName.value);
+    setSecurityIntelligenceExportState(securityIntelligenceExport.value);
     setAutoCacheRebuildState(autoCacheRebuild.value);
   }, [
     storeTimezone,
@@ -210,6 +223,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     detailsExportFileName.value,
     listExportFileName.value,
     reportExportFileName.value,
+    securityIntelligenceExport.value,
     autoCacheRebuild.value,
   ]);
 
@@ -476,6 +490,36 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
 
   const handleReportExportFileNameChange = (value: string): void => {
     setReportExportFileNameState(value);
+  };
+
+  const toggleSecurityIntelligenceExportEditMode = (): void => {
+    setSecurityIntelligenceExportEditMode(!securityIntelligenceExportEditMode);
+  };
+
+  const saveSecurityIntelligenceExport = async (): Promise<void> => {
+    if (!securityIntelligenceExport?.id) {
+      setErrorMessage(
+        'securityIntelligenceExport',
+        _('Cannot save security intelligence export: missing setting ID.'),
+      );
+      return;
+    }
+    await saveSetting(
+      securityIntelligenceExport.id,
+      'securityIntelligenceExport',
+      securityIntelligenceExportState as string,
+      setSecurityIntelligenceExportEditMode,
+    );
+  };
+
+  const cancelSecurityIntelligenceExportEdit = (): void => {
+    setSecurityIntelligenceExportState(securityIntelligenceExport.value);
+    setSecurityIntelligenceExportEditMode(false);
+    clearErrorMessage('securityIntelligenceExport');
+  };
+
+  const handleSecurityIntelligenceExportChange = (value: string): void => {
+    setSecurityIntelligenceExportState(value);
   };
 
   const toggleAutoCacheRebuildEditMode = (): void => {
@@ -811,6 +855,34 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           onEdit={toggleReportExportFileNameEditMode}
           onSave={saveReportExportFileName}
         />
+
+        {features.featureEnabled('ENABLE_SECURITY_INTELLIGENCE_EXPORT') && (
+          <EditableSettingRow
+            disableEditIcon={disableEditIcon}
+            editComponent={
+              <Checkbox<string>
+                checked={
+                  parseYesNo(securityIntelligenceExportState) === YES_VALUE
+                }
+                checkedValue={String(YES_VALUE)}
+                name="securityIntelligenceExport"
+                title={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
+                unCheckedValue={String(NO_VALUE)}
+                onChange={handleSecurityIntelligenceExportChange}
+              />
+            }
+            errorMessage={getErrorMessage('securityIntelligenceExport')}
+            isEditMode={securityIntelligenceExportEditMode}
+            label={_('Export Reports to OPENVAS SECURITY INTELLIGENCE')}
+            title={securityIntelligenceExport.comment}
+            viewComponent={
+              <span>{getYesNoValue(securityIntelligenceExport.value)}</span>
+            }
+            onCancel={cancelSecurityIntelligenceExportEdit}
+            onEdit={toggleSecurityIntelligenceExportEditMode}
+            onSave={saveSecurityIntelligenceExport}
+          />
+        )}
 
         <EditableSettingRow
           disableEditIcon={disableEditIcon}

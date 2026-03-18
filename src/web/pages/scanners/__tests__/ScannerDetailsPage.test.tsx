@@ -221,7 +221,7 @@ describe('ScannerDetailsPage tests', () => {
     ).toBeInTheDocument();
   });
 
-  test('should not render agent configuration tab for regular scanner', () => {
+  test('should not render agent default configuration tab for regular scanner', () => {
     const scanner = createMockScanner(OPENVAS_SCANNER_TYPE);
 
     const gmp = {
@@ -254,11 +254,11 @@ describe('ScannerDetailsPage tests', () => {
     render(<ScannerDetailsPage id="scanner-123" />);
 
     expect(
-      screen.queryByRole('tab', {name: 'Agent Configuration'}),
+      screen.queryByRole('tab', {name: 'Agent Default Configuration'}),
     ).not.toBeInTheDocument();
   });
 
-  test('should render agent configuration tab for agent controller scanner', () => {
+  test('should render agent default configuration tab for agent controller scanner', () => {
     const scanner = createMockScanner(AGENT_CONTROLLER_SCANNER_TYPE, true);
 
     const gmp = {
@@ -291,11 +291,11 @@ describe('ScannerDetailsPage tests', () => {
     render(<ScannerDetailsPage id="scanner-123" />);
 
     expect(
-      screen.getByRole('tab', {name: 'Agent Configuration'}),
+      screen.getByRole('tab', {name: 'Agent Default Configuration'}),
     ).toBeInTheDocument();
   });
 
-  test('should render agent configuration tab for agent controller sensor scanner', () => {
+  test('should render agent default configuration tab for agent controller sensor scanner', () => {
     const scanner = createMockScanner(
       AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
       true,
@@ -331,11 +331,11 @@ describe('ScannerDetailsPage tests', () => {
     render(<ScannerDetailsPage id="scanner-123" />);
 
     expect(
-      screen.getByRole('tab', {name: 'Agent Configuration'}),
+      screen.getByRole('tab', {name: 'Agent Default Configuration'}),
     ).toBeInTheDocument();
   });
 
-  test('should not render agent configuration tab when ENABLE_AGENTS is disabled', () => {
+  test('should not render agent default configuration tab when ENABLE_AGENTS is disabled', () => {
     const scanner = createMockScanner(AGENT_CONTROLLER_SCANNER_TYPE, true);
 
     const gmp = {
@@ -368,11 +368,11 @@ describe('ScannerDetailsPage tests', () => {
     render(<ScannerDetailsPage id="scanner-123" />);
 
     expect(
-      screen.queryByRole('tab', {name: 'Agent Configuration'}),
+      screen.queryByRole('tab', {name: 'Agent Default Configuration'}),
     ).not.toBeInTheDocument();
   });
 
-  test('should display agent configuration content when tab is clicked', () => {
+  test('should display agent default configuration content when tab is clicked', () => {
     const scanner = createMockScanner(AGENT_CONTROLLER_SCANNER_TYPE, true);
 
     const gmp = {
@@ -406,7 +406,7 @@ describe('ScannerDetailsPage tests', () => {
     render(<ScannerDetailsPage id="scanner-123" />);
 
     const agentConfigTab = screen.getByRole('tab', {
-      name: 'Agent Configuration',
+      name: 'Agent Default Configuration',
     });
     fireEvent.click(agentConfigTab);
 
@@ -561,7 +561,7 @@ describe('ScannerDetailsPage tests', () => {
     render(<ScannerDetailsPage id="scanner-123" />);
 
     const agentConfigTab = screen.getByRole('tab', {
-      name: 'Agent Configuration',
+      name: 'Agent Default Configuration',
     });
     fireEvent.click(agentConfigTab);
 
