@@ -153,9 +153,9 @@ describe('TargetDialog tests', () => {
     expect(aliveTestsRadios[2]).not.toBeChecked();
 
     expect(screen.getByName('portListId')).toHaveValue(DEFAULT_PORT_LIST_ID);
-    expect(screen.getByName('sshCredentialId')).toHaveValue(undefined);
-    expect(screen.getByName('smbCredentialId')).toHaveValue(undefined);
-    expect(screen.getByName('esxiCredentialId')).toHaveValue(undefined);
+    expect(screen.getByName('sshCredentialId')).toHaveValue('');
+    expect(screen.getByName('smbCredentialId')).toHaveValue('');
+    expect(screen.getByName('esxiCredentialId')).toHaveValue('');
 
     expect(screen.getByTitle('Create a new port list')).toBeInTheDocument();
     const createCredentialIcons = screen.getAllByTitle(
@@ -259,9 +259,9 @@ describe('TargetDialog tests', () => {
     expect(aliveTestsRadios[2]).not.toBeChecked();
 
     expect(screen.getByName('portListId')).toHaveValue(DEFAULT_PORT_LIST_ID);
-    expect(screen.getByName('sshCredentialId')).toHaveValue(undefined);
+    expect(screen.getByName('sshCredentialId')).toHaveValue('');
     expect(screen.getByName('smbCredentialId')).toHaveValue('2345');
-    expect(screen.getByName('esxiCredentialId')).toHaveValue(undefined);
+    expect(screen.getByName('esxiCredentialId')).toHaveValue('');
 
     expect(screen.getByTitle('Create a new port list')).toBeInTheDocument();
     const createCredentialIcons = screen.getAllByTitle(

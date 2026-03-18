@@ -14,6 +14,7 @@ import {isArray, isDefined} from 'gmp/utils/identity';
 export interface AgentGroupCreateParams {
   agentIds?: string[];
   authorized?: boolean;
+  updateToLatest?: boolean;
   comment?: string;
   name: string;
   scannerId?: string;
@@ -49,6 +50,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
     scannerId,
     agentIds,
     authorized,
+    updateToLatest,
     attempts,
     delayInSeconds,
     maxJitterInSeconds,
@@ -72,6 +74,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
       'agent_ids:': agentIds,
       authorized: parseYesNo(authorized),
       attempts,
+      update_to_latest: parseYesNo(updateToLatest),
       delay_in_seconds: delayInSeconds,
       max_jitter_in_seconds: maxJitterInSeconds,
       bulk_size: bulkSize,
@@ -102,6 +105,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
     scannerId,
     agentIds,
     authorized,
+    updateToLatest,
     attempts,
     delayInSeconds,
     maxJitterInSeconds,
@@ -127,6 +131,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
       cmd: 'modify_agent',
       'agent_ids:': agentIds,
       authorized: parseYesNo(authorized),
+      update_to_latest: parseYesNo(updateToLatest),
       'scheduler_cron_times:':
         isArray(schedulerCronTimes) || !isDefined(schedulerCronTimes)
           ? schedulerCronTimes

@@ -12,6 +12,7 @@ import {
   fireEvent,
   getSelectItemElementsForSelect,
   changeInputValue,
+  wait,
 } from 'web/testing';
 import Select from 'web/components/form/Select';
 
@@ -273,21 +274,30 @@ describe('Select component tests', () => {
       },
     ];
 
-    render(
-      <Select
-        allowDeselect
-        items={items}
-        name="foo"
-        value="bar"
-        onChange={handleChange}
-      />,
-    );
+    const TestComponent = () => {
+      const [value, setValue] = useState<string | undefined>('bar');
+      return (
+        <Select
+          allowDeselect
+          items={items}
+          name="foo"
+          value={value}
+          onChange={(newValue, name) => {
+            setValue(newValue);
+            handleChange(newValue, name);
+          }}
+        />
+      );
+    };
+
+    render(<TestComponent />);
 
     const input = screen.getSelectElement();
     expect(input).toHaveValue('Bar');
 
     const selectItems = await getSelectItemElementsForSelect(input);
     fireEvent.click(selectItems[0]);
+    await wait();
     expect(input).toHaveValue('');
     expect(handleChange).toHaveBeenCalledWith(undefined, 'foo');
   });
