@@ -421,7 +421,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     await wait();
 
     // Should show the SchedulerCronField with its title
-    expect(screen.getByText('Schedule')).toBeInTheDocument();
+    expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
     const selectInput = getSelectElement();
     expect(selectInput).toBeInTheDocument();
   });
