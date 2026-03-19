@@ -33,6 +33,7 @@ const log = logger.getLogger('gmp.locale.lang');
 declare module 'i18next' {
   interface InitOptions {
     storage?: unknown;
+    showSupportNotice?: boolean;
   }
 }
 
@@ -68,6 +69,7 @@ const I18N_OPTIONS: InitOptions = {
   interpolation: {
     skipOnVariables: false,
   },
+  showSupportNotice: false,
 };
 
 i18next.on('languageChanged', (lang: string) => {
