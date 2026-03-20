@@ -161,8 +161,8 @@ describe('fastxml transform tests', () => {
     // This test ensures the parser can handle large reports without hitting the
     // default entity expansion limit of 1000 entities
 
-    // Generate XML with 1500 entities (exceeds default limit of 1000)
-    const entityContent = '&lt;result&gt;&amp;&quot;&apos;'.repeat(300); // 5 entities × 300 = 1500
+    // Generate XML with ~3,000 entities to exercise the raised expansion limit
+    const entityContent = '&lt;result&gt;&amp;&quot;&apos;'.repeat(600); // 5 entities × 600 = 3000
     const mockXml = createEnvelopedXml(
       `<report><results>${entityContent}</results></report>`,
     );
@@ -189,9 +189,9 @@ describe('fastxml transform tests', () => {
       </result>
     `;
 
-    // Create 150 results with ~12 entities each = ~1800 entities total
-    // (keeps total expansions below the tuned limit of 2000)
-    const results = Array.from({length: 150}, (_, i) => createResult(i)).join(
+    // Create 250 results with ~12 entities each = ~3000 entities total
+    // (keeps total expansions below the current limit of 4000)
+    const results = Array.from({length: 250}, (_, i) => createResult(i)).join(
       '',
     );
     const mockXml = createEnvelopedXml(
