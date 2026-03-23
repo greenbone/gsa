@@ -61,5 +61,3 @@ TagDetails.propTypes = {
 };
 
 export default TagDetails;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -103,5 +103,3 @@ const TagsTable = createEntitiesTable({
 });
 
 export default TagsTable;
-
-// vim: set ts=2 sw=2 tw=80:
