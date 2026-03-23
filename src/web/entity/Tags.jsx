@@ -72,15 +72,12 @@ class EntityTagsTable extends React.Component {
 
   handleCreateTag() {
     const {entity, onTagCreateClick} = this.props;
-    const {_} = this.props;
 
     const entityType = getEntityType(entity);
 
     onTagCreateClick({
-      fixed: true,
-      resource_ids: [entity.id],
-      resource_type: entityType,
-      name: _('{{type}}:unnamed', {type: entityType}),
+      resourceIds: [entity.id],
+      resourceType: entityType,
     });
   }
 

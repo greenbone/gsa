@@ -31,13 +31,18 @@ interface AddTagData {
   entity: Model;
 }
 
+interface CreateTagOptions {
+  resourceType?: EntityType;
+  resourceIds?: string[];
+}
+
 interface TagComponentRenderProps {
   add: (tagData: AddTagData) => Promise<void>;
   clone: (tag: Tag) => Promise<void>;
-  create: () => void;
+  create: (options?: CreateTagOptions) => void;
   delete: (tag: Tag) => Promise<void>;
   download: (tag: Tag) => Promise<void>;
-  edit: (tag: Tag, options?: {}) => void;
+  edit: (tag: Tag, options?: {}) => Promise<void> | void;
   enable: (tag: Tag) => Promise<void>;
   disable: (tag: Tag) => Promise<void>;
   remove: (tagId: string, entity: Model) => Promise<void>;
@@ -138,9 +143,7 @@ const TagComponent = ({
   const [resourceTypes, setResourceTypes] = useState<EntityType[]>([]);
 
   const getResourceTypes = (): EntityType[] =>
-    RESOURCE_TYPES.map(type =>
-      capabilities.mayAccess(type) ? type : undefined,
-    ).filter(isDefined<EntityType>);
+    RESOURCE_TYPES.filter(type => capabilities.mayAccess(type));
 
   const handleEnableTag = (tag: Tag) => {
     return gmp.tag
@@ -214,8 +217,20 @@ const TagComponent = ({
     closeTagDialog();
   };
 
-  const openCreateTagDialog = () => {
-    void openTagDialog();
+  const openCreateTagDialog = (options?: CreateTagOptions) => {
+    const resourceTypesArray = getResourceTypes();
+
+    setActive(undefined);
+    setComment(undefined);
+    setId(undefined);
+    setName(undefined);
+    setResourceCount(0);
+    setResourceIds(options?.resourceIds ?? []);
+    setResourceType(options?.resourceType);
+    setResourceTypes(resourceTypesArray);
+    setDialogVisible(true);
+    setTitle(undefined);
+    setValue(undefined);
   };
 
   const handleRemove = (tagId: string, entity: Model) => {
