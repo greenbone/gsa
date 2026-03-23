@@ -6,7 +6,7 @@
 import {useState, useEffect} from 'react';
 import {notifications} from '@mantine/notifications';
 import {useDispatch} from 'react-redux';
-import {useLocation, useNavigate} from 'react-router';
+import {useNavigate} from 'react-router';
 import styled from 'styled-components';
 import {ResponseRejection} from 'gmp/http/rejection';
 import logger from 'gmp/log';
@@ -27,6 +27,10 @@ import {
   setTimezone,
 } from 'web/store/usersettings/actions';
 import Theme from 'web/utils/Theme';
+import {
+  getLastVisitedPage,
+  clearLastVisitedPage,
+} from 'web/utils/user-last-visited-page';
 
 const log = logger.getLogger('web.login');
 const StyledLayout = styled(Layout)`
@@ -61,7 +65,6 @@ const isIE11 = () => {
 const LoginPage: React.FC = () => {
   const gmp = useGmp();
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
   const [isLoggedIn] = useUserIsLoggedIn();
   const [error, setError] = useState<Error>();
@@ -97,21 +100,20 @@ const LoginPage: React.FC = () => {
       dispatch(setUsername(username));
       dispatch(setTimezone(timezone));
 
-      // must be set before changing the location
       dispatch(setIsLoggedIn(true));
 
-      const previousLocation = location.state?.from;
-      const previousPath =
-        previousLocation &&
-        previousLocation.pathname +
-          (previousLocation.search ?? '') +
-          (previousLocation.hash ?? '');
+      const userLastVisitedPath = getLastVisitedPage(username);
 
-      if (previousPath && previousPath !== '/login') {
-        await navigate(previousPath, {replace: true});
-      } else {
-        await navigate('/dashboards', {replace: true});
+      // Only redirect to saved page if it exists for THIS specific user
+      // Otherwise always redirect to homepage
+      let redirectPath = '/dashboards';
+
+      if (userLastVisitedPath && userLastVisitedPath !== '/login') {
+        redirectPath = userLastVisitedPath;
+        clearLastVisitedPage(username);
       }
+
+      await navigate(redirectPath, {replace: true});
     } catch (error) {
       log.error(error);
       setError(error as Error);

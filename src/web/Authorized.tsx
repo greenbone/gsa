@@ -5,9 +5,14 @@
 
 import {useEffect, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {useLocation} from 'react-router';
 import useGmp from 'web/hooks/useGmp';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
-import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
+import {
+  isLoggedIn as selectIsLoggedIn,
+  getUsername,
+} from 'web/store/usersettings/selectors';
+import {saveLastVisitedPage} from 'web/utils/user-last-visited-page';
 
 interface AuthorizedProps {
   children: React.ReactNode;
@@ -16,13 +21,20 @@ interface AuthorizedProps {
 const Authorized = ({children}: AuthorizedProps) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const isLoggedIn = useSelector(selectIsLoggedIn);
+  const username = useSelector(getUsername);
 
   const logout = useCallback(() => {
+    if (username && location.pathname !== '/login') {
+      const currentPath = `${location.pathname}${location.search ?? ''}`;
+      saveLastVisitedPage(username, currentPath);
+    }
+
     gmp.logout();
     dispatch(setIsLoggedIn(false));
-  }, [dispatch, gmp]);
+  }, [dispatch, gmp, username, location]);
 
   const responseError = useCallback(
     (xhr: XMLHttpRequest) => {

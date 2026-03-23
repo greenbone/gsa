@@ -10,7 +10,6 @@ import {
   RouterProvider,
   Navigate,
   Outlet,
-  useLocation,
   redirect,
 } from 'react-router';
 import Authorized from 'web/Authorized';
@@ -32,12 +31,6 @@ const LoggedInLayout = () => (
     </Page>
   </Authorized>
 );
-
-// Custom redirect component that preserves location state
-const RedirectToLogin = () => {
-  const location = useLocation();
-  return <Navigate replace state={{from: location}} to="/login" />;
-};
 
 const loggedInRoutes = [
   {
@@ -840,7 +833,7 @@ const AppRoutes = () => {
           element: isLoggedIn ? (
             <Navigate to="/dashboards" />
           ) : (
-            <RedirectToLogin />
+            <Navigate replace to="/login" />
           ),
         },
         {
@@ -860,7 +853,7 @@ const AppRoutes = () => {
           element: isLoggedIn ? (
             <Navigate to="/dashboards" />
           ) : (
-            <RedirectToLogin />
+            <Navigate replace to="/login" />
           ),
         },
       ],
