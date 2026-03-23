@@ -83,34 +83,25 @@ const createGmp = ({
 };
 
 describe('TagComponent tests', () => {
-  test('should render', async () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, capabilities: true});
-
-    render(
-      <TagComponent>{() => <Button data-testid="button" />}</TagComponent>,
-    );
-
-    expect(screen.getByTestId('button')).toBeInTheDocument();
-  });
-
-  test('should allow to create a new tag', async () => {
+  test('should render and allow to create a new tag', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true});
     const onCreated = testing.fn();
 
+    // Verify rendering
     render(
       <TagComponent onCreated={onCreated}>
         {({create}) => <Button data-testid="button" onClick={() => create()} />}
       </TagComponent>,
     );
 
+    // Test create flow
     const button = screen.getByTestId('button');
     fireEvent.click(button);
 
     await wait();
 
-    expect(screen.getDialog()).toBeInTheDocument();
+    screen.getDialog();
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(gmp.tag.create).toHaveBeenCalledWith({
@@ -120,6 +111,50 @@ describe('TagComponent tests', () => {
       name: 'default:unnamed',
       resourceIds: [],
       resourceType: undefined,
+      value: '',
+    });
+
+    await wait();
+
+    expect(onCreated).toHaveBeenCalled();
+  });
+
+  test('should create a tag with predefined resource type and ids', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+    const onCreated = testing.fn();
+
+    render(
+      <TagComponent onCreated={onCreated}>
+        {({create}) => (
+          <Button
+            data-testid="button"
+            onClick={() =>
+              create({
+                resourceType: 'host',
+                resourceIds: ['456', '789'],
+              })
+            }
+          />
+        )}
+      </TagComponent>,
+    );
+
+    const button = screen.getByTestId('button');
+    fireEvent.click(button);
+
+    await wait();
+
+    screen.getDialog();
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(gmp.tag.create).toHaveBeenCalledWith({
+      active: true,
+      comment: '',
+      id: undefined,
+      name: 'default:unnamed',
+      resourceIds: ['456', '789'],
+      resourceType: 'host',
       value: '',
     });
 
@@ -146,7 +181,7 @@ describe('TagComponent tests', () => {
 
     await wait();
 
-    expect(screen.getDialog()).toBeInTheDocument();
+    screen.getDialog();
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(gmp.tag.save).toHaveBeenCalledWith({
@@ -218,53 +253,45 @@ describe('TagComponent tests', () => {
     });
   });
 
-  test('should allow to enable a tag', async () => {
-    const gmp = createGmp();
+  test('should allow to enable and disable a tag', async () => {
     const tag = new Tag({name: 'My Tag', id: '1234', resourceType: 'task'});
-    const onEnabled = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    // Test enable
+    const gmpEnable = createGmp();
+    const onEnabled = testing.fn();
+    let {render} = rendererWith({gmp: gmpEnable, capabilities: true});
 
     render(
       <TagComponent onEnabled={onEnabled}>
         {({enable}) => (
-          <Button data-testid="button" onClick={() => enable(tag)} />
+          <Button data-testid="enable-button" onClick={() => enable(tag)} />
         )}
       </TagComponent>,
     );
 
-    const button = screen.getByTestId('button');
-    fireEvent.click(button);
-
-    expect(gmp.tag.enable).toHaveBeenCalledWith({id: tag.id});
+    fireEvent.click(screen.getByTestId('enable-button'));
+    expect(gmpEnable.tag.enable).toHaveBeenCalledWith({id: tag.id});
 
     await wait();
-
     expect(onEnabled).toHaveBeenCalled();
-  });
 
-  test('should allow to disable a tag', async () => {
-    const gmp = createGmp();
-    const tag = new Tag({name: 'My Tag', id: '1234', resourceType: 'task'});
+    // Test disable
+    const gmpDisable = createGmp();
     const onDisabled = testing.fn();
-
-    const {render} = rendererWith({gmp, capabilities: true});
+    ({render} = rendererWith({gmp: gmpDisable, capabilities: true}));
 
     render(
       <TagComponent onDisabled={onDisabled}>
         {({disable}) => (
-          <Button data-testid="button" onClick={() => disable(tag)} />
+          <Button data-testid="disable-button" onClick={() => disable(tag)} />
         )}
       </TagComponent>,
     );
 
-    const button = screen.getByTestId('button');
-    fireEvent.click(button);
-
-    expect(gmp.tag.disable).toHaveBeenCalledWith({id: tag.id});
+    fireEvent.click(screen.getByTestId('disable-button'));
+    expect(gmpDisable.tag.disable).toHaveBeenCalledWith({id: tag.id});
 
     await wait();
-
     expect(onDisabled).toHaveBeenCalled();
   });
 
