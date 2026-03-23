@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith, waitFor, fireEvent, wait} from 'web/testing';
+import {screen, rendererWith, fireEvent, wait, act} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import TrashcanPage from 'web/pages/trashcan/TrashCanPage';
 
@@ -57,11 +57,11 @@ describe('TrashCanPage tests', () => {
     fireEvent.click(confirmButton);
     expect(gmp.trashcan.empty).toHaveBeenCalled();
 
-    await wait();
-
-    await waitFor(() => {
-      expect(confirmButton).not.toBeVisible();
+    await act(async () => {
+      await testing.runAllTimersAsync();
     });
+
+    expect(confirmButton).not.toBeVisible();
   });
 
   test('Should render with empty trashcan button and handle error case', async () => {

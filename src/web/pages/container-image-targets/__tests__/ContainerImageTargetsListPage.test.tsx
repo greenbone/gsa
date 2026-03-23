@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import OciImageTarget from 'gmp/models/oci-image-target';
@@ -194,8 +194,7 @@ describe('ContainerImageTargetsListPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export page contents');
     fireEvent.click(exportIcon);
-    await wait();
-    expect(exportBulk).toHaveBeenCalled();
+    await waitFor(() => expect(exportBulk).toHaveBeenCalled());
 
     const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
@@ -205,9 +204,7 @@ describe('ContainerImageTargetsListPage tests', () => {
 
     const moveToTrashcanButton = screen.getByText('Move to Trashcan');
     fireEvent.click(moveToTrashcanButton);
-    await wait();
-
-    expect(deleteBulk).toHaveBeenCalled();
+    await waitFor(() => expect(deleteBulk).toHaveBeenCalled());
   });
 
   test('should not show icons if user does not have the right permissions', () => {

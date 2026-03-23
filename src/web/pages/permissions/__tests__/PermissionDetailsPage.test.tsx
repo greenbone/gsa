@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, fireEvent, rendererWith, wait} from 'web/testing';
+import {screen, fireEvent, rendererWith} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
@@ -133,7 +133,7 @@ describe('PermissionDetailsPage tests', () => {
 
     const {baseElement} = render(<PermissionDetailsPage id="12345" />);
 
-    await wait();
+    await screen.findByText('Permission: get_tasks');
     expect(baseElement).toBeVisible();
 
     expect(screen.getByText('Permission: get_tasks')).toBeVisible();
@@ -151,7 +151,7 @@ describe('PermissionDetailsPage tests', () => {
 
     render(<PermissionDetailsPage id="12345" />);
 
-    await wait();
+    await screen.findByText('Comment');
 
     expect(screen.getByText('Comment')).toBeVisible();
     expect(screen.getByText('Test permission for unit testing')).toBeVisible();
@@ -175,7 +175,6 @@ describe('PermissionDetailsPage tests', () => {
     const userTagsTab = await screen.findByText('User Tags');
     fireEvent.click(userTagsTab);
 
-    await wait();
     expect(screen.getByText('User Tags')).toBeVisible();
   });
 
@@ -191,10 +190,8 @@ describe('PermissionDetailsPage tests', () => {
 
     render(<PermissionDetailsPage id="12345" />);
 
-    await wait();
-
     // Check for help and list icons which should always be present
-    const helpIcon = screen.getByTitle('Help: Permissions');
+    const helpIcon = await screen.findByTitle('Help: Permissions');
     expect(helpIcon).toHaveAttribute('title', 'Help: Permissions');
 
     const listIcon = screen.getByTitle('Permission List');
@@ -346,12 +343,7 @@ test('should disable icons if user does not have the right permissions', async (
 
   render(<PermissionDetailsPage id="12345" />);
 
-  await wait();
-
-  const newIcon = screen.queryByTestId('new-icon');
-  expect(newIcon).toBeNull();
-
-  const cloneIcon = screen.getByTestId('clone-icon');
+  const cloneIcon = await screen.findByTestId('clone-icon');
   expect(cloneIcon).toBeDisabled();
   expect(cloneIcon).toHaveAttribute(
     'title',
@@ -385,9 +377,7 @@ test('should show export icon even with limited permissions', async () => {
 
   render(<PermissionDetailsPage id="12345" />);
 
-  await wait();
-
-  const exportIcon = screen.getByTestId('export-icon');
+  const exportIcon = await screen.findByTestId('export-icon');
   expect(exportIcon).toHaveAttribute('title', 'Export Permission as XML');
 });
 

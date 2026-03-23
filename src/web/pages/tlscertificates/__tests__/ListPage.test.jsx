@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, within, rendererWith, wait} from 'web/testing';
+import {screen, within, rendererWith} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tls-certificate';
@@ -138,7 +138,7 @@ describe('TlsCertificatePage tests', () => {
 
     const {baseElement} = render(<TlsCertificatePage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /tls certificates/i});
 
     const display = screen.getAllByTestId('grid-item');
     const header = baseElement.querySelectorAll('th');

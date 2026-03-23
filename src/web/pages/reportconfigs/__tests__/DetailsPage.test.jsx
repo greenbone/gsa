@@ -63,8 +63,8 @@ describe('ReportConfigDetailsPage tests', () => {
 
     render(<DetailsPage id="12345" />);
 
-    expect(screen.getByTitle('Help: Report Configs')).toBeInTheDocument();
-    expect(screen.getByTitle('Report Configs List')).toBeInTheDocument();
+    screen.getByTitle('Help: Report Configs');
+    screen.getByTitle('Report Configs List');
 
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
@@ -76,57 +76,39 @@ describe('ReportConfigDetailsPage tests', () => {
     );
 
     const entityInfo = within(screen.getByTestId('entity-info'));
-    expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
-      '12345',
-    );
-    expect(entityInfo.getByRole('row', {name: /^Created:/})).toHaveTextContent(
+    const infoRows = entityInfo.getAllByRole('row');
+    expect(infoRows[0]).toHaveTextContent('12345');
+    expect(infoRows[1]).toHaveTextContent(
       'Tue, Jul 16, 2019 8:31 AM Central European Summer Time',
     );
-    expect(entityInfo.getByRole('row', {name: /^Modified:/})).toHaveTextContent(
+    expect(infoRows[2]).toHaveTextContent(
       'Tue, Jul 16, 2019 8:44 AM Central European Summer Time',
     );
-    expect(entityInfo.getByRole('row', {name: /Owner:/})).toHaveTextContent(
-      'admin',
-    );
+    expect(infoRows[3]).toHaveTextContent('admin');
 
-    expect(
-      screen.getByRole('heading', {name: /Report Config: foo$/}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /Report Config: foo$/});
 
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^parameter details/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    const tablist = screen.getByRole('tablist');
+    within(tablist).getByRole('tab', {name: /^information/i});
+    within(tablist).getByRole('tab', {name: /^parameter details/i});
+    within(tablist).getByRole('tab', {name: /^user tags/i});
+    within(tablist).getByRole('tab', {name: /^permissions/i});
 
-    expect(screen.getByRole('row', {name: /^Report Format/})).toHaveTextContent(
+    expect(screen.getByText('Report Format').closest('tr')).toHaveTextContent(
       'example-configurable-1',
     );
 
     const paramTable = within(screen.getByRole('table', {name: /parameters/i}));
-    expect(
-      paramTable.getByRole('row', {name: /StringParam/}),
-    ).toHaveTextContent('StringValue');
-    expect(paramTable.getByRole('row', {name: /TextParam/})).toHaveTextContent(
-      'TextValue',
+    const paramRows = paramTable.getAllByRole('row');
+    // Rows: StringParam, TextParam, IntegerParam, BooleanParam, SelectionParam, ReportFormatListParam
+    expect(paramRows[0]).toHaveTextContent('StringValue');
+    expect(paramRows[1]).toHaveTextContent('TextValue');
+    expect(paramRows[2]).toHaveTextContent('12');
+    expect(paramRows[3]).toHaveTextContent('Yes');
+    expect(paramRows[4]).toHaveTextContent('OptionB');
+    expect(paramRows[5]).toHaveTextContent(
+      'non-configurable-1non-configurable-2',
     );
-    expect(
-      paramTable.getByRole('row', {name: /IntegerParam/}),
-    ).toHaveTextContent('12');
-    expect(
-      paramTable.getByRole('row', {name: /BooleanParam/}),
-    ).toHaveTextContent('Yes');
-    expect(
-      paramTable.getByRole('row', {name: /SelectionParam/}),
-    ).toHaveTextContent('OptionB');
-    expect(
-      paramTable.getByRole('row', {name: /ReportFormatListParam/}),
-    ).toHaveTextContent('non-configurable-1non-configurable-2');
 
     const alertsList = within(
       screen.getByRole('list', {
@@ -159,47 +141,23 @@ describe('ReportConfigDetailsPage tests', () => {
 
     render(<DetailsPage id="12345" />);
 
-    const parameterDetailsTab = screen.getByRole('tab', {
+    const tablist = screen.getByRole('tablist');
+    const parameterDetailsTab = within(tablist).getByRole('tab', {
       name: /^parameter details/i,
     });
     fireEvent.click(parameterDetailsTab);
 
-    // table heading
-    expect(
-      screen.getByRole('row', {
-        name: /^Name Value Using Default Default Value Minimum Maximum$/i,
-      }),
-    ).toBeInTheDocument();
-
-    // first param row
-    expect(screen.getByRole('row', {name: /StringParam/})).toHaveTextContent(
-      /StringValueYesStringValue0100$/,
-    );
-
-    // second param row
-    expect(screen.getByRole('row', {name: /^TextParam/})).toHaveTextContent(
-      /TextValueNoTextDefault01000$/,
-    );
-
-    // third param row
-    expect(screen.getByRole('row', {name: /^IntegerParam/})).toHaveTextContent(
-      /12Yes12050$/,
-    );
-
-    // fourth param row
-    expect(screen.getByRole('row', {name: /^BooleanParam/})).toHaveTextContent(
-      /YesNoNo01$/,
-    );
-
-    // fifth param row
-    expect(
-      screen.getByRole('row', {name: /^SelectionParam/}),
-    ).toHaveTextContent(/OptionBNoOptionA01$/);
-
-    // sixth param row
-    expect(
-      screen.getByRole('row', {name: /^ReportFormatListParam/}),
-    ).toHaveTextContent(
+    // Get all parameter detail rows from the table (get last table which is parameter details)
+    const tables = screen.getAllByRole('table');
+    const paramDetailsTable = within(tables[tables.length - 1]);
+    const detailRows = paramDetailsTable.getAllByRole('row');
+    // row 0 is header, rows 1-6 are params
+    expect(detailRows[1]).toHaveTextContent(/StringValueYesStringValue0100$/);
+    expect(detailRows[2]).toHaveTextContent(/TextValueNoTextDefault01000$/);
+    expect(detailRows[3]).toHaveTextContent(/12Yes12050$/);
+    expect(detailRows[4]).toHaveTextContent(/YesNoNo01$/);
+    expect(detailRows[5]).toHaveTextContent(/OptionBNoOptionA01$/);
+    expect(detailRows[6]).toHaveTextContent(
       /ListParamnon-configurable-1non-configurable-2Nonon-configurable-2example-configurable-201$/,
     );
     expect(

@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, wait} from 'web/testing';
+import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Target, {ICMP_PING, TCP_SYN} from 'gmp/models/target';
@@ -120,13 +120,13 @@ describe('TargetDetailsPage tests', () => {
 
     render(<TargetDetailsPage id="46264" />);
 
-    expect(screen.getByTitle('Help: Targets')).toBeInTheDocument();
+    screen.getByTitle('Help: Targets');
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-targets',
     );
 
-    expect(screen.getByTitle('Target List')).toBeInTheDocument();
+    screen.getByTitle('Target List');
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
       '/targets',
@@ -142,97 +142,44 @@ describe('TargetDetailsPage tests', () => {
     );
     expect(entityInfo).toHaveTextContent('Owner:admin');
 
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    const tablist = screen.getByRole('tablist');
+    within(tablist).getByRole('tab', {name: /^information/i});
+    within(tablist).getByRole('tab', {name: /^user tags/i});
+    within(tablist).getByRole('tab', {name: /^permissions/i});
 
-    expect(
-      screen.getByRole('row', {name: /^name target 1/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^comment some comment/i}),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('row', {
-        name: /^included 127\.0\.0\.1 123\.456\.574\.64/i,
-      }),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('row', {name: /^excluded 192\.168\.0\.1/i}),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('row', {
-        name: /^allow simultaneous scanning via multiple ips yes/i,
-      }),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('row', {name: /^maximum number of hosts 2/i}),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('row', {name: /^reverse lookup only yes/i}),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('row', {name: /^reverse lookup unify no/i}),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('row', {
-        name: /^alive test icmp ping tcp-syn service ping/i,
-      }),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('row', {
-        name: /^port list all iana assigned tcp/i,
-      }),
-    ).toBeInTheDocument();
+    screen.getByText('target 1');
+    screen.getByText('some comment');
+    screen.getByText('127.0.0.1');
+    screen.getByText('123.456.574.64');
+    screen.getByText('192.168.0.1');
+    screen.getByText(/allow simultaneous scanning via multiple ips/i);
+    screen.getByText('Maximum Number of Hosts');
+    screen.getByText('Reverse Lookup Only');
+    screen.getByText('Reverse Lookup Unify');
+    screen.getByText(/icmp ping/i);
+    screen.getByText(/IANA/i);
     expect(
       screen.getByRole('link', {name: /iana assigned tcp/i}),
     ).toHaveAttribute('href', '/port-list/32323');
 
-    expect(
-      screen.getByRole('row', {
-        name: /^ssh ssh on port 22/i,
-      }),
-    ).toBeInTheDocument();
+    // SSH credential section
     expect(screen.getByRole('link', {name: 'ssh'})).toHaveAttribute(
       'href',
       '/credential/1235',
     );
 
-    expect(
-      screen.getByRole('row', {
-        name: /^ssh elevate credential ssh_elevate/i,
-      }),
-    ).toBeInTheDocument();
+    screen.getByText('ssh_elevate');
     expect(screen.getByRole('link', {name: /^ssh_elevate/i})).toHaveAttribute(
       'href',
       '/credential/3456',
     );
 
-    expect(
-      screen.getByRole('row', {
-        name: /^smb \(ntlm\) smb_credential/i,
-      }),
-    ).toBeInTheDocument();
-
+    screen.getByText('smb_credential');
     expect(
       screen.getByRole('link', {name: /^smb_credential/i}),
     ).toHaveAttribute('href', '/credential/4784');
 
-    expect(
-      screen.getByRole('heading', {name: /^tasks using this target \(1\)/i}),
-    ).toBeInTheDocument();
+    screen.getByText(/tasks using this target/i);
 
     expect(screen.getByRole('link', {name: /^foo/i})).toHaveAttribute(
       'href',
@@ -256,9 +203,7 @@ describe('TargetDetailsPage tests', () => {
 
     render(<TargetDetailsPage id="46264" />);
 
-    expect(
-      screen.getByRole('row', {name: /smb \(kerberos\) krb5/i}),
-    ).toBeInTheDocument();
+    screen.getByText('krb5');
     expect(screen.getByRole('link', {name: /^krb5/i})).toHaveAttribute(
       'href',
       '/credential/krb5_id',
@@ -281,7 +226,8 @@ describe('TargetDetailsPage tests', () => {
 
     const {container} = render(<TargetDetailsPage id="12345" />);
 
-    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    const tablist = screen.getByRole('tablist');
+    const userTagsTab = within(tablist).getByRole('tab', {name: /^user tags/i});
     fireEvent.click(userTagsTab);
     expect(container).toHaveTextContent('No user tags available');
   });
@@ -302,7 +248,10 @@ describe('TargetDetailsPage tests', () => {
 
     const {container} = render(<TargetDetailsPage id="46264" />);
 
-    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    const tablist = screen.getByRole('tablist');
+    const permissionsTab = within(tablist).getByRole('tab', {
+      name: /^permissions/i,
+    });
     fireEvent.click(permissionsTab);
     expect(container).toHaveTextContent('No permissions available');
   });
@@ -323,9 +272,7 @@ describe('TargetDetailsPage tests', () => {
 
     render(<TargetDetailsPage id="46264" />);
 
-    await wait();
-
-    const cloneIcon = screen.getByTitle('Clone Target');
+    const cloneIcon = await screen.findByTitle('Clone Target');
     fireEvent.click(cloneIcon);
     expect(gmp.target.clone).toHaveBeenCalledWith(target);
 

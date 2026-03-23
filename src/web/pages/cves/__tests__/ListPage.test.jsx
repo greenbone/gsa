@@ -146,7 +146,7 @@ describe('CvesPage tests', () => {
 
     const {baseElement} = render(<CvesPage />);
 
-    await wait();
+    await screen.findByTitle('Help: CVEs');
 
     const display = screen.getAllByTestId('grid-item');
     const powerFilter = within(screen.queryPowerFilter());
@@ -154,25 +154,21 @@ describe('CvesPage tests', () => {
     const select = powerFilter.getByTestId('powerfilter-select');
 
     // Toolbar Icons
-    expect(screen.getAllByTitle('Help: CVEs')[0]).toBeInTheDocument();
+    screen.getByTitle('Help: CVEs');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
+    screen.getByTitle('Update Filter');
+    screen.getByTitle('Remove Filter');
+    screen.getByTitle('Reset to Default Filter');
+    screen.getByTitle('Help: Powerfilter');
+    screen.getByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
     // Dashboard
-    expect(
-      screen.getAllByTitle('Add new Dashboard Display')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Reset to Defaults')[0]).toBeInTheDocument();
+    screen.getByTitle('Add new Dashboard Display');
+    screen.getByTitle('Reset to Defaults');
     expect(display[0]).toHaveTextContent('CVEs by Severity Class (Total: 0)');
     expect(display[1]).toHaveTextContent('CVEs by Creation Time');
     expect(display[2]).toHaveTextContent('CVEs by CVSS (Total: 0)');
@@ -257,10 +253,8 @@ describe('CvesPage tests', () => {
 
     render(<CvesPage />);
 
-    await wait();
-
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    const exportIcon = await screen.findByTitle('Export page contents');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
@@ -403,7 +397,7 @@ describe('CvesPage tests', () => {
 
     render(<CvesPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /cves/i});
 
     const tableFooter = within(screen.queryTableFooter());
     const select = tableFooter.getSelectElement();

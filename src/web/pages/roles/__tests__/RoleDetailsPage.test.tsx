@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, fireEvent, rendererWith, wait} from 'web/testing';
+import {screen, fireEvent, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
@@ -197,7 +197,7 @@ describe('RoleDetailsPage tests', () => {
 
     const {baseElement} = render(<RoleDetailsPage id="12345" />);
 
-    await wait();
+    await screen.findByText('Role: test_role');
     expect(baseElement).toBeVisible();
 
     expect(screen.getByText('Role: test_role')).toBeVisible();
@@ -215,7 +215,7 @@ describe('RoleDetailsPage tests', () => {
 
     render(<RoleDetailsPage id="12345" />);
 
-    await wait();
+    await screen.findByText('Comment');
 
     expect(screen.getByText('Comment')).toBeVisible();
 
@@ -242,8 +242,7 @@ describe('RoleDetailsPage tests', () => {
     );
     fireEvent.click(generalPermissionsTab);
 
-    await wait();
-    expect(screen.getByText('everything')).toBeVisible();
+    expect(await screen.findByText('everything')).toBeVisible();
   });
 
   test('should render user tags tab', async () => {
@@ -261,7 +260,6 @@ describe('RoleDetailsPage tests', () => {
     const userTagsTab = await screen.findByText('User Tags');
     fireEvent.click(userTagsTab);
 
-    await wait();
     expect(screen.getByText('User Tags')).toBeVisible();
   });
 
@@ -280,7 +278,6 @@ describe('RoleDetailsPage tests', () => {
     const permissionsTab = await screen.findByText('Permissions');
     fireEvent.click(permissionsTab);
 
-    await wait();
     expect(screen.getByText('Permissions')).toBeVisible();
   });
 });

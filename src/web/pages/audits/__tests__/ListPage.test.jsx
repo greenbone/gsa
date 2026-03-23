@@ -10,7 +10,6 @@ import {
   within,
   rendererWith,
   fireEvent,
-  wait,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
@@ -131,7 +130,7 @@ describe('AuditPage tests', () => {
 
     const {baseElement} = render(<AuditPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /audits/i});
 
     expect(baseElement).toBeVisible();
     const tableBody = screen.queryTableBody();
@@ -195,7 +194,7 @@ describe('AuditPage tests', () => {
 
     render(<AuditPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /audits/i});
 
     const tableFooter = within(screen.queryTableFooter());
     const deleteIcon = tableFooter.getByTestId('trash-icon');

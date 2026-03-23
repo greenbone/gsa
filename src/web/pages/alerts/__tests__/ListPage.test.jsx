@@ -11,7 +11,6 @@ import {
   within,
   rendererWith,
   fireEvent,
-  wait,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
@@ -131,7 +130,7 @@ describe('Alert ListPage tests', () => {
 
     const {baseElement} = render(<AlertPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /alerts/i});
 
     const select = screen.getByTestId('powerfilter-select');
     const inputs = screen.queryTextInputs();
@@ -222,7 +221,7 @@ describe('Alert ListPage tests', () => {
 
     render(<AlertPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /alerts/i});
 
     // export page contents
     const tableFooter = within(screen.queryTableFooter());
@@ -296,7 +295,7 @@ describe('Alert ListPage tests', () => {
 
     render(<AlertPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /alerts/i});
 
     // change bulk action to apply to selection
     const tableFooter = within(screen.queryTableFooter());
@@ -378,7 +377,7 @@ describe('Alert ListPage tests', () => {
 
     render(<AlertPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /alerts/i});
 
     // change bulk action to apply to all filtered
     const tableFooter = within(screen.queryTableFooter());

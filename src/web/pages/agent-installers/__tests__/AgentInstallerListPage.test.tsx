@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import AgentInstaller from 'gmp/models/agent-installer';
@@ -67,7 +67,7 @@ describe('AgentInstallerListPage tests', () => {
 
     render(<AgentInstallerListPage />);
 
-    await wait();
+    await screen.findByText('Agent Installers 1 of 1');
 
     expect(screen.getByText('Agent Installers 1 of 1')).toBeInTheDocument();
     expect(screen.getByText('Agent Installer i1')).toBeInTheDocument();
@@ -119,7 +119,7 @@ describe('AgentInstallerListPage tests', () => {
 
     render(<AgentInstallerListPage />);
 
-    await wait();
+    await screen.findByText('No agent installers available');
 
     expect(
       screen.getByText('No agent installers available'),
@@ -174,14 +174,14 @@ describe('AgentInstallerListPage tests', () => {
 
     render(<AgentInstallerListPage />);
 
-    await wait();
+    await screen.findByTestId('export-icon');
 
     const downloadButton = screen.getByTestId('export-icon');
     fireEvent.click(downloadButton);
 
-    await wait();
-
-    expect(gmp.agentinstaller.download).toHaveBeenCalledWith(installer.id);
+    await waitFor(() =>
+      expect(gmp.agentinstaller.download).toHaveBeenCalledWith(installer.id),
+    );
   });
 
   test('displays filter dialog when filter button is clicked', async () => {
@@ -229,7 +229,7 @@ describe('AgentInstallerListPage tests', () => {
 
     render(<AgentInstallerListPage />);
 
-    await wait();
+    await screen.findByTestId('powerfilter-edit');
 
     const filterButton = screen.getByTestId('powerfilter-edit');
     fireEvent.click(filterButton);

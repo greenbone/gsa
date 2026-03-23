@@ -113,7 +113,7 @@ describe('ReportConfigsPage tests', () => {
 
     const {baseElement} = render(<ReportConfigsPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /report configs/i});
 
     expect(baseElement).toBeVisible();
   });
@@ -171,7 +171,7 @@ describe('ReportConfigsPage tests', () => {
 
     render(<ReportConfigsPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /report configs/i});
 
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',

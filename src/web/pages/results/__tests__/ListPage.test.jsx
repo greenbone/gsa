@@ -10,7 +10,6 @@ import {
   within,
   fireEvent,
   rendererWith,
-  wait,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
@@ -203,32 +202,28 @@ describe('Results listpage tests', () => {
 
     const {baseElement} = render(<ResultsPage />);
 
-    await wait();
+    await screen.findByTitle('Help: Results');
 
     const powerFilter = within(screen.queryPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
     const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
-    expect(screen.getAllByTitle('Help: Results')[0]).toBeInTheDocument();
+    screen.getByTitle('Help: Results');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
+    screen.getByTitle('Update Filter');
+    screen.getByTitle('Remove Filter');
+    screen.getByTitle('Reset to Default Filter');
+    screen.getByTitle('Help: Powerfilter');
+    screen.getByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
     // Dashboard
-    expect(
-      screen.getAllByTitle('Add new Dashboard Display')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Reset to Defaults')[0]).toBeInTheDocument();
+    screen.getByTitle('Add new Dashboard Display');
+    screen.getByTitle('Reset to Defaults');
 
     const display = screen.getAllByTestId('grid-item');
     expect(display[0]).toHaveTextContent(
@@ -283,10 +278,8 @@ describe('Results listpage tests', () => {
     );
 
     // Footer
-    expect(
-      screen.getAllByTitle('Add tag to page contents')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export page contents')[0]).toBeInTheDocument();
+    screen.getByTitle('Add tag to page contents');
+    screen.getByTitle('Export page contents');
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -342,9 +335,9 @@ describe('Results listpage tests', () => {
 
     render(<ResultsPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /results/i});
 
-    fireEvent.click(screen.getAllByTitle('Export page contents')[0]);
+    fireEvent.click(screen.getByTitle('Export page contents'));
     expect(exportByFilter).toHaveBeenCalled();
   });
 
@@ -401,7 +394,7 @@ describe('Results listpage tests', () => {
 
     render(<ResultsPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /results/i});
 
     // change to apply to selection
     const tableFooter = within(screen.queryTableFooter());
@@ -416,7 +409,7 @@ describe('Results listpage tests', () => {
     fireEvent.click(inputs[1]);
 
     // export selected result
-    fireEvent.click(screen.getAllByTitle('Export selection')[0]);
+    fireEvent.click(screen.getByTitle('Export selection'));
     expect(exportByIds).toHaveBeenCalled();
   });
 
@@ -473,7 +466,7 @@ describe('Results listpage tests', () => {
 
     render(<ResultsPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /results/i});
 
     // change to all filtered
     const tableFooter = within(screen.queryTableFooter());
@@ -483,7 +476,7 @@ describe('Results listpage tests', () => {
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered results
-    fireEvent.click(screen.getAllByTitle('Export all filtered')[0]);
+    fireEvent.click(screen.getByTitle('Export all filtered'));
     expect(exportByFilter).toHaveBeenCalled();
   });
 });

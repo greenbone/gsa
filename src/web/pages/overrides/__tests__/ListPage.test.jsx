@@ -143,7 +143,7 @@ describe('OverridesPage tests', () => {
 
     const {baseElement} = render(<OverridesPage />);
 
-    await wait();
+    await screen.findByTitle('Help: Overrides');
 
     const display = screen.getAllByTestId('grid-item');
     const powerFilter = within(screen.queryPowerFilter());
@@ -151,26 +151,22 @@ describe('OverridesPage tests', () => {
     const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
-    expect(screen.getAllByTitle('Help: Overrides')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('New Override')[0]).toBeInTheDocument();
+    screen.getByTitle('Help: Overrides');
+    screen.getByTitle('New Override');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
+    screen.getByTitle('Update Filter');
+    screen.getByTitle('Remove Filter');
+    screen.getByTitle('Reset to Default Filter');
+    screen.getByTitle('Help: Powerfilter');
+    screen.getByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
     // Dashboard
-    expect(
-      screen.getAllByTitle('Add new Dashboard Display')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Reset to Defaults')[0]).toBeInTheDocument();
+    screen.getByTitle('Add new Dashboard Display');
+    screen.getByTitle('Reset to Defaults');
     expect(display[0]).toHaveTextContent('Overrides by Active Days (Total: 0)');
     expect(display[1]).toHaveTextContent('Overrides by Creation Time');
     expect(display[2]).toHaveTextContent('Overrides Text Word Cloud');
@@ -197,12 +193,10 @@ describe('OverridesPage tests', () => {
     expect(row[1]).toHaveTextContent('False Positive');
     expect(row[1]).toHaveTextContent('yes');
 
-    expect(
-      screen.getAllByTitle('Move Override to trashcan')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Override')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Clone Override')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export Override')[0]).toBeInTheDocument();
+    screen.getByTitle('Move Override to trashcan');
+    screen.getByTitle('Edit Override');
+    screen.getByTitle('Clone Override');
+    screen.getByTitle('Export Override');
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -264,17 +258,13 @@ describe('OverridesPage tests', () => {
 
     render(<OverridesPage />);
 
-    await wait();
-
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    const exportIcon = await screen.findByTitle('Export page contents');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
-    const deleteIcon = screen.getAllByTitle(
-      'Move page contents to trashcan',
-    )[0];
+    const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });
@@ -353,12 +343,12 @@ describe('OverridesPage tests', () => {
     fireEvent.click(inputs[0]);
 
     // export selected override
-    const exportIcon = screen.getAllByTitle('Export selection')[0];
+    const exportIcon = screen.getByTitle('Export selection');
     fireEvent.click(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected override to trashcan
-    const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
+    const deleteIcon = screen.getByTitle('Move selection to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByIds);
   });
@@ -432,12 +422,12 @@ describe('OverridesPage tests', () => {
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered overrides
-    const exportIcon = screen.getAllByTitle('Export all filtered')[0];
+    const exportIcon = screen.getByTitle('Export all filtered');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered overrides to trashcan
-    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
+    const deleteIcon = screen.getByTitle('Move all filtered to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });

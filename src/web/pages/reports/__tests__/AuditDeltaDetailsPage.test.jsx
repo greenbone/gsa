@@ -132,7 +132,7 @@ describe('AuditDeltaDetailsContent tests', () => {
       'test/en/compliance-and-special-scans.html#using-and-managing-audit-reports',
     );
 
-    expect(screen.getByTitle('Audit Reports List')).toBeInTheDocument();
+    screen.getByTitle('Audit Reports List');
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
       '/auditreports',
@@ -164,18 +164,15 @@ describe('AuditDeltaDetailsContent tests', () => {
     );
 
     const entityInfo = within(screen.getByTestId('entity-info'));
-    expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
-      '1234',
+    const entityInfoRows = entityInfo.getAllByRole('row');
+    expect(entityInfoRows[0]).toHaveTextContent('ID:1234');
+    expect(entityInfoRows[1]).toHaveTextContent(
+      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
-    expect(entityInfo.getByRole('row', {name: /^Created:/})).toHaveTextContent(
-      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    expect(entityInfoRows[2]).toHaveTextContent(
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
-    expect(entityInfo.getByRole('row', {name: /^Modified:/})).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
-    );
-    expect(entityInfo.getByRole('row', {name: /^Owner:/})).toHaveTextContent(
-      'admin',
-    );
+    expect(entityInfoRows[3]).toHaveTextContent('Owner:admin');
 
     // Tabs
     expect(
@@ -184,60 +181,88 @@ describe('AuditDeltaDetailsContent tests', () => {
     expect(screen.getByRole('tab', {name: /^results/i})).toBeInTheDocument();
     expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
 
-    const taskName = screen.getByRole('row', {name: /^Task Name/});
-    expect(taskName).toHaveTextContent('foo');
-    expect(within(taskName).getByRole('link')).toHaveAttribute(
+    const allInfoRows = screen.getAllByRole('row');
+    // Find task name row and verify content
+    const taskNameRow = allInfoRows.find(row =>
+      row.textContent.includes('Task Name'),
+    );
+    expect(taskNameRow).toHaveTextContent('foo');
+    expect(within(taskNameRow).getByRole('link')).toHaveAttribute(
       'href',
       '/audit/314',
     );
-    expect(screen.getByRole('row', {name: /^Comment/})).toHaveTextContent(
-      'bar',
-    );
+    // Find and verify comment row
+    expect(
+      allInfoRows.find(row => row.textContent.startsWith('Comment')),
+    ).toHaveTextContent('bar');
 
-    const reportRow1 = screen.getByRole('row', {name: /^Report 1/});
+    // Find Report 1 row
+    const reportRow1 = allInfoRows.find(
+      row =>
+        row.textContent.includes('Report 1') &&
+        !row.textContent.includes('Report 2'),
+    );
     expect(reportRow1).toHaveTextContent('1234');
     expect(within(reportRow1).getByRole('link')).toHaveAttribute(
       'href',
       '/audit-report/1234',
     );
+    // Scan Time Report 1
     expect(
-      screen.getByRole('row', {name: /^Scan Time Report 1/}),
+      allInfoRows.find(row => row.textContent.includes('Scan Time Report 1')),
     ).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time - Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
+    // Scan Duration Report 1
     expect(
-      screen.getByRole('row', {name: /^Scan Duration Report 1/}),
+      allInfoRows.find(row =>
+        row.textContent.includes('Scan Duration Report 1'),
+      ),
     ).toHaveTextContent('0:31 h');
+    // Scan Status Report 1
     expect(
-      screen.getByRole('row', {name: /^Scan Status Report 1/}),
+      allInfoRows.find(row => row.textContent.includes('Scan Status Report 1')),
     ).toHaveTextContent('Done');
 
-    const reportRow2 = screen.getByRole('row', {name: /^Report 2/});
+    // Find Report 2 row
+    const reportRow2 = allInfoRows.find(
+      row =>
+        row.textContent.includes('Report 2') &&
+        !row.textContent.includes('Report 1'),
+    );
     expect(reportRow2).toHaveTextContent('5678');
     expect(within(reportRow2).getByRole('link')).toHaveAttribute(
       'href',
       '/audit-report/5678',
     );
+    // Scan Time Report 2
     expect(
-      screen.getByRole('row', {name: /^Scan Time Report 2/}),
+      allInfoRows.find(row => row.textContent.includes('Scan Time Report 2')),
     ).toHaveTextContent(
       'Mon, May 20, 2019 2:00 PM Central European Summer Time - Mon, May 20, 2019 2:30 PM Central European Summer Time',
     );
+    // Scan Duration Report 2
     expect(
-      screen.getByRole('row', {name: /^Scan Duration Report 2/}),
+      allInfoRows.find(row =>
+        row.textContent.includes('Scan Duration Report 2'),
+      ),
     ).toHaveTextContent('0:30 h');
+    // Scan Status Report 2
     expect(
-      screen.getByRole('row', {name: /^Scan Status Report 2/}),
+      allInfoRows.find(row => row.textContent.includes('Scan Status Report 2')),
     ).toHaveTextContent('Done');
-    expect(screen.getByRole('row', {name: /^Hosts scanned/})).toHaveTextContent(
-      '3',
-    );
-    expect(screen.getByRole('row', {name: /^Filter/})).toHaveTextContent(
-      'apply_overrides=0 compliance_levels=ynui min_qod=70',
-    );
-    expect(screen.getByRole('row', {name: /^Timezone/})).toHaveTextContent(
-      'UTC (UTC)',
-    );
+    // Hosts scanned
+    expect(
+      allInfoRows.find(row => row.textContent.startsWith('Hosts scanned')),
+    ).toHaveTextContent('3');
+    // Filter
+    expect(
+      allInfoRows.find(row => row.textContent.startsWith('Filter')),
+    ).toHaveTextContent('apply_overrides=0 compliance_levels=ynui min_qod=70');
+    // Timezone
+    expect(
+      allInfoRows.find(row => row.textContent.startsWith('Timezone')),
+    ).toHaveTextContent('UTC (UTC)');
   });
 
   test('should render results tab', () => {

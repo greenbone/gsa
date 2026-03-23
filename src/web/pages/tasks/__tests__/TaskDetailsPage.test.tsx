@@ -230,17 +230,19 @@ describe('TaskDetailsPage tests', () => {
 
     expect(baseElement).toHaveTextContent('Task: foo');
 
-    const links = baseElement.querySelectorAll('a');
     const helpIcon = screen.getByTestId('help-icon');
     expect(helpIcon).toHaveAttribute('title', 'Help: Tasks');
-    expect(links[0]).toHaveAttribute(
+    expect(helpIcon.closest('a')).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-tasks',
     );
 
     const listIcon = screen.getByTestId('list-icon');
     expect(listIcon).toHaveAttribute('title', 'Task List');
-    expect(links[1]).toHaveAttribute('href', '/tasks');
+    expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+      'href',
+      '/tasks',
+    );
 
     expect(baseElement).toHaveTextContent('12345');
     expect(baseElement).toHaveTextContent(
@@ -268,25 +270,24 @@ describe('TaskDetailsPage tests', () => {
     expect(progressBars[0]).toHaveAttribute('title', 'Done');
     expect(progressBars[0]).toHaveTextContent('Done');
 
-    const headings = baseElement.querySelectorAll('h2');
     const detailsLinks = screen.getAllByTestId('details-link');
 
-    expect(headings[1]).toHaveTextContent('Target');
+    screen.getByRole('heading', {name: 'Target'});
     expect(detailsLinks[2]).toHaveAttribute('href', '/target/5678');
     expect(baseElement).toHaveTextContent('target1');
 
-    expect(headings[2]).toHaveTextContent('Alerts');
+    screen.getByRole('heading', {name: 'Alerts'});
     expect(detailsLinks[3]).toHaveAttribute('href', '/alert/91011');
     expect(baseElement).toHaveTextContent('alert1');
 
-    expect(headings[3]).toHaveTextContent('Scanner');
+    screen.getByRole('heading', {name: 'Scanner'});
     expect(detailsLinks[4]).toHaveAttribute('href', '/scanner/1516');
     expect(baseElement).toHaveTextContent('scanner1');
     expect(baseElement).toHaveTextContent('OpenVAS Scanner');
 
-    expect(headings[4]).toHaveTextContent('Assets');
+    screen.getByRole('heading', {name: 'Assets'});
 
-    expect(headings[5]).toHaveTextContent('Scan');
+    screen.getByRole('heading', {name: 'Scan'});
     expect(baseElement).toHaveTextContent('2 minutes');
     expect(baseElement).toHaveTextContent(
       'Do not automatically delete reports',

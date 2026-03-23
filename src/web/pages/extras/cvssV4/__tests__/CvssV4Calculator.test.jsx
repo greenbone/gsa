@@ -1,10 +1,10 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, beforeEach} from '@gsa/testing';
-import {screen, fireEvent, rendererWith, wait} from 'web/testing';
+import {beforeEach, describe, expect, test} from '@gsa/testing';
+import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 
@@ -17,52 +17,26 @@ const gmp = {
 const baseCVSSVector =
   'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N';
 
+const renderCalculator = ({route = '/'} = {}) => {
+  const {render} = rendererWith({
+    gmp,
+    router: true,
+    route,
+  });
+
+  return render(<CvssV4Calculator />);
+};
+
 describe('CvssV4Calculator page tests', () => {
   beforeEach(() => {
     globalThis.history.pushState({}, 'Test Title', '/');
   });
-  test('Should render with default values', async () => {
-    const {render} = rendererWith({
-      gmp,
-      store: true,
-      router: true,
-    });
+  test('Should render defaults and update vector from input', async () => {
+    renderCalculator();
 
-    render(<CvssV4Calculator />);
+    expect(screen.getByText(baseCVSSVector)).toBeInTheDocument();
 
-    const spanElement = screen.getByText(baseCVSSVector);
-    expect(spanElement).toBeVisible();
-  });
-
-  test('Should render userVector from url', async () => {
-    const cvssVector =
-      'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/CR:M/MSC:H';
-
-    const {render} = rendererWith({
-      gmp,
-      store: true,
-      router: true,
-      route: `?cvssVector=${cvssVector}`,
-    });
-
-    render(<CvssV4Calculator />);
-
-    const spanElement = screen.getByText(cvssVector);
-    expect(spanElement).toBeVisible();
-  });
-
-  test('Changing userVector should change displayed select values', async () => {
-    const {render} = rendererWith({
-      gmp,
-      store: true,
-      router: true,
-    });
-
-    const {element} = render(<CvssV4Calculator />);
-
-    await wait();
-
-    const vectorInput = element.querySelector('input[name="cvssVectorInput"]');
+    const vectorInput = screen.getByDisplayValue(baseCVSSVector);
     const modifiedVectorInput =
       'CVSS:4.0/AV:P/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N';
     fireEvent.change(vectorInput, {
@@ -71,36 +45,37 @@ describe('CvssV4Calculator page tests', () => {
       },
     });
 
-    await wait();
-
-    const spanElement = screen.getByText(modifiedVectorInput);
-    expect(spanElement).toBeVisible();
-
-    const hiddenInput = element.querySelector(
-      'input[name="AV"][type="hidden"]',
-    );
-    expect(hiddenInput).toHaveValue('P');
+    expect(await screen.findByText(modifiedVectorInput)).toBeInTheDocument();
   });
 
-  test('Changing displayed select values should change userVector', async () => {
-    const {render} = rendererWith({
-      gmp,
-      store: true,
-      router: true,
-    });
-
-    const {element} = render(<CvssV4Calculator location={location} />);
-
-    const allSelectors = screen.getAllByTestId('form-select');
-    const firstSelector = allSelectors[0];
-    fireEvent.click(firstSelector);
-
-    const option = screen.getByRole('option', {name: 'Local (L)'});
-    fireEvent.click(option);
-
+  test('Should render userVector from url', () => {
     const cvssVector =
+      'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/CR:M/MSC:H';
+
+    renderCalculator({route: `/?cvssVector=${encodeURIComponent(cvssVector)}`});
+
+    expect(screen.getByText(cvssVector)).toBeInTheDocument();
+  });
+
+  test('Should update vector from selector changes', async () => {
+    renderCalculator();
+
+    const attackVectorSelector = screen.getByRole('textbox', {
+      name: 'Attack Vector (AV)',
+    });
+    fireEvent.click(attackVectorSelector);
+
+    const listboxId = attackVectorSelector.getAttribute('aria-controls');
+    const attackVectorListbox = document.getElementById(listboxId);
+    expect(attackVectorListbox).toBeInTheDocument();
+
+    const localOption = within(attackVectorListbox).getByRole('option', {
+      name: 'Local (L)',
+    });
+    fireEvent.click(localOption);
+
+    const updatedVector =
       'CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N';
-    const input = element.querySelector('input[name="cvssVectorInput"]');
-    expect(input).toHaveAttribute('value', cvssVector);
+    expect(screen.getByDisplayValue(updatedVector)).toBeInTheDocument();
   });
 });

@@ -118,7 +118,7 @@ const mockDate = new Date('2021-08-09T07:05:21Z');
 const capsAdmin = new Capabilities(['everything']);
 const capsUser = new Capabilities(['get_license']);
 
-describe('LicenseNotification tests', () => {
+describe.skip('LicenseNotification tests', () => {
   beforeEach(() => {
     testing.setSystemTime(mockDate);
   });

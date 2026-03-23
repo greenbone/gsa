@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Agent from 'gmp/models/agent';
 import Date, {type Date as GmpDate} from 'gmp/models/date';
@@ -135,8 +135,7 @@ describe('AgentListPage tests', () => {
     const authorizeButton = screen.getByText('Authorize');
     fireEvent.click(authorizeButton);
 
-    await wait();
-    expect(authorizeMock).toHaveBeenCalled();
+    await waitFor(() => expect(authorizeMock).toHaveBeenCalled());
   });
 
   test('should handle bulk revoke on page contents', async () => {
@@ -155,8 +154,7 @@ describe('AgentListPage tests', () => {
     const revokeButton = screen.getByText('Revoke');
     fireEvent.click(revokeButton);
 
-    await wait();
-    expect(revokeMock).toHaveBeenCalled();
+    await waitFor(() => expect(revokeMock).toHaveBeenCalled());
   });
 
   test('shows error notification when bulk authorize fails', async () => {
@@ -183,7 +181,6 @@ describe('AgentListPage tests', () => {
 
     expect(authorizeMock).toHaveBeenCalled();
 
-    await wait();
     const errorDialog = await screen.findByRole('dialog');
     expect(errorDialog).toBeVisible();
     expect(errorDialog.textContent).toMatch(/boom|An error occurred/i);
@@ -213,7 +210,6 @@ describe('AgentListPage tests', () => {
 
     expect(revokeMock).toHaveBeenCalled();
 
-    await wait();
     const errorDialog = await screen.findByRole('dialog');
     expect(errorDialog).toBeVisible();
     expect(errorDialog.textContent).toMatch(/boom|An error occurred/i);

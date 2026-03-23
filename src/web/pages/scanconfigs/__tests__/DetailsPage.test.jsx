@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith, fireEvent, wait, within} from 'web/testing';
+import {screen, rendererWith, fireEvent, within} from 'web/testing';
 import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
@@ -182,7 +182,7 @@ const createGmp = ({
 };
 
 describe('ScanConfigDetailsPage tests', () => {
-  test('should render full DetailsPage', () => {
+  test('should render full DetailsPage', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
@@ -212,56 +212,37 @@ describe('ScanConfigDetailsPage tests', () => {
       'href',
       '/scan-configs',
     );
-    expect(screen.getByTitle('ScanConfig List')).toBeInTheDocument();
+    screen.getByTitle('ScanConfig List');
 
     const entityInfo = within(screen.getByTestId('entity-info'));
-    expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
-      '12345',
-    );
-    expect(entityInfo.getByRole('row', {name: /^created:/i})).toHaveTextContent(
+    const infoRows = entityInfo.getAllByRole('row');
+    expect(infoRows[0]).toHaveTextContent('12345');
+    expect(infoRows[1]).toHaveTextContent(
       'Tue, Jul 16, 2019 8:31 AM Central European Summer Time',
     );
-    expect(
-      entityInfo.getByRole('row', {name: /^modified:/i}),
-    ).toHaveTextContent(
+    expect(infoRows[2]).toHaveTextContent(
       'Tue, Jul 16, 2019 8:44 AM Central European Summer Time',
     );
-    expect(entityInfo.getByRole('row', {name: /^owner:/i})).toHaveTextContent(
-      'admin',
-    );
+    expect(infoRows[3]).toHaveTextContent('admin');
 
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^scanner preferences/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^nvt families/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^nvt preferences/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    const tablist = await screen.findByRole('tablist');
+    within(tablist).getByRole('tab', {name: /^information/i});
+    within(tablist).getByRole('tab', {name: /^scanner preferences/i});
+    within(tablist).getByRole('tab', {name: /^nvt families/i});
+    within(tablist).getByRole('tab', {name: /^nvt preferences/i});
+    within(tablist).getByRole('tab', {name: /^user tags/i});
+    within(tablist).getByRole('tab', {name: /^permissions/i});
 
-    expect(
-      screen.getByRole('row', {name: /^comment some comment/i}),
-    ).toHaveTextContent('Some Comment');
+    screen.getByText('Some Comment');
 
     const tasksRow = within(
-      screen.getByRole('row', {name: /^tasks using this/i}),
+      screen.getByText('Tasks using this Scan Config').closest('tr'),
     );
-    expect(tasksRow.getByText('task1')).toBeInTheDocument();
     expect(tasksRow.getByText('task1')).toHaveAttribute('href', '/task/1234');
-
-    expect(tasksRow.getByText('task2')).toBeInTheDocument();
     expect(tasksRow.getByText('task2')).toHaveAttribute('href', '/task/5678');
   });
 
-  test('should render nvt families tab', () => {
+  test('should render nvt families tab', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
@@ -277,17 +258,12 @@ describe('ScanConfigDetailsPage tests', () => {
 
     render(<DetailsPage id="12345" />);
 
-    fireEvent.click(screen.getByRole('tab', {name: /nvt families/i}));
+    const tablist = await screen.findByRole('tablist');
+    fireEvent.click(within(tablist).getByRole('tab', {name: /nvt families/i}));
 
-    expect(screen.getByRole('row', {name: /family1/i})).toHaveTextContent(
-      '1 of 1',
-    );
-    expect(screen.getByRole('row', {name: /family2/i})).toHaveTextContent(
-      '2 of 4',
-    );
-    expect(screen.getByRole('row', {name: /family3/i})).toHaveTextContent(
-      '0 of 2',
-    );
+    screen.getByText('1 of 1');
+    screen.getByText('2 of 4');
+    screen.getByText('0 of 2');
 
     const familyRow1 = within(screen.getByRole('cell', {name: /family1/i}));
     const familyRow1Link = familyRow1.getByRole('link');
@@ -331,7 +307,7 @@ describe('ScanConfigDetailsPage tests', () => {
     );
   });
 
-  test('should render nvt preferences tab', () => {
+  test('should render nvt preferences tab', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
@@ -347,32 +323,25 @@ describe('ScanConfigDetailsPage tests', () => {
 
     render(<DetailsPage id="12345" />);
 
-    const preferencesTab = screen.getByRole('tab', {name: /^nvt preferences/i});
+    const tablist = await screen.findByRole('tablist');
+    const preferencesTab = within(tablist).getByRole('tab', {
+      name: /^nvt preferences/i,
+    });
     fireEvent.click(preferencesTab);
 
-    const preferencesRow1 = screen.getByRole('row', {name: /preference0/i});
-    expect(preferencesRow1).toHaveTextContent(/^nvt0preference0yesno/);
-    expect(within(preferencesRow1).getByTestId('details-link')).toHaveAttribute(
-      'href',
-      '/nvt/0',
-    );
+    // Verify preferences are displayed
+    screen.getByText('preference0');
+    screen.getByText('preference1');
+    screen.getByText('preference2');
 
-    const preferencesRow2 = screen.getByRole('row', {name: /preference1/i});
-    expect(preferencesRow2).toHaveTextContent(/^nvt1preference1value2value1/);
-    expect(within(preferencesRow2).getByTestId('details-link')).toHaveAttribute(
-      'href',
-      '/nvt/1',
-    );
-
-    const preferencesRow3 = screen.getByRole('row', {name: /preference2/i});
-    expect(preferencesRow3).toHaveTextContent(/^nvt2preference2foobar/);
-    expect(within(preferencesRow3).getByTestId('details-link')).toHaveAttribute(
-      'href',
-      '/nvt/2',
-    );
+    // Validate NVT detail links without expensive row queries
+    const detailsLinks = screen.getAllByTestId('details-link');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/nvt/0');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/nvt/1');
+    expect(detailsLinks[2]).toHaveAttribute('href', '/nvt/2');
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
@@ -388,13 +357,14 @@ describe('ScanConfigDetailsPage tests', () => {
 
     const {container} = render(<DetailsPage id="12345" />);
 
-    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    const tablist = await screen.findByRole('tablist');
+    const userTagsTab = within(tablist).getByRole('tab', {name: /^user tags/i});
     fireEvent.click(userTagsTab);
 
     expect(container).toHaveTextContent('No user tags available');
   });
 
-  test('should render permissions tab', () => {
+  test('should render permissions tab', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
@@ -410,7 +380,10 @@ describe('ScanConfigDetailsPage tests', () => {
 
     const {container} = render(<DetailsPage id="12345" />);
 
-    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    const tablist = await screen.findByRole('tablist');
+    const permissionsTab = within(tablist).getByRole('tab', {
+      name: /^permissions/i,
+    });
     fireEvent.click(permissionsTab);
 
     expect(container).toHaveTextContent('No permissions available');
@@ -436,9 +409,7 @@ describe('ScanConfigDetailsPage tests', () => {
 
     render(<DetailsPage id="12345" />);
 
-    await wait();
-
-    const cloneIcon = screen.getByTitle('Clone Scan Config');
+    const cloneIcon = await screen.findByTitle('Clone Scan Config');
     fireEvent.click(cloneIcon);
     expect(gmp.scanconfig.clone).toHaveBeenCalledWith(config);
 

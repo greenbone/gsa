@@ -1,10 +1,10 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
+import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
@@ -166,7 +166,7 @@ beforeEach(() => {
 });
 
 describe('Host DetailsPage tests', () => {
-  test('should render full DetailsPage', () => {
+  test('should render full DetailsPage', async () => {
     const gmp = {
       host: {
         get: getHost,
@@ -196,8 +196,8 @@ describe('Host DetailsPage tests', () => {
 
     render(<DetailsPage id="12345" />);
 
-    expect(screen.getByTitle('Help: Hosts')).toBeInTheDocument();
-    expect(screen.getByTitle('Host List')).toBeInTheDocument();
+    screen.getByTitle('Help: Hosts');
+    screen.getByTitle('Host List');
 
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
@@ -208,88 +208,85 @@ describe('Host DetailsPage tests', () => {
       '/hosts',
     );
 
-    expect(screen.getByTitle('Create new Host')).toBeInTheDocument();
-    expect(screen.getByTitle('Edit Host')).toBeInTheDocument();
-    expect(screen.getByTitle('Delete Host')).toBeInTheDocument();
-    expect(screen.getByTitle('Export Host as XML')).toBeInTheDocument();
-    expect(screen.getByTitle('Results for this Host')).toBeInTheDocument();
-    expect(
-      screen.getByTitle('TLS Certificates for this Host'),
-    ).toBeInTheDocument();
+    screen.getByTitle('Create new Host');
+    screen.getByTitle('Edit Host');
+    screen.getByTitle('Delete Host');
+    screen.getByTitle('Export Host as XML');
+    screen.getByTitle('Results for this Host');
+    screen.getByTitle('TLS Certificates for this Host');
 
-    expect(
-      screen.getByRole('heading', {name: /host: foo/i}),
-    ).toBeInTheDocument();
+    screen.getByText('Host: Foo');
 
     const entityInfo = within(screen.getByTestId('entity-info'));
-    expect(entityInfo.getByRole('row', {name: /id/i})).toHaveTextContent(
-      'ID:12345',
+    const idRow = entityInfo.getByText('ID:').closest('tr');
+    within(idRow).getByText('12345');
+
+    const createdRow = entityInfo.getByText('Created:').closest('tr');
+    within(createdRow).getByText(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
-    expect(entityInfo.getByRole('row', {name: /created/i})).toHaveTextContent(
-      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+
+    const modifiedRow = entityInfo.getByText('Modified:').closest('tr');
+    within(modifiedRow).getByText(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
-    expect(entityInfo.getByRole('row', {name: /modified/i})).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
-    );
-    expect(entityInfo.getByRole('row', {name: /owner/i})).toHaveTextContent(
-      'Owner:admin',
-    );
+
+    const ownerRow = entityInfo.getByText('Owner:').closest('tr');
+    within(ownerRow).getByText('admin');
 
     // Tabs
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    screen.getByText('Information');
+    screen.getByText('User Tags');
+    screen.getByText('Permissions');
 
     // Details
-    expect(
-      screen.getByRole('row', {name: /^Hostname foo/}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^IP Address 123.456.789.10/}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^comment bar/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^os linux kernel/i}),
-    ).toBeInTheDocument();
-    const osImage = screen
-      .getByRole('row', {name: /^os linux kernel/i})
-      .querySelector('img');
-    expect(osImage).toHaveAttribute('src', '/img/os_linux.svg');
-
-    expect(screen.getByRole('row', {name: /^route/i})).toHaveTextContent(
-      /123\.456\.789\.10123\.456\.789\.11/,
+    const detailsTable = screen.getByText('Hostname').closest('table');
+    const details = within(detailsTable);
+    const hostnameRow = details.getByText('Hostname').closest('tr');
+    within(hostnameRow).getByText(
+      text => typeof text === 'string' && text.toLowerCase().includes('foo'),
     );
-    expect(screen.getByRole('row', {name: /^severity/i})).toHaveTextContent(
-      /10\.0 \(Critical\)/,
+
+    const ipRow = details.getByText('IP Address').closest('tr');
+    within(ipRow).getByText('123.456.789.10');
+
+    const commentRow = details.getByText('Comment').closest('tr');
+    within(commentRow).getByText('bar');
+
+    const osRow = details.getByText('OS').closest('tr');
+    expect(osRow.querySelector('img')).toHaveAttribute(
+      'src',
+      '/img/os_linux.svg',
+    );
+
+    const routeRow = details.getByText('Route').closest('tr');
+    within(routeRow).getByText('123.456.789.11');
+
+    const severityRow = details.getByText('Severity').closest('tr');
+    within(severityRow).getByText(
+      text => typeof text === 'string' && text.includes('Critical'),
     );
 
     // Identifier Table
-    expect(
-      screen.getByRole('heading', {name: /^all identifiers/i}),
-    ).toBeInTheDocument();
+    screen.getByText('All Identifiers');
     const identifiersTable = within(screen.getByTestId('host-identifiers'));
 
-    // Rows
-    expect(
-      identifiersTable.getByRole('row', {name: /^hostname/i}),
-    ).toHaveTextContent(
+    // Get all rows (including header)
+    const identifierRows = identifiersTable.getAllByRole('row');
+
+    // Verify identifier row content (skip header row at index 0)
+    expect(identifierRows[1]).toHaveTextContent(
       'hostnamefooSun, Jun 2, 2019 2:00 PM Central European Summer TimeReport 910 (NVT 1.2.3.4.5)',
     );
-    expect(identifiersTable.getByRole('row', {name: /^ip/i})).toHaveTextContent(
+    expect(identifierRows[2]).toHaveTextContent(
       'ip123.456.789.10Sun, Jun 2, 2019 2:00 PM Central European Summer TimeReport 910 (NVT 1.2.3.4.5)',
     );
-    expect(identifiersTable.getByRole('row', {name: /^os/i})).toHaveTextContent(
+    expect(identifierRows[3]).toHaveTextContent(
       'OScpe:/o:linux:kernelSun, Jun 2, 2019 2:00 PM Central European Summer TimeReport 910 (NVT 1.2.3.4.5)',
     );
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = {
       host: {
         get: getHost,
@@ -315,14 +312,14 @@ describe('Host DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    const {container} = render(<DetailsPage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    const userTagsTab = screen.getByText('User Tags');
     fireEvent.click(userTagsTab);
-    expect(container).toHaveTextContent('No user tags available');
+    expect(screen.getByText('No user tags available')).toBeInTheDocument();
   });
 
-  test('should render permissions tab', () => {
+  test('should render permissions tab', async () => {
     const gmp = {
       host: {
         get: getHost,
@@ -348,14 +345,14 @@ describe('Host DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    const {container} = render(<DetailsPage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    const permissionsTab = screen.getByText('Permissions');
     fireEvent.click(permissionsTab);
-    expect(container).toHaveTextContent('No permissions available');
+    expect(screen.getByText('No permissions available')).toBeInTheDocument();
   });
 
-  test('should call commands', async () => {
+  test('should call commands', () => {
     const deleteIdentifier = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
@@ -396,21 +393,20 @@ describe('Host DetailsPage tests', () => {
 
     render(<DetailsPage id="12345" />);
 
-    await wait();
-
-    // delete identifier
-    fireEvent.click(screen.getAllByTitle('Delete Identifier')[0]);
-    await wait();
+    const identifiersTable = within(screen.getByTestId('host-identifiers'));
+    const deleteIdentifierButtons =
+      identifiersTable.getAllByTitle('Delete Identifier');
+    fireEvent.click(deleteIdentifierButtons[0]);
     expect(deleteIdentifier).toHaveBeenCalledWith(host.identifiers[0]);
 
-    // export host
-    fireEvent.click(screen.getAllByTitle('Export Host as XML')[0]);
-    await wait();
+    // export host - use testId for toolbar icon
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(exportFunc).toHaveBeenCalledWith(host);
 
-    // delete host
-    fireEvent.click(screen.getAllByTitle('Delete Host')[0]);
-    await wait();
+    // delete host - use testId for toolbar icon
+    const deleteIcons = screen.getAllByTestId('delete-icon');
+    fireEvent.click(deleteIcons[0]);
     expect(deleteFunc).toHaveBeenCalledWith({id: host.id});
   });
 });
@@ -456,16 +452,12 @@ describe('Host ToolBarIcons tests', () => {
     );
     expect(links[1]).toHaveAttribute('href', '/hosts');
 
-    expect(screen.getAllByTitle('Create new Host')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Host')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Delete Host')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export Host as XML')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Results for this Host')[0],
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('TLS Certificates for this Host')[0],
-    ).toBeInTheDocument();
+    screen.getByTitle('Create new Host');
+    screen.getByTitle('Edit Host');
+    screen.getByTitle('Delete Host');
+    screen.getByTitle('Export Host as XML');
+    screen.getByTitle('Results for this Host');
+    screen.getByTitle('TLS Certificates for this Host');
   });
 
   test('should call click handlers', () => {

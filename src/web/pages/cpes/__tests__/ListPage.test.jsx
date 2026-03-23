@@ -10,7 +10,6 @@ import {
   within,
   fireEvent,
   rendererWith,
-  wait,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import CPE from 'gmp/models/cpe';
@@ -151,7 +150,7 @@ describe('CpesPage tests', () => {
 
     render(<CpesPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /cpes/i});
 
     const display = screen.getAllByTestId('grid-item');
     const powerFilter = within(screen.queryPowerFilter());
@@ -159,25 +158,21 @@ describe('CpesPage tests', () => {
     const select = powerFilter.getByTestId('powerfilter-select');
 
     // Toolbar Icons
-    expect(screen.getAllByTitle('Help: CPEs')[0]).toBeInTheDocument();
+    expect(screen.getByTitle('Help: CPEs'));
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
+    expect(screen.getByTitle('Update Filter'));
+    expect(screen.getByTitle('Remove Filter'));
+    expect(screen.getByTitle('Reset to Default Filter'));
+    expect(screen.getByTitle('Help: Powerfilter'));
+    expect(screen.getByTitle('Edit Filter'));
     expect(select).toHaveValue('--');
     expect(select).toHaveAttribute('title', 'Loaded filter');
 
     // Dashboard
-    expect(
-      screen.getAllByTitle('Add new Dashboard Display')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Reset to Defaults')[0]).toBeInTheDocument();
+    expect(screen.getByTitle('Add new Dashboard Display'));
+    expect(screen.getByTitle('Reset to Defaults'));
     expect(display[0]).toHaveTextContent('CPEs by Severity Class (Total: 0)');
     expect(display[1]).toHaveTextContent('CPEs by Creation Time');
     expect(display[2]).toHaveTextContent('CPEs by CVSS (Total: 0)');
@@ -262,7 +257,7 @@ describe('CpesPage tests', () => {
 
     render(<CpesPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /cpes/i});
 
     // export page contents
     const tableFooter = within(screen.queryTableFooter());
@@ -330,7 +325,7 @@ describe('CpesPage tests', () => {
 
     render(<CpesPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /cpes/i});
 
     // change bulk action to apply to selection
     const tableFooter = within(screen.queryTableFooter());
@@ -410,7 +405,7 @@ describe('CpesPage tests', () => {
 
     render(<CpesPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /cpes/i});
 
     // change bulk action to apply to all filtered
     const tableFooter = within(screen.queryTableFooter());

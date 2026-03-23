@@ -9,7 +9,6 @@ import {
   testBulkTrashcanDialog,
   rendererWith,
   fireEvent,
-  wait,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
@@ -129,7 +128,7 @@ describe('ScanConfigsPage tests', () => {
       <ScanConfigsPage openEditNvtDetailsDialog={testing.fn()} />,
     );
 
-    await wait();
+    await screen.findByRole('heading', {name: /scan configs/i});
 
     expect(baseElement).toBeInTheDocument();
     expect(screen.queryTable()).toBeInTheDocument();
@@ -188,11 +187,9 @@ describe('ScanConfigsPage tests', () => {
 
     render(<ScanConfigsPage openEditNvtDetailsDialog={testing.fn()} />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /scan configs/i});
 
-    const deleteIcon = screen.getAllByTitle(
-      'Move page contents to trashcan',
-    )[0];
+    const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
 

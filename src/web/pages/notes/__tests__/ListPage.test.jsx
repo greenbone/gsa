@@ -11,7 +11,6 @@ import {
   within,
   rendererWith,
   fireEvent,
-  wait,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
@@ -141,7 +140,7 @@ describe('NotesPage tests', () => {
 
     const {baseElement} = render(<NotesPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /notes/i});
 
     const powerFilter = within(screen.queryPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
@@ -149,26 +148,22 @@ describe('NotesPage tests', () => {
     const display = screen.getAllByTestId('grid-item');
 
     // Toolbar Icons
-    expect(screen.getAllByTitle('Help: Notes')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('New Note')[0]).toBeInTheDocument();
+    expect(screen.getByTitle('Help: Notes'));
+    expect(screen.getByTitle('New Note'));
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
+    expect(screen.getByTitle('Update Filter'));
+    expect(screen.getByTitle('Remove Filter'));
+    expect(screen.getByTitle('Reset to Default Filter'));
+    expect(screen.getByTitle('Help: Powerfilter'));
+    expect(screen.getByTitle('Edit Filter'));
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
     // Dashboard
-    expect(
-      screen.getAllByTitle('Add new Dashboard Display')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Reset to Defaults')[0]).toBeInTheDocument();
+    expect(screen.getByTitle('Add new Dashboard Display'));
+    expect(screen.getByTitle('Reset to Defaults'));
     expect(display[0]).toHaveTextContent('Notes by Active Days (Total: 0)');
     expect(display[1]).toHaveTextContent('Notes by Creation Time');
     expect(display[2]).toHaveTextContent('Notes Text Word Cloud');
@@ -191,12 +186,10 @@ describe('NotesPage tests', () => {
     expect(row[1]).toHaveTextContent('666');
     expect(row[1]).toHaveTextContent('yes');
 
-    expect(
-      screen.getAllByTitle('Move Note to trashcan')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Note')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Clone Note')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export Note')[0]).toBeInTheDocument();
+    expect(screen.getByTitle('Move Note to trashcan'));
+    expect(screen.getByTitle('Edit Note'));
+    expect(screen.getByTitle('Clone Note'));
+    expect(screen.getByTitle('Export Note'));
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -258,10 +251,10 @@ describe('NotesPage tests', () => {
 
     render(<NotesPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /notes/i});
 
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    const exportIcon = screen.getByTitle('Export page contents');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
@@ -332,7 +325,7 @@ describe('NotesPage tests', () => {
 
     render(<NotesPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /notes/i});
 
     // change to apply to selection
     const tableFooter = within(screen.queryTableFooter());
@@ -347,12 +340,12 @@ describe('NotesPage tests', () => {
     fireEvent.click(inputs[0]);
 
     // export selected note
-    const exportIcon = screen.getAllByTitle('Export selection')[0];
+    const exportIcon = screen.getByTitle('Export selection');
     fireEvent.click(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected note to trashcan
-    const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
+    const deleteIcon = screen.getByTitle('Move selection to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByIds);
   });
@@ -416,7 +409,7 @@ describe('NotesPage tests', () => {
 
     render(<NotesPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /notes/i});
 
     const tableFooter = within(screen.queryTableFooter());
     const select = tableFooter.getSelectElement();
@@ -425,12 +418,12 @@ describe('NotesPage tests', () => {
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered notes
-    const exportIcon = screen.getAllByTitle('Export all filtered')[0];
+    const exportIcon = screen.getByTitle('Export all filtered');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered notes to trashcan
-    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
+    const deleteIcon = screen.getByTitle('Move all filtered to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });

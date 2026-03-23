@@ -54,7 +54,7 @@ const getEntities = testing.fn().mockResolvedValue({
 });
 
 describe('TLS Certificate DetailsPage tests', () => {
-  test('should render full DetailsPage', () => {
+  test('should render full DetailsPage', async () => {
     const getTlsCertificate = testing.fn().mockResolvedValue({
       data: tlsCertificate,
     });

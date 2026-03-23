@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, wait, fireEvent, screen, within} from 'web/testing';
+import {rendererWith, waitFor, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import CPE from 'gmp/models/cpe';
@@ -103,38 +103,30 @@ describe('CpeDetailsPage tests', () => {
     );
 
     // test title bar
-    expect(screen.getByRole('heading', {name: /CPE: foo/})).toBeInTheDocument();
+    screen.getByRole('heading', {name: /CPE: foo/});
 
     const entityInfo = within(screen.getByTestId('entity-info'));
-    expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
-      'cpe:/a:foo',
-    );
-    expect(
-      entityInfo.getByRole('row', {name: /^modified:/i}),
-    ).toHaveTextContent(
+    const infoRows = entityInfo.getAllByRole('row');
+    expect(infoRows[0]).toHaveTextContent('cpe:/a:foo');
+    expect(infoRows[1]).toHaveTextContent(
       'Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
     );
-    expect(entityInfo.getByRole('row', {name: /^created:/i})).toHaveTextContent(
+    expect(infoRows[2]).toHaveTextContent(
       'Mon, Jun 24, 2019 11:55 AM Coordinated Universal Time',
     );
-    expect(
-      entityInfo.getByRole('row', {name: /^last updated:/i}),
-    ).toHaveTextContent(
+    expect(infoRows[3]).toHaveTextContent(
       'Last updated:Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
     );
-    const severityRow = screen.getByRole('row', {name: /^severity/i});
-    expect(within(severityRow).getByText('9.8 (Critical)')).toBeInTheDocument();
+    screen.getByText('9.8 (Critical)');
 
     // details
-    expect(
-      screen.getByRole('heading', {name: /^Reported Vulnerabilities/}),
-    ).toBeInTheDocument();
-    const firstCVE = screen.getByRole('row', {name: /^CVE-2020-1234/});
-    expect(within(firstCVE).getByText('9.7 (Critical)')).toBeInTheDocument();
-    const secondCVE = screen.getByRole('row', {name: /^CVE-2020-5678/});
-    expect(within(secondCVE).getByText('5.4 (Medium)')).toBeInTheDocument();
-    const thirdCVE = screen.getByRole('row', {name: /^CVE-2019-5678/});
-    expect(within(thirdCVE).getByText('1.8 (Low)')).toBeInTheDocument();
+    screen.getByText('Reported Vulnerabilities');
+    screen.getByText('CVE-2020-1234');
+    screen.getByText('9.7 (Critical)');
+    screen.getByText('CVE-2020-5678');
+    screen.getByText('5.4 (Medium)');
+    screen.getByText('CVE-2019-5678');
+    screen.getByText('1.8 (Low)');
   });
 
   test('should render user tags tab', async () => {
@@ -152,7 +144,8 @@ describe('CpeDetailsPage tests', () => {
 
     const {container} = render(<CpePage id="cpe:/a:foo" />);
 
-    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    const tablist = screen.getByRole('tablist');
+    const userTagsTab = within(tablist).getByRole('tab', {name: /^user tags/i});
     fireEvent.click(userTagsTab);
     expect(container).toHaveTextContent('No user tags available');
   });
@@ -174,7 +167,6 @@ describe('CpeDetailsPage tests', () => {
     const exportIcon = screen.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export CPE');
     fireEvent.click(exportIcon);
-    await wait();
-    expect(gmp.cpe.export).toHaveBeenCalledWith(cpe);
+    await waitFor(() => expect(gmp.cpe.export).toHaveBeenCalledWith(cpe));
   });
 });

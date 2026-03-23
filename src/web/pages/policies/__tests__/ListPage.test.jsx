@@ -174,15 +174,12 @@ describe('PoliciesPage tests', () => {
 
     render(<PoliciesPage />);
 
-    await wait();
-
-    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    // export page contents
+    const exportIcon = await screen.findByTitle('Export page contents');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
-    const deleteIcon = screen.getAllByTitle(
-      'Move page contents to trashcan',
-    )[0];
+    const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(undefined, deleteByFilter);
   });

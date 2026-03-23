@@ -224,39 +224,29 @@ describe('Audit DetailsPage tests', () => {
       '/audits',
     );
 
-    expect(
-      screen.getByRole('heading', {name: /Audit: foo/}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /Audit: foo/});
 
     const entityInfo = within(screen.getByTestId('entity-info'));
-    expect(entityInfo.getByRole('row', {name: /ID/})).toHaveTextContent(
-      '12345',
-    );
-    expect(entityInfo.getByRole('row', {name: /Created/})).toHaveTextContent(
+    const infoRows = entityInfo.getAllByRole('row');
+    expect(infoRows[0]).toHaveTextContent('12345');
+    expect(infoRows[1]).toHaveTextContent(
       'Tue, Jul 16, 2019 8:31 AM Central European Summer Time',
     );
-    expect(entityInfo.getByRole('row', {name: /Modified/})).toHaveTextContent(
+    expect(infoRows[2]).toHaveTextContent(
       'Tue, Jul 16, 2019 8:44 AM Central European Summer Time',
     );
-    expect(entityInfo.getByRole('row', {name: /Owner/})).toHaveTextContent(
-      'admin',
-    );
+    expect(infoRows[3]).toHaveTextContent('admin');
 
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    const tablist = screen.getByRole('tablist');
+    within(tablist).getByRole('tab', {name: /^information/i});
+    within(tablist).getByRole('tab', {name: /^permissions/i});
 
-    expect(
-      screen.getByRole('row', {name: /^comment some comment/i}),
-    ).toBeInTheDocument();
+    screen.getByText('some comment');
     const progressBars = screen.getByTestId('progressbar-box');
     expect(progressBars).toHaveAttribute('title', 'Done');
     expect(progressBars).toHaveTextContent('Done');
 
-    expect(screen.getByRole('heading', {name: /^Target$/})).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Target$/});
     const targetDetails = within(
       screen.getByRole('heading', {name: /^Target$/}).parentElement,
     );
@@ -268,7 +258,7 @@ describe('Audit DetailsPage tests', () => {
       'target1',
     );
 
-    expect(screen.getByRole('heading', {name: /^Alerts$/})).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Alerts$/});
     const alertsDetails = within(
       screen.getByRole('heading', {name: /^Alerts$/}).parentElement,
     );
@@ -280,9 +270,7 @@ describe('Audit DetailsPage tests', () => {
       'alert1',
     );
 
-    expect(
-      screen.getByRole('heading', {name: /^Scanner$/}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Scanner$/});
     const scannerDetails = within(
       screen.getByRole('heading', {name: /^Scanner$/}).parentElement,
     );
@@ -293,22 +281,13 @@ describe('Audit DetailsPage tests', () => {
     expect(scannerDetails.getByTestId('details-link')).toHaveTextContent(
       'scanner1',
     );
-    expect(scannerDetails.getByRole('row', {name: /^Type/})).toHaveTextContent(
-      'OpenVAS Scanner',
-    );
+    screen.getByText('OpenVAS Scanner');
 
-    expect(screen.getByRole('heading', {name: /^Assets$/})).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Assets$/});
 
-    expect(screen.getByRole('heading', {name: /^Scan$/})).toBeInTheDocument();
-    const scanDetails = within(
-      screen.getByRole('heading', {name: /^Scan$/}).parentElement,
-    );
-    expect(
-      scanDetails.getByRole('row', {name: /^Duration of last Scan/}),
-    ).toHaveTextContent('2 minutes');
-    expect(
-      scanDetails.getByRole('row', {name: /^Auto delete Reports/}),
-    ).toHaveTextContent('Do not automatically delete reports');
+    screen.getByRole('heading', {name: /^Scan$/});
+    screen.getByText('2 minutes');
+    screen.getByText('Do not automatically delete reports');
   });
 
   test('should render permissions tab', () => {
@@ -329,7 +308,10 @@ describe('Audit DetailsPage tests', () => {
 
     const {container} = render(<DetailsPage id="12345" />);
 
-    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    const tablist = screen.getByRole('tablist');
+    const permissionsTab = within(tablist).getByRole('tab', {
+      name: /^permissions/i,
+    });
     fireEvent.click(permissionsTab);
     expect(container).toHaveTextContent('No permissions available');
   });

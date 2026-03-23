@@ -11,7 +11,6 @@ import {
   within,
   rendererWith,
   fireEvent,
-  wait,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
@@ -139,25 +138,23 @@ describe('TargetsListPage tests', () => {
 
     const {baseElement} = render(<TargetPage />);
 
-    await wait();
+    await screen.findByTitle('Help: Targets');
 
     const powerFilter = within(screen.getPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
     const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
-    expect(screen.getAllByTitle('Help: Targets')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('New Target')[0]).toBeInTheDocument();
+    screen.getByTitle('Help: Targets');
+    screen.getByTitle('New Target');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
+    screen.getByTitle('Update Filter');
+    screen.getByTitle('Remove Filter');
+    screen.getByTitle('Reset to Default Filter');
+    screen.getByTitle('Help: Powerfilter');
+    screen.getByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
@@ -180,12 +177,10 @@ describe('TargetsListPage tests', () => {
     expect(row[1]).toHaveTextContent('SSH: ssh');
     expect(row[1]).toHaveTextContent('SSH Elevate: ssh_elevate');
 
-    expect(
-      screen.getAllByTitle('Move Target to trashcan')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Target')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Clone Target')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export Target')[0]).toBeInTheDocument();
+    screen.getByTitle('Move Target to trashcan');
+    screen.getByTitle('Edit Target');
+    screen.getByTitle('Clone Target');
+    screen.getByTitle('Export Target');
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -241,17 +236,13 @@ describe('TargetsListPage tests', () => {
 
     render(<TargetPage />);
 
-    await wait();
-
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    const exportIcon = await screen.findByTitle('Export page contents');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
-    const deleteIcon = screen.getAllByTitle(
-      'Move page contents to trashcan',
-    )[0];
+    const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });
@@ -310,10 +301,10 @@ describe('TargetsListPage tests', () => {
 
     render(<TargetPage />);
 
-    await wait();
-
     // change to apply to selection
-    const tableFooter = within(screen.queryTableFooter() as HTMLElement);
+    const tableFooter = within(
+      (await screen.findByRole('table')).querySelector('tfoot') as HTMLElement,
+    );
     const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
     fireEvent.click(selectItems[1]);
@@ -325,12 +316,12 @@ describe('TargetsListPage tests', () => {
     fireEvent.click(inputs[0]);
 
     // export selected target
-    const exportIcon = screen.getAllByTitle('Export selection')[0];
+    const exportIcon = screen.getByTitle('Export selection');
     fireEvent.click(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected target to trashcan
-    const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
+    const deleteIcon = screen.getByTitle('Move selection to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByIds);
   });
@@ -389,22 +380,22 @@ describe('TargetsListPage tests', () => {
 
     render(<TargetPage />);
 
-    await wait();
-
     // change to all filtered
-    const tableFooter = within(screen.queryTableFooter() as HTMLElement);
+    const tableFooter = within(
+      (await screen.findByRole('table')).querySelector('tfoot') as HTMLElement,
+    );
     const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
     fireEvent.click(selectItems[2]);
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered targets
-    const exportIcon = screen.getAllByTitle('Export all filtered')[0];
+    const exportIcon = screen.getByTitle('Export all filtered');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered targets to trashcan
-    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
+    const deleteIcon = screen.getByTitle('Move all filtered to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });

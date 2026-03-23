@@ -181,26 +181,22 @@ describe('Host ListPage tests', () => {
     const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
-    expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('New Host')[0]).toBeInTheDocument();
+    screen.getByTitle('Help: Hosts');
+    screen.getByTitle('New Host');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
+    screen.getByTitle('Update Filter');
+    screen.getByTitle('Remove Filter');
+    screen.getByTitle('Reset to Default Filter');
+    screen.getByTitle('Help: Powerfilter');
+    screen.getByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
     // Dashboard
-    expect(
-      screen.getAllByTitle('Add new Dashboard Display')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Reset to Defaults')[0]).toBeInTheDocument();
+    screen.getByTitle('Add new Dashboard Display');
+    screen.getByTitle('Reset to Defaults');
 
     const display = screen.getAllByTestId('grid-item');
     expect(display[0]).toHaveTextContent('Hosts by Severity Class (Total: 0)');
@@ -235,22 +231,16 @@ describe('Host ListPage tests', () => {
     const osImage = baseElement.querySelector('img');
     expect(osImage).toHaveAttribute('src', '/img/os_linux.svg');
 
-    expect(screen.getAllByTitle('Delete Host')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Host')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Create Target from Host')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export Host')[0]).toBeInTheDocument();
+    screen.getByTitle('Delete Host');
+    screen.getByTitle('Edit Host');
+    screen.getByTitle('Create Target from Host');
+    screen.getByTitle('Export Host');
 
     // Footer
-    expect(
-      screen.getAllByTitle('Add tag to page contents')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Delete page contents')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export page contents')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Create Target from page contents')[0],
-    ).toBeInTheDocument();
+    screen.getByTitle('Add tag to page contents');
+    screen.getByTitle('Delete page contents');
+    screen.getByTitle('Export page contents');
+    screen.getByTitle('Create Target from page contents');
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -314,12 +304,12 @@ describe('Host ListPage tests', () => {
     await wait();
 
     // export page contents
-    fireEvent.click(screen.getAllByTitle('Export page contents')[0]);
+    fireEvent.click(screen.getByTitle('Export page contents'));
     await wait();
     expect(exportByFilter).toHaveBeenCalled();
 
     // delete page contents
-    fireEvent.click(screen.getAllByTitle('Delete page contents')[0]);
+    fireEvent.click(screen.getByTitle('Delete page contents'));
     await wait();
     testBulkDeleteDialog(screen, deleteByFilter);
   });
@@ -391,11 +381,11 @@ describe('Host ListPage tests', () => {
     fireEvent.click(selectItems[1]);
 
     // export selected host
-    fireEvent.click(screen.getAllByTitle('Export selection')[0]);
+    fireEvent.click(screen.getByTitle('Export selection'));
     expect(exportByIds).toHaveBeenCalled();
 
     // delete selected host
-    fireEvent.click(screen.getAllByTitle('Delete selection')[0]);
+    fireEvent.click(screen.getByTitle('Delete selection'));
     testBulkDeleteDialog(screen, deleteByIds);
   });
 
@@ -467,10 +457,10 @@ describe('Host ListPage tests', () => {
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered hosts
-    fireEvent.click(screen.getAllByTitle('Export all filtered')[0]);
+    fireEvent.click(screen.getByTitle('Export all filtered'));
     expect(exportByFilter).toHaveBeenCalled();
 
-    fireEvent.click(screen.getAllByTitle('Delete all filtered')[0]);
+    fireEvent.click(screen.getByTitle('Delete all filtered'));
     testBulkDeleteDialog(screen, deleteByFilter);
   });
 });
@@ -522,7 +512,7 @@ describe('Host ListPage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onHostCreateClick={handleCreateHostClick} />);
 
-    fireEvent.click(screen.getAllByTitle('New Host')[0]);
+    fireEvent.click(screen.getByTitle('New Host'));
     expect(handleCreateHostClick).toHaveBeenCalled();
   });
 
@@ -541,7 +531,7 @@ describe('Host ListPage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onHostCreateClick={handleCreateHostClick} />);
 
-    expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
+    screen.getByTitle('Help: Hosts');
     expect(screen.queryByTitle('New Host')).not.toBeInTheDocument();
   });
 });

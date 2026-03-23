@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import AgentGroup from 'gmp/models/agent-group';
@@ -156,8 +156,7 @@ describe('AgentGroupsListPage tests', () => {
     fireEvent.click(moveButton);
 
     // wait for delete mock to be called
-    await wait();
-    expect(deleteMock).toHaveBeenCalled();
+    await waitFor(() => expect(deleteMock).toHaveBeenCalled());
   });
 
   test('shows error notification when fetch fails', async () => {

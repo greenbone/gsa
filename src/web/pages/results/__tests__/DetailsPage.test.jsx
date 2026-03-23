@@ -134,7 +134,7 @@ const createGmp = ({
 };
 
 describe('ResultDetailsPage tests', () => {
-  test('should render full DetailsPage', () => {
+  test('should render full DetailsPage', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
@@ -151,66 +151,53 @@ describe('ResultDetailsPage tests', () => {
     render(<DetailsPage id="12345" />);
 
     // Toolbar Icons
-    expect(screen.getByTitle('Help: Results')).toBeInTheDocument();
+    screen.getByTitle('Help: Results');
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/reports.html#displaying-all-existing-results',
     );
-    expect(screen.getByTitle('Results List')).toBeInTheDocument();
+    screen.getByTitle('Results List');
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
       '/results',
     );
 
-    expect(screen.getByTitle('Export Result as XML')).toBeInTheDocument();
-    expect(screen.getByTitle('Add new Note')).toBeInTheDocument();
-    expect(screen.getByTitle('Add new Override')).toBeInTheDocument();
-    expect(screen.getByTitle('Create new Ticket')).toBeInTheDocument();
-    expect(
-      screen.getByTitle('Corresponding Task (task 1)'),
-    ).toBeInTheDocument();
-    expect(screen.getByTitle('Corresponding Report')).toBeInTheDocument();
-    expect(screen.getByTitle('Corresponding Tickets')).toBeInTheDocument();
+    screen.getByTitle('Export Result as XML');
+    screen.getByTitle('Add new Note');
+    screen.getByTitle('Add new Override');
+    screen.getByTitle('Create new Ticket');
+    screen.getByTitle('Corresponding Task (task 1)');
+    screen.getByTitle('Corresponding Report');
+    screen.getByTitle('Corresponding Tickets');
 
-    expect(
-      screen.getByRole('heading', {name: /Result: foo/}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /Result: foo/});
     const entityInfo = within(screen.getByTestId('entity-info'));
-    expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
-      '12345',
-    );
-    expect(screen.getByRole('row', {name: /^Created:/})).toHaveTextContent(
+    const infoRows = entityInfo.getAllByRole('row');
+    expect(infoRows[0]).toHaveTextContent('12345');
+    expect(infoRows[1]).toHaveTextContent(
       'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
-    expect(screen.getByRole('row', {name: /^Modified:/})).toHaveTextContent(
+    expect(infoRows[2]).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
-    expect(screen.getByRole('row', {name: /^Owner/})).toHaveTextContent(
-      'admin',
-    );
+    expect(infoRows[3]).toHaveTextContent('admin');
 
     // Tabs
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
+    screen.getByRole('tab', {name: /^information/i});
+    screen.getByRole('tab', {name: /^user tags/i});
 
     // Details
-    expect(
-      screen.getByRole('heading', {name: /^Vulnerability/}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('row', {name: /^Name/})).toHaveTextContent('foo');
-    expect(screen.getByRole('row', {name: /^Severity/})).toHaveTextContent(
+    screen.getByRole('heading', {name: /^Vulnerability/});
+    expect(screen.getByText('Name').closest('tr')).toHaveTextContent('foo');
+    expect(screen.getByText('Severity').closest('tr')).toHaveTextContent(
       '5.0 (Medium)',
     );
-    expect(
-      screen.getByTitle('There are overrides for this result'),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('row', {name: /^QoD/})).toHaveTextContent('80 %');
-    expect(screen.getByRole('row', {name: /^Host/})).toHaveTextContent(
+    screen.getByTitle('There are overrides for this result');
+    expect(screen.getByText('QoD').closest('tr')).toHaveTextContent('80 %');
+    expect(screen.getByText('Host').closest('tr')).toHaveTextContent(
       '109.876.54.321',
     );
-    expect(screen.getByRole('row', {name: /^Location/})).toHaveTextContent(
+    expect(screen.getByText('Location').closest('tr')).toHaveTextContent(
       '80/tcp',
     );
 
@@ -219,68 +206,45 @@ describe('ResultDetailsPage tests', () => {
         name: /^EPSS \(CVE with highest severity\)/,
       }).nextSibling,
     );
-    expect(epssCVSS.getByRole('row', {name: /^EPSS Score/})).toHaveTextContent(
-      '87.650%',
-    );
-    expect(
-      epssCVSS.getByRole('row', {name: /^EPSS Percentile/}),
-    ).toHaveTextContent('80th');
-    expect(epssCVSS.getByRole('row', {name: /^CVE CVE/})).toHaveTextContent(
-      'CVE-2019-1234',
-    );
-    expect(
-      epssCVSS.getByRole('row', {name: /^CVE Severity/}),
-    ).toHaveTextContent('5.0 (Medium)');
+    const epssCVSSRows = epssCVSS.getAllByRole('row');
+    expect(epssCVSSRows[0]).toHaveTextContent('87.650%');
+    expect(epssCVSSRows[1]).toHaveTextContent('80th');
+    expect(epssCVSSRows[2]).toHaveTextContent('CVE-2019-1234');
+    expect(epssCVSSRows[3]).toHaveTextContent('5.0 (Medium)');
 
     const epssScore = within(
       screen.getByRole('heading', {
         name: /^EPSS \(highest EPSS score\)/,
       }).nextSibling,
     );
-    expect(epssScore.getByRole('row', {name: /^EPSS Score/})).toHaveTextContent(
-      '98.760%',
-    );
-    expect(
-      epssScore.getByRole('row', {name: /^EPSS Percentile/}),
-    ).toHaveTextContent('90th');
-    expect(epssScore.getByRole('row', {name: /^CVE CVE/})).toHaveTextContent(
-      'CVE-2020-5678',
-    );
-    expect(
-      epssScore.getByRole('row', {name: /^CVE Severity/}),
-    ).toHaveTextContent('2.0 (Low)');
+    const epssScoreRows = epssScore.getAllByRole('row');
+    expect(epssScoreRows[0]).toHaveTextContent('98.760%');
+    expect(epssScoreRows[1]).toHaveTextContent('90th');
+    expect(epssScoreRows[2]).toHaveTextContent('CVE-2020-5678');
+    expect(epssScoreRows[3]).toHaveTextContent('2.0 (Low)');
 
-    expect(screen.getByRole('heading', {name: /^Summary/})).toBeInTheDocument();
-    expect(screen.getByText('This is a mock result')).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Summary/});
+    screen.getByText('This is a mock result');
 
-    expect(
-      screen.getByRole('heading', {name: /^Detection Result/}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('This is a result description'),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Detection Result/});
+    screen.getByText('This is a result description');
 
-    expect(screen.getByRole('heading', {name: /^Insight/})).toBeInTheDocument();
-    expect(screen.getByText('This is just a test')).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Insight/});
+    screen.getByText('This is just a test');
 
-    expect(
-      screen.getByRole('heading', {name: /^Detection Method/}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('This is the detection method'),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Detection Method/});
+    screen.getByText('This is the detection method');
 
     const detectionMethodBlock = within(
       screen.getByRole('heading', {
         name: /^Detection Method/,
       }).parentElement,
     );
-    expect(
-      detectionMethodBlock.getByRole('row', {name: /^Details/}),
-    ).toHaveTextContent('nvt1 OID: 1.3.6.1.4.1.25623.1.12345');
-    expect(
-      detectionMethodBlock.getByRole('row', {name: /^Version used:/}),
-    ).toHaveTextContent('2019-02-14T07:33:50Z');
+    const detectionRows = detectionMethodBlock.getAllByRole('row');
+    expect(detectionRows[0]).toHaveTextContent(
+      'nvt1 OID: 1.3.6.1.4.1.25623.1.12345',
+    );
+    expect(detectionRows[1]).toHaveTextContent('2019-02-14T07:33:50Z');
 
     const affectedSoftware = screen.getByRole('heading', {
       name: /^Affected Software\/OS/,
@@ -333,7 +297,7 @@ describe('ResultDetailsPage tests', () => {
     );
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       capabilities: true,

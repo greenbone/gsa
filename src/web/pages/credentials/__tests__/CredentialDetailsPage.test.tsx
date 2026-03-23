@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, screen, fireEvent, wait, within} from 'web/testing';
+import {rendererWith, screen, fireEvent, waitFor, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Credential, {
   CERTIFICATE_CREDENTIAL_TYPE,
@@ -91,8 +91,8 @@ describe('CredentialDetailsPage tests', () => {
 
     render(<CredentialDetailsPage id="6575" />);
 
-    expect(screen.getByTitle('Help: Credentials')).toBeInTheDocument();
-    expect(screen.getByTitle('Credential List')).toBeInTheDocument();
+    screen.getByTitle('Help: Credentials');
+    screen.getByTitle('Credential List');
 
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
@@ -104,36 +104,24 @@ describe('CredentialDetailsPage tests', () => {
     );
 
     const entityInfo = within(screen.getByTestId('entity-info'));
-    expect(entityInfo.getByRole('row', {name: /ID:/})).toHaveTextContent(
-      'ID:6575',
-    );
-    expect(entityInfo.getByRole('row', {name: /Created:/})).toHaveTextContent(
+    const infoRows = entityInfo.getAllByRole('row');
+    expect(infoRows[0]).toHaveTextContent('ID:6575');
+    expect(infoRows[1]).toHaveTextContent(
       'Created:Wed, Dec 16, 2020 4:23 PM Central European Standard',
     );
-    expect(entityInfo.getByRole('row', {name: /Modified:/})).toHaveTextContent(
+    expect(infoRows[2]).toHaveTextContent(
       'Modified:Tue, Mar 2, 2021 11:28 AM Central European Standard',
     );
-    expect(entityInfo.getByRole('row', {name: /Owner:/})).toHaveTextContent(
-      'Owner:admin',
-    );
+    expect(infoRows[3]).toHaveTextContent('Owner:admin');
 
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    const tablist = screen.getByRole('tablist');
+    within(tablist).getByRole('tab', {name: /^information/i});
+    within(tablist).getByRole('tab', {name: /^user tags/i});
+    within(tablist).getByRole('tab', {name: /^permissions/i});
 
-    expect(
-      screen.getByRole('row', {name: /^comment some comment/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^type username \+ ssh key/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^login admin/i}),
-    ).toBeInTheDocument();
+    screen.getByText('some comment');
+    screen.getByText('Username + SSH Key');
+    screen.getByText('Admin');
   });
 
   test('should render client certificate credential', async () => {
@@ -178,57 +166,21 @@ describe('CredentialDetailsPage tests', () => {
 
     render(<CredentialDetailsPage id={credential.id} />);
 
-    expect(
-      screen.getByRole('row', {name: /^comment some comment/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^type client certificate \(cc\)/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^login admin/i}),
-    ).toBeInTheDocument();
+    screen.getByText('some comment');
+    screen.getByText(/Client Certificate/i);
+    screen.getByText('Admin');
 
-    expect(
-      screen.getByRole('heading', {name: /^credential/i}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^credential/i});
 
-    expect(
-      screen.getByRole('row', {
-        name: /^activation fri, jan 1, 2021 1:00 am central european standard time/i,
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {
-        name: /^expiration sun, jan 1, 2023 1:00 am central european standard time/i,
-      }),
-    ).toBeInTheDocument();
+    screen.getByText('Fri, Jan 1, 2021 1:00 AM Central European Standard Time');
+    screen.getByText('Sun, Jan 1, 2023 1:00 AM Central European Standard Time');
+    screen.getByText('md5_fingerprint_value');
+    screen.getByText('sha256_fingerprint_value');
+    screen.getByText('CN=Example CA,O=Example Corp,C=US');
 
-    expect(
-      screen.getByRole('row', {
-        name: /^md5 fingerprint md5_fingerprint_value/i,
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {
-        name: /^sha-256 fingerprint sha256_fingerprint_value/i,
-      }),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('row', {
-        name: /^issued by cn=example ca,O=example corp,c=us/i,
-      }),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('heading', {name: /^private key/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^sha-256 hash sha256_hash_value/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^key type rsa/i}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^private key/i});
+    screen.getByText('sha256_hash_value');
+    screen.getByText('rsa');
   });
 
   test('should render pgp certificate credential', async () => {
@@ -262,23 +214,13 @@ describe('CredentialDetailsPage tests', () => {
 
     render(<CredentialDetailsPage id={credential.id} />);
 
-    expect(
-      screen.getByRole('row', {name: /^comment some comment/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^type pgp encryption key \(pgp\)/i}),
-    ).toBeInTheDocument();
+    screen.getByText('some comment');
+    screen.getByText(/PGP Encryption Key/i);
 
-    expect(
-      screen.getByRole('heading', {name: /^credential/i}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^credential/i});
 
-    expect(
-      screen.getByRole('heading', {name: /^public key/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('row', {name: /^fingerprint/i})).toHaveTextContent(
-      'sha256_hash_value',
-    );
+    screen.getByRole('heading', {name: /^public key/i});
+    screen.getByText('sha256_hash_value');
   });
 
   test('should render user tags tab', async () => {
@@ -297,7 +239,8 @@ describe('CredentialDetailsPage tests', () => {
 
     const {container} = render(<CredentialDetailsPage id="6575" />);
 
-    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    const tablist = screen.getByRole('tablist');
+    const userTagsTab = within(tablist).getByRole('tab', {name: /^user tags/i});
     fireEvent.click(userTagsTab);
     expect(container).toHaveTextContent('No user tags available');
   });
@@ -318,7 +261,10 @@ describe('CredentialDetailsPage tests', () => {
 
     const {container} = render(<CredentialDetailsPage id="6575" />);
 
-    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    const tablist = screen.getByRole('tablist');
+    const permissionsTab = within(tablist).getByRole('tab', {
+      name: /^permissions/i,
+    });
     fireEvent.click(permissionsTab);
     expect(container).toHaveTextContent('No permissions available');
   });
@@ -393,9 +339,10 @@ describe('CredentialDetailsPage tests', () => {
     const cloneIcon = screen.getByTitle('Clone Credential');
     fireEvent.click(cloneIcon);
 
-    await wait();
-    expect(screen.getByTestId('location-pathname')).toHaveTextContent(
-      '/credential/foo',
+    await waitFor(() =>
+      expect(screen.getByTestId('location-pathname')).toHaveTextContent(
+        '/credential/foo',
+      ),
     );
   });
 
@@ -419,9 +366,10 @@ describe('CredentialDetailsPage tests', () => {
     const deleteIcon = screen.getByTitle('Move Credential to trashcan');
     fireEvent.click(deleteIcon);
 
-    await wait();
-    expect(screen.getByTestId('location-pathname')).toHaveTextContent(
-      '/credentials',
+    await waitFor(() =>
+      expect(screen.getByTestId('location-pathname')).toHaveTextContent(
+        '/credentials',
+      ),
     );
   });
 });

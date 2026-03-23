@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, wait} from 'web/testing';
+import {rendererWith, fireEvent, screen, waitFor, within} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Alert from 'gmp/models/alert';
@@ -119,11 +119,9 @@ describe('Alert DetailsPage tests', () => {
 
     render(<DetailsPage id="12345" />);
 
-    expect(
-      screen.getByRole('heading', {name: /alert: foo/i}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /alert: foo/i});
 
-    expect(screen.getByTitle('Help: Alerts')).toBeInTheDocument();
+    screen.getByTitle('Help: Alerts');
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-alerts',
@@ -147,31 +145,18 @@ describe('Alert DetailsPage tests', () => {
     );
     expect(entityInfo).toHaveTextContent('Owner:admin');
 
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    const tablist = screen.getByRole('tablist');
+    within(tablist).getByRole('tab', {name: /^information/i});
+    within(tablist).getByRole('tab', {name: /^user tags/i});
+    within(tablist).getByRole('tab', {name: /^permissions/i});
 
-    expect(
-      screen.getByRole('row', {name: /^comment bar/i}),
-    ).toBeInTheDocument();
+    screen.getByText('bar'); // comment
 
-    expect(
-      screen.getByRole('row', {
-        name: /^event task run status changed to done/i,
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^condition always/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('row', {name: /^method smb/i})).toBeInTheDocument();
-    expect(
-      screen.getByRole('row', {name: /^results filter report results filter/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('row', {name: /^active yes/i})).toBeInTheDocument();
+    screen.getByText(/task run status changed to done/i); // event
+    screen.getByText('Always'); // condition
+    screen.getByText('SMB'); // method
+    screen.getByText(/report results filter/i); // results filter
+    expect(screen.getByText('Active').closest('tr')).toHaveTextContent('Yes');
   });
 
   test('should render user tags tab', () => {
@@ -208,7 +193,8 @@ describe('Alert DetailsPage tests', () => {
 
     const {container} = render(<DetailsPage id="12345" />);
 
-    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    const tablist = screen.getByRole('tablist');
+    const userTagsTab = within(tablist).getByRole('tab', {name: /^user tags/i});
     fireEvent.click(userTagsTab);
     expect(container).toHaveTextContent('No user tags available');
   });
@@ -247,7 +233,10 @@ describe('Alert DetailsPage tests', () => {
 
     const {container} = render(<DetailsPage id="12345" />);
 
-    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    const tablist = screen.getByRole('tablist');
+    const permissionsTab = within(tablist).getByRole('tab', {
+      name: /^permissions/i,
+    });
     fireEvent.click(permissionsTab);
     expect(container).toHaveTextContent('No permissions available');
   });
@@ -304,20 +293,19 @@ describe('Alert DetailsPage tests', () => {
     const cloneIcon = screen.getByTestId('clone-icon');
     expect(cloneIcon).toHaveAttribute('title', 'Clone Alert');
     fireEvent.click(cloneIcon);
-    await wait();
-    expect(clone).toHaveBeenCalledWith(alert);
+    await waitFor(() => expect(clone).toHaveBeenCalledWith(alert));
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute('title', 'Move Alert to trashcan');
     fireEvent.click(deleteIcon);
-    await wait();
-    expect(deleteFunc).toHaveBeenCalledWith({id: alert.id});
+    await waitFor(() =>
+      expect(deleteFunc).toHaveBeenCalledWith({id: alert.id}),
+    );
 
     const exportIcon = screen.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export Alert as XML');
     fireEvent.click(exportIcon);
-    await wait();
-    expect(exportFunc).toHaveBeenCalledWith(alert);
+    await waitFor(() => expect(exportFunc).toHaveBeenCalledWith(alert));
   });
 });
 

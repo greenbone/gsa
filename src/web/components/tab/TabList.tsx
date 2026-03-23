@@ -35,7 +35,11 @@ const TabList = ({children, ...props}: TabListProps) => {
     }
     return child;
   });
-  return <Layout {...props}>{mappedChildren}</Layout>;
+  return (
+    <Layout role="tablist" {...props}>
+      {mappedChildren}
+    </Layout>
+  );
 };
 
 export default TabList;

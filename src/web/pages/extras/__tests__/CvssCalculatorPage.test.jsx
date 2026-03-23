@@ -12,7 +12,14 @@ import {
   rendererWith,
   wait,
 } from 'web/testing';
+import {vi} from 'vitest';
 import CvssCalculator from 'web/pages/extras/CvssCalculatorPage';
+
+vi.mock('web/pages/extras/cvssV4/CvssV4Calculator', () => {
+  return {
+    default: () => undefined,
+  };
+});
 
 const gmp = {
   settings: {

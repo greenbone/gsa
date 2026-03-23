@@ -10,7 +10,6 @@ import {
   within,
   rendererWith,
   fireEvent,
-  wait,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
@@ -153,7 +152,7 @@ describe('TaskListPage tests', () => {
 
     render(<TaskListPage />);
 
-    await wait();
+    await screen.findByRole('heading', {name: /tasks/i});
 
     const powerFilter = within(screen.getPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
@@ -306,7 +305,7 @@ describe('TaskListPage tests', () => {
 
     render(<TaskListPage />);
 
-    await wait();
+    await screen.findByTitle('Export page contents');
 
     // export page contents
     const exportIcon = screen.getByTitle('Export page contents');

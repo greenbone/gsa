@@ -137,7 +137,7 @@ describe('CredentialListPage tests', () => {
 
     render(<CredentialPage />);
 
-    await wait();
+    await screen.findByTitle('Help: Credentials');
 
     // Toolbar Icons
     expect(screen.getByTitle('Help: Credentials')).toBeInTheDocument();
@@ -149,13 +149,11 @@ describe('CredentialListPage tests', () => {
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
+    screen.getByTitle('Update Filter');
+    screen.getByTitle('Remove Filter');
+    screen.getByTitle('Reset to Default Filter');
+    screen.getByTitle('Help: Powerfilter');
+    screen.getByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
@@ -212,10 +210,8 @@ describe('CredentialListPage tests', () => {
 
     render(<CredentialPage />);
 
-    await wait();
-
     // export page contents
-    const exportIcon = screen.getByTitle('Export page contents');
+    const exportIcon = await screen.findByTitle('Export page contents');
     fireEvent.click(exportIcon);
     expect(gmp.credentials.exportByFilter).toHaveBeenCalled();
 
@@ -301,7 +297,7 @@ describe('CredentialListPage tests', () => {
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered credentials
-    const exportIcon = screen.getAllByTitle('Export all filtered')[0];
+    const exportIcon = screen.getByTitle('Export all filtered');
     fireEvent.click(exportIcon);
     expect(gmp.credentials.exportByFilter).toHaveBeenCalled();
 
