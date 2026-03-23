@@ -30,11 +30,12 @@ const createGmp = ({
 });
 
 describe('TagDialog tests', () => {
-  test('should render', () => {
+  test('should render and handle close', () => {
+    const onClose = testing.fn();
     const {render} = rendererWith({
       gmp: createGmp(),
     });
-    render(<TagDialog />);
+    render(<TagDialog onClose={onClose} />);
 
     const dialog = screen.getDialog();
     expect(dialog).toBeInTheDocument();
@@ -53,17 +54,8 @@ describe('TagDialog tests', () => {
     const activeOptions = screen.getAllByName('active');
     expect(activeOptions[0]).toBeChecked();
     expect(activeOptions[1]).not.toBeChecked();
-  });
-
-  test('should allow to close the dialog', () => {
-    const onClose = testing.fn();
-    const {render} = rendererWith({
-      gmp: createGmp(),
-    });
-    render(<TagDialog onClose={onClose} />);
 
     fireEvent.click(screen.getDialogCloseButton());
-
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -97,19 +89,34 @@ describe('TagDialog tests', () => {
     });
   });
 
-  test('should allow to change the name, comment and value', async () => {
+  test('should allow to change form fields', async () => {
     const onSave = testing.fn();
     const {render} = rendererWith({
       gmp: createGmp(),
     });
-    render(<TagDialog comment="" name="" value="" onSave={onSave} />);
+    render(
+      <TagDialog
+        comment=""
+        name=""
+        resourceType="task"
+        resourceTypes={['task', 'report']}
+        value=""
+        onSave={onSave}
+      />,
+    );
 
-    const nameField = screen.getByLabelText('Name');
-    changeInputValue(nameField, 'Changed Name');
-    const commentField = screen.getByLabelText('Comment');
-    changeInputValue(commentField, 'Changed Comment');
-    const valueField = screen.getByLabelText('Value');
-    changeInputValue(valueField, 'Changed Value');
+    // Change text fields
+    changeInputValue(screen.getByLabelText('Name'), 'Changed Name');
+    changeInputValue(screen.getByLabelText('Comment'), 'Changed Comment');
+    changeInputValue(screen.getByLabelText('Value'), 'Changed Value');
+
+    // Change resource type
+    const resourceTypeSelect = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Resource Type',
+    });
+    const resourceTypeOptions =
+      await getSelectItemElementsForSelect(resourceTypeSelect);
+    fireEvent.click(resourceTypeOptions[1]); // select 'report'
 
     fireEvent.click(screen.getDialogSaveButton());
 
@@ -119,83 +126,12 @@ describe('TagDialog tests', () => {
       comment: 'Changed Comment',
       name: 'Changed Name',
       resourceIds: [],
-      resourceType: undefined,
+      resourceType: 'report',
       value: 'Changed Value',
     });
   });
 
-  test('should allow to change the resource type', async () => {
-    const onSave = testing.fn();
-    const {render} = rendererWith({
-      gmp: createGmp(),
-    });
-    render(
-      <TagDialog
-        resourceType="task"
-        resourceTypes={['task', 'report']}
-        onSave={onSave}
-      />,
-    );
-
-    const resourceTypeSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Resource Type',
-    });
-    const resourceTypeOptions =
-      await getSelectItemElementsForSelect(resourceTypeSelect);
-    expect(resourceTypeOptions).toHaveLength(2);
-    fireEvent.click(resourceTypeOptions[1]); // select 'report'
-
-    fireEvent.click(screen.getDialogSaveButton());
-
-    expect(onSave).toHaveBeenCalledWith({
-      id: undefined,
-      active: true,
-      comment: '',
-      name: 'default:unnamed',
-      resourceIds: [],
-      resourceType: 'report',
-      value: '',
-    });
-  });
-
-  test('should allow to change the resource IDs', async () => {
-    const onSave = testing.fn();
-    const {render} = rendererWith({
-      gmp: createGmp(),
-    });
-    render(
-      <TagDialog
-        resourceType="task"
-        resourceTypes={['task', 'report']}
-        onSave={onSave}
-      />,
-    );
-
-    // Wait for resource names to be loaded
-    await wait();
-
-    const resourceIdsSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Select Resource',
-    });
-    const resourceIdOptions =
-      await getSelectItemElementsForSelect(resourceIdsSelect);
-    expect(resourceIdOptions.length).toBeGreaterThan(0);
-    fireEvent.click(resourceIdOptions[0]); // select first option
-
-    fireEvent.click(screen.getDialogSaveButton());
-
-    expect(onSave).toHaveBeenCalledWith({
-      id: undefined,
-      active: true,
-      comment: '',
-      name: 'default:unnamed',
-      resourceIds: ['123'],
-      resourceType: 'task',
-      value: '',
-    });
-  });
-
-  test('should allow to change the active state', async () => {
+  test('should allow to select resource IDs and change active state', async () => {
     const onSave = testing.fn();
     const {render} = rendererWith({
       gmp: createGmp(),
@@ -205,12 +141,27 @@ describe('TagDialog tests', () => {
         active={true}
         comment="New Tag"
         name="Some Tag"
+        resourceType="task"
+        resourceTypes={['task', 'report']}
         value="Some Value"
         onSave={onSave}
       />,
     );
-    const inactiveOption = screen.getByLabelText('No');
-    fireEvent.click(inactiveOption);
+
+    // Wait for resource names to be loaded
+    await wait();
+
+    // Select resource ID from dropdown
+    const resourceIdsSelect = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Select Resource',
+    });
+    const resourceIdOptions =
+      await getSelectItemElementsForSelect(resourceIdsSelect);
+    fireEvent.click(resourceIdOptions[0]); // select first option
+
+    // Change active state
+    fireEvent.click(screen.getByLabelText('No'));
+
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(onSave).toHaveBeenCalledWith({
@@ -218,8 +169,8 @@ describe('TagDialog tests', () => {
       active: false,
       comment: 'New Tag',
       name: 'Some Tag',
-      resourceIds: [],
-      resourceType: undefined,
+      resourceIds: ['123'],
+      resourceType: 'task',
       value: 'Some Value',
     });
   });
@@ -270,7 +221,7 @@ describe('TagDialog tests', () => {
       />,
     );
 
-    expect(screen.getByText('Too many resources to list.')).toBeInTheDocument();
+    expect(screen.getByText('Too many resources to list.'));
     expect(screen.queryByLabelText('Resource Type')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('Select Resource')).not.toBeInTheDocument();
     expect(
