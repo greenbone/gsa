@@ -6,7 +6,7 @@
 import React, {useCallback} from 'react';
 import {AppHeader} from '@greenbone/ui-lib';
 import {useSelector} from 'react-redux';
-import {useNavigate} from 'react-router';
+import {useLocation, useNavigate} from 'react-router';
 import {LogoutIcon, MySettingsIcon} from 'web/components/icon';
 import SessionTimer from 'web/components/sessionTimer/SessionTimer';
 import getLogo from 'web/components/structure/GetLogo';
@@ -17,6 +17,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
 import {type ApplianceLogo} from 'web/utils/appliance-data';
+import {saveLastVisitedPage} from 'web/utils/user-last-visited-page';
 
 const Header = () => {
   const [_] = useTranslation();
@@ -25,6 +26,7 @@ const Header = () => {
   const [username] = useUserName();
   const [loggedIn] = useUserIsLoggedIn();
   const navigate = useNavigate();
+  const location = useLocation();
   const logoComponent = getLogo(gmp?.settings?.vendorLabel as ApplianceLogo);
   const timezone = useSelector<{userSettings: {timezone: string}}, string>(
     state => state.userSettings.timezone,
@@ -36,10 +38,15 @@ const Header = () => {
   }, [navigate]);
 
   const handleLogout = useCallback(() => {
+    if (username) {
+      const currentPath = `${location.pathname}${location.search ?? ''}`;
+      saveLastVisitedPage(username, currentPath);
+    }
+
     void gmp.doLogout().then(() => {
       return navigate('/login?type=logout');
     });
-  }, [gmp, navigate]);
+  }, [gmp, navigate, username, location]);
 
   const menuPoints = [
     {

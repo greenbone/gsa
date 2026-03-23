@@ -257,8 +257,7 @@ describe('LoginPage tests', () => {
 
   test.each([
     {
-      description:
-        'should redirect to previous path with search and hash after login',
+      description: 'should redirect to dashboards when no saved page for user',
       locationState: {
         state: {
           from: {
@@ -268,7 +267,7 @@ describe('LoginPage tests', () => {
           },
         },
       },
-      expectedPath: '/somewhere?foo=bar#baz',
+      expectedPath: '/dashboards',
     },
     {
       description:
@@ -278,6 +277,7 @@ describe('LoginPage tests', () => {
     },
   ])('$description', async ({locationState, expectedPath}) => {
     mockUseNavigate.mockClear();
+    sessionStorage.clear();
 
     const login = testing.fn().mockResolvedValue({
       locale: 'locale',
@@ -325,5 +325,128 @@ describe('LoginPage tests', () => {
     expect(mockNavigate).toHaveBeenCalledWith(expectedPath, {
       replace: true,
     });
+  });
+
+  test('should redirect to user-specific saved page after login', async () => {
+    mockUseNavigate.mockClear();
+    sessionStorage.clear();
+
+    // Save a last visited page for user 'foo'
+    sessionStorage.setItem('gsa_last_visited_page_foo', '/tasks?filter=open');
+
+    const login = testing.fn().mockResolvedValue({
+      locale: 'locale',
+      token: 'token',
+      timezone: 'Europe/Berlin',
+      sessionTimeout: '10:00',
+    });
+
+    mockUseLocation.mockReturnValue({});
+
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
+    const setLocale = testing.fn();
+    const setTimezone = testing.fn();
+    const gmp = {
+      setTimezone,
+      setLocale,
+      login,
+      isLoggedIn,
+      clearToken,
+      settings: {},
+      user: {
+        currentSettings: testing.fn().mockResolvedValue({
+          data: {
+            userinterfacetimeformat: {value: '24h'},
+            userinterfacedateformat: {value: 'YYYY-MM-DD'},
+          },
+        }),
+      },
+    };
+    const {render} = rendererWith({
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    render(<LoginPage />);
+    const usernameField = screen.getByName('username');
+    const passwordField = screen.getByName('password');
+    changeInputValue(usernameField, 'foo');
+    changeInputValue(passwordField, 'bar');
+    const button = screen.getByTestId('login-button');
+    fireEvent.click(button);
+    await wait();
+
+    // Should redirect to the saved page
+    expect(mockNavigate).toHaveBeenCalledWith('/tasks?filter=open', {
+      replace: true,
+    });
+
+    // Should clear the saved page after using it
+    expect(sessionStorage.getItem('gsa_last_visited_page_foo')).toBeNull();
+  });
+
+  test('should not redirect to another user saved page', async () => {
+    mockUseNavigate.mockClear();
+    sessionStorage.clear();
+
+    // Save a last visited page for user 'alice'
+    sessionStorage.setItem('gsa_last_visited_page_alice', '/agents');
+
+    const login = testing.fn().mockResolvedValue({
+      locale: 'locale',
+      token: 'token',
+      timezone: 'Europe/Berlin',
+      sessionTimeout: '10:00',
+    });
+
+    mockUseLocation.mockReturnValue({});
+
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
+    const setLocale = testing.fn();
+    const setTimezone = testing.fn();
+    const gmp = {
+      setTimezone,
+      setLocale,
+      login,
+      isLoggedIn,
+      clearToken,
+      settings: {},
+      user: {
+        currentSettings: testing.fn().mockResolvedValue({
+          data: {
+            userinterfacetimeformat: {value: '24h'},
+            userinterfacedateformat: {value: 'YYYY-MM-DD'},
+          },
+        }),
+      },
+    };
+    const {render} = rendererWith({
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    render(<LoginPage />);
+    const usernameField = screen.getByName('username');
+    const passwordField = screen.getByName('password');
+    // User 'bob' logs in
+    changeInputValue(usernameField, 'bob');
+    changeInputValue(passwordField, 'bar');
+    const button = screen.getByTestId('login-button');
+    fireEvent.click(button);
+    await wait();
+
+    // Should redirect to dashboards, not to alice's saved page
+    expect(mockNavigate).toHaveBeenCalledWith('/dashboards', {
+      replace: true,
+    });
+
+    // Alice's saved page should still exist
+    expect(sessionStorage.getItem('gsa_last_visited_page_alice')).toBe(
+      '/agents',
+    );
   });
 });
