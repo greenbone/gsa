@@ -44,10 +44,10 @@ const PARSER_OPTIONS = {
      * denial-of-service attacks. These limits provide headroom for large
      * reports while still restricting abusive expansion; adjust if needed.
      */
-    maxTotalExpansions: 4000, //max entity expansion limit
-    maxExpandedLength: 5000000, // ~5MB total expanded content budget
-    maxEntitySize: 20000, // max length per entity
-    maxEntityCount: 500, // max distinct entity names
+    maxTotalExpansions: 2000, // headroom above observed large backend responses
+    maxExpandedLength: 3000000, // ~3MB total expanded content budget
+    maxEntitySize: 20000, // max length per entity (mock entities are short)
+    maxEntityCount: 100, // max distinct entity names
   },
 };
 
