@@ -36,19 +36,6 @@ const PARSER_OPTIONS = {
     parseXmlEncodedString(value),
   tagValueProcessor: (_name: string, value: string) =>
     parseXmlEncodedString(value),
-  processEntities: {
-    enabled: true,
-    /*
-     * Reasonable defaults for entity processing that balance parsing large,
-     * trusted backend XML responses and protection against entity expansion
-     * denial-of-service attacks. These limits provide headroom for large
-     * reports while still restricting abusive expansion; adjust if needed.
-     */
-    maxTotalExpansions: 2000, // headroom above observed large backend responses
-    maxExpandedLength: 3000000, // ~3MB total expanded content budget
-    maxEntitySize: 20000, // max length per entity (mock entities are short)
-    maxEntityCount: 100, // max distinct entity names
-  },
 };
 
 const xmlParser = new XMLParser(PARSER_OPTIONS);
