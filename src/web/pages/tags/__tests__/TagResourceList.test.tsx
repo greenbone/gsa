@@ -10,7 +10,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
-import ResourceList from 'web/pages/tags/ResourceList';
+import ResourceList from 'web/pages/tags/TagResourceList';
 
 const createTag = (id = 'tag-1') =>
   new Tag({

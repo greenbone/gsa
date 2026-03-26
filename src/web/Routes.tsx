@@ -635,13 +635,13 @@ const loggedInRoutes = [
       {
         path: 'tags',
         lazy: async () => ({
-          Component: (await import('web/pages/tags/ListPage')).default,
+          Component: (await import('web/pages/tags/TagListPage')).default,
         }),
       },
       {
         path: 'tag/:id',
         lazy: async () => ({
-          Component: (await import('web/pages/tags/DetailsPage')).default,
+          Component: (await import('web/pages/tags/TagDetailsPage')).default,
         }),
       },
 

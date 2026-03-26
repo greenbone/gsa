@@ -49,7 +49,7 @@ import RolesTable from 'web/pages/roles/RoleTable';
 import ScanConfigsTable from 'web/pages/scanconfigs/Table';
 import ScannerTable from 'web/pages/scanners/ScannerTable';
 import SchedulesTable from 'web/pages/schedules/Table';
-import TagsTable from 'web/pages/tags/Table';
+import TagsTable from 'web/pages/tags/TagTable';
 import TargetsTable from 'web/pages/targets/TargetTable';
 import TasksTable from 'web/pages/tasks/TaskTable';
 import TicketsTable from 'web/pages/tickets/Table';

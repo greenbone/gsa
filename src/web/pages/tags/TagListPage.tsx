@@ -31,7 +31,7 @@ import usePagination from 'web/hooks/usePagination';
 import useSelection from 'web/hooks/useSelection';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
-import TagsTable from 'web/pages/tags/Table';
+import TagTable from 'web/pages/tags/TagTable';
 import TagComponent from 'web/pages/tags/TagComponent';
 import TagFilterDialog from 'web/pages/tags/TagFilterDialog';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -260,7 +260,7 @@ const TagsPage = () => {
               isUpdating={isUpdating}
               sectionIcon={<TagIcon size="large" />}
               table={
-                <TagsTable
+                <TagTable
                   entities={allEntities}
                   entitiesCounts={entitiesCounts}
                   filter={filter}

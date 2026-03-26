@@ -33,7 +33,7 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import TagDetails from 'web/pages/tags/Details';
+import TagDetails from 'web/pages/tags/TagDetails';
 import {renderYesNo} from 'web/utils/Render';
 import type {SortDirectionType} from 'web/utils/sort-direction';
 
@@ -140,7 +140,7 @@ const getCoreColumns = (): ColumnConfig[] => [
     title: _l('Modified') as unknown as string,
     width: '8%',
     sortBy: 'modified',
-    render: (entity: Tag) => <DateTime date={entity.modificationTime} />,
+    render: (entity: Tag) => <DateTime date={entity.modificationTime} />, 
   },
 ];
 
@@ -184,7 +184,7 @@ const Actions = ({
       onEntityDeselected={onEntityDeselected}
       onEntitySelected={onEntitySelected}
     >
-      <IconDivider grow align={['center', 'center']}>
+      <IconDivider grow align={["center", "center"]}>
         {toggleIcon}
         <TrashIcon
           displayName={_('Tag')}
