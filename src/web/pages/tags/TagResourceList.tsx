@@ -57,7 +57,7 @@ const Notification = ({id, resourceType}: NotificationProps) => {
   );
 };
 
-const ResourceList = ({entity}: ResourceListProps) => {
+const TagResourceList = ({entity}: ResourceListProps) => {
   const gmp = useGmp();
   const [isLoading, setIsLoading] = useState(true);
   const [resources, setResources] = useState<Model[]>([]);
@@ -124,4 +124,4 @@ const ResourceList = ({entity}: ResourceListProps) => {
   );
 };
 
-export default ResourceList;
+export default TagResourceList;

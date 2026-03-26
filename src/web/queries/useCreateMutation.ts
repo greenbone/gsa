@@ -30,9 +30,17 @@ const useCreateMutation = <
   return useGmpMutation<TInput, TOutput, TError>({
     gmpMethod,
     invalidateQueryIds,
-    successMessage: _('{{entity}} successfully created', {
-      entity: typeName(entityType),
-    }),
+    successMessage: (_data, variables) => {
+      const name = (variables as Record<string, unknown>)?.name;
+      return typeof name === 'string' && name
+        ? _('{{entity}} {{- name}} successfully created', {
+            entity: typeName(entityType),
+            name,
+          })
+        : _('{{entity}} successfully created', {
+            entity: typeName(entityType),
+          });
+    },
     onSuccess,
     onError,
   });

@@ -26,9 +26,17 @@ const useSaveMutation = <TInput = unknown, TOutput = void, TError = Error>({
   return useGmpMutation<TInput, TOutput, TError>({
     gmpMethod,
     invalidateQueryIds,
-    successMessage: _('{{entity}} successfully saved', {
-      entity: typeName(entityType),
-    }),
+    successMessage: (_data, variables) => {
+      const name = (variables as Record<string, unknown>)?.name;
+      return typeof name === 'string' && name
+        ? _('{{entity}} {{- name}} successfully saved', {
+            entity: typeName(entityType),
+            name,
+          })
+        : _('{{entity}} successfully saved', {
+            entity: typeName(entityType),
+          });
+    },
     onSuccess,
     onError,
   });

@@ -63,7 +63,10 @@ const AgentGroupsComponent = ({
   });
 
   const handleClone = (agentGroup: AgentGroup) => {
-    return cloneMutation.mutateAsync({id: agentGroup.id as string});
+    return cloneMutation.mutateAsync({
+      id: agentGroup.id as string,
+      name: agentGroup.name as string,
+    });
   };
 
   const deleteMutation = useDeleteAgentGroup({
@@ -72,7 +75,10 @@ const AgentGroupsComponent = ({
   });
 
   const handleDelete = (agentGroup: AgentGroup) => {
-    return deleteMutation.mutateAsync({id: agentGroup.id as string});
+    return deleteMutation.mutateAsync({
+      id: agentGroup.id as string,
+      name: agentGroup.name as string,
+    });
   };
 
   const createMutation = useCreateAgentGroup({

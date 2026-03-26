@@ -140,7 +140,7 @@ const getCoreColumns = (): ColumnConfig[] => [
     title: _l('Modified') as unknown as string,
     width: '8%',
     sortBy: 'modified',
-    render: (entity: Tag) => <DateTime date={entity.modificationTime} />, 
+    render: (entity: Tag) => <DateTime date={entity.modificationTime} />,
   },
 ];
 
@@ -184,7 +184,7 @@ const Actions = ({
       onEntityDeselected={onEntityDeselected}
       onEntitySelected={onEntitySelected}
     >
-      <IconDivider grow align={["center", "center"]}>
+      <IconDivider grow align={['center', 'center']}>
         {toggleIcon}
         <TrashIcon
           displayName={_('Tag')}
