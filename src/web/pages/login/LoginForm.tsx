@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
@@ -13,13 +12,21 @@ import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
 import TextField from 'web/components/form/TextField';
 import useFormValues from 'web/components/form/useFormValues';
-import GreenboneLoginLogo from 'web/components/img/LoginLogo';
+import LoginLogo from 'web/components/img/LoginLogo';
 import ProductImage from 'web/components/img/ProductImage';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
+
+interface LoginFormProps {
+  error?: string;
+  showGuestLogin?: boolean;
+  showLogin?: boolean;
+  showProtocolInsecure?: boolean;
+  onGuestLoginClick: () => void;
+  onSubmit: (username: string, password: string) => void;
+}
 
 const Paper = styled(Layout)`
   background: ${Theme.white};
@@ -69,10 +76,9 @@ const LoginForm = ({
   showGuestLogin = false,
   showLogin = true,
   showProtocolInsecure = false,
-  isIE11 = false,
   onGuestLoginClick,
   onSubmit,
-}) => {
+}: LoginFormProps) => {
   const [_] = useTranslation();
   const [{username, password}, handleValueChange] = useFormValues({
     username: '',
@@ -95,7 +101,7 @@ const LoginForm = ({
     <Paper>
       <Divider flex="column" grow="1" margin="10px">
         <Layout align="center">
-          <GreenboneLoginLogo width="300px" />
+          <LoginLogo />
         </Layout>
 
         <Layout flex="column">
@@ -120,21 +126,6 @@ const LoginForm = ({
           )}
         </Layout>
 
-        <Layout>
-          {isIE11 && (
-            <Panel data-testid="IE11">
-              <StyledWarningError>
-                {_('Warning: You are using IE11')}
-              </StyledWarningError>
-              <p>
-                {_(
-                  'You are using Internet Explorer 11. This browser is not supported anymore. Please use an up-to-date alternative or contact your system administrator.',
-                )}
-              </p>
-            </Panel>
-          )}
-        </Layout>
-
         <>
           {isDefined(error) && (
             <StyledErrorContainer data-testid="error">
@@ -142,7 +133,7 @@ const LoginForm = ({
             </StyledErrorContainer>
           )}
 
-          {showLogin && !isIE11 && (
+          {showLogin && (
             <FormGroup>
               <H1>{_('Sign in to your account')}</H1>
               <TextField
@@ -150,7 +141,6 @@ const LoginForm = ({
                 autoFocus={true}
                 name="username"
                 placeholder={_('Username')}
-                tabIndex="1"
                 title={_('Username')}
                 value={username}
                 onChange={handleValueChange}
@@ -188,16 +178,6 @@ const LoginForm = ({
       </Divider>
     </Paper>
   );
-};
-
-LoginForm.propTypes = {
-  error: PropTypes.string,
-  isIE11: PropTypes.bool,
-  showGuestLogin: PropTypes.bool,
-  showLogin: PropTypes.bool,
-  showProtocolInsecure: PropTypes.bool,
-  onGuestLoginClick: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

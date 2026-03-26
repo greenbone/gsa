@@ -57,12 +57,7 @@ const BackgroundBottomImage = styled(Image)`
   left: 0;
 `;
 
-const isIE11 = () => {
-  const match = /Trident\/([\d.]+)/.exec(navigator.userAgent);
-  return match ? +match[1] >= 7 : false;
-};
-
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   const gmp = useGmp();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -172,7 +167,6 @@ const LoginPage: React.FC = () => {
       <BackgroundBottomImage src="login-bottom.svg" />
       <LoginForm
         error={message}
-        isIE11={isIE11()}
         showGuestLogin={showGuestLogin}
         showLogin={showLogin}
         showProtocolInsecure={showProtocolInsecure}
