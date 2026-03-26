@@ -3,22 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import Img from 'web/components/img/Img';
 import Cpe from 'web/utils/Cpe';
-import PropTypes from 'web/utils/PropTypes';
 
-const CpeIcon = ({name, ...props}) => {
+interface CpeIconProps {
+  name: string;
+}
+
+const CpeIcon = ({name}: CpeIconProps) => {
   const cpe = Cpe.find(name);
 
   const icon = isDefined(cpe) ? cpe.icon : 'cpe/other.svg';
 
-  return <Img {...props} data-testid="cpe-icon" src={icon} width="16px" />;
-};
-
-CpeIcon.propTypes = {
-  name: PropTypes.string,
+  return <Img data-testid="cpe-icon" src={icon} width="16px" />;
 };
 
 export default CpeIcon;
