@@ -17,6 +17,7 @@ import {
   EnterpriseExa,
   EnterprisePeta,
   EnterpriseTera,
+  EnterpriseContainer,
 } from 'web/components/icon/GreenboneApplianceLogo';
 
 export type ApplianceLogo = keyof typeof APPLIANCE_DATA;
@@ -89,6 +90,10 @@ const APPLIANCE_DATA = {
   'gsm-tera_label.svg': {
     title: 'OPENVAS SCAN - TERA',
     component: EnterpriseTera,
+  },
+  'enterprise-container.svg': {
+    title: 'OPENVAS SCAN - CONTAINER',
+    component: EnterpriseContainer,
   },
   'gsm-unknown_label.svg': {
     title: 'OPENVAS',

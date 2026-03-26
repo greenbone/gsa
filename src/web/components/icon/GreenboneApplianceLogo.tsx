@@ -110,3 +110,7 @@ export const EnterpriseTera = createEnterpriseComponent(
   () => import('web/components/icon/svg/Enterprise_TERA.svg?react'),
   'EnterpriseTera',
 );
+export const EnterpriseContainer = createEnterpriseComponent(
+  () => import('web/components/icon/svg/Enterprise_CONTAINER.svg?react'),
+  'EnterpriseContainer',
+);
