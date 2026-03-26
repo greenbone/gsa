@@ -5,17 +5,17 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
-import GreenboneLoginLogo from 'web/components/img/LoginLogo';
+import LoginLogo from 'web/components/img/LoginLogo';
 
-describe('GreenboneLogo tests', () => {
+describe('LoginLogo tests', () => {
   test('should render', () => {
     const {render} = rendererWith({
       gmp: {settings: {}},
     });
-    const {element} = render(<GreenboneLoginLogo />);
+    const {element} = render(<LoginLogo />);
 
-    expect(element).toHaveAttribute('alt', 'Greenbone AG');
-    expect(element).toHaveAttribute('data-testid', 'greenbone-login-logo');
+    expect(element).toHaveAttribute('alt', 'OPENVAS');
+    expect(element).toHaveAttribute('data-testid', 'login-logo');
     expect(element).toHaveAttribute('src', '/img/openvasHorizontal.svg');
   });
 
@@ -23,10 +23,10 @@ describe('GreenboneLogo tests', () => {
     const {render} = rendererWith({
       gmp: {settings: {vendorLabel: 'test'}},
     });
-    const {element} = render(<GreenboneLoginLogo />);
+    const {element} = render(<LoginLogo />);
 
-    expect(element).toHaveAttribute('alt', 'Greenbone AG');
-    expect(element).toHaveAttribute('data-testid', 'greenbone-login-logo');
+    expect(element).toHaveAttribute('alt', 'OPENVAS SCAN');
+    expect(element).toHaveAttribute('data-testid', 'login-logo');
     expect(element).toHaveAttribute('src', '/img/openvasHorizontal-scan.svg');
   });
 });
