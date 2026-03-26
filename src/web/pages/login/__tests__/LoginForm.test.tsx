@@ -91,36 +91,6 @@ describe('LoginForm tests', () => {
     expect(screen.queryByTestId('protocol-insecure')).toBeNull();
   });
 
-  test('should display IE11 message', () => {
-    const handleSubmit = testing.fn();
-    const handleClick = testing.fn();
-
-    const {render} = rendererWith({gmp});
-
-    render(
-      <LoginForm
-        isIE11
-        onGuestLoginClick={handleClick}
-        onSubmit={handleSubmit}
-      />,
-    );
-
-    expect(screen.getByTestId('IE11')).toBeInTheDocument();
-  });
-
-  test('should not display IE11 message by default', () => {
-    const handleSubmit = testing.fn();
-    const handleClick = testing.fn();
-
-    const {render} = rendererWith({gmp});
-
-    render(
-      <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
-    );
-
-    expect(screen.queryByTestId('IE11')).toBeNull();
-  });
-
   test('should display login fields by default', () => {
     const handleSubmit = testing.fn();
     const handleClick = testing.fn();
