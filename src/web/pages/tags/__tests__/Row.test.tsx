@@ -9,7 +9,7 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import dayjs from 'gmp/models/date';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-import Row from 'web/pages/tags/Row';
+import {Row} from 'web/pages/tags/Table';
 
 const createTag = (id = 'tag-1') =>
   new Tag({

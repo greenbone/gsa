@@ -104,6 +104,8 @@ describe('TagComponent tests', () => {
     screen.getDialog();
     fireEvent.click(screen.getDialogSaveButton());
 
+    await wait();
+
     expect(gmp.tag.create).toHaveBeenCalledWith({
       active: true,
       comment: '',
@@ -113,8 +115,6 @@ describe('TagComponent tests', () => {
       resourceType: undefined,
       value: '',
     });
-
-    await wait();
 
     expect(onCreated).toHaveBeenCalled();
   });
@@ -148,6 +148,8 @@ describe('TagComponent tests', () => {
     screen.getDialog();
     fireEvent.click(screen.getDialogSaveButton());
 
+    await wait();
+
     expect(gmp.tag.create).toHaveBeenCalledWith({
       active: true,
       comment: '',
@@ -157,8 +159,6 @@ describe('TagComponent tests', () => {
       resourceType: 'host',
       value: '',
     });
-
-    await wait();
 
     expect(onCreated).toHaveBeenCalled();
   });
@@ -184,6 +184,8 @@ describe('TagComponent tests', () => {
     screen.getDialog();
     fireEvent.click(screen.getDialogSaveButton());
 
+    await wait();
+
     expect(gmp.tag.save).toHaveBeenCalledWith({
       active: true,
       comment: '',
@@ -193,8 +195,6 @@ describe('TagComponent tests', () => {
       resourceType: 'task',
       value: 'Some Value',
     });
-
-    await wait();
 
     expect(onSaved).toHaveBeenCalled();
   });
@@ -216,10 +216,10 @@ describe('TagComponent tests', () => {
 
     const button = screen.getByTestId('button');
     fireEvent.click(button);
-    expect(gmp.tag.clone).toHaveBeenCalledWith(tag);
 
     await wait();
 
+    expect(gmp.tag.clone).toHaveBeenCalledWith({id: tag.id});
     expect(onCloned).toHaveBeenCalled();
   });
 
@@ -270,9 +270,10 @@ describe('TagComponent tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('enable-button'));
-    expect(gmpEnable.tag.enable).toHaveBeenCalledWith({id: tag.id});
 
     await wait();
+
+    expect(gmpEnable.tag.enable).toHaveBeenCalledWith({id: tag.id});
     expect(onEnabled).toHaveBeenCalled();
 
     // Test disable
@@ -289,9 +290,10 @@ describe('TagComponent tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('disable-button'));
-    expect(gmpDisable.tag.disable).toHaveBeenCalledWith({id: tag.id});
 
     await wait();
+
+    expect(gmpDisable.tag.disable).toHaveBeenCalledWith({id: tag.id});
     expect(onDisabled).toHaveBeenCalled();
   });
 
