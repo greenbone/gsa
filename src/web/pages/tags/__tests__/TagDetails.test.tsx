@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-import TagDetails from 'web/pages/tags/Details';
+import TagDetails from 'web/pages/tags/TagDetails';
 
 describe('TagDetails tests', () => {
   test('should render tag details', () => {

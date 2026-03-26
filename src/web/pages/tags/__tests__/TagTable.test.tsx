@@ -8,7 +8,7 @@ import {fireEvent, rendererWith, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-import TagsTable from 'web/pages/tags/Table';
+import TagsTable from 'web/pages/tags/TagTable';
 
 describe('TagsTable tests', () => {
   test('should render tags in table with sort headers', () => {

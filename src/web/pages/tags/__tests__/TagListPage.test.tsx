@@ -12,7 +12,7 @@ import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE} from 'gmp/parser';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
-import TagsListPage from 'web/pages/tags/ListPage';
+import TagsListPage from 'web/pages/tags/TagListPage';
 import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';

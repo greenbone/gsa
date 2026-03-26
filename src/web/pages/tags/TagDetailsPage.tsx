@@ -36,8 +36,8 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import TagDetails from 'web/pages/tags/Details';
-import ResourceList from 'web/pages/tags/ResourceList';
+import TagDetails from 'web/pages/tags/TagDetails';
+import ResourceList from 'web/pages/tags/TagResourceList';
 import TagComponent from 'web/pages/tags/TagComponent';
 import {
   selector as permissionsSelector,
@@ -181,8 +181,8 @@ const Page = ({
                   title={_('Tag: {{name}}', {name: entity.name ?? ''})}
                 />
                 <TabsContainer flex="column" grow="1">
-                  <TabLayout align={['start', 'end']} grow="1">
-                    <TabList align={['start', 'stretch']}>
+                  <TabLayout align={["start", "end"]} grow="1">
+                    <TabList align={["start", "stretch"]}>
                       <Tab>{_('Information')}</Tab>
                       <EntitiesTab count={entity.resourceCount}>
                         {_('Assigned Items')}
