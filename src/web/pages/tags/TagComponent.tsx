@@ -4,6 +4,8 @@
  */
 
 import React, {useState} from 'react';
+import {showSuccessNotification} from '@greenbone/ui-lib';
+import {type EntityCommandParams} from 'gmp/commands/entity';
 import type Response from 'gmp/http/response';
 import type Model from 'gmp/models/model';
 import type Tag from 'gmp/models/tag';
@@ -15,11 +17,19 @@ import {
 } from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import EntityComponent from 'web/entity/EntityComponent';
 import {type EntityCloneResponse} from 'web/entity/hooks/useEntityClone';
 import {type EntityCreateResponse} from 'web/entity/hooks/useEntityCreate';
-import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
-import {type EntitySaveResponse} from 'web/entity/hooks/useEntitySave';
+import useEntityDownload, {
+  type OnDownloadedFunc,
+} from 'web/entity/hooks/useEntityDownload';
+import {
+  useCloneTag,
+  useCreateTag,
+  useDeleteTag,
+  useDisableTag,
+  useEnableTag,
+  useSaveTag,
+} from 'web/hooks/use-query/tags';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -50,8 +60,6 @@ interface TagComponentRenderProps {
 
 interface TagComponentProps {
   children: (props: TagComponentRenderProps) => React.ReactNode;
-  onAddError?: (error: Error) => void;
-  onAdded?: () => void;
   onCloneError?: (error: Error) => void;
   onCloned?: (response: EntityCloneResponse) => void;
   onCreateError?: (error: Error) => void;
@@ -67,7 +75,7 @@ interface TagComponentProps {
   onRemoveError?: (error: Error) => void;
   onRemoved?: () => void;
   onSaveError?: (error: Error) => void;
-  onSaved?: (response: EntitySaveResponse) => void;
+  onSaved?: () => void;
 }
 
 const RESOURCE_TYPES: EntityType[] = [
@@ -119,8 +127,6 @@ const TagComponent = ({
   onRemoveError,
   onEnabled,
   onEnableError,
-  onAdded,
-  onAddError,
   onDisabled,
   onDisableError,
 }: TagComponentProps) => {
@@ -142,31 +148,94 @@ const TagComponent = ({
   const [resourceType, setResourceType] = useState<EntityType | undefined>();
   const [resourceTypes, setResourceTypes] = useState<EntityType[]>([]);
 
+  const deleteMutation = useDeleteTag({
+    onSuccess: onDeleted,
+    onError: onDeleteError,
+  });
+
+  const createMutation = useCreateTag({
+    onSuccess: onCreated,
+    onError: onCreateError,
+  });
+
+  const saveMutation = useSaveTag({
+    onSuccess: onSaved,
+    onError: onSaveError,
+  });
+
+  const cloneMutation = useCloneTag({
+    onSuccess: onCloned,
+    onError: onCloneError,
+  });
+
+  const enableMutation = useEnableTag({
+    onSuccess: onEnabled,
+    onError: onEnableError,
+  });
+
+  const disableMutation = useDisableTag({
+    onSuccess: onDisabled,
+    onError: onDisableError,
+  });
+
+  const handleEntityDownload = useEntityDownload<Tag>(
+    (entity: EntityCommandParams) => gmp.tag.export(entity),
+    {
+      onDownloaded,
+      onDownloadError,
+    },
+  );
+
   const getResourceTypes = (): EntityType[] =>
     RESOURCE_TYPES.filter(type => capabilities.mayAccess(type));
 
-  const handleEnableTag = (tag: Tag) => {
-    return gmp.tag
-      .enable({id: tag.id as string})
-      .then(onEnabled, onEnableError);
+  const handleDelete = async (tag: Tag): Promise<void> => {
+    await deleteMutation.mutateAsync({id: tag.id as string});
   };
 
-  const handleDisableTag = (tag: Tag) => {
-    return gmp.tag
-      .disable({id: tag.id as string})
-      .then(onDisabled, onDisableError);
+  const handleClone = async (tag: Tag): Promise<void> => {
+    await cloneMutation.mutateAsync({id: tag.id as string});
   };
 
-  const handleAddTag = ({name, value, entity}: AddTagData) => {
-    return gmp.tag
-      .create({
-        name,
-        value,
-        active: true,
-        resourceIds: [entity.id as string],
-        resourceType: getEntityType(entity),
-      })
-      .then(onAdded, onAddError);
+  const handleDownload = async (tag: Tag): Promise<void> => {
+    if (!isDefined(tag.id)) {
+      throw new Error('Tag ID is required for download');
+    }
+    await handleEntityDownload(tag);
+  };
+
+  const handleEnableTag = async (tag: Tag): Promise<void> => {
+    await enableMutation.mutateAsync({id: tag.id as string});
+    showSuccessNotification(
+      '',
+      _('Tag {{- name}} enabled', {
+        name: tag.name || tag.id || 'unnamed',
+      }),
+    );
+  };
+
+  const handleDisableTag = async (tag: Tag): Promise<void> => {
+    await disableMutation.mutateAsync({id: tag.id as string});
+    showSuccessNotification(
+      '',
+      _('Tag {{- name}} disabled', {
+        name: tag.name || tag.id || 'unnamed',
+      }),
+    );
+  };
+
+  const handleAddTag = async ({
+    name,
+    value,
+    entity,
+  }: AddTagData): Promise<void> => {
+    await createMutation.mutateAsync({
+      name,
+      value,
+      active: true,
+      resourceIds: [entity.id as string],
+      resourceType: getEntityType(entity),
+    });
   };
 
   const openTagDialog = async (tag?: Tag) => {
@@ -233,75 +302,75 @@ const TagComponent = ({
     setValue(undefined);
   };
 
-  const handleRemove = (tagId: string, entity: Model) => {
-    return gmp.tag
-      .get({id: tagId})
-      .then(response => response.data)
-      .then(tag =>
-        gmp.tag.save({
-          id: tag.id as string,
-          name: tag.name as string,
-          comment: tag.comment as string,
-          active: tag.active === YES_VALUE,
-          value: tag.value,
-          resourceIds: [entity.id as string],
-          resourceType: tag.resourceType as EntityType,
-          resourcesAction: 'remove',
-        }),
-      )
-      .then(onRemoved, onRemoveError);
+  const handleRemove = async (tagId: string, entity: Model): Promise<void> => {
+    try {
+      const response = await gmp.tag.get({id: tagId});
+      const tag = response.data;
+      await saveMutation.mutateAsync({
+        id: tag.id as string,
+        name: tag.name as string,
+        comment: tag.comment as string,
+        active: tag.active === YES_VALUE,
+        value: tag.value,
+        resourceIds: [entity.id as string],
+        resourceType: tag.resourceType as EntityType,
+        resourcesAction: 'remove',
+      });
+      if (onRemoved) {
+        onRemoved();
+      }
+    } catch (error) {
+      if (onRemoveError) {
+        onRemoveError(error as Error);
+      }
+      throw error;
+    }
   };
 
   return (
-    <EntityComponent<Tag>
-      name="tag"
-      onCloneError={onCloneError}
-      onCloned={onCloned}
-      onCreateError={onCreateError}
-      onCreated={onCreated}
-      onDeleteError={onDeleteError}
-      onDeleted={onDeleted}
-      onDownloadError={onDownloadError}
-      onDownloaded={onDownloaded}
-      onSaveError={onSaveError}
-      onSaved={onSaved}
-    >
-      {({save, create, download, delete: deleteFunc, clone}) => (
-        <>
-          {children({
-            clone,
-            delete: deleteFunc,
-            download,
-            add: handleAddTag,
-            create: openCreateTagDialog,
-            edit: openTagDialog,
-            enable: handleEnableTag,
-            disable: handleDisableTag,
-            remove: handleRemove,
-          })}
-          {dialogVisible && (
-            <TagDialog
-              active={active}
-              comment={comment}
-              id={id}
-              name={name}
-              resourceCount={resourceCount}
-              resourceIds={resourceIds}
-              resourceType={resourceType}
-              resourceTypes={resourceTypes}
-              title={title}
-              value={value}
-              onClose={handleCloseTagDialog}
-              onSave={async d => {
-                const promise = isDefined(d.id) ? save(d) : create(d);
-                await promise;
-                return closeTagDialog();
-              }}
-            />
-          )}
-        </>
+    <>
+      {children({
+        clone: handleClone,
+        delete: handleDelete,
+        download: handleDownload,
+        add: handleAddTag,
+        create: openCreateTagDialog,
+        edit: openTagDialog,
+        enable: handleEnableTag,
+        disable: handleDisableTag,
+        remove: handleRemove,
+      })}
+      {dialogVisible && (
+        <TagDialog
+          active={active}
+          comment={comment}
+          id={id}
+          name={name}
+          resourceCount={resourceCount}
+          resourceIds={resourceIds}
+          resourceType={resourceType}
+          resourceTypes={resourceTypes}
+          title={title}
+          value={value}
+          onClose={handleCloseTagDialog}
+          onSave={async d => {
+            if (isDefined(d.id)) {
+              await saveMutation.mutateAsync({
+                ...d,
+                id: d.id,
+                resourceType: d.resourceType as EntityType,
+              });
+            } else {
+              await createMutation.mutateAsync({
+                ...d,
+                resourceType: d.resourceType as EntityType,
+              });
+            }
+            closeTagDialog();
+          }}
+        />
       )}
-    </EntityComponent>
+    </>
   );
 };
 

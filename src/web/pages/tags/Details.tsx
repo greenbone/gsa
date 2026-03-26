@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Tag from 'gmp/models/tag';
 import {typeName} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import Layout from 'web/components/layout/Layout';
@@ -13,12 +13,15 @@ import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 
-const TagDetails = ({entity}) => {
+interface TagDetailsProps {
+  entity: Tag;
+}
+
+const TagDetails = ({entity}: TagDetailsProps) => {
   const [_] = useTranslation();
-  const {comment, value, resourceType, resources} = entity;
+  const {comment, value, resourceType, resourceCount} = entity;
   return (
     <Layout grow flex="column">
       <InfoTable>
@@ -39,7 +42,7 @@ const TagDetails = ({entity}) => {
             <TableData>{value}</TableData>
           </TableRow>
 
-          {isDefined(resources) && (
+          {isDefined(resourceCount) && resourceCount > 0 && (
             <TableRow>
               <TableData>{_('Resource Type')}</TableData>
               <TableData>{typeName(resourceType)}</TableData>
@@ -54,10 +57,6 @@ const TagDetails = ({entity}) => {
       </InfoTable>
     </Layout>
   );
-};
-
-TagDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
 };
 
 export default TagDetails;

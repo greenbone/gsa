@@ -5,9 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
+import EverythingCapabilities from 'gmp/capabilities/everything';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import dayjs from 'gmp/models/date';
-import EverythingCapabilities from 'gmp/capabilities/everything';
 import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE} from 'gmp/parser';
@@ -148,7 +148,19 @@ describe('TagsListPage tests', () => {
     });
 
     const gmp = {
-      tag: {},
+      tag: {
+        create: testing.fn().mockResolvedValue({id: 'created-id'}),
+        save: testing.fn().mockResolvedValue({id: 'saved-id'}),
+        clone: testing.fn().mockResolvedValue({id: 'cloned-id'}),
+        delete: testing.fn().mockResolvedValue(undefined),
+        export: testing.fn().mockResolvedValue({foo: 'bar'}),
+        enable: testing.fn().mockResolvedValue(undefined),
+        disable: testing.fn().mockResolvedValue(undefined),
+        get: testing.fn().mockResolvedValue({data: createTag()}),
+        resourcenames: {
+          getAll: testing.fn().mockResolvedValue({data: []}),
+        },
+      },
       tags: {
         get: getTags,
       },
