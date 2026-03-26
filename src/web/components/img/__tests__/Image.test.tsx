@@ -5,11 +5,11 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {render} from 'web/testing';
-import Img from 'web/components/img/Img';
+import Image from 'web/components/img/Image';
 
-describe('Img tests', () => {
-  test('should render img with attributes', () => {
-    const {element} = render(<Img alt="OPENVAS SCAN" src="greenbone.svg" />);
+describe('Image tests', () => {
+  test('should render image with attributes', () => {
+    const {element} = render(<Image alt="OPENVAS SCAN" src="greenbone.svg" />);
 
     expect(element).toHaveAttribute('alt', 'OPENVAS SCAN');
     expect(element).toHaveAttribute('src', '/img/greenbone.svg');

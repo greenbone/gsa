@@ -4,7 +4,7 @@
  */
 
 import {isDefined, isString} from 'gmp/utils/identity';
-import Img from 'web/components/img/Img';
+import Image from 'web/components/img/Image';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
@@ -61,7 +61,7 @@ const OsIcon = ({
   return (
     <Layout>
       <Divider title={title}>
-        <Img src={osIcon} width="16px" />
+        <Image src={osIcon} width="16px" />
         {displayOsName && isDefined(os) && <span>{os.title}</span>}
       </Divider>
     </Layout>

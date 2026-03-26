@@ -4,7 +4,7 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import Img from 'web/components/img/Img';
+import Image from 'web/components/img/Image';
 import Cpe from 'web/utils/Cpe';
 
 interface CpeIconProps {
@@ -16,7 +16,7 @@ const CpeIcon = ({name}: CpeIconProps) => {
 
   const icon = isDefined(cpe) ? cpe.icon : 'cpe/other.svg';
 
-  return <Img data-testid="cpe-icon" src={icon} width="16px" />;
+  return <Image data-testid="cpe-icon" src={icon} width="16px" />;
 };
 
 export default CpeIcon;
