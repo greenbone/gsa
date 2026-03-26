@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Img from 'web/components/img/Img';
@@ -15,13 +14,12 @@ const Image = styled(Img)`
   height: 180px;
 `;
 
-const ProductImage = props => {
+const ProductImage = () => {
   const [_] = useTranslation();
   const {settings} = useGmp();
   return (
     <Image
       alt={_('OPENVAS SCAN')}
-      {...props}
       src={
         isDefined(settings) && isDefined(settings.vendorLabel)
           ? settings.vendorLabel
