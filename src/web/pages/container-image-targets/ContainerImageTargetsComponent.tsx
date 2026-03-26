@@ -18,10 +18,10 @@ import useEntityDownload, {
   type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
 import {
-  useCreateOciImageTarget,
-  useSaveOciImageTarget,
-  useDeleteOciImageTarget,
   useCloneOciImageTarget,
+  useCreateOciImageTarget,
+  useDeleteOciImageTarget,
+  useSaveOciImageTarget,
 } from 'web/hooks/use-query/oci-image-targets';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -105,7 +105,10 @@ const ContainerImageTargetsComponent = ({
     if (!target.id) {
       throw new Error('Container ImageTarget ID is required for deletion');
     }
-    return deleteMutation.mutateAsync({id: target.id as string});
+    return deleteMutation.mutateAsync({
+      id: target.id as string,
+      name: target.name,
+    });
   };
 
   const saveMutation = useSaveOciImageTarget({
@@ -156,7 +159,10 @@ const ContainerImageTargetsComponent = ({
     if (!target.id) {
       throw new Error('Container Image Target ID is required for cloning');
     }
-    return cloneMutation.mutateAsync({id: target.id as string});
+    return cloneMutation.mutateAsync({
+      id: target.id as string,
+      name: target.name,
+    });
   };
 
   const downloadTarget = async (target: OciImageTarget) => {

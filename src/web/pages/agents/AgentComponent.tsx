@@ -48,7 +48,10 @@ const AgentComponent = ({
     if (!agent.id) {
       throw new Error('Agent ID is required for deletion');
     }
-    return deleteMutation.mutateAsync({id: agent.id as string});
+    return deleteMutation.mutateAsync({
+      id: agent.id as string,
+      name: agent.name || agent.agentId,
+    });
   };
 
   const modifyAgentsMutation = useModifyAgent({

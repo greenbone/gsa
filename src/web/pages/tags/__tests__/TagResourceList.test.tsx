@@ -10,7 +10,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
-import ResourceList from 'web/pages/tags/TagResourceList';
+import TagResourceList from 'web/pages/tags/TagResourceList';
 
 const createTag = (id = 'tag-1') =>
   new Tag({
@@ -41,7 +41,7 @@ describe('ResourceList tests', () => {
     };
 
     const {render} = rendererWith({gmp, capabilities: true});
-    render(<ResourceList entity={tag} />);
+    render(<TagResourceList entity={tag} />);
 
     await screen.findByText('Test Task');
   });
@@ -64,7 +64,7 @@ describe('ResourceList tests', () => {
     };
 
     const {render} = rendererWith({gmp, capabilities: true});
-    render(<ResourceList entity={tag} />);
+    render(<TagResourceList entity={tag} />);
 
     // Component renders empty state gracefully
   });
@@ -85,7 +85,7 @@ describe('ResourceList tests', () => {
     };
 
     const {render} = rendererWith({gmp, capabilities: true});
-    render(<ResourceList entity={tag} />);
+    render(<TagResourceList entity={tag} />);
 
     const items = await screen.findAllByText('Test Task');
     expect(items.length).toBeGreaterThanOrEqual(1);
@@ -104,7 +104,7 @@ describe('ResourceList tests', () => {
     };
 
     const {render} = rendererWith({gmp, capabilities: true});
-    render(<ResourceList entity={tag} />);
+    render(<TagResourceList entity={tag} />);
 
     await screen.findByText('Test Task');
 

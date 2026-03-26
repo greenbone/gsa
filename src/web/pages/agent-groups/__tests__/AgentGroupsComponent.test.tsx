@@ -94,10 +94,7 @@ describe('AgentGroupsComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('clone'));
     await wait();
-    expect(gmp.agentgroup.clone).toHaveBeenCalledWith(
-      {id: 'g1'},
-      expect.anything(),
-    );
+    expect(gmp.agentgroup.clone).toHaveBeenCalledWith({id: 'g1'});
 
     // delete returns a promise; call and await it
     const res = screen.getByTestId('delete');
@@ -107,7 +104,6 @@ describe('AgentGroupsComponent tests', () => {
 
     expect(gmp.agentgroup.delete).toHaveBeenCalledWith(
       expect.objectContaining({id: 'g1'}),
-      expect.anything(),
     );
   });
 
@@ -128,10 +124,7 @@ describe('AgentGroupsComponent tests', () => {
     fireEvent.click(screen.getByTestId('clone'));
     await wait();
 
-    expect(gmp.agentgroup.clone).toHaveBeenCalledWith(
-      {id: 'g1'},
-      expect.anything(),
-    );
+    expect(gmp.agentgroup.clone).toHaveBeenCalledWith({id: 'g1'});
     expect(onCloned).toHaveBeenCalled();
   });
 
@@ -162,10 +155,7 @@ describe('AgentGroupsComponent tests', () => {
     }
     await wait();
 
-    expect(gmp.agentgroup.clone).toHaveBeenCalledWith(
-      {id: 'g1'},
-      expect.anything(),
-    );
+    expect(gmp.agentgroup.clone).toHaveBeenCalledWith({id: 'g1'});
     // React Query mutations pass additional context parameters to error callbacks
     expect(onCloneError).toHaveBeenCalled();
     expect(onCloneError.mock.calls[0][0]).toEqual(error);

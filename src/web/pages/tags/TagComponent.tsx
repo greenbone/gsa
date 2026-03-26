@@ -190,11 +190,11 @@ const TagComponent = ({
     RESOURCE_TYPES.filter(type => capabilities.mayAccess(type));
 
   const handleDelete = async (tag: Tag): Promise<void> => {
-    await deleteMutation.mutateAsync({id: tag.id as string});
+    await deleteMutation.mutateAsync({id: tag.id as string, name: tag.name});
   };
 
   const handleClone = async (tag: Tag): Promise<void> => {
-    await cloneMutation.mutateAsync({id: tag.id as string});
+    await cloneMutation.mutateAsync({id: tag.id as string, name: tag.name});
   };
 
   const handleDownload = async (tag: Tag): Promise<void> => {

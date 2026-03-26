@@ -93,7 +93,7 @@ describe('AgentComponent tests', () => {
 
     await actions?.delete(sampleAgent);
 
-    expect(deleteMock).toHaveBeenCalledWith({id: 'a1'}, expect.any(Object));
+    expect(deleteMock).toHaveBeenCalledWith({id: 'a1'});
     expect(onDeleted).toHaveBeenCalled();
   });
 

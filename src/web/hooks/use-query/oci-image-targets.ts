@@ -14,9 +14,9 @@ import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type Filter from 'gmp/models/filter';
 import {isFilter} from 'gmp/models/filter/utils';
 import type OciImageTarget from 'gmp/models/oci-image-target';
-import {typeName} from 'gmp/utils/entity-type';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGmpMutation from 'web/queries/useGmpMutation';
@@ -102,15 +102,12 @@ export const useCloneOciImageTarget = ({
   onError,
   onSuccess,
 }: UseCreateOciImageTargetParams) => {
-  const [_] = useTranslation();
   const gmp = useGmp();
 
-  return useGmpMutation<{id: string}, EntityActionResponse, Rejection>({
+  return useCloneMutation<EntityActionResponse, Rejection>({
     gmpMethod: gmp.ociimagetarget.clone.bind(gmp.ociimagetarget),
+    entityType: 'ociimagetarget',
     invalidateQueryIds: ['get_oci_image_targets'],
-    successMessage: _('{{- entity}} successfully cloned', {
-      entity: typeName('ociimagetarget'),
-    }),
     onError,
     onSuccess,
   });

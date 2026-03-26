@@ -8,6 +8,10 @@ import {type EntityType, typeName} from 'gmp/utils/entity-type';
 import useTranslation from 'web/hooks/useTranslation';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
+export interface CloneMutationInput extends EntityCommandParams {
+  name?: string;
+}
+
 interface UseCloneMutationParams<TOutput, TError> {
   gmpMethod: (entity: EntityCommandParams) => Promise<TOutput>;
   entityType: EntityType;
@@ -24,12 +28,18 @@ const useCloneMutation = <TOutput = unknown, TError = Error>({
   onError,
 }: UseCloneMutationParams<TOutput, TError>) => {
   const [_] = useTranslation();
-  return useGmpMutation<EntityCommandParams, TOutput, TError>({
-    gmpMethod,
+  return useGmpMutation<CloneMutationInput, TOutput, TError>({
+    gmpMethod: ({id}) => gmpMethod({id}),
     invalidateQueryIds,
-    successMessage: _('{{entity}} cloned successfully', {
-      entity: typeName(entityType),
-    }),
+    successMessage: (_data, variables) =>
+      variables.name
+        ? _('{{entity}} {{- name}} cloned successfully', {
+            entity: typeName(entityType),
+            name: variables.name,
+          })
+        : _('{{entity}} cloned successfully', {
+            entity: typeName(entityType),
+          }),
     onSuccess,
     onError,
   });

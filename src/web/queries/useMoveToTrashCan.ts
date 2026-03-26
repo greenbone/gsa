@@ -8,32 +8,38 @@ import {type EntityType, typeName} from 'gmp/utils/entity-type';
 import useTranslation from 'web/hooks/useTranslation';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
-interface UseDeleteMutationParams<TInput, TOutput, TError> {
+export interface MoveToTrashCanInput extends EntityCommandParams {
+  name?: string;
+}
+
+interface UseMoveToTrashCanParams<TOutput, TError> {
   entityType: EntityType;
-  gmpMethod: (input: TInput) => Promise<TOutput>;
+  gmpMethod: (input: EntityCommandParams) => Promise<TOutput>;
   invalidateQueryIds?: string[];
   onSuccess?: (data: TOutput) => void;
   onError?: (error: TError) => void;
 }
 
-const useMoveToTrashCan = <
-  TInput = EntityCommandParams,
-  TOutput = void,
-  TError = Error,
->({
+const useMoveToTrashCan = <TOutput = void, TError = Error>({
   gmpMethod,
   entityType,
   invalidateQueryIds,
   onSuccess,
   onError,
-}: UseDeleteMutationParams<TInput, TOutput, TError>) => {
+}: UseMoveToTrashCanParams<TOutput, TError>) => {
   const [_] = useTranslation();
-  return useGmpMutation<TInput, TOutput, TError>({
-    gmpMethod,
+  return useGmpMutation<MoveToTrashCanInput, TOutput, TError>({
+    gmpMethod: ({id}) => gmpMethod({id}),
     invalidateQueryIds,
-    successMessage: _('{{- entity}} successfully moved to trashcan', {
-      entity: typeName(entityType),
-    }),
+    successMessage: (_data, variables) =>
+      variables.name
+        ? _('{{- entity}} {{- name}} successfully moved to trashcan', {
+            entity: typeName(entityType),
+            name: variables.name,
+          })
+        : _('{{- entity}} successfully moved to trashcan', {
+            entity: typeName(entityType),
+          }),
     onSuccess,
     onError,
   });

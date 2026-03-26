@@ -9,7 +9,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 interface UseGmpMutationParams<TInput, TOutput, TError> {
   gmpMethod: (input: TInput) => Promise<TOutput>;
-  successMessage?: string;
+  successMessage?: string | ((data: TOutput, variables: TInput) => string);
   onSuccess?: (data: TOutput) => void;
   onError?: (error: TError) => void;
   invalidateQueryIds?: string[];
@@ -29,7 +29,7 @@ export function useGmpMutation<
   const queryClient = useQueryClient();
   return useMutation<TOutput, TError, TInput>({
     mutationFn: gmpMethod,
-    onSuccess: data => {
+    onSuccess: (data, variables) => {
       if (isDefined(invalidateQueryIds)) {
         /*
          * TODO test cache invalidation based on useGetQuery cmd queryKey: [cmd, token, filter]
@@ -45,7 +45,11 @@ export function useGmpMutation<
       }
 
       if (successMessage) {
-        mantineShowSuccessNotification('', successMessage);
+        const message =
+          typeof successMessage === 'function'
+            ? successMessage(data, variables)
+            : successMessage;
+        mantineShowSuccessNotification('', message);
       }
 
       if (onSuccess) {
