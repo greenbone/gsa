@@ -158,7 +158,9 @@ describe('LoginPage tests', () => {
   test('should display invalid login message', async () => {
     const login = testing
       .fn()
-      .mockRejectedValue(new ResponseRejection({status: 401}));
+      .mockRejectedValue(
+        new ResponseRejection({status: 401} as XMLHttpRequest),
+      );
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
     const setLocale = testing.fn();
