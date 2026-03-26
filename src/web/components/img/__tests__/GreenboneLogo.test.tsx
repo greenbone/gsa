@@ -5,13 +5,13 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {render} from 'web/testing';
-import GreenboneLogo from 'web/components/img/Greenbone';
+import GreenboneLogo from 'web/components/img/GreenboneLogo';
 
 describe('GreenboneLogo tests', () => {
   test('should render', () => {
     const {element} = render(<GreenboneLogo />);
 
-    expect(element).toHaveAttribute('alt', 'OPENVAS');
+    expect(element).toHaveAttribute('alt', 'Greenbone Logo');
     expect(element).toHaveAttribute('data-testid', 'greenbone-logo');
     expect(element).toHaveAttribute('src');
   });

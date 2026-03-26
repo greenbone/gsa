@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
-import Logo from 'web/components/img/Greenbone';
+import Logo from 'web/components/img/GreenboneLogo';
 import PageTitle from 'web/components/layout/PageTitle';
 import useTranslation from 'web/hooks/useTranslation';
 
-const StyledLogo = styled(Logo)`
+const GreenboneLogo = styled(Logo)`
   width: 300px;
   margin-bottom: 20px;
 `;
@@ -31,7 +30,7 @@ const PageNotFound = () => {
     <CenteredDiv>
       <PageTitle title={_('Page Not Found')} />
       <h1>{_('Page Not Found.')}</h1>
-      <StyledLogo />
+      <GreenboneLogo />
       <p>
         {_('We are sorry. The page you have requested could not be found.')}
       </p>
