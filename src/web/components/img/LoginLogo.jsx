@@ -5,14 +5,14 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Img from 'web/components/img/Img';
+import Image from 'web/components/img/Image';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
 const OPENVAS_LOGO = 'openvasHorizontal.svg';
 const OPENVAS_SCAN_LOGO = 'openvasHorizontal-scan.svg';
 
-const Image = styled(Img)`
+const StyledImage = styled(Image)`
   display: flex;
   width: 300px;
 `;
@@ -25,7 +25,7 @@ const LoginLogo = () => {
     : OPENVAS_LOGO;
 
   return (
-    <Image
+    <StyledImage
       alt={_('Greenbone AG')}
       data-testid="greenbone-login-logo"
       src={loginTopLogo}

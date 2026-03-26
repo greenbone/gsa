@@ -12,7 +12,7 @@ import {ResponseRejection} from 'gmp/http/rejection';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import Img from 'web/components/img/Img';
+import Image from 'web/components/img/Image';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import Footer from 'web/components/structure/Footer';
@@ -45,13 +45,13 @@ const StyledLayout = styled(Layout)`
   height: 100vh;
 `;
 
-const BackgroundTopImage = styled(Img)`
+const BackgroundTopImage = styled(Image)`
   position: fixed;
   top: 0;
   right: 0;
 `;
 
-const BackgroundBottomImage = styled(Img)`
+const BackgroundBottomImage = styled(Image)`
   position: fixed;
   bottom: 0;
   left: 0;
