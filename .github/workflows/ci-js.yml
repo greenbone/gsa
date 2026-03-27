@@ -21,9 +21,9 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 20
           - 22
           - 24
+          - 26
     steps:
       - uses: actions/checkout@v6
       - name: Set up node ${{ matrix.node-version }}
@@ -46,7 +46,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 22
+          - 24
     steps:
       - uses: actions/checkout@v6
       - name: Set up node ${{ matrix.node-version }}
@@ -70,9 +70,9 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 20
           - 22
           - 24
+          - 26
     steps:
       - uses: actions/checkout@v6
       - name: Set up node ${{ matrix.node-version }}
@@ -104,9 +104,9 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 20
           - 22
           - 24
+          - 26
     steps:
       - uses: actions/checkout@v6
       - name: Set up node ${{ matrix.node-version }}
@@ -125,7 +125,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 20
+          - 24
     steps:
       - uses: actions/checkout@v6
       - name: Set up node ${{ matrix.node-version }}
@@ -149,7 +149,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 20
+          - 24
     steps:
       - uses: actions/checkout@v6
       - name: Set up node ${{ matrix.node-version }}
