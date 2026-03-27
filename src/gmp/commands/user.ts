@@ -599,9 +599,8 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     const seconds = parseInt(response.data.message);
     const timeout = isDefined(seconds) ? date.unix(seconds) : undefined;
 
-    // If backend returns a jwt in the response, include it so callers can update settings.jwt
-    // @ts-expect-error - response.data shape may vary across backends
-    const jwt: string | undefined = response.data?.jwt ?? response.data?.token;
+    // JWT is now extracted to response.meta by the transformation layer
+    const jwt: string | undefined = response.meta?.jwt;
 
     return response.setData({timeout, jwt});
   }

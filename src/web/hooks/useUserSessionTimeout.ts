@@ -25,8 +25,7 @@ const useUserSessionTimeout = (): [Date, () => Promise<void>] => {
   const sessionTimeout = useSelector(getSessionTimeout);
 
   const renewSessionAndUpdateTimeout = async () => {
-    const response = await gmp.user.renewSession();
-    const data = response.data;
+    const {data} = await gmp.user.renewSession();
 
     // Extract timeout and jwt from response
     // data may be the timeout value directly, or an object with timeout and jwt properties

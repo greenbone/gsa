@@ -260,6 +260,7 @@ class Gmp {
       token,
       timezone,
       sessionTimeout,
+      jwt,
     };
   }
 

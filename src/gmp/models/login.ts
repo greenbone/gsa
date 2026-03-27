@@ -20,6 +20,7 @@ export interface LoginData {
 
 export interface LoginMeta extends Meta {
   i18n?: string;
+  jwt?: string;
   timezone?: string;
   version?: string;
 }
@@ -39,7 +40,7 @@ class Login {
     const {data = {}, meta = {}} = elem;
     this.clientAddress = data.client_address;
     this.guest = data.guest;
-    this.jwt = data.jwt;
+    this.jwt = (meta as Record<string, unknown>)?.jwt as string | undefined;
     this.locale = meta.i18n;
     this.timezone = meta.timezone;
     this.token = data.token;

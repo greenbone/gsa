@@ -44,7 +44,7 @@ const useGetEntities = <
   queryId,
   filter = undefined,
   enabled = true,
-  refetchInterval = undefined,
+  refetchInterval = 5000 * 60, // 5 minutes
   keepPreviousData = false,
 }: UseGetEntitiesParams<TModel, TInput>) => {
   const gmp = useGmp();
