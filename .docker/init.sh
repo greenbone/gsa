@@ -4,8 +4,23 @@ set -e
 
 [ -z "${STORAGE_PATH}" ] && STORAGE_PATH="/usr/local/share/gvm/gsad/web/"
 [ -z "${STATE_FILE}" ] && STATE_FILE="/run/gsa/copying.done"
+[ -z "${GSA_CONFIG_FILE}" ] && GSA_CONFIG_FILE="${STORAGE_PATH}/config.js"
 
 rm -f "${STATE_FILE}"
+
+if ! [ -f "${GSA_CONFIG_FILE}" ]; then
+  echo "Creating Config"
+  echo "config = {" > "${GSA_CONFIG_FILE}"
+  [ -n "$GSA_VENDOR_LABEL" ] && echo "  vendorLabel: '${GSA_VENDOR_LABEL}'," >> "${GSA_CONFIG_FILE}"
+  [ -n "$GSA_VENDOR_TITLE" ] && echo "  vendorTitle: '${GSA_VENDOR_TITLE}'," >> "${GSA_CONFIG_FILE}"
+  [ -n "$GSA_VENDOR_VERSION" ] && echo "  vendorVersion: '${GSA_VENDOR_VERSION}'," >> "${GSA_CONFIG_FILE}"
+  [ -n "$GSA_API_SERVER" ] && echo "  apiServer: '${GSA_API_SERVER}'," >> "${GSA_CONFIG_FILE}"
+  [ -n "$GSA_API_PROTOCOL" ] && echo "  apiProtocol: '${GSA_API_PROTOCOL}'," >> "${GSA_CONFIG_FILE}"
+  [ -n "$GSA_ENABLE_ASSET_MANAGEMENT" ] && echo "  enableAssetManagement: ${GSA_ENABLE_ASSET_MANAGEMENT}," >> "${GSA_CONFIG_FILE}"
+  [ -n "$GSA_ENABLE_EPSS" ] && echo "  enableEPSS: ${GSA_ENABLE_EPSS}," >> "${GSA_CONFIG_FILE}"
+  [ -n "$GSA_ENABLE_KRB5" ] && echo "  enableKrb5: ${GSA_ENABLE_KRB5}," >> "${GSA_CONFIG_FILE}"
+  echo "}" >> "${GSA_CONFIG_FILE}"
+fi
 
 if [ -n "${MOUNT_PATH}" ]; then
   if ! [ -d "${MOUNT_PATH}" ]; then
