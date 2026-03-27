@@ -31,14 +31,8 @@ export const useGetKeyStatus = () => {
   return useQuery<KeyStatusResponse>({
     queryKey: ['get_feed_key_status', jwt],
     enabled: Boolean(jwt),
-    queryFn: async () => {
-      if (typeof gmp.feedkey.getStatus === 'function') {
-        return gmp.feedkey.getStatus();
-      }
-      const res = await gmp.feedkey.get();
-      return {hasKey: Boolean(res)} as KeyStatusResponse;
-    },
-    retry: false,
+    queryFn: gmp.feedkey.getStatus.bind(gmp.feedkey),
+    refetchInterval: 5000 * 60, // 5 minutes
   });
 };
 
@@ -59,7 +53,11 @@ export const useUploadKey = () => {
   const gmp = useGmp();
 
   return useMutation<UploadKeyResponse, Error, File>({
-    mutationFn: gmp.feedkey.save.bind(gmp.feedkey),
+    mutationFn: async (file: File) => {
+      // Renew session to ensure JWT is fresh before uploading
+      await gmp.user.renewSession();
+      return gmp.feedkey.save(file);
+    },
     onSuccess: () => {
       void queryClient.invalidateQueries({queryKey: ['get_feed_key_status']});
     },

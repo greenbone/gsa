@@ -151,16 +151,22 @@ describe('feed-key hooks', () => {
   });
 
   describe('useUploadKey', () => {
-    test('should call save with a file', async () => {
+    test('should call renewSession and save with a file', async () => {
       const saveFn = testing
         .fn()
         .mockResolvedValue({status: 'success', message: 'ok'});
+      const renewSessionFn = testing
+        .fn()
+        .mockResolvedValue({data: {timeout: 123, jwt: 'renewed-jwt'}});
 
       const gmp = {
         feedkey: {
           get: testing.fn().mockResolvedValue(null),
           delete: testing.fn(),
           save: saveFn,
+        },
+        user: {
+          renewSession: renewSessionFn,
         },
         settings: {
           jwt: 'test-jwt-token',
@@ -180,17 +186,24 @@ describe('feed-key hooks', () => {
         expect(result.current.isSuccess).toBe(true);
       });
 
+      expect(renewSessionFn).toHaveBeenCalled();
       expect(saveFn.mock.calls[0][0]).toBe(file);
     });
 
     test('should handle upload error', async () => {
       const saveFn = testing.fn().mockRejectedValue(new Error('Upload failed'));
+      const renewSessionFn = testing
+        .fn()
+        .mockResolvedValue({data: {timeout: 123, jwt: 'renewed-jwt'}});
 
       const gmp = {
         feedkey: {
           get: testing.fn().mockResolvedValue(null),
           delete: testing.fn(),
           save: saveFn,
+        },
+        user: {
+          renewSession: renewSessionFn,
         },
         settings: {
           jwt: 'test-jwt-token',

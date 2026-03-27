@@ -46,9 +46,9 @@ class FeedKeyCommand extends HttpCommand {
   }
 
   private getAuthHeaders(): HeadersInit {
-    const jwt = this.settings.jwt;
+    const {jwt} = this.settings;
     if (!jwt) {
-      throw new Error('Not authenticated');
+      throw new Error('Not authenticated, JWT is missing');
     }
 
     return {
