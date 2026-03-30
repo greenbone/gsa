@@ -29,5 +29,7 @@ FROM ${BASE_IMAGE}
 
 COPY --from=builder /source/build /usr/local/share/gvm/gsad/web/
 COPY --chmod=755 .docker/init.sh /usr/local/bin/init.sh
+COPY --chmod=755 .docker/entrypoint.sh /usr/local/bin/entrypoint
+COPY --chmod=755 .docker/setup-gsa.sh /usr/local/bin/setup-gsa
 
 CMD ["/usr/local/bin/init.sh"]
