@@ -4,12 +4,12 @@
  */
 
 import React from 'react';
-import {useDraggable, useDroppable} from '@dnd-kit/core';
+import {useDraggable, useDroppable} from '@dnd-kit/react';
 import styled from 'styled-components';
 import Theme from 'web/utils/Theme';
 
 interface DropZoneProps {
-  $isOver: boolean;
+  $isDropTarget: boolean;
 }
 
 interface GridItemProps {
@@ -20,12 +20,7 @@ export interface ItemRenderProps {
   id: string;
   height: number;
   width: number;
-  dragHandleProps: {
-    onPointerDown?: React.PointerEventHandler;
-    onKeyDown?: React.KeyboardEventHandler;
-    style?: React.CSSProperties;
-    [key: string]: unknown;
-  };
+  dragHandleRef: (element: Element | null) => void;
 }
 
 interface ItemProps {
@@ -55,7 +50,9 @@ const DropZone = styled.div<DropZoneProps>`
     right: 0;
     bottom: -2px;
     border: ${props =>
-      props.$isOver ? `2px dashed ${Theme.green}` : '2px dashed transparent'};
+      props.$isDropTarget
+        ? `2px dashed ${Theme.green}`
+        : '2px dashed transparent'};
     border-radius: 4px;
     transition: border-color 0.2s ease;
     pointer-events: none;
@@ -83,10 +80,8 @@ const GridItem = styled.div<GridItemProps>`
 
 const Item = ({children, index, id, rowId, ...props}: ItemProps) => {
   const {
-    attributes,
-    listeners,
-    setNodeRef: setDragRef,
-    transform,
+    ref: setDragRef,
+    handleRef,
     isDragging,
   } = useDraggable({
     id,
@@ -97,7 +92,7 @@ const Item = ({children, index, id, rowId, ...props}: ItemProps) => {
     },
   });
 
-  const {setNodeRef: setDropRef, isOver} = useDroppable({
+  const {ref, isDropTarget} = useDroppable({
     id: `${rowId}--${index}`,
     data: {
       type: 'Position',
@@ -106,30 +101,17 @@ const Item = ({children, index, id, rowId, ...props}: ItemProps) => {
     },
   });
 
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined;
-
   return (
-    <DropZone ref={setDropRef} $isOver={isOver}>
+    <DropZone ref={ref} $isDropTarget={isDropTarget}>
       <GridItem
         ref={setDragRef}
         $isDragging={isDragging}
         data-testid="grid-item"
-        style={style}
       >
         {children({
           ...props,
           id,
-          dragHandleProps: {
-            ...listeners,
-            ...attributes,
-            style: {
-              cursor: isDragging ? 'grabbing' : 'grab',
-            },
-          },
+          dragHandleRef: handleRef,
         })}
       </GridItem>
     </DropZone>

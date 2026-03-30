@@ -4,13 +4,8 @@
  */
 
 import {useState} from 'react';
-import {
-  DndContext,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
+import {PointerActivationConstraints} from '@dnd-kit/dom';
+import {DragDropProvider, KeyboardSensor, PointerSensor} from '@dnd-kit/react';
 import {v4 as uuid} from 'uuid';
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import {isDefined} from 'gmp/utils/identity';
@@ -29,15 +24,16 @@ const createNewRow = item => ({
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
+const sensors = [
+  PointerSensor.configure({
+    activationConstraints: [
+      new PointerActivationConstraints.Distance({value: 8}),
+    ],
+  }),
+  KeyboardSensor,
+];
+
 const Grid = props => {
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8, // Require 8px of movement before dragging starts
-      },
-    }),
-    useSensor(KeyboardSensor),
-  );
   const [isDragging, setIsDragging] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
   const [dragSourceRowId, setDragSourceRowId] = useState(undefined);
@@ -56,21 +52,25 @@ const Grid = props => {
     }
   };
 
-  const handleDragStart = ({active}) => {
+  const handleDragStart = ({operation}) => {
     setIsDragging(true);
     setIsInteracting(true);
     const {items = []} = props;
-    const srcRow = items.find(r => (r.items || []).includes(active.id));
+    const sourceId = operation.source?.id;
+    const srcRow = items.find(row => (row.items || []).includes(sourceId));
     setDragSourceRowId(srcRow ? srcRow.id : undefined);
   };
 
-  const handleDragEnd = ({active, over}) => {
+  const handleDragEnd = ({operation}) => {
     setIsDragging(false);
     setDragSourceRowId(undefined);
 
     setTimeout(() => {
       setIsInteracting(false);
     }, 200);
+
+    const activeId = operation.source?.id;
+    const over = operation.target;
 
     if (!over) {
       return;
@@ -81,13 +81,13 @@ const Grid = props => {
 
     // Find source row/index from active id
     const sourceRowIndex = items.findIndex(r =>
-      (r.items || []).includes(active.id),
+      (r.items || []).includes(activeId),
     );
     if (sourceRowIndex < 0) {
       return;
     }
     const sourceRow = items[sourceRowIndex];
-    const sourceIndex = (sourceRow.items || []).indexOf(active.id);
+    const sourceIndex = (sourceRow.items || []).indexOf(activeId);
 
     // Remove from source
     const sourceRowItems = [...sourceRow.items];
@@ -153,7 +153,7 @@ const Grid = props => {
   const getRowHeight = row => row.height;
   const getRowItems = row => row.items;
   return (
-    <DndContext
+    <DragDropProvider
       sensors={sensors}
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
@@ -213,7 +213,7 @@ const Grid = props => {
           </Layout>
         )}
       </AutoSize>
-    </DndContext>
+    </DragDropProvider>
   );
 };
 

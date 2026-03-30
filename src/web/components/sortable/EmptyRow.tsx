@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {useDroppable} from '@dnd-kit/core';
+import {useDroppable} from '@dnd-kit/react';
 import styled from 'styled-components';
 import Theme from 'web/utils/Theme';
 
@@ -16,7 +16,7 @@ interface EmptyRowProps {
 
 interface EmptyGridRowProps {
   $active: boolean;
-  $isDraggingOver: boolean;
+  $isDropTarget: boolean;
   height: number;
 }
 
@@ -25,9 +25,9 @@ const EmptyGridRow = styled.div<EmptyGridRowProps>`
   min-height: 50px;
   display: ${props => (props.$active ? 'flex' : 'none')};
   border: 2px dashed
-    ${props => (props.$isDraggingOver ? Theme.green : Theme.lightGray)};
+    ${props => (props.$isDropTarget ? Theme.green : Theme.lightGray)};
   background: ${props =>
-    props.$isDraggingOver ? Theme.lightGreen : 'transparent'};
+    props.$isDropTarget ? Theme.lightGreen : 'transparent'};
   height: ${props => props.height}px;
   border-radius: 4px;
   transition: all 0.2s ease;
@@ -35,9 +35,9 @@ const EmptyGridRow = styled.div<EmptyGridRowProps>`
   justify-content: center;
 
   &::before {
-    content: '${props =>
-      props.$isDraggingOver ? 'Drop here' : 'Drop items here'}';
-    color: ${props => (props.$isDraggingOver ? Theme.green : Theme.mediumGray)};
+    content: ${props =>
+      props.$isDropTarget ? '"Drop here"' : '"Drop items here"'};
+    color: ${props => (props.$isDropTarget ? Theme.green : Theme.mediumGray)};
     font-size: 14px;
     opacity: ${props => (props.$active ? 0.7 : 0)};
     transition: opacity 0.2s ease;
@@ -45,12 +45,12 @@ const EmptyGridRow = styled.div<EmptyGridRowProps>`
 `;
 
 const EmptyRow = ({children, active = false, height}: EmptyRowProps) => {
-  const {isOver, setNodeRef} = useDroppable({id: 'empty'});
+  const {isDropTarget, ref} = useDroppable({id: 'empty'});
   return (
     <EmptyGridRow
-      ref={setNodeRef}
+      ref={ref}
       $active={active}
-      $isDraggingOver={isOver}
+      $isDropTarget={isDropTarget}
       data-testid="empty-grid-row"
       height={height}
     >
