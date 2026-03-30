@@ -86,5 +86,6 @@ jobs:
       service: openvas-gsa
       url: ${{ vars.GREENBONE_REGISTRY }}/openvas-scan-dev/${{ github.event.repository.name }}
       tag: ${{ github.ref_name }}
-      artifact-pattern: default
+      # We only need the slim version for enterprise-contianer
+      artifact-pattern: slim
     secrets: inherit
