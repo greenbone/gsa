@@ -259,7 +259,7 @@ class Dashboard extends React.Component {
           onChange={this.handleItemsChange}
           onRowResize={this.handleRowResize}
         >
-          {({id, dragHandleProps, height, width}) => {
+          {({id, dragHandleRef, height, width}) => {
             const {displayId, ...displayProps} = getDisplaySettings(id);
             const Component = getDisplayComponent(displayId);
             const state = this.getDisplayState(id);
@@ -267,7 +267,7 @@ class Dashboard extends React.Component {
               <Component
                 {...other}
                 {...displayProps}
-                dragHandleProps={dragHandleProps}
+                dragHandleRef={dragHandleRef}
                 height={height}
                 id={id}
                 setState={stateFunc =>

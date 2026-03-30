@@ -4,7 +4,7 @@
  */
 
 import React, {useCallback, useRef} from 'react';
-import {useDroppable} from '@dnd-kit/core';
+import {useDroppable} from '@dnd-kit/react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Resizer from 'web/components/sortable/Resizer';
@@ -20,7 +20,7 @@ interface RowProps {
 
 interface GridRowProps {
   $height: number | string;
-  $isDraggingOver: boolean;
+  $isDropTarget: boolean;
 }
 
 const MIN_HEIGHT = 175;
@@ -30,9 +30,9 @@ const GridRow = styled.div<GridRowProps>`
   height: ${props => props.$height}px;
   min-height: ${MIN_HEIGHT}px;
   background: ${props =>
-    props.$isDraggingOver ? Theme.lightGreen : 'transparent'};
+    props.$isDropTarget ? Theme.lightGreen : 'transparent'};
   border: ${props =>
-    props.$isDraggingOver
+    props.$isDropTarget
       ? `2px dashed ${Theme.green}`
       : '2px solid transparent'};
   border-radius: 4px;
@@ -56,17 +56,20 @@ const Row = ({children, dropDisabled, id, height, onResize}: RowProps) => {
     [onResize],
   );
 
-  const {isOver, setNodeRef} = useDroppable({id, disabled: dropDisabled});
+  const {isDropTarget, ref} = useDroppable({
+    id,
+    disabled: dropDisabled,
+  });
 
   return (
     <>
       <GridRow
-        ref={ref => {
-          rowRef.current = ref;
-          setNodeRef(ref);
+        ref={element => {
+          rowRef.current = element;
+          ref(element);
         }}
         $height={height}
-        $isDraggingOver={isOver}
+        $isDropTarget={isDropTarget}
         data-testid="grid-row"
       >
         {children}

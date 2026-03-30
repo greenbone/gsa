@@ -13,7 +13,7 @@ import Theme from 'web/utils/Theme';
 
 export interface DisplayProps {
   children: React.ReactNode;
-  dragHandleProps?: Record<string, unknown>;
+  dragHandleRef?: (element: Element | null) => void;
   title?: string;
   onRemoveClick: () => void;
   isLoading?: boolean;
@@ -99,11 +99,11 @@ const DisplayTitle = styled.div`
 `;
 
 const Display = (props: DisplayProps) => {
-  const {children, dragHandleProps, title, onRemoveClick, isLoading} = props;
+  const {children, dragHandleRef, title, onRemoveClick, isLoading} = props;
   const [_] = useTranslation();
   return (
     <DisplayView>
-      <HeaderContainer {...dragHandleProps}>
+      <HeaderContainer ref={dragHandleRef}>
         <Header>
           <HeaderContent>
             <DisplayTitle>{title}</DisplayTitle>
