@@ -30,10 +30,16 @@ const API_BASE_PATH = 'service/feed-key/api/v1';
 class FeedKeyCommand extends HttpCommand {
   private readonly settings: Settings;
   private readonly baseUrl: string;
+  private readonly renewSessionFn?: () => Promise<void>;
 
-  constructor(http: Http, settings: Settings) {
+  constructor(
+    http: Http,
+    settings: Settings,
+    renewSessionFn?: () => Promise<void>,
+  ) {
     super(http);
     this.settings = settings;
+    this.renewSessionFn = renewSessionFn;
     if (this.settings.apiServer) {
       this.baseUrl = buildServerUrl(
         this.settings.apiServer,
@@ -42,6 +48,12 @@ class FeedKeyCommand extends HttpCommand {
       );
     } else {
       this.baseUrl = `/${API_BASE_PATH}`;
+    }
+  }
+
+  private async ensureSession(): Promise<void> {
+    if (this.renewSessionFn) {
+      await this.renewSessionFn();
     }
   }
 
@@ -89,6 +101,7 @@ class FeedKeyCommand extends HttpCommand {
    * @throws Error if the request fails
    */
   async getStatus(): Promise<KeyStatusResponse> {
+    await this.ensureSession();
     log.debug('Getting feed key status');
 
     const response = await fetch(`${this.baseUrl}/key/status`, {
@@ -117,6 +130,7 @@ class FeedKeyCommand extends HttpCommand {
    * @throws Error if the request fails
    */
   async get(): Promise<KeyResponse> {
+    await this.ensureSession();
     log.debug('Getting feed key');
 
     const response = await fetch(`${this.baseUrl}/key`, {
@@ -149,6 +163,7 @@ class FeedKeyCommand extends HttpCommand {
    * @throws Error if the deletion fails
    */
   async delete(): Promise<DeleteKeyResponse> {
+    await this.ensureSession();
     log.debug('Deleting feed key');
 
     const response = await fetch(`${this.baseUrl}/key`, {
@@ -172,6 +187,7 @@ class FeedKeyCommand extends HttpCommand {
    * @throws Error if the save fails
    */
   async save(file: File): Promise<UploadKeyResponse> {
+    await this.ensureSession();
     log.debug('Saving feed key', {fileName: file.name});
 
     const formData = new FormData();
