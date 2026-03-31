@@ -274,7 +274,6 @@ class Gmp {
     this.dashboard = new DashboardCommand(this.http);
     this.dfncert = new DfnCertAdvisoryCommand(this.http);
     this.dfncerts = new DfnCertAdvisoriesCommand(this.http);
-    this.feedkey = new FeedKeyCommand(this.http, this.settings);
     this.feedstatus = new FeedStatusCommand(this.http);
     this.filter = new FilterCommand(this.http);
     this.filters = new FiltersCommand(this.http);
@@ -344,6 +343,9 @@ class Gmp {
     this.vuln = new VulnerabilityCommand(this.http);
     this.vulns = new VulnerabilitiesCommand(this.http);
     this.wizard = new WizardCommand(this.http);
+    this.feedkey = new FeedKeyCommand(this.http, this.settings, async () => {
+      await this.user.renewSession();
+    });
   }
 
   public async login(username: string, password: string) {
