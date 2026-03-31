@@ -215,7 +215,6 @@ class Gmp {
     this.dashboard = new DashboardCommand(this.http);
     this.dfncert = new DfnCertAdvisoryCommand(this.http);
     this.dfncerts = new DfnCertAdvisoriesCommand(this.http);
-    this.feedkey = new FeedKeyCommand(this.http, this.settings);
     this.feedstatus = new FeedStatusCommand(this.http);
     this.filter = new FilterCommand(this.http);
     this.filters = new FiltersCommand(this.http);
@@ -254,6 +253,9 @@ class Gmp {
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);
     this.wizard = new WizardCommand(this.http);
+    this.feedkey = new FeedKeyCommand(this.http, this.settings, async () => {
+      await this.user.renewSession();
+    });
 
     this._initCommands();
   }
