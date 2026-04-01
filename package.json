@@ -31,7 +31,7 @@
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
     "clear:node_modules": "rm -rf node_modules && npm install",
-    "generate:feed-key-types": "node scripts/generate-feed-key-types.js"
+    "generate:feed-key-types": "node scripts/generate-feed-key-types.ts"
   },
   "engines": {
     "node": ">=22.0"
