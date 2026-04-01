@@ -39,7 +39,7 @@
     "@dnd-kit/helpers": "^0.3.2",
     "@dnd-kit/react": "^0.3.2",
     "@greenbone/ui-lib": "^2.1.1",
-    "@mantine/core": "^8.3.16",
+    "@mantine/core": "^9.0.0",
     "@mantine/dates": "^8.3.16",
     "@mantine/notifications": "^8.3.16",
     "@reduxjs/toolkit": "^2.11.2",
