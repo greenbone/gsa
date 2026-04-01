@@ -16,6 +16,7 @@ export interface Paths {
       path?: never;
       cookie?: never;
     };
+    /** Check the health status of the service. */
     get: Operations['health_check'];
     put?: never;
     post?: never;
@@ -45,6 +46,23 @@ export interface Paths {
     patch?: never;
     trace?: never;
   };
+  '/api/v1/key/status': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Status of the current feed key. */
+    get: Operations['key_status'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type Webhooks = Record<string, never>;
 export interface Components {
@@ -52,6 +70,9 @@ export interface Components {
     JsonResponse: {
       message: string;
       status: string;
+    };
+    KeyStatus: {
+      hasKey: boolean;
     };
   };
   responses: never;
@@ -341,6 +362,46 @@ export interface Operations {
           /**
            * @example {
            *       "message": "Key deletion failed",
+           *       "status": "error"
+           *     }
+           */
+          'application/json': Components['schemas']['JsonResponse'];
+        };
+      };
+    };
+  };
+  key_status: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Status of the current feed key */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          /**
+           * @example {
+           *       "hasKey": true
+           *     }
+           */
+          'application/json': Components['schemas']['KeyStatus'];
+        };
+      };
+      /** @description Getting the Key Status failed because of a File error. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          /**
+           * @example {
+           *       "message": "Internal Server Error. File error.",
            *       "status": "error"
            *     }
            */

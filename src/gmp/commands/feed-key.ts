@@ -14,9 +14,8 @@ import type Settings from 'gmp/settings';
 export type KeyResponse =
   Operations['download_key']['responses']['200']['content']['application/octet-stream'];
 
-export interface KeyStatusResponse {
-  hasKey: boolean;
-}
+export type KeyStatusResponse =
+  Operations['key_status']['responses']['200']['content']['application/json'];
 
 export type DeleteKeyResponse =
   Operations['delete_key']['responses']['200']['content']['application/json'];
