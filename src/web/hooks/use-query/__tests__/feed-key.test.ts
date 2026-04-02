@@ -7,6 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, wait, waitFor} from 'web/testing';
 import {
   useGetKey,
+  useGetKeyStatus,
   useDeleteKey,
   useUploadKey,
 } from 'web/hooks/use-query/feed-key';
@@ -49,6 +50,7 @@ describe('feed-key hooks', () => {
       const gmp = {
         feedkey: {
           get,
+          getStatus: testing.fn().mockResolvedValue({hasKey: false}),
           delete: testing.fn(),
           save: testing.fn(),
         },
@@ -72,6 +74,7 @@ describe('feed-key hooks', () => {
       const gmp = {
         feedkey: {
           get,
+          getStatus: testing.fn().mockResolvedValue({hasKey: false}),
           delete: testing.fn(),
           save: testing.fn(),
         },
@@ -82,6 +85,90 @@ describe('feed-key hooks', () => {
 
       const {renderHook} = rendererWith({gmp});
       const {result} = renderHook(() => useGetKey());
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error).toBeInstanceOf(Error);
+      expect(result.current.error?.message).toBe('Server error');
+    });
+  });
+
+  describe('useGetKeyStatus', () => {
+    test('should fetch key status when jwt is available', async () => {
+      const getStatus = testing
+        .fn()
+        .mockResolvedValue({hasKey: true});
+
+      const gmp = {
+        feedkey: {
+          get: testing.fn(),
+          getStatus,
+          delete: testing.fn(),
+          save: testing.fn(),
+        },
+        settings: {
+          jwt: 'test-jwt-token',
+        },
+      };
+
+      const {renderHook} = rendererWith({gmp});
+      const {result} = renderHook(() => useGetKeyStatus());
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual({
+        hasKey: true,
+      });
+      expect(getStatus).toHaveBeenCalled();
+    });
+
+    test('should not fetch when jwt is not available', async () => {
+      const getStatus = testing.fn();
+
+      const gmp = {
+        feedkey: {
+          get: testing.fn(),
+          getStatus,
+          delete: testing.fn(),
+          save: testing.fn(),
+        },
+        settings: {
+          jwt: undefined,
+        },
+      };
+
+      const {renderHook} = rendererWith({gmp});
+      const {result} = renderHook(() => useGetKeyStatus());
+
+      await wait();
+
+      expect(result.current.isFetching).toBe(false);
+      expect(getStatus).not.toHaveBeenCalled();
+    });
+
+    test('should handle error from getStatus', async () => {
+      const getStatus = testing
+        .fn()
+        .mockRejectedValue(new Error('Server error'));
+
+      const gmp = {
+        feedkey: {
+          get: testing.fn(),
+          getStatus,
+          delete: testing.fn(),
+          save: testing.fn(),
+        },
+        settings: {
+          jwt: 'test-jwt-token',
+        },
+      };
+
+      const {renderHook} = rendererWith({gmp});
+      const {result} = renderHook(() => useGetKeyStatus());
 
       await waitFor(() => {
         expect(result.current.isError).toBe(true);
@@ -129,6 +216,7 @@ describe('feed-key hooks', () => {
       const gmp = {
         feedkey: {
           get: testing.fn().mockResolvedValue({status: 'success'}),
+          getStatus: testing.fn().mockResolvedValue({hasKey: true}),
           delete: deleteFn,
           save: testing.fn(),
         },
@@ -199,6 +287,7 @@ describe('feed-key hooks', () => {
       const gmp = {
         feedkey: {
           get: testing.fn().mockResolvedValue(null),
+          getStatus: testing.fn().mockResolvedValue({hasKey: false}),
           delete: testing.fn(),
           save: saveFn,
         },

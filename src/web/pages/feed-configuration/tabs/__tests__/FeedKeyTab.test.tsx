@@ -16,6 +16,7 @@ import FeedKeyTab from 'web/pages/feed-configuration/tabs/FeedKeyTab';
 const createGmp = (overrides: Record<string, unknown> = {}) => ({
   feedkey: {
     get: testing.fn().mockResolvedValue(null),
+    getStatus: testing.fn().mockResolvedValue({hasKey: false}),
     delete: testing.fn().mockResolvedValue({status: 'success', message: 'ok'}),
     save: testing.fn().mockResolvedValue({status: 'success', message: 'ok'}),
   },
@@ -40,6 +41,7 @@ describe('FeedKeyTab', () => {
     const gmp = createGmp({
       feedkey: {
         get: testing.fn().mockResolvedValue(null),
+        getStatus: testing.fn().mockResolvedValue({hasKey: false}),
         delete: testing.fn(),
         save: testing.fn(),
       },
@@ -59,6 +61,7 @@ describe('FeedKeyTab', () => {
         get: testing
           .fn()
           .mockResolvedValue({status: 'success', message: 'Key found'}),
+        getStatus: testing.fn().mockResolvedValue({hasKey: true}),
         delete: testing.fn(),
         save: testing.fn(),
       },
@@ -76,6 +79,7 @@ describe('FeedKeyTab', () => {
     const gmp = createGmp({
       feedkey: {
         get: testing.fn().mockResolvedValue(null),
+        getStatus: testing.fn().mockResolvedValue({hasKey: false}),
         delete: testing.fn(),
         save: testing.fn(),
       },
@@ -97,6 +101,7 @@ describe('FeedKeyTab', () => {
         get: testing
           .fn()
           .mockResolvedValue({status: 'success', message: 'Key found'}),
+        getStatus: testing.fn().mockResolvedValue({hasKey: true}),
         delete: testing.fn(),
         save: testing.fn(),
       },
@@ -121,6 +126,7 @@ describe('FeedKeyTab', () => {
         get: testing
           .fn()
           .mockResolvedValue({status: 'success', message: 'Key found'}),
+        getStatus: testing.fn().mockResolvedValue({hasKey: true}),
         delete: deleteFn,
         save: testing.fn(),
       },
@@ -144,6 +150,7 @@ describe('FeedKeyTab', () => {
         get: testing
           .fn()
           .mockResolvedValue({status: 'success', message: 'Key found'}),
+        getStatus: testing.fn().mockResolvedValue({hasKey: true}),
         delete: testing.fn(),
         save: testing.fn(),
       },
@@ -170,6 +177,7 @@ describe('FeedKeyTab', () => {
     const gmp = createGmp({
       feedkey: {
         get: testing.fn().mockRejectedValue(new Error('Network error')),
+        getStatus: testing.fn().mockRejectedValue(new Error('Network error')),
         delete: testing.fn(),
         save: testing.fn(),
       },
