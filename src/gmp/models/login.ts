@@ -20,7 +20,6 @@ export interface LoginData {
 export interface LoginMeta extends Meta {
   i18n?: string;
   timezone?: string;
-  vendor_version?: string;
   version?: string;
 }
 
