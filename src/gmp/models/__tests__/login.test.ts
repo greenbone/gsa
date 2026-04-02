@@ -14,7 +14,6 @@ describe('Login model tests', () => {
       {
         client_address: '1.2.3.4',
         guest: false,
-        role: 'admin',
         severity: '8.5',
         token: '123abc',
         session: '12345',
@@ -22,7 +21,6 @@ describe('Login model tests', () => {
       {
         i18n: 'en',
         timezone: 'UTC',
-        vendor_version: '42',
         version: '1337',
       },
     );
