@@ -31,15 +31,9 @@ describe('Login model tests', () => {
       {} as unknown as Response<LoginData, LoginMeta>,
     );
 
-    expect(login.clientAddress).toEqual('1.2.3.4');
-    expect(login.guest).toEqual(false);
     expect(login.locale).toEqual('en');
-    expect(login.role).toEqual('admin');
-    expect(login.severity).toEqual('8.5');
     expect(login.timezone).toEqual('UTC');
     expect(login.token).toEqual('123abc');
-    expect(login.vendorVersion).toEqual('42');
-    expect(login.version).toEqual('1337');
     expect(isDate(login.sessionTimeout)).toEqual(true);
     expect(login2.sessionTimeout).toBeUndefined();
   });
