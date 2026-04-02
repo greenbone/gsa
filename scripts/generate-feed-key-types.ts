@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {execSync} from 'node:child_process';
+import {execFileSync} from 'node:child_process';
 import {readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -42,9 +42,13 @@ try {
   console.info('Generating TypeScript types from OpenAPI spec...');
 
   // Generate the types
-  execSync(`npx openapi-typescript ${OPENAPI_URL} -o ${OUTPUT_FILE}`, {
-    stdio: 'inherit',
-  });
+  execFileSync(
+    'node_modules/.bin/openapi-typescript',
+    [OPENAPI_URL, '-o', OUTPUT_FILE],
+    {
+      stdio: 'inherit',
+    },
+  );
 
   // Read the generated file
   let content = readFileSync(OUTPUT_FILE, 'utf8');
@@ -124,7 +128,7 @@ try {
 
   // Run prettier to format the file according to project conventions
   console.info('Running prettier to format the generated file...');
-  execSync(`npx prettier --write ${OUTPUT_FILE}`, {
+  execFileSync('node_modules/.bin/prettier', ['--write', OUTPUT_FILE], {
     stdio: 'inherit',
   });
 
