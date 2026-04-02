@@ -22,6 +22,7 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
+import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import FeedKeyTab from 'web/pages/feed-configuration/tabs/FeedKeyTab';
@@ -35,6 +36,7 @@ const FeedConfigurationPageContent = ({
   feeds,
 }: FeedConfigurationPageContentProps) => {
   const [_] = useTranslation();
+  const features = useFeatures();
 
   const tabs = [
     {
@@ -42,7 +44,15 @@ const FeedConfigurationPageContent = ({
       label: _('Feed Status'),
       panel: <FeedStatusTab feeds={feeds} />,
     },
-    {key: 'key', label: _('Feed Key'), panel: <FeedKeyTab />},
+    ...(features.featureEnabled('ENABLE_FEED_KEY_SERVICE')
+      ? [
+          {
+            key: 'key',
+            label: _('Feed Key'),
+            panel: <FeedKeyTab />,
+          },
+        ]
+      : []),
   ];
 
   return (
