@@ -46,6 +46,14 @@ const commonRules = {
       allow: ['warn', 'error', 'info'],
     },
   ],
+  'no-unused-expressions': [
+    'warn',
+    {
+      allowShortCircuit: true,
+      allowTernary: true,
+      allowTaggedTemplates: true,
+    },
+  ],
   'header/header': [
     2,
     'block',

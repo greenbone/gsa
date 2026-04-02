@@ -450,8 +450,9 @@ describe('Nvt DetailsPage tests', () => {
     const preferencesTab = screen.getByRole('tab', {name: /^preferences/i});
     fireEvent.click(preferencesTab);
 
-    expect(screen.getByRole('columnheader', {name: /^name/i}))
-      .toBeInTheDocument;
+    expect(
+      screen.getByRole('columnheader', {name: /^name/i}),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('columnheader', {name: /^default value/i}),
     ).toBeInTheDocument();
