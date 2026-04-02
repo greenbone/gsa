@@ -97,9 +97,7 @@ describe('feed-key hooks', () => {
 
   describe('useGetKeyStatus', () => {
     test('should fetch key status when jwt is available', async () => {
-      const getStatus = testing
-        .fn()
-        .mockResolvedValue({hasKey: true});
+      const getStatus = testing.fn().mockResolvedValue({hasKey: true});
 
       const gmp = {
         feedkey: {

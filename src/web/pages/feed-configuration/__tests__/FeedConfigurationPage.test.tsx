@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
+import Features from 'gmp/capabilities/features';
 import {createFeed} from 'gmp/commands/feed-status';
 import Response from 'gmp/http/response';
 import FeedStatus from 'web/pages/feed-configuration/FeedConfigurationPage';
@@ -124,6 +125,54 @@ describe('Feed status page tests', () => {
       'Please check the automatic synchronization of your system.',
     );
     screen.getByText('Update in progress...');
+  });
+
+  test('should show Feed Key tab when ENABLE_FEED_KEY_SERVICE is enabled', async () => {
+    const response = new Response([nvtFeed, scapFeed, certFeed, gvmdDataFeed]);
+    const gmp = {
+      feedstatus: {
+        readFeedInformation: testing.fn(() => Promise.resolve(response)),
+      },
+      settings: {
+        manualUrl: 'http://foo.bar',
+      },
+    };
+
+    const features = new Features(['ENABLE_FEED_KEY_SERVICE']);
+    const {render} = rendererWith({gmp, router: true, features});
+    render(<FeedStatus />);
+
+    await screen.findByRole('table');
+
+    // Check that both tabs are present
+    const tabs = screen.getAllByRole('tab');
+    expect(tabs).toHaveLength(2);
+    expect(tabs[0]).toHaveTextContent('Feed Status');
+    expect(tabs[1]).toHaveTextContent('Feed Key');
+  });
+
+  test('should hide Feed Key tab when ENABLE_FEED_KEY_SERVICE is disabled', async () => {
+    const response = new Response([nvtFeed, scapFeed, certFeed, gvmdDataFeed]);
+    const gmp = {
+      feedstatus: {
+        readFeedInformation: testing.fn(() => Promise.resolve(response)),
+      },
+      settings: {
+        manualUrl: 'http://foo.bar',
+      },
+    };
+
+    const features = new Features();
+    const {render} = rendererWith({gmp, router: true, features});
+    render(<FeedStatus />);
+
+    await screen.findByRole('table');
+
+    // Check that only the Feed Status tab is present
+    const tabs = screen.getAllByRole('tab');
+    expect(tabs).toHaveLength(1);
+    expect(tabs[0]).toHaveTextContent('Feed Status');
+    expect(screen.queryByText('Feed Key')).not.toBeInTheDocument();
   });
 });
 
