@@ -50,7 +50,7 @@ describe('ScannerFilterDialog tests', () => {
     expect(screen.getByName('rows')).toHaveValue('20');
     expect(screen.getByName('sort_by')).toHaveValue('name');
     const radio = screen.getRadioInputs();
-    expect(radio[0]).toBeChecked;
+    expect(radio[0]).toBeChecked();
     expect(radio[1]).not.toBeChecked();
   });
 

@@ -223,7 +223,7 @@ describe('ReportFormat model tests', () => {
       ],
     });
 
-    expect(reportFormat4.params[0].default).toBeUndefined;
+    expect(reportFormat4.params[0].default).toBeUndefined();
     expect(reportFormat4.params[0].name).toBeUndefined();
     expect(reportFormat4.params[0].max).toEqual(1);
     expect(reportFormat4.params[0].min).toEqual(0);
@@ -250,7 +250,7 @@ describe('ReportFormat model tests', () => {
         },
       ],
     });
-    expect(reportFormat5.params[0].default).toBeUndefined;
+    expect(reportFormat5.params[0].default).toBeUndefined();
     expect(reportFormat5.params[0].name).toBeUndefined();
     expect(reportFormat5.params[0].max).toEqual(1);
     expect(reportFormat5.params[0].min).toEqual(0);
@@ -272,7 +272,7 @@ describe('ReportFormat model tests', () => {
         },
       ],
     });
-    expect(reportFormat6.params[0].default).toBeUndefined;
+    expect(reportFormat6.params[0].default).toBeUndefined();
     expect(reportFormat6.params[0].name).toBeUndefined();
     expect(reportFormat6.params[0].max).toEqual(1);
     expect(reportFormat6.params[0].min).toEqual(0);
@@ -300,15 +300,21 @@ describe('ReportFormat model tests', () => {
         },
       ],
     });
-    expect(reportFormat7.params[0].default).toBeUndefined;
+    expect(reportFormat7.params[0].default).toEqual(['43', '22']);
     expect(reportFormat7.params[0].name).toBeUndefined();
     expect(reportFormat7.params[0].max).toEqual(1);
     expect(reportFormat7.params[0].min).toEqual(0);
     expect(reportFormat7.params[0].type).toEqual('report_format_list');
     expect(reportFormat7.params[0].options).toEqual([]);
     expect(reportFormat7.params[0].value).toEqual(['42', '21']);
-    expect(reportFormat7.params[0].valueLabels).toEqual({});
-    expect(reportFormat7.params[0].defaultLabels).toEqual({});
+    expect(reportFormat7.params[0].valueLabels).toEqual({
+      '42': undefined,
+      '21': undefined,
+    });
+    expect(reportFormat7.params[0].defaultLabels).toEqual({
+      '43': undefined,
+      '22': undefined,
+    });
     expect(reportFormat7.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat8 = ReportFormat.fromElement({
@@ -328,15 +334,15 @@ describe('ReportFormat model tests', () => {
         },
       ],
     });
-    expect(reportFormat8.params[0].default).toBeUndefined;
+    expect(reportFormat8.params[0].default).toEqual(['43']);
     expect(reportFormat8.params[0].name).toBeUndefined();
     expect(reportFormat8.params[0].max).toEqual(1);
     expect(reportFormat8.params[0].min).toEqual(0);
     expect(reportFormat8.params[0].type).toEqual('report_format_list');
     expect(reportFormat8.params[0].options).toEqual([]);
     expect(reportFormat8.params[0].value).toEqual(['42']);
-    expect(reportFormat8.params[0].valueLabels).toEqual({});
-    expect(reportFormat8.params[0].defaultLabels).toEqual({});
+    expect(reportFormat8.params[0].valueLabels).toEqual({'42': undefined});
+    expect(reportFormat8.params[0].defaultLabels).toEqual({'43': undefined});
     expect(reportFormat8.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat9 = ReportFormat.fromElement({
@@ -362,7 +368,7 @@ describe('ReportFormat model tests', () => {
         },
       ],
     });
-    expect(reportFormat9.params[0].default).toBeUndefined;
+    expect(reportFormat9.params[0].default).toEqual(['43', '22']);
     expect(reportFormat9.params[0].name).toBeUndefined();
     expect(reportFormat9.params[0].max).toEqual(1);
     expect(reportFormat9.params[0].min).toEqual(0);
@@ -387,7 +393,7 @@ describe('ReportFormat model tests', () => {
         },
       ],
     });
-    expect(reportFormat10.params[0].default).toBeUndefined;
+    expect(reportFormat10.params[0].default).toBeUndefined();
     expect(reportFormat10.params[0].name).toBeUndefined();
     expect(reportFormat10.params[0].max).toEqual(1);
     expect(reportFormat10.params[0].min).toEqual(0);

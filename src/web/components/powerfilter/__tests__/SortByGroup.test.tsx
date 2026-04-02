@@ -76,7 +76,7 @@ describe('SortByGroup tests', () => {
     );
 
     const radio = screen.getRadioInputs();
-    expect(radio[0]).toBeChecked;
+    expect(radio[0]).toBeChecked();
     expect(radio[1]).not.toBeChecked();
     expect(screen.getByName('sort_by')).toHaveValue('severity');
 
