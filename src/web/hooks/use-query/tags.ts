@@ -11,12 +11,19 @@ import type Filter from 'gmp/models/filter';
 import {isFilter} from 'gmp/models/filter/utils';
 import type Tag from 'gmp/models/tag';
 import useGmp from 'web/hooks/useGmp';
+import type {RefetchIntervalFn} from 'web/queries/helpers';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
 import useDeleteMutation from 'web/queries/useDeleteMutation';
 import useGetEntities from 'web/queries/useGetEntities';
+import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 import useSaveMutation from 'web/queries/useSaveMutation';
+
+interface UseGetTagParams {
+  id: string;
+  refetchInterval?: RefetchIntervalFn<Tag>;
+}
 
 interface UseGetTagsParams {
   filter?: Filter;
@@ -45,6 +52,16 @@ export const useGetTags = ({filter}: UseGetTagsParams) => {
     gmpMethod: gmp.tags.get.bind(gmp.tags),
     queryId: 'get_tags',
     filter,
+  });
+};
+
+export const useGetTag = ({id, refetchInterval}: UseGetTagParams) => {
+  const gmp = useGmp();
+  return useGetEntity<Tag>({
+    gmpMethod: gmp.tag.get.bind(gmp.tag),
+    queryId: 'get_tag',
+    id,
+    refetchInterval,
   });
 };
 
