@@ -82,8 +82,9 @@ class EntityTagsTable extends React.Component {
   }
 
   handleEditTag(tag) {
-    const {onTagEditClick} = this.props;
-    onTagEditClick(tag, {fixed: true});
+    const {entity, onTagEditClick} = this.props;
+    const entityType = getEntityType(entity);
+    onTagEditClick(tag, {resourceType: entityType, fixed: true});
   }
 
   render() {

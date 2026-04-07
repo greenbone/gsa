@@ -46,13 +46,18 @@ interface CreateTagOptions {
   resourceIds?: string[];
 }
 
+interface EditTagOptions {
+  resourceType?: EntityType;
+  fixed?: boolean;
+}
+
 interface TagComponentRenderProps {
   add: (tagData: AddTagData) => Promise<void>;
   clone: (tag: Tag) => Promise<void>;
   create: (options?: CreateTagOptions) => void;
   delete: (tag: Tag) => Promise<void>;
   download: (tag: Tag) => Promise<void>;
-  edit: (tag: Tag, options?: {}) => Promise<void> | void;
+  edit: (tag: Tag, options?: EditTagOptions) => Promise<void> | void;
   enable: (tag: Tag) => Promise<void>;
   disable: (tag: Tag) => Promise<void>;
   remove: (tagId: string, entity: Model) => Promise<void>;
@@ -238,7 +243,7 @@ const TagComponent = ({
     });
   };
 
-  const openTagDialog = async (tag?: Tag) => {
+  const openTagDialog = async (tag?: Tag, options?: EditTagOptions) => {
     const resourceTypesArray = getResourceTypes();
 
     if (isDefined(tag)) {
@@ -258,7 +263,7 @@ const TagComponent = ({
       setName(loadedTag.name);
       setResourceCount(loadedTag.resourceCount);
       setResourceIds(resources.map(res => res.id as string));
-      setResourceType(tag.resourceType);
+      setResourceType(options?.resourceType ?? tag.resourceType);
       setResourceTypes(resourceTypesArray);
       setTitle(_('Edit Tag {{- name}}', {name: shorten(loadedTag.name)}));
       setValue(loadedTag.value);
