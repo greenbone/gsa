@@ -5,14 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, within} from 'web/testing';
+import {Route, Routes} from 'react-router';
 import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/policies/DetailsPage';
-import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 vi.mock('web/pages/scanconfigs/EditDialog', () => ({
@@ -179,11 +178,10 @@ const policy4 = Policy.fromElement({
 
 const scanners = [{name: 'scanner1'}, {name: 'scanner2'}];
 
-const reloadInterval = 1;
 const manualUrl = 'test/';
 
 const createGmp = ({
-  getPolicyResponse = new Response(policy),
+  policyEntity = policy,
   getTagsResponse = {
     data: [],
     meta: {
@@ -200,11 +198,11 @@ const createGmp = ({
   },
   getNvtFamiliesResponse = {},
   getScannersResponse = {data: scanners},
-  clonePolicyResponse = new Response({id: 'cloned-id'}),
+  clonePolicyResponse = {data: {id: 'cloned-id'}},
   deletePolicyResponse = undefined,
-  exportPolicyResponse = new Response('some-data'),
+  exportPolicyResponse = {data: 'some-data'},
   currentSettingsResponse = currentSettingsDefaultResponse,
-  getPolicy = testing.fn().mockResolvedValue(getPolicyResponse),
+  getPolicy = testing.fn().mockResolvedValue({data: policyEntity}),
   getTags = testing.fn().mockResolvedValue(getTagsResponse),
   getPermissions = testing.fn().mockResolvedValue(getPermissionsResponse),
   getNvtFamilies = testing.fn().mockResolvedValue(getNvtFamiliesResponse),
@@ -233,8 +231,10 @@ const createGmp = ({
     permissions: {
       get: getPermissions,
     },
-    reloadInterval,
-    settings: {manualUrl},
+    settings: {
+      manualUrl,
+      token: 'test-token',
+    },
     user: {
       currentSettings,
     },
@@ -242,36 +242,37 @@ const createGmp = ({
 };
 
 describe('PolicyDetailsPage tests', () => {
-  test('should render full DetailsPage', () => {
+  test('should render full DetailsPage', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/policy/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy));
 
-    render(<DetailsPage id="12345" />);
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
 
-    expect(screen.getByTitle('Help: Policies')).toBeInTheDocument();
+    await screen.findByTitle('Help: Policies');
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-policies',
     );
 
-    expect(screen.getByTitle('Policies List')).toBeInTheDocument();
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
       '/policies',
     );
 
-    expect(
-      screen.getByRole('heading', {name: /Policy: foo$/}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /Policy: foo$/});
 
     const entityInfo = within(screen.getByTestId('entity-info'));
     expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(
@@ -287,21 +288,13 @@ describe('PolicyDetailsPage tests', () => {
       'admin',
     );
 
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^scanner preferences/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^nvt families/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^nvt preferences/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    const tablist = within(await screen.findByRole('tablist'));
+    tablist.getByRole('tab', {name: /^information/i});
+    tablist.getByRole('tab', {name: /^scanner preferences/i});
+    tablist.getByRole('tab', {name: /^nvt families/i});
+    tablist.getByRole('tab', {name: /^nvt preferences/i});
+    tablist.getByRole('tab', {name: /^user tags/i});
+    tablist.getByRole('tab', {name: /^permissions/i});
 
     expect(
       screen.getByRole('row', {name: /^comment some comment/i}),
@@ -310,36 +303,66 @@ describe('PolicyDetailsPage tests', () => {
     const auditsRow = within(
       screen.getByRole('row', {name: /^audits using this/i}),
     );
-    expect(auditsRow.getByText('audit1')).toBeInTheDocument();
     expect(auditsRow.getByText('audit1')).toHaveAttribute(
       'href',
       '/audit/1234',
     );
 
-    expect(auditsRow.getByText('audit2')).toBeInTheDocument();
     expect(auditsRow.getByText('audit2')).toHaveAttribute(
       'href',
       '/audit/5678',
     );
   });
 
-  test('should render nvt families tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/policy/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', policy));
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
 
-    render(<DetailsPage id="12345" />);
+    const tablist = within(await screen.findByRole('tablist'));
+    const userTagsTab = await tablist.findByRole('tab', {
+      name: /^user tags/i,
+    });
+    fireEvent.click(userTagsTab);
+  });
 
-    const nvtFamiliesTab = screen.getByRole('tab', {name: /^nvt families/i});
+  test('should render nvt families tab', async () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+      route: '/policy/12345',
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
+
+    const tablist = within(await screen.findByRole('tablist'));
+    const nvtFamiliesTab = await tablist.findByRole('tab', {
+      name: /^nvt families/i,
+    });
     fireEvent.click(nvtFamiliesTab);
 
     expect(screen.getByRole('row', {name: /^family nvts/i})).toHaveTextContent(
@@ -389,22 +412,27 @@ describe('PolicyDetailsPage tests', () => {
     );
   });
 
-  test('should render scanner preferences tab', () => {
+  test('should render scanner preferences tab', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/policy/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy));
 
-    render(<DetailsPage id="12345" />);
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
 
-    const scannerPreferencesTab = screen.getByRole('tab', {
+    const tablist = within(await screen.findByRole('tablist'));
+    const scannerPreferencesTab = await tablist.findByRole('tab', {
       name: /^scanner preferences/i,
     });
     fireEvent.click(scannerPreferencesTab);
@@ -417,22 +445,27 @@ describe('PolicyDetailsPage tests', () => {
     );
   });
 
-  test('should render nvt preferences tab', () => {
+  test('should render nvt preferences tab', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/policy/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy));
 
-    render(<DetailsPage id="12345" />);
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
 
-    const nvtPreferencesTab = screen.getByRole('tab', {
+    const tablist = within(await screen.findByRole('tablist'));
+    const nvtPreferencesTab = await tablist.findByRole('tab', {
       name: /^nvt preferences/i,
     });
     fireEvent.click(nvtPreferencesTab);
@@ -459,22 +492,29 @@ describe('PolicyDetailsPage tests', () => {
     );
   });
 
-  test('should render permissions tab', () => {
+  test('should render permissions tab', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/policy/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {container} = render(<DetailsPage id="12345" />);
+    const {container} = render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
 
-    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    const tablist = within(await screen.findByRole('tablist'));
+    const permissionsTab = await tablist.findByRole('tab', {
+      name: /^permissions/i,
+    });
     fireEvent.click(permissionsTab);
 
     expect(container).toHaveTextContent('No permissions available');
@@ -487,15 +527,19 @@ describe('PolicyDetailsPage tests', () => {
       capabilities: true,
       router: true,
       store: true,
+      route: '/policy/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy));
 
-    render(<DetailsPage id="12345" />);
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
 
-    const cloneIcon = screen.getByTestId('clone-icon');
+    const cloneIcon = await screen.findByTestId('clone-icon');
     expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
     fireEvent.click(cloneIcon);
     expect(gmp.policy.clone).toHaveBeenCalledWith(policy);
@@ -518,23 +562,25 @@ describe('PolicyDetailsPage tests', () => {
   });
 
   test('should not call commands without permission', async () => {
-    const gmp = createGmp({
-      getPermissionsResponse: new Response(policy2),
-    });
+    const gmp = createGmp({policyEntity: policy2});
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/policy/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy2));
 
-    render(<DetailsPage id="12345" />);
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
 
-    const cloneIcon = screen.getByTestId('clone-icon');
+    const cloneIcon = await screen.findByTestId('clone-icon');
     expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Policy denied',
@@ -566,23 +612,25 @@ describe('PolicyDetailsPage tests', () => {
   });
 
   test('should (not) call commands if policy is in use', async () => {
-    const gmp = createGmp({
-      getPolicyResponse: new Response(policy3),
-    });
+    const gmp = createGmp({policyEntity: policy3});
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/policy/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy3));
 
-    render(<DetailsPage id="12345" />);
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
 
-    const cloneIcon = screen.getByTestId('clone-icon');
+    const cloneIcon = await screen.findByTestId('clone-icon');
     expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
     fireEvent.click(cloneIcon);
     expect(gmp.policy.clone).toHaveBeenCalledWith(policy3);
@@ -605,23 +653,25 @@ describe('PolicyDetailsPage tests', () => {
   });
 
   test('should (not) call commands if policy is not writable', async () => {
-    const gmp = createGmp({
-      getPolicyResponse: new Response(policy4),
-    });
+    const gmp = createGmp({policyEntity: policy4});
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/policy/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy4));
 
-    render(<DetailsPage id="12345" />);
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/policy/:id" />
+      </Routes>,
+    );
 
-    const cloneIcon = screen.getByTestId('clone-icon');
+    const cloneIcon = await screen.findByTestId('clone-icon');
     expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
     fireEvent.click(cloneIcon);
     expect(gmp.policy.clone).toHaveBeenCalledWith(policy4);

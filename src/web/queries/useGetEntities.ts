@@ -11,6 +11,10 @@ import type Response from 'gmp/http/response';
 import type Filter from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import useGmp from 'web/hooks/useGmp';
+import {
+  transformRefetchInterval,
+  type RefetchIntervalFn,
+} from 'web/queries/helpers';
 
 type GmpMethodParams = HttpCommandInputParams;
 
@@ -28,7 +32,7 @@ interface UseGetEntitiesParams<
   queryId: string;
   filter?: Filter;
   enabled?: boolean;
-  refetchInterval?: number;
+  refetchInterval?: number | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
   keepPreviousData?: boolean;
 }
 
@@ -45,8 +49,15 @@ const useGetEntities = <
 }: UseGetEntitiesParams<TModel, TInput>) => {
   const gmp = useGmp();
   const {token} = gmp.settings;
+
+  const interval = refetchInterval ?? gmp.settings.reloadInterval;
+  const resolvedRefetchInterval =
+    typeof interval === 'function'
+      ? transformRefetchInterval(interval)
+      : interval;
+
   return useQuery<UseGetEntitiesReturn<TModel>>({
-    enabled: enabled && !!token,
+    enabled: enabled && Boolean(token),
     queryKey: [queryId, token, filter?.toFilterString()],
     queryFn: async () => {
       const response = await gmpMethod({filter} as TInput);
@@ -59,7 +70,7 @@ const useGetEntities = <
         filter: responseFilter,
       };
     },
-    refetchInterval,
+    refetchInterval: resolvedRefetchInterval,
     placeholderData: keepPreviousData
       ? previousData => previousData
       : undefined,

@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, within} from 'web/testing';
+import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
@@ -13,7 +14,6 @@ import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/audits/DetailsPage';
-import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 const policy = Policy.fromElement({
@@ -132,7 +132,6 @@ const audit5 = Audit.fromElement({
   usage_type: 'audit',
 });
 
-const reloadInterval = 1;
 const manualUrl = 'test/';
 
 const currentSettings = testing
@@ -140,23 +139,26 @@ const currentSettings = testing
   .mockResolvedValue(currentSettingsDefaultResponse);
 
 const createGmp = ({
-  getAuditResponse = new Response(audit),
+  auditEntity = audit,
   getPolicyResponse = new Response(policy),
   getScheduleResponse = new Response(schedule),
   getReportFormatsResponse = new Response([], {
     filter: Filter.fromString(),
     counts: new CollectionCounts(),
   }),
-  getPermissionsResponse = new Response([], {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  }),
+  getPermissionsResponse = {
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  },
   cloneAuditResponse = new Response({id: 'foo'}),
   deleteAuditResponse = new Response({foo: 'bar'}),
   exportAuditResponse = new Response({foo: 'bar'}),
   startAuditResponse = new Response({foo: 'bar'}),
   resumeAuditResponse = new Response({foo: 'bar'}),
-  getAudit = testing.fn().mockResolvedValue(getAuditResponse),
+  getAudit = testing.fn().mockResolvedValue({data: auditEntity}),
   getPolicy = testing.fn().mockResolvedValue(getPolicyResponse),
   getSchedule = testing.fn().mockResolvedValue(getScheduleResponse),
   getReportFormats = testing.fn().mockResolvedValue(getReportFormatsResponse),
@@ -188,8 +190,12 @@ const createGmp = ({
     reportformats: {
       get: getReportFormats,
     },
-    reloadInterval,
-    settings: {manualUrl},
+    settings: {
+      manualUrl,
+      reloadInterval: 15000,
+      reloadIntervalActive: 3000,
+      token: 'test-token',
+    },
     user: {
       currentSettings,
     },
@@ -197,36 +203,36 @@ const createGmp = ({
 };
 
 describe('Audit DetailsPage tests', () => {
-  test('should render full DetailsPage', () => {
+  test('should render full DetailsPage', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/audit/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', audit));
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/audit/:id" />
+      </Routes>,
+    );
 
-    render(<DetailsPage id="12345" />);
-
-    expect(screen.getByTitle('Help: Audits')).toBeInTheDocument();
+    await screen.findByTitle('Help: Audits');
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-audits',
     );
-    expect(screen.getByTitle('Audit List')).toBeInTheDocument();
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
       '/audits',
     );
 
-    expect(
-      screen.getByRole('heading', {name: /Audit: foo/}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /Audit: foo/});
 
     const entityInfo = within(screen.getByTestId('entity-info'));
     expect(entityInfo.getByRole('row', {name: /ID/})).toHaveTextContent(
@@ -242,23 +248,19 @@ describe('Audit DetailsPage tests', () => {
       'admin',
     );
 
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    const tablist = within(await screen.findByRole('tablist'));
+    tablist.getByRole('tab', {name: /^information/i});
+    tablist.getByRole('tab', {name: /^user tags/i});
+    tablist.getByRole('tab', {name: /^permissions/i});
 
-    expect(
-      screen.getByRole('row', {name: /^comment some comment/i}),
-    ).toBeInTheDocument();
+    screen.getByRole('row', {name: /^comment some comment/i});
     const progressBars = screen.getByTestId('progressbar-box');
     expect(progressBars).toHaveAttribute('title', 'Done');
     expect(progressBars).toHaveTextContent('Done');
 
-    expect(screen.getByRole('heading', {name: /^Target$/})).toBeInTheDocument();
     const targetDetails = within(
-      screen.getByRole('heading', {name: /^Target$/}).parentElement,
+      screen.getByRole('heading', {name: /^Target$/})
+        .parentElement as HTMLElement,
     );
     expect(targetDetails.getByTestId('details-link')).toHaveAttribute(
       'href',
@@ -268,9 +270,9 @@ describe('Audit DetailsPage tests', () => {
       'target1',
     );
 
-    expect(screen.getByRole('heading', {name: /^Alerts$/})).toBeInTheDocument();
     const alertsDetails = within(
-      screen.getByRole('heading', {name: /^Alerts$/}).parentElement,
+      screen.getByRole('heading', {name: /^Alerts$/})
+        .parentElement as HTMLElement,
     );
     expect(alertsDetails.getByTestId('details-link')).toHaveAttribute(
       'href',
@@ -280,11 +282,9 @@ describe('Audit DetailsPage tests', () => {
       'alert1',
     );
 
-    expect(
-      screen.getByRole('heading', {name: /^Scanner$/}),
-    ).toBeInTheDocument();
     const scannerDetails = within(
-      screen.getByRole('heading', {name: /^Scanner$/}).parentElement,
+      screen.getByRole('heading', {name: /^Scanner$/})
+        .parentElement as HTMLElement,
     );
     expect(scannerDetails.getByTestId('details-link')).toHaveAttribute(
       'href',
@@ -297,11 +297,12 @@ describe('Audit DetailsPage tests', () => {
       'OpenVAS Scanner',
     );
 
-    expect(screen.getByRole('heading', {name: /^Assets$/})).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Assets$/});
 
-    expect(screen.getByRole('heading', {name: /^Scan$/})).toBeInTheDocument();
+    screen.getByRole('heading', {name: /^Scan$/});
     const scanDetails = within(
-      screen.getByRole('heading', {name: /^Scan$/}).parentElement,
+      screen.getByRole('heading', {name: /^Scan$/})
+        .parentElement as HTMLElement,
     );
     expect(
       scanDetails.getByRole('row', {name: /^Duration of last Scan/}),
@@ -311,48 +312,79 @@ describe('Audit DetailsPage tests', () => {
     ).toHaveTextContent('Do not automatically delete reports');
   });
 
-  test('should render permissions tab', () => {
-    const gmp = createGmp({
-      getAuditResponse: new Response(audit2),
-    });
+  test('should render user tags tab', async () => {
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/audit/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', audit2));
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/audit/:id" />
+      </Routes>,
+    );
 
-    const {container} = render(<DetailsPage id="12345" />);
+    const tablist = within(await screen.findByRole('tablist'));
+    const userTagsTab = await tablist.findByRole('tab', {
+      name: /^user tags/i,
+    });
+    fireEvent.click(userTagsTab);
+  });
 
-    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+  test('should render permissions tab', async () => {
+    const gmp = createGmp({auditEntity: audit2});
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+      route: '/audit/12345',
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const {container} = render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/audit/:id" />
+      </Routes>,
+    );
+
+    const tablist = within(await screen.findByRole('tablist'));
+    const permissionsTab = await tablist.findByRole('tab', {
+      name: /^permissions/i,
+    });
     fireEvent.click(permissionsTab);
     expect(container).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
-    const gmp = createGmp({
-      getAuditResponse: new Response(audit5),
-    });
+    const gmp = createGmp({auditEntity: audit5});
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
+      route: '/audit/12345',
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', audit5));
+    render(
+      <Routes>
+        <Route element={<DetailsPage />} path="/audit/:id" />
+      </Routes>,
+    );
 
-    render(<DetailsPage id="12345" />);
-
-    const cloneIcon = screen.getByTestId('clone-icon');
+    const cloneIcon = await screen.findByTestId('clone-icon');
     expect(gmp.audit.clone).not.toHaveBeenCalled();
     expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
     fireEvent.click(cloneIcon);

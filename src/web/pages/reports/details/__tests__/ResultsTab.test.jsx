@@ -16,7 +16,7 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-const reloadInterval = 1;
+const reloadInterval = 60000;
 const manualUrl = 'test/';
 
 // mock entities
@@ -193,10 +193,10 @@ describe('Report Results Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('result', defaultSettingfilter),
+      defaultFilterLoadingActions.success('result', defaultSettingFilter),
     );
 
     const filter = Filter.fromString('first=1 rows=10');
@@ -328,10 +328,10 @@ describe('Report Results Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('result', defaultSettingfilter),
+      defaultFilterLoadingActions.success('result', defaultSettingFilter),
     );
 
     const filter = Filter.fromString('first=1 rows=10');
