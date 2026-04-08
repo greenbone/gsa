@@ -17,6 +17,7 @@ import Select from 'web/components/form/Select';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
+import ComponentWithInfoTip from 'web/components/info-tip/ComponentWithInfoTip';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import {renderSelectItems} from 'web/utils/Render';
@@ -88,6 +89,7 @@ const TagDialog = ({
     initialResourceType,
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [resourceIdError, setResourceIdError] = useState<string>('');
 
   title = title ?? _('New Tag');
   name = name ?? _('default:unnamed');
@@ -103,18 +105,6 @@ const TagDialog = ({
         .getAll({resourceType: type})
         .then(response => {
           const data: ResourceOption[] = response.data;
-          let id: string | undefined = resourceIdText;
-          if (isEmpty(id)) {
-            id = undefined;
-          } else {
-            const idPresent = data.some(res => res.id === id);
-            if (!idPresent) {
-              data.push({
-                name: '----',
-                id: id,
-              });
-            }
-          }
           setResourceOptions(data);
           setIsLoading(false);
         })
@@ -123,7 +113,7 @@ const TagDialog = ({
           throw err;
         });
     },
-    [gmp, resourceIdText],
+    [gmp],
   );
 
   useEffect(() => {
@@ -147,34 +137,47 @@ const TagDialog = ({
     setResourceIdsSelected(ids);
   };
 
-  const handleIdChangeByText = async (id: string) => {
+  const handleResourceIdTextChange = (value: string) => {
+    setResourceIdText(value);
+    setResourceIdError('');
+  };
+
+  const handleAddResourceById = async () => {
+    const id = resourceIdText.trim();
+
+    if (isEmpty(id)) {
+      setResourceIdText('');
+      return;
+    }
+
     const response = await gmp.resourcenames.get({
       resourceType,
       filter: 'uuid=' + id,
     });
-    const ids = isDefined(resourceIdsSelected) ? resourceIdsSelected : [];
-    if (response.data.length === 0) {
-      let currentResourceOptions = resourceOptions;
-      const idPresent = currentResourceOptions.filter(res => res.id === id);
-      if (idPresent.length === 0 && !isEmpty(id)) {
-        // if the options already contain '----', remove the old element
-        currentResourceOptions = currentResourceOptions.filter(
-          res => res.name !== '----',
-        );
-        currentResourceOptions.push({
-          name: '----',
-          id: id,
-        });
-      }
 
-      setResourceOptions(currentResourceOptions);
-      setResourceIdText(id);
-    } else {
-      const idSelected = ids.includes(id);
+    if (response.data.length === 0) {
+      setResourceIdError(
+        _('UUID not found. Please check the UUID and try again.'),
+      );
+      return;
+    }
+
+    const ids = isDefined(resourceIdsSelected) ? resourceIdsSelected : [];
+    const idSelected = ids.includes(id);
+
+    if (!idSelected) {
+      setResourceIdsSelected(prevIds => [...prevIds, id]);
       setResourceIdText('');
-      if (!idSelected) {
-        setResourceIdsSelected(prevIds => [...prevIds, id]);
-      }
+      setResourceIdError('');
+    } else {
+      setResourceIdError(_('This resource is already selected.'));
+    }
+  };
+
+  const handleResourceIdTextKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      void handleAddResourceById();
     }
   };
 
@@ -254,12 +257,26 @@ const TagDialog = ({
                     onChange={ids => handleIdChange(ids, onValueChange)}
                   />
                 </ScrollableContent>
-                <TextField
-                  disabled={!typeIsChosen || fixed}
-                  name="resourceIdText"
-                  title={_('Add Resource by ID')}
-                  value={resourceIdText}
-                  onChange={handleIdChangeByText}
+                <ComponentWithInfoTip
+                  dataTestId="resource-id-help-infotip"
+                  helpAriaLabel={_('More info about adding resources by ID')}
+                  helpContent={_(
+                    'Type a resource UUID and press Enter. The system validates it: if found it is added to the selected resources; if missing you see "UUID not found"; if duplicate you see "This resource is already selected".',
+                  )}
+                  slot={
+                    <TextField
+                      disabled={!typeIsChosen || fixed}
+                      errorContent={resourceIdError}
+                      name="resourceIdText"
+                      placeholder={_(
+                        'e.g., 12345678-1234-1234-1234-123456789012',
+                      )}
+                      title={_('Add Resource by ID')}
+                      value={resourceIdText}
+                      onChange={handleResourceIdTextChange}
+                      onKeyDown={handleResourceIdTextKeyDown}
+                    />
+                  }
                 />
               </>
             ) : (

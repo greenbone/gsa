@@ -194,6 +194,12 @@ describe('TagDialog tests', () => {
     // let the change propagate
     await wait();
 
+    // Press Enter to add the resource ID
+    fireEvent.keyDown(resourceIdTextField, {key: 'Enter'});
+
+    // let the async operation complete
+    await wait();
+
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(onSave).toHaveBeenCalledWith({
