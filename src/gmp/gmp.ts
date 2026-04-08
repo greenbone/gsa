@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import 'gmp/commands/audits';
 import 'gmp/commands/audit-reports';
 import 'gmp/commands/filters';
 import 'gmp/commands/groups';
@@ -12,7 +11,7 @@ import 'gmp/commands/license';
 import 'gmp/commands/notes';
 import 'gmp/commands/os';
 import 'gmp/commands/overrides';
-import 'gmp/commands/policies';
+
 import 'gmp/commands/report-configs';
 import 'gmp/commands/report-formats';
 import 'gmp/commands/results';
@@ -31,6 +30,7 @@ import AgentInstallersCommand from 'gmp/commands/agent-installers';
 import AgentsCommand from 'gmp/commands/agents';
 import AlertCommand from 'gmp/commands/alert';
 import AlertsCommand from 'gmp/commands/alerts';
+import AuditCommand, {AuditsCommand} from 'gmp/commands/audits';
 import AuthenticationCommand from 'gmp/commands/auth';
 import CertBundAdvisoriesCommand from 'gmp/commands/cert-bund-advisories';
 import CertBundAdvisoryCommand from 'gmp/commands/cert-bund-advisory';
@@ -55,6 +55,7 @@ import OciImageTargetsCommand from 'gmp/commands/oci-image-targets';
 import PerformanceCommand from 'gmp/commands/performance';
 import PermissionCommand from 'gmp/commands/permission';
 import PermissionsCommand from 'gmp/commands/permissions';
+import PolicyCommand, {PoliciesCommand} from 'gmp/commands/policies';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/port-lists';
 import ReportCommand from 'gmp/commands/report';
 import ReportsCommand from 'gmp/commands/reports';
@@ -102,6 +103,8 @@ class Gmp {
   readonly agentinstallers: AgentInstallersCommand;
   readonly alert: AlertCommand;
   readonly alerts: AlertsCommand;
+  readonly audit: AuditCommand;
+  readonly audits: AuditsCommand;
   readonly auth: AuthenticationCommand;
   readonly certbund: CertBundAdvisoryCommand;
   readonly certbunds: CertBundAdvisoriesCommand;
@@ -125,6 +128,8 @@ class Gmp {
   readonly performance: PerformanceCommand;
   readonly permission: PermissionCommand;
   readonly permissions: PermissionsCommand;
+  readonly policy: PolicyCommand;
+  readonly policies: PoliciesCommand;
   readonly portlist: PortListCommand;
   readonly portlists: PortListsCommand;
   readonly report: ReportCommand;
@@ -169,6 +174,8 @@ class Gmp {
     this.agentinstallers = new AgentInstallersCommand(this.http);
     this.alert = new AlertCommand(this.http);
     this.alerts = new AlertsCommand(this.http);
+    this.audit = new AuditCommand(this.http);
+    this.audits = new AuditsCommand(this.http);
     this.auth = new AuthenticationCommand(this.http);
     this.certbund = new CertBundAdvisoryCommand(this.http);
     this.certbunds = new CertBundAdvisoriesCommand(this.http);
@@ -192,6 +199,8 @@ class Gmp {
     this.performance = new PerformanceCommand(this.http);
     this.permission = new PermissionCommand(this.http);
     this.permissions = new PermissionsCommand(this.http);
+    this.policy = new PolicyCommand(this.http);
+    this.policies = new PoliciesCommand(this.http);
     this.portlist = new PortListCommand(this.http);
     this.portlists = new PortListsCommand(this.http);
     this.report = new ReportCommand(this.http);

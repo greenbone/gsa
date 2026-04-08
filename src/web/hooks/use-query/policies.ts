@@ -20,7 +20,6 @@ interface UseGetPoliciesParams {
 export const useGetPolicy = ({id}: UseGetPolicyParams) => {
   const gmp = useGmp();
   return useGetEntity<Policy>({
-    // @ts-expect-error policy command is dynamically added via registerCommand()
     gmpMethod: gmp.policy.get.bind(gmp.policy),
     queryId: 'get_policy',
     id,
@@ -30,7 +29,6 @@ export const useGetPolicy = ({id}: UseGetPolicyParams) => {
 export const useGetPolicies = ({filter}: UseGetPoliciesParams = {}) => {
   const gmp = useGmp();
   return useGetEntities<Policy>({
-    // @ts-expect-error policies command is dynamically added via registerCommand()
     gmpMethod: gmp.policies.get.bind(gmp.policies),
     queryId: 'get_policies',
     filter,
