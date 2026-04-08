@@ -22,7 +22,6 @@ interface UseGetAuditsParams {
 export const useGetAudit = ({id, refetchInterval}: UseGetAuditParams) => {
   const gmp = useGmp();
   return useGetEntity<Audit>({
-    // @ts-expect-error audit command is dynamically added via registerCommand()
     gmpMethod: gmp.audit.get.bind(gmp.audit),
     queryId: 'get_audit',
     id,
@@ -33,7 +32,6 @@ export const useGetAudit = ({id, refetchInterval}: UseGetAuditParams) => {
 export const useGetAudits = ({filter}: UseGetAuditsParams = {}) => {
   const gmp = useGmp();
   return useGetEntities<Audit>({
-    // @ts-expect-error audits command is dynamically added via registerCommand()
     gmpMethod: gmp.audits.get.bind(gmp.audits),
     queryId: 'get_audits',
     filter,
