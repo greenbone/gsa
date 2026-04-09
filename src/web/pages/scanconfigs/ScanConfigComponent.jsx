@@ -351,7 +351,7 @@ const ScanConfigComponent = ({
         const configPromise = loadScanConfig(configId, true);
 
         if (editConfigFamilyDialogVisible) {
-          promise = loadFamily(familyName, true);
+          promise = loadFamily(familyName, config, true);
         } else {
           promise = configPromise;
         }
