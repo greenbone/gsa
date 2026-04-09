@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {PolicyCommand} from 'gmp/commands/policies';
+import PolicyCommand from 'gmp/commands/policy';
 import {
   createActionResultResponse,
   createEntityResponse,
@@ -17,7 +17,11 @@ import {
   SCANCONFIG_TREND_STATIC,
   BASE_SCAN_CONFIG_ID,
 } from 'gmp/models/scan-config';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
+
+type ScanConfigTrend =
+  | typeof SCANCONFIG_TREND_DYNAMIC
+  | typeof SCANCONFIG_TREND_STATIC;
 
 describe('PolicyCommand tests', () => {
   test('should create new policy', async () => {
@@ -62,8 +66,8 @@ describe('PolicyCommand tests', () => {
       id: 'c1',
       name: 'foo',
       comment: 'somecomment',
-      trend,
-      select,
+      trend: trend as Record<string, ScanConfigTrend>,
+      select: select as Record<string, YesNo>,
       scannerPreferenceValues,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -94,7 +98,6 @@ describe('PolicyCommand tests', () => {
       trend: undefined,
       select: undefined,
       scannerPreferenceValues: undefined,
-      scannerId: undefined,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
