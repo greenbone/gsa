@@ -416,7 +416,7 @@ const ScanConfigComponent = ({
                 <EditScanConfigDialog
                   comment={config.comment}
                   configFamilies={config.families}
-                  configFamiliesTrend={config.families.trend}
+                  configFamiliesTrend={String(config.families.trend)}
                   configId={config.id}
                   configIsInUse={config.isInUse()}
                   editNvtDetailsTitle={_('Edit Scan Config NVT Details')}

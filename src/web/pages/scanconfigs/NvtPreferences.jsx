@@ -75,7 +75,7 @@ const NvtPreferences = ({
         counts: preferences.length,
       })}
     >
-      <Table fixed>
+      <Table $fixed>
         <TableHeader>
           <TableRow>
             <TableHead width="30%">{_('NVT')}</TableHead>
