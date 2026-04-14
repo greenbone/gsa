@@ -11,6 +11,7 @@ import {
   ArrowUpDown,
   BarChart3,
   Calendar,
+  Check,
   ChevronFirst,
   ChevronLast,
   ChevronLeft,
@@ -20,6 +21,7 @@ import {
   CircleX,
   ClipboardCheck,
   Clock3,
+  Copy,
   Diff,
   Download,
   Equal,
@@ -206,6 +208,8 @@ const getIcons = (): Record<string, IconComponent> => {
     ),
     ArrowUp: createIcon(ArrowUp, 'arrow-up-icon', 'Arrow Up Icon'),
     Calendar: createIcon(Calendar, 'calendar-icon', 'Calendar Icon'),
+    Check: createIcon(Check, 'check-icon', 'Check Icon'),
+    Copy: createIcon(Copy, 'copy-icon', 'Copy Icon'),
     KeyRound: createIcon(KeyRound, 'credential-icon', 'Credential Icon'),
     BarChart3: createIcon(BarChart3, 'dashboard-icon', 'Dashboard Icon'),
     Trash2: createIcon(Trash2, 'trashcan-icon', 'Delete Icon'),
@@ -451,6 +455,8 @@ export const ArrowUpDownIcon = getIcons().ArrowUpDown;
 export const AuditIcon = getIcons().Audit;
 export const DashboardIcon = getIcons().BarChart3;
 export const CalendarIcon = getIcons().Calendar;
+export const CheckIcon = getIcons().Check;
+export const CopyIcon = getIcons().Copy;
 export const CertBundAdvIcon = getIcons().CertBundAdv;
 export const FirstIcon = getIcons().ChevronFirst;
 export const LastIcon = getIcons().ChevronLast;
