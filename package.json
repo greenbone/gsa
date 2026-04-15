@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@dnd-kit/helpers": "^0.3.2",
-    "@dnd-kit/react": "^0.3.2",
+    "@dnd-kit/react": "^0.4.0",
     "@greenbone/ui-lib": "^2.1.1",
     "@mantine/core": "^8.3.16",
     "@mantine/dates": "^8.3.16",
