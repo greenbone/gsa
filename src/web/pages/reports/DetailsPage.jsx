@@ -11,6 +11,7 @@ import Filter, {
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
+import {resultsToCvesCollection} from 'gmp/models/report/parser';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
@@ -91,6 +92,22 @@ class ReportDetails extends React.Component {
     this.state = {
       showFilterDialog: false,
       showDownloadReportDialog: false,
+      resultsCounts: undefined,
+      resultsData: undefined,
+      cvesCounts: undefined,
+      cvesData: undefined,
+      hostsResponse: undefined,
+      hostsData: undefined,
+      hostsCounts: undefined,
+      appsData: undefined,
+      applicationsCounts: undefined,
+      operatingSystemsData: undefined,
+      operatingSystemsCounts: undefined,
+      closedCvesData: undefined,
+      closedCvesCounts: undefined,
+      isUpdating: false,
+      splitDataLoaded: false,
+      splitDataLoading: false,
       sorting: {
         results: {
           sortField: 'severity',
@@ -181,18 +198,32 @@ class ReportDetails extends React.Component {
         resultsCounts: isDefined(results.counts)
           ? results.counts
           : state.resultsCounts,
-        hostsCounts: isDefined(hosts.counts) ? hosts.counts : state.hostsCounts,
+        hostsCounts: isDefined(state.hostsCounts)
+          ? state.hostsCounts
+          : isDefined(hosts.counts)
+            ? hosts.counts
+            : state.hostsCounts,
         portsCounts: isDefined(ports.counts) ? ports.counts : state.portsCounts,
-        applicationsCounts: isDefined(applications.counts)
-          ? applications.counts
-          : state.applicationsCounts,
-        operatingSystemsCounts: isDefined(operatingsystems.counts)
-          ? operatingsystems.counts
-          : state.operatingSystemsCounts,
-        cvesCounts: isDefined(cves.counts) ? cves.counts : state.cvesCounts,
-        closedCvesCounts: isDefined(closedCves.counts)
-          ? closedCves.counts
-          : state.closedCvesCounts,
+        applicationsCounts: isDefined(state.applicationsCounts)
+          ? state.applicationsCounts
+          : isDefined(applications.counts)
+            ? applications.counts
+            : state.applicationsCounts,
+        operatingSystemsCounts: isDefined(state.operatingSystemsCounts)
+          ? state.operatingSystemsCounts
+          : isDefined(operatingsystems.counts)
+            ? operatingsystems.counts
+            : state.operatingSystemsCounts,
+        cvesCounts: isDefined(state.cvesCounts)
+          ? state.cvesCounts
+          : isDefined(cves.counts)
+            ? cves.counts
+            : state.cvesCounts,
+        closedCvesCounts: isDefined(state.closedCvesCounts)
+          ? state.closedCvesCounts
+          : isDefined(closedCves.counts)
+            ? closedCves.counts
+            : state.closedCvesCounts,
         tlsCertificatesCounts: isDefined(tlsCertificates.counts)
           ? tlsCertificates.counts
           : state.tlsCertificatesCounts,
@@ -248,11 +279,24 @@ class ReportDetails extends React.Component {
     }
 
     if (prevProps.reportId !== this.props.reportId) {
-      this.load();
+      this.load(this.props.reportFilter);
+      return;
+    }
+
+    const reportJustLoaded =
+      !isDefined(prevProps.entity) && isDefined(this.props.entity);
+
+    if (
+      reportJustLoaded &&
+      isDefined(this.props.reportFilter) &&
+      !this.state.splitDataLoaded &&
+      !this.state.splitDataLoading
+    ) {
+      this.load(this.props.reportFilter);
     }
   }
 
-  load(filter) {
+  async load(filter) {
     log.debug('Loading report', {
       filter,
     });
@@ -260,21 +304,128 @@ class ReportDetails extends React.Component {
 
     this.setState({
       isUpdating: !isDefined(reportFilter) || !reportFilter.equals(filter), // show update indicator if filter has changed
+      resultsData: undefined,
+      resultsCounts: undefined,
+      hostsResponse: undefined,
+      hostsData: undefined,
+      hostsCounts: undefined,
+      appsData: undefined,
+      applicationsCounts: undefined,
+      operatingSystemsData: undefined,
+      operatingSystemsCounts: undefined,
+      closedCvesData: undefined,
+      closedCvesCounts: undefined,
+      splitDataLoaded: false,
+      splitDataLoading: true,
     });
 
-    this.props
-      .reload(filter)
-      .then(() => {
-        this.setState({isUpdating: false});
-      })
-      .catch(() => {
-        this.setState({isUpdating: false});
+    try {
+      await this.props.reload(filter);
+      // Get Results with filtered which is needed for ReportHostResponse
+      // to fill host, application, os and closed CVE tabs with severity information
+      const resultsData = await this.loadResultsData(filter);
+
+      const cvesData = resultsToCvesCollection(
+        resultsData?.entities ?? [],
+        filter,
+      );
+      this.setState({
+        cvesData,
+        cvesCounts: cvesData?.counts,
       });
+
+      // Get ReportHostResponse to fill host, application, os and closed CVEs tabs
+      const hostsResponse = await this.loadHostsResponse(filter);
+
+      this.buildHostRelatedCollections(
+        filter,
+        hostsResponse,
+        resultsData?.entities ?? [],
+      );
+
+      this.setState({
+        isUpdating: false,
+        splitDataLoaded: true,
+        splitDataLoading: false,
+      });
+    } catch (error) {
+      this.setState({
+        isUpdating: false,
+        splitDataLoading: false,
+      });
+      this.handleError(error);
+    }
   }
 
   reload() {
     // reload data from backend
     this.load(this.props.reportFilter);
+  }
+
+  async loadResultsData(filter) {
+    const {gmp, reportId} = this.props;
+
+    const response = await gmp.results.get({
+      filter: filter.copy().set('_and_report_id', reportId),
+    });
+
+    const resultsData = {
+      entities: response._data,
+      counts: response._meta.counts,
+      filter: response._meta.filter,
+    };
+
+    this.setState({
+      resultsData,
+      resultsCounts: resultsData.counts,
+    });
+
+    return resultsData;
+  }
+
+  async loadHostsResponse(filter) {
+    const {gmp, reportId} = this.props;
+
+    const response = await gmp.reportHosts.get(
+      {id: reportId},
+      {
+        filter,
+        details: true,
+        ignorePagination: true,
+        lean: false,
+      },
+    );
+
+    const hostsResponse = response.data;
+
+    this.setState({hostsResponse});
+    return hostsResponse;
+  }
+
+  buildHostRelatedCollections(filter, hostsResponse, results = []) {
+    // we need result array to set severity information for these tabs
+    // Build ReportHosts from ReportHostsResponse
+    const hostsData = hostsResponse.toHostsCollection(filter, results);
+    // Build ReportApp from ReportHostsResponse
+    const appsData = hostsResponse.toAppsCollection(filter, results);
+    // Build ReportOperatingSystem from ReportHostsResponse
+    const operatingSystemsData = hostsResponse.toOperatingSystemsCollection(
+      filter,
+      results,
+    );
+    // Build ClosedCves from ReportHostsResponse
+    const closedCvesData = hostsResponse.toClosedCvesCollection(filter);
+
+    this.setState({
+      hostsData,
+      hostsCounts: hostsData?.counts,
+      appsData,
+      applicationsCounts: appsData?.counts,
+      operatingSystemsData,
+      operatingSystemsCounts: operatingSystemsData?.counts,
+      closedCvesData,
+      closedCvesCounts: closedCvesData?.counts,
+    });
   }
 
   handleChanged() {
@@ -508,19 +659,26 @@ class ReportDetails extends React.Component {
     } = this.props;
     const {
       applicationsCounts,
+      appsData,
       cvesCounts,
+      cvesData,
       closedCvesCounts,
+      closedCvesData,
       entity,
       errorsCounts,
       hostsCounts,
+      hostsData,
       isUpdating = false,
       operatingSystemsCounts,
+      operatingSystemsData,
       portsCounts,
       reportFilter,
       resultsCounts,
+      resultsData,
       showFilterDialog,
       showDownloadReportDialog,
       sorting,
+      splitDataLoading,
       storeAsDefault,
       tlsCertificatesCounts,
     } = this.state;
@@ -528,8 +686,11 @@ class ReportDetails extends React.Component {
     const report = isDefined(entity) ? entity.report : undefined;
 
     const threshold = gmp.settings.reportResultsThreshold;
-    const showThresholdMessage =
-      isDefined(report) && report.results.counts.filtered > threshold;
+    const showThresholdMessage = isDefined(resultsData?.counts)
+      ? resultsData.counts.filtered > threshold
+      : isDefined(report?.results?.counts)
+        ? report.results.counts.filtered > threshold
+        : false;
 
     return (
       <React.Fragment>
@@ -538,16 +699,21 @@ class ReportDetails extends React.Component {
           {({edit}) => (
             <Page
               applicationsCounts={applicationsCounts}
+              appsData={appsData}
               closedCvesCounts={closedCvesCounts}
+              closedCvesData={closedCvesData}
               cvesCounts={cvesCounts}
+              cvesData={cvesData}
               entity={entity}
               errorsCounts={errorsCounts}
               filters={filters}
               hostsCounts={hostsCounts}
+              hostsData={hostsData}
               isLoading={isLoading}
               isLoadingFilters={isLoadingFilters}
               isUpdating={isUpdating}
               operatingSystemsCounts={operatingSystemsCounts}
+              operatingSystemsData={operatingSystemsData}
               pageFilter={pageFilter}
               portsCounts={portsCounts}
               reportError={reportError}
@@ -555,10 +721,12 @@ class ReportDetails extends React.Component {
               reportId={reportId}
               resetFilter={REPORT_RESET_FILTER}
               resultsCounts={resultsCounts}
+              resultsData={resultsData}
               showError={showError}
               showErrorMessage={showErrorMessage}
               showSuccessMessage={showSuccessMessage}
               sorting={sorting}
+              splitDataLoading={splitDataLoading}
               task={isDefined(report) ? report.task : undefined}
               tlsCertificatesCounts={tlsCertificatesCounts}
               onAddToAssetsClick={this.handleAddToAssets}

@@ -60,16 +60,21 @@ const HeaderContainer = styled.div`
 
 const PageContent = ({
   applicationsCounts,
+  appsData,
   closedCvesCounts,
+  closedCvesData,
   cvesCounts,
+  cvesData,
   entity,
   errorsCounts,
   filters,
   hostsCounts,
+  hostsData,
   isLoading = true,
   isLoadingFilters = true,
   isUpdating = false,
   operatingSystemsCounts,
+  operatingSystemsData,
   pageFilter,
   portsCounts,
   reportError,
@@ -77,6 +82,8 @@ const PageContent = ({
   reportId,
   resetFilter,
   resultsCounts,
+  resultsData,
+  splitDataLoading = false,
   sorting,
   showError,
   showErrorMessage,
@@ -127,6 +134,16 @@ const PageContent = ({
     scan_run_status,
   } = report || {};
 
+  const resultsDataToUse = resultsData ?? {
+    entities: results.entities ?? [],
+    counts: results.counts,
+  };
+  const hostsDataToUse = hostsData ?? hosts;
+  const applicationsDataToUse = appsData ?? applications;
+  const operatingSystemsDataToUse = operatingSystemsData ?? operatingsystems;
+  const closedCvesDataToUse = closedCvesData ?? closedCves;
+  const cvesDataToUse = cvesData ?? cves;
+
   if (!hasReport && isDefined(reportError)) {
     return (
       <ErrorPanel
@@ -139,7 +156,10 @@ const PageContent = ({
   const threshold = gmp.settings.reportResultsThreshold;
 
   const showThresholdMessage =
-    !isLoading && hasReport && results.counts.filtered > threshold;
+    !isLoading &&
+    !splitDataLoading &&
+    isDefined(resultsDataToUse.counts) &&
+    resultsDataToUse.counts.filtered > threshold;
 
   const isImport = isDefined(task) && task.isImport();
   const status = isImport ? TASK_STATUS.import : scan_run_status;
@@ -148,10 +168,11 @@ const PageContent = ({
   const showIsLoading = isLoading && !hasReport;
 
   const showInitialLoading =
-    isLoading &&
+    (isLoading || splitDataLoading) &&
     !isDefined(reportError) &&
     !showThresholdMessage &&
-    (!isDefined(results.entities) || results.entities.length === 0);
+    (!isDefined(resultsDataToUse.entities) ||
+      resultsDataToUse.entities.length === 0);
 
   const HeaderTitle = (
     <Divider>
@@ -294,7 +315,7 @@ const PageContent = ({
                       reportFilter={reportFilter}
                       reportId={reportId}
                       reportResultsCounts={resultsCounts}
-                      results={results}
+                      results={resultsDataToUse}
                       sorting={sorting}
                       status={status}
                       onFilterAddLogLevelClick={onFilterAddLogLevelClick}
@@ -307,7 +328,7 @@ const PageContent = ({
                   </TabPanel>
                   <TabPanel>
                     <HostsTabContent
-                      hosts={hosts}
+                      hosts={hostsDataToUse}
                       isAgentScanning={isAgentScanning}
                       isContainerScanning={isContainerScanning}
                       isUpdating={isUpdating}
@@ -361,8 +382,8 @@ const PageContent = ({
                       />
                     ) : (
                       <ApplicationsTab
-                        applications={applications.entities}
-                        counts={applications.counts}
+                        applications={applicationsDataToUse.entities}
+                        counts={applicationsDataToUse.counts}
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.apps.sortField}
@@ -387,10 +408,10 @@ const PageContent = ({
                       />
                     ) : (
                       <OperatingSystemsTab
-                        counts={operatingsystems.counts}
+                        counts={operatingSystemsDataToUse.counts}
                         filter={reportFilter}
                         isUpdating={isUpdating}
-                        operatingsystems={operatingsystems.entities}
+                        operatingsystems={operatingSystemsDataToUse.entities}
                         sortField={sorting.os.sortField}
                         sortReverse={sorting.os.sortReverse}
                         onSortChange={sortField =>
@@ -413,8 +434,8 @@ const PageContent = ({
                       />
                     ) : (
                       <CvesTab
-                        counts={cves.counts}
-                        cves={cves.entities}
+                        counts={cvesDataToUse.counts}
+                        cves={cvesDataToUse.entities}
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.cves.sortField}
@@ -439,8 +460,8 @@ const PageContent = ({
                       />
                     ) : (
                       <ClosedCvesTab
-                        closedCves={closedCves.entities}
-                        counts={closedCves.counts}
+                        closedCves={closedCvesDataToUse.entities}
+                        counts={closedCvesDataToUse.counts}
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.closedcves.sortField}
@@ -514,16 +535,21 @@ const PageContent = ({
 
 PageContent.propTypes = {
   applicationsCounts: PropTypes.counts,
+  appsData: PropTypes.object,
   closedCvesCounts: PropTypes.counts,
+  closedCvesData: PropTypes.object,
   cvesCounts: PropTypes.counts,
+  cvesData: PropTypes.object,
   entity: PropTypes.model,
   errorsCounts: PropTypes.counts,
   filters: PropTypes.array,
   hostsCounts: PropTypes.counts,
+  hostsData: PropTypes.object,
   isLoading: PropTypes.bool,
   isLoadingFilters: PropTypes.bool,
   isUpdating: PropTypes.bool,
   operatingSystemsCounts: PropTypes.counts,
+  operatingSystemsData: PropTypes.object,
   pageFilter: PropTypes.filter,
   portsCounts: PropTypes.counts,
   reportError: PropTypes.error,
@@ -531,6 +557,8 @@ PageContent.propTypes = {
   reportId: PropTypes.id.isRequired,
   resetFilter: PropTypes.filter,
   resultsCounts: PropTypes.counts,
+  resultsData: PropTypes.object,
+  splitDataLoading: PropTypes.bool,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
