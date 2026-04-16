@@ -12,6 +12,7 @@ import {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
+  OPENVASD_SENSOR_SCANNER_TYPE,
   type ScannerType,
   scannerTypeName,
 } from 'gmp/models/scanner';
@@ -80,6 +81,7 @@ const updatePort = (scannerType: ScannerType | undefined) => {
   }
   if (
     scannerType === OPENVASD_SCANNER_TYPE ||
+    scannerType === OPENVASD_SENSOR_SCANNER_TYPE ||
     scannerType === CONTAINER_IMAGE_SCANNER_TYPE
   ) {
     return 443;
@@ -169,6 +171,13 @@ const ScannerDialog = ({
     features.featureEnabled('ENABLE_OPENVASD')
   ) {
     scannerTypes.push(OPENVASD_SCANNER_TYPE);
+  }
+
+  if (
+    scannerType === OPENVASD_SENSOR_SCANNER_TYPE ||
+    features.featureEnabled('ENABLE_OPENVASD')
+  ) {
+    scannerTypes.push(OPENVASD_SENSOR_SCANNER_TYPE);
   }
 
   if (
