@@ -438,7 +438,7 @@ describe('ScannerDialog tests', () => {
     });
     expect(scannerType).toHaveValue('');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
-    expect(scannerTypeItems.length).toBe(3); // OpenVAS Scanner, OpenVASD Scanner, Agent Controller
+    expect(scannerTypeItems.length).toBe(4); // OpenVAS Scanner, OpenVASD Scanner, OpenVASD Sensor, Agent Controller
   });
 
   test('should not allow to change host, port and type if scanner is in use', () => {
@@ -631,9 +631,10 @@ describe('ScannerDialog tests', () => {
     });
     expect(scannerType).toHaveValue('OpenVASD Scanner');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
-    expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner and OpenVASD Scanner
+    expect(scannerTypeItems.length).toEqual(3); // OpenVAS Scanner, OpenVASD Scanner and OpenVASD Sensor
     expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
     expect(scannerTypeItems[1]).toHaveTextContent('OpenVASD Scanner');
+    expect(scannerTypeItems[2]).toHaveTextContent('OpenVASD Sensor');
   });
 
   test('should not render openvasd in scanner selection if feature is disabled', async () => {
