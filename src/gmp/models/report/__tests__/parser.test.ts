@@ -15,6 +15,7 @@ import {
   parseCves,
   parseErrors,
   parseClosedCves,
+  resultsToCvesCollection,
 } from 'gmp/models/report/parser';
 import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 
@@ -1004,10 +1005,228 @@ describe('report parser tests', () => {
   test('should parse empty closed CVEs', () => {
     const filter = Filter.fromString('foo=bar rows=5');
     const report = {};
-    const closedCves = parseErrors(report, filter);
+    const closedCves = parseClosedCves(report, filter);
 
     expect(closedCves.entities.length).toEqual(0);
     expect(closedCves.counts).toEqual(emptyCollectionCounts);
     expect(closedCves.filter).toEqual(filter);
+  });
+
+  test('should build cves collection from results', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+
+    const results = [
+      {
+        information: {
+          id: '1.2.3',
+          name: 'Foo',
+          cves: ['CVE-123'],
+        },
+        host: {
+          name: '1.1.1.1',
+        },
+        severity: 4.5,
+      },
+      {
+        information: {
+          id: '1.2.3',
+          name: 'Foo',
+          cves: ['CVE-123'],
+        },
+        host: {
+          name: '2.2.2.2',
+        },
+        severity: 9.5,
+      },
+      {
+        information: {
+          id: '2.2.3',
+          name: 'Bar',
+          cves: ['CVE-234'],
+        },
+        host: {
+          name: '1.1.1.1',
+        },
+        severity: 5.5,
+      },
+      {
+        information: {
+          id: '2.3.3',
+          name: 'Ipsum',
+          cves: ['CVE-234', 'CVE-334'],
+        },
+        host: {
+          name: '1.1.1.1',
+        },
+        severity: 6.5,
+      },
+    ];
+
+    const cves = resultsToCvesCollection(results as never, filter);
+
+    expect(cves.entities.length).toEqual(3);
+    expect(cves.counts).toEqual({
+      first: 1,
+      all: 3,
+      filtered: 3,
+      length: 3,
+      rows: 3,
+      last: 3,
+    });
+    expect(cves.filter).toEqual(filter);
+
+    const [cve1, cve2, cve3] = cves.entities;
+
+    expect(cve1.id).toEqual('1.2.3');
+    expect(cve1.nvtName).toEqual('Foo');
+    expect(cve1.cves).toEqual(['CVE-123']);
+    expect(cve1.severity).toEqual(9.5);
+    expect(cve1.hosts.count).toEqual(2);
+    expect(cve1.occurrences).toEqual(2);
+
+    expect(cve2.id).toEqual('2.2.3');
+    expect(cve2.nvtName).toEqual('Bar');
+    expect(cve2.cves).toEqual(['CVE-234']);
+    expect(cve2.severity).toEqual(5.5);
+    expect(cve2.hosts.count).toEqual(1);
+    expect(cve2.occurrences).toEqual(1);
+
+    expect(cve3.id).toEqual('2.3.3');
+    expect(cve3.nvtName).toEqual('Ipsum');
+    expect(cve3.cves).toEqual(['CVE-234', 'CVE-334']);
+    expect(cve3.severity).toEqual(6.5);
+    expect(cve3.hosts.count).toEqual(1);
+    expect(cve3.occurrences).toEqual(1);
+  });
+
+  test('should ignore results without valid information for cves collection', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+
+    const results = [
+      {},
+      {
+        information: undefined,
+      },
+      {
+        information: {
+          id: '1.2.3',
+          cves: ['CVE-123'],
+        },
+      },
+      {
+        information: {
+          id: '1.2.3',
+          name: 'Foo',
+        },
+      },
+      {
+        information: {
+          id: '1.2.3',
+          name: 'Foo',
+          cves: [],
+        },
+      },
+      {
+        information: {
+          id: '1.2.3',
+          name: 'Foo',
+          cves: 'CVE-123',
+        },
+      },
+    ];
+
+    const cves = resultsToCvesCollection(results as never, filter);
+
+    expect(cves.entities.length).toEqual(0);
+    expect(cves.counts).toEqual({
+      first: 1,
+      all: 0,
+      filtered: 0,
+      length: 0,
+      rows: 0,
+      last: 0,
+    });
+    expect(cves.filter).toEqual(filter);
+  });
+
+  test('should filter empty cve refs in resultsToCvesCollection', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+
+    const results = [
+      {
+        information: {
+          id: '1.2.3',
+          name: 'Foo',
+          cves: ['CVE-123', '', '   ', 'CVE-456'],
+        },
+        host: {
+          name: '1.1.1.1',
+        },
+        severity: 7.5,
+      },
+    ];
+
+    const cves = resultsToCvesCollection(results as never, filter);
+
+    expect(cves.entities.length).toEqual(1);
+
+    const [cve] = cves.entities;
+    expect(cve.id).toEqual('1.2.3');
+    expect(cve.nvtName).toEqual('Foo');
+    expect(cve.cves).toEqual(['CVE-123', 'CVE-456']);
+    expect(cve.hosts.count).toEqual(1);
+    expect(cve.occurrences).toEqual(1);
+  });
+
+  test('should not add host when host name is missing in resultsToCvesCollection', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+
+    const results = [
+      {
+        information: {
+          id: '1.2.3',
+          name: 'Foo',
+          cves: ['CVE-123'],
+        },
+        host: {},
+        severity: 4.5,
+      },
+      {
+        information: {
+          id: '1.2.3',
+          name: 'Foo',
+          cves: ['CVE-123'],
+        },
+        severity: 9.5,
+      },
+    ];
+
+    const cves = resultsToCvesCollection(results as never, filter);
+
+    expect(cves.entities.length).toEqual(1);
+
+    const [cve] = cves.entities;
+    expect(cve.id).toEqual('1.2.3');
+    expect(cve.cves).toEqual(['CVE-123']);
+    expect(cve.severity).toEqual(9.5);
+    expect(cve.hosts.count).toEqual(0);
+    expect(cve.occurrences).toEqual(2);
+  });
+
+  test('should return empty cves collection for empty results', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+
+    const cves = resultsToCvesCollection([], filter);
+
+    expect(cves.entities.length).toEqual(0);
+    expect(cves.counts).toEqual({
+      first: 1,
+      all: 0,
+      filtered: 0,
+      length: 0,
+      rows: 0,
+      last: 0,
+    });
+    expect(cves.filter).toEqual(filter);
   });
 });

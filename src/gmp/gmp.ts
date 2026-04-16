@@ -60,6 +60,7 @@ import PoliciesCommand from 'gmp/commands/policies';
 import PolicyCommand from 'gmp/commands/policy';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/port-lists';
 import ReportCommand from 'gmp/commands/report';
+import ReportHostsCommand from 'gmp/commands/report-hosts';
 import ReportsCommand from 'gmp/commands/reports';
 import ResourceNamesCommand from 'gmp/commands/resource-names';
 import RoleCommand from 'gmp/commands/role';
@@ -136,6 +137,7 @@ class Gmp {
   readonly portlists: PortListsCommand;
   readonly report: ReportCommand;
   readonly reports: ReportsCommand;
+  readonly reportHosts: ReportHostsCommand;
   readonly resourcenames: ResourceNamesCommand;
   readonly role: RoleCommand;
   readonly roles: RolesCommand;
@@ -207,6 +209,7 @@ class Gmp {
     this.portlists = new PortListsCommand(this.http);
     this.report = new ReportCommand(this.http);
     this.reports = new ReportsCommand(this.http);
+    this.reportHosts = new ReportHostsCommand(this.http);
     this.resourcenames = new ResourceNamesCommand(this.http);
     this.role = new RoleCommand(this.http);
     this.roles = new RolesCommand(this.http);

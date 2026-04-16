@@ -952,3 +952,75 @@ export const parseCves = (
     filter,
   };
 };
+
+const buildCveRefs = (cves: string[] = []): NvtRefElement[] =>
+  cves
+    .filter(cve => isDefined(cve) && cve.trim().length > 0)
+    .map(cve => ({
+      _type: 'cve',
+      __text: cve,
+      _id: cve,
+    }));
+
+export const resultsToCvesCollection = (
+  results: Result[] = [],
+  filter: Filter,
+): CollectionList<ReportCve> => {
+  const cves: Record<string, ReportCve> = {};
+
+  results.forEach(result => {
+    const information = result.information;
+    const host = result.host ?? {};
+
+    if (
+      !isDefined(information) ||
+      !('id' in information) ||
+      !isDefined(information.id) ||
+      !isDefined(information.name) ||
+      !('cves' in information) ||
+      !Array.isArray(information.cves) ||
+      information.cves.length === 0
+    ) {
+      return;
+    }
+
+    const id = information.id;
+    const refs = buildCveRefs(information.cves);
+
+    let cve = cves[id];
+
+    if (!isDefined(cve)) {
+      cve = ReportCve.fromElement({
+        nvt: {
+          _oid: information.id,
+          name: information.name,
+          refs: refs.length > 0 ? {ref: refs} : undefined,
+        },
+      });
+      cves[id] = cve;
+    }
+
+    if (isDefined(host.name)) {
+      cve.addHost({ip: host.name});
+    }
+
+    cve.addResult(result);
+  });
+
+  const cvesArray = Object.values(cves);
+  const filteredCount = cvesArray.length;
+
+  const counts = new CollectionCounts({
+    all: filteredCount,
+    filtered: filteredCount,
+    first: 1,
+    length: filteredCount,
+    rows: filteredCount,
+  });
+
+  return {
+    counts,
+    entities: cvesArray,
+    filter,
+  };
+};

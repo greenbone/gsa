@@ -102,6 +102,7 @@ const ENTITY_TYPES = {
   report: _l('Report'),
   reportconfig: _l('Report Config'),
   reportformat: _l('Report Format'),
+  reporthost: _l('Report Host'),
   result: _l('Result'),
   role: _l('Role'),
   scanconfig: _l('Scan Config'),
