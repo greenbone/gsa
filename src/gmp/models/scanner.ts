@@ -109,6 +109,7 @@ export interface ScannerElement extends ModelElement {
     task?: ScannerTaskElement | ScannerTaskElement[];
   };
   agent_control_config_defaults?: AgentControlConfigElement;
+  disabled?: YesNo;
 }
 
 interface Info {
@@ -193,6 +194,7 @@ interface ScannerProperties extends ModelProperties {
   scannerType?: ScannerType;
   tasks?: ScannerTask[];
   agentControlConfig?: AgentControlConfig;
+  disabled?: boolean;
 }
 
 // Scanner type definitions - add new scanner types here with their display names
@@ -276,6 +278,7 @@ class Scanner extends Model {
   readonly scannerType?: ScannerType;
   readonly tasks: ScannerTask[];
   readonly agentControlConfig?: AgentControlConfig;
+  readonly disabled?: boolean;
 
   constructor({
     caPub,
@@ -287,6 +290,7 @@ class Scanner extends Model {
     scannerType,
     tasks = [],
     agentControlConfig,
+    disabled,
     ...properties
   }: ScannerProperties = {}) {
     super(properties);
@@ -300,6 +304,7 @@ class Scanner extends Model {
     this.scannerType = scannerType;
     this.tasks = tasks;
     this.agentControlConfig = agentControlConfig;
+    this.disabled = disabled;
   }
 
   static fromElement(element?: ScannerElement): Scanner {
@@ -414,6 +419,10 @@ class Scanner extends Model {
         };
       }
     }
+
+    ret.disabled = isDefined(element.disabled)
+      ? parseBoolean(element.disabled)
+      : undefined;
 
     return ret;
   }
