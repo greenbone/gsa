@@ -56,6 +56,9 @@ const EntityNameTableData = <TEntity extends Model>({
               >
                 {entity.name}
               </RowDetailsToggle>
+              {/* disabled is currently only supported for scanners. */}
+              {/* @ts-expect-error */}
+              {entity?.disabled && <b> ({_('Disabled')})</b>}
               {/* @ts-expect-error */}
               {entity?.deprecated && <b> ({_('Deprecated')})</b>}
             </span>
@@ -68,6 +71,8 @@ const EntityNameTableData = <TEntity extends Model>({
               >
                 {entity.name}
               </DetailsLink>
+              {/* @ts-expect-error */}
+              {entity?.disabled && <b> ({_('Disabled')})</b>}
               {/* @ts-expect-error */}
               {entity?.deprecated && <b> ({_('Deprecated')})</b>}
             </span>
