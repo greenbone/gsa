@@ -59,7 +59,7 @@ const LABEL_HEIGHT = 20;
 const MIN_WIDTH = 250;
 const MIN_TICK_WIDTH = 20;
 
-const tickFormat = (val: number | string) => {
+const tickFormat = (val: number | string | Date) => {
   const valStr = String(val);
   if (valStr.length > MAX_LABEL_LENGTH) {
     // prevent cycling through the string

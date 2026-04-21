@@ -14,13 +14,10 @@ import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
 import ToolTip from 'web/components/chart/base/Tooltip';
 import path from 'web/components/chart/utils/Path';
-import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
+import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/user-setting-time-date-formatters';
-import withTranslation, {
-  type WithTranslationComponentProps,
-} from 'web/utils/withTranslation';
 
 interface FutureRun {
   label: string;
@@ -46,7 +43,7 @@ interface ClonedScheduleData extends ScheduleData {
   start: GmpDate;
 }
 
-interface ScheduleChartProps extends WithTranslationComponentProps {
+interface ScheduleChartProps {
   data: ScheduleData[];
   height: number;
   svgRef?: React.Ref<SVGSVGElement>;
@@ -54,7 +51,6 @@ interface ScheduleChartProps extends WithTranslationComponentProps {
   yAxisLabel?: string;
   startDate?: GmpDate;
   endDate?: GmpDate;
-  _: TranslateFunc;
 }
 
 const ONE_DAY = 60 * 60 * 24;
@@ -69,7 +65,7 @@ const margin = {
 
 const MAX_LABEL_LENGTH = 25;
 
-const tickFormat = (value: string | number) => {
+const tickFormat = (value: string | number | Date) => {
   return shorten(String(value), MAX_LABEL_LENGTH);
 };
 
@@ -164,150 +160,141 @@ const Triangle = ({
   );
 };
 
-class ScheduleChart extends React.Component<ScheduleChartProps> {
-  shouldComponentUpdate(nextProps: ScheduleChartProps) {
-    return shouldUpdate(nextProps, this.props);
-  }
+const ScheduleChart = ({
+  data = [],
+  height,
+  svgRef,
+  width,
+  yAxisLabel,
+  startDate = date(),
+  endDate,
+}: ScheduleChartProps) => {
+  const [_] = useTranslation();
 
-  render() {
-    const {
-      data = [],
-      height,
-      svgRef,
-      width,
-      yAxisLabel,
-      startDate = date(),
-      endDate = startDate.clone().add(7, 'days'),
-    } = this.props;
+  const resolvedEndDate = endDate ?? startDate.clone().add(7, 'days');
 
-    const {_} = this.props;
+  const yValues = data.map(d => d.label);
 
-    const yValues = data.map(d => d.label);
+  const maxLabelLength = Math.max(
+    ...yValues.map(val => val.toString().length),
+    MAX_LABEL_LENGTH,
+  );
 
-    const maxLabelLength = Math.max(
-      ...yValues.map(val => val.toString().length),
-      MAX_LABEL_LENGTH,
-    );
+  // adjust left margin for label length on horizontal bars
+  // 4px for each letter is just a randomly chosen value
+  const marginLeft =
+    margin.left + Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4;
 
-    // adjust left margin for label length on horizontal bars
-    // 4px for each letter is just a randomly chosen value
-    const marginLeft =
-      margin.left + Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4;
+  const maxWidth = width - marginLeft - margin.right;
+  const maxHeight = height - margin.top - margin.bottom;
 
-    const maxWidth = width - marginLeft - margin.right;
-    const maxHeight = height - margin.top - margin.bottom;
+  const xScale = scaleUtc()
+    .range([0, maxWidth])
+    .domain([startDate.toDate(), resolvedEndDate.toDate()]);
 
-    const xScale = scaleUtc()
-      .range([0, maxWidth])
-      .domain([startDate.toDate(), endDate.toDate()]);
+  const yScale = scaleBand()
+    .range([0, maxHeight])
+    .domain(yValues)
+    .padding(0.125);
 
-    const yScale = scaleBand()
-      .range([0, maxHeight])
-      .domain(yValues)
-      .padding(0.125);
+  const futureRuns: FutureRun[] = [];
+  let schedules: ClonedScheduleData[] = [];
 
-    const futureRuns: FutureRun[] = [];
-    let schedules: ClonedScheduleData[] = [];
+  for (const d of data) {
+    const {label, isInfinite = false, starts} = d;
 
-    for (const d of data) {
-      const {label, isInfinite = false, starts} = d;
+    schedules = [
+      ...schedules,
+      ...starts.map(next => cloneSchedule(d, next, _)),
+    ];
 
-      schedules = [
-        ...schedules,
-        ...starts.map(next => cloneSchedule(d, next, _)),
-      ];
+    const futureRun = isInfinite ? Number.POSITIVE_INFINITY : starts.length;
 
-      const futureRun = isInfinite ? Number.POSITIVE_INFINITY : starts.length;
-
-      if (futureRun > 0) {
-        futureRuns.push({
-          label,
-          futureRun,
-        });
-      }
+    if (futureRun > 0) {
+      futureRuns.push({
+        label,
+        futureRun,
+      });
     }
-
-    const bandwidth = yScale.bandwidth();
-    return (
-      <Layout align={['start', 'start']}>
-        <Svg ref={svgRef} height={height} width={width}>
-          <Group left={marginLeft} top={margin.top}>
-            <Axis
-              label={yAxisLabel}
-              left={0}
-              orientation="left"
-              rangePadding={0}
-              scale={yScale}
-              tickFormat={tickFormat}
-              top={0}
-            />
-            <Axis
-              label={yAxisLabel}
-              numTicks={7}
-              orientation="bottom"
-              rangePadding={0}
-              scale={xScale}
-              top={maxHeight}
-            />
-            <StrokeGradient />
-            <FillGradient />
-            {schedules.map(d => {
-              const {duration = 0, period = 0, start, label} = d;
-
-              const startX = xScale(start);
-
-              let end = start.clone();
-              const hasDuration = duration > 0;
-              if (hasDuration) {
-                end = end.add(d.duration as number, 'seconds');
-              } else if (period > 0) {
-                end = end.add(Math.min(period, ONE_DAY), 'seconds');
-              } else {
-                end = end.add(1, 'day');
-              }
-
-              if (end.isAfter(endDate)) {
-                end = endDate;
-              }
-
-              const endX = xScale(end.toDate());
-              const rwidth = endX - startX;
-              return (
-                <ToolTip key={d.label} content={d.toolTip}>
-                  {({targetRef, show, hide}) => (
-                    <rect
-                      ref={targetRef as React.Ref<SVGRectElement>}
-                      fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
-                      height={bandwidth}
-                      stroke={hasDuration ? Theme.darkGreen : strokeGradientUrl}
-                      width={rwidth}
-                      x={startX}
-                      y={yScale(label)}
-                      onMouseEnter={show}
-                      onMouseLeave={hide}
-                    />
-                  )}
-                </ToolTip>
-              );
-            })}
-          </Group>
-          <Group
-            left={width - margin.triangle - TRIANGLE_WIDTH}
-            top={margin.top}
-          >
-            {futureRuns.map((run, i) => (
-              <Triangle
-                key={i}
-                height={bandwidth}
-                toolTip={getFutureRunLabel(run.futureRun, _)}
-                y={yScale(run.label)}
-              />
-            ))}
-          </Group>
-        </Svg>
-      </Layout>
-    );
   }
-}
 
-export default withTranslation<ScheduleChartProps>(ScheduleChart);
+  const bandwidth = yScale.bandwidth();
+  return (
+    <Layout align={['start', 'start']}>
+      <Svg ref={svgRef} height={height} width={width}>
+        <Group left={marginLeft} top={margin.top}>
+          <Axis
+            label={yAxisLabel}
+            left={0}
+            orientation="left"
+            rangePadding={0}
+            scale={yScale}
+            tickFormat={tickFormat}
+            top={0}
+          />
+          <Axis
+            label={yAxisLabel}
+            numTicks={7}
+            orientation="bottom"
+            rangePadding={0}
+            scale={xScale}
+            top={maxHeight}
+          />
+          <StrokeGradient />
+          <FillGradient />
+          {schedules.map(d => {
+            const {duration = 0, period = 0, start, label} = d;
+
+            const startX = xScale(start);
+
+            let end = start.clone();
+            const hasDuration = duration > 0;
+            if (hasDuration) {
+              end = end.add(d.duration as number, 'seconds');
+            } else if (period > 0) {
+              end = end.add(Math.min(period, ONE_DAY), 'seconds');
+            } else {
+              end = end.add(1, 'day');
+            }
+
+            if (end.isAfter(resolvedEndDate)) {
+              end = resolvedEndDate;
+            }
+
+            const endX = xScale(end.toDate());
+            const rwidth = endX - startX;
+            return (
+              <ToolTip key={d.label} content={d.toolTip}>
+                {({targetRef, show, hide}) => (
+                  <rect
+                    ref={targetRef as React.Ref<SVGRectElement>}
+                    fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
+                    height={bandwidth}
+                    stroke={hasDuration ? Theme.darkGreen : strokeGradientUrl}
+                    width={rwidth}
+                    x={startX}
+                    y={yScale(label)}
+                    onMouseEnter={show}
+                    onMouseLeave={hide}
+                  />
+                )}
+              </ToolTip>
+            );
+          })}
+        </Group>
+        <Group left={width - margin.triangle - TRIANGLE_WIDTH} top={margin.top}>
+          {futureRuns.map(run => (
+            <Triangle
+              key={run.label}
+              height={bandwidth}
+              toolTip={getFutureRunLabel(run.futureRun, _)}
+              y={yScale(run.label)}
+            />
+          ))}
+        </Group>
+      </Svg>
+    </Layout>
+  );
+};
+
+export default ScheduleChart;
