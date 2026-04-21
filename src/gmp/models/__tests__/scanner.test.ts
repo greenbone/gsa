@@ -36,6 +36,7 @@ describe('Scanner model tests', () => {
     expect(scanner.scannerType).toBeUndefined();
     expect(scanner.tasks).toEqual([]);
     expect(scanner.port).toBeUndefined();
+    expect(scanner.disabled).toBeUndefined();
   });
 
   test('should parse empty element', () => {
@@ -48,6 +49,7 @@ describe('Scanner model tests', () => {
     expect(scanner.scannerType).toBeUndefined();
     expect(scanner.tasks).toEqual([]);
     expect(scanner.port).toBeUndefined();
+    expect(scanner.disabled).toBeUndefined();
   });
 
   test('should parse type', () => {
@@ -200,6 +202,14 @@ describe('Scanner model tests', () => {
     expect(scanner2.port).toBeUndefined();
     expect(scanner3.port).toBeUndefined();
     expect(scanner4.port).toEqual(1234);
+  });
+
+  test('should parse disabled', () => {
+    const scanner = Scanner.fromElement({disabled: 0});
+    const scanner2 = Scanner.fromElement({disabled: 1});
+
+    expect(scanner.disabled).toEqual(false);
+    expect(scanner2.disabled).toEqual(true);
   });
 });
 
