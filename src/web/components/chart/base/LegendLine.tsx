@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Line as VxLine} from '@visx/shape';
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
 import Theme from 'web/utils/Theme';
@@ -39,12 +38,14 @@ const LegendLine = ({
   return (
     <StyledDiv>
       <svg height={height} width={width}>
-        <VxLine
-          from={{x: 0, y}}
+        <line
           stroke={String(color)}
           strokeDasharray={dashArray}
           strokeWidth={lineWidth}
-          to={{x: width, y}}
+          x1={0}
+          x2={width}
+          y1={y}
+          y2={y}
         />
       </svg>
     </StyledDiv>
