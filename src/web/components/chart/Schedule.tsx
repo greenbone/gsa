@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {LinearGradient} from '@visx/gradient';
 import {scaleBand, scaleUtc} from 'd3-scale';
 import {type TranslateFunc} from 'gmp/locale';
 import date, {type Date as GmpDate} from 'gmp/models/date';
@@ -109,11 +108,13 @@ const cloneSchedule = (d: ScheduleData, start: GmpDate, _: TranslateFunc) => {
 };
 
 const StrokeGradient = () => (
-  <LinearGradient id={STROKE_GRADIENT_ID} x1="0%" x2="100%" y1="0%" y2="0%">
-    <stop offset="0%" stopColor={Theme.darkGreen} stopOpacity="1.0" />
-    <stop offset="25%" stopColor={Theme.darkGreen} stopOpacity="1.0" />
-    <stop offset="100%" stopColor={Theme.darkGreen} stopOpacity="0.1" />
-  </LinearGradient>
+  <defs>
+    <linearGradient id={STROKE_GRADIENT_ID} x1="0%" x2="100%" y1="0%" y2="0%">
+      <stop offset="0%" stopColor={Theme.darkGreen} stopOpacity="1.0" />
+      <stop offset="25%" stopColor={Theme.darkGreen} stopOpacity="1.0" />
+      <stop offset="100%" stopColor={Theme.darkGreen} stopOpacity="0.1" />
+    </linearGradient>
+  </defs>
 );
 
 const strokeGradientUrl = `url(#${STROKE_GRADIENT_ID})`;
@@ -121,11 +122,13 @@ const strokeGradientUrl = `url(#${STROKE_GRADIENT_ID})`;
 const FILL_GRADIENT_ID = 'green_fill_gradient';
 
 const FillGradient = () => (
-  <LinearGradient id={FILL_GRADIENT_ID} x1="0%" x2="100%" y1="0%" y2="0%">
-    <stop offset="0%" stopColor={Theme.lightGreen} stopOpacity="1.0" />
-    <stop offset="25%" stopColor={Theme.lightGreen} stopOpacity="1.0" />
-    <stop offset="100%" stopColor={Theme.lightGreen} stopOpacity="0.1" />
-  </LinearGradient>
+  <defs>
+    <linearGradient id={FILL_GRADIENT_ID} x1="0%" x2="100%" y1="0%" y2="0%">
+      <stop offset="0%" stopColor={Theme.lightGreen} stopOpacity="1.0" />
+      <stop offset="25%" stopColor={Theme.lightGreen} stopOpacity="1.0" />
+      <stop offset="100%" stopColor={Theme.lightGreen} stopOpacity="0.1" />
+    </linearGradient>
+  </defs>
 );
 
 const fillGradientUrl = `url(#${FILL_GRADIENT_ID})`;
