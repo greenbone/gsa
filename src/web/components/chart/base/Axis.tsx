@@ -4,9 +4,24 @@
  */
 
 import {useEffect, useRef} from 'react';
-import {axisBottom, axisLeft, axisRight, axisTop} from 'd3-axis';
+import {
+  axisBottom,
+  axisLeft,
+  axisRight,
+  axisTop,
+  type AxisScale,
+} from 'd3-axis';
+import type {ScaleBand, ScaleLinear, ScaleTime} from 'd3-scale';
 import {select} from 'd3-selection';
 import Theme from 'web/utils/Theme';
+
+type AxisDomainValue = string | number | Date;
+
+type SupportedScale =
+  | ScaleBand<string>
+  | ScaleBand<number>
+  | ScaleLinear<number, number>
+  | ScaleTime<number, number>;
 
 interface AxisProps {
   hideTickLabels?: boolean;
@@ -15,13 +30,10 @@ interface AxisProps {
   left?: number;
   orientation?: 'bottom' | 'top' | 'left' | 'right';
   numTicks?: number;
+  scale: SupportedScale;
   rangePadding?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  scale: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tickFormat?: (value: any) => string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tickValues?: any[];
+  tickFormat?: (value: AxisDomainValue) => string;
+  tickValues?: AxisDomainValue[];
   tickLength?: number;
   top?: number;
 }
@@ -47,6 +59,7 @@ const Axis = ({
   top = 0,
   numTicks,
   scale,
+  rangePadding,
   tickFormat,
   tickValues,
 }: AxisProps) => {
@@ -55,15 +68,22 @@ const Axis = ({
   useEffect(() => {
     if (!axisRef.current) return;
 
-    const generator = AXIS_GENERATORS[orientation](scale);
+    const generator = AXIS_GENERATORS[orientation](
+      scale as AxisScale<AxisDomainValue>,
+    );
     generator.tickSize(tickLength);
 
     if (numTicks !== undefined) {
       generator.ticks(numTicks);
     }
 
+    if (rangePadding !== undefined) {
+      // Keep compatibility with the old visx prop using the nearest d3-axis equivalent.
+      generator.tickPadding(rangePadding);
+    }
+
     if (tickFormat) {
-      generator.tickFormat(tickFormat);
+      generator.tickFormat(value => tickFormat(value));
     }
 
     if (tickValues) {
@@ -91,13 +111,14 @@ const Axis = ({
     scale,
     orientation,
     numTicks,
+    rangePadding,
     tickFormat,
     tickValues,
     tickLength,
     hideTickLabels,
   ]);
 
-  const range = scale.range() as number[];
+  const range = scale.range();
   const rangeCenter = (range[0] + range[1]) / 2;
   const isHorizontal = orientation === 'bottom' || orientation === 'top';
 
