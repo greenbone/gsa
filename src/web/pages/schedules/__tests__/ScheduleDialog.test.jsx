@@ -796,4 +796,240 @@ describe('ScheduleDialog component tests', () => {
       },
     );
   });
+
+  describe('handleSave recurrence logic', () => {
+    const mockStartDate = date('2021-02-08T15:00:00Z').tz('UTC');
+
+    test('should save with "once" recurrence (no RRULE in ical)', async () => {
+      handleSave.mockResolvedValue({});
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(),
+      });
+
+      render(
+        <ScheduleDialog
+          comment="test"
+          name="once schedule"
+          startDate={mockStartDate}
+          timezone="UTC"
+          title="Test Schedule"
+          onClose={handleClose}
+          onSave={handleSave}
+        />,
+      );
+
+      // Default recurrence is "Once" when no freq is provided
+      const selects = screen.queryAllSelectElements();
+      expect(selects[1]).toHaveValue('Once');
+
+      const saveButton = screen.getDialogSaveButton();
+      fireEvent.click(saveButton);
+
+      expect(handleSave).toHaveBeenCalledWith(
+        expect.objectContaining({
+          icalendar: expect.not.stringContaining('RRULE'),
+        }),
+      );
+    });
+
+    test('should save with "workweek" recurrence (FREQ=WEEKLY with BYDAY=MO,TU,WE,TH,FR)', async () => {
+      handleSave.mockResolvedValue({});
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(),
+      });
+
+      render(
+        <ScheduleDialog
+          comment="test"
+          duration={scheduleDuration}
+          name="workweek schedule"
+          startDate={mockStartDate}
+          timezone="UTC"
+          title="Test Schedule"
+          onClose={handleClose}
+          onSave={handleSave}
+        />,
+      );
+
+      // Select "Workweek" recurrence
+      const selects = screen.queryAllSelectElements();
+      const recurrenceSelect = selects[1];
+      const selectItems =
+        await getSelectItemElementsForSelect(recurrenceSelect);
+      const workweekOption = selectItems.find(
+        item => item.textContent === 'Workweek (Monday till Friday)',
+      );
+      fireEvent.click(workweekOption);
+      expect(recurrenceSelect).toHaveValue('Workweek (Monday till Friday)');
+
+      const saveButton = screen.getDialogSaveButton();
+      fireEvent.click(saveButton);
+
+      const ical = handleSave.mock.calls[0][0].icalendar;
+      expect(ical).toContain('RRULE');
+      expect(ical).toContain('FREQ=WEEKLY');
+      expect(ical).toMatch(/BYDAY=.*MO/);
+      expect(ical).toMatch(/BYDAY=.*TU/);
+      expect(ical).toMatch(/BYDAY=.*WE/);
+      expect(ical).toMatch(/BYDAY=.*TH/);
+      expect(ical).toMatch(/BYDAY=.*FR/);
+      expect(ical).not.toMatch(/BYDAY=.*SA/);
+      expect(ical).not.toMatch(/BYDAY=.*SU/);
+    });
+
+    test.each([
+      {
+        label: 'Hourly',
+        expectedFreq: 'FREQ=HOURLY',
+      },
+      {
+        label: 'Daily',
+        expectedFreq: 'FREQ=DAILY',
+      },
+      {
+        label: 'Weekly',
+        expectedFreq: 'FREQ=WEEKLY',
+      },
+      {
+        label: 'Monthly',
+        expectedFreq: 'FREQ=MONTHLY',
+      },
+      {
+        label: 'Yearly',
+        expectedFreq: 'FREQ=YEARLY',
+      },
+    ])(
+      'should save pre-defined "$label" recurrence with interval=1',
+      async ({label, expectedFreq}) => {
+        handleSave.mockResolvedValue({});
+        const {render} = rendererWith({
+          capabilities: true,
+          gmp: createGmp(),
+        });
+
+        render(
+          <ScheduleDialog
+            comment="test"
+            duration={scheduleDuration}
+            name="predefined schedule"
+            startDate={mockStartDate}
+            timezone="UTC"
+            title="Test Schedule"
+            onClose={handleClose}
+            onSave={handleSave}
+          />,
+        );
+
+        // Select the pre-defined recurrence
+        const selects = screen.queryAllSelectElements();
+        const recurrenceSelect = selects[1];
+        const selectItems =
+          await getSelectItemElementsForSelect(recurrenceSelect);
+        const option = selectItems.find(item => item.textContent === label);
+        fireEvent.click(option);
+
+        const saveButton = screen.getDialogSaveButton();
+        fireEvent.click(saveButton);
+
+        const ical = handleSave.mock.calls[0][0].icalendar;
+        expect(ical).toContain(expectedFreq);
+        // Pre-defined recurrence uses interval=1; ical omits INTERVAL when it's 1
+        expect(ical).not.toMatch(/INTERVAL=[2-9]/);
+      },
+    );
+
+    test('should save with open end (no DURATION in ical)', async () => {
+      handleSave.mockResolvedValue({});
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(),
+      });
+
+      // No duration means open end
+      render(
+        <ScheduleDialog
+          comment="test"
+          name="open end schedule"
+          startDate={mockStartDate}
+          timezone="UTC"
+          title="Test Schedule"
+          onClose={handleClose}
+          onSave={handleSave}
+        />,
+      );
+
+      // Open End checkbox should be checked by default when no duration
+      const saveButton = screen.getDialogSaveButton();
+      fireEvent.click(saveButton);
+
+      const ical = handleSave.mock.calls[0][0].icalendar;
+      expect(ical).not.toContain('DURATION');
+    });
+
+    test('should save with duration when end date is set', async () => {
+      handleSave.mockResolvedValue({});
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(),
+      });
+
+      render(
+        <ScheduleDialog
+          comment="test"
+          duration={scheduleDuration}
+          freq={scheduleFrequency}
+          name="duration schedule"
+          startDate={mockStartDate}
+          timezone="UTC"
+          title="Test Schedule"
+          weekdays={scheduleWeekDays}
+          onClose={handleClose}
+          onSave={handleSave}
+        />,
+      );
+
+      const saveButton = screen.getDialogSaveButton();
+      fireEvent.click(saveButton);
+
+      const ical = handleSave.mock.calls[0][0].icalendar;
+      expect(ical).toContain('DURATION');
+    });
+
+    test('should reject when end date is before start date', async () => {
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(),
+      });
+
+      // Start at 15:00, end at 14:00 (end before start)
+      const startDate = date('2021-02-08T15:00:00Z').tz('UTC');
+
+      render(
+        <ScheduleDialog
+          comment="test"
+          duration={scheduleDuration}
+          freq={scheduleFrequency}
+          name="invalid schedule"
+          startDate={startDate}
+          timezone="UTC"
+          title="Test Schedule"
+          weekdays={scheduleWeekDays}
+          onClose={handleClose}
+          onSave={handleSave}
+        />,
+      );
+
+      // Change start time to after end time
+      const startTimeInput = screen.getByName('startDate');
+      changeInputValue(startTimeInput, '20:00');
+
+      const saveButton = screen.getDialogSaveButton();
+      fireEvent.click(saveButton);
+
+      // handleSave should not be called because validation rejects
+      expect(handleSave).not.toHaveBeenCalled();
+    });
+  });
 });

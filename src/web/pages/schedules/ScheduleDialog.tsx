@@ -48,6 +48,11 @@ type WeekDay =
   | 'saturday'
   | 'sunday';
 
+interface ResolvedRecurrence {
+  freq: RecurrenceFrequencyValue;
+  weekdays: WeekDays;
+}
+
 interface ScheduleDialogDefaultValues {
   comment: string;
   id?: string;
@@ -134,6 +139,77 @@ const updateDateWithTime = (currentDate: DateType, timeString: string) => {
     .hour(parsedTime.hour())
     .minute(parsedTime.minute());
 };
+
+const PRE_DEFINED_RECURRENCES: ReadonlySet<RecurrenceType> = new Set([
+  RecurrenceFrequency.HOURLY,
+  RecurrenceFrequency.DAILY,
+  RecurrenceFrequency.WEEKLY,
+  RecurrenceFrequency.MONTHLY,
+  RecurrenceFrequency.YEARLY,
+  RECURRENCE_WORKWEEK,
+]);
+
+const resolveRecurrence = (
+  recurrenceType: RecurrenceType,
+  freq: RecurrenceFrequencyValue,
+  monthly: RepeatMonthlyValue,
+  monthlyDay: string | undefined,
+  monthlyNth: string | undefined,
+  weekdays: WeekDays,
+): ResolvedRecurrence => {
+  if (recurrenceType === RECURRENCE_WORKWEEK) {
+    return {
+      freq: RecurrenceFrequency.WEEKLY,
+      weekdays: new WeekDays({
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+      }),
+    };
+  }
+
+  if (
+    recurrenceType === RECURRENCE_CUSTOM &&
+    freq === RecurrenceFrequency.MONTHLY &&
+    monthly === RepeatMonthly.nth &&
+    isDefined(monthlyDay)
+  ) {
+    return {
+      freq,
+      weekdays: new WeekDays({[monthlyDay]: monthlyNth}),
+    };
+  }
+
+  if (
+    recurrenceType !== RECURRENCE_CUSTOM &&
+    recurrenceType !== RECURRENCE_ONCE
+  ) {
+    return {freq: recurrenceType, weekdays};
+  }
+
+  return {freq, weekdays};
+};
+
+const shouldIncludeWeekdays = (
+  recurrenceType: RecurrenceType,
+  freq: RecurrenceFrequencyValue,
+  monthly: RepeatMonthlyValue,
+) =>
+  recurrenceType === RECURRENCE_WORKWEEK ||
+  (recurrenceType === RECURRENCE_CUSTOM &&
+    (freq === RecurrenceFrequency.WEEKLY ||
+      (freq === RecurrenceFrequency.MONTHLY && monthly === RepeatMonthly.nth)));
+
+const shouldIncludeMonthDays = (
+  recurrenceType: RecurrenceType,
+  freq: RecurrenceFrequencyValue,
+  monthly: RepeatMonthlyValue,
+) =>
+  recurrenceType === RECURRENCE_CUSTOM &&
+  freq === RecurrenceFrequency.MONTHLY &&
+  monthly === RepeatMonthly.days;
 
 const ScheduleDialog = ({
   duration,
@@ -286,9 +362,11 @@ const ScheduleDialog = ({
     },
   ];
 
-  duration = endOpen
-    ? undefined
-    : isDefined(endDate) && createDuration(endDate.diff(startDate));
+  if (endOpen || !isDefined(endDate)) {
+    duration = undefined;
+  } else {
+    duration = createDuration(endDate.diff(startDate));
+  }
 
   const handleNowButtonClick = () => {
     const now = date().tz(timezone);
@@ -355,61 +433,29 @@ const ScheduleDialog = ({
       }
     }
 
-    if (recurrenceType === RECURRENCE_WORKWEEK) {
-      weekdays = new WeekDays({
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-      });
-      freq = RecurrenceFrequency.WEEKLY;
-    } else if (
-      recurrenceType === RECURRENCE_CUSTOM &&
-      freq === RecurrenceFrequency.MONTHLY &&
-      monthly === RepeatMonthly.nth
-    ) {
-      if (isDefined(monthlyDay)) {
-        weekdays = new WeekDays({
-          [monthlyDay]: monthlyNth,
-        });
-      }
-    } else if (
-      recurrenceType !== RECURRENCE_CUSTOM &&
-      recurrenceType !== RECURRENCE_ONCE
-    ) {
-      freq = recurrenceType;
-    }
-
-    const weekdaysSet =
-      recurrenceType === RECURRENCE_WORKWEEK ||
-      (recurrenceType === RECURRENCE_CUSTOM &&
-        freq === RecurrenceFrequency.WEEKLY) ||
-      (recurrenceType === RECURRENCE_CUSTOM &&
-        freq === RecurrenceFrequency.MONTHLY &&
-        monthly === RepeatMonthly.nth);
-
-    const monthDaysSet =
-      recurrenceType === RECURRENCE_CUSTOM &&
-      freq === RecurrenceFrequency.MONTHLY &&
-      monthly === RepeatMonthly.days;
-
-    const isPreDefined =
-      recurrenceType === RECURRENCE_HOURLY ||
-      recurrenceType === RECURRENCE_DAILY ||
-      recurrenceType === RECURRENCE_WEEKLY ||
-      recurrenceType === RECURRENCE_MONTHLY ||
-      recurrenceType === RECURRENCE_YEARLY ||
-      recurrenceType === RECURRENCE_WORKWEEK;
+    const resolved = resolveRecurrence(
+      recurrenceType,
+      freq,
+      monthly,
+      monthlyDay,
+      monthlyNth,
+      weekdays,
+    );
+    freq = resolved.freq;
+    weekdays = resolved.weekdays;
 
     const event = Event.fromData(
       {
         duration: endOpen ? undefined : createDuration(endDate.diff(startDate)),
         description: comment,
         freq: recurrenceType === RECURRENCE_ONCE ? undefined : freq,
-        interval: isPreDefined ? 1 : interval,
-        monthDays: monthDaysSet ? monthdays : undefined,
-        weekDays: weekdaysSet ? weekdays : undefined,
+        interval: PRE_DEFINED_RECURRENCES.has(recurrenceType) ? 1 : interval,
+        monthDays: shouldIncludeMonthDays(recurrenceType, freq, monthly)
+          ? monthdays
+          : undefined,
+        weekDays: shouldIncludeWeekdays(recurrenceType, freq, monthly)
+          ? weekdays
+          : undefined,
         // convert name to string explicitly to not run into:
         // `TypeError: e.replace is not a function`
         // when name is just numbers.
@@ -439,7 +485,7 @@ const ScheduleDialog = ({
     endOpen,
     freq,
     interval,
-    monthdays,
+    monthdays: monthdays,
     monthly,
     monthlyDay,
     monthlyNth,
