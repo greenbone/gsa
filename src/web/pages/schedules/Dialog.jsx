@@ -19,7 +19,9 @@ import Select from 'web/components/form/Select';
 import Spinner from 'web/components/form/Spinner';
 import TextField from 'web/components/form/TextField';
 import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
+import {ComponentWithHoverCard} from 'web/components/hover-card';
 import Row from 'web/components/layout/Row';
+import ManualLink from 'web/components/link/ManualLink';
 import useTranslation from 'web/hooks/useTranslation';
 import DaySelect from 'web/pages/schedules/DaySelect';
 import MonthDaysSelect from 'web/pages/schedules/MonthDaysSelect';
@@ -423,25 +425,48 @@ const ScheduleDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
+            <ComponentWithHoverCard
+              dataTestId="scheduling-options-info"
+              helpAriaLabel={_('More information about scheduling options')}
+              helpContent={
+                <>
+                  {_(
+                    'Please consider enabling "Time synchronization" if the scans are not starting at the expected time.',
+                  )}
+                  <div>
+                    <ManualLink
+                      anchor="configuring-the-time-synchronization"
+                      page="managing-gos"
+                    >
+                      {_('Learn more')}
+                    </ManualLink>
+                  </div>
+                </>
+              }
+              slot={
+                <FormGroup title={_('Scheduling')}>
+                  <Row align={'end'} flex="row" gap={'lg'}>
+                    <DatePicker
+                      label={_('Start Date')}
+                      name="startDate"
+                      timezone={timezone}
+                      value={startDate}
+                      onChange={handleStartDateChange}
+                    />
+                    <TimePicker
+                      label={_('Start Time')}
+                      name="startDate"
+                      value={startTime}
+                      onChange={newStartTime =>
+                        handleTimeChange(newStartTime, 'startTime')
+                      }
+                    />
+                    <Button title={_('Now')} onClick={handleNowButtonClick} />
+                  </Row>
+                </FormGroup>
+              }
+            />
 
-            <Row align={'end'} flex="row" gap={'lg'}>
-              <DatePicker
-                label={_('Start Date')}
-                name="startDate"
-                timezone={timezone}
-                value={startDate}
-                onChange={handleStartDateChange}
-              />
-              <TimePicker
-                label={_('Start Time')}
-                name="startDate"
-                value={startTime}
-                onChange={newStartTime =>
-                  handleTimeChange(newStartTime, 'startTime')
-                }
-              />
-              <Button title={_('Now')} onClick={handleNowButtonClick} />
-            </Row>
             <FormGroup title={_('Timezone')}>
               <TimeZoneSelect
                 name="timezone"
