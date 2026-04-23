@@ -14,7 +14,6 @@ import {
 } from 'web/testing';
 import date from 'gmp/models/date';
 import Schedule from 'gmp/models/schedule';
-import timezones from 'gmp/time-zones';
 import ScheduleDialog from 'web/pages/schedules/ScheduleDialog';
 
 const checkElementVisibilityAndContent = (
@@ -88,7 +87,7 @@ const createGmp = () => ({
   settings: {token: 'token'},
 
   timezones: {
-    get: testing.fn().mockResolvedValue(new Response(mockedTimezones, {})),
+    get: testing.fn().mockResolvedValue({data: mockedTimezones}),
   },
 });
 
@@ -230,9 +229,9 @@ describe('ScheduleDialog component tests', () => {
     expect(selects[1]).toHaveValue('Weekly');
 
     selectItems = await getSelectItemElementsForSelect(selects[0]);
-    expect(selectItems.length).toBe(timezones.length);
+    expect(selectItems.length).toBe(mockedTimezones.length);
     fireEvent.click(selectItems[1]);
-    expect(selects[0]).toHaveValue(timezones[1]);
+    expect(selects[0]).toHaveValue(mockedTimezones[1]);
 
     selectItems = await getSelectItemElementsForSelect(selects[1]);
     expect(selectItems.length).toBe(8);

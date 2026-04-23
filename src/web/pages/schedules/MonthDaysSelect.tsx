@@ -1,31 +1,41 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
-import {parseInt} from 'gmp/parser';
+import {useCallback} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import ToggleButton from 'web/components/form/ToggleButton';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface MonthDaysSelectProps {
+  disabled?: boolean;
+  name?: string;
+  value: number[];
+  onChange?: (value: number[], name?: string) => void;
+}
 
 const RANGE = [1, 2, 3, 4, 5, 6, 7];
 const ROWS = [0, 1, 2, 3];
 
-const MonthDaysSelect = ({disabled, onChange, value = [], name}) => {
+const MonthDaysSelect = ({
+  disabled,
+  onChange,
+  value = [],
+  name,
+}: MonthDaysSelectProps) => {
   const [_] = useTranslation();
 
   const handleChange = useCallback(
-    (val, valName) => {
+    (val: boolean, valName?: string) => {
       if (!isDefined(onChange)) {
         return;
       }
 
-      const day = parseInt(valName);
+      const day = Number(valName);
 
-      let newValue;
+      let newValue: number[];
       if (val && !value.includes(day)) {
         newValue = [...value, day];
       } else if (!val && value.includes(day)) {
@@ -99,13 +109,6 @@ const MonthDaysSelect = ({disabled, onChange, value = [], name}) => {
       </Divider>
     </Divider>
   );
-};
-
-MonthDaysSelect.propTypes = {
-  disabled: PropTypes.bool,
-  name: PropTypes.string,
-  value: PropTypes.arrayOf(PropTypes.number).isRequired,
-  onChange: PropTypes.func,
 };
 
 export default MonthDaysSelect;

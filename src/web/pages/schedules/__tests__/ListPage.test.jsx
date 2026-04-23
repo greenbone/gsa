@@ -11,7 +11,6 @@ import {
   within,
   rendererWith,
   fireEvent,
-  wait,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
@@ -115,25 +114,23 @@ describe('SchedulePage tests', () => {
 
     const {baseElement} = render(<SchedulePage />);
 
-    await wait();
+    await screen.findByTitle('New Schedule');
 
     const powerFilter = within(screen.queryPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
     const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
-    expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('New Schedule')[0]).toBeInTheDocument();
+    screen.getByTitle('Help: Schedules');
+    screen.getByTitle('New Schedule');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
+    screen.getByTitle('Update Filter');
+    screen.getByTitle('Remove Filter');
+    screen.getByTitle('Reset to Default Filter');
+    screen.getByTitle('Help: Powerfilter');
+    screen.getByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
@@ -157,12 +154,10 @@ describe('SchedulePage tests', () => {
     expect(row[1]).toHaveTextContent('-');
     expect(row[1]).toHaveTextContent('Entire Operation');
 
-    expect(
-      screen.getAllByTitle('Move Schedule to trashcan')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Schedule')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Clone Schedule')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export Schedule')[0]).toBeInTheDocument();
+    screen.getByTitle('Move Schedule to trashcan');
+    screen.getByTitle('Edit Schedule');
+    screen.getByTitle('Clone Schedule');
+    screen.getByTitle('Export Schedule');
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -218,17 +213,15 @@ describe('SchedulePage tests', () => {
 
     render(<SchedulePage />);
 
-    await wait();
+    await screen.findByTitle('Export page contents');
 
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    const exportIcon = screen.getByTitle('Export page contents');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
-    const deleteIcon = screen.getAllByTitle(
-      'Move page contents to trashcan',
-    )[0];
+    const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });
@@ -286,7 +279,7 @@ describe('SchedulePage tests', () => {
 
     render(<SchedulePage />);
 
-    await wait();
+    await screen.findByText('schedule 1');
 
     // change to apply to selection
     const tableFooter = within(screen.queryTableFooter());
@@ -301,12 +294,12 @@ describe('SchedulePage tests', () => {
     fireEvent.click(inputs[0]);
 
     // export selected schedule
-    const exportIcon = screen.getAllByTitle('Export selection')[0];
+    const exportIcon = screen.getByTitle('Export selection');
     fireEvent.click(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected schedule to trashcan
-    const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
+    const deleteIcon = screen.getByTitle('Move selection to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByIds);
   });
@@ -364,7 +357,7 @@ describe('SchedulePage tests', () => {
 
     render(<SchedulePage />);
 
-    await wait();
+    await screen.findByText('schedule 1');
 
     // change to all filtered
     const tableFooter = within(screen.queryTableFooter());
@@ -374,12 +367,12 @@ describe('SchedulePage tests', () => {
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered schedules
-    const exportIcon = screen.getAllByTitle('Export all filtered')[0];
+    const exportIcon = screen.getByTitle('Export all filtered');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered schedules to trashcan
-    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
+    const deleteIcon = screen.getByTitle('Move all filtered to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });

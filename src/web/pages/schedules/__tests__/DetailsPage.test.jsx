@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
+import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
@@ -76,62 +76,48 @@ describe('ScheduleDetailsPage tests', () => {
 
     render(<ScheduleDetailsPage id="12345" />);
 
-    expect(
-      screen.getByRole('heading', {name: /Schedule: schedule 1/}),
-    ).toBeInTheDocument();
+    screen.getByRole('heading', {name: /schedule: schedule 1/i});
 
-    expect(screen.getByTitle('Help: Schedules')).toBeInTheDocument();
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-schedules',
     );
 
-    expect(screen.getByTitle('Schedules List')).toBeInTheDocument();
+    screen.getByTitle('Help: Schedules');
+    screen.getByTitle('Schedules List');
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
       '/schedules',
     );
 
     const entityInfo = within(screen.getByTestId('entity-info'));
-    expect(entityInfo.getByRole('row', {name: /^id/i})).toHaveTextContent(
-      'ID:1234',
-    );
-    expect(entityInfo.getByRole('row', {name: /^created/i})).toHaveTextContent(
+    const rows = entityInfo.getAllByRole('row');
+    expect(rows[0]).toHaveTextContent('ID:1234');
+    expect(rows[1]).toHaveTextContent(
       'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
     );
-    expect(entityInfo.getByRole('row', {name: /^modified/i})).toHaveTextContent(
+    expect(rows[2]).toHaveTextContent(
       'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
     );
-    expect(entityInfo.getByRole('row', {name: /^owner/i})).toHaveTextContent(
-      'Owner:admin',
-    );
+    expect(rows[3]).toHaveTextContent('Owner:admin');
 
-    expect(
-      screen.getByRole('tab', {name: /^information/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
-    expect(
-      screen.getByRole('tab', {name: /^permissions/i}),
-    ).toBeInTheDocument();
+    const tablist = screen.getByRole('tablist');
+    within(tablist).getByRole('tab', {name: /information/i});
+    within(tablist).getByRole('tab', {name: /user tags/i});
+    within(tablist).getByRole('tab', {name: /permissions/i});
 
-    expect(
-      screen.getByRole('row', {name: /^comment hello world/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('row', {name: /^first run/i})).toHaveTextContent(
-      'Mon, Jan 4, 2021 11:54 AM Coordinated Universal Time',
-    );
-    expect(screen.getByRole('row', {name: /^next run/i})).toHaveTextContent(
-      '-',
-    );
-    expect(screen.getByRole('row', {name: /^timezone/i})).toHaveTextContent(
-      'UTC',
-    );
-    expect(screen.getByRole('row', {name: /^recurrence/i})).toHaveTextContent(
-      'Once',
-    );
-    expect(screen.getByRole('row', {name: /^duration/i})).toHaveTextContent(
-      'Entire Operation',
-    );
+    screen.getByText('Comment');
+    screen.getByText('hello world');
+    screen.getByText('First Run');
+    screen.getByText('Mon, Jan 4, 2021 11:54 AM Coordinated Universal Time');
+    screen.getByText('Next Run');
+    screen.getByText('-');
+    screen.getByText('Timezone');
+    screen.getByText('UTC');
+    screen.getByText('Recurrence');
+    screen.getByText('Once');
+    screen.getByText('Duration');
+    screen.getByText('Entire Operation');
   });
 
   test('should render user tags tab', () => {
@@ -162,7 +148,8 @@ describe('ScheduleDetailsPage tests', () => {
 
     const {container} = render(<ScheduleDetailsPage id="12345" />);
 
-    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    const tablist = screen.getByRole('tablist');
+    const userTagsTab = within(tablist).getByRole('tab', {name: /user tags/i});
     fireEvent.click(userTagsTab);
     expect(container).toHaveTextContent('No user tags available');
   });
@@ -195,7 +182,10 @@ describe('ScheduleDetailsPage tests', () => {
 
     const {container} = render(<ScheduleDetailsPage id="12345" />);
 
-    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
+    const tablist = screen.getByRole('tablist');
+    const permissionsTab = within(tablist).getByRole('tab', {
+      name: /permissions/i,
+    });
     fireEvent.click(permissionsTab);
     expect(container).toHaveTextContent('No permissions available');
   });
@@ -243,20 +233,15 @@ describe('ScheduleDetailsPage tests', () => {
 
     render(<ScheduleDetailsPage id="12345" />);
 
-    await wait();
-
-    const cloneIcon = screen.getByTitle('Clone Schedule');
-    expect(cloneIcon).toBeInTheDocument();
+    const cloneIcon = await screen.findByTitle('Clone Schedule');
     fireEvent.click(cloneIcon);
     expect(clone).toHaveBeenCalledWith(schedule);
 
     const exportIcon = screen.getByTitle('Export Schedule as XML');
-    expect(exportIcon).toBeInTheDocument();
     fireEvent.click(exportIcon);
     expect(exportFunc).toHaveBeenCalledWith(schedule);
 
     const deleteIcon = screen.getByTitle('Move Schedule to trashcan');
-    expect(deleteIcon).toBeInTheDocument();
     fireEvent.click(deleteIcon);
     expect(deleteFunc).toHaveBeenCalledWith({id: schedule.id});
   });
