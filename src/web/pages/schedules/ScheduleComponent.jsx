@@ -8,7 +8,7 @@ import {useSelector} from 'react-redux';
 import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import useTranslation from 'web/hooks/useTranslation';
-import ScheduleDialog from 'web/pages/schedules/Dialog';
+import ScheduleDialog from 'web/pages/schedules/ScheduleDialog';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 
