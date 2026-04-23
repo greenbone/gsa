@@ -1,14 +1,18 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {RecurrenceFrequency} from 'gmp/models/event';
-import Select from 'web/components/form/Select';
+import Select, {type SelectProps} from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
 
-const TimeUnitSelect = props => {
+type RecurrenceFrequencyValue =
+  (typeof RecurrenceFrequency)[keyof typeof RecurrenceFrequency];
+
+type TimeUnitSelectProps = Omit<SelectProps<RecurrenceFrequencyValue>, 'items'>;
+
+const TimeUnitSelect = (props: TimeUnitSelectProps) => {
   const [_] = useTranslation();
   const TIME_UNIT_ITEMS = [
     {value: RecurrenceFrequency.HOURLY, label: _('hour(s)')},

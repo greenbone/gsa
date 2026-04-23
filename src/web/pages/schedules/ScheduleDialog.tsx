@@ -66,7 +66,7 @@ interface ScheduleDialogValues {
   interval: number;
   monthdays: number[];
   monthly: RepeatMonthlyValue;
-  monthlyDay: string | undefined;
+  monthlyDay: WeekDay | undefined;
   monthlyNth: string | undefined;
   recurrenceType: RecurrenceType;
   startDate: DateType;
@@ -153,7 +153,7 @@ const resolveRecurrence = (
   recurrenceType: RecurrenceType,
   freq: RecurrenceFrequencyValue,
   monthly: RepeatMonthlyValue,
-  monthlyDay: string | undefined,
+  monthlyDay: WeekDay | undefined,
   monthlyNth: string | undefined,
   weekdays: WeekDays,
 ): ResolvedRecurrence => {
@@ -661,7 +661,6 @@ const ScheduleDialog = ({
                       <MonthDaysSelect
                         disabled={state.monthly !== RepeatMonthly.days}
                         name="monthdays"
-                        // @ts-expect-error MonthDaysSelect is untyped JSX
                         value={state.monthdays}
                         onChange={setMonthdays}
                       />
