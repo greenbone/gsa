@@ -85,15 +85,23 @@ const LoginPage = () => {
 
   const login = async (username: string, password: string) => {
     try {
-      const data = await gmp.login(username, password);
+      const loginResponse = await gmp.login(username, password);
 
-      const {locale, timezone, sessionTimeout} = data;
+      const {locale, timezone, sessionTimeout, jwt} = loginResponse;
 
       gmp.setTimezone(timezone);
       gmp.setLocale(locale);
       dispatch(setSessionTimeout(sessionTimeout));
       dispatch(setUsername(username));
       dispatch(setTimezone(timezone));
+
+      if (jwt && typeof jwt === 'string') {
+        try {
+          gmp.settings.jwt = jwt;
+        } catch (err) {
+          log.error('Could not set jwt from login response', err);
+        }
+      }
 
       dispatch(setIsLoggedIn(true));
 

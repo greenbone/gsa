@@ -11,6 +11,7 @@ import {isDefined} from 'gmp/utils/identity';
 export interface LoginData {
   client_address?: string;
   guest?: boolean;
+  jwt?: string;
   role?: string;
   severity?: string;
   session?: string;
@@ -19,6 +20,7 @@ export interface LoginData {
 
 export interface LoginMeta extends Meta {
   i18n?: string;
+  jwt?: string;
   timezone?: string;
   version?: string;
 }
@@ -26,6 +28,9 @@ export interface LoginMeta extends Meta {
 type LoginElement = Response<LoginData, LoginMeta>;
 
 class Login {
+  readonly clientAddress?: string;
+  readonly guest?: boolean;
+  readonly jwt?: string;
   readonly locale?: string;
   readonly sessionTimeout?: Date;
   readonly timezone?: string;
@@ -33,6 +38,9 @@ class Login {
 
   constructor(elem: LoginElement) {
     const {data = {}, meta = {}} = elem;
+    this.clientAddress = data.client_address;
+    this.guest = data.guest;
+    this.jwt = (meta as Record<string, unknown>)?.jwt as string | undefined;
     this.locale = meta.i18n;
     this.timezone = meta.timezone;
     this.token = data.token;

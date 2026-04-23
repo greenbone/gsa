@@ -217,6 +217,16 @@ class Settings {
     setAndFreeze(this, 'vendorVersion', vendorVersion);
   }
 
+  private _jwt: string | undefined;
+
+  set jwt(value: string | undefined) {
+    this._jwt = value;
+  }
+
+  get jwt(): string | undefined {
+    return this._jwt;
+  }
+
   set token(value: string | undefined) {
     set(this.storage, 'token', value);
   }

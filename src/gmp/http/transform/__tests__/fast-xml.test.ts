@@ -147,6 +147,33 @@ describe('fastxml transform tests', () => {
     });
   });
 
+  test('should extract JWT from envelope to meta', () => {
+    const xmlStr = `
+<envelope>
+  <version>1.0.1</version>
+  <backend_operation>0.01</backend_operation>
+  <vendor_version>1.1.0</vendor_version>
+  <i18n>en</i18n>
+  <time>Fri Sep 14 11:26:40 2018 CEST</time>
+  <timezone>Europe/Berlin</timezone>
+  <jwt>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.test</jwt>
+  <foo>bar</foo>
+</envelope>
+`;
+    const response = new Response<string>(xmlStr);
+    const transformedResponse = transform.success(response);
+    expect(transformedResponse.data).toEqual({foo: 'bar'});
+    expect(transformedResponse.meta).toEqual({
+      version: '1.0.1',
+      backendOperation: 0.01,
+      vendorVersion: '1.1.0',
+      i18n: 'en',
+      time: 'Fri Sep 14 11:26:40 2018 CEST',
+      timezone: 'Europe/Berlin',
+      jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.test',
+    });
+  });
+
   test('should transform elements with long values', () => {
     const longValue = 'a'.repeat(100000);
     const xmlStr = createEnvelopedXml(`<foo>${longValue}</foo>`);

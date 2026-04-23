@@ -68,7 +68,7 @@ describe('Menu rendering', () => {
     'CVEs',
     'CVSS Calculator',
     'DFN-CERT Advisories',
-    'Feed Status',
+    'Feed Configuration',
     'Filters',
     'Groups',
     'LDAP',

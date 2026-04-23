@@ -20,6 +20,7 @@ describe('Login model tests', () => {
       },
       {
         i18n: 'en',
+        jwt: 'test-jwt-token',
         timezone: 'UTC',
         version: '1337',
       },
@@ -29,6 +30,9 @@ describe('Login model tests', () => {
       {} as unknown as Response<LoginData, LoginMeta>,
     );
 
+    expect(login.clientAddress).toEqual('1.2.3.4');
+    expect(login.guest).toEqual(false);
+    expect(login.jwt).toEqual('test-jwt-token');
     expect(login.locale).toEqual('en');
     expect(login.timezone).toEqual('UTC');
     expect(login.token).toEqual('123abc');

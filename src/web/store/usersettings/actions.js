@@ -55,7 +55,22 @@ export const setIsLoggedIn = isLoggedIn => ({
 export const renewSessionTimeout = gmp => () => async dispatch => {
   try {
     const response = await gmp.user.renewSession();
-    dispatch(setSessionTimeout(response.data));
+    const data = response.data;
+
+    // Extract timeout and jwt from response
+    // data may be the timeout value directly, or an object with timeout and jwt properties
+    const timeout = data?.timeout ?? data;
+    const jwt = data?.jwt;
+
+    if (jwt) {
+      try {
+        gmp.settings.jwt = jwt;
+      } catch (err) {
+        console.warn('Could not set jwt returned by renewSession', err);
+      }
+    }
+
+    dispatch(setSessionTimeout(timeout));
   } catch (error) {
     console.error('Error renewing session:', error);
   }

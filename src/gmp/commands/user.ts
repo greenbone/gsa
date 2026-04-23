@@ -595,10 +595,14 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     const response = await this.action({
       cmd: 'renew_session',
     });
+
     const seconds = parseInt(response.data.message);
-    return response.setData(
-      isDefined(seconds) ? date.unix(seconds) : undefined,
-    );
+    const timeout = isDefined(seconds) ? date.unix(seconds) : undefined;
+
+    // JWT is now extracted to response.meta by the transformation layer
+    const jwt: string | undefined = response.meta?.jwt;
+
+    return response.setData({timeout, jwt});
   }
 
   changePassword(oldPassword: string, newPassword: string) {

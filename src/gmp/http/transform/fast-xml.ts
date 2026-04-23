@@ -18,6 +18,7 @@ export interface XmlMeta {
   i18n?: string;
   time?: string;
   timezone?: string;
+  jwt?: string;
   [key: string]: string | undefined;
 }
 
@@ -47,6 +48,7 @@ const ENVELOPE_PROPS = [
   ['i18n', 'i18n'],
   ['time', 'time'],
   ['timezone', 'timezone'],
+  ['jwt', 'jwt'],
 ] as const;
 
 const parseEnvelopeMeta = (envelope: Envelope): XmlMeta => {

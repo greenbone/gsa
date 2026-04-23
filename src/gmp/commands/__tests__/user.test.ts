@@ -15,6 +15,7 @@ import UserCommand, {
   saveDefaultFilterSettingId,
   transformSettingName,
 } from 'gmp/commands/user';
+import Response from 'gmp/http/response';
 
 describe('UserCommand tests', () => {
   test('should parse auth settings in currentAuthSettings', async () => {
@@ -120,6 +121,38 @@ describe('UserCommand tests', () => {
         password: 'newPassword',
       },
     });
+  });
+
+  test('should renew session and extract JWT from meta', async () => {
+    const envelopeData = {
+      action_result: {
+        message: '1234567890',
+      },
+    };
+    // Create a raw XMLstring that includes JWT in the envelope
+    const xmlResponse = `<envelope><version>1</version><jwt>test-jwt-token</jwt>${Object.entries(
+      envelopeData,
+    )
+      .map(([key, value]) => {
+        if (typeof value === 'object') {
+          return `<${key}>${Object.entries(value)
+            .map(([k, v]) => `<${k}>${v}</${k}>`)
+            .join('')}</${key}>`;
+        }
+        return `<${key}>${value}</${key}>`;
+      })
+      .join('')}</envelope>`;
+    const response = new Response(xmlResponse);
+    const fakeHttp = createHttp(response);
+    const cmd = new UserCommand(fakeHttp);
+    const result = await cmd.renewSession();
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'renew_session',
+      },
+    });
+    expect(result.data.jwt).toEqual('test-jwt-token');
+    expect(result.data.timeout).toBeDefined();
   });
 });
 

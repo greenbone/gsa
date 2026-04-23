@@ -46,6 +46,7 @@ import CvesCommand from 'gmp/commands/cves';
 import DashboardCommand from 'gmp/commands/dashboards';
 import DfnCertAdvisoriesCommand from 'gmp/commands/dfn-cert-advisories';
 import DfnCertAdvisoryCommand from 'gmp/commands/dfn-cert-advisory';
+import FeedKeyCommand from 'gmp/commands/feed-key';
 import FeedStatusCommand from 'gmp/commands/feed-status';
 import LoginCommand from 'gmp/commands/login';
 import NvtCommand from 'gmp/commands/nvt';
@@ -121,6 +122,7 @@ class Gmp {
   readonly dashboard: DashboardCommand;
   readonly dfncert: DfnCertAdvisoryCommand;
   readonly dfncerts: DfnCertAdvisoriesCommand;
+  readonly feedkey: FeedKeyCommand;
   readonly feedstatus: FeedStatusCommand;
   readonly nvt: NvtCommand;
   readonly nvtfamilies: NvtFamiliesCommand;
@@ -223,6 +225,11 @@ class Gmp {
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);
     this.wizard = new WizardCommand(this.http);
+    this.feedkey = new FeedKeyCommand(
+      this.http,
+      this.settings,
+      this.user.renewSession.bind(this.user),
+    );
 
     this._initCommands();
   }
@@ -242,14 +249,13 @@ class Gmp {
   }
 
   async login(username: string, password: string) {
-    const {token, timezone, locale, sessionTimeout} = await this._login.login(
-      username,
-      password,
-    );
+    const {token, jwt, timezone, locale, sessionTimeout} =
+      await this._login.login(username, password);
 
     this.settings.username = username;
     this.settings.timezone = timezone;
     this.settings.token = token;
+    this.settings.jwt = jwt;
     this.settings.locale = locale;
 
     return {
@@ -258,6 +264,7 @@ class Gmp {
       token,
       timezone,
       sessionTimeout,
+      jwt,
     };
   }
 
@@ -321,6 +328,7 @@ class Gmp {
 
   clearToken() {
     this.settings.token = undefined;
+    this.settings.jwt = undefined;
   }
 
   setLocale(lang?: string) {
