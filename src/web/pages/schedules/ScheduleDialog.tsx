@@ -3,14 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {TimePicker} from '@greenbone/ui-lib';
-import date, {duration as createDuration} from 'gmp/models/date';
+import date, {
+  duration as createDuration,
+  type Date as DateType,
+  type Duration,
+} from 'gmp/models/date';
 import Event, {RecurrenceFrequency, WeekDays} from 'gmp/models/event';
 import {DEFAULT_TIMEZONE} from 'gmp/time-zones';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
-import Button from 'web/components/form/Button';
 import CheckBox from 'web/components/form/Checkbox';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';
@@ -19,39 +22,99 @@ import Select from 'web/components/form/Select';
 import Spinner from 'web/components/form/Spinner';
 import TextField from 'web/components/form/TextField';
 import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
-import {ComponentWithHoverCard} from 'web/components/hover-card';
 import Row from 'web/components/layout/Row';
-import ManualLink from 'web/components/link/ManualLink';
-import useFeatures from 'web/hooks/useFeatures';
 import useTranslation from 'web/hooks/useTranslation';
 import DaySelect from 'web/pages/schedules/DaySelect';
 import MonthDaysSelect from 'web/pages/schedules/MonthDaysSelect';
 import {renderDuration} from 'web/pages/schedules/Render';
+import SchedulingFormGroup from 'web/pages/schedules/SchedulingFormGroup';
 import TimeUnitSelect from 'web/pages/schedules/TimeUnitSelect';
-import WeekDaySelect, {
-  WeekDaysPropType,
-} from 'web/pages/schedules/WeekdaySelect';
-import PropTypes from 'web/utils/PropTypes';
+import WeekDaySelect from 'web/pages/schedules/WeekdaySelect';
 import {formatTimeForTimePicker} from 'web/utils/time-picker-helpers';
 
-const RECURRENCE_ONCE = 'once';
+type RecurrenceFrequencyValue =
+  (typeof RecurrenceFrequency)[keyof typeof RecurrenceFrequency];
+
+type RecurrenceType = 'once' | RecurrenceFrequencyValue | 'workweek' | 'custom';
+
+type RepeatMonthlyValue = 'nth' | 'days';
+
+type WeekDay =
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'
+  | 'sunday';
+
+interface ScheduleDialogDefaultValues {
+  comment: string;
+  id?: string;
+  name: string;
+}
+
+interface ScheduleDialogValues {
+  endDate: DateType;
+  endOpen: boolean;
+  freq: RecurrenceFrequencyValue;
+  interval: number;
+  monthdays: number[];
+  monthly: RepeatMonthlyValue;
+  monthlyDay: string | undefined;
+  monthlyNth: string | undefined;
+  recurrenceType: RecurrenceType;
+  startDate: DateType;
+  timezone: string;
+  weekdays: WeekDays;
+}
+
+export interface ScheduleDialogSaveData {
+  id?: string;
+  name: string;
+  comment: string;
+  icalendar: string;
+  timezone: string;
+}
+
+interface ScheduleDialogProps {
+  comment?: string;
+  duration?: Duration;
+  freq?: RecurrenceFrequencyValue;
+  id?: string;
+  interval?: number;
+  monthdays?: number[];
+  name?: string;
+  startDate?: DateType;
+  timezone?: string;
+  title?: string;
+  weekdays?: WeekDays;
+  onClose: () => void;
+  onSave: (data: ScheduleDialogSaveData) => Promise<void> | void;
+}
+
+const RECURRENCE_ONCE = 'once' as const;
 const RECURRENCE_HOURLY = RecurrenceFrequency.HOURLY;
 const RECURRENCE_DAILY = RecurrenceFrequency.DAILY;
 const RECURRENCE_WEEKLY = RecurrenceFrequency.WEEKLY;
 const RECURRENCE_MONTHLY = RecurrenceFrequency.MONTHLY;
 const RECURRENCE_YEARLY = RecurrenceFrequency.YEARLY;
-const RECURRENCE_WORKWEEK = 'workweek';
-const RECURRENCE_CUSTOM = 'custom';
+const RECURRENCE_WORKWEEK = 'workweek' as const;
+const RECURRENCE_CUSTOM = 'custom' as const;
 
 const RepeatMonthly = {
   nth: 'nth',
   days: 'days',
-};
+} as const;
 
-const getNthWeekday = cdate => Math.ceil(cdate.date() / 7);
+const getNthWeekday = (cdate: DateType) => Math.ceil(cdate.date() / 7);
 
 // Helper: Preserve time components when changing date
-const preserveTimeOnDateChange = (newDate, currentDate, timezone) => {
+const preserveTimeOnDateChange = (
+  newDate: DateType,
+  currentDate: DateType,
+  timezone: string,
+) => {
   const dateInTimezone = newDate.tz(timezone, true);
   return dateInTimezone
     .hour(currentDate.hour())
@@ -61,7 +124,7 @@ const preserveTimeOnDateChange = (newDate, currentDate, timezone) => {
 };
 
 // Helper: Update date with new time
-const updateDateWithTime = (currentDate, timeString) => {
+const updateDateWithTime = (currentDate: DateType, timeString: string) => {
   const parsedTime = date(timeString, 'HH:mm');
   if (!parsedTime.isValid()) {
     return null;
@@ -70,66 +133,6 @@ const updateDateWithTime = (currentDate, timeString) => {
     .clone()
     .hour(parsedTime.hour())
     .minute(parsedTime.minute());
-};
-
-const SchedulingFormGroup = ({
-  timezone,
-  startDate,
-  startTime,
-  handleStartDateChange,
-  handleTimeChange,
-  handleNowButtonClick,
-}) => {
-  const [_] = useTranslation();
-  const features = useFeatures();
-
-  const formGroup = (
-    <FormGroup label={_('Scheduling')} title={_('Scheduling')}>
-      <Row align={'end'} flex="row" gap={'lg'}>
-        <DatePicker
-          label={_('Start Date')}
-          name="startDate"
-          timezone={timezone}
-          value={startDate}
-          onChange={handleStartDateChange}
-        />
-        <TimePicker
-          label={_('Start Time')}
-          name="startDate"
-          value={startTime}
-          onChange={newStartTime => handleTimeChange(newStartTime, 'startTime')}
-        />
-        <Button title={_('Now')} onClick={handleNowButtonClick} />
-      </Row>
-    </FormGroup>
-  );
-
-  if (!features.featureEnabled('ENABLE_CONTAINER_SCANNING')) {
-    return formGroup;
-  }
-
-  return (
-    <ComponentWithHoverCard
-      dataTestId="scheduling-options-info"
-      helpAriaLabel={_('More information about scheduling options')}
-      helpContent={
-        <>
-          {_(
-            'Please consider enabling "Time synchronization" if the scans are not starting at the expected time.',
-          )}
-          <div>
-            <ManualLink
-              anchor="configuring-the-time-synchronization"
-              page="managing-gos"
-            >
-              {_('Learn more')}
-            </ManualLink>
-          </div>
-        </>
-      }
-      slot={formGroup}
-    />
-  );
 };
 
 const ScheduleDialog = ({
@@ -149,7 +152,7 @@ const ScheduleDialog = ({
   title,
   onClose,
   onSave,
-}) => {
+}: ScheduleDialogProps) => {
   const [_] = useTranslation();
 
   const [startDate, setStartDate] = useState(initialStartDate);
@@ -169,10 +172,10 @@ const ScheduleDialog = ({
 
   const [timezone, setTimezone] = useState(initialTimezone);
 
-  const [freq, setFreq] = useState(
+  const [freq, setFreq] = useState<RecurrenceFrequencyValue>(
     isDefined(initialFrequency) ? initialFrequency : RecurrenceFrequency.WEEKLY,
   );
-  const [recurrenceType, setRecurrenceType] = useState(() => {
+  const [recurrenceType, setRecurrenceType] = useState<RecurrenceType>(() => {
     if (isDefined(initialFrequency)) {
       if (
         !isDefined(initialWeekdays) &&
@@ -186,7 +189,7 @@ const ScheduleDialog = ({
     return RECURRENCE_ONCE;
   });
   const [interval, setInterval] = useState(initialInterval);
-  const [monthly, setMonthly] = useState(
+  const [monthly, setMonthly] = useState<RepeatMonthlyValue>(
     initialFrequency === RecurrenceFrequency.MONTHLY &&
       !isDefined(initialWeekdays)
       ? RepeatMonthly.days
@@ -202,8 +205,12 @@ const ScheduleDialog = ({
     const currentWeekdays = isDefined(initialWeekdays)
       ? initialWeekdays
       : new WeekDays().setWeekDayFromDate(initialStartDate);
-    const currentMonthlyDay = currentWeekdays.getSelectedWeekDay();
-    const currentMonthlyNth = currentWeekdays.get(currentMonthlyDay);
+    const currentMonthlyDay = currentWeekdays.getSelectedWeekDay() as
+      | WeekDay
+      | undefined;
+    const currentMonthlyNth = currentMonthlyDay
+      ? currentWeekdays.get(currentMonthlyDay)
+      : undefined;
     return currentMonthlyNth === true
       ? '' + getNthWeekday(initialStartDate)
       : currentMonthlyDay;
@@ -215,7 +222,7 @@ const ScheduleDialog = ({
     const currentWeekdays = isDefined(initialWeekdays)
       ? initialWeekdays
       : new WeekDays().setWeekDayFromDate(initialStartDate);
-    return currentWeekdays.getSelectedWeekDay();
+    return currentWeekdays.getSelectedWeekDay() as WeekDay | undefined;
   });
 
   name = name || _('Unnamed');
@@ -289,7 +296,7 @@ const ScheduleDialog = ({
     setStartTime(formatTimeForTimePicker(now));
   };
 
-  const handleTimezoneChange = value => {
+  const handleTimezoneChange = (value: string) => {
     setEndDate(endDate => endDate.tz(value));
     setStartDate(startDate => startDate.tz(value));
     setStartTime(formatTimeForTimePicker(startDate));
@@ -297,7 +304,7 @@ const ScheduleDialog = ({
     setTimezone(value);
   };
 
-  const handleTimeChange = (selectedTime, type) => {
+  const handleTimeChange = (selectedTime: string, type: string) => {
     const updateState =
       type === 'startTime'
         ? {currentDate: startDate, setDate: setStartDate, setTime: setStartTime}
@@ -326,7 +333,7 @@ const ScheduleDialog = ({
     startDate,
     timezone,
     weekdays,
-  }) => {
+  }: ScheduleDialogDefaultValues & ScheduleDialogValues) => {
     if (!isDefined(onSave)) {
       return Promise.resolve();
     }
@@ -362,10 +369,15 @@ const ScheduleDialog = ({
       freq === RecurrenceFrequency.MONTHLY &&
       monthly === RepeatMonthly.nth
     ) {
-      weekdays = new WeekDays({
-        [monthlyDay]: monthlyNth,
-      });
-    } else if (recurrenceType !== RECURRENCE_CUSTOM) {
+      if (isDefined(monthlyDay)) {
+        weekdays = new WeekDays({
+          [monthlyDay]: monthlyNth,
+        });
+      }
+    } else if (
+      recurrenceType !== RECURRENCE_CUSTOM &&
+      recurrenceType !== RECURRENCE_ONCE
+    ) {
       freq = recurrenceType;
     }
 
@@ -416,13 +428,13 @@ const ScheduleDialog = ({
     });
   };
 
-  const defaultValues = {
+  const defaultValues: ScheduleDialogDefaultValues = {
     comment,
     id,
     name,
   };
 
-  const values = {
+  const values: ScheduleDialogValues = {
     endDate,
     endOpen,
     freq,
@@ -447,7 +459,7 @@ const ScheduleDialog = ({
     >
       {({values: state, onValueChange}) => {
         // Date change handlers with timezone preservation
-        const handleStartDateChange = newDate => {
+        const handleStartDateChange = (newDate: DateType) => {
           const updatedDate = preserveTimeOnDateChange(
             newDate,
             startDate,
@@ -458,7 +470,7 @@ const ScheduleDialog = ({
           onValueChange(updatedDate, 'startDate');
         };
 
-        const handleEndDateChange = newDate => {
+        const handleEndDateChange = (newDate: DateType) => {
           const updatedDate = preserveTimeOnDateChange(
             newDate,
             endDate,
@@ -492,7 +504,6 @@ const ScheduleDialog = ({
               handleTimeChange={handleTimeChange}
               startDate={startDate}
               startTime={startTime}
-              timezone={timezone}
             />
 
             <FormGroup title={_('Timezone')}>
@@ -523,7 +534,9 @@ const ScheduleDialog = ({
                 label={_('End Time')}
                 name="endTime"
                 value={endTime}
-                onChange={newEndTime => handleTimeChange(newEndTime, 'endTime')}
+                onChange={(newEndTime: string) =>
+                  handleTimeChange(newEndTime, 'endTime')
+                }
               />
             </FormGroup>
 
@@ -545,7 +558,7 @@ const ScheduleDialog = ({
                 <FormGroup direction="row" title={_('Repeat')}>
                   <span>{_('Every')}</span>
                   <Spinner
-                    min="1"
+                    min={1}
                     name="interval"
                     type="int"
                     value={state.interval}
@@ -602,6 +615,7 @@ const ScheduleDialog = ({
                       <MonthDaysSelect
                         disabled={state.monthly !== RepeatMonthly.days}
                         name="monthdays"
+                        // @ts-expect-error MonthDaysSelect is untyped JSX
                         value={state.monthdays}
                         onChange={setMonthdays}
                       />
@@ -615,29 +629,6 @@ const ScheduleDialog = ({
       }}
     </SaveDialog>
   );
-};
-
-ScheduleDialog.propTypes = {
-  comment: PropTypes.string,
-  date: PropTypes.date,
-  duration: PropTypes.duration,
-  freq: PropTypes.oneOf([
-    RecurrenceFrequency.HOURLY,
-    RecurrenceFrequency.DAILY,
-    RecurrenceFrequency.WEEKLY,
-    RecurrenceFrequency.MONTHLY,
-    RecurrenceFrequency.YEARLY,
-  ]),
-  id: PropTypes.string,
-  interval: PropTypes.number,
-  monthdays: PropTypes.arrayOf(PropTypes.number),
-  name: PropTypes.string,
-  startDate: PropTypes.date,
-  timezone: PropTypes.string,
-  title: PropTypes.string,
-  weekdays: WeekDaysPropType,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default ScheduleDialog;
