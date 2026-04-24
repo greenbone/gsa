@@ -9,9 +9,10 @@ import useClickHandler, {
 } from 'web/components/form/useClickHandler';
 import {updateDisplayName} from 'web/utils/display-name';
 
-type WrappedComponent<TEvent> = React.ComponentType<{
-  onClick?: (event: TEvent) => void;
-}>;
+type WrappedComponent<
+  TEvent,
+  TProps = Record<string, unknown>,
+> = React.ComponentType<TProps & {onClick?: (event: TEvent) => void}>;
 
 export interface WithClickHandlerProps<TValue> {
   children?: React.ReactNode;
@@ -29,7 +30,7 @@ function withClickHandler<TProps, TValue, TEvent = ClickEvent>({
   valueFunc,
   nameFunc,
 }: WithClickHandlerParams<TProps, TValue, TEvent>) {
-  return (Component: WrappedComponent<TEvent>) => {
+  return (Component: WrappedComponent<TEvent, TProps>) => {
     const WithClickHandler = ({
       onClick,
       ...props
@@ -40,7 +41,7 @@ function withClickHandler<TProps, TValue, TEvent = ClickEvent>({
         nameFunc,
         props: props as TProps,
       });
-      return <Component {...props} onClick={handleClick} />;
+      return <Component {...(props as TProps)} onClick={handleClick} />;
     };
     return updateDisplayName(WithClickHandler, Component, 'withClickHandler');
   };
