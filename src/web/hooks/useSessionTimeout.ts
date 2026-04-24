@@ -20,7 +20,7 @@ import {getSessionTimeout} from 'web/store/usersettings/selectors';
  * @returns An array containing the current `sessionTimeout` as a Date object and the `renewSessionAndUpdateTimeout` function.
  */
 
-const useUserSessionTimeout = (): [Date, () => Promise<void>] => {
+const useSessionTimeout = (): [Date, () => Promise<void>] => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const sessionTimeout = useSelector(getSessionTimeout);
@@ -33,4 +33,4 @@ const useUserSessionTimeout = (): [Date, () => Promise<void>] => {
   return [sessionTimeout, renewSessionAndUpdateTimeout];
 };
 
-export default useUserSessionTimeout;
+export default useSessionTimeout;
