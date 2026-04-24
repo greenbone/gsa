@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import useGmp from 'web/hooks/useGmp';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {useEffect} from 'react';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 
 /**
  * Hook that automatically tracks user activity to renew the session timeout.
@@ -18,30 +16,24 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
  */
 
 const useSessionTracker = () => {
-  const dispatch = useDispatch();
-  const gmp = useGmp();
-
-  const renewSession = useCallback(() => {
-    // @ts-expect-error
-    dispatch(renewSessionTimeout(gmp)());
-  }, [dispatch, gmp]);
+  const [, renewSession] = useUserSessionTimeout();
 
   useEffect(() => {
-    renewSession();
+    void renewSession();
 
     let isCooldown = false;
     let cooldownTimeoutId: ReturnType<typeof setTimeout>;
 
-    const handleUserActivity = () => {
+    const handleUserActivity = async () => {
       if (isCooldown) return;
-      renewSession();
+      await renewSession();
       isCooldown = true;
       cooldownTimeoutId = setTimeout(() => {
         isCooldown = false;
       }, 10000);
     };
 
-    const handleClick = (event: MouseEvent | KeyboardEvent) => {
+    const handleClick = async (event: MouseEvent | KeyboardEvent) => {
       if (isCooldown) return;
       if (!(event instanceof MouseEvent)) return;
       const path = event.composedPath?.() || [];
@@ -51,7 +43,7 @@ const useSessionTracker = () => {
           (el.tagName === 'BUTTON' || el.tagName === 'A'),
       );
       if (found) {
-        handleUserActivity();
+        await handleUserActivity();
       }
     };
 
