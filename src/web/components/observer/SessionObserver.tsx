@@ -20,7 +20,7 @@ type Timer = ReturnType<typeof globalThis.setTimeout>;
 
 const log = Logger.getLogger('web.observer.sessionobserver');
 
-const DELAY = 15 * 1000; // 5 seconds in milliseconds
+const DELAY = 5 * 1000; // 5 seconds in milliseconds
 
 const Ping = ({sessionTimeout}: PingProps) => {
   const gmp = useGmp();
