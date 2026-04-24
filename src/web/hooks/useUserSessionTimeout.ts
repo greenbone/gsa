@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {type Date} from 'gmp/models/date';
 import useGmp from 'web/hooks/useGmp';
@@ -24,10 +25,10 @@ const useUserSessionTimeout = (): [Date, () => Promise<void>] => {
   const dispatch = useDispatch();
   const sessionTimeout = useSelector(getSessionTimeout);
 
-  const renewSessionAndUpdateTimeout = async () => {
+  const renewSessionAndUpdateTimeout = useCallback(async () => {
     const response = await gmp.user.renewSession();
     dispatch(setSessionTimeout(response.data));
-  };
+  }, [gmp, dispatch]);
 
   return [sessionTimeout, renewSessionAndUpdateTimeout];
 };
