@@ -10,6 +10,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {act, fireEvent, rendererWith, screen} from 'web/testing';
+import date from 'gmp/models/date';
 import useSessionTracker from 'web/hooks/useSessionTracker';
 
 const TestSessionTracker = ({onClick}: {onClick?: () => void}) => {
@@ -26,8 +27,8 @@ const runTimers = async () => {
 describe('useSessionTracker', () => {
   test('should renew session on mount and on user activity with cooldown', async () => {
     testing.useFakeTimers();
-    const renewSession = testing.fn().mockRejectedValueOnce({
-      data: new Date(),
+    const renewSession = testing.fn().mockResolvedValue({
+      data: date(),
     });
 
     const {render} = rendererWith({
@@ -50,17 +51,18 @@ describe('useSessionTracker', () => {
     renewSession.mockClear();
 
     fireEvent.click(btn);
-    expect(renewSession).not.toHaveBeenCalled();
+    expect(renewSession).toHaveBeenCalledOnce();
+    renewSession.mockClear();
 
     await runTimers();
     fireEvent.click(btn);
-    expect(renewSession).toHaveBeenCalledTimes(1);
+    expect(renewSession).toHaveBeenCalledOnce();
   });
 
   test('should not new session on non-button click', () => {
     testing.useFakeTimers();
-    const renewSession = testing.fn().mockRejectedValueOnce({
-      data: new Date(),
+    const renewSession = testing.fn().mockResolvedValue({
+      data: date(),
     });
 
     const {render} = rendererWith({
@@ -86,8 +88,8 @@ describe('useSessionTracker', () => {
 
   test('should  renew session on keypress, wheel, and drag events with cooldown resets', async () => {
     testing.useFakeTimers();
-    const renewSession = testing.fn().mockRejectedValueOnce({
-      data: new Date(),
+    const renewSession = testing.fn().mockResolvedValue({
+      data: date(),
     });
 
     const {render} = rendererWith({
@@ -102,18 +104,18 @@ describe('useSessionTracker', () => {
     renewSession.mockClear();
 
     fireEvent.keyPress(document, {key: 'Enter'});
-    expect(renewSession).toHaveBeenCalledTimes(1);
+    expect(renewSession).toHaveBeenCalledOnce();
 
     await runTimers();
     renewSession.mockClear();
 
     fireEvent.wheel(document);
-    expect(renewSession).toHaveBeenCalledTimes(1);
+    expect(renewSession).toHaveBeenCalledOnce();
 
     await runTimers();
     renewSession.mockClear();
 
     fireEvent.drag(document);
-    expect(renewSession).toHaveBeenCalledTimes(1);
+    expect(renewSession).toHaveBeenCalledOnce();
   });
 });
