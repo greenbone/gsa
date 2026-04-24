@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useState} from 'react';
+import {type HTMLAttributes, useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useSearchParams} from 'react-router';
 import styled from 'styled-components';
@@ -54,6 +54,7 @@ interface SelectorProps {
   $duration: Duration | undefined;
   value: Duration;
   name?: string;
+  className?: string;
 }
 
 const SENSOR_SCANNER_FILTER = Filter.fromString(
@@ -101,10 +102,22 @@ const ToolBar = ({onDurationChangeClick}: ToolBarProps) => {
   );
 };
 
-const Selector = withClickHandler<SelectorProps, Duration | undefined>({
+const SelectorBase = ({
+  $duration: _duration,
+  value: _value,
+  name: _name,
+  ...props
+}: SelectorProps & HTMLAttributes<HTMLSpanElement>) => <span {...props} />;
+
+const ClickableSelectorBase = withClickHandler<
+  SelectorProps,
+  Duration | undefined
+>({
   valueFunc: (_event, props) => props.value,
   nameFunc: (_event, props) => props.name,
-})(styled.span<SelectorProps>`
+})(SelectorBase);
+
+const Selector = styled(ClickableSelectorBase)<SelectorProps>`
   ${props => {
     if (props.value !== props.$duration) {
       return {
@@ -115,7 +128,7 @@ const Selector = withClickHandler<SelectorProps, Duration | undefined>({
     }
     return {};
   }}
-`);
+`;
 
 const PerformancePage = () => {
   const gmp = useGmp();

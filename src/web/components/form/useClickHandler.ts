@@ -5,7 +5,7 @@
 
 import {type ChangeEvent} from 'react';
 
-export type ClickEvent = React.MouseEvent<HTMLButtonElement | HTMLInputElement>;
+export type ClickEvent = React.MouseEvent<HTMLElement>;
 
 interface UseClickEvent {
   currentTarget: {
