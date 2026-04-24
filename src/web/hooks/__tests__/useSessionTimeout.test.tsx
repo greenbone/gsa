@@ -7,11 +7,11 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, wait} from 'web/testing';
 import {getFormattedDate} from 'gmp/locale/date';
 import date from 'gmp/models/date';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
+import useSessionTimeout from 'web/hooks/useSessionTimeout';
 import {setSessionTimeout as setSessionTimeoutAction} from 'web/store/usersettings/actions';
 
 const TestUserSessionTimeout = () => {
-  const [sessionTimeout, renewSessionTimeout] = useUserSessionTimeout();
+  const [sessionTimeout, renewSessionTimeout] = useSessionTimeout();
   return (
     <button onClick={() => renewSessionTimeout()} onKeyDown={() => {}}>
       {getFormattedDate(sessionTimeout, 'DD-MM-YY')}
@@ -19,7 +19,7 @@ const TestUserSessionTimeout = () => {
   );
 };
 
-describe('useUserSessionTimeout tests', () => {
+describe('useSessionTimeout tests', () => {
   test('should return the users session timeout', () => {
     const {render, store} = rendererWith({store: true, gmp: {}});
 

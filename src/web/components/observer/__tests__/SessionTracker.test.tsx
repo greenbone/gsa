@@ -28,7 +28,7 @@ vi.mock('web/hooks/useSessionTracker', () => ({
 
 const mockUseUserSessionTimeout = testing.fn();
 
-vi.mock('web/hooks/useUserSessionTimeout', () => ({
+vi.mock('web/hooks/useSessionTimeout', () => ({
   __esModule: true,
   default: () => mockUseUserSessionTimeout(),
 }));

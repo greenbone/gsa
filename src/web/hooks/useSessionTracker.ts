@@ -4,7 +4,7 @@
  */
 
 import {useEffect} from 'react';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
+import useSessionTimeout from 'web/hooks/useSessionTimeout';
 
 /**
  * Hook that automatically tracks user activity to renew the session timeout.
@@ -16,7 +16,7 @@ import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
  */
 
 const useSessionTracker = () => {
-  const [, renewSession] = useUserSessionTimeout();
+  const [, renewSession] = useSessionTimeout();
 
   useEffect(() => {
     void renewSession();

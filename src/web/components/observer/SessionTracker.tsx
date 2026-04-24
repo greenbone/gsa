@@ -8,16 +8,16 @@ import {notifications} from '@mantine/notifications';
 import {showNotification} from '@greenbone/ui-lib';
 
 import date from 'gmp/models/date';
+import useSessionTimeout from 'web/hooks/useSessionTimeout';
 import useSessionTracker from 'web/hooks/useSessionTracker';
 import useTranslation from 'web/hooks/useTranslation';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 
 export const NOTIFICATION_TIMEOUT = 3;
 const notificationId = 'session-expiration-warning';
 
 const SessionTracker = () => {
   const [_] = useTranslation();
-  const [sessionTimeout] = useUserSessionTimeout();
+  const [sessionTimeout] = useSessionTimeout();
   useSessionTracker();
 
   useEffect(() => {

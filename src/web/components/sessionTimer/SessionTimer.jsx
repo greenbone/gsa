@@ -8,11 +8,12 @@ import {ActionIcon} from '@mantine/core';
 import date from 'gmp/models/date';
 import {RefreshIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
+import useSessionTimeout from 'web/hooks/useSessionTimeout';
 import useTranslation from 'web/hooks/useTranslation';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import Theme from 'web/utils/Theme';
+
 const SessionTimer = () => {
-  const [sessionTimeout, renewSession] = useUserSessionTimeout();
+  const [sessionTimeout, renewSession] = useSessionTimeout();
   const [timeLeft, setTimeLeft] = useState('');
   const [_] = useTranslation();
 

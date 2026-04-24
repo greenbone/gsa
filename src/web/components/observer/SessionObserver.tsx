@@ -9,7 +9,7 @@ import date, {type Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useInstanceVariable from 'web/hooks/useInstanceVariable';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
+import useSessionTimeout from 'web/hooks/useSessionTimeout';
 
 interface PingProps {
   sessionTimeout: Date;
@@ -76,7 +76,7 @@ const Ping = ({sessionTimeout}: PingProps) => {
 };
 
 const SessionObserver = () => {
-  const [sessionTimeout] = useUserSessionTimeout();
+  const [sessionTimeout] = useSessionTimeout();
 
   if (!isDefined(sessionTimeout)) {
     return null;
