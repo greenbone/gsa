@@ -3,82 +3,94 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type CollectionCounts from 'gmp/collection/collection-counts';
-import type Filter from 'gmp/models/filter';
-import type ReportPort from 'gmp/models/report/port';
+import {useEffect, useMemo, useState} from 'react';
+import CollectionCounts from 'gmp/collection/collection-counts';
+import Filter from 'gmp/models/filter';
+import ErrorPanel from 'web/components/error/ErrorPanel';
+import Loading from 'web/components/loading/Loading';
+import useGetReportPorts from 'web/hooks/use-query/report-ports';
+import useFilterSortBy from 'web/hooks/useFilterSortBy';
+import usePagination from 'web/hooks/usePagination';
+import useTranslation from 'web/hooks/useTranslation';
 import PortsTable from 'web/pages/reports/details/PortsTable';
-import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
-import {
-  makeCompareNumber,
-  makeCompareSeverity,
-  makeCompareString,
-} from 'web/utils/Sort';
-
-type EntityCompareFunc<TEntity> = (
-  sortReverse?: boolean,
-) => (a: TEntity, b: TEntity) => number;
 
 interface PortsTabProps {
-  counts?: CollectionCounts;
-  filter: Filter;
-  isUpdating?: boolean;
-  ports?: ReportPort[];
-  sortField: string;
-  sortReverse: boolean;
-  onSortChange: (sortField: string) => void;
+  reportId: string;
+  reportFilter: Filter;
 }
 
-const portsSortFunctions: Record<string, EntityCompareFunc<ReportPort>> = {
-  name: makeCompareString('id'),
-  hosts: makeCompareNumber((entity: ReportPort) => entity.hosts.count),
-  severity: makeCompareSeverity(),
-};
+const PortsTab = ({reportId, reportFilter}: PortsTabProps) => {
+  const [_] = useTranslation();
+  const reportFilterString = reportFilter.toFilterString();
 
-const PortsTab = ({
-  counts,
-  filter,
-  isUpdating = false,
-  ports,
-  sortField,
-  sortReverse,
-  onSortChange,
-}: PortsTabProps) => {
+  const baseFilter = useMemo(() => {
+    return Filter.fromString(reportFilterString);
+  }, [reportFilterString]);
+
+  const [portsFilter, setPortsFilter] = useState<Filter>(baseFilter);
+
+  useEffect(() => {
+    setPortsFilter(baseFilter);
+  }, [baseFilter]);
+
+  const {data, isLoading, isFetching, isError, error} = useGetReportPorts({
+    reportId,
+    filter: portsFilter,
+  });
+
+  const updateFilter = (newFilter: Filter) => {
+    setPortsFilter(newFilter);
+  };
+
+  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
+    portsFilter,
+    updateFilter,
+  );
+
+  const [
+    handleFirstClick,
+    handleLastClick,
+    handleNextClick,
+    handlePreviousClick,
+  ] = usePagination(
+    portsFilter,
+    data?.entitiesCounts ?? new CollectionCounts(),
+    updateFilter,
+  );
+
+  if (isError) {
+    return (
+      <ErrorPanel
+        error={error}
+        message={_('Error while loading Ports for Report {{reportId}}', {
+          reportId,
+        })}
+      />
+    );
+  }
+
+  if (isLoading && !data) {
+    return <Loading />;
+  }
+
+  const {entities: ports = [], entitiesCounts: portsCounts} = data || {};
+
   return (
-    <ReportEntitiesContainer<ReportPort>
-      counts={counts}
+    <PortsTable
+      // @ts-expect-error entities are ReportPort[], not Model[]
       entities={ports}
-      filter={filter}
-      sortField={sortField}
-      sortFunctions={portsSortFunctions}
-      sortReverse={sortReverse}
-    >
-      {({
-        entities,
-        entitiesCounts,
-        sortBy,
-        sortDir,
-        onFirstClick,
-        onLastClick,
-        onNextClick,
-        onPreviousClick,
-      }) => (
-        <PortsTable
-          // @ts-expect-error entities are ReportPort[], not Model[]
-          entities={entities}
-          entitiesCounts={entitiesCounts}
-          filter={filter}
-          isUpdating={isUpdating}
-          sortBy={sortBy}
-          sortDir={sortDir}
-          toggleDetailsIcon={false}
-          onFirstClick={onFirstClick}
-          onLastClick={onLastClick}
-          onNextClick={onNextClick}
-          onPreviousClick={onPreviousClick}
-          onSortChange={onSortChange}
-        />
-      )}
-    </ReportEntitiesContainer>
+      entitiesCounts={portsCounts}
+      filter={portsFilter}
+      isUpdating={isFetching && !data}
+      sortBy={sortBy || 'severity'}
+      sortDir={sortDir}
+      toggleDetailsIcon={false}
+      onFirstClick={handleFirstClick}
+      onLastClick={handleLastClick}
+      onNextClick={handleNextClick}
+      onPreviousClick={handlePreviousClick}
+      onSortChange={handleSortChange}
+    />
   );
 };
 

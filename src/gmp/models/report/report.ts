@@ -71,6 +71,12 @@ export interface ReportReportTaskElement {
     name?: string;
     trash?: YesNo;
   };
+  agent_group?: {
+    _id?: string;
+  };
+  oci_image_target?: {
+    _id?: string;
+  };
 }
 
 export interface ReportReportElement extends ModelElement {

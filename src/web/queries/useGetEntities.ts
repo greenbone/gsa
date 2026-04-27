@@ -9,7 +9,6 @@ import {type EntitiesMeta} from 'gmp/commands/entities';
 import {type HttpCommandInputParams} from 'gmp/commands/http';
 import type Response from 'gmp/http/response';
 import type Filter from 'gmp/models/filter';
-import type Model from 'gmp/models/model';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import {
@@ -33,12 +32,15 @@ interface UseGetEntitiesParams<
   queryId: string;
   filter?: Filter;
   enabled?: boolean;
-  refetchInterval?: number | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
+  refetchInterval?:
+    | number
+    | false
+    | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
   keepPreviousData?: boolean;
 }
 
 const useGetEntities = <
-  TModel extends Model,
+  TModel,
   TInput extends GmpMethodParams = GmpMethodParams,
 >({
   gmpMethod,

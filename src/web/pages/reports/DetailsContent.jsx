@@ -120,7 +120,6 @@ const PageContent = ({
     errors = {},
     hosts = {},
     operatingsystems = {},
-    ports = {},
     results = {},
     tlsCertificates = {},
     timestamp,
@@ -322,30 +321,7 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    {showInitialLoading ? (
-                      <Loading />
-                    ) : showThresholdMessage ? (
-                      <ThresholdPanel
-                        entityType={_('Ports')}
-                        filter={reportFilter}
-                        isUpdating={isUpdating}
-                        threshold={threshold}
-                        onFilterChanged={onFilterChanged}
-                        onFilterEditClick={onFilterEditClick}
-                      />
-                    ) : (
-                      <PortsTab
-                        counts={ports.counts}
-                        filter={reportFilter}
-                        isUpdating={isUpdating}
-                        ports={ports.entities}
-                        sortField={sorting.ports.sortField}
-                        sortReverse={sorting.ports.sortReverse}
-                        onSortChange={sortField =>
-                          onSortChange('ports', sortField)
-                        }
-                      />
-                    )}
+                    <PortsTab reportFilter={reportFilter} reportId={reportId} />
                   </TabPanel>
                   <TabPanel>
                     {showInitialLoading ? (

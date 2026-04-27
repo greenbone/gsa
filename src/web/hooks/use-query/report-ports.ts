@@ -1,0 +1,36 @@
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import type Filter from 'gmp/models/filter';
+import type ReportPort from 'gmp/models/report/port';
+import useGmp from 'web/hooks/useGmp';
+import useGetEntities from 'web/queries/useGetEntities';
+
+interface UseGetReportPortsParams {
+  reportId: string;
+  filter?: Filter;
+}
+
+export const useGetReportPorts = ({
+  reportId,
+  filter = undefined,
+}: UseGetReportPortsParams) => {
+  const gmp = useGmp();
+
+  return useGetEntities<ReportPort>({
+    gmpMethod: ({filter: reportFilter}) =>
+      // @ts-expect-error reportports command is dynamically added via getCommands()
+      gmp.reportports.get({
+        report_id: reportId,
+        filter: reportFilter,
+      }),
+    queryId: `get_report_ports_${reportId}`,
+    filter,
+    enabled: Boolean(reportId),
+    keepPreviousData: true,
+  });
+};
+
+export default useGetReportPorts;
