@@ -14,6 +14,7 @@ import 'gmp/commands/overrides';
 
 import 'gmp/commands/report-configs';
 import 'gmp/commands/report-formats';
+import 'gmp/commands/report-ports';
 import 'gmp/commands/results';
 import 'gmp/commands/scan-configs';
 import 'gmp/commands/schedules';

@@ -1,0 +1,562 @@
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {useCallback, useEffect, useState} from 'react';
+import {useQueryClient} from '@tanstack/react-query';
+import {useParams} from 'react-router';
+import logger from 'gmp/log';
+import Filter, {RESET_FILTER} from 'gmp/models/filter';
+import type Report from 'gmp/models/report';
+import {isActive} from 'gmp/models/task';
+import {isDefined} from 'gmp/utils/identity';
+import Download from 'web/components/form/Download';
+import useDownload from 'web/components/form/useDownload';
+import PageTitle from 'web/components/layout/PageTitle';
+import DialogNotification from 'web/components/notification/DialogNotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import {
+  useGetReport,
+  useGetReportConfigs,
+  useGetReportExportFileName,
+  useGetReportFormats,
+  useGetResultsFilters,
+} from 'web/hooks/use-query/reports';
+import useGmp from 'web/hooks/useGmp';
+import usePageFilter from 'web/hooks/usePageFilter';
+import useTranslation from 'web/hooks/useTranslation';
+import useUserName from 'web/hooks/useUserName';
+import Page from 'web/pages/reports/DetailsContent';
+import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
+import TargetComponent from 'web/pages/targets/TargetComponent';
+import {create_pem_certificate} from 'web/utils/Cert';
+import {generateFilename} from 'web/utils/Render';
+
+interface SortState {
+  sortField: string;
+  sortReverse: boolean;
+}
+
+interface SortingState {
+  results: SortState;
+  apps: SortState;
+  ports: SortState;
+  hosts: SortState;
+  os: SortState;
+  cves: SortState;
+  closedcves: SortState;
+  tlscerts: SortState;
+  errors: SortState;
+}
+
+interface ReportComposerDefaults {
+  defaultReportConfigId?: string;
+  defaultReportFormatId?: string;
+  includeNotes?: number;
+  includeOverrides?: number;
+}
+
+interface DownloadReportState {
+  includeNotes: number;
+  includeOverrides: number;
+  reportConfigId: string;
+  reportFormatId: string;
+  storeAsDefault: boolean;
+}
+
+interface ReportTargetRef {
+  id: string;
+}
+
+const log = logger.getLogger('web.pages.reports.DetailsPage');
+
+const DEFAULT_FILTER = Filter.fromString(
+  'levels=chml rows=100 min_qod=70 first=1 sort-reverse=severity result_hosts_only=0',
+);
+
+export const REPORT_RESET_FILTER = RESET_FILTER.copy()
+  .setSortOrder('sort-reverse')
+  .setSortBy('severity');
+
+const hasTargetId = (value: unknown): value is ReportTargetRef => {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'id' in value &&
+    typeof (value as {id?: unknown}).id === 'string'
+  );
+};
+
+const getTarget = (entity?: Report) => {
+  const report = entity?.report;
+  const task = report?.task as {target?: unknown} | undefined;
+  const target = task?.target;
+  return hasTargetId(target) ? target : undefined;
+};
+
+const getReportFilter = (entity?: Report) => {
+  return entity?.report?.filter;
+};
+
+const initialSorting: SortingState = {
+  results: {sortField: 'severity', sortReverse: true},
+  apps: {sortField: 'severity', sortReverse: true},
+  ports: {sortField: 'severity', sortReverse: true},
+  hosts: {sortField: 'severity', sortReverse: true},
+  os: {sortField: 'severity', sortReverse: true},
+  cves: {sortField: 'severity', sortReverse: true},
+  closedcves: {sortField: 'severity', sortReverse: true},
+  tlscerts: {sortField: 'dn', sortReverse: false},
+  errors: {sortField: 'error', sortReverse: false},
+};
+
+const ReportDetailsPage = () => {
+  const [_] = useTranslation();
+  const {id: reportId = ''} = useParams<{id: string}>();
+  const gmp = useGmp();
+  const queryClient = useQueryClient();
+  const [username] = useUserName();
+
+  const {
+    dialogState,
+    closeDialog,
+    showError,
+    showErrorMessage,
+    showSuccessMessage,
+  } = useDialogNotification();
+  const [downloadRef, handleDownload] = useDownload();
+
+  const [showFilterDialog, setShowFilterDialog] = useState(false);
+  const [showDownloadReportDialog, setShowDownloadReportDialog] =
+    useState(false);
+  const [sorting, setSorting] = useState<SortingState>(initialSorting);
+  const [reportComposerDefaults, setReportComposerDefaults] =
+    useState<ReportComposerDefaults>({});
+
+  // Filter management
+  const [pageFilter, , {changeFilter}] = usePageFilter(
+    `report-${reportId}`,
+    'result',
+    {fallbackFilter: DEFAULT_FILTER},
+  );
+
+  // Report entity
+  const getRefetchInterval = useCallback(
+    (entity?: Report) => {
+      if (!isDefined(entity) || !isDefined(entity.report)) {
+        return false as const;
+      }
+      return isActive(entity.report.scan_run_status)
+        ? gmp.settings.reloadIntervalActive
+        : false;
+    },
+    [gmp.settings.reloadIntervalActive],
+  );
+
+  const {
+    data: entity,
+    isLoading,
+    isFetching,
+  } = useGetReport({
+    id: reportId,
+    filter: pageFilter,
+    refetchInterval: getRefetchInterval,
+  });
+
+  const reportFilter = getReportFilter(entity);
+
+  // Filters list for Powerfilter dropdown
+  const {data: filtersData, isLoading: isLoadingFilters} =
+    useGetResultsFilters();
+  const filters = filtersData?.entities ?? [];
+
+  // Report formats for download dialog
+  const {data: reportFormatsData} = useGetReportFormats();
+  const reportFormats = reportFormatsData?.entities;
+
+  // Report configs for download dialog
+  const {data: reportConfigsData} = useGetReportConfigs();
+  const reportConfigs = reportConfigsData?.entities ?? [];
+
+  // User settings: report export filename
+  const {data: reportExportFileName} = useGetReportExportFileName();
+
+  // Report composer defaults
+  useEffect(() => {
+    gmp.user
+      .getReportComposerDefaults()
+      .then(response => {
+        setReportComposerDefaults(response.data);
+      })
+      .catch(error => {
+        log.error('Error loading report composer defaults', error);
+      });
+  }, [gmp]);
+
+  // Set initial report format ID from available formats
+  useEffect(() => {
+    if (isDefined(reportFormats) && reportFormats.length > 0) {
+      const reportFormatId = reportFormats[0]?.id;
+      if (!isDefined(reportFormatId)) {
+        const noReportFormatError = _(
+          'The report cannot be displayed because' +
+            ' no Greenbone Vulnerability Manager report format is available.' +
+            ' This could be due to a missing gvmd data feed. Please update' +
+            ' the gvmd data feed, check the "feed import owner" setting, or' +
+            ' contact your system administrator.',
+        );
+        throw new Error(noReportFormatError);
+      }
+    }
+  }, [reportFormats, _]);
+
+  // Derive counts from report entity
+  const report = entity?.report;
+
+  const resultsCounts = report?.results?.counts;
+  const hostsCounts = report?.hosts?.counts;
+  const portsCounts = report?.ports?.counts;
+  const applicationsCounts = report?.applications?.counts;
+  const operatingSystemsCounts = report?.operatingsystems?.counts;
+  const cvesCounts = report?.cves?.counts;
+  const closedCvesCounts = report?.closedCves?.counts;
+  const tlsCertificatesCounts = report?.tlsCertificates?.counts;
+  const errorsCounts = report?.errors?.counts;
+
+  const threshold = gmp.settings.reportResultsThreshold;
+  const showThresholdMessage =
+    isDefined(report) &&
+    isDefined(resultsCounts) &&
+    resultsCounts.filtered > threshold;
+
+  // Handlers
+  const handleFilterChange = useCallback(
+    (filter: Filter) => {
+      changeFilter(filter);
+    },
+    [changeFilter],
+  );
+
+  const handleFilterRemoveClick = useCallback(() => {
+    handleFilterChange(REPORT_RESET_FILTER);
+  }, [handleFilterChange]);
+
+  const handleFilterResetClick = useCallback(() => {
+    handleFilterChange(DEFAULT_FILTER);
+  }, [handleFilterChange]);
+
+  const handleAddToAssets = useCallback(() => {
+    if (!entity?.id) return;
+    gmp.report
+      .addAssets({id: entity.id, filter: reportFilter?.toFilterString()})
+      .then(() => {
+        showSuccessMessage(
+          _(
+            'Report content added to Assets with QoD>=70% and Overrides enabled.',
+          ),
+        );
+        void queryClient.invalidateQueries({queryKey: ['get_report']});
+      })
+      .catch((error: Error) => {
+        log.error(error);
+        showError(error);
+      });
+  }, [
+    entity,
+    gmp,
+    reportFilter,
+    showSuccessMessage,
+    showError,
+    queryClient,
+    _,
+  ]);
+
+  const handleRemoveFromAssets = useCallback(() => {
+    if (!entity?.id) return;
+    gmp.report
+      .removeAssets({id: entity.id, filter: reportFilter?.toFilterString()})
+      .then(() => {
+        showSuccessMessage(_('Report content removed from Assets.'));
+        void queryClient.invalidateQueries({queryKey: ['get_report']});
+      })
+      .catch((error: Error) => {
+        log.error(error);
+        showError(error);
+      });
+  }, [
+    entity,
+    gmp,
+    reportFilter,
+    showSuccessMessage,
+    showError,
+    queryClient,
+    _,
+  ]);
+
+  const handleFilterEditClick = useCallback(() => {
+    setShowFilterDialog(true);
+  }, []);
+
+  const handleFilterDialogClose = useCallback(() => {
+    setShowFilterDialog(false);
+  }, []);
+
+  const handleOpenDownloadReportDialog = useCallback(() => {
+    setShowDownloadReportDialog(true);
+  }, []);
+
+  const handleCloseDownloadReportDialog = useCallback(() => {
+    setShowDownloadReportDialog(false);
+  }, []);
+
+  const handleReportDownload = useCallback(
+    async (state: DownloadReportState) => {
+      if (!entity || !reportFilter) return;
+      const {
+        includeNotes,
+        includeOverrides,
+        reportConfigId,
+        reportFormatId,
+        storeAsDefault,
+      } = state;
+
+      const newFilter = reportFilter.copy();
+      newFilter.set('notes', includeNotes);
+      newFilter.set('overrides', includeOverrides);
+
+      if (storeAsDefault) {
+        const defaults = {
+          ...reportComposerDefaults,
+          defaultReportConfigId: reportConfigId,
+          defaultReportFormatId: reportFormatId,
+          includeNotes,
+          includeOverrides,
+        };
+        try {
+          await gmp.user.saveReportComposerDefaults(defaults);
+          setReportComposerDefaults(defaults);
+        } catch (error) {
+          log.error('Error saving report composer defaults', error);
+        }
+      }
+
+      const reportFormat = reportFormats?.find(
+        format => reportFormatId === format.id,
+      );
+
+      const extension = isDefined(reportFormat)
+        ? reportFormat.extension
+        : 'unknown';
+
+      try {
+        const response = await gmp.report.download(
+          {id: entity.id as string},
+          {
+            reportConfigId,
+            reportFormatId,
+            filter: newFilter,
+          },
+        );
+        setShowDownloadReportDialog(false);
+        const {data} = response;
+        const filename = generateFilename({
+          creationTime: entity.creationTime,
+          extension,
+          fileNameFormat: reportExportFileName,
+          id: entity.id as string,
+          modificationTime: entity.modificationTime,
+          reportFormat: reportFormat?.name,
+          resourceName: entity.task?.name,
+          resourceType: 'report',
+          username,
+        });
+
+        handleDownload({filename, data});
+      } catch (error) {
+        log.error(error);
+        showError(error as Error);
+      }
+    },
+    [
+      entity,
+      gmp,
+      handleDownload,
+      reportComposerDefaults,
+      reportExportFileName,
+      reportFilter,
+      reportFormats,
+      showError,
+      username,
+    ],
+  );
+
+  const handleTlsCertificateDownload = useCallback(
+    (cert: {data: string; serial: string}) => {
+      handleDownload({
+        filename: 'tls-cert-' + cert.serial + '.pem',
+        mimetype: 'application/x-x509-ca-cert',
+        data: create_pem_certificate(cert.data),
+      });
+    },
+    [handleDownload],
+  );
+
+  const handleFilterCreated = useCallback(
+    (filter: Filter) => {
+      handleFilterChange(filter);
+      void queryClient.invalidateQueries({queryKey: ['get_filters']});
+    },
+    [handleFilterChange, queryClient],
+  );
+
+  const handleFilterAddLogLevel = useCallback(() => {
+    if (!reportFilter) return;
+    let levels = reportFilter.get('levels', '') as string;
+
+    if (!levels.includes('g')) {
+      levels += 'g';
+      const lfilter = reportFilter.copy();
+      lfilter.set('levels', levels);
+      handleFilterChange(lfilter);
+    }
+  }, [reportFilter, handleFilterChange]);
+
+  const handleFilterRemoveSeverity = useCallback(() => {
+    if (!reportFilter) return;
+
+    if (reportFilter.has('severity')) {
+      const lfilter = reportFilter.copy();
+      lfilter.delete('severity');
+      handleFilterChange(lfilter);
+    }
+  }, [reportFilter, handleFilterChange]);
+
+  const handleFilterDecreaseMinQoD = useCallback(() => {
+    if (!reportFilter) return;
+
+    if (reportFilter.has('min_qod')) {
+      const lfilter = reportFilter.copy();
+      lfilter.set('min_qod', 30);
+      handleFilterChange(lfilter);
+    }
+  }, [reportFilter, handleFilterChange]);
+
+  const handleSortChange = useCallback(
+    (name: string, sortField: string) => {
+      const prev = sorting[name as keyof SortingState];
+      const sortReverse =
+        sortField === prev.sortField ? !prev.sortReverse : false;
+
+      setSorting(prevSorting => ({
+        ...prevSorting,
+        [name]: {sortField, sortReverse},
+      }));
+    },
+    [sorting],
+  );
+
+  const handleChanged = useCallback(() => {
+    void queryClient.invalidateQueries({queryKey: ['get_report']});
+  }, [queryClient]);
+
+  const handleError = useCallback(
+    (error: Error) => {
+      log.error(error);
+      showError(error);
+    },
+    [showError],
+  );
+
+  const loadTarget = useCallback(() => {
+    if (!entity) return Promise.resolve();
+    const target = getTarget(entity);
+    if (!isDefined(target)) return Promise.resolve();
+    return gmp.target.get({id: target.id});
+  }, [entity, gmp]);
+
+  return (
+    <>
+      <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+      <Download ref={downloadRef} />
+      <PageTitle title={_('Report Details')} />
+      <TargetComponent onSaveError={handleError}>
+        {({edit}) => (
+          <Page
+            applicationsCounts={applicationsCounts}
+            closedCvesCounts={closedCvesCounts}
+            cvesCounts={cvesCounts}
+            entity={entity}
+            errorsCounts={errorsCounts}
+            filters={filters}
+            hostsCounts={hostsCounts}
+            isLoading={isLoading}
+            isLoadingFilters={isLoadingFilters}
+            isUpdating={isFetching && !isLoading}
+            operatingSystemsCounts={operatingSystemsCounts}
+            pageFilter={pageFilter}
+            portsCounts={portsCounts}
+            reportError={undefined}
+            reportFilter={reportFilter}
+            reportId={reportId}
+            resetFilter={REPORT_RESET_FILTER}
+            resultsCounts={resultsCounts}
+            showError={showError}
+            showErrorMessage={showErrorMessage}
+            showSuccessMessage={showSuccessMessage}
+            sorting={sorting}
+            task={isDefined(report) ? report.task : undefined}
+            tlsCertificatesCounts={tlsCertificatesCounts}
+            onAddToAssetsClick={handleAddToAssets}
+            onError={handleError}
+            onFilterAddLogLevelClick={handleFilterAddLogLevel}
+            onFilterChanged={handleFilterChange}
+            onFilterCreated={handleFilterCreated}
+            onFilterDecreaseMinQoDClick={handleFilterDecreaseMinQoD}
+            onFilterEditClick={handleFilterEditClick}
+            onFilterRemoveClick={handleFilterRemoveClick}
+            onFilterRemoveSeverityClick={handleFilterRemoveSeverity}
+            onFilterResetClick={handleFilterResetClick}
+            onRemoveFromAssetsClick={handleRemoveFromAssets}
+            onReportDownloadClick={handleOpenDownloadReportDialog}
+            onSortChange={handleSortChange}
+            onTagSuccess={handleChanged}
+            onTargetEditClick={() => {
+              void loadTarget().then(response => {
+                if (response) void edit(response.data);
+              });
+            }}
+            onTlsCertificateDownloadClick={handleTlsCertificateDownload}
+          />
+        )}
+      </TargetComponent>
+      {showFilterDialog && reportFilter && (
+        <ReportDetailsFilterDialog
+          delta={false}
+          filter={reportFilter}
+          onClose={handleFilterDialogClose}
+          onFilterChanged={handleFilterChange}
+          onFilterCreated={handleFilterCreated}
+        />
+      )}
+      {showDownloadReportDialog && reportFilter && (
+        <DownloadReportDialog
+          defaultReportConfigId={reportComposerDefaults.defaultReportConfigId}
+          defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
+          filter={reportFilter}
+          includeNotes={reportComposerDefaults.includeNotes}
+          includeOverrides={reportComposerDefaults.includeOverrides}
+          reportConfigs={reportConfigs}
+          reportFormats={reportFormats ?? []}
+          showThresholdMessage={showThresholdMessage}
+          threshold={threshold}
+          onClose={handleCloseDownloadReportDialog}
+          onSave={handleReportDownload}
+        />
+      )}
+    </>
+  );
+};
+
+export default ReportDetailsPage;

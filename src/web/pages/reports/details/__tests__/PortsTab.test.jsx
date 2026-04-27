@@ -4,26 +4,61 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith} from 'web/testing';
+import {screen, rendererWith, wait} from 'web/testing';
+import {waitFor} from '@testing-library/react';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
+import ReportPort from 'gmp/models/report/port';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import PortsTab from 'web/pages/reports/details/PortsTab';
 
-const filter = Filter.fromString(
+const reportFilter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
-const gmp = {
-  settings: {
-    severityRating: SEVERITY_RATING_CVSS_3,
-  },
-};
+
+const port1 = ReportPort.fromElement({
+  host: '1.1.1.1',
+  __text: '123/tcp',
+  severity: 10.0,
+  threat: 'High',
+});
+port1.addHost({ip: '1.1.1.1'});
+
+const port2 = ReportPort.fromElement({
+  host: '2.2.2.2',
+  __text: '456/tcp',
+  severity: 5.0,
+  threat: 'Medium',
+});
+port2.addHost({ip: '2.2.2.2'});
+
+const ports = [port1, port2];
 
 describe('Report Ports Tab tests', () => {
-  test('should render Report Ports Tab', () => {
-    const {ports} = getMockReport();
+  test('should render Report Ports Tab', async () => {
+    const getReportPorts = testing.fn().mockResolvedValue({
+      data: ports,
+      meta: {
+        filter: reportFilter,
+        counts: new CollectionCounts({
+          first: 1,
+          all: 2,
+          filtered: 2,
+          length: 2,
+          rows: 10,
+        }),
+      },
+    });
 
-    const onSortChange = testing.fn();
+    const gmp = {
+      reportports: {
+        get: getReportPorts,
+      },
+      settings: {
+        severityRating: SEVERITY_RATING_CVSS_3,
+        token: 'test-token',
+      },
+    };
 
     const {render} = rendererWith({
       gmp,
@@ -31,16 +66,16 @@ describe('Report Ports Tab tests', () => {
     });
 
     const {baseElement} = render(
-      <PortsTab
-        counts={ports.counts}
-        filter={filter}
-        isUpdating={false}
-        ports={ports.entities}
-        sortField={'severity'}
-        sortReverse={true}
-        onSortChange={sortField => onSortChange('ports', sortField)}
-      />,
+      <PortsTab reportId="1234" reportFilter={reportFilter} />,
     );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('progressbar-box').length).toBeGreaterThan(
+        0,
+      );
+    });
 
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
@@ -64,6 +99,11 @@ describe('Report Ports Tab tests', () => {
     // Filter
     expect(baseElement).toHaveTextContent(
       '(Applied filter: apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity)',
+    );
+
+    // Verify report_id was passed as a separate parameter
+    expect(getReportPorts).toHaveBeenCalledWith(
+      expect.objectContaining({report_id: '1234'}),
     );
   });
 });

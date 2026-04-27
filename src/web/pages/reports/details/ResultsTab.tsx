@@ -7,7 +7,6 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import type {TaskStatus} from 'gmp/models/task';
-import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
 import useGetResults from 'web/hooks/use-query/results';
@@ -50,12 +49,15 @@ const ResultsTabWrapper = ({
   onTargetEditClick,
 }: ResultsTabWrapperProps) => {
   const [_] = useTranslation();
+  const reportFilterString = reportFilter.toFilterString();
 
   // Create filter with report ID
   const baseFilter = useMemo(() => {
-    const filter = isDefined(reportFilter) ? reportFilter.copy() : new Filter();
+    const filter = reportFilterString
+      ? Filter.fromString(reportFilterString)
+      : new Filter();
     return filter.set('_and_report_id', reportId);
-  }, [reportFilter, reportId]);
+  }, [reportFilterString, reportId]);
 
   const [resultsFilter, setResultsFilter] = useState<Filter>(baseFilter);
 
@@ -142,7 +144,7 @@ const ResultsTabWrapper = ({
       entitiesCounts={resultsCounts}
       filter={displayedFilter}
       footer={false}
-      isUpdating={isFetching}
+      isUpdating={isFetching && !data}
       links={true}
       sortBy={sortBy || 'severity'}
       sortDir={sortDir}
