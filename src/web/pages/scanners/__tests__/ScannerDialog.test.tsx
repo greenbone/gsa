@@ -438,7 +438,7 @@ describe('ScannerDialog tests', () => {
     });
     expect(scannerType).toHaveValue('');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
-    expect(scannerTypeItems.length).toBe(4); // OpenVAS Scanner, OpenVASD Scanner, OpenVASD Sensor, Agent Controller
+    expect(scannerTypeItems.length).toBe(5); // OpenVAS Scanner, OpenVASD Scanner, OpenVASD Sensor, Agent Controller, Agent Sensor
   });
 
   test('should not allow to change host, port and type if scanner is in use', () => {
@@ -568,9 +568,10 @@ describe('ScannerDialog tests', () => {
     });
     expect(scannerType).toHaveValue('Agent Controller');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
-    expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner and Agent Controller
+    expect(scannerTypeItems.length).toEqual(3); // OpenVAS Scanner, Agent Controller and Agent Sensor
     expect(scannerTypeItems[0]).toHaveTextContent('OpenVAS Scanner');
     expect(scannerTypeItems[1]).toHaveTextContent('Agent Controller');
+    expect(scannerTypeItems[2]).toHaveTextContent('Agent Sensor');
   });
 
   test('should allow to set a CA certificate of a scanner', async () => {

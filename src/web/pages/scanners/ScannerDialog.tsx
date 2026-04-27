@@ -141,8 +141,7 @@ const ScannerDialog = ({
       // don't allow selecting sensor types initially if the setting is disabled
       if (
         !gmp.settings.enableGreenboneSensor &&
-        (initialScannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
-          initialScannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)
+        initialScannerType === GREENBONE_SENSOR_SCANNER_TYPE
       ) {
         return undefined;
       }
@@ -191,8 +190,7 @@ const ScannerDialog = ({
   if (
     scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE ||
     (features.featureEnabled('ENABLE_AGENTS') &&
-      capabilities.mayAccess('agent') &&
-      gmp.settings.enableGreenboneSensor)
+      capabilities.mayAccess('agent'))
   ) {
     scannerTypes.push(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE);
   }
