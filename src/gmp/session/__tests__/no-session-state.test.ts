@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import date from 'gmp/models/date';
-import NoSession from 'gmp/session/no-session';
+import NoSessionState from 'gmp/session/no-session-state';
 
 const createStorage = (state?: Record<string, string>) => {
   const store = {
@@ -17,10 +17,10 @@ const createStorage = (state?: Record<string, string>) => {
   return store;
 };
 
-describe('NoSession tests', () => {
-  test('should create a session', () => {
+describe('NoSessionState tests', () => {
+  test('should create a session state', () => {
     const storage = createStorage();
-    const session = new NoSession(storage);
+    const session = new NoSessionState(storage);
 
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
@@ -37,7 +37,7 @@ describe('NoSession tests', () => {
       token: 'test-token',
       sessionTimeout: '2024-12-31T23:59:59Z',
     });
-    const session = new NoSession(storage);
+    const session = new NoSessionState(storage);
 
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
@@ -46,9 +46,9 @@ describe('NoSession tests', () => {
     expect(session.timezone).toBe('UTC');
   });
 
-  test('should not store session data except for locale and timezone', () => {
+  test('should not update session data', () => {
     const storage = createStorage();
-    const session = new NoSession(storage);
+    const session = new NoSessionState(storage);
 
     session.token = 'test-token';
     session.sessionTimeout = date('2024-12-31T23:59:59Z');
@@ -58,8 +58,8 @@ describe('NoSession tests', () => {
 
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
-    expect(session.locale).toBe('en-US');
-    expect(session.timezone).toBe('UTC');
+    expect(session.locale).toBeUndefined();
+    expect(session.timezone).toBeUndefined();
     expect(session.username).toBeUndefined();
 
     expect(storage.setItem).not.toHaveBeenCalledWith('token', 'test-token');
@@ -68,10 +68,40 @@ describe('NoSession tests', () => {
       '2024-12-31T23:59:59.000Z',
     );
     expect(storage.setItem).not.toHaveBeenCalledWith('username', 'test-user');
-    expect(storage.setItem).toHaveBeenCalledWith('locale', 'en-US');
-    expect(storage.setItem).toHaveBeenCalledWith('timezone', 'UTC');
+    expect(storage.setItem).not.toHaveBeenCalledWith('locale', 'en-US');
+    expect(storage.setItem).not.toHaveBeenCalledWith('timezone', 'UTC');
 
     expect(storage.getItem).toHaveBeenCalledWith('locale');
     expect(storage.getItem).toHaveBeenCalledWith('timezone');
+  });
+
+  test('should transition to UserSessionState on login', () => {
+    const storage = createStorage();
+    const session = new NoSessionState(storage);
+
+    const newState = session.login({
+      token: 'test-token',
+      sessionTimeout: date('2024-12-31T23:59:59Z'),
+      locale: 'en-US',
+      timezone: 'UTC',
+      username: 'test-user',
+    });
+
+    expect(newState.token).toBe('test-token');
+    expect(newState.sessionTimeout?.toISOString()).toBe(
+      '2024-12-31T23:59:59.000Z',
+    );
+    expect(newState.locale).toBe('en-US');
+    expect(newState.timezone).toBe('UTC');
+    expect(newState.username).toBe('test-user');
+  });
+
+  test('should remain in NoSessionState on logout', () => {
+    const storage = createStorage();
+    const session = new NoSessionState(storage);
+
+    const newState = session.logout();
+
+    expect(newState).toBe(session);
   });
 });

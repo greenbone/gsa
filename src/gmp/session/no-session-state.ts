@@ -4,19 +4,19 @@
  */
 
 import {type Date} from 'gmp/models/date';
-import type Session from 'gmp/session/session';
 import {
-  type default as SessionStorage,
-  setSessionValue,
-} from 'gmp/session/session-storage';
+  type SessionLoginData,
+  type default as SessionState,
+} from 'gmp/session/session-state';
+import {type default as SessionStorage} from 'gmp/session/session-storage';
+import UserSessionState from 'gmp/session/user-session-state';
 
 /**
- * NoSession class implements the Session interface but does not store any
- * session data besides locale and timezone. It is used as a default session
- * when no user session is available, allowing the application to function
- * without requiring user authentication.
+ * NoSessionState class implements the SessionState interface but does not store
+ * any user-specific session data. It serves as a default state when there is no
+ * active user session.
  */
-class NoSession implements Session {
+class NoSessionState implements SessionState {
   private storage: SessionStorage;
 
   constructor(storage: SessionStorage = globalThis.localStorage) {
@@ -28,7 +28,7 @@ class NoSession implements Session {
   }
 
   set token(value: string | undefined) {
-    // No-op
+    // No session token is stored in NoSessionState
   }
 
   get sessionTimeout(): Date | undefined {
@@ -36,7 +36,7 @@ class NoSession implements Session {
   }
 
   set sessionTimeout(value: Date | undefined) {
-    // No-op
+    // No session timeout is stored in NoSessionState
   }
 
   get locale(): string | undefined {
@@ -44,7 +44,7 @@ class NoSession implements Session {
   }
 
   set locale(value: string | undefined) {
-    setSessionValue(this.storage, 'locale', value);
+    // No-op
   }
 
   get timezone(): string | undefined {
@@ -52,7 +52,7 @@ class NoSession implements Session {
   }
 
   set timezone(value: string | undefined) {
-    setSessionValue(this.storage, 'timezone', value);
+    // No-op
   }
 
   get username(): string | undefined {
@@ -60,8 +60,16 @@ class NoSession implements Session {
   }
 
   set username(value: string | undefined) {
-    // No-op
+    // No session username is stored in NoSessionState
+  }
+
+  login(data: SessionLoginData): SessionState {
+    return new UserSessionState(this.storage, data);
+  }
+
+  logout(): SessionState {
+    return this;
   }
 }
 
-export default NoSession;
+export default NoSessionState;
