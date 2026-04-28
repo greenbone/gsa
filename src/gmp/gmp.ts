@@ -253,10 +253,8 @@ class Gmp {
     this.settings.token = token;
     this.settings.locale = locale;
 
+    setLocale(locale === BROWSER_LANGUAGE ? undefined : locale);
     return {
-      locale: locale === BROWSER_LANGUAGE ? undefined : locale,
-      username,
-      token,
       timezone,
       sessionTimeout,
     };

@@ -54,11 +54,7 @@ describe('LoginPage tests', () => {
     });
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
-    const setLocale = testing.fn();
-    const setTimezone = testing.fn();
     const gmp = {
-      setTimezone,
-      setLocale,
       login,
       isLoggedIn,
       clearToken,
@@ -77,7 +73,7 @@ describe('LoginPage tests', () => {
     const button = screen.getByTestId('login-button');
     fireEvent.click(button);
 
-    expect(login).toBeCalledWith('foo', 'bar');
+    expect(login).toHaveBeenCalledWith('foo', 'bar');
   });
 
   test('should not display guest login by default', () => {
@@ -104,11 +100,7 @@ describe('LoginPage tests', () => {
     });
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
-    const setLocale = testing.fn();
-    const setTimezone = testing.fn();
     const gmp = {
-      setTimezone,
-      setLocale,
       login,
       isLoggedIn,
       clearToken,
@@ -127,11 +119,7 @@ describe('LoginPage tests', () => {
     const login = testing.fn().mockRejectedValue({message: 'Just a test'});
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
-    const setLocale = testing.fn();
-    const setTimezone = testing.fn();
     const gmp = {
-      setTimezone,
-      setLocale,
       login,
       isLoggedIn,
       clearToken,
@@ -149,7 +137,7 @@ describe('LoginPage tests', () => {
 
     const button = screen.getByTestId('login-button');
     fireEvent.click(button);
-    expect(login).toBeCalledWith('foo', 'bar');
+    expect(login).toHaveBeenCalledWith('foo', 'bar');
 
     const error = await screen.findByTestId('error');
     expect(error).toHaveTextContent('Just a test');
@@ -163,11 +151,7 @@ describe('LoginPage tests', () => {
       );
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
-    const setLocale = testing.fn();
-    const setTimezone = testing.fn();
     const gmp = {
-      setTimezone,
-      setLocale,
       login,
       isLoggedIn,
       clearToken,
@@ -214,11 +198,7 @@ describe('LoginPage tests', () => {
     });
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
-    const setLocale = testing.fn();
-    const setTimezone = testing.fn();
     const gmp = {
-      setTimezone,
-      setLocale,
       login,
       isLoggedIn,
       clearToken,
@@ -245,7 +225,7 @@ describe('LoginPage tests', () => {
     const button = screen.getByTestId('login-button');
     fireEvent.click(button);
 
-    expect(login).toBeCalledWith('foo', 'bar');
+    expect(login).toHaveBeenCalledWith('foo', 'bar');
 
     await wait();
 
@@ -253,8 +233,6 @@ describe('LoginPage tests', () => {
     expect(userSettings.timezone).toEqual('Australia/Sydney');
     expect(userSettings.username).toEqual('foo');
     expect(userSettings.isLoggedIn).toBe(true);
-
-    expect(setTimezone).toHaveBeenCalledWith('Australia/Sydney');
   });
 
   test.each([
@@ -292,11 +270,7 @@ describe('LoginPage tests', () => {
 
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
-    const setLocale = testing.fn();
-    const setTimezone = testing.fn();
     const gmp = {
-      setTimezone,
-      setLocale,
       login,
       isLoggedIn,
       clearToken,
@@ -347,11 +321,7 @@ describe('LoginPage tests', () => {
 
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
-    const setLocale = testing.fn();
-    const setTimezone = testing.fn();
     const gmp = {
-      setTimezone,
-      setLocale,
       login,
       isLoggedIn,
       clearToken,
@@ -407,11 +377,7 @@ describe('LoginPage tests', () => {
 
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
-    const setLocale = testing.fn();
-    const setTimezone = testing.fn();
     const gmp = {
-      setTimezone,
-      setLocale,
       login,
       isLoggedIn,
       clearToken,
