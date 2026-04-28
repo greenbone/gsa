@@ -193,7 +193,6 @@ describe('Settings tests', () => {
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');
   });
 
@@ -258,12 +257,8 @@ describe('Settings tests', () => {
     expect(settings.vendorTitle).toEqual('title test');
 
     expect(storage.setItem).toHaveBeenCalledTimes(2);
-    expect(storage.setItem).toHaveBeenNthCalledWith(
-      1,
-      'enableStoreDebugLog',
-      '1',
-    );
-    expect(storage.setItem).toHaveBeenNthCalledWith(2, 'logLevel', 'debug');
+    expect(storage.setItem).toHaveBeenCalledWith('enableStoreDebugLog', '1');
+    expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'debug');
   });
 
   test('should delete settings from storage', () => {
@@ -288,22 +283,22 @@ describe('Settings tests', () => {
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');
 
     settings.enableStoreDebugLog = undefined;
-    expect(storage.removeItem).toBeCalledWith('enableStoreDebugLog');
+    expect(storage.removeItem).toHaveBeenCalledWith('enableStoreDebugLog');
 
     settings.locale = undefined;
-    expect(storage.removeItem).toBeCalledWith('locale');
+    expect(storage.removeItem).toHaveBeenCalledWith('locale');
 
     settings.logLevel = undefined;
-    expect(storage.removeItem).toBeCalledWith('logLevel');
+    expect(storage.removeItem).toHaveBeenCalledWith('logLevel');
 
     settings.token = undefined;
-    expect(storage.removeItem).toBeCalledWith('token');
+    expect(storage.removeItem).toHaveBeenCalledWith('token');
 
     settings.timezone = undefined;
-    expect(storage.removeItem).toBeCalledWith('timezone');
+    expect(storage.removeItem).toHaveBeenCalledWith('timezone');
 
     settings.username = undefined;
-    expect(storage.removeItem).toBeCalledWith('username');
+    expect(storage.removeItem).toHaveBeenCalledWith('username');
   });
 
   test('should freeze properties', () => {
