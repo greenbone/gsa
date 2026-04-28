@@ -3,39 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type default as Response, type Meta} from 'gmp/http/response';
+import {type default as Response} from 'gmp/http/response';
+import {type Envelope} from 'gmp/http/transform/fast-xml';
 import date, {type Date} from 'gmp/models/date';
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-export interface LoginData {
-  client_address?: string;
-  guest?: boolean;
-  role?: string;
-  severity?: string;
-  session?: string;
-  token?: string;
-}
-
-export interface LoginMeta extends Meta {
-  i18n?: string;
-  timezone?: string;
-  version?: string;
-}
-
-type LoginElement = Response<LoginData, LoginMeta>;
+export type LoginData = Envelope;
+type LoginElement = Response<LoginData>;
 
 class Login {
+  readonly clientAddress?: string;
+  readonly gsadVersion?: string;
   readonly locale?: string;
   readonly sessionTimeout?: Date;
   readonly timezone?: string;
   readonly token?: string;
 
   constructor(elem: LoginElement) {
-    const {data = {}, meta = {}} = elem;
-    this.locale = meta.i18n;
-    this.timezone = meta.timezone;
+    const {data = {}} = elem;
+    this.clientAddress = data.client_address;
+    this.gsadVersion = data.version;
+    this.locale = data.i18n;
+    this.timezone = data.timezone;
     this.token = data.token;
+
     const unixSeconds = parseInt(data.session);
 
     this.sessionTimeout = isDefined(unixSeconds)
