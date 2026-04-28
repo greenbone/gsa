@@ -91,67 +91,68 @@ type Listener = () => void;
 const log = logger.getLogger('gmp');
 
 class Gmp {
-  readonly settings: Settings;
-  readonly log: RootLogger;
-  readonly http: Http;
-  readonly _login: LoginCommand;
-  _logoutListeners: Listener[];
+  public readonly settings: Settings;
 
-  readonly agent: AgentCommand;
-  readonly agents: AgentsCommand;
-  readonly agentgroup: AgentGroupCommand;
-  readonly agentgroups: AgentGroupsCommand;
-  readonly agentinstaller: AgentInstallerCommand;
-  readonly agentinstallers: AgentInstallersCommand;
-  readonly alert: AlertCommand;
-  readonly alerts: AlertsCommand;
-  readonly audit: AuditCommand;
-  readonly audits: AuditsCommand;
-  readonly auth: AuthenticationCommand;
-  readonly certbund: CertBundAdvisoryCommand;
-  readonly certbunds: CertBundAdvisoriesCommand;
-  readonly credential: CredentialCommand;
-  readonly credentials: CredentialsCommand;
-  readonly cpe: CpeCommand;
-  readonly cpes: CpesCommand;
-  readonly credentialstore: CredentialStoreCommand;
-  readonly credentialstores: CredentialStoresCommand;
-  readonly cve: CveCommand;
-  readonly cves: CvesCommand;
-  readonly dashboard: DashboardCommand;
-  readonly dfncert: DfnCertAdvisoryCommand;
-  readonly dfncerts: DfnCertAdvisoriesCommand;
-  readonly feedstatus: FeedStatusCommand;
-  readonly nvt: NvtCommand;
-  readonly nvtfamilies: NvtFamiliesCommand;
-  readonly nvts: NvtsCommand;
-  readonly ociimagetarget: OciImageTargetCommand;
-  readonly ociimagetargets: OciImageTargetsCommand;
-  readonly performance: PerformanceCommand;
-  readonly permission: PermissionCommand;
-  readonly permissions: PermissionsCommand;
-  readonly policy: PolicyCommand;
-  readonly policies: PoliciesCommand;
-  readonly portlist: PortListCommand;
-  readonly portlists: PortListsCommand;
-  readonly report: ReportCommand;
-  readonly reports: ReportsCommand;
-  readonly resourcenames: ResourceNamesCommand;
-  readonly role: RoleCommand;
-  readonly roles: RolesCommand;
-  readonly scanner: ScannerCommand;
-  readonly scanners: ScannersCommand;
-  readonly tag: TagCommand;
-  readonly tags: TagsCommand;
-  readonly target: TargetCommand;
-  readonly targets: TargetsCommand;
-  readonly task: TaskCommand;
-  readonly tasks: TasksCommand;
-  readonly timezones: TimezonesCommand;
-  readonly trashcan: TrashCanCommand;
-  readonly user: UserCommand;
-  readonly users: UsersCommand;
-  readonly wizard: WizardCommand;
+  private readonly log: RootLogger;
+  private readonly http: Http;
+  private readonly _login: LoginCommand;
+  private _logoutListeners: Listener[];
+
+  public readonly agent: AgentCommand;
+  public readonly agents: AgentsCommand;
+  public readonly agentgroup: AgentGroupCommand;
+  public readonly agentgroups: AgentGroupsCommand;
+  public readonly agentinstaller: AgentInstallerCommand;
+  public readonly agentinstallers: AgentInstallersCommand;
+  public readonly alert: AlertCommand;
+  public readonly alerts: AlertsCommand;
+  public readonly audit: AuditCommand;
+  public readonly audits: AuditsCommand;
+  public readonly auth: AuthenticationCommand;
+  public readonly certbund: CertBundAdvisoryCommand;
+  public readonly certbunds: CertBundAdvisoriesCommand;
+  public readonly credential: CredentialCommand;
+  public readonly credentials: CredentialsCommand;
+  public readonly cpe: CpeCommand;
+  public readonly cpes: CpesCommand;
+  public readonly credentialstore: CredentialStoreCommand;
+  public readonly credentialstores: CredentialStoresCommand;
+  public readonly cve: CveCommand;
+  public readonly cves: CvesCommand;
+  public readonly dashboard: DashboardCommand;
+  public readonly dfncert: DfnCertAdvisoryCommand;
+  public readonly dfncerts: DfnCertAdvisoriesCommand;
+  public readonly feedstatus: FeedStatusCommand;
+  public readonly nvt: NvtCommand;
+  public readonly nvtfamilies: NvtFamiliesCommand;
+  public readonly nvts: NvtsCommand;
+  public readonly ociimagetarget: OciImageTargetCommand;
+  public readonly ociimagetargets: OciImageTargetsCommand;
+  public readonly performance: PerformanceCommand;
+  public readonly permission: PermissionCommand;
+  public readonly permissions: PermissionsCommand;
+  public readonly policy: PolicyCommand;
+  public readonly policies: PoliciesCommand;
+  public readonly portlist: PortListCommand;
+  public readonly portlists: PortListsCommand;
+  public readonly report: ReportCommand;
+  public readonly reports: ReportsCommand;
+  public readonly resourcenames: ResourceNamesCommand;
+  public readonly role: RoleCommand;
+  public readonly roles: RolesCommand;
+  public readonly scanner: ScannerCommand;
+  public readonly scanners: ScannersCommand;
+  public readonly tag: TagCommand;
+  public readonly tags: TagsCommand;
+  public readonly target: TargetCommand;
+  public readonly targets: TargetsCommand;
+  public readonly task: TaskCommand;
+  public readonly tasks: TasksCommand;
+  public readonly timezones: TimezonesCommand;
+  public readonly trashcan: TrashCanCommand;
+  public readonly user: UserCommand;
+  public readonly users: UsersCommand;
+  public readonly wizard: WizardCommand;
 
   constructor(settings: Settings, http?: Http) {
     this.settings = settings;
@@ -227,7 +228,7 @@ class Gmp {
     this._initCommands();
   }
 
-  _initCommands() {
+  private _initCommands() {
     const commands = getCommands();
 
     for (const [name, cmd] of Object.entries(commands)) {
@@ -241,7 +242,7 @@ class Gmp {
     }
   }
 
-  async login(username: string, password: string) {
+  public async login(username: string, password: string) {
     const {token, timezone, locale, sessionTimeout} = await this._login.login(
       username,
       password,
@@ -261,7 +262,7 @@ class Gmp {
     };
   }
 
-  async doLogout() {
+  public async doLogout() {
     if (this.isLoggedIn()) {
       const url = this.buildUrl('logout');
       const args = {token: this.settings.token};
@@ -281,7 +282,7 @@ class Gmp {
     return Promise.resolve();
   }
 
-  logout() {
+  public logout() {
     this.clearToken();
 
     for (const listener of this._logoutListeners) {
@@ -289,11 +290,11 @@ class Gmp {
     }
   }
 
-  isLoggedIn() {
+  public isLoggedIn() {
     return !isEmpty(this.settings.token);
   }
 
-  subscribeToLogout(listener: Listener) {
+  public subscribeToLogout(listener: Listener) {
     this._logoutListeners.push(listener);
 
     return () =>
@@ -302,7 +303,7 @@ class Gmp {
       ));
   }
 
-  buildUrl(path: string, params?: UrlParams, anchor?: string) {
+  public buildUrl(path: string, params?: UrlParams, anchor?: string) {
     let url = buildServerUrl(
       this.settings.apiServer,
       path,
@@ -319,22 +320,22 @@ class Gmp {
     return url;
   }
 
-  clearToken() {
+  private clearToken() {
     this.settings.token = undefined;
   }
 
-  setLocale(lang?: string) {
+  public setLocale(lang?: string) {
     this.settings.locale = lang;
     setLocale(lang);
     return this;
   }
 
-  setTimezone(timezone?: string) {
+  public setTimezone(timezone?: string) {
     this.settings.timezone = timezone;
     return this;
   }
 
-  addHttpErrorHandler(handler: ErrorHandler) {
+  public addHttpErrorHandler(handler: ErrorHandler) {
     return this.http.addErrorHandler(handler);
   }
 }

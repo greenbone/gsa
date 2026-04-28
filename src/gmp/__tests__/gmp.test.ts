@@ -115,21 +115,6 @@ describe('Gmp tests', () => {
     });
   });
 
-  describe('clearToken tests', () => {
-    test('should reset token', () => {
-      const storage = createStorage({token: 'foo'});
-      const settings = new Settings(storage);
-      const gmp = new Gmp(settings);
-
-      expect(gmp.isLoggedIn()).toEqual(true);
-
-      gmp.clearToken();
-
-      expect(gmp.isLoggedIn()).toEqual(false);
-      expect(settings.token).toBeUndefined();
-    });
-  });
-
   describe('logout tests', () => {
     test('should reset token', () => {
       const storage = createStorage({token: 'foo'});
