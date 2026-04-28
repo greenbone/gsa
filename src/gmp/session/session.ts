@@ -4,17 +4,22 @@
  */
 
 import {type Date} from 'gmp/models/date';
+import {type SessionLoginData} from 'gmp/session/session-state';
 
 /**
  * Session interface defines the structure of the user session data, including JWT, token,
  * session timeout, locale, timezone, and username.
  */
 interface Session {
-  token?: string;
-  sessionTimeout?: Date;
-  locale?: string;
-  timezone?: string;
-  username?: string;
+  readonly token: string | undefined;
+  readonly sessionTimeout: Date | undefined;
+  readonly locale: string | undefined;
+  readonly timezone: string | undefined;
+  readonly username: string | undefined;
+  setTimezone: (timezone?: string) => void;
+  setLocale: (locale?: string) => void;
+  logout: () => void;
+  login: (data: SessionLoginData) => void;
 }
 
 export default Session;

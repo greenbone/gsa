@@ -4,31 +4,27 @@
  */
 
 import date, {type Date} from 'gmp/models/date';
-import type Session from 'gmp/session/session';
+import NoSessionState from 'gmp/session/no-session-state';
+import {
+  type default as SessionState,
+  type SessionLoginData,
+} from 'gmp/session/session-state';
 import {
   type default as SessionStorage,
   setSessionValue,
 } from 'gmp/session/session-storage';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
-interface UserSessionData {
-  token?: string;
-  sessionTimeout?: Date;
-  locale?: string;
-  timezone?: string;
-  username?: string;
-}
-
 /**
  * UserSession class manages the user's session data, including JWT, token,
  * session timeout, locale, timezone, and username.
  */
-class UserSession implements Session {
+class UserSessionState implements SessionState {
   private storage: SessionStorage;
 
   constructor(
     storage: SessionStorage = globalThis.localStorage,
-    {token, sessionTimeout, locale, timezone, username}: UserSessionData = {},
+    {token, sessionTimeout, locale, timezone, username}: SessionLoginData = {},
   ) {
     this.storage = storage;
     if (isDefined(locale)) {
@@ -88,6 +84,17 @@ class UserSession implements Session {
   get username(): string | undefined {
     return this.storage.getItem('username') ?? undefined;
   }
+
+  login(data: SessionLoginData): UserSessionState {
+    return this;
+  }
+
+  logout(): SessionState {
+    this.token = undefined;
+    this.sessionTimeout = undefined;
+    this.username = undefined;
+    return new NoSessionState(this.storage);
+  }
 }
 
-export default UserSession;
+export default UserSessionState;
