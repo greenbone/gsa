@@ -163,7 +163,7 @@ class Gmp {
 
     this.log = logger;
 
-    this.http = http ?? new Http(this.settings);
+    this.http = http ?? new Http(this.settings, this.settings.session);
 
     this._login = new LoginCommand(this.http);
 

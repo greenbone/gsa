@@ -21,6 +21,7 @@ import {
 } from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
+import type Session from 'gmp/session/session';
 import {isDefined} from 'gmp/utils/identity';
 
 export type ErrorHandler = (request: XMLHttpRequest) => void;
@@ -34,7 +35,6 @@ export interface HttpOptions {
   apiServer: string;
   apiProtocol?: string;
   timeout?: number;
-  token?: string;
 }
 
 export interface RequestOptions {
@@ -51,17 +51,16 @@ class Http {
   readonly url: string;
   readonly timeout?: number;
   private errorHandlers: Array<ErrorHandler>;
-  // we need to store an object here to allow setting the token after login
-  private readonly options: HttpOptions;
+  private readonly session: Session;
 
-  private static readonly XHR = global.XMLHttpRequest;
+  private static readonly XHR = globalThis.XMLHttpRequest;
 
-  constructor(options: HttpOptions) {
+  constructor(options: HttpOptions, session: Session) {
     const {timeout, apiServer, apiProtocol} = options;
 
     this.url = buildServerUrl(apiServer, 'gmp', apiProtocol);
     this.timeout = timeout;
-    this.options = options;
+    this.session = session;
 
     this.errorHandlers = [];
 
@@ -70,7 +69,7 @@ class Http {
 
   getParams() {
     return {
-      token: this.options.token,
+      token: this.session.token,
     };
   }
 
