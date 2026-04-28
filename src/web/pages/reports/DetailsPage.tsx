@@ -512,7 +512,6 @@ const ReportDetailsPage = () => {
             onError={handleError}
             onFilterAddLogLevelClick={handleFilterAddLogLevel}
             onFilterChanged={handleFilterChange}
-            onFilterCreated={handleFilterCreated}
             onFilterDecreaseMinQoDClick={handleFilterDecreaseMinQoD}
             onFilterEditClick={handleFilterEditClick}
             onFilterRemoveClick={handleFilterRemoveClick}
