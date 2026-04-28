@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import NoSession from 'gmp/session/no-session';
+import type Session from 'gmp/session/session';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import {
   SEVERITY_RATING_CVSS_2,
@@ -94,6 +96,7 @@ const warnDeprecatedSetting = (oldName: string, newName: string) => {
 };
 
 class Settings {
+  public session: Session;
   public reloadInterval: number;
   public reloadIntervalActive: number;
   public reloadIntervalInactive: number;
@@ -120,7 +123,7 @@ class Settings {
   public readonly vendorVersion?: string;
 
   constructor(
-    storage: SettingsStorage = global.localStorage,
+    storage: SettingsStorage = globalThis.localStorage,
     options: SettingsOptions = {},
   ) {
     const {
@@ -156,6 +159,7 @@ class Settings {
     } = options;
 
     this.storage = storage;
+    this.session = new NoSession(storage);
 
     if (isDefined(loglevel)) {
       warnDeprecatedSetting('loglevel', 'logLevel');
@@ -180,10 +184,10 @@ class Settings {
     }
 
     if (!isDefined(apiProtocol)) {
-      apiProtocol = global.location.protocol;
+      apiProtocol = globalThis.location.protocol;
     }
     if (!isDefined(apiServer)) {
-      apiServer = global.location.host;
+      apiServer = globalThis.location.host;
     }
     if (
       severityRating !== SEVERITY_RATING_CVSS_3 &&
@@ -219,35 +223,43 @@ class Settings {
   }
 
   set token(value: string | undefined) {
-    set(this.storage, 'token', value);
+    if (isDefined(this.session)) {
+      this.session.token = value;
+    }
   }
 
   get token(): string | undefined {
-    return this.storage.getItem('token') || undefined;
+    return this.session?.token;
   }
 
   set timezone(value: string | undefined) {
-    set(this.storage, 'timezone', value);
+    if (isDefined(this.session)) {
+      this.session.timezone = value;
+    }
   }
 
   get timezone(): string | undefined {
-    return this.storage.getItem('timezone') || undefined;
+    return this.session?.timezone;
   }
 
   set username(value: string | undefined) {
-    set(this.storage, 'username', value);
+    if (isDefined(this.session)) {
+      this.session.username = value;
+    }
   }
 
   get username(): string | undefined {
-    return this.storage.getItem('username') || undefined;
+    return this.session?.username;
   }
 
   set locale(value: string | undefined) {
-    set(this.storage, 'locale', value);
+    if (isDefined(this.session)) {
+      this.session.locale = value;
+    }
   }
 
   get locale(): string | undefined {
-    return this.storage.getItem('locale') || undefined;
+    return this.session?.locale;
   }
 
   get logLevel(): string {
