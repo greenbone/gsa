@@ -6,16 +6,20 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Http, {type HttpOptions} from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
+import type Session from 'gmp/session/session';
 
 const mockGetFeedAccessStatusMessage = testing.fn();
 const mockFindActionInXMLString = testing.fn();
 
-const createHttp = (options?: Partial<HttpOptions>) => {
-  return new Http({
-    apiServer: 'example.com',
-    apiProtocol: 'https:',
-    ...options,
-  });
+const createHttp = (options?: Partial<HttpOptions>, sessionOptions?) => {
+  return new Http(
+    {
+      apiServer: 'example.com',
+      apiProtocol: 'https:',
+      ...options,
+    },
+    {...sessionOptions} as unknown as Session,
+  );
 };
 
 const createXHR = (status: number, response = '') => {
@@ -30,7 +34,7 @@ const createXHR = (status: number, response = '') => {
   } as unknown as XMLHttpRequest;
 };
 
-describe('Http', () => {
+describe('Http tests', () => {
   test('should handle response error without error handlers', async () => {
     const http = createHttp();
     const xhr = createXHR(500);
@@ -62,7 +66,7 @@ describe('Http', () => {
   });
 
   test('should allow to get params', () => {
-    const http = createHttp({token: '123'});
+    const http = createHttp({}, {token: '123'});
     expect(http.getParams()).toEqual({
       token: '123',
     });
