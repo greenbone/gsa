@@ -94,29 +94,30 @@ const warnDeprecatedSetting = (oldName: string, newName: string) => {
 };
 
 class Settings {
-  storage: SettingsStorage;
-  reloadInterval: number;
-  reloadIntervalActive: number;
-  reloadIntervalInactive: number;
-  reportResultsThreshold: number;
-  timeout: number;
-  readonly apiProtocol!: string;
-  readonly apiServer!: string;
-  readonly disableLoginForm!: boolean;
-  readonly enableAssetManagement!: boolean;
-  readonly enableCommunityFeedNotification: boolean;
-  readonly enableEPSS!: boolean;
-  readonly enableGreenboneSensor!: boolean;
-  readonly enableKrb5!: boolean;
-  readonly guestPassword?: string;
-  readonly guestUsername?: string;
-  readonly manualLanguageMapping!: LanguageMapping;
-  readonly manualUrl!: string;
-  readonly protocolDocUrl!: string;
-  readonly severityRating!: SeverityRating;
-  readonly vendorLabel?: string;
-  readonly vendorTitle!: string;
-  readonly vendorVersion?: string;
+  public reloadInterval: number;
+  public reloadIntervalActive: number;
+  public reloadIntervalInactive: number;
+  public reportResultsThreshold: number;
+  public timeout: number;
+
+  public readonly storage: SettingsStorage;
+  public readonly apiProtocol!: string;
+  public readonly apiServer!: string;
+  public readonly disableLoginForm!: boolean;
+  public readonly enableAssetManagement!: boolean;
+  public readonly enableCommunityFeedNotification: boolean;
+  public readonly enableEPSS!: boolean;
+  public readonly enableGreenboneSensor!: boolean;
+  public readonly enableKrb5!: boolean;
+  public readonly guestPassword?: string;
+  public readonly guestUsername?: string;
+  public readonly manualLanguageMapping!: LanguageMapping;
+  public readonly manualUrl!: string;
+  public readonly protocolDocUrl!: string;
+  public readonly severityRating!: SeverityRating;
+  public readonly vendorLabel?: string;
+  public readonly vendorTitle!: string;
+  public readonly vendorVersion?: string;
 
   constructor(
     storage: SettingsStorage = global.localStorage,
