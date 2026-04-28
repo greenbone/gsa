@@ -20,7 +20,7 @@ import {hasValue, isDefined} from 'gmp/utils/identity';
  * session timeout, locale, timezone, and username.
  */
 class UserSessionState implements SessionState {
-  private storage: SessionStorage;
+  private readonly storage: SessionStorage;
 
   constructor(
     storage: SessionStorage = globalThis.localStorage,
@@ -85,7 +85,8 @@ class UserSessionState implements SessionState {
     return this.storage.getItem('username') ?? undefined;
   }
 
-  login(data: SessionLoginData): UserSessionState {
+  login(_data: SessionLoginData): UserSessionState {
+    // No-op since we're already logged in
     return this;
   }
 
