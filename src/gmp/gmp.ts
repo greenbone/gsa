@@ -82,8 +82,6 @@ import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
 import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
 import logger, {type RootLogger} from 'gmp/log';
-import NoSession from 'gmp/session/no-session';
-import UserSession from 'gmp/session/user-session';
 import type Settings from 'gmp/settings';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -250,7 +248,7 @@ class Gmp {
       password,
     );
 
-    this.settings.session = new UserSession(this.settings.storage, {
+    this.settings.session.login({
       username,
       token,
       timezone,
@@ -268,7 +266,7 @@ class Gmp {
   public async doLogout() {
     if (this.isLoggedIn()) {
       const url = this.buildUrl('logout');
-      const args = {token: this.settings.token};
+      const args = {token: this.settings.session.token};
 
       try {
         await this.http.request('get', {
@@ -286,7 +284,7 @@ class Gmp {
   }
 
   public logout() {
-    this.settings.session = new NoSession(this.settings.storage);
+    this.settings.session.logout();
 
     for (const listener of this._logoutListeners) {
       listener();
@@ -294,7 +292,7 @@ class Gmp {
   }
 
   public isLoggedIn() {
-    return !isEmpty(this.settings.token);
+    return !isEmpty(this.settings.session.token);
   }
 
   public subscribeToLogout(listener: Listener) {
@@ -324,13 +322,13 @@ class Gmp {
   }
 
   public setLocale(lang?: string) {
-    this.settings.locale = lang;
+    this.settings.session.setLocale(lang);
     setLocale(lang);
     return this;
   }
 
   public setTimezone(timezone?: string) {
-    this.settings.timezone = timezone;
+    this.settings.session.setTimezone(timezone);
     return this;
   }
 

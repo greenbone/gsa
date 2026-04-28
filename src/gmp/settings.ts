@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import NoSession from 'gmp/session/no-session';
+import DefaultSession from 'gmp/session/default-session';
 import type Session from 'gmp/session/session';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import {
@@ -159,7 +159,7 @@ class Settings {
     } = options;
 
     this.storage = storage;
-    this.session = new NoSession(storage);
+    this.session = new DefaultSession(storage);
 
     if (isDefined(loglevel)) {
       warnDeprecatedSetting('loglevel', 'logLevel');
