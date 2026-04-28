@@ -87,10 +87,8 @@ const LoginPage = () => {
     try {
       const data = await gmp.login(username, password);
 
-      const {locale, timezone, sessionTimeout} = data;
+      const {timezone, sessionTimeout} = data;
 
-      gmp.setTimezone(timezone);
-      gmp.setLocale(locale);
       dispatch(setSessionTimeout(sessionTimeout));
       dispatch(setUsername(username));
       dispatch(setTimezone(timezone));
