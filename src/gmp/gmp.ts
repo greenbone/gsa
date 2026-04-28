@@ -82,6 +82,8 @@ import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
 import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
 import logger, {type RootLogger} from 'gmp/log';
+import NoSession from 'gmp/session/no-session';
+import UserSession from 'gmp/session/user-session';
 import type Settings from 'gmp/settings';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -248,10 +250,13 @@ class Gmp {
       password,
     );
 
-    this.settings.username = username;
-    this.settings.timezone = timezone;
-    this.settings.token = token;
-    this.settings.locale = locale;
+    this.settings.session = new UserSession(this.settings.storage, {
+      username,
+      token,
+      timezone,
+      locale,
+      sessionTimeout,
+    });
 
     setLocale(locale === BROWSER_LANGUAGE ? undefined : locale);
     return {
@@ -281,7 +286,7 @@ class Gmp {
   }
 
   public logout() {
-    this.clearToken();
+    this.settings.session = new NoSession(this.settings.storage);
 
     for (const listener of this._logoutListeners) {
       listener();
@@ -316,10 +321,6 @@ class Gmp {
       url += '#' + anchor;
     }
     return url;
-  }
-
-  private clearToken() {
-    this.settings.token = undefined;
   }
 
   public setLocale(lang?: string) {
