@@ -598,11 +598,16 @@ class ReportDetails extends React.Component {
             filter={reportFilter}
             includeNotes={reportComposerDefaults.includeNotes}
             includeOverrides={reportComposerDefaults.includeOverrides}
+            isContainerScanning={
+              isDefined(entity) &&
+              isDefined(entity.report?.task?.ociImageTarget?.id)
+            }
             reportConfigs={reportConfigs}
             reportFormats={reportFormats}
             showThresholdMessage={showThresholdMessage}
             storeAsDefault={storeAsDefault}
             threshold={threshold}
+            totalResultCount={resultsCounts?.all ?? 0}
             onClose={this.handleCloseDownloadReportDialog}
             onSave={this.handleReportDownload}
           />
