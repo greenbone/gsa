@@ -41,13 +41,13 @@ let origLocation: Location;
 
 describe('Settings tests', () => {
   beforeAll(() => {
-    origLocation = global.location;
+    origLocation = globalThis.location;
     // @ts-expect-error
-    global.location = {protocol: 'http:', host: 'localhost:9392'};
+    globalThis.location = {protocol: 'http:', host: 'localhost:9392'};
   });
 
   afterAll(() => {
-    global.location = origLocation;
+    globalThis.location = origLocation;
   });
 
   test('should init with defaults', () => {
@@ -62,7 +62,6 @@ describe('Settings tests', () => {
     expect(settings.guestUsername).toBeUndefined();
     expect(settings.guestPassword).toBeUndefined();
     expect(settings.logLevel).toEqual(DEFAULT_LOG_LEVEL);
-    expect(settings.locale).toBeUndefined();
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocolDocUrl).toEqual(DEFAULT_PROTOCOLDOC_URL);
@@ -77,10 +76,7 @@ describe('Settings tests', () => {
       DEFAULT_REPORT_RESULTS_THRESHOLD,
     );
     expect(settings.severityRating).toEqual(DEFAULT_SEVERITY_RATING);
-    expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
-    expect(settings.timezone).toBeUndefined();
-    expect(settings.username).toBeUndefined();
     expect(settings.vendorVersion).toBeUndefined();
     expect(settings.vendorLabel).toBeUndefined();
     expect(settings.vendorTitle).toBeUndefined();
@@ -125,7 +121,6 @@ describe('Settings tests', () => {
     expect(settings.enableStoreDebugLog).toEqual(true);
     expect(settings.guestUsername).toEqual('guest');
     expect(settings.guestPassword).toEqual('pass');
-    expect(settings.locale).toBeUndefined();
     expect(settings.logLevel).toEqual('error');
     expect(settings.manualUrl).toEqual('http://manual');
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
@@ -135,10 +130,7 @@ describe('Settings tests', () => {
     expect(settings.reloadIntervalInactive).toEqual(60);
     expect(settings.reportResultsThreshold).toEqual(10000);
     expect(settings.severityRating).toEqual(SEVERITY_RATING_CVSS_3);
-    expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(30000);
-    expect(settings.timezone).toBeUndefined();
-    expect(settings.username).toBeUndefined();
     expect(settings.vendorVersion).toEqual('foo');
     expect(settings.vendorLabel).toEqual('foo.bar');
     expect(settings.vendorTitle).toEqual('test title');
@@ -155,11 +147,7 @@ describe('Settings tests', () => {
   test('should init from store', () => {
     const storage = createStorage({
       enableStoreDebugLog: '0',
-      locale: 'en',
       logLevel: 'error',
-      timezone: 'cet',
-      token: 'atoken',
-      username: 'foo',
     });
     const settings = new Settings(storage, {
       // pass server and protocol. location defaults may not reliable on
@@ -172,7 +160,6 @@ describe('Settings tests', () => {
     expect(settings.apiServer).toEqual('foo');
     expect(settings.enableGreenboneSensor).toEqual(false);
     expect(settings.enableStoreDebugLog).toEqual(false);
-    expect(settings.locale).toEqual('en');
     expect(settings.logLevel).toEqual('error');
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.manualLanguageMapping).toBeUndefined();
@@ -188,10 +175,7 @@ describe('Settings tests', () => {
       DEFAULT_REPORT_RESULTS_THRESHOLD,
     );
     expect(settings.severityRating).toEqual(DEFAULT_SEVERITY_RATING);
-    expect(settings.token).toEqual('atoken');
     expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
-    expect(settings.timezone).toEqual('cet');
-    expect(settings.username).toEqual('foo');
 
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');
   });
@@ -201,7 +185,6 @@ describe('Settings tests', () => {
       apiProtocol: 'https',
       apiServer: 'foo.bar',
       enableStoreDebugLog: '0',
-      locale: 'de',
       logLevel: 'error',
       manualUrl: 'http://ipsum',
       protocolDocUrl: 'http://lorem',
@@ -209,10 +192,7 @@ describe('Settings tests', () => {
       reloadIntervalActive: '20',
       reloadIntervalInactive: '20',
       reportResultsThreshold: '500',
-      token: 'btoken',
       timeout: '10000',
-      timezone: 'cest',
-      username: 'bar',
       vendorVersion: 'foo',
       vendorLabel: 'foo.bar',
       vendorTitle: 'test title',
@@ -238,7 +218,6 @@ describe('Settings tests', () => {
     expect(settings.apiProtocol).toEqual('http');
     expect(settings.apiServer).toEqual('localhost');
     expect(settings.enableStoreDebugLog).toEqual(true);
-    expect(settings.locale).toEqual('de');
     expect(settings.logLevel).toEqual('debug');
     expect(settings.manualUrl).toEqual('http://manual');
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
@@ -248,10 +227,7 @@ describe('Settings tests', () => {
     expect(settings.reloadIntervalInactive).toEqual(60);
     expect(settings.reportResultsThreshold).toEqual(10000);
     expect(settings.severityRating).toEqual(DEFAULT_SEVERITY_RATING);
-    expect(settings.token).toEqual('btoken');
     expect(settings.timeout).toEqual(30000);
-    expect(settings.timezone).toEqual('cest');
-    expect(settings.username).toEqual('bar');
     expect(settings.vendorVersion).toEqual('bar');
     expect(settings.vendorLabel).toEqual('bar.foo');
     expect(settings.vendorTitle).toEqual('title test');
@@ -264,20 +240,12 @@ describe('Settings tests', () => {
   test('should delete settings from storage', () => {
     const storage = createStorage({
       enableStoreDebugLog: '1',
-      locale: 'en',
       logLevel: 'error',
-      token: 'atoken',
-      timezone: 'cet',
-      username: 'foo',
     });
     const settings = new Settings(storage, {});
 
     expect(settings.enableStoreDebugLog).toEqual(true);
-    expect(settings.locale).toEqual('en');
     expect(settings.logLevel).toEqual('error');
-    expect(settings.token).toEqual('atoken');
-    expect(settings.timezone).toEqual('cet');
-    expect(settings.username).toEqual('foo');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');
@@ -285,20 +253,8 @@ describe('Settings tests', () => {
     settings.enableStoreDebugLog = undefined;
     expect(storage.removeItem).toHaveBeenCalledWith('enableStoreDebugLog');
 
-    settings.locale = undefined;
-    expect(storage.removeItem).toHaveBeenCalledWith('locale');
-
     settings.logLevel = undefined;
     expect(storage.removeItem).toHaveBeenCalledWith('logLevel');
-
-    settings.token = undefined;
-    expect(storage.removeItem).toHaveBeenCalledWith('token');
-
-    settings.timezone = undefined;
-    expect(storage.removeItem).toHaveBeenCalledWith('timezone');
-
-    settings.username = undefined;
-    expect(storage.removeItem).toHaveBeenCalledWith('username');
   });
 
   test('should freeze properties', () => {
