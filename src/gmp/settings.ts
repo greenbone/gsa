@@ -222,46 +222,6 @@ class Settings {
     setAndFreeze(this, 'vendorVersion', vendorVersion);
   }
 
-  set token(value: string | undefined) {
-    if (isDefined(this.session)) {
-      this.session.token = value;
-    }
-  }
-
-  get token(): string | undefined {
-    return this.session?.token;
-  }
-
-  set timezone(value: string | undefined) {
-    if (isDefined(this.session)) {
-      this.session.timezone = value;
-    }
-  }
-
-  get timezone(): string | undefined {
-    return this.session?.timezone;
-  }
-
-  set username(value: string | undefined) {
-    if (isDefined(this.session)) {
-      this.session.username = value;
-    }
-  }
-
-  get username(): string | undefined {
-    return this.session?.username;
-  }
-
-  set locale(value: string | undefined) {
-    if (isDefined(this.session)) {
-      this.session.locale = value;
-    }
-  }
-
-  get locale(): string | undefined {
-    return this.session?.locale;
-  }
-
   get logLevel(): string {
     return this.storage.getItem('logLevel') as string;
   }

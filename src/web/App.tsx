@@ -28,7 +28,7 @@ import {
 void initLocale();
 const queryClient = new QueryClient();
 
-const settings = new Settings(global.localStorage, global.config);
+const settings = new Settings(globalThis.localStorage, globalThis.config);
 const gmp = new Gmp(settings);
 
 const store = configureStore({
@@ -41,7 +41,7 @@ const store = configureStore({
 window.gmp = gmp;
 
 const initStore = () => {
-  const {timezone, username} = gmp.settings;
+  const {timezone, username} = gmp.settings.session;
 
   if (isDefined(timezone)) {
     store.dispatch(setTimezone(timezone));
