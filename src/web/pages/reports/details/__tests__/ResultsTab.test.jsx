@@ -91,52 +91,57 @@ export const result3 = Result.fromElement({
 
 const results = [result1, result2, result3];
 
-let currentSettings;
-let getAggregates;
-let getDashboardSetting;
-let getFilters;
-let getResults;
-
-beforeEach(() => {
-  // mock gmp commands
-
+const createGmp = ({
   getResults = testing.fn().mockResolvedValue({
     data: results,
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
-  getFilters = testing.fn().mockReturnValue(
-    Promise.resolve({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    }),
-  );
-
-  getDashboardSetting = testing.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
-
+  }),
   getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
+  getDashboardSetting = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getFilters = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
   currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
-  });
+  }),
+}) => ({
+  results: {
+    get: getResults,
+    getSeverityAggregates: getAggregates,
+    getWordCountsAggregates: getAggregates,
+  },
+  filters: {
+    get: getFilters,
+  },
+  dashboard: {
+    getSetting: getDashboardSetting,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    severityRating: SEVERITY_RATING_CVSS_3,
+    session: {token: 'test-token'},
+  },
+  user: {currentSettings},
 });
 
 describe('Report Results Tab tests', () => {
@@ -148,7 +153,7 @@ describe('Report Results Tab tests', () => {
     const onFilterRemoveSeverityClick = testing.fn();
     const onTargetEditClick = testing.fn();
 
-    getResults = testing.fn().mockResolvedValue({
+    const getResults = testing.fn().mockResolvedValue({
       data: results,
       meta: {
         filter: Filter.fromString(),
@@ -162,26 +167,7 @@ describe('Report Results Tab tests', () => {
       },
     });
 
-    const gmp = {
-      results: {
-        get: getResults,
-        getSeverityAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {
-        manualUrl,
-        reloadInterval,
-        severityRating: SEVERITY_RATING_CVSS_3,
-        token: 'test-token',
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({getResults});
 
     const {render, store} = rendererWith({
       gmp,
@@ -283,7 +269,7 @@ describe('Report Results Tab tests', () => {
     const onFilterRemoveSeverityClick = testing.fn();
     const onTargetEditClick = testing.fn();
 
-    getResults = testing.fn().mockResolvedValue({
+    const getResults = testing.fn().mockResolvedValue({
       data: results,
       meta: {
         filter: Filter.fromString(),
@@ -297,26 +283,7 @@ describe('Report Results Tab tests', () => {
       },
     });
 
-    const gmp = {
-      results: {
-        get: getResults,
-        getSeverityAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {
-        manualUrl,
-        reloadInterval,
-        severityRating: SEVERITY_RATING_CVSS_3,
-        token: 'test-token',
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({getResults});
 
     const {render, store} = rendererWith({
       gmp,

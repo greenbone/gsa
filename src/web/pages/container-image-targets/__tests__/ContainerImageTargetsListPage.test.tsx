@@ -41,40 +41,45 @@ const makeTarget = (id = 'oci1') =>
     permissions: {permission: [{name: 'everything'}]},
   });
 
+const createGmp = ({
+  getOciImageTargets = testing.fn().mockResolvedValue({
+    data: [makeTarget()],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts({
+        first: 1,
+        all: 1,
+        filtered: 1,
+        length: 1,
+        rows: 10,
+      }),
+    },
+  }),
+  deleteBulk = testing.fn().mockResolvedValue({foo: 'bar'}),
+  exportBulk = testing.fn().mockResolvedValue({data: 'exported data'}),
+} = {}) => ({
+  ociimagetarget: {
+    create: testing.fn().mockResolvedValue({id: 'created-id'}),
+    save: testing.fn().mockResolvedValue({id: 'saved-id'}),
+    clone: testing.fn().mockResolvedValue({id: 'cloned-id'}),
+    delete: testing.fn().mockResolvedValue(undefined),
+    export: testing.fn().mockResolvedValue({foo: 'bar'}),
+  },
+  ociimagetargets: {
+    get: getOciImageTargets,
+    delete: deleteBulk,
+    export: exportBulk,
+  },
+  filters: {
+    get: getFilters,
+  },
+  settings: {manualUrl, session: {token: 'token'}},
+  user: {currentSettings, getSetting},
+});
+
 describe('ContainerImageTargetsListPage tests', () => {
   test('should render full ContainerImageTargetsListPage', async () => {
-    const target = makeTarget();
-
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-
-    const getOciImageTargets = testing.fn().mockResolvedValue({
-      data: [target],
-      meta: {filter: Filter.fromString(), counts},
-    });
-
-    const gmp = {
-      ociimagetarget: {
-        create: testing.fn().mockResolvedValue({id: 'created-id'}),
-        save: testing.fn().mockResolvedValue({id: 'saved-id'}),
-        clone: testing.fn().mockResolvedValue({id: 'cloned-id'}),
-        delete: testing.fn().mockResolvedValue(undefined),
-        export: testing.fn().mockResolvedValue({foo: 'bar'}),
-      },
-      ociimagetargets: {
-        get: getOciImageTargets,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, token: 'token'},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -131,43 +136,7 @@ describe('ContainerImageTargetsListPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const target = makeTarget();
-
-    const deleteBulk = testing.fn().mockResolvedValue({foo: 'bar'});
-    const exportBulk = testing.fn().mockResolvedValue({data: 'exported data'});
-
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-
-    const getOciImageTargets = testing.fn().mockResolvedValue({
-      data: [target],
-      meta: {filter: Filter.fromString(), counts},
-    });
-
-    const gmp = {
-      ociimagetarget: {
-        create: testing.fn().mockResolvedValue({id: 'created-id'}),
-        save: testing.fn().mockResolvedValue({id: 'saved-id'}),
-        clone: testing.fn().mockResolvedValue({id: 'cloned-id'}),
-        delete: testing.fn().mockResolvedValue(undefined),
-        export: testing.fn().mockResolvedValue({foo: 'bar'}),
-      },
-      ociimagetargets: {
-        get: getOciImageTargets,
-        delete: deleteBulk,
-        export: exportBulk,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, token: 'token'},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -195,7 +164,7 @@ describe('ContainerImageTargetsListPage tests', () => {
     const exportIcon = screen.getByTitle('Export page contents');
     fireEvent.click(exportIcon);
     await wait();
-    expect(exportBulk).toHaveBeenCalled();
+    expect(gmp.ociimagetargets.export).toHaveBeenCalled();
 
     const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
@@ -207,32 +176,11 @@ describe('ContainerImageTargetsListPage tests', () => {
     fireEvent.click(moveToTrashcanButton);
     await wait();
 
-    expect(deleteBulk).toHaveBeenCalled();
+    expect(gmp.ociimagetargets.delete).toHaveBeenCalled();
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const getOciImageTargets = testing.fn().mockResolvedValue({
-      data: [makeTarget()],
-      meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
-    });
-
-    const gmp = {
-      ociimagetarget: {
-        create: testing.fn().mockResolvedValue({id: 'created-id'}),
-        save: testing.fn().mockResolvedValue({id: 'saved-id'}),
-        clone: testing.fn().mockResolvedValue({id: 'cloned-id'}),
-        delete: testing.fn().mockResolvedValue(undefined),
-        export: testing.fn().mockResolvedValue({foo: 'bar'}),
-      },
-      ociimagetargets: {
-        get: getOciImageTargets,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, token: 'token'},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: false, router: true});
 

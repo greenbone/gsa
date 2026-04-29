@@ -29,43 +29,35 @@ const createMockResult = (id = '101') => {
   });
 };
 
+const reportResultsCounts = new CollectionCounts({
+  filtered: 1,
+  all: 1,
+  first: 1,
+  rows: 10,
+});
+
+const results = [createMockResult()];
+const resultsData = {
+  entities: results,
+  counts: reportResultsCounts,
+};
+
+const createGmp = ({
+  get = testing.fn().mockResolvedValue(resultsData),
+} = {}) => ({
+  results: {
+    get,
+  },
+  settings: {
+    session: {token: 'test-token'},
+    enableEPSS: false,
+  },
+});
+
 describe('ResultsTabContent', () => {
   describe('Container Scanning', () => {
     test('should render ContainerScanningResultsTab when isContainerScanning is true and has results', () => {
-      const results = {
-        entities: [createMockResult()],
-        counts: new CollectionCounts({
-          filtered: 1,
-          all: 1,
-          first: 1,
-          rows: 10,
-        }),
-      };
-
-      const reportResultsCounts = new CollectionCounts({
-        filtered: 1,
-        all: 1,
-        first: 1,
-        rows: 10,
-      });
-
-      const getMock = testing.fn().mockResolvedValue({
-        data: results.entities,
-        meta: {
-          counts: results.counts,
-          filter,
-        },
-      });
-
-      const gmp = {
-        results: {
-          get: getMock,
-        },
-        settings: {
-          token: 'test-token',
-          enableEPSS: false,
-        },
-      };
+      const gmp = createGmp();
 
       const {render} = rendererWith({gmp});
 
@@ -78,7 +70,7 @@ describe('ResultsTabContent', () => {
           reportFilter={filter}
           reportId="report-123"
           reportResultsCounts={reportResultsCounts}
-          results={results}
+          results={resultsData}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={testing.fn()}
@@ -109,11 +101,7 @@ describe('ResultsTabContent', () => {
         rows: 10,
       });
 
-      const gmp = {
-        settings: {
-          enableEPSS: false,
-        },
-      };
+      const gmp = createGmp();
 
       const onTargetEditClick = testing.fn();
       const {render} = rendererWith({gmp, capabilities: true});
@@ -159,11 +147,7 @@ describe('ResultsTabContent', () => {
         rows: 10,
       });
 
-      const gmp = {
-        settings: {
-          enableEPSS: false,
-        },
-      };
+      const gmp = createGmp();
 
       const onFilterEditClick = testing.fn();
       const {render} = rendererWith({gmp});
@@ -196,40 +180,7 @@ describe('ResultsTabContent', () => {
 
   describe('Regular Scanning', () => {
     test('should render ResultsTab when isContainerScanning is false', () => {
-      const results = {
-        entities: [createMockResult()],
-        counts: new CollectionCounts({
-          filtered: 1,
-          all: 1,
-          first: 1,
-          rows: 10,
-        }),
-      };
-
-      const reportResultsCounts = new CollectionCounts({
-        filtered: 1,
-        all: 1,
-        first: 1,
-        rows: 10,
-      });
-
-      const getMock = testing.fn().mockResolvedValue({
-        data: results.entities,
-        meta: {
-          counts: results.counts,
-          filter,
-        },
-      });
-
-      const gmp = {
-        results: {
-          get: getMock,
-        },
-        settings: {
-          token: 'test-token',
-          enableEPSS: false,
-        },
-      };
+      const gmp = createGmp();
 
       const {render} = rendererWith({gmp});
 
@@ -242,7 +193,7 @@ describe('ResultsTabContent', () => {
           reportFilter={filter}
           reportId="report-123"
           reportResultsCounts={reportResultsCounts}
-          results={results}
+          results={resultsData}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={testing.fn()}
@@ -261,11 +212,7 @@ describe('ResultsTabContent', () => {
         counts: undefined,
       };
 
-      const gmp = {
-        settings: {
-          enableEPSS: false,
-        },
-      };
+      const gmp = createGmp();
 
       const {render} = rendererWith({gmp});
 
@@ -300,11 +247,7 @@ describe('ResultsTabContent', () => {
         }),
       };
 
-      const gmp = {
-        settings: {
-          enableEPSS: false,
-        },
-      };
+      const gmp = createGmp();
 
       const {render} = rendererWith({gmp});
 
@@ -348,11 +291,7 @@ describe('ResultsTabContent', () => {
         rows: 10,
       });
 
-      const gmp = {
-        settings: {
-          enableEPSS: false,
-        },
-      };
+      const gmp = createGmp();
 
       const onFilterAddLogLevelClick = testing.fn();
       const onFilterDecreaseMinQoDClick = testing.fn();

@@ -16,16 +16,36 @@ import {
 import Response from 'gmp/http/response';
 import AgentGroupsDialog from 'web/pages/agent-groups/AgentGroupsDialog';
 
+const agent = {
+  id: 'a1',
+  agentId: 'A1',
+  name: 'Agent One',
+  hostname: 'host1',
+  authorized: true,
+  updateToLatest: true,
+  config: {
+    agentScriptExecutor: {schedulerCronTimes: ['0 0 1 * *']},
+    heartbeat: {intervalInSeconds: 77},
+  },
+};
+
+const scanner = {id: 's1', name: 'Controller One'};
+
+const createGmp = ({
+  getScanners = testing.fn().mockResolvedValue(new Response([scanner], {})),
+  getAgents = testing.fn().mockResolvedValue(new Response([agent], {})),
+} = {}) => ({
+  settings: {session: {token: 'token'}},
+  scanners: {get: getScanners},
+  agents: {get: getAgents},
+});
+
 describe('AgentGroupsDialog tests', () => {
   test('should render without issues and close', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    const gmp = {
-      settings: {token: 'token'},
-      scanners: {get: testing.fn().mockResolvedValue(new Response([], {}))},
-      agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp});
 
@@ -43,11 +63,7 @@ describe('AgentGroupsDialog tests', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    const gmp = {
-      settings: {token: 'token'},
-      scanners: {get: testing.fn().mockResolvedValue(new Response([], {}))},
-      agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp});
 
@@ -73,28 +89,7 @@ describe('AgentGroupsDialog tests', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    const agent = {
-      id: 'a1',
-      agentId: 'A1',
-      name: 'Agent One',
-      hostname: 'host1',
-      authorized: true,
-      updateToLatest: true,
-      config: {
-        agentScriptExecutor: {schedulerCronTimes: ['0 0 1 * *']},
-        heartbeat: {intervalInSeconds: 77},
-      },
-    };
-
-    const scanner = {id: 's1', name: 'Controller One'};
-
-    const gmp = {
-      settings: {token: 'token'},
-      scanners: {
-        get: testing.fn().mockResolvedValue(new Response([scanner], {})),
-      },
-      agents: {get: testing.fn().mockResolvedValue(new Response([agent], {}))},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp});
 
@@ -146,15 +141,9 @@ describe('AgentGroupsDialog tests', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    const scanner = {id: 's1', name: 'Controller One'};
-
-    const gmp = {
-      settings: {token: 'token'},
-      scanners: {
-        get: testing.fn().mockResolvedValue(new Response([scanner], {})),
-      },
-      agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
-    };
+    const gmp = createGmp({
+      getAgents: testing.fn().mockResolvedValue(new Response([], {})),
+    });
 
     const {render} = rendererWith({gmp});
 
@@ -187,15 +176,12 @@ describe('AgentGroupsDialog tests', () => {
     const scanner1 = {id: 's1', name: 'Controller One'};
     const scanner2 = {id: 's2', name: 'Controller Two'};
 
-    const gmp = {
-      settings: {token: 'token'},
-      scanners: {
-        get: testing
-          .fn()
-          .mockResolvedValue(new Response([scanner1, scanner2], {})),
-      },
-      agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
-    };
+    const gmp = createGmp({
+      getScanners: testing
+        .fn()
+        .mockResolvedValue(new Response([scanner1, scanner2], {})),
+      getAgents: testing.fn().mockResolvedValue(new Response([], {})),
+    });
 
     const {render} = rendererWith({gmp});
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);

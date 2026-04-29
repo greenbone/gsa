@@ -21,47 +21,52 @@ const makeInstaller = (id = 'i1') =>
     userCapabilities: new EverythingCapabilities(),
   });
 
+const createGmp = ({
+  getAgentInstallers = testing.fn().mockResolvedValue({
+    data: [makeInstaller('i1')],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts({
+        first: 1,
+        all: 1,
+        filtered: 1,
+        length: 1,
+        rows: 10,
+      }),
+    },
+  }),
+} = {}) => ({
+  agentinstallers: {
+    get: getAgentInstallers,
+  },
+  agentinstaller: {
+    download: testing.fn().mockResolvedValue({data: 'file-content'}),
+  },
+  settings: {session: {token: 'token'}},
+  filters: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {counts: new CollectionCounts()},
+    }),
+  },
+  user: {
+    getSetting: testing.fn().mockResolvedValue({value: 10}),
+    saveSetting: testing.fn().mockResolvedValue(undefined),
+  },
+  trashcan: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {counts: new CollectionCounts()},
+    }),
+  },
+});
+
 describe('AgentInstallerListPage tests', () => {
   test('renders full AgentInstallerListPage with data and toolbar', async () => {
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-
-    const getAgentInstallers = testing.fn().mockResolvedValue({
-      data: [makeInstaller('i1')],
-      meta: {filter: Filter.fromString(), counts},
-    });
-
-    const gmp = {
-      settings: {token: 'token'},
-      agentinstaller: {},
-      agentinstallers: {
-        get: getAgentInstallers,
-      },
-      filters: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {counts: new CollectionCounts()},
-        }),
-      },
-      user: {
-        getSetting: testing.fn().mockResolvedValue({value: 10}),
-        saveSetting: testing.fn().mockResolvedValue(undefined),
-      },
-      trashcan: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {counts: new CollectionCounts()},
-        }),
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
-      capabilities: new EverythingCapabilities(),
+      capabilities: true,
       gmp,
     });
 
@@ -71,7 +76,7 @@ describe('AgentInstallerListPage tests', () => {
 
     expect(screen.getByText('Agent Installers 1 of 1')).toBeInTheDocument();
     expect(screen.getByText('Agent Installer i1')).toBeInTheDocument();
-    expect(getAgentInstallers).toHaveBeenCalled();
+    expect(gmp.agentinstallers.get).toHaveBeenCalled();
   });
 
   test('renders empty state when no installers are available', async () => {
@@ -88,32 +93,9 @@ describe('AgentInstallerListPage tests', () => {
       meta: {filter: Filter.fromString(), counts},
     });
 
-    const gmp = {
-      settings: {token: 'token'},
-      agentinstaller: {},
-      agentinstallers: {
-        get: getAgentInstallers,
-      },
-      filters: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {counts: new CollectionCounts()},
-        }),
-      },
-      user: {
-        getSetting: testing.fn().mockResolvedValue({value: 10}),
-        saveSetting: testing.fn().mockResolvedValue(undefined),
-      },
-      trashcan: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {counts: new CollectionCounts()},
-        }),
-      },
-    };
-
+    const gmp = createGmp({getAgentInstallers});
     const {render} = rendererWith({
-      capabilities: new EverythingCapabilities(),
+      capabilities: true,
       gmp,
     });
 
@@ -127,48 +109,10 @@ describe('AgentInstallerListPage tests', () => {
   });
 
   test('handles download action', async () => {
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-
-    const installer = makeInstaller('i1');
-    const getAgentInstallers = testing.fn().mockResolvedValue({
-      data: [installer],
-      meta: {filter: Filter.fromString(), counts},
-    });
-
-    const gmp = {
-      settings: {token: 'token'},
-      agentinstaller: {
-        download: testing.fn().mockResolvedValue({data: 'file-content'}),
-      },
-      agentinstallers: {
-        get: getAgentInstallers,
-      },
-      filters: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {counts: new CollectionCounts()},
-        }),
-      },
-      user: {
-        getSetting: testing.fn().mockResolvedValue({value: 10}),
-        saveSetting: testing.fn().mockResolvedValue(undefined),
-      },
-      trashcan: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {counts: new CollectionCounts()},
-        }),
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
-      capabilities: new EverythingCapabilities(),
+      capabilities: true,
       gmp,
     });
 
@@ -181,46 +125,11 @@ describe('AgentInstallerListPage tests', () => {
 
     await wait();
 
-    expect(gmp.agentinstaller.download).toHaveBeenCalledWith(installer.id);
+    expect(gmp.agentinstaller.download).toHaveBeenCalledWith('i1');
   });
 
   test('displays filter dialog when filter button is clicked', async () => {
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-
-    const getAgentInstallers = testing.fn().mockResolvedValue({
-      data: [makeInstaller('i1')],
-      meta: {filter: Filter.fromString(), counts},
-    });
-
-    const gmp = {
-      settings: {token: 'token'},
-      agentinstaller: {},
-      agentinstallers: {
-        get: getAgentInstallers,
-      },
-      filters: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {counts: new CollectionCounts()},
-        }),
-      },
-      user: {
-        getSetting: testing.fn().mockResolvedValue({value: 10}),
-        saveSetting: testing.fn().mockResolvedValue(undefined),
-      },
-      trashcan: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {counts: new CollectionCounts()},
-        }),
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: new EverythingCapabilities(),

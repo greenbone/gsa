@@ -21,18 +21,24 @@ const sampleAgentWithUpdateToLatest: Agent = new Agent({
   updateToLatest: true,
 });
 
+const createGmp = ({
+  save = testing.fn().mockResolvedValue(undefined),
+  delete: deleteMock = testing.fn().mockResolvedValue(undefined),
+  modify = testing.fn().mockResolvedValue(undefined),
+} = {}) => ({
+  settings: {session: {token: 'token'}},
+  agent: {
+    save,
+    delete: deleteMock,
+    modify,
+  },
+});
+
 describe('AgentComponent tests', () => {
   test('should open dialog for edit and call save mutation', async () => {
     const onSaved = testing.fn();
 
-    const gmp = {
-      settings: {token: 'token'},
-      agent: {
-        save: testing.fn().mockResolvedValue(undefined),
-        delete: testing.fn().mockResolvedValue(undefined),
-        modify: testing.fn().mockResolvedValue(undefined),
-      },
-    };
+    const gmp = createGmp();
 
     type AgentActions = {
       delete: (entity: Agent) => Promise<void>;
@@ -63,16 +69,8 @@ describe('AgentComponent tests', () => {
 
   test('should handle delete action', async () => {
     const onDeleted = testing.fn();
-    const deleteMock = testing.fn().mockResolvedValue(undefined);
 
-    const gmp = {
-      settings: {token: 'token'},
-      agent: {
-        save: testing.fn().mockResolvedValue(undefined),
-        delete: deleteMock,
-        modify: testing.fn().mockResolvedValue(undefined),
-      },
-    };
+    const gmp = createGmp();
 
     type AgentActions = {
       delete: (entity: Agent) => Promise<void>;
@@ -93,22 +91,14 @@ describe('AgentComponent tests', () => {
 
     await actions?.delete(sampleAgent);
 
-    expect(deleteMock).toHaveBeenCalledWith({id: 'a1'});
+    expect(gmp.agent.delete).toHaveBeenCalledWith({id: 'a1'});
     expect(onDeleted).toHaveBeenCalled();
   });
 
   test('should handle authorize action', async () => {
     const onSaved = testing.fn();
-    const modifyMock = testing.fn().mockResolvedValue(undefined);
 
-    const gmp = {
-      settings: {token: 'token'},
-      agent: {
-        save: testing.fn().mockResolvedValue(undefined),
-        delete: testing.fn().mockResolvedValue(undefined),
-        modify: modifyMock,
-      },
-    };
+    const gmp = createGmp();
 
     type AgentActions = {
       delete: (entity: Agent) => Promise<void>;
@@ -137,14 +127,7 @@ describe('AgentComponent tests', () => {
     const deleteError = new Error('Delete failed');
     const deleteMock = testing.fn().mockRejectedValue(deleteError);
 
-    const gmp = {
-      settings: {token: 'token'},
-      agent: {
-        save: testing.fn().mockResolvedValue(undefined),
-        delete: deleteMock,
-        modify: testing.fn().mockResolvedValue(undefined),
-      },
-    };
+    const gmp = createGmp({delete: deleteMock});
 
     type AgentActions = {
       delete: (entity: Agent) => Promise<void>;
@@ -170,16 +153,8 @@ describe('AgentComponent tests', () => {
 
   test('should handle edit dialog with updateToLatest and save correctly', async () => {
     const onSaved = testing.fn();
-    const modifyMock = testing.fn().mockResolvedValue(undefined);
 
-    const gmp = {
-      settings: {token: 'token'},
-      agent: {
-        save: testing.fn().mockResolvedValue(undefined),
-        delete: testing.fn().mockResolvedValue(undefined),
-        modify: modifyMock,
-      },
-    };
+    const gmp = createGmp();
 
     type AgentActions = {
       delete: (entity: Agent) => Promise<void>;
@@ -218,14 +193,7 @@ describe('AgentComponent tests', () => {
   test('should pass updateToLatest to AgentDialog when editing agent', async () => {
     const onSaved = testing.fn();
 
-    const gmp = {
-      settings: {token: 'token'},
-      agent: {
-        save: testing.fn().mockResolvedValue(undefined),
-        delete: testing.fn().mockResolvedValue(undefined),
-        modify: testing.fn().mockResolvedValue(undefined),
-      },
-    };
+    const gmp = createGmp();
 
     type AgentActions = {
       delete: (entity: Agent) => Promise<void>;

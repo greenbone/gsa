@@ -44,7 +44,7 @@ const mockedTimezones = [
 ];
 
 const createGmp = () => ({
-  settings: {token: 'token'},
+  settings: {session: {token: 'token'}},
 
   timezones: {
     get: testing.fn().mockResolvedValue(new Response(mockedTimezones, {})),
@@ -229,8 +229,10 @@ describe('ModifyTaskWizard component tests', () => {
   test('should allow to cancel the modify wizard', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
     });
 

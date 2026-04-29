@@ -26,6 +26,8 @@ const audit2 = Audit.fromElement({
   permissions: {permission: [{name: 'everything'}]},
 });
 
+const filter = Filter.fromString('name~test');
+
 const SingleAuditComponent = ({id}: {id: string}) => {
   const {data, isLoading, isError} = useGetAudit({id});
 
@@ -71,17 +73,26 @@ const AuditListComponent = ({filter}: {filter?: Filter}) => {
   );
 };
 
+const createGmp = () => ({
+  audit: {
+    get: testing.fn().mockResolvedValue({data: audit}),
+  },
+  audits: {
+    get: testing.fn().mockResolvedValue({
+      data: [audit, audit2],
+      meta: {
+        filter,
+        counts: new CollectionCounts({all: 2, filtered: 2, length: 2}),
+      },
+    }),
+    getById: testing.fn().mockResolvedValue({data: audit}),
+  },
+  settings: {session: {token: 'test-token'}},
+});
+
 describe('useGetAudit', () => {
   test('should fetch a single audit', async () => {
-    const mockGet = testing.fn().mockResolvedValue({data: audit});
-
-    const gmp = {
-      audit: {
-        get: mockGet,
-      },
-      settings: {token: 'test-token'},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
     render(<SingleAuditComponent id="audit-1" />);
 
@@ -89,20 +100,12 @@ describe('useGetAudit', () => {
       expect(screen.getByTestId('audit-name')).toHaveTextContent('Test Audit');
     });
 
-    expect(mockGet).toHaveBeenCalledWith({id: 'audit-1'});
+    expect(gmp.audit.get).toHaveBeenCalledWith({id: 'audit-1'});
     expect(screen.getByTestId('audit-id')).toHaveTextContent('audit-1');
   });
 
   test('should show loading state initially', () => {
-    const mockGet = testing.fn().mockReturnValue(new Promise(() => {}));
-
-    const gmp = {
-      audit: {
-        get: mockGet,
-      },
-      settings: {token: 'test-token'},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
     render(<SingleAuditComponent id="audit-1" />);
 
@@ -112,22 +115,7 @@ describe('useGetAudit', () => {
 
 describe('useGetAudits', () => {
   test('should fetch a list of audits', async () => {
-    const filter = Filter.fromString('name~test');
-    const mockGet = testing.fn().mockResolvedValue({
-      data: [audit, audit2],
-      meta: {
-        filter: Filter.fromString('name~test'),
-        counts: new CollectionCounts({all: 2, filtered: 2, length: 2}),
-      },
-    });
-
-    const gmp = {
-      audits: {
-        get: mockGet,
-      },
-      settings: {token: 'test-token'},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
     render(<AuditListComponent filter={filter} />);
 
@@ -135,7 +123,7 @@ describe('useGetAudits', () => {
       expect(screen.getAllByTestId('audit-item')).toHaveLength(2);
     });
 
-    expect(mockGet).toHaveBeenCalled();
+    expect(gmp.audits.get).toHaveBeenCalled();
     expect(screen.getByText('Test Audit')).toBeInTheDocument();
     expect(screen.getByText('Test Audit 2')).toBeInTheDocument();
   });

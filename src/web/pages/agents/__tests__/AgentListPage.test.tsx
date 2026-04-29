@@ -44,7 +44,7 @@ const createMockGmp = ({
   sync = syncMock,
 } = {}) => ({
   settings: {
-    token: 'token',
+    session: {token: 'token'},
     manualUrl: 'https://docs.greenbone.net',
     reloadInterval: 30000,
   },
