@@ -157,6 +157,8 @@ const ReportDetailsPage = () => {
 
   const {
     data: entity,
+    error: queryError,
+    isError,
     isLoading,
     isFetching,
   } = useGetReport({
@@ -164,6 +166,8 @@ const ReportDetailsPage = () => {
     filter: pageFilter,
     refetchInterval: getRefetchInterval,
   });
+
+  const reportError = isError ? queryError : undefined;
 
   const reportFilter = getReportFilter(entity);
 
@@ -497,7 +501,7 @@ const ReportDetailsPage = () => {
             operatingSystemsCounts={operatingSystemsCounts}
             pageFilter={pageFilter}
             portsCounts={portsCounts}
-            reportError={undefined}
+            reportError={reportError}
             reportFilter={reportFilter}
             reportId={reportId}
             resetFilter={REPORT_RESET_FILTER}
