@@ -8,6 +8,7 @@ import type Response from 'gmp/http/response';
 import type {XmlMeta} from 'gmp/http/transform/fast-xml';
 import type Model from 'gmp/models/model';
 import useGmp from 'web/hooks/useGmp';
+import useSession from 'web/hooks/useSession';
 import {
   transformRefetchInterval,
   type RefetchIntervalFn,
@@ -27,7 +28,8 @@ const useGetEntity = <TModel extends Model>({
   refetchInterval,
 }: UseGetEntityParams<TModel>) => {
   const gmp = useGmp();
-  const {token} = gmp.settings;
+  const session = useSession();
+  const token = session?.token;
 
   const interval = refetchInterval ?? gmp.settings.reloadInterval;
   const resolvedRefetchInterval =

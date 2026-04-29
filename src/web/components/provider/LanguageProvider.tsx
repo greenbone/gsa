@@ -12,6 +12,7 @@ import {
   DEFAULT_LANGUAGE,
 } from 'gmp/locale/lang';
 import useGmp from 'web/hooks/useGmp';
+import useSession from 'web/hooks/useSession';
 
 interface LanguageContextProps {
   language: string;
@@ -29,10 +30,9 @@ export const LanguageContext = createContext<LanguageContextProps>({
   setLanguage: async () => {},
 });
 
-export const LanguageProvider: React.FC<LanguageProviderProps> = ({
-  children,
-}) => {
+export const LanguageProvider = ({children}: LanguageProviderProps) => {
   const gmp = useGmp();
+  const session = useSession();
   const [languageState, setLanguageState] = useState<string>(
     getLocale() ?? DEFAULT_LANGUAGE,
   );
@@ -45,7 +45,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
           setDateLocale(newLang);
 
           // store language in the session
-          gmp.settings.locale = newLang;
+          session.setLocale(newLang);
 
           void (async () => {
             try {
@@ -60,7 +60,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
         return currentLang;
       });
     },
-    [gmp],
+    [gmp, session],
   );
 
   useEffect(() => {
@@ -83,13 +83,13 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
         setDateLocale(newLang);
 
         // store language in the session
-        gmp.settings.locale = newLang;
+        session.setLocale(newLang);
 
         // Save the setting permanently
         await gmp.user.saveSetting(SETTING_ID_LOCALE, newLang);
       }
     },
-    [gmp, languageState],
+    [gmp, session, languageState],
   );
 
   const value = useMemo(
