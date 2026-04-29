@@ -35,7 +35,7 @@ describe('ContainerImageTaskDialog component tests', () => {
 
   const gmp = {
     settings: {
-      token: 'test-token',
+      session: {token: 'test-token'},
     },
     ociimagetargets: {
       get: getMockFn,

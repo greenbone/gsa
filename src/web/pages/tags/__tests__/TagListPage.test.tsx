@@ -97,7 +97,7 @@ const createGmp = ({
   resourcenames: {
     getAll: testing.fn().mockResolvedValue({data: []}),
   },
-  settings: {manualUrl: 'test/', token: 'token'},
+  settings: {manualUrl: 'test/', session: {token: 'token'}},
   user: {currentSettings, getSetting},
 });
 

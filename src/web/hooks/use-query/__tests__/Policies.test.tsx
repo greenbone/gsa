@@ -28,6 +28,8 @@ const policy2 = Policy.fromElement({
   permissions: {permission: [{name: 'everything'}]},
 });
 
+const filter = Filter.fromString('name~test');
+
 const SinglePolicyComponent = ({id}: {id: string}) => {
   const {data, isLoading, isError} = useGetPolicy({id});
 
@@ -73,17 +75,25 @@ const PolicyListComponent = ({filter}: {filter?: Filter}) => {
   );
 };
 
+const createGmp = () => ({
+  settings: {session: {token: 'test-token'}},
+  policy: {
+    get: testing.fn().mockResolvedValue({data: policy}),
+  },
+  policies: {
+    get: testing.fn().mockResolvedValue({
+      data: [policy, policy2],
+      meta: {
+        filter,
+        counts: new CollectionCounts({all: 2, filtered: 2, length: 2}),
+      },
+    }),
+  },
+});
+
 describe('useGetPolicy', () => {
   test('should fetch a single policy', async () => {
-    const mockGet = testing.fn().mockResolvedValue({data: policy});
-
-    const gmp = {
-      policy: {
-        get: mockGet,
-      },
-      settings: {token: 'test-token'},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
     render(<SinglePolicyComponent id="policy-1" />);
 
@@ -93,20 +103,12 @@ describe('useGetPolicy', () => {
       );
     });
 
-    expect(mockGet).toHaveBeenCalledWith({id: 'policy-1'});
+    expect(gmp.policy.get).toHaveBeenCalledWith({id: 'policy-1'});
     expect(screen.getByTestId('policy-id')).toHaveTextContent('policy-1');
   });
 
   test('should show loading state initially', () => {
-    const mockGet = testing.fn().mockReturnValue(new Promise(() => {}));
-
-    const gmp = {
-      policy: {
-        get: mockGet,
-      },
-      settings: {token: 'test-token'},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
     render(<SinglePolicyComponent id="policy-1" />);
 
@@ -116,22 +118,7 @@ describe('useGetPolicy', () => {
 
 describe('useGetPolicies', () => {
   test('should fetch a list of policies', async () => {
-    const filter = Filter.fromString('name~test');
-    const mockGet = testing.fn().mockResolvedValue({
-      data: [policy, policy2],
-      meta: {
-        filter: Filter.fromString('name~test'),
-        counts: new CollectionCounts({all: 2, filtered: 2, length: 2}),
-      },
-    });
-
-    const gmp = {
-      policies: {
-        get: mockGet,
-      },
-      settings: {token: 'test-token'},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
     render(<PolicyListComponent filter={filter} />);
 
@@ -139,7 +126,7 @@ describe('useGetPolicies', () => {
       expect(screen.getAllByTestId('policy-item')).toHaveLength(2);
     });
 
-    expect(mockGet).toHaveBeenCalled();
+    expect(gmp.policies.get).toHaveBeenCalled();
     expect(screen.getByText('Test Policy')).toBeInTheDocument();
     expect(screen.getByText('Test Policy 2')).toBeInTheDocument();
   });

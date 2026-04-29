@@ -233,7 +233,7 @@ const createGmp = ({
     },
     settings: {
       manualUrl,
-      token: 'test-token',
+      session: {token: 'test-token'},
     },
     user: {
       currentSettings,

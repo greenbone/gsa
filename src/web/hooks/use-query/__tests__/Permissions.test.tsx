@@ -24,6 +24,8 @@ const permission2 = Permission.fromElement({
   subject: {_id: 'user-1', type: 'user'},
 });
 
+const filter = Filter.fromString('resource_uuid=task-1').all();
+
 const TestComponent = ({filter}: {filter?: Filter}) => {
   const {data, isLoading, isError} = useGetPermissions({filter});
 
@@ -48,23 +50,22 @@ const TestComponent = ({filter}: {filter?: Filter}) => {
   );
 };
 
-describe('useGetPermissions', () => {
-  test('should fetch permissions with a filter', async () => {
-    const filter = Filter.fromString('resource_uuid=task-1').all();
-    const mockGet = testing.fn().mockResolvedValue({
+const createGmp = () => ({
+  settings: {session: {token: 'test-token'}},
+  permissions: {
+    get: testing.fn().mockResolvedValue({
       data: [permission1, permission2],
       meta: {
-        filter: Filter.fromString('resource_uuid=task-1'),
+        filter,
         counts: new CollectionCounts({all: 2, filtered: 2, length: 2}),
       },
-    });
+    }),
+  },
+});
 
-    const gmp = {
-      permissions: {
-        get: mockGet,
-      },
-      settings: {token: 'test-token'},
-    };
+describe('useGetPermissions', () => {
+  test('should fetch permissions with a filter', async () => {
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, router: true});
     render(<TestComponent filter={filter} />);
@@ -73,20 +74,13 @@ describe('useGetPermissions', () => {
       expect(screen.getAllByTestId('permission')).toHaveLength(2);
     });
 
-    expect(mockGet).toHaveBeenCalled();
+    expect(gmp.permissions.get).toHaveBeenCalled();
     expect(screen.getByText('get_tasks')).toBeInTheDocument();
     expect(screen.getByText('modify_task')).toBeInTheDocument();
   });
 
   test('should show loading state initially', () => {
-    const mockGet = testing.fn().mockReturnValue(new Promise(() => {}));
-
-    const gmp = {
-      permissions: {
-        get: mockGet,
-      },
-      settings: {token: 'test-token'},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, router: true});
     render(<TestComponent />);

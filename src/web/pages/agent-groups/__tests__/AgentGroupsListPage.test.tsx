@@ -20,52 +20,52 @@ const makeGroup = (id = 'g1') =>
     userCapabilities: new EverythingCapabilities(),
   });
 
-describe('AgentGroupsListPage tests', () => {
-  test('renders full AgentGroupsListPage with data and toolbar', async () => {
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-
-    const getAgentGroups = testing.fn().mockResolvedValue({
-      data: [makeGroup('g1')],
-      meta: {filter: Filter.fromString(), counts},
-    });
-
-    const gmp = {
-      agentgroup: {
-        create: testing.fn().mockResolvedValue({id: 'created'}),
-        clone: testing.fn().mockResolvedValue({id: 'cloned'}),
-        save: testing.fn().mockResolvedValue({id: 'saved'}),
-        delete: testing.fn().mockResolvedValue(undefined),
-      },
-      agentgroups: {
-        get: getAgentGroups,
-      },
-      // minimal filters and user stubs required by EntitiesPage mount
-      filters: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {
-            filter: Filter.fromString(),
-            counts: new CollectionCounts({
-              first: 0,
-              all: 0,
-              filtered: 0,
-              length: 0,
-              rows: 0,
-            }),
-          },
+const createGmp = ({
+  get = testing.fn().mockResolvedValue({
+    data: [makeGroup()],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts({
+        first: 1,
+        all: 1,
+        filtered: 1,
+        length: 1,
+        rows: 10,
+      }),
+    },
+  }),
+} = {}) => ({
+  agentgroup: {
+    create: testing.fn().mockResolvedValue({id: 'created'}),
+    clone: testing.fn().mockResolvedValue({id: 'cloned'}),
+    save: testing.fn().mockResolvedValue({id: 'saved'}),
+    delete: testing.fn().mockResolvedValue(undefined),
+  },
+  agentgroups: {get},
+  filters: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts({
+          first: 0,
+          all: 0,
+          filtered: 0,
+          length: 0,
+          rows: 0,
         }),
       },
-      user: {
-        getSetting: testing.fn().mockResolvedValue({data: null}),
-      },
-      settings: {token: 'token'},
-    };
+    }),
+  },
+  user: {
+    getSetting: testing.fn().mockResolvedValue({data: null}),
+  },
+  settings: {session: {token: 'token'}},
+});
+
+describe('AgentGroupsListPage tests', () => {
+  test('renders full AgentGroupsListPage with data and toolbar', async () => {
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true, router: true});
 
@@ -107,36 +107,7 @@ describe('AgentGroupsListPage tests', () => {
       meta: {filter: Filter.fromString(), counts},
     });
 
-    const deleteMock = testing.fn().mockResolvedValue(undefined);
-
-    const gmp = {
-      agentgroup: {
-        create: testing.fn(),
-        clone: testing.fn(),
-        save: testing.fn(),
-        delete: deleteMock,
-      },
-      agentgroups: {get: getAgentGroups},
-      filters: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {
-            filter: Filter.fromString(),
-            counts: new CollectionCounts({
-              first: 0,
-              all: 0,
-              filtered: 0,
-              length: 0,
-              rows: 0,
-            }),
-          },
-        }),
-      },
-      user: {
-        getSetting: testing.fn().mockResolvedValue({data: null}),
-      },
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp({get: getAgentGroups});
 
     const {render} = rendererWith({gmp, capabilities: true, router: true});
 
@@ -157,40 +128,13 @@ describe('AgentGroupsListPage tests', () => {
 
     // wait for delete mock to be called
     await wait();
-    expect(deleteMock).toHaveBeenCalled();
+    expect(gmp.agentgroup.delete).toHaveBeenCalled();
   });
 
   test('shows error notification when fetch fails', async () => {
     const getAgentGroups = testing.fn().mockRejectedValue(new Error('boom'));
 
-    const gmp = {
-      agentgroup: {
-        create: testing.fn(),
-        clone: testing.fn(),
-        save: testing.fn(),
-        delete: testing.fn(),
-      },
-      agentgroups: {get: getAgentGroups},
-      filters: {
-        get: testing.fn().mockResolvedValue({
-          data: [],
-          meta: {
-            filter: Filter.fromString(),
-            counts: new CollectionCounts({
-              first: 0,
-              all: 0,
-              filtered: 0,
-              length: 0,
-              rows: 0,
-            }),
-          },
-        }),
-      },
-      user: {
-        getSetting: testing.fn().mockResolvedValue({data: null}),
-      },
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp({get: getAgentGroups});
 
     const {render} = rendererWith({gmp, capabilities: true});
 

@@ -194,7 +194,7 @@ const createGmp = ({
       manualUrl,
       reloadInterval: 15000,
       reloadIntervalActive: 3000,
-      token: 'test-token',
+      session: {token: 'test-token'},
     },
     user: {
       currentSettings,

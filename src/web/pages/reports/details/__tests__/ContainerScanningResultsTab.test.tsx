@@ -11,23 +11,36 @@ import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import ContainerScanningResultsTab from 'web/pages/reports/details/ContainerScanningResultsTab';
 
+const result = Result.fromElement({
+  _id: '1',
+  name: 'Test Result',
+  severity: 7.5,
+});
+
+const createGmp = ({
+  get = testing.fn().mockResolvedValue({
+    data: [result],
+    meta: {
+      counts: new CollectionCounts({filtered: 1, all: 1, first: 1, rows: 10}),
+      filter: Filter.fromString(''),
+    },
+  }),
+} = {}) => ({
+  results: {
+    get,
+  },
+  settings: {
+    session: {token: 'test-token'},
+    enableEPSS: false,
+  },
+});
+
 describe('ContainerScanningResultsTab', () => {
   test('should render loading state initially', () => {
     const reportId = 'report-123';
     const filter = Filter.fromString('');
 
-    const getMock = testing.fn().mockReturnValue(
-      new Promise(() => {}), // Never resolves to keep loading state
-    );
-
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp});
 
@@ -41,35 +54,7 @@ describe('ContainerScanningResultsTab', () => {
   test('should fetch results with report ID filter', async () => {
     const reportId = 'report-123';
     const filter = Filter.fromString('severity>5');
-    const mockResults = [
-      Result.fromElement({
-        _id: '1',
-        name: 'Test Result',
-        severity: 7.5,
-      }),
-    ];
-
-    const getMock = testing.fn().mockResolvedValue({
-      data: mockResults,
-      meta: {
-        counts: new CollectionCounts({
-          filtered: 1,
-          all: 1,
-          first: 1,
-          rows: 10,
-        }),
-        filter,
-      },
-    });
-
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp});
 
@@ -81,8 +66,8 @@ describe('ContainerScanningResultsTab', () => {
       expect(screen.getByTestId('entities-table')).toBeInTheDocument();
     });
 
-    expect(getMock).toHaveBeenCalled();
-    const callArg = getMock.mock.calls[0][0];
+    expect(gmp.results.get).toHaveBeenCalled();
+    const callArg = gmp.results.get.mock.calls[0][0];
     expect(callArg.filter.toFilterString()).toContain(
       '_and_report_id=report-123',
     );
@@ -117,15 +102,7 @@ describe('ContainerScanningResultsTab', () => {
       },
     });
 
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-        enableEPSS: false,
-      },
-    };
+    const gmp = createGmp({get: getMock});
 
     const {render} = rendererWith({gmp});
 
@@ -142,10 +119,10 @@ describe('ContainerScanningResultsTab', () => {
     await userEvent.click(severityHeader);
 
     await waitFor(() => {
-      expect(getMock).toHaveBeenCalledTimes(2);
+      expect(gmp.results.get).toHaveBeenCalledTimes(2);
     });
 
-    const secondCall = getMock.mock.calls[1][0];
+    const secondCall = gmp.results.get.mock.calls[1][0];
     expect(secondCall.filter.toFilterString()).toContain('sort=severity');
   });
 
@@ -172,14 +149,7 @@ describe('ContainerScanningResultsTab', () => {
       },
     });
 
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-      },
-    };
+    const gmp = createGmp({get: getMock});
 
     const {render} = rendererWith({gmp});
 
@@ -197,10 +167,10 @@ describe('ContainerScanningResultsTab', () => {
     await userEvent.click(nextButton);
 
     await waitFor(() => {
-      expect(getMock).toHaveBeenCalledTimes(2);
+      expect(gmp.results.get).toHaveBeenCalledTimes(2);
     });
 
-    const secondCall = getMock.mock.calls[1][0];
+    const secondCall = gmp.results.get.mock.calls[1][0];
     expect(secondCall.filter.toFilterString()).toContain('first=11');
   });
 
@@ -227,14 +197,7 @@ describe('ContainerScanningResultsTab', () => {
       },
     });
 
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-      },
-    };
+    const gmp = createGmp({get: getMock});
 
     const {render} = rendererWith({gmp});
 
@@ -252,10 +215,10 @@ describe('ContainerScanningResultsTab', () => {
     await userEvent.click(previousButton);
 
     await waitFor(() => {
-      expect(getMock).toHaveBeenCalledTimes(2);
+      expect(gmp.results.get).toHaveBeenCalledTimes(2);
     });
 
-    const secondCall = getMock.mock.calls[1][0];
+    const secondCall = gmp.results.get.mock.calls[1][0];
     expect(secondCall.filter.toFilterString()).toContain('first=1');
   });
 
@@ -282,14 +245,7 @@ describe('ContainerScanningResultsTab', () => {
       },
     });
 
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-      },
-    };
+    const gmp = createGmp({get: getMock});
 
     const {render} = rendererWith({gmp});
 
@@ -307,10 +263,10 @@ describe('ContainerScanningResultsTab', () => {
     await userEvent.click(firstButton);
 
     await waitFor(() => {
-      expect(getMock).toHaveBeenCalledTimes(2);
+      expect(gmp.results.get).toHaveBeenCalledTimes(2);
     });
 
-    const secondCall = getMock.mock.calls[1][0];
+    const secondCall = gmp.results.get.mock.calls[1][0];
     expect(secondCall.filter.toFilterString()).toContain('first=1');
   });
 
@@ -337,14 +293,7 @@ describe('ContainerScanningResultsTab', () => {
       },
     });
 
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-      },
-    };
+    const gmp = createGmp({get: getMock});
 
     const {render} = rendererWith({gmp});
 
@@ -362,10 +311,10 @@ describe('ContainerScanningResultsTab', () => {
     await userEvent.click(lastButton);
 
     await waitFor(() => {
-      expect(getMock).toHaveBeenCalledTimes(2);
+      expect(gmp.results.get).toHaveBeenCalledTimes(2);
     });
 
-    const secondCall = getMock.mock.calls[1][0];
+    const secondCall = gmp.results.get.mock.calls[1][0];
     expect(secondCall.filter.toFilterString()).toContain('first=21');
   });
 
@@ -393,14 +342,7 @@ describe('ContainerScanningResultsTab', () => {
       },
     });
 
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-      },
-    };
+    const gmp = createGmp({get: getMock});
 
     const {render} = rendererWith({gmp});
 
@@ -423,10 +365,10 @@ describe('ContainerScanningResultsTab', () => {
     );
 
     await waitFor(() => {
-      expect(getMock).toHaveBeenCalledTimes(2);
+      expect(gmp.results.get).toHaveBeenCalledTimes(2);
     });
 
-    const secondCall = getMock.mock.calls[1][0];
+    const secondCall = gmp.results.get.mock.calls[1][0];
     expect(secondCall.filter.toFilterString()).toContain('severity>7');
   });
 
@@ -436,14 +378,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const getMock = testing.fn().mockRejectedValue(new Error('API Error'));
 
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-      },
-    };
+    const gmp = createGmp({get: getMock});
 
     const {render} = rendererWith({gmp});
 
@@ -452,7 +387,7 @@ describe('ContainerScanningResultsTab', () => {
     );
 
     await waitFor(() => {
-      expect(getMock).toHaveBeenCalled();
+      expect(gmp.results.get).toHaveBeenCalled();
     });
 
     await waitFor(() => {
@@ -488,14 +423,7 @@ describe('ContainerScanningResultsTab', () => {
       .mockReturnValueOnce(firstQueryPromise)
       .mockReturnValueOnce(secondQueryPromise);
 
-    const gmp = {
-      results: {
-        get: getMock,
-      },
-      settings: {
-        token: 'test-token',
-      },
-    };
+    const gmp = createGmp({get: getMock});
 
     const {render} = rendererWith({gmp});
 
@@ -544,7 +472,7 @@ describe('ContainerScanningResultsTab', () => {
     }
 
     await waitFor(() => {
-      expect(getMock).toHaveBeenCalledTimes(2);
+      expect(gmp.results.get).toHaveBeenCalledTimes(2);
     });
   });
 });

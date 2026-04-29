@@ -17,35 +17,36 @@ import CredentialStore from 'gmp/models/credential-store';
 import Filter from 'gmp/models/filter';
 import CredentialStorePage from 'web/pages/credential-store/CredentialStorePage';
 
+const credentialStore = CredentialStore.fromElement({
+  _id: 'cs1',
+  name: 'Test Store',
+  active: 1,
+  host: 'h',
+  path: 'p',
+  port: '8080',
+  version: '1.0',
+  comment: 'c',
+  preferences: {
+    preference: [{name: 'app_id', value: 'initial-app'}],
+  },
+});
+
+const createGmp = ({
+  get = testing.fn().mockResolvedValue({
+    data: [credentialStore],
+    meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
+  }),
+  edit = testing.fn().mockResolvedValue({}),
+  verify = testing.fn().mockResolvedValue({}),
+} = {}) => ({
+  credentialstores: {get},
+  credentialstore: {edit, verify},
+  settings: {session: {token: 'token'}},
+});
+
 describe('CredentialStorePage tests', () => {
   test('should render credential store and allow editing and saving', async () => {
-    const credentialStore = CredentialStore.fromElement({
-      _id: 'cs1',
-      name: 'Test Store',
-      active: 1,
-      host: 'h',
-      path: 'p',
-      port: '8080',
-      version: '1.0',
-      comment: 'c',
-      preferences: {
-        preference: [{name: 'app_id', value: 'initial-app'}],
-      },
-    });
-
-    const get = testing.fn().mockResolvedValue({
-      data: [credentialStore],
-      meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
-    });
-
-    const edit = testing.fn().mockResolvedValue({});
-    const verify = testing.fn().mockResolvedValue({});
-
-    const gmp = {
-      credentialstores: {get},
-      credentialstore: {edit, verify},
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true, store: true});
 
@@ -79,8 +80,8 @@ describe('CredentialStorePage tests', () => {
     await wait();
 
     // mutate should be called with expected params (first arg only)
-    expect(edit).toHaveBeenCalled();
-    expect(edit.mock.calls[0][0]).toEqual({
+    expect(gmp.credentialstore.edit).toHaveBeenCalled();
+    expect(gmp.credentialstore.edit.mock.calls[0][0]).toEqual({
       id: 'cs1',
       active: true,
       appId: 'new-app',
@@ -97,33 +98,7 @@ describe('CredentialStorePage tests', () => {
   });
 
   test('should verify credential store connection successfully', async () => {
-    const credentialStore = CredentialStore.fromElement({
-      _id: 'cs1',
-      name: 'Test Store',
-      active: 1,
-      host: 'h',
-      path: 'p',
-      port: '8080',
-      version: '1.0',
-      comment: 'c',
-      preferences: {
-        preference: [{name: 'app_id', value: 'initial-app'}],
-      },
-    });
-
-    const get = testing.fn().mockResolvedValue({
-      data: [credentialStore],
-      meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
-    });
-
-    const edit = testing.fn().mockResolvedValue({});
-    const verify = testing.fn().mockResolvedValue({});
-
-    const gmp = {
-      credentialstores: {get},
-      credentialstore: {edit, verify},
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true, store: true});
 
@@ -137,8 +112,8 @@ describe('CredentialStorePage tests', () => {
 
     // should call verify and show success
     await screen.findAllByText('Connection successful');
-    expect(verify).toHaveBeenCalled();
-    expect(verify.mock.calls[0][0]).toEqual({id: 'cs1'});
+    expect(gmp.credentialstore.verify).toHaveBeenCalled();
+    expect(gmp.credentialstore.verify.mock.calls[0][0]).toEqual({id: 'cs1'});
   });
 
   test('should not call verify and show failure when app_id missing', async () => {
@@ -159,14 +134,7 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const edit = testing.fn().mockResolvedValue({});
-    const verify = testing.fn().mockResolvedValue({});
-
-    const gmp = {
-      credentialstores: {get},
-      credentialstore: {edit, verify},
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp({get});
 
     const {render} = rendererWith({gmp, capabilities: true, store: true});
 
@@ -179,37 +147,12 @@ describe('CredentialStorePage tests', () => {
 
     // should not call verify and should show connection failed
     await screen.findAllByText('Connection failed');
-    expect(verify).not.toHaveBeenCalled();
+    expect(gmp.credentialstore.verify).not.toHaveBeenCalled();
   });
 
   test('should show failed when verification throws an error', async () => {
-    const credentialStore = CredentialStore.fromElement({
-      _id: 'cs1',
-      name: 'Test Store',
-      active: 1,
-      host: 'h',
-      path: 'p',
-      port: '8080',
-      version: '1.0',
-      comment: 'c',
-      preferences: {
-        preference: [{name: 'app_id', value: 'initial-app'}],
-      },
-    });
-
-    const get = testing.fn().mockResolvedValue({
-      data: [credentialStore],
-      meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
-    });
-
-    const edit = testing.fn().mockResolvedValue({});
     const verify = testing.fn().mockRejectedValue(new Error('boom'));
-
-    const gmp = {
-      credentialstores: {get},
-      credentialstore: {edit, verify},
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp({verify});
 
     const {render} = rendererWith({gmp, capabilities: true, store: true});
 
@@ -222,8 +165,8 @@ describe('CredentialStorePage tests', () => {
 
     // should call verify and show connection failed
     await screen.findAllByText('Connection failed');
-    expect(verify).toHaveBeenCalled();
-    expect(verify.mock.calls[0][0]).toEqual({id: 'cs1'});
+    expect(gmp.credentialstore.verify).toHaveBeenCalled();
+    expect(gmp.credentialstore.verify.mock.calls[0][0]).toEqual({id: 'cs1'});
   });
 
   test('should show error when credential store has no id on test', async () => {
@@ -242,14 +185,7 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const edit = testing.fn().mockResolvedValue({});
-    const verify = testing.fn().mockResolvedValue({});
-
-    const gmp = {
-      credentialstores: {get},
-      credentialstore: {edit, verify},
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp({get});
 
     const {render} = rendererWith({gmp, capabilities: true, store: true});
 
@@ -262,7 +198,7 @@ describe('CredentialStorePage tests', () => {
 
     // should not call verify and should show connection failed
     await screen.findAllByText('Connection failed');
-    expect(verify).not.toHaveBeenCalled();
+    expect(gmp.credentialstore.verify).not.toHaveBeenCalled();
   });
 
   test('should not call edit when saving and credential store has no id', async () => {
@@ -281,14 +217,7 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const edit = testing.fn().mockResolvedValue({});
-    const verify = testing.fn().mockResolvedValue({});
-
-    const gmp = {
-      credentialstores: {get},
-      credentialstore: {edit, verify},
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp({get});
 
     const {render} = rendererWith({gmp, capabilities: true, store: true});
 
@@ -308,17 +237,13 @@ describe('CredentialStorePage tests', () => {
 
     // ensure edit wasn't called due to missing id
     await wait();
-    expect(edit).not.toHaveBeenCalled();
+    expect(gmp.credentialstore.edit).not.toHaveBeenCalled();
   });
 
   test('should render error state when fetching credential stores fails', async () => {
     const get = testing.fn().mockRejectedValue(new Error('fetch failed'));
 
-    const gmp = {
-      credentialstores: {get},
-      credentialstore: {edit: testing.fn(), verify: testing.fn()},
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp({get});
 
     const {render} = rendererWith({gmp, capabilities: true, store: true});
 
@@ -334,11 +259,7 @@ describe('CredentialStorePage tests', () => {
       meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
     });
 
-    const gmp = {
-      credentialstores: {get},
-      credentialstore: {edit: testing.fn(), verify: testing.fn()},
-      settings: {token: 'token'},
-    };
+    const gmp = createGmp({get});
 
     const {render} = rendererWith({gmp, capabilities: true, store: true});
 

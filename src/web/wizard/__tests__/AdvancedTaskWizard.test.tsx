@@ -63,7 +63,7 @@ const mockedTimezones = [
 ];
 
 const createGmp = () => ({
-  settings: {token: 'token'},
+  settings: {session: {token: 'token'}},
 
   timezones: {
     get: testing.fn().mockResolvedValue(new Response(mockedTimezones, {})),
