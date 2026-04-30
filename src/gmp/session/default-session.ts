@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type Date} from 'gmp/models/date';
+import date, {type Date} from 'gmp/models/date';
 import NoSessionState from 'gmp/session/no-session-state';
 import {type default as Session} from 'gmp/session/session';
 import {
@@ -11,12 +11,26 @@ import {
   type SessionLoginData,
 } from 'gmp/session/session-state';
 import {type default as SessionStorage} from 'gmp/session/session-storage';
+import UserSessionState from 'gmp/session/user-session-state';
+
+const isLoggedIn = (storage: SessionStorage): boolean => {
+  const token = storage.getItem('token');
+  const username = storage.getItem('username');
+  const sessionTimeoutStr = storage.getItem('sessionTimeout');
+  if (!token || !username || !sessionTimeoutStr) {
+    return false;
+  }
+  const sessionTimeout = date(sessionTimeoutStr);
+  return sessionTimeout > date();
+};
 
 class DefaultSession implements Session {
   private state: SessionState;
 
   constructor(storage: SessionStorage = globalThis.localStorage) {
-    this.state = new NoSessionState(storage);
+    this.state = isLoggedIn(storage)
+      ? new UserSessionState(storage)
+      : new NoSessionState(storage);
   }
 
   get token(): string | undefined {
