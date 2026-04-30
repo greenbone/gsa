@@ -24,7 +24,7 @@ const Header = () => {
 
   const gmp = useGmp();
   const [username] = useUserName();
-  const [loggedIn] = useUserIsLoggedIn();
+  const isLoggedIn = useUserIsLoggedIn();
   const navigate = useNavigate();
   const location = useLocation();
   const logoComponent = getLogo(gmp?.settings?.vendorLabel as ApplianceLogo);
@@ -64,7 +64,7 @@ const Header = () => {
   return (
     <AppHeader
       ianaTimeZone={timezone}
-      isLoggedIn={loggedIn}
+      isLoggedIn={isLoggedIn}
       isThemeSwitchVisible={false}
       languageSwitch={<LanguageSwitch />}
       logo={logoComponent}
