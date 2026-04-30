@@ -5,7 +5,7 @@
 
 import {useQuery} from '@tanstack/react-query';
 import useGmp from 'web/hooks/useGmp';
-import useSession from 'web/hooks/useSession';
+import useSessionToken from 'web/hooks/useSessionToken';
 
 interface UseGetTimezonesParams {
   enabled?: boolean;
@@ -15,8 +15,7 @@ export const useGetTimezones = ({
   enabled = true,
 }: UseGetTimezonesParams = {}) => {
   const gmp = useGmp();
-  const session = useSession();
-  const token = session?.token;
+  const token = useSessionToken();
 
   return useQuery({
     enabled: enabled && Boolean(token),
