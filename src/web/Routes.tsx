@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -16,8 +14,8 @@ import Authorized from 'web/Authorized';
 import Loading from 'web/components/loading/Loading';
 import SessionObserver from 'web/components/observer/SessionObserver';
 import SessionTracker from 'web/components/observer/SessionTracker';
+import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import Page from 'web/pages/Page';
-import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
 
 // Layout components
 const LoggedOutLayout = () => <Outlet />;
@@ -808,18 +806,7 @@ const loggedInRoutes = [
 ];
 
 const AppRoutes = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-
-  useEffect(() => {
-    if (isLoggedIn !== undefined) {
-      setIsLoading(false);
-    }
-  }, [isLoggedIn]);
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  const isLoggedIn = useUserIsLoggedIn();
 
   // Create router dynamically based on login state
   const router = createBrowserRouter([

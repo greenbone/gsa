@@ -15,7 +15,6 @@ import {vi} from 'vitest';
 import {ResponseRejection} from 'gmp/http/rejection';
 import Logger from 'gmp/log';
 import LoginPage from 'web/pages/login/LoginPage';
-import {setIsLoggedIn} from 'web/store/usersettings/actions';
 
 Logger.setDefaultLevel('silent');
 const mockNavigate = testing.fn();
@@ -31,14 +30,56 @@ vi.mock('react-router', async () => {
   };
 });
 
+const createGmp = ({
+  isLoggedIn = false,
+  clearToken = testing.fn(),
+  login = testing.fn().mockResolvedValue({
+    locale: 'locale',
+    username: 'username',
+    token: 'token',
+    timezone: 'timezone',
+  }),
+  currentSettings = testing.fn().mockResolvedValue({
+    data: {
+      userinterfacetimeformat: {value: '24h'},
+      userinterfacedateformat: {value: 'YYYY-MM-DD'},
+    },
+  }),
+  guestUsername = undefined,
+  guestPassword = undefined,
+}: {
+  isLoggedIn?: boolean;
+  clearToken?: () => void;
+  login?: (username: string, password: string) => Promise<void>;
+  currentSettings?: () => Promise<unknown>;
+  guestUsername?: string;
+  guestPassword?: string;
+} = {}) => ({
+  clearToken,
+  login,
+  settings: {
+    guestUsername,
+    guestPassword,
+    session: {
+      isLoggedIn: () => isLoggedIn,
+      subscribeToChanges: testing.fn().mockImplementation(callback => {
+        callback();
+        return () => {};
+      }),
+    },
+  },
+  user: {
+    currentSettings,
+  },
+});
+
 describe('LoginPage tests', () => {
   beforeEach(() => {
     testing.clearAllMocks();
   });
+
   test('should render LoginPage', () => {
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {isLoggedIn, clearToken, settings: {}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, router: true, store: true});
 
@@ -46,20 +87,8 @@ describe('LoginPage tests', () => {
   });
 
   test('should allow to login with username and password', () => {
-    const login = testing.fn().mockResolvedValue({
-      locale: 'locale',
-      username: 'username',
-      token: 'token',
-      timezone: 'timezone',
-    });
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {
-      login,
-      isLoggedIn,
-      clearToken,
-      settings: {},
-    };
+    const gmp = createGmp();
+
     const {render} = rendererWith({gmp, router: true, store: true});
 
     render(<LoginPage />);
@@ -73,17 +102,11 @@ describe('LoginPage tests', () => {
     const button = screen.getByTestId('login-button');
     fireEvent.click(button);
 
-    expect(login).toHaveBeenCalledWith('foo', 'bar');
+    expect(gmp.login).toHaveBeenCalledWith('foo', 'bar');
   });
 
   test('should not display guest login by default', () => {
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {
-      isLoggedIn,
-      clearToken,
-      settings: {},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, store: true});
     render(<LoginPage />);
 
@@ -92,39 +115,19 @@ describe('LoginPage tests', () => {
   });
 
   test('should allow to login as guest', () => {
-    const login = testing.fn().mockResolvedValue({
-      locale: 'locale',
-      username: 'username',
-      token: 'token',
-      timezone: 'timezone',
-    });
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {
-      login,
-      isLoggedIn,
-      clearToken,
-      settings: {guestUsername: 'foo', guestPassword: 'bar'},
-    };
+    const gmp = createGmp({guestUsername: 'foo', guestPassword: 'bar'});
     const {render} = rendererWith({gmp, router: true, store: true});
     render(<LoginPage />);
 
     const button = screen.getByTestId('guest-login-button');
     fireEvent.click(button);
 
-    expect(login).toBeCalledWith('foo', 'bar');
+    expect(gmp.login).toHaveBeenCalledWith('foo', 'bar');
   });
 
   test('should display error message', async () => {
     const login = testing.fn().mockRejectedValue({message: 'Just a test'});
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {
-      login,
-      isLoggedIn,
-      clearToken,
-      settings: {},
-    };
+    const gmp = createGmp({login});
     const {render} = rendererWith({gmp, router: true, store: true});
 
     render(<LoginPage />);
@@ -149,14 +152,7 @@ describe('LoginPage tests', () => {
       .mockRejectedValue(
         new ResponseRejection({status: 401} as XMLHttpRequest),
       );
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {
-      login,
-      isLoggedIn,
-      clearToken,
-      settings: {},
-    };
+    const gmp = createGmp({login});
     const {render} = rendererWith({gmp, router: true, store: true});
 
     render(<LoginPage />);
@@ -169,7 +165,7 @@ describe('LoginPage tests', () => {
 
     const button = screen.getByTestId('login-button');
     fireEvent.click(button);
-    expect(login).toBeCalledWith('foo', 'bar');
+    expect(login).toHaveBeenCalledWith('foo', 'bar');
 
     const error = await screen.findByTestId('error');
     expect(error).toHaveTextContent(
@@ -178,15 +174,13 @@ describe('LoginPage tests', () => {
   });
 
   test('should redirect to main page if already logged in', () => {
-    const gmp = {settings: {}};
+    const gmp = createGmp({isLoggedIn: true});
 
-    const {render, store} = rendererWith({gmp, router: true, store: true});
-
-    store.dispatch(setIsLoggedIn(true));
+    const {render} = rendererWith({gmp, router: true});
 
     render(<LoginPage />);
-    expect(mockNavigate).toBeCalledTimes(1);
-    expect(mockNavigate).toBeCalledWith('/dashboards', {replace: true});
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
+    expect(mockNavigate).toHaveBeenCalledWith('/dashboards', {replace: true});
   });
 
   test('should dispatch timezone to Redux after login', async () => {
@@ -196,22 +190,7 @@ describe('LoginPage tests', () => {
       timezone: 'Australia/Sydney',
       sessionTimeout: '10:00',
     });
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {
-      login,
-      isLoggedIn,
-      clearToken,
-      settings: {},
-      user: {
-        currentSettings: testing.fn().mockResolvedValue({
-          data: {
-            userinterfacetimeformat: {value: '24h'},
-            userinterfacedateformat: {value: 'YYYY-MM-DD'},
-          },
-        }),
-      },
-    };
+    const gmp = createGmp({login});
     const {render, store} = rendererWith({gmp, router: true, store: true});
 
     render(<LoginPage />);
@@ -232,7 +211,6 @@ describe('LoginPage tests', () => {
     const userSettings = store.getState().userSettings;
     expect(userSettings.timezone).toEqual('Australia/Sydney');
     expect(userSettings.username).toEqual('foo');
-    expect(userSettings.isLoggedIn).toBe(true);
   });
 
   test.each([
@@ -268,22 +246,7 @@ describe('LoginPage tests', () => {
 
     mockUseLocation.mockReturnValue(locationState);
 
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {
-      login,
-      isLoggedIn,
-      clearToken,
-      settings: {},
-      user: {
-        currentSettings: testing.fn().mockResolvedValue({
-          data: {
-            userinterfacetimeformat: {value: '24h'},
-            userinterfacedateformat: {value: 'YYYY-MM-DD'},
-          },
-        }),
-      },
-    };
+    const gmp = createGmp({login});
     const {render} = rendererWith({
       gmp,
       router: true,
@@ -319,22 +282,7 @@ describe('LoginPage tests', () => {
 
     mockUseLocation.mockReturnValue({});
 
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {
-      login,
-      isLoggedIn,
-      clearToken,
-      settings: {},
-      user: {
-        currentSettings: testing.fn().mockResolvedValue({
-          data: {
-            userinterfacetimeformat: {value: '24h'},
-            userinterfacedateformat: {value: 'YYYY-MM-DD'},
-          },
-        }),
-      },
-    };
+    const gmp = createGmp({login});
     const {render} = rendererWith({
       gmp,
       router: true,
@@ -375,22 +323,7 @@ describe('LoginPage tests', () => {
 
     mockUseLocation.mockReturnValue({});
 
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const clearToken = testing.fn();
-    const gmp = {
-      login,
-      isLoggedIn,
-      clearToken,
-      settings: {},
-      user: {
-        currentSettings: testing.fn().mockResolvedValue({
-          data: {
-            userinterfacetimeformat: {value: '24h'},
-            userinterfacedateformat: {value: 'YYYY-MM-DD'},
-          },
-        }),
-      },
-    };
+    const gmp = createGmp({login});
     const {render} = rendererWith({
       gmp,
       router: true,

@@ -4,17 +4,14 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {CLEAR_STORE} from 'web/store/actions';
 import {
   getReportComposerDefaultsAction,
-  setIsLoggedIn,
   setLocale,
   setSessionTimeout,
   setTimezone,
   setUsername,
 } from 'web/store/usersettings/actions';
 import {
-  isLoggedIn,
   locale,
   reportComposerDefaults,
   sessionTimeout,
@@ -108,32 +105,6 @@ describe('settings reducers tests', () => {
         toBe: 'preserved',
       };
       expect(reportComposerDefaults(state, action)).toEqual(res);
-    });
-  });
-
-  describe('isLoggedIn tests', () => {
-    test('should create initial state', () => {
-      expect(isLoggedIn(undefined, {})).toEqual(false);
-    });
-
-    test('should reduce false if store is cleared', () => {
-      const action = {type: CLEAR_STORE};
-      expect(isLoggedIn(undefined, action)).toEqual(false);
-    });
-
-    test('should reduce false', () => {
-      const action = setIsLoggedIn(false);
-      expect(isLoggedIn(undefined, action)).toEqual(false);
-    });
-
-    test('should reduce true', () => {
-      const action = setIsLoggedIn(true);
-      expect(isLoggedIn(undefined, action)).toEqual(true);
-    });
-
-    test('should override state', () => {
-      const action = setIsLoggedIn(false);
-      expect(isLoggedIn(true, action)).toEqual(false);
     });
   });
 });
