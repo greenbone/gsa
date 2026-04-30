@@ -6,6 +6,8 @@
 import {type Date} from 'gmp/models/date';
 import {type SessionLoginData} from 'gmp/session/session-state';
 
+export type SessionListener = () => void;
+
 /**
  * Session interface defines the structure of the user session data, including JWT, token,
  * session timeout, locale, timezone, and username.
@@ -21,6 +23,7 @@ interface Session {
   logout: () => void;
   login: (data: SessionLoginData) => void;
   isLoggedIn: () => boolean;
+  subscribeToChanges: (listener: SessionListener) => () => void;
 }
 
 export default Session;

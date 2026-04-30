@@ -5,7 +5,10 @@
 
 import date, {type Date} from 'gmp/models/date';
 import NoSessionState from 'gmp/session/no-session-state';
-import {type default as Session} from 'gmp/session/session';
+import {
+  type SessionListener,
+  type default as Session,
+} from 'gmp/session/session';
 import {
   type default as SessionState,
   type SessionLoginData,
@@ -26,11 +29,13 @@ const isLoggedIn = (storage: SessionStorage): boolean => {
 
 class DefaultSession implements Session {
   private state: SessionState;
+  private listeners: SessionListener[];
 
   constructor(storage: SessionStorage = globalThis.localStorage) {
     this.state = isLoggedIn(storage)
       ? new UserSessionState(storage)
       : new NoSessionState(storage);
+    this.listeners = [];
   }
 
   get token(): string | undefined {
@@ -62,15 +67,26 @@ class DefaultSession implements Session {
   }
 
   logout() {
-    this.state = this.state.logout();
+    this.setState(this.state.logout());
   }
 
   login(data: SessionLoginData) {
-    this.state = this.state.login(data);
+    this.setState(this.state.login(data));
   }
 
   isLoggedIn() {
     return this.state.isLoggedIn;
+  }
+
+  subscribeToChanges(listener: SessionListener) {
+    this.listeners.push(listener);
+
+    return () => (this.listeners = this.listeners.filter(l => l !== listener));
+  }
+
+  private setState(newState: SessionState) {
+    this.state = newState;
+    this.listeners.forEach(listener => listener());
   }
 }
 

@@ -132,10 +132,46 @@ describe('DefaultSession tests', () => {
       username: 'test-user',
     });
 
+    expect(session.isLoggedIn()).toBe(true);
+
     session.setLocale('fr-FR');
     session.setTimezone('CET');
 
     expect(session.locale).toBe('fr-FR');
     expect(session.timezone).toBe('CET');
+  });
+
+  test('should allow to be notified of session changes', () => {
+    const storage = createStorage();
+    const session = new DefaultSession(storage);
+
+    const listener = testing.fn();
+    const unsubscribe = session.subscribeToChanges(listener);
+
+    session.login({
+      token: 'test-token',
+      sessionTimeout: date('2024-12-31T23:59:59Z'),
+      locale: 'en-US',
+      timezone: 'UTC',
+      username: 'test-user',
+    });
+
+    expect(listener).toHaveBeenCalledTimes(1);
+
+    session.logout();
+
+    expect(listener).toHaveBeenCalledTimes(2);
+
+    unsubscribe();
+
+    session.login({
+      token: 'test-token',
+      sessionTimeout: date('2024-12-31T23:59:59Z'),
+      locale: 'en-US',
+      timezone: 'UTC',
+      username: 'test-user',
+    });
+
+    expect(listener).toHaveBeenCalledTimes(2);
   });
 });
