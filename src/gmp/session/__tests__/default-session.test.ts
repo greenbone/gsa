@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect, testing, onTestFinished} from '@gsa/testing';
 import date from 'gmp/models/date';
 import DefaultSession from 'gmp/session/default-session';
 
@@ -18,7 +18,7 @@ const createStorage = (state?: Record<string, string>) => {
 };
 
 describe('DefaultSession tests', () => {
-  test('should create a default session', () => {
+  test('should create a no-session if storage is empty', () => {
     const storage = createStorage();
     const session = new DefaultSession(storage);
 
@@ -27,6 +27,29 @@ describe('DefaultSession tests', () => {
     expect(session.locale).toBeUndefined();
     expect(session.timezone).toBeUndefined();
     expect(session.username).toBeUndefined();
+  });
+
+  test('should create a user session if valid token and sessionTimeout are stored', () => {
+    testing.useFakeTimers();
+    testing.setSystemTime(new Date('2024-01-01T00:00:00Z'));
+    const storage = createStorage({
+      token: 'test-token',
+      sessionTimeout: '2024-12-31T23:59:59Z',
+      username: 'test-user',
+    });
+    const session = new DefaultSession(storage);
+
+    expect(session.token).toBe('test-token');
+    expect(session.sessionTimeout?.toISOString()).toBe(
+      '2024-12-31T23:59:59.000Z',
+    );
+    expect(session.username).toBe('test-user');
+    expect(session.locale).toBeUndefined();
+    expect(session.timezone).toBeUndefined();
+
+    onTestFinished(() => {
+      testing.useRealTimers();
+    });
   });
 
   test('should return locale and timezone from storage if available', () => {
