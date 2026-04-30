@@ -23,7 +23,6 @@ import LoginForm from 'web/pages/login/LoginForm';
 import {
   setSessionTimeout,
   setUsername,
-  setIsLoggedIn,
   setTimezone,
 } from 'web/store/usersettings/actions';
 import Theme from 'web/utils/Theme';
@@ -92,8 +91,6 @@ const LoginPage = () => {
       dispatch(setSessionTimeout(sessionTimeout));
       dispatch(setUsername(username));
       dispatch(setTimezone(timezone));
-
-      dispatch(setIsLoggedIn(true));
 
       const userLastVisitedPath = getLastVisitedPage(username);
 

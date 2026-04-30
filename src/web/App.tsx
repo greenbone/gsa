@@ -19,11 +19,7 @@ import LanguageProvider from 'web/components/provider/LanguageProvider';
 import Routes from 'web/Routes';
 import configureStore from 'web/store';
 import {clearStore} from 'web/store/actions';
-import {
-  setUsername,
-  setTimezone,
-  setIsLoggedIn,
-} from 'web/store/usersettings/actions';
+import {setUsername, setTimezone} from 'web/store/usersettings/actions';
 
 void initLocale();
 const queryClient = new QueryClient();
@@ -49,7 +45,6 @@ const initStore = () => {
   if (isDefined(username)) {
     store.dispatch(setUsername(username));
   }
-  store.dispatch(setIsLoggedIn(gmp.isLoggedIn()));
 };
 
 class App extends React.Component<{}> {

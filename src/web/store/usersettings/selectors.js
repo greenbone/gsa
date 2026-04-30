@@ -15,6 +15,3 @@ export const getSessionTimeout = rootState =>
   rootState.userSettings.sessionTimeout;
 
 export const getUsername = rootState => rootState.userSettings.username;
-
-export const isLoggedIn = rootState =>
-  rootState.userSettings.isLoggedIn === true;

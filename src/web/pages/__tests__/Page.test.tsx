@@ -9,11 +9,7 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import Features from 'gmp/capabilities/features';
 import Response from 'gmp/http/response';
 import Page from 'web/pages/Page';
-import {
-  setIsLoggedIn,
-  setTimezone,
-  setUsername,
-} from 'web/store/usersettings/actions';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 describe('Page tests', () => {
   test('renders null when capabilities are not loaded', () => {
@@ -58,12 +54,18 @@ describe('Page tests', () => {
       settings: {
         manualUrl: 'https://example.com/manual',
         enableCommunityFeedNotification: true,
+        session: {
+          subscribeToChanges: testing.fn().mockImplementation(callback => {
+            callback();
+            return () => {};
+          }),
+          isLoggedIn: () => true,
+        },
       },
     };
     const {render, store} = rendererWith({gmp});
 
     store.dispatch(setUsername('testuser'));
-    store.dispatch(setIsLoggedIn(true));
     store.dispatch(setTimezone('UTC'));
 
     render(

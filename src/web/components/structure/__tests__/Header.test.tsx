@@ -6,20 +6,23 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import Header from 'web/components/structure/Header';
-import {
-  setTimezone,
-  setUsername,
-  setIsLoggedIn,
-} from 'web/store/usersettings/actions';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 const gmp = {
   settings: {
     vendorLabel: 'gsm-150_label.svg',
+    session: {
+      isLoggedIn: () => true,
+      subscribeToChanges: testing.fn().mockImplementation(callback => {
+        callback();
+        return () => {};
+      }),
+    },
   },
   doLogout: testing.fn().mockResolvedValue(undefined),
 };
 
-describe('Header', () => {
+describe('Header tests', () => {
   test('renders component', async () => {
     const {render, store} = rendererWith({
       gmp,
@@ -28,7 +31,6 @@ describe('Header', () => {
     });
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('testUser'));
-    store.dispatch(setIsLoggedIn(true));
 
     render(<Header />);
 
@@ -69,7 +71,6 @@ describe('Header', () => {
       store: true,
     });
     store.dispatch(setUsername('testUser'));
-    store.dispatch(setIsLoggedIn(true));
 
     render(<Header />);
 
