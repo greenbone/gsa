@@ -61,7 +61,7 @@ const LoginPage = () => {
   const gmp = useGmp();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isLoggedIn] = useUserIsLoggedIn();
+  const isLoggedIn = useUserIsLoggedIn();
   const [error, setError] = useState<Error>();
   const [_] = useTranslation();
 
