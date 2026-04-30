@@ -46,7 +46,7 @@ const Dialog = ({
   onSave,
 }) => {
   const [_] = useTranslation();
-  const [username] = useUserName();
+  const username = useUserName();
   const capabilities = useCapabilities();
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);

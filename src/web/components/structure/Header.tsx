@@ -23,7 +23,7 @@ const Header = () => {
   const [_] = useTranslation();
 
   const gmp = useGmp();
-  const [username] = useUserName();
+  const username = useUserName();
   const isLoggedIn = useUserIsLoggedIn();
   const navigate = useNavigate();
   const location = useLocation();
