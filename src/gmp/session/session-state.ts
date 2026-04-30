@@ -20,6 +20,8 @@ interface SessionState {
   timezone: string | undefined;
   username: string | undefined;
 
+  readonly isLoggedIn: boolean;
+
   logout: () => SessionState;
   login: (data: SessionLoginData) => SessionState;
 }

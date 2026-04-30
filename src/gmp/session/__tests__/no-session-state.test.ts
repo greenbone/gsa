@@ -27,6 +27,8 @@ describe('NoSessionState tests', () => {
     expect(session.locale).toBeUndefined();
     expect(session.timezone).toBeUndefined();
     expect(session.username).toBeUndefined();
+
+    expect(session.isLoggedIn).toBe(false);
   });
 
   test('should return locale and timezone from storage', () => {
