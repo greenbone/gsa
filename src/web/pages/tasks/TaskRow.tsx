@@ -89,7 +89,7 @@ const TaskRow = ({
   ...props
 }: TaskRowProps) => {
   const [_] = useTranslation();
-  const [username] = useUserName();
+  const username = useUserName() as string;
   const {scanner, observers, last_report: lastReport} = entity;
 
   const obs: {role: string; user: string; group: string} = {

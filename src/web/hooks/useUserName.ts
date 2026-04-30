@@ -3,21 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useSelector, useDispatch} from 'react-redux';
-import {setUsername} from 'web/store/usersettings/actions';
-import {getUsername} from 'web/store/usersettings/selectors';
+import {useSyncExternalStore} from 'react';
+import useGmp from 'web/hooks/useGmp';
 
 /**
  * Custom hook to get and set the username.
  *
- * @returns An array containing the current username and a function to set the username.
+ * @returns The current username.
  */
-const useUserName = (): [string, (username: string) => void] => {
-  const dispatch = useDispatch();
-  return [
-    useSelector(getUsername),
-    (username: string) => dispatch(setUsername(username)),
-  ];
+const useUserName = () => {
+  const gmp = useGmp();
+  const username = useSyncExternalStore(
+    listener => gmp.settings.session.subscribeToChanges(listener),
+    () => gmp.settings.session.username,
+  );
+  return username;
 };
 
 export default useUserName;

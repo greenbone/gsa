@@ -66,7 +66,7 @@ const Row = ({
   ...props
 }) => {
   const [_] = useTranslation();
-  const [username] = useUserName();
+  const username = useUserName();
   const {scanner, observers} = entity;
   const obs = [];
   let hasObservers = false;

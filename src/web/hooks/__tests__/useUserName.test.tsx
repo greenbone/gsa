@@ -4,39 +4,23 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {rendererWith, fireEvent} from 'web/testing';
+import {rendererWith} from 'web/testing';
 import useUserName from 'web/hooks/useUserName';
-import {setUsername} from 'web/store/usersettings/actions';
-
-const TestUserName = () => <span>{useUserName()[0]}</span>;
-
-const TestUserName2 = () => {
-  const [name, setUserName] = useUserName();
-  return <span onClick={() => setUserName('bar')}>{name}</span>;
-};
 
 describe('useUserName tests', () => {
   test('should return the users name', () => {
-    const {render, store} = rendererWith({store: true});
+    const gmp = {
+      settings: {
+        session: {
+          username: 'foo',
+          subscribeToChanges: () => () => {},
+        },
+      },
+    };
+    const {renderHook} = rendererWith({gmp});
 
-    store.dispatch(setUsername('foo'));
+    const {result} = renderHook(() => useUserName());
 
-    const {element} = render(<TestUserName />);
-
-    expect(element).toHaveTextContent(/^foo$/);
-  });
-
-  test('should allow to change the user name', () => {
-    const {render, store} = rendererWith({store: true});
-
-    store.dispatch(setUsername('foo'));
-
-    const {element} = render(<TestUserName2 />);
-
-    expect(element).toHaveTextContent(/^foo$/);
-
-    fireEvent.click(element);
-
-    expect(element).toHaveTextContent(/^bar$/);
+    expect(result.current).toBe('foo');
   });
 });

@@ -36,7 +36,7 @@ const EntityNameTableData = <TEntity extends Model>({
   onToggleDetailsClick,
 }: EntityNameTableDataProps<TEntity>) => {
   const [_] = useTranslation();
-  const [username] = useUserName();
+  const username = useUserName() as string;
   return (
     <TableData data-testid={dataTestId}>
       <Layout align="space-between">
