@@ -20,6 +20,7 @@ interface Session {
   setLocale: (locale?: string) => void;
   logout: () => void;
   login: (data: SessionLoginData) => void;
+  isLoggedIn: () => boolean;
 }
 
 export default Session;

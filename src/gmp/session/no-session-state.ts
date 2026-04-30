@@ -19,6 +19,8 @@ import UserSessionState from 'gmp/session/user-session-state';
 class NoSessionState implements SessionState {
   private readonly storage: SessionStorage;
 
+  readonly isLoggedIn = false;
+
   constructor(storage: SessionStorage = globalThis.localStorage) {
     this.storage = storage;
   }

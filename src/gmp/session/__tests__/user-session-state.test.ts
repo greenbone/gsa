@@ -29,6 +29,8 @@ describe('UserSessionState tests', () => {
       username: 'test-user',
     });
 
+    expect(session.isLoggedIn).toBe(true);
+
     expect(storage.getItem).not.toHaveBeenCalled();
 
     expect(session.token).toBe('test-token');

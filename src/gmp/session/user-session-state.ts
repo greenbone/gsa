@@ -22,6 +22,8 @@ import {hasValue, isDefined} from 'gmp/utils/identity';
 class UserSessionState implements SessionState {
   private readonly storage: SessionStorage;
 
+  readonly isLoggedIn = true;
+
   constructor(
     storage: SessionStorage = globalThis.localStorage,
     {token, sessionTimeout, locale, timezone, username}: SessionLoginData = {},

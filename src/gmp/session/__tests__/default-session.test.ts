@@ -52,15 +52,18 @@ describe('DefaultSession tests', () => {
     });
   });
 
-  test('should return locale and timezone from storage if available', () => {
+  test('should only return locale and timezone from storage if logged out', () => {
     const storage = createStorage({
       token: 'test-token',
-      sessionTimeout: '2024-12-31T23:59:59Z',
+      // sessionTimeout is in the past, so session should be considered logged out
+      sessionTimeout: '2023-12-31T23:59:59Z',
       locale: 'en-US',
       timezone: 'UTC',
       username: 'test-user',
     });
     const session = new DefaultSession(storage);
+
+    expect(session.isLoggedIn()).toBe(false);
 
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
@@ -69,9 +72,11 @@ describe('DefaultSession tests', () => {
     expect(session.timezone).toBe('UTC');
   });
 
-  test('should not update session data', () => {
+  test('should not update session data if logged out', () => {
     const storage = createStorage();
     const session = new DefaultSession(storage);
+
+    expect(session.isLoggedIn()).toBe(false);
 
     session.setLocale('en-US');
     session.setTimezone('UTC');
@@ -84,6 +89,8 @@ describe('DefaultSession tests', () => {
     const storage = createStorage();
     const session = new DefaultSession(storage);
 
+    expect(session.isLoggedIn()).toBe(false);
+
     session.login({
       token: 'test-token',
       sessionTimeout: date('2024-12-31T23:59:59Z'),
@@ -91,6 +98,8 @@ describe('DefaultSession tests', () => {
       timezone: 'UTC',
       username: 'test-user',
     });
+
+    expect(session.isLoggedIn()).toBe(true);
 
     expect(session.token).toBe('test-token');
     expect(session.sessionTimeout?.toISOString()).toBe(
@@ -101,6 +110,8 @@ describe('DefaultSession tests', () => {
     expect(session.username).toBe('test-user');
 
     session.logout();
+
+    expect(session.isLoggedIn()).toBe(false);
 
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();

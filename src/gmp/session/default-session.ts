@@ -68,6 +68,10 @@ class DefaultSession implements Session {
   login(data: SessionLoginData) {
     this.state = this.state.login(data);
   }
+
+  isLoggedIn() {
+    return this.state.isLoggedIn;
+  }
 }
 
 export default DefaultSession;
