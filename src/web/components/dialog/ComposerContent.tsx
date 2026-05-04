@@ -4,7 +4,6 @@
  */
 
 import styled from 'styled-components';
-import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import CheckBox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import useTranslation from 'web/hooks/useTranslation';
@@ -14,14 +13,14 @@ interface ComposerContentProps {
   audit: boolean;
   filterFieldTitle?: string;
   filterString: string;
-  includeNotes: YesNo;
-  includeOverrides: YesNo;
-  onValueChange?: (value: YesNo, name?: string) => void;
+  includeNotes: boolean;
+  includeOverrides: boolean;
+  onValueChange?: (value: boolean, name?: string) => void;
 }
 
 export const COMPOSER_CONTENT_DEFAULTS = {
-  includeNotes: YES_VALUE,
-  includeOverrides: YES_VALUE,
+  includeNotes: true,
+  includeOverrides: true,
 };
 
 const FilterField = styled.div`
@@ -57,34 +56,34 @@ const ComposerContent = ({
       </FormGroup>
       <FormGroup direction="row" title={_('Include')}>
         <CheckBox
-          checked={includeNotes === YES_VALUE}
-          checkedValue={YES_VALUE}
+          checked={includeNotes}
+          checkedValue={true}
           data-testid="includeNotes"
           name="includeNotes"
           title={_('Notes')}
-          unCheckedValue={NO_VALUE}
+          unCheckedValue={false}
           onChange={onValueChange}
         />
         {!audit && (
           <CheckBox
-            checked={includeOverrides === YES_VALUE}
-            checkedValue={YES_VALUE}
+            checked={includeOverrides}
+            checkedValue={true}
             data-testid="include-overrides"
             name="includeOverrides"
             title={_('Overrides')}
-            unCheckedValue={NO_VALUE}
+            unCheckedValue={false}
             onChange={onValueChange}
           />
         )}
         <CheckBox
           checked={true}
-          checkedValue={YES_VALUE}
+          checkedValue={true}
           data-testid="include-tls-cert"
           disabled={true}
           name="includeTlsCertificates"
           title={_('TLS Certificates')}
           toolTipTitle={_('TLS Certificates are always included for now')}
-          unCheckedValue={NO_VALUE}
+          unCheckedValue={false}
           onChange={onValueChange}
         />
       </FormGroup>

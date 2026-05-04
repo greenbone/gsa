@@ -17,7 +17,6 @@ import type Report from 'gmp/models/report';
 import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
 import {isActive} from 'gmp/models/task';
-import type {YesNo} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
@@ -577,10 +576,8 @@ const DeltaReportDetails = () => {
           defaultReportConfigId={reportComposerDefaults.defaultReportConfigId}
           defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
           filter={reportFilter ?? DEFAULT_FILTER}
-          includeNotes={Number(reportComposerDefaults.includeNotes) as YesNo}
-          includeOverrides={
-            Number(reportComposerDefaults.includeOverrides) as YesNo
-          }
+          includeNotes={reportComposerDefaults.includeNotes}
+          includeOverrides={reportComposerDefaults.includeOverrides}
           reportConfigs={reportConfigs}
           reportFormats={reportFormats}
           storeAsDefault={storeAsDefault}

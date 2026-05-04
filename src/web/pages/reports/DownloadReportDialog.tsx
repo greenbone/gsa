@@ -7,7 +7,6 @@ import {useState} from 'react';
 import type Filter from 'gmp/models/filter';
 import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
-import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 import {CONTAINER_SCANNING_RESULTS_THRESHOLD} from 'gmp/settings';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -28,8 +27,8 @@ interface DownloadReportDialogProps {
   defaultReportConfigId?: string;
   defaultReportFormatId?: string;
   filter: Filter | string;
-  includeNotes?: YesNo;
-  includeOverrides?: YesNo;
+  includeNotes?: boolean;
+  includeOverrides?: boolean;
   isContainerScanning?: boolean;
   reportConfigs?: ReportConfig[];
   reportFormats?: ReportFormat[];
@@ -46,8 +45,8 @@ const DownloadReportDialog = ({
   defaultReportConfigId,
   defaultReportFormatId,
   filter,
-  includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes as YesNo,
-  includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides as YesNo,
+  includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
+  includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
   isContainerScanning = false,
   reportConfigs,
   reportFormats,
@@ -176,13 +175,13 @@ const DownloadReportDialog = ({
             )}
             <CheckBox
               checked={values.storeAsDefault}
-              checkedValue={YES_VALUE}
+              checkedValue={true}
               name="storeAsDefault"
               title={_('Store as default')}
               toolTipTitle={_(
                 'Store indicated settings (without filter) as default',
               )}
-              unCheckedValue={NO_VALUE}
+              unCheckedValue={false}
               onChange={onValueChange}
             />
             {showContainerScanningWarning ? (
