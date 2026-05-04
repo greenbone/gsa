@@ -116,7 +116,7 @@
     "typescript-eslint": "^8.58.2",
     "vite": "^7.3.2",
     "vite-plugin-eslint2": "^5.1.0",
-    "vite-plugin-svgr": "^4.5.0",
+    "vite-plugin-svgr": "^5.2.0",
     "vitest": "^4.0.17"
   }
 }
