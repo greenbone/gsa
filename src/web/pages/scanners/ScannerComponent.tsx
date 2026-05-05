@@ -40,12 +40,12 @@ import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserName from 'web/hooks/useUserName';
 import CredentialDialog, {
   type CredentialDialogState,
 } from 'web/pages/credentials/CredentialDialog';
 import ScannerDialog from 'web/pages/scanners/ScannerDialog';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUsername} from 'web/store/usersettings/selectors';
 import {generateFilename} from 'web/utils/Render';
 
 interface ScannerComponentRenderProps {
@@ -118,7 +118,7 @@ const ScannerComponent = ({
   const [_] = useTranslation();
 
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
-  const username = useShallowEqualSelector(getUsername);
+  const username = useUserName();
   const detailsExportFileName = userDefaultsSelector.getValueByName(
     'detailsexportfilename',
   );

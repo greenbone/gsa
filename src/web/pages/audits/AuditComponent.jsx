@@ -23,6 +23,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserName from 'web/hooks/useUserName';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
 import AuditDialog from 'web/pages/audits/Dialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
@@ -53,7 +54,6 @@ import {
 } from 'web/store/entities/targets';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUsername} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE, generateFilename} from 'web/utils/Render';
 
@@ -121,7 +121,7 @@ const AuditComponent = ({
     'reportexportfilename',
   );
 
-  const username = useShallowEqualSelector(getUsername);
+  const username = useUserName();
   const policies = useShallowEqualSelector(state =>
     policiesSelector(state).getEntities(ALL_FILTER),
   );

@@ -32,6 +32,7 @@ import useGmp from 'web/hooks/useGmp';
 import useReload from 'web/hooks/useReload';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserName from 'web/hooks/useUserName';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
@@ -59,10 +60,7 @@ import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilte
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {
-  getReportComposerDefaults,
-  getUsername,
-} from 'web/store/usersettings/selectors';
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 import {generateFilename} from 'web/utils/Render';
 import {DESC} from 'web/utils/sort-direction';
 
@@ -160,7 +158,7 @@ const useReportState = (params: UseReportStateParams) => {
     Filter | undefined
   >(state => getUserSettingsDefaultFilter(state, 'result').getFilter('result'));
 
-  const username = useShallowEqualSelector<unknown, string>(getUsername);
+  const username = useUserName();
 
   const reportComposerDefaults = useShallowEqualSelector(
     getReportComposerDefaults,
