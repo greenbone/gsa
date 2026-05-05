@@ -17,7 +17,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialDetailsPage from 'web/pages/credentials/CredentialDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/credentials';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -88,7 +88,6 @@ describe('CredentialDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 
@@ -175,8 +174,6 @@ describe('CredentialDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
     store.dispatch(entityLoadingActions.success('6575', credential));
 
     render(<CredentialDetailsPage id={credential.id} />);
@@ -259,7 +256,6 @@ describe('CredentialDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 
@@ -294,7 +290,6 @@ describe('CredentialDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 
@@ -315,7 +310,6 @@ describe('CredentialDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 
@@ -336,7 +330,6 @@ describe('CredentialDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 
@@ -387,7 +380,6 @@ describe('CredentialDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 
@@ -413,7 +405,6 @@ describe('CredentialDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 

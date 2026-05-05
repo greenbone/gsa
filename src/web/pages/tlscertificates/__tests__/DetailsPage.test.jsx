@@ -12,7 +12,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/tlscertificates/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tlscertificates';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -82,8 +82,6 @@ describe('TLS Certificate DetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
-
     store.dispatch(entityLoadingActions.success('1234', tlsCertificate));
 
     const {baseElement, container} = render(<DetailsPage id="1234" />);

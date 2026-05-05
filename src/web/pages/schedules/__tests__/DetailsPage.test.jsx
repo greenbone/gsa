@@ -12,7 +12,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScheduleDetailsPage from 'web/pages/schedules/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/schedules';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -87,7 +87,6 @@ describe('ScheduleDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
@@ -148,7 +147,6 @@ describe('ScheduleDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
@@ -170,7 +168,6 @@ describe('ScheduleDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
@@ -195,7 +192,6 @@ describe('ScheduleDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 

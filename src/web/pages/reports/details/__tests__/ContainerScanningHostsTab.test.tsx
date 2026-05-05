@@ -9,7 +9,7 @@ import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ContainerScanningHostsTab from 'web/pages/reports/details/ContainerScanningHostsTab';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -34,7 +34,6 @@ describe('Container Scanning Hosts Tab tests', () => {
       store: true,
     });
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
     render(
       <ContainerScanningHostsTab
         counts={hosts.counts}

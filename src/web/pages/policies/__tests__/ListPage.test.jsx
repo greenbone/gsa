@@ -19,7 +19,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import PoliciesPage, {ToolBarIcons} from 'web/pages/policies/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
-import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -101,8 +100,6 @@ describe('PoliciesPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setUsername('admin'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -138,8 +135,6 @@ describe('PoliciesPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));

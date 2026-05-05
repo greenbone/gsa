@@ -15,7 +15,6 @@ import PermissionDetailsPage, {
   PermissionsDetailsPageToolBarIcons,
 } from 'web/pages/permissions/PermissionDetailsPage';
 import {entitiesLoadingActions} from 'web/store/entities/permissions';
-import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -63,8 +62,6 @@ const reloadInterval = 1;
 const manualUrl = 'test/';
 
 const setupStoreForPermissionDetailsPage = store => {
-  store.dispatch(setUsername('admin'));
-
   const defaultSettingFilter = Filter.fromString('foo=bar');
   store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
   store.dispatch(
@@ -391,7 +388,7 @@ test('should show export icon even with limited permissions', async () => {
 });
 
 test('should handle loading state', () => {
-  const {render, store} = rendererWith({
+  const {render} = rendererWith({
     gmp: createGmp(),
     capabilities: true,
     store: true,
@@ -399,8 +396,6 @@ test('should handle loading state', () => {
   });
 
   // Don't setup store to simulate loading state
-  store.dispatch(setUsername('admin'));
-
   render(<PermissionDetailsPage id="12345" />);
 
   // Component should render in loading state

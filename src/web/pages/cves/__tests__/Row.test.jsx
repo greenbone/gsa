@@ -10,7 +10,7 @@ import Cve from 'gmp/models/cve';
 import {parseDate} from 'gmp/parser';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CveRow from 'web/pages/cves/Row';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const gmp = {settings: {severityRating: SEVERITY_RATING_CVSS_3}};
 const caps = new Capabilities(['everything']);
@@ -38,7 +38,6 @@ describe('CVEv2 Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
       <CveRow
@@ -122,7 +121,6 @@ describe('CVEv3 Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
       <CveRow

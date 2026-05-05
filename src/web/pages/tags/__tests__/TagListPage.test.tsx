@@ -21,7 +21,6 @@ import {YES_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TagsListPage from 'web/pages/tags/TagListPage';
-import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -103,7 +102,6 @@ const createGmp = ({
 });
 
 const setupStore = (store: ReturnType<typeof rendererWith>['store']) => {
-  store.dispatch(setUsername('admin'));
   store.dispatch(
     loadingActions.success({
       rowsperpage: {value: '10'},

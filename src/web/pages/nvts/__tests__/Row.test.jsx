@@ -9,7 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter.js';
 import NVT from 'gmp/models/nvt';
 import Row from 'web/pages/nvts/Row';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -67,7 +67,6 @@ describe('NVT row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
       <Row

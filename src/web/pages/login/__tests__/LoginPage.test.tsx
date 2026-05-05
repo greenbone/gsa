@@ -210,7 +210,6 @@ describe('LoginPage tests', () => {
 
     const userSettings = store.getState().userSettings;
     expect(userSettings.timezone).toEqual('Australia/Sydney');
-    expect(userSettings.username).toEqual('foo');
   });
 
   test.each([

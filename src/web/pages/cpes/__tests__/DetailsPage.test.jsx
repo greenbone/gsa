@@ -14,7 +14,7 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CpePage from 'web/pages/cpes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cpes';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -82,7 +82,6 @@ describe('CpeDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
 

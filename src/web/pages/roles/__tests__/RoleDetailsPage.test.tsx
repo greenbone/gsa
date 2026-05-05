@@ -17,7 +17,6 @@ import RoleDetailsPage from 'web/pages/roles/RoleDetailsPage';
 import RoleDetailsPageToolBarIcons from 'web/pages/roles/RoleDetailsPageToolBarIcons';
 import {entitiesLoadingActions as permissionsLoadingActions} from 'web/store/entities/permissions';
 import {entitiesLoadingActions} from 'web/store/entities/roles';
-import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -91,8 +90,6 @@ const reloadInterval = 1;
 const manualUrl = 'test/';
 
 const setupStoreForRoleDetailsPage = store => {
-  store.dispatch(setUsername('admin'));
-
   const defaultSettingFilter = Filter.fromString('foo=bar');
   store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
   store.dispatch(

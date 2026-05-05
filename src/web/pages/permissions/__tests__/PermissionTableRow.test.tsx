@@ -10,7 +10,6 @@ import Permission from 'gmp/models/permission';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
 import PermissionTableRow from 'web/pages/permissions/PermissionTableRow';
-import {setUsername} from 'web/store/usersettings/actions';
 
 const permission = Permission.fromElement({
   _id: '1',
@@ -39,13 +38,11 @@ const createGmp = () => ({
 
 describe('PermissionTableRow tests', () => {
   test('should render entity name', async () => {
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-
-    store.dispatch(setUsername('foo'));
 
     render(
       <PermissionTableRow
@@ -58,13 +55,12 @@ describe('PermissionTableRow tests', () => {
   });
 
   test('should call onToggleDetailsClick when EntityNameTableData is clicked', async () => {
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
 
-    store.dispatch(setUsername('foo'));
     render(
       <PermissionTableRow
         entity={permission}
@@ -78,12 +74,11 @@ describe('PermissionTableRow tests', () => {
   });
 
   test('should render default actions', async () => {
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(
       <PermissionTableRow
         entity={permission}
@@ -102,12 +97,11 @@ describe('PermissionTableRow tests', () => {
   });
 
   test('should render permission description', async () => {
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(
       <PermissionTableRow
         entity={permission}
@@ -119,12 +113,11 @@ describe('PermissionTableRow tests', () => {
   });
 
   test('should handle permission without resource', async () => {
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(
       <PermissionTableRow
         entity={permission}
@@ -147,12 +140,11 @@ describe('PermissionTableRow tests', () => {
       in_use: NO_VALUE,
       resource: {_id: 'resource123', type: 'config'},
     });
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(
       <PermissionTableRow
         entity={permission}
@@ -168,12 +160,11 @@ describe('PermissionTableRow tests', () => {
       permission as Permission & {userCapabilities: EverythingCapabilities}
     ).userCapabilities = new EverythingCapabilities();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(
       <PermissionTableRow
         entity={permission}

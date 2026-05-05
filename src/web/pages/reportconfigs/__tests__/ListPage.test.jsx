@@ -21,7 +21,6 @@ import ReportConfigsPage, {
   ToolBarIcons,
 } from 'web/pages/reportconfigs/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
-import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -98,8 +97,6 @@ describe('ReportConfigsPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setUsername('admin'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -134,8 +131,6 @@ describe('ReportConfigsPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));

@@ -12,7 +12,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TargetDetailsPage from 'web/pages/targets/TargetDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/targets';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const target = Target.fromElement({
   _id: '46264',
@@ -114,8 +114,6 @@ describe('TargetDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
     store.dispatch(entityLoadingActions.success('46264', target));
 
     render(<TargetDetailsPage id="46264" />);
@@ -250,8 +248,6 @@ describe('TargetDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
     store.dispatch(entityLoadingActions.success('46264', target));
 
     render(<TargetDetailsPage id="46264" />);
@@ -275,8 +271,6 @@ describe('TargetDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
     store.dispatch(entityLoadingActions.success('12345', target));
 
     const {container} = render(<TargetDetailsPage id="12345" />);
@@ -296,8 +290,6 @@ describe('TargetDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
     store.dispatch(entityLoadingActions.success('46264', target));
 
     const {container} = render(<TargetDetailsPage id="46264" />);
@@ -317,8 +309,6 @@ describe('TargetDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
     store.dispatch(entityLoadingActions.success('46264', target));
 
     render(<TargetDetailsPage id="46264" />);

@@ -8,7 +8,6 @@ import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import ReportConfig from 'gmp/models/report-config';
 import {createSession} from 'gmp/testing';
 import Row from 'web/pages/reportconfigs/Row';
-import {setUsername} from 'web/store/usersettings/actions';
 
 const entity = ReportConfig.fromElement({
   _id: '1234',
@@ -48,13 +47,12 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
     });
-    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
       <Row
@@ -80,14 +78,12 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
     });
-    store.dispatch(setUsername('admin'));
-
     const {baseElement} = render(
       <Row
         entity={orphanEntity}
@@ -129,14 +125,12 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     render(
       <Row
@@ -163,13 +157,12 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
     });
-    store.dispatch(setUsername('admin'));
 
     render(
       <Row
@@ -228,14 +221,12 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
     });
-    store.dispatch(setUsername('admin'));
-
     render(
       <Row
         entity={config}
@@ -300,13 +291,12 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
     });
-    store.dispatch(setUsername('admin'));
 
     render(
       <Row
@@ -366,13 +356,12 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
     });
-    store.dispatch(setUsername('admin'));
 
     render(
       <Row

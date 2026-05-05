@@ -18,7 +18,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScannerDetailsPage from 'web/pages/scanners/ScannerDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/scanners';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -115,7 +115,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -138,7 +137,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -158,7 +156,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -180,7 +177,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -205,7 +201,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -230,7 +225,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -258,7 +252,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -283,7 +276,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -308,7 +300,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -338,7 +329,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     const {container} = render(<ScannerDetailsPage id="scanner-123" />);
@@ -361,7 +351,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     const {container} = render(<ScannerDetailsPage id="scanner-123" />);
@@ -384,7 +373,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);
@@ -408,7 +396,6 @@ describe('ScannerDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('scanner-123', scanner));
 
     render(<ScannerDetailsPage id="scanner-123" />);

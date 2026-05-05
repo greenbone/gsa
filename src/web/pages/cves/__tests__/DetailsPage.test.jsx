@@ -10,7 +10,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CvePage from 'web/pages/cves/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cves';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const cve = Cve.fromElement({
   _id: 'CVE-2020-9997',
@@ -148,7 +148,6 @@ describe('CveDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('CVE-2020-9997', cve));
 
@@ -275,7 +274,6 @@ describe('CveDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('CVE-2020-9997', cve));
 
     const {container} = render(<CvePage id="CVE-2020-9997" />);
@@ -295,7 +293,6 @@ describe('CveDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('CVE-2020-9997', cve));
 
     render(<CvePage id="CVE-2020-9997" />);

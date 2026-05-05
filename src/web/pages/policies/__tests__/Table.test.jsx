@@ -10,7 +10,6 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {createSession} from 'gmp/testing';
 import Table from 'web/pages/policies/Table';
-import {setUsername} from 'web/store/usersettings/actions';
 
 const policy = Policy.fromElement({
   _id: '12345',
@@ -62,13 +61,11 @@ describe('Policies table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
       <Table
@@ -98,14 +95,12 @@ describe('Policies table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const {element} = render(
       <Table
@@ -137,14 +132,12 @@ describe('Policies table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     render(
       <Table
