@@ -5,32 +5,31 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
+import date from 'gmp/models/date';
+import {createSession} from 'gmp/testing';
 import Header from 'web/components/structure/Header';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
-const gmp = {
+const createGmp = () => ({
   settings: {
     vendorLabel: 'gsm-150_label.svg',
-    session: {
-      isLoggedIn: () => true,
-      subscribeToChanges: testing.fn().mockImplementation(callback => {
-        callback();
-        return () => {};
-      }),
-    },
+    session: createSession({
+      username: 'testUser',
+      timezone: 'UTC',
+      sessionTimeout: date(Date.now() + 3600 * 1000),
+    }),
   },
   doLogout: testing.fn().mockResolvedValue(undefined),
-};
+});
 
 describe('Header tests', () => {
   test('renders component', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       router: true,
       store: true,
     });
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('testUser'));
 
     render(<Header />);
 
@@ -65,12 +64,12 @@ describe('Header tests', () => {
   });
 
   test('opens user menu, checks items and logs out user', async () => {
-    const {render, store} = rendererWith({
+    const gmp = createGmp();
+    const {render} = rendererWith({
       gmp,
       router: true,
       store: true,
     });
-    store.dispatch(setUsername('testUser'));
 
     render(<Header />);
 

@@ -9,7 +9,14 @@ import Credential, {
   CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
+import {createSession} from 'gmp/testing';
 import CredentialTableRow from 'web/pages/credentials/CredentialTableRow';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('CredentialTableRow tests', () => {
   test('should render entity name', async () => {
@@ -18,7 +25,10 @@ describe('CredentialTableRow tests', () => {
       name: 'Test Credential',
       credentialType: CERTIFICATE_CREDENTIAL_TYPE,
     });
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<CredentialTableRow entity={credential} />);
     expect(
       screen.getByRole('cell', {name: /test credential/i}),
@@ -31,7 +41,10 @@ describe('CredentialTableRow tests', () => {
       name: 'Test Credential',
       credentialType: CERTIFICATE_CREDENTIAL_TYPE,
     });
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<CredentialTableRow entity={credential} />);
     expect(
       screen.getByRole('cell', {name: /client certificate \(cc\)/i}),
@@ -45,7 +58,10 @@ describe('CredentialTableRow tests', () => {
       credentialType: CERTIFICATE_CREDENTIAL_TYPE,
       login: 'Foo Bar',
     });
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<CredentialTableRow entity={credential} />);
     expect(screen.getByRole('cell', {name: /foo bar/i})).toBeInTheDocument();
   });
@@ -57,7 +73,10 @@ describe('CredentialTableRow tests', () => {
       credentialType: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
     });
     const handleDownloadInstaller = testing.fn();
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <CredentialTableRow
         entity={credential}

@@ -18,6 +18,7 @@ import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scan-config';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScanConfigsPage, {ToolBarIcons} from 'web/pages/scanconfigs/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
@@ -53,49 +54,56 @@ const config = ScanConfig.fromElement({
   },
 });
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({filter: null}),
+  getConfigs = testing.fn().mockResolvedValue({
+    data: [config],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getConfigs = testing.fn().mockResolvedValue({
-  data: [config],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  scanconfigs: {
+    get: getConfigs,
+    deleteByFilter,
+    exportByFilter,
   },
+  filters: {
+    get: getFilters,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting: getSetting},
 });
-
-const getSetting = testing.fn().mockResolvedValue({filter: null});
 
 describe('ScanConfigsPage tests', () => {
   test('should render full ScanConfigsPage', async () => {
-    const gmp = {
-      scanconfigs: {
-        get: getConfigs,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -136,27 +144,7 @@ describe('ScanConfigsPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      scanconfigs: {
-        get: getConfigs,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -194,11 +182,11 @@ describe('ScanConfigsPage tests', () => {
       'Move page contents to trashcan',
     )[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.scanconfigs.deleteByFilter);
 
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.scanconfigs.exportByFilter).toHaveBeenCalled();
   });
 });
 
@@ -213,7 +201,7 @@ describe('ScanConfigsPage ToolBarIcons test', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -245,7 +233,7 @@ describe('ScanConfigsPage ToolBarIcons test', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 

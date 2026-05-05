@@ -8,6 +8,7 @@ import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Task from 'gmp/models/task';
 import {YES_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import EntityTags from 'web/entity/Tags';
 
 const createTask = () => {
@@ -54,6 +55,7 @@ const createGmpMock = (
     settings: {
       manualUrl: 'http://docs.example.com/manual',
       manualLanguageMapping: {},
+      session: createSession(),
     },
     user: {
       currentSettings: testing.fn().mockResolvedValue(currentSettingsResponse),

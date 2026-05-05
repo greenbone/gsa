@@ -13,73 +13,90 @@ import {
   wait,
 } from 'web/testing';
 import ReportConfig from 'gmp/models/report-config';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ReportFormatComponent from 'web/pages/reportconfigs/ReportConfigsComponent';
 
-describe('Report Config Component tests', () => {
-  const mockReportConfig = ReportConfig.fromElement({
-    _id: 'rc123',
-    name: 'test report config',
-    report_format: {
-      _id: 'rf456',
-      name: 'test report format',
-    },
-    param: [
-      {
-        name: 'test param',
-        value: 'ABC',
-        type: {
-          __text: 'string',
-          min: '0',
-          max: '1',
-        },
-      },
-    ],
-  });
-
-  const mockReportFormat = {
-    id: 'rf456',
+const mockReportConfig = ReportConfig.fromElement({
+  _id: 'rc123',
+  name: 'test report config',
+  report_format: {
+    _id: 'rf456',
     name: 'test report format',
-    configurable: true,
-    params: [
-      {
-        name: 'test param',
-        value: 'ABC',
-        type: 'string',
+  },
+  param: [
+    {
+      name: 'test param',
+      value: 'ABC',
+      type: {
+        __text: 'string',
+        min: '0',
+        max: '1',
       },
-    ],
-  };
+    },
+  ],
+});
 
+const mockReportFormat = {
+  id: 'rf456',
+  name: 'test report format',
+  configurable: true,
+  params: [
+    {
+      name: 'test param',
+      value: 'ABC',
+      type: 'string',
+    },
+  ],
+};
+
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getReportConfig = testing.fn().mockResolvedValue({
+    data: mockReportConfig,
+  }),
+  getReportFormat = testing.fn().mockResolvedValue({
+    data: mockReportFormat,
+  }),
+  getAllReportFormats = testing.fn().mockResolvedValue({
+    data: [mockReportFormat],
+  }),
+  saveReportConfig = testing.fn().mockResolvedValue({
+    data: {},
+  }),
+  createReportConfig = testing.fn().mockResolvedValue({
+    data: {},
+  }),
+} = {}) => ({
+  settings: {
+    session: createSession(),
+  },
+  user: {
+    currentSettings: currentSettings,
+  },
+  reportconfig: {
+    get: getReportConfig,
+    save: saveReportConfig,
+    create: createReportConfig,
+  },
+  reportformats: {
+    getAll: getAllReportFormats,
+  },
+  reportformat: {
+    get: getReportFormat,
+  },
+});
+
+describe('Report Config Component tests', () => {
   test('should open edit dialog and call GMP save', async () => {
     let editClick;
     const children = testing.fn(({edit}) => {
       editClick = edit;
     });
 
-    const getReportConfig = testing.fn().mockResolvedValue({
-      data: mockReportConfig,
-    });
-    const getAllReportFormats = testing.fn().mockResolvedValue({
-      data: [mockReportFormat],
-    });
-    const saveReportConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      user: {
-        currentSettings: testing
-          .fn()
-          .mockResolvedValue(currentSettingsDefaultResponse),
-      },
-      reportconfig: {
-        get: getReportConfig,
-        save: saveReportConfig,
-      },
-      reportformats: {
-        getAll: getAllReportFormats,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -92,10 +109,10 @@ describe('Report Config Component tests', () => {
 
     await wait();
 
-    expect(getReportConfig).toHaveBeenCalledWith({
+    expect(gmp.reportconfig.get).toHaveBeenCalledWith({
       id: 'rc123',
     });
-    expect(getAllReportFormats).toHaveBeenCalledWith();
+    expect(gmp.reportformats.getAll).toHaveBeenCalledWith();
 
     expect(screen.queryDialogTitle()).toHaveTextContent(
       'Edit Report Config test report config',
@@ -110,7 +127,7 @@ describe('Report Config Component tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
-    expect(saveReportConfig).toHaveBeenCalledWith({
+    expect(gmp.reportconfig.save).toHaveBeenCalledWith({
       comment: '',
       id: 'rc123',
       name: 'test report config',
@@ -133,33 +150,7 @@ describe('Report Config Component tests', () => {
       createClick = create;
     });
 
-    const getAllReportFormats = testing.fn().mockResolvedValue({
-      data: [mockReportFormat],
-    });
-    const getReportFormat = testing.fn().mockResolvedValue({
-      data: mockReportFormat,
-    });
-    const createReportConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      user: {
-        currentSettings: testing
-          .fn()
-          .mockResolvedValue(currentSettingsDefaultResponse),
-      },
-      reportconfig: {
-        create: createReportConfig,
-      },
-      reportformat: {
-        get: getReportFormat,
-      },
-      reportformats: {
-        getAll: getAllReportFormats,
-      },
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       gmp,
       router: true,
@@ -171,7 +162,7 @@ describe('Report Config Component tests', () => {
 
     await wait();
 
-    expect(getAllReportFormats).toHaveBeenCalledWith();
+    expect(gmp.reportformats.getAll).toHaveBeenCalledWith();
 
     expect(screen.queryDialogTitle()).toHaveTextContent('New Report Config');
     const content = within(screen.queryDialogContent());
@@ -190,7 +181,7 @@ describe('Report Config Component tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
-    expect(createReportConfig).toHaveBeenCalledWith({
+    expect(gmp.reportconfig.create).toHaveBeenCalledWith({
       name: 'Unnamed',
       comment: '',
       paramTypes: {
@@ -211,20 +202,7 @@ describe('Report Config Component tests', () => {
     const children = testing.fn(({create}) => {
       createClick = create;
     });
-    const getAllReportFormats = testing.fn().mockResolvedValue({
-      data: [mockReportFormat],
-    });
-
-    const gmp = {
-      user: {
-        currentSettings: testing
-          .fn()
-          .mockResolvedValue(currentSettingsDefaultResponse),
-      },
-      reportformats: {
-        getAll: getAllReportFormats,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,

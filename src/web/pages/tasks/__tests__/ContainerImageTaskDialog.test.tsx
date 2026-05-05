@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
 import {
   changeInputValue,
   fireEvent,
@@ -15,10 +15,18 @@ import {
 import {CONTAINER_IMAGE_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 import Task, {AUTO_DELETE_NO, TASK_STATUS} from 'gmp/models/task';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import ContainerImageTaskDialog from 'web/pages/tasks/ContainerImageTaskDialog';
 
-describe('ContainerImageTaskDialog component tests', () => {
-  const getMockFn = testing.fn().mockResolvedValue({
+const alerts = [
+  {id: 'al-1', name: 'Alert 1'},
+  {id: 'al-2', name: 'Alert 2'},
+];
+const schedules = [{id: 'sc-1', name: 'Daily 09:00'}];
+const tags = [{id: 'tg-1', name: 'Important'}];
+
+const createGmp = ({
+  getOciImageTargets = testing.fn().mockResolvedValue({
     data: [
       {id: 'oci-1', name: 'Registry Target 1'},
       {id: 'oci-2', name: 'Registry Target 2'},
@@ -31,28 +39,17 @@ describe('ContainerImageTaskDialog component tests', () => {
         rows: 2,
       },
     },
-  });
+  }),
+} = {}) => ({
+  settings: {
+    session: createSession({token: 'test-token'}),
+  },
+  ociimagetargets: {
+    get: getOciImageTargets,
+  },
+});
 
-  const gmp = {
-    settings: {
-      session: {token: 'test-token'},
-    },
-    ociimagetargets: {
-      get: getMockFn,
-    },
-  };
-
-  const alerts = [
-    {id: 'al-1', name: 'Alert 1'},
-    {id: 'al-2', name: 'Alert 2'},
-  ];
-  const schedules = [{id: 'sc-1', name: 'Daily 09:00'}];
-  const tags = [{id: 'tg-1', name: 'Important'}];
-
-  beforeEach(() => {
-    getMockFn.mockClear();
-  });
-
+describe('ContainerImageTaskDialog component tests', () => {
   const commonHandlers = () => ({
     onClose: testing.fn(),
     onSave: testing.fn(),
@@ -67,6 +64,7 @@ describe('ContainerImageTaskDialog component tests', () => {
 
   const renderDialog = (
     props: Partial<React.ComponentProps<typeof ContainerImageTaskDialog>> = {},
+    gmp = createGmp(),
   ) => {
     return rendererWith({gmp, capabilities: true}).render(
       <ContainerImageTaskDialog
@@ -126,8 +124,9 @@ describe('ContainerImageTaskDialog component tests', () => {
   });
 
   test('should list OCI image targets and call onOciImageTargetChange when selected', async () => {
+    const gmp = createGmp();
     const {onOciImageTargetChange} = commonHandlers();
-    renderDialog({onOciImageTargetChange});
+    renderDialog({onOciImageTargetChange}, gmp);
 
     // Wait for the OCI targets to load
     await wait();
@@ -135,7 +134,7 @@ describe('ContainerImageTaskDialog component tests', () => {
     const ociTargetSelect = screen.getByTestId('oci-image-target-select');
     expect(ociTargetSelect).toBeInTheDocument();
 
-    expect(getMockFn).toHaveBeenCalled();
+    expect(gmp.ociimagetargets.get).toHaveBeenCalled();
 
     fireEvent.click(ociTargetSelect);
     const option1 = await screen.findByText('Registry Target 1');
@@ -282,13 +281,18 @@ describe('ContainerImageTaskDialog component tests', () => {
   });
 
   test('should handle loading states', () => {
-    gmp.ociimagetargets.get.mockReturnValueOnce(new Promise(() => {}));
-
-    renderDialog({
-      isLoadingAlerts: true,
-      isLoadingSchedules: true,
-      isLoadingTags: true,
+    const gmp = createGmp({
+      getOciImageTargets: testing.fn().mockResolvedValueOnce({}),
     });
+
+    renderDialog(
+      {
+        isLoadingAlerts: true,
+        isLoadingSchedules: true,
+        isLoadingTags: true,
+      },
+      gmp,
+    );
 
     const ociTargetSelect = screen.getByTestId('oci-image-target-select');
     expect(ociTargetSelect).toHaveAttribute('placeholder', 'Loading...');

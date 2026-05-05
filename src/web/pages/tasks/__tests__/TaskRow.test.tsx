@@ -7,10 +7,9 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import TaskRow from 'web/pages/tasks/TaskRow';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-const gmp = {settings: {}};
 
 const lastReport = {
   report: {
@@ -26,6 +25,12 @@ const currentReport = {
     timestamp: '2019-07-10T12:51:27Z',
   },
 };
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('TaskRow tests', () => {
   test('should render', () => {
@@ -54,7 +59,7 @@ describe('TaskRow tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -168,7 +173,7 @@ describe('TaskRow tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -233,7 +238,7 @@ describe('TaskRow tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -329,7 +334,7 @@ describe('TaskRow tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -443,7 +448,7 @@ describe('TaskRow tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -560,7 +565,7 @@ describe('TaskRow tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -677,7 +682,7 @@ describe('TaskRow tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -801,7 +806,7 @@ describe('TaskRow tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,

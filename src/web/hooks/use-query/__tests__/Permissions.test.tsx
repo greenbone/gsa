@@ -8,6 +8,7 @@ import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
+import {createSession} from 'gmp/testing';
 import {useGetPermissions} from 'web/hooks/use-query/permissions';
 
 const permission1 = Permission.fromElement({
@@ -51,7 +52,7 @@ const TestComponent = ({filter}: {filter?: Filter}) => {
 };
 
 const createGmp = () => ({
-  settings: {session: {token: 'test-token'}},
+  settings: {session: createSession({token: 'test-token'})},
   permissions: {
     get: testing.fn().mockResolvedValue({
       data: [permission1, permission2],

@@ -15,6 +15,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import PoliciesPage, {ToolBarIcons} from 'web/pages/policies/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
@@ -42,49 +43,56 @@ const policy = Policy.fromElement({
   },
 });
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getSetting = testing.fn().mockResolvedValue({filter: null});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({filter: null}),
+  getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getPolicies = testing.fn().mockResolvedValue({
-  data: [policy],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getPolicies = testing.fn().mockResolvedValue({
+    data: [policy],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  policies: {
+    get: getPolicies,
+    deleteByFilter,
+    exportByFilter,
   },
+  filters: {
+    get: getFilters,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
 });
 
 describe('PoliciesPage tests', () => {
   test('should render full PoliciesPage', async () => {
-    const gmp = {
-      policies: {
-        get: getPolicies,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -122,27 +130,7 @@ describe('PoliciesPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      policies: {
-        get: getPolicies,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -178,13 +166,13 @@ describe('PoliciesPage tests', () => {
 
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.policies.exportByFilter).toHaveBeenCalled();
 
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(undefined, deleteByFilter);
+    testBulkTrashcanDialog(undefined, gmp.policies.deleteByFilter);
   });
 });
 
@@ -197,7 +185,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -227,7 +215,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 

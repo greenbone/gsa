@@ -8,6 +8,7 @@ import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage, {ToolBarIcons} from 'web/pages/hosts/DetailsPage';
@@ -143,45 +144,51 @@ const hostWithoutPermission = Host.fromElement({
 
 // mock gmp commands
 
-let getHost;
-let getPermissions;
-let currentSettings;
-
-beforeEach(() => {
+const createGmp = ({
   getHost = testing.fn().mockResolvedValue({
     data: host,
-  });
-
+  }),
   getPermissions = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   currentSettings = testing
     .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  deleteIdentifier = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  deleteFunc = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportFunc = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  host: {
+    get: getHost,
+    delete: deleteFunc,
+    export: exportFunc,
+    deleteIdentifier,
+  },
+  permissions: {
+    get: getPermissions,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    severityRating: SEVERITY_RATING_CVSS_3,
+    session: createSession(),
+  },
+  user: {currentSettings},
 });
 
 describe('Host DetailsPage tests', () => {
   test('should render full DetailsPage', () => {
-    const gmp = {
-      host: {
-        get: getHost,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      settings: {
-        manualUrl,
-        reloadInterval,
-        severityRating: SEVERITY_RATING_CVSS_3,
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -290,19 +297,7 @@ describe('Host DetailsPage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const gmp = {
-      host: {
-        get: getHost,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       capabilities: true,
       gmp,
@@ -323,19 +318,7 @@ describe('Host DetailsPage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const gmp = {
-      host: {
-        get: getHost,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       capabilities: true,
       gmp,
@@ -356,32 +339,7 @@ describe('Host DetailsPage tests', () => {
   });
 
   test('should call commands', async () => {
-    const deleteIdentifier = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-    const deleteFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-    const exportFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      host: {
-        get: getHost,
-        deleteIdentifier,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       capabilities: true,
       gmp,
@@ -401,17 +359,17 @@ describe('Host DetailsPage tests', () => {
     // delete identifier
     fireEvent.click(screen.getAllByTitle('Delete Identifier')[0]);
     await wait();
-    expect(deleteIdentifier).toHaveBeenCalledWith(host.identifiers[0]);
+    expect(gmp.host.deleteIdentifier).toHaveBeenCalledWith(host.identifiers[0]);
 
     // export host
     fireEvent.click(screen.getAllByTitle('Export Host as XML')[0]);
     await wait();
-    expect(exportFunc).toHaveBeenCalledWith(host);
+    expect(gmp.host.export).toHaveBeenCalledWith(host);
 
     // delete host
     fireEvent.click(screen.getAllByTitle('Delete Host')[0]);
     await wait();
-    expect(deleteFunc).toHaveBeenCalledWith({id: host.id});
+    expect(gmp.host.delete).toHaveBeenCalledWith({id: host.id});
   });
 });
 
@@ -422,7 +380,7 @@ describe('Host ToolBarIcons tests', () => {
     const handleHostDownloadClick = testing.fn();
     const handleHostEditClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -474,7 +432,7 @@ describe('Host ToolBarIcons tests', () => {
     const handleHostDownloadClick = testing.fn();
     const handleHostEditClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -518,7 +476,7 @@ describe('Host ToolBarIcons tests', () => {
     const handleHostDownloadClick = testing.fn();
     const handleHostEditClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,

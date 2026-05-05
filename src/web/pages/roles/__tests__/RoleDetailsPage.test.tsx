@@ -11,6 +11,7 @@ import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
 import Role from 'gmp/models/role';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import RoleDetailsPage from 'web/pages/roles/RoleDetailsPage';
 import RoleDetailsPageToolBarIcons from 'web/pages/roles/RoleDetailsPageToolBarIcons';
@@ -84,39 +85,10 @@ const generalPermission = Permission.fromElement({
   },
 });
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_configs']);
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
-
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getSetting = testing.fn().mockResolvedValue({filter: undefined});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
-
-const getRole = testing.fn().mockResolvedValue({
-  data: role,
-});
-
-const getPermissions = testing.fn().mockResolvedValue({
-  data: [permission1, permission2],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
 
 const setupStoreForRoleDetailsPage = store => {
   store.dispatch(setUsername('admin'));
@@ -170,7 +142,31 @@ const setupStoreForRoleDetailsPage = store => {
     ),
   );
 };
-const gmp = {
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({filter: undefined}),
+  getFilters = testing.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  ),
+  getRole = testing.fn().mockResolvedValue({
+    data: role,
+  }),
+  getPermissions = testing.fn().mockResolvedValue({
+    data: [permission1, permission2],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+} = {}) => ({
   roles: {
     get: getRole,
   },
@@ -181,13 +177,17 @@ const gmp = {
     get: getFilters,
   },
   reloadInterval,
-  settings: {manualUrl},
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
   user: {currentSettings, getSetting},
-};
+});
+
 describe('RoleDetailsPage tests', () => {
   test('should render full RoleDetailsPage', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -205,7 +205,7 @@ describe('RoleDetailsPage tests', () => {
 
   test('should render role details in Information tab', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -227,7 +227,7 @@ describe('RoleDetailsPage tests', () => {
 
   test('should render general permissions tab', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -248,7 +248,7 @@ describe('RoleDetailsPage tests', () => {
 
   test('should render user tags tab', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -267,7 +267,7 @@ describe('RoleDetailsPage tests', () => {
 
   test('should render permissions tab', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -287,11 +287,9 @@ describe('RoleDetailsPage tests', () => {
 
 describe('RoleDetailsPageToolBarIcons tests', () => {
   test('should render toolbar icons', () => {
-    const gmp = {settings: {manualUrl}};
-
     const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       router: true,
     });
 
@@ -322,11 +320,9 @@ describe('RoleDetailsPageToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const gmp = {settings: {manualUrl}};
-
     const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       router: true,
     });
 

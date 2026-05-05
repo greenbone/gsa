@@ -12,6 +12,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/audits/DetailsPage';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -168,39 +169,37 @@ const createGmp = ({
   exportAudit = testing.fn().mockResolvedValue(exportAuditResponse),
   startAudit = testing.fn().mockResolvedValue(startAuditResponse),
   resumeAudit = testing.fn().mockResolvedValue(resumeAuditResponse),
-} = {}) => {
-  return {
-    audit: {
-      get: getAudit,
-      clone: cloneAudit,
-      delete: deleteAudit,
-      export: exportAudit,
-      start: startAudit,
-      resume: resumeAudit,
-    },
-    policy: {
-      get: getPolicy,
-    },
-    schedule: {
-      get: getSchedule,
-    },
-    permissions: {
-      get: getPermissions,
-    },
-    reportformats: {
-      get: getReportFormats,
-    },
-    settings: {
-      manualUrl,
-      reloadInterval: 15000,
-      reloadIntervalActive: 3000,
-      session: {token: 'test-token'},
-    },
-    user: {
-      currentSettings,
-    },
-  };
-};
+} = {}) => ({
+  audit: {
+    get: getAudit,
+    clone: cloneAudit,
+    delete: deleteAudit,
+    export: exportAudit,
+    start: startAudit,
+    resume: resumeAudit,
+  },
+  policy: {
+    get: getPolicy,
+  },
+  schedule: {
+    get: getSchedule,
+  },
+  permissions: {
+    get: getPermissions,
+  },
+  reportformats: {
+    get: getReportFormats,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval: 15000,
+    reloadIntervalActive: 3000,
+    session: createSession({token: 'test-token'}),
+  },
+  user: {
+    currentSettings,
+  },
+});
 
 describe('Audit DetailsPage tests', () => {
   test('should render full DetailsPage', async () => {

@@ -17,6 +17,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import NotesPage, {ToolBarIcons} from 'web/pages/notes/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/notes';
@@ -49,67 +50,81 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getSetting = testing.fn().mockResolvedValue({
-  filter: null,
-});
-
-const getDashboardSetting = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getAggregates = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({
+    filter: null,
+  }),
+  getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getNotes = testing.fn().mockResolvedValue({
-  data: [note],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getAggregates = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getFilters = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getNotes = testing.fn().mockResolvedValue({
+    data: [note],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  deleteByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  dashboard: {
+    getSetting: getDashboardSetting,
   },
+  notes: {
+    get: getNotes,
+    getActiveDaysAggregates: getAggregates,
+    getCreatedAggregates: getAggregates,
+    getWordCountsAggregates: getAggregates,
+    deleteByFilter,
+    exportByFilter,
+    delete: deleteByIds,
+    export: exportByIds,
+  },
+  filters: {
+    get: getFilters,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
 });
 
 describe('NotesPage tests', () => {
   test('should render full NotesPage', async () => {
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      notes: {
-        get: getNotes,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -200,33 +215,7 @@ describe('NotesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      notes: {
-        get: getNotes,
-        deleteByFilter,
-        exportByFilter,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -263,44 +252,18 @@ describe('NotesPage tests', () => {
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.notes.exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.notes.deleteByFilter);
   });
 
   test('should allow to bulk action on selected notes', async () => {
-    const deleteByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      notes: {
-        get: getNotes,
-        delete: deleteByIds,
-        export: exportByIds,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -349,42 +312,16 @@ describe('NotesPage tests', () => {
     // export selected note
     const exportIcon = screen.getAllByTitle('Export selection')[0];
     fireEvent.click(exportIcon);
-    expect(exportByIds).toHaveBeenCalled();
+    expect(gmp.notes.export).toHaveBeenCalled();
 
     // move selected note to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByIds);
+    testBulkTrashcanDialog(screen, gmp.notes.delete);
   });
 
   test('should allow to bulk action on filtered notes', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      notes: {
-        get: getNotes,
-        deleteByFilter,
-        exportByFilter,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -427,12 +364,12 @@ describe('NotesPage tests', () => {
     // export all filtered notes
     const exportIcon = screen.getAllByTitle('Export all filtered')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.notes.exportByFilter).toHaveBeenCalled();
 
     // move all filtered notes to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.notes.deleteByFilter);
   });
 });
 
@@ -440,9 +377,7 @@ describe('NotesPage ToolBarIcons test', () => {
   test('should render', () => {
     const handleNoteCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -469,9 +404,7 @@ describe('NotesPage ToolBarIcons test', () => {
   test('should call click handlers', () => {
     const handleNoteCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -490,9 +423,7 @@ describe('NotesPage ToolBarIcons test', () => {
   test('should not show icons if user does not have the right permissions', () => {
     const handleNoteCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,

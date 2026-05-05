@@ -5,14 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import Table from 'web/pages/tasks/TaskTable';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const lastReport = {
   report: {
@@ -86,6 +84,12 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('TaskTable tests', () => {
   test('should render', () => {
     const handleReportImport = testing.fn();
@@ -97,13 +101,11 @@ describe('TaskTable tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -147,13 +149,11 @@ describe('TaskTable tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -195,13 +195,11 @@ describe('TaskTable tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });

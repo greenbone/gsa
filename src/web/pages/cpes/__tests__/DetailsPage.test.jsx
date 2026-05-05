@@ -9,6 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CpePage from 'web/pages/cpes/DetailsPage';
@@ -51,22 +52,24 @@ const createGmp = ({
   getCpe = testing.fn().mockResolvedValue(getCpeResponse),
   getTags = testing.fn().mockResolvedValue(getTagsResponse),
   exportCpe = testing.fn().mockResolvedValue(exportCpeResponse),
-} = {}) => {
-  return {
-    cpe: {
-      get: getCpe,
-      export: exportCpe,
-    },
-    tags: {
-      get: getTags,
-    },
-    reloadInterval,
-    settings: {manualUrl, severityRating: SEVERITY_RATING_CVSS_3},
-    user: {
-      currentSettings,
-    },
-  };
-};
+} = {}) => ({
+  cpe: {
+    get: getCpe,
+    export: exportCpe,
+  },
+  tags: {
+    get: getTags,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    severityRating: SEVERITY_RATING_CVSS_3,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
+  },
+});
 
 describe('CpeDetailsPage tests', () => {
   test('should render full DetailsPage', () => {

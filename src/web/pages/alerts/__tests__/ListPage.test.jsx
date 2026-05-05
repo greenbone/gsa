@@ -17,6 +17,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Alert from 'gmp/models/alert';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import AlertPage, {ToolBarIcons} from 'web/pages/alerts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/alerts';
@@ -24,7 +25,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = -1;
@@ -54,51 +54,62 @@ const alert = Alert.fromElement({
   },
 });
 
-let getAlerts;
-let getFilters;
-let getSetting;
-let currentSettings;
-
-beforeEach(() => {
+const createGmp = ({
   getAlerts = testing.fn().mockResolvedValue({
     data: [alert],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
-  getFilters = testing.fn().mockReturnValue(
-    Promise.resolve({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    }),
-  );
-
+  }),
+  getFilters = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
   getSetting = testing.fn().mockResolvedValue({
     filter: null,
-  });
-
+  }),
   currentSettings = testing
     .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  deleteByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  alerts: {
+    get: getAlerts,
+    deleteByFilter,
+    exportByFilter,
+    delete: deleteByIds,
+    export: exportByIds,
+  },
+  filters: {
+    get: getFilters,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {currentSettings},
 });
 
 describe('Alert ListPage tests', () => {
   test('should render full alert ListPage', async () => {
-    const gmp = {
-      alerts: {
-        get: getAlerts,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -170,26 +181,7 @@ describe('Alert ListPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      alerts: {
-        get: getAlerts,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -227,43 +219,24 @@ describe('Alert ListPage tests', () => {
     // export page contents
     const tableFooter = within(screen.queryTableFooter());
     const exportIcon = tableFooter.getByTestId('export-icon');
-    expect(exportByFilter).not.toHaveBeenCalled();
+    expect(gmp.alerts.exportByFilter).not.toHaveBeenCalled();
     expect(exportIcon).toHaveAttribute('title', 'Export page contents');
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.alerts.exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = tableFooter.getByTestId('trash-icon');
-    expect(deleteByFilter).not.toHaveBeenCalled();
+    expect(gmp.alerts.deleteByFilter).not.toHaveBeenCalled();
     expect(deleteIcon).toHaveAttribute(
       'title',
       'Move page contents to trashcan',
     );
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.alerts.deleteByFilter);
   });
 
   test('should allow to bulk action on selected alerts', async () => {
-    const deleteByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      alerts: {
-        get: getAlerts,
-        delete: deleteByIds,
-        export: exportByIds,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -311,41 +284,22 @@ describe('Alert ListPage tests', () => {
     fireEvent.click(inputs[0]);
 
     // export selected alert
-    expect(exportByIds).not.toHaveBeenCalled();
+    expect(gmp.alerts.export).not.toHaveBeenCalled();
     const exportIcon = tableFooter.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export selection');
     fireEvent.click(exportIcon);
-    expect(exportByIds).toHaveBeenCalled();
+    expect(gmp.alerts.export).toHaveBeenCalled();
 
     // move selected alert to trashcan
-    expect(deleteByIds).not.toHaveBeenCalled();
+    expect(gmp.alerts.delete).not.toHaveBeenCalled();
     const deleteIcon = tableFooter.getByTestId('trash-icon');
     expect(deleteIcon).toHaveAttribute('title', 'Move selection to trashcan');
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByIds);
+    testBulkTrashcanDialog(screen, gmp.alerts.delete);
   });
 
   test('should allow to bulk action on filtered alerts', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      alerts: {
-        get: getAlerts,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -388,21 +342,21 @@ describe('Alert ListPage tests', () => {
     expect(selectElement).toHaveValue('Apply to all filtered');
 
     // export all filtered alerts
-    expect(exportByFilter).not.toHaveBeenCalled();
+    expect(gmp.alerts.exportByFilter).not.toHaveBeenCalled();
     const exportIcon = tableFooter.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export all filtered');
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.alerts.exportByFilter).toHaveBeenCalled();
 
     // move all filtered alerts to trashcan
     const deleteIcon = tableFooter.getByTestId('trash-icon');
-    expect(deleteByFilter).not.toHaveBeenCalled();
+    expect(gmp.alerts.deleteByFilter).not.toHaveBeenCalled();
     expect(deleteIcon).toHaveAttribute(
       'title',
       'Move all filtered to trashcan',
     );
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.alerts.deleteByFilter);
   });
 });
 
@@ -410,13 +364,11 @@ describe('Alert ListPage ToolBarIcons test', () => {
   test('should render', () => {
     const handleAlertCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -443,13 +395,11 @@ describe('Alert ListPage ToolBarIcons test', () => {
   test('should call click handlers', () => {
     const handleAlertCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -464,9 +414,7 @@ describe('Alert ListPage ToolBarIcons test', () => {
   test('should not show icons if user does not have the right permissions', () => {
     const handleAlertCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,

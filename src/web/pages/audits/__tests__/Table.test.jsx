@@ -5,14 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import Table from 'web/pages/audits/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const lastReport = {
   report: {
@@ -83,6 +81,12 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('Audits table tests', () => {
   test('should render', () => {
     const handleAuditCloneClick = testing.fn();
@@ -94,13 +98,11 @@ describe('Audits table tests', () => {
     const handleAuditResumeClick = testing.fn();
     const handleReportDownloadClick = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -143,13 +145,11 @@ describe('Audits table tests', () => {
     const handleAuditResumeClick = testing.fn();
     const handleReportDownloadClick = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -192,13 +192,11 @@ describe('Audits table tests', () => {
     const handleAuditResumeClick = testing.fn();
     const handleReportDownloadClick = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });

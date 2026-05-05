@@ -7,13 +7,15 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Target from 'gmp/models/target';
+import {createSession} from 'gmp/testing';
 import TargetTable from 'web/pages/targets/TargetTable';
 
-const gmp = {
+const createGmp = () => ({
   settings: {
     enableKrb5: true,
+    session: createSession(),
   },
-};
+});
 
 describe('TargetTable tests', () => {
   test('should render without crashing', () => {
@@ -27,20 +29,20 @@ describe('TargetTable tests', () => {
         name: 'Port List 2',
       }),
     ];
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<TargetTable entities={targets} />);
     expect(screen.getByTestId('entities-table')).toBeInTheDocument();
   });
 
   test('should render the empty title when no targets are available', () => {
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<TargetTable entities={[]} />);
     expect(screen.getByText('No targets available')).toBeInTheDocument();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
   });
 
   test("should not render anything if targets aren't available", () => {
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     const {container} = render(<TargetTable />);
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
@@ -57,7 +59,7 @@ describe('TargetTable tests', () => {
         name: 'Target 2',
       }),
     ];
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<TargetTable entities={targets} />);
     expect(screen.getByText('Target 1')).toBeInTheDocument();
     expect(screen.getByText('Target 2')).toBeInTheDocument();
@@ -79,7 +81,7 @@ describe('TargetTable tests', () => {
     const handleDelete = testing.fn();
     const handleDownload = testing.fn();
     const handleEdit = testing.fn();
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <TargetTable
         entities={targets}

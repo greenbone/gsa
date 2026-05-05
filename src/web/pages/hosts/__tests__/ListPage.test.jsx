@@ -17,6 +17,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import HostPage, {ToolBarIcons} from 'web/pages/hosts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
@@ -24,7 +25,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-const capabilities = new Capabilities(['everything']);
 const wrongCapabilities = new Capabilities(['get_host']);
 
 const reloadInterval = -1;
@@ -72,24 +72,14 @@ const host = Host.fromElement({
   },
 });
 
-// mock gmp commands
-
-let getHosts;
-let getFilters;
-let getDashboardSetting;
-let getAggregates;
-let getSetting;
-let currentSettings;
-
-beforeEach(() => {
+const createGmp = ({
   getHosts = testing.fn().mockResolvedValue({
     data: [host],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   getFilters = testing.fn().mockReturnValue(
     Promise.resolve({
       data: [],
@@ -98,51 +88,66 @@ beforeEach(() => {
         counts: new CollectionCounts(),
       },
     }),
-  );
-
+  ),
   getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   getSetting = testing.fn().mockResolvedValue({
     filter: null,
-  });
-
+  }),
   currentSettings = testing
     .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  deleteByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  hosts: {
+    get: getHosts,
+    getSeverityAggregates: getAggregates,
+    getModifiedAggregates: getAggregates,
+    deleteByFilter,
+    exportByFilter,
+    delete: deleteByIds,
+    export: exportByIds,
+  },
+  filters: {
+    get: getFilters,
+  },
+  dashboard: {
+    getSetting: getDashboardSetting,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {currentSettings},
 });
 
 describe('Host ListPage tests', () => {
   test('should render full host ListPage', async () => {
-    const gmp = {
-      hosts: {
-        get: getHosts,
-        getSeverityAggregates: getAggregates,
-        getModifiedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -254,32 +259,7 @@ describe('Host ListPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      hosts: {
-        get: getHosts,
-        deleteByFilter,
-        exportByFilter,
-        getSeverityAggregates: getAggregates,
-        getModifiedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -316,41 +296,16 @@ describe('Host ListPage tests', () => {
     // export page contents
     fireEvent.click(screen.getAllByTitle('Export page contents')[0]);
     await wait();
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.hosts.exportByFilter).toHaveBeenCalled();
 
     // delete page contents
     fireEvent.click(screen.getAllByTitle('Delete page contents')[0]);
     await wait();
-    testBulkDeleteDialog(screen, deleteByFilter);
+    testBulkDeleteDialog(screen, gmp.hosts.deleteByFilter);
   });
 
   test('should allow to bulk action on selected hosts', async () => {
-    const deleteByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      hosts: {
-        get: getHosts,
-        delete: deleteByIds,
-        export: exportByIds,
-        getSeverityAggregates: getAggregates,
-        getModifiedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -392,40 +347,15 @@ describe('Host ListPage tests', () => {
 
     // export selected host
     fireEvent.click(screen.getAllByTitle('Export selection')[0]);
-    expect(exportByIds).toHaveBeenCalled();
+    expect(gmp.hosts.export).toHaveBeenCalled();
 
     // delete selected host
     fireEvent.click(screen.getAllByTitle('Delete selection')[0]);
-    testBulkDeleteDialog(screen, deleteByIds);
+    testBulkDeleteDialog(screen, gmp.hosts.delete);
   });
 
   test('should allow to bulk action on filtered hosts', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      hosts: {
-        get: getHosts,
-        deleteByFilter,
-        exportByFilter,
-        getSeverityAggregates: getAggregates,
-        getModifiedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -468,10 +398,10 @@ describe('Host ListPage tests', () => {
 
     // export all filtered hosts
     fireEvent.click(screen.getAllByTitle('Export all filtered')[0]);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.hosts.exportByFilter).toHaveBeenCalled();
 
     fireEvent.click(screen.getAllByTitle('Delete all filtered')[0]);
-    testBulkDeleteDialog(screen, deleteByFilter);
+    testBulkDeleteDialog(screen, gmp.hosts.deleteByFilter);
   });
 });
 
@@ -479,13 +409,11 @@ describe('Host ListPage ToolBarIcons test', () => {
   test('should render', () => {
     const handleCreateHostClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: capabilities,
+      capabilities: true,
       router: true,
     });
 
@@ -510,13 +438,11 @@ describe('Host ListPage ToolBarIcons test', () => {
   test('should call click handlers', () => {
     const handleCreateHostClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: capabilities,
+      capabilities: true,
       router: true,
     });
 
@@ -529,9 +455,7 @@ describe('Host ListPage ToolBarIcons test', () => {
   test('should not show icons if user does not have the right permissions', () => {
     const handleCreateHostClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,

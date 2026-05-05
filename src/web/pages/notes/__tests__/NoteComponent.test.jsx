@@ -16,24 +16,30 @@ import {
   RESULT_UUID,
   TASK_ANY,
 } from 'gmp/models/override';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import NoteComponent from 'web/pages/notes/NoteComponent';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
+const createGmp = ({
+  getTasks = testing.fn().mockResolvedValue({
+    data: [{name: 'Task 1', id: 'task-1'}],
+  }),
+  create = testing.fn().mockResolvedValue({}),
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+} = {}) => ({
+  user: {currentSettings},
+  tasks: {getAll: getTasks},
+  note: {create},
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('NoteComponent', () => {
   test('should render create note dialog', async () => {
-    const getAll = testing.fn().mockResolvedValue({
-      data: [],
-    });
-    const create = testing.fn().mockResolvedValue({});
-    const gmp = {
-      user: {currentSettings},
-      tasks: {getAll},
-      note: {create},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
 
     render(
@@ -93,7 +99,7 @@ describe('NoteComponent', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
-    expect(create).toHaveBeenCalledWith({
+    expect(gmp.note.create).toHaveBeenCalledWith({
       active: ACTIVE_YES_ALWAYS_VALUE,
       days: DEFAULT_DAYS,
       fixed: false,
@@ -110,15 +116,7 @@ describe('NoteComponent', () => {
   });
 
   test('should render create note dialog with initial values', async () => {
-    const getAll = testing.fn().mockResolvedValue({
-      data: [{id: 'task-1', name: 'Task 1'}],
-    });
-    const create = testing.fn().mockResolvedValue({});
-    const gmp = {
-      user: {currentSettings},
-      tasks: {getAll},
-      note: {create},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     const initial = {
       active: ACTIVE_YES_FOR_NEXT_VALUE,
@@ -207,7 +205,7 @@ describe('NoteComponent', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
-    expect(create).toHaveBeenCalledWith({
+    expect(gmp.note.create).toHaveBeenCalledWith({
       active: ACTIVE_YES_FOR_NEXT_VALUE,
       days: DEFAULT_DAYS,
       fixed: true,

@@ -7,8 +7,15 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, screen, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Role from 'gmp/models/role';
+import {createSession} from 'gmp/testing';
 import RoleTableRow from 'web/pages/roles/RoleTableRow';
 import {setUsername} from 'web/store/usersettings/actions';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('RoleTableRow tests', () => {
   test('should render entity name', async () => {
@@ -20,6 +27,7 @@ describe('RoleTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(<RoleTableRow entity={role} />);
@@ -36,6 +44,7 @@ describe('RoleTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(<RoleTableRow entity={role} onToggleDetailsClick={handleToggle} />);
@@ -58,6 +67,7 @@ describe('RoleTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(

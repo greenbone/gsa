@@ -9,6 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {TASK_STATUS} from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import ResultsTabContent from 'web/pages/reports/details/ResultsTabContent';
 
 const filter = Filter.fromString('first=1 rows=10');
@@ -49,7 +50,7 @@ const createGmp = ({
     get,
   },
   settings: {
-    session: {token: 'test-token'},
+    session: createSession({token: 'test-token'}),
     enableEPSS: false,
   },
 });

@@ -8,6 +8,7 @@ import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScheduleDetailsPage from 'web/pages/schedules/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/schedules';
@@ -31,36 +32,52 @@ const schedule = Schedule.fromElement({
   _id: '12345',
 });
 
-const getSchedule = testing.fn().mockResolvedValue({
-  data: schedule,
-});
-
-const getEntities = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getEntities = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getSchedule = testing.fn().mockResolvedValue({
+    data: schedule,
+  }),
+  clone = testing.fn().mockResolvedValue({
+    data: {id: 'foo'},
+  }),
+  deleteFunc = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportFunc = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  schedule: {
+    get: getSchedule,
+    clone,
+    delete: deleteFunc,
+    export: exportFunc,
+  },
+  permissions: {
+    get: getEntities,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
   },
 });
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
 describe('ScheduleDetailsPage tests', () => {
   test('should render full DetailsPage', () => {
-    const gmp = {
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -121,18 +138,7 @@ describe('ScheduleDetailsPage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const gmp = {
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -155,19 +161,7 @@ describe('ScheduleDetailsPage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const gmp = {
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -191,33 +185,7 @@ describe('ScheduleDetailsPage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = testing.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      schedule: {
-        get: getSchedule,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -235,14 +203,14 @@ describe('ScheduleDetailsPage tests', () => {
 
     const cloneIcon = await screen.findByTitle('Clone Schedule');
     fireEvent.click(cloneIcon);
-    expect(clone).toHaveBeenCalledWith(schedule);
+    expect(gmp.schedule.clone).toHaveBeenCalledWith(schedule);
 
     const exportIcon = screen.getByTitle('Export Schedule as XML');
     fireEvent.click(exportIcon);
-    expect(exportFunc).toHaveBeenCalledWith(schedule);
+    expect(gmp.schedule.export).toHaveBeenCalledWith(schedule);
 
     const deleteIcon = screen.getByTitle('Move Schedule to trashcan');
     fireEvent.click(deleteIcon);
-    expect(deleteFunc).toHaveBeenCalledWith({id: schedule.id});
+    expect(gmp.schedule.delete).toHaveBeenCalledWith({id: schedule.id});
   });
 });

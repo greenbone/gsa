@@ -5,14 +5,11 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import TargetTableRow from 'web/pages/targets/TargetTableRow';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-const gmp = {settings: {}};
-const caps = new Capabilities(['everything']);
 
 const targetElevate = Target.fromElement({
   _id: 'foo',
@@ -151,6 +148,13 @@ const targetNoElevate = Target.fromElement({
   },
 });
 
+const createGmp = ({settings = {}} = {}) => ({
+  settings: {
+    session: createSession(),
+    ...settings,
+  },
+});
+
 describe('TargetRow tests', () => {
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
@@ -160,8 +164,8 @@ describe('TargetRow tests', () => {
     const handleTargetEditClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -199,9 +203,9 @@ describe('TargetRow tests', () => {
   });
 
   test('should render Kerberos credentials, when KRB5 is enabled', () => {
-    const gmp = {
+    const gmp = createGmp({
       settings: {enableKrb5: true},
-    };
+    });
 
     const handleToggleDetailsClick = testing.fn();
     const handleTargetCloneClick = testing.fn();
@@ -211,7 +215,7 @@ describe('TargetRow tests', () => {
 
     const {render, store} = rendererWithTableBody({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -243,8 +247,8 @@ describe('TargetRow tests', () => {
     const handleTargetEditClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -291,8 +295,8 @@ describe('TargetRow tests', () => {
     const handleTargetEditClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       router: true,
       store: true,
     });
@@ -327,9 +331,9 @@ describe('TargetRow tests', () => {
     const handleTargetEditClick = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       store: true,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 

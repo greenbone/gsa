@@ -9,7 +9,14 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import Credential, {
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
+import {createSession} from 'gmp/testing';
 import CredentialTable from 'web/pages/credentials/CredentialTable';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('CredentialTable tests', () => {
   test('should render without crashing', () => {
@@ -23,20 +30,20 @@ describe('CredentialTable tests', () => {
         name: 'Credential 2',
       }),
     ];
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<CredentialTable entities={credentials} />);
     expect(screen.getByTestId('entities-table')).toBeInTheDocument();
   });
 
   test('should render the empty title when no port lists are available', () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<CredentialTable entities={[]} />);
     expect(screen.getByText('No credentials available')).toBeInTheDocument();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
   });
 
   test("should not render anything if port list aren't available", () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     const {container} = render(<CredentialTable />);
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
@@ -53,7 +60,7 @@ describe('CredentialTable tests', () => {
         name: 'Credential 2',
       }),
     ];
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<CredentialTable entities={credentials} />);
     expect(screen.getByText('Credential 1')).toBeInTheDocument();
     expect(screen.getByText('Credential 2')).toBeInTheDocument();
@@ -75,7 +82,7 @@ describe('CredentialTable tests', () => {
     const handleDownload = testing.fn();
     const handleEdit = testing.fn();
     const handleDownloadInstaller = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <CredentialTable
         entities={[credential]}

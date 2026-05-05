@@ -13,6 +13,7 @@ import Credential, {
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialDetailsPage from 'web/pages/credentials/CredentialDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/credentials';
@@ -47,32 +48,34 @@ const createGmp = ({
     .mockResolvedValue(downloadCredentialResponse),
   exportCredential = testing.fn().mockResolvedValue(exportCredentialResponse),
   getCredential = testing.fn().mockResolvedValue(getCredentialResponse),
-} = {}) => {
-  return {
-    credential: {
-      clone: cloneCredential,
-      delete: deleteCredential,
-      download: downloadCredential,
-      export: exportCredential,
-      get: getCredential,
-    },
-    settings: {manualUrl, reloadInterval},
-    user: {
-      currentSettings: testing
-        .fn()
-        .mockResolvedValue(currentSettingsDefaultResponse),
-    },
-    permissions: {
-      get: testing.fn().mockResolvedValue({
-        data: [],
-        meta: {
-          filter: Filter.fromString(),
-          counts: new CollectionCounts(),
-        },
-      }),
-    },
-  };
-};
+} = {}) => ({
+  credential: {
+    clone: cloneCredential,
+    delete: deleteCredential,
+    download: downloadCredential,
+    export: exportCredential,
+    get: getCredential,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {
+    currentSettings: testing
+      .fn()
+      .mockResolvedValue(currentSettingsDefaultResponse),
+  },
+  permissions: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  },
+});
 
 describe('CredentialDetailsPage tests', () => {
   test('should render usk credential', async () => {

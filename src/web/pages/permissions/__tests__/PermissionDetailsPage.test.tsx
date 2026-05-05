@@ -9,6 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import PermissionDetailsPage, {
   PermissionsDetailsPageToolBarIcons,
@@ -61,26 +62,6 @@ const permission = Permission.fromElement({
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getSetting = testing.fn().mockResolvedValue({filter: undefined});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
-
-const getPermission = testing.fn().mockResolvedValue({
-  data: permission,
-});
-
 const setupStoreForPermissionDetailsPage = store => {
   store.dispatch(setUsername('admin'));
 
@@ -108,7 +89,22 @@ const setupStoreForPermissionDetailsPage = store => {
   );
 };
 
-const gmp = {
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({filter: undefined}),
+  getFilters = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getPermission = testing.fn().mockResolvedValue({
+    data: permission,
+  }),
+} = {}) => ({
   permissions: {
     get: getPermission,
   },
@@ -116,14 +112,17 @@ const gmp = {
     get: getFilters,
   },
   reloadInterval,
-  settings: {manualUrl},
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
   user: {currentSettings, getSetting},
-};
+});
 
 describe('PermissionDetailsPage tests', () => {
   test('should render full PermissionDetailsPage', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -141,7 +140,7 @@ describe('PermissionDetailsPage tests', () => {
 
   test('should render permission details in Information tab', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -162,7 +161,7 @@ describe('PermissionDetailsPage tests', () => {
 
   test('should render user tags tab', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
       router: true,
@@ -181,7 +180,7 @@ describe('PermissionDetailsPage tests', () => {
 
   test('should render toolbar icons', async () => {
     const {render, store} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
       store: true,
@@ -214,7 +213,7 @@ describe('PermissionDetailsPageToolBarIcons tests', () => {
   const handlePermissionEditClick = testing.fn();
 
   test('should render toolbar icons', () => {
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -268,7 +267,7 @@ describe('PermissionDetailsPageToolBarIcons tests', () => {
   });
 
   test('should disable icons if user does not have the right permissions', () => {
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -310,7 +309,7 @@ describe('PermissionDetailsPageToolBarIcons tests', () => {
   });
 
   test('should show export icon even with limited permissions', () => {
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -336,7 +335,7 @@ describe('PermissionDetailsPageToolBarIcons tests', () => {
 
 test('should disable icons if user does not have the right permissions', async () => {
   const {render, store} = rendererWith({
-    gmp,
+    gmp: createGmp(),
     capabilities: false,
     store: true,
     router: true,
@@ -375,7 +374,7 @@ test('should disable icons if user does not have the right permissions', async (
 
 test('should show export icon even with limited permissions', async () => {
   const {render, store} = rendererWith({
-    gmp,
+    gmp: createGmp(),
     capabilities: false,
     store: true,
     router: true,
@@ -393,7 +392,7 @@ test('should show export icon even with limited permissions', async () => {
 
 test('should handle loading state', () => {
   const {render, store} = rendererWith({
-    gmp,
+    gmp: createGmp(),
     capabilities: true,
     store: true,
     router: true,

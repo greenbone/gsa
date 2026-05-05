@@ -5,10 +5,10 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tls-certificate';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/tlscertificates/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tlscertificates';
@@ -36,45 +36,46 @@ const tlsCertificate = TlsCertificate.fromElement({
   permissions: {permission: [{name: 'everything'}]},
 });
 
-const caps = new Capabilities(['everything']);
-
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getEntities = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+const createGmp = ({
+  getTlsCertificate = testing.fn().mockResolvedValue({
+    data: tlsCertificate,
+  }),
+  getEntities = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+} = {}) => ({
+  tlscertificate: {
+    get: getTlsCertificate,
+  },
+  permissions: {
+    get: getEntities,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
   },
 });
 
 describe('TLS Certificate DetailsPage tests', () => {
   test('should render full DetailsPage', () => {
-    const getTlsCertificate = testing.fn().mockResolvedValue({
-      data: tlsCertificate,
-    });
-
-    const gmp = {
-      tlscertificate: {
-        get: getTlsCertificate,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
       gmp,
       router: true,
       store: true,

@@ -9,6 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/results/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/results';
@@ -114,24 +115,22 @@ const createGmp = ({
   getUsers = testing.fn().mockResolvedValue(getUsersResponse),
   currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
   exportResult = testing.fn().mockResolvedValue(exportResultResponse),
-} = {}) => {
-  return {
-    result: {
-      get: getResult,
-      export: exportResult,
-    },
-    permissions: {
-      get: getPermissions,
-    },
-    settings: {manualUrl, reloadInterval, enableEPSS},
-    user: {
-      currentSettings,
-    },
-    users: {
-      get: getUsers,
-    },
-  };
-};
+} = {}) => ({
+  result: {
+    get: getResult,
+    export: exportResult,
+  },
+  permissions: {
+    get: getPermissions,
+  },
+  settings: {manualUrl, reloadInterval, enableEPSS, session: createSession()},
+  user: {
+    currentSettings,
+  },
+  users: {
+    get: getUsers,
+  },
+});
 
 describe('ResultDetailsPage tests', () => {
   test('should render full DetailsPage', () => {

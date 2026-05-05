@@ -7,11 +7,9 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Policy from 'gmp/models/policy';
+import {createSession} from 'gmp/testing';
 import Row from 'web/pages/policies/Row';
 import {setUsername} from 'web/store/usersettings/actions';
-
-const gmp = {settings: {}};
-const caps = new Capabilities(['everything']);
 
 const entity = Policy.fromElement({
   _id: '1234',
@@ -20,6 +18,12 @@ const entity = Policy.fromElement({
   in_use: '0',
   writable: '1',
   permissions: {permission: [{name: 'everything'}]},
+});
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
 });
 
 describe('Row tests', () => {
@@ -32,8 +36,8 @@ describe('Row tests', () => {
     const handleCreateAudit = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       store: true,
     });
     store.dispatch(setUsername('username'));
@@ -74,8 +78,8 @@ describe('Row tests', () => {
     const handleCreateAudit = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       store: true,
     });
 
@@ -106,7 +110,7 @@ describe('Row tests', () => {
     const handleCreateAudit = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
     });
@@ -172,7 +176,7 @@ describe('Row tests', () => {
     const wrongCaps = new Capabilities(['authenticate']);
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: wrongCaps,
       store: true,
     });
@@ -245,7 +249,7 @@ describe('Row tests', () => {
     });
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
     });
@@ -310,7 +314,7 @@ describe('Row tests', () => {
     });
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
     });

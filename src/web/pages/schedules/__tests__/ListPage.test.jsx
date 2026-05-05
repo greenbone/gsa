@@ -16,6 +16,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import SchedulePage, {ToolBarIcons} from 'web/pages/schedules/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/schedules';
@@ -44,44 +45,61 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getSetting = testing.fn().mockResolvedValue({
-  filter: null,
-});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({
+    filter: null,
+  }),
+  getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getSchedules = testing.fn().mockResolvedValue({
-  data: [schedule],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getSchedules = testing.fn().mockResolvedValue({
+    data: [schedule],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  deleteByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  schedules: {
+    get: getSchedules,
+    deleteByFilter,
+    exportByFilter,
+    export: exportByIds,
+    delete: deleteByIds,
   },
+  filters: {
+    get: getFilters,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
 });
 
 describe('SchedulePage tests', () => {
   test('should render full SchedulePage', async () => {
-    const gmp = {
-      schedules: {
-        get: getSchedules,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -161,26 +179,7 @@ describe('SchedulePage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      schedules: {
-        get: getSchedules,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -218,35 +217,16 @@ describe('SchedulePage tests', () => {
     // export page contents
     const exportIcon = screen.getByTitle('Export page contents');
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.schedules.exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.schedules.deleteByFilter);
   });
 
   test('should allow to bulk action on selected schedules', async () => {
-    const deleteByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      schedules: {
-        get: getSchedules,
-        delete: deleteByIds,
-        export: exportByIds,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -296,35 +276,16 @@ describe('SchedulePage tests', () => {
     // export selected schedule
     const exportIcon = screen.getByTitle('Export selection');
     fireEvent.click(exportIcon);
-    expect(exportByIds).toHaveBeenCalled();
+    expect(gmp.schedules.export).toHaveBeenCalled();
 
     // move selected schedule to trashcan
     const deleteIcon = screen.getByTitle('Move selection to trashcan');
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByIds);
+    testBulkTrashcanDialog(screen, gmp.schedules.delete);
   });
 
   test('should allow to bulk action on filtered schedules', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      schedules: {
-        get: getSchedules,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -369,12 +330,12 @@ describe('SchedulePage tests', () => {
     // export all filtered schedules
     const exportIcon = screen.getByTitle('Export all filtered');
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.schedules.exportByFilter).toHaveBeenCalled();
 
     // move all filtered schedules to trashcan
     const deleteIcon = screen.getByTitle('Move all filtered to trashcan');
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.schedules.deleteByFilter);
   });
 });
 

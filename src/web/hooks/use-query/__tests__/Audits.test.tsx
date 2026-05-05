@@ -8,6 +8,7 @@ import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {useGetAudit, useGetAudits} from 'web/hooks/use-query/audits';
 
 const audit = Audit.fromElement({
@@ -87,7 +88,7 @@ const createGmp = () => ({
     }),
     getById: testing.fn().mockResolvedValue({data: audit}),
   },
-  settings: {session: {token: 'test-token'}},
+  settings: {session: createSession({token: 'test-token'})},
 });
 
 describe('useGetAudit', () => {

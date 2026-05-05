@@ -8,6 +8,7 @@ import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Agent from 'gmp/models/agent';
 import Date, {type Date as GmpDate} from 'gmp/models/date';
+import {createSession} from 'gmp/testing';
 import AgentListPage from 'web/pages/agents/AgentListPage';
 
 const makeAgent = (
@@ -44,7 +45,7 @@ const createMockGmp = ({
   sync = syncMock,
 } = {}) => ({
   settings: {
-    session: {token: 'token'},
+    session: createSession({token: 'token'}),
     manualUrl: 'https://docs.greenbone.net',
     reloadInterval: 30000,
   },

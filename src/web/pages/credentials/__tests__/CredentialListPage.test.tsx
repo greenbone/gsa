@@ -16,6 +16,7 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialPage from 'web/pages/credentials/CredentialListPage';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -79,42 +80,44 @@ const createGmp = ({
   exportByModels = testing.fn().mockResolvedValue({
     foo: 'bar',
   }),
-} = {}) => {
-  return {
-    credential: {
-      clone: cloneCredential,
-      delete: deleteCredential,
-      download: downloadCredential,
-      export: exportCredential,
-      get: getCredential,
-    },
-    credentials: {
-      get: getCredentials,
-      deleteByFilter,
-      exportByFilter,
-      export: exportByModels,
-      delete: deleteByModels,
-    },
-    filters: {
-      get: getFilters,
-    },
-    settings: {manualUrl, reloadInterval},
-    user: {
-      currentSettings: testing
-        .fn()
-        .mockResolvedValue(currentSettingsDefaultResponse),
-    },
-    permissions: {
-      get: testing.fn().mockResolvedValue({
-        data: [],
-        meta: {
-          filter: Filter.fromString(),
-          counts: new CollectionCounts(),
-        },
-      }),
-    },
-  };
-};
+} = {}) => ({
+  credential: {
+    clone: cloneCredential,
+    delete: deleteCredential,
+    download: downloadCredential,
+    export: exportCredential,
+    get: getCredential,
+  },
+  credentials: {
+    get: getCredentials,
+    deleteByFilter,
+    exportByFilter,
+    export: exportByModels,
+    delete: deleteByModels,
+  },
+  filters: {
+    get: getFilters,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {
+    currentSettings: testing
+      .fn()
+      .mockResolvedValue(currentSettingsDefaultResponse),
+  },
+  permissions: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  },
+});
 
 describe('CredentialListPage tests', () => {
   test('should render full CredentialPage', async () => {

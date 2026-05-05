@@ -11,12 +11,19 @@ import Scanner, {
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
 } from 'gmp/models/scanner';
+import {createSession} from 'gmp/testing';
 import ScannerTable from 'web/pages/scanners/ScannerTable';
 import SelectionType from 'web/utils/SelectionType';
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('ScannerTable tests', () => {
   test("should render empty table when there's no scanner", () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<ScannerTable entities={[]} />);
 
     expect(screen.getByText('No scanners available')).toBeInTheDocument();
@@ -35,7 +42,7 @@ describe('ScannerTable tests', () => {
       name: 'Scanner 2',
       scannerType: CVE_SCANNER_TYPE,
     });
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<ScannerTable entities={[scanner1, scanner2]} />);
 
     expect(screen.getByText('Scanner 1')).toBeInTheDocument();
@@ -55,7 +62,7 @@ describe('ScannerTable tests', () => {
       port: 443,
       scannerType: OPENVASD_SCANNER_TYPE,
     });
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<ScannerTable entities={[scanner1]} />);
 
     const header = screen.queryAllByRole('columnheader');
@@ -76,7 +83,7 @@ describe('ScannerTable tests', () => {
       port: 443,
       scannerType: OPENVASD_SCANNER_TYPE,
     });
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<ScannerTable entities={[scanner1]} />);
 
     expect(screen.queryByTestId('scanner-details')).not.toBeInTheDocument();
@@ -100,7 +107,7 @@ describe('ScannerTable tests', () => {
     const handleEditClick = testing.fn();
     const handleVerifyClick = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <ScannerTable
         entities={[scanner1]}
@@ -146,7 +153,7 @@ describe('ScannerTable tests', () => {
     const handleDeleteBulkClick = testing.fn();
     const handleDownloadBulkClick = testing.fn();
     const handleTagsBulkClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <ScannerTable
         entities={[scanner1]}

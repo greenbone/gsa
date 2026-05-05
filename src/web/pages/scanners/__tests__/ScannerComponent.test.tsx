@@ -10,6 +10,7 @@ import Scanner, {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
 } from 'gmp/models/scanner';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScannerComponent from 'web/pages/scanners/ScannerComponent';
 
@@ -17,6 +18,7 @@ const createGmp = (object?: unknown) => {
   const gmp = {
     settings: {
       enableGreenboneSensor: true,
+      session: createSession(),
     },
     user: {
       currentSettings: testing

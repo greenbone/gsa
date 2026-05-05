@@ -13,6 +13,7 @@ import Credential, {
 } from 'gmp/models/credential';
 import Date from 'gmp/models/date';
 import ScanConfig from 'gmp/models/scan-config';
+import {createSession} from 'gmp/testing';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
@@ -63,7 +64,7 @@ const mockedTimezones = [
 ];
 
 const createGmp = () => ({
-  settings: {session: {token: 'token'}},
+  settings: {session: createSession({token: 'token'})},
 
   timezones: {
     get: testing.fn().mockResolvedValue(new Response(mockedTimezones, {})),

@@ -16,6 +16,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import User from 'gmp/models/user';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import UsersListPage, {
   UsersListPageToolBarIcons,
@@ -108,7 +109,11 @@ const createGmp = ({
     filters: {
       get: getFilters,
     },
-    settings: {manualUrl, reloadInterval},
+    settings: {
+      manualUrl,
+      reloadInterval,
+      session: createSession(),
+    },
     permissions: {
       get: testing.fn().mockResolvedValue({
         data: [],

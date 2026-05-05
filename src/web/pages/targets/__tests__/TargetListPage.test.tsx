@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
 import {
   getSelectItemElementsForSelect,
   screen,
@@ -16,45 +16,13 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TargetPage from 'web/pages/targets/TargetListPage';
 import {entitiesLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-
-let currentSettings;
-let getSetting;
-let getFilters;
-let getTargets;
-
-beforeEach(() => {
-  currentSettings = testing
-    .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
-
-  getSetting = testing.fn().mockResolvedValue({
-    filter: null,
-  });
-
-  getFilters = testing.fn().mockReturnValue(
-    Promise.resolve({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    }),
-  );
-
-  getTargets = testing.fn().mockResolvedValue({
-    data: [target],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
-});
 
 const target = Target.fromElement({
   _id: '46264',
@@ -95,18 +63,63 @@ const target = Target.fromElement({
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({
+    filter: null,
+  }),
+  getFilters = testing.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  ),
+  getTargets = testing.fn().mockResolvedValue({
+    data: [target],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  deleteByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  targets: {
+    get: getTargets,
+    deleteByFilter,
+    exportByFilter,
+    delete: deleteByIds,
+    export: exportByIds,
+  },
+  filters: {
+    get: getFilters,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
+});
+
 describe('TargetsListPage tests', () => {
   test('should render full TargetListPage', async () => {
-    const gmp = {
-      targets: {
-        get: getTargets,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -189,26 +202,7 @@ describe('TargetsListPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      targets: {
-        get: getTargets,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -246,38 +240,18 @@ describe('TargetsListPage tests', () => {
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.targets.exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.targets.deleteByFilter);
   });
 
   test('should allow to bulk action on selected targets', async () => {
-    // mock cache issues will cause these tests to randomly fail. Will fix later.
-    const deleteByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      targets: {
-        get: getTargets,
-        delete: deleteByIds,
-        export: exportByIds,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -327,36 +301,16 @@ describe('TargetsListPage tests', () => {
     // export selected target
     const exportIcon = screen.getAllByTitle('Export selection')[0];
     fireEvent.click(exportIcon);
-    expect(exportByIds).toHaveBeenCalled();
+    expect(gmp.targets.export).toHaveBeenCalled();
 
     // move selected target to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByIds);
+    testBulkTrashcanDialog(screen, gmp.targets.delete);
   });
 
   test('should allow to bulk action on filtered targets', async () => {
-    // mock cache issues will cause these tests to randomly fail. Will fix later.
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      targets: {
-        get: getTargets,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -401,11 +355,11 @@ describe('TargetsListPage tests', () => {
     // export all filtered targets
     const exportIcon = screen.getAllByTitle('Export all filtered')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.targets.exportByFilter).toHaveBeenCalled();
 
     // move all filtered targets to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.targets.deleteByFilter);
   });
 });

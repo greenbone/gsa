@@ -9,6 +9,7 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import dayjs from 'gmp/models/date';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import {Row} from 'web/pages/tags/TagTable';
 
 const createTag = (id = 'tag-1') =>
@@ -23,10 +24,19 @@ const createTag = (id = 'tag-1') =>
     userCapabilities: new EverythingCapabilities(),
   });
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('TagRow tests', () => {
   test('should render tag in table row with action buttons', () => {
     const tag = createTag();
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <Row
         entity={tag}
@@ -56,7 +66,10 @@ describe('TagRow tests', () => {
 
   test('should render disable button when tag is active', () => {
     const activeTag = createTag();
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <Row
         entity={activeTag}
@@ -84,7 +97,10 @@ describe('TagRow tests', () => {
       resourceCount: 5,
       userCapabilities: new EverythingCapabilities(),
     });
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <Row
         entity={disabledTag}
@@ -111,7 +127,10 @@ describe('TagRow tests', () => {
     const handleEnable = testing.fn();
     const handleDisable = testing.fn();
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <Row
         entity={tag}
@@ -143,7 +162,10 @@ describe('TagRow tests', () => {
 
   test('should not render disable button if user cannot edit', () => {
     const tag = createTag();
-    const {render} = rendererWithTableBody({capabilities: false});
+    const {render} = rendererWithTableBody({
+      capabilities: false,
+      gmp: createGmp(),
+    });
     render(
       <Row
         entity={tag}

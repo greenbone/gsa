@@ -5,16 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, screen, fireEvent} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scan-config';
+import {createSession} from 'gmp/testing';
 import Row from 'web/pages/scanconfigs/Row';
 import {setUsername} from 'web/store/usersettings/actions';
-
-const gmp = {settings: {}};
-const caps = new Capabilities(['everything']);
 
 const entity = ScanConfig.fromElement({
   _id: '1234',
@@ -33,6 +30,12 @@ const entity = ScanConfig.fromElement({
   },
 });
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('Scan Config row tests', () => {
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
@@ -43,8 +46,8 @@ describe('Scan Config row tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       store: true,
     });
     store.dispatch(setUsername('admin'));
@@ -105,8 +108,8 @@ describe('Scan Config row tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       store: true,
     });
     store.dispatch(setUsername('admin'));
@@ -155,8 +158,8 @@ describe('Scan Config row tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       store: true,
     });
     store.dispatch(setUsername('admin'));
@@ -187,7 +190,7 @@ describe('Scan Config row tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
     });
@@ -264,8 +267,8 @@ describe('Scan Config row tests', () => {
     });
 
     const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       store: true,
     });
     store.dispatch(setUsername('admin'));
@@ -350,7 +353,7 @@ describe('Scan Config row tests', () => {
     });
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
     });
@@ -428,7 +431,7 @@ describe('Scan Config row tests', () => {
     });
 
     const {render, store} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       store: true,
     });

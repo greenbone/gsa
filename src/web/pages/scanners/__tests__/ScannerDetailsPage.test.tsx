@@ -14,6 +14,7 @@ import Scanner, {
   OPENVAS_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {YES_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScannerDetailsPage from 'web/pages/scanners/ScannerDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/scanners';
@@ -21,18 +22,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
-
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getEntities = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
 
 const createMockScanner = (
   type: string = OPENVAS_SCANNER_TYPE,
@@ -85,22 +74,38 @@ const createMockScanner = (
   return Scanner.fromElement(baseScanner);
 };
 
+const createGmp = ({
+  scanner = createMockScanner(),
+  getScanner = testing.fn().mockResolvedValue({data: scanner}),
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getEntities = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  modifyAgentControlConfig = testing.fn().mockResolvedValue({data: {}}),
+} = {}) => ({
+  scanner: {
+    get: getScanner,
+    modifyAgentControlConfig,
+  },
+  permissions: {
+    get: getEntities,
+  },
+  settings: {manualUrl, reloadInterval, session: createSession()},
+  user: {
+    currentSettings,
+  },
+});
+
 describe('ScannerDetailsPage tests', () => {
   test('should render scanner details page', () => {
     const scanner = createMockScanner();
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -123,19 +128,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should render information tab', () => {
     const scanner = createMockScanner();
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -155,19 +148,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should render user tags tab', () => {
     const scanner = createMockScanner();
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -189,19 +170,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should render permissions tab', () => {
     const scanner = createMockScanner();
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -223,19 +192,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should not render agent default configuration tab for regular scanner', () => {
     const scanner = createMockScanner(OPENVAS_SCANNER_TYPE);
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const features = new Features(['ENABLE_AGENTS']);
 
@@ -260,19 +217,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should render agent default configuration tab for agent controller scanner', () => {
     const scanner = createMockScanner(AGENT_CONTROLLER_SCANNER_TYPE, true);
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const features = new Features(['ENABLE_AGENTS']);
 
@@ -300,19 +245,7 @@ describe('ScannerDetailsPage tests', () => {
       AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
       true,
     );
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const features = new Features(['ENABLE_AGENTS']);
 
@@ -337,19 +270,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should not render agent default configuration tab when ENABLE_AGENTS is disabled', () => {
     const scanner = createMockScanner(AGENT_CONTROLLER_SCANNER_TYPE, true);
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const features = new Features([]);
 
@@ -374,20 +295,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should display agent default configuration content when tab is clicked', () => {
     const scanner = createMockScanner(AGENT_CONTROLLER_SCANNER_TYPE, true);
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-        modifyAgentControlConfig: testing.fn().mockResolvedValue({data: {}}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const features = new Features(['ENABLE_AGENTS']);
 
@@ -420,19 +328,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should display user tags content when tab is clicked', () => {
     const scanner = createMockScanner();
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -455,19 +351,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should display permissions content when tab is clicked', () => {
     const scanner = createMockScanner();
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -490,19 +374,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should render toolbar icons', () => {
     const scanner = createMockScanner();
-
-    const gmp = {
-      scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -523,26 +395,7 @@ describe('ScannerDetailsPage tests', () => {
 
   test('should call onChanged when modifications are made', async () => {
     const scanner = createMockScanner(AGENT_CONTROLLER_SCANNER_TYPE, true);
-
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const getScanner = testing.fn().mockResolvedValue({data: scanner});
-
-    const gmp = {
-      scanner: {
-        get: getScanner,
-        modifyAgentControlConfig,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({scanner});
 
     const features = new Features(['ENABLE_AGENTS']);
 
@@ -566,6 +419,6 @@ describe('ScannerDetailsPage tests', () => {
     fireEvent.click(agentConfigTab);
 
     // Get the scanner again after clicking the tab to verify onChanged would work
-    expect(getScanner).toHaveBeenCalled();
+    expect(gmp.scanner.get).toHaveBeenCalled();
   });
 });

@@ -17,6 +17,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Override from 'gmp/models/override';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import OverridesPage, {ToolBarIcons} from 'web/pages/overrides/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/overrides';
@@ -51,67 +52,83 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getSetting = testing.fn().mockResolvedValue({
-  filter: null,
-});
-
-const getDashboardSetting = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getAggregates = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({
+    filter: null,
+  }),
+  getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getOverrides = testing.fn().mockResolvedValue({
-  data: [override],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getAggregates = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getFilters = testing.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  ),
+  getOverrides = testing.fn().mockResolvedValue({
+    data: [override],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  deleteByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  dashboard: {
+    getSetting: getDashboardSetting,
   },
+  overrides: {
+    get: getOverrides,
+    deleteByFilter,
+    exportByFilter,
+    delete: deleteByIds,
+    export: exportByIds,
+    getActiveDaysAggregates: getAggregates,
+    getCreatedAggregates: getAggregates,
+    getWordCountsAggregates: getAggregates,
+  },
+  filters: {
+    get: getFilters,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
 });
 
 describe('OverridesPage tests', () => {
   test('should render full OverridesPage', async () => {
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      overrides: {
-        get: getOverrides,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -206,33 +223,7 @@ describe('OverridesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      overrides: {
-        get: getOverrides,
-        deleteByFilter,
-        exportByFilter,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -269,44 +260,18 @@ describe('OverridesPage tests', () => {
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.overrides.exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.overrides.deleteByFilter);
   });
 
   test('should allow to bulk action on selected overrides', async () => {
-    const deleteByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      overrides: {
-        get: getOverrides,
-        delete: deleteByIds,
-        export: exportByIds,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -355,42 +320,16 @@ describe('OverridesPage tests', () => {
     // export selected override
     const exportIcon = screen.getAllByTitle('Export selection')[0];
     fireEvent.click(exportIcon);
-    expect(exportByIds).toHaveBeenCalled();
+    expect(gmp.overrides.export).toHaveBeenCalled();
 
     // move selected override to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByIds);
+    testBulkTrashcanDialog(screen, gmp.overrides.delete);
   });
 
   test('should allow to bulk action on filtered overrides', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      overrides: {
-        get: getOverrides,
-        deleteByFilter,
-        exportByFilter,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -434,12 +373,12 @@ describe('OverridesPage tests', () => {
     // export all filtered overrides
     const exportIcon = screen.getAllByTitle('Export all filtered')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.overrides.exportByFilter).toHaveBeenCalled();
 
     // move all filtered overrides to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.overrides.deleteByFilter);
   });
 });
 
@@ -447,9 +386,7 @@ describe('OverridesPage ToolBarIcons test', () => {
   test('should render', () => {
     const handleOverrideCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -476,9 +413,7 @@ describe('OverridesPage ToolBarIcons test', () => {
   test('should call click handlers', () => {
     const handleOverrideCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -497,9 +432,7 @@ describe('OverridesPage ToolBarIcons test', () => {
   test('should not show icons if user does not have the right permissions', () => {
     const handleOverrideCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,

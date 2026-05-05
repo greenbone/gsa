@@ -9,6 +9,7 @@ import {waitFor, screen} from '@testing-library/react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
+import {createSession} from 'gmp/testing';
 import ContainerScanningResultsTab from 'web/pages/reports/details/ContainerScanningResultsTab';
 
 const result = Result.fromElement({
@@ -30,7 +31,7 @@ const createGmp = ({
     get,
   },
   settings: {
-    session: {token: 'test-token'},
+    session: createSession({token: 'test-token'}),
     enableEPSS: false,
   },
 });

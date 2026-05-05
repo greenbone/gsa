@@ -8,6 +8,7 @@ import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import OciImageTarget from 'gmp/models/oci-image-target';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ContainerImageTargetsListPage from 'web/pages/container-image-targets/ContainerImageTargetsListPage';
 import {setUsername} from 'web/store/usersettings/actions';
@@ -73,7 +74,7 @@ const createGmp = ({
   filters: {
     get: getFilters,
   },
-  settings: {manualUrl, session: {token: 'token'}},
+  settings: {manualUrl, session: createSession({token: 'token'})},
   user: {currentSettings, getSetting},
 });
 

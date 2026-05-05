@@ -5,16 +5,14 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, wait} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Alert from 'gmp/models/alert';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage, {ToolBarIcons} from 'web/pages/alerts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/alerts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -62,51 +60,61 @@ const alertInUse = Alert.fromElement({
   inUse: true,
 });
 
-let getAlert;
-let getEntities;
-let currentSettings;
-
-beforeEach(() => {
+const createGmp = ({
   getAlert = testing.fn().mockResolvedValue({
     data: alert,
-  });
-
+  }),
   getEntities = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   currentSettings = testing
     .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  clone = testing.fn().mockResolvedValue({
+    data: {id: 'foo'},
+  }),
+  deleteFunc = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportFunc = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  alert: {
+    get: getAlert,
+    clone,
+    delete: deleteFunc,
+    export: exportFunc,
+  },
+  permissions: {
+    get: getEntities,
+  },
+  reportformats: {
+    get: getEntities,
+  },
+  reportconfigs: {
+    get: getEntities,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
+  },
 });
 
 describe('Alert DetailsPage tests', () => {
   test('should render full DetailsPage', () => {
-    const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
-      reportconfigs: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
       gmp,
       router: true,
       store: true,
@@ -175,27 +183,10 @@ describe('Alert DetailsPage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
-      reportconfigs: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
       gmp,
       router: true,
       store: true,
@@ -214,27 +205,10 @@ describe('Alert DetailsPage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
-      reportconfigs: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
       gmp,
       router: true,
       store: true,
@@ -253,42 +227,10 @@ describe('Alert DetailsPage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = testing.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      alert: {
-        get: getAlert,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
-      reportconfigs: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
       gmp,
       router: true,
       store: true,
@@ -305,19 +247,19 @@ describe('Alert DetailsPage tests', () => {
     expect(cloneIcon).toHaveAttribute('title', 'Clone Alert');
     fireEvent.click(cloneIcon);
     await wait();
-    expect(clone).toHaveBeenCalledWith(alert);
+    expect(gmp.alert.clone).toHaveBeenCalledWith(alert);
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute('title', 'Move Alert to trashcan');
     fireEvent.click(deleteIcon);
     await wait();
-    expect(deleteFunc).toHaveBeenCalledWith({id: alert.id});
+    expect(gmp.alert.delete).toHaveBeenCalledWith({id: alert.id});
 
     const exportIcon = screen.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export Alert as XML');
     fireEvent.click(exportIcon);
     await wait();
-    expect(exportFunc).toHaveBeenCalledWith(alert);
+    expect(gmp.alert.export).toHaveBeenCalledWith(alert);
   });
 });
 
@@ -329,11 +271,11 @@ describe('Alert ToolBarIcons tests', () => {
     const handleAlertEditClick = testing.fn();
     const handleAlertCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -372,11 +314,11 @@ describe('Alert ToolBarIcons tests', () => {
     const handleAlertEditClick = testing.fn();
     const handleAlertCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -419,11 +361,11 @@ describe('Alert ToolBarIcons tests', () => {
     const handleAlertEditClick = testing.fn();
     const handleAlertCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -472,11 +414,11 @@ describe('Alert ToolBarIcons tests', () => {
     const handleAlertEditClick = testing.fn();
     const handleAlertCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
