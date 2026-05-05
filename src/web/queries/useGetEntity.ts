@@ -18,6 +18,7 @@ interface UseGetEntityParams<TModel extends Model> {
   gmpMethod: (params: {id: string}) => Promise<Response<TModel, XmlMeta>>;
   queryId: string;
   id: string;
+  queryKeyParts?: unknown[];
   refetchInterval?: number | false | RefetchIntervalFn<TModel>;
 }
 
@@ -25,6 +26,7 @@ const useGetEntity = <TModel extends Model>({
   gmpMethod,
   queryId,
   id,
+  queryKeyParts,
   refetchInterval,
 }: UseGetEntityParams<TModel>) => {
   const gmp = useGmp();
@@ -38,7 +40,7 @@ const useGetEntity = <TModel extends Model>({
 
   return useQuery<TModel>({
     enabled: Boolean(token) && Boolean(id),
-    queryKey: [queryId, token, id],
+    queryKey: [queryId, token, id, ...(queryKeyParts ?? [])],
     queryFn: async () => {
       const response = await gmpMethod({id});
       return response.data;

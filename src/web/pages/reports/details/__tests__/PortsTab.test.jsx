@@ -56,7 +56,7 @@ describe('Report Ports Tab tests', () => {
       },
       settings: {
         severityRating: SEVERITY_RATING_CVSS_3,
-        token: 'test-token',
+        session: {token: 'test-token'},
       },
     };
 

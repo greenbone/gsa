@@ -9,7 +9,8 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportReport from 'gmp/models/report/report';
-import {type Task, TASK_STATUS} from 'gmp/models/task';
+import type ReportTask from 'gmp/models/report/task';
+import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
@@ -98,7 +99,7 @@ interface PageContentProps {
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
   sorting: SortingData;
-  task?: Task;
+  task?: ReportTask;
   tlsCertificatesCounts?: CollectionCounts;
   onAddToAssetsClick: () => void;
   onError: (error: Error) => void;
