@@ -16,10 +16,11 @@ import {
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import AuditReportListPage from 'web/pages/reports/AuditReportsListPage';
 import {entitiesActions} from 'web/store/entities/auditreports';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -30,85 +31,91 @@ const {entity} = getMockAuditReport();
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  currentSettings = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getDashboardSetting = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getDashboardSetting = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getUserSetting = testing.fn().mockResolvedValue({
+    filter: null,
+  }),
+  getComplianceAggregates = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getReports = testing.fn().mockResolvedValue({
+    data: [entity],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getTags = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getReportFormats = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  auditreports: {
+    get: getReports,
+    getComplianceAggregates: getComplianceAggregates,
+    deleteByFilter,
+    exportByFilter,
   },
-});
-
-const getUserSetting = testing.fn().mockResolvedValue({
-  filter: null,
-});
-
-const getComplianceAggregates = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  filters: {
+    get: getFilters,
   },
-});
-
-const getReports = testing.fn().mockResolvedValue({
-  data: [entity],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  reportformats: {
+    get: getReportFormats,
   },
-});
-
-const getAll = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  dashboard: {
+    getSetting: getDashboardSetting,
   },
-});
-
-const getReportFormats = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting: getUserSetting},
+  tags: {
+    getAll: getTags,
   },
 });
 
 describe('AuditReportsPage tests', () => {
   test('should render full AuditReports Page', async () => {
-    const gmp = {
-      auditreports: {
-        get: getReports,
-        getComplianceAggregates: getComplianceAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reportformats: {
-        get: getReportFormats,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getUserSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -117,7 +124,6 @@ describe('AuditReportsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -198,38 +204,7 @@ describe('AuditReportsPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      auditreports: {
-        get: getReports,
-        getComplianceAggregates: getComplianceAggregates,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reportformats: {
-        get: getReportFormats,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      tags: {
-        getAll: getAll,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getUserSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -238,12 +213,11 @@ describe('AuditReportsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('auditreport', defaultSettingfilter),
+      defaultFilterLoadingActions.success('auditreport', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -266,12 +240,12 @@ describe('AuditReportsPage tests', () => {
     const icon = screen.getByTestId('tags-icon');
     expect(icon).toHaveAttribute('title', 'Add tag to page contents');
     fireEvent.click(icon);
-    expect(getAll).toHaveBeenCalled();
+    expect(gmp.tags.getAll).toHaveBeenCalled();
 
     fireEvent.click(screen.getAllByTitle('Delete page contents')[0]);
 
     await wait();
 
-    testBulkDeleteDialog(screen, deleteByFilter);
+    testBulkDeleteDialog(screen, gmp.auditreports.deleteByFilter);
   });
 });

@@ -15,11 +15,12 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CpesPage, {ToolBarIcons} from 'web/pages/cpes/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/cpes';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -47,22 +48,14 @@ const cpe = CPE.fromElement({
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-let getCpes;
-let getFilters;
-let getDashboardSetting;
-let getAggregates;
-let getSetting;
-let currentSettings;
-
-beforeEach(() => {
+const createGmp = ({
   getCpes = testing.fn().mockResolvedValue({
     data: [cpe],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   getFilters = testing.fn().mockReturnValue(
     Promise.resolve({
       data: [],
@@ -71,54 +64,68 @@ beforeEach(() => {
         counts: new CollectionCounts(),
       },
     }),
-  );
-
+  ),
   getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   getSetting = testing.fn().mockResolvedValue({
     filter: null,
-  });
-
+  }),
   currentSettings = testing
     .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  deleteByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  dashboard: {
+    getSetting: getDashboardSetting,
+  },
+  cpes: {
+    get: getCpes,
+    getSeverityAggregates: getAggregates,
+    getCreatedAggregates: getAggregates,
+    getActiveDaysAggregates: getAggregates,
+    deleteByFilter,
+    exportByFilter,
+    delete: deleteByIds,
+    export: exportByIds,
+  },
+  filters: {
+    get: getFilters,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    severityRating: SEVERITY_RATING_CVSS_3,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
 });
 
 describe('CpesPage tests', () => {
   test('should render full CpesPage', async () => {
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      cpes: {
-        get: getCpes,
-        getSeverityAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {
-        manualUrl,
-        reloadInterval,
-        severityRating: SEVERITY_RATING_CVSS_3,
-      },
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -128,7 +135,6 @@ describe('CpesPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -204,32 +210,7 @@ describe('CpesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      cpes: {
-        get: getCpes,
-        deleteByFilter,
-        exportByFilter,
-        getSeverityAggregates: getAggregates,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -239,7 +220,6 @@ describe('CpesPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -268,37 +248,11 @@ describe('CpesPage tests', () => {
     const tableFooter = within(screen.queryTableFooter());
     const exportIcon = tableFooter.getByTestId('export-icon');
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.cpes.exportByFilter).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected cpes', async () => {
-    const deleteByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      cpes: {
-        get: getCpes,
-        delete: deleteByIds,
-        export: exportByIds,
-        getSeverityAggregates: getAggregates,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -307,7 +261,6 @@ describe('CpesPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -348,37 +301,11 @@ describe('CpesPage tests', () => {
     const exportIcon = tableFooter.getByTestId('export-icon');
     fireEvent.click(exportIcon);
 
-    expect(exportByIds).toHaveBeenCalled();
+    expect(gmp.cpes.export).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered cpes', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      cpes: {
-        get: getCpes,
-        deleteByFilter,
-        exportByFilter,
-        getSeverityAggregates: getAggregates,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -387,7 +314,6 @@ describe('CpesPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -422,16 +348,13 @@ describe('CpesPage tests', () => {
     // export all filtered cpes
     const exportIcon = tableFooter.getByTestId('export-icon');
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.cpes.exportByFilter).toHaveBeenCalled();
   });
 });
 
 describe('CpesPage ToolBarIcons test', () => {
   test('should render', () => {
-    const gmp = {
-      settings: {manualUrl},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       gmp,
       router: true,

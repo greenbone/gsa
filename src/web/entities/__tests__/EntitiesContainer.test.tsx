@@ -14,6 +14,7 @@ import {
 } from 'web/testing';
 import Filter from 'gmp/models/filter';
 import PortList from 'gmp/models/port-list';
+import {createSession} from 'gmp/testing';
 import EntitiesContainer from 'web/entities/EntitiesContainer';
 
 const currentSettingsResponse = {
@@ -63,40 +64,38 @@ const setup = gmp => {
   return screen.getByRole('button', {name: /Download Bulk/i});
 };
 
+const createGmp = ({
+  exportByFilter = testing.fn().mockResolvedValue({data: {id: '123'}}),
+  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+} = {}) => ({
+  portlists: {
+    exportByFilter,
+  },
+  user: {currentSettings},
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('EntitiesContainer', () => {
   test('should allow downloading entities in bulk', async () => {
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
-    const downloadedData = {id: '123'};
-    const gmp = {
-      portlists: {
-        exportByFilter: testing.fn().mockResolvedValue({data: downloadedData}),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const downloadButton = setup(gmp);
     await userEvent.click(downloadButton);
 
     await waitFor(() => expect(screen.getByText('Bulk download started.')));
     expect(onDownload).toHaveBeenCalledWith({
       filename: 'portlists-list.xml',
-      data: downloadedData,
+      data: {id: '123'},
     });
     await waitFor(() => expect(screen.getByText('Bulk download completed.')));
   });
 
   test('should call onDownloadError when downloading entities in bulk fails', async () => {
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
     const error = 'mock error';
-    const gmp = {
-      portlists: {exportByFilter: testing.fn().mockRejectedValue(error)},
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      exportByFilter: testing.fn().mockRejectedValue(error),
+    });
     const originalConsoleError = console.error;
     console.error = testing.fn();
 
