@@ -5,7 +5,7 @@
 
 import type Filter from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
-import type Task from 'gmp/models/task';
+import type ReportTask from 'gmp/models/report/task';
 import ToolBar from 'web/components/bar/Toolbar';
 import Layout from 'web/components/layout/Layout';
 import Powerfilter from 'web/components/powerfilter/PowerFilter';
@@ -26,7 +26,7 @@ export interface DetailsToolbarProps {
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
   showThresholdMessage?: boolean;
-  task?: Task;
+  task?: ReportTask;
   threshold?: number;
   onAddToAssetsClick: () => void;
   onFilterChanged: (filter: Filter) => void;

@@ -54,13 +54,13 @@ interface SortingState {
 interface ReportComposerDefaults {
   defaultReportConfigId?: string;
   defaultReportFormatId?: string;
-  includeNotes?: number;
-  includeOverrides?: number;
+  includeNotes?: boolean;
+  includeOverrides?: boolean;
 }
 
 interface DownloadReportState {
-  includeNotes: number;
-  includeOverrides: number;
+  includeNotes: boolean;
+  includeOverrides: boolean;
   reportConfigId: string;
   reportFormatId: string;
   storeAsDefault: boolean;
@@ -117,7 +117,7 @@ const ReportDetailsPage = () => {
   const {id: reportId = ''} = useParams<{id: string}>();
   const gmp = useGmp();
   const queryClient = useQueryClient();
-  const [username] = useUserName();
+  const username = useUserName();
 
   const {
     dialogState,
@@ -316,7 +316,8 @@ const ReportDetailsPage = () => {
   }, []);
 
   const handleReportDownload = useCallback(
-    async (state: DownloadReportState) => {
+    async (values: Record<string, unknown>) => {
+      const state = values as unknown as DownloadReportState;
       if (!entity || !reportFilter) return;
       const {
         includeNotes,
@@ -506,7 +507,7 @@ const ReportDetailsPage = () => {
             reportId={reportId}
             resetFilter={REPORT_RESET_FILTER}
             resultsCounts={resultsCounts}
-            showError={showError}
+            showError={showError as (...args: unknown[]) => void}
             showErrorMessage={showErrorMessage}
             showSuccessMessage={showSuccessMessage}
             sorting={sorting}
@@ -530,7 +531,9 @@ const ReportDetailsPage = () => {
                 if (response) void edit(response.data);
               });
             }}
-            onTlsCertificateDownloadClick={handleTlsCertificateDownload}
+            onTlsCertificateDownloadClick={
+              handleTlsCertificateDownload as unknown as () => void
+            }
           />
         )}
       </TargetComponent>
@@ -550,10 +553,15 @@ const ReportDetailsPage = () => {
           filter={reportFilter}
           includeNotes={reportComposerDefaults.includeNotes}
           includeOverrides={reportComposerDefaults.includeOverrides}
+          isContainerScanning={
+            isDefined(entity) &&
+            isDefined(entity.report?.task?.ociImageTarget?.id)
+          }
           reportConfigs={reportConfigs}
           reportFormats={reportFormats ?? []}
           showThresholdMessage={showThresholdMessage}
           threshold={threshold}
+          totalResultCount={resultsCounts?.all ?? 0}
           onClose={handleCloseDownloadReportDialog}
           onSave={handleReportDownload}
         />
