@@ -9,14 +9,12 @@ import {
   setLocale,
   setSessionTimeout,
   setTimezone,
-  setUsername,
 } from 'web/store/usersettings/actions';
 import {
   locale,
   reportComposerDefaults,
   sessionTimeout,
   timezone,
-  username,
 } from 'web/store/usersettings/reducers';
 
 describe('settings reducers tests', () => {
@@ -49,22 +47,6 @@ describe('settings reducers tests', () => {
     test('should override locale in state', () => {
       const action = setLocale('de');
       expect(locale('foo', action)).toEqual('de');
-    });
-  });
-
-  describe('username reducer tests', () => {
-    test('should create initial state', () => {
-      expect(username(undefined, {})).toBeUndefined();
-    });
-
-    test('should reduce username action', () => {
-      const action = setUsername('foo');
-      expect(username(undefined, action)).toEqual('foo');
-    });
-
-    test('should override username in state', () => {
-      const action = setUsername('foo');
-      expect(username('bar', action)).toEqual('foo');
     });
   });
 

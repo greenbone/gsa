@@ -11,7 +11,6 @@ import ScanConfig, {
 } from 'gmp/models/scan-config';
 import {createSession} from 'gmp/testing';
 import Row from 'web/pages/scanconfigs/Row';
-import {setUsername} from 'web/store/usersettings/actions';
 
 const entity = ScanConfig.fromElement({
   _id: '1234',
@@ -45,13 +44,11 @@ describe('Scan Config row tests', () => {
     const handleScanConfigEdit = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('admin'));
-
     const {element} = render(
       <Row
         entity={entity}
@@ -107,13 +104,11 @@ describe('Scan Config row tests', () => {
     const handleScanConfigEdit = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('admin'));
-
     const {element} = render(
       <Row
         entity={config}
@@ -157,13 +152,11 @@ describe('Scan Config row tests', () => {
     const handleScanConfigEdit = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('admin'));
-
     render(
       <Row
         entity={config}
@@ -189,13 +182,11 @@ describe('Scan Config row tests', () => {
     const handleScanConfigSettings = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('admin'));
-
     render(
       <Row
         entity={entity}
@@ -266,13 +257,11 @@ describe('Scan Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('admin'));
-
     render(
       <Row
         entity={config}
@@ -352,13 +341,11 @@ describe('Scan Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('admin'));
-
     render(
       <Row
         entity={config}
@@ -430,13 +417,11 @@ describe('Scan Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('admin'));
-
     render(
       <Row
         entity={config}

@@ -13,7 +13,7 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage, {ToolBarIcons} from 'web/pages/hosts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/hosts';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 // setup
 
@@ -197,7 +197,6 @@ describe('Host DetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
@@ -306,7 +305,6 @@ describe('Host DetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
@@ -327,7 +325,6 @@ describe('Host DetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
@@ -348,7 +345,6 @@ describe('Host DetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', host));
 

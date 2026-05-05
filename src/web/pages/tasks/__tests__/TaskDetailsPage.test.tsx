@@ -16,7 +16,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TaskDetailsPage from 'web/pages/tasks/TaskDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tasks';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const config = ScanConfig.fromElement({
   _id: '314',
@@ -253,7 +253,6 @@ describe('TaskDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
@@ -344,7 +343,6 @@ describe('TaskDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', task2));
 
@@ -373,7 +371,6 @@ describe('TaskDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', task2));
 
@@ -402,7 +399,6 @@ describe('TaskDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', task5));
 

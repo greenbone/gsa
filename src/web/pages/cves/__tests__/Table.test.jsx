@@ -11,7 +11,7 @@ import Cve from 'gmp/models/cve';
 import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
 import CveTable from 'web/pages/cves/Table';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const caps = new Capabilities(['everything']);
 
@@ -83,7 +83,6 @@ describe('Cve table tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
       <CveTable
@@ -106,14 +105,12 @@ describe('Cve table tests', () => {
       settings: {},
     };
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: caps,
       router: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const {element} = render(
       <CveTable

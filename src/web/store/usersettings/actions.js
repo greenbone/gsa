@@ -7,7 +7,6 @@ export const USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS =
   'USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS';
 export const USER_SETTINGS_SET_TIMEZONE = 'USER_SETTINGS_SET_TIMEZONE';
 export const USER_SETTINGS_SET_LOCALE = 'USER_SETTINGS_SET_LOCALE';
-export const USER_SETTINGS_SET_USERNAME = 'USER_SETTINGS_SET_USERNAME';
 export const USER_SETTINGS_SET_SESSION_TIMEOUT =
   'USER_SETTINGS_SET_SESSION_TIMEOUT';
 
@@ -34,11 +33,6 @@ export const setTimezone = timezone => ({
 export const setLocale = locale => ({
   type: USER_SETTINGS_SET_LOCALE,
   locale,
-});
-
-export const setUsername = username => ({
-  type: USER_SETTINGS_SET_USERNAME,
-  username,
 });
 
 export const setSessionTimeout = timeout => ({

@@ -9,7 +9,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Policy from 'gmp/models/policy';
 import {createSession} from 'gmp/testing';
 import Row from 'web/pages/policies/Row';
-import {setUsername} from 'web/store/usersettings/actions';
 
 const entity = Policy.fromElement({
   _id: '1234',
@@ -35,13 +34,11 @@ describe('Row tests', () => {
     const handlePolicyEdit = testing.fn();
     const handleCreateAudit = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('username'));
-
     const {baseElement} = render(
       <Row
         entity={entity}
@@ -77,13 +74,11 @@ describe('Row tests', () => {
     const handlePolicyEdit = testing.fn();
     const handleCreateAudit = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-
-    store.dispatch(setUsername('username'));
 
     render(
       <Row
@@ -109,13 +104,11 @@ describe('Row tests', () => {
     const handlePolicyEdit = testing.fn();
     const handleCreateAudit = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('username'));
-
     render(
       <Row
         entity={entity}
@@ -175,13 +168,11 @@ describe('Row tests', () => {
 
     const wrongCaps = new Capabilities(['authenticate']);
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: wrongCaps,
       store: true,
     });
-    store.dispatch(setUsername('username'));
-
     render(
       <Row
         entity={policy}
@@ -248,13 +239,11 @@ describe('Row tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('username'));
-
     render(
       <Row
         entity={policy}
@@ -313,13 +302,11 @@ describe('Row tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       store: true,
     });
-    store.dispatch(setUsername('username'));
-
     render(
       <Row
         entity={policy}

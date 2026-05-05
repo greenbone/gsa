@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__fixtures__/MockAuditDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
@@ -87,7 +87,6 @@ describe('AuditDeltaDetailsContent tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <DeltaDetailsContent
@@ -282,7 +281,6 @@ describe('AuditDeltaDetailsContent tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <DeltaDetailsContent

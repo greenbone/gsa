@@ -10,7 +10,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tls-certificate';
 import Table from 'web/pages/tlscertificates/Table';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const caps = new Capabilities(['everything']);
 
@@ -62,7 +62,6 @@ describe('TlsCertificates table tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <Table
@@ -94,14 +93,12 @@ describe('TlsCertificates table tests', () => {
       settings: {},
     };
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: caps,
       router: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     render(
       <Table
@@ -138,14 +135,12 @@ describe('TlsCertificates table tests', () => {
       settings: {},
     };
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: caps,
       router: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     render(
       <Table

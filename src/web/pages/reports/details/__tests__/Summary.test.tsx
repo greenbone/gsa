@@ -9,7 +9,7 @@ import Filter from 'gmp/models/filter';
 import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import Summary from 'web/pages/reports/details/Summary';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -26,7 +26,6 @@ describe('Report Summary tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {element} = render(
       <Summary
@@ -81,7 +80,6 @@ describe('Report Summary tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {element} = render(
       <Summary

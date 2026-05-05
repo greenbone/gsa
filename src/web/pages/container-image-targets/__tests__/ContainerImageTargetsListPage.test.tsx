@@ -11,7 +11,6 @@ import OciImageTarget from 'gmp/models/oci-image-target';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ContainerImageTargetsListPage from 'web/pages/container-image-targets/ContainerImageTargetsListPage';
-import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -89,8 +88,6 @@ describe('ContainerImageTargetsListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setUsername('admin'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -145,8 +142,6 @@ describe('ContainerImageTargetsListPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));

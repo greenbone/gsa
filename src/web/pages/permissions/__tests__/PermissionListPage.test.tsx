@@ -20,7 +20,6 @@ import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-set
 import PermissionListPage from 'web/pages/permissions/PermissionListPage';
 import PermissionListPageToolBarIcons from 'web/pages/permissions/PermissionListPageToolBarIcons';
 import {entitiesLoadingActions} from 'web/store/entities/permissions';
-import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -93,8 +92,6 @@ describe('PermissionListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setUsername('admin'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -134,8 +131,6 @@ describe('PermissionListPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));

@@ -9,7 +9,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {createSession} from 'gmp/testing';
 import Row from 'web/pages/audits/Row';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const lastReport = {
   report: {
@@ -65,7 +65,6 @@ describe('Audit Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {element} = render(
       <Row
@@ -180,7 +179,6 @@ describe('Audit Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     render(
       <Row
@@ -243,7 +241,6 @@ describe('Audit Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     render(
       <Row
@@ -352,7 +349,6 @@ describe('Audit Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     render(
       <Row
@@ -466,7 +462,6 @@ describe('Audit Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     render(
       <Row
@@ -581,7 +576,6 @@ describe('Audit Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     render(
       <Row
@@ -696,7 +690,6 @@ describe('Audit Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     render(
       <Row

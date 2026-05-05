@@ -21,7 +21,6 @@ import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-set
 import RoleListPage from 'web/pages/roles/RoleListPage';
 import RoleListPageToolBarIcons from 'web/pages/roles/RoleListPageToolBarIcons';
 import {entitiesLoadingActions} from 'web/store/entities/roles';
-import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -99,8 +98,6 @@ describe('RoleListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setUsername('admin'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -136,9 +133,6 @@ describe('RoleListPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setUsername('admin'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(

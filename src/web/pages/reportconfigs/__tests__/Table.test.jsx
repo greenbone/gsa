@@ -10,7 +10,6 @@ import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/report-config';
 import {createSession} from 'gmp/testing';
 import Table from 'web/pages/reportconfigs/Table';
-import {setUsername} from 'web/store/usersettings/actions';
 
 const config = ReportConfig.fromElement({
   _id: '12345',
@@ -73,14 +72,12 @@ describe('Scan Config table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
       <Table
@@ -108,14 +105,12 @@ describe('Scan Config table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const {element} = render(
       <Table
@@ -145,14 +140,12 @@ describe('Scan Config table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     render(
       <Table

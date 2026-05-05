@@ -9,7 +9,7 @@ import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
 import TargetTableRow from 'web/pages/targets/TargetTableRow';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const targetElevate = Target.fromElement({
   _id: 'foo',
@@ -171,7 +171,6 @@ describe('TargetRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <TargetTableRow
@@ -221,7 +220,6 @@ describe('TargetRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <TargetTableRow
@@ -254,7 +252,6 @@ describe('TargetRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <TargetTableRow
@@ -302,7 +299,6 @@ describe('TargetRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <TargetTableRow
@@ -337,7 +333,6 @@ describe('TargetRow tests', () => {
       router: true,
     });
 
-    store.dispatch(setUsername('admin'));
     store.dispatch(setTimezone('UTC'));
 
     render(

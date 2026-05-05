@@ -7,7 +7,6 @@ import {
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
   USER_SETTINGS_SET_TIMEZONE,
   USER_SETTINGS_SET_LOCALE,
-  USER_SETTINGS_SET_USERNAME,
   USER_SETTINGS_SET_SESSION_TIMEOUT,
 } from 'web/store/usersettings/actions';
 import defaultFilters from 'web/store/usersettings/defaultfilters/reducers';
@@ -53,15 +52,6 @@ export const sessionTimeout = (state, action) => {
   }
 };
 
-export const username = (state, action) => {
-  switch (action.type) {
-    case USER_SETTINGS_SET_USERNAME:
-      return action.username;
-    default:
-      return state;
-  }
-};
-
 const userSettings = combineReducers({
   defaults,
   defaultFilters,
@@ -69,7 +59,6 @@ const userSettings = combineReducers({
   reportComposerDefaults,
   sessionTimeout,
   timezone,
-  username,
 });
 
 export default userSettings;

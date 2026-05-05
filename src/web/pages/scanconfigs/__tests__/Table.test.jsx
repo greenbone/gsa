@@ -13,7 +13,6 @@ import ScanConfig, {
 } from 'gmp/models/scan-config';
 import {createSession} from 'gmp/testing';
 import Table from 'web/pages/scanconfigs/Table';
-import {setUsername} from 'web/store/usersettings/actions';
 
 const config = ScanConfig.fromElement({
   _id: '12345',
@@ -89,13 +88,11 @@ describe('Scan Config table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const {element} = render(
       <Table
@@ -130,14 +127,12 @@ describe('Scan Config table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
 
     const {element} = render(
       <Table
@@ -169,15 +164,12 @@ describe('Scan Config table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
     });
-
-    store.dispatch(setUsername('admin'));
-
     render(
       <Table
         entities={[config, config2, config3]}

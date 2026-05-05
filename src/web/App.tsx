@@ -19,7 +19,7 @@ import LanguageProvider from 'web/components/provider/LanguageProvider';
 import Routes from 'web/Routes';
 import configureStore from 'web/store';
 import {clearStore} from 'web/store/actions';
-import {setUsername, setTimezone} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 void initLocale();
 const queryClient = new QueryClient();
@@ -37,13 +37,10 @@ const store = configureStore({
 window.gmp = gmp;
 
 const initStore = () => {
-  const {timezone, username} = gmp.settings.session;
+  const {timezone} = gmp.settings.session;
 
   if (isDefined(timezone)) {
     store.dispatch(setTimezone(timezone));
-  }
-  if (isDefined(username)) {
-    store.dispatch(setUsername(username));
   }
 };
 

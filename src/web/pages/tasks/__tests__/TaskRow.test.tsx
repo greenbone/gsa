@@ -9,7 +9,7 @@ import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import TaskRow from 'web/pages/tasks/TaskRow';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const lastReport = {
   report: {
@@ -66,7 +66,6 @@ describe('TaskRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
       <TaskRow
@@ -180,7 +179,6 @@ describe('TaskRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     render(
       <TaskRow
@@ -245,7 +243,6 @@ describe('TaskRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     render(
       <TaskRow
@@ -341,7 +338,6 @@ describe('TaskRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
       <TaskRow
@@ -455,7 +451,6 @@ describe('TaskRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
       <TaskRow
@@ -572,7 +567,6 @@ describe('TaskRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
       <TaskRow
@@ -689,7 +683,6 @@ describe('TaskRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
       <TaskRow
@@ -813,7 +806,6 @@ describe('TaskRow tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
       <TaskRow

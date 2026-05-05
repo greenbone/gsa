@@ -9,7 +9,7 @@ import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import HostsTabContent from 'web/pages/reports/details/HostsTabContent';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const createMockProps = (overrides = {}) => {
   const {hosts} = getMockReport();
@@ -98,7 +98,6 @@ describe('HostsTabContent', () => {
       store: true,
     });
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(<HostsTabContent {...props} />);
 
@@ -125,7 +124,6 @@ describe('HostsTabContent', () => {
       store: true,
     });
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(<HostsTabContent {...props} />);
 
@@ -153,7 +151,6 @@ describe('HostsTabContent', () => {
       store: true,
     });
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(<HostsTabContent {...props} />);
 
@@ -179,7 +176,6 @@ describe('HostsTabContent', () => {
       store: true,
     });
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(<HostsTabContent {...props} />);
 

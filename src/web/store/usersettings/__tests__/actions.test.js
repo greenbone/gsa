@@ -13,14 +13,12 @@ import {
   setLocale,
   setSessionTimeout,
   setTimezone,
-  setUsername,
   renewSessionTimeout,
   updateTimezone,
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
   USER_SETTINGS_SET_LOCALE,
   USER_SETTINGS_SET_SESSION_TIMEOUT,
   USER_SETTINGS_SET_TIMEZONE,
-  USER_SETTINGS_SET_USERNAME,
 } from 'web/store/usersettings/actions';
 
 describe('settings actions tests', () => {
@@ -35,13 +33,6 @@ describe('settings actions tests', () => {
     expect(setTimezone('cet')).toEqual({
       type: USER_SETTINGS_SET_TIMEZONE,
       timezone: 'cet',
-    });
-  });
-
-  test('should create a setUsername action', () => {
-    expect(setUsername('foo')).toEqual({
-      type: USER_SETTINGS_SET_USERNAME,
-      username: 'foo',
     });
   });
 

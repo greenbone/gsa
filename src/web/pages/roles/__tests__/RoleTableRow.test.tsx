@@ -9,7 +9,6 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import Role from 'gmp/models/role';
 import {createSession} from 'gmp/testing';
 import RoleTableRow from 'web/pages/roles/RoleTableRow';
-import {setUsername} from 'web/store/usersettings/actions';
 
 const createGmp = () => ({
   settings: {
@@ -24,12 +23,11 @@ describe('RoleTableRow tests', () => {
       name: 'Test Role',
       userCapabilities: new EverythingCapabilities(),
     });
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(<RoleTableRow entity={role} />);
     expect(screen.getByText('Test Role')).toBeVisible();
   });
@@ -41,12 +39,11 @@ describe('RoleTableRow tests', () => {
       userCapabilities: new EverythingCapabilities(),
     });
     const handleToggle = testing.fn();
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(<RoleTableRow entity={role} onToggleDetailsClick={handleToggle} />);
 
     const details = screen.getByTestId('row-details-toggle');
@@ -64,12 +61,11 @@ describe('RoleTableRow tests', () => {
     const handleDelete = testing.fn();
     const handleDownload = testing.fn();
     const handleEdit = testing.fn();
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(
       <RoleTableRow
         entity={role}

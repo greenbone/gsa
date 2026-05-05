@@ -9,7 +9,6 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import PortList from 'gmp/models/port-list';
 import {createSession} from 'gmp/testing';
 import PortListTableRow from 'web/pages/portlists/PortListTableRow';
-import {setUsername} from 'web/store/usersettings/actions';
 
 const createGmp = () => ({
   settings: {
@@ -29,12 +28,11 @@ describe('PortListTableRow tests', () => {
         udp: 4,
       },
     });
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(<PortListTableRow entity={portList} />);
     expect(screen.getByText('10')).toBeInTheDocument();
     expect(screen.getByText('6')).toBeInTheDocument();
@@ -52,12 +50,11 @@ describe('PortListTableRow tests', () => {
         udp: 4,
       },
     });
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(<PortListTableRow entity={portList} />);
     expect(screen.getByText('Test Port List')).toBeInTheDocument();
   });
@@ -74,12 +71,11 @@ describe('PortListTableRow tests', () => {
       },
     });
     const handleToggle = testing.fn();
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(
       <PortListTableRow
         entity={portList}
@@ -107,12 +103,11 @@ describe('PortListTableRow tests', () => {
     const handleDelete = testing.fn();
     const handleDownload = testing.fn();
     const handleEdit = testing.fn();
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
       gmp: createGmp(),
     });
-    store.dispatch(setUsername('foo'));
     render(
       <PortListTableRow
         entity={portList}

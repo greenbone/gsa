@@ -14,7 +14,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-set
 import {mockReportConfig} from 'web/pages/reportconfigs/__fixtures__/MockReportConfig';
 import DetailsPage from 'web/pages/reportconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/reportconfigs';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
@@ -56,7 +56,6 @@ describe('ReportConfigDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', reportConfig));
 
@@ -152,7 +151,6 @@ describe('ReportConfigDetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', reportConfig));
 

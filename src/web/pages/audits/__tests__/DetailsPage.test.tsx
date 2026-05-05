@@ -15,7 +15,7 @@ import Schedule from 'gmp/models/schedule';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/audits/DetailsPage';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const policy = Policy.fromElement({
   _id: '314',
@@ -213,7 +213,6 @@ describe('Audit DetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <Routes>
@@ -322,7 +321,6 @@ describe('Audit DetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <Routes>
@@ -348,7 +346,6 @@ describe('Audit DetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {container} = render(
       <Routes>
@@ -375,7 +372,6 @@ describe('Audit DetailsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     render(
       <Routes>

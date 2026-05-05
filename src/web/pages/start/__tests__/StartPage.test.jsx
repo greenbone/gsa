@@ -8,7 +8,7 @@ import {within, rendererWith, wait, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import StartPage from 'web/pages/start/StartPage';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 const manualUrl = 'test/';
 
@@ -71,7 +71,6 @@ describe('StartPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(<StartPage />);
 
