@@ -807,6 +807,7 @@
   "Error Message": "Error Message",
   "Error Messages": "Error Messages",
   "Error while loading Container Scanning Results for Report {{reportId}}": "",
+  "Error while loading Ports for Report {{reportId}}": "",
   "Error while loading Report {{reportId}}": "Error while loading Report {{reportId}}",
   "Error while loading Results for Report {{reportId}}": "Error while loading Results for Report {{reportId}}",
   "Error: Unknown Performance Report": "Error: Unknown Performance Report",
