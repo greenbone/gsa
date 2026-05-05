@@ -37,13 +37,13 @@ import TagDialog from 'web/pages/tags/TagDialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
 import {withRouter} from 'web/utils/withRouter';
 import withTranslation from 'web/utils/withTranslation';
+import withUserName from 'web/utils/withUserName';
 
 type NavigateFunction = (args: {pathname: string; search?: string}) => void;
 
@@ -661,12 +661,10 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
 
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
-  const username = getUsername(rootState);
   const listExportFileName =
     userDefaultsSelector.getValueByName('listexportfilename');
   return {
     listExportFileName,
-    username,
   };
 };
 
@@ -684,6 +682,7 @@ const mapDispatchToProps = (
 export default compose(
   withTranslation,
   withRouter,
+  withUserName,
   connect(mapStateToProps, mapDispatchToProps),
 )(EntitiesContainer) as <TModel extends Model>(
   props: EntitiesContainerProps<TModel>,

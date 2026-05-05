@@ -13,5 +13,3 @@ export const getTimezone = rootState => rootState.userSettings.timezone;
 
 export const getSessionTimeout = rootState =>
   rootState.userSettings.sessionTimeout;
-
-export const getUsername = rootState => rootState.userSettings.username;

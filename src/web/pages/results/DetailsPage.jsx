@@ -45,12 +45,12 @@ import TicketComponent from 'web/pages/tickets/TicketComponent';
 import {loadEntity, selector} from 'web/store/entities/results';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 import withTranslation from 'web/utils/withTranslation';
+import withUserName from 'web/utils/withUserName';
 
 const activeFilter = entity => entity.isActive();
 
@@ -378,13 +378,11 @@ Page.propTypes = {
 
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
-  const username = getUsername(rootState);
   const detailsExportFileName = userDefaultsSelector.getValueByName(
     'detailsexportfilename',
   );
   return {
     detailsExportFileName,
-    username,
   };
 };
 
@@ -394,6 +392,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withTranslation,
+  withUserName,
   withEntityContainer('result', {
     entitySelector: selector,
     load: loadEntity,

@@ -49,10 +49,7 @@ import {
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {
-  getReportComposerDefaults,
-  getUsername,
-} from 'web/store/usersettings/selectors';
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 import {create_pem_certificate} from 'web/utils/Cert';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
@@ -60,6 +57,7 @@ import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 import withTranslation from 'web/utils/withTranslation';
+import withUserName from 'web/utils/withUserName';
 
 const log = logger.getLogger('web.pages.report./DetailsPage');
 
@@ -754,8 +752,6 @@ const mapStateToProps = (rootState, {params}) => {
     rootState,
     'result',
   );
-  const username = getUsername(rootState);
-
   const pSelector = getPage(rootState);
   const pageFilter = pSelector.getFilter(getReportPageName(id));
 
@@ -784,13 +780,13 @@ const mapStateToProps = (rootState, {params}) => {
     reportId: id,
     reportComposerDefaults: getReportComposerDefaults(rootState),
     resultDefaultFilter: userDefaultFilterSel.getFilter(),
-    username,
   };
 };
 
 export default compose(
   withTranslation,
   withGmp,
+  withUserName,
   withDialogNotification,
   withDownload,
   withRouter,
