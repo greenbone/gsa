@@ -16,6 +16,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Role from 'gmp/models/role';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import RoleListPage from 'web/pages/roles/RoleListPage';
 import RoleListPageToolBarIcons from 'web/pages/roles/RoleListPageToolBarIcons';
@@ -43,43 +44,53 @@ const wrongCaps = new Capabilities(['get_configs']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getSetting = testing.fn().mockResolvedValue({filter: null});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({filter: null}),
+  getFilters = testing.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  ),
+  getRoles = testing.fn().mockResolvedValue({
+    data: [role],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getRoles = testing.fn().mockResolvedValue({
-  data: [role],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  roles: {
+    get: getRoles,
+    deleteByFilter,
+    exportByFilter,
   },
+  filters: {
+    get: getFilters,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
 });
 
 describe('RoleListPage tests', () => {
   test('should render full RoleListPage', async () => {
-    const gmp = {
-      roles: {
-        get: getRoles,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -117,27 +128,7 @@ describe('RoleListPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      roles: {
-        get: getRoles,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -173,13 +164,13 @@ describe('RoleListPage tests', () => {
 
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.roles.exportByFilter).toHaveBeenCalled();
 
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.roles.deleteByFilter);
   });
 });
 
@@ -187,7 +178,7 @@ describe('ToolBarIcons tests', () => {
   test('should render', () => {
     const handleRoleCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,

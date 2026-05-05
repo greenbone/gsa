@@ -8,6 +8,7 @@ import {rendererWithTableBody, screen, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Permission from 'gmp/models/permission';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import PermissionTableRow from 'web/pages/permissions/PermissionTableRow';
 import {setUsername} from 'web/store/usersettings/actions';
 
@@ -30,11 +31,18 @@ const handleDownload = testing.fn();
 const handleEdit = testing.fn();
 const handleToggle = testing.fn();
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('PermissionTableRow tests', () => {
   test('should render entity name', async () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
 
     store.dispatch(setUsername('foo'));
@@ -53,6 +61,7 @@ describe('PermissionTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
 
     store.dispatch(setUsername('foo'));
@@ -72,6 +81,7 @@ describe('PermissionTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(
@@ -95,6 +105,7 @@ describe('PermissionTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(
@@ -111,6 +122,7 @@ describe('PermissionTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(
@@ -138,6 +150,7 @@ describe('PermissionTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(
@@ -158,6 +171,7 @@ describe('PermissionTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(

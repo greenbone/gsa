@@ -8,7 +8,14 @@ import {screen, rendererWithTableBody, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Credential from 'gmp/models/credential';
 import Scanner, {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
+import {createSession} from 'gmp/testing';
 import ScannerRow from 'web/pages/scanners/ScannerRow';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('ScannerRow tests', () => {
   test('should render scanner row', () => {
@@ -20,7 +27,10 @@ describe('ScannerRow tests', () => {
       scannerType: OPENVASD_SCANNER_TYPE,
       credential: new Credential({id: '5678', name: 'Test Credential'}),
     });
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<ScannerRow entity={scanner} />);
 
     expect(screen.getByText('Test Scanner')).toBeInTheDocument();
@@ -40,7 +50,10 @@ describe('ScannerRow tests', () => {
       credential: new Credential({id: '5678', name: 'Test Credential'}),
     });
     const onToggleDetailsClick = testing.fn();
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <ScannerRow
         entity={scanner}
@@ -67,7 +80,10 @@ describe('ScannerRow tests', () => {
     const handleEditClick = testing.fn();
     const handleDeleteClick = testing.fn();
     const handleVerifyClick = testing.fn();
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <ScannerRow
         entity={scanner}
@@ -104,7 +120,10 @@ describe('ScannerRow tests', () => {
         <button type="button">Action for {entity.name}</button>
       </td>
     );
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<ScannerRow actionsComponent={ActionsComponent} entity={scanner} />);
 
     expect(screen.getByText('Action for Test Scanner')).toBeInTheDocument();

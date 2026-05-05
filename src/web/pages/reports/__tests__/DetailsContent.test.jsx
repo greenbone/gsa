@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import DetailsContent from 'web/pages/reports/DetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -32,18 +33,17 @@ const createGmp = ({
   getReportComposerDefaults = testing
     .fn()
     .mockResolvedValue(getReportComposerDefaultsResponse),
-} = {}) => {
-  return {
-    settings: {
-      manualUrl,
-      reportResultsThreshold,
-    },
-    user: {
-      currentSettings,
-      getReportComposerDefaults,
-    },
-  };
-};
+} = {}) => ({
+  settings: {
+    manualUrl,
+    reportResultsThreshold,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
+    getReportComposerDefaults,
+  },
+});
 
 describe('ReportDetailsContent tests', () => {
   test('should render', () => {

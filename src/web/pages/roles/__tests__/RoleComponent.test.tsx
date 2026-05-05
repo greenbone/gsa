@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, wait, fireEvent} from 'web/testing';
 import Role from 'gmp/models/role';
+import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import RoleComponent from 'web/pages/roles/RoleComponent';
@@ -28,31 +29,32 @@ const createGmp = ({
   cloneRole = testing.fn().mockResolvedValue(cloneRoleResponse),
   deleteRole = testing.fn().mockResolvedValue(undefined),
   exportRole = testing.fn().mockResolvedValue(exportRoleResponse),
-} = {}) => {
-  return {
-    role: {
-      get: getRole,
-      create: createRole,
-      save: saveRole,
-      clone: cloneRole,
-      delete: deleteRole,
-      export: exportRole,
-    },
-    users: {
-      get: testing.fn().mockResolvedValue({
-        data: [],
-        meta: {filter: {}, counts: {}},
-      }),
-    },
-    groups: {
-      get: testing.fn().mockResolvedValue({
-        data: [],
-        meta: {filter: {}, counts: {}},
-      }),
-    },
-    user: {currentSettings},
-  };
-};
+} = {}) => ({
+  role: {
+    get: getRole,
+    create: createRole,
+    save: saveRole,
+    clone: cloneRole,
+    delete: deleteRole,
+    export: exportRole,
+  },
+  users: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {filter: {}, counts: {}},
+    }),
+  },
+  groups: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {filter: {}, counts: {}},
+    }),
+  },
+  user: {currentSettings},
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('RoleComponent tests', () => {
   test('should render without crashing', async () => {

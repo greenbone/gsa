@@ -15,6 +15,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/report-config';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ReportConfigsPage, {
   ToolBarIcons,
@@ -39,7 +40,6 @@ const config = ReportConfig.fromElement({
   },
 });
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = 1;
@@ -49,40 +49,48 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  addTagByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  getSetting = testing.fn().mockResolvedValue({filter: null}),
+  getReportConfigs = testing.fn().mockResolvedValue({
+    data: [config],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getReportConfigs = testing.fn().mockResolvedValue({
-  data: [config],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+} = {}) => ({
+  reportconfigs: {
+    get: getReportConfigs,
+    deleteByFilter,
+    addTagByFilter,
+  },
+  filters: {
+    get: getFilters,
+  },
+  reloadInterval,
+  settings: {manualUrl, session: createSession()},
+  user: {
+    currentSettings,
+    getSetting,
   },
 });
 
-const getSetting = testing.fn().mockResolvedValue({filter: null});
-
 describe('ReportConfigsPage tests', () => {
   test('should render full ReportConfigsPage', async () => {
-    const gmp = {
-      reportconfigs: {
-        get: getReportConfigs,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -119,28 +127,7 @@ describe('ReportConfigsPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const addTagByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      reportconfigs: {
-        get: getReportConfigs,
-        deleteByFilter,
-        addTagByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -177,20 +164,17 @@ describe('ReportConfigsPage tests', () => {
       'Move page contents to trashcan',
     )[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.reportconfigs.deleteByFilter);
   });
 
   describe('ReportConfigsPage ToolBarIcons test', () => {
     test('should render', () => {
       const handleReportConfigCreateClick = testing.fn();
-
-      const gmp = {
-        settings: {manualUrl},
-      };
+      const gmp = createGmp();
 
       const {render} = rendererWith({
         gmp,
-        capabilities: caps,
+        capabilities: true,
         router: true,
       });
 
@@ -220,13 +204,11 @@ describe('ReportConfigsPage tests', () => {
     test('should call click handlers', () => {
       const handleReportConfigCreateClick = testing.fn();
 
-      const gmp = {
-        settings: {manualUrl},
-      };
+      const gmp = createGmp();
 
       const {render} = rendererWith({
         gmp,
-        capabilities: caps,
+        capabilities: true,
         router: true,
       });
 
@@ -245,7 +227,7 @@ describe('ReportConfigsPage tests', () => {
     test('should not show icons if user does not have the right permissions', () => {
       const handleReportConfigCreateClick = testing.fn();
 
-      const gmp = {settings: {manualUrl}};
+      const gmp = createGmp();
 
       const {render} = rendererWith({
         gmp,

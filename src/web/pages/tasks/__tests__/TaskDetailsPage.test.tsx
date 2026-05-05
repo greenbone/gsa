@@ -12,6 +12,7 @@ import ScanConfig from 'gmp/models/scan-config';
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TaskDetailsPage from 'web/pages/tasks/TaskDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tasks';
@@ -160,56 +161,88 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const getConfig = testing.fn().mockResolvedValue({
-  data: config,
-});
-
-const getSchedule = testing.fn().mockResolvedValue({
-  data: schedule,
-});
-
-const getEntities = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+const createGmp = ({
+  getTask = testing.fn().mockResolvedValue({
+    data: task,
+  }),
+  getConfig = testing.fn().mockResolvedValue({
+    data: config,
+  }),
+  getSchedule = testing.fn().mockResolvedValue({
+    data: schedule,
+  }),
+  getEntities = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getTags = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  cloneTask = testing.fn().mockResolvedValue({
+    data: {id: 'foo'},
+  }),
+  deleteTask = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportTask = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  startTask = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  resumeTask = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  task: {
+    get: getTask,
+    clone: cloneTask,
+    delete: deleteTask,
+    export: exportTask,
+    start: startTask,
+    resume: resumeTask,
+  },
+  scanconfig: {
+    get: getConfig,
+  },
+  schedule: {
+    get: getSchedule,
+  },
+  permissions: {
+    get: getEntities,
+  },
+  reportformats: {
+    get: getEntities,
+  },
+  notes: {
+    get: getEntities,
+  },
+  overrides: {
+    get: getEntities,
+  },
+  tags: {
+    get: getTags,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
   },
 });
 
 describe('TaskDetailsPage tests', () => {
   test('should render full DetailsPage', () => {
-    const getTask = testing.fn().mockResolvedValue({
-      data: task,
-    });
-
-    const gmp = {
-      task: {
-        get: getTask,
-      },
-      scanconfig: {
-        get: getConfig,
-      },
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
-      notes: {
-        get: getEntities,
-      },
-      overrides: {
-        get: getEntities,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -298,45 +331,9 @@ describe('TaskDetailsPage tests', () => {
       data: task2,
     });
 
-    const getTags = testing.fn().mockResolvedValue({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
+    const gmp = createGmp({
+      getTask,
     });
-
-    const gmp = {
-      task: {
-        get: getTask,
-      },
-      scanconfig: {
-        get: getConfig,
-      },
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      tags: {
-        get: getTags,
-      },
-      reportformats: {
-        get: getEntities,
-      },
-      notes: {
-        get: getEntities,
-      },
-      overrides: {
-        get: getEntities,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {
-        currentSettings,
-      },
-    };
 
     const {render, store} = rendererWith({
       gmp,
@@ -363,34 +360,9 @@ describe('TaskDetailsPage tests', () => {
       data: task2,
     });
 
-    const gmp = {
-      task: {
-        get: getTask,
-      },
-      scanconfig: {
-        get: getConfig,
-      },
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
-      notes: {
-        get: getEntities,
-      },
-      overrides: {
-        get: getEntities,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {
-        currentSettings,
-      },
-    };
+    const gmp = createGmp({
+      getTask,
+    });
 
     const {render, store} = rendererWith({
       gmp,
@@ -417,59 +389,9 @@ describe('TaskDetailsPage tests', () => {
       data: task5,
     });
 
-    const clone = testing.fn().mockResolvedValue({
-      data: {id: 'foo'},
+    const gmp = createGmp({
+      getTask,
     });
-
-    const deleteFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const start = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const resume = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      task: {
-        get: getTask,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-        start,
-        resume,
-      },
-      scanconfig: {
-        get: getConfig,
-      },
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
-      notes: {
-        get: getEntities,
-      },
-      overrides: {
-        get: getEntities,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {
-        currentSettings,
-      },
-    };
 
     const {render, store} = rendererWith({
       gmp,
@@ -489,26 +411,26 @@ describe('TaskDetailsPage tests', () => {
     const cloneIcon = screen.getByTestId('clone-icon');
     expect(cloneIcon).toHaveAttribute('title', 'Clone Task');
     fireEvent.click(cloneIcon);
-    expect(clone).toHaveBeenCalledWith(task5);
+    expect(gmp.task.clone).toHaveBeenCalledWith(task5);
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute('title', 'Move Task to trashcan');
     fireEvent.click(deleteIcon);
-    expect(deleteFunc).toHaveBeenCalledWith(task5Id);
+    expect(gmp.task.delete).toHaveBeenCalledWith(task5Id);
 
     const exportIcon = screen.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export Task as XML');
     fireEvent.click(exportIcon);
-    expect(exportFunc).toHaveBeenCalledWith(task5);
+    expect(gmp.task.export).toHaveBeenCalledWith(task5);
 
     const startIcon = screen.getByTestId('start-icon');
     expect(startIcon).toHaveAttribute('title', 'Start');
     fireEvent.click(startIcon);
-    expect(start).toHaveBeenCalledWith(task5);
+    expect(gmp.task.start).toHaveBeenCalledWith(task5);
 
     const resumeIcon = screen.getByTestId('resume-icon');
     expect(resumeIcon).toHaveAttribute('title', 'Resume');
     fireEvent.click(resumeIcon);
-    expect(resume).toHaveBeenCalledWith(task5);
+    expect(gmp.task.resume).toHaveBeenCalledWith(task5);
   });
 });

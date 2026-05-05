@@ -14,6 +14,7 @@ import {
 } from 'web/testing';
 import date from 'gmp/models/date';
 import Schedule from 'gmp/models/schedule';
+import {createSession} from 'gmp/testing';
 import ScheduleDialog from 'web/pages/schedules/ScheduleDialog';
 
 const checkElementVisibilityAndContent = (
@@ -84,7 +85,7 @@ const mockedTimezones = [
 ];
 
 const createGmp = () => ({
-  settings: {session: {token: 'token'}},
+  settings: {session: createSession({token: 'token'})},
 
   timezones: {
     get: testing.fn().mockResolvedValue({data: mockedTimezones}),

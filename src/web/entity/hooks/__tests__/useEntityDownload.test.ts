@@ -7,14 +7,25 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, wait} from 'web/testing';
 import date from 'gmp/models/date';
 import Model from 'gmp/models/model';
+import {createSession} from 'gmp/testing';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 
+const createGmp = ({
+  exportFunc = testing.fn().mockResolvedValue({data: {id: '123'}}),
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+} = {}) => ({
+  settings: {
+    session: createSession(),
+  },
+  task: {export: exportFunc},
+  user: {currentSettings},
+});
+
 describe('useEntityDownload', () => {
   test('should allow to download an entity', async () => {
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsDefaultResponse);
     const entity = new Model(
       {
         id: '123',
@@ -24,52 +35,39 @@ describe('useEntityDownload', () => {
       },
       'task',
     );
-    const downloadedData = {id: '123'};
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
-    const exportFunc = testing.fn().mockResolvedValue({data: downloadedData});
 
-    const gmp = {
-      task: {
-        export: exportFunc,
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
-      useEntityDownload(exportFunc, {
+      useEntityDownload(gmp.task.export, {
         onDownloaded,
         onDownloadError,
       }),
     );
     await wait(); // wait for currentSettings to be resolved and put into the store
-    expect(currentSettings).toHaveBeenCalledOnce();
+    expect(gmp.user.currentSettings).toHaveBeenCalledOnce();
     expect(result.current).toBeDefined();
     await result.current(entity);
     expect(onDownloaded).toHaveBeenCalledWith({
       filename: 'task-123.xml',
-      data: downloadedData,
+      data: {id: '123'},
     });
     expect(onDownloadError).not.toHaveBeenCalled();
   });
 
   test('should call onDownloadError when downloading an entity fails', async () => {
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsDefaultResponse);
     const error = new Error('error');
     const entity = new Model({id: '123'});
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
     const exportFunc = testing.fn().mockRejectedValue(error);
 
-    const gmp = {
-      task: {export: exportFunc},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({exportFunc});
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
-      useEntityDownload(exportFunc, {
+      useEntityDownload(gmp.task.export, {
         onDownloaded,
         onDownloadError,
       }),
@@ -83,24 +81,15 @@ describe('useEntityDownload', () => {
   });
 
   test('should allow to pass optional arguments to gmp method', async () => {
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsDefaultResponse);
     const entity = new Model({id: '123'}, 'task');
-    const downloadedData = {id: '123'};
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
-    const exportFunc = testing.fn().mockResolvedValue({data: downloadedData});
 
-    const gmp = {
-      task: {
-        export: exportFunc,
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
+
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
-      useEntityDownload(exportFunc, {
+      useEntityDownload(gmp.task.export, {
         onDownloaded,
         onDownloadError,
       }),
@@ -109,14 +98,14 @@ describe('useEntityDownload', () => {
     expect(result.current).toBeDefined();
     const options = {foo: 'bar', resourceType: 'custom'};
     await result.current(entity, options);
-    expect(exportFunc).toHaveBeenCalledWith(
+    expect(gmp.task.export).toHaveBeenCalledWith(
       entity,
       // should pass options to gmp method
       options,
     );
     expect(onDownloaded).toHaveBeenCalledWith({
       filename: 'custom-123.xml',
-      data: downloadedData,
+      data: {id: '123'},
     });
     expect(onDownloadError).not.toHaveBeenCalled();
   });

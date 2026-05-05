@@ -8,6 +8,7 @@ import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Target, {ICMP_PING, TCP_SYN} from 'gmp/models/target';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TargetDetailsPage from 'web/pages/targets/TargetDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/targets';
@@ -65,43 +66,42 @@ const target = Target.fromElement({
   },
 });
 
-const createGmp = (settings = {}) => {
-  return {
-    target: {
-      get: testing.fn().mockResolvedValue({
-        data: target,
-      }),
-      clone: testing.fn().mockResolvedValue({
-        data: {id: 'foo'},
-      }),
-      delete: testing.fn().mockResolvedValue({
-        foo: 'bar',
-      }),
-      export: testing.fn().mockResolvedValue({
-        foo: 'bar',
-      }),
-    },
-    permissions: {
-      get: testing.fn().mockResolvedValue({
-        data: [],
-        meta: {
-          filter: Filter.fromString(),
-          counts: new CollectionCounts(),
-        },
-      }),
-    },
-    settings: {
-      manualUrl: 'test/',
-      reloadInterval: -1,
-      ...settings,
-    },
-    user: {
-      currentSettings: testing
-        .fn()
-        .mockResolvedValue(currentSettingsDefaultResponse),
-    },
-  };
-};
+const createGmp = (settings = {}) => ({
+  target: {
+    get: testing.fn().mockResolvedValue({
+      data: target,
+    }),
+    clone: testing.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    }),
+    delete: testing.fn().mockResolvedValue({
+      foo: 'bar',
+    }),
+    export: testing.fn().mockResolvedValue({
+      foo: 'bar',
+    }),
+  },
+  permissions: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  },
+  settings: {
+    manualUrl: 'test/',
+    reloadInterval: -1,
+    session: createSession(),
+    ...settings,
+  },
+  user: {
+    currentSettings: testing
+      .fn()
+      .mockResolvedValue(currentSettingsDefaultResponse),
+  },
+});
 
 describe('TargetDetailsPage tests', () => {
   test('should render full DetailsPage', () => {

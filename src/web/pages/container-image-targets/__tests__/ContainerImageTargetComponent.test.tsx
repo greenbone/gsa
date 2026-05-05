@@ -7,6 +7,7 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait, within} from 'web/testing';
 import Response from 'gmp/http/response';
 import OciImageTarget from 'gmp/models/oci-image-target';
+import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ContainerImageTargetsComponent from 'web/pages/container-image-targets/ContainerImageTargetsComponent';
@@ -54,6 +55,7 @@ const createGmp = ({
   ociimagetarget: Record<string, ReturnType<typeof testing.fn>>;
   credential: {create: ReturnType<typeof testing.fn>};
   user: {currentSettings: ReturnType<typeof testing.fn>};
+  settings: {session: ReturnType<typeof createSession>};
 } => {
   const make = (val: unknown) =>
     typeof val === 'function'
@@ -78,6 +80,9 @@ const createGmp = ({
       currentSettings: testing
         .fn()
         .mockResolvedValue(currentSettingsDefaultResponse),
+    },
+    settings: {
+      session: createSession(),
     },
   };
 };

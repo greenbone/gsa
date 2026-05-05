@@ -7,6 +7,7 @@ import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import AuditReportDetailsContent from 'web/pages/reports/AuditReportDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -35,18 +36,17 @@ const createGmp = ({
   getReportComposerDefaults = testing
     .fn()
     .mockResolvedValue(getReportComposerDefaultsResponse),
-} = {}) => {
-  return {
-    settings: {
-      manualUrl,
-      reportResultsThreshold,
-    },
-    user: {
-      currentSettings,
-      getReportComposerDefaults,
-    },
-  };
-};
+} = {}) => ({
+  settings: {
+    manualUrl,
+    reportResultsThreshold,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
+    getReportComposerDefaults,
+  },
+});
 
 describe('AuditReportDetailsContent tests', () => {
   test('should render Audit Report Details Content', () => {

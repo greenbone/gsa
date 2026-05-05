@@ -13,6 +13,7 @@ import {
   fireEvent,
 } from 'web/testing';
 import PortList from 'gmp/models/port-list';
+import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
@@ -39,20 +40,19 @@ const createGmp = ({
     .fn()
     .mockResolvedValue({data: createPortRangeResponse}),
   deletePortRange = testing.fn().mockResolvedValue(undefined),
-} = {}) => {
-  return {
-    portlist: {
-      get: getPortList,
-      create: createPortList,
-      delete: deletePortList,
-      save: savePortList,
-      clone: clonePortList,
-      createPortRange,
-      deletePortRange,
-    },
-    user: {currentSettings},
-  };
-};
+} = {}) => ({
+  portlist: {
+    get: getPortList,
+    create: createPortList,
+    delete: deletePortList,
+    save: savePortList,
+    clone: clonePortList,
+    createPortRange,
+    deletePortRange,
+  },
+  user: {currentSettings},
+  settings: {session: createSession()},
+});
 
 describe('PortListComponent tests', () => {
   test('should render without crashing', async () => {

@@ -9,6 +9,7 @@ import {type EntityActionData} from 'gmp/commands/entity';
 import Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import AgentGroup from 'gmp/models/agent-group';
+import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
 
@@ -20,7 +21,11 @@ const deleteMock = testing.fn().mockResolvedValue(undefined);
 const saveMock = testing.fn().mockResolvedValue(undefined);
 
 const createGmp = () => ({
-  settings: {token: 'token'},
+  settings: {
+    session: createSession({
+      token: 'token',
+    }),
+  },
   scanners: {get: testing.fn().mockResolvedValue(new Response([], {}))},
   agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
   agentgroup: {

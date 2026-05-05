@@ -7,6 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 
@@ -27,7 +28,10 @@ const getReportComposerDefaults = testing.fn().mockResolvedValue({
 });
 
 const gmp = {
-  settings: {manualUrl},
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
   user: {currentSettings, getReportComposerDefaults},
 };
 

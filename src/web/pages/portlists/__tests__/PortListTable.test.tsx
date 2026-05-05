@@ -7,7 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import PortList from 'gmp/models/port-list';
+import {createSession} from 'gmp/testing';
 import PortListTable from 'web/pages/portlists/PortListTable';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('PortListTable tests', () => {
   test('should render without crashing', () => {
@@ -21,20 +28,20 @@ describe('PortListTable tests', () => {
         name: 'Port List 2',
       }),
     ];
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<PortListTable entities={portLists} />);
     expect(screen.getByTestId('entities-table')).toBeInTheDocument();
   });
 
   test('should render the empty title when no port lists are available', () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<PortListTable entities={[]} />);
     expect(screen.getByText('No port lists available')).toBeInTheDocument();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
   });
 
   test("should not render anything if port list aren't available", () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     const {container} = render(<PortListTable />);
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
@@ -51,7 +58,7 @@ describe('PortListTable tests', () => {
         name: 'Port List 2',
       }),
     ];
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<PortListTable entities={portLists} />);
     expect(screen.getByText('Port List 1')).toBeInTheDocument();
     expect(screen.getByText('Port List 2')).toBeInTheDocument();
@@ -73,7 +80,7 @@ describe('PortListTable tests', () => {
     const handleDelete = testing.fn();
     const handleDownload = testing.fn();
     const handleEdit = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <PortListTable
         entities={portLists}

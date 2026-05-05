@@ -9,6 +9,7 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import AgentInstaller from 'gmp/models/agent-installer';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import AgentInstallerListPage from 'web/pages/agent-installers/AgentInstallerListPage';
 
 const makeInstaller = (id = 'i1') =>
@@ -42,7 +43,7 @@ const createGmp = ({
   agentinstaller: {
     download: testing.fn().mockResolvedValue({data: 'file-content'}),
   },
-  settings: {session: {token: 'token'}},
+  settings: {session: createSession({token: 'token'})},
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],

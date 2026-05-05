@@ -11,6 +11,7 @@ import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scan-config';
+import {createSession} from 'gmp/testing';
 import Table from 'web/pages/scanconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
 
@@ -72,6 +73,12 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('Scan Config table tests', () => {
   test('should render', () => {
     const handleScanConfigClone = testing.fn();
@@ -80,9 +87,7 @@ describe('Scan Config table tests', () => {
     const handleScanConfigEdit = testing.fn();
     const openEditNvtDetailsDialog = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -123,9 +128,7 @@ describe('Scan Config table tests', () => {
     const handleScanConfigDownload = testing.fn();
     const handleScanConfigEdit = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -164,9 +167,7 @@ describe('Scan Config table tests', () => {
     const handleScanConfigEdit = testing.fn();
     const openEditNvtDetailsDialog = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,

@@ -8,6 +8,7 @@ import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Model from 'gmp/models/model';
 import OciImageTarget from 'gmp/models/oci-image-target';
+import {createSession} from 'gmp/testing';
 import ContainerImageTargetRow from 'web/pages/container-image-targets/ContainerImageTargetRow';
 
 const entity = new OciImageTarget({
@@ -20,9 +21,18 @@ const entity = new OciImageTarget({
   userCapabilities: new EverythingCapabilities(),
 });
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('ContainerImageTargetRow tests', () => {
   test('should render entity name, image references, and credential', () => {
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<ContainerImageTargetRow entity={entity} />);
     expect(screen.getByText('Test Container Image Target')).toBeInTheDocument();
     expect(
@@ -33,7 +43,10 @@ describe('ContainerImageTargetRow tests', () => {
   });
 
   test('should render action buttons', () => {
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<ContainerImageTargetRow entity={entity} />);
     expect(screen.getByTestId('trashcan-icon')).toBeInTheDocument();
     expect(screen.getByTestId('edit-icon')).toBeInTheDocument();
@@ -46,7 +59,10 @@ describe('ContainerImageTargetRow tests', () => {
     const handleClone = testing.fn();
     const handleDelete = testing.fn();
     const handleDownload = testing.fn();
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <ContainerImageTargetRow
         entity={entity}
@@ -76,7 +92,10 @@ describe('ContainerImageTargetRow tests', () => {
       reverseLookupUnify: false,
       userCapabilities: new EverythingCapabilities(),
     });
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<ContainerImageTargetRow entity={entityNoCred} />);
     expect(screen.queryByText('Credential:')).not.toBeInTheDocument();
   });
@@ -90,7 +109,10 @@ describe('ContainerImageTargetRow tests', () => {
       reverseLookupUnify: false,
       userCapabilities: new EverythingCapabilities(),
     });
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<ContainerImageTargetRow entity={entityNoImages} />);
     expect(screen.getByText('Test Container Image Target')).toBeInTheDocument();
     // Should render empty cell instead of erroring
@@ -107,7 +129,10 @@ describe('ContainerImageTargetRow tests', () => {
       reverseLookupUnify: false,
       userCapabilities: new EverythingCapabilities(),
     });
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<ContainerImageTargetRow entity={entityEmptyImages} />);
     expect(screen.getByText('Test Container Image Target')).toBeInTheDocument();
     // Should render empty string from joining empty array

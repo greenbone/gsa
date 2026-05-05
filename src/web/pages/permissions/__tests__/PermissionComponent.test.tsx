@@ -6,26 +6,62 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, wait, fireEvent} from 'web/testing';
 import Permission from 'gmp/models/permission';
+import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import PermissionComponent from 'web/pages/permissions/PermissionComponent';
 
-const getPermissionResponse = {
-  data: Permission.fromElement({_id: '123', name: 'get_tasks'}),
-};
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-const getPermission = testing.fn().mockResolvedValue(getPermissionResponse);
+const newPermission = Permission.fromElement({_id: '123'});
+
+const createGmp = ({
+  getPermissionResponse = {
+    data: Permission.fromElement({_id: '123', name: 'get_tasks'}),
+  },
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getPermission = testing.fn().mockResolvedValue(getPermissionResponse),
+  getUsers = testing.fn().mockResolvedValue({
+    data: [],
+  }),
+  getRoles = testing.fn().mockResolvedValue({
+    data: [],
+  }),
+  getGroups = testing.fn().mockResolvedValue({
+    data: [],
+  }),
+  create = testing.fn().mockResolvedValue(newPermission),
+  save = testing.fn().mockResolvedValue(newPermission),
+  clone = testing.fn().mockResolvedValue(newPermission),
+  exportFunc = testing.fn().mockResolvedValue({data: 'xml data'}),
+  deleteFunc = testing.fn().mockResolvedValue(undefined),
+} = {}) => ({
+  permission: {
+    get: getPermission,
+    create,
+    save,
+    clone,
+    delete: deleteFunc,
+    export: exportFunc,
+  },
+  users: {
+    getAll: getUsers,
+  },
+  roles: {
+    getAll: getRoles,
+  },
+  groups: {
+    getAll: getGroups,
+  },
+  user: {currentSettings},
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('PermissionComponent tests', () => {
   test('should render without crashing', () => {
-    const gmp = {
-      permission: {
-        get: getPermission,
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true, store: true});
     render(
@@ -37,28 +73,7 @@ describe('PermissionComponent tests', () => {
   });
 
   test('should open and close PermissionDialog', async () => {
-    const gmp = {
-      permission: {
-        get: getPermission,
-      },
-      users: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      roles: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      groups: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
     render(
       <PermissionComponent>
@@ -76,28 +91,7 @@ describe('PermissionComponent tests', () => {
   });
 
   test('should allow creating a new permission', async () => {
-    const newPermission = Permission.fromElement({_id: '123'});
-    const gmp = {
-      permission: {
-        create: testing.fn().mockResolvedValue(newPermission),
-      },
-      users: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      roles: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      groups: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
 
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
@@ -123,28 +117,9 @@ describe('PermissionComponent tests', () => {
 
   test('should call onCreateError if creating a new permission fails', async () => {
     const error = new Error('error');
-    const gmp = {
-      permission: {
-        create: testing.fn().mockRejectedValue(error),
-      },
-      users: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      roles: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      groups: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      create: testing.fn().mockRejectedValue(error),
+    });
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
@@ -168,28 +143,9 @@ describe('PermissionComponent tests', () => {
 
   test('should show error in dialog if creating a new permission fails', async () => {
     const error = new Error('some error');
-    const gmp = {
-      permission: {
-        create: testing.fn().mockRejectedValue(error),
-      },
-      users: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      roles: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      groups: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      create: testing.fn().mockRejectedValue(error),
+    });
     const onCreated = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
     render(
@@ -213,29 +169,10 @@ describe('PermissionComponent tests', () => {
   test('should allow editing a permission', async () => {
     const permission = Permission.fromElement({_id: '123', name: 'get_tasks'});
     const permissionResponse = {data: permission};
-    const gmp = {
-      permission: {
-        get: testing.fn().mockResolvedValue(permissionResponse),
-        save: testing.fn().mockResolvedValue(permission),
-      },
-      users: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      roles: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      groups: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      getPermission: testing.fn().mockResolvedValue(permissionResponse),
+      save: testing.fn().mockResolvedValue(permission),
+    });
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
@@ -266,29 +203,10 @@ describe('PermissionComponent tests', () => {
     const permission = Permission.fromElement({_id: '123', name: 'get_tasks'});
     const permissionResponse = {data: permission};
     const error = new Error('error');
-    const gmp = {
-      permission: {
-        get: testing.fn().mockResolvedValue(permissionResponse),
-        save: testing.fn().mockRejectedValue(error),
-      },
-      users: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      roles: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      groups: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      getPermission: testing.fn().mockResolvedValue(permissionResponse),
+      save: testing.fn().mockRejectedValue(error),
+    });
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
@@ -320,29 +238,10 @@ describe('PermissionComponent tests', () => {
     const permission = Permission.fromElement({_id: '123', name: 'get_tasks'});
     const permissionResponse = {data: permission};
     const error = new Error('some error');
-    const gmp = {
-      permission: {
-        get: testing.fn().mockResolvedValue(permissionResponse),
-        save: testing.fn().mockRejectedValue(error),
-      },
-      users: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      roles: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      groups: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      getPermission: testing.fn().mockResolvedValue(permissionResponse),
+      save: testing.fn().mockRejectedValue(error),
+    });
     const onSaved = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
     render(
@@ -371,12 +270,7 @@ describe('PermissionComponent tests', () => {
 
   test('should allow cloning a permission', async () => {
     const cloned = Permission.fromElement({_id: '123'});
-    const gmp = {
-      permission: {
-        clone: testing.fn().mockResolvedValue(cloned),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
 
@@ -403,12 +297,9 @@ describe('PermissionComponent tests', () => {
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
 
-    const gmp = {
-      permission: {
-        clone: testing.fn().mockRejectedValue(error),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      clone: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp, capabilities: true, store: true});
     render(
       <PermissionComponent onCloneError={onCloneError} onCloned={onCloned}>
@@ -428,16 +319,9 @@ describe('PermissionComponent tests', () => {
   });
 
   test('should allow deleting a permission', async () => {
-    const deleted = {id: '123'};
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
-
-    const gmp = {
-      permission: {
-        delete: testing.fn().mockResolvedValue(deleted),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <PermissionComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
@@ -460,11 +344,9 @@ describe('PermissionComponent tests', () => {
     const error = new Error('error');
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
-
-    const gmp = {
-      permission: {delete: testing.fn().mockRejectedValue(error)},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      deleteFunc: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <PermissionComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
@@ -484,16 +366,9 @@ describe('PermissionComponent tests', () => {
   });
 
   test('should allow downloading a permission', async () => {
-    const exported = {data: 'xml data'};
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
-
-    const gmp = {
-      permission: {
-        export: testing.fn().mockResolvedValue(exported),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <PermissionComponent
@@ -519,11 +394,9 @@ describe('PermissionComponent tests', () => {
     const error = new Error('error');
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
-
-    const gmp = {
-      permission: {export: testing.fn().mockRejectedValue(error)},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      exportFunc: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp, capabilities: true});
     render(
       <PermissionComponent
@@ -559,30 +432,13 @@ describe('PermissionComponent tests', () => {
         type: 'task',
       },
     });
-
-    const gmp = {
-      permission: {
-        get: testing.fn().mockResolvedValue({data: permission}),
-        save: testing.fn().mockResolvedValue(permission),
-      },
-      users: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [{id: 'user-123', name: 'testuser'}],
-        }),
-      },
-      roles: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      groups: {
-        getAll: testing.fn().mockResolvedValue({
-          data: [],
-        }),
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp({
+      getPermission: testing.fn().mockResolvedValue({data: permission}),
+      save: testing.fn().mockResolvedValue(permission),
+      getUsers: testing.fn().mockResolvedValue({
+        data: [{id: 'user-123', name: 'testuser'}],
+      }),
+    });
     const {render} = rendererWith({gmp, capabilities: true, store: true});
     render(
       <PermissionComponent>

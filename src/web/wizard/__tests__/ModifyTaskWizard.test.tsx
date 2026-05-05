@@ -9,6 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Response from 'gmp/http/response';
 import date from 'gmp/models/date';
 import Task from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
@@ -44,7 +45,7 @@ const mockedTimezones = [
 ];
 
 const createGmp = () => ({
-  settings: {session: {token: 'token'}},
+  settings: {session: createSession({token: 'token'})},
 
   timezones: {
     get: testing.fn().mockResolvedValue(new Response(mockedTimezones, {})),

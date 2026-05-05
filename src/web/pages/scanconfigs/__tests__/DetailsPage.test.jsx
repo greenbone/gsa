@@ -10,6 +10,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import ScanConfig from 'gmp/models/scan-config';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/scanconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
@@ -120,11 +121,10 @@ const scanners = [{name: 'scanner1'}, {name: 'scanner2'}];
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
 const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
   getConfigResponse = new Response(config),
   getTagsResponse = {
     data: [],
@@ -153,33 +153,34 @@ const createGmp = ({
   cloneConfig = testing.fn().mockResolvedValue(cloneConfigResponse),
   deleteConfig = testing.fn().mockResolvedValue(deleteConfigResponse),
   exportConfig = testing.fn().mockResolvedValue(exportConfigResponse),
-} = {}) => {
-  return {
-    nvtfamilies: {
-      get: getNvtFamilies,
-    },
-    scanconfig: {
-      get: getConfig,
-      clone: cloneConfig,
-      delete: deleteConfig,
-      export: exportConfig,
-    },
-    scanners: {
-      getAll: getScanners,
-    },
-    tags: {
-      get: getTags,
-    },
-    permissions: {
-      get: getPermissions,
-    },
-    reloadInterval,
-    settings: {manualUrl},
-    user: {
-      currentSettings,
-    },
-  };
-};
+} = {}) => ({
+  nvtfamilies: {
+    get: getNvtFamilies,
+  },
+  scanconfig: {
+    get: getConfig,
+    clone: cloneConfig,
+    delete: deleteConfig,
+    export: exportConfig,
+  },
+  scanners: {
+    getAll: getScanners,
+  },
+  tags: {
+    get: getTags,
+  },
+  permissions: {
+    get: getPermissions,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
+  },
+});
 
 describe('ScanConfigDetailsPage tests', () => {
   test('should render full DetailsPage', () => {

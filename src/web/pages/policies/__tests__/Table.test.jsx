@@ -8,6 +8,7 @@ import {rendererWith, fireEvent, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
+import {createSession} from 'gmp/testing';
 import Table from 'web/pages/policies/Table';
 import {setUsername} from 'web/store/usersettings/actions';
 
@@ -45,6 +46,12 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('Policies table tests', () => {
   test('should render', () => {
     const handlePolicyCloneClick = testing.fn();
@@ -53,9 +60,7 @@ describe('Policies table tests', () => {
     const handlePolicyDownloadClick = testing.fn();
     const handlePolicyEditClick = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -91,9 +96,7 @@ describe('Policies table tests', () => {
     const handlePolicyDownloadClick = testing.fn();
     const handlePolicyEditClick = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -132,9 +135,7 @@ describe('Policies table tests', () => {
     const handlePolicyDownloadClick = testing.fn();
     const handlePolicyEditClick = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,

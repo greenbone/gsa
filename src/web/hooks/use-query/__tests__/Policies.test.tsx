@@ -8,6 +8,7 @@ import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
+import {createSession} from 'gmp/testing';
 import {useGetPolicy, useGetPolicies} from 'web/hooks/use-query/policies';
 
 const policy = Policy.fromElement({
@@ -76,7 +77,7 @@ const PolicyListComponent = ({filter}: {filter?: Filter}) => {
 };
 
 const createGmp = () => ({
-  settings: {session: {token: 'test-token'}},
+  settings: {session: createSession({token: 'test-token'})},
   policy: {
     get: testing.fn().mockResolvedValue({data: policy}),
   },

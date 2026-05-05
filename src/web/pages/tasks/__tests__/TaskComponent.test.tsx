@@ -11,6 +11,7 @@ import Response from 'gmp/http/response';
 import {CONTAINER_IMAGE_SCANNER_TYPE} from 'gmp/models/scanner';
 import Setting from 'gmp/models/setting';
 import Task from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import TaskComponent from 'web/pages/tasks/TaskComponent';
 
@@ -27,6 +28,7 @@ const createGmp = ({
     settings: {
       enableGreenboneSensor: true,
       enableKrb5: false,
+      session: createSession(),
     },
     user: {
       currentSettings: testing.fn().mockResolvedValue(

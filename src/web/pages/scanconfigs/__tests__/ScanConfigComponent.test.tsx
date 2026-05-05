@@ -12,6 +12,7 @@ import ScanConfig, {
   type ScanConfigPreferenceElement,
 } from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScanConfigComponent, {
   createSelectedNvts,
@@ -270,7 +271,10 @@ const createGmp = (overrides: Record<string, unknown> = {}): GmpFactory => {
       scanners: {
         getAll: getScannersAll,
       },
-      settings: {manualUrl: 'http://test/'},
+      settings: {
+        manualUrl: 'http://test/',
+        session: createSession(),
+      },
       user: {
         currentSettings,
       },

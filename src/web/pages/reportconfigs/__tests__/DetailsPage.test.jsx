@@ -9,6 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/report-config';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {mockReportConfig} from 'web/pages/reportconfigs/__fixtures__/MockReportConfig';
 import DetailsPage from 'web/pages/reportconfigs/DetailsPage';
@@ -30,21 +31,19 @@ const createGmp = ({
   getReportConfig = testing.fn().mockResolvedValue(getReportConfigResponse),
   getPermissions = testing.fn().mockResolvedValue(getPermissionsResponse),
   currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
-} = {}) => {
-  return {
-    reportconfig: {
-      get: getReportConfig,
-    },
-    permissions: {
-      get: getPermissions,
-    },
-    reloadInterval,
-    settings: {manualUrl},
-    user: {
-      currentSettings,
-    },
-  };
-};
+} = {}) => ({
+  reportconfig: {
+    get: getReportConfig,
+  },
+  permissions: {
+    get: getPermissions,
+  },
+  reloadInterval,
+  settings: {manualUrl, session: createSession()},
+  user: {
+    currentSettings,
+  },
+});
 
 describe('ReportConfigDetailsPage tests', () => {
   test('should render full Details page with param details', () => {

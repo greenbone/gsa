@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import Cve from 'gmp/models/cve';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CvePage from 'web/pages/cves/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cves';
@@ -120,22 +121,21 @@ const createGmp = ({
   getCve = testing.fn().mockResolvedValue(getCveResponse),
   currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
   exportCve = testing.fn().mockResolvedValue(exportCveResponse),
-} = {}) => {
-  return {
-    cve: {
-      get: getCve,
-      export: exportCve,
-    },
-    reloadInterval,
-    settings: {
-      manualUrl,
-      enableEPSS: true,
-    },
-    user: {
-      currentSettings,
-    },
-  };
-};
+} = {}) => ({
+  cve: {
+    get: getCve,
+    export: exportCve,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    enableEPSS: true,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
+  },
+});
 
 describe('CveDetailsPage tests', () => {
   test('should render full DetailsPage', () => {

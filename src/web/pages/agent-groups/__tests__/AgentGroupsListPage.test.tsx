@@ -9,6 +9,7 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import AgentGroup from 'gmp/models/agent-group';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import AgentGroupsListPage from 'web/pages/agent-groups/AgentGroupsListPage';
 
 const makeGroup = (id = 'g1') =>
@@ -60,7 +61,7 @@ const createGmp = ({
   user: {
     getSetting: testing.fn().mockResolvedValue({data: null}),
   },
-  settings: {session: {token: 'token'}},
+  settings: {session: createSession({token: 'token'})},
 });
 
 describe('AgentGroupsListPage tests', () => {

@@ -9,6 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import Filter from 'gmp/models/filter';
 import Override from 'gmp/models/override';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/overrides/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/overrides';
@@ -58,23 +59,25 @@ const createGmp = ({
   cloneOverride = testing.fn().mockResolvedValue(cloneOverrideResponse),
   deleteOverride = testing.fn().mockResolvedValue(deleteOverrideResponse),
   exportOverride = testing.fn().mockResolvedValue(exportOverrideResponse),
-} = {}) => {
-  return {
-    override: {
-      get: getOverride,
-      clone: cloneOverride,
-      delete: deleteOverride,
-      export: exportOverride,
-    },
-    permissions: {
-      get: getPermissions,
-    },
-    settings: {manualUrl, reloadInterval},
-    user: {
-      currentSettings,
-    },
-  };
-};
+} = {}) => ({
+  override: {
+    get: getOverride,
+    clone: cloneOverride,
+    delete: deleteOverride,
+    export: exportOverride,
+  },
+  permissions: {
+    get: getPermissions,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
+  },
+});
 
 describe('OverrideDetailsPage tests', () => {
   test('should render full DetailsPage', () => {

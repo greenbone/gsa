@@ -15,6 +15,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Permission from 'gmp/models/permission';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import PermissionListPage from 'web/pages/permissions/PermissionListPage';
 import PermissionListPageToolBarIcons from 'web/pages/permissions/PermissionListPageToolBarIcons';
@@ -39,43 +40,51 @@ const permission = Permission.fromElement({
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getSetting = testing.fn().mockResolvedValue({filter: null});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({filter: null}),
+  getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getPermissions = testing.fn().mockResolvedValue({
-  data: [permission],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getPermissions = testing.fn().mockResolvedValue({
+    data: [permission],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  permissions: {
+    get: getPermissions,
+    deleteByFilter,
+    exportByFilter,
   },
+  filters: {
+    get: getFilters,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
 });
 
 describe('PermissionListPage tests', () => {
   test('should render full PermissionListPage', async () => {
-    const gmp = {
-      permissions: {
-        get: getPermissions,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -118,28 +127,7 @@ describe('PermissionListPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      permissions: {
-        get: getPermissions,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -179,22 +167,20 @@ describe('PermissionListPage tests', () => {
 
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.permissions.exportByFilter).toHaveBeenCalled();
 
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.permissions.deleteByFilter);
   });
 });
 
 describe('ToolBarIcons tests', () => {
   test('should render', () => {
     const handlePermissionCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       gmp,
       capabilities: true,
@@ -220,9 +206,7 @@ describe('ToolBarIcons tests', () => {
 
   test('should call click handlers', () => {
     const handlePermissionCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       gmp,
       capabilities: true,
@@ -243,9 +227,7 @@ describe('ToolBarIcons tests', () => {
 
   test('should not show icons if user does not have the right permissions', () => {
     const handlePermissionCreateClick = testing.fn();
-
-    const gmp = {settings: {manualUrl}};
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       gmp,
       capabilities: false,

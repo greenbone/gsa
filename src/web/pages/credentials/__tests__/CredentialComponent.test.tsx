@@ -7,13 +7,10 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {screen, rendererWith, wait, fireEvent} from 'web/testing';
 import Response from 'gmp/http/response';
 import Credential, {CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
+import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialComponent from 'web/pages/credentials/CredentialComponent';
-
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const defaultGetCredentialResponse = new Response(new Credential({id: '123'}));
 const createGmp = ({
@@ -33,25 +30,27 @@ const createGmp = ({
   downloadInstaller = testing.fn().mockResolvedValue(downloadInstallerResponse),
   getCredential = testing.fn().mockResolvedValue(getCredentialResponse),
   saveCredential = testing.fn().mockResolvedValue(saveCredentialResponse),
-} = {}) => {
-  return {
-    settings: {
-      enableKrb5: true,
-    },
-    credential: {
-      clone: cloneCredential,
-      create: createCredential,
-      delete: deleteCredential,
-      download: downloadInstaller,
-      export: downloadCredential,
-      get: getCredential,
-      save: saveCredential,
-    },
-    user: {
-      currentSettings,
-    },
-  };
-};
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+} = {}) => ({
+  settings: {
+    enableKrb5: true,
+    session: createSession(),
+  },
+  credential: {
+    clone: cloneCredential,
+    create: createCredential,
+    delete: deleteCredential,
+    download: downloadInstaller,
+    export: downloadCredential,
+    get: getCredential,
+    save: saveCredential,
+  },
+  user: {
+    currentSettings,
+  },
+});
 
 describe('CredentialComponent tests', () => {
   test('should render without crashing', async () => {

@@ -8,7 +8,14 @@ import {fireEvent, rendererWith, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Credential from 'gmp/models/credential';
 import OciImageTarget from 'gmp/models/oci-image-target';
+import {createSession} from 'gmp/testing';
 import ContainerImageTargetTable from 'web/pages/container-image-targets/ContainerImageTargetTable';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('ContainerImageTargetTable tests', () => {
   test('should render without crashing', () => {
@@ -27,20 +34,20 @@ describe('ContainerImageTargetTable tests', () => {
         imageReferences: ['registry.example.com/repo:3'],
       }),
     ];
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<ContainerImageTargetTable entities={targets} />);
     expect(screen.getByTestId('entities-table')).toBeInTheDocument();
   });
 
   test('should render the empty title when no targets are available', () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<ContainerImageTargetTable entities={[]} />);
     expect(screen.getByText('No targets available')).toBeInTheDocument();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
   });
 
   test("should not render anything if targets aren't available", () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     const {container} = render(<ContainerImageTargetTable />);
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
@@ -62,7 +69,7 @@ describe('ContainerImageTargetTable tests', () => {
         imageReferences: ['registry.example.com/repo:3'],
       }),
     ];
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<ContainerImageTargetTable entities={targets} />);
     expect(screen.getByText('Target 1')).toBeInTheDocument();
     expect(screen.getByText('Target 2')).toBeInTheDocument();
@@ -82,7 +89,7 @@ describe('ContainerImageTargetTable tests', () => {
         credential: cred,
       }),
     ];
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<ContainerImageTargetTable entities={targets} />);
     expect(screen.getByText('Cred 1')).toBeInTheDocument();
   });
@@ -100,7 +107,7 @@ describe('ContainerImageTargetTable tests', () => {
     const handleDelete = testing.fn();
     const handleDownload = testing.fn();
     const handleEdit = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <ContainerImageTargetTable
         entities={targets}

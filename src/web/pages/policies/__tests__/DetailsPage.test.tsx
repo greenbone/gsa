@@ -10,6 +10,7 @@ import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/policies/DetailsPage';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -211,35 +212,33 @@ const createGmp = ({
   deletePolicy = testing.fn().mockResolvedValue(deletePolicyResponse),
   exportPolicy = testing.fn().mockResolvedValue(exportPolicyResponse),
   currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
-} = {}) => {
-  return {
-    nvtfamilies: {
-      get: getNvtFamilies,
-    },
-    policy: {
-      get: getPolicy,
-      clone: clonePolicy,
-      delete: deletePolicy,
-      export: exportPolicy,
-    },
-    scanners: {
-      getAll: getScanners,
-    },
-    tags: {
-      get: getTags,
-    },
-    permissions: {
-      get: getPermissions,
-    },
-    settings: {
-      manualUrl,
-      session: {token: 'test-token'},
-    },
-    user: {
-      currentSettings,
-    },
-  };
-};
+} = {}) => ({
+  nvtfamilies: {
+    get: getNvtFamilies,
+  },
+  policy: {
+    get: getPolicy,
+    clone: clonePolicy,
+    delete: deletePolicy,
+    export: exportPolicy,
+  },
+  scanners: {
+    getAll: getScanners,
+  },
+  tags: {
+    get: getTags,
+  },
+  permissions: {
+    get: getPermissions,
+  },
+  settings: {
+    manualUrl,
+    session: createSession({token: 'test-token'}),
+  },
+  user: {
+    currentSettings,
+  },
+});
 
 describe('PolicyDetailsPage tests', () => {
   test('should render full DetailsPage', async () => {

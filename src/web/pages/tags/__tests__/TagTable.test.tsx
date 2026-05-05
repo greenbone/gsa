@@ -8,7 +8,14 @@ import {fireEvent, rendererWith, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import TagsTable from 'web/pages/tags/TagTable';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('TagsTable tests', () => {
   test('should render tags in table with sort headers', () => {
@@ -30,7 +37,7 @@ describe('TagsTable tests', () => {
         resourceCount: 1,
       }),
     ];
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <TagsTable
         entities={tags}
@@ -54,7 +61,7 @@ describe('TagsTable tests', () => {
   });
 
   test('should handle empty and undefined entities', () => {
-    let {render} = rendererWith({capabilities: true});
+    let {render} = rendererWith({capabilities: true, gmp: createGmp()});
 
     // Test with empty array
     render(
@@ -99,7 +106,7 @@ describe('TagsTable tests', () => {
     const handleClone = testing.fn();
     const handleEdit = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <TagsTable
         entities={[tag]}

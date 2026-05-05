@@ -11,6 +11,7 @@ import Setting from 'gmp/models/setting';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
 import {YES_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import TagComponent from 'web/pages/tags/TagComponent';
 
@@ -46,41 +47,40 @@ const createGmp = ({
   disableTag = testing.fn().mockResolvedValue(disableTagResponse),
   getTasks = testing.fn().mockResolvedValue(getTasksResponse),
   getResourceNames = testing.fn().mockResolvedValue(getResourceNamesResponse),
-} = {}) => {
-  return {
-    settings: {
-      enableGreenboneSensor: true,
-      enableKrb5: false,
-    },
-    user: {
-      currentSettings: testing.fn().mockResolvedValue(
-        new Response({
-          detailsexportfilename: new Setting({
-            _id: 'a6ac88c5-729c-41ba-ac0a-deea4a3441f2',
-            name: 'Details Export File Name',
-            value: '%T-%U',
-          }),
+} = {}) => ({
+  settings: {
+    enableGreenboneSensor: true,
+    enableKrb5: false,
+    session: createSession(),
+  },
+  user: {
+    currentSettings: testing.fn().mockResolvedValue(
+      new Response({
+        detailsexportfilename: new Setting({
+          _id: 'a6ac88c5-729c-41ba-ac0a-deea4a3441f2',
+          name: 'Details Export File Name',
+          value: '%T-%U',
         }),
-      ),
-    },
-    tag: {
-      clone: cloneTag,
-      create: createTag,
-      export: downloadTag,
-      get: getTag,
-      save: saveTag,
-      enable: enableTag,
-      disable: disableTag,
-      delete: deleteTag,
-    },
-    tasks: {
-      get: getTasks,
-    },
-    resourcenames: {
-      getAll: getResourceNames,
-    },
-  };
-};
+      }),
+    ),
+  },
+  tag: {
+    clone: cloneTag,
+    create: createTag,
+    export: downloadTag,
+    get: getTag,
+    save: saveTag,
+    enable: enableTag,
+    disable: disableTag,
+    delete: deleteTag,
+  },
+  tasks: {
+    get: getTasks,
+  },
+  resourcenames: {
+    getAll: getResourceNames,
+  },
+});
 
 describe('TagComponent tests', () => {
   test('should render and allow to create a new tag', async () => {

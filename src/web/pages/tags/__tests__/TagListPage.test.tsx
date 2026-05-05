@@ -18,6 +18,7 @@ import dayjs from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TagsListPage from 'web/pages/tags/TagListPage';
 import {setUsername} from 'web/store/usersettings/actions';
@@ -97,7 +98,7 @@ const createGmp = ({
   resourcenames: {
     getAll: testing.fn().mockResolvedValue({data: []}),
   },
-  settings: {manualUrl: 'test/', session: {token: 'token'}},
+  settings: {manualUrl: 'test/', session: createSession({token: 'token'})},
   user: {currentSettings, getSetting},
 });
 

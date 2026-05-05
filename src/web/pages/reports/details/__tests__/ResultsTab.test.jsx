@@ -10,6 +10,7 @@ import {waitFor, screen} from '@testing-library/react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import ResultsTab from 'web/pages/reports/details/ResultsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -139,7 +140,7 @@ const createGmp = ({
     manualUrl,
     reloadInterval,
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: {token: 'test-token'},
+    session: createSession({token: 'test-token'}),
   },
   user: {currentSettings},
 });

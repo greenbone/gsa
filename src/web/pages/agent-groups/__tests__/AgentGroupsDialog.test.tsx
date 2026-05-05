@@ -14,6 +14,7 @@ import {
   within,
 } from 'web/testing';
 import Response from 'gmp/http/response';
+import {createSession} from 'gmp/testing';
 import AgentGroupsDialog from 'web/pages/agent-groups/AgentGroupsDialog';
 
 const agent = {
@@ -35,7 +36,7 @@ const createGmp = ({
   getScanners = testing.fn().mockResolvedValue(new Response([scanner], {})),
   getAgents = testing.fn().mockResolvedValue(new Response([agent], {})),
 } = {}) => ({
-  settings: {session: {token: 'token'}},
+  settings: {session: createSession({token: 'token'})},
   scanners: {get: getScanners},
   agents: {get: getAgents},
 });

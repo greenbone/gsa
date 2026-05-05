@@ -6,11 +6,12 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {openSelectElement, screen, fireEvent, rendererWith} from 'web/testing';
 import Response from 'gmp/http/response';
+import {createSession} from 'gmp/testing';
 import timezones from 'gmp/time-zones';
 import TimezoneSelect from 'web/components/form/TimeZoneSelect';
 
 const createGmp = () => ({
-  settings: {session: {token: 'token'}},
+  settings: {session: createSession({token: 'token'})},
   timezones: {
     get: testing.fn().mockResolvedValue(new Response(timezones)),
   },

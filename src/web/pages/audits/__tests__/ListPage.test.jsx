@@ -16,6 +16,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import AuditPage, {ToolBarIcons} from 'web/pages/audits/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
@@ -43,7 +44,6 @@ const audit = Audit.fromElement({
   target: {_id: 'id1', name: 'target1'},
 });
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = 1;
@@ -53,52 +53,60 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const getSetting = testing.fn().mockResolvedValue({
-  filter: null,
-});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  getSetting = testing.fn().mockResolvedValue({
+    filter: null,
+  }),
+  getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getAudits = testing.fn().mockResolvedValue({
-  data: [audit],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getAudits = testing.fn().mockResolvedValue({
+    data: [audit],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getReportFormats = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+} = {}) => ({
+  audits: {
+    get: getAudits,
+    deleteByFilter,
+    exportByFilter,
   },
-});
-
-const getReportFormats = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  filters: {
+    get: getFilters,
   },
+  reportformats: {
+    get: getReportFormats,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
 });
 
 describe('AuditPage tests', () => {
   test('should render full AuditPage', async () => {
-    const gmp = {
-      audits: {
-        get: getAudits,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reportformats: {
-        get: getReportFormats,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -139,31 +147,7 @@ describe('AuditPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      audits: {
-        get: getAudits,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reportformats: {
-        get: getReportFormats,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -199,20 +183,20 @@ describe('AuditPage tests', () => {
 
     const tableFooter = within(screen.queryTableFooter());
     const deleteIcon = tableFooter.getByTestId('trash-icon');
-    expect(deleteByFilter).not.toHaveBeenCalled();
+    expect(gmp.audits.deleteByFilter).not.toHaveBeenCalled();
     expect(deleteIcon).toHaveAttribute(
       'title',
       'Move page contents to trashcan',
     );
     fireEvent.click(deleteIcon);
 
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.audits.deleteByFilter);
 
     const exportIcon = tableFooter.getByTestId('export-icon');
-    expect(exportByFilter).not.toHaveBeenCalled();
+    expect(gmp.audits.exportByFilter).not.toHaveBeenCalled();
     expect(exportIcon).toHaveAttribute('title', 'Export page contents');
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.audits.exportByFilter).toHaveBeenCalled();
   });
 });
 
@@ -220,13 +204,11 @@ describe('AuditPage ToolBarIcons test', () => {
   test('should render', () => {
     const handleAuditCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -250,13 +232,11 @@ describe('AuditPage ToolBarIcons test', () => {
   test('should call click handlers', () => {
     const handleAuditCreateClick = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 

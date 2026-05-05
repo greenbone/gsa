@@ -15,6 +15,7 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import CredentialStore from 'gmp/models/credential-store';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import CredentialStorePage from 'web/pages/credential-store/CredentialStorePage';
 
 const credentialStore = CredentialStore.fromElement({
@@ -41,7 +42,9 @@ const createGmp = ({
 } = {}) => ({
   credentialstores: {get},
   credentialstore: {edit, verify},
-  settings: {session: {token: 'token'}},
+  settings: {
+    session: createSession({token: 'token'}),
+  },
 });
 
 describe('CredentialStorePage tests', () => {

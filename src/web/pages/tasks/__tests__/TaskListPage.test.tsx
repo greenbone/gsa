@@ -15,6 +15,7 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TaskListPage from 'web/pages/tasks/TaskListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
@@ -46,81 +47,87 @@ const task = Task.fromElement({
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  exportTask = testing.fn(),
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getDashboardSetting = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getDashboardSetting = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getUserSetting = testing.fn().mockResolvedValue({
+    filter: null,
+  }),
+  getAggregates = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getTasks = testing.fn().mockResolvedValue({
+    data: [task],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getReportFormats = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  task: {
+    export: exportTask,
   },
-});
-
-const getUserSetting = testing.fn().mockResolvedValue({
-  filter: null,
-});
-
-const getAggregates = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  tasks: {
+    get: getTasks,
+    getSeverityAggregates: getAggregates,
+    getHighResultsAggregates: getAggregates,
+    getStatusAggregates: getAggregates,
+    deleteByFilter,
+    exportByFilter,
   },
-});
-
-const getTasks = testing.fn().mockResolvedValue({
-  data: [task],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  filters: {
+    get: getFilters,
   },
-});
-
-const getReportFormats = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  reportformats: {
+    get: getReportFormats,
   },
+  dashboard: {
+    getSetting: getDashboardSetting,
+  },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting: getUserSetting},
 });
 
 describe('TaskListPage tests', () => {
   test('should render full page', async () => {
-    const gmp = {
-      task: {
-        export: testing.fn(),
-      },
-      tasks: {
-        get: getTasks,
-        getSeverityAggregates: getAggregates,
-        getHighResultsAggregates: getAggregates,
-        getStatusAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reportformats: {
-        get: getReportFormats,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getUserSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -241,40 +248,7 @@ describe('TaskListPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      task: {
-        export: testing.fn(),
-      },
-      tasks: {
-        get: getTasks,
-        getSeverityAggregates: getAggregates,
-        getHighResultsAggregates: getAggregates,
-        getStatusAggregates: getAggregates,
-        deleteByFilter,
-        exportByFilter,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reportformats: {
-        get: getReportFormats,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getUserSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -311,11 +285,11 @@ describe('TaskListPage tests', () => {
     // export page contents
     const exportIcon = screen.getByTitle('Export page contents');
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.tasks.exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    testBulkTrashcanDialog(screen, gmp.tasks.deleteByFilter);
   });
 });

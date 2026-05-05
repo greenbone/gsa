@@ -7,7 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Role from 'gmp/models/role';
+import {createSession} from 'gmp/testing';
 import RoleTable from 'web/pages/roles/RoleTable';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('RoleTable tests', () => {
   test('should render without crashing', () => {
@@ -21,7 +28,11 @@ describe('RoleTable tests', () => {
         name: 'Role 2',
       }),
     ];
-    const {render} = rendererWith({store: true, capabilities: true});
+    const {render} = rendererWith({
+      store: true,
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<RoleTable entities={roles} />);
     expect(screen.getByTestId('entities-table')).toBeInTheDocument();
   });
@@ -51,7 +62,11 @@ describe('RoleTable tests', () => {
         name: 'Role 2',
       }),
     ];
-    const {render} = rendererWith({store: true, capabilities: true});
+    const {render} = rendererWith({
+      store: true,
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<RoleTable entities={roles} />);
     expect(screen.getByText('Role 1')).toBeInTheDocument();
     expect(screen.getByText('Role 2')).toBeInTheDocument();
@@ -73,7 +88,11 @@ describe('RoleTable tests', () => {
     const handleDelete = testing.fn();
     const handleDownload = testing.fn();
     const handleEdit = testing.fn();
-    const {render} = rendererWith({store: true, capabilities: true});
+    const {render} = rendererWith({
+      store: true,
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <RoleTable
         entities={roles}

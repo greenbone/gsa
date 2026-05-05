@@ -5,18 +5,20 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
+import {createSession} from 'gmp/testing';
 import useUserName from 'web/hooks/useUserName';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession({
+      username: 'foo',
+    }),
+  },
+});
 
 describe('useUserName tests', () => {
   test('should return the users name', () => {
-    const gmp = {
-      settings: {
-        session: {
-          username: 'foo',
-          subscribeToChanges: () => () => {},
-        },
-      },
-    };
+    const gmp = createGmp();
     const {renderHook} = rendererWith({gmp});
 
     const {result} = renderHook(() => useUserName());

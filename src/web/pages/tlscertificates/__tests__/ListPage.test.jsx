@@ -8,6 +8,7 @@ import {screen, within, rendererWith, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tls-certificate';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TlsCertificatePage from 'web/pages/tlscertificates/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
@@ -37,68 +38,67 @@ const tlsCertificate = TlsCertificate.fromElement({
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  getTlsCertificates = testing.fn().mockResolvedValue({
+    data: [tlsCertificate],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getDashboardSetting = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getUserSetting = testing.fn().mockResolvedValue({
+    filter: null,
+  }),
+  getDashboardSetting = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getFilters = testing.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  ),
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+} = {}) => ({
+  tlscertificates: {
+    get: getTlsCertificates,
+    getAll: getTlsCertificates,
+    getTimeStatusAggregates: getAggregates,
+    getModifiedAggregates: getAggregates,
   },
-});
-
-const getUserSetting = testing.fn().mockResolvedValue({
-  filter: null,
-});
-
-const getAggregates = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  filters: {
+    get: getFilters,
   },
-});
-
-const getTlsCertificates = testing.fn().mockResolvedValue({
-  data: [tlsCertificate],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  dashboard: {
+    getSetting: getDashboardSetting,
   },
+  reloadInterval,
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting: getUserSetting},
 });
 
 describe('TlsCertificatePage tests', () => {
   test('should render full TlsCertificatePage', async () => {
-    const gmp = {
-      tlscertificates: {
-        get: getTlsCertificates,
-        getAll: getTlsCertificates,
-        getTimeStatusAggregates: getAggregates,
-        getModifiedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getUserSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,

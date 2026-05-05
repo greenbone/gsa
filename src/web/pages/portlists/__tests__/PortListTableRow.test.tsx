@@ -7,8 +7,15 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWithTableBody, screen, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import PortList from 'gmp/models/port-list';
+import {createSession} from 'gmp/testing';
 import PortListTableRow from 'web/pages/portlists/PortListTableRow';
 import {setUsername} from 'web/store/usersettings/actions';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('PortListTableRow tests', () => {
   test('should render port counts', async () => {
@@ -25,6 +32,7 @@ describe('PortListTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(<PortListTableRow entity={portList} />);
@@ -47,6 +55,7 @@ describe('PortListTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(<PortListTableRow entity={portList} />);
@@ -68,6 +77,7 @@ describe('PortListTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(
@@ -100,6 +110,7 @@ describe('PortListTableRow tests', () => {
     const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
+      gmp: createGmp(),
     });
     store.dispatch(setUsername('foo'));
     render(

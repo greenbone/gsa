@@ -10,6 +10,7 @@ import Response from 'gmp/http/response';
 import type Model from 'gmp/models/model';
 import Setting from 'gmp/models/setting';
 import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
+import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {DEFAULT_PORT_LIST_ID} from 'web/pages/targets/TargetDialog';
@@ -22,6 +23,7 @@ const createGmp = ({
     settings: {
       enableGreenboneSensor: true,
       enableKrb5: false,
+      session: createSession(),
     },
     user: {
       currentSettings: testing.fn().mockResolvedValue(

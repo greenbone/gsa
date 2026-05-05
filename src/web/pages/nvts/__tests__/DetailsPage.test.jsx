@@ -10,6 +10,7 @@ import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 import NVT from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/nvts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/nvts';
@@ -193,63 +194,58 @@ const override2 = Override.fromElement({
   writable: 1,
 });
 
-let getNvt;
-let getNotes;
-let getOverrides;
-let getEntities;
-let currentSettings;
-
-beforeEach(() => {
+const createGmp = ({
   getNvt = testing.fn().mockResolvedValue({
     data: nvt,
-  });
-
+  }),
   getNotes = testing.fn().mockResolvedValue({
     data: [note1],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   getOverrides = testing.fn().mockResolvedValue({
     data: [override1, override2],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   getEntities = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   currentSettings = testing
     .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
+    .mockResolvedValue(currentSettingsDefaultResponse),
+} = {}) => ({
+  nvt: {
+    get: getNvt,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    enableEPSS: true,
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
+  },
+  notes: {
+    get: getNotes,
+  },
+  overrides: {
+    get: getOverrides,
+  },
 });
 
 describe('Nvt DetailsPage tests', () => {
   test('should render full DetailsPage', async () => {
-    const gmp = {
-      nvt: {
-        get: getNvt,
-      },
-      settings: {manualUrl, reloadInterval, enableEPSS: true},
-      user: {
-        currentSettings,
-      },
-      notes: {
-        get: getNotes,
-      },
-      overrides: {
-        get: getOverrides,
-      },
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -417,22 +413,7 @@ describe('Nvt DetailsPage tests', () => {
   });
 
   test('should render preferences tab', () => {
-    const gmp = {
-      nvt: {
-        get: getNvt,
-      },
-      notes: {
-        get: getEntities,
-      },
-      overrides: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval, enableEPSS: true},
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -462,22 +443,7 @@ describe('Nvt DetailsPage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const gmp = {
-      nvt: {
-        get: getNvt,
-      },
-      notes: {
-        get: getEntities,
-      },
-      overrides: {
-        get: getEntities,
-      },
-      settings: {manualUrl, reloadInterval, enableEPSS: true},
-      user: {
-        currentSettings,
-      },
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       capabilities: true,
       gmp,

@@ -7,7 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Permission from 'gmp/models/permission';
+import {createSession} from 'gmp/testing';
 import PermissionTable from 'web/pages/permissions/PermissionTable';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('PermissionTable tests', () => {
   test('should render without crashing', () => {
@@ -21,7 +28,11 @@ describe('PermissionTable tests', () => {
         name: 'Permission 2',
       }),
     ];
-    const {render} = rendererWith({store: true, capabilities: true});
+    const {render} = rendererWith({
+      store: true,
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<PermissionTable entities={permissions} />);
     expect(screen.getByTestId('entities-table')).toBeInTheDocument();
   });
@@ -51,7 +62,11 @@ describe('PermissionTable tests', () => {
         name: 'Permission 2',
       }),
     ];
-    const {render} = rendererWith({store: true, capabilities: true});
+    const {render} = rendererWith({
+      store: true,
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<PermissionTable entities={permissions} />);
     expect(screen.getByText('Permission 1')).toBeInTheDocument();
     expect(screen.getByText('Permission 2')).toBeInTheDocument();
@@ -73,7 +88,11 @@ describe('PermissionTable tests', () => {
     const handlePermissionDeleteClick = testing.fn();
     const handlePermissionDownloadClick = testing.fn();
     const handlePermissionEditClick = testing.fn();
-    const {render} = rendererWith({store: true, capabilities: true});
+    const {render} = rendererWith({
+      store: true,
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <PermissionTable
         entities={permissions}

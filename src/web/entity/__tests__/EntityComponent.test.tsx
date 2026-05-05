@@ -7,6 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import date from 'gmp/models/date';
 import Model from 'gmp/models/model';
+import {createSession} from 'gmp/testing';
 import {type EntityType} from 'gmp/utils/entity-type';
 import EntityComponent from 'web/entity/EntityComponent';
 
@@ -20,13 +21,32 @@ const currentSettingsResponse = {
   },
 };
 
+const createGmp = ({
+  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+  fooExport = testing.fn().mockResolvedValue({data: {id: '123'}}),
+  fooClone = testing.fn().mockResolvedValue({id: '123'}),
+  fooDelete = testing.fn().mockResolvedValue(undefined),
+  fooSave = testing.fn().mockResolvedValue({id: '123'}),
+  fooCreate = testing.fn().mockResolvedValue({id: '123'}),
+} = {}) => ({
+  settings: {
+    session: createSession(),
+  },
+  user: {
+    currentSettings,
+  },
+  foo: {
+    export: fooExport,
+    clone: fooClone,
+    delete: fooDelete,
+    save: fooSave,
+    create: fooCreate,
+  },
+});
+
 describe('EntityComponent tests', () => {
   test('should render', () => {
-    const exportFunc = testing.fn();
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
-    const gmp = {foo: {export: exportFunc}, user: {currentSettings}};
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -50,21 +70,10 @@ describe('EntityComponent tests', () => {
   });
 
   test('should allow cloning an entity', async () => {
-    const exportFunc = testing.fn();
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
-    const clonedData = {id: '123'};
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
 
-    const gmp = {
-      foo: {
-        clone: testing.fn().mockResolvedValue(clonedData),
-        export: exportFunc,
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -83,23 +92,18 @@ describe('EntityComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onCloned).toHaveBeenCalledWith(clonedData);
+    expect(onCloned).toHaveBeenCalledWith({id: '123'});
     expect(onCloneError).not.toHaveBeenCalled();
   });
 
   test('should call onCloneError when cloning an entity fails', async () => {
-    const exportFunc = testing.fn();
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
 
-    const gmp = {
-      foo: {clone: testing.fn().mockRejectedValue(error), export: exportFunc},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      fooClone: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -123,22 +127,11 @@ describe('EntityComponent tests', () => {
   });
 
   test('should allow deleting an entity', async () => {
-    const exportFunc = testing.fn();
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
-    const deletedData = {id: '123'};
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
     const model = new Model({id: '123'});
 
-    const gmp = {
-      foo: {
-        delete: testing.fn().mockResolvedValue(deletedData),
-        export: exportFunc,
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -159,19 +152,14 @@ describe('EntityComponent tests', () => {
   });
 
   test('should call onDeleteError when deleting an entity fails', async () => {
-    const exportFunc = testing.fn();
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
     const model = new Model({id: '123'});
 
-    const gmp = {
-      foo: {delete: testing.fn().mockRejectedValue(error), export: exportFunc},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      fooDelete: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -192,21 +180,10 @@ describe('EntityComponent tests', () => {
   });
 
   test('should allow saving an entity', async () => {
-    const exportFunc = testing.fn();
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
-    const savedData = {id: '123'};
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
 
-    const gmp = {
-      foo: {
-        save: testing.fn().mockResolvedValue(savedData),
-        export: exportFunc,
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -222,23 +199,18 @@ describe('EntityComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onSaved).toHaveBeenCalledWith(savedData);
+    expect(onSaved).toHaveBeenCalledWith({id: '123'});
     expect(onSaveError).not.toHaveBeenCalled();
   });
 
   test('should call onSaveError when saving an entity fails', async () => {
-    const exportFunc = testing.fn();
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
 
-    const gmp = {
-      foo: {save: testing.fn().mockRejectedValue(error), export: exportFunc},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      fooSave: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -259,21 +231,10 @@ describe('EntityComponent tests', () => {
   });
 
   test('should allow to create an entity', async () => {
-    const exportFunc = testing.fn();
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
-    const createdData = {id: '123'};
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
 
-    const gmp = {
-      foo: {
-        create: testing.fn().mockResolvedValue(createdData),
-        export: exportFunc,
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -289,23 +250,18 @@ describe('EntityComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onCreated).toHaveBeenCalledWith(createdData);
+    expect(onCreated).toHaveBeenCalledWith({id: '123'});
     expect(onCreateError).not.toHaveBeenCalled();
   });
 
   test('should call onCreateError when creating an entity fails', async () => {
-    const exportFunc = testing.fn();
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
 
-    const gmp = {
-      foo: {create: testing.fn().mockRejectedValue(error), export: exportFunc},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      fooCreate: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp});
     render(
       <EntityComponent
@@ -326,9 +282,6 @@ describe('EntityComponent tests', () => {
   });
 
   test('should allow to download an entity', async () => {
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
     const entity = new Model(
       {
         id: '123',
@@ -338,16 +291,10 @@ describe('EntityComponent tests', () => {
       },
       'foo' as EntityType,
     );
-    const downloadedData = {id: '123'};
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
 
-    const gmp = {
-      foo: {
-        export: testing.fn().mockResolvedValue({data: downloadedData}),
-      },
-      user: {currentSettings},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, store: true});
     render(
       <EntityComponent
@@ -361,29 +308,25 @@ describe('EntityComponent tests', () => {
       </EntityComponent>,
     );
     await wait(); // wait for currentSettings to be resolved and put into the store
-    expect(currentSettings).toHaveBeenCalledOnce();
+    expect(gmp.user.currentSettings).toHaveBeenCalledOnce();
     fireEvent.click(screen.getByTestId('button'));
     await wait();
     expect(onDownloaded).toHaveBeenCalledWith({
       filename: 'foo-123.xml',
-      data: downloadedData,
+      data: {id: '123'},
     });
     expect(onDownloadError).not.toHaveBeenCalled();
   });
 
   test('should call onDownloadError when downloading an entity fails', async () => {
-    const currentSettings = testing
-      .fn()
-      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const entity = new Model({id: '123'});
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
 
-    const gmp = {
-      foo: {export: testing.fn().mockRejectedValue(error)},
-      user: {currentSettings},
-    };
+    const gmp = createGmp({
+      fooExport: testing.fn().mockRejectedValue(error),
+    });
     const {render} = rendererWith({gmp, store: true});
     render(
       <EntityComponent

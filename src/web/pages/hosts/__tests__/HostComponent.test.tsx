@@ -11,6 +11,7 @@ import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
 
 import {type ModelElement} from 'gmp/models/model';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import HostsDialog from 'web/pages/hosts/Dialog';
@@ -130,37 +131,40 @@ const host = Host.fromElement({
   },
 } as ModelElement) as Host;
 
-describe('HostWithTargetComponent tests', () => {
-  const getHost = testing.fn().mockResolvedValue({data: host});
-  const getPermissions = testing.fn().mockResolvedValue({
+const createGmp = ({
+  getHost = testing.fn().mockResolvedValue({data: host}),
+  getPermissions = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-  const currentSettings = testing
+  }),
+  currentSettings = testing
     .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
-
-  const gmp = {
-    host: {get: getHost},
-    permissions: {get: getPermissions},
-    credentials: {
-      getAll: testing.fn().mockResolvedValue({data: []}),
-    },
-    portlists: {
-      getAll: testing.fn().mockResolvedValue({data: []}),
-    },
-    user: {currentSettings},
-    settings: {
-      manualUrl: 'test/',
-      reloadInterval: -1,
-      severityRating: SEVERITY_RATING_CVSS_3,
-    },
-  };
-
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getCredentials = testing.fn().mockResolvedValue({data: []}),
+  getPortLists = testing.fn().mockResolvedValue({data: []}),
+} = {}) => ({
+  host: {get: getHost},
+  permissions: {get: getPermissions},
+  credentials: {
+    getAll: getCredentials,
+  },
+  portlists: {
+    getAll: getPortLists,
+  },
+  user: {currentSettings},
+  settings: {
+    manualUrl: 'test/',
+    reloadInterval: -1,
+    severityRating: SEVERITY_RATING_CVSS_3,
+    session: createSession(),
+  },
+});
+describe('HostWithTargetComponent tests', () => {
   test('should call onInteraction and display HostDialog when edit is triggered', () => {
+    const gmp = createGmp();
     const onTargetCreated = testing.fn();
     const onTargetCreateError = testing.fn();
     const handleClose = testing.fn();
@@ -187,6 +191,7 @@ describe('HostWithTargetComponent tests', () => {
 
   test('should call createtarget with correct values when createtargetfromhost is triggered', async () => {
     const createtarget = testing.fn();
+    const gmp = createGmp();
 
     let triggerFn: (host: Host) => void = () => {};
 
@@ -221,6 +226,7 @@ describe('HostWithTargetComponent tests', () => {
 
   test('openCreateTargetSelectionDialog handles SELECTION_PAGE_CONTENTS correctly', () => {
     let triggerSelectionDialog: (data: SelectionDialogData) => void = () => {};
+    const gmp = createGmp();
 
     rendererWith({gmp, capabilities: true}).render(
       <HostWithTargetComponent
@@ -246,6 +252,7 @@ describe('HostWithTargetComponent tests', () => {
 
   test('openCreateTargetSelectionDialog handles SELECTION_USER correctly', () => {
     let triggerSelectionDialog: (data: SelectionDialogData) => void = () => {};
+    const gmp = createGmp();
 
     rendererWith({gmp, capabilities: true}).render(
       <HostWithTargetComponent

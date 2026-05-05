@@ -8,6 +8,7 @@ import {rendererWith, fireEvent, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/report-config';
+import {createSession} from 'gmp/testing';
 import Table from 'web/pages/reportconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
 
@@ -57,6 +58,12 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('Scan Config table tests', () => {
   test('should render', () => {
     const handleReportConfigClone = testing.fn();
@@ -64,9 +71,7 @@ describe('Scan Config table tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -101,9 +106,7 @@ describe('Scan Config table tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -140,9 +143,7 @@ describe('Scan Config table tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
