@@ -8,7 +8,6 @@ import {
   getReportComposerDefaults,
   getSessionTimeout,
   getTimezone,
-  getUsername,
 } from 'web/store/usersettings/selectors';
 
 const createRootState = state => ({
@@ -25,18 +24,6 @@ describe('settings selectors tests', () => {
     test('should return timezone', () => {
       const state = createRootState({timezone: 'cet'});
       expect(getTimezone(state)).toEqual('cet');
-    });
-  });
-
-  describe('getUsername tests', () => {
-    test('should return undefined username for empty state', () => {
-      const state = createRootState({});
-      expect(getUsername(state)).toBeUndefined();
-    });
-
-    test('should return username', () => {
-      const state = createRootState({username: 'foo'});
-      expect(getUsername(state)).toEqual('foo');
     });
   });
 
