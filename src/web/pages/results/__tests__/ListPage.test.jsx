@@ -15,11 +15,12 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ResultsPage from 'web/pages/results/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/results';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -97,81 +98,73 @@ export const result3 = Result.fromElement({
 
 const results = [result1, result2, result3];
 
-let currentSettings;
-let getAggregates;
-let getDashboardSetting;
-let getFilters;
-let getResults;
-let getSetting;
-
-beforeEach(() => {
-  // mock gmp commands
-
+const createGmp = ({
   getResults = testing.fn().mockResolvedValue({
     data: results,
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
-  getFilters = testing.fn().mockReturnValue(
-    Promise.resolve({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    }),
-  );
-
+  }),
+  getFilters = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
   getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-
+  }),
   currentSettings = testing
     .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse);
-
+    .mockResolvedValue(currentSettingsDefaultResponse),
   getSetting = testing.fn().mockResolvedValue({
     filter: null,
-  });
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  results: {
+    get: getResults,
+    getSeverityAggregates: getAggregates,
+    getWordCountsAggregates: getAggregates,
+    exportByFilter,
+    export: exportByIds,
+  },
+  filters: {
+    get: getFilters,
+  },
+  dashboard: {
+    getSetting: getDashboardSetting,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    severityRating: SEVERITY_RATING_CVSS_3,
+    session: createSession(),
+  },
+  user: {currentSettings},
 });
 
 describe('Results listpage tests', () => {
   test('should render full results listpage', async () => {
-    const gmp = {
-      results: {
-        get: getResults,
-        getSeverityAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {
-        manualUrl,
-        reloadInterval,
-        severityRating: SEVERITY_RATING_CVSS_3,
-      },
-      user: {currentSettings},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -180,7 +173,6 @@ describe('Results listpage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -290,27 +282,7 @@ describe('Results listpage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      results: {
-        get: getResults,
-        exportByFilter,
-        getSeverityAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -319,7 +291,6 @@ describe('Results listpage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -345,31 +316,11 @@ describe('Results listpage tests', () => {
     await wait();
 
     fireEvent.click(screen.getAllByTitle('Export page contents')[0]);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.results.exportByFilter).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected results', async () => {
-    const exportByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      results: {
-        get: getResults,
-        export: exportByIds,
-        getSeverityAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -378,7 +329,6 @@ describe('Results listpage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -417,31 +367,11 @@ describe('Results listpage tests', () => {
 
     // export selected result
     fireEvent.click(screen.getAllByTitle('Export selection')[0]);
-    expect(exportByIds).toHaveBeenCalled();
+    expect(gmp.results.export).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered results', async () => {
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      results: {
-        get: getResults,
-        exportByFilter,
-        getSeverityAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -450,7 +380,6 @@ describe('Results listpage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -484,6 +413,6 @@ describe('Results listpage tests', () => {
 
     // export all filtered results
     fireEvent.click(screen.getAllByTitle('Export all filtered')[0]);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.results.exportByFilter).toHaveBeenCalled();
   });
 });

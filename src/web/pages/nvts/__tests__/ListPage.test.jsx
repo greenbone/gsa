@@ -15,10 +15,11 @@ import {
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import NVT from 'gmp/models/nvt';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import NvtsPage, {ToolBarIcons} from 'web/pages/nvts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/nvts';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -65,66 +66,82 @@ const nvt = NVT.fromElement({
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
-const getSetting = testing.fn().mockResolvedValue({
-  filter: null,
-});
-
-const getDashboardSetting = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getAggregates = testing.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getFilters = testing.fn().mockReturnValue(
-  Promise.resolve({
+const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({
+    filter: null,
+  }),
+  getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
-);
-
-const getNvts = testing.fn().mockResolvedValue({
-  data: [nvt],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
+  getAggregates = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getFilters = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  getNvts = testing.fn().mockResolvedValue({
+    data: [nvt],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+  deleteByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByFilter = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  deleteByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+  exportByIds = testing.fn().mockResolvedValue({
+    foo: 'bar',
+  }),
+} = {}) => ({
+  dashboard: {
+    getSetting: getDashboardSetting,
   },
+  nvts: {
+    get: getNvts,
+    getFamilyAggregates: getAggregates,
+    getSeverityAggregates: getAggregates,
+    getCreatedAggregates: getAggregates,
+    deleteByFilter,
+    exportByFilter,
+    delete: deleteByIds,
+    export: exportByIds,
+  },
+  filters: {
+    get: getFilters,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+    enableEPSS: true,
+    session: createSession(),
+  },
+  user: {currentSettings, getSetting},
 });
 
 describe('NvtsPage tests', () => {
   test('should render full NvtsPage', async () => {
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      nvts: {
-        get: getNvts,
-        getFamilyAggregates: getAggregates,
-        getSeverityAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval, enableEPSS: true},
-      user: {currentSettings, getSetting},
-    };
+    const gmp = createGmp();
 
     const {render, store} = rendererWith({
       gmp,
@@ -134,7 +151,6 @@ describe('NvtsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -220,33 +236,7 @@ describe('NvtsPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      nvts: {
-        get: getNvts,
-        deleteByFilter,
-        exportByFilter,
-        getSeverityAggregates: getAggregates,
-        getFamilyAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval, enableEPSS: true},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -255,7 +245,6 @@ describe('NvtsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -283,37 +272,11 @@ describe('NvtsPage tests', () => {
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.nvts.exportByFilter).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected nvts', async () => {
-    const deleteByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      nvts: {
-        get: getNvts,
-        delete: deleteByIds,
-        export: exportByIds,
-        getSeverityAggregates: getAggregates,
-        getFamilyAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -322,7 +285,6 @@ describe('NvtsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -362,37 +324,11 @@ describe('NvtsPage tests', () => {
     // export selected nvt
     const exportIcon = screen.getAllByTitle('Export selection')[0];
     fireEvent.click(exportIcon);
-    expect(exportByIds).toHaveBeenCalled();
+    expect(gmp.nvts.export).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered nvts', async () => {
-    const deleteByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = testing.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      nvts: {
-        get: getNvts,
-        deleteByFilter,
-        exportByFilter,
-        getSeverityAggregates: getAggregates,
-        getFamilyAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
+    const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
@@ -401,7 +337,6 @@ describe('NvtsPage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -436,16 +371,13 @@ describe('NvtsPage tests', () => {
     // export all filtered nvts
     const exportIcon = screen.getAllByTitle('Export all filtered')[0];
     fireEvent.click(exportIcon);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(gmp.nvts.exportByFilter).toHaveBeenCalled();
   });
 });
 
 describe('NvtsPage ToolBarIcons test', () => {
   test('should render', () => {
-    const gmp = {
-      settings: {manualUrl},
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       gmp,
       router: true,
