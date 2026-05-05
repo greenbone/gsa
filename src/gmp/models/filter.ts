@@ -455,7 +455,11 @@ class Filter extends EntityModel {
    *
    * @return This filter
    */
-  set(keyword: string, value?: string | number, relation: string = '=') {
+  set(
+    keyword: string,
+    value?: string | number | boolean,
+    relation: string = '=',
+  ) {
     this._resetFilterId(); // reset id because the filter has changed
     const converted = convert(keyword, value, relation);
     this._setTerm(new FilterTerm(converted));

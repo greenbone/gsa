@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseInt, parseFloat} from 'gmp/parser';
+import {parseInt, parseFloat, parseYesNo} from 'gmp/parser';
 import {isDefined, isNumberOrNumberString, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
@@ -110,29 +110,40 @@ const VALUE_CONVERTERS = {
 
 const convert = (
   keyword: ConvertKeyword,
-  value: ConvertValue,
+  value: string | number | boolean | undefined,
   relation: ConvertRelation,
 ): FilterTermObject => {
+  const normalizedValue: ConvertValue =
+    typeof value === 'boolean' ? parseYesNo(value) : value;
+
   let converter = isDefined(keyword) ? KEYWORD_CONVERTERS[keyword] : undefined;
 
   if (!isDefined(converter)) {
-    converter = isDefined(value) ? VALUE_CONVERTERS[value] : undefined;
+    converter = isDefined(normalizedValue)
+      ? VALUE_CONVERTERS[normalizedValue]
+      : undefined;
   }
 
   if (isDefined(converter)) {
-    return converter(keyword, value, relation);
+    return converter(keyword, normalizedValue, relation);
   }
 
   if (isString(keyword) && isEmpty(keyword)) {
-    return {value: isDefined(value) ? String(value) : undefined, relation};
+    return {
+      value: isDefined(normalizedValue) ? String(normalizedValue) : undefined,
+      relation,
+    };
   }
 
   if (isNumberOrNumberString(keyword, parseFloat)) {
-    return {value: `"${keyword}${relation}${value}"`, relation: '~'};
+    return {
+      value: `"${keyword}${relation}${normalizedValue}"`,
+      relation: '~',
+    };
   }
 
   return {
-    value: isDefined(value) ? String(value) : undefined,
+    value: isDefined(normalizedValue) ? String(normalizedValue) : undefined,
     keyword,
     relation,
   };

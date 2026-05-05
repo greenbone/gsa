@@ -59,6 +59,7 @@ export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
 export const DEFAULT_MANUAL_URL = `https://docs.greenbone.net/GSM-Manual/gos-25.0/`;
 export const DEFAULT_PROTOCOLDOC_URL = `https://docs.greenbone.net/API/GMP/gmp-22.5.html`;
 export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
+export const CONTAINER_SCANNING_RESULTS_THRESHOLD = 7000;
 export const DEFAULT_LOG_LEVEL = 'warn';
 export const DEFAULT_TIMEOUT = 300000; // 5 minutes
 

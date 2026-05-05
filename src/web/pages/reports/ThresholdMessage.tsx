@@ -1,14 +1,16 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import ErrorContainer from 'web/components/error/ErrorContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const ThresholdMessage = ({threshold}) => {
+interface ThresholdMessageProps {
+  threshold: number;
+}
+
+const ThresholdMessage = ({threshold}: ThresholdMessageProps) => {
   const [_] = useTranslation();
 
   return (
@@ -22,10 +24,6 @@ const ThresholdMessage = ({threshold}) => {
       )}
     </ErrorContainer>
   );
-};
-
-ThresholdMessage.propTypes = {
-  threshold: PropTypes.number.isRequired,
 };
 
 export default ThresholdMessage;

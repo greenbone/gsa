@@ -575,9 +575,9 @@ const DeltaReportDetails = () => {
         <DownloadReportDialog
           defaultReportConfigId={reportComposerDefaults.defaultReportConfigId}
           defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
-          filter={reportFilter}
-          includeNotes={Number(reportComposerDefaults.includeNotes)}
-          includeOverrides={Number(reportComposerDefaults.includeOverrides)}
+          filter={reportFilter ?? DEFAULT_FILTER}
+          includeNotes={reportComposerDefaults.includeNotes}
+          includeOverrides={reportComposerDefaults.includeOverrides}
           reportConfigs={reportConfigs}
           reportFormats={reportFormats}
           storeAsDefault={storeAsDefault}
