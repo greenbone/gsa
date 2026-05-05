@@ -4,12 +4,11 @@
  */
 
 import React from 'react';
-import {useSelector} from 'react-redux';
 import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
+import useUserName from 'web/hooks/useUserName';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUsername} from 'web/store/usersettings/selectors';
 import {create_pem_certificate} from 'web/utils/Cert';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
@@ -23,7 +22,7 @@ const TlsCertificateComponent = ({
 }) => {
   const gmp = useGmp();
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
-  const username = useSelector(getUsername);
+  const username = useUserName();
   const detailsExportFileName = userDefaultsSelector.getValueByName(
     'detailsexportfilename',
   );

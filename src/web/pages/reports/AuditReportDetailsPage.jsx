@@ -25,6 +25,7 @@ import withDialogNotification from 'web/components/notification/withDialogNotifi
 import FilterProvider from 'web/entities/FilterProvider';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserName from 'web/hooks/useUserName';
 import Page from 'web/pages/reports/AuditReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
@@ -52,10 +53,7 @@ import {
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {
-  getReportComposerDefaults,
-  getUsername,
-} from 'web/store/usersettings/selectors';
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 import {create_pem_certificate} from 'web/utils/Cert';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
@@ -157,7 +155,7 @@ const AuditReportDetailsPage = props => {
     shallowEqual,
   );
   const resultDefaultFilter = userDefaultFilterSel?.getFilter();
-  const username = useSelector(getUsername);
+  const username = useUserName();
 
   useEffect(() => {
     dispatch(loadUserSettingDefaults(gmp)());

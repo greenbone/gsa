@@ -4,11 +4,10 @@
  */
 
 import {useEffect, useCallback} from 'react';
-import {useSelector} from 'react-redux';
 import {useLocation} from 'react-router';
 import useGmp from 'web/hooks/useGmp';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
-import {getUsername} from 'web/store/usersettings/selectors';
+import useUserName from 'web/hooks/useUserName';
 import {saveLastVisitedPage} from 'web/utils/user-last-visited-page';
 
 interface AuthorizedProps {
@@ -20,7 +19,7 @@ const Authorized = ({children}: AuthorizedProps) => {
   const location = useLocation();
 
   const isLoggedIn = useUserIsLoggedIn();
-  const username = useSelector(getUsername);
+  const username = useUserName();
 
   const logout = useCallback(() => {
     if (username && location.pathname !== '/login') {
