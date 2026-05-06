@@ -3,22 +3,62 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
+import type Http from 'gmp/http/http';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
+import type {Element} from 'gmp/models/model';
 import ReportConfig from 'gmp/models/report-config';
 import {parseYesNo} from 'gmp/parser';
 import {isArray} from 'gmp/utils/identity';
 
+type ReportConfigParamValue =
+  | string
+  | number
+  | boolean
+  | Array<string | number | boolean>;
+
+interface ReportConfigCreateArgs {
+  comment?: string;
+  name: string;
+  reportFormatId: string;
+  params?: Record<string, ReportConfigParamValue>;
+  paramsUsingDefault?: Record<string, string | number | boolean | undefined>;
+  paramTypes?: Record<string, string>;
+}
+
+interface ReportConfigSaveArgs {
+  id: string;
+  comment?: string;
+  name: string;
+  params?: Record<string, ReportConfigParamValue>;
+  paramsUsingDefault?: Record<string, string | number | boolean | undefined>;
+  paramTypes?: Record<string, string>;
+}
+
+interface ReportConfigResponseData extends XmlResponseData {
+  get_report_config?: {
+    get_report_configs_response?: {
+      report_config?: Element;
+    };
+  };
+}
+
+interface ReportConfigsResponseData extends XmlResponseData {
+  get_report_configs?: {
+    get_report_configs_response?: Element;
+  };
+}
+
 const log = logger.getLogger('gmp.commands.reportconfigs');
 
-export class ReportConfigCommand extends EntityCommand {
-  constructor(http) {
+export class ReportConfigCommand extends EntityCommand<ReportConfig> {
+  constructor(http: Http) {
     super(http, 'report_config', ReportConfig);
   }
 
-  create(args) {
+  create(args: ReportConfigCreateArgs) {
     const {
       comment,
       name,
@@ -39,9 +79,9 @@ export class ReportConfigCommand extends EntityCommand {
       let value = params[prefName];
       if (isArray(value)) {
         if (paramTypes[prefName] === 'report_format_list') {
-          value = params[prefName].join(',');
+          value = value.map(String).join(',');
         } else {
-          value = JSON.stringify(params[prefName]);
+          value = JSON.stringify(value);
         }
       }
       data['param:' + prefName] = value;
@@ -59,7 +99,7 @@ export class ReportConfigCommand extends EntityCommand {
     return this.action(data);
   }
 
-  save(args) {
+  save(args: ReportConfigSaveArgs) {
     const {
       id,
       comment,
@@ -86,11 +126,11 @@ export class ReportConfigCommand extends EntityCommand {
 
     for (const prefName in params) {
       let value = params[prefName];
-      if (isArray(params[prefName])) {
+      if (isArray(value)) {
         if (paramTypes[prefName] === 'report_format_list') {
-          value = params[prefName].join(',');
+          value = value.map(String).join(',');
         } else {
-          value = JSON.stringify(params[prefName]);
+          value = JSON.stringify(value);
         }
       }
       data['param:' + prefName] = value;
@@ -100,20 +140,23 @@ export class ReportConfigCommand extends EntityCommand {
     return this.action(data);
   }
 
-  getElementFromRoot(root) {
-    return root.get_report_config.get_report_configs_response.report_config;
+  getElementFromRoot(root: XmlResponseData) {
+    return (
+      (root as ReportConfigResponseData).get_report_config
+        ?.get_report_configs_response?.report_config ?? {}
+    );
   }
 }
 
-export class ReportConfigsCommand extends EntitiesCommand {
-  constructor(http) {
+export class ReportConfigsCommand extends EntitiesCommand<ReportConfig> {
+  constructor(http: Http) {
     super(http, 'report_config', ReportConfig);
   }
 
-  getEntitiesResponse(root) {
-    return root.get_report_configs.get_report_configs_response;
+  getEntitiesResponse(root: XmlResponseData) {
+    return (
+      (root as ReportConfigsResponseData).get_report_configs
+        ?.get_report_configs_response ?? {}
+    );
   }
 }
-
-registerCommand('reportconfig', ReportConfigCommand);
-registerCommand('reportconfigs', ReportConfigsCommand);
