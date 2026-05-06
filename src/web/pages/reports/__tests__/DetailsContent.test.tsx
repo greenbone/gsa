@@ -11,7 +11,6 @@ import Report from 'gmp/models/report';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import DetailsContent from 'web/pages/reports/DetailsContent';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -43,10 +42,20 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
   settings: {
     manualUrl,
     reportResultsThreshold,
-    session: createSession({token: 'test-token', username: 'admin'}),
+    session: createSession({
+      token: 'test-token',
+      username: 'admin',
+      timezone: 'Europe/Berlin',
+    }),
   },
   user: {
-    currentSettings: testing.fn().mockResolvedValue({foo: 'bar'}),
+    currentSettings: testing.fn().mockResolvedValue({
+      reportexportfilename: {
+        id: 'report-export-filename',
+        name: 'Report Export File Name',
+        value: '%T-%U',
+      },
+    }),
     getReportComposerDefaults: testing.fn().mockResolvedValue({foo: 'bar'}),
   },
   results: {
@@ -111,7 +120,6 @@ const setupRenderer = (gmpOptions: {reportResultsThreshold?: number} = {}) => {
     router: true,
     store: true,
   });
-  store.dispatch(setTimezone('CET'));
   return {render, store};
 };
 
