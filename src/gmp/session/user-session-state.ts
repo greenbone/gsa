@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import memoizeOne from 'memoize-one';
 import date, {type Date} from 'gmp/models/date';
 import NoSessionState from 'gmp/session/no-session-state';
 import {
@@ -14,6 +15,8 @@ import {
   setSessionValue,
 } from 'gmp/session/session-storage';
 import {hasValue, isDefined} from 'gmp/utils/identity';
+
+const memoizedDate = memoizeOne((value: string): Date => date(value));
 
 /**
  * UserSession class manages the user's session data, including JWT, token,
@@ -60,7 +63,7 @@ class UserSessionState implements SessionState {
 
   get sessionTimeout(): Date | undefined {
     const value = this.storage.getItem('sessionTimeout');
-    return hasValue(value) ? date(value) : undefined;
+    return hasValue(value) ? memoizedDate(value) : undefined;
   }
 
   set token(value: string | undefined) {
