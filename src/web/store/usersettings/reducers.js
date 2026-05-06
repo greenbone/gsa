@@ -5,7 +5,6 @@
 
 import {
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
-  USER_SETTINGS_SET_TIMEZONE,
   USER_SETTINGS_SET_LOCALE,
   USER_SETTINGS_SET_SESSION_TIMEOUT,
 } from 'web/store/usersettings/actions';
@@ -20,15 +19,6 @@ export const reportComposerDefaults = (state = {}, action) => {
         ...state,
         ...action.data,
       };
-    default:
-      return state;
-  }
-};
-
-export const timezone = (state, action) => {
-  switch (action.type) {
-    case USER_SETTINGS_SET_TIMEZONE:
-      return action.timezone;
     default:
       return state;
   }
@@ -58,7 +48,6 @@ const userSettings = combineReducers({
   locale,
   reportComposerDefaults,
   sessionTimeout,
-  timezone,
 });
 
 export default userSettings;

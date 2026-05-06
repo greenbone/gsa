@@ -9,7 +9,5 @@ export const getReportComposerDefaults = rootState => {
   return reportComposerDefaults;
 };
 
-export const getTimezone = rootState => rootState.userSettings.timezone;
-
 export const getSessionTimeout = rootState =>
   rootState.userSettings.sessionTimeout;
