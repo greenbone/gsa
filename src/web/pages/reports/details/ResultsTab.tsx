@@ -6,9 +6,13 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import type {TaskStatus} from 'gmp/models/task';
+import {isActive, type TaskStatus} from 'gmp/models/task';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/Reload';
 import useGetResults from 'web/hooks/use-query/results';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePagination from 'web/hooks/usePagination';
@@ -67,6 +71,9 @@ const ResultsTabWrapper = ({
 
   const {data, isLoading, isFetching, isError, error} = useGetResults({
     filter: resultsFilter,
+    refetchInterval: isActive(status)
+      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+      : NO_RELOAD,
   });
 
   const updateFilter = useCallback(

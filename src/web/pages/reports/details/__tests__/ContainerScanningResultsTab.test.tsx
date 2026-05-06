@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith} from 'web/testing';
+import {act, rendererWith} from 'web/testing';
 import {waitFor, screen} from '@testing-library/react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
@@ -17,6 +17,8 @@ const result = Result.fromElement({
   name: 'Test Result',
   severity: 7.5,
 });
+
+const reloadIntervalActive = 100; // short value for timer tests
 
 const createGmp = ({
   get = testing.fn().mockResolvedValue({
@@ -31,6 +33,9 @@ const createGmp = ({
     get,
   },
   settings: {
+    reloadInterval: 15000,
+    reloadIntervalActive,
+    reloadIntervalInactive: 60000,
     enableEPSS: false,
   },
   session: createSession({token: 'test-token'}),
@@ -46,7 +51,11 @@ describe('ContainerScanningResultsTab', () => {
     const {render} = rendererWith({gmp});
 
     render(
-      <ContainerScanningResultsTab reportFilter={filter} reportId={reportId} />,
+      <ContainerScanningResultsTab
+        reportFilter={filter}
+        reportId={reportId}
+        status={'Running'}
+      />,
     );
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
@@ -60,7 +69,11 @@ describe('ContainerScanningResultsTab', () => {
     const {render} = rendererWith({gmp});
 
     render(
-      <ContainerScanningResultsTab reportFilter={filter} reportId={reportId} />,
+      <ContainerScanningResultsTab
+        reportFilter={filter}
+        reportId={reportId}
+        status={'Running'}
+      />,
     );
 
     await waitFor(() => {
@@ -108,7 +121,11 @@ describe('ContainerScanningResultsTab', () => {
     const {render} = rendererWith({gmp});
 
     const {userEvent} = render(
-      <ContainerScanningResultsTab reportFilter={filter} reportId={reportId} />,
+      <ContainerScanningResultsTab
+        reportFilter={filter}
+        reportId={reportId}
+        status={'Stopped'}
+      />,
     );
 
     await waitFor(() => {
@@ -155,7 +172,11 @@ describe('ContainerScanningResultsTab', () => {
     const {render} = rendererWith({gmp});
 
     const {userEvent} = render(
-      <ContainerScanningResultsTab reportFilter={filter} reportId={reportId} />,
+      <ContainerScanningResultsTab
+        reportFilter={filter}
+        reportId={reportId}
+        status={'Stopped'}
+      />,
     );
 
     await waitFor(() => {
@@ -203,7 +224,11 @@ describe('ContainerScanningResultsTab', () => {
     const {render} = rendererWith({gmp});
 
     const {userEvent} = render(
-      <ContainerScanningResultsTab reportFilter={filter} reportId={reportId} />,
+      <ContainerScanningResultsTab
+        reportFilter={filter}
+        reportId={reportId}
+        status={'Stopped'}
+      />,
     );
 
     await waitFor(() => {
@@ -251,7 +276,11 @@ describe('ContainerScanningResultsTab', () => {
     const {render} = rendererWith({gmp});
 
     const {userEvent} = render(
-      <ContainerScanningResultsTab reportFilter={filter} reportId={reportId} />,
+      <ContainerScanningResultsTab
+        reportFilter={filter}
+        reportId={reportId}
+        status={'Stopped'}
+      />,
     );
 
     await waitFor(() => {
@@ -299,7 +328,11 @@ describe('ContainerScanningResultsTab', () => {
     const {render} = rendererWith({gmp});
 
     const {userEvent} = render(
-      <ContainerScanningResultsTab reportFilter={filter} reportId={reportId} />,
+      <ContainerScanningResultsTab
+        reportFilter={filter}
+        reportId={reportId}
+        status={'Stopped'}
+      />,
     );
 
     await waitFor(() => {
@@ -351,6 +384,7 @@ describe('ContainerScanningResultsTab', () => {
       <ContainerScanningResultsTab
         reportFilter={filter1}
         reportId={reportId}
+        status={'Stopped'}
       />,
     );
 
@@ -362,6 +396,7 @@ describe('ContainerScanningResultsTab', () => {
       <ContainerScanningResultsTab
         reportFilter={filter2}
         reportId={reportId}
+        status={'Stopped'}
       />,
     );
 
@@ -384,7 +419,11 @@ describe('ContainerScanningResultsTab', () => {
     const {render} = rendererWith({gmp});
 
     render(
-      <ContainerScanningResultsTab reportFilter={filter} reportId={reportId} />,
+      <ContainerScanningResultsTab
+        reportFilter={filter}
+        reportId={reportId}
+        status={'Running'}
+      />,
     );
 
     await waitFor(() => {
@@ -429,7 +468,11 @@ describe('ContainerScanningResultsTab', () => {
     const {render} = rendererWith({gmp});
 
     const {userEvent} = render(
-      <ContainerScanningResultsTab reportFilter={filter} reportId={reportId} />,
+      <ContainerScanningResultsTab
+        reportFilter={filter}
+        reportId={reportId}
+        status={'Stopped'}
+      />,
     );
 
     if (resolveFirstQuery) {
@@ -474,6 +517,60 @@ describe('ContainerScanningResultsTab', () => {
 
     await waitFor(() => {
       expect(gmp.results.get).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('Results polling behavior isActive status', () => {
+    test.each([
+      [
+        'should poll results when task status is active',
+        'Running' as const,
+        reloadIntervalActive + 50,
+        2,
+      ],
+      [
+        'should not poll results when task status is not active',
+        'Stopped' as const,
+        reloadIntervalActive * 10,
+        1,
+      ],
+    ])('%s', async (_, status, timeToAdvance, expectedCallCount) => {
+      testing.useFakeTimers();
+
+      const getMock = testing.fn().mockResolvedValue({
+        data: [result],
+        meta: {
+          counts: new CollectionCounts({
+            filtered: 1,
+            all: 1,
+            first: 1,
+            rows: 10,
+          }),
+          filter: Filter.fromString(''),
+        },
+      });
+
+      const gmp = createGmp({get: getMock});
+      const {render} = rendererWith({gmp});
+
+      render(
+        <ContainerScanningResultsTab
+          reportFilter={Filter.fromString('')}
+          reportId={'report-123'}
+          status={status}
+        />,
+      );
+
+      await act(async () => {});
+      expect(getMock).toHaveBeenCalledTimes(1);
+
+      await act(async () => {
+        await testing.advanceTimersByTimeAsync(timeToAdvance);
+      });
+
+      expect(getMock).toHaveBeenCalledTimes(expectedCallCount);
+
+      testing.useRealTimers();
     });
   });
 });
