@@ -10,8 +10,6 @@ import 'gmp/commands/license';
 import 'gmp/commands/notes';
 import 'gmp/commands/os';
 import 'gmp/commands/overrides';
-
-import 'gmp/commands/results';
 import 'gmp/commands/scan-configs';
 import 'gmp/commands/schedules';
 import 'gmp/commands/tickets';
@@ -66,6 +64,8 @@ import ReportFormatsCommand from 'gmp/commands/report-formats';
 import ReportPortsCommand from 'gmp/commands/report-ports';
 import ReportsCommand from 'gmp/commands/reports';
 import ResourceNamesCommand from 'gmp/commands/resource-names';
+import {ResultCommand} from 'gmp/commands/result';
+import {ResultsCommand} from 'gmp/commands/results';
 import RoleCommand from 'gmp/commands/role';
 import RolesCommand from 'gmp/commands/roles';
 import ScannerCommand from 'gmp/commands/scanner';
@@ -148,6 +148,8 @@ class Gmp {
   public readonly reportformats: ReportFormatsCommand;
   public readonly reports: ReportsCommand;
   public readonly reportports: ReportPortsCommand;
+  public readonly result: ResultCommand;
+  public readonly results: ResultsCommand;
   public readonly resourcenames: ResourceNamesCommand;
   public readonly role: RoleCommand;
   public readonly roles: RolesCommand;
@@ -235,6 +237,8 @@ class Gmp {
     this.reportformats = new ReportFormatsCommand(this.http);
     this.reports = new ReportsCommand(this.http);
     this.reportports = new ReportPortsCommand(this.http);
+    this.result = new ResultCommand(this.http);
+    this.results = new ResultsCommand(this.http);
     this.resourcenames = new ResourceNamesCommand(this.http);
     this.role = new RoleCommand(this.http);
     this.roles = new RolesCommand(this.http);
