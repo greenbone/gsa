@@ -118,6 +118,13 @@ describe('UserSessionState tests', () => {
 
     const session = new UserSessionState(storage);
 
+    expect(session.locale).toBe('en-US');
+    expect(session.sessionTimeout?.toISOString()).toBe(
+      '2024-12-31T23:59:59.000Z',
+    );
+    expect(session.timezone).toBe('UTC');
+    expect(session.username).toBe('test-user');
+
     session.locale = undefined;
     session.sessionTimeout = undefined;
     session.timezone = undefined;
@@ -213,5 +220,39 @@ describe('UserSessionState tests', () => {
     expect(newState.locale).toBe('de-DE');
     expect(newState.timezone).toBe('CET');
     expect(newState.username).toBe('test-user1');
+  });
+
+  test("should return same session timeout instance if it's not changed", () => {
+    const storage = createStorage({
+      sessionTimeout: '2024-12-31T23:59:59.000Z',
+    });
+
+    const session = new UserSessionState(storage);
+
+    const firstTimeout = session.sessionTimeout;
+    const secondTimeout = session.sessionTimeout;
+
+    expect(firstTimeout).toBe(secondTimeout);
+  });
+
+  test("should return new session timeout instance if it's changed", () => {
+    const storage = createStorage({
+      sessionTimeout: '2024-12-31T23:59:59.000Z',
+    });
+
+    const session = new UserSessionState(storage);
+
+    const firstTimeout = session.sessionTimeout;
+
+    session.sessionTimeout = date('2025-01-01T00:00:00Z');
+
+    const secondTimeout = session.sessionTimeout;
+
+    expect(firstTimeout).not.toBe(secondTimeout);
+    expect(secondTimeout?.toISOString()).toBe('2025-01-01T00:00:00.000Z');
+
+    session.sessionTimeout = undefined;
+
+    expect(session.sessionTimeout).toBeUndefined();
   });
 });
