@@ -95,6 +95,7 @@ const ResultsTabContent = ({
       <ContainerScanningResultsTab
         reportFilter={reportFilter}
         reportId={reportId}
+        status={status}
       />
     );
   }

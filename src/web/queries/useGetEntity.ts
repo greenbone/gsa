@@ -10,7 +10,8 @@ import type Model from 'gmp/models/model';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import {
-  transformRefetchInterval,
+  resolveRefetchInterval,
+  transformRefetchIntervalFn,
   type RefetchIntervalFn,
 } from 'web/queries/helpers';
 
@@ -32,11 +33,11 @@ const useGetEntity = <TModel extends Model>({
   const gmp = useGmp();
   const token = useSessionToken();
 
-  const interval = refetchInterval ?? gmp.settings.reloadInterval;
+  const settings = gmp.settings;
   const resolvedRefetchInterval =
-    typeof interval === 'function'
-      ? transformRefetchInterval(interval)
-      : interval;
+    typeof refetchInterval === 'function'
+      ? transformRefetchIntervalFn(refetchInterval, settings)
+      : resolveRefetchInterval(refetchInterval, settings);
 
   return useQuery<TModel>({
     enabled: Boolean(token) && Boolean(id),

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, wait} from 'web/testing';
+import {act, rendererWith, wait} from 'web/testing';
 import {waitFor, screen} from '@testing-library/react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
@@ -17,6 +17,7 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
 const reloadInterval = 60000;
+const reloadIntervalActive = 100; // short value for timer tests
 const manualUrl = 'test/';
 
 // mock entities
@@ -138,6 +139,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     reloadInterval,
+    reloadIntervalActive,
     severityRating: SEVERITY_RATING_CVSS_3,
   },
   session: createSession({token: 'test-token', timezone: 'CET'}),
@@ -369,5 +371,78 @@ describe('Report Results Tab tests', () => {
     expect(row[4]).toHaveTextContent(
       'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
     );
+  });
+
+  describe('Results polling behavior isActive status', () => {
+    test.each([
+      [
+        'should poll results when task status is active',
+        'Running',
+        50,
+        reloadIntervalActive + 50,
+        2,
+      ],
+      [
+        'should not poll results when task status is not active',
+        'Stopped',
+        100,
+        reloadIntervalActive * 10,
+        1,
+      ],
+    ])('%s', async (_, status, progress, timeToAdvance, expectedCallCount) => {
+      testing.useFakeTimers();
+
+      const getResults = testing.fn().mockResolvedValue({
+        data: results,
+        meta: {
+          filter: Filter.fromString(),
+          counts: new CollectionCounts({
+            first: 1,
+            all: 3,
+            filtered: 3,
+            length: 3,
+            rows: 10,
+          }),
+        },
+      });
+
+      const gmp = createGmp({getResults});
+      const {render, store} = rendererWith({
+        gmp,
+        capabilities: true,
+        store: true,
+        router: true,
+      });
+
+      store.dispatch(loadingActions.success({rowsperpage: {value: '10'}}));
+
+      render(
+        <ResultsTab
+          hasTarget={true}
+          progress={progress}
+          reportFilter={Filter.fromString('first=1 rows=10')}
+          reportId={'123'}
+          reportResultsCounts={
+            new CollectionCounts({first: 1, all: 3, filtered: 3, rows: 10})
+          }
+          status={status}
+          onFilterDecreaseMinQoDClick={testing.fn()}
+          onFilterEditClick={testing.fn()}
+          onFilterRemoveClick={testing.fn()}
+          onTargetEditClick={testing.fn()}
+        />,
+      );
+
+      await act(async () => {});
+      expect(getResults).toHaveBeenCalledTimes(1);
+
+      await act(async () => {
+        await testing.advanceTimersByTimeAsync(timeToAdvance);
+      });
+
+      expect(getResults).toHaveBeenCalledTimes(expectedCallCount);
+
+      testing.useRealTimers();
+    });
   });
 });
