@@ -42,23 +42,6 @@ describe('Gmp tests', () => {
     globalThis.location = origLocation;
   });
 
-  test('should not be logged in if session is inactive', () => {
-    const storage = createStorage();
-    const settings = new Settings(storage);
-    const gmp = new Gmp(settings);
-
-    expect(gmp.isLoggedIn()).toEqual(false);
-  });
-
-  test('should be logged in if session is active', () => {
-    const storage = createStorage();
-    const settings = new Settings(storage);
-    settings.session.login({token: 'foo'});
-    const gmp = new Gmp(settings);
-
-    expect(gmp.isLoggedIn()).toEqual(true);
-  });
-
   test('should login user', async () => {
     const http = createHttp(createResponse({token: 'foo'}));
 
@@ -77,7 +60,7 @@ describe('Gmp tests', () => {
         },
       }),
     );
-    expect(gmp.isLoggedIn()).toEqual(true);
+    expect(settings.session.isLoggedIn()).toEqual(true);
   });
 
   test('should not login if request fails', async () => {
@@ -100,7 +83,7 @@ describe('Gmp tests', () => {
         }),
       );
       expect((error as Error).message).toEqual('An error');
-      expect(gmp.isLoggedIn()).toEqual(false);
+      expect(settings.session.isLoggedIn()).toEqual(false);
     }
   });
 
@@ -110,11 +93,11 @@ describe('Gmp tests', () => {
     settings.session.login({token: 'foo'});
     const gmp = new Gmp(settings);
 
-    expect(gmp.isLoggedIn()).toEqual(true);
+    expect(settings.session.isLoggedIn()).toEqual(true);
 
     gmp.logout();
 
-    expect(gmp.isLoggedIn()).toEqual(false);
+    expect(settings.session.isLoggedIn()).toEqual(false);
     expect(settings.session.token).toBeUndefined();
   });
 
@@ -126,11 +109,11 @@ describe('Gmp tests', () => {
     const handler = testing.fn();
     const unsub = gmp.subscribeToLogout(handler);
 
-    expect(gmp.isLoggedIn()).toEqual(true);
+    expect(settings.session.isLoggedIn()).toEqual(true);
 
     gmp.logout();
 
-    expect(gmp.isLoggedIn()).toEqual(false);
+    expect(settings.session.isLoggedIn()).toEqual(false);
     expect(handler).toHaveBeenCalled();
 
     unsub();
@@ -143,11 +126,11 @@ describe('Gmp tests', () => {
     const handler = testing.fn();
     const unsub = gmp.subscribeToLogout(handler);
 
-    expect(gmp.isLoggedIn()).toEqual(false);
+    expect(settings.session.isLoggedIn()).toEqual(false);
 
     gmp.logout();
 
-    expect(gmp.isLoggedIn()).toEqual(false);
+    expect(settings.session.isLoggedIn()).toEqual(false);
     expect(handler).toHaveBeenCalled();
 
     unsub();
@@ -160,7 +143,7 @@ describe('Gmp tests', () => {
     settings.session.login({token: 'foo'});
     const gmp = new Gmp(settings, http);
 
-    expect(gmp.isLoggedIn()).toEqual(true);
+    expect(settings.session.isLoggedIn()).toEqual(true);
 
     await gmp.doLogout();
     expect(http.request).toHaveBeenCalledWith('get', {
@@ -169,7 +152,7 @@ describe('Gmp tests', () => {
       },
       url: 'http://localhost/logout',
     });
-    expect(gmp.isLoggedIn()).toEqual(false);
+    expect(settings.session.isLoggedIn()).toEqual(false);
     expect(settings.session.token).toBeUndefined();
   });
 
@@ -184,10 +167,10 @@ describe('Gmp tests', () => {
 
     gmp.subscribeToLogout(handler);
 
-    expect(gmp.isLoggedIn()).toEqual(true);
+    expect(settings.session.isLoggedIn()).toEqual(true);
 
     await gmp.doLogout();
-    expect(gmp.isLoggedIn()).toEqual(false);
+    expect(settings.session.isLoggedIn()).toEqual(false);
     expect(settings.session.token).toBeUndefined();
     expect(handler).toHaveBeenCalled();
   });
@@ -206,10 +189,10 @@ describe('Gmp tests', () => {
 
     gmp.subscribeToLogout(handler);
 
-    expect(gmp.isLoggedIn()).toEqual(true);
+    expect(settings.session.isLoggedIn()).toEqual(true);
 
     await gmp.doLogout();
-    expect(gmp.isLoggedIn()).toEqual(false);
+    expect(settings.session.isLoggedIn()).toEqual(false);
     expect(settings.session.token).toBeUndefined();
     expect(handler).toHaveBeenCalled();
   });
@@ -224,10 +207,10 @@ describe('Gmp tests', () => {
 
     gmp.subscribeToLogout(handler);
 
-    expect(gmp.isLoggedIn()).toEqual(false);
+    expect(settings.session.isLoggedIn()).toEqual(false);
 
     await gmp.doLogout();
-    expect(gmp.isLoggedIn()).toEqual(false);
+    expect(settings.session.isLoggedIn()).toEqual(false);
     expect(settings.session.token).toBeUndefined();
     expect(handler).not.toHaveBeenCalled();
   });

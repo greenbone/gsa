@@ -84,7 +84,6 @@ import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
 import logger, {type RootLogger} from 'gmp/log';
 import type Settings from 'gmp/settings';
 import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
 
 type Listener = () => void;
 
@@ -263,7 +262,7 @@ class Gmp {
   }
 
   public async doLogout() {
-    if (this.isLoggedIn()) {
+    if (this.settings.session.isLoggedIn()) {
       const url = this.buildUrl('logout');
       const args = {token: this.settings.session.token};
 
@@ -288,10 +287,6 @@ class Gmp {
     for (const listener of this._logoutListeners) {
       listener();
     }
-  }
-
-  public isLoggedIn() {
-    return !isEmpty(this.settings.session.token);
   }
 
   public subscribeToLogout(listener: Listener) {

@@ -32,7 +32,6 @@ vi.mock('react-router', async () => {
 });
 
 const createGmp = ({
-  isLoggedIn = false,
   clearToken = testing.fn(),
   login = testing.fn().mockResolvedValue({
     locale: 'locale',
@@ -49,7 +48,6 @@ const createGmp = ({
   guestUsername = undefined,
   guestPassword = undefined,
 }: {
-  isLoggedIn?: boolean;
   clearToken?: () => void;
   login?: (username: string, password: string) => Promise<void>;
   currentSettings?: () => Promise<unknown>;
@@ -171,7 +169,7 @@ describe('LoginPage tests', () => {
   });
 
   test('should redirect to main page if already logged in', () => {
-    const gmp = createGmp({isLoggedIn: true});
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, router: true});
 
