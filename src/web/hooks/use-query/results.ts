@@ -13,7 +13,10 @@ import useGetEntities, {
 
 interface UseGetResultsParams {
   filter?: Filter;
-  refetchInterval?: number | RefetchIntervalFn<UseGetEntitiesReturn<Result>>;
+  refetchInterval?:
+    | number
+    | false
+    | RefetchIntervalFn<UseGetEntitiesReturn<Result>>;
 }
 
 /**
@@ -30,7 +33,6 @@ export const useGetResults = ({
   const gmp = useGmp();
 
   return useGetEntities<Result>({
-    // @ts-expect-error results command is dynamically added via getCommands()
     gmpMethod: gmp.results.get.bind(gmp.results),
     queryId: 'get_results',
     filter,
