@@ -7,7 +7,14 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import AgentInstaller from 'gmp/models/agent-installer';
+import {createSession} from 'gmp/testing';
 import AgentInstallerTable from 'web/pages/agent-installers/AgentInstallerTable';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('AgentInstallerTable tests', () => {
   test('should render without crashing', () => {
@@ -16,13 +23,13 @@ describe('AgentInstallerTable tests', () => {
       new AgentInstaller({id: '2', name: 'Agent Installer 2'}),
     ];
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<AgentInstallerTable entities={installers} />);
     expect(screen.getByTestId('entities-table')).toBeInTheDocument();
   });
 
   test('should render the empty title when no installers are available', () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<AgentInstallerTable entities={[]} />);
     expect(
       screen.getByText('No agent installers available'),
@@ -31,7 +38,7 @@ describe('AgentInstallerTable tests', () => {
   });
 
   test("should not render anything if installers aren't provided", () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<AgentInstallerTable />);
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
   });
@@ -53,7 +60,7 @@ describe('AgentInstallerTable tests', () => {
       }),
     ];
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<AgentInstallerTable entities={installers} />);
 
     expect(screen.getByText('Agent Installer 1')).toBeInTheDocument();
@@ -80,7 +87,7 @@ describe('AgentInstallerTable tests', () => {
     const handleDownload = testing.fn();
     const handleChecksum = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <AgentInstallerTable
         entities={installers}
@@ -106,7 +113,7 @@ describe('AgentInstallerTable tests', () => {
       }),
     ];
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<AgentInstallerTable entities={installers} />);
 
     expect(screen.getByText('Name')).toBeInTheDocument();
@@ -129,7 +136,7 @@ describe('AgentInstallerTable tests', () => {
 
     const handleSortChange = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <AgentInstallerTable
         entities={installers}

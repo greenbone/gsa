@@ -19,7 +19,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TaskListPage from 'web/pages/tasks/TaskListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -120,7 +119,7 @@ const createGmp = ({
   reloadInterval,
   settings: {
     manualUrl,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {currentSettings, getSetting: getUserSetting},
 });
@@ -135,8 +134,6 @@ describe('TaskListPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -254,8 +251,6 @@ describe('TaskListPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));

@@ -7,6 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Policy from 'gmp/models/policy';
+import {createSession} from 'gmp/testing';
 import AuditDetailsPageToolBarIcons from 'web/pages/audits/AuditDetailsPageToolBarIcons';
 
 const policy = Policy.fromElement({
@@ -57,6 +58,13 @@ const currentReport = {
 
 const manualUrl = 'test/';
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+    manualUrl,
+  },
+});
+
 describe('AuditDetailsPageToolBarIcons tests', () => {
   test('should render', () => {
     const audit = Audit.fromElement({
@@ -87,7 +95,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const handleAuditStartClick = testing.fn();
     const handleAuditStopClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -149,7 +157,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const handleAuditStartClick = testing.fn();
     const handleAuditStopClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -246,7 +254,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const handleAuditStartClick = testing.fn();
     const handleAuditStopClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -351,7 +359,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const handleAuditStartClick = testing.fn();
     const handleAuditStopClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -456,7 +464,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const handleAuditStartClick = testing.fn();
     const handleAuditStopClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -560,7 +568,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const handleAuditStartClick = testing.fn();
     const handleAuditStopClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,
@@ -677,7 +685,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const handleAuditStartClick = testing.fn();
     const handleAuditStopClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       gmp,

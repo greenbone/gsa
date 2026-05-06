@@ -4,12 +4,11 @@
  */
 
 import {useState} from 'react';
-import {useSelector} from 'react-redux';
 import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 import ScheduleDialog from 'web/pages/schedules/ScheduleDialog';
-import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 
 const ScheduleComponent = ({
@@ -26,7 +25,7 @@ const ScheduleComponent = ({
   onSaveError,
 }) => {
   const [_] = useTranslation();
-  const timezone = useSelector(getTimezone);
+  const timezone = useUserTimezone();
 
   const [dialogVisible, setDialogVisible] = useState(false);
 

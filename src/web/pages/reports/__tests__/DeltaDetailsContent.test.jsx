@@ -6,10 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=chml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -38,6 +38,7 @@ const createGmp = ({
       manualUrl,
       reportResultsThreshold,
       severityRating,
+      session: createSession({timezone: 'CET'}),
     },
     user: {
       currentSettings,
@@ -82,14 +83,11 @@ describe('DeltaReportDetailsContent tests', () => {
     const {entity} = getMockDeltaReport();
     const filters = [filterWithName];
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <DeltaDetailsContent
@@ -282,14 +280,11 @@ describe('DeltaReportDetailsContent tests', () => {
     const {entity} = getMockDeltaReport();
     const filters = [filterWithName];
     const gmp = createGmp({severityRating: SEVERITY_RATING_CVSS_3});
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <DeltaDetailsContent

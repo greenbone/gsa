@@ -13,17 +13,18 @@ import {
 } from '@gsa/testing';
 import {rendererWith} from 'web/testing';
 import Date from 'gmp/models/date';
+import {createSession} from 'gmp/testing';
 import DateTime from 'web/components/date/DateTime';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-const getSetting = testing.fn().mockResolvedValue({});
-
-const gmp = {
+const createGmp = ({getSetting = testing.fn().mockResolvedValue({})} = {}) => ({
   user: {
     getSetting,
   },
-};
+  settings: {
+    session: createSession({timezone: 'CET'}),
+  },
+});
 
 describe('DateTime render tests', () => {
   let originalSetItem;
@@ -47,7 +48,7 @@ describe('DateTime render tests', () => {
   };
 
   test('should render nothing if date is undefined', () => {
-    const {render, store} = rendererWith({gmp, store: true});
+    const {render, store} = rendererWith({gmp: createGmp(), store: true});
     store.dispatch(
       loadingActions.success({
         userinterfacetimeformat: {value: 12},
@@ -66,7 +67,7 @@ describe('DateTime render tests', () => {
     const consoleWarn = console.warn;
     console.warn = () => {};
 
-    const {render, store} = rendererWith({gmp, store: true});
+    const {render, store} = rendererWith({gmp: createGmp(), store: true});
     store.dispatch(
       loadingActions.success({
         userinterfacetimeformat: {value: 12},
@@ -89,13 +90,11 @@ describe('DateTime render tests', () => {
   test('should call formatter', () => {
     const formatter = testing.fn().mockReturnValue('foo');
 
-    const {render, store} = rendererWith({gmp, store: true});
+    const {render} = rendererWith({gmp: createGmp(), store: true});
 
     const date = Date('2019-01-01T12:00:00Z');
 
     expect(date.isValid()).toEqual(true);
-
-    store.dispatch(setTimezone('CET'));
 
     localStorage.setItem('userInterfaceTimeFormat', 12);
     localStorage.setItem('userInterfaceDateFormat', 'wdmy');
@@ -109,12 +108,10 @@ describe('DateTime render tests', () => {
   });
 
   test('should render timezone on separate lines when showTimezoneAsSeparateLine is true', () => {
-    const {render, store} = rendererWith({gmp, store: true});
+    const {render} = rendererWith({gmp: createGmp(), store: true});
 
     const date = Date('2019-01-01T12:00:00Z');
     expect(date.isValid()).toEqual(true);
-
-    store.dispatch(setTimezone('CET'));
 
     localStorage.setItem('userInterfaceTimeFormat', 12);
     localStorage.setItem('userInterfaceDateFormat', 'wdmy');
@@ -162,7 +159,7 @@ describe('DateTime render tests', () => {
       'Tue, 1 Jan 2019 1:00 PM Central European Standard Time',
     ],
   ])('%s', (_, settings, expectedText) => {
-    const {render, store} = rendererWith({gmp, store: true});
+    const {render} = rendererWith({gmp: createGmp(), store: true});
 
     localStorage.setItem(
       'userInterfaceTimeFormat',
@@ -175,8 +172,6 @@ describe('DateTime render tests', () => {
 
     const date = Date('2019-01-01T12:00:00Z');
     expect(date.isValid()).toEqual(true);
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(<DateTime date={date} />);
     expect(baseElement).toHaveTextContent(expectedText);

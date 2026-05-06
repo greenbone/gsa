@@ -17,7 +17,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialDetailsPage from 'web/pages/credentials/CredentialDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/credentials';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -59,7 +58,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     reloadInterval,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {
     currentSettings: testing
@@ -86,8 +85,6 @@ describe('CredentialDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 
@@ -173,7 +170,6 @@ describe('CredentialDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     store.dispatch(entityLoadingActions.success('6575', credential));
 
     render(<CredentialDetailsPage id={credential.id} />);
@@ -255,8 +251,6 @@ describe('CredentialDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('6575', credential));
 
     render(<CredentialDetailsPage id={credential.id} />);
@@ -289,8 +283,6 @@ describe('CredentialDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('6575', credential));
 
     const {container} = render(<CredentialDetailsPage id="6575" />);
@@ -309,8 +301,6 @@ describe('CredentialDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('6575', credential));
 
     const {container} = render(<CredentialDetailsPage id="6575" />);
@@ -328,8 +318,6 @@ describe('CredentialDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 
@@ -379,8 +367,6 @@ describe('CredentialDetailsPage tests', () => {
       showLocation: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('6575', credential));
 
     render(<CredentialDetailsPage id="6575" />);
@@ -403,8 +389,6 @@ describe('CredentialDetailsPage tests', () => {
       store: true,
       showLocation: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 

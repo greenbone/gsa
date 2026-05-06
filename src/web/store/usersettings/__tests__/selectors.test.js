@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import {
   getReportComposerDefaults,
   getSessionTimeout,
-  getTimezone,
 } from 'web/store/usersettings/selectors';
 
 const createRootState = state => ({
@@ -15,18 +14,6 @@ const createRootState = state => ({
 });
 
 describe('settings selectors tests', () => {
-  describe('getTimezone tests', () => {
-    test('should return undefined timezone for empty state', () => {
-      const state = createRootState({});
-      expect(getTimezone(state)).toBeUndefined();
-    });
-
-    test('should return timezone', () => {
-      const state = createRootState({timezone: 'cet'});
-      expect(getTimezone(state)).toEqual('cet');
-    });
-  });
-
   describe('getSessionTimeout tests', () => {
     test('should return undefined session timeout for empty state', () => {
       const state = createRootState({});

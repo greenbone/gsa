@@ -8,7 +8,6 @@ import {within, rendererWith, wait, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import StartPage from 'web/pages/start/StartPage';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const manualUrl = 'test/';
 
@@ -63,14 +62,11 @@ describe('StartPage tests', () => {
       settings: {manualUrl},
     };
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(<StartPage />);
 

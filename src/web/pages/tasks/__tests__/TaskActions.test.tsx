@@ -7,9 +7,16 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableRow, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import TaskActions from 'web/pages/tasks/TaskActions';
 
 const wrongCaps = new Capabilities(['get_tasks']);
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('TaskActions tests', () => {
   test('should render', () => {
@@ -29,7 +36,10 @@ describe('TaskActions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: true, store: true});
+    const {render} = rendererWithTableRow({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     const {element} = render(
       <TaskActions
         entity={task}
@@ -66,7 +76,10 @@ describe('TaskActions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: true, store: true});
+    const {render} = rendererWithTableRow({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <TaskActions
         entity={task}
@@ -133,7 +146,7 @@ describe('TaskActions tests', () => {
 
     const {render} = rendererWithTableRow({
       capabilities: wrongCaps,
-      store: true,
+      gmp: createGmp(),
     });
     render(
       <TaskActions
@@ -210,7 +223,7 @@ describe('TaskActions tests', () => {
 
     const {render} = rendererWithTableRow({
       capabilities: wrongCaps,
-      store: true,
+      gmp: createGmp(),
     });
     render(
       <TaskActions
@@ -290,7 +303,7 @@ describe('TaskActions tests', () => {
 
     const {render} = rendererWithTableRow({
       capabilities: wrongCaps,
-      store: true,
+      gmp: createGmp(),
     });
     render(
       <TaskActions
@@ -362,7 +375,10 @@ describe('TaskActions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: true, store: true});
+    const {render} = rendererWithTableRow({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <TaskActions
         entity={task}
@@ -427,7 +443,10 @@ describe('TaskActions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: true, store: true});
+    const {render} = rendererWithTableRow({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <TaskActions
         entity={task}
@@ -499,7 +518,7 @@ describe('TaskActions tests', () => {
 
     const {render} = rendererWithTableRow({
       capabilities: true,
-      store: true,
+      gmp: createGmp(),
       router: true,
     });
     render(
@@ -569,7 +588,10 @@ describe('TaskActions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: true, store: true});
+    const {render} = rendererWithTableRow({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <TaskActions
         entity={task}

@@ -7,10 +7,10 @@ import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__fixtures__/MockAuditDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
@@ -37,6 +37,7 @@ const createGmp = ({
     settings: {
       manualUrl,
       reportResultsThreshold,
+      session: createSession({timezone: 'CET'}),
     },
     user: {
       currentSettings,
@@ -79,14 +80,11 @@ describe('AuditDeltaDetailsContent tests', () => {
       reportResultsThreshold: 10,
     });
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <DeltaDetailsContent
@@ -273,14 +271,11 @@ describe('AuditDeltaDetailsContent tests', () => {
     const {entity} = getMockAuditDeltaReport();
     const filters = [filterWithName];
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <DeltaDetailsContent

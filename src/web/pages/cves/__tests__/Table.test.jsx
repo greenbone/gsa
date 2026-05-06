@@ -10,8 +10,8 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Cve from 'gmp/models/cve';
 import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import CveTable from 'web/pages/cves/Table';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const caps = new Capabilities(['everything']);
 
@@ -69,20 +69,19 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('Cve table tests', () => {
   test('should render', () => {
-    const gmp = {
-      settings: {},
-    };
-
-    const {render, store} = rendererWith({
-      gmp,
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: caps,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <CveTable
@@ -101,15 +100,10 @@ describe('Cve table tests', () => {
   });
 
   test('should unfold all details', () => {
-    const gmp = {
-      settings: {},
-    };
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: caps,
       router: true,
-      store: true,
     });
 
     const {element} = render(

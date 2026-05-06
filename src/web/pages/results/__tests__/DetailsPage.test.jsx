@@ -13,7 +13,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/results/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/results';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -123,7 +122,12 @@ const createGmp = ({
   permissions: {
     get: getPermissions,
   },
-  settings: {manualUrl, reloadInterval, enableEPSS, session: createSession()},
+  settings: {
+    manualUrl,
+    reloadInterval,
+    enableEPSS,
+    session: createSession({timezone: 'CET'}),
+  },
   user: {
     currentSettings,
   },
@@ -141,8 +145,6 @@ describe('ResultDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', result));
 
@@ -340,8 +342,6 @@ describe('ResultDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', result));
 
     const {container} = render(<DetailsPage id="12345" />);
@@ -359,8 +359,6 @@ describe('ResultDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', result));
 

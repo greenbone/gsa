@@ -12,7 +12,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScheduleDetailsPage from 'web/pages/schedules/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/schedules';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -68,7 +67,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     reloadInterval,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {
     currentSettings,
@@ -85,8 +84,6 @@ describe('ScheduleDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
@@ -146,8 +143,6 @@ describe('ScheduleDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
     const {container} = render(<ScheduleDetailsPage id="12345" />);
@@ -166,8 +161,6 @@ describe('ScheduleDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
@@ -190,8 +183,6 @@ describe('ScheduleDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 

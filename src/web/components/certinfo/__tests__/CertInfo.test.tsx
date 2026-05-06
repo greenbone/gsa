@@ -7,8 +7,14 @@ import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Credential, {type CertificateInfo} from 'gmp/models/credential';
 import date from 'gmp/models/date';
+import {createSession} from 'gmp/testing';
 import CertInfo from 'web/components/certinfo/CertInfo';
-import {setTimezone} from 'web/store/usersettings/actions';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession({timezone: 'UTC'}),
+  },
+});
 
 describe('CertInfo tests', () => {
   test('should render cert info with all fields', () => {
@@ -22,8 +28,7 @@ describe('CertInfo tests', () => {
         md5Fingerprint: 'AA:BB:CC:DD:EE:FF',
       },
     });
-    const {render, store} = rendererWith({store: true});
-    store.dispatch(setTimezone('UTC'));
+    const {render} = rendererWith({store: true, gmp: createGmp()});
 
     render(<CertInfo info={credential.certificateInfo as CertificateInfo} />);
 

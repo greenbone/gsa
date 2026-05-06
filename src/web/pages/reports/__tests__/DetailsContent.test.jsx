@@ -9,7 +9,6 @@ import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import DetailsContent from 'web/pages/reports/DetailsContent';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -37,7 +36,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     reportResultsThreshold,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {
     currentSettings,
@@ -81,14 +80,11 @@ describe('ReportDetailsContent tests', () => {
     const {entity} = getMockReport();
     const filters = [filterWithName];
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <DetailsContent
@@ -287,14 +283,11 @@ describe('ReportDetailsContent tests', () => {
     const gmp = createGmp({
       reportResultsThreshold: 1,
     });
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <DetailsContent

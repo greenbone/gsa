@@ -15,7 +15,6 @@ import Schedule from 'gmp/models/schedule';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/audits/DetailsPage';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const policy = Policy.fromElement({
   _id: '314',
@@ -135,11 +134,10 @@ const audit5 = Audit.fromElement({
 
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
 const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
   auditEntity = audit,
   getPolicyResponse = new Response(policy),
   getScheduleResponse = new Response(schedule),
@@ -194,7 +192,7 @@ const createGmp = ({
     manualUrl,
     reloadInterval: 15000,
     reloadIntervalActive: 3000,
-    session: createSession({token: 'test-token'}),
+    session: createSession({token: 'test-token', timezone: 'CET'}),
   },
   user: {
     currentSettings,
@@ -204,15 +202,12 @@ const createGmp = ({
 describe('Audit DetailsPage tests', () => {
   test('should render full DetailsPage', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/audit/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -312,15 +307,12 @@ describe('Audit DetailsPage tests', () => {
 
   test('should render user tags tab', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/audit/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -337,15 +329,12 @@ describe('Audit DetailsPage tests', () => {
 
   test('should render permissions tab', async () => {
     const gmp = createGmp({auditEntity: audit2});
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/audit/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {container} = render(
       <Routes>
@@ -363,16 +352,12 @@ describe('Audit DetailsPage tests', () => {
 
   test('should call commands', async () => {
     const gmp = createGmp({auditEntity: audit5});
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/audit/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <Routes>
         <Route element={<DetailsPage />} path="/audit/:id" />

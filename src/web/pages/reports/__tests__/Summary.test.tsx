@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWithTableBody, screen} from 'web/testing';
 import type Filter from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
 import {TASK_STATUS} from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import Summary from 'web/pages/reports/details/Summary';
 
 const createFilter = (value: string): Filter =>
@@ -36,11 +36,20 @@ const createBaseReport = (): ReportReport =>
     timezone_abbrev: 'UTC',
   }) as unknown as ReportReport;
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('Summary', () => {
   test('renders basic task info, comment, hosts, filter and timezone', () => {
     const report = createBaseReport();
     const filter = createFilter('severity>5');
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
 
     render(
       <Summary
@@ -78,7 +87,10 @@ describe('Summary', () => {
       },
     } as unknown as ReportReport;
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <Summary
         filter={createFilter('')}
@@ -102,7 +114,10 @@ describe('Summary', () => {
       isDeltaReport: () => true,
     } as unknown as ReportReport;
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <Summary
         filter={createFilter('')}
@@ -139,7 +154,10 @@ describe('Summary', () => {
       isDeltaReport: () => true,
     } as unknown as ReportReport;
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <Summary
         audit={true}
@@ -161,7 +179,10 @@ describe('Summary', () => {
 
   test('shows error panel when reportError prop is provided', () => {
     const report = createBaseReport();
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
 
     render(
       <Summary

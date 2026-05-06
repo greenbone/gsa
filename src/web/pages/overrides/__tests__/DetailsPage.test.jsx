@@ -13,7 +13,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/overrides/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/overrides';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -72,7 +71,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     reloadInterval,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {
     currentSettings,
@@ -88,8 +87,6 @@ describe('OverrideDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(
       entityLoadingActions.success(
@@ -184,8 +181,6 @@ describe('OverrideDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(
       entityLoadingActions.success(
         '6d00d22f-551b-4fbe-8215-d8615eff73ea',
@@ -211,8 +206,6 @@ describe('OverrideDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(
       entityLoadingActions.success(
         '6d00d22f-551b-4fbe-8215-d8615eff73ea',
@@ -237,8 +230,6 @@ describe('OverrideDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(
       entityLoadingActions.success(

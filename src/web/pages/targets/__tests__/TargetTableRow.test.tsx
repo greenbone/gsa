@@ -9,7 +9,6 @@ import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
 import TargetTableRow from 'web/pages/targets/TargetTableRow';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const targetElevate = Target.fromElement({
   _id: 'foo',
@@ -163,14 +162,11 @@ describe('TargetRow tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <TargetTableRow
@@ -212,15 +208,11 @@ describe('TargetRow tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <TargetTableRow
         entity={targetNoElevate}
@@ -244,15 +236,11 @@ describe('TargetRow tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <TargetTableRow
         entity={targetElevate}
@@ -291,15 +279,11 @@ describe('TargetRow tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <TargetTableRow
         entity={targetNoPortlist}
@@ -326,15 +310,11 @@ describe('TargetRow tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
-      store: true,
       capabilities: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('UTC'));
-
     render(
       <TargetTableRow
         entity={targetNoElevate}

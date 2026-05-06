@@ -14,7 +14,6 @@ import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-set
 import {mockReportConfig} from 'web/pages/reportconfigs/__fixtures__/MockReportConfig';
 import DetailsPage from 'web/pages/reportconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/reportconfigs';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
@@ -39,7 +38,7 @@ const createGmp = ({
     get: getPermissions,
   },
   reloadInterval,
-  settings: {manualUrl, session: createSession()},
+  settings: {manualUrl, session: createSession({timezone: 'CET'})},
   user: {
     currentSettings,
   },
@@ -54,8 +53,6 @@ describe('ReportConfigDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', reportConfig));
 
@@ -149,8 +146,6 @@ describe('ReportConfigDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', reportConfig));
 

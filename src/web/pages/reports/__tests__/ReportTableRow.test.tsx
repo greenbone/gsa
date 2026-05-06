@@ -7,14 +7,16 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, screen, fireEvent} from 'web/testing';
 import Report from 'gmp/models/report';
 import {TASK_STATUS} from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import ReportTableRow from 'web/pages/reports/ReportTableRow';
 
-const gmp = {
+const createGmp = () => ({
   settings: {
+    session: createSession({timezone: 'CET'}),
     severityRating: SEVERITY_RATING_CVSS_3,
   },
-};
+});
 
 describe('ReportTableRow tests', () => {
   test('should render the report row', () => {
@@ -40,7 +42,10 @@ describe('ReportTableRow tests', () => {
       },
     });
 
-    const {render} = rendererWithTableBody({capabilities: true, gmp});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<ReportTableRow entity={report} links={true} />);
 
     expect(screen.queryAllByTestId('details-link')[0]).toHaveAttribute(
@@ -82,7 +87,10 @@ describe('ReportTableRow tests', () => {
         },
       },
     });
-    const {render} = rendererWithTableBody({capabilities: true, gmp});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <ReportTableRow entity={report} onReportDeleteClick={handleDelete} />,
     );
@@ -114,7 +122,10 @@ describe('ReportTableRow tests', () => {
         },
       },
     });
-    const {render} = rendererWithTableBody({capabilities: true, gmp});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <ReportTableRow entity={report} onReportDeltaSelect={handleSelect} />,
     );
@@ -145,7 +156,10 @@ describe('ReportTableRow tests', () => {
         },
       },
     });
-    const {render} = rendererWithTableBody({capabilities: true, gmp});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <ReportTableRow entity={report} onReportDeleteClick={handleDelete} />,
     );
@@ -177,7 +191,10 @@ describe('ReportTableRow tests', () => {
         },
       },
     });
-    const {render} = rendererWithTableBody({capabilities: true, gmp});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <ReportTableRow
         entity={report}
@@ -213,7 +230,10 @@ describe('ReportTableRow tests', () => {
       },
     });
     const selectedDeltaReport = new Report({id: '2'});
-    const {render} = rendererWithTableBody({capabilities: true, gmp});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <ReportTableRow
         entity={report}

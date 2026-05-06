@@ -6,20 +6,21 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import HostsTab from 'web/pages/reports/details/HostsTab';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
-const gmp = {
+const createGmp = ({severityRating = SEVERITY_RATING_CVSS_3} = {}) => ({
   settings: {
-    severityRating: SEVERITY_RATING_CVSS_3,
+    severityRating,
+    session: createSession({timezone: 'CET'}),
   },
-};
+});
 
 describe('Report Hosts Tab tests', () => {
   test('should render Report Hosts Tab', () => {
@@ -27,14 +28,11 @@ describe('Report Hosts Tab tests', () => {
 
     const onSortChange = testing.fn();
 
-    const {render, store} = rendererWith({
-      gmp,
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <HostsTab
@@ -170,14 +168,11 @@ describe('Audit Report Hosts Tab tests', () => {
 
     const onSortChange = testing.fn();
 
-    const {render, store} = rendererWith({
-      gmp,
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <HostsTab

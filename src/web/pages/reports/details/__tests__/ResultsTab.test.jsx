@@ -13,7 +13,6 @@ import Result from 'gmp/models/result';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import ResultsTab from 'web/pages/reports/details/ResultsTab';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -140,7 +139,7 @@ const createGmp = ({
     manualUrl,
     reloadInterval,
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: createSession({token: 'test-token'}),
+    session: createSession({token: 'test-token', timezone: 'CET'}),
   },
   user: {currentSettings},
 });
@@ -176,8 +175,6 @@ describe('Report Results Tab tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -291,8 +288,6 @@ describe('Report Results Tab tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));

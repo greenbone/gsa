@@ -7,10 +7,16 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+import {createSession} from 'gmp/testing';
 import Actions from 'web/pages/audits/Actions';
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_task']);
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('Audit Actions tests', () => {
   // deactivate console.error for tests
@@ -37,7 +43,7 @@ describe('Audit Actions tests', () => {
     const handleAuditStop = testing.fn();
     const handleReportDownload = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     const {container} = render(
       <Actions
         entity={audit}
@@ -76,7 +82,7 @@ describe('Audit Actions tests', () => {
     const handleAuditStop = testing.fn();
     const handleReportDownload = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <Actions
         entity={audit}
@@ -151,7 +157,7 @@ describe('Audit Actions tests', () => {
     const handleAuditStop = testing.fn();
     const handleReportDownload = testing.fn();
 
-    const {render} = rendererWith({capabilities: wrongCaps});
+    const {render} = rendererWith({capabilities: wrongCaps, gmp: createGmp()});
     render(
       <Actions
         entity={audit}
@@ -238,7 +244,7 @@ describe('Audit Actions tests', () => {
     const handleAuditStop = testing.fn();
     const handleReportDownload = testing.fn();
 
-    const {render} = rendererWith({capabilities: wrongCaps});
+    const {render} = rendererWith({capabilities: wrongCaps, gmp: createGmp()});
     render(
       <Actions
         entity={audit}
@@ -328,7 +334,7 @@ describe('Audit Actions tests', () => {
     const handleAuditStop = testing.fn();
     const handleReportDownload = testing.fn();
 
-    const {render} = rendererWith({capabilities: wrongCaps});
+    const {render} = rendererWith({capabilities: wrongCaps, gmp: createGmp()});
     render(
       <Actions
         entity={audit}
@@ -415,7 +421,7 @@ describe('Audit Actions tests', () => {
     const handleAuditStop = testing.fn();
     const handleReportDownload = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <Actions
         entity={audit}
@@ -491,7 +497,7 @@ describe('Audit Actions tests', () => {
     const handleAuditStop = testing.fn();
     const handleReportDownload = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <Actions
         entity={audit}
@@ -566,7 +572,7 @@ describe('Audit Actions tests', () => {
     const handleAuditStop = testing.fn();
     const handleReportDownload = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <Actions
         entity={audit}
@@ -618,8 +624,8 @@ describe('Audit Actions tests', () => {
 
     const {render} = rendererWith({
       capabilities: true,
-      store: true,
       router: true,
+      gmp: createGmp(),
     });
     render(
       <Actions

@@ -10,7 +10,6 @@ import Features from 'gmp/capabilities/features';
 import Response from 'gmp/http/response';
 import {createSession} from 'gmp/testing';
 import Page from 'web/pages/Page';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 describe('Page tests', () => {
   test('renders null when capabilities are not loaded', () => {
@@ -58,10 +57,7 @@ describe('Page tests', () => {
         session: createSession(),
       },
     };
-    const {render, store} = rendererWith({gmp});
-
-    store.dispatch(setTimezone('UTC'));
-
+    const {render} = rendererWith({gmp});
     render(
       <Page>
         <div>Child Content</div>

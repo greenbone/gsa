@@ -8,6 +8,7 @@ import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
+import {createSession} from 'gmp/testing';
 import ContainerScanningResultsTable from 'web/pages/reports/details/ContainerScanningResultsTable';
 
 const filter = Filter.fromString('first=1 rows=10');
@@ -44,6 +45,13 @@ const createMockResult = (overrides = {}) => {
   });
 };
 
+const createGmp = ({enableEPSS = false} = {}) => ({
+  settings: {
+    enableEPSS,
+    session: createSession(),
+  },
+});
+
 describe('ContainerScanningResultsTable', () => {
   test('should render table with all columns', () => {
     const entities = [createMockResult()];
@@ -54,14 +62,8 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: false,
-      },
-    };
-
     const onSortChange = testing.fn();
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <ContainerScanningResultsTable
@@ -116,13 +118,7 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: false,
-      },
-    };
-
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <ContainerScanningResultsTable
@@ -155,13 +151,7 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: false,
-      },
-    };
-
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <ContainerScanningResultsTable
@@ -213,13 +203,7 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: false,
-      },
-    };
-
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <ContainerScanningResultsTable
@@ -257,13 +241,7 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: false,
-      },
-    };
-
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <ContainerScanningResultsTable
@@ -294,13 +272,7 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: false,
-      },
-    };
-
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <ContainerScanningResultsTable
@@ -325,13 +297,7 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: false,
-      },
-    };
-
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <ContainerScanningResultsTable
@@ -377,13 +343,7 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: true,
-      },
-    };
-
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp({enableEPSS: true})});
 
     render(
       <ContainerScanningResultsTable
@@ -408,14 +368,8 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: false,
-      },
-    };
-
     const onSortChange = testing.fn();
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp()});
 
     const {userEvent} = render(
       <ContainerScanningResultsTable
@@ -445,13 +399,7 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const gmp = {
-      settings: {
-        enableEPSS: false,
-      },
-    };
-
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <ContainerScanningResultsTable

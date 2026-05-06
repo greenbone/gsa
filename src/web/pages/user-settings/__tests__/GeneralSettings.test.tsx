@@ -6,7 +6,15 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith, within, fireEvent} from 'web/testing';
 import Features from 'gmp/capabilities/features';
+import {createSession} from 'gmp/testing';
 import GeneralSettings from 'web/pages/user-settings/GeneralSettings';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession({timezone: 'UTC'}),
+    manualUrl: 'test/',
+  },
+});
 
 describe('General tab', () => {
   test('displays user settings in the General tab', async () => {
@@ -95,20 +103,17 @@ describe('General tab', () => {
 
     const USER_SETTINGS_DEFAULTS_LOADING_SUCCESS =
       'USER_SETTINGS_DEFAULTS_LOADING_SUCCESS';
-    const setTimezone = tz => ({type: 'SET_TIMEZONE', timezone: tz});
-    const createGmpMock = () => ({settings: {manualUrl: 'test/'}});
     const UserSettingsPage = GeneralSettings;
     const features = new Features(['ENABLE_SECURITY_INTELLIGENCE_EXPORT']);
 
     const {render, store} = rendererWith({
       capabilities: true,
       router: true,
-      gmp: createGmpMock(),
+      gmp: createGmp(),
       store: true,
       features,
     });
 
-    store.dispatch(setTimezone('UTC'));
     store.dispatch({
       type: USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
       data: settingsData,
@@ -172,21 +177,16 @@ describe('General tab', () => {
   };
   const USER_SETTINGS_DEFAULTS_LOADING_SUCCESS =
     'USER_SETTINGS_DEFAULTS_LOADING_SUCCESS';
-  const setTimezone = tz => ({type: 'SET_TIMEZONE', timezone: tz});
-  const createGmpMock = () => ({
-    settings: {manualUrl: 'test/'},
-  });
   const UserSettingsPage = GeneralSettings;
 
   function setupStore(settingsData) {
     const {render, store} = rendererWith({
       capabilities: true,
       router: true,
-      gmp: createGmpMock(),
+      gmp: createGmp(),
       store: true,
       features: new Features(['ENABLE_SECURITY_INTELLIGENCE_EXPORT']),
     });
-    store.dispatch(setTimezone('UTC'));
     store.dispatch({
       type: USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
       data: settingsData,
