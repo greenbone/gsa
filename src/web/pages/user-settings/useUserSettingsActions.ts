@@ -20,7 +20,6 @@ import {loadEntities as loadScanConfigsAction} from 'web/store/entities/scanconf
 import {loadEntities as loadScannersAction} from 'web/store/entities/scanners';
 import {loadEntities as loadSchedulesAction} from 'web/store/entities/schedules';
 import {loadEntities as loadTargetsAction} from 'web/store/entities/targets';
-import {updateTimezone} from 'web/store/usersettings/actions';
 import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 
@@ -76,12 +75,6 @@ const useUserSettingsActions = () => {
   const loadAlert = useCallback(
     // @ts-expect-error
     id => dispatch(loadAlertAction(gmp)(id)),
-    [dispatch, gmp],
-  );
-
-  const setTimezone = useCallback(
-    // @ts-expect-error
-    timezone => dispatch(updateTimezone(gmp)(timezone)),
     [dispatch, gmp],
   );
 
@@ -162,8 +155,6 @@ const useUserSettingsActions = () => {
     loadUserSettings,
     loadAlert,
     loadFilterDefaults,
-
-    setTimezone,
   };
 };
 
