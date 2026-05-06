@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {connect} from 'react-redux';
 import {isDefined} from 'gmp/utils/identity';
 import {OverrideIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
@@ -31,6 +30,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 import OverrideDetails from 'web/pages/overrides/Details';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import OverrideDetailsPageToolBarIcons from 'web/pages/overrides/OverrideDetailsPageToolBarIcons';
@@ -42,15 +42,13 @@ import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
-const Details = connect(rootState => ({
-  timezone: getTimezone(rootState),
-}))(({entity, timezone, ...props}) => {
+const Details = ({entity, ...props}) => {
   const [_] = useTranslation();
+  const timezone = useUserTimezone();
   const {nvt} = entity;
   return (
     <Layout flex="column">
@@ -101,7 +99,7 @@ const Details = connect(rootState => ({
       <OverrideDetails entity={entity} {...props} />
     </Layout>
   );
-});
+};
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,

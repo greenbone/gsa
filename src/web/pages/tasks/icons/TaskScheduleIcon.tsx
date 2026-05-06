@@ -8,9 +8,8 @@ import {isDefined} from 'gmp/utils/identity';
 import {ScheduleIcon} from 'web/components/icon';
 import {type ExtendedIconSize} from 'web/components/icon/DynamicIcon';
 import DetailsLink from 'web/components/link/DetailsLink';
-import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
-import {getTimezone} from 'web/store/usersettings/selectors';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/user-setting-time-date-formatters';
 
 interface TaskScheduleIconProps {
@@ -25,7 +24,7 @@ const TaskScheduleIcon = ({
   schedule,
 }: TaskScheduleIconProps) => {
   const [_] = useTranslation();
-  const timezone = useShallowEqualSelector<unknown, string>(getTimezone);
+  const [timezone] = useUserTimezone();
 
   if (
     schedule.userCapabilities.areDefined() &&

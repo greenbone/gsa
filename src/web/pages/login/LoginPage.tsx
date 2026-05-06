@@ -20,7 +20,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import LoginForm from 'web/pages/login/LoginForm';
-import {setSessionTimeout, setTimezone} from 'web/store/usersettings/actions';
+import {setSessionTimeout} from 'web/store/usersettings/actions';
 import Theme from 'web/utils/Theme';
 import {
   getLastVisitedPage,
@@ -82,10 +82,9 @@ const LoginPage = () => {
     try {
       const data = await gmp.login(username, password);
 
-      const {timezone, sessionTimeout} = data;
+      const {sessionTimeout} = data;
 
       dispatch(setSessionTimeout(sessionTimeout));
-      dispatch(setTimezone(timezone));
 
       const userLastVisitedPath = getLastVisitedPage(username);
 

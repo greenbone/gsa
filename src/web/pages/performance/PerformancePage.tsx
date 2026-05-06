@@ -33,6 +33,7 @@ import Section from 'web/components/section/Section';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 import {
   type Duration,
   getDurationInSeconds,
@@ -43,7 +44,6 @@ import {
   loadEntities as loadScanners,
   selector as scannerSelector,
 } from 'web/store/entities/scanners';
-import {getTimezone} from 'web/store/usersettings/selectors';
 import {renderSelectItems} from 'web/utils/Render';
 
 interface ToolBarProps {
@@ -147,7 +147,7 @@ const PerformancePage = () => {
     const scannerEntitiesSelector = scannerSelector(state);
     return scannerEntitiesSelector.getEntities(SENSOR_SCANNER_FILTER);
   });
-  const timezone = useShallowEqualSelector<unknown, string>(getTimezone);
+  const [timezone] = useUserTimezone();
   const dispatch = useDispatch();
 
   const fetchScanners = useCallback(
@@ -244,7 +244,7 @@ const PerformancePage = () => {
             <StartEndTimeSelection
               endDate={endDate}
               startDate={startDate}
-              timezone={timezone}
+              timezone={timezone as string}
               onChanged={handleStartEndChange}
             />
 

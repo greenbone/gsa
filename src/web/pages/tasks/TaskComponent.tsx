@@ -35,6 +35,7 @@ import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
 import ContainerImageTargetsComponent from 'web/pages/container-image-targets/ContainerImageTargetsComponent';
@@ -82,7 +83,6 @@ import {
 } from 'web/store/entities/targets';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getTimezone} from 'web/store/usersettings/selectors';
 import {type RenderSelectItemProps, UNSET_VALUE} from 'web/utils/Render';
 import AdvancedTaskWizard, {
   type AdvancedTaskWizardData,
@@ -282,7 +282,7 @@ const TaskComponent = ({
     scannerSelector(state).getEntities(ALL_FILTER),
   );
 
-  const timezone = useShallowEqualSelector(getTimezone);
+  const [timezone] = useUserTimezone();
 
   const credentials = useShallowEqualSelector(state =>
     credentialsSelector(state).getEntities(ALL_FILTER),
@@ -843,7 +843,7 @@ const TaskComponent = ({
       setStartDate(now);
       setStartHour(now.hour());
       setStartMinute(now.minute());
-      setStartTimezone(timezone);
+      setStartTimezone(timezone as string);
       setTargetHosts(data.clientAddress);
       setTaskName(_('New Quick Task'));
     });
@@ -870,7 +870,7 @@ const TaskComponent = ({
       setStartDate(now);
       setStartHour(now.hour());
       setStartMinute(now.minute());
-      setStartTimezone(timezone);
+      setStartTimezone(timezone as string);
       setTaskId(selectSaveId(data.tasks));
       setTasks(data.tasks);
     });
