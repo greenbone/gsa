@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {connect} from 'react-redux';
 import {isDefined} from 'gmp/utils/identity';
 import {NoteIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
@@ -31,6 +30,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 import NoteDetails from 'web/pages/notes/Details';
 import NoteComponent from 'web/pages/notes/NoteComponent';
 import NoteDetailsPageToolBarIcons from 'web/pages/notes/NoteDetailsPageToolBarIcons';
@@ -39,14 +39,12 @@ import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
-const Details = connect(rootState => ({
-  timezone: getTimezone(rootState),
-}))(({entity, timezone, ...props}) => {
+const Details = ({entity, ...props}) => {
+  const timezone = useUserTimezone();
   const [_] = useTranslation();
   const {nvt} = entity;
   return (
@@ -98,7 +96,7 @@ const Details = connect(rootState => ({
       <NoteDetails entity={entity} {...props} />
     </Layout>
   );
-});
+};
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -110,7 +108,6 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-
   ...props
 }) => {
   const [_] = useTranslation();

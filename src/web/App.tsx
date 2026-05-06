@@ -19,7 +19,6 @@ import LanguageProvider from 'web/components/provider/LanguageProvider';
 import Routes from 'web/Routes';
 import configureStore from 'web/store';
 import {clearStore} from 'web/store/actions';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 void initLocale();
 const queryClient = new QueryClient();
@@ -36,14 +35,6 @@ const store = configureStore({
 // @ts-expect-error
 window.gmp = gmp;
 
-const initStore = () => {
-  const {timezone} = gmp.settings.session;
-
-  if (isDefined(timezone)) {
-    store.dispatch(setTimezone(timezone));
-  }
-};
-
 class App extends React.Component<{}> {
   private unsubscribeFromLogout!: () => void;
 
@@ -55,8 +46,6 @@ class App extends React.Component<{}> {
 
   componentDidMount() {
     this.unsubscribeFromLogout = gmp.subscribeToLogout(this.handleLogout);
-
-    initStore();
   }
 
   componentWillUnmount() {

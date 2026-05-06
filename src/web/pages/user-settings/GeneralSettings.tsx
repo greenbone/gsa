@@ -4,7 +4,6 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import {useDispatch} from 'react-redux';
 
 import {
   DATE_TIME_CATEGORY,
@@ -33,14 +32,13 @@ import useLanguage from 'web/hooks/useLanguage';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 
 import useTranslation from 'web/hooks/useTranslation';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
 
 import {getLangNameByCode} from 'web/pages/user-settings/helper-functions';
 import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';
 import useSettingSave from 'web/pages/user-settings/useSettingSave';
-import {updateTimezone} from 'web/store/usersettings/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getTimezone} from 'web/store/usersettings/selectors';
 import Languages from 'web/utils/Languages';
 
 interface GeneralSettingsProps {
@@ -91,14 +89,13 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [_] = useTranslation();
   const [, setLanguage] = useLanguage();
   const gmp = useGmp();
-  const dispatch = useDispatch();
   const features = useFeatures();
 
   const {getErrorMessage, saveSetting, setErrorMessage, clearErrorMessage} =
     useSettingSave();
 
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
-  const storeTimezone = useShallowEqualSelector(getTimezone) ?? '';
+  const [userTimezone, setUserTimezone] = useUserTimezone();
 
   const userInterfaceTimeFormat = useMemo(
     () => userDefaultsSelector.getByName('userinterfacetimeformat') ?? {},
@@ -158,7 +155,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     useState(false);
   const [passwordEditMode, setPasswordEditMode] = useState(false);
 
-  const [timezoneState, setTimezoneState] = useState(storeTimezone);
+  const [timezoneState, setTimezoneState] = useState(userTimezone as string);
   const [timeFormatState, setTimeFormatState] = useState(
     userInterfaceTimeFormat.value,
   );
@@ -198,7 +195,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [confPasswordState, setConfPasswordState] = useState('');
 
   useEffect(() => {
-    setTimezoneState(storeTimezone);
+    setTimezoneState(userTimezone as string);
     setTimeFormatState(userInterfaceTimeFormat.value);
     setDateFormatState(userInterfaceDateFormat.value);
     setIsUserInterfaceTimeDateDefaultState(
@@ -215,7 +212,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setSecurityIntelligenceExportState(securityIntelligenceExport.value);
     setAutoCacheRebuildState(autoCacheRebuild.value);
   }, [
-    storeTimezone,
+    userTimezone,
     userInterfaceTimeFormat.value,
     userInterfaceDateFormat.value,
     userInterfaceLanguage.value,
@@ -232,9 +229,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   };
 
   const saveTimezone = async (): Promise<void> => {
-    // @ts-expect-error
-    dispatch(updateTimezone(gmp)(timezoneState as string));
-
+    setUserTimezone(timezoneState as string);
     await saveSetting(
       'Timezone',
       'Timezone',
@@ -247,7 +242,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   };
 
   const cancelTimezoneEdit = (): void => {
-    setTimezoneState(storeTimezone);
+    setTimezoneState(userTimezone as string);
     setTimezoneEditMode(false);
     clearErrorMessage('Timezone');
   };

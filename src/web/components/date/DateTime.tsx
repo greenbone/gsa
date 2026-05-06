@@ -15,7 +15,7 @@ import {
 
 interface DateTimeProps {
   date?: Date | string;
-  formatter?: (date: Date, timezone: string) => string | undefined;
+  formatter?: (date: Date, timezone?: string) => string | undefined;
   timezone?: string;
   showTimezoneAsSeparateLine?: boolean;
 }
