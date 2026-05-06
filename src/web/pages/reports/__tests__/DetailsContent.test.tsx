@@ -8,6 +8,7 @@ import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Report from 'gmp/models/report';
+import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import DetailsContent from 'web/pages/reports/DetailsContent';
 import {setTimezone} from 'web/store/usersettings/actions';
@@ -42,6 +43,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
   settings: {
     manualUrl,
     reportResultsThreshold,
+    session: createSession({token: 'test-token', username: 'admin'}),
   },
   user: {
     currentSettings: testing.fn().mockResolvedValue({foo: 'bar'}),
