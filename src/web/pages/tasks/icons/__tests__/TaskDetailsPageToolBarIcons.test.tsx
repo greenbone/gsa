@@ -8,6 +8,7 @@ import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import ScanConfig from 'gmp/models/scan-config';
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import TaskDetailsPageToolBarIcons from 'web/pages/tasks/icons/TaskDetailsPageToolBarIcons';
 
 const scanConfig = ScanConfig.fromElement({
@@ -72,6 +73,13 @@ const currentReport = {
 
 const manualUrl = 'test/';
 
+const createGmp = () => ({
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+});
+
 describe('Task ToolBarIcons tests', () => {
   test('should render', () => {
     const task = Task.fromElement({
@@ -104,15 +112,10 @@ describe('Task ToolBarIcons tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     const {element} = render(
@@ -178,15 +181,10 @@ describe('Task ToolBarIcons tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(
@@ -307,15 +305,10 @@ describe('Task ToolBarIcons tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(
@@ -441,15 +434,10 @@ describe('Task ToolBarIcons tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(
@@ -575,15 +563,10 @@ describe('Task ToolBarIcons tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(
@@ -710,15 +693,10 @@ describe('Task ToolBarIcons tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(
@@ -851,15 +829,10 @@ describe('Task ToolBarIcons tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(
@@ -915,15 +888,10 @@ describe('Task ToolBarIcons tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const gmp = {
-      settings: {manualUrl},
-    };
-
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(

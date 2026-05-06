@@ -14,7 +14,6 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CpePage from 'web/pages/cpes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cpes';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -64,7 +63,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: createSession(),
+    session: createSession({timezone: 'UTC'}),
   },
   user: {
     currentSettings,
@@ -80,8 +79,6 @@ describe('CpeDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('UTC'));
 
     store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
 
@@ -148,8 +145,6 @@ describe('CpeDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
 
     const {container} = render(<CpePage id="cpe:/a:foo" />);
@@ -167,8 +162,6 @@ describe('CpeDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
 

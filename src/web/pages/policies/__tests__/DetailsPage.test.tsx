@@ -13,7 +13,6 @@ import Policy from 'gmp/models/policy';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/policies/DetailsPage';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 vi.mock('web/pages/scanconfigs/EditDialog', () => ({
   default: () => null,
@@ -233,7 +232,7 @@ const createGmp = ({
   },
   settings: {
     manualUrl,
-    session: createSession({token: 'test-token'}),
+    session: createSession({token: 'test-token', timezone: 'CET'}),
   },
   user: {
     currentSettings,
@@ -243,15 +242,12 @@ const createGmp = ({
 describe('PolicyDetailsPage tests', () => {
   test('should render full DetailsPage', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -314,15 +310,12 @@ describe('PolicyDetailsPage tests', () => {
 
   test('should render user tags tab', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -339,15 +332,12 @@ describe('PolicyDetailsPage tests', () => {
 
   test('should render nvt families tab', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -410,15 +400,12 @@ describe('PolicyDetailsPage tests', () => {
 
   test('should render scanner preferences tab', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -442,15 +429,12 @@ describe('PolicyDetailsPage tests', () => {
 
   test('should render nvt preferences tab', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -488,15 +472,12 @@ describe('PolicyDetailsPage tests', () => {
 
   test('should render permissions tab', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {container} = render(
       <Routes>
@@ -515,15 +496,12 @@ describe('PolicyDetailsPage tests', () => {
 
   test('should call commands', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -555,15 +533,12 @@ describe('PolicyDetailsPage tests', () => {
 
   test('should not call commands without permission', async () => {
     const gmp = createGmp({policyEntity: policy2});
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -604,15 +579,12 @@ describe('PolicyDetailsPage tests', () => {
 
   test('should (not) call commands if policy is in use', async () => {
     const gmp = createGmp({policyEntity: policy3});
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>
@@ -644,15 +616,12 @@ describe('PolicyDetailsPage tests', () => {
 
   test('should (not) call commands if policy is not writable', async () => {
     const gmp = createGmp({policyEntity: policy4});
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
       route: '/policy/12345',
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Routes>

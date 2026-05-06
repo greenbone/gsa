@@ -13,7 +13,6 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage, {ToolBarIcons} from 'web/pages/hosts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/hosts';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 // setup
 
@@ -181,7 +180,7 @@ const createGmp = ({
     manualUrl,
     reloadInterval,
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {currentSettings},
 });
@@ -195,8 +194,6 @@ describe('Host DetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
@@ -304,8 +301,6 @@ describe('Host DetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', host));
 
     const {container} = render(<DetailsPage id="12345" />);
@@ -324,8 +319,6 @@ describe('Host DetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', host));
 
     const {container} = render(<DetailsPage id="12345" />);
@@ -343,8 +336,6 @@ describe('Host DetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', host));
 

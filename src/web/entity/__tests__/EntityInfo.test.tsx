@@ -6,8 +6,14 @@
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import Model from 'gmp/models/model';
+import {createSession} from 'gmp/testing';
 import EntityInfo from 'web/entity/EntityInfo';
-import {setTimezone} from 'web/store/usersettings/actions';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('EntityInfo component tests', () => {
   test('should render with existing owner', () => {
@@ -20,9 +26,7 @@ describe('EntityInfo component tests', () => {
       modification_time: '2019-02-02T12:00:00Z',
     });
 
-    const {render, store} = rendererWith({store: true});
-
-    store.dispatch(setTimezone('UTC'));
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(<EntityInfo entity={entity} />);
 
@@ -45,9 +49,7 @@ describe('EntityInfo component tests', () => {
       modification_time: '2019-02-02T12:00:00Z',
     });
 
-    const {render, store} = rendererWith({store: true});
-
-    store.dispatch(setTimezone('UTC'));
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(<EntityInfo entity={entity} />);
 

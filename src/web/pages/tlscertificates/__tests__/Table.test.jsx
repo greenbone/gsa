@@ -5,14 +5,11 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tls-certificate';
+import {createSession} from 'gmp/testing';
 import Table from 'web/pages/tlscertificates/Table';
-import {setTimezone} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -44,24 +41,23 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
+const createGmp = () => ({
+  settings: {
+    session: createSession({timezone: 'UTC'}),
+  },
+});
+
 describe('TlsCertificates table tests', () => {
   test('should render', () => {
     const handleTlsCertificateDelete = testing.fn();
     const handleTlsCertificateDownload = testing.fn();
     const handleTlsCertificateExport = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
-
-    const {render, store} = rendererWith({
-      gmp,
-      capabilities: caps,
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <Table
@@ -89,15 +85,10 @@ describe('TlsCertificates table tests', () => {
     const handleTlsCertificateExport = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
-
     const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       router: true,
-      store: true,
     });
 
     render(
@@ -131,15 +122,10 @@ describe('TlsCertificates table tests', () => {
     const handleTlsCertificateExport = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const gmp = {
-      settings: {},
-    };
-
     const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
+      gmp: createGmp(),
+      capabilities: true,
       router: true,
-      store: true,
     });
 
     render(

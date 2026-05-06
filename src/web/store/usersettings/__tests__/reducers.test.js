@@ -8,32 +8,14 @@ import {
   getReportComposerDefaultsAction,
   setLocale,
   setSessionTimeout,
-  setTimezone,
 } from 'web/store/usersettings/actions';
 import {
   locale,
   reportComposerDefaults,
   sessionTimeout,
-  timezone,
 } from 'web/store/usersettings/reducers';
 
 describe('settings reducers tests', () => {
-  describe('timezone reducer tests', () => {
-    test('should create initial state', () => {
-      expect(timezone(undefined, {})).toBeUndefined();
-    });
-
-    test('should reduce timezone action', () => {
-      const action = setTimezone('cet');
-      expect(timezone(undefined, action)).toEqual('cet');
-    });
-
-    test('should override timezone in state', () => {
-      const action = setTimezone('cet');
-      expect(timezone('foo', action)).toEqual('cet');
-    });
-  });
-
   describe('locale reducer tests', () => {
     test('should create initial state', () => {
       expect(locale(undefined, {})).toBeUndefined();

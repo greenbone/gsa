@@ -5,14 +5,11 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import CvesTab from 'web/pages/reports/details/CvesTab';
-import {setTimezone} from 'web/store/usersettings/actions';
 
-const caps = new Capabilities(['everything']);
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
@@ -27,14 +24,11 @@ describe('Report CVEs Tab tests', () => {
     const {cves} = getMockReport();
     const onSortChange = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <CvesTab

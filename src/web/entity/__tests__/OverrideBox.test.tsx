@@ -5,12 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Override from 'gmp/models/override';
+import {createSession} from 'gmp/testing';
 import OverrideBox from 'web/entity/OverrideBox';
-import {setTimezone} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const override = Override.fromElement({
   _id: '123',
@@ -21,15 +18,19 @@ const override = Override.fromElement({
   modification_time: '2019-02-02T12:00:00Z',
 });
 
+const createGmp = () => ({
+  settings: {
+    session: createSession({timezone: 'CET'}),
+  },
+});
+
 describe('OverrideBox tests', () => {
   test('should render with DetailsLink', () => {
-    const {render, store} = rendererWith({
-      capabilities: caps,
+    const {render} = rendererWith({
+      capabilities: true,
       router: true,
-      store: true,
+      gmp: createGmp(),
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {element} = render(
       <OverrideBox detailsLink={true} override={override} />,
@@ -53,13 +54,12 @@ describe('OverrideBox tests', () => {
   });
 
   test('should render without DetailsLink', () => {
-    const {render, store} = rendererWith({
-      capabilities: caps,
+    const {render} = rendererWith({
+      capabilities: true,
       router: true,
-      store: true,
+      gmp: createGmp(),
     });
 
-    store.dispatch(setTimezone('CET'));
     const {element} = render(
       <OverrideBox detailsLink={false} override={override} />,
     );

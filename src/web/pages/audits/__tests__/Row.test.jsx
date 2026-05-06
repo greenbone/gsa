@@ -9,7 +9,6 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {createSession} from 'gmp/testing';
 import Row from 'web/pages/audits/Row';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const lastReport = {
   report: {
@@ -28,7 +27,7 @@ const currentReport = {
 
 const createGmp = () => ({
   settings: {
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
 });
 
@@ -57,14 +56,11 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {element} = render(
       <Row
@@ -171,15 +167,11 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <Row
         entity={audit}
@@ -233,15 +225,11 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <Row
         entity={audit}
@@ -341,15 +329,11 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <Row
         entity={audit}
@@ -454,15 +438,11 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <Row
         entity={audit}
@@ -568,15 +548,11 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <Row
         entity={audit}
@@ -682,15 +658,11 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <Row
         entity={audit}

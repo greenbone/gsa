@@ -9,53 +9,66 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Features from 'gmp/capabilities/features';
 import Filter from 'gmp/models/filter';
 import Setting from 'gmp/models/setting';
+import {createSession} from 'gmp/testing';
 import UserSettingsPage, {
   ToolBarIcons,
 } from 'web/pages/user-settings/UserSettingsPage';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS} from 'web/store/usersettings/defaultfilters/actions';
 import {USER_SETTINGS_DEFAULTS_LOADING_SUCCESS} from 'web/store/usersettings/defaults/actions';
 
 const manualUrl = 'test/';
 
-const createGmpMock = (userSettings = {}) => {
-  const mockGetSettingPromise = Promise.resolve({
-    data: {
-      value: null,
-    },
-  });
-
-  const mockEntitiesResponse = {
+const createGmp = ({
+  userInterfaceDateFormat = {value: 'MM/DD/YYYY'},
+  userInterfaceTimeFormat = {value: 'hh:mm:ss a'},
+  timezone = 'UTC',
+  currentSettings = testing.fn().mockResolvedValue({
+    userInterfaceDateFormat,
+    userInterfaceTimeFormat,
+    timezone,
+  }),
+  getSetting = testing.fn().mockResolvedValue({
+    data: {value: null},
+  }),
+  saveSettings = testing.fn().mockResolvedValue({}),
+  mockGet = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: {},
       counts: {},
     },
-  };
-
-  const mockGet = testing.fn().mockResolvedValue(mockEntitiesResponse);
-
-  return {
-    settings: {manualUrl},
-    user: {
-      getSetting: testing.fn().mockReturnValue(mockGetSettingPromise),
-      currentSettings: testing.fn().mockResolvedValue(userSettings),
-      saveSettings: testing.fn().mockResolvedValue({}),
-    },
-    alerts: {get: mockGet},
-    credentials: {get: mockGet},
-    filters: {get: mockGet},
-    portlists: {get: mockGet},
-    scanconfigs: {get: mockGet},
-    scanners: {get: mockGet},
-    schedules: {get: mockGet},
-    targets: {get: mockGet},
-  };
-};
+  }),
+  getAlerts = mockGet,
+  getCredentials = mockGet,
+  getFilters = mockGet,
+  getPortlists = mockGet,
+  getScanConfigs = mockGet,
+  getScanners = mockGet,
+  getSchedules = mockGet,
+  getTargets = mockGet,
+} = {}) => ({
+  settings: {
+    manualUrl,
+    session: createSession(),
+  },
+  user: {
+    getSetting,
+    currentSettings,
+    saveSettings,
+  },
+  alerts: {get: getAlerts},
+  credentials: {get: getCredentials},
+  filters: {get: getFilters},
+  portlists: {get: getPortlists},
+  scanconfigs: {get: getScanConfigs},
+  scanners: {get: getScanners},
+  schedules: {get: getSchedules},
+  targets: {get: getTargets},
+});
 
 describe('UserSettingsPage', () => {
   test('renders without crashing', async () => {
-    const gmp = createGmpMock();
+    const gmp = createGmp();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -70,7 +83,7 @@ describe('UserSettingsPage', () => {
   });
 
   test('renders tabs after loading completes', async () => {
-    const gmp = createGmpMock({
+    const gmp = createGmp({
       userInterfaceDateFormat: {value: 'MM/DD/YYYY'},
       userInterfaceTimeFormat: {value: 'hh:mm:ss a'},
       timezone: 'UTC',
@@ -99,7 +112,7 @@ describe('UserSettingsPage', () => {
   describe('ToolBarIcons', () => {
     test('should render and handle click', () => {
       const {render} = rendererWith({
-        gmp: {settings: {manualUrl: 'test/'}},
+        gmp: createGmp(),
         capabilities: true,
         router: true,
       });
@@ -198,7 +211,7 @@ describe('UserSettingsPage', () => {
         securityintelligenceexport: securityIntelligenceExportSetting,
       };
 
-      const gmp = createGmpMock();
+      const gmp = createGmp();
       const features = new Features(['ENABLE_SECURITY_INTELLIGENCE_EXPORT']);
 
       const {render, store} = rendererWith({
@@ -208,8 +221,6 @@ describe('UserSettingsPage', () => {
         store: true,
         features,
       });
-
-      store.dispatch(setTimezone('UTC'));
 
       store.dispatch({
         type: USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
@@ -294,7 +305,7 @@ describe('UserSettingsPage', () => {
         defaultseverity: defaultSeveritySetting,
       };
 
-      const gmp = createGmpMock();
+      const gmp = createGmp();
 
       const {render, store} = rendererWith({
         capabilities: true,
@@ -410,25 +421,16 @@ describe('UserSettingsPage', () => {
         .fn()
         .mockResolvedValue(mockScheduleEntitiesResponse);
 
-      const gmp = {
-        settings: {manualUrl},
-        user: {
-          getSetting: testing.fn().mockResolvedValue({
-            data: {value: null},
-          }),
-          currentSettings: testing.fn().mockResolvedValue({}),
-          saveSettings: testing.fn().mockResolvedValue({}),
-        },
-        alerts: {get: mockAlertGet},
-
-        credentials: {get: mockCredentialsGet},
-        filters: {get: mockGetTarget},
-        portlists: {get: mockPortlistsGet},
-        scanconfigs: {get: mockScanconfigsGet},
-        scanners: {get: mockScannersGet},
-        schedules: {get: mockSchedulesGet},
-        targets: {get: mockGetTarget},
-      };
+      const gmp = createGmp({
+        getAlerts: mockAlertGet,
+        getCredentials: mockCredentialsGet,
+        getFilters: mockGetTarget,
+        getPortlists: mockPortlistsGet,
+        getScanConfigs: mockScanconfigsGet,
+        getScanners: mockScannersGet,
+        getSchedules: mockSchedulesGet,
+        getTargets: mockGetTarget,
+      });
 
       const {render, store} = rendererWith({
         capabilities: true,
@@ -622,7 +624,7 @@ describe('UserSettingsPage', () => {
     });
 
     test('permission capabilities with no capabilities', async () => {
-      const gmp = createGmpMock();
+      const gmp = createGmp();
       const capabilities = new Capabilities([]);
 
       const {render, store} = rendererWith({
@@ -666,7 +668,7 @@ describe('UserSettingsPage', () => {
 
   describe('Filter tab', () => {
     test('permission capabilities with no capabilities for filter tab', async () => {
-      const gmp = createGmpMock();
+      const gmp = createGmp();
       const capabilities = new Capabilities([]);
 
       const {render} = rendererWith({
@@ -680,7 +682,7 @@ describe('UserSettingsPage', () => {
     });
 
     test('displays filter settings headers and links in the Filters tab', async () => {
-      const gmp = createGmpMock();
+      const gmp = createGmp();
 
       const {render, store} = rendererWith({
         capabilities: true,

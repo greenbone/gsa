@@ -9,7 +9,6 @@ import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import TaskRow from 'web/pages/tasks/TaskRow';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const lastReport = {
   report: {
@@ -28,7 +27,7 @@ const currentReport = {
 
 const createGmp = () => ({
   settings: {
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
 });
 
@@ -58,14 +57,11 @@ describe('TaskRow tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <TaskRow
@@ -171,14 +167,11 @@ describe('TaskRow tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <TaskRow
@@ -235,14 +228,11 @@ describe('TaskRow tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <TaskRow
@@ -330,14 +320,11 @@ describe('TaskRow tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <TaskRow
@@ -443,14 +430,11 @@ describe('TaskRow tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <TaskRow
@@ -559,14 +543,11 @@ describe('TaskRow tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <TaskRow
@@ -675,14 +656,11 @@ describe('TaskRow tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <TaskRow
@@ -798,14 +776,11 @@ describe('TaskRow tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
+    const {render} = rendererWithTableBody({
       gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <TaskRow

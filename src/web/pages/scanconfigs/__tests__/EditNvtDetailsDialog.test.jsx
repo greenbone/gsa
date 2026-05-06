@@ -6,9 +6,9 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 import date from 'gmp/models/date';
+import {createSession} from 'gmp/testing';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const preferences = [
   {name: 'pref 1', value: 'no', id: '1', type: 'checkbox'},
@@ -16,25 +16,24 @@ const preferences = [
   {name: 'pref 3', value: 'foo', id: '3', type: 'entry'},
 ];
 const modified = date('2019-09-09T12:00:00Z');
-const gmp = {
+
+const createGmp = () => ({
   settings: {
     severityRating: DEFAULT_SEVERITY_RATING,
+    session: createSession({timezone: 'UTC'}),
   },
-};
+});
 
 describe('EditNvtDetailsDialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {render, store} = rendererWith({
-      gmp,
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('UTC'));
 
     render(
       <EditNvtDetailsDialog
@@ -68,14 +67,11 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {render, store} = rendererWith({
-      gmp,
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('UTC'));
 
     render(
       <EditNvtDetailsDialog
@@ -110,9 +106,8 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
 
@@ -170,9 +165,8 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
 
@@ -209,9 +203,8 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
 
@@ -266,9 +259,8 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
-      store: true,
       router: true,
     });
 

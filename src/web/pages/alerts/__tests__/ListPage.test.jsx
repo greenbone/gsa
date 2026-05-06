@@ -21,7 +21,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import AlertPage, {ToolBarIcons} from 'web/pages/alerts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/alerts';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -102,7 +101,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     reloadInterval,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {currentSettings},
 });
@@ -110,15 +109,12 @@ const createGmp = ({
 describe('Alert ListPage tests', () => {
   test('should render full alert ListPage', async () => {
     const gmp = createGmp();
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -181,15 +177,12 @@ describe('Alert ListPage tests', () => {
 
   test('should allow to bulk action on page contents', async () => {
     const gmp = createGmp();
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -235,15 +228,12 @@ describe('Alert ListPage tests', () => {
 
   test('should allow to bulk action on selected alerts', async () => {
     const gmp = createGmp();
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -297,15 +287,12 @@ describe('Alert ListPage tests', () => {
 
   test('should allow to bulk action on filtered alerts', async () => {
     const gmp = createGmp();
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));

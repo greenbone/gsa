@@ -21,7 +21,6 @@ import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-set
 import UsersListPage, {
   UsersListPageToolBarIcons,
 } from 'web/pages/users/UsersListPage';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -138,7 +137,6 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -211,7 +209,6 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -243,7 +240,6 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -288,7 +284,6 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -341,7 +336,6 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '10'}}));
     store.dispatch(
@@ -388,7 +382,6 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     const defaultSettingFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(loadingActions.success({rowsperpage: {value: '10'}}));
     store.dispatch(

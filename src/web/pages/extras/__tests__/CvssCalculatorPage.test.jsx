@@ -12,13 +12,15 @@ import {
   rendererWith,
   wait,
 } from 'web/testing';
+import {createSession} from 'gmp/testing';
 import CvssCalculator from 'web/pages/extras/CvssCalculatorPage';
 
-const gmp = {
+const createGmp = () => ({
   settings: {
     manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
+    session: createSession(),
   },
-};
+});
 
 const location = {
   query: {cvssVector: 'AV:N/AC:L/Au:N/C:P/I:P/A:P'},
@@ -30,7 +32,7 @@ describe('CvssCalculator page tests', () => {
   });
   test('Should render with default values', async () => {
     const {render} = rendererWith({
-      gmp,
+      gmp: createGmp(),
       store: true,
       router: true,
     });
@@ -73,8 +75,7 @@ describe('CvssCalculator page tests', () => {
 
   test('Should render userVector from url', async () => {
     const {render} = rendererWith({
-      gmp,
-      store: true,
+      gmp: createGmp(),
       router: true,
       route: '?cvssVector=AV:N/AC:L/Au:N/C:P/I:P/A:P',
     });
@@ -117,8 +118,7 @@ describe('CvssCalculator page tests', () => {
 
   test('Changing userVector should change displayed select values', async () => {
     const {render} = rendererWith({
-      gmp,
-      store: true,
+      gmp: createGmp(),
       router: true,
     });
 
@@ -168,8 +168,7 @@ describe('CvssCalculator page tests', () => {
 
   test('Changing displayed select values should change userVector', async () => {
     const {render} = rendererWith({
-      gmp,
-      store: true,
+      gmp: createGmp(),
       router: true,
       route: '/?cvssVector=AV:N/AC:L/Au:N/C:P/I:P/A:P',
     });

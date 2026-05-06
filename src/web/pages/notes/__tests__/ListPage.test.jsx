@@ -21,7 +21,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import NotesPage, {ToolBarIcons} from 'web/pages/notes/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/notes';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -44,7 +43,6 @@ const note = Note.fromElement({
   writable: 1,
 });
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = -1;
@@ -131,8 +129,6 @@ describe('NotesPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -222,8 +218,6 @@ describe('NotesPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -268,8 +262,6 @@ describe('NotesPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -326,8 +318,6 @@ describe('NotesPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -377,7 +367,7 @@ describe('NotesPage ToolBarIcons test', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 
@@ -404,7 +394,7 @@ describe('NotesPage ToolBarIcons test', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: caps,
+      capabilities: true,
       router: true,
     });
 

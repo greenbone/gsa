@@ -6,26 +6,30 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import Summary from 'web/pages/reports/details/Summary';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
+const createGmp = () => ({
+  settings: {
+    session: createSession({timezone: 'CET'}),
+  },
+});
+
 describe('Report Summary tests', () => {
   test('should render Report Summary', () => {
     const {report} = getMockReport();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {element} = render(
       <Summary
@@ -73,13 +77,11 @@ describe('Report Summary tests', () => {
   test('should render Delta Report Summary', () => {
     const {report} = getMockDeltaReport();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       capabilities: true,
       router: true,
-      store: true,
+      gmp: createGmp(),
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {element} = render(
       <Summary

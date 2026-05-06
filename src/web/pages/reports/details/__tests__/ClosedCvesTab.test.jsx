@@ -10,7 +10,6 @@ import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const caps = new Capabilities(['everything']);
 const filter = Filter.fromString(
@@ -27,14 +26,11 @@ describe('Report Closed CVEs Tab tests', () => {
     const {closedCves} = getMockReport();
     const onSortChange = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: caps,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <ClosedCvesTab

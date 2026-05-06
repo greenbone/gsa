@@ -5,13 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
-import {setTimezone} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -23,13 +19,10 @@ describe('Report Errors Tab tests', () => {
 
     const onSortChange = testing.fn();
 
-    const {render, store} = rendererWith({
-      capabilities: caps,
+    const {render} = rendererWith({
+      capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <ErrorsTab

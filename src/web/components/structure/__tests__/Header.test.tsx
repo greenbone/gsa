@@ -8,7 +8,6 @@ import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import date from 'gmp/models/date';
 import {createSession} from 'gmp/testing';
 import Header from 'web/components/structure/Header';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const createGmp = () => ({
   settings: {
@@ -24,12 +23,10 @@ const createGmp = () => ({
 
 describe('Header tests', () => {
   test('renders component', async () => {
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp: createGmp(),
       router: true,
-      store: true,
     });
-    store.dispatch(setTimezone('UTC'));
 
     render(<Header />);
 
@@ -68,7 +65,6 @@ describe('Header tests', () => {
     const {render} = rendererWith({
       gmp,
       router: true,
-      store: true,
     });
 
     render(<Header />);

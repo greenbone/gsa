@@ -14,7 +14,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/nvts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/nvts';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -230,7 +229,7 @@ const createGmp = ({
     manualUrl,
     reloadInterval,
     enableEPSS: true,
-    session: createSession(),
+    session: createSession({timezone: 'UTC'}),
   },
   user: {
     currentSettings,
@@ -253,8 +252,6 @@ describe('Nvt DetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('UTC'));
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
@@ -420,8 +417,6 @@ describe('Nvt DetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('UTC'));
-
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
     render(<DetailsPage id="12345" />);
@@ -448,8 +443,6 @@ describe('Nvt DetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('UTC'));
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
 

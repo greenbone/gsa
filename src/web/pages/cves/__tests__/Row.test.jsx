@@ -5,15 +5,11 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Cve from 'gmp/models/cve';
 import {parseDate} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CveRow from 'web/pages/cves/Row';
-import {setTimezone} from 'web/store/usersettings/actions';
-
-const gmp = {settings: {severityRating: SEVERITY_RATING_CVSS_3}};
-const caps = new Capabilities(['everything']);
 
 const entity = Cve.fromElement({
   _id: 'CVE-2020-9992',
@@ -26,18 +22,23 @@ const entity = Cve.fromElement({
   },
 });
 
+const createGmp = () => ({
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+    session: createSession({timezone: 'CET'}),
+  },
+});
+
 describe('CVEv2 Row tests', () => {
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+    const {render} = rendererWithTableBody({
+      gmp: createGmp(),
+      capabilities: true,
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <CveRow
@@ -76,7 +77,7 @@ describe('CVEv2 Row tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
       store: true,
@@ -113,14 +114,12 @@ describe('CVEv3 Row tests', () => {
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTableBody({
-      gmp,
-      capabilities: caps,
+    const {render} = rendererWithTableBody({
+      gmp: createGmp(),
+      capabilities: true,
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <CveRow
@@ -161,10 +160,9 @@ describe('CVEv3 Row tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render} = rendererWithTableBody({
-      gmp,
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     const {baseElement} = render(

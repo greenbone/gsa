@@ -12,7 +12,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/tlscertificates/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tlscertificates';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -63,7 +62,7 @@ const createGmp = ({
   reloadInterval,
   settings: {
     manualUrl,
-    session: createSession(),
+    session: createSession({timezone: 'UTC'}),
   },
   user: {
     currentSettings,
@@ -81,7 +80,6 @@ describe('TLS Certificate DetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('UTC'));
     store.dispatch(entityLoadingActions.success('1234', tlsCertificate));
 
     const {baseElement, container} = render(<DetailsPage id="1234" />);

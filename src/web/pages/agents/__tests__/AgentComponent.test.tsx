@@ -6,6 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, wait} from 'web/testing';
 import Agent from 'gmp/models/agent';
+import {createSession} from 'gmp/testing';
 import AgentComponent from 'web/pages/agents/AgentComponent';
 
 const sampleAgent: Agent = new Agent({
@@ -26,7 +27,9 @@ const createGmp = ({
   delete: deleteMock = testing.fn().mockResolvedValue(undefined),
   modify = testing.fn().mockResolvedValue(undefined),
 } = {}) => ({
-  settings: {session: {token: 'token'}},
+  settings: {
+    session: createSession(),
+  },
   agent: {
     save,
     delete: deleteMock,

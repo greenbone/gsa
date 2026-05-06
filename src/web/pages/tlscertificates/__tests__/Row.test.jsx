@@ -6,10 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
 import TlsCertificate from 'gmp/models/tls-certificate';
+import {createSession} from 'gmp/testing';
 import Row from 'web/pages/tlscertificates/Row';
-import {setTimezone} from 'web/store/usersettings/actions';
-
-const gmp = {settings: {}};
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -30,6 +28,12 @@ const tlsCertificate = TlsCertificate.fromElement({
   permissions: {permission: [{name: 'everything'}]},
 });
 
+const createGmp = () => ({
+  settings: {
+    session: createSession({timezone: 'UTC'}),
+  },
+});
+
 describe('Tls Certificate Row tests', () => {
   // deactivate console.error for tests
   // to make it possible to test a row without a table
@@ -42,12 +46,10 @@ describe('Tls Certificate Row tests', () => {
     const handleTlsCertificateExport = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
-      gmp,
+    const {render} = rendererWith({
+      gmp: createGmp(),
       store: true,
     });
-
-    store.dispatch(setTimezone('UTC'));
 
     const {baseElement} = render(
       <Row
@@ -86,10 +88,10 @@ describe('Tls Certificate Row tests', () => {
     const handleTlsCertificateExport = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({gmp, store: true});
-
-    store.dispatch(setTimezone('UTC'));
-
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      store: true,
+    });
     render(
       <Row
         entity={tlsCertificate}
@@ -122,12 +124,10 @@ describe('Tls Certificate Row tests', () => {
     const handleTlsCertificateExport = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
-      gmp,
+    const {render} = rendererWith({
+      gmp: createGmp(),
       store: true,
     });
-
-    store.dispatch(setTimezone('UTC'));
 
     render(
       <Row

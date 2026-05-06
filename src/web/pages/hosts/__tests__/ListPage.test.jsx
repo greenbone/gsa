@@ -21,7 +21,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import HostPage, {ToolBarIcons} from 'web/pages/hosts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -140,7 +139,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     reloadInterval,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {currentSettings},
 });
@@ -154,8 +153,6 @@ describe('Host ListPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -266,8 +263,6 @@ describe('Host ListPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -310,8 +305,6 @@ describe('Host ListPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -359,8 +352,6 @@ describe('Host ListPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));

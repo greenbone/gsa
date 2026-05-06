@@ -12,7 +12,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage, {ToolBarIcons} from 'web/pages/alerts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/alerts';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -102,7 +101,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     reloadInterval,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {
     currentSettings,
@@ -119,8 +118,6 @@ describe('Alert DetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 
@@ -191,8 +188,6 @@ describe('Alert DetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', alert));
 
     const {container} = render(<DetailsPage id="12345" />);
@@ -212,8 +207,6 @@ describe('Alert DetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', alert));
 
     const {container} = render(<DetailsPage id="12345" />);
@@ -232,8 +225,6 @@ describe('Alert DetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 

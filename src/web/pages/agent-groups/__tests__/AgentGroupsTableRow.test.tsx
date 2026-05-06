@@ -8,7 +8,14 @@ import {fireEvent, rendererWithTableBody, screen} from 'web/testing';
 import dayjs from 'dayjs';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import AgentGroup from 'gmp/models/agent-group';
+import {createSession} from 'gmp/testing';
 import AgentGroupsTableRow from 'web/pages/agent-groups/AgentGroupsTableRow';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('AgentGroupsTableRow tests', () => {
   test('renders name, scanner (or None), agent count and Never for empty modification', () => {
@@ -18,7 +25,10 @@ describe('AgentGroupsTableRow tests', () => {
       agents: [{id: 'a1'}, {id: 'a2'}],
     });
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<AgentGroupsTableRow entity={group} />);
 
     expect(screen.getByText('Group 1')).toBeInTheDocument();
@@ -38,7 +48,10 @@ describe('AgentGroupsTableRow tests', () => {
       modificationTime: dayjs('2020-01-01T00:00:00Z'),
     });
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<AgentGroupsTableRow entity={group} />);
 
     expect(screen.getByText('Scanner 1')).toBeInTheDocument();
@@ -57,7 +70,10 @@ describe('AgentGroupsTableRow tests', () => {
     const onClone = testing.fn();
     const onDelete = testing.fn();
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <AgentGroupsTableRow
         entity={group}

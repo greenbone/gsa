@@ -14,6 +14,7 @@ import {
 import {vi} from 'vitest';
 import {ResponseRejection} from 'gmp/http/rejection';
 import Logger from 'gmp/log';
+import {createSession} from 'gmp/testing';
 import LoginPage from 'web/pages/login/LoginPage';
 
 Logger.setDefaultLevel('silent');
@@ -60,13 +61,9 @@ const createGmp = ({
   settings: {
     guestUsername,
     guestPassword,
-    session: {
-      isLoggedIn: () => isLoggedIn,
-      subscribeToChanges: testing.fn().mockImplementation(callback => {
-        callback();
-        return () => {};
-      }),
-    },
+    session: createSession({
+      timezone: 'UTC',
+    }),
   },
   user: {
     currentSettings,
@@ -181,35 +178,6 @@ describe('LoginPage tests', () => {
     render(<LoginPage />);
     expect(mockNavigate).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith('/dashboards', {replace: true});
-  });
-
-  test('should dispatch timezone to Redux after login', async () => {
-    const login = testing.fn().mockResolvedValue({
-      locale: 'locale',
-      token: 'token',
-      timezone: 'Australia/Sydney',
-      sessionTimeout: '10:00',
-    });
-    const gmp = createGmp({login});
-    const {render, store} = rendererWith({gmp, router: true, store: true});
-
-    render(<LoginPage />);
-
-    const usernameField = screen.getByName('username');
-    const passwordField = screen.getByName('password');
-
-    changeInputValue(usernameField, 'foo');
-    changeInputValue(passwordField, 'bar');
-
-    const button = screen.getByTestId('login-button');
-    fireEvent.click(button);
-
-    expect(login).toHaveBeenCalledWith('foo', 'bar');
-
-    await wait();
-
-    const userSettings = store.getState().userSettings;
-    expect(userSettings.timezone).toEqual('Australia/Sydney');
   });
 
   test.each([

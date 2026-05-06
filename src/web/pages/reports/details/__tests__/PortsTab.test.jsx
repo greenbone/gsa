@@ -9,7 +9,6 @@ import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import PortsTab from 'web/pages/reports/details/PortsTab';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -26,13 +25,10 @@ describe('Report Ports Tab tests', () => {
 
     const onSortChange = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <PortsTab

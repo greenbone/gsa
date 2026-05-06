@@ -20,7 +20,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import AuditPage, {ToolBarIcons} from 'web/pages/audits/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -49,11 +48,10 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing
-  .fn()
-  .mockResolvedValue(currentSettingsDefaultResponse);
-
 const createGmp = ({
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse),
   deleteByFilter = testing.fn().mockResolvedValue({
     foo: 'bar',
   }),
@@ -99,7 +97,7 @@ const createGmp = ({
   reloadInterval,
   settings: {
     manualUrl,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {currentSettings, getSetting},
 });
@@ -114,8 +112,6 @@ describe('AuditPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -153,8 +149,6 @@ describe('AuditPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));

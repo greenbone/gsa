@@ -10,7 +10,6 @@ import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import Table from 'web/pages/tasks/TaskTable';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const lastReport = {
   report: {
@@ -103,15 +102,11 @@ describe('TaskTable tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
-
     render(
       <Table
         entities={[task, task2, task3]}

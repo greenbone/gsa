@@ -10,7 +10,6 @@ import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import AuditReportDetailsContent from 'web/pages/reports/AuditReportDetailsContent';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
@@ -40,7 +39,7 @@ const createGmp = ({
   settings: {
     manualUrl,
     reportResultsThreshold,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {
     currentSettings,
@@ -79,14 +78,11 @@ describe('AuditReportDetailsContent tests', () => {
     const {entity} = getMockAuditReport();
     const filters = [filterWithName];
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     render(
       <AuditReportDetailsContent
@@ -264,14 +260,11 @@ describe('AuditReportDetailsContent tests', () => {
     const {entity} = getMockAuditReport();
     const filters = [filterWithName];
     const gmp = createGmp({reportResultsThreshold: 1});
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <AuditReportDetailsContent

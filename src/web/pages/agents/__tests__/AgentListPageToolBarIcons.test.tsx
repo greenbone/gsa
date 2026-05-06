@@ -8,26 +8,28 @@ import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Agent from 'gmp/models/agent';
 import Date from 'gmp/models/date';
+import {createSession} from 'gmp/testing';
 import AgentsListPageToolBarIcons from 'web/pages/agents/AgentListPageToolBarIcons';
 
-const syncMock = testing.fn().mockResolvedValue(undefined);
+const onError = testing.fn();
 
-const gmp = {
+const createGmp = ({
+  syncMock = testing.fn().mockResolvedValue(undefined),
+} = {}) => ({
   settings: {
     manualUrl: 'https://docs.greenbone.net',
+    session: createSession(),
   },
   agents: {
     sync: syncMock,
   },
-};
-
-const onError = testing.fn();
+});
 
 describe('AgentsListPageToolBarIcons tests', () => {
   test('should render toolbar icons', () => {
     const {render} = rendererWith({
       capabilities: true,
-      gmp,
+      gmp: createGmp(),
     });
 
     render(<AgentsListPageToolBarIcons onError={onError} />);
@@ -37,6 +39,7 @@ describe('AgentsListPageToolBarIcons tests', () => {
   });
 
   test('should call sync when sync icon is clicked', async () => {
+    const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
     render(<AgentsListPageToolBarIcons onError={onError} />);
@@ -45,11 +48,11 @@ describe('AgentsListPageToolBarIcons tests', () => {
 
     await wait();
 
-    expect(syncMock).toHaveBeenCalledTimes(1);
+    expect(gmp.agents.sync).toHaveBeenCalledTimes(1);
   });
 
   test('should not render last updated when agents have no modificationTime', () => {
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
 
     render(
       <AgentsListPageToolBarIcons
@@ -68,7 +71,7 @@ describe('AgentsListPageToolBarIcons tests', () => {
   });
 
   test('should not render last updated when agents is not set', () => {
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
 
     render(<AgentsListPageToolBarIcons onError={onError} />);
 
@@ -76,7 +79,7 @@ describe('AgentsListPageToolBarIcons tests', () => {
   });
 
   test('should render last updated using the most recent agent modificationTime', () => {
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
 
     render(
       <AgentsListPageToolBarIcons

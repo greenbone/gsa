@@ -6,10 +6,13 @@
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWithTableBody, screen} from 'web/testing';
 import Result from 'gmp/models/result';
+import {createSession} from 'gmp/testing';
 import ResultsTableRow from 'web/pages/results/ResultsTableRow';
 
-const gmp = {settings: {enableEPSS: true}};
-const {render} = rendererWithTableBody({gmp, store: true});
+const createGmp = () => ({
+  settings: {enableEPSS: true, session: createSession()},
+});
+const {render} = rendererWithTableBody({gmp: createGmp(), store: true});
 
 describe('ResultsTableRow tests', () => {
   test('should render EPSS fields 1 columns', () => {

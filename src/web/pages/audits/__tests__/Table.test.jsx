@@ -10,7 +10,6 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import Table from 'web/pages/audits/Table';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const lastReport = {
   report: {
@@ -100,14 +99,11 @@ describe('Audits table tests', () => {
 
     const gmp = createGmp();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <Table

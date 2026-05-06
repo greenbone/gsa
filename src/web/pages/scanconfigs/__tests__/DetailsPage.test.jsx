@@ -14,7 +14,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/scanconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 vi.mock('web/pages/scanconfigs/EditDialog', () => ({
   default: () => null,
@@ -175,7 +174,7 @@ const createGmp = ({
   reloadInterval,
   settings: {
     manualUrl,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {
     currentSettings,
@@ -191,8 +190,6 @@ describe('ScanConfigDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
@@ -270,8 +267,6 @@ describe('ScanConfigDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', config));
 
     render(<DetailsPage id="12345" />);
@@ -339,8 +334,6 @@ describe('ScanConfigDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', config));
 
     render(<DetailsPage id="12345" />);
@@ -379,8 +372,6 @@ describe('ScanConfigDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {container} = render(<DetailsPage id="12345" />);
@@ -399,8 +390,6 @@ describe('ScanConfigDetailsPage tests', () => {
       router: true,
       store: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
@@ -426,7 +415,6 @@ describe('ScanConfigDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     store.dispatch(entityLoadingActions.success('12345', config));
 
     render(<DetailsPage id="12345" />);
@@ -493,7 +481,6 @@ describe('ScanConfigDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     store.dispatch(entityLoadingActions.success('12345', config2));
 
     render(<DetailsPage id="12345" />);
@@ -566,7 +553,6 @@ describe('ScanConfigDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     store.dispatch(entityLoadingActions.success('12345', config3));
 
     render(<DetailsPage id="12345" />);
@@ -633,7 +619,6 @@ describe('ScanConfigDetailsPage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
     store.dispatch(entityLoadingActions.success('12345', config4));
 
     render(<DetailsPage id="12345" />);

@@ -16,7 +16,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TaskDetailsPage from 'web/pages/tasks/TaskDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tasks';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const config = ScanConfig.fromElement({
   _id: '314',
@@ -233,7 +232,7 @@ const createGmp = ({
   reloadInterval,
   settings: {
     manualUrl,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {
     currentSettings,
@@ -251,8 +250,6 @@ describe('TaskDetailsPage tests', () => {
       store: true,
       features: new Features(['ENABLE_CREDENTIAL_STORES']),
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
@@ -342,8 +339,6 @@ describe('TaskDetailsPage tests', () => {
       features: new Features(['ENABLE_CREDENTIAL_STORES']),
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', task2));
 
     const {container} = render(<TaskDetailsPage id="12345" />);
@@ -370,8 +365,6 @@ describe('TaskDetailsPage tests', () => {
       features: new Features(['ENABLE_CREDENTIAL_STORES']),
     });
 
-    store.dispatch(setTimezone('CET'));
-
     store.dispatch(entityLoadingActions.success('12345', task2));
 
     const {container} = render(<TaskDetailsPage id="12345" />);
@@ -397,8 +390,6 @@ describe('TaskDetailsPage tests', () => {
       store: true,
       features: new Features(['ENABLE_CREDENTIAL_STORES']),
     });
-
-    store.dispatch(setTimezone('CET'));
 
     store.dispatch(entityLoadingActions.success('12345', task5));
 

@@ -6,13 +6,21 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import dayjs from 'dayjs';
+import {createSession} from 'gmp/testing';
 import AgentDialog from 'web/pages/agents/AgentDialog';
+
 const onSave = testing.fn();
 const onClose = testing.fn();
 
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
+
 describe('AgentDialog tests', () => {
   test('should render without issues and close', () => {
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(<AgentDialog onClose={onClose} onSave={onSave} />);
 
@@ -25,7 +33,7 @@ describe('AgentDialog tests', () => {
   });
 
   test('should call onSave with default values', async () => {
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(<AgentDialog onClose={onClose} onSave={onSave} />);
 
@@ -47,7 +55,7 @@ describe('AgentDialog tests', () => {
   });
 
   test('should render edit dialog with existing values', () => {
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <AgentDialog
@@ -68,7 +76,7 @@ describe('AgentDialog tests', () => {
   });
 
   test('should handle form field changes', async () => {
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(<AgentDialog onClose={onClose} onSave={onSave} />);
 
@@ -90,7 +98,7 @@ describe('AgentDialog tests', () => {
   });
 
   test('should render status information when provided', () => {
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <AgentDialog
@@ -114,7 +122,7 @@ describe('AgentDialog tests', () => {
   });
 
   test('should show status section', () => {
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(<AgentDialog onClose={onClose} onSave={onSave} />);
 
@@ -125,7 +133,7 @@ describe('AgentDialog tests', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(<AgentDialog onClose={onClose} onSave={onSave} />);
 
@@ -140,7 +148,7 @@ describe('AgentDialog tests', () => {
   });
 
   test('should render updateToLatest checkbox with true when provided', () => {
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <AgentDialog updateToLatest={true} onClose={onClose} onSave={onSave} />,
@@ -154,7 +162,7 @@ describe('AgentDialog tests', () => {
   });
 
   test('should handle updateToLatest checkbox change and include it in onSave', async () => {
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(<AgentDialog onClose={onClose} onSave={onSave} />);
 
@@ -185,7 +193,7 @@ describe('AgentDialog tests', () => {
   });
 
   test('should maintain updateToLatest value from props and save correctly', async () => {
-    const {render} = rendererWith({});
+    const {render} = rendererWith({gmp: createGmp()});
 
     render(
       <AgentDialog

@@ -6,13 +6,19 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent} from 'web/testing';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity',
 );
+
+const createGmp = () => ({
+  settings: {
+    session: createSession({timezone: 'CET'}),
+  },
+});
 
 describe('Report TLS Certificates Tab tests', () => {
   test('should render Report TLS Certificates Tab', () => {
@@ -22,12 +28,10 @@ describe('Report TLS Certificates Tab tests', () => {
 
     const onTlsCertificateDownloadClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       router: true,
-      store: true,
+      gmp: createGmp(),
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <TLSCertificatesTab
@@ -118,12 +122,10 @@ describe('Report TLS Certificates Tab tests', () => {
 
     const onTlsCertificateDownloadClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       router: true,
-      store: true,
+      gmp: createGmp(),
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {baseElement} = render(
       <TLSCertificatesTab

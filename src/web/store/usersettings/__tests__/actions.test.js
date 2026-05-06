@@ -12,13 +12,10 @@ import {
   saveReportComposerDefaults,
   setLocale,
   setSessionTimeout,
-  setTimezone,
   renewSessionTimeout,
-  updateTimezone,
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
   USER_SETTINGS_SET_LOCALE,
   USER_SETTINGS_SET_SESSION_TIMEOUT,
-  USER_SETTINGS_SET_TIMEZONE,
 } from 'web/store/usersettings/actions';
 
 describe('settings actions tests', () => {
@@ -26,13 +23,6 @@ describe('settings actions tests', () => {
     expect(setLocale('de')).toEqual({
       type: USER_SETTINGS_SET_LOCALE,
       locale: 'de',
-    });
-  });
-
-  test('should create a setTimezone action', () => {
-    expect(setTimezone('cet')).toEqual({
-      type: USER_SETTINGS_SET_TIMEZONE,
-      timezone: 'cet',
     });
   });
 
@@ -48,20 +38,6 @@ describe('settings actions tests', () => {
     expect(action).toEqual({
       type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
       data: {foo: 'bar'},
-    });
-  });
-
-  test('should update timezone', () => {
-    const dispatch = testing.fn();
-    const gmp = {
-      setTimezone: testing.fn(),
-    };
-    return updateTimezone(gmp)('cet')(dispatch).then(() => {
-      expect(dispatch).toBeCalledWith({
-        type: USER_SETTINGS_SET_TIMEZONE,
-        timezone: 'cet',
-      });
-      expect(gmp.setTimezone).toBeCalledWith('cet');
     });
   });
 

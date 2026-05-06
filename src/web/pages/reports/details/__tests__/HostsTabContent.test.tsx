@@ -6,10 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import HostsTabContent from 'web/pages/reports/details/HostsTabContent';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 const createMockProps = (overrides = {}) => {
   const {hosts} = getMockReport();
@@ -44,15 +44,24 @@ const createMockProps = (overrides = {}) => {
   };
 };
 
+const createGmp = ({severityRating = SEVERITY_RATING_CVSS_3} = {}) => ({
+  settings: {
+    session: createSession({
+      timezone: 'CET',
+    }),
+    severityRating,
+  },
+});
+
 describe('HostsTabContent', () => {
   test('should render Loading component when showInitialLoading is true', () => {
     const props = createMockProps({
       showInitialLoading: true,
     });
     const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(<HostsTabContent {...props} />);
@@ -65,14 +74,9 @@ describe('HostsTabContent', () => {
       showThresholdMessage: true,
     });
     const {render} = rendererWith({
-      gmp: {
-        settings: {
-          severityRating: 'cvss_3',
-        },
-      },
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(<HostsTabContent {...props} />);
@@ -87,17 +91,11 @@ describe('HostsTabContent', () => {
     const props = createMockProps({
       isContainerScanning: true,
     });
-    const {render, store} = rendererWith({
-      gmp: {
-        settings: {
-          severityRating: SEVERITY_RATING_CVSS_3,
-        },
-      },
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-    store.dispatch(setTimezone('CET'));
 
     render(<HostsTabContent {...props} />);
 
@@ -113,17 +111,11 @@ describe('HostsTabContent', () => {
     const props = createMockProps({
       isContainerScanning: false,
     });
-    const {render, store} = rendererWith({
-      gmp: {
-        settings: {
-          severityRating: SEVERITY_RATING_CVSS_3,
-        },
-      },
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-    store.dispatch(setTimezone('CET'));
 
     render(<HostsTabContent {...props} />);
 
@@ -140,17 +132,11 @@ describe('HostsTabContent', () => {
       isContainerScanning: true,
       onSortChange: mockOnSortChange,
     });
-    const {render, store} = rendererWith({
-      gmp: {
-        settings: {
-          severityRating: SEVERITY_RATING_CVSS_3,
-        },
-      },
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-    store.dispatch(setTimezone('CET'));
 
     render(<HostsTabContent {...props} />);
 
@@ -165,17 +151,11 @@ describe('HostsTabContent', () => {
       isContainerScanning: false,
       onSortChange: mockOnSortChange,
     });
-    const {render, store} = rendererWith({
-      gmp: {
-        settings: {
-          severityRating: SEVERITY_RATING_CVSS_3,
-        },
-      },
+    const {render} = rendererWith({
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
-    store.dispatch(setTimezone('CET'));
 
     render(<HostsTabContent {...props} />);
 
@@ -192,7 +172,7 @@ describe('HostsTabContent', () => {
     const {render} = rendererWith({
       capabilities: true,
       router: true,
-      store: true,
+      gmp: createGmp(),
     });
 
     render(<HostsTabContent {...props} />);
@@ -209,14 +189,9 @@ describe('HostsTabContent', () => {
       isContainerScanning: true,
     });
     const {render} = rendererWith({
-      gmp: {
-        settings: {
-          severityRating: SEVERITY_RATING_CVSS_3,
-        },
-      },
+      gmp: createGmp(),
       capabilities: true,
       router: true,
-      store: true,
     });
 
     render(<HostsTabContent {...props} />);

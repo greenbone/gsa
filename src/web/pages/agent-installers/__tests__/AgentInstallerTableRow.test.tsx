@@ -8,7 +8,14 @@ import {fireEvent, rendererWithTableBody, screen} from 'web/testing';
 import dayjs from 'dayjs';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import AgentInstaller from 'gmp/models/agent-installer';
+import {createSession} from 'gmp/testing';
 import AgentInstallerTableRow from 'web/pages/agent-installers/AgentInstallerTableRow';
+
+const createGmp = () => ({
+  settings: {
+    session: createSession(),
+  },
+});
 
 describe('AgentInstallerTableRow tests', () => {
   test('renders name, description, version and actions', () => {
@@ -20,7 +27,10 @@ describe('AgentInstallerTableRow tests', () => {
       checksum: 'abc123def456',
     });
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<AgentInstallerTableRow entity={installer} />);
 
     expect(screen.getByText('Agent Installer 1')).toBeInTheDocument();
@@ -37,7 +47,10 @@ describe('AgentInstallerTableRow tests', () => {
       name: 'Agent Installer 2',
     });
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<AgentInstallerTableRow entity={installer} />);
 
     expect(screen.getByText('Agent Installer 2')).toBeInTheDocument();
@@ -57,7 +70,10 @@ describe('AgentInstallerTableRow tests', () => {
     const handleDownload = testing.fn();
     const handleChecksum = testing.fn();
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <AgentInstallerTableRow
         entity={installer}
@@ -82,7 +98,10 @@ describe('AgentInstallerTableRow tests', () => {
       userCapabilities: new EverythingCapabilities(),
     });
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<AgentInstallerTableRow entity={installer} />);
 
     const checksumButton = screen.getByTestId('fingerprint-icon');
@@ -96,7 +115,10 @@ describe('AgentInstallerTableRow tests', () => {
       modificationTime: dayjs('2020-01-01T00:00:00Z'),
     });
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<AgentInstallerTableRow entity={installer} />);
 
     expect(screen.getByText('Agent Installer 5')).toBeInTheDocument();
@@ -111,7 +133,10 @@ describe('AgentInstallerTableRow tests', () => {
       version: '1.2.3-beta.4',
     });
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(<AgentInstallerTableRow entity={installer} />);
 
     expect(
@@ -135,7 +160,10 @@ describe('AgentInstallerTableRow tests', () => {
     const handleEntitySelected = testing.fn();
     const handleEntityDeselected = testing.fn();
 
-    const {render} = rendererWithTableBody({capabilities: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
       <AgentInstallerTableRow
         entity={installer}

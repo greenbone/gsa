@@ -5,12 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Note from 'gmp/models/note';
+import {createSession} from 'gmp/testing';
 import NoteBox from 'web/entity/NoteBox';
-import {setTimezone} from 'web/store/usersettings/actions';
-
-const caps = new Capabilities(['everything']);
 
 const note = Note.fromElement({
   _id: '123',
@@ -24,15 +21,19 @@ const note = Note.fromElement({
   modification_time: '2019-02-02T12:00:00Z',
 });
 
+const createGmp = () => ({
+  settings: {
+    session: createSession({timezone: 'CET'}),
+  },
+});
+
 describe('NoteBox tests', () => {
   test('should render with DetailsLink', () => {
-    const {render, store} = rendererWith({
-      capabilities: caps,
+    const {render} = rendererWith({
+      capabilities: true,
       router: true,
-      store: true,
+      gmp: createGmp(),
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {element} = render(<NoteBox detailsLink={true} note={note} />);
 
@@ -51,13 +52,11 @@ describe('NoteBox tests', () => {
   });
 
   test('should render without DetailsLink', () => {
-    const {render, store} = rendererWith({
-      capabilities: caps,
+    const {render} = rendererWith({
+      capabilities: true,
       router: true,
-      store: true,
+      gmp: createGmp(),
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const {element} = render(<NoteBox detailsLink={false} note={note} />);
 

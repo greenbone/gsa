@@ -20,7 +20,6 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CvesPage, {ToolBarIcons} from 'web/pages/cves/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/cves';
-import {setTimezone} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -111,7 +110,7 @@ const createGmp = ({
     reloadInterval,
     enableEPSS: true,
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: createSession(),
+    session: createSession({timezone: 'CET'}),
   },
   user: {currentSettings, getSetting},
 });
@@ -125,8 +124,6 @@ describe('CvesPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -210,8 +207,6 @@ describe('CvesPage tests', () => {
       router: true,
     });
 
-    store.dispatch(setTimezone('CET'));
-
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
@@ -249,8 +244,6 @@ describe('CvesPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
@@ -301,8 +294,6 @@ describe('CvesPage tests', () => {
       store: true,
       router: true,
     });
-
-    store.dispatch(setTimezone('CET'));
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
