@@ -48,18 +48,16 @@ const useFilterDialogSave = (
   const gmp = useGmp();
 
   const createFilter = useCallback(
-    (newFilter: Filter) => {
-      // @ts-expect-error
+    (newFilter: Filter, name: string) => {
       return gmp.filter
         .create({
           term: newFilter.toFilterString(),
           type: createFilterType,
-          name: filterName,
+          name,
         })
         .then(response => {
           const {data} = response;
           // load new filter
-          // @ts-expect-error
           return gmp.filter.get({id: data.id});
         })
         .then(response => {
@@ -70,7 +68,7 @@ const useFilterDialogSave = (
           }
         });
     },
-    [gmp, createFilterType, filterName, onFilterCreated],
+    [gmp, createFilterType, onFilterCreated],
   );
 
   const handleSave: () => Promise<void> = useCallback(() => {
@@ -80,7 +78,7 @@ const useFilterDialogSave = (
 
     if (saveNamedFilter) {
       if (isDefined(filterName) && filterName.trim().length > 0) {
-        return createFilter(newFilter).then(onClose);
+        return createFilter(newFilter, filterName).then(onClose);
       }
       return Promise.reject(
         new Error(_('Please insert a name for the new filter')),

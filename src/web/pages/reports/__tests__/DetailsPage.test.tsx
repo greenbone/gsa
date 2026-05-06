@@ -13,7 +13,6 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import DetailsPage from 'web/pages/reports/DetailsPage';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 interface CollectionResponse {
   data: unknown[];
@@ -54,12 +53,23 @@ const createGmp = () => ({
     reportResultsThreshold: 100,
     reloadInterval: 15000,
     reloadIntervalActive: 3000,
-    session: createSession({token: 'test-token', username: 'admin'}),
+    session: createSession({
+      token: 'test-token',
+      username: 'admin',
+      timezone: 'Europe/Berlin',
+    }),
   },
   user: {
-    currentSettings: testing
-      .fn()
-      .mockResolvedValue(currentSettingsDefaultResponse),
+    currentSettings: testing.fn().mockResolvedValue({
+      data: {
+        ...currentSettingsDefaultResponse.data,
+        reportexportfilename: {
+          id: 'report-export-filename',
+          name: 'Report Export File Name',
+          value: '%T-%U',
+        },
+      },
+    }),
     getReportComposerDefaults: testing.fn().mockResolvedValue({data: {}}),
     getSetting: createGetSettingMock(),
   },
@@ -94,8 +104,6 @@ const setupRenderer = (gmp = createGmp()) => {
     store: true,
     route: `/report/${reportId}`,
   });
-
-  store.dispatch(setTimezone('CET'));
 
   return {render, store};
 };
