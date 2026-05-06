@@ -1,21 +1,34 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useSelector, useDispatch} from 'react-redux';
-import {setTimezone} from 'web/store/usersettings/actions';
-import {getTimezone} from 'web/store/usersettings/selectors';
+import {useCallback, useSyncExternalStore} from 'react';
+import useGmp from 'web/hooks/useGmp';
 
+/**
+ * Custom hook to access the current user's timezone.
+ *
+ * This hook provides access to the user's timezone setting.
+ *
+ * @returns An array containing the current timezone and a function to update it.
+ */
 const useUserTimezone = (): [
-  timezone: string,
-  setTimeZone: (timezone: string) => void,
+  timezone: string | undefined,
+  setTimezone: (newTimezone: string) => void,
 ] => {
-  const dispatch = useDispatch();
-  return [
-    useSelector(getTimezone),
-    timezone => dispatch(setTimezone(timezone)),
-  ];
+  const gmp = useGmp();
+  const timezone = useSyncExternalStore(
+    listener => gmp.settings.session.subscribeToChanges(listener),
+    () => gmp.settings.session.timezone,
+  );
+  const setTimezone = useCallback(
+    (newTimezone: string) => {
+      gmp.settings.session.setTimezone(newTimezone);
+    },
+    [gmp],
+  );
+  return [timezone, setTimezone];
 };
 
 export default useUserTimezone;
