@@ -189,14 +189,16 @@ const ReportDetailsPage = () => {
 
   // Report composer defaults
   useEffect(() => {
-    gmp.user
-      .getReportComposerDefaults()
-      .then(response => {
+    const loadReportComposerDefaults = async () => {
+      try {
+        const response = await gmp.user.getReportComposerDefaults();
         setReportComposerDefaults(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         log.error('Error loading report composer defaults', error);
-      });
+      }
+    };
+
+    void loadReportComposerDefaults();
   }, [gmp]);
 
   // Set initial report format ID from available formats
@@ -251,22 +253,23 @@ const ReportDetailsPage = () => {
     handleFilterChange(DEFAULT_FILTER);
   }, [handleFilterChange]);
 
-  const handleAddToAssets = useCallback(() => {
+  const handleAddToAssets = useCallback(async () => {
     if (!entity?.id) return;
-    gmp.report
-      .addAssets({id: entity.id, filter: reportFilter?.toFilterString()})
-      .then(() => {
-        showSuccessMessage(
-          _(
-            'Report content added to Assets with QoD>=70% and Overrides enabled.',
-          ),
-        );
-        void queryClient.invalidateQueries({queryKey: ['get_report']});
-      })
-      .catch((error: Error) => {
-        log.error(error);
-        showError(error);
+    try {
+      await gmp.report.addAssets({
+        id: entity.id,
+        filter: reportFilter?.toFilterString(),
       });
+      showSuccessMessage(
+        _(
+          'Report content added to Assets with QoD>=70% and Overrides enabled.',
+        ),
+      );
+      await queryClient.invalidateQueries({queryKey: ['get_report']});
+    } catch (error) {
+      log.error(error);
+      showError(error as Error);
+    }
   }, [
     entity,
     gmp,
@@ -277,18 +280,19 @@ const ReportDetailsPage = () => {
     _,
   ]);
 
-  const handleRemoveFromAssets = useCallback(() => {
+  const handleRemoveFromAssets = useCallback(async () => {
     if (!entity?.id) return;
-    gmp.report
-      .removeAssets({id: entity.id, filter: reportFilter?.toFilterString()})
-      .then(() => {
-        showSuccessMessage(_('Report content removed from Assets.'));
-        void queryClient.invalidateQueries({queryKey: ['get_report']});
-      })
-      .catch((error: Error) => {
-        log.error(error);
-        showError(error);
+    try {
+      await gmp.report.removeAssets({
+        id: entity.id,
+        filter: reportFilter?.toFilterString(),
       });
+      showSuccessMessage(_('Report content removed from Assets.'));
+      await queryClient.invalidateQueries({queryKey: ['get_report']});
+    } catch (error) {
+      log.error(error);
+      showError(error as Error);
+    }
   }, [
     entity,
     gmp,
@@ -422,9 +426,9 @@ const ReportDetailsPage = () => {
 
     if (!levels.includes('g')) {
       levels += 'g';
-      const lfilter = reportFilter.copy();
-      lfilter.set('levels', levels);
-      handleFilterChange(lfilter);
+      const levelFilter = reportFilter.copy();
+      levelFilter.set('levels', levels);
+      handleFilterChange(levelFilter);
     }
   }, [reportFilter, handleFilterChange]);
 
@@ -432,9 +436,9 @@ const ReportDetailsPage = () => {
     if (!reportFilter) return;
 
     if (reportFilter.has('severity')) {
-      const lfilter = reportFilter.copy();
-      lfilter.delete('severity');
-      handleFilterChange(lfilter);
+      const levelFilter = reportFilter.copy();
+      levelFilter.delete('severity');
+      handleFilterChange(levelFilter);
     }
   }, [reportFilter, handleFilterChange]);
 
@@ -442,9 +446,9 @@ const ReportDetailsPage = () => {
     if (!reportFilter) return;
 
     if (reportFilter.has('min_qod')) {
-      const lfilter = reportFilter.copy();
-      lfilter.set('min_qod', 30);
-      handleFilterChange(lfilter);
+      const levelFilter = reportFilter.copy();
+      levelFilter.set('min_qod', 30);
+      handleFilterChange(levelFilter);
     }
   }, [reportFilter, handleFilterChange]);
 
@@ -526,10 +530,9 @@ const ReportDetailsPage = () => {
             onReportDownloadClick={handleOpenDownloadReportDialog}
             onSortChange={handleSortChange}
             onTagSuccess={handleChanged}
-            onTargetEditClick={() => {
-              void loadTarget().then(response => {
-                if (response) void edit(response.data);
-              });
+            onTargetEditClick={async () => {
+              const response = await loadTarget();
+              if (response) void edit(response.data);
             }}
             onTlsCertificateDownloadClick={
               handleTlsCertificateDownload as unknown as () => void

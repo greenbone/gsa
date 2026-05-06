@@ -9,10 +9,11 @@ import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import Filter from 'gmp/models/filter';
+import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import DetailsPage from 'web/pages/reports/DetailsPage';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 interface CollectionResponse {
   data: unknown[];
@@ -53,7 +54,7 @@ const createGmp = () => ({
     reportResultsThreshold: 100,
     reloadInterval: 15000,
     reloadIntervalActive: 3000,
-    session: {token: 'test-token'},
+    session: createSession({token: 'test-token', username: 'admin'}),
   },
   user: {
     currentSettings: testing
@@ -95,7 +96,6 @@ const setupRenderer = (gmp = createGmp()) => {
   });
 
   store.dispatch(setTimezone('CET'));
-  store.dispatch(setUsername('admin'));
 
   return {render, store};
 };
