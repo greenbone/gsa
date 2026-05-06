@@ -5,12 +5,11 @@
 
 import {testing} from '@gsa/testing';
 import {type Date} from 'gmp/models/date';
-import type Session from 'gmp/session/session';
+import {
+  type default as Session,
+  type SessionListener,
+} from 'gmp/session/session';
 import {type SessionLoginData} from 'gmp/session/session-state';
-
-interface MockSession extends Session {
-  listener: (() => void)[];
-}
 
 interface MockSessionOptions {
   token?: string;
@@ -27,6 +26,54 @@ interface MockSessionOptions {
   login?: (data: SessionLoginData) => void;
 }
 
+class MockSession implements Session {
+  public listener: SessionListener[];
+  public token: string | undefined;
+  public sessionTimeout: Date | undefined;
+  public locale: string | undefined;
+  public timezone: string | undefined;
+  public username: string | undefined;
+
+  public setTimezone: (timezone?: string) => void;
+  public setLocale: (locale?: string) => void;
+  public logout: () => void;
+  public login: (data: SessionLoginData) => void;
+  public isLoggedIn: () => boolean;
+  public subscribeToChanges: (listener: SessionListener) => () => void;
+
+  constructor(options: MockSessionOptions = {}) {
+    this.listener = options.listener ?? [];
+    this.locale = options.locale;
+    this.sessionTimeout = options.sessionTimeout;
+    this.timezone = options.timezone ?? 'UTC';
+    this.token = options.token;
+    this.username = options.username;
+    this.isLoggedIn = options.isLoggedIn ?? testing.fn().mockReturnValue(true);
+    this.subscribeToChanges =
+      options.subscribeToChanges ??
+      testing.fn().mockImplementation(callback => {
+        this.listener.push(callback);
+        callback();
+        return () => {};
+      });
+    this.setTimezone =
+      options.setTimezone ??
+      testing.fn().mockImplementation(timezone => {
+        this.timezone = timezone;
+        this.listener.forEach(listener => listener());
+      });
+
+    this.setLocale =
+      options.setLocale ??
+      testing.fn().mockImplementation(locale => {
+        this.locale = locale;
+        this.listener.forEach(listener => listener());
+      });
+    this.logout = options.logout ?? testing.fn();
+    this.login = options.login ?? testing.fn();
+  }
+}
+
 export const createSession = ({
   listener = [],
   locale,
@@ -34,27 +81,25 @@ export const createSession = ({
   timezone,
   token,
   username,
-  isLoggedIn = testing.fn().mockReturnValue(true),
-  subscribeToChanges = testing.fn().mockImplementation(callback => {
-    listener.push(callback);
-    callback();
-    return () => {};
-  }),
-  setTimezone = testing.fn(),
-  setLocale = testing.fn(),
-  logout = testing.fn(),
-  login = testing.fn(),
-}: MockSessionOptions = {}): MockSession => ({
-  listener,
-  locale,
-  sessionTimeout,
-  timezone,
-  token,
-  username,
   isLoggedIn,
-  login,
-  logout,
-  setLocale,
-  setTimezone,
   subscribeToChanges,
-});
+  setTimezone,
+  setLocale,
+  logout,
+  login,
+}: MockSessionOptions = {}): MockSession => {
+  return new MockSession({
+    listener,
+    locale,
+    sessionTimeout,
+    timezone,
+    token,
+    username,
+    isLoggedIn,
+    subscribeToChanges,
+    setTimezone,
+    setLocale,
+    logout,
+    login,
+  });
+};
