@@ -258,7 +258,6 @@ class Gmp {
 
     setLocale(locale === BROWSER_LANGUAGE ? undefined : locale);
     return {
-      timezone,
       sessionTimeout,
     };
   }
@@ -324,11 +323,6 @@ class Gmp {
   public setLocale(lang?: string) {
     this.settings.session.setLocale(lang);
     setLocale(lang);
-    return this;
-  }
-
-  public setTimezone(timezone?: string) {
-    this.settings.session.setTimezone(timezone);
     return this;
   }
 
