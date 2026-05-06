@@ -5,7 +5,6 @@
 
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {parseFilter} from 'gmp/collection/parser';
-import registerCommand from 'gmp/command';
 import type {EntitiesMeta} from 'gmp/commands/entities';
 import HttpCommand, {
   type HttpCommandInputParams,
@@ -112,7 +111,5 @@ class ReportPortsCommand extends HttpCommand {
     });
   }
 }
-
-registerCommand('reportports', ReportPortsCommand);
 
 export default ReportPortsCommand;

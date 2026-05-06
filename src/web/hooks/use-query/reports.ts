@@ -61,7 +61,6 @@ export const useGetResultsFilters = () => {
   const gmp = useGmp();
 
   return useGetEntities<Filter>({
-    // @ts-expect-error filters command is dynamically added via getCommands()
     gmpMethod: gmp.filters.get.bind(gmp.filters),
     queryId: 'get_filters',
     filter: RESULTS_FILTER_FILTER,
@@ -74,7 +73,6 @@ export const useGetReportFormats = () => {
   const gmp = useGmp();
 
   return useGetEntities<ReportFormat>({
-    // @ts-expect-error reportformats command is dynamically added via getCommands()
     gmpMethod: gmp.reportformats.get.bind(gmp.reportformats),
     queryId: 'get_report_formats',
     filter: REPORT_FORMATS_FILTER,
@@ -87,7 +85,6 @@ export const useGetReportConfigs = () => {
   const gmp = useGmp();
 
   return useGetEntities<ReportConfig>({
-    // @ts-expect-error reportconfigs command is dynamically added via getCommands()
     gmpMethod: gmp.reportconfigs.get.bind(gmp.reportconfigs),
     queryId: 'get_report_configs',
     filter: ALL_FILTER,

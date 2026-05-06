@@ -21,7 +21,6 @@ export const useGetReportPorts = ({
 
   return useGetEntities<ReportPort>({
     gmpMethod: ({filter: reportFilter}) =>
-      // @ts-expect-error reportports command is dynamically added via getCommands()
       gmp.reportports.get({
         report_id: reportId,
         filter: reportFilter,

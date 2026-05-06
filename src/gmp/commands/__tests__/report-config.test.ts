@@ -79,9 +79,9 @@ describe('ReportConfigCommand tests', () => {
     const fakeHttp = createHttp(response);
     const cmd = new ReportConfigCommand(fakeHttp);
     const resp = await cmd.save({
+      id: 'foo',
       name: 'foo',
       comment: 'bar',
-      reportFormatId: 'should-be-ignored-in-save',
       params: {
         'param 1': 'value A',
         'param 2': 'value B',
@@ -104,6 +104,7 @@ describe('ReportConfigCommand tests', () => {
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_report_config',
+        report_config_id: 'foo',
         name: 'foo',
         comment: 'bar',
         'param:param 1': 'value A',

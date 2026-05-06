@@ -4,7 +4,6 @@
  */
 
 import 'gmp/commands/audit-reports';
-import 'gmp/commands/filters';
 import 'gmp/commands/groups';
 import 'gmp/commands/hosts';
 import 'gmp/commands/license';
@@ -12,9 +11,6 @@ import 'gmp/commands/notes';
 import 'gmp/commands/os';
 import 'gmp/commands/overrides';
 
-import 'gmp/commands/report-configs';
-import 'gmp/commands/report-formats';
-import 'gmp/commands/report-ports';
 import 'gmp/commands/results';
 import 'gmp/commands/scan-configs';
 import 'gmp/commands/schedules';
@@ -48,6 +44,7 @@ import DashboardCommand from 'gmp/commands/dashboards';
 import DfnCertAdvisoriesCommand from 'gmp/commands/dfn-cert-advisories';
 import DfnCertAdvisoryCommand from 'gmp/commands/dfn-cert-advisory';
 import FeedStatusCommand from 'gmp/commands/feed-status';
+import {FilterCommand, FiltersCommand} from 'gmp/commands/filters';
 import LoginCommand from 'gmp/commands/login';
 import NvtCommand from 'gmp/commands/nvt';
 import NvtFamiliesCommand from 'gmp/commands/nvt-families';
@@ -61,6 +58,15 @@ import PoliciesCommand from 'gmp/commands/policies';
 import PolicyCommand from 'gmp/commands/policy';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/port-lists';
 import ReportCommand from 'gmp/commands/report';
+import {
+  ReportConfigCommand,
+  ReportConfigsCommand,
+} from 'gmp/commands/report-configs';
+import {
+  ReportFormatCommand,
+  ReportFormatsCommand,
+} from 'gmp/commands/report-formats';
+import ReportPortsCommand from 'gmp/commands/report-ports';
 import ReportsCommand from 'gmp/commands/reports';
 import ResourceNamesCommand from 'gmp/commands/resource-names';
 import RoleCommand from 'gmp/commands/role';
@@ -122,6 +128,8 @@ class Gmp {
   public readonly dfncert: DfnCertAdvisoryCommand;
   public readonly dfncerts: DfnCertAdvisoriesCommand;
   public readonly feedstatus: FeedStatusCommand;
+  public readonly filter: FilterCommand;
+  public readonly filters: FiltersCommand;
   public readonly nvt: NvtCommand;
   public readonly nvtfamilies: NvtFamiliesCommand;
   public readonly nvts: NvtsCommand;
@@ -135,7 +143,12 @@ class Gmp {
   public readonly portlist: PortListCommand;
   public readonly portlists: PortListsCommand;
   public readonly report: ReportCommand;
+  public readonly reportconfig: ReportConfigCommand;
+  public readonly reportconfigs: ReportConfigsCommand;
+  public readonly reportformat: ReportFormatCommand;
+  public readonly reportformats: ReportFormatsCommand;
   public readonly reports: ReportsCommand;
+  public readonly reportports: ReportPortsCommand;
   public readonly resourcenames: ResourceNamesCommand;
   public readonly role: RoleCommand;
   public readonly roles: RolesCommand;
@@ -193,6 +206,8 @@ class Gmp {
     this.dfncert = new DfnCertAdvisoryCommand(this.http);
     this.dfncerts = new DfnCertAdvisoriesCommand(this.http);
     this.feedstatus = new FeedStatusCommand(this.http);
+    this.filter = new FilterCommand(this.http);
+    this.filters = new FiltersCommand(this.http);
     this.nvt = new NvtCommand(this.http);
     this.nvtfamilies = new NvtFamiliesCommand(this.http);
     this.nvts = new NvtsCommand(this.http);
@@ -206,7 +221,12 @@ class Gmp {
     this.portlist = new PortListCommand(this.http);
     this.portlists = new PortListsCommand(this.http);
     this.report = new ReportCommand(this.http);
+    this.reportconfig = new ReportConfigCommand(this.http);
+    this.reportconfigs = new ReportConfigsCommand(this.http);
+    this.reportformat = new ReportFormatCommand(this.http);
+    this.reportformats = new ReportFormatsCommand(this.http);
     this.reports = new ReportsCommand(this.http);
+    this.reportports = new ReportPortsCommand(this.http);
     this.resourcenames = new ResourceNamesCommand(this.http);
     this.role = new RoleCommand(this.http);
     this.roles = new RolesCommand(this.http);
