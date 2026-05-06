@@ -18,7 +18,7 @@ export type DateTimeCategory =
 export type DateTimeFormatOptions =
   (typeof DATE_TIME_FORMAT_OPTIONS)[keyof typeof DATE_TIME_FORMAT_OPTIONS];
 
-type DateInput = undefined | Date | GmpDate | string;
+export type DateInput = undefined | Date | GmpDate | string;
 
 export type DateTimeKey = DateTimeFormatOptions | typeof SYSTEM_DEFAULT;
 

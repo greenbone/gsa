@@ -8,17 +8,19 @@ import {
   shortDate,
   dateTimeWithTimeZone,
   dateTimeWithTimeZoneObject,
+  type DateInput,
+  type DateTimeKey,
 } from 'gmp/locale/date';
 
-export const formattedUserSettingShortDate = (date, tz) => {
+export const formattedUserSettingShortDate = (date: DateInput, tz?: string) => {
   const userInterfaceDateFormat = localStorage.getItem(
     'userInterfaceDateFormat',
   );
 
-  return shortDate(date, tz, userInterfaceDateFormat);
+  return shortDate(date, tz, userInterfaceDateFormat as DateTimeKey);
 };
 
-export const formattedUserSettingLongDate = (date, tz) => {
+export const formattedUserSettingLongDate = (date: DateInput, tz?: string) => {
   const userInterfaceDateFormat = localStorage.getItem(
     'userInterfaceDateFormat',
   );
@@ -26,10 +28,18 @@ export const formattedUserSettingLongDate = (date, tz) => {
   const userInterfaceTimeFormat = localStorage.getItem(
     'userInterfaceTimeFormat',
   );
-  return longDate(date, tz, userInterfaceTimeFormat, userInterfaceDateFormat);
+  return longDate(
+    date,
+    tz,
+    userInterfaceTimeFormat as DateTimeKey,
+    userInterfaceDateFormat as DateTimeKey,
+  );
 };
 
-export const formattedUserSettingDateTimeWithTimeZone = (date, tz) => {
+export const formattedUserSettingDateTimeWithTimeZone = (
+  date: DateInput,
+  tz?: string,
+) => {
   const userInterfaceDateFormat = localStorage.getItem(
     'userInterfaceDateFormat',
   );
@@ -39,8 +49,8 @@ export const formattedUserSettingDateTimeWithTimeZone = (date, tz) => {
   return dateTimeWithTimeZone(
     date,
     tz,
-    userInterfaceTimeFormat,
-    userInterfaceDateFormat,
+    userInterfaceTimeFormat as DateTimeKey,
+    userInterfaceDateFormat as DateTimeKey,
   );
 };
 
@@ -48,12 +58,15 @@ export const formattedUserSettingDateTimeWithTimeZone = (date, tz) => {
  * Returns date and timezone as separate object properties
  * for display on separate lines
  *
- * @param {DateInput} date - The date to format
- * @param {string} tz - The timezone
- * @returns {Object|undefined} - Object with datetime and timezone properties or undefined
+ * @param date - The date to format
+ * @param tz - The timezone
+ * @returns Object with datetime and timezone properties or undefined
  */
 
-export const formattedUserSettingDateTimeObject = (date, tz) => {
+export const formattedUserSettingDateTimeObject = (
+  date: DateInput,
+  tz?: string,
+) => {
   const userInterfaceDateFormat = localStorage.getItem(
     'userInterfaceDateFormat',
   );
@@ -64,7 +77,7 @@ export const formattedUserSettingDateTimeObject = (date, tz) => {
   return dateTimeWithTimeZoneObject(
     date,
     tz,
-    userInterfaceTimeFormat,
-    userInterfaceDateFormat,
+    userInterfaceTimeFormat as DateTimeKey,
+    userInterfaceDateFormat as DateTimeKey,
   );
 };
