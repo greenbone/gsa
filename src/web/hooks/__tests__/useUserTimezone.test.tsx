@@ -1,44 +1,44 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {rendererWith, fireEvent} from 'web/testing';
-import useUserTimezone from 'web/hooks/useUserTimezone';
-import {setTimezone as setTimezoneAction} from 'web/store/usersettings/actions';
+import {rendererWith, wait} from 'web/testing';
+import {createSession} from 'gmp/testing';
+import useTimezone from 'web/hooks/useUserTimezone';
 
-const TestUserTimezone = () => {
-  const [timezone, setUserTimezone] = useUserTimezone();
-  return (
-    <span onClick={() => setUserTimezone('Coordinated Universal Time')}>
-      {timezone}
-    </span>
-  );
-};
+const createGmp = () => ({
+  settings: {
+    session: createSession({
+      timezone: 'initial-timezone',
+    }),
+  },
+});
 
 describe('useUserTimezone tests', () => {
-  test('should return the users timezone', () => {
-    const {render, store} = rendererWith({store: true});
+  test('should return the user timezone', () => {
+    const gmp = createGmp();
+    const {renderHook} = rendererWith({gmp});
 
-    store.dispatch(setTimezoneAction('Central European Standard'));
+    const {result} = renderHook(() => useTimezone());
 
-    const {element} = render(<TestUserTimezone />);
-
-    expect(element).toHaveTextContent(/^Central European Standard$/);
+    expect(result.current[0]).toBe('initial-timezone');
   });
 
-  test('should allow to update the user timezone', () => {
-    const {render, store} = rendererWith({store: true});
+  test('should allow to update the user timezone', async () => {
+    const gmp = createGmp();
+    const {renderHook} = rendererWith({gmp});
 
-    store.dispatch(setTimezoneAction('Central European Standard'));
+    const {result} = renderHook(() => useTimezone());
+    const [timezone, setTimezone] = result.current;
 
-    const {element} = render(<TestUserTimezone />);
+    expect(timezone).toBe('initial-timezone');
 
-    expect(element).toHaveTextContent(/^Central European Standard$/);
+    setTimezone('updated-timezone');
 
-    fireEvent.click(element);
+    await wait();
 
-    expect(element).toHaveTextContent(/^Coordinated Universal Time$/);
+    expect(result.current[0]).toBe('updated-timezone');
   });
 });
