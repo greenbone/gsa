@@ -7,7 +7,7 @@ import {useCallback} from 'react';
 import {AppHeader} from '@greenbone/ui-lib';
 import {useLocation, useNavigate} from 'react-router';
 import {LogoutIcon, MySettingsIcon} from 'web/components/icon';
-import SessionTimer from 'web/components/sessionTimer/SessionTimer';
+import SessionTimer from 'web/components/session-timer/SessionTimer';
 import getLogo from 'web/components/structure/GetLogo';
 import LanguageSwitch from 'web/components/structure/LanguageSwitch';
 import useGmp from 'web/hooks/useGmp';
