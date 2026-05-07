@@ -11,7 +11,9 @@ type LanguageHook = [string, (lang: string) => Promise<void>];
 /**
  * Hook to access and update the current language
  *
- * @returns {Array} [language, setLanguage] Array with current language and setter function
+ * @returns A tuple containing the current language and a function to update it.
+ * The update function accepts a language code as a parameter and returns a
+ * promise that resolves when the language has been updated.
  */
 const useLanguage = (): LanguageHook => {
   const {language, setLanguage} = useContext(LanguageContext);
