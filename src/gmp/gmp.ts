@@ -80,7 +80,6 @@ import WizardCommand from 'gmp/commands/wizard';
 import Http, {type ErrorHandler} from 'gmp/http/http';
 import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
-import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
 import logger, {type RootLogger} from 'gmp/log';
 import type Settings from 'gmp/settings';
 import {isDefined} from 'gmp/utils/identity';
@@ -255,7 +254,7 @@ class Gmp {
       sessionTimeout,
     });
 
-    setLocale(locale === BROWSER_LANGUAGE ? undefined : locale);
+    setLocale(locale);
   }
 
   public async doLogout() {
@@ -310,12 +309,6 @@ class Gmp {
       url += '#' + anchor;
     }
     return url;
-  }
-
-  public setLocale(lang?: string) {
-    this.settings.session.setLocale(lang);
-    setLocale(lang);
-    return this;
   }
 
   public addHttpErrorHandler(handler: ErrorHandler) {

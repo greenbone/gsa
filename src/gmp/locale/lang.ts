@@ -7,7 +7,7 @@ import i18next, {type InitOptions, type TFunction} from 'i18next';
 import HttpBackend from 'i18next-http-backend';
 import {initReactI18next} from 'react-i18next';
 import Detector from 'gmp/locale/detector';
-import {getLanguageCodes} from 'gmp/locale/languages';
+import {BROWSER_LANGUAGE, getLanguageCodes} from 'gmp/locale/languages';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
@@ -120,12 +120,15 @@ export const getLocale = (): string => currentLocale;
 /**
  * Change the current used locale
  *
- * @param lang - Language (code) to be set. Pass undefined
- *               to start automatic detection.
+ * @param lang - Language (code) to be set. Pass undefined or BROWSER_LANGUAGE
+ * to use the browser language. Pass an unsupported language code to fall back
+ * to the default language.
  */
 
 export const setLocale = (lang?: string): void => {
-  if (isDefined(lang)) {
+  if (lang === BROWSER_LANGUAGE) {
+    lang = undefined;
+  } else if (isDefined(lang)) {
     const code = lang.includes('-') ? split(lang, '-', 1)[0] : lang;
 
     if (!whitelist.includes(lang) && !whitelist.includes(code)) {
