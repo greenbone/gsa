@@ -15,6 +15,7 @@ import {
 } from 'gmp/session/session-state';
 import {type default as SessionStorage} from 'gmp/session/session-storage';
 import UserSessionState from 'gmp/session/user-session-state';
+import {isDefined} from 'gmp/utils/identity';
 
 const isLoggedIn = (storage: SessionStorage): boolean => {
   const token = storage.getItem('token');
@@ -59,11 +60,30 @@ class DefaultSession implements Session {
   }
 
   setTimezone(timezone?: string) {
+    const oldTimezone = this.state.timezone;
     this.state.timezone = timezone;
+    if (oldTimezone !== this.state.timezone) {
+      this.notifyListeners();
+    }
   }
 
   setLocale(locale?: string) {
+    const oldLocale = this.state.locale;
     this.state.locale = locale;
+    if (oldLocale !== this.state.locale) {
+      this.notifyListeners();
+    }
+  }
+
+  setSessionTimeout(sessionTimeout?: Date) {
+    const oldSessionTimeout = this.state.sessionTimeout;
+    this.state.sessionTimeout = sessionTimeout;
+    if (
+      isDefined(oldSessionTimeout) &&
+      oldSessionTimeout.isSame(sessionTimeout) !== true
+    ) {
+      this.notifyListeners();
+    }
   }
 
   logout() {
@@ -86,6 +106,10 @@ class DefaultSession implements Session {
 
   private setState(newState: SessionState) {
     this.state = newState;
+    this.notifyListeners();
+  }
+
+  private notifyListeners() {
     this.listeners.forEach(listener => listener());
   }
 }
