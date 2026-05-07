@@ -311,12 +311,6 @@ class Gmp {
     return url;
   }
 
-  public setLocale(lang?: string) {
-    this.settings.session.setLocale(lang);
-    setLocale(lang);
-    return this;
-  }
-
   public addHttpErrorHandler(handler: ErrorHandler) {
     return this.http.addErrorHandler(handler);
   }
