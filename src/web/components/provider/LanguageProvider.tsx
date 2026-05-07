@@ -30,7 +30,14 @@ export const LanguageContext = createContext<LanguageContextProps>({
   setLanguage: async () => {},
 });
 
-export const LanguageProvider = ({children}: LanguageProviderProps) => {
+/**
+ * LanguageProvider component that provides the current language and a function
+ * to update it to its children via context. It listens for language changes and
+ * updates the context accordingly.
+ *
+ * The language is stored in the session and saved as a user setting in GMP.
+ */
+const LanguageProvider = ({children}: LanguageProviderProps) => {
   const gmp = useGmp();
   const session = useSession();
   const [languageState, setLanguageState] = useState<string>(
