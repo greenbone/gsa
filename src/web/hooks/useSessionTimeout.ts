@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useCallback, useSyncExternalStore} from 'react';
 import {type Date} from 'gmp/models/date';
 import useGmp from 'web/hooks/useGmp';
-import {setSessionTimeout} from 'web/store/usersettings/actions';
-import {getSessionTimeout} from 'web/store/usersettings/selectors';
 
 /**
  * Custom hook to manage user session timeout.
@@ -20,15 +17,20 @@ import {getSessionTimeout} from 'web/store/usersettings/selectors';
  * @returns An array containing the current `sessionTimeout` as a Date object and the `renewSessionAndUpdateTimeout` function.
  */
 
-const useSessionTimeout = (): [Date, () => Promise<void>] => {
+const useSessionTimeout = (): [
+  sessionTimeout: Date | undefined,
+  renewSessionAndUpdateTimeout: () => Promise<void>,
+] => {
   const gmp = useGmp();
-  const dispatch = useDispatch();
-  const sessionTimeout = useSelector(getSessionTimeout);
+  const sessionTimeout = useSyncExternalStore(
+    listener => gmp.settings.session.subscribeToChanges(listener),
+    () => gmp.settings.session.sessionTimeout,
+  );
 
   const renewSessionAndUpdateTimeout = useCallback(async () => {
     const response = await gmp.user.renewSession();
-    dispatch(setSessionTimeout(response.data));
-  }, [gmp, dispatch]);
+    gmp.settings.session.setSessionTimeout(response.data);
+  }, [gmp]);
 
   return [sessionTimeout, renewSessionAndUpdateTimeout];
 };
