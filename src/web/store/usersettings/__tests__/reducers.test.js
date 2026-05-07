@@ -7,13 +7,8 @@ import {describe, test, expect} from '@gsa/testing';
 import {
   getReportComposerDefaultsAction,
   setLocale,
-  setSessionTimeout,
 } from 'web/store/usersettings/actions';
-import {
-  locale,
-  reportComposerDefaults,
-  sessionTimeout,
-} from 'web/store/usersettings/reducers';
+import {locale, reportComposerDefaults} from 'web/store/usersettings/reducers';
 
 describe('settings reducers tests', () => {
   describe('locale reducer tests', () => {
@@ -29,22 +24,6 @@ describe('settings reducers tests', () => {
     test('should override locale in state', () => {
       const action = setLocale('de');
       expect(locale('foo', action)).toEqual('de');
-    });
-  });
-
-  describe('sessionTimeout reducer tests', () => {
-    test('should create initial state', () => {
-      expect(sessionTimeout(undefined, {})).toBeUndefined();
-    });
-
-    test('should reduce username action', () => {
-      const action = setSessionTimeout('1234');
-      expect(sessionTimeout(undefined, action)).toEqual('1234');
-    });
-
-    test('should override username in state', () => {
-      const action = setSessionTimeout('1234');
-      expect(sessionTimeout('54321', action)).toEqual('1234');
     });
   });
 

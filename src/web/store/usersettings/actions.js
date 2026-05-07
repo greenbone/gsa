@@ -6,8 +6,6 @@
 export const USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS =
   'USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS';
 export const USER_SETTINGS_SET_LOCALE = 'USER_SETTINGS_SET_LOCALE';
-export const USER_SETTINGS_SET_SESSION_TIMEOUT =
-  'USER_SETTINGS_SET_SESSION_TIMEOUT';
 
 export const getReportComposerDefaultsAction = data => ({
   type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
@@ -28,17 +26,3 @@ export const setLocale = locale => ({
   type: USER_SETTINGS_SET_LOCALE,
   locale,
 });
-
-export const setSessionTimeout = timeout => ({
-  type: USER_SETTINGS_SET_SESSION_TIMEOUT,
-  timeout,
-});
-
-export const renewSessionTimeout = gmp => () => async dispatch => {
-  try {
-    const response = await gmp.user.renewSession();
-    dispatch(setSessionTimeout(response.data));
-  } catch (error) {
-    console.error('Error renewing session:', error);
-  }
-};
