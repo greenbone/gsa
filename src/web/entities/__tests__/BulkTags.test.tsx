@@ -6,12 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import date from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
 import BulkTags from 'web/entities/BulkTags';
-import {setSessionTimeout} from 'web/store/usersettings/actions';
 import SelectionType from 'web/utils/SelectionType';
 
 describe('BulkTags tests', () => {
@@ -27,12 +25,7 @@ describe('BulkTags tests', () => {
     const gmp = {
       tags: {getAll: getAllTags},
     };
-    const timeout = date('2019-10-10');
-
-    const {render, store} = rendererWith({gmp, store: true});
-
-    store.dispatch(setSessionTimeout(timeout));
-
+    const {render} = rendererWith({gmp, store: true});
     render(
       <BulkTags
         entities={entities}
@@ -59,12 +52,7 @@ describe('BulkTags tests', () => {
     const gmp = {
       tags: {getAll: getAllTags},
     };
-    const timeout = date('2019-10-10');
-
-    const {render, store} = rendererWith({gmp, store: true});
-
-    store.dispatch(setSessionTimeout(timeout));
-
+    const {render} = rendererWith({gmp, store: true});
     render(
       <BulkTags
         entities={entities}
@@ -101,12 +89,7 @@ describe('BulkTags tests', () => {
         save: saveTag,
       },
     };
-    const timeout = date('2019-10-10');
-
-    const {render, store} = rendererWith({gmp, store: true});
-
-    store.dispatch(setSessionTimeout(timeout));
-
+    const {render} = rendererWith({gmp, store: true});
     render(
       <BulkTags
         entities={entities}
