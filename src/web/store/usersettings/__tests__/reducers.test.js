@@ -4,29 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {
-  getReportComposerDefaultsAction,
-  setLocale,
-} from 'web/store/usersettings/actions';
-import {locale, reportComposerDefaults} from 'web/store/usersettings/reducers';
+import {getReportComposerDefaultsAction} from 'web/store/usersettings/actions';
+import {reportComposerDefaults} from 'web/store/usersettings/reducers';
 
 describe('settings reducers tests', () => {
-  describe('locale reducer tests', () => {
-    test('should create initial state', () => {
-      expect(locale(undefined, {})).toBeUndefined();
-    });
-
-    test('should reduce locale action', () => {
-      const action = setLocale('de');
-      expect(locale(undefined, action)).toEqual('de');
-    });
-
-    test('should override locale in state', () => {
-      const action = setLocale('de');
-      expect(locale('foo', action)).toEqual('de');
-    });
-  });
-
   describe('reportComposerDefaults reducer tests', () => {
     test('should create initial empty state', () => {
       expect(reportComposerDefaults(undefined, {})).toEqual({});

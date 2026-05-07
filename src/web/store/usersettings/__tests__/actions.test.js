@@ -9,19 +9,10 @@ import {
   getReportComposerDefaultsAction,
   loadReportComposerDefaults,
   saveReportComposerDefaults,
-  setLocale,
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
-  USER_SETTINGS_SET_LOCALE,
 } from 'web/store/usersettings/actions';
 
 describe('settings actions tests', () => {
-  test('should create a setLocale action', () => {
-    expect(setLocale('de')).toEqual({
-      type: USER_SETTINGS_SET_LOCALE,
-      locale: 'de',
-    });
-  });
-
   test('should create report composer defaults loading success action', () => {
     const action = getReportComposerDefaultsAction({foo: 'bar'});
     expect(action).toEqual({

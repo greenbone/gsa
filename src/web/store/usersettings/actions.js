@@ -5,7 +5,6 @@
 
 export const USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS =
   'USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS';
-export const USER_SETTINGS_SET_LOCALE = 'USER_SETTINGS_SET_LOCALE';
 
 export const getReportComposerDefaultsAction = data => ({
   type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
@@ -21,8 +20,3 @@ export const saveReportComposerDefaults = gmp => defaults => dispatch =>
   gmp.user
     .saveReportComposerDefaults(defaults)
     .then(() => dispatch(getReportComposerDefaultsAction(defaults)));
-
-export const setLocale = locale => ({
-  type: USER_SETTINGS_SET_LOCALE,
-  locale,
-});
