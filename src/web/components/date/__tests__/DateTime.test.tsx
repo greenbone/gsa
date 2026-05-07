@@ -94,7 +94,7 @@ describe('DateTime render tests', () => {
 
     expect(date.isValid()).toEqual(true);
 
-    localStorage.setItem('userInterfaceTimeFormat', 12);
+    localStorage.setItem('userInterfaceTimeFormat', '12');
     localStorage.setItem('userInterfaceDateFormat', 'wdmy');
 
     const {baseElement} = render(
@@ -111,7 +111,7 @@ describe('DateTime render tests', () => {
     const date = Date('2019-01-01T12:00:00Z');
     expect(date.isValid()).toEqual(true);
 
-    localStorage.setItem('userInterfaceTimeFormat', 12);
+    localStorage.setItem('userInterfaceTimeFormat', '12');
     localStorage.setItem('userInterfaceDateFormat', 'wdmy');
 
     const {container} = render(
@@ -161,11 +161,11 @@ describe('DateTime render tests', () => {
 
     localStorage.setItem(
       'userInterfaceTimeFormat',
-      settings.userinterfacetimeformat.value,
+      String(settings.userinterfacetimeformat.value),
     );
     localStorage.setItem(
       'userInterfaceDateFormat',
-      settings.userinterfacedateformat.value,
+      String(settings.userinterfacedateformat.value),
     );
 
     const date = Date('2019-01-01T12:00:00Z');
