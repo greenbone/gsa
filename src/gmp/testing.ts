@@ -22,6 +22,7 @@ interface MockSessionOptions {
   subscribeToChanges?: (callback: () => void) => () => void;
   setTimezone?: (timezone?: string) => void;
   setLocale?: (locale?: string) => void;
+  setSessionTimeout?: (sessionTimeout?: Date) => void;
   logout?: () => void;
   login?: (data: SessionLoginData) => void;
 }
@@ -36,6 +37,7 @@ class MockSession implements Session {
 
   public setTimezone: (timezone?: string) => void;
   public setLocale: (locale?: string) => void;
+  public setSessionTimeout: (sessionTimeout?: Date) => void;
   public logout: () => void;
   public login: (data: SessionLoginData) => void;
   public isLoggedIn: () => boolean;
@@ -62,11 +64,16 @@ class MockSession implements Session {
         this.timezone = timezone;
         this.listener.forEach(listener => listener());
       });
-
     this.setLocale =
       options.setLocale ??
       testing.fn().mockImplementation(locale => {
         this.locale = locale;
+        this.listener.forEach(listener => listener());
+      });
+    this.setSessionTimeout =
+      options.setSessionTimeout ??
+      testing.fn().mockImplementation(sessionTimeout => {
+        this.sessionTimeout = sessionTimeout;
         this.listener.forEach(listener => listener());
       });
     this.logout = options.logout ?? testing.fn();

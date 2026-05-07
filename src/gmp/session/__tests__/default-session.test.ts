@@ -80,9 +80,11 @@ describe('DefaultSession tests', () => {
 
     session.setLocale('en-US');
     session.setTimezone('UTC');
+    session.setSessionTimeout(date('2024-12-31T23:59:59Z'));
 
     expect(session.locale).toBeUndefined();
     expect(session.timezone).toBeUndefined();
+    expect(session.sessionTimeout).toBeUndefined();
   });
 
   test('should login and logout correctly', () => {
@@ -120,7 +122,7 @@ describe('DefaultSession tests', () => {
     expect(session.username).toBeUndefined();
   });
 
-  test('should allow to set locale and timezone after login', () => {
+  test('should allow to set locale, timezone and session timeout after login', () => {
     const storage = createStorage();
     const session = new DefaultSession(storage);
 
@@ -136,9 +138,13 @@ describe('DefaultSession tests', () => {
 
     session.setLocale('fr-FR');
     session.setTimezone('CET');
+    session.setSessionTimeout(date('2025-01-31T23:59:59Z'));
 
     expect(session.locale).toBe('fr-FR');
     expect(session.timezone).toBe('CET');
+    expect(session.sessionTimeout?.toISOString()).toBe(
+      '2025-01-31T23:59:59.000Z',
+    );
   });
 
   test('should allow to be notified of session changes', () => {
@@ -173,5 +179,81 @@ describe('DefaultSession tests', () => {
     });
 
     expect(listener).toHaveBeenCalledTimes(2);
+  });
+
+  test('should call listeners when session data changes', () => {
+    const storage = createStorage();
+    const session = new DefaultSession(storage);
+
+    session.login({
+      token: 'test-token',
+      sessionTimeout: date('2024-12-31T23:59:59Z'),
+      locale: 'en-US',
+      timezone: 'UTC',
+      username: 'test-user',
+    });
+
+    expect(session.isLoggedIn()).toBe(true);
+
+    const listener = testing.fn();
+    session.subscribeToChanges(listener);
+
+    session.setLocale('fr-FR');
+    expect(listener).toHaveBeenCalledTimes(1);
+
+    session.setTimezone('CET');
+    expect(listener).toHaveBeenCalledTimes(2);
+
+    session.setSessionTimeout(date('2025-01-31T23:59:59Z'));
+    expect(listener).toHaveBeenCalledTimes(3);
+  });
+
+  test('should not call listeners when session data is set to the same value', () => {
+    const storage = createStorage();
+    const session = new DefaultSession(storage);
+
+    session.login({
+      token: 'test-token',
+      sessionTimeout: date('2024-12-31T23:59:59Z'),
+      locale: 'en-US',
+      timezone: 'UTC',
+      username: 'test-user',
+    });
+
+    expect(session.isLoggedIn()).toBe(true);
+
+    const listener = testing.fn();
+    session.subscribeToChanges(listener);
+
+    session.setLocale('en-US');
+    expect(listener).toHaveBeenCalledTimes(0);
+
+    session.setTimezone('UTC');
+    expect(listener).toHaveBeenCalledTimes(0);
+
+    session.setSessionTimeout(date('2024-12-31T23:59:59Z'));
+    expect(listener).toHaveBeenCalledTimes(0);
+  });
+
+  test('should not call listeners when logged out', () => {
+    const storage = createStorage();
+    const session = new DefaultSession(storage);
+
+    expect(session.isLoggedIn()).toBe(false);
+
+    const listener = testing.fn();
+    session.subscribeToChanges(listener);
+
+    session.setLocale('fr-FR');
+    expect(listener).toHaveBeenCalledTimes(0);
+
+    session.setTimezone('CET');
+    expect(listener).toHaveBeenCalledTimes(0);
+
+    session.setSessionTimeout(date('2025-01-31T23:59:59Z'));
+    expect(listener).toHaveBeenCalledTimes(0);
+
+    session.setSessionTimeout(undefined);
+    expect(listener).toHaveBeenCalledTimes(0);
   });
 });

@@ -20,6 +20,7 @@ interface Session {
   readonly username: string | undefined;
   setTimezone: (timezone?: string) => void;
   setLocale: (locale?: string) => void;
+  setSessionTimeout: (sessionTimeout?: Date) => void;
   logout: () => void;
   login: (data: SessionLoginData) => void;
   isLoggedIn: () => boolean;
