@@ -11,7 +11,20 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {act, fireEvent, rendererWith, screen} from 'web/testing';
 import date from 'gmp/models/date';
+import {createSession} from 'gmp/testing';
 import useSessionTracker from 'web/hooks/useSessionTracker';
+
+const createGmp = ({
+  newDate = date(),
+  renewSession = testing.fn().mockResolvedValue({data: newDate}),
+} = {}) => ({
+  user: {
+    renewSession,
+  },
+  settings: {
+    session: createSession({sessionTimeout: newDate}),
+  },
+});
 
 const TestSessionTracker = ({onClick}: {onClick?: () => void}) => {
   useSessionTracker();
@@ -27,49 +40,39 @@ const runTimers = async () => {
 describe('useSessionTracker', () => {
   test('should renew session on mount and on user activity with cooldown', async () => {
     testing.useFakeTimers();
-    const renewSession = testing.fn().mockResolvedValue({
-      data: date(),
-    });
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       store: true,
-      gmp: {
-        user: {renewSession},
-      },
+      gmp,
     });
 
     render(<TestSessionTracker />);
     const btn = screen.getByTestId('session-btn');
 
-    expect(renewSession).toHaveBeenCalledTimes(1);
+    expect(gmp.user.renewSession).toHaveBeenCalledTimes(1);
 
-    renewSession.mockClear();
-
-    fireEvent.click(btn);
-    expect(renewSession).toHaveBeenCalledTimes(1);
-
-    renewSession.mockClear();
+    gmp.user.renewSession.mockClear();
 
     fireEvent.click(btn);
-    expect(renewSession).toHaveBeenCalledOnce();
-    renewSession.mockClear();
+    expect(gmp.user.renewSession).toHaveBeenCalledTimes(1);
+
+    gmp.user.renewSession.mockClear();
+
+    fireEvent.click(btn);
+    expect(gmp.user.renewSession).toHaveBeenCalledOnce();
+    gmp.user.renewSession.mockClear();
 
     await runTimers();
     fireEvent.click(btn);
-    expect(renewSession).toHaveBeenCalledOnce();
+    expect(gmp.user.renewSession).toHaveBeenCalledOnce();
   });
 
   test('should not new session on non-button click', () => {
     testing.useFakeTimers();
-    const renewSession = testing.fn().mockResolvedValue({
-      data: date(),
-    });
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       store: true,
-      gmp: {
-        user: {renewSession},
-      },
+      gmp,
     });
 
     const NonButtonComponent = () => {
@@ -80,42 +83,37 @@ describe('useSessionTracker', () => {
     render(<NonButtonComponent />);
     const nonButton = screen.getByTestId('non-button');
 
-    renewSession.mockClear();
+    gmp.user.renewSession.mockClear();
 
     fireEvent.click(nonButton);
-    expect(renewSession).not.toHaveBeenCalled();
+    expect(gmp.user.renewSession).not.toHaveBeenCalled();
   });
 
   test('should  renew session on keypress, wheel, and drag events with cooldown resets', async () => {
     testing.useFakeTimers();
-    const renewSession = testing.fn().mockResolvedValue({
-      data: date(),
-    });
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       store: true,
-      gmp: {
-        user: {renewSession},
-      },
+      gmp,
     });
 
     render(<TestSessionTracker />);
 
-    renewSession.mockClear();
+    gmp.user.renewSession.mockClear();
 
     fireEvent.keyPress(document, {key: 'Enter'});
-    expect(renewSession).toHaveBeenCalledOnce();
+    expect(gmp.user.renewSession).toHaveBeenCalledOnce();
 
     await runTimers();
-    renewSession.mockClear();
+    gmp.user.renewSession.mockClear();
 
     fireEvent.wheel(document);
-    expect(renewSession).toHaveBeenCalledOnce();
+    expect(gmp.user.renewSession).toHaveBeenCalledOnce();
 
     await runTimers();
-    renewSession.mockClear();
+    gmp.user.renewSession.mockClear();
 
     fireEvent.drag(document);
-    expect(renewSession).toHaveBeenCalledOnce();
+    expect(gmp.user.renewSession).toHaveBeenCalledOnce();
   });
 });
