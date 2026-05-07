@@ -6,7 +6,6 @@
 import {
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
   USER_SETTINGS_SET_LOCALE,
-  USER_SETTINGS_SET_SESSION_TIMEOUT,
 } from 'web/store/usersettings/actions';
 import defaultFilters from 'web/store/usersettings/defaultfilters/reducers';
 import defaults from 'web/store/usersettings/defaults/reducers';
@@ -33,21 +32,11 @@ export const locale = (state, action) => {
   }
 };
 
-export const sessionTimeout = (state, action) => {
-  switch (action.type) {
-    case USER_SETTINGS_SET_SESSION_TIMEOUT:
-      return action.timeout;
-    default:
-      return state;
-  }
-};
-
 const userSettings = combineReducers({
   defaults,
   defaultFilters,
   locale,
   reportComposerDefaults,
-  sessionTimeout,
 });
 
 export default userSettings;

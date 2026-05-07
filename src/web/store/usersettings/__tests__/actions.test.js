@@ -4,18 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import moment from 'gmp/models/date';
 import {isFunction} from 'gmp/utils/identity';
 import {
   getReportComposerDefaultsAction,
   loadReportComposerDefaults,
   saveReportComposerDefaults,
   setLocale,
-  setSessionTimeout,
-  renewSessionTimeout,
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
   USER_SETTINGS_SET_LOCALE,
-  USER_SETTINGS_SET_SESSION_TIMEOUT,
 } from 'web/store/usersettings/actions';
 
 describe('settings actions tests', () => {
@@ -26,42 +22,11 @@ describe('settings actions tests', () => {
     });
   });
 
-  test('should create a setSessionTimeout action', () => {
-    expect(setSessionTimeout('12345')).toEqual({
-      type: USER_SETTINGS_SET_SESSION_TIMEOUT,
-      timeout: '12345',
-    });
-  });
-
   test('should create report composer defaults loading success action', () => {
     const action = getReportComposerDefaultsAction({foo: 'bar'});
     expect(action).toEqual({
       type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
       data: {foo: 'bar'},
-    });
-  });
-
-  test('should renew the session timeout', () => {
-    const dispatch = testing.fn();
-    const sessionTimeout = moment().add(1, 'day');
-
-    const renewSession = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: sessionTimeout,
-      }),
-    );
-
-    const gmp = {
-      user: {
-        renewSession,
-      },
-    };
-    return renewSessionTimeout(gmp)()(dispatch).then(() => {
-      expect(dispatch).toBeCalledWith({
-        type: USER_SETTINGS_SET_SESSION_TIMEOUT,
-        timeout: sessionTimeout,
-      });
-      expect(renewSession).toBeCalled();
     });
   });
 

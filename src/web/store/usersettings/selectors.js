@@ -8,6 +8,3 @@ export const getReportComposerDefaults = rootState => {
   const {reportComposerDefaults} = userSettings;
   return reportComposerDefaults;
 };
-
-export const getSessionTimeout = rootState =>
-  rootState.userSettings.sessionTimeout;
