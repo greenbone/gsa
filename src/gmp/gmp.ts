@@ -256,9 +256,6 @@ class Gmp {
     });
 
     setLocale(locale === BROWSER_LANGUAGE ? undefined : locale);
-    return {
-      sessionTimeout,
-    };
   }
 
   public async doLogout() {

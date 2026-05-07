@@ -5,7 +5,6 @@
 
 import {useState, useEffect} from 'react';
 import {notifications} from '@mantine/notifications';
-import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import styled from 'styled-components';
 import {ResponseRejection} from 'gmp/http/rejection';
@@ -20,7 +19,6 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import LoginForm from 'web/pages/login/LoginForm';
-import {setSessionTimeout} from 'web/store/usersettings/actions';
 import Theme from 'web/utils/Theme';
 import {
   getLastVisitedPage,
@@ -55,7 +53,6 @@ const BackgroundBottomImage = styled(Image)`
 const LoginPage = () => {
   const gmp = useGmp();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const isLoggedIn = useUserIsLoggedIn();
   const [error, setError] = useState<Error>();
   const [_] = useTranslation();
@@ -80,11 +77,7 @@ const LoginPage = () => {
 
   const login = async (username: string, password: string) => {
     try {
-      const data = await gmp.login(username, password);
-
-      const {sessionTimeout} = data;
-
-      dispatch(setSessionTimeout(sessionTimeout));
+      await gmp.login(username, password);
 
       const userLastVisitedPath = getLastVisitedPage(username);
 
