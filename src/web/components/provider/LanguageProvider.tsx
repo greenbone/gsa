@@ -12,7 +12,6 @@ import {
   DEFAULT_LANGUAGE,
 } from 'gmp/locale/lang';
 import useGmp from 'web/hooks/useGmp';
-import useSession from 'web/hooks/useSession';
 
 interface LanguageContextProps {
   language: string;
@@ -39,7 +38,7 @@ export const LanguageContext = createContext<LanguageContextProps>({
  */
 const LanguageProvider = ({children}: LanguageProviderProps) => {
   const gmp = useGmp();
-  const session = useSession();
+  const {session} = gmp;
   const [languageState, setLanguageState] = useState<string>(
     getLocale() ?? DEFAULT_LANGUAGE,
   );
