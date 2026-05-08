@@ -3,14 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {
-  describe,
-  test,
-  expect,
-  beforeAll,
-  afterAll,
-  testing,
-} from '@gsa/testing';
+import {describe, test, expect, beforeAll, afterAll} from '@gsa/testing';
 import Settings, {
   DEFAULT_MANUAL_URL,
   DEFAULT_RELOAD_INTERVAL,
@@ -21,21 +14,12 @@ import Settings, {
   DEFAULT_TIMEOUT,
   DEFAULT_REPORT_RESULTS_THRESHOLD,
 } from 'gmp/settings';
+import {createStorage} from 'gmp/testing';
 import {
   DEFAULT_SEVERITY_RATING,
   SEVERITY_RATING_CVSS_2,
   SEVERITY_RATING_CVSS_3,
 } from 'gmp/utils/severity';
-
-const createStorage = (state?: Record<string, string>) => {
-  const store = {
-    state: {...state},
-    getItem: testing.fn(name => store.state[name] || null),
-    setItem: testing.fn((name, value) => (store.state[name] = String(value))),
-    removeItem: testing.fn(name => delete store.state[name]),
-  };
-  return store;
-};
 
 let origLocation: Location;
 

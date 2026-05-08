@@ -3,21 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import {
-  type default as SessionStorage,
-  setSessionValue,
-} from 'gmp/session/session-storage';
-
-const createStorage = (state?: Record<string, string>): SessionStorage => {
-  const store = {
-    state: {...state},
-    getItem: testing.fn(name => store.state[name] ?? null),
-    setItem: testing.fn((name, value) => (store.state[name] = String(value))),
-    removeItem: testing.fn(name => delete store.state[name]),
-  };
-  return store;
-};
+import {describe, test, expect} from '@gsa/testing';
+import {setSessionValue} from 'gmp/session/session-storage';
+import {createStorage} from 'gmp/testing';
 
 describe('setSessionValue tests', () => {
   test('should set value if it is defined', () => {
