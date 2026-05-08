@@ -44,7 +44,8 @@ import DashboardCommand from 'gmp/commands/dashboards';
 import DfnCertAdvisoriesCommand from 'gmp/commands/dfn-cert-advisories';
 import DfnCertAdvisoryCommand from 'gmp/commands/dfn-cert-advisory';
 import FeedStatusCommand from 'gmp/commands/feed-status';
-import {FilterCommand, FiltersCommand} from 'gmp/commands/filters';
+import FilterCommand from 'gmp/commands/filter';
+import FiltersCommand from 'gmp/commands/filters';
 import LoginCommand from 'gmp/commands/login';
 import NvtCommand from 'gmp/commands/nvt';
 import NvtFamiliesCommand from 'gmp/commands/nvt-families';
@@ -58,14 +59,10 @@ import PoliciesCommand from 'gmp/commands/policies';
 import PolicyCommand from 'gmp/commands/policy';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/port-lists';
 import ReportCommand from 'gmp/commands/report';
-import {
-  ReportConfigCommand,
-  ReportConfigsCommand,
-} from 'gmp/commands/report-configs';
-import {
-  ReportFormatCommand,
-  ReportFormatsCommand,
-} from 'gmp/commands/report-formats';
+import ReportConfigCommand from 'gmp/commands/report-config';
+import ReportConfigsCommand from 'gmp/commands/report-configs';
+import ReportFormatCommand from 'gmp/commands/report-format';
+import ReportFormatsCommand from 'gmp/commands/report-formats';
 import ReportPortsCommand from 'gmp/commands/report-ports';
 import ReportsCommand from 'gmp/commands/reports';
 import ResourceNamesCommand from 'gmp/commands/resource-names';
