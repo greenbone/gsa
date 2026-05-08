@@ -10,7 +10,7 @@ import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
-import useSession from 'web/hooks/useSession';
+import useSessionToken from 'web/hooks/useSessionToken';
 import {type RefetchIntervalFn} from 'web/queries/helpers';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGetEntity from 'web/queries/useGetEntity';
@@ -95,8 +95,7 @@ export const useGetReportConfigs = () => {
 
 export const useGetReportExportFileName = () => {
   const gmp = useGmp();
-  const session = useSession();
-  const token = session?.token;
+  const token = useSessionToken();
 
   return useQuery<string | undefined>({
     queryKey: ['user_settings', token, 'reportexportfilename'],
