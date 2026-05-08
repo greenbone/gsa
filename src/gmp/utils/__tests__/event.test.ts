@@ -3,14 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {
+  describe,
+  test,
+  expect,
+  testing,
+  beforeEach,
+  afterEach,
+} from '@gsa/testing';
 import {debounce, throttleAnimation} from 'gmp/utils/event';
 
 // @vitest-environment jsdom
 
-describe('debounce function tests', () => {
+beforeEach(() => {
   testing.useFakeTimers();
+});
 
+afterEach(() => {
+  testing.useRealTimers();
+});
+
+describe('debounce function tests', () => {
   test('should debounce function', () => {
     const callback = testing.fn();
     const func = debounce(callback);
@@ -21,7 +34,7 @@ describe('debounce function tests', () => {
 
     testing.runAllTimers();
 
-    expect(callback).toBeCalled();
+    expect(callback).toHaveBeenCalled();
     expect(callback.mock.calls.length).toBe(1);
     expect(callback.mock.calls[0][0]).toBe(3);
   });
@@ -34,7 +47,7 @@ describe('debounce function tests', () => {
     func(2);
     func(3);
 
-    expect(callback).toBeCalled();
+    expect(callback).toHaveBeenCalled();
     expect(callback.mock.calls.length).toBe(1);
     expect(callback.mock.calls[0][0]).toBe(1);
 
@@ -46,8 +59,6 @@ describe('debounce function tests', () => {
 });
 
 describe('throttleAnimation function tests', () => {
-  testing.useFakeTimers();
-
   test('should throttle running callback', () => {
     global.requestAnimationFrame = cb => setTimeout(cb, 0);
 
@@ -60,7 +71,7 @@ describe('throttleAnimation function tests', () => {
 
     testing.runAllTimers();
 
-    expect(callback).toBeCalled();
+    expect(callback).toHaveBeenCalled();
     expect(callback.mock.calls.length).toBe(1);
     expect(callback.mock.calls[0][0]).toBe(1);
   });
