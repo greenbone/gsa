@@ -6,18 +6,20 @@
 import {type Date} from 'gmp/models/date';
 
 export interface SessionLoginData {
-  token?: string;
-  sessionTimeout?: Date;
+  jwt?: string;
   locale?: string;
+  sessionTimeout?: Date;
   timezone?: string;
+  token?: string;
   username?: string;
 }
 
 interface SessionState {
-  token: string | undefined;
-  sessionTimeout: Date | undefined;
+  jwt: string | undefined;
   locale: string | undefined;
+  sessionTimeout: Date | undefined;
   timezone: string | undefined;
+  token: string | undefined;
   username: string | undefined;
 
   readonly isLoggedIn: boolean;

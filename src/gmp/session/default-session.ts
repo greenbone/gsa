@@ -21,7 +21,8 @@ const isLoggedIn = (storage: SessionStorage): boolean => {
   const token = storage.getItem('token');
   const username = storage.getItem('username');
   const sessionTimeoutStr = storage.getItem('sessionTimeout');
-  if (!token || !username || !sessionTimeoutStr) {
+  const jwt = storage.getItem('jwt');
+  if ((!token && !jwt) || !username || !sessionTimeoutStr) {
     return false;
   }
   const sessionTimeout = date(sessionTimeoutStr);
@@ -37,6 +38,10 @@ class DefaultSession implements Session {
       ? new UserSessionState(storage)
       : new NoSessionState(storage);
     this.listeners = [];
+  }
+
+  get jwt(): string | undefined {
+    return this.state.jwt;
   }
 
   get token(): string | undefined {

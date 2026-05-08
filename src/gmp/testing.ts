@@ -12,11 +12,12 @@ import {
 import {type SessionLoginData} from 'gmp/session/session-state';
 
 interface MockSessionOptions {
-  token?: string;
+  jwt?: string;
+  locale?: string;
   sessionTimeout?: Date;
   timezone?: string;
+  token?: string;
   username?: string;
-  locale?: string;
   listener?: (() => void)[];
   isLoggedIn?: () => boolean;
   subscribeToChanges?: (callback: () => void) => () => void;
@@ -29,10 +30,12 @@ interface MockSessionOptions {
 
 class MockSession implements Session {
   public listener: SessionListener[];
-  public token: string | undefined;
-  public sessionTimeout: Date | undefined;
+
+  public jwt: string | undefined;
   public locale: string | undefined;
+  public sessionTimeout: Date | undefined;
   public timezone: string | undefined;
+  public token: string | undefined;
   public username: string | undefined;
 
   public setTimezone: (timezone?: string) => void;
@@ -45,11 +48,14 @@ class MockSession implements Session {
 
   constructor(options: MockSessionOptions = {}) {
     this.listener = options.listener ?? [];
+
+    this.jwt = options.jwt;
     this.locale = options.locale;
     this.sessionTimeout = options.sessionTimeout;
     this.timezone = options.timezone ?? 'UTC';
     this.token = options.token;
     this.username = options.username;
+
     this.isLoggedIn = options.isLoggedIn ?? testing.fn().mockReturnValue(true);
     this.subscribeToChanges =
       options.subscribeToChanges ??
@@ -83,6 +89,7 @@ class MockSession implements Session {
 
 export const createSession = ({
   listener = [],
+  jwt,
   locale,
   sessionTimeout,
   timezone,
@@ -97,6 +104,7 @@ export const createSession = ({
 }: MockSessionOptions = {}): MockSession => {
   return new MockSession({
     listener,
+    jwt,
     locale,
     sessionTimeout,
     timezone,

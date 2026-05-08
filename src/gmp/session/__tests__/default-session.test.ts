@@ -13,6 +13,7 @@ describe('DefaultSession tests', () => {
     const storage = createStorage();
     const session = new DefaultSession(storage);
 
+    expect(session.jwt).toBeUndefined();
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
     expect(session.locale).toBeUndefined();
@@ -43,8 +44,33 @@ describe('DefaultSession tests', () => {
     });
   });
 
+  test('should create a user session if valid jwt and sessionTimeout are stored', () => {
+    testing.useFakeTimers();
+    testing.setSystemTime(new Date('2024-01-01T00:00:00Z'));
+    const storage = createStorage({
+      jwt: 'test-jwt',
+      sessionTimeout: '2024-12-31T23:59:59Z',
+      username: 'test-user',
+    });
+    const session = new DefaultSession(storage);
+
+    expect(session.jwt).toBe('test-jwt');
+    expect(session.sessionTimeout?.toISOString()).toBe(
+      '2024-12-31T23:59:59.000Z',
+    );
+    expect(session.token).toBeUndefined();
+    expect(session.username).toBe('test-user');
+    expect(session.locale).toBeUndefined();
+    expect(session.timezone).toBeUndefined();
+
+    onTestFinished(() => {
+      testing.useRealTimers();
+    });
+  });
+
   test('should only return locale and timezone from storage if logged out', () => {
     const storage = createStorage({
+      jwt: 'test-jwt',
       token: 'test-token',
       // sessionTimeout is in the past, so session should be considered logged out
       sessionTimeout: '2023-12-31T23:59:59Z',
@@ -56,6 +82,7 @@ describe('DefaultSession tests', () => {
 
     expect(session.isLoggedIn()).toBe(false);
 
+    expect(session.jwt).toBeUndefined();
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
     expect(session.username).toBeUndefined();
@@ -85,6 +112,7 @@ describe('DefaultSession tests', () => {
     expect(session.isLoggedIn()).toBe(false);
 
     session.login({
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: date('2024-12-31T23:59:59Z'),
       locale: 'en-US',
@@ -94,6 +122,7 @@ describe('DefaultSession tests', () => {
 
     expect(session.isLoggedIn()).toBe(true);
 
+    expect(session.jwt).toBe('test-jwt');
     expect(session.token).toBe('test-token');
     expect(session.sessionTimeout?.toISOString()).toBe(
       '2024-12-31T23:59:59.000Z',
@@ -106,6 +135,7 @@ describe('DefaultSession tests', () => {
 
     expect(session.isLoggedIn()).toBe(false);
 
+    expect(session.jwt).toBeUndefined();
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
     expect(session.locale).toBe('en-US');
@@ -118,6 +148,7 @@ describe('DefaultSession tests', () => {
     const session = new DefaultSession(storage);
 
     session.login({
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: date('2024-12-31T23:59:59Z'),
       locale: 'en-US',
@@ -146,6 +177,7 @@ describe('DefaultSession tests', () => {
     const unsubscribe = session.subscribeToChanges(listener);
 
     session.login({
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: date('2024-12-31T23:59:59Z'),
       locale: 'en-US',
@@ -162,6 +194,7 @@ describe('DefaultSession tests', () => {
     unsubscribe();
 
     session.login({
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: date('2024-12-31T23:59:59Z'),
       locale: 'en-US',
@@ -177,6 +210,7 @@ describe('DefaultSession tests', () => {
     const session = new DefaultSession(storage);
 
     session.login({
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: date('2024-12-31T23:59:59Z'),
       locale: 'en-US',
@@ -204,6 +238,7 @@ describe('DefaultSession tests', () => {
     const session = new DefaultSession(storage);
 
     session.login({
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: date('2024-12-31T23:59:59Z'),
       locale: 'en-US',

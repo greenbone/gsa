@@ -13,11 +13,13 @@ export type SessionListener = () => void;
  * session timeout, locale, timezone, and username.
  */
 interface Session {
-  readonly token: string | undefined;
-  readonly sessionTimeout: Date | undefined;
+  readonly jwt: string | undefined;
   readonly locale: string | undefined;
+  readonly sessionTimeout: Date | undefined;
   readonly timezone: string | undefined;
+  readonly token: string | undefined;
   readonly username: string | undefined;
+
   setTimezone: (timezone?: string) => void;
   setLocale: (locale?: string) => void;
   setSessionTimeout: (sessionTimeout?: Date) => void;

@@ -13,6 +13,7 @@ describe('NoSessionState tests', () => {
     const storage = createStorage();
     const session = new NoSessionState(storage);
 
+    expect(session.jwt).toBeUndefined();
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
     expect(session.locale).toBeUndefined();
@@ -24,6 +25,7 @@ describe('NoSessionState tests', () => {
 
   test('should return locale and timezone from storage', () => {
     const storage = createStorage({
+      jwt: 'test-jwt',
       locale: 'en-US',
       timezone: 'UTC',
       username: 'test-user',
@@ -32,6 +34,7 @@ describe('NoSessionState tests', () => {
     });
     const session = new NoSessionState(storage);
 
+    expect(session.jwt).toBeUndefined();
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
     expect(session.username).toBeUndefined();
@@ -43,18 +46,21 @@ describe('NoSessionState tests', () => {
     const storage = createStorage();
     const session = new NoSessionState(storage);
 
+    session.jwt = 'test-jwt';
     session.token = 'test-token';
     session.sessionTimeout = date('2024-12-31T23:59:59Z');
     session.locale = 'en-US';
     session.timezone = 'UTC';
     session.username = 'test-user';
 
+    expect(session.jwt).toBeUndefined();
     expect(session.token).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
     expect(session.locale).toBeUndefined();
     expect(session.timezone).toBeUndefined();
     expect(session.username).toBeUndefined();
 
+    expect(storage.setItem).not.toHaveBeenCalledWith('jwt', 'test-jwt');
     expect(storage.setItem).not.toHaveBeenCalledWith('token', 'test-token');
     expect(storage.setItem).not.toHaveBeenCalledWith(
       'sessionTimeout',
@@ -78,6 +84,7 @@ describe('NoSessionState tests', () => {
       locale: 'en-US',
       timezone: 'UTC',
       username: 'test-user',
+      jwt: 'test-jwt',
     });
 
     expect(newState.token).toBe('test-token');
@@ -87,6 +94,7 @@ describe('NoSessionState tests', () => {
     expect(newState.locale).toBe('en-US');
     expect(newState.timezone).toBe('UTC');
     expect(newState.username).toBe('test-user');
+    expect(newState.jwt).toBe('test-jwt');
   });
 
   test('should remain in NoSessionState on logout', () => {
