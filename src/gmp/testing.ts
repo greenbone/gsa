@@ -110,3 +110,13 @@ export const createSession = ({
     login,
   });
 };
+
+export const createStorage = (state?: Record<string, string>) => {
+  const store = {
+    state: {...state},
+    getItem: testing.fn(name => store.state[name] || null),
+    setItem: testing.fn((name, value) => (store.state[name] = String(value))),
+    removeItem: testing.fn(name => delete store.state[name]),
+  };
+  return store;
+};
