@@ -85,6 +85,7 @@ import Http, {type ErrorHandler} from 'gmp/http/http';
 import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
 import logger, {type RootLogger} from 'gmp/log';
+import type Session from 'gmp/session/session';
 import type Settings from 'gmp/settings';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -94,6 +95,7 @@ const log = logger.getLogger('gmp');
 
 class Gmp {
   public readonly settings: Settings;
+  public readonly session: Session;
 
   private readonly log: RootLogger;
   private readonly http: Http;
@@ -163,7 +165,16 @@ class Gmp {
   public readonly users: UsersCommand;
   public readonly wizard: WizardCommand;
 
-  constructor(settings: Settings, http?: Http) {
+  constructor({
+    settings,
+    session,
+    http,
+  }: {
+    settings: Settings;
+    session: Session;
+    http?: Http;
+  }) {
+    this.session = session;
     this.settings = settings;
 
     logger.init(this.settings);
@@ -172,7 +183,7 @@ class Gmp {
 
     this.log = logger;
 
-    this.http = http ?? new Http(this.settings, this.settings.session);
+    this.http = http ?? new Http(this.settings, this.session);
 
     this._login = new LoginCommand(this.http);
 
@@ -264,7 +275,7 @@ class Gmp {
       password,
     );
 
-    this.settings.session.login({
+    this.session.login({
       username,
       token,
       timezone,
@@ -276,9 +287,9 @@ class Gmp {
   }
 
   public async doLogout() {
-    if (this.settings.session.isLoggedIn()) {
+    if (this.session.isLoggedIn()) {
       const url = this.buildUrl('logout');
-      const args = {token: this.settings.session.token};
+      const args = {token: this.session.token};
 
       try {
         await this.http.request('get', {
@@ -296,7 +307,7 @@ class Gmp {
   }
 
   public logout() {
-    this.settings.session.logout();
+    this.session.logout();
 
     for (const listener of this._logoutListeners) {
       listener();

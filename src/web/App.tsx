@@ -10,6 +10,7 @@ import {Provider as StoreProvider} from 'react-redux';
 import Gmp from 'gmp/gmp';
 import {_, initLocale} from 'gmp/locale/lang';
 import {LOG_LEVEL_DEBUG} from 'gmp/log';
+import DefaultSession from 'gmp/session/default-session';
 import Settings from 'gmp/settings';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
@@ -24,7 +25,8 @@ void initLocale();
 const queryClient = new QueryClient();
 
 const settings = new Settings(globalThis.localStorage, globalThis.config);
-const gmp = new Gmp(settings);
+const session = new DefaultSession(globalThis.localStorage);
+const gmp = new Gmp({settings, session});
 
 const store = configureStore({
   debug: isDefined(settings.enableStoreDebugLog)
