@@ -25,6 +25,14 @@ class NoSessionState implements SessionState {
     this.storage = storage;
   }
 
+  get jwt(): string | undefined {
+    return undefined;
+  }
+
+  set jwt(value: string | undefined) {
+    // No session JWT is stored in NoSessionState
+  }
+
   get token(): string | undefined {
     return undefined;
   }

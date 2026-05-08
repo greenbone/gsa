@@ -270,17 +270,16 @@ class Gmp {
   }
 
   public async login(username: string, password: string) {
-    const {token, timezone, locale, sessionTimeout} = await this._login.login(
-      username,
-      password,
-    );
+    const {token, timezone, locale, sessionTimeout, jwt} =
+      await this._login.login(username, password);
 
     this.session.login({
-      username,
-      token,
-      timezone,
+      jwt,
       locale,
       sessionTimeout,
+      timezone,
+      token,
+      username,
     });
 
     setLocale(locale);

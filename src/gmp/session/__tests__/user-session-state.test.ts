@@ -13,6 +13,7 @@ describe('UserSessionState tests', () => {
     const storage = createStorage();
 
     const session = new UserSessionState(storage, {
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: date('2024-12-31T23:59:59Z'),
       locale: 'en-US',
@@ -24,6 +25,7 @@ describe('UserSessionState tests', () => {
 
     expect(storage.getItem).not.toHaveBeenCalled();
 
+    expect(session.jwt).toBe('test-jwt');
     expect(session.token).toBe('test-token');
     expect(session.sessionTimeout?.toISOString()).toBe(
       '2024-12-31T23:59:59.000Z',
@@ -32,6 +34,7 @@ describe('UserSessionState tests', () => {
     expect(session.timezone).toBe('UTC');
     expect(session.username).toBe('test-user');
 
+    expect(storage.setItem).toHaveBeenCalledWith('jwt', 'test-jwt');
     expect(storage.setItem).toHaveBeenCalledWith('token', 'test-token');
     expect(storage.setItem).toHaveBeenCalledWith(
       'sessionTimeout',
@@ -50,6 +53,7 @@ describe('UserSessionState tests', () => {
 
   test('should allow to get initial session properties from storage', () => {
     const storage = createStorage({
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: '2024-12-31T23:59:59.000Z',
       locale: 'en-US',
@@ -58,6 +62,7 @@ describe('UserSessionState tests', () => {
     });
     const session = new UserSessionState(storage);
 
+    expect(session.jwt).toBe('test-jwt');
     expect(session.token).toBe('test-token');
     expect(session.sessionTimeout?.toISOString()).toBe(
       '2024-12-31T23:59:59.000Z',
@@ -66,6 +71,7 @@ describe('UserSessionState tests', () => {
     expect(session.timezone).toBe('UTC');
     expect(session.username).toBe('test-user');
 
+    expect(storage.getItem).toHaveBeenCalledWith('jwt');
     expect(storage.getItem).toHaveBeenCalledWith('token');
     expect(storage.getItem).toHaveBeenCalledWith('sessionTimeout');
     expect(storage.getItem).toHaveBeenCalledWith('locale');
@@ -78,11 +84,15 @@ describe('UserSessionState tests', () => {
 
     const session = new UserSessionState(storage);
 
+    session.jwt = 'test-jwt';
+    session.token = 'test-token';
     session.locale = 'fr-FR';
     session.sessionTimeout = date('2025-01-01T00:00:00Z');
     session.timezone = 'CET';
     session.username = 'new-user';
 
+    expect(session.jwt).toBe('test-jwt');
+    expect(session.token).toBe('test-token');
     expect(session.locale).toBe('fr-FR');
     expect(session.sessionTimeout?.toISOString()).toBe(
       '2025-01-01T00:00:00.000Z',
@@ -90,6 +100,8 @@ describe('UserSessionState tests', () => {
     expect(session.timezone).toBe('CET');
     expect(session.username).toBe('new-user');
 
+    expect(storage.setItem).toHaveBeenCalledWith('jwt', 'test-jwt');
+    expect(storage.setItem).toHaveBeenCalledWith('token', 'test-token');
     expect(storage.setItem).toHaveBeenCalledWith('locale', 'fr-FR');
     expect(storage.setItem).toHaveBeenCalledWith(
       'sessionTimeout',
@@ -101,6 +113,8 @@ describe('UserSessionState tests', () => {
 
   test('should remove session properties', () => {
     const storage = createStorage({
+      jwt: 'test-jwt',
+      token: 'test-token',
       locale: 'en-US',
       sessionTimeout: '2024-12-31T23:59:59.000Z',
       timezone: 'UTC',
@@ -109,6 +123,8 @@ describe('UserSessionState tests', () => {
 
     const session = new UserSessionState(storage);
 
+    expect(session.jwt).toBe('test-jwt');
+    expect(session.token).toBe('test-token');
     expect(session.locale).toBe('en-US');
     expect(session.sessionTimeout?.toISOString()).toBe(
       '2024-12-31T23:59:59.000Z',
@@ -116,16 +132,22 @@ describe('UserSessionState tests', () => {
     expect(session.timezone).toBe('UTC');
     expect(session.username).toBe('test-user');
 
+    session.jwt = undefined;
+    session.token = undefined;
     session.locale = undefined;
     session.sessionTimeout = undefined;
     session.timezone = undefined;
     session.username = undefined;
 
+    expect(session.jwt).toBeUndefined();
+    expect(session.token).toBeUndefined();
     expect(session.locale).toBeUndefined();
     expect(session.sessionTimeout).toBeUndefined();
     expect(session.timezone).toBeUndefined();
     expect(session.username).toBeUndefined();
 
+    expect(storage.removeItem).toHaveBeenCalledWith('jwt');
+    expect(storage.removeItem).toHaveBeenCalledWith('token');
     expect(storage.removeItem).toHaveBeenCalledWith('locale');
     expect(storage.removeItem).toHaveBeenCalledWith('sessionTimeout');
     expect(storage.removeItem).toHaveBeenCalledWith('timezone');
@@ -134,6 +156,7 @@ describe('UserSessionState tests', () => {
 
   test('should transition to NoSessionState on logout', () => {
     const storage = createStorage({
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: '2024-12-31T23:59:59.000Z',
       locale: 'en-US',
@@ -145,12 +168,14 @@ describe('UserSessionState tests', () => {
 
     const newState = session.logout();
 
+    expect(newState.jwt).toBeUndefined();
     expect(newState.token).toBeUndefined();
     expect(newState.sessionTimeout).toBeUndefined();
     expect(newState.locale).toBe('en-US');
     expect(newState.timezone).toBe('UTC');
     expect(newState.username).toBeUndefined();
 
+    expect(storage.removeItem).toHaveBeenCalledWith('jwt');
     expect(storage.removeItem).toHaveBeenCalledWith('token');
     expect(storage.removeItem).toHaveBeenCalledWith('sessionTimeout');
     expect(storage.removeItem).toHaveBeenCalledWith('username');
@@ -160,6 +185,7 @@ describe('UserSessionState tests', () => {
 
   test('should override storage values with provided session properties', () => {
     const storage = createStorage({
+      jwt: 'test-jwt',
       token: 'test-token',
       sessionTimeout: '2024-12-31T23:59:59.000Z',
       locale: 'en-US',
@@ -168,6 +194,7 @@ describe('UserSessionState tests', () => {
     });
 
     const session = new UserSessionState(storage, {
+      jwt: 'new-jwt',
       token: 'new-token',
       sessionTimeout: date('2025-01-01T00:00:00Z'),
       locale: 'fr-FR',
@@ -175,6 +202,7 @@ describe('UserSessionState tests', () => {
       username: 'new-user',
     });
 
+    expect(session.jwt).toBe('new-jwt');
     expect(session.token).toBe('new-token');
     expect(session.sessionTimeout?.toISOString()).toBe(
       '2025-01-01T00:00:00.000Z',
@@ -188,6 +216,7 @@ describe('UserSessionState tests', () => {
     const storage = createStorage();
 
     const session = new UserSessionState(storage, {
+      jwt: 'test-jwt',
       token: 'test-token1',
       sessionTimeout: date('2025-12-31T23:59:59Z'),
       locale: 'de-DE',
@@ -196,6 +225,7 @@ describe('UserSessionState tests', () => {
     });
 
     const newState = session.login({
+      jwt: 'new-jwt',
       token: 'test-token2',
       sessionTimeout: date('2024-12-31T23:59:59Z'),
       locale: 'en-US',
@@ -204,6 +234,7 @@ describe('UserSessionState tests', () => {
     });
 
     expect(newState).toBe(session);
+    expect(newState.jwt).toBe('test-jwt');
     expect(newState.token).toBe('test-token1');
     expect(newState.sessionTimeout?.toISOString()).toBe(
       '2025-12-31T23:59:59.000Z',

@@ -29,9 +29,19 @@ class UserSessionState implements SessionState {
 
   constructor(
     storage: SessionStorage = globalThis.localStorage,
-    {token, sessionTimeout, locale, timezone, username}: SessionLoginData = {},
+    {
+      jwt,
+      locale,
+      sessionTimeout,
+      timezone,
+      token,
+      username,
+    }: SessionLoginData = {},
   ) {
     this.storage = storage;
+    if (isDefined(jwt)) {
+      this.jwt = jwt;
+    }
     if (isDefined(locale)) {
       this.locale = locale;
     }
@@ -47,6 +57,14 @@ class UserSessionState implements SessionState {
     if (isDefined(username)) {
       this.username = username;
     }
+  }
+
+  set jwt(value: string | undefined) {
+    setSessionValue(this.storage, 'jwt', value);
+  }
+
+  get jwt(): string | undefined {
+    return this.storage.getItem('jwt') ?? undefined;
   }
 
   set locale(value: string | undefined) {
@@ -96,6 +114,7 @@ class UserSessionState implements SessionState {
   }
 
   logout(): SessionState {
+    this.jwt = undefined;
     this.token = undefined;
     this.sessionTimeout = undefined;
     this.username = undefined;
