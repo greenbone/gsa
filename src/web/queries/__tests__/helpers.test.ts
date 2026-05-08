@@ -22,60 +22,58 @@ const settings = {
 };
 
 describe('resolveRefetchInterval', () => {
-  test('returns false for NO_RELOAD (0)', () => {
-    expect(resolveRefetchInterval(NO_RELOAD, settings)).toBe(false);
-  });
-
-  test('returns false for boolean false', () => {
-    expect(resolveRefetchInterval(false, settings)).toBe(false);
-  });
-
-  test('returns reloadIntervalActive for USE_DEFAULT_RELOAD_INTERVAL_ACTIVE', () => {
-    expect(
-      resolveRefetchInterval(USE_DEFAULT_RELOAD_INTERVAL_ACTIVE, settings),
-    ).toBe(settings.reloadIntervalActive);
-  });
-
-  test('returns reloadIntervalInactive for USE_DEFAULT_RELOAD_INTERVAL_INACTIVE', () => {
-    expect(
-      resolveRefetchInterval(USE_DEFAULT_RELOAD_INTERVAL_INACTIVE, settings),
-    ).toBe(settings.reloadIntervalInactive);
-  });
-
-  test('returns reloadInterval for USE_DEFAULT_RELOAD_INTERVAL', () => {
-    expect(
-      resolveRefetchInterval(USE_DEFAULT_RELOAD_INTERVAL, settings),
-    ).toBe(settings.reloadInterval);
-  });
-
-  test('returns reloadInterval for undefined', () => {
-    expect(resolveRefetchInterval(undefined, settings)).toBe(
+  test.each<[string, number | false | undefined, number | false]>([
+    ['returns false for NO_RELOAD (0)', NO_RELOAD, false],
+    ['returns false for boolean false', false, false],
+    [
+      'returns reloadIntervalActive for USE_DEFAULT_RELOAD_INTERVAL_ACTIVE',
+      USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+      settings.reloadIntervalActive,
+    ],
+    [
+      'returns reloadIntervalInactive for USE_DEFAULT_RELOAD_INTERVAL_INACTIVE',
+      USE_DEFAULT_RELOAD_INTERVAL_INACTIVE,
+      settings.reloadIntervalInactive,
+    ],
+    [
+      'returns reloadInterval for USE_DEFAULT_RELOAD_INTERVAL',
+      USE_DEFAULT_RELOAD_INTERVAL,
       settings.reloadInterval,
-    );
-  });
-
-  test('returns reloadInterval for unknown negative numbers', () => {
-    expect(resolveRefetchInterval(-99, settings)).toBe(settings.reloadInterval);
-  });
-
-  test('passes through positive numeric intervals unchanged', () => {
-    expect(resolveRefetchInterval(30000, settings)).toBe(30000);
+    ],
+    [
+      'returns reloadInterval for undefined',
+      undefined,
+      settings.reloadInterval,
+    ],
+    [
+      'returns reloadInterval for unknown negative numbers',
+      -99,
+      settings.reloadInterval,
+    ],
+    ['passes through positive numeric intervals unchanged', 30000, 30000],
+  ])('%s', (_, interval, expected) => {
+    expect(resolveRefetchInterval(interval, settings)).toBe(expected);
   });
 });
 
 describe('transformRefetchIntervalFn', () => {
-  test('resolves USE_DEFAULT_RELOAD_INTERVAL_ACTIVE returned by the wrapped function', () => {
-    const fn = () => USE_DEFAULT_RELOAD_INTERVAL_ACTIVE;
-    const transformed = transformRefetchIntervalFn(fn, settings);
-    expect(transformed({state: {data: undefined}})).toBe(
+  test.each<[string, number | false, number | false]>([
+    [
+      'resolves USE_DEFAULT_RELOAD_INTERVAL_ACTIVE to reloadIntervalActive',
+      USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
       settings.reloadIntervalActive,
-    );
-  });
-
-  test('resolves NO_RELOAD returned by the wrapped function to false', () => {
-    const fn = () => NO_RELOAD;
+    ],
+    ['resolves NO_RELOAD to false', NO_RELOAD, false],
+    [
+      'resolves USE_DEFAULT_RELOAD_INTERVAL to reloadInterval',
+      USE_DEFAULT_RELOAD_INTERVAL,
+      settings.reloadInterval,
+    ],
+    ['passes through positive numeric intervals unchanged', 15000, 15000],
+  ])('%s', (_, returnValue, expected) => {
+    const fn = () => returnValue;
     const transformed = transformRefetchIntervalFn(fn, settings);
-    expect(transformed({state: {data: undefined}})).toBe(false);
+    expect(transformed({state: {data: undefined}})).toBe(expected);
   });
 
   test('passes data from query state to the wrapped function', () => {
@@ -87,17 +85,5 @@ describe('transformRefetchIntervalFn', () => {
       settings.reloadIntervalActive,
     );
     expect(transformed({state: {data: 'done'}})).toBe(false);
-  });
-
-  test('resolves USE_DEFAULT_RELOAD_INTERVAL returned by the wrapped function', () => {
-    const fn = () => USE_DEFAULT_RELOAD_INTERVAL;
-    const transformed = transformRefetchIntervalFn(fn, settings);
-    expect(transformed({state: {data: undefined}})).toBe(settings.reloadInterval);
-  });
-
-  test('passes through positive numeric intervals returned by the wrapped function', () => {
-    const fn = () => 15000;
-    const transformed = transformRefetchIntervalFn(fn, settings);
-    expect(transformed({state: {data: undefined}})).toBe(15000);
   });
 });

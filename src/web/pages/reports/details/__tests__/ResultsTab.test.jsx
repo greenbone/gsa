@@ -5,8 +5,8 @@
 
 import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
-import {act, rendererWith, wait} from 'web/testing';
-import {waitFor, screen} from '@testing-library/react';
+import {act, rendererWith} from 'web/testing';
+import {screen} from '@testing-library/react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
@@ -147,231 +147,126 @@ const createGmp = ({
 });
 
 describe('Report Results Tab tests', () => {
-  test('should render Results Tab with compliance information', async () => {
-    const onFilterAddLogLevelClick = testing.fn();
-    const onFilterDecreaseMinQoDClick = testing.fn();
-    const onFilterEditClick = testing.fn();
-    const onFilterRemoveClick = testing.fn();
-    const onFilterRemoveSeverityClick = testing.fn();
-    const onTargetEditClick = testing.fn();
+  test.each([
+    ['compliance information', true, 'Compliant', 'Yes', 'No', 'Incomplete'],
+    [
+      'severity information',
+      false,
+      'Severity',
+      '10.0 (Critical)',
+      '5.0 (Medium)',
+      '5.0 (Medium)',
+    ],
+  ])(
+    'should render Results Tab with %s',
+    async (_, audit, header2Text, row2Val, row3Val, row4Val) => {
+      const onFilterAddLogLevelClick = testing.fn();
+      const onFilterDecreaseMinQoDClick = testing.fn();
+      const onFilterEditClick = testing.fn();
+      const onFilterRemoveClick = testing.fn();
+      const onFilterRemoveSeverityClick = testing.fn();
+      const onTargetEditClick = testing.fn();
 
-    const getResults = testing.fn().mockResolvedValue({
-      data: results,
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts({
-          first: 1,
-          all: 3,
-          filtered: 3,
-          length: 3,
-          rows: 10,
-        }),
-      },
-    });
+      const getResults = testing.fn().mockResolvedValue({
+        data: results,
+        meta: {
+          filter: Filter.fromString(),
+          counts: new CollectionCounts({
+            first: 1,
+            all: 3,
+            filtered: 3,
+            length: 3,
+            rows: 10,
+          }),
+        },
+      });
 
-    const gmp = createGmp({getResults});
+      const gmp = createGmp({getResults});
 
-    const {render, store} = rendererWith({
-      gmp,
-      capabilities: true,
-      store: true,
-      router: true,
-    });
+      const {render, store} = rendererWith({
+        gmp,
+        capabilities: true,
+        store: true,
+        router: true,
+      });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
-    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
-    store.dispatch(
-      defaultFilterLoadingActions.success('result', defaultSettingFilter),
-    );
+      const defaultSettingFilter = Filter.fromString('foo=bar');
+      store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+      store.dispatch(
+        defaultFilterLoadingActions.success('result', defaultSettingFilter),
+      );
 
-    const filter = Filter.fromString('first=1 rows=10');
-    const reportResultsCounts = new CollectionCounts({
-      first: 1,
-      all: 3,
-      filtered: 3,
-      length: 3,
-      rows: 10,
-    });
+      const filter = Filter.fromString('first=1 rows=10');
+      const reportResultsCounts = new CollectionCounts({
+        first: 1,
+        all: 3,
+        filtered: 3,
+        length: 3,
+        rows: 10,
+      });
 
-    const {baseElement} = render(
-      <ResultsTab
-        audit={true}
-        hasTarget={true}
-        progress={100}
-        reportFilter={filter}
-        reportId={'123'}
-        reportResultsCounts={reportResultsCounts}
-        status={'Stopped'}
-        onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-        onFilterEditClick={onFilterEditClick}
-        onFilterRemoveClick={onFilterRemoveClick}
-        onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-        onTargetEditClick={onTargetEditClick}
-      />,
-    );
+      render(
+        <ResultsTab
+          audit={audit}
+          hasTarget={true}
+          progress={100}
+          reportFilter={filter}
+          reportId={'123'}
+          reportResultsCounts={reportResultsCounts}
+          status={'Stopped'}
+          onFilterAddLogLevelClick={onFilterAddLogLevelClick}
+          onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
+          onFilterEditClick={onFilterEditClick}
+          onFilterRemoveClick={onFilterRemoveClick}
+          onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
+          onTargetEditClick={onTargetEditClick}
+        />,
+      );
 
-    await wait();
+      await screen.findByTestId('entities-table');
 
-    // Wait for the table to be rendered
-    await waitFor(() => {
-      expect(screen.getByTestId('entities-table')).toBeInTheDocument();
-    });
+      const headers = screen.getAllByRole('columnheader');
+      const rows = screen.getAllByRole('row');
 
-    const header = baseElement.querySelectorAll('th');
-    const row = baseElement.querySelectorAll('tr');
+      expect(headers[0]).toHaveTextContent('Vulnerability');
+      expect(headers[2]).toHaveTextContent(header2Text);
+      expect(headers[3]).toHaveTextContent('QoD');
+      expect(headers[4]).toHaveTextContent('Host');
+      expect(headers[5]).toHaveTextContent('Location');
+      expect(headers[6]).toHaveTextContent('Created');
+      expect(headers[7]).toHaveTextContent('IP');
+      expect(headers[8]).toHaveTextContent('Name');
 
-    expect(header[0]).toHaveTextContent('Vulnerability');
-    expect(header[2]).toHaveTextContent('Compliant');
-    expect(header[3]).toHaveTextContent('QoD');
-    expect(header[4]).toHaveTextContent('Host');
-    expect(header[5]).toHaveTextContent('Location');
-    expect(header[6]).toHaveTextContent('Created');
-    expect(header[7]).toHaveTextContent('IP');
-    expect(header[8]).toHaveTextContent('Name');
+      expect(rows[2]).toHaveTextContent('Result 1');
+      expect(rows[2]).toHaveTextContent(row2Val);
+      expect(rows[2]).toHaveTextContent('80 %');
+      expect(rows[2]).toHaveTextContent('123.456.78.910');
+      expect(rows[2]).toHaveTextContent('foo');
+      expect(rows[2]).toHaveTextContent('80/tcp');
+      expect(rows[2]).toHaveTextContent(
+        'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+      );
 
-    expect(row[2]).toHaveTextContent('Result 1');
-    expect(row[2]).toHaveTextContent('Yes');
-    expect(row[2]).toHaveTextContent('80 %');
-    expect(row[2]).toHaveTextContent('123.456.78.910');
-    expect(row[2]).toHaveTextContent('foo');
-    expect(row[2]).toHaveTextContent('80/tcp');
-    expect(row[2]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
-    );
+      expect(rows[3]).toHaveTextContent('Result 2');
+      expect(rows[3]).toHaveTextContent(row3Val);
+      expect(rows[3]).toHaveTextContent('70 %');
+      expect(rows[3]).toHaveTextContent('109.876.54.321');
+      expect(rows[3]).toHaveTextContent('80/tcp');
+      expect(rows[3]).toHaveTextContent(
+        'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+      );
 
-    expect(row[3]).toHaveTextContent('Result 2');
-    expect(row[3]).toHaveTextContent('No');
-    expect(row[3]).toHaveTextContent('70 %');
-    expect(row[3]).toHaveTextContent('109.876.54.321');
-    expect(row[3]).toHaveTextContent('80/tcp');
-    expect(row[3]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
-    );
-
-    expect(row[4]).toHaveTextContent('Result 3');
-    expect(row[4]).toHaveTextContent('Incomplete');
-    expect(row[4]).toHaveTextContent('80 %');
-    expect(row[4]).toHaveTextContent('109.876.54.321');
-    expect(row[4]).toHaveTextContent('bar');
-    expect(row[4]).toHaveTextContent('80/tcp');
-    expect(row[4]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
-    );
-  });
-
-  test('should render Results Tab with severity information', async () => {
-    const onFilterAddLogLevelClick = testing.fn();
-    const onFilterDecreaseMinQoDClick = testing.fn();
-    const onFilterEditClick = testing.fn();
-    const onFilterRemoveClick = testing.fn();
-    const onFilterRemoveSeverityClick = testing.fn();
-    const onTargetEditClick = testing.fn();
-
-    const getResults = testing.fn().mockResolvedValue({
-      data: results,
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts({
-          first: 1,
-          all: 3,
-          filtered: 3,
-          length: 3,
-          rows: 10,
-        }),
-      },
-    });
-
-    const gmp = createGmp({getResults});
-
-    const {render, store} = rendererWith({
-      gmp,
-      capabilities: true,
-      store: true,
-      router: true,
-    });
-
-    const defaultSettingFilter = Filter.fromString('foo=bar');
-    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
-    store.dispatch(
-      defaultFilterLoadingActions.success('result', defaultSettingFilter),
-    );
-
-    const filter = Filter.fromString('first=1 rows=10');
-    const reportResultsCounts = new CollectionCounts({
-      first: 1,
-      all: 3,
-      filtered: 3,
-      length: 3,
-      rows: 10,
-    });
-
-    const {baseElement} = render(
-      <ResultsTab
-        audit={false}
-        hasTarget={true}
-        progress={100}
-        reportFilter={filter}
-        reportId={'123'}
-        reportResultsCounts={reportResultsCounts}
-        status={'Stopped'}
-        onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-        onFilterEditClick={onFilterEditClick}
-        onFilterRemoveClick={onFilterRemoveClick}
-        onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-        onTargetEditClick={onTargetEditClick}
-      />,
-    );
-
-    await wait();
-
-    // Wait for the table to be rendered
-    await waitFor(() => {
-      expect(screen.getByTestId('entities-table')).toBeInTheDocument();
-    });
-
-    const header = baseElement.querySelectorAll('th');
-    const row = baseElement.querySelectorAll('tr');
-
-    expect(header[0]).toHaveTextContent('Vulnerability');
-    expect(header[2]).toHaveTextContent('Severity');
-    expect(header[3]).toHaveTextContent('QoD');
-    expect(header[4]).toHaveTextContent('Host');
-    expect(header[5]).toHaveTextContent('Location');
-    expect(header[6]).toHaveTextContent('Created');
-    expect(header[7]).toHaveTextContent('IP');
-    expect(header[8]).toHaveTextContent('Name');
-
-    expect(row[2]).toHaveTextContent('Result 1');
-    expect(row[2]).toHaveTextContent('10.0 (Critical)');
-    expect(row[2]).toHaveTextContent('80 %');
-    expect(row[2]).toHaveTextContent('123.456.78.910');
-    expect(row[2]).toHaveTextContent('foo');
-    expect(row[2]).toHaveTextContent('80/tcp');
-    expect(row[2]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
-    );
-
-    expect(row[3]).toHaveTextContent('Result 2');
-    expect(row[3]).toHaveTextContent('5.0 (Medium)');
-    expect(row[3]).toHaveTextContent('70 %');
-    expect(row[3]).toHaveTextContent('109.876.54.321');
-    expect(row[3]).toHaveTextContent('80/tcp');
-    expect(row[3]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
-    );
-
-    expect(row[4]).toHaveTextContent('Result 3');
-    expect(row[4]).toHaveTextContent('5.0 (Medium)');
-    expect(row[4]).toHaveTextContent('80 %');
-    expect(row[4]).toHaveTextContent('109.876.54.321');
-    expect(row[4]).toHaveTextContent('bar');
-    expect(row[4]).toHaveTextContent('80/tcp');
-    expect(row[4]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
-    );
-  });
+      expect(rows[4]).toHaveTextContent('Result 3');
+      expect(rows[4]).toHaveTextContent(row4Val);
+      expect(rows[4]).toHaveTextContent('80 %');
+      expect(rows[4]).toHaveTextContent('109.876.54.321');
+      expect(rows[4]).toHaveTextContent('bar');
+      expect(rows[4]).toHaveTextContent('80/tcp');
+      expect(rows[4]).toHaveTextContent(
+        'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+      );
+    },
+  );
 
   describe('Results polling behavior isActive status', () => {
     test.each([
