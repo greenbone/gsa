@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import DefaultSession from 'gmp/session/default-session';
-import type Session from 'gmp/session/session';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import {
   SEVERITY_RATING_CVSS_2,
@@ -97,7 +95,6 @@ const warnDeprecatedSetting = (oldName: string, newName: string) => {
 };
 
 class Settings {
-  public session: Session;
   public reloadInterval: number;
   public reloadIntervalActive: number;
   public reloadIntervalInactive: number;
@@ -160,7 +157,6 @@ class Settings {
     } = options;
 
     this.storage = storage;
-    this.session = new DefaultSession(storage);
 
     if (isDefined(loglevel)) {
       warnDeprecatedSetting('loglevel', 'logLevel');
