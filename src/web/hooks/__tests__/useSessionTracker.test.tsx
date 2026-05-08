@@ -21,9 +21,7 @@ const createGmp = ({
   user: {
     renewSession,
   },
-  settings: {
-    session: createSession({sessionTimeout: newDate}),
-  },
+  session: createSession({sessionTimeout: newDate}),
 });
 
 const TestSessionTracker = ({onClick}: {onClick?: () => void}) => {

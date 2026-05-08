@@ -23,13 +23,13 @@ const useSessionTimeout = (): [
 ] => {
   const gmp = useGmp();
   const sessionTimeout = useSyncExternalStore(
-    listener => gmp.settings.session.subscribeToChanges(listener),
-    () => gmp.settings.session.sessionTimeout,
+    listener => gmp.session.subscribeToChanges(listener),
+    () => gmp.session.sessionTimeout,
   );
 
   const renewSessionAndUpdateTimeout = useCallback(async () => {
     const response = await gmp.user.renewSession();
-    gmp.settings.session.setSessionTimeout(response.data);
+    gmp.session.setSessionTimeout(response.data);
   }, [gmp]);
 
   return [sessionTimeout, renewSessionAndUpdateTimeout];

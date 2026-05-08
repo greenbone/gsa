@@ -26,9 +26,7 @@ const createGmp = ({
   user: {
     renewSession,
   },
-  settings: {
-    session: createSession({sessionTimeout}),
-  },
+  session: createSession({sessionTimeout}),
 });
 
 describe('useSessionTimeout tests', () => {

@@ -5,19 +5,16 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
+import {createSession} from 'gmp/testing';
 import useSessionToken from 'web/hooks/useSessionToken';
+
+const createGmp = () => ({
+  session: createSession({token: 'mock-token'}),
+});
 
 describe('useSessionToken tests', () => {
   test('should return the user session token', () => {
-    const gmp = {
-      settings: {
-        session: {
-          token: 'mock-token',
-          subscribeToChanges: () => () => {},
-        },
-      },
-    };
-    const {renderHook} = rendererWith({gmp});
+    const {renderHook} = rendererWith({gmp: createGmp()});
 
     const {result} = renderHook(() => useSessionToken());
 

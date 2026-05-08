@@ -19,12 +19,12 @@ const useUserTimezone = (): [
 ] => {
   const gmp = useGmp();
   const timezone = useSyncExternalStore(
-    listener => gmp.settings.session.subscribeToChanges(listener),
-    () => gmp.settings.session.timezone,
+    listener => gmp.session.subscribeToChanges(listener),
+    () => gmp.session.timezone,
   );
   const setTimezone = useCallback(
     (newTimezone: string) => {
-      gmp.settings.session.setTimezone(newTimezone);
+      gmp.session.setTimezone(newTimezone);
     },
     [gmp],
   );

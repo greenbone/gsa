@@ -14,8 +14,8 @@ import useGmp from 'web/hooks/useGmp';
 const useUserName = () => {
   const gmp = useGmp();
   const username = useSyncExternalStore(
-    listener => gmp.settings.session.subscribeToChanges(listener),
-    () => gmp.settings.session.username,
+    listener => gmp.session.subscribeToChanges(listener),
+    () => gmp.session.username,
   );
   return username;
 };

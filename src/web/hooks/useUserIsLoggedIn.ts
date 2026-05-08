@@ -19,8 +19,8 @@ import useGmp from 'web/hooks/useGmp';
 const useUserIsLoggedIn = () => {
   const gmp = useGmp();
   const isLoggedIn = useSyncExternalStore(
-    listener => gmp.settings.session.subscribeToChanges(listener),
-    () => gmp.settings.session.isLoggedIn(),
+    listener => gmp.session.subscribeToChanges(listener),
+    () => gmp.session.isLoggedIn(),
   );
   return isLoggedIn;
 };
