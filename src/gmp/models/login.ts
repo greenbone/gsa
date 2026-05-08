@@ -19,6 +19,7 @@ class Login {
   readonly sessionTimeout?: Date;
   readonly timezone?: string;
   readonly token?: string;
+  readonly jwt?: string;
 
   constructor(elem: LoginElement) {
     const {data = {}} = elem;
@@ -27,6 +28,7 @@ class Login {
     this.locale = data.i18n;
     this.timezone = data.timezone;
     this.token = data.token;
+    this.jwt = data.jwt;
 
     const unixSeconds = parseInt(data.session);
 

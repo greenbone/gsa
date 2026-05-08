@@ -19,6 +19,7 @@ export interface Envelope {
   session?: number;
   timezone?: string;
   token?: string;
+  jwt?: string;
   version?: string;
 }
 
