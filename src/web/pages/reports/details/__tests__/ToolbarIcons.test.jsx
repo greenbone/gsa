@@ -30,8 +30,8 @@ const getReportComposerDefaults = testing.fn().mockResolvedValue({
 const gmp = {
   settings: {
     manualUrl,
-    session: createSession(),
   },
+  session: createSession(),
   user: {currentSettings, getReportComposerDefaults},
 };
 

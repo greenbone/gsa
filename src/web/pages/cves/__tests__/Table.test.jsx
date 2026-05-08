@@ -70,9 +70,8 @@ const counts = new CollectionCounts({
 const filter = Filter.fromString('rows=2');
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
+  settings: {},
 });
 
 describe('Cve table tests', () => {

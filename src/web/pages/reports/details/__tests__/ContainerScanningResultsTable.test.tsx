@@ -48,8 +48,8 @@ const createMockResult = (overrides = {}) => {
 const createGmp = ({enableEPSS = false} = {}) => ({
   settings: {
     enableEPSS,
-    session: createSession(),
   },
+  session: createSession(),
 });
 
 describe('ContainerScanningResultsTable', () => {

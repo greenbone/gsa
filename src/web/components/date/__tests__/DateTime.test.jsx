@@ -21,9 +21,7 @@ const createGmp = ({getSetting = testing.fn().mockResolvedValue({})} = {}) => ({
   user: {
     getSetting,
   },
-  settings: {
-    session: createSession({timezone: 'CET'}),
-  },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('DateTime render tests', () => {

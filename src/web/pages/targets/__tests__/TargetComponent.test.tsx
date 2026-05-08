@@ -23,8 +23,8 @@ const createGmp = ({
     settings: {
       enableGreenboneSensor: true,
       enableKrb5: false,
-      session: createSession(),
     },
+    session: createSession(),
     user: {
       currentSettings: testing.fn().mockResolvedValue(
         new Response({

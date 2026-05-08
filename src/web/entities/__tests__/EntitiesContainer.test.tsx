@@ -72,9 +72,7 @@ const createGmp = ({
     exportByFilter,
   },
   user: {currentSettings},
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('EntitiesContainer', () => {

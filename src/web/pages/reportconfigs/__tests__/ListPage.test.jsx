@@ -80,7 +80,10 @@ const createGmp = ({
     get: getFilters,
   },
   reloadInterval,
-  settings: {manualUrl, session: createSession()},
+  settings: {
+    manualUrl,
+  },
+  session: createSession(),
   user: {
     currentSettings,
     getSetting,

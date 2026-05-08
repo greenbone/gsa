@@ -37,9 +37,7 @@ const createBaseReport = (): ReportReport =>
   }) as unknown as ReportReport;
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('Summary', () => {

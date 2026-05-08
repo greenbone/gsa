@@ -42,12 +42,12 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
   settings: {
     manualUrl,
     reportResultsThreshold,
-    session: createSession({
-      token: 'test-token',
-      username: 'admin',
-      timezone: 'Europe/Berlin',
-    }),
   },
+  session: createSession({
+    token: 'test-token',
+    username: 'admin',
+    timezone: 'Europe/Berlin',
+  }),
   user: {
     currentSettings: testing.fn().mockResolvedValue({
       reportexportfilename: {

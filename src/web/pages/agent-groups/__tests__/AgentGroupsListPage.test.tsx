@@ -61,7 +61,8 @@ const createGmp = ({
   user: {
     getSetting: testing.fn().mockResolvedValue({data: null}),
   },
-  settings: {session: createSession({token: 'token'})},
+  settings: {},
+  session: createSession({token: 'token'}),
 });
 
 describe('AgentGroupsListPage tests', () => {

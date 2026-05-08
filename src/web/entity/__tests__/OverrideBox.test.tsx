@@ -19,9 +19,7 @@ const override = Override.fromElement({
 });
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'CET'}),
-  },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('OverrideBox tests', () => {

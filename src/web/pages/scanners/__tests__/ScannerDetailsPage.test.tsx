@@ -95,7 +95,11 @@ const createGmp = ({
   permissions: {
     get: getEntities,
   },
-  settings: {manualUrl, reloadInterval, session: createSession()},
+  settings: {
+    manualUrl,
+    reloadInterval,
+  },
+  session: createSession(),
   user: {
     currentSettings,
   },

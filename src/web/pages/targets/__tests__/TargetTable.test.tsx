@@ -13,8 +13,8 @@ import TargetTable from 'web/pages/targets/TargetTable';
 const createGmp = () => ({
   settings: {
     enableKrb5: true,
-    session: createSession(),
   },
+  session: createSession(),
 });
 
 describe('TargetTable tests', () => {

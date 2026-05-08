@@ -36,7 +36,8 @@ const createGmp = ({
   getScanners = testing.fn().mockResolvedValue(new Response([scanner], {})),
   getAgents = testing.fn().mockResolvedValue(new Response([agent], {})),
 } = {}) => ({
-  settings: {session: createSession({token: 'token'})},
+  settings: {},
+  session: createSession({token: 'token'}),
   scanners: {get: getScanners},
   agents: {get: getAgents},
 });

@@ -49,8 +49,8 @@ const createGmp = ({
 } = {}) => ({
   settings: {
     manualUrl,
-    session: createSession(),
   },
+  session: createSession(),
   user: {
     getSetting,
     currentSettings,

@@ -192,8 +192,8 @@ const createGmp = ({
     manualUrl,
     reloadInterval: 15000,
     reloadIntervalActive: 3000,
-    session: createSession({token: 'test-token', timezone: 'CET'}),
   },
+  session: createSession({token: 'test-token', timezone: 'CET'}),
   user: {
     currentSettings,
   },

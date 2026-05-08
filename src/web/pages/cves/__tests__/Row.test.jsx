@@ -25,8 +25,8 @@ const entity = Cve.fromElement({
 const createGmp = () => ({
   settings: {
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: createSession({timezone: 'CET'}),
   },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('CVEv2 Row tests', () => {

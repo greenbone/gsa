@@ -29,9 +29,7 @@ const tlsCertificate = TlsCertificate.fromElement({
 });
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'UTC'}),
-  },
+  session: createSession({timezone: 'UTC'}),
 });
 
 describe('Tls Certificate Row tests', () => {

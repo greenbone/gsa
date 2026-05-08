@@ -18,8 +18,8 @@ const createGmp = ({
 } = {}) => ({
   settings: {
     manualUrl: 'https://docs.greenbone.net',
-    session: createSession(),
   },
+  session: createSession(),
   agents: {
     sync: syncMock,
   },

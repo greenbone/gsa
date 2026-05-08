@@ -46,9 +46,7 @@ const counts = new CollectionCounts({
 const filter = Filter.fromString('rows=2');
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('Policies table tests', () => {

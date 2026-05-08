@@ -26,9 +26,8 @@ const currentReport = {
 };
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'CET'}),
-  },
+  settings: {},
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('TaskRow tests', () => {

@@ -13,9 +13,7 @@ const onSave = testing.fn();
 const onClose = testing.fn();
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('AgentDialog tests', () => {

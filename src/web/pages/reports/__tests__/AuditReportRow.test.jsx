@@ -11,9 +11,7 @@ import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport
 import AuditReportRow from 'web/pages/reports/AuditReportRow';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'CET'}),
-  },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('Audit report row', () => {

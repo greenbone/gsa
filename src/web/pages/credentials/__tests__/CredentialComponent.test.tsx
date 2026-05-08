@@ -36,8 +36,8 @@ const createGmp = ({
 } = {}) => ({
   settings: {
     enableKrb5: true,
-    session: createSession(),
   },
+  session: createSession(),
   credential: {
     clone: cloneCredential,
     create: createCredential,

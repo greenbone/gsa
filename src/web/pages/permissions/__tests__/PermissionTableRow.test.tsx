@@ -31,9 +31,7 @@ const handleEdit = testing.fn();
 const handleToggle = testing.fn();
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('PermissionTableRow tests', () => {

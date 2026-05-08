@@ -104,8 +104,8 @@ const createGmp = ({
   reloadInterval,
   settings: {
     manualUrl,
-    session: createSession({timezone: 'CET'}),
   },
+  session: createSession({timezone: 'CET'}),
   user: {currentSettings, getSetting: getUserSetting},
   tags: {
     getAll: getTags,

@@ -13,9 +13,7 @@ import {createSession} from 'gmp/testing';
 import CredentialTableRow from 'web/pages/credentials/CredentialTableRow';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('CredentialTableRow tests', () => {

@@ -88,7 +88,8 @@ const createGmp = () => ({
     }),
     getById: testing.fn().mockResolvedValue({data: audit}),
   },
-  settings: {session: createSession({token: 'test-token'})},
+  session: createSession({token: 'test-token'}),
+  settings: {},
 });
 
 describe('useGetAudit', () => {

@@ -73,7 +73,10 @@ const createGmp = ({
   filters: {
     get: getFilters,
   },
-  settings: {manualUrl, session: createSession({token: 'token'})},
+  settings: {
+    manualUrl,
+  },
+  session: createSession({token: 'token'}),
   user: {currentSettings, getSetting},
 });
 

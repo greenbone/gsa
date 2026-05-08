@@ -11,9 +11,9 @@ import GeneralSettings from 'web/pages/user-settings/GeneralSettings';
 
 const createGmp = () => ({
   settings: {
-    session: createSession({timezone: 'UTC'}),
     manualUrl: 'test/',
   },
+  session: createSession({timezone: 'UTC'}),
 });
 
 describe('General tab', () => {

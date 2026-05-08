@@ -11,9 +11,7 @@ import {createSession} from 'gmp/testing';
 import PortListTable from 'web/pages/portlists/PortListTable';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('PortListTable tests', () => {

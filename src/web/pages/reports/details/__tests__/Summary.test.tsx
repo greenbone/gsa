@@ -16,9 +16,7 @@ const filter = Filter.fromString(
 );
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'CET'}),
-  },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('Report Summary tests', () => {

@@ -84,9 +84,8 @@ const counts = new CollectionCounts({
 const filter = Filter.fromString('rows=2');
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  settings: {},
+  session: createSession(),
 });
 
 describe('TaskTable tests', () => {

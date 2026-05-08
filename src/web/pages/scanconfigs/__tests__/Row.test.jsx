@@ -30,9 +30,7 @@ const entity = ScanConfig.fromElement({
 });
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('Scan Config row tests', () => {

@@ -10,9 +10,12 @@ import {createSession} from 'gmp/testing';
 import ResultsTableRow from 'web/pages/results/ResultsTableRow';
 
 const createGmp = () => ({
-  settings: {enableEPSS: true, session: createSession()},
+  settings: {
+    enableEPSS: true,
+  },
+  session: createSession(),
 });
-const {render} = rendererWithTableBody({gmp: createGmp(), store: true});
+const {render} = rendererWithTableBody({gmp: createGmp()});
 
 describe('ResultsTableRow tests', () => {
   test('should render EPSS fields 1 columns', () => {

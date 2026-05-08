@@ -273,8 +273,8 @@ const createGmp = (overrides: Record<string, unknown> = {}): GmpFactory => {
       },
       settings: {
         manualUrl: 'http://test/',
-        session: createSession(),
       },
+      session: createSession(),
       user: {
         currentSettings,
       },

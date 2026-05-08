@@ -18,8 +18,8 @@ const filter = Filter.fromString(
 const createGmp = ({severityRating = SEVERITY_RATING_CVSS_3} = {}) => ({
   settings: {
     severityRating,
-    session: createSession({timezone: 'CET'}),
   },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('Delta Results Tab tests', () => {

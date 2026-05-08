@@ -59,10 +59,10 @@ const createGmp = ({
   settings: {
     guestUsername,
     guestPassword,
-    session: createSession({
-      timezone: 'UTC',
-    }),
   },
+  session: createSession({
+    timezone: 'UTC',
+  }),
   user: {
     currentSettings,
   },

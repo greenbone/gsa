@@ -67,8 +67,8 @@ const createGmp = ({
   settings: {
     manualUrl,
     reloadInterval,
-    session: createSession({timezone: 'CET'}),
   },
+  session: createSession({timezone: 'CET'}),
   user: {
     currentSettings,
   },

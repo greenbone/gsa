@@ -12,9 +12,7 @@ import {createSession} from 'gmp/testing';
 import AgentGroupsTableRow from 'web/pages/agent-groups/AgentGroupsTableRow';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('AgentGroupsTableRow tests', () => {

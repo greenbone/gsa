@@ -159,9 +159,10 @@ const createGmp = ({
     manualUrl: 'test/',
     reloadInterval: -1,
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: createSession(),
   },
+  session: createSession(),
 });
+
 describe('HostWithTargetComponent tests', () => {
   test('should call onInteraction and display HostDialog when edit is triggered', () => {
     const gmp = createGmp();

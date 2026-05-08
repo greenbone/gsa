@@ -139,8 +139,8 @@ const createGmp = ({
     manualUrl,
     reloadInterval,
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: createSession({token: 'test-token', timezone: 'CET'}),
   },
+  session: createSession({token: 'test-token', timezone: 'CET'}),
   user: {currentSettings},
 });
 

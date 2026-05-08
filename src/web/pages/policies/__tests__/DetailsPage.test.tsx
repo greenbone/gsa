@@ -232,8 +232,8 @@ const createGmp = ({
   },
   settings: {
     manualUrl,
-    session: createSession({token: 'test-token', timezone: 'CET'}),
   },
+  session: createSession({token: 'test-token', timezone: 'CET'}),
   user: {
     currentSettings,
   },

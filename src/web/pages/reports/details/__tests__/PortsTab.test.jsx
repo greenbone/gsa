@@ -35,32 +35,33 @@ port2.addHost({ip: '2.2.2.2'});
 
 const ports = [port1, port2];
 
+const createGmp = ({
+  getReportPorts = testing.fn().mockResolvedValue({
+    data: ports,
+    meta: {
+      filter: reportFilter,
+      counts: new CollectionCounts({
+        first: 1,
+        all: 2,
+        filtered: 2,
+        length: 2,
+        rows: 10,
+      }),
+    },
+  }),
+} = {}) => ({
+  reportports: {
+    get: getReportPorts,
+  },
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
+  session: createSession({token: 'test-token', username: 'admin'}),
+});
+
 describe('Report Ports Tab tests', () => {
   test('should render Report Ports Tab', async () => {
-    const getReportPorts = testing.fn().mockResolvedValue({
-      data: ports,
-      meta: {
-        filter: reportFilter,
-        counts: new CollectionCounts({
-          first: 1,
-          all: 2,
-          filtered: 2,
-          length: 2,
-          rows: 10,
-        }),
-      },
-    });
-
-    const gmp = {
-      reportports: {
-        get: getReportPorts,
-      },
-      settings: {
-        severityRating: SEVERITY_RATING_CVSS_3,
-        session: createSession({token: 'test-token', username: 'admin'}),
-      },
-    };
-
+    const gmp = createGmp();
     const {render} = rendererWith({
       gmp,
       router: true,
@@ -103,7 +104,7 @@ describe('Report Ports Tab tests', () => {
     );
 
     // Verify report_id was passed as a separate parameter
-    expect(getReportPorts).toHaveBeenCalledWith(
+    expect(gmp.reportports.get).toHaveBeenCalledWith(
       expect.objectContaining({report_id: '1234'}),
     );
   });

@@ -11,9 +11,7 @@ import {createSession} from 'gmp/testing';
 import PermissionTable from 'web/pages/permissions/PermissionTable';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('PermissionTable tests', () => {

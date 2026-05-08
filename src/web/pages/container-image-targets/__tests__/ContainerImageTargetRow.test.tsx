@@ -22,9 +22,7 @@ const entity = new OciImageTarget({
 });
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('ContainerImageTargetRow tests', () => {

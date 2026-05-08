@@ -48,15 +48,15 @@ const currentSettingsResponse = {
   },
 };
 
-const createGmpMock = (
+const createGmp = (
   overrides: Record<string, unknown> | {user?: Record<string, unknown>} = {},
 ) => {
   const base = {
     settings: {
       manualUrl: 'http://docs.example.com/manual',
       manualLanguageMapping: {},
-      session: createSession(),
     },
+    session: createSession(),
     user: {
       currentSettings: testing.fn().mockResolvedValue(currentSettingsResponse),
     },
@@ -76,7 +76,7 @@ const createGmpMock = (
 describe('EntityTags tests', () => {
   test('should render user tags section', async () => {
     const entity = createTask();
-    const gmp = createGmpMock();
+    const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
     render(<EntityTags entity={entity} />);
@@ -93,7 +93,7 @@ describe('EntityTags tests', () => {
       name: 'Test Task',
       userTags: [],
     });
-    const gmp = createGmpMock();
+    const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
     render(<EntityTags entity={entity1} />);
@@ -105,7 +105,7 @@ describe('EntityTags tests', () => {
       id: 'task-1',
       name: 'Test Task',
     });
-    const gmp = createGmpMock();
+    const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
     render(<EntityTags entity={entity2} />);
@@ -114,7 +114,7 @@ describe('EntityTags tests', () => {
 
   test('should render complete tags table with values, headers, actions and links', () => {
     const entity = createTask();
-    const gmp = createGmpMock();
+    const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
     render(<EntityTags entity={entity} />);
@@ -149,7 +149,7 @@ describe('EntityTags tests', () => {
 
   test('should call edit handler when edit icon is clicked', async () => {
     const entity = createTask();
-    const gmp = createGmpMock({
+    const gmp = createGmp({
       tag: {
         get: testing.fn().mockResolvedValue({data: entity.userTags[0]}),
       },
@@ -175,7 +175,7 @@ describe('EntityTags tests', () => {
     const handleChanged = testing.fn();
     const getMock = testing.fn().mockResolvedValue({data: entity.userTags[0]});
     const saveMock = testing.fn().mockResolvedValue({data: {}});
-    const gmp = createGmpMock({
+    const gmp = createGmp({
       tag: {
         get: getMock,
         save: saveMock,
