@@ -11,9 +11,7 @@ import {createSession} from 'gmp/testing';
 import RoleTableRow from 'web/pages/roles/RoleTableRow';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('RoleTableRow tests', () => {

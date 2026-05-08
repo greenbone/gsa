@@ -129,8 +129,8 @@ const createGmp = ({
   settings: {
     manualUrl,
     enableEPSS: true,
-    session: createSession({timezone: 'UTC'}),
   },
+  session: createSession({timezone: 'UTC'}),
   user: {
     currentSettings,
   },

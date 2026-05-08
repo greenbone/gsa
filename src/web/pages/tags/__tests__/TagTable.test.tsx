@@ -12,9 +12,7 @@ import {createSession} from 'gmp/testing';
 import TagsTable from 'web/pages/tags/TagTable';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('TagsTable tests', () => {

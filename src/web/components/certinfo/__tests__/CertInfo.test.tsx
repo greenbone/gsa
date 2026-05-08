@@ -11,9 +11,7 @@ import {createSession} from 'gmp/testing';
 import CertInfo from 'web/components/certinfo/CertInfo';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'UTC'}),
-  },
+  session: createSession({timezone: 'UTC'}),
 });
 
 describe('CertInfo tests', () => {

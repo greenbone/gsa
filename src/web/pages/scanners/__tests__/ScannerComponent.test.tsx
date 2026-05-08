@@ -18,8 +18,8 @@ const createGmp = (object?: unknown) => {
   const gmp = {
     settings: {
       enableGreenboneSensor: true,
-      session: createSession(),
     },
+    session: createSession(),
     user: {
       currentSettings: testing
         .fn()

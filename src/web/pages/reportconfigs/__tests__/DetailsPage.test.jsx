@@ -38,7 +38,10 @@ const createGmp = ({
     get: getPermissions,
   },
   reloadInterval,
-  settings: {manualUrl, session: createSession({timezone: 'CET'})},
+  settings: {
+    manualUrl,
+  },
+  session: createSession({timezone: 'CET'}),
   user: {
     currentSettings,
   },

@@ -51,9 +51,8 @@ const entity = NVT.fromElement({
 });
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'CET'}),
-  },
+  session: createSession({timezone: 'CET'}),
+  settings: {},
 });
 
 describe('NVT row tests', () => {

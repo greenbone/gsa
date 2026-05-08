@@ -77,7 +77,8 @@ const PolicyListComponent = ({filter}: {filter?: Filter}) => {
 };
 
 const createGmp = () => ({
-  settings: {session: createSession({token: 'test-token'})},
+  session: createSession({token: 'test-token'}),
+  settings: {},
   policy: {
     get: testing.fn().mockResolvedValue({data: policy}),
   },

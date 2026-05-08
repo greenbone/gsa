@@ -16,9 +16,7 @@ import ScannerTable from 'web/pages/scanners/ScannerTable';
 import SelectionType from 'web/utils/SelectionType';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('ScannerTable tests', () => {

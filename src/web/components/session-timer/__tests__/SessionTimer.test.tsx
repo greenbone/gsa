@@ -23,11 +23,9 @@ const createGmp = ({
     .fn()
     .mockResolvedValue({data: currentTime.add(10, 'minutes')}),
 } = {}) => ({
-  settings: {
-    session: createSession({
-      sessionTimeout: currentTime.add(5, 'minutes'),
-    }),
-  },
+  session: createSession({
+    sessionTimeout: currentTime.add(5, 'minutes'),
+  }),
   user: {
     renewSession,
   },

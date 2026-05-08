@@ -10,9 +10,7 @@ import {createSession} from 'gmp/testing';
 import EntityInfo from 'web/entity/EntityInfo';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('EntityInfo component tests', () => {

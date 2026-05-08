@@ -70,9 +70,7 @@ const createGmp = ({
     data: {},
   }),
 } = {}) => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
   user: {
     currentSettings: currentSettings,
   },

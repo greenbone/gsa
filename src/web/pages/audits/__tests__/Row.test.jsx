@@ -26,9 +26,7 @@ const currentReport = {
 };
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'CET'}),
-  },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('Audit Row tests', () => {

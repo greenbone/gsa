@@ -54,9 +54,7 @@ const createGmp = ({
     getAll: getGroups,
   },
   user: {currentSettings},
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('PermissionComponent tests', () => {

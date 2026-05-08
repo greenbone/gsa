@@ -42,9 +42,7 @@ const counts = new CollectionCounts({
 const filter = Filter.fromString('rows=2');
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'UTC'}),
-  },
+  session: createSession({timezone: 'UTC'}),
 });
 
 describe('TlsCertificates table tests', () => {

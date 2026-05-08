@@ -51,9 +51,7 @@ const createGmp = ({
     }),
   },
   user: {currentSettings},
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('RoleComponent tests', () => {

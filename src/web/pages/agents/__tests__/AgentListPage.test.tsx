@@ -32,7 +32,7 @@ const authorizeMock = testing.fn().mockResolvedValue(undefined);
 const revokeMock = testing.fn().mockResolvedValue(undefined);
 const syncMock = testing.fn().mockResolvedValue(undefined);
 
-const createMockGmp = ({
+const createGmp = ({
   getAgents = testing.fn().mockResolvedValue({
     data: [
       makeAgent('1', 'Agent 1', true, '192.168.1.1'),
@@ -45,10 +45,10 @@ const createMockGmp = ({
   sync = syncMock,
 } = {}) => ({
   settings: {
-    session: createSession({token: 'token'}),
     manualUrl: 'https://docs.greenbone.net',
     reloadInterval: 30000,
   },
+  session: createSession({token: 'token'}),
   agents: {
     get: getAgents,
     authorize,
@@ -77,11 +77,11 @@ const createMockGmp = ({
   },
 });
 
-const gmp = createMockGmp();
+const gmp = createGmp();
 
 describe('AgentListPage tests', () => {
   test('should display loading indicator initially', () => {
-    const gmp = createMockGmp({
+    const gmp = createGmp({
       getAgents: testing.fn().mockImplementation(
         () =>
           new Promise(() => {
@@ -101,7 +101,7 @@ describe('AgentListPage tests', () => {
   });
 
   test('should render empty state when no agents are available', async () => {
-    const gmp = createMockGmp({
+    const gmp = createGmp({
       getAgents: testing.fn().mockResolvedValue({
         data: [],
         meta: {},
@@ -163,7 +163,7 @@ describe('AgentListPage tests', () => {
   test('shows error notification when bulk authorize fails', async () => {
     authorizeMock.mockRejectedValue(new Error('boom'));
 
-    const gmp = createMockGmp({
+    const gmp = createGmp({
       authorize: authorizeMock,
     });
 
@@ -193,7 +193,7 @@ describe('AgentListPage tests', () => {
   test('shows error notification when bulk revoke fails', async () => {
     revokeMock.mockRejectedValue(new Error('boom'));
 
-    const gmp = createMockGmp({
+    const gmp = createGmp({
       revoke: revokeMock,
     });
 
@@ -221,7 +221,7 @@ describe('AgentListPage tests', () => {
   });
 
   test('should not show last updated when agents have no modificationTime', async () => {
-    const gmp = createMockGmp({
+    const gmp = createGmp({
       getAgents: testing.fn().mockResolvedValue({
         data: [makeAgent('1', 'Agent 1'), makeAgent('2', 'Agent 2')],
         meta: {},
@@ -241,7 +241,7 @@ describe('AgentListPage tests', () => {
     const olderDate = Date('2026-01-01T10:00:00Z');
     const newerDate = Date('2026-02-01T10:00:00Z');
 
-    const gmp = createMockGmp({
+    const gmp = createGmp({
       getAgents: testing.fn().mockResolvedValue({
         data: [
           makeAgent('1', 'Agent 1', false, '192.168.1.1', olderDate),

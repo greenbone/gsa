@@ -133,8 +133,8 @@ const createGmp = ({
     manualUrl,
     reloadInterval,
     enableEPSS: true,
-    session: createSession({timezone: 'CET'}),
   },
+  session: createSession({timezone: 'CET'}),
   user: {currentSettings, getSetting},
 });
 

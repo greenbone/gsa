@@ -85,45 +85,43 @@ const createGmp = ({
   exportByModels = testing.fn().mockResolvedValue({
     foo: 'bar',
   }),
-} = {}) => {
-  return {
-    user: {
-      clone: cloneUser,
-      delete: deleteUser,
-      download: downloadUser,
-      export: exportUser,
-      get: getUser,
-      currentSettings: testing
-        .fn()
-        .mockResolvedValue(currentSettingsDefaultResponse),
-    },
-    users: {
-      get: getUsers,
-      getAll: getAllUsers,
-      deleteByFilter,
-      exportByFilter,
-      export: exportByModels,
-      delete: deleteByModels,
-    },
-    filters: {
-      get: getFilters,
-    },
-    settings: {
-      manualUrl,
-      reloadInterval,
-      session: createSession(),
-    },
-    permissions: {
-      get: testing.fn().mockResolvedValue({
-        data: [],
-        meta: {
-          filter: Filter.fromString(),
-          counts: new CollectionCounts(),
-        },
-      }),
-    },
-  };
-};
+} = {}) => ({
+  user: {
+    clone: cloneUser,
+    delete: deleteUser,
+    download: downloadUser,
+    export: exportUser,
+    get: getUser,
+    currentSettings: testing
+      .fn()
+      .mockResolvedValue(currentSettingsDefaultResponse),
+  },
+  users: {
+    get: getUsers,
+    getAll: getAllUsers,
+    deleteByFilter,
+    exportByFilter,
+    export: exportByModels,
+    delete: deleteByModels,
+  },
+  filters: {
+    get: getFilters,
+  },
+  settings: {
+    manualUrl,
+    reloadInterval,
+  },
+  session: createSession(),
+  permissions: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  },
+});
 
 const wrongCaps = new Capabilities(['get_configs']);
 

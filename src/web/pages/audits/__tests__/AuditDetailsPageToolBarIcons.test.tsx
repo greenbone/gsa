@@ -60,9 +60,9 @@ const manualUrl = 'test/';
 
 const createGmp = () => ({
   settings: {
-    session: createSession(),
     manualUrl,
   },
+  session: createSession(),
 });
 
 describe('AuditDetailsPageToolBarIcons tests', () => {

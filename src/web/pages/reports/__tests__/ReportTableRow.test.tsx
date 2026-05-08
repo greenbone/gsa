@@ -13,9 +13,9 @@ import ReportTableRow from 'web/pages/reports/ReportTableRow';
 
 const createGmp = () => ({
   settings: {
-    session: createSession({timezone: 'CET'}),
     severityRating: SEVERITY_RATING_CVSS_3,
   },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('ReportTableRow tests', () => {

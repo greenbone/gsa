@@ -13,9 +13,7 @@ import TaskActions from 'web/pages/tasks/TaskActions';
 const wrongCaps = new Capabilities(['get_tasks']);
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('TaskActions tests', () => {

@@ -13,9 +13,7 @@ import Actions from 'web/pages/audits/Actions';
 const wrongCaps = new Capabilities(['get_task']);
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('Audit Actions tests', () => {

@@ -12,9 +12,7 @@ import {createSession} from 'gmp/testing';
 import ContainerImageTargetTable from 'web/pages/container-image-targets/ContainerImageTargetTable';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('ContainerImageTargetTable tests', () => {

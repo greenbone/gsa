@@ -11,9 +11,7 @@ import {createSession} from 'gmp/testing';
 import AgentInstallerTable from 'web/pages/agent-installers/AgentInstallerTable';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('AgentInstallerTable tests', () => {

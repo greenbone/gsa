@@ -53,12 +53,12 @@ const createGmp = () => ({
     reportResultsThreshold: 100,
     reloadInterval: 15000,
     reloadIntervalActive: 3000,
-    session: createSession({
-      token: 'test-token',
-      username: 'admin',
-      timezone: 'Europe/Berlin',
-    }),
   },
+  session: createSession({
+    token: 'test-token',
+    username: 'admin',
+    timezone: 'Europe/Berlin',
+  }),
   user: {
     currentSettings: testing.fn().mockResolvedValue({
       data: {

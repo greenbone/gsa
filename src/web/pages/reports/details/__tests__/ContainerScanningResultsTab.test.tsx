@@ -31,9 +31,9 @@ const createGmp = ({
     get,
   },
   settings: {
-    session: createSession({token: 'test-token'}),
     enableEPSS: false,
   },
+  session: createSession({token: 'test-token'}),
 });
 
 describe('ContainerScanningResultsTab', () => {

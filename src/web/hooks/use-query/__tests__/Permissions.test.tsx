@@ -52,7 +52,8 @@ const TestComponent = ({filter}: {filter?: Filter}) => {
 };
 
 const createGmp = () => ({
-  settings: {session: createSession({token: 'test-token'})},
+  session: createSession({token: 'test-token'}),
+  settings: {},
   permissions: {
     get: testing.fn().mockResolvedValue({
       data: [permission1, permission2],

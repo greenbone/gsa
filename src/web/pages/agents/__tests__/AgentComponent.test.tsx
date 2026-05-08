@@ -27,9 +27,7 @@ const createGmp = ({
   delete: deleteMock = testing.fn().mockResolvedValue(undefined),
   modify = testing.fn().mockResolvedValue(undefined),
 } = {}) => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
   agent: {
     save,
     delete: deleteMock,

@@ -41,9 +41,8 @@ const createGmp = ({
     },
   }),
 } = {}) => ({
-  settings: {
-    session: createSession({token: 'test-token'}),
-  },
+  settings: {},
+  session: createSession({token: 'test-token'}),
   ociimagetargets: {
     get: getOciImageTargets,
   },

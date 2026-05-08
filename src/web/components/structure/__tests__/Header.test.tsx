@@ -12,12 +12,12 @@ import Header from 'web/components/structure/Header';
 const createGmp = () => ({
   settings: {
     vendorLabel: 'gsm-150_label.svg',
-    session: createSession({
-      username: 'testUser',
-      timezone: 'UTC',
-      sessionTimeout: date(Date.now() + 3600 * 1000),
-    }),
   },
+  session: createSession({
+    username: 'testUser',
+    timezone: 'UTC',
+    sessionTimeout: date(Date.now() + 3600 * 1000),
+  }),
   doLogout: testing.fn().mockResolvedValue(undefined),
 });
 

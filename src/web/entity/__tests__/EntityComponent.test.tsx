@@ -29,9 +29,7 @@ const createGmp = ({
   fooSave = testing.fn().mockResolvedValue({id: '123'}),
   fooCreate = testing.fn().mockResolvedValue({id: '123'}),
 } = {}) => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
   user: {
     currentSettings,
   },

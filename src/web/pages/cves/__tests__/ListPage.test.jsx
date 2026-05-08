@@ -110,8 +110,8 @@ const createGmp = ({
     reloadInterval,
     enableEPSS: true,
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: createSession({timezone: 'CET'}),
   },
+  session: createSession({timezone: 'CET'}),
   user: {currentSettings, getSetting},
 });
 

@@ -46,11 +46,11 @@ const createMockProps = (overrides = {}) => {
 
 const createGmp = ({severityRating = SEVERITY_RATING_CVSS_3} = {}) => ({
   settings: {
-    session: createSession({
-      timezone: 'CET',
-    }),
     severityRating,
   },
+  session: createSession({
+    timezone: 'CET',
+  }),
 });
 
 describe('HostsTabContent', () => {

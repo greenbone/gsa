@@ -54,8 +54,8 @@ describe('Page tests', () => {
       settings: {
         manualUrl: 'https://example.com/manual',
         enableCommunityFeedNotification: true,
-        session: createSession(),
       },
+      session: createSession(),
     };
     const {render} = rendererWith({gmp});
     render(

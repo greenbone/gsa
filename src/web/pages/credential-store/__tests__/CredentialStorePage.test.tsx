@@ -42,9 +42,8 @@ const createGmp = ({
 } = {}) => ({
   credentialstores: {get},
   credentialstore: {edit, verify},
-  settings: {
-    session: createSession({token: 'token'}),
-  },
+  settings: {},
+  session: createSession({token: 'token'}),
 });
 
 describe('CredentialStorePage tests', () => {

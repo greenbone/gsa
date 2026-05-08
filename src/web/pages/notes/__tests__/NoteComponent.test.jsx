@@ -32,9 +32,7 @@ const createGmp = ({
   user: {currentSettings},
   tasks: {getAll: getTasks},
   note: {create},
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('NoteComponent', () => {

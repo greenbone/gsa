@@ -11,7 +11,7 @@ import timezones from 'gmp/time-zones';
 import TimezoneSelect from 'web/components/form/TimeZoneSelect';
 
 const createGmp = () => ({
-  settings: {session: createSession({token: 'token'})},
+  session: createSession({token: 'token'}),
   timezones: {
     get: testing.fn().mockResolvedValue(new Response(timezones)),
   },

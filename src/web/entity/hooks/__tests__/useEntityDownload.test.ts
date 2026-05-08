@@ -17,9 +17,7 @@ const createGmp = ({
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse),
 } = {}) => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
   task: {export: exportFunc},
   user: {currentSettings},
 });

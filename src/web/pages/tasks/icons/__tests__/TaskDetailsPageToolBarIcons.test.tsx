@@ -76,8 +76,8 @@ const manualUrl = 'test/';
 const createGmp = () => ({
   settings: {
     manualUrl,
-    session: createSession(),
   },
+  session: createSession(),
 });
 
 describe('Task ToolBarIcons tests', () => {

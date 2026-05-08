@@ -13,9 +13,7 @@ const date1 = Date('2019-01-01T12:00:00Z');
 const date2 = Date('2019-02-02T12:00:00Z');
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'CET'}),
-  },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('EntityBox tests', () => {

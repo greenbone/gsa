@@ -63,8 +63,8 @@ const createGmp = ({
   settings: {
     manualUrl,
     severityRating: SEVERITY_RATING_CVSS_3,
-    session: createSession({timezone: 'UTC'}),
   },
+  session: createSession({timezone: 'UTC'}),
   user: {
     currentSettings,
   },

@@ -51,7 +51,7 @@ const createGmp = ({
     deletePortRange,
   },
   user: {currentSettings},
-  settings: {session: createSession()},
+  session: createSession(),
 });
 
 describe('PortListComponent tests', () => {

@@ -21,11 +21,10 @@ const deleteMock = testing.fn().mockResolvedValue(undefined);
 const saveMock = testing.fn().mockResolvedValue(undefined);
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({
-      token: 'token',
-    }),
-  },
+  settings: {},
+  session: createSession({
+    token: 'token',
+  }),
   scanners: {get: testing.fn().mockResolvedValue(new Response([], {}))},
   agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
   agentgroup: {

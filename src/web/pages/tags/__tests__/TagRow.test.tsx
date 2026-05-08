@@ -25,9 +25,7 @@ const createTag = (id = 'tag-1') =>
   });
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession({username: 'test-user'}),
 });
 
 describe('TagRow tests', () => {

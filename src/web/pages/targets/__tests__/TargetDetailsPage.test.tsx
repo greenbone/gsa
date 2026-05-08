@@ -92,9 +92,9 @@ const createGmp = (settings = {}) => ({
   settings: {
     manualUrl: 'test/',
     reloadInterval: -1,
-    session: createSession({timezone: 'CET'}),
     ...settings,
   },
+  session: createSession({timezone: 'CET'}),
   user: {
     currentSettings: testing
       .fn()

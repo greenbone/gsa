@@ -43,7 +43,8 @@ const createGmp = ({
   agentinstaller: {
     download: testing.fn().mockResolvedValue({data: 'file-content'}),
   },
-  settings: {session: createSession({token: 'token'})},
+  settings: {},
+  session: createSession({token: 'token'}),
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],

@@ -12,9 +12,7 @@ import {createSession} from 'gmp/testing';
 import ScannerRow from 'web/pages/scanners/ScannerRow';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('ScannerRow tests', () => {

@@ -34,9 +34,7 @@ const orphanEntity = ReportConfig.fromElement({
 });
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('Report Config row tests', () => {

@@ -37,8 +37,8 @@ const createGmp = ({
     settings: {
       manualUrl,
       reportResultsThreshold,
-      session: createSession({timezone: 'CET'}),
     },
+    session: createSession({timezone: 'CET'}),
     user: {
       currentSettings,
       getReportComposerDefaults,

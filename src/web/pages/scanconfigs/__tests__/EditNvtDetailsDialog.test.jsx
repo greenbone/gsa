@@ -20,8 +20,8 @@ const modified = date('2019-09-09T12:00:00Z');
 const createGmp = () => ({
   settings: {
     severityRating: DEFAULT_SEVERITY_RATING,
-    session: createSession({timezone: 'UTC'}),
   },
+  session: createSession({timezone: 'UTC'}),
 });
 
 describe('EditNvtDetailsDialog component tests', () => {

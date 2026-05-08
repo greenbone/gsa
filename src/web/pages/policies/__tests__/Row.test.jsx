@@ -20,9 +20,7 @@ const entity = Policy.fromElement({
 });
 
 const createGmp = () => ({
-  settings: {
-    session: createSession(),
-  },
+  session: createSession(),
 });
 
 describe('Row tests', () => {

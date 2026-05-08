@@ -149,9 +149,9 @@ const targetNoElevate = Target.fromElement({
 
 const createGmp = ({settings = {}} = {}) => ({
   settings: {
-    session: createSession(),
     ...settings,
   },
+  session: createSession(),
 });
 
 describe('TargetRow tests', () => {

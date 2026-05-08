@@ -111,8 +111,8 @@ const createGmp = ({
   reloadInterval,
   settings: {
     manualUrl,
-    session: createSession(),
   },
+  session: createSession(),
   user: {currentSettings, getSetting},
 });
 

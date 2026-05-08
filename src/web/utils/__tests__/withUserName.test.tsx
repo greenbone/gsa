@@ -21,9 +21,7 @@ const TestComponent = ({title = 'Default Title', username}: TestProps) => (
 );
 
 const createGmp = ({username = 'test-user'} = {}) => ({
-  settings: {
-    session: createSession({username}),
-  },
+  session: createSession({username}),
 });
 
 describe('withUserName tests', () => {

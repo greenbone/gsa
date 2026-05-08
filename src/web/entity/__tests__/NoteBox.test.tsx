@@ -22,9 +22,7 @@ const note = Note.fromElement({
 });
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({timezone: 'CET'}),
-  },
+  session: createSession({timezone: 'CET'}),
 });
 
 describe('NoteBox tests', () => {
