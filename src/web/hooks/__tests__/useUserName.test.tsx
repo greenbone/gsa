@@ -9,11 +9,9 @@ import {createSession} from 'gmp/testing';
 import useUserName from 'web/hooks/useUserName';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({
-      username: 'foo',
-    }),
-  },
+  session: createSession({
+    username: 'foo',
+  }),
 });
 
 describe('useUserName tests', () => {

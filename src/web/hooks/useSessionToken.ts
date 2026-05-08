@@ -16,8 +16,8 @@ import useGmp from 'web/hooks/useGmp';
 const useSessionToken = () => {
   const gmp = useGmp();
   const token = useSyncExternalStore(
-    listener => gmp.settings.session.subscribeToChanges(listener),
-    () => gmp.settings.session.token,
+    listener => gmp.session.subscribeToChanges(listener),
+    () => gmp.session.token,
   );
   return token;
 };

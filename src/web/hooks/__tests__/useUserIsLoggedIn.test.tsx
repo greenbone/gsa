@@ -8,15 +8,15 @@ import {rendererWith} from 'web/testing';
 import {createSession} from 'gmp/testing';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 
+const createGmp = ({
+  isLoggedIn = undefined,
+}: {isLoggedIn?: () => boolean} = {}) => ({
+  session: createSession({isLoggedIn}),
+});
+
 describe('useUserIsLoggedIn tests', () => {
   test('should return the user logged-in state', () => {
-    const session = createSession();
-    const gmp = {
-      settings: {
-        session,
-      },
-    };
-    const {renderHook} = rendererWith({gmp});
+    const {renderHook} = rendererWith({gmp: createGmp()});
 
     const {result} = renderHook(() => useUserIsLoggedIn());
 
@@ -24,13 +24,9 @@ describe('useUserIsLoggedIn tests', () => {
   });
 
   test('should return the user logged-out state', () => {
-    const session = createSession({isLoggedIn: () => false});
-    const gmp = {
-      settings: {
-        session,
-      },
-    };
-    const {renderHook} = rendererWith({gmp});
+    const {renderHook} = rendererWith({
+      gmp: createGmp({isLoggedIn: () => false}),
+    });
 
     const {result} = renderHook(() => useUserIsLoggedIn());
 

@@ -9,11 +9,9 @@ import {createSession} from 'gmp/testing';
 import useTimezone from 'web/hooks/useUserTimezone';
 
 const createGmp = () => ({
-  settings: {
-    session: createSession({
-      timezone: 'initial-timezone',
-    }),
-  },
+  session: createSession({
+    timezone: 'initial-timezone',
+  }),
 });
 
 describe('useUserTimezone tests', () => {
