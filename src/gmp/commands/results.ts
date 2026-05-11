@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import {
   type HttpCommandInputParams,
@@ -60,5 +59,3 @@ export class ResultsCommand extends EntitiesCommand<Result> {
     });
   }
 }
-
-registerCommand('results', ResultsCommand);
