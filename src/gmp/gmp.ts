@@ -343,9 +343,14 @@ class Gmp {
     this.vuln = new VulnerabilityCommand(this.http);
     this.vulns = new VulnerabilitiesCommand(this.http);
     this.wizard = new WizardCommand(this.http);
-    this.feedkey = new FeedKeyCommand(this.http, this.settings, async () => {
-      await this.user.renewSession();
-    });
+    this.feedkey = new FeedKeyCommand(
+      this.http,
+      this.settings,
+      () => this.session.jwt,
+      async () => {
+        await this.user.renewSession();
+      },
+    );
   }
 
   public async login(username: string, password: string) {

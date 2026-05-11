@@ -14,7 +14,7 @@ import useGmp from 'web/hooks/useGmp';
 
 export const useGetKey = () => {
   const gmp = useGmp();
-  const {jwt} = gmp.settings;
+  const {jwt} = gmp.session;
 
   return useQuery<KeyResponse>({
     queryKey: ['get_feed_key', jwt],
@@ -26,7 +26,7 @@ export const useGetKey = () => {
 
 export const useGetKeyStatus = () => {
   const gmp = useGmp();
-  const {jwt} = gmp.settings;
+  const {jwt} = gmp.session;
 
   return useQuery<KeyStatusResponse>({
     queryKey: ['get_feed_key_status', jwt],
