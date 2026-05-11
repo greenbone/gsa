@@ -81,6 +81,7 @@ class Http {
     let formdata: FormData | undefined;
 
     method = method.toUpperCase() as HttpMethod;
+    const {jwt} = this.session;
 
     if (args) {
       url = `${url}?${buildUrlParams({...this.getParams(), ...args})}`;
@@ -105,6 +106,10 @@ class Http {
       };
 
       xhr.open(method, url, true);
+
+      if (isDefined(jwt)) {
+        xhr.setRequestHeader('Authorization', `Bearer ${jwt}`);
+      }
 
       if (isDefined(self.timeout)) {
         xhr.timeout = self.timeout;
