@@ -600,7 +600,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     const timeout = isDefined(seconds) ? date.unix(seconds) : undefined;
 
     // JWT is now extracted to response.meta by the transformation layer
-    const jwt: string | undefined = response.meta?.jwt;
+    const jwt: string | undefined = response.meta?.jwt as string | undefined;
 
     return response.setData({timeout, jwt});
   }

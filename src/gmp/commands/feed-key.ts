@@ -29,15 +29,18 @@ const API_BASE_PATH = 'service/feed-key/api/v1';
 class FeedKeyCommand extends HttpCommand {
   private readonly settings: Settings;
   private readonly baseUrl: string;
+  private readonly getJwt: () => string | undefined;
   private readonly renewSessionFn?: () => Promise<void>;
 
   constructor(
     http: Http,
     settings: Settings,
+    getJwt: () => string | undefined,
     renewSessionFn?: () => Promise<void>,
   ) {
     super(http);
     this.settings = settings;
+    this.getJwt = getJwt;
     this.renewSessionFn = renewSessionFn;
     if (this.settings.apiServer) {
       this.baseUrl = buildServerUrl(
@@ -57,7 +60,7 @@ class FeedKeyCommand extends HttpCommand {
   }
 
   private getAuthHeaders(): HeadersInit {
-    const {jwt} = this.settings;
+    const jwt = this.getJwt();
     if (!jwt) {
       throw new Error('Not authenticated, JWT is missing');
     }

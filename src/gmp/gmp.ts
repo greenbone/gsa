@@ -253,9 +253,14 @@ class Gmp {
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);
     this.wizard = new WizardCommand(this.http);
-    this.feedkey = new FeedKeyCommand(this.http, this.settings, async () => {
-      await this.user.renewSession();
-    });
+    this.feedkey = new FeedKeyCommand(
+      this.http,
+      this.settings,
+      () => this.session.jwt,
+      async () => {
+        await this.user.renewSession();
+      },
+    );
 
     this._initCommands();
   }
