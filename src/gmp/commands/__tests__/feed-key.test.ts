@@ -13,11 +13,10 @@ import {
 } from '@gsa/testing';
 import FeedKeyCommand from 'gmp/commands/feed-key';
 import {createHttp} from 'gmp/commands/testing';
+import type Settings from 'gmp/settings';
 
-const createMockSettings = (jwt?: string) =>
-  ({
-    jwt,
-  }) as FeedKeyCommand['settings'];
+const mockSettings = {} as Settings;
+const createGetJwt = (jwt?: string) => () => jwt;
 
 describe('FeedKeyCommand', () => {
   let originalFetch: typeof globalThis.fetch;
@@ -39,8 +38,7 @@ describe('FeedKeyCommand', () => {
       });
 
       const fakeHttp = createHttp({});
-      const settings = createMockSettings('test-jwt-token');
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt('test-jwt-token'));
 
       const result = await cmd.get();
 
@@ -60,16 +58,14 @@ describe('FeedKeyCommand', () => {
       });
 
       const fakeHttp = createHttp({});
-      const settings = createMockSettings('test-jwt-token');
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt('test-jwt-token'));
 
       await expect(cmd.get()).rejects.toThrow('Request failed: 500');
     });
 
     test('should throw error when not authenticated', async () => {
       const fakeHttp = createHttp({});
-      const settings = createMockSettings();
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt());
 
       await expect(cmd.get()).rejects.toThrow('Not authenticated');
     });
@@ -87,8 +83,7 @@ describe('FeedKeyCommand', () => {
       });
 
       const fakeHttp = createHttp({});
-      const settings = createMockSettings('test-jwt-token');
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt('test-jwt-token'));
 
       const result = await cmd.delete();
 
@@ -109,8 +104,7 @@ describe('FeedKeyCommand', () => {
       });
 
       const fakeHttp = createHttp({});
-      const settings = createMockSettings('test-jwt-token');
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt('test-jwt-token'));
 
       await expect(cmd.delete()).rejects.toThrow('Permission denied');
     });
@@ -122,16 +116,14 @@ describe('FeedKeyCommand', () => {
       });
 
       const fakeHttp = createHttp({});
-      const settings = createMockSettings('test-jwt-token');
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt('test-jwt-token'));
 
       await expect(cmd.delete()).rejects.toThrow('Key deletion failed');
     });
 
     test('should throw error when not authenticated', async () => {
       const fakeHttp = createHttp({});
-      const settings = createMockSettings();
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt());
 
       await expect(cmd.delete()).rejects.toThrow('Not authenticated');
     });
@@ -149,8 +141,7 @@ describe('FeedKeyCommand', () => {
       });
 
       const fakeHttp = createHttp({});
-      const settings = createMockSettings('test-jwt-token');
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt('test-jwt-token'));
 
       const file = new File(['key-content'], 'feed.pem', {
         type: 'application/x-pem-file',
@@ -174,8 +165,7 @@ describe('FeedKeyCommand', () => {
       });
 
       const fakeHttp = createHttp({});
-      const settings = createMockSettings('test-jwt-token');
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt('test-jwt-token'));
 
       const file = new File(['bad-content'], 'feed.pem');
 
@@ -189,8 +179,7 @@ describe('FeedKeyCommand', () => {
       });
 
       const fakeHttp = createHttp({});
-      const settings = createMockSettings('test-jwt-token');
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt('test-jwt-token'));
 
       const file = new File(['bad-content'], 'feed.pem');
 
@@ -199,8 +188,7 @@ describe('FeedKeyCommand', () => {
 
     test('should throw error when not authenticated', async () => {
       const fakeHttp = createHttp({});
-      const settings = createMockSettings();
-      const cmd = new FeedKeyCommand(fakeHttp, settings);
+      const cmd = new FeedKeyCommand(fakeHttp, mockSettings, createGetJwt());
 
       const file = new File(['content'], 'feed.pem');
 
