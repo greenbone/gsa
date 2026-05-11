@@ -31,6 +31,7 @@ const createXHR = (status: number, response = '') => {
     onload: testing.fn(),
     onerror: testing.fn(),
     ontimeout: testing.fn(),
+    setRequestHeader: testing.fn(),
   } as unknown as XMLHttpRequest;
 };
 
@@ -70,6 +71,33 @@ describe('Http tests', () => {
     expect(http.getParams()).toEqual({
       token: '123',
     });
+  });
+
+  test('should allow to create requests with JWT', async () => {
+    const xhr = createXHR(200, 'some data');
+    // @ts-expect-error
+    Http.XHR = testing.fn().mockImplementation(function () {
+      return xhr;
+    });
+
+    const http = createHttp({}, {jwt: 'test-jwt'});
+    const promise = http.request('get', {args: {cmd: 'get_tasks'}});
+    // @ts-expect-error
+    xhr.onload();
+
+    const response = await promise;
+    expect(response.data).toEqual('some data');
+    expect(xhr.open).toHaveBeenCalledWith(
+      'GET',
+      'https://example.com/gmp?cmd=get_tasks',
+      true,
+    );
+    expect(xhr.withCredentials).toEqual(true);
+    expect(xhr.send).toHaveBeenCalledWith(undefined);
+    expect(xhr.setRequestHeader).toHaveBeenCalledWith(
+      'Authorization',
+      'Bearer test-jwt',
+    );
   });
 
   test('should allow to add error handlers and call them on error', async () => {
