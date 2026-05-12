@@ -15,20 +15,27 @@ import Loading from 'web/components/loading/Loading';
 import SessionObserver from 'web/components/observer/SessionObserver';
 import SessionTracker from 'web/components/observer/SessionTracker';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
+import LoginPageRoute from 'web/pages/login/LoginPageRoute';
 import Page from 'web/pages/Page';
 
 // Layout components
 const LoggedOutLayout = () => <Outlet />;
 
-const LoggedInLayout = () => (
-  <Authorized>
-    <SessionTracker />
-    <SessionObserver />
-    <Page>
-      <Outlet />
-    </Page>
-  </Authorized>
-);
+const LoggedInLayout = () => {
+  const isLoggedIn = useUserIsLoggedIn();
+  if (!isLoggedIn) {
+    return <Navigate replace to="/login" />;
+  }
+  return (
+    <Authorized>
+      <SessionTracker />
+      <SessionObserver />
+      <Page>
+        <Outlet />
+      </Page>
+    </Authorized>
+  );
+};
 
 const loggedInRoutes = [
   {
@@ -805,50 +812,44 @@ const loggedInRoutes = [
   },
 ];
 
-const AppRoutes = () => {
+const AuthRedirect = () => {
   const isLoggedIn = useUserIsLoggedIn();
-
-  // Create router dynamically based on login state
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <LoggedOutLayout />,
-      HydrateFallback: Loading,
-      children: [
-        {
-          index: true,
-          element: isLoggedIn ? (
-            <Navigate to="/dashboards" />
-          ) : (
-            <Navigate replace to="/login" />
-          ),
-        },
-        {
-          path: 'login',
-          lazy: async () => ({
-            Component: (await import('web/pages/login/LoginPage')).default,
-          }),
-        },
-        {
-          path: 'omp',
-          lazy: async () => ({
-            Component: (await import('web/pages/Omp')).default,
-          }),
-        },
-        {
-          path: '*',
-          element: isLoggedIn ? (
-            <Navigate to="/dashboards" />
-          ) : (
-            <Navigate replace to="/login" />
-          ),
-        },
-      ],
-    },
-    ...(isLoggedIn ? loggedInRoutes : []),
-  ]);
-
-  return <RouterProvider router={router} />;
+  return isLoggedIn ? (
+    <Navigate to="/dashboards" />
+  ) : (
+    <Navigate replace to="/login" />
+  );
 };
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LoggedOutLayout />,
+    HydrateFallback: Loading,
+    children: [
+      {
+        index: true,
+        element: <AuthRedirect />,
+      },
+      {
+        path: 'login',
+        element: <LoginPageRoute />,
+      },
+      {
+        path: 'omp',
+        lazy: async () => ({
+          Component: (await import('web/pages/Omp')).default,
+        }),
+      },
+      {
+        path: '*',
+        element: <AuthRedirect />,
+      },
+    ],
+  },
+  ...loggedInRoutes,
+]);
+
+const AppRoutes = () => <RouterProvider router={router} />;
 
 export default AppRoutes;

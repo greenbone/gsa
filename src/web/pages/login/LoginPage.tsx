@@ -5,7 +5,6 @@
 
 import {useState, useEffect} from 'react';
 import {notifications} from '@mantine/notifications';
-import {useNavigate} from 'react-router';
 import styled from 'styled-components';
 import {ResponseRejection} from 'gmp/http/rejection';
 import logger from 'gmp/log';
@@ -17,17 +16,11 @@ import PageTitle from 'web/components/layout/PageTitle';
 import Footer from 'web/components/structure/Footer';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import LoginForm from 'web/pages/login/LoginForm';
 import Theme from 'web/utils/Theme';
-import {
-  getLastVisitedPage,
-  clearLastVisitedPage,
-} from 'web/utils/user-last-visited-page';
 
 const log = logger.getLogger('web.login');
 
-const POST_LOGIN_REDIRECT_KEY = 'gsa_post_login_redirect';
 const StyledLayout = styled(Layout)`
   background: radial-gradient(
     51.84% 102.52% at 58.54% 44.97%,
@@ -54,36 +47,17 @@ const BackgroundBottomImage = styled(Image)`
 
 const LoginPage = () => {
   const gmp = useGmp();
-  const navigate = useNavigate();
-  const isLoggedIn = useUserIsLoggedIn();
   const [error, setError] = useState<Error>();
   const [_] = useTranslation();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      const redirectPath =
-        sessionStorage.getItem(POST_LOGIN_REDIRECT_KEY) ?? '/dashboards';
-      sessionStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
-      void navigate(redirectPath, {replace: true});
-    }
-
     notifications.clean();
-  }, [isLoggedIn, navigate]);
+  }, []);
 
   const login = async (username: string, password: string) => {
-    const userLastVisitedPath = getLastVisitedPage(username);
-    if (userLastVisitedPath && userLastVisitedPath !== '/login') {
-      sessionStorage.setItem(POST_LOGIN_REDIRECT_KEY, userLastVisitedPath);
-    }
-
     try {
       await gmp.login(username, password);
-
-      if (userLastVisitedPath && userLastVisitedPath !== '/login') {
-        clearLastVisitedPage(username);
-      }
     } catch (error) {
-      sessionStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
       log.error(error);
       setError(error as Error);
     }
@@ -132,7 +106,7 @@ const LoginPage = () => {
     isDefined(gmp.settings.guestPassword);
 
   const showLogin = !gmp.settings.disableLoginForm;
-  const showProtocolInsecure = window.location.protocol !== 'https:';
+  const showProtocolInsecure = globalThis.location.protocol !== 'https:';
 
   return (
     <StyledLayout>
