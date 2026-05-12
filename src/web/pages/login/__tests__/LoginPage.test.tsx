@@ -11,25 +11,12 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
-import {vi} from 'vitest';
 import {ResponseRejection} from 'gmp/http/rejection';
 import Logger from 'gmp/log';
 import {createSession} from 'gmp/testing';
 import LoginPage from 'web/pages/login/LoginPage';
 
 Logger.setDefaultLevel('silent');
-const mockNavigate = testing.fn();
-const mockUseNavigate = testing.fn().mockReturnValue(mockNavigate);
-const mockUseLocation = testing.fn();
-
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-    useLocation: () => mockUseLocation(),
-  };
-});
 
 const createGmp = ({
   clearToken = testing.fn(),
@@ -168,39 +155,10 @@ describe('LoginPage tests', () => {
     );
   });
 
-  test('should redirect to main page if already logged in', () => {
-    const gmp = createGmp();
-
-    const {render} = rendererWith({gmp, router: true});
-
-    render(<LoginPage />);
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith('/dashboards', {replace: true});
-  });
-
-  test.each([
-    {
-      description: 'should redirect to dashboards when no saved page for user',
-      locationState: {
-        state: {
-          from: {
-            pathname: '/somewhere',
-            search: '?foo=bar',
-            hash: '#baz',
-          },
-        },
-      },
-      expectedPath: '/dashboards',
-    },
-    {
-      description:
-        'should redirect to dashboards when no previous path is available',
-      locationState: {},
-      expectedPath: '/dashboards',
-    },
-  ])('$description', async ({locationState, expectedPath}) => {
-    mockUseNavigate.mockClear();
+  test('should not clear saved last visited page on login', async () => {
     sessionStorage.clear();
+
+    sessionStorage.setItem('gsa_last_visited_page_foo', '/tasks?filter=open');
 
     const login = testing.fn().mockResolvedValue({
       locale: 'locale',
@@ -208,8 +166,6 @@ describe('LoginPage tests', () => {
       timezone: 'Europe/Berlin',
       sessionTimeout: '10:00',
     });
-
-    mockUseLocation.mockReturnValue(locationState);
 
     const gmp = createGmp({login});
     const {render} = rendererWith({
@@ -226,63 +182,15 @@ describe('LoginPage tests', () => {
     const button = screen.getByTestId('login-button');
     fireEvent.click(button);
     await wait();
-    expect(mockNavigate).toHaveBeenCalledWith(expectedPath, {
-      replace: true,
-    });
+
+    expect(sessionStorage.getItem('gsa_last_visited_page_foo')).toBe(
+      '/tasks?filter=open',
+    );
   });
 
-  test('should redirect to user-specific saved page after login', async () => {
+  test('should not clear another user saved page on login', async () => {
     sessionStorage.clear();
 
-    // Save a last visited page for user 'foo'
-    sessionStorage.setItem('gsa_last_visited_page_foo', '/tasks?filter=open');
-
-    const isLoggedIn = testing.fn().mockReturnValue(false);
-    const session = createSession({timezone: 'UTC', isLoggedIn});
-
-    const login = testing.fn().mockImplementation(async () => {
-      isLoggedIn.mockReturnValue(true);
-      session.listener.forEach(l => l());
-      return {
-        locale: 'locale',
-        token: 'token',
-        timezone: 'Europe/Berlin',
-        sessionTimeout: '10:00',
-      };
-    });
-
-    mockUseLocation.mockReturnValue({});
-
-    const gmp = {...createGmp({login}), session};
-    const {render} = rendererWith({
-      gmp,
-      router: true,
-      store: true,
-    });
-
-    render(<LoginPage />);
-    const usernameField = screen.getByName('username');
-    const passwordField = screen.getByName('password');
-    changeInputValue(usernameField, 'foo');
-    changeInputValue(passwordField, 'bar');
-    const button = screen.getByTestId('login-button');
-    fireEvent.click(button);
-    await wait();
-
-    // Should redirect to the saved page
-    expect(mockNavigate).toHaveBeenCalledWith('/tasks?filter=open', {
-      replace: true,
-    });
-
-    // Should clear the saved page after using it
-    expect(sessionStorage.getItem('gsa_last_visited_page_foo')).toBeNull();
-  });
-
-  test('should not redirect to another user saved page', async () => {
-    mockUseNavigate.mockClear();
-    sessionStorage.clear();
-
-    // Save a last visited page for user 'alice'
     sessionStorage.setItem('gsa_last_visited_page_alice', '/agents');
 
     const login = testing.fn().mockResolvedValue({
@@ -292,8 +200,6 @@ describe('LoginPage tests', () => {
       sessionTimeout: '10:00',
     });
 
-    mockUseLocation.mockReturnValue({});
-
     const gmp = createGmp({login});
     const {render} = rendererWith({
       gmp,
@@ -304,19 +210,12 @@ describe('LoginPage tests', () => {
     render(<LoginPage />);
     const usernameField = screen.getByName('username');
     const passwordField = screen.getByName('password');
-    // User 'bob' logs in
     changeInputValue(usernameField, 'bob');
     changeInputValue(passwordField, 'bar');
     const button = screen.getByTestId('login-button');
     fireEvent.click(button);
     await wait();
 
-    // Should redirect to dashboards, not to alice's saved page
-    expect(mockNavigate).toHaveBeenCalledWith('/dashboards', {
-      replace: true,
-    });
-
-    // Alice's saved page should still exist
     expect(sessionStorage.getItem('gsa_last_visited_page_alice')).toBe(
       '/agents',
     );
