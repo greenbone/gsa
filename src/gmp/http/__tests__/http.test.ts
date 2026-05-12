@@ -36,6 +36,18 @@ const createXHR = (status: number, response = '') => {
 };
 
 describe('Http tests', () => {
+  test('should initialize with correct url and timeout', () => {
+    const http = createHttp({
+      apiServer: 'test.com',
+      apiProtocol: 'http:',
+      timeout: 5000,
+    });
+    expect(http.url).toEqual('http://test.com/gmp');
+    expect(http.timeout).toEqual(5000);
+    expect(http.apiServer).toEqual('test.com');
+    expect(http.apiProtocol).toEqual('http:');
+  });
+
   test('should handle response error without error handlers', async () => {
     const http = createHttp();
     const xhr = createXHR(500);
