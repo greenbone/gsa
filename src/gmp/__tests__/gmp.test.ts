@@ -35,7 +35,10 @@ describe('Gmp tests', () => {
 
   test('should login user', async () => {
     const token = 'foo';
-    const http = createHttp(createResponse({token}));
+    const http = createHttp(createResponse({token}), {
+      apiServer: 'localhost',
+      apiProtocol: 'http:',
+    });
 
     const storage = createStorage();
     const session = createSession();
@@ -43,21 +46,21 @@ describe('Gmp tests', () => {
     const gmp = new Gmp({settings, http, session});
 
     await gmp.login('foo', 'bar');
-    expect(http.request).toHaveBeenCalledWith(
-      'post',
-      expect.objectContaining({
-        data: {
-          cmd: 'login',
-          login: 'foo',
-          password: 'bar',
-        },
-      }),
-    );
+    expect(http.request).toHaveBeenCalledWith('post', {
+      data: {
+        login: 'foo',
+        password: 'bar',
+      },
+      url: 'http://localhost/login',
+    });
     expect(session.login).toHaveBeenCalledWith({token, username: 'foo'});
   });
 
   test('should not login if request fails', async () => {
-    const http = createHttpError(new Error('An error'));
+    const http = createHttpError(new Error('An error'), {
+      apiServer: 'localhost',
+      apiProtocol: 'http:',
+    });
     const storage = createStorage();
     const session = createSession();
     const settings = new Settings(storage);
@@ -66,16 +69,13 @@ describe('Gmp tests', () => {
     try {
       return await gmp.login('foo', 'bar');
     } catch (error) {
-      expect(http.request).toHaveBeenCalledWith(
-        'post',
-        expect.objectContaining({
-          data: {
-            cmd: 'login',
-            login: 'foo',
-            password: 'bar',
-          },
-        }),
-      );
+      expect(http.request).toHaveBeenCalledWith('post', {
+        data: {
+          login: 'foo',
+          password: 'bar',
+        },
+        url: 'http://localhost/login',
+      });
       expect((error as Error).message).toEqual('An error');
       expect(session.login).not.toHaveBeenCalled();
     }
