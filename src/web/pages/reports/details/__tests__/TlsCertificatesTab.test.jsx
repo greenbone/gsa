@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent} from 'web/testing';
+import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
@@ -31,7 +31,7 @@ describe('Report TLS Certificates Tab tests', () => {
       gmp: createGmp(),
     });
 
-    const {baseElement} = render(
+    render(
       <TLSCertificatesTab
         counts={tlsCertificates.counts}
         filter={filter}
@@ -44,9 +44,10 @@ describe('Report TLS Certificates Tab tests', () => {
       />,
     );
 
-    const links = baseElement.querySelectorAll('a');
-    const header = baseElement.querySelectorAll('th');
-    const rows = baseElement.querySelectorAll('tr');
+    const table = screen.getByRole('table');
+    const header = within(table).getAllByRole('columnheader');
+    const rows = within(table).getAllByRole('row');
+    const links = within(table).getAllByRole('link');
 
     // Headings
     expect(header[0]).toHaveTextContent('DN');
@@ -108,7 +109,8 @@ describe('Report TLS Certificates Tab tests', () => {
     expect(rows[3]).toHaveTextContent('8445');
 
     // Filter
-    expect(baseElement).toHaveTextContent(
+    expect(screen.getByTestId('entities-table')).toBeInTheDocument();
+    expect(screen.getByText(/Applied filter:/)).toHaveTextContent(
       '(Applied filter: apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity)',
     );
   });
@@ -125,7 +127,7 @@ describe('Report TLS Certificates Tab tests', () => {
       gmp: createGmp(),
     });
 
-    const {baseElement} = render(
+    render(
       <TLSCertificatesTab
         counts={tlsCertificates.counts}
         filter={filter}
@@ -138,14 +140,14 @@ describe('Report TLS Certificates Tab tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
+    const downloadIcons = screen.getAllByTestId('download-icon');
 
-    fireEvent.click(icons[11]);
+    fireEvent.click(downloadIcons[0]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
       tlsCertificates.entities[0],
     );
 
-    fireEvent.click(icons[12]);
+    fireEvent.click(downloadIcons[1]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
       tlsCertificates.entities[1],
     );
