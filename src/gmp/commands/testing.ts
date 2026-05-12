@@ -4,7 +4,7 @@
  */
 
 import {testing} from '@gsa/testing';
-import type Http from 'gmp/http/http';
+import {type default as Http, type HttpOptions} from 'gmp/http/http';
 import Response, {type Meta} from 'gmp/http/response';
 import {type Element} from 'gmp/models/model';
 
@@ -113,14 +113,20 @@ export const createInfoEntitiesResponse = (entities: Element[]) =>
 
 export const createHttp = <TData = Element, TMeta extends Meta = Meta>(
   response?: TData | Response<TData, TMeta>,
+  options: Partial<HttpOptions> = {},
 ) =>
   ({
     request: testing.fn().mockResolvedValue(response),
+    ...options,
   }) as unknown as Http;
 
-export const createHttpError = (error: Error) =>
+export const createHttpError = (
+  error: Error,
+  options: Partial<HttpOptions> = {},
+) =>
   ({
     request: testing.fn().mockRejectedValue(error),
+    ...options,
   }) as unknown as Http;
 
 export const createHttpMany = (responses: Element[] | Response[]) => {
