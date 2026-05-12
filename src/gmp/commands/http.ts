@@ -23,7 +23,7 @@ import type Filter from 'gmp/models/filter';
 import {filterString, isFilter} from 'gmp/models/filter/utils';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
-export interface HttpCommandOptions {
+export interface HttpCommandOptions extends RequestOptions {
   cancelToken?: CancelToken;
   force?: boolean;
   responseType?: ResponseType;
