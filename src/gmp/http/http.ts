@@ -50,6 +50,9 @@ const log = logger.getLogger('gmp.http');
 class Http {
   readonly url: string;
   readonly timeout?: number;
+  readonly apiServer: string;
+  readonly apiProtocol?: string;
+
   private errorHandlers: Array<ErrorHandler>;
   private readonly session: Session;
 
@@ -57,6 +60,9 @@ class Http {
 
   constructor(options: HttpOptions, session: Session) {
     const {timeout, apiServer, apiProtocol} = options;
+
+    this.apiServer = apiServer;
+    this.apiProtocol = apiProtocol;
 
     this.url = buildServerUrl(apiServer, 'gmp', apiProtocol);
     this.timeout = timeout;
