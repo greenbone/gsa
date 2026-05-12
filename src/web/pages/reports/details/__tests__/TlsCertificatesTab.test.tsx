@@ -21,6 +21,7 @@ const createGmp = () => ({
 describe('Report TLS Certificates Tab tests', () => {
   test('should render Report TLS Certificates Tab', () => {
     const {tlsCertificates} = getMockReport();
+    const reportTlsCertificates = tlsCertificates!;
 
     const onSortChange = testing.fn();
 
@@ -33,12 +34,12 @@ describe('Report TLS Certificates Tab tests', () => {
 
     render(
       <TLSCertificatesTab
-        counts={tlsCertificates.counts}
+        counts={reportTlsCertificates.counts}
         filter={filter}
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
-        tlsCertificates={tlsCertificates.entities}
+        tlsCertificates={reportTlsCertificates.entities}
         onSortChange={onSortChange}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
@@ -117,6 +118,7 @@ describe('Report TLS Certificates Tab tests', () => {
 
   test('should call click handler', () => {
     const {tlsCertificates} = getMockReport();
+    const reportTlsCertificates = tlsCertificates!;
 
     const onSortChange = testing.fn();
 
@@ -129,12 +131,12 @@ describe('Report TLS Certificates Tab tests', () => {
 
     render(
       <TLSCertificatesTab
-        counts={tlsCertificates.counts}
+        counts={reportTlsCertificates.counts}
         filter={filter}
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
-        tlsCertificates={tlsCertificates.entities}
+        tlsCertificates={reportTlsCertificates.entities}
         onSortChange={onSortChange}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
@@ -144,12 +146,12 @@ describe('Report TLS Certificates Tab tests', () => {
 
     fireEvent.click(downloadIcons[0]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
-      tlsCertificates.entities[0],
+      reportTlsCertificates.entities[0],
     );
 
     fireEvent.click(downloadIcons[1]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
-      tlsCertificates.entities[1],
+      reportTlsCertificates.entities[1],
     );
   });
 });

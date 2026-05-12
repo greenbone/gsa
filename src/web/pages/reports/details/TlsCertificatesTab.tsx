@@ -3,16 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type CollectionCounts from 'gmp/collection/collection-counts';
+import type Filter from 'gmp/models/filter';
+import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import TLSCertificatesTable from 'web/pages/reports/details/TlsCertificatesTable';
-import PropTypes from 'web/utils/PropTypes';
 import {
   makeCompareDate,
   makeCompareIp,
   makeComparePort,
   makeCompareString,
 } from 'web/utils/Sort';
+
+interface TLSCertificatesTabProps {
+  counts?: CollectionCounts;
+  filter: Filter;
+  isUpdating?: boolean;
+  sortField: string;
+  sortReverse: boolean;
+  tlsCertificates?: ReportTLSCertificate[];
+  onSortChange: (sortBy: string) => void;
+  onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
+}
 
 const tlsCertificatesSortFunctions = {
   dn: makeCompareString('subjectDn'),
@@ -34,8 +46,8 @@ const TLSCertificatesTab = ({
 
   onSortChange,
   onTlsCertificateDownloadClick,
-}) => (
-  <ReportEntitiesContainer
+}: TLSCertificatesTabProps) => (
+  <ReportEntitiesContainer<ReportTLSCertificate>
     counts={counts}
     entities={tlsCertificates}
     filter={filter}
@@ -54,6 +66,7 @@ const TLSCertificatesTab = ({
       onPreviousClick,
     }) => (
       <TLSCertificatesTable
+        // @ts-expect-error entities are ReportTLSCertificate[], not Model[]
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}
@@ -71,16 +84,5 @@ const TLSCertificatesTab = ({
     )}
   </ReportEntitiesContainer>
 );
-
-TLSCertificatesTab.propTypes = {
-  counts: PropTypes.object,
-  filter: PropTypes.filter.isRequired,
-  isUpdating: PropTypes.bool,
-  sortField: PropTypes.string.isRequired,
-  sortReverse: PropTypes.bool.isRequired,
-  tlsCertificates: PropTypes.array,
-  onSortChange: PropTypes.func.isRequired,
-  onTlsCertificateDownloadClick: PropTypes.func.isRequired,
-};
 
 export default TLSCertificatesTab;

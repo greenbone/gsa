@@ -19,6 +19,7 @@ const createGmp = () => ({
 describe('TLSCertificatesTable', () => {
   test('should render table with expected columns and row values', () => {
     const {tlsCertificates} = getMockReport();
+    const reportTlsCertificates = tlsCertificates!;
 
     const {render} = rendererWith({
       router: true,
@@ -27,8 +28,9 @@ describe('TLSCertificatesTable', () => {
 
     render(
       <TLSCertificatesTable
-        entities={tlsCertificates.entities}
-        entitiesCounts={tlsCertificates.counts}
+        // @ts-expect-error entities are ReportTLSCertificate[], not Model[]
+        entities={reportTlsCertificates.entities}
+        entitiesCounts={reportTlsCertificates.counts}
         filter={filter}
         sortBy="dn"
         sortDir="asc"
@@ -73,6 +75,7 @@ describe('TLSCertificatesTable', () => {
 
   test('should call download click handler', () => {
     const {tlsCertificates} = getMockReport();
+    const reportTlsCertificates = tlsCertificates!;
     const onTlsCertificateDownloadClick = testing.fn();
 
     const {render} = rendererWith({
@@ -82,8 +85,9 @@ describe('TLSCertificatesTable', () => {
 
     render(
       <TLSCertificatesTable
-        entities={tlsCertificates.entities}
-        entitiesCounts={tlsCertificates.counts}
+        // @ts-expect-error entities are ReportTLSCertificate[], not Model[]
+        entities={reportTlsCertificates.entities}
+        entitiesCounts={reportTlsCertificates.counts}
         filter={filter}
         sortBy="dn"
         sortDir="asc"
@@ -95,12 +99,13 @@ describe('TLSCertificatesTable', () => {
     fireEvent.click(downloadIcons[0]);
 
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
-      tlsCertificates.entities[0],
+      reportTlsCertificates.entities[0],
     );
   });
 
   test('should render table without actions column when disabled', () => {
     const {tlsCertificates} = getMockReport();
+    const reportTlsCertificates = tlsCertificates!;
 
     const {render} = rendererWith({
       router: true,
@@ -110,8 +115,9 @@ describe('TLSCertificatesTable', () => {
     render(
       <TLSCertificatesTable
         actions={false}
-        entities={tlsCertificates.entities}
-        entitiesCounts={tlsCertificates.counts}
+        // @ts-expect-error entities are ReportTLSCertificate[], not Model[]
+        entities={reportTlsCertificates.entities}
+        entitiesCounts={reportTlsCertificates.counts}
         filter={filter}
         sortBy="dn"
         sortDir="asc"
