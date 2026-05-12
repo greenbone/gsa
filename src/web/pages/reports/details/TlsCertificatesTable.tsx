@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
+import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import DateTime from 'web/components/date/DateTime';
 import {DownloadIcon} from 'web/components/icon';
 import Link from 'web/components/link/Link';
@@ -17,8 +17,30 @@ import createEntitiesTable from 'web/entities/createEntitiesTable';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withRowDetails from 'web/entities/withRowDetails';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
-import PropTypes from 'web/utils/PropTypes';
-import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
+import {type SortDirectionType} from 'web/utils/sort-direction';
+
+interface HeaderProps {
+  actions?: boolean;
+  currentSortBy?: string;
+  currentSortDir?: SortDirectionType;
+  sort?: boolean;
+  onSortChange?: (sortBy: string) => void;
+}
+
+interface RowProps {
+  actions?: boolean;
+  entity: any;
+  links?: boolean;
+  onTlsCertificateDownloadClick?: (entity: ReportTLSCertificate) => void;
+  onToggleDetailsClick?: (entity: any, id?: string) => void;
+}
+
+interface ColumnsProps {
+  actions?: boolean;
+  links?: boolean;
+  onTlsCertificateDownloadClick?: (entity: ReportTLSCertificate) => void;
+  onToggleDetailsClick?: (entity: any, id?: string) => void;
+}
 
 const Div = styled.div`
   word-break: break-all;
@@ -33,14 +55,14 @@ const getColumns = ({
   links = true,
   onTlsCertificateDownloadClick,
   onToggleDetailsClick,
-}) =>
+}: ColumnsProps) =>
   [
     {
       key: 'dn',
       title: _('Subject DN'),
       width: actions ? '35%' : '40%',
       sortBy: 'dn',
-      render: entity => (
+      render: (entity: ReportTLSCertificate) => (
         <StyledSpan>
           <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
             <Div>{entity.subjectDn}</Div>
@@ -53,15 +75,15 @@ const getColumns = ({
       title: _('Serial'),
       width: '10%',
       sortBy: 'serial',
-      render: entity => entity.serial,
+      render: (entity: ReportTLSCertificate) => entity.serial,
     },
     {
       key: 'notvalidbefore',
       title: _('Activates'),
       width: '10%',
       sortBy: 'notvalidbefore',
-      render: entity => (
-        <DateTime date={entity.activationTime} format={formattedUserSettingShortDate} />
+      render: (entity: ReportTLSCertificate) => (
+        <DateTime date={entity.activationTime} />
       ),
     },
     {
@@ -69,8 +91,8 @@ const getColumns = ({
       title: _('Expires'),
       width: '10%',
       sortBy: 'notvalidafter',
-      render: entity => (
-        <DateTime date={entity.expirationTime} format={formattedUserSettingShortDate} />
+      render: (entity: ReportTLSCertificate) => (
+        <DateTime date={entity.expirationTime} />
       ),
     },
     {
@@ -78,11 +100,11 @@ const getColumns = ({
       title: _('IP'),
       width: '10%',
       sortBy: 'ip',
-      render: entity => (
+      render: (entity: ReportTLSCertificate) => (
         <Link
           filter={'name=' + entity.ip}
           textOnly={!links}
-          title={_('Show all Hosts with IP {{ip}}', {ip: entity.ip})}
+          title={_('Show all Hosts with IP {{ip}}', {ip: entity.ip ?? ''})}
           to="hosts"
         >
           {entity.ip}
@@ -94,21 +116,21 @@ const getColumns = ({
       title: _('Hostname'),
       width: '15%',
       sortBy: 'hostname',
-      render: entity => entity.hostname,
+      render: (entity: ReportTLSCertificate) => entity.hostname,
     },
     {
       key: 'port',
       title: _('Port'),
       width: '5%',
       sortBy: 'port',
-      render: entity => entity.port,
+      render: (entity: ReportTLSCertificate) => entity.port,
     },
     {
       key: 'actions',
       title: _('Actions'),
       width: '5%',
       align: 'center',
-      render: entity => (
+      render: (entity: ReportTLSCertificate) => (
         <DownloadIcon
           title={_('Download TLS Certificate')}
           value={entity}
@@ -125,7 +147,7 @@ const Header = ({
   currentSortBy,
   sort = true,
   onSortChange,
-}) => {
+}: HeaderProps) => {
   const columns = getColumns({actions});
 
   return (
@@ -148,21 +170,13 @@ const Header = ({
   );
 };
 
-Header.propTypes = {
-  actions: PropTypes.bool,
-  currentSortBy: PropTypes.string,
-  currentSortDir: PropTypes.string,
-  sort: PropTypes.bool,
-  onSortChange: PropTypes.func,
-};
-
 const Row = ({
   actions = true,
   entity,
   links = true,
   onTlsCertificateDownloadClick,
   onToggleDetailsClick,
-}) => {
+}: RowProps) => {
   const columns = getColumns({
     actions,
     links,
@@ -182,14 +196,6 @@ const Row = ({
       ))}
     </TableRow>
   );
-};
-
-Row.propTypes = {
-  actions: PropTypes.bool,
-  entity: PropTypes.object.isRequired,
-  links: PropTypes.bool,
-  onTlsCertificateDownloadClick: PropTypes.func,
-  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default createEntitiesTable({
