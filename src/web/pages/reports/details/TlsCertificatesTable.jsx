@@ -20,6 +20,105 @@ import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
 import PropTypes from 'web/utils/PropTypes';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
+const Div = styled.div`
+  word-break: break-all;
+`;
+
+const StyledSpan = styled.span`
+  word-break: break-all;
+`;
+
+const getColumns = ({
+  actions = true,
+  links = true,
+  onTlsCertificateDownloadClick,
+  onToggleDetailsClick,
+}) =>
+  [
+    {
+      key: 'dn',
+      title: _('Subject DN'),
+      width: actions ? '35%' : '40%',
+      sortBy: 'dn',
+      render: entity => (
+        <StyledSpan>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            <Div>{entity.subjectDn}</Div>
+          </RowDetailsToggle>
+        </StyledSpan>
+      ),
+    },
+    {
+      key: 'serial',
+      title: _('Serial'),
+      width: '10%',
+      sortBy: 'serial',
+      render: entity => entity.serial,
+    },
+    {
+      key: 'notvalidbefore',
+      title: _('Activates'),
+      width: '10%',
+      sortBy: 'notvalidbefore',
+      render: entity => (
+        <DateTime date={entity.activationTime} format={formattedUserSettingShortDate} />
+      ),
+    },
+    {
+      key: 'notvalidafter',
+      title: _('Expires'),
+      width: '10%',
+      sortBy: 'notvalidafter',
+      render: entity => (
+        <DateTime date={entity.expirationTime} format={formattedUserSettingShortDate} />
+      ),
+    },
+    {
+      key: 'ip',
+      title: _('IP'),
+      width: '10%',
+      sortBy: 'ip',
+      render: entity => (
+        <Link
+          filter={'name=' + entity.ip}
+          textOnly={!links}
+          title={_('Show all Hosts with IP {{ip}}', {ip: entity.ip})}
+          to="hosts"
+        >
+          {entity.ip}
+        </Link>
+      ),
+    },
+    {
+      key: 'hostname',
+      title: _('Hostname'),
+      width: '15%',
+      sortBy: 'hostname',
+      render: entity => entity.hostname,
+    },
+    {
+      key: 'port',
+      title: _('Port'),
+      width: '5%',
+      sortBy: 'port',
+      render: entity => entity.port,
+    },
+    {
+      key: 'actions',
+      title: _('Actions'),
+      width: '5%',
+      align: 'center',
+      render: entity => (
+        <DownloadIcon
+          title={_('Download TLS Certificate')}
+          value={entity}
+          onClick={onTlsCertificateDownloadClick}
+        />
+      ),
+      hidden: !actions,
+    },
+  ].filter(column => !column.hidden);
+
 const Header = ({
   actions = true,
   currentSortDir,
@@ -27,52 +126,23 @@ const Header = ({
   sort = true,
   onSortChange,
 }) => {
-  const sortProps = {
-    currentSortDir,
-    currentSortBy,
-    sort,
-    onSortChange,
-  };
+  const columns = getColumns({actions});
+
   return (
     <TableHeader>
       <TableRow>
-        <TableHead
-          {...sortProps}
-          sortBy="dn"
-          title={_('Subject DN')}
-          width={actions ? '35%' : '40%'}
-        />
-        <TableHead
-          {...sortProps}
-          sortBy="serial"
-          title={_('Serial')}
-          width="10%"
-        />
-        <TableHead
-          {...sortProps}
-          sortBy="notvalidbefore"
-          title={_('Activates')}
-          width="10%"
-        />
-        <TableHead
-          {...sortProps}
-          sortBy="notvalidafter"
-          title={_('Expires')}
-          width="10%"
-        />
-        <TableHead {...sortProps} sortBy="ip" title={_('IP')} width="10%" />
-        <TableHead
-          {...sortProps}
-          sortBy="hostname"
-          title={_('Hostname')}
-          width="15%"
-        />
-        <TableHead {...sortProps} sortBy="port" title={_('Port')} width="5%" />
-        {actions && (
-          <TableHead align="center" width="5%">
-            {_('Actions')}
-          </TableHead>
-        )}
+        {columns.map(column => (
+          <TableHead
+            key={column.key}
+            align={column.align}
+            currentSortBy={currentSortBy}
+            currentSortDir={currentSortDir}
+            sortBy={sort ? column.sortBy : undefined}
+            title={column.title}
+            width={column.width}
+            onSortChange={onSortChange}
+          />
+        ))}
       </TableRow>
     </TableHeader>
   );
@@ -86,14 +156,6 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Div = styled.div`
-  word-break: break-all;
-`;
-
-const StyledSpan = styled.span`
-  word-break: break-all;
-`;
-
 const Row = ({
   actions = true,
   entity,
@@ -101,50 +163,23 @@ const Row = ({
   onTlsCertificateDownloadClick,
   onToggleDetailsClick,
 }) => {
-  const {serial, activationTime, expirationTime, hostname, ip, port} = entity;
+  const columns = getColumns({
+    actions,
+    links,
+    onTlsCertificateDownloadClick,
+    onToggleDetailsClick,
+  });
+
   return (
     <TableRow>
-      <TableData>
-        <StyledSpan>
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            <Div>{entity.subjectDn}</Div>
-          </RowDetailsToggle>
-        </StyledSpan>
-      </TableData>
-      <TableData>{serial}</TableData>
-      <TableData>
-        <DateTime
-          date={activationTime}
-          format={formattedUserSettingShortDate}
-        />
-      </TableData>
-      <TableData>
-        <DateTime
-          date={expirationTime}
-          format={formattedUserSettingShortDate}
-        />
-      </TableData>
-      <TableData>
-        <Link
-          filter={'name=' + ip}
-          textOnly={!links}
-          title={_('Show all Hosts with IP {{ip}}', {ip})}
-          to="hosts"
+      {columns.map(column => (
+        <TableData
+          key={column.key}
+          align={column.align === 'center' ? ['center', 'center'] : undefined}
         >
-          {ip}
-        </Link>
-      </TableData>
-      <TableData>{hostname}</TableData>
-      <TableData>{port}</TableData>
-      {actions && (
-        <TableData align={['center', 'center']}>
-          <DownloadIcon
-            title={_('Download TLS Certificate')}
-            value={entity}
-            onClick={onTlsCertificateDownloadClick}
-          />
+          {column.render(entity)}
         </TableData>
-      )}
+      ))}
     </TableRow>
   );
 };
