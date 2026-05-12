@@ -26,6 +26,8 @@ import {
 } from 'web/utils/user-last-visited-page';
 
 const log = logger.getLogger('web.login');
+
+const POST_LOGIN_REDIRECT_KEY = 'gsa_post_login_redirect';
 const StyledLayout = styled(Layout)`
   background: radial-gradient(
     51.84% 102.52% at 58.54% 44.97%,
@@ -58,40 +60,30 @@ const LoginPage = () => {
   const [_] = useTranslation();
 
   useEffect(() => {
-    const checkLoginStatus = async () => {
-      // redirect user to main page if he is already logged in
-
-      if (isLoggedIn) {
-        try {
-          await navigate('/dashboards', {replace: true});
-        } catch (error) {
-          log.error(error);
-        }
-      }
-    };
-
-    void checkLoginStatus();
+    if (isLoggedIn) {
+      const redirectPath =
+        sessionStorage.getItem(POST_LOGIN_REDIRECT_KEY) ?? '/dashboards';
+      sessionStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
+      void navigate(redirectPath, {replace: true});
+    }
 
     notifications.clean();
   }, [isLoggedIn, navigate]);
 
   const login = async (username: string, password: string) => {
+    const userLastVisitedPath = getLastVisitedPage(username);
+    if (userLastVisitedPath && userLastVisitedPath !== '/login') {
+      sessionStorage.setItem(POST_LOGIN_REDIRECT_KEY, userLastVisitedPath);
+    }
+
     try {
       await gmp.login(username, password);
 
-      const userLastVisitedPath = getLastVisitedPage(username);
-
-      // Only redirect to saved page if it exists for THIS specific user
-      // Otherwise always redirect to homepage
-      let redirectPath = '/dashboards';
-
       if (userLastVisitedPath && userLastVisitedPath !== '/login') {
-        redirectPath = userLastVisitedPath;
         clearLastVisitedPage(username);
       }
-
-      await navigate(redirectPath, {replace: true});
     } catch (error) {
+      sessionStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
       log.error(error);
       setError(error as Error);
     }

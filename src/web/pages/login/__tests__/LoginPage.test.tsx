@@ -232,22 +232,28 @@ describe('LoginPage tests', () => {
   });
 
   test('should redirect to user-specific saved page after login', async () => {
-    mockUseNavigate.mockClear();
     sessionStorage.clear();
 
     // Save a last visited page for user 'foo'
     sessionStorage.setItem('gsa_last_visited_page_foo', '/tasks?filter=open');
 
-    const login = testing.fn().mockResolvedValue({
-      locale: 'locale',
-      token: 'token',
-      timezone: 'Europe/Berlin',
-      sessionTimeout: '10:00',
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const session = createSession({timezone: 'UTC', isLoggedIn});
+
+    const login = testing.fn().mockImplementation(async () => {
+      isLoggedIn.mockReturnValue(true);
+      session.listener.forEach(l => l());
+      return {
+        locale: 'locale',
+        token: 'token',
+        timezone: 'Europe/Berlin',
+        sessionTimeout: '10:00',
+      };
     });
 
     mockUseLocation.mockReturnValue({});
 
-    const gmp = createGmp({login});
+    const gmp = {...createGmp({login}), session};
     const {render} = rendererWith({
       gmp,
       router: true,
