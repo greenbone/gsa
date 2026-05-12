@@ -6,22 +6,30 @@
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import {ResponseRejection} from 'gmp/http/rejection';
+import {buildServerUrl} from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import Login from 'gmp/models/login';
 
 class LoginCommand extends HttpCommand {
   constructor(http: Http) {
-    super(http, {
-      cmd: 'login',
-    });
+    super(http);
   }
 
   async login(username: string, password: string) {
     try {
-      const response = await this.httpPostWithTransform({
-        login: username,
-        password,
-      });
+      const response = await this.httpPostWithTransform(
+        {
+          login: username,
+          password,
+        },
+        {
+          url: buildServerUrl(
+            this.http.apiServer,
+            'login',
+            this.http.apiProtocol,
+          ),
+        },
+      );
       return new Login(response);
     } catch (rej) {
       if (rej instanceof ResponseRejection) {
