@@ -11,8 +11,8 @@ import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
-import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import DetailsPage from 'web/pages/reports/DetailsPage';
+import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
+import AuditReportDetailsPage from 'web/pages/reports/AuditReportDetailsPage';
 
 interface CollectionResponse {
   data: unknown[];
@@ -24,7 +24,7 @@ interface CollectionResponse {
 
 const manualUrl = 'test/';
 
-const {entity} = getMockReport();
+const {entity} = getMockAuditReport();
 const reportId = entity.report?.id ?? '';
 
 const emptyCollectionResponse: CollectionResponse = {
@@ -72,6 +72,7 @@ const createGmp = () => ({
     }),
     getReportComposerDefaults: testing.fn().mockResolvedValue({data: {}}),
     getSetting: createGetSettingMock(),
+    saveReportComposerDefaults: testing.fn().mockResolvedValue({}),
   },
   filter: {
     get: testing.fn().mockResolvedValue({data: Filter.fromString('rows=100')}),
@@ -85,7 +86,7 @@ const createGmp = () => ({
   reportformats: {
     get: testing.fn().mockResolvedValue(emptyCollectionResponse),
   },
-  report: {
+  auditreport: {
     get: testing.fn().mockResolvedValue({data: entity}),
     addAssets: testing.fn().mockResolvedValue({}),
     removeAssets: testing.fn().mockResolvedValue({}),
@@ -114,7 +115,7 @@ const setupRenderer = (gmp = createGmp()) => {
     capabilities: true,
     router: true,
     store: true,
-    route: `/report/${reportId}`,
+    route: `/audit-report/${reportId}`,
   });
 
   return {render, store};
@@ -123,15 +124,15 @@ const setupRenderer = (gmp = createGmp()) => {
 const renderPage = (render: ReturnType<typeof setupRenderer>['render']) =>
   render(
     <Routes>
-      <Route element={<DetailsPage />} path="/report/:id" />
+      <Route element={<AuditReportDetailsPage />} path="/audit-report/:id" />
     </Routes>,
   );
 
-describe('DetailsPage', () => {
+describe('AuditReportDetailsPage', () => {
   describe('Loading state', () => {
     test('should render Loading spinner while report is being fetched', () => {
       const gmp = createGmp();
-      gmp.report.get = testing.fn().mockReturnValue(new Promise(() => {}));
+      gmp.auditreport.get = testing.fn().mockReturnValue(new Promise(() => {}));
 
       const {render} = setupRenderer(gmp);
       renderPage(render);
@@ -142,63 +143,53 @@ describe('DetailsPage', () => {
 
     test('should show Loading text in header while report is being fetched', async () => {
       const gmp = createGmp();
-      gmp.report.get = testing.fn().mockReturnValue(new Promise(() => {}));
+      gmp.auditreport.get = testing.fn().mockReturnValue(new Promise(() => {}));
 
       const {render} = setupRenderer(gmp);
       renderPage(render);
 
       await screen.findByText('Loading');
-      screen.getByText('Report:');
+      screen.getByText('Audit Report:');
       screen.getByTestId('loading');
       expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
     });
   });
 
   describe('Full render with entity', () => {
-    test('should render report heading once entity is loaded', async () => {
+    test('should render audit report heading once entity is loaded', async () => {
       const {render} = setupRenderer();
       renderPage(render);
 
-      await screen.findByRole('heading', {name: /Report:/});
-      expect(screen.getByRole('heading', {name: /Report:/})).toHaveTextContent(
-        'Mon, Jun 3, 2019 1:00 PMCentral European Summer TimeDone',
+      await screen.findByRole('heading', {name: /Audit Report:/});
+      expect(
+        screen.getByRole('heading', {name: /Audit Report:/}),
+      ).toHaveTextContent(
+        'Audit Report:Mon, Jun 3, 2019 1:00 PM Central European Summer TimeDone',
       );
     });
 
-    test('should render all 11 tabs once entity is loaded', async () => {
+    test('should render all 7 tabs once entity is loaded', async () => {
       const {render} = setupRenderer();
       renderPage(render);
 
       const tablist = await screen.findByRole('tablist');
-      expect(within(tablist).getAllByRole('tab')).toHaveLength(11);
+      expect(within(tablist).getAllByRole('tab')).toHaveLength(7);
     });
 
     test('should render toolbar help and list links', async () => {
       const {render} = setupRenderer();
       renderPage(render);
 
-      await screen.findByTitle('Help: Reading Reports');
+      await screen.findByTitle('Help: Audit Reports');
       expect(
-        screen.getByTitle('Help: Reading Reports').closest('a'),
-      ).toHaveAttribute('href', 'test/en/reports.html#reading-a-report');
-      expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
+        screen.getByTitle('Help: Audit Reports').closest('a'),
+      ).toHaveAttribute(
         'href',
-        '/reports',
+        'test/en/compliance-and-special-scans.html#using-and-managing-audit-reports',
       );
     });
 
-    test('should render corresponding task link in toolbar', async () => {
-      const {render} = setupRenderer();
-      renderPage(render);
-
-      await screen.findByTitle(/^Corresponding Task/);
-      expect(screen.getByTitle(/^Corresponding Task/)).toHaveAttribute(
-        'href',
-        '/task/314',
-      );
-    });
-
-    test('should render Summary tab content by default', async () => {
+    test('should render Information tab content by default', async () => {
       const {render} = setupRenderer();
       renderPage(render);
 
@@ -218,7 +209,7 @@ describe('DetailsPage', () => {
       fireEvent.click(screen.getByTitle(/^Download filtered Report/));
 
       await screen.findByRole('heading', {
-        name: /Compose Content for Scan Report/,
+        name: /Compose Content for Compliance Report/,
       });
     });
 
@@ -230,14 +221,14 @@ describe('DetailsPage', () => {
       fireEvent.click(screen.getByTitle(/^Download filtered Report/));
 
       await screen.findByRole('heading', {
-        name: /Compose Content for Scan Report/,
+        name: /Compose Content for Compliance Report/,
       });
 
       fireEvent.click(screen.getByRole('button', {name: 'Cancel'}));
 
       expect(
         screen.queryByRole('heading', {
-          name: /Compose Content for Scan Report/,
+          name: /Compose Content for Compliance Report/,
         }),
       ).not.toBeInTheDocument();
     });
@@ -275,7 +266,7 @@ describe('DetailsPage', () => {
     test('should render error panel when report load fails', async () => {
       const gmp = createGmp();
       const loadError = new Error('Connection refused');
-      gmp.report.get = testing.fn().mockRejectedValue(loadError);
+      gmp.auditreport.get = testing.fn().mockRejectedValue(loadError);
 
       const {render} = setupRenderer(gmp);
       renderPage(render);
@@ -321,7 +312,7 @@ describe('DetailsPage', () => {
       fireEvent.click(screen.getByTitle(/^Add to Assets/));
 
       await screen.findByText(/Report content added to Assets/);
-      expect(gmp.report.addAssets).toHaveBeenCalled();
+      expect(gmp.auditreport.addAssets).toHaveBeenCalled();
     });
 
     test('should call removeAssets and show success message when Remove from Assets is clicked', async () => {
@@ -334,12 +325,12 @@ describe('DetailsPage', () => {
       fireEvent.click(screen.getByTitle(/^Remove from Assets/));
 
       await screen.findByText(/Report content removed from Assets/);
-      expect(gmp.report.removeAssets).toHaveBeenCalled();
+      expect(gmp.auditreport.removeAssets).toHaveBeenCalled();
     });
 
     test('should show error dialog when addAssets fails', async () => {
       const gmp = createGmp();
-      gmp.report.addAssets = testing
+      gmp.auditreport.addAssets = testing
         .fn()
         .mockRejectedValue(new Error('Permission denied'));
 
@@ -354,7 +345,7 @@ describe('DetailsPage', () => {
 
     test('should show error dialog when removeAssets fails', async () => {
       const gmp = createGmp();
-      gmp.report.removeAssets = testing
+      gmp.auditreport.removeAssets = testing
         .fn()
         .mockRejectedValue(new Error('Server error'));
 
@@ -369,7 +360,7 @@ describe('DetailsPage', () => {
   });
 
   describe('Report download flow', () => {
-    test('should call report download when download dialog OK is clicked', async () => {
+    test('should call auditreport download when download dialog OK is clicked', async () => {
       const gmp = createGmp();
 
       const {render} = setupRenderer(gmp);
@@ -379,13 +370,13 @@ describe('DetailsPage', () => {
       fireEvent.click(screen.getByTitle(/^Download filtered Report/));
 
       await screen.findByRole('heading', {
-        name: /Compose Content for Scan Report/,
+        name: /Compose Content for Compliance Report/,
       });
 
       fireEvent.click(screen.getByRole('button', {name: 'OK'}));
 
       await waitFor(() => {
-        expect(gmp.report.download).toHaveBeenCalled();
+        expect(gmp.auditreport.download).toHaveBeenCalled();
       });
     });
 
@@ -399,7 +390,7 @@ describe('DetailsPage', () => {
       fireEvent.click(screen.getByTitle(/^Download filtered Report/));
 
       await screen.findByRole('heading', {
-        name: /Compose Content for Scan Report/,
+        name: /Compose Content for Compliance Report/,
       });
 
       fireEvent.click(screen.getByRole('button', {name: 'OK'}));
@@ -407,7 +398,7 @@ describe('DetailsPage', () => {
       await waitFor(() => {
         expect(
           screen.queryByRole('heading', {
-            name: /Compose Content for Scan Report/,
+            name: /Compose Content for Compliance Report/,
           }),
         ).not.toBeInTheDocument();
       });
@@ -415,7 +406,7 @@ describe('DetailsPage', () => {
 
     test('should show error when download fails', async () => {
       const gmp = createGmp();
-      gmp.report.download = testing
+      gmp.auditreport.download = testing
         .fn()
         .mockRejectedValue(new Error('Download failed'));
 
@@ -426,7 +417,7 @@ describe('DetailsPage', () => {
       fireEvent.click(screen.getByTitle(/^Download filtered Report/));
 
       await screen.findByRole('heading', {
-        name: /Compose Content for Scan Report/,
+        name: /Compose Content for Compliance Report/,
       });
 
       fireEvent.click(screen.getByRole('button', {name: 'OK'}));

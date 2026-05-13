@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2026 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
@@ -8,7 +8,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useParams} from 'react-router';
 import logger from 'gmp/log';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
-import type Report from 'gmp/models/report';
+import type AuditReport from 'gmp/models/audit-report';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
@@ -17,23 +17,23 @@ import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import {
-  useGetReport,
   useGetReportConfigs,
   useGetReportExportFileName,
   useGetReportFormats,
   useGetResultsFilters,
 } from 'web/hooks/use-query/reports';
-import useGmp from 'web/hooks/useGmp';
 import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
+import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import Page from 'web/pages/reports/DetailsContent';
+import Page from 'web/pages/reports/AuditReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {create_pem_certificate} from 'web/utils/Cert';
 import {generateFilename} from 'web/utils/Render';
+import useGetEntity from 'web/queries/useGetEntity';
 
 interface SortState {
   sortField: string;
@@ -42,18 +42,13 @@ interface SortState {
 
 interface SortingState {
   results: SortState;
-  apps: SortState;
-  ports: SortState;
   hosts: SortState;
   os: SortState;
-  cves: SortState;
-  closedcves: SortState;
   tlscerts: SortState;
   errors: SortState;
 }
 
 interface ReportComposerDefaults {
-  defaultReportConfigId?: string;
   defaultReportFormatId?: string;
   includeNotes?: boolean;
   includeOverrides?: boolean;
@@ -62,7 +57,6 @@ interface ReportComposerDefaults {
 interface DownloadReportState {
   includeNotes: boolean;
   includeOverrides: boolean;
-  reportConfigId: string;
   reportFormatId: string;
   storeAsDefault: boolean;
 }
@@ -71,15 +65,15 @@ interface ReportTargetRef {
   id: string;
 }
 
-const log = logger.getLogger('web.pages.reports.DetailsPage');
+const log = logger.getLogger('web.pages.reports.AuditReportDetailsPage');
 
 const DEFAULT_FILTER = Filter.fromString(
-  'levels=chml rows=100 min_qod=70 first=1 sort-reverse=severity result_hosts_only=0',
+  'levels=hmlg rows=100 min_qod=70 first=1 compliance_levels=yniu sort=compliant',
 );
 
-export const REPORT_RESET_FILTER = RESET_FILTER.copy()
-  .setSortOrder('sort-reverse')
-  .setSortBy('severity');
+export const AUDIT_REPORT_RESET_FILTER = RESET_FILTER.copy()
+  .setSortOrder('sort')
+  .setSortBy('compliant');
 
 const hasTargetId = (value: unknown): value is ReportTargetRef => {
   return (
@@ -90,30 +84,67 @@ const hasTargetId = (value: unknown): value is ReportTargetRef => {
   );
 };
 
-const getTarget = (entity?: Report) => {
+const getTarget = (entity?: AuditReport) => {
   const report = entity?.report;
   const task = report?.task as {target?: unknown} | undefined;
   const target = task?.target;
   return hasTargetId(target) ? target : undefined;
 };
 
-const getReportFilter = (entity?: Report) => {
+const getReportFilter = (entity?: AuditReport) => {
   return entity?.report?.filter;
 };
 
 const initialSorting: SortingState = {
-  results: {sortField: 'severity', sortReverse: true},
-  apps: {sortField: 'severity', sortReverse: true},
-  ports: {sortField: 'severity', sortReverse: true},
-  hosts: {sortField: 'severity', sortReverse: true},
-  os: {sortField: 'severity', sortReverse: true},
-  cves: {sortField: 'severity', sortReverse: true},
-  closedcves: {sortField: 'severity', sortReverse: true},
+  results: {sortField: 'compliant', sortReverse: true},
+  hosts: {sortField: 'compliant', sortReverse: true},
+  os: {sortField: 'compliant', sortReverse: true},
   tlscerts: {sortField: 'dn', sortReverse: false},
   errors: {sortField: 'error', sortReverse: false},
 };
 
-const ReportDetailsPage = () => {
+const useGetAuditReport = ({
+  id,
+  filter,
+  refetchInterval,
+}: {
+  id: string;
+  filter?: Filter;
+  refetchInterval?: number | false | ((data?: AuditReport) => number | false);
+}) => {
+  const gmp = useGmp();
+  const threshold = gmp.settings.reportResultsThreshold;
+  const filterString = filter?.toFilterString();
+
+  return useGetEntity<AuditReport>({
+    gmpMethod: async ({id}) => {
+      const lightResponse = await gmp.auditreport.get(
+        {id},
+        {filter: filterString, details: false},
+      );
+      const lightReport = lightResponse.data;
+
+      const needsFullReport =
+        isDefined(lightReport?.report?.results) &&
+        lightReport.report.results.counts.filtered < threshold;
+
+      if (needsFullReport) {
+        return gmp.auditreport.get(
+          {id},
+          {filter: filterString, details: true},
+        );
+      }
+
+      return lightResponse;
+    },
+    queryId: 'get_audit_report',
+    queryKeyParts: [filterString],
+    id,
+    refetchInterval,
+  });
+};
+
+const AuditReportDetailsPage = () => {
   const [_] = useTranslation();
   const {id: reportId = ''} = useParams<{id: string}>();
   const gmp = useGmp();
@@ -145,7 +176,7 @@ const ReportDetailsPage = () => {
 
   // Report entity
   const getRefetchInterval = useCallback(
-    (entity?: Report) => {
+    (entity?: AuditReport) => {
       if (!isDefined(entity) || !isDefined(entity.report)) {
         return false as const;
       }
@@ -162,7 +193,7 @@ const ReportDetailsPage = () => {
     isError,
     isLoading,
     isFetching,
-  } = useGetReport({
+  } = useGetAuditReport({
     id: reportId,
     filter: pageFilter,
     refetchInterval: getRefetchInterval,
@@ -213,10 +244,10 @@ const ReportDetailsPage = () => {
       if (!isDefined(reportFormatId)) {
         const noReportFormatError = _(
           'The report cannot be displayed because' +
-            ' no Greenbone Vulnerability Manager report format is available.' +
+            ' no report format is available.' +
             ' This could be due to a missing gvmd data feed. Please update' +
-            ' the gvmd data feed, check the "feed import owner" setting, or' +
-            ' contact your system administrator.',
+            ' the gvmd data feed, check the "feed import owner" setting, the' +
+            ' feed status page, or contact your system administrator.',
         );
         throw new Error(noReportFormatError);
       }
@@ -228,11 +259,7 @@ const ReportDetailsPage = () => {
 
   const resultsCounts = report?.results?.counts;
   const hostsCounts = report?.hosts?.counts;
-  const portsCounts = report?.ports?.counts;
-  const applicationsCounts = report?.applications?.counts;
-  const operatingSystemsCounts = report?.operatingsystems?.counts;
-  const cvesCounts = report?.cves?.counts;
-  const closedCvesCounts = report?.closedCves?.counts;
+  const operatingSystemsCounts = report?.operatingSystems?.counts;
   const tlsCertificatesCounts =
     reportTlsCertificatesData?.entitiesCounts ?? report?.tlsCertificates?.counts;
   const errorsCounts = report?.errors?.counts;
@@ -252,7 +279,7 @@ const ReportDetailsPage = () => {
   );
 
   const handleFilterRemoveClick = useCallback(() => {
-    handleFilterChange(REPORT_RESET_FILTER);
+    handleFilterChange(AUDIT_REPORT_RESET_FILTER);
   }, [handleFilterChange]);
 
   const handleFilterResetClick = useCallback(() => {
@@ -262,7 +289,7 @@ const ReportDetailsPage = () => {
   const handleAddToAssets = useCallback(async () => {
     if (!entity?.id) return;
     try {
-      await gmp.report.addAssets({
+      await gmp.auditreport.addAssets({
         id: entity.id,
         filter: reportFilter?.toFilterString(),
       });
@@ -271,7 +298,7 @@ const ReportDetailsPage = () => {
           'Report content added to Assets with QoD>=70% and Overrides enabled.',
         ),
       );
-      await queryClient.invalidateQueries({queryKey: ['get_report']});
+      await queryClient.invalidateQueries({queryKey: ['get_audit_report']});
     } catch (error) {
       log.error(error);
       showError(error as Error);
@@ -289,12 +316,12 @@ const ReportDetailsPage = () => {
   const handleRemoveFromAssets = useCallback(async () => {
     if (!entity?.id) return;
     try {
-      await gmp.report.removeAssets({
+      await gmp.auditreport.removeAssets({
         id: entity.id,
         filter: reportFilter?.toFilterString(),
       });
       showSuccessMessage(_('Report content removed from Assets.'));
-      await queryClient.invalidateQueries({queryKey: ['get_report']});
+      await queryClient.invalidateQueries({queryKey: ['get_audit_report']});
     } catch (error) {
       log.error(error);
       showError(error as Error);
@@ -329,13 +356,8 @@ const ReportDetailsPage = () => {
     async (values: Record<string, unknown>) => {
       const state = values as unknown as DownloadReportState;
       if (!entity || !reportFilter) return;
-      const {
-        includeNotes,
-        includeOverrides,
-        reportConfigId,
-        reportFormatId,
-        storeAsDefault,
-      } = state;
+      const {includeNotes, includeOverrides, reportFormatId, storeAsDefault} =
+        state;
 
       const newFilter = reportFilter.copy();
       newFilter.set('notes', includeNotes);
@@ -344,7 +366,6 @@ const ReportDetailsPage = () => {
       if (storeAsDefault) {
         const defaults = {
           ...reportComposerDefaults,
-          defaultReportConfigId: reportConfigId,
           defaultReportFormatId: reportFormatId,
           includeNotes,
           includeOverrides,
@@ -366,10 +387,9 @@ const ReportDetailsPage = () => {
         : 'unknown';
 
       try {
-        const response = await gmp.report.download(
+        const response = await gmp.auditreport.download(
           {id: entity.id as string},
           {
-            reportConfigId,
             reportFormatId,
             filter: newFilter,
           },
@@ -426,28 +446,6 @@ const ReportDetailsPage = () => {
     [handleFilterChange, queryClient],
   );
 
-  const handleFilterAddLogLevel = useCallback(() => {
-    if (!reportFilter) return;
-    let levels = reportFilter.get('levels', '') as string;
-
-    if (!levels.includes('g')) {
-      levels += 'g';
-      const levelFilter = reportFilter.copy();
-      levelFilter.set('levels', levels);
-      handleFilterChange(levelFilter);
-    }
-  }, [reportFilter, handleFilterChange]);
-
-  const handleFilterRemoveSeverity = useCallback(() => {
-    if (!reportFilter) return;
-
-    if (reportFilter.has('severity')) {
-      const levelFilter = reportFilter.copy();
-      levelFilter.delete('severity');
-      handleFilterChange(levelFilter);
-    }
-  }, [reportFilter, handleFilterChange]);
-
   const handleFilterDecreaseMinQoD = useCallback(() => {
     if (!reportFilter) return;
 
@@ -473,7 +471,7 @@ const ReportDetailsPage = () => {
   );
 
   const handleChanged = useCallback(() => {
-    void queryClient.invalidateQueries({queryKey: ['get_report']});
+    void queryClient.invalidateQueries({queryKey: ['get_audit_report']});
   }, [queryClient]);
 
   const handleError = useCallback(
@@ -499,9 +497,7 @@ const ReportDetailsPage = () => {
       <TargetComponent onSaveError={handleError}>
         {({edit}) => (
           <Page
-            applicationsCounts={applicationsCounts}
-            closedCvesCounts={closedCvesCounts}
-            cvesCounts={cvesCounts}
+            audit={true}
             entity={entity}
             errorsCounts={errorsCounts}
             filters={filters}
@@ -511,11 +507,10 @@ const ReportDetailsPage = () => {
             isUpdating={isFetching && !isLoading}
             operatingSystemsCounts={operatingSystemsCounts}
             pageFilter={pageFilter}
-            portsCounts={portsCounts}
             reportError={reportError}
             reportFilter={reportFilter}
             reportId={reportId}
-            resetFilter={REPORT_RESET_FILTER}
+            resetFilter={AUDIT_REPORT_RESET_FILTER}
             resultsCounts={resultsCounts}
             showError={showError as (...args: unknown[]) => void}
             showErrorMessage={showErrorMessage}
@@ -525,12 +520,11 @@ const ReportDetailsPage = () => {
             tlsCertificatesCounts={tlsCertificatesCounts}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
-            onFilterAddLogLevelClick={handleFilterAddLogLevel}
             onFilterChanged={handleFilterChange}
+            onFilterCreated={handleFilterCreated}
             onFilterDecreaseMinQoDClick={handleFilterDecreaseMinQoD}
             onFilterEditClick={handleFilterEditClick}
             onFilterRemoveClick={handleFilterRemoveClick}
-            onFilterRemoveSeverityClick={handleFilterRemoveSeverity}
             onFilterResetClick={handleFilterResetClick}
             onRemoveFromAssetsClick={handleRemoveFromAssets}
             onReportDownloadClick={handleOpenDownloadReportDialog}
@@ -538,7 +532,7 @@ const ReportDetailsPage = () => {
             onTagSuccess={handleChanged}
             onTargetEditClick={async () => {
               const response = await loadTarget();
-              if (response) void edit(response.data);
+              if (response) edit(response.data);
             }}
             onTlsCertificateDownloadClick={handleTlsCertificateDownload}
           />
@@ -546,6 +540,8 @@ const ReportDetailsPage = () => {
       </TargetComponent>
       {showFilterDialog && reportFilter && (
         <ReportDetailsFilterDialog
+          audit={true}
+          createFilterType="result"
           delta={false}
           filter={reportFilter}
           onClose={handleFilterDialogClose}
@@ -555,20 +551,15 @@ const ReportDetailsPage = () => {
       )}
       {showDownloadReportDialog && reportFilter && (
         <DownloadReportDialog
-          defaultReportConfigId={reportComposerDefaults.defaultReportConfigId}
+          audit={true}
           defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
           filter={reportFilter}
           includeNotes={reportComposerDefaults.includeNotes}
           includeOverrides={reportComposerDefaults.includeOverrides}
-          isContainerScanning={
-            isDefined(entity) &&
-            isDefined(entity.report?.task?.ociImageTarget?.id)
-          }
           reportConfigs={reportConfigs}
           reportFormats={reportFormats ?? []}
           showThresholdMessage={showThresholdMessage}
           threshold={threshold}
-          totalResultCount={resultsCounts?.all ?? 0}
           onClose={handleCloseDownloadReportDialog}
           onSave={handleReportDownload}
         />
@@ -577,4 +568,4 @@ const ReportDetailsPage = () => {
   );
 };
 
-export default ReportDetailsPage;
+export default AuditReportDetailsPage;
