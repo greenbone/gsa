@@ -29,17 +29,17 @@ interface HeaderProps {
 
 interface RowProps {
   actions?: boolean;
-  entity: any;
+  entity: ReportTLSCertificate;
   links?: boolean;
   onTlsCertificateDownloadClick?: (entity: ReportTLSCertificate) => void;
-  onToggleDetailsClick?: (entity: any, id?: string) => void;
+  onToggleDetailsClick?: (entity: ReportTLSCertificate, id?: string) => void;
 }
 
 interface ColumnsProps {
   actions?: boolean;
   links?: boolean;
   onTlsCertificateDownloadClick?: (entity: ReportTLSCertificate) => void;
-  onToggleDetailsClick?: (entity: any, id?: string) => void;
+  onToggleDetailsClick?: (entity: ReportTLSCertificate, id?: string) => void;
 }
 
 const Div = styled.div`
@@ -64,7 +64,11 @@ const getColumns = ({
       sortBy: 'dn',
       render: (entity: ReportTLSCertificate) => (
         <StyledSpan>
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          <RowDetailsToggle
+            name={entity.id}
+            value={entity}
+            onClick={onToggleDetailsClick}
+          >
             <Div>{entity.subjectDn}</Div>
           </RowDetailsToggle>
         </StyledSpan>

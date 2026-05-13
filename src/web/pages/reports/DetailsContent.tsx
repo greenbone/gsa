@@ -10,6 +10,7 @@ import type Filter from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
+import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
@@ -115,7 +116,7 @@ interface PageContentProps {
   onSortChange: (type: string, sortField: string) => void;
   onTagSuccess: () => void;
   onTargetEditClick: () => void;
-  onTlsCertificateDownloadClick: () => void;
+  onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
 }
 
 const renderWithThreshold = (
@@ -218,7 +219,6 @@ const PageContent = ({
     hosts,
     operatingsystems,
     results,
-    tlsCertificates,
     timestamp,
     scan_run_status,
   } = report ?? {};
@@ -452,13 +452,8 @@ const PageContent = ({
           activeFilter,
           thresholdConfig,
           <TLSCertificatesTab
-            counts={tlsCertificates?.counts}
-            filter={activeFilter}
-            isUpdating={isUpdating}
-            sortField={sorting.tlscerts.sortField}
-            sortReverse={sorting.tlscerts.sortReverse}
-            tlsCertificates={tlsCertificates?.entities}
-            onSortChange={sortField => onSortChange('tlscerts', sortField)}
+            reportFilter={activeFilter}
+            reportId={reportId}
             onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
           />,
         ),

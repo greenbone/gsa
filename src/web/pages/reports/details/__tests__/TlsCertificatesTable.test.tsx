@@ -17,9 +17,49 @@ const createGmp = () => ({
 });
 
 describe('TLSCertificatesTable', () => {
+  test('should show row details when Subject DN is clicked', () => {
+    const reportTlsCertificates = getMockReport().tlsCertificates;
+
+    if (!reportTlsCertificates) {
+      throw new Error(
+        'Mock report TLS certificates are required for this test',
+      );
+    }
+
+    const {render} = rendererWith({
+      router: true,
+      gmp: createGmp(),
+    });
+
+    render(
+      <TLSCertificatesTable
+        // @ts-expect-error entities are ReportTLSCertificate[], not Model[]
+        entities={reportTlsCertificates.entities}
+        entitiesCounts={reportTlsCertificates.counts}
+        filter={filter}
+        sortBy="dn"
+        sortDir="asc"
+      />,
+    );
+
+    const toggles = screen.getAllByTestId('row-details-toggle');
+    fireEvent.click(toggles[0]);
+
+    expect(
+      screen.getByTestId(
+        `tls-certificate-details-${reportTlsCertificates.entities[0].id}`,
+      ),
+    ).toBeInTheDocument();
+  });
+
   test('should render table with expected columns and row values', () => {
-    const {tlsCertificates} = getMockReport();
-    const reportTlsCertificates = tlsCertificates!;
+    const reportTlsCertificates = getMockReport().tlsCertificates;
+
+    if (!reportTlsCertificates) {
+      throw new Error(
+        'Mock report TLS certificates are required for this test',
+      );
+    }
 
     const {render} = rendererWith({
       router: true,
@@ -74,8 +114,14 @@ describe('TLSCertificatesTable', () => {
   });
 
   test('should call download click handler', () => {
-    const {tlsCertificates} = getMockReport();
-    const reportTlsCertificates = tlsCertificates!;
+    const reportTlsCertificates = getMockReport().tlsCertificates;
+
+    if (!reportTlsCertificates) {
+      throw new Error(
+        'Mock report TLS certificates are required for this test',
+      );
+    }
+
     const onTlsCertificateDownloadClick = testing.fn();
 
     const {render} = rendererWith({
@@ -104,8 +150,13 @@ describe('TLSCertificatesTable', () => {
   });
 
   test('should render table without actions column when disabled', () => {
-    const {tlsCertificates} = getMockReport();
-    const reportTlsCertificates = tlsCertificates!;
+    const reportTlsCertificates = getMockReport().tlsCertificates;
+
+    if (!reportTlsCertificates) {
+      throw new Error(
+        'Mock report TLS certificates are required for this test',
+      );
+    }
 
     const {render} = rendererWith({
       router: true,
