@@ -94,7 +94,6 @@ const AuditReportDetailsContent = ({
     hosts = {},
     operatingSystems = {},
     results = {},
-    tlsCertificates = {},
     timestamp,
     scan_run_status,
   } = report || {};
@@ -325,15 +324,8 @@ const AuditReportDetailsContent = ({
                       />
                     ) : (
                       <TLSCertificatesTab
-                        counts={tlsCertificates.counts}
-                        filter={reportFilter}
-                        isUpdating={isUpdating}
-                        sortField={sorting.tlscerts.sortField}
-                        sortReverse={sorting.tlscerts.sortReverse}
-                        tlsCertificates={tlsCertificates.entities}
-                        onSortChange={sortField =>
-                          onSortChange('tlscerts', sortField)
-                        }
+                        reportId={reportId}
+                        reportFilter={reportFilter}
                         onTlsCertificateDownloadClick={
                           onTlsCertificateDownloadClick
                         }
