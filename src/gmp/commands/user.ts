@@ -25,7 +25,6 @@ import {parseBoolean, parseInt} from 'gmp/parser';
 import {filter, forEach, map} from 'gmp/utils/array';
 import {type EntityType} from 'gmp/utils/entity-type';
 import {isArray, isDefined} from 'gmp/utils/identity';
-import {severityValue} from 'gmp/utils/number';
 
 interface AuthSettingsResponseData extends XmlResponseData {
   auth_settings: {
@@ -122,68 +121,6 @@ interface DeleteArguments {
   inheritorId: string;
 }
 
-interface SaveSettingsArguments {
-  autoCacheRebuild?: string;
-  timezone?: string;
-  oldPassword?: string;
-  newPassword?: string;
-  userInterfaceDateFormat?: string;
-  userInterfaceTimeFormat?: string;
-  userInterfaceLanguage?: string;
-  rowsPerPage?: string;
-  detailsExportFileName?: string;
-  listExportFileName?: string;
-  reportExportFileName?: string;
-  securityIntelligenceExport?: string;
-  dynamicSeverity?: string;
-  defaultSeverity?: string;
-  defaultAlert?: string;
-  defaultEsxiCredential?: string;
-  defaultOpenvasScanConfig?: string;
-  defaultOspScanConfig?: string;
-  defaultSmbCredential?: string;
-  defaultSnmpCredential?: string;
-  defaultPortList?: string;
-  defaultOpenvasScanner?: string;
-  defaultOspScanner?: string;
-  defaultSchedule?: string;
-  defaultTarget?: string;
-  agentGroupsFilter?: string;
-  agentInstallersFilter?: string;
-  agentsFilter?: string;
-  alertsFilter?: string;
-  assetsFilter?: string;
-  auditReportsFilter?: string;
-  configsFilter?: string;
-  credentialsFilter?: string;
-  filtersFilter?: string;
-  groupsFilter?: string;
-  hostsFilter?: string;
-  notesFilter?: string;
-  operatingSystemsFilter?: string;
-  overridesFilter?: string;
-  permissionsFilter?: string;
-  portListsFilter?: string;
-  reportsFilter?: string;
-  reportFormatsFilter?: string;
-  resultsFilter?: string;
-  rolesFilter?: string;
-  scannersFilter?: string;
-  schedulesFilter?: string;
-  tagsFilter?: string;
-  targetsFilter?: string;
-  tasksFilter?: string;
-  ticketsFilter?: string;
-  tlsCertificatesFilter?: string;
-  usersFilter?: string;
-  vulnerabilitiesFilter?: string;
-  cpeFilter?: string;
-  cveFilter?: string;
-  nvtFilter?: string;
-  certBundFilter?: string;
-  dfnCertFilter?: string;
-}
-
 const log = logger.getLogger('gmp.commands.users');
 
 const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
@@ -252,11 +189,6 @@ export const DEFAULT_FILTER_SETTINGS: Record<
   user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
   ociimagetarget: 'db61a364-de40-4552-b1bc-a518744f847a',
-} as const;
-
-const PARAM_KEYS = {
-  DATE: 'date_format',
-  TIME: 'time_format',
 } as const;
 
 export const saveDefaultFilterSettingId = (entityType: string) =>
@@ -461,90 +393,6 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     };
     log.debug('Deleting user', data);
     await this.httpPostWithTransform(data);
-  }
-
-  /**
-   * @deprecated Use saveSetting instead.
-   */
-  saveSettings(data: SaveSettingsArguments) {
-    log.debug('Saving settings', data);
-
-    return this.httpPostWithTransform({
-      cmd: 'save_my_settings',
-      text: data.timezone,
-      [PARAM_KEYS.DATE]: data.userInterfaceDateFormat,
-      [PARAM_KEYS.TIME]: data.userInterfaceTimeFormat,
-      old_password: data.oldPassword,
-      password: data.newPassword,
-      lang: data.userInterfaceLanguage,
-      max: data.rowsPerPage,
-      details_fname: data.detailsExportFileName,
-      list_fname: data.listExportFileName,
-      report_fname: data.reportExportFileName,
-      dynamic_severity: data.dynamicSeverity,
-      default_severity: severityValue(data.defaultSeverity),
-      [`settings_default:${DEFAULT_SETTINGS.defaultalert}`]: data.defaultAlert,
-      [`settings_default:${DEFAULT_SETTINGS.defaultesxicredential}`]:
-        data.defaultEsxiCredential,
-      [`settings_default:${DEFAULT_SETTINGS.defaultopenvasscanconfig}`]:
-        data.defaultOpenvasScanConfig,
-      [`settings_default:${DEFAULT_SETTINGS.defaultospscanconfig}`]:
-        data.defaultOspScanConfig,
-      [`settings_default:${DEFAULT_SETTINGS.defaultsmbcredential}`]:
-        data.defaultSmbCredential,
-      [`settings_default:${DEFAULT_SETTINGS.defaultsnmpcredential}`]:
-        data.defaultSnmpCredential,
-      [`settings_default:${DEFAULT_SETTINGS.defaultportlist}`]:
-        data.defaultPortList,
-      [`settings_default:${DEFAULT_SETTINGS.defaultopenvasscanner}`]:
-        data.defaultOpenvasScanner,
-      [`settings_default:${DEFAULT_SETTINGS.defaultospscanner}`]:
-        data.defaultOspScanner,
-      [`settings_default:${DEFAULT_SETTINGS.defaultschedule}`]:
-        data.defaultSchedule,
-      [`settings_default:${DEFAULT_SETTINGS.defaulttarget}`]:
-        data.defaultTarget,
-      [saveDefaultFilterSettingId('agent')]: data.agentsFilter,
-      [saveDefaultFilterSettingId('agentgroup')]: data.agentGroupsFilter,
-      [saveDefaultFilterSettingId('agentinstaller')]:
-        data.agentInstallersFilter,
-      [saveDefaultFilterSettingId('alert')]: data.alertsFilter,
-      [saveDefaultFilterSettingId('alert')]: data.alertsFilter,
-      [saveDefaultFilterSettingId('asset')]: data.assetsFilter,
-      [saveDefaultFilterSettingId('auditreport')]: data.auditReportsFilter,
-      [saveDefaultFilterSettingId('scanconfig')]: data.configsFilter,
-      [saveDefaultFilterSettingId('credential')]: data.credentialsFilter,
-      [saveDefaultFilterSettingId('filter')]: data.filtersFilter,
-      [saveDefaultFilterSettingId('group')]: data.groupsFilter,
-      [saveDefaultFilterSettingId('host')]: data.hostsFilter,
-      [saveDefaultFilterSettingId('note')]: data.notesFilter,
-      [saveDefaultFilterSettingId('operatingsystem')]:
-        data.operatingSystemsFilter,
-      [saveDefaultFilterSettingId('override')]: data.overridesFilter,
-      [saveDefaultFilterSettingId('permission')]: data.permissionsFilter,
-      [saveDefaultFilterSettingId('portlist')]: data.portListsFilter,
-      [saveDefaultFilterSettingId('report')]: data.reportsFilter,
-      [saveDefaultFilterSettingId('reportformat')]: data.reportFormatsFilter,
-      [saveDefaultFilterSettingId('result')]: data.resultsFilter,
-      [saveDefaultFilterSettingId('role')]: data.rolesFilter,
-      [saveDefaultFilterSettingId('scanner')]: data.scannersFilter,
-      [saveDefaultFilterSettingId('schedule')]: data.schedulesFilter,
-      [saveDefaultFilterSettingId('tag')]: data.tagsFilter,
-      [saveDefaultFilterSettingId('target')]: data.targetsFilter,
-      [saveDefaultFilterSettingId('task')]: data.tasksFilter,
-      [saveDefaultFilterSettingId('ticket')]: data.ticketsFilter,
-      [saveDefaultFilterSettingId('tlscertificate')]:
-        data.tlsCertificatesFilter,
-      [saveDefaultFilterSettingId('user')]: data.usersFilter,
-      [saveDefaultFilterSettingId('vulnerability')]: data.vulnerabilitiesFilter,
-      [saveDefaultFilterSettingId('cpe')]: data.cpeFilter,
-      [saveDefaultFilterSettingId('cve')]: data.cveFilter,
-      [saveDefaultFilterSettingId('nvt')]: data.nvtFilter,
-      [saveDefaultFilterSettingId('certbund')]: data.certBundFilter,
-      [saveDefaultFilterSettingId('dfncert')]: data.dfnCertFilter,
-      auto_cache_rebuild: data.autoCacheRebuild,
-      security_intelligence_export: data.securityIntelligenceExport,
-    });
   }
 
   async saveSetting(settingId: string, settingValue: string | number) {
