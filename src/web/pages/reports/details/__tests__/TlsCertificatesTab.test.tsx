@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, within} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
@@ -13,39 +14,59 @@ import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity',
 );
+const tlsCertificates = getMockReport().tlsCertificates?.entities ?? [];
 
-const createGmp = () => ({
-  session: createSession({timezone: 'CET'}),
+const createGmp = ({
+  getReportTlsCertificates = testing.fn().mockResolvedValue({
+    data: tlsCertificates,
+    meta: {
+      filter,
+      counts: new CollectionCounts({
+        first: 1,
+        all: tlsCertificates.length,
+        filtered: tlsCertificates.length,
+        length: tlsCertificates.length,
+        rows: tlsCertificates.length,
+      }),
+    },
+  }),
+} = {}) => ({
+  reporttlscertificates: {
+    get: getReportTlsCertificates,
+  },
+  settings: {
+    reloadInterval: 5000,
+    reloadIntervalActive: 2000,
+    reloadIntervalInactive: 10000,
+  },
+  session: createSession({
+    timezone: 'CET',
+    token: 'test-token',
+    username: 'admin',
+  }),
 });
 
 describe('Report TLS Certificates Tab tests', () => {
-  test('should render Report TLS Certificates Tab', () => {
-    const {tlsCertificates} = getMockReport();
-    const reportTlsCertificates = tlsCertificates!;
-
-    const onSortChange = testing.fn();
+  test('should render Report TLS Certificates Tab', async () => {
+    const reportId = 'report-id-1234';
 
     const onTlsCertificateDownloadClick = testing.fn();
 
+    const gmp = createGmp();
     const {render} = rendererWith({
       router: true,
-      gmp: createGmp(),
+      gmp,
     });
 
     render(
       <TLSCertificatesTab
-        counts={reportTlsCertificates.counts}
-        filter={filter}
-        isUpdating={false}
-        sortField={'severity'}
-        sortReverse={true}
-        tlsCertificates={reportTlsCertificates.entities}
-        onSortChange={onSortChange}
+        reportFilter={filter}
+        reportId={reportId}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
     );
 
-    const table = screen.getByRole('table');
+    const table = await screen.findByRole('table');
     const header = within(table).getAllByRole('columnheader');
     const rows = within(table).getAllByRole('row');
     const links = within(table).getAllByRole('link');
@@ -114,44 +135,39 @@ describe('Report TLS Certificates Tab tests', () => {
     expect(screen.getByText(/Applied filter:/)).toHaveTextContent(
       '(Applied filter: apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity)',
     );
+
+    expect(gmp.reporttlscertificates.get).toHaveBeenCalledWith(
+      expect.objectContaining({report_id: reportId}),
+    );
   });
 
-  test('should call click handler', () => {
-    const {tlsCertificates} = getMockReport();
-    const reportTlsCertificates = tlsCertificates!;
-
-    const onSortChange = testing.fn();
-
+  test('should call click handler', async () => {
     const onTlsCertificateDownloadClick = testing.fn();
 
+    const gmp = createGmp();
     const {render} = rendererWith({
       router: true,
-      gmp: createGmp(),
+      gmp,
     });
 
     render(
       <TLSCertificatesTab
-        counts={reportTlsCertificates.counts}
-        filter={filter}
-        isUpdating={false}
-        sortField={'severity'}
-        sortReverse={true}
-        tlsCertificates={reportTlsCertificates.entities}
-        onSortChange={onSortChange}
+        reportFilter={filter}
+        reportId="report-id-1234"
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
     );
 
-    const downloadIcons = screen.getAllByTestId('download-icon');
+    const downloadIcons = await screen.findAllByTestId('download-icon');
 
     fireEvent.click(downloadIcons[0]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
-      reportTlsCertificates.entities[0],
+      tlsCertificates[0],
     );
 
     fireEvent.click(downloadIcons[1]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
-      reportTlsCertificates.entities[1],
+      tlsCertificates[1],
     );
   });
 });

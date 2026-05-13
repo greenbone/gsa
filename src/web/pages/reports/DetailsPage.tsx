@@ -534,9 +534,7 @@ const ReportDetailsPage = () => {
               const response = await loadTarget();
               if (response) void edit(response.data);
             }}
-            onTlsCertificateDownloadClick={
-              handleTlsCertificateDownload as unknown as () => void
-            }
+            onTlsCertificateDownloadClick={handleTlsCertificateDownload}
           />
         )}
       </TargetComponent>
