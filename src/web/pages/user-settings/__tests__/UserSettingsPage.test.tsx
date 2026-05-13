@@ -30,7 +30,6 @@ const createGmp = ({
   getSetting = testing.fn().mockResolvedValue({
     data: {value: null},
   }),
-  saveSettings = testing.fn().mockResolvedValue({}),
   mockGet = testing.fn().mockResolvedValue({
     data: [],
     meta: {
@@ -54,7 +53,6 @@ const createGmp = ({
   user: {
     getSetting,
     currentSettings,
-    saveSettings,
   },
   alerts: {get: getAlerts},
   credentials: {get: getCredentials},
