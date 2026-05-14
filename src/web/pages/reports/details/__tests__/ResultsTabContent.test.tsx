@@ -66,12 +66,10 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={true}
-          isLoading={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"
           reportResultsCounts={reportResultsCounts}
-          results={resultsData}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={testing.fn()}
@@ -85,16 +83,6 @@ describe('ResultsTabContent', () => {
     });
 
     test('should render EmptyReport when container scanning has no results at all', () => {
-      const results = {
-        entities: [],
-        counts: new CollectionCounts({
-          filtered: 0,
-          all: 0,
-          first: 1,
-          rows: 10,
-        }),
-      };
-
       const reportResultsCounts = new CollectionCounts({
         filtered: 0,
         all: 0,
@@ -111,12 +99,10 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={true}
-          isLoading={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"
           reportResultsCounts={reportResultsCounts}
-          results={results}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={testing.fn()}
@@ -131,16 +117,6 @@ describe('ResultsTabContent', () => {
     });
 
     test('should render EmptyResultsReport when container scanning has results but filtered to 0', () => {
-      const results = {
-        entities: [],
-        counts: new CollectionCounts({
-          filtered: 0,
-          all: 5,
-          first: 1,
-          rows: 10,
-        }),
-      };
-
       const reportResultsCounts = new CollectionCounts({
         filtered: 0,
         all: 5,
@@ -157,12 +133,10 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={true}
-          isLoading={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"
           reportResultsCounts={reportResultsCounts}
-          results={results}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={onFilterEditClick}
@@ -189,12 +163,10 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={false}
-          isLoading={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"
           reportResultsCounts={reportResultsCounts}
-          results={resultsData}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={testing.fn()}
@@ -207,12 +179,7 @@ describe('ResultsTabContent', () => {
       expect(screen.getByTestId('loading')).toBeInTheDocument();
     });
 
-    test('should render Loading when isLoading is true and no entities', () => {
-      const results = {
-        entities: undefined,
-        counts: undefined,
-      };
-
+    test('should render Loading while ResultsTab fetches results', () => {
       const gmp = createGmp();
 
       const {render} = rendererWith({gmp});
@@ -221,46 +188,9 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={false}
-          isLoading={true}
           progress={50}
           reportFilter={filter}
           reportId="report-123"
-          results={results}
-          status={TASK_STATUS.running}
-          onFilterDecreaseMinQoDClick={testing.fn()}
-          onFilterEditClick={testing.fn()}
-          onFilterRemoveClick={testing.fn()}
-          onTargetEditClick={testing.fn()}
-        />,
-      );
-
-      expect(screen.getByTestId('loading')).toBeInTheDocument();
-    });
-
-    test('should render Loading when isLoading is true and entities array is empty', () => {
-      const results = {
-        entities: [],
-        counts: new CollectionCounts({
-          filtered: 0,
-          all: 0,
-          first: 1,
-          rows: 10,
-        }),
-      };
-
-      const gmp = createGmp();
-
-      const {render} = rendererWith({gmp});
-
-      render(
-        <ResultsTabContent
-          hasTarget={true}
-          isContainerScanning={false}
-          isLoading={true}
-          progress={50}
-          reportFilter={filter}
-          reportId="report-123"
-          results={results}
           status={TASK_STATUS.running}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={testing.fn()}
@@ -275,16 +205,6 @@ describe('ResultsTabContent', () => {
 
   describe('Filter callbacks', () => {
     test('should pass filter callbacks to EmptyResultsReport for container scanning', () => {
-      const results = {
-        entities: [],
-        counts: new CollectionCounts({
-          filtered: 0,
-          all: 5,
-          first: 1,
-          rows: 10,
-        }),
-      };
-
       const reportResultsCounts = new CollectionCounts({
         filtered: 0,
         all: 5,
@@ -306,12 +226,10 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={true}
-          isLoading={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"
           reportResultsCounts={reportResultsCounts}
-          results={results}
           status={TASK_STATUS.done}
           onFilterAddLogLevelClick={onFilterAddLogLevelClick}
           onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}

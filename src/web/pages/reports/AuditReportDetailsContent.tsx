@@ -58,34 +58,27 @@ interface SortingData {
   errors: SortingEntry;
 }
 
-interface CountsLike {
-  all: number;
-  filtered: number;
-}
-
-type MaybeCounts = CollectionCounts | CountsLike;
-
 interface AuditReportDetailsContentProps {
   entity?: AuditReport;
-  errorsCounts?: MaybeCounts;
+  errorsCounts?: CollectionCounts;
   filters?: Filter[];
-  hostsCounts?: MaybeCounts;
+  hostsCounts?: CollectionCounts;
   isLoading?: boolean;
   isLoadingFilters?: boolean;
   isUpdating?: boolean;
-  operatingSystemsCounts?: MaybeCounts;
+  operatingSystemsCounts?: CollectionCounts;
   pageFilter?: Filter;
   reportError?: Error;
   reportFilter?: Filter;
   reportId: string;
   resetFilter?: Filter;
-  resultsCounts?: MaybeCounts;
+  resultsCounts?: CollectionCounts;
   showError: (...args: unknown[]) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
   sorting: SortingData;
   task?: ReportTask;
-  tlsCertificatesCounts?: MaybeCounts;
+  tlsCertificatesCounts?: CollectionCounts;
   onAddToAssetsClick: () => void;
   onError: (error: Error) => void;
   onFilterChanged: (filter: Filter) => void;
