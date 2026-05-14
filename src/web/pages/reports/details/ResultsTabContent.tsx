@@ -5,24 +5,14 @@
 
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
-import type Result from 'gmp/models/result';
 import type {TaskStatus} from 'gmp/models/task';
-import {isDefined} from 'gmp/utils/identity';
-import Loading from 'web/components/loading/Loading';
 import ContainerScanningResultsTab from 'web/pages/reports/details/ContainerScanningResultsTab';
 import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
 import ResultsTab from 'web/pages/reports/details/ResultsTab';
 
-interface ResultsData {
-  counts?: CollectionCounts;
-  entities?: Result[];
-}
-
 interface ResultsTabContentProps {
-  results: ResultsData;
   isContainerScanning: boolean;
-  isLoading?: boolean;
   hasTarget: boolean;
   progress: number;
   reportFilter: Filter;
@@ -38,9 +28,7 @@ interface ResultsTabContentProps {
 }
 
 const ResultsTabContent = ({
-  results,
   isContainerScanning,
-  isLoading = false,
   hasTarget,
   progress,
   reportFilter,
@@ -98,14 +86,6 @@ const ResultsTabContent = ({
         status={status}
       />
     );
-  }
-
-  // Loading state for regular scanning
-  if (
-    isLoading &&
-    (!isDefined(results.entities) || results.entities.length === 0)
-  ) {
-    return <Loading />;
   }
 
   // Default: regular scanning results table

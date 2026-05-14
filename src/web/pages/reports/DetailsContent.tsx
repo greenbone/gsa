@@ -310,12 +310,10 @@ const PageContent = ({
         <ResultsTabContent
           hasTarget={!isImport}
           isContainerScanning={isContainerScanning}
-          isLoading={isLoading}
           progress={progress}
           reportFilter={activeFilter}
           reportId={reportId}
           reportResultsCounts={resultsCounts}
-          results={results ?? {entities: [], counts: undefined}}
           status={status}
           onFilterAddLogLevelClick={onFilterAddLogLevelClick}
           onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}

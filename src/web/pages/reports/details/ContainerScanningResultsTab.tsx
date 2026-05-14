@@ -76,10 +76,6 @@ const ContainerScanningResultsTab = ({
     updateFilter,
   );
 
-  if (isLoading && !data) {
-    return <Loading />;
-  }
-
   if (isError) {
     return (
       <ErrorPanel
@@ -92,6 +88,10 @@ const ContainerScanningResultsTab = ({
         )}
       />
     );
+  }
+
+  if (isLoading && !data) {
+    return <Loading />;
   }
 
   if (!data) {
