@@ -5,6 +5,7 @@
 
 import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
+import type Model from 'gmp/models/model';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import DateTime from 'web/components/date/DateTime';
 import {DownloadIcon} from 'web/components/icon';
@@ -14,6 +15,10 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
+import type {
+  FooterComponentProps,
+  RowComponentProps,
+} from 'web/entities/EntitiesTable';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withRowDetails from 'web/entities/withRowDetails';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
@@ -27,12 +32,11 @@ interface HeaderProps {
   onSortChange?: (sortBy: string) => void;
 }
 
-interface RowProps {
+interface RowProps extends RowComponentProps<Model> {
   actions?: boolean;
-  entity: ReportTLSCertificate;
   links?: boolean;
   onTlsCertificateDownloadClick?: (entity: ReportTLSCertificate) => void;
-  onToggleDetailsClick?: (entity: ReportTLSCertificate, id?: string) => void;
+  onToggleDetailsClick?: (entity: Model, id?: string) => void;
 }
 
 interface ColumnsProps {
@@ -181,11 +185,14 @@ const Row = ({
   onTlsCertificateDownloadClick,
   onToggleDetailsClick,
 }: RowProps) => {
+  const tlsEntity = entity as unknown as ReportTLSCertificate;
   const columns = getColumns({
     actions,
     links,
     onTlsCertificateDownloadClick,
-    onToggleDetailsClick,
+    onToggleDetailsClick: onToggleDetailsClick as
+      | ((entity: ReportTLSCertificate, id?: string) => void)
+      | undefined,
   });
 
   return (
@@ -195,14 +202,19 @@ const Row = ({
           key={column.key}
           align={column.align === 'center' ? ['center', 'center'] : undefined}
         >
-          {column.render(entity)}
+          {column.render(tlsEntity)}
         </TableData>
       ))}
     </TableRow>
   );
 };
 
-export default createEntitiesTable({
+export default createEntitiesTable<
+  Model,
+  FooterComponentProps<Model>,
+  HeaderProps,
+  RowProps
+>({
   header: Header,
   emptyTitle: _l('No TLS Certificates available'),
   row: Row,

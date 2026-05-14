@@ -9,6 +9,7 @@ import {useParams} from 'react-router';
 import logger from 'gmp/log';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
+import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
@@ -16,6 +17,7 @@ import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
+import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import {
   useGetReport,
   useGetReportConfigs,
@@ -24,7 +26,6 @@ import {
   useGetResultsFilters,
 } from 'web/hooks/use-query/reports';
 import useGmp from 'web/hooks/useGmp';
-import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import usePageFilter from 'web/hooks/usePageFilter';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
@@ -234,7 +235,8 @@ const ReportDetailsPage = () => {
   const cvesCounts = report?.cves?.counts;
   const closedCvesCounts = report?.closedCves?.counts;
   const tlsCertificatesCounts =
-    reportTlsCertificatesData?.entitiesCounts ?? report?.tlsCertificates?.counts;
+    reportTlsCertificatesData?.entitiesCounts ??
+    report?.tlsCertificates?.counts;
   const errorsCounts = report?.errors?.counts;
 
   const threshold = gmp.settings.reportResultsThreshold;
@@ -408,7 +410,8 @@ const ReportDetailsPage = () => {
   );
 
   const handleTlsCertificateDownload = useCallback(
-    (cert: {data: string; serial: string}) => {
+    (cert: ReportTLSCertificate) => {
+      if (!cert.data || !cert.serial) return;
       handleDownload({
         filename: 'tls-cert-' + cert.serial + '.pem',
         mimetype: 'application/x-x509-ca-cert',
