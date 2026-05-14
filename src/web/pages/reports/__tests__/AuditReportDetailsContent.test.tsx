@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
-import AuditReportDetailsContent from 'web/pages/reports/AuditReportDetailsContent.jsx';
+import AuditReportDetailsContent from 'web/pages/reports/AuditReportDetailsContent';
 
 const filter = Filter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
@@ -70,26 +70,27 @@ const renderContent = (
   const {entity} = getMockAuditReport();
   const gmp = createGmp({reportResultsThreshold});
   const {render} = rendererWith({gmp, capabilities: true, router: true});
+  const reportId = entity.report?.id ?? '1234';
 
   render(
     <AuditReportDetailsContent
       entity={entity}
-      errorsCounts={{all: 2, filtered: 2}}
-      hostsCounts={{all: 3, filtered: 3}}
+      errorsCounts={new CollectionCounts({all: 2, filtered: 2})}
+      hostsCounts={new CollectionCounts({all: 3, filtered: 3})}
       isLoading={false}
       isUpdating={false}
-      operatingSystemsCounts={{all: 2, filtered: 2}}
+      operatingSystemsCounts={new CollectionCounts({all: 2, filtered: 2})}
       pageFilter={filter}
       reportFilter={filter}
-      reportId={entity.report.id}
+      reportId={reportId}
       resetFilter={resetFilter}
-      resultsCounts={{all: 3, filtered: 2}}
+      resultsCounts={new CollectionCounts({all: 3, filtered: 2})}
       showError={cbs.showError}
       showErrorMessage={cbs.showErrorMessage}
       showSuccessMessage={cbs.showSuccessMessage}
       sorting={sorting}
-      task={entity.report.task}
-      tlsCertificatesCounts={{all: 2, filtered: 2}}
+      task={entity.report?.task}
+      tlsCertificatesCounts={new CollectionCounts({all: 2, filtered: 2})}
       onAddToAssetsClick={cbs.onAddToAssetsClick}
       onError={cbs.onError}
       onFilterChanged={cbs.onFilterChanged}
