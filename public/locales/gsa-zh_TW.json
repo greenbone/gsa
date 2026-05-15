@@ -810,6 +810,7 @@
   "Error while loading Ports for Report {{reportId}}": "",
   "Error while loading Report {{reportId}}": "",
   "Error while loading Results for Report {{reportId}}": "",
+  "Error while loading TLS Certificates for Report {{reportId}}": "",
   "Error: Unknown Performance Report": "",
   "ESXi": "",
   "ESXi authentication was successful": "編輯驗證",
