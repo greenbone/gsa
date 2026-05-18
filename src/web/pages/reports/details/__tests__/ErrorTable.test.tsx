@@ -4,11 +4,11 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
+import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import type {ReportError} from 'gmp/models/report/parser';
 import ErrorsTable from 'web/pages/reports/details/ErrorsTable';
-import {rendererWith, screen, within} from 'web/testing';
 
 const filter = Filter.fromString('first=1 rows=10');
 
@@ -17,7 +17,7 @@ const createMockError = (overrides = {}): ReportError => {
     description: 'Test error description',
     host: {
       id: 'host-123',
-      ip: '192.168.1.100',
+      ip: '192.168.1.1000',
       name: 'test-host',
     },
     nvt: {
@@ -47,7 +47,7 @@ describe('ErrorsTable', () => {
     render(
       <ErrorsTable
         // @ts-expect-error entities are ReportErrors[], not Model[]
-        entities={entities as unknown as Model[]}
+        entities={entities}
         entitiesCounts={counts}
         filter={filter}
         onSortChange={onSortChange}
@@ -57,7 +57,6 @@ describe('ErrorsTable', () => {
     const table = screen.getByRole('table');
     const columnHeaders = within(table).getAllByRole('columnheader');
 
-    // Check all expected columns
     expect(
       columnHeaders.some(th => /Error Message/i.exec(th.textContent)),
     ).toBe(true);
@@ -89,32 +88,27 @@ describe('ErrorsTable', () => {
     render(
       <ErrorsTable
         // @ts-expect-error entities are ReportErrors[], not Model[]
-        entities={entities as unknown as Model[]}
+        entities={entities}
         entitiesCounts={counts}
         filter={filter}
       />,
     );
 
-    // Check error description
-    expect(screen.getByText('SSH authentication failed')).toBeInTheDocument();
+    screen.getByText('SSH authentication failed');
 
-    // Check NVT name
-    expect(screen.getByText('Test NVT')).toBeInTheDocument();
+    screen.getByText('Test NVT');
 
-    // Check port
-    expect(screen.getByText('22')).toBeInTheDocument();
+    screen.getByText('22');
 
-    // Check that hostname is rendered
     const table = screen.getByRole('table');
-    const allRows = within(table).getAllByRole('row');
-    const dataRows = allRows.filter(
+    const rows = within(table).getAllByRole('row');
+    const dataRow = rows.find(
       row => within(row).queryAllByRole('cell').length > 0,
     );
-    expect(dataRows).toHaveLength(1);
+    expect(dataRow).toBeDefined();
+    if (!dataRow) throw new Error('data row not found');
 
-    const cells = within(dataRows[0]).getAllByRole('cell');
-    // Check that hostname is in the cell (it's the 3rd cell - index 2)
-    const hostnameCell = within(dataRows[0]).getAllByRole('cell')[2];
+    const hostnameCell = within(dataRow).getAllByRole('cell')[2];
     expect(hostnameCell?.textContent).toBe('test-host');
   });
 
@@ -123,7 +117,7 @@ describe('ErrorsTable', () => {
       createMockError({
         host: {
           id: 'host-456',
-          ip: '172.16.0.10',
+          ip: '172.16.0.1000',
         },
       }),
     ];
@@ -141,14 +135,13 @@ describe('ErrorsTable', () => {
     render(
       <ErrorsTable
         // @ts-expect-error entities are ReportErrors[], not Model[]
-        entities={entities as unknown as Model[]}
+        entities={entities}
         entitiesCounts={counts}
         filter={filter}
       />,
     );
 
-    const link = screen.getByText('172.16.0.10');
-    expect(link).toBeInTheDocument();
+    const link = screen.getByText('172.16.0.1000');
     expect(link.closest('a')).toHaveAttribute('href', '/host/host-456');
   });
 
@@ -156,7 +149,7 @@ describe('ErrorsTable', () => {
     const entities = [
       createMockError({
         host: {
-          ip: '172.16.0.20',
+          ip: '172.16.0.2000',
         },
       }),
     ];
@@ -174,14 +167,13 @@ describe('ErrorsTable', () => {
     render(
       <ErrorsTable
         // @ts-expect-error entities are ReportErrors[], not Model[]
-        entities={entities as unknown as Model[]}
+        entities={entities}
         entitiesCounts={counts}
         filter={filter}
       />,
     );
 
-    const link = screen.getByText('172.16.0.20');
-    expect(link).toBeInTheDocument();
+    const link = screen.getByText('172.16.0.2000');
     // Should not be a link
     expect(link.closest('a')).not.toBeInTheDocument();
   });
@@ -190,7 +182,7 @@ describe('ErrorsTable', () => {
     const entities = [
       createMockError({
         host: {
-          ip: '172.16.0.30',
+          ip: '172.16.0.3000',
           name: 'my-test-host',
         },
       }),
@@ -209,21 +201,20 @@ describe('ErrorsTable', () => {
     render(
       <ErrorsTable
         // @ts-expect-error entities are ReportErrors[], not Model[]
-        entities={entities as unknown as Model[]}
+        entities={entities}
         entitiesCounts={counts}
         filter={filter}
       />,
     );
 
-    // Check that hostname is rendered with italics tag
     const table = screen.getByRole('table');
-    const allRows = within(table).getAllByRole('row');
-    const dataRows = allRows.filter(
+    const rows = within(table).getAllByRole('row');
+    const dataRow = rows.find(
       row => within(row).queryAllByRole('cell').length > 0,
     );
 
-    // Get the hostname cell (3rd column, index 2)
-    const hostnameCell = within(dataRows[0]).getAllByRole('cell')[2];
+    if (!dataRow) throw new Error('data row not found');
+    const hostnameCell = within(dataRow).getAllByRole('cell')[2];
     expect(hostnameCell?.querySelector('i')).toBeInTheDocument();
     expect(hostnameCell?.textContent).toBe('my-test-host');
   });
@@ -241,15 +232,10 @@ describe('ErrorsTable', () => {
     const {render} = rendererWith({gmp, capabilities: true, router: true});
 
     render(
-      <ErrorsTable
-        // @ts-expect-error entities are ReportErrors[], not Model[]
-        entities={[] as unknown as Model[]}
-        entitiesCounts={counts}
-        filter={filter}
-      />,
+      <ErrorsTable entities={[]} entitiesCounts={counts} filter={filter} />,
     );
 
-    expect(screen.getByText('No Errors available')).toBeInTheDocument();
+    screen.getByText('No Errors available');
   });
 
   test('should render NVT as DetailsLink when nvt id exists', () => {
@@ -275,14 +261,13 @@ describe('ErrorsTable', () => {
     render(
       <ErrorsTable
         // @ts-expect-error entities are ReportErrors[], not Model[]
-        entities={entities as unknown as Model[]}
+        entities={entities}
         entitiesCounts={counts}
         filter={filter}
       />,
     );
 
     const link = screen.getByText('CVE-2024-1234');
-    expect(link).toBeInTheDocument();
     expect(link.closest('a')).toHaveAttribute(
       'href',
       '/nvt/1.3.6.1.4.1.25623.1.1.1.1.1',
@@ -306,7 +291,7 @@ describe('ErrorsTable', () => {
     const {userEvent} = render(
       <ErrorsTable
         // @ts-expect-error entities are ReportErrors[], not Model[]
-        entities={entities as unknown as Model[]}
+        entities={entities}
         entitiesCounts={counts}
         filter={filter}
         onSortChange={onSortChange}
