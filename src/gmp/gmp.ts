@@ -14,7 +14,6 @@ import 'gmp/commands/scan-configs';
 import 'gmp/commands/schedules';
 import 'gmp/commands/tickets';
 import 'gmp/commands/tls-certificates';
-import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
 import AgentCommand from 'gmp/commands/agent';
@@ -59,6 +58,7 @@ import {PortListCommand, PortListsCommand} from 'gmp/commands/port-lists';
 import ReportCommand from 'gmp/commands/report';
 import ReportConfigCommand from 'gmp/commands/report-config';
 import ReportConfigsCommand from 'gmp/commands/report-configs';
+import ReportsErrorsCommand from 'gmp/commands/report-errors';
 import ReportFormatCommand from 'gmp/commands/report-format';
 import ReportFormatsCommand from 'gmp/commands/report-formats';
 import ReportPortsCommand from 'gmp/commands/report-ports';
@@ -145,6 +145,7 @@ class Gmp {
   public readonly report: ReportCommand;
   public readonly reportconfig: ReportConfigCommand;
   public readonly reportconfigs: ReportConfigsCommand;
+  public readonly reporterrors: ReportsErrorsCommand;
   public readonly reportformat: ReportFormatCommand;
   public readonly reportformats: ReportFormatsCommand;
   public readonly reports: ReportsCommand;
@@ -235,6 +236,7 @@ class Gmp {
     this.report = new ReportCommand(this.http);
     this.reportconfig = new ReportConfigCommand(this.http);
     this.reportconfigs = new ReportConfigsCommand(this.http);
+    this.reporterrors = new ReportsErrorsCommand(this.http);
     this.reportformat = new ReportFormatCommand(this.http);
     this.reportformats = new ReportFormatsCommand(this.http);
     this.reports = new ReportsCommand(this.http);
