@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import type CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import type {ReportError} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
@@ -20,14 +18,6 @@ import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
 interface ErrorsTabWrapperProps {
   filter?: Filter;
   reportId: string;
-  reportErrors?: ReportError[];
-  reportErrorsCounts?: CollectionCounts;
-  onSortChange?: (sortField: string) => void;
-  onFilterAddLogLevelClick?: () => void;
-  onFilterDecreaseMinQoDClick?: () => void;
-  onFilterEditClick?: () => void;
-  onFilterRemoveClick?: () => void;
-  onFilterRemoveSeverityClick?: () => void;
 }
 
 export const errorsSortFunctions = {
@@ -38,19 +28,8 @@ export const errorsSortFunctions = {
   port: makeCompareString('port'),
 };
 
-const ErrorsTabWrapper = ({
-  filter,
-  reportId,
-  reportErrors,
-  reportErrorsCounts,
-  onSortChange,
-  onFilterAddLogLevelClick,
-  onFilterDecreaseMinQoDClick,
-  onFilterEditClick,
-  onFilterRemoveClick,
-  onFilterRemoveSeverityClick,
-}: ErrorsTabWrapperProps) => {
-  const {t: _} = useTranslation();
+const ErrorsTabWrapper = ({filter, reportId}: ErrorsTabWrapperProps) => {
+  const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
     return isDefined(filter) ? filter.copy() : new Filter();
@@ -63,21 +42,13 @@ const ErrorsTabWrapper = ({
     filter: errorsFilter,
   });
 
-  const updateFilter = useCallback((newFilter: Filter) => {
+  const updateFilter = (newFilter: Filter) => {
     setErrorsFilter(newFilter);
-  }, []);
+  };
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     errorsFilter,
     updateFilter,
-  );
-
-  const handleSort = useCallback(
-    (newSortBy: string) => {
-      handleSortChange(newSortBy);
-      onSortChange?.(newSortBy);
-    },
-    [handleSortChange, onSortChange],
   );
 
   if (isError) {
@@ -91,11 +62,9 @@ const ErrorsTabWrapper = ({
     );
   }
 
-  const errors = data?.entities ?? reportErrors ?? [];
-  const errorsCounts = data?.entitiesCounts;
+  const {entities: errors = [], entitiesCounts: errorsCounts} = data || {};
 
   const displayedFilter = errorsFilter;
-  const finalCounts = errorsCounts || reportErrorsCounts;
 
   if (isLoading && !data) {
     return <Loading />;
@@ -103,7 +72,7 @@ const ErrorsTabWrapper = ({
 
   return (
     <ReportEntitiesContainer
-      counts={finalCounts}
+      counts={errorsCounts}
       entities={errors}
       filter={displayedFilter}
       sortField={sortBy || 'error'}
@@ -133,7 +102,7 @@ const ErrorsTabWrapper = ({
           onLastClick={onLastClick}
           onNextClick={onNextClick}
           onPreviousClick={onPreviousClick}
-          onSortChange={handleSort}
+          onSortChange={handleSortChange}
         />
       )}
     </ReportEntitiesContainer>

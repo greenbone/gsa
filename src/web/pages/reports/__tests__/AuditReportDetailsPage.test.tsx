@@ -92,6 +92,15 @@ const createGmp = () => ({
     removeAssets: testing.fn().mockResolvedValue({}),
     download: testing.fn().mockResolvedValue({data: 'report-blob-data'}),
   },
+  reporterrors: {
+    get: testing.fn().mockResolvedValue({
+      data: entity.report?.errors?.entities ?? [],
+      meta: {
+        filter: Filter.fromString(''),
+        counts: entity.report?.errors?.counts ?? new CollectionCounts(),
+      },
+    }),
+  },
   reporttlscertificates: {
     get: testing.fn().mockResolvedValue({
       data: [],
@@ -435,15 +444,15 @@ describe('AuditReportDetailsPage', () => {
       await screen.findByRole('tab', {name: /^Error Messages/});
       fireEvent.click(screen.getByRole('tab', {name: /^Error Messages/}));
 
-      // Click on the "Error Message" column header to sort
-      const errorMessageHeader = await screen.findByRole('columnheader', {
-        name: /Error Message/,
-      });
-      fireEvent.click(errorMessageHeader);
+      // Click on the sort button for the "Error Message" column
+      const sortButton = await screen.findByTestId(
+        'table-header-sort-by-error',
+      );
+      fireEvent.click(sortButton);
 
-      // The column header should still be in the document after the sort
+      // The sort button should still be in the document after sorting
       expect(
-        screen.getByRole('columnheader', {name: /Error Message/}),
+        screen.getByTestId('table-header-sort-by-error'),
       ).toBeInTheDocument();
     });
 
@@ -454,17 +463,17 @@ describe('AuditReportDetailsPage', () => {
       await screen.findByRole('tab', {name: /^Error Messages/});
       fireEvent.click(screen.getByRole('tab', {name: /^Error Messages/}));
 
-      const errorMessageHeader = await screen.findByRole('columnheader', {
-        name: /Error Message/,
-      });
+      const sortButton = await screen.findByTestId(
+        'table-header-sort-by-error',
+      );
 
       // Click once to sort ascending
-      fireEvent.click(errorMessageHeader);
+      fireEvent.click(sortButton);
       // Click again to toggle to descending
-      fireEvent.click(errorMessageHeader);
+      fireEvent.click(sortButton);
 
       expect(
-        screen.getByRole('columnheader', {name: /Error Message/}),
+        screen.getByTestId('table-header-sort-by-error'),
       ).toBeInTheDocument();
     });
   });

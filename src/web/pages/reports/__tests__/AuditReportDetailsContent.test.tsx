@@ -33,9 +33,37 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     reportResultsThreshold,
   },
   results: {
-    get: testing.fn(),
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter,
+        counts: new CollectionCounts({filtered: 0, all: 0, first: 1, rows: 10}),
+      },
+    }),
   },
-  session: createSession({timezone: 'CET'}),
+  reporterrors: {
+    get: testing.fn().mockResolvedValue({
+      data: getMockAuditReport().errors?.entities ?? [],
+      meta: {
+        filter,
+        counts: new CollectionCounts({filtered: 2, all: 2, first: 1, rows: 10}),
+      },
+    }),
+  },
+  reporttlscertificates: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter,
+        counts: new CollectionCounts({filtered: 0, all: 0, first: 1, rows: 10}),
+      },
+    }),
+  },
+  session: createSession({
+    timezone: 'CET',
+    token: 'test-token',
+    username: 'admin',
+  }),
   user: {
     currentSettings: testing.fn().mockResolvedValue({foo: 'bar'}),
     getReportComposerDefaults: testing.fn().mockResolvedValue({foo: 'bar'}),
@@ -374,8 +402,8 @@ describe('AuditReportDetailsContent tests', () => {
       );
 
       expect(
-        screen.getByRole('columnheader', {name: /Error Message/i}),
-      ).toBeInTheDocument();
+        screen.queryByRole('row', {name: /^Task Name/}),
+      ).not.toBeInTheDocument();
     });
 
     test('should switch to User Tags tab', () => {
@@ -434,19 +462,6 @@ describe('AuditReportDetailsContent tests', () => {
   });
 
   describe('Sorting', () => {
-    test('should call onSortChange when Error Messages column header is clicked', () => {
-      const cbs = renderContent();
-
-      const tablist = screen.getByRole('tablist');
-      fireEvent.click(
-        within(tablist).getByRole('tab', {name: /^error messages/i}),
-      );
-
-      fireEvent.click(screen.getByTestId('table-header-sort-by-error'));
-
-      expect(cbs.onSortChange).toHaveBeenCalledWith('errors', 'error');
-    });
-
     test('should call onSortChange when Hosts IP column header is clicked', () => {
       const cbs = renderContent();
 

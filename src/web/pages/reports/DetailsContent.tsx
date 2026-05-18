@@ -215,7 +215,6 @@ const PageContent = ({
     applications,
     closedCves,
     cves,
-    errors,
     hosts,
     operatingsystems,
     results,
@@ -462,15 +461,7 @@ const PageContent = ({
         <TabTitle counts={errorsCounts} title={_('Error Messages')} />
       ),
       renderPanel: () => (
-        <ErrorsTab
-          counts={errors?.counts}
-          errors={errors?.entities}
-          filter={activeFilter}
-          isUpdating={isUpdating}
-          sortField={sorting.errors.sortField}
-          sortReverse={sorting.errors.sortReverse}
-          onSortChange={sortField => onSortChange('errors', sortField)}
-        />
+        <ErrorsTab filter={activeFilter} reportId={reportId} />
       ),
     },
     {

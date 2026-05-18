@@ -176,7 +176,6 @@ const AuditReportDetailsContent = ({
   const gmp = useGmp();
   const [_] = useTranslation();
 
-  const errors = report?.errors;
   const hosts = report?.hosts;
   const operatingSystems = report?.operatingSystems;
   const results = report?.results;
@@ -334,19 +333,7 @@ const AuditReportDetailsContent = ({
     {
       key: 'errors',
       title: <TabTitle counts={errorsCounts} title={_('Error Messages')} />,
-      panel: (
-        <ErrorsTab
-          counts={errors?.counts}
-          errors={errors?.entities}
-          filter={effectiveReportFilter}
-          isUpdating={isUpdating}
-          sortField={sorting.errors.sortField}
-          sortReverse={sorting.errors.sortReverse}
-          onSortChange={(sortField: string) =>
-            onSortChange('errors', sortField)
-          }
-        />
-      ),
+      panel: <ErrorsTab filter={effectiveReportFilter} reportId={reportId} />,
     },
     {
       key: 'usertags',

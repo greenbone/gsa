@@ -807,6 +807,7 @@
   "Error Message": "錯誤訊息",
   "Error Messages": "錯誤訊息",
   "Error while loading Container Scanning Results for Report {{reportId}}": "",
+  "Error while loading Errors for Report {{reportId}}": "",
   "Error while loading Ports for Report {{reportId}}": "",
   "Error while loading Report {{reportId}}": "",
   "Error while loading Results for Report {{reportId}}": "",

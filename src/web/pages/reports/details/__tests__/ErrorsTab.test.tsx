@@ -4,10 +4,10 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
+import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
-import {rendererWith, screen, within} from 'web/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
 
