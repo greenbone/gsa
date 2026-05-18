@@ -197,7 +197,7 @@ const Menu = () => {
 
   const isPerformanceActive = Boolean(useMatch('/performance'));
   const isTrashcanActive = Boolean(useMatch('/trashcan'));
-  const isFeedStatusActive = Boolean(useMatch('/feed-status'));
+  const isFeedStatusActive = Boolean(useMatch('/feed-configuration'));
   const isLdapActive = Boolean(useMatch('/ldap'));
   const isCredentialStoreActive = Boolean(useMatch('/credential-store'));
   const isRadiusActive = Boolean(useMatch('/radius'));
@@ -585,8 +585,8 @@ const Menu = () => {
             active: isTrashcanActive,
           },
           capabilities.mayOp('get_feeds') && {
-            label: _('Feed Status'),
-            to: '/feed-status',
+            label: _('Feed Configuration'),
+            to: '/feed-configuration',
             isPathMatch: isFeedStatusActive,
             active: isFeedStatusActive,
           },

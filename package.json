@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "type": "module",
   "scripts": {
@@ -30,7 +30,8 @@
     "i18n-extract": "i18next-cli extract",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
-    "clear:node_modules": "rm -rf node_modules && npm install"
+    "clear:node_modules": "rm -rf node_modules && npm install",
+    "generate:feed-key-types": "node scripts/generate-feed-key-types.ts"
   },
   "engines": {
     "node": ">=22.0"
@@ -111,6 +112,7 @@
     "globals": "^17.6.0",
     "i18next-cli": "^1.50.3",
     "jsdom": "^26.1.0",
+    "openapi-typescript": "^7.13.0",
     "prettier": "^3.8.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.59.3",
