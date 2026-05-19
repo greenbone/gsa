@@ -61,6 +61,7 @@ import ReportConfigsCommand from 'gmp/commands/report-configs';
 import ReportsErrorsCommand from 'gmp/commands/report-errors';
 import ReportFormatCommand from 'gmp/commands/report-format';
 import ReportFormatsCommand from 'gmp/commands/report-formats';
+import ReportOperatingSystemsCommand from 'gmp/commands/report-operating-system';
 import ReportPortsCommand from 'gmp/commands/report-ports';
 import ReportTlsCertificatesCommand from 'gmp/commands/report-tls-certificates';
 import ReportsCommand from 'gmp/commands/reports';
@@ -150,6 +151,7 @@ class Gmp {
   public readonly reportformats: ReportFormatsCommand;
   public readonly reports: ReportsCommand;
   public readonly reportports: ReportPortsCommand;
+  public readonly reportoperatingsystems: ReportOperatingSystemsCommand;
   public readonly reporttlscertificates: ReportTlsCertificatesCommand;
   public readonly result: ResultCommand;
   public readonly results: ResultsCommand;
@@ -239,6 +241,7 @@ class Gmp {
     this.reporterrors = new ReportsErrorsCommand(this.http);
     this.reportformat = new ReportFormatCommand(this.http);
     this.reportformats = new ReportFormatsCommand(this.http);
+    this.reportoperatingsystems = new ReportOperatingSystemsCommand(this.http);
     this.reports = new ReportsCommand(this.http);
     this.reportports = new ReportPortsCommand(this.http);
     this.reporttlscertificates = new ReportTlsCertificatesCommand(this.http);

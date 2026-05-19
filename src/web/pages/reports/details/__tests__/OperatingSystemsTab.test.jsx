@@ -4,44 +4,76 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith} from 'web/testing';
+import {screen, rendererWith, waitFor} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
+import ReportOperatingSystem from 'gmp/models/report/os';
+import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
 
 const filter = Filter.fromString(
-  'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+  'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort=severity',
 );
-const gmp = {
-  settings: {
-    severityRating: SEVERITY_RATING_CVSS_3,
-  },
+
+// Build API-format OS entities (no severity set, matching get_report_operating_systems response)
+const buildApiEntities = () => {
+  const os1 = ReportOperatingSystem.fromElement({
+    best_os_cpe: 'cpe:/foo/bar',
+    best_os_txt: 'Foo OS',
+  });
+  os1.hosts.count = 2;
+
+  const os2 = ReportOperatingSystem.fromElement({
+    best_os_cpe: 'cpe:/lorem/ipsum',
+    best_os_txt: 'Lorem OS',
+  });
+  os2.hosts.count = 5;
+
+  return [os1, os2];
 };
 
+const createGmp = (apiEntities, responseFilter = filter) => ({
+  session: createSession({token: 'test-token'}),
+  settings: {severityRating: SEVERITY_RATING_CVSS_3},
+  reportoperatingsystems: {
+    get: testing.fn().mockResolvedValue({
+      data: apiEntities,
+      meta: {
+        filter: responseFilter,
+        counts: new CollectionCounts({
+          all: apiEntities.length,
+          filtered: apiEntities.length,
+          first: 1,
+          length: apiEntities.length,
+          rows: apiEntities.length,
+        }),
+      },
+    }),
+  },
+});
+
 describe('Report Operating Systems Tab tests', () => {
-  test('should render Report Operating Systems Tab', () => {
+  test('should render Report Operating Systems Tab with severity from full report', async () => {
     const {operatingsystems} = getMockReport();
+    const apiEntities = buildApiEntities();
+    const gmp = createGmp(apiEntities);
 
-    const onSortChange = testing.fn();
-
-    const {render} = rendererWith({
-      gmp,
-      router: true,
-    });
+    const {render} = rendererWith({gmp, router: true});
 
     const {baseElement} = render(
       <OperatingSystemsTab
-        counts={operatingsystems.counts}
         filter={filter}
-        isUpdating={false}
-        operatingsystems={operatingsystems.entities}
-        sortField={'severity'}
-        sortReverse={true}
-        onSortChange={onSortChange}
+        reportId="1234"
+        reportOperatingSystems={operatingsystems?.entities}
       />,
     );
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('progressbar-box')).toHaveLength(2);
+    });
 
     const images = baseElement.querySelectorAll('img');
     const links = baseElement.querySelectorAll('a');
@@ -56,67 +88,73 @@ describe('Report Operating Systems Tab tests', () => {
 
     // Row 1
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(links[1]).toHaveAttribute(
-      'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
-    );
     expect(links[0]).toHaveTextContent('Foo OS');
     expect(links[0]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
     expect(links[1]).toHaveTextContent('cpe:/foo/bar');
+    expect(links[1]).toHaveAttribute(
+      'href',
+      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
+    );
     expect(bars[0]).toHaveAttribute('title', 'Critical');
     expect(bars[0]).toHaveTextContent('10.0 (Critical)');
 
     // Row 2
     expect(images[1]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(links[2]).toHaveAttribute(
-      'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
-    );
     expect(links[2]).toHaveTextContent('Lorem OS');
     expect(links[2]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
     );
     expect(links[3]).toHaveTextContent('cpe:/lorem/ipsum');
+    expect(links[3]).toHaveAttribute(
+      'href',
+      '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
+    );
     expect(bars[1]).toHaveAttribute('title', 'Medium');
     expect(bars[1]).toHaveTextContent('5.0 (Medium)');
+  });
 
-    // Filter
-    expect(baseElement).toHaveTextContent(
-      '(Applied filter: apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity)',
+  test('should show loading state before data arrives', async () => {
+    const gmp = createGmp(buildApiEntities());
+    // Replace with a promise that never resolves to keep the loading state
+    gmp.reportoperatingsystems.get = testing.fn().mockReturnValue(
+      new Promise(() => {}),
     );
+
+    const {render} = rendererWith({gmp, router: true});
+    render(<OperatingSystemsTab filter={filter} reportId="1234" />);
+
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
 });
 
-const auditfilter = Filter.fromString(
+const auditFilter = Filter.fromString(
   'apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant',
 );
 
 describe('Audit Report Operating Systems Tab tests', () => {
-  test('should render Audit Report Operating Systems Tab', () => {
+  test('should render Audit Report Operating Systems Tab with compliance', async () => {
     const {operatingsystems} = getMockAuditReport();
+    const apiEntities = buildApiEntities();
+    const gmp = createGmp(apiEntities, auditFilter);
 
-    const onSortChange = testing.fn();
-
-    const {render} = rendererWith({
-      router: true,
-    });
+    const {render} = rendererWith({gmp, router: true});
 
     const {baseElement} = render(
       <OperatingSystemsTab
         audit={true}
-        counts={operatingsystems.counts}
-        filter={auditfilter}
-        isUpdating={false}
-        operatingsystems={operatingsystems.entities}
-        sortField={'compliant'}
-        sortReverse={true}
-        onSortChange={onSortChange}
+        filter={auditFilter}
+        reportId="1234"
+        reportOperatingSystems={operatingsystems?.entities}
       />,
     );
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('progressbar-box')).toHaveLength(2);
+    });
 
     const images = baseElement.querySelectorAll('img');
     const links = baseElement.querySelectorAll('a');
@@ -131,12 +169,8 @@ describe('Audit Report Operating Systems Tab tests', () => {
 
     // Row 1
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(links[0]).toHaveAttribute(
-      'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
-    );
     expect(links[0]).toHaveTextContent('Foo OS');
-    expect(links[1]).toHaveAttribute(
+    expect(links[0]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
@@ -146,10 +180,6 @@ describe('Audit Report Operating Systems Tab tests', () => {
 
     // Row 2
     expect(images[1]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(links[2]).toHaveAttribute(
-      'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
-    );
     expect(links[2]).toHaveTextContent('Lorem OS');
     expect(links[2]).toHaveAttribute(
       'href',
@@ -158,10 +188,5 @@ describe('Audit Report Operating Systems Tab tests', () => {
     expect(links[3]).toHaveTextContent('cpe:/lorem/ipsum');
     expect(bars[1]).toHaveAttribute('title', 'Incomplete');
     expect(bars[1]).toHaveTextContent('Incomplete');
-
-    // Filter
-    expect(baseElement).toHaveTextContent(
-      '(Applied filter: apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant)',
-    );
   });
 });

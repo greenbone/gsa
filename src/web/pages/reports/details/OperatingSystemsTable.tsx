@@ -4,11 +4,12 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import {COMPLIANCE} from 'gmp/models/compliance';
 import type ReportOperatingSystem from 'gmp/models/report/os';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import OsIcon from 'web/components/icon/OsIcon';
+import IconDivider from 'web/components/layout/IconDivider';
+import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
@@ -30,7 +31,18 @@ const getColumns = (audit = false) => [
     title: _('Operating System'),
     sortBy: 'name',
     render: (entity: ReportOperatingSystem) => (
-      <OsIcon osCpe={entity.cpe} osTxt={entity.name} />
+      <span>
+        <Link
+          filter={`name=${entity.cpe}`}
+          textOnly={!entity.cpe}
+          to="operatingsystems"
+        >
+          <IconDivider>
+            <OsIcon osCpe={entity.cpe} osTxt={entity.name} />
+            <span>{entity.name}</span>
+          </IconDivider>
+        </Link>
+      </span>
     ),
     align: 'center',
   },
@@ -38,7 +50,17 @@ const getColumns = (audit = false) => [
     key: 'cpe',
     title: _('CPE'),
     sortBy: 'cpe',
-    render: (entity: ReportOperatingSystem) => entity.cpe,
+    render: (entity: ReportOperatingSystem) => (
+      <span>
+        <Link
+          filter={`name=${entity.cpe}`}
+          textOnly={!entity.cpe}
+          to="operatingsystems"
+        >
+          {entity.cpe}
+        </Link>
+      </span>
+    ),
     align: 'center',
   },
   {
@@ -97,15 +119,7 @@ const Header = ({
             title={column.title}
             width={column.width}
             onSortChange={onSortChange}
-          >
-            {column.render({
-              compliance: COMPLIANCE.UNDEFINED,
-              hosts: {count: 0, hostsByIp: {}, complianceByIp: {}},
-              severity: undefined,
-              cpe: '',
-              name: '',
-            } as ReportOperatingSystem)}
-          </TableHead>
+          />
         ))}
       </TableRow>
     </TableHeader>
