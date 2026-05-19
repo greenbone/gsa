@@ -18,7 +18,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true 
+  cancel-in-progress: true
 
 jobs:
   release:
@@ -96,7 +96,7 @@ jobs:
           node-version: '22'
           cache: 'npm'
       - name: Install npm dependencies
-        run: npm install
+        run: npm ci
       - name: Build dist files
         run: npm run build
       - name: Create tarballs

@@ -1,10 +1,10 @@
-name: "CodeQL"
+name: 'CodeQL'
 
 on:
   push:
-    branches: [ main, stable, oldstable ]
+    branches: [main, stable, oldstable]
   pull_request:
-    branches: [ main, stable, oldstable ]
+    branches: [main, stable, oldstable]
     paths-ignore:
       - '**/*.md'
       - '**/*.txt'
@@ -13,7 +13,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true 
+  cancel-in-progress: true
 
 jobs:
   analyze:
@@ -27,22 +27,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'javascript' ]
+        language: ['javascript']
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v4
-      with:
-        languages: ${{ matrix.language }}
-      # build between init and analyze ...
-    - name: Install node
-      uses: actions/setup-node@v6
-      with:
-        cache: "npm"
-    - name: Install dependencies
-      run: npm install
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+        # build between init and analyze ...
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4

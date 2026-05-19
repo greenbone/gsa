@@ -31,7 +31,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Run JavaScript tests
         env:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.REPORT_DIR }}
@@ -54,7 +54,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Run JavaScript tests
         run: npm run test:coverage -- --reporter=default --reporter=junit --outputFile=${{ env.REPORT_DIR }}/test-report.xml
       - name: Submit test coverage to codecov.io
@@ -79,7 +79,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Cache ESLint
         uses: actions/cache@v5
         with:
@@ -112,7 +112,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Run TypeScript typecheck
         run: npm run type-check
 
@@ -131,7 +131,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Check if translations need an update
         id: check
         run: npm run i18n-extract -- --ci
@@ -155,7 +155,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Check code formatting
         id: check
         run: |
