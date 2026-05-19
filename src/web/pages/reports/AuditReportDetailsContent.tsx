@@ -302,13 +302,9 @@ const AuditReportDetailsContent = ({
         thresholdConfig,
         <OperatingSystemsTab
           audit={true}
-          counts={operatingSystems?.counts}
           filter={effectiveReportFilter}
-          isUpdating={isUpdating}
-          operatingsystems={operatingSystems?.entities}
-          sortField={sorting.os.sortField}
-          sortReverse={sorting.os.sortReverse}
-          onSortChange={(sortField: string) => onSortChange('os', sortField)}
+          reportId={reportId}
+          reportOperatingSystems={operatingSystems?.entities}
         />,
       ),
     },

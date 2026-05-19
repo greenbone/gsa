@@ -385,13 +385,9 @@ const PageContent = ({
           activeFilter,
           thresholdConfig,
           <OperatingSystemsTab
-            counts={operatingsystems?.counts}
             filter={activeFilter}
-            isUpdating={isUpdating}
-            operatingsystems={operatingsystems?.entities}
-            sortField={sorting.os.sortField}
-            sortReverse={sorting.os.sortReverse}
-            onSortChange={sortField => onSortChange('os', sortField)}
+            reportId={reportId}
+            reportOperatingSystems={operatingsystems?.entities}
           />,
         ),
     },
