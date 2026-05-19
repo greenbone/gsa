@@ -72,7 +72,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
     setIsLoading(false);
   }, [error]);
 
-  const setError = err => {
+  const setError = (err: Error) => {
     setIsLoading(false);
 
     if (onError) {
@@ -82,7 +82,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
     }
   };
 
-  const handleSaveClick = state => {
+  const handleSaveClick = (state: TValues & TDefaultValues) => {
     if (onSave && !isLoading) {
       const promise = onSave(state);
       if (isFunction(promise?.then)) {
@@ -104,7 +104,6 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
     <State {...defaultValues}>
       {({state, onValueChange}) => {
         const childValues = {...state, ...values};
-
         return (
           <Dialog
             footer={
