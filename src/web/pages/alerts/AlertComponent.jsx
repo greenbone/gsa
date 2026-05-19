@@ -117,7 +117,6 @@ const AlertComponent = ({
     useState(false);
   const [credentialDialogTitle, setCredentialDialogTitle] = useState('');
   const [credentialTypes, setCredentialTypes] = useState([]);
-  const [credentialError, setCredentialError] = useState();
 
   const [id, setId] = useState(undefined);
   const [alert, setAlert] = useState(undefined);
@@ -285,7 +284,7 @@ const AlertComponent = ({
 
   const handleCreateCredential = credentialData => {
     let credentialId;
-    gmp.credential
+    return gmp.credential
       .create(credentialData)
       .then(response => {
         credentialId = response.data.id;
@@ -310,9 +309,6 @@ const AlertComponent = ({
         } else if (String(credentialTypeRef.current) === 'pw') {
           setMethodDataPkcs12Credential(credentialId);
         }
-      })
-      .catch(error => {
-        setCredentialError(error.message);
       });
   };
 
@@ -1175,11 +1171,9 @@ const AlertComponent = ({
           )}
           {credentialDialogVisible && (
             <CredentialDialog
-              error={credentialError}
               title={credentialDialogTitle}
               types={credentialTypes}
               onClose={handleCloseCredentialDialog}
-              onErrorClose={() => setCredentialError(undefined)}
               onSave={handleCreateCredential}
             />
           )}
