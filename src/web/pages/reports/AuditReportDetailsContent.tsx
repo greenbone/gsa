@@ -305,6 +305,7 @@ const AuditReportDetailsContent = ({
           filter={effectiveReportFilter}
           reportId={reportId}
           reportOperatingSystems={operatingSystems?.entities}
+          status={status}
         />,
       ),
     },
@@ -322,6 +323,7 @@ const AuditReportDetailsContent = ({
         <TLSCertificatesTab
           reportFilter={effectiveReportFilter}
           reportId={reportId}
+          status={status}
           onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
         />,
       ),
@@ -329,7 +331,13 @@ const AuditReportDetailsContent = ({
     {
       key: 'errors',
       title: <TabTitle counts={errorsCounts} title={_('Error Messages')} />,
-      panel: <ErrorsTab filter={effectiveReportFilter} reportId={reportId} />,
+      panel: (
+        <ErrorsTab
+          filter={effectiveReportFilter}
+          reportId={reportId}
+          status={status}
+        />
+      ),
     },
     {
       key: 'usertags',

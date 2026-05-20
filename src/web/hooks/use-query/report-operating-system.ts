@@ -11,11 +11,13 @@ import useGetEntities from 'web/queries/useGetEntities';
 interface UseGetReportOperatingSystemsParams {
   reportId: string;
   filter?: Filter;
+  refetchInterval?: number | false;
 }
 
 export const useGetReportOperatingSystems = ({
   reportId,
   filter,
+  refetchInterval = undefined,
 }: UseGetReportOperatingSystemsParams) => {
   const gmp = useGmp();
 
@@ -29,6 +31,7 @@ export const useGetReportOperatingSystems = ({
     filter,
     enabled: Boolean(reportId),
     keepPreviousData: true,
+    refetchInterval,
   });
 };
 

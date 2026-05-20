@@ -388,6 +388,7 @@ const PageContent = ({
             filter={activeFilter}
             reportId={reportId}
             reportOperatingSystems={operatingsystems?.entities}
+            status={status}
           />,
         ),
     },
@@ -447,6 +448,7 @@ const PageContent = ({
           <TLSCertificatesTab
             reportFilter={activeFilter}
             reportId={reportId}
+            status={status}
             onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
           />,
         ),
@@ -457,7 +459,7 @@ const PageContent = ({
         <TabTitle counts={errorsCounts} title={_('Error Messages')} />
       ),
       renderPanel: () => (
-        <ErrorsTab filter={activeFilter} reportId={reportId} />
+        <ErrorsTab filter={activeFilter} reportId={reportId} status={status} />
       ),
     },
     {

@@ -6,9 +6,14 @@
 import {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
+import {isActive, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/Reload';
 import useGetReportErrors from 'web/hooks/use-query/report-errors';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import ErrorsTable from 'web/pages/reports/details/ErrorsTable';
@@ -18,6 +23,7 @@ import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
 interface ErrorsTabWrapperProps {
   filter?: Filter;
   reportId: string;
+  status: TaskStatus;
 }
 
 export const errorsSortFunctions = {
@@ -28,7 +34,11 @@ export const errorsSortFunctions = {
   port: makeCompareString('port'),
 };
 
-const ErrorsTabWrapper = ({filter, reportId}: ErrorsTabWrapperProps) => {
+const ErrorsTabWrapper = ({
+  filter,
+  reportId,
+  status,
+}: ErrorsTabWrapperProps) => {
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
@@ -40,6 +50,9 @@ const ErrorsTabWrapper = ({filter, reportId}: ErrorsTabWrapperProps) => {
   const {data, isLoading, isFetching, isError, error} = useGetReportErrors({
     reportId,
     filter: errorsFilter,
+    refetchInterval: isActive(status)
+      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+      : NO_RELOAD,
   });
 
   const updateFilter = (newFilter: Filter) => {

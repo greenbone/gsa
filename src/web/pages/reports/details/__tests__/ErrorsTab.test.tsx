@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, within} from 'web/testing';
+import {act, rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
@@ -44,13 +44,14 @@ const createGmp = ({
 });
 
 const reportId = 'report-123';
+const reloadIntervalActive = 2000;
 
 describe('ErrorsTab', () => {
   test('should render loading state initially', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ErrorsTab filter={filter} reportId={reportId} />);
+    render(<ErrorsTab filter={filter} reportId={reportId} status="Done" />);
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
@@ -59,7 +60,7 @@ describe('ErrorsTab', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ErrorsTab filter={filter} reportId={reportId} />);
+    render(<ErrorsTab filter={filter} reportId={reportId} status="Done" />);
 
     const table = await screen.findByRole('table');
     expect(table).toBeInTheDocument();
@@ -100,7 +101,7 @@ describe('ErrorsTab', () => {
     });
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ErrorsTab filter={filter} reportId={reportId} />);
+    render(<ErrorsTab filter={filter} reportId={reportId} status="Done" />);
 
     expect(await screen.findByText('No Errors available')).toBeInTheDocument();
   });
@@ -113,7 +114,7 @@ describe('ErrorsTab', () => {
     });
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ErrorsTab filter={filter} reportId={reportId} />);
+    render(<ErrorsTab filter={filter} reportId={reportId} status="Done" />);
 
     expect(
       await screen.findByText(/Error while loading Errors for Report/),
@@ -128,7 +129,7 @@ describe('ErrorsTab', () => {
     const gmp = createGmp({getReportErrors});
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ErrorsTab filter={filter} reportId={reportId} />);
+    render(<ErrorsTab filter={filter} reportId={reportId} status="Done" />);
 
     await screen.findByRole('table');
 
@@ -144,10 +145,55 @@ describe('ErrorsTab', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ErrorsTab filter={filter} reportId={reportId} />);
+    render(<ErrorsTab filter={filter} reportId={reportId} status="Done" />);
 
     await screen.findByRole('table');
 
     expect(screen.getByText(/Applied filter:/)).toBeInTheDocument();
+  });
+
+  describe('Errors polling behavior isActive status', () => {
+    test.each([
+      [
+        'should poll errors when task status is active',
+        'Running',
+        reloadIntervalActive + 50,
+        2,
+      ],
+      [
+        'should not poll errors when task status is not active',
+        'Stopped',
+        reloadIntervalActive * 10,
+        1,
+      ],
+    ])('%s', async (_, status, timeToAdvance, expectedCallCount) => {
+      testing.useFakeTimers();
+
+      const getReportErrors = testing.fn().mockResolvedValue({
+        data: mockErrors,
+        meta: {filter, counts: mockErrorsCounts},
+      });
+      const gmp = createGmp({getReportErrors});
+      const {render} = rendererWith({gmp, router: true, capabilities: true});
+
+      render(
+        <ErrorsTab
+          filter={filter}
+          reportId={reportId}
+          status={status as 'Running' | 'Stopped'}
+        />,
+      );
+
+      await act(async () => {});
+      expect(getReportErrors).toHaveBeenCalledTimes(1);
+
+      await act(async () => {
+        await testing.advanceTimersByTimeAsync(timeToAdvance);
+      });
+
+      expect(getReportErrors).toHaveBeenCalledTimes(expectedCallCount);
+
+      testing.useRealTimers();
+    });
   });
 });
