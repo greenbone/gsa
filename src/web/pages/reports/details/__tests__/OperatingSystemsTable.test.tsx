@@ -35,8 +35,8 @@ describe('OperatingSystemsTable', () => {
     render(
       <OperatingSystemsTable
         // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        entitiesCounts={operatingsystems!.counts}
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={filter}
       />,
     );
@@ -52,10 +52,6 @@ describe('OperatingSystemsTable', () => {
     expect(columnHeaders.some(th => /CPE/i.exec(th.textContent))).toBe(true);
 
     expect(columnHeaders.some(th => /Hosts/i.exec(th.textContent))).toBe(true);
-
-    expect(columnHeaders.some(th => /Severity/i.exec(th.textContent))).toBe(
-      true,
-    );
   });
 
   test('should render operating system data correctly', () => {
@@ -70,8 +66,8 @@ describe('OperatingSystemsTable', () => {
     render(
       <OperatingSystemsTable
         // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        entitiesCounts={operatingsystems!.counts}
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={filter}
       />,
     );
@@ -81,10 +77,6 @@ describe('OperatingSystemsTable', () => {
     screen.getByText('Foo OS');
 
     screen.getByText('cpe:/foo/bar');
-
-    // Should render severity bar
-
-    screen.getByText('10.0 (Critical)');
   });
 
   test('should render operating system as link when CPE is defined', () => {
@@ -99,8 +91,8 @@ describe('OperatingSystemsTable', () => {
     render(
       <OperatingSystemsTable
         // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        entitiesCounts={operatingsystems!.counts}
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={filter}
       />,
     );
@@ -126,8 +118,8 @@ describe('OperatingSystemsTable', () => {
     render(
       <OperatingSystemsTable
         // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        entitiesCounts={operatingsystems!.counts}
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={filter}
       />,
     );
@@ -139,31 +131,6 @@ describe('OperatingSystemsTable', () => {
 
       '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
-  });
-
-  test('should render severity bar instead of compliance bar for regular reports', () => {
-    const {operatingsystems} = getMockReport();
-
-    const {render} = rendererWith({
-      router: true,
-
-      gmp: createGmp(),
-    });
-
-    render(
-      <OperatingSystemsTable
-        // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        entitiesCounts={operatingsystems!.counts}
-        filter={filter}
-      />,
-    );
-
-    // Should render severity bars, not compliance bars
-
-    screen.getByText('10.0 (Critical)');
-
-    screen.getByText('5.0 (Medium)');
   });
 
   test('should render empty state when no operating systems', () => {
@@ -207,10 +174,10 @@ describe('OperatingSystemsTable', () => {
 
     render(
       <OperatingSystemsTable
-        // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
         audit={true}
-        entitiesCounts={operatingsystems!.counts}
+        // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={auditFilter}
       />,
     );
@@ -247,10 +214,10 @@ describe('OperatingSystemsTable', () => {
 
     render(
       <OperatingSystemsTable
-        // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
         audit={true}
-        entitiesCounts={operatingsystems!.counts}
+        // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={auditFilter}
       />,
     );
@@ -276,8 +243,8 @@ describe('OperatingSystemsTable', () => {
     render(
       <OperatingSystemsTable
         // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        entitiesCounts={operatingsystems!.counts}
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={filter}
         onSortChange={onSortChange}
       />,
@@ -304,8 +271,8 @@ describe('OperatingSystemsTable', () => {
     render(
       <OperatingSystemsTable
         // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        entitiesCounts={operatingsystems!.counts}
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={filter}
         onSortChange={onSortChange}
       />,
@@ -332,8 +299,8 @@ describe('OperatingSystemsTable', () => {
     render(
       <OperatingSystemsTable
         // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        entitiesCounts={operatingsystems!.counts}
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={filter}
         onSortChange={onSortChange}
       />,
@@ -346,11 +313,9 @@ describe('OperatingSystemsTable', () => {
     expect(onSortChange).toHaveBeenCalledWith('hosts');
   });
 
-  test('should handle sorting by severity column', async () => {
+  test('should not render severity column for regular or audit reports', () => {
     const {operatingsystems} = getMockReport();
 
-    const onSortChange = testing.fn();
-
     const {render} = rendererWith({
       router: true,
 
@@ -360,38 +325,9 @@ describe('OperatingSystemsTable', () => {
     render(
       <OperatingSystemsTable
         // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        entitiesCounts={operatingsystems!.counts}
+        entities={operatingsystems?.entities ?? []}
+        entitiesCounts={operatingsystems?.counts}
         filter={filter}
-        onSortChange={onSortChange}
-      />,
-    );
-
-    const severityHeader = await screen.findByText('Severity');
-
-    await userEvent.click(severityHeader);
-
-    expect(onSortChange).toHaveBeenCalledWith('severity');
-  });
-
-  test('should not render severity column when audit is true', () => {
-    const {operatingsystems} = getMockAuditReport();
-
-    const auditFilter = Filter.fromString('first=1 rows=10');
-
-    const {render} = rendererWith({
-      router: true,
-
-      gmp: createGmp(),
-    });
-
-    render(
-      <OperatingSystemsTable
-        // @ts-expect-error entities are ReportOperatingSystem[], not Model[]
-        entities={operatingsystems!.entities}
-        audit={true}
-        entitiesCounts={operatingsystems!.counts}
-        filter={auditFilter}
       />,
     );
 
@@ -399,12 +335,10 @@ describe('OperatingSystemsTable', () => {
 
     const columnHeaders = within(table).getAllByRole('columnheader');
 
+    expect(columnHeaders).toHaveLength(3);
+
     expect(columnHeaders.some(th => /Severity/i.exec(th.textContent))).toBe(
       false,
-    );
-
-    expect(columnHeaders.some(th => /Compliant/i.exec(th.textContent))).toBe(
-      true,
     );
   });
 });

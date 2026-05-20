@@ -26,9 +26,7 @@ interface ReportOperatingSystemsResponseData extends XmlResponseData {
   get_report_operating_systems?: {
     get_report_operating_systems_response?: {
       operating_systems?: {
-        operating_system?:
-          | OperatingSystemElement
-          | OperatingSystemElement[];
+        operating_system?: OperatingSystemElement | OperatingSystemElement[];
       };
     };
   };
@@ -90,4 +88,3 @@ class ReportOperatingSystemsCommand extends HttpCommand {
 }
 
 export default ReportOperatingSystemsCommand;
-

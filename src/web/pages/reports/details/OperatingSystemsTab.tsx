@@ -19,7 +19,7 @@ interface OperatingSystemsTabWrapperProps {
   audit?: boolean;
   filter?: Filter;
   reportId: string;
-  /** Pre-parsed OS entities from the full report, used to enrich severity and compliance. */
+  /** Pre-parsed OS entities from the full report, used to enrich compliance. */
   reportOperatingSystems?: ReportOperatingSystem[];
 }
 
@@ -33,9 +33,6 @@ type OperatingSystemsSortFunctions = {
   hosts: (
     sortReverse?: boolean,
   ) => (a: ReportOperatingSystem, b: ReportOperatingSystem) => number;
-  severity: (
-    sortReverse?: boolean,
-  ) => (a: ReportOperatingSystem, b: ReportOperatingSystem) => number;
   compliant: (
     sortReverse?: boolean,
   ) => (a: ReportOperatingSystem, b: ReportOperatingSystem) => number;
@@ -45,7 +42,6 @@ const operatingSystemsSortFunctions: OperatingSystemsSortFunctions = {
   name: makeCompareString('name'),
   cpe: makeCompareString('id'),
   hosts: makeCompareNumber(entity => entity.hosts.count),
-  severity: makeCompareNumber('severity', 0),
   compliant: makeCompareString('compliance'),
 };
 
@@ -94,9 +90,6 @@ const OperatingSystemsTabWrapper = ({
         best_os_txt: os.name,
       });
       enriched.hosts.count = os.hosts.count;
-      if (isDefined(source.severity)) {
-        enriched.setSeverity(source.severity);
-      }
       enriched.compliance = source.compliance;
       return enriched;
     });
