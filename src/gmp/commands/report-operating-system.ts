@@ -13,6 +13,7 @@ import HttpCommand, {
 import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
 import type {XmlResponseData} from 'gmp/http/transform/fast-xml';
+import type {FilterModelElement} from 'gmp/models/filter';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import {map} from 'gmp/utils/array';
 
@@ -25,6 +26,7 @@ interface OperatingSystemElement {
 interface ReportOperatingSystemsResponseData extends XmlResponseData {
   get_report_operating_systems?: {
     get_report_operating_systems_response?: {
+      filters?: FilterModelElement;
       operating_systems?: {
         operating_system?: OperatingSystemElement | OperatingSystemElement[];
       };
@@ -57,7 +59,7 @@ class ReportOperatingSystemsCommand extends HttpCommand {
     const data =
       root.get_report_operating_systems.get_report_operating_systems_response;
 
-    const filter = parseFilter(data as any);
+    const filter = parseFilter(data ?? {});
 
     const entities = map(
       data?.operating_systems?.operating_system,

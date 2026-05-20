@@ -68,6 +68,7 @@ describe('Report Operating Systems Tab tests', () => {
         filter={filter}
         reportId="1234"
         reportOperatingSystems={operatingsystems?.entities}
+        status="Done"
       />,
     );
 
@@ -117,7 +118,9 @@ describe('Report Operating Systems Tab tests', () => {
       .mockReturnValue(new Promise(() => {}));
 
     const {render} = rendererWith({gmp, router: true});
-    render(<OperatingSystemsTab filter={filter} reportId="1234" />);
+    render(
+      <OperatingSystemsTab filter={filter} reportId="1234" status="Done" />,
+    );
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
@@ -141,6 +144,7 @@ describe('Audit Report Operating Systems Tab tests', () => {
         filter={auditFilter}
         reportId="1234"
         reportOperatingSystems={operatingsystems?.entities}
+        status="Done"
       />,
     );
 

@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, within} from 'web/testing';
+import {act, rendererWith, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
@@ -15,6 +15,7 @@ const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity',
 );
 const tlsCertificates = getMockReport().tlsCertificates?.entities ?? [];
+const reloadIntervalActive = 2000;
 
 const createGmp = ({
   getReportTlsCertificates = testing.fn().mockResolvedValue({
@@ -62,6 +63,7 @@ describe('Report TLS Certificates Tab tests', () => {
       <TLSCertificatesTab
         reportFilter={filter}
         reportId={reportId}
+        status="Done"
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
     );
@@ -154,6 +156,7 @@ describe('Report TLS Certificates Tab tests', () => {
       <TLSCertificatesTab
         reportFilter={filter}
         reportId="report-id-1234"
+        status="Done"
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
     );
@@ -169,5 +172,60 @@ describe('Report TLS Certificates Tab tests', () => {
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
       tlsCertificates[1],
     );
+  });
+
+  describe('TLS Certificates polling behavior isActive status', () => {
+    test.each([
+      [
+        'should poll TLS certificates when task status is active',
+        'Running',
+        reloadIntervalActive + 50,
+        2,
+      ],
+      [
+        'should not poll TLS certificates when task status is not active',
+        'Stopped',
+        reloadIntervalActive * 10,
+        1,
+      ],
+    ])('%s', async (_, status, timeToAdvance, expectedCallCount) => {
+      testing.useFakeTimers();
+
+      const getReportTlsCertificates = testing.fn().mockResolvedValue({
+        data: tlsCertificates,
+        meta: {
+          filter,
+          counts: new CollectionCounts({
+            first: 1,
+            all: tlsCertificates.length,
+            filtered: tlsCertificates.length,
+            length: tlsCertificates.length,
+            rows: tlsCertificates.length,
+          }),
+        },
+      });
+      const gmp = createGmp({getReportTlsCertificates});
+      const {render} = rendererWith({router: true, gmp});
+
+      render(
+        <TLSCertificatesTab
+          reportFilter={filter}
+          reportId="report-id-1234"
+          status={status as 'Running' | 'Stopped'}
+          onTlsCertificateDownloadClick={testing.fn()}
+        />,
+      );
+
+      await act(async () => {});
+      expect(getReportTlsCertificates).toHaveBeenCalledTimes(1);
+
+      await act(async () => {
+        await testing.advanceTimersByTimeAsync(timeToAdvance);
+      });
+
+      expect(getReportTlsCertificates).toHaveBeenCalledTimes(expectedCallCount);
+
+      testing.useRealTimers();
+    });
   });
 });

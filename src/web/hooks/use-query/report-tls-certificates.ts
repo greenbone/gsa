@@ -11,11 +11,13 @@ import useGetEntities from 'web/queries/useGetEntities';
 interface UseGetReportTlsCertificatesParams {
   reportId: string;
   filter?: Filter;
+  refetchInterval?: number | false;
 }
 
 export const useGetReportTlsCertificates = ({
   reportId,
   filter = undefined,
+  refetchInterval = undefined,
 }: UseGetReportTlsCertificatesParams) => {
   const gmp = useGmp();
 
@@ -29,6 +31,7 @@ export const useGetReportTlsCertificates = ({
     filter,
     enabled: Boolean(reportId),
     keepPreviousData: true,
+    refetchInterval,
   });
 };
 

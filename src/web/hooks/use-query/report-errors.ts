@@ -10,11 +10,13 @@ import useGetEntities from 'web/queries/useGetEntities';
 interface UseGetReportErrorsParams {
   reportId: string;
   filter?: Filter;
+  refetchInterval?: number | false;
 }
 
 export const useGetReportErrors = ({
   reportId,
   filter = undefined,
+  refetchInterval = undefined,
 }: UseGetReportErrorsParams) => {
   const gmp = useGmp();
 
@@ -28,6 +30,7 @@ export const useGetReportErrors = ({
     filter,
     enabled: Boolean(reportId),
     keepPreviousData: true,
+    refetchInterval,
   });
 };
 

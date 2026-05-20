@@ -7,8 +7,13 @@ import {useEffect, useMemo, useState} from 'react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
+import {isActive, type TaskStatus} from 'gmp/models/task';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/Reload';
 import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePagination from 'web/hooks/usePagination';
@@ -18,12 +23,14 @@ import TLSCertificatesTable from 'web/pages/reports/details/TlsCertificatesTable
 interface TLSCertificatesTabProps {
   reportId: string;
   reportFilter: Filter;
+  status: TaskStatus;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
 }
 
 const TLSCertificatesTab = ({
   reportId,
   reportFilter,
+  status,
   onTlsCertificateDownloadClick,
 }: TLSCertificatesTabProps) => {
   const [_] = useTranslation();
@@ -44,6 +51,9 @@ const TLSCertificatesTab = ({
     useGetReportTlsCertificates({
       reportId,
       filter: tlsCertificatesFilter,
+      refetchInterval: isActive(status)
+        ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+        : NO_RELOAD,
     });
 
   const updateFilter = (newFilter: Filter) => {
