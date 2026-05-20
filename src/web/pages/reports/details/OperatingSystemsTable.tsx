@@ -6,7 +6,6 @@
 import {_, _l} from 'gmp/locale/lang';
 import type ReportOperatingSystem from 'gmp/models/report/os';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
-import SeverityBar from 'web/components/bar/SeverityBar';
 import OsIcon from 'web/components/icon/OsIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Link from 'web/components/link/Link';
@@ -84,18 +83,7 @@ const getColumns = (audit = false) => [
           align: 'center',
         },
       ]
-    : [
-        {
-          key: 'severity',
-          title: _('Severity'),
-          width: '10%',
-          sortBy: 'severity',
-          render: (entity: ReportOperatingSystem) => (
-            <SeverityBar severity={entity.severity} />
-          ),
-          align: 'center',
-        },
-      ]),
+    : []),
 ];
 
 const Header = ({

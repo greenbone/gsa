@@ -56,7 +56,7 @@ const createGmp = (apiEntities, responseFilter = filter) => ({
 });
 
 describe('Report Operating Systems Tab tests', () => {
-  test('should render Report Operating Systems Tab with severity from full report', async () => {
+  test('should render Report Operating Systems Tab', async () => {
     const {operatingsystems} = getMockReport();
     const apiEntities = buildApiEntities();
     const gmp = createGmp(apiEntities);
@@ -71,20 +71,16 @@ describe('Report Operating Systems Tab tests', () => {
       />,
     );
 
-    await waitFor(() => {
-      expect(screen.getAllByTestId('progressbar-box')).toHaveLength(2);
-    });
+    await screen.findByText('Foo OS');
 
     const images = baseElement.querySelectorAll('img');
     const links = baseElement.querySelectorAll('a');
     const header = baseElement.querySelectorAll('th');
-    const bars = screen.getAllByTestId('progressbar-box');
 
     // Headings
     expect(header[0]).toHaveTextContent('Operating System');
     expect(header[1]).toHaveTextContent('CPE');
     expect(header[2]).toHaveTextContent('Hosts');
-    expect(header[3]).toHaveTextContent('Severity');
 
     // Row 1
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
@@ -98,8 +94,6 @@ describe('Report Operating Systems Tab tests', () => {
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
-    expect(bars[0]).toHaveAttribute('title', 'Critical');
-    expect(bars[0]).toHaveTextContent('10.0 (Critical)');
 
     // Row 2
     expect(images[1]).toHaveAttribute('src', '/img/os_unknown.svg');
@@ -113,16 +107,14 @@ describe('Report Operating Systems Tab tests', () => {
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
     );
-    expect(bars[1]).toHaveAttribute('title', 'Medium');
-    expect(bars[1]).toHaveTextContent('5.0 (Medium)');
   });
 
   test('should show loading state before data arrives', async () => {
     const gmp = createGmp(buildApiEntities());
     // Replace with a promise that never resolves to keep the loading state
-    gmp.reportoperatingsystems.get = testing.fn().mockReturnValue(
-      new Promise(() => {}),
-    );
+    gmp.reportoperatingsystems.get = testing
+      .fn()
+      .mockReturnValue(new Promise(() => {}));
 
     const {render} = rendererWith({gmp, router: true});
     render(<OperatingSystemsTab filter={filter} reportId="1234" />);
