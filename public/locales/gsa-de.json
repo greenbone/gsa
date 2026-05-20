@@ -808,6 +808,7 @@
   "Error Messages": "Fehlermeldungen",
   "Error while loading Container Scanning Results for Report {{reportId}}": "Fehler beim Laden der Container-Scan-Ergebnisse für Bericht {{reportId}}",
   "Error while loading Errors for Report {{reportId}}": "Fehler beim Laden der Fehler für Bericht {{reportId}}",
+  "Error while loading Operating Systems for Report {{reportId}}": "Fehler beim Laden der Betriebssysteme für Bericht {{reportId}}",
   "Error while loading Ports for Report {{reportId}}": "Fehler beim Laden der Ports für Bericht {{reportId}}",
   "Error while loading Report {{reportId}}": "Fehler beim Laden des Berichts {{reportId}}",
   "Error while loading Results for Report {{reportId}}": "Fehler beim Laden von Ergebnissen des Berichts {{reportId}}",
