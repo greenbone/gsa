@@ -101,8 +101,9 @@ describe('PermissionDialog tests', () => {
     render(<PermissionDialog onClose={onClose} onSave={onSave} />);
 
     const dialog = within(screen.getDialog());
-    const nameSelect = dialog.getByName('name') as HTMLSelectElement;
-
+    const nameSelect = dialog.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Name',
+    });
     const selectItems = await getSelectItemElementsForSelect(nameSelect);
 
     const getTasksOption = selectItems.find(item =>
@@ -372,10 +373,10 @@ describe('PermissionDialog tests', () => {
     const dialog = within(screen.getDialog());
 
     // Check that resource type select is visible for Super permission
-    const resourceTypeSelect = dialog.getByName(
-      'resourceType',
-    ) as HTMLSelectElement;
-    expect(resourceTypeSelect.value).toBe('user');
+    const resourceTypeSelect = dialog.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Resource Type',
+    });
+    expect(resourceTypeSelect.value).toBe('User');
 
     // Open the select dropdown and get available options
     const selectItems =
@@ -558,8 +559,9 @@ describe('PermissionDialog tests', () => {
 
     const dialog = within(screen.getDialog());
 
-    const nameSelect = dialog.getByName('name') as HTMLSelectElement;
-
+    const nameSelect = dialog.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Name',
+    });
     const selectItems = await getSelectItemElementsForSelect(nameSelect);
 
     const getTasksOption = selectItems.find(item =>
