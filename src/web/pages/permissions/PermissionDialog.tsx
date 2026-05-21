@@ -256,9 +256,10 @@ const PermissionDialog = ({
 
         return (
           <>
-            <FormGroup title={_('Name')}>
+            <FormGroup htmlFor="permission-name" title={_('Name')}>
               <Select
                 grow="1"
+                id="permission-name"
                 items={permItems}
                 name="name"
                 value={state.name}
@@ -266,9 +267,10 @@ const PermissionDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Comment')}>
+            <FormGroup htmlFor="permission-comment" title={_('Comment')}>
               <TextField
                 grow="1"
+                id="permission-comment"
                 name="comment"
                 value={state.comment}
                 onChange={onValueChange}
@@ -334,9 +336,13 @@ const PermissionDialog = ({
             </FormGroup>
 
             {state.name === 'Super' && (
-              <FormGroup title={_('Resource Type')}>
+              <FormGroup
+                htmlFor="permission-resource-type"
+                title={_('Resource Type')}
+              >
                 <Select
                   grow="1"
+                  id="permission-resource-type"
                   items={[
                     {
                       value: '',
@@ -362,10 +368,14 @@ const PermissionDialog = ({
               </FormGroup>
             )}
             {showResourceId && (
-              <FormGroup title={resourceIdTitle}>
+              <FormGroup
+                htmlFor="permission-resource-id"
+                title={resourceIdTitle}
+              >
                 <TextField
                   disabled={fixedResource}
                   grow="1"
+                  id="permission-resource-id"
                   name="resourceId"
                   value={state.resourceId}
                   onChange={onValueChange}
