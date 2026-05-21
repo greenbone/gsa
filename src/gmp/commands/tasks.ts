@@ -10,7 +10,8 @@ import type Http from 'gmp/http/http';
 import type Filter from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import Task, {type TaskElement} from 'gmp/models/task';
-import {type YesNo} from 'gmp/parser';
+import {parseYesNo, type YesNo} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 interface GetTasksResponse extends Element {
   apply_overrides: YesNo;
@@ -39,6 +40,7 @@ interface TasksCommandWithFilterParam {
 
 interface TasksCommandGetParams {
   filter?: Filter | string;
+  schedulesOnly?: boolean;
 }
 
 class TasksCommand extends EntitiesCommand<Task, GetTasksResponse> {
@@ -52,10 +54,16 @@ class TasksCommand extends EntitiesCommand<Task, GetTasksResponse> {
   }
 
   async get(
-    {filter}: TasksCommandGetParams = {},
+    {filter, schedulesOnly}: TasksCommandGetParams = {},
     options?: HttpCommandOptions,
   ) {
-    const params = {filter, usage_type: 'scan'};
+    const params = {
+      filter,
+      usage_type: 'scan',
+      schedules_only: isDefined(schedulesOnly)
+        ? parseYesNo(schedulesOnly)
+        : undefined,
+    };
     const response = await this.httpGetWithTransform(params, options);
     const {
       entities,
