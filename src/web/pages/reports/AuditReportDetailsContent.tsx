@@ -177,7 +177,6 @@ const AuditReportDetailsContent = ({
   const [_] = useTranslation();
 
   const hosts = report?.hosts;
-  const operatingSystems = report?.operatingSystems;
   const results = report?.results;
   const timestamp = report?.timestamp;
   const scan_run_status = report?.scan_run_status;
@@ -304,7 +303,6 @@ const AuditReportDetailsContent = ({
           audit={true}
           filter={effectiveReportFilter}
           reportId={reportId}
-          reportOperatingSystems={operatingSystems?.entities}
           status={status}
         />,
       ),

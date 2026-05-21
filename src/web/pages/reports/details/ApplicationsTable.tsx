@@ -23,11 +23,6 @@ interface HeaderProps {
   onSortChange?: (sortBy: string) => void;
 }
 
-interface RowProps {
-  entity: ReportApp;
-  links?: boolean;
-}
-
 interface ColumnsProps {
   links?: boolean;
 }
@@ -96,7 +91,7 @@ const Header = ({
   );
 };
 
-const Row = ({entity, links = true}: RowProps) => {
+const Row = ({entity, links = true}) => {
   const columns = getColumns({links});
   return (
     <TableRow>
@@ -110,5 +105,5 @@ const Row = ({entity, links = true}: RowProps) => {
 export default createEntitiesTable({
   emptyTitle: _l('No Applications available'),
   header: Header,
-  row: Row as any,
+  row: Row,
 });

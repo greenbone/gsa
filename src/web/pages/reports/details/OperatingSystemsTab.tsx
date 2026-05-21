@@ -6,7 +6,7 @@
 import {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
-import ReportOperatingSystem from 'gmp/models/report/os';
+import type ReportOperatingSystem from 'gmp/models/report/os';
 import {isActive, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
@@ -24,8 +24,6 @@ interface OperatingSystemsTabWrapperProps {
   audit?: boolean;
   filter?: Filter;
   reportId: string;
-  /** Pre-parsed OS entities from the full report, used to enrich compliance. */
-  reportOperatingSystems?: ReportOperatingSystem[];
   status: TaskStatus;
 }
 
@@ -55,7 +53,6 @@ const OperatingSystemsTabWrapper = ({
   filter,
   reportId,
   audit = false,
-  reportOperatingSystems,
   status,
 }: OperatingSystemsTabWrapperProps) => {
   const [_] = useTranslation();
@@ -84,26 +81,7 @@ const OperatingSystemsTabWrapper = ({
     updateFilter,
   );
 
-  // Enrich entities from the dedicated endpoint with severity / compliance
-  // data from the full report parse, which has that information.
-  const operatingSystems = useMemo(() => {
-    const fetchedEntities = data?.entities ?? [];
-    if (!reportOperatingSystems?.length || !fetchedEntities.length) {
-      return fetchedEntities;
-    }
-    const byKey = new Map(reportOperatingSystems.map(os => [os.cpe, os]));
-    return fetchedEntities.map(os => {
-      const source = byKey.get(os.cpe);
-      if (!isDefined(source)) return os;
-      const enriched = ReportOperatingSystem.fromElement({
-        best_os_cpe: os.cpe,
-        best_os_txt: os.name,
-      });
-      enriched.hosts.count = os.hosts.count;
-      enriched.compliance = source.compliance;
-      return enriched;
-    });
-  }, [data?.entities, reportOperatingSystems]);
+  const operatingSystems = data?.entities ?? [];
 
   if (isError) {
     return (
