@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {prettyDOM} from '@testing-library/react';
 import {PointerEventsCheckLevel} from '@testing-library/user-event';
 import {isDefined} from 'gmp/utils/identity';
 import {
@@ -25,6 +26,12 @@ export const getSelectItemElementsForSelect = async (
   element = isDefined(element) ? element : getSelectElement();
   await openSelectElement(element);
   const selectItemsId = element.getAttribute('aria-controls');
+  if (!selectItemsId) {
+    throw new Error(
+      'Select element does not have aria-controls attribute\n ' +
+        prettyDOM(element),
+    );
+  }
   const itemsContainer =
     document.body.querySelector<HTMLElement>('#' + selectItemsId) || undefined;
   return getSelectItemElements(itemsContainer);
