@@ -14,6 +14,7 @@ interface FormGroupProps {
   'data-testid'?: string;
   direction?: 'row' | 'column';
   gap?: StyleProp<MantineSpacing>;
+  htmlFor?: string;
   title?: React.ReactNode;
 }
 
@@ -33,6 +34,7 @@ const StyledLabel = styled.label`
 
 const FormGroup = ({
   children,
+  htmlFor,
   title,
   gap = 'md',
   direction = 'column',
@@ -42,7 +44,9 @@ const FormGroup = ({
   return (
     <Wrapper data-testid={dataTestId}>
       {isDefined(title) && (
-        <StyledLabel data-testid={`${dataTestId}-label`}>{title}</StyledLabel>
+        <StyledLabel data-testid={`${dataTestId}-label`} htmlFor={htmlFor}>
+          {title}
+        </StyledLabel>
       )}
       <Layout gap={gap}>{children}</Layout>
     </Wrapper>

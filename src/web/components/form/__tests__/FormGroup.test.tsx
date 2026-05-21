@@ -30,4 +30,17 @@ describe('FormGroup tests', () => {
     const content = screen.getByTestId('inner');
     expect(content).toHaveTextContent('Foo');
   });
+
+  test("should render with htmlFor and label's htmlFor should match", () => {
+    render(
+      <FormGroup htmlFor="input-id" title="Some Label">
+        <input id="input-id" name="input-name" />
+      </FormGroup>,
+    );
+
+    const input = screen.getByLabelText('Some Label');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute('id', 'input-id');
+    expect(input).toHaveAttribute('name', 'input-name');
+  });
 });
