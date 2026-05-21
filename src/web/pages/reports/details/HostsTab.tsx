@@ -1,12 +1,13 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+ import type CollectionCounts from 'gmp/collection/collection-counts';
+import type Filter from 'gmp/models/filter';
+import type ReportHost from 'gmp/models/report/host';
 import HostsTable from 'web/pages/reports/details/HostsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
-import PropTypes from 'web/utils/PropTypes';
 import {
   makeCompareDate,
   makeCompareIp,
@@ -14,6 +15,17 @@ import {
   makeCompareSeverity,
   makeCompareString,
 } from 'web/utils/Sort';
+
+interface HostsTabProps {
+  audit?: boolean;
+  counts?: CollectionCounts;
+  hosts?: ReportHost[];
+  filter: Filter;
+  isUpdating?: boolean;
+  sortField: string;
+  sortReverse: boolean;
+  onSortChange: (sortField: string) => void;
+}
 
 const hostsSortFunctions = {
   ip: makeCompareIp('ip'),
@@ -52,7 +64,7 @@ const HostsTab = ({
   sortField,
   sortReverse,
   onSortChange,
-}) => (
+}: HostsTabProps) => (
   <ReportEntitiesContainer
     counts={counts}
     entities={hosts}
@@ -73,6 +85,7 @@ const HostsTab = ({
     }) => (
       <HostsTable
         audit={audit}
+        // @ts-expect-error
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}
@@ -89,16 +102,5 @@ const HostsTab = ({
     )}
   </ReportEntitiesContainer>
 );
-
-HostsTab.propTypes = {
-  audit: PropTypes.bool,
-  counts: PropTypes.object,
-  filter: PropTypes.filter.isRequired,
-  hosts: PropTypes.array,
-  isUpdating: PropTypes.bool,
-  sortField: PropTypes.string.isRequired,
-  sortReverse: PropTypes.bool.isRequired,
-  onSortChange: PropTypes.func.isRequired,
-};
 
 export default HostsTab;
