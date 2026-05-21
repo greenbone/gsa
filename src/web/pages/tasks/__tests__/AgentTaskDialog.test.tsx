@@ -76,10 +76,11 @@ describe('AgentTaskDialog component tests', () => {
     const {onAgentGroupChange} = commonHandlers();
     renderDialog({onAgentGroupChange});
 
-    const agentGroupSelect = screen.getByName('agentGroupId');
+    const agentGroupSelect = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Scan Agent Groups',
+    });
     fireEvent.click(agentGroupSelect);
 
-    //@ts-expect-error
     const items = await getSelectItemElementsForSelect(agentGroupSelect);
     expect(items[0]).toHaveTextContent('Group A');
     fireEvent.click(items[0]);

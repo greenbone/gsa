@@ -209,7 +209,11 @@ const AgentTaskDialog = ({
 
             {capabilities.mayAccess('agentgroup') &&
               capabilities.mayCreate('agentgroup') && (
-                <FormGroup direction="row" title={_('Scan Agent Groups')}>
+                <FormGroup
+                  direction="row"
+                  htmlFor="agent-group"
+                  title={_('Scan Agent Groups')}
+                >
                   <Title
                     title={
                       changeTask
@@ -221,6 +225,7 @@ const AgentTaskDialog = ({
                   >
                     <Select
                       disabled={!changeTask}
+                      id="agent-group"
                       isLoading={isLoadingAgentGroups}
                       items={agentGroupItems}
                       name="agentGroupId"
@@ -239,9 +244,10 @@ const AgentTaskDialog = ({
 
             {capabilities.mayAccess('alert') &&
               capabilities.mayCreate('alert') && (
-                <FormGroup direction="row" title={_('Alerts')}>
+                <FormGroup direction="row" htmlFor="alerts" title={_('Alerts')}>
                   <MultiSelect
                     grow="1"
+                    id="alerts"
                     isLoading={isLoadingAlerts}
                     items={alertItems}
                     name="alertIds"
@@ -263,9 +269,14 @@ const AgentTaskDialog = ({
                     'Note that the Agent Task refers to generating the report with stored data.\nIf you want to change when the Scan Agents scan, go to the Agent Groups page.',
                   )}
                   slot={
-                    <FormGroup direction="row" title={_('Schedule')}>
+                    <FormGroup
+                      direction="row"
+                      htmlFor="schedule"
+                      title={_('Schedule')}
+                    >
                       <Select
                         grow="1"
+                        id="schedule"
                         isLoading={isLoadingSchedules}
                         items={scheduleItems}
                         name="scheduleId"
@@ -303,9 +314,10 @@ const AgentTaskDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Min QoD')}>
+            <FormGroup htmlFor="min-qod" title={_('Min QoD')}>
               <Spinner
                 disabled={state.inAssets !== YES_VALUE}
+                id="min-qod"
                 max={100}
                 min={0}
                 name="minQod"
