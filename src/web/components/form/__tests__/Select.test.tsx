@@ -334,4 +334,53 @@ describe('Select component tests', () => {
     expect(input).toHaveValue('');
     expect(handleChange).toHaveBeenCalledWith(undefined, 'foo');
   });
+
+  test('should allow to get options of distinct select elements', async () => {
+    const handleChange = testing.fn();
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
+
+    render(
+      <>
+        <label htmlFor="select1">Select 1</label>
+        <Select
+          id="select1"
+          items={items}
+          name="foo"
+          value="bar"
+          onChange={handleChange}
+        />
+        <label htmlFor="select2">Select 2</label>
+        <Select
+          id="select2"
+          items={items}
+          name="foo2"
+          value="foo"
+          onChange={handleChange}
+        />
+      </>,
+    );
+
+    const select1 = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Select 1',
+    });
+    expect(select1).toHaveValue('Bar');
+    const select2 = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Select 2',
+    });
+    expect(select2).toHaveValue('Foo');
+
+    const select1Items = await getSelectItemElementsForSelect(select1);
+    expect(select1Items.length).toEqual(2);
+    fireEvent.click(select1Items[1]);
+    expect(handleChange).toHaveBeenCalledWith('foo', 'foo');
+  });
 });
