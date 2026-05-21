@@ -806,6 +806,7 @@
   "Error loading credential store: ": "加载凭据存储时出错：",
   "Error Message": "错误消息",
   "Error Messages": "错误消息",
+  "Error while loading Applications for Report {{reportId}}": "",
   "Error while loading Container Scanning Results for Report {{reportId}}": "",
   "Error while loading Errors for Report {{reportId}}": "",
   "Error while loading Operating Systems for Report {{reportId}}": "",
