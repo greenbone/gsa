@@ -49,6 +49,24 @@ describe('TasksCommand tests', () => {
     expect(result.data).toEqual([new Task({id: '3', name: 'Custom Task'})]);
   });
 
+  test('should fetch tasks with schedules only', async () => {
+    const response = createEntitiesResponse('task', [
+      {_id: '3', name: 'Custom Task'},
+    ]);
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TasksCommand(fakeHttp);
+    const result = await cmd.get({schedulesOnly: true});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_tasks',
+        usage_type: 'scan',
+        schedules_only: 1,
+      },
+    });
+    expect(result.data).toEqual([new Task({id: '3', name: 'Custom Task'})]);
+  });
+
   test('should fetch all tasks', async () => {
     const response = createEntitiesResponse('task', [
       {_id: '4', name: 'All Tasks 1'},
@@ -60,6 +78,29 @@ describe('TasksCommand tests', () => {
     const result = await cmd.getAll();
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_tasks', filter: 'first=1 rows=-1', usage_type: 'scan'},
+    });
+    expect(result.data).toEqual([
+      new Task({id: '4', name: 'All Tasks 1'}),
+      new Task({id: '5', name: 'All Tasks 2'}),
+    ]);
+  });
+
+  test('should fetch all tasks with schedules only', async () => {
+    const response = createEntitiesResponse('task', [
+      {_id: '4', name: 'All Tasks 1'},
+      {_id: '5', name: 'All Tasks 2'},
+    ]);
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TasksCommand(fakeHttp);
+    const result = await cmd.getAll({schedulesOnly: true});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_tasks',
+        filter: 'first=1 rows=-1',
+        usage_type: 'scan',
+        schedules_only: 1,
+      },
     });
     expect(result.data).toEqual([
       new Task({id: '4', name: 'All Tasks 1'}),
