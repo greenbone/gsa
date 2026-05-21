@@ -56,6 +56,7 @@ import PoliciesCommand from 'gmp/commands/policies';
 import PolicyCommand from 'gmp/commands/policy';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/port-lists';
 import ReportCommand from 'gmp/commands/report';
+import ReportApplicationsCommand from 'gmp/commands/report-applications';
 import ReportConfigCommand from 'gmp/commands/report-config';
 import ReportConfigsCommand from 'gmp/commands/report-configs';
 import ReportsErrorsCommand from 'gmp/commands/report-errors';
@@ -146,6 +147,7 @@ class Gmp {
   public readonly report: ReportCommand;
   public readonly reportconfig: ReportConfigCommand;
   public readonly reportconfigs: ReportConfigsCommand;
+  public readonly reportapplications: ReportApplicationsCommand;
   public readonly reporterrors: ReportsErrorsCommand;
   public readonly reportformat: ReportFormatCommand;
   public readonly reportformats: ReportFormatsCommand;
@@ -237,6 +239,7 @@ class Gmp {
     this.portlists = new PortListsCommand(this.http);
     this.report = new ReportCommand(this.http);
     this.reportconfig = new ReportConfigCommand(this.http);
+    this.reportapplications = new ReportApplicationsCommand(this.http);
     this.reportconfigs = new ReportConfigsCommand(this.http);
     this.reporterrors = new ReportsErrorsCommand(this.http);
     this.reportformat = new ReportFormatCommand(this.http);
