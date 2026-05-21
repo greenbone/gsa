@@ -5,6 +5,7 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {
+  changeInputValue,
   fireEvent,
   getSelectItemElementsForSelect,
   rendererWith,
@@ -98,7 +99,10 @@ describe('AgentGroupsDialog tests', () => {
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
 
     // open agent controller select and choose controller
-    const select = screen.getByName('agentController') as HTMLSelectElement;
+    const select = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Agent Controller',
+    });
+
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
       i.textContent?.includes('Controller One'),
@@ -151,7 +155,9 @@ describe('AgentGroupsDialog tests', () => {
 
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
 
-    const select = screen.getByName('agentController') as HTMLSelectElement;
+    const select = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Agent Controller',
+    });
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
       i.textContent?.includes('Controller One'),
@@ -190,10 +196,12 @@ describe('AgentGroupsDialog tests', () => {
 
     // type a custom name
     const nameField = screen.getByName('name');
-    fireEvent.change(nameField, {target: {value: 'Custom Group'}});
+    changeInputValue(nameField, 'Custom Group');
 
     // select a controller
-    const select = screen.getByName('agentController') as HTMLSelectElement;
+    const select = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Agent Controller',
+    });
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
       i.textContent?.includes('Controller One'),
