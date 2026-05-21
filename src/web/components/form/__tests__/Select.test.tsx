@@ -383,4 +383,31 @@ describe('Select component tests', () => {
     fireEvent.click(select1Items[1]);
     expect(handleChange).toHaveBeenCalledWith('foo', 'foo');
   });
+
+  test('should allow to render label', async () => {
+    const handleChange = testing.fn();
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
+
+    render(
+      <Select
+        items={items}
+        label="Test Label"
+        value="bar"
+        onChange={handleChange}
+      />,
+    );
+
+    const select = screen.getByRole('textbox', {name: 'Test Label'});
+    expect(select).toBeInTheDocument();
+    expect(select).toHaveValue('Bar');
+  });
 });
