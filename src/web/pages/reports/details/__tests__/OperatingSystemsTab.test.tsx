@@ -6,12 +6,11 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import {COMPLIANCE} from 'gmp/models/compliance';
 import Filter from 'gmp/models/filter';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
-import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
 
 const filter = Filter.fromString(
@@ -25,12 +24,14 @@ const buildApiEntities = () => {
     best_os_txt: 'Foo OS',
   });
   os1.hosts.count = 2;
+  os1.compliance = COMPLIANCE.NO;
 
   const os2 = ReportOperatingSystem.fromElement({
     best_os_cpe: 'cpe:/lorem/ipsum',
     best_os_txt: 'Lorem OS',
   });
   os2.hosts.count = 5;
+  os2.compliance = COMPLIANCE.INCOMPLETE;
 
   return [os1, os2];
 };
@@ -57,19 +58,13 @@ const createGmp = (apiEntities, responseFilter = filter) => ({
 
 describe('Report Operating Systems Tab tests', () => {
   test('should render Report Operating Systems Tab', async () => {
-    const {operatingsystems} = getMockReport();
     const apiEntities = buildApiEntities();
     const gmp = createGmp(apiEntities);
 
     const {render} = rendererWith({gmp, router: true});
 
     render(
-      <OperatingSystemsTab
-        filter={filter}
-        reportId="1234"
-        reportOperatingSystems={operatingsystems?.entities}
-        status="Done"
-      />,
+      <OperatingSystemsTab filter={filter} reportId="1234" status="Done" />,
     );
 
     // Wait for data to load
@@ -140,7 +135,6 @@ const auditFilter = Filter.fromString(
 
 describe('Audit Report Operating Systems Tab tests', () => {
   test('should render Audit Report Operating Systems Tab with compliance', async () => {
-    const {operatingsystems} = getMockAuditReport();
     const apiEntities = buildApiEntities();
     const gmp = createGmp(apiEntities, auditFilter);
 
@@ -151,7 +145,6 @@ describe('Audit Report Operating Systems Tab tests', () => {
         audit={true}
         filter={auditFilter}
         reportId="1234"
-        reportOperatingSystems={operatingsystems?.entities}
         status="Done"
       />,
     );

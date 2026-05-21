@@ -1,4 +1,4 @@
-* SPDX-FileCopyrightText: 2026 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
@@ -80,7 +80,9 @@ describe('ApplicationsTab', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />);
+    render(
+      <ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />,
+    );
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
@@ -89,7 +91,9 @@ describe('ApplicationsTab', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />);
+    render(
+      <ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />,
+    );
 
     const table = await screen.findByRole('table');
     expect(table).toBeInTheDocument();
@@ -122,7 +126,9 @@ describe('ApplicationsTab', () => {
     });
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />);
+    render(
+      <ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />,
+    );
 
     expect(
       await screen.findByText('No Applications available'),
@@ -137,7 +143,9 @@ describe('ApplicationsTab', () => {
     });
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />);
+    render(
+      <ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />,
+    );
 
     expect(
       await screen.findByText(/Error while loading Applications for Report/),
@@ -152,7 +160,9 @@ describe('ApplicationsTab', () => {
     const gmp = createGmp({getReportApplications});
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />);
+    render(
+      <ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />,
+    );
 
     await screen.findByRole('table');
 
@@ -168,7 +178,9 @@ describe('ApplicationsTab', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />);
+    render(
+      <ApplicationsTab filter={filter} reportId={reportId} status={'Done'} />,
+    );
 
     await screen.findByRole('table');
 
@@ -246,5 +258,3 @@ describe('ApplicationsTab polling behavior', () => {
     testing.useRealTimers();
   });
 });
-
-

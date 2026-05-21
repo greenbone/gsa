@@ -211,16 +211,8 @@ const PageContent = ({
 
   const userTagsCount = report?.userTags?.length ?? 0;
 
-  const {
-    applications,
-    closedCves,
-    cves,
-    hosts,
-    operatingsystems,
-    results,
-    timestamp,
-    scan_run_status,
-  } = report ?? {};
+  const {closedCves, cves, hosts, results, timestamp, scan_run_status} =
+    report ?? {};
 
   if (!hasReport && isDefined(reportError)) {
     return (
@@ -361,13 +353,9 @@ const PageContent = ({
           activeFilter,
           thresholdConfig,
           <ApplicationsTab
-            applications={applications?.entities}
-            counts={applications?.counts}
             filter={activeFilter}
-            isUpdating={isUpdating}
-            sortField={sorting.apps.sortField}
-            sortReverse={sorting.apps.sortReverse}
-            onSortChange={sortField => onSortChange('apps', sortField)}
+            reportId={reportId}
+            status={status}
           />,
         ),
     },
@@ -387,7 +375,6 @@ const PageContent = ({
           <OperatingSystemsTab
             filter={activeFilter}
             reportId={reportId}
-            reportOperatingSystems={operatingsystems?.entities}
             status={status}
           />,
         ),
