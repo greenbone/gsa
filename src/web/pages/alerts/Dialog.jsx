@@ -41,7 +41,7 @@ import {ReportIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Row from 'web/components/layout/Row';
 import AlembaVfireMethodPart from 'web/pages/alerts/AlembavFireMethodPart';
-import EmailMethodPart from 'web/pages/alerts/EmailMethodPart';
+import EmailMethodPart from 'web/pages/alerts/dialog/EmailMethodPart';
 import FilterCountChangedConditionPart from 'web/pages/alerts/FilterCountChangedConditionPart';
 import FilterCountLeastConditionPart from 'web/pages/alerts/FilterCountLeastConditionPart';
 import HttpMethodPart from 'web/pages/alerts/HttpMethodPart';
