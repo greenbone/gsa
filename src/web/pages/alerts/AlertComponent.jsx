@@ -87,7 +87,6 @@ const AlertComponent = ({
   onDeleteError = onError,
   onDownloaded,
   onDownloadError = onError,
-
   onSaved,
   onSaveError = onError,
   onTestSuccess,
@@ -398,493 +397,463 @@ const AlertComponent = ({
     openCredentialDialog({type: 'email', types});
   };
 
-  const openAlertDialog = alertObj => {
-    const credentialPromise = gmp.credentials.getAll().then(r => r.data);
+  const openAlertDialog = async alertObj => {
+    const credentialsPromise = gmp.credentials.getAll().then(r => r.data);
+    const reportFormatsPromise = gmp.reportformats.getAll().then(r => r.data);
+    const reportConfigsPromise = gmp.reportconfigs.getAll().then(r => r.data);
+    const filtersPromise = gmp.filters.getAll().then(r => r.data);
+    const tasksPromise = gmp.tasks
+      .getAll({schedulesOnly: true})
+      .then(r => r.data);
     loadDefaults();
 
     if (isDefined(alertObj)) {
-      const alertPromise = gmp.alert
-        .editAlertSettings(alertObj)
-        .then(r => r.data);
-      Promise.all([credentialPromise, alertPromise]).then(
-        ([newCredentials, settings]) => {
-          const {
-            filters = [],
-            report_formats = [],
-            report_configs = [],
-            tasks = [],
-            alert: lalert,
-          } = settings;
+      const alertPromise = gmp.alert.get({id: alertObj.id}).then(r => r.data);
+      const [
+        credentials,
+        lalert,
+        reportFormats,
+        reportConfigs,
+        filters,
+        tasks,
+      ] = await Promise.all([
+        credentialsPromise,
+        alertPromise,
+        reportFormatsPromise,
+        reportConfigsPromise,
+        filtersPromise,
+        tasksPromise,
+      ]);
+      const {method, condition, event} = lalert;
 
-          const {method, condition, event} = lalert;
-
-          const emailCredentials = newCredentials.filter(
-            email_credential_filter,
-          );
-          const vFireCredentials = newCredentials.filter(
-            vFire_credential_filter,
-          );
-          const passwordOnlyCredentials = newCredentials.filter(
-            password_only_credential_filter,
-          );
-
-          const resultFilters = filters.filter(filterResultsFilter);
-          const secinfoFilters = filters.filter(filterSecinfoFilter);
-
-          let conditionDataFilters;
-          const conditionDataFilterId = getValue(condition.data.filter_id);
-
-          let methodDataMessage;
-          let methodDataMessageAttach;
-          const methodDataNotice = getValue(method.data.notice, DEFAULT_NOTICE);
-
-          let methodDataSubject;
-          let feedEvent;
-          let eventType = event.type;
-
-          if (eventType === 'Task run status changed') {
-            conditionDataFilters = resultFilters;
-            methodDataSubject = getValue(method.data.subject, TASK_SUBJECT);
-
-            if (methodDataNotice === NOTICE_ATTACH) {
-              methodDataMessageAttach = getValue(
-                method.data.message,
-                ATTACH_MESSAGE_DEFAULT,
-              );
-              methodDataMessage = INCLUDE_MESSAGE_DEFAULT;
-            } else {
-              methodDataMessage = getValue(
-                method.data.message,
-                INCLUDE_MESSAGE_DEFAULT,
-              );
-              methodDataMessageAttach = ATTACH_MESSAGE_DEFAULT;
-            }
-          } else {
-            conditionDataFilters = secinfoFilters;
-            methodDataSubject = getValue(method.data.subject, SECINFO_SUBJECT);
-
-            if (methodDataNotice === NOTICE_ATTACH) {
-              methodDataMessageAttach = getValue(
-                method.data.message,
-                ATTACH_MESSAGE_SECINFO,
-              );
-              methodDataMessage = INCLUDE_MESSAGE_SECINFO;
-            } else {
-              methodDataMessage = getValue(
-                method.data.message,
-                INCLUDE_MESSAGE_SECINFO,
-              );
-              methodDataMessageAttach = ATTACH_MESSAGE_SECINFO;
-            }
-          }
-
-          if (event.type === 'Updated SecInfo arrived') {
-            eventType = 'New SecInfo arrived';
-            feedEvent = 'updated';
-          } else {
-            feedEvent = 'new';
-          }
-
-          const scpCredentialId = isDefined(method.data.scp_credential)
-            ? method.data.scp_credential.credential.id
-            : undefined;
-
-          const veriniceCredentialId = isDefined(
-            method.data.verinice_server_credential,
-          )
-            ? method.data.verinice_server_credential.credential.id
-            : undefined;
-
-          const tpSmsCredentialId = isDefined(method.data.tp_sms_credential)
-            ? getValue(method.data.tp_sms_credential)
-            : undefined;
-
-          const recipientCredentialId = isDefined(
-            method.data.recipient_credential,
-          )
-            ? getValue(method.data.recipient_credential)
-            : undefined;
-
-          const pkcs12CredentialId = isDefined(method.data.pkcs12_credential)
-            ? getValue(method.data.pkcs12_credential)
-            : undefined;
-
-          const vfireCredentialId = isDefined(method.data.vfire_credential)
-            ? getValue(method.data.vfire_credential)
-            : undefined;
-
-          setAlertDialogVisible(true);
-          setId(alertObj.id);
-          setAlert(alertObj);
-          setActive(alertObj.active);
-          setName(alertObj.name);
-          setComment(alertObj.comment);
-          setFilters(filters);
-          setFilterId(
-            isDefined(alertObj.filter) ? alertObj.filter.id : undefined,
-          );
-          setComposerFilterId(
-            isDefined(alertObj.filter) ? alertObj.filter.id : undefined,
-          );
-          setComposerIgnorePagination(
-            getValue(method.data.composer_ignore_pagination),
-          );
-          setComposerIncludeNotes(getValue(method.data.composer_include_notes));
-          setComposerIncludeOverrides(
-            getValue(method.data.composer_include_overrides),
-          );
-          setComposerStoreAsDefault(NO_VALUE);
-          setCredentials(newCredentials);
-          setResultFilters(resultFilters);
-          setSecinfoFilters(secinfoFilters);
-          setReportFormats(report_formats);
-          setReportFormatIds(method.data.report_formats);
-          setReportConfigs(report_configs);
-          setReportConfigIds(method.data.report_configs);
-
-          setCondition(condition.type);
-          setConditionDataCount(parseInt(getValue(condition.data.count, 1)));
-          setConditionDataDirection(
-            getValue(condition.data.direction, DEFAULT_DIRECTION),
-          );
-          setConditionDataFilters(conditionDataFilters);
-          setConditionDataFilterId(conditionDataFilterId);
-          setConditionDataAtLeast([
-            conditionDataFilterId,
-            parseInt(getValue(condition.data.count, 1)),
-          ]);
-          setConditionDataSeverity(
-            parseSeverity(getValue(condition.data.severity, DEFAULT_SEVERITY)),
-          );
-
-          setEvent(eventType);
-          setEventDataStatus(getValue(event.data.status, DEFAULT_EVENT_STATUS));
-          setEventDataFeedEvent(feedEvent);
-          setEventDataSecinfoType(
-            getValue(event.data.secinfo_type, DEFAULT_SECINFO_TYPE),
-          );
-
-          setMethod(alertObj.method.type);
-
-          setMethodDataComposerIgnorePagination(
-            getValue(method.data.composer_ignore_pagination),
-          );
-          setMethodDataComposerIncludeNotes(
-            getValue(method.data.composer_include_notes),
-          );
-          setMethodDataComposerIncludeOverrides(
-            getValue(method.data.composer_include_overrides),
-          );
-          setMethodDataDefenseCenterIp(
-            getValue(method.data.defense_center_ip, ''),
-          );
-          setMethodDataDefenseCenterPort(
-            parseInt(
-              getValue(
-                method.data.defense_center_port,
-                DEFAULT_DEFENSE_CENTER_PORT,
-              ),
-            ),
-          );
-          setMethodDataDetailsUrl(
-            getValue(method.data.details_url, DEFAULT_DETAILS_URL),
-          );
-          setMethodDataRecipientCredential(
-            selectSaveId(emailCredentials, recipientCredentialId, UNSET_VALUE),
-          );
-          setMethodDataToAddress(getValue(alertObj.method.data.to_address, ''));
-          setMethodDataFromAddress(
-            getValue(alertObj.method.data.from_address, ''),
-          );
-          setMethodDataSubject(methodDataSubject);
-          setMethodDataMessage(methodDataMessage);
-          setMethodDataMessageAttach(methodDataMessageAttach);
-          setMethodDataNotice(methodDataNotice);
-          setMethodDataNoticeReportFormat(
-            selectSaveId(
-              report_formats,
-              getValue(
-                method.data.notice_report_format,
-                DEFAULT_NOTICE_REPORT_FORMAT,
-              ),
-            ),
-          );
-          setMethodDataNoticeReportConfig(
-            selectSaveId(
-              report_configs,
-              getValue(method.data.notice_report_config, UNSET_VALUE),
-              UNSET_VALUE,
-            ),
-          );
-          setMethodDataNoticeAttachFormat(
-            selectSaveId(
-              report_formats,
-              getValue(
-                method.data.notice_attach_format,
-                DEFAULT_NOTICE_ATTACH_FORMAT,
-              ),
-            ),
-          );
-          setMethodDataNoticeAttachConfig(
-            selectSaveId(
-              report_configs,
-              getValue(method.data.notice_attach_config, UNSET_VALUE),
-              UNSET_VALUE,
-            ),
-          );
-          setMethodDataScpCredential(
-            selectSaveId(newCredentials, scpCredentialId),
-          );
-          setMethodDataScpReportConfig(
-            selectSaveId(
-              report_configs,
-              getValue(method.data.scp_report_config, UNSET_VALUE),
-              UNSET_VALUE,
-            ),
-          );
-          setMethodDataScpReportFormat(
-            selectSaveId(
-              report_formats,
-              getValue(method.data.scp_report_format),
-            ),
-          );
-          setMethodDataScpPath(
-            getValue(method.data.scp_path, DEFAULT_SCP_PATH),
-          );
-          setMethodDataScpHost(getValue(method.data.scp_host, ''));
-          setMethodDataScpPort(getValue(method.data.scp_port, 22));
-          setMethodDataScpKnownHosts(getValue(method.data.scp_known_hosts, ''));
-          setMethodDataSendPort(getValue(method.data.send_port, ''));
-          setMethodDataSendHost(getValue(method.data.send_host, ''));
-          setMethodDataSendReportConfig(
-            selectSaveId(
-              report_configs,
-              getValue(method.data.send_report_config, UNSET_VALUE),
-              UNSET_VALUE,
-            ),
-          );
-          setMethodDataSendReportFormat(
-            selectSaveId(
-              report_formats,
-              getValue(method.data.send_report_format),
-            ),
-          );
-          setMethodDataSmbCredential(getValue(method.data.smb_credential, ''));
-          setMethodDataSmbFilePath(getValue(method.data.smb_file_path, ''));
-          setMethodDataSmbFilePathType(
-            getValue(method.data.smb_file_path_type, ''),
-          );
-          setMethodDataSmbMaxProtocol(
-            getValue(method.data.smb_max_protocol, ''),
-          );
-          setMethodDataSmbReportConfig(
-            selectSaveId(
-              report_configs,
-              getValue(method.data.smb_report_config, UNSET_VALUE),
-              UNSET_VALUE,
-            ),
-          );
-          setMethodDataSmbReportFormat(
-            selectSaveId(
-              report_formats,
-              getValue(method.data.smb_report_format),
-            ),
-          );
-          setMethodDataSmbSharePath(getValue(method.data.smb_share_path, ''));
-          setMethodDataSnmpAgent(getValue(method.data.snmp_agent, ''));
-          setMethodDataSnmpCommunity(getValue(method.data.snmp_community, ''));
-          setMethodDataSnmpMessage(getValue(method.data.snmp_message, ''));
-          setMethodDataStartTaskTask(
-            selectSaveId(tasks, getValue(method.data.start_task_task)),
-          );
-          setMethodDataTpSmsCredential(
-            selectSaveId(newCredentials, tpSmsCredentialId),
-          );
-          setMethodDataTpSmsHostname(getValue(method.data.tp_sms_hostname, ''));
-          setMethodDataTpSmsTlsWorkaround(
-            parseYesNo(getValue(method.data.tp_sms_tls_workaround, NO_VALUE)),
-          );
-          setMethodDataVeriniceServerReportConfig(
-            selectSaveId(
-              report_configs,
-              getValue(method.data.verinice_server_report_config, UNSET_VALUE),
-              UNSET_VALUE,
-            ),
-          );
-          setMethodDataVeriniceServerReportFormat(
-            selectVeriniceReportId(
-              report_formats,
-              getValue(method.data.verinice_server_report_format),
-            ),
-          );
-          setMethodDataVeriniceServerUrl(
-            getValue(method.data.verinice_server_url),
-          );
-          setMethodDataVeriniceServerCredential(
-            selectSaveId(newCredentials, veriniceCredentialId),
-          );
-          setMethodDataPkcs12Credential(
-            selectSaveId(passwordOnlyCredentials, pkcs12CredentialId, '0'),
-          );
-          setMethodDataVfireCredential(
-            selectSaveId(vFireCredentials, vfireCredentialId),
-          );
-          setMethodDataVfireBaseUrl(getValue(method.data.vfire_base_url));
-          setMethodDataVfireCallDescription(
-            getValue(method.data.vfire_call_description),
-          );
-          setMethodDataVfireCallImpactName(
-            getValue(method.data.vfire_call_impact_name),
-          );
-          setMethodDataVfireCallPartitionName(
-            getValue(method.data.vfire_call_partition_name),
-          );
-          setMethodDataVfireCallTemplateName(
-            getValue(method.data.vfire_call_template_name),
-          );
-          setMethodDataVfireCallTypeName(
-            getValue(method.data.vfire_call_type_name),
-          );
-          setMethodDataVfireCallUrgencyName(
-            getValue(method.data.vfire_call_urgency_name),
-          );
-          setMethodDataVfireClientId(getValue(method.data.vfire_client_id));
-          setMethodDataVfireSessionType(
-            getValue(method.data.vfire_session_type),
-          );
-          setMethodDataURL(getValue(method.data.URL, ''));
-          setMethodDataDeltaType(getValue(alertObj.method.data.delta_type, ''));
-          setMethodDataDeltaReportId(
-            getValue(alertObj.method.data.delta_report_id, ''),
-          );
-          setTasks(tasks);
-          setTitle(_('Edit Alert {{- name}}', {name: shorten(alertObj.name)}));
-        },
+      const emailCredentials = credentials.filter(email_credential_filter);
+      const vFireCredentials = credentials.filter(vFire_credential_filter);
+      const passwordOnlyCredentials = credentials.filter(
+        password_only_credential_filter,
       );
+
+      const resultFilters = filters.filter(filterResultsFilter);
+      const secinfoFilters = filters.filter(filterSecinfoFilter);
+
+      let conditionDataFilters;
+      const conditionDataFilterId = getValue(condition.data.filter_id);
+
+      let methodDataMessage;
+      let methodDataMessageAttach;
+      const methodDataNotice = getValue(method.data.notice, DEFAULT_NOTICE);
+
+      let methodDataSubject;
+      let feedEvent;
+      let eventType = event.type;
+
+      if (eventType === 'Task run status changed') {
+        conditionDataFilters = resultFilters;
+        methodDataSubject = getValue(method.data.subject, TASK_SUBJECT);
+
+        if (methodDataNotice === NOTICE_ATTACH) {
+          methodDataMessageAttach = getValue(
+            method.data.message,
+            ATTACH_MESSAGE_DEFAULT,
+          );
+          methodDataMessage = INCLUDE_MESSAGE_DEFAULT;
+        } else {
+          methodDataMessage = getValue(
+            method.data.message,
+            INCLUDE_MESSAGE_DEFAULT,
+          );
+          methodDataMessageAttach = ATTACH_MESSAGE_DEFAULT;
+        }
+      } else {
+        conditionDataFilters = secinfoFilters;
+        methodDataSubject = getValue(method.data.subject, SECINFO_SUBJECT);
+
+        if (methodDataNotice === NOTICE_ATTACH) {
+          methodDataMessageAttach = getValue(
+            method.data.message,
+            ATTACH_MESSAGE_SECINFO,
+          );
+          methodDataMessage = INCLUDE_MESSAGE_SECINFO;
+        } else {
+          methodDataMessage = getValue(
+            method.data.message,
+            INCLUDE_MESSAGE_SECINFO,
+          );
+          methodDataMessageAttach = ATTACH_MESSAGE_SECINFO;
+        }
+      }
+
+      if (event.type === 'Updated SecInfo arrived') {
+        eventType = 'New SecInfo arrived';
+        feedEvent = 'updated';
+      } else {
+        feedEvent = 'new';
+      }
+
+      const scpCredentialId = isDefined(method.data.scp_credential)
+        ? method.data.scp_credential.credential.id
+        : undefined;
+
+      const veriniceCredentialId = isDefined(
+        method.data.verinice_server_credential,
+      )
+        ? method.data.verinice_server_credential.credential.id
+        : undefined;
+
+      const tpSmsCredentialId = isDefined(method.data.tp_sms_credential)
+        ? getValue(method.data.tp_sms_credential)
+        : undefined;
+
+      const recipientCredentialId = isDefined(method.data.recipient_credential)
+        ? getValue(method.data.recipient_credential)
+        : undefined;
+
+      const pkcs12CredentialId = isDefined(method.data.pkcs12_credential)
+        ? getValue(method.data.pkcs12_credential)
+        : undefined;
+
+      const vfireCredentialId = isDefined(method.data.vfire_credential)
+        ? getValue(method.data.vfire_credential)
+        : undefined;
+
+      setAlertDialogVisible(true);
+      setId(alertObj.id);
+      setAlert(alertObj);
+      setActive(alertObj.active);
+      setName(alertObj.name);
+      setComment(alertObj.comment);
+      setFilters(filters);
+      setFilterId(isDefined(alertObj.filter) ? alertObj.filter.id : undefined);
+      setComposerFilterId(
+        isDefined(alertObj.filter) ? alertObj.filter.id : undefined,
+      );
+      setComposerIgnorePagination(
+        getValue(method.data.composer_ignore_pagination),
+      );
+      setComposerIncludeNotes(getValue(method.data.composer_include_notes));
+      setComposerIncludeOverrides(
+        getValue(method.data.composer_include_overrides),
+      );
+      setComposerStoreAsDefault(NO_VALUE);
+      setCredentials(credentials);
+      setResultFilters(resultFilters);
+      setSecinfoFilters(secinfoFilters);
+      setReportFormats(reportFormats);
+      setReportFormatIds(method.data.report_formats);
+      setReportConfigs(reportConfigs);
+      setReportConfigIds(method.data.report_configs);
+
+      setCondition(condition.type);
+      setConditionDataCount(parseInt(getValue(condition.data.count, 1)));
+      setConditionDataDirection(
+        getValue(condition.data.direction, DEFAULT_DIRECTION),
+      );
+      setConditionDataFilters(conditionDataFilters);
+      setConditionDataFilterId(conditionDataFilterId);
+      setConditionDataAtLeast([
+        conditionDataFilterId,
+        parseInt(getValue(condition.data.count, 1)),
+      ]);
+      setConditionDataSeverity(
+        parseSeverity(getValue(condition.data.severity, DEFAULT_SEVERITY)),
+      );
+
+      setEvent(eventType);
+      setEventDataStatus(getValue(event.data.status, DEFAULT_EVENT_STATUS));
+      setEventDataFeedEvent(feedEvent);
+      setEventDataSecinfoType(
+        getValue(event.data.secinfo_type, DEFAULT_SECINFO_TYPE),
+      );
+
+      setMethod(alertObj.method.type);
+
+      setMethodDataComposerIgnorePagination(
+        getValue(method.data.composer_ignore_pagination),
+      );
+      setMethodDataComposerIncludeNotes(
+        getValue(method.data.composer_include_notes),
+      );
+      setMethodDataComposerIncludeOverrides(
+        getValue(method.data.composer_include_overrides),
+      );
+      setMethodDataDefenseCenterIp(getValue(method.data.defense_center_ip, ''));
+      setMethodDataDefenseCenterPort(
+        parseInt(
+          getValue(
+            method.data.defense_center_port,
+            DEFAULT_DEFENSE_CENTER_PORT,
+          ),
+        ),
+      );
+      setMethodDataDetailsUrl(
+        getValue(method.data.details_url, DEFAULT_DETAILS_URL),
+      );
+      setMethodDataRecipientCredential(
+        selectSaveId(emailCredentials, recipientCredentialId, UNSET_VALUE),
+      );
+      setMethodDataToAddress(getValue(alertObj.method.data.to_address, ''));
+      setMethodDataFromAddress(getValue(alertObj.method.data.from_address, ''));
+      setMethodDataSubject(methodDataSubject);
+      setMethodDataMessage(methodDataMessage);
+      setMethodDataMessageAttach(methodDataMessageAttach);
+      setMethodDataNotice(methodDataNotice);
+      setMethodDataNoticeReportFormat(
+        selectSaveId(
+          reportFormats,
+          getValue(
+            method.data.notice_report_format,
+            DEFAULT_NOTICE_REPORT_FORMAT,
+          ),
+        ),
+      );
+      setMethodDataNoticeReportConfig(
+        selectSaveId(
+          reportConfigs,
+          getValue(method.data.notice_report_config, UNSET_VALUE),
+          UNSET_VALUE,
+        ),
+      );
+      setMethodDataNoticeAttachFormat(
+        selectSaveId(
+          reportFormats,
+          getValue(
+            method.data.notice_attach_format,
+            DEFAULT_NOTICE_ATTACH_FORMAT,
+          ),
+        ),
+      );
+      setMethodDataNoticeAttachConfig(
+        selectSaveId(
+          reportConfigs,
+          getValue(method.data.notice_attach_config, UNSET_VALUE),
+          UNSET_VALUE,
+        ),
+      );
+      setMethodDataScpCredential(selectSaveId(credentials, scpCredentialId));
+      setMethodDataScpReportConfig(
+        selectSaveId(
+          reportConfigs,
+          getValue(method.data.scp_report_config, UNSET_VALUE),
+          UNSET_VALUE,
+        ),
+      );
+      setMethodDataScpReportFormat(
+        selectSaveId(reportFormats, getValue(method.data.scp_report_format)),
+      );
+      setMethodDataScpPath(getValue(method.data.scp_path, DEFAULT_SCP_PATH));
+      setMethodDataScpHost(getValue(method.data.scp_host, ''));
+      setMethodDataScpPort(getValue(method.data.scp_port, 22));
+      setMethodDataScpKnownHosts(getValue(method.data.scp_known_hosts, ''));
+      setMethodDataSendPort(getValue(method.data.send_port, ''));
+      setMethodDataSendHost(getValue(method.data.send_host, ''));
+      setMethodDataSendReportConfig(
+        selectSaveId(
+          reportConfigs,
+          getValue(method.data.send_report_config, UNSET_VALUE),
+          UNSET_VALUE,
+        ),
+      );
+      setMethodDataSendReportFormat(
+        selectSaveId(reportFormats, getValue(method.data.send_report_format)),
+      );
+      setMethodDataSmbCredential(getValue(method.data.smb_credential, ''));
+      setMethodDataSmbFilePath(getValue(method.data.smb_file_path, ''));
+      setMethodDataSmbFilePathType(
+        getValue(method.data.smb_file_path_type, ''),
+      );
+      setMethodDataSmbMaxProtocol(getValue(method.data.smb_max_protocol, ''));
+      setMethodDataSmbReportConfig(
+        selectSaveId(
+          reportConfigs,
+          getValue(method.data.smb_report_config, UNSET_VALUE),
+          UNSET_VALUE,
+        ),
+      );
+      setMethodDataSmbReportFormat(
+        selectSaveId(reportFormats, getValue(method.data.smb_report_format)),
+      );
+      setMethodDataSmbSharePath(getValue(method.data.smb_share_path, ''));
+      setMethodDataSnmpAgent(getValue(method.data.snmp_agent, ''));
+      setMethodDataSnmpCommunity(getValue(method.data.snmp_community, ''));
+      setMethodDataSnmpMessage(getValue(method.data.snmp_message, ''));
+      setMethodDataStartTaskTask(
+        selectSaveId(tasks, getValue(method.data.start_task_task)),
+      );
+      setMethodDataTpSmsCredential(
+        selectSaveId(credentials, tpSmsCredentialId),
+      );
+      setMethodDataTpSmsHostname(getValue(method.data.tp_sms_hostname, ''));
+      setMethodDataTpSmsTlsWorkaround(
+        parseYesNo(getValue(method.data.tp_sms_tls_workaround, NO_VALUE)),
+      );
+      setMethodDataVeriniceServerReportConfig(
+        selectSaveId(
+          reportConfigs,
+          getValue(method.data.verinice_server_report_config, UNSET_VALUE),
+          UNSET_VALUE,
+        ),
+      );
+      setMethodDataVeriniceServerReportFormat(
+        selectVeriniceReportId(
+          reportFormats,
+          getValue(method.data.verinice_server_report_format),
+        ),
+      );
+      setMethodDataVeriniceServerUrl(getValue(method.data.verinice_server_url));
+      setMethodDataVeriniceServerCredential(
+        selectSaveId(credentials, veriniceCredentialId),
+      );
+      setMethodDataPkcs12Credential(
+        selectSaveId(passwordOnlyCredentials, pkcs12CredentialId, '0'),
+      );
+      setMethodDataVfireCredential(
+        selectSaveId(vFireCredentials, vfireCredentialId),
+      );
+      setMethodDataVfireBaseUrl(getValue(method.data.vfire_base_url));
+      setMethodDataVfireCallDescription(
+        getValue(method.data.vfire_call_description),
+      );
+      setMethodDataVfireCallImpactName(
+        getValue(method.data.vfire_call_impact_name),
+      );
+      setMethodDataVfireCallPartitionName(
+        getValue(method.data.vfire_call_partition_name),
+      );
+      setMethodDataVfireCallTemplateName(
+        getValue(method.data.vfire_call_template_name),
+      );
+      setMethodDataVfireCallTypeName(
+        getValue(method.data.vfire_call_type_name),
+      );
+      setMethodDataVfireCallUrgencyName(
+        getValue(method.data.vfire_call_urgency_name),
+      );
+      setMethodDataVfireClientId(getValue(method.data.vfire_client_id));
+      setMethodDataVfireSessionType(getValue(method.data.vfire_session_type));
+      setMethodDataURL(getValue(method.data.URL, ''));
+      setMethodDataDeltaType(getValue(alertObj.method.data.delta_type, ''));
+      setMethodDataDeltaReportId(
+        getValue(alertObj.method.data.delta_report_id, ''),
+      );
+      setTasks(tasks);
+      setTitle(_('Edit Alert {{- name}}', {name: shorten(alertObj.name)}));
     } else {
-      const alertPromise = gmp.alert.newAlertSettings().then(r => r.data);
-      Promise.all([credentialPromise, alertPromise]).then(
-        ([newCredentials, settings]) => {
-          const {
-            filters = [],
-            report_formats = [],
-            report_configs = [],
-            tasks = [],
-          } = settings;
+      const [credentials, reportFormats, reportConfigs, filters, tasks] =
+        await Promise.all([
+          credentialsPromise,
+          reportFormatsPromise,
+          reportConfigsPromise,
+          filtersPromise,
+          tasksPromise,
+        ]);
+      const resultFilters = filters.filter(filterResultsFilter);
+      const secinfoFilters = filters.filter(filterSecinfoFilter);
+      const smbCredentials = credentials.filter(smb_credential_filter);
 
-          const resultFilters = filters.filter(filterResultsFilter);
-          const secinfoFilters = filters.filter(filterSecinfoFilter);
-          const smbCredentials = newCredentials.filter(smb_credential_filter);
+      const resultFilterId = selectSaveId(resultFilters);
+      const reportFormatId = selectSaveId(reportFormats);
+      const reportConfigId = UNSET_VALUE;
 
-          const resultFilterId = selectSaveId(resultFilters);
-          const reportFormatId = selectSaveId(report_formats);
-          const reportConfigId = UNSET_VALUE;
+      const filterId = isDefined(reportComposerDefaults.reportResultFilterId)
+        ? reportComposerDefaults.reportResultFilterId
+        : undefined;
 
-          const filterId = isDefined(
-            reportComposerDefaults.reportResultFilterId,
-          )
-            ? reportComposerDefaults.reportResultFilterId
-            : undefined;
-
-          setActive(undefined);
-          setAlert(undefined);
-          setAlertDialogVisible(true);
-          setName(undefined);
-          setComment(undefined);
-          setCondition(undefined);
-          setConditionDataAtLeast([resultFilterId, undefined]);
-          setConditionDataCount(undefined);
-          setConditionDataDirection(undefined);
-          setConditionDataFilters(resultFilters);
-          setConditionDataFilterId(resultFilterId);
-          setConditionDataSeverity(undefined);
-          setCredentials(newCredentials);
-          setEvent(undefined);
-          setEventDataStatus(DEFAULT_EVENT_STATUS);
-          setEventDataFeedEvent(undefined);
-          setEventDataSecinfoType(undefined);
-          setFilterId(filterId);
-          setFilters(filters);
-          setComposerFilterId(reportComposerDefaults.reportResultFilterId);
-          setComposerIgnorePagination(reportComposerDefaults.ignorePagination);
-          setComposerIncludeNotes(reportComposerDefaults.includeNotes);
-          setComposerIncludeOverrides(reportComposerDefaults.includeOverrides);
-          setComposerStoreAsDefault(NO_VALUE);
-          setId(undefined);
-          setMethod(undefined);
-          setMethodDataComposerIgnorePagination(undefined);
-          setMethodDataComposerIncludeNotes(undefined);
-          setMethodDataComposerIncludeOverrides(undefined);
-          setMethodDataDefenseCenterIp(undefined);
-          setMethodDataDefenseCenterPort(undefined);
-          setMethodDataDetailsUrl(undefined);
-          setMethodDataToAddress(undefined);
-          setMethodDataFromAddress(undefined);
-          setMethodDataSubject(undefined);
-          setMethodDataMessage(undefined);
-          setMethodDataMessageAttach(undefined);
-          setMethodDataNotice(undefined);
-          setMethodDataNoticeReportFormat(
-            selectSaveId(report_formats, DEFAULT_NOTICE_REPORT_FORMAT),
-          );
-          setMethodDataNoticeReportConfig(undefined);
-          setMethodDataNoticeAttachFormat(
-            selectSaveId(report_formats, DEFAULT_NOTICE_ATTACH_FORMAT),
-          );
-          setMethodDataNoticeAttachConfig(undefined);
-          setMethodDataScpCredential(undefined);
-          setMethodDataScpPath(DEFAULT_SCP_PATH);
-          setMethodDataScpReportConfig(reportConfigId);
-          setMethodDataScpReportFormat(reportFormatId);
-          setMethodDataScpHost(undefined);
-          setMethodDataScpPort(22);
-          setMethodDataScpKnownHosts(undefined);
-          setMethodDataSendPort(undefined);
-          setMethodDataSendHost(undefined);
-          setMethodDataSnmpAgent(undefined);
-          setMethodDataSnmpCommunity(undefined);
-          setMethodDataSnmpMessage(undefined);
-          setMethodDataTpSmsCredential(undefined);
-          setMethodDataTpSmsHostname(undefined);
-          setMethodDataTpSmsTlsWorkaround(undefined);
-          setMethodDataVeriniceServerUrl(undefined);
-          setMethodDataVeriniceServerCredential(undefined);
-          setMethodDataURL(undefined);
-          setMethodDataDeltaType(undefined);
-          setMethodDataDeltaReportId(undefined);
-          setMethodDataRecipientCredential(UNSET_VALUE);
-          setMethodDataSendReportConfig(reportConfigId);
-          setMethodDataSendReportFormat(reportFormatId);
-          setMethodDataStartTaskTask(selectSaveId(tasks));
-          setMethodDataSmbCredential(selectSaveId(smbCredentials));
-          setMethodDataSmbSharePath(undefined);
-          setMethodDataSmbFilePath(undefined);
-          setMethodDataSmbFilePathType(undefined);
-          setMethodDataSmbReportConfig(reportConfigId);
-          setMethodDataSmbReportFormat(reportFormatId);
-          setMethodDataVeriniceServerReportConfig(reportConfigId);
-          setMethodDataVeriniceServerReportFormat(reportFormatId);
-          setMethodDataPkcs12Credential(UNSET_VALUE);
-          setMethodDataVfireCredential(undefined);
-          setMethodDataVfireBaseUrl(undefined);
-          setMethodDataVfireCallDescription(undefined);
-          setMethodDataVfireCallImpactName(undefined);
-          setMethodDataVfireCallPartitionName(undefined);
-          setMethodDataVfireCallTemplateName(undefined);
-          setMethodDataVfireCallTypeName(undefined);
-          setMethodDataVfireCallUrgencyName(undefined);
-          setMethodDataVfireClientId(undefined);
-          setMethodDataVfireSessionType(undefined);
-          setResultFilters(resultFilters);
-          setSecinfoFilters(secinfoFilters);
-          setReportFormats(report_formats);
-          setReportFormatIds([]);
-          setReportConfigs(report_configs);
-          setReportConfigIds([]);
-          setTasks(tasks);
-          setTitle(_('New Alert'));
-        },
+      setActive(undefined);
+      setAlert(undefined);
+      setAlertDialogVisible(true);
+      setName(undefined);
+      setComment(undefined);
+      setCondition(undefined);
+      setConditionDataAtLeast([resultFilterId, undefined]);
+      setConditionDataCount(undefined);
+      setConditionDataDirection(undefined);
+      setConditionDataFilters(resultFilters);
+      setConditionDataFilterId(resultFilterId);
+      setConditionDataSeverity(undefined);
+      setCredentials(credentials);
+      setEvent(undefined);
+      setEventDataStatus(DEFAULT_EVENT_STATUS);
+      setEventDataFeedEvent(undefined);
+      setEventDataSecinfoType(undefined);
+      setFilterId(filterId);
+      setFilters(filters);
+      setComposerFilterId(reportComposerDefaults.reportResultFilterId);
+      setComposerIgnorePagination(reportComposerDefaults.ignorePagination);
+      setComposerIncludeNotes(reportComposerDefaults.includeNotes);
+      setComposerIncludeOverrides(reportComposerDefaults.includeOverrides);
+      setComposerStoreAsDefault(NO_VALUE);
+      setId(undefined);
+      setMethod(undefined);
+      setMethodDataComposerIgnorePagination(undefined);
+      setMethodDataComposerIncludeNotes(undefined);
+      setMethodDataComposerIncludeOverrides(undefined);
+      setMethodDataDefenseCenterIp(undefined);
+      setMethodDataDefenseCenterPort(undefined);
+      setMethodDataDetailsUrl(undefined);
+      setMethodDataToAddress(undefined);
+      setMethodDataFromAddress(undefined);
+      setMethodDataSubject(undefined);
+      setMethodDataMessage(undefined);
+      setMethodDataMessageAttach(undefined);
+      setMethodDataNotice(undefined);
+      setMethodDataNoticeReportFormat(
+        selectSaveId(reportFormats, DEFAULT_NOTICE_REPORT_FORMAT),
       );
+      setMethodDataNoticeReportConfig(undefined);
+      setMethodDataNoticeAttachFormat(
+        selectSaveId(reportFormats, DEFAULT_NOTICE_ATTACH_FORMAT),
+      );
+      setMethodDataNoticeAttachConfig(undefined);
+      setMethodDataScpCredential(undefined);
+      setMethodDataScpPath(DEFAULT_SCP_PATH);
+      setMethodDataScpReportConfig(reportConfigId);
+      setMethodDataScpReportFormat(reportFormatId);
+      setMethodDataScpHost(undefined);
+      setMethodDataScpPort(22);
+      setMethodDataScpKnownHosts(undefined);
+      setMethodDataSendPort(undefined);
+      setMethodDataSendHost(undefined);
+      setMethodDataSnmpAgent(undefined);
+      setMethodDataSnmpCommunity(undefined);
+      setMethodDataSnmpMessage(undefined);
+      setMethodDataTpSmsCredential(undefined);
+      setMethodDataTpSmsHostname(undefined);
+      setMethodDataTpSmsTlsWorkaround(undefined);
+      setMethodDataVeriniceServerUrl(undefined);
+      setMethodDataVeriniceServerCredential(undefined);
+      setMethodDataURL(undefined);
+      setMethodDataDeltaType(undefined);
+      setMethodDataDeltaReportId(undefined);
+      setMethodDataRecipientCredential(UNSET_VALUE);
+      setMethodDataSendReportConfig(reportConfigId);
+      setMethodDataSendReportFormat(reportFormatId);
+      setMethodDataStartTaskTask(selectSaveId(tasks));
+      setMethodDataSmbCredential(selectSaveId(smbCredentials));
+      setMethodDataSmbSharePath(undefined);
+      setMethodDataSmbFilePath(undefined);
+      setMethodDataSmbFilePathType(undefined);
+      setMethodDataSmbReportConfig(reportConfigId);
+      setMethodDataSmbReportFormat(reportFormatId);
+      setMethodDataVeriniceServerReportConfig(reportConfigId);
+      setMethodDataVeriniceServerReportFormat(reportFormatId);
+      setMethodDataPkcs12Credential(UNSET_VALUE);
+      setMethodDataVfireCredential(undefined);
+      setMethodDataVfireBaseUrl(undefined);
+      setMethodDataVfireCallDescription(undefined);
+      setMethodDataVfireCallImpactName(undefined);
+      setMethodDataVfireCallPartitionName(undefined);
+      setMethodDataVfireCallTemplateName(undefined);
+      setMethodDataVfireCallTypeName(undefined);
+      setMethodDataVfireCallUrgencyName(undefined);
+      setMethodDataVfireClientId(undefined);
+      setMethodDataVfireSessionType(undefined);
+      setResultFilters(resultFilters);
+      setSecinfoFilters(secinfoFilters);
+      setReportFormats(reportFormats);
+      setReportFormatIds([]);
+      setReportConfigs(reportConfigs);
+      setReportConfigIds([]);
+      setTasks(tasks);
+      setTitle(_('New Alert'));
     }
   };
 
