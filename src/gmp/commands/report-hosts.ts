@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import CollectionCounts from 'gmp/collection/collection-counts';
 import {parseFilter} from 'gmp/collection/parser';
 import type {EntitiesMeta} from 'gmp/commands/entities';
 import HttpCommand, {
@@ -13,17 +14,12 @@ import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
 import type {XmlResponseData} from 'gmp/http/transform/fast-xml';
 import type {FilterModelElement} from 'gmp/models/filter';
-import type ReportHost from 'gmp/models/report/host';
-import {
-  parseHosts,
-  type ReportHostElement,
-  type ReportResultsElement,
-} from 'gmp/models/report/parser';
+import ReportHost from 'gmp/models/report/host';
+import {type ReportHostElement} from 'gmp/models/report/parser';
+import {map} from 'gmp/utils/array';
 
 interface ReportHostsData {
-  hosts?: {count?: number};
   host?: ReportHostElement | ReportHostElement[];
-  results?: ReportResultsElement;
   filters?: FilterModelElement;
   [key: string]: unknown;
 }
@@ -58,9 +54,17 @@ class ReportHostsCommand extends HttpCommand {
 
     const data = root.get_report_hosts.get_report_hosts_response;
     const filter = parseFilter(data);
-    const {entities: hosts, counts} = parseHosts(data, filter);
 
-    return response.set<ReportHost[], EntitiesMeta>(hosts, {
+    const hostsArray = map(data.host, host => ReportHost.fromElement(host));
+
+    const counts = new CollectionCounts({
+      first: 1,
+      filtered: hostsArray.length,
+      length: hostsArray.length,
+      rows: hostsArray.length,
+    });
+
+    return response.set<ReportHost[], EntitiesMeta>(hostsArray, {
       filter,
       counts,
     });

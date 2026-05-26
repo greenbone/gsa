@@ -1,205 +1,196 @@
-/* SPDX-FileCopyrightText: 2025 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith} from 'web/testing';
+import {screen, rendererWith, within} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import HostsTabContent from 'web/pages/reports/details/HostsTabContent';
+import HostsTabContent, {
+  type HostsTabContentProps,
+} from 'web/pages/reports/details/HostsTabContent';
 
-const createMockProps = (overrides = {}) => {
-  const {hosts} = getMockReport();
-  if (!hosts?.entities) {
-    throw new Error('Mock report did not return hosts or hosts.entities');
-  }
-  const filter = Filter.fromString(
-    'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
-  );
+const filter = Filter.fromString(
+  'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+);
 
-  return {
-    hosts: {
-      counts: hosts.counts,
-      entities: hosts.entities,
+const reportId = 'report-123';
+
+const {hosts: mockReportHosts} = getMockReport();
+const mockHosts = mockReportHosts?.entities ?? [];
+const mockHostsCounts =
+  mockReportHosts?.counts ??
+  new CollectionCounts({filtered: 0, all: 0, first: 1, rows: 2});
+
+const createGmp = ({
+  getReportHosts = testing.fn().mockResolvedValue({
+    data: mockHosts,
+    meta: {
+      filter,
+      counts: mockHostsCounts,
     },
-    isContainerScanning: false,
-    reportFilter: filter,
-    isUpdating: false,
-    showInitialLoading: false,
-    showThresholdMessage: false,
-    sorting: {
-      hosts: {
-        sortField: 'severity',
-        sortReverse: true,
-      },
-    },
-    threshold: 1000,
-    onFilterChanged: testing.fn(),
-    onFilterEditClick: testing.fn(),
-    onSortChange: testing.fn(),
-    ...overrides,
-  };
-};
-
-const createGmp = ({severityRating = SEVERITY_RATING_CVSS_3} = {}) => ({
+  }),
+  severityRating = SEVERITY_RATING_CVSS_3,
+} = {}) => ({
+  reporthosts: {
+    get: getReportHosts,
+  },
   settings: {
     severityRating,
+    reloadInterval: 5000,
+    reloadIntervalActive: 2000,
+    reloadIntervalInactive: 10000,
   },
   session: createSession({
     timezone: 'CET',
+    token: 'test-token',
+    username: 'admin',
   }),
 });
 
+const createMockProps = (
+  overrides: Partial<HostsTabContentProps> = {},
+): HostsTabContentProps => ({
+  reportId,
+  status: 'Done',
+  isContainerScanning: false,
+  reportFilter: filter,
+  ...overrides,
+});
+
 describe('HostsTabContent', () => {
-  test('should render Loading component when showInitialLoading is true', () => {
-    const props = createMockProps({
-      showInitialLoading: true,
-    });
-    const {render} = rendererWith({
-      gmp: createGmp(),
-      capabilities: true,
-      router: true,
-    });
-
-    render(<HostsTabContent {...props} />);
-
-    expect(screen.getByTestId('loading')).toBeInTheDocument();
-  });
-
-  test('should render ThresholdPanel when showThresholdMessage is true', () => {
-    const props = createMockProps({
-      showThresholdMessage: true,
-    });
-    const {render} = rendererWith({
-      gmp: createGmp(),
-      capabilities: true,
-      router: true,
-    });
-
-    render(<HostsTabContent {...props} />);
-
-    expect(
-      screen.getByText(/cannot be displayed.*performance.*threshold of 1000/i),
-    ).toBeInTheDocument();
-    expect(screen.getAllByTestId('filter-icon')).toHaveLength(2);
-  });
-
-  test('should render ContainerScanningHostsTab when isContainerScanning is true', () => {
+  test('should render ContainerScanningHostsTab when isContainerScanning is true', async () => {
+    const gmp = createGmp();
     const props = createMockProps({
       isContainerScanning: true,
     });
     const {render} = rendererWith({
-      gmp: createGmp(),
+      gmp,
       capabilities: true,
       router: true,
     });
 
     render(<HostsTabContent {...props} />);
 
-    // Check for container scanning specific elements
-    const table = screen.getByRole('table');
+    const table = await screen.findByRole('table');
     expect(table).toBeInTheDocument();
-
-    // Check for pagination (which confirms ContainerScanningHostsTab is rendered)
     expect(screen.getAllByText('1 - 2 of 2')).toHaveLength(2);
   });
 
-  test('should render HostsTab when isContainerScanning is false', () => {
+  test('should render HostsTab when isContainerScanning is false', async () => {
+    const gmp = createGmp();
     const props = createMockProps({
       isContainerScanning: false,
     });
     const {render} = rendererWith({
-      gmp: createGmp(),
+      gmp,
       capabilities: true,
       router: true,
     });
 
     render(<HostsTabContent {...props} />);
 
-    // Check for regular hosts tab elements
-    const table = screen.getByRole('table');
+    const table = await screen.findByRole('table');
     expect(table).toBeInTheDocument();
-    // Check that we have the standard hosts table
     expect(screen.getByText(/123\.456\.78\.910/)).toBeInTheDocument();
   });
 
-  test('should pass correct props to ContainerScanningHostsTab', () => {
-    const mockOnSortChange = testing.fn();
+  test('should pass correct props to ContainerScanningHostsTab', async () => {
+    const gmp = createGmp();
     const props = createMockProps({
       isContainerScanning: true,
-      onSortChange: mockOnSortChange,
     });
     const {render} = rendererWith({
-      gmp: createGmp(),
+      gmp,
       capabilities: true,
       router: true,
     });
 
     render(<HostsTabContent {...props} />);
 
-    // Verify the component is rendered with expected data
-    expect(screen.getByRole('table')).toBeInTheDocument();
+    await screen.findByRole('table');
     expect(screen.getAllByTestId('progressbar-box')).toHaveLength(2);
   });
 
-  test('should pass correct props to HostsTab', () => {
-    const mockOnSortChange = testing.fn();
+  test('should pass correct props to HostsTab', async () => {
+    const gmp = createGmp();
     const props = createMockProps({
       isContainerScanning: false,
-      onSortChange: mockOnSortChange,
     });
     const {render} = rendererWith({
-      gmp: createGmp(),
+      gmp,
       capabilities: true,
       router: true,
     });
 
     render(<HostsTabContent {...props} />);
 
-    // Verify the component is rendered with expected data
-    expect(screen.getByRole('table')).toBeInTheDocument();
+    await screen.findByRole('table');
   });
 
-  test('should prioritize showInitialLoading over other conditions', () => {
-    const props = createMockProps({
-      showInitialLoading: true,
-      showThresholdMessage: true,
-      isContainerScanning: true,
-    });
-    const {render} = rendererWith({
-      capabilities: true,
-      router: true,
-      gmp: createGmp(),
-    });
+  // Hook-based assertions
+  test('should show Loading spinner while hook is fetching', () => {
+    const gmp = createGmp();
+    const props = createMockProps();
+    const {render} = rendererWith({gmp, capabilities: true, router: true});
 
     render(<HostsTabContent {...props} />);
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
-    expect(screen.queryByText(/threshold/i)).not.toBeInTheDocument();
-    expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
 
-  test('should prioritize showThresholdMessage over tab rendering', () => {
-    const props = createMockProps({
-      showInitialLoading: false,
-      showThresholdMessage: true,
-      isContainerScanning: true,
+  test('should render ErrorPanel on fetch failure', async () => {
+    const gmp = createGmp({
+      getReportHosts: testing
+        .fn()
+        .mockRejectedValue(new Error('Failed to fetch hosts')),
     });
-    const {render} = rendererWith({
-      gmp: createGmp(),
-      capabilities: true,
-      router: true,
-    });
+    const props = createMockProps();
+    const {render} = rendererWith({gmp, capabilities: true, router: true});
 
     render(<HostsTabContent {...props} />);
 
     expect(
-      screen.getByText(/cannot be displayed.*performance.*threshold of 1000/i),
+      await screen.findByText(/Error while loading Hosts for Report/),
     ).toBeInTheDocument();
-    expect(screen.getAllByTestId('filter-icon')).toHaveLength(2);
-    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+  });
+
+  test('should call API with reportId and filter', async () => {
+    const getReportHosts = testing.fn().mockResolvedValue({
+      data: mockHosts,
+      meta: {filter, counts: mockHostsCounts},
+    });
+    const gmp = createGmp({getReportHosts});
+    const props = createMockProps();
+    const {render} = rendererWith({gmp, capabilities: true, router: true});
+
+    render(<HostsTabContent {...props} />);
+
+    await screen.findByRole('table');
+
+    expect(getReportHosts).toHaveBeenCalledWith(
+      expect.objectContaining({
+        report_id: reportId,
+        filter: expect.objectContaining({}),
+      }),
+    );
+  });
+
+  test('should render table with host rows once data resolves', async () => {
+    const gmp = createGmp();
+    const props = createMockProps();
+    const {render} = rendererWith({gmp, capabilities: true, router: true});
+
+    render(<HostsTabContent {...props} />);
+
+    const table = await screen.findByRole('table');
+    expect(table).toBeInTheDocument();
+
+    const rows = within(table).getAllByRole('row');
+    expect(rows.length).toBeGreaterThan(1);
   });
 });
