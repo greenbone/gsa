@@ -117,16 +117,15 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const inputs = screen.queryTextInputs();
-    const selects = screen.queryAllSelectElements();
+    const nameInput = screen.getByRole('textbox', {name: 'Name'});
+    expect(nameInput).toHaveAttribute('name', 'name');
+    expect(nameInput).toHaveValue('schedule 1'); // name field
 
-    expect(inputs[0]).toHaveAttribute('name', 'name');
-    expect(inputs[0]).toHaveValue('schedule 1'); // name field
+    const commentInput = screen.getByRole('textbox', {name: 'Comment'});
+    expect(commentInput).toHaveAttribute('name', 'comment');
+    expect(commentInput).toHaveValue('hello world'); // comment field
 
-    expect(inputs[1]).toHaveAttribute('name', 'comment');
-    expect(inputs[1]).toHaveValue('hello world'); // comment field
-
-    const defaultTimezone = selects[0];
+    const defaultTimezone = screen.getByRole('textbox', {name: 'Timezone'});
     expect(defaultTimezone).toHaveValue('UTC');
 
     checkElementVisibilityAndContent(
@@ -144,7 +143,7 @@ describe('ScheduleDialog component tests', () => {
       '19:45',
     );
 
-    const recurrence = selects[1];
+    const recurrence = screen.getByRole('textbox', {name: 'Recurrence'});
     expect(recurrence).toHaveValue('Weekly');
   });
 
@@ -164,12 +163,12 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const nameInput = screen.getByName('name');
+    const nameInput = screen.getByRole('textbox', {name: 'Name'});
     expect(nameInput).toHaveValue('Unnamed');
     changeInputValue(nameInput, 'foo');
     expect(nameInput).toHaveValue('foo');
 
-    const commentInput = screen.getByName('comment');
+    const commentInput = screen.getByRole('textbox', {name: 'Comment'});
     expect(commentInput).toHaveValue('');
     changeInputValue(commentInput, 'bar');
     expect(commentInput).toHaveValue('bar');
@@ -225,20 +224,25 @@ describe('ScheduleDialog component tests', () => {
     );
 
     let selectItems;
-    const selects = screen.queryAllSelectElements();
-    expect(selects[0]).toHaveValue('UTC');
-    expect(selects[1]).toHaveValue('Weekly');
+    const timezoneSelect = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Timezone',
+    });
+    const recurrenceSelect = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Recurrence',
+    });
+    expect(timezoneSelect).toHaveValue('UTC');
+    expect(recurrenceSelect).toHaveValue('Weekly');
 
-    selectItems = await getSelectItemElementsForSelect(selects[0]);
+    selectItems = await getSelectItemElementsForSelect(timezoneSelect);
     expect(selectItems.length).toBe(mockedTimezones.length);
     fireEvent.click(selectItems[1]);
-    expect(selects[0]).toHaveValue(mockedTimezones[1]);
+    expect(timezoneSelect).toHaveValue(mockedTimezones[1]);
 
-    selectItems = await getSelectItemElementsForSelect(selects[1]);
+    selectItems = await getSelectItemElementsForSelect(recurrenceSelect);
     expect(selectItems.length).toBe(8);
     fireEvent.click(selectItems[6]);
 
-    expect(selects[1]).toHaveValue('Workweek (Monday till Friday)');
+    expect(recurrenceSelect).toHaveValue('Workweek (Monday till Friday)');
 
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
@@ -294,14 +298,14 @@ describe('ScheduleDialog component tests', () => {
       );
 
       if (startTime) {
-        const startTimeInput = screen.getByName('startDate');
+        const startTimeInput = screen.getByLabelText('Start Time');
         expect(startTimeInput).toHaveValue('15:00');
         changeInputValue(startTimeInput, startTime);
         expect(startTimeInput).toHaveValue(startTime);
       }
 
       if (endTime) {
-        const endTimeInput = screen.getByName('endTime');
+        const endTimeInput = screen.getByLabelText('End Time');
         expect(endTimeInput).toHaveValue('19:45');
         changeInputValue(endTimeInput, endTime);
         expect(endTimeInput).toHaveValue(endTime);
@@ -348,7 +352,7 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const startTimeInput = screen.getByName('startDate');
+    const startTimeInput = screen.getByLabelText('Start Time');
     changeInputValue(startTimeInput, '08:00');
 
     const saveButton = screen.getDialogSaveButton();
@@ -397,7 +401,7 @@ describe('ScheduleDialog component tests', () => {
     const startDateInput = screen.getByLabelText('Start Date');
     expect(startDateInput).toHaveValue('15/02/2021');
 
-    const startTimeInput = screen.getByName('startDate');
+    const startTimeInput = screen.getByLabelText('Start Time');
     expect(startTimeInput).toHaveValue('15:00');
 
     // Change the start time
@@ -405,7 +409,7 @@ describe('ScheduleDialog component tests', () => {
     expect(startTimeInput).toHaveValue('09:30');
 
     // Change the end time
-    const endTimeInput = screen.getByName('endTime');
+    const endTimeInput = screen.getByLabelText('End Time');
     expect(endTimeInput).toHaveValue('19:45');
     changeInputValue(endTimeInput, '17:00');
     expect(endTimeInput).toHaveValue('17:00');
@@ -450,7 +454,7 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const startTimeInput = screen.getByName('startDate');
+    const startTimeInput = screen.getByLabelText('Start Time');
     expect(startTimeInput).toHaveValue('15:00');
     changeInputValue(startTimeInput, '');
     expect(startTimeInput).toHaveValue('15:00');
@@ -471,7 +475,7 @@ describe('ScheduleDialog component tests', () => {
     changeInputValue(startTimeInput, '15:62');
     expect(startTimeInput).toHaveValue('15:00');
 
-    const endTimeInput = screen.getByName('endTime');
+    const endTimeInput = screen.getByLabelText('End Time');
     expect(endTimeInput).toHaveValue('19:45');
     changeInputValue(endTimeInput, '');
     expect(endTimeInput).toHaveValue('19:45');
@@ -522,11 +526,13 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Verify initial state
-      const startTimeInput = screen.getByName('startDate');
+      const startTimeInput = screen.getByLabelText('Start Time');
       expect(startTimeInput).toHaveValue('15:00');
 
       // Change timezone to America/New_York
-      const timezoneSelect = screen.queryAllSelectElements()[0];
+      const timezoneSelect = screen.getByRole<HTMLSelectElement>('textbox', {
+        name: 'Timezone',
+      });
       const selectItems = await getSelectItemElementsForSelect(timezoneSelect);
       const nyTimezone = selectItems.find(
         item => item.textContent === 'America/New_York',
@@ -627,7 +633,7 @@ describe('ScheduleDialog component tests', () => {
         );
 
         // Change only the time
-        const startTimeInput = screen.getByName('startDate');
+        const startTimeInput = screen.getByLabelText('Start Time');
         changeInputValue(startTimeInput, newTime);
         expect(startTimeInput).toHaveValue(newTime);
 
@@ -701,12 +707,12 @@ describe('ScheduleDialog component tests', () => {
         );
 
         // Change the time
-        const startTimeInput = screen.getByName('startDate');
+        const startTimeInput = screen.getByLabelText('Start Time');
         changeInputValue(startTimeInput, startTime);
         expect(startTimeInput).toHaveValue(startTime);
 
         // Change the end time
-        const endTimeInput = screen.getByName('endTime');
+        const endTimeInput = screen.getByLabelText('End Time');
         changeInputValue(endTimeInput, endTime);
         expect(endTimeInput).toHaveValue(endTime);
 
@@ -777,7 +783,7 @@ describe('ScheduleDialog component tests', () => {
         );
 
         // Change the time
-        const startTimeInput = screen.getByName('startDate');
+        const startTimeInput = screen.getByLabelText('Start Time');
         changeInputValue(startTimeInput, newTime);
         expect(startTimeInput).toHaveValue(newTime);
 
@@ -820,8 +826,10 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Default recurrence is "Once" when no freq is provided
-      const selects = screen.queryAllSelectElements();
-      expect(selects[1]).toHaveValue('Once');
+      const recurrenceSelect = screen.getByRole<HTMLSelectElement>('textbox', {
+        name: 'Recurrence',
+      });
+      expect(recurrenceSelect).toHaveValue('Once');
 
       const saveButton = screen.getDialogSaveButton();
       fireEvent.click(saveButton);
@@ -854,8 +862,9 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Select "Workweek" recurrence
-      const selects = screen.queryAllSelectElements();
-      const recurrenceSelect = selects[1];
+      const recurrenceSelect = screen.getByRole<HTMLSelectElement>('textbox', {
+        name: 'Recurrence',
+      });
       const selectItems =
         await getSelectItemElementsForSelect(recurrenceSelect);
       const workweekOption = selectItems.find(
@@ -923,8 +932,12 @@ describe('ScheduleDialog component tests', () => {
         );
 
         // Select the pre-defined recurrence
-        const selects = screen.queryAllSelectElements();
-        const recurrenceSelect = selects[1];
+        const recurrenceSelect = screen.getByRole<HTMLSelectElement>(
+          'textbox',
+          {
+            name: 'Recurrence',
+          },
+        );
         const selectItems =
           await getSelectItemElementsForSelect(recurrenceSelect);
         const option = selectItems.find(
@@ -1024,7 +1037,7 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Change start time to after end time
-      const startTimeInput = screen.getByName('startDate');
+      const startTimeInput = screen.getByLabelText('Start Time');
       changeInputValue(startTimeInput, '20:00');
 
       const saveButton = screen.getDialogSaveButton();

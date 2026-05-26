@@ -529,16 +529,18 @@ const ScheduleDialog = ({
 
         return (
           <>
-            <FormGroup title={_('Name')}>
+            <FormGroup htmlFor="schedule-name" title={_('Name')}>
               <TextField
+                id="schedule-name"
                 name="name"
                 value={state.name}
                 onChange={onValueChange}
               />
             </FormGroup>
 
-            <FormGroup title={_('Comment')}>
+            <FormGroup htmlFor="schedule-comment" title={_('Comment')}>
               <TextField
+                id="schedule-comment"
                 name="comment"
                 value={state.comment}
                 onChange={onValueChange}
@@ -552,8 +554,9 @@ const ScheduleDialog = ({
               startTime={startTime}
             />
 
-            <FormGroup title={_('Timezone')}>
+            <FormGroup htmlFor="schedule-timezone" title={_('Timezone')}>
               <TimeZoneSelect
+                id="schedule-timezone"
                 name="timezone"
                 value={timezone}
                 onChange={handleTimezoneChange}
@@ -590,8 +593,9 @@ const ScheduleDialog = ({
               <span>{renderDuration(duration)}</span>
             </FormGroup>
 
-            <FormGroup title={_('Recurrence')}>
+            <FormGroup htmlFor="schedule-recurrence" title={_('Recurrence')}>
               <Select
+                id="schedule-recurrence"
                 items={RECURRENCE_TYPE_ITEMS}
                 name="recurrenceType"
                 value={state.recurrenceType}
