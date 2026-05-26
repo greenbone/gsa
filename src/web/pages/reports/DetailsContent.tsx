@@ -211,8 +211,7 @@ const PageContent = ({
 
   const userTagsCount = report?.userTags?.length ?? 0;
 
-  const {closedCves, cves, hosts, results, timestamp, scan_run_status} =
-    report ?? {};
+  const {closedCves, cves, results, timestamp, scan_run_status} = report ?? {};
 
   if (!hasReport && isDefined(reportError)) {
     return (
@@ -318,22 +317,19 @@ const PageContent = ({
     {
       key: 'hosts',
       renderTab: () => <TabTitle counts={hostsCounts} title={_('Hosts')} />,
-      renderPanel: () => (
-        <HostsTabContent
-          hosts={hosts ?? {entities: [], counts: undefined}}
-          isAgentScanning={isAgentScanning}
-          isContainerScanning={isContainerScanning}
-          isUpdating={isUpdating}
-          reportFilter={activeFilter}
-          showInitialLoading={showInitialLoading}
-          showThresholdMessage={showThresholdMessage}
-          sorting={sorting}
-          threshold={threshold}
-          onFilterChanged={onFilterChanged}
-          onFilterEditClick={onFilterEditClick}
-          onSortChange={onSortChange}
-        />
-      ),
+      renderPanel: () =>
+        renderWithThreshold(
+          _('Hosts'),
+          activeFilter,
+          thresholdConfig,
+          <HostsTabContent
+            isAgentScanning={isAgentScanning}
+            isContainerScanning={isContainerScanning}
+            reportFilter={activeFilter}
+            reportId={reportId}
+            status={status}
+          />,
+        ),
     },
     {
       key: 'ports',

@@ -1,79 +1,80 @@
-/* SPDX-FileCopyrightText: 2025 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type CollectionCounts from 'gmp/collection/collection-counts';
+import {useState} from 'react';
 import type Filter from 'gmp/models/filter';
-import type ReportHost from 'gmp/models/report/host';
+import {isActive, type TaskStatus} from 'gmp/models/task';
+import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/Reload';
+import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentScanningHostsTab from 'web/pages/reports/details/AgentScanningHostsTab';
 import ContainerScanningHostsTab from 'web/pages/reports/details/ContainerScanningHostsTab';
 import HostsTab from 'web/pages/reports/details/HostsTab';
-import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
 
-interface HostsData {
-  counts?: CollectionCounts;
-  entities?: ReportHost[];
-}
-
-interface SortingData {
-  hosts: {
-    sortField: string;
-    sortReverse: boolean;
-  };
-}
-
-interface HostsTabContentProps {
+export interface HostsTabContentProps {
   audit?: boolean;
-  hosts: HostsData;
+  reportId: string;
+  status: TaskStatus;
   isAgentScanning?: boolean;
   isContainerScanning: boolean;
   reportFilter: Filter;
-  isUpdating: boolean;
-  showInitialLoading: boolean;
-  showThresholdMessage: boolean;
-  sorting: SortingData;
-  threshold: number;
-  onFilterChanged: (filter: Filter) => void;
-  onFilterEditClick: () => void;
-  onSortChange: (type: string, sortField: string) => void;
 }
 
 const HostsTabContent = ({
   audit = false,
-  hosts,
+  reportId,
+  status,
   isAgentScanning,
   isContainerScanning,
   reportFilter,
-  isUpdating,
-  showInitialLoading,
-  showThresholdMessage,
-  sorting,
-  threshold,
-  onFilterChanged,
-  onFilterEditClick,
-  onSortChange,
 }: HostsTabContentProps) => {
   const [_] = useTranslation();
+  const [{sortField, sortReverse}, setSorting] = useState({
+    sortField: 'severity',
+    sortReverse: true,
+  });
 
-  if (showInitialLoading) {
+  const {data, isLoading, isFetching, isError, error} = useGetReportHosts({
+    reportId,
+    filter: reportFilter,
+    refetchInterval: isActive(status)
+      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+      : NO_RELOAD,
+  });
+
+  const handleSortChange = (newSortField: string) => {
+    setSorting(prev => ({
+      sortField: newSortField,
+      sortReverse: newSortField === prev.sortField ? !prev.sortReverse : false,
+    }));
+  };
+
+  if (isLoading && !data) {
     return <Loading />;
   }
 
-  if (showThresholdMessage) {
+  if (isError) {
     return (
-      <ThresholdPanel
-        entityType={_('Hosts')}
-        filter={reportFilter}
-        isUpdating={isUpdating}
-        threshold={threshold}
-        onFilterChanged={onFilterChanged}
-        onFilterEditClick={onFilterEditClick}
+      <ErrorPanel
+        error={error}
+        message={_('Error while loading Hosts for Report {{reportId}}', {
+          reportId,
+        })}
       />
     );
   }
+
+  const hosts = {
+    counts: data?.entitiesCounts,
+    entities: data?.entities ?? [],
+  };
 
   if (isAgentScanning) {
     return (
@@ -82,10 +83,10 @@ const HostsTabContent = ({
         counts={hosts.counts}
         filter={reportFilter}
         hosts={hosts.entities}
-        isUpdating={isUpdating}
-        sortField={sorting.hosts.sortField}
-        sortReverse={sorting.hosts.sortReverse}
-        onSortChange={(sortField: string) => onSortChange('hosts', sortField)}
+        isUpdating={isFetching}
+        sortField={sortField}
+        sortReverse={sortReverse}
+        onSortChange={handleSortChange}
       />
     );
   }
@@ -97,10 +98,10 @@ const HostsTabContent = ({
         counts={hosts.counts}
         filter={reportFilter}
         hosts={hosts.entities}
-        isUpdating={isUpdating}
-        sortField={sorting.hosts.sortField}
-        sortReverse={sorting.hosts.sortReverse}
-        onSortChange={(sortField: string) => onSortChange('hosts', sortField)}
+        isUpdating={isFetching}
+        sortField={sortField}
+        sortReverse={sortReverse}
+        onSortChange={handleSortChange}
       />
     );
   }
@@ -111,10 +112,10 @@ const HostsTabContent = ({
       counts={hosts.counts}
       filter={reportFilter}
       hosts={hosts.entities}
-      isUpdating={isUpdating}
-      sortField={sorting.hosts.sortField}
-      sortReverse={sorting.hosts.sortReverse}
-      onSortChange={(sortField: string) => onSortChange('hosts', sortField)}
+      isUpdating={isFetching}
+      sortField={sortField}
+      sortReverse={sortReverse}
+      onSortChange={handleSortChange}
     />
   );
 };
