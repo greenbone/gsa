@@ -31,6 +31,10 @@ describe('withEntitiesFooter tests', () => {
       entitiesCounts: new CollectionCounts({all: 2, filtered: 2, length: 2}),
       filter: new Filter(),
       onDeleteBulk: testing.fn(),
+      onAuthorizeBulk: testing.fn(),
+      onRevokeBulk: testing.fn(),
+      onEnableUpdateToLatestBulk: testing.fn(),
+      onDisableUpdateToLatestBulk: testing.fn(),
       onDownloadBulk: testing.fn(),
       onTagsBulk: testing.fn(),
     };
@@ -43,6 +47,10 @@ describe('withEntitiesFooter tests', () => {
         entitiesCounts: mockProps.entitiesCounts,
         filter: mockProps.filter,
         onDeleteClick: mockProps.onDeleteBulk,
+        onAuthorizeClick: mockProps.onAuthorizeBulk,
+        onRevokeClick: mockProps.onRevokeBulk,
+        onEnableUpdateToLatestClick: mockProps.onEnableUpdateToLatestBulk,
+        onDisableUpdateToLatestClick: mockProps.onDisableUpdateToLatestBulk,
         onDownloadClick: mockProps.onDownloadBulk,
         onTagsClick: mockProps.onTagsBulk,
         onTrashClick: mockProps.onDeleteBulk,
@@ -55,15 +63,21 @@ describe('withEntitiesFooter tests', () => {
     interface MockProps extends WithEntitiesFooterComponentProps<Task> {
       foo?: string;
     }
+
     const options = {
       foo: 'bar',
     } as Partial<MockProps>;
+
     const MockComponent = testing.fn(() => <div>Mock Component</div>);
     const WrappedComponent = withEntitiesFooter(options)(MockComponent);
 
     const mockProps = {
       entities: [new Task({id: '1'})],
       onDeleteBulk: testing.fn(),
+      onAuthorizeBulk: testing.fn(),
+      onRevokeBulk: testing.fn(),
+      onEnableUpdateToLatestBulk: testing.fn(),
+      onDisableUpdateToLatestBulk: testing.fn(),
     };
 
     render(<WrappedComponent {...mockProps} />);
@@ -73,6 +87,11 @@ describe('withEntitiesFooter tests', () => {
         foo: options.foo,
         entities: mockProps.entities,
         onDeleteClick: mockProps.onDeleteBulk,
+        onAuthorizeClick: mockProps.onAuthorizeBulk,
+        onRevokeClick: mockProps.onRevokeBulk,
+        onEnableUpdateToLatestClick: mockProps.onEnableUpdateToLatestBulk,
+        onDisableUpdateToLatestClick: mockProps.onDisableUpdateToLatestBulk,
+        onTrashClick: mockProps.onDeleteBulk,
       }),
       {},
     );
@@ -82,16 +101,22 @@ describe('withEntitiesFooter tests', () => {
     interface MockProps extends WithEntitiesFooterComponentProps<Task> {
       foo?: string;
     }
+
     const options = {
       foo: 'bar',
     } as Partial<MockProps>;
+
     const MockComponent = testing.fn(() => <div>Mock Component</div>);
     const WrappedComponent = withEntitiesFooter(options)(MockComponent);
 
     const mockProps = {
       entities: [new Task({id: '1'})],
-      foo: 'baz', // This should override the option
+      foo: 'baz',
       onDeleteBulk: testing.fn(),
+      onAuthorizeBulk: testing.fn(),
+      onRevokeBulk: testing.fn(),
+      onEnableUpdateToLatestBulk: testing.fn(),
+      onDisableUpdateToLatestBulk: testing.fn(),
     };
 
     render(<WrappedComponent {...mockProps} />);
@@ -101,6 +126,11 @@ describe('withEntitiesFooter tests', () => {
         foo: mockProps.foo,
         entities: mockProps.entities,
         onDeleteClick: mockProps.onDeleteBulk,
+        onAuthorizeClick: mockProps.onAuthorizeBulk,
+        onRevokeClick: mockProps.onRevokeBulk,
+        onEnableUpdateToLatestClick: mockProps.onEnableUpdateToLatestBulk,
+        onDisableUpdateToLatestClick: mockProps.onDisableUpdateToLatestBulk,
+        onTrashClick: mockProps.onDeleteBulk,
       }),
       {},
     );

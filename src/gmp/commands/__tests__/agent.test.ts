@@ -21,7 +21,9 @@ describe('AgentCommand tests', () => {
     const entityResponse = createAgentResponse({id: '324'});
     const http = createHttp(entityResponse);
     const command = new AgentCommand(http);
+
     const result = await command.get({id: '324'});
+
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {cmd: 'get_agent', agent_id: '324'},
     });
@@ -32,7 +34,9 @@ describe('AgentCommand tests', () => {
     const response = createActionResultResponse();
     const http = createHttp(response);
     const command = new AgentCommand(http);
+
     await command.delete({id: '324'});
+
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {cmd: 'delete_agent', 'agent_ids:': '324'},
     });
@@ -42,21 +46,15 @@ describe('AgentCommand tests', () => {
     const entityResponse = createActionResultResponse({id: '324'});
     const http = createHttp(entityResponse);
     const command = new AgentCommand(http);
+
     const result = await command.save({
       agentsIds: ['324'],
       authorized: true,
       updateToLatest: true,
-      attempts: 5,
       comment: 'Test agent',
-      delayInSeconds: 10,
-      maxJitterInSeconds: 3,
-      bulkSize: 50,
-      bulkThrottleTime: 2,
-      indexerDirDepth: 4,
-      schedulerCronTimes: ['0 0 * * *', '30 14 * * 1-5'],
       intervalInSeconds: 3600,
-      missUntilInactive: 3,
     });
+
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'modify_agent',
@@ -64,15 +62,7 @@ describe('AgentCommand tests', () => {
         authorized: YES_VALUE,
         update_to_latest: YES_VALUE,
         comment: 'Test agent',
-        attempts: 5,
-        delay_in_seconds: 10,
-        max_jitter_in_seconds: 3,
-        bulk_size: 50,
-        bulk_throttle_time_in_ms: 2,
-        indexer_dir_depth: 4,
         interval_in_seconds: 3600,
-        miss_until_inactive: 3,
-        'scheduler_cron_times:': ['0 0 * * *', '30 14 * * 1-5'],
       },
     });
     expect(result).toBeUndefined();
@@ -82,7 +72,9 @@ describe('AgentCommand tests', () => {
     const entityResponse = createActionResultResponse({id: '999'});
     const http = createHttp(entityResponse);
     const command = new AgentCommand(http);
+
     const result = await command.clone({id: '324'});
+
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'clone',
@@ -97,7 +89,9 @@ describe('AgentCommand tests', () => {
     const fakeFile = new ArrayBuffer(8);
     const http = createHttp(fakeFile);
     const command = new AgentCommand(http);
+
     const result = await command.export({id: '324'});
+
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'bulk_export',

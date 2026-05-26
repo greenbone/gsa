@@ -17,6 +17,7 @@ interface AgentConfigurationSectionProps {
   schedulerCronExpression?: string;
   intervalInSeconds?: number;
   hideIntervalInSeconds?: boolean;
+  hideSchedulerCronField?: boolean;
   onValueChange: (value: string | number | boolean, name?: string) => void;
 }
 
@@ -29,6 +30,7 @@ const AgentConfigurationSection = ({
   isEdit = false,
   intervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
   hideIntervalInSeconds = false,
+  hideSchedulerCronField = false,
   port,
   schedulerCronExpression = DEFAULT_CRON_EXPRESSION,
   onValueChange,
@@ -53,21 +55,23 @@ const AgentConfigurationSection = ({
         )}
 
         {/* Scheduler Options */}
-        <SchedulerCronField
-          activeCronExpression={activeCronExpression}
-          infoTip={
-            isEdit
-              ? _(
-                  'This will set when the Agents scan the systems.\nA report is not automatically generated and needs to be set up as a "New Agent Task".',
-                )
-              : undefined
-          }
-          infoTipAriaLabel={_('More information about scheduler')}
-          name="schedulerCronExpression"
-          title={_('Scheduler Options')}
-          value={schedulerCronExpression ?? ''}
-          onChange={value => onValueChange(value, 'schedulerCronExpression')}
-        />
+        {!hideSchedulerCronField && (
+          <SchedulerCronField
+            activeCronExpression={activeCronExpression}
+            infoTip={
+              isEdit
+                ? _(
+                    'This will set when the Agents scan the systems.\nA report is not automatically generated and needs to be set up as a "New Agent Task".',
+                  )
+                : undefined
+            }
+            infoTipAriaLabel={_('More information about scheduler')}
+            name="schedulerCronExpression"
+            title={_('Scheduler Options')}
+            value={schedulerCronExpression ?? ''}
+            onChange={value => onValueChange(value, 'schedulerCronExpression')}
+          />
+        )}
 
         {/* Heartbeat Configuration */}
         {!hideIntervalInSeconds && (

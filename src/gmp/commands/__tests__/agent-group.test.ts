@@ -11,7 +11,6 @@ import {
   createHttp,
 } from 'gmp/commands/testing';
 import {type Element} from 'gmp/models/model';
-import {YES_VALUE} from 'gmp/parser';
 
 const createAgentGroupResponse = (data: Element) =>
   createEntityResponse('agent_group', data, {
@@ -44,49 +43,27 @@ describe('AgentGroupCommand tests', () => {
     const entityResponse = createActionResultResponse({id: '324'});
     const http = createHttp(entityResponse);
     const command = new AgentGroupCommand(http);
+
     const result = await command.create({
       name: 'Test Agent Group',
       comment: 'some comment',
       scannerId: '12',
       agentIds: ['1', '2', '3'],
-      authorized: true,
-      attempts: 5,
-      delayInSeconds: 10,
-      maxJitterInSeconds: 3,
-      bulkSize: 50,
-      bulkThrottleTime: 2,
-      indexerDirDepth: 4,
-      intervalInSeconds: 3600,
-      missUntilInactive: 3,
-      schedulerCronTimes: ['0 0 * * *', '30 14 * * 1-5'],
+      schedulerCronTime: '0 0 * * *',
     });
-    expect(http.request).toHaveBeenCalledTimes(2);
-    expect(http.request).toHaveBeenNthCalledWith(1, 'post', {
+
+    expect(http.request).toHaveBeenCalledTimes(1);
+    expect(http.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'create_agent_group',
         name: 'Test Agent Group',
         comment: 'some comment',
         scanner_id: '12',
         'agent_ids:': ['1', '2', '3'],
+        scheduler_cron_time: '0 0 * * *',
       },
     });
-    expect(http.request).toHaveBeenNthCalledWith(2, 'post', {
-      data: {
-        cmd: 'modify_agent',
-        'agent_ids:': ['1', '2', '3'],
-        authorized: YES_VALUE,
-        attempts: 5,
-        delay_in_seconds: 10,
-        update_to_latest: 0,
-        max_jitter_in_seconds: 3,
-        bulk_size: 50,
-        bulk_throttle_time_in_ms: 2,
-        indexer_dir_depth: 4,
-        interval_in_seconds: 3600,
-        miss_until_inactive: 3,
-        'scheduler_cron_times:': ['0 0 * * *', '30 14 * * 1-5'],
-      },
-    });
+
     expect(result.data.id).toEqual('324');
   });
 
@@ -94,51 +71,29 @@ describe('AgentGroupCommand tests', () => {
     const entityResponse = createActionResultResponse({id: '324'});
     const http = createHttp(entityResponse);
     const command = new AgentGroupCommand(http);
+
     const result = await command.save({
       id: '324',
       name: 'Test Agent Group',
       comment: 'some comment',
       scannerId: '12',
       agentIds: ['1', '2', '3'],
-      authorized: true,
-      attempts: 5,
-      delayInSeconds: 10,
-      maxJitterInSeconds: 3,
-      bulkSize: 50,
-      bulkThrottleTime: 2,
-      indexerDirDepth: 4,
-      intervalInSeconds: 3600,
-      missUntilInactive: 3,
-      schedulerCronTimes: ['0 0 * * *', '30 14 * * 1-5'],
+      schedulerCronTime: '0 */12 * * *',
     });
-    expect(http.request).toHaveBeenCalledTimes(2);
-    expect(http.request).toHaveBeenNthCalledWith(1, 'post', {
+
+    expect(http.request).toHaveBeenCalledTimes(1);
+    expect(http.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_agent_group',
+        agent_group_id: '324',
         name: 'Test Agent Group',
         comment: 'some comment',
         scanner_id: '12',
-        agent_group_id: '324',
         'agent_ids:': ['1', '2', '3'],
+        scheduler_cron_time: '0 */12 * * *',
       },
     });
-    expect(http.request).toHaveBeenNthCalledWith(2, 'post', {
-      data: {
-        cmd: 'modify_agent',
-        'agent_ids:': ['1', '2', '3'],
-        authorized: YES_VALUE,
-        attempts: 5,
-        update_to_latest: 0,
-        delay_in_seconds: 10,
-        max_jitter_in_seconds: 3,
-        bulk_size: 50,
-        bulk_throttle_time_in_ms: 2,
-        indexer_dir_depth: 4,
-        interval_in_seconds: 3600,
-        miss_until_inactive: 3,
-        'scheduler_cron_times:': ['0 0 * * *', '30 14 * * 1-5'],
-      },
-    });
+
     expect(result).toBeUndefined();
   });
 

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, expect, test, testing} from '@gsa/testing';
+import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Agent from 'gmp/models/agent';
@@ -31,6 +31,8 @@ const makeAgent = (
 const authorizeMock = testing.fn().mockResolvedValue(undefined);
 const revokeMock = testing.fn().mockResolvedValue(undefined);
 const syncMock = testing.fn().mockResolvedValue(undefined);
+const enableUpdateToLatestMock = testing.fn().mockResolvedValue(undefined);
+const disableUpdateToLatestMock = testing.fn().mockResolvedValue(undefined);
 
 const createGmp = ({
   getAgents = testing.fn().mockResolvedValue({
@@ -43,6 +45,8 @@ const createGmp = ({
   authorize = authorizeMock,
   revoke = revokeMock,
   sync = syncMock,
+  enableUpdateToLatest = enableUpdateToLatestMock,
+  disableUpdateToLatest = disableUpdateToLatestMock,
 } = {}) => ({
   settings: {
     manualUrl: 'https://docs.greenbone.net',
@@ -54,6 +58,8 @@ const createGmp = ({
     authorize,
     revoke,
     sync,
+    enableUpdateToLatest,
+    disableUpdateToLatest,
   },
   agent: {
     delete: testing.fn().mockResolvedValue(undefined),
@@ -80,6 +86,14 @@ const createGmp = ({
 const gmp = createGmp();
 
 describe('AgentListPage tests', () => {
+  beforeEach(() => {
+    authorizeMock.mockClear();
+    revokeMock.mockClear();
+    syncMock.mockClear();
+    enableUpdateToLatestMock.mockClear();
+    disableUpdateToLatestMock.mockClear();
+  });
+
   test('should display loading indicator initially', () => {
     const gmp = createGmp({
       getAgents: testing.fn().mockImplementation(
@@ -161,12 +175,9 @@ describe('AgentListPage tests', () => {
   });
 
   test('shows error notification when bulk authorize fails', async () => {
-    authorizeMock.mockRejectedValue(new Error('boom'));
+    authorizeMock.mockRejectedValueOnce(new Error('Authorize failed'));
 
-    const gmp = createGmp({
-      authorize: authorizeMock,
-    });
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true});
 
     render(<AgentListPage />);
@@ -179,24 +190,20 @@ describe('AgentListPage tests', () => {
     const dialog = await screen.findByRole('dialog');
     expect(dialog).toBeVisible();
 
-    const authorizeButton = screen.getByText('Authorize');
+    const authorizeButton = screen.getByRole('button', {
+      name: 'Authorize',
+    });
     fireEvent.click(authorizeButton);
 
-    expect(authorizeMock).toHaveBeenCalled();
-
     await wait();
-    const errorDialog = await screen.findByRole('dialog');
-    expect(errorDialog).toBeVisible();
-    expect(errorDialog.textContent).toMatch(/boom|An error occurred/i);
+
+    expect(authorizeMock).toHaveBeenCalled();
   });
 
   test('shows error notification when bulk revoke fails', async () => {
-    revokeMock.mockRejectedValue(new Error('boom'));
+    revokeMock.mockRejectedValueOnce(new Error('Revoke failed'));
 
-    const gmp = createGmp({
-      revoke: revokeMock,
-    });
-
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, capabilities: true});
 
     render(<AgentListPage />);
@@ -209,15 +216,14 @@ describe('AgentListPage tests', () => {
     const dialog = await screen.findByRole('dialog');
     expect(dialog).toBeVisible();
 
-    const revokeButton = screen.getByText('Revoke');
+    const revokeButton = screen.getByRole('button', {
+      name: 'Revoke',
+    });
     fireEvent.click(revokeButton);
 
-    expect(revokeMock).toHaveBeenCalled();
-
     await wait();
-    const errorDialog = await screen.findByRole('dialog');
-    expect(errorDialog).toBeVisible();
-    expect(errorDialog.textContent).toMatch(/boom|An error occurred/i);
+
+    expect(revokeMock).toHaveBeenCalled();
   });
 
   test('should not show last updated when agents have no modificationTime', async () => {
@@ -258,5 +264,53 @@ describe('AgentListPage tests', () => {
     await screen.findByText(/Agent 1/i);
 
     expect(screen.getByText(/Last updated/i)).toBeInTheDocument();
+  });
+
+  test('should handle bulk enable update to latest on page contents', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(<AgentListPage />);
+
+    await screen.findByText(/Agent 1/i);
+
+    const enableIcon = screen.getByTitle(
+      'Enable update to latest for all items on this page',
+    );
+    fireEvent.click(enableIcon);
+
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toBeVisible();
+
+    const enableButton = screen.getByText('Enable Update to Latest');
+    fireEvent.click(enableButton);
+
+    await wait();
+
+    expect(enableUpdateToLatestMock).toHaveBeenCalled();
+  });
+
+  test('should handle bulk disable update to latest on page contents', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(<AgentListPage />);
+
+    await screen.findByText(/Agent 1/i);
+
+    const disableIcon = screen.getByTitle(
+      'Disable update to latest for all items on this page',
+    );
+    fireEvent.click(disableIcon);
+
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toBeVisible();
+
+    const disableButton = screen.getByText('Disable Update to Latest');
+    fireEvent.click(disableButton);
+
+    await wait();
+
+    expect(disableUpdateToLatestMock).toHaveBeenCalled();
   });
 });

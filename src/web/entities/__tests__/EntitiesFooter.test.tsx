@@ -77,4 +77,82 @@ describe('EntitiesFooter tests', () => {
     expect(screen.getByText('Move to trashcan completed')).toBeVisible();
     expect(dialogTitle).not.toBeVisible();
   });
+  test('should show ConfirmationDialog when EnableUpdateToLatestIcon is clicked', async () => {
+    const {render} = rendererWithTable();
+    const onEnableUpdateToLatestClick = testing.fn();
+
+    render(
+      <EntitiesFooter
+        enableUpdateToLatest={true}
+        span={2}
+        onEnableUpdateToLatestClick={onEnableUpdateToLatestClick}
+      />,
+    );
+
+    const enableButton = screen.getByTestId('enable-update-to-latest-icon');
+    expect(enableButton).toBeVisible();
+
+    fireEvent.click(enableButton);
+
+    const dialogTitle = screen.getDialogTitle();
+    expect(dialogTitle).toBeVisible();
+
+    const dialogText = screen.getByText(
+      /Are you sure you want to enable update to latest for all selected items\?/,
+    );
+    expect(dialogText).toBeVisible();
+
+    const resumeButton = screen.getByRole('button', {
+      name: 'Enable Update to Latest',
+    });
+
+    expect(resumeButton).toBeVisible();
+
+    fireEvent.click(resumeButton);
+
+    expect(screen.getByText('Enabling update to latest')).toBeVisible();
+    await wait();
+
+    expect(onEnableUpdateToLatestClick).toHaveBeenCalled();
+    expect(dialogTitle).not.toBeVisible();
+  });
+
+  test('should show ConfirmationDialog when DisableUpdateToLatestIcon is clicked', async () => {
+    const {render} = rendererWithTable();
+    const onDisableUpdateToLatestClick = testing.fn();
+
+    render(
+      <EntitiesFooter
+        disableUpdateToLatest={true}
+        span={2}
+        onDisableUpdateToLatestClick={onDisableUpdateToLatestClick}
+      />,
+    );
+
+    const disableButton = screen.getByTestId('disable-update-to-latest-icon');
+    expect(disableButton).toBeVisible();
+
+    fireEvent.click(disableButton);
+
+    const dialogTitle = screen.getDialogTitle();
+    expect(dialogTitle).toBeVisible();
+
+    const dialogText = screen.getByText(
+      /Are you sure you want to disable update to latest for all selected items\?/,
+    );
+    expect(dialogText).toBeVisible();
+
+    const resumeButton = screen.getByRole('button', {
+      name: 'Disable Update to Latest',
+    });
+
+    expect(resumeButton).toBeVisible();
+
+    fireEvent.click(resumeButton);
+
+    await wait();
+
+    expect(onDisableUpdateToLatestClick).toHaveBeenCalled();
+    expect(dialogTitle).not.toBeVisible();
+  });
 });

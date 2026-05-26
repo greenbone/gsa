@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, expect, test, testing} from '@gsa/testing';
+import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import AgentConfigurationSection, {
   DEFAULT_CRON_EXPRESSION,
@@ -13,6 +13,10 @@ import {getSelectElement} from 'web/testing/custom-queries';
 
 describe('AgentConfigurationSection tests', () => {
   const onValueChange = testing.fn();
+
+  beforeEach(() => {
+    onValueChange.mockClear();
+  });
 
   test('should render with default values', () => {
     const {render} = rendererWith({});
@@ -31,6 +35,37 @@ describe('AgentConfigurationSection tests', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByDisplayValue(DEFAULT_HEARTBEAT_INTERVAL),
+    ).toBeInTheDocument();
+  });
+
+  test('should not render scheduler cron field when hideSchedulerCronField is true', () => {
+    const {render} = rendererWith({});
+
+    render(
+      <AgentConfigurationSection
+        activeCronExpression={DEFAULT_CRON_EXPRESSION}
+        hideSchedulerCronField={true}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    expect(screen.getByText('Configuration Details')).toBeInTheDocument();
+    expect(screen.queryByText('Scheduler Options')).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByText(
+        "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
+      ),
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByRole('textbox', {
+        name: /Custom cron expression/,
+      }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.getByText('Heartbeat Interval (seconds)'),
     ).toBeInTheDocument();
   });
 
@@ -71,6 +106,27 @@ describe('AgentConfigurationSection tests', () => {
     expect(helpRegion).toBeInTheDocument();
   });
 
+  test('should not render InfoTip when scheduler cron field is hidden', () => {
+    const {render} = rendererWith({});
+
+    render(
+      <AgentConfigurationSection
+        activeCronExpression={DEFAULT_CRON_EXPRESSION}
+        hideSchedulerCronField={true}
+        isEdit={true}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    expect(screen.queryByText('Scheduler Options')).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByRole('region', {
+        name: 'More information about scheduler',
+      }),
+    ).not.toBeInTheDocument();
+  });
+
   test('should render port field when hidePort is false', () => {
     const {render} = rendererWith({});
 
@@ -91,8 +147,8 @@ describe('AgentConfigurationSection tests', () => {
 
     render(
       <AgentConfigurationSection
-        hidePort
         activeCronExpression={DEFAULT_CRON_EXPRESSION}
+        hidePort={true}
         port={4442}
         onValueChange={onValueChange}
       />,
@@ -121,7 +177,7 @@ describe('AgentConfigurationSection tests', () => {
   });
 
   test('should show TextField when a custom cron expression is set', () => {
-    const customCron = '0 5 * * *'; // Custom cron not in predefined list
+    const customCron = '0 5 * * *';
     const {render} = rendererWith({});
 
     render(
@@ -132,7 +188,6 @@ describe('AgentConfigurationSection tests', () => {
       />,
     );
 
-    // Check the TextField input is rendered (not the Select option)
     expect(
       screen.getByRole('textbox', {
         name: /Custom cron expression More info about cron format/,
@@ -159,33 +214,10 @@ describe('AgentConfigurationSection tests', () => {
     expect(onValueChange).toHaveBeenCalled();
   });
 
-  test('should render custom cron expression in TextField when schedulerCronExpression is custom', () => {
-    const customCron = '0 5 * * *'; // 5 AM daily - not in predefined list
-    const {render} = rendererWith({});
-
-    render(
-      <AgentConfigurationSection
-        activeCronExpression={DEFAULT_CRON_EXPRESSION}
-        schedulerCronExpression={customCron}
-        onValueChange={onValueChange}
-      />,
-    );
-
-    // When schedulerCronExpression is custom, both Select and TextField are shown
-    expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
-    expect(
-      screen.getByRole('textbox', {
-        name: /Custom cron expression More info about cron format/,
-      }),
-    ).toBeInTheDocument();
-    expect(screen.getByDisplayValue(customCron)).toBeInTheDocument();
-  });
-
   test('should restore original custom cron when switching from predefined back to custom', () => {
-    const originalCustomCron = '0 3 * * 1'; // 3 AM on Mondays - not in predefined list
-    const {render} = rendererWith({});
-
+    const originalCustomCron = '0 3 * * 1';
     const onValueChangeMock = testing.fn();
+    const {render} = rendererWith({});
 
     render(
       <AgentConfigurationSection
@@ -195,19 +227,15 @@ describe('AgentConfigurationSection tests', () => {
       />,
     );
 
-    // Verify we're showing the predefined schedule dropdown
     expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Every 12 hours')).toBeInTheDocument();
 
-    // Find the dropdown and select the custom option
     const selectInput = getSelectElement();
     fireEvent.click(selectInput);
 
-    // Find and click the "Custom cron expression" option
     const customOption = screen.getByText('Custom cron expression');
     fireEvent.click(customOption);
 
-    // Verify that onValueChange was called with the original custom cron expression
     expect(onValueChangeMock).toHaveBeenCalledWith(
       originalCustomCron,
       'schedulerCronExpression',
@@ -225,9 +253,8 @@ describe('AgentConfigurationSection tests', () => {
       />,
     );
 
-    // When schedulerCronExpression matches a predefined schedule, show the Select
     expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
-    // The custom TextField input should not be rendered (only the Select dropdown option exists)
+
     expect(
       screen.queryByRole('textbox', {name: 'Custom cron expression'}),
     ).not.toBeInTheDocument();
@@ -247,32 +274,13 @@ describe('AgentConfigurationSection tests', () => {
     expect(screen.getByDisplayValue('600')).toBeInTheDocument();
   });
 
-  test('should render heartbeat interval field when hideIntervalInSeconds is false', () => {
-    const {render} = rendererWith({});
-
-    render(
-      <AgentConfigurationSection
-        activeCronExpression={DEFAULT_CRON_EXPRESSION}
-        hideIntervalInSeconds={false}
-        intervalInSeconds={300}
-        onValueChange={onValueChange}
-      />,
-    );
-
-    expect(
-      screen.getByText('Heartbeat Interval (seconds)'),
-    ).toBeInTheDocument();
-    expect(screen.getByDisplayValue('300')).toBeInTheDocument();
-  });
-
   test('should not render heartbeat interval field when hideIntervalInSeconds is true', () => {
     const {render} = rendererWith({});
 
     render(
       <AgentConfigurationSection
-        hideIntervalInSeconds
         activeCronExpression={DEFAULT_CRON_EXPRESSION}
-        intervalInSeconds={300}
+        hideIntervalInSeconds={true}
         onValueChange={onValueChange}
       />,
     );
@@ -280,6 +288,5 @@ describe('AgentConfigurationSection tests', () => {
     expect(
       screen.queryByText('Heartbeat Interval (seconds)'),
     ).not.toBeInTheDocument();
-    expect(screen.queryByDisplayValue('300')).not.toBeInTheDocument();
   });
 });

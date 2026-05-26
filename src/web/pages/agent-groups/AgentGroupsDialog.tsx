@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useMemo, useState} from 'react';
-import {type AgentConfig} from 'gmp/models/agent';
+import {useState} from 'react';
 import type AgentGroup from 'gmp/models/agent-group';
 import Filter from 'gmp/models/filter';
 import {
@@ -14,8 +13,6 @@ import {
 } from 'gmp/models/scanner';
 import {filter, map} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
-import Checkbox from 'web/components/form/Checkbox';
-import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
@@ -41,13 +38,8 @@ interface AgentGroupsDialogValues {
 
 interface AgentGroupsDialogDefaultValues {
   agentIds: string[];
-  authorized?: boolean;
   comment: string;
-  config?: AgentConfig;
   name: string;
-  network: string;
-  port: number;
-  updateToLatest?: boolean;
   schedulerCronExpression?: string;
 }
 
@@ -101,16 +93,9 @@ const AgentGroupsDialog = ({
     }`.trim(),
   }));
   const selectedAgents = map(agentGroup?.agents, agent => agent.id as string);
-  const first = agentsData?.entities?.find(
-    agent => agent.id === selectedAgents[0],
-  );
-  const firstAgentFromGroup = useMemo(() => {
-    const firstId = selectedAgents[0];
-    return agentsData?.entities?.find(a => a.id === firstId);
-  }, [agentsData, selectedAgents]);
+
   const schedulerCron =
-    first?.config?.agentScriptExecutor?.schedulerCronTimes?.[0] ??
-    DEFAULT_CRON_EXPRESSION;
+    agentGroup?.schedulerCronTime ?? DEFAULT_CRON_EXPRESSION;
   const defaultsKey = [
     agentGroup?.id ?? 'new',
     selectedAgents[0] || 'no-first',
@@ -121,15 +106,10 @@ const AgentGroupsDialog = ({
     <SaveDialog<AgentGroupsDialogValues, AgentGroupsDialogDefaultValues>
       key={defaultsKey}
       defaultValues={{
-        config: firstAgentFromGroup?.config,
-        authorized: firstAgentFromGroup?.authorized,
         name: agentGroup?.name ?? 'Unnamed',
         comment: agentGroup?.comment ?? '',
         agentIds: selectedAgents,
-        network: '',
-        port: 0,
         schedulerCronExpression: schedulerCron,
-        updateToLatest: firstAgentFromGroup?.updateToLatest ?? false,
       }}
       title={title}
       values={{
@@ -137,16 +117,8 @@ const AgentGroupsDialog = ({
       }}
       onClose={onClose}
       onSave={values => {
-        const firstSelected = agentsData?.entities?.find(
-          a => a.id === values.agentIds?.[0],
-        );
-
         const payload: AgentGroupDialogData = {
           ...values,
-          authorized: firstSelected?.authorized ?? values.authorized,
-          config: firstSelected?.config ?? values.config,
-          updateToLatest:
-            firstSelected?.updateToLatest ?? values.updateToLatest,
         };
 
         return onSave?.(payload);
@@ -201,19 +173,14 @@ const AgentGroupsDialog = ({
                   hidePort
                   activeCronExpression={schedulerCron}
                   isEdit={Boolean(agentGroup)}
-                  port={state.port}
+                  port={0}
                   schedulerCronExpression={state.schedulerCronExpression}
-                  onValueChange={onValueChange}
+                  onValueChange={(value, name) => {
+                    if (typeof value === 'string') {
+                      onValueChange(value, name);
+                    }
+                  }}
                 />
-
-                <FormGroup title={_('Automatic Update Settings')}>
-                  <Checkbox
-                    checked={state.updateToLatest}
-                    name="updateToLatest"
-                    title={_('Enable automatic updates')}
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
               </>
             )}
 

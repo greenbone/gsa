@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, expect, test, testing} from '@gsa/testing';
+import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import dayjs from 'dayjs';
 import {createSession} from 'gmp/testing';
@@ -17,6 +17,11 @@ const createGmp = () => ({
 });
 
 describe('AgentDialog tests', () => {
+  beforeEach(() => {
+    onSave.mockClear();
+    onClose.mockClear();
+  });
+
   test('should render without issues and close', () => {
     const {render} = rendererWith({gmp: createGmp()});
 
@@ -47,7 +52,6 @@ describe('AgentDialog tests', () => {
       ipAddress: '',
       name: 'Unnamed',
       port: 0,
-      schedulerCronExpression: '0 */12 * * *',
       updateToLatest: false,
     });
   });
@@ -73,6 +77,22 @@ describe('AgentDialog tests', () => {
     expect(screen.getByDisplayValue('600')).toBeInTheDocument();
   });
 
+  test('should hide scheduler cron field', () => {
+    const {render} = rendererWith({gmp: createGmp()});
+
+    render(<AgentDialog onClose={onClose} onSave={onSave} />);
+
+    expect(screen.getByText('Configuration Details')).toBeInTheDocument();
+
+    expect(screen.queryByText('Scheduler Options')).not.toBeInTheDocument();
+    expect(
+      screen.queryByName('schedulerCronExpression'),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Custom cron expression'),
+    ).not.toBeInTheDocument();
+  });
+
   test('should handle form field changes', async () => {
     const {render} = rendererWith({gmp: createGmp()});
 
@@ -90,7 +110,6 @@ describe('AgentDialog tests', () => {
       ipAddress: '',
       name: 'Unnamed',
       port: 0,
-      schedulerCronExpression: '0 */12 * * *',
       updateToLatest: false,
     });
   });
@@ -128,9 +147,6 @@ describe('AgentDialog tests', () => {
   });
 
   test('should render updateToLatest checkbox with false as default', () => {
-    const onSave = testing.fn();
-    const onClose = testing.fn();
-
     const {render} = rendererWith({gmp: createGmp()});
 
     render(<AgentDialog onClose={onClose} onSave={onSave} />);
@@ -141,6 +157,7 @@ describe('AgentDialog tests', () => {
     const checkbox = screen.getByRole('checkbox', {
       name: 'Enable automatic updates',
     });
+
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).not.toBeChecked();
   });
@@ -155,6 +172,7 @@ describe('AgentDialog tests', () => {
     const checkbox = screen.getByRole('checkbox', {
       name: 'Enable automatic updates',
     });
+
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).toBeChecked();
   });
@@ -185,7 +203,6 @@ describe('AgentDialog tests', () => {
       ipAddress: '',
       name: 'Unnamed',
       port: 0,
-      schedulerCronExpression: '0 */12 * * *',
       updateToLatest: true,
     });
   });
@@ -219,7 +236,6 @@ describe('AgentDialog tests', () => {
       ipAddress: '',
       name: 'Test Agent',
       port: 0,
-      schedulerCronExpression: '0 */12 * * *',
       updateToLatest: true,
     });
   });
