@@ -97,6 +97,11 @@ export type AlertMethodType =
   | typeof METHOD_TYPE_VERINICE
   | typeof METHOD_TYPE_TIPPING_POINT;
 
+export type AlertMethodNoticeType =
+  | typeof EMAIL_NOTICE_INCLUDE
+  | typeof EMAIL_NOTICE_SIMPLE
+  | typeof EMAIL_NOTICE_ATTACH;
+
 export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
 export const EVENT_TYPE_TASK_RUN_STATUS_CHANGED = 'Task run status changed';
