@@ -25,7 +25,7 @@ const ScheduleComponent = ({
   onSaveError,
 }) => {
   const [_] = useTranslation();
-  const timezone = useUserTimezone();
+  const [timezone] = useUserTimezone();
 
   const [dialogVisible, setDialogVisible] = useState(false);
 
