@@ -15,7 +15,7 @@ import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-type RecurrenceFrequencyType = keyof typeof RecurrenceFrequency;
+export type RecurrenceFrequencyType = keyof typeof RecurrenceFrequency;
 
 type WeekDayValue = boolean | number;
 
@@ -27,6 +27,16 @@ interface WeekDaysOptions {
   friday?: WeekDayValue;
   saturday?: WeekDayValue;
   sunday?: WeekDayValue;
+}
+
+interface EventRecurrence {
+  count?: number;
+  freq: RecurrenceFrequencyType;
+  interval?: number;
+  monthdays?: number[];
+  until?: ical.Time;
+  weekdays?: WeekDays;
+  wkst?: number;
 }
 
 type WeekDay = keyof WeekDaysOptions;
@@ -365,7 +375,7 @@ class Event {
     );
   }
 
-  get recurrence() {
+  get recurrence(): EventRecurrence {
     const recurrenceRule = this._getRecurrenceRule();
 
     return {
