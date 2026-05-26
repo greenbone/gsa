@@ -809,6 +809,7 @@
   "Error while loading Applications for Report {{reportId}}": "",
   "Error while loading Container Scanning Results for Report {{reportId}}": "",
   "Error while loading Errors for Report {{reportId}}": "",
+  "Error while loading Hosts for Report {{reportId}}": "",
   "Error while loading Operating Systems for Report {{reportId}}": "",
   "Error while loading Ports for Report {{reportId}}": "",
   "Error while loading Report {{reportId}}": "Error while loading Report {{reportId}}",
