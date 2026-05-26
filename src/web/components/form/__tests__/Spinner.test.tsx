@@ -4,7 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {render, fireEvent, screen, userEvent} from 'web/testing';
+import {
+  render,
+  fireEvent,
+  screen,
+  userEvent,
+  changeInputValue,
+} from 'web/testing';
 import {KeyCode} from 'gmp/utils/event';
 import Spinner from 'web/components/form/Spinner';
 
@@ -24,20 +30,20 @@ const clickDecrementButton = async element =>
 
 describe('Spinner tests', () => {
   test('should render', () => {
-    render(<Spinner data-testid="input" value={1} />);
+    render(<Spinner value={1} />);
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByRole('spinbutton');
 
     expect(element).toHaveAttribute('value', '1');
   });
 
   test('should call change handler', () => {
     const onChange = testing.fn();
-    render(<Spinner data-testid="input" value={1} onChange={onChange} />);
+    render(<Spinner value={1} onChange={onChange} />);
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByRole('spinbutton');
 
-    fireEvent.change(element, {target: {value: '2'}});
+    changeInputValue(element, '2');
 
     expect(onChange).toHaveBeenCalledWith(2, undefined);
     expect(element).toHaveAttribute('value', '2');
@@ -45,11 +51,11 @@ describe('Spinner tests', () => {
 
   test('should not call change handler for characters', () => {
     const onChange = testing.fn();
-    render(<Spinner data-testid="input" value={1} onChange={onChange} />);
+    render(<Spinner value={1} onChange={onChange} />);
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByRole('spinbutton');
 
-    fireEvent.change(element, {target: {value: 'ABC'}});
+    changeInputValue(element, 'ABC');
 
     expect(onChange).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('value', '1');
@@ -57,11 +63,11 @@ describe('Spinner tests', () => {
 
   test('should not call change handler for cleaned input', () => {
     const onChange = testing.fn();
-    render(<Spinner data-testid="input" value={1} onChange={onChange} />);
+    render(<Spinner value={1} onChange={onChange} />);
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByRole('spinbutton');
 
-    fireEvent.change(element, {target: {value: ''}});
+    changeInputValue(element, '');
 
     expect(onChange).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('value', '1');
@@ -69,13 +75,11 @@ describe('Spinner tests', () => {
 
   test('should call change handler with value and name', () => {
     const onChange = testing.fn();
-    render(
-      <Spinner data-testid="input" name="foo" value={1} onChange={onChange} />,
-    );
+    render(<Spinner name="foo" value={1} onChange={onChange} />);
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByRole('spinbutton');
 
-    fireEvent.change(element, {target: {value: '2'}});
+    changeInputValue(element, '2');
 
     expect(onChange).toHaveBeenCalledWith(2, 'foo');
     expect(element).toHaveAttribute('value', '2');
@@ -83,40 +87,31 @@ describe('Spinner tests', () => {
 
   test('should not call change handler if disabled', () => {
     const onChange = testing.fn();
-    render(
-      <Spinner
-        data-testid="input"
-        disabled={true}
-        value={1}
-        onChange={onChange}
-      />,
-    );
+    render(<Spinner disabled={true} value={1} onChange={onChange} />);
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByRole('spinbutton');
 
-    fireEvent.change(element, {target: {value: '2'}});
+    changeInputValue(element, '2');
 
     expect(onChange).not.toHaveBeenCalled();
   });
 
   test('should update value', () => {
     const onChange = testing.fn();
-    const {rerender} = render(
-      <Spinner data-testid="input" value={1} onChange={onChange} />,
-    );
+    const {rerender} = render(<Spinner value={1} onChange={onChange} />);
 
-    const element = screen.getByTestId<HTMLInputElement>('input');
+    const element = screen.getByRole('spinbutton');
 
-    fireEvent.change(element, {target: {value: '2'}});
+    changeInputValue(element, '2');
 
     expect(onChange).toHaveBeenCalledWith(2, undefined);
-    expect(element.value).toBe('2');
+    expect(element).toHaveAttribute('value', '2');
 
-    rerender(<Spinner data-testid="input" value={2} onChange={onChange} />);
-    expect(element.value).toBe('2');
+    rerender(<Spinner value={2} onChange={onChange} />);
+    expect(element).toHaveAttribute('value', '2');
 
-    rerender(<Spinner data-testid="input" value={3} onChange={onChange} />);
-    expect(element.value).toBe('3');
+    rerender(<Spinner value={3} onChange={onChange} />);
+    expect(element).toHaveAttribute('value', '3');
   });
 
   test('should increment value on button click', async () => {

@@ -24,6 +24,7 @@ const Spinner = forwardRef<HTMLInputElement, SpinnerProps>(
       allowEmpty={false}
       fixedDecimalScale={true}
       hideControls={false}
+      role="spinbutton"
       type={type}
       onChange={onChange}
     />
