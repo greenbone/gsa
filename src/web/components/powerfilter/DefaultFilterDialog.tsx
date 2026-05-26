@@ -5,7 +5,6 @@
 
 import {type default as Filter, type FilterSortOrder} from 'gmp/models/filter';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
-import DefaultFilterDialogPropTypes from 'web/components/powerfilter/DialogPropTypes';
 import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
 import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup';
@@ -64,7 +63,5 @@ const DefaultFilterDialog = ({
     </>
   );
 };
-
-export {DefaultFilterDialogPropTypes};
 
 export default DefaultFilterDialog;
