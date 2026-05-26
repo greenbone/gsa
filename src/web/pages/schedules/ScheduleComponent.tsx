@@ -71,49 +71,49 @@ const ScheduleComponent = ({
   );
   const [weekdays, setWeekdays] = useState<WeekDays | undefined>();
 
-  const openScheduleDialog = (schedule: Schedule | undefined) => {
-    if (isDefined(schedule)) {
-      const {event} = schedule;
-      const {
-        startDate: eventStartDate,
-        recurrence,
-        duration: eventDuration,
-        durationInSeconds,
-      } = event as Event;
+  const openCreateScheduleDialog = () => {
+    setComment(undefined);
+    setDialogVisible(true);
+    setDuration(undefined);
+    setFreq(undefined);
+    setId(undefined);
+    setInterval(undefined);
+    setMonthDays(undefined);
+    setName(undefined);
+    setStartDate(undefined);
+    setScheduleTimezone(timezone);
+    setTitle(undefined);
+    setWeekdays(undefined);
+  };
 
-      const {
-        interval: recInterval,
-        freq: recFreq,
-        monthdays: recMonthdays,
-        weekdays: recWeekdays,
-      } = recurrence ?? {};
+  const openEditScheduleDialog = (schedule: Schedule) => {
+    const {event} = schedule;
+    const {
+      startDate: eventStartDate,
+      recurrence,
+      duration: eventDuration,
+      durationInSeconds,
+    } = event as Event;
 
-      setComment(schedule.comment);
-      setStartDate(eventStartDate);
-      setDialogVisible(true);
-      setDuration(durationInSeconds > 0 ? eventDuration : undefined);
-      setFreq(recFreq);
-      setId(schedule.id);
-      setInterval(recInterval);
-      setMonthDays(recMonthdays);
-      setName(schedule.name);
-      setTitle(_('Edit Schedule {{- name}}', {name: schedule.name as string}));
-      setScheduleTimezone(schedule.timezone);
-      setWeekdays(recWeekdays);
-    } else {
-      setComment(undefined);
-      setDialogVisible(true);
-      setDuration(undefined);
-      setFreq(undefined);
-      setId(undefined);
-      setInterval(undefined);
-      setMonthDays(undefined);
-      setName(undefined);
-      setStartDate(undefined);
-      setScheduleTimezone(timezone);
-      setTitle(undefined);
-      setWeekdays(undefined);
-    }
+    const {
+      interval: recInterval,
+      freq: recFreq,
+      monthdays: recMonthdays,
+      weekdays: recWeekdays,
+    } = recurrence ?? {};
+
+    setComment(schedule.comment);
+    setStartDate(eventStartDate);
+    setDialogVisible(true);
+    setDuration(durationInSeconds > 0 ? eventDuration : undefined);
+    setFreq(recFreq);
+    setId(schedule.id);
+    setInterval(recInterval);
+    setMonthDays(recMonthdays);
+    setName(schedule.name);
+    setTitle(_('Edit Schedule {{- name}}', {name: schedule.name as string}));
+    setScheduleTimezone(schedule.timezone);
+    setWeekdays(recWeekdays);
   };
 
   const closeScheduleDialog = () => {
@@ -142,8 +142,8 @@ const ScheduleComponent = ({
         <>
           {children({
             ...other,
-            create: openScheduleDialog as () => void,
-            edit: openScheduleDialog,
+            create: openCreateScheduleDialog,
+            edit: openEditScheduleDialog,
           })}
           {dialogVisible && (
             <ScheduleDialog
