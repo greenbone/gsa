@@ -13,6 +13,8 @@ interface EntitiesFooterWrapperProps<TEntity> {
   onDeleteBulk?: () => void;
   onAuthorizeBulk?: () => void;
   onRevokeBulk?: () => void;
+  onEnableUpdateToLatestBulk?: () => void;
+  onDisableUpdateToLatestBulk?: () => void;
   onDownloadBulk?: () => void;
   onTagsBulk?: () => void;
   onTrashBulk?: () => void;
@@ -28,6 +30,8 @@ export interface WithEntitiesFooterComponentProps<TEntity> {
   onDeleteClick?: () => void;
   onAuthorizeClick?: () => void;
   onRevokeClick?: () => void;
+  onEnableUpdateToLatestClick?: () => void;
+  onDisableUpdateToLatestClick?: () => void;
   onDownloadClick?: (filename: string) => void;
   onTagsClick?: () => void;
   onTrashClick?: () => void;
@@ -60,6 +64,8 @@ export function withEntitiesFooter<
       onDeleteBulk,
       onTagsBulk,
       onAuthorizeBulk,
+      onDisableUpdateToLatestBulk,
+      onEnableUpdateToLatestBulk,
       onRevokeBulk,
       ...props
     }: WithEntitiesFooterProps<TEntity, TProps>) => {
@@ -72,7 +78,9 @@ export function withEntitiesFooter<
           filter={filter}
           onAuthorizeClick={onAuthorizeBulk}
           onDeleteClick={onDeleteBulk}
+          onDisableUpdateToLatestClick={onDisableUpdateToLatestBulk}
           onDownloadClick={onDownloadBulk}
+          onEnableUpdateToLatestClick={onEnableUpdateToLatestBulk}
           onRevokeClick={onRevokeBulk}
           onTagsClick={onTagsBulk}
           onTrashClick={onDeleteBulk}

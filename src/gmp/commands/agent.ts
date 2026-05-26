@@ -9,22 +9,13 @@ import logger from 'gmp/log';
 import Agent, {type AgentElement} from 'gmp/models/agent';
 import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
-import {isArray, isDefined} from 'gmp/utils/identity';
 
 export interface AgentModifyParams {
   agentsIds: string[];
   authorized?: boolean;
   updateToLatest?: boolean;
   comment?: string;
-  attempts?: number;
-  delayInSeconds?: number;
-  maxJitterInSeconds?: number;
-  bulkSize?: number;
-  bulkThrottleTime?: number;
-  indexerDirDepth?: number;
-  schedulerCronTimes?: string | string[];
   intervalInSeconds?: number;
-  missUntilInactive?: number;
 }
 
 const log = logger.getLogger('gmp.commands.agent');
@@ -47,15 +38,7 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
     authorized,
     updateToLatest,
     comment,
-    attempts,
-    delayInSeconds,
-    maxJitterInSeconds,
-    bulkSize,
-    bulkThrottleTime,
-    indexerDirDepth,
-    schedulerCronTimes,
     intervalInSeconds,
-    missUntilInactive,
   }: AgentModifyParams) {
     const data = {
       cmd: 'modify_agent',
@@ -63,18 +46,7 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
       authorized: parseYesNo(authorized),
       update_to_latest: parseYesNo(updateToLatest),
       comment,
-      'scheduler_cron_times:':
-        isArray(schedulerCronTimes) || !isDefined(schedulerCronTimes)
-          ? schedulerCronTimes
-          : [schedulerCronTimes],
-      attempts,
-      delay_in_seconds: delayInSeconds,
-      max_jitter_in_seconds: maxJitterInSeconds,
-      bulk_size: bulkSize,
-      bulk_throttle_time_in_ms: bulkThrottleTime,
-      indexer_dir_depth: indexerDirDepth,
       interval_in_seconds: intervalInSeconds,
-      miss_until_inactive: missUntilInactive,
     };
 
     log.debug('Final data being sent to modify_agents:', data);

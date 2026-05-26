@@ -174,3 +174,41 @@ export const useSyncAgents = ({
     onError,
   });
 };
+
+export const useBulkEnableUpdateToLatestAgents = ({
+  onError,
+  onSuccess,
+}: UseModifyAgentParams) => {
+  const [_] = useTranslation();
+  const gmp = useGmp();
+  return useGmpMutation<AgentBulkInput, void, Rejection>({
+    gmpMethod: (input: AgentBulkInput) => {
+      return isFilter(input)
+        ? gmp.agents.enableUpdateToLatestByFilter(input)
+        : gmp.agents.enableUpdateToLatest(input);
+    },
+    invalidateQueryIds: ['get_agents'],
+    successMessage: _('Agents successfully updated to latest enabled'),
+    onSuccess,
+    onError,
+  });
+};
+
+export const useBulkDisableUpdateToLatestAgents = ({
+  onError,
+  onSuccess,
+}: UseModifyAgentParams) => {
+  const [_] = useTranslation();
+  const gmp = useGmp();
+  return useGmpMutation<AgentBulkInput, void, Rejection>({
+    gmpMethod: (input: AgentBulkInput) => {
+      return isFilter(input)
+        ? gmp.agents.disableUpdateToLatestByFilter(input)
+        : gmp.agents.disableUpdateToLatest(input);
+    },
+    invalidateQueryIds: ['get_agents'],
+    successMessage: _('Agents successfully updated to latest disabled'),
+    onSuccess,
+    onError,
+  });
+};

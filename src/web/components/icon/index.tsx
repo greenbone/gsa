@@ -18,6 +18,7 @@ import {
   CircleMinus,
   CirclePlus,
   CircleX,
+  CircleOff,
   ClipboardCheck,
   Clock3,
   Diff,
@@ -437,6 +438,7 @@ const getIcons = (): Record<string, IconComponent> => {
       false,
     ),
     Wizard: createIcon(Wizard, 'wizard-icon', 'Wizard Icon', false),
+    CircleOff: createIcon(CircleOff, 'circle-off-icon', 'Circle Off Icon'),
   };
 
   return _iconCache;
@@ -565,3 +567,4 @@ export const VulnerabilityIcon = getIcons().Vulnerability;
 export const WizardIcon = getIcons().Wizard;
 export const XIcon = getIcons().X;
 export const DetailsIcon = getIcons().ZoomIn;
+export const CircleOffIcon = getIcons().CircleOff;

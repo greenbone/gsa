@@ -237,4 +237,97 @@ describe('AgentsCommand tests', () => {
     });
     expect(result).toBeUndefined();
   });
+  test('should allow to enable update to latest for agents', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new AgentsCommand(fakeHttp);
+    const agents = [new Agent({id: '1'}), new Agent({id: '2'})];
+
+    const result = await cmd.enableUpdateToLatest(agents);
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'modify_agent',
+        update_to_latest: YES_VALUE,
+        'agent_ids:': ['1', '2'],
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test('should allow to enable update to latest for agents by filter', async () => {
+    const response1 = createEntitiesResponse('agent', [
+      {_id: '1', name: 'Agent1'},
+      {_id: '2', name: 'Agent2'},
+    ]);
+    const response2 = createActionResultResponse();
+    const fakeHttp = createHttpMany([response1, response2]);
+    const cmd = new AgentsCommand(fakeHttp);
+
+    const result = await cmd.enableUpdateToLatestByFilter(
+      Filter.fromString("name='AgentToEnableUpdateToLatest'"),
+    );
+
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {
+      args: {
+        cmd: 'get_agents',
+        filter: "name='AgentToEnableUpdateToLatest'",
+      },
+    });
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {
+      data: {
+        cmd: 'modify_agent',
+        update_to_latest: YES_VALUE,
+        'agent_ids:': ['1', '2'],
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test('should allow to disable update to latest for agents', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new AgentsCommand(fakeHttp);
+    const agents = [new Agent({id: '3'}), new Agent({id: '4'})];
+
+    const result = await cmd.disableUpdateToLatest(agents);
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'modify_agent',
+        update_to_latest: NO_VALUE,
+        'agent_ids:': ['3', '4'],
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test('should allow to disable update to latest for agents by filter', async () => {
+    const response1 = createEntitiesResponse('agent', [
+      {_id: '3', name: 'Agent3'},
+      {_id: '4', name: 'Agent4'},
+    ]);
+    const response2 = createActionResultResponse();
+    const fakeHttp = createHttpMany([response1, response2]);
+    const cmd = new AgentsCommand(fakeHttp);
+
+    const result = await cmd.disableUpdateToLatestByFilter(
+      Filter.fromString("name='AgentToDisableUpdateToLatest'"),
+    );
+
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {
+      args: {
+        cmd: 'get_agents',
+        filter: "name='AgentToDisableUpdateToLatest'",
+      },
+    });
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {
+      data: {
+        cmd: 'modify_agent',
+        update_to_latest: NO_VALUE,
+        'agent_ids:': ['3', '4'],
+      },
+    });
+    expect(result).toBeUndefined();
+  });
 });

@@ -19,6 +19,8 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import {
   useBulkAuthorizeAgents,
   useBulkDeleteAgents,
+  useBulkDisableUpdateToLatestAgents,
+  useBulkEnableUpdateToLatestAgents,
   useBulkRevokeAgents,
   useGetAgents,
 } from 'web/hooks/use-query/agents';
@@ -99,6 +101,12 @@ const AgentListPage = () => {
   const bulkRevoke = useBulkRevokeAgents({
     onError: showError,
   });
+  const bulkEnableUpdateToLatest = useBulkEnableUpdateToLatestAgents({
+    onError: showError,
+  });
+  const bulkDisableUpdateToLatest = useBulkDisableUpdateToLatestAgents({
+    onError: showError,
+  });
 
   const handleBulkDelete = useCallback(async () => {
     let input: Agent[] | Filter;
@@ -141,6 +149,44 @@ const AgentListPage = () => {
       showError(error as Error);
     }
   }, [selectionType, selectedEntities, agents, showError, bulkRevoke]);
+
+  const handleBulkEnableUpdateToLatest = useCallback(async () => {
+    const selectedAgents =
+      selectionType === SelectionType.SELECTION_USER
+        ? selectedEntities
+        : (agents ?? []);
+
+    try {
+      await bulkEnableUpdateToLatest.mutateAsync(selectedAgents);
+    } catch (error) {
+      showError(error as Error);
+    }
+  }, [
+    selectionType,
+    selectedEntities,
+    agents,
+    showError,
+    bulkEnableUpdateToLatest,
+  ]);
+
+  const handleBulkDisableUpdateToLatest = useCallback(async () => {
+    const selectedAgents =
+      selectionType === SelectionType.SELECTION_USER
+        ? selectedEntities
+        : (agents ?? []);
+
+    try {
+      await bulkDisableUpdateToLatest.mutateAsync(selectedAgents);
+    } catch (error) {
+      showError(error as Error);
+    }
+  }, [
+    selectionType,
+    selectedEntities,
+    agents,
+    showError,
+    bulkDisableUpdateToLatest,
+  ]);
 
   const handleFilterChanged = useCallback(
     (newFilter?: Filter) => {
@@ -230,6 +276,8 @@ const AgentListPage = () => {
                   onAgentEditClick={edit}
                   onAuthorizeBulk={handleBulkAuthorize}
                   onDeleteBulk={handleBulkDelete}
+                  onDisableUpdateToLatestBulk={handleBulkDisableUpdateToLatest}
+                  onEnableUpdateToLatestBulk={handleBulkEnableUpdateToLatest}
                   onEntityDeselected={deselect}
                   onEntitySelected={select}
                   onFirstClick={getFirst}

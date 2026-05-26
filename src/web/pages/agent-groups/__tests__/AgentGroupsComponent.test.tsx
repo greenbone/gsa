@@ -13,43 +13,58 @@ import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
 
-const sampleAgentGroup: AgentGroup = new AgentGroup({id: 'g1', name: 'group1'});
-
-const createMock = testing.fn().mockResolvedValue({id: '123'});
-const cloneMock = testing.fn().mockResolvedValue({id: 'cloned'});
-const deleteMock = testing.fn().mockResolvedValue(undefined);
-const saveMock = testing.fn().mockResolvedValue(undefined);
-
-const createGmp = () => ({
-  settings: {},
-  session: createSession({
-    token: 'token',
-  }),
-  scanners: {get: testing.fn().mockResolvedValue(new Response([], {}))},
-  agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
-  agentgroup: {
-    create: createMock,
-    clone: cloneMock,
-    delete: deleteMock,
-    save: saveMock,
-  },
+const sampleAgentGroup: AgentGroup = new AgentGroup({
+  id: 'g1',
+  name: 'group1',
 });
+
+const createGmp = () => {
+  const createMock = testing.fn().mockResolvedValue({id: '123'});
+  const cloneMock = testing.fn().mockResolvedValue({id: 'cloned'});
+  const deleteMock = testing.fn().mockResolvedValue(undefined);
+  const saveMock = testing.fn().mockResolvedValue(undefined);
+
+  return {
+    gmp: {
+      settings: {},
+      session: createSession({
+        token: 'token',
+      }),
+      scanners: {get: testing.fn().mockResolvedValue(new Response([], {}))},
+      agents: {get: testing.fn().mockResolvedValue(new Response([], {}))},
+      agentgroup: {
+        create: createMock,
+        clone: cloneMock,
+        delete: deleteMock,
+        save: saveMock,
+      },
+    },
+    createMock,
+    cloneMock,
+    deleteMock,
+    saveMock,
+  };
+};
 
 describe('AgentGroupsComponent tests', () => {
   test('should open dialog for edit and call save mutation', async () => {
-    const gmp = createGmp();
+    const {gmp, saveMock} = createGmp();
 
     type AgentGroupsActions = {
       create: () => void;
-      clone: (entity: AgentGroup) => void;
-      delete: (entity: AgentGroup) => Promise<void> | void;
+      clone: (
+        entity: AgentGroup,
+      ) => Promise<Response<EntityActionData, XmlMeta>>;
+      delete: (entity: AgentGroup) => Promise<void>;
       edit: (entity: AgentGroup) => void;
     };
+
     let actions: AgentGroupsActions | undefined;
+    const onSaved = testing.fn();
     const {render} = rendererWith({gmp});
 
     render(
-      <AgentGroupsComponent onSaved={saveMock}>
+      <AgentGroupsComponent onSaved={onSaved}>
         {(props: AgentGroupsActions) => {
           actions = props;
           return <div />;
@@ -57,7 +72,6 @@ describe('AgentGroupsComponent tests', () => {
       </AgentGroupsComponent>,
     );
 
-    // open dialog in edit mode with a sample group
     actions?.edit(sampleAgentGroup);
     await wait();
 
@@ -65,18 +79,26 @@ describe('AgentGroupsComponent tests', () => {
     expect(titleElement).toHaveTextContent('Edit Agent Group');
     expect(titleElement).toHaveTextContent('group1');
 
-    const save = screen.getDialogSaveButton();
-    fireEvent.click(save);
+    fireEvent.click(screen.getDialogSaveButton());
 
     await wait();
 
-    expect(gmp.agentgroup.save).toHaveBeenCalled();
-    expect(saveMock).toHaveBeenCalled();
+    expect(saveMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'g1',
+        name: 'group1',
+        comment: '',
+        scannerId: '',
+        agentIds: [],
+        schedulerCronTime: '0 */12 * * *',
+      }),
+      expect.anything(),
+    );
+    expect(onSaved).toHaveBeenCalled();
   });
 
   test('clone and delete handlers call gmp methods', async () => {
-    const gmp = createGmp();
-
+    const {gmp, cloneMock, deleteMock} = createGmp();
     const {render} = rendererWith({gmp});
 
     render(
@@ -98,23 +120,22 @@ describe('AgentGroupsComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('clone'));
     await wait();
-    expect(gmp.agentgroup.clone).toHaveBeenCalledWith({id: 'g1'});
 
-    // delete returns a promise; call and await it
-    const res = screen.getByTestId('delete');
-    fireEvent.click(res);
+    expect(cloneMock).toHaveBeenCalledWith({
+      id: 'g1',
+    });
+
+    fireEvent.click(screen.getByTestId('delete'));
     await wait();
-    expect(gmp.agentgroup.delete).toHaveBeenCalled();
 
-    expect(gmp.agentgroup.delete).toHaveBeenCalledWith(
-      expect.objectContaining({id: 'g1'}),
-    );
+    expect(deleteMock).toHaveBeenCalledWith({
+      id: 'g1',
+    });
   });
 
   test('clone should trigger onCloned callback on success', async () => {
+    const {gmp, cloneMock} = createGmp();
     const onCloned = testing.fn();
-    const gmp = createGmp();
-
     const {render} = rendererWith({gmp});
 
     render(
@@ -128,21 +149,25 @@ describe('AgentGroupsComponent tests', () => {
     fireEvent.click(screen.getByTestId('clone'));
     await wait();
 
-    expect(gmp.agentgroup.clone).toHaveBeenCalledWith({id: 'g1'});
+    expect(cloneMock).toHaveBeenCalledWith({
+      id: 'g1',
+    });
     expect(onCloned).toHaveBeenCalled();
   });
 
   test('clone should trigger onCloneError callback on failure', async () => {
+    const {gmp, cloneMock} = createGmp();
     const onCloneError = testing.fn();
     const error = new Error('Clone operation failed');
-    cloneMock.mockRejectedValue(error);
-    const gmp = createGmp();
 
-    const {render} = rendererWith({gmp});
+    cloneMock.mockRejectedValue(error);
 
     let cloneFn:
       | ((entity: AgentGroup) => Promise<Response<EntityActionData, XmlMeta>>)
       | undefined;
+
+    const {render} = rendererWith({gmp});
+
     render(
       <AgentGroupsComponent onCloneError={onCloneError}>
         {({clone}) => {
@@ -152,26 +177,23 @@ describe('AgentGroupsComponent tests', () => {
       </AgentGroupsComponent>,
     );
 
-    fireEvent.click(screen.getByTestId('clone'));
-    // Catch the rejection to prevent unhandled promise rejection
-    if (cloneFn) {
-      await cloneFn(sampleAgentGroup).catch(() => {});
-    }
+    await cloneFn?.(sampleAgentGroup).catch(() => {});
     await wait();
 
-    expect(gmp.agentgroup.clone).toHaveBeenCalledWith({id: 'g1'});
-    // React Query mutations pass additional context parameters to error callbacks
+    expect(cloneMock).toHaveBeenCalledWith({
+      id: 'g1',
+    });
     expect(onCloneError).toHaveBeenCalled();
     expect(onCloneError.mock.calls[0][0]).toEqual(error);
   });
 
   test('delete should trigger onDeleted callback on success', async () => {
-    const gmp = createGmp();
-
+    const {gmp, deleteMock} = createGmp();
+    const onDeleted = testing.fn();
     const {render} = rendererWith({gmp});
 
     render(
-      <AgentGroupsComponent onDeleted={deleteMock}>
+      <AgentGroupsComponent onDeleted={onDeleted}>
         {({delete: del}) => (
           <Button data-testid="delete" onClick={() => del(sampleAgentGroup)} />
         )}
@@ -181,19 +203,22 @@ describe('AgentGroupsComponent tests', () => {
     fireEvent.click(screen.getByTestId('delete'));
     await wait();
 
-    expect(gmp.agentgroup.delete).toHaveBeenCalled();
-    expect(deleteMock).toHaveBeenCalled();
+    expect(deleteMock).toHaveBeenCalledWith({
+      id: 'g1',
+    });
+    expect(onDeleted).toHaveBeenCalled();
   });
 
   test('delete should trigger onDeleteError callback on failure', async () => {
+    const {gmp, deleteMock} = createGmp();
     const onDeleteError = testing.fn();
     const error = new Error('Delete operation failed');
-    deleteMock.mockRejectedValue(error);
-    const gmp = createGmp();
 
-    const {render} = rendererWith({gmp});
+    deleteMock.mockRejectedValue(error);
 
     let deleteFn: ((entity: AgentGroup) => Promise<void>) | undefined;
+    const {render} = rendererWith({gmp});
+
     render(
       <AgentGroupsComponent onDeleteError={onDeleteError}>
         {({delete: del}) => {
@@ -203,15 +228,12 @@ describe('AgentGroupsComponent tests', () => {
       </AgentGroupsComponent>,
     );
 
-    fireEvent.click(screen.getByTestId('delete'));
-    // Catch the rejection to prevent unhandled promise rejection
-    if (deleteFn) {
-      await deleteFn(sampleAgentGroup).catch(() => {});
-    }
+    await deleteFn?.(sampleAgentGroup).catch(() => {});
     await wait();
 
-    expect(gmp.agentgroup.delete).toHaveBeenCalled();
-    // React Query mutations pass additional context parameters to error callbacks
+    expect(deleteMock).toHaveBeenCalledWith({
+      id: 'g1',
+    });
     expect(onDeleteError).toHaveBeenCalled();
     expect(onDeleteError.mock.calls[0][0]).toEqual(error);
   });

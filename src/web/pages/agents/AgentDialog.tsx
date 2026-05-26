@@ -44,7 +44,6 @@ interface AgentDialogProps {
   lastContact?: GmpDate;
   name?: string;
   port?: number;
-  schedulerCronTime?: string;
   status?: string;
   title?: string;
   updateToLatest?: boolean;
@@ -62,7 +61,6 @@ const AgentDialog = ({
   lastContact,
   name,
   port = 0,
-  schedulerCronTime = DEFAULT_CRON_EXPRESSION,
   status = '',
   title,
   updateToLatest,
@@ -78,7 +76,6 @@ const AgentDialog = ({
         comment,
         id,
         intervalInSeconds,
-        schedulerCronExpression: schedulerCronTime,
         ipAddress,
         name,
         port,
@@ -146,7 +143,8 @@ const AgentDialog = ({
             </Section>
 
             <AgentConfigurationSection
-              activeCronExpression={schedulerCronTime}
+              activeCronExpression={DEFAULT_CRON_EXPRESSION}
+              hideSchedulerCronField={true}
               intervalInSeconds={state.intervalInSeconds}
               port={state.port}
               schedulerCronExpression={state.schedulerCronExpression}

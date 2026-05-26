@@ -12,6 +12,8 @@ import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import Select from 'web/components/form/Select';
 import AuthorizeIcon from 'web/components/icon/AuthorizeIcon';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
+import DisableUpdateToLatestIcon from 'web/components/icon/DisableUpdateToLatestIcon';
+import EnableUpdateToLatestIcon from 'web/components/icon/EnableUpdateToLatestIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import RevokeIcon from 'web/components/icon/RevokeIcon';
 import TagsIcon from 'web/components/icon/TagsIcon';
@@ -56,6 +58,8 @@ export interface EntitiesFooterProps<
   trash?: boolean;
   authorize?: boolean;
   revoke?: boolean;
+  enableUpdateToLatest?: boolean;
+  disableUpdateToLatest?: boolean;
   onSelectionTypeChange?: (selectionType: SelectionTypeType) => void;
 }
 
@@ -64,6 +68,8 @@ const DIALOG_TYPES = {
   DELETE: 'delete',
   AUTHORIZE: 'authorize',
   REVOKE: 'revoke',
+  ENABLE_UPDATE_TO_LATEST: 'enable_update_to_latest',
+  DISABLE_UPDATE_TO_LATEST: 'disable_update_to_latest',
 } as const;
 
 const EntitiesFooter = <TEntity = Model,>({
@@ -78,6 +84,8 @@ const EntitiesFooter = <TEntity = Model,>({
   trash = false,
   authorize = false,
   revoke = false,
+  enableUpdateToLatest = false,
+  disableUpdateToLatest = false,
   onDeleteClick,
   onDownloadClick,
   onSelectionTypeChange,
@@ -85,6 +93,8 @@ const EntitiesFooter = <TEntity = Model,>({
   onTrashClick,
   onAuthorizeClick,
   onRevokeClick,
+  onEnableUpdateToLatestClick,
+  onDisableUpdateToLatestClick,
   dialogConfig = {useCustomDialog: false},
   delete: deleteEntities = false,
 }: EntitiesFooterProps<TEntity>) => {
@@ -181,6 +191,46 @@ const EntitiesFooter = <TEntity = Model,>({
           }
         },
       },
+      [DIALOG_TYPES.ENABLE_UPDATE_TO_LATEST]: {
+        dialogText: _(
+          'Are you sure you want to enable update to latest for all selected items?',
+        ),
+        dialogTitle: _('Confirm enable update to latest'),
+        dialogButtonTitle: _('Enable Update to Latest'),
+        confirmFunction: async () => {
+          try {
+            setIsInProgress(true);
+            showInfoNotification('', _('Enabling update to latest'));
+            if (isDefined(propOnAction)) {
+              await propOnAction();
+            }
+            // in contrast to delete and trash we don't show a success message
+            // and the action is responsible for showing notifications
+          } finally {
+            setIsInProgress(false);
+          }
+        },
+      },
+      [DIALOG_TYPES.DISABLE_UPDATE_TO_LATEST]: {
+        dialogText: _(
+          'Are you sure you want to disable update to latest for all selected items?',
+        ),
+        dialogTitle: _('Confirm disable update to latest'),
+        dialogButtonTitle: _('Disable Update to Latest'),
+        confirmFunction: async () => {
+          try {
+            setIsInProgress(true);
+            showInfoNotification('', _('Disabling update to latest'));
+            if (isDefined(propOnAction)) {
+              await propOnAction();
+            }
+            // in contrast to delete and trash we don't show a success message
+            // and the action is responsible for showing notifications
+          } finally {
+            setIsInProgress(false);
+          }
+        },
+      },
     } as const;
 
     setConfigDialog(configMap[type]);
@@ -246,6 +296,34 @@ const EntitiesFooter = <TEntity = Model,>({
                       onClick={
                         onRevokeClick &&
                         (() => onIconClick(DIALOG_TYPES.REVOKE, onRevokeClick))
+                      }
+                    />
+                  )}
+                  {enableUpdateToLatest && (
+                    <EnableUpdateToLatestIcon
+                      loading={isInProgress || dialogConfig.dialogProcessing}
+                      selectionType={selectionType}
+                      onClick={
+                        onEnableUpdateToLatestClick &&
+                        (() =>
+                          onIconClick(
+                            DIALOG_TYPES.ENABLE_UPDATE_TO_LATEST,
+                            onEnableUpdateToLatestClick,
+                          ))
+                      }
+                    />
+                  )}
+                  {disableUpdateToLatest && (
+                    <DisableUpdateToLatestIcon
+                      loading={isInProgress || dialogConfig.dialogProcessing}
+                      selectionType={selectionType}
+                      onClick={
+                        onDisableUpdateToLatestClick &&
+                        (() =>
+                          onIconClick(
+                            DIALOG_TYPES.DISABLE_UPDATE_TO_LATEST,
+                            onDisableUpdateToLatestClick,
+                          ))
                       }
                     />
                   )}

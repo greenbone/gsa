@@ -8,25 +8,13 @@ import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
 import AgentGroup, {type AgentGroupElement} from 'gmp/models/agent-group';
 import {type Element} from 'gmp/models/model';
-import {parseYesNo} from 'gmp/parser';
-import {isArray, isDefined} from 'gmp/utils/identity';
 
 export interface AgentGroupCreateParams {
   agentIds?: string[];
-  authorized?: boolean;
-  updateToLatest?: boolean;
   comment?: string;
   name: string;
   scannerId?: string;
-  attempts?: number;
-  delayInSeconds?: number;
-  maxJitterInSeconds?: number;
-  bulkSize?: number;
-  bulkThrottleTime?: number;
-  indexerDirDepth?: number;
-  intervalInSeconds?: number;
-  missUntilInactive?: number;
-  schedulerCronTimes?: string | string[];
+  schedulerCronTime?: string;
 }
 
 export interface AgentGroupSaveParams extends Omit<
@@ -49,17 +37,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
     comment,
     scannerId,
     agentIds,
-    authorized,
-    updateToLatest,
-    attempts,
-    delayInSeconds,
-    maxJitterInSeconds,
-    bulkSize,
-    bulkThrottleTime,
-    indexerDirDepth,
-    intervalInSeconds,
-    missUntilInactive,
-    schedulerCronTimes,
+    schedulerCronTime,
   }: AgentGroupCreateParams): Promise<EntityActionResponse> {
     const agentGroupData = {
       cmd: 'create_agent_group',
@@ -67,34 +45,14 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
       comment,
       scanner_id: scannerId,
       'agent_ids:': agentIds,
+      scheduler_cron_time: schedulerCronTime,
     };
 
-    const agentData = {
-      cmd: 'modify_agent',
-      'agent_ids:': agentIds,
-      authorized: parseYesNo(authorized),
-      attempts,
-      update_to_latest: parseYesNo(updateToLatest),
-      delay_in_seconds: delayInSeconds,
-      max_jitter_in_seconds: maxJitterInSeconds,
-      bulk_size: bulkSize,
-      bulk_throttle_time_in_ms: bulkThrottleTime,
-      indexer_dir_depth: indexerDirDepth,
-      interval_in_seconds: intervalInSeconds,
-      miss_until_inactive: missUntilInactive,
-      'scheduler_cron_times:':
-        isArray(schedulerCronTimes) || !isDefined(schedulerCronTimes)
-          ? schedulerCronTimes
-          : [schedulerCronTimes],
-    };
-
-    log.debug('Prepared data for both create calls', {
+    log.debug('Prepared data for create calls', {
       agentGroupData,
-      agentData,
     });
 
     const response = await this.entityAction(agentGroupData);
-    await this.action(agentData);
     return response;
   }
 
@@ -104,17 +62,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
     comment,
     scannerId,
     agentIds,
-    authorized,
-    updateToLatest,
-    attempts,
-    delayInSeconds,
-    maxJitterInSeconds,
-    bulkSize,
-    bulkThrottleTime,
-    indexerDirDepth,
-    intervalInSeconds,
-    missUntilInactive,
-    schedulerCronTimes,
+    schedulerCronTime,
   }: AgentGroupSaveParams): Promise<void> {
     // Build agent group payload
     const agentGroupData = {
@@ -124,32 +72,12 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
       comment,
       scanner_id: scannerId,
       'agent_ids:': agentIds,
+      scheduler_cron_time: schedulerCronTime,
     };
 
-    // Build agent payload
-    const agentData = {
-      cmd: 'modify_agent',
-      'agent_ids:': agentIds,
-      authorized: parseYesNo(authorized),
-      update_to_latest: parseYesNo(updateToLatest),
-      'scheduler_cron_times:':
-        isArray(schedulerCronTimes) || !isDefined(schedulerCronTimes)
-          ? schedulerCronTimes
-          : [schedulerCronTimes],
-      attempts,
-      delay_in_seconds: delayInSeconds,
-      max_jitter_in_seconds: maxJitterInSeconds,
-      bulk_size: bulkSize,
-      bulk_throttle_time_in_ms: bulkThrottleTime,
-      indexer_dir_depth: indexerDirDepth,
-      interval_in_seconds: intervalInSeconds,
-      miss_until_inactive: missUntilInactive,
-    };
-
-    log.debug('Prepared payloads', {agentGroupData, agentData});
+    log.debug('Prepared payload', agentGroupData);
 
     await this.action(agentGroupData);
-    await this.action(agentData);
   }
 
   getElementFromRoot(root: Element): AgentGroupElement {

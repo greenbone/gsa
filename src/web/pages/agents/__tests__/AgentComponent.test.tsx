@@ -4,15 +4,27 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, wait} from 'web/testing';
+import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import Agent from 'gmp/models/agent';
 import {createSession} from 'gmp/testing';
 import AgentComponent from 'web/pages/agents/AgentComponent';
+
+type AgentActions = {
+  delete: (entity: Agent) => Promise<void>;
+  edit: (entity: Agent) => void;
+  authorize: (entity: Agent) => Promise<void>;
+};
 
 const sampleAgent: Agent = new Agent({
   id: 'a1',
   name: 'agent1',
   authorized: true,
+});
+
+const sampleUnauthorizedAgent: Agent = new Agent({
+  id: 'a3',
+  name: 'agent3',
+  authorized: false,
 });
 
 const sampleAgentWithUpdateToLatest: Agent = new Agent({
@@ -25,27 +37,20 @@ const sampleAgentWithUpdateToLatest: Agent = new Agent({
 const createGmp = ({
   save = testing.fn().mockResolvedValue(undefined),
   delete: deleteMock = testing.fn().mockResolvedValue(undefined),
-  modify = testing.fn().mockResolvedValue(undefined),
 } = {}) => ({
   session: createSession(),
   agent: {
     save,
     delete: deleteMock,
-    modify,
   },
 });
 
 describe('AgentComponent tests', () => {
   test('should open dialog for edit and call save mutation', async () => {
     const onSaved = testing.fn();
+    const saveMock = testing.fn().mockResolvedValue(undefined);
+    const gmp = createGmp({save: saveMock});
 
-    const gmp = createGmp();
-
-    type AgentActions = {
-      delete: (entity: Agent) => Promise<void>;
-      edit: (entity: Agent) => void;
-      authorize: (entity: Agent) => Promise<void>;
-    };
     let actions: AgentActions | undefined;
     const {render} = rendererWith({gmp});
 
@@ -65,19 +70,28 @@ describe('AgentComponent tests', () => {
     expect(screen.getByText('Edit Agent - agent1')).toBeInTheDocument();
 
     const save = screen.getDialogSaveButton();
-    expect(save).toBeInTheDocument();
+    fireEvent.click(save);
+
+    await wait();
+
+    expect(saveMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        agentsIds: ['a1'],
+        authorized: true,
+        updateToLatest: false,
+        intervalInSeconds: 300,
+        comment: undefined,
+      }),
+      expect.anything(),
+    );
+    expect(onSaved).toHaveBeenCalled();
   });
 
   test('should handle delete action', async () => {
     const onDeleted = testing.fn();
+    const deleteMock = testing.fn().mockResolvedValue(undefined);
+    const gmp = createGmp({delete: deleteMock});
 
-    const gmp = createGmp();
-
-    type AgentActions = {
-      delete: (entity: Agent) => Promise<void>;
-      edit: (entity: Agent) => void;
-      authorize: (entity: Agent) => Promise<void>;
-    };
     let actions: AgentActions | undefined;
     const {render} = rendererWith({gmp});
 
@@ -92,20 +106,15 @@ describe('AgentComponent tests', () => {
 
     await actions?.delete(sampleAgent);
 
-    expect(gmp.agent.delete).toHaveBeenCalledWith({id: 'a1'});
+    expect(deleteMock).toHaveBeenCalledWith({id: 'a1'});
     expect(onDeleted).toHaveBeenCalled();
   });
 
   test('should handle authorize action', async () => {
     const onSaved = testing.fn();
+    const saveMock = testing.fn().mockResolvedValue(undefined);
+    const gmp = createGmp({save: saveMock});
 
-    const gmp = createGmp();
-
-    type AgentActions = {
-      delete: (entity: Agent) => Promise<void>;
-      edit: (entity: Agent) => void;
-      authorize: (entity: Agent) => Promise<void>;
-    };
     let actions: AgentActions | undefined;
     const {render} = rendererWith({gmp});
 
@@ -120,6 +129,42 @@ describe('AgentComponent tests', () => {
 
     await actions?.authorize(sampleAgent);
 
+    expect(saveMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        agentsIds: ['a1'],
+        authorized: false,
+      }),
+      expect.anything(),
+    );
+    expect(onSaved).toHaveBeenCalled();
+  });
+
+  test('should handle authorize action for unauthorized agent', async () => {
+    const onSaved = testing.fn();
+    const saveMock = testing.fn().mockResolvedValue(undefined);
+    const gmp = createGmp({save: saveMock});
+
+    let actions: AgentActions | undefined;
+    const {render} = rendererWith({gmp});
+
+    render(
+      <AgentComponent onSaved={onSaved}>
+        {(props: AgentActions) => {
+          actions = props;
+          return <div />;
+        }}
+      </AgentComponent>,
+    );
+
+    await actions?.authorize(sampleUnauthorizedAgent);
+
+    expect(saveMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        agentsIds: ['a3'],
+        authorized: true,
+      }),
+      expect.anything(),
+    );
     expect(onSaved).toHaveBeenCalled();
   });
 
@@ -130,11 +175,6 @@ describe('AgentComponent tests', () => {
 
     const gmp = createGmp({delete: deleteMock});
 
-    type AgentActions = {
-      delete: (entity: Agent) => Promise<void>;
-      edit: (entity: Agent) => void;
-      authorize: (entity: Agent) => Promise<void>;
-    };
     let actions: AgentActions | undefined;
     const {render} = rendererWith({gmp});
 
@@ -152,16 +192,37 @@ describe('AgentComponent tests', () => {
     expect(onDeleteError).toHaveBeenCalled();
   });
 
+  test('should handle save error', async () => {
+    const onSaveError = testing.fn();
+    const saveError = new Error('Save failed');
+    const saveMock = testing.fn().mockRejectedValue(saveError);
+
+    const gmp = createGmp({save: saveMock});
+
+    let actions: AgentActions | undefined;
+    const {render} = rendererWith({gmp});
+
+    render(
+      <AgentComponent onSaveError={onSaveError}>
+        {(props: AgentActions) => {
+          actions = props;
+          return <div />;
+        }}
+      </AgentComponent>,
+    );
+
+    await expect(actions?.authorize(sampleAgent)).rejects.toThrow(
+      'Save failed',
+    );
+
+    expect(onSaveError).toHaveBeenCalled();
+  });
+
   test('should handle edit dialog with updateToLatest and save correctly', async () => {
     const onSaved = testing.fn();
+    const saveMock = testing.fn().mockResolvedValue(undefined);
+    const gmp = createGmp({save: saveMock});
 
-    const gmp = createGmp();
-
-    type AgentActions = {
-      delete: (entity: Agent) => Promise<void>;
-      edit: (entity: Agent) => void;
-      authorize: (entity: Agent) => Promise<void>;
-    };
     let actions: AgentActions | undefined;
     const {render} = rendererWith({gmp});
 
@@ -188,19 +249,27 @@ describe('AgentComponent tests', () => {
     expect(checkbox).toBeChecked();
 
     const save = screen.getDialogSaveButton();
-    expect(save).toBeInTheDocument();
+    fireEvent.click(save);
+
+    await wait();
+
+    expect(saveMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        agentsIds: ['a2'],
+        authorized: true,
+        updateToLatest: true,
+        intervalInSeconds: 300,
+        comment: undefined,
+      }),
+      expect.anything(),
+    );
+    expect(onSaved).toHaveBeenCalled();
   });
 
-  test('should pass updateToLatest to AgentDialog when editing agent', async () => {
+  test('should pass updateToLatest false to AgentDialog when editing agent', async () => {
     const onSaved = testing.fn();
-
     const gmp = createGmp();
 
-    type AgentActions = {
-      delete: (entity: Agent) => Promise<void>;
-      edit: (entity: Agent) => void;
-      authorize: (entity: Agent) => Promise<void>;
-    };
     let actions: AgentActions | undefined;
     const {render} = rendererWith({gmp});
 
@@ -220,6 +289,7 @@ describe('AgentComponent tests', () => {
     const checkbox = screen.getByRole('checkbox', {
       name: 'Enable automatic updates',
     });
+
     expect(checkbox).not.toBeChecked();
   });
 });

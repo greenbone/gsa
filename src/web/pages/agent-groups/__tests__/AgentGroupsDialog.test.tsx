@@ -49,7 +49,6 @@ describe('AgentGroupsDialog tests', () => {
     const onClose = testing.fn();
 
     const gmp = createGmp();
-
     const {render} = rendererWith({gmp});
 
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
@@ -67,7 +66,6 @@ describe('AgentGroupsDialog tests', () => {
     const onClose = testing.fn();
 
     const gmp = createGmp();
-
     const {render} = rendererWith({gmp});
 
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
@@ -75,30 +73,37 @@ describe('AgentGroupsDialog tests', () => {
     const save = screen.getDialogSaveButton();
     fireEvent.click(save);
 
-    // onSave should be called with the dialog defaults
     expect(onSave).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'Unnamed',
         comment: '',
+        agentController: '',
         agentIds: [],
-        network: '',
-        port: 0,
-        updateToLatest: false,
+        schedulerCronExpression: '0 */12 * * *',
+      }),
+    );
+
+    expect(onSave).toHaveBeenCalledWith(
+      expect.not.objectContaining({
+        network: expect.anything(),
+        port: expect.anything(),
+        authorized: expect.anything(),
+        updateToLatest: expect.anything(),
+        config: expect.anything(),
+        intervalInSeconds: expect.anything(),
       }),
     );
   });
 
-  test('selecting agent controller and agent sets payload config and authorized', async () => {
+  test('selecting agent controller and agent sets payload values', async () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
     const gmp = createGmp();
-
     const {render} = rendererWith({gmp});
 
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
 
-    // open agent controller select and choose controller
     const select = screen.getByRole<HTMLSelectElement>('textbox', {
       name: 'Agent Controller',
     });
@@ -107,16 +112,19 @@ describe('AgentGroupsDialog tests', () => {
     const item = items.find(i =>
       i.textContent?.includes('Controller One'),
     ) as HTMLElement;
+
     fireEvent.click(item);
     await wait();
-    // wait for agents data to load and MultiSelect to render
+
     const dialogContent = screen.getDialogContent();
     let multi: HTMLElement = document.createElement('div');
+
     await waitFor(() => {
       const multiElements = within(dialogContent).getMultiSelectElements();
       expect(multiElements.length).toBeGreaterThan(0);
       multi = multiElements[0];
     });
+
     fireEvent.click(multi);
 
     const agentOption = await screen.findByText(/Agent One/);
@@ -127,19 +135,21 @@ describe('AgentGroupsDialog tests', () => {
 
     expect(onSave).toHaveBeenCalledWith(
       expect.objectContaining({
+        name: 'Unnamed',
+        comment: '',
         agentController: 's1',
         agentIds: ['a1'],
-        authorized: true,
-        updateToLatest: true,
-        config: expect.objectContaining({
-          heartbeat: expect.objectContaining({intervalInSeconds: 77}),
-        }),
+        schedulerCronExpression: '0 */12 * * *',
       }),
     );
 
-    // intervalInSeconds is removed from the payload since the field is hidden
     expect(onSave).toHaveBeenCalledWith(
-      expect.not.objectContaining({intervalInSeconds: expect.anything()}),
+      expect.not.objectContaining({
+        authorized: expect.anything(),
+        updateToLatest: expect.anything(),
+        config: expect.anything(),
+        intervalInSeconds: expect.anything(),
+      }),
     );
   });
 
@@ -158,14 +168,15 @@ describe('AgentGroupsDialog tests', () => {
     const select = screen.getByRole<HTMLSelectElement>('textbox', {
       name: 'Agent Controller',
     });
+
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
       i.textContent?.includes('Controller One'),
     ) as HTMLElement;
+
     fireEvent.click(item);
     await wait();
 
-    // wait for agents data to load so AgentConfigurationSection renders
     await waitFor(() => {
       expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
     });
@@ -192,24 +203,24 @@ describe('AgentGroupsDialog tests', () => {
     });
 
     const {render} = rendererWith({gmp});
+
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
 
-    // type a custom name
     const nameField = screen.getByName('name');
     changeInputValue(nameField, 'Custom Group');
 
-    // select a controller
     const select = screen.getByRole<HTMLSelectElement>('textbox', {
       name: 'Agent Controller',
     });
+
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
       i.textContent?.includes('Controller One'),
     ) as HTMLElement;
+
     fireEvent.click(item);
     await wait();
 
-    // name should NOT have been reset
     expect(screen.getByName('name')).toHaveValue('Custom Group');
   });
 });

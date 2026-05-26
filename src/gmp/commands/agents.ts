@@ -79,6 +79,34 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     return this.revoke(response.data);
   }
 
+  async enableUpdateToLatestByFilter(filter: Filter) {
+    const response = await this.get({filter});
+    return this.enableUpdateToLatest(response.data);
+  }
+
+  async enableUpdateToLatest(agents: Agent[]) {
+    log.debug('Enabling update to latest', {agents});
+    await this.httpPostWithTransform({
+      cmd: 'modify_agent',
+      update_to_latest: YES_VALUE,
+      'agent_ids:': map(agents, agent => agent.id),
+    });
+  }
+
+  async disableUpdateToLatestByFilter(filter: Filter) {
+    const response = await this.get({filter});
+    return this.disableUpdateToLatest(response.data);
+  }
+
+  async disableUpdateToLatest(agents: Agent[]) {
+    log.debug('Disabling update to latest', {agents});
+    await this.httpPostWithTransform({
+      cmd: 'modify_agent',
+      update_to_latest: NO_VALUE,
+      'agent_ids:': map(agents, agent => agent.id),
+    });
+  }
+
   getSeverityAggregates({filter}: {filter?: Filter} = {}) {
     const combinedFilter = filter
       ? filter.copy().and(AGENT_CONTROLLER_FILTER)

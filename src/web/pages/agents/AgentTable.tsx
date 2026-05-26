@@ -32,5 +32,7 @@ export default createEntitiesTable<
     delete: true,
     authorize: true,
     revoke: true,
+    enableUpdateToLatest: true,
+    disableUpdateToLatest: true,
   }),
 });

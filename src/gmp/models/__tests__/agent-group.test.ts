@@ -94,4 +94,12 @@ describe('AgentGroup model tests', () => {
     );
     expect(agentGroup.scanner?.name).toEqual('Agent Controller');
   });
+
+  test('should parse scheduler cron time', () => {
+    const agentGroup = AgentGroup.fromElement({
+      scheduler_cron_time: '0 0 * * *',
+    });
+
+    expect(agentGroup.schedulerCronTime).toEqual('0 0 * * *');
+  });
 });

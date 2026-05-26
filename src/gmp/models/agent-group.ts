@@ -23,6 +23,7 @@ export interface AgentGroupElement extends ModelElement {
   agents?: {
     agent?: AgentGroupAgentElement | AgentGroupAgentElement[];
   };
+  scheduler_cron_time?: string;
 }
 
 interface AgentGroupScanner {
@@ -38,6 +39,7 @@ interface AgentGroupAgent {
 interface AgentGroupProperties extends ModelProperties {
   scanner?: AgentGroupScanner;
   agents?: AgentGroupAgent[];
+  schedulerCronTime?: string;
 }
 
 class AgentGroup extends Model {
@@ -45,16 +47,19 @@ class AgentGroup extends Model {
 
   readonly scanner?: AgentGroupScanner;
   readonly agents: AgentGroupAgent[];
+  readonly schedulerCronTime?: string;
 
   constructor({
     scanner,
     agents = [],
+    schedulerCronTime,
     ...properties
   }: AgentGroupProperties = {}) {
     super(properties);
 
     this.scanner = scanner;
     this.agents = agents;
+    this.schedulerCronTime = schedulerCronTime;
   }
 
   static fromElement(element: AgentGroupElement = {}): AgentGroup {
@@ -77,6 +82,9 @@ class AgentGroup extends Model {
       id: agent._id,
       name: parseToString(agent.name),
     }));
+
+    copy.schedulerCronTime = parseToString(element.scheduler_cron_time);
+
     return copy;
   }
 

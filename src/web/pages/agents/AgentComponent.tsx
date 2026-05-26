@@ -90,18 +90,7 @@ const AgentComponent = ({
       agentsIds: [data.id as string],
       authorized: selectedAgent?.isAuthorized(),
       updateToLatest: data?.updateToLatest,
-      attempts: selectedAgent?.config?.agentControl?.retry?.attempts,
-      delayInSeconds: selectedAgent?.config?.agentControl?.retry.delayInSeconds,
-      maxJitterInSeconds:
-        selectedAgent?.config?.agentControl?.retry?.maxJitterInSeconds,
-      bulkSize: selectedAgent?.config?.agentScriptExecutor?.bulkSize,
-      bulkThrottleTime:
-        selectedAgent?.config?.agentScriptExecutor?.bulkThrottleTimeInMs,
-      indexerDirDepth:
-        selectedAgent?.config?.agentScriptExecutor?.indexerDirDepth,
-      schedulerCronTimes: data?.schedulerCronExpression,
       intervalInSeconds: data?.intervalInSeconds,
-      missUntilInactive: selectedAgent?.config?.heartbeat?.missUntilInactive,
       comment: data.comment,
     });
     closeEditDialog();
@@ -125,9 +114,6 @@ const AgentComponent = ({
           ipAddress={selectedAgent.hostname}
           lastContact={selectedAgent.lastUpdate}
           name={selectedAgent.name || selectedAgent.agentId}
-          schedulerCronTime={
-            selectedAgent.config?.agentScriptExecutor?.schedulerCronTimes?.[0]
-          }
           status={selectedAgent.connectionStatus}
           title={editDialogTitle}
           updateToLatest={selectedAgent.updateToLatest}
