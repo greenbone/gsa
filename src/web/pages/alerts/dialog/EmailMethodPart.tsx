@@ -3,18 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {
   isTaskEvent,
   isSecinfoEvent,
   EMAIL_NOTICE_INCLUDE,
   EMAIL_NOTICE_SIMPLE,
   EMAIL_NOTICE_ATTACH,
+  type AlertEventType,
+  type AlertMethodNoticeType,
 } from 'gmp/models/alert';
 import {
+  type default as Credential,
   EMAIL_CREDENTIAL_TYPES,
   email_credential_filter,
 } from 'gmp/models/credential';
+import type ReportConfig from 'gmp/models/report-config';
+import type ReportFormat from 'gmp/models/report-format';
 import {selectSaveId} from 'gmp/utils/id';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
@@ -25,9 +30,35 @@ import {NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
-import withPrefix from 'web/utils/withPrefix';
+import addPrefix from 'web/utils/add-prefix';
+import {
+  type RenderSelectItemProps,
+  renderSelectItems,
+  UNSET_VALUE,
+} from 'web/utils/Render';
+
+interface EmailMethodPartProps {
+  credentials?: Credential[];
+  event: AlertEventType;
+  fromAddress?: string;
+  message?: string;
+  messageAttach?: string;
+  notice: AlertMethodNoticeType;
+  noticeAttachConfig?: string;
+  noticeAttachFormat?: string;
+  noticeReportConfig?: string;
+  noticeReportFormat?: string;
+  prefix?: string;
+  recipientCredential?: string;
+  reportConfigs?: ReportConfig[];
+  reportFormats?: ReportFormat[];
+  subject?: string;
+  toAddress?: string;
+  onChange: (value: string, name?: string) => void;
+  onCredentialChange: (value: string, name?: string) => void;
+  onNewCredentialClick: () => void;
+}
+
 const EmailMethodPart = ({
   credentials = [],
   fromAddress,
@@ -39,7 +70,7 @@ const EmailMethodPart = ({
   noticeReportFormat,
   noticeAttachConfig,
   noticeReportConfig,
-  prefix,
+  prefix: initialPrefix,
   recipientCredential,
   reportConfigs = [],
   reportFormats = [],
@@ -48,100 +79,115 @@ const EmailMethodPart = ({
   onChange,
   onCredentialChange,
   onNewCredentialClick,
-}) => {
+}: EmailMethodPartProps) => {
+  const prefix = addPrefix(initialPrefix);
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const taskEvent = isTaskEvent(event);
   const secinfoEvent = isSecinfoEvent(event);
-  const textReportFormatItems = renderSelectItems(
-    reportFormats.filter(
-      format =>
-        (taskEvent && format.content_type.startsWith('text/')) || !taskEvent,
-    ),
+  const [reportConfigId, setReportConfigId] = useState<string>(
+    selectSaveId(reportConfigs, noticeReportConfig, UNSET_VALUE) as string,
   );
-  const reportFormatItems = renderSelectItems(reportFormats);
-  const [attachFormatIdInState, setAttachFormatId] = useState(
+  const [attachFormatId, setAttachFormatId] = useState(
     selectSaveId(reportFormats, noticeAttachFormat),
   );
+  const textReportFormats = reportFormats.filter(
+    format =>
+      (taskEvent && format.content_type?.startsWith('text/')) || !taskEvent,
+  );
+  const textReportFormatItems = renderSelectItems(
+    textReportFormats as RenderSelectItemProps[],
+  );
+  const reportFormatItems = renderSelectItems(
+    reportFormats as RenderSelectItemProps[],
+  );
+  const attachReportConfigs = reportConfigs.filter(config => {
+    return attachFormatId === config.reportFormat?.id;
+  });
   const attachConfigItems = renderSelectItems(
-    reportConfigs.filter(config => {
-      return attachFormatIdInState === config.report_format._id;
-    }),
+    attachReportConfigs as RenderSelectItemProps[],
     UNSET_VALUE,
   );
-  const [attachConfigIdInState, setAttachConfigId] = useState(
-    selectSaveId(reportConfigs, noticeAttachConfig, UNSET_VALUE),
+  const [attachConfigId, setAttachConfigId] = useState<string>(
+    selectSaveId(reportConfigs, noticeAttachConfig, UNSET_VALUE) as string,
   );
-  const handleAttachConfigIdChange = (value, name) => {
+  const handleAttachConfigIdChange = (value: string, name?: string) => {
     setAttachConfigId(value);
     onChange(value, name);
   };
-  const handleAttachFormatIdChange = (value, name) => {
+  const handleAttachFormatIdChange = (value: string, name?: string) => {
     setAttachConfigId(UNSET_VALUE);
-    onChange(UNSET_VALUE, 'method_data_notice_attach_config');
+    onChange(UNSET_VALUE, prefix('notice_attach_config'));
     setAttachFormatId(value);
     onChange(value, name);
   };
-  const [reportFormatIdInState, setReportFormatId] = useState(
-    selectSaveId(reportFormats, noticeReportFormat),
+  const [reportFormatId, setReportFormatId] = useState<string>(
+    selectSaveId(reportFormats, noticeReportFormat) as string,
   );
   const reportConfigItems = renderSelectItems(
     reportConfigs.filter(config => {
-      return reportFormatIdInState === config.report_format._id;
-    }),
+      return reportFormatId === config.reportFormat?.id;
+    }) as RenderSelectItemProps[],
     UNSET_VALUE,
   );
-  const [reportConfigIdInState, setReportConfigId] = useState(
-    selectSaveId(reportConfigs, noticeReportConfig, UNSET_VALUE),
-  );
-  const handleReportConfigIdChange = (value, name) => {
+  const handleReportConfigIdChange = (value: string, name?: string) => {
     setReportConfigId(value);
     onChange(value, name);
   };
-  const handleReportFormatIdChange = (value, name) => {
+  const handleReportFormatIdChange = (value: string, name?: string) => {
     setReportConfigId(UNSET_VALUE);
-    onChange(UNSET_VALUE, 'method_data_notice_report_config');
+    onChange(UNSET_VALUE, prefix('notice_report_config'));
     setReportFormatId(value);
     onChange(value, name);
   };
   credentials = credentials.filter(email_credential_filter);
   return (
     <>
-      <FormGroup title={_('To Address')}>
+      <FormGroup>
         <TextField
           grow="1"
-          name={prefix + 'to_address'}
+          name={prefix('to_address')}
+          title={_('To Address')}
           value={toAddress}
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('From Address')}>
+      <FormGroup>
         <TextField
           grow="1"
-          name={prefix + 'from_address'}
+          name={prefix('from_address')}
+          title={_('From Address')}
           value={fromAddress}
           onChange={onChange}
         />
       </FormGroup>
 
       {(taskEvent || secinfoEvent) && (
-        <FormGroup title={_('Subject')}>
+        <FormGroup>
           <TextField
             grow="1"
-            name={prefix + 'subject'}
-            size="30"
+            name={prefix('subject')}
+            title={_('Subject')}
             value={subject}
             onChange={onChange}
           />
         </FormGroup>
       )}
 
-      <FormGroup direction="row" title={_('Email Encryption')}>
+      <FormGroup
+        direction="row"
+        htmlFor="email-encryption-credential"
+        title={_('Email Encryption')}
+      >
         <Select
           grow="1"
-          items={renderSelectItems(credentials, UNSET_VALUE)}
-          name={prefix + 'recipient_credential'}
+          id="email-encryption-credential"
+          items={renderSelectItems(
+            credentials as RenderSelectItemProps[],
+            UNSET_VALUE,
+          )}
+          name={prefix('recipient_credential')}
           value={recipientCredential}
           onChange={onCredentialChange}
         />
@@ -157,7 +203,7 @@ const EmailMethodPart = ({
         <FormGroup title={_('Content')}>
           <Radio
             checked={notice === EMAIL_NOTICE_SIMPLE}
-            name={prefix + 'notice'}
+            name={prefix('notice')}
             title={_('Simple Notice')}
             value="1"
             onChange={onChange}
@@ -168,7 +214,7 @@ const EmailMethodPart = ({
               <Row>
                 <Radio
                   checked={notice === EMAIL_NOTICE_INCLUDE}
-                  name={prefix + 'notice'}
+                  name={prefix('notice')}
                   title={
                     taskEvent
                       ? _('Include report')
@@ -179,33 +225,33 @@ const EmailMethodPart = ({
                 />
                 {taskEvent && (
                   <Select
+                    aria-label="Include Report Format"
                     disabled={notice !== EMAIL_NOTICE_INCLUDE}
                     grow="1"
                     items={textReportFormatItems}
-                    name={prefix + 'notice_report_format'}
-                    value={reportFormatIdInState}
+                    name={prefix('notice_report_format')}
+                    value={reportFormatId}
                     onChange={handleReportFormatIdChange}
                   />
                 )}
 
                 {capabilities.mayOp('get_report_configs') && (
-                  <>
-                    <label htmlFor="report-config-select">Report Config</label>
-                    <Select
-                      disabled={notice !== EMAIL_NOTICE_INCLUDE}
-                      id="report-config-select"
-                      items={reportConfigItems}
-                      name={prefix + 'notice_report_config'}
-                      value={reportConfigIdInState}
-                      onChange={handleReportConfigIdChange}
-                    />
-                  </>
+                  <Select
+                    aria-label="Include Report Config"
+                    disabled={notice !== EMAIL_NOTICE_INCLUDE}
+                    id="report-config-select"
+                    items={reportConfigItems}
+                    label={_('Report Config')}
+                    name={prefix('notice_report_config')}
+                    value={reportConfigId}
+                    onChange={handleReportConfigIdChange}
+                  />
                 )}
               </Row>
               <TextArea
                 cols="50"
                 disabled={notice !== EMAIL_NOTICE_INCLUDE}
-                name={prefix + 'message'}
+                name={prefix('message')}
                 rows="8"
                 title={
                   notice === EMAIL_NOTICE_INCLUDE
@@ -223,7 +269,7 @@ const EmailMethodPart = ({
               <Row>
                 <Radio
                   checked={notice === EMAIL_NOTICE_ATTACH}
-                  name={prefix + 'notice'}
+                  name={prefix('notice')}
                   title={
                     taskEvent
                       ? _('Attach report')
@@ -234,32 +280,30 @@ const EmailMethodPart = ({
                 />
                 {taskEvent && (
                   <Select
+                    aria-label="Attach Report Format"
                     disabled={notice !== EMAIL_NOTICE_ATTACH}
                     grow="1"
                     items={reportFormatItems}
-                    name={prefix + 'notice_attach_format'}
-                    value={attachFormatIdInState}
+                    name={prefix('notice_attach_format')}
+                    value={attachFormatId}
                     onChange={handleAttachFormatIdChange}
                   />
                 )}
                 {capabilities.mayOp('get_report_configs') && (
-                  <>
-                    <label htmlFor="attach-config-select">Report Config</label>
-                    <Select
-                      disabled={notice !== EMAIL_NOTICE_ATTACH}
-                      id="attach-config-select"
-                      items={attachConfigItems}
-                      name={prefix + 'notice_attach_config'}
-                      value={attachConfigIdInState}
-                      onChange={handleAttachConfigIdChange}
-                    />
-                  </>
+                  <Select
+                    disabled={notice !== EMAIL_NOTICE_ATTACH}
+                    items={attachConfigItems}
+                    label="Report Config"
+                    name={prefix('notice_attach_config')}
+                    value={attachConfigId}
+                    onChange={handleAttachConfigIdChange}
+                  />
                 )}
               </Row>
               <TextArea
                 cols="50"
                 disabled={notice !== EMAIL_NOTICE_ATTACH}
-                name={prefix + 'message_attach'}
+                name={prefix('message_attach')}
                 rows="8"
                 title={
                   notice === EMAIL_NOTICE_ATTACH
@@ -277,28 +321,4 @@ const EmailMethodPart = ({
   );
 };
 
-EmailMethodPart.propTypes = {
-  attachConfigItems: PropTypes.array,
-  credentials: PropTypes.array,
-  event: PropTypes.string.isRequired,
-  fromAddress: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
-  messageAttach: PropTypes.string.isRequired,
-  notice: PropTypes.string.isRequired,
-  noticeAttachConfig: PropTypes.id,
-  noticeAttachFormat: PropTypes.id,
-  noticeReportConfig: PropTypes.id,
-  noticeReportFormat: PropTypes.id,
-  prefix: PropTypes.string.isRequired,
-  recipientCredential: PropTypes.id,
-  reportConfigItems: PropTypes.array,
-  reportConfigs: PropTypes.array,
-  reportFormats: PropTypes.array,
-  subject: PropTypes.string.isRequired,
-  toAddress: PropTypes.string.isRequired,
-  onChange: PropTypes.func,
-  onCredentialChange: PropTypes.func,
-  onNewCredentialClick: PropTypes.func,
-};
-
-export default withPrefix(EmailMethodPart);
+export default EmailMethodPart;
