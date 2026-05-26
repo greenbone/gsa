@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, expect, test, testing} from '@gsa/testing';
+import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {
   changeInputValue,
   closeDialog,
@@ -13,6 +13,7 @@ import {
   screen,
 } from 'web/testing';
 import date from 'gmp/models/date';
+import type Event from 'gmp/models/event';
 import Schedule from 'gmp/models/schedule';
 import {createSession} from 'gmp/testing';
 import ScheduleDialog from 'web/pages/schedules/ScheduleDialog';
@@ -47,17 +48,17 @@ beforeEach(() => {
 const schedule = Schedule.fromElement({
   comment: 'hello world',
   name: 'schedule 1',
-  id: 'foo',
+  _id: 'foo',
   icalendar:
     'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1//EN\nBEGIN:VEVENT\nDTSTART:20210208T150000Z\nDURATION:PT4H45M\nRRULE:FREQ=WEEKLY\nUID:foo\nDTSTAMP:20210208T143704Z\nEND:VEVENT\nEND:VCALENDAR',
-  creationTime: '2021-02-08T14:37:04+00:00',
-  modificationTime: '2021-02-08T14:37:04+00:00',
-  owner: 'admin',
-  permissions: [{name: 'Everything'}],
-  userTags: null,
+  creation_time: '2021-02-08T14:37:04+00:00',
+  modification_time: '2021-02-08T14:37:04+00:00',
+  owner: {name: 'admin'},
+  permissions: {permission: [{name: 'Everything'}]},
   timezone: 'UTC',
-  inUse: false,
+  in_use: 0,
 });
+
 const {
   comment: scheduleComment,
   event,
@@ -69,7 +70,7 @@ const {
   duration: scheduleDuration,
   startDate: scheduleStartDate,
   recurrence,
-} = event;
+} = event as Event;
 const {
   interval: scheduleInterval,
   freq: scheduleFrequency,
@@ -859,7 +860,7 @@ describe('ScheduleDialog component tests', () => {
         await getSelectItemElementsForSelect(recurrenceSelect);
       const workweekOption = selectItems.find(
         item => item.textContent === 'Workweek (Monday till Friday)',
-      );
+      ) as HTMLElement;
       fireEvent.click(workweekOption);
       expect(recurrenceSelect).toHaveValue('Workweek (Monday till Friday)');
 
@@ -926,7 +927,9 @@ describe('ScheduleDialog component tests', () => {
         const recurrenceSelect = selects[1];
         const selectItems =
           await getSelectItemElementsForSelect(recurrenceSelect);
-        const option = selectItems.find(item => item.textContent === label);
+        const option = selectItems.find(
+          item => item.textContent === label,
+        ) as HTMLElement;
         fireEvent.click(option);
 
         const saveButton = screen.getDialogSaveButton();
