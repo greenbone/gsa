@@ -5,11 +5,11 @@
 
 import {_l} from 'gmp/locale/lang';
 import type Agent from 'gmp/models/agent';
-import createEntitiesFooter, {
-  type CreateEntitiesFooterProps,
-} from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 
+import AgentTableFooter, {
+  type AgentTableFooterProps,
+} from 'web/pages/agents/AgentTableFooter';
 import AgentTableHeader, {
   type AgentTableHeaderProps,
 } from 'web/pages/agents/AgentTableHeader';
@@ -19,7 +19,7 @@ import AgentTableRow, {
 
 export default createEntitiesTable<
   Agent,
-  CreateEntitiesFooterProps<Agent>,
+  AgentTableFooterProps,
   AgentTableHeaderProps,
   AgentTableRowProps
 >({
@@ -27,12 +27,5 @@ export default createEntitiesTable<
   row: AgentTableRow,
   rowDetails: undefined,
   header: AgentTableHeader,
-  footer: createEntitiesFooter({
-    span: 8,
-    delete: true,
-    authorize: true,
-    revoke: true,
-    enableUpdateToLatest: true,
-    disableUpdateToLatest: true,
-  }),
+  footer: AgentTableFooter,
 });

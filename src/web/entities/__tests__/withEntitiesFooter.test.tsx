@@ -31,12 +31,9 @@ describe('withEntitiesFooter tests', () => {
       entitiesCounts: new CollectionCounts({all: 2, filtered: 2, length: 2}),
       filter: new Filter(),
       onDeleteBulk: testing.fn(),
-      onAuthorizeBulk: testing.fn(),
-      onRevokeBulk: testing.fn(),
-      onEnableUpdateToLatestBulk: testing.fn(),
-      onDisableUpdateToLatestBulk: testing.fn(),
       onDownloadBulk: testing.fn(),
       onTagsBulk: testing.fn(),
+      onTrashBulk: testing.fn(),
     };
 
     render(<WrappedComponent {...mockProps} />);
@@ -47,13 +44,9 @@ describe('withEntitiesFooter tests', () => {
         entitiesCounts: mockProps.entitiesCounts,
         filter: mockProps.filter,
         onDeleteClick: mockProps.onDeleteBulk,
-        onAuthorizeClick: mockProps.onAuthorizeBulk,
-        onRevokeClick: mockProps.onRevokeBulk,
-        onEnableUpdateToLatestClick: mockProps.onEnableUpdateToLatestBulk,
-        onDisableUpdateToLatestClick: mockProps.onDisableUpdateToLatestBulk,
         onDownloadClick: mockProps.onDownloadBulk,
         onTagsClick: mockProps.onTagsBulk,
-        onTrashClick: mockProps.onDeleteBulk,
+        onTrashClick: mockProps.onTrashBulk,
       }),
       {},
     );
@@ -69,15 +62,14 @@ describe('withEntitiesFooter tests', () => {
     } as Partial<MockProps>;
 
     const MockComponent = testing.fn(() => <div>Mock Component</div>);
-    const WrappedComponent = withEntitiesFooter(options)(MockComponent);
+    const WrappedComponent = withEntitiesFooter<Task, MockProps>(options)(
+      MockComponent,
+    );
 
     const mockProps = {
       entities: [new Task({id: '1'})],
       onDeleteBulk: testing.fn(),
-      onAuthorizeBulk: testing.fn(),
-      onRevokeBulk: testing.fn(),
-      onEnableUpdateToLatestBulk: testing.fn(),
-      onDisableUpdateToLatestBulk: testing.fn(),
+      onTrashBulk: testing.fn(),
     };
 
     render(<WrappedComponent {...mockProps} />);
@@ -87,11 +79,7 @@ describe('withEntitiesFooter tests', () => {
         foo: options.foo,
         entities: mockProps.entities,
         onDeleteClick: mockProps.onDeleteBulk,
-        onAuthorizeClick: mockProps.onAuthorizeBulk,
-        onRevokeClick: mockProps.onRevokeBulk,
-        onEnableUpdateToLatestClick: mockProps.onEnableUpdateToLatestBulk,
-        onDisableUpdateToLatestClick: mockProps.onDisableUpdateToLatestBulk,
-        onTrashClick: mockProps.onDeleteBulk,
+        onTrashClick: mockProps.onTrashBulk,
       }),
       {},
     );
@@ -107,16 +95,15 @@ describe('withEntitiesFooter tests', () => {
     } as Partial<MockProps>;
 
     const MockComponent = testing.fn(() => <div>Mock Component</div>);
-    const WrappedComponent = withEntitiesFooter(options)(MockComponent);
+    const WrappedComponent = withEntitiesFooter<Task, MockProps>(options)(
+      MockComponent,
+    );
 
     const mockProps = {
       entities: [new Task({id: '1'})],
       foo: 'baz',
       onDeleteBulk: testing.fn(),
-      onAuthorizeBulk: testing.fn(),
-      onRevokeBulk: testing.fn(),
-      onEnableUpdateToLatestBulk: testing.fn(),
-      onDisableUpdateToLatestBulk: testing.fn(),
+      onTrashBulk: testing.fn(),
     };
 
     render(<WrappedComponent {...mockProps} />);
@@ -126,11 +113,29 @@ describe('withEntitiesFooter tests', () => {
         foo: mockProps.foo,
         entities: mockProps.entities,
         onDeleteClick: mockProps.onDeleteBulk,
-        onAuthorizeClick: mockProps.onAuthorizeBulk,
-        onRevokeClick: mockProps.onRevokeBulk,
-        onEnableUpdateToLatestClick: mockProps.onEnableUpdateToLatestBulk,
-        onDisableUpdateToLatestClick: mockProps.onDisableUpdateToLatestBulk,
-        onTrashClick: mockProps.onDeleteBulk,
+        onTrashClick: mockProps.onTrashBulk,
+      }),
+      {},
+    );
+  });
+
+  test('should not pass agent-specific props to the wrapped component', () => {
+    const MockComponent = testing.fn(() => <div>Mock Component</div>);
+    const WrappedComponent = withEntitiesFooter<Task>()(MockComponent);
+
+    render(
+      <WrappedComponent
+        entities={[new Task({id: '1'})]}
+        onDeleteBulk={testing.fn()}
+      />,
+    );
+
+    expect(MockComponent).toHaveBeenCalledWith(
+      expect.not.objectContaining({
+        onAuthorizeClick: expect.any(Function),
+        onRevokeClick: expect.any(Function),
+        onEnableUpdateToLatestClick: expect.any(Function),
+        onDisableUpdateToLatestClick: expect.any(Function),
       }),
       {},
     );
