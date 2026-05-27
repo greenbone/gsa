@@ -3,40 +3,51 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import CvesTable from 'web/pages/reports/details/CvesTable';
+import type CollectionCounts from 'gmp/collection/collection-counts';
+import type Filter from 'gmp/models/filter';
+import type {ReportClosedCve} from 'gmp/models/report/parser';
+import ClosedCvesTable from 'web/pages/reports/details/ClosedCvesTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
-import PropTypes from 'web/utils/PropTypes';
 import {
-  makeCompareNumber,
+  makeCompareIp,
   makeCompareString,
   makeCompareSeverity,
 } from 'web/utils/Sort';
 
-const cvesSortFunctions = {
-  cve: makeCompareString(entity => entity.cves.join(' ')),
-  hosts: makeCompareNumber(entity => entity.hosts.count),
-  nvt: makeCompareString(entity => entity.nvtName),
-  occurrences: makeCompareNumber(entity => entity.occurrences),
+interface ClosedCvesTabProps {
+  counts?: CollectionCounts;
+  closedCves?: ReportClosedCve[];
+  filter: Filter;
+  isUpdating?: boolean;
+  sortField: string;
+  sortReverse: boolean;
+  onSortChange: (sortField: string) => void;
+}
+
+const closedCvesSortFunctions = {
+  cve: makeCompareString('cveId'),
+  host: makeCompareIp((entity: ReportClosedCve) => entity.host.ip),
+  nvt: makeCompareString(
+    (entity: ReportClosedCve) => entity.source?.description,
+  ),
   severity: makeCompareSeverity(),
 };
 
-const CvesTab = ({
+const ClosedCvesTab = ({
   counts,
-  cves,
+  closedCves,
   filter,
   isUpdating,
   sortField,
   sortReverse,
-
   onSortChange,
-}) => (
+}: ClosedCvesTabProps) => (
   <ReportEntitiesContainer
     counts={counts}
-    entities={cves}
+    entities={closedCves}
     filter={filter}
     sortField={sortField}
-    sortFunctions={cvesSortFunctions}
+    sortFunctions={closedCvesSortFunctions}
     sortReverse={sortReverse}
   >
     {({
@@ -49,7 +60,8 @@ const CvesTab = ({
       onNextClick,
       onPreviousClick,
     }) => (
-      <CvesTable
+      <ClosedCvesTable
+        // @ts-expect-error entities are ReportClosedCve[], not Model[]
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}
@@ -67,14 +79,4 @@ const CvesTab = ({
   </ReportEntitiesContainer>
 );
 
-CvesTab.propTypes = {
-  counts: PropTypes.object,
-  cves: PropTypes.array,
-  filter: PropTypes.filter.isRequired,
-  isUpdating: PropTypes.bool,
-  sortField: PropTypes.string.isRequired,
-  sortReverse: PropTypes.bool.isRequired,
-  onSortChange: PropTypes.func.isRequired,
-};
-
-export default CvesTab;
+export default ClosedCvesTab;

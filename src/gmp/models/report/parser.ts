@@ -18,7 +18,6 @@ import {
   type NvtSeveritiesElement,
 } from 'gmp/models/nvt';
 import ReportApp from 'gmp/models/report/app';
-import ReportCve from 'gmp/models/report/cve';
 import ReportHost from 'gmp/models/report/host';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import ReportPort from 'gmp/models/report/port';
@@ -291,7 +290,7 @@ export interface ReportHostElement {
   start?: string; // date
 }
 
-interface AppsReportElement {
+export interface AppsReportElement {
   host?: ReportHostElement | ReportHostElement[];
   apps?: CountElement;
   results?: ReportResultsElement;
@@ -330,6 +329,44 @@ export interface ReportClosedCve {
     name?: string;
   };
   severity?: number;
+}
+
+export interface ReportActiveCve {
+  id: string;
+  cveId: string;
+  host: {
+    ip?: string;
+    id?: string;
+    name?: string;
+  };
+  source?: {
+    name?: string;
+    description?: string;
+  };
+  severity?: number;
+}
+
+export interface CveEndpointElement {
+  host?: string;
+  name?: string;
+  nvt?: {
+    _oid?: string;
+    name?: string;
+    __text?: string;
+  };
+  severity?: string | number;
+  threat?: string;
+}
+
+interface CvesEndpointContainer {
+  cve?: CveEndpointElement | CveEndpointElement[];
+  count?: number;
+  _count?: number;
+}
+
+export interface CvesEndpointData {
+  cves?: CvesEndpointContainer;
+  [key: string]: unknown;
 }
 
 export interface ReportError {
@@ -902,14 +939,14 @@ export const parseClosedCves = (
 export const parseCves = (
   report: CvesReportElement,
   filter: Filter,
-): CollectionList<ReportCve> => {
+): CollectionList<ReportActiveCve> => {
   const {results} = report;
 
   if (!isDefined(results)) {
     return emptyCollectionList(filter);
   }
 
-  const cves: Record<string, ReportCve> = {};
+  const cvesMap: Record<string, ReportActiveCve> = {};
 
   const resultsWithCve = filterFunc(results.result, result => {
     const refs = getRefs(result.nvt);
@@ -918,24 +955,40 @@ export const parseCves = (
 
   resultsWithCve.forEach(result => {
     const {host = {}, nvt} = result;
-    const id = nvt?._oid as string;
-    let cve = cves[id];
+    const {__text: ip, asset} = host;
+    const nvtOid = nvt?._oid;
+    const nvtName = nvt?.name;
+    const resultSeverity = parseSeverity(result.severity);
+    const hostId = isDefined(asset) ? asset._asset_id : undefined;
 
-    if (!isDefined(cve)) {
-      cve = ReportCve.fromElement({nvt});
-      cves[id] = cve;
-    }
+    getRefs(nvt)
+      .filter(hasRefType('cve'))
+      .forEach(ref => {
+        const cveId = ref._id;
+        const key = `${cveId}-${ip}-${nvtOid}`;
 
-    const {__text: ip} = host;
-
-    if (isDefined(ip)) {
-      cve.addHost({ip});
-    }
-    cve.addResult(result);
+        const existing = cvesMap[key];
+        if (isDefined(existing)) {
+          if (
+            isDefined(resultSeverity) &&
+            (!isDefined(existing.severity) ||
+              resultSeverity > existing.severity)
+          ) {
+            existing.severity = resultSeverity;
+          }
+        } else {
+          cvesMap[key] = {
+            id: key,
+            cveId: cveId as string,
+            host: {ip, id: hostId},
+            source: {name: nvtOid, description: nvtName},
+            severity: resultSeverity,
+          };
+        }
+      });
   });
 
-  const cvesArray = Object.values(cves);
-
+  const cvesArray = Object.values(cvesMap);
   const {length: filteredCount} = cvesArray;
 
   const counts = new CollectionCounts({
@@ -949,6 +1002,56 @@ export const parseCves = (
   return {
     counts,
     entities: cvesArray,
+    filter,
+  };
+};
+
+export const parseCvesFromEndpoint = (
+  data: CvesEndpointData,
+  filter: Filter,
+): CollectionList<ReportActiveCve> => {
+  const {cves: cvesContainer} = data;
+
+  if (!isDefined(cvesContainer)) {
+    return emptyCollectionList(filter);
+  }
+
+  const entities: ReportActiveCve[] = [];
+
+  forEach(cvesContainer.cve, cveEl => {
+    const ip = cveEl.host;
+    const cveId = cveEl.name;
+    const nvtOid = cveEl.nvt?._oid;
+    const nvtName = cveEl.nvt?.name ?? cveEl.nvt?.__text;
+    const severity = parseSeverity(cveEl.severity);
+
+    if (isDefined(cveId)) {
+      entities.push({
+        id: `${cveId}-${ip}-${nvtOid}`,
+        cveId,
+        host: {ip},
+        source: {
+          name: nvtOid,
+          description: nvtName,
+        },
+        severity,
+      });
+    }
+  });
+
+  const {length: filteredCount} = entities;
+
+  const counts = new CollectionCounts({
+    all: cvesContainer.count ?? cvesContainer._count ?? filteredCount,
+    filtered: filteredCount,
+    first: 1,
+    length: filteredCount,
+    rows: filteredCount,
+  });
+
+  return {
+    counts,
+    entities,
     filter,
   };
 };

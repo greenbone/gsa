@@ -8,7 +8,6 @@ import {type Date} from 'gmp/models/date';
 import Filter, {type FilterKeyword} from 'gmp/models/filter';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import type ReportApp from 'gmp/models/report/app';
-import type ReportCve from 'gmp/models/report/cve';
 import type ReportHost from 'gmp/models/report/host';
 import type ReportOperatingSystem from 'gmp/models/report/os';
 import {
@@ -21,6 +20,7 @@ import {
   parsePorts,
   parseResults,
   parseTlsCertificates,
+  type ReportActiveCve,
   type ReportResultsElement,
   type CountElement,
   type TlsCertificatesElement,
@@ -162,7 +162,7 @@ interface ReportResultCounts {
 interface ReportReportProperties extends ModelProperties {
   applications?: CollectionList<ReportApp>;
   closedCves?: CollectionList<ReportClosedCve>;
-  cves?: CollectionList<ReportCve>;
+  cves?: CollectionList<ReportActiveCve>;
   delta_report?: DeltaReport;
   errors?: CollectionList<ReportError>;
   filter?: Filter;
@@ -187,7 +187,7 @@ class ReportReport extends Model {
 
   readonly applications?: CollectionList<ReportApp>;
   readonly closedCves?: CollectionList<ReportClosedCve>;
-  readonly cves?: CollectionList<ReportCve>;
+  readonly cves?: CollectionList<ReportActiveCve>;
   readonly delta_report?: DeltaReport;
   readonly errors?: CollectionList<ReportError>;
   readonly filter?: Filter;
