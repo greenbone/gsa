@@ -49,6 +49,7 @@ import SmbMethodPart from 'web/pages/alerts/dialog/SmbMethodPart';
 import SnmpMethodPart from 'web/pages/alerts/dialog/SnmpMethodPart';
 import SourceFireMethodPart from 'web/pages/alerts/dialog/SourceFireMethodPart';
 import StartTaskMethodPart from 'web/pages/alerts/dialog/StartTaskMethodPart';
+import VeriniceMethodPart from 'web/pages/alerts/dialog/VeriniceMethodPart';
 import FilterCountChangedConditionPart from 'web/pages/alerts/FilterCountChangedConditionPart';
 import FilterCountLeastConditionPart from 'web/pages/alerts/FilterCountLeastConditionPart';
 import SecInfoEventPart from 'web/pages/alerts/SecInfoEventPart';
@@ -57,7 +58,6 @@ import SeverityLeastConditionPart from 'web/pages/alerts/SeverityLeastConditionP
 import TaskEventPart from 'web/pages/alerts/TaskEventPart';
 import TicketEventPart from 'web/pages/alerts/TicketEventPart';
 import TippingPontMethodPart from 'web/pages/alerts/TippingPointMethodPart';
-import VeriniceMethodPart from 'web/pages/alerts/VeriniceMethodPart';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
