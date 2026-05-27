@@ -15,6 +15,8 @@ import {
   parseCves,
   parseErrors,
   parseClosedCves,
+  parseCvesFromEndpoint,
+  parseClosedCvesFromEndpoint,
 } from 'gmp/models/report/parser';
 import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 
@@ -1028,5 +1030,237 @@ describe('report parser tests', () => {
     expect(closedCves.entities.length).toEqual(0);
     expect(closedCves.counts).toEqual(emptyCollectionCounts);
     expect(closedCves.filter).toEqual(filter);
+  });
+});
+
+describe('parseCvesFromEndpoint', () => {
+  test('should parse multiple cve elements', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+    const data = {
+      cves: {
+        cve: [
+          {
+            host: '192.168.1.1',
+            name: 'CVE-2019-1234',
+            nvt: {_oid: '1.2.3', name: 'TestNVT'},
+            severity: 7.5,
+            threat: 'High',
+          },
+          {
+            host: '192.168.1.2',
+            name: 'CVE-2020-5678',
+            nvt: {_oid: '2.3.4', name: 'AnotherNVT'},
+            severity: 5.0,
+            threat: 'Medium',
+          },
+        ],
+      },
+    };
+
+    const result = parseCvesFromEndpoint(data, filter);
+
+    expect(result.entities).toHaveLength(2);
+    expect(result.entities[0].cveId).toEqual('CVE-2019-1234');
+    expect(result.entities[0].host.ip).toEqual('192.168.1.1');
+    expect(result.entities[0].source?.name).toEqual('1.2.3');
+    expect(result.entities[0].source?.description).toEqual('TestNVT');
+    expect(result.entities[0].severity).toEqual(7.5);
+    expect(result.entities[0].id).toEqual('CVE-2019-1234-192.168.1.1-1.2.3');
+    expect(result.entities[1].cveId).toEqual('CVE-2020-5678');
+    expect(result.entities[1].host.ip).toEqual('192.168.1.2');
+    expect(result.filter).toEqual(filter);
+  });
+
+  test('should handle a single cve element (not array)', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+    const data = {
+      cves: {
+        cve: {
+          host: '10.0.0.1',
+          name: 'CVE-2021-9999',
+          nvt: {_oid: '9.9.9', name: 'SingleNVT'},
+          severity: 3.0,
+          threat: 'Low',
+        },
+      },
+    };
+
+    const result = parseCvesFromEndpoint(data, filter);
+
+    expect(result.entities).toHaveLength(1);
+    expect(result.entities[0].cveId).toEqual('CVE-2021-9999');
+    expect(result.entities[0].host.ip).toEqual('10.0.0.1');
+    expect(result.entities[0].severity).toEqual(3.0);
+  });
+
+  test('should fall back to nvt __text when name child is absent', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+    const data = {
+      cves: {
+        cve: {
+          host: '10.0.0.1',
+          name: 'CVE-2022-0001',
+          nvt: {_oid: '1.1.1', __text: 'NVT from text'},
+          severity: 4.0,
+        },
+      },
+    };
+
+    const result = parseCvesFromEndpoint(data, filter);
+
+    expect(result.entities[0].source?.description).toEqual('NVT from text');
+  });
+
+  test('should return empty list when cves container is missing', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+
+    const result = parseCvesFromEndpoint({}, filter);
+
+    expect(result.entities).toHaveLength(0);
+    expect(result.counts).toEqual(emptyCollectionCounts);
+    expect(result.filter).toEqual(filter);
+  });
+
+  test('should use server count for counts.all when provided', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+    const data = {
+      cves: {
+        count: 999,
+        cve: [
+          {host: '1.1.1.1', name: 'CVE-A', nvt: {_oid: '1'}, severity: 5.0},
+          {host: '1.1.1.1', name: 'CVE-B', nvt: {_oid: '1'}, severity: 5.0},
+        ],
+      },
+    };
+
+    const result = parseCvesFromEndpoint(data, filter);
+
+    expect(result.counts.all).toEqual(999);
+    expect(result.counts.filtered).toEqual(2);
+  });
+});
+
+describe('parseClosedCvesFromEndpoint', () => {
+  test('should parse multiple closed_cve elements', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+    const data = {
+      closed_cves: {
+        closed_cve: [
+          {
+            host: '192.168.1.1',
+            cve: 'CVE-2019-1234',
+            nvt: {_oid: '1.2.3', name: 'TestNVT'},
+            severity: 7.5,
+            threat: 'High',
+          },
+          {
+            host: '192.168.1.2',
+            cve: 'CVE-2020-5678',
+            nvt: {_oid: '2.3.4', name: 'AnotherNVT'},
+            severity: 5.0,
+            threat: 'Medium',
+          },
+        ],
+      },
+    };
+
+    const result = parseClosedCvesFromEndpoint(data, filter);
+
+    expect(result.entities).toHaveLength(2);
+    expect(result.entities[0].cveId).toEqual('CVE-2019-1234');
+    expect(result.entities[0].host.ip).toEqual('192.168.1.1');
+    expect(result.entities[0].source?.name).toEqual('1.2.3');
+    expect(result.entities[0].source?.description).toEqual('TestNVT');
+    expect(result.entities[0].severity).toEqual(7.5);
+    expect(result.entities[0].id).toEqual('CVE-2019-1234-192.168.1.1-1.2.3');
+    expect(result.entities[1].cveId).toEqual('CVE-2020-5678');
+    expect(result.entities[1].host.ip).toEqual('192.168.1.2');
+    expect(result.filter).toEqual(filter);
+  });
+
+  test('should handle a single closed_cve element (not array)', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+    const data = {
+      closed_cves: {
+        closed_cve: {
+          host: '10.0.0.1',
+          cve: 'CVE-2021-9999',
+          nvt: {_oid: '9.9.9', name: 'SingleNVT'},
+          severity: 3.0,
+          threat: 'Low',
+        },
+      },
+    };
+
+    const result = parseClosedCvesFromEndpoint(data, filter);
+
+    expect(result.entities).toHaveLength(1);
+    expect(result.entities[0].cveId).toEqual('CVE-2021-9999');
+    expect(result.entities[0].host.ip).toEqual('10.0.0.1');
+    expect(result.entities[0].severity).toEqual(3.0);
+  });
+
+  test('should fall back to nvt __text when name child is absent', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+    const data = {
+      closed_cves: {
+        closed_cve: {
+          host: '10.0.0.1',
+          cve: 'CVE-2022-0001',
+          nvt: {_oid: '1.1.1', __text: 'NVT from text'},
+          severity: 4.0,
+        },
+      },
+    };
+
+    const result = parseClosedCvesFromEndpoint(data, filter);
+
+    expect(result.entities[0].source?.description).toEqual('NVT from text');
+  });
+
+  test('should return empty list when closed_cves container is missing', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+
+    const result = parseClosedCvesFromEndpoint({}, filter);
+
+    expect(result.entities).toHaveLength(0);
+    expect(result.counts).toEqual(emptyCollectionCounts);
+    expect(result.filter).toEqual(filter);
+  });
+
+  test('should use server count for counts.all when provided', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+    const data = {
+      closed_cves: {
+        count: 500,
+        closed_cve: [
+          {host: '1.1.1.1', cve: 'CVE-A', nvt: {_oid: '1'}, severity: 5.0},
+          {host: '1.1.1.1', cve: 'CVE-B', nvt: {_oid: '1'}, severity: 5.0},
+        ],
+      },
+    };
+
+    const result = parseClosedCvesFromEndpoint(data, filter);
+
+    expect(result.counts.all).toEqual(500);
+    expect(result.counts.filtered).toEqual(2);
+  });
+
+  test('should build composite id from cve, host, and nvt oid', () => {
+    const filter = Filter.fromString('first=1 rows=100');
+    const data = {
+      closed_cves: {
+        closed_cve: {
+          host: '10.0.0.1',
+          cve: 'CVE-2022-0001',
+          nvt: {_oid: '9.9.9', name: 'TestNVT'},
+          severity: 6.0,
+        },
+      },
+    };
+
+    const result = parseClosedCvesFromEndpoint(data, filter);
+
+    expect(result.entities[0].id).toEqual('CVE-2022-0001-10.0.0.1-9.9.9');
   });
 });

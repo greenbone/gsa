@@ -3,9 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type CollectionCounts from 'gmp/collection/collection-counts';
-import type Filter from 'gmp/models/filter';
-import type {ReportClosedCve} from 'gmp/models/report/parser';
+import {useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import Filter from 'gmp/models/filter';
+import {isActive, type TaskStatus} from 'gmp/models/task';
+import {isDefined} from 'gmp/utils/identity';
+import ErrorPanel from 'web/components/error/ErrorPanel';
+import Loading from 'web/components/loading/Loading';
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/Reload';
+import useGetReportClosedCves from 'web/hooks/use-query/report-closed-cves';
+import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import ClosedCvesTable from 'web/pages/reports/details/ClosedCvesTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {
@@ -15,68 +25,105 @@ import {
 } from 'web/utils/Sort';
 
 interface ClosedCvesTabProps {
-  counts?: CollectionCounts;
-  closedCves?: ReportClosedCve[];
-  filter: Filter;
-  isUpdating?: boolean;
-  sortField: string;
-  sortReverse: boolean;
-  onSortChange: (sortField: string) => void;
+  filter?: Filter;
+  reportId: string;
+  status: TaskStatus;
 }
 
-const closedCvesSortFunctions = {
+export const closedCvesSortFunctions = {
   cve: makeCompareString('cveId'),
-  host: makeCompareIp((entity: ReportClosedCve) => entity.host.ip),
-  nvt: makeCompareString(
-    (entity: ReportClosedCve) => entity.source?.description,
-  ),
+  host: makeCompareIp(entity => entity.host.ip),
+  nvt: makeCompareString(entity => entity.source?.description),
   severity: makeCompareSeverity(),
 };
 
-const ClosedCvesTab = ({
-  counts,
-  closedCves,
+const ClosedCvesTabWrapper = ({
   filter,
-  isUpdating,
-  sortField,
-  sortReverse,
-  onSortChange,
-}: ClosedCvesTabProps) => (
-  <ReportEntitiesContainer
-    counts={counts}
-    entities={closedCves}
-    filter={filter}
-    sortField={sortField}
-    sortFunctions={closedCvesSortFunctions}
-    sortReverse={sortReverse}
-  >
-    {({
-      entities,
-      entitiesCounts,
-      sortBy,
-      sortDir,
-      onFirstClick,
-      onLastClick,
-      onNextClick,
-      onPreviousClick,
-    }) => (
-      <ClosedCvesTable
-        // @ts-expect-error entities are ReportClosedCve[], not Model[]
-        entities={entities}
-        entitiesCounts={entitiesCounts}
-        filter={filter}
-        isUpdating={isUpdating}
-        sortBy={sortBy}
-        sortDir={sortDir}
-        toggleDetailsIcon={false}
-        onFirstClick={onFirstClick}
-        onLastClick={onLastClick}
-        onNextClick={onNextClick}
-        onPreviousClick={onPreviousClick}
-        onSortChange={onSortChange}
-      />
-    )}
-  </ReportEntitiesContainer>
-);
+  reportId,
+  status,
+}: ClosedCvesTabProps) => {
+  const [_] = useTranslation();
 
-export default ClosedCvesTab;
+  const baseFilter = useMemo(() => {
+    return isDefined(filter) ? filter.copy() : new Filter();
+  }, [filter]);
+
+  const [closedCvesFilter, setClosedCvesFilter] = useState<Filter>(baseFilter);
+
+  const {data, isLoading, isFetching, isError, error} = useGetReportClosedCves({
+    reportId,
+    filter: closedCvesFilter,
+    refetchInterval: isActive(status)
+      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+      : NO_RELOAD,
+  });
+
+  const updateFilter = (newFilter: Filter) => {
+    setClosedCvesFilter(newFilter);
+  };
+
+  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
+    closedCvesFilter,
+    updateFilter,
+  );
+
+  if (isError) {
+    return (
+      <ErrorPanel
+        error={error}
+        message={_('Error while loading Closed CVEs for Report {{reportId}}', {
+          reportId,
+        })}
+      />
+    );
+  }
+
+  const {entities: closedCves = [], entitiesCounts: closedCvesCounts} =
+    data || {};
+
+  const displayedFilter = closedCvesFilter;
+
+  if (isLoading && !data) {
+    return <Loading />;
+  }
+
+  return (
+    <ReportEntitiesContainer
+      counts={closedCvesCounts}
+      entities={closedCves}
+      filter={displayedFilter}
+      sortField={sortBy || 'severity'}
+      sortFunctions={closedCvesSortFunctions}
+      sortReverse={sortDir === 'asc'}
+    >
+      {({
+        entities,
+        entitiesCounts,
+        sortBy,
+        sortDir,
+        onFirstClick,
+        onLastClick,
+        onNextClick,
+        onPreviousClick,
+      }) => (
+        <ClosedCvesTable
+          // @ts-expect-error entities are ReportClosedCve[], not Model[]
+          entities={entities}
+          entitiesCounts={entitiesCounts}
+          filter={displayedFilter}
+          isUpdating={isFetching}
+          sortBy={sortBy}
+          sortDir={sortDir}
+          toggleDetailsIcon={false}
+          onFirstClick={onFirstClick}
+          onLastClick={onLastClick}
+          onNextClick={onNextClick}
+          onPreviousClick={onPreviousClick}
+          onSortChange={handleSortChange}
+        />
+      )}
+    </ReportEntitiesContainer>
+  );
+};
+
+export default ClosedCvesTabWrapper;

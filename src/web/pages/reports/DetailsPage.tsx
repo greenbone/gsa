@@ -17,6 +17,8 @@ import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
+import useGetReportClosedCves from 'web/hooks/use-query/report-closed-cves';
+import useGetReportCves from 'web/hooks/use-query/report-cves';
 import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import {
   useGetReport,
@@ -177,6 +179,16 @@ const ReportDetailsPage = () => {
     filter: reportFilter,
   });
 
+  const {data: reportCvesData} = useGetReportCves({
+    reportId,
+    filter: reportFilter,
+  });
+
+  const {data: reportClosedCvesData} = useGetReportClosedCves({
+    reportId,
+    filter: reportFilter,
+  });
+
   // Filters list for Powerfilter dropdown
   const {data: filtersData, isLoading: isLoadingFilters} =
     useGetResultsFilters();
@@ -232,8 +244,8 @@ const ReportDetailsPage = () => {
   const portsCounts = report?.ports?.counts;
   const applicationsCounts = report?.applications?.counts;
   const operatingSystemsCounts = report?.operatingsystems?.counts;
-  const cvesCounts = report?.cves?.counts;
-  const closedCvesCounts = report?.closedCves?.counts;
+  const cvesCounts = reportCvesData?.entitiesCounts;
+  const closedCvesCounts = reportClosedCvesData?.entitiesCounts;
   const tlsCertificatesCounts =
     reportTlsCertificatesData?.entitiesCounts ??
     report?.tlsCertificates?.counts;
