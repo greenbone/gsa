@@ -14,9 +14,9 @@ import {
 } from 'web/components/loading/Reload';
 import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
-import AgentScanningHostsTab from 'web/pages/reports/details/AgentScanningHostsTab';
-import ContainerScanningHostsTab from 'web/pages/reports/details/ContainerScanningHostsTab';
-import HostsTab from 'web/pages/reports/details/HostsTab';
+import AgentScanningHostsTab from 'web/pages/reports/details/host/AgentScanningHostsTab';
+import ContainerScanningHostsTab from 'web/pages/reports/details/host/ContainerScanningHostsTab';
+import HostsTab from 'web/pages/reports/details/host/HostsTab';
 
 export interface HostsTabContentProps {
   audit?: boolean;

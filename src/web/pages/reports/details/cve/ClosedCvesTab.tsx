@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2026 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
@@ -14,53 +14,56 @@ import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import useGetReportErrors from 'web/hooks/use-query/report-errors';
+import useGetReportClosedCves from 'web/hooks/use-query/report-closed-cves';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import ErrorsTable from 'web/pages/reports/details/ErrorsTable';
+import ClosedCvesTable from 'web/pages/reports/details/cve/ClosedCvesTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
-import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
+import {
+  makeCompareIp,
+  makeCompareString,
+  makeCompareSeverity,
+} from 'web/utils/Sort';
 
-interface ErrorsTabWrapperProps {
+interface ClosedCvesTabProps {
   filter?: Filter;
   reportId: string;
   status: TaskStatus;
 }
 
-export const errorsSortFunctions = {
-  error: makeCompareString('description'),
+export const closedCvesSortFunctions = {
+  cve: makeCompareString('cveId'),
   host: makeCompareIp(entity => entity.host.ip),
-  hostname: makeCompareString(entity => entity.host.name),
-  nvt: makeCompareString(entity => entity.nvt.name),
-  port: makeCompareString('port'),
+  nvt: makeCompareString(entity => entity.source?.description),
+  severity: makeCompareSeverity(),
 };
 
-const ErrorsTabWrapper = ({
+const ClosedCvesTabWrapper = ({
   filter,
   reportId,
   status,
-}: ErrorsTabWrapperProps) => {
+}: ClosedCvesTabProps) => {
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
     return isDefined(filter) ? filter.copy() : new Filter();
   }, [filter]);
 
-  const [errorsFilter, setErrorsFilter] = useState<Filter>(baseFilter);
+  const [closedCvesFilter, setClosedCvesFilter] = useState<Filter>(baseFilter);
 
-  const {data, isLoading, isFetching, isError, error} = useGetReportErrors({
+  const {data, isLoading, isFetching, isError, error} = useGetReportClosedCves({
     reportId,
-    filter: errorsFilter,
+    filter: closedCvesFilter,
     refetchInterval: isActive(status)
       ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
       : NO_RELOAD,
   });
 
   const updateFilter = (newFilter: Filter) => {
-    setErrorsFilter(newFilter);
+    setClosedCvesFilter(newFilter);
   };
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
-    errorsFilter,
+    closedCvesFilter,
     updateFilter,
   );
 
@@ -68,16 +71,17 @@ const ErrorsTabWrapper = ({
     return (
       <ErrorPanel
         error={error}
-        message={_('Error while loading Errors for Report {{reportId}}', {
+        message={_('Error while loading Closed CVEs for Report {{reportId}}', {
           reportId,
         })}
       />
     );
   }
 
-  const {entities: errors = [], entitiesCounts: errorsCounts} = data || {};
+  const {entities: closedCves = [], entitiesCounts: closedCvesCounts} =
+    data || {};
 
-  const displayedFilter = errorsFilter;
+  const displayedFilter = closedCvesFilter;
 
   if (isLoading && !data) {
     return <Loading />;
@@ -85,11 +89,11 @@ const ErrorsTabWrapper = ({
 
   return (
     <ReportEntitiesContainer
-      counts={errorsCounts}
-      entities={errors}
+      counts={closedCvesCounts}
+      entities={closedCves}
       filter={displayedFilter}
-      sortField={sortBy || 'error'}
-      sortFunctions={errorsSortFunctions}
+      sortField={sortBy || 'severity'}
+      sortFunctions={closedCvesSortFunctions}
       sortReverse={sortDir === 'asc'}
     >
       {({
@@ -102,8 +106,8 @@ const ErrorsTabWrapper = ({
         onNextClick,
         onPreviousClick,
       }) => (
-        <ErrorsTable
-          // @ts-expect-error entities are ReportErrors[], not Model[]
+        <ClosedCvesTable
+          // @ts-expect-error entities are ReportClosedCve[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={displayedFilter}
@@ -122,4 +126,4 @@ const ErrorsTabWrapper = ({
   );
 };
 
-export default ErrorsTabWrapper;
+export default ClosedCvesTabWrapper;

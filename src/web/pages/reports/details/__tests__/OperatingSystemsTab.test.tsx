@@ -11,7 +11,7 @@ import Filter from 'gmp/models/filter';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
+import OperatingSystemsTab from 'web/pages/reports/details/operating-system/OperatingSystemsTab';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort=severity',

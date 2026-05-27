@@ -8,7 +8,7 @@ import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import TLSCertificatesTable from 'web/pages/reports/details/TlsCertificatesTable';
+import TLSCertificatesTable from 'web/pages/reports/details/tls-certificate/TlsCertificatesTable';
 
 const filter = Filter.fromString('rows=3 first=1');
 

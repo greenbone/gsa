@@ -12,7 +12,7 @@ import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import ResultsTab from 'web/pages/reports/details/ResultsTab';
+import ResultsTab from 'web/pages/reports/details/result/ResultsTab';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 

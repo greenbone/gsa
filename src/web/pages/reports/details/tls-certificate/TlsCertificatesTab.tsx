@@ -18,7 +18,7 @@ import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certific
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
-import TLSCertificatesTable from 'web/pages/reports/details/TlsCertificatesTable';
+import TLSCertificatesTable from 'web/pages/reports/details/tls-certificate/TlsCertificatesTable';
 
 interface TLSCertificatesTabProps {
   reportId: string;

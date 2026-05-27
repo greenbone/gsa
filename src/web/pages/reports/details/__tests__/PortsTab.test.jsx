@@ -11,7 +11,7 @@ import Filter from 'gmp/models/filter';
 import ReportPort from 'gmp/models/report/port';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import PortsTab from 'web/pages/reports/details/PortsTab';
+import PortsTab from 'web/pages/reports/details/port/PortsTab';
 
 const reportFilter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',

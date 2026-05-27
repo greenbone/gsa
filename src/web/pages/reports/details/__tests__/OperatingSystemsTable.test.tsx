@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import OperatingSystemsTable from 'web/pages/reports/details/OperatingSystemsTable';
+import OperatingSystemsTable from 'web/pages/reports/details/operating-system/OperatingSystemsTable';
 
 const filter = Filter.fromString('first=1 rows=10');
 

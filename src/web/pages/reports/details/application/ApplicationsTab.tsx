@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
@@ -14,52 +14,57 @@ import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import useGetReportCves from 'web/hooks/use-query/report-cves';
+import useGetReportApplications from 'web/hooks/use-query/report-applications';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import CvesTable from 'web/pages/reports/details/CvesTable';
+import ApplicationsTable from 'web/pages/reports/details/application/ApplicationsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {
-  makeCompareIp,
-  makeCompareString,
+  makeCompareNumber,
   makeCompareSeverity,
+  makeCompareString,
 } from 'web/utils/Sort';
 
-interface CvesTabProps {
+interface ApplicationsTabProps {
   filter?: Filter;
   reportId: string;
   status: TaskStatus;
 }
 
-export const cvesSortFunctions = {
-  cve: makeCompareString('cveId'),
-  host: makeCompareIp(entity => entity.host.ip),
-  nvt: makeCompareString(entity => entity.source?.description),
+export const appsSortFunctions = {
+  name: makeCompareString('name'),
+  hosts: makeCompareNumber(entity => entity.hosts.count),
+  occurrences: makeCompareNumber(entity => entity.occurrences.total),
   severity: makeCompareSeverity(),
 };
 
-const CvesTabWrapper = ({filter, reportId, status}: CvesTabProps) => {
+const ApplicationsTabWrapper = ({
+  filter,
+  reportId,
+  status,
+}: ApplicationsTabProps) => {
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
     return isDefined(filter) ? filter.copy() : new Filter();
   }, [filter]);
 
-  const [cvesFilter, setCvesFilter] = useState<Filter>(baseFilter);
+  const [appsFilter, setAppsFilter] = useState<Filter>(baseFilter);
 
-  const {data, isLoading, isFetching, isError, error} = useGetReportCves({
-    reportId,
-    filter: cvesFilter,
-    refetchInterval: isActive(status)
-      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : NO_RELOAD,
-  });
+  const {data, isLoading, isFetching, isError, error} =
+    useGetReportApplications({
+      reportId,
+      filter: appsFilter,
+      refetchInterval: isActive(status)
+        ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+        : NO_RELOAD,
+    });
 
   const updateFilter = (newFilter: Filter) => {
-    setCvesFilter(newFilter);
+    setAppsFilter(newFilter);
   };
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
-    cvesFilter,
+    appsFilter,
     updateFilter,
   );
 
@@ -67,16 +72,17 @@ const CvesTabWrapper = ({filter, reportId, status}: CvesTabProps) => {
     return (
       <ErrorPanel
         error={error}
-        message={_('Error while loading CVEs for Report {{reportId}}', {
+        message={_('Error while loading Applications for Report {{reportId}}', {
           reportId,
         })}
       />
     );
   }
 
-  const {entities: cves = [], entitiesCounts: cvesCounts} = data || {};
+  const {entities: applications = [], entitiesCounts: applicationsCounts} =
+    data || {};
 
-  const displayedFilter = cvesFilter;
+  const displayedFilter = appsFilter;
 
   if (isLoading && !data) {
     return <Loading />;
@@ -84,11 +90,11 @@ const CvesTabWrapper = ({filter, reportId, status}: CvesTabProps) => {
 
   return (
     <ReportEntitiesContainer
-      counts={cvesCounts}
-      entities={cves}
+      counts={applicationsCounts}
+      entities={applications}
       filter={displayedFilter}
-      sortField={sortBy || 'severity'}
-      sortFunctions={cvesSortFunctions}
+      sortField={sortBy || 'name'}
+      sortFunctions={appsSortFunctions}
       sortReverse={sortDir === 'asc'}
     >
       {({
@@ -101,8 +107,8 @@ const CvesTabWrapper = ({filter, reportId, status}: CvesTabProps) => {
         onNextClick,
         onPreviousClick,
       }) => (
-        <CvesTable
-          // @ts-expect-error entities are ReportActiveCve[], not Model[]
+        <ApplicationsTable
+          // @ts-expect-error entities are ReportApp[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={displayedFilter}
@@ -121,4 +127,4 @@ const CvesTabWrapper = ({filter, reportId, status}: CvesTabProps) => {
   );
 };
 
-export default CvesTabWrapper;
+export default ApplicationsTabWrapper;

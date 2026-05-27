@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
-import ResultsTabContent from 'web/pages/reports/details/ResultsTabContent';
+import ResultsTabContent from 'web/pages/reports/details/result/ResultsTabContent';
 
 const filter = Filter.fromString('first=1 rows=10');
 
