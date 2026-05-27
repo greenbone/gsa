@@ -53,9 +53,7 @@ describe('Report Closed CVEs Tab tests', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(
-      <ClosedCvesTab filter={filter} reportId={reportId} status="Done" />,
-    );
+    render(<ClosedCvesTab filter={filter} reportId={reportId} status="Done" />);
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
@@ -63,9 +61,7 @@ describe('Report Closed CVEs Tab tests', () => {
   test('should render Report Closed CVEs Tab', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
-    render(
-      <ClosedCvesTab filter={filter} reportId={reportId} status="Done" />,
-    );
+    render(<ClosedCvesTab filter={filter} reportId={reportId} status="Done" />);
 
     // Verify headers
     const table = await screen.findByRole('table');
@@ -124,9 +120,7 @@ describe('Report Closed CVEs Tab tests', () => {
     });
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(
-      <ClosedCvesTab filter={filter} reportId={reportId} status="Done" />,
-    );
+    render(<ClosedCvesTab filter={filter} reportId={reportId} status="Done" />);
 
     expect(
       await screen.findByText('No Closed CVEs available'),
@@ -141,9 +135,7 @@ describe('Report Closed CVEs Tab tests', () => {
     });
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(
-      <ClosedCvesTab filter={filter} reportId={reportId} status="Done" />,
-    );
+    render(<ClosedCvesTab filter={filter} reportId={reportId} status="Done" />);
 
     expect(
       await screen.findByText(/Error while loading Closed CVEs for Report/),
