@@ -27,40 +27,50 @@ describe('EntitiesFooter tests', () => {
 
     render(<Footer onDeleteBulk={onDeleteBulk} />);
 
-    // Find and click the delete icon
     const deleteButton = screen.getByTestId('delete-icon');
     expect(deleteButton).toBeVisible();
+
     fireEvent.click(deleteButton);
 
     const dialogTitle = screen.getDialogTitle();
+    expect(dialogTitle).toBeVisible();
+
     const dialogText = screen.getByText(
       /Are you sure you want to delete all items on this page/,
     );
     expect(dialogText).toBeVisible();
+
     const resumeButton = screen.getByRole('button', {
       name: 'Delete',
     });
 
+    expect(resumeButton).toBeVisible();
+
     fireEvent.click(resumeButton);
 
     expect(screen.getByText('Deletion started')).toBeVisible();
+
     await wait();
+
     expect(screen.getByText('Deletion completed')).toBeVisible();
-    expect(dialogTitle).not.toBeVisible();
     expect(onDeleteBulk).toHaveBeenCalled();
+    expect(dialogTitle).not.toBeVisible();
   });
 
   test('should show ConfirmationDialog when TrashIcon is clicked and notification', async () => {
     const {render} = rendererWithTable();
-    const Footer = createEntitiesFooter({
-      trash: true,
-      span: 2,
-    });
-    const onDeleteBulk = testing.fn();
+    const onTrashBulk = testing.fn();
 
-    render(<Footer onDeleteBulk={onDeleteBulk} />);
+    const Footer = createEntitiesFooter({
+      span: 2,
+      trash: true,
+    });
+
+    render(<Footer onTrashBulk={onTrashBulk} />);
 
     const trashButton = screen.getByTestId('trash-icon');
+    expect(trashButton).toBeVisible();
+
     fireEvent.click(trashButton);
 
     const dialogTitle = screen.getDialogTitle();
@@ -76,14 +86,16 @@ describe('EntitiesFooter tests', () => {
     });
 
     expect(resumeButton).toBeVisible();
-    expect(resumeButton).toHaveTextContent('Move to Trashcan');
+
     fireEvent.click(resumeButton);
 
     expect(screen.getByText('Moving to trashcan')).toBeVisible();
+
     await wait();
+
     expect(screen.getByText('Move to trashcan completed')).toBeVisible();
+    expect(onTrashBulk).toHaveBeenCalled();
     expect(dialogTitle).not.toBeVisible();
-    expect(onDeleteBulk).toHaveBeenCalled();
   });
 
   test('should render the footer with custom options', () => {

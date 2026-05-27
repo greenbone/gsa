@@ -11,10 +11,6 @@ interface EntitiesFooterWrapperProps<TEntity> {
   entitiesCounts?: CollectionCounts;
   filter?: Filter;
   onDeleteBulk?: () => void;
-  onAuthorizeBulk?: () => void;
-  onRevokeBulk?: () => void;
-  onEnableUpdateToLatestBulk?: () => void;
-  onDisableUpdateToLatestBulk?: () => void;
   onDownloadBulk?: () => void;
   onTagsBulk?: () => void;
   onTrashBulk?: () => void;
@@ -28,10 +24,6 @@ export interface WithEntitiesFooterComponentProps<TEntity> {
   entitiesCounts?: CollectionCounts;
   filter?: Filter;
   onDeleteClick?: () => void;
-  onAuthorizeClick?: () => void;
-  onRevokeClick?: () => void;
-  onEnableUpdateToLatestClick?: () => void;
-  onDisableUpdateToLatestClick?: () => void;
   onDownloadClick?: (filename: string) => void;
   onTagsClick?: () => void;
   onTrashClick?: () => void;
@@ -63,10 +55,7 @@ export function withEntitiesFooter<
       onDownloadBulk,
       onDeleteBulk,
       onTagsBulk,
-      onAuthorizeBulk,
-      onDisableUpdateToLatestBulk,
-      onEnableUpdateToLatestBulk,
-      onRevokeBulk,
+      onTrashBulk,
       ...props
     }: WithEntitiesFooterProps<TEntity, TProps>) => {
       return (
@@ -76,14 +65,10 @@ export function withEntitiesFooter<
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={filter}
-          onAuthorizeClick={onAuthorizeBulk}
           onDeleteClick={onDeleteBulk}
-          onDisableUpdateToLatestClick={onDisableUpdateToLatestBulk}
           onDownloadClick={onDownloadBulk}
-          onEnableUpdateToLatestClick={onEnableUpdateToLatestBulk}
-          onRevokeClick={onRevokeBulk}
           onTagsClick={onTagsBulk}
-          onTrashClick={onDeleteBulk}
+          onTrashClick={onTrashBulk}
         />
       );
     };

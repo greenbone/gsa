@@ -8,39 +8,59 @@ import {screen, rendererWithTable, fireEvent, wait} from 'web/testing';
 import EntitiesFooter from 'web/entities/EntitiesFooter';
 
 describe('EntitiesFooter tests', () => {
-  test('should render', async () => {
+  test('should render children', async () => {
     const {render} = rendererWithTable();
 
-    render(<EntitiesFooter>Some Content</EntitiesFooter>);
+    render(<EntitiesFooter span={2}>Some Content</EntitiesFooter>);
 
     expect(screen.getByText('Some Content')).toBeVisible();
   });
 
-  test('should show ConfirmationDialog when DeleteIcon is clicked and notification', async () => {
+  test('should render children inside actions area', async () => {
     const {render} = rendererWithTable();
 
     render(
-      <EntitiesFooter delete={true} span={2} onDeleteClick={testing.fn()} />,
+      <EntitiesFooter span={2}>
+        <button type="button">Custom Footer Action</button>
+      </EntitiesFooter>,
     );
 
-    // Find and click the delete icon
+    expect(screen.getByText('Custom Footer Action')).toBeVisible();
+  });
+
+  test('should show ConfirmationDialog when DeleteIcon is clicked and notification', async () => {
+    const {render} = rendererWithTable();
+    const onDeleteClick = testing.fn();
+
+    render(
+      <EntitiesFooter delete={true} span={2} onDeleteClick={onDeleteClick} />,
+    );
+
     const deleteButton = screen.getByTestId('delete-icon');
     expect(deleteButton).toBeVisible();
+
     fireEvent.click(deleteButton);
 
     const dialogTitle = screen.getDialogTitle();
+    expect(dialogTitle).toBeVisible();
+
     const dialogText = screen.getByText(
       /Are you sure you want to delete all items on this page/,
     );
     expect(dialogText).toBeVisible();
+
     const resumeButton = screen.getByRole('button', {
       name: 'Delete',
     });
+    expect(resumeButton).toBeVisible();
 
     fireEvent.click(resumeButton);
 
     expect(screen.getByText('Deletion started')).toBeVisible();
+
     await wait();
+
+    expect(onDeleteClick).toHaveBeenCalled();
     expect(screen.getByText('Deletion completed')).toBeVisible();
     expect(dialogTitle).not.toBeVisible();
   });
@@ -54,6 +74,8 @@ describe('EntitiesFooter tests', () => {
     );
 
     const trashButton = screen.getByTestId('trash-icon');
+    expect(trashButton).toBeVisible();
+
     fireEvent.click(trashButton);
 
     const dialogTitle = screen.getDialogTitle();
@@ -70,89 +92,73 @@ describe('EntitiesFooter tests', () => {
 
     expect(resumeButton).toBeVisible();
     expect(resumeButton).toHaveTextContent('Move to Trashcan');
+
     fireEvent.click(resumeButton);
 
     expect(screen.getByText('Moving to trashcan')).toBeVisible();
+
     await wait();
+
+    expect(onTrashClick).toHaveBeenCalled();
     expect(screen.getByText('Move to trashcan completed')).toBeVisible();
     expect(dialogTitle).not.toBeVisible();
   });
-  test('should show ConfirmationDialog when EnableUpdateToLatestIcon is clicked', async () => {
+
+  test('should call onTagsClick when TagsIcon is clicked', async () => {
     const {render} = rendererWithTable();
-    const onEnableUpdateToLatestClick = testing.fn();
+    const onTagsClick = testing.fn();
 
-    render(
-      <EntitiesFooter
-        enableUpdateToLatest={true}
-        span={2}
-        onEnableUpdateToLatestClick={onEnableUpdateToLatestClick}
-      />,
-    );
+    render(<EntitiesFooter span={2} tags={true} onTagsClick={onTagsClick} />);
 
-    const enableButton = screen.getByTestId('enable-update-to-latest-icon');
-    expect(enableButton).toBeVisible();
+    const tagsButton = screen.getByTestId('tags-icon');
+    expect(tagsButton).toBeVisible();
 
-    fireEvent.click(enableButton);
+    fireEvent.click(tagsButton);
 
-    const dialogTitle = screen.getDialogTitle();
-    expect(dialogTitle).toBeVisible();
-
-    const dialogText = screen.getByText(
-      /Are you sure you want to enable update to latest for all selected items\?/,
-    );
-    expect(dialogText).toBeVisible();
-
-    const resumeButton = screen.getByRole('button', {
-      name: 'Enable Update to Latest',
-    });
-
-    expect(resumeButton).toBeVisible();
-
-    fireEvent.click(resumeButton);
-
-    expect(screen.getByText('Enabling update to latest')).toBeVisible();
-    await wait();
-
-    expect(onEnableUpdateToLatestClick).toHaveBeenCalled();
-    expect(dialogTitle).not.toBeVisible();
+    expect(onTagsClick).toHaveBeenCalled();
   });
 
-  test('should show ConfirmationDialog when DisableUpdateToLatestIcon is clicked', async () => {
+  test('should not render TagsIcon when tags is false', async () => {
     const {render} = rendererWithTable();
-    const onDisableUpdateToLatestClick = testing.fn();
+
+    render(<EntitiesFooter span={2} tags={false} />);
+
+    expect(screen.queryByTestId('tags-icon')).not.toBeInTheDocument();
+  });
+
+  test('should not render selection dropdown when selection is false', async () => {
+    const {render} = rendererWithTable();
+
+    render(<EntitiesFooter selection={false} span={2} />);
+
+    expect(
+      screen.queryByTestId('entities-footer-select'),
+    ).not.toBeInTheDocument();
+  });
+
+  test('should render custom data-testid', async () => {
+    const {render} = rendererWithTable();
 
     render(
-      <EntitiesFooter
-        disableUpdateToLatest={true}
-        span={2}
-        onDisableUpdateToLatestClick={onDisableUpdateToLatestClick}
-      />,
+      <EntitiesFooter data-testid="custom-entities-footer" span={2}>
+        Some Content
+      </EntitiesFooter>,
     );
 
-    const disableButton = screen.getByTestId('disable-update-to-latest-icon');
-    expect(disableButton).toBeVisible();
+    expect(screen.getByTestId('custom-entities-footer')).toBeVisible();
+    expect(screen.getByText('Some Content')).toBeVisible();
+  });
 
-    fireEvent.click(disableButton);
+  test('should render children only when actions is false', async () => {
+    const {render} = rendererWithTable();
 
-    const dialogTitle = screen.getDialogTitle();
-    expect(dialogTitle).toBeVisible();
-
-    const dialogText = screen.getByText(
-      /Are you sure you want to disable update to latest for all selected items\?/,
+    render(
+      <EntitiesFooter actions={false} delete={true} span={2}>
+        Only Children
+      </EntitiesFooter>,
     );
-    expect(dialogText).toBeVisible();
 
-    const resumeButton = screen.getByRole('button', {
-      name: 'Disable Update to Latest',
-    });
-
-    expect(resumeButton).toBeVisible();
-
-    fireEvent.click(resumeButton);
-
-    await wait();
-
-    expect(onDisableUpdateToLatestClick).toHaveBeenCalled();
-    expect(dialogTitle).not.toBeVisible();
+    expect(screen.getByText('Only Children')).toBeVisible();
+    expect(screen.queryByTestId('delete-icon')).not.toBeInTheDocument();
   });
 });

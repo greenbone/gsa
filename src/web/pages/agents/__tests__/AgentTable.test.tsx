@@ -130,4 +130,110 @@ describe('AgentTable tests', () => {
 
     expect(onAuthorize).toHaveBeenCalledWith(agents[0]);
   });
+
+  test('should call onAuthorizeBulk when footer authorize action is confirmed', () => {
+    const agents = [new Agent({id: '1', name: 'Agent 1', authorized: false})];
+    const onAuthorizeBulk = testing.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    render(<AgentTable entities={agents} onAuthorizeBulk={onAuthorizeBulk} />);
+
+    const footer = screen.getByTestId('agents-footer');
+    const authorizeIcon = within(footer).getByTestId('circle-plus-icon');
+
+    fireEvent.click(authorizeIcon);
+
+    expect(screen.getDialogTitle()).toBeVisible();
+
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Authorize',
+      }),
+    );
+
+    expect(onAuthorizeBulk).toHaveBeenCalled();
+  });
+
+  test('should call onRevokeBulk when footer revoke action is confirmed', () => {
+    const agents = [new Agent({id: '1', name: 'Agent 1', authorized: true})];
+    const onRevokeBulk = testing.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    render(<AgentTable entities={agents} onRevokeBulk={onRevokeBulk} />);
+
+    const footer = screen.getByTestId('agents-footer');
+    const revokeIcon = within(footer).getByTestId('circle-minus-icon');
+
+    fireEvent.click(revokeIcon);
+
+    expect(screen.getDialogTitle()).toBeVisible();
+
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Revoke',
+      }),
+    );
+
+    expect(onRevokeBulk).toHaveBeenCalled();
+  });
+
+  test('should call onEnableUpdateToLatestBulk when footer enable update to latest action is confirmed', () => {
+    const agents = [new Agent({id: '1', name: 'Agent 1', authorized: true})];
+    const onEnableUpdateToLatestBulk = testing.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    render(
+      <AgentTable
+        entities={agents}
+        onEnableUpdateToLatestBulk={onEnableUpdateToLatestBulk}
+      />,
+    );
+
+    const footer = screen.getByTestId('agents-footer');
+    const enableUpdateToLatestIcon = within(footer).getByTestId(
+      'enable-update-to-latest-icon',
+    );
+
+    fireEvent.click(enableUpdateToLatestIcon);
+
+    expect(screen.getDialogTitle()).toBeVisible();
+
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Enable Update to Latest',
+      }),
+    );
+
+    expect(onEnableUpdateToLatestBulk).toHaveBeenCalled();
+  });
+
+  test('should call onDisableUpdateToLatestBulk when footer disable update to latest action is confirmed', () => {
+    const agents = [new Agent({id: '1', name: 'Agent 1', authorized: true})];
+    const onDisableUpdateToLatestBulk = testing.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    render(
+      <AgentTable
+        entities={agents}
+        onDisableUpdateToLatestBulk={onDisableUpdateToLatestBulk}
+      />,
+    );
+
+    const footer = screen.getByTestId('agents-footer');
+    const disableUpdateToLatestIcon = within(footer).getByTestId(
+      'disable-update-to-latest-icon',
+    );
+
+    fireEvent.click(disableUpdateToLatestIcon);
+
+    expect(screen.getDialogTitle()).toBeVisible();
+
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Disable Update to Latest',
+      }),
+    );
+
+    expect(onDisableUpdateToLatestBulk).toHaveBeenCalled();
+  });
 });
