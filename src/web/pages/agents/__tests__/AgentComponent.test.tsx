@@ -74,16 +74,14 @@ describe('AgentComponent tests', () => {
 
     await wait();
 
-    expect(saveMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        agentsIds: ['a1'],
-        authorized: true,
-        updateToLatest: false,
-        intervalInSeconds: 300,
-        comment: undefined,
-      }),
-      expect.anything(),
-    );
+    expect(saveMock).toHaveBeenCalled();
+    expect(saveMock.mock.calls[0][0]).toEqual({
+      agentsIds: ['a1'],
+      authorized: true,
+      updateToLatest: false,
+      intervalInSeconds: 300,
+      comment: undefined,
+    });
     expect(onSaved).toHaveBeenCalled();
   });
 
@@ -129,13 +127,11 @@ describe('AgentComponent tests', () => {
 
     await actions?.authorize(sampleAgent);
 
-    expect(saveMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        agentsIds: ['a1'],
-        authorized: false,
-      }),
-      expect.anything(),
-    );
+    expect(saveMock).toHaveBeenCalled();
+    expect(saveMock.mock.calls[0][0]).toEqual({
+      agentsIds: ['a1'],
+      authorized: false,
+    });
     expect(onSaved).toHaveBeenCalled();
   });
 
@@ -158,13 +154,11 @@ describe('AgentComponent tests', () => {
 
     await actions?.authorize(sampleUnauthorizedAgent);
 
-    expect(saveMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        agentsIds: ['a3'],
-        authorized: true,
-      }),
-      expect.anything(),
-    );
+    expect(saveMock).toHaveBeenCalled();
+    expect(saveMock.mock.calls[0][0]).toEqual({
+      agentsIds: ['a3'],
+      authorized: true,
+    });
     expect(onSaved).toHaveBeenCalled();
   });
 
@@ -189,6 +183,7 @@ describe('AgentComponent tests', () => {
 
     await expect(actions?.delete(sampleAgent)).rejects.toThrow('Delete failed');
 
+    expect(deleteMock).toHaveBeenCalledWith({id: 'a1'});
     expect(onDeleteError).toHaveBeenCalled();
   });
 
@@ -215,6 +210,11 @@ describe('AgentComponent tests', () => {
       'Save failed',
     );
 
+    expect(saveMock).toHaveBeenCalled();
+    expect(saveMock.mock.calls[0][0]).toEqual({
+      agentsIds: ['a1'],
+      authorized: false,
+    });
     expect(onSaveError).toHaveBeenCalled();
   });
 
@@ -240,11 +240,12 @@ describe('AgentComponent tests', () => {
     await wait();
 
     expect(screen.getByText('Edit Agent - agent2')).toBeInTheDocument();
-
     expect(screen.getByText('Automatic Update Settings')).toBeInTheDocument();
+
     const checkbox = screen.getByRole('checkbox', {
       name: 'Enable automatic updates',
     });
+
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).toBeChecked();
 
@@ -253,16 +254,14 @@ describe('AgentComponent tests', () => {
 
     await wait();
 
-    expect(saveMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        agentsIds: ['a2'],
-        authorized: true,
-        updateToLatest: true,
-        intervalInSeconds: 300,
-        comment: undefined,
-      }),
-      expect.anything(),
-    );
+    expect(saveMock).toHaveBeenCalled();
+    expect(saveMock.mock.calls[0][0]).toEqual({
+      agentsIds: ['a2'],
+      authorized: true,
+      updateToLatest: true,
+      intervalInSeconds: 300,
+      comment: undefined,
+    });
     expect(onSaved).toHaveBeenCalled();
   });
 
