@@ -211,7 +211,7 @@ const PageContent = ({
 
   const userTagsCount = report?.userTags?.length ?? 0;
 
-  const {closedCves, cves, results, timestamp, scan_run_status} = report ?? {};
+  const {results, timestamp, scan_run_status} = report ?? {};
 
   if (!hasReport && isDefined(reportError)) {
     return (
@@ -384,13 +384,9 @@ const PageContent = ({
           activeFilter,
           thresholdConfig,
           <CvesTab
-            counts={cves?.counts}
-            cves={cves?.entities}
             filter={activeFilter}
-            isUpdating={isUpdating}
-            sortField={sorting.cves.sortField}
-            sortReverse={sorting.cves.sortReverse}
-            onSortChange={sortField => onSortChange('cves', sortField)}
+            reportId={reportId}
+            status={status}
           />,
         ),
     },
@@ -405,13 +401,9 @@ const PageContent = ({
           activeFilter,
           thresholdConfig,
           <ClosedCvesTab
-            closedCves={closedCves?.entities}
-            counts={closedCves?.counts}
             filter={activeFilter}
-            isUpdating={isUpdating}
-            sortField={sorting.closedcves.sortField}
-            sortReverse={sorting.closedcves.sortReverse}
-            onSortChange={sortField => onSortChange('closedcves', sortField)}
+            reportId={reportId}
+            status={status}
           />,
         ),
     },

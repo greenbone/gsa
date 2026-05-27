@@ -57,6 +57,7 @@ import PolicyCommand from 'gmp/commands/policy';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/port-lists';
 import ReportCommand from 'gmp/commands/report';
 import ReportApplicationsCommand from 'gmp/commands/report-applications';
+import ReportClosedCvesCommand from 'gmp/commands/report-closed-cves';
 import ReportConfigCommand from 'gmp/commands/report-config';
 import ReportConfigsCommand from 'gmp/commands/report-configs';
 import ReportCvesCommand from 'gmp/commands/report-cves';
@@ -150,6 +151,7 @@ class Gmp {
   public readonly reportconfig: ReportConfigCommand;
   public readonly reportconfigs: ReportConfigsCommand;
   public readonly reportapplications: ReportApplicationsCommand;
+  public readonly reportclosedcves: ReportClosedCvesCommand;
   public readonly reportcves: ReportCvesCommand;
   public readonly reporterrors: ReportsErrorsCommand;
   public readonly reportformat: ReportFormatCommand;
@@ -246,6 +248,7 @@ class Gmp {
     this.reportapplications = new ReportApplicationsCommand(this.http);
     this.reporthosts = new ReportHostsCommand(this.http);
     this.reportconfigs = new ReportConfigsCommand(this.http);
+    this.reportclosedcves = new ReportClosedCvesCommand(this.http);
     this.reportcves = new ReportCvesCommand(this.http);
     this.reporterrors = new ReportsErrorsCommand(this.http);
     this.reportformat = new ReportFormatCommand(this.http);
