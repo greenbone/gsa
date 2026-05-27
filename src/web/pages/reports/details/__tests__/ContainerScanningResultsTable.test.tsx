@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {createSession} from 'gmp/testing';
-import ContainerScanningResultsTable from 'web/pages/reports/details/ContainerScanningResultsTable';
+import ContainerScanningResultsTable from 'web/pages/reports/details/result/ContainerScanningResultsTable';
 
 const filter = Filter.fromString('first=1 rows=10');
 

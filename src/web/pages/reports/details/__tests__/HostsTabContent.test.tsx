@@ -12,7 +12,7 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import HostsTabContent, {
   type HostsTabContentProps,
-} from 'web/pages/reports/details/HostsTabContent';
+} from 'web/pages/reports/details/host/HostsTabContent';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',

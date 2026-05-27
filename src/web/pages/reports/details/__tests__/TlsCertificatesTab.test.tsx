@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
+import TLSCertificatesTab from 'web/pages/reports/details/tls-certificate/TlsCertificatesTab';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity',

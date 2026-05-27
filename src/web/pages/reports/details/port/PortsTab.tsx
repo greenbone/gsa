@@ -12,7 +12,7 @@ import useGetReportPorts from 'web/hooks/use-query/report-ports';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
-import PortsTable from 'web/pages/reports/details/PortsTable';
+import PortsTable from 'web/pages/reports/details/port/PortsTable';
 
 interface PortsTabProps {
   reportId: string;

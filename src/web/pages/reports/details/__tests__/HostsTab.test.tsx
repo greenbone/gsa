@@ -10,7 +10,7 @@ import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import HostsTab from 'web/pages/reports/details/HostsTab';
+import HostsTab from 'web/pages/reports/details/host/HostsTab';
 
 const getRow = (link: HTMLElement): HTMLTableRowElement => {
   const row = link.closest('tr');

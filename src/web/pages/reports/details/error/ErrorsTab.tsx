@@ -14,57 +14,53 @@ import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import useGetReportApplications from 'web/hooks/use-query/report-applications';
+import useGetReportErrors from 'web/hooks/use-query/report-errors';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import ApplicationsTable from 'web/pages/reports/details/ApplicationsTable';
+import ErrorsTable from 'web/pages/reports/details/error/ErrorsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
-import {
-  makeCompareNumber,
-  makeCompareSeverity,
-  makeCompareString,
-} from 'web/utils/Sort';
+import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
 
-interface ApplicationsTabProps {
+interface ErrorsTabWrapperProps {
   filter?: Filter;
   reportId: string;
   status: TaskStatus;
 }
 
-export const appsSortFunctions = {
-  name: makeCompareString('name'),
-  hosts: makeCompareNumber(entity => entity.hosts.count),
-  occurrences: makeCompareNumber(entity => entity.occurrences.total),
-  severity: makeCompareSeverity(),
+export const errorsSortFunctions = {
+  error: makeCompareString('description'),
+  host: makeCompareIp(entity => entity.host.ip),
+  hostname: makeCompareString(entity => entity.host.name),
+  nvt: makeCompareString(entity => entity.nvt.name),
+  port: makeCompareString('port'),
 };
 
-const ApplicationsTabWrapper = ({
+const ErrorsTabWrapper = ({
   filter,
   reportId,
   status,
-}: ApplicationsTabProps) => {
+}: ErrorsTabWrapperProps) => {
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
     return isDefined(filter) ? filter.copy() : new Filter();
   }, [filter]);
 
-  const [appsFilter, setAppsFilter] = useState<Filter>(baseFilter);
+  const [errorsFilter, setErrorsFilter] = useState<Filter>(baseFilter);
 
-  const {data, isLoading, isFetching, isError, error} =
-    useGetReportApplications({
-      reportId,
-      filter: appsFilter,
-      refetchInterval: isActive(status)
-        ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-        : NO_RELOAD,
-    });
+  const {data, isLoading, isFetching, isError, error} = useGetReportErrors({
+    reportId,
+    filter: errorsFilter,
+    refetchInterval: isActive(status)
+      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+      : NO_RELOAD,
+  });
 
   const updateFilter = (newFilter: Filter) => {
-    setAppsFilter(newFilter);
+    setErrorsFilter(newFilter);
   };
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
-    appsFilter,
+    errorsFilter,
     updateFilter,
   );
 
@@ -72,17 +68,16 @@ const ApplicationsTabWrapper = ({
     return (
       <ErrorPanel
         error={error}
-        message={_('Error while loading Applications for Report {{reportId}}', {
+        message={_('Error while loading Errors for Report {{reportId}}', {
           reportId,
         })}
       />
     );
   }
 
-  const {entities: applications = [], entitiesCounts: applicationsCounts} =
-    data || {};
+  const {entities: errors = [], entitiesCounts: errorsCounts} = data || {};
 
-  const displayedFilter = appsFilter;
+  const displayedFilter = errorsFilter;
 
   if (isLoading && !data) {
     return <Loading />;
@@ -90,11 +85,11 @@ const ApplicationsTabWrapper = ({
 
   return (
     <ReportEntitiesContainer
-      counts={applicationsCounts}
-      entities={applications}
+      counts={errorsCounts}
+      entities={errors}
       filter={displayedFilter}
-      sortField={sortBy || 'name'}
-      sortFunctions={appsSortFunctions}
+      sortField={sortBy || 'error'}
+      sortFunctions={errorsSortFunctions}
       sortReverse={sortDir === 'asc'}
     >
       {({
@@ -107,8 +102,8 @@ const ApplicationsTabWrapper = ({
         onNextClick,
         onPreviousClick,
       }) => (
-        <ApplicationsTable
-          // @ts-expect-error entities are ReportApp[], not Model[]
+        <ErrorsTable
+          // @ts-expect-error entities are ReportErrors[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={displayedFilter}
@@ -127,4 +122,4 @@ const ApplicationsTabWrapper = ({
   );
 };
 
-export default ApplicationsTabWrapper;
+export default ErrorsTabWrapper;

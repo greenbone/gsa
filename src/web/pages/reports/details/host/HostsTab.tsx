@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2025 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
@@ -6,7 +6,7 @@
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import type ReportHost from 'gmp/models/report/host';
-import ContainerScanningHostsTable from 'web/pages/reports/details/ContainerScanningHostsTable';
+import HostsTable from 'web/pages/reports/details/host/HostsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {
   makeCompareDate,
@@ -16,7 +16,7 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-interface ContainerScanningHostsTabProps {
+interface HostsTabProps {
   audit?: boolean;
   counts?: CollectionCounts;
   hosts?: ReportHost[];
@@ -27,7 +27,7 @@ interface ContainerScanningHostsTabProps {
   onSortChange: (sortField: string) => void;
 }
 
-const containerScanningHostsSortFunctions = {
+const hostsSortFunctions = {
   ip: makeCompareIp('ip'),
   hostname: makeCompareString('hostname'),
   portsCount: makeCompareNumber(entity => entity.portsCount),
@@ -55,7 +55,7 @@ const containerScanningHostsSortFunctions = {
   compliant: makeCompareString('hostCompliance'),
 };
 
-const ContainerScanningHostsTab = ({
+const HostsTab = ({
   audit = false,
   counts,
   hosts,
@@ -64,44 +64,43 @@ const ContainerScanningHostsTab = ({
   sortField,
   sortReverse,
   onSortChange,
-}: ContainerScanningHostsTabProps) => {
-  return (
-    <ReportEntitiesContainer<ReportHost>
-      counts={counts}
-      entities={hosts}
-      filter={filter}
-      sortField={sortField}
-      sortFunctions={containerScanningHostsSortFunctions}
-      sortReverse={sortReverse}
-    >
-      {({
-        entities,
-        entitiesCounts,
-        sortBy,
-        sortDir,
-        onFirstClick,
-        onLastClick,
-        onNextClick,
-        onPreviousClick,
-      }) => (
-        <ContainerScanningHostsTable
-          audit={audit}
-          // @ts-expect-error
-          entities={entities}
-          entitiesCounts={entitiesCounts}
-          filter={filter}
-          isUpdating={isUpdating}
-          sortBy={sortBy}
-          sortDir={sortDir}
-          onFirstClick={onFirstClick}
-          onLastClick={onLastClick}
-          onNextClick={onNextClick}
-          onPreviousClick={onPreviousClick}
-          onSortChange={onSortChange}
-        />
-      )}
-    </ReportEntitiesContainer>
-  );
-};
+}: HostsTabProps) => (
+  <ReportEntitiesContainer
+    counts={counts}
+    entities={hosts}
+    filter={filter}
+    sortField={sortField}
+    sortFunctions={hostsSortFunctions}
+    sortReverse={sortReverse}
+  >
+    {({
+      entities,
+      entitiesCounts,
+      sortBy,
+      sortDir,
+      onFirstClick,
+      onLastClick,
+      onNextClick,
+      onPreviousClick,
+    }) => (
+      <HostsTable
+        audit={audit}
+        // @ts-expect-error
+        entities={entities}
+        entitiesCounts={entitiesCounts}
+        filter={filter}
+        isUpdating={isUpdating}
+        sortBy={sortBy}
+        sortDir={sortDir}
+        toggleDetailsIcon={false}
+        onFirstClick={onFirstClick}
+        onLastClick={onLastClick}
+        onNextClick={onNextClick}
+        onPreviousClick={onPreviousClick}
+        onSortChange={onSortChange}
+      />
+    )}
+  </ReportEntitiesContainer>
+);
 
-export default ContainerScanningHostsTab;
+export default HostsTab;

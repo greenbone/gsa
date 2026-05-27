@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
+import ErrorsTab from 'web/pages/reports/details/error/ErrorsTab';
 
 const filter = Filter.fromString('first=1 rows=10');
 

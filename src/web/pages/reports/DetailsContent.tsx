@@ -5,7 +5,6 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportReport from 'gmp/models/report/report';
@@ -31,21 +30,29 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
+import useGetReportApplications from 'web/hooks/use-query/report-applications';
+import useGetReportClosedCves from 'web/hooks/use-query/report-closed-cves';
+import useGetReportCves from 'web/hooks/use-query/report-cves';
+import useGetReportErrors from 'web/hooks/use-query/report-errors';
+import useGetReportHosts from 'web/hooks/use-query/report-hosts';
+import useGetReportOperatingSystems from 'web/hooks/use-query/report-operating-system';
+import useGetReportPorts from 'web/hooks/use-query/report-ports';
+import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
-import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
-import CvesTab from 'web/pages/reports/details/CvesTab';
+import ApplicationsTab from 'web/pages/reports/details/application/ApplicationsTab';
+import ClosedCvesTab from 'web/pages/reports/details/cve/ClosedCvesTab';
+import CvesTab from 'web/pages/reports/details/cve/CvesTab';
 import DetailsToolbar from 'web/pages/reports/details/DetailsToolbar';
-import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
-import HostsTabContent from 'web/pages/reports/details/HostsTabContent';
-import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
-import PortsTab from 'web/pages/reports/details/PortsTab';
-import ResultsTabContent from 'web/pages/reports/details/ResultsTabContent';
+import ErrorsTab from 'web/pages/reports/details/error/ErrorsTab';
+import HostsTabContent from 'web/pages/reports/details/host/HostsTabContent';
+import OperatingSystemsTab from 'web/pages/reports/details/operating-system/OperatingSystemsTab';
+import PortsTab from 'web/pages/reports/details/port/PortsTab';
+import ResultsTabContent from 'web/pages/reports/details/result/ResultsTabContent';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
 import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
-import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
+import TLSCertificatesTab from 'web/pages/reports/details/tls-certificate/TlsCertificatesTab';
 
 interface ThresholdConfig {
   showInitialLoading: boolean;
@@ -78,30 +85,22 @@ interface TabDefinition {
 }
 
 interface PageContentProps {
-  applicationsCounts?: CollectionCounts;
-  closedCvesCounts?: CollectionCounts;
-  cvesCounts?: CollectionCounts;
   entity?: Report;
-  errorsCounts?: CollectionCounts;
   filters?: Filter[];
-  hostsCounts?: CollectionCounts;
   isLoading?: boolean;
   isLoadingFilters?: boolean;
   isUpdating?: boolean;
-  operatingSystemsCounts?: CollectionCounts;
   pageFilter?: Filter;
-  portsCounts?: CollectionCounts;
   reportError?: Error;
   reportFilter?: Filter;
   reportId: string;
   resetFilter?: Filter;
-  resultsCounts?: CollectionCounts;
+  resultsCounts?: {filtered?: number; all?: number};
   showError: (...args: unknown[]) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
   sorting: SortingData;
   task?: ReportTask;
-  tlsCertificatesCounts?: CollectionCounts;
   onAddToAssetsClick: () => void;
   onError: (error: Error) => void;
   onFilterAddLogLevelClick: () => void;
@@ -117,6 +116,12 @@ interface PageContentProps {
   onTagSuccess: () => void;
   onTargetEditClick: () => void;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
+}
+
+interface TabTitleHookProps {
+  reportId: string;
+  filter?: Filter;
+  title: string;
 }
 
 const renderWithThreshold = (
@@ -143,6 +148,54 @@ const renderWithThreshold = (
   return content;
 };
 
+const HostsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
+  const {data} = useGetReportHosts({reportId, filter});
+  return <TabTitle counts={data?.entitiesCounts} title={title} />;
+};
+
+const PortsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
+  const {data} = useGetReportPorts({reportId, filter});
+  return <TabTitle counts={data?.entitiesCounts} title={title} />;
+};
+
+const ApplicationsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
+  const {data} = useGetReportApplications({reportId, filter});
+  return <TabTitle counts={data?.entitiesCounts} title={title} />;
+};
+
+const OperatingSystemsTabTitle = ({
+  reportId,
+  filter,
+  title,
+}: TabTitleHookProps) => {
+  const {data} = useGetReportOperatingSystems({reportId, filter});
+  return <TabTitle counts={data?.entitiesCounts} title={title} />;
+};
+
+const CvesTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
+  const {data} = useGetReportCves({reportId, filter});
+  return <TabTitle counts={data?.entitiesCounts} title={title} />;
+};
+
+const ClosedCvesTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
+  const {data} = useGetReportClosedCves({reportId, filter});
+  return <TabTitle counts={data?.entitiesCounts} title={title} />;
+};
+
+const TlsCertificatesTabTitle = ({
+  reportId,
+  filter,
+  title,
+}: TabTitleHookProps) => {
+  const {data} = useGetReportTlsCertificates({reportId, filter});
+  return <TabTitle counts={data?.entitiesCounts} title={title} />;
+};
+
+const ErrorsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
+  const {data} = useGetReportErrors({reportId, filter});
+  return <TabTitle counts={data?.entitiesCounts} title={title} />;
+};
+
 const Span = styled.span`
   margin-top: 2px;
 `;
@@ -158,30 +211,21 @@ const HeaderContainer = styled.div`
 `;
 
 const PageContent = ({
-  applicationsCounts,
-  closedCvesCounts,
-  cvesCounts,
   entity,
-  errorsCounts,
   filters,
-  hostsCounts,
   isLoading = true,
   isLoadingFilters = true,
   isUpdating = false,
-  operatingSystemsCounts,
   pageFilter,
-  portsCounts,
   reportError,
   reportFilter,
   reportId,
   resetFilter,
   resultsCounts,
-  sorting,
-  showError,
+   showError,
   showErrorMessage,
   showSuccessMessage,
   task,
-  tlsCertificatesCounts,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
   onError,
@@ -211,7 +255,7 @@ const PageContent = ({
 
   const userTagsCount = report?.userTags?.length ?? 0;
 
-  const {results, timestamp, scan_run_status} = report ?? {};
+  const {timestamp, scan_run_status} = report ?? {};
 
   if (!hasReport && isDefined(reportError)) {
     return (
@@ -225,7 +269,7 @@ const PageContent = ({
   const threshold = gmp.settings.reportResultsThreshold;
 
   const showThresholdMessage =
-    !isLoading && hasReport && (results?.counts?.filtered ?? 0) > threshold;
+    !isLoading && hasReport && (resultsCounts?.filtered ?? 0) > threshold;
 
   const isImport = isDefined(task) && task.isImport();
   const status = isImport
@@ -236,10 +280,7 @@ const PageContent = ({
   const showIsLoading = isLoading && !hasReport;
 
   const showInitialLoading =
-    isLoading &&
-    !isDefined(reportError) &&
-    !showThresholdMessage &&
-    (!isDefined(results?.entities) || results.entities.length === 0);
+    isLoading && !isDefined(reportError) && !showThresholdMessage;
 
   const HeaderTitle = (
     <Divider>
@@ -295,7 +336,19 @@ const PageContent = ({
     },
     {
       key: 'results',
-      renderTab: () => <TabTitle counts={resultsCounts} title={_('Results')} />,
+      renderTab: () => (
+        <TabTitle
+          counts={
+            resultsCounts
+              ? {
+                  filtered: resultsCounts.filtered ?? 0,
+                  all: resultsCounts.full ?? 0,
+                }
+              : undefined
+          }
+          title={_('Results')}
+        />
+      ),
       renderPanel: () => (
         <ResultsTabContent
           hasTarget={!isImport}
@@ -316,7 +369,13 @@ const PageContent = ({
     },
     {
       key: 'hosts',
-      renderTab: () => <TabTitle counts={hostsCounts} title={_('Hosts')} />,
+      renderTab: () => (
+        <HostsTabTitle
+          filter={activeFilter}
+          reportId={reportId}
+          title={_('Hosts')}
+        />
+      ),
       renderPanel: () =>
         renderWithThreshold(
           _('Hosts'),
@@ -333,7 +392,13 @@ const PageContent = ({
     },
     {
       key: 'ports',
-      renderTab: () => <TabTitle counts={portsCounts} title={_('Ports')} />,
+      renderTab: () => (
+        <PortsTabTitle
+          filter={activeFilter}
+          reportId={reportId}
+          title={_('Ports')}
+        />
+      ),
       renderPanel: () => (
         <PortsTab reportFilter={activeFilter} reportId={reportId} />
       ),
@@ -341,7 +406,11 @@ const PageContent = ({
     {
       key: 'applications',
       renderTab: () => (
-        <TabTitle counts={applicationsCounts} title={_('Applications')} />
+        <ApplicationsTabTitle
+          filter={activeFilter}
+          reportId={reportId}
+          title={_('Applications')}
+        />
       ),
       renderPanel: () =>
         renderWithThreshold(
@@ -358,8 +427,9 @@ const PageContent = ({
     {
       key: 'os',
       renderTab: () => (
-        <TabTitle
-          counts={operatingSystemsCounts}
+        <OperatingSystemsTabTitle
+          filter={activeFilter}
+          reportId={reportId}
           title={_('Operating Systems')}
         />
       ),
@@ -377,7 +447,13 @@ const PageContent = ({
     },
     {
       key: 'cves',
-      renderTab: () => <TabTitle counts={cvesCounts} title={_('CVEs')} />,
+      renderTab: () => (
+        <CvesTabTitle
+          filter={activeFilter}
+          reportId={reportId}
+          title={_('CVEs')}
+        />
+      ),
       renderPanel: () =>
         renderWithThreshold(
           _('CVEs'),
@@ -389,7 +465,11 @@ const PageContent = ({
     {
       key: 'closedcves',
       renderTab: () => (
-        <TabTitle counts={closedCvesCounts} title={_('Closed CVEs')} />
+        <ClosedCvesTabTitle
+          filter={activeFilter}
+          reportId={reportId}
+          title={_('Closed CVEs')}
+        />
       ),
       renderPanel: () =>
         renderWithThreshold(
@@ -406,8 +486,9 @@ const PageContent = ({
     {
       key: 'tlscerts',
       renderTab: () => (
-        <TabTitle
-          counts={tlsCertificatesCounts}
+        <TlsCertificatesTabTitle
+          filter={activeFilter}
+          reportId={reportId}
           title={_('TLS Certificates')}
         />
       ),
@@ -427,7 +508,11 @@ const PageContent = ({
     {
       key: 'errors',
       renderTab: () => (
-        <TabTitle counts={errorsCounts} title={_('Error Messages')} />
+        <ErrorsTabTitle
+          filter={activeFilter}
+          reportId={reportId}
+          title={_('Error Messages')}
+        />
       ),
       renderPanel: () => (
         <ErrorsTab filter={activeFilter} reportId={reportId} status={status} />

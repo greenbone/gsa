@@ -8,7 +8,7 @@ import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import type {ReportError} from 'gmp/models/report/parser';
-import ErrorsTable from 'web/pages/reports/details/ErrorsTable';
+import ErrorsTable from 'web/pages/reports/details/error/ErrorsTable';
 
 const filter = Filter.fromString('first=1 rows=10');
 

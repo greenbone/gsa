@@ -16,7 +16,7 @@ import {
 } from 'web/components/loading/Reload';
 import useGetReportOperatingSystems from 'web/hooks/use-query/report-operating-system';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import OperatingSystemsTable from 'web/pages/reports/details/OperatingSystemsTable';
+import OperatingSystemsTable from 'web/pages/reports/details/operating-system/OperatingSystemsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {makeCompareNumber, makeCompareString} from 'web/utils/Sort';
 

@@ -8,7 +8,7 @@ import {act, rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
-import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
+import ApplicationsTab from 'web/pages/reports/details/application/ApplicationsTab';
 
 const filter = Filter.fromString('first=1 rows=10');
 

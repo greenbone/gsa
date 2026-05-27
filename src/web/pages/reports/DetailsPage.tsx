@@ -17,9 +17,6 @@ import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
-import useGetReportClosedCves from 'web/hooks/use-query/report-closed-cves';
-import useGetReportCves from 'web/hooks/use-query/report-cves';
-import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import {
   useGetReport,
   useGetReportConfigs,
@@ -174,20 +171,6 @@ const ReportDetailsPage = () => {
   const reportError = isError ? queryError : undefined;
 
   const reportFilter = getReportFilter(entity);
-  const {data: reportTlsCertificatesData} = useGetReportTlsCertificates({
-    reportId,
-    filter: reportFilter,
-  });
-
-  const {data: reportCvesData} = useGetReportCves({
-    reportId,
-    filter: reportFilter,
-  });
-
-  const {data: reportClosedCvesData} = useGetReportClosedCves({
-    reportId,
-    filter: reportFilter,
-  });
 
   // Filters list for Powerfilter dropdown
   const {data: filtersData, isLoading: isLoadingFilters} =
@@ -239,23 +222,13 @@ const ReportDetailsPage = () => {
   // Derive counts from report entity
   const report = entity?.report;
 
-  const resultsCounts = report?.results?.counts;
-  const hostsCounts = report?.hosts?.counts;
-  const portsCounts = report?.ports?.counts;
-  const applicationsCounts = report?.applications?.counts;
-  const operatingSystemsCounts = report?.operatingsystems?.counts;
-  const cvesCounts = reportCvesData?.entitiesCounts;
-  const closedCvesCounts = reportClosedCvesData?.entitiesCounts;
-  const tlsCertificatesCounts =
-    reportTlsCertificatesData?.entitiesCounts ??
-    report?.tlsCertificates?.counts;
-  const errorsCounts = report?.errors?.counts;
+  const resultsCounts = report?.result_count;
 
   const threshold = gmp.settings.reportResultsThreshold;
   const showThresholdMessage =
     isDefined(report) &&
     isDefined(resultsCounts) &&
-    resultsCounts.filtered > threshold;
+    (resultsCounts.filtered ?? 0) > threshold;
 
   // Handlers
   const handleFilterChange = useCallback(
@@ -514,19 +487,12 @@ const ReportDetailsPage = () => {
       <TargetComponent onSaveError={handleError}>
         {({edit}) => (
           <Page
-            applicationsCounts={applicationsCounts}
-            closedCvesCounts={closedCvesCounts}
-            cvesCounts={cvesCounts}
             entity={entity}
-            errorsCounts={errorsCounts}
             filters={filters}
-            hostsCounts={hostsCounts}
             isLoading={isLoading}
             isLoadingFilters={isLoadingFilters}
             isUpdating={isFetching && !isLoading}
-            operatingSystemsCounts={operatingSystemsCounts}
             pageFilter={pageFilter}
-            portsCounts={portsCounts}
             reportError={reportError}
             reportFilter={reportFilter}
             reportId={reportId}
@@ -537,7 +503,6 @@ const ReportDetailsPage = () => {
             showSuccessMessage={showSuccessMessage}
             sorting={sorting}
             task={isDefined(report) ? report.task : undefined}
-            tlsCertificatesCounts={tlsCertificatesCounts}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
             onFilterAddLogLevelClick={handleFilterAddLogLevel}
@@ -583,7 +548,7 @@ const ReportDetailsPage = () => {
           reportFormats={reportFormats ?? []}
           showThresholdMessage={showThresholdMessage}
           threshold={threshold}
-          totalResultCount={resultsCounts?.all ?? 0}
+          totalResultCount={resultsCounts?.full ?? 0}
           onClose={handleCloseDownloadReportDialog}
           onSave={handleReportDownload}
         />

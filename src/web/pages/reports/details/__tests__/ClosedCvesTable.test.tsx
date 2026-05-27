@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import type {ReportClosedCve} from 'gmp/models/report/parser';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import ClosedCvesTable from 'web/pages/reports/details/ClosedCvesTable';
+import ClosedCvesTable from 'web/pages/reports/details/cve/ClosedCvesTable';
 
 const filter = Filter.fromString('first=1 rows=10');
 

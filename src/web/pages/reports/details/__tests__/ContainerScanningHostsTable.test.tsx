@@ -13,7 +13,7 @@ import {
   SEVERITY_RATING_CVSS_2,
   SEVERITY_RATING_CVSS_3,
 } from 'gmp/utils/severity';
-import ContainerScanningHostsTable from 'web/pages/reports/details/ContainerScanningHostsTable';
+import ContainerScanningHostsTable from 'web/pages/reports/details/host/ContainerScanningHostsTable';
 
 const filter = Filter.fromString('first=1 rows=10');
 

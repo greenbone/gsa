@@ -29,26 +29,11 @@ export const useGetReport = ({
   refetchInterval,
 }: UseGetReportParams) => {
   const gmp = useGmp();
-  const threshold = gmp.settings.reportResultsThreshold;
   const filterString = filter?.toFilterString();
 
   return useGetEntity<Report>({
     gmpMethod: async ({id}) => {
-      const lightResponse = await gmp.report.get(
-        {id},
-        {filter: filterString, details: false},
-      );
-      const lightReport = lightResponse.data;
-
-      const needsFullReport =
-        isDefined(lightReport?.report?.results) &&
-        lightReport.report.results.counts.filtered < threshold;
-
-      if (needsFullReport) {
-        return gmp.report.get({id}, {filter: filterString, details: true});
-      }
-
-      return lightResponse;
+      return gmp.report.get({id}, {filter: filterString, details: false});
     },
     queryId: 'get_report',
     queryKeyParts: [filterString],

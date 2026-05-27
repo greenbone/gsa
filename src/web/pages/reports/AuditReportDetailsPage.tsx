@@ -19,7 +19,6 @@ import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
-import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import {
   useGetReportConfigs,
   useGetReportExportFileName,
@@ -219,10 +218,6 @@ const AuditReportDetailsPage = () => {
   const reportError = isError ? queryError : undefined;
 
   const reportFilter = getReportFilter(entity);
-  const {data: reportTlsCertificatesData} = useGetReportTlsCertificates({
-    reportId,
-    filter: reportFilter,
-  });
 
   // Filters list for Powerfilter dropdown
   const {data: filtersData, isLoading: isLoadingFilters} =
@@ -274,19 +269,10 @@ const AuditReportDetailsPage = () => {
   // Derive counts from report entity
   const report = entity?.report;
 
-  const resultsCounts = report?.results?.counts;
-  const hostsCounts = report?.hosts?.counts;
-  const operatingSystemsCounts = report?.operatingSystems?.counts;
-  const tlsCertificatesCounts =
-    reportTlsCertificatesData?.entitiesCounts ??
-    report?.tlsCertificates?.counts;
-  const errorsCounts = report?.errors?.counts;
-
   const threshold = gmp.settings.reportResultsThreshold;
+  const complianceFiltered = report?.complianceCounts?.filtered ?? 0;
   const showThresholdMessage =
-    isDefined(report) &&
-    isDefined(resultsCounts) &&
-    resultsCounts.filtered > threshold;
+    isDefined(report) && complianceFiltered > threshold;
 
   // Handlers
   const handleFilterChange = useCallback(
@@ -518,25 +504,20 @@ const AuditReportDetailsPage = () => {
         {({edit}) => (
           <Page
             entity={entity}
-            errorsCounts={errorsCounts}
             filters={filters}
-            hostsCounts={hostsCounts}
             isLoading={isLoading}
             isLoadingFilters={isLoadingFilters}
             isUpdating={isFetching && !isLoading}
-            operatingSystemsCounts={operatingSystemsCounts}
             pageFilter={pageFilter}
             reportError={reportError}
             reportFilter={reportFilter}
             reportId={reportId}
             resetFilter={AUDIT_REPORT_RESET_FILTER}
-            resultsCounts={resultsCounts}
             showError={showError as (...args: unknown[]) => void}
             showErrorMessage={showErrorMessage}
             showSuccessMessage={showSuccessMessage}
             sorting={sorting}
             task={isDefined(report) ? report.task : undefined}
-            tlsCertificatesCounts={tlsCertificatesCounts}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
             onFilterChanged={handleFilterChange}
