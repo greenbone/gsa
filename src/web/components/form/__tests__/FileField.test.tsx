@@ -4,21 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {render, fireEvent, screen} from 'web/testing';
+import {render, fireEvent, screen, changeFileInput} from 'web/testing';
 import FileField from 'web/components/form/FileField';
 
 const getFileInput = () => {
-  const input = document.querySelector<HTMLElement>('input[type=file]');
+  const input = document.querySelector<HTMLInputElement>('input[type=file]');
   if (!input) {
     throw new Error('File input not found');
   }
   return input;
-};
-
-const changeFileInput = (input: HTMLElement, file: string) => {
-  fireEvent.change(input, {
-    target: {files: [file]},
-  });
 };
 
 describe('FileField tests', () => {

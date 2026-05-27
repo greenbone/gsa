@@ -99,6 +99,12 @@ export const changeSelectInput = (value: string, input?: HTMLSelectElement) => {
   changeInputValue(input, value);
 };
 
+export const changeFileInput = (input: HTMLInputElement, file: string) => {
+  fireEvent.change(input, {
+    target: {files: [file]},
+  });
+};
+
 /**
  * Closes a dialog by clicking its close (X) button.
  *
