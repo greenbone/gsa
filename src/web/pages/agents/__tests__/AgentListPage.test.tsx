@@ -303,7 +303,7 @@ describe('AgentListPage tests', () => {
     );
     fireEvent.click(disableIcon);
 
-    const dialog = await screen.findByRole('dialog');
+    const dialog = screen.getDialog();
     expect(dialog).toBeVisible();
 
     const disableButton = screen.getByText('Disable Update to Latest');
