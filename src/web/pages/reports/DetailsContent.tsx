@@ -383,11 +383,7 @@ const PageContent = ({
           _('CVEs'),
           activeFilter,
           thresholdConfig,
-          <CvesTab
-            filter={activeFilter}
-            reportId={reportId}
-            status={status}
-          />,
+          <CvesTab filter={activeFilter} reportId={reportId} status={status} />,
         ),
     },
     {
