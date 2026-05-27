@@ -55,7 +55,6 @@ export function withEntitiesFooter<
       onDownloadBulk,
       onDeleteBulk,
       onTagsBulk,
-      onTrashBulk,
       ...props
     }: WithEntitiesFooterProps<TEntity, TProps>) => {
       return (
@@ -68,7 +67,7 @@ export function withEntitiesFooter<
           onDeleteClick={onDeleteBulk}
           onDownloadClick={onDownloadBulk}
           onTagsClick={onTagsBulk}
-          onTrashClick={onTrashBulk}
+          onTrashClick={onDeleteBulk}
         />
       );
     };
