@@ -14,14 +14,13 @@ import {
 import {filter, map} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import MultiSelect from 'web/components/form/MultiSelect';
+import SchedulerCronField from 'web/components/form/SchedulerCronField';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {useGetAgents} from 'web/hooks/use-query/agents';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import AgentConfigurationSection, {
-  DEFAULT_CRON_EXPRESSION,
-} from 'web/pages/agents/components/AgentConfigurationSection';
+import {DEFAULT_CRON_EXPRESSION} from 'web/pages/agents/components/AgentConfigurationSection';
 import useGetEntities from 'web/queries/useGetEntities';
 import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
@@ -167,21 +166,23 @@ const AgentGroupsDialog = ({
             )}
 
             {state.agentController && agentsData && (
-              <>
-                <AgentConfigurationSection
-                  hideIntervalInSeconds
-                  hidePort
-                  activeCronExpression={schedulerCron}
-                  isEdit={Boolean(agentGroup)}
-                  port={0}
-                  schedulerCronExpression={state.schedulerCronExpression}
-                  onValueChange={(value, name) => {
-                    if (typeof value === 'string') {
-                      onValueChange(value, name);
-                    }
-                  }}
-                />
-              </>
+              <SchedulerCronField
+                activeCronExpression={schedulerCron}
+                infoTip={
+                  agentGroup
+                    ? _(
+                        'This will set when the Agents scan the systems.\nA report is not automatically generated and needs to be set up as a "New Agent Task".',
+                      )
+                    : undefined
+                }
+                infoTipAriaLabel={_('More information about scheduler')}
+                name="schedulerCronExpression"
+                title={_('Scheduler Options')}
+                value={state.schedulerCronExpression ?? ''}
+                onChange={value =>
+                  onValueChange(value, 'schedulerCronExpression')
+                }
+              />
             )}
 
             {state.agentController && !agentsData && (

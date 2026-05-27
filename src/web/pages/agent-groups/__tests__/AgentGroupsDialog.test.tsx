@@ -61,7 +61,7 @@ describe('AgentGroupsDialog tests', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
-  test('should call onSave with default values', async () => {
+  test('should call onSave with default values', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
@@ -73,26 +73,13 @@ describe('AgentGroupsDialog tests', () => {
     const save = screen.getDialogSaveButton();
     fireEvent.click(save);
 
-    expect(onSave).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: 'Unnamed',
-        comment: '',
-        agentController: '',
-        agentIds: [],
-        schedulerCronExpression: '0 */12 * * *',
-      }),
-    );
-
-    expect(onSave).toHaveBeenCalledWith(
-      expect.not.objectContaining({
-        network: expect.anything(),
-        port: expect.anything(),
-        authorized: expect.anything(),
-        updateToLatest: expect.anything(),
-        config: expect.anything(),
-        intervalInSeconds: expect.anything(),
-      }),
-    );
+    expect(onSave).toHaveBeenCalledWith({
+      name: 'Unnamed',
+      comment: '',
+      agentController: '',
+      agentIds: [],
+      schedulerCronExpression: '0 */12 * * *',
+    });
   });
 
   test('selecting agent controller and agent sets payload values', async () => {
@@ -133,27 +120,47 @@ describe('AgentGroupsDialog tests', () => {
     const save = screen.getDialogSaveButton();
     fireEvent.click(save);
 
-    expect(onSave).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: 'Unnamed',
-        comment: '',
-        agentController: 's1',
-        agentIds: ['a1'],
-        schedulerCronExpression: '0 */12 * * *',
-      }),
-    );
-
-    expect(onSave).toHaveBeenCalledWith(
-      expect.not.objectContaining({
-        authorized: expect.anything(),
-        updateToLatest: expect.anything(),
-        config: expect.anything(),
-        intervalInSeconds: expect.anything(),
-      }),
-    );
+    expect(onSave).toHaveBeenCalledWith({
+      name: 'Unnamed',
+      comment: '',
+      agentController: 's1',
+      agentIds: ['a1'],
+      schedulerCronExpression: '0 */12 * * *',
+    });
   });
 
-  test('should hide heartbeat interval field and show scheduler when agent controller is selected', async () => {
+  test('should show scheduler field when agent controller is selected', async () => {
+    const onSave = testing.fn();
+    const onClose = testing.fn();
+
+    const gmp = createGmp({
+      getAgents: testing.fn().mockResolvedValue(new Response([], {})),
+    });
+
+    const {render} = rendererWith({gmp});
+
+    render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
+
+    const select = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Agent Controller',
+    });
+
+    const items = await getSelectItemElementsForSelect(select);
+    const item = items.find(i =>
+      i.textContent?.includes('Controller One'),
+    ) as HTMLElement;
+
+    fireEvent.click(item);
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
+    });
+
+    expect(screen.getByName('schedulerCronExpression')).toBeInTheDocument();
+  });
+
+  test('should not render heartbeat interval or port fields in agent groups dialog', async () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
@@ -185,7 +192,50 @@ describe('AgentGroupsDialog tests', () => {
       screen.queryByText('Heartbeat Interval (seconds)'),
     ).not.toBeInTheDocument();
 
-    expect(screen.getByName('schedulerCronExpression')).toBeInTheDocument();
+    expect(screen.queryByText('Port')).not.toBeInTheDocument();
+    expect(screen.queryByText('Configuration Details')).not.toBeInTheDocument();
+  });
+
+  test('should not include agent configuration values in save payload', async () => {
+    const onSave = testing.fn();
+    const onClose = testing.fn();
+
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp});
+
+    render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
+
+    const select = screen.getByRole<HTMLSelectElement>('textbox', {
+      name: 'Agent Controller',
+    });
+
+    const items = await getSelectItemElementsForSelect(select);
+    const item = items.find(i =>
+      i.textContent?.includes('Controller One'),
+    ) as HTMLElement;
+
+    fireEvent.click(item);
+    await wait();
+
+    const save = screen.getDialogSaveButton();
+    fireEvent.click(save);
+
+    expect(onSave).toHaveBeenCalledWith({
+      name: 'Unnamed',
+      comment: '',
+      agentController: 's1',
+      agentIds: [],
+      schedulerCronExpression: '0 */12 * * *',
+    });
+
+    const payload = onSave.mock.calls[0][0];
+
+    expect(payload).not.toHaveProperty('network');
+    expect(payload).not.toHaveProperty('port');
+    expect(payload).not.toHaveProperty('authorized');
+    expect(payload).not.toHaveProperty('updateToLatest');
+    expect(payload).not.toHaveProperty('config');
+    expect(payload).not.toHaveProperty('intervalInSeconds');
   });
 
   test('should keep name when agent controller is changed', async () => {
