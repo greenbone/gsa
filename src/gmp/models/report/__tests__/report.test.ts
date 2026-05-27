@@ -372,11 +372,12 @@ describe('ReportReport tests', () => {
     expect(report.cves?.counts?.rows).toEqual(1);
     expect(report.cves?.counts?.length).toEqual(1);
     expect(report.cves?.entities.length).toEqual(1);
-    expect(report.cves?.entities[0].id).toEqual('1.2.3');
-    expect(report.cves?.entities[0].nvtName).toEqual('Foo');
-    expect(report.cves?.entities[0].cves).toEqual(['CVE-123']);
+    expect(report.cves?.entities[0].id).toEqual('CVE-123-1.1.1.1-1.2.3');
+    expect(report.cves?.entities[0].cveId).toEqual('CVE-123');
+    expect(report.cves?.entities[0].host.ip).toEqual('1.1.1.1');
+    expect(report.cves?.entities[0].source?.name).toEqual('1.2.3');
+    expect(report.cves?.entities[0].source?.description).toEqual('Foo');
     expect(report.cves?.entities[0].severity).toEqual(4.5);
-    expect(report.cves?.entities[0].occurrences).toEqual(1);
   });
 
   test('should parse closed CVEs', () => {

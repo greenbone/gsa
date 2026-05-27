@@ -633,149 +633,168 @@ describe('report parser tests', () => {
     expect(tlsCerts.filter).toEqual(filter);
   });
 
-  test('should parse cves', () => {
+  test('should parse cves: result with two CVE refs produces two rows', () => {
     const filter = Filter.fromString('foo=bar rows=5');
     const report = {
       results: {
         result: [
           {
             nvt: {
-              refs: {
-                ref: [],
-              },
-            },
-          },
-          {
-            nvt: {
+              _oid: '1.2.3',
+              name: 'MultiCVE',
               refs: {
                 ref: [
-                  {
-                    _type: '',
-                    _id: '',
-                  },
+                  {_type: 'cve', _id: 'CVE-A'},
+                  {_type: 'cve', _id: 'CVE-B'},
                 ],
               },
             },
+            host: {__text: '1.1.1.1'},
+            severity: 5.0,
           },
+        ],
+      },
+    };
+
+    const cves = parseCves(report, filter);
+    expect(cves.entities.length).toEqual(2);
+    const cveIds = cves.entities.map(e => e.cveId);
+    expect(cveIds).toContain('CVE-A');
+    expect(cveIds).toContain('CVE-B');
+  });
+
+  test('should parse cves: duplicate (same CVE + host + NVT) is deduplicated with highest severity', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+    const report = {
+      results: {
+        result: [
           {
             nvt: {
               _oid: '1.2.3',
               name: 'Foo',
-              refs: {
-                ref: [
-                  {
-                    _type: 'cve',
-                    _id: 'CVE-123',
-                  },
-                ],
-              },
+              refs: {ref: [{_type: 'cve', _id: 'CVE-123'}]},
             },
-            host: {
-              __text: '1.1.1.1',
-            },
+            host: {__text: '1.1.1.1'},
             severity: 4.5,
           },
           {
             nvt: {
               _oid: '1.2.3',
               name: 'Foo',
-              refs: {
-                ref: [
-                  {
-                    _type: 'cve',
-                    _id: 'CVE-123',
-                  },
-                  {
-                    _type: 'foo',
-                    _id: 'foo1',
-                  },
-                ],
-              },
+              refs: {ref: [{_type: 'cve', _id: 'CVE-123'}]},
             },
-            host: {
-              __text: '2.2.2.2',
-            },
+            host: {__text: '1.1.1.1'},
             severity: 9.5,
-          },
-          {
-            nvt: {
-              _oid: '2.2.3',
-              name: 'Bar',
-              refs: {
-                ref: [
-                  {
-                    _type: 'cve',
-                    _id: 'CVE-234',
-                  },
-                ],
-              },
-            },
-            host: {
-              __text: '1.1.1.1',
-            },
-            severity: 5.5,
-          },
-          {
-            nvt: {
-              _oid: '2.3.3',
-              name: 'Ipsum',
-              refs: {
-                ref: [
-                  {
-                    _type: 'cve',
-                    _id: 'CVE-234',
-                  },
-                  {
-                    _type: 'cve',
-                    _id: 'CVE-334',
-                  },
-                ],
-              },
-            },
-            host: {
-              __text: '1.1.1.1',
-            },
-            severity: 6.5,
           },
         ],
       },
     };
-    const counts = {
-      first: 1,
-      all: 3,
-      filtered: 3,
-      length: 3,
-      rows: 3,
-      last: 3,
-    };
+
     const cves = parseCves(report, filter);
+    expect(cves.entities.length).toEqual(1);
+    expect(cves.entities[0].cveId).toEqual('CVE-123');
+    expect(cves.entities[0].severity).toEqual(9.5);
+  });
 
+  test('should parse cves: same CVE for two different hosts produces two rows', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+    const report = {
+      results: {
+        result: [
+          {
+            nvt: {
+              _oid: '1.2.3',
+              name: 'Foo',
+              refs: {ref: [{_type: 'cve', _id: 'CVE-123'}]},
+            },
+            host: {__text: '1.1.1.1'},
+            severity: 5.0,
+          },
+          {
+            nvt: {
+              _oid: '1.2.3',
+              name: 'Foo',
+              refs: {ref: [{_type: 'cve', _id: 'CVE-123'}]},
+            },
+            host: {__text: '2.2.2.2'},
+            severity: 5.0,
+          },
+        ],
+      },
+    };
+
+    const cves = parseCves(report, filter);
+    expect(cves.entities.length).toEqual(2);
+    const ips = cves.entities.map(e => e.host.ip);
+    expect(ips).toContain('1.1.1.1');
+    expect(ips).toContain('2.2.2.2');
+  });
+
+  test('should parse cves: result with no CVE refs is excluded', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+    const report = {
+      results: {
+        result: [
+          {
+            nvt: {refs: {ref: [{_type: 'url', _id: 'http://example.com'}]}},
+            host: {__text: '1.1.1.1'},
+            severity: 5.0,
+          },
+          {
+            nvt: {
+              _oid: '1.2.3',
+              name: 'Foo',
+              refs: {ref: [{_type: 'cve', _id: 'CVE-123'}]},
+            },
+            host: {__text: '1.1.1.1'},
+            severity: 5.0,
+          },
+        ],
+      },
+    };
+
+    const cves = parseCves(report, filter);
+    expect(cves.entities.length).toEqual(1);
+    expect(cves.entities[0].cveId).toEqual('CVE-123');
+  });
+
+  test('should parse cves: counts.all equals number of deduplicated per-CVE rows', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+    const report = {
+      results: {
+        result: [
+          {
+            nvt: {
+              _oid: '1.2.3',
+              name: 'Foo',
+              refs: {
+                ref: [
+                  {_type: 'cve', _id: 'CVE-A'},
+                  {_type: 'cve', _id: 'CVE-B'},
+                ],
+              },
+            },
+            host: {__text: '1.1.1.1'},
+            severity: 5.0,
+          },
+          {
+            nvt: {
+              _oid: '1.2.3',
+              name: 'Foo',
+              refs: {ref: [{_type: 'cve', _id: 'CVE-A'}]},
+            },
+            host: {__text: '2.2.2.2'},
+            severity: 7.0,
+          },
+        ],
+      },
+    };
+
+    const cves = parseCves(report, filter);
+    // CVE-A + 1.1.1.1 + 1.2.3, CVE-B + 1.1.1.1 + 1.2.3, CVE-A + 2.2.2.2 + 1.2.3 = 3 rows
     expect(cves.entities.length).toEqual(3);
-    expect(cves.counts).toEqual(counts);
-    expect(cves.filter).toEqual(filter);
-
-    const [cve1, cve2, cve3] = cves.entities;
-
-    expect(cve1.id).toEqual('1.2.3');
-    expect(cve1.nvtName).toEqual('Foo');
-    expect(cve1.cves).toEqual(['CVE-123']);
-    expect(cve1.severity).toEqual(9.5);
-    expect(cve1.hosts.count).toEqual(2);
-    expect(cve1.occurrences).toEqual(2);
-
-    expect(cve2.id).toEqual('2.2.3');
-    expect(cve2.nvtName).toEqual('Bar');
-    expect(cve2.cves).toEqual(['CVE-234']);
-    expect(cve2.severity).toEqual(5.5);
-    expect(cve2.hosts.count).toEqual(1);
-    expect(cve2.occurrences).toEqual(1);
-
-    expect(cve3.id).toEqual('2.3.3');
-    expect(cve3.nvtName).toEqual('Ipsum');
-    expect(cve3.cves).toEqual(['CVE-234', 'CVE-334']);
-    expect(cve3.severity).toEqual(6.5);
-    expect(cve3.hosts.count).toEqual(1);
-    expect(cve3.occurrences).toEqual(1);
+    expect(cves.counts.all).toEqual(3);
+    expect(cves.counts.filtered).toEqual(3);
   });
 
   test('should parse empty cves', () => {

@@ -3,39 +3,51 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import ClosedCvesTable from 'web/pages/reports/details/ClosedCvesTable';
+import type CollectionCounts from 'gmp/collection/collection-counts';
+import type Filter from 'gmp/models/filter';
+import type {ReportActiveCve} from 'gmp/models/report/parser';
+import CvesTable from 'web/pages/reports/details/CvesTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
-import PropTypes from 'web/utils/PropTypes';
 import {
   makeCompareIp,
   makeCompareString,
   makeCompareSeverity,
 } from 'web/utils/Sort';
 
-const closedCvesSortFunctions = {
+interface CvesTabProps {
+  counts?: CollectionCounts;
+  cves?: ReportActiveCve[];
+  filter: Filter;
+  isUpdating?: boolean;
+  sortField: string;
+  sortReverse: boolean;
+  onSortChange: (sortField: string) => void;
+}
+
+const cvesSortFunctions = {
   cve: makeCompareString('cveId'),
-  host: makeCompareIp(entity => entity.host.ip),
-  nvt: makeCompareString(entity => entity.source.description),
+  host: makeCompareIp((entity: ReportActiveCve) => entity.host.ip),
+  nvt: makeCompareString(
+    (entity: ReportActiveCve) => entity.source?.description,
+  ),
   severity: makeCompareSeverity(),
 };
 
-const ClosedCvesTab = ({
+const CvesTab = ({
   counts,
-  closedCves,
+  cves,
   filter,
   isUpdating,
   sortField,
   sortReverse,
-
   onSortChange,
-}) => (
+}: CvesTabProps) => (
   <ReportEntitiesContainer
     counts={counts}
-    entities={closedCves}
+    entities={cves}
     filter={filter}
     sortField={sortField}
-    sortFunctions={closedCvesSortFunctions}
+    sortFunctions={cvesSortFunctions}
     sortReverse={sortReverse}
   >
     {({
@@ -48,7 +60,8 @@ const ClosedCvesTab = ({
       onNextClick,
       onPreviousClick,
     }) => (
-      <ClosedCvesTable
+      <CvesTable
+        // @ts-expect-error entities are ReportActiveCve[], not Model[]
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}
@@ -66,14 +79,4 @@ const ClosedCvesTab = ({
   </ReportEntitiesContainer>
 );
 
-ClosedCvesTab.propTypes = {
-  closedCves: PropTypes.array,
-  counts: PropTypes.object,
-  filter: PropTypes.filter.isRequired,
-  isUpdating: PropTypes.bool,
-  sortField: PropTypes.string.isRequired,
-  sortReverse: PropTypes.bool.isRequired,
-  onSortChange: PropTypes.func.isRequired,
-};
-
-export default ClosedCvesTab;
+export default CvesTab;

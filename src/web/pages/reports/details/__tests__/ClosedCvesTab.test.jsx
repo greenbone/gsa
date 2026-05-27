@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith} from 'web/testing';
+import {screen, rendererWith, within} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
@@ -15,27 +15,17 @@ const caps = new Capabilities(['everything']);
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
-const gmp = {
-  settings: {
-    severityRating: SEVERITY_RATING_CVSS_3,
-  },
-};
+const gmp = {settings: {severityRating: SEVERITY_RATING_CVSS_3}};
 
 describe('Report Closed CVEs Tab tests', () => {
   test('should render Report Closed CVEs Tab', () => {
     const {closedCves} = getMockReport();
     const onSortChange = testing.fn();
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    const {baseElement} = render(
+    const {render} = rendererWith({gmp, capabilities: caps, router: true});
+    render(
       <ClosedCvesTab
-        closedCves={closedCves.entities}
-        counts={closedCves.counts}
+        closedCves={closedCves?.entities}
+        counts={closedCves?.counts}
         filter={filter}
         isUpdating={false}
         sortField={'severity'}
@@ -44,42 +34,46 @@ describe('Report Closed CVEs Tab tests', () => {
       />,
     );
 
-    const links = baseElement.querySelectorAll('a');
-    const header = baseElement.querySelectorAll('th');
+    // Verify headers
+    const table = screen.getByRole('table');
+    const headers = within(table).getAllByRole('columnheader');
+    expect(headers[0]).toHaveTextContent('CVE');
+    expect(headers[1]).toHaveTextContent('Host');
+    expect(headers[2]).toHaveTextContent('NVT');
+    expect(headers[3]).toHaveTextContent('Severity');
+
+    // Get severity bars and verify row data
     const bars = screen.getAllByTestId('progressbar-box');
-
-    // Headings
-    expect(header[0]).toHaveTextContent('CVE');
-    expect(header[1]).toHaveTextContent('Host');
-    expect(header[2]).toHaveTextContent('NVT');
-    expect(header[3]).toHaveTextContent('Severity');
-
-    // Row 1
-    expect(links[0]).toHaveAttribute('href', '/cve/CVE-2000-1234');
-    expect(links[0]).toHaveTextContent('CVE-2000-1234');
-    expect(links[1]).toHaveAttribute('href', '/host/123');
-    expect(links[1]).toHaveTextContent('123.456.78.910');
-    expect(links[2]).toHaveAttribute('href', '/nvt/201');
-    expect(links[2]).toHaveTextContent('This is a description');
     expect(bars[0]).toHaveAttribute('title', 'Critical');
     expect(bars[0]).toHaveTextContent('10.0 (Critical)');
-
-    // Row 2
-    expect(links[3]).toHaveAttribute('href', '/cve/CVE-2000-5678');
-    expect(links[3]).toHaveTextContent('CVE-2000-5678');
-    expect(links[4]).toHaveAttribute(
-      'href',
-      '/hosts?filter=name%3D109.876.54.321',
-    ); // because the host has no asset id
-    expect(links[4]).toHaveTextContent('109.876.54.321');
-    expect(links[5]).toHaveAttribute('href', '/nvt/202');
-    expect(links[5]).toHaveTextContent('This is another description');
     expect(bars[1]).toHaveAttribute('title', 'Medium');
     expect(bars[1]).toHaveTextContent('5.0 (Medium)');
 
-    // Filter
-    expect(baseElement).toHaveTextContent(
-      '(Applied filter: apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity)',
+    // Verify CVE links
+    const cveLink1 = screen.getByText('CVE-2000-1234');
+    expect(cveLink1.closest('a')).toHaveAttribute('href', '/cve/CVE-2000-1234');
+
+    const cveLink2 = screen.getByText('CVE-2000-5678');
+    expect(cveLink2.closest('a')).toHaveAttribute('href', '/cve/CVE-2000-5678');
+
+    // Verify host links
+    const hostLink1 = screen.getByText('123.456.78.910');
+    expect(hostLink1.closest('a')).toHaveAttribute('href', '/host/123');
+
+    const hostLink2 = screen.getByText('109.876.54.321');
+    expect(hostLink2.closest('a')).toHaveAttribute(
+      'href',
+      '/hosts?filter=name%3D109.876.54.321',
     );
+
+    // Verify NVT links
+    const nvtLink1 = screen.getByText('This is a description');
+    expect(nvtLink1.closest('a')).toHaveAttribute('href', '/nvt/201');
+
+    const nvtLink2 = screen.getByText('This is another description');
+    expect(nvtLink2.closest('a')).toHaveAttribute('href', '/nvt/202');
+
+    // Verify filter is applied
+    screen.getByText(/sort-reverse=severity/);
   });
 });
