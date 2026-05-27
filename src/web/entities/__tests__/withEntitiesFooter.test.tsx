@@ -33,7 +33,6 @@ describe('withEntitiesFooter tests', () => {
       onDeleteBulk: testing.fn(),
       onDownloadBulk: testing.fn(),
       onTagsBulk: testing.fn(),
-      onTrashBulk: testing.fn(),
     };
 
     render(<WrappedComponent {...mockProps} />);
@@ -46,7 +45,7 @@ describe('withEntitiesFooter tests', () => {
         onDeleteClick: mockProps.onDeleteBulk,
         onDownloadClick: mockProps.onDownloadBulk,
         onTagsClick: mockProps.onTagsBulk,
-        onTrashClick: mockProps.onTrashBulk,
+        onTrashClick: mockProps.onDeleteBulk,
       }),
       {},
     );
@@ -69,7 +68,6 @@ describe('withEntitiesFooter tests', () => {
     const mockProps = {
       entities: [new Task({id: '1'})],
       onDeleteBulk: testing.fn(),
-      onTrashBulk: testing.fn(),
     };
 
     render(<WrappedComponent {...mockProps} />);
@@ -79,7 +77,7 @@ describe('withEntitiesFooter tests', () => {
         foo: options.foo,
         entities: mockProps.entities,
         onDeleteClick: mockProps.onDeleteBulk,
-        onTrashClick: mockProps.onTrashBulk,
+        onTrashClick: mockProps.onDeleteBulk,
       }),
       {},
     );
@@ -103,7 +101,6 @@ describe('withEntitiesFooter tests', () => {
       entities: [new Task({id: '1'})],
       foo: 'baz',
       onDeleteBulk: testing.fn(),
-      onTrashBulk: testing.fn(),
     };
 
     render(<WrappedComponent {...mockProps} />);
@@ -113,7 +110,7 @@ describe('withEntitiesFooter tests', () => {
         foo: mockProps.foo,
         entities: mockProps.entities,
         onDeleteClick: mockProps.onDeleteBulk,
-        onTrashClick: mockProps.onTrashBulk,
+        onTrashClick: mockProps.onDeleteBulk,
       }),
       {},
     );

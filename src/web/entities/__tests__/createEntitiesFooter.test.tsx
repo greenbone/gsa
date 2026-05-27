@@ -59,14 +59,14 @@ describe('EntitiesFooter tests', () => {
 
   test('should show ConfirmationDialog when TrashIcon is clicked and notification', async () => {
     const {render} = rendererWithTable();
-    const onTrashBulk = testing.fn();
+    const onDeleteBulk = testing.fn();
 
     const Footer = createEntitiesFooter({
       span: 2,
       trash: true,
     });
 
-    render(<Footer onTrashBulk={onTrashBulk} />);
+    render(<Footer onDeleteBulk={onDeleteBulk} />);
 
     const trashButton = screen.getByTestId('trash-icon');
     expect(trashButton).toBeVisible();
@@ -94,7 +94,7 @@ describe('EntitiesFooter tests', () => {
     await wait();
 
     expect(screen.getByText('Move to trashcan completed')).toBeVisible();
-    expect(onTrashBulk).toHaveBeenCalled();
+    expect(onDeleteBulk).toHaveBeenCalled();
     expect(dialogTitle).not.toBeVisible();
   });
 
