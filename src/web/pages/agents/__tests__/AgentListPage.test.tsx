@@ -282,7 +282,7 @@ describe('AgentListPage tests', () => {
     const dialog = await screen.findByRole('dialog');
     expect(dialog).toBeVisible();
 
-    const enableButton = screen.getByText('Enable Update to Latest');
+    const enableButton = screen.getByText('Enable automatic Update to Latest');
     fireEvent.click(enableButton);
 
     await wait();
@@ -306,7 +306,9 @@ describe('AgentListPage tests', () => {
     const dialog = screen.getDialog();
     expect(dialog).toBeVisible();
 
-    const disableButton = screen.getByText('Disable Update to Latest');
+    const disableButton = screen.getByText(
+      'Disable automatic Update to Latest',
+    );
     fireEvent.click(disableButton);
 
     await wait();
