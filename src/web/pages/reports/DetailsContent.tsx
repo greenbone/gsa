@@ -191,42 +191,46 @@ const PageContent = ({
     : (scan_run_status ?? TASK_STATUS.unknown);
   const refetchInterval = isActive(status) ? undefined : false;
 
-  const {data: hostsData} = useGetReportHosts({
+  const {data: hostsData, isFetching: isHostsFetching} = useGetReportHosts({
     reportId,
     filter: reportFilter,
     refetchInterval,
   });
-  const {data: portsData} = useGetReportPorts({
+  const {data: portsData, isFetching: isPortsFetching} = useGetReportPorts({
     reportId,
     filter: reportFilter,
     refetchInterval,
   });
-  const {data: applicationsData} = useGetReportApplications({
+  const {data: applicationsData, isFetching: isApplicationsFetching} =
+    useGetReportApplications({
+      reportId,
+      filter: reportFilter,
+      refetchInterval,
+    });
+  const {data: operatingSystemsData, isFetching: isOperatingSystemsFetching} =
+    useGetReportOperatingSystems({
+      reportId,
+      filter: reportFilter,
+      refetchInterval,
+    });
+  const {data: cvesData, isFetching: isCvesFetching} = useGetReportCves({
     reportId,
     filter: reportFilter,
     refetchInterval,
   });
-  const {data: operatingSystemsData} = useGetReportOperatingSystems({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {data: cvesData} = useGetReportCves({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {data: closedCvesData} = useGetReportClosedCves({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {data: tlsCertificatesData} = useGetReportTlsCertificates({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {data: errorsData} = useGetReportErrors({
+  const {data: closedCvesData, isFetching: isClosedCvesFetching} =
+    useGetReportClosedCves({
+      reportId,
+      filter: reportFilter,
+      refetchInterval,
+    });
+  const {data: tlsCertificatesData, isFetching: isTlsCertificatesFetching} =
+    useGetReportTlsCertificates({
+      reportId,
+      filter: reportFilter,
+      refetchInterval,
+    });
+  const {data: errorsData, isFetching: isErrorsFetching} = useGetReportErrors({
     reportId,
     filter: reportFilter,
     refetchInterval,
@@ -317,6 +321,7 @@ const PageContent = ({
                 }
               : undefined
           }
+          isLoading={isUpdating}
           title={_('Results')}
         />
       ),
@@ -341,7 +346,11 @@ const PageContent = ({
     {
       key: 'hosts',
       renderTab: () => (
-        <TabTitle counts={hostsData?.entitiesCounts} title={_('Hosts')} />
+        <TabTitle
+          counts={hostsData?.entitiesCounts}
+          isLoading={isHostsFetching}
+          title={_('Hosts')}
+        />
       ),
       renderPanel: () =>
         renderWithThreshold(
@@ -360,7 +369,11 @@ const PageContent = ({
     {
       key: 'ports',
       renderTab: () => (
-        <TabTitle counts={portsData?.entitiesCounts} title={_('Ports')} />
+        <TabTitle
+          counts={portsData?.entitiesCounts}
+          isLoading={isPortsFetching}
+          title={_('Ports')}
+        />
       ),
       renderPanel: () => (
         <PortsTab
@@ -375,6 +388,7 @@ const PageContent = ({
       renderTab: () => (
         <TabTitle
           counts={applicationsData?.entitiesCounts}
+          isLoading={isApplicationsFetching}
           title={_('Applications')}
         />
       ),
@@ -395,6 +409,7 @@ const PageContent = ({
       renderTab: () => (
         <TabTitle
           counts={operatingSystemsData?.entitiesCounts}
+          isLoading={isOperatingSystemsFetching}
           title={_('Operating Systems')}
         />
       ),
@@ -407,13 +422,19 @@ const PageContent = ({
             filter={activeFilter}
             reportId={reportId}
             status={status}
+            operatingSystemsData={operatingSystemsData}
+            isOperatingSystemsFetching={isOperatingSystemsFetching}
           />,
         ),
     },
     {
       key: 'cves',
       renderTab: () => (
-        <TabTitle counts={cvesData?.entitiesCounts} title={_('CVEs')} />
+        <TabTitle
+          counts={cvesData?.entitiesCounts}
+          isLoading={isCvesFetching}
+          title={_('CVEs')}
+        />
       ),
       renderPanel: () =>
         renderWithThreshold(
@@ -428,6 +449,7 @@ const PageContent = ({
       renderTab: () => (
         <TabTitle
           counts={closedCvesData?.entitiesCounts}
+          isLoading={isClosedCvesFetching}
           title={_('Closed CVEs')}
         />
       ),
@@ -448,6 +470,7 @@ const PageContent = ({
       renderTab: () => (
         <TabTitle
           counts={tlsCertificatesData?.entitiesCounts}
+          isLoading={isTlsCertificatesFetching}
           title={_('TLS Certificates')}
         />
       ),
@@ -469,6 +492,7 @@ const PageContent = ({
       renderTab: () => (
         <TabTitle
           counts={errorsData?.entitiesCounts}
+          isLoading={isErrorsFetching}
           title={_('Error Messages')}
         />
       ),
