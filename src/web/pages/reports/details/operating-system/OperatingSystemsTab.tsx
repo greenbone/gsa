@@ -7,14 +7,9 @@ import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
 import type ReportOperatingSystem from 'gmp/models/report/os';
-import {isActive, type TaskStatus} from 'gmp/models/task';
+import type { TaskStatus } from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportOperatingSystems from 'web/hooks/use-query/report-operating-system';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import OperatingSystemsTable from 'web/pages/reports/details/operating-system/OperatingSystemsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
@@ -25,6 +20,8 @@ interface OperatingSystemsTabWrapperProps {
   filter?: Filter;
   reportId: string;
   status: TaskStatus;
+  operatingSystemsData?: any;
+  isOperatingSystemsFetching?: boolean;
 }
 
 type OperatingSystemsSortFunctions = {
@@ -54,6 +51,8 @@ const OperatingSystemsTabWrapper = ({
   reportId,
   audit = false,
   status,
+  operatingSystemsData,
+  isOperatingSystemsFetching,
 }: OperatingSystemsTabWrapperProps) => {
   const [_] = useTranslation();
 
@@ -68,13 +67,10 @@ const OperatingSystemsTabWrapper = ({
     setOperatingSystemsFilter(baseFilter);
   }, [baseFilter]);
 
-  const {data, isLoading, isFetching, isError} = useGetReportOperatingSystems({
-    reportId,
-    filter: operatingSystemsFilter,
-    refetchInterval: isActive(status)
-      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : NO_RELOAD,
-  });
+  const data = operatingSystemsData;
+  const isFetching = isOperatingSystemsFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = false;
 
   const updateFilter = (newFilter: Filter) => {
     setOperatingSystemsFilter(newFilter);
