@@ -44,11 +44,15 @@ export const useGetAgents = ({
 
   if (isDefined(scannerId)) {
     finalFilter = finalFilter ?? new Filter();
-    finalFilter = finalFilter.set('scanner', scannerId);
+    finalFilter = finalFilter.and(
+      Filter.fromString(`scanner_uuid=${scannerId}`),
+    );
   }
   if (isDefined(authorized)) {
     finalFilter = finalFilter ?? new Filter();
-    finalFilter = finalFilter.set('authorized', parseYesNo(authorized));
+    finalFilter = finalFilter.and(
+      Filter.fromString(`authorized=${parseYesNo(authorized)}`),
+    );
   }
 
   const gmp = useGmp();
