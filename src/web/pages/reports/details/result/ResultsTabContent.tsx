@@ -5,9 +5,9 @@
 
 import type Filter from 'gmp/models/filter';
 import type {TaskStatus} from 'gmp/models/task';
-import ContainerScanningResultsTab from 'web/pages/reports/details/result/ContainerScanningResultsTab';
 import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
+import ContainerScanningResultsTab from 'web/pages/reports/details/result/ContainerScanningResultsTab';
 import ResultsTab from 'web/pages/reports/details/result/ResultsTab';
 
 interface ResultsCounts {

@@ -182,19 +182,8 @@ export interface ReportResultCountElement {
   };
 }
 
-interface ResultsReportElement {
-  results?: ReportResultsElement;
-  result_count?: ReportResultCountElement;
-  compliance_count?: ReportComplianceCountElement;
-}
-
 export interface TlsCertificatesElement {
   tls_certificate?: ReportTLSCertificateElement | ReportTLSCertificateElement[];
-}
-
-interface TlsCertificatesReportElement {
-  ssl_certs?: CountElement;
-  tls_certificates?: TlsCertificatesElement;
 }
 
 export interface PortElement {
@@ -208,10 +197,6 @@ export interface PortsElement extends CountElement {
   _max?: string;
   _min?: string;
   port?: PortElement | PortElement[];
-}
-
-interface PortsReportElement {
-  ports?: PortsElement;
 }
 
 interface PageCountElement {
@@ -280,24 +265,9 @@ export interface AppsReportElement {
   results?: ReportResultsElement;
 }
 
-interface OperatingSystemReportElement {
-  host?: ReportHostElement | ReportHostElement[];
-  results?: ReportResultsElement;
-  os?: CountElement;
-}
-
 interface ErrorsReportElement {
   host?: ReportHostElement | ReportHostElement[];
   errors?: ErrorsElement;
-}
-
-interface ClosedCvesReportElement {
-  host?: ReportHostElement | ReportHostElement[];
-  closed_cves?: CountElement;
-}
-
-interface CvesReportElement {
-  results?: ReportResultsElement;
 }
 
 export interface ReportClosedCve {
@@ -381,12 +351,6 @@ export interface ReportError {
     name?: string;
   };
   port?: string;
-}
-
-interface HostsReportElement {
-  host?: ReportHostElement | ReportHostElement[];
-  results?: ReportResultsElement;
-  hosts?: CountElement;
 }
 
 // reports with details=1 always have a results element

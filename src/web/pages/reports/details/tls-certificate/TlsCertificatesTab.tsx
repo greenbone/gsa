@@ -4,7 +4,6 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive, type TaskStatus} from 'gmp/models/task';
@@ -16,9 +15,25 @@ import {
 } from 'web/components/loading/Reload';
 import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import TLSCertificatesTable from 'web/pages/reports/details/tls-certificate/TlsCertificatesTable';
+import {
+  makeCompareDate,
+  makeCompareIp,
+  makeComparePort,
+  makeCompareString,
+} from 'web/utils/Sort';
+
+export const tlsCertificatesSortFunctions = {
+  dn: makeCompareString('subjectDn'),
+  serial: makeCompareString('serial'),
+  notvalidbefore: makeCompareDate('activationTime'),
+  notvalidafter: makeCompareDate('expirationTime'),
+  ip: makeCompareIp('ip'),
+  hostname: makeCompareString('hostname'),
+  port: makeComparePort('port'),
+};
 
 interface TLSCertificatesTabProps {
   reportId: string;
@@ -65,17 +80,6 @@ const TLSCertificatesTab = ({
     updateFilter,
   );
 
-  const [
-    handleFirstClick,
-    handleLastClick,
-    handleNextClick,
-    handlePreviousClick,
-  ] = usePagination(
-    tlsCertificatesFilter,
-    data?.entitiesCounts ?? new CollectionCounts(),
-    updateFilter,
-  );
-
   if (isError) {
     return (
       <ErrorPanel
@@ -100,22 +104,42 @@ const TLSCertificatesTab = ({
   } = data || {};
 
   return (
-    <TLSCertificatesTable
-      // @ts-expect-error entities are ReportTLSCertificate[], not Model[]
+    <ReportEntitiesContainer
+      counts={tlsCertificatesCounts}
       entities={tlsCertificates}
-      entitiesCounts={tlsCertificatesCounts}
       filter={tlsCertificatesFilter}
-      isUpdating={isFetching}
-      sortBy={sortBy || 'severity'}
-      sortDir={sortDir}
-      toggleDetailsIcon={false}
-      onFirstClick={handleFirstClick}
-      onLastClick={handleLastClick}
-      onNextClick={handleNextClick}
-      onPreviousClick={handlePreviousClick}
-      onSortChange={handleSortChange}
-      onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
-    />
+      sortField={sortBy || 'dn'}
+      sortFunctions={tlsCertificatesSortFunctions}
+      sortReverse={sortDir === 'asc'}
+    >
+      {({
+        entities,
+        entitiesCounts,
+        sortBy: sortByPaged,
+        sortDir: sortDirPaged,
+        onFirstClick,
+        onLastClick,
+        onNextClick,
+        onPreviousClick,
+      }) => (
+        <TLSCertificatesTable
+          // @ts-expect-error entities are ReportTLSCertificate[], not Model[]
+          entities={entities}
+          entitiesCounts={entitiesCounts}
+          filter={tlsCertificatesFilter}
+          isUpdating={isFetching}
+          sortBy={sortByPaged || 'dn'}
+          sortDir={sortDirPaged}
+          toggleDetailsIcon={false}
+          onFirstClick={onFirstClick}
+          onLastClick={onLastClick}
+          onNextClick={onNextClick}
+          onPreviousClick={onPreviousClick}
+          onSortChange={handleSortChange}
+          onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
+        />
+      )}
+    </ReportEntitiesContainer>
   );
 };
 

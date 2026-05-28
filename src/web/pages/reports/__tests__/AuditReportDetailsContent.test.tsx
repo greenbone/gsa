@@ -19,14 +19,6 @@ const resetFilter = Filter.fromString(
   'first=1 compliance_levels=ynui sort=compliant',
 );
 
-const sorting = {
-  errors: {sortField: 'error', sortReverse: true},
-  hosts: {sortField: 'compliant', sortReverse: true},
-  os: {sortField: 'compliant', sortReverse: true},
-  results: {sortField: 'compliant', sortReverse: true},
-  tlscerts: {sortField: 'dn', sortReverse: true},
-};
-
 const createGmp = ({reportResultsThreshold = 10} = {}) => ({
   settings: {
     manualUrl: 'test/',

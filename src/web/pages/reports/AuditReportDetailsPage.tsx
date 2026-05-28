@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
-import {useParams} from 'react-router';
 import type Response from 'gmp/http/response';
 import type {XmlMeta} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
@@ -14,6 +12,8 @@ import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
+import {useCallback, useEffect, useState} from 'react';
+import {useParams} from 'react-router';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -36,19 +36,6 @@ import TargetComponent from 'web/pages/targets/TargetComponent';
 import useGetEntity from 'web/queries/useGetEntity';
 import {create_pem_certificate} from 'web/utils/Cert';
 import {generateFilename} from 'web/utils/Render';
-
-interface SortState {
-  sortField: string;
-  sortReverse: boolean;
-}
-
-interface SortingState {
-  results: SortState;
-  hosts: SortState;
-  os: SortState;
-  tlscerts: SortState;
-  errors: SortState;
-}
 
 interface ReportComposerDefaults {
   defaultReportFormatId?: string;
@@ -110,14 +97,6 @@ const getReportFilter = (entity?: AuditReport) => {
   return entity?.report?.filter;
 };
 
-const initialSorting: SortingState = {
-  results: {sortField: 'compliant', sortReverse: true},
-  hosts: {sortField: 'compliant', sortReverse: true},
-  os: {sortField: 'compliant', sortReverse: true},
-  tlscerts: {sortField: 'dn', sortReverse: false},
-  errors: {sortField: 'error', sortReverse: false},
-};
-
 const useGetAuditReport = ({
   id,
   filter,
@@ -134,10 +113,7 @@ const useGetAuditReport = ({
 
   return useGetEntity<AuditReport>({
     gmpMethod: async ({id}) => {
-      return auditreport.get(
-        {id},
-        {filter: filterString, details: false},
-      );
+      return auditreport.get({id}, {filter: filterString, details: false});
     },
     queryId: 'get_audit_report',
     queryKeyParts: [filterString],
@@ -167,7 +143,6 @@ const AuditReportDetailsPage = () => {
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showDownloadReportDialog, setShowDownloadReportDialog] =
     useState(false);
-  const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
 
@@ -449,20 +424,6 @@ const AuditReportDetailsPage = () => {
       handleFilterChange(levelFilter);
     }
   }, [reportFilter, handleFilterChange]);
-
-  const handleSortChange = useCallback(
-    (name: string, sortField: string) => {
-      const prev = sorting[name as keyof SortingState];
-      const sortReverse =
-        sortField === prev.sortField ? !prev.sortReverse : false;
-
-      setSorting(prevSorting => ({
-        ...prevSorting,
-        [name]: {sortField, sortReverse},
-      }));
-    },
-    [sorting],
-  );
 
   const handleChanged = useCallback(() => {
     void queryClient.invalidateQueries({queryKey: ['get_audit_report']});

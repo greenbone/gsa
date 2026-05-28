@@ -7,13 +7,13 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import AuditReport from 'gmp/models/audit-report';
 import {COMPLIANCE} from 'gmp/models/compliance';
 import Filter from 'gmp/models/filter';
+import ReportOperatingSystem from 'gmp/models/report/os';
 import {
   type PortElement,
   type ReportHostElement,
   type ReportResultElement,
   parseErrors,
 } from 'gmp/models/report/parser';
-import ReportOperatingSystem from 'gmp/models/report/os';
 import {
   type default as ReportReport,
   type ReportReportTaskElement,
@@ -379,7 +379,13 @@ export const getMockAuditReport = () => {
   });
   const operatingsystemsCollection = {
     entities: [os1, os2],
-    counts: new CollectionCounts({all: 2, filtered: 2, first: 1, rows: 2, length: 2}),
+    counts: new CollectionCounts({
+      all: 2,
+      filtered: 2,
+      first: 1,
+      rows: 2,
+      length: 2,
+    }),
     filter: Filter.fromString(''),
   };
 
@@ -387,7 +393,7 @@ export const getMockAuditReport = () => {
     entity,
     report: entity.report as ReportReport,
     errors: errorsCollection,
-    hosts: undefined as any,
+    hosts: undefined,
     operatingsystems: operatingsystemsCollection,
     task: entity.report?.task,
   };
