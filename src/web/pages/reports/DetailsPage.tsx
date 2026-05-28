@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback, useEffect, useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
+import {useParams} from 'react-router';
 import logger from 'gmp/log';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import {useCallback, useEffect, useState} from 'react';
-import {useParams} from 'react-router';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -34,23 +34,6 @@ import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDial
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {create_pem_certificate} from 'web/utils/Cert';
 import {generateFilename} from 'web/utils/Render';
-
-interface SortState {
-  sortField: string;
-  sortReverse: boolean;
-}
-
-interface SortingState {
-  results: SortState;
-  apps: SortState;
-  ports: SortState;
-  hosts: SortState;
-  os: SortState;
-  cves: SortState;
-  closedcves: SortState;
-  tlscerts: SortState;
-  errors: SortState;
-}
 
 interface ReportComposerDefaults {
   defaultReportConfigId?: string;
@@ -99,18 +82,6 @@ const getTarget = (entity?: Report) => {
 
 const getReportFilter = (entity?: Report) => {
   return entity?.report?.filter;
-};
-
-const initialSorting: SortingState = {
-  results: {sortField: 'severity', sortReverse: true},
-  apps: {sortField: 'severity', sortReverse: true},
-  ports: {sortField: 'severity', sortReverse: true},
-  hosts: {sortField: 'severity', sortReverse: true},
-  os: {sortField: 'severity', sortReverse: true},
-  cves: {sortField: 'severity', sortReverse: true},
-  closedcves: {sortField: 'severity', sortReverse: true},
-  tlscerts: {sortField: 'dn', sortReverse: false},
-  errors: {sortField: 'error', sortReverse: false},
 };
 
 const ReportDetailsPage = () => {

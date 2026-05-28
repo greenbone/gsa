@@ -4,9 +4,9 @@
  */
 
 import {
-  type CollectionList,
   parseCollectionList,
   parseResourceNamesEntities,
+  type CollectionList,
 } from 'gmp/collection/parser';
 import {type EntitiesMeta} from 'gmp/commands/entities';
 import HttpCommand from 'gmp/commands/http';

@@ -5,19 +5,21 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import Filter from 'gmp/models/filter';
-import {isActive, type TaskStatus} from 'gmp/models/task';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportPorts from 'web/hooks/use-query/report-ports';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useTranslation from 'web/hooks/useTranslation';
-import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import PortsTable from 'web/pages/reports/details/port/PortsTable';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {makeCompareNumber, makeCompareSeverity} from 'web/utils/Sort';
+
+interface PortsTabProps {
+  reportId: string;
+  reportFilter: Filter;
+  portsData?: any;
+  isPortsFetching?: boolean;
+  isPortsError?: boolean;
+}
 
 export const portsSortFunctions = {
   name: makeCompareNumber('number'),
@@ -25,13 +27,13 @@ export const portsSortFunctions = {
   severity: makeCompareSeverity(),
 };
 
-interface PortsTabProps {
-  reportId: string;
-  reportFilter: Filter;
-  status: TaskStatus;
-}
-
-const PortsTab = ({reportId, reportFilter, status}: PortsTabProps) => {
+const PortsTab = ({
+  reportId,
+  reportFilter,
+  isPortsError,
+  portsData,
+  isPortsFetching,
+}: PortsTabProps) => {
   const [_] = useTranslation();
   const reportFilterString = reportFilter.toFilterString();
 
@@ -45,13 +47,10 @@ const PortsTab = ({reportId, reportFilter, status}: PortsTabProps) => {
     setPortsFilter(baseFilter);
   }, [baseFilter]);
 
-  const {data, isLoading, isFetching, isError, error} = useGetReportPorts({
-    reportId,
-    filter: portsFilter,
-    refetchInterval: isActive(status)
-      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : NO_RELOAD,
-  });
+  const data = portsData;
+  const isFetching = isPortsFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = isPortsError ?? false;
 
   const updateFilter = (newFilter: Filter) => {
     setPortsFilter(newFilter);
@@ -62,19 +61,18 @@ const PortsTab = ({reportId, reportFilter, status}: PortsTabProps) => {
     updateFilter,
   );
 
+  if (isLoading && !data) {
+    return <Loading />;
+  }
+
   if (isError) {
     return (
       <ErrorPanel
-        error={error}
         message={_('Error while loading Ports for Report {{reportId}}', {
           reportId,
         })}
       />
     );
-  }
-
-  if (isLoading && !data) {
-    return <Loading />;
   }
 
   const {entities: ports = [], entitiesCounts: portsCounts} = data || {};
@@ -99,7 +97,6 @@ const PortsTab = ({reportId, reportFilter, status}: PortsTabProps) => {
         onPreviousClick,
       }) => (
         <PortsTable
-          // @ts-expect-error entities are ReportPort[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={portsFilter}

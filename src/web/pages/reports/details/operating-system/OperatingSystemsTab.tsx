@@ -7,7 +7,6 @@ import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
 import type ReportOperatingSystem from 'gmp/models/report/os';
-import type { TaskStatus } from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
@@ -19,9 +18,9 @@ interface OperatingSystemsTabWrapperProps {
   audit?: boolean;
   filter?: Filter;
   reportId: string;
-  status: TaskStatus;
   operatingSystemsData?: any;
   isOperatingSystemsFetching?: boolean;
+  isOperatingSystemsError?: boolean;
 }
 
 type OperatingSystemsSortFunctions = {
@@ -50,9 +49,9 @@ const OperatingSystemsTabWrapper = ({
   filter,
   reportId,
   audit = false,
-  status,
   operatingSystemsData,
   isOperatingSystemsFetching,
+  isOperatingSystemsError,
 }: OperatingSystemsTabWrapperProps) => {
   const [_] = useTranslation();
 
@@ -70,7 +69,7 @@ const OperatingSystemsTabWrapper = ({
   const data = operatingSystemsData;
   const isFetching = isOperatingSystemsFetching ?? false;
   const isLoading = !data && isFetching;
-  const isError = false;
+  const isError = isOperatingSystemsError ?? false;
 
   const updateFilter = (newFilter: Filter) => {
     setOperatingSystemsFilter(newFilter);
