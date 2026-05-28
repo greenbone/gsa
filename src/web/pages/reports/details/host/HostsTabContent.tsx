@@ -37,7 +37,7 @@ const HostsTabContent = ({
 }: HostsTabContentProps) => {
   const [_] = useTranslation();
   const [{sortField, sortReverse}, setSorting] = useState({
-    sortField: 'severity',
+    sortField: audit ? 'compliant' : 'severity',
     sortReverse: true,
   });
 

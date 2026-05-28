@@ -4,16 +4,26 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {isActive, type TaskStatus} from 'gmp/models/task';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/Reload';
 import useGetReportPorts from 'web/hooks/use-query/report-ports';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import PortsTable from 'web/pages/reports/details/port/PortsTable';
+import {makeCompareNumber, makeCompareSeverity} from 'web/utils/Sort';
+
+export const portsSortFunctions = {
+  name: makeCompareNumber('number'),
+  hosts: makeCompareNumber(entity => entity.hosts.count),
+  severity: makeCompareSeverity(),
+};
 
 interface PortsTabProps {
   reportId: string;
@@ -38,7 +48,9 @@ const PortsTab = ({reportId, reportFilter, status}: PortsTabProps) => {
   const {data, isLoading, isFetching, isError, error} = useGetReportPorts({
     reportId,
     filter: portsFilter,
-    refetchInterval: isActive(status) ? undefined : false,
+    refetchInterval: isActive(status)
+      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+      : NO_RELOAD,
   });
 
   const updateFilter = (newFilter: Filter) => {
@@ -47,17 +59,6 @@ const PortsTab = ({reportId, reportFilter, status}: PortsTabProps) => {
 
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     portsFilter,
-    updateFilter,
-  );
-
-  const [
-    handleFirstClick,
-    handleLastClick,
-    handleNextClick,
-    handlePreviousClick,
-  ] = usePagination(
-    portsFilter,
-    data?.entitiesCounts ?? new CollectionCounts(),
     updateFilter,
   );
 
@@ -79,21 +80,41 @@ const PortsTab = ({reportId, reportFilter, status}: PortsTabProps) => {
   const {entities: ports = [], entitiesCounts: portsCounts} = data || {};
 
   return (
-    <PortsTable
-      // @ts-expect-error entities are ReportPort[], not Model[]
+    <ReportEntitiesContainer
+      counts={portsCounts}
       entities={ports}
-      entitiesCounts={portsCounts}
       filter={portsFilter}
-      isUpdating={isFetching}
-      sortBy={sortBy || 'severity'}
-      sortDir={sortDir}
-      toggleDetailsIcon={false}
-      onFirstClick={handleFirstClick}
-      onLastClick={handleLastClick}
-      onNextClick={handleNextClick}
-      onPreviousClick={handlePreviousClick}
-      onSortChange={handleSortChange}
-    />
+      sortField={sortBy || 'severity'}
+      sortFunctions={portsSortFunctions}
+      sortReverse={sortDir === 'asc'}
+    >
+      {({
+        entities,
+        entitiesCounts,
+        sortBy: sortByPaged,
+        sortDir: sortDirPaged,
+        onFirstClick,
+        onLastClick,
+        onNextClick,
+        onPreviousClick,
+      }) => (
+        <PortsTable
+          // @ts-expect-error entities are ReportPort[], not Model[]
+          entities={entities}
+          entitiesCounts={entitiesCounts}
+          filter={portsFilter}
+          isUpdating={isFetching}
+          sortBy={sortByPaged || 'severity'}
+          sortDir={sortDirPaged}
+          toggleDetailsIcon={false}
+          onFirstClick={onFirstClick}
+          onLastClick={onLastClick}
+          onNextClick={onNextClick}
+          onPreviousClick={onPreviousClick}
+          onSortChange={handleSortChange}
+        />
+      )}
+    </ReportEntitiesContainer>
   );
 };
 

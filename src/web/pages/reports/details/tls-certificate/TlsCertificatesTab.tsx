@@ -52,7 +52,11 @@ const TLSCertificatesTab = ({
   const reportFilterString = reportFilter.toFilterString();
 
   const baseFilter = useMemo(() => {
-    return Filter.fromString(reportFilterString);
+    const f = Filter.fromString(reportFilterString);
+    // Override sort: 'sort-reverse=dn' maps to ascending A→Z via the
+    // sortReverse=(sortDir==='asc') convention used in ReportEntitiesContainer
+    f.set('sort-reverse', 'dn');
+    return f;
   }, [reportFilterString]);
 
   const [tlsCertificatesFilter, setTlsCertificatesFilter] =

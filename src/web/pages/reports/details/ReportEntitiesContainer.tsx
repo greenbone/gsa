@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
@@ -132,16 +132,20 @@ const ReportEntitiesContainer = <TEntity,>({
     setPage(page => page - 1);
   };
 
+  const sortedEntities = useMemo(
+    () =>
+      sortEntities<TEntity>({
+        entities: entities ?? [],
+        sortFunctions,
+        sortReverse,
+        sortField,
+      }),
+    [entities, sortFunctions, sortReverse, sortField],
+  );
+
   if (!isDefined(children) || !isDefined(entities)) {
     return <Loading />;
   }
-
-  const sortedEntities = sortEntities<TEntity>({
-    entities,
-    sortFunctions,
-    sortReverse,
-    sortField,
-  });
 
   const rows = getRows(filter, counts) || 1;
   const entitiesIndex = page * rows;

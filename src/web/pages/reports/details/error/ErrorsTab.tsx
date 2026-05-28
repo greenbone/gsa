@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
 import {isActive, type TaskStatus} from 'gmp/models/task';
@@ -42,10 +42,18 @@ const ErrorsTabWrapper = ({
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
-    return isDefined(filter) ? filter.copy() : new Filter();
+    const f = isDefined(filter) ? filter.copy() : new Filter();
+    // Override sort: 'sort-reverse=error' maps to ascending A→Z via the
+    // sortReverse=(sortDir==='asc') convention used in ReportEntitiesContainer
+    f.set('sort-reverse', 'error');
+    return f;
   }, [filter]);
 
   const [errorsFilter, setErrorsFilter] = useState<Filter>(baseFilter);
+
+  useEffect(() => {
+    setErrorsFilter(baseFilter);
+  }, [baseFilter]);
 
   const {data, isLoading, isFetching, isError, error} = useGetReportErrors({
     reportId,
