@@ -275,7 +275,7 @@ describe('AgentListPage tests', () => {
     await screen.findByText(/Agent 1/i);
 
     const enableIcon = screen.getByTitle(
-      'Enable update to latest for all items on this page',
+      'Enable automatic update to latest for all items on this page',
     );
     fireEvent.click(enableIcon);
 
@@ -299,7 +299,7 @@ describe('AgentListPage tests', () => {
     await screen.findByText(/Agent 1/i);
 
     const disableIcon = screen.getByTitle(
-      'Disable update to latest for all items on this page',
+      'Disable automatic update to latest for all items on this page',
     );
     fireEvent.click(disableIcon);
 

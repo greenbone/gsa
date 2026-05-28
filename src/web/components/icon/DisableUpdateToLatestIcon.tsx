@@ -28,11 +28,13 @@ const DisableUpdateToLatestIcon = <TValue = string,>({
 
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      title = _('Disable update to latest for all items on this page');
+      title = _(
+        'Disable automatic update to latest for all items on this page',
+      );
     } else if (selectionType === SelectionType.SELECTION_USER) {
-      title = _('Disable update to latest for selected items');
+      title = _('Disable automatic update to latest for selected items');
     } else if (selectionType === SelectionType.SELECTION_FILTER) {
-      title = _('Disable update to latest for all filtered items');
+      title = _('Disable automatic update to latest for all filtered items');
     }
   }
 
