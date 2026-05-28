@@ -188,7 +188,9 @@ export const useBulkEnableUpdateToLatestAgents = ({
         : gmp.agents.enableUpdateToLatest(input);
     },
     invalidateQueryIds: ['get_agents'],
-    successMessage: _('Enabled update to latest for Agents successfully'),
+    successMessage: _(
+      'Enabled automatic update to latest for Agents successfully',
+    ),
     onSuccess,
     onError,
   });
@@ -207,7 +209,9 @@ export const useBulkDisableUpdateToLatestAgents = ({
         : gmp.agents.disableUpdateToLatest(input);
     },
     invalidateQueryIds: ['get_agents'],
-    successMessage: _('Disabled update to latest for Agents successfully'),
+    successMessage: _(
+      'Disabled automatic update to latest for Agents successfully',
+    ),
     onSuccess,
     onError,
   });
