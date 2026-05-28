@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
-import {useParams} from 'react-router';
 import logger from 'gmp/log';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
+import {useCallback, useEffect, useState} from 'react';
+import {useParams} from 'react-router';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -132,7 +132,6 @@ const ReportDetailsPage = () => {
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showDownloadReportDialog, setShowDownloadReportDialog] =
     useState(false);
-  const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
 

@@ -4,16 +4,16 @@
  */
 
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
 import {setLocale} from 'gmp/locale/lang';
+import Filter from 'gmp/models/filter';
 import Report from 'gmp/models/report';
+import ReportOperatingSystem from 'gmp/models/report/os';
 import {
   type ReportResultElement,
   type ReportHostElement,
   type PortElement,
   parseErrors,
 } from 'gmp/models/report/parser';
-import ReportOperatingSystem from 'gmp/models/report/os';
 import type ReportReport from 'gmp/models/report/report';
 import ReportTLSCertificate, {
   type ReportTLSCertificateElement,
@@ -322,7 +322,13 @@ export const getMockReport = () => {
   });
   const operatingsystemsCollection = {
     entities: [os1, os2],
-    counts: new CollectionCounts({all: 2, filtered: 2, first: 1, rows: 2, length: 2}),
+    counts: new CollectionCounts({
+      all: 2,
+      filtered: 2,
+      first: 1,
+      rows: 2,
+      length: 2,
+    }),
     filter: Filter.fromString(''),
   };
 
@@ -330,20 +336,26 @@ export const getMockReport = () => {
   const cert2 = ReportTLSCertificate.fromElement(tlsCertificate2);
   const tlsCertificatesCollection = {
     entities: [cert1, cert2],
-    counts: new CollectionCounts({all: 2, filtered: 2, first: 1, rows: 2, length: 2}),
+    counts: new CollectionCounts({
+      all: 2,
+      filtered: 2,
+      first: 1,
+      rows: 2,
+      length: 2,
+    }),
     filter: Filter.fromString(''),
   };
 
   return {
     entity,
     report: entity.report as ReportReport,
-    results: undefined as any,
-    hosts: undefined as any,
-    ports: undefined as any,
-    applications: undefined as any,
+    results: undefined as unknown,
+    hosts: undefined as unknown,
+    ports: undefined as unknown,
+    applications: undefined as unknown,
     operatingsystems: operatingsystemsCollection,
-    cves: undefined as any,
-    closedCves: undefined as any,
+    cves: undefined as unknown,
+    closedCves: undefined as unknown,
     tlsCertificates: tlsCertificatesCollection,
     errors: errorsCollection,
     task: entity.report?.task,
