@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
 import type ReportOperatingSystem from 'gmp/models/report/os';
@@ -63,6 +63,10 @@ const OperatingSystemsTabWrapper = ({
 
   const [operatingSystemsFilter, setOperatingSystemsFilter] =
     useState<Filter>(baseFilter);
+
+  useEffect(() => {
+    setOperatingSystemsFilter(baseFilter);
+  }, [baseFilter]);
 
   const {data, isLoading, isFetching, isError} = useGetReportOperatingSystems({
     reportId,

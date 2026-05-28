@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
 import {isActive, type TaskStatus} from 'gmp/models/task';
@@ -49,6 +49,10 @@ const ClosedCvesTabWrapper = ({
   }, [filter]);
 
   const [closedCvesFilter, setClosedCvesFilter] = useState<Filter>(baseFilter);
+
+  useEffect(() => {
+    setClosedCvesFilter(baseFilter);
+  }, [baseFilter]);
 
   const {data, isLoading, isFetching, isError, error} = useGetReportClosedCves({
     reportId,
