@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   type Date as GmpDate,
@@ -23,6 +23,7 @@ import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface UpdatingTableProps {
@@ -55,7 +56,6 @@ const Summary = ({
   const [_] = useTranslation();
   const {
     delta_report,
-    hosts,
     scan_end,
     scan_run_status,
     scan_start,
@@ -68,7 +68,8 @@ const Summary = ({
 
   const {id, name, comment, progress} = task ?? {};
 
-  const [hostsCount, setHostsCount] = useState(0);
+  const {data: hostsData} = useGetReportHosts({reportId, filter});
+  const hostsCount = hostsData?.entitiesCounts?.all ?? 0;
 
   const scanDuration = (start: GmpDate, end: GmpDate) => {
     const dur = createDuration(end.diff(start));
@@ -103,12 +104,6 @@ const Summary = ({
       minutes,
     });
   };
-
-  useEffect(() => {
-    if (isDefined(hosts?.counts?.all)) {
-      setHostsCount(hosts.counts.all);
-    }
-  }, [hosts]);
 
   const filterString = isDefined(filter)
     ? filter.simple().toFilterString()

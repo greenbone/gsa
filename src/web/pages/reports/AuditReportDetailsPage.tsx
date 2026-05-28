@@ -130,26 +130,14 @@ const useGetAuditReport = ({
   const gmp = useGmp();
   const auditreport = (gmp as unknown as {auditreport: AuditReportCommand})
     .auditreport;
-  const threshold = gmp.settings.reportResultsThreshold;
   const filterString = filter?.toFilterString();
 
   return useGetEntity<AuditReport>({
     gmpMethod: async ({id}) => {
-      const lightResponse = await auditreport.get(
+      return auditreport.get(
         {id},
         {filter: filterString, details: false},
       );
-      const lightReport = lightResponse.data;
-
-      const needsFullReport =
-        isDefined(lightReport?.report?.results) &&
-        lightReport.report.results.counts.filtered < threshold;
-
-      if (needsFullReport) {
-        return auditreport.get({id}, {filter: filterString, details: true});
-      }
-
-      return lightResponse;
     },
     queryId: 'get_audit_report',
     queryKeyParts: [filterString],
@@ -516,7 +504,6 @@ const AuditReportDetailsPage = () => {
             showError={showError as (...args: unknown[]) => void}
             showErrorMessage={showErrorMessage}
             showSuccessMessage={showSuccessMessage}
-            sorting={sorting}
             task={isDefined(report) ? report.task : undefined}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
@@ -528,7 +515,6 @@ const AuditReportDetailsPage = () => {
             onFilterResetClick={handleFilterResetClick}
             onRemoveFromAssetsClick={handleRemoveFromAssets}
             onReportDownloadClick={handleOpenDownloadReportDialog}
-            onSortChange={handleSortChange}
             onTagSuccess={handleChanged}
             onTargetEditClick={async () => {
               const response = await loadTarget();

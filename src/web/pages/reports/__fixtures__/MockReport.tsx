@@ -3,15 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import CollectionCounts from 'gmp/collection/collection-counts';
+import Filter from 'gmp/models/filter';
 import {setLocale} from 'gmp/locale/lang';
 import Report from 'gmp/models/report';
 import {
   type ReportResultElement,
   type ReportHostElement,
   type PortElement,
+  parseErrors,
 } from 'gmp/models/report/parser';
+import ReportOperatingSystem from 'gmp/models/report/os';
 import type ReportReport from 'gmp/models/report/report';
-import {type ReportTLSCertificateElement} from 'gmp/models/report/tls-certificate';
+import ReportTLSCertificate, {
+  type ReportTLSCertificateElement,
+} from 'gmp/models/report/tls-certificate';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 setLocale('en');
@@ -300,18 +306,46 @@ export const getMockReport = () => {
     _id: '1234',
   });
 
+  const errorsCollection = parseErrors(report, Filter.fromString(''));
+
+  const os1 = new ReportOperatingSystem({
+    id: 'cpe:/foo/bar',
+    name: 'Foo OS',
+    cpe: 'cpe:/foo/bar',
+    severity: 10,
+  });
+  const os2 = new ReportOperatingSystem({
+    id: 'cpe:/lorem/ipsum',
+    name: 'Lorem OS',
+    cpe: 'cpe:/lorem/ipsum',
+    severity: 5,
+  });
+  const operatingsystemsCollection = {
+    entities: [os1, os2],
+    counts: new CollectionCounts({all: 2, filtered: 2, first: 1, rows: 2, length: 2}),
+    filter: Filter.fromString(''),
+  };
+
+  const cert1 = ReportTLSCertificate.fromElement(tlsCertificate1);
+  const cert2 = ReportTLSCertificate.fromElement(tlsCertificate2);
+  const tlsCertificatesCollection = {
+    entities: [cert1, cert2],
+    counts: new CollectionCounts({all: 2, filtered: 2, first: 1, rows: 2, length: 2}),
+    filter: Filter.fromString(''),
+  };
+
   return {
     entity,
     report: entity.report as ReportReport,
-    results: entity.report?.results,
-    hosts: entity.report?.hosts,
-    ports: entity.report?.ports,
-    applications: entity.report?.applications,
-    operatingsystems: entity.report?.operatingsystems,
-    cves: entity.report?.cves,
-    closedCves: entity.report?.closedCves,
-    tlsCertificates: entity.report?.tlsCertificates,
-    errors: entity.report?.errors,
+    results: undefined as any,
+    hosts: undefined as any,
+    ports: undefined as any,
+    applications: undefined as any,
+    operatingsystems: operatingsystemsCollection,
+    cves: undefined as any,
+    closedCves: undefined as any,
+    tlsCertificates: tlsCertificatesCollection,
+    errors: errorsCollection,
     task: entity.report?.task,
   };
 };
