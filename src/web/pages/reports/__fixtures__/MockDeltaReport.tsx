@@ -7,7 +7,6 @@ import {setLocale} from 'gmp/locale/lang';
 import Report from 'gmp/models/report';
 import {type ReportResultElement} from 'gmp/models/report/parser';
 import {
-  type ReportReportElement,
   type default as ReportReport,
   type ReportReportTaskElement,
 } from 'gmp/models/report/report';
@@ -66,8 +65,8 @@ const result2: ReportResultElement = {
 };
 
 export const getMockDeltaReport = () => {
-  const report: ReportReportElement = {
-    _type: 'delta',
+  const report = {
+    _type: 'delta' as const,
     _id: '1234',
     delta: {
       report: {
@@ -107,7 +106,6 @@ export const getMockDeltaReport = () => {
   return {
     entity,
     report: entity.report as ReportReport,
-    results: entity.report?.results,
     task: entity.report?.task,
   };
 };

@@ -6,6 +6,7 @@
 import {useEffect, useMemo, useState} from 'react';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
+import {isActive, type TaskStatus} from 'gmp/models/task';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
 import useGetReportPorts from 'web/hooks/use-query/report-ports';
@@ -17,9 +18,10 @@ import PortsTable from 'web/pages/reports/details/port/PortsTable';
 interface PortsTabProps {
   reportId: string;
   reportFilter: Filter;
+  status: TaskStatus;
 }
 
-const PortsTab = ({reportId, reportFilter}: PortsTabProps) => {
+const PortsTab = ({reportId, reportFilter, status}: PortsTabProps) => {
   const [_] = useTranslation();
   const reportFilterString = reportFilter.toFilterString();
 
@@ -36,6 +38,7 @@ const PortsTab = ({reportId, reportFilter}: PortsTabProps) => {
   const {data, isLoading, isFetching, isError, error} = useGetReportPorts({
     reportId,
     filter: portsFilter,
+    refetchInterval: isActive(status) ? undefined : false,
   });
 
   const updateFilter = (newFilter: Filter) => {
@@ -81,7 +84,7 @@ const PortsTab = ({reportId, reportFilter}: PortsTabProps) => {
       entities={ports}
       entitiesCounts={portsCounts}
       filter={portsFilter}
-      isUpdating={isFetching && !data}
+      isUpdating={isFetching}
       sortBy={sortBy || 'severity'}
       sortDir={sortDir}
       toggleDetailsIcon={false}

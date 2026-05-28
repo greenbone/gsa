@@ -94,10 +94,10 @@ const createGmp = () => ({
   },
   reporterrors: {
     get: testing.fn().mockResolvedValue({
-      data: entity.report?.errors?.entities ?? [],
+      data: [],
       meta: {
         filter: Filter.fromString(''),
-        counts: entity.report?.errors?.counts ?? new CollectionCounts(),
+        counts: new CollectionCounts(),
       },
     }),
   },

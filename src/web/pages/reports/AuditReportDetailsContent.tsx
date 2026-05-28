@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
-import {TASK_STATUS, type TaskStatus} from 'gmp/models/task';
+import {isActive, TASK_STATUS, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/Toolbar';
@@ -48,11 +48,6 @@ import TabTitle from 'web/pages/reports/details/TabTitle';
 import TLSCertificatesTab from 'web/pages/reports/details/tls-certificate/TlsCertificatesTab';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 
-interface SortingEntry {
-  sortField: string;
-  sortReverse: boolean;
-}
-
 interface AuditReportDetailsContentProps {
   entity?: AuditReport;
   filters?: Filter[];
@@ -82,41 +77,6 @@ interface AuditReportDetailsContentProps {
   onTargetEditClick: () => void;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
 }
-
-// Self-contained TabTitle components that fetch their own counts
-interface TabTitleHookProps {
-  reportId: string;
-  filter?: Filter;
-  title: string;
-}
-
-const HostsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
-  const {data} = useGetReportHosts({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const OperatingSystemsTabTitle = ({
-  reportId,
-  filter,
-  title,
-}: TabTitleHookProps) => {
-  const {data} = useGetReportOperatingSystems({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const TlsCertificatesTabTitle = ({
-  reportId,
-  filter,
-  title,
-}: TabTitleHookProps) => {
-  const {data} = useGetReportTlsCertificates({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const ErrorsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
-  const {data} = useGetReportErrors({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
 
 const Span = styled.span`
   margin-top: 2px;
@@ -195,6 +155,33 @@ const AuditReportDetailsContent = ({
   const timestamp = report?.timestamp;
   const scan_run_status = report?.scan_run_status;
 
+  const isImport = isDefined(task) && task.isImport();
+  const status: TaskStatus = isImport
+    ? TASK_STATUS.import
+    : ((scan_run_status as TaskStatus) ?? TASK_STATUS.unknown);
+  const refetchInterval = isActive(status) ? undefined : false;
+
+  const {data: hostsData} = useGetReportHosts({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: operatingSystemsData} = useGetReportOperatingSystems({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: tlsCertificatesData} = useGetReportTlsCertificates({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: errorsData} = useGetReportErrors({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+
   if (!hasReport && isDefined(reportError)) {
     return (
       <ErrorPanel
@@ -210,10 +197,6 @@ const AuditReportDetailsContent = ({
   const showThresholdMessage =
     !isLoading && hasReportData && complianceFiltered > threshold;
 
-  const isImport = isDefined(task) && task.isImport();
-  const status: TaskStatus = isImport
-    ? TASK_STATUS.import
-    : ((scan_run_status as TaskStatus) ?? TASK_STATUS.unknown);
   const progress = task?.progress ?? 0;
 
   const effectiveReportFilter = reportFilter ?? pageFilter ?? new Filter();
@@ -221,6 +204,13 @@ const AuditReportDetailsContent = ({
   const showIsLoading = isLoading && !hasReport;
 
   const resultsCounts = report?.complianceCounts
+    ? {
+        filtered: report.complianceCounts.filtered ?? 0,
+        all: report.complianceCounts.full ?? 0,
+      }
+    : undefined;
+
+  const resultsTabCounts = report?.complianceCounts
     ? {
         filtered: report.complianceCounts.filtered,
         full: report.complianceCounts.full,
@@ -269,7 +259,7 @@ const AuditReportDetailsContent = ({
           progress={progress}
           reportFilter={effectiveReportFilter}
           reportId={reportId}
-          reportResultsCounts={resultsCounts}
+          reportResultsCounts={resultsTabCounts}
           status={status}
           onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
           onFilterEditClick={onFilterEditClick}
@@ -280,13 +270,7 @@ const AuditReportDetailsContent = ({
     },
     {
       key: 'hosts',
-      title: (
-        <HostsTabTitle
-          filter={effectiveReportFilter}
-          reportId={reportId}
-          title={_('Hosts')}
-        />
-      ),
+      title: <TabTitle counts={hostsData?.entitiesCounts} title={_('Hosts')} />,
       panel: renderWithThreshold(
         _('Hosts'),
         thresholdConfig,
@@ -302,9 +286,8 @@ const AuditReportDetailsContent = ({
     {
       key: 'os',
       title: (
-        <OperatingSystemsTabTitle
-          filter={effectiveReportFilter}
-          reportId={reportId}
+        <TabTitle
+          counts={operatingSystemsData?.entitiesCounts}
           title={_('Operating Systems')}
         />
       ),
@@ -322,9 +305,8 @@ const AuditReportDetailsContent = ({
     {
       key: 'tlscerts',
       title: (
-        <TlsCertificatesTabTitle
-          filter={effectiveReportFilter}
-          reportId={reportId}
+        <TabTitle
+          counts={tlsCertificatesData?.entitiesCounts}
           title={_('TLS Certificates')}
         />
       ),
@@ -342,9 +324,8 @@ const AuditReportDetailsContent = ({
     {
       key: 'errors',
       title: (
-        <ErrorsTabTitle
-          filter={effectiveReportFilter}
-          reportId={reportId}
+        <TabTitle
+          counts={errorsData?.entitiesCounts}
           title={_('Error Messages')}
         />
       ),

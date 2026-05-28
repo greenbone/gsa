@@ -11,11 +11,13 @@ import useGetEntities from 'web/queries/useGetEntities';
 interface UseGetReportPortsParams {
   reportId: string;
   filter?: Filter;
+  refetchInterval?: number | false;
 }
 
 export const useGetReportPorts = ({
   reportId,
   filter = undefined,
+  refetchInterval = undefined,
 }: UseGetReportPortsParams) => {
   const gmp = useGmp();
 
@@ -29,6 +31,7 @@ export const useGetReportPorts = ({
     filter,
     enabled: Boolean(reportId),
     keepPreviousData: true,
+    refetchInterval,
   });
 };
 

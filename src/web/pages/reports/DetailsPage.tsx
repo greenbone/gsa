@@ -446,20 +446,6 @@ const ReportDetailsPage = () => {
     }
   }, [reportFilter, handleFilterChange]);
 
-  const handleSortChange = useCallback(
-    (name: string, sortField: string) => {
-      const prev = sorting[name as keyof SortingState];
-      const sortReverse =
-        sortField === prev.sortField ? !prev.sortReverse : false;
-
-      setSorting(prevSorting => ({
-        ...prevSorting,
-        [name]: {sortField, sortReverse},
-      }));
-    },
-    [sorting],
-  );
-
   const handleChanged = useCallback(() => {
     void queryClient.invalidateQueries({queryKey: ['get_report']});
   }, [queryClient]);
@@ -501,7 +487,6 @@ const ReportDetailsPage = () => {
             showError={showError as (...args: unknown[]) => void}
             showErrorMessage={showErrorMessage}
             showSuccessMessage={showSuccessMessage}
-            sorting={sorting}
             task={isDefined(report) ? report.task : undefined}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
@@ -514,7 +499,6 @@ const ReportDetailsPage = () => {
             onFilterResetClick={handleFilterResetClick}
             onRemoveFromAssetsClick={handleRemoveFromAssets}
             onReportDownloadClick={handleOpenDownloadReportDialog}
-            onSortChange={handleSortChange}
             onTagSuccess={handleChanged}
             onTargetEditClick={async () => {
               const response = await loadTarget();

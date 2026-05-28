@@ -10,7 +10,7 @@ import type Report from 'gmp/models/report';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
-import {TASK_STATUS} from 'gmp/models/task';
+import {isActive, TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
@@ -63,21 +63,6 @@ interface ThresholdConfig {
   onFilterEditClick: () => void;
 }
 
-interface SortingEntry {
-  sortField: string;
-  sortReverse: boolean;
-}
-
-interface SortingData {
-  apps: SortingEntry;
-  cves: SortingEntry;
-  errors: SortingEntry;
-  hosts: SortingEntry;
-  os: SortingEntry;
-  closedcves: SortingEntry;
-  tlscerts: SortingEntry;
-}
-
 interface TabDefinition {
   key: string;
   renderTab: () => React.ReactNode;
@@ -95,11 +80,10 @@ interface PageContentProps {
   reportFilter?: Filter;
   reportId: string;
   resetFilter?: Filter;
-  resultsCounts?: {filtered?: number; all?: number};
+  resultsCounts?: {filtered?: number; full?: number};
   showError: (...args: unknown[]) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
-  sorting: SortingData;
   task?: ReportTask;
   onAddToAssetsClick: () => void;
   onError: (error: Error) => void;
@@ -112,16 +96,9 @@ interface PageContentProps {
   onFilterResetClick: () => void;
   onRemoveFromAssetsClick: () => void;
   onReportDownloadClick: () => void;
-  onSortChange: (type: string, sortField: string) => void;
   onTagSuccess: () => void;
   onTargetEditClick: () => void;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
-}
-
-interface TabTitleHookProps {
-  reportId: string;
-  filter?: Filter;
-  title: string;
 }
 
 const renderWithThreshold = (
@@ -146,54 +123,6 @@ const renderWithThreshold = (
     );
   }
   return content;
-};
-
-const HostsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
-  const {data} = useGetReportHosts({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const PortsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
-  const {data} = useGetReportPorts({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const ApplicationsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
-  const {data} = useGetReportApplications({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const OperatingSystemsTabTitle = ({
-  reportId,
-  filter,
-  title,
-}: TabTitleHookProps) => {
-  const {data} = useGetReportOperatingSystems({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const CvesTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
-  const {data} = useGetReportCves({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const ClosedCvesTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
-  const {data} = useGetReportClosedCves({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const TlsCertificatesTabTitle = ({
-  reportId,
-  filter,
-  title,
-}: TabTitleHookProps) => {
-  const {data} = useGetReportTlsCertificates({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
-};
-
-const ErrorsTabTitle = ({reportId, filter, title}: TabTitleHookProps) => {
-  const {data} = useGetReportErrors({reportId, filter});
-  return <TabTitle counts={data?.entitiesCounts} title={title} />;
 };
 
 const Span = styled.span`
@@ -222,7 +151,7 @@ const PageContent = ({
   reportId,
   resetFilter,
   resultsCounts,
-   showError,
+  showError,
   showErrorMessage,
   showSuccessMessage,
   task,
@@ -238,7 +167,6 @@ const PageContent = ({
   onFilterResetClick,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
-  onSortChange,
   onTagSuccess,
   onTargetEditClick,
 }: PageContentProps) => {
@@ -257,6 +185,53 @@ const PageContent = ({
 
   const {timestamp, scan_run_status} = report ?? {};
 
+  const isImport = isDefined(task) && task.isImport();
+  const status = isImport
+    ? TASK_STATUS.import
+    : (scan_run_status ?? TASK_STATUS.unknown);
+  const refetchInterval = isActive(status) ? undefined : false;
+
+  const {data: hostsData} = useGetReportHosts({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: portsData} = useGetReportPorts({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: applicationsData} = useGetReportApplications({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: operatingSystemsData} = useGetReportOperatingSystems({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: cvesData} = useGetReportCves({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: closedCvesData} = useGetReportClosedCves({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: tlsCertificatesData} = useGetReportTlsCertificates({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {data: errorsData} = useGetReportErrors({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+
   if (!hasReport && isDefined(reportError)) {
     return (
       <ErrorPanel
@@ -271,10 +246,6 @@ const PageContent = ({
   const showThresholdMessage =
     !isLoading && hasReport && (resultsCounts?.filtered ?? 0) > threshold;
 
-  const isImport = isDefined(task) && task.isImport();
-  const status = isImport
-    ? TASK_STATUS.import
-    : (scan_run_status ?? TASK_STATUS.unknown);
   const progress = task?.progress ?? 0;
 
   const showIsLoading = isLoading && !hasReport;
@@ -370,11 +341,7 @@ const PageContent = ({
     {
       key: 'hosts',
       renderTab: () => (
-        <HostsTabTitle
-          filter={activeFilter}
-          reportId={reportId}
-          title={_('Hosts')}
-        />
+        <TabTitle counts={hostsData?.entitiesCounts} title={_('Hosts')} />
       ),
       renderPanel: () =>
         renderWithThreshold(
@@ -393,22 +360,21 @@ const PageContent = ({
     {
       key: 'ports',
       renderTab: () => (
-        <PortsTabTitle
-          filter={activeFilter}
-          reportId={reportId}
-          title={_('Ports')}
-        />
+        <TabTitle counts={portsData?.entitiesCounts} title={_('Ports')} />
       ),
       renderPanel: () => (
-        <PortsTab reportFilter={activeFilter} reportId={reportId} />
+        <PortsTab
+          reportFilter={activeFilter}
+          reportId={reportId}
+          status={status}
+        />
       ),
     },
     {
       key: 'applications',
       renderTab: () => (
-        <ApplicationsTabTitle
-          filter={activeFilter}
-          reportId={reportId}
+        <TabTitle
+          counts={applicationsData?.entitiesCounts}
           title={_('Applications')}
         />
       ),
@@ -427,9 +393,8 @@ const PageContent = ({
     {
       key: 'os',
       renderTab: () => (
-        <OperatingSystemsTabTitle
-          filter={activeFilter}
-          reportId={reportId}
+        <TabTitle
+          counts={operatingSystemsData?.entitiesCounts}
           title={_('Operating Systems')}
         />
       ),
@@ -448,11 +413,7 @@ const PageContent = ({
     {
       key: 'cves',
       renderTab: () => (
-        <CvesTabTitle
-          filter={activeFilter}
-          reportId={reportId}
-          title={_('CVEs')}
-        />
+        <TabTitle counts={cvesData?.entitiesCounts} title={_('CVEs')} />
       ),
       renderPanel: () =>
         renderWithThreshold(
@@ -465,9 +426,8 @@ const PageContent = ({
     {
       key: 'closedcves',
       renderTab: () => (
-        <ClosedCvesTabTitle
-          filter={activeFilter}
-          reportId={reportId}
+        <TabTitle
+          counts={closedCvesData?.entitiesCounts}
           title={_('Closed CVEs')}
         />
       ),
@@ -486,9 +446,8 @@ const PageContent = ({
     {
       key: 'tlscerts',
       renderTab: () => (
-        <TlsCertificatesTabTitle
-          filter={activeFilter}
-          reportId={reportId}
+        <TabTitle
+          counts={tlsCertificatesData?.entitiesCounts}
           title={_('TLS Certificates')}
         />
       ),
@@ -508,9 +467,8 @@ const PageContent = ({
     {
       key: 'errors',
       renderTab: () => (
-        <ErrorsTabTitle
-          filter={activeFilter}
-          reportId={reportId}
+        <TabTitle
+          counts={errorsData?.entitiesCounts}
           title={_('Error Messages')}
         />
       ),
