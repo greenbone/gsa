@@ -40,7 +40,7 @@ import YesNoRadio from 'web/components/form/YesNoRadio';
 import {ReportIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Row from 'web/components/layout/Row';
-import AlembaVfireMethodPart from 'web/pages/alerts/AlembavFireMethodPart';
+import AlembaVfireMethodPart from 'web/pages/alerts/dialog/AlembavFireMethodPart';
 import EmailMethodPart from 'web/pages/alerts/dialog/EmailMethodPart';
 import HttpMethodPart from 'web/pages/alerts/dialog/HttpMethodPart';
 import ScpMethodPart from 'web/pages/alerts/dialog/ScpMethodPart';
