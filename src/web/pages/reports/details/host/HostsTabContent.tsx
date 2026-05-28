@@ -5,14 +5,9 @@
 
 import {useState} from 'react';
 import type Filter from 'gmp/models/filter';
-import {isActive, type TaskStatus} from 'gmp/models/task';
+import type {TaskStatus} from 'gmp/models/task';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentScanningHostsTab from 'web/pages/reports/details/host/AgentScanningHostsTab';
 import ContainerScanningHostsTab from 'web/pages/reports/details/host/ContainerScanningHostsTab';
@@ -25,15 +20,20 @@ export interface HostsTabContentProps {
   isAgentScanning?: boolean;
   isContainerScanning: boolean;
   reportFilter: Filter;
+  hostsData?: any;
+  isHostsFetching?: boolean;
+  isHostsError?: boolean;
 }
 
 const HostsTabContent = ({
   audit = false,
   reportId,
-  status,
+  isHostsError,
   isAgentScanning,
   isContainerScanning,
   reportFilter,
+  hostsData,
+  isHostsFetching,
 }: HostsTabContentProps) => {
   const [_] = useTranslation();
   const [{sortField, sortReverse}, setSorting] = useState({
@@ -41,13 +41,10 @@ const HostsTabContent = ({
     sortReverse: true,
   });
 
-  const {data, isLoading, isFetching, isError, error} = useGetReportHosts({
-    reportId,
-    filter: reportFilter,
-    refetchInterval: isActive(status)
-      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : NO_RELOAD,
-  });
+  const data = hostsData;
+  const isFetching = isHostsFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = isHostsError ?? false;
 
   const handleSortChange = (newSortField: string) => {
     setSorting(prev => ({
@@ -63,7 +60,6 @@ const HostsTabContent = ({
   if (isError) {
     return (
       <ErrorPanel
-        error={error}
         message={_('Error while loading Hosts for Report {{reportId}}', {
           reportId,
         })}

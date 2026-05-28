@@ -5,7 +5,7 @@
 
 import CollectionCounts from 'gmp/collection/collection-counts';
 import AuditReport from 'gmp/models/audit-report';
-import {COMPLIANCE} from 'gmp/models/compliance';
+import { COMPLIANCE } from 'gmp/models/compliance';
 import Filter from 'gmp/models/filter';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import {
@@ -18,8 +18,8 @@ import {
   type default as ReportReport,
   type ReportReportTaskElement,
 } from 'gmp/models/report/report';
-import {type ReportTLSCertificateElement} from 'gmp/models/report/tls-certificate';
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import { type ReportTLSCertificateElement } from 'gmp/models/report/tls-certificate';
+import { NO_VALUE, YES_VALUE } from 'gmp/parser';
 
 // Task
 const task1: ReportReportTaskElement = {
@@ -393,7 +393,7 @@ export const getMockAuditReport = () => {
     entity,
     report: entity.report as ReportReport,
     errors: errorsCollection,
-    hosts: undefined,
+    hosts: undefined as any,
     operatingsystems: operatingsystemsCollection,
     task: entity.report?.task,
   };

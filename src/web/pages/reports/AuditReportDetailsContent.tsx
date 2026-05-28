@@ -161,22 +161,24 @@ const AuditReportDetailsContent = ({
     : ((scan_run_status as TaskStatus) ?? TASK_STATUS.unknown);
   const refetchInterval = isActive(status) ? undefined : false;
 
-  const {data: hostsData} = useGetReportHosts({
+  const {data: hostsData, isError: isHostsError} = useGetReportHosts({
     reportId,
     filter: reportFilter,
     refetchInterval,
   });
-  const {data: operatingSystemsData} = useGetReportOperatingSystems({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {data: tlsCertificatesData} = useGetReportTlsCertificates({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {data: errorsData} = useGetReportErrors({
+  const {data: operatingSystemsData, isError: isOperatingSystemsError} =
+    useGetReportOperatingSystems({
+      reportId,
+      filter: reportFilter,
+      refetchInterval,
+    });
+  const {data: tlsCertificatesData, isError: isTlsCertificatesError} =
+    useGetReportTlsCertificates({
+      reportId,
+      filter: reportFilter,
+      refetchInterval,
+    });
+  const {data: errorsData, isError: isErrorsError} = useGetReportErrors({
     reportId,
     filter: reportFilter,
     refetchInterval,
@@ -277,6 +279,7 @@ const AuditReportDetailsContent = ({
         <HostsTabContent
           audit={true}
           isContainerScanning={false}
+          isHostsError={isHostsError}
           reportFilter={effectiveReportFilter}
           reportId={reportId}
           status={status}
@@ -297,8 +300,8 @@ const AuditReportDetailsContent = ({
         <OperatingSystemsTab
           audit={true}
           filter={effectiveReportFilter}
+          isOperatingSystemsError={isOperatingSystemsError}
           reportId={reportId}
-          status={status}
         />,
       ),
     },
@@ -314,6 +317,7 @@ const AuditReportDetailsContent = ({
         _('TLS Certificates'),
         thresholdConfig,
         <TLSCertificatesTab
+          isTlsCertificatesError={isTlsCertificatesError}
           reportFilter={effectiveReportFilter}
           reportId={reportId}
           status={status}
@@ -332,8 +336,8 @@ const AuditReportDetailsContent = ({
       panel: (
         <ErrorsTab
           filter={effectiveReportFilter}
+          isErrorsError={isErrorsError}
           reportId={reportId}
-          status={status}
         />
       ),
     },

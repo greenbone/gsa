@@ -6,14 +6,8 @@
 import {useEffect, useMemo, useState} from 'react';
 import Filter from 'gmp/models/filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
-import {isActive, type TaskStatus} from 'gmp/models/task';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
@@ -25,6 +19,15 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
+interface TLSCertificatesTabProps {
+  reportId: string;
+  reportFilter: Filter;
+  onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
+  tlsCertificatesData?: any;
+  isTlsCertificatesFetching?: boolean;
+  isTlsCertificatesError?: boolean;
+}
+
 export const tlsCertificatesSortFunctions = {
   dn: makeCompareString('subjectDn'),
   serial: makeCompareString('serial'),
@@ -35,20 +38,16 @@ export const tlsCertificatesSortFunctions = {
   port: makeComparePort('port'),
 };
 
-interface TLSCertificatesTabProps {
-  reportId: string;
-  reportFilter: Filter;
-  status: TaskStatus;
-  onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
-}
-
 const TLSCertificatesTab = ({
   reportId,
   reportFilter,
-  status,
+  isTlsCertificatesError,
   onTlsCertificateDownloadClick,
+  tlsCertificatesData,
+  isTlsCertificatesFetching,
 }: TLSCertificatesTabProps) => {
   const [_] = useTranslation();
+
   const reportFilterString = reportFilter.toFilterString();
 
   const baseFilter = useMemo(() => {
@@ -66,15 +65,10 @@ const TLSCertificatesTab = ({
     setTlsCertificatesFilter(baseFilter);
   }, [baseFilter]);
 
-  const {data, isLoading, isFetching, isError, error} =
-    useGetReportTlsCertificates({
-      reportId,
-      filter: tlsCertificatesFilter,
-      refetchInterval: isActive(status)
-        ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-        : NO_RELOAD,
-    });
-
+  const data = tlsCertificatesData;
+  const isFetching = isTlsCertificatesFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = isTlsCertificatesError ?? false;
   const updateFilter = (newFilter: Filter) => {
     setTlsCertificatesFilter(newFilter);
   };
@@ -84,10 +78,13 @@ const TLSCertificatesTab = ({
     updateFilter,
   );
 
+  if (isLoading && !data) {
+    return <Loading />;
+  }
+
   if (isError) {
     return (
       <ErrorPanel
-        error={error}
         message={_(
           'Error while loading TLS Certificates for Report {{reportId}}',
           {
@@ -96,10 +93,6 @@ const TLSCertificatesTab = ({
         )}
       />
     );
-  }
-
-  if (isLoading && !data) {
-    return <Loading />;
   }
 
   const {
@@ -127,7 +120,6 @@ const TLSCertificatesTab = ({
         onPreviousClick,
       }) => (
         <TLSCertificatesTable
-          // @ts-expect-error entities are ReportTLSCertificate[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={tlsCertificatesFilter}

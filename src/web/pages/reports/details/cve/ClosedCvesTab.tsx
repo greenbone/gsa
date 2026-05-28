@@ -6,28 +6,24 @@
 import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
-import {isActive, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportClosedCves from 'web/hooks/use-query/report-closed-cves';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import ClosedCvesTable from 'web/pages/reports/details/cve/ClosedCvesTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {
   makeCompareIp,
-  makeCompareString,
   makeCompareSeverity,
+  makeCompareString,
 } from 'web/utils/Sort';
 
 interface ClosedCvesTabProps {
   filter?: Filter;
   reportId: string;
-  status: TaskStatus;
+  closedCvesData?: any;
+  isClosedCvesFetching?: boolean;
+  isClosedCvesError?: boolean;
 }
 
 export const closedCvesSortFunctions = {
@@ -40,7 +36,9 @@ export const closedCvesSortFunctions = {
 const ClosedCvesTabWrapper = ({
   filter,
   reportId,
-  status,
+  isClosedCvesError,
+  closedCvesData,
+  isClosedCvesFetching,
 }: ClosedCvesTabProps) => {
   const [_] = useTranslation();
 
@@ -54,14 +52,10 @@ const ClosedCvesTabWrapper = ({
     setClosedCvesFilter(baseFilter);
   }, [baseFilter]);
 
-  const {data, isLoading, isFetching, isError, error} = useGetReportClosedCves({
-    reportId,
-    filter: closedCvesFilter,
-    refetchInterval: isActive(status)
-      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : NO_RELOAD,
-  });
-
+  const data = closedCvesData;
+  const isFetching = isClosedCvesFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = isClosedCvesError ?? false;
   const updateFilter = (newFilter: Filter) => {
     setClosedCvesFilter(newFilter);
   };
@@ -71,17 +65,6 @@ const ClosedCvesTabWrapper = ({
     updateFilter,
   );
 
-  if (isError) {
-    return (
-      <ErrorPanel
-        error={error}
-        message={_('Error while loading Closed CVEs for Report {{reportId}}', {
-          reportId,
-        })}
-      />
-    );
-  }
-
   const {entities: closedCves = [], entitiesCounts: closedCvesCounts} =
     data || {};
 
@@ -89,6 +72,16 @@ const ClosedCvesTabWrapper = ({
 
   if (isLoading && !data) {
     return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorPanel
+        message={_('Error while loading Closed CVEs for Report {{reportId}}', {
+          reportId,
+        })}
+      />
+    );
   }
 
   return (
@@ -111,7 +104,6 @@ const ClosedCvesTabWrapper = ({
         onPreviousClick,
       }) => (
         <ClosedCvesTable
-          // @ts-expect-error entities are ReportClosedCve[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={displayedFilter}

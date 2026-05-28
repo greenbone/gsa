@@ -9,9 +9,9 @@ import Filter from 'gmp/models/filter';
 import Report from 'gmp/models/report';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import {
-  type ReportResultElement,
-  type ReportHostElement,
   type PortElement,
+  type ReportHostElement,
+  type ReportResultElement,
   parseErrors,
 } from 'gmp/models/report/parser';
 import type ReportReport from 'gmp/models/report/report';
@@ -349,13 +349,13 @@ export const getMockReport = () => {
   return {
     entity,
     report: entity.report as ReportReport,
-    results: undefined as unknown,
-    hosts: undefined as unknown,
-    ports: undefined as unknown,
-    applications: undefined as unknown,
+    results: undefined as any,
+    hosts: undefined as any,
+    ports: undefined as any,
+    applications: undefined as any,
     operatingsystems: operatingsystemsCollection,
-    cves: undefined as unknown,
-    closedCves: undefined as unknown,
+    cves: undefined as any,
+    closedCves: undefined as any,
     tlsCertificates: tlsCertificatesCollection,
     errors: errorsCollection,
     task: entity.report?.task,

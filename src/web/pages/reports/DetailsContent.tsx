@@ -19,6 +19,10 @@ import {ReportIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/Reload';
 import SectionHeader from 'web/components/section/Header';
 import Section from 'web/components/section/Section';
 import Tab from 'web/components/tab/Tab';
@@ -189,48 +193,78 @@ const PageContent = ({
   const status = isImport
     ? TASK_STATUS.import
     : (scan_run_status ?? TASK_STATUS.unknown);
-  const refetchInterval = isActive(status) ? undefined : false;
+  const refetchInterval = isActive(status)
+    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : NO_RELOAD;
 
-  const {data: hostsData, isFetching: isHostsFetching} = useGetReportHosts({
+  const {
+    data: hostsData,
+    isFetching: isHostsFetching,
+    isError: isHostsError,
+  } = useGetReportHosts({
     reportId,
     filter: reportFilter,
     refetchInterval,
   });
-  const {data: portsData, isFetching: isPortsFetching} = useGetReportPorts({
+  const {
+    data: portsData,
+    isFetching: isPortsFetching,
+    isError: isPortsError,
+  } = useGetReportPorts({
     reportId,
     filter: reportFilter,
     refetchInterval,
   });
-  const {data: applicationsData, isFetching: isApplicationsFetching} =
-    useGetReportApplications({
-      reportId,
-      filter: reportFilter,
-      refetchInterval,
-    });
-  const {data: operatingSystemsData, isFetching: isOperatingSystemsFetching} =
-    useGetReportOperatingSystems({
-      reportId,
-      filter: reportFilter,
-      refetchInterval,
-    });
-  const {data: cvesData, isFetching: isCvesFetching} = useGetReportCves({
+  const {
+    data: applicationsData,
+    isFetching: isApplicationsFetching,
+    isError: isApplicationsError,
+  } = useGetReportApplications({
     reportId,
     filter: reportFilter,
     refetchInterval,
   });
-  const {data: closedCvesData, isFetching: isClosedCvesFetching} =
-    useGetReportClosedCves({
-      reportId,
-      filter: reportFilter,
-      refetchInterval,
-    });
-  const {data: tlsCertificatesData, isFetching: isTlsCertificatesFetching} =
-    useGetReportTlsCertificates({
-      reportId,
-      filter: reportFilter,
-      refetchInterval,
-    });
-  const {data: errorsData, isFetching: isErrorsFetching} = useGetReportErrors({
+  const {
+    data: operatingSystemsData,
+    isFetching: isOperatingSystemsFetching,
+    isError: isOperatingSystemsError,
+  } = useGetReportOperatingSystems({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {
+    data: cvesData,
+    isFetching: isCvesFetching,
+    isError: isCvesError,
+  } = useGetReportCves({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {
+    data: closedCvesData,
+    isFetching: isClosedCvesFetching,
+    isError: isClosedCvesError,
+  } = useGetReportClosedCves({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {
+    data: tlsCertificatesData,
+    isFetching: isTlsCertificatesFetching,
+    isError: isTlsCertificatesError,
+  } = useGetReportTlsCertificates({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
+  const {
+    data: errorsData,
+    isFetching: isErrorsFetching,
+    isError: isErrorsError,
+  } = useGetReportErrors({
     reportId,
     filter: reportFilter,
     refetchInterval,
@@ -358,8 +392,11 @@ const PageContent = ({
           activeFilter,
           thresholdConfig,
           <HostsTabContent
+            hostsData={hostsData}
             isAgentScanning={isAgentScanning}
             isContainerScanning={isContainerScanning}
+            isHostsError={isHostsError}
+            isHostsFetching={isHostsFetching}
             reportFilter={activeFilter}
             reportId={reportId}
             status={status}
@@ -377,9 +414,11 @@ const PageContent = ({
       ),
       renderPanel: () => (
         <PortsTab
+          isPortsError={isPortsError}
+          isPortsFetching={isPortsFetching}
+          portsData={portsData}
           reportFilter={activeFilter}
           reportId={reportId}
-          status={status}
         />
       ),
     },
@@ -398,9 +437,11 @@ const PageContent = ({
           activeFilter,
           thresholdConfig,
           <ApplicationsTab
+            applicationsData={applicationsData}
             filter={activeFilter}
+            isApplicationsError={isApplicationsError}
+            isApplicationsFetching={isApplicationsFetching}
             reportId={reportId}
-            status={status}
           />,
         ),
     },
@@ -420,10 +461,10 @@ const PageContent = ({
           thresholdConfig,
           <OperatingSystemsTab
             filter={activeFilter}
-            reportId={reportId}
-            status={status}
-            operatingSystemsData={operatingSystemsData}
+            isOperatingSystemsError={isOperatingSystemsError}
             isOperatingSystemsFetching={isOperatingSystemsFetching}
+            operatingSystemsData={operatingSystemsData}
+            reportId={reportId}
           />,
         ),
     },
@@ -441,7 +482,14 @@ const PageContent = ({
           _('CVEs'),
           activeFilter,
           thresholdConfig,
-          <CvesTab filter={activeFilter} reportId={reportId} status={status} />,
+          <CvesTab
+            cvesData={cvesData}
+            filter={activeFilter}
+            isCvesError={isCvesError}
+            isCvesFetching={isCvesFetching}
+            reportId={reportId}
+            status={status}
+          />,
         ),
     },
     {
@@ -459,9 +507,11 @@ const PageContent = ({
           activeFilter,
           thresholdConfig,
           <ClosedCvesTab
+            closedCvesData={closedCvesData}
             filter={activeFilter}
+            isClosedCvesError={isClosedCvesError}
+            isClosedCvesFetching={isClosedCvesFetching}
             reportId={reportId}
-            status={status}
           />,
         ),
     },
@@ -480,9 +530,11 @@ const PageContent = ({
           activeFilter,
           thresholdConfig,
           <TLSCertificatesTab
+            isTlsCertificatesError={isTlsCertificatesError}
+            isTlsCertificatesFetching={isTlsCertificatesFetching}
             reportFilter={activeFilter}
             reportId={reportId}
-            status={status}
+            tlsCertificatesData={tlsCertificatesData}
             onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
           />,
         ),
@@ -497,7 +549,13 @@ const PageContent = ({
         />
       ),
       renderPanel: () => (
-        <ErrorsTab filter={activeFilter} reportId={reportId} status={status} />
+        <ErrorsTab
+          errorsData={errorsData}
+          filter={activeFilter}
+          isErrorsError={isErrorsError}
+          isErrorsFetching={isErrorsFetching}
+          reportId={reportId}
+        />
       ),
     },
     {
