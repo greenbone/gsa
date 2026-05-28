@@ -82,21 +82,21 @@ const AgentTableFooter = ({
         handler,
       },
       enableUpdateToLatest: {
-        title: _('Confirm enable update to latest'),
+        title: _('Confirm enable automatic update to latest'),
         content: _(
-          'Are you sure you want to enable update to latest for all selected agents?',
+          'Are you sure you want to enable automatic update to latest for all selected agents?',
         ),
-        buttonTitle: _('Enable Update to Latest'),
-        infoText: _('Enabling update to latest'),
+        buttonTitle: _('Enable automatic Update to Latest'),
+        infoText: _('Enabling automatic update to latest'),
         handler,
       },
       disableUpdateToLatest: {
-        title: _('Confirm disable update to latest'),
+        title: _('Confirm disable automatic update to latest'),
         content: _(
-          'Are you sure you want to disable update to latest for all selected agents?',
+          'Are you sure you want to disable automatic update to latest for all selected agents?',
         ),
-        buttonTitle: _('Disable Update to Latest'),
-        infoText: _('Disabling update to latest'),
+        buttonTitle: _('Disable automatic Update to Latest'),
+        infoText: _('Disabling automatic update to latest'),
         handler,
       },
     };

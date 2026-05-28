@@ -200,7 +200,7 @@ describe('AgentTable tests', () => {
 
     fireEvent.click(
       screen.getByRole('button', {
-        name: 'Enable Update to Latest',
+        name: 'Enable automatic Update to Latest',
       }),
     );
 
@@ -230,7 +230,7 @@ describe('AgentTable tests', () => {
 
     fireEvent.click(
       screen.getByRole('button', {
-        name: 'Disable Update to Latest',
+        name: 'Disable automatic Update to Latest',
       }),
     );
 

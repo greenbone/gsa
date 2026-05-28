@@ -143,13 +143,13 @@ describe('AgentTableFooter tests', () => {
     expect(screen.getDialogTitle()).toBeVisible();
     expect(
       screen.getByText(
-        /Are you sure you want to enable update to latest for all selected agents\?/,
+        /Are you sure you want to enable automatic update to latest for all selected agents\?/,
       ),
     ).toBeVisible();
 
     fireEvent.click(
       screen.getByRole('button', {
-        name: 'Enable Update to Latest',
+        name: 'Enable automatic Update to Latest',
       }),
     );
 
@@ -176,13 +176,13 @@ describe('AgentTableFooter tests', () => {
     expect(screen.getDialogTitle()).toBeVisible();
     expect(
       screen.getByText(
-        /Are you sure you want to disable update to latest for all selected agents\?/,
+        /Are you sure you want to disable automatic update to latest for all selected agents\?/,
       ),
     ).toBeVisible();
 
     fireEvent.click(
       screen.getByRole('button', {
-        name: 'Disable Update to Latest',
+        name: 'Disable automatic Update to Latest',
       }),
     );
 
