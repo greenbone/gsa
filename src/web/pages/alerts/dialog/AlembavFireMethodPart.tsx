@@ -3,8 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
+import {
+  type default as Credential,
+  type CredentialType,
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+} from 'gmp/models/credential';
+import type ReportFormat from 'gmp/models/report-format';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Radio from 'web/components/form/Radio';
@@ -14,14 +18,37 @@ import TextField from 'web/components/form/TextField';
 import {NewIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
 import {VFIRE_CALL_DESCRIPTION} from 'web/pages/alerts/Dialog';
-import PropTypes from 'web/utils/PropTypes';
-import {renderSelectItems} from 'web/utils/Render';
-import withPrefix from 'web/utils/withPrefix';
-const VFIRE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
+import addPrefix from 'web/utils/add-prefix';
+import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
-const AlembaVfireMethodPart = ({
-  credentials,
-  prefix,
+interface AlembavFireMethodPartProps {
+  prefix?: string;
+  credentials?: Credential[];
+  reportFormats?: ReportFormat[];
+  reportFormatIds?: string[];
+  vFireBaseUrl?: string;
+  vFireCallDescription?: string;
+  vFireCallImpactName?: string;
+  vFireCallPartitionName?: string;
+  vFireCallTemplateName?: string;
+  vFireCallTypeName?: string;
+  vFireCallUrgencyName?: string;
+  vFireClientId?: string;
+  vFireCredential?: string;
+  vFireSessionType?: string;
+  onChange: (value: string | undefined, name?: string) => void;
+  onCredentialChange: (value: string, name?: string) => void;
+  onNewVfireCredentialClick: (credentialTypes: CredentialType[]) => void;
+  onReportFormatsChange: (value: string[], name?: string) => void;
+}
+
+const VFIRE_CREDENTIAL_TYPES = [
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+] as CredentialType[];
+
+const AlembavFireMethodPart = ({
+  credentials = [],
+  prefix: initialPrefix,
   reportFormats = [],
   reportFormatIds = [],
   vFireBaseUrl,
@@ -38,36 +65,44 @@ const AlembaVfireMethodPart = ({
   onCredentialChange,
   onNewVfireCredentialClick,
   onReportFormatsChange,
-}) => {
-  credentials = credentials.filter(
-    cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
-  );
+}: AlembavFireMethodPartProps) => {
   const [_] = useTranslation();
+  const prefix = addPrefix(initialPrefix);
+  credentials = credentials.filter(
+    cred => cred.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  );
   return (
     <>
-      <FormGroup title={_('Report Formats')}>
+      <FormGroup>
         <MultiSelect
-          items={renderSelectItems(reportFormats)}
+          items={renderSelectItems(reportFormats as RenderSelectItemProps[])}
+          label={_('Report Formats')}
           name={'report_format_ids'}
           value={reportFormatIds}
           onChange={onReportFormatsChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('Base URL')}>
+      <FormGroup>
         <TextField
           grow="1"
-          name={prefix + 'vfire_base_url'}
+          name={prefix('vfire_base_url')}
+          title={_('Base URL')}
           value={vFireBaseUrl}
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup direction="row" title={_('Credential')}>
+      <FormGroup
+        direction="row"
+        htmlFor="vfire-credential"
+        title={_('Credential')}
+      >
         <Select
           grow="1"
-          items={renderSelectItems(credentials)}
-          name={prefix + 'vfire_credential'}
+          id="vfire-credential"
+          items={renderSelectItems(credentials as RenderSelectItemProps[])}
+          name={prefix('vfire_credential')}
           value={vFireCredential}
           onChange={onCredentialChange}
         />
@@ -82,79 +117,86 @@ const AlembaVfireMethodPart = ({
       <FormGroup direction="row" title={_('Session Type')}>
         <Radio
           checked={vFireSessionType === 'Analyst'}
-          name={prefix + 'vfire_session_type'}
+          name={prefix('vfire_session_type')}
           title={_('Analyst')}
           value="Analyst"
           onChange={onChange}
         />
         <Radio
           checked={vFireSessionType === 'User'}
-          name={prefix + 'vfire_session_type'}
+          name={prefix('vfire_session_type')}
           title={_('User')}
           value="User"
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('Alemba Client ID')}>
+      <FormGroup>
         <TextField
           grow="1"
-          name={prefix + 'vfire_client_id'}
+          name={prefix('vfire_client_id')}
+          title={_('Alemba Client ID')}
           value={vFireClientId}
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('Partition')}>
+      <FormGroup>
         <TextField
           grow="1"
-          name={prefix + 'vfire_call_partition_name'}
+          name={prefix('vfire_call_partition_name')}
+          title={_('Partition')}
           value={vFireCallPartitionName}
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('Call Description')}>
+      <FormGroup>
         <TextArea
           grow="1"
-          name={prefix + 'vfire_call_description'}
+          name={prefix('vfire_call_description')}
           rows="9"
+          title={_('Call Description')}
           value={vFireCallDescription}
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('Call Template')}>
+      <FormGroup>
         <TextField
           grow="1"
-          name={prefix + 'vfire_call_template_name'}
+          name={prefix('vfire_call_template_name')}
+          title={_('Call Template')}
           value={vFireCallTemplateName}
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('Call Type')}>
+      <FormGroup>
         <TextField
           grow="1"
-          name={prefix + 'vfire_call_type_name'}
+          name={prefix('vfire_call_type_name')}
+          title={_('Call Type')}
           value={vFireCallTypeName}
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('Impact')}>
+      <FormGroup>
         <TextField
           grow="1"
-          name={prefix + 'vfire_call_impact_name'}
+          name={prefix('vfire_call_impact_name')}
+          title={_('Impact')}
           value={vFireCallImpactName}
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('Urgency')}>
+      <FormGroup>
         <TextField
           grow="1"
-          name={prefix + 'vfire_call_urgency_name'}
+          name={prefix('vfire_call_urgency_name')}
+          title={_('Urgency')}
           value={vFireCallUrgencyName}
           onChange={onChange}
         />
@@ -163,25 +205,4 @@ const AlembaVfireMethodPart = ({
   );
 };
 
-AlembaVfireMethodPart.propTypes = {
-  credentials: PropTypes.array,
-  prefix: PropTypes.string,
-  reportFormatIds: PropTypes.array,
-  reportFormats: PropTypes.array,
-  vFireBaseUrl: PropTypes.string,
-  vFireCallDescription: PropTypes.string,
-  vFireCallImpactName: PropTypes.string,
-  vFireCallPartitionName: PropTypes.string,
-  vFireCallTemplateName: PropTypes.string,
-  vFireCallTypeName: PropTypes.string,
-  vFireCallUrgencyName: PropTypes.string,
-  vFireClientId: PropTypes.string,
-  vFireCredential: PropTypes.string,
-  vFireSessionType: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  onCredentialChange: PropTypes.func.isRequired,
-  onNewVfireCredentialClick: PropTypes.func.isRequired,
-  onReportFormatsChange: PropTypes.func.isRequired,
-};
-
-export default withPrefix(AlembaVfireMethodPart);
+export default AlembavFireMethodPart;
