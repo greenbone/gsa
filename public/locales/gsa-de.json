@@ -480,7 +480,7 @@
   "Confirm deletion of user {{- name}}": "Löschen von Benutzer {{- name}} bestätigen",
   "Confirm deletion of users": "Löschen von Benutzern bestätigen",
   "Confirm disable automatic update to latest": "Deaktivierung der automatischen Aktualisierung auf die neueste Version bestätigen",
-  "Confirm enable automatic update to latest": "Löschung der automatischen Aktualisierung auf die neueste Version bestätigen",
+  "Confirm enable automatic update to latest": "Aktivierung der automatischen Aktualisierung auf die neueste Version bestätigen",
   "Confirm move to trashcan": "Verschieben in den Papierkorb bestätigen",
   "Confirm revocation": "Widerruf bestätigen",
   "Confirmation does not match new password!": "Bestätigung entspricht nicht dem neuen Passwort!",
