@@ -78,7 +78,8 @@ const AgentGroupsDialog = ({
 
   const allAgentsFilter = Filter.fromString('first=1 rows=-1');
   const {data: agentsData, isLoading: isLoadingAgents} = useGetAgents({
-    filter: selectedAgentController ? allAgentsFilter : undefined,
+    filter: allAgentsFilter,
+    scannerId: selectedAgentController,
     enabled: Boolean(selectedAgentController),
     authorized: true,
   });
