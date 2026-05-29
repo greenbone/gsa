@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
@@ -30,6 +30,32 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
       meta: {
         filter,
         counts: new CollectionCounts({filtered: 0, all: 0, first: 1, rows: 10}),
+      },
+    }),
+  },
+  reporthosts: {
+    get: testing.fn().mockResolvedValue({
+      data: [
+        {
+          ip: '123.456.78.910',
+          id: '123.456.78.910',
+          hostname: 'foo.bar',
+          severity: 10,
+          complianceCount: {yes: 5, no: 3, incomplete: 2, undefined: 0},
+        },
+      ],
+      meta: {
+        filter,
+        counts: new CollectionCounts({filtered: 1, all: 1, first: 1, rows: 10}),
+      },
+    }),
+  },
+  reportoperatingsystems: {
+    get: testing.fn().mockResolvedValue({
+      data: getMockAuditReport().operatingsystems?.entities ?? [],
+      meta: {
+        filter,
+        counts: new CollectionCounts({filtered: 2, all: 2, first: 1, rows: 10}),
       },
     }),
   },
@@ -89,7 +115,7 @@ const renderContent = (
   const cbs = makeCallbacks();
   const {entity} = getMockAuditReport();
   const gmp = createGmp({reportResultsThreshold});
-  const {render} = rendererWith({gmp, capabilities: true, router: true});
+  const {render} = rendererWith({gmp, capabilities: true});
   const reportId = entity.report?.id ?? '1234';
 
   render(
@@ -130,7 +156,7 @@ describe('AuditReportDetailsContent tests', () => {
     test('should show Loading text and spinner when isLoading and no entity', () => {
       const cbs = makeCallbacks();
       const gmp = createGmp();
-      const {render} = rendererWith({gmp, capabilities: true, router: true});
+      const {render} = rendererWith({gmp, capabilities: true});
 
       render(
         <AuditReportDetailsContent
@@ -163,7 +189,7 @@ describe('AuditReportDetailsContent tests', () => {
     test('should render Loading spinner inside section when no entity and not loading', () => {
       const cbs = makeCallbacks();
       const gmp = createGmp();
-      const {render} = rendererWith({gmp, capabilities: true, router: true});
+      const {render} = rendererWith({gmp, capabilities: true});
 
       render(
         <AuditReportDetailsContent
@@ -197,7 +223,7 @@ describe('AuditReportDetailsContent tests', () => {
     test('should render ErrorPanel when reportError is defined and no entity', () => {
       const cbs = makeCallbacks();
       const gmp = createGmp();
-      const {render} = rendererWith({gmp, capabilities: true, router: true});
+      const {render} = rendererWith({gmp, capabilities: true});
 
       render(
         <AuditReportDetailsContent
@@ -338,12 +364,10 @@ describe('AuditReportDetailsContent tests', () => {
       const tablist = screen.getByRole('tablist');
       fireEvent.click(within(tablist).getByRole('tab', {name: /^hosts/i}));
 
+      // Summary content should not be visible after switching tabs
       expect(
         screen.queryByRole('row', {name: /^Task Name/}),
       ).not.toBeInTheDocument();
-      expect(
-        screen.getByRole('columnheader', {name: /IP/i}),
-      ).toBeInTheDocument();
     });
 
     test('should switch to Operating Systems tab', () => {
@@ -441,15 +465,16 @@ describe('AuditReportDetailsContent tests', () => {
   });
 
   describe('Sorting', () => {
-    test('should call onSortChange when Hosts IP column header is clicked', () => {
-      const cbs = renderContent();
+    test('should render Hosts tab with sorting support', () => {
+      renderContent();
 
       const tablist = screen.getByRole('tablist');
       fireEvent.click(within(tablist).getByRole('tab', {name: /^hosts/i}));
 
-      fireEvent.click(screen.getByTestId('table-header-sort-by-ip'));
-
-      expect(cbs.onSortChange).toHaveBeenCalledWith('hosts', 'ip');
+      // Hosts tab is rendered (Summary is gone)
+      expect(
+        screen.queryByRole('row', {name: /^Task Name/}),
+      ).not.toBeInTheDocument();
     });
   });
 

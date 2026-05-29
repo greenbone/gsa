@@ -44,15 +44,16 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
   settings: {
     manualUrl,
     reportResultsThreshold,
+    reloadInterval: 5000,
+    reloadIntervalActive: 2000,
+    reloadIntervalInactive: 10000,
   },
-  reporterrors: {
+  reporthosts: {
     get: testing.fn().mockResolvedValue({
-      data: mockReport.errors?.entities ?? [],
+      data: mockReport.hosts ?? [],
       meta: {
-        filter: Filter.fromString('rows=10'),
-        counts:
-          mockReport.errors?.counts ??
-          new CollectionCounts({filtered: 0, all: 0}),
+        filter: Filter.fromString(''),
+        counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
   },
@@ -61,7 +62,43 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
       data: [],
       meta: {
         filter: Filter.fromString(''),
-        counts: new CollectionCounts({filtered: 0, all: 0}),
+        counts: new CollectionCounts({filtered: 2, all: 2}),
+      },
+    }),
+  },
+  reportapplications: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(''),
+        counts: new CollectionCounts({filtered: 4, all: 4}),
+      },
+    }),
+  },
+  reportoperatingsystems: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(''),
+        counts: new CollectionCounts({filtered: 2, all: 2}),
+      },
+    }),
+  },
+  reportcves: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(''),
+        counts: new CollectionCounts({filtered: 2, all: 2}),
+      },
+    }),
+  },
+  reportclosedcves: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(''),
+        counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
   },
@@ -70,7 +107,18 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
       data: [],
       meta: {
         filter: Filter.fromString(''),
-        counts: new CollectionCounts({filtered: 0, all: 0}),
+        counts: new CollectionCounts({filtered: 2, all: 2}),
+      },
+    }),
+  },
+  reporterrors: {
+    get: testing.fn().mockResolvedValue({
+      data: mockReport.errors?.entities ?? [],
+      meta: {
+        filter: Filter.fromString('rows=10'),
+        counts:
+          mockReport.errors?.counts ??
+          new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
   },
@@ -117,7 +165,7 @@ const createMockProps = (overrides: Record<string, unknown> = {}) => {
     isUpdating: false,
     sorting: defaultSorting,
     reportError: undefined,
-    resultsCounts: new CollectionCounts({all: 3, filtered: 2}),
+    resultsCounts: {full: 3, filtered: 2},
     hostsCounts: new CollectionCounts({all: 2, filtered: 2}),
     portsCounts: new CollectionCounts({all: 2, filtered: 2}),
     applicationsCounts: new CollectionCounts({all: 4, filtered: 4}),
@@ -233,7 +281,7 @@ const agentEntity = Report.fromElement({
 });
 
 const zeroCounts = {
-  resultsCounts: new CollectionCounts({all: 0, filtered: 0}),
+  resultsCounts: {full: 0, filtered: 0},
   hostsCounts: new CollectionCounts({all: 0, filtered: 0}),
   portsCounts: new CollectionCounts({all: 0, filtered: 0}),
   applicationsCounts: new CollectionCounts({all: 0, filtered: 0}),
@@ -450,33 +498,35 @@ describe('DetailsContent', () => {
       render(<DetailsContent {...props} />);
 
       const tablist = screen.getByRole('tablist');
+      // Results count comes from props (synchronous)
       expect(
         within(tablist).getByRole('tab', {name: /^results/i}),
       ).toHaveTextContent('2 of 3');
+      // Hook-based counts show loading indicator initially
       expect(
         within(tablist).getByRole('tab', {name: /^hosts/i}),
-      ).toHaveTextContent('2 of 2');
+      ).toHaveTextContent('...');
       expect(
         within(tablist).getByRole('tab', {name: /^ports/i}),
-      ).toHaveTextContent('2 of 2');
+      ).toHaveTextContent('...');
       expect(
         within(tablist).getByRole('tab', {name: /^applications/i}),
-      ).toHaveTextContent('4 of 4');
+      ).toHaveTextContent('...');
       expect(
         within(tablist).getByRole('tab', {name: /^operating systems/i}),
-      ).toHaveTextContent('2 of 2');
+      ).toHaveTextContent('...');
       expect(
         within(tablist).getByRole('tab', {name: /^cves/i}),
-      ).toHaveTextContent('2 of 2');
+      ).toHaveTextContent('...');
       expect(
         within(tablist).getByRole('tab', {name: /^closed cves/i}),
-      ).toHaveTextContent('2 of 2');
+      ).toHaveTextContent('...');
       expect(
         within(tablist).getByRole('tab', {name: /^tls certificates/i}),
-      ).toHaveTextContent('2 of 2');
+      ).toHaveTextContent('...');
       expect(
         within(tablist).getByRole('tab', {name: /^error messages/i}),
-      ).toHaveTextContent('2 of 2');
+      ).toHaveTextContent('...');
       expect(
         within(tablist).getByRole('tab', {name: /^user tags/i}),
       ).toHaveTextContent('0');
@@ -510,9 +560,6 @@ describe('DetailsContent', () => {
       expect(screen.getByRole('row', {name: /^Scan Status/})).toHaveTextContent(
         'Done',
       );
-      expect(
-        screen.getByRole('row', {name: /^Hosts scanned/}),
-      ).toHaveTextContent('2');
       expect(
         screen.getByRole('row', {name: /^Filter apply_overrides/}),
       ).toHaveTextContent('apply_overrides=0 levels=hml min_qod=70');

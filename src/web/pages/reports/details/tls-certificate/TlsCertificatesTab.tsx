@@ -12,18 +12,18 @@ import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import TLSCertificatesTable from 'web/pages/reports/details/tls-certificate/TlsCertificatesTable';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {
   makeCompareDate,
   makeCompareIp,
   makeComparePort,
   makeCompareString,
 } from 'web/utils/Sort';
-
 interface TLSCertificatesTabProps {
   reportId: string;
   reportFilter: Filter;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
-  tlsCertificatesData?: any;
+  tlsCertificatesData?: UseGetEntitiesReturn<ReportTLSCertificate>;
   isTlsCertificatesFetching?: boolean;
   isTlsCertificatesError?: boolean;
 }
@@ -120,6 +120,7 @@ const TLSCertificatesTab = ({
         onPreviousClick,
       }) => (
         <TLSCertificatesTable
+          //@ts-expect-error entities are ReportTLSCertificate[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={tlsCertificatesFilter}

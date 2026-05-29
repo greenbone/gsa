@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, within} from 'web/testing';
+import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
@@ -27,7 +27,6 @@ describe('TLSCertificatesTable', () => {
     }
 
     const {render} = rendererWith({
-      router: true,
       gmp: createGmp(),
     });
 
@@ -62,7 +61,6 @@ describe('TLSCertificatesTable', () => {
     }
 
     const {render} = rendererWith({
-      router: true,
       gmp: createGmp(),
     });
 
@@ -97,10 +95,10 @@ describe('TLSCertificatesTable', () => {
       true,
     );
 
-    expect(screen.getAllByText('CN=LoremIpsumSubject1 C=Dolor').length).toBe(2);
-    expect(screen.getAllByText('00B49C541FF5A8E1D9').length).toBe(2);
-    expect(screen.getAllByText('foo.bar').length).toBe(2);
-    expect(screen.getByText('4021')).toBeInTheDocument();
+    expect(screen.getAllByText('CN=LoremIpsumSubject1 C=Dolor').length).toBe(1);
+    expect(screen.getAllByText('00B49C541FF5A8E1D9').length).toBe(1);
+    expect(screen.getAllByText('foo.bar').length).toBe(1);
+    expect(screen.getByText(/4021/)).toBeInTheDocument();
 
     const [hostLink] = screen.getAllByRole('link', {name: '192.168.9.90'});
     expect(hostLink).toHaveAttribute(
@@ -125,7 +123,6 @@ describe('TLSCertificatesTable', () => {
     const onTlsCertificateDownloadClick = testing.fn();
 
     const {render} = rendererWith({
-      router: true,
       gmp: createGmp(),
     });
 
@@ -159,7 +156,6 @@ describe('TLSCertificatesTable', () => {
     }
 
     const {render} = rendererWith({
-      router: true,
       gmp: createGmp(),
     });
 

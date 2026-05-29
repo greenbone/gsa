@@ -5,8 +5,9 @@
 
 import CollectionCounts from 'gmp/collection/collection-counts';
 import AuditReport from 'gmp/models/audit-report';
-import { COMPLIANCE } from 'gmp/models/compliance';
+import {COMPLIANCE} from 'gmp/models/compliance';
 import Filter from 'gmp/models/filter';
+import ReportHost from 'gmp/models/report/host';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import {
   type PortElement,
@@ -18,8 +19,8 @@ import {
   type default as ReportReport,
   type ReportReportTaskElement,
 } from 'gmp/models/report/report';
-import { type ReportTLSCertificateElement } from 'gmp/models/report/tls-certificate';
-import { NO_VALUE, YES_VALUE } from 'gmp/parser';
+import {type ReportTLSCertificateElement} from 'gmp/models/report/tls-certificate';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 // Task
 const task1: ReportReportTaskElement = {
@@ -232,6 +233,12 @@ export const host3: ReportHostElement = {
   ],
 };
 
+export const mockAuditHosts = [
+  ReportHost.fromElement(host1),
+  ReportHost.fromElement(host2),
+  ReportHost.fromElement(host3),
+];
+
 // Ports
 const port1: PortElement = {
   host: '1.1.1.1',
@@ -393,7 +400,7 @@ export const getMockAuditReport = () => {
     entity,
     report: entity.report as ReportReport,
     errors: errorsCollection,
-    hosts: undefined as any,
+    hosts: undefined,
     operatingsystems: operatingsystemsCollection,
     task: entity.report?.task,
   };
