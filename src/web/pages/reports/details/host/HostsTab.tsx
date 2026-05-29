@@ -85,7 +85,7 @@ const HostsTab = ({
     }) => (
       <HostsTable
         audit={audit}
-        // @ts-expect-error
+        // @ts-expect-error entities are ReportHost[], not Model[]
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}

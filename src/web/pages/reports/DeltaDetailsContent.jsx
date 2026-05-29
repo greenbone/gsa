@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
@@ -27,6 +27,7 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
+import useGetResults from 'web/hooks/use-query/results';
 import useTranslation from 'web/hooks/useTranslation';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
 import Summary from 'web/pages/reports/details/Summary';
@@ -75,15 +76,14 @@ const PageContent = ({
   const {userTags = {}} = report;
   const userTagsCount = userTags.length;
 
-  const {
-    results = {},
-    complianceCounts = {},
-    result_count = {},
-    timestamp,
-    scan_run_status,
-  } = report;
+  const {complianceCounts = {}, timestamp, scan_run_status} = report;
 
   const hasReport = isDefined(entity);
+
+  // Fetch results from dedicated endpoint
+  const {data: resultsData, isFetching: isResultsFetching} = useGetResults({
+    filter,
+  });
 
   if (!hasReport && isDefined(entityError)) {
     return <ErrorMessage message={entityError.message} />;
@@ -115,7 +115,8 @@ const PageContent = ({
     </SectionHeader>
   );
 
-  const {filtered} = audit ? complianceCounts : result_count;
+  const resultsCounts = resultsData?.entitiesCounts;
+  const filtered = audit ? complianceCounts.filtered : resultsCounts?.filtered;
 
   return (
     <Layout grow align={['start', 'stretch']} flex="column">
@@ -182,13 +183,13 @@ const PageContent = ({
                   <TabPanel>
                     <DeltaResultsTab
                       audit={audit}
-                      counts={isDefined(results.counts) ? results.counts : {}}
+                      counts={resultsCounts ?? new CollectionCounts()}
                       delta={true}
                       filter={filter}
                       hasTarget={!isImport}
-                      isUpdating={isUpdating}
+                      isUpdating={isUpdating || isResultsFetching}
                       progress={progress}
-                      results={isDefined(results) ? results.entities : {}}
+                      results={resultsData?.entities ?? []}
                       sortField={sortField}
                       sortReverse={sortReverse}
                       status={status}

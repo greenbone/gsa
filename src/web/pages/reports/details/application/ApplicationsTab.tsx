@@ -3,15 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useEffect, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
-import { isDefined } from 'gmp/utils/identity';
-import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import type ReportApp from 'gmp/models/report/app';
+import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import ApplicationsTable from 'web/pages/reports/details/application/ApplicationsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {
   makeCompareNumber,
   makeCompareSeverity,
@@ -21,7 +23,7 @@ import {
 interface ApplicationsTabProps {
   filter?: Filter;
   reportId: string;
-   applicationsData?: any;
+  applicationsData?: UseGetEntitiesReturn<ReportApp>;
   isApplicationsFetching?: boolean;
   isApplicationsError?: boolean;
 }
@@ -105,7 +107,8 @@ const ApplicationsTabWrapper = ({
         onPreviousClick,
       }) => (
         <ApplicationsTable
-            entities={entities}
+          // @ts-expect-error entities are ReportApp[], not Model[]
+          entities={entities}
           entitiesCounts={entitiesCounts}
           filter={displayedFilter}
           isUpdating={isFetching}

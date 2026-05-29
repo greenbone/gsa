@@ -5,6 +5,7 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import Filter from 'gmp/models/filter';
+import {type ReportError} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
@@ -12,12 +13,13 @@ import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useTranslation from 'web/hooks/useTranslation';
 import ErrorsTable from 'web/pages/reports/details/error/ErrorsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
 
 interface ErrorsTabWrapperProps {
   filter?: Filter;
   reportId: string;
-  errorsData?: any;
+  errorsData?: UseGetEntitiesReturn<ReportError>;
   isErrorsFetching?: boolean;
   isErrorsError?: boolean;
 }
@@ -107,6 +109,7 @@ const ErrorsTabWrapper = ({
         onPreviousClick,
       }) => (
         <ErrorsTable
+          // @ts-expect-error entities are ReportError[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={displayedFilter}

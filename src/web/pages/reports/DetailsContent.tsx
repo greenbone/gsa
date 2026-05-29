@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import type Filter from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
-import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive, TASK_STATUS} from 'gmp/models/task';
@@ -33,30 +31,11 @@ import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
-import EntityTags from 'web/entity/Tags';
-import useGetReportApplications from 'web/hooks/use-query/report-applications';
-import useGetReportClosedCves from 'web/hooks/use-query/report-closed-cves';
-import useGetReportCves from 'web/hooks/use-query/report-cves';
-import useGetReportErrors from 'web/hooks/use-query/report-errors';
-import useGetReportHosts from 'web/hooks/use-query/report-hosts';
-import useGetReportOperatingSystems from 'web/hooks/use-query/report-operating-system';
-import useGetReportPorts from 'web/hooks/use-query/report-ports';
-import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
+import useReportSubEntities from 'web/hooks/use-query/use-report-sub-entities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import ApplicationsTab from 'web/pages/reports/details/application/ApplicationsTab';
-import ClosedCvesTab from 'web/pages/reports/details/cve/ClosedCvesTab';
-import CvesTab from 'web/pages/reports/details/cve/CvesTab';
 import DetailsToolbar from 'web/pages/reports/details/DetailsToolbar';
-import ErrorsTab from 'web/pages/reports/details/error/ErrorsTab';
-import HostsTabContent from 'web/pages/reports/details/host/HostsTabContent';
-import OperatingSystemsTab from 'web/pages/reports/details/operating-system/OperatingSystemsTab';
-import PortsTab from 'web/pages/reports/details/port/PortsTab';
-import ResultsTabContent from 'web/pages/reports/details/result/ResultsTabContent';
-import Summary from 'web/pages/reports/details/Summary';
-import TabTitle from 'web/pages/reports/details/TabTitle';
-import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
-import TLSCertificatesTab from 'web/pages/reports/details/tls-certificate/TlsCertificatesTab';
+import {buildReportTabDefinitions} from 'web/pages/reports/details/ReportTabDefinitions';
 
 interface ThresholdConfig {
   showInitialLoading: boolean;
@@ -65,12 +44,6 @@ interface ThresholdConfig {
   threshold: number;
   onFilterChanged: (filter: Filter) => void;
   onFilterEditClick: () => void;
-}
-
-interface TabDefinition {
-  key: string;
-  renderTab: () => React.ReactNode;
-  renderPanel: () => React.ReactNode;
 }
 
 interface PageContentProps {
@@ -104,30 +77,6 @@ interface PageContentProps {
   onTargetEditClick: () => void;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
 }
-
-const renderWithThreshold = (
-  entityType: string,
-  activeFilter: Filter,
-  config: ThresholdConfig,
-  content: React.ReactNode,
-): React.ReactNode => {
-  if (config.showInitialLoading) {
-    return <Loading />;
-  }
-  if (config.showThresholdMessage) {
-    return (
-      <ThresholdPanel
-        entityType={entityType}
-        filter={activeFilter}
-        isUpdating={config.isUpdating}
-        threshold={config.threshold}
-        onFilterChanged={config.onFilterChanged}
-        onFilterEditClick={config.onFilterEditClick}
-      />
-    );
-  }
-  return content;
-};
 
 const Span = styled.span`
   margin-top: 2px;
@@ -185,8 +134,6 @@ const PageContent = ({
   const isAgentScanning =
     hasReport && isDefined(entity.report?.task?.agentGroup?.id);
 
-  const userTagsCount = report?.userTags?.length ?? 0;
-
   const {timestamp, scan_run_status} = report ?? {};
 
   const isImport = isDefined(task) && task.isImport();
@@ -197,74 +144,7 @@ const PageContent = ({
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : NO_RELOAD;
 
-  const {
-    data: hostsData,
-    isFetching: isHostsFetching,
-    isError: isHostsError,
-  } = useGetReportHosts({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {
-    data: portsData,
-    isFetching: isPortsFetching,
-    isError: isPortsError,
-  } = useGetReportPorts({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {
-    data: applicationsData,
-    isFetching: isApplicationsFetching,
-    isError: isApplicationsError,
-  } = useGetReportApplications({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {
-    data: operatingSystemsData,
-    isFetching: isOperatingSystemsFetching,
-    isError: isOperatingSystemsError,
-  } = useGetReportOperatingSystems({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {
-    data: cvesData,
-    isFetching: isCvesFetching,
-    isError: isCvesError,
-  } = useGetReportCves({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {
-    data: closedCvesData,
-    isFetching: isClosedCvesFetching,
-    isError: isClosedCvesError,
-  } = useGetReportClosedCves({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {
-    data: tlsCertificatesData,
-    isFetching: isTlsCertificatesFetching,
-    isError: isTlsCertificatesError,
-  } = useGetReportTlsCertificates({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {
-    data: errorsData,
-    isFetching: isErrorsFetching,
-    isError: isErrorsError,
-  } = useGetReportErrors({
+  const reportEntities = useReportSubEntities({
     reportId,
     filter: reportFilter,
     refetchInterval,
@@ -326,256 +206,31 @@ const PageContent = ({
     onFilterEditClick,
   };
 
-  const buildTabDefinitions = (
-    activeReport: ReportReport,
-    activeFilter: Filter,
-  ): TabDefinition[] => [
-    {
-      key: 'information',
-      renderTab: () => _('Information'),
-      renderPanel: () => (
-        <Summary
-          filter={activeFilter}
-          isUpdating={isUpdating}
-          report={activeReport}
-          reportError={reportError}
-          reportId={reportId}
-        />
-      ),
-    },
-    {
-      key: 'results',
-      renderTab: () => (
-        <TabTitle
-          counts={
-            resultsCounts
-              ? {
-                  filtered: resultsCounts.filtered ?? 0,
-                  all: resultsCounts.full ?? 0,
-                }
-              : undefined
-          }
-          isLoading={isUpdating}
-          title={_('Results')}
-        />
-      ),
-      renderPanel: () => (
-        <ResultsTabContent
-          hasTarget={!isImport}
-          isContainerScanning={isContainerScanning}
-          progress={progress}
-          reportFilter={activeFilter}
-          reportId={reportId}
-          reportResultsCounts={resultsCounts}
-          status={status}
-          onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-          onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-          onFilterEditClick={onFilterEditClick}
-          onFilterRemoveClick={onFilterRemoveClick}
-          onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-          onTargetEditClick={onTargetEditClick}
-        />
-      ),
-    },
-    {
-      key: 'hosts',
-      renderTab: () => (
-        <TabTitle
-          counts={hostsData?.entitiesCounts}
-          isLoading={isHostsFetching}
-          title={_('Hosts')}
-        />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('Hosts'),
-          activeFilter,
-          thresholdConfig,
-          <HostsTabContent
-            hostsData={hostsData}
-            isAgentScanning={isAgentScanning}
-            isContainerScanning={isContainerScanning}
-            isHostsError={isHostsError}
-            isHostsFetching={isHostsFetching}
-            reportFilter={activeFilter}
-            reportId={reportId}
-            status={status}
-          />,
-        ),
-    },
-    {
-      key: 'ports',
-      renderTab: () => (
-        <TabTitle
-          counts={portsData?.entitiesCounts}
-          isLoading={isPortsFetching}
-          title={_('Ports')}
-        />
-      ),
-      renderPanel: () => (
-        <PortsTab
-          isPortsError={isPortsError}
-          isPortsFetching={isPortsFetching}
-          portsData={portsData}
-          reportFilter={activeFilter}
-          reportId={reportId}
-        />
-      ),
-    },
-    {
-      key: 'applications',
-      renderTab: () => (
-        <TabTitle
-          counts={applicationsData?.entitiesCounts}
-          isLoading={isApplicationsFetching}
-          title={_('Applications')}
-        />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('Applications'),
-          activeFilter,
-          thresholdConfig,
-          <ApplicationsTab
-            applicationsData={applicationsData}
-            filter={activeFilter}
-            isApplicationsError={isApplicationsError}
-            isApplicationsFetching={isApplicationsFetching}
-            reportId={reportId}
-          />,
-        ),
-    },
-    {
-      key: 'os',
-      renderTab: () => (
-        <TabTitle
-          counts={operatingSystemsData?.entitiesCounts}
-          isLoading={isOperatingSystemsFetching}
-          title={_('Operating Systems')}
-        />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('Operating Systems'),
-          activeFilter,
-          thresholdConfig,
-          <OperatingSystemsTab
-            filter={activeFilter}
-            isOperatingSystemsError={isOperatingSystemsError}
-            isOperatingSystemsFetching={isOperatingSystemsFetching}
-            operatingSystemsData={operatingSystemsData}
-            reportId={reportId}
-          />,
-        ),
-    },
-    {
-      key: 'cves',
-      renderTab: () => (
-        <TabTitle
-          counts={cvesData?.entitiesCounts}
-          isLoading={isCvesFetching}
-          title={_('CVEs')}
-        />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('CVEs'),
-          activeFilter,
-          thresholdConfig,
-          <CvesTab
-            cvesData={cvesData}
-            filter={activeFilter}
-            isCvesError={isCvesError}
-            isCvesFetching={isCvesFetching}
-            reportId={reportId}
-            status={status}
-          />,
-        ),
-    },
-    {
-      key: 'closedcves',
-      renderTab: () => (
-        <TabTitle
-          counts={closedCvesData?.entitiesCounts}
-          isLoading={isClosedCvesFetching}
-          title={_('Closed CVEs')}
-        />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('Closed CVEs'),
-          activeFilter,
-          thresholdConfig,
-          <ClosedCvesTab
-            closedCvesData={closedCvesData}
-            filter={activeFilter}
-            isClosedCvesError={isClosedCvesError}
-            isClosedCvesFetching={isClosedCvesFetching}
-            reportId={reportId}
-          />,
-        ),
-    },
-    {
-      key: 'tlscerts',
-      renderTab: () => (
-        <TabTitle
-          counts={tlsCertificatesData?.entitiesCounts}
-          isLoading={isTlsCertificatesFetching}
-          title={_('TLS Certificates')}
-        />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('TLS Certificates'),
-          activeFilter,
-          thresholdConfig,
-          <TLSCertificatesTab
-            isTlsCertificatesError={isTlsCertificatesError}
-            isTlsCertificatesFetching={isTlsCertificatesFetching}
-            reportFilter={activeFilter}
-            reportId={reportId}
-            tlsCertificatesData={tlsCertificatesData}
-            onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
-          />,
-        ),
-    },
-    {
-      key: 'errors',
-      renderTab: () => (
-        <TabTitle
-          counts={errorsData?.entitiesCounts}
-          isLoading={isErrorsFetching}
-          title={_('Error Messages')}
-        />
-      ),
-      renderPanel: () => (
-        <ErrorsTab
-          errorsData={errorsData}
-          filter={activeFilter}
-          isErrorsError={isErrorsError}
-          isErrorsFetching={isErrorsFetching}
-          reportId={reportId}
-        />
-      ),
-    },
-    {
-      key: 'usertags',
-      renderTab: () => (
-        <TabTitle count={userTagsCount} title={_('User Tags')} />
-      ),
-      renderPanel: () => (
-        <EntityTags
-          entity={activeReport}
-          onChanged={onTagSuccess}
-          onError={onError}
-        />
-      ),
-    },
-  ];
-
   const tabDefinitions =
     isDefined(report) && isDefined(reportFilter)
-      ? buildTabDefinitions(report, reportFilter)
+      ? buildReportTabDefinitions({
+          activeReport: report,
+          activeFilter: reportFilter,
+          reportId,
+          isImport,
+          isAgentScanning,
+          isContainerScanning,
+          isUpdating,
+          progress,
+          status,
+          resultsCounts,
+          thresholdConfig,
+          reportEntities,
+          onFilterAddLogLevelClick,
+          onFilterDecreaseMinQoDClick,
+          onFilterEditClick,
+          onFilterRemoveClick,
+          onFilterRemoveSeverityClick,
+          onTargetEditClick,
+          onTlsCertificateDownloadClick,
+          onTagSuccess,
+          onError,
+        })
       : [];
 
   return (

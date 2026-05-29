@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, expect, test} from '@gsa/testing';
 import {rendererWithTableBody, screen} from 'web/testing';
 import type Filter from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
@@ -16,6 +16,7 @@ const createFilter = (value: string): Filter =>
     simple: () => ({
       toFilterString: () => value,
     }),
+    toFilterString: () => value,
   }) as unknown as Filter;
 
 const createBaseReport = (): ReportReport =>
@@ -37,11 +38,26 @@ const createBaseReport = (): ReportReport =>
   }) as unknown as ReportReport;
 
 const createGmp = () => ({
-  session: createSession(),
+  reporthosts: {
+    get: () =>
+      Promise.resolve({
+        data: [],
+        meta: {
+          filter: {toFilterString: () => ''},
+          counts: {all: 3, filtered: 3},
+        },
+      }),
+  },
+  settings: {
+    reloadInterval: 5000,
+    reloadIntervalActive: 2000,
+    reloadIntervalInactive: 10000,
+  },
+  session: createSession({token: 'test-token'}),
 });
 
 describe('Summary', () => {
-  test('renders basic task info, comment, hosts, filter and timezone', () => {
+  test('renders basic task info, comment, hosts, filter and timezone', async () => {
     const report = createBaseReport();
     const filter = createFilter('severity>5');
     const {render} = rendererWithTableBody({
@@ -63,7 +79,8 @@ describe('Summary', () => {
 
     expect(screen.getByText('Example comment')).toBeInTheDocument();
 
-    expect(screen.getByText('Hosts scanned')).toBeInTheDocument();
+    expect(await screen.findByText('Hosts scanned')).toBeInTheDocument();
+
     expect(screen.getByText('3')).toBeInTheDocument();
 
     expect(screen.getByText('Filter')).toBeInTheDocument();

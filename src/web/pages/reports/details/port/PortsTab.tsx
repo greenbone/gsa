@@ -5,18 +5,20 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import Filter from 'gmp/models/filter';
+import type ReportPort from 'gmp/models/report/port';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useTranslation from 'web/hooks/useTranslation';
 import PortsTable from 'web/pages/reports/details/port/PortsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {makeCompareNumber, makeCompareSeverity} from 'web/utils/Sort';
 
 interface PortsTabProps {
   reportId: string;
   reportFilter: Filter;
-  portsData?: any;
+  portsData?: UseGetEntitiesReturn<ReportPort>;
   isPortsFetching?: boolean;
   isPortsError?: boolean;
 }
@@ -97,6 +99,7 @@ const PortsTab = ({
         onPreviousClick,
       }) => (
         <PortsTable
+          // @ts-expect-error entities are ReportPort[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={portsFilter}

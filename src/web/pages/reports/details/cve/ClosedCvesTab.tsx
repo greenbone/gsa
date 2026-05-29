@@ -6,12 +6,14 @@
 import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
+import {type ReportClosedCve} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import ClosedCvesTable from 'web/pages/reports/details/cve/ClosedCvesTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {
   makeCompareIp,
   makeCompareSeverity,
@@ -21,7 +23,7 @@ import {
 interface ClosedCvesTabProps {
   filter?: Filter;
   reportId: string;
-  closedCvesData?: any;
+  closedCvesData?: UseGetEntitiesReturn<ReportClosedCve>;
   isClosedCvesFetching?: boolean;
   isClosedCvesError?: boolean;
 }
@@ -104,6 +106,7 @@ const ClosedCvesTabWrapper = ({
         onPreviousClick,
       }) => (
         <ClosedCvesTable
+          // @ts-expect-error entities are ReportActiveCve[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={displayedFilter}

@@ -6,13 +6,14 @@
 import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
-import {type TaskStatus} from 'gmp/models/task';
+import {type ReportActiveCve} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import CvesTable from 'web/pages/reports/details/cve/CvesTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {
   makeCompareIp,
   makeCompareSeverity,
@@ -22,8 +23,7 @@ import {
 interface CvesTabProps {
   filter?: Filter;
   reportId: string;
-  status: TaskStatus;
-  cvesData?: any;
+  cvesData?: UseGetEntitiesReturn<ReportActiveCve>;
   isCvesFetching?: boolean;
   isCvesError?: boolean;
 }
@@ -105,6 +105,7 @@ const CvesTabWrapper = ({
         onPreviousClick,
       }) => (
         <CvesTable
+          // @ts-expect-error entities are ReportActiveCve[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={displayedFilter}

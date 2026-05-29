@@ -32,10 +32,7 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
-import useGetReportErrors from 'web/hooks/use-query/report-errors';
-import useGetReportHosts from 'web/hooks/use-query/report-hosts';
-import useGetReportOperatingSystems from 'web/hooks/use-query/report-operating-system';
-import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
+import useReportSubEntities from 'web/hooks/use-query/use-report-sub-entities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import AuditThresholdPanel from 'web/pages/reports/details/AuditThresholdPanel';
@@ -161,24 +158,7 @@ const AuditReportDetailsContent = ({
     : ((scan_run_status as TaskStatus) ?? TASK_STATUS.unknown);
   const refetchInterval = isActive(status) ? undefined : false;
 
-  const {data: hostsData, isError: isHostsError} = useGetReportHosts({
-    reportId,
-    filter: reportFilter,
-    refetchInterval,
-  });
-  const {data: operatingSystemsData, isError: isOperatingSystemsError} =
-    useGetReportOperatingSystems({
-      reportId,
-      filter: reportFilter,
-      refetchInterval,
-    });
-  const {data: tlsCertificatesData, isError: isTlsCertificatesError} =
-    useGetReportTlsCertificates({
-      reportId,
-      filter: reportFilter,
-      refetchInterval,
-    });
-  const {data: errorsData, isError: isErrorsError} = useGetReportErrors({
+  const reportEntities = useReportSubEntities({
     reportId,
     filter: reportFilter,
     refetchInterval,
@@ -272,17 +252,23 @@ const AuditReportDetailsContent = ({
     },
     {
       key: 'hosts',
-      title: <TabTitle counts={hostsData?.entitiesCounts} title={_('Hosts')} />,
+      title: (
+        <TabTitle
+          counts={reportEntities.hosts.data?.entitiesCounts}
+          title={_('Hosts')}
+        />
+      ),
       panel: renderWithThreshold(
         _('Hosts'),
         thresholdConfig,
         <HostsTabContent
           audit={true}
+          hostsData={reportEntities.hosts.data}
           isContainerScanning={false}
-          isHostsError={isHostsError}
+          isHostsError={reportEntities.hosts.isError}
+          isHostsFetching={reportEntities.hosts.isFetching}
           reportFilter={effectiveReportFilter}
           reportId={reportId}
-          status={status}
         />,
       ),
     },
@@ -290,7 +276,7 @@ const AuditReportDetailsContent = ({
       key: 'os',
       title: (
         <TabTitle
-          counts={operatingSystemsData?.entitiesCounts}
+          counts={reportEntities.operatingSystems.data?.entitiesCounts}
           title={_('Operating Systems')}
         />
       ),
@@ -300,7 +286,11 @@ const AuditReportDetailsContent = ({
         <OperatingSystemsTab
           audit={true}
           filter={effectiveReportFilter}
-          isOperatingSystemsError={isOperatingSystemsError}
+          isOperatingSystemsError={reportEntities.operatingSystems.isError}
+          isOperatingSystemsFetching={
+            reportEntities.operatingSystems.isFetching
+          }
+          operatingSystemsData={reportEntities.operatingSystems.data}
           reportId={reportId}
         />,
       ),
@@ -309,7 +299,7 @@ const AuditReportDetailsContent = ({
       key: 'tlscerts',
       title: (
         <TabTitle
-          counts={tlsCertificatesData?.entitiesCounts}
+          counts={reportEntities.tlsCertificates.data?.entitiesCounts}
           title={_('TLS Certificates')}
         />
       ),
@@ -317,10 +307,11 @@ const AuditReportDetailsContent = ({
         _('TLS Certificates'),
         thresholdConfig,
         <TLSCertificatesTab
-          isTlsCertificatesError={isTlsCertificatesError}
+          isTlsCertificatesError={reportEntities.tlsCertificates.isError}
+          isTlsCertificatesFetching={reportEntities.tlsCertificates.isFetching}
           reportFilter={effectiveReportFilter}
           reportId={reportId}
-          status={status}
+          tlsCertificatesData={reportEntities.tlsCertificates.data}
           onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
         />,
       ),
@@ -329,14 +320,16 @@ const AuditReportDetailsContent = ({
       key: 'errors',
       title: (
         <TabTitle
-          counts={errorsData?.entitiesCounts}
+          counts={reportEntities.errors.data?.entitiesCounts}
           title={_('Error Messages')}
         />
       ),
       panel: (
         <ErrorsTab
+          errorsData={reportEntities.errors.data}
           filter={effectiveReportFilter}
-          isErrorsError={isErrorsError}
+          isErrorsError={reportEntities.errors.isError}
+          isErrorsFetching={reportEntities.errors.isFetching}
           reportId={reportId}
         />
       ),

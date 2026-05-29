@@ -5,22 +5,22 @@
 
 import {useState} from 'react';
 import type Filter from 'gmp/models/filter';
-import type {TaskStatus} from 'gmp/models/task';
+import type ReportHost from 'gmp/models/report/host';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentScanningHostsTab from 'web/pages/reports/details/host/AgentScanningHostsTab';
 import ContainerScanningHostsTab from 'web/pages/reports/details/host/ContainerScanningHostsTab';
 import HostsTab from 'web/pages/reports/details/host/HostsTab';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 
 export interface HostsTabContentProps {
   audit?: boolean;
   reportId: string;
-  status: TaskStatus;
   isAgentScanning?: boolean;
   isContainerScanning: boolean;
   reportFilter: Filter;
-  hostsData?: any;
+  hostsData?: UseGetEntitiesReturn<ReportHost>;
   isHostsFetching?: boolean;
   isHostsError?: boolean;
 }

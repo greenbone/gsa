@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
-import {screen, rendererWith} from 'web/testing';
+import {describe, expect, test} from '@gsa/testing';
+import {rendererWith, screen, waitFor} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
@@ -16,11 +17,32 @@ const filter = Filter.fromString(
 );
 
 const createGmp = () => ({
-  session: createSession({timezone: 'CET'}),
+  session: createSession({timezone: 'CET', token: 'test-token'}),
+  settings: {
+    reloadInterval: 5000,
+    reloadIntervalActive: 2000,
+    reloadIntervalInactive: 10000,
+  },
+  reporthosts: {
+    get: () =>
+      Promise.resolve({
+        data: [{ip: '123.456.78.910'}, {ip: '109.876.54.321'}],
+        meta: {
+          filter: filter,
+          counts: new CollectionCounts({
+            all: 2,
+            filtered: 2,
+            first: 1,
+            rows: 2,
+            length: 2,
+          }),
+        },
+      }),
+  },
 });
 
 describe('Report Summary tests', () => {
-  test('should render Report Summary', () => {
+  test('should render Report Summary', async () => {
     const {report} = getMockReport();
 
     const {render} = rendererWith({
@@ -37,6 +59,8 @@ describe('Report Summary tests', () => {
         reportId={report.id as string}
       />,
     );
+
+    expect(await screen.findByText('Hosts scanned')).toBeInTheDocument();
 
     const tableData = element.querySelectorAll('td');
     const links = element.querySelectorAll('a');
@@ -72,7 +96,7 @@ describe('Report Summary tests', () => {
     expect(tableData[15]).toHaveTextContent('UTC (UTC)');
   });
 
-  test('should render Delta Report Summary', () => {
+  test('should render Delta Report Summary', async () => {
     const {report} = getMockDeltaReport();
 
     const {render} = rendererWith({
@@ -88,6 +112,11 @@ describe('Report Summary tests', () => {
         reportId={report.id as string}
       />,
     );
+
+    // Wait for async hosts data to load
+    await waitFor(() => {
+      expect(screen.getByText('Hosts scanned')).toBeInTheDocument();
+    });
 
     const tableData = element.querySelectorAll('td');
     const links = element.querySelectorAll('a');

@@ -12,13 +12,14 @@ import Loading from 'web/components/loading/Loading';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import OperatingSystemsTable from 'web/pages/reports/details/operating-system/OperatingSystemsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {makeCompareNumber, makeCompareString} from 'web/utils/Sort';
 
 interface OperatingSystemsTabWrapperProps {
   audit?: boolean;
   filter?: Filter;
   reportId: string;
-  operatingSystemsData?: any;
+  operatingSystemsData?: UseGetEntitiesReturn<ReportOperatingSystem>;
   isOperatingSystemsFetching?: boolean;
   isOperatingSystemsError?: boolean;
 }

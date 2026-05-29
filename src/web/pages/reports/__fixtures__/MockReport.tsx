@@ -7,6 +7,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import {setLocale} from 'gmp/locale/lang';
 import Filter from 'gmp/models/filter';
 import Report from 'gmp/models/report';
+import ReportHost from 'gmp/models/report/host';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import {
   type PortElement,
@@ -14,6 +15,7 @@ import {
   type ReportResultElement,
   parseErrors,
 } from 'gmp/models/report/parser';
+import ReportPort from 'gmp/models/report/port';
 import type ReportReport from 'gmp/models/report/report';
 import ReportTLSCertificate, {
   type ReportTLSCertificateElement,
@@ -188,6 +190,11 @@ export const host2: ReportHostElement = {
   ],
 };
 
+export const mockReportHosts = [
+  ReportHost.fromElement({...host1, severity: 10.0}),
+  ReportHost.fromElement({...host2, severity: 5.0}),
+];
+
 // Ports
 const port1: PortElement = {
   host: '1.1.1.1',
@@ -346,16 +353,76 @@ export const getMockReport = () => {
     filter: Filter.fromString(''),
   };
 
+  const resultsCollection = {
+    entities: [],
+    counts: new CollectionCounts({
+      all: report.result_count?.full ?? 0,
+      filtered: report.result_count?.filtered ?? 0,
+      first: 1,
+      rows: report.result_count?.filtered ?? 0,
+      length: report.result_count?.filtered ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const portsCollection = {
+    entities: [ReportPort.fromElement(port1), ReportPort.fromElement(port2)],
+    counts: new CollectionCounts({
+      all: report.ports?.count ?? 0,
+      filtered: report.ports?.count ?? 0,
+      first: 1,
+      rows: report.ports?.count ?? 0,
+      length: report.ports?.count ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const applicationsCollection = {
+    entities: [],
+    counts: new CollectionCounts({
+      all: report.apps?.count ?? 0,
+      filtered: report.apps?.count ?? 0,
+      first: 1,
+      rows: report.apps?.count ?? 0,
+      length: report.apps?.count ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const cvesCollection = {
+    entities: [],
+    counts: new CollectionCounts({
+      all: report.vulns?.count ?? 0,
+      filtered: report.vulns?.count ?? 0,
+      first: 1,
+      rows: report.vulns?.count ?? 0,
+      length: report.vulns?.count ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const closedCvesCollection = {
+    entities: [],
+    counts: new CollectionCounts({
+      all: report.closed_cves?.count ?? 0,
+      filtered: report.closed_cves?.count ?? 0,
+      first: 1,
+      rows: report.closed_cves?.count ?? 0,
+      length: report.closed_cves?.count ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
   return {
     entity,
     report: entity.report as ReportReport,
-    results: undefined as any,
-    hosts: undefined as any,
-    ports: undefined as any,
-    applications: undefined as any,
+    results: resultsCollection,
+    hosts: mockReportHosts,
+    ports: portsCollection,
+    applications: applicationsCollection,
     operatingsystems: operatingsystemsCollection,
-    cves: undefined as any,
-    closedCves: undefined as any,
+    cves: cvesCollection,
+    closedCves: closedCvesCollection,
     tlsCertificates: tlsCertificatesCollection,
     errors: errorsCollection,
     task: entity.report?.task,
