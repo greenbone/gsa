@@ -49,7 +49,7 @@ describe('Header tests', () => {
       name: 'Switch color theme',
     });
 
-    expect(themeSwitch).not.toBeInTheDocument();
+    expect(themeSwitch).toBeInTheDocument();
 
     await waitFor(() => {
       const logo = screen.getByTestId('Enterprise150');
