@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
 import {
   changeInputValue,
-  screen,
-  rendererWith,
   fireEvent,
   getSelectItemElementsForSelect,
+  rendererWith,
+  screen,
   wait,
 } from 'web/testing';
 import Features from 'gmp/capabilities/features';
@@ -378,7 +378,7 @@ describe('ScannerDialog tests', () => {
         id="1234"
         name="john"
         port={22}
-        type={AGENT_CONTROLLER_SCANNER_TYPE}
+        type={OPENVAS_SCANNER_TYPE}
         onClose={handleClose}
         onCredentialChange={handleCredentialChange}
         onSave={handleSave}
@@ -402,7 +402,7 @@ describe('ScannerDialog tests', () => {
     const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
       name: 'Scanner Type',
     });
-    expect(scannerType).toHaveValue('Agent Controller');
+    expect(scannerType).toHaveValue('OpenVAS Scanner');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     fireEvent.click(scannerTypeItems[2]); // select Agent Sensor
     expect(scannerType).toHaveValue('Agent Sensor');
@@ -508,6 +508,21 @@ describe('ScannerDialog tests', () => {
     fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
     expect(handleSave).not.toHaveBeenCalled();
+  });
+
+  test('should disable port field for agent controller type because it always defaults to 8080', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      features: new Features(['ENABLE_AGENTS']),
+    });
+
+    render(<ScannerDialog type={AGENT_CONTROLLER_SCANNER_TYPE} />);
+
+    const portInput = screen.getByName('port');
+    expect(portInput).toBeDisabled();
+    expect(portInput).toHaveValue('8080');
   });
 
   test('should not render agent controller in scanner selection if feature is disabled', async () => {
