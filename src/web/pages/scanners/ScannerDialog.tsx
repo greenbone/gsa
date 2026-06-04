@@ -243,6 +243,8 @@ const ScannerDialog = ({
     scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
   const showScannerDetails = isDefined(scannerType);
   const showPort = showScannerDetails && !isGreenboneSensorType;
+  const isPortDisabled =
+    scannerInUse || scannerType === AGENT_CONTROLLER_SCANNER_TYPE;
   const showCredentialField =
     !isGreenboneSensorType &&
     !isAgentControllerSensorScannerType &&
@@ -313,7 +315,7 @@ const ScannerDialog = ({
 
             {showPort && (
               <NumberField
-                disabled={scannerInUse}
+                disabled={isPortDisabled}
                 name="port"
                 placeholder={_('Insert a Port number')}
                 title={_('Port')}
