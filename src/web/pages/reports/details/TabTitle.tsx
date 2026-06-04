@@ -7,18 +7,29 @@ import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface TabTitleProps {
+  count?: number | string;
+  counts?: {
+    filtered: number | string;
+    all: number | string;
+  };
+  isLoading?: boolean;
+  title: string;
+}
 
 const TabTitleCounts = styled.span`
   font-size: 0.7em;
 `;
 
-const TabTitle = ({title, counts, count, isLoading = false}) => {
+const TabTitle = ({title, counts, count, isLoading = false}: TabTitleProps) => {
   const [_] = useTranslation();
+
+  const countLoadingMessage = '...';
 
   let countLabel;
   if (isLoading || !(isDefined(count) || isDefined(counts))) {
-    countLabel = '...';
+    countLabel = countLoadingMessage;
   } else if (isDefined(count)) {
     countLabel = count;
   } else {
@@ -33,16 +44,6 @@ const TabTitle = ({title, counts, count, isLoading = false}) => {
       </TabTitleCounts>
     </Layout>
   );
-};
-
-TabTitle.propTypes = {
-  count: PropTypes.number,
-  counts: PropTypes.shape({
-    filtered: PropTypes.numberOrNumberString.isRequired,
-    all: PropTypes.numberOrNumberString.isRequired,
-  }),
-  isLoading: PropTypes.bool,
-  title: PropTypes.string.isRequired,
 };
 
 export default TabTitle;
