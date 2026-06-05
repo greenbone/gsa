@@ -13,7 +13,7 @@ const detectLanguageFromStorage = (options: {
   storage: {locale: string | undefined};
 }) => options.storage.locale;
 
-const detectLanguageFromNavigator = ({navigator = global.navigator}) => {
+const detectLanguageFromNavigator = ({navigator = globalThis.navigator}) => {
   if (navigator) {
     if (navigator.languages) {
       return [...navigator.languages];
@@ -21,10 +21,9 @@ const detectLanguageFromNavigator = ({navigator = global.navigator}) => {
     if (navigator.language) {
       return navigator.language;
     }
-    // @ts-expect-error
-    if (navigator.userLanguage) {
-      // @ts-expect-error
-      return navigator.userLanguage;
+    const {userLanguage} = navigator as {userLanguage?: string};
+    if (userLanguage) {
+      return userLanguage;
     }
   }
 
@@ -32,7 +31,7 @@ const detectLanguageFromNavigator = ({navigator = global.navigator}) => {
 };
 
 class LanguageDetector {
-  static type = 'languageDetector';
+  static readonly type = 'languageDetector';
 
   private services;
   private options;
@@ -50,10 +49,10 @@ class LanguageDetector {
     let detected: string[] = [];
 
     for (const detector of detectors) {
-      const lookup: string | string[] = detector(this.options);
+      const lookup: string | string[] | undefined = detector(this.options);
       if (isArray(lookup)) {
         detected = [...detected, ...lookup];
-      } else {
+      } else if (isDefined(lookup)) {
         detected.push(lookup);
       }
     }

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, expect, test} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
 import PageTitle from 'web/components/layout/PageTitle';
 import {applianceTitle} from 'web/utils/appliance-data';
@@ -20,7 +20,7 @@ describe('PageTitle tests', () => {
 
     render(<PageTitle />);
 
-    expect(global.window.document.title).toBe(
+    expect(globalThis.window.document.title).toBe(
       applianceTitle['defaultVendorLabel'],
     );
   });
@@ -31,7 +31,7 @@ describe('PageTitle tests', () => {
     const title = 'foo';
     render(<PageTitle title={title} />);
 
-    expect(global.window.document.title).toBe(
+    expect(globalThis.window.document.title).toBe(
       applianceTitle['defaultVendorLabel'] + ' - ' + title,
     );
   });
@@ -43,13 +43,13 @@ describe('PageTitle tests', () => {
     const title2 = 'bar';
     const {rerender} = render(<PageTitle title={title1} />);
 
-    expect(global.window.document.title).toBe(
+    expect(globalThis.window.document.title).toBe(
       applianceTitle['defaultVendorLabel'] + ' - ' + title1,
     );
 
     rerender(<PageTitle title={title2} />);
 
-    expect(global.window.document.title).toBe(
+    expect(globalThis.window.document.title).toBe(
       applianceTitle['defaultVendorLabel'] + ' - ' + title2,
     );
   });
@@ -64,7 +64,7 @@ describe('PageTitle tests', () => {
     });
     render(<PageTitle />);
 
-    expect(global.window.document.title).toBe(
+    expect(globalThis.window.document.title).toBe(
       applianceTitle['gsm-150_label.svg'],
     );
   });
@@ -80,7 +80,7 @@ describe('PageTitle tests', () => {
 
     render(<PageTitle />);
 
-    expect(global.window.document.title).toBe('Custom Vendor Title');
+    expect(globalThis.window.document.title).toBe('Custom Vendor Title');
   });
 
   test('should render prefer vendor title over vendor label', () => {
@@ -95,6 +95,6 @@ describe('PageTitle tests', () => {
 
     render(<PageTitle />);
 
-    expect(global.window.document.title).toBe('Custom Vendor Title');
+    expect(globalThis.window.document.title).toBe('Custom Vendor Title');
   });
 });

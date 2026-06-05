@@ -11,13 +11,13 @@
     "allowJs": true,
     "checkJs": false,
     "noImplicitAny": false,
+    "types": ["vitest/globals"],
     "noEmit": true,
-    "baseUrl": "./",
-    "paths": {
-      "gmp/*": ["src/gmp/*"],
-      "web/*": ["src/web/*"],
-      "version": ["src/version.js"],
-      "@gsa/testing": ["src/testing.js"]
+     "paths": {
+      "gmp/*": ["./src/gmp/*"],
+      "web/*": ["./src/web/*"],
+      "version": ["./src/version.js"],
+      "@gsa/testing": ["./src/testing.js"]
     }
   },
   "include": ["src", "vitest.projects.ts"],

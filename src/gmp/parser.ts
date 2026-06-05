@@ -4,7 +4,7 @@
  */
 
 import createDate, {type Date as GmpDate, duration} from 'gmp/models/date';
-import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
+import {isArray, isDefined, isNumber, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 export interface TextElement {
@@ -81,7 +81,7 @@ export const parseInt = (value?: NumberValue): NumberReturn => {
     return undefined;
   }
 
-  const val = global.parseInt(value as string, 10);
+  const val = Number.parseInt(value as string, 10);
 
   if (isNaN(val)) {
     return undefined;
@@ -99,7 +99,7 @@ export const parseFloat = (value: NumberValue): NumberReturn => {
     return undefined;
   }
 
-  const val = global.parseFloat(value as string);
+  const val = Number.parseFloat(value as string);
 
   if (isNaN(val)) {
     return undefined;

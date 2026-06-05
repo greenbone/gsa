@@ -4,12 +4,12 @@
  */
 
 import {
-  describe,
-  test,
-  expect,
-  testing,
-  beforeEach,
   afterEach,
+  beforeEach,
+  describe,
+  expect,
+  test,
+  testing,
 } from '@gsa/testing';
 import {debounce, throttleAnimation} from 'gmp/utils/event';
 
@@ -60,7 +60,7 @@ describe('debounce function tests', () => {
 
 describe('throttleAnimation function tests', () => {
   test('should throttle running callback', () => {
-    global.requestAnimationFrame = cb => setTimeout(cb, 0);
+    globalThis.requestAnimationFrame = cb => setTimeout(cb, 0);
 
     const callback = testing.fn();
     const func = throttleAnimation(callback);
