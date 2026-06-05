@@ -1,9 +1,9 @@
+import legacy from '@vitejs/plugin-legacy';
+import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
-import react from '@vitejs/plugin-react';
-import legacy from '@vitejs/plugin-legacy';
-import svgrPlugin from 'vite-plugin-svgr';
 import eslintPlugin from 'vite-plugin-eslint2';
+import svgrPlugin from 'vite-plugin-svgr';
 
 const projectRootDir = path.resolve(__dirname);
 
@@ -64,14 +64,19 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
-    minify: 'terser',
-    terserOptions: {
-      mangle: false,
-    },
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: {
-          'greenbone-ui-lib': ['@greenbone/ui-lib'],
+        minify: {
+          compress: true,
+          mangle: false,
+        },
+        codeSplitting: {
+          groups: [
+            {
+              name: 'greenbone-ui-lib',
+              test: /greenbone[/\\]ui-lib/,
+            },
+          ],
         },
       },
     },
