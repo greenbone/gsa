@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {testing, beforeEach, expect} from '@gsa/testing';
+import {testing} from '@gsa/testing';
 // eslint-disable-next-line no-restricted-imports
 import '../setup-tests';
 // setup additional matchers for vitest
@@ -11,9 +11,6 @@ import '@testing-library/jest-dom/vitest';
 // eslint-disable-next-line no-restricted-imports
 import './testing/custom-matchers';
 import * as ResizeObserverModule from 'resize-observer-polyfill';
-
-globalThis.beforeEach = beforeEach;
-globalThis.expect = expect;
 
 // Avoid "Error: Not implemented: navigation (except hash changes)"
 // It is caused by clicking on <a> elements in tests
