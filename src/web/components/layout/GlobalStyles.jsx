@@ -47,6 +47,7 @@ const GlobalStyles = createGlobalStyle`
     --gsa-darkEmptyColor: #b5b5b5;
     --gsa-lightGray-darker: #c5c5c5;
     --gsa-shadowColor: rgba(0, 0, 0, 0.15);
+    --gsa-pieLabel: #f3f3f3;
   }
 
   html[data-mantine-color-scheme="dark"] {
@@ -84,11 +85,12 @@ const GlobalStyles = createGlobalStyle`
     --gsa-statusNewGreen: #37b24d;
     --gsa-statusRunGreen: #2b8a3e;
     --gsa-paleGreen: #5c7cfa;
-    --gsa-darkGreen: #09341c;
-    --gsa-darkGreenTransparent: rgba(9, 52, 28, 0.8);
+    --gsa-darkGreen: #a1ddba;
+    --gsa-darkGreenTransparent: rgba(161, 221, 186, 0.8);
     --gsa-darkEmptyColor: #141416;
     --gsa-lightGray-darker: #1e1f22;
     --gsa-shadowColor: rgba(0, 0, 0, 0.6);
+    --gsa-pieLabel: #ffffff;
   }
 
   html[data-mantine-color-scheme="dark"] [data-testid="login-logo"] {

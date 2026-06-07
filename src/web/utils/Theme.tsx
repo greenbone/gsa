@@ -55,6 +55,7 @@ interface ThemeInterface {
   paleGreen: string;
   darkGreen: string;
   darkGreenTransparent: string;
+  pieLabel: string;
   Layers: ThemeLayer;
   Font: ThemeFont;
 }
@@ -116,6 +117,7 @@ const Theme: ThemeInterface = {
   /* source ? */
   darkGreen: color('--gsa-darkGreen', '#074320'), // RGB: 7, 67, 32
   darkGreenTransparent: color('--gsa-darkGreenTransparent', 'rgba(7, 67, 32, 0.8)'), // corresponds to darkGreen
+  pieLabel: color('--gsa-pieLabel', '#f3f3f3'),
 
   Layers: {
     menu: 600,
