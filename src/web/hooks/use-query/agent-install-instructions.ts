@@ -4,39 +4,35 @@
  */
 
 import {useQuery} from '@tanstack/react-query';
+import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
+import useSession from 'web/hooks/useSessionToken';
 import {type InstallInstructionsData} from 'web/pages/agent-remote-installer/types';
 
 type UseGetInstallInstructionsParams = {
+  scannerId?: string;
   enabled?: boolean;
 };
 
-const getInstructionsUrl = (langCode: string): string => {
-  const encodedLang = encodeURIComponent(langCode);
-  return `http://dev.agent-control.greenbone.io:8080/api/v1/install-instructions?lang=${encodedLang}`;
-};
-
 const useGetInstallInstructions = ({
+  scannerId,
   enabled = true,
 }: UseGetInstallInstructionsParams = {}) => {
+  const gmp = useGmp();
+  const token = useSession();
   const [language] = useLanguage();
   const langCode = language.split(/[-_]/)[0] || 'en';
-  const url = getInstructionsUrl(langCode);
 
   return useQuery<InstallInstructionsData>({
-    queryKey: ['install-instructions', url],
+    queryKey: ['install-instructions', token, scannerId, langCode],
     queryFn: async () => {
-      const response = await fetch(url, {
-        headers: {
-          Accept: 'application/json',
-        },
+      const response = await gmp.agentinstallersinstructions.getInstructions({
+        lang: langCode,
+        scannerId,
       });
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      return response.json() as Promise<InstallInstructionsData>;
+      return response.data;
     },
-    enabled,
+    enabled: enabled && Boolean(token),
   });
 };
 

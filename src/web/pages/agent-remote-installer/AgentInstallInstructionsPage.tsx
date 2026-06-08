@@ -62,7 +62,6 @@ const AgentInstallInstructionsPage = () => {
   const controllers = useMemo(() => controllersData ?? [], [controllersData]);
 
   const activeControllerId = selectedController ?? controllers[0]?.id;
-  const activeController = controllers.find(c => c.id === activeControllerId);
 
   const {
     data: instructions,
@@ -70,8 +69,7 @@ const AgentInstallInstructionsPage = () => {
     error: instructionsError,
     refetch: refetchInstructions,
   } = useGetInstallInstructions({
-    host: activeController?.host,
-    port: activeController?.port,
+    scannerId: activeControllerId,
     enabled: !controllersLoading,
   });
 
