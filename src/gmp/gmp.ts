@@ -14,6 +14,7 @@ import 'gmp/commands/scan-configs';
 import 'gmp/commands/schedules';
 import 'gmp/commands/tickets';
 import 'gmp/commands/tls-certificates';
+import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
 import AgentCommand from 'gmp/commands/agent';
