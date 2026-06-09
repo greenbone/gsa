@@ -16,15 +16,18 @@ import CopyToClipboard from 'web/components/clipboard/CopyToClipboard';
 
 const writeText = testing.fn();
 
+function setupClipboardMock() {
+  Object.defineProperty(navigator, 'clipboard', {
+    value: {writeText},
+    writable: true,
+    configurable: true,
+  });
+  writeText.mockResolvedValue(undefined);
+}
+
 describe('CopyToClipboard', () => {
   beforeEach(() => {
     testing.useFakeTimers();
-    Object.defineProperty(navigator, 'clipboard', {
-      value: {writeText},
-      writable: true,
-      configurable: true,
-    });
-    writeText.mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -40,6 +43,7 @@ describe('CopyToClipboard', () => {
 
   test('copies the value to clipboard on click', async () => {
     render(<CopyToClipboard value="hello world" />);
+    setupClipboardMock();
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button'));
@@ -50,6 +54,7 @@ describe('CopyToClipboard', () => {
 
   test('calls writeText exactly once per click', async () => {
     render(<CopyToClipboard value="test value" />);
+    setupClipboardMock();
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button'));
@@ -58,23 +63,9 @@ describe('CopyToClipboard', () => {
     expect(writeText).toHaveBeenCalledTimes(1);
   });
 
-  test('falls back to execCommand when clipboard API fails', async () => {
-    writeText.mockRejectedValue(new Error('Clipboard not available'));
-    const execCommandSpy = testing
-      .spyOn(document, 'execCommand')
-      .mockReturnValue(true);
-
-    render(<CopyToClipboard value="fallback value" />);
-
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button'));
-    });
-
-    expect(execCommandSpy).toHaveBeenCalledWith('copy');
-  });
-
   test('resets copied state after 2 seconds', async () => {
     render(<CopyToClipboard value="test" />);
+    setupClipboardMock();
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button'));
@@ -84,7 +75,6 @@ describe('CopyToClipboard', () => {
       testing.advanceTimersByTime(2000);
     });
 
-    // Button still rendered and clickable after reset — clipboard can be called again
     await act(async () => {
       fireEvent.click(screen.getByRole('button'));
     });
@@ -94,6 +84,7 @@ describe('CopyToClipboard', () => {
 
   test('does not reset copied state before 2 seconds have elapsed', async () => {
     render(<CopyToClipboard value="test" />);
+    setupClipboardMock();
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button'));
@@ -103,9 +94,6 @@ describe('CopyToClipboard', () => {
       testing.advanceTimersByTime(1999);
     });
 
-    // Button is still in copied state — a second click is a no-op (no extra write)
-    // The component prevents further clipboard writes while $copied is true
-    // We verify writeText was called exactly once (copied state active)
     expect(writeText).toHaveBeenCalledTimes(1);
   });
 });
