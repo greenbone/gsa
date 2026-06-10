@@ -32,7 +32,6 @@ const FeedSyncNotification = () => {
 
   return (
     <NotificationWrapper>
-      {/* @ts-expect-error */}
       <InfoPanel
         heading={
           isDefined(feedStatus.error)

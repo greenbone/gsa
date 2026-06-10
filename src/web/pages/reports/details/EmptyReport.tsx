@@ -37,7 +37,6 @@ const EmptyReport = ({
       data-testid={dataTestId}
       flex="column"
     >
-      {/* @ts-expect-error */}
       <InfoPanel
         heading={_(
           'The Report is empty. This can happen for the following ' +
