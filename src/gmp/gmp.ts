@@ -86,6 +86,8 @@ import TimezonesCommand from 'gmp/commands/timezones';
 import TrashCanCommand from 'gmp/commands/trashcan';
 import UserCommand from 'gmp/commands/user';
 import UsersCommand from 'gmp/commands/users';
+import VulnerabilitiesCommand from 'gmp/commands/vulnerabilities';
+import VulnerabilityCommand from 'gmp/commands/vulnerability';
 import WizardCommand from 'gmp/commands/wizard';
 import Http, {type ErrorHandler} from 'gmp/http/http';
 import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
@@ -178,6 +180,8 @@ class Gmp {
   public readonly trashcan: TrashCanCommand;
   public readonly user: UserCommand;
   public readonly users: UsersCommand;
+  public readonly vuln: VulnerabilityCommand;
+  public readonly vulns: VulnerabilitiesCommand;
   public readonly wizard: WizardCommand;
 
   constructor({
@@ -274,6 +278,8 @@ class Gmp {
     this.trashcan = new TrashCanCommand(this.http);
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);
+    this.vuln = new VulnerabilityCommand(this.http);
+    this.vulns = new VulnerabilitiesCommand(this.http);
     this.wizard = new WizardCommand(this.http);
 
     this._initCommands();
