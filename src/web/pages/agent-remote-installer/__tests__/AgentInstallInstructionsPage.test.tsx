@@ -5,7 +5,9 @@
 
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
-import Scanner from 'gmp/models/scanner';
+import Scanner, {
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import {createSession} from 'gmp/testing';
 import AgentInstallInstructionsPage from 'web/pages/agent-remote-installer/AgentInstallInstructionsPage';
 import {type InstallInstructionsData} from 'web/pages/agent-remote-installer/types';
@@ -15,7 +17,15 @@ const makeScanner = (
   name: string,
   host: string,
   port: number,
-): Scanner => new Scanner({id, name, host, port});
+  scannerType?: string,
+): Scanner =>
+  new Scanner({
+    id,
+    name,
+    host,
+    port,
+    scannerType: scannerType as Scanner['scannerType'],
+  });
 
 const mockInstructionsData: InstallInstructionsData = {
   _version: '1.0',
@@ -205,5 +215,46 @@ describe('AgentInstallInstructionsPage tests', () => {
     expect(options).toHaveLength(2);
     expect(options[0]).toHaveTextContent('Local Controller (agentcontrol:443)');
     expect(options[1]).toHaveTextContent('Remote Controller (10.0.0.1:443)');
+  });
+
+  test('should show sensor warning when selected controller is an agent sensor', async () => {
+    const gmp = createGmp({
+      getAllScanners: testing.fn().mockResolvedValue({
+        data: [
+          makeScanner(
+            'scanner-1',
+            'Sensor Controller',
+            '10.0.0.2',
+            443,
+            AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+          ),
+        ],
+      }),
+    });
+
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(<AgentInstallInstructionsPage />);
+
+    await screen.findByTestId('agent-sensor-warning');
+    expect(screen.getByTestId('agent-sensor-warning')).toBeInTheDocument();
+    expect(screen.getByText('Sensor Network Notice')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Please run these commands on the selected sensor network only; do not execute them on the master node.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  test('should not show sensor warning when selected controller is not an agent sensor', async () => {
+    const gmp = createGmp();
+
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(<AgentInstallInstructionsPage />);
+
+    await screen.findByText('Agent Installation');
+
+    expect(
+      screen.queryByTestId('agent-sensor-warning'),
+    ).not.toBeInTheDocument();
   });
 });
