@@ -89,6 +89,8 @@ import UserCommand from 'gmp/commands/user';
 import UsersCommand from 'gmp/commands/users';
 import VulnerabilitiesCommand from 'gmp/commands/vulnerabilities';
 import VulnerabilityCommand from 'gmp/commands/vulnerability';
+import WebApplicationTargetCommand from 'gmp/commands/web-application-target';
+import WebApplicationTargetsCommand from 'gmp/commands/web-application-targets';
 import WizardCommand from 'gmp/commands/wizard';
 import Http, {type ErrorHandler} from 'gmp/http/http';
 import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
@@ -145,6 +147,8 @@ class Gmp {
   public readonly ociimagetarget: OciImageTargetCommand;
   public readonly ociimagetargets: OciImageTargetsCommand;
   public readonly performance: PerformanceCommand;
+  public readonly webapplicationtarget: WebApplicationTargetCommand;
+  public readonly webapplicationtargets: WebApplicationTargetsCommand;
   public readonly permission: PermissionCommand;
   public readonly permissions: PermissionsCommand;
   public readonly policy: PolicyCommand;
@@ -246,6 +250,8 @@ class Gmp {
     this.ociimagetarget = new OciImageTargetCommand(this.http);
     this.ociimagetargets = new OciImageTargetsCommand(this.http);
     this.performance = new PerformanceCommand(this.http);
+    this.webapplicationtarget = new WebApplicationTargetCommand(this.http);
+    this.webapplicationtargets = new WebApplicationTargetsCommand(this.http);
     this.permission = new PermissionCommand(this.http);
     this.permissions = new PermissionsCommand(this.http);
     this.policy = new PolicyCommand(this.http);
