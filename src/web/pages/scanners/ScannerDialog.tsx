@@ -204,7 +204,8 @@ const ScannerDialog = ({
 
   if (
     scannerType === CONTAINER_IMAGE_SCANNER_TYPE ||
-    features.featureEnabled('ENABLE_CONTAINER_SCANNING')
+    features.featureEnabled('ENABLE_CONTAINER_SCANNING') ||
+    features.featureEnabled('ENABLE_WEB_APPLICATION_SCANNING')
   ) {
     scannerTypes.push(CONTAINER_IMAGE_SCANNER_TYPE);
   }

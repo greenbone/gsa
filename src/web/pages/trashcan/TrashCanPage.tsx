@@ -35,6 +35,7 @@ import AlertsTable from 'web/pages/alerts/Table';
 import AuditsTable from 'web/pages/audits/Table';
 import ContainerImageTargetTable from 'web/pages/container-image-targets/ContainerImageTargetTable';
 import CredentialTable from 'web/pages/credentials/CredentialTable';
+import WebApplicationTargetTable from 'web/pages/web-application-targets/WebApplicationTargetTable';
 import TrashActions from 'web/pages/extras/TrashActions';
 import FiltersTable from 'web/pages/filters/Table';
 import GroupsTable from 'web/pages/groups/Table';
@@ -96,6 +97,9 @@ const TrashCan = () => {
       .get({
         agentGroups: features.featureEnabled('ENABLE_AGENTS'),
         ociImageTargets: features.featureEnabled('ENABLE_CONTAINER_SCANNING'),
+        webApplicationTargets: features.featureEnabled(
+          'ENABLE_WEB_APPLICATION_SCANNING',
+        ),
       })
       .then(
         response => {
@@ -415,6 +419,17 @@ const TrashCan = () => {
             {/* @ts-expect-error */}
             <ContainerImageTargetTable
               entities={trash.ociImageTargets}
+              {...tableProps}
+            />
+          </span>
+        )}
+        {hasEntities(trash?.webApplicationTargets) && (
+          <span>
+            <LinkTarget id="web-application-target" />
+            <h1>{_('Web Application Targets')}</h1>
+            {/* @ts-expect-error */}
+            <WebApplicationTargetTable
+              entities={trash.webApplicationTargets}
               {...tableProps}
             />
           </span>

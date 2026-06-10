@@ -52,7 +52,10 @@ const SchedulingFormGroup = ({
     </FormGroup>
   );
 
-  if (!features.featureEnabled('ENABLE_CONTAINER_SCANNING')) {
+  if (
+    !features.featureEnabled('ENABLE_CONTAINER_SCANNING') &&
+    !features.featureEnabled('ENABLE_WEB_APPLICATION_SCANNING')
+  ) {
     return formGroup;
   }
 

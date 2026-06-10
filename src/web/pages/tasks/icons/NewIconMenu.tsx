@@ -15,6 +15,7 @@ interface NewIconMenuProps {
   onNewImportTaskClick?: () => void;
   onNewAgentTaskClick?: () => void;
   onNewContainerImageTaskClick?: () => void;
+  onNewWebApplicationTaskClick?: () => void;
 }
 
 const NewIconMenu = ({
@@ -22,6 +23,7 @@ const NewIconMenu = ({
   onNewImportTaskClick,
   onNewAgentTaskClick,
   onNewContainerImageTaskClick,
+  onNewWebApplicationTaskClick,
 }: NewIconMenuProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -51,6 +53,13 @@ const NewIconMenu = ({
             data-testid="new-container-image-menu"
             title={_('New Container Image Task')}
             onClick={onNewContainerImageTaskClick}
+          />
+        )}
+        {features.featureEnabled('ENABLE_WEB_APPLICATION_SCANNING') && (
+          <MenuEntry
+            data-testid="new-web-application-menu"
+            title={_('New Web Application Task')}
+            onClick={onNewWebApplicationTaskClick}
           />
         )}
       </IconMenu>
