@@ -216,6 +216,8 @@ describe('Gmp tests', () => {
     'ociimagetarget',
     'ociimagetargets',
     'performance',
+    'webapplicationtarget',
+    'webapplicationtargets',
     'permission',
     'permissions',
     'policy',
