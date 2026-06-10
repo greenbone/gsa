@@ -5,9 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {COMPLIANCE} from 'gmp/models/compliance';
-import Filter from 'gmp/models/filter';
 import AuditReportReport from 'gmp/models/report/audit-report';
-import {emptyCollectionList} from 'gmp/models/report/parser';
 import {parseDate} from 'gmp/parser';
 
 describe('AuditReportReport tests', () => {
@@ -16,41 +14,29 @@ describe('AuditReportReport tests', () => {
     expect(report.compliance).toBeUndefined();
     expect(report.complianceCounts).toBeUndefined();
     expect(report.delta_report).toBeUndefined();
-    expect(report.errors).toBeUndefined();
     expect(report.filter).toBeUndefined();
-    expect(report.hosts).toBeUndefined();
-    expect(report.operatingSystems).toBeUndefined();
     expect(report.reportType).toBeUndefined();
-    expect(report.results).toBeUndefined();
     expect(report.scan_end).toBeUndefined();
     expect(report.scan_run_status).toBeUndefined();
     expect(report.scan_start).toBeUndefined();
     expect(report.task).toBeUndefined();
     expect(report.timezone).toBeUndefined();
     expect(report.timezone_abbrev).toBeUndefined();
-    expect(report.tlsCertificates).toBeUndefined();
   });
 
   test('should parse empty element', () => {
     const report = AuditReportReport.fromElement();
-    const filter = new Filter();
-    const emptyCollection = emptyCollectionList(filter);
     expect(report.compliance).toBeUndefined();
     expect(report.complianceCounts).toBeUndefined();
     expect(report.delta_report).toBeUndefined();
-    expect(report.errors).toEqual(emptyCollection);
     expect(report.filter).toBeDefined();
-    expect(report.hosts).toBeDefined();
-    expect(report.operatingSystems).toBeDefined();
     expect(report.reportType).toBeUndefined();
-    expect(report.results).toBeUndefined();
     expect(report.scan_end).toBeUndefined();
     expect(report.scan_run_status).toBeUndefined();
     expect(report.scan_start).toBeUndefined();
     expect(report.task).toBeDefined();
     expect(report.timezone).toBeUndefined();
     expect(report.timezone_abbrev).toBeUndefined();
-    expect(report.tlsCertificates).toBeDefined();
   });
 
   test('should parse filter', () => {
@@ -118,181 +104,6 @@ describe('AuditReportReport tests', () => {
     expect(report.delta_report?.scan_end).toEqual(
       parseDate('2024-01-02T00:00:00Z'),
     );
-  });
-
-  test('should parse results', () => {
-    const report = AuditReportReport.fromElement({
-      results: {
-        result: [
-          {
-            _id: 'result1',
-            severity: 4.0,
-          },
-        ],
-      },
-      result_count: {
-        __text: '1',
-        full: 3,
-        filtered: 2,
-      },
-    });
-    expect(report.results).toBeDefined();
-    expect(report.results?.counts?.all).toEqual(3);
-    expect(report.results?.counts?.filtered).toEqual(2);
-    expect(report.results?.counts?.rows).toEqual(2);
-    expect(report.results?.counts?.length).toEqual(1);
-    expect(report.results?.entities.length).toEqual(1);
-    expect(report.results?.entities[0].id).toEqual('result1');
-    expect(report.results?.entities[0].severity).toEqual(4.0);
-  });
-
-  test('should parse TLS certificates', () => {
-    const report = AuditReportReport.fromElement({
-      ssl_certs: {
-        count: 43,
-      },
-      tls_certificates: {
-        tls_certificate: [
-          {
-            name: '57610B6A3C73866870678E638C7825743145B24',
-            certificate: {
-              __text: '66870678E638C7825743145B247554E0D92C94',
-              _format: 'DER',
-            },
-            sha256_fingerprint: '57610B6A3C73866870678E638C78',
-            md5_fingerprint: 'fa:a9:9d:f2:28:cc:2c:c0:80:16',
-            activation_time: '2019-08-10T12:51:27Z',
-            expiration_time: '2019-09-10T12:51:27Z',
-            valid: 1,
-            subject_dn: 'CN=LoremIpsumSubject C=Dolor',
-            issuer_dn: 'CN=LoremIpsumIssuer C=Dolor',
-            serial: '00B49C541FF5A8E1D9',
-            host: {ip: '192.168.9.90', hostname: 'foo.bar'},
-            ports: {port: [4021, 4023]},
-          },
-        ],
-      },
-    });
-    expect(report.tlsCertificates).toBeDefined();
-    expect(report.tlsCertificates?.counts?.all).toEqual(43);
-    expect(report.tlsCertificates?.counts?.filtered).toEqual(2);
-    expect(report.tlsCertificates?.counts?.rows).toEqual(2);
-    expect(report.tlsCertificates?.counts?.length).toEqual(2);
-    expect(report.tlsCertificates?.entities?.length).toEqual(2);
-    expect(report.tlsCertificates?.entities[0].id).toEqual(
-      '192.168.9.90:4021:57610B6A3C73866870678E638C7825743145B24',
-    );
-  });
-
-  test('should parse hosts', () => {
-    const report = AuditReportReport.fromElement({
-      host: [
-        {
-          ip: '1.1.1.1',
-        },
-      ],
-      hosts: {
-        count: 123,
-      },
-      results: {
-        result: [
-          {
-            _id: '123',
-            host: {
-              __text: '1.1.1.1',
-            },
-            severity: 7,
-          },
-        ],
-      },
-    });
-    expect(report.hosts).toBeDefined();
-    expect(report.hosts?.counts?.all).toEqual(123);
-    expect(report.hosts?.counts?.filtered).toEqual(1);
-    expect(report.hosts?.counts?.rows).toEqual(1);
-    expect(report.hosts?.counts?.length).toEqual(1);
-    expect(report.hosts?.entities.length).toEqual(1);
-    expect(report.hosts?.entities[0].id).toEqual('1.1.1.1');
-    expect(report.hosts?.entities[0].ip).toEqual('1.1.1.1');
-    expect(report.hosts?.entities[0].severity).toEqual(7);
-  });
-
-  test('should parse operating systems', () => {
-    const report = AuditReportReport.fromElement({
-      os: {
-        count: 123,
-      },
-      results: {
-        result: [
-          {
-            host: {
-              __text: '1.1.1.1',
-            },
-            severity: 5.5,
-          },
-        ],
-      },
-      host: [
-        {
-          ip: '1.1.1.1',
-          detail: [
-            {
-              name: 'best_os_cpe',
-              value: 'cpe:/foo/os',
-            },
-            {
-              name: 'best_os_txt',
-              value: 'Foo OS',
-            },
-          ],
-        },
-      ],
-    });
-    expect(report.operatingSystems).toBeDefined();
-    expect(report.operatingSystems?.counts?.all).toEqual(123);
-    expect(report.operatingSystems?.counts?.filtered).toEqual(1);
-    expect(report.operatingSystems?.counts?.rows).toEqual(1);
-    expect(report.operatingSystems?.counts?.length).toEqual(1);
-    expect(report.operatingSystems?.entities.length).toEqual(1);
-    expect(report.operatingSystems?.entities[0].id).toEqual('cpe:/foo/os');
-    expect(report.operatingSystems?.entities[0].cpe).toEqual('cpe:/foo/os');
-    expect(report.operatingSystems?.entities[0].name).toEqual('Foo OS');
-    expect(report.operatingSystems?.entities[0].severity).toEqual(5.5);
-  });
-
-  test('should parse errors', () => {
-    const report = AuditReportReport.fromElement({
-      errors: {
-        count: 123,
-        error: [
-          {
-            host: {
-              __text: '1.1.1.1',
-              asset: {_asset_id: '123'},
-            },
-            port: '123/tcp',
-            description: 'This is an error.',
-            nvt: {
-              _oid: '314',
-              name: 'NVT1',
-            },
-          },
-        ],
-      },
-    });
-    expect(report.errors).toBeDefined();
-    expect(report.errors?.counts?.all).toEqual(123);
-    expect(report.errors?.counts?.filtered).toEqual(1);
-    expect(report.errors?.counts?.rows).toEqual(1);
-    expect(report.errors?.counts?.length).toEqual(1);
-    expect(report.errors?.entities.length).toEqual(1);
-    expect(report.errors?.entities[0].id).toEqual('1.1.1.1:314');
-    expect(report.errors?.entities[0].description).toEqual('This is an error.');
-    expect(report.errors?.entities[0].host?.ip).toEqual('1.1.1.1');
-    expect(report.errors?.entities[0].host?.id).toEqual('123');
-    expect(report.errors?.entities[0].port).toEqual('123/tcp');
-    expect(report.errors?.entities[0].nvt?.id).toEqual('314');
-    expect(report.errors?.entities[0].nvt?.name).toEqual('NVT1');
   });
 
   test('should parse scan run status', () => {

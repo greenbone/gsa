@@ -19,7 +19,6 @@ import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
-import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import {
   useGetReportConfigs,
   useGetReportExportFileName,
@@ -37,19 +36,6 @@ import TargetComponent from 'web/pages/targets/TargetComponent';
 import useGetEntity from 'web/queries/useGetEntity';
 import {create_pem_certificate} from 'web/utils/Cert';
 import {generateFilename} from 'web/utils/Render';
-
-interface SortState {
-  sortField: string;
-  sortReverse: boolean;
-}
-
-interface SortingState {
-  results: SortState;
-  hosts: SortState;
-  os: SortState;
-  tlscerts: SortState;
-  errors: SortState;
-}
 
 interface ReportComposerDefaults {
   defaultReportFormatId?: string;
@@ -111,14 +97,6 @@ const getReportFilter = (entity?: AuditReport) => {
   return entity?.report?.filter;
 };
 
-const initialSorting: SortingState = {
-  results: {sortField: 'compliant', sortReverse: true},
-  hosts: {sortField: 'compliant', sortReverse: true},
-  os: {sortField: 'compliant', sortReverse: true},
-  tlscerts: {sortField: 'dn', sortReverse: false},
-  errors: {sortField: 'error', sortReverse: false},
-};
-
 const useGetAuditReport = ({
   id,
   filter,
@@ -131,26 +109,11 @@ const useGetAuditReport = ({
   const gmp = useGmp();
   const auditreport = (gmp as unknown as {auditreport: AuditReportCommand})
     .auditreport;
-  const threshold = gmp.settings.reportResultsThreshold;
   const filterString = filter?.toFilterString();
 
   return useGetEntity<AuditReport>({
     gmpMethod: async ({id}) => {
-      const lightResponse = await auditreport.get(
-        {id},
-        {filter: filterString, details: false},
-      );
-      const lightReport = lightResponse.data;
-
-      const needsFullReport =
-        isDefined(lightReport?.report?.results) &&
-        lightReport.report.results.counts.filtered < threshold;
-
-      if (needsFullReport) {
-        return auditreport.get({id}, {filter: filterString, details: true});
-      }
-
-      return lightResponse;
+      return auditreport.get({id}, {filter: filterString, details: false});
     },
     queryId: 'get_audit_report',
     queryKeyParts: [filterString],
@@ -180,7 +143,6 @@ const AuditReportDetailsPage = () => {
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showDownloadReportDialog, setShowDownloadReportDialog] =
     useState(false);
-  const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
 
@@ -219,10 +181,6 @@ const AuditReportDetailsPage = () => {
   const reportError = isError ? queryError : undefined;
 
   const reportFilter = getReportFilter(entity);
-  const {data: reportTlsCertificatesData} = useGetReportTlsCertificates({
-    reportId,
-    filter: reportFilter,
-  });
 
   // Filters list for Powerfilter dropdown
   const {data: filtersData, isLoading: isLoadingFilters} =
@@ -274,19 +232,10 @@ const AuditReportDetailsPage = () => {
   // Derive counts from report entity
   const report = entity?.report;
 
-  const resultsCounts = report?.results?.counts;
-  const hostsCounts = report?.hosts?.counts;
-  const operatingSystemsCounts = report?.operatingSystems?.counts;
-  const tlsCertificatesCounts =
-    reportTlsCertificatesData?.entitiesCounts ??
-    report?.tlsCertificates?.counts;
-  const errorsCounts = report?.errors?.counts;
-
   const threshold = gmp.settings.reportResultsThreshold;
+  const complianceFiltered = report?.complianceCounts?.filtered ?? 0;
   const showThresholdMessage =
-    isDefined(report) &&
-    isDefined(resultsCounts) &&
-    resultsCounts.filtered > threshold;
+    isDefined(report) && complianceFiltered > threshold;
 
   // Handlers
   const handleFilterChange = useCallback(
@@ -476,20 +425,6 @@ const AuditReportDetailsPage = () => {
     }
   }, [reportFilter, handleFilterChange]);
 
-  const handleSortChange = useCallback(
-    (name: string, sortField: string) => {
-      const prev = sorting[name as keyof SortingState];
-      const sortReverse =
-        sortField === prev.sortField ? !prev.sortReverse : false;
-
-      setSorting(prevSorting => ({
-        ...prevSorting,
-        [name]: {sortField, sortReverse},
-      }));
-    },
-    [sorting],
-  );
-
   const handleChanged = useCallback(() => {
     void queryClient.invalidateQueries({queryKey: ['get_audit_report']});
   }, [queryClient]);
@@ -518,25 +453,19 @@ const AuditReportDetailsPage = () => {
         {({edit}) => (
           <Page
             entity={entity}
-            errorsCounts={errorsCounts}
             filters={filters}
-            hostsCounts={hostsCounts}
             isLoading={isLoading}
             isLoadingFilters={isLoadingFilters}
             isUpdating={isFetching && !isLoading}
-            operatingSystemsCounts={operatingSystemsCounts}
             pageFilter={pageFilter}
             reportError={reportError}
             reportFilter={reportFilter}
             reportId={reportId}
             resetFilter={AUDIT_REPORT_RESET_FILTER}
-            resultsCounts={resultsCounts}
             showError={showError as (...args: unknown[]) => void}
             showErrorMessage={showErrorMessage}
             showSuccessMessage={showSuccessMessage}
-            sorting={sorting}
             task={isDefined(report) ? report.task : undefined}
-            tlsCertificatesCounts={tlsCertificatesCounts}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
             onFilterChanged={handleFilterChange}
@@ -547,7 +476,6 @@ const AuditReportDetailsPage = () => {
             onFilterResetClick={handleFilterResetClick}
             onRemoveFromAssetsClick={handleRemoveFromAssets}
             onReportDownloadClick={handleOpenDownloadReportDialog}
-            onSortChange={handleSortChange}
             onTagSuccess={handleChanged}
             onTargetEditClick={async () => {
               const response = await loadTarget();

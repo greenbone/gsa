@@ -21,13 +21,18 @@ import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
 import ResultsTable from 'web/pages/results/ResultsTable';
 
+interface ResultsCounts {
+  filtered?: number;
+  full?: number;
+}
+
 interface ResultsTabWrapperProps {
   audit?: boolean;
   hasTarget: boolean;
   progress: number;
   reportFilter: Filter;
   reportId: string;
-  reportResultsCounts?: CollectionCounts;
+  reportResultsCounts?: ResultsCounts;
   status: TaskStatus;
   onFilterAddLogLevelClick?: () => void;
   onFilterDecreaseMinQoDClick: () => void;
@@ -119,7 +124,7 @@ const ResultsTabWrapper = ({
   const displayedFilter = resultsFilter.copy().delete('_and_report_id');
 
   if (reportResultsCounts?.filtered === 0) {
-    if (reportResultsCounts.all === 0) {
+    if ((reportResultsCounts.full ?? 0) === 0) {
       return (
         <EmptyReport
           hasTarget={hasTarget}
@@ -128,10 +133,10 @@ const ResultsTabWrapper = ({
           onTargetEditClick={onTargetEditClick}
         />
       );
-    } else if (reportResultsCounts.all > 0) {
+    } else if ((reportResultsCounts.full ?? 0) > 0) {
       return (
         <EmptyResultsReport
-          all={reportResultsCounts.all}
+          all={reportResultsCounts.full ?? 0}
           filter={displayedFilter}
           onFilterAddLogLevelClick={onFilterAddLogLevelClick}
           onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -151,7 +156,7 @@ const ResultsTabWrapper = ({
       entitiesCounts={resultsCounts}
       filter={displayedFilter}
       footer={false}
-      isUpdating={isFetching && !data}
+      isUpdating={isFetching}
       links={true}
       sortBy={sortBy || 'severity'}
       sortDir={sortDir}

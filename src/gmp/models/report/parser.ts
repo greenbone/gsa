@@ -4,30 +4,14 @@
  */
 
 import CollectionCounts from 'gmp/collection/collection-counts';
-import {
-  type CollectionList,
-  parseCollectionList,
-  parseReportResultEntities,
-} from 'gmp/collection/parser';
+import {type CollectionList} from 'gmp/collection/parser';
 import {type ComplianceType} from 'gmp/models/compliance';
 import type Filter from 'gmp/models/filter';
-import {
-  getRefs,
-  hasRefType,
-  type NvtRefElement,
-  type NvtSeveritiesElement,
-} from 'gmp/models/nvt';
-import ReportApp from 'gmp/models/report/app';
-import ReportHost from 'gmp/models/report/host';
-import ReportOperatingSystem from 'gmp/models/report/os';
-import ReportPort from 'gmp/models/report/port';
-import ReportTLSCertificate, {
-  type ReportTLSCertificateElement,
-} from 'gmp/models/report/tls-certificate';
-import Result from 'gmp/models/result';
+import {type NvtRefElement, type NvtSeveritiesElement} from 'gmp/models/nvt';
+import {type ReportTLSCertificateElement} from 'gmp/models/report/tls-certificate';
 import {parseSeverity, type QoDParams} from 'gmp/parser';
-import {filter as filterFunc, forEach, map} from 'gmp/utils/array';
-import {isArray, isDefined} from 'gmp/utils/identity';
+import {filter as filterFunc, forEach} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 export interface CountElement {
@@ -198,19 +182,8 @@ export interface ReportResultCountElement {
   };
 }
 
-interface ResultsReportElement {
-  results?: ReportResultsElement;
-  result_count?: ReportResultCountElement;
-  compliance_count?: ReportComplianceCountElement;
-}
-
 export interface TlsCertificatesElement {
   tls_certificate?: ReportTLSCertificateElement | ReportTLSCertificateElement[];
-}
-
-interface TlsCertificatesReportElement {
-  ssl_certs?: CountElement;
-  tls_certificates?: TlsCertificatesElement;
 }
 
 export interface PortElement {
@@ -224,10 +197,6 @@ export interface PortsElement extends CountElement {
   _max?: string;
   _min?: string;
   port?: PortElement | PortElement[];
-}
-
-interface PortsReportElement {
-  ports?: PortsElement;
 }
 
 interface PageCountElement {
@@ -296,24 +265,9 @@ export interface AppsReportElement {
   results?: ReportResultsElement;
 }
 
-interface OperatingSystemReportElement {
-  host?: ReportHostElement | ReportHostElement[];
-  results?: ReportResultsElement;
-  os?: CountElement;
-}
-
 interface ErrorsReportElement {
   host?: ReportHostElement | ReportHostElement[];
   errors?: ErrorsElement;
-}
-
-interface ClosedCvesReportElement {
-  host?: ReportHostElement | ReportHostElement[];
-  closed_cves?: CountElement;
-}
-
-interface CvesReportElement {
-  results?: ReportResultsElement;
 }
 
 export interface ReportClosedCve {
@@ -399,216 +353,14 @@ export interface ReportError {
   port?: string;
 }
 
-interface HostsReportElement {
-  host?: ReportHostElement | ReportHostElement[];
-  results?: ReportResultsElement;
-  hosts?: CountElement;
-}
-
 // reports with details=1 always have a results element
 // (that can be empty) whereas reports with details=0
 // never have a results element
-const isReportWithDetails = (results: ReportResultsElement | undefined) =>
-  isDefined(results);
-
 export const emptyCollectionList = (filter: Filter) => {
   return {
     filter,
     entities: [],
     counts: new CollectionCounts(),
-  };
-};
-
-export const parseTlsCertificates = (
-  report: TlsCertificatesReportElement,
-  filter: Filter,
-): CollectionList<ReportTLSCertificate> => {
-  const {ssl_certs, tls_certificates} = report;
-
-  if (!isDefined(ssl_certs) || !isDefined(tls_certificates)) {
-    return emptyCollectionList(filter);
-  }
-
-  const {count: fullCount} = ssl_certs;
-
-  const certs = map(tls_certificates.tls_certificate, tlsCert =>
-    ReportTLSCertificate.fromElement(tlsCert),
-  );
-
-  // create a cert per port
-  const certsPerPort: ReportTLSCertificate[] = [];
-  certs.forEach(cert => {
-    cert.ports.forEach(port => {
-      certsPerPort.push(cert.copy({port, ports: [port]}));
-    });
-  });
-
-  const {length: filteredCount} = certsPerPort;
-
-  const counts = new CollectionCounts({
-    all: fullCount,
-    filtered: filteredCount,
-    first: 1,
-    length: filteredCount,
-    rows: filteredCount,
-  });
-
-  return {
-    counts,
-    entities: certsPerPort,
-    filter,
-  };
-};
-
-export const parsePorts = (
-  report: PortsReportElement,
-  filter: Filter,
-): CollectionList<ReportPort> => {
-  const tempPorts: Record<string, ReportPort> = {};
-  const {ports} = report;
-
-  if (!isDefined(ports)) {
-    return emptyCollectionList(filter);
-  }
-
-  const {count: fullCount} = ports;
-
-  forEach(ports.port, port => {
-    const {__text: id} = port;
-
-    if (isDefined(id) && !id.startsWith('general')) {
-      let tPort = tempPorts[id];
-
-      if (isDefined(tPort)) {
-        const severity = parseSeverity(port.severity);
-
-        tPort.setSeverity(severity);
-      } else {
-        tPort = ReportPort.fromElement(port);
-        tempPorts[id] = tPort;
-      }
-
-      tPort.addHost({ip: port.host});
-    }
-  });
-
-  const portsArray = Object.values(tempPorts);
-  const {length: filteredCount} = portsArray;
-
-  const counts = new CollectionCounts({
-    all: fullCount,
-    filtered: filteredCount,
-    first: 1,
-    length: filteredCount,
-    rows: filteredCount,
-  });
-
-  return {
-    entities: portsArray.sort((portA, portB) =>
-      Number(portA.number > portB.number),
-    ),
-    filter,
-    counts,
-  };
-};
-
-export const parseApps = (
-  report: AppsReportElement,
-  filter: Filter,
-): CollectionList<ReportApp> => {
-  const {host: hosts, apps, results} = report;
-  if (!isDefined(apps) || !isReportWithDetails(results)) {
-    return emptyCollectionList(filter);
-  }
-
-  const {count: fullCount} = apps;
-  const severities = {};
-  const tempApps: Record<string, ReportApp> = {};
-  const cpeHostDetails: Record<string, number> = {};
-
-  // if there are several results find the highest severity for the cpe
-  forEach(results.result, result => {
-    const resultSeverity = parseSeverity(result.severity);
-
-    if (
-      isDefined(resultSeverity) &&
-      isDefined(result.detection?.result?.details)
-    ) {
-      filterFunc(
-        result.detection.result.details.detail,
-        detail => detail.name === 'product',
-      ).forEach(detail => {
-        const {value: cpe} = detail;
-
-        if (isDefined(cpe)) {
-          const severity = severities[cpe];
-
-          if (isDefined(severity)) {
-            if (severity < resultSeverity) {
-              severities[cpe] = resultSeverity;
-            }
-          } else {
-            severities[cpe] = resultSeverity;
-          }
-        }
-      });
-    }
-  });
-
-  // Collect Apps and their hosts
-  forEach(hosts, host => {
-    const {detail: details} = host;
-
-    forEach(details, detail => {
-      const {name = ''} = detail;
-
-      if (name === 'App') {
-        const cpe = detail.value as string;
-        let app = tempApps[cpe];
-
-        if (!isDefined(app)) {
-          app = ReportApp.fromElement({
-            value: detail.value as string,
-            severity: severities[cpe],
-          });
-          tempApps[cpe] = app;
-        }
-
-        app.addHost(host);
-      } else if (name.startsWith('cpe:/a')) {
-        const detailsCountForCpe = cpeHostDetails[name];
-
-        if (isDefined(detailsCountForCpe)) {
-          cpeHostDetails[name] += 1;
-        } else {
-          cpeHostDetails[name] = 1;
-        }
-      }
-    });
-  });
-
-  const appsArray = Object.values(tempApps);
-
-  // Collect host and occurrence counts
-  for (const app of appsArray) {
-    const details_count_for_cpe = cpeHostDetails[app.id as string];
-    app.addOccurrence(details_count_for_cpe);
-  }
-
-  const {length: filteredCount} = appsArray;
-
-  const counts = new CollectionCounts({
-    all: fullCount,
-    filtered: filteredCount,
-    first: 1,
-    length: filteredCount,
-    rows: filteredCount,
-  });
-
-  return {
-    filter,
-    entities: appsArray,
-    counts,
   };
 };
 
@@ -635,163 +387,6 @@ export const parseHostSeverities = (results: ReportResultsElement = {}) => {
   });
 
   return severities;
-};
-
-export const parseOperatingSystems = (
-  report: OperatingSystemReportElement,
-  filter: Filter,
-): CollectionList<ReportOperatingSystem> => {
-  const {host: hosts, results, os: osCount} = report;
-
-  if (!isDefined(osCount) || !isReportWithDetails(results)) {
-    return emptyCollectionList(filter);
-  }
-
-  const operatingSystems: Record<string, ReportOperatingSystem> = {};
-
-  const severities = parseHostSeverities(results);
-
-  forEach(hosts, host => {
-    const {detail: details, ip, host_compliance} = host;
-
-    let bestOsCpe: string | undefined;
-    let bestOsTxt: string | undefined;
-
-    if (isDefined(ip)) {
-      forEach(details, detail => {
-        const {name, value} = detail;
-        if (name === 'best_os_cpe') {
-          bestOsCpe = value as string;
-        } else if (name === 'best_os_txt') {
-          bestOsTxt = value as string;
-        }
-      });
-
-      if (isDefined(bestOsCpe)) {
-        let os = operatingSystems[bestOsCpe];
-        const severity = severities[ip];
-
-        if (!isDefined(os)) {
-          os = ReportOperatingSystem.fromElement({
-            best_os_cpe: bestOsCpe,
-            best_os_txt: bestOsTxt,
-          });
-          operatingSystems[bestOsCpe] = os;
-        }
-
-        os.addHost(host);
-        os.setSeverity(severity);
-        os.addHostCompliance(host, host_compliance);
-      }
-    }
-  });
-
-  const osArray = Object.values(operatingSystems);
-  const {length: filteredCount} = osArray;
-
-  const counts = new CollectionCounts({
-    all: osCount.count,
-    filtered: filteredCount,
-    first: 1,
-    length: filteredCount,
-    rows: filteredCount,
-  });
-
-  return {
-    filter,
-    entities: osArray,
-    counts,
-  };
-};
-
-export const parseHosts = (
-  report: HostsReportElement,
-  filter: Filter,
-): CollectionList<ReportHost> => {
-  const {host: hosts, results, hosts: hostsCount} = report;
-
-  if (
-    (!isDefined(hosts) && !isDefined(hostsCount)) ||
-    !isReportWithDetails(results)
-  ) {
-    return emptyCollectionList(filter);
-  }
-
-  const severities = parseHostSeverities(results);
-
-  const hostsArray = map(hosts, host => {
-    const severity = severities[host.ip as string];
-    return ReportHost.fromElement({
-      ...host,
-      severity,
-    });
-  });
-
-  const {length: filteredCount} = hostsArray;
-
-  const counts = new CollectionCounts({
-    all: hostsCount?.count,
-    filtered: filteredCount,
-    first: 1,
-    length: filteredCount,
-    rows: filteredCount,
-  });
-
-  return {
-    counts,
-    entities: hostsArray,
-    filter,
-  };
-};
-
-const parseReportReportCounts = (element: ResultsReportElement) => {
-  const resultsElement = element.results ?? {};
-  const resultCountElement = element.result_count ?? element.compliance_count;
-
-  // due to the XML conversion to JS the result element can be a single element or an array
-  const length = isDefined(resultsElement.result)
-    ? isArray(resultsElement.result)
-      ? resultsElement.result.length
-      : 1
-    : 0;
-
-  return new CollectionCounts({
-    first: resultsElement._start,
-    rows: resultCountElement?.filtered,
-    length,
-    all: isDefined(resultCountElement?.full)
-      ? resultCountElement.full
-      : resultCountElement?.filtered, // ec.full isn't available for delta reports
-    filtered: resultCountElement?.filtered,
-  });
-};
-
-export const parseResults = (report: ResultsReportElement) => {
-  const {results, result_count, compliance_count} = report;
-  if (
-    !isDefined(results) &&
-    !isDefined(result_count) &&
-    !isDefined(compliance_count)
-  ) {
-    return undefined;
-    // instead of returning empty_collection_list(filter) we return an undefined
-    // in order to query if results have been loaded and make a difference to
-    // "loaded, but 0 total". This is used for showing the Loading indicator at
-    // the report details
-  }
-
-  return parseCollectionList<Result, Required<ResultsReportElement>>(
-    report as Required<ResultsReportElement>,
-    'result',
-    Result,
-    {
-      entitiesParseFunc: parseReportResultEntities<
-        Result,
-        Required<ResultsReportElement>
-      >,
-      collectionCountParseFunc: parseReportReportCounts,
-    },
-  );
 };
 
 export const parseErrors = (
@@ -862,161 +457,6 @@ export const parseErrors = (
   return {
     counts,
     entities: errorsArray,
-    filter,
-  };
-};
-
-export const parseClosedCves = (
-  report: ClosedCvesReportElement,
-  filter: Filter,
-): CollectionList<ReportClosedCve> => {
-  const {host: hosts, closed_cves: closedCves} = report;
-
-  if (!isDefined(closedCves)) {
-    return emptyCollectionList(filter);
-  }
-
-  // count doesn't fit to our counting of cves. we split the db rows with a csv
-  // list of cves into several cves.
-  // const {count: full_count} = closed_cves;
-
-  let cvesArray: ReportClosedCve[] = [];
-
-  forEach(hosts, host => {
-    let hostname: string | undefined;
-    const hostCves: Record<string, ReportClosedCve> = {};
-
-    forEach(host.detail, detail => {
-      const {name, value = '', extra, source} = detail;
-
-      if (isDefined(name)) {
-        if (name.startsWith('Closed CVE')) {
-          const cveHost = {
-            ip: host.ip,
-            id: isDefined(host.asset) ? host.asset._asset_id : undefined,
-          };
-          const severity = parseSeverity(extra);
-          (value as string).split(',').forEach(val => {
-            const cveId = val.trim();
-            const cve: ReportClosedCve = {
-              id: `${cveId}-${host.ip}-${source?.name}`,
-              cveId,
-              host: cveHost,
-              source,
-              severity,
-            };
-
-            const existingCve = hostCves[cveId];
-            if (
-              isDefined(existingCve) &&
-              isDefined(existingCve.severity) &&
-              (!isDefined(cve.severity) || existingCve.severity > cve.severity)
-            ) {
-              // always use highest severity
-              cve.severity = existingCve.severity;
-            }
-
-            hostCves[cveId] = cve;
-          });
-        } else if (name === 'hostname') {
-          // collect hostname
-          hostname = value as string | undefined;
-        }
-      }
-    });
-
-    if (isDefined(hostname)) {
-      for (const cve of Object.values(hostCves)) {
-        cve.host.name = hostname;
-      }
-    }
-
-    cvesArray = cvesArray.concat(Object.values(hostCves));
-  });
-
-  const {length: filteredCount} = cvesArray;
-
-  const counts = new CollectionCounts({
-    all: closedCves.count,
-    filtered: filteredCount,
-    first: 1,
-    length: filteredCount,
-    rows: filteredCount,
-  });
-
-  return {
-    counts,
-    entities: cvesArray,
-    filter,
-  };
-};
-
-export const parseCves = (
-  report: CvesReportElement,
-  filter: Filter,
-): CollectionList<ReportActiveCve> => {
-  const {results} = report;
-
-  if (!isDefined(results)) {
-    return emptyCollectionList(filter);
-  }
-
-  const cvesMap: Record<string, ReportActiveCve> = {};
-
-  const resultsWithCve = filterFunc(results.result, result => {
-    const refs = getRefs(result.nvt);
-    return refs.some(hasRefType('cve'));
-  });
-
-  resultsWithCve.forEach(result => {
-    const {host = {}, nvt} = result;
-    const {__text: ip, asset} = host;
-    const nvtOid = nvt?._oid;
-    const nvtName = nvt?.name;
-    const resultSeverity = parseSeverity(result.severity);
-    const hostId = isDefined(asset) ? asset._asset_id : undefined;
-
-    getRefs(nvt)
-      .filter(hasRefType('cve'))
-      .forEach(ref => {
-        const cveId = ref._id;
-        const key = `${cveId}-${ip}-${nvtOid}`;
-
-        const existing = cvesMap[key];
-        if (isDefined(existing)) {
-          if (
-            isDefined(resultSeverity) &&
-            (!isDefined(existing.severity) ||
-              resultSeverity > existing.severity)
-          ) {
-            existing.severity = resultSeverity;
-          }
-        } else {
-          cvesMap[key] = {
-            id: key,
-            cveId: cveId as string,
-            host: {ip, id: hostId},
-            source: {name: nvtOid, description: nvtName},
-            severity: resultSeverity,
-          };
-        }
-      });
-  });
-
-  const cvesArray = Object.values(cvesMap);
-  const {length: filteredCount} = cvesArray;
-
-  const counts = new CollectionCounts({
-    all: filteredCount,
-    filtered: filteredCount,
-    first: 1,
-    length: filteredCount,
-    rows: filteredCount,
-  });
-
-  return {
-    counts,
-    entities: cvesArray,
     filter,
   };
 };

@@ -5,12 +5,11 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
-import ResultsTabContent from 'web/pages/reports/details/ResultsTabContent';
+import ResultsTabContent from 'web/pages/reports/details/result/ResultsTabContent';
 
 const filter = Filter.fromString('first=1 rows=10');
 
@@ -30,21 +29,13 @@ const createMockResult = (id = '101') => {
   });
 };
 
-const reportResultsCounts = new CollectionCounts({
-  filtered: 1,
-  all: 1,
-  first: 1,
-  rows: 10,
-});
-
 const results = [createMockResult()];
-const resultsData = {
-  entities: results,
-  counts: reportResultsCounts,
-};
 
 const createGmp = ({
-  get = testing.fn().mockResolvedValue(resultsData),
+  get = testing.fn().mockResolvedValue({
+    entities: results,
+    entitiesCounts: {filtered: 1, all: 1},
+  }),
 } = {}) => ({
   results: {
     get,
@@ -69,7 +60,7 @@ describe('ResultsTabContent', () => {
           progress={100}
           reportFilter={filter}
           reportId="report-123"
-          reportResultsCounts={reportResultsCounts}
+          reportResultsCounts={{filtered: 1, full: 1}}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={testing.fn()}
@@ -78,18 +69,11 @@ describe('ResultsTabContent', () => {
         />,
       );
 
-      // ContainerScanningResultsTab should be rendered
+      // ContainerScanningResultsTab should be rendered (which shows loading initially)
       expect(screen.getByTestId('loading')).toBeInTheDocument();
     });
 
     test('should render EmptyReport when container scanning has no results at all', () => {
-      const reportResultsCounts = new CollectionCounts({
-        filtered: 0,
-        all: 0,
-        first: 1,
-        rows: 10,
-      });
-
       const gmp = createGmp();
 
       const onTargetEditClick = testing.fn();
@@ -102,7 +86,7 @@ describe('ResultsTabContent', () => {
           progress={100}
           reportFilter={filter}
           reportId="report-123"
-          reportResultsCounts={reportResultsCounts}
+          reportResultsCounts={{filtered: 0, full: 0}}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={testing.fn()}
@@ -117,13 +101,6 @@ describe('ResultsTabContent', () => {
     });
 
     test('should render EmptyResultsReport when container scanning has results but filtered to 0', () => {
-      const reportResultsCounts = new CollectionCounts({
-        filtered: 0,
-        all: 5,
-        first: 1,
-        rows: 10,
-      });
-
       const gmp = createGmp();
 
       const onFilterEditClick = testing.fn();
@@ -136,7 +113,7 @@ describe('ResultsTabContent', () => {
           progress={100}
           reportFilter={filter}
           reportId="report-123"
-          reportResultsCounts={reportResultsCounts}
+          reportResultsCounts={{filtered: 0, full: 5}}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={onFilterEditClick}
@@ -166,7 +143,7 @@ describe('ResultsTabContent', () => {
           progress={100}
           reportFilter={filter}
           reportId="report-123"
-          reportResultsCounts={reportResultsCounts}
+          reportResultsCounts={{filtered: 1, full: 1}}
           status={TASK_STATUS.done}
           onFilterDecreaseMinQoDClick={testing.fn()}
           onFilterEditClick={testing.fn()}
@@ -205,13 +182,6 @@ describe('ResultsTabContent', () => {
 
   describe('Filter callbacks', () => {
     test('should pass filter callbacks to EmptyResultsReport for container scanning', () => {
-      const reportResultsCounts = new CollectionCounts({
-        filtered: 0,
-        all: 5,
-        first: 1,
-        rows: 10,
-      });
-
       const gmp = createGmp();
 
       const onFilterAddLogLevelClick = testing.fn();
@@ -229,7 +199,7 @@ describe('ResultsTabContent', () => {
           progress={100}
           reportFilter={filter}
           reportId="report-123"
-          reportResultsCounts={reportResultsCounts}
+          reportResultsCounts={{filtered: 0, full: 5}}
           status={TASK_STATUS.done}
           onFilterAddLogLevelClick={onFilterAddLogLevelClick}
           onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}

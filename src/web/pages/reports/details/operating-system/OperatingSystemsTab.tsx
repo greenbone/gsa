@@ -3,28 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
 import type ReportOperatingSystem from 'gmp/models/report/os';
-import {isActive, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportOperatingSystems from 'web/hooks/use-query/report-operating-system';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import OperatingSystemsTable from 'web/pages/reports/details/OperatingSystemsTable';
+import OperatingSystemsTable from 'web/pages/reports/details/operating-system/OperatingSystemsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {makeCompareNumber, makeCompareString} from 'web/utils/Sort';
 
 interface OperatingSystemsTabWrapperProps {
   audit?: boolean;
   filter?: Filter;
   reportId: string;
-  status: TaskStatus;
+  operatingSystemsData?: UseGetEntitiesReturn<ReportOperatingSystem>;
+  isOperatingSystemsFetching?: boolean;
+  isOperatingSystemsError?: boolean;
 }
 
 type OperatingSystemsSortFunctions = {
@@ -53,7 +50,9 @@ const OperatingSystemsTabWrapper = ({
   filter,
   reportId,
   audit = false,
-  status,
+  operatingSystemsData,
+  isOperatingSystemsFetching,
+  isOperatingSystemsError,
 }: OperatingSystemsTabWrapperProps) => {
   const [_] = useTranslation();
 
@@ -64,13 +63,14 @@ const OperatingSystemsTabWrapper = ({
   const [operatingSystemsFilter, setOperatingSystemsFilter] =
     useState<Filter>(baseFilter);
 
-  const {data, isLoading, isFetching, isError} = useGetReportOperatingSystems({
-    reportId,
-    filter: operatingSystemsFilter,
-    refetchInterval: isActive(status)
-      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : NO_RELOAD,
-  });
+  useEffect(() => {
+    setOperatingSystemsFilter(baseFilter);
+  }, [baseFilter]);
+
+  const data = operatingSystemsData;
+  const isFetching = isOperatingSystemsFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = isOperatingSystemsError ?? false;
 
   const updateFilter = (newFilter: Filter) => {
     setOperatingSystemsFilter(newFilter);

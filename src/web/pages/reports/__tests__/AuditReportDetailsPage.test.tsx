@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, within, waitFor} from 'web/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
+import {fireEvent, rendererWith, screen, waitFor, within} from 'web/testing';
 import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
@@ -94,10 +94,24 @@ const createGmp = () => ({
   },
   reporterrors: {
     get: testing.fn().mockResolvedValue({
-      data: entity.report?.errors?.entities ?? [],
+      data: [
+        {
+          id: 'error-1',
+          description: 'Test error message',
+          host: {ip: '192.168.1.1', name: 'host1', id: 'host-1'},
+          nvt: {id: 'nvt-1', name: 'Test NVT'},
+          port: '22/tcp',
+        },
+      ],
       meta: {
         filter: Filter.fromString(''),
-        counts: entity.report?.errors?.counts ?? new CollectionCounts(),
+        counts: new CollectionCounts({
+          first: 1,
+          all: 1,
+          filtered: 1,
+          length: 1,
+          rows: 10,
+        }),
       },
     }),
   },
@@ -123,7 +137,6 @@ const setupRenderer = (gmp = createGmp()) => {
     gmp,
     capabilities: true,
     router: true,
-    store: true,
     route: `/audit-report/${reportId}`,
   });
 
@@ -338,6 +351,7 @@ describe('AuditReportDetailsPage', () => {
     });
 
     test('should show error dialog when addAssets fails', async () => {
+      testing.spyOn(console, 'error').mockImplementation(() => {});
       const gmp = createGmp();
       gmp.auditreport.addAssets = testing
         .fn()
@@ -353,6 +367,7 @@ describe('AuditReportDetailsPage', () => {
     });
 
     test('should show error dialog when removeAssets fails', async () => {
+      testing.spyOn(console, 'error').mockImplementation(() => {});
       const gmp = createGmp();
       gmp.auditreport.removeAssets = testing
         .fn()
@@ -414,6 +429,7 @@ describe('AuditReportDetailsPage', () => {
     });
 
     test('should show error when download fails', async () => {
+      testing.spyOn(console, 'error').mockImplementation(() => {});
       const gmp = createGmp();
       gmp.auditreport.download = testing
         .fn()

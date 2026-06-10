@@ -3,15 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import CollectionCounts from 'gmp/collection/collection-counts';
 import {setLocale} from 'gmp/locale/lang';
+import Filter from 'gmp/models/filter';
 import Report from 'gmp/models/report';
+import ReportHost from 'gmp/models/report/host';
+import ReportOperatingSystem from 'gmp/models/report/os';
 import {
-  type ReportResultElement,
-  type ReportHostElement,
   type PortElement,
+  type ReportHostElement,
+  type ReportResultElement,
+  parseErrors,
 } from 'gmp/models/report/parser';
+import ReportPort from 'gmp/models/report/port';
 import type ReportReport from 'gmp/models/report/report';
-import {type ReportTLSCertificateElement} from 'gmp/models/report/tls-certificate';
+import ReportTLSCertificate, {
+  type ReportTLSCertificateElement,
+} from 'gmp/models/report/tls-certificate';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 setLocale('en');
@@ -182,6 +190,11 @@ export const host2: ReportHostElement = {
   ],
 };
 
+export const mockReportHosts = [
+  ReportHost.fromElement({...host1, severity: 10.0}),
+  ReportHost.fromElement({...host2, severity: 5.0}),
+];
+
 // Ports
 const port1: PortElement = {
   host: '1.1.1.1',
@@ -300,18 +313,118 @@ export const getMockReport = () => {
     _id: '1234',
   });
 
+  const errorsCollection = parseErrors(report, Filter.fromString(''));
+
+  const os1 = new ReportOperatingSystem({
+    id: 'cpe:/foo/bar',
+    name: 'Foo OS',
+    cpe: 'cpe:/foo/bar',
+    severity: 10,
+  });
+  const os2 = new ReportOperatingSystem({
+    id: 'cpe:/lorem/ipsum',
+    name: 'Lorem OS',
+    cpe: 'cpe:/lorem/ipsum',
+    severity: 5,
+  });
+  const operatingsystemsCollection = {
+    entities: [os1, os2],
+    counts: new CollectionCounts({
+      all: 2,
+      filtered: 2,
+      first: 1,
+      rows: 2,
+      length: 2,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const cert1 = ReportTLSCertificate.fromElement(tlsCertificate1);
+  const cert2 = ReportTLSCertificate.fromElement(tlsCertificate2);
+  const tlsCertificatesCollection = {
+    entities: [cert1, cert2],
+    counts: new CollectionCounts({
+      all: 2,
+      filtered: 2,
+      first: 1,
+      rows: 2,
+      length: 2,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const resultsCollection = {
+    entities: [],
+    counts: new CollectionCounts({
+      all: report.result_count?.full ?? 0,
+      filtered: report.result_count?.filtered ?? 0,
+      first: 1,
+      rows: report.result_count?.filtered ?? 0,
+      length: report.result_count?.filtered ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const portsCollection = {
+    entities: [ReportPort.fromElement(port1), ReportPort.fromElement(port2)],
+    counts: new CollectionCounts({
+      all: report.ports?.count ?? 0,
+      filtered: report.ports?.count ?? 0,
+      first: 1,
+      rows: report.ports?.count ?? 0,
+      length: report.ports?.count ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const applicationsCollection = {
+    entities: [],
+    counts: new CollectionCounts({
+      all: report.apps?.count ?? 0,
+      filtered: report.apps?.count ?? 0,
+      first: 1,
+      rows: report.apps?.count ?? 0,
+      length: report.apps?.count ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const cvesCollection = {
+    entities: [],
+    counts: new CollectionCounts({
+      all: report.vulns?.count ?? 0,
+      filtered: report.vulns?.count ?? 0,
+      first: 1,
+      rows: report.vulns?.count ?? 0,
+      length: report.vulns?.count ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
+  const closedCvesCollection = {
+    entities: [],
+    counts: new CollectionCounts({
+      all: report.closed_cves?.count ?? 0,
+      filtered: report.closed_cves?.count ?? 0,
+      first: 1,
+      rows: report.closed_cves?.count ?? 0,
+      length: report.closed_cves?.count ?? 0,
+    }),
+    filter: Filter.fromString(''),
+  };
+
   return {
     entity,
     report: entity.report as ReportReport,
-    results: entity.report?.results,
-    hosts: entity.report?.hosts,
-    ports: entity.report?.ports,
-    applications: entity.report?.applications,
-    operatingsystems: entity.report?.operatingsystems,
-    cves: entity.report?.cves,
-    closedCves: entity.report?.closedCves,
-    tlsCertificates: entity.report?.tlsCertificates,
-    errors: entity.report?.errors,
+    results: resultsCollection,
+    hosts: mockReportHosts,
+    ports: portsCollection,
+    applications: applicationsCollection,
+    operatingsystems: operatingsystemsCollection,
+    cves: cvesCollection,
+    closedCves: closedCvesCollection,
+    tlsCertificates: tlsCertificatesCollection,
+    errors: errorsCollection,
     task: entity.report?.task,
   };
 };

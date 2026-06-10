@@ -3,21 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
-import {isActive, type TaskStatus} from 'gmp/models/task';
+import type ReportApp from 'gmp/models/report/app';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportApplications from 'web/hooks/use-query/report-applications';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import ApplicationsTable from 'web/pages/reports/details/ApplicationsTable';
+import ApplicationsTable from 'web/pages/reports/details/application/ApplicationsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {
   makeCompareNumber,
   makeCompareSeverity,
@@ -27,7 +23,9 @@ import {
 interface ApplicationsTabProps {
   filter?: Filter;
   reportId: string;
-  status: TaskStatus;
+  applicationsData?: UseGetEntitiesReturn<ReportApp>;
+  isApplicationsFetching?: boolean;
+  isApplicationsError?: boolean;
 }
 
 export const appsSortFunctions = {
@@ -40,7 +38,9 @@ export const appsSortFunctions = {
 const ApplicationsTabWrapper = ({
   filter,
   reportId,
-  status,
+  isApplicationsError,
+  applicationsData,
+  isApplicationsFetching,
 }: ApplicationsTabProps) => {
   const [_] = useTranslation();
 
@@ -50,14 +50,14 @@ const ApplicationsTabWrapper = ({
 
   const [appsFilter, setAppsFilter] = useState<Filter>(baseFilter);
 
-  const {data, isLoading, isFetching, isError, error} =
-    useGetReportApplications({
-      reportId,
-      filter: appsFilter,
-      refetchInterval: isActive(status)
-        ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-        : NO_RELOAD,
-    });
+  useEffect(() => {
+    setAppsFilter(baseFilter);
+  }, [baseFilter]);
+
+  const data = applicationsData;
+  const isFetching = isApplicationsFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = isApplicationsError ?? false;
 
   const updateFilter = (newFilter: Filter) => {
     setAppsFilter(newFilter);
@@ -68,17 +68,6 @@ const ApplicationsTabWrapper = ({
     updateFilter,
   );
 
-  if (isError) {
-    return (
-      <ErrorPanel
-        error={error}
-        message={_('Error while loading Applications for Report {{reportId}}', {
-          reportId,
-        })}
-      />
-    );
-  }
-
   const {entities: applications = [], entitiesCounts: applicationsCounts} =
     data || {};
 
@@ -86,6 +75,16 @@ const ApplicationsTabWrapper = ({
 
   if (isLoading && !data) {
     return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorPanel
+        message={_('Error while loading Applications for Report {{reportId}}', {
+          reportId,
+        })}
+      />
+    );
   }
 
   return (

@@ -3,13 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import type {TaskStatus} from 'gmp/models/task';
-import ContainerScanningResultsTab from 'web/pages/reports/details/ContainerScanningResultsTab';
 import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
-import ResultsTab from 'web/pages/reports/details/ResultsTab';
+import ContainerScanningResultsTab from 'web/pages/reports/details/result/ContainerScanningResultsTab';
+import ResultsTab from 'web/pages/reports/details/result/ResultsTab';
+
+interface ResultsCounts {
+  filtered?: number;
+  full?: number;
+}
 
 interface ResultsTabContentProps {
   isContainerScanning: boolean;
@@ -17,7 +21,7 @@ interface ResultsTabContentProps {
   progress: number;
   reportFilter: Filter;
   reportId: string;
-  reportResultsCounts?: CollectionCounts;
+  reportResultsCounts?: ResultsCounts;
   status: TaskStatus;
   onFilterAddLogLevelClick?: () => void;
   onFilterDecreaseMinQoDClick: () => void;
@@ -46,7 +50,7 @@ const ResultsTabContent = ({
   if (
     isContainerScanning &&
     reportResultsCounts?.filtered === 0 &&
-    reportResultsCounts.all === 0
+    reportResultsCounts.full === 0
   ) {
     return (
       <EmptyReport
@@ -62,11 +66,11 @@ const ResultsTabContent = ({
   if (
     isContainerScanning &&
     reportResultsCounts?.filtered === 0 &&
-    reportResultsCounts.all > 0
+    (reportResultsCounts.full ?? 0) > 0
   ) {
     return (
       <EmptyResultsReport
-        all={reportResultsCounts.all}
+        all={reportResultsCounts.full ?? 0}
         filter={reportFilter}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}

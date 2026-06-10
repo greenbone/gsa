@@ -5,10 +5,11 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import ContainerScanningHostsTab from 'web/pages/reports/details/ContainerScanningHostsTab';
+import {mockReportHosts} from 'web/pages/reports/__fixtures__/MockReport';
+import ContainerScanningHostsTab from 'web/pages/reports/details/host/ContainerScanningHostsTab';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -19,23 +20,27 @@ const gmp = {
   },
 };
 
+const mockHosts = mockReportHosts;
+const mockHostsCounts = new CollectionCounts({
+  all: 2,
+  filtered: 2,
+  first: 1,
+  rows: 2,
+  length: 2,
+});
+
 describe('Container Scanning Hosts Tab tests', () => {
   test('should render Container Scanning Hosts Tab', () => {
-    const {hosts} = getMockReport();
-    if (!hosts?.entities) {
-      throw new Error('Mock report did not return hosts or hosts.entities');
-    }
     const onSortChange = testing.fn();
     const {render} = rendererWith({
       gmp,
       capabilities: true,
-      router: true,
     });
     render(
       <ContainerScanningHostsTab
-        counts={hosts.counts}
+        counts={mockHostsCounts}
         filter={filter}
-        hosts={hosts.entities}
+        hosts={mockHosts}
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}

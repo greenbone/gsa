@@ -131,7 +131,8 @@ const getColumns = ({
       title: _('Port'),
       width: '5%',
       sortBy: 'port',
-      render: (entity: ReportTLSCertificate) => entity.port,
+      render: (entity: ReportTLSCertificate) =>
+        entity.port ?? entity.ports?.join(', '),
     },
     {
       key: 'actions',

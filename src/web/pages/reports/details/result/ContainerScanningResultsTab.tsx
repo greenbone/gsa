@@ -17,7 +17,7 @@ import useGetResults from 'web/hooks/use-query/results';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
-import ContainerScanningResultsTable from 'web/pages/reports/details/ContainerScanningResultsTable';
+import ContainerScanningResultsTable from 'web/pages/reports/details/result/ContainerScanningResultsTable';
 
 interface ContainerScanningResultsTabProps {
   reportId: string;
@@ -105,7 +105,7 @@ const ContainerScanningResultsTab = ({
       entities={entities}
       entitiesCounts={entitiesCounts}
       filter={resultsFilter}
-      isUpdating={isFetching && !data}
+      isUpdating={isFetching}
       sortBy={sortBy}
       sortDir={sortDir}
       onFirstClick={handleFirstClick}

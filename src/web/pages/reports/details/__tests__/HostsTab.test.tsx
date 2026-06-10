@@ -5,12 +5,13 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
-import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import HostsTab from 'web/pages/reports/details/HostsTab';
+import {mockAuditHosts} from 'web/pages/reports/__fixtures__/MockAuditReport';
+import {mockReportHosts} from 'web/pages/reports/__fixtures__/MockReport';
+import HostsTab from 'web/pages/reports/details/host/HostsTab';
 
 const getRow = (link: HTMLElement): HTMLTableRowElement => {
   const row = link.closest('tr');
@@ -28,6 +29,14 @@ const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
+const hostsCounts = new CollectionCounts({
+  all: 2,
+  filtered: 2,
+  first: 1,
+  rows: 2,
+  length: 2,
+});
+
 const createGmp = ({severityRating = SEVERITY_RATING_CVSS_3} = {}) => ({
   settings: {
     severityRating,
@@ -37,21 +46,18 @@ const createGmp = ({severityRating = SEVERITY_RATING_CVSS_3} = {}) => ({
 
 describe('Report Hosts Tab tests', () => {
   test('should render Report Hosts Tab', () => {
-    const {hosts} = getMockReport();
-
     const onSortChange = testing.fn();
 
     const {render} = rendererWith({
       gmp: createGmp(),
       capabilities: true,
-      router: true,
     });
 
     render(
       <HostsTab
-        counts={hosts?.counts}
+        counts={hostsCounts}
         filter={filter}
-        hosts={hosts?.entities}
+        hosts={mockReportHosts}
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
@@ -132,24 +138,30 @@ const auditFilter = Filter.fromString(
   'apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant',
 );
 
+const auditHosts = mockAuditHosts;
+const auditHostsCounts = new CollectionCounts({
+  all: 3,
+  filtered: 3,
+  first: 1,
+  rows: 3,
+  length: 3,
+});
+
 describe('Audit Report Hosts Tab tests', () => {
   test('should render Audit Report Hosts Tab', () => {
-    const {hosts} = getMockAuditReport();
-
     const onSortChange = testing.fn();
 
     const {render} = rendererWith({
       gmp: createGmp(),
       capabilities: true,
-      router: true,
     });
 
     render(
       <HostsTab
         audit={true}
-        counts={hosts?.counts}
+        counts={auditHostsCounts}
         filter={auditFilter}
-        hosts={hosts?.entities}
+        hosts={auditHosts}
         isUpdating={false}
         sortField={'compliant'}
         sortReverse={false}
@@ -174,12 +186,12 @@ describe('Audit Report Hosts Tab tests', () => {
     screen.getByRole('columnheader', {name: /Compliant/i});
 
     // Row 1
-    const auditHost1 = screen.getByRole('link', {name: '109.876.54.321'});
-    expect(auditHost1).toHaveAttribute(
+    const auditHost1Link = screen.getByRole('link', {name: '109.876.54.321'});
+    expect(auditHost1Link).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D109.876.54.321',
     );
-    const auditRow1 = getRow(auditHost1);
+    const auditRow1 = getRow(auditHost1Link);
     expect(auditRow1).toHaveTextContent('lorem.ipsum');
     expect(getImgSrc(auditRow1)).toContain('/img/os_unknown.svg');
     expect(auditRow1).toHaveTextContent('1521');
@@ -199,9 +211,9 @@ describe('Audit Report Hosts Tab tests', () => {
     );
 
     // Row 2
-    const auditHost2 = screen.getByRole('link', {name: '123.456.78.910'});
-    expect(auditHost2).toHaveAttribute('href', '/host/123');
-    const auditRow2 = getRow(auditHost2);
+    const auditHost2Link = screen.getByRole('link', {name: '123.456.78.910'});
+    expect(auditHost2Link).toHaveAttribute('href', '/host/123');
+    const auditRow2 = getRow(auditHost2Link);
     expect(auditRow2).toHaveTextContent('foo.bar');
     expect(getImgSrc(auditRow2)).toContain('/img/os_unknown.svg');
     expect(auditRow2).toHaveTextContent('1032');
@@ -221,9 +233,9 @@ describe('Audit Report Hosts Tab tests', () => {
     );
 
     // Row 3
-    const auditHost3 = screen.getByRole('link', {name: '123.456.78.810'});
-    expect(auditHost3).toHaveAttribute('href', '/host/123');
-    const auditRow3 = getRow(auditHost3);
+    const auditHost3Link = screen.getByRole('link', {name: '123.456.78.810'});
+    expect(auditHost3Link).toHaveAttribute('href', '/host/123');
+    const auditRow3 = getRow(auditHost3Link);
     expect(auditRow3).toHaveTextContent('foo.bar');
     expect(getImgSrc(auditRow3)).toContain('/img/os_unknown.svg');
     expect(auditRow3).toHaveTextContent('1032');

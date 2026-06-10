@@ -3,27 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useMemo, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useEffect, useMemo, useState} from 'react';
 import Filter from 'gmp/models/filter';
-import {isActive, type TaskStatus} from 'gmp/models/task';
+import {type ReportError} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportErrors from 'web/hooks/use-query/report-errors';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import ErrorsTable from 'web/pages/reports/details/ErrorsTable';
+import useTranslation from 'web/hooks/useTranslation';
+import ErrorsTable from 'web/pages/reports/details/error/ErrorsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
 
 interface ErrorsTabWrapperProps {
   filter?: Filter;
   reportId: string;
-  status: TaskStatus;
+  errorsData?: UseGetEntitiesReturn<ReportError>;
+  isErrorsFetching?: boolean;
+  isErrorsError?: boolean;
 }
 
 export const errorsSortFunctions = {
@@ -37,24 +35,30 @@ export const errorsSortFunctions = {
 const ErrorsTabWrapper = ({
   filter,
   reportId,
-  status,
+  isErrorsError,
+  errorsData,
+  isErrorsFetching,
 }: ErrorsTabWrapperProps) => {
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
-    return isDefined(filter) ? filter.copy() : new Filter();
+    const f = isDefined(filter) ? filter.copy() : new Filter();
+    // Override sort: 'sort-reverse=error' maps to ascending A→Z via the
+    // sortReverse=(sortDir==='asc') convention used in ReportEntitiesContainer
+    f.set('sort-reverse', 'error');
+    return f;
   }, [filter]);
 
   const [errorsFilter, setErrorsFilter] = useState<Filter>(baseFilter);
 
-  const {data, isLoading, isFetching, isError, error} = useGetReportErrors({
-    reportId,
-    filter: errorsFilter,
-    refetchInterval: isActive(status)
-      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : NO_RELOAD,
-  });
+  useEffect(() => {
+    setErrorsFilter(baseFilter);
+  }, [baseFilter]);
 
+  const data = errorsData;
+  const isFetching = isErrorsFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = isErrorsError ?? false;
   const updateFilter = (newFilter: Filter) => {
     setErrorsFilter(newFilter);
   };
@@ -64,23 +68,25 @@ const ErrorsTabWrapper = ({
     updateFilter,
   );
 
-  if (isError) {
-    return (
-      <ErrorPanel
-        error={error}
-        message={_('Error while loading Errors for Report {{reportId}}', {
-          reportId,
-        })}
-      />
-    );
-  }
-
   const {entities: errors = [], entitiesCounts: errorsCounts} = data || {};
 
   const displayedFilter = errorsFilter;
 
   if (isLoading && !data) {
     return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorPanel
+        message={_(
+          'Error while loading Error Messages for Report {{reportId}}',
+          {
+            reportId,
+          },
+        )}
+      />
+    );
   }
 
   return (
@@ -103,7 +109,7 @@ const ErrorsTabWrapper = ({
         onPreviousClick,
       }) => (
         <ErrorsTable
-          // @ts-expect-error entities are ReportErrors[], not Model[]
+          // @ts-expect-error entities are ReportError[], not Model[]
           entities={entities}
           entitiesCounts={entitiesCounts}
           filter={displayedFilter}

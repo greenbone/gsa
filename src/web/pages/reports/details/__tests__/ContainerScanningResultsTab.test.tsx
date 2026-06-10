@@ -10,7 +10,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {createSession} from 'gmp/testing';
-import ContainerScanningResultsTab from 'web/pages/reports/details/ContainerScanningResultsTab';
+import ContainerScanningResultsTab from 'web/pages/reports/details/result/ContainerScanningResultsTab';
 
 const result = Result.fromElement({
   _id: '1',

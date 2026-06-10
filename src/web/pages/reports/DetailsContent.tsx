@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
-import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
-import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
-import {TASK_STATUS} from 'gmp/models/task';
+import {isActive, TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
@@ -20,6 +17,10 @@ import {ReportIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/Reload';
 import SectionHeader from 'web/components/section/Header';
 import Section from 'web/components/section/Section';
 import Tab from 'web/components/tab/Tab';
@@ -30,22 +31,11 @@ import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
-import EntityTags from 'web/entity/Tags';
+import useReportSubEntities from 'web/hooks/use-query/use-report-sub-entities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
-import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
-import CvesTab from 'web/pages/reports/details/CvesTab';
 import DetailsToolbar from 'web/pages/reports/details/DetailsToolbar';
-import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
-import HostsTabContent from 'web/pages/reports/details/HostsTabContent';
-import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
-import PortsTab from 'web/pages/reports/details/PortsTab';
-import ResultsTabContent from 'web/pages/reports/details/ResultsTabContent';
-import Summary from 'web/pages/reports/details/Summary';
-import TabTitle from 'web/pages/reports/details/TabTitle';
-import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
-import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
+import {buildReportTabDefinitions} from 'web/pages/reports/details/ReportTabDefinitions';
 
 interface ThresholdConfig {
   showInitialLoading: boolean;
@@ -56,52 +46,22 @@ interface ThresholdConfig {
   onFilterEditClick: () => void;
 }
 
-interface SortingEntry {
-  sortField: string;
-  sortReverse: boolean;
-}
-
-interface SortingData {
-  apps: SortingEntry;
-  cves: SortingEntry;
-  errors: SortingEntry;
-  hosts: SortingEntry;
-  os: SortingEntry;
-  closedcves: SortingEntry;
-  tlscerts: SortingEntry;
-}
-
-interface TabDefinition {
-  key: string;
-  renderTab: () => React.ReactNode;
-  renderPanel: () => React.ReactNode;
-}
-
 interface PageContentProps {
-  applicationsCounts?: CollectionCounts;
-  closedCvesCounts?: CollectionCounts;
-  cvesCounts?: CollectionCounts;
   entity?: Report;
-  errorsCounts?: CollectionCounts;
   filters?: Filter[];
-  hostsCounts?: CollectionCounts;
   isLoading?: boolean;
   isLoadingFilters?: boolean;
   isUpdating?: boolean;
-  operatingSystemsCounts?: CollectionCounts;
   pageFilter?: Filter;
-  portsCounts?: CollectionCounts;
   reportError?: Error;
   reportFilter?: Filter;
   reportId: string;
   resetFilter?: Filter;
-  resultsCounts?: CollectionCounts;
+  resultsCounts?: {filtered?: number; full?: number};
   showError: (...args: unknown[]) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
-  sorting: SortingData;
   task?: ReportTask;
-  tlsCertificatesCounts?: CollectionCounts;
   onAddToAssetsClick: () => void;
   onError: (error: Error) => void;
   onFilterAddLogLevelClick: () => void;
@@ -113,35 +73,10 @@ interface PageContentProps {
   onFilterResetClick: () => void;
   onRemoveFromAssetsClick: () => void;
   onReportDownloadClick: () => void;
-  onSortChange: (type: string, sortField: string) => void;
   onTagSuccess: () => void;
   onTargetEditClick: () => void;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
 }
-
-const renderWithThreshold = (
-  entityType: string,
-  activeFilter: Filter,
-  config: ThresholdConfig,
-  content: React.ReactNode,
-): React.ReactNode => {
-  if (config.showInitialLoading) {
-    return <Loading />;
-  }
-  if (config.showThresholdMessage) {
-    return (
-      <ThresholdPanel
-        entityType={entityType}
-        filter={activeFilter}
-        isUpdating={config.isUpdating}
-        threshold={config.threshold}
-        onFilterChanged={config.onFilterChanged}
-        onFilterEditClick={config.onFilterEditClick}
-      />
-    );
-  }
-  return content;
-};
 
 const Span = styled.span`
   margin-top: 2px;
@@ -158,30 +93,21 @@ const HeaderContainer = styled.div`
 `;
 
 const PageContent = ({
-  applicationsCounts,
-  closedCvesCounts,
-  cvesCounts,
   entity,
-  errorsCounts,
   filters,
-  hostsCounts,
   isLoading = true,
   isLoadingFilters = true,
   isUpdating = false,
-  operatingSystemsCounts,
   pageFilter,
-  portsCounts,
   reportError,
   reportFilter,
   reportId,
   resetFilter,
   resultsCounts,
-  sorting,
   showError,
   showErrorMessage,
   showSuccessMessage,
   task,
-  tlsCertificatesCounts,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
   onError,
@@ -194,7 +120,6 @@ const PageContent = ({
   onFilterResetClick,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
-  onSortChange,
   onTagSuccess,
   onTargetEditClick,
 }: PageContentProps) => {
@@ -209,9 +134,21 @@ const PageContent = ({
   const isAgentScanning =
     hasReport && isDefined(entity.report?.task?.agentGroup?.id);
 
-  const userTagsCount = report?.userTags?.length ?? 0;
+  const {timestamp, scan_run_status} = report ?? {};
 
-  const {results, timestamp, scan_run_status} = report ?? {};
+  const isImport = isDefined(task) && task.isImport();
+  const status = isImport
+    ? TASK_STATUS.import
+    : (scan_run_status ?? TASK_STATUS.unknown);
+  const refetchInterval = isActive(status)
+    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : NO_RELOAD;
+
+  const reportEntities = useReportSubEntities({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
 
   if (!hasReport && isDefined(reportError)) {
     return (
@@ -225,21 +162,14 @@ const PageContent = ({
   const threshold = gmp.settings.reportResultsThreshold;
 
   const showThresholdMessage =
-    !isLoading && hasReport && (results?.counts?.filtered ?? 0) > threshold;
+    !isLoading && hasReport && (resultsCounts?.filtered ?? 0) > threshold;
 
-  const isImport = isDefined(task) && task.isImport();
-  const status = isImport
-    ? TASK_STATUS.import
-    : (scan_run_status ?? TASK_STATUS.unknown);
   const progress = task?.progress ?? 0;
 
   const showIsLoading = isLoading && !hasReport;
 
   const showInitialLoading =
-    isLoading &&
-    !isDefined(reportError) &&
-    !showThresholdMessage &&
-    (!isDefined(results?.entities) || results.entities.length === 0);
+    isLoading && !isDefined(reportError) && !showThresholdMessage;
 
   const HeaderTitle = (
     <Divider>
@@ -276,181 +206,31 @@ const PageContent = ({
     onFilterEditClick,
   };
 
-  const buildTabDefinitions = (
-    activeReport: ReportReport,
-    activeFilter: Filter,
-  ): TabDefinition[] => [
-    {
-      key: 'information',
-      renderTab: () => _('Information'),
-      renderPanel: () => (
-        <Summary
-          filter={activeFilter}
-          isUpdating={isUpdating}
-          report={activeReport}
-          reportError={reportError}
-          reportId={reportId}
-        />
-      ),
-    },
-    {
-      key: 'results',
-      renderTab: () => <TabTitle counts={resultsCounts} title={_('Results')} />,
-      renderPanel: () => (
-        <ResultsTabContent
-          hasTarget={!isImport}
-          isContainerScanning={isContainerScanning}
-          progress={progress}
-          reportFilter={activeFilter}
-          reportId={reportId}
-          reportResultsCounts={resultsCounts}
-          status={status}
-          onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-          onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-          onFilterEditClick={onFilterEditClick}
-          onFilterRemoveClick={onFilterRemoveClick}
-          onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-          onTargetEditClick={onTargetEditClick}
-        />
-      ),
-    },
-    {
-      key: 'hosts',
-      renderTab: () => <TabTitle counts={hostsCounts} title={_('Hosts')} />,
-      renderPanel: () =>
-        renderWithThreshold(
-          _('Hosts'),
-          activeFilter,
-          thresholdConfig,
-          <HostsTabContent
-            isAgentScanning={isAgentScanning}
-            isContainerScanning={isContainerScanning}
-            reportFilter={activeFilter}
-            reportId={reportId}
-            status={status}
-          />,
-        ),
-    },
-    {
-      key: 'ports',
-      renderTab: () => <TabTitle counts={portsCounts} title={_('Ports')} />,
-      renderPanel: () => (
-        <PortsTab reportFilter={activeFilter} reportId={reportId} />
-      ),
-    },
-    {
-      key: 'applications',
-      renderTab: () => (
-        <TabTitle counts={applicationsCounts} title={_('Applications')} />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('Applications'),
-          activeFilter,
-          thresholdConfig,
-          <ApplicationsTab
-            filter={activeFilter}
-            reportId={reportId}
-            status={status}
-          />,
-        ),
-    },
-    {
-      key: 'os',
-      renderTab: () => (
-        <TabTitle
-          counts={operatingSystemsCounts}
-          title={_('Operating Systems')}
-        />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('Operating Systems'),
-          activeFilter,
-          thresholdConfig,
-          <OperatingSystemsTab
-            filter={activeFilter}
-            reportId={reportId}
-            status={status}
-          />,
-        ),
-    },
-    {
-      key: 'cves',
-      renderTab: () => <TabTitle counts={cvesCounts} title={_('CVEs')} />,
-      renderPanel: () =>
-        renderWithThreshold(
-          _('CVEs'),
-          activeFilter,
-          thresholdConfig,
-          <CvesTab filter={activeFilter} reportId={reportId} status={status} />,
-        ),
-    },
-    {
-      key: 'closedcves',
-      renderTab: () => (
-        <TabTitle counts={closedCvesCounts} title={_('Closed CVEs')} />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('Closed CVEs'),
-          activeFilter,
-          thresholdConfig,
-          <ClosedCvesTab
-            filter={activeFilter}
-            reportId={reportId}
-            status={status}
-          />,
-        ),
-    },
-    {
-      key: 'tlscerts',
-      renderTab: () => (
-        <TabTitle
-          counts={tlsCertificatesCounts}
-          title={_('TLS Certificates')}
-        />
-      ),
-      renderPanel: () =>
-        renderWithThreshold(
-          _('TLS Certificates'),
-          activeFilter,
-          thresholdConfig,
-          <TLSCertificatesTab
-            reportFilter={activeFilter}
-            reportId={reportId}
-            status={status}
-            onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
-          />,
-        ),
-    },
-    {
-      key: 'errors',
-      renderTab: () => (
-        <TabTitle counts={errorsCounts} title={_('Error Messages')} />
-      ),
-      renderPanel: () => (
-        <ErrorsTab filter={activeFilter} reportId={reportId} status={status} />
-      ),
-    },
-    {
-      key: 'usertags',
-      renderTab: () => (
-        <TabTitle count={userTagsCount} title={_('User Tags')} />
-      ),
-      renderPanel: () => (
-        <EntityTags
-          entity={activeReport}
-          onChanged={onTagSuccess}
-          onError={onError}
-        />
-      ),
-    },
-  ];
-
   const tabDefinitions =
     isDefined(report) && isDefined(reportFilter)
-      ? buildTabDefinitions(report, reportFilter)
+      ? buildReportTabDefinitions({
+          activeReport: report,
+          activeFilter: reportFilter,
+          reportId,
+          isImport,
+          isAgentScanning,
+          isContainerScanning,
+          isUpdating,
+          progress,
+          status,
+          resultsCounts,
+          thresholdConfig,
+          reportEntities,
+          onFilterAddLogLevelClick,
+          onFilterDecreaseMinQoDClick,
+          onFilterEditClick,
+          onFilterRemoveClick,
+          onFilterRemoveSeverityClick,
+          onTargetEditClick,
+          onTlsCertificateDownloadClick,
+          onTagSuccess,
+          onError,
+        })
       : [];
 
   return (

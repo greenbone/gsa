@@ -3,77 +3,68 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith, within} from 'web/testing';
+import {describe, expect, test} from '@gsa/testing';
+import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {COMPLIANCE} from 'gmp/models/compliance';
 import Filter from 'gmp/models/filter';
 import ReportOperatingSystem from 'gmp/models/report/os';
-import {createSession} from 'gmp/testing';
-import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
+import OperatingSystemsTab from 'web/pages/reports/details/operating-system/OperatingSystemsTab';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort=severity',
 );
 
-// Build API-format OS entities (no severity set, matching get_report_operating_systems response)
 const buildApiEntities = () => {
   const os1 = ReportOperatingSystem.fromElement({
     best_os_cpe: 'cpe:/foo/bar',
     best_os_txt: 'Foo OS',
+    hosts_count: 2,
   });
-  os1.hosts.count = 2;
   os1.compliance = COMPLIANCE.NO;
 
   const os2 = ReportOperatingSystem.fromElement({
     best_os_cpe: 'cpe:/lorem/ipsum',
     best_os_txt: 'Lorem OS',
+    hosts_count: 5,
   });
-  os2.hosts.count = 5;
   os2.compliance = COMPLIANCE.INCOMPLETE;
 
   return [os1, os2];
 };
 
-const createGmp = (apiEntities, responseFilter = filter) => ({
-  session: createSession({token: 'test-token'}),
-  settings: {severityRating: SEVERITY_RATING_CVSS_3},
-  reportoperatingsystems: {
-    get: testing.fn().mockResolvedValue({
-      data: apiEntities,
-      meta: {
-        filter: responseFilter,
-        counts: new CollectionCounts({
-          all: apiEntities.length,
-          filtered: apiEntities.length,
-          first: 1,
-          length: apiEntities.length,
-          rows: apiEntities.length,
-        }),
-      },
-    }),
-  },
+const createOperatingSystemsData = apiEntities => ({
+  entities: apiEntities,
+  entitiesCounts: new CollectionCounts({
+    all: apiEntities.length,
+    filtered: apiEntities.length,
+    first: 1,
+    length: apiEntities.length,
+    rows: apiEntities.length,
+  }),
 });
 
 describe('Report Operating Systems Tab tests', () => {
   test('should render Report Operating Systems Tab', async () => {
     const apiEntities = buildApiEntities();
-    const gmp = createGmp(apiEntities);
+    const operatingSystemsData = createOperatingSystemsData(apiEntities);
 
-    const {render} = rendererWith({gmp, router: true});
+    const {render} = rendererWith({gmp: {}});
 
     render(
-      <OperatingSystemsTab filter={filter} reportId="1234" status="Done" />,
+      <OperatingSystemsTab
+        filter={filter}
+        operatingSystemsData={operatingSystemsData}
+        reportId="1234"
+      />,
     );
 
     // Wait for data to load
-    const dataCell = await screen.findByText('Foo OS');
+    await screen.findByText('Foo OS');
 
-    expect(dataCell).toBeInTheDocument();
-
-    // Batch row lookups
-    const rows = screen.getAllByRole('row');
+    // Get the table and rows within it
+    const table = await screen.findByRole('table');
+    const rows = within(table).getAllByRole('row');
 
     // Verify headers
     expect(rows[0]).toHaveTextContent('Operating System');
@@ -114,15 +105,13 @@ describe('Report Operating Systems Tab tests', () => {
   });
 
   test('should show loading state before data arrives', async () => {
-    const gmp = createGmp(buildApiEntities());
-    // Replace with a promise that never resolves to keep the loading state
-    gmp.reportoperatingsystems.get = testing
-      .fn()
-      .mockReturnValue(new Promise(() => {}));
-
-    const {render} = rendererWith({gmp, router: true});
+    const {render} = rendererWith({gmp: {}});
     render(
-      <OperatingSystemsTab filter={filter} reportId="1234" status="Done" />,
+      <OperatingSystemsTab
+        filter={filter}
+        isOperatingSystemsFetching={true}
+        reportId="1234"
+      />,
     );
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
@@ -136,16 +125,16 @@ const auditFilter = Filter.fromString(
 describe('Audit Report Operating Systems Tab tests', () => {
   test('should render Audit Report Operating Systems Tab with compliance', async () => {
     const apiEntities = buildApiEntities();
-    const gmp = createGmp(apiEntities, auditFilter);
+    const operatingSystemsData = createOperatingSystemsData(apiEntities);
 
-    const {render} = rendererWith({gmp, router: true});
+    const {render} = rendererWith({gmp: {}});
 
     render(
       <OperatingSystemsTab
         audit={true}
         filter={auditFilter}
+        operatingSystemsData={operatingSystemsData}
         reportId="1234"
-        status="Done"
       />,
     );
 

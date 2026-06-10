@@ -3,31 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type CollectionList, parseFilter} from 'gmp/collection/parser';
+import {parseFilter} from 'gmp/collection/parser';
 import {type AuditStatus} from 'gmp/models/audit';
 import {type ComplianceType} from 'gmp/models/compliance';
 import {type Date} from 'gmp/models/date';
 import type Filter from 'gmp/models/filter';
 import Model, {type ModelProperties} from 'gmp/models/model';
-import type ReportHost from 'gmp/models/report/host';
-import type ReportOperatingSystem from 'gmp/models/report/os';
-import {
-  parseErrors,
-  parseHosts,
-  parseOperatingSystems,
-  parseResults,
-  parseTlsCertificates,
-  type ReportComplianceCountElement,
-  type ReportError,
-} from 'gmp/models/report/parser';
+import {type ReportComplianceCountElement} from 'gmp/models/report/parser';
 import {
   type DeltaReport,
   type ReportReportElement,
   type ReportType,
 } from 'gmp/models/report/report';
 import ReportTask from 'gmp/models/report/task';
-import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
-import type Result from 'gmp/models/result';
 import {type TaskStatus} from 'gmp/models/task';
 import {parseDate, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -70,19 +58,14 @@ interface AuditReportReportProperties extends ModelProperties {
   compliance?: AuditReportCompliance;
   complianceCounts?: AuditReportComplianceCounts;
   delta_report?: DeltaReport;
-  errors?: CollectionList<ReportError>;
   filter?: Filter;
-  hosts?: CollectionList<ReportHost>;
-  operatingSystems?: CollectionList<ReportOperatingSystem>;
   reportType?: ReportType;
-  results?: CollectionList<Result>;
   task?: ReportTask;
   scan_end?: Date;
   scan_run_status?: AuditStatus;
   scan_start?: Date;
   timezone?: string;
   timezone_abbrev?: string;
-  tlsCertificates?: CollectionList<ReportTLSCertificate>;
 }
 
 class AuditReportReport extends Model {
@@ -91,31 +74,22 @@ class AuditReportReport extends Model {
   readonly compliance?: AuditReportCompliance;
   readonly complianceCounts?: AuditReportComplianceCounts;
   readonly delta_report?: DeltaReport;
-  readonly errors?: CollectionList<ReportError>;
   readonly filter?: Filter;
-  readonly hosts?: CollectionList<ReportHost>;
-  readonly operatingSystems?: CollectionList<ReportOperatingSystem>;
   readonly reportType?: ReportType;
-  readonly results?: CollectionList<Result>;
   readonly task?: ReportTask;
   readonly scan_end?: Date;
   readonly scan_run_status?: string;
   readonly scan_start?: Date;
   readonly timezone?: string;
   readonly timezone_abbrev?: string;
-  readonly tlsCertificates?: CollectionList<ReportTLSCertificate>;
 
   constructor({
     compliance,
     complianceCounts,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     delta_report,
-    errors,
     filter,
-    hosts,
-    operatingSystems,
     reportType,
-    results,
     task,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     scan_end,
@@ -126,7 +100,6 @@ class AuditReportReport extends Model {
     timezone,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     timezone_abbrev,
-    tlsCertificates,
     ...properties
   }: AuditReportReportProperties = {}) {
     super(properties);
@@ -134,19 +107,14 @@ class AuditReportReport extends Model {
     this.compliance = compliance;
     this.complianceCounts = complianceCounts;
     this.delta_report = delta_report;
-    this.errors = errors;
     this.filter = filter;
-    this.hosts = hosts;
-    this.operatingSystems = operatingSystems;
     this.reportType = reportType;
-    this.results = results;
     this.task = task;
     this.scan_end = scan_end;
     this.scan_run_status = scan_run_status;
     this.scan_start = scan_start;
     this.timezone = timezone;
     this.timezone_abbrev = timezone_abbrev;
-    this.tlsCertificates = tlsCertificates;
   }
 
   static fromElement(element?: AuditReportReportElement): AuditReportReport {
@@ -198,11 +166,6 @@ class AuditReportReport extends Model {
     }
 
     copy.task = ReportTask.fromElement(task);
-    copy.results = parseResults(element);
-    copy.hosts = parseHosts(element, filter);
-    copy.tlsCertificates = parseTlsCertificates(element, filter);
-    copy.operatingSystems = parseOperatingSystems(element, filter);
-    copy.errors = parseErrors(element, filter);
 
     copy.scan_start = parseDate(scan_start);
     copy.scan_end = parseDate(scan_end);

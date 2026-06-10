@@ -6,7 +6,7 @@
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import type ReportHost from 'gmp/models/report/host';
-import HostsTable from 'web/pages/reports/details/HostsTable';
+import HostsTable from 'web/pages/reports/details/host/HostsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {
   makeCompareDate,
@@ -85,7 +85,7 @@ const HostsTab = ({
     }) => (
       <HostsTable
         audit={audit}
-        // @ts-expect-error
+        // @ts-expect-error entities are ReportHost[], not Model[]
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}

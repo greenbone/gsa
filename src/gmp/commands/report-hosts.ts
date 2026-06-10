@@ -20,6 +20,7 @@ import {map} from 'gmp/utils/array';
 
 interface ReportHostsData {
   host?: ReportHostElement | ReportHostElement[];
+  hosts?: {count?: number};
   filters?: FilterModelElement;
   [key: string]: unknown;
 }
@@ -59,6 +60,7 @@ class ReportHostsCommand extends HttpCommand {
 
     const counts = new CollectionCounts({
       first: 1,
+      all: data.hosts?.count ?? hostsArray.length,
       filtered: hostsArray.length,
       length: hostsArray.length,
       rows: hostsArray.length,

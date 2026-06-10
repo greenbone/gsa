@@ -5,13 +5,12 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import CollectionCounts from 'gmp/collection/collection-counts';
 import type AuditReport from 'gmp/models/audit-report';
 import Filter from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
-import {TASK_STATUS, type TaskStatus} from 'gmp/models/task';
+import {isActive, TASK_STATUS, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/Toolbar';
@@ -33,52 +32,34 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
+import useReportSubEntities from 'web/hooks/use-query/use-report-sub-entities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import AuditThresholdPanel from 'web/pages/reports/details/AuditThresholdPanel';
-import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
-import HostsTab from 'web/pages/reports/details/HostsTab';
-import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
-import ResultsTab from 'web/pages/reports/details/ResultsTab';
+import ErrorsTab from 'web/pages/reports/details/error/ErrorsTab';
+import HostsTabContent from 'web/pages/reports/details/host/HostsTabContent';
+import OperatingSystemsTab from 'web/pages/reports/details/operating-system/OperatingSystemsTab';
+import ResultsTab from 'web/pages/reports/details/result/ResultsTab';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
-import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
+import TLSCertificatesTab from 'web/pages/reports/details/tls-certificate/TlsCertificatesTab';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
-
-interface SortingEntry {
-  sortField: string;
-  sortReverse: boolean;
-}
-
-interface SortingData {
-  results: SortingEntry;
-  hosts: SortingEntry;
-  os: SortingEntry;
-  tlscerts: SortingEntry;
-  errors: SortingEntry;
-}
 
 interface AuditReportDetailsContentProps {
   entity?: AuditReport;
-  errorsCounts?: CollectionCounts;
   filters?: Filter[];
-  hostsCounts?: CollectionCounts;
   isLoading?: boolean;
   isLoadingFilters?: boolean;
   isUpdating?: boolean;
-  operatingSystemsCounts?: CollectionCounts;
   pageFilter?: Filter;
   reportError?: Error;
   reportFilter?: Filter;
   reportId: string;
   resetFilter?: Filter;
-  resultsCounts?: CollectionCounts;
   showError: (...args: unknown[]) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
-  sorting: SortingData;
   task?: ReportTask;
-  tlsCertificatesCounts?: CollectionCounts;
   onAddToAssetsClick: () => void;
   onError: (error: Error) => void;
   onFilterChanged: (filter: Filter) => void;
@@ -89,7 +70,6 @@ interface AuditReportDetailsContentProps {
   onFilterResetClick: () => void;
   onRemoveFromAssetsClick: () => void;
   onReportDownloadClick: () => void;
-  onSortChange: (type: string, sortField: string) => void;
   onTagSuccess: () => void;
   onTargetEditClick: () => void;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
@@ -132,25 +112,19 @@ const renderWithThreshold = (
 
 const AuditReportDetailsContent = ({
   entity,
-  errorsCounts,
   filters,
-  hostsCounts,
   isLoading = true,
   isLoadingFilters = true,
   isUpdating = false,
-  operatingSystemsCounts,
   pageFilter,
   reportError,
   reportFilter,
   reportId,
   resetFilter,
-  resultsCounts,
-  sorting,
   showError,
   showErrorMessage,
   showSuccessMessage,
   task,
-  tlsCertificatesCounts,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
   onError,
@@ -162,7 +136,6 @@ const AuditReportDetailsContent = ({
   onFilterResetClick,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
-  onSortChange,
   onTagSuccess,
   onTargetEditClick,
 }: AuditReportDetailsContentProps) => {
@@ -176,10 +149,20 @@ const AuditReportDetailsContent = ({
   const gmp = useGmp();
   const [_] = useTranslation();
 
-  const hosts = report?.hosts;
-  const results = report?.results;
   const timestamp = report?.timestamp;
   const scan_run_status = report?.scan_run_status;
+
+  const isImport = isDefined(task) && task.isImport();
+  const status: TaskStatus = isImport
+    ? TASK_STATUS.import
+    : ((scan_run_status as TaskStatus) ?? TASK_STATUS.unknown);
+  const refetchInterval = isActive(status) ? undefined : false;
+
+  const reportEntities = useReportSubEntities({
+    reportId,
+    filter: reportFilter,
+    refetchInterval,
+  });
 
   if (!hasReport && isDefined(reportError)) {
     return (
@@ -192,35 +175,32 @@ const AuditReportDetailsContent = ({
 
   const threshold = gmp.settings.reportResultsThreshold;
 
+  const complianceFiltered = report?.complianceCounts?.filtered ?? 0;
   const showThresholdMessage =
-    !isLoading &&
-    hasReportData &&
-    isDefined(results?.counts) &&
-    results.counts.filtered > threshold;
+    !isLoading && hasReportData && complianceFiltered > threshold;
 
-  const isImport = isDefined(task) && task.isImport();
-  const status: TaskStatus = isImport
-    ? TASK_STATUS.import
-    : ((scan_run_status as TaskStatus) ?? TASK_STATUS.unknown);
   const progress = task?.progress ?? 0;
 
   const effectiveReportFilter = reportFilter ?? pageFilter ?? new Filter();
 
   const showIsLoading = isLoading && !hasReport;
 
-  const resultEntities = results?.entities;
-  const reportResultsCounts =
-    resultsCounts instanceof CollectionCounts
-      ? resultsCounts
-      : isDefined(resultsCounts)
-        ? new CollectionCounts(resultsCounts)
-        : undefined;
+  const resultsCounts = report?.complianceCounts
+    ? {
+        filtered: report.complianceCounts.filtered ?? 0,
+        all: report.complianceCounts.full ?? 0,
+      }
+    : undefined;
+
+  const resultsTabCounts = report?.complianceCounts
+    ? {
+        filtered: report.complianceCounts.filtered,
+        full: report.complianceCounts.full,
+      }
+    : undefined;
 
   const showInitialLoading =
-    isLoading &&
-    !isDefined(reportError) &&
-    !showThresholdMessage &&
-    (!isDefined(resultEntities) || resultEntities.length === 0);
+    isLoading && !isDefined(reportError) && !showThresholdMessage;
 
   const thresholdConfig = {
     showInitialLoading,
@@ -261,7 +241,7 @@ const AuditReportDetailsContent = ({
           progress={progress}
           reportFilter={effectiveReportFilter}
           reportId={reportId}
-          reportResultsCounts={reportResultsCounts}
+          reportResultsCounts={resultsTabCounts}
           status={status}
           onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
           onFilterEditClick={onFilterEditClick}
@@ -272,19 +252,23 @@ const AuditReportDetailsContent = ({
     },
     {
       key: 'hosts',
-      title: <TabTitle counts={hostsCounts} title={_('Hosts')} />,
+      title: (
+        <TabTitle
+          counts={reportEntities.hosts.data?.entitiesCounts}
+          title={_('Hosts')}
+        />
+      ),
       panel: renderWithThreshold(
         _('Hosts'),
         thresholdConfig,
-        <HostsTab
+        <HostsTabContent
           audit={true}
-          counts={hosts?.counts}
-          filter={effectiveReportFilter}
-          hosts={hosts?.entities}
-          isUpdating={isUpdating}
-          sortField={sorting.hosts.sortField}
-          sortReverse={sorting.hosts.sortReverse}
-          onSortChange={(sortField: string) => onSortChange('hosts', sortField)}
+          hostsData={reportEntities.hosts.data}
+          isContainerScanning={false}
+          isHostsError={reportEntities.hosts.isError}
+          isHostsFetching={reportEntities.hosts.isFetching}
+          reportFilter={effectiveReportFilter}
+          reportId={reportId}
         />,
       ),
     },
@@ -292,7 +276,7 @@ const AuditReportDetailsContent = ({
       key: 'os',
       title: (
         <TabTitle
-          counts={operatingSystemsCounts}
+          counts={reportEntities.operatingSystems.data?.entitiesCounts}
           title={_('Operating Systems')}
         />
       ),
@@ -302,8 +286,12 @@ const AuditReportDetailsContent = ({
         <OperatingSystemsTab
           audit={true}
           filter={effectiveReportFilter}
+          isOperatingSystemsError={reportEntities.operatingSystems.isError}
+          isOperatingSystemsFetching={
+            reportEntities.operatingSystems.isFetching
+          }
+          operatingSystemsData={reportEntities.operatingSystems.data}
           reportId={reportId}
-          status={status}
         />,
       ),
     },
@@ -311,7 +299,7 @@ const AuditReportDetailsContent = ({
       key: 'tlscerts',
       title: (
         <TabTitle
-          counts={tlsCertificatesCounts}
+          counts={reportEntities.tlsCertificates.data?.entitiesCounts}
           title={_('TLS Certificates')}
         />
       ),
@@ -319,21 +307,30 @@ const AuditReportDetailsContent = ({
         _('TLS Certificates'),
         thresholdConfig,
         <TLSCertificatesTab
+          isTlsCertificatesError={reportEntities.tlsCertificates.isError}
+          isTlsCertificatesFetching={reportEntities.tlsCertificates.isFetching}
           reportFilter={effectiveReportFilter}
           reportId={reportId}
-          status={status}
+          tlsCertificatesData={reportEntities.tlsCertificates.data}
           onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
         />,
       ),
     },
     {
       key: 'errors',
-      title: <TabTitle counts={errorsCounts} title={_('Error Messages')} />,
+      title: (
+        <TabTitle
+          counts={reportEntities.errors.data?.entitiesCounts}
+          title={_('Error Messages')}
+        />
+      ),
       panel: (
         <ErrorsTab
+          errorsData={reportEntities.errors.data}
           filter={effectiveReportFilter}
+          isErrorsError={reportEntities.errors.isError}
+          isErrorsFetching={reportEntities.errors.isFetching}
           reportId={reportId}
-          status={status}
         />
       ),
     },

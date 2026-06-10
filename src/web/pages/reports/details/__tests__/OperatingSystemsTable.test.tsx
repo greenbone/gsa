@@ -4,13 +4,13 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, within, userEvent} from 'web/testing';
+import {rendererWith, screen, userEvent, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import OperatingSystemsTable from 'web/pages/reports/details/OperatingSystemsTable';
+import OperatingSystemsTable from 'web/pages/reports/details/operating-system/OperatingSystemsTable';
 
 const filter = Filter.fromString('first=1 rows=10');
 
@@ -27,8 +27,6 @@ describe('OperatingSystemsTable', () => {
     const {operatingsystems} = getMockReport();
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -58,8 +56,6 @@ describe('OperatingSystemsTable', () => {
     const {operatingsystems} = getMockReport();
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -83,8 +79,6 @@ describe('OperatingSystemsTable', () => {
     const {operatingsystems} = getMockReport();
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -110,8 +104,6 @@ describe('OperatingSystemsTable', () => {
     const {operatingsystems} = getMockReport();
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -145,8 +137,6 @@ describe('OperatingSystemsTable', () => {
     });
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -167,8 +157,6 @@ describe('OperatingSystemsTable', () => {
     const auditFilter = Filter.fromString('first=1 rows=10');
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -207,8 +195,6 @@ describe('OperatingSystemsTable', () => {
     const auditFilter = Filter.fromString('first=1 rows=10');
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -235,8 +221,6 @@ describe('OperatingSystemsTable', () => {
     const onSortChange = testing.fn();
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -263,8 +247,6 @@ describe('OperatingSystemsTable', () => {
     const onSortChange = testing.fn();
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -291,8 +273,6 @@ describe('OperatingSystemsTable', () => {
     const onSortChange = testing.fn();
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 
@@ -317,8 +297,6 @@ describe('OperatingSystemsTable', () => {
     const {operatingsystems} = getMockReport();
 
     const {render} = rendererWith({
-      router: true,
-
       gmp: createGmp(),
     });
 

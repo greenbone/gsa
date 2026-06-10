@@ -5,10 +5,11 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import AgentScanningHostsTab from 'web/pages/reports/details/AgentScanningHostsTab';
+import {mockReportHosts} from 'web/pages/reports/__fixtures__/MockReport';
+import AgentScanningHostsTab from 'web/pages/reports/details/host/AgentScanningHostsTab';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -19,12 +20,17 @@ const gmp = {
   },
 };
 
+const mockHosts = mockReportHosts;
+const mockHostsCounts = new CollectionCounts({
+  all: 2,
+  filtered: 2,
+  first: 1,
+  rows: 2,
+  length: 2,
+});
+
 describe('Agent Scanning Hosts Tab tests', () => {
   test('should render Agent Scanning Hosts Tab', () => {
-    const {hosts} = getMockReport();
-    if (!hosts?.entities) {
-      throw new Error('Mock report did not return hosts or hosts.entities');
-    }
     const onSortChange = testing.fn();
     const {render} = rendererWith({
       gmp,
@@ -33,9 +39,9 @@ describe('Agent Scanning Hosts Tab tests', () => {
     });
     render(
       <AgentScanningHostsTab
-        counts={hosts.counts}
+        counts={mockHostsCounts}
         filter={filter}
-        hosts={hosts.entities}
+        hosts={mockHosts}
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
@@ -125,10 +131,6 @@ describe('Agent Scanning Hosts Tab tests', () => {
   });
 
   test('should handle sorting', () => {
-    const {hosts} = getMockReport();
-    if (!hosts?.entities) {
-      throw new Error('Mock report did not return hosts or hosts.entities');
-    }
     const onSortChange = testing.fn();
     const {render} = rendererWith({
       gmp,
@@ -137,9 +139,9 @@ describe('Agent Scanning Hosts Tab tests', () => {
     });
     render(
       <AgentScanningHostsTab
-        counts={hosts.counts}
+        counts={mockHostsCounts}
         filter={filter}
-        hosts={hosts.entities}
+        hosts={mockHosts}
         isUpdating={false}
         sortField={'ip'}
         sortReverse={false}

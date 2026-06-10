@@ -3,15 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import CollectionCounts from 'gmp/collection/collection-counts';
 import AuditReport from 'gmp/models/audit-report';
+import {COMPLIANCE} from 'gmp/models/compliance';
+import Filter from 'gmp/models/filter';
+import ReportHost from 'gmp/models/report/host';
+import ReportOperatingSystem from 'gmp/models/report/os';
 import {
   type PortElement,
   type ReportHostElement,
   type ReportResultElement,
+  parseErrors,
 } from 'gmp/models/report/parser';
 import {
   type default as ReportReport,
-  type ReportReportElement,
   type ReportReportTaskElement,
 } from 'gmp/models/report/report';
 import {type ReportTLSCertificateElement} from 'gmp/models/report/tls-certificate';
@@ -228,6 +233,12 @@ export const host3: ReportHostElement = {
   ],
 };
 
+export const mockAuditHosts = [
+  ReportHost.fromElement(host1),
+  ReportHost.fromElement(host2),
+  ReportHost.fromElement(host3),
+];
+
 // Ports
 const port1: PortElement = {
   host: '1.1.1.1',
@@ -307,7 +318,7 @@ const tlsCertificate2: ReportTLSCertificateElement = {
 };
 
 export const getMockAuditReport = () => {
-  const report: ReportReportElement = {
+  const report = {
     _id: '1234',
     scan_run_status: 'Done',
     scan_start: '2019-06-03T11:00:22Z',
@@ -321,7 +332,6 @@ export const getMockAuditReport = () => {
     apps: {count: 4},
     os: {count: 2},
     ssl_certs: {count: 2},
-    // @ts-expect-error missing in type
     compliance: {filtered: 'no', full: 'no'},
     compliance_count: {
       __text: 3,
@@ -358,14 +368,40 @@ export const getMockAuditReport = () => {
     task: task1,
   });
 
+  const errorsCollection = parseErrors(report, Filter.fromString(''));
+
+  const os1 = new ReportOperatingSystem({
+    id: 'cpe:/foo/bar',
+    name: 'Foo OS',
+    cpe: 'cpe:/foo/bar',
+    compliance: COMPLIANCE.NO,
+    severity: 10,
+  });
+  const os2 = new ReportOperatingSystem({
+    id: 'cpe:/lorem/ipsum',
+    name: 'Lorem OS',
+    cpe: 'cpe:/lorem/ipsum',
+    compliance: COMPLIANCE.INCOMPLETE,
+    severity: 5,
+  });
+  const operatingsystemsCollection = {
+    entities: [os1, os2],
+    counts: new CollectionCounts({
+      all: 2,
+      filtered: 2,
+      first: 1,
+      rows: 2,
+      length: 2,
+    }),
+    filter: Filter.fromString(''),
+  };
+
   return {
     entity,
     report: entity.report as ReportReport,
-    results: entity.report?.results,
-    hosts: entity.report?.hosts,
-    operatingsystems: entity.report?.operatingSystems,
-    tlsCertificates: entity.report?.tlsCertificates,
-    errors: entity.report?.errors,
+    errors: errorsCollection,
+    hosts: undefined,
+    operatingsystems: operatingsystemsCollection,
     task: entity.report?.task,
   };
 };

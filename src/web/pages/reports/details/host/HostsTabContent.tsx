@@ -5,49 +5,46 @@
 
 import {useState} from 'react';
 import type Filter from 'gmp/models/filter';
-import {isActive, type TaskStatus} from 'gmp/models/task';
+import type ReportHost from 'gmp/models/report/host';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
-import AgentScanningHostsTab from 'web/pages/reports/details/AgentScanningHostsTab';
-import ContainerScanningHostsTab from 'web/pages/reports/details/ContainerScanningHostsTab';
-import HostsTab from 'web/pages/reports/details/HostsTab';
+import AgentScanningHostsTab from 'web/pages/reports/details/host/AgentScanningHostsTab';
+import ContainerScanningHostsTab from 'web/pages/reports/details/host/ContainerScanningHostsTab';
+import HostsTab from 'web/pages/reports/details/host/HostsTab';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 
 export interface HostsTabContentProps {
   audit?: boolean;
   reportId: string;
-  status: TaskStatus;
   isAgentScanning?: boolean;
   isContainerScanning: boolean;
   reportFilter: Filter;
+  hostsData?: UseGetEntitiesReturn<ReportHost>;
+  isHostsFetching?: boolean;
+  isHostsError?: boolean;
 }
 
 const HostsTabContent = ({
   audit = false,
   reportId,
-  status,
+  isHostsError,
   isAgentScanning,
   isContainerScanning,
   reportFilter,
+  hostsData,
+  isHostsFetching,
 }: HostsTabContentProps) => {
   const [_] = useTranslation();
   const [{sortField, sortReverse}, setSorting] = useState({
-    sortField: 'severity',
+    sortField: audit ? 'compliant' : 'severity',
     sortReverse: true,
   });
 
-  const {data, isLoading, isFetching, isError, error} = useGetReportHosts({
-    reportId,
-    filter: reportFilter,
-    refetchInterval: isActive(status)
-      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : NO_RELOAD,
-  });
+  const data = hostsData;
+  const isFetching = isHostsFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = isHostsError ?? false;
 
   const handleSortChange = (newSortField: string) => {
     setSorting(prev => ({
@@ -63,7 +60,6 @@ const HostsTabContent = ({
   if (isError) {
     return (
       <ErrorPanel
-        error={error}
         message={_('Error while loading Hosts for Report {{reportId}}', {
           reportId,
         })}

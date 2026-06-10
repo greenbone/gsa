@@ -5,7 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, within} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
+import Result from 'gmp/models/result';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
@@ -33,7 +35,53 @@ describe('Delta Results Tab tests', () => {
     const onSortChange = testing.fn();
     const onTargetEditClick = testing.fn();
 
-    const {report, results, task} = getMockDeltaReport();
+    const {report, task} = getMockDeltaReport();
+
+    // Build results from the report's parsed data
+    const resultElements = [
+      {
+        _id: '101',
+        name: 'Result 1',
+        creation_time: '2019-06-03T11:06:31Z',
+        host: {__text: '123.456.78.910'},
+        port: '80/tcp',
+        nvt: {
+          type: 'nvt',
+          name: 'nvt1',
+          tags: 'solution_type=Mitigation',
+          solution: {_type: 'Mitigation'},
+        },
+        threat: 'High',
+        severity: 10.0,
+        qod: {value: 80},
+        delta: 'same',
+      },
+      {
+        _id: '102',
+        name: 'Result 2',
+        creation_time: '2019-06-03T11:06:31Z',
+        host: {__text: '109.876.54.321'},
+        port: '80/tcp',
+        nvt: {
+          type: 'nvt',
+          name: 'nvt2',
+          tags: 'solution_type=VendorFix',
+          solution: {_type: 'VendorFix'},
+        },
+        threat: 'Medium',
+        severity: 5.0,
+        qod: {value: 70},
+        delta: 'same',
+      },
+    ];
+    const results = resultElements.map(r => Result.fromElement(r));
+    const resultsCounts = new CollectionCounts({
+      all: 2,
+      filtered: 2,
+      first: 1,
+      rows: 2,
+      length: 2,
+    });
 
     const {render} = rendererWith({
       capabilities: true,
@@ -43,13 +91,13 @@ describe('Delta Results Tab tests', () => {
 
     const {baseElement} = render(
       <DeltaResultsTab
-        counts={results.counts}
+        counts={resultsCounts}
         delta={true}
         filter={filter}
         hasTarget={true}
         isUpdating={false}
         progress={task.progress}
-        results={results.entities}
+        results={results}
         sortField={'severity'}
         sortReverse={true}
         status={report.scan_run_status}

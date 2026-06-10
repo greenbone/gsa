@@ -3,31 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Filter from 'gmp/models/filter';
-import {isActive, type TaskStatus} from 'gmp/models/task';
+import {type ReportActiveCve} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/Reload';
-import useGetReportCves from 'web/hooks/use-query/report-cves';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import CvesTable from 'web/pages/reports/details/CvesTable';
+import CvesTable from 'web/pages/reports/details/cve/CvesTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {
   makeCompareIp,
-  makeCompareString,
   makeCompareSeverity,
+  makeCompareString,
 } from 'web/utils/Sort';
 
 interface CvesTabProps {
   filter?: Filter;
   reportId: string;
-  status: TaskStatus;
+  cvesData?: UseGetEntitiesReturn<ReportActiveCve>;
+  isCvesFetching?: boolean;
+  isCvesError?: boolean;
 }
 
 export const cvesSortFunctions = {
@@ -37,7 +35,13 @@ export const cvesSortFunctions = {
   severity: makeCompareSeverity(),
 };
 
-const CvesTabWrapper = ({filter, reportId, status}: CvesTabProps) => {
+const CvesTabWrapper = ({
+  filter,
+  reportId,
+  isCvesError,
+  cvesData,
+  isCvesFetching,
+}: CvesTabProps) => {
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
@@ -46,14 +50,14 @@ const CvesTabWrapper = ({filter, reportId, status}: CvesTabProps) => {
 
   const [cvesFilter, setCvesFilter] = useState<Filter>(baseFilter);
 
-  const {data, isLoading, isFetching, isError, error} = useGetReportCves({
-    reportId,
-    filter: cvesFilter,
-    refetchInterval: isActive(status)
-      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : NO_RELOAD,
-  });
+  useEffect(() => {
+    setCvesFilter(baseFilter);
+  }, [baseFilter]);
 
+  const data = cvesData;
+  const isFetching = isCvesFetching ?? false;
+  const isLoading = !data && isFetching;
+  const isError = isCvesError ?? false;
   const updateFilter = (newFilter: Filter) => {
     setCvesFilter(newFilter);
   };
@@ -63,23 +67,22 @@ const CvesTabWrapper = ({filter, reportId, status}: CvesTabProps) => {
     updateFilter,
   );
 
-  if (isError) {
-    return (
-      <ErrorPanel
-        error={error}
-        message={_('Error while loading CVEs for Report {{reportId}}', {
-          reportId,
-        })}
-      />
-    );
-  }
-
   const {entities: cves = [], entitiesCounts: cvesCounts} = data || {};
 
   const displayedFilter = cvesFilter;
 
   if (isLoading && !data) {
     return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorPanel
+        message={_('Error while loading CVEs for Report {{reportId}}', {
+          reportId,
+        })}
+      />
+    );
   }
 
   return (

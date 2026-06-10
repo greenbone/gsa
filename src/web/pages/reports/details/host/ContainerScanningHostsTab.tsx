@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2026 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
@@ -6,16 +6,17 @@
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Filter from 'gmp/models/filter';
 import type ReportHost from 'gmp/models/report/host';
-import AgentScanningHostsTable from 'web/pages/reports/details/AgentScanningHostsTable';
+import ContainerScanningHostsTable from 'web/pages/reports/details/host/ContainerScanningHostsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {
+  makeCompareDate,
   makeCompareIp,
   makeCompareNumber,
   makeCompareSeverity,
   makeCompareString,
 } from 'web/utils/Sort';
 
-interface AgentScanningHostsTabProps {
+interface ContainerScanningHostsTabProps {
   audit?: boolean;
   counts?: CollectionCounts;
   hosts?: ReportHost[];
@@ -26,10 +27,9 @@ interface AgentScanningHostsTabProps {
   onSortChange: (sortField: string) => void;
 }
 
-const agentScanningHostsSortFunctions = {
+const containerScanningHostsSortFunctions = {
   ip: makeCompareIp('ip'),
   hostname: makeCompareString('hostname'),
-  agentId: makeCompareString(entity => entity.details?.agentId),
   portsCount: makeCompareNumber(entity => entity.portsCount),
   appsCount: makeCompareNumber(entity => entity.details.appsCount),
   distance: makeCompareNumber(entity => entity.details.distance),
@@ -43,6 +43,8 @@ const agentScanningHostsSortFunctions = {
     entity => entity.result_counts.false_positive,
   ),
   severity: makeCompareSeverity(),
+  start: makeCompareDate(entity => entity.start),
+  end: makeCompareDate(entity => entity.end),
   total: makeCompareNumber(entity => entity.result_counts.total),
   complianceYes: makeCompareNumber(entity => entity.complianceCounts.yes),
   complianceNo: makeCompareNumber(entity => entity.complianceCounts.no),
@@ -53,7 +55,7 @@ const agentScanningHostsSortFunctions = {
   compliant: makeCompareString('hostCompliance'),
 };
 
-const AgentScanningHostsTab = ({
+const ContainerScanningHostsTab = ({
   audit = false,
   counts,
   hosts,
@@ -62,14 +64,14 @@ const AgentScanningHostsTab = ({
   sortField,
   sortReverse,
   onSortChange,
-}: AgentScanningHostsTabProps) => {
+}: ContainerScanningHostsTabProps) => {
   return (
     <ReportEntitiesContainer<ReportHost>
       counts={counts}
       entities={hosts}
       filter={filter}
       sortField={sortField}
-      sortFunctions={agentScanningHostsSortFunctions}
+      sortFunctions={containerScanningHostsSortFunctions}
       sortReverse={sortReverse}
     >
       {({
@@ -82,7 +84,7 @@ const AgentScanningHostsTab = ({
         onNextClick,
         onPreviousClick,
       }) => (
-        <AgentScanningHostsTable
+        <ContainerScanningHostsTable
           audit={audit}
           // @ts-expect-error
           entities={entities}
@@ -102,4 +104,4 @@ const AgentScanningHostsTab = ({
   );
 };
 
-export default AgentScanningHostsTab;
+export default ContainerScanningHostsTab;

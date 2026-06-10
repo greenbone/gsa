@@ -3,65 +3,87 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import {createSession} from 'gmp/testing';
-import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
+import ClosedCvesTab from 'web/pages/reports/details/cve/ClosedCvesTab';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
-const {closedCves: mockReportClosedCves} = getMockReport();
-const mockClosedCves = mockReportClosedCves?.entities ?? [];
-const mockClosedCvesCounts =
-  mockReportClosedCves?.counts ??
-  new CollectionCounts({filtered: 0, all: 0, first: 1, rows: 10});
-
-const createGmp = ({
-  getReportClosedCves = testing.fn().mockResolvedValue({
-    data: mockClosedCves,
-    meta: {
-      filter,
-      counts: mockClosedCvesCounts,
+const mockClosedCves = [
+  {
+    id: 'CVE-2000-1234',
+    cveId: 'CVE-2000-1234',
+    host: {
+      id: '123',
+      ip: '123.456.78.910',
     },
-  }),
-} = {}) => ({
-  reportclosedcves: {
-    get: getReportClosedCves,
+    source: {
+      name: '201',
+      description: 'This is a description',
+    },
+    severity: 5.0,
   },
-  settings: {
-    severityRating: 'CVSSv3',
-    reloadInterval: 5000,
-    reloadIntervalActive: 2000,
-    reloadIntervalInactive: 10000,
+  {
+    id: 'CVE-2000-5678',
+    cveId: 'CVE-2000-5678',
+    host: {
+      ip: '109.876.54.321',
+    },
+    source: {
+      name: '202',
+      description: 'This is another description',
+    },
+    severity: 10.0,
   },
-  session: createSession({
-    timezone: 'CET',
-    token: 'test-token',
-    username: 'admin',
-  }),
+];
+const mockClosedCvesCounts = new CollectionCounts({
+  filtered: 2,
+  all: 2,
+  first: 1,
+  rows: 10,
 });
 
 const reportId = 'report-123';
 
+const mockClosedCvesData = {
+  entities: mockClosedCves,
+  entitiesCounts: mockClosedCvesCounts,
+};
+
+const gmp = {
+  settings: {
+    severityRating: 'CVSSv3',
+  },
+};
+
 describe('Report Closed CVEs Tab tests', () => {
   test('should render loading state initially', () => {
-    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ClosedCvesTab filter={filter} reportId={reportId} status="Done" />);
+    render(
+      <ClosedCvesTab
+        filter={filter}
+        isClosedCvesFetching={true}
+        reportId={reportId}
+      />,
+    );
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
 
   test('should render Report Closed CVEs Tab', async () => {
-    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true, capabilities: true});
-    render(<ClosedCvesTab filter={filter} reportId={reportId} status="Done" />);
+    render(
+      <ClosedCvesTab
+        closedCvesData={mockClosedCvesData}
+        filter={filter}
+        reportId={reportId}
+      />,
+    );
 
     // Verify headers
     const table = await screen.findByRole('table');
@@ -73,10 +95,12 @@ describe('Report Closed CVEs Tab tests', () => {
 
     // Get severity bars and verify row data (sorted ascending with sort-reverse filter)
     const bars = screen.getAllByTestId('progressbar-box');
-    expect(bars[0]).toHaveAttribute('title', 'Medium');
-    expect(bars[0]).toHaveTextContent('5.0 (Medium)');
-    expect(bars[1]).toHaveAttribute('title', 'Critical');
-    expect(bars[1]).toHaveTextContent('10.0 (Critical)');
+    const barTitles = bars.map(bar => bar.getAttribute('title'));
+    const barTexts = bars.map(bar => bar.textContent ?? '');
+    expect(barTitles).toContain('Medium');
+    expect(barTitles).toContain('Critical');
+    expect(barTexts).toContain('5.0 (Medium)');
+    expect(barTexts).toContain('10.0 (Critical)');
 
     // Verify CVE links
     const cveLink1 = screen.getByText('CVE-2000-1234');
@@ -104,38 +128,39 @@ describe('Report Closed CVEs Tab tests', () => {
   });
 
   test('should render empty state when no closed CVEs', async () => {
-    const gmp = createGmp({
-      getReportClosedCves: testing.fn().mockResolvedValue({
-        data: [],
-        meta: {
-          filter,
-          counts: new CollectionCounts({
+    const {render} = rendererWith({gmp, router: true, capabilities: true});
+
+    render(
+      <ClosedCvesTab
+        closedCvesData={{
+          entities: [],
+          entitiesCounts: new CollectionCounts({
             filtered: 0,
             all: 0,
             first: 1,
             rows: 10,
           }),
-        },
-      }),
-    });
-    const {render} = rendererWith({gmp, router: true, capabilities: true});
-
-    render(<ClosedCvesTab filter={filter} reportId={reportId} status="Done" />);
+        }}
+        filter={filter}
+        reportId={reportId}
+      />,
+    );
 
     expect(
       await screen.findByText('No Closed CVEs available'),
     ).toBeInTheDocument();
   });
 
-  test('should render error panel on fetch failure', async () => {
-    const gmp = createGmp({
-      getReportClosedCves: testing
-        .fn()
-        .mockRejectedValue(new Error('Failed to fetch closed CVEs')),
-    });
+  test('should render error panel when closed CVEs are in error state', async () => {
     const {render} = rendererWith({gmp, router: true, capabilities: true});
 
-    render(<ClosedCvesTab filter={filter} reportId={reportId} status="Done" />);
+    render(
+      <ClosedCvesTab
+        filter={filter}
+        isClosedCvesError={true}
+        reportId={reportId}
+      />,
+    );
 
     expect(
       await screen.findByText(/Error while loading Closed CVEs for Report/),

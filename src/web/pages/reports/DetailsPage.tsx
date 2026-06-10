@@ -17,9 +17,6 @@ import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
-import useGetReportClosedCves from 'web/hooks/use-query/report-closed-cves';
-import useGetReportCves from 'web/hooks/use-query/report-cves';
-import useGetReportTlsCertificates from 'web/hooks/use-query/report-tls-certificates';
 import {
   useGetReport,
   useGetReportConfigs,
@@ -37,23 +34,6 @@ import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDial
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {create_pem_certificate} from 'web/utils/Cert';
 import {generateFilename} from 'web/utils/Render';
-
-interface SortState {
-  sortField: string;
-  sortReverse: boolean;
-}
-
-interface SortingState {
-  results: SortState;
-  apps: SortState;
-  ports: SortState;
-  hosts: SortState;
-  os: SortState;
-  cves: SortState;
-  closedcves: SortState;
-  tlscerts: SortState;
-  errors: SortState;
-}
 
 interface ReportComposerDefaults {
   defaultReportConfigId?: string;
@@ -104,18 +84,6 @@ const getReportFilter = (entity?: Report) => {
   return entity?.report?.filter;
 };
 
-const initialSorting: SortingState = {
-  results: {sortField: 'severity', sortReverse: true},
-  apps: {sortField: 'severity', sortReverse: true},
-  ports: {sortField: 'severity', sortReverse: true},
-  hosts: {sortField: 'severity', sortReverse: true},
-  os: {sortField: 'severity', sortReverse: true},
-  cves: {sortField: 'severity', sortReverse: true},
-  closedcves: {sortField: 'severity', sortReverse: true},
-  tlscerts: {sortField: 'dn', sortReverse: false},
-  errors: {sortField: 'error', sortReverse: false},
-};
-
 const ReportDetailsPage = () => {
   const [_] = useTranslation();
   const {id: reportId = ''} = useParams<{id: string}>();
@@ -135,7 +103,6 @@ const ReportDetailsPage = () => {
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showDownloadReportDialog, setShowDownloadReportDialog] =
     useState(false);
-  const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
 
@@ -174,20 +141,6 @@ const ReportDetailsPage = () => {
   const reportError = isError ? queryError : undefined;
 
   const reportFilter = getReportFilter(entity);
-  const {data: reportTlsCertificatesData} = useGetReportTlsCertificates({
-    reportId,
-    filter: reportFilter,
-  });
-
-  const {data: reportCvesData} = useGetReportCves({
-    reportId,
-    filter: reportFilter,
-  });
-
-  const {data: reportClosedCvesData} = useGetReportClosedCves({
-    reportId,
-    filter: reportFilter,
-  });
 
   // Filters list for Powerfilter dropdown
   const {data: filtersData, isLoading: isLoadingFilters} =
@@ -239,23 +192,13 @@ const ReportDetailsPage = () => {
   // Derive counts from report entity
   const report = entity?.report;
 
-  const resultsCounts = report?.results?.counts;
-  const hostsCounts = report?.hosts?.counts;
-  const portsCounts = report?.ports?.counts;
-  const applicationsCounts = report?.applications?.counts;
-  const operatingSystemsCounts = report?.operatingsystems?.counts;
-  const cvesCounts = reportCvesData?.entitiesCounts;
-  const closedCvesCounts = reportClosedCvesData?.entitiesCounts;
-  const tlsCertificatesCounts =
-    reportTlsCertificatesData?.entitiesCounts ??
-    report?.tlsCertificates?.counts;
-  const errorsCounts = report?.errors?.counts;
+  const resultsCounts = report?.result_count;
 
   const threshold = gmp.settings.reportResultsThreshold;
   const showThresholdMessage =
     isDefined(report) &&
     isDefined(resultsCounts) &&
-    resultsCounts.filtered > threshold;
+    (resultsCounts.filtered ?? 0) > threshold;
 
   // Handlers
   const handleFilterChange = useCallback(
@@ -473,20 +416,6 @@ const ReportDetailsPage = () => {
     }
   }, [reportFilter, handleFilterChange]);
 
-  const handleSortChange = useCallback(
-    (name: string, sortField: string) => {
-      const prev = sorting[name as keyof SortingState];
-      const sortReverse =
-        sortField === prev.sortField ? !prev.sortReverse : false;
-
-      setSorting(prevSorting => ({
-        ...prevSorting,
-        [name]: {sortField, sortReverse},
-      }));
-    },
-    [sorting],
-  );
-
   const handleChanged = useCallback(() => {
     void queryClient.invalidateQueries({queryKey: ['get_report']});
   }, [queryClient]);
@@ -514,19 +443,12 @@ const ReportDetailsPage = () => {
       <TargetComponent onSaveError={handleError}>
         {({edit}) => (
           <Page
-            applicationsCounts={applicationsCounts}
-            closedCvesCounts={closedCvesCounts}
-            cvesCounts={cvesCounts}
             entity={entity}
-            errorsCounts={errorsCounts}
             filters={filters}
-            hostsCounts={hostsCounts}
             isLoading={isLoading}
             isLoadingFilters={isLoadingFilters}
             isUpdating={isFetching && !isLoading}
-            operatingSystemsCounts={operatingSystemsCounts}
             pageFilter={pageFilter}
-            portsCounts={portsCounts}
             reportError={reportError}
             reportFilter={reportFilter}
             reportId={reportId}
@@ -535,9 +457,7 @@ const ReportDetailsPage = () => {
             showError={showError as (...args: unknown[]) => void}
             showErrorMessage={showErrorMessage}
             showSuccessMessage={showSuccessMessage}
-            sorting={sorting}
             task={isDefined(report) ? report.task : undefined}
-            tlsCertificatesCounts={tlsCertificatesCounts}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
             onFilterAddLogLevelClick={handleFilterAddLogLevel}
@@ -549,7 +469,6 @@ const ReportDetailsPage = () => {
             onFilterResetClick={handleFilterResetClick}
             onRemoveFromAssetsClick={handleRemoveFromAssets}
             onReportDownloadClick={handleOpenDownloadReportDialog}
-            onSortChange={handleSortChange}
             onTagSuccess={handleChanged}
             onTargetEditClick={async () => {
               const response = await loadTarget();
@@ -583,7 +502,7 @@ const ReportDetailsPage = () => {
           reportFormats={reportFormats ?? []}
           showThresholdMessage={showThresholdMessage}
           threshold={threshold}
-          totalResultCount={resultsCounts?.all ?? 0}
+          totalResultCount={resultsCounts?.full ?? 0}
           onClose={handleCloseDownloadReportDialog}
           onSave={handleReportDownload}
         />

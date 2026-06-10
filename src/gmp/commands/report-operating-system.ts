@@ -64,12 +64,7 @@ class ReportOperatingSystemsCommand extends HttpCommand {
     const entities = map(
       data?.operating_systems?.operating_system,
       (item: OperatingSystemElement) => {
-        const os = ReportOperatingSystem.fromElement({
-          best_os_cpe: item.best_os_cpe,
-          best_os_txt: item.best_os_txt,
-        });
-        os.hosts.count = Number(item.hosts_count) || 0;
-        return os;
+        return ReportOperatingSystem.fromElement(item);
       },
     );
 

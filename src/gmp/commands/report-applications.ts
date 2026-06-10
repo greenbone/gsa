@@ -15,7 +15,6 @@ import type Response from 'gmp/http/response';
 import type {XmlResponseData} from 'gmp/http/transform/fast-xml';
 import type {FilterModelElement} from 'gmp/models/filter';
 import ReportApp from 'gmp/models/report/app';
-import {parseSeverity} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -75,16 +74,7 @@ class ReportApplicationsCommand extends HttpCommand {
         return;
       }
 
-      const reportApp = new ReportApp({
-        id: app.name,
-        name: app.name,
-        severity: parseSeverity(app.severity),
-      });
-
-      reportApp.hosts.count = Number(app.hosts_count) || 0;
-      reportApp.occurrences.total = Number(app.occurrences) || 0;
-
-      apps.push(reportApp);
+      apps.push(ReportApp.fromElement(app));
     });
 
     const filteredCount = apps.length;

@@ -3,65 +3,79 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import {createSession} from 'gmp/testing';
-import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import CvesTab from 'web/pages/reports/details/CvesTab';
+import CvesTab from 'web/pages/reports/details/cve/CvesTab';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
-const {cves: mockReportCves} = getMockReport();
-const mockCves = mockReportCves?.entities ?? [];
-const mockCvesCounts =
-  mockReportCves?.counts ??
-  new CollectionCounts({filtered: 0, all: 0, first: 1, rows: 10});
-
-const createGmp = ({
-  getReportCves = testing.fn().mockResolvedValue({
-    data: mockCves,
-    meta: {
-      filter,
-      counts: mockCvesCounts,
+const mockCves = [
+  {
+    id: 'CVE-2019-1234',
+    cveId: 'CVE-2019-1234',
+    host: {
+      id: '123',
+      ip: '123.456.78.910',
     },
-  }),
-} = {}) => ({
-  reportcves: {
-    get: getReportCves,
+    source: {
+      name: '201',
+      description: 'nvt1',
+    },
+    severity: 5.0,
   },
-  settings: {
-    severityRating: 'CVSSv3',
-    reloadInterval: 5000,
-    reloadIntervalActive: 2000,
-    reloadIntervalInactive: 10000,
+  {
+    id: 'CVE-2019-5678',
+    cveId: 'CVE-2019-5678',
+    host: {
+      ip: '109.876.54.321',
+    },
+    source: {
+      name: '202',
+      description: 'nvt2',
+    },
+    severity: 5.0,
   },
-  session: createSession({
-    timezone: 'CET',
-    token: 'test-token',
-    username: 'admin',
-  }),
+];
+const mockCvesCounts = new CollectionCounts({
+  filtered: 2,
+  all: 2,
+  first: 1,
+  rows: 10,
 });
 
 const reportId = 'report-123';
 
+const mockCvesData = {
+  entities: mockCves,
+  entitiesCounts: mockCvesCounts,
+};
+
+const gmp = {
+  settings: {
+    severityRating: 'CVSSv3',
+  },
+};
+
 describe('Report CVEs Tab tests', () => {
   test('should render loading state initially', () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true, capabilities: true});
+    const {render} = rendererWith({gmp, capabilities: true});
 
-    render(<CvesTab filter={filter} reportId={reportId} status="Done" />);
+    render(
+      <CvesTab filter={filter} isCvesFetching={true} reportId={reportId} />,
+    );
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
 
   test('should render Report CVEs Tab', async () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true, capabilities: true});
-    render(<CvesTab filter={filter} reportId={reportId} status="Done" />);
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(
+      <CvesTab cvesData={mockCvesData} filter={filter} reportId={reportId} />,
+    );
 
     // Verify headers
     const table = await screen.findByRole('table');
@@ -88,36 +102,31 @@ describe('Report CVEs Tab tests', () => {
   });
 
   test('should render empty state when no CVEs', async () => {
-    const gmp = createGmp({
-      getReportCves: testing.fn().mockResolvedValue({
-        data: [],
-        meta: {
-          filter,
-          counts: new CollectionCounts({
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <CvesTab
+        cvesData={{
+          entities: [],
+          entitiesCounts: new CollectionCounts({
             filtered: 0,
             all: 0,
             first: 1,
             rows: 10,
           }),
-        },
-      }),
-    });
-    const {render} = rendererWith({gmp, router: true, capabilities: true});
-
-    render(<CvesTab filter={filter} reportId={reportId} status="Done" />);
+        }}
+        filter={filter}
+        reportId={reportId}
+      />,
+    );
 
     expect(await screen.findByText('No CVEs available')).toBeInTheDocument();
   });
 
-  test('should render error panel on fetch failure', async () => {
-    const gmp = createGmp({
-      getReportCves: testing
-        .fn()
-        .mockRejectedValue(new Error('Failed to fetch CVEs')),
-    });
-    const {render} = rendererWith({gmp, router: true, capabilities: true});
+  test('should render error panel when CVEs are in error state', async () => {
+    const {render} = rendererWith({gmp, capabilities: true});
 
-    render(<CvesTab filter={filter} reportId={reportId} status="Done" />);
+    render(<CvesTab filter={filter} isCvesError={true} reportId={reportId} />);
 
     expect(
       await screen.findByText(/Error while loading CVEs for Report/),

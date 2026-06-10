@@ -3,38 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type CollectionList, parseFilter} from 'gmp/collection/parser';
+import {parseFilter} from 'gmp/collection/parser';
 import {type Date} from 'gmp/models/date';
 import Filter, {type FilterKeyword} from 'gmp/models/filter';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import type ReportApp from 'gmp/models/report/app';
-import type ReportHost from 'gmp/models/report/host';
-import type ReportOperatingSystem from 'gmp/models/report/os';
-import {
-  parseApps,
-  parseClosedCves,
-  parseCves,
-  parseErrors,
-  parseHosts,
-  parseOperatingSystems,
-  parsePorts,
-  parseResults,
-  parseTlsCertificates,
-  type ReportActiveCve,
-  type ReportResultsElement,
-  type CountElement,
-  type TlsCertificatesElement,
-  type ReportResultCountElement,
-  type PortsElement,
-  type ReportHostElement,
-  type ErrorsElement,
-  type ReportError,
-  type ReportClosedCve,
-} from 'gmp/models/report/parser';
-import type ReportPort from 'gmp/models/report/port';
+import {type ReportResultCountElement} from 'gmp/models/report/parser';
 import ReportTask from 'gmp/models/report/task';
-import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
-import type Result from 'gmp/models/result';
 import {type TaskStatus} from 'gmp/models/task';
 import {parseSeverity, parseDate, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -81,20 +55,13 @@ export interface ReportReportTaskElement {
 
 export interface ReportReportElement extends ModelElement {
   _type?: ReportType;
-  apps?: CountElement;
-  closed_cves?: CountElement;
   delta?: ReportDeltaElement;
-  errors?: ErrorsElement;
   filters?: ReportFiltersElement;
   gmp?: {
     version?: string;
   };
-  host?: ReportHostElement | ReportHostElement[];
-  hosts?: CountElement;
-  ports?: PortsElement;
-  os?: CountElement;
+  hosts?: {count?: number};
   result_count?: ReportResultCountElement;
-  results?: ReportResultsElement; // only present if details=1
   scan_end?: string;
   scan_start?: string;
   scan_run_status?: string;
@@ -108,13 +75,10 @@ export interface ReportReportElement extends ModelElement {
       order?: 'descending' | 'ascending';
     };
   };
-  ssl_certs?: CountElement;
   task?: ReportReportTaskElement;
   timestamp?: string;
   timezone?: string;
   timezone_abbrev?: string;
-  tls_certificates?: TlsCertificatesElement;
-  vulns?: CountElement;
 }
 
 export interface DeltaReport {
@@ -160,17 +124,9 @@ interface ReportResultCounts {
 }
 
 interface ReportReportProperties extends ModelProperties {
-  applications?: CollectionList<ReportApp>;
-  closedCves?: CollectionList<ReportClosedCve>;
-  cves?: CollectionList<ReportActiveCve>;
   delta_report?: DeltaReport;
-  errors?: CollectionList<ReportError>;
   filter?: Filter;
-  hosts?: CollectionList<ReportHost>;
-  operatingsystems?: CollectionList<ReportOperatingSystem>;
-  ports?: CollectionList<ReportPort>;
   report_type?: ReportType;
-  results?: CollectionList<Result>;
   result_count?: ReportResultCounts;
   scan_end?: Date;
   scan_run_status?: TaskStatus;
@@ -179,24 +135,15 @@ interface ReportReportProperties extends ModelProperties {
   task?: ReportTask;
   timezone?: string;
   timezone_abbrev?: string;
-  tlsCertificates?: CollectionList<ReportTLSCertificate>;
 }
 
 class ReportReport extends Model {
   static readonly entityType = 'report';
 
-  readonly applications?: CollectionList<ReportApp>;
-  readonly closedCves?: CollectionList<ReportClosedCve>;
-  readonly cves?: CollectionList<ReportActiveCve>;
   readonly delta_report?: DeltaReport;
-  readonly errors?: CollectionList<ReportError>;
   readonly filter?: Filter;
-  readonly hosts?: CollectionList<ReportHost>;
-  readonly operatingsystems?: CollectionList<ReportOperatingSystem>;
-  readonly ports?: CollectionList<ReportPort>;
   readonly report_type?: ReportType;
   readonly result_count?: ReportResultCounts;
-  readonly results?: CollectionList<Result>;
   readonly scan_end?: Date;
   readonly scan_run_status?: TaskStatus;
   readonly scan_start?: Date;
@@ -204,24 +151,15 @@ class ReportReport extends Model {
   readonly task?: ReportTask;
   readonly timezone?: string;
   readonly timezone_abbrev?: string;
-  readonly tlsCertificates?: CollectionList<ReportTLSCertificate>;
 
   constructor({
-    applications,
-    closedCves,
-    cves,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     delta_report,
-    errors,
     filter,
-    hosts,
-    operatingsystems,
-    ports,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     report_type,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     result_count,
-    results,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     scan_end,
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -233,23 +171,14 @@ class ReportReport extends Model {
     timezone,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     timezone_abbrev,
-    tlsCertificates,
     ...properties
   }: ReportReportProperties = {}) {
     super(properties);
 
-    this.applications = applications;
-    this.closedCves = closedCves;
-    this.cves = cves;
     this.delta_report = delta_report;
-    this.errors = errors;
     this.filter = filter;
-    this.hosts = hosts;
-    this.operatingsystems = operatingsystems;
-    this.ports = ports;
     this.report_type = report_type;
     this.result_count = result_count;
-    this.results = results;
     this.scan_end = scan_end;
     this.scan_run_status = scan_run_status;
     this.scan_start = scan_start;
@@ -257,7 +186,6 @@ class ReportReport extends Model {
     this.task = task;
     this.timezone = timezone;
     this.timezone_abbrev = timezone_abbrev;
-    this.tlsCertificates = tlsCertificates;
   }
 
   static fromElement(element?: ReportReportElement): ReportReport {
@@ -286,16 +214,6 @@ class ReportReport extends Model {
       : undefined;
 
     copy.task = ReportTask.fromElement(task);
-
-    copy.results = parseResults(element);
-    copy.hosts = parseHosts(element, filter);
-    copy.tlsCertificates = parseTlsCertificates(element, filter);
-    copy.applications = parseApps(element, filter);
-    copy.operatingsystems = parseOperatingSystems(element, filter);
-    copy.ports = parsePorts(element, filter);
-    copy.cves = parseCves(element, filter);
-    copy.closedCves = parseClosedCves(element, filter);
-    copy.errors = parseErrors(element, filter);
 
     copy.scan_start = parseDate(scan_start);
     copy.scan_end = parseDate(scan_end);

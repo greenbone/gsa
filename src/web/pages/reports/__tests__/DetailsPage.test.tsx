@@ -93,10 +93,24 @@ const createGmp = () => ({
   },
   reporterrors: {
     get: testing.fn().mockResolvedValue({
-      data: entity.report?.errors?.entities ?? [],
+      data: [
+        {
+          id: 'error-1',
+          description: 'Test error message',
+          host: {ip: '192.168.1.1', name: 'host1', id: 'host-1'},
+          nvt: {id: 'nvt-1', name: 'Test NVT'},
+          port: '22/tcp',
+        },
+      ],
       meta: {
         filter: Filter.fromString(''),
-        counts: entity.report?.errors?.counts ?? new CollectionCounts(),
+        counts: new CollectionCounts({
+          first: 1,
+          all: 1,
+          filtered: 1,
+          length: 1,
+          rows: 10,
+        }),
       },
     }),
   },
@@ -347,6 +361,7 @@ describe('DetailsPage', () => {
     });
 
     test('should show error dialog when addAssets fails', async () => {
+      testing.spyOn(console, 'error').mockImplementation(() => {});
       const gmp = createGmp();
       gmp.report.addAssets = testing
         .fn()
@@ -362,6 +377,7 @@ describe('DetailsPage', () => {
     });
 
     test('should show error dialog when removeAssets fails', async () => {
+      testing.spyOn(console, 'error').mockImplementation(() => {});
       const gmp = createGmp();
       gmp.report.removeAssets = testing
         .fn()
@@ -423,6 +439,7 @@ describe('DetailsPage', () => {
     });
 
     test('should show error when download fails', async () => {
+      testing.spyOn(console, 'error').mockImplementation(() => {});
       const gmp = createGmp();
       gmp.report.download = testing
         .fn()
