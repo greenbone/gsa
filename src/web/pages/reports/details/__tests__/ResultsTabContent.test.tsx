@@ -57,6 +57,7 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={true}
+          isWebApplicationScanning={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"
@@ -83,6 +84,7 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={true}
+          isWebApplicationScanning={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"
@@ -110,6 +112,7 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={true}
+          isWebApplicationScanning={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"
@@ -140,6 +143,7 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={false}
+          isWebApplicationScanning={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"
@@ -165,6 +169,7 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={false}
+          isWebApplicationScanning={false}
           progress={50}
           reportFilter={filter}
           reportId="report-123"
@@ -196,6 +201,7 @@ describe('ResultsTabContent', () => {
         <ResultsTabContent
           hasTarget={true}
           isContainerScanning={true}
+          isWebApplicationScanning={false}
           progress={100}
           reportFilter={filter}
           reportId="report-123"

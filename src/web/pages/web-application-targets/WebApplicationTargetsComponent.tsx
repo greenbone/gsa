@@ -174,16 +174,36 @@ const WebApplicationTargetsComponent = ({
   };
 
   const handleSaveEdit = async (data: WebApplicationTargetsDialogData) => {
+    const normalizedUrls = data.urls
+      .map(u => u.trim())
+      .filter(u => u.length > 0)
+      .join(',');
+    const normalizedExcludeUrls = data.excludeUrls
+      .map(u => u.trim())
+      .filter(u => u.length > 0)
+      .join(',');
+
     if (selectedTarget?.id) {
       await saveMutation.mutateAsync({
         id: selectedTarget.id,
-        ...data,
+        name: data.name,
+        comment: data.comment,
+        urls: normalizedUrls,
+        excludeUrls: normalizedExcludeUrls || undefined,
         credentialId,
+        inUse: data.inUse,
+        reverseLookupOnly: data.reverseLookupOnly,
+        reverseLookupUnify: data.reverseLookupUnify,
       });
     } else {
       await createMutation.mutateAsync({
-        ...data,
+        name: data.name,
+        comment: data.comment,
+        urls: normalizedUrls,
+        excludeUrls: normalizedExcludeUrls || undefined,
         credentialId,
+        reverseLookupOnly: data.reverseLookupOnly,
+        reverseLookupUnify: data.reverseLookupUnify,
       });
     }
     closeEditDialog();
@@ -234,12 +254,13 @@ const WebApplicationTargetsComponent = ({
           comment={selectedTarget?.comment}
           credentialId={credentialId}
           credentials={credentials}
+          excludeUrls={selectedTarget?.excludeUrls}
           inUse={selectedTarget?.inUse}
           name={selectedTarget?.name}
           reverseLookupOnly={selectedTarget?.reverseLookupOnly}
           reverseLookupUnify={selectedTarget?.reverseLookupUnify}
           title={editDialogTitle}
-          url={selectedTarget?.url}
+          urls={selectedTarget?.urls}
           onClose={handleCloseEditDialog}
           onCredentialChange={setCredentialId}
           onNewCredentialsClick={openCredentialsDialog}

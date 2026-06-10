@@ -80,7 +80,7 @@ const WebApplicationTargetsListPage = () => {
   } = useDialogNotification();
 
   const [filter, isFilterLoading, {changeFilter, resetFilter, removeFilter}] =
-    usePageFilter('web_application_targets');
+    usePageFilter('web_application_targets', 'web_application_targets');
 
   const {
     data: webApplicationTargetsData,
@@ -262,10 +262,6 @@ const WebApplicationTargetsListPage = () => {
                   selectionType={selectionType}
                   sortBy={sortBy}
                   sortDir={sortDir}
-                  onWebApplicationTargetCloneClick={clone}
-                  onWebApplicationTargetDeleteClick={openConfirmDeleteDialog}
-                  onWebApplicationTargetDownloadClick={download}
-                  onWebApplicationTargetEditClick={edit}
                   onDeleteBulk={handleBulkDelete}
                   onDownloadBulk={handleBulkDownload}
                   onEntityDeselected={deselect}
@@ -277,6 +273,10 @@ const WebApplicationTargetsListPage = () => {
                   onSelectionTypeChange={changeSelectionType}
                   onSortChange={handleSortChange}
                   onTagsBulk={openTagsDialog}
+                  onWebApplicationTargetCloneClick={clone}
+                  onWebApplicationTargetDeleteClick={openConfirmDeleteDialog}
+                  onWebApplicationTargetDownloadClick={download}
+                  onWebApplicationTargetEditClick={edit}
                 />
               }
               title={_('Web Application Targets')}
