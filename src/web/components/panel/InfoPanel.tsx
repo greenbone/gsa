@@ -7,17 +7,31 @@ import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {XIcon} from 'web/components/icon';
-import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
+import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 import Theme from 'web/utils/Theme';
-const Panel = styled(Layout)`
+
+interface PanelProps extends LayoutProps {
+  $isWarning?: boolean;
+  $noMargin?: boolean;
+}
+
+export interface InfoPanelProps extends Omit<LayoutProps, 'children'> {
+  children?: React.ReactNode;
+  footer?: React.ReactNode;
+  heading?: React.ReactNode;
+  isWarning?: boolean;
+  noMargin?: boolean;
+  onCloseClick?: () => void;
+}
+
+const Panel = styled(Layout)<PanelProps>`
   background-color: ${Theme.white};
   border: 1px solid
     ${props => (props.$isWarning ? Theme.darkRed : Theme.lightBlue)};
   margin-top: ${props => (props.$noMargin ? '0px' : '5px')};
 `;
 
-const Heading = styled.div`
+const Heading = styled.div<{$isWarning?: boolean}>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -50,7 +64,7 @@ const InfoPanel = ({
   onCloseClick,
   noMargin,
   ...props
-}) => {
+}: InfoPanelProps) => {
   return (
     <Panel
       $isWarning={isWarning}
@@ -77,15 +91,6 @@ const InfoPanel = ({
       {footer && <Footer>{footer}</Footer>}
     </Panel>
   );
-};
-
-InfoPanel.propTypes = {
-  children: PropTypes.element,
-  noMargin: PropTypes.bool,
-  footer: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  heading: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  isWarning: PropTypes.bool,
-  onCloseClick: PropTypes.func,
 };
 
 export default InfoPanel;

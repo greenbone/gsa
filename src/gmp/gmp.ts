@@ -20,6 +20,7 @@ import AgentCommand from 'gmp/commands/agent';
 import AgentGroupCommand from 'gmp/commands/agent-group';
 import AgentGroupsCommand from 'gmp/commands/agent-groups';
 import AgentInstallerCommand from 'gmp/commands/agent-installer';
+import AgentsInstallerInstructionsCommand from 'gmp/commands/agent-installer-instruction';
 import AgentInstallersCommand from 'gmp/commands/agent-installers';
 import AgentsCommand from 'gmp/commands/agents';
 import AlertCommand from 'gmp/commands/alert';
@@ -115,6 +116,7 @@ class Gmp {
   public readonly agentgroup: AgentGroupCommand;
   public readonly agentgroups: AgentGroupsCommand;
   public readonly agentinstaller: AgentInstallerCommand;
+  public readonly agentinstallersinstructions: AgentsInstallerInstructionsCommand;
   public readonly agentinstallers: AgentInstallersCommand;
   public readonly alert: AlertCommand;
   public readonly alerts: AlertsCommand;
@@ -213,6 +215,9 @@ class Gmp {
     this.agentgroup = new AgentGroupCommand(this.http);
     this.agentgroups = new AgentGroupsCommand(this.http);
     this.agentinstaller = new AgentInstallerCommand(this.http);
+    this.agentinstallersinstructions = new AgentsInstallerInstructionsCommand(
+      this.http,
+    );
     this.agentinstallers = new AgentInstallersCommand(this.http);
     this.alert = new AlertCommand(this.http);
     this.alerts = new AlertsCommand(this.http);
