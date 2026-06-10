@@ -74,6 +74,7 @@ const CAPABILITY_NAMES = [
   'describe_auth',
   'empty_trashcan',
   'get_agent_groups',
+  'get_agent_installer_instruction',
   'get_agent_installers',
   'get_agents',
   'get_aggregates',
