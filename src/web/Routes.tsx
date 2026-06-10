@@ -180,6 +180,21 @@ const loggedInRoutes = [
         }),
       },
 
+      {
+        path: 'webapplicationtargets',
+        loader: () => {
+          throw redirect('/web-application-targets');
+        },
+      },
+      {
+        path: 'web-application-targets',
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/web-application-targets/WebApplicationTargetsListPage')
+          ).default,
+        }),
+      },
+
       // CPE routes
       {
         path: 'cpes',
