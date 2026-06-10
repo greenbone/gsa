@@ -66,15 +66,17 @@ export const useSaveWebApplicationTarget = ({
 }: UseModifyWebApplicationTargetParams) => {
   const gmp = useGmp();
 
-  return useSaveMutation<Record<string, unknown>, EntityActionResponse, Rejection>(
-    {
-      gmpMethod: gmp.webapplicationtarget.save.bind(gmp.webapplicationtarget),
-      entityType: 'webapplicationtarget',
-      invalidateQueryIds: ['get_web_application_targets'],
-      onError,
-      onSuccess,
-    },
-  );
+  return useSaveMutation<
+    Record<string, unknown>,
+    EntityActionResponse,
+    Rejection
+  >({
+    gmpMethod: gmp.webapplicationtarget.save.bind(gmp.webapplicationtarget),
+    entityType: 'webapplicationtarget',
+    invalidateQueryIds: ['get_web_application_targets'],
+    onError,
+    onSuccess,
+  });
 };
 
 export const useDeleteWebApplicationTarget = ({
