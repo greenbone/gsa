@@ -28,6 +28,7 @@ import Tag from 'gmp/models/tag';
 import Target from 'gmp/models/target';
 import Task from 'gmp/models/task';
 import Ticket from 'gmp/models/ticket';
+import WebApplicationTarget from 'gmp/models/web-application-target';
 import TrashCanTableContents from 'web/pages/trashcan/TrashCanTableContents';
 
 describe('TrashCanTableContents tests', () => {
@@ -54,6 +55,7 @@ describe('TrashCanTableContents tests', () => {
     tickets: [],
     agentGroups: [],
     ociImageTargets: [],
+    webApplicationTargets: [],
   };
 
   test('renders rows for non-empty trash categories', () => {
@@ -107,6 +109,7 @@ describe('TrashCanTableContents tests', () => {
       tickets: [new Ticket({id: 'ticket1'})],
       agentGroups: [new AgentGroup({id: 'agentgroup1'})],
       ociImageTargets: [new OciImageTarget({id: 'ociimagetarget1'})],
+      webApplicationTargets: [new WebApplicationTarget({id: 'webapptarget1'})],
     };
     const {render} = rendererWithTable();
     render(<TrashCanTableContents trash={mockAllTrashData} />);

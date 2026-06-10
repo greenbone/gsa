@@ -10,6 +10,7 @@ import {
 } from 'gmp/models/credential';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
+import MultiValueTextField from 'web/components/form/MultiValueTextField';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
@@ -33,7 +34,8 @@ interface WebApplicationTargetsDialogDefaultValues {
   name: string;
   reverseLookupOnly: boolean;
   reverseLookupUnify: boolean;
-  url: string;
+  urls: string[];
+  excludeUrls: string[];
 }
 
 export type WebApplicationTargetsDialogData =
@@ -47,7 +49,8 @@ interface WebApplicationTargetsDialogProps {
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
   credentialId?: string;
-  url?: string;
+  urls?: string[];
+  excludeUrls?: string[];
   title?: string;
   onClose?: () => void;
   onNewCredentialsClick?: (newCredential: NewCredential) => void;
@@ -63,7 +66,8 @@ const WebApplicationTargetsDialog = ({
   reverseLookupOnly = false,
   reverseLookupUnify = false,
   credentialId,
-  url = '',
+  urls = [],
+  excludeUrls = [],
   title,
   onClose,
   onNewCredentialsClick,
@@ -92,7 +96,8 @@ const WebApplicationTargetsDialog = ({
     inUse,
     reverseLookupOnly,
     reverseLookupUnify,
-    url,
+    urls,
+    excludeUrls,
   };
 
   const controlledValues = {
@@ -130,13 +135,23 @@ const WebApplicationTargetsDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('URL')}>
-              <TextField
+            <FormGroup title={_('URLs')}>
+              <MultiValueTextField
                 disabled={inUse}
-                grow="1"
-                name="url"
-                value={state.url}
-                onChange={onValueChange}
+                name="urls"
+                placeholder={_('Enter a URL and press Enter')}
+                value={state.urls}
+                onChange={value => onValueChange(value, 'urls')}
+              />
+            </FormGroup>
+
+            <FormGroup title={_('Exclude URLs')}>
+              <MultiValueTextField
+                disabled={inUse}
+                name="excludeUrls"
+                placeholder={_('Enter a URL and press Enter')}
+                value={state.excludeUrls}
+                onChange={value => onValueChange(value, 'excludeUrls')}
               />
             </FormGroup>
 

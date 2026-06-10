@@ -4,6 +4,10 @@
  */
 
 import {type EntityActionResponse} from 'gmp/commands/entity';
+import {
+  type WebApplicationTargetCreateParams,
+  type WebApplicationTargetSaveParams,
+} from 'gmp/commands/web-application-target';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
@@ -48,7 +52,7 @@ export const useCreateWebApplicationTarget = ({
   const gmp = useGmp();
 
   return useCreateMutation<
-    Record<string, unknown>,
+    WebApplicationTargetCreateParams,
     EntityActionResponse,
     Rejection
   >({
@@ -67,7 +71,7 @@ export const useSaveWebApplicationTarget = ({
   const gmp = useGmp();
 
   return useSaveMutation<
-    Record<string, unknown>,
+    WebApplicationTargetSaveParams,
     EntityActionResponse,
     Rejection
   >({

@@ -109,6 +109,7 @@ interface TaskComponentRenderProps {
   taskWizard: () => void;
   onNewAgentTaskClick: () => void;
   onNewContainerImageTaskClick: () => void;
+  onNewWebApplicationTaskClick: () => void;
 }
 
 interface TaskComponentProps {
@@ -945,6 +946,10 @@ const TaskComponent = ({
     openContainerImageTaskDialog(task);
   };
 
+  const handleOpenWebApplicationTaskDialog = () => {
+    // TODO: open web application task dialog once implemented
+  };
+
   const handleCloseNewAgentTaskDialog = () => {
     closeAgentTaskDialog();
   };
@@ -1001,6 +1006,7 @@ const TaskComponent = ({
           taskWizard: openTaskWizard,
           onNewAgentTaskClick: handleOpenAgentTaskDialog,
           onNewContainerImageTaskClick: handleOpenContainerImageTaskDialog,
+          onNewWebApplicationTaskClick: handleOpenWebApplicationTaskDialog,
         })}
 
       {taskDialogVisible && (

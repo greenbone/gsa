@@ -4,33 +4,54 @@
  */
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import {parseCsv, parseBoolean, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 interface WebApplicationTargetElement extends ModelElement {
   target_url?: string;
+  exclude_url?: string;
   credential?: ModelElement;
+  reverse_lookup_only?: YesNo;
+  reverse_lookup_unify?: YesNo;
 }
 
 interface WebApplicationTargetProperties extends ModelProperties {
-  url?: string;
+  urls?: string[];
+  excludeUrls?: string[];
   credential?: Model;
+  reverseLookupOnly?: boolean;
+  reverseLookupUnify?: boolean;
 }
 
 class WebApplicationTarget extends Model {
   static readonly entityType = 'webapplicationtarget';
 
-  readonly url: string;
+  readonly urls: string[];
+  readonly excludeUrls: string[];
   readonly credential?: Model;
+  readonly reverseLookupOnly: boolean;
+  readonly reverseLookupUnify: boolean;
 
   constructor({
-    url = '',
+    urls = [],
+    excludeUrls = [],
     credential,
+    reverseLookupOnly = false,
+    reverseLookupUnify = false,
     ...properties
   }: WebApplicationTargetProperties = {}) {
     super(properties);
-    this.url = url;
+    this.urls = urls;
+    this.excludeUrls = excludeUrls;
     this.credential = credential;
+    this.reverseLookupOnly = reverseLookupOnly;
+    this.reverseLookupUnify = reverseLookupUnify;
+  }
+
+  /** Backward-compatible accessor for the primary URL */
+  get url(): string {
+    return this.urls[0] ?? '';
   }
 
   static fromElement(
@@ -43,12 +64,15 @@ class WebApplicationTarget extends Model {
     element: WebApplicationTargetElement,
   ): WebApplicationTargetProperties {
     const ret = super.parseElement(element) as WebApplicationTargetProperties;
-    ret.url = element.target_url ?? '';
+    ret.urls = parseCsv(element.target_url);
+    ret.excludeUrls = parseCsv(element.exclude_url);
     if (isDefined(element.credential) && !isEmpty(element.credential._id)) {
       ret.credential = Model.fromElement(element.credential, 'credential');
     } else {
       delete ret.credential;
     }
+    ret.reverseLookupOnly = parseBoolean(element.reverse_lookup_only);
+    ret.reverseLookupUnify = parseBoolean(element.reverse_lookup_unify);
     return ret;
   }
 }
