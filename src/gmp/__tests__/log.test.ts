@@ -4,14 +4,14 @@
  */
 
 import {
-  describe,
-  test,
-  expect,
-  beforeEach,
   afterEach,
+  beforeEach,
+  describe,
+  expect,
+  test,
   testing,
 } from '@gsa/testing';
-import {RootLogger, DEFAULT_LOG_LEVEL, LogLevels} from 'gmp/log.js';
+import {DEFAULT_LOG_LEVEL, LogLevels, RootLogger} from 'gmp/log.js';
 import {isFunction} from 'gmp/utils/identity';
 
 let origConsole: Console;
@@ -21,7 +21,7 @@ const getRootLogger = () => new RootLogger();
 
 describe('log tests', () => {
   beforeEach(() => {
-    origConsole = global.console;
+    origConsole = console;
     testConsole = {
       error: testing.fn(),
       warn: testing.fn(),
@@ -30,11 +30,11 @@ describe('log tests', () => {
       trace: testing.fn(),
     };
 
-    global.console = testConsole;
+    globalThis.console = testConsole;
   });
 
   afterEach(() => {
-    global.console = origConsole;
+    globalThis.console = origConsole;
   });
 
   test('should init with defaults', () => {

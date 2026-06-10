@@ -217,7 +217,6 @@ const Menu = () => {
   const mayOpConfiguration = mayAccessAny([
     'agent',
     'agentgroup',
-    'agentinstaller',
     'target',
     'ociimagetarget',
     'portlist',
@@ -522,7 +521,7 @@ const Menu = () => {
               isPathMatch: Boolean(agentGroupsMatch),
               active: isAgentGroupsActive,
             },
-          capabilities.mayAccess('agentinstaller') &&
+          capabilities.mayOp('get_agent_installer_instruction') &&
             features.featureEnabled('ENABLE_AGENTS') && {
               label: _('Agent Installers'),
               to: '/agent-installers',

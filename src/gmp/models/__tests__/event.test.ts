@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, expect, test} from '@gsa/testing';
+import {vi} from 'vitest';
 import date from 'gmp/models/date';
 import Event, {isEvent, WeekDays} from 'gmp/models/event';
 
@@ -187,8 +188,7 @@ END:VCALENDAR
   });
 
   test('should calculate next date for daily recurrence when a timezone is used', () => {
-    const tz = process.env.TZ;
-    process.env.TZ = 'America/New_York'; // UTC-4 or UTC-5
+    vi.stubEnv('TZ', 'America/New_York');
 
     const now = date()
       .tz('America/New_York')
@@ -217,7 +217,7 @@ END:VCALENDAR
 
     expect(next?.isSame(expected)).toEqual(true);
 
-    process.env.TZ = tz;
+    vi.unstubAllEnvs();
   });
 
   test('should allow to get the recurrence rule', () => {

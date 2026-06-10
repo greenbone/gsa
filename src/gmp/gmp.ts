@@ -20,6 +20,7 @@ import AgentCommand from 'gmp/commands/agent';
 import AgentGroupCommand from 'gmp/commands/agent-group';
 import AgentGroupsCommand from 'gmp/commands/agent-groups';
 import AgentInstallerCommand from 'gmp/commands/agent-installer';
+import AgentsInstallerInstructionsCommand from 'gmp/commands/agent-installer-instruction';
 import AgentInstallersCommand from 'gmp/commands/agent-installers';
 import AgentsCommand from 'gmp/commands/agents';
 import AlertCommand from 'gmp/commands/alert';
@@ -86,6 +87,8 @@ import TimezonesCommand from 'gmp/commands/timezones';
 import TrashCanCommand from 'gmp/commands/trashcan';
 import UserCommand from 'gmp/commands/user';
 import UsersCommand from 'gmp/commands/users';
+import VulnerabilitiesCommand from 'gmp/commands/vulnerabilities';
+import VulnerabilityCommand from 'gmp/commands/vulnerability';
 import WizardCommand from 'gmp/commands/wizard';
 import Http, {type ErrorHandler} from 'gmp/http/http';
 import {buildServerUrl, buildUrlParams, type UrlParams} from 'gmp/http/utils';
@@ -113,6 +116,7 @@ class Gmp {
   public readonly agentgroup: AgentGroupCommand;
   public readonly agentgroups: AgentGroupsCommand;
   public readonly agentinstaller: AgentInstallerCommand;
+  public readonly agentinstallersinstructions: AgentsInstallerInstructionsCommand;
   public readonly agentinstallers: AgentInstallersCommand;
   public readonly alert: AlertCommand;
   public readonly alerts: AlertsCommand;
@@ -178,6 +182,8 @@ class Gmp {
   public readonly trashcan: TrashCanCommand;
   public readonly user: UserCommand;
   public readonly users: UsersCommand;
+  public readonly vuln: VulnerabilityCommand;
+  public readonly vulns: VulnerabilitiesCommand;
   public readonly wizard: WizardCommand;
 
   constructor({
@@ -209,6 +215,9 @@ class Gmp {
     this.agentgroup = new AgentGroupCommand(this.http);
     this.agentgroups = new AgentGroupsCommand(this.http);
     this.agentinstaller = new AgentInstallerCommand(this.http);
+    this.agentinstallersinstructions = new AgentsInstallerInstructionsCommand(
+      this.http,
+    );
     this.agentinstallers = new AgentInstallersCommand(this.http);
     this.alert = new AlertCommand(this.http);
     this.alerts = new AlertsCommand(this.http);
@@ -274,6 +283,8 @@ class Gmp {
     this.trashcan = new TrashCanCommand(this.http);
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);
+    this.vuln = new VulnerabilityCommand(this.http);
+    this.vulns = new VulnerabilitiesCommand(this.http);
     this.wizard = new WizardCommand(this.http);
 
     this._initCommands();
