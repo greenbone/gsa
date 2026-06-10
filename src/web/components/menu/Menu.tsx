@@ -151,6 +151,12 @@ const Menu = () => {
     containerImageTargetsMatch || containerImageTargetMatch,
   );
 
+  const webApplicationTargetsMatch = useMatch('/web-application-targets');
+  const webApplicationTargetMatch = useMatch('/web-application-target/*');
+  const isWebApplicationTargetsActive = Boolean(
+    webApplicationTargetsMatch || webApplicationTargetMatch,
+  );
+
   const schedulesMatch = useMatch('/schedules');
   const scheduleMatch = useMatch('/schedule/*');
   const isSchedulesActive = Boolean(schedulesMatch || scheduleMatch);
@@ -446,6 +452,13 @@ const Menu = () => {
               to: '/oci-image-targets',
               isPathMatch: Boolean(containerImageTargetsMatch),
               active: isContainerImageTargetsActive,
+            },
+          capabilities.mayAccess('webapplicationtarget') &&
+            features.featureEnabled('ENABLE_WEB_APPLICATION_SCANNING') && {
+              label: _('Web Application Targets'),
+              to: '/web-application-targets',
+              isPathMatch: Boolean(webApplicationTargetsMatch),
+              active: isWebApplicationTargetsActive,
             },
           capabilities.mayAccess('portlist') && {
             label: _('Port Lists'),
