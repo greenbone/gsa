@@ -150,6 +150,11 @@ export interface TaskElement extends ModelElement {
     name?: string;
     trash?: YesNo;
   };
+  web_application_target?: {
+    _id?: string;
+    name?: string;
+    trash?: YesNo;
+  };
   agent_group?: {
     _id?: string;
     name?: string;
@@ -223,6 +228,7 @@ export interface TaskProperties extends ModelProperties {
   status?: TaskStatus;
   target?: Model;
   ociImageTarget?: Model;
+  webApplicationTarget?: Model;
   agentGroup?: Model;
   trend?: TaskTrend;
   // from preferences
@@ -340,6 +346,7 @@ class Task extends Model {
   readonly status: TaskStatus;
   readonly target?: Model;
   readonly ociImageTarget?: Model;
+  readonly webApplicationTarget?: Model;
   readonly agentGroup?: Model;
   readonly trend?: TaskTrend;
   readonly usageType: TaskUsageType;
@@ -386,6 +393,7 @@ class Task extends Model {
     status = TASK_STATUS.unknown,
     target,
     ociImageTarget,
+    webApplicationTarget,
     agentGroup,
     trend,
     usageType = USAGE_TYPE.scan,
@@ -421,6 +429,7 @@ class Task extends Model {
     this.status = status;
     this.target = target;
     this.ociImageTarget = ociImageTarget;
+    this.webApplicationTarget = webApplicationTarget;
     this.trend = trend;
     this.agentGroup = agentGroup;
     this.usageType = usageType;
@@ -535,6 +544,12 @@ class Task extends Model {
     copy.ociImageTarget = isEmpty(element.oci_image_target?._id)
       ? undefined
       : Model.fromElement(element.oci_image_target, 'target');
+    copy.webApplicationTarget = isEmpty(element.web_application_target?._id)
+      ? undefined
+      : Model.fromElement(
+          element.web_application_target,
+          'webapplicationtarget',
+        );
     copy.agentGroup = isEmpty(element.agent_group?._id)
       ? undefined
       : Model.fromElement(element.agent_group, 'agentgroup');
@@ -650,12 +665,17 @@ class Task extends Model {
     return (
       !isDefined(this.target) &&
       !isDefined(this.agentGroup) &&
-      !isDefined(this.ociImageTarget)
+      !isDefined(this.ociImageTarget) &&
+      !isDefined(this.webApplicationTarget)
     );
   }
 
   isContainerImage() {
     return isDefined(this.ociImageTarget);
+  }
+
+  isWebApplication() {
+    return isDefined(this.webApplicationTarget);
   }
 
   isAgent() {

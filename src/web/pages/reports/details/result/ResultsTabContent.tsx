@@ -9,6 +9,7 @@ import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
 import ContainerScanningResultsTab from 'web/pages/reports/details/result/ContainerScanningResultsTab';
 import ResultsTab from 'web/pages/reports/details/result/ResultsTab';
+import WebApplicationScanningResultsTab from 'web/pages/reports/details/WebApplicationScanningResultsTab';
 
 interface ResultsCounts {
   filtered?: number;
@@ -17,6 +18,7 @@ interface ResultsCounts {
 
 interface ResultsTabContentProps {
   isContainerScanning: boolean;
+  isWebApplicationScanning: boolean;
   hasTarget: boolean;
   progress: number;
   reportFilter: Filter;
@@ -33,6 +35,7 @@ interface ResultsTabContentProps {
 
 const ResultsTabContent = ({
   isContainerScanning,
+  isWebApplicationScanning,
   hasTarget,
   progress,
   reportFilter,
@@ -46,9 +49,11 @@ const ResultsTabContent = ({
   onFilterRemoveSeverityClick,
   onTargetEditClick,
 }: ResultsTabContentProps) => {
-  // Container scanning: show empty report when no results at all
+  const isSpecialScanning = isContainerScanning || isWebApplicationScanning;
+
+  // Special scanning: show empty report when no results at all
   if (
-    isContainerScanning &&
+    isSpecialScanning &&
     reportResultsCounts?.filtered === 0 &&
     reportResultsCounts.full === 0
   ) {
@@ -62,9 +67,9 @@ const ResultsTabContent = ({
     );
   }
 
-  // Container scanning: show empty results report when filtered out
+  // Special scanning: show empty results report when filtered out
   if (
-    isContainerScanning &&
+    isSpecialScanning &&
     reportResultsCounts?.filtered === 0 &&
     (reportResultsCounts.full ?? 0) > 0
   ) {
@@ -85,6 +90,17 @@ const ResultsTabContent = ({
   if (isContainerScanning) {
     return (
       <ContainerScanningResultsTab
+        reportFilter={reportFilter}
+        reportId={reportId}
+        status={status}
+      />
+    );
+  }
+
+  // Web application scanning: show results table
+  if (isWebApplicationScanning) {
+    return (
+      <WebApplicationScanningResultsTab
         reportFilter={reportFilter}
         reportId={reportId}
         status={status}
