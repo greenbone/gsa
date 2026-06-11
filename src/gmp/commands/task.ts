@@ -13,6 +13,7 @@ import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
 import {
   CONTAINER_IMAGE_SCANNER_TYPE,
+  WEB_APPLICATION_SCANNER_TYPE,
   type ScannerType,
 } from 'gmp/models/scanner';
 import Task, {
@@ -142,6 +143,41 @@ interface TaskCommandSaveContainerImageParams {
   scannerId?: string;
   scheduleId?: string;
   schedulePeriods?: boolean;
+}
+
+interface TaskCommandCreateWebApplicationParams {
+  addTag?: boolean;
+  alertIds?: string[];
+  alterable?: boolean;
+  applyOverrides?: boolean;
+  autoDelete?: TaskAutoDelete;
+  autoDeleteData?: number;
+  comment?: string;
+  inAssets?: boolean;
+  minQod?: number;
+  name: string;
+  scannerId?: string;
+  scheduleId?: string;
+  schedulePeriods?: boolean;
+  tagId?: string;
+  webApplicationTargetId?: string;
+}
+
+interface TaskCommandSaveWebApplicationParams {
+  alertIds?: string[];
+  alterable?: boolean;
+  applyOverrides?: boolean;
+  autoDelete?: TaskAutoDelete;
+  autoDeleteData?: number;
+  comment?: string;
+  id: string;
+  inAssets?: boolean;
+  minQod?: number;
+  name: string;
+  scannerId?: string;
+  scheduleId?: string;
+  schedulePeriods?: boolean;
+  webApplicationTargetId?: string;
 }
 
 const log = logger.getLogger('gmp.commands.tasks');
@@ -521,6 +557,117 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       schedule_periods: parseYesNo(schedulePeriods),
       task_id: id,
       usage_type: 'scan',
+    });
+  }
+
+  async createWebApplicationTask({
+    addTag,
+    alertIds = [],
+    alterable,
+    applyOverrides,
+    autoDelete,
+    autoDeleteData,
+    comment = '',
+    inAssets,
+    minQod,
+    name,
+    scannerId,
+    scheduleId,
+    schedulePeriods,
+    tagId,
+    webApplicationTargetId,
+  }: TaskCommandCreateWebApplicationParams) {
+    log.debug('Creating web application task', {
+      addTag,
+      alertIds,
+      alterable,
+      applyOverrides,
+      autoDelete,
+      autoDeleteData,
+      comment,
+      inAssets,
+      minQod,
+      name,
+      scannerId,
+      scheduleId,
+      schedulePeriods,
+      tagId,
+      webApplicationTargetId,
+    });
+
+    return this.entityAction({
+      cmd: 'create_web_application_task',
+      add_tag: parseYesNo(addTag),
+      'alert_ids:': alertIds,
+      alterable: parseYesNo(alterable),
+      apply_overrides: parseYesNo(applyOverrides),
+      auto_delete_data: autoDeleteData,
+      auto_delete: autoDelete,
+      comment,
+      in_assets: parseYesNo(inAssets),
+      min_qod: minQod,
+      name,
+      scanner_id: scannerId,
+      scanner_type: WEB_APPLICATION_SCANNER_TYPE,
+      schedule_id: scheduleId,
+      schedule_periods: parseYesNo(schedulePeriods),
+      tag_id: tagId,
+      usage_type: 'scan',
+      web_application_target_id: webApplicationTargetId,
+    });
+  }
+
+  async saveWebApplicationTask({
+    alertIds = [],
+    alterable,
+    applyOverrides,
+    autoDelete,
+    autoDeleteData,
+    comment = '',
+    id,
+    inAssets,
+    minQod,
+    name,
+    scannerId = NO_VALUE_ID,
+    scheduleId,
+    schedulePeriods,
+    webApplicationTargetId,
+  }: TaskCommandSaveWebApplicationParams) {
+    log.debug('Saving web application task', {
+      alertIds,
+      alterable,
+      applyOverrides,
+      autoDelete,
+      autoDeleteData,
+      comment,
+      id,
+      inAssets,
+      minQod,
+      name,
+      scannerId,
+      scheduleId,
+      schedulePeriods,
+      webApplicationTargetId,
+    });
+
+    await this.httpPostWithTransform({
+      cmd: 'save_web_application_task',
+      'alert_ids:': alertIds,
+      alterable: parseYesNo(alterable),
+      apply_overrides: parseYesNo(applyOverrides),
+      auto_delete_data: autoDeleteData,
+      auto_delete: autoDelete,
+      comment,
+      in_assets: parseYesNo(inAssets),
+      min_qod: minQod,
+      name,
+      scanner_id: scannerId,
+      scanner_type: WEB_APPLICATION_SCANNER_TYPE,
+      schedule_id: scheduleId,
+      schedule_periods: parseYesNo(schedulePeriods),
+      task_id: id,
+      usage_type: 'scan',
+      web_application_target_id: webApplicationTargetId,
     });
   }
 

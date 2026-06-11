@@ -47,6 +47,7 @@ interface BuildReportTabDefinitionsParams {
   isImport: boolean;
   isAgentScanning: boolean;
   isContainerScanning: boolean;
+  isWebApplicationScanning: boolean;
   isUpdating: boolean;
   progress: number;
   status: TaskStatus;
@@ -97,6 +98,7 @@ export const buildReportTabDefinitions = ({
   isImport,
   isAgentScanning,
   isContainerScanning,
+  isWebApplicationScanning,
   isUpdating,
   progress,
   status,
@@ -146,6 +148,7 @@ export const buildReportTabDefinitions = ({
       <ResultsTabContent
         hasTarget={!isImport}
         isContainerScanning={isContainerScanning}
+        isWebApplicationScanning={isWebApplicationScanning}
         progress={progress}
         reportFilter={activeFilter}
         reportId={reportId}

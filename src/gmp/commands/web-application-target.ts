@@ -19,8 +19,6 @@ export interface WebApplicationTargetCreateParams {
   credentialId?: string;
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
-  targetSource?: string;
-  targetExcludeSource?: string;
 }
 
 export interface WebApplicationTargetSaveParams {
@@ -33,8 +31,6 @@ export interface WebApplicationTargetSaveParams {
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
   inUse?: boolean;
-  targetSource?: string;
-  targetExcludeSource?: string;
 }
 
 const log = logger.getLogger('gmp.commands.webApplicationTarget');
@@ -53,8 +49,6 @@ class WebApplicationTargetCommand extends EntityCommand<WebApplicationTarget> {
     credentialId,
     reverseLookupOnly,
     reverseLookupUnify,
-    targetSource,
-    targetExcludeSource,
   }: WebApplicationTargetCreateParams): Promise<EntityActionResponse> {
     log.debug('Creating new web application target', {
       name,
@@ -67,13 +61,13 @@ class WebApplicationTargetCommand extends EntityCommand<WebApplicationTarget> {
       name,
       comment,
       copy,
-      target_url: urls,
-      exclude_url: excludeUrls || undefined,
+      target_source: 'manual',
+      urls,
+      target_exclude_source: excludeUrls ? 'manual' : undefined,
+      exclude_urls: excludeUrls || undefined,
       credential_id: credentialId,
       reverse_lookup_only: parseYesNo(reverseLookupOnly),
       reverse_lookup_unify: parseYesNo(reverseLookupUnify),
-      target_source: targetSource,
-      target_exclude_source: targetExcludeSource,
     });
   }
 
@@ -87,8 +81,6 @@ class WebApplicationTargetCommand extends EntityCommand<WebApplicationTarget> {
     reverseLookupOnly,
     reverseLookupUnify,
     inUse,
-    targetSource,
-    targetExcludeSource,
   }: WebApplicationTargetSaveParams): Promise<EntityActionResponse> {
     log.debug('Modifying web application target', {
       id,
@@ -102,14 +94,14 @@ class WebApplicationTargetCommand extends EntityCommand<WebApplicationTarget> {
       web_application_target_id: id,
       name,
       comment,
-      target_url: urls,
-      exclude_url: excludeUrls || undefined,
+      target_source: 'manual',
+      urls,
+      target_exclude_source: excludeUrls ? 'manual' : undefined,
+      exclude_urls: excludeUrls || undefined,
       credential_id: credentialId,
       reverse_lookup_only: parseYesNo(reverseLookupOnly),
       reverse_lookup_unify: parseYesNo(reverseLookupUnify),
       in_use: parseYesNo(inUse),
-      target_source: targetSource,
-      target_exclude_source: targetExcludeSource,
     });
   }
 

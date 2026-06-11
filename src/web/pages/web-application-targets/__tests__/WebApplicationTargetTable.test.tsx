@@ -21,12 +21,12 @@ describe('WebApplicationTargetTable tests', () => {
       new WebApplicationTarget({
         id: '1',
         name: 'Target 1',
-        url: 'https://a.com',
+        urls: ['https://a.com'],
       }),
       new WebApplicationTarget({
         id: '2',
         name: 'Target 2',
-        url: 'https://b.com',
+        urls: ['https://b.com'],
       }),
     ];
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
@@ -55,12 +55,12 @@ describe('WebApplicationTargetTable tests', () => {
       new WebApplicationTarget({
         id: '1',
         name: 'Target 1',
-        url: 'https://a.com',
+        urls: ['https://a.com'],
       }),
       new WebApplicationTarget({
         id: '2',
         name: 'Target 2',
-        url: 'https://b.com',
+        urls: ['https://b.com'],
       }),
     ];
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
@@ -79,7 +79,7 @@ describe('WebApplicationTargetTable tests', () => {
       new WebApplicationTarget({
         id: '1',
         name: 'Target 1',
-        url: 'https://a.com',
+        urls: ['https://a.com'],
         credential: cred,
       }),
     ];
@@ -93,7 +93,7 @@ describe('WebApplicationTargetTable tests', () => {
       new WebApplicationTarget({
         id: '1',
         name: 'Target 1',
-        url: 'https://a.com',
+        urls: ['https://a.com'],
         userCapabilities: new EverythingCapabilities(),
       }),
     ];

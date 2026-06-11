@@ -14,7 +14,7 @@ describe('WebApplicationTargetsDialog tests', () => {
     expect(screen.getByText('New Web Application Target')).toBeInTheDocument();
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Comment')).toBeInTheDocument();
-    expect(screen.getByText('URL')).toBeInTheDocument();
+    expect(screen.getByText('URLs')).toBeInTheDocument();
     expect(screen.getByText('Credential')).toBeInTheDocument();
     expect(screen.getByText('Reverse Lookup Only')).toBeInTheDocument();
     expect(screen.getByText('Reverse Lookup Unify')).toBeInTheDocument();
@@ -57,11 +57,15 @@ describe('WebApplicationTargetsDialog tests', () => {
   test('should allow changing url', () => {
     const onSave = testing.fn();
     const {render} = rendererWith({capabilities: true});
-    render(<WebApplicationTargetsDialog onSave={onSave} />);
-    changeInputValue(screen.getByName('url'), 'https://example.com');
+    render(
+      <WebApplicationTargetsDialog
+        urls={['https://example.com']}
+        onSave={onSave}
+      />,
+    );
     fireEvent.click(screen.getDialogSaveButton());
     expect(onSave).toHaveBeenCalledWith(
-      expect.objectContaining({url: 'https://example.com'}),
+      expect.objectContaining({urls: ['https://example.com']}),
     );
   });
 });

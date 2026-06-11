@@ -14,6 +14,7 @@ import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scan-config';
 import {
   CONTAINER_IMAGE_SCANNER_TYPE,
+  WEB_APPLICATION_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
 } from 'gmp/models/scanner';
 import {type default as Task, type TaskAutoDelete} from 'gmp/models/task';
@@ -49,10 +50,13 @@ import AgentTaskDialog, {
 } from 'web/pages/tasks/AgentTaskDialog';
 import ContainerImageTaskDialog from 'web/pages/tasks/ContainerImageTaskDialog';
 import {useContainerImageTaskDialog} from 'web/pages/tasks/hooks/useContainerImageTaskDialog';
+import {useWebApplicationTaskDialog} from 'web/pages/tasks/hooks/useWebApplicationTaskDialog';
 import ImportTaskDialog, {
   type ImportTaskDialogData,
 } from 'web/pages/tasks/ImportTaskDialog';
 import TaskDialog, {type TaskDialogData} from 'web/pages/tasks/TaskDialog';
+import WebApplicationTaskDialog from 'web/pages/tasks/WebApplicationTaskDialog';
+import WebApplicationTargetsComponent from 'web/pages/web-application-targets/WebApplicationTargetsComponent';
 import {
   loadEntities as loadAlerts,
   selector as alertSelector,
@@ -220,6 +224,34 @@ const TaskComponent = ({
     onContainerCreateError: onImportTaskCreateError,
     onContainerSaved: onImportTaskSaved,
     onContainerSaveError: onImportTaskSaveError,
+  });
+
+  const {
+    webApplicationTaskDialogVisible,
+    task: webApplicationTask,
+    name: webApplicationName,
+    comment: webApplicationComment,
+    addTag: webApplicationAddTag,
+    alterable: webApplicationAlterable,
+    applyOverrides: webApplicationApplyOverrides,
+    inAssets: webApplicationInAssets,
+    schedulePeriods: webApplicationSchedulePeriods,
+    scheduleId: webApplicationScheduleId,
+    webApplicationTargetId,
+    scannerId: webApplicationScannerId,
+    title: webApplicationTitle,
+    setWebApplicationTargetId,
+    openWebApplicationTaskDialog,
+    closeWebApplicationTaskDialog,
+    handleSaveWebApplicationTask,
+    handleWebApplicationTargetChange,
+    handleScannerChange: handleWebApplicationScannerChange,
+    handleScheduleChange: handleWebApplicationScheduleChange,
+  } = useWebApplicationTaskDialog({
+    onWebAppCreated: onImportTaskCreated,
+    onWebAppCreateError: onImportTaskCreateError,
+    onWebAppSaved: onImportTaskSaved,
+    onWebAppSaveError: onImportTaskSaveError,
   });
 
   const [alertIds, setAlertIds] = useState<string[]>([]);
@@ -479,6 +511,12 @@ const TaskComponent = ({
     const {data} = resp;
 
     setOciImageTargetId(data.id);
+  };
+
+  const handleWebApplicationTargetCreated = (resp: {data: {id?: string}}) => {
+    const {data} = resp;
+
+    setWebApplicationTargetId(data.id);
   };
 
   const openImportTaskDialog = (task?: Task) => {
@@ -946,8 +984,10 @@ const TaskComponent = ({
     openContainerImageTaskDialog(task);
   };
 
-  const handleOpenWebApplicationTaskDialog = () => {
-    // TODO: open web application task dialog once implemented
+  const handleOpenWebApplicationTaskDialog = (task?: Task) => {
+    fetchAlerts();
+    fetchSchedules();
+    openWebApplicationTaskDialog(task);
   };
 
   const handleCloseNewAgentTaskDialog = () => {
@@ -957,6 +997,8 @@ const TaskComponent = ({
   const handleEditTask = async (task: Task) => {
     if (task.scanner?.scannerType === CONTAINER_IMAGE_SCANNER_TYPE) {
       handleOpenContainerImageTaskDialog(task);
+    } else if (task.scanner?.scannerType === WEB_APPLICATION_SCANNER_TYPE) {
+      handleOpenWebApplicationTaskDialog(task);
     } else {
       await openTaskDialog(task);
     }
@@ -1129,6 +1171,57 @@ const TaskComponent = ({
           )}
         </AlertComponent>
       )}
+
+      {features.featureEnabled('ENABLE_WEB_APPLICATION_SCANNING') &&
+        webApplicationTaskDialogVisible && (
+          // @ts-expect-error
+          <AlertComponent onCreated={handleAlertCreated}>
+            {({create: createAlert}) => (
+              <ScheduleComponent onCreated={handleScheduleCreated}>
+                {({create: createSchedule}) => (
+                  <WebApplicationTargetsComponent
+                    onCreated={handleWebApplicationTargetCreated}
+                  >
+                    {({create: createWebApplicationTarget}) => (
+                      <WebApplicationTaskDialog
+                        addTag={webApplicationAddTag}
+                        alertIds={alertIds}
+                        alerts={alerts as RenderSelectItemProps[]}
+                        alterable={webApplicationAlterable}
+                        applyOverrides={webApplicationApplyOverrides}
+                        comment={webApplicationComment}
+                        inAssets={webApplicationInAssets}
+                        isLoadingAlerts={isLoadingAlerts}
+                        isLoadingSchedules={isLoadingSchedules}
+                        name={webApplicationName}
+                        scannerId={webApplicationScannerId}
+                        scheduleId={webApplicationScheduleId}
+                        schedulePeriods={webApplicationSchedulePeriods}
+                        schedules={schedules as RenderSelectItemProps[]}
+                        task={webApplicationTask}
+                        title={webApplicationTitle}
+                        webApplicationTargetId={webApplicationTargetId}
+                        onAlertsChange={handleAlertsChange}
+                        onClose={closeWebApplicationTaskDialog}
+                        onNewAlertClick={createAlert}
+                        onNewScheduleClick={createSchedule}
+                        onNewWebApplicationTargetClick={
+                          createWebApplicationTarget
+                        }
+                        onSave={handleSaveWebApplicationTask}
+                        onScannerChange={handleWebApplicationScannerChange}
+                        onScheduleChange={handleWebApplicationScheduleChange}
+                        onWebApplicationTargetChange={
+                          handleWebApplicationTargetChange
+                        }
+                      />
+                    )}
+                  </WebApplicationTargetsComponent>
+                )}
+              </ScheduleComponent>
+            )}
+          </AlertComponent>
+        )}
 
       {taskWizardVisible && (
         <TaskWizard

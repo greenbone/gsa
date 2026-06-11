@@ -25,6 +25,7 @@ import {
   useBulkExportWebApplicationTargets,
 } from 'web/hooks/use-query/web-application-targets';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useFeatures from 'web/hooks/useFeatures';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
@@ -43,6 +44,7 @@ const WebApplicationTargetsListPageToolBarIcons = ({
 }) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
+  const features = useFeatures();
   return (
     <IconDivider>
       <ManualIcon
@@ -50,12 +52,13 @@ const WebApplicationTargetsListPageToolBarIcons = ({
         page="scanning"
         title={_('Help: Web Application Targets')}
       />
-      {capabilities.mayCreate('webapplicationtarget') && (
-        <NewIcon
-          title={_('New Web Application Target')}
-          onClick={onWebApplicationTargetCreateClick}
-        />
-      )}
+      {capabilities.mayAccess('webapplicationtarget') &&
+        features.featureEnabled('ENABLE_WEB_APPLICATION_SCANNING') && (
+          <NewIcon
+            title={_('New Web Application Target')}
+            onClick={onWebApplicationTargetCreateClick}
+          />
+        )}
     </IconDivider>
   );
 };

@@ -35,7 +35,6 @@ import AlertsTable from 'web/pages/alerts/Table';
 import AuditsTable from 'web/pages/audits/Table';
 import ContainerImageTargetTable from 'web/pages/container-image-targets/ContainerImageTargetTable';
 import CredentialTable from 'web/pages/credentials/CredentialTable';
-import WebApplicationTargetTable from 'web/pages/web-application-targets/WebApplicationTargetTable';
 import TrashActions from 'web/pages/extras/TrashActions';
 import FiltersTable from 'web/pages/filters/Table';
 import GroupsTable from 'web/pages/groups/Table';
@@ -57,6 +56,7 @@ import TicketsTable from 'web/pages/tickets/Table';
 import EmptyTrashButton from 'web/pages/trashcan/EmptyTrashButton';
 import TrashCanPageToolBarIcons from 'web/pages/trashcan/TrashCanPageToolBarIcons';
 import TrashCanTableContents from 'web/pages/trashcan/TrashCanTableContents';
+import WebApplicationTargetTable from 'web/pages/web-application-targets/WebApplicationTargetTable';
 
 interface TrashCanTableProps {
   links?: boolean;

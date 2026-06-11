@@ -174,14 +174,14 @@ const WebApplicationTargetsComponent = ({
   };
 
   const handleSaveEdit = async (data: WebApplicationTargetsDialogData) => {
-    const normalizedUrls = data.urls
-      .map(u => u.trim())
-      .filter(u => u.length > 0)
-      .join(',');
-    const normalizedExcludeUrls = data.excludeUrls
-      .map(u => u.trim())
-      .filter(u => u.length > 0)
-      .join(',');
+    const normalizeUrls = (arr: string[]) =>
+      arr
+        .map(u => u.trim())
+        .filter(u => u.length > 0)
+        .join(',');
+
+    const normalizedUrls = normalizeUrls(data.urls);
+    const normalizedExcludeUrls = normalizeUrls(data.excludeUrls);
 
     if (selectedTarget?.id) {
       await saveMutation.mutateAsync({

@@ -9,8 +9,8 @@ import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 interface WebApplicationTargetElement extends ModelElement {
-  target_url?: string;
-  exclude_url?: string;
+  urls?: string;
+  exclude_urls?: string;
   credential?: ModelElement;
   reverse_lookup_only?: YesNo;
   reverse_lookup_unify?: YesNo;
@@ -64,8 +64,8 @@ class WebApplicationTarget extends Model {
     element: WebApplicationTargetElement,
   ): WebApplicationTargetProperties {
     const ret = super.parseElement(element) as WebApplicationTargetProperties;
-    ret.urls = parseCsv(element.target_url);
-    ret.excludeUrls = parseCsv(element.exclude_url);
+    ret.urls = parseCsv(element.urls);
+    ret.excludeUrls = parseCsv(element.exclude_urls);
     if (isDefined(element.credential) && !isEmpty(element.credential._id)) {
       ret.credential = Model.fromElement(element.credential, 'credential');
     } else {

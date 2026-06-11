@@ -210,6 +210,10 @@ export const SCANNER_TYPE_DEFINITIONS = {
     value: '10',
     name: _l('Container Image Scanner'),
   },
+  WEB_APPLICATION_SCANNER_TYPE: {
+    value: '11',
+    name: _l('Web Application Scanner'),
+  },
 } as const;
 
 // Extract individual constants
@@ -228,6 +232,8 @@ export const AGENT_CONTROLLER_SENSOR_SCANNER_TYPE =
   SCANNER_TYPE_DEFINITIONS.AGENT_CONTROLLER_SENSOR_SCANNER_TYPE.value;
 export const CONTAINER_IMAGE_SCANNER_TYPE =
   SCANNER_TYPE_DEFINITIONS.CONTAINER_IMAGE_SCANNER_TYPE.value;
+export const WEB_APPLICATION_SCANNER_TYPE =
+  SCANNER_TYPE_DEFINITIONS.WEB_APPLICATION_SCANNER_TYPE.value;
 
 // Mapping of scanner types to their display names (automatically generated)
 export const SCANNER_TYPE_NAMES = Object.fromEntries(
@@ -239,6 +245,9 @@ export const OPENVAS_DEFAULT_SCANNER_ID =
 
 export const CONTAINER_IMAGE_DEFAULT_SCANNER_ID =
   '1facb485-10e8-4520-9110-66f929d9ac2e';
+
+export const WEB_APPLICATION_DEFAULT_SCANNER_ID =
+  'c0e29580-6183-43e5-a081-c781ac2b4623';
 
 export const openVasScannersFilter = (config: {scannerType: ScannerType}) =>
   config.scannerType === OPENVAS_SCANNER_TYPE;
