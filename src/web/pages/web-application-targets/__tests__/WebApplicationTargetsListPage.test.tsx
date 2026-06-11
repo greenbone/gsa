@@ -6,6 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import Features from 'gmp/capabilities/features';
 import Filter from 'gmp/models/filter';
 import WebApplicationTarget from 'gmp/models/web-application-target';
 import {createSession} from 'gmp/testing';
@@ -33,7 +34,7 @@ const makeTarget = (id = 'wat1') =>
   WebApplicationTarget.fromElement({
     _id: id,
     name: 'web app target',
-    target_url: 'https://example.com',
+    urls: 'https://example.com',
     credential: {_id: 'cred1', name: 'cred'},
     creation_time: '2026-01-01T00:00:00Z',
     modification_time: '2026-01-02T00:00:00Z',
@@ -87,6 +88,7 @@ describe('WebApplicationTargetsListPage tests', () => {
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
+      features: new Features(['ENABLE_WEB_APPLICATION_SCANNING']),
       store: true,
       router: true,
     });

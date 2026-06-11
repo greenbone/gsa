@@ -217,6 +217,7 @@ const PageContent = ({
           isImport,
           isAgentScanning,
           isContainerScanning,
+          isWebApplicationScanning,
           isUpdating,
           progress,
           status,

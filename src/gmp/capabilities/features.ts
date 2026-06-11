@@ -31,10 +31,6 @@ class Features {
   }
 
   featureEnabled(feature: Feature) {
-    // TODO: remove once ENABLE_WEB_APPLICATION_SCANNING is served by the backend
-    if (feature === 'ENABLE_WEB_APPLICATION_SCANNING') {
-      return true;
-    }
     return this.has(feature);
   }
 

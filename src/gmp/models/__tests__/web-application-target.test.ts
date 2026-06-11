@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import WebApplicationTarget from 'gmp/models/web-application-target';
 import {testModel} from 'gmp/models/testing';
+import WebApplicationTarget from 'gmp/models/web-application-target';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 describe('WebApplicationTarget model tests', () => {
@@ -37,21 +37,21 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should parse target_url as array of urls', () => {
     const target = WebApplicationTarget.fromElement({
-      target_url: 'https://example.com,https://test.com',
+      urls: 'https://example.com,https://test.com',
     });
     expect(target.urls).toEqual(['https://example.com', 'https://test.com']);
   });
 
   test('should parse single target_url', () => {
     const target = WebApplicationTarget.fromElement({
-      target_url: 'https://example.com',
+      urls: 'https://example.com',
     });
     expect(target.urls).toEqual(['https://example.com']);
   });
 
   test('should expose backward-compatible url getter', () => {
     const target = WebApplicationTarget.fromElement({
-      target_url: 'https://example.com,https://test.com',
+      urls: 'https://example.com,https://test.com',
     });
     expect(target.url).toEqual('https://example.com');
   });
@@ -63,7 +63,7 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should parse exclude_url as array', () => {
     const target = WebApplicationTarget.fromElement({
-      exclude_url: 'https://exclude1.com,https://exclude2.com',
+      exclude_urls: 'https://exclude1.com,https://exclude2.com',
     });
     expect(target.excludeUrls).toEqual([
       'https://exclude1.com',
@@ -110,8 +110,8 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should parse all fields together', () => {
     const target = WebApplicationTarget.fromElement({
-      target_url: 'https://a.com,https://b.com',
-      exclude_url: 'https://ex.com',
+      urls: 'https://a.com,https://b.com',
+      exclude_urls: 'https://ex.com',
       credential: {_id: 'cred-2', name: 'Cred2'},
       reverse_lookup_only: YES_VALUE,
       reverse_lookup_unify: NO_VALUE,

@@ -4,12 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import WebApplicationTargetCommand from 'gmp/commands/web-application-target';
 import {
   createActionResultResponse,
   createEntityResponse,
   createHttp,
 } from 'gmp/commands/testing';
+import WebApplicationTargetCommand from 'gmp/commands/web-application-target';
 import {type Element} from 'gmp/models/model';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
@@ -47,8 +47,6 @@ describe('WebApplicationTargetCommand tests', () => {
       credentialId: 'cred-1',
       reverseLookupOnly: false,
       reverseLookupUnify: true,
-      targetSource: 'manual',
-      targetExcludeSource: 'manual',
     });
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {
@@ -56,13 +54,13 @@ describe('WebApplicationTargetCommand tests', () => {
         name: 'New Target',
         comment: 'A new target',
         copy: undefined,
-        target_url: 'https://example.com,https://test.com',
-        exclude_url: 'https://exclude.com',
+        target_source: 'manual',
+        urls: 'https://example.com,https://test.com',
+        target_exclude_source: 'manual',
+        exclude_urls: 'https://exclude.com',
         credential_id: 'cred-1',
         reverse_lookup_only: NO_VALUE,
         reverse_lookup_unify: YES_VALUE,
-        target_source: 'manual',
-        target_exclude_source: 'manual',
       },
     });
     expect(result.data.id).toEqual('wat-456');
@@ -82,13 +80,13 @@ describe('WebApplicationTargetCommand tests', () => {
         name: 'Minimal Target',
         comment: undefined,
         copy: undefined,
-        target_url: 'https://example.com',
-        exclude_url: undefined,
+        target_source: 'manual',
+        urls: 'https://example.com',
+        target_exclude_source: undefined,
+        exclude_urls: undefined,
         credential_id: undefined,
         reverse_lookup_only: NO_VALUE,
         reverse_lookup_unify: NO_VALUE,
-        target_source: undefined,
-        target_exclude_source: undefined,
       },
     });
   });
@@ -107,8 +105,6 @@ describe('WebApplicationTargetCommand tests', () => {
       reverseLookupOnly: true,
       reverseLookupUnify: false,
       inUse: true,
-      targetSource: 'src',
-      targetExcludeSource: 'ex-src',
     });
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {
@@ -116,14 +112,14 @@ describe('WebApplicationTargetCommand tests', () => {
         web_application_target_id: 'wat-123',
         name: 'Updated Target',
         comment: 'Updated comment',
-        target_url: 'https://updated.com',
-        exclude_url: 'https://exclude.com',
+        target_source: 'manual',
+        urls: 'https://updated.com',
+        target_exclude_source: 'manual',
+        exclude_urls: 'https://exclude.com',
         credential_id: 'cred-2',
         reverse_lookup_only: YES_VALUE,
         reverse_lookup_unify: NO_VALUE,
         in_use: YES_VALUE,
-        target_source: 'src',
-        target_exclude_source: 'ex-src',
       },
     });
     expect(result.data.id).toEqual('wat-123');
@@ -139,7 +135,8 @@ describe('WebApplicationTargetCommand tests', () => {
     });
     expect(http.request).toHaveBeenCalledWith('post', {
       data: expect.objectContaining({
-        exclude_url: undefined,
+        exclude_urls: undefined,
+        target_exclude_source: undefined,
       }),
     });
   });

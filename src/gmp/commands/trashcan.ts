@@ -16,7 +16,6 @@ import {type ModelElement} from 'gmp/models/model';
 import Note from 'gmp/models/note';
 import OciImageTarget from 'gmp/models/oci-image-target';
 import Override from 'gmp/models/override';
-import WebApplicationTarget from 'gmp/models/web-application-target';
 import Permission from 'gmp/models/permission';
 import Policy from 'gmp/models/policy';
 import PortList from 'gmp/models/port-list';
@@ -30,6 +29,7 @@ import Tag from 'gmp/models/tag';
 import Target from 'gmp/models/target';
 import Task from 'gmp/models/task';
 import Ticket from 'gmp/models/ticket';
+import WebApplicationTarget from 'gmp/models/web-application-target';
 import {forEach, map} from 'gmp/utils/array';
 import {apiType, type EntityType} from 'gmp/utils/entity-type';
 

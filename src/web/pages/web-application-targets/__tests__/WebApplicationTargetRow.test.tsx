@@ -14,7 +14,7 @@ import WebApplicationTargetRow from 'web/pages/web-application-targets/WebApplic
 const entity = new WebApplicationTarget({
   id: 'target-1',
   name: 'Test Web Application Target',
-  url: 'https://example.com',
+  urls: ['https://example.com'],
   credential: new Model({id: 'cred-1', name: 'Test Credential'}),
   reverseLookupOnly: false,
   reverseLookupUnify: false,
@@ -82,7 +82,7 @@ describe('WebApplicationTargetRow tests', () => {
     const entityNoCred = new WebApplicationTarget({
       id: 'target-1',
       name: 'Test Web Application Target',
-      url: 'https://example.com',
+      urls: ['https://example.com'],
       credential: undefined,
       reverseLookupOnly: false,
       reverseLookupUnify: false,
