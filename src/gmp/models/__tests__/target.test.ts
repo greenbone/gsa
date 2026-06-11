@@ -6,7 +6,11 @@
 import {describe, test, expect} from '@gsa/testing';
 import Model from 'gmp/models/model';
 import PortList from 'gmp/models/port-list';
-import Target, {ARP_PING, ICMP_PING} from 'gmp/models/target';
+import Target, {
+  ARP_PING,
+  HOST_DISCOVERY_IPV6,
+  ICMP_PING,
+} from 'gmp/models/target';
 import {testModel} from 'gmp/models/testing';
 
 describe('Target model tests', () => {
@@ -292,5 +296,10 @@ describe('Target model tests', () => {
 
     const target3 = Target.fromElement({alive_tests: {alive_test: []}});
     expect(target3.aliveTests).toEqual([]);
+
+    const target4 = Target.fromElement({
+      alive_tests: {alive_test: HOST_DISCOVERY_IPV6},
+    });
+    expect(target4.aliveTests).toEqual([HOST_DISCOVERY_IPV6]);
   });
 });
