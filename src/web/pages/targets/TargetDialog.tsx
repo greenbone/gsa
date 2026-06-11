@@ -29,6 +29,7 @@ import {
   type AliveTest,
   ARP_PING,
   CONSIDER_ALIVE,
+  HOST_DISCOVERY_IPV6,
   ICMP_PING,
   SCAN_CONFIG_DEFAULT,
   TCP_ACK,
@@ -209,6 +210,8 @@ const TargetDialog = ({
   const isCredentialStoresEnabled = features.featureEnabled(
     'ENABLE_CREDENTIAL_STORES',
   );
+
+  const isOpenvasdEnabled = features.featureEnabled('ENABLE_OPENVASD');
 
   /**
    * Mapping of credential types to their corresponding credential store types.
@@ -575,11 +578,26 @@ const TargetDialog = ({
                   value={CONSIDER_ALIVE}
                   onChange={handleBaseAliveTestsChange}
                 />
+
+                {isOpenvasdEnabled && (
+                  <Radio
+                    checked={
+                      aliveTests.length === 1 &&
+                      aliveTests[0] === HOST_DISCOVERY_IPV6
+                    }
+                    name="baseAliveTests"
+                    title={_('Host Discovery IPv6')}
+                    value={HOST_DISCOVERY_IPV6}
+                    onChange={handleBaseAliveTestsChange}
+                  />
+                )}
+
                 <Radio
                   checked={
                     aliveTests.length > 1 ||
                     (aliveTests[0] !== SCAN_CONFIG_DEFAULT &&
-                      aliveTests[0] !== CONSIDER_ALIVE)
+                      aliveTests[0] !== CONSIDER_ALIVE &&
+                      aliveTests[0] !== HOST_DISCOVERY_IPV6)
                   }
                   name="baseAliveTests"
                   title={_('Custom')}
@@ -591,13 +609,16 @@ const TargetDialog = ({
                 disabled={
                   aliveTests.length === 1 &&
                   (aliveTests[0] === SCAN_CONFIG_DEFAULT ||
-                    aliveTests[0] === CONSIDER_ALIVE)
+                    aliveTests[0] === CONSIDER_ALIVE ||
+                    aliveTests[0] === HOST_DISCOVERY_IPV6)
                 }
                 items={ALIVE_TESTS_ITEMS}
                 name="aliveTests"
                 value={aliveTests.filter(
                   value =>
-                    value !== SCAN_CONFIG_DEFAULT && value !== CONSIDER_ALIVE,
+                    value !== SCAN_CONFIG_DEFAULT &&
+                    value !== CONSIDER_ALIVE &&
+                    value !== HOST_DISCOVERY_IPV6,
                 )}
                 onChange={handleCustomAliveTestsChange}
               />

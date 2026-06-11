@@ -68,6 +68,7 @@ export type AliveTest =
   | typeof ARP_PING
   | typeof CONSIDER_ALIVE
   | typeof ICMP_PING
+  | typeof HOST_DISCOVERY_IPV6
   | typeof SCAN_CONFIG_DEFAULT
   | typeof TCP_ACK
   | typeof TCP_SYN;
@@ -78,6 +79,7 @@ export const TCP_ACK = 'TCP-ACK Service Ping';
 export const TCP_SYN = 'TCP-SYN Service Ping';
 export const ARP_PING = 'ARP Ping';
 export const CONSIDER_ALIVE = 'Consider Alive';
+export const HOST_DISCOVERY_IPV6 = 'Host Discovery IPv6';
 
 class SSHCredential extends Model {
   static readonly entityType = 'credential';
