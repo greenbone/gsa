@@ -5,7 +5,7 @@
 
 import {useCallback, useEffect, useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
-import {useParams} from 'react-router';
+import {useParams, useLocation} from 'react-router';
 import logger from 'gmp/log';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
@@ -59,6 +59,12 @@ const log = logger.getLogger('web.pages.reports.DetailsPage');
 const DEFAULT_FILTER = Filter.fromString(
   'levels=chml rows=100 min_qod=70 first=1 sort-reverse=severity result_hosts_only=0',
 );
+const DEFAULT_HOSTS_FILTER = Filter.fromString(
+  'levels=chml rows=-1 min_qod=70 first=1 sort-reverse=severity result_hosts_only=1',
+);
+
+const DEFAULT_HOSTS_TAB_INDEX = 2;
+
 
 export const REPORT_RESET_FILTER = RESET_FILTER.copy()
   .setSortOrder('sort-reverse')
@@ -107,10 +113,19 @@ const ReportDetailsPage = () => {
     useState<ReportComposerDefaults>({});
 
   // Filter management
+  const location = useLocation();
+  const tabParam = new URLSearchParams(location.search).get('tab');
+  const activeTab = tabParam ? Number.parseInt(tabParam, 10) : 0;
+
+  const fallbackFilter =
+    activeTab === DEFAULT_HOSTS_TAB_INDEX
+      ? DEFAULT_HOSTS_FILTER
+      : DEFAULT_FILTER;
+
   const [pageFilter, , {changeFilter}] = usePageFilter(
     `report-${reportId}`,
     'result',
-    {fallbackFilter: DEFAULT_FILTER},
+    {fallbackFilter},
   );
 
   // Report entity
