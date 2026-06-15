@@ -20,6 +20,7 @@ import {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
+  WEB_APPLICATION_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import ScannerDialog from 'web/pages/scanners/ScannerDialog';
 
@@ -284,6 +285,43 @@ describe('ScannerDialog tests', () => {
       comment: '',
       credentialId: undefined,
       type: CONTAINER_IMAGE_SCANNER_TYPE,
+      id: undefined,
+      port: 443,
+    });
+  });
+
+  test('should display defaults for web application scanner', async () => {
+    const gmp = createGmp();
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      features: new Features(['ENABLE_WEB_APPLICATION_SCANNING']),
+    });
+
+    render(
+      <ScannerDialog type={WEB_APPLICATION_SCANNER_TYPE} onSave={handleSave} />,
+    );
+
+    expect(screen.getByName('name')).toHaveValue('Unnamed');
+    expect(screen.getByName('comment')).toHaveValue('');
+    expect(screen.getByName('host')).toHaveValue('localhost');
+    expect(screen.getByName('port')).toHaveValue('443');
+
+    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    expect(scannerType).toHaveValue('Web Application Scanner');
+    expect(screen.queryByRole('textbox', {name: 'Credential'})).toHaveValue('');
+    expect(screen.queryByName('caCertificate')).toHaveValue('');
+
+    fireEvent.click(screen.getDialogSaveButton());
+    expect(handleSave).toHaveBeenCalledWith({
+      caCertificate: undefined,
+      host: 'localhost',
+      name: 'Unnamed',
+      comment: '',
+      credentialId: undefined,
+      type: WEB_APPLICATION_SCANNER_TYPE,
       id: undefined,
       port: 443,
     });

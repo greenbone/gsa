@@ -10,6 +10,7 @@ import {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
+  WEB_APPLICATION_SCANNER_TYPE,
   type ScannerType,
   scannerTypeName,
 } from 'gmp/models/scanner';
@@ -53,6 +54,7 @@ const ScannerTypeGroup = ({
   const scannerTypes: ScannerType[] = [
     OPENVAS_SCANNER_TYPE,
     OPENVASD_SCANNER_TYPE,
+    WEB_APPLICATION_SCANNER_TYPE,
   ];
   if (
     features.featureEnabled('ENABLE_AGENTS') &&
@@ -65,6 +67,9 @@ const ScannerTypeGroup = ({
   }
   if (gmp.settings.enableGreenboneSensor) {
     scannerTypes.push(GREENBONE_SENSOR_SCANNER_TYPE);
+  }
+  if (features.featureEnabled('ENABLE_WEB_APPLICATION_SCANNING')) {
+    scannerTypes.push(WEB_APPLICATION_SCANNER_TYPE);
   }
 
   const scannerTypesOptions = scannerTypes.map(scannerType => ({
