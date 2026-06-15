@@ -27,7 +27,6 @@ import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withRowDetails from 'web/entities/withRowDetails';
-import useGmp from 'web/hooks/useGmp';
 import ResultDetails, {
   type ResultDetailsProps,
 } from 'web/pages/results/ResultDetails';
@@ -195,9 +194,7 @@ const Header = ({
   sort = true,
   onSortChange,
 }: HeaderProps) => {
-  const gmp = useGmp();
-  const enableEPSS = gmp.settings.enableEPSS;
-  const columns = getColumns(enableEPSS);
+  const columns = getColumns(false);
 
   const hasEPSS = columns.some(col => col.headerGroup === _('EPSS'));
   const hasNestedHeaders = hasEPSS;
@@ -263,9 +260,7 @@ const Header = ({
 };
 
 const Row = ({entity, onToggleDetailsClick}: RowProps) => {
-  const gmp = useGmp();
-  const enableEPSS = gmp.settings.enableEPSS;
-  const columns = getColumns(enableEPSS, onToggleDetailsClick);
+  const columns = getColumns(false, onToggleDetailsClick);
 
   return (
     <TableRow>

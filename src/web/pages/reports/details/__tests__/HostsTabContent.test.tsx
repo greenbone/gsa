@@ -108,6 +108,42 @@ describe('HostsTabContent', () => {
     expect(screen.getAllByTestId('progressbar-box')).toHaveLength(2);
   });
 
+  test('should render WebApplicationHostsTab when isWebApplicationScanning is true', () => {
+    const props = createMockProps({
+      isContainerScanning: false,
+      isWebApplicationScanning: true,
+      hostsData: mockHostsData,
+    });
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+    });
+
+    render(<HostsTabContent {...props} />);
+
+    const table = screen.getByRole('table');
+    expect(table).toBeInTheDocument();
+    expect(screen.getAllByText('1 - 2 of 2')).toHaveLength(2);
+  });
+
+  test('should pass correct props to WebApplicationHostsTab', () => {
+    const props = createMockProps({
+      isContainerScanning: false,
+      isWebApplicationScanning: true,
+      hostsData: mockHostsData,
+    });
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+    });
+
+    render(<HostsTabContent {...props} />);
+
+    screen.getByRole('table');
+  });
+
   test('should pass correct props to HostsTab', () => {
     const props = createMockProps({
       isContainerScanning: false,

@@ -12,6 +12,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import AgentScanningHostsTab from 'web/pages/reports/details/host/AgentScanningHostsTab';
 import ContainerScanningHostsTab from 'web/pages/reports/details/host/ContainerScanningHostsTab';
 import HostsTab from 'web/pages/reports/details/host/HostsTab';
+import WebApplicationHostsTab from 'web/pages/reports/details/host/WebApplicationHostsTab';
 import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 
 export interface HostsTabContentProps {
@@ -19,6 +20,7 @@ export interface HostsTabContentProps {
   reportId: string;
   isAgentScanning?: boolean;
   isContainerScanning: boolean;
+  isWebApplicationScanning?: boolean;
   reportFilter: Filter;
   hostsData?: UseGetEntitiesReturn<ReportHost>;
   isHostsFetching?: boolean;
@@ -31,6 +33,7 @@ const HostsTabContent = ({
   isHostsError,
   isAgentScanning,
   isContainerScanning,
+  isWebApplicationScanning,
   reportFilter,
   hostsData,
   isHostsFetching,
@@ -75,6 +78,21 @@ const HostsTabContent = ({
   if (isAgentScanning) {
     return (
       <AgentScanningHostsTab
+        audit={audit}
+        counts={hosts.counts}
+        filter={reportFilter}
+        hosts={hosts.entities}
+        isUpdating={isFetching}
+        sortField={sortField}
+        sortReverse={sortReverse}
+        onSortChange={handleSortChange}
+      />
+    );
+  }
+
+  if (isWebApplicationScanning) {
+    return (
+      <WebApplicationHostsTab
         audit={audit}
         counts={hosts.counts}
         filter={reportFilter}

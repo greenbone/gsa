@@ -131,6 +131,86 @@ describe('ResultsTabContent', () => {
         ),
       ).toBeInTheDocument();
     });
+
+    test('should render WebApplicationScanningResultsTab when isWebApplicationScanning is true and has results', () => {
+      const gmp = createGmp();
+      const {render} = rendererWith({gmp});
+
+      render(
+        <ResultsTabContent
+          hasTarget={true}
+          isContainerScanning={false}
+          isWebApplicationScanning={true}
+          progress={100}
+          reportFilter={filter}
+          reportId="report-123"
+          reportResultsCounts={{filtered: 1, full: 1}}
+          status={TASK_STATUS.done}
+          onFilterDecreaseMinQoDClick={testing.fn()}
+          onFilterEditClick={testing.fn()}
+          onFilterRemoveClick={testing.fn()}
+          onTargetEditClick={testing.fn()}
+        />,
+      );
+
+      expect(screen.getByTestId('loading')).toBeInTheDocument();
+    });
+
+    test('should render EmptyReport when web application scanning has no results at all', () => {
+      const gmp = createGmp();
+      const onTargetEditClick = testing.fn();
+      const {render} = rendererWith({gmp, capabilities: true});
+
+      render(
+        <ResultsTabContent
+          hasTarget={true}
+          isContainerScanning={false}
+          isWebApplicationScanning={true}
+          progress={100}
+          reportFilter={filter}
+          reportId="report-123"
+          reportResultsCounts={{filtered: 0, full: 0}}
+          status={TASK_STATUS.done}
+          onFilterDecreaseMinQoDClick={testing.fn()}
+          onFilterEditClick={testing.fn()}
+          onFilterRemoveClick={testing.fn()}
+          onTargetEditClick={onTargetEditClick}
+        />,
+      );
+
+      expect(
+        screen.getByText(/The scan did not collect any results/i),
+      ).toBeInTheDocument();
+    });
+
+    test('should render EmptyResultsReport when web application scanning has results but filtered to 0', () => {
+      const gmp = createGmp();
+      const onFilterEditClick = testing.fn();
+      const {render} = rendererWith({gmp});
+
+      render(
+        <ResultsTabContent
+          hasTarget={true}
+          isContainerScanning={false}
+          isWebApplicationScanning={true}
+          progress={100}
+          reportFilter={filter}
+          reportId="report-123"
+          reportResultsCounts={{filtered: 0, full: 5}}
+          status={TASK_STATUS.done}
+          onFilterDecreaseMinQoDClick={testing.fn()}
+          onFilterEditClick={onFilterEditClick}
+          onFilterRemoveClick={testing.fn()}
+          onTargetEditClick={testing.fn()}
+        />,
+      );
+
+      expect(
+        screen.getByText(
+          /The report is empty. The filter does not match any of the 5 results./i,
+        ),
+      ).toBeInTheDocument();
+    });
   });
 
   describe('Regular Scanning', () => {
