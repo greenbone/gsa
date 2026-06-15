@@ -17,7 +17,7 @@ import useGetResults from 'web/hooks/use-query/results';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
-import WebApplicationScanningResultsTable from 'web/pages/reports/details/WebApplicationScanningResultsTable';
+import WebApplicationScanningResultsTable from 'web/pages/reports/details/result/WebApplicationScanningResultsTable';
 
 interface WebApplicationScanningResultsTabProps {
   reportId: string;

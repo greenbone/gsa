@@ -939,7 +939,6 @@
   "Export User": "Benutzer exportieren",
   "Export User as XML": "Benutzer als XML exportieren",
   "Export Web Application Target": "Webanwendungsziel exportieren",
-  "Export Web Application Target as XML": "Webanwendungsziel als XML exportieren",
   "Extension": "Dateiendung",
   "Failed to connect to credential store server. Please check your settings.": "Verbindung zum Anmeldedaten-Store-Server fehlgeschlagen. Bitte überprüfen Sie Ihre Einstellungen.",
   "Failed to copy checksum for agent installer {{name}} {{version}} to clipboard.": "Agent-Installationsprogramm-Prüfsumme für {{name}} {{version}} konnte nicht in die Zwischenablage kopiert werden.",

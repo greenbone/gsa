@@ -5,8 +5,8 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
-import CollectionCounts from 'gmp/collection/collection-counts';
 import Features from 'gmp/capabilities/features';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import WebApplicationTarget from 'gmp/models/web-application-target';
 import {createSession} from 'gmp/testing';

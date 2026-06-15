@@ -9,7 +9,7 @@ import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
 import ContainerScanningResultsTab from 'web/pages/reports/details/result/ContainerScanningResultsTab';
 import ResultsTab from 'web/pages/reports/details/result/ResultsTab';
-import WebApplicationScanningResultsTab from 'web/pages/reports/details/WebApplicationScanningResultsTab';
+import WebApplicationScanningResultsTab from 'web/pages/reports/details/result/WebApplicationScanningResultsTab';
 
 interface ResultsCounts {
   filtered?: number;
