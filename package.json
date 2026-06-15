@@ -39,7 +39,7 @@
   "dependencies": {
     "@dnd-kit/helpers": "^0.3.2",
     "@dnd-kit/react": "^0.4.0",
-    "@greenbone/ui-lib": "^2.5.0",
+    "@greenbone/ui-lib": "^2.8.0",
     "@mantine/core": "^8.3.16",
     "@mantine/dates": "^8.3.16",
     "@mantine/notifications": "^8.3.16",
