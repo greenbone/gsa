@@ -17,6 +17,7 @@ interface ReportTaskElement extends ModelElement {
   target?: ModelElement;
   agent_group?: ModelElement;
   oci_image_target?: ModelElement;
+  web_application_target?: ModelElement;
 }
 
 interface ReportTaskProperties extends ModelProperties {
@@ -24,6 +25,7 @@ interface ReportTaskProperties extends ModelProperties {
   target?: Model;
   agentGroup?: Model;
   ociImageTarget?: Model;
+  webApplicationTarget?: Model;
 }
 
 class ReportTask extends Model {
@@ -33,12 +35,14 @@ class ReportTask extends Model {
   readonly target?: Model;
   readonly agentGroup?: Model;
   readonly ociImageTarget?: Model;
+  readonly webApplicationTarget?: Model;
 
   constructor({
     progress,
     target,
     agentGroup,
     ociImageTarget,
+    webApplicationTarget,
     ...properties
   }: ReportTaskProperties = {}) {
     super(properties);
@@ -47,6 +51,7 @@ class ReportTask extends Model {
     this.target = target;
     this.agentGroup = agentGroup;
     this.ociImageTarget = ociImageTarget;
+    this.webApplicationTarget = webApplicationTarget;
   }
 
   static fromElement(element: ReportTaskElement = {}): ReportTask {
@@ -65,6 +70,12 @@ class ReportTask extends Model {
     copy.ociImageTarget = isEmpty(element.oci_image_target?._id)
       ? undefined
       : Model.fromElement(element.oci_image_target, 'ociimagetarget');
+    copy.webApplicationTarget = isEmpty(element.web_application_target?._id)
+      ? undefined
+      : Model.fromElement(
+          element.web_application_target,
+          'webapplicationtarget',
+        );
     copy.progress = isDefined(element.progress)
       ? parseProgressElement(element.progress)
       : undefined;
@@ -76,7 +87,8 @@ class ReportTask extends Model {
     return (
       !isDefined(this.target) &&
       !isDefined(this.agentGroup) &&
-      !isDefined(this.ociImageTarget)
+      !isDefined(this.ociImageTarget) &&
+      !isDefined(this.webApplicationTarget)
     );
   }
 }

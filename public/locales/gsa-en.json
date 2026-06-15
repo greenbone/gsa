@@ -2324,6 +2324,7 @@
   "WARNING: Please be aware that the report has more results than the threshold of {{threshold}}. Therefore, this action can take a really long time to finish. It might even exceed the session timeout!": "WARNING: Please be aware that the report has more results than the threshold of {{threshold}}. Therefore, this action can take a really long time to finish. It might even exceed the session timeout!",
   "We are sorry. The page you have requested could not be found.": "We are sorry. The page you have requested could not be found.",
   "We.": "We.",
+  "Web Application Target": "",
   "Wednesday": "Wednesday",
   "Week": "Week",
   "week(s)": "week(s)",

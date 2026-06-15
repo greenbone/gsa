@@ -114,6 +114,7 @@ const ENTITY_TYPES = {
   tlscertificate: _l('TLS Certificate'),
   user: _l('User'),
   vulnerability: _l('Vulnerability'),
+  webapplicationtarget: _l('Web Application Target'),
 } as const;
 
 /**

@@ -560,7 +560,7 @@ describe('Task Model parse tests', () => {
 });
 
 describe(`Task Model methods tests`, () => {
-  test('should be a container only if neither target nor agentGroup nor ociImageTarget is set', () => {
+  test('should be a container only if neither target nor agentGroup nor ociImageTarget nor webApplicationTarget is set', () => {
     const t1 = Task.fromElement({});
     const t2 = Task.fromElement({target: {_id: 'foo'}});
     const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
@@ -571,12 +571,16 @@ describe(`Task Model methods tests`, () => {
     const t5 = Task.fromElement({
       oci_image_target: {_id: 'oci1'},
     });
+    const t6 = Task.fromElement({
+      web_application_target: {_id: 'web1'},
+    });
 
     expect(t1.isImport()).toEqual(true);
     expect(t2.isImport()).toEqual(false);
     expect(t3.isImport()).toEqual(false);
     expect(t4.isImport()).toEqual(false);
     expect(t5.isImport()).toEqual(false);
+    expect(t6.isImport()).toEqual(false);
   });
 
   test('should be a container image if ociImageTarget is set', () => {
@@ -733,21 +737,24 @@ describe(`Task Model methods tests`, () => {
     expect(task.agentGroup?.entityType).toEqual('agentgroup');
   });
 
-  test('container vs agent vs target vs container image parsing check', () => {
+  test('container vs agent vs target vs container image vs web application parsing check', () => {
     const t1 = Task.fromElement({});
     expect(t1.isImport()).toBe(true);
     expect(t1.isAgent()).toBe(false);
     expect(t1.isContainerImage()).toBe(false);
+    expect(t1.isWebApplication()).toBe(false);
 
     const t2 = Task.fromElement({target: {_id: 'tgt1'}});
     expect(t2.isImport()).toBe(false);
     expect(t2.isAgent()).toBe(false);
     expect(t2.isContainerImage()).toBe(false);
+    expect(t2.isWebApplication()).toBe(false);
 
     const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
     expect(t3.isImport()).toBe(false);
     expect(t3.isAgent()).toBe(true);
     expect(t3.isContainerImage()).toBe(false);
+    expect(t3.isWebApplication()).toBe(false);
 
     const t4 = Task.fromElement({
       target: {_id: 'tgt1'},
@@ -756,6 +763,7 @@ describe(`Task Model methods tests`, () => {
     expect(t4.isImport()).toBe(false);
     expect(t4.isAgent()).toBe(true);
     expect(t4.isContainerImage()).toBe(false);
+    expect(t4.isWebApplication()).toBe(false);
 
     const t5 = Task.fromElement({
       oci_image_target: {_id: 'oci1'},
@@ -763,6 +771,15 @@ describe(`Task Model methods tests`, () => {
     expect(t5.isImport()).toBe(false);
     expect(t5.isAgent()).toBe(false);
     expect(t5.isContainerImage()).toBe(true);
+    expect(t5.isWebApplication()).toBe(false);
+
+    const t6 = Task.fromElement({
+      web_application_target: {_id: 'web1'},
+    });
+    expect(t6.isImport()).toBe(false);
+    expect(t6.isAgent()).toBe(false);
+    expect(t6.isContainerImage()).toBe(false);
+    expect(t6.isWebApplication()).toBe(true);
   });
 
   test('should be agent if agentGroup is set', () => {
@@ -778,5 +795,24 @@ describe(`Task Model methods tests`, () => {
     expect(t2.isAgent()).toEqual(true);
     expect(t3.isAgent()).toEqual(false);
     expect(t4.isAgent()).toEqual(true);
+  });
+
+  test('should be a web application if webApplicationTarget is set', () => {
+    const t1 = Task.fromElement({});
+    const t2 = Task.fromElement({target: {_id: 'foo'}});
+    const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
+    const t4 = Task.fromElement({
+      web_application_target: {_id: 'web1'},
+    });
+    const t5 = Task.fromElement({
+      target: {_id: 'foo'},
+      web_application_target: {_id: 'web1'},
+    });
+
+    expect(t1.isWebApplication()).toEqual(false);
+    expect(t2.isWebApplication()).toEqual(false);
+    expect(t3.isWebApplication()).toEqual(false);
+    expect(t4.isWebApplication()).toEqual(true);
+    expect(t5.isWebApplication()).toEqual(true);
   });
 });

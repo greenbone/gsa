@@ -189,6 +189,7 @@ export const DEFAULT_FILTER_SETTINGS: Record<
   user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
   ociimagetarget: 'db61a364-de40-4552-b1bc-a518744f847a',
+  webapplicationtarget: '4d0ac899-cac9-4161-bfac-be173e88a8a6',
 } as const;
 
 export const saveDefaultFilterSettingId = (entityType: string) =>

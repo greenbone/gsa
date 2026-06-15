@@ -2324,6 +2324,7 @@
   "WARNING: Please be aware that the report has more results than the threshold of {{threshold}}. Therefore, this action can take a really long time to finish. It might even exceed the session timeout!": "WARNUNG: Der Bericht enthält mehr als {{threshold}} Ergebnisse. Deshalb könnte diese Aktion eine sehr lange Zeit in Anspruch nehmen. Es ist sogar möglich, dass das Sitzungstimeout überschritten wird!",
   "We are sorry. The page you have requested could not be found.": "Es tut uns leid. Die Seite, die Sie angefragt haben, konnte nicht gefunden werden.",
   "We.": "Mi.",
+  "Web Application Target": "Web-Application-Ziel",
   "Wednesday": "Mittwoch",
   "Week": "Woche",
   "week(s)": "Woche(n)",

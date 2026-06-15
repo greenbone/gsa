@@ -2324,6 +2324,7 @@
   "WARNING: Please be aware that the report has more results than the threshold of {{threshold}}. Therefore, this action can take a really long time to finish. It might even exceed the session timeout!": "警告: 请注意,报告的结果数超过了{{threshold}}.因此,此操作可能需要很长时间才能完成.它甚至可能超过会话超时!",
   "We are sorry. The page you have requested could not be found.": "我们很抱歉.找不到您请求的页面.",
   "We.": "周三",
+  "Web Application Target": "",
   "Wednesday": "周三",
   "Week": "周",
   "week(s)": "周",

@@ -91,4 +91,28 @@ describe('ReportTask tests', () => {
     expect(t.progress).toEqual(42);
     expect(t.agentGroup?.id).toEqual('ag1');
   });
+
+  test('should parse web application target', () => {
+    const task = ReportTask.fromElement({
+      _id: 't1',
+      web_application_target: {_id: 'wat1'},
+    });
+
+    expect(task.id).toEqual('t1');
+    expect(task.webApplicationTarget).toBeDefined();
+    expect(task.webApplicationTarget?.id).toEqual('wat1');
+    expect(task.webApplicationTarget?.entityType).toEqual(
+      'webapplicationtarget',
+    );
+    expect(task.isImport()).toEqual(false);
+  });
+
+  test('should still parse progress with webApplicationTarget present', () => {
+    const t = ReportTask.fromElement({
+      progress: {__text: '42'},
+      web_application_target: {_id: 'wat1'},
+    });
+    expect(t.progress).toEqual(42);
+    expect(t.webApplicationTarget?.id).toEqual('wat1');
+  });
 });

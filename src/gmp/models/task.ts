@@ -155,6 +155,11 @@ export interface TaskElement extends ModelElement {
     name?: string;
     trash?: YesNo;
   };
+  web_application_target?: {
+    _id?: string;
+    name?: string;
+    trash?: YesNo;
+  };
   trend?: TaskTrend;
   usage_type?: string;
 }
@@ -223,6 +228,7 @@ export interface TaskProperties extends ModelProperties {
   status?: TaskStatus;
   target?: Model;
   ociImageTarget?: Model;
+  webApplicationTarget?: Model;
   agentGroup?: Model;
   trend?: TaskTrend;
   // from preferences
@@ -340,6 +346,7 @@ class Task extends Model {
   readonly status: TaskStatus;
   readonly target?: Model;
   readonly ociImageTarget?: Model;
+  readonly webApplicationTarget?: Model;
   readonly agentGroup?: Model;
   readonly trend?: TaskTrend;
   readonly usageType: TaskUsageType;
@@ -387,6 +394,7 @@ class Task extends Model {
     target,
     ociImageTarget,
     agentGroup,
+    webApplicationTarget,
     trend,
     usageType = USAGE_TYPE.scan,
     ...properties
@@ -421,6 +429,7 @@ class Task extends Model {
     this.status = status;
     this.target = target;
     this.ociImageTarget = ociImageTarget;
+    this.webApplicationTarget = webApplicationTarget;
     this.trend = trend;
     this.agentGroup = agentGroup;
     this.usageType = usageType;
@@ -538,6 +547,12 @@ class Task extends Model {
     copy.agentGroup = isEmpty(element.agent_group?._id)
       ? undefined
       : Model.fromElement(element.agent_group, 'agentgroup');
+    copy.webApplicationTarget = isEmpty(element.web_application_target?._id)
+      ? undefined
+      : Model.fromElement(
+          element.web_application_target,
+          'webapplicationtarget',
+        );
     // slave isn't really an entity type but it has an id
     copy.slave = isEmpty(element.slave?._id)
       ? undefined
@@ -650,7 +665,8 @@ class Task extends Model {
     return (
       !isDefined(this.target) &&
       !isDefined(this.agentGroup) &&
-      !isDefined(this.ociImageTarget)
+      !isDefined(this.ociImageTarget) &&
+      !isDefined(this.webApplicationTarget)
     );
   }
 
@@ -660,6 +676,10 @@ class Task extends Model {
 
   isAgent() {
     return isDefined(this.agentGroup);
+  }
+
+  isWebApplication() {
+    return isDefined(this.webApplicationTarget);
   }
 }
 
