@@ -45,7 +45,7 @@ describe('ScannerFilterDialog tests', () => {
     }) as HTMLSelectElement;
     expect(select).toHaveValue('');
     const selectItems = await getSelectItemElementsForSelect(select);
-    expect(selectItems).toHaveLength(5);
+    expect(selectItems).toHaveLength(6);
     expect(screen.getByName('first')).toHaveValue('1');
     expect(screen.getByName('rows')).toHaveValue('20');
     expect(screen.getByName('sort_by')).toHaveValue('name');

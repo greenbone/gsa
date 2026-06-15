@@ -17,6 +17,7 @@ import Scanner, {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   CONTAINER_IMAGE_SCANNER_TYPE,
+  WEB_APPLICATION_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {testModel} from 'gmp/models/testing';
 import {YES_VALUE} from 'gmp/parser';
@@ -266,6 +267,9 @@ describe('Scanner model function tests', () => {
     );
     expect(scannerTypeName(CONTAINER_IMAGE_SCANNER_TYPE)).toEqual(
       'Container Image Scanner',
+    );
+    expect(scannerTypeName(WEB_APPLICATION_SCANNER_TYPE)).toEqual(
+      'Web Application Scanner',
     );
     expect(scannerTypeName(undefined)).toEqual('Unknown scanner type');
   });
