@@ -22,6 +22,7 @@ import {
   CircleOff,
   ClipboardCheck,
   Clock3,
+  Container,
   Copy,
   Diff,
   Download,
@@ -35,6 +36,7 @@ import {
   FolderOpen,
   Gauge,
   Glasses,
+  Globe,
   HatGlasses,
   HelpCircle,
   Import,
@@ -67,6 +69,7 @@ import {
   Tag,
   Tags,
   Trash2,
+  Radar,
   Upload,
   User,
   UserCheck,
@@ -210,6 +213,7 @@ const getIcons = (): Record<string, IconComponent> => {
     ArrowUp: createIcon(ArrowUp, 'arrow-up-icon', 'Arrow Up Icon'),
     Calendar: createIcon(Calendar, 'calendar-icon', 'Calendar Icon'),
     Check: createIcon(Check, 'check-icon', 'Check Icon'),
+    Container: createIcon(Container, 'container-icon', 'Container Icon'),
     Copy: createIcon(Copy, 'copy-icon', 'Copy Icon'),
     KeyRound: createIcon(KeyRound, 'credential-icon', 'Credential Icon'),
     BarChart3: createIcon(BarChart3, 'dashboard-icon', 'Dashboard Icon'),
@@ -223,6 +227,7 @@ const getIcons = (): Record<string, IconComponent> => {
     Filter: createIcon(Filter, 'filter-icon', 'Filter Icon'),
     ChevronFirst: createIcon(ChevronFirst, 'first-icon', 'First Icon'),
     Folder: createIcon(Folder, 'fold-icon', 'Fold Icon'),
+    Globe: createIcon(Globe, 'globe-icon', 'Globe Icon'),
     Users: createIcon(Users, 'group-icon', 'Group Icon'),
     HelpCircle: createIcon(HelpCircle, 'help-icon', 'Help Icon'),
     Import: createIcon(Import, 'import-icon', 'Import Icon'),
@@ -262,6 +267,7 @@ const getIcons = (): Record<string, IconComponent> => {
       'Fingerprint Icon',
     ),
     PlugZap: createIcon(PlugZap, 'plug-zap-icon', 'Plug Zap Icon'),
+    Radar: createIcon(Radar, 'radar-icon', 'Radar Icon'),
 
     // SVG icons
     AddToAssets: createIcon(
@@ -470,6 +476,7 @@ export const CircleXDeleteIcon = getIcons().CircleX;
 export const ScheduleIcon = getIcons().Clock3;
 export const CloneIcon = getIcons().Clone;
 export const ConfigIcon = getIcons().ScanConfig;
+export const ContainerIcon = getIcons().Container;
 export const CpeLogoIcon = getIcons().CpeLogo;
 export const CveIcon = getIcons().Cve;
 export const CvssIcon = getIcons().CvssCalculator;
@@ -492,6 +499,7 @@ export const FileOutputIcon = getIcons().FileOutput;
 export const FilterIcon = getIcons().Filter;
 export const FingerprintIcon = getIcons().Fingerprint;
 export const FoldIcon = getIcons().Folder;
+export const GlobeIcon = getIcons().Globe;
 export const UnfoldIcon = getIcons().FolderOpen;
 export const PerformanceIcon = getIcons().Gauge;
 export const ViewOtherIcon = getIcons().Glasses;
@@ -524,6 +532,7 @@ export const PortListIcon = getIcons().PortList;
 export const EnableIcon = getIcons().Power;
 export const ProvideViewIcon = getIcons().ProvideView;
 export const SolutionTypeSvgIcon = getIcons().Puzzle;
+export const RadarIcon = getIcons().Radar;
 export const RadiusIcon = getIcons().Radius;
 export const RefreshIcon = getIcons().RefreshCcw;
 export const RemoveFromAssetsIcon = getIcons().RemoveFromAssets;

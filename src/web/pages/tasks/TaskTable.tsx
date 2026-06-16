@@ -44,6 +44,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead {...sortProps} sortBy="name" title={_('Name')} width="41%" />
+        <TableHead title={_('Type')} width="8%" />
         <TableHead
           {...sortProps}
           sortBy="status"
