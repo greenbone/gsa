@@ -44,7 +44,7 @@ import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
 const Details = ({entity, ...props}) => {
-  const timezone = useUserTimezone();
+  const [timezone] = useUserTimezone();
   const [_] = useTranslation();
   const {nvt} = entity;
   return (
