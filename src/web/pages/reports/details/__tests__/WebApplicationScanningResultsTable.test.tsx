@@ -69,9 +69,7 @@ describe('WebApplicationScanningResultsTable', () => {
     const table = screen.getByRole('table');
     const columnHeaders = within(table).getAllByRole('columnheader');
 
-    expect(
-      columnHeaders.some(th => /Vulnerability/i.exec(th.textContent)),
-    ).toBe(true);
+    expect(columnHeaders.some(th => /NVT/i.exec(th.textContent))).toBe(true);
     expect(
       screen.getByRole('button', {name: /Solution Type/i}),
     ).toBeInTheDocument();

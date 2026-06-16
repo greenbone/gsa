@@ -47,10 +47,10 @@ interface RowProps {
 
 const getColumns = (enableEPSS = false, onToggleDetailsClick?: () => void) => [
   {
-    key: 'vulnerability',
-    title: _('Vulnerability'),
+    key: 'nvt',
+    title: _('NVT'),
     width: '40%',
-    sortBy: 'vulnerability',
+    sortBy: 'nvt',
     render: (entity: Result) => {
       let shownName = isDefined(entity.name)
         ? entity.name
