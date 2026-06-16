@@ -124,12 +124,13 @@ describe('TaskTable tests', () => {
 
     const header = screen.queryAllByRole('columnheader');
     expect(header[0]).toHaveTextContent('Name');
-    expect(header[1]).toHaveTextContent('Status');
-    expect(header[2]).toHaveTextContent('Reports');
-    expect(header[3]).toHaveTextContent('Last Report');
-    expect(header[4]).toHaveTextContent('Severity');
-    expect(header[5]).toHaveTextContent('Trend');
-    expect(header[6]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Type');
+    expect(header[2]).toHaveTextContent('Status');
+    expect(header[3]).toHaveTextContent('Reports');
+    expect(header[4]).toHaveTextContent('Last Report');
+    expect(header[5]).toHaveTextContent('Severity');
+    expect(header[6]).toHaveTextContent('Trend');
+    expect(header[7]).toHaveTextContent('Actions');
   });
 
   test('should unfold all details', () => {

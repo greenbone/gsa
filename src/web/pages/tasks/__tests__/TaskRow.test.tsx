@@ -864,4 +864,98 @@ describe('TaskRow tests', () => {
     fireEvent.click(downloadIcon);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
   });
+
+  test.each([
+    [
+      'container',
+      {
+        _id: 'c1',
+        owner: {name: 'username'},
+        name: 'container',
+        report_count: {__text: 0, finished: 0},
+        oci_image_target: {_id: 'oci1'},
+        permissions: {permission: [{name: 'everything'}]},
+      },
+      'container-icon-task-details',
+      'Container Image Task',
+    ],
+    [
+      'import',
+      {
+        _id: 'i1',
+        owner: {name: 'username'},
+        name: 'import',
+        report_count: {__text: 0, finished: 0},
+        permissions: {permission: [{name: 'everything'}]},
+      },
+      'import-icon-task-details',
+      'Import Task',
+    ],
+    [
+      'agent',
+      {
+        _id: 'a1',
+        owner: {name: 'username'},
+        name: 'agent',
+        report_count: {__text: 0, finished: 0},
+        agent_group: {_id: 'ag1'},
+        permissions: {permission: [{name: 'everything'}]},
+      },
+      'agent-icon-task-details',
+      'Agent Task',
+    ],
+    [
+      'default',
+      {
+        _id: 'd1',
+        owner: {name: 'username'},
+        name: 'default',
+        report_count: {__text: 0, finished: 0},
+        target: {_id: 't1', name: 'target'},
+        permissions: {permission: [{name: 'everything'}]},
+      },
+      'radar-icon',
+      'Task',
+    ],
+  ])(
+    'should render %s scan icon',
+    (_label, elementProps, testId, expectedTitle) => {
+      const handleReportImport = testing.fn();
+      const handleTaskClone = testing.fn();
+      const handleTaskDelete = testing.fn();
+      const handleTaskDownload = testing.fn();
+      const handleTaskEdit = testing.fn();
+      const handleTaskResume = testing.fn();
+      const handleTaskStart = testing.fn();
+      const handleTaskStop = testing.fn();
+      const handleToggleDetailsClick = testing.fn();
+
+      const {render} = rendererWithTableBody({
+        gmp: createGmp(),
+        capabilities: true,
+        router: true,
+      });
+
+      const task = Task.fromElement(elementProps);
+
+      render(
+        <TaskRow
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />,
+      );
+
+      const icon = screen.getByTestId(testId);
+      expect(icon).toHaveAttribute('title', expectedTitle);
+    },
+  );
 });
