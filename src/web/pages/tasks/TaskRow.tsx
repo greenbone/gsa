@@ -22,6 +22,7 @@ import {
   HatAndGlassesIcon,
   ImportIcon,
   RadarIcon,
+  GlobeIcon,
 } from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -131,6 +132,15 @@ const TaskRow = ({
           data-testid="agent-icon-task-details"
           size="small"
           title={_('Agent Task')}
+        />
+      );
+    }
+    if (entity.isWebApplication()) {
+      return (
+        <GlobeIcon
+          data-testid="web-application-icon-task-details"
+          size="small"
+          title={_('Web Application Task')}
         />
       );
     }
