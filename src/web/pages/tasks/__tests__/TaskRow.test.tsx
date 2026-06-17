@@ -905,6 +905,19 @@ describe('TaskRow tests', () => {
       'Agent Task',
     ],
     [
+      'webapp',
+      {
+        _id: 'w1',
+        owner: {name: 'username'},
+        name: 'webapp',
+        report_count: {__text: 0, finished: 0},
+        web_application_target: {_id: 'wt1'},
+        permissions: {permission: [{name: 'everything'}]},
+      },
+      'web-application-icon-task-details',
+      'Web Application Task',
+    ],
+    [
       'default',
       {
         _id: 'd1',
