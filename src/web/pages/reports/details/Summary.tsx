@@ -17,6 +17,7 @@ import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Layout from 'web/components/layout/Layout';
+import updatingStyle from 'web/components/layout/updating-style';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Table from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
@@ -25,10 +26,6 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
-
-interface UpdatingTableProps {
-  $isUpdating: boolean;
-}
 
 interface SummaryProps {
   audit?: boolean;
@@ -40,8 +37,8 @@ interface SummaryProps {
   reportError?: Error;
 }
 
-const UpdatingTable = styled(Table)<UpdatingTableProps>`
-  opacity: ${props => (props.$isUpdating ? '0.2' : '1.0')};
+const UpdatingTable = styled(Table)<{$isUpdating?: boolean}>`
+  ${updatingStyle}
 `;
 
 const Summary = ({

@@ -14,6 +14,7 @@ import {FoldState} from 'web/components/folding/Folding';
 import FootNote from 'web/components/footnote/Footnote';
 import FoldStateIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
+import updatingStyle from 'web/components/layout/updating-style';
 import Pagination from 'web/components/pagination/Pagination';
 import StripedTable from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
@@ -102,8 +103,8 @@ export interface EntitiesTableProps<
   onSortChange?: (sortBy: string) => void;
 }
 
-const UpdatingStripedTable = styled(StripedTable)<{$isUpdating: boolean}>`
-  opacity: ${props => (props.$isUpdating ? '0.2' : '1.0')};
+const UpdatingStripedTable = styled(StripedTable)<{$isUpdating?: boolean}>`
+  ${updatingStyle}
 `;
 
 const DetailsIcon = styled(FoldStateIcon)`
