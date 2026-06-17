@@ -3,21 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import FootNote from 'web/components/footnote/Footnote';
 import {EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
+import updatingStyle from 'web/components/layout/updating-style';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 
-const UpdatingDivider = styled(({isUpdating, ...props}) => (
-  <Divider {...props} />
-))`
-  opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
+const UpdatingDivider = styled(Divider)`
+  ${updatingStyle}
 `;
 
 const AuditThresholdPanel = ({
@@ -65,9 +63,9 @@ const AuditThresholdPanel = ({
   return (
     <UpdatingDivider
       grow
+      $isUpdating={isUpdating}
       align={['start', 'stretch']}
       flex="column"
-      isUpdating={isUpdating}
     >
       <InfoPanel
         heading={_(
