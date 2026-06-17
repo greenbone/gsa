@@ -49,6 +49,14 @@ describe('EditableSettingRow', () => {
     expect(within(row).queryByTitle('Test Label')).toBeNull();
   });
 
+  test('should render info tip when infoMessage is provided', () => {
+    const {render} = rendererWithTableBody(rendererOptions);
+    const info = 'Helpful info';
+    render(<EditableSettingRow {...defaultProps} infoMessage={info} />);
+    const row = screen.getByRole('row');
+    expect(within(row).getByLabelText('More information')).toBeVisible();
+  });
+
   test('should render editComponent and error message in edit mode', () => {
     const errorMessage = 'Something went wrong';
     const {render} = rendererWithTableBody(rendererOptions);

@@ -161,10 +161,14 @@ describe('General tab', () => {
     expect(screen.getByText('Auto Cache Rebuild')).toBeVisible();
     expect(screen.getByText(/Yes/i)).toBeVisible();
 
+    const securityIntelligenceExportRow = screen
+      .getByText('Export Reports to OPENVAS SECURITY INTELLIGENCE')
+      .closest('tr');
     expect(
-      screen.getByText('Export Reports to OPENVAS SECURITY INTELLIGENCE'),
+      within(securityIntelligenceExportRow as HTMLTableRowElement).getByText(
+        /No/i,
+      ),
     ).toBeVisible();
-    expect(screen.getByText(/No/i)).toBeVisible();
   });
 
   const Setting = {
