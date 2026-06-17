@@ -278,7 +278,14 @@ describe('UserSettingsPage', () => {
       expect(
         screen.getByText('Export Reports to OPENVAS SECURITY INTELLIGENCE'),
       ).toBeVisible();
-      expect(screen.getByText(/No/i)).toBeVisible();
+      const securityIntelligenceExportRow = screen
+        .getByText('Export Reports to OPENVAS SECURITY INTELLIGENCE')
+        .closest('tr');
+      expect(
+        within(securityIntelligenceExportRow as HTMLTableRowElement).getByText(
+          /No/i,
+        ),
+      ).toBeVisible();
     });
   });
 

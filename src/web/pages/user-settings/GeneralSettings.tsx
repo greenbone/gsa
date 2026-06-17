@@ -36,6 +36,7 @@ import useUserTimezone from 'web/hooks/useUserTimezone';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
 
 import {getLangNameByCode} from 'web/pages/user-settings/helper-functions';
+import MaintenanceWindowSettingRow from 'web/pages/user-settings/MaintenanceWindowSettingRow';
 import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';
 import useSettingSave from 'web/pages/user-settings/useSettingSave';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -136,6 +137,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     () => userDefaultsSelector.getByName('autocacherebuild') ?? {},
     [userDefaultsSelector],
   );
+  const maintenanceWindow = useMemo(
+    () => userDefaultsSelector.getByName('maintenancewindow') ?? {},
+    [userDefaultsSelector],
+  );
 
   const [timezoneEditMode, setTimezoneEditMode] = useState(false);
   const [dateTimeFormatEditMode, setDateTimeFormatEditMode] = useState(false);
@@ -190,6 +195,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const [autoCacheRebuildState, setAutoCacheRebuildState] = useState(
     autoCacheRebuild.value,
   );
+
   const [oldPasswordState, setOldPasswordState] = useState('');
   const [newPasswordState, setNewPasswordState] = useState('');
   const [confPasswordState, setConfPasswordState] = useState('');
@@ -899,6 +905,11 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           onCancel={cancelAutoCacheRebuildEdit}
           onEdit={toggleAutoCacheRebuildEditMode}
           onSave={saveAutoCacheRebuild}
+        />
+
+        <MaintenanceWindowSettingRow
+          disableEditIcon={disableEditIcon}
+          maintenanceWindow={maintenanceWindow}
         />
       </TableBody>
     </StripedTable>
