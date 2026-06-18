@@ -244,4 +244,46 @@ describe('MaintenanceWindowSettingRow', () => {
     const row = screen.getByRole('row');
     expect(within(row).queryByTestId('edit-icon')).toBeNull();
   });
+
+  test('calls saveSetting with empty string on clear and closes edit mode', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWithTableBody(rendererOptions(gmp));
+    render(
+      <MaintenanceWindowSettingRow
+        maintenanceWindow={{...defaultSetting, value: ICAL_DAILY}}
+      />,
+    );
+
+    const row = screen.getByRole('row');
+    fireEvent.click(within(row).getByTestId('edit-icon'));
+    await screen.findByText('Start');
+
+    fireEvent.click(screen.getByTestId('reset-icon'));
+    await wait();
+
+    expect(gmp.user.saveSetting).toHaveBeenCalledWith('mw-setting-id', '');
+    expect(screen.queryByText('Start')).toBeNull();
+  });
+
+  test('shows error when setting ID is missing on clear', async () => {
+    const {render} = rendererWithTableBody(rendererOptions());
+    render(
+      <MaintenanceWindowSettingRow
+        maintenanceWindow={{id: undefined, value: ICAL_DAILY}}
+      />,
+    );
+
+    const row = screen.getByRole('row');
+    fireEvent.click(within(row).getByTestId('edit-icon'));
+    await screen.findByText('Start');
+
+    fireEvent.click(screen.getByTestId('reset-icon'));
+    await wait();
+
+    expect(
+      await screen.findByText(
+        'Cannot clear maintenance window: missing setting ID.',
+      ),
+    ).toBeVisible();
+  });
 });

@@ -157,6 +157,19 @@ const MaintenanceWindowSettingRow = ({
     return event.toIcalString();
   };
 
+  const handleClear = async (): Promise<void> => {
+    if (!maintenanceWindow?.id) {
+      setErrorMessage(
+        'maintenanceWindow',
+        _('Cannot clear maintenance window: missing setting ID.'),
+      );
+      return;
+    }
+    await saveSetting(maintenanceWindow.id, 'maintenanceWindow', '', () =>
+      setEditMode(false),
+    );
+  };
+
   const handleSave = async (): Promise<void> => {
     if (!maintenanceWindow?.id) {
       setErrorMessage(
@@ -366,6 +379,7 @@ const MaintenanceWindowSettingRow = ({
       title={maintenanceWindow.comment}
       viewComponent={<span>{formatForView()}</span>}
       onCancel={handleCancel}
+      onClear={handleClear}
       onEdit={() => setEditMode(!editMode)}
       onSave={handleSave}
     />

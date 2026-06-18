@@ -335,6 +335,7 @@
   "Call Template": "Vorlage (Call Template)",
   "Call Type": "Typ (Call Type)",
   "Cancel": "Abbrechen",
+  "Cannot clear maintenance window: missing setting ID.": "Kann Wartungsfenster nicht löschen: fehlende Einstellungs-ID.",
   "Cannot delete {{entity}}": "Kann {{entity}} nicht löschen",
   "Cannot modify {{entity}}": "Kann {{entity}} nicht ändern",
   "Cannot modify {{entity}} settings": "Kann {{entity}}-Einstellungen nicht ändern",
