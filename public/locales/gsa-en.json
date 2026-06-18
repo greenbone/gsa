@@ -335,6 +335,7 @@
   "Call Template": "Call Template",
   "Call Type": "Call Type",
   "Cancel": "Cancel",
+  "Cannot clear maintenance window: missing setting ID.": "",
   "Cannot delete {{entity}}": "Cannot delete {{entity}}",
   "Cannot modify {{entity}}": "Cannot modify {{entity}}",
   "Cannot modify {{entity}} settings": "Cannot modify {{entity}} settings",

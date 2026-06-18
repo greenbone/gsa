@@ -335,6 +335,7 @@
   "Call Template": "Call 模板",
   "Call Type": "Call 类型",
   "Cancel": "取消",
+  "Cannot clear maintenance window: missing setting ID.": "",
   "Cannot delete {{entity}}": "无法删除{{entity}}",
   "Cannot modify {{entity}}": "无法修改{{entity}}",
   "Cannot modify {{entity}} settings": "无法修改{{entity}}设置",
