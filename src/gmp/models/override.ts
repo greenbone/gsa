@@ -43,6 +43,14 @@ interface OverrideProperties extends ModelProperties {
   textExcerpt?: YesNo;
 }
 
+export type Active =
+  | typeof ACTIVE_NO_VALUE
+  | typeof ACTIVE_YES_FOR_NEXT_VALUE
+  | typeof ACTIVE_YES_ALWAYS_VALUE
+  | typeof ACTIVE_YES_UNTIL_VALUE;
+
+export type AnyOrManual = typeof ANY | typeof MANUAL;
+
 export const MANUAL = '1';
 export const ANY = '0';
 
