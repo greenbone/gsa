@@ -5,7 +5,7 @@
 
 import {type ReactNode} from 'react';
 import styled from 'styled-components';
-import {EditIcon, SaveIcon, XIcon} from 'web/components/icon';
+import {EditIcon, SaveIcon, XIcon, ResetIcon} from 'web/components/icon';
 import InfoTip from 'web/components/info-tip/InfoTip';
 import Layout from 'web/components/layout/Layout';
 import Row from 'web/components/layout/Row';
@@ -24,6 +24,7 @@ interface EditableSettingRowProps {
   viewComponent: ReactNode;
   errorMessage?: string;
   onSave: () => Promise<void>;
+  onClear?: () => void;
   onCancel: () => void;
   onEdit: () => void;
 }
@@ -54,6 +55,7 @@ const EditableSettingRow = ({
   errorMessage,
   onSave,
   onCancel,
+  onClear,
   onEdit,
 }: EditableSettingRowProps) => {
   const [_] = useTranslation();
@@ -78,6 +80,7 @@ const EditableSettingRow = ({
           {isEditMode ? (
             <StyledIconsRow>
               <SaveIcon title={_('Save')} onClick={onSave} />
+              <ResetIcon title={_('Clear')} onClick={onClear} />
               <XIcon title={_('Cancel')} onClick={onCancel} />
             </StyledIconsRow>
           ) : (
