@@ -1069,6 +1069,82 @@ const operating_systems = [
     title: 'VMWare ESXi',
     icon: 'os_vmware.svg',
   },
+  // Grouped generic distro fallbacks (catch-alls when no specific match found)
+  {
+    pattern: 'cpe:/o:centos:centos',
+    title: 'CentOS',
+    icon: 'os_centos.svg',
+  },
+  {
+    pattern: 'cpe:/o:redhat',
+    title: 'Red Hat',
+    icon: 'os_redhat.svg',
+  },
+  {
+    pattern: 'cpe:/o:debian:debian_linux',
+    title: 'Debian GNU/Linux',
+    icon: 'os_debian.svg',
+  },
+  {
+    pattern: 'cpe:/o:suse:linux_enterprise_server',
+    title: 'SuSE Linux Enterprise Server',
+    icon: 'os_suse.svg',
+  },
+  {
+    pattern: 'cpe:/o:novell:opensuse',
+    title: 'Novell openSUSE',
+    icon: 'os_novell.svg',
+  },
+  {
+    pattern: 'cpe:/o:novell:suse_linux',
+    title: 'Novell SUSE Linux',
+    icon: 'os_novell.svg',
+  },
+  {
+    pattern: 'cpe:/o:mandriva:linux',
+    title: 'Mandriva Linux',
+    icon: 'os_mandriva.svg',
+  },
+  {
+    pattern: 'cpe:/o:mandrakesoft:mandrake_linux',
+    title: 'MandrakeSoft Mandrake Linux',
+    icon: 'os_mandriva.svg',
+  },
+  {
+    pattern: 'cpe:/o:trustix:secure_linux',
+    title: 'Trustix Secure Linux',
+    icon: 'os_trustix.svg',
+  },
+  {
+    pattern: 'cpe:/o:gentoo:linux',
+    title: 'Gentoo Linux',
+    icon: 'os_gentoo.svg',
+  },
+  {
+    pattern: 'cpe:/o:oracle',
+    title: 'Oracle Linux',
+    icon: 'os_linux.svg',
+  },
+  {
+    pattern: 'cpe:/o:alpine',
+    title: 'Alpine Linux',
+    icon: 'os_linux.svg',
+  },
+  {
+    pattern: 'cpe:/o:arch',
+    title: 'Arch Linux',
+    icon: 'os_linux.svg',
+  },
+  {
+    pattern: 'cpe:/o:amazon:linux',
+    title: 'Amazon Linux',
+    icon: 'os_linux.svg',
+  },
+  {
+    pattern: 'linux',
+    title: 'Linux',
+    icon: 'os_linux.svg',
+  },
 ];
 
 const osObject = {

@@ -75,7 +75,7 @@ describe('Report Operating Systems Tab tests', () => {
     const row1Links = within(rows[1]).getAllByRole('link');
     const row1Image = within(rows[1]).getByAltText('');
 
-    expect(row1Image).toHaveAttribute('src', '/img/os_unknown.svg');
+    expect(row1Image).toHaveAttribute('src', '/img/os_not_available.svg');
     expect(row1Links[0]).toHaveTextContent('Foo OS');
     expect(row1Links[0]).toHaveAttribute(
       'href',
@@ -91,7 +91,7 @@ describe('Report Operating Systems Tab tests', () => {
     const row2Links = within(rows[2]).getAllByRole('link');
     const row2Image = within(rows[2]).getByAltText('');
 
-    expect(row2Image).toHaveAttribute('src', '/img/os_unknown.svg');
+    expect(row2Image).toHaveAttribute('src', '/img/os_not_available.svg');
     expect(row2Links[0]).toHaveTextContent('Lorem OS');
     expect(row2Links[0]).toHaveAttribute(
       'href',
@@ -115,6 +115,32 @@ describe('Report Operating Systems Tab tests', () => {
     );
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
+  });
+
+  test('should render os_unknown icon when OS has no name or CPE', async () => {
+    const unknownOs = ReportOperatingSystem.fromElement({
+      best_os_cpe: '',
+      best_os_txt: '',
+      hosts_count: 1,
+    });
+
+    const operatingSystemsData = createOperatingSystemsData([unknownOs]);
+
+    const {render} = rendererWith({gmp: {}});
+
+    render(
+      <OperatingSystemsTab
+        filter={filter}
+        operatingSystemsData={operatingSystemsData}
+        reportId="1234"
+      />,
+    );
+
+    const table = await screen.findByRole('table');
+    const rows = within(table).getAllByRole('row');
+
+    const row1Image = within(rows[1]).getByAltText('');
+    expect(row1Image).toHaveAttribute('src', '/img/os_unknown.svg');
   });
 });
 
@@ -156,7 +182,7 @@ describe('Audit Report Operating Systems Tab tests', () => {
     const row1Links = within(rows[1]).getAllByRole('link');
     const row1Image = within(rows[1]).getByAltText('');
 
-    expect(row1Image).toHaveAttribute('src', '/img/os_unknown.svg');
+    expect(row1Image).toHaveAttribute('src', '/img/os_not_available.svg');
     expect(row1Links[0]).toHaveTextContent('Foo OS');
     expect(row1Links[0]).toHaveAttribute(
       'href',
@@ -170,7 +196,7 @@ describe('Audit Report Operating Systems Tab tests', () => {
     const row2Links = within(rows[2]).getAllByRole('link');
     const row2Image = within(rows[2]).getByAltText('');
 
-    expect(row2Image).toHaveAttribute('src', '/img/os_unknown.svg');
+    expect(row2Image).toHaveAttribute('src', '/img/os_not_available.svg');
     expect(row2Links[0]).toHaveTextContent('Lorem OS');
     expect(row2Links[0]).toHaveAttribute(
       'href',

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="52.509"
+   height="52.52"
+   version="1.0"
+   viewBox="0 0 52.509 52.52"
+   id="svg30">
+   <defs
+      id="defs12">
+      <linearGradient
+         id="linearGradient13956"
+         x1="46.592"
+         x2="43.592"
+         y1="89.585"
+         y2="-74.733"
+         gradientUnits="userSpaceOnUse">
+         <stop
+            stop-color="#483737"
+            offset="0"
+            id="stop2" />
+         <stop
+            stop-color="#fff"
+            offset="1"
+            id="stop4" />
+      </linearGradient>
+      <linearGradient
+         id="linearGradient13966"
+         x1="26.48"
+         x2="26.48"
+         y1="1.3939"
+         y2="52.843"
+         gradientUnits="userSpaceOnUse">
+         <stop
+            stop-color="#fff"
+            offset="0"
+            id="stop7" />
+         <stop
+            stop-color="#fff"
+            stop-opacity="0"
+            offset="1"
+            id="stop9" />
+      </linearGradient>
+   </defs>
+   <g
+      transform="translate(-3.8191 -6.1557)"
+      id="g28">
+      <rect
+         x="4.9083"
+         y="7.2196"
+         width="50.731"
+         height="50.549"
+         ry="7.0914"
+         color="black"
+         fill="url(#linearGradient13956)"
+         fill-rule="evenodd"
+         stroke="#2b2b2b"
+         stroke-width=".997"
+         id="rect18" />
+      <path
+         transform="translate(3.8191 6.1557)"
+         d="m2.1818 45.429-0.18182-37.636s1.0909-5.6364 5.4545-5.8182c4.3636-0.18182 37.455 0 37.455 0s5.8182 0 6 7.2727c0.18182 7.2727-0.18182 36.727-0.18182 36.727"
+         color="black"
+         fill="none"
+         stroke="url(#linearGradient13966)"
+         id="path22" />
+      <g
+         id="monitor-symbol"
+         transform="translate(9.5 12) scale(1.75)">
+         <rect
+            x="3"
+            y="3"
+            width="18"
+            height="13"
+            rx="2.2"
+            ry="2.2"
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="1.82" />
+         <rect
+            x="7"
+            y="16.3"
+            width="10"
+            height="2.85"
+            rx="1.42"
+            fill="#ffffff" />
+         <rect
+            x="8.7"
+            y="19.8"
+            width="6.6"
+            height="1.82"
+            rx="0.91"
+            fill="#ffffff" />
+      </g>
+   </g>
+</svg>

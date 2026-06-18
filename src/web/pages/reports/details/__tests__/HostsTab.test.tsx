@@ -7,6 +7,7 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
+import ReportHost from 'gmp/models/report/host';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {mockAuditHosts} from 'web/pages/reports/__fixtures__/MockAuditReport';
@@ -90,7 +91,7 @@ describe('Report Hosts Tab tests', () => {
 
     const row1 = getRow(host1Link);
     expect(row1).toHaveTextContent('foo.bar');
-    expect(getImgSrc(row1)).toContain('/img/os_unknown.svg');
+    expect(getImgSrc(row1)).toContain('/img/os_not_available.svg');
     expect(row1).toHaveTextContent('1032');
     expect(row1).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
@@ -113,7 +114,7 @@ describe('Report Hosts Tab tests', () => {
 
     const row2 = getRow(host2Link);
     expect(row2).toHaveTextContent('lorem.ipsum');
-    expect(getImgSrc(row2)).toContain('/img/os_unknown.svg');
+    expect(getImgSrc(row2)).toContain('/img/os_not_available.svg');
     expect(row2).toHaveTextContent('1521');
     expect(row2).toHaveTextContent(
       'Mon, Jun 3, 2019 1:15 PM Central European Summer Time',
@@ -131,6 +132,53 @@ describe('Report Hosts Tab tests', () => {
     screen.getByText(
       '(Applied filter: apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity)',
     );
+  });
+
+  test('should render os_unknown icon when host has no OS info', () => {
+    const hostWithoutOs = ReportHost.fromElement({
+      ip: '192.168.1.1',
+      start: '2019-06-03T11:00:22Z',
+      end: '2019-06-03T11:15:14Z',
+      port_count: {page: 5},
+      result_count: {
+        page: 10,
+        high: {page: 2},
+        medium: {page: 3},
+        low: {page: 1},
+        log: {page: 0},
+        false_positive: {page: 0},
+      },
+      detail: [{name: 'hostname', value: 'unknown.host'}],
+    });
+
+    const singleHostCounts = new CollectionCounts({
+      all: 1,
+      filtered: 1,
+      first: 1,
+      rows: 1,
+      length: 1,
+    });
+
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+    });
+
+    render(
+      <HostsTab
+        counts={singleHostCounts}
+        filter={filter}
+        hosts={[hostWithoutOs]}
+        isUpdating={false}
+        sortField={'severity'}
+        sortReverse={false}
+        onSortChange={testing.fn()}
+      />,
+    );
+
+    const hostLink = screen.getByRole('link', {name: '192.168.1.1'});
+    const row = getRow(hostLink);
+    expect(getImgSrc(row)).toContain('/img/os_unknown.svg');
   });
 });
 
@@ -193,7 +241,7 @@ describe('Audit Report Hosts Tab tests', () => {
     );
     const auditRow1 = getRow(auditHost1Link);
     expect(auditRow1).toHaveTextContent('lorem.ipsum');
-    expect(getImgSrc(auditRow1)).toContain('/img/os_unknown.svg');
+    expect(getImgSrc(auditRow1)).toContain('/img/os_not_available.svg');
     expect(auditRow1).toHaveTextContent('1521');
     expect(auditRow1).toHaveTextContent(
       'Mon, Jun 3, 2019 1:15 PM Central European Summer Time',
@@ -215,7 +263,7 @@ describe('Audit Report Hosts Tab tests', () => {
     expect(auditHost2Link).toHaveAttribute('href', '/host/123');
     const auditRow2 = getRow(auditHost2Link);
     expect(auditRow2).toHaveTextContent('foo.bar');
-    expect(getImgSrc(auditRow2)).toContain('/img/os_unknown.svg');
+    expect(getImgSrc(auditRow2)).toContain('/img/os_not_available.svg');
     expect(auditRow2).toHaveTextContent('1032');
     expect(auditRow2).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
@@ -237,7 +285,7 @@ describe('Audit Report Hosts Tab tests', () => {
     expect(auditHost3Link).toHaveAttribute('href', '/host/123');
     const auditRow3 = getRow(auditHost3Link);
     expect(auditRow3).toHaveTextContent('foo.bar');
-    expect(getImgSrc(auditRow3)).toContain('/img/os_unknown.svg');
+    expect(getImgSrc(auditRow3)).toContain('/img/os_not_available.svg');
     expect(auditRow3).toHaveTextContent('1032');
     expect(auditRow3).toHaveTextContent(
       'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',

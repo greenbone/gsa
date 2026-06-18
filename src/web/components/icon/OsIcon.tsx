@@ -50,9 +50,12 @@ const OsIcon = ({
   }
 
   if (!isDefined(osIcon)) {
-    osIcon = 'os_unknown.svg';
-    if (osTxt) {
-      title = osTxt;
+    const hasOsInformation = Boolean(osTxt || osCpe);
+
+    osIcon = hasOsInformation ? 'os_not_available.svg' : 'os_unknown.svg';
+
+    if (hasOsInformation) {
+      title = osTxt ?? osCpe;
     } else {
       title = _('No information about the Operation System');
     }
