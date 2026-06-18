@@ -12,9 +12,6 @@ import {
   DEFAULT_DAYS,
   DEFAULT_OID_VALUE,
   MANUAL,
-  RESULT_ANY,
-  RESULT_UUID,
-  TASK_ANY,
 } from 'gmp/models/override';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -107,8 +104,8 @@ describe('NoteComponent', () => {
       oid: DEFAULT_OID_VALUE,
       port: ANY,
       port_manual: '',
-      result_id: RESULT_ANY,
-      task_id: TASK_ANY,
+      result_id: ANY,
+      task_id: ANY,
       text: '',
     });
   });
@@ -125,10 +122,10 @@ describe('NoteComponent', () => {
       oid: '1.2.3',
       port: MANUAL,
       port_manual: '1234',
-      result_id: RESULT_UUID,
+      result_id: MANUAL,
       result_name: 'Test Result',
       severity: 9.9,
-      task_id: 'task-1',
+      task_id: MANUAL,
       task_name: 'Task 1',
       task_uuid: 'task-1',
       text: 'foo bar',
@@ -186,7 +183,7 @@ describe('NoteComponent', () => {
     const taskRadioInputs = taskFormGroup.getRadioInputs();
     expect(taskRadioInputs).toHaveLength(2);
     expect(taskRadioInputs[0]).not.toBeChecked();
-    expect(taskRadioInputs[1]).not.toBeChecked();
+    expect(taskRadioInputs[1]).toBeChecked();
     expect(taskFormGroup.getSelectElement()).toHaveValue('Task 1');
 
     const resultFormGroup = within(screen.getByTestId('group-result'));
@@ -212,10 +209,10 @@ describe('NoteComponent', () => {
       oid: '1.2.3',
       port: MANUAL,
       port_manual: '1234',
-      result_id: RESULT_UUID,
+      result_id: MANUAL,
       result_name: 'Test Result',
       severity: 9.9,
-      task_id: 'task-1',
+      task_id: MANUAL,
       task_name: 'Task 1',
       task_uuid: 'task-1',
       text: 'foo bar',

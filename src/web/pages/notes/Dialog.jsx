@@ -7,15 +7,12 @@ import React from 'react';
 import {
   ANY,
   MANUAL,
-  TASK_ANY,
   DEFAULT_DAYS,
   ACTIVE_YES_ALWAYS_VALUE,
   DEFAULT_OID_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
   ACTIVE_YES_FOR_NEXT_VALUE,
   ACTIVE_NO_VALUE,
-  RESULT_ANY,
-  RESULT_UUID,
 } from 'gmp/models/override';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -53,11 +50,11 @@ const NoteDialog = ({
   oid,
   port = ANY,
   port_manual = '',
-  result_id = RESULT_ANY,
+  result_id = ANY,
   result_name,
   result_uuid,
   severity,
-  task_id = TASK_ANY,
+  task_id = ANY,
   task_name,
   tasks,
   task_uuid,
@@ -312,21 +309,21 @@ const NoteDialog = ({
 
             <FormGroup data-testid="group-task" title={_('Task')}>
               <Radio
-                checked={state.task_id === ''}
+                checked={state.task_id === ANY}
                 name="task_id"
                 title={_('Any')}
-                value=""
+                value={ANY}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  checked={state.task_id === '0'}
+                  checked={state.task_id === MANUAL}
                   name="task_id"
-                  value="0"
+                  value={MANUAL}
                   onChange={onValueChange}
                 />
                 <Select
-                  disabled={state.task_id !== '0'}
+                  disabled={state.task_id !== MANUAL}
                   items={renderSelectItems(tasks)}
                   name="task_uuid"
                   value={state.task_uuid}
@@ -337,15 +334,15 @@ const NoteDialog = ({
 
             <FormGroup data-testid="group-result" title={_('Result')}>
               <Radio
-                checked={state.result_id === RESULT_ANY}
+                checked={state.result_id === ANY}
                 name="result_id"
                 title={_('Any')}
-                value={RESULT_ANY}
+                value={ANY}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  checked={state.result_id === RESULT_UUID}
+                  checked={state.result_id === MANUAL}
                   name="result_id"
                   title={
                     state.fixed
@@ -354,12 +351,12 @@ const NoteDialog = ({
                         })
                       : _('UUID')
                   }
-                  value={RESULT_UUID}
+                  value={MANUAL}
                   onChange={onValueChange}
                 />
                 {!fixed && (
                   <TextField
-                    disabled={state.result_id !== RESULT_UUID}
+                    disabled={state.result_id !== MANUAL}
                     name="result_uuid"
                     value={state.result_uuid}
                     onChange={onValueChange}
