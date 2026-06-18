@@ -81,11 +81,27 @@ export const renderSelectItems = (
 
 export const severityFormat = format('0.1f');
 
+export const getNvtDisplayName = (
+  oid: string,
+  name?: string,
+  length?: number,
+): string => {
+  if (!isDefined(name)) {
+    return oid;
+  }
+
+  if (!length || name.length < length) {
+    return name;
+  }
+
+  return shorten(name, length);
+};
+
 export const renderNvtName = (
   oid: string,
   name?: string,
   length: number = 70,
-) => {
+): React.ReactNode => {
   if (!isDefined(name)) {
     return oid;
   }

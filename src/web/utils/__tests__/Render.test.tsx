@@ -11,6 +11,7 @@ import {
   renderSelectItems,
   renderYesNo,
   type Resource,
+  getNvtDisplayName,
   simplePermissionDescription,
   simplePermissionDescriptionWithSubject,
 } from 'web/utils/Render';
@@ -410,5 +411,29 @@ describe('renderYesNo tests', () => {
     {value: 'foo', expected: 'Unknown'},
   ])('should return $expected for for $value', ({value, expected}) => {
     expect(renderYesNo(value)).toEqual(expected);
+  });
+});
+
+describe('getNvtDisplayName tests', () => {
+  test('should return name if it is shorter than the specified length', () => {
+    const name = 'Short NVT Name';
+    expect(getNvtDisplayName('oid1', name, 20)).toEqual(name);
+  });
+
+  test('should shorten name and add ellipsis if it is longer than the specified length', () => {
+    const name = 'This is a very long NVT Name that needs to be shortened';
+    expect(getNvtDisplayName('oid1', name, 20)).toEqual(
+      'This is a very long ...',
+    );
+  });
+
+  test('should return OID if name is not defined', () => {
+    expect(getNvtDisplayName('oid1')).toEqual('oid1');
+    expect(getNvtDisplayName('oid1', undefined, 20)).toEqual('oid1');
+  });
+
+  test('should return full name if length is not specified', () => {
+    const name = 'This is a very long NVT Name that needs to be shortened';
+    expect(getNvtDisplayName('oid1', name)).toEqual(name);
   });
 });
