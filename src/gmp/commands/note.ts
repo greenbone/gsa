@@ -19,16 +19,16 @@ import {
 interface NoteCommandCreateParams {
   active?: Active;
   days?: number;
-  hosts_manual?: string;
+  hostsManual?: string;
   hosts?: AnyOrManual;
   oid: string;
-  port_manual?: string;
+  portManual?: string;
   port?: AnyOrManual;
-  result_id?: AnyOrManual;
-  result_uuid?: string;
+  resultId?: AnyOrManual;
+  resultUuid?: string;
   severity?: string;
-  task_id?: AnyOrManual;
-  task_uuid?: string;
+  taskId?: AnyOrManual;
+  taskUuid?: string;
   text: string;
 }
 
@@ -61,14 +61,14 @@ class NoteCommand extends EntityCommand<Note, NoteElement> {
     active,
     days = DEFAULT_DAYS,
     hosts = ANY,
-    hosts_manual,
-    result_id = ANY,
-    result_uuid,
+    hostsManual,
+    resultId = ANY,
+    resultUuid,
     port = ANY,
-    port_manual,
+    portManual,
     severity,
-    task_id = ANY,
-    task_uuid,
+    taskId = ANY,
+    taskUuid,
     text,
   }: NoteCommandCreateParams & {
     id?: string;
@@ -79,10 +79,10 @@ class NoteCommand extends EntityCommand<Note, NoteElement> {
       oid,
       id,
       active: active === ACTIVE_YES_UNTIL_VALUE ? days : active,
-      hosts: hosts === MANUAL ? hosts_manual : undefined,
-      result_id: result_id === MANUAL ? result_uuid : undefined,
-      task_id: task_id === MANUAL ? task_uuid : undefined,
-      port: port === MANUAL ? port_manual : undefined,
+      hosts: hosts === MANUAL ? hostsManual : undefined,
+      result_id: resultId === MANUAL ? resultUuid : undefined,
+      task_id: taskId === MANUAL ? taskUuid : undefined,
+      port: port === MANUAL ? portManual : undefined,
       severity,
       text,
     });

@@ -17,7 +17,7 @@ import {shorten} from 'gmp/utils/string';
 import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import NoteDialog from 'web/pages/notes/Dialog';
+import NoteDialog from 'web/pages/notes/NoteDialog';
 import PropTypes from 'web/utils/PropTypes';
 
 const NoteComponent = ({
@@ -30,7 +30,6 @@ const NoteComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-
   onSaved,
   onSaveError,
   ...props
@@ -113,20 +112,20 @@ const NoteComponent = ({
       setActive(initial.active);
       setFixed(initial.fixed);
       setHosts(initial.hosts);
-      setHostsManual(initial.hosts_manual);
+      setHostsManual(initial.hostsManual);
       setId(initial.id);
       setNote(initial.note);
-      setNvtName(initial.nvt_name);
+      setNvtName(initial.nvtName);
       setOid(initial.oid);
       setPort(initial.port);
-      setPortManual(initial.port_manual);
-      setResultId(initial.result_id);
-      setResultName(initial.result_name);
-      setResultUuid(initial.result_uuid);
+      setPortManual(initial.portManual);
+      setResultId(initial.resultId);
+      setResultName(initial.resultName);
+      setResultUuid(initial.resultUuid);
       setSeverity(initial.severity);
-      setTaskId(initial.task_id);
-      setTaskName(initial.task_name);
-      setTaskUuid(initial.task_uuid);
+      setTaskId(initial.taskId);
+      setTaskName(initial.taskName);
+      setTaskUuid(initial.taskUuid);
       setText(initial.text);
       setTitle(initial.title);
     }
@@ -164,20 +163,20 @@ const NoteComponent = ({
               active={active}
               fixed={fixed}
               hosts={hosts}
-              hosts_manual={hostsManual}
+              hostsManual={hostsManual}
               id={id}
               note={note}
-              nvt_name={nvtName}
+              nvtName={nvtName}
               oid={oid}
               port={port}
-              port_manual={portManual}
-              result_id={resultId}
-              result_name={resultName}
-              result_uuid={resultUuid}
+              portManual={portManual}
+              resultId={resultId}
+              resultName={resultName}
+              resultUuid={resultUuid}
               severity={severity}
-              task_id={taskId}
-              task_name={taskName}
-              task_uuid={taskUuid}
+              taskId={taskId}
+              taskName={taskName}
+              taskUuid={taskUuid}
               tasks={tasks}
               text={text}
               title={title}
