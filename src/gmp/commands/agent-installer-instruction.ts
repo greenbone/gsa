@@ -16,9 +16,11 @@ class AgentInstallerInstructionsCommand extends HttpCommand {
   async getInstructions({
     lang,
     scannerId,
+    originUrl,
   }: {
     lang?: string;
     scannerId?: string;
+    originUrl?: string;
   }) {
     const params: Record<string, string> = {};
     if (isDefined(lang)) {
@@ -26,6 +28,9 @@ class AgentInstallerInstructionsCommand extends HttpCommand {
     }
     if (isDefined(scannerId)) {
       params.scanner_id = scannerId;
+    }
+    if (isDefined(originUrl)) {
+      params.origin_url = originUrl;
     }
 
     const response = await this.httpGetWithTransform(params);

@@ -22,6 +22,7 @@ const useGetInstallInstructions = ({
   const token = useSession();
   const [language] = useLanguage();
   const langCode = language.split(/[-_]/)[0] || 'en';
+  const originUrl = globalThis.location.origin;
 
   return useQuery<InstallInstructionsData>({
     queryKey: ['install-instructions', token, scannerId, langCode],
@@ -29,6 +30,7 @@ const useGetInstallInstructions = ({
       const response = await gmp.agentinstallersinstructions.getInstructions({
         lang: langCode,
         scannerId,
+        originUrl,
       });
       return response.data;
     },
