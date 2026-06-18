@@ -2249,6 +2249,7 @@
   "Unreliable rem. banner": "Unzuverlässiger Banner",
   "Unreported": "Unberichtet",
   "until {{- enddate}}": "bis {{- enddate}}",
+  "until {{- endDate}}": "bis {{- endDate}}",
   "Update": "Aktualisieren",
   "Update available to:": "Update verfügbar für:",
   "Update Filter": "Filter aktualisieren",
