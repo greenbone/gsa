@@ -42,7 +42,7 @@ import {
   translatedResultSeverityRiskFactor,
 } from 'web/utils/severity';
 
-interface NoteDialogData {
+interface NoteDialogDefaultValues {
   active: Active;
   days: number;
   fixed: boolean;
@@ -60,6 +60,12 @@ interface NoteDialogData {
   taskName?: string;
   text: string;
 }
+
+interface NoteDialogValues {
+  id?: string;
+}
+
+type NoteDialogData = NoteDialogDefaultValues & NoteDialogValues;
 
 interface NoteDialogProps {
   active?: Active;
@@ -138,7 +144,7 @@ const NoteDialog = ({
   };
 
   return (
-    <SaveDialog<{id?: string}, NoteDialogData>
+    <SaveDialog<NoteDialogValues, NoteDialogDefaultValues>
       defaultValues={data}
       title={title}
       values={{id}}

@@ -11,7 +11,7 @@ import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
-import DetailsPage from 'web/pages/notes/DetailsPage';
+import DetailsPage from 'web/pages/notes/NoteDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/notes';
 
 const reloadInterval = -1;

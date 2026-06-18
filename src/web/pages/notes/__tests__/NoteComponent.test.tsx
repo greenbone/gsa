@@ -113,29 +113,33 @@ describe('NoteComponent', () => {
   test('should render fixed create note dialog with initial values', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp});
-    const initial = {
-      active: ACTIVE_YES_FOR_NEXT_VALUE,
-      fixed: true,
-      hosts: MANUAL,
-      hostsManual: 'host1, host2',
-      nvtName: 'Test NVT',
-      oid: '1.2.3',
-      port: MANUAL,
-      portManual: '1234',
-      resultId: MANUAL,
-      resultName: 'Test Result',
-      severity: 9.9,
-      taskId: MANUAL,
-      taskName: 'Task 1',
-      taskUuid: 'task-1',
-      text: 'foo bar',
-    };
 
     render(
       <NoteComponent>
         {({create}) => {
           return (
-            <button data-testid="button" onClick={() => create(initial)}>
+            <button
+              data-testid="button"
+              onClick={() =>
+                create({
+                  active: ACTIVE_YES_FOR_NEXT_VALUE,
+                  fixed: true,
+                  hosts: MANUAL,
+                  hostsManual: 'host1, host2',
+                  nvtName: 'Test NVT',
+                  oid: '1.2.3',
+                  port: MANUAL,
+                  portManual: '1234',
+                  resultId: MANUAL,
+                  resultName: 'Test Result',
+                  severity: 9.9,
+                  taskId: MANUAL,
+                  taskName: 'Task 1',
+                  taskUuid: 'task-1',
+                  text: 'foo bar',
+                })
+              }
+            >
               Create Note
             </button>
           );

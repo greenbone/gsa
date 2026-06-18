@@ -4,6 +4,10 @@
  */
 
 import React from 'react';
+import {useNavigate} from 'react-router';
+import type Gmp from 'gmp/gmp';
+import type Note from 'gmp/models/note';
+import type Permission from 'gmp/models/permission';
 import {isDefined} from 'gmp/utils/identity';
 import {NoteIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
@@ -24,6 +28,7 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
@@ -31,19 +36,31 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';
-import NoteDetails from 'web/pages/notes/Details';
 import NoteComponent from 'web/pages/notes/NoteComponent';
+import NoteDetails from 'web/pages/notes/NoteDetails';
 import NoteDetailsPageToolBarIcons from 'web/pages/notes/NoteDetailsPageToolBarIcons';
 import {selector as notesSelector, loadEntity} from 'web/store/entities/notes';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
-const Details = ({entity, ...props}) => {
+interface DetailsProps {
+  entity: Note;
+}
+
+interface NoteDetailsPageProps {
+  entity: Note;
+  permissions?: Permission[];
+  isLoading?: boolean;
+  onChanged?: () => void;
+  onDownloaded?: OnDownloadedFunc;
+  onError?: (error: Error) => void;
+}
+
+const Details = ({entity}: DetailsProps) => {
   const [timezone] = useUserTimezone();
   const [_] = useTranslation();
   const {nvt} = entity;
@@ -60,7 +77,7 @@ const Details = ({entity, ...props}) => {
             <TableData>
               {isDefined(nvt) ? (
                 <span>
-                  <DetailsLink id={nvt.id} type="nvt">
+                  <DetailsLink id={nvt.id as string} type="nvt">
                     {nvt.name}
                   </DetailsLink>
                 </span>
@@ -72,7 +89,7 @@ const Details = ({entity, ...props}) => {
 
           <TableRow>
             <TableData>{_('NVT OID')}</TableData>
-            <TableData>{nvt.id}</TableData>
+            <TableData>{nvt?.id}</TableData>
           </TableRow>
 
           <TableRow>
@@ -82,67 +99,65 @@ const Details = ({entity, ...props}) => {
               {entity.isActive() &&
                 isDefined(entity.endTime) &&
                 ' ' +
-                  _('until {{- enddate}}', {
-                    enddate: formattedUserSettingLongDate(
+                  _('until {{- endDate}}', {
+                    endDate: formattedUserSettingLongDate(
                       entity.endTime,
                       timezone,
-                    ),
+                    ) as string,
                   })}
             </TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
 
-      <NoteDetails entity={entity} {...props} />
+      <NoteDetails entity={entity} />
     </Layout>
   );
 };
 
-Details.propTypes = {
-  entity: PropTypes.model.isRequired,
-};
-
-const Page = ({
+const NoteDetailsPage = ({
   permissions = [],
   entity,
+  isLoading = false,
   onChanged,
   onDownloaded,
   onError,
   ...props
-}) => {
+}: NoteDetailsPageProps) => {
   const [_] = useTranslation();
-
+  const navigate = useNavigate();
   return (
     <NoteComponent
       onCloneError={onError}
-      onCloned={goToDetails('note', props)}
-      onCreated={goToDetails('note', props)}
+      onCloned={goToDetails('note', navigate)}
+      onCreated={goToDetails('note', navigate)}
       onDeleteError={onError}
-      onDeleted={goToList('notes', props)}
+      onDeleted={goToList('notes', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onSaved={onChanged}
     >
-      {({clone, create, delete: delete_func, download, edit, save}) => (
+      {({clone, create, delete: deleteFunc, download, edit}) => (
         <EntityPage
           {...props}
           entity={entity}
+          isLoading={isLoading}
           sectionIcon={<NoteIcon size="large" />}
           title={_('Note')}
-          toolBarIcons={NoteDetailsPageToolBarIcons}
-          onChanged={onChanged}
-          onDownloaded={onDownloaded}
-          onError={onError}
-          onNoteCloneClick={clone}
-          onNoteCreateClick={create}
-          onNoteDeleteClick={delete_func}
-          onNoteDownloadClick={download}
-          onNoteEditClick={edit}
-          onNoteSaveClick={save}
+          toolBarIcons={
+            <NoteDetailsPageToolBarIcons
+              entity={entity}
+              onNoteCloneClick={clone}
+              onNoteCreateClick={create}
+              onNoteDeleteClick={deleteFunc}
+              onNoteDownloadClick={download}
+              onNoteEditClick={edit}
+            />
+          }
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle title={_('Note Details')} />
                 <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
@@ -181,7 +196,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>
@@ -190,25 +205,17 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-};
-
-const load = gmp => {
+const load = (gmp: Gmp) => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
+  return (id: string) => dispatch =>
     Promise.all([
       dispatch(loadEntityFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
     ]);
 };
 
-const mapStateToProps = (rootState, {id}) => {
+const mapStateToProps = (rootState: unknown, {id}: {id: string}) => {
   const permissionsSel = permissionsSelector(rootState);
   return {
     permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
@@ -219,4 +226,4 @@ export default withEntityContainer('note', {
   entitySelector: notesSelector,
   load,
   mapStateToProps,
-})(Page);
+})(NoteDetailsPage);
