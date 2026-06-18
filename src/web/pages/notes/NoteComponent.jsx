@@ -8,10 +8,6 @@ import {
   ACTIVE_NO_VALUE,
   ACTIVE_YES_ALWAYS_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
-  TASK_SELECTED,
-  TASK_ANY,
-  RESULT_UUID,
-  RESULT_ANY,
   MANUAL,
   ANY,
 } from 'gmp/models/override';
@@ -103,10 +99,10 @@ const NoteComponent = ({
       setOid(isDefined(nvt) ? nvt.oid : undefined);
       setNote(note);
       setNvtName(isDefined(nvt) ? nvt.name : undefined);
-      setTaskId(hasId(task) ? TASK_SELECTED : TASK_ANY);
+      setTaskId(hasId(task) ? MANUAL : ANY);
       setTaskName(hasId(task) ? task.name : undefined);
       setTaskUuid(hasId(task) ? task.id : undefined);
-      setResultId(hasId(result) ? RESULT_UUID : RESULT_ANY);
+      setResultId(hasId(result) ? MANUAL : ANY);
       setResultName(hasId(result) ? result.name : undefined);
       setResultUuid(hasId(result) ? result.id : undefined);
       setSeverity(note.severity);
