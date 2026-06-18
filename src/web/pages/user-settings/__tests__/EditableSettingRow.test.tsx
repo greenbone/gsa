@@ -95,6 +95,21 @@ describe('EditableSettingRow', () => {
     expect(handleCancel).toHaveBeenCalled();
   });
 
+  test('should call onClear when clear icon is clicked in edit mode', () => {
+    const handleClear = testing.fn();
+    const {render} = rendererWithTableBody(rendererOptions);
+    render(
+      <EditableSettingRow
+        {...defaultProps}
+        isEditMode={true}
+        onClear={handleClear}
+      />,
+    );
+    const row = screen.getByRole('row');
+    fireEvent.click(within(row).getByTitle('Clear'));
+    expect(handleClear).toHaveBeenCalled();
+  });
+
   test('should render viewComponent in view mode', () => {
     const {render} = rendererWithTableBody(rendererOptions);
     render(<EditableSettingRow {...defaultProps} isEditMode={false} />);
