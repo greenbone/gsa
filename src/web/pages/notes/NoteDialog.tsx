@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Note from 'gmp/models/note';
 import {
   ANY,
   MANUAL,
@@ -13,7 +13,10 @@ import {
   ACTIVE_YES_UNTIL_VALUE,
   ACTIVE_YES_FOR_NEXT_VALUE,
   ACTIVE_NO_VALUE,
+  type Active,
+  type AnyOrManual,
 } from 'gmp/models/override';
+import type Task from 'gmp/models/task';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -27,9 +30,10 @@ import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {
+  getNvtDisplayName,
   renderNvtName,
+  type RenderSelectItemProps,
   renderSelectItems,
   severityFormat,
 } from 'web/utils/Render';
@@ -38,31 +42,76 @@ import {
   translatedResultSeverityRiskFactor,
 } from 'web/utils/severity';
 
+interface NoteDialogData {
+  active: Active;
+  days: number;
+  fixed: boolean;
+  hosts: AnyOrManual;
+  hostsManual: string;
+  oid: string;
+  port: AnyOrManual;
+  portManual: string;
+  resultId: AnyOrManual;
+  resultUuid?: string;
+  resultName?: string;
+  severity?: number;
+  taskId: AnyOrManual;
+  taskUuid?: string;
+  taskName?: string;
+  text: string;
+}
+
+interface NoteDialogProps {
+  active?: Active;
+  days?: number;
+  fixed?: boolean;
+  hosts?: AnyOrManual;
+  hostsManual?: string;
+  id?: string;
+  note?: Note;
+  nvtName?: string;
+  oid?: string;
+  port?: AnyOrManual;
+  portManual?: string;
+  resultId?: AnyOrManual;
+  resultName?: string;
+  resultUuid?: string;
+  severity?: number;
+  taskId?: AnyOrManual;
+  taskName?: string;
+  taskUuid?: string;
+  tasks?: Task[];
+  text?: string;
+  title?: string;
+  onClose: () => void;
+  onSave: (data: NoteDialogData) => void;
+}
+
 const NoteDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
   days = DEFAULT_DAYS,
   fixed = false,
   id,
   hosts = ANY,
-  hosts_manual = '',
+  hostsManual = '',
   note,
-  nvt_name,
+  nvtName,
   oid,
   port = ANY,
-  port_manual = '',
-  result_id = ANY,
-  result_name,
-  result_uuid,
+  portManual = '',
+  resultId = ANY,
+  resultName,
+  resultUuid,
   severity,
-  task_id = ANY,
-  task_name,
+  taskId = ANY,
+  taskName,
   tasks,
-  task_uuid,
+  taskUuid,
   text = '',
   title,
   onClose,
   onSave,
-}) => {
+}: NoteDialogProps) => {
   const [_] = useTranslation();
   const isEdit = isDefined(note);
 
@@ -74,22 +123,22 @@ const NoteDialog = ({
     days,
     fixed,
     hosts,
-    hosts_manual,
+    hostsManual,
     id,
     oid: oid ?? DEFAULT_OID_VALUE,
     port,
-    port_manual,
-    result_id,
-    result_uuid,
-    result_name,
-    task_id,
-    task_uuid,
-    task_name,
+    portManual,
+    resultId,
+    resultUuid,
+    resultName,
+    taskId,
+    taskUuid,
+    taskName,
     text,
   };
 
   return (
-    <SaveDialog
+    <SaveDialog<{id?: string}, NoteDialogData>
       defaultValues={data}
       title={title}
       values={{id}}
@@ -100,21 +149,13 @@ const NoteDialog = ({
         return (
           <>
             {state.fixed && isDefined(oid) && (
-              <FormGroup
-                data-testid="group-nvt-oid"
-                flex="column"
-                title={_('NVT')}
-              >
-                <span>{renderNvtName(oid, nvt_name)}</span>
+              <FormGroup data-testid="group-nvt-oid" title={_('NVT')}>
+                <span>{renderNvtName(oid, nvtName)}</span>
               </FormGroup>
             )}
             {state.fixed && !isDefined(oid) && (
-              <FormGroup
-                data-testid="group-nvt-no-oid"
-                flex="column"
-                title={_('NVT')}
-              >
-                <span>{renderNvtName(state.oid, nvt_name)}</span>
+              <FormGroup data-testid="group-nvt-no-oid" title={_('NVT')}>
+                <span>{renderNvtName(state.oid, nvtName)}</span>
               </FormGroup>
             )}
             {isEdit && !state.fixed && (
@@ -126,7 +167,7 @@ const NoteDialog = ({
                 <Radio
                   checked={state.oid === oid}
                   name="oid"
-                  title={renderNvtName(oid, nvt_name)}
+                  title={getNvtDisplayName(oid as string, nvtName)}
                   value={oid}
                   onChange={onValueChange}
                 />
@@ -187,7 +228,7 @@ const NoteDialog = ({
                 />
                 <Spinner
                   disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}
-                  min="1"
+                  min={1}
                   name="days"
                   type="int"
                   value={state.days}
@@ -221,8 +262,8 @@ const NoteDialog = ({
                 />
                 <TextField
                   disabled={state.hosts !== MANUAL}
-                  name="hosts_manual"
-                  value={state.hosts_manual}
+                  name="hostsManual"
+                  value={state.hostsManual}
                   onChange={onValueChange}
                 />
               </Row>
@@ -245,8 +286,8 @@ const NoteDialog = ({
                 />
                 <TextField
                   disabled={state.port !== MANUAL}
-                  name="port_manual"
-                  value={state.port_manual}
+                  name="portManual"
+                  value={state.portManual}
                   onChange={onValueChange}
                 />
               </Row>
@@ -292,7 +333,7 @@ const NoteDialog = ({
                     convert={parseFloat}
                     name="severity"
                     title={_('> 0.0')}
-                    value="0.1"
+                    value={0.1}
                     onChange={onValueChange}
                   />
                   <Radio
@@ -300,7 +341,7 @@ const NoteDialog = ({
                     convert={parseFloat}
                     name="severity"
                     title={_('Log')}
-                    value="0.0"
+                    value={0.0}
                     onChange={onValueChange}
                   />
                 </>
@@ -309,24 +350,24 @@ const NoteDialog = ({
 
             <FormGroup data-testid="group-task" title={_('Task')}>
               <Radio
-                checked={state.task_id === ANY}
-                name="task_id"
+                checked={state.taskId === ANY}
+                name="taskId"
                 title={_('Any')}
                 value={ANY}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  checked={state.task_id === MANUAL}
-                  name="task_id"
+                  checked={state.taskId === MANUAL}
+                  name="taskId"
                   value={MANUAL}
                   onChange={onValueChange}
                 />
                 <Select
-                  disabled={state.task_id !== MANUAL}
-                  items={renderSelectItems(tasks)}
-                  name="task_uuid"
-                  value={state.task_uuid}
+                  disabled={state.taskId !== MANUAL}
+                  items={renderSelectItems(tasks as RenderSelectItemProps[])}
+                  name="taskUuid"
+                  value={state.taskUuid}
                   onChange={onValueChange}
                 />
               </Row>
@@ -334,20 +375,20 @@ const NoteDialog = ({
 
             <FormGroup data-testid="group-result" title={_('Result')}>
               <Radio
-                checked={state.result_id === ANY}
-                name="result_id"
+                checked={state.resultId === ANY}
+                name="resultId"
                 title={_('Any')}
                 value={ANY}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  checked={state.result_id === MANUAL}
-                  name="result_id"
+                  checked={state.resultId === MANUAL}
+                  name="resultId"
                   title={
                     state.fixed
                       ? _('Only selected result ({{- name}})', {
-                          name: state.result_name,
+                          name: state.resultName as string,
                         })
                       : _('UUID')
                   }
@@ -356,9 +397,9 @@ const NoteDialog = ({
                 />
                 {!fixed && (
                   <TextField
-                    disabled={state.result_id !== MANUAL}
-                    name="result_uuid"
-                    value={state.result_uuid}
+                    disabled={state.resultId !== MANUAL}
+                    name="resultUuid"
+                    value={state.resultUuid}
                     onChange={onValueChange}
                   />
                 )}
@@ -379,37 +420,6 @@ const NoteDialog = ({
       }}
     </SaveDialog>
   );
-};
-
-NoteDialog.propTypes = {
-  active: PropTypes.oneOf([
-    ACTIVE_NO_VALUE,
-    ACTIVE_YES_FOR_NEXT_VALUE,
-    ACTIVE_YES_ALWAYS_VALUE,
-    ACTIVE_YES_UNTIL_VALUE,
-  ]),
-  days: PropTypes.number,
-  fixed: PropTypes.bool,
-  hosts: PropTypes.string,
-  hosts_manual: PropTypes.string,
-  id: PropTypes.string,
-  note: PropTypes.model,
-  nvt_name: PropTypes.string,
-  oid: PropTypes.string,
-  port: PropTypes.string,
-  port_manual: PropTypes.string,
-  result_id: PropTypes.id,
-  result_name: PropTypes.string,
-  result_uuid: PropTypes.id,
-  severity: PropTypes.number,
-  task_id: PropTypes.id,
-  task_name: PropTypes.string,
-  task_uuid: PropTypes.id,
-  tasks: PropTypes.array,
-  text: PropTypes.string,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default NoteDialog;

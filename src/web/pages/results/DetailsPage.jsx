@@ -256,7 +256,8 @@ class Page extends React.Component {
 
     this.handleDownload = this.handleDownload.bind(this);
 
-    this.openDialog = this.openDialog.bind(this);
+    this.openNoteDialog = this.openNoteDialog.bind(this);
+    this.openOverrideDialog = this.openOverrideDialog.bind(this);
   }
 
   handleDownload(result) {
@@ -281,7 +282,7 @@ class Page extends React.Component {
       .then(onDownloaded, onError);
   }
 
-  openDialog(result = {}, createFunc) {
+  openOverrideDialog(result = {}, createFunc) {
     const {information = {}, task = {}, host = {}} = result;
     createFunc({
       fixed: true,
@@ -298,6 +299,26 @@ class Page extends React.Component {
       hosts_manual: host.name,
       port: MANUAL,
       port_manual: result.port,
+    });
+  }
+
+  openNoteDialog(result = {}, createFunc) {
+    const {information = {}, task = {}, host = {}} = result;
+    createFunc({
+      fixed: true,
+      hosts: MANUAL,
+      hostsManual: host.name,
+      nvtName: information.name,
+      oid: information.id,
+      port: MANUAL,
+      portManual: result.port,
+      resultId: MANUAL,
+      resultName: result.name,
+      resultUuid: result.id,
+      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
+      taskId: MANUAL,
+      taskName: task.name,
+      taskUuid: task.id,
     });
   }
 
@@ -319,10 +340,10 @@ class Page extends React.Component {
                     title={_('Result')}
                     toolBarIcons={ResultDetailsPageToolBarIcons}
                     onNoteCreateClick={result =>
-                      this.openDialog(result, createNote)
+                      this.openNoteDialog(result, createNote)
                     }
                     onOverrideCreateClick={result =>
-                      this.openDialog(result, createOverride)
+                      this.openOverrideDialog(result, createOverride)
                     }
                     onResultDownloadClick={this.handleDownload}
                     onTicketCreateClick={createTicket}
