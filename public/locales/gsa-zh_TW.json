@@ -2249,6 +2249,7 @@
   "Unreliable rem. banner": "",
   "Unreported": "",
   "until {{- enddate}}": "",
+  "until {{- endDate}}": "",
   "Update": "更新",
   "Update available to:": "",
   "Update Filter": "",
