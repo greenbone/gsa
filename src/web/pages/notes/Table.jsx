@@ -12,7 +12,7 @@ import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
-import NoteDetails from 'web/pages/notes/Details';
+import NoteDetails from 'web/pages/notes/NoteDetails';
 import Row from 'web/pages/notes/Row';
 import PropTypes from 'web/utils/PropTypes';
 

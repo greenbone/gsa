@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Note from 'gmp/models/note';
 import {isDefined} from 'gmp/utils/identity';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
@@ -16,13 +16,16 @@ import DetailsBlock from 'web/entity/DetailsBlock';
 import EntityLink from 'web/entity/Link';
 import NoteBox from 'web/entity/NoteBox';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {
   translatedResultSeverityRiskFactor,
   LOG_VALUE,
 } from 'web/utils/severity';
 
-const NoteDetails = ({entity}) => {
+interface NoteDetailsProps {
+  entity: Note;
+}
+
+const NoteDetails = ({entity}: NoteDetailsProps) => {
   const [_] = useTranslation();
   const {hosts, port, result, severity, task} = entity;
   return (
@@ -106,10 +109,6 @@ const NoteDetails = ({entity}) => {
       </DetailsBlock>
     </Layout>
   );
-};
-
-NoteDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
 };
 
 export default NoteDetails;
