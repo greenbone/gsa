@@ -99,6 +99,22 @@ describe('AgentInstallerInstructionsCommand tests', () => {
     });
   });
 
+  test('should include origin_url when originUrl is given', async () => {
+    const instructions = makeMockInstructions();
+    const response = makeResponse(instructions);
+    const fakeHttp = createHttp(response);
+    const cmd = new AgentInstallerInstructionsCommand(fakeHttp);
+
+    await cmd.getInstructions({originUrl: 'https://example.com'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_agent_installer_instruction',
+        origin_url: 'https://example.com',
+      },
+    });
+  });
+
   test('should parse the nested JSON instruction and return it as response data', async () => {
     const instructions = makeMockInstructions({
       title: 'Parsed Title',
