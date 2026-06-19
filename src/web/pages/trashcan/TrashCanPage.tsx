@@ -38,7 +38,7 @@ import CredentialTable from 'web/pages/credentials/CredentialTable';
 import TrashActions from 'web/pages/extras/TrashActions';
 import FiltersTable from 'web/pages/filters/Table';
 import GroupsTable from 'web/pages/groups/Table';
-import NotesTable from 'web/pages/notes/Table';
+import NotesTable from 'web/pages/notes/NoteTable';
 import OverridesTable from 'web/pages/overrides/Table';
 import PermissionsTable from 'web/pages/permissions/PermissionTable';
 import PoliciesTable from 'web/pages/policies/Table';
@@ -290,6 +290,7 @@ const TrashCan = () => {
           <span>
             <LinkTarget id="note" />
             <h1>{_('Notes')}</h1>
+            {/* @ts-expect-error */}
             <NotesTable entities={trash.notes} {...tableProps} />
           </span>
         )}

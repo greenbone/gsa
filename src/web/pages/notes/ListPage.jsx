@@ -16,7 +16,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import NotesDashboard, {NOTES_DASHBOARD_ID} from 'web/pages/notes/dashboard';
 import NoteComponent from 'web/pages/notes/NoteComponent';
 import FilterDialog from 'web/pages/notes/NoteFilterDialog';
-import NotesTable from 'web/pages/notes/Table';
+import NotesTable from 'web/pages/notes/NoteTable';
 import {
   loadEntities,
   selector as entitiesSelector,
