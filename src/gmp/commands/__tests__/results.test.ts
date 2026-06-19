@@ -58,6 +58,29 @@ describe('ResultsCommand tests', () => {
     expect(data.length).toEqual(2);
   });
 
+  test('should allow to fetch results with custom params', async () => {
+    const response = createEntitiesResponse('result', [
+      {
+        _id: '1',
+      },
+      {
+        _id: '2',
+      },
+    ]);
+    const fakeHttp = createHttp(response);
+    const cmd = new ResultsCommand(fakeHttp);
+    const resp = await cmd.get({filter: "name='foo'"});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_results',
+        details: 1,
+        filter: "name='foo'",
+      },
+    });
+    const {data} = resp;
+    expect(data.length).toEqual(2);
+  });
+
   test('should allow to overwrite details parameter', async () => {
     const response = createEntitiesResponse('result', [
       {
