@@ -48,7 +48,7 @@ class ReportsCommand extends EntitiesCommand<Report> {
     });
   }
 
-  get(params: ReportsCommandGetParams, options: ReportsCommandGetOptions) {
+  get(params?: ReportsCommandGetParams, options?: ReportsCommandGetOptions) {
     return super.get(
       {
         details: 0,
