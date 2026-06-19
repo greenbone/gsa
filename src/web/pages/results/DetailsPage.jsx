@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
+import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import {OverrideIcon, ResultIcon} from 'web/components/icon';
@@ -290,7 +290,7 @@ class Page extends React.Component {
       nvt_name: information.name,
       task_id: TASK_SELECTED,
       task_name: task.name,
-      result_id: RESULT_ANY,
+      result_id: RESULT_UUID,
       task_uuid: task.id,
       result_uuid: result.id,
       result_name: result.name,
