@@ -83,7 +83,7 @@ interface TaskDetailsPageProps {
   isLoading?: boolean;
   onChanged?: () => void;
   onDownloaded?: OnDownloadedFunc;
-  onError?: (error: unknown) => void;
+  onError?: (error: Error) => void;
 }
 
 const Details = ({entity, links}: DetailsProps) => {
