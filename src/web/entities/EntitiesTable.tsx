@@ -313,7 +313,11 @@ function EntitiesTable<
       grow="1"
     >
       {toggleDetailsIcon ? (
-        <Layout align="space-between" grow="1">
+        <Layout
+          align="space-between"
+          data-testid="entities-table-header"
+          grow="1"
+        >
           <DetailsIcon
             // @ts-expect-error
             foldState={allToggled ? FoldState.UNFOLDED : FoldState.FOLDED}
@@ -335,7 +339,7 @@ function EntitiesTable<
         </UpdatingStripedTable>
       </TableWrapper>
       {footnote ? (
-        <Layout align="space-between">
+        <Layout align="space-between" data-testid="entities-table-footer">
           <FootNote>
             {_('(Applied filter: {{- filter}})', {filter: filterString})}
           </FootNote>
