@@ -349,7 +349,7 @@ const loggedInRoutes = [
       {
         path: 'notes',
         lazy: async () => ({
-          Component: (await import('web/pages/notes/ListPage')).default,
+          Component: (await import('web/pages/notes/NoteListPage')).default,
         }),
       },
       {
