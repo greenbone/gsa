@@ -19,20 +19,20 @@ import Override, {
 
 interface OverrideCommandCreateParams {
   active?: Active;
-  custom_severity?: boolean;
+  customSeverity?: boolean;
   days?: number;
-  hosts_manual?: string;
+  hostsManual?: string;
   hosts?: AnyOrManual;
   oid: string;
   newSeverity?: number;
-  new_severity_from_list?: number;
-  port_manual?: string;
+  newSeverityFromList?: number;
+  portManual?: string;
   port?: AnyOrManual;
-  result_id?: AnyOrManual;
-  result_uuid?: string;
+  resultId?: AnyOrManual;
+  resultUuid?: string;
   severity?: string;
-  task_id?: AnyOrManual;
-  task_uuid?: string;
+  taskId?: AnyOrManual;
+  taskUuid?: string;
   text: string;
 }
 
@@ -71,29 +71,29 @@ class OverrideCommand extends EntityCommand<Override, OverrideElement> {
       active,
       days = DEFAULT_DAYS,
       hosts = ANY,
-      hosts_manual,
-      result_id,
-      result_uuid,
+      hostsManual,
+      resultId,
+      resultUuid,
       port = ANY,
-      port_manual,
+      portManual,
       severity,
-      task_id,
-      task_uuid,
+      taskId,
+      taskUuid,
       text,
-      custom_severity = false,
+      customSeverity = false,
       newSeverity,
-      new_severity_from_list = SEVERITY_FALSE_POSITIVE,
+      newSeverityFromList = SEVERITY_FALSE_POSITIVE,
     } = args;
     return this.action({
       cmd,
       oid,
       id,
       active: active === ACTIVE_YES_UNTIL_VALUE ? days : active,
-      new_severity: custom_severity ? newSeverity : new_severity_from_list,
-      hosts: hosts === MANUAL ? hosts_manual : undefined,
-      result_id: result_id === MANUAL ? result_uuid : undefined,
-      task_id: task_id === MANUAL ? task_uuid : undefined,
-      port: port === MANUAL ? port_manual : undefined,
+      new_severity: customSeverity ? newSeverity : newSeverityFromList,
+      hosts: hosts === MANUAL ? hostsManual : undefined,
+      result_id: resultId === MANUAL ? resultUuid : undefined,
+      task_id: taskId === MANUAL ? taskUuid : undefined,
+      port: port === MANUAL ? portManual : undefined,
       severity,
       text,
     });
