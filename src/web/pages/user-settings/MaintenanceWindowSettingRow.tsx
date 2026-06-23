@@ -228,6 +228,14 @@ const MaintenanceWindowSettingRow = ({
     }
   };
 
+  const handleFrequencyChange = (value: string): void => {
+    if (value === 'NONE') {
+      setFreq(undefined);
+      return;
+    }
+    setFreq(value as keyof typeof RecurrenceFrequency);
+  };
+
   const handleTimezoneChange = (value: string): void => {
     if (startDate) {
       const converted = startDate.clone().tz(value, true);
@@ -355,12 +363,7 @@ const MaintenanceWindowSettingRow = ({
           ]}
           name="maintenanceWindowFreq"
           value={freq ?? 'NONE'}
-          onChange={
-            ((value: string) =>
-              setFreq(value as keyof typeof RecurrenceFrequency)) as (
-              value: string,
-            ) => void
-          }
+          onChange={handleFrequencyChange}
         />
       </Section>
     </Column>
