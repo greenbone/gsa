@@ -3,38 +3,39 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {
+  type default as Override,
+  type Active,
   ANY,
   MANUAL,
   ACTIVE_YES_ALWAYS_VALUE,
   DEFAULT_DAYS,
   DEFAULT_OID_VALUE,
-  RESULT_ANY,
-  TASK_ANY,
   ACTIVE_YES_UNTIL_VALUE,
   ACTIVE_YES_FOR_NEXT_VALUE,
   ACTIVE_NO_VALUE,
-  TASK_SELECTED,
-  RESULT_UUID,
+  type AnyOrManual,
 } from 'gmp/models/override';
-import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import type Task from 'gmp/models/task';
+import {parseBoolean, parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 import DateTime from 'web/components/date/DateTime';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
-import Select from 'web/components/form/Select';
+import Select, {type SelectItem} from 'web/components/form/Select';
 import Spinner from 'web/components/form/Spinner';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {
+  getNvtDisplayName,
   renderNvtName,
+  type RenderSelectItemProps,
   renderSelectItems,
   severityFormat,
 } from 'web/utils/Render';
@@ -53,34 +54,91 @@ import {
   getSeverityLevelBoundaries,
 } from 'web/utils/severity';
 
+interface OverrideDialogDefaultValues {
+  active?: Active;
+  customSeverity?: boolean;
+  days?: number;
+  hosts?: string;
+  hostsManual?: string;
+  newSeverity?: number;
+  newSeverityFromList?: number;
+  oid?: string;
+  override?: Override;
+  port?: string;
+  portManual?: string;
+  resultId?: string;
+  resultUuid?: string;
+  severity?: number;
+  taskId?: string;
+  taskName?: string;
+  tasks?: Task[];
+  taskUuid?: string;
+  text: string;
+}
+
+interface OverrideDialogValues {
+  id?: string;
+}
+
+type OverrideDialogState = OverrideDialogDefaultValues & OverrideDialogValues;
+
+interface OverrideDialogProps {
+  active?: Active;
+  customSeverity?: boolean;
+  days?: number;
+  fixed?: boolean;
+  hosts?: AnyOrManual;
+  hostsManual?: string;
+  id?: string;
+  newSeverity?: number;
+  newSeverityFromList?: number;
+  nvtName?: string;
+  oid?: string;
+  override?: Override;
+  port?: AnyOrManual;
+  portManual?: string;
+  resultId?: AnyOrManual;
+  resultName?: string;
+  resultUuid?: string;
+  severity?: number;
+  taskId?: AnyOrManual;
+  taskName?: string;
+  tasks?: Task[];
+  taskUuid?: string;
+  text?: string;
+  title?: string;
+  onClose: () => void;
+  onSave: (values: OverrideDialogState) => void;
+}
+
 const OverrideDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
-  custom_severity = NO_VALUE,
+  customSeverity = false,
   days = DEFAULT_DAYS,
   fixed = false,
   hosts = ANY,
-  hosts_manual = '',
+  hostsManual = '',
   id,
   newSeverity,
-  new_severity_from_list = FALSE_POSITIVE_VALUE,
-  nvt_name,
+  newSeverityFromList = FALSE_POSITIVE_VALUE,
+  nvtName,
   oid,
   override,
   port = ANY,
-  port_manual = '',
-  result_id = RESULT_ANY,
-  result_name,
-  result_uuid = '',
+  portManual = '',
+  resultId = ANY,
+  resultName,
+  resultUuid,
   severity,
-  task_id = TASK_ANY,
-  task_name,
+  taskId = ANY,
+  taskName,
   tasks,
-  task_uuid,
+  taskUuid,
   text = '',
   title,
   onClose,
   onSave,
-}) => {
+}: OverrideDialogProps) => {
   const [_] = useTranslation();
   const gmp = useGmp();
   const isEdit = isDefined(override);
@@ -92,27 +150,27 @@ const OverrideDialog = ({
 
   const data = {
     active,
-    custom_severity,
+    customSeverity,
     days,
     hosts,
-    hosts_manual,
+    hostsManual,
     newSeverity,
-    new_severity_from_list,
+    newSeverityFromList,
     oid: isDefined(oid) ? oid : DEFAULT_OID_VALUE,
     override,
     port,
-    port_manual,
-    result_id,
-    result_uuid,
-    severity: isDefined(severity) ? severity : '',
-    task_id,
-    task_name,
+    portManual,
+    resultId,
+    resultUuid,
+    severity,
+    taskId,
+    taskName,
     tasks,
-    task_uuid,
+    taskUuid,
     text,
   };
 
-  const severityFromListItems = [];
+  const severityFromListItems: SelectItem[] = [];
 
   if (isEdit) {
     severityFromListItems.push({
@@ -123,36 +181,36 @@ const OverrideDialog = ({
 
   if (severityBoundaries.minCritical) {
     severityFromListItems.push({
-      value: severityBoundaries.minCritical,
+      value: String(severityBoundaries.minCritical),
       label: `${_CRITICAL}`,
     });
   }
 
   severityFromListItems.push(
     {
-      value: severityBoundaries.minHigh,
+      value: String(severityBoundaries.minHigh),
       label: `${_HIGH}`,
     },
     {
-      value: MEDIUM_VALUE,
+      value: String(MEDIUM_VALUE),
       label: `${_MEDIUM}`,
     },
     {
-      value: LOW_VALUE,
+      value: String(LOW_VALUE),
       label: `${_LOW}`,
     },
     {
-      value: LOG_VALUE,
+      value: String(LOG_VALUE),
       label: `${_LOG}`,
     },
     {
-      value: FALSE_POSITIVE_VALUE,
+      value: String(FALSE_POSITIVE_VALUE),
       label: `${_FALSE_POSITIVE}`,
     },
   );
 
   return (
-    <SaveDialog
+    <SaveDialog<OverrideDialogValues, OverrideDialogDefaultValues>
       defaultValues={data}
       title={title}
       values={{id}}
@@ -163,21 +221,21 @@ const OverrideDialog = ({
         return (
           <>
             {fixed && isDefined(oid) && (
-              <FormGroup flex="column" title={_('NVT')}>
-                <span>{renderNvtName(oid, nvt_name)}</span>
+              <FormGroup data-testid="group-nvt" title={_('NVT')}>
+                <span>{renderNvtName(oid, nvtName)}</span>
               </FormGroup>
             )}
             {fixed && !isDefined(oid) && (
-              <FormGroup flex="column" title={_('NVT')}>
-                <span>{renderNvtName(state.oid, nvt_name)}</span>
+              <FormGroup data-testid="group-nvt" title={_('NVT')}>
+                <span>{renderNvtName(state.oid as string, nvtName)}</span>
               </FormGroup>
             )}
             {isEdit && !fixed && (
-              <FormGroup title={_('NVT')}>
+              <FormGroup data-testid="group-nvt" title={_('NVT')}>
                 <Radio
                   checked={state.oid === oid}
                   name="oid"
-                  title={renderNvtName(oid, nvt_name)}
+                  title={getNvtDisplayName(oid as string, nvtName)}
                   value={oid}
                   onChange={onValueChange}
                 />
@@ -208,7 +266,7 @@ const OverrideDialog = ({
               </FormGroup>
             )}
 
-            <FormGroup title={_('Active')}>
+            <FormGroup data-testid="group-active" title={_('Active')}>
               <Radio
                 checked={state.active === ACTIVE_YES_ALWAYS_VALUE}
                 name="active"
@@ -238,7 +296,7 @@ const OverrideDialog = ({
                 />
                 <Spinner
                   disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}
-                  min="1"
+                  min={1}
                   name="days"
                   type="int"
                   value={state.days}
@@ -255,7 +313,7 @@ const OverrideDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Hosts')}>
+            <FormGroup data-testid="group-hosts" title={_('Hosts')}>
               <Radio
                 checked={state.hosts === ANY}
                 name="hosts"
@@ -273,14 +331,14 @@ const OverrideDialog = ({
                 <TextField
                   disabled={state.hosts !== MANUAL}
                   grow="1"
-                  name="hosts_manual"
-                  value={state.hosts_manual}
+                  name="hostsManual"
+                  value={state.hostsManual}
                   onChange={onValueChange}
                 />
               </Row>
             </FormGroup>
 
-            <FormGroup title={_('Location')}>
+            <FormGroup data-testid="group-location" title={_('Location')}>
               <Radio
                 checked={state.port === ANY}
                 name="port"
@@ -298,16 +356,16 @@ const OverrideDialog = ({
                 <TextField
                   disabled={state.port !== MANUAL}
                   grow="1"
-                  name="port_manual"
-                  value={state.port_manual}
+                  name="portManual"
+                  value={state.portManual}
                   onChange={onValueChange}
                 />
               </Row>
             </FormGroup>
 
-            <FormGroup title={_('Severity')}>
+            <FormGroup data-testid="group-severity" title={_('Severity')}>
               <Radio
-                checked={state.severity === ''}
+                checked={isEmpty(state.severity)}
                 name="severity"
                 title={_('Any')}
                 value=""
@@ -327,7 +385,7 @@ const OverrideDialog = ({
                   checked={state.severity === severity}
                   convert={parseFloat}
                   name="severity"
-                  title={translatedResultSeverityRiskFactor(severity)}
+                  title={translatedResultSeverityRiskFactor(severity as number)}
                   value={severity}
                   onChange={onValueChange}
                 />
@@ -339,7 +397,7 @@ const OverrideDialog = ({
                     convert={parseFloat}
                     name="severity"
                     title={_('> 0.0')}
-                    value="0.1"
+                    value={0.1}
                     onChange={onValueChange}
                   />
                   <Radio
@@ -347,42 +405,45 @@ const OverrideDialog = ({
                     convert={parseFloat}
                     name="severity"
                     title={_('Log')}
-                    value="0.0"
+                    value={0}
                     onChange={onValueChange}
                   />
                 </>
               )}
             </FormGroup>
 
-            <FormGroup direction="column" title={_('New Severity')}>
+            <FormGroup
+              data-testid="group-new-severity"
+              direction="column"
+              title={_('New Severity')}
+            >
               <Row>
-                <Radio
-                  checked={state.custom_severity === NO_VALUE}
-                  convert={parseYesNo}
-                  name="custom_severity"
-                  value={NO_VALUE}
+                <Radio<boolean>
+                  checked={!state.customSeverity}
+                  convert={parseBoolean}
+                  name="customSeverity"
+                  value={false}
                   onChange={onValueChange}
                 />
                 <Select
-                  convert={parseFloat}
-                  disabled={state.custom_severity === YES_VALUE}
+                  disabled={state.customSeverity}
                   items={severityFromListItems}
-                  name="new_severity_from_list"
-                  value={state.new_severity_from_list}
+                  name="newSeverityFromList"
+                  value={String(state.newSeverityFromList)}
                   onChange={onValueChange}
                 />
               </Row>
               <Row>
-                <Radio
-                  checked={state.custom_severity === YES_VALUE}
-                  convert={parseYesNo}
-                  name="custom_severity"
+                <Radio<boolean>
+                  checked={state.customSeverity}
+                  convert={parseBoolean}
+                  name="customSeverity"
                   title={_('Other')}
-                  value={YES_VALUE}
+                  value={true}
                   onChange={onValueChange}
                 />
                 <NumberField
-                  disabled={state.custom_severity === NO_VALUE}
+                  disabled={!state.customSeverity}
                   max={10}
                   min={0}
                   name="newSeverity"
@@ -394,65 +455,64 @@ const OverrideDialog = ({
               </Row>
             </FormGroup>
 
-            <FormGroup title={_('Task')}>
+            <FormGroup data-testid="group-task" title={_('Task')}>
               <Radio
-                checked={state.task_id === TASK_ANY}
-                name="task_id"
+                checked={state.taskId === ANY}
+                name="taskId"
                 title={_('Any')}
-                value={TASK_ANY}
+                value={ANY}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  checked={state.task_id === TASK_SELECTED}
-                  name="task_id"
-                  value={TASK_SELECTED}
+                  checked={state.taskId === MANUAL}
+                  name="taskId"
+                  value={MANUAL}
                   onChange={onValueChange}
                 />
 
                 <Select
-                  disabled={state.task_id !== TASK_SELECTED}
+                  disabled={state.taskId !== MANUAL}
                   grow="1"
-                  items={renderSelectItems(tasks)}
-                  name="task_uuid"
-                  value={state.task_uuid}
+                  items={renderSelectItems(tasks as RenderSelectItemProps[])}
+                  name="taskUuid"
+                  value={state.taskUuid}
                   onChange={onValueChange}
                 />
               </Row>
             </FormGroup>
 
-            <FormGroup title={_('Result')}>
+            <FormGroup data-testid="group-result" title={_('Result')}>
               <Radio
-                checked={state.result_id === RESULT_ANY}
-                name="result_id"
+                checked={state.resultId === ANY}
+                name="resultId"
                 title={_('Any')}
-                value={RESULT_ANY}
+                value={ANY}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  checked={state.result_id === RESULT_UUID}
-                  name="result_id"
+                  checked={state.resultId === MANUAL}
+                  name="resultId"
                   title={
-                    isDefined(result_name)
+                    isDefined(resultName)
                       ? _('Only selected result ({{- name}})', {
-                          name: result_name,
+                          name: resultName,
                         })
                       : _('UUID')
                   }
-                  value={RESULT_UUID}
+                  value={MANUAL}
                   onChange={onValueChange}
                 />
-                {(result_id === RESULT_ANY || result_id === RESULT_UUID) &&
-                  !fixed && (
-                    <TextField
-                      disabled={state.result_id !== RESULT_UUID}
-                      grow="1"
-                      name="result_uuid"
-                      value={state.result_uuid}
-                      onChange={onValueChange}
-                    />
-                  )}
+                {!fixed && (
+                  <TextField
+                    disabled={state.resultId !== MANUAL}
+                    grow="1"
+                    name="resultUuid"
+                    value={state.resultUuid}
+                    onChange={onValueChange}
+                  />
+                )}
               </Row>
             </FormGroup>
 
@@ -470,40 +530,6 @@ const OverrideDialog = ({
       }}
     </SaveDialog>
   );
-};
-
-OverrideDialog.propTypes = {
-  active: PropTypes.oneOf([
-    ACTIVE_NO_VALUE,
-    ACTIVE_YES_FOR_NEXT_VALUE,
-    ACTIVE_YES_ALWAYS_VALUE,
-    ACTIVE_YES_UNTIL_VALUE,
-  ]),
-  custom_severity: PropTypes.yesno,
-  days: PropTypes.number,
-  fixed: PropTypes.bool,
-  hosts: PropTypes.string,
-  hosts_manual: PropTypes.string,
-  id: PropTypes.string,
-  newSeverity: PropTypes.number,
-  new_severity_from_list: PropTypes.number,
-  nvt_name: PropTypes.string,
-  oid: PropTypes.string,
-  override: PropTypes.model,
-  port: PropTypes.string,
-  port_manual: PropTypes.string,
-  result_id: PropTypes.id,
-  result_name: PropTypes.string,
-  result_uuid: PropTypes.id,
-  severity: PropTypes.number,
-  task_id: PropTypes.id,
-  task_name: PropTypes.string,
-  task_uuid: PropTypes.id,
-  tasks: PropTypes.array,
-  text: PropTypes.string,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default OverrideDialog;

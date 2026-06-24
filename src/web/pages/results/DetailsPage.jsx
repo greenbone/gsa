@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
+import {MANUAL} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import {OverrideIcon, ResultIcon} from 'web/components/icon';
@@ -287,18 +287,18 @@ class Page extends React.Component {
     createFunc({
       fixed: true,
       oid: information.id,
-      nvt_name: information.name,
-      task_id: TASK_SELECTED,
-      task_name: task.name,
-      result_id: RESULT_UUID,
-      task_uuid: task.id,
-      result_uuid: result.id,
-      result_name: result.name,
+      nvtName: information.name,
+      taskId: MANUAL,
+      taskName: task.name,
+      resultId: MANUAL,
+      taskUuid: task.id,
+      resultUuid: result.id,
+      resultName: result.name,
       severity: result.original_severity > 0 ? 0.1 : result.original_severity,
       hosts: MANUAL,
-      hosts_manual: host.name,
+      hostsManual: host.name,
       port: MANUAL,
-      port_manual: result.port,
+      portManual: result.port,
     });
   }
 
