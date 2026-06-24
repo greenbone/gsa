@@ -9,21 +9,21 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useTranslation from 'web/hooks/useTranslation';
-import NoteActions, {
-  type NoteActionsProps,
+import NoteTableActions, {
+  type NoteTableActionsProps,
 } from 'web/pages/notes/NoteTableActions';
 
-export interface NoteRowProps extends NoteActionsProps {
-  actionsComponent?: React.ComponentType<NoteActionsProps>;
+export interface NoteTableRowProps extends NoteTableActionsProps {
+  actionsComponent?: React.ComponentType<NoteTableActionsProps>;
   onToggleDetailsClick: (entity: Note, id: string) => void;
 }
 
-const NoteRow = ({
-  actionsComponent: ActionsComponent = NoteActions,
+const NoteTableRow = ({
+  actionsComponent: ActionsComponent = NoteTableActions,
   entity,
   onToggleDetailsClick,
   ...props
-}: NoteRowProps) => {
+}: NoteTableRowProps) => {
   const [_] = useTranslation();
   const text = (
     <div>
@@ -60,4 +60,4 @@ const NoteRow = ({
   );
 };
 
-export default NoteRow;
+export default NoteTableRow;

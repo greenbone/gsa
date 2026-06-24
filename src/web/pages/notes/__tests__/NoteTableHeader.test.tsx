@@ -6,6 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWithTable, screen, fireEvent} from 'web/testing';
 import NoteTableHeader from 'web/pages/notes/NoteTableHeader';
+import SelectionType from 'web/utils/SelectionType';
 
 describe('NoteTableHeader tests', () => {
   test('should render the table header', () => {
@@ -25,15 +26,14 @@ describe('NoteTableHeader tests', () => {
     expect(screen.getByText('Hosts')).toBeInTheDocument();
     expect(screen.getByText('Location')).toBeInTheDocument();
     expect(screen.getByText('Active')).toBeInTheDocument();
+    expect(screen.getByText('Actions')).toBeInTheDocument();
   });
 
-  test('should allow to render custom actions', () => {
-    const actionsColumn = <th>Custom Actions</th>;
+  test('should render the default actions column from withEntitiesHeader', () => {
     const handleSortChange = testing.fn();
     const {render} = rendererWithTable();
     render(
       <NoteTableHeader
-        actionsColumn={actionsColumn}
         currentSortBy="text"
         currentSortDir="asc"
         sort={true}
@@ -41,7 +41,23 @@ describe('NoteTableHeader tests', () => {
       />,
     );
 
-    expect(screen.getByText('Custom Actions')).toBeInTheDocument();
+    expect(screen.getByText('Actions')).toBeInTheDocument();
+  });
+
+  test('should render actions column for user selection mode', () => {
+    const handleSortChange = testing.fn();
+    const {render} = rendererWithTable();
+    render(
+      <NoteTableHeader
+        currentSortBy="text"
+        currentSortDir="asc"
+        selectionType={SelectionType.SELECTION_USER}
+        sort={true}
+        onSortChange={handleSortChange}
+      />,
+    );
+
+    expect(screen.getByText('Actions')).toBeInTheDocument();
   });
 
   test('should call onSortChange when a sortable column is clicked', () => {
