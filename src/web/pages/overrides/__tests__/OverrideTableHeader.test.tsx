@@ -1,0 +1,98 @@
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {describe, expect, test, testing} from '@gsa/testing';
+import {rendererWithTable, screen, fireEvent} from 'web/testing';
+import OverrideTableHeader from 'web/pages/overrides/OverrideTableHeader';
+import SelectionType from 'web/utils/SelectionType';
+
+describe('OverrideTableHeader tests', () => {
+  test('should render the table header', () => {
+    const handleSortChange = testing.fn();
+    const {render} = rendererWithTable();
+    render(
+      <OverrideTableHeader
+        currentSortBy="text"
+        currentSortDir="asc"
+        sort={true}
+        onSortChange={handleSortChange}
+      />,
+    );
+
+    expect(screen.getByText('Text')).toBeInTheDocument();
+    expect(screen.getByText('NVT')).toBeInTheDocument();
+    expect(screen.getByText('Hosts')).toBeInTheDocument();
+    expect(screen.getByText('Location')).toBeInTheDocument();
+    expect(screen.getByText('From')).toBeInTheDocument();
+    expect(screen.getByText('To')).toBeInTheDocument();
+    expect(screen.getByText('Active')).toBeInTheDocument();
+    expect(screen.getByText('Actions')).toBeInTheDocument();
+  });
+
+  test('should render the default actions column from withEntitiesHeader', () => {
+    const handleSortChange = testing.fn();
+    const {render} = rendererWithTable();
+    render(
+      <OverrideTableHeader
+        currentSortBy="text"
+        currentSortDir="asc"
+        sort={true}
+        onSortChange={handleSortChange}
+      />,
+    );
+
+    expect(screen.getByText('Actions')).toBeInTheDocument();
+  });
+
+  test('should render actions column for user selection mode', () => {
+    const handleSortChange = testing.fn();
+    const {render} = rendererWithTable();
+    render(
+      <OverrideTableHeader
+        currentSortBy="text"
+        currentSortDir="asc"
+        selectionType={SelectionType.SELECTION_USER}
+        sort={true}
+        onSortChange={handleSortChange}
+      />,
+    );
+
+    expect(screen.getByText('Actions')).toBeInTheDocument();
+  });
+
+  test('should call onSortChange when a sortable column is clicked', () => {
+    const handleSortChange = testing.fn();
+    const {render} = rendererWithTable();
+    render(
+      <OverrideTableHeader
+        currentSortBy="text"
+        currentSortDir="asc"
+        sort={true}
+        onSortChange={handleSortChange}
+      />,
+    );
+
+    const textColumn = screen.getByText('Text');
+    fireEvent.click(textColumn);
+    expect(handleSortChange).toHaveBeenCalledWith('text');
+  });
+
+  test('should allow to deactivate sorting functionality', () => {
+    const handleSortChange = testing.fn();
+    const {render} = rendererWithTable();
+    render(
+      <OverrideTableHeader
+        currentSortBy="text"
+        currentSortDir="asc"
+        sort={false}
+        onSortChange={handleSortChange}
+      />,
+    );
+
+    const textColumn = screen.getByText('Text');
+    fireEvent.click(textColumn);
+    expect(handleSortChange).not.toHaveBeenCalled();
+  });
+});

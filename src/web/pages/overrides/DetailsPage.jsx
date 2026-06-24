@@ -31,7 +31,7 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';
-import OverrideDetails from 'web/pages/overrides/Details';
+import OverrideDetails from 'web/pages/overrides/OverrideDetails';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import OverrideDetailsPageToolBarIcons from 'web/pages/overrides/OverrideDetailsPageToolBarIcons';
 import {

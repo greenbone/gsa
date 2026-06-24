@@ -18,7 +18,7 @@ import OverridesDashboard, {
 } from 'web/pages/overrides/dashboard';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import OverrideFilterDialog from 'web/pages/overrides/OverrideFilterDialog';
-import OverridesTable from 'web/pages/overrides/Table';
+import OverridesTable from 'web/pages/overrides/OverrideTable';
 import {
   loadEntities,
   selector as entitiesSelector,

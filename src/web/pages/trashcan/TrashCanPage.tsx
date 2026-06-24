@@ -39,7 +39,7 @@ import TrashActions from 'web/pages/extras/TrashActions';
 import FiltersTable from 'web/pages/filters/Table';
 import GroupsTable from 'web/pages/groups/Table';
 import NotesTable from 'web/pages/notes/NoteTable';
-import OverridesTable from 'web/pages/overrides/Table';
+import OverridesTable from 'web/pages/overrides/OverrideTable';
 import PermissionsTable from 'web/pages/permissions/PermissionTable';
 import PoliciesTable from 'web/pages/policies/Table';
 import PortListTable from 'web/pages/portlists/PortListTable';
