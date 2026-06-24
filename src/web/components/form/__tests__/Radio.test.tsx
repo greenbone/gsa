@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent, screen} from 'web/testing';
+import {parseBoolean} from 'gmp/parser';
 import Radio from 'web/components/form/Radio';
 
 describe('Radio tests', () => {
@@ -125,5 +126,39 @@ describe('Radio tests', () => {
     fireEvent.click(element);
 
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  test('should call change handler with booleans', () => {
+    const onChange = testing.fn();
+
+    const {rerender} = render(
+      <Radio
+        convert={parseBoolean}
+        data-testid="input"
+        value={true}
+        onChange={onChange}
+      />,
+    );
+
+    const element = screen.getByTestId('input');
+
+    fireEvent.click(element);
+
+    expect(onChange).toHaveBeenCalledWith(true, undefined);
+
+    onChange.mockClear();
+
+    rerender(
+      <Radio
+        convert={parseBoolean}
+        data-testid="input"
+        value={false}
+        onChange={onChange}
+      />,
+    );
+
+    fireEvent.click(element);
+
+    expect(onChange).toHaveBeenCalledWith(false, undefined);
   });
 });
