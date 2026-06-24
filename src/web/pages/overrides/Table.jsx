@@ -13,7 +13,7 @@ import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import OverrideDetails from 'web/pages/overrides/Details';
-import Row from 'web/pages/overrides/Row';
+import OverrideTableRow from 'web/pages/overrides/OverrideTableRow';
 import PropTypes from 'web/utils/PropTypes';
 
 const Header = ({
@@ -98,7 +98,7 @@ Header.propTypes = {
 
 export default createEntitiesTable({
   emptyTitle: _l('No Overrides available'),
-  row: Row,
+  row: OverrideTableRow,
   rowDetails: withRowDetails('override', 8)(OverrideDetails),
   header: withEntitiesHeader()(Header),
   footer: createEntitiesFooter({
