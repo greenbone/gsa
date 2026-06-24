@@ -9,19 +9,20 @@ import createEntitiesFooter, {
   type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import NoteDetails from 'web/pages/notes/NoteDetails';
 import NoteTableHeader, {
   type NoteTableHeaderProps,
 } from 'web/pages/notes/NoteTableHeader';
-import NoteRow, {type NoteRowProps} from 'web/pages/notes/NoteTableRow';
+import NoteTableRow, {
+  type NoteTableRowProps,
+} from 'web/pages/notes/NoteTableRow';
 
 export default createEntitiesTable<
   Note,
   CreateEntitiesFooterProps<Note>,
   NoteTableHeaderProps,
-  NoteRowProps
+  NoteTableRowProps
 >({
   emptyTitle: _l('No Notes available'),
   footer: createEntitiesFooter<Note>({
@@ -29,7 +30,7 @@ export default createEntitiesTable<
     trash: true,
     download: 'notes.xml',
   }),
-  header: withEntitiesHeader()(NoteTableHeader),
-  row: NoteRow,
+  header: NoteTableHeader,
+  row: NoteTableRow,
   rowDetails: withRowDetails<Note>('note', 10)(NoteDetails),
 });

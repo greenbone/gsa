@@ -6,12 +6,13 @@
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import {type ActionsColumn} from 'web/entities/withEntitiesHeader';
+import withEntitiesHeader, {
+  type WithEntitiesHeaderComponentProps,
+} from 'web/entities/withEntitiesHeader';
 import useTranslation from 'web/hooks/useTranslation';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
-export interface NoteTableHeaderProps {
-  actionsColumn?: ActionsColumn;
+export interface NoteTableHeaderProps extends WithEntitiesHeaderComponentProps {
   sort?: boolean;
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;
@@ -62,4 +63,4 @@ const NoteTableHeader = ({
   );
 };
 
-export default NoteTableHeader;
+export default withEntitiesHeader<NoteTableHeaderProps>()(NoteTableHeader);

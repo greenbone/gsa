@@ -14,7 +14,7 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
 
-export interface NoteActionsProps extends Omit<
+export interface NoteTableActionsProps extends Omit<
   EntitiesActionsProps<Note>,
   'children'
 > {
@@ -24,7 +24,7 @@ export interface NoteActionsProps extends Omit<
   onNoteEditClick?: (note: Note) => void | Promise<void>;
 }
 
-const NoteActions = ({
+const NoteTableActions = ({
   'data-testid': dataTestId,
   entity,
   selectionType,
@@ -34,7 +34,7 @@ const NoteActions = ({
   onNoteDownloadClick,
   onNoteCloneClick,
   onNoteEditClick,
-}: NoteActionsProps) => {
+}: NoteTableActionsProps) => {
   const [_] = useTranslation();
   return (
     <EntitiesActions<Note>
@@ -58,4 +58,4 @@ const NoteActions = ({
   );
 };
 
-export default NoteActions;
+export default NoteTableActions;

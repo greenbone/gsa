@@ -10,7 +10,7 @@ import Note from 'gmp/models/note';
 import Nvt from 'gmp/models/nvt';
 import {createSession} from 'gmp/testing';
 import {shorten} from 'gmp/utils/string';
-import NoteRow from 'web/pages/notes/NoteTableRow';
+import NoteTableRow from 'web/pages/notes/NoteTableRow';
 
 const createGmp = () => ({
   session: createSession(),
@@ -44,7 +44,7 @@ describe('NoteRow tests', () => {
     });
 
     render(
-      <NoteRow
+      <NoteTableRow
         entity={note}
         onNoteCloneClick={testing.fn()}
         onNoteDeleteClick={testing.fn()}
@@ -85,7 +85,7 @@ describe('NoteRow tests', () => {
     });
 
     render(
-      <NoteRow
+      <NoteTableRow
         entity={note}
         onNoteCloneClick={handleNoteClone}
         onNoteDeleteClick={handleNoteDelete}
