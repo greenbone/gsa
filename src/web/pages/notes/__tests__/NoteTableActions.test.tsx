@@ -8,7 +8,8 @@ import {fireEvent, rendererWithTableRow, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Note from 'gmp/models/note';
 import {createSession} from 'gmp/testing';
-import NoteActions from 'web/pages/notes/NoteTableActions';
+import NoteTableActions from 'web/pages/notes/NoteTableActions';
+import SelectionType from 'web/utils/SelectionType';
 
 const wrongCaps = new Capabilities(['get_notes']);
 
@@ -38,7 +39,7 @@ describe('NoteActions tests', () => {
       gmp: createGmp(),
     });
     const {element} = render(
-      <NoteActions
+      <NoteTableActions
         entity={note}
         onNoteCloneClick={handleNoteClone}
         onNoteDeleteClick={handleNoteDelete}
@@ -63,7 +64,7 @@ describe('NoteActions tests', () => {
       gmp: createGmp(),
     });
     render(
-      <NoteActions
+      <NoteTableActions
         entity={note}
         onNoteCloneClick={handleNoteClone}
         onNoteDeleteClick={handleNoteDelete}
@@ -102,7 +103,7 @@ describe('NoteActions tests', () => {
       gmp: createGmp(),
     });
     render(
-      <NoteActions
+      <NoteTableActions
         entity={note}
         onNoteCloneClick={handleNoteClone}
         onNoteDeleteClick={handleNoteDelete}
@@ -136,5 +137,74 @@ describe('NoteActions tests', () => {
     expect(exportIcon).toHaveAttribute('title', 'Export Note');
     fireEvent.click(exportIcon);
     expect(handleNoteDownload).toHaveBeenCalledWith(note);
+  });
+
+  test('should render entity selection in user selection mode', () => {
+    const note = createNote(new Capabilities(['everything']));
+
+    const handleNoteClone = testing.fn();
+    const handleNoteDelete = testing.fn();
+    const handleNoteDownload = testing.fn();
+    const handleNoteEdit = testing.fn();
+
+    const {render} = rendererWithTableRow({
+      capabilities: true,
+      gmp: createGmp(),
+    });
+    render(
+      <NoteTableActions
+        entity={note}
+        selectionType={SelectionType.SELECTION_USER}
+        onNoteCloneClick={handleNoteClone}
+        onNoteDeleteClick={handleNoteDelete}
+        onNoteDownloadClick={handleNoteDownload}
+        onNoteEditClick={handleNoteEdit}
+      />,
+    );
+
+    expect(screen.getByTestId('entity-selection-314')).toBeInTheDocument();
+    expect(
+      screen.queryByTitle('Move Note to trashcan'),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByTitle('Edit Note')).not.toBeInTheDocument();
+    expect(screen.queryByTitle('Clone Note')).not.toBeInTheDocument();
+    expect(screen.queryByTitle('Export Note')).not.toBeInTheDocument();
+  });
+
+  test('should disable delete action when note is in use', () => {
+    const note = new Note({
+      id: '315',
+      inUse: true,
+      text: 'note in use',
+      userCapabilities: new Capabilities(['everything']),
+      writable: 1,
+    });
+
+    const handleNoteClone = testing.fn();
+    const handleNoteDelete = testing.fn();
+    const handleNoteDownload = testing.fn();
+    const handleNoteEdit = testing.fn();
+
+    const {render} = rendererWithTableRow({
+      capabilities: true,
+      gmp: createGmp(),
+    });
+    render(
+      <NoteTableActions
+        entity={note}
+        onNoteCloneClick={handleNoteClone}
+        onNoteDeleteClick={handleNoteDelete}
+        onNoteDownloadClick={handleNoteDownload}
+        onNoteEditClick={handleNoteEdit}
+      />,
+    );
+
+    const deleteIcon = screen.getByTitle('Note is still in use');
+    fireEvent.click(deleteIcon);
+    expect(handleNoteDelete).not.toHaveBeenCalled();
+
+    const editIcon = screen.getByTitle('Edit Note');
+    fireEvent.click(editIcon);
+    expect(handleNoteEdit).toHaveBeenCalledWith(note);
   });
 });
