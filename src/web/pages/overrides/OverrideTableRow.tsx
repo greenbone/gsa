@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import type Model from 'gmp/models/model';
+import type Override from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 import {shorten} from 'gmp/utils/string';
@@ -24,18 +24,6 @@ import {
   translateRiskFactor,
   LOG_VALUE,
 } from 'web/utils/severity';
-
-// should be changed to an Override model in future
-interface Override extends Model {
-  text: string;
-  nvt?: {
-    name: string;
-  };
-  hosts: string[];
-  port: string;
-  severity: number;
-  newSeverity: number;
-}
 
 interface OverrideRowProps extends ActionsProps {
   actionsComponent?: React.ComponentType<ActionsProps>;
@@ -59,7 +47,6 @@ const Actions = withEntitiesActions(
     onOverrideEditClick,
   }: ActionsProps) => {
     const [_] = useTranslation();
-
     return (
       <IconDivider grow align={['center', 'center']}>
         <TrashIcon<Override>
@@ -87,7 +74,7 @@ const Actions = withEntitiesActions(
   },
 );
 
-const Row = ({
+const OverrideTableRow = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   onToggleDetailsClick,
@@ -115,11 +102,11 @@ const Row = ({
         </span>
       </TableData>
       <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
-      <TableData title={entity.hosts.join(', ')}>
-        {shorten(entity.hosts.join(', '))}
+      <TableData title={entity.hosts?.join(', ')}>
+        {shorten(entity.hosts?.join(', '))}
       </TableData>
       <TableData title={entity.port}>{shorten(entity.port)}</TableData>
-      <TableData>{renderSeverity(entity.severity)}</TableData>
+      <TableData>{renderSeverity(entity.severity as number)}</TableData>
       <TableData>
         <SeverityBar severity={entity.newSeverity} />
       </TableData>
@@ -129,4 +116,4 @@ const Row = ({
   );
 };
 
-export default Row;
+export default OverrideTableRow;
