@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {FROM_FILE, PortListCommand} from 'gmp/commands/port-lists';
+import PortListCommand, {FROM_FILE} from 'gmp/commands/port-list';
 import {
   createHttp,
   createActionResultResponse,
@@ -12,7 +12,7 @@ import {
   createEntityResponse,
 } from 'gmp/commands/testing';
 
-describe('PortListCommand', () => {
+describe('PortListCommand tests', () => {
   test('should allow to create a port list', async () => {
     const response = createActionResultResponse({
       id: '12345',
