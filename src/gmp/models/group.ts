@@ -6,7 +6,7 @@
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseCsv} from 'gmp/parser';
 
-interface GroupElement extends ModelElement {
+export interface GroupElement extends ModelElement {
   users?: string;
 }
 

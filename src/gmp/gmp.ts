@@ -4,7 +4,6 @@
  */
 
 import 'gmp/commands/audit-reports';
-import 'gmp/commands/groups';
 import 'gmp/commands/hosts';
 import 'gmp/commands/license';
 import 'gmp/commands/os';
@@ -42,6 +41,8 @@ import DfnCertAdvisoryCommand from 'gmp/commands/dfn-cert-advisory';
 import FeedStatusCommand from 'gmp/commands/feed-status';
 import FilterCommand from 'gmp/commands/filter';
 import FiltersCommand from 'gmp/commands/filters';
+import GroupCommand from 'gmp/commands/group';
+import GroupsCommand from 'gmp/commands/groups';
 import LoginCommand from 'gmp/commands/login';
 import NoteCommand from 'gmp/commands/note';
 import NotesCommand from 'gmp/commands/notes';
@@ -144,6 +145,8 @@ class Gmp {
   public readonly feedstatus: FeedStatusCommand;
   public readonly filter: FilterCommand;
   public readonly filters: FiltersCommand;
+  public readonly group: GroupCommand;
+  public readonly groups: GroupsCommand;
   public readonly note: NoteCommand;
   public readonly notes: NotesCommand;
   public readonly nvt: NvtCommand;
@@ -251,6 +254,8 @@ class Gmp {
     this.feedstatus = new FeedStatusCommand(this.http);
     this.filter = new FilterCommand(this.http);
     this.filters = new FiltersCommand(this.http);
+    this.group = new GroupCommand(this.http);
+    this.groups = new GroupsCommand(this.http);
     this.note = new NoteCommand(this.http);
     this.notes = new NotesCommand(this.http);
     this.nvt = new NvtCommand(this.http);
