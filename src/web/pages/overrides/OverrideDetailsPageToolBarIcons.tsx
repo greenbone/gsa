@@ -18,7 +18,7 @@ import useTranslation from 'web/hooks/useTranslation';
 interface OverrideDetailsPageToolBarIconsProps {
   entity: Override;
   onOverrideCloneClick: (entity: Override) => void;
-  onOverrideCreateClick: (entity: Override) => void;
+  onOverrideCreateClick: () => void;
   onOverrideDeleteClick: (entity: Override) => void;
   onOverrideDownloadClick: (entity: Override) => void;
   onOverrideEditClick: (entity: Override) => void;

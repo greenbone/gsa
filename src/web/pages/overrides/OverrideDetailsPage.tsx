@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {useNavigate} from 'react-router';
+import type Gmp from 'gmp/gmp';
+import type Override from 'gmp/models/override';
+import type Permission from 'gmp/models/permission';
 import {isDefined} from 'gmp/utils/identity';
 import {OverrideIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
@@ -31,8 +34,8 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';
-import OverrideDetails from 'web/pages/overrides/OverrideDetails';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
+import OverrideDetails from 'web/pages/overrides/OverrideDetails';
 import OverrideDetailsPageToolBarIcons from 'web/pages/overrides/OverrideDetailsPageToolBarIcons';
 import {
   selector as overridesSelector,
@@ -42,11 +45,23 @@ import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
-const Details = ({entity, ...props}) => {
+interface DetailsProps {
+  entity: Override;
+}
+
+interface OverrideDetailsPageProps {
+  entity: Override;
+  isLoading?: boolean;
+  onChanged: () => void;
+  onDownloaded: () => void;
+  onError: (error: Error) => void;
+  permissions?: Permission[];
+}
+
+const Details = ({entity}: DetailsProps) => {
   const [_] = useTranslation();
   const [timezone] = useUserTimezone();
   const {nvt} = entity;
@@ -63,7 +78,7 @@ const Details = ({entity, ...props}) => {
             <TableData>
               {isDefined(nvt) ? (
                 <span>
-                  <DetailsLink id={nvt.id} type="nvt">
+                  <DetailsLink id={nvt.id as string} type="nvt">
                     {nvt.name}
                   </DetailsLink>
                 </span>
@@ -75,7 +90,7 @@ const Details = ({entity, ...props}) => {
 
           <TableRow>
             <TableData>{_('NVT OID')}</TableData>
-            <TableData>{nvt.id}</TableData>
+            <TableData>{nvt?.id}</TableData>
           </TableRow>
 
           <TableRow>
@@ -85,66 +100,62 @@ const Details = ({entity, ...props}) => {
               {entity.isActive() &&
                 isDefined(entity.endTime) &&
                 ' ' +
-                  _('until {{- enddate}}', {
-                    enddate: formattedUserSettingLongDate(
+                  _('until {{- endDate}}', {
+                    endDate: formattedUserSettingLongDate(
                       entity.endTime,
                       timezone,
-                    ),
+                    ) as string,
                   })}
             </TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
-
-      <OverrideDetails entity={entity} {...props} />
+      <OverrideDetails entity={entity} />
     </Layout>
   );
 };
 
-Details.propTypes = {
-  entity: PropTypes.model.isRequired,
-};
-
-const Page = ({
+const OverrideDetailsPage = ({
   entity,
+  isLoading = false,
   permissions = [],
   onError,
   onChanged,
   onDownloaded,
-
   ...props
-}) => {
+}: OverrideDetailsPageProps) => {
   const [_] = useTranslation();
-
+  const navigate = useNavigate();
   return (
     <OverrideComponent
       onCloneError={onError}
-      onCloned={goToDetails('override', props)}
-      onCreated={goToDetails('override', props)}
+      onCloned={goToDetails('override', navigate)}
+      onCreated={goToDetails('override', navigate)}
       onDeleteError={onError}
-      onDeleted={goToList('overrides', props)}
+      onDeleted={goToList('overrides', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onSaved={onChanged}
     >
-      {({clone, create, delete: delete_func, download, edit, save}) => (
-        <React.Fragment>
+      {({clone, create, delete: deleteFunc, download, edit}) => (
+        <>
           <PageTitle title={_('Override Details')} />
           <EntityPage
             {...props}
             entity={entity}
+            isLoading={isLoading}
             sectionIcon={<OverrideIcon size="large" />}
             title={_('Override')}
-            toolBarIcons={OverrideDetailsPageToolBarIcons}
-            onChanged={onChanged}
-            onDownloaded={onDownloaded}
-            onError={onError}
-            onOverrideCloneClick={clone}
-            onOverrideCreateClick={create}
-            onOverrideDeleteClick={delete_func}
-            onOverrideDownloadClick={download}
-            onOverrideEditClick={edit}
-            onOverrideSaveClick={save}
+            toolBarIcons={
+              <OverrideDetailsPageToolBarIcons
+                entity={entity}
+                onOverrideCloneClick={clone}
+                onOverrideCreateClick={create}
+                onOverrideDeleteClick={deleteFunc}
+                onOverrideDownloadClick={download}
+                onOverrideEditClick={edit}
+              />
+            }
           >
             {() => {
               return (
@@ -188,31 +199,23 @@ const Page = ({
               );
             }}
           </EntityPage>
-        </React.Fragment>
+        </>
       )}
     </OverrideComponent>
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-};
-
-const load = gmp => {
+const load = (gmp: Gmp) => {
   const loadOverride = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
+  return (id: string) => dispatch =>
     Promise.all([
       dispatch(loadOverride(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
     ]);
 };
 
-const mapStateToProps = (rootState, {id}) => {
+const mapStateToProps = (rootState: unknown, {id}: {id: string}) => {
   const permissionsSel = permissionsSelector(rootState);
   return {
     permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
@@ -223,4 +226,4 @@ export default withEntityContainer('override', {
   entitySelector: overridesSelector,
   load,
   mapStateToProps,
-})(Page);
+})(OverrideDetailsPage);
