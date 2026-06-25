@@ -2254,7 +2254,6 @@
   "Unreliable package check": "不可靠的封装检查",
   "Unreliable rem. banner": "不可靠的远程支持",
   "Unreported": "未报告",
-  "until {{- enddate}}": "直到 {{- enddate}}",
   "until {{- endDate}}": "",
   "Update": "更新",
   "Update available to:": "可更新至：",
