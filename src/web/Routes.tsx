@@ -405,7 +405,8 @@ const loggedInRoutes = [
       {
         path: 'overrides',
         lazy: async () => ({
-          Component: (await import('web/pages/overrides/ListPage')).default,
+          Component: (await import('web/pages/overrides/OverrideListPage'))
+            .default,
         }),
       },
       {
