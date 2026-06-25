@@ -34,7 +34,8 @@ const OverrideTableRow = ({
 }: OverrideTableRowProps) => {
   const [_] = useTranslation();
 
-  const renderSeverity = (severity: number): string => {
+  const renderSeverity = (): string => {
+    const {severity} = entity;
     if (isDefined(severity)) {
       if (severity <= LOG_VALUE) {
         return translateRiskFactor(extraRiskFactor(severity));
@@ -58,7 +59,7 @@ const OverrideTableRow = ({
         {shorten(entity.hosts?.join(', '))}
       </TableData>
       <TableData title={entity.port}>{shorten(entity.port)}</TableData>
-      <TableData>{renderSeverity(entity.severity as number)}</TableData>
+      <TableData>{renderSeverity()}</TableData>
       <TableData>
         <SeverityBar severity={entity.newSeverity} />
       </TableData>
