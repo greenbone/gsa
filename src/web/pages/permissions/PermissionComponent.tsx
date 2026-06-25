@@ -242,7 +242,6 @@ const PermissionsComponent = ({
         setSubjectType('group');
       }
 
-      // @ts-expect-error
       const response = await gmp.groups.getAll();
       const {data: groupsData} = response;
       setGroupId(selectSaveId(groupsData, permState.groupId));
