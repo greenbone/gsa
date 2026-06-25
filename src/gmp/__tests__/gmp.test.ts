@@ -210,6 +210,8 @@ describe('Gmp tests', () => {
     'feedstatus',
     'filter',
     'filters',
+    'group',
+    'groups',
     'note',
     'notes',
     'nvt',
@@ -265,8 +267,6 @@ describe('Gmp tests', () => {
     // registered commands (side-effect imports via registerCommand)
     'auditreport',
     'auditreports',
-    'group',
-    'groups',
     'host',
     'hosts',
     'license',
