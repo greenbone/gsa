@@ -11,7 +11,7 @@ import {
 import {
   type PortListCommandCreateParams,
   type PortListCommandSaveParams,
-} from 'gmp/commands/port-lists';
+} from 'gmp/commands/port-list';
 import type Rejection from 'gmp/http/rejection';
 import {
   type default as PortList,
