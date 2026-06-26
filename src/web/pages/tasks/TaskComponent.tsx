@@ -240,6 +240,8 @@ const TaskComponent = ({
     webApplicationTargetId,
     scannerId: webApplicationScannerId,
     title: webApplicationTitle,
+    ajaxSpiderTimeout: webApplicationAjaxSpiderTimeout,
+    scanMode: webApplicationScanMode,
     setWebApplicationTargetId,
     openWebApplicationTaskDialog,
     closeWebApplicationTaskDialog,
@@ -247,6 +249,7 @@ const TaskComponent = ({
     handleWebApplicationTargetChange,
     handleScannerChange: handleWebApplicationScannerChange,
     handleScheduleChange: handleWebApplicationScheduleChange,
+    handleScanModeChange: handleWebApplicationScanModeChange,
   } = useWebApplicationTaskDialog({
     onWebAppCreated: onImportTaskCreated,
     onWebAppCreateError: onImportTaskCreateError,
@@ -1185,6 +1188,7 @@ const TaskComponent = ({
                     {({create: createWebApplicationTarget}) => (
                       <WebApplicationTaskDialog
                         addTag={webApplicationAddTag}
+                        ajaxSpiderTimeout={webApplicationAjaxSpiderTimeout}
                         alertIds={alertIds}
                         alerts={alerts as RenderSelectItemProps[]}
                         alterable={webApplicationAlterable}
@@ -1194,6 +1198,7 @@ const TaskComponent = ({
                         isLoadingAlerts={isLoadingAlerts}
                         isLoadingSchedules={isLoadingSchedules}
                         name={webApplicationName}
+                        scanMode={webApplicationScanMode}
                         scannerId={webApplicationScannerId}
                         scheduleId={webApplicationScheduleId}
                         schedulePeriods={webApplicationSchedulePeriods}
@@ -1209,6 +1214,7 @@ const TaskComponent = ({
                           createWebApplicationTarget
                         }
                         onSave={handleSaveWebApplicationTask}
+                        onScanModeChange={handleWebApplicationScanModeChange}
                         onScannerChange={handleWebApplicationScannerChange}
                         onScheduleChange={handleWebApplicationScheduleChange}
                         onWebApplicationTargetChange={

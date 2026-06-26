@@ -21,6 +21,7 @@ import Task, {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   type TaskElement,
   type TaskAutoDelete,
+  type TaskScanMode,
 } from 'gmp/models/task';
 import {NO_VALUE, YES_VALUE, parseYesNo, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -159,6 +160,8 @@ interface TaskCommandCreateWebApplicationParams {
   scannerId?: string;
   scheduleId?: string;
   schedulePeriods?: boolean;
+  ajaxSpiderTimeout?: number;
+  scanMode?: TaskScanMode;
   tagId?: string;
   webApplicationTargetId?: string;
 }
@@ -177,6 +180,8 @@ interface TaskCommandSaveWebApplicationParams {
   scannerId?: string;
   scheduleId?: string;
   schedulePeriods?: boolean;
+  ajaxSpiderTimeout?: number;
+  scanMode?: TaskScanMode;
   webApplicationTargetId?: string;
 }
 
@@ -574,6 +579,8 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     scannerId,
     scheduleId,
     schedulePeriods,
+    ajaxSpiderTimeout,
+    scanMode,
     tagId,
     webApplicationTargetId,
   }: TaskCommandCreateWebApplicationParams) {
@@ -591,6 +598,8 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       scannerId,
       scheduleId,
       schedulePeriods,
+      ajaxSpiderTimeout,
+      scanMode,
       tagId,
       webApplicationTargetId,
     });
@@ -601,6 +610,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       'alert_ids:': alertIds,
       alterable: parseYesNo(alterable),
       apply_overrides: parseYesNo(applyOverrides),
+      ajax_spider_timeout: ajaxSpiderTimeout,
       auto_delete_data: autoDeleteData,
       auto_delete: autoDelete,
       comment,
@@ -612,12 +622,14 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       schedule_id: scheduleId,
       schedule_periods: parseYesNo(schedulePeriods),
       tag_id: tagId,
+      scan_mode: scanMode,
       usage_type: 'scan',
       web_application_target_id: webApplicationTargetId,
     });
   }
 
   async saveWebApplicationTask({
+    ajaxSpiderTimeout,
     alertIds = [],
     alterable,
     applyOverrides,
@@ -631,9 +643,11 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     scannerId = NO_VALUE_ID,
     scheduleId,
     schedulePeriods,
+    scanMode,
     webApplicationTargetId,
   }: TaskCommandSaveWebApplicationParams) {
     log.debug('Saving web application task', {
+      ajaxSpiderTimeout,
       alertIds,
       alterable,
       applyOverrides,
@@ -647,12 +661,14 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       scannerId,
       scheduleId,
       schedulePeriods,
+      scanMode,
       webApplicationTargetId,
     });
 
     await this.httpPostWithTransform({
       cmd: 'save_web_application_task',
       'alert_ids:': alertIds,
+      ajax_spider_timeout: ajaxSpiderTimeout,
       alterable: parseYesNo(alterable),
       apply_overrides: parseYesNo(applyOverrides),
       auto_delete_data: autoDeleteData,
@@ -666,6 +682,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       schedule_id: scheduleId,
       schedule_periods: parseYesNo(schedulePeriods),
       task_id: id,
+      scan_mode: scanMode,
       usage_type: 'scan',
       web_application_target_id: webApplicationTargetId,
     });
