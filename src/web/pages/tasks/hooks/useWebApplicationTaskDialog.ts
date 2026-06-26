@@ -5,7 +5,12 @@
 
 import {useState, useCallback} from 'react';
 import {WEB_APPLICATION_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
-import type {default as Task} from 'gmp/models/task';
+import {
+  SCAN_MODE_SAFE,
+  WEB_SCANNER_DEFAULT_AJAX_SPIDER_TIMEOUT,
+  type TaskScanMode,
+  type default as Task,
+} from 'gmp/models/task';
 import {parseBoolean} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {type EntityCreateResponse} from 'web/entity/hooks/useEntityCreate';
@@ -43,6 +48,10 @@ export const useWebApplicationTaskDialog = ({
   const [webApplicationTargetId, setWebApplicationTargetId] = useState<
     string | undefined
   >();
+  const [ajaxSpiderTimeout, setAjaxSpiderTimeout] = useState<
+    number | undefined
+  >();
+  const [scanMode, setScanMode] = useState<TaskScanMode | undefined>();
 
   const [scannerId, setScannerId] = useState<string>(
     WEB_APPLICATION_DEFAULT_SCANNER_ID,
@@ -58,11 +67,15 @@ export const useWebApplicationTaskDialog = ({
       setAddTag(false);
       setAlterable(task ? parseBoolean(task.alterable) : false);
       setApplyOverrides(task ? parseBoolean(task.apply_overrides) : true);
-      setInAssets(task ? parseBoolean(task.in_assets) : true);
+      setInAssets(task ? parseBoolean(task.in_assets) : false);
       setSchedulePeriods(task ? parseBoolean(task.schedule_periods) : false);
       setScheduleId(task?.schedule?.id);
       setWebApplicationTargetId(task?.webApplicationTarget?.id);
       setScannerId(WEB_APPLICATION_DEFAULT_SCANNER_ID);
+      setAjaxSpiderTimeout(
+        task ? task.ajaxSpiderTimeout : WEB_SCANNER_DEFAULT_AJAX_SPIDER_TIMEOUT,
+      );
+      setScanMode(task ? task.scanMode : SCAN_MODE_SAFE);
       setTitle(
         task
           ? _('Edit Web Application Task {{- name}}', {
@@ -90,6 +103,10 @@ export const useWebApplicationTaskDialog = ({
     setScheduleId(value);
   }, []);
 
+  const handleScanModeChange = useCallback((value: TaskScanMode) => {
+    setScanMode(value);
+  }, []);
+
   const handleSaveWebApplicationTask = useCallback(
     (data: WebApplicationTaskDialogData) => {
       const {
@@ -109,6 +126,8 @@ export const useWebApplicationTaskDialog = ({
         autoDeleteData,
         minQod,
         schedulePeriods,
+        ajaxSpiderTimeout,
+        scanMode,
       } = data;
 
       if (isDefined(id)) {
@@ -128,6 +147,8 @@ export const useWebApplicationTaskDialog = ({
             autoDeleteData,
             minQod,
             schedulePeriods,
+            ajaxSpiderTimeout,
+            scanMode,
           })
           .then(onWebAppSaved, onWebAppSaveError)
           .then(() => closeWebApplicationTaskDialog());
@@ -150,6 +171,8 @@ export const useWebApplicationTaskDialog = ({
           inAssets,
           minQod,
           schedulePeriods,
+          ajaxSpiderTimeout,
+          scanMode,
         })
         .then(onWebAppCreated, onWebAppCreateError)
         .then(() => closeWebApplicationTaskDialog());
@@ -177,6 +200,8 @@ export const useWebApplicationTaskDialog = ({
     schedulePeriods,
     scheduleId,
     webApplicationTargetId,
+    ajaxSpiderTimeout,
+    scanMode,
     scannerId,
     title,
 
@@ -190,5 +215,6 @@ export const useWebApplicationTaskDialog = ({
     handleWebApplicationTargetChange,
     handleScannerChange: handleScannerChange,
     handleScheduleChange: handleScheduleChange,
+    handleScanModeChange: handleScanModeChange,
   };
 };

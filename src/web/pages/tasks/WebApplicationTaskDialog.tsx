@@ -8,9 +8,12 @@ import {WEB_APPLICATION_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 import {
   type default as Task,
   type TaskAutoDelete,
+  type TaskScanMode,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   AUTO_DELETE_NO,
   DEFAULT_MIN_QOD,
+  SCAN_MODE_DEFAULT,
+  WEB_SCANNER_DEFAULT_AJAX_SPIDER_TIMEOUT,
 } from 'gmp/models/task';
 import {parseBoolean} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
@@ -20,6 +23,7 @@ import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
+import Spinner from 'web/components/form/Spinner';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import {NewIcon} from 'web/components/icon';
@@ -39,6 +43,7 @@ interface WebApplicationTaskDialogValues {
   scheduleId?: string;
   webApplicationTargetId?: string;
   scannerId?: string;
+  scanMode?: TaskScanMode;
 }
 
 interface WebApplicationTaskDialogDefaultValues {
@@ -56,6 +61,8 @@ interface WebApplicationTaskDialogDefaultValues {
   tags?: RenderSelectItemProps[];
   task?: Task;
   id?: string;
+  ajaxSpiderTimeout?: number;
+  scanMode?: TaskScanMode;
 }
 
 export type WebApplicationTaskDialogData = WebApplicationTaskDialogValues &
@@ -84,6 +91,8 @@ interface WebApplicationTaskDialogProps {
   tags?: RenderSelectItemProps[];
   task?: Task;
   title?: string;
+  ajaxSpiderTimeout?: number;
+  scanMode?: TaskScanMode;
   onAlertsChange?: (value: string[]) => void;
   onClose: () => void | Promise<void>;
   onNewAlertClick?: () => void;
@@ -93,6 +102,7 @@ interface WebApplicationTaskDialogProps {
   onSave: (data: WebApplicationTaskDialogData) => void | Promise<void>;
   onScheduleChange?: (value: string) => void;
   onScannerChange?: (value: string) => void;
+  onScanModeChange?: (value: TaskScanMode) => void;
 }
 
 const WebApplicationTaskDialog = ({
@@ -118,6 +128,8 @@ const WebApplicationTaskDialog = ({
   tags = [],
   task,
   title,
+  ajaxSpiderTimeout = WEB_SCANNER_DEFAULT_AJAX_SPIDER_TIMEOUT,
+  scanMode = SCAN_MODE_DEFAULT,
   onAlertsChange,
   onClose,
   onNewAlertClick,
@@ -127,10 +139,22 @@ const WebApplicationTaskDialog = ({
   onSave,
   onScheduleChange,
   onScannerChange,
+  onScanModeChange,
 }: WebApplicationTaskDialogProps) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
   const isEdit = isDefined(task);
+
+  const scannerModes = renderSelectItems([
+    {
+      id: 'safe',
+      name: _('Safe'),
+    },
+    {
+      id: 'active',
+      name: _('Active'),
+    },
+  ]);
 
   const {
     data: webApplicationTargetsData,
@@ -191,6 +215,8 @@ const WebApplicationTaskDialog = ({
     tagId,
     tags,
     task,
+    ajaxSpiderTimeout: isEdit ? task?.ajaxSpiderTimeout : ajaxSpiderTimeout,
+    scanMode: isEdit ? task?.scanMode : scanMode,
     id: isEdit ? task.id : undefined,
   };
 
@@ -199,6 +225,7 @@ const WebApplicationTaskDialog = ({
     scheduleId,
     webApplicationTargetId,
     scannerId,
+    scanMode,
   };
 
   return (
@@ -326,6 +353,22 @@ const WebApplicationTaskDialog = ({
               autoDelete={state.autoDelete}
               autoDeleteData={state.autoDeleteData}
               onChange={onValueChange}
+            />
+
+            <FormGroup title={_('AJAX Spider Timeout (seconds)')}>
+              <Spinner
+                min={0}
+                name="ajaxSpiderTimeout"
+                value={state.ajaxSpiderTimeout}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+
+            <Select
+              items={scannerModes}
+              label={_('Scan Mode')}
+              value={state.scanMode}
+              onChange={onScanModeChange}
             />
 
             {capabilities.mayAccess('tag') &&

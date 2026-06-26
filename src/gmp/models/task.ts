@@ -34,6 +34,7 @@ export type TaskHostsOrdering =
 export type TaskStatus = (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
 export type TaskTrend = 'up' | 'down' | 'more' | 'less' | 'same';
 export type TaskAutoDelete = typeof AUTO_DELETE_KEEP | typeof AUTO_DELETE_NO;
+export type TaskScanMode = typeof SCAN_MODE_ACTIVE | typeof SCAN_MODE_SAFE;
 
 interface TaskPreferenceElement {
   name?: string;
@@ -242,10 +243,14 @@ export interface TaskProperties extends ModelProperties {
   acceptInvalidCerts?: boolean;
   registryAllowInsecure?: boolean;
   csAllowFailedRetrieval?: boolean;
+  ajaxSpiderTimeout?: number;
+  scanMode?: TaskScanMode;
   usageType?: TaskUsageType;
 }
 
 export type TaskUsageType = (typeof USAGE_TYPE)[keyof typeof USAGE_TYPE];
+
+export const WEB_SCANNER_DEFAULT_AJAX_SPIDER_TIMEOUT = 3600;
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
@@ -258,6 +263,10 @@ export const HOSTS_ORDERING_REVERSE = 'reverse';
 export const DEFAULT_MAX_CHECKS = 4;
 export const DEFAULT_MAX_HOSTS = 20;
 export const DEFAULT_MIN_QOD = 70;
+
+export const SCAN_MODE_ACTIVE = 'active';
+export const SCAN_MODE_SAFE = 'safe';
+export const SCAN_MODE_DEFAULT = SCAN_MODE_SAFE;
 
 export const TASK_STATUS = {
   queued: 'Queued',
@@ -334,6 +343,7 @@ class Task extends Model {
   readonly acceptInvalidCerts?: boolean;
   readonly registryAllowInsecure?: boolean;
   readonly csAllowFailedRetrieval?: boolean;
+  readonly ajaxSpiderTimeout?: number;
   readonly observers?: TaskObservers;
   readonly preferences: TaskPreferences;
   readonly progress?: number;
@@ -350,6 +360,7 @@ class Task extends Model {
   readonly agentGroup?: Model;
   readonly trend?: TaskTrend;
   readonly usageType: TaskUsageType;
+  readonly scanMode?: TaskScanMode;
 
   constructor({
     alerts = [],
@@ -378,6 +389,8 @@ class Task extends Model {
     acceptInvalidCerts,
     registryAllowInsecure,
     csAllowFailedRetrieval,
+    ajaxSpiderTimeout,
+    scanMode = SCAN_MODE_DEFAULT,
     observers,
     preferences = {},
     progress,
@@ -433,6 +446,8 @@ class Task extends Model {
     this.trend = trend;
     this.agentGroup = agentGroup;
     this.usageType = usageType;
+    this.ajaxSpiderTimeout = ajaxSpiderTimeout;
+    this.scanMode = scanMode;
   }
 
   static fromElement(element?: TaskElement): Task {
@@ -612,6 +627,15 @@ class Task extends Model {
             break;
           case 'cs_allow_failed_retrieval':
             copy.csAllowFailedRetrieval = parseBoolean(pref.value);
+            break;
+          case 'ajax_spider_timeout':
+            copy.ajaxSpiderTimeout = parseInt(pref.value);
+            break;
+          case 'scan_mode':
+            copy.scanMode =
+              pref.value === SCAN_MODE_ACTIVE
+                ? SCAN_MODE_ACTIVE
+                : SCAN_MODE_SAFE;
             break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
