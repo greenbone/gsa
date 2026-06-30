@@ -4,8 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {OperatingSystemCommand} from 'gmp/commands/os';
-import {createPlainResponse, createHttp} from 'gmp/commands/testing';
+import OperatingSystemCommand from 'gmp/commands/operatingsystem';
+import {
+  createPlainResponse,
+  createHttp,
+  createEntityResponse,
+} from 'gmp/commands/testing';
 import Response from 'gmp/http/response';
 
 describe('OperatingSystemCommand tests', () => {
@@ -28,5 +32,22 @@ describe('OperatingSystemCommand tests', () => {
     });
     expect(cmdResponse).toBeInstanceOf(Response);
     expect(cmdResponse.data).toEqual(content);
+  });
+
+  test('should request single operating system', async () => {
+    const response = createEntityResponse('asset', {_id: 'foo'});
+    const fakeHttp = createHttp(response);
+
+    const cmd = new OperatingSystemCommand(fakeHttp);
+    const resp = await cmd.get({id: 'foo'});
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_asset',
+        asset_type: 'os',
+        asset_id: 'foo',
+      },
+    });
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
   });
 });
