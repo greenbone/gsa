@@ -13,7 +13,7 @@ interface ScheduleTaskElement extends ModelElement {
   usage_type?: 'scan' | 'audit';
 }
 
-interface ScheduleElement extends ModelElement {
+export interface ScheduleElement extends ModelElement {
   icalendar?: string;
   tasks?: {
     task?: ScheduleTaskElement | ScheduleTaskElement[];
