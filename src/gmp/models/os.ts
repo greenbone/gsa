@@ -6,7 +6,7 @@
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseInt, parseSeverity} from 'gmp/parser';
 
-interface OperatingSystemElement extends ModelElement {
+export interface OperatingSystemElement extends ModelElement {
   os?: {
     all_installs?: number;
     average_severity?: {

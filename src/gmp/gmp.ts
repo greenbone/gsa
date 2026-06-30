@@ -5,7 +5,6 @@
 
 import 'gmp/commands/audit-reports';
 import 'gmp/commands/license';
-import 'gmp/commands/os';
 import 'gmp/commands/scan-configs';
 import 'gmp/commands/schedules';
 import 'gmp/commands/tickets';
@@ -52,6 +51,8 @@ import NvtFamiliesCommand from 'gmp/commands/nvt-families';
 import NvtsCommand from 'gmp/commands/nvts';
 import OciImageTargetCommand from 'gmp/commands/oci-image-target';
 import OciImageTargetsCommand from 'gmp/commands/oci-image-targets';
+import OperatingSystemCommand from 'gmp/commands/operatingsystem';
+import OperatingSystemsCommand from 'gmp/commands/operatingsystems';
 import OverrideCommand from 'gmp/commands/override';
 import OverridesCommand from 'gmp/commands/overrides';
 import PerformanceCommand from 'gmp/commands/performance';
@@ -157,6 +158,8 @@ class Gmp {
   public readonly nvts: NvtsCommand;
   public readonly ociimagetarget: OciImageTargetCommand;
   public readonly ociimagetargets: OciImageTargetsCommand;
+  public readonly operatingsystem: OperatingSystemCommand;
+  public readonly operatingsystems: OperatingSystemsCommand;
   public readonly override: OverrideCommand;
   public readonly overrides: OverridesCommand;
   public readonly performance: PerformanceCommand;
@@ -268,6 +271,8 @@ class Gmp {
     this.nvts = new NvtsCommand(this.http);
     this.ociimagetarget = new OciImageTargetCommand(this.http);
     this.ociimagetargets = new OciImageTargetsCommand(this.http);
+    this.operatingsystem = new OperatingSystemCommand(this.http);
+    this.operatingsystems = new OperatingSystemsCommand(this.http);
     this.override = new OverrideCommand(this.http);
     this.overrides = new OverridesCommand(this.http);
     this.performance = new PerformanceCommand(this.http);
