@@ -197,12 +197,7 @@ const AgentListPage = () => {
   });
 
   const handleDownloadSupportBundle = (agent: Agent) => {
-    if (!agent.id) {
-      showError(new Error(_('Agent ID is required.')));
-      return;
-    }
-
-    downloadSupportBundleMutation.mutate(agent.id, {
+    downloadSupportBundleMutation.mutate(agent.id as string, {
       onSuccess: response => {
         const formatUtcTimestamp = (date = new Date()) =>
           date
