@@ -194,7 +194,6 @@ const AgentListPage = () => {
 
   const downloadSupportBundleMutation = useDownloadAgentSupportBundle({
     onError: showError,
-    },
   });
 
   const handleDownloadSupportBundle = (agent: Agent) => {
