@@ -6,6 +6,7 @@
 import type Agent from 'gmp/models/agent';
 import {isDefined} from 'gmp/utils/identity';
 import {CircleMinusIcon, CirclePlusIcon, EditIcon} from 'web/components/icon';
+import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import EntitiesActions, {
   type EntitiesActionsProps,
@@ -20,6 +21,7 @@ export interface AgentActionsProps extends Omit<
   onAgentAuthorizeClick?: (entity: Agent) => void;
   onAgentDeleteClick?: (entity: Agent) => void;
   onAgentEditClick?: (entity: Agent) => void;
+  onAgentDownloadSupportBundleClick?: (entity: Agent) => void;
 }
 
 const AgentActions = ({
@@ -31,6 +33,7 @@ const AgentActions = ({
   onAgentAuthorizeClick,
   onAgentDeleteClick,
   onAgentEditClick,
+  onAgentDownloadSupportBundleClick,
 }: AgentActionsProps) => {
   const [_] = useTranslation();
 
@@ -69,6 +72,11 @@ const AgentActions = ({
             onClick={handleAuthorizeClick}
           />
         )}
+        <ExportIcon
+          title={_('Download Agent Support Bundle')}
+          value={entity}
+          onClick={onAgentDownloadSupportBundleClick}
+        />
 
         <DeleteIcon<Agent>
           displayName={_('Agent')}

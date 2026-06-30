@@ -54,6 +54,16 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
     await this.action(data);
   }
 
+  async downloadSupportBundle(id: string) {
+    return await this.httpRequestWithRejectionTransform<ArrayBuffer>('get', {
+      args: {
+        cmd: 'get_agent_support_bundle',
+        agent_uuid: id,
+      },
+      responseType: 'arraybuffer',
+    });
+  }
+
   getElementFromRoot(root: Element): AgentElement {
     // @ts-expect-error
     return root.get_agent.get_agents_response.agent;

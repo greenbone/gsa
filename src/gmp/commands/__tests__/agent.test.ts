@@ -102,4 +102,21 @@ describe('AgentCommand tests', () => {
     });
     expect(result).toBe(fakeFile);
   });
+
+  test('should allow to download agent support bundle', async () => {
+    const fakeFile = new ArrayBuffer(8);
+    const http = createHttp(fakeFile);
+    const command = new AgentCommand(http);
+
+    const result = await command.downloadSupportBundle('324');
+
+    expect(http.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_agent_support_bundle',
+        agent_uuid: '324',
+      },
+      responseType: 'arraybuffer',
+    });
+    expect(result).toBe(fakeFile);
+  });
 });

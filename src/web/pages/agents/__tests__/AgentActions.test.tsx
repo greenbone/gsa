@@ -32,6 +32,7 @@ describe('AgentActions tests', () => {
 
     const edit = screen.getByTestId('edit-icon');
     fireEvent.click(edit);
+
     expect(onEdit).toHaveBeenCalledWith(agent);
   });
 
@@ -48,6 +49,7 @@ describe('AgentActions tests', () => {
 
     const authorize = screen.getByTestId('circle-plus-icon');
     fireEvent.click(authorize);
+
     expect(onAuthorize).toHaveBeenCalledWith(unauthorizedAgent);
   });
 
@@ -59,7 +61,25 @@ describe('AgentActions tests', () => {
 
     const revoke = screen.getByTestId('circle-minus-icon');
     fireEvent.click(revoke);
+
     expect(onAuthorize).toHaveBeenCalledWith(agent);
+  });
+
+  test('download support bundle icon calls onAgentDownloadSupportBundleClick', () => {
+    const onDownloadSupportBundle = testing.fn();
+
+    const {render} = rendererWithTableRow({capabilities: true});
+    render(
+      <AgentActions
+        entity={agent}
+        onAgentDownloadSupportBundleClick={onDownloadSupportBundle}
+      />,
+    );
+
+    const downloadSupportBundle = screen.getByTestId('export-icon');
+    fireEvent.click(downloadSupportBundle);
+
+    expect(onDownloadSupportBundle).toHaveBeenCalledWith(agent);
   });
 
   test('delete icon calls onAgentDeleteClick', () => {
@@ -70,29 +90,24 @@ describe('AgentActions tests', () => {
 
     const deleteIcon = screen.getByTestId('delete-icon');
     fireEvent.click(deleteIcon);
+
     expect(onDelete).toHaveBeenCalledWith(agent);
   });
 
-  test('should not call actions if handlers are not provided', () => {
-    const onEdit = testing.fn();
-    const onAuthorize = testing.fn();
-    const onDelete = testing.fn();
-
+  test('should not throw if handlers are not provided', () => {
     const {render} = rendererWithTableRow({capabilities: true});
     render(<AgentActions entity={agent} />);
 
     const edit = screen.getByTestId('edit-icon');
     const authorize = screen.getByTestId('circle-minus-icon');
+    const downloadSupportBundle = screen.getByTestId('export-icon');
     const deleteIcon = screen.getByTestId('delete-icon');
 
     expect(() => {
       fireEvent.click(edit);
       fireEvent.click(authorize);
+      fireEvent.click(downloadSupportBundle);
       fireEvent.click(deleteIcon);
     }).not.toThrow();
-
-    expect(onEdit).not.toHaveBeenCalled();
-    expect(onAuthorize).not.toHaveBeenCalled();
-    expect(onDelete).not.toHaveBeenCalled();
   });
 });

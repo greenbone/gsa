@@ -33,6 +33,9 @@ const revokeMock = testing.fn().mockResolvedValue(undefined);
 const syncMock = testing.fn().mockResolvedValue(undefined);
 const enableUpdateToLatestMock = testing.fn().mockResolvedValue(undefined);
 const disableUpdateToLatestMock = testing.fn().mockResolvedValue(undefined);
+const downloadSupportBundleMock = testing.fn().mockResolvedValue({
+  data: new ArrayBuffer(8),
+});
 
 const createGmp = ({
   getAgents = testing.fn().mockResolvedValue({
@@ -47,6 +50,7 @@ const createGmp = ({
   sync = syncMock,
   enableUpdateToLatest = enableUpdateToLatestMock,
   disableUpdateToLatest = disableUpdateToLatestMock,
+  downloadSupportBundle = downloadSupportBundleMock,
 } = {}) => ({
   settings: {
     manualUrl: 'https://docs.greenbone.net',
@@ -65,6 +69,7 @@ const createGmp = ({
     delete: testing.fn().mockResolvedValue(undefined),
     save: testing.fn().mockResolvedValue(undefined),
     modify: testing.fn().mockResolvedValue(undefined),
+    downloadSupportBundle,
   },
   dashboard: {
     getSetting: testing.fn().mockResolvedValue({}),
@@ -92,6 +97,7 @@ describe('AgentListPage tests', () => {
     syncMock.mockClear();
     enableUpdateToLatestMock.mockClear();
     disableUpdateToLatestMock.mockClear();
+    downloadSupportBundleMock.mockClear();
   });
 
   test('should display loading indicator initially', () => {
@@ -314,5 +320,26 @@ describe('AgentListPage tests', () => {
     await wait();
 
     expect(disableUpdateToLatestMock).toHaveBeenCalled();
+  });
+
+  test('should download the support bundle for an agent', async () => {
+    const gmp = createGmp();
+
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+    });
+
+    render(<AgentListPage />);
+
+    await screen.findByText('Agent 1');
+
+    const downloadIcons = screen.getAllByTitle('Download Agent Support Bundle');
+
+    fireEvent.click(downloadIcons[0]);
+
+    await wait();
+
+    expect(downloadSupportBundleMock).toHaveBeenCalledWith('1');
   });
 });
