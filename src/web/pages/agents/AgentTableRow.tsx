@@ -28,6 +28,7 @@ const AgentTableRow = ({
   onAgentAuthorizeClick,
   onAgentDeleteClick,
   onAgentEditClick,
+  onAgentDownloadSupportBundleClick,
   onEntityDeselected,
   onEntitySelected,
   selectionType,
@@ -63,6 +64,7 @@ const AgentTableRow = ({
         selectionType={selectionType}
         onAgentAuthorizeClick={onAgentAuthorizeClick}
         onAgentDeleteClick={onAgentDeleteClick}
+        onAgentDownloadSupportBundleClick={onAgentDownloadSupportBundleClick}
         onAgentEditClick={onAgentEditClick}
         onEntityDeselected={onEntityDeselected}
         onEntitySelected={onEntitySelected}

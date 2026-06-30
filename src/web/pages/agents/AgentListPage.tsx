@@ -10,6 +10,8 @@ import {type default as Filter, AGENTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
+import Download from 'web/components/form/Download';
+import useDownload from 'web/components/form/useDownload';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
@@ -19,6 +21,7 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import {
   useBulkAuthorizeAgents,
   useBulkDeleteAgents,
+  useDownloadAgentSupportBundle,
   useBulkDisableUpdateToLatestAgents,
   useBulkEnableUpdateToLatestAgents,
   useBulkRevokeAgents,
@@ -46,6 +49,7 @@ const AgentListPage = () => {
   const [entitiesCounts, setEntitiesCounts] = useState<
     CollectionCounts | undefined
   >(undefined);
+  const [downloadRef, handleDownload] = useDownload();
   const deleteFuncRef = useRef<((agent: Agent) => Promise<void>) | undefined>(
     undefined,
   );
@@ -188,6 +192,35 @@ const AgentListPage = () => {
     bulkDisableUpdateToLatest,
   ]);
 
+  const downloadSupportBundleMutation = useDownloadAgentSupportBundle({
+    onError: error => {
+      showError(error);
+    },
+  });
+
+  const handleDownloadSupportBundle = (agent: Agent) => {
+    if (!agent.id) {
+      showError(new Error(_('Agent ID is required.')));
+      return;
+    }
+
+    downloadSupportBundleMutation.mutate(agent.id, {
+      onSuccess: response => {
+        const formatUtcTimestamp = (date = new Date()) =>
+          date
+            .toISOString()
+            .replace(/[-:]/g, '')
+            .replace(/\.\d{3}Z$/, 'Z');
+
+        handleDownload({
+          data: response.data,
+          filename: `support-bundle-${agent.agentId}-${formatUtcTimestamp()}.tar.gz.enc`,
+          mimetype: 'application/octet-stream',
+        });
+      },
+    });
+  };
+
   const handleFilterChanged = useCallback(
     (newFilter?: Filter) => {
       changeFilter(newFilter);
@@ -273,6 +306,9 @@ const AgentListPage = () => {
                   sortDir={sortDir}
                   onAgentAuthorizeClick={authorize}
                   onAgentDeleteClick={openConfirmDeleteDialog}
+                  onAgentDownloadSupportBundleClick={
+                    handleDownloadSupportBundle
+                  }
                   onAgentEditClick={edit}
                   onAuthorizeBulk={handleBulkAuthorize}
                   onDeleteBulk={handleBulkDelete}
@@ -304,6 +340,7 @@ const AgentListPage = () => {
               onFilterRemoved={handleFilterRemoved}
               onFilterReset={handleFilterReset}
             />
+            <Download ref={downloadRef} />
             <DialogNotification
               {...notificationDialogState}
               onCloseClick={closeNotificationDialog}

@@ -34,6 +34,11 @@ interface UseModifyAgentParams {
 
 type AgentBulkInput = Agent[] | Filter;
 
+interface UseDownloadAgentSupportBundleParams {
+  onSuccess?: (response: Response<ArrayBuffer>) => void;
+  onError?: (error: Rejection) => void;
+}
+
 export const useGetAgents = ({
   filter,
   scannerId,
@@ -216,6 +221,19 @@ export const useBulkDisableUpdateToLatestAgents = ({
     successMessage: _(
       'Disabled automatic update to latest for Agents successfully',
     ),
+    onSuccess,
+    onError,
+  });
+};
+
+export const useDownloadAgentSupportBundle = ({
+  onSuccess,
+  onError,
+}: UseDownloadAgentSupportBundleParams = {}) => {
+  const gmp = useGmp();
+
+  return useGmpMutation<string, Response<ArrayBuffer>, Rejection>({
+    gmpMethod: id => gmp.agent.downloadSupportBundle(id),
     onSuccess,
     onError,
   });

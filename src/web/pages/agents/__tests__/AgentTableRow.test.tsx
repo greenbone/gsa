@@ -101,4 +101,27 @@ describe('AgentTableRow tests', () => {
     expect(screen.getByText(/Update available to:/)).toBeInTheDocument();
     expect(screen.getByText(/22\.4\.1/)).toBeInTheDocument();
   });
+
+  test('should call download support bundle handler', () => {
+    const agent = new Agent({
+      id: '1',
+      name: 'Agent 1',
+      authorized: true,
+      userCapabilities: new EverythingCapabilities(),
+    });
+
+    const onDownloadSupportBundle = testing.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    render(
+      <AgentTableRow
+        entity={agent}
+        onAgentDownloadSupportBundleClick={onDownloadSupportBundle}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId('export-icon'));
+
+    expect(onDownloadSupportBundle).toHaveBeenCalledWith(agent);
+  });
 });
