@@ -9,7 +9,7 @@ import {
   createEntityResponse,
   createHttp,
 } from 'gmp/commands/testing';
-import {TicketCommand} from 'gmp/commands/tickets';
+import TicketCommand from 'gmp/commands/ticket';
 
 describe('TicketCommand tests', () => {
   test('should trim note when creating ticket', async () => {
@@ -19,7 +19,6 @@ describe('TicketCommand tests', () => {
     const resp = await cmd.create({
       resultId: 'r1',
       userId: 'u1',
-      foo: 'bar',
       note: ' ',
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -42,7 +41,6 @@ describe('TicketCommand tests', () => {
       resultId: 'r1',
       userId: 'u1',
       note: 'foo',
-      foo: 'bar',
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {

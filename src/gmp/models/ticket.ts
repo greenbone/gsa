@@ -12,7 +12,7 @@ import {isEmpty} from 'gmp/utils/string';
 
 export type TicketStatus = keyof typeof TICKET_STATUS;
 
-interface TicketElement extends ModelElement {
+export interface TicketElement extends ModelElement {
   assigned_to?: {
     user?: {
       _id?: string;

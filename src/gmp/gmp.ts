@@ -6,7 +6,6 @@
 import 'gmp/commands/audit-reports';
 import 'gmp/commands/license';
 import 'gmp/commands/scan-configs';
-import 'gmp/commands/tickets';
 import 'gmp/commands/tls-certificates';
 
 import {getCommands} from 'gmp/command';
@@ -90,6 +89,8 @@ import TargetCommand from 'gmp/commands/target';
 import TargetsCommand from 'gmp/commands/targets';
 import TaskCommand from 'gmp/commands/task';
 import TasksCommand from 'gmp/commands/tasks';
+import TicketCommand from 'gmp/commands/ticket';
+import TicketsCommand from 'gmp/commands/tickets';
 import TimezonesCommand from 'gmp/commands/timezones';
 import TrashCanCommand from 'gmp/commands/trashcan';
 import UserCommand from 'gmp/commands/user';
@@ -201,6 +202,8 @@ class Gmp {
   public readonly targets: TargetsCommand;
   public readonly task: TaskCommand;
   public readonly tasks: TasksCommand;
+  public readonly ticket: TicketCommand;
+  public readonly tickets: TicketsCommand;
   public readonly timezones: TimezonesCommand;
   public readonly trashcan: TrashCanCommand;
   public readonly user: UserCommand;
@@ -316,6 +319,8 @@ class Gmp {
     this.targets = new TargetsCommand(this.http);
     this.task = new TaskCommand(this.http);
     this.tasks = new TasksCommand(this.http);
+    this.ticket = new TicketCommand(this.http);
+    this.tickets = new TicketsCommand(this.http);
     this.timezones = new TimezonesCommand(this.http);
     this.trashcan = new TrashCanCommand(this.http);
     this.user = new UserCommand(this.http);

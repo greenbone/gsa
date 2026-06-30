@@ -263,6 +263,8 @@ describe('Gmp tests', () => {
     'targets',
     'task',
     'tasks',
+    'ticket',
+    'tickets',
     'timezones',
     'trashcan',
     'user',
@@ -276,8 +278,6 @@ describe('Gmp tests', () => {
     'license',
     'scanconfig',
     'scanconfigs',
-    'ticket',
-    'tickets',
     'tlscertificate',
     'tlscertificates',
   ])('should expose command %s', name => {
