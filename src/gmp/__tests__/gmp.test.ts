@@ -212,6 +212,8 @@ describe('Gmp tests', () => {
     'filters',
     'group',
     'groups',
+    'host',
+    'hosts',
     'note',
     'notes',
     'nvt',
@@ -267,8 +269,6 @@ describe('Gmp tests', () => {
     // registered commands (side-effect imports via registerCommand)
     'auditreport',
     'auditreports',
-    'host',
-    'hosts',
     'license',
     'operatingsystem',
     'operatingsystems',

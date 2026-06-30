@@ -68,7 +68,7 @@ interface RouteElement {
   host?: HostRouteElement | HostRouteElement[];
 }
 
-interface HostElement extends ModelElement {
+export interface HostElement extends ModelElement {
   host?: {
     severity?: {value: string};
     detail?: HostDetailElement | HostDetailElement[];
@@ -120,7 +120,7 @@ const getIdentifier = (
 ): Identifier | undefined =>
   identifiers.find(identifier => identifier.name === name);
 
-class Identifier extends BaseModel {
+export class Identifier extends BaseModel {
   readonly name?: string;
   readonly os?: {
     id?: string;

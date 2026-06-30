@@ -4,7 +4,6 @@
  */
 
 import 'gmp/commands/audit-reports';
-import 'gmp/commands/hosts';
 import 'gmp/commands/license';
 import 'gmp/commands/os';
 import 'gmp/commands/scan-configs';
@@ -43,6 +42,8 @@ import FilterCommand from 'gmp/commands/filter';
 import FiltersCommand from 'gmp/commands/filters';
 import GroupCommand from 'gmp/commands/group';
 import GroupsCommand from 'gmp/commands/groups';
+import HostCommand from 'gmp/commands/host';
+import HostsCommand from 'gmp/commands/hosts';
 import LoginCommand from 'gmp/commands/login';
 import NoteCommand from 'gmp/commands/note';
 import NotesCommand from 'gmp/commands/notes';
@@ -147,6 +148,8 @@ class Gmp {
   public readonly filters: FiltersCommand;
   public readonly group: GroupCommand;
   public readonly groups: GroupsCommand;
+  public readonly host: HostCommand;
+  public readonly hosts: HostsCommand;
   public readonly note: NoteCommand;
   public readonly notes: NotesCommand;
   public readonly nvt: NvtCommand;
@@ -256,6 +259,8 @@ class Gmp {
     this.filters = new FiltersCommand(this.http);
     this.group = new GroupCommand(this.http);
     this.groups = new GroupsCommand(this.http);
+    this.host = new HostCommand(this.http);
+    this.hosts = new HostsCommand(this.http);
     this.note = new NoteCommand(this.http);
     this.notes = new NotesCommand(this.http);
     this.nvt = new NvtCommand(this.http);
