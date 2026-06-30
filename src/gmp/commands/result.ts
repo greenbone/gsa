@@ -8,7 +8,7 @@ import type Http from 'gmp/http/http';
 import {type Element} from 'gmp/models/model';
 import Result from 'gmp/models/result';
 
-export class ResultCommand extends EntityCommand<Result> {
+class ResultCommand extends EntityCommand<Result> {
   constructor(http: Http) {
     super(http, 'result', Result);
   }
@@ -18,3 +18,5 @@ export class ResultCommand extends EntityCommand<Result> {
     return root.get_result.get_results_response.result;
   }
 }
+
+export default ResultCommand;
