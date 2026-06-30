@@ -17,7 +17,7 @@ interface GetAggregatesParams {
   filter?: Filter;
 }
 
-export class ResultsCommand extends EntitiesCommand<Result> {
+class ResultsCommand extends EntitiesCommand<Result> {
   constructor(http: Http) {
     super(http, 'result', Result);
   }
@@ -59,3 +59,5 @@ export class ResultsCommand extends EntitiesCommand<Result> {
     });
   }
 }
+
+export default ResultsCommand;
