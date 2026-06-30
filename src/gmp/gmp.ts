@@ -6,7 +6,6 @@
 import 'gmp/commands/audit-reports';
 import 'gmp/commands/license';
 import 'gmp/commands/scan-configs';
-import 'gmp/commands/schedules';
 import 'gmp/commands/tickets';
 import 'gmp/commands/tls-certificates';
 
@@ -83,6 +82,8 @@ import RoleCommand from 'gmp/commands/role';
 import RolesCommand from 'gmp/commands/roles';
 import ScannerCommand from 'gmp/commands/scanner';
 import ScannersCommand from 'gmp/commands/scanners';
+import ScheduleCommand from 'gmp/commands/schedule';
+import SchedulesCommand from 'gmp/commands/schedules';
 import TagCommand from 'gmp/commands/tag';
 import TagsCommand from 'gmp/commands/tags';
 import TargetCommand from 'gmp/commands/target';
@@ -192,6 +193,8 @@ class Gmp {
   public readonly roles: RolesCommand;
   public readonly scanner: ScannerCommand;
   public readonly scanners: ScannersCommand;
+  public readonly schedule: ScheduleCommand;
+  public readonly schedules: SchedulesCommand;
   public readonly tag: TagCommand;
   public readonly tags: TagsCommand;
   public readonly target: TargetCommand;
@@ -305,6 +308,8 @@ class Gmp {
     this.roles = new RolesCommand(this.http);
     this.scanner = new ScannerCommand(this.http);
     this.scanners = new ScannersCommand(this.http);
+    this.schedule = new ScheduleCommand(this.http);
+    this.schedules = new SchedulesCommand(this.http);
     this.tag = new TagCommand(this.http);
     this.tags = new TagsCommand(this.http);
     this.target = new TargetCommand(this.http);
