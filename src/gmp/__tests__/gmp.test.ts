@@ -193,6 +193,8 @@ describe('Gmp tests', () => {
     'alerts',
     'audit',
     'audits',
+    'auditreport',
+    'auditreports',
     'auth',
     'certbund',
     'certbunds',
@@ -275,8 +277,6 @@ describe('Gmp tests', () => {
     'vulns',
     'wizard',
     // registered commands (side-effect imports via registerCommand)
-    'auditreport',
-    'auditreports',
     'scanconfig',
     'scanconfigs',
   ])('should expose command %s', name => {
