@@ -8,7 +8,7 @@ import {type ReportElement} from 'gmp/models/report';
 import AuditReportReport from 'gmp/models/report/audit-report';
 import {isDefined} from 'gmp/utils/identity';
 
-type AuditReportElement = ReportElement;
+export type AuditReportElement = ReportElement;
 
 interface AuditReportProperties extends ModelProperties {
   contentType?: string;
