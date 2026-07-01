@@ -275,7 +275,6 @@ describe('Gmp tests', () => {
     // registered commands (side-effect imports via registerCommand)
     'auditreport',
     'auditreports',
-    'license',
     'scanconfig',
     'scanconfigs',
     'tlscertificate',

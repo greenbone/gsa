@@ -25,7 +25,6 @@ import {
   TestingFeaturesProvider,
   TestingGmpProvider,
   TestingLanguageProvider,
-  TestingLicenseProvider,
   TestingStoreProvider,
 } from 'web/testing/Components';
 import {userEvent, PointerEventsCheckLevel} from 'web/testing/event';
@@ -112,26 +111,22 @@ export const rendererWith = ({
       <TestingGmpProvider gmp={gmp}>
         <TestingCapabilitiesProvider capabilities={capabilities}>
           <TestingFeaturesProvider features={features}>
-            <TestingLicenseProvider license={license}>
-              <TestingStoreProvider store={store}>
-                <TestingLanguageProvider
-                  language={
-                    typeof language === 'string' ? {language} : language
-                  }
-                >
-                  <QueryClientProvider client={queryClient}>
-                    {router ? (
-                      <MemoryRouter initialEntries={[route]}>
-                        {children}
-                        {showLocation && <LocationDisplay />}
-                      </MemoryRouter>
-                    ) : (
-                      children
-                    )}
-                  </QueryClientProvider>
-                </TestingLanguageProvider>
-              </TestingStoreProvider>
-            </TestingLicenseProvider>
+            <TestingStoreProvider store={store}>
+              <TestingLanguageProvider
+                language={typeof language === 'string' ? {language} : language}
+              >
+                <QueryClientProvider client={queryClient}>
+                  {router ? (
+                    <MemoryRouter initialEntries={[route]}>
+                      {children}
+                      {showLocation && <LocationDisplay />}
+                    </MemoryRouter>
+                  ) : (
+                    children
+                  )}
+                </QueryClientProvider>
+              </TestingLanguageProvider>
+            </TestingStoreProvider>
           </TestingFeaturesProvider>
         </TestingCapabilitiesProvider>
       </TestingGmpProvider>
