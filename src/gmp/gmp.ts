@@ -4,7 +4,6 @@
  */
 
 import 'gmp/commands/audit-reports';
-import 'gmp/commands/license';
 import 'gmp/commands/scan-configs';
 import 'gmp/commands/tls-certificates';
 
