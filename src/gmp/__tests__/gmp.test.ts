@@ -266,6 +266,8 @@ describe('Gmp tests', () => {
     'ticket',
     'tickets',
     'timezones',
+    'tlscertificate',
+    'tlscertificates',
     'trashcan',
     'user',
     'users',
@@ -277,8 +279,6 @@ describe('Gmp tests', () => {
     'auditreports',
     'scanconfig',
     'scanconfigs',
-    'tlscertificate',
-    'tlscertificates',
   ])('should expose command %s', name => {
     const storage = createStorage();
     const session = createSession();

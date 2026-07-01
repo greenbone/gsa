@@ -5,7 +5,6 @@
 
 import 'gmp/commands/audit-reports';
 import 'gmp/commands/scan-configs';
-import 'gmp/commands/tls-certificates';
 
 import {getCommands} from 'gmp/command';
 import AgentCommand from 'gmp/commands/agent';
@@ -91,6 +90,8 @@ import TasksCommand from 'gmp/commands/tasks';
 import TicketCommand from 'gmp/commands/ticket';
 import TicketsCommand from 'gmp/commands/tickets';
 import TimezonesCommand from 'gmp/commands/timezones';
+import TlsCertificateCommand from 'gmp/commands/tls-certificate';
+import TlsCertificatesCommand from 'gmp/commands/tls-certificates';
 import TrashCanCommand from 'gmp/commands/trashcan';
 import UserCommand from 'gmp/commands/user';
 import UsersCommand from 'gmp/commands/users';
@@ -204,6 +205,8 @@ class Gmp {
   public readonly ticket: TicketCommand;
   public readonly tickets: TicketsCommand;
   public readonly timezones: TimezonesCommand;
+  public readonly tlscertificate: TlsCertificateCommand;
+  public readonly tlscertificates: TlsCertificatesCommand;
   public readonly trashcan: TrashCanCommand;
   public readonly user: UserCommand;
   public readonly users: UsersCommand;
@@ -321,6 +324,8 @@ class Gmp {
     this.ticket = new TicketCommand(this.http);
     this.tickets = new TicketsCommand(this.http);
     this.timezones = new TimezonesCommand(this.http);
+    this.tlscertificate = new TlsCertificateCommand(this.http);
+    this.tlscertificates = new TlsCertificatesCommand(this.http);
     this.trashcan = new TrashCanCommand(this.http);
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);
