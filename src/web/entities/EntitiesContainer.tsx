@@ -21,9 +21,9 @@ import type Tag from 'gmp/models/tag';
 import {map} from 'gmp/utils/array';
 import {
   getEntityType,
-  apiType,
   pluralizeType,
   type EntityType,
+  resourceType,
 } from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {
@@ -502,7 +502,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
   }
 
   openTagsDialog() {
-    this.getTagsByType();
+    void this.getTagsByType();
     this.setState({
       tagsDialogVisible: true,
       multiTagEntitiesCount: this.getMultiTagEntitiesCount(),
@@ -517,16 +517,15 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     this.closeTagsDialog();
   }
 
-  getTagsByType() {
+  async getTagsByType() {
     const {gmp} = this.props;
     const {entities} = this.state as {entities: TModel[]};
 
     if (entities.length > 0) {
-      const filter = 'resource_type=' + apiType(getEntityType(entities[0]));
-      void gmp.tags.getAll({filter}).then(response => {
-        const {data: tags} = response;
-        this.setState({tags});
-      });
+      const filter = `resource_type=${resourceType(getEntityType(entities[0]))}`;
+      const response = await gmp.tags.getAll({filter});
+      const {data: tags} = response;
+      this.setState({tags});
     }
   }
 
