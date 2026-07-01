@@ -54,22 +54,37 @@ const setup = gmp => {
       updateFilter={updateFilter}
       onDownload={onDownload}
     >
-      {({onDownloadBulk}) => (
-        <button data-testid="button" onClick={() => onDownloadBulk()}>
-          Download Bulk
-        </button>
+      {({onDownloadBulk, onTagsBulk}) => (
+        <>
+          <button
+            data-testid="download-button"
+            onClick={() => onDownloadBulk()}
+          >
+            Download Bulk
+          </button>
+          <button data-testid="tags-button" onClick={() => onTagsBulk()}>
+            Open Tags
+          </button>
+        </>
       )}
     </EntitiesContainer>,
   );
-  return screen.getByRole('button', {name: /Download Bulk/i});
+  return {
+    downloadButton: screen.getByRole('button', {name: /Download Bulk/i}),
+    tagsButton: screen.getByRole('button', {name: /Open Tags/i}),
+  };
 };
 
 const createGmp = ({
   exportByFilter = testing.fn().mockResolvedValue({data: {id: '123'}}),
   currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+  getAllTags = testing.fn().mockResolvedValue({data: []}),
 } = {}) => ({
   portlists: {
     exportByFilter,
+  },
+  tags: {
+    getAll: getAllTags,
   },
   user: {currentSettings},
   session: createSession(),
@@ -78,7 +93,7 @@ const createGmp = ({
 describe('EntitiesContainer', () => {
   test('should allow downloading entities in bulk', async () => {
     const gmp = createGmp();
-    const downloadButton = setup(gmp);
+    const {downloadButton} = setup(gmp);
     await userEvent.click(downloadButton);
 
     await waitFor(() => expect(screen.getByText('Bulk download started.')));
@@ -97,7 +112,7 @@ describe('EntitiesContainer', () => {
     const originalConsoleError = console.error;
     console.error = testing.fn();
 
-    const downloadButton = setup(gmp);
+    const {downloadButton} = setup(gmp);
     fireEvent.click(downloadButton);
 
     await wait();
@@ -106,5 +121,25 @@ describe('EntitiesContainer', () => {
     expect(onDownloaded).not.toHaveBeenCalled();
 
     console.error = originalConsoleError;
+  });
+
+  test('should open tags dialog when onTagsBulk is triggered', async () => {
+    const getAllTags = testing.fn().mockResolvedValue({data: []});
+    const gmp = createGmp({getAllTags});
+    const {tagsButton} = setup(gmp);
+
+    await userEvent.click(tagsButton);
+
+    await waitFor(() => {
+      expect(getAllTags).toHaveBeenCalledWith({
+        filter: 'resource_type=port_list',
+      });
+    });
+
+    await waitFor(() => {
+      expect(screen.getDialogTitle()).toHaveTextContent(
+        'Add Tag to Page Contents',
+      );
+    });
   });
 });
