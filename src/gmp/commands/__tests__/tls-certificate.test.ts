@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
@@ -6,15 +6,10 @@
 import {describe, test, expect} from '@gsa/testing';
 import {
   createActionResultResponse,
-  createEntitiesResponse,
   createEntityResponse,
   createHttp,
 } from 'gmp/commands/testing';
-import {
-  TlsCertificateCommand,
-  TlsCertificatesCommand,
-} from 'gmp/commands/tls-certificates';
-import {ALL_FILTER} from 'gmp/models/filter';
+import TlsCertificateCommand from 'gmp/commands/tls-certificate';
 
 describe('TlsCertificateCommand tests', () => {
   test('should return a single TLS certificate', async () => {
@@ -65,63 +60,5 @@ describe('TlsCertificateCommand tests', () => {
         'bulk_selected:foo': 1,
       },
     });
-  });
-});
-
-describe('TlsCertificatesCommand tests', () => {
-  test('should return all TLS certificates', async () => {
-    const response = createEntitiesResponse('tls_certificate', [
-      {
-        _id: '1',
-        certificate: {
-          __text: 'foo',
-        },
-      },
-      {
-        _id: '2',
-        certificate: {
-          __text: 'bar',
-        },
-      },
-    ]);
-
-    const fakeHttp = createHttp(response);
-    const cmd = new TlsCertificatesCommand(fakeHttp);
-    const resp = await cmd.getAll();
-    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-      args: {
-        cmd: 'get_tls_certificates',
-        filter: ALL_FILTER.toFilterString(),
-      },
-    });
-    const {data} = resp;
-    expect(data.length).toEqual(2);
-  });
-
-  test('should return TLS certificates', async () => {
-    const response = createEntitiesResponse('tls_certificate', [
-      {
-        _id: '1',
-        certificate: {
-          __text: 'foo',
-        },
-      },
-      {
-        _id: '2',
-        certificate: {
-          __text: 'foo',
-        },
-      },
-    ]);
-    const fakeHttp = createHttp(response);
-    const cmd = new TlsCertificatesCommand(fakeHttp);
-    const resp = await cmd.get();
-    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-      args: {
-        cmd: 'get_tls_certificates',
-      },
-    });
-    const {data} = resp;
-    expect(data.length).toEqual(2);
   });
 });

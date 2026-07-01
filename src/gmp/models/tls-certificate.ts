@@ -42,7 +42,7 @@ interface SourceElement {
   tls_versions?: string;
 }
 
-interface TlsCertificateElement extends ModelElement {
+export interface TlsCertificateElement extends ModelElement {
   activation_time?: string;
   certificate?: {
     __text: string;
