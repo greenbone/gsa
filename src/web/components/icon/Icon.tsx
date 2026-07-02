@@ -54,7 +54,7 @@ const StyledDiv = styled.div<StyledDivProps>`
   & svg path {
     fill: ${props => {
       const {$active = true} = props;
-      return $active ? undefined : Theme.inputBorderGray;
+      return $active ? Theme.black : Theme.inputBorderGray;
     }};
   }
 `;

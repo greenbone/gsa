@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, render, fireEvent} from 'web/testing';
 import DynamicIcon from 'web/components/icon/DynamicIcon';
+import Theme from 'web/utils/Theme';
 
 const MockIcon = props => <svg {...props} data-testid="mock-icon" />;
 
@@ -115,7 +116,7 @@ describe('DynamicIcon', () => {
         selector: 'svg',
       });
 
-      expect(svgElement).toHaveAttribute('color', 'black');
+      expect(svgElement).toHaveAttribute('color', Theme.black);
     });
 
     test('renders Lucide icon with custom size and color', () => {
@@ -183,7 +184,7 @@ describe('DynamicIcon', () => {
       const nonLucideIcon = screen.getByTestId('non-lucide-icon');
       expect(nonLucideIcon).toBeVisible();
       const svg = nonLucideIcon.querySelector('svg');
-      expect(svg).toHaveStyle('fill: black');
+      expect(svg).toHaveStyle(`fill: ${Theme.black}`);
     });
 
     test('renders non-Lucide icon with custom size and color', () => {

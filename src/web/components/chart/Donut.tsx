@@ -4,7 +4,6 @@
  */
 
 import React, {type Ref} from 'react';
-import {color as d3color, type HSLColor, type RGBColor} from 'd3-color';
 import styled from 'styled-components';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
@@ -74,8 +73,8 @@ const margin = {
   left: 20,
 };
 
-const emptyColor = Theme.lightGray;
-const darkEmptyColor = (d3color(emptyColor) as HSLColor | RGBColor).darker();
+const emptyColor = 'var(--gsa-lightGray)';
+const darkEmptyColor = 'var(--gsa-darkEmptyColor)';
 
 const EmptyDonut = ({
   left,

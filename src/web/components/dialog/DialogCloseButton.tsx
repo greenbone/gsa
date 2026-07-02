@@ -15,6 +15,7 @@ interface StyledCloseButtonProps {
 }
 
 interface DialogCloseButtonProps {
+  className?: string;
   title?: string;
   size?: IconSizeType;
   onClick?: () => void;
@@ -25,7 +26,7 @@ const StyledCloseButton = styled.div<StyledCloseButtonProps>`
   font-weight: bold;
   font-size: 12px;
   font-family: ${Theme.Font.default};
-  color: ${Theme.darkGreen};
+  color: ${Theme.mediumGray};
   cursor: pointer;
   border-radius: 2px;
   padding: 0;
@@ -36,7 +37,8 @@ const StyledCloseButton = styled.div<StyledCloseButtonProps>`
   height: ${props => props.$height};
   line-height: ${props => props.$lineHeight};
   :hover {
-    border: 1px solid ${Theme.darkGreen};
+    border: 1px solid ${Theme.mediumGray};
+    color: ${Theme.black};
   }
   & * {
     height: inherit;
@@ -45,6 +47,7 @@ const StyledCloseButton = styled.div<StyledCloseButtonProps>`
 `;
 
 const DialogCloseButton = ({
+  className,
   title,
   size = 'medium',
   onClick,
@@ -55,6 +58,7 @@ const DialogCloseButton = ({
 
   return (
     <StyledCloseButton
+      className={className}
       $height={height}
       $lineHeight={height}
       $width={width}
