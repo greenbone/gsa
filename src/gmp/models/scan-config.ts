@@ -11,6 +11,10 @@ import {isEmpty} from 'gmp/utils/string';
 
 type ScanConfigPreferenceValue = string | number;
 
+export type ScanConfigTrend =
+  | typeof SCANCONFIG_TREND_DYNAMIC
+  | typeof SCANCONFIG_TREND_STATIC;
+
 export interface ScanConfigFamilyElement {
   name: string;
   growing?: number;
@@ -35,7 +39,7 @@ export interface ScanConfigScannerElement extends ModelElement {
   __text?: string;
 }
 
-interface ScanConfigElement extends ModelElement {
+export interface ScanConfigElement extends ModelElement {
   deprecated?: YesNo;
   families?: {
     family: ScanConfigFamilyElement | ScanConfigFamilyElement[];
