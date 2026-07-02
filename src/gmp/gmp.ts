@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {getCommands} from 'gmp/command';
 import AgentCommand from 'gmp/commands/agent';
 import AgentGroupCommand from 'gmp/commands/agent-group';
 import AgentGroupsCommand from 'gmp/commands/agent-groups';
@@ -341,22 +340,6 @@ class Gmp {
     this.vuln = new VulnerabilityCommand(this.http);
     this.vulns = new VulnerabilitiesCommand(this.http);
     this.wizard = new WizardCommand(this.http);
-
-    this._initCommands();
-  }
-
-  private _initCommands() {
-    const commands = getCommands();
-
-    for (const [name, cmd] of Object.entries(commands)) {
-      const instance = new cmd(this.http);
-
-      Object.defineProperty(this, name, {
-        get: function () {
-          return instance;
-        },
-      });
-    }
   }
 
   public async login(username: string, password: string) {
