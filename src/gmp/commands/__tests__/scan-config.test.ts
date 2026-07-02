@@ -1,10 +1,14 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {convertPreferences, ScanConfigCommand} from 'gmp/commands/scan-configs';
+import ScanConfigCommand, {
+  convert,
+  convertPreferences,
+  convertSelect,
+} from 'gmp/commands/scan-config';
 import {
   createEntityResponse,
   createHttp,
@@ -15,12 +19,13 @@ import {
 import {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
+  type ScanConfigTrend,
 } from 'gmp/models/scan-config';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
 
 describe('convertPreferences tests', () => {
   test('should convert preferences', () => {
-    const prefenceValues = {
+    const preferenceValues = {
       'foo Password:': {
         id: 1,
         value: undefined,
@@ -43,7 +48,7 @@ describe('convertPreferences tests', () => {
       },
     };
 
-    expect(convertPreferences(prefenceValues, '1.2.3')).toEqual({
+    expect(convertPreferences(preferenceValues, '1.2.3')).toEqual({
       'file:1.2.3:4:file:foo': 'yes',
       'password:1.2.3:3:password:bar': 'yes',
       'preference:1.2.3:2:entry:foo Username:': 'user',
@@ -55,6 +60,45 @@ describe('convertPreferences tests', () => {
   test('should return empty object if preferences are empty', () => {
     expect(convertPreferences(undefined, '1.2.3')).toEqual({});
     expect(convertPreferences({}, '1.2.3')).toEqual({});
+  });
+});
+
+describe('convert tests', () => {
+  test('should convert values with prefix', () => {
+    const values = {
+      foo: 'bar',
+      baz: 123,
+    };
+    const prefix = 'prefix_';
+    const expected = {
+      prefix_foo: 'bar',
+      prefix_baz: 123,
+    };
+    expect(convert(values, prefix)).toEqual(expected);
+  });
+
+  test('should return empty object if values are empty', () => {
+    expect(convert({}, 'prefix_')).toEqual({});
+  });
+});
+
+describe('convertSelect tests', () => {
+  test('should convert select values with prefix', () => {
+    const values: Record<string, YesNo> = {
+      foo: YES_VALUE,
+      bar: NO_VALUE,
+      baz: YES_VALUE,
+    };
+    const prefix = 'select_';
+    const expected = {
+      select_foo: YES_VALUE,
+      select_baz: YES_VALUE,
+    };
+    expect(convertSelect(values, prefix)).toEqual(expected);
+  });
+
+  test('should return empty object if values are empty', () => {
+    expect(convertSelect({}, 'select_')).toEqual({});
   });
 });
 
@@ -110,11 +154,11 @@ describe('ScanConfigCommand tests', () => {
   test('should save a config', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-    const trend = {
+    const trend: Record<string, ScanConfigTrend> = {
       'AIX Local Security Checks': SCANCONFIG_TREND_DYNAMIC,
       'Family Foo': SCANCONFIG_TREND_STATIC,
     };
-    const select = {
+    const select: Record<string, YesNo> = {
       'AIX Local Security Checks': YES_VALUE,
       'Brute force attacks': YES_VALUE,
       'Foo Family': NO_VALUE,
@@ -146,6 +190,29 @@ describe('ScanConfigCommand tests', () => {
     });
   });
 
+  test('should save a config with family trend', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new ScanConfigCommand(fakeHttp);
+
+    await cmd.save({
+      id: 'c1',
+      name: 'foo',
+      comment: 'somecomment',
+      familyTrend: SCANCONFIG_TREND_DYNAMIC,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config',
+        comment: 'somecomment',
+        config_id: 'c1',
+        name: 'foo',
+        trend: SCANCONFIG_TREND_DYNAMIC,
+      },
+    });
+  });
+
   test('should save an in use config with undefined input objects', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
@@ -171,7 +238,7 @@ describe('ScanConfigCommand tests', () => {
   test('should save a config family', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-    const selected = {
+    const selected: Record<string, YesNo> = {
       'oid:1': YES_VALUE,
       'oid:2': NO_VALUE,
       'oid:3': YES_VALUE,
@@ -225,6 +292,28 @@ describe('ScanConfigCommand tests', () => {
         'preference:1.2.3:1:entry:Foo': 'bar',
         'preference:1.2.3:2:password:Bar': 'foo',
         timeout: 1,
+      },
+    });
+  });
+
+  test('should save a config nvt without timeout', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new ScanConfigCommand(fakeHttp);
+
+    await cmd.saveScanConfigNvt({
+      id: 'c1',
+      oid: '1.2.3',
+      preferenceValues: undefined,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config_nvt',
+        config_id: 'c1',
+        oid: '1.2.3',
+        'preference:1.2.3:0:entry:timeout': '',
+        timeout: 0,
       },
     });
   });

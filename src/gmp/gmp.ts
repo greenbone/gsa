@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import 'gmp/commands/scan-configs';
-
 import {getCommands} from 'gmp/command';
 import AgentCommand from 'gmp/commands/agent';
 import AgentGroupCommand from 'gmp/commands/agent-group';
@@ -78,6 +76,8 @@ import ResultCommand from 'gmp/commands/result';
 import ResultsCommand from 'gmp/commands/results';
 import RoleCommand from 'gmp/commands/role';
 import RolesCommand from 'gmp/commands/roles';
+import ScanConfigCommand from 'gmp/commands/scan-config';
+import ScanConfigsCommand from 'gmp/commands/scan-configs';
 import ScannerCommand from 'gmp/commands/scanner';
 import ScannersCommand from 'gmp/commands/scanners';
 import ScheduleCommand from 'gmp/commands/schedule';
@@ -195,6 +195,8 @@ class Gmp {
   public readonly resourcenames: ResourceNamesCommand;
   public readonly role: RoleCommand;
   public readonly roles: RolesCommand;
+  public readonly scanconfig: ScanConfigCommand;
+  public readonly scanconfigs: ScanConfigsCommand;
   public readonly scanner: ScannerCommand;
   public readonly scanners: ScannersCommand;
   public readonly schedule: ScheduleCommand;
@@ -316,6 +318,8 @@ class Gmp {
     this.resourcenames = new ResourceNamesCommand(this.http);
     this.role = new RoleCommand(this.http);
     this.roles = new RolesCommand(this.http);
+    this.scanconfig = new ScanConfigCommand(this.http);
+    this.scanconfigs = new ScanConfigsCommand(this.http);
     this.scanner = new ScannerCommand(this.http);
     this.scanners = new ScannersCommand(this.http);
     this.schedule = new ScheduleCommand(this.http);

@@ -8,23 +8,18 @@ import {
   convert,
   convertSelect,
   convertPreferences,
-} from 'gmp/commands/scan-configs';
+} from 'gmp/commands/scan-config';
 import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
 import Policy from 'gmp/models/policy';
 import {
   BASE_SCAN_CONFIG_ID,
-  type SCANCONFIG_TREND_DYNAMIC,
-  type SCANCONFIG_TREND_STATIC,
+  type ScanConfigTrend,
 } from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-
-type ScanConfigTrend =
-  | typeof SCANCONFIG_TREND_DYNAMIC
-  | typeof SCANCONFIG_TREND_STATIC;
 
 interface NvtResponseEntry {
   _oid: string;

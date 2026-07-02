@@ -255,6 +255,8 @@ describe('Gmp tests', () => {
     'results',
     'role',
     'roles',
+    'scanconfig',
+    'scanconfigs',
     'scanner',
     'scanners',
     'schedule',
@@ -276,9 +278,6 @@ describe('Gmp tests', () => {
     'vuln',
     'vulns',
     'wizard',
-    // registered commands (side-effect imports via registerCommand)
-    'scanconfig',
-    'scanconfigs',
   ])('should expose command %s', name => {
     const storage = createStorage();
     const session = createSession();
