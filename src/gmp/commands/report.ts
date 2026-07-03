@@ -19,25 +19,20 @@ interface ReportCommandImportParams {
   xml_file?: string;
 }
 
-interface ReportCommandAddAssetsParams {
+interface ReportCommandAssetsParams {
   id: string;
-  filter?: string;
-}
-
-interface ReportCommandARemoveAssetsParams {
-  id: string;
-  filter?: string;
+  filter?: Filter | string;
 }
 
 interface ReportCommandAlertParams {
   alert_id: string;
   report_id: string;
-  filter: string;
+  filter?: Filter | string;
 }
 
 interface ReportCommandGetParams {
   id?: string;
-  filter?: string;
+  filter?: Filter | string;
   details?: boolean;
   ignorePagination?: boolean;
   lean?: boolean;
@@ -97,7 +92,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
     });
   }
 
-  addAssets({id, filter = ''}: ReportCommandAddAssetsParams) {
+  addAssets({id, filter = ''}: ReportCommandAssetsParams) {
     return this.httpPostWithTransform({
       cmd: 'create_asset',
       report_id: id,
@@ -105,7 +100,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
     });
   }
 
-  removeAssets({id, filter = ''}: ReportCommandARemoveAssetsParams) {
+  removeAssets({id, filter = ''}: ReportCommandAssetsParams) {
     return this.httpPostWithTransform({
       cmd: 'delete_asset',
       report_id: id,
@@ -131,7 +126,11 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       filter,
       details = true,
       ...options
-    }: {filter?: string; details?: boolean; [key: string]: unknown} = {},
+    }: {
+      filter?: Filter | string;
+      details?: boolean;
+      [key: string]: unknown;
+    } = {},
   ) {
     const response = await this.httpGetWithTransform(
       {
