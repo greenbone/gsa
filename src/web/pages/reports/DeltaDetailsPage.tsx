@@ -33,7 +33,7 @@ import useReload from 'web/hooks/useReload';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
+import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
@@ -520,9 +520,9 @@ const DeltaReportDetails = () => {
     <>
       <TargetComponent>
         {({edit}) => (
-          <DeltaDetailsContent
+          <DeltaReportDetailsContent
             entity={entity}
-            entityError={entityError as Record<string, unknown> | undefined}
+            entityError={entityError}
             filter={reportFilter}
             filters={filters}
             isLoading={isLoading}

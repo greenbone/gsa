@@ -39,11 +39,11 @@ import AuditThresholdPanel from 'web/pages/reports/details/AuditThresholdPanel';
 import ErrorsTab from 'web/pages/reports/details/error/ErrorsTab';
 import HostsTabContent from 'web/pages/reports/details/host/HostsTabContent';
 import OperatingSystemsTab from 'web/pages/reports/details/operating-system/OperatingSystemsTab';
+import ReportDetailsToolBarIcons from 'web/pages/reports/details/ReportDetailsPageToolBarIcons';
 import ResultsTab from 'web/pages/reports/details/result/ResultsTab';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
 import TLSCertificatesTab from 'web/pages/reports/details/tls-certificate/TlsCertificatesTab';
-import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 
 interface AuditReportDetailsContentProps {
   entity?: AuditReport;
@@ -372,7 +372,7 @@ const AuditReportDetailsContent = ({
   return (
     <Layout grow align={['start', 'stretch']} flex="column">
       <ToolBar>
-        <ToolBarIcons
+        <ReportDetailsToolBarIcons
           audit={true}
           delta={false}
           filter={effectiveReportFilter}

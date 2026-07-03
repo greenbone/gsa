@@ -8,6 +8,7 @@ import {screen, rendererWith, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
+import {type TaskStatus} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
@@ -96,11 +97,11 @@ describe('Delta Results Tab tests', () => {
         filter={filter}
         hasTarget={true}
         isUpdating={false}
-        progress={task.progress}
+        progress={task?.progress as number}
         results={results}
         sortField={'severity'}
         sortReverse={true}
-        status={report.scan_run_status}
+        status={report.scan_run_status as TaskStatus}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterEditClick={onFilterEditClick}

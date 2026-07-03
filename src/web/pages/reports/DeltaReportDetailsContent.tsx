@@ -5,6 +5,15 @@
 
 import styled from 'styled-components';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import type AuditReport from 'gmp/models/audit-report';
+import type Filter from 'gmp/models/filter';
+import type Report from 'gmp/models/report';
+import {
+  type default as AuditReportReport,
+  type AuditReportComplianceCounts,
+} from 'gmp/models/report/audit-report';
+import type ReportReport from 'gmp/models/report/report';
+import type ReportTask from 'gmp/models/report/task';
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
@@ -27,19 +36,49 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
-import useGetResults from 'web/hooks/use-query/results';
 import useTranslation from 'web/hooks/useTranslation';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
+import ReportDetailsToolBarIcons from 'web/pages/reports/details/ReportDetailsPageToolBarIcons';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
-import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
-import PropTypes from 'web/utils/PropTypes';
+
+interface DeltaReportDetailsContentProps {
+  audit?: boolean;
+  entity?: Report | AuditReport;
+  entityError?: Error;
+  filter?: Filter;
+  filters?: Filter[];
+  isLoading?: boolean;
+  isUpdating?: boolean;
+  reportId: string;
+  sortField: string;
+  sortReverse: boolean;
+  showError: (error: Error) => void;
+  showErrorMessage: (message: string) => void;
+  showSuccessMessage: (message: string) => void;
+  task?: ReportTask;
+  onAddToAssetsClick?: () => void;
+  onError?: (error: Error) => void;
+  onFilterAddLogLevelClick?: () => void;
+  onFilterChanged?: (filter: Filter) => void;
+  onFilterCreated?: (filter: Filter) => void;
+  onFilterDecreaseMinQoDClick?: () => void;
+  onFilterEditClick?: () => void;
+  onFilterRemoveClick?: () => void;
+  onFilterRemoveSeverityClick?: () => void;
+  onFilterResetClick?: () => void;
+  onRemoveFromAssetsClick?: () => void;
+  onReportDownloadClick?: () => void;
+  onSortChange?: (tabName: string, sortField: string) => void;
+  onTagSuccess?: () => void;
+  onTargetEditClick?: () => void;
+}
 
 const Span = styled.span`
   margin-top: 2px;
 `;
 
-const PageContent = ({
+const DeltaReportDetailsContent = ({
   audit = false,
   entity,
   entityError,
@@ -69,31 +108,29 @@ const PageContent = ({
   onSortChange,
   onTagSuccess,
   onTargetEditClick,
-}) => {
+}: DeltaReportDetailsContentProps) => {
   const [_] = useTranslation();
-  const {report = {}} = entity || {};
+  const {report} = entity ?? {};
 
-  const {userTags = {}} = report;
-  const userTagsCount = userTags.length;
+  const {userTags, timestamp, scan_run_status} = report ?? {};
+  const userTagsCount = userTags?.length;
 
-  const {complianceCounts = {}, timestamp, scan_run_status} = report;
+  const complianceCounts: AuditReportComplianceCounts | undefined = (
+    report as AuditReportReport
+  )?.complianceCounts;
 
   const hasReport = isDefined(entity);
-
-  // Fetch results from dedicated endpoint
-  const {data: resultsData, isFetching: isResultsFetching} = useGetResults({
-    filter,
-  });
 
   if (!hasReport && isDefined(entityError)) {
     return <ErrorMessage message={entityError.message} />;
   }
 
+  const results = (report as ReportReport)?.results;
   const isImport = isDefined(task) && task.isImport();
   const status = isImport ? TASK_STATUS.import : scan_run_status;
   const progress = isDefined(task) ? task.progress : 0;
 
-  const header_title = (
+  const headerTitle = (
     <Divider>
       {audit ? <span>{_('Audit Report:')}</span> : <span>{_('Report:')}</span>}
       {isLoading ? (
@@ -110,18 +147,18 @@ const PageContent = ({
   );
 
   const header = (
-    <SectionHeader img={<ReportIcon size="large" />} title={header_title}>
+    <SectionHeader img={<ReportIcon size="large" />} title={headerTitle}>
       {hasReport && <EntityInfo entity={entity} />}
     </SectionHeader>
   );
 
-  const resultsCounts = resultsData?.entitiesCounts;
-  const filtered = audit ? complianceCounts.filtered : resultsCounts?.filtered;
+  const resultsCounts = results?.counts ?? new CollectionCounts();
+  const filtered = audit ? complianceCounts?.filtered : resultsCounts?.filtered;
 
   return (
     <Layout grow align={['start', 'stretch']} flex="column">
       <ToolBar>
-        <ToolBarIcons
+        <ReportDetailsToolBarIcons
           audit={audit}
           delta={true}
           filter={filter}
@@ -176,8 +213,6 @@ const PageContent = ({
                       filter={filter}
                       report={report}
                       reportId={reportId}
-                      onError={onError}
-                      onTagChanged={onTagSuccess}
                     />
                   </TabPanel>
                   <TabPanel>
@@ -187,19 +222,19 @@ const PageContent = ({
                       delta={true}
                       filter={filter}
                       hasTarget={!isImport}
-                      isUpdating={isUpdating || isResultsFetching}
-                      progress={progress}
-                      results={resultsData?.entities ?? []}
+                      isUpdating={isUpdating}
+                      progress={progress ?? 0}
+                      results={results?.entities ?? []}
                       sortField={sortField}
                       sortReverse={sortReverse}
-                      status={status}
+                      status={status ?? TASK_STATUS.unknown}
                       onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                       onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
                       onFilterEditClick={onFilterEditClick}
                       onFilterRemoveClick={onFilterRemoveClick}
                       onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                       onSortChange={sortField =>
-                        onSortChange('results', sortField)
+                        onSortChange?.('results', sortField)
                       }
                       onTargetEditClick={onTargetEditClick}
                     />
@@ -223,36 +258,4 @@ const PageContent = ({
   );
 };
 
-PageContent.propTypes = {
-  audit: PropTypes.bool,
-  entity: PropTypes.model,
-  entityError: PropTypes.object,
-  filter: PropTypes.filter,
-  filters: PropTypes.array,
-  isLoading: PropTypes.bool,
-  isUpdating: PropTypes.bool,
-  reportId: PropTypes.id.isRequired,
-  showError: PropTypes.func.isRequired,
-  showErrorMessage: PropTypes.func.isRequired,
-  showSuccessMessage: PropTypes.func.isRequired,
-  sortField: PropTypes.string.isRequired,
-  sortReverse: PropTypes.bool.isRequired,
-  task: PropTypes.model,
-  onAddToAssetsClick: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onFilterAddLogLevelClick: PropTypes.func,
-  onFilterChanged: PropTypes.func.isRequired,
-  onFilterCreated: PropTypes.func.isRequired,
-  onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
-  onFilterEditClick: PropTypes.func.isRequired,
-  onFilterRemoveClick: PropTypes.func.isRequired,
-  onFilterRemoveSeverityClick: PropTypes.func,
-  onFilterResetClick: PropTypes.func.isRequired,
-  onRemoveFromAssetsClick: PropTypes.func.isRequired,
-  onReportDownloadClick: PropTypes.func.isRequired,
-  onSortChange: PropTypes.func.isRequired,
-  onTagSuccess: PropTypes.func.isRequired,
-  onTargetEditClick: PropTypes.func.isRequired,
-};
-
-export default PageContent;
+export default DeltaReportDetailsContent;

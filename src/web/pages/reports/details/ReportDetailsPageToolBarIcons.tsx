@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Filter from 'gmp/models/filter';
+import type AuditReportReport from 'gmp/models/report/audit-report';
+import type ReportReport from 'gmp/models/report/report';
+import type ReportTask from 'gmp/models/report/task';
 import {isDefined} from 'gmp/utils/identity';
 import {
   AddToAssetsIcon,
@@ -23,12 +26,30 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import useTranslation from 'web/hooks/useTranslation';
 import AlertActions from 'web/pages/reports/details/AlertActions';
-import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({
+
+interface ReportDetailsToolBarIconsProps {
+  audit?: boolean;
+  delta?: boolean;
+  filter?: Filter;
+  isLoading?: boolean;
+  report?: ReportReport | AuditReportReport;
+  reportId: string;
+  showError: (error: Error) => void;
+  showErrorMessage: (message: string) => void;
+  showSuccessMessage: (message: string) => void;
+  showThresholdMessage?: boolean;
+  task?: ReportTask;
+  threshold?: number;
+  onAddToAssetsClick?: () => void;
+  onRemoveFromAssetsClick?: () => void;
+  onReportDownloadClick?: () => void;
+}
+
+const ReportDetailsToolBarIcons = ({
   audit = false,
   delta = false,
   filter,
-  isLoading,
+  isLoading = true,
   report,
   reportId,
   showThresholdMessage,
@@ -40,7 +61,7 @@ const ToolBarIcons = ({
   showError,
   showErrorMessage,
   showSuccessMessage,
-}) => {
+}: ReportDetailsToolBarIconsProps) => {
   const [_] = useTranslation();
 
   return (
@@ -67,7 +88,7 @@ const ToolBarIcons = ({
         )}
       </IconDivider>
       {!isLoading && (
-        <React.Fragment>
+        <>
           <IconDivider>
             {audit ? (
               <AddToAssetsIcon
@@ -87,7 +108,7 @@ const ToolBarIcons = ({
           </IconDivider>
           <IconDivider>
             <DetailsLink
-              id={isDefined(task) ? task.id : ''}
+              id={isDefined(task) ? (task.id as string) : ''}
               textOnly={!isDefined(task)}
               title={_('Corresponding Task')}
               type="task"
@@ -122,15 +143,16 @@ const ToolBarIcons = ({
             {isDefined(task) && !task.isImport() && (
               <Link
                 query={{
-                  start: isDefined(report.scan_start)
+                  start: (isDefined(report?.scan_start)
                     ? report.scan_start
                         .utc()
                         .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-                    : undefined,
-                  end: isDefined(report.scan_end)
+                    : undefined) as string,
+                  end: (isDefined(report?.scan_end)
                     ? report.scan_end.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-                    : undefined,
-                  ...(isDefined(report.slave) && {scanner: report.slave.id}),
+                    : undefined) as string,
+                  // @ts-expect-error
+                  ...(isDefined(report?.slave) && {scanner: report.slave.id}),
                 }}
                 title={_('Corresponding Performance')}
                 to="performance"
@@ -157,34 +179,10 @@ const ToolBarIcons = ({
               />
             )}
           </IconDivider>
-        </React.Fragment>
+        </>
       )}
     </Divider>
   );
 };
 
-ToolBarIcons.propTypes = {
-  audit: PropTypes.bool,
-  delta: PropTypes.bool,
-  filter: PropTypes.filter,
-  isLoading: PropTypes.bool,
-  report: PropTypes.shape({
-    scan_end: PropTypes.date,
-    scan_start: PropTypes.date,
-    slave: PropTypes.shape({
-      id: PropTypes.id.isRequired,
-    }),
-  }),
-  reportId: PropTypes.id.isRequired,
-  showError: PropTypes.func.isRequired,
-  showErrorMessage: PropTypes.func.isRequired,
-  showSuccessMessage: PropTypes.func.isRequired,
-  showThresholdMessage: PropTypes.bool,
-  task: PropTypes.model,
-  threshold: PropTypes.number,
-  onAddToAssetsClick: PropTypes.func.isRequired,
-  onRemoveFromAssetsClick: PropTypes.func.isRequired,
-  onReportDownloadClick: PropTypes.func.isRequired,
-};
-
-export default ToolBarIcons;
+export default ReportDetailsToolBarIcons;
