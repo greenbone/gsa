@@ -4,14 +4,19 @@
  */
 
 import CollectionCounts from 'gmp/collection/collection-counts';
-import {type CollectionList} from 'gmp/collection/parser';
+import {
+  parseCollectionList,
+  parseReportResultEntities,
+  type CollectionList,
+} from 'gmp/collection/parser';
 import {type ComplianceType} from 'gmp/models/compliance';
 import type Filter from 'gmp/models/filter';
 import {type NvtRefElement, type NvtSeveritiesElement} from 'gmp/models/nvt';
 import {type ReportTLSCertificateElement} from 'gmp/models/report/tls-certificate';
+import Result from 'gmp/models/result';
 import {parseSeverity, type QoDParams} from 'gmp/parser';
 import {filter as filterFunc, forEach} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
+import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 export interface CountElement {
@@ -353,6 +358,15 @@ export interface ReportError {
   port?: string;
 }
 
+interface ResultsReportElement {
+  results?: ReportResultsElement;
+  result_count?: ReportResultCountElement;
+  compliance_count?: ReportComplianceCountElement;
+}
+
+// Single element shape shared by both active and closed CVE endpoints.
+// Active CVEs use `name` for the CVE ID; closed CVEs use `cve`.
+
 // reports with details=1 always have a results element
 // (that can be empty) whereas reports with details=0
 // never have a results element
@@ -539,4 +553,54 @@ export const parseClosedCvesFromEndpoint = (
   );
 
   return buildCveCollectionList(entities, closedCvesContainer, filter);
+};
+
+const parseReportReportCounts = (element: ResultsReportElement) => {
+  const resultsElement = element.results ?? {};
+  const resultCountElement = element.result_count ?? element.compliance_count;
+
+  // due to the XML conversion to JS the result element can be a single element or an array
+  const length = isDefined(resultsElement.result)
+    ? isArray(resultsElement.result)
+      ? resultsElement.result.length
+      : 1
+    : 0;
+
+  return new CollectionCounts({
+    first: resultsElement._start,
+    rows: resultCountElement?.filtered,
+    length,
+    all: isDefined(resultCountElement?.full)
+      ? resultCountElement.full
+      : resultCountElement?.filtered, // ec.full isn't available for delta reports
+    filtered: resultCountElement?.filtered,
+  });
+};
+
+export const parseResults = (report: ResultsReportElement) => {
+  const {results, result_count, compliance_count} = report;
+  if (
+    !isDefined(results) &&
+    !isDefined(result_count) &&
+    !isDefined(compliance_count)
+  ) {
+    return undefined;
+    // instead of returning empty_collection_list(filter) we return an undefined
+    // in order to query if results have been loaded and make a difference to
+    // "loaded, but 0 total". This is used for showing the Loading indicator at
+    // the report details
+  }
+
+  return parseCollectionList<Result, Required<ResultsReportElement>>(
+    report as Required<ResultsReportElement>,
+    'result',
+    Result,
+    {
+      entitiesParseFunc: parseReportResultEntities<
+        Result,
+        Required<ResultsReportElement>
+      >,
+      collectionCountParseFunc: parseReportReportCounts,
+    },
+  );
 };

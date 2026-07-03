@@ -81,9 +81,11 @@ class AuditReportReport extends Model {
   readonly delta_report?: DeltaReport;
   readonly filter?: Filter;
   readonly reportType?: ReportType;
+  // used for delta reports only
+  readonly results?: CollectionList<Result>;
   readonly task?: ReportTask;
   readonly scan_end?: Date;
-  readonly scan_run_status?: string;
+  readonly scan_run_status?: AuditStatus;
   readonly scan_start?: Date;
   readonly timezone?: string;
   readonly timezone_abbrev?: string;
@@ -95,6 +97,7 @@ class AuditReportReport extends Model {
     delta_report,
     filter,
     reportType,
+    results,
     task,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     scan_end,
@@ -114,6 +117,7 @@ class AuditReportReport extends Model {
     this.delta_report = delta_report;
     this.filter = filter;
     this.reportType = reportType;
+    this.results = results;
     this.task = task;
     this.scan_end = scan_end;
     this.scan_run_status = scan_run_status;
@@ -171,6 +175,8 @@ class AuditReportReport extends Model {
     }
 
     copy.task = ReportTask.fromElement(task);
+
+    copy.results = parseResults(element);
 
     copy.scan_start = parseDate(scan_start);
     copy.scan_end = parseDate(scan_end);
