@@ -16,7 +16,7 @@ interface EmptyReportProps {
   hasTarget?: boolean;
   progress?: number;
   status: TaskStatus;
-  onTargetEditClick: () => void;
+  onTargetEditClick?: () => void;
 }
 
 const EmptyReport = ({

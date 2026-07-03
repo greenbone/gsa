@@ -9,7 +9,7 @@ import type ReportTask from 'gmp/models/report/task';
 import ToolBar from 'web/components/bar/Toolbar';
 import Layout from 'web/components/layout/Layout';
 import Powerfilter from 'web/components/powerfilter/PowerFilter';
-import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
+import ReportDetailsToolBarIcons from 'web/pages/reports/details/ReportDetailsPageToolBarIcons';
 
 export interface DetailsToolbarProps {
   delta?: boolean;
@@ -22,22 +22,22 @@ export interface DetailsToolbarProps {
   reportFilter?: Filter;
   reportId: string;
   resetFilter?: Filter;
-  showError: (...args: unknown[]) => void;
+  showError: (error: Error) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
   showThresholdMessage?: boolean;
   task?: ReportTask;
   threshold?: number;
-  onAddToAssetsClick: () => void;
-  onFilterChanged: (filter: Filter) => void;
-  onFilterEditClick: () => void;
-  onFilterRemoveClick: () => void;
-  onFilterResetClick: () => void;
-  onRemoveFromAssetsClick: () => void;
-  onReportDownloadClick: () => void;
+  onAddToAssetsClick?: () => void;
+  onFilterChanged?: (filter: Filter) => void;
+  onFilterEditClick?: () => void;
+  onFilterRemoveClick?: () => void;
+  onFilterResetClick?: () => void;
+  onRemoveFromAssetsClick?: () => void;
+  onReportDownloadClick?: () => void;
 }
 
-const DetailsToolbar = ({
+const ReportDetailsPageToolBar = ({
   delta = false,
   filters,
   isLoading,
@@ -64,7 +64,7 @@ const DetailsToolbar = ({
 }: DetailsToolbarProps) => {
   return (
     <ToolBar>
-      <ToolBarIcons
+      <ReportDetailsToolBarIcons
         delta={delta}
         filter={reportFilter}
         isLoading={isLoading}
@@ -98,4 +98,4 @@ const DetailsToolbar = ({
   );
 };
 
-export default DetailsToolbar;
+export default ReportDetailsPageToolBar;

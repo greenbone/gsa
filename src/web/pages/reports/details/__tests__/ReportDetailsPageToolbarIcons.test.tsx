@@ -9,7 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
+import ReportDetailsPageToolBarIcons from 'web/pages/reports/details/ReportDetailsPageToolBarIcons';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -55,11 +55,11 @@ describe('Report Details ToolBarIcons tests', () => {
     });
 
     const {element} = render(
-      <ToolBarIcons
+      <ReportDetailsPageToolBarIcons
         filter={filter}
         isLoading={false}
         report={report}
-        reportId={report.id}
+        reportId={report.id as string}
         showError={showError}
         showErrorMessage={showErrorMessage}
         showSuccessMessage={showSuccessMessage}
@@ -153,11 +153,11 @@ describe('Report Details ToolBarIcons tests', () => {
     });
 
     const {element} = render(
-      <ToolBarIcons
+      <ReportDetailsPageToolBarIcons
         filter={filter}
         isLoading={false}
         report={report}
-        reportId={report.id}
+        reportId={report.id as string}
         showError={showError}
         showErrorMessage={showErrorMessage}
         showSuccessMessage={showSuccessMessage}

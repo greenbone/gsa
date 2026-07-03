@@ -3,19 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseFilter} from 'gmp/collection/parser';
+import {type CollectionList, parseFilter} from 'gmp/collection/parser';
 import {type AuditStatus} from 'gmp/models/audit';
 import {type ComplianceType} from 'gmp/models/compliance';
 import {type Date} from 'gmp/models/date';
 import type Filter from 'gmp/models/filter';
 import Model, {type ModelProperties} from 'gmp/models/model';
-import {type ReportComplianceCountElement} from 'gmp/models/report/parser';
+import {
+  parseResults,
+  type ReportComplianceCountElement,
+} from 'gmp/models/report/parser';
 import {
   type DeltaReport,
   type ReportReportElement,
   type ReportType,
 } from 'gmp/models/report/report';
 import ReportTask from 'gmp/models/report/task';
+import type Result from 'gmp/models/result';
 import {type TaskStatus} from 'gmp/models/task';
 import {parseDate, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -60,6 +64,7 @@ interface AuditReportReportProperties extends ModelProperties {
   delta_report?: DeltaReport;
   filter?: Filter;
   reportType?: ReportType;
+  results?: CollectionList<Result>;
   task?: ReportTask;
   scan_end?: Date;
   scan_run_status?: AuditStatus;

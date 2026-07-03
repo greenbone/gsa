@@ -24,7 +24,7 @@ import withDialogNotification from 'web/components/notification/withDialogNotifi
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import Page from 'web/pages/reports/DeltaDetailsContent';
+import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
@@ -351,7 +351,7 @@ const AuditDeltaReportDetails = props => {
     <React.Fragment>
       <TargetComponent onSaveError={handleError}>
         {({edit}) => (
-          <Page
+          <DeltaReportDetailsContent
             audit={true}
             entity={entity}
             entityError={entityError}

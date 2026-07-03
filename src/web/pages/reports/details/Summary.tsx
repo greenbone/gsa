@@ -10,6 +10,7 @@ import {
   duration as createDuration,
 } from 'gmp/models/date';
 import type Filter from 'gmp/models/filter';
+import type AuditReportReport from 'gmp/models/report/audit-report';
 import type ReportReport from 'gmp/models/report/report';
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -29,10 +30,10 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface SummaryProps {
   audit?: boolean;
-  filter: Filter;
+  filter?: Filter;
   isUpdating?: boolean;
   links?: boolean;
-  report: ReportReport;
+  report: ReportReport | AuditReportReport;
   reportId: string;
   reportError?: Error;
 }

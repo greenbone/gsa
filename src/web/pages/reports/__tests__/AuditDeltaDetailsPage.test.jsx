@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__fixtures__/MockAuditDeltaReport';
-import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
+import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 
 const filter = Filter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
@@ -80,7 +80,7 @@ describe('AuditDeltaDetailsContent tests', () => {
     });
 
     render(
-      <DeltaDetailsContent
+      <DeltaReportDetailsContent
         audit={true}
         entity={entity}
         filter={filterWithName}
@@ -195,7 +195,7 @@ describe('AuditDeltaDetailsContent tests', () => {
     });
 
     render(
-      <DeltaDetailsContent
+      <DeltaReportDetailsContent
         audit={true}
         entity={entity}
         filter={filter}

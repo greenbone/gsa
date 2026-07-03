@@ -24,7 +24,7 @@ interface DeltaResultsTabProps {
   audit?: boolean;
   counts: CollectionCounts;
   delta?: boolean;
-  filter: Filter;
+  filter?: Filter;
   hasTarget?: boolean;
   isUpdating?: boolean;
   progress: number;
@@ -32,13 +32,13 @@ interface DeltaResultsTabProps {
   sortField: string;
   sortReverse: boolean;
   status: TaskStatus;
-  onFilterAddLogLevelClick: () => void;
-  onFilterDecreaseMinQoDClick: () => void;
-  onFilterEditClick: () => void;
-  onFilterRemoveClick: () => void;
-  onFilterRemoveSeverityClick: () => void;
-  onSortChange: (sortBy: string) => void;
-  onTargetEditClick: () => void;
+  onFilterAddLogLevelClick?: () => void;
+  onFilterDecreaseMinQoDClick?: () => void;
+  onFilterEditClick?: () => void;
+  onFilterRemoveClick?: () => void;
+  onFilterRemoveSeverityClick?: () => void;
+  onSortChange?: (sortBy: string) => void;
+  onTargetEditClick?: () => void;
 }
 
 const resultsSortFunctions = {

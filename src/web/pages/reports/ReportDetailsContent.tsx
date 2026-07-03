@@ -34,7 +34,7 @@ import EntityInfo from 'web/entity/EntityInfo';
 import useReportSubEntities from 'web/hooks/use-query/use-report-sub-entities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import DetailsToolbar from 'web/pages/reports/details/DetailsToolbar';
+import ReportDetailsPageToolBar from 'web/pages/reports/details/ReportDetailsPageToolBar';
 import {buildReportTabDefinitions} from 'web/pages/reports/details/ReportTabDefinitions';
 
 interface ThresholdConfig {
@@ -238,7 +238,7 @@ const ReportDetailsContent = ({
 
   return (
     <Layout grow align={['start', 'stretch']} flex="column">
-      <DetailsToolbar
+      <ReportDetailsPageToolBar
         delta={false}
         filters={filters}
         isLoading={showIsLoading}

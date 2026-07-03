@@ -8,9 +8,9 @@ import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
-import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
+import {SEVERITY_RATING_CVSS_3, type SeverityRating} from 'gmp/utils/severity';
 import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
-import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
+import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=chml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -19,7 +19,7 @@ const filter = Filter.fromString(
 const filterWithName = Filter.fromElement({
   term: 'apply_overrides=0 levels=chml rows=2 min_qod=70 first=1 sort-reverse=severity',
   name: 'foo',
-  id: '123',
+  _id: '123',
 });
 
 const manualUrl = 'test/';
@@ -29,6 +29,9 @@ const {entity: mockEntity} = getMockDeltaReport();
 const createGmp = ({
   reportResultsThreshold = 10,
   severityRating = undefined,
+}: {
+  reportResultsThreshold?: number;
+  severityRating?: SeverityRating;
 } = {}) => ({
   settings: {
     manualUrl,
@@ -84,19 +87,19 @@ describe('DeltaReportDetailsContent tests', () => {
     });
 
     render(
-      <DeltaDetailsContent
+      <DeltaReportDetailsContent
         entity={entity}
         filter={filterWithName}
         filters={filters}
         isLoading={false}
         isUpdating={false}
-        reportId={entity.report.id}
+        reportId={entity.report?.id as string}
         showError={testing.fn()}
         showErrorMessage={testing.fn()}
         showSuccessMessage={testing.fn()}
         sortField="severity"
         sortReverse={true}
-        task={entity.report.task}
+        task={entity.report?.task}
         onAddToAssetsClick={testing.fn()}
         onError={testing.fn()}
         onFilterAddLogLevelClick={testing.fn()}
@@ -130,7 +133,7 @@ describe('DeltaReportDetailsContent tests', () => {
     expect(screen.getByTitle(/^Download filtered Report/)).toBeInTheDocument();
 
     // Powerfilter
-    const powerFilter = within(screen.queryPowerFilter());
+    const powerFilter = within(screen.getPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('foo');
@@ -217,19 +220,19 @@ describe('DeltaReportDetailsContent tests', () => {
     });
 
     render(
-      <DeltaDetailsContent
+      <DeltaReportDetailsContent
         entity={entity}
         filter={filter}
         filters={filters}
         isLoading={false}
         isUpdating={false}
-        reportId={entity.report.id}
+        reportId={entity.report?.id as string}
         showError={testing.fn()}
         showErrorMessage={testing.fn()}
         showSuccessMessage={testing.fn()}
         sortField="severity"
         sortReverse={true}
-        task={entity.report.task}
+        task={entity.report?.task}
         onAddToAssetsClick={testing.fn()}
         onError={testing.fn()}
         onFilterAddLogLevelClick={testing.fn()}

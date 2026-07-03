@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
+import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {CircleXDeleteIcon, EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
@@ -12,7 +12,17 @@ import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
-import PropTypes from 'web/utils/PropTypes';
+
+interface EmptyResultsReportProps {
+  all: number;
+  filter?: Filter;
+  onFilterAddLogLevelClick?: () => void;
+  onFilterEditClick?: () => void;
+  onFilterDecreaseMinQoDClick?: () => void;
+  onFilterRemoveSeverityClick?: () => void;
+  onFilterRemoveClick?: () => void;
+}
+
 const FilterString = styled.span`
   font-style: italic;
   margin-left: 10px;
@@ -26,12 +36,13 @@ const EmptyResultsReport = ({
   onFilterDecreaseMinQoDClick,
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
-}) => {
+}: EmptyResultsReportProps) => {
   const [_] = useTranslation();
-  const levels = filter.get('levels', '');
+  filter = filter ?? new Filter();
+  const levels = filter.get('levels', '') as string | undefined;
   const severity = filter.getTerm('severity');
-  const min_qod = filter.get('min_qod');
-  const has_severity_filter = isDefined(severity) && severity.relation === '>';
+  const minQod = filter.get('min_qod') as number | undefined;
+  const hasSeverityFilter = isDefined(severity) && severity.relation === '>';
   return (
     <Layout grow align={['start', 'stretch']} flex="column">
       <InfoPanel
@@ -48,17 +59,19 @@ const EmptyResultsReport = ({
       </InfoPanel>
 
       <Divider wrap align={['start', 'stretch']}>
-        {!levels.includes('g') && isDefined(onFilterAddLogLevelClick) && (
-          <ReportPanel
-            icon={props => <FilterIcon {...props} />}
-            title={_('Log messages are currently excluded.')}
-            onClick={onFilterAddLogLevelClick}
-          >
-            {_('Include log messages in your filter settings.')}
-          </ReportPanel>
-        )}
+        {isDefined(levels) &&
+          !levels.includes('g') &&
+          isDefined(onFilterAddLogLevelClick) && (
+            <ReportPanel
+              icon={props => <FilterIcon {...props} />}
+              title={_('Log messages are currently excluded.')}
+              onClick={onFilterAddLogLevelClick}
+            >
+              {_('Include log messages in your filter settings.')}
+            </ReportPanel>
+          )}
 
-        {has_severity_filter && isDefined(onFilterRemoveSeverityClick) && (
+        {hasSeverityFilter && isDefined(onFilterRemoveSeverityClick) && (
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
             title={_(
@@ -70,7 +83,7 @@ const EmptyResultsReport = ({
           </ReportPanel>
         )}
 
-        {isDefined(min_qod) && min_qod > 30 && (
+        {isDefined(minQod) && minQod > 30 && (
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
             title={_(
@@ -104,16 +117,6 @@ const EmptyResultsReport = ({
       </Divider>
     </Layout>
   );
-};
-
-EmptyResultsReport.propTypes = {
-  all: PropTypes.number.isRequired,
-  filter: PropTypes.filter.isRequired,
-  onFilterAddLogLevelClick: PropTypes.func,
-  onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
-  onFilterEditClick: PropTypes.func.isRequired,
-  onFilterRemoveClick: PropTypes.func.isRequired,
-  onFilterRemoveSeverityClick: PropTypes.func,
 };
 
 export default EmptyResultsReport;
