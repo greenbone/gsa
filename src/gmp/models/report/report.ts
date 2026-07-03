@@ -3,12 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseFilter} from 'gmp/collection/parser';
+import {type CollectionList, parseFilter} from 'gmp/collection/parser';
 import {type Date} from 'gmp/models/date';
 import Filter, {type FilterKeyword} from 'gmp/models/filter';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import {type ReportResultCountElement} from 'gmp/models/report/parser';
+import {
+  parseResults,
+  type ReportResultsElement,
+  type ReportResultCountElement,
+} from 'gmp/models/report/parser';
 import ReportTask from 'gmp/models/report/task';
+import type Result from 'gmp/models/result';
 import {type TaskStatus} from 'gmp/models/task';
 import {parseSeverity, parseDate, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -61,6 +66,9 @@ export interface ReportReportElement extends ModelElement {
     version?: string;
   };
   hosts?: {count?: number};
+  // only present if details are requested
+  // required for delta reports
+  results?: ReportResultsElement;
   result_count?: ReportResultCountElement;
   scan_end?: string;
   scan_start?: string;
@@ -127,6 +135,7 @@ interface ReportReportProperties extends ModelProperties {
   delta_report?: DeltaReport;
   filter?: Filter;
   report_type?: ReportType;
+  results?: CollectionList<Result>;
   result_count?: ReportResultCounts;
   scan_end?: Date;
   scan_run_status?: TaskStatus;
@@ -143,6 +152,8 @@ class ReportReport extends Model {
   readonly delta_report?: DeltaReport;
   readonly filter?: Filter;
   readonly report_type?: ReportType;
+  // used for delta reports only
+  readonly results?: CollectionList<Result>;
   readonly result_count?: ReportResultCounts;
   readonly scan_end?: Date;
   readonly scan_run_status?: TaskStatus;
@@ -158,6 +169,7 @@ class ReportReport extends Model {
     filter,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     report_type,
+    results,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     result_count,
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -178,6 +190,7 @@ class ReportReport extends Model {
     this.delta_report = delta_report;
     this.filter = filter;
     this.report_type = report_type;
+    this.results = results;
     this.result_count = result_count;
     this.scan_end = scan_end;
     this.scan_run_status = scan_run_status;
@@ -214,6 +227,8 @@ class ReportReport extends Model {
       : undefined;
 
     copy.task = ReportTask.fromElement(task);
+
+    copy.results = parseResults(element);
 
     copy.scan_start = parseDate(scan_start);
     copy.scan_end = parseDate(scan_end);
