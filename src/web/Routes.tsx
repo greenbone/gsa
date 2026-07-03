@@ -510,7 +510,8 @@ const loggedInRoutes = [
       {
         path: 'report/:id',
         lazy: async () => ({
-          Component: (await import('web/pages/reports/DetailsPage')).default,
+          Component: (await import('web/pages/reports/ReportDetailsPage'))
+            .default,
         }),
       },
 

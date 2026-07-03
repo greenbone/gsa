@@ -46,7 +46,7 @@ interface ThresholdConfig {
   onFilterEditClick: () => void;
 }
 
-interface PageContentProps {
+interface ReportDetailsContentProps {
   entity?: Report;
   filters?: Filter[];
   isLoading?: boolean;
@@ -92,7 +92,7 @@ const HeaderContainer = styled.div`
   word-wrap: break-word;
 `;
 
-const PageContent = ({
+const ReportDetailsContent = ({
   entity,
   filters,
   isLoading = true,
@@ -122,7 +122,7 @@ const PageContent = ({
   onReportDownloadClick,
   onTagSuccess,
   onTargetEditClick,
-}: PageContentProps) => {
+}: ReportDetailsContentProps) => {
   const gmp = useGmp();
   const [_] = useTranslation();
 
@@ -295,4 +295,4 @@ const PageContent = ({
   );
 };
 
-export default PageContent;
+export default ReportDetailsContent;

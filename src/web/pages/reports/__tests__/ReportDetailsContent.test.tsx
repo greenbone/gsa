@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import Report from 'gmp/models/report';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import DetailsContent from 'web/pages/reports/DetailsContent';
+import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 
 const mockReport = getMockReport();
 
@@ -292,7 +292,7 @@ const zeroCounts = {
   errorsCounts: new CollectionCounts({all: 0, filtered: 0}),
 };
 
-describe('DetailsContent', () => {
+describe('ReportDetailsContent tests', () => {
   describe('Error state', () => {
     test('should render ErrorPanel when no entity and reportError is defined', () => {
       const reportError = new Error('An error occurred');
@@ -303,7 +303,7 @@ describe('DetailsContent', () => {
       });
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       screen.getByText(/Error while loading Report r1/);
     });
@@ -314,7 +314,7 @@ describe('DetailsContent', () => {
       });
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       // When entity is present, the component does NOT return the ErrorPanel early.
       // Instead it renders the full report view (tabs, toolbar, etc.)
@@ -331,7 +331,7 @@ describe('DetailsContent', () => {
       });
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       screen.getByTestId('loading');
     });
@@ -343,7 +343,7 @@ describe('DetailsContent', () => {
       });
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       screen.getByText('Loading');
       screen.getByText('Report:');
@@ -353,7 +353,7 @@ describe('DetailsContent', () => {
       const props = createMockProps({isLoading: false});
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
     });
@@ -365,7 +365,7 @@ describe('DetailsContent', () => {
       });
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
     });
@@ -376,7 +376,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       // Header with date and status
       expect(screen.getByRole('heading', {name: /Report:/})).toHaveTextContent(
@@ -401,7 +401,7 @@ describe('DetailsContent', () => {
       });
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       expect(screen.queryByTestId('entity-info')).not.toBeInTheDocument();
     });
@@ -412,7 +412,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       expect(
         screen.getByTitle('Help: Reading Reports').closest('a'),
@@ -443,7 +443,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       screen.getByTitle(/^Add to Assets/);
       screen.getByTitle(/^Remove from Assets/);
@@ -457,7 +457,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       const powerFilter = within(screen.getPowerFilter());
       const inputs = powerFilter.queryTextInputs();
@@ -472,7 +472,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       const tablist = screen.getByRole('tablist');
       const tabs = within(tablist).getAllByRole('tab');
@@ -495,7 +495,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       const tablist = screen.getByRole('tablist');
       // Results count comes from props (synchronous)
@@ -538,7 +538,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       // Summary shows task info, scan details, etc.
       const taskNameRow = screen.getByRole('row', {name: /^Task Name/});
@@ -574,7 +574,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer({reportResultsThreshold: 1});
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       // Click Hosts tab
       fireEvent.click(screen.getByRole('tab', {name: /^Hosts/}));
@@ -591,7 +591,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer({reportResultsThreshold: 1});
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^Hosts/}));
 
@@ -614,7 +614,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer({reportResultsThreshold: 1});
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^Hosts/}));
 
@@ -626,7 +626,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer({reportResultsThreshold: 1});
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^Applications/}));
 
@@ -639,7 +639,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer({reportResultsThreshold: 1});
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^Operating Systems/}));
 
@@ -652,7 +652,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer({reportResultsThreshold: 1});
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^CVEs/}));
 
@@ -665,7 +665,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer({reportResultsThreshold: 1});
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^Closed CVEs/}));
 
@@ -678,7 +678,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer({reportResultsThreshold: 1});
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^TLS Certificates/}));
 
@@ -692,7 +692,7 @@ describe('DetailsContent', () => {
 
       // High threshold - won't be exceeded
       const {render} = setupRenderer({reportResultsThreshold: 10000});
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^Hosts/}));
 
@@ -714,7 +714,7 @@ describe('DetailsContent', () => {
       });
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       const bars = screen.getAllByTestId('progressbar-box');
       expect(bars[0]).toHaveAttribute('title', 'Import Task');
@@ -725,7 +725,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       const bars = screen.getAllByTestId('progressbar-box');
       expect(bars[0]).toHaveAttribute('title', 'Done');
@@ -743,7 +743,7 @@ describe('DetailsContent', () => {
       });
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       screen.getByText('Report:');
       const tablist = screen.getByRole('tablist');
@@ -761,7 +761,7 @@ describe('DetailsContent', () => {
       });
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       screen.getByText('Report:');
       const tablist = screen.getByRole('tablist');
@@ -774,7 +774,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^Results/}));
 
@@ -788,7 +788,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^Hosts/}));
 
@@ -802,7 +802,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^Error Messages/}));
 
@@ -815,7 +815,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       fireEvent.click(screen.getByRole('tab', {name: /^User Tags/}));
 
@@ -830,7 +830,7 @@ describe('DetailsContent', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
-      render(<DetailsContent {...props} />);
+      render(<ReportDetailsContent {...props} />);
 
       // Header
       expect(screen.getByRole('heading', {name: /Report:/})).toHaveTextContent(

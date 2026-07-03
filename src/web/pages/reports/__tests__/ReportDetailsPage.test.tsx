@@ -12,7 +12,7 @@ import Filter from 'gmp/models/filter';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
-import DetailsPage from 'web/pages/reports/DetailsPage';
+import ReportDetailsPage from 'web/pages/reports/ReportDetailsPage';
 
 interface CollectionResponse {
   data: unknown[];
@@ -146,11 +146,11 @@ const setupRenderer = (gmp = createGmp()) => {
 const renderPage = (render: ReturnType<typeof setupRenderer>['render']) =>
   render(
     <Routes>
-      <Route element={<DetailsPage />} path="/report/:id" />
+      <Route element={<ReportDetailsPage />} path="/report/:id" />
     </Routes>,
   );
 
-describe('DetailsPage', () => {
+describe('ReportDetailsPage tests', () => {
   describe('Loading state', () => {
     test('should render Loading spinner while report is being fetched', () => {
       const gmp = createGmp();

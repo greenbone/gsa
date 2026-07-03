@@ -28,8 +28,8 @@ import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import Page from 'web/pages/reports/DetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {create_pem_certificate} from 'web/utils/Cert';
@@ -442,7 +442,7 @@ const ReportDetailsPage = () => {
       <PageTitle title={_('Report Details')} />
       <TargetComponent onSaveError={handleError}>
         {({edit}) => (
-          <Page
+          <ReportDetailsContent
             entity={entity}
             filters={filters}
             isLoading={isLoading}
