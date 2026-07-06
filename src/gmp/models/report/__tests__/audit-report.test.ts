@@ -117,6 +117,7 @@ describe('AuditReportReport tests', () => {
     const report = AuditReportReport.fromElement({
       results: {
         _start: '1',
+        _max: '8',
         result: [{_id: 'result-1'}],
       },
       compliance_count: {
@@ -131,7 +132,7 @@ describe('AuditReportReport tests', () => {
     expect(report.results?.entities[0].id).toEqual('result-1');
     expect(report.results?.counts.first).toEqual(1);
     expect(report.results?.counts.length).toEqual(1);
-    expect(report.results?.counts.rows).toEqual(2);
+    expect(report.results?.counts.rows).toEqual(8);
     expect(report.results?.counts.filtered).toEqual(2);
     expect(report.results?.counts.all).toEqual(3);
   });
