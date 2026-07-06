@@ -258,5 +258,93 @@ describe('DeltaReportDetailsContent tests', () => {
     expect(
       screen.queryByRole('row', {name: /^Task Name/}),
     ).not.toBeInTheDocument();
+
+    // Results content
+    const resultsTable = screen.getByText('Result 1').closest('table');
+    expect(resultsTable).toBeInTheDocument();
+    const tableHeader = within(resultsTable as HTMLElement);
+
+    expect(
+      tableHeader.getByRole('button', {name: /delta/i}),
+    ).toBeInTheDocument();
+    expect(
+      tableHeader.getByRole('button', {name: /vulnerability/i}),
+    ).toBeInTheDocument();
+    expect(
+      tableHeader.getByRole('button', {name: /severity/i}),
+    ).toBeInTheDocument();
+    expect(tableHeader.getByRole('button', {name: /qod/i})).toBeInTheDocument();
+    expect(tableHeader.getByRole('button', {name: /^ip/i})).toBeInTheDocument();
+    expect(
+      tableHeader.getByRole('button', {name: /^name/i}),
+    ).toBeInTheDocument();
+
+    expect(screen.getByText('Result 1')).toBeInTheDocument();
+    expect(screen.getByText('Result 2')).toBeInTheDocument();
+    expect(screen.getByText('123.456.78.910')).toBeInTheDocument();
+    expect(screen.getByText('109.876.54.321')).toBeInTheDocument();
+    expect(screen.getByText('80 %')).toBeInTheDocument();
+    expect(screen.getByText('70 %')).toBeInTheDocument();
+
+    const deltaIndicators = screen.getAllByTestId('equal-icon');
+    expect(deltaIndicators).toHaveLength(2);
+  });
+
+  test('should render pagination controls in results tab', () => {
+    const {entity} = getMockDeltaReport();
+    const filters = [filterWithName];
+    const gmp = createGmp({severityRating: SEVERITY_RATING_CVSS_3});
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+    });
+
+    render(
+      <DeltaReportDetailsContent
+        entity={entity}
+        filter={filter}
+        filters={filters}
+        isLoading={false}
+        isUpdating={false}
+        reportId={entity.report?.id as string}
+        showError={testing.fn()}
+        showErrorMessage={testing.fn()}
+        showSuccessMessage={testing.fn()}
+        sortField="severity"
+        sortReverse={true}
+        task={entity.report?.task}
+        onAddToAssetsClick={testing.fn()}
+        onError={testing.fn()}
+        onFilterAddLogLevelClick={testing.fn()}
+        onFilterChanged={testing.fn()}
+        onFilterCreated={testing.fn()}
+        onFilterDecreaseMinQoDClick={testing.fn()}
+        onFilterEditClick={testing.fn()}
+        onFilterRemoveClick={testing.fn()}
+        onFilterRemoveSeverityClick={testing.fn()}
+        onFilterResetClick={testing.fn()}
+        onRemoveFromAssetsClick={testing.fn()}
+        onReportDownloadClick={testing.fn()}
+        onSortChange={testing.fn()}
+        onTagSuccess={testing.fn()}
+        onTargetEditClick={testing.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('tab', {name: /Results/}));
+
+    const footer = within(screen.getByTestId('entities-table-footer'));
+    const firstButton = footer.getByRole('button', {name: 'First Icon'});
+    const previousButton = footer.getByRole('button', {
+      name: 'Previous Icon',
+    });
+    const nextButton = footer.getByRole('button', {name: 'Next Icon'});
+    const lastButton = footer.getByRole('button', {name: 'Last Icon'});
+
+    // The mock report has only one page of results.
+    expect(firstButton).toBeDisabled();
+    expect(previousButton).toBeDisabled();
+    expect(nextButton).toBeDisabled();
+    expect(lastButton).toBeDisabled();
   });
 });

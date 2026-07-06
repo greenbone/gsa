@@ -56,7 +56,7 @@ interface AuditReportDetailsContentProps {
   reportFilter?: Filter;
   reportId: string;
   resetFilter?: Filter;
-  showError: (...args: unknown[]) => void;
+  showError: (error: Error) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
   task?: ReportTask;
