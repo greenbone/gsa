@@ -568,7 +568,7 @@ const parseReportReportCounts = (element: ResultsReportElement) => {
 
   return new CollectionCounts({
     first: resultsElement._start,
-    rows: resultCountElement?.filtered,
+    rows: resultsElement?._max,
     length,
     all: isDefined(resultCountElement?.full)
       ? resultCountElement.full

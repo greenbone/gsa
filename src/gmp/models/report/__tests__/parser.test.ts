@@ -376,6 +376,7 @@ describe('parseResults', () => {
     const result = parseResults({
       results: {
         _start: '1',
+        _max: '8',
         result: [{_id: 'result-1'}],
       },
       result_count: {
@@ -389,7 +390,7 @@ describe('parseResults', () => {
     expect(result?.entities[0].id).toEqual('result-1');
     expect(result?.counts.first).toEqual(1);
     expect(result?.counts.length).toEqual(1);
-    expect(result?.counts.rows).toEqual(5);
+    expect(result?.counts.rows).toEqual(8);
     expect(result?.counts.filtered).toEqual(5);
     expect(result?.counts.all).toEqual(10);
   });
@@ -398,6 +399,7 @@ describe('parseResults', () => {
     const result = parseResults({
       results: {
         _start: '2',
+        _max: '8',
         result: {_id: 'result-1'},
       },
       compliance_count: {
@@ -409,7 +411,7 @@ describe('parseResults', () => {
     expect(result?.entities).toHaveLength(1);
     expect(result?.counts.first).toEqual(2);
     expect(result?.counts.length).toEqual(1);
-    expect(result?.counts.rows).toEqual(7);
+    expect(result?.counts.rows).toEqual(8);
     expect(result?.counts.filtered).toEqual(7);
     expect(result?.counts.all).toEqual(7);
   });
@@ -426,7 +428,7 @@ describe('parseResults', () => {
     expect(result?.entities).toHaveLength(0);
     expect(result?.counts.first).toEqual(0);
     expect(result?.counts.length).toEqual(0);
-    expect(result?.counts.rows).toEqual(3);
+    expect(result?.counts.rows).toEqual(0);
     expect(result?.counts.filtered).toEqual(3);
     expect(result?.counts.all).toEqual(9);
   });
@@ -435,6 +437,7 @@ describe('parseResults', () => {
     const result = parseResults({
       results: {
         _start: '3',
+        _max: '6',
         result: [{_id: 'result-1'}],
       },
       result_count: {
@@ -450,7 +453,7 @@ describe('parseResults', () => {
     expect(result).toBeDefined();
     expect(result?.entities).toHaveLength(1);
     expect(result?.counts.first).toEqual(3);
-    expect(result?.counts.rows).toEqual(5);
+    expect(result?.counts.rows).toEqual(6);
     expect(result?.counts.filtered).toEqual(5);
     expect(result?.counts.all).toEqual(11);
   });
