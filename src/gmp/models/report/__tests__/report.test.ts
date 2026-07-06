@@ -120,6 +120,29 @@ describe('ReportReport tests', () => {
     expect(report.scan_run_status).toEqual('completed');
   });
 
+  test('should parse results', () => {
+    const report = ReportReport.fromElement({
+      results: {
+        _start: '1',
+        result: [{_id: 'result-1'}],
+      },
+      result_count: {
+        __text: '1',
+        filtered: 2,
+        full: 3,
+      },
+    });
+
+    expect(report.results).toBeDefined();
+    expect(report.results?.entities).toHaveLength(1);
+    expect(report.results?.entities[0].id).toEqual('result-1');
+    expect(report.results?.counts.first).toEqual(1);
+    expect(report.results?.counts.length).toEqual(1);
+    expect(report.results?.counts.rows).toEqual(2);
+    expect(report.results?.counts.filtered).toEqual(2);
+    expect(report.results?.counts.all).toEqual(3);
+  });
+
   test('should parse result_count', () => {
     const report = ReportReport.fromElement({
       result_count: {

@@ -10,6 +10,7 @@ import {
   parseErrors,
   parseCvesFromEndpoint,
   parseClosedCvesFromEndpoint,
+  parseResults,
 } from 'gmp/models/report/parser';
 
 const emptyCollectionCounts = new CollectionCounts();
@@ -361,5 +362,96 @@ describe('parseClosedCvesFromEndpoint', () => {
     const result = parseClosedCvesFromEndpoint(data, filter);
 
     expect(result.entities[0].id).toEqual('CVE-2022-0001-10.0.0.1-9.9.9');
+  });
+});
+
+describe('parseResults', () => {
+  test('should return undefined when results and counts are missing', () => {
+    const result = parseResults({});
+
+    expect(result).toBeUndefined();
+  });
+
+  test('should parse results and counts from result_count', () => {
+    const result = parseResults({
+      results: {
+        _start: '1',
+        result: [{_id: 'result-1'}],
+      },
+      result_count: {
+        filtered: 5,
+        full: 10,
+      },
+    });
+
+    expect(result).toBeDefined();
+    expect(result?.entities).toHaveLength(1);
+    expect(result?.entities[0].id).toEqual('result-1');
+    expect(result?.counts.first).toEqual(1);
+    expect(result?.counts.length).toEqual(1);
+    expect(result?.counts.rows).toEqual(5);
+    expect(result?.counts.filtered).toEqual(5);
+    expect(result?.counts.all).toEqual(10);
+  });
+
+  test('should use compliance_count.filtered as counts.all when full is missing', () => {
+    const result = parseResults({
+      results: {
+        _start: '2',
+        result: {_id: 'result-1'},
+      },
+      compliance_count: {
+        filtered: 7,
+      },
+    });
+
+    expect(result).toBeDefined();
+    expect(result?.entities).toHaveLength(1);
+    expect(result?.counts.first).toEqual(2);
+    expect(result?.counts.length).toEqual(1);
+    expect(result?.counts.rows).toEqual(7);
+    expect(result?.counts.filtered).toEqual(7);
+    expect(result?.counts.all).toEqual(7);
+  });
+
+  test('should return empty entities when only result_count is present', () => {
+    const result = parseResults({
+      result_count: {
+        filtered: 3,
+        full: 9,
+      },
+    });
+
+    expect(result).toBeDefined();
+    expect(result?.entities).toHaveLength(0);
+    expect(result?.counts.first).toEqual(0);
+    expect(result?.counts.length).toEqual(0);
+    expect(result?.counts.rows).toEqual(3);
+    expect(result?.counts.filtered).toEqual(3);
+    expect(result?.counts.all).toEqual(9);
+  });
+
+  test('should prefer result_count over compliance_count when both are present', () => {
+    const result = parseResults({
+      results: {
+        _start: '3',
+        result: [{_id: 'result-1'}],
+      },
+      result_count: {
+        filtered: 5,
+        full: 11,
+      },
+      compliance_count: {
+        filtered: 7,
+        full: 13,
+      },
+    });
+
+    expect(result).toBeDefined();
+    expect(result?.entities).toHaveLength(1);
+    expect(result?.counts.first).toEqual(3);
+    expect(result?.counts.rows).toEqual(5);
+    expect(result?.counts.filtered).toEqual(5);
+    expect(result?.counts.all).toEqual(11);
   });
 });
