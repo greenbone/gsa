@@ -7,15 +7,15 @@ import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {
+  type FoldToggleComponentProps,
   withFolding,
   withFoldToggle,
-  type FoldState,
 } from 'web/components/folding/Folding';
 import FoldStateIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
 import SectionHeader from 'web/components/section/Header';
 
-interface SectionProps {
+interface SectionProps extends FoldToggleComponentProps {
   children?: React.ReactNode;
   className?: string;
   'data-testid'?: string;
@@ -24,12 +24,6 @@ interface SectionProps {
   header?: React.ReactNode;
   img?: React.ReactNode;
   title?: string;
-}
-
-interface SectionPropsWithFoldToggle extends SectionProps {
-  foldState: keyof typeof FoldState;
-  onFoldToggle: () => void;
-  onFoldStepEnd: () => void;
 }
 
 const FoldableLayout = withFolding(Layout);
@@ -51,7 +45,7 @@ const Section = ({
   ['data-testid']: dataTestId,
   onFoldToggle,
   onFoldStepEnd,
-}: SectionPropsWithFoldToggle) => {
+}: SectionProps) => {
   if (!isDefined(header)) {
     header = (
       <SectionHeader img={img} title={title}>
@@ -88,4 +82,4 @@ const Section = ({
   );
 };
 
-export default withFoldToggle(Section) as React.ComponentType<SectionProps>;
+export default withFoldToggle(Section);
