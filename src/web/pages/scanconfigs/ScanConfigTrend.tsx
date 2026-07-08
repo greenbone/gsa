@@ -3,31 +3,39 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
+  type ScanConfigTrend as ScanConfigTrendType,
 } from 'gmp/models/scan-config';
 import {TrendMoreIcon, TrendNoChangeIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-const Trend = ({trend, titleDynamic, titleStatic, ...props}) => {
+
+interface ScanConfigTrendProps {
+  active?: boolean;
+  trend: ScanConfigTrendType;
+  titleDynamic?: string;
+  titleStatic?: string;
+}
+
+const ScanConfigTrend = ({
+  active,
+  trend,
+  titleDynamic,
+  titleStatic,
+}: ScanConfigTrendProps) => {
   const [_] = useTranslation();
   if (trend === SCANCONFIG_TREND_DYNAMIC) {
-    return <TrendMoreIcon alt={_('Dynamic')} title={titleDynamic} {...props} />;
+    return (
+      <TrendMoreIcon active={active} title={titleDynamic ?? _('Dynamic')} />
+    );
   }
   if (trend === SCANCONFIG_TREND_STATIC) {
     return (
-      <TrendNoChangeIcon alt={_('Static')} title={titleStatic} {...props} />
+      <TrendNoChangeIcon active={active} title={titleStatic ?? _('Static')} />
     );
   }
   return <span>{_('N/A')}</span>;
 };
 
-Trend.propTypes = {
-  titleDynamic: PropTypes.string,
-  titleStatic: PropTypes.string,
-  trend: PropTypes.oneOf([0, 1]),
-};
-
-export default Trend;
+export default ScanConfigTrend;
