@@ -6,14 +6,15 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 import date from 'gmp/models/date';
+import {type ScanConfigPreference} from 'gmp/models/scan-config';
 import {createSession} from 'gmp/testing';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
-import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
+import ScanConfigEditNvtDetailsDialog from 'web/pages/scanconfigs/ScanConfigEditNvtDetailsDialog';
 
-const preferences = [
-  {name: 'pref 1', value: 'no', id: '1', type: 'checkbox'},
-  {name: 'pref 2', value: '1', id: '2', type: 'radio', alt: ['2', '3']},
-  {name: 'pref 3', value: 'foo', id: '3', type: 'entry'},
+const preferences: ScanConfigPreference[] = [
+  {name: 'pref 1', value: 'no', id: 1, type: 'checkbox'},
+  {name: 'pref 2', value: '1', id: 2, type: 'radio'},
+  {name: 'pref 3', value: 'foo', id: 3, type: 'entry'},
 ];
 const modified = date('2019-09-09T12:00:00Z');
 
@@ -24,7 +25,7 @@ const createGmp = () => ({
   session: createSession({timezone: 'UTC'}),
 });
 
-describe('EditNvtDetailsDialog component tests', () => {
+describe('ScanConfigEditNvtDetailsDialog tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
@@ -36,7 +37,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     });
 
     render(
-      <EditNvtDetailsDialog
+      <ScanConfigEditNvtDetailsDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
@@ -74,7 +75,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     });
 
     render(
-      <EditNvtDetailsDialog
+      <ScanConfigEditNvtDetailsDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
@@ -112,7 +113,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     });
 
     render(
-      <EditNvtDetailsDialog
+      <ScanConfigEditNvtDetailsDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
@@ -140,23 +141,23 @@ describe('EditNvtDetailsDialog component tests', () => {
       nvtOid: '1.2.3',
       preferenceValues: {
         'pref 1': {
-          id: '1',
+          id: 1,
           value: 'no',
           type: 'checkbox',
         },
         'pref 2': {
-          id: '2',
+          id: 2,
           value: '1',
           type: 'radio',
         },
         'pref 3': {
-          id: '3',
+          id: 3,
           value: 'foo',
           type: 'entry',
         },
       },
       timeout: undefined,
-      useDefaultTimeout: '1',
+      useDefaultTimeout: 1,
     });
   });
 
@@ -171,7 +172,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     });
 
     render(
-      <EditNvtDetailsDialog
+      <ScanConfigEditNvtDetailsDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
@@ -209,7 +210,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     });
 
     render(
-      <EditNvtDetailsDialog
+      <ScanConfigEditNvtDetailsDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
@@ -240,9 +241,9 @@ describe('EditNvtDetailsDialog component tests', () => {
     fireEvent.click(saveButton);
 
     const newPreferenceValues = {
-      'pref 1': {id: '1', value: 'yes', type: 'checkbox'},
-      'pref 2': {id: '2', value: '2', type: 'radio'},
-      'pref 3': {id: '3', value: 'bar', type: 'entry'},
+      'pref 1': {id: 1, value: 'yes', type: 'checkbox'},
+      'pref 2': {id: 2, value: '2', type: 'radio'},
+      'pref 3': {id: 3, value: 'bar', type: 'entry'},
     };
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -250,7 +251,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       timeout: undefined,
       nvtOid: '1.2.3',
       preferenceValues: newPreferenceValues,
-      useDefaultTimeout: '1',
+      useDefaultTimeout: 1,
     });
   });
 
@@ -265,7 +266,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     });
 
     render(
-      <EditNvtDetailsDialog
+      <ScanConfigEditNvtDetailsDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
@@ -296,9 +297,9 @@ describe('EditNvtDetailsDialog component tests', () => {
     fireEvent.click(saveButton);
 
     const preferenceValues = {
-      'pref 1': {id: '1', value: 'no', type: 'checkbox'},
-      'pref 2': {id: '2', value: '1', type: 'radio'},
-      'pref 3': {id: '3', value: 'foo', type: 'entry'},
+      'pref 1': {id: 1, value: 'no', type: 'checkbox'},
+      'pref 2': {id: 2, value: '1', type: 'radio'},
+      'pref 3': {id: 3, value: 'foo', type: 'entry'},
     };
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -306,7 +307,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       timeout: '100',
       nvtOid: '1.2.3',
       preferenceValues,
-      useDefaultTimeout: '0',
+      useDefaultTimeout: 0,
     });
   });
 });
