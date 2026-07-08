@@ -117,6 +117,33 @@ interface ScanConfigProperties extends ModelProperties {
   usageType?: ScanConfigUsageType;
 }
 
+export const WHOLE_SELECTION_FAMILIES = [
+  'AIX Local Security Checks',
+  'AlmaLinux Local Security Checks',
+  'Amazon Linux Local Security Checks',
+  'Arch Linux Local Security Checks',
+  'CentOS Local Security Checks',
+  'Debian Local Security Checks',
+  'Fedora Local Security Checks',
+  'FreeBSD Local Security Checks',
+  'Gentoo Local Security Checks',
+  'HCE Local Security Checks',
+  'HP-UX Local Security Checks',
+  'Huawei EulerOS Local Security Checks',
+  'Mageia Linux Local Security Checks',
+  'Mandrake Local Security Checks',
+  'openEuler Local Security Checks',
+  'openSUSE Local Security Checks',
+  'Oracle Linux Local Security Checks',
+  'Red Hat Local Security Checks',
+  'Rocky Linux Local Security Checks',
+  'Slackware Local Security Checks',
+  'Solaris Local Security Checks',
+  'SuSE Local Security Checks',
+  'Ubuntu Local Security Checks',
+  'Windows Local Security Checks',
+];
+
 export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
 export const FULL_AND_FAST_SCAN_CONFIG_ID =
   'daba56c8-73ec-11df-a475-002264764cea';
