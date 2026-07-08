@@ -9,12 +9,12 @@ import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scan-config';
-import Trend from 'web/pages/scanconfigs/Trend';
+import ScanConfigTrend from 'web/pages/scanconfigs/ScanConfigTrend';
 
-describe('Scan Config Trend tests', () => {
+describe('ScanConfigTrend tests', () => {
   test('should render', () => {
     const {element} = render(
-      <Trend
+      <ScanConfigTrend
         titleDynamic="Dynamic"
         titleStatic="Static"
         trend={SCANCONFIG_TREND_DYNAMIC}
@@ -26,7 +26,7 @@ describe('Scan Config Trend tests', () => {
 
   test('should render static title', () => {
     render(
-      <Trend
+      <ScanConfigTrend
         titleDynamic="Dynamic"
         titleStatic="Static"
         trend={SCANCONFIG_TREND_STATIC}
@@ -39,7 +39,7 @@ describe('Scan Config Trend tests', () => {
 
   test('should render dynamic title', () => {
     render(
-      <Trend
+      <ScanConfigTrend
         titleDynamic="Dynamic"
         titleStatic="Static"
         trend={SCANCONFIG_TREND_DYNAMIC}
@@ -51,17 +51,15 @@ describe('Scan Config Trend tests', () => {
   });
 
   test('should render N/A', () => {
-    // deactivate console.error for this test
-    // to be able to test trend=-1
-    const consoleError = console.error;
-    console.error = () => {};
-
     const {element} = render(
-      <Trend titleDynamic="Dynamic" titleStatic="Static" trend={-1} />,
+      <ScanConfigTrend
+        titleDynamic="Dynamic"
+        titleStatic="Static"
+        // @ts-expect-error: testing invalid trend value
+        trend={-1}
+      />,
     );
 
     expect(element).toHaveTextContent('N/A');
-
-    console.warn = consoleError;
   });
 });
