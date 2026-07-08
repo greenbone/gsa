@@ -4,9 +4,12 @@
  */
 
 import React, {useState, useEffect} from 'react';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {
+  type ScanConfigNvtsSelected,
+  type ScanConfigFamilyNvt,
+} from 'gmp/commands/scan-config';
+import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
@@ -22,7 +25,40 @@ import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {makeCompareSeverity, makeCompareString} from 'web/utils/Sort';
-import SortDirection from 'web/utils/sort-direction';
+import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
+
+interface NvtDisplayProps {
+  nvt: ScanConfigFamilyNvt;
+  selected?: YesNo;
+  onSelectedChange?: (value: YesNo, name?: string) => void;
+  onEditNvtDetailsClick?: (nvtOid: string) => void;
+}
+
+interface ScanConfigEditFamilyDialogProps {
+  configId: string;
+  configName: string;
+  configNameLabel: string;
+  familyName: string;
+  isLoadingFamily?: boolean;
+  nvts?: ScanConfigFamilyNvt[];
+  selected: ScanConfigNvtsSelected;
+  title: string;
+  onClose: () => void;
+  onEditNvtDetailsClick?: (nvtOid: string) => void;
+  onSave: (data: ScanConfigEditFamilyDialogData) => void;
+}
+
+interface TableHeaderColumn {
+  sortBy?: string;
+  title: string;
+  align?: 'start' | 'center';
+}
+
+interface ScanConfigEditFamilyDialogData {
+  familyName: string;
+  configId: string;
+  selected: ScanConfigNvtsSelected;
+}
 
 const EDIT_CONFIG_COLUMNS_SORT = {
   name: 'name',
@@ -32,14 +68,20 @@ const EDIT_CONFIG_COLUMNS_SORT = {
   selected: 'selected',
 };
 
-const Nvt = React.memo(
-  ({nvt, selected, onSelectedChange, onEditNvtDetailsClick}) => {
+const shouldNvtDisplayComponentUpdate = (
+  props: NvtDisplayProps,
+  nextProps: NvtDisplayProps,
+) => nextProps.nvt !== props.nvt || nextProps.selected !== props.selected;
+
+const NvtDisplay = React.memo(
+  ({
+    nvt,
+    selected,
+    onSelectedChange,
+    onEditNvtDetailsClick,
+  }: NvtDisplayProps) => {
     const [_] = useTranslation();
-
-    const {name, oid, severity, timeout, defaultTimeout, preference_count} =
-      nvt;
-    const prefCount = preference_count === '0' ? '' : preference_count;
-
+    const {name, oid, severity, timeout, defaultTimeout, preferenceCount} = nvt;
     return (
       <TableRow>
         <TableData>{name}</TableData>
@@ -48,10 +90,10 @@ const Nvt = React.memo(
           <SeverityBar severity={severity} />
         </TableData>
         <TableData>
-          {isEmpty(timeout) ? _('default') : timeout}
-          {isEmpty(defaultTimeout) ? '' : ' (' + defaultTimeout + ')'}
+          {timeout ?? _('default')}
+          {isDefined(defaultTimeout) ? ` (${defaultTimeout})` : ''}
         </TableData>
-        <TableData>{prefCount}</TableData>
+        <TableData>{preferenceCount ?? ''}</TableData>
         <TableData align={['center', 'center']}>
           <Checkbox
             checked={selected === YES_VALUE}
@@ -71,17 +113,8 @@ const Nvt = React.memo(
       </TableRow>
     );
   },
-  (prevProps, nextProps) =>
-    prevProps.selected === nextProps.selected &&
-    prevProps.nvt === nextProps.nvt,
+  shouldNvtDisplayComponentUpdate,
 );
-
-Nvt.propTypes = {
-  nvt: PropTypes.object.isRequired,
-  selected: PropTypes.yesno,
-  onEditNvtDetailsClick: PropTypes.func,
-  onSelectedChange: PropTypes.func,
-};
 
 const sortFunctions = {
   name: makeCompareString(EDIT_CONFIG_COLUMNS_SORT.name),
@@ -90,7 +123,12 @@ const sortFunctions = {
   timeout: makeCompareString(EDIT_CONFIG_COLUMNS_SORT.timeout),
 };
 
-const sortNvts = (sortBy, sortReverse, selected = {}, nvts = []) => {
+const sortNvts = (
+  sortBy: string,
+  sortReverse: boolean,
+  selected: Record<string, YesNo> = {},
+  nvts: ScanConfigFamilyNvt[] = [],
+) => {
   if (sortBy === EDIT_CONFIG_COLUMNS_SORT.selected) {
     return [...nvts].sort((a, b) => {
       if (selected[a.oid] && !selected[b.oid]) {
@@ -125,7 +163,12 @@ const sortNvts = (sortBy, sortReverse, selected = {}, nvts = []) => {
   return [...nvts].sort(compare);
 };
 
-const renderTableHead = (sortBy, sortDir, handleSortChange, columns) => {
+const renderTableHead = (
+  sortBy: string,
+  sortDir: SortDirectionType,
+  handleSortChange?: (newSortBy: string) => void,
+  columns: TableHeaderColumn[] = [],
+) => {
   return columns.map(({sortBy: columnSortBy, title, align}) => (
     <TableHead
       key={columnSortBy || title}
@@ -139,7 +182,7 @@ const renderTableHead = (sortBy, sortDir, handleSortChange, columns) => {
   ));
 };
 
-const EditScanConfigFamilyDialog = ({
+const ScanConfigEditFamilyDialog = ({
   configId,
   configName,
   configNameLabel,
@@ -151,18 +194,18 @@ const EditScanConfigFamilyDialog = ({
   onClose,
   onEditNvtDetailsClick,
   onSave,
-}) => {
+}: ScanConfigEditFamilyDialogProps) => {
   const [_] = useTranslation();
   const [sortBy, setSortBy] = useState(EDIT_CONFIG_COLUMNS_SORT.name);
   const [sortReverse, setSortReverse] = useState(false);
   const [selectedNvts, setSelectedNvts] = useState(selected);
 
-  const handleSortChange = newSortBy => {
+  const handleSortChange = (newSortBy: string) => {
     setSortReverse(sortBy === newSortBy ? !sortReverse : false);
     setSortBy(newSortBy);
   };
 
-  const handleSelectedChange = (value, name) => {
+  const handleSelectedChange = (value: YesNo, name: string) => {
     setSelectedNvts(prevSelectedNvts => ({
       ...prevSelectedNvts,
       [name]: value,
@@ -187,7 +230,7 @@ const EditScanConfigFamilyDialog = ({
     return <Loading />;
   }
 
-  const tableHeaders = [
+  const tableHeaders: TableHeaderColumn[] = [
     {sortBy: EDIT_CONFIG_COLUMNS_SORT.name, title: _('Name')},
     {sortBy: EDIT_CONFIG_COLUMNS_SORT.oid, title: _('OID')},
     {sortBy: EDIT_CONFIG_COLUMNS_SORT.severity, title: _('Severity')},
@@ -202,7 +245,7 @@ const EditScanConfigFamilyDialog = ({
   ];
 
   return (
-    <SaveDialog
+    <SaveDialog<ScanConfigEditFamilyDialogData>
       title={title}
       values={data}
       width="auto"
@@ -229,12 +272,17 @@ const EditScanConfigFamilyDialog = ({
             {sortedNvts.map(nvt => {
               const {oid} = nvt;
               return (
-                <Nvt
+                <NvtDisplay
                   key={oid}
                   nvt={nvt}
-                  selected={selectedNvts[oid]}
+                  selected={selectedNvts[oid as string]}
                   onEditNvtDetailsClick={onEditNvtDetailsClick}
-                  onSelectedChange={handleSelectedChange}
+                  onSelectedChange={
+                    handleSelectedChange as (
+                      value: YesNo,
+                      name?: string,
+                    ) => void
+                  }
                 />
               );
             })}
@@ -245,7 +293,7 @@ const EditScanConfigFamilyDialog = ({
   );
 };
 
-EditScanConfigFamilyDialog.propTypes = {
+ScanConfigEditFamilyDialog.propTypes = {
   configId: PropTypes.id,
   configName: PropTypes.string,
   configNameLabel: PropTypes.string.isRequired,
@@ -259,4 +307,4 @@ EditScanConfigFamilyDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default EditScanConfigFamilyDialog;
+export default ScanConfigEditFamilyDialog;

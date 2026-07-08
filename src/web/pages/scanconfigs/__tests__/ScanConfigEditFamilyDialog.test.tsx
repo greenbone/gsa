@@ -5,9 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
+import {
+  type ScanConfigFamilyNvt,
+  type ScanConfigNvtsSelected,
+} from 'gmp/commands/scan-config';
 import Nvt from 'gmp/models/nvt';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
-import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
+import ScanConfigEditFamilyDialog from 'web/pages/scanconfigs/ScanConfigEditFamilyDialog';
 
 const nvt = Nvt.fromElement({
   nvt: {
@@ -40,7 +44,7 @@ const nvt3 = Nvt.fromElement({
   },
 });
 
-const selected = {
+const selected: ScanConfigNvtsSelected = {
   1234: 0,
   5678: 0,
 };
@@ -51,7 +55,9 @@ const gmp = {
   },
 };
 
-describe('EditConfigFamilyDialog component tests', () => {
+const nvts = [nvt, nvt2] as ScanConfigFamilyNvt[];
+
+describe('ScanConfigEditFamilyDialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
@@ -59,13 +65,13 @@ describe('EditConfigFamilyDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, gmp});
     const {baseElement} = render(
-      <EditConfigFamilyDialog
+      <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
         familyName="family"
         isLoadingFamily={false}
-        nvts={[nvt, nvt2]}
+        nvts={nvts}
         selected={selected}
         title="Foo title"
         onClose={handleClose}
@@ -87,13 +93,13 @@ describe('EditConfigFamilyDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, gmp});
     const {baseElement} = render(
-      <EditConfigFamilyDialog
+      <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
         familyName="family"
         isLoadingFamily={true}
-        nvts={[nvt, nvt2]}
+        nvts={nvts}
         selected={selected}
         title="Foo title"
         onClose={handleClose}
@@ -117,13 +123,13 @@ describe('EditConfigFamilyDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, gmp});
     render(
-      <EditConfigFamilyDialog
+      <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
         familyName="family"
         isLoadingFamily={false}
-        nvts={[nvt, nvt2]}
+        nvts={nvts}
         selected={selected}
         title="Foo title"
         onClose={handleClose}
@@ -149,13 +155,13 @@ describe('EditConfigFamilyDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, gmp});
     render(
-      <EditConfigFamilyDialog
+      <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
         familyName="family"
         isLoadingFamily={false}
-        nvts={[nvt, nvt2]}
+        nvts={nvts}
         selected={selected}
         title="Foo title"
         onClose={handleClose}
@@ -179,13 +185,13 @@ describe('EditConfigFamilyDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, gmp});
     const {baseElement} = render(
-      <EditConfigFamilyDialog
+      <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
         familyName="family"
         isLoadingFamily={false}
-        nvts={[nvt, nvt2]}
+        nvts={nvts}
         selected={selected}
         title="Foo title"
         onClose={handleClose}
@@ -219,13 +225,13 @@ describe('EditConfigFamilyDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, gmp});
     render(
-      <EditConfigFamilyDialog
+      <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
         familyName="family"
         isLoadingFamily={false}
-        nvts={[nvt, nvt2]}
+        nvts={nvts}
         selected={selected}
         title="Foo title"
         onClose={handleClose}
@@ -254,7 +260,7 @@ describe('EditConfigFamilyDialog component tests', () => {
       const handleSave = testing.fn();
       const handleOpenEditNvtDetailsDialog = testing.fn();
 
-      const newSelected = {
+      const newSelected: ScanConfigNvtsSelected = {
         1234: 0,
         5678: 1,
         2345: 0,
@@ -262,13 +268,13 @@ describe('EditConfigFamilyDialog component tests', () => {
 
       const {render} = rendererWith({capabilities: true, gmp});
       render(
-        <EditConfigFamilyDialog
+        <ScanConfigEditFamilyDialog
           configId="c1"
           configName="foo"
           configNameLabel="Config"
           familyName="family"
           isLoadingFamily={false}
-          nvts={[nvt, nvt2, nvt3]}
+          nvts={[nvt, nvt2, nvt3] as ScanConfigFamilyNvt[]}
           selected={newSelected}
           title="Foo title"
           onClose={handleClose}
@@ -280,8 +286,8 @@ describe('EditConfigFamilyDialog component tests', () => {
       const getOidColumn = row => row.querySelectorAll('td')[1];
 
       const dialog = within(screen.getDialog());
-      const tableHeader = dialog.queryTableHeader();
-      const tableBody = dialog.queryTableBody();
+      const tableHeader = dialog.getTableHeader();
+      const tableBody = dialog.getTableBody();
       let rows = tableBody.querySelectorAll('tr');
       const columns = within(tableHeader).getAllByRole('columnheader');
       expect(columns).toHaveLength(7);
@@ -301,20 +307,20 @@ describe('EditConfigFamilyDialog component tests', () => {
     },
   );
 
-  test('should allow selecting an NVT', () => {
+  test('should allow selecting an NVT', async () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, gmp});
     render(
-      <EditConfigFamilyDialog
+      <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
         configNameLabel="Config"
         familyName="family"
         isLoadingFamily={false}
-        nvts={[nvt, nvt2]}
+        nvts={nvts}
         selected={selected}
         title="Foo title"
         onClose={handleClose}
@@ -323,12 +329,20 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
-    const checkboxes = screen.getAllByRole('checkbox');
+    const dialog = within(screen.getDialog());
+    const nvtCheckbox = dialog.getByName('1234') as HTMLInputElement;
+    expect(nvtCheckbox).not.toBeChecked();
 
-    expect(checkboxes[0].checked).toBe(false);
+    fireEvent.click(nvtCheckbox);
+    fireEvent.click(screen.getDialogSaveButton());
 
-    fireEvent.click(checkboxes[0]);
-
-    expect(checkboxes[0].checked).toBe(true);
+    expect(handleSave).toHaveBeenCalledWith({
+      configId: 'c1',
+      familyName: 'family',
+      selected: {
+        1234: 1,
+        5678: 0,
+      },
+    });
   });
 });
