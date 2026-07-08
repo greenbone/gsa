@@ -5,6 +5,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import {type ScanConfigPreference} from 'gmp/models/scan-config';
 import {FoldState} from 'web/components/folding/Folding';
 import {EditIcon} from 'web/components/icon';
 import Section from 'web/components/section/Section';
@@ -15,27 +16,45 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface ScanConfigNvtPreferenceDisplayProps {
+  preference: ScanConfigPreference;
+  title: string;
+  onEditNvtDetailsClick?: (oid: string) => void;
+}
+
+interface ScanConfigNvtPreferencesProps {
+  editTitle: string;
+  preferences?: ScanConfigPreference[];
+  onEditNvtDetailsClick?: (oid: string) => void;
+}
+
 const StyledTableData = styled(TableData)`
   overflow-wrap: break-word;
   white-space: normal;
   word-break: break-word;
 `;
 
-const shouldComponentUpdate = (props, nextProps) =>
-  nextProps.preference !== props.preference;
+const shouldComponentUpdate = (
+  props: ScanConfigNvtPreferenceDisplayProps,
+  nextProps: ScanConfigNvtPreferenceDisplayProps,
+) => nextProps.preference !== props.preference;
 
-const NvtPreferenceDisplay = React.memo(
-  ({preference, onEditNvtDetailsClick, title}) => {
+const ScanConfigNvtPreferenceDisplay = React.memo(
+  ({
+    preference,
+    onEditNvtDetailsClick,
+    title,
+  }: ScanConfigNvtPreferenceDisplayProps) => {
     return (
       <TableRow>
-        <StyledTableData>{preference.nvt.name}</StyledTableData>
+        <StyledTableData>{preference.nvt?.name}</StyledTableData>
         <StyledTableData>{preference.name}</StyledTableData>
         <StyledTableData>{preference.value}</StyledTableData>
         <TableData align={['center', 'center']}>
           <EditIcon
             title={title}
-            value={preference.nvt.oid}
+            value={preference.nvt?.oid}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>
@@ -45,26 +64,11 @@ const NvtPreferenceDisplay = React.memo(
   shouldComponentUpdate,
 );
 
-export const NvtPreferencePropType = PropTypes.shape({
-  nvt: PropTypes.shape({
-    oid: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.any.isRequired,
-});
-
-NvtPreferenceDisplay.propTypes = {
-  preference: NvtPreferencePropType.isRequired,
-  title: PropTypes.string.isRequired,
-  onEditNvtDetailsClick: PropTypes.func.isRequired,
-};
-
-const NvtPreferences = ({
+const ScanConfigNvtPreferences = ({
   editTitle,
   preferences = [],
   onEditNvtDetailsClick,
-}) => {
+}: ScanConfigNvtPreferencesProps) => {
   const [_] = useTranslation();
   return (
     <Section
@@ -89,8 +93,8 @@ const NvtPreferences = ({
         <TableBody>
           {preferences.map(pref => {
             return (
-              <NvtPreferenceDisplay
-                key={`${pref.nvt.oid}-${pref.id}`}
+              <ScanConfigNvtPreferenceDisplay
+                key={`${pref.nvt?.oid}-${pref.id}`}
                 preference={pref}
                 title={editTitle}
                 onEditNvtDetailsClick={onEditNvtDetailsClick}
@@ -103,10 +107,4 @@ const NvtPreferences = ({
   );
 };
 
-NvtPreferences.propTypes = {
-  editTitle: PropTypes.string,
-  preferences: PropTypes.arrayOf(NvtPreferencePropType),
-  onEditNvtDetailsClick: PropTypes.func.isRequired,
-};
-
-export default NvtPreferences;
+export default ScanConfigNvtPreferences;
