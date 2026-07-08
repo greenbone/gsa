@@ -319,7 +319,6 @@ function EntitiesTable<
           grow="1"
         >
           <DetailsIcon
-            // @ts-expect-error
             foldState={allToggled ? FoldState.UNFOLDED : FoldState.FOLDED}
             title={allToggled ? _('Fold all details') : _('Unfold all details')}
             onClick={handleToggleAllDetails}
