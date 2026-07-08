@@ -3,7 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useReducer, useState} from 'react';
+import {useEffect, useReducer, useState} from 'react';
+import {type NvtPreferenceValues} from 'gmp/commands/scan-config';
+import {type Date} from 'gmp/models/date';
+import {
+  type ScanConfigPreferenceValue,
+  type ScanConfigPreference,
+} from 'gmp/models/scan-config';
+import {NO_VALUE, parseYesNo, YES_VALUE, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
@@ -26,10 +33,51 @@ import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import NvtPreference from 'web/pages/nvts/NvtPreference';
 import Preformatted from 'web/pages/nvts/Preformatted';
-import PropTypes from 'web/utils/PropTypes';
 
-const createPrefValues = (preferences = []) => {
-  const preferenceValues = {};
+export interface ScanConfigEditNvtDetailsDialogData {
+  configId: string;
+  nvtOid: string;
+  preferenceValues: NvtPreferenceValues;
+  timeout?: number;
+  useDefaultTimeout: YesNo;
+}
+
+interface ScanConfigEditNvtDetailsDialogProps {
+  configId: string;
+  configName: string;
+  configNameLabel: string;
+  defaultTimeout?: number;
+  isLoadingNvt?: boolean;
+  nvtAffectedSoftware?: string;
+  nvtCvssVector?: string;
+  nvtFamily?: string;
+  nvtLastModified?: Date;
+  nvtName: string;
+  nvtOid: string;
+  nvtSeverity?: number;
+  nvtSummary?: string;
+  preferences?: ScanConfigPreference[];
+  timeout?: number;
+  title: string;
+  onClose: () => void;
+  onSave: (data: ScanConfigEditNvtDetailsDialogData) => void;
+}
+
+interface SetValueAction {
+  type: 'setValue';
+  newState: {
+    name: string;
+    value: ScanConfigPreferenceValue;
+  };
+}
+
+interface SetAllAction {
+  type: 'setAll';
+  formValues: NvtPreferenceValues;
+}
+
+const createPrefValues = (preferences: ScanConfigPreference[] = []) => {
+  const preferenceValues: NvtPreferenceValues = {};
 
   preferences.forEach(pref => {
     let {id, value, type} = pref;
@@ -38,17 +86,20 @@ const createPrefValues = (preferences = []) => {
       value = undefined;
     }
 
-    preferenceValues[pref.name] = {
-      id,
-      value,
-      type,
+    preferenceValues[pref.name as string] = {
+      id: id as number,
+      value: value as ScanConfigPreferenceValue,
+      type: type as string,
     };
   });
 
   return preferenceValues;
 };
 
-const reducer = (state, action) => {
+const reducer = (
+  state: NvtPreferenceValues,
+  action: SetValueAction | SetAllAction,
+): NvtPreferenceValues => {
   switch (action.type) {
     case 'setValue': {
       const {newState} = action;
@@ -76,7 +127,7 @@ const reducer = (state, action) => {
   }
 };
 
-const EditNvtDetailsDialog = ({
+const ScanConfigEditNvtDetailsDialog = ({
   configId,
   configName,
   configNameLabel,
@@ -91,11 +142,11 @@ const EditNvtDetailsDialog = ({
   nvtSeverity,
   nvtSummary,
   timeout,
-  preferences,
+  preferences = [],
   title,
   onClose,
   onSave,
-}) => {
+}: ScanConfigEditNvtDetailsDialogProps) => {
   const [_] = useTranslation();
   const [preferenceValues, dispatch] = useReducer(
     reducer,
@@ -103,8 +154,8 @@ const EditNvtDetailsDialog = ({
   );
 
   const [controlledTimeout, setControlledTimeout] = useState(timeout);
-  const [useDefaultTimeout, setDefaultTimeout] = useState(
-    isDefined(timeout) ? '0' : '1',
+  const [useDefaultTimeout, setDefaultTimeout] = useState<YesNo>(
+    isDefined(timeout) ? NO_VALUE : YES_VALUE,
   );
 
   useEffect(() => {
@@ -116,14 +167,14 @@ const EditNvtDetailsDialog = ({
 
   useEffect(() => {
     setControlledTimeout(timeout);
-    setDefaultTimeout(isDefined(timeout) ? '0' : '1');
+    setDefaultTimeout(isDefined(timeout) ? NO_VALUE : YES_VALUE);
   }, [timeout]);
 
   const handleChangeTimeout = value => {
     setControlledTimeout(value);
   };
 
-  const controlledData = {
+  const controlledData: ScanConfigEditNvtDetailsDialogData = {
     configId,
     nvtOid,
     preferenceValues,
@@ -132,7 +183,7 @@ const EditNvtDetailsDialog = ({
   };
 
   return (
-    <SaveDialog
+    <SaveDialog<ScanConfigEditNvtDetailsDialogData>
       title={title}
       values={controlledData}
       onClose={onClose}
@@ -231,10 +282,11 @@ const EditNvtDetailsDialog = ({
                   <TableData>
                     <Column>
                       <Divider>
-                        <Radio
-                          checked={state.useDefaultTimeout === '1'}
+                        <Radio<YesNo>
+                          checked={state.useDefaultTimeout === YES_VALUE}
+                          convert={parseYesNo}
                           name="useDefaultTimeout"
-                          value="1"
+                          value={YES_VALUE}
                           onChange={value => setDefaultTimeout(value)}
                         />
                         <span>
@@ -244,14 +296,15 @@ const EditNvtDetailsDialog = ({
                             : ''}
                         </span>
                       </Divider>
-                      <Radio
-                        checked={state.useDefaultTimeout === '0'}
+                      <Radio<YesNo>
+                        checked={state.useDefaultTimeout === NO_VALUE}
+                        convert={parseYesNo}
                         name="useDefaultTimeout"
-                        value="0"
+                        value={NO_VALUE}
                         onChange={value => setDefaultTimeout(value)}
                       />
                       <TextField
-                        disabled={state.useDefaultTimeout === '1'}
+                        disabled={state.useDefaultTimeout === YES_VALUE}
                         name="timeout"
                         value={isDefined(state.timeout) ? state.timeout : ''}
                         onChange={handleChangeTimeout}
@@ -263,13 +316,17 @@ const EditNvtDetailsDialog = ({
                   </TableData>
                 </TableRow>
                 {preferences.map(pref => {
-                  const prefValue = isDefined(preferenceValues[pref.name])
-                    ? preferenceValues[pref.name].value
+                  const prefValue = isDefined(
+                    preferenceValues[pref.name as string],
+                  )
+                    ? preferenceValues[pref.name as string].value
                     : undefined;
                   return (
                     <NvtPreference
                       key={pref.name}
+                      // @ts-expect-error
                       preference={pref}
+                      // @ts-expect-error
                       value={prefValue}
                       onChange={dispatch}
                     />
@@ -284,35 +341,4 @@ const EditNvtDetailsDialog = ({
   );
 };
 
-EditNvtDetailsDialog.propTypes = {
-  configId: PropTypes.string.isRequired,
-  configName: PropTypes.string.isRequired,
-  configNameLabel: PropTypes.string.isRequired,
-  defaultTimeout: PropTypes.number,
-  isLoadingNvt: PropTypes.bool,
-  nvtAffectedSoftware: PropTypes.string,
-  nvtCvssVector: PropTypes.string,
-  nvtFamily: PropTypes.string,
-  nvtLastModified: PropTypes.date,
-  nvtName: PropTypes.string,
-  nvtOid: PropTypes.string,
-  nvtSeverity: PropTypes.number,
-  nvtSummary: PropTypes.string,
-  preferences: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      default: PropTypes.any,
-      hr_name: PropTypes.string,
-      name: PropTypes.string.isRequired,
-      value: PropTypes.any,
-      alt: PropTypes.array,
-      type: PropTypes.string,
-    }),
-  ),
-  timeout: PropTypes.number,
-  title: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-};
-
-export default EditNvtDetailsDialog;
+export default ScanConfigEditNvtDetailsDialog;
