@@ -8,6 +8,7 @@ import {screen, rendererWith, fireEvent, waitFor} from 'web/testing';
 import date from 'gmp/models/date';
 import type Nvt from 'gmp/models/nvt';
 import ScanConfig, {
+  type ScanConfigFamily,
   type ScanConfigFamilyElement,
   type ScanConfigPreferenceElement,
 } from 'gmp/models/scan-config';
@@ -16,6 +17,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import ScanConfigComponent, {
   createSelectedNvts,
+  type ScanConfigRenderProps,
 } from 'web/pages/scanconfigs/ScanConfigComponent';
 
 interface AllFamily {
@@ -23,13 +25,8 @@ interface AllFamily {
   maxNvtCount: number;
 }
 
-interface Scanner {
-  id: string;
-  name: string;
-}
-
 interface FamilyNvt {
-  oid: string | number;
+  oid: string;
   name: string;
   severity?: number;
   selected: YesNo;
@@ -56,7 +53,7 @@ interface NvtData {
   tags: Nvt['tags'];
 }
 
-type MockFunction<T extends (...args: unknown[]) => unknown> = ReturnType<
+type MockFunction<T = (...args: unknown[]) => unknown> = ReturnType<
   typeof testing.fn
 > & {mockResolvedValue: (value: unknown) => MockFunction<T>};
 
@@ -66,7 +63,9 @@ type ConfigMock = MockFunction<() => Promise<{data: typeof config}>>;
 type AllFamiliesMock = MockFunction<() => Promise<{data: AllFamily[]}>>;
 type FamilyNvtsMock = MockFunction<() => Promise<{data: {nvts: FamilyNvt[]}}>>;
 type NvtDataMock = MockFunction<() => Promise<{data: NvtData}>>;
-type ScannersMock = MockFunction<() => Promise<{data: Scanner[]}>>;
+type ScanConfigsMock = MockFunction<() => Promise<{data: ScanConfig[]}>>;
+type ScanConfigComponentRenderPropsMock = ReturnType<typeof testing.fn> &
+  ((props: ScanConfigRenderProps) => React.ReactNode);
 
 interface GmpObject {
   scanconfig: {
@@ -78,14 +77,14 @@ interface GmpObject {
     import: RecordPromiseMock;
     export: RecordPromiseMock;
   };
+  scanconfigs: {
+    getAll: ScanConfigsMock;
+  };
   nvtfamilies: {
     get: AllFamiliesMock;
   };
   nvt: {
     getConfigNvt: NvtDataMock;
-  };
-  scanners: {
-    getAll: ScannersMock;
   };
   settings: {manualUrl: string};
   user: {
@@ -96,6 +95,7 @@ interface GmpObject {
 
 interface GmpMocks {
   getScanConfig: ConfigMock;
+  getAllScanConfigs: ScanConfigsMock;
   saveScanConfig: RecordPromiseMock;
   editScanConfigFamilySettings: FamilyNvtsMock;
   saveScanConfigFamily: RecordPromiseMock;
@@ -103,7 +103,6 @@ interface GmpMocks {
   importScanConfig: RecordPromiseMock;
   getNvtFamilies: AllFamiliesMock;
   getConfigNvt: NvtDataMock;
-  getScannersAll: ScannersMock;
 }
 
 interface GmpFactory {
@@ -188,8 +187,6 @@ const allFamilies: AllFamily[] = [
   {name: 'family2', maxNvtCount: 4},
 ];
 
-const scannersData: Scanner[] = [{id: 's1', name: 'Scanner 1'}];
-
 const familyNvts: FamilyNvt[] = [
   {oid: 'nvt-1', name: 'NVT One', severity: 5, selected: YES_VALUE},
   {oid: 'nvt-2', name: 'NVT Two', severity: 8, selected: NO_VALUE},
@@ -224,33 +221,19 @@ const currentSettings: RecordPromiseMock = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const createGmp = (overrides: Record<string, unknown> = {}): GmpFactory => {
-  const getScanConfig: ConfigMock = testing
+const createGmp = ({
+  getScanConfig = testing.fn().mockResolvedValue({data: config}),
+  getAllScanConfigs = testing.fn().mockResolvedValue({data: [config]}),
+  saveScanConfig = testing.fn().mockResolvedValue({}),
+  editScanConfigFamilySettings = testing
     .fn()
-    .mockResolvedValue({data: config});
-  const saveScanConfig: RecordPromiseMock = testing.fn().mockResolvedValue({});
-  const editScanConfigFamilySettings: FamilyNvtsMock = testing
-    .fn()
-    .mockResolvedValue({data: {nvts: familyNvts}});
-  const saveScanConfigFamily: RecordPromiseMock = testing
-    .fn()
-    .mockResolvedValue({});
-  const saveScanConfigNvt: RecordPromiseMock = testing
-    .fn()
-    .mockResolvedValue({});
-  const importScanConfig: RecordPromiseMock = testing
-    .fn()
-    .mockResolvedValue({});
-  const getNvtFamilies: AllFamiliesMock = testing
-    .fn()
-    .mockResolvedValue({data: allFamilies});
-  const getConfigNvt: NvtDataMock = testing
-    .fn()
-    .mockResolvedValue({data: nvtData});
-  const getScannersAll: ScannersMock = testing
-    .fn()
-    .mockResolvedValue({data: scannersData});
-
+    .mockResolvedValue({data: {nvts: familyNvts}}),
+  saveScanConfigFamily = testing.fn().mockResolvedValue({}),
+  saveScanConfigNvt = testing.fn().mockResolvedValue({}),
+  importScanConfig = testing.fn().mockResolvedValue({}),
+  getNvtFamilies = testing.fn().mockResolvedValue({data: allFamilies}),
+  getConfigNvt = testing.fn().mockResolvedValue({data: nvtData}),
+}: Partial<GmpMocks> = {}): GmpFactory => {
   return {
     gmp: {
       scanconfig: {
@@ -262,14 +245,14 @@ const createGmp = (overrides: Record<string, unknown> = {}): GmpFactory => {
         import: importScanConfig,
         export: testing.fn().mockResolvedValue({}),
       },
+      scanconfigs: {
+        getAll: getAllScanConfigs,
+      },
       nvtfamilies: {
         get: getNvtFamilies,
       },
       nvt: {
         getConfigNvt,
-      },
-      scanners: {
-        getAll: getScannersAll,
       },
       settings: {
         manualUrl: 'http://test/',
@@ -278,10 +261,10 @@ const createGmp = (overrides: Record<string, unknown> = {}): GmpFactory => {
       user: {
         currentSettings,
       },
-      ...overrides,
     } as GmpObject,
     mocks: {
       getScanConfig,
+      getAllScanConfigs,
       saveScanConfig,
       editScanConfigFamilySettings,
       saveScanConfigFamily,
@@ -289,7 +272,6 @@ const createGmp = (overrides: Record<string, unknown> = {}): GmpFactory => {
       importScanConfig,
       getNvtFamilies,
       getConfigNvt,
-      getScannersAll,
     },
   };
 };
@@ -297,8 +279,10 @@ const createGmp = (overrides: Record<string, unknown> = {}): GmpFactory => {
 const renderComponent = (
   gmpObj: GmpObject,
   extraProps: Record<string, unknown> = {},
-): ReturnType<typeof testing.fn> => {
-  const childFn = testing.fn().mockReturnValue(null);
+): ScanConfigComponentRenderPropsMock => {
+  const childFn: ScanConfigComponentRenderPropsMock = testing
+    .fn()
+    .mockReturnValue(null);
 
   const {render} = rendererWith({
     gmp: gmpObj,
@@ -312,22 +296,32 @@ const renderComponent = (
   return childFn;
 };
 
+const createConfigFamily = (
+  count: number,
+  name: string = 'family1',
+): ScanConfigFamily => ({
+  name,
+  nvts: {
+    count,
+  },
+});
+
 describe('createSelectedNvts', () => {
   test('should select all NVTs when count equals nvts length', () => {
-    const configFamily: {nvts: {count: number}} = {nvts: {count: 2}};
+    const configFamily = createConfigFamily(2, 'family1');
     const nvts: FamilyNvt[] = [
-      {oid: 1, name: 'NVT1', selected: NO_VALUE},
-      {oid: 2, name: 'NVT2', selected: NO_VALUE},
+      {oid: '1', name: 'NVT1', selected: NO_VALUE},
+      {oid: '2', name: 'NVT2', selected: NO_VALUE},
     ];
     const result = createSelectedNvts(configFamily, nvts);
     expect(result).toEqual({1: YES_VALUE, 2: YES_VALUE});
   });
 
   test('should use individual selected values when count differs', () => {
-    const configFamily: {nvts: {count: number}} = {nvts: {count: 1}};
+    const configFamily = createConfigFamily(1, 'family1');
     const nvts: FamilyNvt[] = [
-      {oid: 1, name: 'NVT1', selected: YES_VALUE},
-      {oid: 2, name: 'NVT2', selected: NO_VALUE},
+      {oid: '1', name: 'NVT1', selected: YES_VALUE},
+      {oid: '2', name: 'NVT2', selected: NO_VALUE},
     ];
     const result = createSelectedNvts(configFamily, nvts);
     expect(result).toEqual({1: YES_VALUE, 2: NO_VALUE});
@@ -335,10 +329,13 @@ describe('createSelectedNvts', () => {
 
   test('should default to count 0 when configFamily is undefined', () => {
     const nvts: FamilyNvt[] = [
-      {oid: 1, name: 'NVT1', selected: YES_VALUE},
-      {oid: 2, name: 'NVT2', selected: NO_VALUE},
+      {oid: '1', name: 'NVT1', selected: YES_VALUE},
+      {oid: '2', name: 'NVT2', selected: NO_VALUE},
     ];
-    const result = createSelectedNvts(undefined, nvts);
+    const result = createSelectedNvts(
+      undefined as unknown as ScanConfigFamily,
+      nvts,
+    );
     expect(result).toEqual({1: YES_VALUE, 2: NO_VALUE});
   });
 });
@@ -349,7 +346,7 @@ describe('ScanConfigComponent', () => {
     const childFn = renderComponent(gmp);
 
     expect(childFn).toHaveBeenCalled();
-    const props = childFn.mock.lastCall?.[0] as Record<string, unknown>;
+    const props = childFn.mock.lastCall?.[0] as ScanConfigRenderProps;
     expect(props.create).toBeDefined();
     expect(props.edit).toBeDefined();
     expect(props.import).toBeDefined();
@@ -357,20 +354,12 @@ describe('ScanConfigComponent', () => {
   });
 
   describe('openCreateConfigDialog / closeCreateConfigDialog', () => {
-    test('should open create dialog and load scanners', async () => {
-      const {gmp, mocks} = createGmp();
+    test('should open create dialog and load scan configs', async () => {
+      const {gmp} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.lastCall?.[0] as Record<
-        string,
-        (arg: unknown) => void
-      >;
-      const create = props.create as (arg: unknown) => void;
-      create(undefined);
-
-      await waitFor(() => {
-        expect(mocks.getScannersAll).toHaveBeenCalled();
-      });
+      const props = childFn.mock.lastCall?.[0] as ScanConfigRenderProps;
+      props.create();
 
       await screen.findByText('New Scan Config');
     });
@@ -381,17 +370,13 @@ describe('ScanConfigComponent', () => {
       const {gmp, mocks} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof config) => void
-      >;
-      const edit = props.edit as (arg: typeof config) => void;
-      edit(config);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
 
       await waitFor(() => {
         expect(mocks.getScanConfig).toHaveBeenCalledWith({id: 'c1'});
         expect(mocks.getNvtFamilies).toHaveBeenCalled();
-        expect(mocks.getScannersAll).toHaveBeenCalled();
+        expect(mocks.getAllScanConfigs).toHaveBeenCalled();
       });
 
       await screen.findByText('Edit Scan Config Test Config');
@@ -401,12 +386,8 @@ describe('ScanConfigComponent', () => {
       const {gmp} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof config) => void
-      >;
-      const edit = props.edit as (arg: typeof config) => void;
-      edit(config);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
 
       await screen.findByText('Edit Scan Config Test Config');
 
@@ -426,12 +407,8 @@ describe('ScanConfigComponent', () => {
       const {gmp, mocks} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof config) => void
-      >;
-      const edit = props.edit as (arg: typeof config) => void;
-      edit(config);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
 
       await screen.findByText('Edit Scan Config Test Config');
 
@@ -451,27 +428,20 @@ describe('ScanConfigComponent', () => {
 
     test('should only save name and comment when config is in use', async () => {
       const {gmp} = createGmp({
-        scanconfig: {
-          get: testing.fn().mockResolvedValue({data: configInUse}),
-          save: testing.fn().mockResolvedValue({}),
-          editScanConfigFamilySettings: testing
-            .fn()
-            .mockResolvedValue({data: {nvts: familyNvts}}),
-          saveScanConfigFamily: testing.fn().mockResolvedValue({}),
-          saveScanConfigNvt: testing.fn().mockResolvedValue({}),
-          import: testing.fn().mockResolvedValue({}),
-          export: testing.fn().mockResolvedValue({}),
-        },
+        getScanConfig: testing.fn().mockResolvedValue({data: configInUse}),
+        saveScanConfig: testing.fn().mockResolvedValue({}),
+        editScanConfigFamilySettings: testing
+          .fn()
+          .mockResolvedValue({data: {nvts: familyNvts}}),
+        saveScanConfigFamily: testing.fn().mockResolvedValue({}),
+        saveScanConfigNvt: testing.fn().mockResolvedValue({}),
+        importScanConfig: testing.fn().mockResolvedValue({}),
       });
 
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof configInUse) => void
-      >;
-      const edit = props.edit as (arg: typeof configInUse) => void;
-      edit(configInUse);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(configInUse);
 
       await screen.findByText('Edit Scan Config In-Use Config');
 
@@ -508,12 +478,8 @@ describe('ScanConfigComponent', () => {
       const {gmp, mocks} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof config) => void
-      >;
-      const edit = props.edit as (arg: typeof config) => void;
-      edit(config);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
 
       await screen.findByText('Edit Scan Config Test Config');
 
@@ -538,12 +504,8 @@ describe('ScanConfigComponent', () => {
       const {gmp, mocks} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof config) => void
-      >;
-      const edit = props.edit as (arg: typeof config) => void;
-      edit(config);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
 
       await screen.findByText('Edit Scan Config Test Config');
 
@@ -568,12 +530,8 @@ describe('ScanConfigComponent', () => {
       const {gmp, mocks} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof config) => void
-      >;
-      const edit = props.edit as (arg: typeof config) => void;
-      edit(config);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
 
       await screen.findByText('Edit Scan Config Test Config');
 
@@ -607,12 +565,8 @@ describe('ScanConfigComponent', () => {
       const {gmp, mocks} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof config) => void
-      >;
-      const edit = props.edit as (arg: typeof config) => void;
-      edit(config);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
 
       await screen.findByText('Edit Scan Config Test Config');
 
@@ -659,12 +613,8 @@ describe('ScanConfigComponent', () => {
       const {gmp, mocks} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof config) => void
-      >;
-      const edit = props.edit as (arg: typeof config) => void;
-      edit(config);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
 
       await screen.findByText('Edit Scan Config Test Config');
 
@@ -738,15 +688,8 @@ describe('ScanConfigComponent', () => {
       mocks.getScanConfig.mockResolvedValue({data: configWithSettings});
 
       const childFn = renderComponent(gmp);
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof configWithSettings) => void
-      >;
-      const settings = props.settings as (
-        arg: typeof configWithSettings,
-      ) => void;
-
-      settings(configWithSettings);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.settings(configWithSettings);
 
       await waitFor(async () => {
         expect(mocks.getScanConfig).toHaveBeenCalledWith({id: 'c1'});
@@ -768,12 +711,8 @@ describe('ScanConfigComponent', () => {
       const {gmp} = createGmp();
       const childFn = renderComponent(gmp);
 
-      const props = childFn.mock.calls[0]?.[0] as Record<
-        string,
-        (arg: typeof config) => void
-      >;
-      const edit = props.edit as (arg: typeof config) => void;
-      edit(config);
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
 
       await screen.findByText('Edit Scan Config Test Config');
 
