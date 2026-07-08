@@ -14,8 +14,8 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
+import ScanConfigTrend from 'web/pages/scanconfigs/ScanConfigTrend';
 import Settings from 'web/pages/scanconfigs/Settings';
-import Trend from 'web/pages/scanconfigs/Trend';
 import PropTypes from 'web/utils/PropTypes';
 import {na} from 'web/utils/Render';
 
@@ -99,7 +99,7 @@ const ScanConfigRow = ({
       />
       <TableData>{na(entity.families.count)}</TableData>
       <TableData>
-        <Trend
+        <ScanConfigTrend
           titleDynamic={_(
             'The family selection is DYNAMIC. New families ' +
               'will automatically be added and considered.',
@@ -113,7 +113,7 @@ const ScanConfigRow = ({
       </TableData>
       <TableData>{na(entity.nvts.count)}</TableData>
       <TableData>
-        <Trend
+        <ScanConfigTrend
           titleDynamic={_(
             'The NVT selection is DYNAMIC. New NVTs of ' +
               'selected families will automatically be added and considered.',

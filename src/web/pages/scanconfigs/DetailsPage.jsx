@@ -36,7 +36,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import ScanConfigDetails from 'web/pages/scanconfigs/Details';
 import ScanConfigComponent from 'web/pages/scanconfigs/ScanConfigComponent';
 import ScanConfigDetailsPageToolBarIcons from 'web/pages/scanconfigs/ScanConfigDetailsPageToolBarIcons';
-import Trend from 'web/pages/scanconfigs/Trend';
+import ScanConfigTrend from 'web/pages/scanconfigs/ScanConfigTrend';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -58,7 +58,7 @@ export const NvtFamilies = ({entity}) => {
               <TableHead align={['center', 'center']}>
                 <Divider>
                   {_('Trend')}
-                  <Trend
+                  <ScanConfigTrend
                     titleDynamic={_(
                       'The families selection is DYNAMIC. New ' +
                         'families will automatically be added and considered.',
@@ -94,7 +94,7 @@ export const NvtFamilies = ({entity}) => {
                     <Layout>{_('{{count}} of {{max}}', family.nvts)}</Layout>
                   </TableData>
                   <TableData align={['center', 'center']}>
-                    <Trend
+                    <ScanConfigTrend
                       titleDynamic={_(
                         'The NVT selection is DYNAMIC. New ' +
                           'NVTs will automatically be added and considered.',

@@ -23,11 +23,11 @@ import useTranslation from 'web/hooks/useTranslation';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
 import AuditDialog from 'web/pages/audits/Dialog';
 import PolicyDialog from 'web/pages/policies/Dialog';
-import EditPolicyFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
-import EditPolicyDialog from 'web/pages/scanconfigs/EditDialog';
-import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import ImportDialog from 'web/pages/scanconfigs/ImportDialog';
 import {createSelectedNvts} from 'web/pages/scanconfigs/ScanConfigComponent';
+import EditPolicyDialog from 'web/pages/scanconfigs/ScanConfigEditDialog';
+import ScanConfigEditPolicyFamilyDialog from 'web/pages/scanconfigs/ScanConfigEditFamilyDialog';
+import ScanConfigEditNvtDetailsDialog from 'web/pages/scanconfigs/ScanConfigEditNvtDetailsDialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {
@@ -60,7 +60,6 @@ const PolicyComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-
   onSaved,
   onSaveError,
   onImported,
@@ -672,7 +671,7 @@ const PolicyComponent = ({
         />
       )}
       {editPolicyFamilyDialogVisible && policy && (
-        <EditPolicyFamilyDialog
+        <ScanConfigEditPolicyFamilyDialog
           configId={policy.id}
           configName={policy.name}
           configNameLabel={_('Policy')}
@@ -687,7 +686,7 @@ const PolicyComponent = ({
         />
       )}
       {editNvtDetailsDialogVisible && policy && nvt && (
-        <EditNvtDetailsDialog
+        <ScanConfigEditNvtDetailsDialog
           configId={policy.id}
           configName={policy.name}
           configNameLabel={_('Policy')}
