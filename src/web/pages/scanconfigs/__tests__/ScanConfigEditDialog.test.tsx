@@ -15,31 +15,42 @@ import {
 import {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
+  type ScanConfigFamilies,
+  type ScanConfigFamily,
+  type ScanConfigPreference,
 } from 'gmp/models/scan-config';
-import EditScanConfigDialog, {
+import ScanConfigEditDialog, {
   handleSearchChange,
-} from 'web/pages/scanconfigs/EditDialog';
+} from 'web/pages/scanconfigs/ScanConfigEditDialog';
 
-const families = [
+const families: ScanConfigFamily[] = [
   {
     name: 'family1',
-    maxNvtCount: 1,
+    nvts: {
+      max: 1,
+    },
   },
   {
     name: 'family2',
-    maxNvtCount: 4,
+    nvts: {
+      max: 4,
+    },
   },
   {
     name: 'family3',
-    maxNvtCount: 2,
+    nvts: {
+      max: 2,
+    },
   },
   {
     name: 'family4',
-    maxNvtCount: 6,
+    nvts: {
+      max: 6,
+    },
   },
 ];
 
-const configFamilies = {
+const configFamilies: ScanConfigFamilies = {
   family1: {
     name: 'family1',
     nvts: {
@@ -66,7 +77,7 @@ const configFamilies = {
   },
 };
 
-const nvtPreferences = [
+const nvtPreferences: ScanConfigPreference[] = [
   {
     name: 'preference1',
     value: '3',
@@ -89,15 +100,8 @@ const nvtPreferences = [
     nvt: {
       oid: '1.2.3',
       name: 'preference2',
-      value: 'foo',
     },
   },
-];
-
-const scanners = [
-  {name: 'scanner1', id: '1'},
-  {name: 'scanner2', id: '2'},
-  {name: 'scanner3', id: '3'},
 ];
 
 const select = {
@@ -122,7 +126,7 @@ const scannerPreferences = [
   },
 ];
 
-describe('EditScanConfigDialog component tests', () => {
+describe('ScanConfigEditDialog tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
@@ -132,7 +136,7 @@ describe('EditScanConfigDialog component tests', () => {
     const {render} = rendererWith({capabilities: true});
 
     render(
-      <EditScanConfigDialog
+      <ScanConfigEditDialog
         comment="bar"
         configFamilies={configFamilies}
         configId="c1"
@@ -146,7 +150,6 @@ describe('EditScanConfigDialog component tests', () => {
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
-        scanners={scanners}
         title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
@@ -155,9 +158,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(screen.queryDialogTitle()).toHaveTextContent('Edit Scan Config');
+    expect(screen.getDialogTitle()).toHaveTextContent('Edit Scan Config');
 
-    const content = screen.queryDialogContent();
+    const content = screen.getDialogContent();
     expect(content).toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -176,7 +179,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true});
     render(
-      <EditScanConfigDialog
+      <ScanConfigEditDialog
         comment="bar"
         configFamilies={configFamilies}
         configId="c1"
@@ -190,7 +193,6 @@ describe('EditScanConfigDialog component tests', () => {
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
-        scanners={scanners}
         title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
@@ -199,9 +201,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(screen.queryDialogTitle()).toHaveTextContent('Edit Scan Config');
+    expect(screen.getDialogTitle()).toHaveTextContent('Edit Scan Config');
 
-    const content = screen.queryDialogContent();
+    const content = screen.getDialogContent();
     expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -227,7 +229,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true});
     render(
-      <EditScanConfigDialog
+      <ScanConfigEditDialog
         comment="bar"
         configFamilies={configFamilies}
         configId="c1"
@@ -241,7 +243,6 @@ describe('EditScanConfigDialog component tests', () => {
         name="Policy"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
-        scanners={scanners}
         title="Edit Policy"
         usageType="policy"
         onClose={handleClose}
@@ -251,9 +252,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(screen.queryDialogTitle()).toHaveTextContent('Edit Policy');
+    expect(screen.getDialogTitle()).toHaveTextContent('Edit Policy');
 
-    const content = screen.queryDialogContent();
+    const content = screen.getDialogContent();
     expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -276,7 +277,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true});
     render(
-      <EditScanConfigDialog
+      <ScanConfigEditDialog
         comment="bar"
         configFamilies={configFamilies}
         configId="c1"
@@ -290,7 +291,6 @@ describe('EditScanConfigDialog component tests', () => {
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
-        scanners={scanners}
         title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
@@ -323,7 +323,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true});
     render(
-      <EditScanConfigDialog
+      <ScanConfigEditDialog
         comment="bar"
         configFamilies={configFamilies}
         configId="c1"
@@ -337,7 +337,6 @@ describe('EditScanConfigDialog component tests', () => {
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
-        scanners={scanners}
         title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
@@ -362,7 +361,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true});
     render(
-      <EditScanConfigDialog
+      <ScanConfigEditDialog
         comment="bar"
         configFamilies={configFamilies}
         configId="c1"
@@ -376,7 +375,6 @@ describe('EditScanConfigDialog component tests', () => {
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
-        scanners={scanners}
         title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
@@ -385,7 +383,7 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const content = within(screen.queryDialogContent());
+    const content = within(screen.getDialogContent());
     const inputs = content.queryTextInputs();
 
     changeInputValue(inputs[0], 'lorem');
@@ -415,7 +413,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true});
     render(
-      <EditScanConfigDialog
+      <ScanConfigEditDialog
         comment="bar"
         configFamilies={configFamilies}
         configId="c1"
@@ -429,7 +427,6 @@ describe('EditScanConfigDialog component tests', () => {
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
-        scanners={scanners}
         title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
@@ -438,15 +435,10 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const dialogContent = within(screen.queryDialogContent());
-    const tableBody = dialogContent.queryTableBody();
-
-    const rows = tableBody.querySelectorAll('tr');
-
-    const family1Inputs = screen.getRadioInputs(rows[0]);
+    const family1Inputs = screen.getRadioInputs();
     fireEvent.click(family1Inputs[1]);
 
-    const family2Checkboxes = screen.getAllCheckBoxes(rows[1]);
+    const family2Checkboxes = screen.getAllCheckBoxes();
     fireEvent.click(family2Checkboxes[1]);
 
     const saveButton = screen.getDialogSaveButton();
@@ -490,7 +482,7 @@ describe('EditScanConfigDialog component tests', () => {
       router: true,
     });
     render(
-      <EditScanConfigDialog
+      <ScanConfigEditDialog
         comment="bar"
         configFamilies={configFamilies}
         configId="c1"
@@ -504,7 +496,6 @@ describe('EditScanConfigDialog component tests', () => {
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
-        scanners={scanners}
         title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
@@ -546,7 +537,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true});
     render(
-      <EditScanConfigDialog
+      <ScanConfigEditDialog
         comment="bar"
         configFamilies={configFamilies}
         configId="c1"
@@ -560,7 +551,6 @@ describe('EditScanConfigDialog component tests', () => {
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
-        scanners={scanners}
         title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
@@ -574,13 +564,10 @@ describe('EditScanConfigDialog component tests', () => {
     );
     fireEvent.change(searchBar, {target: {value: 'family4'}});
 
-    expect(searchBar.value).toBe('family4');
+    expect(searchBar).toHaveValue('family4');
 
     await waitFor(() => {
-      const section = screen
-        .getByText('Edit Network Vulnerability Test Families (1)')
-        .closest('.section-header');
-      const rows = screen.getAllByRole('row', {container: section});
+      const rows = screen.getAllByRole('row');
       expect(rows).toHaveLength(2);
       expect(rows[1]).toHaveTextContent('family4');
     });
@@ -639,7 +626,7 @@ describe('EditScanConfigDialog component tests', () => {
 
       const {render} = rendererWith({capabilities: true, router: true});
       render(
-        <EditScanConfigDialog
+        <ScanConfigEditDialog
           comment="bar"
           configFamilies={configFamilies}
           configId="c1"
@@ -653,7 +640,6 @@ describe('EditScanConfigDialog component tests', () => {
           name="Config"
           nvtPreferences={nvtPreferences}
           scannerPreferences={scannerPreferences}
-          scanners={scanners}
           title="Edit Scan Config"
           onClose={handleClose}
           onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
@@ -667,7 +653,7 @@ describe('EditScanConfigDialog component tests', () => {
       );
 
       fireEvent.change(searchBar, {target: {value: 'family1'}});
-      expect(searchBar.value).toBe('family1');
+      expect(searchBar).toHaveValue('family1');
 
       const resultsCount =
         isLoadingConfig || isLoadingFamilies || isLoadingScanners

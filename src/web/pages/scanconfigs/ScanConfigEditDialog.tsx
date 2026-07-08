@@ -11,7 +11,20 @@ import {
   memo,
   useRef,
 } from 'react';
-import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scan-config';
+import {
+  type ScanConfigFamilyTrends,
+  type ScanConfigNvtsSelected,
+  type ScanConfigScannerPreferenceValues,
+} from 'gmp/commands/scan-config';
+import {
+  SCANCONFIG_TREND_STATIC,
+  type ScanConfigPreference,
+  type ScanConfigPreferenceValue,
+  type ScanConfigUsageType,
+  type ScanConfigFamilies,
+  type ScanConfigFamily,
+  type ScanConfigTrend,
+} from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import DialogInlineNotification from 'web/components/dialog/DialogInlineNotification';
@@ -20,29 +33,83 @@ import TextField from 'web/components/form/TextField';
 import Loading from 'web/components/loading/Loading';
 import SearchBar from 'web/components/searchbar/SearchBar';
 import useTranslation from 'web/hooks/useTranslation';
-import NvtFamilies from 'web/pages/scanconfigs/NvtFamilies';
-import NvtPreferences, {
-  NvtPreferencePropType,
-} from 'web/pages/scanconfigs/NvtPreferences';
-import ScannerPreferences, {
-  ScannerPreferencePropType,
-} from 'web/pages/scanconfigs/ScannerPreferences';
-import PropTypes from 'web/utils/PropTypes';
+import ScanConfigNvtFamilies from 'web/pages/scanconfigs/ScanConfigNvtFamilies';
+import ScanConfigNvtPreferences from 'web/pages/scanconfigs/ScanConfigNvtPreferences';
+import ScanConfigScannerPreferences from 'web/pages/scanconfigs/ScanConfigScannerPreferences';
 
-const MemoizedNvtPreferences = memo(NvtPreferences);
+interface SyncData {
+  name?: string;
+  comment?: string;
+}
 
-const createTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
+type SyncDataRef = React.MutableRefObject<SyncData>;
+
+interface BasicFieldsContainerProps {
+  initialName: string;
+  initialComment: string;
+  syncDataRef: (ref: SyncDataRef) => void;
+}
+
+interface ScanConfigEditDialogDefaultValues {
+  scannerId?: string;
+}
+
+interface ScanConfigEditDialogValues {
+  id: string;
+  scannerPreferenceValues?: ScanConfigScannerPreferenceValues;
+  select?: ScanConfigNvtsSelected;
+  trend?: ScanConfigFamilyTrends;
+  familyTrend?: ScanConfigTrend;
+}
+
+type ScanConfigEditDialogData = ScanConfigEditDialogDefaultValues &
+  ScanConfigEditDialogValues;
+
+interface ScanConfigEditDialogProps {
+  comment?: string;
+  configId: string;
+  configFamilies?: ScanConfigFamilies;
+  configFamiliesTrend?: ScanConfigTrend;
+  configIsInUse?: boolean;
+  editNvtDetailsTitle: string;
+  editNvtFamiliesTitle: string;
+  error?: string;
+  families?: ScanConfigFamily[];
+  isLoadingConfig?: boolean;
+  isLoadingFamilies?: boolean;
+  isLoadingScanners?: boolean;
+  name: string;
+  nvtPreferences?: ScanConfigPreference[];
+  scannerPreferences?: ScanConfigPreference[];
+  scannerId?: string;
+  title: string;
+  usageType?: ScanConfigUsageType;
+  onClose: () => void;
+  onEditConfigFamilyClick?: (familyName: string) => void;
+  onEditNvtDetailsClick?: (nvtOid: string) => void;
+  onSave: (values: ScanConfigEditDialogData) => void;
+}
+
+const MemoizedNvtPreferences = memo(ScanConfigNvtPreferences);
+
+const createTrendAndSelect = (
+  scanConfigFamilies: ScanConfigFamilies = {},
+  allFamilies: ScanConfigFamily[] = [],
+) => {
   const trend = {};
   const select = {};
 
   allFamilies.forEach(family => {
     const {name} = family;
-    const configFamily = scanConfigFamilies[name];
+    const configFamily = scanConfigFamilies[name] as ScanConfigFamily;
 
     if (isDefined(configFamily)) {
-      trend[name] = configFamily.trend;
+      trend[name] = configFamily.trend as ScanConfigTrend;
       select[name] =
-        configFamily.nvts.count === family.maxNvtCount ? YES_VALUE : NO_VALUE;
+        isDefined(configFamily.nvts?.count) &&
+        configFamily.nvts.count === family.nvts?.max
+          ? YES_VALUE
+          : NO_VALUE;
     } else {
       trend[name] = SCANCONFIG_TREND_STATIC;
       select[name] = NO_VALUE;
@@ -55,11 +122,14 @@ const createTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
   };
 };
 
-const createScannerPreferenceValues = (preferences = []) => {
-  const values = {};
+const createScannerPreferenceValues = (
+  preferences: ScanConfigPreference[] = [],
+) => {
+  const values: {[key: string]: ScanConfigPreferenceValue} = {};
 
   preferences.forEach(preference => {
-    values[preference.name] = preference.value;
+    values[preference.name as string] =
+      preference.value as ScanConfigPreferenceValue;
   });
 
   return values;
@@ -86,16 +156,16 @@ const reducer = (state, action) => {
 /**
  * Filters items based on the query and updates the filtered items state.
  *
- * @param {string} query - The search query.
- * @param {Array} items - The list of items to filter.
- * @param {Function} setFilteredItems - The function to update the filtered items state.
- * @param {Function} getItemName - The function to get the name property from an item.
+ * @param query - The search query.
+ * @param items - The list of items to filter.
+ * @param setFilteredItems - The function to update the filtered items state.
+ * @param getItemName - The function to get the name property from an item.
  */
-export const handleSearchChange = (
-  query,
-  items,
-  setFilteredItems,
-  getItemName,
+export const handleSearchChange = <TItem,>(
+  query: string,
+  items: TItem[],
+  setFilteredItems: (items: TItem[]) => void,
+  getItemName: (item: TItem) => string,
 ) => {
   const filtered = items.filter(item =>
     getItemName(item).toLowerCase().includes(query.toLowerCase()),
@@ -105,7 +175,7 @@ export const handleSearchChange = (
 };
 
 const BasicFieldsContainer = memo(
-  ({initialName, initialComment, syncDataRef}) => {
+  ({initialName, initialComment, syncDataRef}: BasicFieldsContainerProps) => {
     const [_] = useTranslation();
     const [name, setName] = useState(initialName);
     const [comment, setComment] = useState(initialComment);
@@ -139,13 +209,7 @@ const BasicFieldsContainer = memo(
   },
 );
 
-BasicFieldsContainer.propTypes = {
-  initialName: PropTypes.string,
-  initialComment: PropTypes.string,
-  syncDataRef: PropTypes.func,
-};
-
-const EditScanConfigDialog = ({
+const ScanConfigEditDialog = ({
   comment = '',
   configId,
   configFamilies = {},
@@ -168,20 +232,21 @@ const EditScanConfigDialog = ({
   onEditConfigFamilyClick,
   onEditNvtDetailsClick,
   onSave,
-}) => {
+}: ScanConfigEditDialogProps) => {
   const [_] = useTranslation();
   const [scannerPreferenceValues, dispatch] = useReducer(
     reducer,
     createScannerPreferenceValues(scannerPreferences),
   );
-  const [trendValues, setTrendValues] = useState();
-  const [selectValues, setSelectValues] = useState();
+  const [trendValues, setTrendValues] = useState<ScanConfigFamilyTrends>();
+  const [selectValues, setSelectValues] = useState<ScanConfigNvtsSelected>();
   const [filteredFamilies, setFilteredFamilies] = useState(families);
   const [filteredScannerPreferences, setFilteredScannerPreferences] =
     useState(scannerPreferences);
   const [filteredNvtPreferences, setFilteredNvtPreferences] =
     useState(nvtPreferences);
-  const basicFieldsRef = useRef(null);
+  const basicFieldsRef: React.MutableRefObject<SyncDataRef | null> =
+    useRef<SyncDataRef>(null);
 
   useEffect(() => {
     dispatch({
@@ -242,13 +307,13 @@ const EditScanConfigDialog = ({
         query,
         scannerPreferences,
         setFilteredScannerPreferences,
-        item => item.name,
+        item => item.name as string,
       );
       handleSearchChange(
         query,
         nvtPreferences,
         setFilteredNvtPreferences,
-        item => item.nvt.name,
+        item => item.nvt?.name as string,
       );
     },
     [families, scannerPreferences, nvtPreferences],
@@ -261,8 +326,8 @@ const EditScanConfigDialog = ({
       filteredScannerPreferences.length +
       filteredNvtPreferences.length;
 
-  const handleSave = values => {
-    const basicFields = basicFieldsRef.current
+  const handleSave = (values: ScanConfigEditDialogData) => {
+    const basicFields: SyncData = basicFieldsRef.current
       ? basicFieldsRef.current.current
       : {};
 
@@ -275,15 +340,14 @@ const EditScanConfigDialog = ({
     onSave(allValues);
   };
 
-  const syncDataRef = useCallback(ref => {
+  const syncDataRef = useCallback((ref: SyncDataRef) => {
     basicFieldsRef.current = ref;
   }, []);
 
   return (
-    <SaveDialog
+    <SaveDialog<ScanConfigEditDialogValues, ScanConfigEditDialogDefaultValues>
       defaultValues={uncontrolledData}
       error={error}
-      loading={isLoadingConfig}
       title={title}
       values={controlledData}
       width="900px"
@@ -312,12 +376,12 @@ const EditScanConfigDialog = ({
               {isLoadingConfig || isLoadingFamilies ? (
                 <Loading />
               ) : (
-                <NvtFamilies
+                <ScanConfigNvtFamilies
                   configFamilies={configFamilies}
                   editTitle={editNvtFamiliesTitle}
                   families={filteredFamilies}
-                  select={selectValues}
-                  trend={trendValues}
+                  select={selectValues as ScanConfigNvtsSelected}
+                  trend={trendValues as ScanConfigFamilyTrends}
                   onEditConfigFamilyClick={onEditConfigFamilyClick}
                   onValueChange={onValueChange}
                 />
@@ -325,7 +389,7 @@ const EditScanConfigDialog = ({
               {isLoadingConfig ? (
                 <Loading />
               ) : (
-                <ScannerPreferences
+                <ScanConfigScannerPreferences
                   preferences={filteredScannerPreferences}
                   values={scannerPreferenceValues}
                   onValuesChange={dispatch}
@@ -349,34 +413,4 @@ const EditScanConfigDialog = ({
   );
 };
 
-EditScanConfigDialog.propTypes = {
-  comment: PropTypes.string,
-  configFamilies: PropTypes.object,
-  configId: PropTypes.id.isRequired,
-  configIsInUse: PropTypes.bool,
-  editNvtDetailsTitle: PropTypes.string.isRequired,
-  editNvtFamiliesTitle: PropTypes.string.isRequired,
-  error: PropTypes.any,
-  families: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      maxNvtCount: PropTypes.number,
-    }),
-  ),
-  isLoadingConfig: PropTypes.bool,
-  isLoadingFamilies: PropTypes.bool,
-  isLoadingScanners: PropTypes.bool,
-  name: PropTypes.string,
-  configFamiliesTrend: PropTypes.string,
-  nvtPreferences: PropTypes.arrayOf(NvtPreferencePropType),
-  scannerId: PropTypes.id,
-  scannerPreferences: PropTypes.arrayOf(ScannerPreferencePropType),
-  title: PropTypes.string.isRequired,
-  usageType: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onEditConfigFamilyClick: PropTypes.func,
-  onEditNvtDetailsClick: PropTypes.func,
-  onSave: PropTypes.func.isRequired,
-};
-
-export default EditScanConfigDialog;
+export default ScanConfigEditDialog;
