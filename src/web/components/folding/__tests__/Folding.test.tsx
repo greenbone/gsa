@@ -9,10 +9,13 @@ import {
   withFolding,
   FoldState,
   withFoldToggle,
+  type FoldStateType,
 } from 'web/components/folding/Folding';
 
 describe('withFolding', () => {
-  const DummyComponent = props => <div {...props}>Dummy Component</div>;
+  const DummyComponent = (props: React.HTMLAttributes<HTMLDivElement>) => (
+    <div {...props}>Dummy Component</div>
+  );
   const FoldableComponent = withFolding(DummyComponent);
 
   test('hides content when foldState is Folded', () => {
@@ -28,7 +31,12 @@ describe('withFolding', () => {
 
 describe('withFoldToggle', () => {
   test('toggles foldState when onFolded isCalled', () => {
-    const DummyComponent = ({foldState, onFoldToggle}) => (
+    interface DummyProps {
+      foldState: FoldStateType;
+      onFoldToggle: () => void;
+    }
+
+    const DummyComponent = ({foldState, onFoldToggle}: DummyProps) => (
       <div>
         <span data-testid="foldState">{foldState}</span>
         <button onClick={onFoldToggle}>Toggle</button>

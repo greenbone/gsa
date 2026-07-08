@@ -6,7 +6,29 @@
 import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
 import {updateDisplayName} from 'web/utils/display-name';
-import PropTypes from 'web/utils/PropTypes';
+
+interface FoldStatefulProps {
+  foldState?: FoldStateType;
+  onFoldStepEnd?: () => void;
+  onFoldToggle?: () => void;
+  style?: React.CSSProperties;
+}
+
+interface FoldToggleProps {
+  initialFoldState?: FoldStateType;
+}
+
+export interface FoldToggleComponentProps {
+  foldState: FoldStateType;
+  onFoldStepEnd: () => void;
+  onFoldToggle: () => void;
+}
+
+interface FoldableDivProps {
+  $foldState: FoldStateType;
+}
+
+export type FoldStateType = (typeof FoldState)[keyof typeof FoldState];
 
 /**
  * State used in foldable components
@@ -18,7 +40,7 @@ export const FoldState = {
   UNFOLDING_START: 'UNFOLDING_START',
   FOLDING: 'FOLDING',
   UNFOLDING: 'UNFOLDING',
-};
+} as const;
 
 const foldDelay = keyframes`
   0% {
@@ -29,7 +51,7 @@ const foldDelay = keyframes`
   }
 `;
 
-const FoldableDiv = styled.div`
+const FoldableDiv = styled.div<FoldableDivProps>`
   overflow: hidden;
   transition: height 0.4s;
 
@@ -60,36 +82,25 @@ const FoldableDiv = styled.div`
       : 'none'};
 `;
 
-const FoldStatePropType = PropTypes.oneOf([
-  FoldState.UNFOLDED,
-  FoldState.FOLDED,
-  FoldState.FOLDING_START,
-  FoldState.UNFOLDING_START,
-  FoldState.FOLDING,
-  FoldState.UNFOLDING,
-]);
-
 /**
  * HOC for making a container content component foldable
  */
-
-export const withFolding = Component => {
-  const FoldingWrapper = ({foldState, onFoldStepEnd, ...props}) => (
+export const withFolding = <TProps extends {}>(
+  Component: React.ComponentType<TProps>,
+) => {
+  const FoldingWrapper = ({
+    foldState = FoldState.UNFOLDED,
+    onFoldStepEnd,
+    ...props
+  }: TProps & FoldStatefulProps) => (
     <FoldableDiv
       $foldState={foldState}
       onAnimationEnd={onFoldStepEnd}
       onTransitionEnd={onFoldStepEnd}
     >
-      <Component {...props} />
+      <Component {...(props as TProps)} />
     </FoldableDiv>
   );
-
-  FoldingWrapper.propTypes = {
-    foldState: FoldStatePropType,
-    style: PropTypes.object,
-    onFoldStepEnd: PropTypes.func,
-    onFoldToggle: PropTypes.func,
-  };
 
   return updateDisplayName(FoldingWrapper, Component, 'withFolding');
 };
@@ -98,12 +109,20 @@ export const withFolding = Component => {
  * HOC to add fold parent functionality to a component.
  */
 
-export const withFoldToggle = Component => {
-  class FoldToggleWrapper extends React.Component {
-    constructor(...args) {
-      super(...args);
+export const withFoldToggle = <TProps extends FoldToggleComponentProps>(
+  Component: React.ComponentType<TProps>,
+) => {
+  type PublicProps = Omit<TProps, keyof FoldToggleComponentProps> &
+    FoldToggleProps;
 
-      const {initialFoldState = FoldState.UNFOLDED} = this.props;
+  class FoldToggleWrapper extends React.Component<
+    PublicProps,
+    {foldState: FoldStateType}
+  > {
+    constructor(props: PublicProps) {
+      super(props);
+
+      const {initialFoldState = FoldState.UNFOLDED} = props;
 
       this.state = {
         foldState: initialFoldState,
@@ -115,7 +134,7 @@ export const withFoldToggle = Component => {
 
     handleFoldToggle() {
       this.setState(({foldState}) => {
-        let newFoldState;
+        let newFoldState: FoldStateType;
 
         switch (foldState) {
           case FoldState.FOLDED:
@@ -145,7 +164,7 @@ export const withFoldToggle = Component => {
 
     handleFoldStepEnd() {
       this.setState(({foldState}) => {
-        let newFoldState;
+        let newFoldState: FoldStateType;
 
         switch (foldState) {
           case FoldState.FOLDED:
@@ -176,21 +195,16 @@ export const withFoldToggle = Component => {
     render() {
       const {...other} = this.props;
       const {foldState} = this.state;
+      const componentProps = {
+        ...(other as Omit<TProps, keyof FoldToggleComponentProps>),
+        foldState,
+        onFoldStepEnd: this.handleFoldStepEnd,
+        onFoldToggle: this.handleFoldToggle,
+      } as TProps;
 
-      return (
-        <Component
-          foldState={foldState}
-          onFoldStepEnd={this.handleFoldStepEnd}
-          onFoldToggle={this.handleFoldToggle}
-          {...other}
-        />
-      );
+      return <Component {...componentProps} />;
     }
   }
-
-  FoldToggleWrapper.propTypes = {
-    initialFoldState: FoldStatePropType,
-  };
 
   return FoldToggleWrapper;
 };
