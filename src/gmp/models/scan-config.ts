@@ -69,7 +69,7 @@ export interface ScanConfigElement extends ModelElement {
 
 export interface ScanConfigFamily {
   name: string;
-  trend?: number;
+  trend?: ScanConfigTrend;
   nvts?: {
     count?: number;
     max?: number;
@@ -77,9 +77,11 @@ export interface ScanConfigFamily {
 }
 
 export interface ScanConfigFamilies {
+  // @ts-expect-error
   count?: number;
-  trend?: number;
-  [name: string]: ScanConfigFamily | number | undefined;
+  // @ts-expect-error
+  trend?: ScanConfigTrend;
+  [name: string]: ScanConfigFamily;
 }
 
 export interface ScanConfigPreference {
@@ -159,7 +161,9 @@ export const parseCount = (count: string | undefined) => {
 export const filterEmptyScanConfig = (config: {id: string}) =>
   config.id !== EMPTY_SCAN_CONFIG_ID;
 
-export const parseTrend = parseInt;
+export const parseTrend = parseInt as (
+  value: string | number,
+) => ScanConfigTrend;
 
 class ScanConfig extends Model {
   static readonly entityType = 'scanconfig';
@@ -219,7 +223,7 @@ class ScanConfig extends Model {
         const {name} = family;
         const new_family = {
           name,
-          trend: parseTrend(family.growing),
+          trend: parseTrend(family.growing as number),
           nvts: {
             count: parseCount(family.nvt_count),
             max: parseCount(family.max_nvt_count),
@@ -234,7 +238,7 @@ class ScanConfig extends Model {
 
     if (isDefined(element.family_count)) {
       families.count = parseCount(element.family_count.__text);
-      families.trend = parseTrend(element.family_count.growing);
+      families.trend = parseTrend(element.family_count.growing as number);
     } else {
       families.count = 0;
     }
@@ -245,7 +249,7 @@ class ScanConfig extends Model {
       ret.nvts = {
         // number of selected nvts
         count: parseCount(element.nvt_count.__text),
-        trend: parseTrend(element.nvt_count.growing),
+        trend: parseTrend(element.nvt_count.growing as number),
       };
 
       if (isDefined(element.known_nvt_count)) {
