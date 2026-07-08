@@ -8,6 +8,8 @@ import ScanConfigCommand, {
   convert,
   convertPreferences,
   convertSelect,
+  type ScanConfigFamilyTrends,
+  type ScanConfigNvtsSelected,
 } from 'gmp/commands/scan-config';
 import {
   createEntityResponse,
@@ -19,7 +21,6 @@ import {
 import {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
-  type ScanConfigTrend,
 } from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
 
@@ -84,7 +85,7 @@ describe('convert tests', () => {
 
 describe('convertSelect tests', () => {
   test('should convert select values with prefix', () => {
-    const values: Record<string, YesNo> = {
+    const values: ScanConfigNvtsSelected = {
       foo: YES_VALUE,
       bar: NO_VALUE,
       baz: YES_VALUE,
@@ -154,11 +155,11 @@ describe('ScanConfigCommand tests', () => {
   test('should save a config', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
-    const trend: Record<string, ScanConfigTrend> = {
+    const trend: ScanConfigFamilyTrends = {
       'AIX Local Security Checks': SCANCONFIG_TREND_DYNAMIC,
       'Family Foo': SCANCONFIG_TREND_STATIC,
     };
-    const select: Record<string, YesNo> = {
+    const select: ScanConfigNvtsSelected = {
       'AIX Local Security Checks': YES_VALUE,
       'Brute force attacks': YES_VALUE,
       'Foo Family': NO_VALUE,
@@ -208,6 +209,36 @@ describe('ScanConfigCommand tests', () => {
         comment: 'somecomment',
         config_id: 'c1',
         name: 'foo',
+        trend: SCANCONFIG_TREND_DYNAMIC,
+      },
+    });
+  });
+
+  test('should save a config with family trend and individual trends', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new ScanConfigCommand(fakeHttp);
+    const trend: ScanConfigFamilyTrends = {
+      family1: SCANCONFIG_TREND_DYNAMIC,
+      family2: SCANCONFIG_TREND_STATIC,
+    };
+
+    await cmd.save({
+      id: 'c1',
+      name: 'foo',
+      comment: 'somecomment',
+      trend,
+      familyTrend: SCANCONFIG_TREND_DYNAMIC,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config',
+        comment: 'somecomment',
+        config_id: 'c1',
+        name: 'foo',
+        'trend:family1': SCANCONFIG_TREND_DYNAMIC,
+        'trend:family2': SCANCONFIG_TREND_STATIC,
         trend: SCANCONFIG_TREND_DYNAMIC,
       },
     });
@@ -340,14 +371,22 @@ describe('ScanConfigCommand tests', () => {
             {
               _oid: 1,
               cvss_base: 1.1,
+              name: 'nvt1',
+              timeout: 10,
+              default_timeout: 10,
+              preference_count: 1,
             },
             {
               _oid: 2,
               cvss_base: 2.2,
+              name: 'nvt2',
+              preference_count: 2,
             },
             {
               _oid: 3,
               cvss_base: 3.3,
+              name: 'nvt3',
+              preference_count: 0,
             },
           ],
         },
@@ -371,10 +410,19 @@ describe('ScanConfigCommand tests', () => {
     expect(nvts.length).toEqual(3);
     expect(nvts[0].selected).toEqual(YES_VALUE);
     expect(nvts[0].severity).toEqual(1.1);
+    expect(nvts[0].timeout).toEqual(10);
+    expect(nvts[0].defaultTimeout).toEqual(10);
+    expect(nvts[0].preferenceCount).toEqual(1);
     expect(nvts[1].selected).toEqual(YES_VALUE);
     expect(nvts[1].severity).toEqual(2.2);
+    expect(nvts[1].timeout).toEqual(undefined);
+    expect(nvts[1].defaultTimeout).toEqual(undefined);
+    expect(nvts[1].preferenceCount).toEqual(2);
     expect(nvts[2].selected).toEqual(NO_VALUE);
     expect(nvts[2].severity).toEqual(3.3);
+    expect(nvts[2].timeout).toEqual(undefined);
+    expect(nvts[2].defaultTimeout).toEqual(undefined);
+    expect(nvts[2].preferenceCount).toEqual(0);
   });
 
   test('should request scan config nvt data', async () => {

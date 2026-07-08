@@ -12,17 +12,19 @@ import ScanConfig, {
   type ScanConfigPreference,
   type ScanConfigElement,
   type ScanConfigTrend,
+  type ScanConfigPreferenceValue,
 } from 'gmp/models/scan-config';
-import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
+import {NO_VALUE, parseFloat, YES_VALUE, type YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
 interface NvtResponseEntry {
   _oid: string;
-  cvss_base?: number;
-  oid?: string;
-  severity?: number;
-  selected?: YesNo;
+  cvss_base: number;
+  name: string;
+  timeout: string | number;
+  default_timeout?: string | number;
+  preference_count?: number;
 }
 
 interface ConfigFamilyResponse {
@@ -45,20 +47,27 @@ interface ScanConfigCommandCreateParams {
   comment?: string;
 }
 
+export type ScanConfigNvtsSelected = Record<string, YesNo>;
+export type ScanConfigFamilyTrends = Record<string, ScanConfigTrend>;
+export type ScanConfigScannerPreferenceValues = Record<
+  string,
+  ScanConfigPreferenceValue
+>;
+
 interface ScanConfigCommandSaveParams {
   id: string;
   familyTrend?: ScanConfigTrend;
   name: string;
   comment?: string;
-  trend?: Record<string, ScanConfigTrend>;
-  select?: Record<string, YesNo>;
-  scannerPreferenceValues?: Record<string, string>;
+  trend?: ScanConfigFamilyTrends;
+  select?: ScanConfigNvtsSelected;
+  scannerPreferenceValues?: ScanConfigScannerPreferenceValues;
 }
 
 interface ScanConfigCommandSaveFamilyParams {
   id: string;
   familyName: string;
-  selected: Record<string, YesNo>;
+  selected: ScanConfigNvtsSelected;
 }
 
 interface ScanConfigCommandEditFamilyParams {
@@ -69,19 +78,31 @@ interface ScanConfigCommandEditFamilyParams {
 interface NvtPreferenceValue {
   id: number;
   type: string;
-  value: string;
+  value: ScanConfigPreferenceValue;
 }
+
+export type NvtPreferenceValues = Record<string, NvtPreferenceValue>;
 
 interface ScanConfigCommandSaveNvtParams {
   id: string;
   timeout?: number;
   oid: string;
-  preferenceValues?: Record<string, NvtPreferenceValue>;
+  preferenceValues?: NvtPreferenceValues;
 }
 
 interface ScanConfigCommandEditNvtSettingsParams {
   id: string;
   oid: string;
+}
+
+export interface ScanConfigFamilyNvt {
+  oid: string;
+  severity?: number;
+  selected?: YesNo;
+  name: string;
+  timeout?: number;
+  defaultTimeout?: number;
+  preferenceCount?: number;
 }
 
 const log = logger.getLogger('gmp.commands.scanconfigs');
@@ -227,15 +248,22 @@ class ScanConfigCommand extends EntityCommand<ScanConfig, ScanConfigElement> {
     const nvts: Record<string, boolean> = {};
     forEach(configResp.get_nvts_response.nvt, nvt => (nvts[nvt._oid] = true));
 
-    const mappedNvts = map(
+    const mappedNvts = map<NvtResponseEntry, ScanConfigFamilyNvt>(
       configRespAll.get_nvts_response.nvt,
-      (nvt: NvtResponseEntry) => ({
-        oid: nvt._oid,
-        severity: nvt.cvss_base,
-        selected: nvt._oid in nvts ? YES_VALUE : NO_VALUE,
-      }),
+      (nvt: NvtResponseEntry) => {
+        const scanConfigFamilyNvt: ScanConfigFamilyNvt = {
+          oid: nvt._oid,
+          severity: nvt.cvss_base,
+          selected: (nvt._oid in nvts ? YES_VALUE : NO_VALUE) as YesNo,
+          name: nvt.name,
+          timeout: parseFloat(nvt.timeout),
+          defaultTimeout: parseFloat(nvt.default_timeout),
+          preferenceCount: nvt.preference_count,
+        };
+        return scanConfigFamilyNvt;
+      },
     );
-    return response.setData({nvts: mappedNvts});
+    return response.setData<{nvts: ScanConfigFamilyNvt[]}>({nvts: mappedNvts});
   }
 
   async saveScanConfigNvt({
