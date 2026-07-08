@@ -15,6 +15,8 @@ export type ScanConfigTrend =
   | typeof SCANCONFIG_TREND_DYNAMIC
   | typeof SCANCONFIG_TREND_STATIC;
 
+export type ScanConfigUsageType = 'policy' | 'scan';
+
 export interface ScanConfigFamilyElement {
   name: string;
   growing?: number;
@@ -62,6 +64,7 @@ export interface ScanConfigElement extends ModelElement {
   tasks?: {
     task: ModelElement | ModelElement[];
   };
+  usage_type?: string;
 }
 
 export interface ScanConfigFamily {
@@ -111,6 +114,7 @@ interface ScanConfigProperties extends ModelProperties {
   };
   scanner?: Model;
   tasks?: Model[];
+  usageType?: ScanConfigUsageType;
 }
 
 export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
@@ -144,6 +148,7 @@ class ScanConfig extends Model {
   };
   readonly scanner?: Model;
   readonly tasks: Model[];
+  readonly usageType: ScanConfigUsageType;
 
   constructor({
     deprecated,
@@ -155,6 +160,7 @@ class ScanConfig extends Model {
     preferences = {nvt: [], scanner: []},
     scanner,
     tasks = [],
+    usageType = 'scan',
     ...properties
   }: ScanConfigProperties = {}) {
     super(properties);
@@ -167,6 +173,7 @@ class ScanConfig extends Model {
     this.preferences = preferences;
     this.scanner = scanner;
     this.tasks = tasks;
+    this.usageType = usageType;
   }
 
   static fromElement(element?: ScanConfigElement): ScanConfig {
@@ -271,6 +278,8 @@ class ScanConfig extends Model {
     ret.deprecated = isDefined(element.deprecated)
       ? parseBoolean(element.deprecated)
       : undefined;
+
+    ret.usageType = element.usage_type as ScanConfigUsageType;
 
     return ret;
   }
