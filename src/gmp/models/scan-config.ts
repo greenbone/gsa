@@ -9,7 +9,7 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-type ScanConfigPreferenceValue = string | number;
+export type ScanConfigPreferenceValue = string | number;
 
 export type ScanConfigTrend =
   | typeof SCANCONFIG_TREND_DYNAMIC
