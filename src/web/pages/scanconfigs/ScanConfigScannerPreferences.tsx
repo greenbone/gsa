@@ -3,8 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {parseInt} from 'gmp/parser';
+import {
+  type ScanConfigPreference,
+  type ScanConfigPreferenceValue,
+} from 'gmp/models/scan-config';
+import {NO_VALUE, parseYesNo, YES_VALUE, type YesNo} from 'gmp/parser';
 import {FoldState} from 'web/components/folding/Folding';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
@@ -17,15 +20,34 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import {renderYesNo} from 'web/utils/Render';
 
-const ScannerPreference = ({
+interface SetValueAction {
+  type: 'setValue';
+  newState: Record<string, ScanConfigPreferenceValue>;
+}
+
+interface ScanConfigScannerPreferencesProps {
+  preferences?: ScanConfigPreference[];
+  values?: Record<string, ScanConfigPreferenceValue>;
+  onValuesChange: (action: SetValueAction) => void;
+}
+
+interface ScanConfigScannerPreferenceProps {
+  defaultValue?: ScanConfigPreferenceValue;
+  displayName: string;
+  name: string;
+  value: ScanConfigPreferenceValue;
+  onPreferenceChange?: (value: ScanConfigPreferenceValue, name: string) => void;
+}
+
+const ScanConfigScannerPreference = ({
   displayName,
   defaultValue,
   name,
   value,
   onPreferenceChange,
-}) => {
+}: ScanConfigScannerPreferenceProps) => {
   const isRadio =
     name === 'ping_hosts' ||
     name === 'reverse_lookup' ||
@@ -57,37 +79,39 @@ const ScannerPreference = ({
       <TableData>
         {isRadio ? (
           <Layout>
-            <YesNoRadio // booleans are now 1 and 0 and not yes/no.
-              convert={parseInt}
+            <YesNoRadio
+              convert={parseYesNo}
               name={name}
-              noValue={0}
-              value={value}
-              yesValue={1}
-              onChange={onPreferenceChange}
+              noValue={NO_VALUE}
+              value={value as YesNo}
+              yesValue={YES_VALUE}
+              onChange={
+                onPreferenceChange as (value: YesNo, name?: string) => void
+              }
             />
           </Layout>
         ) : (
-          <TextField name={name} value={value} onChange={onPreferenceChange} />
+          <TextField
+            name={name}
+            value={value as string}
+            onChange={
+              onPreferenceChange as (value: string, name?: string) => void
+            }
+          />
         )}
       </TableData>
-      <TableData>{defaultValue}</TableData>
+      <TableData>
+        {isRadio ? renderYesNo(defaultValue as YesNo) : defaultValue}
+      </TableData>
     </TableRow>
   );
 };
 
-ScannerPreference.propTypes = {
-  defaultValue: PropTypes.any,
-  displayName: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.any.isRequired,
-  onPreferenceChange: PropTypes.func,
-};
-
-const ScannerPreferences = ({
+const ScanConfigScannerPreferences = ({
   preferences = [],
   values = {},
   onValuesChange,
-}) => {
+}: ScanConfigScannerPreferencesProps) => {
   const [_] = useTranslation();
   return (
     <Section
@@ -108,14 +132,17 @@ const ScannerPreferences = ({
         </TableHeader>
         <TableBody>
           {preferences.map(pref => (
-            <ScannerPreference
+            <ScanConfigScannerPreference
               key={pref.name}
               defaultValue={pref.default}
-              displayName={pref.hr_name}
-              name={pref.name}
-              value={values[pref.name]}
+              displayName={pref.hr_name as string}
+              name={pref.name as string}
+              value={values[pref.name as string]}
               onPreferenceChange={(value, name) =>
-                onValuesChange({type: 'setValue', newState: {[name]: value}})
+                onValuesChange({
+                  type: 'setValue',
+                  newState: {[name as string]: value},
+                })
               }
             />
           ))}
@@ -125,17 +152,4 @@ const ScannerPreferences = ({
   );
 };
 
-export const ScannerPreferencePropType = PropTypes.shape({
-  default: PropTypes.any,
-  hr_name: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.any,
-});
-
-ScannerPreferences.propTypes = {
-  preferences: PropTypes.arrayOf(ScannerPreferencePropType),
-  values: PropTypes.object,
-  onValuesChange: PropTypes.func.isRequired,
-};
-
-export default ScannerPreferences;
+export default ScanConfigScannerPreferences;
