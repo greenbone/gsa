@@ -5,12 +5,19 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent, screen} from 'web/testing';
+import {
+  type ScanConfigPreference,
+  type ScanConfigPreferenceValue,
+} from 'gmp/models/scan-config';
 import NvtPreference from 'web/pages/nvts/NvtPreference';
 
 describe('NvtPreference', () => {
   const mockOnChange = testing.fn();
 
-  const renderComponent = (preference, value) => {
+  const renderComponent = (
+    preference: ScanConfigPreference,
+    value: ScanConfigPreferenceValue,
+  ) => {
     render(
       <table>
         <tbody>
