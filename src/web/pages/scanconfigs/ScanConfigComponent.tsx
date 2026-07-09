@@ -349,12 +349,11 @@ const ScanConfigComponent = ({
     closeEditNvtDetailsDialog();
   };
 
-  const handleImportConfig = data => {
-    return gmp.scanconfig
+  const handleImportConfig = (data: {xml_file: string}) =>
+    gmp.scanconfig
       .import(data)
       .then(onImported, onImportError)
       .then(() => closeImportDialog());
-  };
 
   const handleSaveConfigFamily = async ({
     familyName: familyNameValue,
