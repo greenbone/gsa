@@ -5,18 +5,33 @@
 
 import React, {useState, useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
+import {type NvtFamily} from 'gmp/commands/nvt-families';
+import {
+  type ScanConfigFamilyNvt,
+  type ScanConfigNvtsSelected,
+} from 'gmp/commands/scan-config';
+import type Alert from 'gmp/models/alert';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 import {ALL_FILTER} from 'gmp/models/filter';
+import type Nvt from 'gmp/models/nvt';
+import type Policy from 'gmp/models/policy';
+import {type ScanConfigFamily} from 'gmp/models/scan-config';
 import {
+  type default as Scanner,
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
+import type Schedule from 'gmp/models/schedule';
+import type Target from 'gmp/models/target';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import EntityComponent from 'web/entity/EntityComponent';
+import {type EntityCloneResponse} from 'web/entity/hooks/useEntityClone';
+import {type EntityCreateResponse} from 'web/entity/hooks/useEntityCreate';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
@@ -25,9 +40,13 @@ import AuditDialog from 'web/pages/audits/Dialog';
 import PolicyDialog from 'web/pages/policies/Dialog';
 import ImportDialog from 'web/pages/scanconfigs/ImportDialog';
 import {createSelectedNvts} from 'web/pages/scanconfigs/ScanConfigComponent';
-import EditPolicyDialog from 'web/pages/scanconfigs/ScanConfigEditDialog';
+import PolicyEditDialog, {
+  type ScanConfigEditDialogData,
+} from 'web/pages/scanconfigs/ScanConfigEditDialog';
 import ScanConfigEditPolicyFamilyDialog from 'web/pages/scanconfigs/ScanConfigEditFamilyDialog';
-import ScanConfigEditNvtDetailsDialog from 'web/pages/scanconfigs/ScanConfigEditNvtDetailsDialog';
+import ScanConfigEditNvtDetailsDialog, {
+  type ScanConfigEditNvtDetailsDialogData,
+} from 'web/pages/scanconfigs/ScanConfigEditNvtDetailsDialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {
@@ -48,7 +67,32 @@ import {
 } from 'web/store/entities/targets';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import PropTypes from 'web/utils/PropTypes';
+
+interface PoliciesComponentRenderProps {
+  clone: (config: Policy) => void;
+  create: () => void;
+  createAudit: (config: Policy) => void;
+  delete: (config: Policy) => void;
+  download: (config: Policy) => void;
+  edit: (config: Policy) => void;
+  import: () => void;
+}
+
+interface PoliciesComponentProps {
+  children: (props: PoliciesComponentRenderProps) => React.ReactNode;
+  onCloned?: (response: EntityCloneResponse) => void;
+  onCloneError?: (error: Error) => void;
+  onCreated?: (response: EntityCreateResponse) => void;
+  onCreateError?: (error: Error) => void;
+  onDeleted?: () => void;
+  onDeleteError?: (error: Error) => void;
+  onDownloaded?: OnDownloadedFunc;
+  onDownloadError?: (error: Error) => void;
+  onImported?: () => void;
+  onImportError?: (error: Error) => void;
+  onSaved?: () => void;
+  onSaveError?: (error: Error) => void;
+}
 
 const PolicyComponent = ({
   children,
@@ -64,7 +108,7 @@ const PolicyComponent = ({
   onSaveError,
   onImported,
   onImportError,
-}) => {
+}: PoliciesComponentProps) => {
   const gmp = useGmp();
   const [_] = useTranslation();
   const dispatch = useDispatch();
@@ -76,17 +120,17 @@ const PolicyComponent = ({
   const defaultScheduleId =
     userDefaultsSelector.getValueByName('defaultschedule');
 
-  const alerts = useShallowEqualSelector(state =>
+  const alerts = useShallowEqualSelector<unknown, Alert[]>(state =>
     alertSelector(state).getEntities(ALL_FILTER),
   );
-  const targets = useShallowEqualSelector(state =>
+  const targets = useShallowEqualSelector<unknown, Target[]>(state =>
     targetSelector(state).getEntities(ALL_FILTER),
   );
-  const schedules = useShallowEqualSelector(state =>
+  const schedules = useShallowEqualSelector<unknown, Schedule[]>(state =>
     scheduleSelector(state).getEntities(ALL_FILTER),
   );
 
-  const scannerList = useShallowEqualSelector(state =>
+  const scannerList = useShallowEqualSelector<unknown, Scanner[]>(state =>
     scannerSelector(state).getEntities(ALL_FILTER),
   );
   const scanners = isDefined(scannerList)
@@ -97,31 +141,36 @@ const PolicyComponent = ({
       )
     : undefined;
 
-  const isLoadingScanners = useShallowEqualSelector(state =>
+  const isLoadingScanners = useShallowEqualSelector<unknown, boolean>(state =>
     scannerSelector(state).isLoadingAllEntities(ALL_FILTER),
   );
 
   const fetchScanners = useCallback(
+    // @ts-expect-error
     () => dispatch(loadScanners(gmp)(ALL_FILTER)),
     [dispatch, gmp],
   );
 
   const fetchAlerts = useCallback(
+    // @ts-expect-error
     () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
     [dispatch, gmp],
   );
 
   const fetchSchedules = useCallback(
+    // @ts-expect-error
     () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
     [dispatch, gmp],
   );
 
   const fetchTargets = useCallback(
+    // @ts-expect-error
     () => dispatch(loadTargets(gmp)(ALL_FILTER)),
     [dispatch, gmp],
   );
 
   const fetchUserSettingsDefaults = useCallback(
+    // @ts-expect-error
     () => dispatch(loadUserSettingDefaults(gmp)()),
     [dispatch, gmp],
   );
@@ -141,7 +190,7 @@ const PolicyComponent = ({
     useState(false);
   const [importDialogVisible, setImportDialogVisible] = useState(false);
 
-  const [alertIds, setAlertIds] = useState(
+  const [alertIds, setAlertIds] = useState<string[]>(
     isDefined(defaultAlertId) ? [defaultAlertId] : [],
   );
   const [alterable, setAlterable] = useState();
@@ -152,10 +201,11 @@ const PolicyComponent = ({
     useState('');
   const [editNvtDetailsDialogTitle, setEditNvtDetailsDialogTitle] =
     useState('');
-  const [families, setFamilies] = useState();
-  const [familyName, setFamilyName] = useState();
-  const [familyNvts, setFamilyNvts] = useState();
-  const [familySelectedNvts, setFamilySelectedNvts] = useState();
+  const [families, setFamilies] = useState<NvtFamily[]>();
+  const [familyName, setFamilyName] = useState<string>();
+  const [familyNvts, setFamilyNvts] = useState<ScanConfigFamilyNvt[]>();
+  const [familySelectedNvts, setFamilySelectedNvts] =
+    useState<ScanConfigNvtsSelected>();
   const [hostsOrdering, setHostsOrdering] = useState();
   const [id, setId] = useState();
   const [inAssets, setInAssets] = useState();
@@ -165,16 +215,16 @@ const PolicyComponent = ({
   const [isLoadingPolicy, setIsLoadingPolicy] = useState(false);
   const [maxChecks, setMaxChecks] = useState();
   const [maxHosts, setMaxHosts] = useState();
-  const [name, setName] = useState();
-  const [nvt, setNvt] = useState();
-  const [policy, setPolicy] = useState();
-  const [policyName, setPolicyName] = useState();
-  const [policyId, setPolicyId] = useState();
-  const [scannerId, setScannerId] = useState();
-  const [scheduleId, setScheduleId] = useState(defaultScheduleId);
+  const [name, setName] = useState<string>();
+  const [nvt, setNvt] = useState<Nvt>();
+  const [policy, setPolicy] = useState<Policy>();
+  const [policyName, setPolicyName] = useState<string>();
+  const [policyId, setPolicyId] = useState<string>();
+  const [scannerId, setScannerId] = useState<string>();
+  const [scheduleId, setScheduleId] = useState<string>(defaultScheduleId);
   const [schedulePeriods, setSchedulePeriods] = useState();
-  const [targetId, setTargetId] = useState(defaultTargetId);
-  const [title, setTitle] = useState();
+  const [targetId, setTargetId] = useState<string>(defaultTargetId);
+  const [title, setTitle] = useState<string>();
 
   const handleChange = (value, name) => {
     switch (name) {
@@ -276,12 +326,12 @@ const PolicyComponent = ({
     }
   };
 
-  const loadFamily = async (familyName, silent = false) => {
+  const loadFamily = async (familyName: string, silent = false) => {
     setIsLoadingFamily(silent ? isLoadingFamily : true);
 
     try {
       const response = await gmp.policy.editPolicyFamilySettings({
-        id: policy?.id,
+        id: policy?.id as string,
         familyName,
       });
 
@@ -289,7 +339,7 @@ const PolicyComponent = ({
         data: {nvts},
       } = response;
 
-      const policyFamily = policy?.families[familyName];
+      const policyFamily = policy?.families?.[familyName] as ScanConfigFamily;
       const selected = createSelectedNvts(policyFamily, nvts);
 
       setFamilyNvts(nvts);
@@ -302,12 +352,12 @@ const PolicyComponent = ({
     }
   };
 
-  const loadNvt = async nvtOid => {
+  const loadNvt = async (nvtOid: string) => {
     setIsLoadingNvt(true);
 
     try {
       const response = await gmp.nvt.getConfigNvt({
-        configId: policy?.id,
+        configId: policy?.id as string,
         oid: nvtOid,
       });
 
@@ -324,17 +374,17 @@ const PolicyComponent = ({
     }
   };
 
-  const loadEditPolicySettings = (policyId, silent) => {
-    return Promise.all([loadPolicy(policyId, silent), loadFamilies(silent)]);
+  const loadEditPolicySettings = async (policyId: string, silent = false) => {
+    await Promise.all([loadPolicy(policyId, silent), loadFamilies(silent)]);
   };
 
-  const openEditPolicyDialog = policy => {
+  const openEditPolicyDialog = (policy: Policy) => {
     setPolicy(policy); // put policy from list with reduced data in state
-    setEditPolicyDialogVisible(true);
     setTitle(_('Edit Policy {{- name}}', {name: shorten(policy.name)}));
+    setEditPolicyDialogVisible(true);
 
-    loadEditPolicySettings(policy.id);
-    loadComponentScanners();
+    void loadEditPolicySettings(policy.id as string);
+    void loadComponentScanners();
   };
 
   const closeEditPolicyDialog = () => {
@@ -347,7 +397,7 @@ const PolicyComponent = ({
     closeEditPolicyDialog();
   };
 
-  const handleSavePolicy = async data => {
+  const handleSavePolicy = async (data: ScanConfigEditDialogData) => {
     const {name, comment, id} = data;
     let saveData = data;
 
@@ -360,7 +410,6 @@ const PolicyComponent = ({
   };
 
   const openCreatePolicyDialog = () => {
-    loadComponentScanners();
     setCreatePolicyDialogVisible(true);
   };
 
@@ -384,7 +433,7 @@ const PolicyComponent = ({
     closeImportDialog();
   };
 
-  const openCreateAuditDialog = policy => {
+  const openCreateAuditDialog = (policy: Policy) => {
     fetchAlerts();
     fetchScanners();
     fetchSchedules();
@@ -423,10 +472,12 @@ const PolicyComponent = ({
   const handleSaveAudit = async ({
     alertIds,
     alterable,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     auto_delete,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     auto_delete_data,
     comment,
-    hostsOrdering,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     in_assets,
     maxChecks,
     maxHosts,
@@ -443,7 +494,7 @@ const PolicyComponent = ({
     const minQod = DEFAULT_MIN_QOD;
 
     try {
-      await gmp.audit.create({
+      const response = await gmp.audit.create({
         addTag,
         alertIds,
         alterable,
@@ -452,7 +503,6 @@ const PolicyComponent = ({
         autoDeleteData: auto_delete_data,
         comment,
         policyId,
-        hostsOrdering,
         inAssets: in_assets,
         maxChecks,
         maxHosts,
@@ -466,10 +516,12 @@ const PolicyComponent = ({
         targetId,
       });
 
-      onCreated();
+      onCreated?.(response);
       closeCreateAuditDialog();
     } catch (error) {
-      onCreateError(error);
+      onCreateError?.(
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   };
 
@@ -495,10 +547,10 @@ const PolicyComponent = ({
     closeEditPolicyFamilyDialog();
   };
 
-  const openEditNvtDetailsDialog = nvtOid => {
+  const openEditNvtDetailsDialog = (nvtOid: string) => {
     setEditNvtDetailsDialogVisible(true);
     setEditNvtDetailsDialogTitle(_('Edit Policy NVT {{nvtOid}}', {nvtOid}));
-    loadNvt(nvtOid);
+    void loadNvt(nvtOid);
   };
 
   const closeEditNvtDetailsDialog = () => {
@@ -510,13 +562,15 @@ const PolicyComponent = ({
     closeEditNvtDetailsDialog();
   };
 
-  const handleImportPolicy = async data => {
+  const handleImportPolicy = async (data: {xml_file: string}) => {
     try {
       await gmp.policy.import(data);
-      onImported();
+      onImported?.();
       closeImportDialog();
     } catch (error) {
-      onImportError(error);
+      onImportError?.(
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   };
 
@@ -537,16 +591,16 @@ const PolicyComponent = ({
     useDefaultTimeout,
     nvtOid,
     preferenceValues,
-  }) => {
+  }: ScanConfigEditNvtDetailsDialogData) => {
     await gmp.policy.savePolicyNvt({
       id: configId,
-      timeout: useDefaultTimeout === '1' ? undefined : timeout,
+      timeout: useDefaultTimeout === YES_VALUE ? undefined : timeout,
       oid: nvtOid,
       preferenceValues,
     });
 
     if (editPolicyFamilyDialogVisible) {
-      await loadFamily(familyName, true);
+      await loadFamily(familyName as string, true);
     } else {
       await loadPolicy(configId, true);
     }
@@ -581,12 +635,15 @@ const PolicyComponent = ({
             {createAuditDialogVisible && (
               <TargetComponent onCreated={handleTargetCreated}>
                 {({create: createTarget}) => (
+                  // @ts-expect-error
                   <AlertComponent onCreated={handleAlertCreated}>
                     {({create: createAlert}) => (
                       <ScheduleComponent onCreated={handleScheduleCreated}>
                         {({create: createSchedule}) => (
                           <AuditDialog
+                            // @ts-expect-error
                             alertIds={alertIds}
+                            // @ts-expect-error
                             alerts={alerts}
                             alterable={alterable}
                             auto_delete={autoDelete}
@@ -600,12 +657,15 @@ const PolicyComponent = ({
                             maxChecks={maxChecks}
                             maxHosts={maxHosts}
                             name={name}
+                            // @ts-expect-error
                             policies={[{name: policyName, id: policyId}]}
                             policyId={policyId}
                             scannerId={scannerId}
+                            // @ts-expect-error
                             scanners={scanners}
                             scheduleId={scheduleId}
                             schedulePeriods={schedulePeriods}
+                            // @ts-expect-error
                             schedules={schedules}
                             targetId={targetId}
                             targets={targets}
@@ -628,17 +688,18 @@ const PolicyComponent = ({
             {createPolicyDialogVisible && (
               <PolicyDialog
                 onClose={handleCloseCreatePolicyDialog}
-                onSave={d => {
+                onSave={async d => {
                   const promise = isDefined(d.id) ? save(d) : create(d);
-                  return promise.then(() => closeCreatePolicyDialog());
+                  await promise;
+                  return closeCreatePolicyDialog();
                 }}
               />
             )}
             {editPolicyDialogVisible && policy && (
-              <EditPolicyDialog
+              <PolicyEditDialog
                 comment={policy.comment}
                 configFamilies={policy.families}
-                configId={policy.id}
+                configId={policy.id as string}
                 configIsInUse={policy.isInUse()}
                 editNvtDetailsTitle={_('Edit Policy NVT Details')}
                 editNvtFamiliesTitle={_('Edit Policy Family')}
@@ -646,13 +707,12 @@ const PolicyComponent = ({
                 isLoadingConfig={isLoadingPolicy}
                 isLoadingFamilies={isLoadingFamilies}
                 isLoadingScanners={isLoadingScanners}
-                name={policy.name}
+                name={policy.name as string}
                 nvtPreferences={policy.preferences.nvt}
                 scannerId={scannerId}
                 scannerPreferences={policy.preferences.scanner}
-                scanners={scanners}
-                title={title}
-                usageType={'policy'}
+                title={title as string}
+                usageType="policy"
                 onClose={handleCloseEditPolicyDialog}
                 onEditConfigFamilyClick={openEditPolicyFamilyDialog}
                 onEditNvtDetailsClick={openEditNvtDetailsDialog}
@@ -670,38 +730,38 @@ const PolicyComponent = ({
           onSave={handleImportPolicy}
         />
       )}
-      {editPolicyFamilyDialogVisible && policy && (
+      {editPolicyFamilyDialogVisible && isDefined(policy) && (
         <ScanConfigEditPolicyFamilyDialog
-          configId={policy.id}
-          configName={policy.name}
+          configId={policy.id as string}
+          configName={policy.name as string}
           configNameLabel={_('Policy')}
-          familyName={familyName}
+          familyName={familyName as string}
           isLoadingFamily={isLoadingFamily}
           nvts={familyNvts}
-          selected={familySelectedNvts}
+          selected={familySelectedNvts as ScanConfigNvtsSelected}
           title={editPolicyFamilyDialogTitle}
           onClose={handleCloseEditPolicyFamilyDialog}
           onEditNvtDetailsClick={openEditNvtDetailsDialog}
           onSave={handleSavePolicyFamily}
         />
       )}
-      {editNvtDetailsDialogVisible && policy && nvt && (
+      {editNvtDetailsDialogVisible && isDefined(policy) && isDefined(nvt) && (
         <ScanConfigEditNvtDetailsDialog
-          configId={policy.id}
-          configName={policy.name}
+          configId={policy.id as string}
+          configName={policy.name as string}
           configNameLabel={_('Policy')}
-          defaultTimeout={isDefined(nvt) ? nvt.defaultTimeout : undefined}
+          defaultTimeout={nvt.defaultTimeout}
           isLoadingNvt={isLoadingNvt}
-          nvtAffectedSoftware={isDefined(nvt) ? nvt.tags.affected : undefined}
-          nvtCvssVector={isDefined(nvt) ? nvt.tags.cvss_base_vector : undefined}
-          nvtFamily={isDefined(nvt) ? nvt.family : undefined}
-          nvtLastModified={isDefined(nvt) ? nvt.modificationTime : undefined}
-          nvtName={isDefined(nvt) ? nvt.name : undefined}
-          nvtOid={isDefined(nvt) ? nvt.oid : undefined}
-          nvtSeverity={isDefined(nvt) ? nvt.severity : undefined}
-          nvtSummary={isDefined(nvt) ? nvt.tags.summary : undefined}
-          preferences={isDefined(nvt) ? nvt.preferences : undefined}
-          timeout={isDefined(nvt) ? nvt.timeout : undefined}
+          nvtAffectedSoftware={nvt.tags.affected}
+          nvtCvssVector={nvt.tags.cvss_base_vector}
+          nvtFamily={nvt.family}
+          nvtLastModified={nvt.modificationTime}
+          nvtName={nvt.name as string}
+          nvtOid={nvt.oid as string}
+          nvtSeverity={nvt.severity}
+          nvtSummary={nvt.tags.summary}
+          preferences={nvt.preferences}
+          timeout={nvt.timeout}
           title={editNvtDetailsDialogTitle}
           onClose={handleCloseEditNvtDetailsDialog}
           onSave={handleSavePolicyNvt}
@@ -709,22 +769,6 @@ const PolicyComponent = ({
       )}
     </>
   );
-};
-
-PolicyComponent.propTypes = {
-  children: PropTypes.func.isRequired,
-  onCloneError: PropTypes.func,
-  onCloned: PropTypes.func,
-  onCreateError: PropTypes.func,
-  onCreated: PropTypes.func,
-  onDeleteError: PropTypes.func,
-  onDeleted: PropTypes.func,
-  onDownloadError: PropTypes.func,
-  onDownloaded: PropTypes.func,
-  onImportError: PropTypes.func,
-  onImported: PropTypes.func,
-  onSaveError: PropTypes.func,
-  onSaved: PropTypes.func,
 };
 
 export default PolicyComponent;
