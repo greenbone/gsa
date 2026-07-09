@@ -219,13 +219,13 @@ const ScanConfigEditDialog = ({
   editNvtDetailsTitle,
   editNvtFamiliesTitle,
   error,
-  families = [],
+  families,
   isLoadingConfig = true,
   isLoadingFamilies = true,
   isLoadingScanners = true,
   name,
-  nvtPreferences = [],
-  scannerPreferences = [],
+  nvtPreferences,
+  scannerPreferences,
   scannerId,
   title,
   usageType = 'scan',
@@ -241,11 +241,13 @@ const ScanConfigEditDialog = ({
   );
   const [trendValues, setTrendValues] = useState<ScanConfigFamilyTrends>();
   const [selectValues, setSelectValues] = useState<ScanConfigNvtsSelected>();
-  const [filteredFamilies, setFilteredFamilies] = useState(families);
-  const [filteredScannerPreferences, setFilteredScannerPreferences] =
-    useState(scannerPreferences);
-  const [filteredNvtPreferences, setFilteredNvtPreferences] =
-    useState(nvtPreferences);
+  const [filteredFamilies, setFilteredFamilies] = useState(families ?? []);
+  const [filteredScannerPreferences, setFilteredScannerPreferences] = useState(
+    scannerPreferences ?? [],
+  );
+  const [filteredNvtPreferences, setFilteredNvtPreferences] = useState(
+    nvtPreferences ?? [],
+  );
   const basicFieldsRef: React.MutableRefObject<SyncDataRef | null> =
     useRef<SyncDataRef>(null);
 
@@ -257,15 +259,15 @@ const ScanConfigEditDialog = ({
   }, [scannerPreferences]);
 
   useEffect(() => {
-    setFilteredFamilies(families);
+    setFilteredFamilies(families ?? []);
   }, [families]);
 
   useEffect(() => {
-    setFilteredScannerPreferences(scannerPreferences);
+    setFilteredScannerPreferences(scannerPreferences ?? []);
   }, [scannerPreferences]);
 
   useEffect(() => {
-    setFilteredNvtPreferences(nvtPreferences);
+    setFilteredNvtPreferences(nvtPreferences ?? []);
   }, [nvtPreferences]);
 
   // trend and select are created only once and only after the whole config is loaded
@@ -300,19 +302,19 @@ const ScanConfigEditDialog = ({
     query => {
       handleSearchChange(
         query,
-        families,
+        families ?? [],
         setFilteredFamilies,
         item => item.name,
       );
       handleSearchChange(
         query,
-        scannerPreferences,
+        scannerPreferences ?? [],
         setFilteredScannerPreferences,
         item => item.name as string,
       );
       handleSearchChange(
         query,
-        nvtPreferences,
+        nvtPreferences ?? [],
         setFilteredNvtPreferences,
         item => item.nvt?.name as string,
       );
