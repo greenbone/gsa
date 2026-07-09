@@ -14,12 +14,12 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface AuditDetailsPageToolBarIconsProps {
+interface PolicyDetailsPageToolBarIconsProps {
   entity: Policy;
   onPolicyCloneClick: (entity: Policy) => void;
   onPolicyDeleteClick: (entity: Policy) => void;
-  onPolicyDownloadClick: () => void;
-  onPolicyEditClick: () => void;
+  onPolicyDownloadClick: (entity: Policy) => void;
+  onPolicyEditClick: (entity: Policy) => void;
 }
 
 const PolicyDetailsPageToolBarIcons = ({
@@ -28,7 +28,7 @@ const PolicyDetailsPageToolBarIcons = ({
   onPolicyDeleteClick,
   onPolicyDownloadClick,
   onPolicyEditClick,
-}: AuditDetailsPageToolBarIconsProps) => {
+}: PolicyDetailsPageToolBarIconsProps) => {
   const [_] = useTranslation();
   return (
     <Divider margin="10px">
