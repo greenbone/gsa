@@ -18,7 +18,7 @@ import {NO_VALUE, parseFloat, YES_VALUE, type YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-interface NvtResponseEntry {
+export interface NvtResponseEntry {
   _oid: string;
   cvss_base: number;
   name: string;
@@ -27,7 +27,7 @@ interface NvtResponseEntry {
   preference_count?: number;
 }
 
-interface ConfigFamilyResponse {
+export interface ConfigFamilyResponse {
   get_nvts_response: {
     nvt: NvtResponseEntry[];
   };

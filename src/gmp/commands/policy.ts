@@ -8,32 +8,22 @@ import {
   convert,
   convertSelect,
   convertPreferences,
+  type ScanConfigFamilyNvt,
+  type ConfigFamilyResponse,
+  type NvtResponseEntry,
+  type NvtPreferenceValues,
+  type ScanConfigNvtsSelected,
+  type ScanConfigFamilyTrends,
+  type ScanConfigScannerPreferenceValues,
 } from 'gmp/commands/scan-config';
 import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
 import Policy from 'gmp/models/policy';
-import {
-  BASE_SCAN_CONFIG_ID,
-  type ScanConfigTrend,
-} from 'gmp/models/scan-config';
-import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
+import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scan-config';
+import {YES_VALUE, NO_VALUE, type YesNo, parseFloat} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-
-interface NvtResponseEntry {
-  _oid: string;
-  cvss_base?: number;
-  oid?: string;
-  severity?: number;
-  selected?: YesNo;
-}
-
-interface ConfigFamilyResponse {
-  get_nvts_response: {
-    nvt: NvtResponseEntry[];
-  };
-}
 
 export interface PolicyCommandImportParams {
   xml_file: string;
@@ -48,15 +38,15 @@ export interface PolicyCommandSaveParams {
   id: string;
   name: string;
   comment?: string;
-  trend?: Record<string, ScanConfigTrend>;
-  select?: Record<string, YesNo>;
-  scannerPreferenceValues?: Record<string, string>;
+  trend?: ScanConfigFamilyTrends;
+  select?: ScanConfigNvtsSelected;
+  scannerPreferenceValues?: ScanConfigScannerPreferenceValues;
 }
 
 export interface PolicyCommandSaveFamilyParams {
   id: string;
   familyName: string;
-  selected: Record<string, YesNo>;
+  selected: ScanConfigNvtsSelected;
 }
 
 export interface PolicyCommandEditFamilyParams {
@@ -64,17 +54,11 @@ export interface PolicyCommandEditFamilyParams {
   familyName: string;
 }
 
-interface NvtPreferenceValue {
-  id: number;
-  type: string;
-  value: string;
-}
-
 export interface PolicyCommandSaveNvtParams {
   id: string;
   timeout?: number;
   oid: string;
-  preferenceValues?: Record<string, NvtPreferenceValue>;
+  preferenceValues?: NvtPreferenceValues;
 }
 
 const log = logger.getLogger('gmp.commands.policy');
@@ -186,10 +170,14 @@ class PolicyCommand extends EntityCommand<Policy> {
     const mappedNvts = map(
       policyRespAll.get_nvts_response.nvt,
       (nvt: NvtResponseEntry) => {
-        const entry = {
+        const entry: ScanConfigFamilyNvt = {
           oid: nvt._oid,
           severity: nvt.cvss_base,
-          selected: nvt._oid in nvts ? YES_VALUE : NO_VALUE,
+          selected: (nvt._oid in nvts ? YES_VALUE : NO_VALUE) as YesNo,
+          name: nvt.name,
+          timeout: parseFloat(nvt.timeout),
+          defaultTimeout: parseFloat(nvt.default_timeout),
+          preferenceCount: nvt.preference_count,
         };
         return entry;
       },
