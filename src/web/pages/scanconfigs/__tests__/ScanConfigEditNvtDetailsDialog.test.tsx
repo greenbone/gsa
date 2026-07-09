@@ -13,7 +13,7 @@ import ScanConfigEditNvtDetailsDialog from 'web/pages/scanconfigs/ScanConfigEdit
 
 const preferences: ScanConfigPreference[] = [
   {name: 'pref 1', value: 'no', id: 1, type: 'checkbox'},
-  {name: 'pref 2', value: '1', id: 2, type: 'radio'},
+  {name: 'pref 2', value: '1', id: 2, type: 'radio', alt: ['2']},
   {name: 'pref 3', value: 'foo', id: 3, type: 'entry'},
 ];
 const modified = date('2019-09-09T12:00:00Z');
@@ -237,6 +237,7 @@ describe('ScanConfigEditNvtDetailsDialog tests', () => {
     const inputs = screen.queryTextInputs();
 
     changeInputValue(inputs[1], 'bar');
+
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
