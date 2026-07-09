@@ -6,17 +6,17 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent, screen} from 'web/testing';
 import {
-  type ScanConfigPreference,
-  type ScanConfigPreferenceValue,
-} from 'gmp/models/scan-config';
+  type NvtPreference as NvtPreferenceType,
+  type NvtPreferenceValue,
+} from 'gmp/models/nvt';
 import NvtPreference from 'web/pages/nvts/NvtPreference';
 
 describe('NvtPreference', () => {
   const mockOnChange = testing.fn();
 
   const renderComponent = (
-    preference: ScanConfigPreference,
-    value: ScanConfigPreferenceValue,
+    preference: NvtPreferenceType,
+    value: NvtPreferenceValue,
   ) => {
     render(
       <table>
@@ -32,10 +32,11 @@ describe('NvtPreference', () => {
   };
 
   test('renders checkbox input', () => {
-    const preference = {
+    const preference: NvtPreferenceType = {
       type: 'checkbox',
       hr_name: 'Checkbox Preference',
       name: 'checkbox_preference',
+      value: undefined,
     };
     renderComponent(preference, 'yes');
 
@@ -45,10 +46,11 @@ describe('NvtPreference', () => {
   });
 
   test('renders password input', () => {
-    const preference = {
+    const preference: NvtPreferenceType = {
       type: 'password',
       hr_name: 'Password Preference',
       name: 'password_preference',
+      value: undefined,
     };
     renderComponent(preference, '');
 
@@ -116,6 +118,7 @@ describe('NvtPreference', () => {
       type: 'text',
       hr_name: 'Text Preference',
       name: 'text_preference',
+      value: '',
     };
     renderComponent(preference, 'some text');
 
@@ -124,10 +127,11 @@ describe('NvtPreference', () => {
   });
 
   test('calls onChange when checkbox is toggled', () => {
-    const preference = {
+    const preference: NvtPreferenceType = {
       type: 'checkbox',
       hr_name: 'Checkbox Preference',
       name: 'checkbox_preference',
+      value: undefined,
     };
     renderComponent(preference, 'yes');
 
@@ -139,10 +143,11 @@ describe('NvtPreference', () => {
   });
 
   test('calls onChange when password checkbox is toggled', () => {
-    const preference = {
+    const preference: NvtPreferenceType = {
       type: 'password',
       hr_name: 'Password Preference',
       name: 'password_preference',
+      value: undefined,
     };
     renderComponent(preference, '');
 
@@ -158,7 +163,7 @@ describe('NvtPreference', () => {
   });
 
   test('calls onChange when file checkbox is toggled', () => {
-    const preference = {
+    const preference: NvtPreferenceType = {
       type: 'file',
       hr_name: 'File Preference',
       name: 'file_preference',
@@ -191,10 +196,11 @@ describe('NvtPreference', () => {
   });
 
   test('calls onChange when text input is changed', () => {
-    const preference = {
+    const preference: NvtPreferenceType = {
       type: 'text',
       hr_name: 'Text Preference',
       name: 'text_preference',
+      value: '',
     };
     renderComponent(preference, 'some text');
 

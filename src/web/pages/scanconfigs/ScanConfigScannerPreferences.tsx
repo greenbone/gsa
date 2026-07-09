@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {
-  type ScanConfigPreference,
-  type ScanConfigPreferenceValue,
-} from 'gmp/models/scan-config';
+import {type ScanConfigPreferenceValues} from 'gmp/commands/scan-config';
+import {type NvtPreferenceValue} from 'gmp/models/nvt';
+import {type ScanConfigPreference} from 'gmp/models/scan-config';
 import {NO_VALUE, parseYesNo, YES_VALUE, type YesNo} from 'gmp/parser';
 import {FoldState} from 'web/components/folding/Folding';
 import TextField from 'web/components/form/TextField';
@@ -24,21 +23,21 @@ import {renderYesNo} from 'web/utils/Render';
 
 interface SetValueAction {
   type: 'setValue';
-  newState: Record<string, ScanConfigPreferenceValue>;
+  newState: ScanConfigPreferenceValues;
 }
 
 interface ScanConfigScannerPreferencesProps {
   preferences?: ScanConfigPreference[];
-  values?: Record<string, ScanConfigPreferenceValue>;
+  values?: ScanConfigPreferenceValues;
   onValuesChange: (action: SetValueAction) => void;
 }
 
 interface ScanConfigScannerPreferenceProps {
-  defaultValue?: ScanConfigPreferenceValue;
+  defaultValue?: NvtPreferenceValue;
   displayName: string;
   name: string;
-  value: ScanConfigPreferenceValue;
-  onPreferenceChange?: (value: ScanConfigPreferenceValue, name: string) => void;
+  value: NvtPreferenceValue;
+  onPreferenceChange?: (value: NvtPreferenceValue, name: string) => void;
 }
 
 const ScanConfigScannerPreference = ({

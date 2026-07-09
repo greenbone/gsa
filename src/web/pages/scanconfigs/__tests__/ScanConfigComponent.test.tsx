@@ -6,11 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, fireEvent, waitFor} from 'web/testing';
 import date from 'gmp/models/date';
-import type Nvt from 'gmp/models/nvt';
+import {type default as Nvt, type NvtPreferenceElement} from 'gmp/models/nvt';
 import ScanConfig, {
   type ScanConfigFamily,
   type ScanConfigFamilyElement,
-  type ScanConfigPreferenceElement,
 } from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
@@ -126,7 +125,7 @@ const families: ScanConfigFamilyElement[] = [
 ];
 
 const preferences: {
-  preference: ScanConfigPreferenceElement[];
+  preference: NvtPreferenceElement[];
 } = {
   preference: [
     {

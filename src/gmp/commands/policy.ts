@@ -11,10 +11,10 @@ import {
   type ScanConfigFamilyNvt,
   type ConfigFamilyResponse,
   type NvtResponseEntry,
-  type NvtPreferenceValues,
+  type ScanConfigNvtPreferenceValues,
   type ScanConfigNvtsSelected,
   type ScanConfigFamilyTrends,
-  type ScanConfigScannerPreferenceValues,
+  type ScanConfigPreferenceValues,
 } from 'gmp/commands/scan-config';
 import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
@@ -40,7 +40,7 @@ export interface PolicyCommandSaveParams {
   comment?: string;
   trend?: ScanConfigFamilyTrends;
   select?: ScanConfigNvtsSelected;
-  scannerPreferenceValues?: ScanConfigScannerPreferenceValues;
+  scannerPreferenceValues?: ScanConfigPreferenceValues;
 }
 
 export interface PolicyCommandSaveFamilyParams {
@@ -58,7 +58,7 @@ export interface PolicyCommandSaveNvtParams {
   id: string;
   timeout?: number;
   oid: string;
-  preferenceValues?: NvtPreferenceValues;
+  preferenceValues?: ScanConfigNvtPreferenceValues;
 }
 
 const log = logger.getLogger('gmp.commands.policy');

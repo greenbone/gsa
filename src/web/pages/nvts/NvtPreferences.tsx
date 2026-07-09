@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type Preference} from 'gmp/models/nvt';
+import {type NvtPreference} from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 import Table from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
@@ -14,7 +14,7 @@ import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface NvtPreferencesProps {
-  preferences?: Preference[];
+  preferences?: NvtPreference[];
   defaultTimeout?: number;
 }
 
