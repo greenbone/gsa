@@ -84,6 +84,13 @@ export interface ScanConfigFamilies {
   [name: string]: ScanConfigFamily;
 }
 
+type ScanConfigPreferenceType =
+  | 'checkbox'
+  | 'password'
+  | 'file'
+  | 'radio'
+  | string;
+
 export interface ScanConfigPreference {
   default?: ScanConfigPreferenceValue;
   hr_name?: string;
@@ -93,8 +100,9 @@ export interface ScanConfigPreference {
     name?: string;
     oid?: string;
   };
-  type?: string;
+  type?: ScanConfigPreferenceType;
   value?: ScanConfigPreferenceValue;
+  alt?: ScanConfigPreferenceValue[];
 }
 
 export interface ScanConfigNvts {
