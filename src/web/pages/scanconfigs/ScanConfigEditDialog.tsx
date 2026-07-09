@@ -62,8 +62,9 @@ interface ScanConfigEditDialogValues {
   familyTrend?: ScanConfigTrend;
 }
 
-type ScanConfigEditDialogData = ScanConfigEditDialogDefaultValues &
-  ScanConfigEditDialogValues;
+export type ScanConfigEditDialogData = ScanConfigEditDialogDefaultValues &
+  ScanConfigEditDialogValues &
+  Required<SyncData>;
 
 interface ScanConfigEditDialogProps {
   comment?: string;
@@ -326,15 +327,17 @@ const ScanConfigEditDialog = ({
       filteredScannerPreferences.length +
       filteredNvtPreferences.length;
 
-  const handleSave = (values: ScanConfigEditDialogData) => {
+  const handleSave = (
+    values: ScanConfigEditDialogValues & ScanConfigEditDialogDefaultValues,
+  ) => {
     const basicFields: SyncData = basicFieldsRef.current
       ? basicFieldsRef.current.current
       : {};
 
     const allValues = {
       ...values,
-      name: basicFields.name,
-      comment: basicFields.comment,
+      name: basicFields.name as string,
+      comment: basicFields.comment as string,
     };
 
     onSave(allValues);
