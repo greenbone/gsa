@@ -141,6 +141,7 @@ const createGmp = ({
   },
   getNvtFamiliesResponse = {},
   getScannersResponse = {data: scanners},
+  getAllScanConfigsResponse = new Response([]),
   cloneConfigResponse = new Response({id: 'cloned-id'}),
   deleteConfigResponse = undefined,
   exportConfigResponse = new Response('some-data'),
@@ -152,6 +153,7 @@ const createGmp = ({
   cloneConfig = testing.fn().mockResolvedValue(cloneConfigResponse),
   deleteConfig = testing.fn().mockResolvedValue(deleteConfigResponse),
   exportConfig = testing.fn().mockResolvedValue(exportConfigResponse),
+  getAllScanConfigs = testing.fn().mockResolvedValue(getAllScanConfigsResponse),
 } = {}) => ({
   nvtfamilies: {
     get: getNvtFamilies,
@@ -161,6 +163,9 @@ const createGmp = ({
     clone: cloneConfig,
     delete: deleteConfig,
     export: exportConfig,
+  },
+  scanconfigs: {
+    getAll: getAllScanConfigs,
   },
   scanners: {
     getAll: getScanners,
@@ -429,7 +434,7 @@ describe('ScanConfigDetailsPage tests', () => {
     expect(editIcon).toBeInTheDocument();
     fireEvent.click(editIcon);
     expect(gmp.nvtfamilies.get).toHaveBeenCalled();
-    expect(gmp.scanners.getAll).toHaveBeenCalled();
+    expect(gmp.scanconfigs.getAll).toHaveBeenCalled();
 
     const exportIcon = screen.getByTitle('Export Scan Config as XML');
     fireEvent.click(exportIcon);
@@ -567,7 +572,7 @@ describe('ScanConfigDetailsPage tests', () => {
     expect(editIcon).toBeInTheDocument();
     fireEvent.click(editIcon);
     expect(gmp.nvtfamilies.get).toHaveBeenCalled();
-    expect(gmp.scanners.getAll).toHaveBeenCalled();
+    expect(gmp.scanconfigs.getAll).toHaveBeenCalled();
 
     const deleteIcon = screen.getByTitle('Scan Config is still in use');
     fireEvent.click(deleteIcon);
