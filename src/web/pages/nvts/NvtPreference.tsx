@@ -6,9 +6,9 @@
 import {useState} from 'react';
 import styled from 'styled-components';
 import {
-  type ScanConfigPreference,
-  type ScanConfigPreferenceValue,
-} from 'gmp/models/scan-config';
+  type NvtPreference as NvtPreferenceType,
+  type NvtPreferenceValue,
+} from 'gmp/models/nvt';
 import {map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
 import Checkbox from 'web/components/form/Checkbox';
@@ -26,13 +26,13 @@ interface NvtPreferenceChange {
   type: 'setValue';
   newState: {
     name: string;
-    value: ScanConfigPreferenceValue | undefined;
+    value: NvtPreferenceValue;
   };
 }
 
 interface NvtPreferenceProps {
-  preference: ScanConfigPreference;
-  value?: ScanConfigPreferenceValue;
+  preference: NvtPreferenceType;
+  value?: NvtPreferenceValue;
   onChange: (change: NvtPreferenceChange) => void;
 }
 
@@ -52,9 +52,7 @@ const NvtPreference = ({
   const [_] = useTranslation();
   const [checked, setChecked] = useState(false);
 
-  const onPreferenceChange = (
-    nextValue: ScanConfigPreferenceValue | undefined,
-  ) => {
+  const onPreferenceChange = (nextValue: NvtPreferenceValue | undefined) => {
     onChange({
       type: 'setValue',
       newState: {name: preference.name as string, value: nextValue},
@@ -126,7 +124,7 @@ const NvtPreference = ({
         <Radio
           checked={value === preference.value}
           title={String(preference.value)}
-          value={preference.value as ScanConfigPreferenceValue}
+          value={preference.value}
           onChange={() => onPreferenceChange(preference.value)}
         />
         {map(preference.alt, alt => {

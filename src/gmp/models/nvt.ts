@@ -36,7 +36,7 @@ interface SeverityElement {
   value?: string;
 }
 
-interface PreferenceElement {
+export interface NvtPreferenceElement {
   default?: string | number;
   hr_name?: string;
   id?: number;
@@ -47,6 +47,7 @@ interface PreferenceElement {
   };
   type?: string;
   value?: string | number;
+  alt?: string[] | number[];
 }
 
 interface EpssElement {
@@ -82,7 +83,7 @@ export interface NvtNvtElement {
   preferences?: {
     default_timeout?: string;
     timeout?: string;
-    preference?: PreferenceElement | PreferenceElement[];
+    preference?: NvtPreferenceElement | NvtPreferenceElement[];
   };
   qod?: QoDParams;
   refs?: {
@@ -103,13 +104,18 @@ export interface NvtElement extends ModelElement {
   nvt?: NvtNvtElement;
 }
 
-export interface Preference {
-  default?: string | number;
+export type NvtPreferenceValue = string | number | undefined;
+
+type NvtPreferenceType = 'checkbox' | 'password' | 'file' | 'radio' | string;
+
+export interface NvtPreference {
+  default?: NvtPreferenceValue;
   hr_name?: string;
   id?: number;
   name?: string;
-  type?: string;
-  value?: string | number;
+  type?: NvtPreferenceType;
+  value?: NvtPreferenceValue;
+  alt?: NvtPreferenceValue[];
 }
 
 interface Reference {
@@ -149,7 +155,7 @@ interface NvtProperties extends ModelProperties {
   epss?: Epss;
   family?: string;
   oid?: string;
-  preferences?: Preference[];
+  preferences?: NvtPreference[];
   qod?: QoD;
   severity?: number;
   severityDate?: Date;
@@ -244,7 +250,7 @@ class Nvt extends Model {
   readonly epss?: Epss;
   readonly family?: string;
   readonly oid?: string;
-  readonly preferences: Preference[];
+  readonly preferences: NvtPreference[];
   readonly qod?: QoD;
   readonly severity?: number;
   readonly severityDate?: Date;

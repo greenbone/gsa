@@ -14,12 +14,11 @@ import {
 import {
   type ScanConfigFamilyTrends,
   type ScanConfigNvtsSelected,
-  type ScanConfigScannerPreferenceValues,
+  type ScanConfigPreferenceValues,
 } from 'gmp/commands/scan-config';
 import {
   SCANCONFIG_TREND_STATIC,
   type ScanConfigPreference,
-  type ScanConfigPreferenceValue,
   type ScanConfigUsageType,
   type ScanConfigFamilies,
   type ScanConfigFamily,
@@ -56,7 +55,7 @@ interface ScanConfigEditDialogDefaultValues {
 
 interface ScanConfigEditDialogValues {
   id: string;
-  scannerPreferenceValues?: ScanConfigScannerPreferenceValues;
+  scannerPreferenceValues?: ScanConfigPreferenceValues;
   select?: ScanConfigNvtsSelected;
   trend?: ScanConfigFamilyTrends;
   familyTrend?: ScanConfigTrend;
@@ -126,11 +125,10 @@ const createTrendAndSelect = (
 const createScannerPreferenceValues = (
   preferences: ScanConfigPreference[] = [],
 ) => {
-  const values: {[key: string]: ScanConfigPreferenceValue} = {};
+  const values: ScanConfigPreferenceValues = {};
 
   preferences.forEach(preference => {
-    values[preference.name as string] =
-      preference.value as ScanConfigPreferenceValue;
+    values[preference.name as string] = preference.value;
   });
 
   return values;

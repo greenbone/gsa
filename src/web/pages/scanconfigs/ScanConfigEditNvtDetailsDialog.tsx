@@ -4,12 +4,12 @@
  */
 
 import {useEffect, useReducer, useState} from 'react';
-import {type NvtPreferenceValues} from 'gmp/commands/scan-config';
+import {type ScanConfigNvtPreferenceValues} from 'gmp/commands/scan-config';
 import {type Date} from 'gmp/models/date';
 import {
-  type ScanConfigPreferenceValue,
-  type ScanConfigPreference,
-} from 'gmp/models/scan-config';
+  type NvtPreferenceValue,
+  type NvtPreference as NvtPreferenceType,
+} from 'gmp/models/nvt';
 import {NO_VALUE, parseYesNo, YES_VALUE, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -37,7 +37,7 @@ import Preformatted from 'web/pages/nvts/Preformatted';
 export interface ScanConfigEditNvtDetailsDialogData {
   configId: string;
   nvtOid: string;
-  preferenceValues: NvtPreferenceValues;
+  preferenceValues: ScanConfigNvtPreferenceValues;
   timeout?: number;
   useDefaultTimeout: YesNo;
 }
@@ -56,7 +56,7 @@ interface ScanConfigEditNvtDetailsDialogProps {
   nvtOid: string;
   nvtSeverity?: number;
   nvtSummary?: string;
-  preferences?: ScanConfigPreference[];
+  preferences?: NvtPreferenceType[];
   timeout?: number;
   title: string;
   onClose: () => void;
@@ -67,17 +67,17 @@ interface SetValueAction {
   type: 'setValue';
   newState: {
     name: string;
-    value: ScanConfigPreferenceValue;
+    value: NvtPreferenceValue | undefined;
   };
 }
 
 interface SetAllAction {
   type: 'setAll';
-  formValues: NvtPreferenceValues;
+  formValues: ScanConfigNvtPreferenceValues;
 }
 
-const createPrefValues = (preferences: ScanConfigPreference[] = []) => {
-  const preferenceValues: NvtPreferenceValues = {};
+const createPrefValues = (preferences: NvtPreferenceType[] = []) => {
+  const preferenceValues: ScanConfigNvtPreferenceValues = {};
 
   preferences.forEach(pref => {
     let {id, value, type} = pref;
@@ -88,7 +88,7 @@ const createPrefValues = (preferences: ScanConfigPreference[] = []) => {
 
     preferenceValues[pref.name as string] = {
       id: id as number,
-      value: value as ScanConfigPreferenceValue,
+      value: value as NvtPreferenceValue,
       type: type as string,
     };
   });
@@ -97,9 +97,9 @@ const createPrefValues = (preferences: ScanConfigPreference[] = []) => {
 };
 
 const reducer = (
-  state: NvtPreferenceValues,
+  state: ScanConfigNvtPreferenceValues,
   action: SetValueAction | SetAllAction,
-): NvtPreferenceValues => {
+): ScanConfigNvtPreferenceValues => {
   switch (action.type) {
     case 'setValue': {
       const {newState} = action;
@@ -324,9 +324,7 @@ const ScanConfigEditNvtDetailsDialog = ({
                   return (
                     <NvtPreference
                       key={pref.name}
-                      // @ts-expect-error
                       preference={pref}
-                      // @ts-expect-error
                       value={prefValue}
                       onChange={dispatch}
                     />

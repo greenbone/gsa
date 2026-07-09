@@ -4,12 +4,11 @@
  */
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import {type NvtPreference, type NvtPreferenceElement} from 'gmp/models/nvt';
 import {parseInt, parseBoolean, type YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-export type ScanConfigPreferenceValue = string | number;
 
 export type ScanConfigTrend =
   | typeof SCANCONFIG_TREND_DYNAMIC
@@ -22,19 +21,6 @@ export interface ScanConfigFamilyElement {
   growing?: number;
   nvt_count?: string;
   max_nvt_count?: string;
-}
-
-export interface ScanConfigPreferenceElement {
-  default?: ScanConfigPreferenceValue;
-  id?: number;
-  name?: string;
-  hr_name?: string;
-  nvt?: {
-    name?: string;
-    _oid?: string;
-  };
-  type?: string;
-  value?: ScanConfigPreferenceValue;
 }
 
 export interface ScanConfigScannerElement extends ModelElement {
@@ -58,7 +44,7 @@ export interface ScanConfigElement extends ModelElement {
   };
   predefined?: YesNo;
   preferences?: {
-    preference?: ScanConfigPreferenceElement | ScanConfigPreferenceElement[];
+    preference?: NvtPreferenceElement | NvtPreferenceElement[];
   };
   scanner?: ScanConfigScannerElement;
   tasks?: {
@@ -84,25 +70,11 @@ export interface ScanConfigFamilies {
   [name: string]: ScanConfigFamily;
 }
 
-type ScanConfigPreferenceType =
-  | 'checkbox'
-  | 'password'
-  | 'file'
-  | 'radio'
-  | string;
-
-export interface ScanConfigPreference {
-  default?: ScanConfigPreferenceValue;
-  hr_name?: string;
-  id?: number;
-  name?: string;
+export interface ScanConfigPreference extends NvtPreference {
   nvt?: {
     name?: string;
     oid?: string;
   };
-  type?: ScanConfigPreferenceType;
-  value?: ScanConfigPreferenceValue;
-  alt?: ScanConfigPreferenceValue[];
 }
 
 export interface ScanConfigNvts {
@@ -283,13 +255,13 @@ class ScanConfig extends Model {
         if (isEmpty(pref.nvt?.name)) {
           delete pref.nvt;
 
-          scannerPreferences.push(pref);
+          scannerPreferences.push(pref as ScanConfigPreference);
         } else {
           const nvt = {...pref.nvt, oid: pref.nvt?._oid};
           pref.nvt = nvt;
           delete pref.nvt._oid;
 
-          nvtPreferences.push(pref);
+          nvtPreferences.push(pref as ScanConfigPreference);
         }
       });
     }

@@ -7,12 +7,11 @@ import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
-import Nvt from 'gmp/models/nvt';
+import Nvt, {type NvtPreferenceValue} from 'gmp/models/nvt';
 import ScanConfig, {
   type ScanConfigPreference,
   type ScanConfigElement,
   type ScanConfigTrend,
-  type ScanConfigPreferenceValue,
 } from 'gmp/models/scan-config';
 import {NO_VALUE, parseFloat, YES_VALUE, type YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
@@ -49,10 +48,7 @@ interface ScanConfigCommandCreateParams {
 
 export type ScanConfigNvtsSelected = Record<string, YesNo>;
 export type ScanConfigFamilyTrends = Record<string, ScanConfigTrend>;
-export type ScanConfigScannerPreferenceValues = Record<
-  string,
-  ScanConfigPreferenceValue
->;
+export type ScanConfigPreferenceValues = Record<string, NvtPreferenceValue>;
 
 interface ScanConfigCommandSaveParams {
   id: string;
@@ -61,7 +57,7 @@ interface ScanConfigCommandSaveParams {
   comment?: string;
   trend?: ScanConfigFamilyTrends;
   select?: ScanConfigNvtsSelected;
-  scannerPreferenceValues?: ScanConfigScannerPreferenceValues;
+  scannerPreferenceValues?: ScanConfigPreferenceValues;
 }
 
 interface ScanConfigCommandSaveFamilyParams {
@@ -75,19 +71,22 @@ interface ScanConfigCommandEditFamilyParams {
   familyName: string;
 }
 
-interface NvtPreferenceValue {
+interface ScanConfigNvtPreferenceValue {
   id: number;
   type: string;
-  value: ScanConfigPreferenceValue;
+  value: NvtPreferenceValue;
 }
 
-export type NvtPreferenceValues = Record<string, NvtPreferenceValue>;
+export type ScanConfigNvtPreferenceValues = Record<
+  string,
+  ScanConfigNvtPreferenceValue
+>;
 
 interface ScanConfigCommandSaveNvtParams {
   id: string;
   timeout?: number;
   oid: string;
-  preferenceValues?: NvtPreferenceValues;
+  preferenceValues?: ScanConfigNvtPreferenceValues;
 }
 
 interface ScanConfigCommandEditNvtSettingsParams {

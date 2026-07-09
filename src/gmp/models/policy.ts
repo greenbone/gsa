@@ -4,6 +4,7 @@
  */
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import {type NvtPreferenceElement} from 'gmp/models/nvt';
 import {
   parseCount,
   parseTrend,
@@ -11,7 +12,6 @@ import {
   type ScanConfigFamily,
   type ScanConfigFamilyElement,
   type ScanConfigNvts,
-  type ScanConfigPreferenceElement,
   type ScanConfigScannerElement,
 } from 'gmp/models/scan-config';
 import {parseBoolean, type YesNo} from 'gmp/parser';
@@ -20,7 +20,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 type PolicyFamilyElement = ScanConfigFamilyElement;
-type PolicyPreferenceElement = ScanConfigPreferenceElement;
+type PolicyPreferenceElement = NvtPreferenceElement;
 
 interface PolicyElement extends ModelElement {
   families?: {
@@ -49,7 +49,7 @@ interface PolicyElement extends ModelElement {
 type PolicyFamily = ScanConfigFamily;
 type PolicyFamilies = ScanConfigFamilies;
 type PolicyNvts = ScanConfigNvts;
-type PolicyPreference = ScanConfigPreferenceElement;
+type PolicyPreference = NvtPreferenceElement;
 
 interface PolicyPreferences {
   nvt: PolicyPreference[];
