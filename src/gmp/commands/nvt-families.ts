@@ -8,6 +8,11 @@ import type Http from 'gmp/http/http';
 import {parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 
+export interface NvtFamily {
+  name: string;
+  maxNvtCount: number;
+}
+
 class NvtFamiliesCommand extends HttpCommand {
   constructor(http: Http) {
     super(http, {cmd: 'get_nvt_families'});
@@ -19,10 +24,10 @@ class NvtFamiliesCommand extends HttpCommand {
     const {family: families} =
       // @ts-expect-error
       data.get_nvt_families.get_nvt_families_response.families;
-    return response.set(
+    return response.set<NvtFamily[]>(
       map(families, family => ({
-        name: family.name,
-        maxNvtCount: parseInt(family.max_nvt_count),
+        name: family.name as string,
+        maxNvtCount: parseInt(family.max_nvt_count) as number,
       })),
     );
   }
