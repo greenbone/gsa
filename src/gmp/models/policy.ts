@@ -115,7 +115,7 @@ class Policy extends Model {
         const {name} = family;
         const new_family = {
           name,
-          trend: parseTrend(family.growing),
+          trend: parseTrend(family.growing as number),
           nvts: {
             count: parseCount(family.nvt_count),
             max: parseCount(family.max_nvt_count),
@@ -130,7 +130,7 @@ class Policy extends Model {
 
     if (isDefined(element.family_count)) {
       families.count = parseCount(element.family_count.__text);
-      families.trend = parseTrend(element.family_count.growing);
+      families.trend = parseTrend(element.family_count.growing as number);
     } else {
       families.count = 0;
     }
@@ -140,7 +140,7 @@ class Policy extends Model {
     if (isDefined(element.nvt_count)) {
       ret.nvts = {
         count: parseCount(element.nvt_count.__text),
-        trend: parseTrend(element.nvt_count.growing),
+        trend: parseTrend(element.nvt_count.growing as number),
       };
 
       if (isDefined(element.known_nvt_count)) {
