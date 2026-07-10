@@ -129,7 +129,7 @@ const ReportListPage = ({
   const handleImportReport = (data: ReportImportDialogData) => {
     return gmp.report
       .import(data)
-      .then(onChanged, onError)
+      .then(onChanged)
       .then(() => closeImportDialog());
   };
 
