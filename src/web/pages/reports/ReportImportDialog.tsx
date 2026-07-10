@@ -71,6 +71,7 @@ const ReportImportDialog = ({
           </FormGroup>
           <FormGroup direction="row" title={_('Import Task')}>
             <Select
+              disabled={tasks.length <= 1}
               grow="1"
               items={renderSelectItems(tasks as RenderSelectItemProps[])}
               name="task_id"
