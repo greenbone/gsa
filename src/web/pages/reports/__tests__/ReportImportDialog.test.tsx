@@ -30,8 +30,42 @@ describe('ReportImportDialog tests', () => {
     expect(screen.getByText('Import Report')).toBeInTheDocument();
     expect(screen.getByRole('button', {name: 'Import'})).toBeInTheDocument();
     expect(screen.getByName('task_id')).toHaveValue('1');
+    expect(screen.getByName('task_id')).toBeEnabled();
     expect(screen.getByTestId('new-import-task')).toBeInTheDocument();
     expect(screen.getByName('in_assets')).toBeChecked();
+  });
+
+  test('should disable task selection if there are no tasks', async () => {
+    const onSave = testing.fn();
+    const onClose = testing.fn();
+
+    render(
+      <ReportImportDialog
+        task_id=""
+        tasks={[]}
+        onClose={onClose}
+        onSave={onSave}
+      />,
+    );
+
+    expect(screen.getByName('task_id')).toBeDisabled();
+  });
+
+  test('should disable task selection if there is only one task', async () => {
+    const tasks = [new Task({id: '1', name: 'Task 1'})];
+    const onSave = testing.fn();
+    const onClose = testing.fn();
+
+    render(
+      <ReportImportDialog
+        task_id="1"
+        tasks={tasks}
+        onClose={onClose}
+        onSave={onSave}
+      />,
+    );
+
+    expect(screen.getByName('task_id')).toBeDisabled();
   });
 
   test('should call onSave', async () => {
