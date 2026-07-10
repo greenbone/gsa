@@ -9,53 +9,43 @@ import {
   type ScanConfigFamilyNvt,
   type ScanConfigNvtsSelected,
 } from 'gmp/commands/scan-config';
-import Nvt from 'gmp/models/nvt';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import ScanConfigEditFamilyDialog from 'web/pages/scanconfigs/ScanConfigEditFamilyDialog';
 
-const nvt = Nvt.fromElement({
-  nvt: {
-    _oid: '1234',
-    name: 'nvt',
-    family: 'family',
-    cvss_base: 1,
-    preference_count: 3,
-  },
-});
+const nvt: ScanConfigFamilyNvt = {
+  oid: '1234',
+  name: 'nvt',
+  severity: 1,
+  preferenceCount: 3,
+};
 
-const nvt2 = Nvt.fromElement({
-  nvt: {
-    _oid: '5678',
-    name: 'nvt2',
-    family: 'family',
-    cvss_base: 10,
-    timeout: 1,
-    preference_count: 4,
-  },
-});
+const nvt2: ScanConfigFamilyNvt = {
+  oid: '5678',
+  name: 'nvt2',
+  severity: 10,
+  timeout: 1,
+  preferenceCount: 4,
+};
 
-const nvt3 = Nvt.fromElement({
-  nvt: {
-    _oid: '2345',
-    name: 'nvt3',
-    family: 'family',
-    timeout: 2,
-    preference_count: 2,
-  },
-});
+const nvt3: ScanConfigFamilyNvt = {
+  oid: '2345',
+  name: 'nvt3',
+  timeout: 2,
+  preferenceCount: 2,
+};
 
 const selected: ScanConfigNvtsSelected = {
   1234: 0,
   5678: 0,
 };
 
-const gmp = {
+const createGmp = () => ({
   settings: {
     severityRating: DEFAULT_SEVERITY_RATING,
   },
-};
+});
 
-const nvts = [nvt, nvt2] as ScanConfigFamilyNvt[];
+const nvts = [nvt, nvt2];
 
 describe('ScanConfigEditFamilyDialog component tests', () => {
   test('should render dialog', () => {
@@ -63,8 +53,8 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true, gmp});
-    const {baseElement} = render(
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
+    render(
       <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
@@ -80,10 +70,27 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toBeVisible();
+    const dialog = screen.getDialog();
+    const dialogContent = screen.getDialogContent();
+    const tableBody = within(dialog).getTableBody();
+    const rows = tableBody.querySelectorAll('tr');
 
-    expect(baseElement).toHaveTextContent('Config');
-    expect(baseElement).toHaveTextContent('foo');
+    expect(dialog).toBeVisible();
+
+    expect(dialogContent).toHaveTextContent('Config');
+    expect(dialogContent).toHaveTextContent('foo');
+
+    // preference count is rendered as preferenceCount + 1 in the Prefs column
+    expect(
+      within(rows[0]).getByRole('cell', {
+        name: String((nvt.preferenceCount ?? 0) + 1),
+      }),
+    ).toBeVisible();
+    expect(
+      within(rows[1]).getByRole('cell', {
+        name: String((nvt2.preferenceCount ?? 0) + 1),
+      }),
+    ).toBeVisible();
   });
 
   test('should render loading indicator', () => {
@@ -91,8 +98,8 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true, gmp});
-    const {baseElement} = render(
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
+    render(
       <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
@@ -108,12 +115,8 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toBeVisible();
-
     expect(screen.getByTestId('loading')).toBeInTheDocument();
-
-    expect(baseElement).not.toHaveTextContent('Config');
-    expect(baseElement).not.toHaveTextContent('foo');
+    expect(screen.queryDialog()).not.toBeInTheDocument();
   });
 
   test('should save data', () => {
@@ -121,7 +124,7 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <ScanConfigEditFamilyDialog
         configId="c1"
@@ -153,7 +156,7 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <ScanConfigEditFamilyDialog
         configId="c1"
@@ -183,8 +186,8 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true, gmp});
-    const {baseElement} = render(
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
+    render(
       <ScanConfigEditFamilyDialog
         configId="c1"
         configName="foo"
@@ -200,8 +203,9 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
       />,
     );
 
-    const inputs = baseElement.querySelectorAll('input');
-    fireEvent.click(inputs[0]);
+    const dialog = within(screen.getDialog());
+    const nvtCheckbox = dialog.getByName('1234') as HTMLInputElement;
+    fireEvent.click(nvtCheckbox);
 
     const saveButton = screen.getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
@@ -223,7 +227,7 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <ScanConfigEditFamilyDialog
         configId="c1"
@@ -243,7 +247,7 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
     const editButtons = screen.getAllByTestId('edit-icon');
     fireEvent.click(editButtons[0]);
 
-    expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith(nvt.id);
+    expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith(nvt.oid);
   });
 
   test.each`
@@ -266,7 +270,7 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
         2345: 0,
       };
 
-      const {render} = rendererWith({capabilities: true, gmp});
+      const {render} = rendererWith({capabilities: true, gmp: createGmp()});
       render(
         <ScanConfigEditFamilyDialog
           configId="c1"
@@ -274,7 +278,7 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
           configNameLabel="Config"
           familyName="family"
           isLoadingFamily={false}
-          nvts={[nvt, nvt2, nvt3] as ScanConfigFamilyNvt[]}
+          nvts={[nvt, nvt2, nvt3]}
           selected={newSelected}
           title="Foo title"
           onClose={handleClose}
@@ -312,7 +316,7 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true, gmp});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <ScanConfigEditFamilyDialog
         configId="c1"
