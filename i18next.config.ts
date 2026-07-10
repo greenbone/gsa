@@ -19,8 +19,8 @@ export default defineConfig({
     disablePlurals: true,
     generateBasePluralForms: false,
     removeUnusedKeys: true,
-    defaultValue: (locale, namespace, key, defaultValue) =>
-      locale === 'en' ? key : '',
+    defaultValue: (key, namespace, locale, defaultValue) =>
+      locale && locale.includes('en') ? key : '',
     functions: ['_', '_l'],
     useTranslationNames: ['useTranslation'],
   },
