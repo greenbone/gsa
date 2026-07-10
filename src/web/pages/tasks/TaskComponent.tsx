@@ -135,7 +135,6 @@ interface TaskComponentProps {
   onModifyTaskWizardError?: (error: Error) => void;
   onModifyTaskWizardSaved?: () => void;
   onReportImported?: () => void;
-  onReportImportError?: (error: Error) => void;
   onResumed?: (response: Response<Task, XmlMeta>) => void;
   onResumeError?: (error: Error) => void;
   onSaved?: () => void;
@@ -169,7 +168,6 @@ const TaskComponent = ({
   onModifyTaskWizardError,
   onModifyTaskWizardSaved,
   onReportImported,
-  onReportImportError,
   onResumed,
   onResumeError,
   onSaved,
@@ -939,11 +937,10 @@ const TaskComponent = ({
     setReportImportDialogVisible(false);
   };
 
-  const handleReportImport = (data: ReportImportDialogData) => {
-    return gmp.report
-      .import(data)
-      .then(onReportImported, onReportImportError)
-      .then(() => closeReportImportDialog());
+  const handleReportImport = async (data: ReportImportDialogData) => {
+    await gmp.report.import(data);
+    onReportImported?.();
+    closeReportImportDialog();
   };
 
   const handleScanConfigChange = (configId?: string) => {
