@@ -93,7 +93,9 @@ const NvtDisplay = React.memo(
           {timeout ?? _('default')}
           {isDefined(defaultTimeout) ? ` (${defaultTimeout})` : ''}
         </TableData>
-        <TableData>{preferenceCount ?? ''}</TableData>
+        <TableData align={['center', 'center']}>
+          {isDefined(preferenceCount) ? preferenceCount + 1 : ''}
+        </TableData>
         <TableData align={['center', 'center']}>
           <Checkbox
             checked={selected === YES_VALUE}
