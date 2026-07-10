@@ -367,7 +367,9 @@ const ScanConfigEditDialog = ({
 
           <SearchBar
             matchesCount={matchesCount}
-            placeholder={_('Search for families, preferences, or NVTs')}
+            placeholder={_(
+              'Search for NVT families, Scanner preferences, or NVT preferences',
+            )}
             onSearch={handleSearchChangeCallback}
           />
           {configIsInUse ? (

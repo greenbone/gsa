@@ -1849,7 +1849,7 @@
   "SCP to {{- url}}": "SCP nach {{- url}}",
   "Search": "Suche",
   "Search by content": "Suche nach Inhalt",
-  "Search for families, preferences, or NVTs": "Suche nach Familien, Vorgaben oder NVTs",
+  "Search for NVT families, Scanner preferences, or NVT preferences": "Suche nach NVT-Familien, Scanner-Vorgaben oder NVT-Vorgaben",
   "SecInfo": "Sicherheitsinfos",
   "SecInfo Displays": "SecInfo-Anzeigen",
   "Secret Key": "Geheimer Schlüssel",

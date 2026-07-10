@@ -560,7 +560,7 @@ describe('ScanConfigEditDialog tests', () => {
     );
 
     const searchBar = screen.getByPlaceholderText(
-      'Search for families, preferences, or NVTs',
+      'Search for NVT families, Scanner preferences, or NVT preferences',
     );
     fireEvent.change(searchBar, {target: {value: 'family4'}});
 
@@ -649,7 +649,7 @@ describe('ScanConfigEditDialog tests', () => {
       );
 
       const searchBar = screen.getByPlaceholderText(
-        'Search for families, preferences, or NVTs',
+        'Search for NVT families, Scanner preferences, or NVT preferences',
       );
 
       fireEvent.change(searchBar, {target: {value: 'family1'}});
