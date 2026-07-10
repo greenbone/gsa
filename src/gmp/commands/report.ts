@@ -16,7 +16,7 @@ import {isDefined} from 'gmp/utils/identity';
 interface ReportCommandImportParams {
   task_id: string;
   in_assets?: YesNo;
-  xml_file?: string;
+  xml_file?: File;
 }
 
 interface ReportCommandAssetsParams {

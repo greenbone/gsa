@@ -31,7 +31,9 @@ import ReportsDashboard, {
   REPORTS_DASHBOARD_ID,
 } from 'web/pages/reports/dashboard';
 import ReportFilterDialog from 'web/pages/reports/ReportFilterDialog';
-import ReportImportDialog from 'web/pages/reports/ReportImportDialog';
+import ReportImportDialog, {
+  type ReportImportDialogData,
+} from 'web/pages/reports/ReportImportDialog';
 import ReportsTable from 'web/pages/reports/ReportTable';
 import ImportTaskDialog from 'web/pages/tasks/ImportTaskDialog';
 import {
@@ -124,7 +126,7 @@ const ReportListPage = ({
     closeImportDialog();
   };
 
-  const handleImportReport = data => {
+  const handleImportReport = (data: ReportImportDialogData) => {
     return gmp.report
       .import(data)
       .then(onChanged, onError)

@@ -940,13 +940,10 @@ const TaskComponent = ({
   };
 
   const handleReportImport = (data: ReportImportDialogData) => {
-    return (
-      gmp.report
-        // @ts-expect-error
-        .import(data)
-        .then(onReportImported, onReportImportError)
-        .then(() => closeReportImportDialog())
-    );
+    return gmp.report
+      .import(data)
+      .then(onReportImported, onReportImportError)
+      .then(() => closeReportImportDialog());
   };
 
   const handleScanConfigChange = (configId?: string) => {
