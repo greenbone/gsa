@@ -23,7 +23,6 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {makeCompareSeverity, makeCompareString} from 'web/utils/Sort';
 import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
 
@@ -293,20 +292,6 @@ const ScanConfigEditFamilyDialog = ({
       </Section>
     </SaveDialog>
   );
-};
-
-ScanConfigEditFamilyDialog.propTypes = {
-  configId: PropTypes.id,
-  configName: PropTypes.string,
-  configNameLabel: PropTypes.string.isRequired,
-  familyName: PropTypes.string,
-  isLoadingFamily: PropTypes.bool,
-  nvts: PropTypes.array,
-  selected: PropTypes.object,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onEditNvtDetailsClick: PropTypes.func,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default ScanConfigEditFamilyDialog;
