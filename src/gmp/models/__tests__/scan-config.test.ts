@@ -7,6 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import ScanConfig, {
   filterEmptyScanConfig,
   SCANCONFIG_TREND_DYNAMIC,
+  WHOLE_SELECTION_FAMILIES,
 } from 'gmp/models/scan-config';
 import {testModel} from 'gmp/models/testing';
 
@@ -207,6 +208,13 @@ describe('ScanConfig model tests', () => {
 
     expect(scanConfig.deprecated).toEqual(false);
     expect(scanConfig2.deprecated).toEqual(true);
+  });
+});
+
+describe('Whole Selection Family tests', () => {
+  test('should have whole selection families', () => {
+    // ensure that the whole selection families list is not empty and has the expected length
+    expect(WHOLE_SELECTION_FAMILIES.length).toEqual(25);
   });
 });
 
