@@ -114,6 +114,7 @@ export const WHOLE_SELECTION_FAMILIES = [
   'Huawei EulerOS Local Security Checks',
   'Mageia Linux Local Security Checks',
   'Mandrake Local Security Checks',
+  'Microsoft Office Local Security Checks',
   'openEuler Local Security Checks',
   'openSUSE Local Security Checks',
   'Oracle Linux Local Security Checks',
