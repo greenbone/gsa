@@ -45,7 +45,7 @@ const ApplicationsTabWrapper = ({
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
-    return isDefined(filter) ? filter.copy() : new Filter();
+    return isDefined(filter) ? filter : new Filter();
   }, [filter]);
 
   const [appsFilter, setAppsFilter] = useState<Filter>(baseFilter);

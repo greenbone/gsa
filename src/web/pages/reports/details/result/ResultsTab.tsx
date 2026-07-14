@@ -121,7 +121,7 @@ const ResultsTabWrapper = ({
 
   const {entities: results = [], entitiesCounts: resultsCounts} = data || {};
 
-  const displayedFilter = resultsFilter.copy().delete('_and_report_id');
+  const displayedFilter = resultsFilter.delete('_and_report_id');
 
   if (reportResultsCounts?.filtered === 0) {
     if ((reportResultsCounts.full ?? 0) === 0) {

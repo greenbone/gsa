@@ -73,9 +73,8 @@ const DEFAULT_FILTER = Filter.fromString(
   'levels=hmlg rows=100 min_qod=70 first=1 compliance_levels=yniu sort=compliant',
 );
 
-export const AUDIT_REPORT_RESET_FILTER = RESET_FILTER.copy()
-  .setSortOrder('sort')
-  .setSortBy('compliant');
+export const AUDIT_REPORT_RESET_FILTER =
+  RESET_FILTER.setSortOrder('sort').setSortBy('compliant');
 
 const hasTargetId = (value: unknown): value is ReportTargetRef => {
   return (
@@ -326,9 +325,9 @@ const AuditReportDetailsPage = () => {
       const {includeNotes, includeOverrides, reportFormatId, storeAsDefault} =
         state;
 
-      const newFilter = reportFilter.copy();
-      newFilter.set('notes', includeNotes);
-      newFilter.set('overrides', includeOverrides);
+      const newFilter = reportFilter
+        .set('notes', includeNotes)
+        .set('overrides', includeOverrides);
 
       if (storeAsDefault) {
         const defaults = {
@@ -419,8 +418,7 @@ const AuditReportDetailsPage = () => {
     if (!reportFilter) return;
 
     if (reportFilter.has('min_qod')) {
-      const levelFilter = reportFilter.copy();
-      levelFilter.set('min_qod', 30);
+      const levelFilter = reportFilter.set('min_qod', 30);
       handleFilterChange(levelFilter);
     }
   }, [reportFilter, handleFilterChange]);

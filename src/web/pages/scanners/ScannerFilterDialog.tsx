@@ -96,7 +96,7 @@ const ScannerFilterDialog = ({
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const initialFilterString = isDefined(initialFilter)
-    ? initialFilter.copy().delete('type').toFilterCriteriaString()
+    ? initialFilter.delete('type').toFilterCriteriaString()
     : '';
   const filterDialogProps = useFilterDialog<UseFilterDialogStateProps>(
     initialFilter,

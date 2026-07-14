@@ -36,9 +36,9 @@ const SolutionTypesFilterGroup = ({
     const filteredSolutionType = filter.get('solution_type');
 
     if (!isDefined(solutionType) || solutionType === 'All') {
-      onChange(filter.copy().delete('solution_type'));
+      onChange(filter.delete('solution_type'));
     } else if (solutionType !== filteredSolutionType) {
-      onChange(filter.copy().set('solution_type', solutionType));
+      onChange(filter.set('solution_type', solutionType));
     }
   };
 

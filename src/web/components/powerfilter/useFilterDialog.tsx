@@ -24,7 +24,7 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
 ) => {
   const [originalFilter] = useState(initialFilter);
   const [filter, setFilter] = useState<Filter>(() =>
-    isDefined(initialFilter) ? initialFilter.copy() : new Filter(),
+    isDefined(initialFilter) ? initialFilter : new Filter(),
   );
   const [filterDialogState, setFilterDialogState] =
     useState<TFilterDialogState>({} as TFilterDialogState);
@@ -44,14 +44,14 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
 
   const handleFilterValueChange = useCallback(
     (value: string | number, name: string, relation: string = '=') => {
-      setFilter(filter => filter.copy().set(name, value, relation));
+      setFilter(filter => filter.set(name, value, relation));
     },
     [],
   );
 
   const handleSearchTermChange = useCallback(
     (value: string, name: string, relation: string = '~') => {
-      setFilter(filter => filter.copy().set(name, `"${value}"`, relation));
+      setFilter(filter => filter.set(name, `"${value}"`, relation));
     },
     [],
   );
@@ -61,11 +61,11 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
   }, []);
 
   const handleSortByChange = useCallback((value: string) => {
-    setFilter(filter => filter.copy().setSortBy(value));
+    setFilter(filter => filter.setSortBy(value));
   }, []);
 
   const handleSortOrderChange = useCallback((value: FilterSortOrder) => {
-    setFilter(filter => filter.copy().setSortOrder(value));
+    setFilter(filter => filter.setSortOrder(value));
   }, []);
 
   const handleChange = useCallback(

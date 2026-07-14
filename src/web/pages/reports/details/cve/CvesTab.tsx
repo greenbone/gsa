@@ -45,7 +45,7 @@ const CvesTabWrapper = ({
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
-    return isDefined(filter) ? filter.copy() : new Filter();
+    return isDefined(filter) ? filter : new Filter();
   }, [filter]);
 
   const [cvesFilter, setCvesFilter] = useState<Filter>(baseFilter);

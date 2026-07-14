@@ -42,11 +42,10 @@ const ErrorsTabWrapper = ({
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
-    const f = isDefined(filter) ? filter.copy() : new Filter();
+    const f = isDefined(filter) ? filter : new Filter();
     // Override sort: 'sort-reverse=error' maps to ascending A→Z via the
     // sortReverse=(sortDir==='asc') convention used in ReportEntitiesContainer
-    f.set('sort-reverse', 'error');
-    return f;
+    return f.set('sort-reverse', 'error');
   }, [filter]);
 
   const [errorsFilter, setErrorsFilter] = useState<Filter>(baseFilter);

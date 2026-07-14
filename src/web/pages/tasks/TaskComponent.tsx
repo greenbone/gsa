@@ -147,7 +147,7 @@ interface TaskComponentProps {
   onTaskWizardSaved?: () => void;
 }
 
-const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
+const TAGS_FILTER = ALL_FILTER.set('resource_type', 'task');
 
 const TaskComponent = ({
   children,

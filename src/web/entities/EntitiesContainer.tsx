@@ -356,13 +356,13 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     let sort = 'sort';
     const sortField = loadedFilter.getSortBy();
 
-    const filter = loadedFilter.first();
+    let filter = loadedFilter.first();
 
     if (sortField && sortField === field) {
       sort = filter.getSortOrder() === 'sort' ? 'sort-reverse' : 'sort';
     }
 
-    filter.set(sort, field);
+    filter = filter.set(sort, field);
 
     this.changeFilter(filter);
   }

@@ -72,9 +72,7 @@ const useFilterDialogSave = (
   );
 
   const handleSave: () => Promise<void> = useCallback(() => {
-    const newFilter = filter
-      .copy()
-      .mergeKeywords(Filter.fromString(filterString));
+    const newFilter = filter.mergeKeywords(Filter.fromString(filterString));
 
     if (saveNamedFilter) {
       if (isDefined(filterName) && filterName.trim().length > 0) {

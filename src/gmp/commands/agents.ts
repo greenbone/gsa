@@ -109,8 +109,8 @@ class AgentsCommand extends EntitiesCommand<Agent> {
 
   getSeverityAggregates({filter}: {filter?: Filter} = {}) {
     const combinedFilter = filter
-      ? filter.copy().and(AGENT_CONTROLLER_FILTER)
-      : AGENT_CONTROLLER_FILTER.copy();
+      ? filter.and(AGENT_CONTROLLER_FILTER)
+      : AGENT_CONTROLLER_FILTER;
 
     return this.getAggregates({
       aggregate_type: 'task',

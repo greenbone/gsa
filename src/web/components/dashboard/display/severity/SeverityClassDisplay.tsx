@@ -81,7 +81,7 @@ const SeverityClassDisplay = ({
     }
 
     const newFilter = isDefined(filter)
-      ? filter.copy().and(severityFilter)
+      ? filter.and(severityFilter)
       : severityFilter;
 
     onFilterChanged(newFilter);
