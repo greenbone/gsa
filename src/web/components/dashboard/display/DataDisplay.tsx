@@ -485,9 +485,7 @@ class DataDisplay<
             {showFilterString && isDefined(filter) && (
               <FilterString>
                 ({_('Applied filter: ')}
-                {/* @ts-ignore-error */}
                 <b>{filter.name}</b>&nbsp;
-                {/* @ts-ignore-error */}
                 <i>{filter.simple().toFilterString()}</i>)
               </FilterString>
             )}
