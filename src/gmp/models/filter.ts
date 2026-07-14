@@ -99,7 +99,7 @@ class Filter extends EntityModel {
 
   readonly alerts: Model[];
   readonly filter_type?: string;
-  readonly terms: FilterTerm[];
+  private terms: FilterTerm[];
 
   constructor({
     _type,
@@ -359,7 +359,7 @@ class Filter extends EntityModel {
     const index = this._getIndex(key);
     const hasKey = index !== -1;
     if (hasKey) {
-      this.terms.splice(index, 1);
+      this.terms = this.terms.filter((_, i) => i !== index);
       this._resetFilterId(); // filter has changed
     }
     return hasKey;
@@ -477,7 +477,7 @@ class Filter extends EntityModel {
    *
    * @returns Returns the array of all FilterTerms in this filter
    */
-  getAllTerms(): FilterTerm[] {
+  getAllTerms(): readonly FilterTerm[] {
     return this.terms;
   }
 

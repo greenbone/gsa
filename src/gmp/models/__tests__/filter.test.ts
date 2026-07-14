@@ -12,13 +12,14 @@ describe('Filter parse filter terms from string', () => {
   test('should parse terms from string', () => {
     const filter = Filter.fromString('foo=bar lorem~ipsum');
     expect(filter.toFilterString()).toEqual('foo=bar lorem~ipsum');
-    expect(filter.terms.length).toBe(2);
-    expect(filter.terms[0]).toEqual({
+    expect(filter.length).toBe(2);
+    const terms = filter.getAllTerms();
+    expect(terms[0]).toEqual({
       keyword: 'foo',
       relation: '=',
       value: 'bar',
     });
-    expect(filter.terms[1]).toEqual({
+    expect(terms[1]).toEqual({
       keyword: 'lorem',
       relation: '~',
       value: 'ipsum',
@@ -29,18 +30,19 @@ describe('Filter parse filter terms from string', () => {
     // should parse filter strings with and
     let filter = Filter.fromString('foo=bar and lorem~ipsum');
     expect(filter.toFilterString()).toEqual('foo=bar and lorem~ipsum');
-    expect(filter.terms.length).toBe(3);
-    expect(filter.terms[0]).toEqual({
+    expect(filter.length).toBe(3);
+    let terms = filter.getAllTerms();
+    expect(terms[0]).toEqual({
       keyword: 'foo',
       relation: '=',
       value: 'bar',
     });
-    expect(filter.terms[1]).toEqual({
+    expect(terms[1]).toEqual({
       keyword: undefined,
       relation: undefined,
       value: 'and',
     });
-    expect(filter.terms[2]).toEqual({
+    expect(terms[2]).toEqual({
       keyword: 'lorem',
       relation: '~',
       value: 'ipsum',
@@ -49,18 +51,19 @@ describe('Filter parse filter terms from string', () => {
     // should parse filter strings with or
     filter = Filter.fromString('foo=bar or lorem~ipsum');
     expect(filter.toFilterString()).toEqual('foo=bar or lorem~ipsum');
-    expect(filter.terms.length).toBe(3);
-    expect(filter.terms[0]).toEqual({
+    expect(filter.length).toBe(3);
+    terms = filter.getAllTerms();
+    expect(terms[0]).toEqual({
       keyword: 'foo',
       relation: '=',
       value: 'bar',
     });
-    expect(filter.terms[1]).toEqual({
+    expect(terms[1]).toEqual({
       keyword: undefined,
       relation: undefined,
       value: 'or',
     });
-    expect(filter.terms[2]).toEqual({
+    expect(terms[2]).toEqual({
       keyword: 'lorem',
       relation: '~',
       value: 'ipsum',
@@ -69,13 +72,14 @@ describe('Filter parse filter terms from string', () => {
     // should parse filter strings with not
     filter = Filter.fromString('not foo=bar');
     expect(filter.toFilterString()).toEqual('not foo=bar');
-    expect(filter.terms.length).toBe(2);
-    expect(filter.terms[0]).toEqual({
+    expect(filter.length).toBe(2);
+    terms = filter.getAllTerms();
+    expect(terms[0]).toEqual({
       keyword: undefined,
       relation: undefined,
       value: 'not',
     });
-    expect(filter.terms[1]).toEqual({
+    expect(terms[1]).toEqual({
       keyword: 'foo',
       relation: '=',
       value: 'bar',
@@ -87,14 +91,15 @@ describe('Filter parse filter terms from string', () => {
     expect(filter.toFilterString()).toEqual(
       'name="foo bar" comment~"lorem ipsum"',
     );
-    expect(filter.terms.length).toBe(2);
-    expect(filter.terms[0]).toEqual({
+    expect(filter.length).toBe(2);
+    const terms = filter.getAllTerms();
+    expect(terms[0]).toEqual({
       keyword: 'name',
       relation: '=',
       value: '"foo bar"',
     });
-    expect(filter.terms.length).toBe(2);
-    expect(filter.terms[1]).toEqual({
+    expect(terms.length).toBe(2);
+    expect(terms[1]).toEqual({
       keyword: 'comment',
       relation: '~',
       value: '"lorem ipsum"',
@@ -104,14 +109,15 @@ describe('Filter parse filter terms from string', () => {
   test('should parse strings with double quotes and without columns', () => {
     const filter = Filter.fromString('="foo bar" ~"lorem ipsum"');
     expect(filter.toFilterString()).toEqual('="foo bar" ~"lorem ipsum"');
-    expect(filter.terms.length).toBe(2);
-    expect(filter.terms[0]).toEqual({
+    expect(filter.length).toBe(2);
+    const terms = filter.getAllTerms();
+    expect(terms[0]).toEqual({
       keyword: undefined,
       relation: '=',
       value: '"foo bar"',
     });
-    expect(filter.terms.length).toBe(2);
-    expect(filter.terms[1]).toEqual({
+    expect(terms.length).toBe(2);
+    expect(terms[1]).toEqual({
       keyword: undefined,
       relation: '~',
       value: '"lorem ipsum"',
@@ -125,23 +131,24 @@ describe('Filter parse filter terms from string', () => {
     expect(filter.toFilterString()).toEqual(
       'name="foo <= bar" ~"foo & bar" and comment="hello : world ?"',
     );
-    expect(filter.terms.length).toBe(4);
-    expect(filter.terms[0]).toEqual({
+    expect(filter.length).toBe(4);
+    const terms = filter.getAllTerms();
+    expect(terms[0]).toEqual({
       keyword: 'name',
       relation: '=',
       value: '"foo <= bar"',
     });
-    expect(filter.terms[1]).toEqual({
+    expect(terms[1]).toEqual({
       keyword: undefined,
       relation: '~',
       value: '"foo & bar"',
     });
-    expect(filter.terms[2]).toEqual({
+    expect(terms[2]).toEqual({
       keyword: undefined,
       relation: undefined,
       value: 'and',
     });
-    expect(filter.terms[3]).toEqual({
+    expect(terms[3]).toEqual({
       keyword: 'comment',
       relation: '=',
       value: '"hello : world ?"',
