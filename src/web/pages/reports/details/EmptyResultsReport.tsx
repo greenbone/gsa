@@ -63,7 +63,9 @@ const EmptyResultsReport = ({
           !levels.includes('g') &&
           isDefined(onFilterAddLogLevelClick) && (
             <ReportPanel
-              icon={props => <FilterIcon {...props} />}
+              icon={
+                <FilterIcon size="large" onClick={onFilterAddLogLevelClick} />
+              }
               title={_('Log messages are currently excluded.')}
               onClick={onFilterAddLogLevelClick}
             >
@@ -73,7 +75,9 @@ const EmptyResultsReport = ({
 
         {hasSeverityFilter && isDefined(onFilterRemoveSeverityClick) && (
           <ReportPanel
-            icon={props => <FilterIcon {...props} />}
+            icon={
+              <FilterIcon size="large" onClick={onFilterRemoveSeverityClick} />
+            }
             title={_(
               'You are using keywords setting a minimum limit on severity.',
             )}
@@ -85,7 +89,9 @@ const EmptyResultsReport = ({
 
         {isDefined(minQod) && minQod > 30 && (
           <ReportPanel
-            icon={props => <FilterIcon {...props} />}
+            icon={
+              <FilterIcon size="large" onClick={onFilterDecreaseMinQoDClick} />
+            }
             title={_(
               'There may be results below the currently selected Quality ' +
                 'of Detection (QoD).',
@@ -100,7 +106,7 @@ const EmptyResultsReport = ({
         )}
 
         <ReportPanel
-          icon={props => <EditIcon {...props} />}
+          icon={<EditIcon size="large" onClick={onFilterEditClick} />}
           title={_('Your filter settings may be too refined.')}
           onClick={onFilterEditClick}
         >
@@ -108,7 +114,9 @@ const EmptyResultsReport = ({
         </ReportPanel>
 
         <ReportPanel
-          icon={props => <CircleXDeleteIcon {...props} />}
+          icon={
+            <CircleXDeleteIcon size="large" onClick={onFilterRemoveClick} />
+          }
           title={_('Your last filter change may be too restrictive.')}
           onClick={onFilterRemoveClick}
         >

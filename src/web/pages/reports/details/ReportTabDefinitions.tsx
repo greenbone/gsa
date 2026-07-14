@@ -19,10 +19,10 @@ import ErrorsTab from 'web/pages/reports/details/error/ErrorsTab';
 import HostsTabContent from 'web/pages/reports/details/host/HostsTabContent';
 import OperatingSystemsTab from 'web/pages/reports/details/operating-system/OperatingSystemsTab';
 import PortsTab from 'web/pages/reports/details/port/PortsTab';
+import ReportThresholdPanel from 'web/pages/reports/details/ReportThresholdPanel';
 import ResultsTabContent from 'web/pages/reports/details/result/ResultsTabContent';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
-import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
 import TLSCertificatesTab from 'web/pages/reports/details/tls-certificate/TlsCertificatesTab';
 
 export interface ThresholdConfig {
@@ -104,7 +104,7 @@ export const renderWithThreshold = (
 
   if (config.showThresholdMessage) {
     return (
-      <ThresholdPanel
+      <ReportThresholdPanel
         entityType={entityType}
         filter={activeFilter}
         isUpdating={config.isUpdating}

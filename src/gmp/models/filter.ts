@@ -477,7 +477,7 @@ class Filter extends EntityModel {
    */
   get(
     key: string,
-    def: string | undefined = undefined,
+    def: string | number | undefined = undefined,
   ): string | number | undefined {
     const term = this.getTerm(key);
     return isDefined(term) ? term.value : def;
