@@ -65,7 +65,7 @@ describe('usePageFilter tests', () => {
 
     const {result} = renderHook(() => usePageFilter('somePage2', 'somePage'));
     const [filter] = result.current;
-    expect(filter.equals(pFilter.copy().set('rows', '42'))).toEqual(true);
+    expect(filter.equals(pFilter.set('rows', '42'))).toEqual(true);
   });
 
   test('should use defaultSettingFilter', async () => {
@@ -160,7 +160,7 @@ describe('usePageFilter tests', () => {
   });
 
   test('should use default fallback filter as last resort', async () => {
-    const resultingFilter = DEFAULT_FALLBACK_FILTER.copy().set('rows', '42');
+    const resultingFilter = DEFAULT_FALLBACK_FILTER.set('rows', '42');
 
     const getSetting = testing.fn().mockResolvedValue({});
     const subscribe = testing.fn();
@@ -275,7 +275,7 @@ describe('usePageFilter tests', () => {
       usePageFilter(undefined, 'somePage', {fallbackFilter}),
     );
     const [filter] = result.current;
-    const expectedFilter = defaultSettingFilter.copy().set('rows', '42');
+    const expectedFilter = defaultSettingFilter.set('rows', '42');
     expect(filter.equals(expectedFilter)).toEqual(true);
   });
 
@@ -311,7 +311,7 @@ describe('usePageFilter tests', () => {
     await wait();
 
     const [resetFilterResult] = result.current;
-    const expectedFilter = defaultSettingFilter.copy().set('rows', '42');
+    const expectedFilter = defaultSettingFilter.set('rows', '42');
     expect(resetFilterResult.equals(expectedFilter)).toEqual(true);
   });
 

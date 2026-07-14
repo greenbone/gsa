@@ -65,8 +65,7 @@ const ReportDetailsFilterDialog = ({
     onValueChange,
   } = filterDialogProps;
   const resultHostsOnly = filter.get('result_hosts_only');
-  const handleRemoveLevels = () =>
-    onFilterChange(filter.copy().delete('levels'));
+  const handleRemoveLevels = () => onFilterChange(filter.delete('levels'));
   const handleRemoveCompliance = () =>
     onFilterChange(filter.delete('compliance_levels'));
   return (

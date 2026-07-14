@@ -35,14 +35,14 @@ const useFilterSortBy = (
   const sortChange = useCallback(
     (field: string) => {
       let sort = 'sort';
-      const newFilter = filter.copy().first();
+      let newFilter = filter.first();
       const sortField = filter.getSortBy();
 
       if (sortField && sortField === field) {
         sort = filter.getSortOrder() === 'sort' ? 'sort-reverse' : 'sort';
       }
 
-      newFilter.set(sort, field);
+      newFilter = newFilter.set(sort, field);
 
       changeFilter(newFilter);
     },

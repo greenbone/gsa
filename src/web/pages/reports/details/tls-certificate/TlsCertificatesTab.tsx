@@ -54,8 +54,7 @@ const TLSCertificatesTab = ({
     const f = Filter.fromString(reportFilterString);
     // Override sort: 'sort-reverse=dn' maps to ascending A→Z via the
     // sortReverse=(sortDir==='asc') convention used in ReportEntitiesContainer
-    f.set('sort-reverse', 'dn');
-    return f;
+    return f.set('sort-reverse', 'dn');
   }, [reportFilterString]);
 
   const [tlsCertificatesFilter, setTlsCertificatesFilter] =

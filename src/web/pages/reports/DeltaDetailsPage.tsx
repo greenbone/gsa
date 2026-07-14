@@ -201,7 +201,7 @@ const loadFilteredReport =
 
     // Ensure the filter respects the sortField set by the user
     if (!filter.has('sort') && !filter.has('sort-reverse')) {
-      filter.set('sort', 'name');
+      filter = filter.set('sort', 'name');
     }
 
     return loadReportIfNeeded(reportId, deltaReportId, filter).then(() =>
@@ -410,10 +410,9 @@ const DeltaReportDetails = () => {
     } = state;
 
     const baseFilter = reportFilter ?? DEFAULT_FILTER;
-    const newFilter = baseFilter.copy();
-
-    newFilter.set('notes', includeNotes);
-    newFilter.set('overrides', includeOverrides);
+    const newFilter = baseFilter
+      .set('notes', includeNotes)
+      .set('overrides', includeOverrides);
 
     if (storeDefault) {
       const defaults = {
@@ -479,24 +478,21 @@ const DeltaReportDetails = () => {
     if (!levelsStr.includes('g')) {
       const newLevels = levelsStr + 'g';
 
-      const copiedReportFilter = reportFilter.copy();
-      copiedReportFilter.set('levels', newLevels);
+      const copiedReportFilter = reportFilter.set('levels', newLevels);
       void load(copiedReportFilter);
     }
   };
 
   const handleFilterRemoveSeverity = () => {
     if (reportFilter?.has('severity')) {
-      const copiedReportFilter = reportFilter.copy();
-      copiedReportFilter.delete('severity');
+      const copiedReportFilter = reportFilter.delete('severity');
       void load(copiedReportFilter);
     }
   };
 
   const handleFilterDecreaseMinQoD = () => {
     if (reportFilter?.has('min_qod')) {
-      const copiedReportFilter = reportFilter.copy();
-      copiedReportFilter.set('min_qod', 30);
+      const copiedReportFilter = reportFilter.set('min_qod', 30);
       void load(copiedReportFilter);
     }
   };

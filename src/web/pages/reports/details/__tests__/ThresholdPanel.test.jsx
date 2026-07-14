@@ -131,9 +131,7 @@ describe('Report Threshold Panel tests', () => {
 
     const filterMinSeverity = Filter.fromString(
       'apply_overrides=0 rows=2 first=1 sort-reverse=severity',
-    );
-
-    filterMinSeverity.set('severity', 7.0, '>');
+    ).set('severity', 7.0, '>');
 
     const {baseElement} = render(
       <Thresholdpanel

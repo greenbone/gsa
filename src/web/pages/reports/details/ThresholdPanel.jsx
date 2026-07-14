@@ -32,37 +32,33 @@ const ThresholdPanel = ({
   const handleRemoveLogLevel = () => {
     if (levels.includes('g')) {
       const newLevels = levels.replace('g', '');
-      const lfilter = filter.copy();
-      lfilter.set('levels', newLevels);
+      const levelsFilter = filter.set('levels', newLevels);
 
-      onFilterChanged(lfilter);
+      onFilterChanged(levelsFilter);
     }
   };
 
   const handleRemoveLowLevel = () => {
     if (levels.includes('l')) {
       const newLevels = levels.replace('l', '');
-      const lfilter = filter.copy();
-      lfilter.set('levels', newLevels);
+      const levelsFilter = filter.set('levels', newLevels);
 
-      onFilterChanged(lfilter);
+      onFilterChanged(levelsFilter);
     }
   };
 
   const handleRemoveMediumLevel = () => {
     if (levels.includes('m')) {
       const newLevels = levels.replace('m', '');
-      const lfilter = filter.copy();
-      lfilter.set('levels', newLevels);
+      const levelsFilter = filter.set('levels', newLevels);
 
-      onFilterChanged(lfilter);
+      onFilterChanged(levelsFilter);
     }
   };
   const handleSetMinimumSeverity = () => {
-    const lfilter = filter.copy();
-    lfilter.set('severity', 7.0, '>');
+    const severityFilter = filter.set('severity', 7.0, '>');
 
-    onFilterChanged(lfilter);
+    onFilterChanged(severityFilter);
   };
   return (
     <UpdatingDivider

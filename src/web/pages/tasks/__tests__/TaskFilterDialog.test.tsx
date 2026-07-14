@@ -47,7 +47,7 @@ describe('TaskFilterDialog tests', () => {
       terms: [new FilterTerm({keyword: 'name', value: 'test'})],
     });
     const newFilter = new Filter({id: 'new-filter'});
-    const newFilterWithDetails = newFilter.copy().set('rows', 10);
+    const newFilterWithDetails = newFilter.set('rows', 10);
     const gmp = {
       filter: {
         create: testing.fn().mockResolvedValue({data: newFilter}),

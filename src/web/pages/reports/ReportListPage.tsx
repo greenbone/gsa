@@ -159,12 +159,11 @@ const ReportListPage = ({
         replace: true,
       });
     } else {
-      const newFilter = filter || new Filter();
+      const newFilter = filter ?? new Filter();
 
       isDefined(onFilterChanged) &&
         onFilterChanged(
           newFilter
-            .copy()
             .set('first', 1) // reset to first page
             .set('task_id', report?.task?.id),
         );
