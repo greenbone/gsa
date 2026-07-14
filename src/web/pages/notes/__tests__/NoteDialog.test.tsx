@@ -346,7 +346,7 @@ describe('NoteDialog tests', () => {
     const activeRadioInputs = activeFormGroup.getRadioInputs();
     expect(activeRadioInputs).toHaveLength(4);
     expect(activeRadioInputs[1]).toBeChecked();
-    expect(activeFormGroup.getByText('yes, until')).toBeInTheDocument();
+    expect(activeFormGroup.getAllByText('yes, until')).toHaveLength(2);
     expect(activeFormGroup.getByText(/2026/)).toBeInTheDocument();
 
     fireEvent.click(nvtRadioInputs[1]);
