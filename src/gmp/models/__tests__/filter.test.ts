@@ -1210,6 +1210,18 @@ describe('Filter merge extra keywords', () => {
     expect(filter1).toBe(filter2);
   });
 
+  test('should return a new filter', () => {
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = Filter.fromString('rows=1');
+
+    const filter3 = filter1.mergeExtraKeywords(filter2);
+
+    expect(filter1).not.toBe(filter3);
+    expect(filter2).not.toBe(filter3);
+    expect(filter3.get('abc')).toBe('1');
+    expect(filter3.get('rows')).toBe(1);
+  });
+
   test('should merge extra keywords', () => {
     const filter1 = Filter.fromString('abc=1');
     const filter2 = Filter.fromString(
@@ -1234,19 +1246,6 @@ describe('Filter merge extra keywords', () => {
     expect(filter3.get('timezone')).toBe('CET');
   });
 
-  test('should merge new keywords', () => {
-    const filter1 = Filter.fromString('abc=1 trend=more');
-    const filter2 = Filter.fromString('delta_states=1 severity>3 sort=name');
-
-    const filter3 = filter2.mergeKeywords(filter1);
-
-    expect(filter3.get('abc')).toBe('1');
-    expect(filter3.get('delta_states')).toBe('1');
-    expect(filter3.get('sort')).toBe('name');
-    expect(filter3.get('severity')).toBe('3');
-    expect(filter3.get('trend')).toBe('more');
-  });
-
   test('should not merge non extra keywords', () => {
     const filter1 = Filter.fromString('abc=1');
     const filter2 = Filter.fromString('apply_overrides=1 def=1');
@@ -1256,6 +1255,15 @@ describe('Filter merge extra keywords', () => {
     expect(filter3.get('abc')).toBe('1');
     expect(filter3.get('apply_overrides')).toBe(1);
     expect(filter3.get('def')).toBeUndefined();
+  });
+
+  test('should return same filter if no extra keywords to merge', () => {
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = Filter.fromString('def=1');
+
+    const filter3 = filter1.mergeExtraKeywords(filter2);
+
+    expect(filter3).toBe(filter1);
   });
 
   test('should not merge existing extra keywords', () => {
@@ -1328,7 +1336,126 @@ describe('Filter merge extra keywords', () => {
   });
 });
 
-describe('filter and', () => {
+describe('Filter mergeKeywords', () => {
+  test('should merge keywords', () => {
+    const filter1 = Filter.fromString('abc=1 trend=more');
+    const filter2 = Filter.fromString('delta_states=1 severity>3 sort=name');
+
+    const filter3 = filter2.mergeKeywords(filter1);
+
+    expect(filter3.get('abc')).toBe('1');
+    expect(filter3.get('delta_states')).toBe('1');
+    expect(filter3.get('sort')).toBe('name');
+    expect(filter3.get('severity')).toBe('3');
+    expect(filter3.get('trend')).toBe('more');
+  });
+
+  test('should return new filter', () => {
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = Filter.fromString('def=1');
+
+    const filter3 = filter2.mergeKeywords(filter1);
+
+    expect(filter3).not.toBe(filter1);
+    expect(filter3).not.toBe(filter2);
+
+    expect(filter3.get('abc')).toBe('1');
+    expect(filter3.get('def')).toBe('1');
+  });
+
+  test('should return same filter if no keywords to merge', () => {
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = Filter.fromString('abc=1');
+
+    expect(filter1).not.toBe(filter2);
+
+    const filter3 = filter1.mergeKeywords(filter2);
+
+    expect(filter3).toBe(filter1);
+  });
+
+  test('should return same filter if no filter to merge', () => {
+    const filter1 = Filter.fromString('abc=1');
+    const filter2 = filter1.mergeKeywords();
+
+    expect(filter2).toBe(filter1);
+  });
+
+  test('should reset filter id', () => {
+    const filter1 = Filter.fromString('abc=1');
+    // @ts-expect-error
+    filter1.id = 'f1';
+    const filter2 = Filter.fromString('def=1');
+    // @ts-expect-error
+    filter2.id = 'f2';
+
+    const filter3 = filter2.mergeKeywords(filter1);
+    expect(filter3.id).toBeUndefined();
+  });
+});
+
+describe('Filter merge', () => {
+  test('should merge undefined', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = filter1.merge(undefined);
+
+    expect(filter1).toBe(filter2);
+    expect(filter2.get('foo')).toEqual('bar');
+  });
+
+  test('should not mutate filter while merging', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = Filter.fromString('rows=10 first=1');
+
+    expect(filter1).not.toBe(filter2);
+
+    const filter3 = filter1.merge(filter2);
+
+    expect(filter3).not.toBe(filter1);
+    expect(filter3).not.toBe(filter2);
+    expect(filter1.toFilterString()).toEqual('foo=bar');
+    expect(filter2.toFilterString()).toEqual('rows=10 first=1');
+    expect(filter3.toFilterString()).toEqual('foo=bar rows=10 first=1');
+  });
+
+  test('should return same filter when merging an empty filter', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const emptyFilter = new Filter();
+    const merged = filter1.merge(emptyFilter);
+
+    expect(merged).toBe(filter1);
+    expect(merged.toFilterString()).toEqual('foo=bar');
+    expect(filter1.toFilterString()).toEqual('foo=bar');
+    expect(emptyFilter.toFilterString()).toEqual('');
+  });
+
+  test('should keep duplicate keywords and preserve term order while merging', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = Filter.fromString('foo=baz rows=10');
+    const merged = filter1.merge(filter2);
+
+    expect(merged.toFilterString()).toEqual('foo=bar foo=baz rows=10');
+    expect(merged.getTerms('foo')).toHaveLength(2);
+  });
+
+  test('should merge operator terms as-is', () => {
+    const filter1 = Filter.fromString('name~ssh');
+    const filter2 = Filter.fromString('and severity>7');
+    const merged = filter1.merge(filter2);
+
+    expect(merged.toFilterString()).toEqual('name~ssh and severity>7');
+  });
+
+  test('should merge duplicate terms', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = Filter.fromString('foo=bar');
+    const merged = filter1.merge(filter2);
+
+    expect(merged.toFilterString()).toEqual('foo=bar foo=bar');
+  });
+});
+
+describe('Filter and', () => {
   test('should ignore undefined', () => {
     const filter = Filter.fromString('foo=1');
     const newFilter = filter.and(undefined);
@@ -1389,7 +1516,7 @@ describe('filter and', () => {
   });
 });
 
-describe('filter hasTerm', () => {
+describe('Filter hasTerm', () => {
   test('filter should include terms', () => {
     const filter = Filter.fromString('apply_overrides=1 min_qod=70 severity>0');
 
@@ -1540,37 +1667,6 @@ describe('should lower the case of capitalized keywords', () => {
   test('just a value', () => {
     const filter2 = Filter.fromString('~AbC');
     expect(filter2.toFilterString()).toEqual('~AbC');
-  });
-});
-
-describe('Filter merge', () => {
-  test('should merge undefined', () => {
-    const filter1 = Filter.fromString('foo=bar');
-    const filter2 = filter1.merge(undefined);
-
-    expect(filter1).toBe(filter2);
-    expect(filter2.get('foo')).toEqual('bar');
-  });
-
-  test('should merge null', () => {
-    const filter1 = Filter.fromString('foo=bar');
-    const filter2 = filter1.merge(null);
-
-    expect(filter1).toBe(filter2);
-    expect(filter2.get('foo')).toEqual('bar');
-  });
-
-  test('should not mutate filter while merging', () => {
-    const filter1 = Filter.fromString('foo=bar');
-    const filter2 = Filter.fromString('rows=10 first=1');
-    const filter3 = filter1.merge(filter2);
-
-    expect(filter1).not.toBe(filter2);
-    expect(filter3).not.toBe(filter1);
-    expect(filter3).not.toBe(filter2);
-    expect(filter1.toFilterString()).toEqual('foo=bar');
-    expect(filter2.toFilterString()).toEqual('rows=10 first=1');
-    expect(filter3.toFilterString()).toEqual('foo=bar rows=10 first=1');
   });
 });
 

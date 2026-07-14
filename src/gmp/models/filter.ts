@@ -244,57 +244,41 @@ class Filter extends EntityModel {
   }
 
   /**
-   * Merges additional EXTRA KEYWORD terms from filter into this Filter
+   * Returns extra keywords filter terms from the given filter that are not included in this filter
    *
-   * Only extra keywords not included in this filter will be merged.
-   *
-   * @private
-   *
-   * @param filter Use extra params terms filter to be merged.
-   *
-   * @return This filter with merged terms.
+   * @param filter Filter to get extra keywords from
+   * @returns Array of FilterTerms with extra keywords from filter that are not included in this filter
    */
-
-  private _mergeExtraKeywords(filter: Filter | undefined | null) {
-    if (hasValue(filter)) {
-      filter.forEach(term => {
-        const {keyword: key} = term;
-        if (!isDefined(key) || !EXTRA_KEYWORDS.includes(key) || this.has(key)) {
-          return;
-        }
-        if (
-          (key === 'sort' && this.has('sort-reverse')) ||
-          (key === 'sort-reverse' && this.has('sort'))
-        ) {
-          return;
-        }
-        this._addTerm(term);
-      });
+  private _getExtraKeywords(filter: Filter | undefined | null) {
+    if (!hasValue(filter)) {
+      return [];
     }
-    return this;
+    return filter.terms.filter(term => {
+      const {keyword: key} = term;
+      return (
+        isDefined(key) &&
+        EXTRA_KEYWORDS.includes(key) &&
+        !this.has(key) &&
+        !(key === 'sort' && this.has('sort-reverse')) &&
+        !(key === 'sort-reverse' && this.has('sort'))
+      );
+    });
   }
 
   /**
-   * Merges terms with new keywords from filter into this Filter
+   * Returns new keywords filter terms from the given filter that are not included in this filter
    *
-   * @private
-   *
-   * @param filter  Use extra params terms filter to be merged.
-   *
-   * @return This filter with merged terms.
+   * @param filter Filter to get new keywords from
+   * @returns Array of FilterTerms with new keywords from filter that are not included in this filter
    */
-  private _mergeNewKeywords(filter: Filter | undefined) {
-    if (hasValue(filter)) {
-      filter.forEach(term => {
-        const {keyword: key} = term;
-        if (isDefined(key)) {
-          if (!this.has(key)) {
-            this._addTerm(term);
-          }
-        }
-      });
+  private _getNewKeywords(filter?: Filter) {
+    if (!hasValue(filter)) {
+      return [];
     }
-    return this;
+    return filter.terms.filter(term => {
+      const {keyword: key} = term;
+      return isDefined(key) && !this.has(key);
+    });
   }
 
   /**
@@ -794,11 +778,12 @@ class Filter extends EntityModel {
    *
    * @return A new filter with merged terms if the filter has changed.
    */
-  merge(filter: Filter | undefined | null) {
-    if (!hasValue(filter)) {
+  merge(filter?: Filter) {
+    if (!hasValue(filter) || filter.length === 0) {
       return this;
     }
     const copy = this._copy();
+    // currently this method also adds duplicate terms. this may change in future.
     copy._addTerm(...filter.getAllTerms());
     return copy;
   }
@@ -811,13 +796,17 @@ class Filter extends EntityModel {
    * @return A new filter with merged terms if the filter has changed.
    */
 
-  mergeKeywords(filter: Filter | undefined | null) {
+  mergeKeywords(filter?: Filter) {
     if (!hasValue(filter)) {
+      return this;
+    }
+    const newKeywords = this._getNewKeywords(filter);
+    if (newKeywords.length === 0) {
       return this;
     }
     const copy = this._copy();
     copy._resetFilterId();
-    copy._mergeNewKeywords(filter);
+    copy._addTerm(...newKeywords);
     return copy;
   }
 
@@ -832,9 +821,13 @@ class Filter extends EntityModel {
     if (!hasValue(filter)) {
       return this;
     }
+    const extraKeywords = this._getExtraKeywords(filter);
+    if (extraKeywords.length === 0) {
+      return this;
+    }
     const copy = this._copy();
     copy._resetFilterId();
-    copy._mergeExtraKeywords(filter);
+    copy._addTerm(...extraKeywords);
     return copy;
   }
 
@@ -852,7 +845,8 @@ class Filter extends EntityModel {
       terms: parseFilterTermsFromString(filterString),
     });
 
-    f._mergeExtraKeywords(filter);
+    const extraKeywords = f._getExtraKeywords(filter);
+    f._addTerm(...extraKeywords);
 
     return f;
   }
