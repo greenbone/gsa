@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
+import date, {type Date} from 'gmp/models/date';
 import {
   type default as Override,
   type Active,
@@ -22,11 +24,11 @@ import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import DateTime from 'web/components/date/DateTime';
 import SaveDialog from 'web/components/dialog/SaveDialog';
+import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';
 import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
 import Select, {type SelectItem} from 'web/components/form/Select';
-import Spinner from 'web/components/form/Spinner';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
@@ -111,6 +113,18 @@ interface OverrideDialogProps {
   onSave: (values: OverrideDialogState) => void;
 }
 
+export const computeDaysUntil = (targetDate: Date): number =>
+  Math.max(1, targetDate.startOf('day').diff(date().startOf('day'), 'day'));
+
+export const handleEndDateChange = (
+  newDate: Date,
+  setEndDate: (date: Date) => void,
+  onValueChange: (value: number, name: string) => void,
+) => {
+  setEndDate(newDate);
+  onValueChange(computeDaysUntil(newDate), 'days');
+};
+
 const OverrideDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
   customSeverity = false,
@@ -146,12 +160,23 @@ const OverrideDialog = ({
     gmp.settings.severityRating,
   );
 
+  const [endDate, setEndDate] = useState(() =>
+    isDefined(override?.endTime)
+      ? override.endTime
+      : date().add(DEFAULT_DAYS, 'day'),
+  );
+
   title = title || _('New Override');
+
+  const computedDays =
+    isDefined(override?.endTime) && active === ACTIVE_YES_UNTIL_VALUE
+      ? computeDaysUntil(override.endTime)
+      : days;
 
   const data = {
     active,
     customSeverity,
-    days,
+    days: computedDays,
     hosts,
     hostsManual,
     newSeverity,
@@ -290,19 +315,19 @@ const OverrideDialog = ({
                 <Radio
                   checked={state.active === ACTIVE_YES_FOR_NEXT_VALUE}
                   name="active"
-                  title={_('yes, for the next')}
+                  title={_('yes, until')}
                   value={ACTIVE_YES_FOR_NEXT_VALUE}
                   onChange={onValueChange}
                 />
-                <Spinner
+                <DatePicker
                   disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}
-                  min={1}
-                  name="days"
-                  type="int"
-                  value={state.days}
-                  onChange={onValueChange}
+                  minDate={date()}
+                  name="endDate"
+                  value={endDate}
+                  onChange={newDate =>
+                    handleEndDateChange(newDate, setEndDate, onValueChange)
+                  }
                 />
-                <span>{_('days')}</span>
               </Row>
               <Radio
                 checked={state.active === ACTIVE_NO_VALUE}
