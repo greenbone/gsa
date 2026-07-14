@@ -420,66 +420,74 @@ describe('Filter set', () => {
     expect(filter.set('abc', '1', '=').toFilterString()).toEqual('abc=1');
   });
 
+  test('should not mutate the filter when setting a filter term', () => {
+    const filter = new Filter();
+    const newFilter = filter.set('abc', '1', '=');
+    expect(filter).not.toBe(newFilter);
+    expect(filter.toFilterString()).toEqual('');
+    expect(newFilter.toFilterString()).toEqual('abc=1');
+  });
+
   test('should allow to change a filter term', () => {
     const filter = Filter.fromString('abc=1');
-    expect(filter.set('abc', '2', '=').toFilterString()).toEqual('abc=2');
+    const newFilter = filter.set('abc', '2', '=');
+    expect(newFilter.toFilterString()).toEqual('abc=2');
   });
 
   test('should remove sort-reverse when adding sort filter term', () => {
     const filter = new Filter();
 
-    filter.set('sort-reverse', 'foo', '=');
-    expect(filter.has('sort-reverse')).toEqual(true);
-    expect(filter.has('sort')).toEqual(false);
+    let newFilter = filter.set('sort-reverse', 'foo', '=');
+    expect(newFilter.has('sort-reverse')).toEqual(true);
+    expect(newFilter.has('sort')).toEqual(false);
 
-    filter.set('sort', 'foo', '=');
-    expect(filter.has('sort-reverse')).toEqual(false);
-    expect(filter.has('sort')).toEqual(true);
+    newFilter = filter.set('sort', 'foo', '=');
+    expect(newFilter.has('sort-reverse')).toEqual(false);
+    expect(newFilter.has('sort')).toEqual(true);
   });
 
   test('should remove sort when adding sort-reverse filter term', () => {
     const filter = new Filter();
 
-    filter.set('sort', 'foo', '=');
-    expect(filter.has('sort')).toEqual(true);
-    expect(filter.has('sort-reverse')).toEqual(false);
+    let newFilter = filter.set('sort', 'foo', '=');
+    expect(newFilter.has('sort')).toEqual(true);
+    expect(newFilter.has('sort-reverse')).toEqual(false);
 
-    filter.set('sort-reverse', 'foo', '=');
-    expect(filter.has('sort')).toEqual(false);
-    expect(filter.has('sort-reverse')).toEqual(true);
+    newFilter = filter.set('sort-reverse', 'foo', '=');
+    expect(newFilter.has('sort')).toEqual(false);
+    expect(newFilter.has('sort-reverse')).toEqual(true);
   });
 
   test('should allow to set first keyword', () => {
     const filter = new Filter();
-    filter.set('first', 123);
-    expect(filter.get('first')).toEqual(123);
+    let newFilter = filter.set('first', 123);
+    expect(newFilter.get('first')).toEqual(123);
 
-    filter.set('first', '0');
-    expect(filter.get('first')).toEqual(1);
+    newFilter = filter.set('first', '0');
+    expect(newFilter.get('first')).toEqual(1);
 
-    filter.set('first', '-666');
-    expect(filter.get('first')).toEqual(1);
+    newFilter = filter.set('first', '-666');
+    expect(newFilter.get('first')).toEqual(1);
   });
 
   test('should allow to set name keyword', () => {
     const filter = new Filter();
-    filter.set('name', 'Test Task');
-    expect(filter.get('name')).toEqual('Test Task');
+    let newFilter = filter.set('name', 'Test Task');
+    expect(newFilter.get('name')).toEqual('Test Task');
 
-    filter.set('name', '');
-    expect(filter.get('name')).toBeUndefined();
+    newFilter = filter.set('name', '');
+    expect(newFilter.get('name')).toBeUndefined();
 
-    filter.set('name', 123);
-    expect(filter.get('name')).toEqual('123');
+    newFilter = filter.set('name', 123);
+    expect(newFilter.get('name')).toEqual('123');
   });
 
   test('should reset filter id', () => {
     const filter = new Filter({id: 'foo'});
-
     expect(filter.id).toEqual('foo');
 
-    filter.set('first', '0');
-    expect(filter.id).toBeUndefined();
+    const newFilter = filter.set('first', '0');
+    expect(newFilter.id).toBeUndefined();
   });
 
   test('should allow to set a filter term with underscore', () => {
@@ -519,6 +527,23 @@ describe('Filter delete', () => {
     expect(filter.delete('abc').toFilterString()).toEqual('def=1');
   });
 
+  test('should not mutate filter when deleting a term', () => {
+    const filter = Filter.fromString('abc=1 def=1');
+    const newFilter = filter.delete('abc');
+
+    expect(newFilter).not.toBe(filter);
+    expect(filter.toFilterString()).toEqual('abc=1 def=1');
+    expect(newFilter.toFilterString()).toEqual('def=1');
+  });
+
+  test("should not create new filter if filter term doesn't exist", () => {
+    const filter = Filter.fromString('abc=1 def=1');
+    const newFilter = filter.delete('xyz');
+
+    expect(newFilter).toBe(filter);
+    expect(filter.toFilterString()).toEqual('abc=1 def=1');
+  });
+
   test('should ignore unknown filter term to delete', () => {
     const filter = Filter.fromString('abc=1');
     expect(filter.delete('def').toFilterString()).toEqual('abc=1');
@@ -534,9 +559,10 @@ describe('Filter delete', () => {
     const filter = Filter.fromString('abc=1');
     // @ts-expect-error
     filter.id = 'foo';
-    filter.delete('abc');
+    const newFilter = filter.delete('abc');
 
-    expect(filter.id).toBeUndefined();
+    expect(filter.id).toEqual('foo');
+    expect(newFilter.id).toBeUndefined();
   });
 });
 
@@ -820,6 +846,8 @@ describe('Filter copy', () => {
     expect(filter1).not.toBe(filter2);
     expect(filter2.get('abc')).toBe('1');
     expect(filter2.get('def')).toBe('2');
+    expect(filter1.toFilterString()).toBe('abc=1 def=2');
+    expect(filter2.toFilterString()).toBe('abc=1 def=2');
   });
 
   test('should copy public properties', () => {
@@ -834,19 +862,6 @@ describe('Filter copy', () => {
     expect(filter2.id).toBe('100');
     expect(filter2.filter_type).toBe('foo');
   });
-
-  test('should shallow copy terms', () => {
-    const filter1 = Filter.fromString('abc=1 def=2');
-    const filter2 = filter1.copy();
-
-    expect(filter1).not.toBe(filter2);
-    expect(filter1.equals(filter2)).toBe(true);
-
-    filter2.set('foo', 'bar', '=');
-    expect(filter1.equals(filter2)).toBe(false);
-    expect(filter1.toFilterString()).toBe('abc=1 def=2');
-    expect(filter2.toFilterString()).toBe('abc=1 def=2 foo=bar');
-  });
 });
 
 describe('Filter next', () => {
@@ -860,6 +875,17 @@ describe('Filter next', () => {
 
     expect(filter.get('first')).toEqual(1);
     expect(filter.get('rows')).toEqual(10);
+  });
+
+  test('should not mutate original filter when calling next', () => {
+    let filter = Filter.fromString('first=1 rows=10');
+    const copy = filter.next();
+
+    expect(filter).not.toBe(copy);
+    expect(filter.get('first')).toBe(1);
+    expect(filter.get('rows')).toBe(10);
+    expect(copy.get('first')).toBe(11);
+    expect(copy.get('rows')).toBe(10);
   });
 
   test('should change first and rows', () => {
@@ -896,6 +922,15 @@ describe('Filter first', () => {
     expect(filter.get('first')).toEqual(1);
   });
 
+  test('should not mutate original filter when calling first', () => {
+    let filter = Filter.fromString('first=99');
+    const copy = filter.first();
+
+    expect(filter).not.toBe(copy);
+    expect(filter.get('first')).toBe(99);
+    expect(copy.get('first')).toBe(1);
+  });
+
   test('should change first to 1', () => {
     let filter = Filter.fromString('first=99');
     expect(filter.get('first')).toBe(99);
@@ -928,6 +963,17 @@ describe('Filter previous', () => {
 
     expect(filter.get('first')).toEqual(1);
     expect(filter.get('rows')).toEqual(10);
+  });
+
+  test('should not mutate original filter when calling previous', () => {
+    let filter = Filter.fromString('first=11 rows=10');
+    const copy = filter.previous();
+
+    expect(filter).not.toBe(copy);
+    expect(filter.get('first')).toBe(11);
+    expect(filter.get('rows')).toBe(10);
+    expect(copy.get('first')).toBe(1);
+    expect(copy.get('rows')).toBe(10);
   });
 
   test('should change first and rows', () => {
@@ -990,27 +1036,40 @@ describe('Filter getSortBy', () => {
 describe('Filter setSortOrder', () => {
   test('should keep sort by if order changes to sort', () => {
     const filter = Filter.fromString('sort-reverse=foo');
-    filter.setSortOrder('sort');
+    const newFilter = filter.setSortOrder('sort');
 
-    expect(filter.has('sort-reverse')).toEqual(false);
-    expect(filter.get('sort')).toEqual('foo');
+    expect(newFilter.has('sort-reverse')).toEqual(false);
+    expect(newFilter.get('sort')).toEqual('foo');
+  });
+
+  test('should not mutate the filter when changing sort order', () => {
+    const filter = Filter.fromString('sort-reverse=foo');
+    const newFilter = filter.setSortOrder('sort');
+
+    expect(filter).not.toBe(newFilter);
+
+    expect(filter.has('sort-reverse')).toEqual(true);
+    expect(filter.has('sort')).toEqual(false);
+
+    expect(newFilter.has('sort-reverse')).toEqual(false);
+    expect(newFilter.has('sort')).toEqual(true);
   });
 
   test('should keep sort by if order changes to sort-reverse', () => {
     const filter = Filter.fromString('sort=foo');
-    filter.setSortOrder('sort-reverse');
+    const newFilter = filter.setSortOrder('sort-reverse');
 
-    expect(filter.has('sort')).toEqual(false);
-    expect(filter.get('sort-reverse')).toEqual('foo');
+    expect(newFilter.has('sort')).toEqual(false);
+    expect(newFilter.get('sort-reverse')).toEqual('foo');
   });
 
   test('should set sort for unknown orders', () => {
     const filter = Filter.fromString('sort-reverse=foo');
     // @ts-expect-error
-    filter.setSortOrder('foo');
+    const newFilter = filter.setSortOrder('foo');
 
-    expect(filter.has('sort-reverse')).toEqual(false);
-    expect(filter.get('sort')).toEqual('foo');
+    expect(newFilter.has('sort-reverse')).toEqual(false);
+    expect(newFilter.get('sort')).toEqual('foo');
   });
 
   test('should reset filter id', () => {
@@ -1020,35 +1079,46 @@ describe('Filter setSortOrder', () => {
 
     expect(filter.id).toEqual('foo');
 
-    filter.setSortOrder('sort');
-    expect(filter.id).toBeUndefined();
+    const newFilter = filter.setSortOrder('sort');
+    expect(newFilter.id).toBeUndefined();
   });
 });
 
 describe('Filter setSortBy', () => {
   test('should set sort if not order is set', () => {
     const filter = Filter.fromString('');
-    filter.setSortBy('foo');
+    const newFilter = filter.setSortBy('foo');
 
-    expect(filter.get('sort')).toEqual('foo');
+    expect(newFilter.get('sort')).toEqual('foo');
+  });
+
+  test('should not mutate the filter when changing sort by if order is not set', () => {
+    const filter = Filter.fromString('');
+    const newFilter = filter.setSortBy('foo');
+
+    expect(filter).not.toBe(newFilter);
+
+    expect(filter.has('sort')).toEqual(false);
+    expect(filter.has('sort-reverse')).toEqual(false);
+
+    expect(newFilter.has('sort')).toEqual(true);
+    expect(newFilter.get('sort')).toEqual('foo');
   });
 
   test('should change sort by if order is sort', () => {
     const filter = Filter.fromString('sort=bar');
     expect(filter.get('sort')).toEqual('bar');
 
-    filter.setSortBy('foo');
-
-    expect(filter.get('sort')).toEqual('foo');
+    const newFilter = filter.setSortBy('foo');
+    expect(newFilter.get('sort')).toEqual('foo');
   });
 
   test('should change sort by if order is sort-reverse', () => {
     const filter = Filter.fromString('sort-reverse=bar');
     expect(filter.get('sort-reverse')).toEqual('bar');
 
-    filter.setSortBy('foo');
-
-    expect(filter.get('sort-reverse')).toEqual('foo');
+    const newFilter = filter.setSortBy('foo');
+    expect(newFilter.get('sort-reverse')).toEqual('foo');
   });
 
   test('should reset filter id', () => {
@@ -1057,9 +1127,8 @@ describe('Filter setSortBy', () => {
     filter.id = 'foo';
 
     expect(filter.id).toEqual('foo');
-
-    filter.setSortBy('foo');
-    expect(filter.id).toBeUndefined();
+    const newFilter = filter.setSortBy('foo');
+    expect(newFilter.id).toBeUndefined();
   });
 });
 
@@ -1070,6 +1139,20 @@ describe('Filter simple', () => {
 
     expect(filter).not.toBe(simple);
     expect(filter.equals(simple)).toBe(true);
+  });
+
+  test('should not mutate original filter when calling simple', () => {
+    const filter = Filter.fromString('first=1 rows=10 sort=foo foo=bar');
+    const simple = filter.simple();
+
+    expect(filter).not.toBe(simple);
+    expect(filter.has('first')).toEqual(true);
+    expect(filter.has('rows')).toEqual(true);
+    expect(filter.has('sort')).toEqual(true);
+
+    expect(simple.has('first')).toEqual(false);
+    expect(simple.has('rows')).toEqual(false);
+    expect(simple.has('sort')).toEqual(false);
   });
 
   test('should remove first, rows and sort terms', () => {
@@ -1117,9 +1200,7 @@ describe('Filter merge extra keywords', () => {
     filter1.id = 'f1';
     const filter2 = filter1.mergeExtraKeywords();
 
-    expect(filter1).not.toBe(filter2);
-    expect(filter2.get('abc')).toEqual('1');
-    expect(filter2.id).toBeUndefined();
+    expect(filter1).toBe(filter2);
   });
 
   test('should merge extra keywords', () => {
@@ -1243,12 +1324,29 @@ describe('Filter merge extra keywords', () => {
 describe('filter and', () => {
   test('should ignore undefined', () => {
     const filter = Filter.fromString('foo=1');
-    expect(filter.and(undefined).toFilterString()).toEqual('foo=1');
+    const newFilter = filter.and(undefined);
+    expect(newFilter).toBe(filter);
+    expect(newFilter.toFilterString()).toEqual('foo=1');
   });
 
   test('should ignore null', () => {
     const filter = Filter.fromString('foo=1');
-    expect(filter.and(null).toFilterString()).toEqual('foo=1');
+    const newFilter = filter.and(null);
+    expect(newFilter).toBe(filter);
+    expect(newFilter.toFilterString()).toEqual('foo=1');
+  });
+
+  test("should not mutate filter when concatenating with 'and'", () => {
+    const filter1 = Filter.fromString('foo=1');
+    const filter2 = Filter.fromString('bar=2');
+    const filter3 = filter1.and(filter2);
+
+    expect(filter1).not.toBe(filter2);
+    expect(filter3).not.toBe(filter1);
+    expect(filter3).not.toBe(filter2);
+    expect(filter1.toFilterString()).toBe('foo=1');
+    expect(filter2.toFilterString()).toBe('bar=2');
+    expect(filter3.toFilterString()).toBe('foo=1 and bar=2');
   });
 
   test('filters should be concatenated with and', () => {
@@ -1455,12 +1553,16 @@ describe('Filter merge', () => {
     expect(filter2.get('foo')).toEqual('bar');
   });
 
-  test('should merge filter', () => {
+  test('should not mutate filter while merging', () => {
     const filter1 = Filter.fromString('foo=bar');
     const filter2 = Filter.fromString('rows=10 first=1');
     const filter3 = filter1.merge(filter2);
 
-    expect(filter1).toBe(filter3);
+    expect(filter1).not.toBe(filter2);
+    expect(filter3).not.toBe(filter1);
+    expect(filter3).not.toBe(filter2);
+    expect(filter1.toFilterString()).toEqual('foo=bar');
+    expect(filter2.toFilterString()).toEqual('rows=10 first=1');
     expect(filter3.toFilterString()).toEqual('foo=bar rows=10 first=1');
   });
 });

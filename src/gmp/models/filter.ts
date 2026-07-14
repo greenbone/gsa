@@ -199,10 +199,10 @@ class Filter extends EntityModel {
     // special handling of sort. should be put into a more generic solution in
     // future
     if (key === 'sort' && this.has('sort-reverse')) {
-      this.delete('sort-reverse');
+      this._delete('sort-reverse');
     }
     if (key === 'sort-reverse' && this.has('sort')) {
-      this.delete('sort');
+      this._delete('sort');
     }
 
     const {keyword} = term;
@@ -308,6 +308,61 @@ class Filter extends EntityModel {
     // @ts-expect-error
     this.id = undefined;
     return this;
+  }
+
+  /**
+   * Creates a copy of this filter
+   *
+   * The returned copy is only a shallow copy of this filter.
+   * FilterTerms are copied only by reference.
+   *
+   * @return A shallow copy of this filter.
+   */
+  private _copy(): Filter {
+    return new Filter({
+      id: this.id,
+      filter_type: this.filter_type,
+      terms: [...this.getAllTerms()],
+      userCapabilities: this.userCapabilities,
+      userTags: this.userTags,
+    });
+  }
+
+  /**
+   * Creates a new FilterTerm from key, value and relation
+   *
+   * @param keyword   FilterTerm keyword
+   * @param value     FilterTerm value
+   * @param relation  FilterTerm relation (Default: '=').
+   *
+   * @return This filter
+   */
+  private _set(
+    keyword: string,
+    value?: string | number | boolean,
+    relation: string = '=',
+  ) {
+    this._resetFilterId(); // reset id because the filter has changed
+    const converted = convert(keyword, value, relation);
+    this._setTerm(new FilterTerm(converted));
+    return this;
+  }
+
+  /**
+   * Remove all FilterTerms with this key
+   *
+   * @param key Filter term key to remove
+   *
+   * @return True if a FilterTerm with this key has been removed from this Filter.
+   */
+  private _delete(key: string) {
+    const index = this._getIndex(key);
+    const hasKey = index !== -1;
+    if (hasKey) {
+      this.terms.splice(index, 1);
+      this._resetFilterId(); // filter has changed
+    }
+    return hasKey;
   }
 
   /**
@@ -445,25 +500,22 @@ class Filter extends EntityModel {
   }
 
   /**
-   * Creates a new FilterTerm from key, value and relation
-   *
-   * Creates a new FilterTerm from key, value and relation.
+   * Creates a new Filter with passed keyword, value and relation set
    *
    * @param keyword   FilterTerm keyword
    * @param value     FilterTerm value
    * @param relation  FilterTerm relation (Default: '=').
    *
-   * @return This filter
+   * @return A new Filter
    */
   set(
     keyword: string,
     value?: string | number | boolean,
     relation: string = '=',
   ) {
-    this._resetFilterId(); // reset id because the filter has changed
-    const converted = convert(keyword, value, relation);
-    this._setTerm(new FilterTerm(converted));
-    return this;
+    const filter = this._copy();
+    filter._set(keyword, value, relation);
+    return filter;
   }
 
   /**
@@ -485,13 +537,13 @@ class Filter extends EntityModel {
    *
    * @param key Filter term key to remove
    *
-   * @return This filter
+   * @return New filter with the FilterTerm removed or this filter if no FilterTerm with this key exists.
    */
   delete(key: string) {
-    const index = this._getIndex(key);
-    if (index !== -1) {
-      this.terms.splice(index, 1);
-      this._resetFilterId(); // filter has changed
+    if (this.has(key)) {
+      const filter = this._copy();
+      filter._delete(key);
+      return filter;
     }
     return this;
   }
@@ -557,16 +609,14 @@ class Filter extends EntityModel {
    * The returned copy is only a shallow copy of this filter.
    * FilterTerms are copied only by reference.
    *
+   * @deprecated All methods that mutate the filter now return a new filter instead
+   * of mutating the current filter. Therefore this method is no longer needed
+   * and will be removed in a future version.
+   *
    * @return A shallow copy of this filter.
    */
   copy(): Filter {
-    return new Filter({
-      id: this.id,
-      filter_type: this.filter_type,
-      terms: [...this.getAllTerms()],
-      userCapabilities: this.userCapabilities,
-      userTags: this.userTags,
-    });
+    return this._copy();
   }
 
   /**
@@ -575,7 +625,7 @@ class Filter extends EntityModel {
    * @return Copy of this filter but pointing to the next items.
    */
   next(): Filter {
-    const filter = this.copy();
+    const filter = this._copy();
     let first = parseInt(filter.get('first'));
     let rows = parseInt(filter.get('rows'));
 
@@ -589,8 +639,8 @@ class Filter extends EntityModel {
       first = 1;
     }
 
-    filter.set('first', String(first), '=');
-    filter.set('rows', String(rows), '=');
+    filter._set('first', String(first), '=');
+    filter._set('rows', String(rows), '=');
 
     return filter;
   }
@@ -601,7 +651,7 @@ class Filter extends EntityModel {
    * @return Copy of this filter but pointing to the previous items.
    */
   previous(): Filter {
-    const filter = this.copy();
+    const filter = this._copy();
     let first = parseInt(filter.get('first'));
     let rows = parseInt(filter.get('rows'));
 
@@ -619,8 +669,8 @@ class Filter extends EntityModel {
       first = 1;
     }
 
-    filter.set('first', String(first), '=');
-    filter.set('rows', String(rows), '=');
+    filter._set('first', String(first), '=');
+    filter._set('rows', String(rows), '=');
 
     return filter;
   }
@@ -634,11 +684,7 @@ class Filter extends EntityModel {
    * @return Copy of this filter but pointing to the first items.
    */
   first(first: number = 1): Filter {
-    const filter = this.copy();
-
-    filter.set('first', String(first), '=');
-
-    return filter;
+    return this.set('first', String(first), '=');
   }
 
   /**
@@ -649,10 +695,10 @@ class Filter extends EntityModel {
    * @return Copy of this filter but removing the item count (rows) restriction.
    */
   all(): Filter {
-    const filter = this.copy();
+    const filter = this._copy();
 
-    filter.set('first', '1', '=');
-    filter.set('rows', '-1', '=');
+    filter._set('first', '1', '=');
+    filter._set('rows', '-1', '=');
 
     return filter;
   }
@@ -663,11 +709,11 @@ class Filter extends EntityModel {
    * @return Copy of this filter but without first, rows and sort/sort-reverse terms.
    */
   simple(): Filter {
-    const filter = this.copy();
+    const filter = this._copy();
 
-    filter.delete('first');
-    filter.delete('rows');
-    filter.delete(filter.getSortOrder());
+    filter._delete('first');
+    filter._delete('rows');
+    filter._delete(filter.getSortOrder());
 
     return filter;
   }
@@ -677,7 +723,7 @@ class Filter extends EntityModel {
    *
    * @param filter  Filter to be merged with and operation
    *
-   * @return This filter
+   * @return A new filter if filter is defined, otherwise this filter is returned.
    */
   and(filter: Filter | undefined | null): Filter {
     if (!hasValue(filter)) {
@@ -688,12 +734,13 @@ class Filter extends EntityModel {
       term => isDefined(term.keyword) && !EXTRA_KEYWORDS.includes(term.keyword),
     );
 
+    const copy = this._copy();
     if (nonExtraTerms.length > 0) {
-      this._addTerm(AND);
+      copy._addTerm(AND);
     }
-
-    this._resetFilterId(); // filter has changed
-    return this.merge(filter);
+    copy._resetFilterId(); // filter has changed
+    copy._addTerm(...filter.getAllTerms());
+    return copy;
   }
 
   /**
@@ -716,44 +763,44 @@ class Filter extends EntityModel {
   }
 
   /**
-   * Set the current sort order
+   * Create a new filter with the current sort order
    *
    * @param value  New sort order. 'sort' or 'sort-reverse'.
    *
-   * @return This filter.
+   * @return A new filter with the current sort order.
    */
   setSortOrder(value: FilterSortOrder) {
     const sortby = this.getSortBy();
     value = value === SORT_ORDER_DESC ? SORT_ORDER_DESC : SORT_ORDER_ASC;
-    this.set(value, sortby);
-    return this;
+    return this.set(value, sortby);
   }
 
   /**
-   * Set the current sort field
+   * Create a new filter with the current sort field
    *
    * @param value  New sort field
    *
-   * @return This filter.
+   * @return A new filter with the current sort field.
    */
   setSortBy(value: string) {
     const order = this.getSortOrder();
-    this.set(order, value);
-    return this;
+    return this.set(order, value);
   }
 
   /**
-   * Merges all terms from filter into this Filter
+   * Merges all terms from filter into a Filter
    *
    * @param filter Terms from filter to be merged.
    *
-   * @return This filter with merged terms.
+   * @return A new filter with merged terms if the filter has changed.
    */
   merge(filter: Filter | undefined | null) {
-    if (hasValue(filter)) {
-      this._addTerm(...filter.getAllTerms());
+    if (!hasValue(filter)) {
+      return this;
     }
-    return this;
+    const copy = this._copy();
+    copy._addTerm(...filter.getAllTerms());
+    return copy;
   }
 
   /**
@@ -761,33 +808,34 @@ class Filter extends EntityModel {
    *
    * @param filter Terms from filter to be merged.
    *
-   * @return This filter with merged terms.
+   * @return A new filter with merged terms if the filter has changed.
    */
 
   mergeKeywords(filter: Filter | undefined | null) {
-    if (hasValue(filter)) {
-      this._resetFilterId();
-
-      this._mergeNewKeywords(filter);
+    if (!hasValue(filter)) {
+      return this;
     }
-    return this;
+    const copy = this._copy();
+    copy._resetFilterId();
+    copy._mergeNewKeywords(filter);
+    return copy;
   }
 
   /**
-   * Merges additional EXTRA KEYWORD terms from filter into this Filter
-   *
-   * This filter will not be changed. Instead a copy with merged terms will be
-   * created and returned. Only extra keywords not included in this filter will
-   * be merged.
+   * Merges additional EXTRA KEYWORD terms from filter into a Filter
    *
    * @param filter Use extra params terms filter to be merged.
    *
-   * @return A new filter with merged terms.
+   * @return A new filter with merged terms if changed.
    */
   mergeExtraKeywords(filter?: Filter): Filter {
-    const f = this.copy();
-    f._resetFilterId();
-    return f._mergeExtraKeywords(filter);
+    if (!hasValue(filter)) {
+      return this;
+    }
+    const copy = this._copy();
+    copy._resetFilterId();
+    copy._mergeExtraKeywords(filter);
+    return copy;
   }
 
   /**
