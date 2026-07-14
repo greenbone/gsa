@@ -28,9 +28,7 @@ import {
   SEVERITY_RATING_CVSS_2,
   SEVERITY_RATING_CVSS_3,
 } from 'gmp/utils/severity';
-import OverrideDialog, {
-  computeDaysUntil,
-} from 'web/pages/overrides/OverrideDialog';
+import OverrideDialog from 'web/pages/overrides/OverrideDialog';
 
 const createTask = (id: string = 'task-1', name: string = 'Task 1') =>
   new Task({
@@ -50,27 +48,6 @@ const createGmp = ({severityRating = SEVERITY_RATING_CVSS_3} = {}) => ({
   settings: {
     severityRating,
   },
-});
-
-describe('computeDaysUntil', () => {
-  test('should return 1 for tomorrow', () => {
-    const tomorrow = date().add(1, 'day');
-    expect(computeDaysUntil(tomorrow)).toBe(1);
-  });
-
-  test('should return 30 for 30 days from now', () => {
-    const future = date().add(30, 'day');
-    expect(computeDaysUntil(future)).toBe(30);
-  });
-
-  test('should return 1 for today', () => {
-    expect(computeDaysUntil(date())).toBe(1);
-  });
-
-  test('should return 1 for a past date', () => {
-    const past = date().subtract(5, 'day');
-    expect(computeDaysUntil(past)).toBe(1);
-  });
 });
 
 describe('OverrideDialog tests', () => {
@@ -387,7 +364,7 @@ describe('OverrideDialog tests', () => {
     const activeRadios = activeGroup.getRadioInputs();
     expect(activeRadios).toHaveLength(4);
     expect(activeRadios[1]).toBeChecked();
-    expect(activeGroup.getByText('yes, until')).toBeInTheDocument();
+    expect(activeGroup.getAllByText('yes, until')).toHaveLength(2);
 
     const newSeverityGroup = within(screen.getByTestId('group-new-severity'));
     const options = await getSelectItemElementsForSelect(
