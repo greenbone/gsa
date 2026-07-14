@@ -19,9 +19,9 @@ const RELATIONS = ['=', ':', '~', '>', '<'];
  * value or relation after creation. This can lead to unexpected behavior.
  */
 class FilterTerm {
-  keyword?: string;
-  value?: string | number;
-  relation?: string;
+  readonly keyword?: string;
+  readonly value?: string | number;
+  readonly relation?: string;
 
   /**
    * @param keyword  Filter keyword
