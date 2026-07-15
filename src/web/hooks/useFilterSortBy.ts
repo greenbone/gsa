@@ -4,11 +4,11 @@
  */
 
 import {useCallback} from 'react';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
 
-type ChangeFilterFunc = (filter: Filter) => void;
+type ChangeFilterFunc = (filter: FilterType) => void;
 type SortChangeFunc = (field: string) => void;
 
 /**
@@ -19,7 +19,7 @@ type SortChangeFunc = (field: string) => void;
  * @returns Array of the sort by field, sort direction and a function to change the sort by field
  */
 const useFilterSortBy = (
-  filter: Filter,
+  filter: FilterType,
   changeFilter: ChangeFilterFunc,
 ): [string | undefined, SortDirectionType, SortChangeFunc] => {
   const reverseField = isDefined(filter)
