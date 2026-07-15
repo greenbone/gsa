@@ -6,7 +6,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -24,7 +24,7 @@ import {type SortDirectionType} from 'web/utils/sort-direction';
 export interface FooterComponentProps<TEntity> {
   entities?: TEntity[];
   entitiesCounts?: CollectionCounts;
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 export interface HeaderComponentProps {
@@ -89,7 +89,7 @@ export interface EntitiesTableProps<
   emptyTitle?: string;
   entities?: TEntity[];
   entitiesCounts?: CollectionCounts;
-  filter?: Filter;
+  filter?: FilterType;
   footnote?: boolean;
   isUpdating?: boolean;
   links?: boolean;

@@ -7,7 +7,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Gmp from 'gmp/gmp';
-import type Filter from 'gmp/models/filter';
+import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
@@ -25,20 +25,20 @@ import withTranslation from 'web/utils/withTranslation';
 
 interface FilterDialogComponentProps {
   createFilterType?: string;
-  filter?: Filter;
+  filter?: FilterType;
   onClose: () => void;
-  onFilterChanged: (filter: Filter) => void;
+  onFilterChanged: (filter: FilterType) => void;
   onFilterCreated: (filter: Filter) => void;
 }
 
 interface TableComponentProps<TModel extends Model = Model> {
   entities: TModel[];
   entitiesCounts?: CollectionCounts;
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 interface PowerFilterComponentProps {
-  filter?: Filter;
+  filter?: FilterType;
   filters?: Filter[];
   isLoading?: boolean;
   isLoadingFilters?: boolean;
@@ -46,7 +46,7 @@ interface PowerFilterComponentProps {
   onError?: (error: Error) => void;
   onRemoveClick?: () => void;
   onResetClick?: () => void;
-  onUpdate?: (filter: Filter) => void;
+  onUpdate?: (filter: FilterType) => void;
 }
 
 interface SectionComponentProps {
@@ -68,9 +68,9 @@ export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
   entities?: TModel[];
   entitiesCounts?: CollectionCounts;
   entitiesError?: Error;
-  filter?: Filter;
+  filter?: FilterType;
   filterEditDialog: React.ComponentType<FilterDialogComponentProps>;
-  filtersFilter: Filter;
+  filtersFilter: FilterType;
   isLoading?: boolean;
   powerfilter?: React.ComponentType<PowerFilterComponentProps>;
   section?: false | React.ComponentType<SectionComponentProps>;
@@ -81,7 +81,7 @@ export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
   title: string;
   toolBarIcons?: React.ComponentType<TProps> | React.ReactElement<TProps>;
   onError: (error: Error) => void;
-  onFilterChanged: (newFilter: Filter) => void;
+  onFilterChanged: (newFilter: FilterType) => void;
   onFilterCreated: (newFilter: Filter) => void;
   onFilterRemoved: () => void;
   onFilterReset: () => void;
