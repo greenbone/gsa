@@ -525,7 +525,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     name,
     ociImageTargetId,
     registryAllowInsecure,
-    scannerId = NO_VALUE_ID,
+    scannerId,
     scheduleId,
     schedulePeriods,
   }: TaskCommandSaveContainerImageParams) {
@@ -556,7 +556,7 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       comment,
       name,
       oci_image_target_id: ociImageTargetId,
-      scanner_id: scannerId,
+      scanner_id: NO_VALUE_ID,
       scanner_type: CONTAINER_IMAGE_SCANNER_TYPE,
       schedule_id: scheduleId,
       schedule_periods: parseYesNo(schedulePeriods),
