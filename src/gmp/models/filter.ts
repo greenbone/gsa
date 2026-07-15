@@ -29,6 +29,13 @@ export interface FilterModelElement extends ModelElement {
   term?: string;
 }
 
+export interface FilterResponseElement {
+  keywords?: {
+    keyword?: FilterKeyword | FilterKeyword[];
+  };
+  term?: string;
+}
+
 interface FilterModelProperties extends ModelProperties {
   _term?: string;
   alerts?: Model[];
