@@ -58,7 +58,7 @@ export interface FilterType {
   and(filter?: Filter): Filter;
   copy(): Filter;
   delete(key: string): Filter;
-  equals(filter?: Filter): boolean;
+  equals(filter?: FilterType): boolean;
   first(first?: number): Filter;
   forEach(func: FilterForEachFunc): void;
   getAllTerms(): readonly FilterTerm[];
@@ -70,19 +70,19 @@ export interface FilterType {
   has(key: string): boolean;
   hasTerm(term?: FilterTerm): boolean;
   identifier(): string;
-  merge(filter?: Filter): Filter;
-  mergeExtraKeywords(filter?: Filter): Filter;
-  mergeKeywords(filter?: Filter): Filter;
-  next(): Filter;
-  previous(): Filter;
+  merge(filter?: FilterType): FilterType;
+  mergeExtraKeywords(filter?: FilterType): FilterType;
+  mergeKeywords(filter?: FilterType): FilterType;
+  next(): FilterType;
+  previous(): FilterType;
   set(
     keyword: string,
     value?: string | number | boolean,
     relation?: string,
-  ): Filter;
-  setSortBy(value: string): Filter;
-  setSortOrder(value: FilterSortOrder): Filter;
-  simple(): Filter;
+  ): FilterType;
+  setSortBy(value: string): FilterType;
+  setSortOrder(value: FilterSortOrder): FilterType;
+  simple(): FilterType;
   toFilterCriteriaString(): string;
   toFilterExtraString(): string;
   toFilterString(): string;
@@ -293,11 +293,12 @@ class Filter extends EntityModel implements FilterType {
    * @param filter Filter to get extra keywords from
    * @returns Array of FilterTerms with extra keywords from filter that are not included in this filter
    */
-  private _getExtraKeywords(filter: Filter | undefined | null) {
+  private _getExtraKeywords(filter: FilterType | undefined | null) {
     if (!hasValue(filter)) {
       return [];
     }
-    return filter.terms.filter(term => {
+    const terms = filter.getAllTerms();
+    return terms.filter(term => {
       const {keyword: key} = term;
       return (
         isDefined(key) &&
@@ -315,11 +316,12 @@ class Filter extends EntityModel implements FilterType {
    * @param filter Filter to get new keywords from
    * @returns Array of FilterTerms with new keywords from filter that are not included in this filter
    */
-  private _getNewKeywords(filter?: Filter) {
+  private _getNewKeywords(filter?: FilterType) {
     if (!hasValue(filter)) {
       return [];
     }
-    return filter.terms.filter(term => {
+    const terms = filter.getAllTerms();
+    return terms.filter(term => {
       const {keyword: key} = term;
       return isDefined(key) && !this.has(key);
     });
@@ -592,7 +594,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return {bool} Returns true if this filter equals to the other filter
    */
-  equals(filter: Filter | undefined | null): boolean {
+  equals(filter: FilterType | undefined | null): boolean {
     if (!hasValue(filter)) {
       return false;
     }
@@ -884,7 +886,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return New Filter with FilterTerms parsed from filterString.
    */
-  static fromString(filterString?: string, filter?: Filter): Filter {
+  static fromString(filterString?: string, filter?: FilterType): Filter {
     const f = new Filter({
       terms: parseFilterTermsFromString(filterString),
     });
