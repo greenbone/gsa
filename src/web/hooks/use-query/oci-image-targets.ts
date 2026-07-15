@@ -11,7 +11,7 @@ import {
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isFilterType} from 'gmp/models/filter/utils';
 import type OciImageTarget from 'gmp/models/oci-image-target';
 import useGmp from 'web/hooks/useGmp';
@@ -23,7 +23,7 @@ import useGmpMutation from 'web/queries/useGmpMutation';
 import useMoveToTrashCan from 'web/queries/useMoveToTrashCan';
 import useSaveMutation from 'web/queries/useSaveMutation';
 
-type OciImageTargetBulkInput = OciImageTarget[] | Filter;
+type OciImageTargetBulkInput = OciImageTarget[] | FilterType;
 
 interface UseCreateOciImageTargetParams {
   onSuccess?: (data: EntityActionResponse) => void;
@@ -35,7 +35,7 @@ interface UseModifyOciImageTargetParams {
   onError?: (error: Error) => void;
 }
 
-export const useGetOciImageTargets = ({filter}: {filter?: Filter}) => {
+export const useGetOciImageTargets = ({filter}: {filter?: FilterType}) => {
   const gmp = useGmp();
 
   return useGetEntities<OciImageTarget>({

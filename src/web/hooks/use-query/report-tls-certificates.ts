@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';
 
 interface UseGetReportTlsCertificatesParams {
   reportId: string;
-  filter?: Filter;
+  filter?: FilterType;
   refetchInterval?: number | false;
 }
 

@@ -4,7 +4,11 @@
  */
 
 import {useQuery} from '@tanstack/react-query';
-import Filter, {ALL_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {
+  ALL_FILTER,
+  RESULTS_FILTER_FILTER,
+  type FilterType,
+} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
@@ -17,7 +21,7 @@ import useGetEntity from 'web/queries/useGetEntity';
 
 interface UseGetReportParams {
   id: string;
-  filter?: Filter;
+  filter?: FilterType;
   refetchInterval?: number | false | RefetchIntervalFn<Report>;
 }
 

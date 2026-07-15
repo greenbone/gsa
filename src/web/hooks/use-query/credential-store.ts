@@ -7,7 +7,7 @@ import {type CredentialStoreModifyParams} from 'gmp/commands/credential-store';
 import type {EntityActionResponse} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type CredentialStore from 'gmp/models/credential-store';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGmpMutation from 'web/queries/useGmpMutation';
@@ -22,7 +22,7 @@ interface UseVerifyCredentialStoreParams {
   onError?: (error: Error) => void;
 }
 
-export const useGetCredentialStores = ({filter}: {filter?: Filter}) => {
+export const useGetCredentialStores = ({filter}: {filter?: FilterType}) => {
   const gmp = useGmp();
   return useGetEntities<CredentialStore>({
     queryId: 'get_credential_stores',
