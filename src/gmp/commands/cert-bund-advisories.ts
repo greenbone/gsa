@@ -6,7 +6,7 @@
 import InfoEntitiesCommand from 'gmp/commands/info-entities';
 import type Http from 'gmp/http/http';
 import CertBundAdv from 'gmp/models/cert-bund';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -17,7 +17,7 @@ class CertBundAdvisoriesCommand extends InfoEntitiesCommand<CertBundAdv> {
     super(http, 'cert_bund_adv', CertBundAdv, infoFilter);
   }
 
-  getCreatedAggregates({filter}: {filter?: Filter} = {}) {
+  getCreatedAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'cert_bund_adv',
       group_column: 'created',
@@ -25,7 +25,7 @@ class CertBundAdvisoriesCommand extends InfoEntitiesCommand<CertBundAdv> {
     });
   }
 
-  getSeverityAggregates({filter}: {filter?: Filter} = {}) {
+  getSeverityAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'cert_bund_adv',
       group_column: 'severity',

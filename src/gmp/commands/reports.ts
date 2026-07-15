@@ -6,7 +6,7 @@
 import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
-import Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import Report from 'gmp/models/report';
 
 interface ReportsCommandGetParams {
@@ -29,7 +29,7 @@ class ReportsCommand extends EntitiesCommand<Report> {
     return root.get_reports.get_reports_response;
   }
 
-  getSeverityAggregates({filter}: {filter: Filter} = {filter: new Filter()}) {
+  getSeverityAggregates({filter}: {filter?: FilterType}) {
     return this.getAggregates({
       aggregate_type: 'report',
       group_column: 'severity',
@@ -37,9 +37,7 @@ class ReportsCommand extends EntitiesCommand<Report> {
     });
   }
 
-  getHighResultsAggregates(
-    {filter}: {filter: Filter} = {filter: new Filter()},
-  ) {
+  getHighResultsAggregates({filter}: {filter?: FilterType}) {
     return this.getAggregates({
       aggregate_type: 'report',
       group_column: 'date',

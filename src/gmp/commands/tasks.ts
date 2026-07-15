@@ -7,7 +7,7 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import EntitiesCommand from 'gmp/commands/entities';
 import {type HttpCommandOptions} from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import type Filter from 'gmp/models/filter';
+import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import Task, {type TaskElement} from 'gmp/models/task';
 import {parseYesNo, type YesNo} from 'gmp/parser';
@@ -35,11 +35,11 @@ interface GetTasksResponse extends Element {
 }
 
 interface TasksCommandWithFilterParam {
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 interface TasksCommandGetParams {
-  filter?: Filter | string;
+  filter?: FilterType | string;
   schedulesOnly?: boolean;
 }
 
@@ -70,7 +70,7 @@ class TasksCommand extends EntitiesCommand<Task, GetTasksResponse> {
       filter: responseFilter,
       counts,
     } = this.getCollectionListFromRoot(response.data);
-    return response.set<Task[], {filter: Filter; counts: CollectionCounts}>(
+    return response.set<Task[], {filter: FilterType; counts: CollectionCounts}>(
       entities,
       {filter: responseFilter, counts},
     );
