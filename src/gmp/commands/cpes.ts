@@ -6,7 +6,7 @@
 import InfoEntitiesCommand from 'gmp/commands/info-entities';
 import type Http from 'gmp/http/http';
 import Cpe from 'gmp/models/cpe';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -17,7 +17,7 @@ class CpesCommand extends InfoEntitiesCommand<Cpe> {
     super(http, 'cpe', Cpe, infoFilter);
   }
 
-  getCreatedAggregates({filter}: {filter?: Filter} = {}) {
+  getCreatedAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'cpe',
       group_column: 'created',
@@ -25,7 +25,7 @@ class CpesCommand extends InfoEntitiesCommand<Cpe> {
     });
   }
 
-  getSeverityAggregates({filter}: {filter?: Filter} = {}) {
+  getSeverityAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'cpe',
       group_column: 'severity',

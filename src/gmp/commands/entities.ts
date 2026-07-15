@@ -21,8 +21,7 @@ import HttpCommand, {
 import type Http from 'gmp/http/http';
 import {type default as Response, type Meta} from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
-import {filterString} from 'gmp/models/filter/utils';
+import Filter, {ALL_FILTER, type FilterType} from 'gmp/models/filter';
 import {type default as Model, type Element} from 'gmp/models/model';
 import {map, forEach} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -107,7 +106,7 @@ interface TransformedAggregatesResponseData {
 }
 
 export interface EntitiesMeta extends Meta {
-  filter: Filter;
+  filter: FilterType;
   counts: CollectionCounts;
 }
 
@@ -163,7 +162,7 @@ abstract class EntitiesCommand<
     } else if (isString(filter)) {
       params.filter = Filter.fromString(filter).all();
     } else {
-      params.filter = (filter as Filter).all();
+      params.filter = filter.all();
     }
     return this.get(params, options);
   }
@@ -186,13 +185,13 @@ abstract class EntitiesCommand<
     return this.httpRequestWithRejectionTransform('post', {data});
   }
 
-  exportByFilter(filter: Filter) {
+  exportByFilter(filter: FilterType) {
     return this.httpRequestWithRejectionTransform('post', {
       data: this.postParams({
         cmd: 'bulk_export',
         resource_type: this.name,
         bulk_select: BULK_SELECT_BY_FILTER,
-        filter: filterString(filter),
+        filter,
       }),
     });
   }
@@ -221,7 +220,10 @@ abstract class EntitiesCommand<
     return response.setData(ids);
   }
 
-  async deleteByFilter(filter: Filter, extraParams?: HttpCommandPostParams) {
+  async deleteByFilter(
+    filter: FilterType,
+    extraParams?: HttpCommandPostParams,
+  ) {
     // FIXME change gmp to allow deletion by filter
     const response = await this.get({filter});
     const deleted = response.data;

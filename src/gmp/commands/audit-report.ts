@@ -6,7 +6,7 @@
 import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import AuditReport, {type AuditReportElement} from 'gmp/models/audit-report';
-import {type default as Filter, ALL_FILTER} from 'gmp/models/filter';
+import {ALL_FILTER, type FilterType} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
@@ -19,23 +19,23 @@ interface AuditReportCommandDownloadParams {
 interface AuditReportCommandDownloadOptions {
   reportFormatId: string;
   deltaReportId?: string;
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 interface AuditReportCommandAssetsParams {
   id: string;
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 interface AuditReportCommandAlertParams {
   alert_id: string;
   report_id: string;
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 interface AuditReportCommandGetParams {
   id?: string;
-  filter?: Filter | string;
+  filter?: FilterType | string;
   details?: boolean;
   ignorePagination?: boolean;
   lean?: boolean;
@@ -103,7 +103,7 @@ class AuditReportCommand extends EntityCommand<
       details = true,
       ...options
     }: {
-      filter?: Filter | string;
+      filter?: FilterType | string;
       details?: boolean;
       [key: string]: unknown;
     } = {},

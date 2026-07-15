@@ -22,7 +22,7 @@ type GmpMethodParams = HttpCommandInputParams;
 export interface UseGetEntitiesReturn<T> {
   entities: T[];
   entitiesCounts: CollectionCounts;
-  filter?: Filter;
+  filterType?: Filter;
 }
 
 interface UseGetEntitiesParams<

@@ -19,7 +19,7 @@ import type {
   UrlParams as Params,
   UrlParamValue as ParamValue,
 } from 'gmp/http/utils';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {filterString, isFilter} from 'gmp/models/filter/utils';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
@@ -45,7 +45,7 @@ export interface HttpCommandPostParams extends Data {
 
 export interface HttpCommandInputParams {
   cmd?: string;
-  filter?: Filter | string;
+  filter?: FilterType | string;
   [key: string]: unknown;
 }
 

@@ -6,7 +6,7 @@
 import EntityCommand, {type EntityCommandParams} from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import {type Element} from 'gmp/models/model';
 import Tag, {type TagElement} from 'gmp/models/tag';
@@ -16,7 +16,7 @@ import {resourceType, type EntityType} from 'gmp/utils/entity-type';
 interface TagCommandCreateParams {
   active: boolean;
   comment?: string;
-  filter?: Filter | string;
+  filter?: FilterType | string;
   name: string;
   resourceIds?: string[];
   resourceType: EntityType;
