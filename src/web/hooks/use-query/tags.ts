@@ -8,7 +8,7 @@ import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import type Filter from 'gmp/models/filter';
-import {isFilter} from 'gmp/models/filter/utils';
+import {isFilterType} from 'gmp/models/filter/utils';
 import type Tag from 'gmp/models/tag';
 import useGmp from 'web/hooks/useGmp';
 import type {RefetchIntervalFn} from 'web/queries/helpers';
@@ -117,7 +117,7 @@ export const useBulkDeleteTags = ({
   const gmp = useGmp();
   return useGmpMutation<TagBulkInput, Response<Tag[], XmlMeta>, Rejection>({
     gmpMethod: (input: TagBulkInput) => {
-      return isFilter(input)
+      return isFilterType(input)
         ? gmp.tags.deleteByFilter(input)
         : gmp.tags.delete(input);
     },
@@ -134,7 +134,7 @@ export const useBulkExportTags = ({
   const gmp = useGmp();
   return useGmpMutation<TagBulkInput, Response<string>, Rejection>({
     gmpMethod: (input: TagBulkInput) => {
-      return isFilter(input)
+      return isFilterType(input)
         ? gmp.tags.exportByFilter(input)
         : gmp.tags.export(input);
     },

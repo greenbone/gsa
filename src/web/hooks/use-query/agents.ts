@@ -10,7 +10,7 @@ import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type Agent from 'gmp/models/agent';
 import Filter from 'gmp/models/filter';
-import {isFilter} from 'gmp/models/filter/utils';
+import {isFilterType} from 'gmp/models/filter/utils';
 import {parseYesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
@@ -120,7 +120,7 @@ export const useBulkDeleteAgents = ({
   const gmp = useGmp();
   return useGmpMutation<AgentBulkInput, Response<Agent[], XmlMeta>, Rejection>({
     gmpMethod: (input: AgentBulkInput) => {
-      return isFilter(input)
+      return isFilterType(input)
         ? gmp.agents.deleteByFilter(input)
         : gmp.agents.delete(input);
     },
@@ -139,7 +139,7 @@ export const useBulkAuthorizeAgents = ({
   const gmp = useGmp();
   return useGmpMutation<AgentBulkInput, void, Rejection>({
     gmpMethod: (input: AgentBulkInput) => {
-      return isFilter(input)
+      return isFilterType(input)
         ? gmp.agents.authorizeByFilter(input)
         : gmp.agents.authorize(input);
     },
@@ -158,7 +158,7 @@ export const useBulkRevokeAgents = ({
   const gmp = useGmp();
   return useGmpMutation<AgentBulkInput, void, Rejection>({
     gmpMethod: (input: AgentBulkInput) => {
-      return isFilter(input)
+      return isFilterType(input)
         ? gmp.agents.revokeByFilter(input)
         : gmp.agents.revoke(input);
     },
@@ -192,7 +192,7 @@ export const useBulkEnableUpdateToLatestAgents = ({
   const gmp = useGmp();
   return useGmpMutation<AgentBulkInput, void, Rejection>({
     gmpMethod: (input: AgentBulkInput) => {
-      return isFilter(input)
+      return isFilterType(input)
         ? gmp.agents.enableUpdateToLatestByFilter(input)
         : gmp.agents.enableUpdateToLatest(input);
     },
@@ -213,7 +213,7 @@ export const useBulkDisableUpdateToLatestAgents = ({
   const gmp = useGmp();
   return useGmpMutation<AgentBulkInput, void, Rejection>({
     gmpMethod: (input: AgentBulkInput) => {
-      return isFilter(input)
+      return isFilterType(input)
         ? gmp.agents.disableUpdateToLatestByFilter(input)
         : gmp.agents.disableUpdateToLatest(input);
     },
