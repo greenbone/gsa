@@ -6,11 +6,11 @@
 import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 
-export const isFilter = (filter?: unknown): filter is FilterType =>
+export const isFilterType = (filter?: unknown): filter is FilterType =>
   isDefined((filter as FilterType)?.toFilterString);
 
 export const filterString = (filter?: FilterType | number | string) =>
-  isFilter(filter)
+  isFilterType(filter)
     ? filter.toFilterString()
     : isDefined(filter)
       ? String(filter)

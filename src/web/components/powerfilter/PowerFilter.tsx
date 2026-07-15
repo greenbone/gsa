@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import type Capabilities from 'gmp/capabilities/capabilities';
 import type Gmp from 'gmp/gmp';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
-import {isFilter} from 'gmp/models/filter/utils';
+import {isFilterType} from 'gmp/models/filter/utils';
 import {KeyEvent} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
 import Select from 'web/components/form/Select';
@@ -61,7 +61,7 @@ const PowerFilterTextField = styled(TextField<string>)`
 `;
 
 const getUserFilterString = (filter?: Filter | string) => {
-  if (isFilter(filter)) {
+  if (isFilterType(filter)) {
     return filter.toFilterCriteriaString();
   }
   if (isString(filter)) {

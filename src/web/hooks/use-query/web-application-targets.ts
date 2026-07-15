@@ -12,7 +12,7 @@ import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type Filter from 'gmp/models/filter';
-import {isFilter} from 'gmp/models/filter/utils';
+import {isFilterType} from 'gmp/models/filter/utils';
 import type WebApplicationTarget from 'gmp/models/web-application-target';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -125,7 +125,7 @@ export const useBulkDeleteWebApplicationTargets = ({
     Rejection
   >({
     gmpMethod: (input: WebApplicationTargetBulkInput) => {
-      return isFilter(input)
+      return isFilterType(input)
         ? gmp.webapplicationtargets.deleteByFilter(input)
         : gmp.webapplicationtargets.delete(input);
     },
@@ -147,7 +147,7 @@ export const useBulkExportWebApplicationTargets = ({
     Rejection
   >({
     gmpMethod: (input: WebApplicationTargetBulkInput) => {
-      return isFilter(input)
+      return isFilterType(input)
         ? gmp.webapplicationtargets.exportByFilter(input)
         : gmp.webapplicationtargets.export(input);
     },
