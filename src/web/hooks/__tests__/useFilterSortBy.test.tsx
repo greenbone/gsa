@@ -6,12 +6,12 @@
 import {useState} from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 
 const TestComponent = ({filter: initialFilter, changeFilter}) => {
   const [filter, setFilter] = useState(initialFilter);
-  const handleChangeFilter = (newFilter: Filter) => {
+  const handleChangeFilter = (newFilter: FilterType) => {
     setFilter(newFilter);
     changeFilter(newFilter);
   };
