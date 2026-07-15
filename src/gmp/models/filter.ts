@@ -53,6 +53,7 @@ type FilterForEachFunc = (
 
 export interface FilterType {
   id?: string;
+  length: number;
   all(): Filter;
   and(filter?: Filter): Filter;
   copy(): Filter;
