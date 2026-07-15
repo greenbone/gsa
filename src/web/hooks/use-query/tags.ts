@@ -7,7 +7,7 @@ import {type EntityActionResponse} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isFilterType} from 'gmp/models/filter/utils';
 import type Tag from 'gmp/models/tag';
 import useGmp from 'web/hooks/useGmp';
@@ -26,7 +26,7 @@ interface UseGetTagParams {
 }
 
 interface UseGetTagsParams {
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 interface UseMutationCallbacks {
@@ -44,7 +44,7 @@ interface UseModifyTagParams {
   onError?: (error: Error) => void;
 }
 
-type TagBulkInput = Tag[] | Filter;
+type TagBulkInput = Tag[] | FilterType;
 
 export const useGetTags = ({filter}: UseGetTagsParams) => {
   const gmp = useGmp();

@@ -11,7 +11,7 @@ import {
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isFilterType} from 'gmp/models/filter/utils';
 import type WebApplicationTarget from 'gmp/models/web-application-target';
 import useGmp from 'web/hooks/useGmp';
@@ -23,7 +23,7 @@ import useGmpMutation from 'web/queries/useGmpMutation';
 import useMoveToTrashCan from 'web/queries/useMoveToTrashCan';
 import useSaveMutation from 'web/queries/useSaveMutation';
 
-type WebApplicationTargetBulkInput = WebApplicationTarget[] | Filter;
+type WebApplicationTargetBulkInput = WebApplicationTarget[] | FilterType;
 
 interface UseCreateWebApplicationTargetParams {
   onSuccess?: (data: EntityActionResponse) => void;
@@ -35,7 +35,11 @@ interface UseModifyWebApplicationTargetParams {
   onError?: (error: Error) => void;
 }
 
-export const useGetWebApplicationTargets = ({filter}: {filter?: Filter}) => {
+export const useGetWebApplicationTargets = ({
+  filter,
+}: {
+  filter?: FilterType;
+}) => {
   const gmp = useGmp();
 
   return useGetEntities<WebApplicationTarget>({

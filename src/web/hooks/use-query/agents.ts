@@ -9,7 +9,7 @@ import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type Agent from 'gmp/models/agent';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import {isFilterType} from 'gmp/models/filter/utils';
 import {parseYesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -21,7 +21,7 @@ import useGmpMutation from 'web/queries/useGmpMutation';
 import useSaveMutation from 'web/queries/useSaveMutation';
 
 interface UseGetAgentsParams {
-  filter?: Filter;
+  filter?: FilterType;
   scannerId?: string;
   authorized?: boolean;
   enabled?: boolean;
@@ -32,7 +32,7 @@ interface UseModifyAgentParams {
   onError?: (error: Rejection) => void;
 }
 
-type AgentBulkInput = Agent[] | Filter;
+type AgentBulkInput = Agent[] | FilterType;
 
 interface UseDownloadAgentSupportBundleParams {
   onSuccess?: (response: Response<ArrayBuffer>) => void;
