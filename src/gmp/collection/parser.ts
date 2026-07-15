@@ -39,7 +39,7 @@ interface ParseCollectionListOptions<TModel extends Model, TElement = Element> {
     name: string,
     pluralName?: string,
   ) => CollectionCounts;
-  filterParseFunc?: (element: FilterElement) => Filter;
+  filterParseFunc?: (element: FilterElement) => FilterType;
 }
 
 export interface InfoElement {
@@ -153,7 +153,7 @@ export function parseInfoCounts(response: InfoWithCounts) {
   return new CollectionCounts(counts);
 }
 
-export function parseFilter(element: FilterElement): Filter {
+export function parseFilter(element: FilterElement): FilterType {
   return Filter.fromElement(element.filters);
 }
 
