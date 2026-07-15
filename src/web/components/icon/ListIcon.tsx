@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {ListSvgIcon} from 'web/components/icon';
 import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import Link from 'web/components/link/Link';
@@ -13,7 +13,7 @@ interface ListIconProps<
 > extends ExtendedDynamicIconProps<TValue> {
   'data-testid'?: string;
   page?: string;
-  filter?: string | Filter;
+  filter?: FilterType | string;
 }
 
 const ListIcon = <TValue = string,>({
