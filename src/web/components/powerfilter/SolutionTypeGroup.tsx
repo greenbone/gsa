@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
@@ -18,8 +18,8 @@ import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface SolutionTypesFilterGroupProps {
-  filter: Filter;
-  onChange: (filter: Filter) => void;
+  filter: FilterType;
+  onChange: (filter: FilterType) => void;
 }
 
 const StyledLayout = styled(Layout)`

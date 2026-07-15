@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {parseYesNo, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 
 interface BooleanFilterGroupProps {
-  filter?: Filter;
+  filter?: FilterType;
   name: string;
   title?: string;
   onChange?: (value: YesNo, name: string) => void;

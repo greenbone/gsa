@@ -6,13 +6,13 @@
 /* this is experimental. trying to consolidate all filter terms whose
  * method should be ~'value' into one. */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 
 interface FilterSearchGroupProps {
-  filter?: Filter;
+  filter?: FilterType;
   name: string;
   title?: string;
   onChange?: (value: string, name: string) => void;
