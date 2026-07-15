@@ -44,6 +44,42 @@ type FilterForEachFunc = (
   array: FilterTerm[],
 ) => void;
 
+export interface FilterType {
+  id?: string;
+  all(): Filter;
+  and(filter?: Filter): Filter;
+  copy(): Filter;
+  delete(key: string): Filter;
+  equals(filter?: Filter): boolean;
+  first(first?: number): Filter;
+  forEach(func: FilterForEachFunc): void;
+  getAllTerms(): readonly FilterTerm[];
+  get(key: string, def?: string): string | number | undefined;
+  getSortBy(): string | undefined;
+  getSortOrder(): FilterSortOrder;
+  getTerm(key?: string): FilterTerm | undefined;
+  getTerms(key?: string): FilterTerm[];
+  has(key: string): boolean;
+  hasTerm(term?: FilterTerm): boolean;
+  identifier(): string;
+  merge(filter?: Filter): Filter;
+  mergeExtraKeywords(filter?: Filter): Filter;
+  mergeKeywords(filter?: Filter): Filter;
+  next(): Filter;
+  previous(): Filter;
+  set(
+    keyword: string,
+    value?: string | number | boolean,
+    relation?: string,
+  ): Filter;
+  setSortBy(value: string): Filter;
+  setSortOrder(value: FilterSortOrder): Filter;
+  simple(): Filter;
+  toFilterCriteriaString(): string;
+  toFilterExtraString(): string;
+  toFilterString(): string;
+}
+
 export const UNKNOWN_FILTER_ID = '0';
 const SORT_ORDER_ASC = 'sort';
 const SORT_ORDER_DESC = 'sort-reverse';
@@ -94,7 +130,7 @@ const parseFilterTermsFromString = (
 /**
  * Represents a filter
  */
-class Filter extends EntityModel {
+class Filter extends EntityModel implements FilterType {
   static readonly entityType = 'filter';
 
   readonly alerts: Model[];
