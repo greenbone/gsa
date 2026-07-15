@@ -76,7 +76,7 @@ describe('NotesCommand tests', () => {
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
-        active: '1',
+        active: 15,
         cmd: 'create_note',
         hosts: 'host1,host2',
         oid: 'oid',

@@ -9,6 +9,7 @@ import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import Note, {type NoteElement} from 'gmp/models/note';
 import {
   type Active,
+  ACTIVE_YES_FOR_NEXT_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
   ANY,
   type AnyOrManual,
@@ -78,7 +79,11 @@ class NoteCommand extends EntityCommand<Note, NoteElement> {
       cmd,
       oid,
       id,
-      active: active === ACTIVE_YES_UNTIL_VALUE ? days : active,
+      active:
+        active === ACTIVE_YES_UNTIL_VALUE ||
+        active === ACTIVE_YES_FOR_NEXT_VALUE
+          ? days
+          : active,
       hosts: hosts === MANUAL ? hostsManual : undefined,
       result_id: resultId === MANUAL ? resultUuid : undefined,
       task_id: taskId === MANUAL ? taskUuid : undefined,
