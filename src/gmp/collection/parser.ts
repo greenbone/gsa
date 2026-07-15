@@ -55,7 +55,7 @@ interface ResultsElement {
 }
 
 interface FilterElement {
-  filters?: FilterModelElement;
+  filters?: FilterResponseElement;
 }
 
 interface ElementStart {
