@@ -4,7 +4,7 @@
  */
 
 import {useCallback} from 'react';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import Checkbox from 'web/components/form/Checkbox';
@@ -15,7 +15,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface SeverityLevelsFilterGroupProps {
-  filter: Filter;
+  filter: FilterType;
   onChange: (value: string, field: string) => void;
   onRemove: () => void;
 }

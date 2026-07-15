@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {TICKET_STATUS, type TicketStatus} from 'gmp/models/ticket';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
@@ -12,7 +12,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface TicketStatusFilterGroupProps {
   status?: TicketStatus;
-  filter?: Filter;
+  filter?: FilterType;
   name?: string;
   onChange: (value: TicketStatus, name: string) => void;
 }
