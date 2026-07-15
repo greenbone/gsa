@@ -7,6 +7,7 @@ import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import Override, {
+  ACTIVE_YES_FOR_NEXT_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
   ANY,
   DEFAULT_DAYS,
@@ -88,7 +89,11 @@ class OverrideCommand extends EntityCommand<Override, OverrideElement> {
       cmd,
       oid,
       id,
-      active: active === ACTIVE_YES_UNTIL_VALUE ? days : active,
+      active:
+        active === ACTIVE_YES_UNTIL_VALUE ||
+        active === ACTIVE_YES_FOR_NEXT_VALUE
+          ? days
+          : active,
       new_severity: customSeverity ? newSeverity : newSeverityFromList,
       hosts: hosts === MANUAL ? hostsManual : undefined,
       result_id: resultId === MANUAL ? resultUuid : undefined,
