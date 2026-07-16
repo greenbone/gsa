@@ -14,9 +14,7 @@ import useGetEntities, {
 interface UseGetResultsParams {
   filter?: FilterType;
   refetchInterval?:
-    | number
-    | false
-    | RefetchIntervalFn<UseGetEntitiesReturn<Result>>;
+    number | false | RefetchIntervalFn<UseGetEntitiesReturn<Result>>;
 }
 
 /**

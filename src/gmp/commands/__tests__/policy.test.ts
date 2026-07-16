@@ -20,8 +20,7 @@ import {
 import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
 
 type ScanConfigTrend =
-  | typeof SCANCONFIG_TREND_DYNAMIC
-  | typeof SCANCONFIG_TREND_STATIC;
+  typeof SCANCONFIG_TREND_DYNAMIC | typeof SCANCONFIG_TREND_STATIC;
 
 describe('PolicyCommand tests', () => {
   test('should create new policy', async () => {

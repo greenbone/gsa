@@ -344,8 +344,7 @@ const mapStateToProps = (
 
   const filterSelector = selector(state);
   const filters = filterSelector.getAllEntities(filtersFilter) as
-    | Filter[]
-    | undefined;
+    Filter[] | undefined;
 
   return {
     filters: hasValue(filters) ? filters : [],
