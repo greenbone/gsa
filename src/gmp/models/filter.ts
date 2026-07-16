@@ -112,12 +112,12 @@ export interface FilterType {
   id?: string;
   length: number;
   name?: string;
-  all(): Filter;
-  and(filter?: Filter): Filter;
-  copy(): Filter;
-  delete(key: string): Filter;
+  all(): FilterType;
+  and(filter?: FilterType): FilterType;
+  copy(): FilterType;
+  delete(key: string): FilterType;
   equals(filter?: FilterType): boolean;
-  first(first?: number): Filter;
+  first(first?: number): FilterType;
   forEach(func: FilterForEachFunc): void;
   getAllTerms(): readonly FilterTerm[];
   get(key: string, def?: string | number): string | number | undefined;
@@ -717,7 +717,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return A shallow copy of this filter.
    */
-  copy(): Filter {
+  copy() {
     return this._copy();
   }
 
@@ -726,7 +726,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return Copy of this filter but pointing to the next items.
    */
-  next(): Filter {
+  next() {
     const filter = this._copy();
     let first = parseInt(filter.get('first'));
     let rows = parseInt(filter.get('rows'));
@@ -752,7 +752,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return Copy of this filter but pointing to the previous items.
    */
-  previous(): Filter {
+  previous() {
     const filter = this._copy();
     let first = parseInt(filter.get('first'));
     let rows = parseInt(filter.get('rows'));
@@ -785,7 +785,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return Copy of this filter but pointing to the first items.
    */
-  first(first: number = 1): Filter {
+  first(first: number = 1) {
     return this.set('first', String(first), '=');
   }
 
@@ -796,7 +796,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return Copy of this filter but removing the item count (rows) restriction.
    */
-  all(): Filter {
+  all() {
     const filter = this._copy();
 
     filter._set('first', '1', '=');
@@ -810,7 +810,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return Copy of this filter but without first, rows and sort/sort-reverse terms.
    */
-  simple(): Filter {
+  simple() {
     const filter = this._copy();
 
     filter._delete('first');
@@ -827,7 +827,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return A new filter if filter is defined, otherwise this filter is returned.
    */
-  and(filter: Filter | undefined | null): Filter {
+  and(filter: FilterType | undefined | null) {
     if (!hasValue(filter)) {
       return this;
     }
@@ -896,7 +896,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return A new filter with merged terms if the filter has changed.
    */
-  merge(filter?: Filter) {
+  merge(filter?: FilterType) {
     if (!hasValue(filter) || filter.length === 0) {
       return this;
     }
@@ -914,7 +914,7 @@ class Filter extends EntityModel implements FilterType {
    * @return A new filter with merged terms if the filter has changed.
    */
 
-  mergeKeywords(filter?: Filter) {
+  mergeKeywords(filter?: FilterType) {
     if (!hasValue(filter)) {
       return this;
     }
@@ -935,7 +935,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @return A new filter with merged terms if changed.
    */
-  mergeExtraKeywords(filter?: Filter): Filter {
+  mergeExtraKeywords(filter?: FilterType) {
     if (!hasValue(filter)) {
       return this;
     }
@@ -976,7 +976,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @returns The new Filter
    */
-  static fromTerm(...term: FilterTerm[]): Filter {
+  static fromTerm(...term: FilterTerm[]) {
     return new Filter({
       terms: term,
     });
