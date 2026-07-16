@@ -24,7 +24,7 @@ import {
   type ScanConfigFamily,
   type ScanConfigTrend,
 } from 'gmp/models/scan-config';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import DialogInlineNotification from 'web/components/dialog/DialogInlineNotification';
 import SaveDialog from 'web/components/dialog/SaveDialog';
@@ -65,6 +65,11 @@ export type ScanConfigEditDialogData = ScanConfigEditDialogDefaultValues &
   ScanConfigEditDialogValues &
   Required<SyncData>;
 
+interface FamilySelectionUpdate {
+  familyName: string;
+  select: YesNo;
+}
+
 interface ScanConfigEditDialogProps {
   comment?: string;
   configId: string;
@@ -75,6 +80,7 @@ interface ScanConfigEditDialogProps {
   editNvtFamiliesTitle: string;
   error?: string;
   families?: ScanConfigFamily[];
+  familySelectionUpdate?: FamilySelectionUpdate;
   isLoadingConfig?: boolean;
   isLoadingFamilies?: boolean;
   isLoadingScanners?: boolean;
@@ -107,7 +113,8 @@ const createTrendAndSelect = (
       trend[name] = configFamily.trend as ScanConfigTrend;
       select[name] =
         isDefined(configFamily.nvts?.count) &&
-        configFamily.nvts.count === family.nvts?.max
+        isDefined(configFamily.nvts?.max) &&
+        configFamily.nvts.count === configFamily.nvts.max
           ? YES_VALUE
           : NO_VALUE;
     } else {
@@ -218,6 +225,7 @@ const ScanConfigEditDialog = ({
   editNvtFamiliesTitle,
   error,
   families,
+  familySelectionUpdate,
   isLoadingConfig = true,
   isLoadingFamilies = true,
   isLoadingScanners = true,
@@ -267,6 +275,25 @@ const ScanConfigEditDialog = ({
   useEffect(() => {
     setFilteredNvtPreferences(nvtPreferences ?? []);
   }, [nvtPreferences]);
+
+  // After a family's NVTs are edited and saved in the sub-dialog, sync the
+  // family-level "select all" checkbox for that family so it reflects the
+  // sub-dialog's selection. This keeps the parent value from overriding the
+  // sub-dialog's changes when the whole config is saved. Only the edited family
+  // is touched, so unsaved manual toggles for other families are preserved.
+  useEffect(() => {
+    if (!isDefined(familySelectionUpdate)) {
+      return;
+    }
+
+    const {familyName, select} = familySelectionUpdate;
+
+    setSelectValues(currentSelect =>
+      isDefined(currentSelect)
+        ? {...currentSelect, [familyName]: select}
+        : currentSelect,
+    );
+  }, [familySelectionUpdate]);
 
   // trend and select are created only once and only after the whole config is loaded
   if (!isDefined(trendValues) && !isDefined(selectValues) && !isLoadingConfig) {
