@@ -62,7 +62,7 @@ export interface FilterType {
   first(first?: number): Filter;
   forEach(func: FilterForEachFunc): void;
   getAllTerms(): readonly FilterTerm[];
-  get(key: string, def?: string): string | number | undefined;
+  get(key: string, def?: string | number): string | number | undefined;
   getSortBy(): string | undefined;
   getSortOrder(): FilterSortOrder;
   getTerm(key?: string): FilterTerm | undefined;
