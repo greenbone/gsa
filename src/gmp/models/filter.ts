@@ -1010,6 +1010,7 @@ export const REPORT_FORMATS_FILTER_FILTER =
   Filter.fromString('type=report_format');
 export const REPORTS_FILTER_FILTER = Filter.fromString('type=report');
 export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
+export const RESULTS_FILTER_ALL_FILTER = Filter.fromString('type=result rows=-1');
 export const ROLES_FILTER_FILTER = Filter.fromString('type=role');
 export const SCANCONFIGS_FILTER_FILTER = Filter.fromString('type=config');
 export const SCANNERS_FILTER_FILTER = Filter.fromString('type=scanner');
