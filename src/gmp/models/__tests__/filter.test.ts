@@ -430,6 +430,14 @@ describe('Filter fromResponseElement', () => {
     const filter3 = Filter.fromResponseElement({_id: UNKNOWN_FILTER_ID});
     expect(filter3.id).toBeUndefined();
   });
+
+  test('should parse name', () => {
+    const filter1 = Filter.fromResponseElement();
+    expect(filter1.name).toBeUndefined();
+
+    const filter2 = Filter.fromResponseElement({name: 'Test Filter'});
+    expect(filter2.name).toBe('Test Filter');
+  });
 });
 
 describe('Filter set', () => {
