@@ -86,6 +86,7 @@ export interface FilterModelElement extends ModelElement {
  */
 export interface FilterResponseElement {
   _id?: string;
+  name?: string;
   keywords?: {
     keyword?: FilterKeyword | FilterKeyword[];
   };
@@ -110,6 +111,7 @@ type FilterForEachFunc = (
 export interface FilterType {
   id?: string;
   length: number;
+  name?: string;
   all(): Filter;
   and(filter?: Filter): Filter;
   copy(): Filter;
@@ -284,6 +286,8 @@ class Filter extends EntityModel implements FilterType {
         ? element._id
         : undefined;
 
+    const name = !isEmpty(element.name) ? element.name : undefined;
+
     let terms: FilterTerm[] = [];
     if (isDefined(element.keywords)) {
       terms = map(
@@ -295,7 +299,7 @@ class Filter extends EntityModel implements FilterType {
       terms = parseFilterTermsFromString(element.term);
     }
 
-    return new Filter({id, terms});
+    return new Filter({id, name, terms});
   }
 
   /**
