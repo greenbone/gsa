@@ -6,7 +6,6 @@
 import {useQuery} from '@tanstack/react-query';
 import Filter, {
   ALL_FILTER,
-  RESULTS_FILTER_FILTER,
   RESULTS_FILTER_ALL_FILTER,
   type FilterType,
 } from 'gmp/models/filter';
