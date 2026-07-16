@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import DonutChart from 'web/components/chart/Donut';
 import DataDisplay, {
@@ -24,8 +24,8 @@ interface SeverityClassDisplayProps extends DataDisplayProps<
   SeverityClassData,
   TransformSeverityDataProps
 > {
-  filter?: Filter;
-  onFilterChanged?: (filter: Filter) => void;
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
 }
 
 interface SeverityClassDisplayState {
@@ -56,7 +56,7 @@ const SeverityClassDisplay = ({
       return;
     }
 
-    let severityFilter: Filter;
+    let severityFilter: FilterType;
     const [startTerm, endTerm] = filterValueToFilterTerms(filterValue);
     if (!isDefined(startTerm)) {
       return;
