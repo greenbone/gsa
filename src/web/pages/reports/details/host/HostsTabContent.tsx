@@ -4,7 +4,7 @@
  */
 
 import {useState} from 'react';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type ReportHost from 'gmp/models/report/host';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
@@ -21,7 +21,7 @@ export interface HostsTabContentProps {
   isAgentScanning?: boolean;
   isContainerScanning: boolean;
   isWebApplicationScanning?: boolean;
-  reportFilter: Filter;
+  reportFilter: FilterType;
   hostsData?: UseGetEntitiesReturn<ReportHost>;
   isHostsFetching?: boolean;
   isHostsError?: boolean;

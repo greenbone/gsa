@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {CircleXDeleteIcon, EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
@@ -15,7 +15,7 @@ import ReportPanel from 'web/pages/reports/details/ReportPanel';
 
 interface EmptyResultsReportProps {
   all: number;
-  filter?: Filter;
+  filter?: FilterType;
   onFilterAddLogLevelClick?: () => void;
   onFilterEditClick?: () => void;
   onFilterDecreaseMinQoDClick?: () => void;

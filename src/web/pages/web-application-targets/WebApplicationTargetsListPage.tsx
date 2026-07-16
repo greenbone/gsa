@@ -6,7 +6,11 @@
 import {useCallback, useMemo, useRef, useState} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import {type default as Filter, TARGETS_FILTER_FILTER} from 'gmp/models/filter';
+import {
+  type default as Filter,
+  type FilterType,
+  TARGETS_FILTER_FILTER,
+} from 'gmp/models/filter';
 import type WebApplicationTarget from 'gmp/models/web-application-target';
 import {getEntityType, pluralizeType} from 'gmp/utils/entity-type';
 import Download from 'web/components/form/Download';
@@ -180,7 +184,7 @@ const WebApplicationTargetsListPage = () => {
   ]);
 
   const handleFilterChanged = useCallback(
-    (newFilter?: Filter) => {
+    (newFilter?: FilterType) => {
       changeFilter(newFilter);
     },
     [changeFilter],

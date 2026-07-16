@@ -9,7 +9,7 @@ import {
   type Date as GmpDate,
   duration as createDuration,
 } from 'gmp/models/date';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type AuditReportReport from 'gmp/models/report/audit-report';
 import type ReportReport from 'gmp/models/report/report';
 import {TASK_STATUS} from 'gmp/models/task';
@@ -30,7 +30,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface SummaryProps {
   audit?: boolean;
-  filter?: Filter;
+  filter?: FilterType;
   isUpdating?: boolean;
   links?: boolean;
   report: ReportReport | AuditReportReport;

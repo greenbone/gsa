@@ -10,6 +10,7 @@ import type Gmp from 'gmp/gmp';
 import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
+  type FilterType,
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
@@ -78,8 +79,8 @@ const DEFAULT_FILTER = Filter.fromString(
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
 
 const getFilter = (
-  entity: {report?: {filter?: Filter}} | undefined = {},
-): Filter | undefined => {
+  entity: {report?: {filter?: FilterType}} | undefined = {},
+): FilterType | undefined => {
   const {report = {}} = entity;
   return report.filter;
 };
@@ -118,7 +119,7 @@ const useReportDispatch = (gmp: Gmp, params: UseReportStateParams) => {
       saveReportComposerDefaults: reportComposerDefaults =>
         // @ts-expect-error
         dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
-      updateFilter: (f: Filter) => {
+      updateFilter: (f: FilterType) => {
         return dispatch(
           setPageFilter(getReportPageName(params.id as string), f),
         );
@@ -183,7 +184,7 @@ const useReportState = (params: UseReportStateParams) => {
 
 const loadFilteredReport =
   ({reportId, deltaReportId, loadReport, loadReportIfNeeded, reportFilter}) =>
-  (filter: Filter) => {
+  (filter: FilterType) => {
     if (!hasValue(filter)) {
       // use loaded filter after initial loading
       filter = reportFilter;
@@ -289,7 +290,7 @@ const DeltaReportDetails = () => {
 
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const [lastFilter, setLastFilter] = useState<Filter | undefined>();
+  const [lastFilter, setLastFilter] = useState<FilterType>();
 
   const [storeAsDefault] = useState(false);
 
@@ -298,7 +299,7 @@ const DeltaReportDetails = () => {
   const [initialLoaded, setInitialLoaded] = useState(false);
 
   const reload = useCallback(
-    (filter: Filter) => reloadFunc(filter),
+    (filter: FilterType) => reloadFunc(filter),
     [reloadFunc],
   );
 
@@ -336,7 +337,7 @@ const DeltaReportDetails = () => {
 
   // Load function
 
-  const load = async (filter?: Filter) => {
+  const load = async (filter?: FilterType) => {
     log.debug('Loading delta report', {filter});
     setIsUpdating(isDefined(lastFilter) && !lastFilter?.equals?.(filter));
     setLastFilter(filter);

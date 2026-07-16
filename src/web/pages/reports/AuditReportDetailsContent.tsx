@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import type AuditReport from 'gmp/models/audit-report';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
@@ -51,18 +51,18 @@ interface AuditReportDetailsContentProps {
   isLoading?: boolean;
   isLoadingFilters?: boolean;
   isUpdating?: boolean;
-  pageFilter?: Filter;
+  pageFilter?: FilterType;
   reportError?: Error;
-  reportFilter?: Filter;
+  reportFilter?: FilterType;
   reportId: string;
-  resetFilter?: Filter;
+  resetFilter?: FilterType;
   showError: (error: Error) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
   task?: ReportTask;
   onAddToAssetsClick: () => void;
   onError: (error: Error) => void;
-  onFilterChanged: (filter: Filter) => void;
+  onFilterChanged: (filter: FilterType) => void;
   onFilterCreated: (filter: Filter) => void;
   onFilterDecreaseMinQoDClick: () => void;
   onFilterEditClick: () => void;
@@ -86,8 +86,8 @@ const renderWithThreshold = (
     showThresholdMessage: boolean;
     isUpdating: boolean;
     threshold: number;
-    reportFilter: Filter;
-    onFilterChanged: (filter: Filter) => void;
+    reportFilter: FilterType;
+    onFilterChanged: (filter: FilterType) => void;
     onFilterEditClick: () => void;
   },
   content: React.ReactNode,
@@ -99,6 +99,7 @@ const renderWithThreshold = (
     return (
       <AuditThresholdPanel
         entityType={entityType}
+        // @ts-expect-error
         filter={config.reportFilter}
         isUpdating={config.isUpdating}
         threshold={config.threshold}

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type AuditReportReport from 'gmp/models/report/audit-report';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
@@ -30,7 +30,7 @@ import AlertActions from 'web/pages/reports/details/AlertActions';
 interface ReportDetailsToolBarIconsProps {
   audit?: boolean;
   delta?: boolean;
-  filter?: Filter;
+  filter?: FilterType;
   isLoading?: boolean;
   report?: ReportReport | AuditReportReport;
   reportId: string;

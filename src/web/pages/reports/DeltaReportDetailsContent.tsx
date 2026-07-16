@@ -6,7 +6,7 @@
 import styled from 'styled-components';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import type AuditReport from 'gmp/models/audit-report';
-import type Filter from 'gmp/models/filter';
+import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import {
   type default as AuditReportReport,
@@ -46,7 +46,7 @@ interface DeltaReportDetailsContentProps {
   audit?: boolean;
   entity?: Report | AuditReport;
   entityError?: Error;
-  filter?: Filter;
+  filter?: FilterType;
   filters?: Filter[];
   isLoading?: boolean;
   isUpdating?: boolean;
@@ -60,7 +60,7 @@ interface DeltaReportDetailsContentProps {
   onAddToAssetsClick?: () => void;
   onError?: (error: Error) => void;
   onFilterAddLogLevelClick?: () => void;
-  onFilterChanged?: (filter: Filter) => void;
+  onFilterChanged?: (filter: FilterType) => void;
   onFilterCreated?: (filter: Filter) => void;
   onFilterDecreaseMinQoDClick?: () => void;
   onFilterEditClick?: () => void;

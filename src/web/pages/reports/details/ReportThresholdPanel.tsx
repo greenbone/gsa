@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FootNote from 'web/components/footnote/Footnote';
 import {EditIcon, FilterIcon} from 'web/components/icon';
@@ -19,10 +19,10 @@ import ReportPanel from 'web/pages/reports/details/ReportPanel';
 
 interface ThresholdPanelProps {
   entityType: string;
-  filter: Filter;
+  filter: FilterType;
   isUpdating?: boolean;
   threshold: number;
-  onFilterChanged?: (filter: Filter) => void;
+  onFilterChanged?: (filter: FilterType) => void;
   onFilterEditClick?: () => void;
 }
 

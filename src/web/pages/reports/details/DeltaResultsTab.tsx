@@ -4,7 +4,7 @@
  */
 
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type Nvt from 'gmp/models/nvt';
 import type Result from 'gmp/models/result';
 import {type TaskStatus} from 'gmp/models/task';
@@ -24,7 +24,7 @@ interface DeltaResultsTabProps {
   audit?: boolean;
   counts: CollectionCounts;
   delta?: boolean;
-  filter?: Filter;
+  filter?: FilterType;
   hasTarget?: boolean;
   isUpdating?: boolean;
   progress: number;
