@@ -154,7 +154,7 @@ export function parseInfoCounts(response: InfoWithCounts) {
 }
 
 export function parseFilter(element: FilterElement): FilterType {
-  return Filter.fromElement(element.filters);
+  return Filter.fromResponseElement(element.filters);
 }
 
 export function parseCounts<TElement = Element>(
