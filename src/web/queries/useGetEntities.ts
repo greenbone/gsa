@@ -34,9 +34,7 @@ interface UseGetEntitiesParams<
   filter?: FilterType;
   enabled?: boolean;
   refetchInterval?:
-    | number
-    | false
-    | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
+    number | false | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
   keepPreviousData?: boolean;
 }
 

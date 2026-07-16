@@ -35,8 +35,7 @@ export type CertificateStatus =
   | typeof CERTIFICATE_STATUS_UNKNOWN;
 
 export type SNMPAuthAlgorithmType =
-  | typeof SNMP_AUTH_ALGORITHM_MD5
-  | typeof SNMP_AUTH_ALGORITHM_SHA1;
+  typeof SNMP_AUTH_ALGORITHM_MD5 | typeof SNMP_AUTH_ALGORITHM_SHA1;
 
 export type SNMPPrivacyAlgorithmType =
   | typeof SNMP_PRIVACY_ALGORITHM_NONE
