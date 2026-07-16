@@ -4,7 +4,7 @@
  */
 
 import {useState} from 'react';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
 import {CONTAINER_SCANNING_RESULTS_THRESHOLD} from 'gmp/settings';
@@ -26,7 +26,7 @@ interface DownloadReportDialogProps {
   audit?: boolean;
   defaultReportConfigId?: string;
   defaultReportFormatId?: string;
-  filter: Filter | string;
+  filter: FilterType | string;
   includeNotes?: boolean;
   includeOverrides?: boolean;
   isContainerScanning?: boolean;

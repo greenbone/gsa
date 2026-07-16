@@ -6,7 +6,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {
-  type default as Filter,
+  type FilterType,
   PORTLISTS_FILTER_FILTER,
   RESET_FILTER,
 } from 'gmp/models/filter';
@@ -40,7 +40,7 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 
-const getData = (filter: Filter, eSelector: EntitiesSelector) => {
+const getData = (filter: FilterType, eSelector: EntitiesSelector) => {
   const entities = eSelector.getEntities(filter);
   return {
     entities,
@@ -61,7 +61,7 @@ const PortListsPage = () => {
   const [filter, isLoadingFilter, {changeFilter, resetFilter, removeFilter}] =
     usePageFilter('portlist', 'portlist');
   const [requestedFilter, setRequestedFilter] = useInstanceVariable<
-    Filter | undefined
+    FilterType | undefined
   >(undefined);
   const portListsSelector = useShallowEqualSelector(selector);
   const listExportFileName = useShallowEqualSelector(state =>
@@ -86,7 +86,7 @@ const PortListsPage = () => {
 
   // fetch port lists
   const fetch = useCallback(
-    (withFilter?: Filter) => {
+    (withFilter?: FilterType) => {
       setRequestedFilter(withFilter);
       // @ts-expect-error
       dispatch(loadEntities(gmp)(withFilter));
@@ -106,7 +106,7 @@ const PortListsPage = () => {
   );
 
   const handleFilterChanged = useCallback(
-    (newFilter?: Filter) => {
+    (newFilter?: FilterType) => {
       changeFilter(newFilter);
       fetch(newFilter);
     },

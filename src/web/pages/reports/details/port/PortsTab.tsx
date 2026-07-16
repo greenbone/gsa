@@ -4,7 +4,7 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import type ReportPort from 'gmp/models/report/port';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
@@ -17,7 +17,7 @@ import {makeCompareNumber, makeCompareSeverity} from 'web/utils/Sort';
 
 interface PortsTabProps {
   reportId: string;
-  reportFilter: Filter;
+  reportFilter: FilterType;
   portsData?: UseGetEntitiesReturn<ReportPort>;
   isPortsFetching?: boolean;
   isPortsError?: boolean;
@@ -43,7 +43,7 @@ const PortsTab = ({
     return Filter.fromString(reportFilterString);
   }, [reportFilterString]);
 
-  const [portsFilter, setPortsFilter] = useState<Filter>(baseFilter);
+  const [portsFilter, setPortsFilter] = useState<FilterType>(baseFilter);
 
   useEffect(() => {
     setPortsFilter(baseFilter);
@@ -54,7 +54,7 @@ const PortsTab = ({
   const isLoading = !data && isFetching;
   const isError = isPortsError ?? false;
 
-  const updateFilter = (newFilter: Filter) => {
+  const updateFilter = (newFilter: FilterType) => {
     setPortsFilter(newFilter);
   };
 

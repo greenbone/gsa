@@ -5,7 +5,7 @@
 
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import {isActive, type TaskStatus} from 'gmp/models/task';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
@@ -21,7 +21,7 @@ import ContainerScanningResultsTable from 'web/pages/reports/details/result/Cont
 
 interface ContainerScanningResultsTabProps {
   reportId: string;
-  reportFilter: Filter;
+  reportFilter: FilterType;
   status: TaskStatus;
 }
 
@@ -40,7 +40,7 @@ const ContainerScanningResultsTab = ({
     return filter.set('_and_report_id', reportId);
   }, [reportFilterString, reportId]);
 
-  const [resultsFilter, setResultsFilter] = useState<Filter>(baseFilter);
+  const [resultsFilter, setResultsFilter] = useState<FilterType>(baseFilter);
 
   useEffect(() => {
     setResultsFilter(baseFilter);
@@ -54,7 +54,7 @@ const ContainerScanningResultsTab = ({
   });
 
   const updateFilter = useCallback(
-    (newFilter: Filter) => {
+    (newFilter: FilterType) => {
       setResultsFilter(newFilter.set('_and_report_id', reportId));
     },
     [reportId],

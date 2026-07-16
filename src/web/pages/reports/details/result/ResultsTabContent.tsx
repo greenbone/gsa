@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type {TaskStatus} from 'gmp/models/task';
 import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
@@ -21,7 +21,7 @@ interface ResultsTabContentProps {
   isWebApplicationScanning: boolean;
   hasTarget: boolean;
   progress: number;
-  reportFilter: Filter;
+  reportFilter: FilterType;
   reportId: string;
   reportResultsCounts?: ResultsCounts;
   status: TaskStatus;

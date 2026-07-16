@@ -7,7 +7,10 @@ import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {type TaskCommandCreateImportTaskParams} from 'gmp/commands/task';
-import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {
+  type FilterType,
+  REPORTS_FILTER_FILTER,
+} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -87,7 +90,7 @@ const ReportListPage = ({
   >(undefined);
   const [taskId, setTaskId] = useState<string | undefined>(undefined);
   const [beforeSelectFilter, setBeforeSelectFilter] = useState<
-    Filter | undefined
+    FilterType | undefined
   >(undefined);
   const dispatch = useDispatch();
   const tasks = useShallowEqualSelector(state =>

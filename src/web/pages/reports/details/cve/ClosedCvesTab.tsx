@@ -5,7 +5,7 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import {type ReportClosedCve} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
@@ -21,7 +21,7 @@ import {
 } from 'web/utils/Sort';
 
 interface ClosedCvesTabProps {
-  filter?: Filter;
+  filter?: FilterType;
   reportId: string;
   closedCvesData?: UseGetEntitiesReturn<ReportClosedCve>;
   isClosedCvesFetching?: boolean;
@@ -30,8 +30,10 @@ interface ClosedCvesTabProps {
 
 export const closedCvesSortFunctions = {
   cve: makeCompareString('cveId'),
-  host: makeCompareIp(entity => entity.host.ip),
-  nvt: makeCompareString(entity => entity.source?.description),
+  host: makeCompareIp((entity: ReportClosedCve) => entity.host?.ip),
+  nvt: makeCompareString(
+    (entity: ReportClosedCve) => entity.source?.description,
+  ),
   severity: makeCompareSeverity(),
 };
 
@@ -48,7 +50,8 @@ const ClosedCvesTabWrapper = ({
     return isDefined(filter) ? filter : new Filter();
   }, [filter]);
 
-  const [closedCvesFilter, setClosedCvesFilter] = useState<Filter>(baseFilter);
+  const [closedCvesFilter, setClosedCvesFilter] =
+    useState<FilterType>(baseFilter);
 
   useEffect(() => {
     setClosedCvesFilter(baseFilter);
@@ -58,7 +61,7 @@ const ClosedCvesTabWrapper = ({
   const isFetching = isClosedCvesFetching ?? false;
   const isLoading = !data && isFetching;
   const isError = isClosedCvesError ?? false;
-  const updateFilter = (newFilter: Filter) => {
+  const updateFilter = (newFilter: FilterType) => {
     setClosedCvesFilter(newFilter);
   };
 

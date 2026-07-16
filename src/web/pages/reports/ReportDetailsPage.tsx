@@ -7,7 +7,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
 import {useParams} from 'react-router';
 import logger from 'gmp/log';
-import Filter, {RESET_FILTER} from 'gmp/models/filter';
+import Filter, {type FilterType, RESET_FILTER} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive} from 'gmp/models/task';
@@ -201,7 +201,7 @@ const ReportDetailsPage = () => {
 
   // Handlers
   const handleFilterChange = useCallback(
-    (filter: Filter) => {
+    (filter: FilterType) => {
       changeFilter(filter);
     },
     [changeFilter],
