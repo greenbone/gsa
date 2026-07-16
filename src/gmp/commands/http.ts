@@ -19,8 +19,8 @@ import type {
   UrlParams as Params,
   UrlParamValue as ParamValue,
 } from 'gmp/http/utils';
-import type Filter from 'gmp/models/filter';
-import {filterString, isFilter} from 'gmp/models/filter/utils';
+import {type FilterType} from 'gmp/models/filter';
+import {filterString, isFilterType} from 'gmp/models/filter/utils';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
 export interface HttpCommandOptions extends RequestOptions {
@@ -45,7 +45,7 @@ export interface HttpCommandPostParams extends Data {
 
 export interface HttpCommandInputParams {
   cmd?: string;
-  filter?: Filter | string;
+  filter?: FilterType | string;
   [key: string]: unknown;
 }
 
@@ -90,7 +90,7 @@ class HttpCommand {
       filter?: string;
     } = {};
     if (hasValue(filter)) {
-      if (isFilter(filter) && isDefined(filter.id)) {
+      if (isFilterType(filter) && isDefined(filter.id)) {
         filterParams.filter_id = filter.id;
       } else {
         filterParams.filter = filterString(filter);
@@ -116,7 +116,7 @@ class HttpCommand {
       filter?: string;
     } = {};
     if (hasValue(filter)) {
-      if (isFilter(filter) && isDefined(filter.id)) {
+      if (isFilterType(filter) && isDefined(filter.id)) {
         filterParams.filter_id = filter.id;
       } else {
         filterParams.filter = filterString(filter);

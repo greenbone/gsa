@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type Result from 'gmp/models/result';
 import useGmp from 'web/hooks/useGmp';
 import type {RefetchIntervalFn} from 'web/queries/helpers';
@@ -12,11 +12,9 @@ import useGetEntities, {
 } from 'web/queries/useGetEntities';
 
 interface UseGetResultsParams {
-  filter?: Filter;
+  filter?: FilterType;
   refetchInterval?:
-    | number
-    | false
-    | RefetchIntervalFn<UseGetEntitiesReturn<Result>>;
+    number | false | RefetchIntervalFn<UseGetEntitiesReturn<Result>>;
 }
 
 /**

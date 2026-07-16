@@ -63,8 +63,7 @@ describe('NewIconMenu tests', () => {
   describe.each([
     [
       'ENABLE_CONTAINER_SCANNING' as
-        | 'ENABLE_CONTAINER_SCANNING'
-        | 'ENABLE_AGENTS',
+        'ENABLE_CONTAINER_SCANNING' | 'ENABLE_AGENTS',
       'new-container-image-menu',
       'onNewContainerImageTaskClick',
     ],

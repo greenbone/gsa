@@ -105,8 +105,7 @@ class DashboardCommand extends HttpCommand {
     const {value, name} = setting;
     try {
       const config = JSON.parse(value as string) as
-        | DashboardSetting
-        | DashboardSettings;
+        DashboardSetting | DashboardSettings;
       return response.setData(convertLoadedSettings(config, name));
     } catch {
       log.warn('Could not parse dashboard setting', id, value);

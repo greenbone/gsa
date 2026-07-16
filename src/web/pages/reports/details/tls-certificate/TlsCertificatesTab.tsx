@@ -4,7 +4,7 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
@@ -19,9 +19,10 @@ import {
   makeComparePort,
   makeCompareString,
 } from 'web/utils/Sort';
+
 interface TLSCertificatesTabProps {
   reportId: string;
-  reportFilter: Filter;
+  reportFilter: FilterType;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
   tlsCertificatesData?: UseGetEntitiesReturn<ReportTLSCertificate>;
   isTlsCertificatesFetching?: boolean;
@@ -54,12 +55,11 @@ const TLSCertificatesTab = ({
     const f = Filter.fromString(reportFilterString);
     // Override sort: 'sort-reverse=dn' maps to ascending A→Z via the
     // sortReverse=(sortDir==='asc') convention used in ReportEntitiesContainer
-    f.set('sort-reverse', 'dn');
-    return f;
+    return f.set('sort-reverse', 'dn');
   }, [reportFilterString]);
 
   const [tlsCertificatesFilter, setTlsCertificatesFilter] =
-    useState<Filter>(baseFilter);
+    useState<FilterType>(baseFilter);
 
   useEffect(() => {
     setTlsCertificatesFilter(baseFilter);
@@ -69,7 +69,7 @@ const TLSCertificatesTab = ({
   const isFetching = isTlsCertificatesFetching ?? false;
   const isLoading = !data && isFetching;
   const isError = isTlsCertificatesError ?? false;
-  const updateFilter = (newFilter: Filter) => {
+  const updateFilter = (newFilter: FilterType) => {
     setTlsCertificatesFilter(newFilter);
   };
 

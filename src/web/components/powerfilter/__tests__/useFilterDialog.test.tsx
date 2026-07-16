@@ -42,9 +42,7 @@ describe('useFilterDialog', () => {
     const {result} = renderHook(() => useFilterDialog(initialFilter));
 
     act(() => {
-      result.current.handleFilterChange(
-        initialFilter.copy().set('status', 'active'),
-      );
+      result.current.handleFilterChange(initialFilter.set('status', 'active'));
     });
 
     expect(result.current.filter.toFilterString()).toEqual(

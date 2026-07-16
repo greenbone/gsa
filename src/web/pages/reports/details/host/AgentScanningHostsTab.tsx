@@ -4,7 +4,7 @@
  */
 
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type ReportHost from 'gmp/models/report/host';
 import AgentScanningHostsTable from 'web/pages/reports/details/host/AgentScanningHostsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
@@ -19,7 +19,7 @@ interface AgentScanningHostsTabProps {
   audit?: boolean;
   counts?: CollectionCounts;
   hosts?: ReportHost[];
-  filter: Filter;
+  filter: FilterType;
   isUpdating?: boolean;
   sortField: string;
   sortReverse: boolean;

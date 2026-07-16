@@ -6,7 +6,7 @@
 import {useCallback, useMemo, useRef, useState} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import {type default as Filter, TARGETS_FILTER_FILTER} from 'gmp/models/filter';
+import {type FilterType, TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 import type OciImageTarget from 'gmp/models/oci-image-target';
 import {getEntityType, pluralizeType} from 'gmp/utils/entity-type';
 import Download from 'web/components/form/Download';
@@ -118,7 +118,7 @@ const ContainerImageTargetsListPage = () => {
   });
 
   const handleBulkDelete = useCallback(async () => {
-    let input: OciImageTarget[] | Filter;
+    let input: OciImageTarget[] | FilterType;
     if (selectionType === SelectionType.SELECTION_USER) {
       input = selectedEntities;
     } else if (selectionType === SelectionType.SELECTION_FILTER) {
@@ -142,7 +142,7 @@ const ContainerImageTargetsListPage = () => {
   ]);
 
   const handleBulkDownload = useCallback(async () => {
-    let input: OciImageTarget[] | Filter;
+    let input: OciImageTarget[] | FilterType;
     if (selectionType === SelectionType.SELECTION_USER) {
       input = selectedEntities;
     } else if (selectionType === SelectionType.SELECTION_FILTER) {
@@ -177,7 +177,7 @@ const ContainerImageTargetsListPage = () => {
   ]);
 
   const handleFilterChanged = useCallback(
-    (newFilter?: Filter) => {
+    (newFilter?: FilterType) => {
       changeFilter(newFilter);
     },
     [changeFilter],

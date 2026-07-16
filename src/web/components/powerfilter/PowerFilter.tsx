@@ -7,8 +7,8 @@ import React from 'react';
 import styled from 'styled-components';
 import type Capabilities from 'gmp/capabilities/capabilities';
 import type Gmp from 'gmp/gmp';
-import Filter, {RESET_FILTER} from 'gmp/models/filter';
-import {isFilter} from 'gmp/models/filter/utils';
+import Filter, {type FilterType, RESET_FILTER} from 'gmp/models/filter';
+import {isFilterType} from 'gmp/models/filter/utils';
 import {KeyEvent} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
 import Select from 'web/components/form/Select';
@@ -27,21 +27,21 @@ import withTranslation from 'web/utils/withTranslation';
 
 interface PowerFilterState {
   userFilterString: string;
-  prevFilter?: Filter;
+  prevFilter?: FilterType;
 }
 
 interface PowerFilterProps {
   capabilities: Capabilities;
   createFilterType?: string;
-  filter?: Filter;
+  filter?: FilterType;
   filters?: Filter[];
   isLoading?: boolean;
   isLoadingFilters?: boolean;
-  resetFilter?: Filter;
+  resetFilter?: FilterType;
   gmp: Gmp;
   _: (key: string) => string;
   onEditClick?: () => void;
-  onUpdate?: (filter: Filter) => void;
+  onUpdate?: (filter: FilterType) => void;
   onRemoveClick?: () => void;
   onResetClick?: () => void;
 }
@@ -60,8 +60,8 @@ const PowerFilterTextField = styled(TextField<string>)`
   width: 30vw;
 `;
 
-const getUserFilterString = (filter?: Filter | string) => {
-  if (isFilter(filter)) {
+const getUserFilterString = (filter?: FilterType | string) => {
+  if (isFilterType(filter)) {
     return filter.toFilterCriteriaString();
   }
   if (isString(filter)) {
@@ -110,7 +110,7 @@ class PowerFilter extends React.Component<PowerFilterProps, PowerFilterState> {
     return null;
   }
 
-  updateFilter(filter: Filter) {
+  updateFilter(filter: FilterType) {
     const {onUpdate} = this.props;
 
     if (onUpdate) {
@@ -151,11 +151,8 @@ class PowerFilter extends React.Component<PowerFilterProps, PowerFilterState> {
   handleNamedFilterChange(value: string) {
     const {filters = [], resetFilter = RESET_FILTER} = this.props;
 
-    let filter = filters.find(f => f.id === value);
-    if (!isDefined(filter)) {
-      filter = resetFilter;
-    }
-    this.updateFilter(filter);
+    const filter: FilterType | undefined = filters.find(f => f.id === value);
+    this.updateFilter(filter ?? resetFilter);
   }
 
   handleRemoveClick() {

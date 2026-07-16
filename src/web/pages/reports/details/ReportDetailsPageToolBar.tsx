@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
 import ToolBar from 'web/components/bar/Toolbar';
@@ -17,11 +17,11 @@ export interface DetailsToolbarProps {
   isLoading?: boolean;
   isLoadingFilters?: boolean;
   isUpdating?: boolean;
-  pageFilter?: Filter;
+  pageFilter?: FilterType;
   report?: ReportReport;
-  reportFilter?: Filter;
+  reportFilter?: FilterType;
   reportId: string;
-  resetFilter?: Filter;
+  resetFilter?: FilterType;
   showError: (error: Error) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
@@ -29,7 +29,7 @@ export interface DetailsToolbarProps {
   task?: ReportTask;
   threshold?: number;
   onAddToAssetsClick?: () => void;
-  onFilterChanged?: (filter: Filter) => void;
+  onFilterChanged?: (filter: FilterType) => void;
   onFilterEditClick?: () => void;
   onFilterRemoveClick?: () => void;
   onFilterResetClick?: () => void;

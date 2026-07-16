@@ -4,16 +4,29 @@
  */
 
 import styled from 'styled-components';
+import {type FilterType} from 'gmp/models/filter';
+import {isDefined} from 'gmp/utils/identity';
 import FootNote from 'web/components/footnote/Footnote';
 import {EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
-import updatingStyle from 'web/components/layout/updating-style';
+import updatingStyle, {
+  type UpdatingStyleProps,
+} from 'web/components/layout/updating-style';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
-import PropTypes from 'web/utils/PropTypes';
-const UpdatingDivider = styled(Divider)`
+
+interface ThresholdPanelProps {
+  entityType: string;
+  filter: FilterType;
+  isUpdating?: boolean;
+  threshold: number;
+  onFilterChanged?: (filter: FilterType) => void;
+  onFilterEditClick?: () => void;
+}
+
+const UpdatingDivider = styled(Divider)<UpdatingStyleProps>`
   ${updatingStyle}
 `;
 
@@ -24,45 +37,41 @@ const ThresholdPanel = ({
   threshold,
   onFilterChanged,
   onFilterEditClick,
-}) => {
+}: ThresholdPanelProps) => {
   const [_] = useTranslation();
-  const levels = filter.get('levels', '');
-  const severity = filter.get('severity', 0);
+  const levels = filter.get('levels', '') as string | undefined;
+  const severity = filter.get('severity', 0) as number;
 
   const handleRemoveLogLevel = () => {
-    if (levels.includes('g')) {
+    if (isDefined(levels) && levels.includes('g')) {
       const newLevels = levels.replace('g', '');
-      const lfilter = filter.copy();
-      lfilter.set('levels', newLevels);
+      const levelsFilter = filter.set('levels', newLevels);
 
-      onFilterChanged(lfilter);
+      onFilterChanged?.(levelsFilter);
     }
   };
 
   const handleRemoveLowLevel = () => {
-    if (levels.includes('l')) {
+    if (isDefined(levels) && levels.includes('l')) {
       const newLevels = levels.replace('l', '');
-      const lfilter = filter.copy();
-      lfilter.set('levels', newLevels);
+      const levelsFilter = filter.set('levels', newLevels);
 
-      onFilterChanged(lfilter);
+      onFilterChanged?.(levelsFilter);
     }
   };
 
   const handleRemoveMediumLevel = () => {
-    if (levels.includes('m')) {
+    if (isDefined(levels) && levels.includes('m')) {
       const newLevels = levels.replace('m', '');
-      const lfilter = filter.copy();
-      lfilter.set('levels', newLevels);
+      const levelsFilter = filter.set('levels', newLevels);
 
-      onFilterChanged(lfilter);
+      onFilterChanged?.(levelsFilter);
     }
   };
   const handleSetMinimumSeverity = () => {
-    const lfilter = filter.copy();
-    lfilter.set('severity', 7.0, '>');
+    const severityFilter = filter.set('severity', 7.0, '>');
 
-    onFilterChanged(lfilter);
+    onFilterChanged?.(severityFilter);
   };
   return (
     <UpdatingDivider
@@ -82,27 +91,27 @@ const ThresholdPanel = ({
         )}
       />
       <Divider wrap>
-        {levels.includes('g') && (
+        {isDefined(levels) && levels.includes('g') && (
           <ReportPanel
-            icon={props => <FilterIcon {...props} />}
+            icon={<FilterIcon size="large" onClick={handleRemoveLogLevel} />}
             title={_('Results with log messages are currently included.')}
             onClick={handleRemoveLogLevel}
           >
             {_('Filter out log message results.')}
           </ReportPanel>
         )}
-        {levels.includes('l') && (
+        {isDefined(levels) && levels.includes('l') && (
           <ReportPanel
-            icon={props => <FilterIcon {...props} />}
+            icon={<FilterIcon size="large" onClick={handleRemoveLowLevel} />}
             title={_('Results with the severity "Low" are currently included.')}
             onClick={handleRemoveLowLevel}
           >
             {_('Filter out results with the severity "Low".')}
           </ReportPanel>
         )}
-        {levels.includes('m') && (
+        {isDefined(levels) && levels.includes('m') && (
           <ReportPanel
-            icon={props => <FilterIcon {...props} />}
+            icon={<FilterIcon size="large" onClick={handleRemoveMediumLevel} />}
             title={_(
               'Results with the severity "Medium" are currently included.',
             )}
@@ -113,7 +122,9 @@ const ThresholdPanel = ({
         )}
         {!filter.has('levels') && severity < 7 && (
           <ReportPanel
-            icon={props => <FilterIcon {...props} />}
+            icon={
+              <FilterIcon size="large" onClick={handleSetMinimumSeverity} />
+            }
             title={_("Results aren't filtered by severity.")}
             onClick={handleSetMinimumSeverity}
           >
@@ -121,7 +132,7 @@ const ThresholdPanel = ({
           </ReportPanel>
         )}
         <ReportPanel
-          icon={props => <EditIcon {...props} />}
+          icon={<EditIcon size="large" onClick={onFilterEditClick} />}
           title={_('Your filter settings may be too unrefined.')}
           onClick={onFilterEditClick}
         >
@@ -137,15 +148,6 @@ const ThresholdPanel = ({
       </Layout>
     </UpdatingDivider>
   );
-};
-
-ThresholdPanel.propTypes = {
-  entityType: PropTypes.string.isRequired,
-  filter: PropTypes.filter.isRequired,
-  isUpdating: PropTypes.bool,
-  threshold: PropTypes.number.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
-  onFilterEditClick: PropTypes.func.isRequired,
 };
 
 export default ThresholdPanel;

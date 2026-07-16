@@ -4,7 +4,7 @@
  */
 
 import type Audit from 'gmp/models/audit';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 import type {RefetchIntervalFn} from 'web/queries/helpers';
 import useGetEntities from 'web/queries/useGetEntities';
@@ -16,7 +16,7 @@ interface UseGetAuditParams {
 }
 
 interface UseGetAuditsParams {
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 export const useGetAudit = ({id, refetchInterval}: UseGetAuditParams) => {

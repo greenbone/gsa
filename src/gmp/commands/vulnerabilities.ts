@@ -6,7 +6,7 @@
 import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
 import type {XmlResponseData} from 'gmp/http/transform/fast-xml';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import Vulnerability from 'gmp/models/vulnerability';
 
 class VulnerabilitiesCommand extends EntitiesCommand<Vulnerability> {
@@ -21,7 +21,7 @@ class VulnerabilitiesCommand extends EntitiesCommand<Vulnerability> {
     );
   }
 
-  getSeverityAggregates({filter}: {filter?: Filter} = {}) {
+  getSeverityAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'vuln',
       group_column: 'severity',
@@ -29,7 +29,7 @@ class VulnerabilitiesCommand extends EntitiesCommand<Vulnerability> {
     });
   }
 
-  getHostAggregates({filter}: {filter?: Filter} = {}) {
+  getHostAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'vuln',
       group_column: 'hosts',

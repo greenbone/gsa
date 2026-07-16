@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {useGetReportApplications} from 'web/hooks/use-query/report-applications';
 import {useGetReportClosedCves} from 'web/hooks/use-query/report-closed-cves';
 import {useGetReportCves} from 'web/hooks/use-query/report-cves';
@@ -26,7 +26,7 @@ export interface ReportSubEntities {
 
 interface UseReportSubEntitiesParams {
   reportId: string;
-  filter?: Filter;
+  filter?: FilterType;
   refetchInterval?: number | false;
 }
 

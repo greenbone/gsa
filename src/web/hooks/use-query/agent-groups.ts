@@ -10,7 +10,7 @@ import {
 import {type EntityActionResponse} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import AgentGroup from 'gmp/models/agent-group';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
@@ -28,7 +28,7 @@ interface UseModifyAgentGroupParams {
   onError?: (error: Rejection) => void;
 }
 
-export const useGetAgentGroups = ({filter}: {filter?: Filter}) => {
+export const useGetAgentGroups = ({filter}: {filter?: FilterType}) => {
   const gmp = useGmp();
   return useGetEntities<AgentGroup>({
     queryId: 'get_agent_groups',

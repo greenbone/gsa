@@ -4,14 +4,14 @@
  */
 
 import {useCallback} from 'react';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
 export type OnFilterCreatedFunc = (filter: Filter) => void;
-export type OnFilterChangedFunc = (filter: Filter) => void;
+export type OnFilterChangedFunc = (filter: FilterType) => void;
 
 export interface UseFilterDialogSaveProps {
   onClose?: () => void;
@@ -22,9 +22,9 @@ export interface UseFilterDialogSaveProps {
 export interface UseFilterDialogStateProps {
   filterName?: string;
   saveNamedFilter?: boolean;
-  filter: Filter;
+  filter: FilterType;
   filterString: string;
-  originalFilter: Filter;
+  originalFilter: FilterType;
 }
 
 interface UseFilterDialogReturn {
@@ -48,7 +48,7 @@ const useFilterDialogSave = (
   const gmp = useGmp();
 
   const createFilter = useCallback(
-    (newFilter: Filter, name: string) => {
+    (newFilter: FilterType, name: string) => {
       return gmp.filter
         .create({
           term: newFilter.toFilterString(),
@@ -72,9 +72,7 @@ const useFilterDialogSave = (
   );
 
   const handleSave: () => Promise<void> = useCallback(() => {
-    const newFilter = filter
-      .copy()
-      .mergeKeywords(Filter.fromString(filterString));
+    const newFilter = filter.mergeKeywords(Filter.fromString(filterString));
 
     if (saveNamedFilter) {
       if (isDefined(filterName) && filterName.trim().length > 0) {

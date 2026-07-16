@@ -9,12 +9,12 @@ import {
   type HttpCommandOptions,
 } from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import Result from 'gmp/models/result';
 
 interface GetAggregatesParams {
-  filter?: Filter;
+  filter?: FilterType | string;
 }
 
 class ResultsCommand extends EntitiesCommand<Result> {

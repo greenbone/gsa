@@ -8,9 +8,15 @@ import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Divider from 'web/components/layout/Divider';
 import InfoPanel from 'web/components/panel/InfoPanel';
-import PropTypes from 'web/utils/PropTypes';
 
-const Content = styled.span`
+interface ReportPanelProps {
+  children: React.ReactNode;
+  icon: React.ReactNode;
+  title: string;
+  onClick?: () => void;
+}
+
+const Content = styled.span<{onClick?: () => void}>`
   ${props => {
     if (!isDefined(props.onClick)) {
       return undefined;
@@ -25,21 +31,15 @@ const Content = styled.span`
   }}
 `;
 
-const ReportPanel = ({children, icon, title, onClick}) => {
+const ReportPanel = ({children, icon, title, onClick}: ReportPanelProps) => {
   return (
     <InfoPanel heading={title}>
       <Divider align={['start', 'center']} margin="1em">
-        {icon({size: 'large', onClick})}
+        {icon}
         <Content onClick={onClick}>{children}</Content>
       </Divider>
     </InfoPanel>
   );
-};
-
-ReportPanel.propTypes = {
-  icon: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
 };
 
 export default ReportPanel;

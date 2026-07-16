@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type default as Filter, type FilterSortOrder} from 'gmp/models/filter';
+import {type FilterType, type FilterSortOrder} from 'gmp/models/filter';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
 import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
@@ -14,7 +14,7 @@ import SortByGroup, {
 import useCapabilities from 'web/hooks/useCapabilities';
 
 interface DefaultFilterDialogProps {
-  filter?: Filter;
+  filter?: FilterType;
   filterName?: string;
   filterString: string;
   saveNamedFilter?: boolean;

@@ -192,8 +192,7 @@ const Row = ({
     links,
     onTlsCertificateDownloadClick,
     onToggleDetailsClick: onToggleDetailsClick as
-      | ((entity: ReportTLSCertificate, id?: string) => void)
-      | undefined,
+      ((entity: ReportTLSCertificate, id?: string) => void) | undefined,
   });
 
   return (

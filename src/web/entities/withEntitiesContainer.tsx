@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';
-import type Filter from 'gmp/models/filter';
+import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import {type EntityType} from 'gmp/utils/entity-type';
 import {type DownloadFunc} from 'web/components/form/useDownload';
@@ -30,24 +30,24 @@ import withGmp from 'web/utils/withGmp';
 
 interface ReduxMapProps {
   gmp: Gmp;
-  filter: Filter;
+  filter: FilterType;
 }
 
 interface EntitiesReloadOptions {
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 interface EntitiesSelector<TEntity extends Model = Model> {
-  getEntities: (filter?: Filter) => TEntity[];
-  getEntitiesCounts: (filter?: Filter) => CollectionCounts;
-  getEntitiesError: (filter?: Filter) => Error | Rejection;
-  isLoadingEntities: (filter?: Filter) => boolean;
-  getLoadedFilter: (filter?: Filter) => Filter;
+  getEntities: (filter?: FilterType) => TEntity[];
+  getEntitiesCounts: (filter?: FilterType) => CollectionCounts;
+  getEntitiesError: (filter?: FilterType) => Error | Rejection;
+  isLoadingEntities: (filter?: FilterType) => boolean;
+  getLoadedFilter: (filter?: FilterType) => Filter;
 }
 
 interface EntitiesContainerWrapperProps {
-  filter: Filter;
-  loadEntities: (filter: Filter) => void;
+  filter: FilterType;
+  loadEntities: (filter: FilterType) => void;
   notify: NotifyFunc;
 }
 
@@ -58,11 +58,11 @@ interface OtherProps<
   entities: TEntity[];
   entitiesCounts: CollectionCounts;
   entitiesError?: Error | Rejection;
-  filter: Filter;
+  filter: FilterType;
   isLoading: boolean;
-  loadedFilter: Filter;
-  loadEntities: (filter?: Filter) => void;
-  updateFilter: (filter?: Filter) => void;
+  loadedFilter: FilterType;
+  loadEntities: (filter?: FilterType) => void;
+  updateFilter: (filter?: FilterType) => void;
   onDownload: DownloadFunc;
 }
 
@@ -84,9 +84,9 @@ export type WithEntitiesContainerComponentProps<TEntity extends Model> =
 
 interface WithEntitiesContainerOptions<TEntity extends Model = Model> {
   reloadInterval?: (props: ReloadIntervalProps<TEntity>) => number | void;
-  fallbackFilter?: Filter;
+  fallbackFilter?: FilterType;
   entitiesSelector: (state: unknown) => EntitiesSelector<TEntity>;
-  loadEntities: (gmp: Gmp) => (filter?: Filter) => void;
+  loadEntities: (gmp: Gmp) => (filter?: FilterType) => void;
 }
 
 const noop = () => {};
@@ -157,9 +157,10 @@ const withEntitiesContainer =
     };
 
     const mapDispatchToProps = (dispatch, {gmp}: ReduxMapProps) => ({
-      loadEntities: (filter?: Filter) =>
+      loadEntities: (filter?: FilterType) =>
         dispatch(loadEntitiesFunc(gmp)(filter)),
-      updateFilter: (filter?: Filter) => dispatch(pageFilter(gmpName, filter)),
+      updateFilter: (filter?: FilterType) =>
+        dispatch(pageFilter(gmpName, filter)),
     });
 
     const EntitiesContainerWrapper = compose(

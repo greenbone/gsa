@@ -5,7 +5,7 @@
 
 import {useCallback, useEffect, useState} from 'react';
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import Tag from 'gmp/models/tag';
 import {apiType, type EntityType, getEntityType} from 'gmp/utils/entity-type';
@@ -19,7 +19,7 @@ import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 interface BulkTagsProps<TEntity extends Model> {
   entities: TEntity[];
   selectedEntities: TEntity[];
-  filter: Filter;
+  filter: FilterType;
   selectionType: SelectionTypeType;
   entitiesCounts: CollectionCounts;
   onClose: () => void;

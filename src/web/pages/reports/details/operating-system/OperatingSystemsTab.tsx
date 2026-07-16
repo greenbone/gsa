@@ -5,7 +5,7 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import type ReportOperatingSystem from 'gmp/models/report/os';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
@@ -17,7 +17,7 @@ import {makeCompareNumber, makeCompareString} from 'web/utils/Sort';
 
 interface OperatingSystemsTabWrapperProps {
   audit?: boolean;
-  filter?: Filter;
+  filter?: FilterType;
   reportId: string;
   operatingSystemsData?: UseGetEntitiesReturn<ReportOperatingSystem>;
   isOperatingSystemsFetching?: boolean;
@@ -57,11 +57,11 @@ const OperatingSystemsTabWrapper = ({
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
-    return isDefined(filter) ? filter.copy() : new Filter();
+    return isDefined(filter) ? filter : new Filter();
   }, [filter]);
 
   const [operatingSystemsFilter, setOperatingSystemsFilter] =
-    useState<Filter>(baseFilter);
+    useState<FilterType>(baseFilter);
 
   useEffect(() => {
     setOperatingSystemsFilter(baseFilter);
@@ -72,7 +72,7 @@ const OperatingSystemsTabWrapper = ({
   const isLoading = !data && isFetching;
   const isError = isOperatingSystemsError ?? false;
 
-  const updateFilter = (newFilter: Filter) => {
+  const updateFilter = (newFilter: FilterType) => {
     setOperatingSystemsFilter(newFilter);
   };
 

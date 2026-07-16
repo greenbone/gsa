@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
@@ -33,11 +33,11 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface ScannerFilterDialogProps extends UseFilterDialogSaveProps {
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 interface ScannerTypeGroupProps {
-  filter?: Filter;
+  filter?: FilterType;
   onFilterValueChange: (value: string, name: string) => void;
 }
 
@@ -96,7 +96,7 @@ const ScannerFilterDialog = ({
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const initialFilterString = isDefined(initialFilter)
-    ? initialFilter.copy().delete('type').toFilterCriteriaString()
+    ? initialFilter.delete('type').toFilterCriteriaString()
     : '';
   const filterDialogProps = useFilterDialog<UseFilterDialogStateProps>(
     initialFilter,

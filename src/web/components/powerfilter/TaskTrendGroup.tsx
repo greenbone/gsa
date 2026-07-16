@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type TaskTrend} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
@@ -13,7 +13,7 @@ import useTranslation from 'web/hooks/useTranslation';
 interface TaskTrendGroupProps {
   trend?: TaskTrend;
   name?: string;
-  filter?: Filter;
+  filter?: FilterType;
   onChange?: (value: TaskTrend, name: string) => void;
 }
 

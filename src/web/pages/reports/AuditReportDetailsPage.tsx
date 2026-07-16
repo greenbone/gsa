@@ -10,7 +10,7 @@ import type Response from 'gmp/http/response';
 import type {XmlMeta} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import type AuditReport from 'gmp/models/audit-report';
-import Filter, {RESET_FILTER} from 'gmp/models/filter';
+import Filter, {type FilterType, RESET_FILTER} from 'gmp/models/filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -63,7 +63,7 @@ interface AuditReportCommand {
   removeAssets: (params: {id: string; filter?: string}) => Promise<unknown>;
   download: (
     params: {id: string},
-    options: {reportFormatId: string; filter: Filter},
+    options: {reportFormatId: string; filter: FilterType},
   ) => Promise<{data: string | ArrayBuffer}>;
 }
 
@@ -73,9 +73,8 @@ const DEFAULT_FILTER = Filter.fromString(
   'levels=hmlg rows=100 min_qod=70 first=1 compliance_levels=yniu sort=compliant',
 );
 
-export const AUDIT_REPORT_RESET_FILTER = RESET_FILTER.copy()
-  .setSortOrder('sort')
-  .setSortBy('compliant');
+export const AUDIT_REPORT_RESET_FILTER =
+  RESET_FILTER.setSortOrder('sort').setSortBy('compliant');
 
 const hasTargetId = (value: unknown): value is ReportTargetRef => {
   return (
@@ -103,17 +102,15 @@ const useGetAuditReport = ({
   refetchInterval,
 }: {
   id: string;
-  filter?: Filter;
+  filter?: FilterType;
   refetchInterval?: number | false | ((data?: AuditReport) => number | false);
 }) => {
   const gmp = useGmp();
-  const auditreport = (gmp as unknown as {auditreport: AuditReportCommand})
-    .auditreport;
   const filterString = filter?.toFilterString();
 
   return useGetEntity<AuditReport>({
     gmpMethod: async ({id}) => {
-      return auditreport.get({id}, {filter: filterString, details: false});
+      return gmp.auditreport.get({id}, {filter, details: false});
     },
     queryId: 'get_audit_report',
     queryKeyParts: [filterString],
@@ -239,7 +236,7 @@ const AuditReportDetailsPage = () => {
 
   // Handlers
   const handleFilterChange = useCallback(
-    (filter: Filter) => {
+    (filter: FilterType) => {
       changeFilter(filter);
     },
     [changeFilter],
@@ -326,9 +323,9 @@ const AuditReportDetailsPage = () => {
       const {includeNotes, includeOverrides, reportFormatId, storeAsDefault} =
         state;
 
-      const newFilter = reportFilter.copy();
-      newFilter.set('notes', includeNotes);
-      newFilter.set('overrides', includeOverrides);
+      const newFilter = reportFilter
+        .set('notes', includeNotes)
+        .set('overrides', includeOverrides);
 
       if (storeAsDefault) {
         const defaults = {
@@ -419,8 +416,7 @@ const AuditReportDetailsPage = () => {
     if (!reportFilter) return;
 
     if (reportFilter.has('min_qod')) {
-      const levelFilter = reportFilter.copy();
-      levelFilter.set('min_qod', 30);
+      const levelFilter = reportFilter.set('min_qod', 30);
       handleFilterChange(levelFilter);
     }
   }, [reportFilter, handleFilterChange]);

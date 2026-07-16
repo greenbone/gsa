@@ -5,7 +5,7 @@
 
 import InfoEntitiesCommand from 'gmp/commands/info-entities';
 import type Http from 'gmp/http/http';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import Nvt from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
@@ -17,7 +17,7 @@ class NvtsCommand extends InfoEntitiesCommand<Nvt> {
     super(http, 'nvt', Nvt, infoFilter);
   }
 
-  getFamilyAggregates({filter}: {filter?: Filter} = {}) {
+  getFamilyAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'nvt',
       group_column: 'family',
@@ -26,7 +26,7 @@ class NvtsCommand extends InfoEntitiesCommand<Nvt> {
     });
   }
 
-  getSeverityAggregates({filter}: {filter?: Filter} = {}) {
+  getSeverityAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'nvt',
       group_column: 'severity',
@@ -34,7 +34,7 @@ class NvtsCommand extends InfoEntitiesCommand<Nvt> {
     });
   }
 
-  getQodAggregates({filter}: {filter?: Filter} = {}) {
+  getQodAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'nvt',
       group_column: 'qod',
@@ -42,7 +42,7 @@ class NvtsCommand extends InfoEntitiesCommand<Nvt> {
     });
   }
 
-  getQodTypeAggregates({filter}: {filter?: Filter} = {}) {
+  getQodTypeAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'nvt',
       group_column: 'qod_type',
@@ -50,7 +50,7 @@ class NvtsCommand extends InfoEntitiesCommand<Nvt> {
     });
   }
 
-  getCreatedAggregates({filter}: {filter?: Filter} = {}) {
+  getCreatedAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'nvt',
       group_column: 'created',

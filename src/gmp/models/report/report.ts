@@ -5,7 +5,7 @@
 
 import {type CollectionList, parseFilter} from 'gmp/collection/parser';
 import {type Date} from 'gmp/models/date';
-import Filter, {type FilterKeyword} from 'gmp/models/filter';
+import {type FilterType, type FilterKeyword} from 'gmp/models/filter';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {
   parseResults,
@@ -133,7 +133,7 @@ interface ReportResultCounts {
 
 interface ReportReportProperties extends ModelProperties {
   delta_report?: DeltaReport;
-  filter?: Filter;
+  filter?: FilterType;
   report_type?: ReportType;
   results?: CollectionList<Result>;
   result_count?: ReportResultCounts;
@@ -150,7 +150,7 @@ class ReportReport extends Model {
   static readonly entityType = 'report';
 
   readonly delta_report?: DeltaReport;
-  readonly filter?: Filter;
+  readonly filter?: FilterType;
   readonly report_type?: ReportType;
   // used for delta reports only
   readonly results?: CollectionList<Result>;
@@ -212,10 +212,7 @@ class ReportReport extends Model {
 
     const {delta, severity, scan_start, scan_end, task} = element;
 
-    const filter = isDefined(element.filters)
-      ? parseFilter(element)
-      : new Filter();
-    copy.filter = filter;
+    copy.filter = parseFilter(element);
 
     copy.report_type = element._type;
 

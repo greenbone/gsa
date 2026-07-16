@@ -4,12 +4,12 @@
  */
 
 import type AgentInstaller from 'gmp/models/agent-installer';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';
 
 interface UseGetAgentInstallersParams {
-  filter?: Filter;
+  filter?: FilterType;
   enabled?: boolean;
 }
 

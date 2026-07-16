@@ -5,7 +5,7 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import {type ReportActiveCve} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
@@ -21,7 +21,7 @@ import {
 } from 'web/utils/Sort';
 
 interface CvesTabProps {
-  filter?: Filter;
+  filter?: FilterType;
   reportId: string;
   cvesData?: UseGetEntitiesReturn<ReportActiveCve>;
   isCvesFetching?: boolean;
@@ -30,8 +30,10 @@ interface CvesTabProps {
 
 export const cvesSortFunctions = {
   cve: makeCompareString('cveId'),
-  host: makeCompareIp(entity => entity.host.ip),
-  nvt: makeCompareString(entity => entity.source?.description),
+  host: makeCompareIp((entity: ReportActiveCve) => entity.host?.ip),
+  nvt: makeCompareString(
+    (entity: ReportActiveCve) => entity.source?.description,
+  ),
   severity: makeCompareSeverity(),
 };
 
@@ -45,10 +47,10 @@ const CvesTabWrapper = ({
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
-    return isDefined(filter) ? filter.copy() : new Filter();
+    return isDefined(filter) ? filter : new Filter();
   }, [filter]);
 
-  const [cvesFilter, setCvesFilter] = useState<Filter>(baseFilter);
+  const [cvesFilter, setCvesFilter] = useState<FilterType>(baseFilter);
 
   useEffect(() => {
     setCvesFilter(baseFilter);
@@ -58,7 +60,7 @@ const CvesTabWrapper = ({
   const isFetching = isCvesFetching ?? false;
   const isLoading = !data && isFetching;
   const isError = isCvesError ?? false;
-  const updateFilter = (newFilter: Filter) => {
+  const updateFilter = (newFilter: FilterType) => {
     setCvesFilter(newFilter);
   };
 

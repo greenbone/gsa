@@ -7,7 +7,10 @@ import CollectionCounts, {
   type CollectionCountsOptions,
 } from 'gmp/collection/collection-counts';
 import logger from 'gmp/log';
-import Filter, {type FilterModelElement} from 'gmp/models/filter';
+import Filter, {
+  type FilterResponseElement,
+  type FilterType,
+} from 'gmp/models/filter';
 import Model, {type Element} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {hasValue, isArray, isDefined} from 'gmp/utils/identity';
@@ -18,7 +21,7 @@ export interface ModelClass<TModel> {
 
 export interface CollectionList<TModel> {
   entities: TModel[];
-  filter: Filter;
+  filter: FilterType;
   counts: CollectionCounts;
 }
 
@@ -36,7 +39,7 @@ interface ParseCollectionListOptions<TModel extends Model, TElement = Element> {
     name: string,
     pluralName?: string,
   ) => CollectionCounts;
-  filterParseFunc?: (element: FilterElement) => Filter;
+  filterParseFunc?: (element: FilterElement) => FilterType;
 }
 
 export interface InfoElement {
@@ -52,7 +55,7 @@ interface ResultsElement {
 }
 
 interface FilterElement {
-  filters?: FilterModelElement;
+  filters?: FilterResponseElement;
 }
 
 interface ElementStart {
@@ -150,8 +153,8 @@ export function parseInfoCounts(response: InfoWithCounts) {
   return new CollectionCounts(counts);
 }
 
-export function parseFilter(element: FilterElement): Filter {
-  return Filter.fromElement(element.filters);
+export function parseFilter(element: FilterElement): FilterType {
+  return Filter.fromResponseElement(element.filters);
 }
 
 export function parseCounts<TElement = Element>(
