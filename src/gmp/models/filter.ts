@@ -11,6 +11,7 @@ import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 export interface FilterKeyword {
   column?: string;
@@ -18,18 +19,73 @@ export interface FilterKeyword {
   value?: string;
 }
 
+/**
+ * XML Structure of a filter model element as returned by `<get_filters>`
+ * queries.
+ *
+ * Example XML Structure:
+ * ```xml
+ * <get_filters_response status="200" status_text="OK">
+ *   <filter id="0c239c16-d597-48a1-9f51-347627a23dac">
+ *     ...
+ *     <term>apply_overrides=0 min_qod=70 sort=name first=1 rows=1</term>
+ *   </filter>
+ * </get_filters_response>
+ * ```
+ */
 export interface FilterModelElement extends ModelElement {
   alerts?: {
     alert: ModelElement[];
   };
   filter_type?: string;
-  keywords?: {
-    keyword?: FilterKeyword | FilterKeyword[];
-  };
   term?: string;
 }
 
+/**
+ * XML Structure of a filter response element
+ * as returned by all `<get_xyz>` queries, for example `<get_tasks>`.
+ *
+ * Example XML Structure:
+ * ```xml
+ * <get_tasks_response>
+ *   <task>
+ *     ...
+ *   </task>
+ *   <filters id="">
+ *     <term>apply_overrides=0 min_qod=70 sort=name first=1 rows=1</term>
+ *     <keywords>
+ *       <keyword>
+ *         <column>apply_overrides</column>
+ *         <relation>=</relation>
+ *         <value>0</value>
+ *       </keyword>
+ *       <keyword>
+ *         <column>min_qod</column>
+ *         <relation>=</relation>
+ *         <value>70</value>
+ *       </keyword>
+ *       <keyword>
+ *         <column>sort</column>
+ *         <relation>=</relation>
+ *         <value>name</value>
+ *       </keyword>
+ *       <keyword>
+ *         <column>first</column>
+ *         <relation>=</relation>
+ *         <value>1</value>
+ *       </keyword>
+ *       <keyword>
+ *         <column>rows</column>
+ *         <relation>=</relation>
+ *         <value>1</value>
+ *       </keyword>
+ *     </keywords>
+ *   </filters>
+ * </get_tasks_response>
+ * ```
+ */
 export interface FilterResponseElement {
+  _id?: string;
   keywords?: {
     keyword?: FilterKeyword | FilterKeyword[];
   };
@@ -201,15 +257,7 @@ class Filter extends EntityModel implements FilterType {
     if (ret.id === UNKNOWN_FILTER_ID) {
       ret.id = undefined;
     }
-    if (isDefined(element.keywords)) {
-      ret.terms = map(
-        element.keywords.keyword,
-        ({relation, value, column: key}: FilterKeyword) =>
-          new FilterTerm(convert(key, value, relation)),
-      );
-      // @ts-expect-error
-      delete ret.keywords;
-    } else if (isDefined(element.term)) {
+    if (isDefined(element.term)) {
       ret.terms = parseFilterTermsFromString(element.term);
 
       // ret.term should not be part of the public api
@@ -228,6 +276,26 @@ class Filter extends EntityModel implements FilterType {
     }
 
     return new Filter(ret);
+  }
+
+  static fromResponseElement(element: FilterResponseElement = {}): FilterType {
+    const id =
+      !isEmpty(element._id) && element._id !== UNKNOWN_FILTER_ID
+        ? element._id
+        : undefined;
+
+    let terms: FilterTerm[] = [];
+    if (isDefined(element.keywords)) {
+      terms = map(
+        element.keywords.keyword,
+        ({relation, value, column: key}: FilterKeyword) =>
+          new FilterTerm(convert(key, value, relation)),
+      );
+    } else if (isDefined(element.term)) {
+      terms = parseFilterTermsFromString(element.term);
+    }
+
+    return new Filter({id, terms});
   }
 
   /**
