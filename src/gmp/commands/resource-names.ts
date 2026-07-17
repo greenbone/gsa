@@ -11,14 +11,14 @@ import {
 import {type EntitiesMeta} from 'gmp/commands/entities';
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
+import Filter, {ALL_FILTER, type FilterType} from 'gmp/models/filter';
 import ResourceName from 'gmp/models/resource-name';
 import {resourceType, type EntityType} from 'gmp/utils/entity-type';
 import {isDefined, isString} from 'gmp/utils/identity';
 
 interface ResourceNamesGetParams {
   resourceType?: EntityType;
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 class ResourceNamesCommand extends HttpCommand {
@@ -79,7 +79,7 @@ class ResourceNamesCommand extends HttpCommand {
     } else if (isString(filter)) {
       params.filter = Filter.fromString(filter).all();
     } else {
-      params.filter = (filter as Filter).all();
+      params.filter = filter.all();
     }
     return this.get(params);
   }

@@ -10,11 +10,11 @@ import {
 } from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import AuditReport from 'gmp/models/audit-report';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 
 interface AuditReportAggregatesParams {
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 class AuditReportsCommand extends EntitiesCommand<AuditReport> {

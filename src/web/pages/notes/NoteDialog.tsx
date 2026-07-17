@@ -11,8 +11,6 @@ import {
   ACTIVE_YES_ALWAYS_VALUE,
   DEFAULT_OID_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
-  ACTIVE_YES_FOR_NEXT_VALUE,
-  ACTIVE_NO_VALUE,
   type Active,
   type AnyOrManual,
 } from 'gmp/models/override';
@@ -20,16 +18,17 @@ import type Task from 'gmp/models/task';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import DateTime from 'web/components/date/DateTime';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
-import Spinner from 'web/components/form/Spinner';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
+import ActiveFormGroup, {
+  computeDaysUntil,
+} from 'web/pages/overrides/ActiveFormGroup';
 import {
   getNvtDisplayName,
   renderNvtName,
@@ -123,10 +122,15 @@ const NoteDialog = ({
 
   title = title || _('New Note');
 
+  const computedDays =
+    isDefined(note?.endTime) && active === ACTIVE_YES_UNTIL_VALUE
+      ? computeDaysUntil(note.endTime)
+      : days;
+
   const data = {
     severity,
     active,
-    days,
+    days: computedDays,
     fixed,
     hosts,
     hostsManual,
@@ -202,54 +206,12 @@ const NoteDialog = ({
                 />
               </FormGroup>
             )}
-            <FormGroup data-testid="group-active" title={_('Active')}>
-              <Row>
-                <Radio
-                  checked={state.active === ACTIVE_YES_ALWAYS_VALUE}
-                  name="active"
-                  title={_('yes, always')}
-                  value={ACTIVE_YES_ALWAYS_VALUE}
-                  onChange={onValueChange}
-                />
-                {isEdit && note.isActive() && isDefined(note.endTime) && (
-                  <Row>
-                    <Radio
-                      checked={state.active === ACTIVE_YES_UNTIL_VALUE}
-                      name="active"
-                      title={_('yes, until')}
-                      value={ACTIVE_YES_UNTIL_VALUE}
-                      onChange={onValueChange}
-                    />
-                    <DateTime date={note.endTime} />
-                  </Row>
-                )}
-              </Row>
-              <Row>
-                <Radio
-                  checked={state.active === ACTIVE_YES_FOR_NEXT_VALUE}
-                  name="active"
-                  title={_('yes, for the next')}
-                  value={ACTIVE_YES_FOR_NEXT_VALUE}
-                  onChange={onValueChange}
-                />
-                <Spinner
-                  disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}
-                  min={1}
-                  name="days"
-                  type="int"
-                  value={state.days}
-                  onChange={onValueChange}
-                />
-                <span>{_('days')}</span>
-              </Row>
-              <Radio
-                checked={state.active === ACTIVE_NO_VALUE}
-                name="active"
-                title={_('no')}
-                value={ACTIVE_NO_VALUE}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+            <ActiveFormGroup
+              active={state.active}
+              isEdit={isEdit}
+              item={note}
+              onValueChange={onValueChange}
+            />
 
             <FormGroup data-testid="group-hosts" title={_('Hosts')}>
               <Radio

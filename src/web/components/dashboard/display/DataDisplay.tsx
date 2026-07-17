@@ -6,7 +6,7 @@
 import React from 'react';
 import equal from 'fast-deep-equal';
 import styled from 'styled-components';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
@@ -74,7 +74,7 @@ export interface DataDisplayProps<
   dataRow: (data: TTransformedData) => string[];
   dataTitles: string[];
   dataTransform: TransformFunc<TData, TTransformedData, TTransformProps>;
-  filter?: Filter;
+  filter?: FilterType;
   height: number;
   icons: (props: IconsRenderProps<TState>) => React.ReactNode;
   children: (
@@ -485,9 +485,7 @@ class DataDisplay<
             {showFilterString && isDefined(filter) && (
               <FilterString>
                 ({_('Applied filter: ')}
-                {/* @ts-ignore-error */}
                 <b>{filter.name}</b>&nbsp;
-                {/* @ts-ignore-error */}
                 <i>{filter.simple().toFilterString()}</i>)
               </FilterString>
             )}

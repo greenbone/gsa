@@ -7,7 +7,7 @@ import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
-import {type default as Filter, ALL_FILTER} from 'gmp/models/filter';
+import {ALL_FILTER, type FilterType} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import Report, {type ReportElement} from 'gmp/models/report';
 import {parseYesNo, type YesNo} from 'gmp/parser';
@@ -21,18 +21,18 @@ interface ReportCommandImportParams {
 
 interface ReportCommandAssetsParams {
   id: string;
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 interface ReportCommandAlertParams {
   alert_id: string;
   report_id: string;
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 interface ReportCommandGetParams {
   id?: string;
-  filter?: Filter | string;
+  filter?: FilterType | string;
   details?: boolean;
   ignorePagination?: boolean;
   lean?: boolean;
@@ -47,7 +47,7 @@ interface ReportCommandDownloadOptions {
   reportFormatId: string;
   reportConfigId: string;
   deltaReportId?: string;
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 const log = logger.getLogger('gmp.commands.reports');
@@ -127,7 +127,7 @@ class ReportCommand extends EntityCommand<Report, ReportElement> {
       details = true,
       ...options
     }: {
-      filter?: Filter | string;
+      filter?: FilterType | string;
       details?: boolean;
       [key: string]: unknown;
     } = {},

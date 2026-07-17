@@ -4,7 +4,7 @@
  */
 
 import {useCallback, useState} from 'react';
-import Filter, {type FilterSortOrder} from 'gmp/models/filter';
+import Filter, {type FilterType, type FilterSortOrder} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 
 export interface FilterDialogState {
@@ -15,16 +15,16 @@ export interface FilterDialogState {
 /**
  * React hook for handling filter dialog state
  *
- * @param {Filter} initialFilter
+ * @param initialFilter Optional initial filter to be used in the dialog
  * @returns Object
  */
 const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
-  initialFilter?: Filter,
+  initialFilter?: FilterType,
   initialFilterString?: string,
 ) => {
   const [originalFilter] = useState(initialFilter);
-  const [filter, setFilter] = useState<Filter>(() =>
-    isDefined(initialFilter) ? initialFilter.copy() : new Filter(),
+  const [filter, setFilter] = useState<FilterType>(() =>
+    isDefined(initialFilter) ? initialFilter : new Filter(),
   );
   const [filterDialogState, setFilterDialogState] =
     useState<TFilterDialogState>({} as TFilterDialogState);
@@ -38,20 +38,20 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
       : '';
   });
 
-  const handleFilterChange = useCallback((filter: Filter) => {
+  const handleFilterChange = useCallback((filter: FilterType) => {
     setFilter(filter);
   }, []);
 
   const handleFilterValueChange = useCallback(
     (value: string | number, name: string, relation: string = '=') => {
-      setFilter(filter => filter.copy().set(name, value, relation));
+      setFilter(filter => filter.set(name, value, relation));
     },
     [],
   );
 
   const handleSearchTermChange = useCallback(
     (value: string, name: string, relation: string = '~') => {
-      setFilter(filter => filter.copy().set(name, `"${value}"`, relation));
+      setFilter(filter => filter.set(name, `"${value}"`, relation));
     },
     [],
   );
@@ -61,11 +61,11 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
   }, []);
 
   const handleSortByChange = useCallback((value: string) => {
-    setFilter(filter => filter.copy().setSortBy(value));
+    setFilter(filter => filter.setSortBy(value));
   }, []);
 
   const handleSortOrderChange = useCallback((value: FilterSortOrder) => {
-    setFilter(filter => filter.copy().setSortOrder(value));
+    setFilter(filter => filter.setSortOrder(value));
   }, []);
 
   const handleChange = useCallback(

@@ -4,16 +4,16 @@
  */
 
 import React from 'react';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import Loading from 'web/components/loading/Loading';
 import usePageFilter from 'web/hooks/usePageFilter';
 
 interface FilterProviderRenderProps {
-  filter: Filter;
+  filter: FilterType;
 }
 
 interface FilterProviderProps {
-  fallbackFilter?: Filter;
+  fallbackFilter?: FilterType;
   gmpName: string;
   pageName?: string;
   children: (props: FilterProviderRenderProps) => React.ReactNode;

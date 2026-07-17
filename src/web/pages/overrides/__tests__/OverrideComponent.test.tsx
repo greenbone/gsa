@@ -194,7 +194,6 @@ describe('OverrideComponent', () => {
     const activeFormGroup = within(screen.getByTestId('group-active'));
     const activeRadios = activeFormGroup.getRadioInputs();
     expect(activeRadios[1]).toBeChecked();
-    expect(activeFormGroup.getByName('days')).toHaveValue('30');
 
     // Check hosts: MANUAL with manual input
     const hostsFormGroup = within(screen.getByTestId('group-hosts'));

@@ -30,11 +30,11 @@ const SnackbarContainer = styled.div`
   color: ${Theme.white};
   font-family: ${Theme.Font.dialog};
   animation: ${keyframes({
-      '0%': {bottom: '-110px'},
-      '20%': {bottom: '10px'},
-      '80%': {bottom: '10px'},
-      '100%': {bottom: '-110px'},
-    })}
+    '0%': {bottom: '-110px'},
+    '20%': {bottom: '10px'},
+    '80%': {bottom: '10px'},
+    '100%': {bottom: '-110px'},
+  })}
     5s ease-in-out;
 `;
 

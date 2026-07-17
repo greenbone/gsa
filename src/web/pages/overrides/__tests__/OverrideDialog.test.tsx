@@ -364,7 +364,7 @@ describe('OverrideDialog tests', () => {
     const activeRadios = activeGroup.getRadioInputs();
     expect(activeRadios).toHaveLength(4);
     expect(activeRadios[1]).toBeChecked();
-    expect(activeGroup.getByText('yes, until')).toBeInTheDocument();
+    expect(activeGroup.getAllByText('yes, until')).toHaveLength(2);
 
     const newSeverityGroup = within(screen.getByTestId('group-new-severity'));
     const options = await getSelectItemElementsForSelect(
@@ -385,5 +385,22 @@ describe('OverrideDialog tests', () => {
         taskUuid: 'task-1',
       }),
     );
+  });
+
+  test('should render DatePicker disabled by default and enabled when yes for next is selected', () => {
+    const onClose = testing.fn();
+    const onSave = testing.fn();
+    const {render} = rendererWith({gmp: createGmp()});
+
+    render(<OverrideDialog tasks={tasks} onClose={onClose} onSave={onSave} />);
+
+    const datePicker = screen.getByTestId('datepicker-input');
+    expect(datePicker).toBeInTheDocument();
+    expect(datePicker).toBeDisabled();
+
+    const activeGroup = within(screen.getByTestId('group-active'));
+    fireEvent.click(activeGroup.getRadioInputs()[1]);
+
+    expect(datePicker).not.toBeDisabled();
   });
 });

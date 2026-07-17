@@ -458,8 +458,7 @@ class Task extends Model {
     const copy = super.parseElement(element) as TaskProperties;
 
     const usageType = (element.usage_type ?? USAGE_TYPE.scan) as
-      | typeof USAGE_TYPE.scan
-      | typeof USAGE_TYPE.audit;
+      typeof USAGE_TYPE.scan | typeof USAGE_TYPE.audit;
 
     if (!Object.values(USAGE_TYPE).includes(usageType)) {
       throw new Error("Task.parseElement: usage_type must be 'scan'");

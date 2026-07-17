@@ -19,6 +19,7 @@ import {
   type ScanConfigFamily,
   type ScanConfigPreference,
 } from 'gmp/models/scan-config';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import ScanConfigEditDialog, {
   handleSearchChange,
 } from 'web/pages/scanconfigs/ScanConfigEditDialog';
@@ -403,6 +404,123 @@ describe('ScanConfigEditDialog tests', () => {
       select,
       trend,
     });
+  });
+
+  test('should mark a family as fully selected based on its own NVT count/max, independent of the families list shape (regression for GEA-1698)', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+
+    // families coming from gmp.nvtfamilies.get() only have `name` and
+    // `maxNvtCount`, not a `nvts.max` property. The select-all value must not
+    // depend on that shape, otherwise it always resolves to NO_VALUE.
+    const familiesWithoutNvtsMax = [
+      {name: 'family1'},
+      {name: 'family2'},
+    ] as unknown as ScanConfigFamily[];
+
+    const configFamiliesWithFullSelection: ScanConfigFamilies = {
+      family1: {
+        name: 'family1',
+        nvts: {count: 3, max: 3},
+        trend: SCANCONFIG_TREND_STATIC,
+      },
+      family2: {
+        name: 'family2',
+        nvts: {count: 1, max: 4},
+        trend: SCANCONFIG_TREND_STATIC,
+      },
+    };
+
+    const {render} = rendererWith({capabilities: true});
+    render(
+      <ScanConfigEditDialog
+        comment="bar"
+        configFamilies={configFamiliesWithFullSelection}
+        configId="c1"
+        configIsInUse={false}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
+        families={familiesWithoutNvtsMax}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        title="Edit Scan Config"
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const saveButton = screen.getDialogSaveButton();
+    fireEvent.click(saveButton);
+
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        select: expect.objectContaining({
+          family1: YES_VALUE, // fully selected: 3 of 3
+          family2: NO_VALUE, // partially selected: 1 of 4
+        }),
+      }),
+    );
+  });
+
+  test('should sync a single family select-all value from familySelectionUpdate without affecting other families (regression for GEA-1698)', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    const {rerender} = render(
+      <ScanConfigEditDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
+        families={families}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        title="Edit Scan Config"
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    // family1 initially resolves to fully selected (count 1 === max 1)
+    // simulate the family dialog reporting a deselection was saved for family1
+    rerender(
+      <ScanConfigEditDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
+        families={families}
+        familySelectionUpdate={{familyName: 'family1', select: NO_VALUE}}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        title="Edit Scan Config"
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const saveButton = screen.getDialogSaveButton();
+    fireEvent.click(saveButton);
+
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        select: {
+          ...select,
+          family1: NO_VALUE, // updated via familySelectionUpdate
+        },
+      }),
+    );
   });
 
   test('should allow to edit nvt families for openvas configs', async () => {

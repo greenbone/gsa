@@ -7,7 +7,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
 import {useParams} from 'react-router';
 import logger from 'gmp/log';
-import Filter, {RESET_FILTER} from 'gmp/models/filter';
+import Filter, {type FilterType, RESET_FILTER} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive} from 'gmp/models/task';
@@ -60,9 +60,8 @@ const DEFAULT_FILTER = Filter.fromString(
   'levels=chml rows=100 min_qod=70 first=1 sort-reverse=severity result_hosts_only=0',
 );
 
-export const REPORT_RESET_FILTER = RESET_FILTER.copy()
-  .setSortOrder('sort-reverse')
-  .setSortBy('severity');
+export const REPORT_RESET_FILTER =
+  RESET_FILTER.setSortOrder('sort-reverse').setSortBy('severity');
 
 const hasTargetId = (value: unknown): value is ReportTargetRef => {
   return (
@@ -202,7 +201,7 @@ const ReportDetailsPage = () => {
 
   // Handlers
   const handleFilterChange = useCallback(
-    (filter: Filter) => {
+    (filter: FilterType) => {
       changeFilter(filter);
     },
     [changeFilter],
@@ -294,9 +293,9 @@ const ReportDetailsPage = () => {
         storeAsDefault,
       } = state;
 
-      const newFilter = reportFilter.copy();
-      newFilter.set('notes', includeNotes);
-      newFilter.set('overrides', includeOverrides);
+      const newFilter = reportFilter
+        .set('notes', includeNotes)
+        .set('overrides', includeOverrides);
 
       if (storeAsDefault) {
         const defaults = {
@@ -390,8 +389,7 @@ const ReportDetailsPage = () => {
 
     if (!levels.includes('g')) {
       levels += 'g';
-      const levelFilter = reportFilter.copy();
-      levelFilter.set('levels', levels);
+      const levelFilter = reportFilter.set('levels', levels);
       handleFilterChange(levelFilter);
     }
   }, [reportFilter, handleFilterChange]);
@@ -400,8 +398,7 @@ const ReportDetailsPage = () => {
     if (!reportFilter) return;
 
     if (reportFilter.has('severity')) {
-      const levelFilter = reportFilter.copy();
-      levelFilter.delete('severity');
+      const levelFilter = reportFilter.delete('severity');
       handleFilterChange(levelFilter);
     }
   }, [reportFilter, handleFilterChange]);
@@ -410,8 +407,7 @@ const ReportDetailsPage = () => {
     if (!reportFilter) return;
 
     if (reportFilter.has('min_qod')) {
-      const levelFilter = reportFilter.copy();
-      levelFilter.set('min_qod', 30);
+      const levelFilter = reportFilter.set('min_qod', 30);
       handleFilterChange(levelFilter);
     }
   }, [reportFilter, handleFilterChange]);

@@ -559,6 +559,352 @@ describe('ScanConfigComponent', () => {
     });
   });
 
+  describe('family selection sync between parent and family dialog (regression)', () => {
+    test('should not let the parent overwrite a deselection made in the family dialog on save', async () => {
+      // family1 starts fully selected (2 of 2 NVTs)
+      const editScanConfigFamilySettings = testing.fn().mockResolvedValue({
+        data: {
+          nvts: [
+            {oid: 'nvt-1', name: 'NVT One', severity: 5, selected: YES_VALUE},
+            {oid: 'nvt-2', name: 'NVT Two', severity: 8, selected: YES_VALUE},
+          ],
+        },
+      });
+
+      const {gmp, mocks} = createGmp({editScanConfigFamilySettings});
+      const childFn = renderComponent(gmp);
+
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
+
+      await screen.findByText('Edit Scan Config Test Config');
+
+      const familyEditButtons = screen.getAllByTitle('Edit Scan Config Family');
+      fireEvent.click(familyEditButtons[0]);
+
+      await screen.findByText('Edit Scan Config Family family1');
+
+      // deselect one NVT in the family dialog
+      const nvtCheckbox = screen.getByName('nvt-2') as HTMLInputElement;
+      expect(nvtCheckbox).toBeChecked();
+      fireEvent.click(nvtCheckbox);
+      expect(nvtCheckbox).not.toBeChecked();
+
+      const familySaveButtons = screen.getAllByTestId('dialog-save-button');
+      fireEvent.click(familySaveButtons[familySaveButtons.length - 1]);
+
+      await waitFor(() => {
+        expect(mocks.saveScanConfigFamily).toHaveBeenCalledWith(
+          expect.objectContaining({
+            selected: {'nvt-1': YES_VALUE, 'nvt-2': NO_VALUE},
+          }),
+        );
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText('Edit Scan Config Family family1'),
+        ).not.toBeInTheDocument();
+      });
+
+      // saving the parent config dialog must not overwrite the deselection
+      // with a stale "select all" value for family1
+      const parentSaveButton = screen.getByTestId('dialog-save-button');
+      fireEvent.click(parentSaveButton);
+
+      await waitFor(() => {
+        expect(mocks.saveScanConfig).toHaveBeenCalledWith(
+          expect.objectContaining({
+            select: expect.objectContaining({family1: NO_VALUE}),
+          }),
+        );
+      });
+    });
+
+    test('should reflect a full selection made in the family dialog on the parent select-all value on save', async () => {
+      // family2 starts partially selected (1 of 4 NVTs)
+      const editScanConfigFamilySettings = testing.fn().mockResolvedValue({
+        data: {
+          nvts: [
+            {oid: 'nvt-1', name: 'NVT One', severity: 5, selected: YES_VALUE},
+            {oid: 'nvt-2', name: 'NVT Two', severity: 8, selected: NO_VALUE},
+            {oid: 'nvt-3', name: 'NVT Three', severity: 3, selected: NO_VALUE},
+            {oid: 'nvt-4', name: 'NVT Four', severity: 1, selected: NO_VALUE},
+          ],
+        },
+      });
+
+      const {gmp, mocks} = createGmp({editScanConfigFamilySettings});
+      const childFn = renderComponent(gmp);
+
+      const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+      props.edit(config);
+
+      await screen.findByText('Edit Scan Config Test Config');
+
+      const familyEditButtons = screen.getAllByTitle('Edit Scan Config Family');
+      fireEvent.click(familyEditButtons[1]);
+
+      await screen.findByText('Edit Scan Config Family family2');
+
+      // select all remaining NVTs in the family dialog
+      fireEvent.click(screen.getByName('nvt-2'));
+      fireEvent.click(screen.getByName('nvt-3'));
+      fireEvent.click(screen.getByName('nvt-4'));
+      const familySaveButtons = screen.getAllByTestId('dialog-save-button');
+      fireEvent.click(familySaveButtons[familySaveButtons.length - 1]);
+
+      await waitFor(() => {
+        expect(mocks.saveScanConfigFamily).toHaveBeenCalledWith(
+          expect.objectContaining({
+            selected: {
+              'nvt-1': YES_VALUE,
+              'nvt-2': YES_VALUE,
+              'nvt-3': YES_VALUE,
+              'nvt-4': YES_VALUE,
+            },
+          }),
+        );
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText('Edit Scan Config Family family2'),
+        ).not.toBeInTheDocument();
+      });
+
+      // saving the parent config dialog must reflect the full selection just
+      // made in the family dialog, not the stale "not all selected" value
+      const parentSaveButton = screen.getByTestId('dialog-save-button');
+      fireEvent.click(parentSaveButton);
+
+      await waitFor(() => {
+        expect(mocks.saveScanConfig).toHaveBeenCalledWith(
+          expect.objectContaining({
+            select: expect.objectContaining({family2: YES_VALUE}),
+          }),
+        );
+      });
+    });
+
+    describe('edge cases', () => {
+      test('should preserve updates to multiple families edited sequentially before the parent is saved', async () => {
+        const editScanConfigFamilySettings = testing
+          .fn()
+          .mockImplementation(({familyName}: {familyName: string}) => {
+            const nvts =
+              familyName === 'family1'
+                ? [
+                    {
+                      oid: 'nvt-1',
+                      name: 'NVT One',
+                      severity: 5,
+                      selected: YES_VALUE,
+                    },
+                    {
+                      oid: 'nvt-2',
+                      name: 'NVT Two',
+                      severity: 8,
+                      selected: YES_VALUE,
+                    },
+                  ]
+                : [
+                    {
+                      oid: 'nvt-1',
+                      name: 'NVT One',
+                      severity: 5,
+                      selected: YES_VALUE,
+                    },
+                    {
+                      oid: 'nvt-2',
+                      name: 'NVT Two',
+                      severity: 8,
+                      selected: NO_VALUE,
+                    },
+                    {
+                      oid: 'nvt-3',
+                      name: 'NVT Three',
+                      severity: 3,
+                      selected: NO_VALUE,
+                    },
+                    {
+                      oid: 'nvt-4',
+                      name: 'NVT Four',
+                      severity: 1,
+                      selected: NO_VALUE,
+                    },
+                  ];
+            return Promise.resolve({data: {nvts}});
+          });
+
+        const {gmp, mocks} = createGmp({editScanConfigFamilySettings});
+        const childFn = renderComponent(gmp);
+
+        const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+        props.edit(config);
+
+        await screen.findByText('Edit Scan Config Test Config');
+
+        // deselect one NVT in family1 (fully selected -> partially selected)
+        fireEvent.click(screen.getAllByTitle('Edit Scan Config Family')[0]);
+        await screen.findByText('Edit Scan Config Family family1');
+        fireEvent.click(screen.getByName('nvt-2'));
+        let familySaveButtons = screen.getAllByTestId('dialog-save-button');
+        fireEvent.click(familySaveButtons[familySaveButtons.length - 1]);
+        await waitFor(() => {
+          expect(
+            screen.queryByText('Edit Scan Config Family family1'),
+          ).not.toBeInTheDocument();
+        });
+
+        // select all remaining NVTs in family2 (partially selected -> fully selected)
+        fireEvent.click(screen.getAllByTitle('Edit Scan Config Family')[1]);
+        await screen.findByText('Edit Scan Config Family family2');
+        fireEvent.click(screen.getByName('nvt-2'));
+        fireEvent.click(screen.getByName('nvt-3'));
+        fireEvent.click(screen.getByName('nvt-4'));
+        familySaveButtons = screen.getAllByTestId('dialog-save-button');
+        fireEvent.click(familySaveButtons[familySaveButtons.length - 1]);
+        await waitFor(() => {
+          expect(
+            screen.queryByText('Edit Scan Config Family family2'),
+          ).not.toBeInTheDocument();
+        });
+
+        // both edits must be reflected when the parent config is saved
+        fireEvent.click(screen.getByTestId('dialog-save-button'));
+
+        await waitFor(() => {
+          expect(mocks.saveScanConfig).toHaveBeenCalledWith(
+            expect.objectContaining({
+              select: expect.objectContaining({
+                family1: NO_VALUE,
+                family2: YES_VALUE,
+              }),
+            }),
+          );
+        });
+      });
+
+      test('should not change the parent select value when the family dialog is closed without saving', async () => {
+        const {gmp, mocks} = createGmp();
+        const childFn = renderComponent(gmp);
+
+        const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+        props.edit(config);
+
+        await screen.findByText('Edit Scan Config Test Config');
+
+        const familyEditButtons = screen.getAllByTitle(
+          'Edit Scan Config Family',
+        );
+        fireEvent.click(familyEditButtons[0]);
+
+        await screen.findByText('Edit Scan Config Family family1');
+
+        // family1 starts fully selected (2 of 2); deselect one NVT but discard it
+        const nvtCheckbox = screen.getByName('nvt-2') as HTMLInputElement;
+        expect(nvtCheckbox).toBeChecked();
+        fireEvent.click(nvtCheckbox);
+
+        const closeButtons = screen.getAllByTestId('dialog-close-button');
+        fireEvent.click(closeButtons[closeButtons.length - 1]);
+
+        await waitFor(() => {
+          expect(
+            screen.queryByText('Edit Scan Config Family family1'),
+          ).not.toBeInTheDocument();
+        });
+        expect(mocks.saveScanConfigFamily).not.toHaveBeenCalled();
+
+        fireEvent.click(screen.getByTestId('dialog-save-button'));
+
+        await waitFor(() => {
+          expect(mocks.saveScanConfig).toHaveBeenCalledWith(
+            expect.objectContaining({
+              select: expect.objectContaining({family1: YES_VALUE}),
+            }),
+          );
+        });
+      });
+
+      test('should default to not selected when the edited family has no NVTs', async () => {
+        const emptyFamilyConfig = ScanConfig.fromElement({
+          _id: 'c1',
+          name: 'Test Config',
+          comment: 'A comment',
+          creation_time: '2024-01-01T00:00:00Z',
+          modification_time: '2024-01-02T00:00:00Z',
+          owner: {name: 'admin'},
+          writable: 1,
+          in_use: 0,
+          family_count: {__text: '1', growing: 0},
+          families: {
+            family: [
+              {
+                name: 'familyEmpty',
+                nvt_count: '0',
+                max_nvt_count: '0',
+                growing: 0,
+              },
+            ],
+          },
+          preferences,
+          permissions: {permission: [{name: 'everything'}]},
+          scanner: {name: 'scanner', type: '42'},
+          tasks: {task: []},
+        });
+
+        const {gmp, mocks} = createGmp({
+          getScanConfig: testing.fn().mockResolvedValue({
+            data: emptyFamilyConfig,
+          }),
+          editScanConfigFamilySettings: testing
+            .fn()
+            .mockResolvedValue({data: {nvts: []}}),
+          getNvtFamilies: testing
+            .fn()
+            .mockResolvedValue({data: [{name: 'familyEmpty', maxNvtCount: 0}]}),
+        });
+
+        const childFn = renderComponent(gmp);
+        const props = childFn.mock.calls[0]?.[0] as ScanConfigRenderProps;
+        props.edit(emptyFamilyConfig);
+
+        await screen.findByText('Edit Scan Config Test Config');
+
+        fireEvent.click(screen.getByTitle('Edit Scan Config Family'));
+
+        await screen.findByText('Edit Scan Config Family familyEmpty');
+
+        const familySaveButtons = screen.getAllByTestId('dialog-save-button');
+        fireEvent.click(familySaveButtons[familySaveButtons.length - 1]);
+
+        await waitFor(() => {
+          expect(mocks.saveScanConfigFamily).toHaveBeenCalledWith(
+            expect.objectContaining({selected: {}}),
+          );
+        });
+
+        await waitFor(() => {
+          expect(
+            screen.queryByText('Edit Scan Config Family familyEmpty'),
+          ).not.toBeInTheDocument();
+        });
+
+        fireEvent.click(screen.getByTestId('dialog-save-button'));
+
+        await waitFor(() => {
+          expect(mocks.saveScanConfig).toHaveBeenCalledWith(
+            expect.objectContaining({
+              select: expect.objectContaining({familyEmpty: NO_VALUE}),
+            }),
+          );
+        });
+      });
+    });
+  });
+
   describe('handleSaveConfigNvt', () => {
     test('should save NVT, reload family, and close NVT dialog', async () => {
       const {gmp, mocks} = createGmp();

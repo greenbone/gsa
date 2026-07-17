@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Spinner from 'web/components/form/Spinner';
@@ -11,7 +11,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface ResultsPerPageGroupProps {
   rows?: number;
-  filter?: Filter;
+  filter?: FilterType;
   name?: string;
   onChange?: (value: number, name: string) => void;
 }

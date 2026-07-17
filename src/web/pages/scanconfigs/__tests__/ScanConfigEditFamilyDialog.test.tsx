@@ -338,6 +338,8 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
     expect(nvtCheckbox).not.toBeChecked();
 
     fireEvent.click(nvtCheckbox);
+    // the checkbox must visually reflect the new selection state
+    expect(nvtCheckbox).toBeChecked();
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -346,6 +348,52 @@ describe('ScanConfigEditFamilyDialog component tests', () => {
       selected: {
         1234: 1,
         5678: 0,
+      },
+    });
+  });
+
+  test('should allow deselecting an NVT', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
+
+    const allSelected: ScanConfigNvtsSelected = {
+      1234: 1,
+      5678: 1,
+    };
+
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
+    render(
+      <ScanConfigEditFamilyDialog
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={false}
+        nvts={nvts}
+        selected={allSelected}
+        title="Foo title"
+        onClose={handleClose}
+        onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
+        onSave={handleSave}
+      />,
+    );
+
+    const dialog = within(screen.getDialog());
+    const nvtCheckbox = dialog.getByName('1234') as HTMLInputElement;
+    expect(nvtCheckbox).toBeChecked();
+
+    fireEvent.click(nvtCheckbox);
+    // the checkbox must visually reflect the deselection
+    expect(nvtCheckbox).not.toBeChecked();
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(handleSave).toHaveBeenCalledWith({
+      configId: 'c1',
+      familyName: 'family',
+      selected: {
+        1234: 0,
+        5678: 1,
       },
     });
   });

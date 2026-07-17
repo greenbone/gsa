@@ -251,8 +251,7 @@ class Alert extends Model {
     if (isDefined(ret.method?.data?.report_formats)) {
       // @ts-expect-error
       const methodDataReportFormat = ret.method?.data?.report_formats?.value as
-        | string
-        | undefined;
+        string | undefined;
 
       ret.method.data.report_formats = map(
         methodDataReportFormat?.split(','),

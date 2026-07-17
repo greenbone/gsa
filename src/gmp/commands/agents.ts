@@ -10,7 +10,7 @@ import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import Agent from 'gmp/models/agent';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
@@ -60,7 +60,7 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     });
   }
 
-  async authorizeByFilter(filter: Filter) {
+  async authorizeByFilter(filter: FilterType) {
     const response = await this.get({filter});
     return this.authorize(response.data);
   }
@@ -74,12 +74,12 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     });
   }
 
-  async revokeByFilter(filter: Filter) {
+  async revokeByFilter(filter: FilterType) {
     const response = await this.get({filter});
     return this.revoke(response.data);
   }
 
-  async enableUpdateToLatestByFilter(filter: Filter) {
+  async enableUpdateToLatestByFilter(filter: FilterType) {
     const response = await this.get({filter});
     return this.enableUpdateToLatest(response.data);
   }
@@ -93,7 +93,7 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     });
   }
 
-  async disableUpdateToLatestByFilter(filter: Filter) {
+  async disableUpdateToLatestByFilter(filter: FilterType) {
     const response = await this.get({filter});
     return this.disableUpdateToLatest(response.data);
   }
@@ -107,10 +107,10 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     });
   }
 
-  getSeverityAggregates({filter}: {filter?: Filter} = {}) {
+  getSeverityAggregates({filter}: {filter?: FilterType} = {}) {
     const combinedFilter = filter
-      ? filter.copy().and(AGENT_CONTROLLER_FILTER)
-      : AGENT_CONTROLLER_FILTER.copy();
+      ? filter.and(AGENT_CONTROLLER_FILTER)
+      : AGENT_CONTROLLER_FILTER;
 
     return this.getAggregates({
       aggregate_type: 'task',
@@ -120,7 +120,7 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     });
   }
 
-  getNetworkAggregates({filter}: {filter?: Filter} = {}) {
+  getNetworkAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'agent',
       group_column: 'scanner',

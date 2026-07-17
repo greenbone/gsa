@@ -6,7 +6,7 @@
 import React from 'react';
 import {type LinkProps as RLinkProps, Link as RLink} from 'react-router';
 import styled from 'styled-components';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined, isString} from 'gmp/utils/identity';
 import Theme from 'web/utils/Theme';
 
@@ -24,7 +24,7 @@ interface WithTextOnlyComponentProps {
 interface LinkComponentProps extends Omit<RLinkProps, 'to'> {
   anchor?: string;
   to?: string;
-  filter?: string | Filter;
+  filter?: FilterType | string;
   query?: Record<string, string>;
 }
 

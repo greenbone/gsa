@@ -10,7 +10,7 @@ import {
   type CollectionList,
 } from 'gmp/collection/parser';
 import {type ComplianceType} from 'gmp/models/compliance';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type NvtRefElement, type NvtSeveritiesElement} from 'gmp/models/nvt';
 import {type ReportTLSCertificateElement} from 'gmp/models/report/tls-certificate';
 import Result from 'gmp/models/result';
@@ -370,7 +370,7 @@ interface ResultsReportElement {
 // reports with details=1 always have a results element
 // (that can be empty) whereas reports with details=0
 // never have a results element
-export const emptyCollectionList = (filter: Filter) => {
+export const emptyCollectionList = (filter: FilterType) => {
   return {
     filter,
     entities: [],
@@ -405,7 +405,7 @@ export const parseHostSeverities = (results: ReportResultsElement = {}) => {
 
 export const parseErrors = (
   report: ErrorsReportElement,
-  filter: Filter,
+  filter: FilterType,
 ): CollectionList<ReportError> => {
   const {host: hosts, errors} = report;
 
@@ -505,7 +505,7 @@ const parseCveEndpointElements = (
 const buildCveCollectionList = (
   entities: ReportClosedCve[],
   container: CveEndpointContainer,
-  filter: Filter,
+  filter: FilterType,
 ): CollectionList<ReportClosedCve> => {
   const {length: filteredCount} = entities;
 
@@ -524,7 +524,7 @@ const buildCveCollectionList = (
 
 export const parseCvesFromEndpoint = (
   data: CvesEndpointData,
-  filter: Filter,
+  filter: FilterType,
 ): CollectionList<ReportActiveCve> => {
   const {cves: cvesContainer} = data;
 
@@ -539,7 +539,7 @@ export const parseCvesFromEndpoint = (
 
 export const parseClosedCvesFromEndpoint = (
   data: ClosedCvesEndpointData,
-  filter: Filter,
+  filter: FilterType,
 ): CollectionList<ReportClosedCve> => {
   const {closed_cves: closedCvesContainer} = data;
 

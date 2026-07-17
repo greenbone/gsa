@@ -109,8 +109,7 @@ const ResultFilterDialog = ({
     onValueChange,
   } = filterDialogProps;
 
-  const handleRemoveLevels = () =>
-    onFilterChange(filter.copy().delete('levels'));
+  const handleRemoveLevels = () => onFilterChange(filter.delete('levels'));
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup

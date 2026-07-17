@@ -6,7 +6,7 @@
 import InfoEntitiesCommand from 'gmp/commands/info-entities';
 import type Http from 'gmp/http/http';
 import DfnCertAdv from 'gmp/models/dfn-cert';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -17,7 +17,7 @@ class DfnCertAdvisoriesCommand extends InfoEntitiesCommand<DfnCertAdv> {
     super(http, 'dfn_cert_adv', DfnCertAdv, infoFilter);
   }
 
-  getCreatedAggregates({filter}: {filter?: Filter} = {}) {
+  getCreatedAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'dfn_cert_adv',
       group_column: 'created',
@@ -25,7 +25,7 @@ class DfnCertAdvisoriesCommand extends InfoEntitiesCommand<DfnCertAdv> {
     });
   }
 
-  getSeverityAggregates({filter}: {filter?: Filter} = {}) {
+  getSeverityAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'dfn_cert_adv',
       group_column: 'severity',

@@ -4,12 +4,12 @@
  */
 
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 
 interface EntitiesFooterWrapperProps<TEntity> {
   entities?: TEntity[];
   entitiesCounts?: CollectionCounts;
-  filter?: Filter;
+  filter?: FilterType;
   onDeleteBulk?: () => void;
   onDownloadBulk?: () => void;
   onTagsBulk?: () => void;
@@ -22,7 +22,7 @@ interface EntitiesFooterWrapperProps<TEntity> {
 export interface WithEntitiesFooterComponentProps<TEntity> {
   entities?: TEntity[];
   entitiesCounts?: CollectionCounts;
-  filter?: Filter;
+  filter?: FilterType;
   onDeleteClick?: () => void;
   onDownloadClick?: (filename: string) => void;
   onTagsClick?: () => void;

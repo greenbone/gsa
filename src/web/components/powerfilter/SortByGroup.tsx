@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type default as Filter, type FilterSortOrder} from 'gmp/models/filter';
+import {type FilterType, type FilterSortOrder} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
@@ -18,7 +18,7 @@ export interface SortByField {
 interface SortByGroupProps {
   by?: string;
   fields?: SortByField[];
-  filter?: Filter;
+  filter?: FilterType;
   order?: FilterSortOrder;
   onSortByChange?: (value: string) => void;
   onSortOrderChange?: (value: FilterSortOrder) => void;

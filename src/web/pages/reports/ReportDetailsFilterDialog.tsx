@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import Checkbox from 'web/components/form/Checkbox';
 import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
 import ComplianceLevelsFilterGroup from 'web/components/powerfilter/ComplianceLevelsGroup';
@@ -29,7 +29,7 @@ import DeltaResultsFilterGroup from 'web/pages/reports/DeltaResultsFilterGroup';
 interface ReportDetailsFilterDialogProps extends UseFilterDialogSaveProps {
   audit?: boolean;
   delta?: boolean;
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 const ReportDetailsFilterDialog = ({
@@ -65,8 +65,7 @@ const ReportDetailsFilterDialog = ({
     onValueChange,
   } = filterDialogProps;
   const resultHostsOnly = filter.get('result_hosts_only');
-  const handleRemoveLevels = () =>
-    onFilterChange(filter.copy().delete('levels'));
+  const handleRemoveLevels = () => onFilterChange(filter.delete('levels'));
   const handleRemoveCompliance = () =>
     onFilterChange(filter.delete('compliance_levels'));
   return (

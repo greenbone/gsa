@@ -6,12 +6,12 @@
 import EntitiesCommand from 'gmp/commands/entities';
 import {BULK_SELECT_BY_IDS} from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import Host from 'gmp/models/host';
 import {type Element} from 'gmp/models/model';
 
 interface HostAggregatesParams {
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 interface HostVulnerabilityScoreAggregatesParams extends HostAggregatesParams {

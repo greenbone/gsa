@@ -63,7 +63,7 @@ describe('EntitiesCommand tests', () => {
   });
 
   test('should prefer filter_id over filter parameter', async () => {
-    const filter = Filter.fromElement({
+    const filter = Filter.fromResponseElement({
       _id: 'bar',
       keywords: {
         keyword: {relation: '=', value: 'bar', column: 'foo'},

@@ -47,7 +47,7 @@ const EmptyReport = ({
         {!isActiveReport && (
           <>
             <ReportPanel
-              icon={props => <TaskIcon {...props} />}
+              icon={<TaskIcon size="large" />}
               title={_('The scan did not collect any results')}
             >
               {_(
@@ -55,7 +55,12 @@ const EmptyReport = ({
               )}
             </ReportPanel>
             <ReportPanel
-              icon={props => <TargetIcon {...props} />}
+              icon={
+                <TargetIcon
+                  size="large"
+                  onClick={mayEditTarget ? onTargetEditClick : undefined}
+                />
+              }
               title={_('The target hosts could be regarded dead')}
               onClick={mayEditTarget ? onTargetEditClick : undefined}
             >
@@ -70,7 +75,7 @@ const EmptyReport = ({
         )}
         {isActiveReport && progress === 1 && (
           <ReportPanel
-            icon={props => <RefreshIcon {...props} />}
+            icon={<RefreshIcon size="large" />}
             title={_('The scan just started and no results have arrived yet')}
           >
             {_('Just wait for results to arrive.')}
@@ -78,7 +83,7 @@ const EmptyReport = ({
         )}
         {isActiveReport && progress > 1 && (
           <ReportPanel
-            icon={props => <RefreshIcon {...props} />}
+            icon={<RefreshIcon size="large" />}
             title={_(
               'The scan is still running and no results have arrived yet',
             )}
@@ -88,7 +93,12 @@ const EmptyReport = ({
         )}
         {progress < 1 && hasTarget && status !== TASK_STATUS.interrupted && (
           <ReportPanel
-            icon={props => <TargetIcon {...props} />}
+            icon={
+              <TargetIcon
+                size="large"
+                onClick={mayEditTarget ? onTargetEditClick : undefined}
+              />
+            }
             title={_('The target hosts could be regarded dead')}
             onClick={mayEditTarget ? onTargetEditClick : undefined}
           >

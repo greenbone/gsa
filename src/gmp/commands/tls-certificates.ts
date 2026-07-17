@@ -5,12 +5,12 @@
 
 import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import TlsCertificate from 'gmp/models/tls-certificate';
 
 interface TlsCertificateAggregatesParams {
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 class TlsCertificatesCommand extends EntitiesCommand<TlsCertificate> {

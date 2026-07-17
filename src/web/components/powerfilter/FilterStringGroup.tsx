@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isString} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface FilterStringGroupProps {
-  filter: string | Filter;
+  filter: FilterType | string;
   name?: string;
   onChange?: (value: string, name: string) => void;
 }
