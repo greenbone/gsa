@@ -14,7 +14,7 @@ import {
   CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filterterm';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import {
   type default as Scanner,
   type ScannerType,

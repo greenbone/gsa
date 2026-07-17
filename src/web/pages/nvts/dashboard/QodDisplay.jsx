@@ -6,7 +6,7 @@
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filterterm';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import DonutChart from 'web/components/chart/Donut';

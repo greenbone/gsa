@@ -14,7 +14,7 @@ import {
 } from 'web/testing';
 import Features from 'gmp/capabilities/features';
 import Filter from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filterterm';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import {OPENVASD_SCANNER_TYPE, scannerTypeName} from 'gmp/models/scanner';
 import ScannerFilterDialog from 'web/pages/scanners/ScannerFilterDialog';
 
