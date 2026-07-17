@@ -5,12 +5,12 @@
 
 import EntityModel, {parseEntityModelProperties} from 'gmp/models/entity-model';
 import convert from 'gmp/models/filter/convert';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import FilterTerms from 'gmp/models/filter/filter-terms';
 import {
   type default as FilterType,
   type FilterSortOrder,
 } from 'gmp/models/filter/filter-type';
-import FilterTerm from 'gmp/models/filter/filterterm';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString, isArray} from 'gmp/utils/identity';

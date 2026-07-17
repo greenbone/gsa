@@ -13,7 +13,7 @@ import {
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filterterm';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import TaskFilterDialog from 'web/pages/tasks/TaskFilterDialog';
 
 describe('TaskFilterDialog tests', () => {

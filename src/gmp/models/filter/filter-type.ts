@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type FilterTerm from 'gmp/models/filter/filterterm';
+import type FilterTerm from 'gmp/models/filter/filter-term';
 
 export type FilterSortOrder = typeof SORT_ORDER_ASC | typeof SORT_ORDER_DESC;
 

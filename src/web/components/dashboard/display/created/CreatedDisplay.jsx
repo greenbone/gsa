@@ -5,7 +5,7 @@
 
 import React from 'react';
 import Filter from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filterterm';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import {isDefined} from 'gmp/utils/identity';
 import LineChart, {lineDataPropType} from 'web/components/chart/base/Line';
 import transformCreated from 'web/components/dashboard/display/created/CreatedTransform';

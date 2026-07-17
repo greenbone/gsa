@@ -4,13 +4,13 @@
  */
 
 import convert from 'gmp/models/filter/convert';
+import FilterTerm, {AND} from 'gmp/models/filter/filter-term';
 import {
   type default as FilterType,
   type FilterSortOrder,
   SORT_ORDER_ASC,
   SORT_ORDER_DESC,
 } from 'gmp/models/filter/filter-type';
-import FilterTerm, {AND} from 'gmp/models/filter/filterterm';
 import {EXTRA_KEYWORDS} from 'gmp/models/filter/keywords';
 import {parseInt} from 'gmp/parser';
 import {hasValue, isDefined} from 'gmp/utils/identity';

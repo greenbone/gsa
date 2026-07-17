@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import FilterTerm from 'gmp/models/filter/filterterm';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {LOG_VALUE} from 'web/utils/severity';

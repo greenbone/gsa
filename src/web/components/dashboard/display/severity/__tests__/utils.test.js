@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import FilterTerm from 'gmp/models/filter/filterterm';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
 import {CRITICAL_VALUE, LOG_VALUE} from 'web/utils/severity';
 
