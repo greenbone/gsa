@@ -155,7 +155,7 @@ const SORT_ORDER_DESC = 'sort-reverse';
  *
  * @param filterString  Filter representation as a string
  *
- * @return Array of parsed FilterTerms
+ * @returns Array of parsed FilterTerms
  */
 const parseFilterTermsFromString = (
   filterString: string | undefined,
@@ -193,49 +193,14 @@ const parseFilterTermsFromString = (
   return terms;
 };
 
-/**
- * Represents a filter
- */
-class Filter extends EntityModel implements FilterType {
-  static readonly entityType = 'filter';
-
-  readonly alerts: Model[];
-  readonly filter_type?: string;
+class FilterTerms implements FilterType {
   private terms: FilterTerm[];
 
   constructor({
-    _type,
-    alerts = [],
-    comment,
-    creationTime,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    filter_type,
-    id,
-    inUse,
-    modificationTime,
-    name,
-    owner,
     terms = [],
-    userCapabilities,
-    userTags = [],
-    writable,
-  }: FilterModelProperties = {}) {
-    super({
-      _type,
-      comment,
-      creationTime,
-      id,
-      inUse,
-      modificationTime,
-      name,
-      owner,
-      userCapabilities,
-      userTags,
-      writable,
-    });
-
-    this.alerts = alerts;
-    this.filter_type = filter_type;
+  }: {
+    terms?: FilterTerm[];
+  } = {}) {
     this.terms = terms;
   }
 
@@ -244,70 +209,30 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Create new Filter from the passed element object
-   *
-   * @override
-   * @param element Element object to parse properties from.
-   *
-   * @return An object with properties for the new Filter model
+   * Creates a shallow copy of this filter terms container.
    */
-  static fromElement(element: FilterModelElement = {}): Filter {
-    const ret = parseEntityModelProperties(element) as FilterModelProperties;
-
-    ret.filter_type = ret._type;
-
-    if (ret.id === UNKNOWN_FILTER_ID) {
-      ret.id = undefined;
-    }
-    if (isDefined(element.term)) {
-      ret.terms = parseFilterTermsFromString(element.term);
-
-      // ret.term should not be part of the public api
-      // but it's helpful for debug purposes
-      ret._term = element.term;
-      // @ts-expect-error
-      delete ret.term;
-    } else {
-      ret.terms = [];
-    }
-
-    if (isDefined(element.alerts?.alert)) {
-      ret.alerts = map(element.alerts.alert, alert =>
-        Model.fromElement(alert, 'alert'),
-      );
-    }
-
-    return new Filter(ret);
-  }
-
-  static fromResponseElement(element: FilterResponseElement = {}): FilterType {
-    const id =
-      !isEmpty(element._id) && element._id !== UNKNOWN_FILTER_ID
-        ? element._id
-        : undefined;
-
-    const name = !isEmpty(element.name) ? element.name : undefined;
-
-    let terms: FilterTerm[] = [];
-    if (isDefined(element.keywords)) {
-      terms = map(
-        element.keywords.keyword,
-        ({relation, value, column: key}: FilterKeyword) =>
-          new FilterTerm(convert(key, value, relation)),
-      );
-    } else if (isDefined(element.term)) {
-      terms = parseFilterTermsFromString(element.term);
-    }
-
-    return new Filter({id, name, terms});
+  private _copy(): FilterTerms {
+    return new FilterTerms({
+      terms: [...this.terms],
+    });
   }
 
   /**
-   * @private
+   * Add FilterTerm to this filter
+   *
+   * Adds the passed FilterTerm to the list of filter terms in this filter.
+   *
+   * @param terms FilterTerms to add.
+   * @returns This filter
+   */
+  private _addTerm(...terms: FilterTerm[]) {
+    this.terms.push(...terms);
+  }
+
+  /**
+   * Set FilterTerm in this filter
    *
    * @param term  FilterTerm to set
-   *
-   * @return This filter
    */
   private _setTerm(term: FilterTerm) {
     const key = term.keyword;
@@ -329,23 +254,22 @@ class Filter extends EntityModel implements FilterType {
       const index = this._getIndex(keyword);
       this.terms[index] = term;
     }
-    return this;
   }
 
   /**
-   * Add FilterTerm to this Filter
+   * Remove all FilterTerms with this key
    *
-   * Adds the passed FilterTerm to the list of filter terms in this Filter.
+   * @param key Filter term key to remove
    *
-   * @private
-   *
-   * @param terms FilterTerm to add.
-   *
-   * @return This filter
+   * @returns True if a FilterTerm with this key has been removed from this filter.
    */
-  private _addTerm(...terms: FilterTerm[]) {
-    this.terms.push(...terms);
-    return this;
+  private _delete(key: string) {
+    const index = this._getIndex(key);
+    const hasKey = index !== -1;
+    if (hasKey) {
+      this.terms = this.terms.filter((_, i) => i !== index);
+    }
+    return hasKey;
   }
 
   /**
@@ -383,6 +307,19 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
+   * Mutating internal variant of set used by immutable public methods.
+   */
+  private _set(
+    keyword: string,
+    value?: string | number | boolean,
+    relation: string = '=',
+  ) {
+    const converted = convert(keyword, value, relation);
+    this._setTerm(new FilterTerm(converted));
+    return this;
+  }
+
+  /**
    * Returns new keywords filter terms from the given filter that are not included in this filter
    *
    * @param filter Filter to get new keywords from
@@ -400,135 +337,13 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Reset filter id of the current filter
-   *
-   * @private
-   *
-   * @return This filter.
-   */
-  private _resetFilterId() {
-    // @ts-expect-error
-    this.id = undefined;
-    return this;
-  }
-
-  /**
-   * Creates a copy of this filter
-   *
-   * The returned copy is only a shallow copy of this filter.
-   * FilterTerms are copied only by reference.
-   *
-   * @return A shallow copy of this filter.
-   */
-  private _copy(): Filter {
-    return new Filter({
-      id: this.id,
-      filter_type: this.filter_type,
-      terms: [...this.getAllTerms()],
-      userCapabilities: this.userCapabilities,
-      userTags: this.userTags,
-    });
-  }
-
-  /**
-   * Creates a new FilterTerm from key, value and relation
-   *
-   * @param keyword   FilterTerm keyword
-   * @param value     FilterTerm value
-   * @param relation  FilterTerm relation (Default: '=').
-   *
-   * @return This filter
-   */
-  private _set(
-    keyword: string,
-    value?: string | number | boolean,
-    relation: string = '=',
-  ) {
-    this._resetFilterId(); // reset id because the filter has changed
-    const converted = convert(keyword, value, relation);
-    this._setTerm(new FilterTerm(converted));
-    return this;
-  }
-
-  /**
-   * Remove all FilterTerms with this key
-   *
-   * @param key Filter term key to remove
-   *
-   * @return True if a FilterTerm with this key has been removed from this Filter.
-   */
-  private _delete(key: string) {
-    const index = this._getIndex(key);
-    const hasKey = index !== -1;
-    if (hasKey) {
-      this.terms = this.terms.filter((_, i) => i !== index);
-      this._resetFilterId(); // filter has changed
-    }
-    return hasKey;
-  }
-
-  /**
-   * Calls passed function for each FilterTerm in this Filter
-   *
-   * @param {function} func  Function to call for each FilterTerm.
-   */
-  forEach(func: FilterForEachFunc) {
-    this.terms.forEach(func);
-  }
-
-  /**
-   * Returns a full string representation of this Filter
-   *
-   * @return String which represents this filter.
-   */
-  toFilterString(): string {
-    return this.terms.map(term => term.toString()).join(' ');
-  }
-
-  /**
-   * Returns the filter criteria as a string
-   *
-   * Converts each non extra keyword FilterTerm to a string representation.
-   *
-   * @return The filter criteria terms as string
-   */
-  toFilterCriteriaString(): string {
-    let filterString = '';
-    this.forEach(term => {
-      const key = term.keyword;
-      if (!isDefined(key) || !EXTRA_KEYWORDS.includes(key)) {
-        filterString += term.toString() + ' ';
-      }
-    });
-    return filterString.trim();
-  }
-
-  /**
-   * Returns the filter extra keyword FilterTerms as a string
-   *
-   * Converts each extra keyword FilterTerm to a string representation.
-   *
-   * @return The filter extra keyword terms as a string
-   */
-  toFilterExtraString(): string {
-    let filterString = '';
-    this.forEach(term => {
-      const key = term.keyword;
-      if (isDefined(key) && EXTRA_KEYWORDS.includes(key)) {
-        filterString += term.toString() + ' ';
-      }
-    });
-    return filterString.trim();
-  }
-
-  /**
    * Get the first FilterTerm for a keyword
    *
    * @param key  FilterTerm keyword to search for
    *
-   * @return Returns the first FilterTerm for the passed keyword
+   * @returns Returns the first FilterTerm for the passed keyword
    *         or undefined of not FilterTerm for the keyword exists in
-   *         this Filter.
+   *         this filter.
    */
   getTerm(key: string | undefined): FilterTerm | undefined {
     if (!isDefined(key)) {
@@ -542,7 +357,7 @@ class Filter extends EntityModel implements FilterType {
    *
    * @param term FilterTerm to find in the filter
    *
-   * @return True if the filter term is included in this filter
+   * @returns True if the filter term is included in this filter
    */
   hasTerm(term: FilterTerm | undefined): boolean {
     if (!isDefined(term)) {
@@ -557,9 +372,8 @@ class Filter extends EntityModel implements FilterType {
    *
    * @param key FilterTerm keyword to search for
    *
-   * @returns Returns all FilterTerms in an Array found for
-   *          the passed keyword or an empty Array if not FilterTerm
-   *          has been found.
+   * @returns Returns all FilterTerms with the passed keyword or an empty Array
+   *          if no FilterTerm has been found.
    */
   getTerms(key: string | undefined): FilterTerm[] {
     if (!isDefined(key)) {
@@ -575,9 +389,9 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Get all FilterTerms
+   * Get all FilterTerms in this filter
    *
-   * @returns Returns the array of all FilterTerms in this filter
+   * @returns An array of all FilterTerms in this filter
    */
   getAllTerms(): readonly FilterTerm[] {
     return this.terms;
@@ -590,8 +404,8 @@ class Filter extends EntityModel implements FilterType {
    * @param def  Value returned if no FilterTerm for key could be
    *             found. Defaults to undefined.
    *
-   * @return Returns the first FilterTerm value for the passed keyword
-   *         or def if no FilterTerm for the keyword exists in this Filter.
+   * @returns Returns the first FilterTerm value for the passed keyword
+   *         or def if no FilterTerm for the keyword exists in this filter.
    */
   get(
     key: string,
@@ -602,30 +416,30 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Creates a new Filter with passed keyword, value and relation set
+   * Creates a new filter with passed keyword, value and relation set
    *
    * @param keyword   FilterTerm keyword
    * @param value     FilterTerm value
    * @param relation  FilterTerm relation (Default: '=').
    *
-   * @return A new Filter
+   * @returns A new filter
    */
   set(
     keyword: string,
     value?: string | number | boolean,
     relation: string = '=',
   ) {
-    const filter = this._copy();
-    filter._set(keyword, value, relation);
-    return filter;
+    const newFilterTerms = this._copy();
+    newFilterTerms._set(keyword, value, relation);
+    return newFilterTerms;
   }
 
   /**
-   * Check whether this Filter contains a FilterTerm with the passed keyword
+   * Check whether this filter contains a FilterTerm with the passed keyword
    *
    * @param key  Keyword to search for
    *
-   * @return Returns true if a FilterTerm with this keyword exists in this Filter.
+   * @returns Returns true if a FilterTerm with this keyword exists in this filter.
    */
   has(key: string): boolean {
     if (!isDefined(key)) {
@@ -639,32 +453,86 @@ class Filter extends EntityModel implements FilterType {
    *
    * @param key Filter term key to remove
    *
-   * @return New filter with the FilterTerm removed or this filter if no FilterTerm with this key exists.
+   * @returns New filter with the FilterTerm removed or this filter if no FilterTerm with this key exists.
    */
   delete(key: string) {
     if (this.has(key)) {
-      const filter = this._copy();
-      filter._delete(key);
-      return filter;
+      const newFilterTerms = this._copy();
+      newFilterTerms._delete(key);
+      return newFilterTerms;
     }
     return this;
   }
 
   /**
-   * Provides a unique identifier string for the filter
+   * Calls passed function for each FilterTerm in this filter.
    *
-   * @returns A string representation of this filter to be used as an identifier
+   * @param func Function to call for each FilterTerm.
+   */
+  forEach(func: FilterForEachFunc) {
+    this.terms.forEach(func);
+  }
+
+  /**
+   * Returns a full string representation of this filter.
+   *
+   * @returns String which represents this filter.
+   */
+  toFilterString(): string {
+    return this.terms.map(term => term.toString()).join(' ');
+  }
+
+  /**
+   * Returns the filter criteria as a string.
+   *
+   * Converts each non extra keyword FilterTerm to a string representation.
+   *
+   * @returns The filter criteria terms as string.
+   */
+  toFilterCriteriaString(): string {
+    let filterString = '';
+    this.forEach(term => {
+      const key = term.keyword;
+      if (!isDefined(key) || !EXTRA_KEYWORDS.includes(key)) {
+        filterString += term.toString() + ' ';
+      }
+    });
+    return filterString.trim();
+  }
+
+  /**
+   * Returns the filter extra keyword FilterTerms as a string.
+   *
+   * Converts each extra keyword FilterTerm to a string representation.
+   *
+   * @returns The filter extra keyword terms as a string.
+   */
+  toFilterExtraString(): string {
+    let filterString = '';
+    this.forEach(term => {
+      const key = term.keyword;
+      if (isDefined(key) && EXTRA_KEYWORDS.includes(key)) {
+        filterString += term.toString() + ' ';
+      }
+    });
+    return filterString.trim();
+  }
+
+  /**
+   * Provides a unique identifier string for the filter.
+   *
+   * @returns A string representation of this filter to be used as an identifier.
    */
   identifier() {
     return this.toFilterString();
   }
 
   /**
-   * Compare this filter with another filter
+   * Compare this filter with another filter.
    *
-   * @param {Filter|undefined|null} filter  Other filter to compare to.
+   * @param filter Other filter to compare to.
    *
-   * @return {bool} Returns true if this filter equals to the other filter
+   * @returns Returns true if this filter equals the other filter.
    */
   equals(filter: FilterType | undefined | null): boolean {
     if (!hasValue(filter)) {
@@ -706,25 +574,18 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Creates a copy of this filter
+   * Creates a copy of this filter.
    *
-   * The returned copy is only a shallow copy of this filter.
-   * FilterTerms are copied only by reference.
-   *
-   * @deprecated All methods that mutate the filter now return a new filter instead
-   * of mutating the current filter. Therefore this method is no longer needed
-   * and will be removed in a future version.
-   *
-   * @return A shallow copy of this filter.
+   * @returns A shallow copy of this filter.
    */
   copy() {
     return this._copy();
   }
 
   /**
-   * Returns a new filter pointing to the next items
+   * Returns a new filter pointing to the next items.
    *
-   * @return Copy of this filter but pointing to the next items.
+   * @returns Copy of this filter but pointing to the next items.
    */
   next() {
     const filter = this._copy();
@@ -748,9 +609,9 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Returns a new filter pointing to the previous items
+   * Returns a new filter pointing to the previous items.
    *
-   * @return Copy of this filter but pointing to the previous items.
+   * @returns Copy of this filter but pointing to the previous items.
    */
   previous() {
     const filter = this._copy();
@@ -778,23 +639,22 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Returns a new filter pointing to the first items
+   * Returns a new filter pointing to the first items.
    *
-   * @param first  Number of the first item to receive with this filter
-   *               applied. Is 1 per default.
+   * @param first Number of the first item to receive with this filter applied.
    *
-   * @return Copy of this filter but pointing to the first items.
+   * @returns Copy of this filter but pointing to the first items.
    */
   first(first: number = 1) {
     return this.set('first', String(first), '=');
   }
 
   /**
-   * Returns a new filter to return all items
+   * Returns a new filter to return all items.
    *
-   * Removes a filter restriction from the copy of this filter.
+   * Removes item count restrictions from the copy of this filter.
    *
-   * @return Copy of this filter but removing the item count (rows) restriction.
+   * @returns Copy of this filter but removing the item count restriction.
    */
   all() {
     const filter = this._copy();
@@ -806,9 +666,9 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Returns a simplified filter without first, rows and sort/sort-reverse terms
+   * Returns a simplified filter without first, rows and sort/sort-reverse terms.
    *
-   * @return Copy of this filter but without first, rows and sort/sort-reverse terms.
+   * @returns Copy of this filter but without first, rows and sort/sort-reverse terms.
    */
   simple() {
     const filter = this._copy();
@@ -821,11 +681,11 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Merge other filter with an and operation
+   * Merge other filter with an and operation.
    *
-   * @param filter  Filter to be merged with and operation
+   * @param filter Filter to be merged with and operation.
    *
-   * @return A new filter if filter is defined, otherwise this filter is returned.
+   * @returns A new filter if filter is defined, otherwise this filter is returned.
    */
   and(filter: FilterType | undefined | null) {
     if (!hasValue(filter)) {
@@ -840,24 +700,23 @@ class Filter extends EntityModel implements FilterType {
     if (nonExtraTerms.length > 0) {
       copy._addTerm(AND);
     }
-    copy._resetFilterId(); // filter has changed
     copy._addTerm(...filter.getAllTerms());
     return copy;
   }
 
   /**
-   * Returns the sort order of the current filter
+   * Returns the sort order of the current filter.
    *
-   * @return The sort order. 'sort' or 'sort-reverse'.
+   * @returns The sort order: 'sort' or 'sort-reverse'.
    */
   getSortOrder(): FilterSortOrder {
     return this.has(SORT_ORDER_DESC) ? SORT_ORDER_DESC : SORT_ORDER_ASC;
   }
 
   /**
-   * Returns the sort by field name of the current filter
+   * Returns the sort by field name of the current filter.
    *
-   * @return The sort field name or undefined if no sort field is set.
+   * @returns The sort field name or undefined if no sort field is set.
    */
   getSortBy(): string | undefined {
     const order = this.getSortOrder();
@@ -865,11 +724,11 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Create a new filter with the current sort order
+   * Create a new filter with the current sort order.
    *
-   * @param value  New sort order. 'sort' or 'sort-reverse'.
+   * @param value New sort order: 'sort' or 'sort-reverse'.
    *
-   * @return A new filter with the current sort order.
+   * @returns A new filter with the current sort order.
    */
   setSortOrder(value: FilterSortOrder) {
     const sortby = this.getSortBy();
@@ -878,11 +737,11 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Create a new filter with the current sort field
+   * Create a new filter with the current sort field.
    *
-   * @param value  New sort field
+   * @param value New sort field.
    *
-   * @return A new filter with the current sort field.
+   * @returns A new filter with the current sort field.
    */
   setSortBy(value: string) {
     const order = this.getSortOrder();
@@ -890,11 +749,11 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Merges all terms from filter into a Filter
+   * Merges all terms from filter into a filter.
    *
    * @param filter Terms from filter to be merged.
    *
-   * @return A new filter with merged terms if the filter has changed.
+   * @returns A new filter with merged terms if the filter has changed.
    */
   merge(filter?: FilterType) {
     if (!hasValue(filter) || filter.length === 0) {
@@ -907,13 +766,12 @@ class Filter extends EntityModel implements FilterType {
   }
 
   /**
-   * Merges all new terms from filter into Filter
+   * Merges all new terms from filter into filter.
    *
    * @param filter Terms from filter to be merged.
    *
-   * @return A new filter with merged terms if the filter has changed.
+   * @returns A new filter with merged terms if the filter has changed.
    */
-
   mergeKeywords(filter?: FilterType) {
     if (!hasValue(filter)) {
       return this;
@@ -923,17 +781,16 @@ class Filter extends EntityModel implements FilterType {
       return this;
     }
     const copy = this._copy();
-    copy._resetFilterId();
     copy._addTerm(...newKeywords);
     return copy;
   }
 
   /**
-   * Merges additional EXTRA KEYWORD terms from filter into a Filter
+   * Merges additional EXTRA KEYWORD terms from filter into a filter.
    *
    * @param filter Use extra params terms filter to be merged.
    *
-   * @return A new filter with merged terms if changed.
+   * @returns A new filter with merged terms if changed.
    */
   mergeExtraKeywords(filter?: FilterType) {
     if (!hasValue(filter)) {
@@ -944,29 +801,164 @@ class Filter extends EntityModel implements FilterType {
       return this;
     }
     const copy = this._copy();
-    copy._resetFilterId();
     copy._addTerm(...extraKeywords);
     return copy;
+  }
+}
+
+/**
+ * Represents a filter
+ */
+class Filter extends EntityModel implements FilterType {
+  static readonly entityType = 'filter';
+
+  readonly alerts: Model[];
+  readonly filter_type?: string;
+  private readonly filterTerms: FilterTerms;
+
+  constructor({
+    _type,
+    alerts = [],
+    comment,
+    creationTime,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    filter_type,
+    id,
+    inUse,
+    modificationTime,
+    name,
+    owner,
+    terms = [],
+    userCapabilities,
+    userTags = [],
+    writable,
+  }: FilterModelProperties = {}) {
+    super({
+      _type,
+      comment,
+      creationTime,
+      id,
+      inUse,
+      modificationTime,
+      name,
+      owner,
+      userCapabilities,
+      userTags,
+      writable,
+    });
+
+    this.alerts = alerts;
+    this.filter_type = filter_type;
+    this.filterTerms = new FilterTerms({terms});
+  }
+
+  get length() {
+    return this.filterTerms.length;
+  }
+
+  /**
+   * Create a new Filter from the passed FilterTerms if they are different from the current ones.
+   *
+   * @param terms The FilterTerms to use for creating the new Filter.
+   * @param keepId Whether to keep the current Filter's ID.
+   *
+   * @returns A new Filter if the FilterTerms are different, otherwise the current Filter.
+   */
+  private _delegate(terms: FilterTerms, keepId = false): Filter {
+    return terms === this.filterTerms
+      ? this
+      : new Filter({
+          id: keepId ? this.id : undefined,
+          name: this.name,
+          filter_type: this.filter_type,
+          terms: [...terms.getAllTerms()],
+          userCapabilities: this.userCapabilities,
+          userTags: this.userTags,
+        });
+  }
+
+  /**
+   * Create new Filter from the passed element object
+   *
+   * @param element Element object to parse properties from.
+   *
+   * @returns An object with properties for the new Filter model
+   */
+  static fromElement(element: FilterModelElement = {}): Filter {
+    const ret = parseEntityModelProperties(element) as FilterModelProperties;
+
+    ret.filter_type = ret._type;
+
+    if (ret.id === UNKNOWN_FILTER_ID) {
+      ret.id = undefined;
+    }
+    if (isDefined(element.term)) {
+      ret.terms = parseFilterTermsFromString(element.term);
+
+      // ret.term should not be part of the public api
+      // but it's helpful for debug purposes
+      ret._term = element.term;
+      // @ts-expect-error
+      delete ret.term;
+    } else {
+      ret.terms = [];
+    }
+
+    if (isDefined(element.alerts?.alert)) {
+      ret.alerts = map(element.alerts.alert, alert =>
+        Model.fromElement(alert, 'alert'),
+      );
+    }
+
+    return new Filter(ret);
+  }
+
+  /**
+   * Create a new Filter from the passed response element.
+   *
+   * @param element Response element to parse properties from.
+   *
+   * @returns A new Filter model instance.
+   */
+  static fromResponseElement(element: FilterResponseElement = {}): Filter {
+    const id =
+      !isEmpty(element._id) && element._id !== UNKNOWN_FILTER_ID
+        ? element._id
+        : undefined;
+
+    const name = !isEmpty(element.name) ? element.name : undefined;
+
+    let terms: FilterTerm[] = [];
+    if (isDefined(element.keywords)) {
+      terms = map(
+        element.keywords.keyword,
+        ({relation, value, column: key}: FilterKeyword) =>
+          new FilterTerm(convert(key, value, relation)),
+      );
+    } else if (isDefined(element.term)) {
+      terms = parseFilterTermsFromString(element.term);
+    }
+
+    return new Filter({id, name, terms});
   }
 
   /**
    * Creates a new Filter from filterString
    *
-   * @param [filterString] String to parse FilterTerms from.
-   * @param [filter]       Use extra terms from filter if not already
-   *                       parsed from filterString.
+   * @param filterString String to parse FilterTerms from.
+   * @param filter Use extra terms from filter if not already
+   *               parsed from filterString.
    *
-   * @return New Filter with FilterTerms parsed from filterString.
+   * @returns New Filter with FilterTerms parsed from filterString.
    */
   static fromString(filterString?: string, filter?: FilterType): Filter {
-    const f = new Filter({
+    const filterTerms = new FilterTerms({
       terms: parseFilterTermsFromString(filterString),
+    }).mergeExtraKeywords(filter) as FilterTerms;
+
+    return new Filter({
+      terms: [...filterTerms.getAllTerms()],
     });
-
-    const extraKeywords = f._getExtraKeywords(filter);
-    f._addTerm(...extraKeywords);
-
-    return f;
   }
 
   /**
@@ -978,8 +970,127 @@ class Filter extends EntityModel implements FilterType {
    */
   static fromTerm(...term: FilterTerm[]) {
     return new Filter({
-      terms: term,
+      terms: [...term],
     });
+  }
+
+  forEach(func: FilterForEachFunc): void {
+    this.filterTerms.forEach(func);
+  }
+
+  toFilterString(): string {
+    return this.filterTerms.toFilterString();
+  }
+
+  toFilterCriteriaString(): string {
+    return this.filterTerms.toFilterCriteriaString();
+  }
+
+  toFilterExtraString(): string {
+    return this.filterTerms.toFilterExtraString();
+  }
+
+  getTerm(key: string | undefined): FilterTerm | undefined {
+    return this.filterTerms.getTerm(key);
+  }
+
+  hasTerm(term: FilterTerm | undefined): boolean {
+    return this.filterTerms.hasTerm(term);
+  }
+
+  getTerms(key: string | undefined): FilterTerm[] {
+    return this.filterTerms.getTerms(key);
+  }
+
+  getAllTerms(): readonly FilterTerm[] {
+    return this.filterTerms.getAllTerms();
+  }
+
+  get(
+    key: string,
+    def: string | number | undefined = undefined,
+  ): string | number | undefined {
+    return this.filterTerms.get(key, def);
+  }
+
+  set(
+    keyword: string,
+    value?: string | number | boolean,
+    relation: string = '=',
+  ): Filter {
+    return this._delegate(this.filterTerms.set(keyword, value, relation));
+  }
+
+  has(key: string): boolean {
+    return this.filterTerms.has(key);
+  }
+
+  delete(key: string): Filter {
+    return this._delegate(this.filterTerms.delete(key));
+  }
+
+  identifier() {
+    return this.filterTerms.identifier();
+  }
+
+  equals(filter: FilterType | undefined | null): boolean {
+    return this.filterTerms.equals(filter);
+  }
+
+  copy(): Filter {
+    return this._delegate(this.filterTerms.copy(), true);
+  }
+
+  next(): Filter {
+    return this._delegate(this.filterTerms.next());
+  }
+
+  previous(): Filter {
+    return this._delegate(this.filterTerms.previous());
+  }
+
+  first(first: number = 1): Filter {
+    return this._delegate(this.filterTerms.first(first));
+  }
+
+  all(): Filter {
+    return this._delegate(this.filterTerms.all());
+  }
+
+  simple(): Filter {
+    return this._delegate(this.filterTerms.simple());
+  }
+
+  and(filter: FilterType | undefined | null): Filter {
+    return this._delegate(this.filterTerms.and(filter));
+  }
+
+  getSortOrder(): FilterSortOrder {
+    return this.filterTerms.getSortOrder();
+  }
+
+  getSortBy(): string | undefined {
+    return this.filterTerms.getSortBy();
+  }
+
+  setSortOrder(value: FilterSortOrder): Filter {
+    return this._delegate(this.filterTerms.setSortOrder(value));
+  }
+
+  setSortBy(value: string): Filter {
+    return this._delegate(this.filterTerms.setSortBy(value));
+  }
+
+  merge(filter?: FilterType): Filter {
+    return this._delegate(this.filterTerms.merge(filter));
+  }
+
+  mergeKeywords(filter?: FilterType): Filter {
+    return this._delegate(this.filterTerms.mergeKeywords(filter));
+  }
+
+  mergeExtraKeywords(filter?: FilterType): Filter {
+    return this._delegate(this.filterTerms.mergeExtraKeywords(filter));
   }
 }
 
