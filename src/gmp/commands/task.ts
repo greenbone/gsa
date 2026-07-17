@@ -139,9 +139,9 @@ interface TaskCommandSaveContainerImageParams {
   inAssets?: boolean;
   minQod?: number;
   name: string;
-  ociImageTargetId?: string;
+  oci_image_target_id?: string;
   registryAllowInsecure?: boolean;
-  scannerId?: string;
+  scanner_id?: string;
   scheduleId?: string;
   schedulePeriods?: boolean;
 }
@@ -523,27 +523,13 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
     comment = '',
     id,
     name,
-    ociImageTargetId,
+    oci_image_target_id = NO_VALUE_ID,
     registryAllowInsecure,
+    scanner_id = NO_VALUE_ID,
     scheduleId,
     schedulePeriods,
   }: TaskCommandSaveContainerImageParams) {
-    log.debug('Saving container image task', {
-      acceptInvalidCerts,
-      alertIds,
-      alterable,
-      autoDelete,
-      autoDeleteData,
-      comment,
-      id,
-      name,
-      ociImageTargetId,
-      registryAllowInsecure,
-      scheduleId,
-      schedulePeriods,
-    });
-
-    await this.httpPostWithTransform({
+    const data = {
       cmd: 'save_oci_image_task',
       'alert_ids:': alertIds,
       accept_invalid_certs: parseYesNo(acceptInvalidCerts),
@@ -553,14 +539,20 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
       auto_delete: autoDelete,
       comment,
       name,
-      oci_image_target_id: ociImageTargetId,
-      scanner_id: NO_VALUE_ID,
+      oci_image_target_id,
+      scanner_id,
       scanner_type: CONTAINER_IMAGE_SCANNER_TYPE,
       schedule_id: scheduleId,
       schedule_periods: parseYesNo(schedulePeriods),
       task_id: id,
       usage_type: 'scan',
-    });
+    };
+    log.debug('Saving container image task', data);
+    try {
+      await this.httpPostWithTransform(data);
+    } catch (rejection) {
+      await feedStatusRejection(this.http, rejection as ResponseRejection);
+    }
   }
 
   async createWebApplicationTask({
