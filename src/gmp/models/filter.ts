@@ -380,12 +380,7 @@ class FilterTerms implements FilterType {
       return [];
     }
 
-    return this.terms.reduce((terms: FilterTerm[], term: FilterTerm) => {
-      if (term.keyword === key) {
-        terms.push(term);
-      }
-      return terms;
-    }, []);
+    return this.terms.filter(term => term.keyword === key);
   }
 
   /**
