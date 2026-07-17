@@ -118,7 +118,6 @@ export interface FilterType {
   delete(key: string): FilterType;
   equals(filter?: FilterType): boolean;
   first(first?: number): FilterType;
-  forEach(func: FilterForEachFunc): void;
   getAllTerms(): readonly FilterTerm[];
   get(key: string, def?: string | number): string | number | undefined;
   getSortBy(): string | undefined;
@@ -460,15 +459,6 @@ class FilterTerms implements FilterType {
   }
 
   /**
-   * Calls passed function for each FilterTerm in this filter.
-   *
-   * @param func Function to call for each FilterTerm.
-   */
-  forEach(func: FilterForEachFunc) {
-    this.terms.forEach(func);
-  }
-
-  /**
    * Returns a full string representation of this filter.
    *
    * @returns String which represents this filter.
@@ -486,7 +476,7 @@ class FilterTerms implements FilterType {
    */
   toFilterCriteriaString(): string {
     let filterString = '';
-    this.forEach(term => {
+    this.terms.forEach(term => {
       const key = term.keyword;
       if (!isDefined(key) || !EXTRA_KEYWORDS.includes(key)) {
         filterString += term.toString() + ' ';
@@ -504,7 +494,7 @@ class FilterTerms implements FilterType {
    */
   toFilterExtraString(): string {
     let filterString = '';
-    this.forEach(term => {
+    this.terms.forEach(term => {
       const key = term.keyword;
       if (isDefined(key) && EXTRA_KEYWORDS.includes(key)) {
         filterString += term.toString() + ' ';
@@ -967,10 +957,6 @@ class Filter extends EntityModel implements FilterType {
     return new Filter({
       terms: [...term],
     });
-  }
-
-  forEach(func: FilterForEachFunc): void {
-    this.filterTerms.forEach(func);
   }
 
   toFilterString(): string {
