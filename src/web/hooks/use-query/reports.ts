@@ -6,7 +6,7 @@
 import {useQuery} from '@tanstack/react-query';
 import Filter, {
   ALL_FILTER,
-  RESULTS_FILTER_ALL_FILTER,
+  RESULTS_FILTER_FILTER,
   type FilterType,
 } from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
@@ -52,7 +52,7 @@ export const useGetResultsFilters = () => {
   return useGetEntities<Filter>({
     gmpMethod: gmp.filters.get.bind(gmp.filters),
     queryId: 'get_filters',
-    filter: RESULTS_FILTER_ALL_FILTER,
+    filter: RESULTS_FILTER_FILTER.all(),
     refetchInterval: false,
     keepPreviousData: true,
   });
