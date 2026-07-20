@@ -25,6 +25,10 @@ const Languages: LanguagesType = {
     name: 'English',
     native_name: 'English',
   },
+  ja: {
+    name: 'Japanese',
+    native_name: '日本語',
+  },
   zh_CN: {
     name: 'Simplified Chinese',
     native_name: '简体中文',
