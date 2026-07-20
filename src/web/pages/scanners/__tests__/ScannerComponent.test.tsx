@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Scanner, {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
@@ -209,7 +209,7 @@ describe('ScannerComponent tests', () => {
     fireEvent.click(button);
     expect(gmp.scanner.get).toHaveBeenCalledWith({id: '1234'});
     expect(gmp.credentials.getAll).toHaveBeenCalledWith({
-      filter: Filter.fromString('type=cc'),
+      filter: BaseFilter.fromString('type=cc'),
     });
 
     await wait();
