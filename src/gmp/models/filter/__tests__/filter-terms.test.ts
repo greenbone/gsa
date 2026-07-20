@@ -125,6 +125,15 @@ describe('FilterTerms tests', () => {
       expect(updated.get('rows')).toBe(10);
       expect(filterTerms.get('first')).toBe(1);
     });
+
+    test('should keep other keywords when moving to next page', () => {
+      const filterTerms = fromTerms('first=1', 'rows=10', 'sort=name');
+      const updated = filterTerms.next();
+
+      expect(updated.get('first')).toBe(11);
+      expect(updated.get('rows')).toBe(10);
+      expect(updated.get('sort')).toBe('name');
+    });
   });
 
   describe('FilterTerms previous', () => {
@@ -135,14 +144,46 @@ describe('FilterTerms tests', () => {
       expect(updated.get('first')).toBe(1);
       expect(updated.get('rows')).toBe(10);
     });
+
+    test('should keep other keywords when moving to previous page', () => {
+      const filterTerms = fromTerms('first=15', 'rows=10', 'sort=name');
+      const updated = filterTerms.previous();
+
+      expect(updated.get('first')).toBe(5);
+      expect(updated.get('rows')).toBe(10);
+      expect(updated.get('sort')).toBe('name');
+    });
   });
 
   describe('FilterTerms first', () => {
+    test('should set first', () => {
+      const filterTerms = fromTerms('first=9');
+      const updated = filterTerms.first();
+
+      expect(updated.get('first')).toBe(1);
+      expect(filterTerms.get('first')).toBe(9);
+    });
+
     test('should set first to provided value', () => {
       const filterTerms = fromTerms('first=9');
       const updated = filterTerms.first(3);
       expect(updated.get('first')).toBe(3);
       expect(filterTerms.get('first')).toBe(9);
+    });
+
+    test('should keep other keywords when setting first', () => {
+      const filterTerms = fromTerms('first=9', 'rows=10', 'sort=name');
+      const updated = filterTerms.first(1);
+
+      expect(updated.get('first')).toBe(1);
+      expect(updated.get('rows')).toBe(10);
+      expect(updated.get('sort')).toBe('name');
+    });
+
+    test('should set first to 1 when provided value is less than 1', () => {
+      const filterTerms = fromTerms('first=9');
+      const updated = filterTerms.first(0);
+      expect(updated.get('first')).toBe(1);
     });
   });
 
