@@ -4,7 +4,11 @@
  */
 
 import {useCallback, useState} from 'react';
-import Filter, {type FilterType, type FilterSortOrder} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import {
+  type default as FilterType,
+  type FilterSortOrder,
+} from 'gmp/models/filter/filter-type';
 import {isDefined} from 'gmp/utils/identity';
 
 export interface FilterDialogState {
@@ -24,7 +28,7 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
 ) => {
   const [originalFilter] = useState(initialFilter);
   const [filter, setFilter] = useState<FilterType>(() =>
-    isDefined(initialFilter) ? initialFilter : new Filter(),
+    isDefined(initialFilter) ? initialFilter : new BaseFilter(),
   );
   const [filterDialogState, setFilterDialogState] =
     useState<TFilterDialogState>({} as TFilterDialogState);

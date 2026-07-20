@@ -6,7 +6,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import type AuditReport from 'gmp/models/audit-report';
-import Filter, {type FilterType} from 'gmp/models/filter';
+import type Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
@@ -182,7 +184,7 @@ const AuditReportDetailsContent = ({
 
   const progress = task?.progress ?? 0;
 
-  const effectiveReportFilter = reportFilter ?? pageFilter ?? new Filter();
+  const effectiveReportFilter = reportFilter ?? pageFilter ?? new BaseFilter();
 
   const showIsLoading = isLoading && !hasReport;
 

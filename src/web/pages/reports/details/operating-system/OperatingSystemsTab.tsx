@@ -5,7 +5,8 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import Filter, {type FilterType} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import type ReportOperatingSystem from 'gmp/models/report/os';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
@@ -57,7 +58,7 @@ const OperatingSystemsTabWrapper = ({
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
-    return isDefined(filter) ? filter : new Filter();
+    return isDefined(filter) ? filter : new BaseFilter();
   }, [filter]);
 
   const [operatingSystemsFilter, setOperatingSystemsFilter] =

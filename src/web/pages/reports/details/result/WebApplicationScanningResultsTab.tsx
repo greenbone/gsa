@@ -5,7 +5,8 @@
 
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter, {type FilterType} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import {isActive, type TaskStatus} from 'gmp/models/task';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
@@ -35,8 +36,8 @@ const WebApplicationScanningResultsTab = ({
 
   const baseFilter = useMemo(() => {
     const filter = reportFilterString
-      ? Filter.fromString(reportFilterString)
-      : new Filter();
+      ? BaseFilter.fromString(reportFilterString)
+      : new BaseFilter();
     return filter.set('_and_report_id', reportId);
   }, [reportFilterString, reportId]);
 

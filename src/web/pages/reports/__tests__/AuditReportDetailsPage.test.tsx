@@ -9,6 +9,8 @@ import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
@@ -17,7 +19,7 @@ import AuditReportDetailsPage from 'web/pages/reports/AuditReportDetailsPage';
 interface CollectionResponse {
   data: unknown[];
   meta: {
-    filter: Filter;
+    filter: FilterType;
     counts: CollectionCounts;
   };
 }
@@ -30,7 +32,7 @@ const reportId = entity.report?.id ?? '';
 const emptyCollectionResponse: CollectionResponse = {
   data: [],
   meta: {
-    filter: Filter.fromString(''),
+    filter: new BaseFilter(),
     counts: new CollectionCounts(),
   },
 };

@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Task from 'gmp/models/task';
 import withEntitiesFooter, {
   type WithEntitiesFooterComponentProps,
@@ -29,7 +29,7 @@ describe('withEntitiesFooter tests', () => {
     const mockProps = {
       entities: [new Task({id: '1'}), new Task({id: '2'})],
       entitiesCounts: new CollectionCounts({all: 2, filtered: 2, length: 2}),
-      filter: new Filter(),
+      filter: new BaseFilter(),
       onDeleteBulk: testing.fn(),
       onDownloadBulk: testing.fn(),
       onTagsBulk: testing.fn(),

@@ -10,6 +10,8 @@ import useFilterDialog, {
   type FilterDialogState,
 } from 'web/components/powerfilter/useFilterDialog';
 
+const createInitialFilter = () => new Filter({id: 'foo'}).set('name', 'test');
+
 describe('useFilterDialog', () => {
   test('should initialize with default values', () => {
     const {result} = renderHook(() => useFilterDialog());
@@ -20,7 +22,7 @@ describe('useFilterDialog', () => {
   });
 
   test('should initialize with provided filter and filter string', () => {
-    const initialFilter = new Filter().set('name', 'test');
+    const initialFilter = createInitialFilter();
     const {result} = renderHook(() =>
       useFilterDialog(initialFilter, 'foo=bar'),
     );
@@ -31,14 +33,14 @@ describe('useFilterDialog', () => {
   });
 
   test("should use criteria string from filter if initial filter string isn't provided", () => {
-    const initialFilter = new Filter().set('name', 'test');
+    const initialFilter = createInitialFilter();
     const {result} = renderHook(() => useFilterDialog(initialFilter));
 
     expect(result.current.filterString).toEqual('name=test');
   });
 
   test('should handle filter changes', () => {
-    const initialFilter = new Filter().set('name', 'test');
+    const initialFilter = createInitialFilter();
     const {result} = renderHook(() => useFilterDialog(initialFilter));
 
     act(() => {
@@ -51,7 +53,7 @@ describe('useFilterDialog', () => {
   });
 
   test('should handle filter value changes', () => {
-    const initialFilter = new Filter().set('name', 'test');
+    const initialFilter = createInitialFilter();
     const {result} = renderHook(() => useFilterDialog(initialFilter));
 
     act(() => {
@@ -64,7 +66,7 @@ describe('useFilterDialog', () => {
   });
 
   test('should handle search term changes', () => {
-    const initialFilter = new Filter().set('name', 'test');
+    const initialFilter = createInitialFilter();
     const {result} = renderHook(() => useFilterDialog(initialFilter));
 
     act(() => {
@@ -77,7 +79,7 @@ describe('useFilterDialog', () => {
   });
 
   test('should handle filter string changes', () => {
-    const initialFilter = new Filter().set('name', 'test');
+    const initialFilter = createInitialFilter();
     const {result} = renderHook(() => useFilterDialog(initialFilter));
 
     act(() => {
@@ -89,7 +91,7 @@ describe('useFilterDialog', () => {
   });
 
   test('should handle sort by changes', () => {
-    const initialFilter = new Filter().set('name', 'test');
+    const initialFilter = createInitialFilter();
     const {result} = renderHook(() => useFilterDialog(initialFilter));
 
     act(() => {
@@ -102,7 +104,7 @@ describe('useFilterDialog', () => {
   });
 
   test('should handle sort order changes', () => {
-    const initialFilter = new Filter().set('name', 'test').setSortBy('name');
+    const initialFilter = createInitialFilter().setSortBy('name');
     const {result} = renderHook(() => useFilterDialog(initialFilter));
 
     act(() => {
@@ -115,7 +117,7 @@ describe('useFilterDialog', () => {
   });
 
   test('should handle dialog state changes', () => {
-    const initialFilter = new Filter().set('name', 'test');
+    const initialFilter = createInitialFilter();
     const {result} = renderHook(() =>
       useFilterDialog<FilterDialogState>(initialFilter),
     );

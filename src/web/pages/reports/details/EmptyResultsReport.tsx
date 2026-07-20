@@ -4,7 +4,8 @@
  */
 
 import styled from 'styled-components';
-import Filter, {type FilterType} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import {isDefined} from 'gmp/utils/identity';
 import {CircleXDeleteIcon, EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
@@ -38,7 +39,7 @@ const EmptyResultsReport = ({
   onFilterRemoveClick,
 }: EmptyResultsReportProps) => {
   const [_] = useTranslation();
-  filter = filter ?? new Filter();
+  filter = filter ?? new BaseFilter();
   const levels = filter.get('levels', '') as string | undefined;
   const severity = filter.getTerm('severity');
   const minQod = filter.get('min_qod') as number | undefined;

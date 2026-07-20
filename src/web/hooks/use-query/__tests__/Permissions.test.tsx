@@ -6,7 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import Permission from 'gmp/models/permission';
 import {createSession} from 'gmp/testing';
 import {useGetPermissions} from 'web/hooks/use-query/permissions';
@@ -25,9 +26,9 @@ const permission2 = Permission.fromElement({
   subject: {_id: 'user-1', type: 'user'},
 });
 
-const filter = Filter.fromString('resource_uuid=task-1').all();
+const filter = BaseFilter.fromString('resource_uuid=task-1').all();
 
-const TestComponent = ({filter}: {filter?: Filter}) => {
+const TestComponent = ({filter}: {filter?: FilterType}) => {
   const {data, isLoading, isError} = useGetPermissions({filter});
 
   if (isLoading) {

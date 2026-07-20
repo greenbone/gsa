@@ -9,7 +9,8 @@ import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type Agent from 'gmp/models/agent';
-import Filter, {type FilterType} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import {isFilterType} from 'gmp/models/filter/utils';
 import {parseYesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -48,15 +49,15 @@ export const useGetAgents = ({
   let finalFilter = filter;
 
   if (isDefined(scannerId)) {
-    finalFilter = finalFilter ?? new Filter();
+    finalFilter = finalFilter ?? new BaseFilter();
     finalFilter = finalFilter.and(
-      Filter.fromString(`scanner_uuid=${scannerId}`),
+      BaseFilter.fromString(`scanner_uuid=${scannerId}`),
     );
   }
   if (isDefined(authorized)) {
-    finalFilter = finalFilter ?? new Filter();
+    finalFilter = finalFilter ?? new BaseFilter();
     finalFilter = finalFilter.and(
-      Filter.fromString(`authorized=${parseYesNo(authorized)}`),
+      BaseFilter.fromString(`authorized=${parseYesNo(authorized)}`),
     );
   }
 
