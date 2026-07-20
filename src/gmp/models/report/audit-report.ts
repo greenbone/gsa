@@ -7,7 +7,7 @@ import {type CollectionList, parseFilter} from 'gmp/collection/parser';
 import {type AuditStatus} from 'gmp/models/audit';
 import {type ComplianceType} from 'gmp/models/compliance';
 import {type Date} from 'gmp/models/date';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import Model, {type ModelProperties} from 'gmp/models/model';
 import {
   parseResults,
@@ -62,7 +62,7 @@ interface AuditReportReportProperties extends ModelProperties {
   compliance?: AuditReportCompliance;
   complianceCounts?: AuditReportComplianceCounts;
   delta_report?: DeltaReport;
-  filter?: Filter;
+  filter?: FilterType;
   reportType?: ReportType;
   results?: CollectionList<Result>;
   task?: ReportTask;
@@ -79,7 +79,7 @@ class AuditReportReport extends Model {
   readonly compliance?: AuditReportCompliance;
   readonly complianceCounts?: AuditReportComplianceCounts;
   readonly delta_report?: DeltaReport;
-  readonly filter?: Filter;
+  readonly filter?: FilterType;
   readonly reportType?: ReportType;
   // used for delta reports only
   readonly results?: CollectionList<Result>;
@@ -138,9 +138,7 @@ class AuditReportReport extends Model {
     const {delta, compliance, compliance_count, scan_start, scan_end, task} =
       element;
 
-    const filter = parseFilter(element);
-
-    copy.filter = filter;
+    copy.filter = parseFilter(element);
 
     copy.reportType = element._type;
 

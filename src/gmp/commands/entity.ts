@@ -16,7 +16,7 @@ import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import ActionResult from 'gmp/models/action-result';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -29,7 +29,7 @@ interface EntityCommandInputParams extends HttpCommandInputParams {
 }
 
 interface EntityCommandGetParams {
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 export interface EntityCommandParams {

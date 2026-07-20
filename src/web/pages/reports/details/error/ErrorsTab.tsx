@@ -4,7 +4,7 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import {type ReportError} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
@@ -17,7 +17,7 @@ import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
 import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
 
 interface ErrorsTabWrapperProps {
-  filter?: Filter;
+  filter?: FilterType;
   reportId: string;
   errorsData?: UseGetEntitiesReturn<ReportError>;
   isErrorsFetching?: boolean;
@@ -26,9 +26,9 @@ interface ErrorsTabWrapperProps {
 
 export const errorsSortFunctions = {
   error: makeCompareString('description'),
-  host: makeCompareIp(entity => entity.host.ip),
-  hostname: makeCompareString(entity => entity.host.name),
-  nvt: makeCompareString(entity => entity.nvt.name),
+  host: makeCompareIp((entity: ReportError) => entity.host?.ip),
+  hostname: makeCompareString((entity: ReportError) => entity.host?.name),
+  nvt: makeCompareString((entity: ReportError) => entity.nvt?.name),
   port: makeCompareString('port'),
 };
 
@@ -48,7 +48,7 @@ const ErrorsTabWrapper = ({
     return f.set('sort-reverse', 'error');
   }, [filter]);
 
-  const [errorsFilter, setErrorsFilter] = useState<Filter>(baseFilter);
+  const [errorsFilter, setErrorsFilter] = useState<FilterType>(baseFilter);
 
   useEffect(() => {
     setErrorsFilter(baseFilter);
@@ -58,7 +58,7 @@ const ErrorsTabWrapper = ({
   const isFetching = isErrorsFetching ?? false;
   const isLoading = !data && isFetching;
   const isError = isErrorsError ?? false;
-  const updateFilter = (newFilter: Filter) => {
+  const updateFilter = (newFilter: FilterType) => {
     setErrorsFilter(newFilter);
   };
 

@@ -911,7 +911,7 @@ describe('TaskCommand tests', () => {
         comment: 'comment',
         name: 'foo',
         oci_image_target_id: 'oit1',
-        scanner_id: 's1',
+        scanner_id: '0',
         scanner_type: CONTAINER_IMAGE_SCANNER_TYPE,
         schedule_id: 'sched1',
         schedule_periods: 1,

@@ -114,6 +114,10 @@ const ScanConfigComponent = ({
     ScanConfigFamilyNvt[] | undefined
   >();
   const [familySelectedNvts, setFamilySelectedNvts] = useState<SelectedNvts>();
+  const [familySelectionUpdate, setFamilySelectionUpdate] = useState<{
+    familyName: string;
+    select: YesNo;
+  }>();
   const [hasSelection, setHasSelection] = useState(false);
 
   const [nvt, setNvt] = useState<Nvt>();
@@ -365,6 +369,19 @@ const ScanConfigComponent = ({
       familyName: familyNameValue,
       selected,
     });
+
+    // Sync the parent dialog's family-level "select all" checkbox with the
+    // selection just saved in this family dialog, so saving the whole config
+    // does not overwrite these changes with a stale value.
+    const currentNvts = familyNvts ?? [];
+    const allSelected =
+      currentNvts.length > 0 &&
+      currentNvts.every(nvtItem => selected?.[nvtItem.oid] === YES_VALUE);
+    setFamilySelectionUpdate({
+      familyName: familyNameValue,
+      select: allSelected ? YES_VALUE : NO_VALUE,
+    });
+
     await loadEditScanConfigSettings(configId, true);
     closeEditConfigFamilyDialog();
   };
@@ -449,6 +466,7 @@ const ScanConfigComponent = ({
                   editNvtFamiliesTitle={_('Edit Scan Config Family')}
                   error={editScanConfigDialogError}
                   families={families}
+                  familySelectionUpdate={familySelectionUpdate}
                   isLoadingConfig={isLoadingConfig}
                   isLoadingFamilies={isLoadingFamilies}
                   name={config.name as string}

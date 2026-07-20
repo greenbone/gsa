@@ -6,7 +6,7 @@
 import EntityCommand from 'gmp/commands/entity';
 import {feedStatusRejection} from 'gmp/commands/feed-status';
 import type Http from 'gmp/http/http';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
 import Target, {type AliveTest} from 'gmp/models/target';
 import {parseYesNo} from 'gmp/parser';
@@ -25,7 +25,7 @@ interface TargetCommandCreateParams {
   excludeHosts?: string;
   file?: File;
   hosts?: string;
-  hostsFilter?: Filter;
+  hostsFilter?: FilterType | string;
   krb5CredentialId?: string;
   name: string;
   port?: number;

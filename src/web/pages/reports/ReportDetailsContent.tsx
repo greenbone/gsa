@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import type Filter from 'gmp/models/filter';
+import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
@@ -42,7 +42,7 @@ interface ThresholdConfig {
   showThresholdMessage: boolean;
   isUpdating: boolean;
   threshold: number;
-  onFilterChanged: (filter: Filter) => void;
+  onFilterChanged: (filter: FilterType) => void;
   onFilterEditClick: () => void;
 }
 
@@ -52,11 +52,11 @@ interface ReportDetailsContentProps {
   isLoading?: boolean;
   isLoadingFilters?: boolean;
   isUpdating?: boolean;
-  pageFilter?: Filter;
+  pageFilter?: FilterType;
   reportError?: Error;
-  reportFilter?: Filter;
+  reportFilter?: FilterType;
   reportId: string;
-  resetFilter?: Filter;
+  resetFilter?: FilterType;
   resultsCounts?: {filtered?: number; full?: number};
   showError: (...args: unknown[]) => void;
   showErrorMessage: (message: string) => void;
@@ -65,7 +65,7 @@ interface ReportDetailsContentProps {
   onAddToAssetsClick: () => void;
   onError: (error: Error) => void;
   onFilterAddLogLevelClick: () => void;
-  onFilterChanged: (filter: Filter) => void;
+  onFilterChanged: (filter: FilterType) => void;
   onFilterDecreaseMinQoDClick: () => void;
   onFilterEditClick: () => void;
   onFilterRemoveClick: () => void;

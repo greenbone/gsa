@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import DefaultFilterDialog from 'web/components/powerfilter/DefaultFilterDialog';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
@@ -14,7 +14,7 @@ import useFilterDialogSave, {
 import useTranslation from 'web/hooks/useTranslation';
 
 interface RoleFilterDialogProps extends UseFilterDialogSaveProps {
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 const RoleFilterDialog = ({

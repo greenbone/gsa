@@ -5,12 +5,12 @@
 
 import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import Note from 'gmp/models/note';
 
 interface NoteAggregateParams {
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 class NotesCommand extends EntitiesCommand<Note> {

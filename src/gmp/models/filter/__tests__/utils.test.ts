@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-import {filterString, isFilter} from 'gmp/models/filter/utils';
+import {filterString, isFilterType} from 'gmp/models/filter/utils';
 
 describe('filterString function tests', () => {
   test('should return undefined for undefined input', () => {
@@ -26,15 +26,15 @@ describe('filterString function tests', () => {
   });
 });
 
-describe('isFilter function tests', () => {
+describe('isFilterType function tests', () => {
   test('should return true for Filter objects', () => {
     const filter = Filter.fromString('foo bar');
-    expect(isFilter(filter)).toBe(true);
+    expect(isFilterType(filter)).toBe(true);
   });
 
   test('should return false for non-Filter objects', () => {
-    expect(isFilter(1)).toBe(false);
-    expect(isFilter('foo')).toBe(false);
-    expect(isFilter()).toBe(false);
+    expect(isFilterType(1)).toBe(false);
+    expect(isFilterType('foo')).toBe(false);
+    expect(isFilterType()).toBe(false);
   });
 });

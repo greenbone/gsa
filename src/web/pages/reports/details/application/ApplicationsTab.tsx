@@ -5,7 +5,7 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import Filter from 'gmp/models/filter';
+import Filter, {type FilterType} from 'gmp/models/filter';
 import type ReportApp from 'gmp/models/report/app';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
@@ -21,7 +21,7 @@ import {
 } from 'web/utils/Sort';
 
 interface ApplicationsTabProps {
-  filter?: Filter;
+  filter?: FilterType;
   reportId: string;
   applicationsData?: UseGetEntitiesReturn<ReportApp>;
   isApplicationsFetching?: boolean;
@@ -30,8 +30,10 @@ interface ApplicationsTabProps {
 
 export const appsSortFunctions = {
   name: makeCompareString('name'),
-  hosts: makeCompareNumber(entity => entity.hosts.count),
-  occurrences: makeCompareNumber(entity => entity.occurrences.total),
+  hosts: makeCompareNumber((entity: ReportApp) => entity.hosts.count),
+  occurrences: makeCompareNumber(
+    (entity: ReportApp) => entity.occurrences.total,
+  ),
   severity: makeCompareSeverity(),
 };
 
@@ -48,7 +50,7 @@ const ApplicationsTabWrapper = ({
     return isDefined(filter) ? filter : new Filter();
   }, [filter]);
 
-  const [appsFilter, setAppsFilter] = useState<Filter>(baseFilter);
+  const [appsFilter, setAppsFilter] = useState<FilterType>(baseFilter);
 
   useEffect(() => {
     setAppsFilter(baseFilter);
@@ -59,7 +61,7 @@ const ApplicationsTabWrapper = ({
   const isLoading = !data && isFetching;
   const isError = isApplicationsError ?? false;
 
-  const updateFilter = (newFilter: Filter) => {
+  const updateFilter = (newFilter: FilterType) => {
     setAppsFilter(newFilter);
   };
 

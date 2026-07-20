@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type Permission from 'gmp/models/permission';
 import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';
 
 interface UseGetPermissionsParams {
-  filter?: Filter;
+  filter?: FilterType;
   enabled?: boolean;
 }
 

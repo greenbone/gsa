@@ -6,7 +6,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Agent from 'gmp/models/agent';
-import {type default as Filter, AGENTS_FILTER_FILTER} from 'gmp/models/filter';
+import {AGENTS_FILTER_FILTER, type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
@@ -113,7 +113,7 @@ const AgentListPage = () => {
   });
 
   const handleBulkDelete = useCallback(async () => {
-    let input: Agent[] | Filter;
+    let input: Agent[] | FilterType;
     if (selectionType === SelectionType.SELECTION_USER) {
       input = selectedEntities;
     } else if (selectionType === SelectionType.SELECTION_FILTER) {
@@ -215,7 +215,7 @@ const AgentListPage = () => {
   };
 
   const handleFilterChanged = useCallback(
-    (newFilter?: Filter) => {
+    (newFilter?: FilterType) => {
       changeFilter(newFilter);
     },
     [changeFilter],

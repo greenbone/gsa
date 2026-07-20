@@ -6,12 +6,12 @@
 import EntitiesCommand from 'gmp/commands/entities';
 import {BULK_SELECT_BY_IDS} from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import OperatingSystem from 'gmp/models/os';
 
 interface OperatingSystemAggregatesParams {
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 interface OperatingSystemVulnerabilityScoreAggregatesParams extends OperatingSystemAggregatesParams {

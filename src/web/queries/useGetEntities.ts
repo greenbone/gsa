@@ -8,7 +8,7 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type EntitiesMeta} from 'gmp/commands/entities';
 import {type HttpCommandInputParams} from 'gmp/commands/http';
 import type Response from 'gmp/http/response';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import {
@@ -22,7 +22,7 @@ type GmpMethodParams = HttpCommandInputParams;
 export interface UseGetEntitiesReturn<T> {
   entities: T[];
   entitiesCounts: CollectionCounts;
-  filter?: Filter;
+  filterType?: FilterType;
 }
 
 interface UseGetEntitiesParams<
@@ -31,12 +31,10 @@ interface UseGetEntitiesParams<
 > {
   gmpMethod: (input: TInput) => Promise<Response<TModel[], EntitiesMeta>>;
   queryId: string;
-  filter?: Filter;
+  filter?: FilterType;
   enabled?: boolean;
   refetchInterval?:
-    | number
-    | false
-    | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
+    number | false | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
   keepPreviousData?: boolean;
 }
 

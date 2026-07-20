@@ -10,6 +10,7 @@ import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import Filter, {
   DEFAULT_FALLBACK_FILTER,
   DEFAULT_ROWS_PER_PAGE,
+  type FilterType,
   RESET_FILTER,
 } from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
@@ -23,16 +24,16 @@ import {loadUserSettingDefault} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 interface UsePageFilterOptions {
-  fallbackFilter?: Filter;
+  fallbackFilter?: FilterType;
 }
 
 interface UsePageFilterHandlers {
-  changeFilter: (filter?: Filter) => void;
+  changeFilter: (filter?: FilterType) => void;
   removeFilter: () => void;
   resetFilter: () => void;
 }
 
-type UsePageFilterReturn = [Filter, boolean, UsePageFilterHandlers];
+type UsePageFilterReturn = [FilterType, boolean, UsePageFilterHandlers];
 
 /**
  * Hook to get the default filter of a page from the store
@@ -110,7 +111,7 @@ const usePageFilter = (
     gmpName,
   ]);
 
-  let returnedFilter: Filter | undefined;
+  let returnedFilter: FilterType | undefined;
 
   useEffect(() => {
     if (!isDefined(rowsPerPage)) {
@@ -163,7 +164,7 @@ const usePageFilter = (
     isDefined(rowsPerPage);
 
   const changeFilter = useCallback(
-    (filter?: Filter) => {
+    (filter?: FilterType) => {
       dispatch(setPageFilter(pageName, filter));
     },
     [dispatch, pageName],
@@ -184,7 +185,7 @@ const usePageFilter = (
   }, [changeFilter, setSearchParams, searchParams]);
 
   return [
-    returnedFilter as Filter,
+    returnedFilter as FilterType,
     !finishedLoading,
     {
       changeFilter,

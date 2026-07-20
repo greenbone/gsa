@@ -5,7 +5,7 @@
 
 import React from 'react';
 import _ from 'gmp/locale';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {type TaskStatus} from 'gmp/models/task';
@@ -30,7 +30,7 @@ export interface ThresholdConfig {
   showThresholdMessage: boolean;
   isUpdating: boolean;
   threshold: number;
-  onFilterChanged: (filter: Filter) => void;
+  onFilterChanged: (filter: FilterType) => void;
   onFilterEditClick: () => void;
 }
 
@@ -42,7 +42,7 @@ interface TabDefinition {
 
 interface BuildReportTabDefinitionsParams {
   activeReport: ReportReport;
-  activeFilter: Filter;
+  activeFilter: FilterType;
   reportId: string;
   isImport: boolean;
   isAgentScanning: boolean;
@@ -94,7 +94,7 @@ const EXCLUDED_WEBAPP_TAB_KEY_SET = new Set<string>(
 
 export const renderWithThreshold = (
   entityType: string,
-  activeFilter: Filter,
+  activeFilter: FilterType,
   config: ThresholdConfig,
   content: React.ReactNode,
 ): React.ReactNode => {

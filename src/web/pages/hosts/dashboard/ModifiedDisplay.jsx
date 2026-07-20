@@ -6,7 +6,7 @@
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filterterm';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import {parseInt, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import LineChart, {lineDataPropType} from 'web/components/chart/base/Line';

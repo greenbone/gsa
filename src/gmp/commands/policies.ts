@@ -6,14 +6,13 @@
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import EntitiesCommand from 'gmp/commands/entities';
 import {type HttpCommandOptions} from 'gmp/commands/http';
-import PolicyCommand from 'gmp/commands/policy';
 import type Http from 'gmp/http/http';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {type Element} from 'gmp/models/model';
 import Policy from 'gmp/models/policy';
 
 export interface PoliciesCommandGetParams {
-  filter?: Filter | string;
+  filter?: FilterType | string;
 }
 
 class PoliciesCommand extends EntitiesCommand<Policy> {
@@ -37,12 +36,11 @@ class PoliciesCommand extends EntitiesCommand<Policy> {
       filter: responseFilter,
       counts,
     } = this.getCollectionListFromRoot(response.data);
-    return response.set<Policy[], {filter: Filter; counts: CollectionCounts}>(
-      entities,
-      {filter: responseFilter, counts},
-    );
+    return response.set<
+      Policy[],
+      {filter: FilterType; counts: CollectionCounts}
+    >(entities, {filter: responseFilter, counts});
   }
 }
 
 export default PoliciesCommand;
-export {PolicyCommand};

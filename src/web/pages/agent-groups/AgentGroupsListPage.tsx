@@ -6,10 +6,7 @@
 import {useCallback, useMemo, useRef, useState} from 'react';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type AgentGroup from 'gmp/models/agent-group';
-import {
-  type default as Filter,
-  AGENT_GROUPS_FILTER_FILTER,
-} from 'gmp/models/filter';
+import {AGENT_GROUPS_FILTER_FILTER, type FilterType} from 'gmp/models/filter';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
@@ -92,7 +89,7 @@ const AgentGroupsListPage = () => {
   }, [selectionType, selectedEntities, allEntities, showError]);
 
   const handleFilterChanged = useCallback(
-    (newFilter?: Filter) => {
+    (newFilter?: FilterType) => {
       changeFilter(newFilter);
     },
     [changeFilter],

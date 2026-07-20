@@ -5,10 +5,10 @@
 
 import {useCallback} from 'react';
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 
 interface ChangeFilterFunc {
-  (filter: Filter): void;
+  (filter: FilterType): void;
 }
 
 /**
@@ -18,10 +18,10 @@ interface ChangeFilterFunc {
  * @example
  *
  * const gmp = useGmp();
- * const [filter, setFilter] = useState(new Filter());
+ * const [filter, setFilter] = useState<FilterType>(new Filter());
  * const [entities, setEntities] = useState([]);
  * const [counts, setCounts] = useState({});
- * const updateFilter = useCallback(filter => {
+ * const updateFilter = useCallback((filter: FilterType) => {
  *   setFilter(filter);
  *   gmp.tasks.get(filter).then(response => {setEntities(response.data);setCounts(response.meta.counts)});
  * }, [gmp.tasks]);
@@ -35,7 +35,7 @@ interface ChangeFilterFunc {
  *   next and previous page.
  */
 const usePagination = (
-  filter: Filter,
+  filter: FilterType,
   counts: CollectionCounts,
   changeFilter: ChangeFilterFunc,
 ): [() => void, () => void, () => void, () => void] => {

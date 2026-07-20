@@ -7,14 +7,14 @@ import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import AgentGroup from 'gmp/models/agent-group';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 
 class AgentGroupsCommand extends EntitiesCommand<AgentGroup> {
   constructor(http: Http) {
     super(http, 'agent_group', AgentGroup);
   }
 
-  getSeverityAggregates({filter}: {filter?: Filter} = {}) {
+  getSeverityAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'agent_group',
       group_column: 'severity',
@@ -22,7 +22,7 @@ class AgentGroupsCommand extends EntitiesCommand<AgentGroup> {
     });
   }
 
-  getNetworkAggregates({filter}: {filter?: Filter} = {}) {
+  getNetworkAggregates({filter}: {filter?: FilterType} = {}) {
     return this.getAggregates({
       aggregate_type: 'agent_group',
       group_column: 'scanner',

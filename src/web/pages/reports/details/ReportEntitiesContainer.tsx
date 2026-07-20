@@ -5,7 +5,7 @@
 
 import React, {useEffect, useMemo, useState} from 'react';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
 import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
@@ -33,7 +33,7 @@ interface ReportEntitiesContainerProps<TEntity> {
   children: (
     props: ReportEntitiesContainerRenderProps<TEntity>,
   ) => React.JSX.Element;
-  filter?: Filter;
+  filter?: FilterType;
   counts?: CollectionCounts;
   entities?: TEntity[];
   sortField: string;
@@ -64,7 +64,7 @@ const sortEntities = <TEntity,>({
   return [...entities].sort(compare);
 };
 
-const getRows = (filter?: Filter, counts?: CollectionCounts) => {
+const getRows = (filter?: FilterType, counts?: CollectionCounts) => {
   let rows = isDefined(filter) ? (filter.get('rows') as number) : undefined;
 
   if (!isDefined(rows)) {

@@ -67,10 +67,10 @@ const EDIT_CONFIG_COLUMNS_SORT = {
   selected: 'selected',
 };
 
-const shouldNvtDisplayComponentUpdate = (
+const areNvtDisplayPropsEqual = (
   props: NvtDisplayProps,
   nextProps: NvtDisplayProps,
-) => nextProps.nvt !== props.nvt || nextProps.selected !== props.selected;
+) => nextProps.nvt === props.nvt && nextProps.selected === props.selected;
 
 const NvtDisplay = React.memo(
   ({
@@ -114,7 +114,7 @@ const NvtDisplay = React.memo(
       </TableRow>
     );
   },
-  shouldNvtDisplayComponentUpdate,
+  areNvtDisplayPropsEqual,
 );
 
 const sortFunctions = {

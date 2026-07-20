@@ -15,7 +15,11 @@ import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import {type TranslateOptions} from 'gmp/locale/lang';
 import logger from 'gmp/log';
-import {type default as Filter, RESET_FILTER} from 'gmp/models/filter';
+import {
+  type default as Filter,
+  type FilterType,
+  RESET_FILTER,
+} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import type Tag from 'gmp/models/tag';
 import {map} from 'gmp/utils/array';
@@ -53,7 +57,7 @@ export interface EntitiesContainerRenderProps<TModel extends Model = Model> {
   entitiesCounts?: CollectionCounts;
   entitiesError?: Error | Rejection;
   entitiesSelected?: Set<TModel>;
-  filter?: Filter;
+  filter?: FilterType;
   isLoading: boolean;
   isUpdating: boolean;
   selectionType: SelectionTypeType;
@@ -87,7 +91,7 @@ interface EntitiesContainerState<TModel extends Model = Model> {
   entitiesCounts?: CollectionCounts;
   entitiesError?: Error | Rejection;
   isUpdating: boolean;
-  loadedFilter?: Filter;
+  loadedFilter?: FilterType;
   multiTagEntitiesCount?: number;
   selected?: Set<TModel>;
   selectionType: SelectionTypeType;
@@ -102,17 +106,17 @@ interface EntitiesContainerProps<TModel extends Model = Model> {
   entities?: TModel[];
   entitiesCounts?: CollectionCounts;
   entitiesError?: Error | Rejection;
-  filter: Filter;
+  filter: FilterType;
   gmp: Gmp;
   gmpName: EntityType;
   isLoading?: boolean;
-  loadedFilter?: Filter;
+  loadedFilter?: FilterType;
   notify: (message: string) => () => void;
-  reload: (filter?: Filter) => void;
+  reload: (filter?: FilterType) => void;
   showError: (error: Error | Rejection) => void;
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
-  updateFilter: (filter?: Filter) => void;
+  updateFilter: (filter?: FilterType) => void;
   onDownload: OnDownloadedFunc;
 }
 
@@ -237,7 +241,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     }
   }
 
-  updateFilter(filter?: Filter) {
+  updateFilter(filter?: FilterType) {
     this.props.updateFilter(filter);
     this.props.reload(filter);
   }
@@ -286,9 +290,11 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     if (selectionType === SelectionType.SELECTION_USER) {
       promise = entitiesCommand.export(Array.from(selected as Set<TModel>));
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entitiesCommand.exportByFilter(loadedFilter as Filter);
+      promise = entitiesCommand.exportByFilter(loadedFilter as FilterType);
     } else {
-      promise = entitiesCommand.exportByFilter((loadedFilter as Filter).all());
+      promise = entitiesCommand.exportByFilter(
+        (loadedFilter as FilterType).all(),
+      );
     }
 
     showSuccessNotification('', _('Bulk download started.'));
@@ -351,7 +357,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
   }
 
   handleSortChange(field: string) {
-    const {loadedFilter} = this.state as {loadedFilter: Filter};
+    const {loadedFilter} = this.state as {loadedFilter: FilterType};
 
     let sort = 'sort';
     const sortField = loadedFilter.getSortBy();
@@ -373,31 +379,31 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     showError(error);
   }
 
-  changeFilter(filter?: Filter) {
+  changeFilter(filter?: FilterType) {
     this.updateFilter(filter);
   }
 
   handleFirst() {
-    const {loadedFilter: filter} = this.state as {loadedFilter: Filter};
+    const {loadedFilter: filter} = this.state as {loadedFilter: FilterType};
 
     this.changeFilter(filter.first());
   }
 
   handleNext() {
-    const {loadedFilter: filter} = this.state as {loadedFilter: Filter};
+    const {loadedFilter: filter} = this.state as {loadedFilter: FilterType};
 
     this.changeFilter(filter.next());
   }
 
   handlePrevious() {
-    const {loadedFilter: filter} = this.state as {loadedFilter: Filter};
+    const {loadedFilter: filter} = this.state as {loadedFilter: FilterType};
 
     this.changeFilter(filter.previous());
   }
 
   handleLast() {
     const {loadedFilter: filter, entitiesCounts: counts} = this.state as {
-      loadedFilter: Filter;
+      loadedFilter: FilterType;
       entitiesCounts: CollectionCounts;
     };
 
@@ -411,7 +417,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     this.changeFilter(filter);
   }
 
-  handleFilterChanged(filter: Filter) {
+  handleFilterChanged(filter: FilterType) {
     this.changeFilter(filter);
   }
 
@@ -476,14 +482,14 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     const entitiesType = getEntityType(entities[0]);
 
     let resourceIds: string[] | undefined;
-    let filter: Filter | undefined;
+    let filter: FilterType | undefined;
     if (selectionType === SelectionType.SELECTION_USER) {
       resourceIds = map(selected, res => res.id as string);
       filter = undefined;
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       filter = loadedFilter;
     } else {
-      filter = (loadedFilter as Filter).all();
+      filter = (loadedFilter as FilterType).all();
     }
 
     return gmp.tag

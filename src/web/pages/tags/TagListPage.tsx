@@ -6,7 +6,7 @@
 import {useCallback, useMemo, useRef, useState} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import {type default as Filter, TAGS_FILTER_FILTER} from 'gmp/models/filter';
+import {type FilterType, TAGS_FILTER_FILTER} from 'gmp/models/filter';
 import type Tag from 'gmp/models/tag';
 import {getEntityType, pluralizeType} from 'gmp/utils/entity-type';
 import Download from 'web/components/form/Download';
@@ -114,7 +114,7 @@ const TagsPage = () => {
   });
 
   const handleBulkDelete = useCallback(async () => {
-    let input: Tag[] | Filter;
+    let input: Tag[] | FilterType;
     if (selectionType === SelectionType.SELECTION_USER) {
       input = selectedEntities;
     } else if (selectionType === SelectionType.SELECTION_FILTER) {
@@ -138,7 +138,7 @@ const TagsPage = () => {
   ]);
 
   const handleBulkDownload = useCallback(async () => {
-    let input: Tag[] | Filter;
+    let input: Tag[] | FilterType;
     if (selectionType === SelectionType.SELECTION_USER) {
       input = selectedEntities;
     } else if (selectionType === SelectionType.SELECTION_FILTER) {
@@ -173,7 +173,7 @@ const TagsPage = () => {
   ]);
 
   const handleFilterChanged = useCallback(
-    (newFilter?: Filter) => {
+    (newFilter?: FilterType) => {
       changeFilter(newFilter);
     },
     [changeFilter],

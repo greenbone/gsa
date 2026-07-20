@@ -4,7 +4,7 @@
  */
 
 import {useState} from 'react';
-import type Filter from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import {parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
@@ -13,7 +13,7 @@ import RelationSelector from 'web/components/powerfilter/RelationSelector';
 import {UNSET_VALUE} from 'web/utils/Render';
 
 interface SeverityValuesGroupProps {
-  filter: Filter;
+  filter: FilterType;
   name: string;
   title?: string;
   onChange?: (value: number, name: string, relation?: string) => void;

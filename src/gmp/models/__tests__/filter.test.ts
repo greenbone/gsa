@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Filter, {UNKNOWN_FILTER_ID} from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filterterm';
+import FilterTerm from 'gmp/models/filter/filter-term';
 import {isArray} from 'gmp/utils/identity';
 
 describe('Filter parse filter terms from string', () => {
@@ -263,7 +263,7 @@ describe('Filter parse from string tests', () => {
   });
 });
 
-describe('Filter parse from keywords', () => {
+describe('Filter fromResponseElement', () => {
   test('should parse approx relation without column', () => {
     const elem = {
       keywords: {
@@ -276,7 +276,7 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    const filter = Filter.fromElement(elem);
+    const filter = Filter.fromResponseElement(elem);
     expect(filter.toFilterString()).toEqual('~abc');
   });
 
@@ -307,7 +307,7 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    let filter = Filter.fromElement(elem);
+    let filter = Filter.fromResponseElement(elem);
     expect(filter.toFilterString()).toEqual('~abc and not ~def');
 
     elem = {
@@ -351,7 +351,7 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    filter = Filter.fromElement(elem);
+    filter = Filter.fromResponseElement(elem);
     expect(filter.toFilterString()).toEqual(
       '~abc and not ~def rows=10 first=1 sort=name',
     );
@@ -395,7 +395,7 @@ describe('Filter parse from keywords', () => {
       },
     };
 
-    const filter = Filter.fromElement(elem);
+    const filter = Filter.fromResponseElement(elem);
     const filterString =
       'severity>3.9 and severity<7 first=1 rows=10 sort=name';
     expect(filter.toFilterString()).toEqual(filterString);
@@ -416,8 +416,27 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    const filter = Filter.fromElement(elem);
+    const filter = Filter.fromResponseElement(elem);
     expect(filter.toFilterString()).toEqual('_foo=abc');
+  });
+
+  test('should parse id', () => {
+    const filter1 = Filter.fromResponseElement();
+    expect(filter1.id).toBeUndefined();
+
+    const filter2 = Filter.fromResponseElement({_id: '123'});
+    expect(filter2.id).toBe('123');
+
+    const filter3 = Filter.fromResponseElement({_id: UNKNOWN_FILTER_ID});
+    expect(filter3.id).toBeUndefined();
+  });
+
+  test('should parse name', () => {
+    const filter1 = Filter.fromResponseElement();
+    expect(filter1.name).toBeUndefined();
+
+    const filter2 = Filter.fromResponseElement({name: 'Test Filter'});
+    expect(filter2.name).toBe('Test Filter');
   });
 });
 
@@ -1613,6 +1632,7 @@ describe('should lower the case of capitalized keywords', () => {
       'severity>3.9 and qod_min=70 rows=14',
     );
   });
+
   test('should do the same for filters from arrays', () => {
     const element = {
       keywords: {
@@ -1655,15 +1675,17 @@ describe('should lower the case of capitalized keywords', () => {
         ],
       },
     };
-    const filter = Filter.fromElement(element);
+    const filter = Filter.fromResponseElement(element);
     expect(filter.toFilterString()).toEqual(
       '~abc and not ~def rows=10 first=1 sort=name',
     );
   });
+
   test('a more wacky scenario', () => {
     const filter1 = Filter.fromString('~abc SorT=name');
     expect(filter1.toFilterString()).toEqual('~abc sort=name');
   });
+
   test('just a value', () => {
     const filter2 = Filter.fromString('~AbC');
     expect(filter2.toFilterString()).toEqual('~AbC');
