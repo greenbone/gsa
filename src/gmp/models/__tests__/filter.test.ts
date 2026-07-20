@@ -628,6 +628,18 @@ describe('Filter tests', () => {
     });
   });
 
+  describe('Filter all', () => {
+    test('should set first and rows for all items', () => {
+      const filter = createFilterWithTerms('first=3 rows=10');
+      const updated = filter.all();
+
+      expect(filter.get('first')).toBe(3);
+      expect(filter.get('rows')).toBe(10);
+      expect(updated.get('first')).toBe(1);
+      expect(updated.get('rows')).toBe(-1);
+    });
+  });
+
   describe('Filter getSortOrder', () => {
     test('should return sort if not set', () => {
       const filter = createFilterWithTerms('');
