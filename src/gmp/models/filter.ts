@@ -158,6 +158,8 @@ class Filter extends EntityModel implements FilterType {
   /**
    * Create a new Filter from the passed response element.
    *
+   * @deprecated Use `BaseFilter.fromResponseElement` instead.
+   *
    * @param element Response element to parse properties from.
    *
    * @returns A new Filter model instance.
@@ -168,6 +170,8 @@ class Filter extends EntityModel implements FilterType {
 
   /**
    * Creates a new Filter from filterString
+   *
+   * @deprecated Use `BaseFilter.fromString` instead.
    *
    * @param filterString String to parse FilterTerms from.
    * @param filter Use extra terms from filter if not already
@@ -181,6 +185,8 @@ class Filter extends EntityModel implements FilterType {
 
   /**
    * Creates a new Filter from FilterTerms
+   *
+   * @deprecated Use `BaseFilter.fromTerm` instead.
    *
    * @param term FilterTerms to set for the new Filter
    *
