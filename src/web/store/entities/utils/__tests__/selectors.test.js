@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSelector} from 'web/store/entities/utils/selectors';
 import {createRootState, createState} from 'web/store/entities/utils/testing';
 import {filterIdentifier} from 'web/store/utils';
@@ -21,7 +21,7 @@ describe('EntitiesSelector isLoadingEntities tests', () => {
   test('should be false for undefined state with filter', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
     const fooSelector = selector(rootState);
 
     expect(fooSelector.isLoadingEntities(filter)).toEqual(false);
@@ -39,7 +39,7 @@ describe('EntitiesSelector isLoadingEntities tests', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
 
     expect(fooSelector.isLoadingEntities(filter)).toEqual(false);
   });
@@ -58,7 +58,7 @@ describe('EntitiesSelector isLoadingEntities tests', () => {
   });
 
   test('should be true for filter', () => {
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       isLoading: {
@@ -80,7 +80,7 @@ describe('EntitiesSelector isLoadingEntities tests', () => {
       },
     });
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=bar');
+    const filter = BaseFilter.fromString('name=bar');
 
     expect(fooSelector.isLoadingEntities(filter)).toEqual(false);
   });
@@ -169,7 +169,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
 
     expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
@@ -186,7 +186,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
 
     expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
@@ -231,7 +231,7 @@ describe('EntitiesSelector getEntities tests', () => {
   });
 
   test('getEntities should return entities with filter', () => {
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       byId: {
@@ -280,7 +280,7 @@ describe('EntitiesSelector getEntities tests', () => {
       'name=foo': ['lorem', 'ipsum'],
     });
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=bar');
+    const filter = BaseFilter.fromString('name=bar');
 
     expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
@@ -288,7 +288,7 @@ describe('EntitiesSelector getEntities tests', () => {
 
 describe('EntitiesSelector getAllEntities tests', () => {
   test('getAllEntities should return entities with all-filter', () => {
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       byId: {
@@ -323,7 +323,7 @@ describe('EntitiesSelector getAllEntities tests', () => {
   });
 
   test('getAllEntities should return entities with all-filter if filter is undefined', () => {
-    const filter = new Filter();
+    const filter = new BaseFilter();
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       byId: {
@@ -371,7 +371,7 @@ describe('EntitiesSelector getEntitiesError tests', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
 
     expect(fooSelector.getEntitiesError(filter)).toBeUndefined();
   });
@@ -388,13 +388,13 @@ describe('EntitiesSelector getEntitiesError tests', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
 
     expect(fooSelector.getEntitiesError(filter)).toBeUndefined();
   });
 
   test('should return error with default filter', () => {
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       errors: {
@@ -408,7 +408,7 @@ describe('EntitiesSelector getEntitiesError tests', () => {
   });
 
   test('should return error with filter', () => {
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       errors: {
@@ -432,7 +432,7 @@ describe('EntitiesSelector getEntitiesError tests', () => {
   });
 
   test('should return undefined for unknown filter', () => {
-    const otherFilter = Filter.fromString('name=foo');
+    const otherFilter = BaseFilter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       errors: {
@@ -440,7 +440,7 @@ describe('EntitiesSelector getEntitiesError tests', () => {
         [filterIdentifier(otherFilter)]: 'Another error',
       },
     });
-    const filter = Filter.fromString('name=bar');
+    const filter = BaseFilter.fromString('name=bar');
     const fooSelector = selector(rootState);
 
     expect(fooSelector.getEntitiesError(filter)).toBeUndefined();
@@ -460,7 +460,7 @@ describe('EntitiesSelector getEntitiesCounts tests', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
 
     expect(fooSelector.getEntitiesCounts(filter)).toBeUndefined();
   });
@@ -477,7 +477,7 @@ describe('EntitiesSelector getEntitiesCounts tests', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
 
     expect(fooSelector.getEntitiesCounts(filter)).toBeUndefined();
   });
@@ -502,7 +502,7 @@ describe('EntitiesSelector getEntitiesCounts tests', () => {
     const counts = {
       first: 1,
     };
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
     const filterId = filterIdentifier(filter);
     const rootState = createState('foo', {
       [filterId]: {
@@ -528,7 +528,7 @@ describe('EntitiesSelector getLoadedFilter tests', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
 
     expect(fooSelector.getLoadedFilter(filter)).toBeUndefined();
   });
@@ -545,14 +545,14 @@ describe('EntitiesSelector getLoadedFilter tests', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
+    const filter = BaseFilter.fromString('name=foo');
 
     expect(fooSelector.getLoadedFilter(filter)).toBeUndefined();
   });
 
   test('should return loaded filter', () => {
     const selector = createSelector('foo');
-    const loadedFilter = Filter.fromString('foo=bar');
+    const loadedFilter = BaseFilter.fromString('foo=bar');
     const rootState = createState('foo', {
       default: {
         loadedFilter,
@@ -565,8 +565,8 @@ describe('EntitiesSelector getLoadedFilter tests', () => {
 
   test('should return loadedFilter with filter', () => {
     const selector = createSelector('foo');
-    const loadedFilter = Filter.fromString('foo=bar');
-    const filter = Filter.fromString('name=foo');
+    const loadedFilter = BaseFilter.fromString('foo=bar');
+    const filter = BaseFilter.fromString('name=foo');
     const filterId = filterIdentifier(filter);
     const rootState = createState('foo', {
       [filterId]: {

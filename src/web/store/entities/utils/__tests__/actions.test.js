@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {isFunction} from 'gmp/utils/identity';
 import {
   types,
@@ -40,7 +40,7 @@ describe('entities loading actions tests', () => {
     });
 
     test('should create a load request action with filter', () => {
-      const filter = Filter.fromString('type=abc');
+      const filter = BaseFilter.fromString('type=abc');
       const actions = createEntitiesLoadingActions('foo');
       const action = actions.request(filter);
 
@@ -63,7 +63,7 @@ describe('entities loading actions tests', () => {
     });
 
     test('should create a load success action with filter', () => {
-      const filter = Filter.fromString('type=abc');
+      const filter = BaseFilter.fromString('type=abc');
       const actions = createEntitiesLoadingActions('foo');
       const action = actions.success(['foo', 'bar'], filter);
 
@@ -76,8 +76,8 @@ describe('entities loading actions tests', () => {
     });
 
     test('should create a load success action with meta info', () => {
-      const filter = Filter.fromString('type=abc');
-      const loadedFilter = Filter.fromString('type=abc rows=100');
+      const filter = BaseFilter.fromString('type=abc');
+      const loadedFilter = BaseFilter.fromString('type=abc rows=100');
       const actions = createEntitiesLoadingActions('foo');
       const counts = {first: 1};
       const action = actions.success(
@@ -109,7 +109,7 @@ describe('entities loading actions tests', () => {
     });
 
     test('should create a load error action with filter', () => {
-      const filter = Filter.fromString('type=abc');
+      const filter = BaseFilter.fromString('type=abc');
       const actions = createEntitiesLoadingActions('foo');
       const action = actions.error('An error', filter);
 
@@ -216,7 +216,7 @@ describe('entities loading actions tests', () => {
 
       const getState = testing.fn().mockReturnValue({foo: 'bar'});
 
-      const loadedFilter = Filter.fromString('name=abc');
+      const loadedFilter = BaseFilter.fromString('name=abc');
       const counts = {first: 1};
       const dispatch = testing.fn();
       const get = testing.fn().mockReturnValue(
@@ -245,12 +245,9 @@ describe('entities loading actions tests', () => {
         entityType: 'foo',
       });
 
-      const filter = Filter.fromString('type=teip');
+      const filter = BaseFilter.fromString('type=teip');
 
-      const myFilterAll = new Filter({
-        entityType: 'filter',
-        filter_type: undefined,
-        id: undefined,
+      const myFilterAll = new BaseFilter({
         terms: [
           {
             keyword: 'type',
@@ -319,11 +316,9 @@ describe('entities loading actions tests', () => {
         entityType: 'foo',
       });
 
-      const filter = Filter.fromString('type=teip');
+      const filter = BaseFilter.fromString('type=teip');
 
-      const myFilterAll = new Filter({
-        filter_type: undefined,
-        id: undefined,
+      const myFilterAll = new BaseFilter({
         terms: [
           {
             keyword: 'type',
@@ -407,7 +402,7 @@ describe('entities loading actions tests', () => {
 
       const getState = testing.fn().mockReturnValue({foo: 'bar'});
 
-      const loadedFilter = Filter.fromString('name=abc');
+      const loadedFilter = BaseFilter.fromString('name=abc');
       const counts = {first: 1};
       const dispatch = testing.fn();
       const get = testing.fn().mockReturnValue(
