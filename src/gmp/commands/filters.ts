@@ -9,6 +9,7 @@ import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import Filter, {type FilterModelElement} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type {Element} from 'gmp/models/model';
 import {isArray, isDefined} from 'gmp/utils/identity';
 
@@ -45,15 +46,15 @@ const isPaginationElement = (
   );
 };
 
-const parseFilterFromResponse = (element: FiltersResponseElement): Filter => {
+const parseFilterFromResponse = (element: FiltersResponseElement) => {
   const firstFilter =
     isDefined(element.filters) && isArray(element.filters)
       ? element.filters[0]
       : undefined;
 
   return isDefined(firstFilter) && !isPaginationElement(firstFilter)
-    ? Filter.fromElement(firstFilter)
-    : Filter.fromElement();
+    ? BaseFilter.fromResponseElement(firstFilter)
+    : BaseFilter.fromResponseElement();
 };
 
 const parseCollectionCountsFromResponse = (

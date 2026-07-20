@@ -15,7 +15,7 @@ import {
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Credential from 'gmp/models/credential';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialPage from 'web/pages/credentials/CredentialListPage';
@@ -52,11 +52,11 @@ const createGmp = ({
   getCredentialResponse = {data: credential},
   getCredentialsResponse = {
     data: [credential],
-    meta: {filter: new Filter(), counts: new CollectionCounts()},
+    meta: {filter: new BaseFilter(), counts: new CollectionCounts()},
   },
   getFiltersResponse = {
     data: [],
-    meta: {filter: new Filter(), counts: new CollectionCounts()},
+    meta: {filter: new BaseFilter(), counts: new CollectionCounts()},
   },
   cloneCredential = testing.fn().mockResolvedValue(cloneCredentialResponse),
   deleteCredential = testing.fn().mockResolvedValue(undefined),
@@ -111,7 +111,7 @@ const createGmp = ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(),
+        filter: new BaseFilter(),
         counts: new CollectionCounts(),
       },
     }),
@@ -128,7 +128,7 @@ describe('CredentialListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('credential', defaultSettingFilter),
@@ -200,7 +200,7 @@ describe('CredentialListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('credential', defaultSettingFilter),
@@ -230,7 +230,7 @@ describe('CredentialListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('credential', defaultSettingFilter),
@@ -273,7 +273,7 @@ describe('CredentialListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('credential', defaultSettingFilter),

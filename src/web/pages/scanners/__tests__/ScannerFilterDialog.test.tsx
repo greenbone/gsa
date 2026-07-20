@@ -14,6 +14,7 @@ import {
 } from 'web/testing';
 import Features from 'gmp/capabilities/features';
 import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import {OPENVASD_SCANNER_TYPE, scannerTypeName} from 'gmp/models/scanner';
 import ScannerFilterDialog from 'web/pages/scanners/ScannerFilterDialog';
@@ -55,7 +56,7 @@ describe('ScannerFilterDialog tests', () => {
   });
 
   test('should allow to create a new filter', async () => {
-    const filter = new Filter({
+    const filter = new BaseFilter({
       terms: [new FilterTerm({keyword: 'name', value: 'test'})],
     });
     const newFilter = new Filter({id: 'new-filter'});
@@ -105,11 +106,11 @@ describe('ScannerFilterDialog tests', () => {
   });
 
   test('should not render create named filter group if not allowed', () => {
-    const filter = new Filter();
+    const filter = new BaseFilter();
     const gmp = {
       settings: {enableGreenboneSensor: true},
       filter: {
-        create: testing.fn().mockResolvedValue(new Filter()),
+        create: testing.fn().mockResolvedValue(new Filter({id: 'new-filter'})),
       },
     };
     const handleClose = testing.fn();

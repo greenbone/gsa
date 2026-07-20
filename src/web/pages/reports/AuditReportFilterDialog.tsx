@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Filter from 'gmp/models/filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import ComplianceLevelFilterGroup from 'web/components/powerfilter/ComplianceLevelsGroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
@@ -22,7 +22,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface AuditReportFilterDialogProps extends UseFilterDialogSaveProps {
-  filter?: Filter;
+  filter?: FilterType;
 }
 
 const AuditReportFilterDialog = ({

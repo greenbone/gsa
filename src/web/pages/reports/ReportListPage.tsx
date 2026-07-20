@@ -7,10 +7,9 @@ import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {type TaskCommandCreateImportTaskParams} from 'gmp/commands/task';
-import Filter, {
-  type FilterType,
-  REPORTS_FILTER_FILTER,
-} from 'gmp/models/filter';
+import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import type Report from 'gmp/models/report';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -54,7 +53,7 @@ interface ToolBarIconsProps {
 
 type ReportListPageProps = WithEntitiesContainerComponentProps<Report>;
 
-const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
+const CONTAINER_TASK_FILTER = BaseFilter.fromString('target=""');
 
 const ToolBarIcons = ({onUploadReportClick}: ToolBarIconsProps) => {
   const [_] = useTranslation();
@@ -157,19 +156,14 @@ const ReportListPage = ({
   const handleReportDeltaSelect = (report: Report) => {
     if (isDefined(selectedDeltaReport)) {
       isDefined(onFilterChanged) &&
-        onFilterChanged(beforeSelectFilter as Filter);
+        onFilterChanged(beforeSelectFilter as FilterType);
       void navigate(`/report/delta/${selectedDeltaReport.id}/${report.id}`, {
         replace: true,
       });
     } else {
-      const newFilter = filter ?? new Filter();
-
+      const newFilter = filter ?? new BaseFilter();
       isDefined(onFilterChanged) &&
-        onFilterChanged(
-          newFilter
-            .set('first', 1) // reset to first page
-            .set('task_id', report?.task?.id),
-        );
+        onFilterChanged(newFilter.first().set('task_id', report?.task?.id));
       setBeforeSelectFilter(newFilter);
       setSelectedDeltaReport(report);
     }
@@ -242,7 +236,7 @@ const reportsReloadInterval = ({entities = []}: {entities: Report[]}) =>
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;
 
-const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
+const FALLBACK_REPORT_LIST_FILTER = BaseFilter.fromString(
   'sort-reverse=date first=1',
 );
 

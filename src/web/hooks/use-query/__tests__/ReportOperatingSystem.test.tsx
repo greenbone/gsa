@@ -6,7 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
+import type FilterType from 'gmp/models/filter/filter-type';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
@@ -24,14 +25,14 @@ const os2 = ReportOperatingSystem.fromElement({
 });
 os2.hosts.count = 5;
 
-const filter = Filter.fromString('rows=10 first=1');
+const filter = BaseFilter.fromString('rows=10 first=1');
 
 const TestComponent = ({
   reportId,
   filter: testFilter,
 }: {
   reportId: string;
-  filter?: Filter;
+  filter?: FilterType;
 }) => {
   const {data, isLoading, isError} = useGetReportOperatingSystems({
     reportId,
