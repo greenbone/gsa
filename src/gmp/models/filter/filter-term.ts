@@ -4,9 +4,52 @@
  */
 
 import convert, {type FilterTermObject} from 'gmp/models/filter/convert';
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isString, isArray} from 'gmp/utils/identity';
 
 const RELATIONS = ['=', ':', '~', '>', '<'];
+
+/**
+ * Parses FilterTerms from a filter string
+ *
+ * @param filterString Filter representation as a string
+ *
+ * @returns Array of parsed FilterTerms
+ */
+export const parseFilterTermsFromString = (
+  filterString: string | undefined,
+): FilterTerm[] => {
+  const terms: FilterTerm[] = [];
+  if (isString(filterString)) {
+    // replace whitespace between double quotes with placeholders
+    let modifiedFilterString = filterString;
+    const quotes = filterString.match(/".+?"/g); // find all substrings between double quotes
+    if (isArray(quotes)) {
+      for (const quotedString of quotes) {
+        const newQuotedString = quotedString.replace(/\s/g, '####'); // replace all " " with "####"
+        modifiedFilterString = modifiedFilterString.replace(
+          quotedString,
+          newQuotedString,
+        );
+      }
+    }
+
+    // get filter terms by splitting at whitespace
+    const filterTerms = modifiedFilterString.split(' ');
+
+    for (let filterTerm of filterTerms) {
+      // strip whitespace
+      filterTerm = filterTerm.trim();
+
+      // remove placeholders
+      filterTerm = filterTerm.replace(/####/g, ' '); // replace all "####" with " "
+
+      if (filterTerm.length > 0 && !filterTerm.startsWith('_')) {
+        terms.push(FilterTerm.fromString(filterTerm));
+      }
+    }
+  }
+  return terms;
+};
 
 /**
  * Represents a filter term
