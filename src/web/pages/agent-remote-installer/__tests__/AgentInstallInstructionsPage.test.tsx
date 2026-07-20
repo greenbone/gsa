@@ -217,7 +217,7 @@ describe('AgentInstallInstructionsPage tests', () => {
     expect(options[1]).toHaveTextContent('Remote Controller (10.0.0.1:443)');
   });
 
-  test('should show sensor warning when selected controller is an agent sensor', async () => {
+  test('should show not-installed warning when selected controller is an agent sensor', async () => {
     const gmp = createGmp({
       getAllScanners: testing.fn().mockResolvedValue({
         data: [
@@ -235,17 +235,44 @@ describe('AgentInstallInstructionsPage tests', () => {
     const {render} = rendererWith({gmp, capabilities: true});
     render(<AgentInstallInstructionsPage />);
 
-    await screen.findByTestId('agent-sensor-warning');
-    expect(screen.getByTestId('agent-sensor-warning')).toBeInTheDocument();
-    expect(screen.getByText('Sensor Network Notice')).toBeInTheDocument();
+    await screen.findByTestId('agent-sensor-not-installed-warning');
+    expect(
+      screen.getByTestId('agent-sensor-not-installed-warning'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Agent Controller Not Installed Locally'),
+    ).toBeInTheDocument();
     expect(
       screen.getByText(
-        'Please run these commands on the selected sensor network only; do not execute them on the master node.',
+        'You selected an agent control not installed on this appliance. Please log in to the related sensor appliance and use the install instructions from there.',
       ),
     ).toBeInTheDocument();
   });
 
-  test('should not show sensor warning when selected controller is not an agent sensor', async () => {
+  test('should hide install instructions when selected controller is an agent sensor', async () => {
+    const gmp = createGmp({
+      getAllScanners: testing.fn().mockResolvedValue({
+        data: [
+          makeScanner(
+            'scanner-1',
+            'Sensor Controller',
+            '10.0.0.2',
+            443,
+            AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+          ),
+        ],
+      }),
+    });
+
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(<AgentInstallInstructionsPage />);
+
+    await screen.findByTestId('agent-sensor-not-installed-warning');
+
+    expect(screen.queryByText('Quick Install')).not.toBeInTheDocument();
+  });
+
+  test('should not show not-installed warning when selected controller is not an agent sensor', async () => {
     const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
@@ -254,7 +281,7 @@ describe('AgentInstallInstructionsPage tests', () => {
     await screen.findByText('Agent Installation');
 
     expect(
-      screen.queryByTestId('agent-sensor-warning'),
+      screen.queryByTestId('agent-sensor-not-installed-warning'),
     ).not.toBeInTheDocument();
   });
 });

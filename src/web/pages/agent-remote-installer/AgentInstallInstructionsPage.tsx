@@ -140,29 +140,32 @@ const AgentInstallInstructionsPage = () => {
           <p>{_('No agent controllers available')}</p>
         )}
         {(instructionsLoading || controllersLoading) && <Loading />}
-        {isAgentSensor && (
+        {isAgentSensor ? (
           <InfoPanel
-            data-testid="agent-sensor-warning"
-            heading={_('Sensor Network Notice')}
+            data-testid="agent-sensor-not-installed-warning"
+            heading={_('Agent Controller Not Installed Locally')}
           >
             {_(
-              'Please run these commands on the selected sensor network only; do not execute them on the master node.',
+              'You selected an agent control not installed on this appliance. Please log in to the related sensor appliance and use the install instructions from there.',
             )}
           </InfoPanel>
+        ) : (
+          <>
+            {!instructionsLoading &&
+              !controllersLoading &&
+              !error &&
+              instructions && (
+                <>
+                  {instructions.sections.map(section => (
+                    <InstructionsSectionRenderer
+                      key={section.id}
+                      section={section}
+                    />
+                  ))}
+                </>
+              )}
+          </>
         )}
-        {!instructionsLoading &&
-          !controllersLoading &&
-          !error &&
-          instructions && (
-            <>
-              {instructions.sections.map(section => (
-                <InstructionsSectionRenderer
-                  key={section.id}
-                  section={section}
-                />
-              ))}
-            </>
-          )}
       </Section>
     </>
   );
