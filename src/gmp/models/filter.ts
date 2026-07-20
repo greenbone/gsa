@@ -4,8 +4,13 @@
  */
 
 import EntityModel, {parseEntityModelProperties} from 'gmp/models/entity-model';
-import convert from 'gmp/models/filter/convert';
-import FilterTerm from 'gmp/models/filter/filter-term';
+import BaseFilter, {
+  type FilterResponseElement,
+} from 'gmp/models/filter/base-filter';
+import {
+  type default as FilterTerm,
+  parseFilterTermsFromString,
+} from 'gmp/models/filter/filter-term';
 import FilterTerms from 'gmp/models/filter/filter-terms';
 import {
   type default as FilterType,
@@ -13,14 +18,7 @@ import {
 } from 'gmp/models/filter/filter-type';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
-import {isDefined, isString, isArray} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-
-export interface FilterKeyword {
-  column?: string;
-  relation?: string;
-  value?: string;
-}
+import {isDefined} from 'gmp/utils/identity';
 
 /**
  * XML Structure of a filter model element as returned by `<get_filters>`
@@ -44,58 +42,6 @@ export interface FilterModelElement extends ModelElement {
   term?: string;
 }
 
-/**
- * XML Structure of a filter response element
- * as returned by all `<get_xyz>` queries, for example `<get_tasks>`.
- *
- * Example XML Structure:
- * ```xml
- * <get_tasks_response>
- *   <task>
- *     ...
- *   </task>
- *   <filters id="">
- *     <term>apply_overrides=0 min_qod=70 sort=name first=1 rows=1</term>
- *     <keywords>
- *       <keyword>
- *         <column>apply_overrides</column>
- *         <relation>=</relation>
- *         <value>0</value>
- *       </keyword>
- *       <keyword>
- *         <column>min_qod</column>
- *         <relation>=</relation>
- *         <value>70</value>
- *       </keyword>
- *       <keyword>
- *         <column>sort</column>
- *         <relation>=</relation>
- *         <value>name</value>
- *       </keyword>
- *       <keyword>
- *         <column>first</column>
- *         <relation>=</relation>
- *         <value>1</value>
- *       </keyword>
- *       <keyword>
- *         <column>rows</column>
- *         <relation>=</relation>
- *         <value>1</value>
- *       </keyword>
- *     </keywords>
- *   </filters>
- * </get_tasks_response>
- * ```
- */
-export interface FilterResponseElement {
-  _id?: string;
-  name?: string;
-  keywords?: {
-    keyword?: FilterKeyword | FilterKeyword[];
-  };
-  term?: string;
-}
-
 interface FilterModelProperties extends ModelProperties {
   _term?: string;
   alerts?: Model[];
@@ -107,110 +53,6 @@ export type {
   default as FilterType,
   FilterSortOrder,
 } from 'gmp/models/filter/filter-type';
-
-/**
- * XML Structure of a filter model element as returned by `<get_filters>`
- * queries.
- *
- * Example XML Structure:
- * ```xml
- * <get_filters_response status="200" status_text="OK">
- *   <filter id="0c239c16-d597-48a1-9f51-347627a23dac">
- *     ...
- *     <term>apply_overrides=0 min_qod=70 sort=name first=1 rows=1</term>
- *   </filter>
- * </get_filters_response>
- * ```
- */
-
-/**
- * XML Structure of a filter response element
- * as returned by all `<get_xyz>` queries, for example `<get_tasks>`.
- *
- * Example XML Structure:
- * ```xml
- * <get_tasks_response>
- *   <task>
- *     ...
- *   </task>
- *   <filters id="">
- *     <term>apply_overrides=0 min_qod=70 sort=name first=1 rows=1</term>
- *     <keywords>
- *       <keyword>
- *         <column>apply_overrides</column>
- *         <relation>=</relation>
- *         <value>0</value>
- *       </keyword>
- *       <keyword>
- *         <column>min_qod</column>
- *         <relation>=</relation>
- *         <value>70</value>
- *       </keyword>
- *       <keyword>
- *         <column>sort</column>
- *         <relation>=</relation>
- *         <value>name</value>
- *       </keyword>
- *       <keyword>
- *         <column>first</column>
- *         <relation>=</relation>
- *         <value>1</value>
- *       </keyword>
- *       <keyword>
- *         <column>rows</column>
- *         <relation>=</relation>
- *         <value>1</value>
- *       </keyword>
- *     </keywords>
- *   </filters>
- * </get_tasks_response>
- * ```
- */
-
-export const UNKNOWN_FILTER_ID = '0';
-
-/**
- * Parses FilterTerms from filterString
- *
- * @param filterString  Filter representation as a string
- *
- * @returns Array of parsed FilterTerms
- */
-const parseFilterTermsFromString = (
-  filterString: string | undefined,
-): FilterTerm[] => {
-  const terms: FilterTerm[] = [];
-  if (isString(filterString)) {
-    // replace whitespace between double quotes with placeholders
-    let modifiedFilterString = filterString;
-    const quotes = filterString.match(/".+?"/g); // find all substrings between double quotes
-    if (isArray(quotes)) {
-      for (const quotedString of quotes) {
-        const newQuotedString = quotedString.replace(/\s/g, '####'); // replace all " " with "####"
-        modifiedFilterString = modifiedFilterString.replace(
-          quotedString,
-          newQuotedString,
-        );
-      }
-    }
-
-    // get filter terms by splitting at whitespace
-    const filterTerms = modifiedFilterString.split(' ');
-
-    for (let filterTerm of filterTerms) {
-      // strip whitespace
-      filterTerm = filterTerm.trim();
-
-      // remove placeholders
-      filterTerm = filterTerm.replace(/####/g, ' '); // replace all "####" with " "
-
-      if (filterTerm.length > 0 && !filterTerm.startsWith('_')) {
-        terms.push(FilterTerm.fromString(filterTerm));
-      }
-    }
-  }
-  return terms;
-};
 
 /**
  * Represents a filter
@@ -238,7 +80,7 @@ class Filter extends EntityModel implements FilterType {
     userCapabilities,
     userTags = [],
     writable,
-  }: FilterModelProperties = {}) {
+  }: FilterModelProperties) {
     super({
       _type,
       comment,
@@ -270,16 +112,13 @@ class Filter extends EntityModel implements FilterType {
    *
    * @returns A new Filter if the FilterTerms are different, otherwise the current Filter.
    */
-  private _delegate(terms: FilterTerms, keepId = false): Filter {
+  private _delegate(terms: FilterTerms, keepId = false) {
     return terms === this.filterTerms
       ? this
-      : new Filter({
+      : new BaseFilter({
           id: keepId ? this.id : undefined,
           name: this.name,
-          filter_type: this.filter_type,
           terms: [...terms.getAllTerms()],
-          userCapabilities: this.userCapabilities,
-          userTags: this.userTags,
         });
   }
 
@@ -290,14 +129,11 @@ class Filter extends EntityModel implements FilterType {
    *
    * @returns An object with properties for the new Filter model
    */
-  static fromElement(element: FilterModelElement = {}): Filter {
+  static fromElement(element: FilterModelElement): Filter {
     const ret = parseEntityModelProperties(element) as FilterModelProperties;
 
     ret.filter_type = ret._type;
 
-    if (ret.id === UNKNOWN_FILTER_ID) {
-      ret.id = undefined;
-    }
     if (isDefined(element.term)) {
       ret.terms = parseFilterTermsFromString(element.term);
 
@@ -326,26 +162,8 @@ class Filter extends EntityModel implements FilterType {
    *
    * @returns A new Filter model instance.
    */
-  static fromResponseElement(element: FilterResponseElement = {}): Filter {
-    const id =
-      !isEmpty(element._id) && element._id !== UNKNOWN_FILTER_ID
-        ? element._id
-        : undefined;
-
-    const name = !isEmpty(element.name) ? element.name : undefined;
-
-    let terms: FilterTerm[] = [];
-    if (isDefined(element.keywords)) {
-      terms = map(
-        element.keywords.keyword,
-        ({relation, value, column: key}: FilterKeyword) =>
-          new FilterTerm(convert(key, value, relation)),
-      );
-    } else if (isDefined(element.term)) {
-      terms = parseFilterTermsFromString(element.term);
-    }
-
-    return new Filter({id, name, terms});
+  static fromResponseElement(element: FilterResponseElement = {}) {
+    return BaseFilter.fromResponseElement(element);
   }
 
   /**
@@ -357,14 +175,8 @@ class Filter extends EntityModel implements FilterType {
    *
    * @returns New Filter with FilterTerms parsed from filterString.
    */
-  static fromString(filterString?: string, filter?: FilterType): Filter {
-    const filterTerms = new FilterTerms({
-      terms: parseFilterTermsFromString(filterString),
-    }).mergeExtraKeywords(filter) as FilterTerms;
-
-    return new Filter({
-      terms: [...filterTerms.getAllTerms()],
-    });
+  static fromString(filterString?: string, filter?: FilterType) {
+    return BaseFilter.fromString(filterString, filter);
   }
 
   /**
@@ -375,9 +187,7 @@ class Filter extends EntityModel implements FilterType {
    * @returns The new Filter
    */
   static fromTerm(...term: FilterTerm[]) {
-    return new Filter({
-      terms: [...term],
-    });
+    return BaseFilter.fromTerm(...term);
   }
 
   toFilterString(): string {
@@ -419,7 +229,7 @@ class Filter extends EntityModel implements FilterType {
     keyword: string,
     value?: string | number | boolean,
     relation: string = '=',
-  ): Filter {
+  ) {
     return this._delegate(this.filterTerms.set(keyword, value, relation));
   }
 
@@ -427,7 +237,7 @@ class Filter extends EntityModel implements FilterType {
     return this.filterTerms.has(key);
   }
 
-  delete(key: string): Filter {
+  delete(key: string) {
     return this._delegate(this.filterTerms.delete(key));
   }
 
@@ -439,31 +249,45 @@ class Filter extends EntityModel implements FilterType {
     return this.filterTerms.equals(filter);
   }
 
-  copy(): Filter {
-    return this._delegate(this.filterTerms.copy(), true);
+  copy() {
+    return new Filter({
+      alerts: [...this.alerts],
+      comment: this.comment,
+      creationTime: this.creationTime,
+      filter_type: this.filter_type,
+      id: this.id,
+      inUse: this.inUse,
+      modificationTime: this.modificationTime,
+      name: this.name,
+      owner: this.owner,
+      terms: [...this.filterTerms.getAllTerms()],
+      userCapabilities: this.userCapabilities,
+      userTags: [...this.userTags],
+      writable: this.writable,
+    });
   }
 
-  next(): Filter {
+  next() {
     return this._delegate(this.filterTerms.next());
   }
 
-  previous(): Filter {
+  previous() {
     return this._delegate(this.filterTerms.previous());
   }
 
-  first(first: number = 1): Filter {
+  first(first: number = 1) {
     return this._delegate(this.filterTerms.first(first));
   }
 
-  all(): Filter {
+  all() {
     return this._delegate(this.filterTerms.all());
   }
 
-  simple(): Filter {
+  simple() {
     return this._delegate(this.filterTerms.simple());
   }
 
-  and(filter: FilterType | undefined | null): Filter {
+  and(filter: FilterType | undefined | null) {
     return this._delegate(this.filterTerms.and(filter));
   }
 
@@ -475,28 +299,28 @@ class Filter extends EntityModel implements FilterType {
     return this.filterTerms.getSortBy();
   }
 
-  setSortOrder(value: FilterSortOrder): Filter {
+  setSortOrder(value: FilterSortOrder) {
     return this._delegate(this.filterTerms.setSortOrder(value));
   }
 
-  setSortBy(value: string): Filter {
+  setSortBy(value: string) {
     return this._delegate(this.filterTerms.setSortBy(value));
   }
 
-  merge(filter?: FilterType): Filter {
+  merge(filter?: FilterType) {
     return this._delegate(this.filterTerms.merge(filter));
   }
 
-  mergeKeywords(filter?: FilterType): Filter {
+  mergeKeywords(filter?: FilterType) {
     return this._delegate(this.filterTerms.mergeKeywords(filter));
   }
 
-  mergeExtraKeywords(filter?: FilterType): Filter {
+  mergeExtraKeywords(filter?: FilterType) {
     return this._delegate(this.filterTerms.mergeExtraKeywords(filter));
   }
 }
 
-export const ALL_FILTER = new Filter().all();
+export const ALL_FILTER = new BaseFilter().all();
 export const AGENTS_FILTER_FILTER = Filter.fromString('type=agent');
 export const AGENT_GROUPS_FILTER_FILTER = Filter.fromString('type=agent_group');
 export const AGENT_INSTALLERS_FILTER_FILTER = Filter.fromString(
