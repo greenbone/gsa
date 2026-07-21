@@ -28,6 +28,7 @@ const AgentGroupsTableRow = ({
   onEntitySelected,
   selectionType,
   'data-testid': dataTestId,
+  ...props
 }: AgentGroupsTableRowProps) => {
   const [_] = useTranslation();
 
@@ -44,6 +45,7 @@ const AgentGroupsTableRow = ({
       <TableData>{entity.getAgentCount()}</TableData>
       <TableData>{modificationTime}</TableData>
       <ActionsComponent
+        {...props}
         entity={entity}
         selectionType={selectionType}
         onAgentGroupCloneClick={onAgentGroupCloneClick}
