@@ -45,6 +45,65 @@ const createOperatingSystemsData = apiEntities => ({
 });
 
 describe('Report Operating Systems Tab tests', () => {
+  const cases = [
+    {
+      name: 'normal os',
+      entities: [
+        ReportOperatingSystem.fromElement({
+          best_os_cpe: 'cpe:/foo/bar',
+          best_os_txt: 'Foo OS',
+          hosts_count: 2,
+        }),
+      ],
+      expected: {
+        displayName: 'Foo OS',
+        cpe: 'cpe:/foo/bar',
+        img: '/img/os_not_available.svg',
+      },
+    },
+    {
+      name: 'unknown os',
+      entities: [
+        ReportOperatingSystem.fromElement({
+          best_os_cpe: '',
+          best_os_txt: '',
+          hosts_count: 1,
+        }),
+      ],
+      expected: {
+        displayName: 'Unknown',
+        cpe: 'Unknown',
+        img: '/img/os_unknown.svg',
+      },
+    },
+  ];
+
+  test.each(cases)('renders $name correctly', async ({entities, expected}) => {
+    const operatingSystemsData = createOperatingSystemsData(entities);
+    const {render} = rendererWith({gmp: {}});
+
+    render(
+      <OperatingSystemsTab
+        filter={filter}
+        operatingSystemsData={operatingSystemsData}
+        reportId="test-report"
+      />,
+    );
+
+    // Wait for table to render and then inspect cells
+    const table = await screen.findByRole('table');
+    const rows = within(table).getAllByRole('row');
+
+    const rowImage = within(rows[1]).getByAltText('');
+    expect(rowImage).toHaveAttribute('src', expected.img);
+
+    const cells = within(rows[1]).getAllByRole('cell');
+    // name cell
+    expect(cells[0]).toHaveTextContent(expected.displayName);
+    // cpe cell
+    expect(cells[1]).toHaveTextContent(expected.cpe);
+  });
+
   test('should render Report Operating Systems Tab', async () => {
     const apiEntities = buildApiEntities();
     const operatingSystemsData = createOperatingSystemsData(apiEntities);
@@ -141,6 +200,9 @@ describe('Report Operating Systems Tab tests', () => {
 
     const row1Image = within(rows[1]).getByAltText('');
     expect(row1Image).toHaveAttribute('src', '/img/os_unknown.svg');
+    // verify the CPE column shows 'Unknown'
+    const cells = within(rows[1]).getAllByRole('cell');
+    expect(cells[1]).toHaveTextContent('Unknown');
   });
 });
 
