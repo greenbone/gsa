@@ -5,7 +5,8 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
-import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
+import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import {parseInt, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -58,7 +59,7 @@ export class HostsModifiedHighDisplay extends React.Component {
     let {x: endDate} = end;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-    let newFilter = isDefined(filter) ? filter.copy() : new Filter();
+    let newFilter = isDefined(filter) ? filter.copy() : new BaseFilter();
 
     if (isDefined(startDate)) {
       if (startDate.isSame(endDate)) {
@@ -71,7 +72,7 @@ export class HostsModifiedHighDisplay extends React.Component {
       );
 
       if (!newFilter.hasTerm(startTerm)) {
-        newFilter = newFilter.and(Filter.fromTerm(startTerm));
+        newFilter = newFilter.and(BaseFilter.fromTerm(startTerm));
       }
     }
 
@@ -81,7 +82,7 @@ export class HostsModifiedHighDisplay extends React.Component {
       );
 
       if (!newFilter.hasTerm(endTerm)) {
-        newFilter = newFilter.and(Filter.fromTerm(endTerm));
+        newFilter = newFilter.and(BaseFilter.fromTerm(endTerm));
       }
     }
 

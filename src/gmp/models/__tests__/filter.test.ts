@@ -1184,35 +1184,6 @@ describe('Filter tests', () => {
     });
   });
 
-  describe('Filter fromTerm', () => {
-    test('should add FilterTerm to the Filter.fromElement', () => {
-      const term = new FilterTerm({
-        keyword: 'abc',
-        relation: '=',
-        value: '1',
-      });
-      const filter = Filter.fromTerm(term);
-
-      expect(filter.toFilterString()).toEqual('abc=1');
-    });
-
-    test('should add several FilterTerms to the Filter.fromElement', () => {
-      const term1 = new FilterTerm({
-        keyword: 'abc',
-        relation: '=',
-        value: '1',
-      });
-      const term2 = new FilterTerm({
-        keyword: 'def',
-        relation: '>',
-        value: '666',
-      });
-      const filter = Filter.fromTerm(term1, term2);
-
-      expect(filter.toFilterString()).toEqual('abc=1 def>666');
-    });
-  });
-
   describe('Filter toFilterCriteriaString', () => {
     test('should return string representation', () => {
       const filter1 = createFilterWithTerms('foo=bar and lorem=ipsum');

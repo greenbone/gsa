@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import {isDefined} from 'gmp/utils/identity';
 import LineChart, {lineDataPropType} from 'web/components/chart/base/Line';
@@ -30,7 +30,7 @@ class CreatedDisplay extends React.Component {
     let {x: endDate} = end;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-    let newFilter = isDefined(filter) ? filter.copy() : new Filter();
+    let newFilter = isDefined(filter) ? filter.copy() : new BaseFilter();
 
     if (isDefined(startDate)) {
       if (startDate.isSame(endDate)) {
@@ -43,7 +43,7 @@ class CreatedDisplay extends React.Component {
       );
 
       if (!newFilter.hasTerm(startTerm)) {
-        newFilter = newFilter.and(Filter.fromTerm(startTerm));
+        newFilter = newFilter.and(BaseFilter.fromTerm(startTerm));
       }
     }
 
@@ -53,7 +53,7 @@ class CreatedDisplay extends React.Component {
       );
 
       if (!newFilter.hasTerm(endTerm)) {
-        newFilter = newFilter.and(Filter.fromTerm(endTerm));
+        newFilter = newFilter.and(BaseFilter.fromTerm(endTerm));
       }
     }
 

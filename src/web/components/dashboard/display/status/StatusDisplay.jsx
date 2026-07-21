@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import {isDefined} from 'gmp/utils/identity';
 import DonutChart from 'web/components/chart/Donut';
@@ -32,7 +32,7 @@ class StatusDisplay extends React.Component {
         return;
       }
 
-      const statusFilter = Filter.fromTerm(statusTerm);
+      const statusFilter = BaseFilter.fromTerm(statusTerm);
       const newFilter = isDefined(filter)
         ? filter.copy().and(statusFilter)
         : statusFilter;

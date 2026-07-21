@@ -5,7 +5,8 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
-import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -56,7 +57,7 @@ export class ResultsWordCloudDisplay extends React.Component {
       if (isDefined(filter) && filter.hasTerm(wordTerm)) {
         return;
       }
-      wordFilter = Filter.fromTerm(wordTerm);
+      wordFilter = BaseFilter.fromTerm(wordTerm);
     }
 
     const newFilter = isDefined(filter)
