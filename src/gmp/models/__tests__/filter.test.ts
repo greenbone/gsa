@@ -1220,49 +1220,17 @@ describe('Filter tests', () => {
       );
     });
 
-    test('should do the same for filters from arrays', () => {
-      const element = {
-        keywords: {
-          keyword: [
-            {
-              column: '',
-              relation: '~',
-              value: 'abc',
-            },
-            {
-              column: '',
-              relation: '~',
-              value: 'and',
-            },
-            {
-              column: '',
-              relation: '~',
-              value: 'not',
-            },
-            {
-              column: '',
-              relation: '~',
-              value: 'def',
-            },
-            {
-              column: 'ROWS',
-              relation: '=',
-              value: '10',
-            },
-            {
-              column: 'fiRsT',
-              relation: '=',
-              value: '1',
-            },
-            {
-              column: 'sORt',
-              relation: '=',
-              value: 'name',
-            },
-          ],
-        },
-      };
-      const filter = Filter.fromResponseElement(element);
+    test('should lower the case of keywords for filters from terms', () => {
+      const terms = [
+        new FilterTerm({value: 'abc', relation: '~'}),
+        new FilterTerm({value: 'and', relation: ''}),
+        new FilterTerm({value: 'not', relation: ''}),
+        new FilterTerm({value: 'def', relation: '~'}),
+        new FilterTerm({keyword: 'ROWS', relation: '=', value: '10'}),
+        new FilterTerm({keyword: 'fiRsT', relation: '=', value: '1'}),
+        new FilterTerm({keyword: 'sORt', relation: '=', value: 'name'}),
+      ];
+      const filter = new Filter({id: 'foo', terms});
       expect(filter.toFilterString()).toEqual(
         '~abc and not ~def rows=10 first=1 sort=name',
       );

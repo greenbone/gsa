@@ -4,9 +4,7 @@
  */
 
 import EntityModel, {parseEntityModelProperties} from 'gmp/models/entity-model';
-import BaseFilter, {
-  type FilterResponseElement,
-} from 'gmp/models/filter/base-filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {
   type default as FilterTerm,
   parseFilterTermsFromString,
@@ -153,19 +151,6 @@ class Filter extends EntityModel implements FilterType {
     }
 
     return new Filter(ret);
-  }
-
-  /**
-   * Create a new Filter from the passed response element.
-   *
-   * @deprecated Use `BaseFilter.fromResponseElement` instead.
-   *
-   * @param element Response element to parse properties from.
-   *
-   * @returns A new Filter model instance.
-   */
-  static fromResponseElement(element: FilterResponseElement = {}) {
-    return BaseFilter.fromResponseElement(element);
   }
 
   /**

@@ -8,6 +8,7 @@ import EntitiesCommand from 'gmp/commands/entities';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
 import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Model, {type Element} from 'gmp/models/model';
 
 class Foo extends Model {}
@@ -63,7 +64,7 @@ describe('EntitiesCommand tests', () => {
   });
 
   test('should prefer filter_id over filter parameter', async () => {
-    const filter = Filter.fromResponseElement({
+    const filter = BaseFilter.fromResponseElement({
       _id: 'bar',
       keywords: {
         keyword: {relation: '=', value: 'bar', column: 'foo'},
