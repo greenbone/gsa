@@ -7,7 +7,12 @@ import {useCallback, useEffect, useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
 import {useParams} from 'react-router';
 import logger from 'gmp/log';
-import Filter, {type FilterType, RESET_FILTER} from 'gmp/models/filter';
+import {
+  type default as Filter,
+  type FilterType,
+  RESET_FILTER,
+} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type Report from 'gmp/models/report';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive} from 'gmp/models/task';
@@ -56,7 +61,7 @@ interface ReportTargetRef {
 
 const log = logger.getLogger('web.pages.reports.DetailsPage');
 
-const DEFAULT_FILTER = Filter.fromString(
+const DEFAULT_FILTER = BaseFilter.fromString(
   'levels=chml rows=100 min_qod=70 first=1 sort-reverse=severity result_hosts_only=0',
 );
 

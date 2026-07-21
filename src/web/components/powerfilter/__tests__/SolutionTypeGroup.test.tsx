@@ -5,12 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, render, fireEvent} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import SolutionTypesFilterGroup from 'web/components/powerfilter/SolutionTypeGroup';
 
 describe('SolutionTypesFilterGroup tests', () => {
   test('should render', () => {
-    const filter = Filter.fromString('solution_type=All');
+    const filter = BaseFilter.fromString('solution_type=All');
     const handleChange = testing.fn();
     const {element} = render(
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
@@ -20,7 +20,7 @@ describe('SolutionTypesFilterGroup tests', () => {
   });
 
   test('should call change handler', () => {
-    const filter = Filter.fromString('solution_type=Mitigation');
+    const filter = BaseFilter.fromString('solution_type=Mitigation');
     const handleChange = testing.fn();
 
     render(
@@ -36,7 +36,7 @@ describe('SolutionTypesFilterGroup tests', () => {
   });
 
   test('should check radio', () => {
-    const filter = Filter.fromString('solution_type=Workaround');
+    const filter = BaseFilter.fromString('solution_type=Workaround');
     const handleChange = testing.fn();
 
     render(
@@ -47,8 +47,8 @@ describe('SolutionTypesFilterGroup tests', () => {
   });
 
   test('should uncheck radio of previous choice', () => {
-    const filter1 = Filter.fromString('solution_type=Workaround');
-    const filter2 = Filter.fromString('solution_type=Mitigation');
+    const filter1 = BaseFilter.fromString('solution_type=Workaround');
+    const filter2 = BaseFilter.fromString('solution_type=Mitigation');
     const handleChange = testing.fn();
 
     const {rerender} = render(
@@ -67,7 +67,7 @@ describe('SolutionTypesFilterGroup tests', () => {
   });
 
   test('should check "All" by default', () => {
-    const filter = Filter.fromString();
+    const filter = BaseFilter.fromString();
     const handleChange = testing.fn();
 
     render(

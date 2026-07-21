@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {isDefined} from 'gmp/utils/identity';
 import {NvtIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
@@ -178,7 +178,7 @@ Page.propTypes = {
   onError: PropTypes.func.isRequired,
 };
 
-const nvtIdFilter = id => Filter.fromString('nvt_id=' + id).all();
+const nvtIdFilter = id => BaseFilter.fromString(`nvt_id=${id}`).all();
 
 const mapStateToProps = (rootState, {id}) => {
   const notesSel = notesSelector(rootState);

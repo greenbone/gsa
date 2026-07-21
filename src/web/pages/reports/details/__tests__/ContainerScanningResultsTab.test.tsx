@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {act, rendererWith} from 'web/testing';
 import {waitFor, screen} from '@testing-library/react';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Result from 'gmp/models/result';
 import {createSession} from 'gmp/testing';
 import ContainerScanningResultsTab from 'web/pages/reports/details/result/ContainerScanningResultsTab';
@@ -25,7 +25,7 @@ const createGmp = ({
     data: [result],
     meta: {
       counts: new CollectionCounts({filtered: 1, all: 1, first: 1, rows: 10}),
-      filter: Filter.fromString(''),
+      filter: BaseFilter.fromString(''),
     },
   }),
 } = {}) => ({
@@ -44,7 +44,7 @@ const createGmp = ({
 describe('ContainerScanningResultsTab', () => {
   test('should render loading state initially', () => {
     const reportId = 'report-123';
-    const filter = Filter.fromString('');
+    const filter = BaseFilter.fromString('');
 
     const gmp = createGmp();
 
@@ -63,7 +63,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should fetch results with report ID filter', async () => {
     const reportId = 'report-123';
-    const filter = Filter.fromString('severity>5');
+    const filter = BaseFilter.fromString('severity>5');
     const gmp = createGmp();
 
     const {render} = rendererWith({gmp});
@@ -89,7 +89,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should handle sorting', async () => {
     const reportId = 'report-123';
-    const filter = Filter.fromString('');
+    const filter = BaseFilter.fromString('');
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -146,7 +146,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should handle pagination - next page', async () => {
     const reportId = 'report-123';
-    const filter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -198,7 +198,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should handle pagination - previous page', async () => {
     const reportId = 'report-123';
-    const filter = Filter.fromString('first=11');
+    const filter = BaseFilter.fromString('first=11');
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -250,7 +250,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should handle pagination - first page', async () => {
     const reportId = 'report-123';
-    const filter = Filter.fromString('first=11');
+    const filter = BaseFilter.fromString('first=11');
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -302,7 +302,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should handle pagination - last page', async () => {
     const reportId = 'report-123';
-    const filter = Filter.fromString('');
+    const filter = BaseFilter.fromString('');
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -354,8 +354,8 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should update filter when reportFilter prop changes', async () => {
     const reportId = 'report-123';
-    const filter1 = Filter.fromString('severity>5');
-    const filter2 = Filter.fromString('severity>7');
+    const filter1 = BaseFilter.fromString('severity>5');
+    const filter2 = BaseFilter.fromString('severity>7');
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -410,7 +410,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should render error panel on error', async () => {
     const reportId = 'report-123';
-    const filter = Filter.fromString('');
+    const filter = BaseFilter.fromString('');
 
     const getMock = testing.fn().mockRejectedValue(new Error('API Error'));
 
@@ -439,7 +439,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should show subtle loading indicator when refetching (not full spinner)', async () => {
     const reportId = 'report-123';
-    const filter = Filter.fromString('');
+    const filter = BaseFilter.fromString('');
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -510,7 +510,7 @@ describe('ContainerScanningResultsTab', () => {
             first: 1,
             rows: 10,
           }),
-          filter: Filter.fromString('sort=severity'),
+          filter: BaseFilter.fromString('sort=severity'),
         },
       });
     }
@@ -546,7 +546,7 @@ describe('ContainerScanningResultsTab', () => {
             first: 1,
             rows: 10,
           }),
-          filter: Filter.fromString(''),
+          filter: BaseFilter.fromString(''),
         },
       });
 
@@ -555,7 +555,7 @@ describe('ContainerScanningResultsTab', () => {
 
       render(
         <ContainerScanningResultsTab
-          reportFilter={Filter.fromString('')}
+          reportFilter={BaseFilter.fromString('')}
           reportId={'report-123'}
           status={status}
         />,

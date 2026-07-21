@@ -7,12 +7,13 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3, type SeverityRating} from 'gmp/utils/severity';
 import {getMockDeltaReport} from 'web/pages/reports/__fixtures__/MockDeltaReport';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 
-const filter = Filter.fromString(
+const filter = BaseFilter.fromString(
   'apply_overrides=0 levels=chml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
@@ -51,7 +52,7 @@ const createGmp = ({
     get: testing.fn().mockResolvedValue({
       data: mockEntity.report?.results?.entities ?? [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({
           filtered: 2,
           all: 2,
@@ -69,7 +70,7 @@ const createGmp = ({
         {ip: '109.876.54.321', id: '109.876.54.321', hostname: 'lorem.ipsum'},
       ],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({filtered: 2, all: 2, first: 1, rows: 10}),
       },
     }),

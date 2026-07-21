@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent, screen} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ThresholdPanel from 'web/pages/reports/details/ReportThresholdPanel';
 
 describe('ReportThresholdPanel tests', () => {
@@ -13,7 +13,7 @@ describe('ReportThresholdPanel tests', () => {
     const onFilterEditClick = testing.fn();
     const onFilterChanged = testing.fn();
 
-    const filter = Filter.fromString(
+    const filter = BaseFilter.fromString(
       'apply_overrides=0 rows=2 first=1 sort-reverse=severity',
     );
 
@@ -76,7 +76,7 @@ describe('ReportThresholdPanel tests', () => {
     const onFilterEditClick = testing.fn();
     const onFilterChanged = testing.fn();
 
-    const filter = Filter.fromString(
+    const filter = BaseFilter.fromString(
       'apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',
     );
 
@@ -143,11 +143,11 @@ describe('ReportThresholdPanel tests', () => {
     const onFilterEditClick = testing.fn();
     const onFilterChanged = testing.fn();
 
-    const filter = Filter.fromString(
+    const filter = BaseFilter.fromString(
       'apply_overrides=0 rows=2 first=1 sort-reverse=severity',
     );
 
-    const filterMinSeverity = Filter.fromString(
+    const filterMinSeverity = BaseFilter.fromString(
       'apply_overrides=0 rows=2 first=1 sort-reverse=severity',
     ).set('severity', 7.0, '>');
 
@@ -176,19 +176,19 @@ describe('ReportThresholdPanel tests', () => {
     const onFilterEditClick = testing.fn();
     const onFilterChanged = testing.fn();
 
-    const filter = Filter.fromString(
+    const filter = BaseFilter.fromString(
       'apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',
     );
 
-    const filterLog = Filter.fromString(
+    const filterLog = BaseFilter.fromString(
       'apply_overrides=0 levels=hml rows=2 first=1 sort-reverse=severity',
     );
 
-    const filterLow = Filter.fromString(
+    const filterLow = BaseFilter.fromString(
       'apply_overrides=0 levels=hmg rows=2 first=1 sort-reverse=severity',
     );
 
-    const filterMedium = Filter.fromString(
+    const filterMedium = BaseFilter.fromString(
       'apply_overrides=0 levels=hlg rows=2 first=1 sort-reverse=severity',
     );
 

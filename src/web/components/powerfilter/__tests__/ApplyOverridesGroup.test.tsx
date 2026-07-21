@@ -5,12 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, render, fireEvent} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ApplyOverridesGroup from 'web/components/powerfilter/ApplyOverridesGroup';
 
 describe('ApplyOverridesGroup tests', () => {
   test('should render', () => {
-    const filter = Filter.fromString();
+    const filter = BaseFilter.fromString();
     const handleChange = testing.fn();
     const {element} = render(
       <ApplyOverridesGroup
@@ -25,7 +25,7 @@ describe('ApplyOverridesGroup tests', () => {
   });
 
   test('should call change handler', () => {
-    const filter = Filter.fromString('apply_overrides=1');
+    const filter = BaseFilter.fromString('apply_overrides=1');
     const handleChange = testing.fn();
 
     render(
@@ -43,7 +43,7 @@ describe('ApplyOverridesGroup tests', () => {
   });
 
   test('should check radio', () => {
-    const filter = Filter.fromString('apply_overrides=1');
+    const filter = BaseFilter.fromString('apply_overrides=1');
     const handleChange = testing.fn();
 
     render(
@@ -60,8 +60,8 @@ describe('ApplyOverridesGroup tests', () => {
   });
 
   test('should uncheck radio of previous choice', () => {
-    const filter1 = Filter.fromString('apply_overrides=1');
-    const filter2 = Filter.fromString('apply_overrides=0');
+    const filter1 = BaseFilter.fromString('apply_overrides=1');
+    const filter2 = BaseFilter.fromString('apply_overrides=0');
     const handleChange = testing.fn();
 
     const {rerender} = render(
@@ -92,7 +92,7 @@ describe('ApplyOverridesGroup tests', () => {
   });
 
   test('should use filter value by default', () => {
-    const filter = Filter.fromString('apply_overrides=1');
+    const filter = BaseFilter.fromString('apply_overrides=1');
     const handleChange = testing.fn();
 
     render(

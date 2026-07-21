@@ -14,7 +14,7 @@ import {
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import CredentialStore from 'gmp/models/credential-store';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import CredentialStorePage from 'web/pages/credential-store/CredentialStorePage';
 
@@ -35,7 +35,7 @@ const credentialStore = CredentialStore.fromElement({
 const createGmp = ({
   get = testing.fn().mockResolvedValue({
     data: [credentialStore],
-    meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
+    meta: {filter: BaseFilter.fromString(), counts: new CollectionCounts()},
   }),
   edit = testing.fn().mockResolvedValue({}),
   verify = testing.fn().mockResolvedValue({}),
@@ -133,7 +133,7 @@ describe('CredentialStorePage tests', () => {
 
     const get = testing.fn().mockResolvedValue({
       data: [credentialStore],
-      meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
+      meta: {filter: BaseFilter.fromString(), counts: new CollectionCounts()},
     });
 
     const gmp = createGmp({get});
@@ -184,7 +184,7 @@ describe('CredentialStorePage tests', () => {
 
     const get = testing.fn().mockResolvedValue({
       data: [credentialStore],
-      meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
+      meta: {filter: BaseFilter.fromString(), counts: new CollectionCounts()},
     });
 
     const gmp = createGmp({get});
@@ -216,7 +216,7 @@ describe('CredentialStorePage tests', () => {
 
     const get = testing.fn().mockResolvedValue({
       data: [credentialStore],
-      meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
+      meta: {filter: BaseFilter.fromString(), counts: new CollectionCounts()},
     });
 
     const gmp = createGmp({get});
@@ -258,7 +258,7 @@ describe('CredentialStorePage tests', () => {
   test('should show no credential store configured message when none exist', async () => {
     const get = testing.fn().mockResolvedValue({
       data: [],
-      meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
+      meta: {filter: BaseFilter.fromString(), counts: new CollectionCounts()},
     });
 
     const gmp = createGmp({get});

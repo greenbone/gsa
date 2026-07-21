@@ -6,12 +6,12 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ReportHost from 'gmp/models/report/host';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import WebApplicationHostsTable from 'web/pages/reports/details/host/WebApplicationHostsTable';
 
-const filter = Filter.fromString('first=1 rows=10');
+const filter = BaseFilter.fromString('first=1 rows=10');
 
 const createMockHost = (overrides = {}) =>
   ReportHost.fromElement({

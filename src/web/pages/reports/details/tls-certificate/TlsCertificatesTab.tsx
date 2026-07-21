@@ -4,7 +4,8 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import Filter, {type FilterType} from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
@@ -52,7 +53,7 @@ const TLSCertificatesTab = ({
   const reportFilterString = reportFilter.toFilterString();
 
   const baseFilter = useMemo(() => {
-    const f = Filter.fromString(reportFilterString);
+    const f = BaseFilter.fromString(reportFilterString);
     // Override sort: 'sort-reverse=dn' maps to ascending A→Z via the
     // sortReverse=(sortDir==='asc') convention used in ReportEntitiesContainer
     return f.set('sort-reverse', 'dn');

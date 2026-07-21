@@ -7,6 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Report from 'gmp/models/report';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
@@ -14,7 +15,7 @@ import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 
 const mockReport = getMockReport();
 
-const filter = Filter.fromString(
+const filter = BaseFilter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
@@ -24,7 +25,7 @@ const filterWithName = Filter.fromElement({
   _id: '123',
 });
 
-const resetFilter = Filter.fromString('first=1 sort-reverse=severity');
+const resetFilter = BaseFilter.fromString('first=1 sort-reverse=severity');
 
 const manualUrl = 'test/';
 
@@ -52,7 +53,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: mockReport.hosts ?? [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -61,7 +62,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -70,7 +71,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({filtered: 4, all: 4}),
       },
     }),
@@ -79,7 +80,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -88,7 +89,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -97,7 +98,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -106,7 +107,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -115,7 +116,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: mockReport.errors?.entities ?? [],
       meta: {
-        filter: Filter.fromString('rows=10'),
+        filter: BaseFilter.fromString('rows=10'),
         counts:
           mockReport.errors?.counts ??
           new CollectionCounts({filtered: 2, all: 2}),
@@ -141,7 +142,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({filtered: 0, all: 0}),
       },
     }),

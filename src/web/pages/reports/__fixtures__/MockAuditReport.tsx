@@ -6,7 +6,7 @@
 import CollectionCounts from 'gmp/collection/collection-counts';
 import AuditReport from 'gmp/models/audit-report';
 import {COMPLIANCE} from 'gmp/models/compliance';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ReportHost from 'gmp/models/report/host';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import {
@@ -368,7 +368,7 @@ export const getMockAuditReport = () => {
     task: task1,
   });
 
-  const errorsCollection = parseErrors(report, Filter.fromString(''));
+  const errorsCollection = parseErrors(report, BaseFilter.fromString(''));
 
   const os1 = new ReportOperatingSystem({
     id: 'cpe:/foo/bar',
@@ -393,7 +393,7 @@ export const getMockAuditReport = () => {
       rows: 2,
       length: 2,
     }),
-    filter: Filter.fromString(''),
+    filter: BaseFilter.fromString(''),
   };
 
   return {

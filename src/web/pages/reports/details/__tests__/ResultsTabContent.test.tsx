@@ -5,13 +5,13 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Result from 'gmp/models/result';
 import {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import ResultsTabContent from 'web/pages/reports/details/result/ResultsTabContent';
 
-const filter = Filter.fromString('first=1 rows=10');
+const filter = BaseFilter.fromString('first=1 rows=10');
 
 const createMockResult = (id = '101') => {
   return Result.fromElement({

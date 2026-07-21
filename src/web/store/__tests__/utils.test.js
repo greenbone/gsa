@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {combineReducers, filterIdentifier} from 'web/store/utils';
 
 describe('store utils module tests', () => {
@@ -117,7 +117,7 @@ describe('store utils module tests', () => {
     });
 
     test('should create an identifier for an existing filter', () => {
-      const filter = Filter.fromString('foo=bar');
+      const filter = BaseFilter.fromString('foo=bar');
 
       expect(filterIdentifier(filter)).toEqual('filter:foo=bar');
     });

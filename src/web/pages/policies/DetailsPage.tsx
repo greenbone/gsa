@@ -5,7 +5,7 @@
 
 import {useQueryClient} from '@tanstack/react-query';
 import {useNavigate, useParams} from 'react-router';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type Policy from 'gmp/models/policy';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
@@ -47,7 +47,7 @@ const Details = ({entity}: {entity: Policy}) => {
 };
 
 const permissionsResourceFilter = (id: string) =>
-  Filter.fromString('resource_uuid=' + id).all();
+  BaseFilter.fromString(`resource_uuid=${id}`).all();
 
 const PolicyDetailsPage = () => {
   const [_] = useTranslation();

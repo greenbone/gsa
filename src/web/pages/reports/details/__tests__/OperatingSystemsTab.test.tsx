@@ -7,11 +7,11 @@ import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {COMPLIANCE} from 'gmp/models/compliance';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ReportOperatingSystem from 'gmp/models/report/os';
 import OperatingSystemsTab from 'web/pages/reports/details/operating-system/OperatingSystemsTab';
 
-const filter = Filter.fromString(
+const filter = BaseFilter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort=severity',
 );
 
@@ -144,7 +144,7 @@ describe('Report Operating Systems Tab tests', () => {
   });
 });
 
-const auditFilter = Filter.fromString(
+const auditFilter = BaseFilter.fromString(
   'apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant',
 );
 

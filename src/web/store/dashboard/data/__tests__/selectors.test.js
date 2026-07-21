@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import getDashboardData from 'web/store/dashboard/data/selectors';
 import {filterIdentifier} from 'web/store/utils';
 
@@ -61,7 +61,7 @@ describe('dashboard data selector isLoading tests', () => {
 
   test('should return true for isLoading with filter', () => {
     const id = 'a1';
-    const filter = Filter.fromString('foo=bar');
+    const filter = BaseFilter.fromString('foo=bar');
     const filterString = filterIdentifier(filter);
     const rootState = createState({
       [id]: {
@@ -92,7 +92,7 @@ describe('dashboard data selector error tests', () => {
 
   test('should return true for isLoading with filter', () => {
     const id = 'a1';
-    const filter = Filter.fromString('foo=bar');
+    const filter = BaseFilter.fromString('foo=bar');
     const filterString = filterIdentifier(filter);
     const rootState = createState({
       [id]: {
@@ -127,7 +127,7 @@ describe('dashboard data selector getData tests', () => {
 
   test('should return data with filter', () => {
     const id = 'a1';
-    const filter = Filter.fromString('foo=bar');
+    const filter = BaseFilter.fromString('foo=bar');
     const filterString = filterIdentifier(filter);
     const rootState = createState({
       [id]: {
@@ -163,7 +163,7 @@ describe('dashboard data selector getData tests', () => {
 
   test('should return undefined if unknown filter is passed', () => {
     const id = 'a1';
-    const filter = Filter.fromString('foo=bar');
+    const filter = BaseFilter.fromString('foo=bar');
     const filterString = filterIdentifier();
     const rootState = createState({
       [id]: {

@@ -11,12 +11,12 @@ import {
   fireEvent,
   changeInputValue,
 } from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup';
 
 describe('Severity Values Group Tests', () => {
   test('should render', () => {
-    const filter = Filter.fromString('severity>3');
+    const filter = BaseFilter.fromString('severity>3');
     const name = 'severity';
     const onChange = testing.fn();
 
@@ -35,7 +35,7 @@ describe('Severity Values Group Tests', () => {
 
   test('should initialize value with 0 in case no filter value is given', () => {
     const onChange = testing.fn();
-    const filter = Filter.fromString('rows=10');
+    const filter = BaseFilter.fromString('rows=10');
     const name = 'severity';
 
     render(
@@ -53,7 +53,7 @@ describe('Severity Values Group Tests', () => {
 
   test('should change value', () => {
     const onChange = testing.fn();
-    const filter = Filter.fromString('severity=3');
+    const filter = BaseFilter.fromString('severity=3');
 
     render(
       <SeverityValuesGroup
@@ -70,7 +70,7 @@ describe('Severity Values Group Tests', () => {
 
   test('should change relationship', async () => {
     const onChange = testing.fn();
-    const filter = Filter.fromString('severity=3');
+    const filter = BaseFilter.fromString('severity=3');
     const name = 'severity';
 
     render(
@@ -93,7 +93,7 @@ describe('Severity Values Group Tests', () => {
 
   test('should render title', () => {
     const title = 'Severity';
-    const filter = Filter.fromString('severity=3');
+    const filter = BaseFilter.fromString('severity=3');
     render(
       <SeverityValuesGroup filter={filter} name="severity" title={title} />,
     );

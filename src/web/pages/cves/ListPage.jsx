@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import Filter, {CVES_FILTER_FILTER} from 'gmp/models/filter';
+import {CVES_FILTER_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {CveIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -60,7 +61,7 @@ Page.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const fallbackFilter = Filter.fromString('sort-reverse=name');
+const fallbackFilter = BaseFilter.fromString('sort-reverse=name');
 
 export default withEntitiesContainer('cve', {
   entitiesSelector,

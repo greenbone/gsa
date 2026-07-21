@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
+import {ALL_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {isDefined} from 'gmp/utils/identity';
 import {filterIdentifier} from 'web/store/utils';
 
@@ -38,7 +39,7 @@ export class EntitiesSelector {
     }
     filter = isDefined(filter.toFilterString)
       ? filter.all()
-      : Filter.fromString(filter).all();
+      : BaseFilter.fromString(filter).all();
     return isDefined(this.state.isLoading)
       ? !!this.state.isLoading[filterIdentifier(filter)]
       : false;
@@ -78,7 +79,7 @@ export class EntitiesSelector {
     }
     return isDefined(filter.toFilterString)
       ? this.getEntities(filter.all())
-      : this.getEntities(Filter.fromString(filter).all());
+      : this.getEntities(BaseFilter.fromString(filter).all());
   }
 
   getEntitiesCounts(filter) {

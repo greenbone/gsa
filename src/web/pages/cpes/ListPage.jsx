@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import Filter, {CPES_FILTER_FILTER} from 'gmp/models/filter';
+import {CPES_FILTER_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {CpeLogoIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -59,7 +60,7 @@ Page.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const fallbackFilter = Filter.fromString('sort-reverse=modified');
+const fallbackFilter = BaseFilter.fromString('sort-reverse=modified');
 
 export default withEntitiesContainer('cpe', {
   entitiesSelector,

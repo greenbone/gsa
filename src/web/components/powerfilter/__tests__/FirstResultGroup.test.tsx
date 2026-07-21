@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, render, changeInputValue} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
 
 describe('FirstResultGroup tests', () => {
@@ -20,7 +20,7 @@ describe('FirstResultGroup tests', () => {
   });
 
   test('should render filter first value', () => {
-    const filter = Filter.fromString('first=10');
+    const filter = BaseFilter.fromString('first=10');
     render(<FirstResultGroup filter={filter} />);
     expect(screen.getByName('first')).toHaveValue('10');
   });
@@ -33,7 +33,7 @@ describe('FirstResultGroup tests', () => {
     changeInputValue(screen.getByName('first'), '15');
     expect(handleChange).toHaveBeenCalledWith(15, 'first');
 
-    const filter = Filter.fromString('first=20');
+    const filter = BaseFilter.fromString('first=20');
     rerender(<FirstResultGroup filter={filter} onChange={handleChange} />);
     changeInputValue(screen.getByName('first'), '25');
     expect(handleChange).toHaveBeenCalledWith(25, 'first');

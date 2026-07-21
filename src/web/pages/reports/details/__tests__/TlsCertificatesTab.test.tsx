@@ -6,12 +6,12 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import TLSCertificatesTab from 'web/pages/reports/details/tls-certificate/TlsCertificatesTab';
 
-const filter = Filter.fromString(
+const filter = BaseFilter.fromString(
   'apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity',
 );
 const {tlsCertificates: mockTlsCertificates} = getMockReport();

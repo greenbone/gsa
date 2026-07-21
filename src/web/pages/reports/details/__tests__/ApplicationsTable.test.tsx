@@ -6,11 +6,11 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type ReportApp from 'gmp/models/report/app';
 import ApplicationsTable from 'web/pages/reports/details/application/ApplicationsTable';
 
-const filter = Filter.fromString('first=1 rows=10');
+const filter = BaseFilter.fromString('first=1 rows=10');
 
 const createMockGmp = () => ({
   settings: {

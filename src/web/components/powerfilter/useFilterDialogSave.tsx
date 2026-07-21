@@ -4,7 +4,8 @@
  */
 
 import {useCallback} from 'react';
-import Filter, {type FilterType} from 'gmp/models/filter';
+import {type default as Filter, type FilterType} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
@@ -72,7 +73,7 @@ const useFilterDialogSave = (
   );
 
   const handleSave: () => Promise<void> = useCallback(() => {
-    const newFilter = filter.mergeKeywords(Filter.fromString(filterString));
+    const newFilter = filter.mergeKeywords(BaseFilter.fromString(filterString));
 
     if (saveNamedFilter) {
       if (isDefined(filterName) && filterName.trim().length > 0) {

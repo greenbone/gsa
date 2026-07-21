@@ -6,12 +6,12 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ReportHost from 'gmp/models/report/host';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import WebApplicationHostsTab from 'web/pages/reports/details/host/WebApplicationHostsTab';
 
-const filter = Filter.fromString(
+const filter = BaseFilter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 

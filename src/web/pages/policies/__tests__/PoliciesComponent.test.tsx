@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Policy from 'gmp/models/policy';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -40,14 +40,14 @@ const createGmp = ({
   getAlerts = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getScanners = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -55,14 +55,14 @@ const createGmp = ({
   getSchedules = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getTargets = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -206,28 +206,28 @@ describe('PoliciesComponent tests', () => {
     const getAlerts = testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts(),
       },
     });
     const getScanners = testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts(),
       },
     });
     const getSchedules = testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts(),
       },
     });
     const getTargets = testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts(),
       },
     });

@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
-import Filter from 'gmp/models/filter.js';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import NVT from 'gmp/models/nvt';
 import {createSession} from 'gmp/testing';
 import Row from 'web/pages/nvts/Row';
@@ -105,7 +105,7 @@ describe('NVT row tests', () => {
     const handleToggleDetailsClick = testing.fn();
     const handleFilterChanged = testing.fn();
 
-    const filter = Filter.fromString('family="bar"');
+    const filter = BaseFilter.fromString('family="bar"');
 
     const {render} = rendererWithTableBody({
       gmp: createGmp(),

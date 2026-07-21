@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test} from '@gsa/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type ReportReport from 'gmp/models/report/report';
 import type {TaskStatus} from 'gmp/models/task';
 import type {ReportSubEntities} from 'web/hooks/use-query/use-report-sub-entities';
@@ -35,7 +35,7 @@ const entities = {
 
 const baseParams = {
   activeReport: {} as ReportReport,
-  activeFilter: Filter.fromString(''),
+  activeFilter: BaseFilter.fromString(''),
   reportId: 'report-123',
   isImport: false,
   isAgentScanning: false,

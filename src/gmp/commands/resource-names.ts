@@ -11,7 +11,8 @@ import {
 import {type EntitiesMeta} from 'gmp/commands/entities';
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import Filter, {ALL_FILTER, type FilterType} from 'gmp/models/filter';
+import {ALL_FILTER, type FilterType} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ResourceName from 'gmp/models/resource-name';
 import {resourceType, type EntityType} from 'gmp/utils/entity-type';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -77,7 +78,7 @@ class ResourceNamesCommand extends HttpCommand {
     if (!isDefined(filter)) {
       params.filter = ALL_FILTER;
     } else if (isString(filter)) {
-      params.filter = Filter.fromString(filter).all();
+      params.filter = BaseFilter.fromString(filter).all();
     } else {
       params.filter = filter.all();
     }

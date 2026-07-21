@@ -51,7 +51,7 @@ describe('ContainerImageTargetFilterDialog tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleFilterChanged).toHaveBeenCalledWith(
-      Filter.fromString('foo=bar'),
+      BaseFilter.fromString('foo=bar'),
     );
   });
 

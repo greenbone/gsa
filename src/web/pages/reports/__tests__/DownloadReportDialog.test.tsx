@@ -5,12 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, screen} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ReportFormat from 'gmp/models/report-format';
 import {CONTAINER_SCANNING_RESULTS_THRESHOLD} from 'gmp/settings';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 
-const filter = Filter.fromString('rows=100');
+const filter = BaseFilter.fromString('rows=100');
 
 const reportFormats = [
   ReportFormat.fromElement({_id: 'rf-1', name: 'PDF', report_type: 'scan'}),
