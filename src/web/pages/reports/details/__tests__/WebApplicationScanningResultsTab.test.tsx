@@ -25,7 +25,7 @@ const createGmp = ({
     data: [result],
     meta: {
       counts: new CollectionCounts({filtered: 1, all: 1, first: 1, rows: 10}),
-      filter: BaseFilter.fromString(''),
+      filter: BaseFilter.fromString(),
     },
   }),
 } = {}) => ({
@@ -44,7 +44,7 @@ const createGmp = ({
 describe('WebApplicationScanningResultsTab', () => {
   test('should render loading state initially', () => {
     const reportId = 'report-123';
-    const filter = BaseFilter.fromString('');
+    const filter = BaseFilter.fromString();
     const gmp = createGmp();
     const {render} = rendererWith({gmp});
 
@@ -86,7 +86,7 @@ describe('WebApplicationScanningResultsTab', () => {
 
   test('should handle sorting', async () => {
     const reportId = 'report-123';
-    const filter = BaseFilter.fromString('');
+    const filter = BaseFilter.fromString();
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -136,7 +136,7 @@ describe('WebApplicationScanningResultsTab', () => {
 
   test('should render error panel on error', async () => {
     const reportId = 'report-123';
-    const filter = BaseFilter.fromString('');
+    const filter = BaseFilter.fromString();
     const getMock = testing.fn().mockRejectedValue(new Error('API Error'));
     const gmp = createGmp({get: getMock});
     const {render} = rendererWith({gmp});
@@ -188,7 +188,7 @@ describe('WebApplicationScanningResultsTab', () => {
               first: 1,
               rows: 10,
             }),
-            filter: BaseFilter.fromString(''),
+            filter: BaseFilter.fromString(),
           },
         });
 
@@ -197,7 +197,7 @@ describe('WebApplicationScanningResultsTab', () => {
 
         render(
           <WebApplicationScanningResultsTab
-            reportFilter={BaseFilter.fromString('')}
+            reportFilter={BaseFilter.fromString()}
             reportId={'report-123'}
             status={status}
           />,

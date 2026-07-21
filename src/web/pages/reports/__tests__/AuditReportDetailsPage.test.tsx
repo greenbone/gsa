@@ -107,7 +107,7 @@ const createGmp = () => ({
         },
       ],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({
           first: 1,
           all: 1,
@@ -122,7 +122,7 @@ const createGmp = () => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts(),
       },
     }),

@@ -44,7 +44,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: mockEntity.report?.results?.entities ?? [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({
           filtered: 2,
           all: 2,
@@ -63,7 +63,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
         {ip: '109.876.54.322', id: '109.876.54.322', hostname: 'host3'},
       ],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 3, all: 3, first: 1, rows: 10}),
       },
     }),

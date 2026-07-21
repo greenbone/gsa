@@ -48,6 +48,18 @@ describe('BaseFilter tests', () => {
   });
 
   describe('BaseFilter fromString', () => {
+    test('should parse empty string', () => {
+      const filter = BaseFilter.fromString('');
+      expect(filter.toFilterString()).toEqual('');
+      expect(filter.length).toBe(0);
+    });
+
+    test('should parse undefined string', () => {
+      const filter = BaseFilter.fromString();
+      expect(filter.toFilterString()).toEqual('');
+      expect(filter.length).toBe(0);
+    });
+
     test('should parse terms from string', () => {
       const filter = BaseFilter.fromString('foo=bar lorem~ipsum');
       expect(filter.toFilterString()).toEqual('foo=bar lorem~ipsum');

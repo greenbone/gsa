@@ -52,7 +52,7 @@ const createGmp = ({
     get: testing.fn().mockResolvedValue({
       data: mockEntity.report?.results?.entities ?? [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({
           filtered: 2,
           all: 2,
@@ -70,7 +70,7 @@ const createGmp = ({
         {ip: '109.876.54.321', id: '109.876.54.321', hostname: 'lorem.ipsum'},
       ],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 2, all: 2, first: 1, rows: 10}),
       },
     }),

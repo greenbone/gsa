@@ -25,7 +25,7 @@ const createGmp = ({
     data: [result],
     meta: {
       counts: new CollectionCounts({filtered: 1, all: 1, first: 1, rows: 10}),
-      filter: BaseFilter.fromString(''),
+      filter: BaseFilter.fromString(),
     },
   }),
 } = {}) => ({
@@ -44,7 +44,7 @@ const createGmp = ({
 describe('ContainerScanningResultsTab', () => {
   test('should render loading state initially', () => {
     const reportId = 'report-123';
-    const filter = BaseFilter.fromString('');
+    const filter = BaseFilter.fromString();
 
     const gmp = createGmp();
 
@@ -89,7 +89,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should handle sorting', async () => {
     const reportId = 'report-123';
-    const filter = BaseFilter.fromString('');
+    const filter = BaseFilter.fromString();
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -302,7 +302,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should handle pagination - last page', async () => {
     const reportId = 'report-123';
-    const filter = BaseFilter.fromString('');
+    const filter = BaseFilter.fromString();
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -410,7 +410,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should render error panel on error', async () => {
     const reportId = 'report-123';
-    const filter = BaseFilter.fromString('');
+    const filter = BaseFilter.fromString();
 
     const getMock = testing.fn().mockRejectedValue(new Error('API Error'));
 
@@ -439,7 +439,7 @@ describe('ContainerScanningResultsTab', () => {
 
   test('should show subtle loading indicator when refetching (not full spinner)', async () => {
     const reportId = 'report-123';
-    const filter = BaseFilter.fromString('');
+    const filter = BaseFilter.fromString();
     const mockResults = [
       Result.fromElement({
         _id: '1',
@@ -546,7 +546,7 @@ describe('ContainerScanningResultsTab', () => {
             first: 1,
             rows: 10,
           }),
-          filter: BaseFilter.fromString(''),
+          filter: BaseFilter.fromString(),
         },
       });
 
@@ -555,7 +555,7 @@ describe('ContainerScanningResultsTab', () => {
 
       render(
         <ContainerScanningResultsTab
-          reportFilter={BaseFilter.fromString('')}
+          reportFilter={BaseFilter.fromString()}
           reportId={'report-123'}
           status={status}
         />,
