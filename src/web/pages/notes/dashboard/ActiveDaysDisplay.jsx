@@ -5,7 +5,8 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
-import Filter, {NOTES_FILTER_FILTER} from 'gmp/models/filter';
+import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import {
   NOTE_ACTIVE_UNLIMITED_VALUE,
@@ -116,7 +117,7 @@ export class NotesActiveDaysDisplay extends React.Component {
     if (isDefined(filter) && filter.hasTerm(activeDaysTerm)) {
       return;
     }
-    const activeDaysFilter = Filter.fromTerm(activeDaysTerm);
+    const activeDaysFilter = BaseFilter.fromTerm(activeDaysTerm);
 
     const newFilter = isDefined(filter)
       ? filter.copy().and(activeDaysFilter)

@@ -183,19 +183,6 @@ class Filter extends EntityModel implements FilterType {
     return BaseFilter.fromString(filterString, filter);
   }
 
-  /**
-   * Creates a new Filter from FilterTerms
-   *
-   * @deprecated Use `BaseFilter.fromTerm` instead.
-   *
-   * @param term FilterTerms to set for the new Filter
-   *
-   * @returns The new Filter
-   */
-  static fromTerm(...term: FilterTerm[]) {
-    return BaseFilter.fromTerm(...term);
-  }
-
   toFilterString(): string {
     return this.filterTerms.toFilterString();
   }

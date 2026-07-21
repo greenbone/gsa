@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter, {type FilterType} from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {isDefined} from 'gmp/utils/identity';
 import DonutChart from 'web/components/chart/Donut';
 import DataDisplay, {
@@ -71,13 +72,15 @@ const SeverityClassDisplay = ({
         return;
       }
 
-      severityFilter = Filter.fromTerm(startTerm).and(Filter.fromTerm(endTerm));
+      severityFilter = BaseFilter.fromTerm(startTerm).and(
+        BaseFilter.fromTerm(endTerm),
+      );
     } else {
       if (isDefined(filter) && filter.hasTerm(startTerm)) {
         return;
       }
 
-      severityFilter = Filter.fromTerm(startTerm);
+      severityFilter = BaseFilter.fromTerm(startTerm);
     }
 
     const newFilter = isDefined(filter)
