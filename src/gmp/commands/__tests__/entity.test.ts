@@ -20,6 +20,7 @@ import {
   type EntityModelProperties,
 } from 'gmp/models/entity-model';
 import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Model from 'gmp/models/model';
 
 type FooElement = EntityModelElement;
@@ -112,7 +113,7 @@ describe('EntityCommand tests', () => {
   });
 
   test('should get entity and prefer filter_id over filter parameter', async () => {
-    const filter = Filter.fromResponseElement({
+    const filter = BaseFilter.fromResponseElement({
       _id: 'bar',
       keywords: {
         keyword: {relation: '=', value: 'bar', column: 'foo'},
