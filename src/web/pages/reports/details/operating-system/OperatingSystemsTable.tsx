@@ -29,20 +29,23 @@ const getColumns = (audit = false) => [
     key: 'name',
     title: _('Operating System'),
     sortBy: 'name',
-    render: (entity: ReportOperatingSystem) => (
-      <span>
-        <Link
-          filter={`name=${entity.cpe}`}
-          textOnly={!entity.cpe}
-          to="operatingsystems"
-        >
-          <IconDivider>
-            <OsIcon osCpe={entity.cpe} osTxt={entity.name} />
-            <span>{entity.name}</span>
-          </IconDivider>
-        </Link>
-      </span>
-    ),
+    render: (entity: ReportOperatingSystem) => {
+      const displayName = entity.name || entity.cpe || _('Unknown');
+      return (
+        <span>
+          <Link
+            filter={`name=${entity.cpe}`}
+            textOnly={!entity.cpe}
+            to="operatingsystems"
+          >
+            <IconDivider>
+              <OsIcon osCpe={entity.cpe} osTxt={entity.name} />
+              <span>{displayName}</span>
+            </IconDivider>
+          </Link>
+        </span>
+      );
+    },
     align: 'center',
   },
   {
@@ -51,13 +54,17 @@ const getColumns = (audit = false) => [
     sortBy: 'cpe',
     render: (entity: ReportOperatingSystem) => (
       <span>
-        <Link
-          filter={`name=${entity.cpe}`}
-          textOnly={!entity.cpe}
-          to="operatingsystems"
-        >
-          {entity.cpe}
-        </Link>
+        {entity.cpe ? (
+          <Link
+            filter={`name=${entity.cpe}`}
+            textOnly={!entity.cpe}
+            to="operatingsystems"
+          >
+            {entity.cpe}
+          </Link>
+        ) : (
+          <i aria-hidden="true">{_('Unknown')}</i>
+        )}
       </span>
     ),
     align: 'center',
