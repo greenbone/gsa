@@ -368,7 +368,7 @@ export const getMockAuditReport = () => {
     task: task1,
   });
 
-  const errorsCollection = parseErrors(report, BaseFilter.fromString(''));
+  const errorsCollection = parseErrors(report, BaseFilter.fromString());
 
   const os1 = new ReportOperatingSystem({
     id: 'cpe:/foo/bar',
@@ -393,7 +393,7 @@ export const getMockAuditReport = () => {
       rows: 2,
       length: 2,
     }),
-    filter: BaseFilter.fromString(''),
+    filter: BaseFilter.fromString(),
   };
 
   return {

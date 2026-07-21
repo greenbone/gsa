@@ -35,7 +35,7 @@ const entities = {
 
 const baseParams = {
   activeReport: {} as ReportReport,
-  activeFilter: BaseFilter.fromString(''),
+  activeFilter: BaseFilter.fromString(),
   reportId: 'report-123',
   isImport: false,
   isAgentScanning: false,

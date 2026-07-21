@@ -53,7 +53,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: mockReport.hosts ?? [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -62,7 +62,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -71,7 +71,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 4, all: 4}),
       },
     }),
@@ -80,7 +80,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -89,7 +89,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -98,7 +98,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -107,7 +107,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 2, all: 2}),
       },
     }),
@@ -142,7 +142,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(''),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({filtered: 0, all: 0}),
       },
     }),
