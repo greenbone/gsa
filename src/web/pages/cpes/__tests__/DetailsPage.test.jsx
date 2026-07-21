@@ -8,7 +8,7 @@ import {rendererWith, wait, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import CPE from 'gmp/models/cpe';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -43,7 +43,7 @@ const createGmp = ({
   currentSettingsResponse = currentSettingsDefaultResponse,
   getCpeResponse = new Response(cpe),
   getTagsResponse = new Response([], {
-    filter: Filter.fromString(),
+    filter: BaseFilter.fromString(),
     counts: new CollectionCounts(),
   }),
   currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),

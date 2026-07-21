@@ -16,7 +16,7 @@ import {
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Alert from 'gmp/models/alert';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import AlertPage, {ToolBarIcons} from 'web/pages/alerts/ListPage';
@@ -57,14 +57,14 @@ const createGmp = ({
   getAlerts = testing.fn().mockResolvedValue({
     data: [alert],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -116,7 +116,7 @@ describe('Alert ListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('alert', defaultSettingFilter),
@@ -129,8 +129,8 @@ describe('Alert ListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([alert], filter, loadedFilter, counts),
     );
@@ -184,7 +184,7 @@ describe('Alert ListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('alert', defaultSettingFilter),
@@ -197,8 +197,8 @@ describe('Alert ListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([alert], filter, loadedFilter, counts),
     );
@@ -235,7 +235,7 @@ describe('Alert ListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('alert', defaultSettingFilter),
@@ -248,8 +248,8 @@ describe('Alert ListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([alert], filter, loadedFilter, counts),
     );
@@ -294,7 +294,7 @@ describe('Alert ListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('alert', defaultSettingFilter),
@@ -307,8 +307,8 @@ describe('Alert ListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([alert], filter, loadedFilter, counts),
     );

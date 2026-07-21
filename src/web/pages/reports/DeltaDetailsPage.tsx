@@ -8,12 +8,14 @@ import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router';
 import type Gmp from 'gmp/gmp';
 import logger from 'gmp/log';
-import Filter, {
+import {
   ALL_FILTER,
+  type default as Filter,
   type FilterType,
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type Report from 'gmp/models/report';
 import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
@@ -72,11 +74,13 @@ interface UseReportStateParams {
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
-const DEFAULT_FILTER = Filter.fromString(
+const DEFAULT_FILTER = BaseFilter.fromString(
   'levels=chml rows=100 min_qod=70 first=1 sort-reverse=severity',
 );
 
-const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
+const REPORT_FORMATS_FILTER = BaseFilter.fromString(
+  'active=1 and trust=1 rows=-1',
+);
 
 const getFilter = (
   entity: {report?: {filter?: FilterType}} | undefined = {},

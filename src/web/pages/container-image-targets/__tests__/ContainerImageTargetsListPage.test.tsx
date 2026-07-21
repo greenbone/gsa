@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import OciImageTarget from 'gmp/models/oci-image-target';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -25,7 +25,7 @@ const getSetting = testing.fn().mockResolvedValue({filter: null});
 const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({
     data: [],
-    meta: {filter: Filter.fromString(), counts: new CollectionCounts()},
+    meta: {filter: BaseFilter.fromString(), counts: new CollectionCounts()},
   }),
 );
 
@@ -45,7 +45,7 @@ const createGmp = ({
   getOciImageTargets = testing.fn().mockResolvedValue({
     data: [makeTarget()],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts({
         first: 1,
         all: 1,
@@ -91,7 +91,7 @@ describe('ContainerImageTargetsListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success(
@@ -146,7 +146,7 @@ describe('ContainerImageTargetsListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success(

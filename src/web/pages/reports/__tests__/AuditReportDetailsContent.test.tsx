@@ -6,16 +6,16 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import AuditReportDetailsContent from 'web/pages/reports/AuditReportDetailsContent';
 
-const filter = Filter.fromString(
+const filter = BaseFilter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
 );
 
-const resetFilter = Filter.fromString(
+const resetFilter = BaseFilter.fromString(
   'first=1 compliance_levels=ynui sort=compliant',
 );
 

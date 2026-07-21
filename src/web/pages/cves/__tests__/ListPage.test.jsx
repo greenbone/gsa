@@ -14,7 +14,7 @@ import {
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Cve from 'gmp/models/cve';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -45,28 +45,28 @@ const createGmp = ({
   getCves = testing.fn().mockResolvedValue({
     data: [cve],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -125,7 +125,7 @@ describe('CvesPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cve', defaultSettingFilter),
@@ -138,8 +138,8 @@ describe('CvesPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([cve], filter, loadedFilter, counts),
     );
@@ -207,7 +207,7 @@ describe('CvesPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cve', defaultSettingFilter),
@@ -220,8 +220,8 @@ describe('CvesPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([cve], filter, loadedFilter, counts),
     );
@@ -245,7 +245,7 @@ describe('CvesPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cve', defaultSettingFilter),
@@ -258,8 +258,8 @@ describe('CvesPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([cve], filter, loadedFilter, counts),
     );
@@ -295,7 +295,7 @@ describe('CvesPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cve', defaultSettingFilter),
@@ -308,8 +308,8 @@ describe('CvesPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([cve], filter, loadedFilter, counts),
     );

@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import Filter, {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
+import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {DfnCertAdvIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -69,7 +70,7 @@ Page.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const fallbackFilter = Filter.fromString('sort-reverse=created');
+const fallbackFilter = BaseFilter.fromString('sort-reverse=created');
 
 export default withEntitiesContainer('dfncert', {
   entitiesSelector,

@@ -75,7 +75,7 @@ describe('EntityCommand tests', () => {
   });
 
   test('should get entity with filter parameter', async () => {
-    const filter = Filter.fromString('foo=bar');
+    const filter = BaseFilter.fromString('foo=bar');
     const response = createEntityResponse('foo', {id: '123'});
     const fakeHttp = createHttp(response);
 

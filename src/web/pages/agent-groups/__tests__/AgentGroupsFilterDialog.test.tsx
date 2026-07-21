@@ -5,12 +5,12 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {changeInputValue, fireEvent, rendererWith, screen} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import AgentGroupsFilterDialog from 'web/pages/agent-groups/AgentGroupsFilterDialog';
 
 describe('AgentGroupsFilterDialog tests', () => {
   test('renders default filter dialog with sort fields', () => {
-    const filter = Filter.fromString('first=1 rows=10 sort=name');
+    const filter = BaseFilter.fromString('first=1 rows=10 sort=name');
 
     const onClose = testing.fn();
     const onFilterChanged = testing.fn();
@@ -37,7 +37,7 @@ describe('AgentGroupsFilterDialog tests', () => {
   });
 
   test('calls onFilterChanged when saving modified filter', async () => {
-    const filter = Filter.fromString('first=1 rows=10 sort=name');
+    const filter = BaseFilter.fromString('first=1 rows=10 sort=name');
 
     const onClose = testing.fn();
     const onFilterChanged = testing.fn();

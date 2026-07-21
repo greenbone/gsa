@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {ResultIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -68,7 +69,7 @@ Page.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const fallbackFilter = Filter.fromString('sort-reverse=severity');
+const fallbackFilter = BaseFilter.fromString('sort-reverse=severity');
 
 export default withEntitiesContainer('result', {
   entitiesSelector,

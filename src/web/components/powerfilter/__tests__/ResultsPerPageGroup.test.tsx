@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, render, changeInputValue} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup';
 
 describe('ResultsPerPageGroup tests', () => {
@@ -30,7 +30,7 @@ describe('ResultsPerPageGroup tests', () => {
   });
 
   test("should use filter's rows value if provided", () => {
-    const filter = Filter.fromString('rows=30');
+    const filter = BaseFilter.fromString('rows=30');
     render(<ResultsPerPageGroup filter={filter} />);
     expect(screen.getByName('rows')).toHaveValue('30');
   });

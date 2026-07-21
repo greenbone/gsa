@@ -5,7 +5,7 @@
 
 import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type Permission from 'gmp/models/permission';
 import type Role from 'gmp/models/role';
 import {RoleIcon} from 'web/components/icon';
@@ -217,7 +217,7 @@ const RoleDetailsPage = ({
 };
 
 const generalPermissionsFilter = (id: string) =>
-  Filter.fromString('subject_uuid=' + id + ' and resource_uuid=""').all();
+  BaseFilter.fromString(`subject_uuid=${id} and resource_uuid=""`).all();
 
 const load = (gmp: Gmp) => {
   const loadEntityFunc = loadEntity(gmp);

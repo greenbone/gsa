@@ -6,12 +6,12 @@
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type {ReportActiveCve} from 'gmp/models/report/parser';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CvesTable from 'web/pages/reports/details/cve/CvesTable';
 
-const filter = Filter.fromString('first=1 rows=10');
+const filter = BaseFilter.fromString('first=1 rows=10');
 
 const createGmp = () => ({
   settings: {

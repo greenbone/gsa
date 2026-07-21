@@ -7,11 +7,12 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {useParams} from 'react-router';
 import logger from 'gmp/log';
-import Filter, {
+import {
   ALL_FILTER,
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
@@ -56,11 +57,13 @@ import {generateFilename} from 'web/utils/Render';
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
-const DEFAULT_FILTER = Filter.fromString(
+const DEFAULT_FILTER = BaseFilter.fromString(
   'levels=hmlg rows=100 min_qod=70 first=1 sort-reverse=compliant',
 );
 
-const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
+const REPORT_FORMATS_FILTER = BaseFilter.fromString(
+  'active=1 and trust=1 rows=-1',
+);
 
 const getTarget = (entity = {}) => {
   const {report = {}} = entity;

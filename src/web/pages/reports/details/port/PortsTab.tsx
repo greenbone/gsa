@@ -4,7 +4,8 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import Filter, {type FilterType} from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type ReportPort from 'gmp/models/report/port';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
@@ -40,7 +41,7 @@ const PortsTab = ({
   const reportFilterString = reportFilter.toFilterString();
 
   const baseFilter = useMemo(() => {
-    return Filter.fromString(reportFilterString);
+    return BaseFilter.fromString(reportFilterString);
   }, [reportFilterString]);
 
   const [portsFilter, setPortsFilter] = useState<FilterType>(baseFilter);

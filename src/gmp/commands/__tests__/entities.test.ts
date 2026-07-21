@@ -36,7 +36,7 @@ class FooWithAssetTypeCommand extends EntitiesCommand<Foo> {
 
 describe('EntitiesCommand tests', () => {
   test('should add filter parameter', async () => {
-    const filter = Filter.fromString('foo=bar');
+    const filter = BaseFilter.fromString('foo=bar');
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
     const cmd = new FooCommand(fakeHttp);
@@ -107,7 +107,7 @@ describe('EntitiesCommand tests', () => {
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
 
-    const filter = Filter.fromString('foo=bar');
+    const filter = BaseFilter.fromString('foo=bar');
 
     const cmd = new FooCommand(fakeHttp);
     await cmd.exportByFilter(filter);
@@ -163,7 +163,7 @@ describe('EntitiesCommand tests', () => {
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
 
-    const filter = Filter.fromString('foo=bar');
+    const filter = BaseFilter.fromString('foo=bar');
 
     const cmd = new FooWithAssetTypeCommand(fakeHttp);
     await cmd.exportByFilter(filter);

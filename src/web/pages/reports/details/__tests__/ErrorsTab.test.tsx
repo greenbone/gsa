@@ -6,11 +6,11 @@
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ErrorsTab from 'web/pages/reports/details/error/ErrorsTab';
 
-const filter = Filter.fromString('first=1 rows=10');
+const filter = BaseFilter.fromString('first=1 rows=10');
 
 const {errors: mockReportErrors} = getMockReport();
 const mockErrors = mockReportErrors?.entities ?? [];

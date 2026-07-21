@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Note from 'gmp/models/note';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -46,7 +46,7 @@ const currentSettings = testing
 const createGmp = ({
   getNoteResponse = new Response(note),
   getPermissionsResponse = new Response([], {
-    filter: Filter.fromString(),
+    filter: BaseFilter.fromString(),
     counts: new CollectionCounts(),
   }),
   cloneNoteResponse = new Response({id: 'foo'}),

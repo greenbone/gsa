@@ -8,7 +8,7 @@ import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import AgentGroup from 'gmp/models/agent-group';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import AgentGroupsListPage from 'web/pages/agent-groups/AgentGroupsListPage';
 
@@ -25,7 +25,7 @@ const createGmp = ({
   get = testing.fn().mockResolvedValue({
     data: [makeGroup()],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts({
         first: 1,
         all: 1,
@@ -47,7 +47,7 @@ const createGmp = ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts({
           first: 0,
           all: 0,
@@ -106,7 +106,7 @@ describe('AgentGroupsListPage tests', () => {
 
     const getAgentGroups = testing.fn().mockResolvedValue({
       data: groups,
-      meta: {filter: Filter.fromString(), counts},
+      meta: {filter: BaseFilter.fromString(), counts},
     });
 
     const gmp = createGmp({get: getAgentGroups});

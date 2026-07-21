@@ -6,7 +6,7 @@
 import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type Model from 'gmp/models/model';
 import type Note from 'gmp/models/note';
 import type Override from 'gmp/models/override';
@@ -156,7 +156,7 @@ const TaskDetailsPage = ({
 
   useEffect(() => {
     if (isDefined(entity) && entity.usageType !== USAGE_TYPE.scan) {
-      void navigate('/audit/' + entity.id, {replace: true});
+      void navigate(`/audit/${entity.id}`, {replace: true});
     }
   }, [entity, navigate]);
 
@@ -304,7 +304,8 @@ export const TaskPermissions = withComponentDefaults<
   ],
 })(EntityPermissions<Task>);
 
-const taskIdFilter = (id: string) => Filter.fromString('task_id=' + id).all();
+const taskIdFilter = (id: string) =>
+  BaseFilter.fromString(`task_id=${id}`).all();
 
 const mapStateToProps = (rootState: unknown, {id}: {id: string}) => {
   const permSel = permissionsSelector(rootState);

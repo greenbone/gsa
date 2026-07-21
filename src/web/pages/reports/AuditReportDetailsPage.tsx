@@ -10,7 +10,12 @@ import type Response from 'gmp/http/response';
 import type {XmlMeta} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import type AuditReport from 'gmp/models/audit-report';
-import Filter, {type FilterType, RESET_FILTER} from 'gmp/models/filter';
+import {
+  type default as Filter,
+  type FilterType,
+  RESET_FILTER,
+} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -69,7 +74,7 @@ interface AuditReportCommand {
 
 const log = logger.getLogger('web.pages.reports.AuditReportDetailsPage');
 
-const DEFAULT_FILTER = Filter.fromString(
+const DEFAULT_FILTER = BaseFilter.fromString(
   'levels=hmlg rows=100 min_qod=70 first=1 compliance_levels=yniu sort=compliant',
 );
 

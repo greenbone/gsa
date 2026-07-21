@@ -7,12 +7,13 @@ import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useSearchParams} from 'react-router';
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
-import Filter, {
+import {
   DEFAULT_FALLBACK_FILTER,
   DEFAULT_ROWS_PER_PAGE,
   type FilterType,
   RESET_FILTER,
 } from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
@@ -91,7 +92,7 @@ const usePageFilter = (
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
     hasValue(locationQueryFilterString)
-      ? Filter.fromString(locationQueryFilterString)
+      ? BaseFilter.fromString(locationQueryFilterString)
       : undefined,
   );
 
@@ -123,7 +124,10 @@ const usePageFilter = (
   useEffect(() => {
     if (hasValue(locationQueryFilterString)) {
       dispatch(
-        setPageFilter(pageName, Filter.fromString(locationQueryFilterString)),
+        setPageFilter(
+          pageName,
+          BaseFilter.fromString(locationQueryFilterString),
+        ),
       );
     }
     setLocationQueryFilter(undefined);

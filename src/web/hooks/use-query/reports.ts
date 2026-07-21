@@ -4,11 +4,13 @@
  */
 
 import {useQuery} from '@tanstack/react-query';
-import Filter, {
+import {
   ALL_FILTER,
   RESULTS_FILTER_FILTER,
+  type default as Filter,
   type FilterType,
 } from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import type Report from 'gmp/models/report';
 import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
@@ -25,7 +27,9 @@ interface UseGetReportParams {
   refetchInterval?: number | false | RefetchIntervalFn<Report>;
 }
 
-const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
+const REPORT_FORMATS_FILTER = BaseFilter.fromString(
+  'active=1 and trust=1 rows=-1',
+);
 
 export const useGetReport = ({
   id,

@@ -6,10 +6,10 @@
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ClosedCvesTab from 'web/pages/reports/details/cve/ClosedCvesTab';
 
-const filter = Filter.fromString(
+const filter = BaseFilter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 

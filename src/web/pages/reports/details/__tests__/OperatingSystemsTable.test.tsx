@@ -6,13 +6,13 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, userEvent, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import OperatingSystemsTable from 'web/pages/reports/details/operating-system/OperatingSystemsTable';
 
-const filter = Filter.fromString('first=1 rows=10');
+const filter = BaseFilter.fromString('first=1 rows=10');
 
 const createGmp = () => ({
   session: {timezone: 'CET'},
@@ -154,7 +154,7 @@ describe('OperatingSystemsTable', () => {
   test('should render audit report with compliance column', () => {
     const {operatingsystems} = getMockAuditReport();
 
-    const auditFilter = Filter.fromString('first=1 rows=10');
+    const auditFilter = BaseFilter.fromString('first=1 rows=10');
 
     const {render} = rendererWith({
       gmp: createGmp(),
@@ -192,7 +192,7 @@ describe('OperatingSystemsTable', () => {
   test('should render compliance bar instead of severity bar for audit reports', () => {
     const {operatingsystems} = getMockAuditReport();
 
-    const auditFilter = Filter.fromString('first=1 rows=10');
+    const auditFilter = BaseFilter.fromString('first=1 rows=10');
 
     const {render} = rendererWith({
       gmp: createGmp(),

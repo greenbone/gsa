@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import Permission from 'gmp/models/permission';
 import Role from 'gmp/models/role';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -90,7 +90,7 @@ const reloadInterval = 1;
 const manualUrl = 'test/';
 
 const setupStoreForRoleDetailsPage = store => {
-  const defaultSettingFilter = Filter.fromString('foo=bar');
+  const defaultSettingFilter = BaseFilter.fromString('foo=bar');
   store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
   store.dispatch(
     defaultFilterLoadingActions.success('role', defaultSettingFilter),
@@ -107,17 +107,17 @@ const setupStoreForRoleDetailsPage = store => {
   store.dispatch(
     entitiesLoadingActions.success(
       [role],
-      Filter.fromString(),
-      Filter.fromString(),
+      BaseFilter.fromString(),
+      BaseFilter.fromString(),
       counts,
     ),
   );
 
-  const permissionsSubjectFilter = Filter.fromString(
+  const permissionsSubjectFilter = BaseFilter.fromString(
     'subject_uuid=12345 and not resource_uuid="" or resource_uuid=12345',
   ).all();
 
-  const generalPermissionsFilter = Filter.fromString(
+  const generalPermissionsFilter = BaseFilter.fromString(
     'subject_uuid=12345 and resource_uuid=""',
   ).all();
 
@@ -148,7 +148,7 @@ const createGmp = ({
     Promise.resolve({
       data: [],
       meta: {
-        filter: Filter.fromString(),
+        filter: BaseFilter.fromString(),
         counts: new CollectionCounts(),
       },
     }),
@@ -159,7 +159,7 @@ const createGmp = ({
   getPermissions = testing.fn().mockResolvedValue({
     data: [permission1, permission2],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),

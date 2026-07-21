@@ -5,7 +5,8 @@
 
 import React from 'react';
 import {useNavigate} from 'react-router';
-import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
+import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {HostIcon, NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -124,7 +125,7 @@ Page.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const FALLBACK_HOSTS_LIST_FILTER = Filter.fromString(
+const FALLBACK_HOSTS_LIST_FILTER = BaseFilter.fromString(
   'sort-reverse=severity first=1',
 );
 

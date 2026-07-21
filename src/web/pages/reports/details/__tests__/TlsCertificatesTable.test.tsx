@@ -5,12 +5,12 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import TLSCertificatesTable from 'web/pages/reports/details/tls-certificate/TlsCertificatesTable';
 
-const filter = Filter.fromString('rows=3 first=1');
+const filter = BaseFilter.fromString('rows=3 first=1');
 
 const createGmp = () => ({
   session: createSession({timezone: 'CET'}),

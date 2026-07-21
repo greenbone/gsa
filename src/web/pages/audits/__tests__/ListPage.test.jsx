@@ -15,7 +15,7 @@ import {
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import AuditPage, {ToolBarIcons} from 'web/pages/audits/ListPage';
@@ -64,21 +64,21 @@ const createGmp = ({
   getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getAudits = testing.fn().mockResolvedValue({
     data: [audit],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getReportFormats = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -113,7 +113,7 @@ describe('AuditPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('audit', defaultSettingFilter),
@@ -126,8 +126,8 @@ describe('AuditPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
     );
@@ -150,7 +150,7 @@ describe('AuditPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('audit', defaultSettingFilter),
@@ -163,8 +163,8 @@ describe('AuditPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
     );

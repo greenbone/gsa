@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
+import {ALL_FILTER} from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {pluralizeType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -103,7 +104,7 @@ export const createLoadAllEntities =
     if (isDefined(filter)) {
       filter = isDefined(filter.toFilterString)
         ? filter.all()
-        : Filter.fromString(filter).all();
+        : BaseFilter.fromString(filter).all();
     } else {
       filter = ALL_FILTER;
     }

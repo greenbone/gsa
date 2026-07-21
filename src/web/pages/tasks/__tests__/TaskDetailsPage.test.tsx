@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
 import Features from 'gmp/capabilities/features';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ScanConfig from 'gmp/models/scan-config';
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
@@ -173,14 +173,14 @@ const createGmp = ({
   getEntities = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getTags = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),

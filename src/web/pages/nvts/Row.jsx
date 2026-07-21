@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Filter from 'gmp/models/filter.js';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
@@ -31,7 +31,7 @@ const Row = ({
 }) => {
   const gmp = useGmp();
   const handleFilterChanged = () => {
-    const filter = Filter.fromString('family="' + entity.family + '"');
+    const filter = BaseFilter.fromString(`family="${entity.family}"`);
     onFilterChanged(filter);
   };
   const epssScore = entity?.epss?.maxEpss?.score;

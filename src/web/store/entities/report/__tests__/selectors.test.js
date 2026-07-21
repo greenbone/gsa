@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {
   reportIdentifier,
   simplifiedReportIdentifier,
@@ -21,7 +21,7 @@ describe('reportIdentifier tests', () => {
 
   test('should create identifier with filter', () => {
     const id = 'foo';
-    const filter = Filter.fromString('foo=bar rows=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
     expect(reportIdentifier(id, filter)).toEqual('foo-foo=bar rows=10');
   });
 });
@@ -34,7 +34,7 @@ describe('simplifiedReportIdentifier tests', () => {
 
   test('should create identifier with filter', () => {
     const id = 'foo';
-    const filter = Filter.fromString('foo=bar rows=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
     expect(simplifiedReportIdentifier(id, filter)).toEqual('foo-foo=bar');
   });
 });
@@ -52,7 +52,7 @@ describe('report selector tests', () => {
   });
 
   test('should return true for isLoading with filter', () => {
-    const filter = Filter.fromString('foo=bar rows=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
     const state = createState('report', {
       isLoading: {
         [reportIdentifier('foo', filter)]: true,
@@ -75,7 +75,7 @@ describe('report selector tests', () => {
   });
 
   test('should return false for isLoading with filter', () => {
-    const filter = Filter.fromString('foo=bar rows=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
     const state = createState('report', {
       isLoading: {
         [reportIdentifier('foo', filter)]: false,
@@ -107,7 +107,7 @@ describe('report selector tests', () => {
   });
 
   test('should return undefined for isLoading with filter', () => {
-    const filter = Filter.fromString('foo=bar rows=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
     let state = createState('report', {
       isLoading: {
         foo: true,
@@ -136,7 +136,7 @@ describe('report selector tests', () => {
   });
 
   test('should return error with filter', () => {
-    const filter = Filter.fromString('foo=bar rows=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
     const state = createState('report', {
       errors: {
         [reportIdentifier('foo', filter)]: 'An error',
@@ -147,7 +147,7 @@ describe('report selector tests', () => {
   });
 
   test('should return undefined error', () => {
-    const filter = Filter.fromString('foo=bar rows=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
     const state = createState('report', {
       errors: {
         [simplifiedReportIdentifier('foo', filter)]: 'An error',
@@ -158,7 +158,7 @@ describe('report selector tests', () => {
   });
 
   test('should return undefined error with filter', () => {
-    const filter = Filter.fromString('foo=bar rows=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
     const state = createState('report', {
       errors: {
         foo: 'An error',
@@ -181,7 +181,7 @@ describe('report selector tests', () => {
 
   test('should return report with filter', () => {
     const model = {id: 'foo'};
-    const filter = Filter.fromString('foo=bar rows=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
     const state = createState('report', {
       byId: {
         [simplifiedReportIdentifier('foo', filter)]: model,
@@ -193,8 +193,8 @@ describe('report selector tests', () => {
 
   test('should return report with simplified filter', () => {
     const model = {id: 'foo'};
-    const filter = Filter.fromString('foo=bar rows=10');
-    const filter2 = Filter.fromString('foo=bar first=10');
+    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter2 = BaseFilter.fromString('foo=bar first=10');
     const state = createState('report', {
       byId: {
         [simplifiedReportIdentifier('foo', filter)]: model,

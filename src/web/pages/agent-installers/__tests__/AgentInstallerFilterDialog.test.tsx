@@ -5,12 +5,12 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {changeInputValue, fireEvent, rendererWith, screen} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import AgentInstallersFilterDialog from 'web/pages/agent-installers/AgentInstallerFilterDialog';
 
 describe('AgentInstallersFilterDialog tests', () => {
   test('renders default filter dialog with sort fields', () => {
-    const filter = Filter.fromString('first=1 rows=10 sort=name');
+    const filter = BaseFilter.fromString('first=1 rows=10 sort=name');
 
     const onClose = testing.fn();
     const onFilterChanged = testing.fn();
@@ -35,7 +35,7 @@ describe('AgentInstallersFilterDialog tests', () => {
   });
 
   test('calls onFilterChanged when saving modified filter', async () => {
-    const filter = Filter.fromString('first=1 rows=10 sort=name');
+    const filter = BaseFilter.fromString('first=1 rows=10 sort=name');
 
     const onClose = testing.fn();
     const onFilterChanged = testing.fn();
@@ -61,7 +61,7 @@ describe('AgentInstallersFilterDialog tests', () => {
   });
 
   test('calls onClose when cancel is clicked', () => {
-    const filter = Filter.fromString('first=1 rows=10 sort=name');
+    const filter = BaseFilter.fromString('first=1 rows=10 sort=name');
 
     const onClose = testing.fn();
     const onFilterChanged = testing.fn();
@@ -84,7 +84,7 @@ describe('AgentInstallersFilterDialog tests', () => {
   });
 
   test('renders sort fields correctly', () => {
-    const filter = Filter.fromString('first=1 rows=10 sort=name');
+    const filter = BaseFilter.fromString('first=1 rows=10 sort=name');
 
     const onClose = testing.fn();
     const onFilterChanged = testing.fn();

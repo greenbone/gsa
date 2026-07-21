@@ -8,7 +8,6 @@ import {fireEvent, rendererWith, screen, waitFor, within} from 'web/testing';
 import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
-import Filter from 'gmp/models/filter';
 import BaseFilter from 'gmp/models/filter/base-filter';
 import type FilterType from 'gmp/models/filter/filter-type';
 import {createSession} from 'gmp/testing';
@@ -77,7 +76,9 @@ const createGmp = () => ({
     saveReportComposerDefaults: testing.fn().mockResolvedValue({}),
   },
   filter: {
-    get: testing.fn().mockResolvedValue({data: Filter.fromString('rows=100')}),
+    get: testing
+      .fn()
+      .mockResolvedValue({data: BaseFilter.fromString('rows=100')}),
   },
   filters: {
     get: testing.fn().mockResolvedValue(emptyCollectionResponse),
@@ -106,7 +107,7 @@ const createGmp = () => ({
         },
       ],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts({
           first: 1,
           all: 1,
@@ -121,7 +122,7 @@ const createGmp = () => ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: Filter.fromString(''),
+        filter: BaseFilter.fromString(''),
         counts: new CollectionCounts(),
       },
     }),

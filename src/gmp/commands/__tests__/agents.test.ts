@@ -13,7 +13,7 @@ import {
   createHttpMany,
 } from 'gmp/commands/testing';
 import Agent from 'gmp/models/agent';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 describe('AgentsCommand tests', () => {
@@ -163,7 +163,7 @@ describe('AgentsCommand tests', () => {
     const fakeHttp = createHttpMany([response1, response2]);
     const cmd = new AgentsCommand(fakeHttp);
     const result = await cmd.authorizeByFilter(
-      Filter.fromString("name='AgentToAuthorize'"),
+      BaseFilter.fromString("name='AgentToAuthorize'"),
     );
     expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {
       args: {
@@ -220,7 +220,7 @@ describe('AgentsCommand tests', () => {
     const fakeHttp = createHttpMany([response1, response2]);
     const cmd = new AgentsCommand(fakeHttp);
     const result = await cmd.revokeByFilter(
-      Filter.fromString("name='AgentToRevoke'"),
+      BaseFilter.fromString("name='AgentToRevoke'"),
     );
     expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {
       args: {
@@ -265,7 +265,7 @@ describe('AgentsCommand tests', () => {
     const cmd = new AgentsCommand(fakeHttp);
 
     const result = await cmd.enableUpdateToLatestByFilter(
-      Filter.fromString("name='AgentToEnableUpdateToLatest'"),
+      BaseFilter.fromString("name='AgentToEnableUpdateToLatest'"),
     );
 
     expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {
@@ -312,7 +312,7 @@ describe('AgentsCommand tests', () => {
     const cmd = new AgentsCommand(fakeHttp);
 
     const result = await cmd.disableUpdateToLatestByFilter(
-      Filter.fromString("name='AgentToDisableUpdateToLatest'"),
+      BaseFilter.fromString("name='AgentToDisableUpdateToLatest'"),
     );
 
     expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {

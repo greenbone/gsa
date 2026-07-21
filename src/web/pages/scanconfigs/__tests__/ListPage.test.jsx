@@ -13,7 +13,7 @@ import {
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
@@ -66,14 +66,14 @@ const createGmp = ({
   getConfigs = testing.fn().mockResolvedValue({
     data: [config],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: Filter.fromString(),
+      filter: BaseFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -111,7 +111,7 @@ describe('ScanConfigsPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('scanconfig', defaultSettingFilter),
@@ -124,8 +124,8 @@ describe('ScanConfigsPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
@@ -150,7 +150,7 @@ describe('ScanConfigsPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('scanconfig', defaultSettingFilter),
@@ -163,8 +163,8 @@ describe('ScanConfigsPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );

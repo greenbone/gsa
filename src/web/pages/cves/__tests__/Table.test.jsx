@@ -8,7 +8,7 @@ import {rendererWith, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Cve from 'gmp/models/cve';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {parseDate} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
 import CveTable from 'web/pages/cves/Table';
@@ -67,7 +67,7 @@ const counts = new CollectionCounts({
   rows: 3,
 });
 
-const filter = Filter.fromString('rows=2');
+const filter = BaseFilter.fromString('rows=2');
 
 const createGmp = () => ({
   session: createSession(),

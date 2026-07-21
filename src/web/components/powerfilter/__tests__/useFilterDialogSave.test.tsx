@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
 import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
 describe('useFilterDialogSave', () => {
@@ -32,9 +33,9 @@ describe('useFilterDialogSave', () => {
         {
           filterName: '  My Filter  ',
           saveNamedFilter: true,
-          filter: Filter.fromString('foo=bar'),
+          filter: BaseFilter.fromString('foo=bar'),
           filterString: 'rows=10',
-          originalFilter: Filter.fromString('foo=bar'),
+          originalFilter: BaseFilter.fromString('foo=bar'),
         },
       ),
     );
@@ -70,9 +71,9 @@ describe('useFilterDialogSave', () => {
         {
           filterName: '   ',
           saveNamedFilter: true,
-          filter: Filter.fromString('foo=bar'),
+          filter: BaseFilter.fromString('foo=bar'),
           filterString: 'rows=10',
-          originalFilter: Filter.fromString('foo=bar'),
+          originalFilter: BaseFilter.fromString('foo=bar'),
         },
       ),
     );

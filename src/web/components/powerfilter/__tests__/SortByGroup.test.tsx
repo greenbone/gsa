@@ -5,12 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {openSelectElement, screen, render, fireEvent} from 'web/testing';
-import Filter from 'gmp/models/filter';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
 
 describe('SortByGroup tests', () => {
   test('should render', () => {
-    const filter = Filter.fromString('sort');
+    const filter = BaseFilter.fromString('sort');
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
     const {element} = render(
@@ -28,7 +28,7 @@ describe('SortByGroup tests', () => {
   });
 
   test('should render fields', async () => {
-    const filter1 = Filter.fromString('sort=severity');
+    const filter1 = BaseFilter.fromString('sort=severity');
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
 
@@ -56,8 +56,8 @@ describe('SortByGroup tests', () => {
   });
 
   test('should use filter by default', () => {
-    const filter1 = Filter.fromString('sort=severity');
-    const filter2 = Filter.fromString('sort-reverse=severity');
+    const filter1 = BaseFilter.fromString('sort=severity');
+    const filter2 = BaseFilter.fromString('sort-reverse=severity');
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
 
@@ -123,7 +123,7 @@ describe('SortByGroup tests', () => {
   });
 
   test('should call change handler of select', async () => {
-    const filter = Filter.fromString('sort');
+    const filter = BaseFilter.fromString('sort');
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
 
@@ -152,7 +152,7 @@ describe('SortByGroup tests', () => {
   });
 
   test('should call change handler of radio button', () => {
-    const filter = Filter.fromString('sort');
+    const filter = BaseFilter.fromString('sort');
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
 
