@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Vulnerability from 'gmp/models/vulnerability';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -12,21 +12,30 @@ import Qod from 'web/components/qod/Qod';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
-import PropTypes from 'web/utils/PropTypes';
+import {type SelectionTypeType} from 'web/utils/SelectionType';
+
+interface RowProps {
+  entity: Vulnerability;
+  links?: boolean;
+  selectionType?: SelectionTypeType;
+  onEntityDeselected?: (entity: Vulnerability) => void;
+  onEntitySelected?: (entity: Vulnerability) => void;
+}
 
 const Row = ({
-  actionsComponent: ActionsComponent = EntitiesActions,
   entity,
   links = true,
-  ...props
-}) => {
+  selectionType,
+  onEntityDeselected,
+  onEntitySelected,
+}: RowProps) => {
   const {results = {}, hosts = {}} = entity;
   return (
     <TableRow>
       <TableData>
         <span>
-          <DetailsLink id={entity.id} textOnly={!links} type="nvt">
-            {entity.name}
+          <DetailsLink id={entity.id ?? ''} textOnly={!links} type="nvt">
+            {entity.name ?? ''}
           </DetailsLink>
         </span>
       </TableData>
@@ -40,7 +49,7 @@ const Row = ({
         <SeverityBar severity={entity.severity} />
       </TableData>
       <TableData align="center">
-        <Qod value={entity.qod} />
+        <Qod value={entity.qod as number | string} />
       </TableData>
       <TableData>
         <span>
@@ -50,15 +59,14 @@ const Row = ({
         </span>
       </TableData>
       <TableData>{hosts.count}</TableData>
-      <ActionsComponent {...props} entity={entity} />
+      <EntitiesActions
+        entity={entity}
+        selectionType={selectionType}
+        onEntityDeselected={onEntityDeselected}
+        onEntitySelected={onEntitySelected}
+      />
     </TableRow>
   );
-};
-
-Row.propTypes = {
-  actionsComponent: PropTypes.component,
-  entity: PropTypes.object.isRequired,
-  links: PropTypes.bool,
 };
 
 export default Row;

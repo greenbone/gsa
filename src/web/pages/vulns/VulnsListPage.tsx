@@ -3,27 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
-import QueryFilter from 'gmp/models/filter/query-filter';
+import type Vulnerability from 'gmp/models/vulnerability';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {VulnerabilityIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer, {
+  type WithEntitiesContainerComponentProps,
+} from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import VulnerabilitiesDashboard, {
   VULNS_DASHBOARD_ID,
 } from 'web/pages/vulns/dashboard';
-import VulnsTable from 'web/pages/vulns/Table';
-import VulnerabilityFilterDialog from 'web/pages/vulns/VulnerabilityFilterDialog';
+import VulnerabilityFilterDialog from 'web/pages/vulns/VulnsFilterDialog';
+import VulnsTable from 'web/pages/vulns/VulnsTable';
 import {
-  loadEntities,
   selector as entitiesSelector,
+  loadEntities,
 } from 'web/store/entities/vulns';
-import PropTypes from 'web/utils/PropTypes';
 
 const ToolBarIcons = () => {
   const [_] = useTranslation();
@@ -38,13 +38,24 @@ const ToolBarIcons = () => {
   );
 };
 
-const Page = ({filter, onFilterChanged, ...props}) => {
+const VulnsListPage = ({
+  entities,
+  entitiesCounts,
+  entitiesError,
+  filter,
+  isLoading,
+  onError,
+  onFilterChanged,
+  onFilterCreated,
+  onFilterRemoved,
+  onFilterReset,
+}: WithEntitiesContainerComponentProps<Vulnerability>) => {
   const [_] = useTranslation();
   return (
-    <React.Fragment>
+    <>
       <PageTitle title={_('Vulnerabilities')} />
-      <EntitiesPage
-        {...props}
+      <EntitiesPage<Vulnerability>
+        createFilterType="vulnerability"
         dashboard={() => (
           <VulnerabilitiesDashboard
             filter={filter}
@@ -54,31 +65,28 @@ const Page = ({filter, onFilterChanged, ...props}) => {
         dashboardControls={() => (
           <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
         )}
+        entities={entities}
+        entitiesCounts={entitiesCounts}
+        entitiesError={entitiesError}
         filter={filter}
         filterEditDialog={VulnerabilityFilterDialog}
         filtersFilter={VULNS_FILTER_FILTER}
+        isLoading={isLoading}
         sectionIcon={<VulnerabilityIcon size="large" />}
         table={VulnsTable}
-        tags={false}
         title={_('Vulnerabilities')}
         toolBarIcons={ToolBarIcons}
+        onError={onError}
         onFilterChanged={onFilterChanged}
+        onFilterCreated={onFilterCreated}
+        onFilterRemoved={onFilterRemoved}
+        onFilterReset={onFilterReset}
       />
-    </React.Fragment>
+    </>
   );
 };
 
-Page.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
-};
-
-const FALLBACK_VULNS_LIST_FILTER = QueryFilter.fromString(
-  'sort-reverse=severity first=1',
-);
-
-export default withEntitiesContainer('vulnerability', {
-  fallbackFilter: FALLBACK_VULNS_LIST_FILTER,
+export default withEntitiesContainer<Vulnerability>('vulnerability', {
   entitiesSelector,
   loadEntities,
-})(Page);
+})(VulnsListPage);

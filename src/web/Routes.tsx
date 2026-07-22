@@ -780,7 +780,7 @@ const loggedInRoutes = [
       {
         path: 'vulnerabilities',
         lazy: async () => ({
-          Component: (await import('web/pages/vulns/ListPage')).default,
+          Component: (await import('web/pages/vulns/VulnsListPage')).default,
         }),
       },
 
