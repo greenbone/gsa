@@ -5,13 +5,12 @@
 
 import {type Date as GmpDate} from 'gmp/models/date';
 import {parseDate} from 'gmp/parser';
-import {isDefined, isString} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 /**
  * Represents the data returned by the backend
  */
 export interface BaseModelElement {
-  _id?: string;
   creation_time?: string;
   modification_time?: string;
   type?: string | number;
@@ -23,7 +22,6 @@ export interface BaseModelElement {
 export interface BaseModelProperties {
   _type?: string;
   creationTime?: GmpDate;
-  id?: string;
   modificationTime?: GmpDate;
 }
 
@@ -35,11 +33,6 @@ export const parseBaseModelProperties = (
   // for now we need to return the whole object
   // to not break existing code
   const copy = {...element} as BaseModelProperties; // create shallow copy
-
-  if (isString(element._id) && element._id.length > 0) {
-    // only set id if it id defined
-    copy.id = element._id;
-  }
 
   if (isDefined(element.creation_time)) {
     copy.creationTime = parseDate(element.creation_time);
@@ -65,16 +58,13 @@ export const parseBaseModelProperties = (
 class BaseModel {
   readonly _type?: string;
   readonly creationTime?: GmpDate;
-  readonly id?: string;
   readonly modificationTime?: GmpDate;
 
   constructor({
-    id,
     creationTime,
     modificationTime,
     _type,
   }: BaseModelProperties = {}) {
-    this.id = id;
     this.creationTime = creationTime;
     this.modificationTime = modificationTime;
     this._type = _type;

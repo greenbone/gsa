@@ -12,14 +12,14 @@ import {NO_VALUE, YES_VALUE, type YesNo} from 'gmp/parser';
 
 describe('EntityModel tests', () => {
   test('should use defaults', () => {
-    const model = new EntityModel();
+    const model = new EntityModel({id: 'test-id'});
     expect(model._type).toBeUndefined();
     expect(model.active).toBeUndefined();
     expect(model.comment).toBeUndefined();
     expect(model.creationTime).toBeUndefined();
     expect(model.endTime).toBeUndefined();
     expect(model.entityType).toBeUndefined();
-    expect(model.id).toBeUndefined();
+    expect(model.id).toEqual('test-id');
     expect(model.inUse).toBeUndefined();
     expect(model.modificationTime).toBeUndefined();
     expect(model.name).toBeUndefined();
@@ -143,6 +143,7 @@ describe('EntityModel tests', () => {
 
   test('should return correct status methods', () => {
     const model = new EntityModel({
+      id: 'test-id',
       active: YES_VALUE as YesNo,
       inUse: true,
       orphan: YES_VALUE as YesNo,
@@ -159,8 +160,8 @@ describe('EntityModel tests', () => {
 
 describe('parseEntityModelFromElement tests', () => {
   test('should parse empty properties from element', () => {
-    const props = parseEntityModelProperties();
-    expect(props.id).toBeUndefined();
+    const props = parseEntityModelProperties({_id: '123'});
+    expect(props.id).toEqual('123');
     expect(props._type).toBeUndefined();
     expect(props.active).toBeUndefined();
     expect(props.comment).toBeUndefined();

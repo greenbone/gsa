@@ -35,6 +35,7 @@ export interface EntityModelPermissionElement {
 }
 
 export interface EntityModelElement extends BaseModelElement {
+  _id: string;
   name?: string;
   end_time?: string;
   timestamp?: string;
@@ -58,6 +59,7 @@ export interface EntityModelProperties extends BaseModelProperties {
   active?: YesNo;
   comment?: string;
   endTime?: GmpDate;
+  id: string;
   inUse?: boolean;
   name?: string;
   orphan?: YesNo;
@@ -80,6 +82,7 @@ class EntityModel extends BaseModel {
   readonly comment?: string;
   readonly endTime?: GmpDate;
   readonly entityType: EntityType;
+  readonly id: string;
   readonly inUse?: boolean;
   readonly name?: string;
   readonly orphan?: YesNo;
@@ -110,10 +113,10 @@ class EntityModel extends BaseModel {
       userCapabilities,
       userTags = [],
       writable,
-    }: EntityModelProperties = {},
+    }: EntityModelProperties,
     entityType?: EntityType,
   ) {
-    super({id, creationTime, modificationTime, _type});
+    super({creationTime, modificationTime, _type});
 
     const defaultEntityType = (this.constructor as typeof EntityModel)
       .entityType;
@@ -122,6 +125,7 @@ class EntityModel extends BaseModel {
     this.active = active;
     this.comment = comment;
     this.endTime = endTime;
+    this.id = id;
     this.inUse = inUse;
     this.name = name;
     this.orphan = orphan;
@@ -155,7 +159,7 @@ class EntityModel extends BaseModel {
   }
 
   static fromElement(
-    element: EntityModelElement = {},
+    element: EntityModelElement,
     entityType?: EntityType,
   ): EntityModel {
     return new this(parseEntityModelProperties(element), entityType);
@@ -163,12 +167,17 @@ class EntityModel extends BaseModel {
 }
 
 export const parseEntityModelProperties = (
-  element: EntityModelElement = {},
+  element: EntityModelElement,
 ): EntityModelProperties => {
   // in future parseDefaultProperties should only return known properties
   // and not the whole object
   // for now we need to delete the properties we don't want
   const copy = parseBaseModelProperties(element) as EntityModelProperties;
+
+  if (!isEmpty(element._id)) {
+    // only set id if it id defined
+    copy.id = element._id;
+  }
 
   if (isDefined(element.name)) {
     copy.name = parseToString(element.name);
