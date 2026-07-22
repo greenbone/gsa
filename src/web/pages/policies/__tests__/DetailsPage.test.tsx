@@ -101,7 +101,7 @@ const policy = Policy.fromElement({
   families: {family: families},
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
-  scanner: {name: 'scanner', type: '42'},
+  scanner: {_id: 'test-id', name: 'scanner', type: '42'},
   tasks: {
     task: [
       {_id: '1234', name: 'audit1'},
@@ -123,7 +123,7 @@ const policy2 = Policy.fromElement({
   families: {family: families},
   preferences: preferences,
   permissions: {permission: [{name: 'get_config'}]},
-  scanner: {name: 'scanner', type: '42'},
+  scanner: {_id: 'test-id', name: 'scanner', type: '42'},
   tasks: {
     task: [
       {_id: '1234', name: 'audit1'},
@@ -145,7 +145,7 @@ const policy3 = Policy.fromElement({
   families: {family: families},
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
-  scanner: {name: 'scanner', type: '42'},
+  scanner: {_id: 'test-id', name: 'scanner', type: '42'},
   tasks: {
     task: [
       {_id: '1234', name: 'audit1'},
@@ -167,7 +167,7 @@ const policy4 = Policy.fromElement({
   families: {family: families},
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
-  scanner: {name: 'scanner', type: '42'},
+  scanner: {_id: 'test-id', name: 'scanner', type: '42'},
   tasks: {
     task: [
       {_id: '1234', name: 'audit1'},

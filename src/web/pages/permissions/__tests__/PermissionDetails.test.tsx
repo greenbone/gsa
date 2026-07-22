@@ -11,6 +11,7 @@ import PermissionDetails from 'web/pages/permissions/PermissionDetails';
 describe('PermissionDetails tests', () => {
   test('should render comment', () => {
     const permission = new Permission({
+      id: 'test-id',
       comment: 'Test permission comment',
       name: 'get_tasks',
     });
@@ -21,9 +22,7 @@ describe('PermissionDetails tests', () => {
   });
 
   test('should not render comment row when comment is undefined', () => {
-    const permission = new Permission({
-      name: 'get_tasks',
-    });
+    const permission = new Permission({id: 'test-id', name: 'get_tasks'});
     const {render} = rendererWith({capabilities: true});
     render(<PermissionDetails entity={permission} />);
     expect(screen.queryByText('Comment')).not.toBeInTheDocument();
@@ -31,6 +30,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render description', () => {
     const permission = new Permission({
+      id: 'test-id',
       name: 'get_tasks',
       comment: 'Test comment',
     });
@@ -43,6 +43,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render resource information', () => {
     const permission = Permission.fromElement({
+      _id: 'test-id',
       name: 'get_tasks',
       comment: 'Test comment',
       resource: {
@@ -59,6 +60,7 @@ describe('PermissionDetails tests', () => {
 
   test('should not render resource row when resource is undefined', () => {
     const permission = new Permission({
+      id: 'test-id',
       name: 'get_tasks',
       comment: 'Test comment',
     });
@@ -69,6 +71,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render subject information', () => {
     const permission = Permission.fromElement({
+      _id: 'test-id',
       name: 'get_tasks',
       comment: 'Test comment',
       subject: {
@@ -85,6 +88,7 @@ describe('PermissionDetails tests', () => {
 
   test('should not render subject row when subject is undefined', () => {
     const permission = new Permission({
+      id: 'test-id',
       name: 'get_tasks',
       comment: 'Test comment',
     });
@@ -95,6 +99,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render with both resource and subject', () => {
     const permission = Permission.fromElement({
+      _id: 'test-id',
       name: 'get_tasks',
       comment: 'Full permission test',
       resource: {
@@ -120,6 +125,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render with empty comment', () => {
     const permission = new Permission({
+      id: 'test-id',
       name: 'get_tasks',
       comment: '',
     });
@@ -132,6 +138,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render Super permission description', () => {
     const permission = new Permission({
+      id: 'test-id',
       name: 'Super',
       comment: 'Super user permission',
     });
@@ -143,6 +150,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render permission with resource but without subject', () => {
     const permission = Permission.fromElement({
+      _id: 'test-id',
       name: 'modify_config',
       comment: 'Modify config permission',
       resource: {
@@ -162,6 +170,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render permission with subject but without resource', () => {
     const permission = Permission.fromElement({
+      _id: 'test-id',
       name: 'authenticate',
       comment: 'Login permission',
       subject: {
@@ -180,9 +189,7 @@ describe('PermissionDetails tests', () => {
   });
 
   test('should render minimal permission without comment, resource, or subject', () => {
-    const permission = new Permission({
-      name: 'authenticate',
-    });
+    const permission = new Permission({id: 'test-id', name: 'authenticate'});
     const {render} = rendererWith({capabilities: true});
     render(<PermissionDetails entity={permission} />);
 
@@ -195,6 +202,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render description with resource information when resource is provided', () => {
     const permission = Permission.fromElement({
+      _id: 'test-id',
       name: 'get_tasks',
       resource: {
         _id: 'task-456',
@@ -211,6 +219,7 @@ describe('PermissionDetails tests', () => {
 
   test('should render description with subject information when subject is provided', () => {
     const permission = Permission.fromElement({
+      _id: 'test-id',
       name: 'get_tasks',
       subject: {
         _id: 'user-789',

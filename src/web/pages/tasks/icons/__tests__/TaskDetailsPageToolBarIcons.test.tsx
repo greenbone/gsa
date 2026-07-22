@@ -5,24 +5,24 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, within} from 'web/testing';
-import ScanConfig from 'gmp/models/scan-config';
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
-import Task, {TASK_STATUS} from 'gmp/models/task';
+import Task, {TASK_STATUS, type TaskElement} from 'gmp/models/task';
+import {YES_VALUE, type YesNo} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
 import TaskDetailsPageToolBarIcons from 'web/pages/tasks/icons/TaskDetailsPageToolBarIcons';
 
-const scanConfig = ScanConfig.fromElement({
+const scanConfigElement = {
   _id: '314',
   name: 'foo',
   comment: 'bar',
-  scanner: {name: 'scanner1', type: '0'},
+  scanner: {_id: 'test-id', name: 'scanner1', type: '0'},
   tasks: {
     task: [
       {_id: '12345', name: 'foo'},
       {_id: '678910', name: 'task2'},
     ],
   },
-});
+};
 
 const preferences = {
   preference: [
@@ -80,26 +80,32 @@ const createGmp = () => ({
   session: createSession(),
 });
 
+const baseTaskElement = {
+  _id: '12345',
+  owner: {name: 'admin'},
+  name: 'foo',
+  comment: 'bar',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  alterable: YES_VALUE as YesNo,
+  report_count: {__text: 1},
+  result_count: 1,
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: '5678', name: 'target1'},
+  alert: {_id: '91011', name: 'alert1'},
+  scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
+  config: scanConfigElement,
+  preferences: preferences,
+};
+
+const createTask = (overrides: Partial<TaskElement>) =>
+  Task.fromElement({...baseTaskElement, ...overrides});
+
 describe('Task ToolBarIcons tests', () => {
   test('should render', () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'admin'},
-      name: 'foo',
-      comment: 'bar',
-      creation_time: '2019-07-16T06:31:29Z',
-      modification_time: '2019-07-16T06:44:55Z',
+    const task = createTask({
       status: TASK_STATUS.done,
-      alterable: 1,
       last_report: lastReport,
-      report_count: {__text: 1},
-      result_count: 1,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target1'},
-      alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-      config: scanConfig,
-      preferences: preferences,
     });
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
@@ -152,23 +158,10 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for new task', async () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'admin'},
-      name: 'foo',
-      comment: 'bar',
-      creation_time: '2019-07-16T06:31:29Z',
-      modification_time: '2019-07-16T06:44:55Z',
+    const task = createTask({
       status: TASK_STATUS.new,
-      alterable: 0,
       report_count: {__text: 0},
       result_count: 0,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target1'},
-      alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-      config: scanConfig,
-      preferences: preferences,
     });
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
@@ -274,25 +267,11 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for running task', async () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'admin'},
-      name: 'foo',
-      comment: 'bar',
+    const task = createTask({
       in_use: 1,
-      creation_time: '2019-07-16T06:31:29Z',
-      modification_time: '2019-07-16T06:44:55Z',
       status: TASK_STATUS.running,
-      alterable: 0,
       current_report: currentReport,
-      report_count: {__text: 1},
       result_count: 0,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target1'},
-      alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-      config: scanConfig,
-      preferences: preferences,
     });
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
@@ -403,25 +382,12 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for stopped task', async () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'admin'},
-      name: 'foo',
-      comment: 'bar',
-      creation_time: '2019-07-16T06:31:29Z',
-      modification_time: '2019-07-16T06:44:55Z',
+    const task = createTask({
       status: TASK_STATUS.stopped,
-      alterable: 0,
       current_report: currentReport,
       last_report: lastReport,
       report_count: {__text: 2},
       result_count: 10,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target1'},
-      alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-      config: scanConfig,
-      preferences: preferences,
     });
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
@@ -533,24 +499,9 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for finished task', async () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'admin'},
-      name: 'foo',
-      comment: 'bar',
-      creation_time: '2019-07-16T06:31:29Z',
-      modification_time: '2019-07-16T06:44:55Z',
+    const task = createTask({
       status: TASK_STATUS.done,
-      alterable: 0,
       last_report: lastReport,
-      report_count: {__text: 1},
-      result_count: 1,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target1'},
-      alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-      config: scanConfig,
-      preferences: preferences,
     });
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
@@ -663,24 +614,10 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', async () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'admin'},
-      name: 'foo',
-      comment: 'bar',
-      creation_time: '2019-07-16T06:31:29Z',
-      modification_time: '2019-07-16T06:44:55Z',
+    const task = createTask({
       status: TASK_STATUS.done,
-      alterable: 0,
       last_report: lastReport,
-      report_count: {__text: 1},
-      result_count: 1,
       permissions: {permission: [{name: 'get_tasks'}]},
-      target: {_id: '5678', name: 'target1'},
-      alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-      config: scanConfig,
-      preferences: preferences,
     });
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();
@@ -793,23 +730,9 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should render schedule icon if task is scheduled', () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'admin'},
-      name: 'foo',
-      comment: 'bar',
-      creation_time: '2019-07-16T06:31:29Z',
-      modification_time: '2019-07-16T06:44:55Z',
+    const task = createTask({
       status: TASK_STATUS.done,
-      alterable: 0,
       last_report: lastReport,
-      report_count: {__text: 1},
-      result_count: 1,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target1'},
-      alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-      config: scanConfig,
       schedule: {
         _id: '121314',
         name: 'schedule1',
@@ -865,17 +788,13 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for import task', async () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'admin'},
-      name: 'foo',
-      comment: 'bar',
-      creation_time: '2019-07-16T06:31:29Z',
-      modification_time: '2019-07-16T06:44:55Z',
-      report_count: {__text: 1},
-      result_count: 1,
+    const task = createTask({
       last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
+      target: undefined,
+      alert: undefined,
+      scanner: undefined,
+      config: undefined,
+      preferences: undefined,
     });
     const handleReportImport = testing.fn();
     const handleTaskCreate = testing.fn();

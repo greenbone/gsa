@@ -19,7 +19,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-set
 import PortListComponent from 'web/pages/portlists/PortListComponent';
 
 const defaultGetPortListResponse = {
-  data: PortList.fromElement({id: '123', name: 'foo'}),
+  data: PortList.fromElement({_id: '123', name: 'foo'}),
 };
 const currentSettings = testing
   .fn()
@@ -298,12 +298,12 @@ describe('PortListComponent tests', () => {
 
   test('should allow editing a port list and delete a port range', async () => {
     const portList = PortList.fromElement({
-      id: '123',
+      _id: '123',
       name: 'foo',
       port_ranges: {
         port_range: [
           {
-            id: '123',
+            _id: '123',
             start: 1,
             end: 2,
             type: 'tcp',
@@ -357,7 +357,10 @@ describe('PortListComponent tests', () => {
   });
 
   test('should call onSaveError if saving a port list fails', async () => {
-    const portList = PortList.fromElement({id: '123', name: 'foo'});
+    const portList = PortList.fromElement({
+      _id: '123',
+      name: 'foo',
+    });
     const portListResponse = {data: portList};
     const error = new Error('error');
     const gmp = createGmp({
@@ -392,7 +395,10 @@ describe('PortListComponent tests', () => {
   });
 
   test('should show error in dialog if saving a port list fails', async () => {
-    const portList = PortList.fromElement({id: '123', name: 'foo'});
+    const portList = PortList.fromElement({
+      _id: '123',
+      name: 'foo',
+    });
     const portListResponse = {data: portList};
     const error = new Error('some error');
     const gmp = createGmp({

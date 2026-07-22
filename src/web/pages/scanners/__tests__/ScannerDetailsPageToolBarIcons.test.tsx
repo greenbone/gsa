@@ -13,7 +13,7 @@ import ScannerDetailsPageToolBarIcons from 'web/pages/scanners/ScannerDetailsPag
 
 describe('ScannerDetailsPageToolBarIcons', () => {
   test('should renders the create icon when agents feature is enabled', () => {
-    const scanner = new Scanner({});
+    const scanner = new Scanner({id: 'test-id'});
     const gmp = {
       settings: {
         enableGreenboneSensor: false,
@@ -30,7 +30,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
   });
 
   test('should renders the create icon when sensors are enabled', () => {
-    const scanner = new Scanner({});
+    const scanner = new Scanner({id: 'test-id'});
     const gmp = {
       settings: {
         enableGreenboneSensor: true,
@@ -46,7 +46,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
   });
 
   test('should not render the create icon when agents feature is disabled', () => {
-    const scanner = new Scanner({});
+    const scanner = new Scanner({id: 'test-id'});
     const gmp = {
       settings: {
         enableGreenboneSensor: false,
@@ -62,7 +62,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
   });
 
   test('should not render the create icon when user has no create scanner permission', () => {
-    const scanner = new Scanner({});
+    const scanner = new Scanner({id: 'test-id'});
     const gmp = {
       settings: {
         enableGreenboneSensor: false,
@@ -78,7 +78,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
   });
 
   test('should call create handler', () => {
-    const scanner = new Scanner({});
+    const scanner = new Scanner({id: 'test-id'});
     const gmp = {
       settings: {
         enableGreenboneSensor: true,
@@ -101,7 +101,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
   });
 
   test('should render manual icon with correct props', () => {
-    const scanner = new Scanner({});
+    const scanner = new Scanner({id: 'test-id'});
     const gmp = {
       settings: {
         enableGreenboneSensor: false,
@@ -119,7 +119,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
   });
 
   test('should render the list icon', () => {
-    const scanner = new Scanner({});
+    const scanner = new Scanner({id: 'test-id'});
     const gmp = {
       settings: {
         enableGreenboneSensor: false,
@@ -140,6 +140,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
 
   test('should render clone icon and call clone handler', () => {
     const scanner = new Scanner({
+      id: 'test-id',
       userCapabilities: new EverythingCapabilities(),
     });
     const gmp = {
@@ -166,6 +167,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
 
   test('should render clone icon disabled when user may not clone scanner', () => {
     const scanner = new Scanner({
+      id: 'test-id',
       scannerType: OPENVASD_SCANNER_TYPE,
     });
     const gmp = {
@@ -193,6 +195,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
 
   test('should render edit icon and call edit handler', () => {
     const scanner = new Scanner({
+      id: 'test-id',
       userCapabilities: new EverythingCapabilities(),
     });
     const gmp = {
@@ -219,6 +222,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
 
   test('should render trash icon and call delete handler', () => {
     const scanner = new Scanner({
+      id: 'test-id',
       userCapabilities: new EverythingCapabilities(),
     });
     const gmp = {
@@ -245,6 +249,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
 
   test('should render export icon and call download handler', () => {
     const scanner = new Scanner({
+      id: 'test-id',
       userCapabilities: new EverythingCapabilities(),
     });
     const gmp = {
@@ -271,6 +276,7 @@ describe('ScannerDetailsPageToolBarIcons', () => {
 
   test('should render verify icon and call verify handler', () => {
     const scanner = new Scanner({
+      id: 'test-id',
       userCapabilities: new EverythingCapabilities(),
     });
     const gmp = {
@@ -297,8 +303,9 @@ describe('ScannerDetailsPageToolBarIcons', () => {
 
   test('should render download key icon and call credential download handler', () => {
     const scanner = new Scanner({
+      id: 'test-id',
       userCapabilities: new EverythingCapabilities(),
-      credential: new Credential(),
+      credential: new Credential({id: 'cred-1'}),
     });
     const gmp = {
       settings: {

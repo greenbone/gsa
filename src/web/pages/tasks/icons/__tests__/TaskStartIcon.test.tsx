@@ -14,6 +14,7 @@ describe('Task StartIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.new,
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
@@ -40,6 +41,7 @@ describe('Task StartIcon component tests', () => {
   test('should render in inactive state if wrong command level permissions are given', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.new,
       target: {_id: '123'},
       permissions: {permission: [{name: 'get_task'}]},
@@ -64,6 +66,7 @@ describe('Task StartIcon component tests', () => {
   test('should render in inactive state if wrong command level permissions for audit are given', () => {
     const caps = new Capabilities(['everything']);
     const audit = Audit.fromElement({
+      _id: 'test-id',
       status: AUDIT_STATUS.new,
       target: {_id: '123'},
       permissions: {permission: [{name: 'get_task'}]},
@@ -104,6 +107,7 @@ END:VCALENDAR
 `;
 
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.new,
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
@@ -136,6 +140,7 @@ END:VCALENDAR
   test('should render in inactive state if task is already active', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.requested,
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
@@ -160,6 +165,7 @@ END:VCALENDAR
   test('should render in inactive state if task is queued', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.queued,
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
@@ -184,6 +190,7 @@ END:VCALENDAR
   test('should not be rendered if task is running', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.running,
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
@@ -201,6 +208,7 @@ END:VCALENDAR
   test('should not be rendered if task is a container', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.new,
       permissions: {permission: [{name: 'everything'}]},
     });

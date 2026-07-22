@@ -173,6 +173,7 @@ describe('CredentialStorePage tests', () => {
 
   test('should show error when credential store has no id on test', async () => {
     const credentialStore = CredentialStore.fromElement({
+      _id: '',
       name: 'No ID Store',
       active: 1,
       host: 'h',
@@ -205,6 +206,7 @@ describe('CredentialStorePage tests', () => {
 
   test('should not call edit when saving and credential store has no id', async () => {
     const credentialStore = CredentialStore.fromElement({
+      _id: '',
       name: 'No ID Store',
       active: 1,
       host: 'h',

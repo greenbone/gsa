@@ -29,7 +29,7 @@ const createNote = ({
     id,
     active: 1,
     hosts: ['127.0.0.1'],
-    nvt: new Nvt({oid: `1.3.6.1.4.1.${id}`, name: `NVT ${id}`}),
+    nvt: new Nvt({id: 'nvt-1', oid: `1.3.6.1.4.1.${id}`, name: `NVT ${id}`}),
     port: '22/tcp',
     text,
     userCapabilities,

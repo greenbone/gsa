@@ -45,6 +45,7 @@ describe('TaskFilterDialog tests', () => {
     const handleFilterChanged = testing.fn();
     const handleFilterCreated = testing.fn();
     const filter = new Filter({
+      id: 'test-id',
       terms: [new FilterTerm({keyword: 'name', value: 'test'})],
     });
     const newFilter = new Filter({id: 'new-filter'});
@@ -117,6 +118,7 @@ describe('TaskFilterDialog tests', () => {
 
   test('should render filter string', () => {
     const filter = new Filter({
+      id: 'test-id',
       terms: [new FilterTerm({keyword: 'foo', value: 'bar', relation: '='})],
     });
     const gmp = {

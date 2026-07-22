@@ -160,7 +160,7 @@ const config = ScanConfig.fromElement({
   families: {family: families},
   preferences,
   permissions: {permission: [{name: 'everything'}]},
-  scanner: {name: 'scanner', type: '42'},
+  scanner: {_id: 'test-id', name: 'scanner', type: '42'},
   tasks: {task: []},
 });
 
@@ -177,7 +177,7 @@ const configInUse = ScanConfig.fromElement({
   families: {family: families},
   preferences,
   permissions: {permission: [{name: 'everything'}]},
-  scanner: {name: 'scanner', type: '42'},
+  scanner: {_id: 'test-id', name: 'scanner', type: '42'},
   tasks: {task: [{_id: 't1', name: 'task1'}]},
 });
 
@@ -851,7 +851,7 @@ describe('ScanConfigComponent', () => {
           },
           preferences,
           permissions: {permission: [{name: 'everything'}]},
-          scanner: {name: 'scanner', type: '42'},
+          scanner: {_id: 'test-id', name: 'scanner', type: '42'},
           tasks: {task: []},
         });
 
@@ -1026,7 +1026,7 @@ describe('ScanConfigComponent', () => {
         },
         preferences,
         permissions: {permission: [{name: 'everything'}]},
-        scanner: {name: 'scanner', type: '42'},
+        scanner: {_id: 'test-id', name: 'scanner', type: '42'},
         tasks: {task: []},
       });
 

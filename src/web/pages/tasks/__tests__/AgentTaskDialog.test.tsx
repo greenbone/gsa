@@ -95,7 +95,11 @@ describe('AgentTaskDialog component tests', () => {
   });
 
   test('hides Tag selector in edit mode (task provided)', () => {
-    const task = new Task({status: TASK_STATUS.new, alterable: YES_VALUE});
+    const task = new Task({
+      id: 'test-id',
+      status: TASK_STATUS.new,
+      alterable: YES_VALUE,
+    });
     renderDialog({task});
     expect(screen.queryByName('addTag')).toBeNull();
     expect(screen.queryByName('tagId')).toBeNull();

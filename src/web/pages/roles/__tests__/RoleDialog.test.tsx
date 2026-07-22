@@ -243,7 +243,10 @@ describe('RoleDialog tests', () => {
   });
 
   test('should handle user selection', () => {
-    const allUsers = [{name: 'User 1'}, {name: 'User 2'}];
+    const allUsers = [
+      {id: 'test-id', name: 'User 1'},
+      {id: 'test-id', name: 'User 2'},
+    ];
 
     render(
       <RoleDialog

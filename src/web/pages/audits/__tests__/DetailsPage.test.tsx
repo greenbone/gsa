@@ -16,18 +16,20 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/audits/DetailsPage';
 
-const policy = Policy.fromElement({
+const policyElement = {
   _id: '314',
   name: 'Policy 1',
   comment: 'bar',
-  scanner: {name: 'scanner1', type: '0'},
+  scanner: {_id: 'test-id', name: 'scanner1', type: '0'},
   tasks: {
     task: [
       {_id: '12345', name: 'foo'},
       {_id: '678910', name: 'audit2'},
     ],
   },
-});
+};
+
+const policy = Policy.fromElement(policyElement);
 
 const schedule = Schedule.fromElement({
   _id: '121314',
@@ -84,7 +86,7 @@ const audit = Audit.fromElement({
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
   scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
+  config: policyElement,
   preferences: preferences,
   usage_type: 'audit',
 });
@@ -105,7 +107,7 @@ const audit2 = Audit.fromElement({
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
   scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
+  config: policyElement,
   preferences: preferences,
   usage_type: 'audit',
 });
@@ -127,7 +129,7 @@ const audit5 = Audit.fromElement({
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
   scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
+  config: policyElement,
   preferences: preferences,
   usage_type: 'audit',
 });
@@ -255,37 +257,27 @@ describe('Audit DetailsPage tests', () => {
       screen.getByRole('heading', {name: /^Target$/})
         .parentElement as HTMLElement,
     );
-    expect(targetDetails.getByTestId('details-link')).toHaveAttribute(
+    expect(targetDetails.getByRole('link', {name: 'target1'})).toHaveAttribute(
       'href',
       '/target/5678',
-    );
-    expect(targetDetails.getByTestId('details-link')).toHaveTextContent(
-      'target1',
     );
 
     const alertsDetails = within(
       screen.getByRole('heading', {name: /^Alerts$/})
         .parentElement as HTMLElement,
     );
-    expect(alertsDetails.getByTestId('details-link')).toHaveAttribute(
+    expect(alertsDetails.getByRole('link', {name: 'alert1'})).toHaveAttribute(
       'href',
       '/alert/91011',
-    );
-    expect(alertsDetails.getByTestId('details-link')).toHaveTextContent(
-      'alert1',
     );
 
     const scannerDetails = within(
       screen.getByRole('heading', {name: /^Scanner$/})
         .parentElement as HTMLElement,
     );
-    expect(scannerDetails.getByTestId('details-link')).toHaveAttribute(
-      'href',
-      '/scanner/1516',
-    );
-    expect(scannerDetails.getByTestId('details-link')).toHaveTextContent(
-      'scanner1',
-    );
+    expect(
+      scannerDetails.getByRole('link', {name: 'scanner1'}),
+    ).toHaveAttribute('href', '/scanner/1516');
     expect(scannerDetails.getByRole('row', {name: /^Type/})).toHaveTextContent(
       'OpenVAS Scanner',
     );

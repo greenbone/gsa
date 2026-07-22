@@ -439,17 +439,13 @@ const TaskComponent = ({
   };
 
   const handleTaskStart = (task: Task) => {
-    return actionFunction<void, Rejection>(
-      // @ts-expect-error
-      gmp.task.start(task),
-      {
-        onSuccess: onStarted,
-        onError: onStartError,
-        successMessage: _('Task {{- name}} started successfully.', {
-          name: task.name as string,
-        }),
-      },
-    );
+    return actionFunction<void, Rejection>(gmp.task.start(task), {
+      onSuccess: onStarted,
+      onError: onStartError,
+      successMessage: _('Task {{- name}} started successfully.', {
+        name: task.name as string,
+      }),
+    });
   };
 
   const handleTaskStop = (task: Task) => {
@@ -468,7 +464,6 @@ const TaskComponent = ({
 
   const handleTaskResume = (task: Task) => {
     return actionFunction<Response<Task, XmlMeta>, Rejection>(
-      // @ts-expect-error
       gmp.task.resume(task),
       {
         onSuccess: onResumed,

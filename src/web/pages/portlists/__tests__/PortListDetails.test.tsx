@@ -12,6 +12,7 @@ import PortListDetails from 'web/pages/portlists/PortListDetails';
 describe('PortListDetails tests', () => {
   test('should render deprecated information when entity is deprecated', () => {
     const portList = new PortList({
+      id: 'pl-1',
       comment: 'Test comment',
       portCount: {
         all: 100,
@@ -32,6 +33,7 @@ describe('PortListDetails tests', () => {
 
   test('should render comment', () => {
     const portList = new PortList({
+      id: 'pl-1',
       comment: 'Test comment',
       portCount: {
         all: 100,
@@ -51,6 +53,7 @@ describe('PortListDetails tests', () => {
 
   test('should render port counts', () => {
     const portList = new PortList({
+      id: 'pl-1',
       comment: 'Test comment',
       portCount: {
         all: 100,
@@ -74,6 +77,7 @@ describe('PortListDetails tests', () => {
 
   test('should render targets using the port list', () => {
     const portList = new PortList({
+      id: 'pl-1',
       comment: 'Test comment',
       portCount: {
         all: 100,
@@ -96,6 +100,7 @@ describe('PortListDetails tests', () => {
 
   test('should not render deprecated information when entity is not deprecated', () => {
     const portList = new PortList({
+      id: 'pl-1',
       comment: 'Test comment',
       portCount: {
         all: 100,
@@ -114,6 +119,7 @@ describe('PortListDetails tests', () => {
 
   test('should not render targets when no targets are provided', () => {
     const portList = new PortList({
+      id: 'pl-1',
       comment: 'Test comment',
       portCount: {
         all: 100,

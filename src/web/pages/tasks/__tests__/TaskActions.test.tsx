@@ -19,6 +19,7 @@ const createGmp = () => ({
 describe('TaskActions tests', () => {
   test('should render', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.new,
       alterable: 0,
       permissions: {permission: [{name: 'everything'}]},
@@ -58,6 +59,7 @@ describe('TaskActions tests', () => {
 
   test('should call click handlers', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.done,
       alterable: 0,
       last_report: {report: {_id: 'id'}},
@@ -126,6 +128,7 @@ describe('TaskActions tests', () => {
 
   test('should not call click handlers without permissions', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.done,
       alterable: 0,
       last_report: {report: {_id: 'id'}},
@@ -203,6 +206,7 @@ describe('TaskActions tests', () => {
 
   test('should not call click handlers for stopped task without permissions', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.stopped,
       alterable: 0,
       last_report: {report: {_id: 'id'}},
@@ -283,6 +287,7 @@ describe('TaskActions tests', () => {
 
   test('should not call click handlers for running task without permissions', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.running,
       alterable: 0,
       last_report: {report: {_id: 'id'}},
@@ -357,6 +362,7 @@ describe('TaskActions tests', () => {
 
   test('should call click handlers for running task', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.running,
       alterable: 0,
       in_use: 1,
@@ -425,6 +431,7 @@ describe('TaskActions tests', () => {
 
   test('should call click handlers for stopped task', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.stopped,
       alterable: 0,
       last_report: {report: {_id: 'id'}},
@@ -493,6 +500,7 @@ describe('TaskActions tests', () => {
 
   test('should render schedule icon if task is scheduled', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.stopped,
       alterable: 0,
       last_report: {report: {_id: 'id'}},
@@ -574,6 +582,7 @@ describe('TaskActions tests', () => {
 
   test('should call click handlers for import task', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       permissions: {permission: [{name: 'everything'}]},
     });
 

@@ -6,22 +6,21 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-import Policy from 'gmp/models/policy';
 import {createSession} from 'gmp/testing';
 import AuditDetailsPageToolBarIcons from 'web/pages/audits/AuditDetailsPageToolBarIcons';
 
-const policy = Policy.fromElement({
+const policyElement = {
   _id: '314',
   name: 'Policy 1',
   comment: 'bar',
-  scanner: {name: 'scanner1', type: '0'},
+  scanner: {_id: 'test-id', name: 'scanner1', type: '0'},
   tasks: {
     task: [
       {_id: '12345', name: 'foo'},
       {_id: '678910', name: 'audit2'},
     ],
   },
-});
+};
 
 const preferences = {
   preference: [
@@ -83,7 +82,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
       target: {_id: '5678', name: 'target1'},
       alert: {_id: '91011', name: 'alert1'},
       scanner: {_id: '1516', name: 'scanner1', type: '2'},
-      config: policy,
+      config: policyElement,
       preferences: preferences,
       usage_type: 'audit',
     });
@@ -144,7 +143,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
       target: {_id: '5678', name: 'target1'},
       alert: {_id: '91011', name: 'alert1'},
       scanner: {_id: '1516', name: 'scanner1', type: '2'},
-      config: policy,
+      config: policyElement,
       preferences: preferences,
       usage_type: 'audit',
     });
@@ -241,7 +240,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
       target: {_id: '5678', name: 'target1'},
       alert: {_id: '91011', name: 'alert1'},
       scanner: {_id: '1516', name: 'scanner1', type: '2'},
-      config: policy,
+      config: policyElement,
       preferences: preferences,
       usage_type: 'audit',
     });
@@ -347,7 +346,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
       target: {_id: '5678', name: 'target1'},
       alert: {_id: '91011', name: 'alert1'},
       scanner: {_id: '1516', name: 'scanner1', type: '2'},
-      config: policy,
+      config: policyElement,
       preferences: preferences,
       usage_type: 'audit',
     });
@@ -452,7 +451,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
       target: {_id: '5678', name: 'target1'},
       alert: {_id: '91011', name: 'alert1'},
       scanner: {_id: '1516', name: 'scanner1', type: '2'},
-      config: policy,
+      config: policyElement,
       preferences: preferences,
       usage_type: 'audit',
     });
@@ -555,7 +554,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
       target: {_id: '5678', name: 'target1'},
       alert: {_id: '91011', name: 'alert1'},
       scanner: {_id: '1516', name: 'scanner1', type: '2'},
-      config: policy,
+      config: policyElement,
       preferences: preferences,
       usage_type: 'audit',
     });
@@ -666,7 +665,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
       target: {_id: '5678', name: 'target1'},
       alert: {_id: '91011', name: 'alert1'},
       scanner: {_id: '1516', name: 'scanner1', type: '2'},
-      config: policy,
+      config: policyElement,
       schedule: {
         _id: '121314',
         name: 'schedule1',

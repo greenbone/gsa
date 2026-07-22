@@ -23,6 +23,7 @@ describe('ReportTableRow tests', () => {
     const report = Report.fromElement({
       _id: '1',
       report: {
+        _id: 'test-id',
         timestamp: '2024-01-01T12:00:00Z',
         scan_run_status: TASK_STATUS.running,
         severity: {filtered: 5},
@@ -70,6 +71,7 @@ describe('ReportTableRow tests', () => {
     const report = Report.fromElement({
       _id: '1',
       report: {
+        _id: 'test-id',
         timestamp: '2024-01-01T12:00:00Z',
         scan_run_status: TASK_STATUS.done,
         severity: {filtered: 5},
@@ -105,6 +107,7 @@ describe('ReportTableRow tests', () => {
     const report = Report.fromElement({
       _id: '1',
       report: {
+        _id: 'test-id',
         timestamp: '2024-01-01T12:00:00Z',
         scan_run_status: TASK_STATUS.done,
         severity: {filtered: 5},
@@ -139,6 +142,7 @@ describe('ReportTableRow tests', () => {
     const report = Report.fromElement({
       _id: '1',
       report: {
+        _id: 'test-id',
         timestamp: '2024-01-01T12:00:00Z',
         scan_run_status: TASK_STATUS.running,
         severity: {filtered: 5},
@@ -174,6 +178,7 @@ describe('ReportTableRow tests', () => {
     const report = Report.fromElement({
       _id: '1',
       report: {
+        _id: 'test-id',
         timestamp: '2024-01-01T12:00:00Z',
         scan_run_status: TASK_STATUS.done,
         severity: {filtered: 5},
@@ -212,6 +217,7 @@ describe('ReportTableRow tests', () => {
     const report = Report.fromElement({
       _id: '1',
       report: {
+        _id: 'test-id',
         timestamp: '2024-01-01T12:00:00Z',
         scan_run_status: TASK_STATUS.done,
         severity: {filtered: 5},
