@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import type Vulnerability from 'gmp/models/vulnerability';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
@@ -14,9 +15,10 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
 import {type SelectionTypeType} from 'web/utils/SelectionType';
 
-interface RowProps {
+export interface RowProps {
   entity: Vulnerability;
   links?: boolean;
+  onToggleDetailsClick?: (entity: Vulnerability, id: string) => void;
   selectionType?: SelectionTypeType;
   onEntityDeselected?: (entity: Vulnerability) => void;
   onEntitySelected?: (entity: Vulnerability) => void;
