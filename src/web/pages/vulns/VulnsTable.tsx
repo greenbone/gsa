@@ -5,13 +5,18 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
+import type Vulnerability from 'gmp/models/vulnerability';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import createEntitiesFooter from 'web/entities/createEntitiesFooter';
+import createEntitiesFooter, {
+  type CreateEntitiesFooterProps,
+} from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import VulnsRow from 'web/pages/vulns/VulnsRow';
 import {type SortDirectionType} from 'web/utils/sort-direction';
+
+type RowProps = React.ComponentProps<typeof VulnsRow>;
 
 interface HeaderProps {
   sort?: boolean;
@@ -104,7 +109,12 @@ const Footer = createEntitiesFooter({
   download: 'vulnerabilities.xml',
 });
 
-export const VulnsTable = createEntitiesTable({
+export const VulnsTable = createEntitiesTable<
+  Vulnerability,
+  CreateEntitiesFooterProps<Vulnerability>,
+  HeaderProps,
+  RowProps
+>({
   emptyTitle: _l('No Vulnerabilities available'),
   header: Header,
   footer: Footer,
