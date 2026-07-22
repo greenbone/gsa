@@ -75,11 +75,11 @@ class ReportPort {
     }
   }
 
-  static fromElement(element: ReportPortElement = {}): ReportPort {
+  static fromElement(element: ReportPortElement): ReportPort {
     return new ReportPort(this.parseElement(element));
   }
 
-  static parseElement(element: ReportPortElement = {}): ReportPortProperties {
+  static parseElement(element: ReportPortElement): ReportPortProperties {
     const copy: ReportPortProperties = {};
     const {__text: name} = element;
 

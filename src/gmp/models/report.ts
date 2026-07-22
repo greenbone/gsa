@@ -18,16 +18,16 @@ export interface ReportElement extends ModelElement {
   _type?: ReportType;
   report?: ReportReportElement;
   report_config?: {
-    _id?: string;
+    _id: string;
     name?: string;
   };
   report_format?: {
-    _id?: string;
+    _id: string;
     name?: string;
   };
   task?: {
     name?: string;
-    _id?: string;
+    _id: string;
   };
 }
 
@@ -62,7 +62,7 @@ class Report extends Model {
     report_type,
     task,
     ...properties
-  }: ReportProperties = {}) {
+  }: ReportProperties) {
     super(properties);
 
     this.content_type = content_type;
@@ -73,11 +73,11 @@ class Report extends Model {
     this.task = task;
   }
 
-  static fromElement(element: ReportElement = {}): Report {
+  static fromElement(element: ReportElement): Report {
     return new Report(this.parseElement(element));
   }
 
-  static parseElement(element: ReportElement = {}): ReportProperties {
+  static parseElement(element: ReportElement): ReportProperties {
     const copy = super.parseElement(element) as ReportProperties;
 
     const {

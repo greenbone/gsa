@@ -52,14 +52,14 @@ export interface TaskElement extends ModelElement {
   alterable?: YesNo;
   average_duration?: number;
   config?: {
-    _id?: string;
+    _id: string;
     name?: string;
     trash?: YesNo;
   };
   current_report?: {
     // only available for a running task
     report?: {
-      _id?: string;
+      _id: string;
       timestamp?: string;
       scan_start?: string;
       scan_end?: string;
@@ -69,7 +69,7 @@ export interface TaskElement extends ModelElement {
   last_report?: {
     // Only available for tasks with finished scans
     report?: {
-      _id?: string;
+      _id: string;
       compliance_count?: {
         // only available for audits
         incomplete?: number;
@@ -121,13 +121,13 @@ export interface TaskElement extends ModelElement {
   };
   result_count?: number;
   scanner?: {
-    _id?: string;
+    _id: string;
     name?: string;
     trash?: YesNo;
     type?: ScannerType;
   };
   schedule?: {
-    _id?: string;
+    _id: string;
     icalendar?: string;
     name?: string;
     timezone?: string;
@@ -138,26 +138,26 @@ export interface TaskElement extends ModelElement {
   };
   schedule_periods?: number;
   slave?: {
-    _id?: string;
+    _id: string;
   };
   status?: TaskStatus;
   target?: {
-    _id?: string;
+    _id: string;
     name?: string;
     trash?: YesNo;
   };
   oci_image_target?: {
-    _id?: string;
+    _id: string;
     name?: string;
     trash?: YesNo;
   };
   web_application_target?: {
-    _id?: string;
+    _id: string;
     name?: string;
     trash?: YesNo;
   };
   agent_group?: {
-    _id?: string;
+    _id: string;
     name?: string;
     trash?: YesNo;
   };
@@ -411,7 +411,7 @@ class Task extends Model {
     trend,
     usageType = USAGE_TYPE.scan,
     ...properties
-  }: TaskProperties = {}) {
+  }: TaskProperties) {
     super(properties);
 
     this.alerts = alerts;
@@ -450,11 +450,11 @@ class Task extends Model {
     this.scanMode = scanMode;
   }
 
-  static fromElement(element?: TaskElement): Task {
+  static fromElement(element: TaskElement): Task {
     return new Task(this.parseElement(element));
   }
 
-  static parseElement(element: TaskElement = {}): TaskProperties {
+  static parseElement(element: TaskElement): TaskProperties {
     const copy = super.parseElement(element) as TaskProperties;
 
     const usageType = (element.usage_type ?? USAGE_TYPE.scan) as
@@ -551,35 +551,35 @@ class Task extends Model {
 
     copy.config = isEmpty(element.config?._id)
       ? undefined
-      : Model.fromElement(element.config, 'scanconfig');
+      : Model.fromElement(element.config as {_id: string}, 'scanconfig');
     copy.target = isEmpty(element.target?._id)
       ? undefined
-      : Model.fromElement(element.target, 'target');
+      : Model.fromElement(element.target as {_id: string}, 'target');
     copy.ociImageTarget = isEmpty(element.oci_image_target?._id)
       ? undefined
-      : Model.fromElement(element.oci_image_target, 'target');
+      : Model.fromElement(element.oci_image_target as {_id: string}, 'target');
     copy.webApplicationTarget = isEmpty(element.web_application_target?._id)
       ? undefined
       : Model.fromElement(
-          element.web_application_target,
+          element.web_application_target as {_id: string},
           'webapplicationtarget',
         );
     copy.agentGroup = isEmpty(element.agent_group?._id)
       ? undefined
-      : Model.fromElement(element.agent_group, 'agentgroup');
+      : Model.fromElement(element.agent_group as {_id: string}, 'agentgroup');
     // slave isn't really an entity type but it has an id
     copy.slave = isEmpty(element.slave?._id)
       ? undefined
       : {id: element.slave?._id};
     copy.alerts = map(element.alert, alert =>
-      Model.fromElement(alert, 'alert'),
+      Model.fromElement(alert as {_id: string}, 'alert'),
     );
     copy.scanner = isEmpty(element.scanner?._id)
       ? undefined
-      : Scanner.fromElement(element.scanner);
+      : Scanner.fromElement(element.scanner as {_id: string});
     copy.schedule = isEmpty(element.schedule?._id)
       ? undefined
-      : Schedule.fromElement(element.schedule);
+      : Schedule.fromElement(element.schedule as {_id: string});
     copy.schedule_periods = parseInt(element.schedule_periods);
 
     // it seems element.progress is just a number now, but keep the element parsing as a fallback

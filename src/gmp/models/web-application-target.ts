@@ -40,7 +40,7 @@ class WebApplicationTarget extends Model {
     reverseLookupOnly = false,
     reverseLookupUnify = false,
     ...properties
-  }: WebApplicationTargetProperties = {}) {
+  }: WebApplicationTargetProperties) {
     super(properties);
     this.urls = urls;
     this.excludeUrls = excludeUrls;
@@ -55,7 +55,7 @@ class WebApplicationTarget extends Model {
   }
 
   static fromElement(
-    element: WebApplicationTargetElement = {},
+    element: WebApplicationTargetElement,
   ): WebApplicationTarget {
     return new WebApplicationTarget(this.parseElement(element));
   }

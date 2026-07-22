@@ -329,7 +329,7 @@ class Credential extends Model {
     privateKeyInfo,
     publicKeyInfo,
     ...properties
-  }: CredentialProperties = {}) {
+  }: CredentialProperties) {
     super(properties);
 
     this.authAlgorithm = authAlgorithm;
@@ -347,11 +347,11 @@ class Credential extends Model {
     this.publicKeyInfo = publicKeyInfo;
   }
 
-  static fromElement(element: CredentialElement = {}): Credential {
+  static fromElement(element: CredentialElement): Credential {
     return new Credential(this.parseElement(element));
   }
 
-  static parseElement(element: CredentialElement = {}): CredentialProperties {
+  static parseElement(element: CredentialElement): CredentialProperties {
     const ret = super.parseElement(element) as CredentialProperties;
 
     ret.authAlgorithm = element.auth_algorithm;

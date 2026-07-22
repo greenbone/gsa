@@ -216,7 +216,7 @@ class Alert extends Model {
     method,
     tasks = [],
     ...properties
-  }: AlertProperties = {}) {
+  }: AlertProperties) {
     super(properties);
 
     this.active = active;
@@ -227,18 +227,18 @@ class Alert extends Model {
     this.tasks = tasks;
   }
 
-  static fromElement(element?: AlertElement): Alert {
+  static fromElement(element: AlertElement): Alert {
     return new Alert(this.parseElement(element));
   }
 
-  static parseElement(element: AlertElement = {}): AlertProperties {
+  static parseElement(element: AlertElement): AlertProperties {
     const ret = super.parseElement(element) as AlertProperties;
 
     ret.condition = parseAlertData(element.condition);
     ret.event = parseAlertData(element.event);
     ret.method = parseAlertData(element.method) as MethodData;
 
-    if (isDefined(ret.filter)) {
+    if (isDefined(element.filter)) {
       ret.filter = Model.fromElement(element.filter, 'filter');
     }
 

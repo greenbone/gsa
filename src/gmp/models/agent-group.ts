@@ -54,7 +54,7 @@ class AgentGroup extends Model {
     agents = [],
     schedulerCronTime,
     ...properties
-  }: AgentGroupProperties = {}) {
+  }: AgentGroupProperties) {
     super(properties);
 
     this.scanner = scanner;
@@ -62,11 +62,11 @@ class AgentGroup extends Model {
     this.schedulerCronTime = schedulerCronTime;
   }
 
-  static fromElement(element: AgentGroupElement = {}): AgentGroup {
+  static fromElement(element: AgentGroupElement): AgentGroup {
     return new AgentGroup(this.parseElement(element));
   }
 
-  static parseElement(element: AgentGroupElement = {}): AgentGroupProperties {
+  static parseElement(element: AgentGroupElement): AgentGroupProperties {
     const copy = super.parseElement(element) as AgentGroupProperties;
 
     const {scanner, agents} = element;

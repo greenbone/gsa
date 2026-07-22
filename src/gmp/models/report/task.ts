@@ -44,7 +44,7 @@ class ReportTask extends Model {
     ociImageTarget,
     webApplicationTarget,
     ...properties
-  }: ReportTaskProperties = {}) {
+  }: ReportTaskProperties) {
     super(properties);
 
     this.progress = progress;
@@ -54,26 +54,29 @@ class ReportTask extends Model {
     this.webApplicationTarget = webApplicationTarget;
   }
 
-  static fromElement(element: ReportTaskElement = {}): ReportTask {
+  static fromElement(element: ReportTaskElement): ReportTask {
     return new ReportTask(this.parseElement(element));
   }
 
-  static parseElement(element: ReportTaskElement = {}): ReportTaskProperties {
+  static parseElement(element: ReportTaskElement): ReportTaskProperties {
     const copy = super.parseElement(element) as ReportTaskProperties;
 
     copy.target = isEmpty(element.target?._id)
       ? undefined
-      : Model.fromElement(element.target, 'target');
+      : Model.fromElement(element.target as {_id: string}, 'target');
     copy.agentGroup = isEmpty(element.agent_group?._id)
       ? undefined
-      : Model.fromElement(element.agent_group, 'agentgroup');
+      : Model.fromElement(element.agent_group as {_id: string}, 'agentgroup');
     copy.ociImageTarget = isEmpty(element.oci_image_target?._id)
       ? undefined
-      : Model.fromElement(element.oci_image_target, 'ociimagetarget');
+      : Model.fromElement(
+          element.oci_image_target as {_id: string},
+          'ociimagetarget',
+        );
     copy.webApplicationTarget = isEmpty(element.web_application_target?._id)
       ? undefined
       : Model.fromElement(
-          element.web_application_target,
+          element.web_application_target as {_id: string},
           'webapplicationtarget',
         );
     copy.progress = isDefined(element.progress)

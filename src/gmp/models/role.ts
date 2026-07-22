@@ -19,17 +19,17 @@ class Role extends Model {
 
   readonly users: string[];
 
-  constructor({users = [], ...properties}: RoleProperties = {}) {
+  constructor({users = [], ...properties}: RoleProperties = {id: 'test-id'}) {
     super(properties);
 
     this.users = users;
   }
 
-  static fromElement(element?: RoleElement): Role {
+  static fromElement(element: RoleElement): Role {
     return new Role(this.parseElement(element));
   }
 
-  static parseElement(element: RoleElement = {}): RoleProperties {
+  static parseElement(element: RoleElement): RoleProperties {
     const ret = super.parseElement(element) as RoleProperties;
 
     ret.users = parseCsv(element.users);

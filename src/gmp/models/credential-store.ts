@@ -88,7 +88,7 @@ class CredentialStore extends Model {
     preferences = [],
     selectors = [],
     ...properties
-  }: CredentialStoreProperties = {}) {
+  }: CredentialStoreProperties) {
     super(properties);
 
     this.version = version;
@@ -99,13 +99,13 @@ class CredentialStore extends Model {
     this.selectors = selectors;
   }
 
-  static fromElement(element: CredentialStoreElement = {}): CredentialStore {
+  static fromElement(element: CredentialStoreElement): CredentialStore {
     const props = this.parseElement(element);
     return new CredentialStore(props);
   }
 
   static parseElement(
-    element: CredentialStoreElement = {},
+    element: CredentialStoreElement,
   ): CredentialStoreProperties {
     const copy = super.parseElement(element) as CredentialStoreProperties;
 

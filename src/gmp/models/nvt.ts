@@ -70,7 +70,7 @@ export interface NvtSeveritiesElement {
 }
 
 export interface NvtNvtElement {
-  _oid?: string;
+  _oid: string;
   category?: number;
   creation_time?: string;
   cvss_base?: number;
@@ -101,7 +101,7 @@ export interface NvtNvtElement {
 
 export interface NvtElement extends ModelElement {
   update_time?: string;
-  nvt?: NvtNvtElement;
+  nvt: NvtNvtElement;
 }
 
 export type NvtPreferenceValue = string | number | undefined;
@@ -148,13 +148,13 @@ interface Epss {
   maxSeverity?: EpssValue;
 }
 
-interface NvtProperties extends ModelProperties {
+export interface NvtProperties extends ModelProperties {
   certs?: Cert[];
   cves?: string[];
   defaultTimeout?: number;
   epss?: Epss;
   family?: string;
-  oid?: string;
+  oid: string;
   preferences?: NvtPreference[];
   qod?: QoD;
   severity?: number;
@@ -277,7 +277,7 @@ class Nvt extends Model {
     timeout,
     xrefs = [],
     ...other
-  }: NvtProperties = {}) {
+  }: NvtProperties) {
     super(other);
 
     this.certs = certs;
@@ -297,16 +297,16 @@ class Nvt extends Model {
     this.xrefs = xrefs;
   }
 
-  static fromElement(element: NvtElement = {}): Nvt {
+  static fromElement(element: NvtElement): Nvt {
     return new Nvt(this.parseElement(element));
   }
 
-  static parseElement(element: NvtElement = {}): NvtProperties {
+  static parseElement(element: NvtElement): NvtProperties {
     const {nvt: nvtElement} = element;
     const ret = super.parseElement(element) as NvtProperties;
 
     ret.name = parseToString(nvtElement?.name) ?? ret.name;
-    ret.oid = isEmpty(nvtElement?._oid) ? undefined : nvtElement?._oid;
+    ret.oid = nvtElement._oid;
     ret.id = ret.oid;
     ret.tags = parseTags(nvtElement?.tags);
     ret.family = isEmpty(nvtElement?.family)

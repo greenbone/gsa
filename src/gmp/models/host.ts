@@ -4,6 +4,7 @@
  */
 
 import BaseModel, {
+  type BaseModelElement,
   type BaseModelProperties,
   parseBaseModelProperties,
 } from 'gmp/models/base-model';
@@ -35,7 +36,8 @@ interface IdentifierProperties extends BaseModelProperties {
   value?: string;
 }
 
-interface IdentifierElement extends ModelElement {
+interface IdentifierElement extends BaseModelElement {
+  name?: string;
   os?: {
     id?: string;
   };
@@ -181,7 +183,7 @@ class Host extends Model {
     routes = [],
     severity,
     ...properties
-  }: HostProperties = {}) {
+  }: HostProperties) {
     super(properties);
 
     this.details = details;
@@ -193,11 +195,11 @@ class Host extends Model {
     this.severity = severity;
   }
 
-  static fromElement(element?: HostElement): Host {
+  static fromElement(element: HostElement): Host {
     return new Host(this.parseElement(element));
   }
 
-  static parseElement(element: HostElement = {}): HostProperties {
+  static parseElement(element: HostElement): HostProperties {
     const ret = super.parseElement(element) as HostProperties;
 
     if (isDefined(element.host?.severity)) {

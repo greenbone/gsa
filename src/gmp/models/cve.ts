@@ -248,7 +248,7 @@ class Cve extends Model {
     severity,
     updateTime,
     ...properties
-  }: CveProperties = {}) {
+  }: CveProperties) {
     super(properties);
 
     this.certs = certs;
@@ -282,11 +282,11 @@ class Cve extends Model {
     this.updateTime = updateTime;
   }
 
-  static fromElement(element: CveElement = {}): Cve {
+  static fromElement(element: CveElement): Cve {
     return new Cve(this.parseElement(element));
   }
 
-  static parseElement(element: CveElement = {}): CveProperties {
+  static parseElement(element: CveElement): CveProperties {
     const cveElement = element.cve;
     const ret = super.parseElement(element) as CveProperties;
 

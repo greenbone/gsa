@@ -184,11 +184,11 @@ class ReportHost {
     this.start = start;
   }
 
-  static fromElement(element: HostElementWithSeverity = {}): ReportHost {
+  static fromElement(element: HostElementWithSeverity): ReportHost {
     return new ReportHost(this.parseElement(element));
   }
 
-  static parseElement(element: HostElementWithSeverity = {}): HostProperties {
+  static parseElement(element: HostElementWithSeverity): HostProperties {
     const copy = {} as HostProperties;
 
     const {

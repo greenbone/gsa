@@ -58,7 +58,7 @@ class User extends Model {
     hosts = {addresses: []},
     authMethod = AUTH_METHOD_PASSWORD,
     ...properties
-  }: UserProperties = {}) {
+  }: UserProperties) {
     super(properties);
 
     this.roles = roles;
@@ -67,7 +67,7 @@ class User extends Model {
     this.authMethod = authMethod;
   }
 
-  static fromElement(element: UserElement = {}): User {
+  static fromElement(element: UserElement): User {
     return new User(this.parseElement(element));
   }
 

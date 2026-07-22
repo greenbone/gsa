@@ -143,7 +143,7 @@ class CertBundAdv extends Model {
     title,
     version,
     ...properties
-  }: CertBundAdvProperties = {}) {
+  }: CertBundAdvProperties) {
     super(properties);
 
     this.additionalInformation = additionalInformation;
@@ -164,11 +164,11 @@ class CertBundAdv extends Model {
     this.version = version;
   }
 
-  static fromElement(element?: CertBundAdvElement): CertBundAdv {
+  static fromElement(element: CertBundAdvElement): CertBundAdv {
     return new CertBundAdv(this.parseElement(element));
   }
 
-  static parseElement(element: CertBundAdvElement = {}): CertBundAdvProperties {
+  static parseElement(element: CertBundAdvElement): CertBundAdvProperties {
     const {cert_bund_adv: certBundAdv} = element;
     const ret = super.parseElement(element) as CertBundAdvProperties;
 

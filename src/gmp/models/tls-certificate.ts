@@ -144,7 +144,7 @@ class TlsCertificate extends Model {
     trust,
     valid,
     ...properties
-  }: TlsCertificateProperties = {}) {
+  }: TlsCertificateProperties) {
     super(properties);
 
     this.activationTime = activationTime;
@@ -164,12 +164,12 @@ class TlsCertificate extends Model {
     this.valid = valid;
   }
 
-  static fromElement(element: TlsCertificateElement = {}): TlsCertificate {
+  static fromElement(element: TlsCertificateElement): TlsCertificate {
     return new TlsCertificate(this.parseElement(element));
   }
 
   static parseElement(
-    element: TlsCertificateElement = {},
+    element: TlsCertificateElement,
   ): TlsCertificateProperties {
     const ret = super.parseElement(element) as TlsCertificateProperties;
 

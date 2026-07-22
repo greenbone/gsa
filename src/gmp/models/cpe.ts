@@ -85,7 +85,7 @@ class Cpe extends Model {
     severity,
     updateTime,
     ...properties
-  }: CpeProperties = {}) {
+  }: CpeProperties) {
     super(properties);
 
     this.cpeNameId = cpeNameId;
@@ -98,7 +98,7 @@ class Cpe extends Model {
     this.updateTime = updateTime;
   }
 
-  static fromElement(element: CpeElement = {}): Cpe {
+  static fromElement(element: CpeElement): Cpe {
     return new Cpe(this.parseElement(element));
   }
 

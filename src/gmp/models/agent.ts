@@ -186,7 +186,7 @@ class Agent extends Model {
     latestUpdaterVersion,
     config,
     ...properties
-  }: AgentProperties = {}) {
+  }: AgentProperties) {
     super(properties);
 
     this.hostname = hostname;
@@ -210,12 +210,12 @@ class Agent extends Model {
     this.config = config;
   }
 
-  static fromElement(element: AgentElement = {}): Agent {
+  static fromElement(element: AgentElement): Agent {
     const props = this.parseElement(element);
     return new Agent(props);
   }
 
-  static parseElement(element: AgentElement = {}): AgentProperties {
+  static parseElement(element: AgentElement): AgentProperties {
     const copy = super.parseElement(element) as AgentProperties;
 
     const {scanner, config} = element;

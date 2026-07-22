@@ -69,7 +69,7 @@ class DfnCertAdv extends Model {
     summary,
     title,
     ...properties
-  }: DfnCertAdvProperties = {}) {
+  }: DfnCertAdvProperties) {
     super(properties);
 
     this.additionalLinks = additionalLinks;
@@ -80,11 +80,11 @@ class DfnCertAdv extends Model {
     this.title = title;
   }
 
-  static fromElement(element?: DfnCertAdvElement): DfnCertAdv {
+  static fromElement(element: DfnCertAdvElement): DfnCertAdv {
     return new DfnCertAdv(this.parseElement(element));
   }
 
-  static parseElement(element: DfnCertAdvElement = {}): DfnCertAdvProperties {
+  static parseElement(element: DfnCertAdvElement): DfnCertAdvProperties {
     const dfnCertAdvElement = element.dfn_cert_adv;
     const ret = super.parseElement(element) as DfnCertAdvProperties;
     ret.severity = parseSeverity(dfnCertAdvElement?.severity);

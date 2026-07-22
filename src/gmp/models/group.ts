@@ -19,17 +19,17 @@ class Group extends Model {
 
   readonly users: string[];
 
-  constructor({users = [], ...properties}: GroupProperties = {}) {
+  constructor({users = [], ...properties}: GroupProperties = {id: 'test-id'}) {
     super(properties);
 
     this.users = users;
   }
 
-  static fromElement(element: GroupElement = {}): Group {
+  static fromElement(element: GroupElement): Group {
     return new Group(this.parseElement(element));
   }
 
-  static parseElement(element: GroupElement = {}): GroupProperties {
+  static parseElement(element: GroupElement): GroupProperties {
     const ret = super.parseElement(element) as GroupProperties;
 
     ret.users = parseCsv(element.users);

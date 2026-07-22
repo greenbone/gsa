@@ -225,7 +225,7 @@ class ReportFormat extends Model {
     report_type,
     trust,
     ...properties
-  }: ReportFormatProperties = {}) {
+  }: ReportFormatProperties) {
     super(properties);
 
     this.alerts = alerts;
@@ -241,13 +241,11 @@ class ReportFormat extends Model {
     this.trust = trust;
   }
 
-  static fromElement(element: ReportFormatElement = {}): ReportFormat {
+  static fromElement(element: ReportFormatElement): ReportFormat {
     return new ReportFormat(this.parseElement(element));
   }
 
-  static parseElement(
-    element: ReportFormatElement = {},
-  ): ReportFormatProperties {
+  static parseElement(element: ReportFormatElement): ReportFormatProperties {
     const ret = super.parseElement(element) as ReportFormatProperties;
 
     if (isDefined(element.trust)) {

@@ -87,7 +87,7 @@ class Policy extends Model {
     scanner,
     audits = [],
     ...properties
-  }: PolicyProperties = {}) {
+  }: PolicyProperties) {
     super(properties);
 
     this.families = families;
@@ -99,11 +99,11 @@ class Policy extends Model {
     this.audits = audits;
   }
 
-  static fromElement(element: PolicyElement = {}): Policy {
+  static fromElement(element: PolicyElement): Policy {
     return new Policy(this.parseElement(element));
   }
 
-  static parseElement(element: PolicyElement = {}): PolicyProperties {
+  static parseElement(element: PolicyElement): PolicyProperties {
     const ret = super.parseElement(element) as PolicyProperties;
 
     // for displaying the selected nvts (1 of 33) an object for accessing the

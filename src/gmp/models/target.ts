@@ -86,12 +86,14 @@ class SSHCredential extends Model {
 
   readonly port?: number;
 
-  constructor({port, ...properties}: SSHCredentialProperties = {}) {
+  constructor(
+    {port, ...properties}: SSHCredentialProperties = {id: 'test-id'},
+  ) {
     super(properties);
     this.port = port;
   }
 
-  static fromElement(element: SSHCredentialElement = {}): SSHCredential {
+  static fromElement(element: SSHCredentialElement): SSHCredential {
     return new SSHCredential(this.parseElement(element));
   }
 
@@ -138,7 +140,7 @@ class Target extends Model {
     sshElevateCredential,
     tasks = [],
     ...properties
-  }: TargetProperties = {}) {
+  }: TargetProperties) {
     super(properties);
 
     this.aliveTests = aliveTests;
@@ -158,7 +160,7 @@ class Target extends Model {
     this.tasks = tasks;
   }
 
-  static fromElement(element: TargetElement = {}): Target {
+  static fromElement(element: TargetElement): Target {
     return new Target(this.parseElement(element));
   }
 

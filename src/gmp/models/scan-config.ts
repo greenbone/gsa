@@ -173,7 +173,7 @@ class ScanConfig extends Model {
     tasks = [],
     usageType = 'scan',
     ...properties
-  }: ScanConfigProperties = {}) {
+  }: ScanConfigProperties) {
     super(properties);
 
     this.deprecated = deprecated;
@@ -187,11 +187,11 @@ class ScanConfig extends Model {
     this.usageType = usageType;
   }
 
-  static fromElement(element?: ScanConfigElement): ScanConfig {
+  static fromElement(element: ScanConfigElement): ScanConfig {
     return new ScanConfig(this.parseElement(element));
   }
 
-  static parseElement(element: ScanConfigElement = {}): ScanConfigProperties {
+  static parseElement(element: ScanConfigElement): ScanConfigProperties {
     const ret = super.parseElement(element) as ScanConfigProperties;
 
     // for displaying the selected nvts (1 of 33) an object for accessing the

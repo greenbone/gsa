@@ -94,7 +94,7 @@ class Override extends Model {
     text,
     textExcerpt,
     ...properties
-  }: OverrideProperties = {}) {
+  }: OverrideProperties) {
     super(properties);
 
     this.hosts = hosts;
@@ -108,15 +108,15 @@ class Override extends Model {
     this.textExcerpt = textExcerpt;
   }
 
-  static fromElement(element: OverrideElement = {}): Override {
+  static fromElement(element: OverrideElement): Override {
     return new Override(this.parseElement(element));
   }
 
-  static parseElement(element: OverrideElement = {}): OverrideProperties {
+  static parseElement(element: OverrideElement): OverrideProperties {
     const ret = super.parseElement(element) as OverrideProperties;
 
     if (element.nvt) {
-      ret.nvt = Nvt.fromElement({nvt: element.nvt});
+      ret.nvt = Nvt.fromElement({_id: 'test-id', nvt: element.nvt});
       ret.name = ret.nvt.name;
     }
 

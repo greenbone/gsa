@@ -32,23 +32,23 @@ class Permission extends Model {
   readonly resource?: Model;
   readonly subject?: Model;
 
-  constructor({resource, subject, ...properties}: PermissionProperties = {}) {
+  constructor({resource, subject, ...properties}: PermissionProperties) {
     super(properties);
 
     this.resource = resource;
     this.subject = subject;
   }
 
-  static fromElement(element: PermissionElement = {}): Permission {
+  static fromElement(element: PermissionElement): Permission {
     return new Permission(this.parseElement(element));
   }
 
-  static parseElement(element: PermissionElement = {}): PermissionProperties {
+  static parseElement(element: PermissionElement): PermissionProperties {
     const ret = super.parseElement(element) as PermissionProperties;
 
     if (isDefined(element.resource) && !isEmpty(element.resource._id)) {
       ret.resource = Model.fromElement(
-        element.resource,
+        element.resource as ModelElement,
         normalizeType(element.resource.type),
       );
     } else {
@@ -56,7 +56,10 @@ class Permission extends Model {
     }
 
     if (isDefined(element.subject) && !isEmpty(element.subject._id)) {
-      ret.subject = Model.fromElement(element.subject, element.subject.type);
+      ret.subject = Model.fromElement(
+        element.subject as ModelElement,
+        element.subject.type,
+      );
     } else {
       delete ret.subject;
     }
