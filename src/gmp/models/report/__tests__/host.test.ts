@@ -39,7 +39,7 @@ describe('ReportHost tests', () => {
   });
 
   test('should parse empty element', () => {
-    const host = ReportHost.fromElement();
+    const host = ReportHost.fromElement({});
     expect(host.asset).toBeUndefined();
     expect(host.authSuccess).toEqual({});
     expect(host.complianceCounts).toEqual({
@@ -78,9 +78,7 @@ describe('ReportHost tests', () => {
   });
 
   test('should parse port count', () => {
-    const host1 = ReportHost.fromElement({
-      port_count: {},
-    });
+    const host1 = ReportHost.fromElement({port_count: {}});
     expect(host1.portsCount).toEqual(0);
 
     const host2 = ReportHost.fromElement({
@@ -168,16 +166,12 @@ describe('ReportHost tests', () => {
   });
 
   test('should parse start', () => {
-    const host = ReportHost.fromElement({
-      start: '2019-10-02T12:17:10+02:00',
-    });
+    const host = ReportHost.fromElement({start: '2019-10-02T12:17:10+02:00'});
     expect(host.start).toEqual(parseDate('2019-10-02T12:17:10+02:00'));
   });
 
   test('should parse end', () => {
-    const host = ReportHost.fromElement({
-      end: '2019-10-02T12:29:22+02:00',
-    });
+    const host = ReportHost.fromElement({end: '2019-10-02T12:29:22+02:00'});
     expect(host.end).toEqual(parseDate('2019-10-02T12:29:22+02:00'));
   });
 
@@ -256,17 +250,13 @@ describe('ReportHost tests', () => {
   });
 
   test('should parse ip as id', () => {
-    const host = ReportHost.fromElement({
-      ip: '1.2.3.4',
-    });
+    const host = ReportHost.fromElement({ip: '1.2.3.4'});
     expect(host.ip).toEqual('1.2.3.4');
     expect(host.id).toEqual('1.2.3.4');
   });
 
   test('should parse severity', () => {
-    const host = ReportHost.fromElement({
-      severity: 5.5,
-    });
+    const host = ReportHost.fromElement({severity: 5.5});
     expect(host.severity).toEqual(5.5);
   });
 });

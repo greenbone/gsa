@@ -12,7 +12,8 @@ describe('Task Model parse tests', () => {
   testModel(Task, 'task', {testIsActive: false});
 
   test('should use defaults', () => {
-    const task = new Task();
+    const task = new Task({id: 'test-id'});
+    expect(task.id).toEqual('test-id');
     expect(task.alerts).toEqual([]);
     expect(task.alterable).toBeUndefined();
     expect(task.apply_overrides).toBeUndefined();
@@ -46,7 +47,8 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse empty element', () => {
-    const task = Task.fromElement();
+    const task = Task.fromElement({_id: 'test-id'});
+    expect(task.id).toEqual('test-id');
     expect(task.alerts).toEqual([]);
     expect(task.alterable).toBeUndefined();
     expect(task.apply_overrides).toBeUndefined();
@@ -429,12 +431,11 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse observers', () => {
-    const task = Task.fromElement({
-      observers: 'foo bar',
-    });
+    const task = Task.fromElement({_id: 'test-id', observers: 'foo bar'});
     expect(task.observers?.user).toEqual(['foo', 'bar']);
 
     const task2 = Task.fromElement({
+      _id: 'test-id',
       observers: {
         __text: 'anon nymous',
         role: [{name: 'lorem'}],
@@ -446,14 +447,13 @@ describe('Task Model parse tests', () => {
     expect(task2.observers?.role).toEqual(['lorem']);
     expect(task2.observers?.group).toEqual(['ipsum', 'dolor']);
 
-    const task3 = Task.fromElement({
-      observers: '',
-    });
+    const task3 = Task.fromElement({_id: 'test-id', observers: ''});
     expect(task3.observers?.user).toBeUndefined();
     expect(task3.observers?.role).toBeUndefined();
     expect(task3.observers?.group).toBeUndefined();
 
     const task4 = Task.fromElement({
+      _id: 'test-id',
       observers: {
         __text: '',
       },
@@ -561,14 +561,16 @@ describe('Task Model parse tests', () => {
 
 describe(`Task Model methods tests`, () => {
   test('should be a container only if neither target nor agentGroup nor ociImageTarget is set', () => {
-    const t1 = Task.fromElement({});
-    const t2 = Task.fromElement({target: {_id: 'foo'}});
-    const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
+    const t1 = Task.fromElement({_id: 'test-id'});
+    const t2 = Task.fromElement({_id: 'test-id', target: {_id: 'foo'}});
+    const t3 = Task.fromElement({_id: 'test-id', agent_group: {_id: 'ag1'}});
     const t4 = Task.fromElement({
+      _id: 'test-id',
       target: {_id: 'foo'},
       agent_group: {_id: 'ag1'},
     });
     const t5 = Task.fromElement({
+      _id: 'test-id',
       oci_image_target: {_id: 'oci1'},
     });
 
@@ -580,13 +582,15 @@ describe(`Task Model methods tests`, () => {
   });
 
   test('should be a container image if ociImageTarget is set', () => {
-    const t1 = Task.fromElement({});
-    const t2 = Task.fromElement({target: {_id: 'foo'}});
-    const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
+    const t1 = Task.fromElement({_id: 'test-id'});
+    const t2 = Task.fromElement({_id: 'test-id', target: {_id: 'foo'}});
+    const t3 = Task.fromElement({_id: 'test-id', agent_group: {_id: 'ag1'}});
     const t4 = Task.fromElement({
+      _id: 'test-id',
       oci_image_target: {_id: 'oci1'},
     });
     const t5 = Task.fromElement({
+      _id: 'test-id',
       target: {_id: 'foo'},
       oci_image_target: {_id: 'oci1'},
     });
@@ -616,7 +620,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status: status as TaskStatus});
+      const task = new Task({id: 'test-id', status: status as TaskStatus});
       expect(task.isActive()).toEqual(exp);
     }
   });
@@ -639,7 +643,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status: status as TaskStatus});
+      const task = new Task({id: 'test-id', status: status as TaskStatus});
       expect(task.isRunning()).toEqual(exp);
     }
   });
@@ -662,7 +666,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status: status as TaskStatus});
+      const task = new Task({id: 'test-id', status: status as TaskStatus});
       expect(task.isStopped()).toEqual(exp);
     }
   });
@@ -685,7 +689,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status: status as TaskStatus});
+      const task = new Task({id: 'test-id', status: status as TaskStatus});
       expect(task.isInterrupted()).toEqual(exp);
     }
   });
@@ -708,16 +712,16 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status: status as TaskStatus});
+      const task = new Task({id: 'test-id', status: status as TaskStatus});
       expect(task.isNew()).toEqual(exp);
     }
   });
 
   test('should be changeable if alterable or new', () => {
-    let task = new Task({status: TASK_STATUS.new, alterable: 0});
+    let task = new Task({id: 'test-id', status: TASK_STATUS.new, alterable: 0});
     expect(task.isChangeable()).toEqual(true);
 
-    task = new Task({status: TASK_STATUS.done, alterable: 1});
+    task = new Task({id: 'test-id', status: TASK_STATUS.done, alterable: 1});
     expect(task.isChangeable()).toEqual(true);
   });
 
@@ -734,22 +738,23 @@ describe(`Task Model methods tests`, () => {
   });
 
   test('container vs agent vs target vs container image parsing check', () => {
-    const t1 = Task.fromElement({});
+    const t1 = Task.fromElement({_id: 'test-id'});
     expect(t1.isImport()).toBe(true);
     expect(t1.isAgent()).toBe(false);
     expect(t1.isContainerImage()).toBe(false);
 
-    const t2 = Task.fromElement({target: {_id: 'tgt1'}});
+    const t2 = Task.fromElement({_id: 'test-id', target: {_id: 'tgt1'}});
     expect(t2.isImport()).toBe(false);
     expect(t2.isAgent()).toBe(false);
     expect(t2.isContainerImage()).toBe(false);
 
-    const t3 = Task.fromElement({agent_group: {_id: 'ag1'}});
+    const t3 = Task.fromElement({_id: 'test-id', agent_group: {_id: 'ag1'}});
     expect(t3.isImport()).toBe(false);
     expect(t3.isAgent()).toBe(true);
     expect(t3.isContainerImage()).toBe(false);
 
     const t4 = Task.fromElement({
+      _id: 'test-id',
       target: {_id: 'tgt1'},
       agent_group: {_id: 'ag1'},
     });
@@ -758,6 +763,7 @@ describe(`Task Model methods tests`, () => {
     expect(t4.isContainerImage()).toBe(false);
 
     const t5 = Task.fromElement({
+      _id: 'test-id',
       oci_image_target: {_id: 'oci1'},
     });
     expect(t5.isImport()).toBe(false);
@@ -766,10 +772,11 @@ describe(`Task Model methods tests`, () => {
   });
 
   test('should be agent if agentGroup is set', () => {
-    const t1 = Task.fromElement({});
-    const t2 = Task.fromElement({agent_group: {_id: 'ag1'}});
-    const t3 = Task.fromElement({target: {_id: 'tgt1'}});
+    const t1 = Task.fromElement({_id: 'test-id'});
+    const t2 = Task.fromElement({_id: 'test-id', agent_group: {_id: 'ag1'}});
+    const t3 = Task.fromElement({_id: 'test-id', target: {_id: 'tgt1'}});
     const t4 = Task.fromElement({
+      _id: 'test-id',
       target: {_id: 'tgt1'},
       agent_group: {_id: 'ag1'},
     });

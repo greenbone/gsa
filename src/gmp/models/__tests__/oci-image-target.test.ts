@@ -12,8 +12,8 @@ describe('OciImageTarget model tests', () => {
   testModel(OciImageTarget, 'ociimagetarget');
 
   test('should use defaults', () => {
-    const target = new OciImageTarget();
-    expect(target.id).toBeUndefined();
+    const target = new OciImageTarget({id: 'test-id'});
+    expect(target.id).toEqual('test-id');
     expect(target.name).toBeUndefined();
     expect(target.comment).toBeUndefined();
     expect(target.imageReferences).toEqual([]);
@@ -24,8 +24,8 @@ describe('OciImageTarget model tests', () => {
   });
 
   test('should parse defaults', () => {
-    const target = OciImageTarget.fromElement({});
-    expect(target.id).toBeUndefined();
+    const target = OciImageTarget.fromElement({_id: 'test-id'});
+    expect(target.id).toEqual('test-id');
     expect(target.name).toBeUndefined();
     expect(target.comment).toBeUndefined();
     expect(target.imageReferences).toEqual([]);
@@ -36,34 +36,45 @@ describe('OciImageTarget model tests', () => {
   });
 
   test('should parse imageReferences', () => {
-    const target = OciImageTarget.fromElement({image_references: 'img1,img2'});
+    const target = OciImageTarget.fromElement({
+      _id: 'test-id',
+      image_references: 'img1,img2',
+    });
     expect(target.imageReferences).toEqual(['img1', 'img2']);
   });
 
   test('should parse credential', () => {
     const credential = {_id: 'cred-1', name: 'Credential1'};
-    const target = OciImageTarget.fromElement({credential});
+    const target = OciImageTarget.fromElement({_id: 'test-id', credential});
     expect(target.credential).toBeDefined();
     expect(target.credential?.id).toEqual('cred-1');
     expect(target.credential?.name).toEqual('Credential1');
   });
 
   test('should parse excludeImages', () => {
-    const target = OciImageTarget.fromElement({exclude_images: 'excl1,excl2'});
+    const target = OciImageTarget.fromElement({
+      _id: 'test-id',
+      exclude_images: 'excl1,excl2',
+    });
     expect(target.excludeImages).toEqual(['excl1', 'excl2']);
   });
 
   test('should ignore empty credential', () => {
-    const target = OciImageTarget.fromElement({credential: {_id: ''}});
+    const target = OciImageTarget.fromElement({
+      _id: 'test-id',
+      credential: {_id: ''},
+    });
     expect(target.credential).toBeUndefined();
   });
 
   test('should parse reverseLookupOnly', () => {
     const targetTrue = OciImageTarget.fromElement({
+      _id: 'test-id',
       reverse_lookup_only: YES_VALUE,
     });
     expect(targetTrue.reverseLookupOnly).toEqual(true);
     const targetFalse = OciImageTarget.fromElement({
+      _id: 'test-id',
       reverse_lookup_only: NO_VALUE,
     });
     expect(targetFalse.reverseLookupOnly).toEqual(false);
@@ -71,10 +82,12 @@ describe('OciImageTarget model tests', () => {
 
   test('should parse reverseLookupUnify', () => {
     const targetTrue = OciImageTarget.fromElement({
+      _id: 'test-id',
       reverse_lookup_unify: YES_VALUE,
     });
     expect(targetTrue.reverseLookupUnify).toEqual(true);
     const targetFalse = OciImageTarget.fromElement({
+      _id: 'test-id',
       reverse_lookup_unify: NO_VALUE,
     });
     expect(targetFalse.reverseLookupUnify).toEqual(false);
@@ -82,6 +95,7 @@ describe('OciImageTarget model tests', () => {
 
   test('should parse all fields together', () => {
     const target = OciImageTarget.fromElement({
+      _id: 'test-id',
       image_references: 'imgA,imgB',
       exclude_images: 'exclA,exclB',
       credential: {_id: 'cred-2', name: 'Cred2'},

@@ -12,14 +12,16 @@ describe('Tag model tests', () => {
   testModel(Tag, 'tag');
 
   test('should use defaults', () => {
-    const tag = new Tag();
+    const tag = new Tag({id: 'test-id'});
+    expect(tag.id).toEqual('test-id');
     expect(tag.resourceType).toBeUndefined();
     expect(tag.resourceCount).toEqual(0);
     expect(tag.value).toBeUndefined();
   });
 
   test('should parse empty element', () => {
-    const tag = Tag.fromElement();
+    const tag = Tag.fromElement({_id: 'test-id'});
+    expect(tag.id).toEqual('test-id');
     expect(tag.resourceType).toBeUndefined();
     expect(tag.resourceCount).toEqual(0);
     expect(tag.value).toBeUndefined();
@@ -34,6 +36,7 @@ describe('Tag model tests', () => {
     'should parse resource type $resourceType',
     ({resourceType, entityType}) => {
       const tag = Tag.fromElement({
+        _id: 'test-id',
         resources: {
           type: resourceType as ApiType,
           count: {
@@ -48,10 +51,10 @@ describe('Tag model tests', () => {
   );
 
   test('should parse value', () => {
-    const tag = Tag.fromElement({value: 'foo'});
+    const tag = Tag.fromElement({_id: 'test-id', value: 'foo'});
     expect(tag.value).toEqual('foo');
 
-    const tag2 = Tag.fromElement({value: 42});
+    const tag2 = Tag.fromElement({_id: 'test-id', value: 42});
     expect(tag2.value).toEqual('42');
   });
 });

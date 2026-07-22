@@ -412,9 +412,7 @@ describe('Filter tests', () => {
     });
 
     test('Should not parse term as public property', () => {
-      const filter1 = Filter.fromElement({
-        term: 'abc=1',
-      });
+      const filter1 = Filter.fromElement({_id: 'test-id', term: 'abc=1'});
 
       // @ts-expect-error
       expect(filter1.term).toBeUndefined();
@@ -422,6 +420,7 @@ describe('Filter tests', () => {
 
     test('should parse alerts', () => {
       const filter1 = Filter.fromElement({
+        _id: 'test-id',
         term: 'abc=1',
         alerts: {
           alert: [

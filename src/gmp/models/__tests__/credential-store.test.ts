@@ -16,9 +16,9 @@ describe('CredentialStore model tests', () => {
   testModel(CredentialStore, 'credential');
 
   test('should use defaults', () => {
-    const credentialStore = new CredentialStore();
+    const credentialStore = new CredentialStore({id: 'test-id'});
 
-    expect(credentialStore.id).toBeUndefined();
+    expect(credentialStore.id).toEqual('test-id');
     expect(credentialStore.name).toBeUndefined();
     expect(credentialStore.comment).toBeUndefined();
     expect(credentialStore.entityType).toEqual('credential');
@@ -31,27 +31,40 @@ describe('CredentialStore model tests', () => {
   });
 
   test('should parse version', () => {
-    const credentialStore = CredentialStore.fromElement({version: '1.2.3'});
+    const credentialStore = CredentialStore.fromElement({
+      _id: 'test-id',
+      version: '1.2.3',
+    });
     expect(credentialStore.version).toEqual('1.2.3');
   });
 
   test('should parse host', () => {
-    const credentialStore = CredentialStore.fromElement({host: 'example.com'});
+    const credentialStore = CredentialStore.fromElement({
+      _id: 'test-id',
+      host: 'example.com',
+    });
     expect(credentialStore.host).toEqual('example.com');
   });
 
   test('should parse path', () => {
-    const credentialStore = CredentialStore.fromElement({path: '/some/path'});
+    const credentialStore = CredentialStore.fromElement({
+      _id: 'test-id',
+      path: '/some/path',
+    });
     expect(credentialStore.path).toEqual('/some/path');
   });
 
   test('should parse port', () => {
-    const credentialStore = CredentialStore.fromElement({port: '8080'});
+    const credentialStore = CredentialStore.fromElement({
+      _id: 'test-id',
+      port: '8080',
+    });
     expect(credentialStore.port).toEqual('8080');
   });
 
   test('should parse preferences', () => {
     const credentialStore = CredentialStore.fromElement({
+      _id: 'test-id',
       preferences: {
         preference: [
           {name: 'pref1', type: 'string', value: 'value1'},
@@ -82,6 +95,7 @@ describe('CredentialStore model tests', () => {
 
   test('should parse selectors', () => {
     const credentialStore = CredentialStore.fromElement({
+      _id: 'test-id',
       selectors: {
         selector: [
           {
@@ -114,6 +128,7 @@ describe('CredentialStore model tests', () => {
 
   test('should parse selector with single credential_type and default_value', () => {
     const credentialStore = CredentialStore.fromElement({
+      _id: 'test-id',
       selectors: {
         selector: {
           name: 'selector-single',
@@ -136,6 +151,7 @@ describe('CredentialStore model tests', () => {
 
   test('should parse selector with credential_types but no credential_type property', () => {
     const credentialStore = CredentialStore.fromElement({
+      _id: 'test-id',
       selectors: {
         selector: {
           name: 'selector-empty',

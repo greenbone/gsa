@@ -12,7 +12,8 @@ describe('Result model tests', () => {
   testModel(Result, 'result');
 
   test('should use defaults', () => {
-    const result = new Result();
+    const result = new Result({id: 'test-id'});
+    expect(result.id).toEqual('test-id');
     expect(result.compliance).toBeUndefined();
     expect(result.delta).toBeUndefined();
     expect(result.detection).toBeUndefined();
@@ -33,7 +34,8 @@ describe('Result model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const result = Result.fromElement();
+    const result = Result.fromElement({_id: 'test-id'});
+    expect(result.id).toEqual('test-id');
     expect(result.compliance).toBeUndefined();
     expect(result.delta).toBeUndefined();
     expect(result.detection).toBeUndefined();
@@ -55,6 +57,7 @@ describe('Result model tests', () => {
 
   test('should parse host', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       host: {
         __text: 'foo',
         asset: {
@@ -70,6 +73,7 @@ describe('Result model tests', () => {
     });
 
     const result2 = Result.fromElement({
+      _id: 'test-id',
       host: {
         __text: 'foo',
       },
@@ -79,6 +83,7 @@ describe('Result model tests', () => {
     });
 
     const result3 = Result.fromElement({
+      _id: 'test-id',
       host: {
         asset: {_asset_id: ''},
         __text: 'foo',
@@ -93,6 +98,7 @@ describe('Result model tests', () => {
 
   test('should parse host with container image fields', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       host: {
         __text: 'sha256:abc123',
         asset: {
@@ -124,6 +130,7 @@ describe('Result model tests', () => {
 
   test('should parse NVT', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       nvt: {
         _oid: 'bar',
         type: 'nvt',
@@ -135,6 +142,7 @@ describe('Result model tests', () => {
 
   test('should parse CVE', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       nvt: {
         name: 'CVE-1234',
         type: 'cve',
@@ -148,6 +156,7 @@ describe('Result model tests', () => {
 
   test('should parse EPSS cve', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       nvt: {
         name: 'CVE-1234',
         type: 'cve',
@@ -179,6 +188,7 @@ describe('Result model tests', () => {
 
   test('should parse EPSS nvt', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       nvt: {
         name: 'CVE-1234',
         type: 'nvt',
@@ -209,15 +219,16 @@ describe('Result model tests', () => {
   });
 
   test('should parse severity', () => {
-    const result = Result.fromElement({severity: 4.2});
+    const result = Result.fromElement({_id: 'test-id', severity: 4.2});
     expect(result.severity).toEqual(4.2);
   });
 
   test('should parse vulnerability', () => {
-    const result = Result.fromElement({name: 'foo'});
+    const result = Result.fromElement({_id: 'test-id', name: 'foo'});
     expect(result.vulnerability).toEqual('foo');
 
     const result2 = Result.fromElement({
+      _id: 'test-id',
       nvt: {
         _oid: '42',
       },
@@ -226,19 +237,20 @@ describe('Result model tests', () => {
   });
 
   test('should parse report', () => {
-    const result = Result.fromElement({report: {_id: 'foo'}});
+    const result = Result.fromElement({_id: 'test-id', report: {_id: 'foo'}});
     expect(result.report?.id).toEqual('foo');
     expect(result.report?.entityType).toEqual('report');
   });
 
   test('should parse task', () => {
-    const result = Result.fromElement({task: {_id: 'foo'}});
+    const result = Result.fromElement({_id: 'test-id', task: {_id: 'foo'}});
     expect(result.task?.id).toEqual('foo');
     expect(result.task?.entityType).toEqual('task');
   });
 
   test('should parse detection', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       detection: {
         result: {
           _id: '1337',
@@ -269,11 +281,12 @@ describe('Result model tests', () => {
   });
 
   test('should parse delta', () => {
-    const result = Result.fromElement({delta: 'foo'});
+    const result = Result.fromElement({_id: 'test-id', delta: 'foo'});
     expect(result.delta).toBeInstanceOf(Delta);
     expect(result.delta?.delta_type).toEqual('foo');
 
     const result2 = Result.fromElement({
+      _id: 'test-id',
       delta: {
         __text: 'foo',
       },
@@ -282,6 +295,7 @@ describe('Result model tests', () => {
     expect(result2.delta?.delta_type).toEqual('foo');
 
     const result3 = Result.fromElement({
+      _id: 'test-id',
       delta: {
         __text: Delta.TYPE_CHANGED,
         diff: 'some foobar diff',
@@ -300,12 +314,13 @@ describe('Result model tests', () => {
   });
 
   test('should parse original severity', () => {
-    const result = Result.fromElement({original_severity: 4.2});
+    const result = Result.fromElement({_id: 'test-id', original_severity: 4.2});
     expect(result.original_severity).toEqual(4.2);
   });
 
   test('should parse QoD', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       qod: {
         type: 'foo',
         value: '42.5',
@@ -317,6 +332,7 @@ describe('Result model tests', () => {
 
   test('should parse notes', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       notes: {
         note: [
           {
@@ -336,6 +352,7 @@ describe('Result model tests', () => {
     expect(result.notes?.[1].id).toEqual('bar');
 
     const result2 = Result.fromElement({
+      _id: 'test-id',
       notes: {
         note: {
           _id: 'baz',
@@ -348,6 +365,7 @@ describe('Result model tests', () => {
 
   test('should parse overrides', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       overrides: {
         override: [{_id: 'foo'}, {_id: 'bar'}],
       },
@@ -358,6 +376,7 @@ describe('Result model tests', () => {
     expect(result.overrides[1].id).toEqual('bar');
 
     const result2 = Result.fromElement({
+      _id: 'test-id',
       overrides: {
         override: {_id: 'baz'},
       },
@@ -368,6 +387,7 @@ describe('Result model tests', () => {
 
   test('should parse compliance', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       compliance: 'undefined',
     });
     expect(result.compliance).toEqual('undefined');
@@ -375,6 +395,7 @@ describe('Result model tests', () => {
 
   test('should parse description', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       description: 'This is a test description',
     });
     expect(result.description).toEqual('This is a test description');
@@ -382,6 +403,7 @@ describe('Result model tests', () => {
 
   test('should parse tickets', () => {
     const result = Result.fromElement({
+      _id: 'test-id',
       tickets: {
         ticket: [{_id: 'foo'}, {_id: 'bar'}],
       },
@@ -392,6 +414,7 @@ describe('Result model tests', () => {
     expect(result.tickets[1].id).toEqual('bar');
 
     const result2 = Result.fromElement({
+      _id: 'test-id',
       tickets: {
         ticket: {_id: 'baz'},
       },
@@ -401,18 +424,21 @@ describe('Result model tests', () => {
   });
 
   test('should parse port', () => {
-    const result = Result.fromElement({port: '1234/tcp'});
+    const result = Result.fromElement({_id: 'test-id', port: '1234/tcp'});
     expect(result.port).toEqual('1234/tcp');
   });
 
   test('should parse scan_nvt_version', () => {
-    const result = Result.fromElement({scan_nvt_version: '1.2.3'});
+    const result = Result.fromElement({
+      _id: 'test-id',
+      scan_nvt_version: '1.2.3',
+    });
     expect(result.scan_nvt_version).toEqual('1.2.3');
   });
 
   test('hasDelta() should return correct true/false', () => {
-    const result = Result.fromElement({delta: 'defined'});
-    const result2 = Result.fromElement();
+    const result = Result.fromElement({_id: 'test-id', delta: 'defined'});
+    const result2 = Result.fromElement({_id: 'test-id'});
 
     expect(result.hasDelta()).toEqual(true);
     expect(result2.hasDelta()).toEqual(false);

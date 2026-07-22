@@ -28,7 +28,8 @@ describe('Scanner model tests', () => {
   });
 
   test('should use defaults', () => {
-    const scanner = new Scanner();
+    const scanner = new Scanner({id: 'test-id'});
+    expect(scanner.id).toEqual('test-id');
     expect(scanner.caPub).toBeUndefined();
     expect(scanner.configs).toEqual([]);
     expect(scanner.credential).toBeUndefined();
@@ -41,7 +42,7 @@ describe('Scanner model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const scanner = Scanner.fromElement({});
+    const scanner = Scanner.fromElement({_id: 'test-id'});
     expect(scanner.caPub).toBeUndefined();
     expect(scanner.configs).toEqual([]);
     expect(scanner.credential).toBeUndefined();
@@ -54,18 +55,20 @@ describe('Scanner model tests', () => {
   });
 
   test('should parse type', () => {
-    const scanner = Scanner.fromElement({type: '42'});
+    const scanner = Scanner.fromElement({_id: 'test-id', type: '42'});
 
     expect(scanner.scannerType).toEqual('42');
   });
 
   test('should parse credential', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       credential: {
         _id: '123abc',
       },
     });
     const scanner2 = Scanner.fromElement({
+      _id: 'test-id',
       credential: {
         _id: '',
       },
@@ -78,18 +81,15 @@ describe('Scanner model tests', () => {
   });
 
   test('should parse ca pub', () => {
-    const scanner = Scanner.fromElement({
-      ca_pub: '',
-    });
+    const scanner = Scanner.fromElement({_id: 'test-id', ca_pub: ''});
     expect(scanner.caPub).toBeUndefined();
-    const scanner2 = Scanner.fromElement({
-      ca_pub: 'foobar',
-    });
+    const scanner2 = Scanner.fromElement({_id: 'test-id', ca_pub: 'foobar'});
     expect(scanner2.caPub).toEqual({certificate: 'foobar'});
   });
 
   test('should parse ca pub info', () => {
     const elem = {
+      _id: 'test-id',
       ca_pub: 'foo',
       ca_pub_info: {
         activation_time: '2018-10-10T23:00:00.000+0000',
@@ -104,6 +104,7 @@ describe('Scanner model tests', () => {
 
   test('should parse tasks', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       tasks: {
         task: [
           {_id: '123', usage_type: 'scan'},
@@ -123,6 +124,7 @@ describe('Scanner model tests', () => {
 
   test('should parse scan configs', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       configs: {
         config: [{_id: '123'}],
       },
@@ -134,6 +136,7 @@ describe('Scanner model tests', () => {
 
   test('should parse scanner info', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       info: {
         scanner: {
           name: 'foo',
@@ -160,6 +163,7 @@ describe('Scanner model tests', () => {
       },
     });
     const scanner2 = Scanner.fromElement({
+      _id: 'test-id',
       info: {
         description: '',
         params: {},
@@ -186,18 +190,21 @@ describe('Scanner model tests', () => {
 
   test('should parse port', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       // @ts-expect-error
       port: '9392',
     });
     const scanner2 = Scanner.fromElement({
+      _id: 'test-id',
       // @ts-expect-error
       port: 'not-a-number',
     });
     const scanner3 = Scanner.fromElement({
+      _id: 'test-id',
       // @ts-expect-error
       port: '',
     });
-    const scanner4 = Scanner.fromElement({port: 1234});
+    const scanner4 = Scanner.fromElement({_id: 'test-id', port: 1234});
 
     expect(scanner.port).toEqual(9392);
     expect(scanner2.port).toBeUndefined();
@@ -206,8 +213,8 @@ describe('Scanner model tests', () => {
   });
 
   test('should parse disabled', () => {
-    const scanner = Scanner.fromElement({disabled: 0});
-    const scanner2 = Scanner.fromElement({disabled: 1});
+    const scanner = Scanner.fromElement({_id: 'test-id', disabled: 0});
+    const scanner2 = Scanner.fromElement({_id: 'test-id', disabled: 1});
 
     expect(scanner.disabled).toEqual(false);
     expect(scanner2.disabled).toEqual(true);
@@ -216,9 +223,18 @@ describe('Scanner model tests', () => {
 
 describe('Scanner model method tests', () => {
   test('isCloneable() should return correct true/false', () => {
-    const scanner1 = new Scanner({scannerType: CVE_SCANNER_TYPE});
-    const scanner2 = new Scanner({scannerType: OPENVAS_SCANNER_TYPE});
-    const scanner3 = new Scanner({scannerType: GREENBONE_SENSOR_SCANNER_TYPE});
+    const scanner1 = new Scanner({
+      id: 'test-id',
+      scannerType: CVE_SCANNER_TYPE,
+    });
+    const scanner2 = new Scanner({
+      id: 'test-id',
+      scannerType: OPENVAS_SCANNER_TYPE,
+    });
+    const scanner3 = new Scanner({
+      id: 'test-id',
+      scannerType: GREENBONE_SENSOR_SCANNER_TYPE,
+    });
 
     expect(scanner1.isCloneable()).toEqual(false);
     expect(scanner2.isCloneable()).toEqual(true);
@@ -226,9 +242,18 @@ describe('Scanner model method tests', () => {
   });
 
   test('isWritable() should return correct true/false', () => {
-    const scanner1 = new Scanner({scannerType: CVE_SCANNER_TYPE});
-    const scanner2 = new Scanner({scannerType: OPENVAS_SCANNER_TYPE});
-    const scanner3 = new Scanner({scannerType: GREENBONE_SENSOR_SCANNER_TYPE});
+    const scanner1 = new Scanner({
+      id: 'test-id',
+      scannerType: CVE_SCANNER_TYPE,
+    });
+    const scanner2 = new Scanner({
+      id: 'test-id',
+      scannerType: OPENVAS_SCANNER_TYPE,
+    });
+    const scanner3 = new Scanner({
+      id: 'test-id',
+      scannerType: GREENBONE_SENSOR_SCANNER_TYPE,
+    });
 
     expect(scanner1.isWritable()).toEqual(false);
     expect(scanner2.isWritable()).toEqual(true);
@@ -236,9 +261,9 @@ describe('Scanner model method tests', () => {
   });
 
   test('hasUnixSocket() should return correct true/false', () => {
-    const scanner1 = new Scanner({host: '/foo'});
-    const scanner2 = new Scanner({host: 'bar'});
-    const scanner3 = new Scanner({host: ''});
+    const scanner1 = new Scanner({id: 'test-id', host: '/foo'});
+    const scanner2 = new Scanner({id: 'test-id', host: 'bar'});
+    const scanner3 = new Scanner({id: 'test-id', host: ''});
 
     expect(scanner1.hasUnixSocket()).toEqual(true);
     expect(scanner2.hasUnixSocket()).toEqual(false);
@@ -294,6 +319,7 @@ describe('Scanner model function tests', () => {
 
   test('should parse agent_control_config_defaults with all fields', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       agent_control_config_defaults: {
         agent_defaults: {
           agent_control: {
@@ -363,6 +389,7 @@ describe('Scanner model function tests', () => {
 
   test('should parse agent_control_config_defaults with single scheduler_cron_time', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       agent_control_config_defaults: {
         agent_defaults: {
           agent_script_executor: {
@@ -383,6 +410,7 @@ describe('Scanner model function tests', () => {
 
   test('should handle missing agent_control_config_defaults', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       type: AGENT_CONTROLLER_SCANNER_TYPE,
     });
 
@@ -391,6 +419,7 @@ describe('Scanner model function tests', () => {
 
   test('should handle empty agent_control_config_defaults', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       agent_control_config_defaults: {},
     });
 
@@ -399,6 +428,7 @@ describe('Scanner model function tests', () => {
 
   test('should use defaults for missing fields in agent_control_config_defaults', () => {
     const scanner = Scanner.fromElement({
+      _id: 'test-id',
       agent_control_config_defaults: {
         agent_defaults: {
           agent_control: {

@@ -9,11 +9,11 @@ import {isDate} from 'gmp/models/date';
 import {testModel} from 'gmp/models/testing';
 import {parseDate} from 'gmp/parser';
 
-testModel(Cve, 'cve');
-
 describe('CVE model tests', () => {
+  testModel(Cve, 'cve');
+
   test('should use defaults', () => {
-    const cve = new Cve();
+    const cve = new Cve({id: 'test-id'});
     expect(cve.certs).toEqual([]);
     expect(cve.cvssAccessComplexity).toBeUndefined();
     expect(cve.cvssAccessVector).toBeUndefined();
@@ -37,7 +37,7 @@ describe('CVE model tests', () => {
     expect(cve.cvssUserInteraction).toBeUndefined();
     expect(cve.description).toBeUndefined();
     expect(cve.epss).toBeUndefined();
-    expect(cve.id).toBeUndefined();
+    expect(cve.id).toEqual('test-id');
     expect(cve.lastModifiedTime).toBeUndefined();
     expect(cve.nvts).toEqual([]);
     expect(cve.products).toEqual([]);
@@ -48,7 +48,7 @@ describe('CVE model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const cve = Cve.fromElement();
+    const cve = Cve.fromElement({_id: 'test-id'});
     expect(cve.certs).toEqual([]);
     expect(cve.cvssAccessComplexity).toBeUndefined();
     expect(cve.cvssAccessVector).toBeUndefined();
@@ -72,7 +72,7 @@ describe('CVE model tests', () => {
     expect(cve.cvssUserInteraction).toBeUndefined();
     expect(cve.description).toBeUndefined();
     expect(cve.epss).toBeUndefined();
-    expect(cve.id).toBeUndefined();
+    expect(cve.id).toEqual('test-id');
     expect(cve.lastModifiedTime).toBeUndefined();
     expect(cve.nvts).toEqual([]);
     expect(cve.products).toEqual([]);
@@ -83,15 +83,13 @@ describe('CVE model tests', () => {
   });
 
   test('should parse update time', () => {
-    const elem = {
-      update_time: '2018-10-10T23:00:00.000+0000',
-    };
+    const elem = {_id: 'test-id', update_time: '2018-10-10T23:00:00.000+0000'};
     const cve = Cve.fromElement(elem);
     expect(cve.updateTime).toEqual(parseDate('2018-10-10T23:00:00.000+0000'));
   });
 
   test('should parse severity', () => {
-    const elem = {cve: {severity: 8.5}};
+    const elem = {_id: 'test-id', cve: {severity: 8.5}};
     const cve = Cve.fromElement(elem);
 
     expect(cve.severity).toEqual(8.5);
@@ -99,6 +97,7 @@ describe('CVE model tests', () => {
 
   test('should parse NVTs', () => {
     const elem = {
+      _id: 'test-id',
       cve: {
         nvts: {
           nvt: [
@@ -133,6 +132,7 @@ describe('CVE model tests', () => {
 
   test('should parse CERT-Bund Advs', () => {
     const elem = {
+      _id: 'test-id',
       cve: {
         cert: {
           cert_ref: [
@@ -169,6 +169,7 @@ describe('CVE model tests', () => {
 
   test('should parse CVSS metrics', () => {
     const elem = {
+      _id: 'test-id',
       cve: {
         severity: 10.0,
         cvss_vector: 'AV:N/AC:L/Au:N/C:C/I:C/A:C',
@@ -187,6 +188,7 @@ describe('CVE model tests', () => {
 
   test('should parse products', () => {
     const elem = {
+      _id: 'test-id',
       cve: {
         products: 'foo:bar/dolor ipsum:lorem',
       },
@@ -194,10 +196,11 @@ describe('CVE model tests', () => {
     const cve = Cve.fromElement(elem);
     expect(cve.products).toEqual(['foo:bar/dolor', 'ipsum:lorem']);
 
-    const cve2 = Cve.fromElement({cve: {products: ''}});
+    const cve2 = Cve.fromElement({_id: 'test-id', cve: {products: ''}});
     expect(cve2.products).toEqual([]);
 
     const cve3 = Cve.fromElement({
+      _id: 'test-id',
       cve: {
         configuration_nodes: {
           node: [
@@ -216,6 +219,7 @@ describe('CVE model tests', () => {
     expect(cve3.products).toEqual(['cpe:/a:foo:bar', 'cpe:/a:foo:baz']);
 
     const cve4 = Cve.fromElement({
+      _id: 'test-id',
       cve: {
         products: 'foo:bar/dolor ipsum:lorem',
         configuration_nodes: {
@@ -235,6 +239,7 @@ describe('CVE model tests', () => {
     expect(cve4.products).toEqual(['foo:bar/dolor', 'ipsum:lorem']);
 
     const cve5 = Cve.fromElement({
+      _id: 'test-id',
       cve: {
         raw_data: {
           entry: {
@@ -252,6 +257,7 @@ describe('CVE model tests', () => {
 
   test('should parse published and modified date', () => {
     const elem = {
+      _id: 'test-id',
       cve: {
         raw_data: {
           entry: {
@@ -269,6 +275,7 @@ describe('CVE model tests', () => {
 
   test('should parse references', () => {
     const cve = Cve.fromElement({
+      _id: 'test-id',
       cve: {
         raw_data: {
           entry: {
@@ -296,6 +303,7 @@ describe('CVE model tests', () => {
     ]);
 
     const cve2 = Cve.fromElement({
+      _id: 'test-id',
       cve: {
         references: {
           reference: [
@@ -331,6 +339,7 @@ describe('CVE model tests', () => {
 
   test('should parse CVSS4 metrics', () => {
     const elem = {
+      _id: 'test-id',
       cve: {
         cvss_vector:
           'CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:A/VC:H/VI:L/VA:N/SC:L/SI:H/SA:N',

@@ -25,15 +25,29 @@ import {testModel} from 'gmp/models/testing';
 import {parseDate} from 'gmp/parser';
 
 const USERNAME_PASSWORD_CREDENTIAL = Credential.fromElement({
+  _id: 'test-id',
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
 const USERNAME_SSH_KEY_CREDENTIAL = Credential.fromElement({
+  _id: 'test-id',
   type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 });
-const SNMP_CREDENTIAL = Credential.fromElement({type: SNMP_CREDENTIAL_TYPE});
-const PGP_CREDENTIAL = Credential.fromElement({type: PGP_CREDENTIAL_TYPE});
-const SMIME_CREDENTIAL = Credential.fromElement({type: SMIME_CREDENTIAL_TYPE});
-const KRB5_CREDENTIAL = Credential.fromElement({type: KRB5_CREDENTIAL_TYPE});
+const SNMP_CREDENTIAL = Credential.fromElement({
+  _id: 'test-id',
+  type: SNMP_CREDENTIAL_TYPE,
+});
+const PGP_CREDENTIAL = Credential.fromElement({
+  _id: 'test-id',
+  type: PGP_CREDENTIAL_TYPE,
+});
+const SMIME_CREDENTIAL = Credential.fromElement({
+  _id: 'test-id',
+  type: SMIME_CREDENTIAL_TYPE,
+});
+const KRB5_CREDENTIAL = Credential.fromElement({
+  _id: 'test-id',
+  type: KRB5_CREDENTIAL_TYPE,
+});
 
 const createAllCredentials = () => [
   USERNAME_PASSWORD_CREDENTIAL,
@@ -48,7 +62,8 @@ describe('Credential Model tests', () => {
   testModel(Credential, 'credential');
 
   test('should use defaults', () => {
-    const credential = new Credential();
+    const credential = new Credential({id: 'test-id'});
+    expect(credential.id).toEqual('test-id');
     expect(credential.authAlgorithm).toBeUndefined();
     expect(credential.certificateInfo).toBeUndefined();
     expect(credential.credentialType).toBeUndefined();
@@ -63,7 +78,7 @@ describe('Credential Model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const credential = Credential.fromElement({});
+    const credential = Credential.fromElement({_id: 'test-id'});
     expect(credential.authAlgorithm).toBeUndefined();
     expect(credential.certificateInfo).toBeUndefined();
     expect(credential.credentialType).toBeUndefined();
@@ -79,6 +94,7 @@ describe('Credential Model tests', () => {
 
   test('should parse auth_algorithm', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       auth_algorithm: 'md5',
     });
     expect(credential.authAlgorithm).toEqual('md5');
@@ -86,6 +102,7 @@ describe('Credential Model tests', () => {
 
   test('should parse certificate_info', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       certificate_info: {
         activation_time: '2018-10-10T11:41:23.022Z',
         expiration_time: '2019-10-10T11:41:23.022Z',
@@ -118,6 +135,7 @@ describe('Credential Model tests', () => {
 
   test('should parse private key info', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       private_key_info: {
         sha256_hash: 'sha256-hash-value',
         type: 'ssh-rsa',
@@ -128,6 +146,7 @@ describe('Credential Model tests', () => {
     expect(credential.privateKeyInfo?.keyType).toEqual('rsa');
 
     const credential2 = Credential.fromElement({
+      _id: 'test-id',
       private_key_info: {
         sha256_hash: 'sha256-hash-value',
         type: 'rsa-ssh',
@@ -138,6 +157,7 @@ describe('Credential Model tests', () => {
     expect(credential2.privateKeyInfo?.keyType).toEqual('rsa-ssh');
 
     const credential3 = Credential.fromElement({
+      _id: 'test-id',
       // @ts-expect-error
       private_key_info: '',
     });
@@ -147,6 +167,7 @@ describe('Credential Model tests', () => {
 
   test('should parse public key info', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       public_key_info: {
         fingerprint: 'public-key-fingerprint',
       },
@@ -157,6 +178,7 @@ describe('Credential Model tests', () => {
     );
 
     const credential2 = Credential.fromElement({
+      _id: 'test-id',
       // @ts-expect-error
       public_key_info: '',
     });
@@ -164,13 +186,14 @@ describe('Credential Model tests', () => {
   });
 
   test('should parse type', () => {
-    const credential = Credential.fromElement({type: 'foo'});
+    const credential = Credential.fromElement({_id: 'test-id', type: 'foo'});
 
     expect(credential.credentialType).toEqual('foo');
   });
 
   test('should parse targets', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       targets: {
         target: {_id: 't1'},
       },
@@ -182,6 +205,7 @@ describe('Credential Model tests', () => {
     expect(target.entityType).toEqual('target');
 
     const credential2 = Credential.fromElement({
+      _id: 'test-id',
       // @ts-expect-error
       targets: '',
     });
@@ -190,6 +214,7 @@ describe('Credential Model tests', () => {
 
   test('should parse scanners', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       scanners: {
         scanner: {_id: 's1'},
       },
@@ -201,6 +226,7 @@ describe('Credential Model tests', () => {
     expect(scanner.entityType).toEqual('scanner');
 
     const credential2 = Credential.fromElement({
+      _id: 'test-id',
       // @ts-expect-error
       scanners: '',
     });
@@ -284,6 +310,7 @@ describe('Credential model function tests', () => {
 
   test('should parse kdcs', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       kdcs: {kdc: ['kdc1.example.com', 'kdc2.example.com']},
     });
     expect(credential.kdcs).toEqual(['kdc1.example.com', 'kdc2.example.com']);
@@ -291,6 +318,7 @@ describe('Credential model function tests', () => {
 
   test('should parse login', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       login: 'test-user',
     });
     expect(credential.login).toEqual('test-user');
@@ -298,6 +326,7 @@ describe('Credential model function tests', () => {
 
   test('should parse privacy_algorithm', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       privacy: {algorithm: 'aes'},
     });
     expect(credential.privacyAlgorithm).toEqual('aes');
@@ -305,6 +334,7 @@ describe('Credential model function tests', () => {
 
   test('should parse realm', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       realm: 'test-realm',
     });
     expect(credential.realm).toEqual('test-realm');
@@ -312,6 +342,7 @@ describe('Credential model function tests', () => {
 
   test('should parse credential store with privacy host identifier', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       credential_store: {
         vault_id: 'test-vault',
         host_identifier: 'host-123',
@@ -326,6 +357,7 @@ describe('Credential model function tests', () => {
 
   test('should parse credential store without privacy host identifier', () => {
     const credential = Credential.fromElement({
+      _id: 'test-id',
       credential_store: {
         vault_id: 'test-vault',
         host_identifier: 'host-123',

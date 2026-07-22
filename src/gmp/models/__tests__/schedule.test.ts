@@ -12,7 +12,8 @@ describe('Schedule model tests', () => {
   testModel(Schedule, 'schedule');
 
   test('should use defaults', () => {
-    const schedule = new Schedule();
+    const schedule = new Schedule({id: 'test-id'});
+    expect(schedule.id).toEqual('test-id');
     expect(schedule.event).toBeUndefined();
     expect(schedule.tasks).toEqual([]);
     expect(schedule.timezone).toBeUndefined();
@@ -20,7 +21,8 @@ describe('Schedule model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const schedule = Schedule.fromElement();
+    const schedule = Schedule.fromElement({_id: 'test-id'});
+    expect(schedule.id).toEqual('test-id');
     expect(schedule.event).toBeUndefined();
     expect(schedule.tasks).toEqual([]);
     expect(schedule.timezone).toBeUndefined();
@@ -29,6 +31,7 @@ describe('Schedule model tests', () => {
 
   test('should parse tasks', () => {
     const schedule = Schedule.fromElement({
+      _id: 'test-id',
       tasks: {
         task: [{_id: '123'}],
       },
@@ -39,6 +42,7 @@ describe('Schedule model tests', () => {
 
   test('should parse tasks with usage_type', () => {
     const schedule = Schedule.fromElement({
+      _id: 'test-id',
       tasks: {
         task: [
           {
@@ -90,6 +94,7 @@ describe('Schedule model tests', () => {
 
   test('should parse timezone and timezone_abbrev', () => {
     const schedule = Schedule.fromElement({
+      _id: 'test-id',
       timezone: 'Europe/Berlin',
       timezone_abbrev: 'CET',
     });
@@ -109,6 +114,7 @@ END:VEVENT
 END:VCALENDAR
 `;
     const schedule = Schedule.fromElement({
+      _id: 'test-id',
       icalendar,
       timezone: 'Europe/Berlin',
     });

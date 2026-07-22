@@ -16,18 +16,18 @@ describe('Role model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const role = Role.fromElement({});
+    const role = Role.fromElement({_id: 'test-id'});
     expect(role.users).toEqual([]);
   });
 
   test('should parse users', () => {
-    const role = Role.fromElement({users: 'foo, bar'});
+    const role = Role.fromElement({_id: 'test-id', users: 'foo, bar'});
     expect(role.users).toEqual(['foo', 'bar']);
 
-    const role2 = Role.fromElement({users: 'foo'});
+    const role2 = Role.fromElement({_id: 'test-id', users: 'foo'});
     expect(role2.users).toEqual(['foo']);
 
-    const role3 = Role.fromElement({users: ''});
+    const role3 = Role.fromElement({_id: 'test-id', users: ''});
     expect(role3.users).toEqual([]);
   });
 });

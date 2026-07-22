@@ -21,7 +21,7 @@ describe('Alert Model tests', () => {
   testModel(Alert, 'alert', {testIsActive: false});
 
   test('should use defaults', () => {
-    const alert = new Alert();
+    const alert = new Alert({id: 'test-id'});
     expect(alert.active).toBeUndefined();
     expect(alert.condition).toBeUndefined();
     expect(alert.event).toBeUndefined();
@@ -31,7 +31,7 @@ describe('Alert Model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const alert = Alert.fromElement();
+    const alert = Alert.fromElement({_id: 'test-id'});
     expect(alert.active).toBeUndefined();
     expect(alert.condition).toBeUndefined();
     expect(alert.event).toBeUndefined();
@@ -42,6 +42,7 @@ describe('Alert Model tests', () => {
 
   test('should parse condition, event, and method', () => {
     const elem = {
+      _id: 'test-id',
       condition: {
         __text: 'text',
       },
@@ -82,6 +83,7 @@ describe('Alert Model tests', () => {
 
   test('should parse method data', () => {
     const elem = {
+      _id: 'test-id',
       method: {
         __text: 'foo',
         data: {
@@ -112,6 +114,7 @@ describe('Alert Model tests', () => {
 
   test('should parse method data with report formats', () => {
     const elem = {
+      _id: 'test-id',
       method: {
         __text: 'foo',
         data: [
@@ -149,6 +152,7 @@ describe('Alert Model tests', () => {
 
   test('should parse method data with notice', () => {
     const elem = {
+      _id: 'test-id',
       method: {
         __text: 'foo',
         data: [
@@ -187,21 +191,22 @@ describe('Alert Model tests', () => {
   });
 
   test('should parse filter', () => {
-    const elem = {filter: {_id: '1', term: 'rows=1337'}};
+    const elem = {_id: 'test-id', filter: {_id: '1', term: 'rows=1337'}};
     const alert = Alert.fromElement(elem);
     expect(alert.filter?.entityType).toEqual('filter');
     expect(alert.filter?.id).toEqual('1');
   });
 
   test('should parse active', () => {
-    const alert = Alert.fromElement({active: 1});
+    const alert = Alert.fromElement({_id: 'test-id', active: 1});
     expect(alert.active).toEqual(1);
-    const alert2 = Alert.fromElement({active: 0});
+    const alert2 = Alert.fromElement({_id: 'test-id', active: 0});
     expect(alert2.active).toEqual(0);
   });
 
   test('should parse report formats', () => {
     const elem = {
+      _id: 'test-id',
       method: {
         data: {
           __text: '123, 456, 789',
@@ -216,6 +221,7 @@ describe('Alert Model tests', () => {
 
   test('should parse notice', () => {
     const elem = {
+      _id: 'test-id',
       method: {
         data: {
           __text: 1,
@@ -231,8 +237,8 @@ describe('Alert Model tests', () => {
 
 describe('Alert model method tests', () => {
   test('isActive() should return correct true/false', () => {
-    const alert1 = new Alert({active: 0});
-    const alert2 = new Alert({active: 1});
+    const alert1 = new Alert({id: '123', active: 0});
+    const alert2 = new Alert({id: '123', active: 1});
 
     expect(alert1.isActive()).toBe(false);
     expect(alert2.isActive()).toBe(true);

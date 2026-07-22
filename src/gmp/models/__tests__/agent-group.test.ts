@@ -7,13 +7,13 @@ import {describe, test, expect} from '@gsa/testing';
 import AgentGroup from 'gmp/models/agent-group';
 import {testModel} from 'gmp/models/testing';
 
-testModel(AgentGroup, 'agentgroup');
-
 describe('AgentGroup model tests', () => {
-  test('should use defaults', () => {
-    const agentGroup = new AgentGroup();
+  testModel(AgentGroup, 'agentgroup');
 
-    expect(agentGroup.id).toBeUndefined();
+  test('should use defaults', () => {
+    const agentGroup = new AgentGroup({id: '123'});
+
+    expect(agentGroup.id).toEqual('123');
     expect(agentGroup.name).toBeUndefined();
     expect(agentGroup.comment).toBeUndefined();
     expect(agentGroup.scanner).toBeUndefined();
@@ -22,6 +22,7 @@ describe('AgentGroup model tests', () => {
 
   test('should parse agents', () => {
     const agentGroup = AgentGroup.fromElement({
+      _id: '123',
       agents: {
         agent: [
           {
@@ -50,6 +51,7 @@ describe('AgentGroup model tests', () => {
 
   test('should parse single agent', () => {
     const agentGroup = AgentGroup.fromElement({
+      _id: '123',
       agents: {
         agent: {
           _id: '6b9ac61f-ffff-0000-1111-223344556677',
@@ -68,6 +70,7 @@ describe('AgentGroup model tests', () => {
 
   test('should handle empty agents element', () => {
     const agentGroup = AgentGroup.fromElement({
+      _id: '123',
       agents: {},
     });
 
@@ -75,13 +78,14 @@ describe('AgentGroup model tests', () => {
   });
 
   test('should handle missing agents element', () => {
-    const agentGroup = AgentGroup.fromElement();
+    const agentGroup = AgentGroup.fromElement({_id: '123'});
 
     expect(agentGroup.agents).toEqual([]);
   });
 
   test('should parse scanner', () => {
     const agentGroup = AgentGroup.fromElement({
+      _id: '123',
       scanner: {
         _id: '3b4be213-281f-49ee-b457-5a5f34f71510',
         name: 'Agent Controller',
@@ -97,6 +101,7 @@ describe('AgentGroup model tests', () => {
 
   test('should parse scheduler cron time', () => {
     const agentGroup = AgentGroup.fromElement({
+      _id: '123',
       scheduler_cron_time: '0 0 * * *',
     });
 

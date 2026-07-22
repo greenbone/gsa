@@ -53,6 +53,7 @@ describe('PortList model tests', () => {
 
   test('should parse port_count correctly and as integer', () => {
     const elem = {
+      _id: 'test-id',
       port_count: {
         all: '42',
         tcp: '20',
@@ -67,7 +68,7 @@ describe('PortList model tests', () => {
   });
 
   test('should return counts of zero, if port_count is not defined', () => {
-    const portList = PortList.fromElement({});
+    const portList = PortList.fromElement({_id: 'test-id'});
 
     expect(portList.portCount.all).toEqual(0);
     expect(portList.portCount.tcp).toEqual(0);
@@ -92,22 +93,22 @@ describe('PortList model tests', () => {
   });
 
   test('should return empty array if no targets are given', () => {
-    const portList = PortList.fromElement({});
+    const portList = PortList.fromElement({_id: 'test-id'});
 
     expect(portList.targets).toEqual([]);
   });
 
   test('should parse predefined as boolean correctly', () => {
-    const portList = PortList.fromElement({predefined: 0});
-    const portList2 = PortList.fromElement({predefined: 1});
+    const portList = PortList.fromElement({_id: 'test-id', predefined: 0});
+    const portList2 = PortList.fromElement({_id: 'test-id', predefined: 1});
 
     expect(portList.predefined).toEqual(false);
     expect(portList2.predefined).toEqual(true);
   });
 
   test('should parse deprecated as boolean correctly', () => {
-    const portList = PortList.fromElement({deprecated: 0});
-    const portList2 = PortList.fromElement({deprecated: 1});
+    const portList = PortList.fromElement({_id: 'test-id', deprecated: 0});
+    const portList2 = PortList.fromElement({_id: 'test-id', deprecated: 1});
 
     expect(portList.deprecated).toEqual(false);
     expect(portList2.deprecated).toEqual(true);

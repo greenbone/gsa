@@ -11,9 +11,9 @@ describe('AgentInstaller model tests', () => {
   testModel(AgentInstaller, 'agentinstaller');
 
   test('should use defaults', () => {
-    const agentInstaller = new AgentInstaller();
+    const agentInstaller = new AgentInstaller({id: '123'});
 
-    expect(agentInstaller.id).toBeUndefined();
+    expect(agentInstaller.id).toEqual('123');
     expect(agentInstaller.name).toBeUndefined();
     expect(agentInstaller.comment).toBeUndefined();
     expect(agentInstaller.description).toBeUndefined();
@@ -26,6 +26,7 @@ describe('AgentInstaller model tests', () => {
 
   test('should parse contentType', () => {
     const agentInstaller = AgentInstaller.fromElement({
+      _id: '123',
       content_type: 'application/octet-stream',
     });
 
@@ -34,6 +35,7 @@ describe('AgentInstaller model tests', () => {
 
   test('should parse description', () => {
     const agentInstaller = AgentInstaller.fromElement({
+      _id: '123',
       description: 'This is a test agent installer.',
     });
 
@@ -42,6 +44,7 @@ describe('AgentInstaller model tests', () => {
 
   test('should parse fileExtension', () => {
     const agentInstaller = AgentInstaller.fromElement({
+      _id: '123',
       file_extension: '.exe',
     });
 
@@ -50,6 +53,7 @@ describe('AgentInstaller model tests', () => {
 
   test('should parse version', () => {
     const agentInstaller = AgentInstaller.fromElement({
+      _id: '123',
       version: '1.0.0',
     });
 
@@ -58,6 +62,7 @@ describe('AgentInstaller model tests', () => {
 
   test('should parse checksum', () => {
     const agentInstaller = AgentInstaller.fromElement({
+      _id: '123',
       checksum: 'abc123',
     });
 

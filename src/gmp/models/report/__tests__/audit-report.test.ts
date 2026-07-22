@@ -10,7 +10,8 @@ import {parseDate} from 'gmp/parser';
 
 describe('AuditReportReport tests', () => {
   test('should use defaults', () => {
-    const report = new AuditReportReport();
+    const report = new AuditReportReport({id: 'test-id'});
+    expect(report.id).toEqual('test-id');
     expect(report.compliance).toBeUndefined();
     expect(report.complianceCounts).toBeUndefined();
     expect(report.delta_report).toBeUndefined();
@@ -25,7 +26,8 @@ describe('AuditReportReport tests', () => {
   });
 
   test('should parse empty element', () => {
-    const report = AuditReportReport.fromElement();
+    const report = AuditReportReport.fromElement({_id: 'test-id'});
+    expect(report.id).toEqual('test-id');
     expect(report.compliance).toBeUndefined();
     expect(report.complianceCounts).toBeUndefined();
     expect(report.delta_report).toBeUndefined();
@@ -34,13 +36,14 @@ describe('AuditReportReport tests', () => {
     expect(report.scan_end).toBeUndefined();
     expect(report.scan_run_status).toBeUndefined();
     expect(report.scan_start).toBeUndefined();
-    expect(report.task).toBeDefined();
+    expect(report.task).toBeUndefined();
     expect(report.timezone).toBeUndefined();
     expect(report.timezone_abbrev).toBeUndefined();
   });
 
   test('should parse filter', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       filters: {
         _id: 'filter1',
         term: 'foo=bar',
@@ -53,6 +56,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse report type', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       _type: 'delta',
     });
     expect(report.reportType).toEqual('delta');
@@ -60,6 +64,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse scan start', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       scan_start: '2024-01-01T00:00:00Z',
     });
     expect(report.scan_start).toEqual(parseDate('2024-01-01T00:00:00Z'));
@@ -67,6 +72,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse scan end', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       scan_end: '2024-01-02T00:00:00Z',
     });
     expect(report.scan_end).toEqual(parseDate('2024-01-02T00:00:00Z'));
@@ -74,6 +80,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse task', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       task: {
         _id: 'task1',
         name: 'Test Task',
@@ -86,6 +93,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse delta report', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       delta: {
         report: {
           _id: 'delta1',
@@ -108,6 +116,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse scan run status', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       scan_run_status: 'completed',
     });
     expect(report.scan_run_status).toEqual('completed');
@@ -115,6 +124,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse results', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       results: {
         _start: '1',
         _max: '8',
@@ -139,6 +149,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse compliance count', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       compliance_count: {
         full: 20,
         filtered: 5,
@@ -175,6 +186,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse compliance', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       compliance: {
         full: COMPLIANCE.INCOMPLETE,
         filtered: COMPLIANCE.YES,
@@ -187,6 +199,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse timezone', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       timezone: 'Europe/Berlin',
     });
     expect(report.timezone).toEqual('Europe/Berlin');
@@ -194,6 +207,7 @@ describe('AuditReportReport tests', () => {
 
   test('should parse timezone abbreviation', () => {
     const report = AuditReportReport.fromElement({
+      _id: 'test-id',
       timezone_abbrev: 'CET',
     });
     expect(report.timezone_abbrev).toEqual('CET');

@@ -11,7 +11,8 @@ testModel(OperatingSystem, 'operatingsystem');
 
 describe('OperatingSystem model tests', () => {
   test('should use defaults', () => {
-    const os = new OperatingSystem();
+    const os = new OperatingSystem({id: 'test-id'});
+    expect(os.id).toEqual('test-id');
     expect(os.averageSeverity).toBeUndefined();
     expect(os.highestSeverity).toBeUndefined();
     expect(os.latestSeverity).toBeUndefined();
@@ -21,7 +22,8 @@ describe('OperatingSystem model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const os = OperatingSystem.fromElement();
+    const os = OperatingSystem.fromElement({_id: 'test-id'});
+    expect(os.id).toEqual('test-id');
     expect(os.averageSeverity).toBeUndefined();
     expect(os.highestSeverity).toBeUndefined();
     expect(os.latestSeverity).toBeUndefined();
@@ -32,6 +34,7 @@ describe('OperatingSystem model tests', () => {
 
   test('should parse os severities', () => {
     const os1 = OperatingSystem.fromElement({
+      _id: 'test-id',
       os: {
         average_severity: {
           value: 7,
@@ -52,6 +55,7 @@ describe('OperatingSystem model tests', () => {
 
   test('should parse title', () => {
     const os = OperatingSystem.fromElement({
+      _id: 'test-id',
       os: {
         title: 'foo',
       },
@@ -62,6 +66,7 @@ describe('OperatingSystem model tests', () => {
 
   test('should parse hosts', () => {
     const os = OperatingSystem.fromElement({
+      _id: 'test-id',
       os: {
         installs: 42,
       },
@@ -71,6 +76,7 @@ describe('OperatingSystem model tests', () => {
 
   test('should parse allHosts', () => {
     const os = OperatingSystem.fromElement({
+      _id: 'test-id',
       os: {
         all_installs: 100,
       },

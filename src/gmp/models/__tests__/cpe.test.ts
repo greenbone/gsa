@@ -8,11 +8,11 @@ import Cpe from 'gmp/models/cpe';
 import {isDate} from 'gmp/models/date';
 import {testModel} from 'gmp/models/testing';
 
-testModel(Cpe, 'cpe');
-
 describe('CPE model tests', () => {
+  testModel(Cpe, 'cpe');
+
   test('should use defaults', () => {
-    const cpe = new Cpe();
+    const cpe = new Cpe({id: 'test-id'});
     expect(cpe.cpeNameId).toBeUndefined();
     expect(cpe.cveRefs).toEqual(0);
     expect(cpe.cves).toEqual([]);
@@ -24,7 +24,7 @@ describe('CPE model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const cpe = Cpe.fromElement({});
+    const cpe = Cpe.fromElement({_id: 'test-id'});
     expect(cpe.cpeNameId).toBeUndefined();
     expect(cpe.cveRefs).toEqual(0);
     expect(cpe.cves).toEqual([]);
@@ -36,8 +36,8 @@ describe('CPE model tests', () => {
   });
 
   test('should parse severity', () => {
-    const cpe = Cpe.fromElement({cpe: {severity: 5.0}});
-    const cpe2 = Cpe.fromElement({cpe: {severity: 10.0}});
+    const cpe = Cpe.fromElement({_id: 'test-id', cpe: {severity: 5.0}});
+    const cpe2 = Cpe.fromElement({_id: 'test-id', cpe: {severity: 10.0}});
 
     expect(cpe.severity).toEqual(5.0);
     expect(cpe2.severity).toEqual(10);
@@ -45,6 +45,7 @@ describe('CPE model tests', () => {
 
   test('should parse id and severity of cves', () => {
     const elem = {
+      _id: 'test-id',
       cpe: {
         cves: {
           cve: [
@@ -87,13 +88,16 @@ describe('CPE model tests', () => {
   });
 
   test('should return empty array if no cves are defined', () => {
-    const cpe = Cpe.fromElement({});
+    const cpe = Cpe.fromElement({_id: 'test-id'});
 
     expect(cpe.cves).toEqual([]);
   });
 
   test('should parse update time', () => {
-    const cpe = Cpe.fromElement({update_time: '2018-10-10T11:41:23.022Z'});
+    const cpe = Cpe.fromElement({
+      _id: 'test-id',
+      update_time: '2018-10-10T11:41:23.022Z',
+    });
 
     expect(cpe.updateTime).toBeDefined();
     expect(isDate(cpe.updateTime)).toBe(true);
@@ -101,6 +105,7 @@ describe('CPE model tests', () => {
 
   test('should parse deprecated', () => {
     const cpe = Cpe.fromElement({
+      _id: 'test-id',
       cpe: {
         deprecated: 1,
       },
@@ -108,18 +113,20 @@ describe('CPE model tests', () => {
     expect(cpe.deprecated).toBe(true);
 
     const cpe2 = Cpe.fromElement({
+      _id: 'test-id',
       cpe: {
         deprecated: 0,
       },
     });
     expect(cpe2.deprecated).toBe(false);
 
-    const cpe3 = Cpe.fromElement({});
+    const cpe3 = Cpe.fromElement({_id: 'test-id'});
     expect(cpe3.deprecated).toBe(false);
   });
 
   test('should parse deprecatedBy', () => {
     const cpe = Cpe.fromElement({
+      _id: 'test-id',
       cpe: {
         deprecated: 1,
         deprecated_by: {_cpe_id: 'foo:/bar'},
@@ -128,6 +135,7 @@ describe('CPE model tests', () => {
     expect(cpe.deprecatedBy).toEqual('foo:/bar');
 
     const cpe2 = Cpe.fromElement({
+      _id: 'test-id',
       cpe: {
         deprecated: 1,
         deprecated_by: {_cpe_id: 'foo:/bar'},
@@ -138,6 +146,7 @@ describe('CPE model tests', () => {
     expect(cpe2.deprecatedBy).toEqual('foo:/bar');
 
     const cpe3 = Cpe.fromElement({
+      _id: 'test-id',
       cpe: {
         raw_data: {'cpe-item': {_deprecated_by: 'foo:/bar'}},
       },
@@ -145,6 +154,7 @@ describe('CPE model tests', () => {
     expect(cpe3.deprecatedBy).toEqual('foo:/bar');
 
     const cpe4 = Cpe.fromElement({
+      _id: 'test-id',
       cpe: {
         deprecated: 0,
         deprecated_by: {_cpe_id: 'foo:/bar'},
@@ -155,32 +165,38 @@ describe('CPE model tests', () => {
   });
 
   test('should not parse deprecatedBy', () => {
-    const cpe = Cpe.fromElement({cpe: {raw_data: {'cpe-item': {}}}});
+    const cpe = Cpe.fromElement({
+      _id: 'test-id',
+      cpe: {raw_data: {'cpe-item': {}}},
+    });
 
     expect(cpe.deprecatedBy).toBeUndefined();
   });
 
   test('should parse old nvd_id', () => {
-    const cpe = Cpe.fromElement({cpe: {nvd_id: 'ABC'}});
+    const cpe = Cpe.fromElement({_id: 'test-id', cpe: {nvd_id: 'ABC'}});
 
     expect(cpe.cpeNameId).toEqual('ABC');
   });
 
   test('should parse cpeNameId', () => {
-    const cpe = Cpe.fromElement({cpe: {cpe_name_id: 'ABC'}});
-    const cpe2 = Cpe.fromElement({cpe: {cpe_name_id: 'ABC', nvd_id: 'DEF'}});
+    const cpe = Cpe.fromElement({_id: 'test-id', cpe: {cpe_name_id: 'ABC'}});
+    const cpe2 = Cpe.fromElement({
+      _id: 'test-id',
+      cpe: {cpe_name_id: 'ABC', nvd_id: 'DEF'},
+    });
 
     expect(cpe.cpeNameId).toEqual('ABC');
     expect(cpe2.cpeNameId).toEqual('ABC');
   });
 
   test('should parse title', () => {
-    const cpe = Cpe.fromElement({cpe: {title: 'Test Title'}});
+    const cpe = Cpe.fromElement({_id: 'test-id', cpe: {title: 'Test Title'}});
     expect(cpe.title).toEqual('Test Title');
   });
 
   test('should parse cveRefs', () => {
-    const cpe = Cpe.fromElement({cpe: {cve_refs: 5}});
+    const cpe = Cpe.fromElement({_id: 'test-id', cpe: {cve_refs: 5}});
     expect(cpe.cveRefs).toEqual(5);
   });
 });
