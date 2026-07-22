@@ -12,10 +12,22 @@ import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsActions, {
   type AgentGroupsActionsProps,
 } from 'web/pages/agent-groups/AgentGroupsActions';
+import {type SelectionTypeType} from 'web/utils/SelectionType';
+
+// Props accepted by any pluggable actionsComponent (e.g. TrashActions),
+// in addition to what the default AgentGroupsActions component uses.
+export interface AgentGroupsRowActionsProps extends AgentGroupsActionsProps {
+  onDeleteBulk?: () => void | Promise<void>;
+  onEntityDelete?: (entity: AgentGroup) => Promise<void>;
+  onEntityRestore?: (entity: AgentGroup) => Promise<void>;
+  onSelectionTypeChange?: (selectionType: SelectionTypeType) => void;
+  onTagsBulk?: () => void;
+  onToggleDetailsClick?: (entity: AgentGroup, id: string) => void;
+}
 
 export interface AgentGroupsTableRowProps
-  extends AgentGroupsActionsProps, RowComponentProps<AgentGroup> {
-  actionsComponent?: React.ComponentType<AgentGroupsActionsProps>;
+  extends AgentGroupsRowActionsProps, RowComponentProps<AgentGroup> {
+  actionsComponent?: React.ComponentType<AgentGroupsRowActionsProps>;
 }
 
 const AgentGroupsTableRow = ({
@@ -28,7 +40,12 @@ const AgentGroupsTableRow = ({
   onEntitySelected,
   selectionType,
   'data-testid': dataTestId,
-  ...props
+  onDeleteBulk,
+  onSelectionTypeChange,
+  onTagsBulk,
+  onToggleDetailsClick,
+  onEntityDelete,
+  onEntityRestore,
 }: AgentGroupsTableRowProps) => {
   const [_] = useTranslation();
 
@@ -45,14 +62,19 @@ const AgentGroupsTableRow = ({
       <TableData>{entity.getAgentCount()}</TableData>
       <TableData>{modificationTime}</TableData>
       <ActionsComponent
-        {...props}
         entity={entity}
         selectionType={selectionType}
         onAgentGroupCloneClick={onAgentGroupCloneClick}
         onAgentGroupDeleteClick={onAgentGroupDeleteClick}
         onAgentGroupEditClick={onAgentGroupEditClick}
+        onDeleteBulk={onDeleteBulk}
+        onEntityDelete={onEntityDelete}
         onEntityDeselected={onEntityDeselected}
+        onEntityRestore={onEntityRestore}
         onEntitySelected={onEntitySelected}
+        onSelectionTypeChange={onSelectionTypeChange}
+        onTagsBulk={onTagsBulk}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
     </TableRow>
   );
