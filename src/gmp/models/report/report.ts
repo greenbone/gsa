@@ -41,21 +41,21 @@ interface ReportDeltaElement {
 }
 
 export interface ReportReportTaskElement {
-  _id?: string;
+  _id: string;
   comment?: string;
   name?: string;
   progress?: number;
   target?: {
-    _id?: string;
+    _id: string;
     comment?: string;
     name?: string;
     trash?: YesNo;
   };
   agent_group?: {
-    _id?: string;
+    _id: string;
   };
   oci_image_target?: {
-    _id?: string;
+    _id: string;
   };
 }
 
@@ -185,7 +185,7 @@ class ReportReport extends Model {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     timezone_abbrev,
     ...properties
-  }: ReportReportProperties = {}) {
+  }: ReportReportProperties) {
     super(properties);
 
     this.delta_report = delta_report;
@@ -202,13 +202,11 @@ class ReportReport extends Model {
     this.timezone_abbrev = timezone_abbrev;
   }
 
-  static fromElement(element?: ReportReportElement): ReportReport {
+  static fromElement(element: ReportReportElement): ReportReport {
     return new ReportReport(this.parseElement(element));
   }
 
-  static parseElement(
-    element: ReportReportElement = {},
-  ): ReportReportProperties {
+  static parseElement(element: ReportReportElement): ReportReportProperties {
     const copy = super.parseElement(element) as ReportReportProperties;
 
     const {delta, severity, scan_start, scan_end, task} = element;
@@ -224,7 +222,7 @@ class ReportReport extends Model {
         }
       : undefined;
 
-    copy.task = ReportTask.fromElement(task);
+    copy.task = isDefined(task) ? ReportTask.fromElement(task) : undefined;
 
     copy.results = parseResults(element);
 

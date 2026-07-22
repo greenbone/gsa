@@ -34,7 +34,7 @@ class AuditReport extends Model {
     reportType,
     task,
     ...properties
-  }: AuditReportProperties = {}) {
+  }: AuditReportProperties) {
     super(properties);
 
     this.contentType = contentType;
@@ -44,11 +44,11 @@ class AuditReport extends Model {
     this.task = task;
   }
 
-  static fromElement(element?: AuditReportElement): AuditReport {
+  static fromElement(element: AuditReportElement): AuditReport {
     return new AuditReport(this.parseElement(element));
   }
 
-  static parseElement(element: AuditReportElement = {}): AuditReportProperties {
+  static parseElement(element: AuditReportElement): AuditReportProperties {
     const copy = super.parseElement(element) as AuditReportProperties;
 
     const {

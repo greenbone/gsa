@@ -301,7 +301,7 @@ class Scanner extends Model {
     agentControlConfig,
     disabled,
     ...properties
-  }: ScannerProperties = {}) {
+  }: ScannerProperties) {
     super(properties);
 
     this.caPub = caPub;
@@ -316,11 +316,11 @@ class Scanner extends Model {
     this.disabled = disabled;
   }
 
-  static fromElement(element?: ScannerElement): Scanner {
+  static fromElement(element: ScannerElement): Scanner {
     return new Scanner(this.parseElement(element));
   }
 
-  static parseElement(element: ScannerElement = {}): ScannerProperties {
+  static parseElement(element: ScannerElement): ScannerProperties {
     const ret = super.parseElement(element) as ScannerProperties;
 
     ret.scannerType = isDefined(element.type)

@@ -60,7 +60,7 @@ class OperatingSystem extends Model {
     hosts,
     allHosts,
     ...properties
-  }: OperatingSystemProperties = {}) {
+  }: OperatingSystemProperties) {
     super(properties);
 
     this.averageSeverity = averageSeverity;
@@ -71,12 +71,12 @@ class OperatingSystem extends Model {
     this.allHosts = allHosts;
   }
 
-  static fromElement(element?: OperatingSystemElement): OperatingSystem {
+  static fromElement(element: OperatingSystemElement): OperatingSystem {
     return new OperatingSystem(this.parseElement(element));
   }
 
   static parseElement(
-    element: OperatingSystemElement = {},
+    element: OperatingSystemElement,
   ): OperatingSystemProperties {
     const ret = super.parseElement(element) as OperatingSystemProperties;
 

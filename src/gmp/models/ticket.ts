@@ -15,7 +15,7 @@ export type TicketStatus = keyof typeof TICKET_STATUS;
 export interface TicketElement extends ModelElement {
   assigned_to?: {
     user?: {
-      _id?: string;
+      _id: string;
       name?: string;
     };
   };
@@ -26,16 +26,16 @@ export interface TicketElement extends ModelElement {
   fix_verified_report?: ModelElement;
   fix_verified_time?: string;
   nvt?: {
-    _oid?: string;
+    _oid: string;
   };
   open_note?: string;
   open_time?: string;
   report?: {
-    _id?: string;
+    _id: string;
     timestamp?: string;
   };
   result?: {
-    _id?: string;
+    _id: string;
   };
   host?: string;
   location?: string;
@@ -43,7 +43,7 @@ export interface TicketElement extends ModelElement {
   solution_type?: string;
   status?: TicketStatus;
   task?: {
-    _id?: string;
+    _id: string;
     name?: string;
     trash?: YesNo;
   };
@@ -131,7 +131,7 @@ class Ticket extends Model {
     status,
     task,
     ...properties
-  }: TicketProperties = {}) {
+  }: TicketProperties) {
     super(properties);
 
     this.assignedTo = assignedTo;
@@ -154,14 +154,14 @@ class Ticket extends Model {
     this.task = task;
   }
 
-  static fromElement(element?: TicketElement): Ticket {
+  static fromElement(element: TicketElement): Ticket {
     return new Ticket(this.parseElement(element));
   }
 
-  static parseElement(element: TicketElement = {}): TicketProperties {
+  static parseElement(element: TicketElement): TicketProperties {
     const ret = super.parseElement(element) as TicketProperties;
 
-    if (isDefined(element.assigned_to) && isDefined(element.assigned_to.user)) {
+    if (isDefined(element.assigned_to?.user)) {
       ret.assignedTo = Model.fromElement(element.assigned_to.user, 'user');
     }
 

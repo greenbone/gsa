@@ -20,14 +20,11 @@ export type ModelProperties = EntityModelProperties;
  * A model representing an entity with a required ID
  */
 class Model extends EntityModel {
-  constructor(properties: ModelProperties = {}, entityType?: EntityType) {
+  constructor(properties: ModelProperties, entityType?: EntityType) {
     super(properties, entityType);
   }
 
-  static fromElement(
-    element: ModelElement = {},
-    entityType?: EntityType,
-  ): Model {
+  static fromElement(element: ModelElement, entityType?: EntityType): Model {
     const {
       id,
       creationTime,
@@ -77,7 +74,7 @@ class Model extends EntityModel {
     return f;
   }
 
-  static parseElement(element: ModelElement = {}): ModelProperties {
+  static parseElement(element: ModelElement): ModelProperties {
     return parseEntityModelProperties(element);
   }
 }
@@ -86,7 +83,7 @@ export const parseModelFromElement = (
   element: ModelElement,
   entityType: EntityType,
 ) => {
-  return Model.fromElement(element as Element, entityType);
+  return Model.fromElement(element, entityType);
 };
 
 export default Model;

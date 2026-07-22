@@ -64,7 +64,7 @@ class Note extends Model {
     text,
     textExcerpt,
     ...properties
-  }: NoteProperties = {}) {
+  }: NoteProperties) {
     super(properties);
 
     this.hosts = hosts;
@@ -77,15 +77,15 @@ class Note extends Model {
     this.textExcerpt = textExcerpt;
   }
 
-  static fromElement(element?: NoteElement): Note {
+  static fromElement(element: NoteElement): Note {
     return new Note(this.parseElement(element));
   }
 
-  static parseElement(element: NoteElement = {}): NoteProperties {
+  static parseElement(element: NoteElement): NoteProperties {
     let ret = super.parseElement(element) as NoteProperties;
 
     if (element.nvt) {
-      ret.nvt = Nvt.fromElement({nvt: element.nvt});
+      ret.nvt = Nvt.fromElement({_id: 'test-id', nvt: element.nvt});
       ret.name = ret.nvt.name;
     }
 

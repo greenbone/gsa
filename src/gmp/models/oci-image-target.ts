@@ -40,7 +40,7 @@ class OciImageTarget extends Model {
     reverseLookupOnly = false,
     reverseLookupUnify = false,
     ...properties
-  }: OciImageTargetProperties = {}) {
+  }: OciImageTargetProperties) {
     super(properties);
 
     this.imageReferences = imageReferences;
@@ -50,7 +50,7 @@ class OciImageTarget extends Model {
     this.reverseLookupUnify = reverseLookupUnify;
   }
 
-  static fromElement(element: OciImageTargetElement = {}): OciImageTarget {
+  static fromElement(element: OciImageTargetElement): OciImageTarget {
     return new OciImageTarget(this.parseElement(element));
   }
 

@@ -74,7 +74,7 @@ interface DeltaResult {
 }
 
 interface TicketElement {
-  _id?: string;
+  _id: string;
 }
 
 interface ResultDetectionDetailElement {
@@ -111,7 +111,7 @@ interface ResultElement extends ModelElement {
   description?: string;
   detection?: {
     result?: {
-      _id?: string;
+      _id: string;
       details?: {
         detail?: ResultDetectionDetailElement | ResultDetectionDetailElement[];
       };
@@ -142,12 +142,12 @@ interface ResultElement extends ModelElement {
   };
   port?: string;
   report?: {
-    _id?: string;
+    _id: string;
   };
   scan_nvt_version?: string;
   severity?: number;
   task?: {
-    _id?: string;
+    _id: string;
     name?: string;
   };
   threat?: string;
@@ -312,7 +312,7 @@ class Result extends Model {
     tickets = [],
     vulnerability,
     ...properties
-  }: ResultProperties = {}) {
+  }: ResultProperties) {
     super(properties);
 
     this.compliance = compliance;
@@ -335,11 +335,11 @@ class Result extends Model {
     this.vulnerability = vulnerability;
   }
 
-  static fromElement(element: ResultElement = {}): Result {
+  static fromElement(element: ResultElement): Result {
     return new Result(this.parseElement(element));
   }
 
-  static parseElement(element: ResultElement = {}): ResultProperties {
+  static parseElement(element: ResultElement): ResultProperties {
     const copy = super.parseElement(element) as ResultProperties;
 
     const {
@@ -381,6 +381,7 @@ class Result extends Model {
 
     if (isDefined(information)) {
       if (information.type === 'nvt') {
+        // @ts-expect-error
         copy.information = Nvt.fromElement({
           nvt: information,
         } as ResultNvtElement);

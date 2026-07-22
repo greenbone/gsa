@@ -109,7 +109,7 @@ class AuditReportReport extends Model {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     timezone_abbrev,
     ...properties
-  }: AuditReportReportProperties = {}) {
+  }: AuditReportReportProperties) {
     super(properties);
 
     this.compliance = compliance;
@@ -126,12 +126,12 @@ class AuditReportReport extends Model {
     this.timezone_abbrev = timezone_abbrev;
   }
 
-  static fromElement(element?: AuditReportReportElement): AuditReportReport {
+  static fromElement(element: AuditReportReportElement): AuditReportReport {
     return new AuditReportReport(this.parseElement(element));
   }
 
   static parseElement(
-    element: AuditReportReportElement = {},
+    element: AuditReportReportElement,
   ): AuditReportReportProperties {
     const copy = super.parseElement(element) as AuditReportReportProperties;
 
@@ -172,7 +172,7 @@ class AuditReportReport extends Model {
       };
     }
 
-    copy.task = ReportTask.fromElement(task);
+    copy.task = isDefined(task) ? ReportTask.fromElement(task) : undefined;
 
     copy.results = parseResults(element);
 

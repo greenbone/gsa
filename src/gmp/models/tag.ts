@@ -41,7 +41,7 @@ class Tag extends Model {
     resourceType,
     value,
     ...properties
-  }: TagProperties = {}) {
+  }: TagProperties) {
     super(properties);
 
     this.resourceCount = resourceCount;
@@ -49,7 +49,7 @@ class Tag extends Model {
     this.value = value;
   }
 
-  static fromElement(element: TagElement = {}): Tag {
+  static fromElement(element: TagElement): Tag {
     return new Tag(this.parseElement(element));
   }
 

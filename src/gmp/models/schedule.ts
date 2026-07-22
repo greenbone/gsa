@@ -46,7 +46,7 @@ class Schedule extends Model {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     timezone_abbrev,
     ...properties
-  }: ScheduleProperties = {}) {
+  }: ScheduleProperties) {
     super(properties);
 
     this.event = event;
@@ -55,11 +55,11 @@ class Schedule extends Model {
     this.timezone_abbrev = timezone_abbrev;
   }
 
-  static fromElement(element?: ScheduleElement): Schedule {
+  static fromElement(element: ScheduleElement): Schedule {
     return new Schedule(this.parseElement(element));
   }
 
-  static parseElement(element: ScheduleElement = {}): ScheduleProperties {
+  static parseElement(element: ScheduleElement): ScheduleProperties {
     const ret = super.parseElement(element) as ScheduleProperties;
 
     const {timezone, icalendar, timezone_abbrev} = element;

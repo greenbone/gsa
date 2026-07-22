@@ -50,11 +50,11 @@ class ReportApp {
     };
   }
 
-  static fromElement(element: AppElement = {}): ReportApp {
+  static fromElement(element: AppElement): ReportApp {
     return new ReportApp(this.parseElement(element));
   }
 
-  static parseElement(element: AppElement = {}): AppProperties {
+  static parseElement(element: AppElement): AppProperties {
     const copy: AppProperties = {};
 
     const {name: cpe} = element;

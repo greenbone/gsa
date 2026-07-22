@@ -42,7 +42,7 @@ class ReportConfig extends Model {
     params = [],
     reportFormat,
     ...properties
-  }: ReportConfigProperties = {}) {
+  }: ReportConfigProperties) {
     super(properties, ReportConfig.entityType);
 
     this.alerts = alerts;
@@ -50,13 +50,11 @@ class ReportConfig extends Model {
     this.reportFormat = reportFormat;
   }
 
-  static fromElement(element?: ReportConfigElement): ReportConfig {
+  static fromElement(element: ReportConfigElement): ReportConfig {
     return new ReportConfig(this.parseElement(element));
   }
 
-  static parseElement(
-    element: ReportConfigElement = {},
-  ): ReportConfigProperties {
+  static parseElement(element: ReportConfigElement): ReportConfigProperties {
     const ret = super.parseElement(element) as ReportConfigProperties;
 
     if (isDefined(element.report_format)) {

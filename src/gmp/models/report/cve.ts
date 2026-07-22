@@ -43,11 +43,11 @@ class ReportCve {
     };
   }
 
-  static fromElement(element: ReportCveElement = {}): ReportCve {
+  static fromElement(element: ReportCveElement): ReportCve {
     return new ReportCve(this.parseElement(element));
   }
 
-  static parseElement(element: ReportCveElement = {}): ReportCveProperties {
+  static parseElement(element: ReportCveElement): ReportCveProperties {
     const copy: ReportCveProperties = {};
 
     const nvt = Nvt.fromElement(element);

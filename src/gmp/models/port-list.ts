@@ -101,7 +101,7 @@ class PortList extends Model {
     predefined = false,
     targets = [],
     ...properties
-  }: PortListProperties = {}) {
+  }: PortListProperties) {
     super(properties);
 
     this.deprecated = deprecated;
@@ -111,7 +111,7 @@ class PortList extends Model {
     this.targets = targets;
   }
 
-  static fromElement(element: PortListElement = {}): PortList {
+  static fromElement(element: PortListElement): PortList {
     return new PortList(this.parseElement(element));
   }
 

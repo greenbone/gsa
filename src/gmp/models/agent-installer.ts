@@ -39,7 +39,7 @@ class AgentInstaller extends Model {
     version,
     checksum,
     ...properties
-  }: AgentInstallerProperties = {}) {
+  }: AgentInstallerProperties) {
     super(properties);
 
     this.contentType = contentType;
@@ -49,13 +49,13 @@ class AgentInstaller extends Model {
     this.checksum = checksum;
   }
 
-  static fromElement(element: AgentInstallerElement = {}): AgentInstaller {
+  static fromElement(element: AgentInstallerElement): AgentInstaller {
     const props = this.parseElement(element);
     return new AgentInstaller(props);
   }
 
   static parseElement(
-    element: AgentInstallerElement = {},
+    element: AgentInstallerElement,
   ): AgentInstallerProperties {
     const copy = super.parseElement(element) as AgentInstallerProperties;
 

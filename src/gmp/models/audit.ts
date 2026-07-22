@@ -127,7 +127,7 @@ class Audit extends Model {
     target,
     trend,
     ...properties
-  }: AuditProperties = {}) {
+  }: AuditProperties) {
     super(properties);
 
     this.alerts = alerts;
@@ -157,7 +157,7 @@ class Audit extends Model {
     this.trend = trend;
   }
 
-  static fromElement(element: AuditElement = {}): Audit {
+  static fromElement(element: AuditElement): Audit {
     if (
       isDefined(element?.usage_type) &&
       element.usage_type !== USAGE_TYPE.audit
@@ -167,7 +167,7 @@ class Audit extends Model {
     return new Audit(this.parseElement(element));
   }
 
-  static parseElement(element: AuditElement = {}): AuditProperties {
+  static parseElement(element: AuditElement): AuditProperties {
     return Task.parseElement(element) as AuditProperties;
   }
 
