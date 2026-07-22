@@ -4,21 +4,28 @@
  */
 
 import React from 'react';
+import type Gmp from 'gmp/gmp';
+import {type default as FilterType} from 'gmp/models/filter/filter-type';
 import Loader, {
   loadFunc,
   loaderPropTypes,
 } from 'web/store/dashboard/data/loader';
 
+interface VulnsLoaderProps {
+  filter?: FilterType;
+  children: (props: {data: unknown; isLoading: boolean}) => React.ReactNode;
+}
+
 export const VULNS_SEVERITY = 'vulns-severity';
 export const VULNS_HOSTS = 'vulns-hosts';
 
 export const vulnsSeverityLoader = loadFunc(
-  ({gmp, filter}) =>
+  ({gmp, filter}: {gmp: Gmp; filter: FilterType}) =>
     gmp.vulns.getSeverityAggregates({filter}).then(r => r.data),
   VULNS_SEVERITY,
 );
 
-export const VulnsSeverityLoader = ({filter, children}) => (
+export const VulnsSeverityLoader = ({filter, children}: VulnsLoaderProps) => (
   <Loader
     dataId={VULNS_SEVERITY}
     filter={filter}
@@ -32,11 +39,12 @@ export const VulnsSeverityLoader = ({filter, children}) => (
 VulnsSeverityLoader.propTypes = loaderPropTypes;
 
 export const vulnsHostsLoader = loadFunc(
-  ({gmp, filter}) => gmp.vulns.getHostAggregates({filter}).then(r => r.data),
+  ({gmp, filter}: {gmp: Gmp; filter: FilterType}) =>
+    gmp.vulns.getHostAggregates({filter}).then(r => r.data),
   VULNS_HOSTS,
 );
 
-export const VulnsHostsLoader = ({filter, children}) => (
+export const VulnsHostsLoader = ({filter, children}: VulnsLoaderProps) => (
   <Loader
     dataId={VULNS_HOSTS}
     filter={filter}

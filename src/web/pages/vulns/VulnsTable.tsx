@@ -10,9 +10,17 @@ import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-import withEntitiesHeader from 'web/entities/withEntitiesHeader';
-import VulnsRow from 'web/pages/vulns/Row';
-import PropTypes from 'web/utils/PropTypes';
+import VulnsRow from 'web/pages/vulns/VulnsRow';
+import {type SortDirectionType} from 'web/utils/sort-direction';
+
+interface HeaderProps {
+  sort?: boolean;
+  currentSortBy?: string;
+  currentSortDir?: SortDirectionType;
+  actionsColumn?: React.ReactElement;
+  hideColumns?: Record<string, boolean>;
+  onSortChange?: (sortBy: string) => void;
+}
 
 const Header = ({
   sort = true,
@@ -21,14 +29,14 @@ const Header = ({
   actionsColumn,
   hideColumns = {},
   onSortChange,
-}) => {
+}: HeaderProps) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'name' : false}
+          sortBy={sort ? 'name' : undefined}
           title={_('Name')}
           width="40%"
           onSortChange={onSortChange}
@@ -37,7 +45,7 @@ const Header = ({
           <TableHead
             currentSortBy={currentSortBy}
             currentSortDir={currentSortDir}
-            sortBy={sort ? 'oldest' : false}
+            sortBy={sort ? 'oldest' : undefined}
             title={_('Oldest Result')}
             width="15%"
             onSortChange={onSortChange}
@@ -47,7 +55,7 @@ const Header = ({
           <TableHead
             currentSortBy={currentSortBy}
             currentSortDir={currentSortDir}
-            sortBy={sort ? 'newest' : false}
+            sortBy={sort ? 'newest' : undefined}
             title={_('Newest Result')}
             width="15%"
             onSortChange={onSortChange}
@@ -56,7 +64,7 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'severity' : false}
+          sortBy={sort ? 'severity' : undefined}
           title={_('Severity')}
           width="8%"
           onSortChange={onSortChange}
@@ -64,7 +72,7 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'qod' : false}
+          sortBy={sort ? 'qod' : undefined}
           title={_('QoD')}
           width="4%"
           onSortChange={onSortChange}
@@ -72,7 +80,7 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'results' : false}
+          sortBy={sort ? 'results' : undefined}
           title={_('Results')}
           width="5%"
           onSortChange={onSortChange}
@@ -80,7 +88,7 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'hosts' : false}
+          sortBy={sort ? 'hosts' : undefined}
           title={_('Hosts')}
           width="5%"
           onSortChange={onSortChange}
@@ -91,17 +99,6 @@ const Header = ({
   );
 };
 
-Header.propTypes = {
-  actionsColumn: PropTypes.element,
-  currentSortBy: PropTypes.string,
-  currentSortDir: PropTypes.string,
-  hideColumns: PropTypes.object,
-  sort: PropTypes.bool,
-  onSortChange: PropTypes.func,
-};
-
-const VulnsHeader = withEntitiesHeader(true)(Header);
-
 const Footer = createEntitiesFooter({
   span: 8,
   download: 'vulnerabilities.xml',
@@ -109,9 +106,10 @@ const Footer = createEntitiesFooter({
 
 export const VulnsTable = createEntitiesTable({
   emptyTitle: _l('No Vulnerabilities available'),
-  header: VulnsHeader,
+  header: Header,
   footer: Footer,
   row: VulnsRow,
+  // @ts-expect-error toggleDetailsIcon is not in CreateEntitiesTableOptions but is passed to EntitiesTable
   toggleDetailsIcon: false,
 });
 

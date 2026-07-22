@@ -9,7 +9,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-import {VulnsSeverityLoader} from 'web/pages/vulns/dashboard/Loaders';
+import {VulnsSeverityLoader} from 'web/pages/vulns/dashboard/VulnsLoaders';
 
 export const VulnsSeverityDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
@@ -22,7 +22,7 @@ export const VulnsSeverityDisplay = createDisplay({
   displayId: 'vuln-by-severity-class',
   displayName: 'VulnsSeverityDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
-});
+} as Parameters<typeof createDisplay>[0]);
 
 export const VulnsSeverityTableDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
@@ -35,7 +35,7 @@ export const VulnsSeverityTableDisplay = createDisplay({
   displayId: 'vuln-by-severity-class-table',
   displayName: 'VulnsSeverityTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
-});
+} as Parameters<typeof createDisplay>[0]);
 
 registerDisplay(VulnsSeverityDisplay.displayId, VulnsSeverityDisplay, {
   title: _l('Chart: Vulnerabilities by Severity Class'),

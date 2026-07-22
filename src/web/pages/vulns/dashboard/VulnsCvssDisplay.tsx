@@ -9,7 +9,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-import {VulnsSeverityLoader} from 'web/pages/vulns/dashboard/Loaders';
+import {VulnsSeverityLoader} from 'web/pages/vulns/dashboard/VulnsLoaders';
 
 export const VulnsCvssDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
@@ -20,7 +20,7 @@ export const VulnsCvssDisplay = createDisplay({
   displayId: 'vuln-by-cvss',
   displayName: 'VulnsCvssDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
-});
+} as Parameters<typeof createDisplay>[0]);
 
 export const VulnsCvssTableDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
@@ -31,7 +31,7 @@ export const VulnsCvssTableDisplay = createDisplay({
   displayId: 'vuln-by-cvss-table',
   displayName: 'VulnsCvssTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
-});
+} as Parameters<typeof createDisplay>[0]);
 
 registerDisplay(VulnsCvssDisplay.displayId, VulnsCvssDisplay, {
   title: _l('Chart: Vulnerabilities by CVSS'),
