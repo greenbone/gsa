@@ -5,9 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
-import EverythingCapabilities from 'gmp/capabilities/everything';
+import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
-import {YES_VALUE} from 'gmp/parser';
+import UserTag from 'gmp/models/user-tag';
 import {createSession} from 'gmp/testing';
 import EntityTags from 'web/entity/Tags';
 
@@ -16,26 +16,20 @@ const createTask = () => {
     id: 'task-1',
     name: 'Test Task',
     userTags: [
-      {
+      new UserTag({
         id: 'tag-1',
         name: 'Test Tag',
         value: 'test-value',
-        active: YES_VALUE,
         comment: 'Test comment',
-        resourceType: 'task',
-        userCapabilities: new EverythingCapabilities(),
-      },
-      {
+      }),
+      new UserTag({
         id: 'tag-2',
         name: 'Another Tag',
         value: 'another-value',
-        active: YES_VALUE,
         comment: 'Another comment',
-        resourceType: 'task',
-        userCapabilities: new EverythingCapabilities(),
-      },
+      }),
     ],
-  } as Record<string, unknown>);
+  });
 };
 
 const currentSettingsResponse = {
@@ -151,7 +145,14 @@ describe('EntityTags tests', () => {
     const entity = createTask();
     const gmp = createGmp({
       tag: {
-        get: testing.fn().mockResolvedValue({data: entity.userTags[0]}),
+        get: testing.fn().mockResolvedValue({
+          data: new Tag({
+            id: 'tag-1',
+            name: 'Test Tag',
+            value: 'test-value',
+            resourceType: 'task',
+          }),
+        }),
       },
       tasks: {
         get: testing.fn().mockResolvedValue({data: []}),
