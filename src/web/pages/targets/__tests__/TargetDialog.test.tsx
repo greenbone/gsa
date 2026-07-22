@@ -631,7 +631,7 @@ describe('TargetDialog tests', () => {
 
   test('should allow to create a target from asset hosts', () => {
     const handleSave = testing.fn();
-    const hostsFilter = new Filter({filter_type: 'asset'});
+    const hostsFilter = new Filter({id: 'test-id', filter_type: 'asset'});
 
     const {render} = rendererWith({gmp, capabilities: true});
 

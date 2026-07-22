@@ -30,6 +30,7 @@ describe('ScannerFilterDialog tests', () => {
       gmp,
     });
     const filter = new Filter({
+      id: 'test-id',
       terms: [
         new FilterTerm({keyword: 'first', value: '1', relation: '='}),
         new FilterTerm({keyword: 'rows', value: '20', relation: '='}),
@@ -138,6 +139,7 @@ describe('ScannerFilterDialog tests', () => {
       filter: {},
     };
     const filter = new Filter({
+      id: 'test-id',
       terms: [
         new FilterTerm({keyword: 'foo', value: 'bar', relation: '='}),
         new FilterTerm({

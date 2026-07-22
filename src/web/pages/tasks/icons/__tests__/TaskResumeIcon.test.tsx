@@ -15,6 +15,7 @@ describe('Task ResumeIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.stopped,
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
@@ -38,6 +39,7 @@ describe('Task ResumeIcon component tests', () => {
   test('should render in inactive state if wrong command level permissions are given', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.stopped,
       target: {_id: '123'},
       permissions: {permission: [{name: 'get_task'}]},
@@ -65,6 +67,7 @@ describe('Task ResumeIcon component tests', () => {
   test('should render in inactive state if task is not stopped', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.new,
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
@@ -89,6 +92,7 @@ describe('Task ResumeIcon component tests', () => {
   test('should render in inactive state if wrong command level permissions are given for audit', () => {
     const caps = new Capabilities(['everything']);
     const audit = Audit.fromElement({
+      _id: 'test-id',
       status: AUDIT_STATUS.stopped,
       target: {_id: '123'},
       permissions: {permission: [{name: 'get_task'}]},
@@ -117,6 +121,7 @@ describe('Task ResumeIcon component tests', () => {
   test('should render in inactive state if task is scheduled', () => {
     const caps = new Capabilities(['everything']);
     const elem = {
+      _id: 'test-id',
       status: TASK_STATUS.new,
       schedule: {
         _id: 'schedule1',
@@ -144,6 +149,7 @@ describe('Task ResumeIcon component tests', () => {
 
   test('should render in inactive state if task is a import task', () => {
     const elem = {
+      _id: 'test-id',
       status: TASK_STATUS.new,
       permissions: {permission: [{name: 'everything'}]},
     };
@@ -167,6 +173,7 @@ describe('Task ResumeIcon component tests', () => {
   test('should not be rendered if task is queued', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.queued,
       permissions: {permission: [{name: 'everything'}]},
     });

@@ -11,6 +11,7 @@ import Status from 'web/pages/tasks/TaskStatus';
 describe('TaskStatus tests', () => {
   test('should render', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.new,
       alterable: 0,
       permissions: {permission: [{name: 'everything'}]},
@@ -30,6 +31,7 @@ describe('TaskStatus tests', () => {
 
   test('should render with last report', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.done,
       alterable: 0,
       permissions: {permission: [{name: 'everything'}]},
@@ -51,6 +53,7 @@ describe('TaskStatus tests', () => {
 
   test('should render with current report', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.running,
       alterable: 0,
       permissions: {permission: [{name: 'everything'}]},
@@ -73,6 +76,7 @@ describe('TaskStatus tests', () => {
 
   test('should render import task', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       permissions: {permission: [{name: 'everything'}]},
       last_report: {report: {_id: '42'}},
     });
@@ -91,6 +95,7 @@ describe('TaskStatus tests', () => {
 
   test('should render import task with status interrupted', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.interrupted,
       permissions: {permission: [{name: 'everything'}]},
     });
@@ -105,6 +110,7 @@ describe('TaskStatus tests', () => {
 
   test('should render running import task as processing', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.running,
       permissions: {permission: [{name: 'everything'}]},
     });
@@ -119,6 +125,7 @@ describe('TaskStatus tests', () => {
 
   test('should render processing import task as processing', () => {
     const task = Task.fromElement({
+      _id: 'test-id',
       status: TASK_STATUS.processing,
       permissions: {permission: [{name: 'everything'}]},
     });

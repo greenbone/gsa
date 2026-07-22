@@ -229,6 +229,7 @@ const PermissionDialog = ({
 
         const resource = isDefined(state.resourceType)
           ? Model.fromElement(
+              // @ts-expect-error
               {name: resourceNameOrId},
               resourceTypeOrType as EntityType,
             )

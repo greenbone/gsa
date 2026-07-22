@@ -17,18 +17,20 @@ import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-set
 import TaskDetailsPage from 'web/pages/tasks/TaskDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 
-const config = ScanConfig.fromElement({
+const scanConfigElement = {
   _id: '314',
   name: 'foo',
   comment: 'bar',
-  scanner: {name: 'scanner1', type: '0'},
+  scanner: {_id: 'test-id', name: 'scanner1', type: '0'},
   tasks: {
     task: [
       {_id: '12345', name: 'foo'},
       {_id: '678910', name: 'task2'},
     ],
   },
-});
+};
+
+const scanConfig = ScanConfig.fromElement(scanConfigElement);
 
 const schedule = Schedule.fromElement({
   _id: '121314',
@@ -104,7 +106,7 @@ const task = Task.fromElement({
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
   scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-  config: config,
+  config: scanConfigElement,
   preferences: preferences,
 });
 
@@ -124,7 +126,7 @@ const task2 = Task.fromElement({
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
   scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-  config: config,
+  config: scanConfigElement,
   preferences: preferences,
 });
 
@@ -145,7 +147,7 @@ const task5 = Task.fromElement({
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
   scanner: {_id: '1516', name: 'scanner1', type: OPENVAS_SCANNER_TYPE},
-  config: config,
+  config: scanConfigElement,
   preferences: preferences,
 });
 
@@ -165,7 +167,7 @@ const createGmp = ({
     data: task,
   }),
   getConfig = testing.fn().mockResolvedValue({
-    data: config,
+    data: scanConfig,
   }),
   getSchedule = testing.fn().mockResolvedValue({
     data: schedule,

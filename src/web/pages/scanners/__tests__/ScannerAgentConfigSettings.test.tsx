@@ -564,6 +564,7 @@ describe('ScannerAgentConfigSettings tests', () => {
 
   test('should handle missing scanner ID when saving', async () => {
     const scanner = Scanner.fromElement({
+      _id: '',
       name: 'Scanner Without ID',
       type: AGENT_CONTROLLER_SCANNER_TYPE,
       agent_control_config_defaults: {

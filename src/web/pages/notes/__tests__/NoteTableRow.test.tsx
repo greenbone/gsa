@@ -26,6 +26,7 @@ const note = new Note({
     'host-three.example.invalid',
   ],
   nvt: new Nvt({
+    id: 'nvt-1',
     oid: '1.3.6.1.4.1',
     name: 'Test NVT',
   }),

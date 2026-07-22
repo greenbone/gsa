@@ -96,7 +96,7 @@ const config = ScanConfig.fromElement({
   families: {family: families},
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
-  scanner: {name: 'scanner', type: '42'},
+  scanner: {_id: 'test-id', name: 'scanner', type: '42'},
   tasks: {
     task: [
       {_id: '1234', name: 'task1'},
@@ -212,7 +212,7 @@ describe('ScanConfigDetailPageToolBarIcons tests', () => {
       families: {family: families},
       preferences: preferences,
       permissions: {permission: [{name: 'get_config'}]},
-      scanner: {name: 'scanner', type: '42'},
+      scanner: {_id: 'test-id', name: 'scanner', type: '42'},
       tasks: {
         task: [
           {_id: '1234', name: 'task1'},
@@ -280,7 +280,7 @@ describe('ScanConfigDetailPageToolBarIcons tests', () => {
       families: {family: families},
       preferences: preferences,
       permissions: {permission: [{name: 'everything'}]},
-      scanner: {name: 'scanner', type: '42'},
+      scanner: {_id: 'test-id', name: 'scanner', type: '42'},
       tasks: {
         task: [
           {_id: '1234', name: 'task1'},
@@ -346,7 +346,7 @@ describe('ScanConfigDetailPageToolBarIcons tests', () => {
       families: {family: families},
       preferences: preferences,
       permissions: {permission: [{name: 'everything'}]},
-      scanner: {name: 'scanner', type: '42'},
+      scanner: {_id: 'test-id', name: 'scanner', type: '42'},
       tasks: {
         task: [
           {_id: '1234', name: 'task1'},

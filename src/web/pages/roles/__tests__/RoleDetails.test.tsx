@@ -11,6 +11,7 @@ import RoleDetails from 'web/pages/roles/RoleDetails';
 describe('RoleDetails tests', () => {
   test('should render comment', () => {
     const role = new Role({
+      id: 'test-id',
       comment: 'Test role comment',
       users: ['user1', 'user2'],
     });
@@ -22,6 +23,7 @@ describe('RoleDetails tests', () => {
 
   test('should render users list', () => {
     const role = new Role({
+      id: 'test-id',
       comment: 'Test role comment',
       users: ['admin', 'editor', 'viewer'],
     });
@@ -35,6 +37,7 @@ describe('RoleDetails tests', () => {
 
   test('should render empty users list when no users are provided', () => {
     const role = new Role({
+      id: 'test-id',
       comment: 'Test role comment',
       users: [],
     });
@@ -47,6 +50,7 @@ describe('RoleDetails tests', () => {
 
   test('should render with single user', () => {
     const role = new Role({
+      id: 'test-id',
       comment: 'Single user role',
       users: ['singleUser'],
     });
@@ -57,9 +61,7 @@ describe('RoleDetails tests', () => {
   });
 
   test('should render with undefined comment', () => {
-    const role = new Role({
-      users: ['testUser'],
-    });
+    const role = new Role({id: 'test-id', users: ['testUser']});
     const {render} = rendererWith({capabilities: true});
     render(<RoleDetails entity={role} />);
     expect(screen.getByText('Comment')).toBeVisible();
@@ -69,10 +71,7 @@ describe('RoleDetails tests', () => {
   });
 
   test('should render with empty comment', () => {
-    const role = new Role({
-      comment: '',
-      users: ['testUser'],
-    });
+    const role = new Role({id: 'test-id', comment: '', users: ['testUser']});
     const {render} = rendererWith({capabilities: true});
     render(<RoleDetails entity={role} />);
     expect(screen.getByText('Comment')).toBeVisible();

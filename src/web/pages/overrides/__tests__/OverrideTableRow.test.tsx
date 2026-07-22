@@ -41,6 +41,7 @@ const createOverride = ({
     inUse,
     newSeverity: 7,
     nvt: new Nvt({
+      id: 'nvt-1',
       oid: '1.3.6.1.4.1',
       name: 'Test NVT',
     }),

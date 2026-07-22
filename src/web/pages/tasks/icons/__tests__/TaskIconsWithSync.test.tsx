@@ -43,6 +43,7 @@ describe('TaskIconWithSync component tests', () => {
     ({type, taskStatus, expectedTitle, expectedFill, isSyncing = false}) => {
       const caps = new Capabilities(['everything']);
       const task = Task.fromElement({
+        _id: 'test-id',
         status: taskStatus,
         target: {_id: '123'},
         permissions: {permission: [{name: 'everything'}]},

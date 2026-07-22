@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith} from 'web/testing';
+import {screen, rendererWith, within} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Features from 'gmp/capabilities/features';
 import ScanConfig from 'gmp/models/scan-config';
@@ -14,18 +14,20 @@ import Details from 'web/pages/tasks/TaskDetails';
 import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
 
-const config = ScanConfig.fromElement({
+const scanConfigElement = {
   _id: '314',
   name: 'foo',
   comment: 'bar',
-  scanner: {name: 'scanner1', type: 0},
+  scanner: {_id: 'test-id', name: 'scanner1', type: 0},
   tasks: {
     task: [
       {_id: '12345', name: 'foo'},
       {_id: '678910', name: 'task2'},
     ],
   },
-});
+};
+
+const scanConfig = ScanConfig.fromElement(scanConfigElement);
 
 const lastReport = {
   report: {
@@ -71,11 +73,16 @@ const preferences = {
   ],
 };
 
-const schedule = Schedule.fromElement({_id: '121314', name: 'schedule1'});
+const scheduleElement = {
+  _id: '121314',
+  name: 'schedule1',
+};
+
+const schedule = Schedule.fromElement(scheduleElement);
 
 const getConfig = testing.fn().mockReturnValue(
   Promise.resolve({
-    data: config,
+    data: scanConfig,
   }),
 );
 
@@ -126,6 +133,7 @@ describe('TaskDetails tests', () => {
     expect(link).toBeVisible();
     expect(link.closest('a')).toHaveAttribute('href', '/ociimagetargets');
   });
+
   test('should render full task details', () => {
     const task = Task.fromElement({
       _id: '12345',
@@ -140,8 +148,8 @@ describe('TaskDetails tests', () => {
       alert: {_id: '91011', name: 'alert1'},
       scanner: {_id: '1516', name: 'scanner1', type: '2'},
       preferences: preferences,
-      schedule: schedule,
-      config: config,
+      schedule: scheduleElement,
+      config: scanConfigElement,
     });
     const caps = new Capabilities(['everything']);
     const features = new Features(['ENABLE_CREDENTIAL_STORES']);
@@ -154,34 +162,47 @@ describe('TaskDetails tests', () => {
       features,
     });
 
-    store.dispatch(scanconfigActions.success('314', config));
+    store.dispatch(scanconfigActions.success('314', scanConfig));
     store.dispatch(scheduleActions.success('121314', schedule));
 
     const {element} = render(<Details entity={task} />);
 
-    const headings = element.querySelectorAll('h2');
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const targetDetails = within(
+      screen.getByRole('heading', {name: /^Target$/})
+        .parentElement as HTMLElement,
+    );
+    expect(targetDetails.getByRole('link', {name: 'target1'})).toHaveAttribute(
+      'href',
+      '/target/5678',
+    );
 
-    expect(headings[0]).toHaveTextContent('Target');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/target/5678');
-    expect(element).toHaveTextContent('target1');
+    const alertsDetails = within(
+      screen.getByRole('heading', {name: /^Alerts$/})
+        .parentElement as HTMLElement,
+    );
+    expect(alertsDetails.getByRole('link', {name: 'alert1'})).toHaveAttribute(
+      'href',
+      '/alert/91011',
+    );
 
-    expect(headings[1]).toHaveTextContent('Alerts');
-    expect(detailsLinks[1]).toHaveAttribute('href', '/alert/91011');
-    expect(element).toHaveTextContent('alert1');
+    const scannerDetails = within(
+      screen.getByRole('heading', {name: /^Scanner$/})
+        .parentElement as HTMLElement,
+    );
+    expect(
+      scannerDetails.getByRole('link', {name: 'scanner1'}),
+    ).toHaveAttribute('href', '/scanner/1516');
+    expect(scannerDetails.getByRole('row', {name: /^Type/})).toHaveTextContent(
+      'OpenVAS Scanner',
+    );
 
-    expect(headings[2]).toHaveTextContent('Scanner');
-    expect(detailsLinks[2]).toHaveAttribute('href', '/scanner/1516');
-    expect(element).toHaveTextContent('scanner1');
-    expect(element).toHaveTextContent('OpenVAS Scanner');
-
-    expect(headings[3]).toHaveTextContent('Assets');
+    screen.getByRole('heading', {name: /^Assets$/});
     expect(element).toHaveTextContent(
       'Allow scan when credential store retrieval fails',
     );
     expect(element).toHaveTextContent('Yes');
 
-    expect(headings[4]).toHaveTextContent('Scan');
+    screen.getByRole('heading', {name: /^Scan$/});
     expect(element).toHaveTextContent('2 minutes');
     expect(element).toHaveTextContent('Do not automatically delete reports');
   });
