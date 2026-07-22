@@ -7,7 +7,7 @@ import {useCallback, useEffect, useState} from 'react';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type FilterType} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
-import Tag from 'gmp/models/tag';
+import type Tag from 'gmp/models/tag';
 import {apiType, type EntityType, getEntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import TagsDialog, {type TagsDialogData} from 'web/entities/TagsDialog';
@@ -58,7 +58,7 @@ const BulkTags = <TEntity extends Model>({
 }: BulkTagsProps<TEntity>) => {
   const [_] = useTranslation();
   const gmp = useGmp();
-  const [tag, setTag] = useState<Tag>(new Tag());
+  const [tag, setTag] = useState<Tag>();
   const [tagDialogVisible, setTagDialogVisible] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [error, setError] = useState();
@@ -195,14 +195,14 @@ const BulkTags = <TEntity extends Model>({
   return (
     <>
       <TagsDialog
-        comment={tag.comment}
+        comment={tag?.comment}
         entitiesCount={multiTagEntitiesCount}
         error={error}
-        name={tag.name}
-        tagId={tag.id}
+        name={tag?.name}
+        tagId={tag?.id}
         tags={tags}
         title={title}
-        value={tag.value}
+        value={tag?.value}
         onClose={handleCloseTagsDialog}
         onErrorClose={handleErrorClose}
         onNewTagClick={openTagDialog}

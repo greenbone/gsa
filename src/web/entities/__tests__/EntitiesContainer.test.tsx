@@ -41,7 +41,7 @@ const setup = gmp => {
   const initialFilter = new BaseFilter();
   render(
     <EntitiesContainer
-      entities={[new PortList()]}
+      entities={[new PortList({id: '1', name: 'Port List 1'})]}
       filter={initialFilter}
       gmp={gmp}
       gmpName="portlist"
