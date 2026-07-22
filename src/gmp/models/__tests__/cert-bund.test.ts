@@ -12,7 +12,7 @@ testModel(CertBundAdv, 'certbund');
 
 describe('CertBundAdv model tests', () => {
   test('should set defaults', () => {
-    const certBundAdv = new CertBundAdv();
+    const certBundAdv = new CertBundAdv({id: 'test-id'});
 
     expect(certBundAdv.additionalInformation).toEqual([]);
     expect(certBundAdv.categories).toEqual([]);
@@ -34,20 +34,21 @@ describe('CertBundAdv model tests', () => {
   });
 
   test('should parse severity', () => {
-    const elem = {cert_bund_adv: {severity: 8.5}};
+    const elem = {_id: 'test-id', cert_bund_adv: {severity: 8.5}};
     const certBundAdv = CertBundAdv.fromElement(elem);
 
     expect(certBundAdv.severity).toEqual(8.5);
   });
 
   test('should parse summary', () => {
-    const elem = {cert_bund_adv: {summary: 'foo'}};
+    const elem = {_id: 'test-id', cert_bund_adv: {summary: 'foo'}};
     const certBundAdv = CertBundAdv.fromElement(elem);
     expect(certBundAdv.summary).toEqual('foo');
   });
 
   test('should parse title', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         title: 'foo',
       },
@@ -58,6 +59,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse categories', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -72,6 +74,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse single category', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -86,6 +89,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse descriptions', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -102,6 +106,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse single description', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -120,6 +125,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse additional information', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -161,6 +167,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse single additional information', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -192,6 +199,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse version', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -208,6 +216,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse revision history', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -247,6 +256,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse CVEs', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -264,6 +274,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse single CVE', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -281,6 +292,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse platform', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -295,6 +307,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse effect', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -309,6 +322,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse reference source', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -323,6 +337,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse reference URL', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -337,6 +352,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse remote attack', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -351,6 +367,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse risk', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {
@@ -365,6 +382,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse software', () => {
     const elem = {
+      _id: 'test-id',
       cert_bund_adv: {
         raw_data: {
           Advisory: {

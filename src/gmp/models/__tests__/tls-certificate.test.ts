@@ -12,7 +12,8 @@ describe('TlsCertificate Model tests', () => {
   testModel(TlsCertificate, 'tlscertificate', {testName: false});
 
   test('should use defaults', () => {
-    const tlsCertificate = new TlsCertificate();
+    const tlsCertificate = new TlsCertificate({id: 'test-id'});
+    expect(tlsCertificate.id).toEqual('test-id');
     expect(tlsCertificate.activationTime).toBeUndefined();
     expect(tlsCertificate.certificate).toBeUndefined();
     expect(tlsCertificate.expirationTime).toBeUndefined();
@@ -31,7 +32,8 @@ describe('TlsCertificate Model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const tlsCertificate = TlsCertificate.fromElement();
+    const tlsCertificate = TlsCertificate.fromElement({_id: 'test-id'});
+    expect(tlsCertificate.id).toEqual('test-id');
     expect(tlsCertificate.activationTime).toBeUndefined();
     expect(tlsCertificate.certificate).toBeUndefined();
     expect(tlsCertificate.expirationTime).toBeUndefined();
@@ -51,6 +53,7 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse certificate', () => {
     const tlsCertificate1 = TlsCertificate.fromElement({
+      _id: 'test-id',
       certificate: {
         __text: 'CERT123',
       },
@@ -60,6 +63,7 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse issuer dn', () => {
     const tlsCertificate = TlsCertificate.fromElement({
+      _id: 'test-id',
       issuer_dn: 'CN=issuer',
     });
     expect(tlsCertificate.issuerDn).toEqual('CN=issuer');
@@ -67,6 +71,7 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse subject dn', () => {
     const tlsCertificate = TlsCertificate.fromElement({
+      _id: 'test-id',
       subject_dn: 'CN=subject',
     });
     expect(tlsCertificate.subjectDn).toEqual('CN=subject');
@@ -74,12 +79,15 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse activation_time', () => {
     const tlsCertificate1 = TlsCertificate.fromElement({
+      _id: 'test-id',
       activation_time: '2019-10-10T11:09:23.022Z',
     });
     const tlsCertificate2 = TlsCertificate.fromElement({
+      _id: 'test-id',
       activation_time: 'undefined',
     });
     const tlsCertificate3 = TlsCertificate.fromElement({
+      _id: 'test-id',
       activation_time: 'unlimited',
     });
 
@@ -92,12 +100,15 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse expiration time', () => {
     const tlsCertificate1 = TlsCertificate.fromElement({
+      _id: 'test-id',
       expiration_time: '2019-10-10T11:09:23.022Z',
     });
     const tlsCertificate2 = TlsCertificate.fromElement({
+      _id: 'test-id',
       expiration_time: 'undefined',
     });
     const tlsCertificate3 = TlsCertificate.fromElement({
+      _id: 'test-id',
       expiration_time: 'unlimited',
     });
 
@@ -110,12 +121,15 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse last seen', () => {
     const tlsCertificate1 = TlsCertificate.fromElement({
+      _id: 'test-id',
       last_seen: '2019-10-10T11:09:23.022Z',
     });
     const tlsCertificate2 = TlsCertificate.fromElement({
+      _id: 'test-id',
       last_seen: 'undefined',
     });
     const tlsCertificate3 = TlsCertificate.fromElement({
+      _id: 'test-id',
       last_seen: 'unlimited',
     });
 
@@ -128,15 +142,19 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse time status', () => {
     const tlsCertificate1 = TlsCertificate.fromElement({
+      _id: 'test-id',
       time_status: TIME_STATUS.inactive,
     });
     const tlsCertificate2 = TlsCertificate.fromElement({
+      _id: 'test-id',
       time_status: TIME_STATUS.valid,
     });
     const tlsCertificate3 = TlsCertificate.fromElement({
+      _id: 'test-id',
       time_status: TIME_STATUS.expired,
     });
     const tlsCertificate4 = TlsCertificate.fromElement({
+      _id: 'test-id',
       time_status: TIME_STATUS.unknown,
     });
 
@@ -148,9 +166,11 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse valid', () => {
     const tlsCertificate1 = TlsCertificate.fromElement({
+      _id: 'test-id',
       valid: 1,
     });
     const tlsCertificate2 = TlsCertificate.fromElement({
+      _id: 'test-id',
       valid: 0,
     });
 
@@ -160,9 +180,11 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse trust', () => {
     const tlsCertificate1 = TlsCertificate.fromElement({
+      _id: 'test-id',
       trust: 1,
     });
     const tlsCertificate2 = TlsCertificate.fromElement({
+      _id: 'test-id',
       trust: 0,
     });
 
@@ -172,6 +194,7 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse sha256 fingerprint', () => {
     const tlsCertificate1 = TlsCertificate.fromElement({
+      _id: 'test-id',
       sha256_fingerprint: 'SHA256',
     });
     expect(tlsCertificate1.sha256Fingerprint).toEqual('SHA256');
@@ -179,6 +202,7 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse md5 fingerprint', () => {
     const tlsCertificate1 = TlsCertificate.fromElement({
+      _id: 'test-id',
       md5_fingerprint: 'MD5',
     });
     expect(tlsCertificate1.md5Fingerprint).toEqual('MD5');
@@ -186,6 +210,7 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse source reports', () => {
     const tlsCertificate = TlsCertificate.fromElement({
+      _id: 'test-id',
       sources: {
         source: [
           {
@@ -230,6 +255,7 @@ describe('TlsCertificate Model tests', () => {
     ]);
 
     const tlsCertificate2 = TlsCertificate.fromElement({
+      _id: 'test-id',
       sources: {
         source: [
           {
@@ -263,6 +289,7 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse source hosts', () => {
     const tlsCertificate = TlsCertificate.fromElement({
+      _id: 'test-id',
       sources: {
         source: [
           {
@@ -300,6 +327,7 @@ describe('TlsCertificate Model tests', () => {
     ]);
 
     const tlsCertificate2 = TlsCertificate.fromElement({
+      _id: 'test-id',
       certificate: {
         __text: 'CERT123',
       },
@@ -338,6 +366,7 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse source ports', () => {
     const tlsCertificate = TlsCertificate.fromElement({
+      _id: 'test-id',
       sources: {
         source: [
           {
@@ -356,6 +385,7 @@ describe('TlsCertificate Model tests', () => {
     expect(tlsCertificate.sourcePorts).toEqual(['1234', '5678']);
 
     const tlsCertificate2 = TlsCertificate.fromElement({
+      _id: 'test-id',
       sources: {
         source: [
           {
@@ -376,6 +406,7 @@ describe('TlsCertificate Model tests', () => {
 
   test('should parse serial', () => {
     const tlsCertificate = TlsCertificate.fromElement({
+      _id: 'test-id',
       serial: '1234567890',
     });
     expect(tlsCertificate.serial).toEqual('1234567890');

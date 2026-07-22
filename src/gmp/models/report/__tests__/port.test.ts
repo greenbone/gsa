@@ -20,7 +20,7 @@ describe('ReportPort tests', () => {
   });
 
   test('should parse empty element', () => {
-    const port = ReportPort.fromElement();
+    const port = ReportPort.fromElement({});
     expect(port.id).toBeUndefined();
     expect(port.threat).toBeUndefined();
     expect(port.number).toEqual(0);
@@ -32,7 +32,7 @@ describe('ReportPort tests', () => {
   });
 
   test('should add hosts', () => {
-    const port = ReportPort.fromElement();
+    const port = ReportPort.fromElement({});
     expect(port.hosts).toBeDefined();
     expect(port.hosts.hostsByIp).toEqual({});
     expect(port.hosts.count).toEqual(0);
@@ -44,7 +44,7 @@ describe('ReportPort tests', () => {
   });
 
   test('should allow to set severity', () => {
-    const port = ReportPort.fromElement();
+    const port = ReportPort.fromElement({});
     expect(port.severity).toBeUndefined();
 
     port.setSeverity(5.5);
@@ -62,16 +62,12 @@ describe('ReportPort tests', () => {
   });
 
   test('should parse port information', () => {
-    const port1 = ReportPort.fromElement({
-      __text: '123/tcp',
-    });
+    const port1 = ReportPort.fromElement({__text: '123/tcp'});
     expect(port1.id).toEqual('123/tcp');
     expect(port1.number).toEqual(123);
     expect(port1.protocol).toEqual('tcp');
 
-    const port2 = ReportPort.fromElement({
-      __text: 'general/tcp',
-    });
+    const port2 = ReportPort.fromElement({__text: 'general/tcp'});
     expect(port2.id).toEqual('general/tcp');
     expect(port2.number).toEqual(0);
     expect(port2.protocol).toEqual('tcp');

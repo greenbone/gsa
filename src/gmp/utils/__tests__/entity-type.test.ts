@@ -26,19 +26,19 @@ describe('getEntityType function tests', () => {
   });
 
   test('should return entity type of model', () => {
-    const model = parseModelFromElement({}, 'task');
+    const model = parseModelFromElement({_id: 'test-id'}, 'task');
 
     expect(getEntityType(model)).toEqual('task');
   });
 
   test('should return entity type for info models', () => {
-    const model = Nvt.fromElement();
+    const model = Nvt.fromElement({_id: 'test-id', nvt: {_oid: 'test-oid'}});
 
     expect(getEntityType(model)).toEqual('nvt');
   });
 
   test('should return entity type for asset models', () => {
-    const model = Host.fromElement();
+    const model = Host.fromElement({_id: 'test-id'});
 
     expect(getEntityType(model)).toEqual('host');
   });

@@ -11,7 +11,8 @@ describe('Report tests', () => {
   testModel(Report, 'report');
 
   test('should use defaults', () => {
-    const report = new Report();
+    const report = new Report({id: 'test-id'});
+    expect(report.id).toEqual('test-id');
     expect(report.content_type).toBeUndefined();
     expect(report.report).toBeUndefined();
     expect(report.report_config).toBeUndefined();
@@ -21,7 +22,7 @@ describe('Report tests', () => {
   });
 
   test('should parse empty element', () => {
-    const report = Report.fromElement();
+    const report = Report.fromElement({_id: 'test-id'});
     expect(report.content_type).toBeUndefined();
     expect(report.report).toBeUndefined();
     expect(report.report_config).toBeUndefined();
@@ -32,6 +33,7 @@ describe('Report tests', () => {
 
   test('should parse report', () => {
     const report = Report.fromElement({
+      _id: 'test-id',
       report: {
         _type: 'delta',
         _id: '123',
@@ -45,14 +47,13 @@ describe('Report tests', () => {
   });
 
   test('should parse report type', () => {
-    const report = Report.fromElement({
-      _type: 'delta',
-    });
+    const report = Report.fromElement({_id: 'test-id', _type: 'delta'});
     expect(report.report_type).toEqual('delta');
   });
 
   test('should parse report config', () => {
     const report = Report.fromElement({
+      _id: 'test-id',
       report_config: {
         _id: 'config123',
         name: 'Test Config',
@@ -65,6 +66,7 @@ describe('Report tests', () => {
 
   test('should parse report format', () => {
     const report = Report.fromElement({
+      _id: 'test-id',
       report_format: {
         _id: 'format123',
         name: 'Test Format',
@@ -77,6 +79,7 @@ describe('Report tests', () => {
 
   test('should parse task', () => {
     const report = Report.fromElement({
+      _id: 'test-id',
       task: {
         _id: 'task123',
         name: 'Test Task',
@@ -89,6 +92,7 @@ describe('Report tests', () => {
 
   test('should parse content type', () => {
     const report = Report.fromElement({
+      _id: 'test-id',
       _content_type: 'application/xml',
     });
     expect(report.content_type).toEqual('application/xml');

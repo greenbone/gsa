@@ -44,7 +44,7 @@ describe('User model tests', () => {
       },
     };
     const user = User.fromElement(elem);
-    const user2 = User.fromElement();
+    const user2 = User.fromElement({_id: 'test-id'});
 
     expect(user.groups[0]).toBeInstanceOf(Model);
     expect(user.groups[0].entityType).toEqual('group');
@@ -67,7 +67,7 @@ describe('User model tests', () => {
       addresses: [],
     };
     const user = User.fromElement(elem);
-    const user2 = User.fromElement({});
+    const user2 = User.fromElement({_id: 'test-id'});
 
     expect(user.hosts).toEqual(res);
     expect(user2.hosts).toEqual(res2);
@@ -88,7 +88,7 @@ describe('User model tests', () => {
     };
     const user1 = User.fromElement(elem1);
     const user2 = User.fromElement(elem2);
-    const user3 = User.fromElement();
+    const user3 = User.fromElement({_id: 'test-id'});
 
     expect(user1.authMethod).toEqual(AUTH_METHOD_LDAP);
     expect(user2.authMethod).toEqual(AUTH_METHOD_RADIUS);

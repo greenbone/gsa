@@ -8,23 +8,26 @@ import Model from 'gmp/models/model';
 import Permission from 'gmp/models/permission';
 import {testModel} from 'gmp/models/testing';
 
-testModel(Permission, 'permission');
-
 describe('Permission model tests', () => {
+  testModel(Permission, 'permission');
+
   test('should use defaults', () => {
-    const permission = new Permission();
+    const permission = new Permission({id: 'test-id'});
+    expect(permission.id).toEqual('test-id');
     expect(permission.resource).toBeUndefined();
     expect(permission.subject).toBeUndefined();
   });
 
   test('should parse empty element', () => {
-    const permission = Permission.fromElement();
+    const permission = Permission.fromElement({_id: 'test-id'});
+    expect(permission.id).toEqual('test-id');
     expect(permission.resource).toBeUndefined();
     expect(permission.subject).toBeUndefined();
   });
 
   test('should parse resource', () => {
     const permission = Permission.fromElement({
+      _id: 'test-id',
       resource: {
         _id: '123',
         type: 'alert',
@@ -35,6 +38,7 @@ describe('Permission model tests', () => {
     expect(permission.resource?.id).toEqual('123');
 
     const permission2 = Permission.fromElement({
+      _id: 'test-id',
       resource: {
         type: 'alert',
       },
@@ -44,6 +48,7 @@ describe('Permission model tests', () => {
 
   test('should parse subject as model of their type', () => {
     const permission = Permission.fromElement({
+      _id: 'test-id',
       subject: {
         _id: '123',
         type: 'group',
@@ -54,6 +59,7 @@ describe('Permission model tests', () => {
     expect(permission.subject?.entityType).toEqual('group');
 
     const permission2 = Permission.fromElement({
+      _id: 'test-id',
       subject: {
         type: 'user',
       },

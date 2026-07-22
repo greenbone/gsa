@@ -16,7 +16,7 @@ describe('Audit model tests', () => {
   testModel(Audit, 'audit', {testIsActive: false});
 
   test('should use defaults', () => {
-    const audit = new Audit();
+    const audit = new Audit({id: 'test-id'});
     expect(audit.alerts).toEqual([]);
     expect(audit.alterable).toBeUndefined();
     expect(audit.apply_overrides).toBeUndefined();
@@ -48,7 +48,7 @@ describe('Audit model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const audit = Audit.fromElement();
+    const audit = Audit.fromElement({_id: 'test-id'});
     expect(audit.alerts).toEqual([]);
     expect(audit.alterable).toBeUndefined();
     expect(audit.apply_overrides).toBeUndefined();
@@ -341,12 +341,11 @@ describe('Audit model tests', () => {
   });
 
   test('should parse observers', () => {
-    const audit = Audit.fromElement({
-      observers: 'foo bar',
-    });
+    const audit = Audit.fromElement({_id: 'test-id', observers: 'foo bar'});
     expect(audit.observers?.user).toEqual(['foo', 'bar']);
 
     const audit2 = Audit.fromElement({
+      _id: 'test-id',
       observers: {
         __text: 'anon nymous',
         role: [{name: 'lorem'}],
@@ -358,14 +357,13 @@ describe('Audit model tests', () => {
     expect(audit2.observers?.role).toEqual(['lorem']);
     expect(audit2.observers?.group).toEqual(['ipsum', 'dolor']);
 
-    const audit3 = Audit.fromElement({
-      observers: '',
-    });
+    const audit3 = Audit.fromElement({_id: 'test-id', observers: ''});
     expect(audit3.observers?.user).toBeUndefined();
     expect(audit3.observers?.role).toBeUndefined();
     expect(audit3.observers?.group).toBeUndefined();
 
     const audit4 = Audit.fromElement({
+      _id: 'test-id',
       observers: {
         __text: '',
       },
@@ -454,7 +452,10 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromElement({status: status as AuditStatus});
+      const audit = Audit.fromElement({
+        _id: 'test-id',
+        status: status as AuditStatus,
+      });
       expect(audit.isActive()).toEqual(exp);
     }
   });
@@ -477,7 +478,10 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromElement({status: status as AuditStatus});
+      const audit = Audit.fromElement({
+        _id: 'test-id',
+        status: status as AuditStatus,
+      });
       expect(audit.isRunning()).toEqual(exp);
     }
   });
@@ -500,7 +504,10 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromElement({status: status as AuditStatus});
+      const audit = Audit.fromElement({
+        _id: 'test-id',
+        status: status as AuditStatus,
+      });
       expect(audit.isStopped()).toEqual(exp);
     }
   });
@@ -523,7 +530,10 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromElement({status: status as AuditStatus});
+      const audit = Audit.fromElement({
+        _id: 'test-id',
+        status: status as AuditStatus,
+      });
       expect(audit.isInterrupted()).toEqual(exp);
     }
   });
@@ -546,16 +556,27 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromElement({status: status as AuditStatus});
+      const audit = Audit.fromElement({
+        _id: 'test-id',
+        status: status as AuditStatus,
+      });
       expect(audit.isNew()).toEqual(exp);
     }
   });
 
   test('should be changeable if alterable or new', () => {
-    let audit = Audit.fromElement({status: AUDIT_STATUS.new, alterable: 0});
+    let audit = Audit.fromElement({
+      _id: 'test-id',
+      status: AUDIT_STATUS.new,
+      alterable: 0,
+    });
     expect(audit.isChangeable()).toEqual(true);
 
-    audit = Audit.fromElement({status: AUDIT_STATUS.done, alterable: 1});
+    audit = Audit.fromElement({
+      _id: 'test-id',
+      status: AUDIT_STATUS.done,
+      alterable: 1,
+    });
     expect(audit.isChangeable()).toEqual(true);
   });
 });

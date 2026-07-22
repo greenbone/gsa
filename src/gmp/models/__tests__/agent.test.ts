@@ -13,9 +13,8 @@ describe('Agent model tests', () => {
   testModel(Agent, 'agent');
 
   test('should use defaults', () => {
-    const agent = new Agent();
-
-    expect(agent.id).toBeUndefined();
+    const agent = new Agent({id: 'test-id'});
+    expect(agent.id).toEqual('test-id');
     expect(agent.name).toBeUndefined();
     expect(agent.comment).toBeUndefined();
     expect(agent.hostname).toBeUndefined();
@@ -40,9 +39,8 @@ describe('Agent model tests', () => {
   });
 
   test('should parse defaults', () => {
-    const agent = Agent.fromElement({});
-
-    expect(agent.id).toBeUndefined();
+    const agent = Agent.fromElement({_id: 'test-id'});
+    expect(agent.id).toEqual('test-id');
     expect(agent.name).toBeUndefined();
     expect(agent.comment).toBeUndefined();
     expect(agent.hostname).toBeUndefined();
@@ -67,61 +65,92 @@ describe('Agent model tests', () => {
   });
 
   test('should parse hostname', () => {
-    const agent = Agent.fromElement({hostname: 'agent-hostname'});
+    const agent = Agent.fromElement({
+      _id: 'test-id',
+      hostname: 'agent-hostname',
+    });
     expect(agent.hostname).toEqual('agent-hostname');
   });
 
   test('should parse ipAddresses', () => {
-    const agent = Agent.fromElement({ip: ['192.168.1.1', '192.168.1.2']});
+    const agent = Agent.fromElement({
+      _id: 'test-id',
+      ip: ['192.168.1.1', '192.168.1.2'],
+    });
     expect(agent.ipAddresses).toEqual(['192.168.1.1', '192.168.1.2']);
   });
 
   test('should parse single ipAddress', () => {
-    const agent = Agent.fromElement({ip: '192.168.1.1'});
+    const agent = Agent.fromElement({_id: 'test-id', ip: '192.168.1.1'});
     expect(agent.ipAddresses).toEqual(['192.168.1.1']);
   });
 
   test('should parse agentId', () => {
-    const agent = Agent.fromElement({agent_id: 'agent-1234'});
+    const agent = Agent.fromElement({_id: 'test-id', agent_id: 'agent-1234'});
     expect(agent.agentId).toEqual('agent-1234');
   });
 
   test('should parse authorized', () => {
-    const agentTrue = Agent.fromElement({authorized: YES_VALUE});
+    const agentTrue = Agent.fromElement({
+      _id: 'test-id',
+      authorized: YES_VALUE,
+    });
     expect(agentTrue.authorized).toEqual(true);
 
-    const agentFalse = Agent.fromElement({authorized: NO_VALUE});
+    const agentFalse = Agent.fromElement({
+      _id: 'test-id',
+      authorized: NO_VALUE,
+    });
     expect(agentFalse.authorized).toEqual(false);
   });
 
   test('should parse agent_update_available', () => {
-    const agentTrue = Agent.fromElement({agent_update_available: YES_VALUE});
+    const agentTrue = Agent.fromElement({
+      _id: 'test-id',
+      agent_update_available: YES_VALUE,
+    });
     expect(agentTrue.agentUpdateAvailable).toEqual(true);
 
-    const agentFalse = Agent.fromElement({agent_update_available: NO_VALUE});
+    const agentFalse = Agent.fromElement({
+      _id: 'test-id',
+      agent_update_available: NO_VALUE,
+    });
     expect(agentFalse.agentUpdateAvailable).toEqual(false);
   });
 
   test('should parse updater_update_available', () => {
-    const agentTrue = Agent.fromElement({updater_update_available: YES_VALUE});
+    const agentTrue = Agent.fromElement({
+      _id: 'test-id',
+      updater_update_available: YES_VALUE,
+    });
     expect(agentTrue.updaterUpdateAvailable).toEqual(true);
 
-    const agentFalse = Agent.fromElement({updater_update_available: NO_VALUE});
+    const agentFalse = Agent.fromElement({
+      _id: 'test-id',
+      updater_update_available: NO_VALUE,
+    });
     expect(agentFalse.updaterUpdateAvailable).toEqual(false);
   });
 
   test('should parse connectionStatus', () => {
-    const agent = Agent.fromElement({connection_status: 'connected'});
+    const agent = Agent.fromElement({
+      _id: 'test-id',
+      connection_status: 'connected',
+    });
     expect(agent.connectionStatus).toEqual('connected');
   });
 
   test('should parse lastUpdate', () => {
-    const agent = Agent.fromElement({last_update: '2024-01-01T12:00:00Z'});
+    const agent = Agent.fromElement({
+      _id: 'test-id',
+      last_update: '2024-01-01T12:00:00Z',
+    });
     expect(agent.lastUpdate).toEqual(date('2024-01-01T12:00:00.000Z'));
   });
 
   test('should parse lastUpdaterHeartbeat', () => {
     const agent = Agent.fromElement({
+      _id: 'test-id',
       last_updater_heartbeat: '2024-01-02T15:30:00Z',
     });
     expect(agent.lastUpdaterHeartbeat).toEqual(
@@ -130,40 +159,50 @@ describe('Agent model tests', () => {
   });
 
   test('should parse updaterVersion', () => {
-    const agent = Agent.fromElement({updater_version: '1.2.3'});
+    const agent = Agent.fromElement({_id: 'test-id', updater_version: '1.2.3'});
     expect(agent.updaterVersion).toEqual('1.2.3');
   });
 
   test('should parse agentVersion', () => {
-    const agent = Agent.fromElement({agent_version: '4.5.6'});
+    const agent = Agent.fromElement({_id: 'test-id', agent_version: '4.5.6'});
     expect(agent.agentVersion).toEqual('4.5.6');
   });
 
   test('should parse operatingSystem', () => {
-    const agent = Agent.fromElement({operating_system: 'Linux'});
+    const agent = Agent.fromElement({
+      _id: 'test-id',
+      operating_system: 'Linux',
+    });
     expect(agent.operatingSystem).toEqual('Linux');
   });
 
   test('should parse architecture', () => {
-    const agent = Agent.fromElement({architecture: 'x86_64'});
+    const agent = Agent.fromElement({_id: 'test-id', architecture: 'x86_64'});
     expect(agent.architecture).toEqual('x86_64');
   });
 
   test('should parse updateToLatest boolean', () => {
-    const agentTrue = Agent.fromElement({update_to_latest: YES_VALUE});
+    const agentTrue = Agent.fromElement({
+      _id: 'test-id',
+      update_to_latest: YES_VALUE,
+    });
     expect(agentTrue.updateToLatest).toEqual(true);
 
-    const agentFalse = Agent.fromElement({update_to_latest: NO_VALUE});
+    const agentFalse = Agent.fromElement({
+      _id: 'test-id',
+      update_to_latest: NO_VALUE,
+    });
     expect(agentFalse.updateToLatest).toEqual(false);
   });
 
   test('should parse schedule', () => {
-    const agent = Agent.fromElement({schedule: 'daily at 2am'});
+    const agent = Agent.fromElement({_id: 'test-id', schedule: 'daily at 2am'});
     expect(agent.schedule).toEqual('daily at 2am');
   });
 
   test('should parse scanner', () => {
     const agent = Agent.fromElement({
+      _id: 'test-id',
       scanner: {
         _id: '3b4be213-281f-49ee-b457-5a5f34f71510',
         name: 'Agent1',
@@ -175,17 +214,24 @@ describe('Agent model tests', () => {
   });
 
   test('should parse latest_agent_version', () => {
-    const agent = Agent.fromElement({latest_agent_version: 'v1'});
+    const agent = Agent.fromElement({
+      _id: 'test-id',
+      latest_agent_version: 'v1',
+    });
     expect(agent.latestAgentVersion).toEqual('v1');
   });
 
   test('should parse latest_updater_version', () => {
-    const agent = Agent.fromElement({latest_updater_version: 'v1'});
+    const agent = Agent.fromElement({
+      _id: 'test-id',
+      latest_updater_version: 'v1',
+    });
     expect(agent.latestUpdaterVersion).toEqual('v1');
   });
 
   test('should parse config', () => {
     const agent = Agent.fromElement({
+      _id: 'test-id',
       config: {
         heartbeat: {
           interval_in_seconds: 300,
@@ -226,29 +272,32 @@ describe('Agent model tests', () => {
   });
 
   test('should check if agent is authorized', () => {
-    const authorizedAgent = new Agent({authorized: true});
+    const authorizedAgent = new Agent({id: '123', authorized: true});
     expect(authorizedAgent.isAuthorized()).toEqual(true);
 
-    const unauthorizedAgent = new Agent({authorized: false});
+    const unauthorizedAgent = new Agent({id: '123', authorized: false});
     expect(unauthorizedAgent.isAuthorized()).toEqual(false);
 
-    const undefinedAgent = new Agent();
+    const undefinedAgent = new Agent({id: 'test-id'});
     expect(undefinedAgent.isAuthorized()).toEqual(false);
   });
 
   test('should check if agent should update to latest', () => {
-    const updateAgent = new Agent({updateToLatest: true});
+    const updateAgent = new Agent({id: '123', updateToLatest: true});
     expect(updateAgent.isUpdateToLatest()).toEqual(true);
 
-    const noUpdateAgent = new Agent({updateToLatest: false});
+    const noUpdateAgent = new Agent({id: '123', updateToLatest: false});
     expect(noUpdateAgent.isUpdateToLatest()).toEqual(false);
   });
 
   test('should get connection status', () => {
-    const connectedAgent = new Agent({connectionStatus: 'connected'});
+    const connectedAgent = new Agent({
+      id: '123',
+      connectionStatus: 'connected',
+    });
     expect(connectedAgent.getConnectionStatus()).toEqual('connected');
 
-    const undefinedStatusAgent = new Agent();
+    const undefinedStatusAgent = new Agent({id: 'test-id'});
     expect(undefinedStatusAgent.getConnectionStatus()).toEqual('unknown');
   });
 });

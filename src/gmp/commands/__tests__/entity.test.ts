@@ -15,20 +15,17 @@ import {
 import type Http from 'gmp/http/http';
 import Response from 'gmp/http/response';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
-import {
-  type EntityModelElement,
-  type EntityModelProperties,
-} from 'gmp/models/entity-model';
+import {type EntityModelElement} from 'gmp/models/entity-model';
 import Filter from 'gmp/models/filter';
 import BaseFilter from 'gmp/models/filter/base-filter';
 import Model from 'gmp/models/model';
 
 type FooElement = EntityModelElement;
-type FooProperties = EntityModelProperties;
 
 class Foo extends Model {
   static fromElement(element: FooElement): Foo {
-    return new Foo(element as FooProperties);
+    const ret = super.fromElement(element);
+    return new Foo(ret);
   }
 }
 

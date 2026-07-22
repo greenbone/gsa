@@ -14,7 +14,7 @@ describe('Note model tests', () => {
   testModel(Note, 'note', {testIsActive: false});
 
   test('should use defaults', () => {
-    const note = new Note();
+    const note = new Note({id: 'test-id'});
     expect(note.hosts).toEqual([]);
     expect(note.nvt).toBeUndefined();
     expect(note.port).toBeUndefined();
@@ -26,7 +26,7 @@ describe('Note model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const note = Note.fromElement();
+    const note = Note.fromElement({_id: 'test-id'});
     expect(note.hosts).toEqual([]);
     expect(note.nvt).toBeUndefined();
     expect(note.port).toBeUndefined();
@@ -38,24 +38,24 @@ describe('Note model tests', () => {
   });
 
   test('should parse severity', () => {
-    const note = Note.fromElement({severity: 8.5});
-    const note2 = Note.fromElement({severity: 10});
+    const note = Note.fromElement({_id: 'test-id', severity: 8.5});
+    const note2 = Note.fromElement({_id: 'test-id', severity: 10});
 
     expect(note.severity).toEqual(8.5);
     expect(note2.severity).toEqual(10);
   });
 
   test('should parse active', () => {
-    const note1 = Note.fromElement({active: 0});
-    const note2 = Note.fromElement({active: 1});
+    const note1 = Note.fromElement({_id: 'test-id', active: 0});
+    const note2 = Note.fromElement({_id: 'test-id', active: 1});
 
     expect(note1.active).toEqual(NO_VALUE);
     expect(note2.active).toEqual(YES_VALUE);
   });
 
   test('should parse text excerpt', () => {
-    const note1 = Note.fromElement({text_excerpt: '0'});
-    const note2 = Note.fromElement({text_excerpt: '1'});
+    const note1 = Note.fromElement({_id: 'test-id', text_excerpt: '0'});
+    const note2 = Note.fromElement({_id: 'test-id', text_excerpt: '1'});
 
     expect(note1.textExcerpt).toEqual(NO_VALUE);
     expect(note2.textExcerpt).toEqual(YES_VALUE);
@@ -63,17 +63,18 @@ describe('Note model tests', () => {
 
   test('should parse hosts', () => {
     const note1 = Note.fromElement({
+      _id: 'test-id',
       hosts: '123.456.789.42, 987.654.321.1',
     });
-    const note2 = Note.fromElement({hosts: ''});
+    const note2 = Note.fromElement({_id: 'test-id', hosts: ''});
 
     expect(note1.hosts).toEqual(['123.456.789.42', '987.654.321.1']);
     expect(note2.hosts).toEqual([]);
   });
 
   test('should parse port', () => {
-    const note1 = Note.fromElement({port: 'general/tcp'});
-    const note2 = Note.fromElement({port: ''});
+    const note1 = Note.fromElement({_id: 'test-id', port: 'general/tcp'});
+    const note2 = Note.fromElement({_id: 'test-id', port: ''});
 
     expect(note1.port).toEqual('general/tcp');
     expect(note2.port).toBeUndefined();
@@ -81,16 +82,18 @@ describe('Note model tests', () => {
 
   test('should parse task', () => {
     const note1 = Note.fromElement({
+      _id: 'test-id',
       task: {
         _id: '123abc',
       },
     });
     const note2 = Note.fromElement({
+      _id: 'test-id',
       task: {
         _id: '',
       },
     });
-    const note3 = Note.fromElement({});
+    const note3 = Note.fromElement({_id: 'test-id'});
 
     expect(note1.task?.id).toEqual('123abc');
     expect(note1.task?.entityType).toEqual('task');
@@ -100,11 +103,13 @@ describe('Note model tests', () => {
 
   test('should parse result', () => {
     const note1 = Note.fromElement({
+      _id: 'test-id',
       result: {
         _id: '123abc',
       },
     });
     const note2 = Note.fromElement({
+      _id: 'test-id',
       result: {
         _id: '',
       },
@@ -118,6 +123,7 @@ describe('Note model tests', () => {
 
   test('should parse NVT', () => {
     const note = Note.fromElement({
+      _id: 'test-id',
       nvt: {
         _oid: '1.2.3',
         name: 'foo',
@@ -132,8 +138,8 @@ describe('Note model tests', () => {
 
 describe('Note model methods tests', () => {
   test('isExcerpt() should return correct true/false', () => {
-    const note1 = Note.fromElement({text_excerpt: '1'});
-    const note2 = Note.fromElement({text_excerpt: '0'});
+    const note1 = Note.fromElement({_id: 'test-id', text_excerpt: '1'});
+    const note2 = Note.fromElement({_id: 'test-id', text_excerpt: '0'});
 
     expect(note1.isExcerpt()).toEqual(true);
     expect(note2.isExcerpt()).toEqual(false);

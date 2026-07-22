@@ -12,7 +12,8 @@ describe('Policy model tests', () => {
   testModel(Policy, 'policy');
 
   test('should use defaults', () => {
-    const policy = new Policy();
+    const policy = new Policy({id: 'test-id'});
+    expect(policy.id).toEqual('test-id');
     expect(policy.families).toBeUndefined();
     expect(policy.family_list).toEqual([]);
     expect(policy.nvts).toBeUndefined();
@@ -26,7 +27,8 @@ describe('Policy model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const policy = Policy.fromElement();
+    const policy = Policy.fromElement({_id: 'test-id'});
+    expect(policy.id).toEqual('test-id');
     expect(policy.families).toEqual({count: 0});
     expect(policy.family_list).toEqual([]);
     expect(policy.nvts).toBeUndefined();
@@ -41,6 +43,7 @@ describe('Policy model tests', () => {
 
   test('should parse families', () => {
     const policy = Policy.fromElement({
+      _id: 'test-id',
       families: {
         family: [
           {
@@ -76,6 +79,7 @@ describe('Policy model tests', () => {
     });
 
     const policy2 = Policy.fromElement({
+      _id: 'test-id',
       families: {
         family: [
           {
@@ -93,6 +97,7 @@ describe('Policy model tests', () => {
 
   test('should parse family_count', () => {
     const policy = Policy.fromElement({
+      _id: 'test-id',
       family_count: {
         __text: '42',
         growing: 1,
@@ -104,6 +109,7 @@ describe('Policy model tests', () => {
 
   test('should parse nvt', () => {
     const policy = Policy.fromElement({
+      _id: 'test-id',
       nvt_count: {
         __text: '42',
         growing: 1,
@@ -139,6 +145,7 @@ describe('Policy model tests', () => {
     ];
 
     const policy = Policy.fromElement({
+      _id: 'test-id',
       preferences: {
         preference: [
           {
@@ -166,6 +173,7 @@ describe('Policy model tests', () => {
 
   test('should parse scanner', () => {
     const policy = Policy.fromElement({
+      _id: 'test-id',
       scanner: {
         __text: 'foo',
         _id: '123abc',
@@ -177,6 +185,7 @@ describe('Policy model tests', () => {
 
   test('should parse audits', () => {
     const policy = Policy.fromElement({
+      _id: 'test-id',
       tasks: {
         task: [
           {
@@ -191,10 +200,10 @@ describe('Policy model tests', () => {
   });
 
   test('should parse predefined as boolean correctly', () => {
-    const policy = Policy.fromElement({predefined: 0});
+    const policy = Policy.fromElement({_id: 'test-id', predefined: 0});
     expect(policy.predefined).toEqual(false);
 
-    const policy2 = Policy.fromElement({predefined: 1});
+    const policy2 = Policy.fromElement({_id: 'test-id', predefined: 1});
     expect(policy2.predefined).toEqual(true);
   });
 });

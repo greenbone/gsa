@@ -15,7 +15,8 @@ describe('ScanConfig model tests', () => {
   testModel(ScanConfig, 'scanconfig');
 
   test('should use defaults', () => {
-    const scanConfig = new ScanConfig();
+    const scanConfig = new ScanConfig({id: 'test-id'});
+    expect(scanConfig.id).toEqual('test-id');
     expect(scanConfig.family_list).toEqual([]);
     expect(scanConfig.families).toBeUndefined();
     expect(scanConfig.nvts).toBeUndefined();
@@ -29,7 +30,7 @@ describe('ScanConfig model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const scanConfig = ScanConfig.fromElement();
+    const scanConfig = ScanConfig.fromElement({_id: 'test-id'});
     expect(scanConfig.family_list).toEqual([]);
     expect(scanConfig.families).toEqual({count: 0});
     expect(scanConfig.nvts).toBeUndefined();
@@ -44,6 +45,7 @@ describe('ScanConfig model tests', () => {
 
   test('should parse families', () => {
     const scanConfig = ScanConfig.fromElement({
+      _id: 'test-id',
       families: {
         family: [
           {
@@ -78,6 +80,7 @@ describe('ScanConfig model tests', () => {
     });
 
     const scanConfig2 = ScanConfig.fromElement({
+      _id: 'test-id',
       families: {
         family: [
           {
@@ -95,6 +98,7 @@ describe('ScanConfig model tests', () => {
 
   test('should parse family count', () => {
     const scanConfig = ScanConfig.fromElement({
+      _id: 'test-id',
       family_count: {
         __text: '42',
         growing: 1,
@@ -106,6 +110,7 @@ describe('ScanConfig model tests', () => {
 
   test('should parse nvts', () => {
     const scanConfig = ScanConfig.fromElement({
+      _id: 'test-id',
       nvt_count: {
         __text: '42',
         growing: 1,
@@ -141,6 +146,7 @@ describe('ScanConfig model tests', () => {
     ];
 
     const scanConfig = ScanConfig.fromElement({
+      _id: 'test-id',
       preferences: {
         preference: [
           {
@@ -168,6 +174,7 @@ describe('ScanConfig model tests', () => {
 
   test('should parse scanner', () => {
     const scanConfig = ScanConfig.fromElement({
+      _id: 'test-id',
       scanner: {
         __text: 'foo',
         _id: '123abc',
@@ -180,6 +187,7 @@ describe('ScanConfig model tests', () => {
 
   test('should parse tasks', () => {
     const scanConfig = ScanConfig.fromElement({
+      _id: 'test-id',
       tasks: {
         task: [
           {
@@ -195,16 +203,16 @@ describe('ScanConfig model tests', () => {
   });
 
   test('should parse predefined', () => {
-    const scanConfig = ScanConfig.fromElement({predefined: 0});
-    const scanConfig2 = ScanConfig.fromElement({predefined: 1});
+    const scanConfig = ScanConfig.fromElement({_id: 'test-id', predefined: 0});
+    const scanConfig2 = ScanConfig.fromElement({_id: 'test-id', predefined: 1});
 
     expect(scanConfig.predefined).toEqual(false);
     expect(scanConfig2.predefined).toEqual(true);
   });
 
   test('should parse deprecated', () => {
-    const scanConfig = ScanConfig.fromElement({deprecated: 0});
-    const scanConfig2 = ScanConfig.fromElement({deprecated: 1});
+    const scanConfig = ScanConfig.fromElement({_id: 'test-id', deprecated: 0});
+    const scanConfig2 = ScanConfig.fromElement({_id: 'test-id', deprecated: 1});
 
     expect(scanConfig.deprecated).toEqual(false);
     expect(scanConfig2.deprecated).toEqual(true);

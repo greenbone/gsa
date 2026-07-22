@@ -12,8 +12,8 @@ describe('WebApplicationTarget model tests', () => {
   testModel(WebApplicationTarget, 'webapplicationtarget');
 
   test('should use defaults', () => {
-    const target = new WebApplicationTarget();
-    expect(target.id).toBeUndefined();
+    const target = new WebApplicationTarget({id: 'test-id'});
+    expect(target.id).toEqual('test-id');
     expect(target.name).toBeUndefined();
     expect(target.comment).toBeUndefined();
     expect(target.urls).toEqual([]);
@@ -24,8 +24,8 @@ describe('WebApplicationTarget model tests', () => {
   });
 
   test('should parse defaults', () => {
-    const target = WebApplicationTarget.fromElement({});
-    expect(target.id).toBeUndefined();
+    const target = WebApplicationTarget.fromElement({_id: 'test-id'});
+    expect(target.id).toEqual('test-id');
     expect(target.name).toBeUndefined();
     expect(target.comment).toBeUndefined();
     expect(target.urls).toEqual([]);
@@ -37,6 +37,7 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should parse target_url as array of urls', () => {
     const target = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       urls: 'https://example.com,https://test.com',
     });
     expect(target.urls).toEqual(['https://example.com', 'https://test.com']);
@@ -44,6 +45,7 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should parse single target_url', () => {
     const target = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       urls: 'https://example.com',
     });
     expect(target.urls).toEqual(['https://example.com']);
@@ -51,18 +53,20 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should expose backward-compatible url getter', () => {
     const target = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       urls: 'https://example.com,https://test.com',
     });
     expect(target.url).toEqual('https://example.com');
   });
 
   test('should return empty string from url getter when urls is empty', () => {
-    const target = WebApplicationTarget.fromElement({});
+    const target = WebApplicationTarget.fromElement({_id: 'test-id'});
     expect(target.url).toEqual('');
   });
 
   test('should parse exclude_url as array', () => {
     const target = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       exclude_urls: 'https://exclude1.com,https://exclude2.com',
     });
     expect(target.excludeUrls).toEqual([
@@ -73,7 +77,10 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should parse credential', () => {
     const credential = {_id: 'cred-1', name: 'Credential1'};
-    const target = WebApplicationTarget.fromElement({credential});
+    const target = WebApplicationTarget.fromElement({
+      _id: 'test-id',
+      credential,
+    });
     expect(target.credential).toBeDefined();
     expect(target.credential?.id).toEqual('cred-1');
     expect(target.credential?.name).toEqual('Credential1');
@@ -81,6 +88,7 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should ignore empty credential', () => {
     const target = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       credential: {_id: ''},
     });
     expect(target.credential).toBeUndefined();
@@ -88,10 +96,12 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should parse reverseLookupOnly', () => {
     const targetTrue = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       reverse_lookup_only: YES_VALUE,
     });
     expect(targetTrue.reverseLookupOnly).toEqual(true);
     const targetFalse = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       reverse_lookup_only: NO_VALUE,
     });
     expect(targetFalse.reverseLookupOnly).toEqual(false);
@@ -99,10 +109,12 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should parse reverseLookupUnify', () => {
     const targetTrue = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       reverse_lookup_unify: YES_VALUE,
     });
     expect(targetTrue.reverseLookupUnify).toEqual(true);
     const targetFalse = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       reverse_lookup_unify: NO_VALUE,
     });
     expect(targetFalse.reverseLookupUnify).toEqual(false);
@@ -110,6 +122,7 @@ describe('WebApplicationTarget model tests', () => {
 
   test('should parse all fields together', () => {
     const target = WebApplicationTarget.fromElement({
+      _id: 'test-id',
       urls: 'https://a.com,https://b.com',
       exclude_urls: 'https://ex.com',
       credential: {_id: 'cred-2', name: 'Cred2'},

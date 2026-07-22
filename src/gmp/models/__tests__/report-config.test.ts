@@ -11,14 +11,16 @@ describe('Report Config model tests', () => {
   testModel(ReportConfig, 'reportconfig', {testIsActive: false});
 
   test('should use defaults', () => {
-    const reportConfig = new ReportConfig();
+    const reportConfig = new ReportConfig({id: 'test-id'});
+    expect(reportConfig.id).toEqual('test-id');
     expect(reportConfig.alerts).toEqual([]);
     expect(reportConfig.params).toEqual([]);
     expect(reportConfig.reportFormat).toBeUndefined();
   });
 
   test('should parse empty element', () => {
-    const reportConfig = ReportConfig.fromElement();
+    const reportConfig = ReportConfig.fromElement({_id: 'test-id'});
+    expect(reportConfig.id).toEqual('test-id');
     expect(reportConfig.alerts).toEqual([]);
     expect(reportConfig.params).toEqual([]);
     expect(reportConfig.reportFormat).toBeUndefined();
@@ -26,6 +28,7 @@ describe('Report Config model tests', () => {
 
   test('should parse report format', () => {
     const reportConfig = ReportConfig.fromElement({
+      _id: 'test-id',
       report_format: {
         _id: 'foo',
         name: 'bar',
@@ -37,6 +40,7 @@ describe('Report Config model tests', () => {
 
   test('should parse alerts', () => {
     const reportConfig = ReportConfig.fromElement({
+      _id: 'test-id',
       alerts: {
         alert: {
           _id: 'foo',
@@ -48,6 +52,7 @@ describe('Report Config model tests', () => {
     expect(reportConfig.alerts[0].name).toEqual('bar');
 
     const reportConfig2 = ReportConfig.fromElement({
+      _id: 'test-id',
       alerts: {
         alert: [
           {
@@ -70,6 +75,7 @@ describe('Report Config model tests', () => {
   describe('params tests', () => {
     test('should parse params with attributes given as objects where applicable', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             value: {
@@ -97,6 +103,7 @@ describe('Report Config model tests', () => {
 
     test('should parse params with attributes not given as objects', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             value: 'lorem',
@@ -116,6 +123,7 @@ describe('Report Config model tests', () => {
 
     test('should parse options in params', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             options: {
@@ -136,6 +144,7 @@ describe('Report Config model tests', () => {
 
     test('should return empty array if no options are given', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             type: {
@@ -150,6 +159,7 @@ describe('Report Config model tests', () => {
 
     test('should parse param if it is not in an array', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: {
           name: 'foo',
           type: {
@@ -163,6 +173,7 @@ describe('Report Config model tests', () => {
 
     test('should parse param valueUsingDefault', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             name: 'foo',
@@ -194,6 +205,7 @@ describe('Report Config model tests', () => {
 
     test('should parse value, default and type in string params', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             value: {
@@ -232,6 +244,7 @@ describe('Report Config model tests', () => {
 
     test('should parse value, default and type in text params', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             value: {
@@ -270,6 +283,7 @@ describe('Report Config model tests', () => {
 
     test('should parse value, default and type in integer params', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             value: {
@@ -308,6 +322,7 @@ describe('Report Config model tests', () => {
 
     test('should parse value, default and type in boolean params', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             value: {
@@ -346,6 +361,7 @@ describe('Report Config model tests', () => {
 
     test('should parse options, value, default and type in selection params', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             value: {
@@ -408,6 +424,7 @@ describe('Report Config model tests', () => {
 
     test('should parse value, default and type in report_format_list params', () => {
       const reportConfig = ReportConfig.fromElement({
+        _id: 'test-id',
         param: [
           {
             type: {

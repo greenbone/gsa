@@ -9,7 +9,8 @@ import {parseDate} from 'gmp/parser';
 
 describe('ReportReport tests', () => {
   test('should use defaults', () => {
-    const report = new ReportReport();
+    const report = new ReportReport({id: 'test-id'});
+    expect(report.id).toEqual('test-id');
     expect(report.delta_report).toBeUndefined();
     expect(report.filter).toBeUndefined();
     expect(report.report_type).toBeUndefined();
@@ -22,7 +23,8 @@ describe('ReportReport tests', () => {
   });
 
   test('should parse empty element', () => {
-    const report = ReportReport.fromElement();
+    const report = ReportReport.fromElement({_id: 'test-id'});
+    expect(report.id).toEqual('test-id');
     expect(report.delta_report).toBeUndefined();
     expect(report.filter).toBeDefined();
     expect(report.report_type).toBeUndefined();
@@ -31,11 +33,12 @@ describe('ReportReport tests', () => {
     expect(report.scan_run_status).toBeUndefined();
     expect(report.scan_start).toBeUndefined();
     expect(report.severity).toBeUndefined();
-    expect(report.task).toBeDefined();
+    expect(report.task).toBeUndefined();
   });
 
   test('should parse filter', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       filters: {
         _id: 'filter1',
         term: 'foo=bar',
@@ -47,14 +50,13 @@ describe('ReportReport tests', () => {
   });
 
   test('should parse report type', () => {
-    const report = ReportReport.fromElement({
-      _type: 'delta',
-    });
+    const report = ReportReport.fromElement({_id: 'test-id', _type: 'delta'});
     expect(report.report_type).toEqual('delta');
   });
 
   test('should parse severity', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       severity: {
         filtered: 5,
         full: 7,
@@ -67,6 +69,7 @@ describe('ReportReport tests', () => {
 
   test('should parse scan start', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       scan_start: '2024-01-01T00:00:00Z',
     });
     expect(report.scan_start).toEqual(parseDate('2024-01-01T00:00:00Z'));
@@ -74,6 +77,7 @@ describe('ReportReport tests', () => {
 
   test('should parse scan end', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       scan_end: '2024-01-02T00:00:00Z',
     });
     expect(report.scan_end).toEqual(parseDate('2024-01-02T00:00:00Z'));
@@ -81,6 +85,7 @@ describe('ReportReport tests', () => {
 
   test('should parse task', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       task: {
         _id: 'task1',
         name: 'Test Task',
@@ -93,6 +98,7 @@ describe('ReportReport tests', () => {
 
   test('should parse delta report', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       delta: {
         report: {
           _id: 'delta1',
@@ -115,6 +121,7 @@ describe('ReportReport tests', () => {
 
   test('should parse scan run status', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       scan_run_status: 'completed',
     });
     expect(report.scan_run_status).toEqual('completed');
@@ -122,6 +129,7 @@ describe('ReportReport tests', () => {
 
   test('should parse results', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       results: {
         _start: '1',
         _max: '8',
@@ -146,6 +154,7 @@ describe('ReportReport tests', () => {
 
   test('should parse result_count', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       result_count: {
         full: 10,
         filtered: 5,
@@ -194,6 +203,7 @@ describe('ReportReport tests', () => {
 
   test('should parse timezone', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       timezone: 'Europe/Berlin',
     });
     expect(report.timezone).toEqual('Europe/Berlin');
@@ -201,6 +211,7 @@ describe('ReportReport tests', () => {
 
   test('should parse timezone abbreviation', () => {
     const report = ReportReport.fromElement({
+      _id: 'test-id',
       timezone_abbrev: 'CET',
     });
     expect(report.timezone_abbrev).toEqual('CET');

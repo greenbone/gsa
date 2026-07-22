@@ -20,9 +20,12 @@ describe('ReportCve tests', () => {
   });
 
   test('should parse empty element', () => {
-    const cve = ReportCve.fromElement();
+    const cve = ReportCve.fromElement({
+      _id: 'test-id',
+      nvt: {_oid: '1.2.3'},
+    });
     expect(cve.cves).toEqual([]);
-    expect(cve.id).toBeUndefined();
+    expect(cve.id).toEqual('1.2.3');
     expect(cve.nvtName).toBeUndefined();
     expect(cve.severity).toBeUndefined();
     expect(cve.hosts).toBeDefined();
@@ -33,7 +36,9 @@ describe('ReportCve tests', () => {
 
   test('should parse cves', () => {
     const cve = ReportCve.fromElement({
+      _id: 'test-id',
       nvt: {
+        _oid: '1.2.3',
         refs: {
           ref: [
             {
@@ -55,6 +60,7 @@ describe('ReportCve tests', () => {
 
   test('should parse oid/id', () => {
     const cve = ReportCve.fromElement({
+      _id: 'test-id',
       nvt: {
         _oid: 'c1',
       },
@@ -64,13 +70,14 @@ describe('ReportCve tests', () => {
 
   test('should parse nvtName', () => {
     const cve = ReportCve.fromElement({
+      _id: 'test-id',
       nvt: {_oid: '1.2.3', name: 'Foo'},
     });
     expect(cve.nvtName).toEqual('Foo');
   });
 
   test('should add hosts', () => {
-    const cve = ReportCve.fromElement();
+    const cve = ReportCve.fromElement({_id: 'test-id', nvt: {_oid: '1.2.3'}});
     expect(cve.hosts).toBeDefined();
     expect(cve.hosts.hostsByIp).toEqual({});
     expect(cve.hosts.count).toEqual(0);
@@ -94,7 +101,7 @@ describe('ReportCve tests', () => {
   });
 
   test('should add result', () => {
-    const cve = ReportCve.fromElement();
+    const cve = ReportCve.fromElement({_id: 'test-id', nvt: {_oid: '1.2.3'}});
     expect(cve.occurrences).toEqual(0);
     expect(cve.severity).toBeUndefined();
 

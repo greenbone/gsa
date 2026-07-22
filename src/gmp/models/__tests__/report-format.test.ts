@@ -13,7 +13,8 @@ describe('ReportFormat model tests', () => {
   testModel(ReportFormat, 'reportformat', {testIsActive: false});
 
   test('should use defaults', () => {
-    const reportFormat = new ReportFormat();
+    const reportFormat = new ReportFormat({id: 'test-id'});
+    expect(reportFormat.id).toEqual('test-id');
     expect(reportFormat.alerts).toEqual([]);
     expect(reportFormat.configurable).toBeUndefined();
     expect(reportFormat.content_type).toBeUndefined();
@@ -28,7 +29,8 @@ describe('ReportFormat model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const reportFormat = ReportFormat.fromElement();
+    const reportFormat = ReportFormat.fromElement({_id: 'test-id'});
+    expect(reportFormat.id).toEqual('test-id');
     expect(reportFormat.alerts).toEqual([]);
     expect(reportFormat.configurable).toBeUndefined();
     expect(reportFormat.content_type).toBeUndefined();
@@ -44,12 +46,14 @@ describe('ReportFormat model tests', () => {
 
   test('should parse trust', () => {
     const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
       trust: {
         __text: 'foo',
         time: '2018-10-10T13:30:00+01:00',
       },
     });
     const reportFormat2 = ReportFormat.fromElement({
+      _id: 'test-id',
       trust: {
         __text: 'bar',
       },
@@ -62,24 +66,36 @@ describe('ReportFormat model tests', () => {
   });
 
   test('should parse active', () => {
-    const reportFormat = ReportFormat.fromElement({active: 0});
-    const reportFormat2 = ReportFormat.fromElement({active: 1});
+    const reportFormat = ReportFormat.fromElement({_id: 'test-id', active: 0});
+    const reportFormat2 = ReportFormat.fromElement({_id: 'test-id', active: 1});
 
     expect(reportFormat.active).toEqual(NO_VALUE);
     expect(reportFormat2.active).toEqual(YES_VALUE);
   });
 
   test('should parse configurable', () => {
-    const reportFormat = ReportFormat.fromElement({configurable: 0});
-    const reportFormat2 = ReportFormat.fromElement({configurable: 1});
+    const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
+      configurable: 0,
+    });
+    const reportFormat2 = ReportFormat.fromElement({
+      _id: 'test-id',
+      configurable: 1,
+    });
 
     expect(reportFormat.configurable).toEqual(false);
     expect(reportFormat2.configurable).toEqual(true);
   });
 
   test('should parse predefined', () => {
-    const reportFormat = ReportFormat.fromElement({predefined: 0});
-    const reportFormat2 = ReportFormat.fromElement({predefined: 1});
+    const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
+      predefined: 0,
+    });
+    const reportFormat2 = ReportFormat.fromElement({
+      _id: 'test-id',
+      predefined: 1,
+    });
 
     expect(reportFormat.predefined).toEqual(false);
     expect(reportFormat2.predefined).toEqual(true);
@@ -87,6 +103,7 @@ describe('ReportFormat model tests', () => {
 
   test('should parse alerts', () => {
     const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
       alerts: {
         alert: [{_id: '12'}],
       },
@@ -98,6 +115,7 @@ describe('ReportFormat model tests', () => {
 
   test('should parse content type', () => {
     const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
       content_type: 'application/pdf',
     });
     expect(reportFormat.content_type).toEqual('application/pdf');
@@ -105,6 +123,7 @@ describe('ReportFormat model tests', () => {
 
   test('should parse extension', () => {
     const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
       extension: 'pdf',
     });
     expect(reportFormat.extension).toEqual('pdf');
@@ -112,6 +131,7 @@ describe('ReportFormat model tests', () => {
 
   test('should parse report type', () => {
     const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
       report_type: 'scan',
     });
     expect(reportFormat.report_type).toEqual('scan');
@@ -119,6 +139,7 @@ describe('ReportFormat model tests', () => {
 
   test('should parse invisible alerts count', () => {
     const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
       invisible_alerts: 3,
     });
 
@@ -127,6 +148,7 @@ describe('ReportFormat model tests', () => {
 
   test('should parse invisible report configs count', () => {
     const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
       invisible_report_configs: 5,
     });
 
@@ -135,6 +157,7 @@ describe('ReportFormat model tests', () => {
 
   test('should parse params', () => {
     const reportFormat = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           default: 'ipsum',
@@ -160,6 +183,7 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat2 = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           default: 'ipsum',
@@ -184,6 +208,7 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat2.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat3 = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           default: {
@@ -210,6 +235,7 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat3.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat4 = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           options: {
@@ -238,6 +264,7 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat4.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat5 = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           value: {
@@ -262,6 +289,7 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat5.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat6 = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           value: 'bar',
@@ -284,6 +312,7 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat6.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat7 = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           type: {
@@ -318,6 +347,7 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat7.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat8 = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           type: {
@@ -346,6 +376,7 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat8.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat9 = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           type: {
@@ -380,6 +411,7 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat9.params[0].valueUsingDefault).toBeUndefined();
 
     const reportFormat10 = ReportFormat.fromElement({
+      _id: 'test-id',
       param: [
         {
           value: {
@@ -407,8 +439,8 @@ describe('ReportFormat model tests', () => {
 
   describe('ReportFormat model method tests', () => {
     test('isActive() returns correct true/false', () => {
-      const reportFormat = new ReportFormat({active: 0});
-      const reportFormat2 = new ReportFormat({active: 1});
+      const reportFormat = new ReportFormat({id: 'test-id', active: 0});
+      const reportFormat2 = new ReportFormat({id: 'test-id', active: 1});
 
       expect(reportFormat.isActive()).toBe(false);
       expect(reportFormat2.isActive()).toBe(true);
@@ -416,11 +448,13 @@ describe('ReportFormat model tests', () => {
 
     test('isTrusted() returns correct true/false', () => {
       const reportFormat = new ReportFormat({
+        id: 'test-id',
         trust: {
           value: 'no',
         },
       });
       const reportFormat2 = new ReportFormat({
+        id: 'test-id',
         trust: {
           value: 'yes',
         },

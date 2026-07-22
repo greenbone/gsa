@@ -11,7 +11,7 @@ describe('AuditReport tests', () => {
   testModel(AuditReport, 'auditreport');
 
   test('should use defaults', () => {
-    const report = new AuditReport();
+    const report = new AuditReport({id: 'test-id'});
     expect(report.contentType).toBeUndefined();
     expect(report.report).toBeUndefined();
     expect(report.reportFormat).toBeUndefined();
@@ -20,7 +20,7 @@ describe('AuditReport tests', () => {
   });
 
   test('should parse empty element', () => {
-    const report = AuditReport.fromElement();
+    const report = AuditReport.fromElement({_id: 'test-id'});
     expect(report.contentType).toBeUndefined();
     expect(report.report).toBeUndefined();
     expect(report.reportFormat).toBeUndefined();
@@ -30,6 +30,7 @@ describe('AuditReport tests', () => {
 
   test('should parse report', () => {
     const report = AuditReport.fromElement({
+      _id: 'test-id',
       report: {
         _type: 'delta',
         _id: '123',
@@ -43,14 +44,13 @@ describe('AuditReport tests', () => {
   });
 
   test('should parse report type', () => {
-    const report = AuditReport.fromElement({
-      _type: 'delta',
-    });
+    const report = AuditReport.fromElement({_id: 'test-id', _type: 'delta'});
     expect(report.reportType).toEqual('delta');
   });
 
   test('should parse report format', () => {
     const report = AuditReport.fromElement({
+      _id: 'test-id',
       report_format: {
         _id: 'format123',
         name: 'Test Format',
@@ -63,6 +63,7 @@ describe('AuditReport tests', () => {
 
   test('should parse task', () => {
     const report = AuditReport.fromElement({
+      _id: 'test-id',
       task: {
         _id: 'task123',
         name: 'Test Task',
@@ -75,6 +76,7 @@ describe('AuditReport tests', () => {
 
   test('should parse content type', () => {
     const report = AuditReport.fromElement({
+      _id: 'test-id',
       _content_type: 'application/xml',
     });
     expect(report.contentType).toEqual('application/xml');

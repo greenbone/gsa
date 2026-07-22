@@ -8,11 +8,12 @@ import Host from 'gmp/models/host';
 import {testModel} from 'gmp/models/testing';
 import {parseDate} from 'gmp/parser';
 
-testModel(Host, 'host');
-
 describe('Host model tests', () => {
+  testModel(Host, 'host');
+
   test('should use defaults', () => {
-    const host = new Host();
+    const host = new Host({id: 'test-id'});
+    expect(host.id).toEqual('test-id');
     expect(host.details).toBeUndefined();
     expect(host.hostname).toBeUndefined();
     expect(host.identifiers).toEqual([]);
@@ -23,7 +24,8 @@ describe('Host model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const host = Host.fromElement();
+    const host = Host.fromElement({_id: 'test-id'});
+    expect(host.id).toEqual('test-id');
     expect(host.details).toBeUndefined();
     expect(host.hostname).toBeUndefined();
     expect(host.identifiers).toEqual([]);
@@ -35,6 +37,7 @@ describe('Host model tests', () => {
 
   test('should parse severity', () => {
     const elem = {
+      _id: 'test-id',
       host: {
         severity: {
           value: '8.5',
@@ -42,6 +45,7 @@ describe('Host model tests', () => {
       },
     };
     const elem2 = {
+      _id: 'test-id',
       host: {
         severity: {
           value: '10',
@@ -57,10 +61,10 @@ describe('Host model tests', () => {
 
   test('should parse identifiers', () => {
     const host = Host.fromElement({
+      _id: 'test-id',
       identifiers: {
         identifier: [
           {
-            _id: '123abc',
             name: 'foo',
             value: 'bar:/3',
             creation_time: '2018-10-10T13:31:00+01:00',
@@ -76,7 +80,6 @@ describe('Host model tests', () => {
             },
           },
           {
-            _id: '321abc',
             name: 'bar',
             value: 'foo:/3',
             creation_time: '2018-10-10T13:31:00+01:00',
@@ -97,7 +100,6 @@ describe('Host model tests', () => {
     expect(host.identifiers).toEqual([
       {
         creationTime: parseDate('2018-10-10T13:31:00+01:00'),
-        id: '123abc',
         modificationTime: parseDate('2018-10-10T13:32:00+01:00'),
         name: 'foo',
         os: {id: 'teitl'},
@@ -111,7 +113,6 @@ describe('Host model tests', () => {
       },
       {
         creationTime: parseDate('2018-10-10T13:31:00+01:00'),
-        id: '321abc',
         modificationTime: parseDate('2018-10-10T13:32:00+01:00'),
         name: 'bar',
         os: {id: 'teitl'},
@@ -128,6 +129,7 @@ describe('Host model tests', () => {
 
   test('should parse hostname', () => {
     const host = Host.fromElement({
+      _id: 'test-id',
       identifiers: {
         identifier: [
           {
@@ -138,6 +140,7 @@ describe('Host model tests', () => {
       },
     });
     const host2 = Host.fromElement({
+      _id: 'test-id',
       identifiers: {
         identifier: [
           {
@@ -154,6 +157,7 @@ describe('Host model tests', () => {
 
   test('should parse os', () => {
     const host1 = Host.fromElement({
+      _id: 'test-id',
       host: {
         detail: [
           {
@@ -164,6 +168,7 @@ describe('Host model tests', () => {
       },
     });
     const host2 = Host.fromElement({
+      _id: 'test-id',
       identifiers: {
         identifier: [
           {
@@ -180,6 +185,7 @@ describe('Host model tests', () => {
 
   test('should parse ip', () => {
     const host = Host.fromElement({
+      _id: 'test-id',
       identifiers: {
         identifier: [
           {
@@ -195,6 +201,7 @@ describe('Host model tests', () => {
 
   test('should parse details', () => {
     const host = Host.fromElement({
+      _id: 'test-id',
       host: {
         detail: [
           {
@@ -233,6 +240,7 @@ describe('Host model tests', () => {
 
   test('should parse routes', () => {
     const host = Host.fromElement({
+      _id: 'test-id',
       host: {
         routes: {
           route: [

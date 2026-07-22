@@ -19,7 +19,7 @@ describe('App tests', () => {
   });
 
   test('should parse empty element', () => {
-    const app = ReportApp.fromElement();
+    const app = ReportApp.fromElement({});
     expect(app.id).toBeUndefined();
     expect(app.name).toBeUndefined();
     expect(app.severity).toBeUndefined();

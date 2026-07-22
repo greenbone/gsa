@@ -8,14 +8,16 @@ import ReportTask from 'gmp/models/report/task';
 
 describe('ReportTask tests', () => {
   test('should use defaults', () => {
-    const task = new ReportTask();
+    const task = new ReportTask({id: 'test-id'});
+    expect(task.id).toEqual('test-id');
     expect(task.target).toBeUndefined();
     expect(task.progress).toBeUndefined();
     expect(task.agentGroup).toBeUndefined();
   });
 
   test('should parse empty element', () => {
-    const task = ReportTask.fromElement();
+    const task = ReportTask.fromElement({_id: 'test-id'});
+    expect(task.id).toEqual('test-id');
     expect(task.target).toBeUndefined();
     expect(task.progress).toBeUndefined();
     expect(task.agentGroup).toBeUndefined();
@@ -28,16 +30,20 @@ describe('ReportTask tests', () => {
   });
 
   test('container vs target vs agentGroup precedence', () => {
-    const t1 = ReportTask.fromElement({});
+    const t1 = ReportTask.fromElement({_id: 'test-id'});
     expect(t1.isImport()).toBe(true);
 
-    const t2 = ReportTask.fromElement({target: {_id: 'tgt1'}});
+    const t2 = ReportTask.fromElement({_id: 'test-id', target: {_id: 'tgt1'}});
     expect(t2.isImport()).toBe(false);
 
-    const t3 = ReportTask.fromElement({agent_group: {_id: 'ag1'}});
+    const t3 = ReportTask.fromElement({
+      _id: 'test-id',
+      agent_group: {_id: 'ag1'},
+    });
     expect(t3.isImport()).toBe(false);
 
     const t4 = ReportTask.fromElement({
+      _id: 'test-id',
       target: {_id: 'tgt1'},
       agent_group: {_id: 'ag1'},
     });
@@ -46,6 +52,7 @@ describe('ReportTask tests', () => {
 
   test('should parse target', () => {
     const task = ReportTask.fromElement({
+      _id: 'test-id',
       target: {
         _id: 't1',
       },
@@ -57,16 +64,19 @@ describe('ReportTask tests', () => {
   });
 
   test('should parse progress', () => {
-    const task1 = ReportTask.fromElement({progress: {}});
+    const task1 = ReportTask.fromElement({_id: 'test-id', progress: {}});
     expect(task1.progress).toEqual(0);
 
-    const task2 = ReportTask.fromElement({progress: {__text: '99'}});
+    const task2 = ReportTask.fromElement({
+      _id: 'test-id',
+      progress: {__text: '99'},
+    });
     expect(task2.progress).toEqual(99);
 
-    const task3 = ReportTask.fromElement({progress: '100'});
+    const task3 = ReportTask.fromElement({_id: 'test-id', progress: '100'});
     expect(task3.progress).toEqual(100);
 
-    const task4 = ReportTask.fromElement({progress: 25});
+    const task4 = ReportTask.fromElement({_id: 'test-id', progress: 25});
     expect(task4.progress).toEqual(25);
   });
 
@@ -85,6 +95,7 @@ describe('ReportTask tests', () => {
 
   test('should still parse progress with agentGroup present', () => {
     const t = ReportTask.fromElement({
+      _id: 'test-id',
       progress: {__text: '42'},
       agent_group: {_id: 'ag1'},
     });

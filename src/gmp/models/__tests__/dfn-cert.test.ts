@@ -7,11 +7,11 @@ import {describe, test, expect} from '@gsa/testing';
 import DfnCertAdv from 'gmp/models/dfn-cert';
 import {testModel} from 'gmp/models/testing';
 
-testModel(DfnCertAdv, 'dfncert');
-
 describe('DfnCertAdv model tests', () => {
+  testModel(DfnCertAdv, 'dfncert');
+
   test('should set defaults', () => {
-    const dfnCertAdv = new DfnCertAdv();
+    const dfnCertAdv = new DfnCertAdv({id: 'test-id'});
 
     expect(dfnCertAdv.severity).toBeUndefined();
     expect(dfnCertAdv.additionalLinks).toEqual([]);
@@ -22,7 +22,7 @@ describe('DfnCertAdv model tests', () => {
   });
 
   test('should parse empty element', () => {
-    const dfnCertAdv = DfnCertAdv.fromElement();
+    const dfnCertAdv = DfnCertAdv.fromElement({_id: 'test-id'});
 
     expect(dfnCertAdv.severity).toBeUndefined();
     expect(dfnCertAdv.additionalLinks).toEqual([]);
@@ -33,8 +33,12 @@ describe('DfnCertAdv model tests', () => {
   });
 
   test('should parse severity correctly', () => {
-    const dfnCertAdv = DfnCertAdv.fromElement({dfn_cert_adv: {severity: 5.0}});
+    const dfnCertAdv = DfnCertAdv.fromElement({
+      _id: 'test-id',
+      dfn_cert_adv: {severity: 5.0},
+    });
     const dfnCertAdv2 = DfnCertAdv.fromElement({
+      _id: 'test-id',
       dfn_cert_adv: {severity: 10.0},
     });
 
@@ -44,6 +48,7 @@ describe('DfnCertAdv model tests', () => {
 
   test('should parse advisory links', () => {
     const elem = {
+      _id: 'test-id',
       dfn_cert_adv: {
         raw_data: {
           entry: {
@@ -71,6 +76,7 @@ describe('DfnCertAdv model tests', () => {
 
   test('should parse summary', () => {
     const elem = {
+      _id: 'test-id',
       dfn_cert_adv: {
         raw_data: {
           entry: {
@@ -88,6 +94,7 @@ describe('DfnCertAdv model tests', () => {
 
   test('should parse CVEs', () => {
     const elem = {
+      _id: 'test-id',
       dfn_cert_adv: {
         raw_data: {
           entry: {
@@ -103,6 +110,7 @@ describe('DfnCertAdv model tests', () => {
 
   test('should parse title', () => {
     const elem = {
+      _id: 'test-id',
       dfn_cert_adv: {
         title: 'Test Title',
       },

@@ -305,6 +305,7 @@ class AlertCommand extends EntityCommand<Alert> {
     })) as Response<EditAlertElement>;
     const {edit_alert} = response.data;
     const editAlert: EditAlertSettings = {
+      // @ts-expect-error
       alert: Alert.fromElement(edit_alert?.get_alerts_response?.alert),
       report_formats: map(
         edit_alert?.get_report_formats_response?.report_format,

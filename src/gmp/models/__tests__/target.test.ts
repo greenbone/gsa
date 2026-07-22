@@ -17,8 +17,8 @@ describe('Target model tests', () => {
   testModel(Target, 'target');
 
   test('should use defaults', () => {
-    const target = new Target();
-
+    const target = new Target({id: 'test-id'});
+    expect(target.id).toEqual('test-id');
     expect(target.aliveTests).toEqual([]);
     expect(target.allowSimultaneousIPs).toEqual(false);
     expect(target.esxiCredential).toBeUndefined();
@@ -37,8 +37,8 @@ describe('Target model tests', () => {
   });
 
   test('should parse defaults', () => {
-    const target = Target.fromElement({});
-
+    const target = Target.fromElement({_id: 'test-id'});
+    expect(target.id).toEqual('test-id');
     expect(target.aliveTests).toEqual([]);
     expect(target.allowSimultaneousIPs).toEqual(false);
     expect(target.esxiCredential).toBeUndefined();
@@ -58,18 +58,20 @@ describe('Target model tests', () => {
 
   test('should parse port list', () => {
     const elem1 = {
+      _id: 'test-id',
       port_list: {
         _id: '123',
       },
     };
     const elem2 = {
+      _id: 'test-id',
       port_list: {
         _id: '',
       },
     };
     const target1 = Target.fromElement(elem1);
     const target2 = Target.fromElement(elem2);
-    const target3 = Target.fromElement({});
+    const target3 = Target.fromElement({_id: 'test-id'});
 
     expect(target1.portList).toBeInstanceOf(PortList);
     expect(target1.portList?.entityType).toEqual('portlist');
@@ -79,9 +81,15 @@ describe('Target model tests', () => {
   });
 
   test('should parse smb credentials', () => {
-    const target1 = Target.fromElement({smb_credential: {_id: '123'}});
-    const target2 = Target.fromElement({smb_credential: {_id: ''}});
-    const target3 = Target.fromElement({});
+    const target1 = Target.fromElement({
+      _id: 'test-id',
+      smb_credential: {_id: '123'},
+    });
+    const target2 = Target.fromElement({
+      _id: 'test-id',
+      smb_credential: {_id: ''},
+    });
+    const target3 = Target.fromElement({_id: 'test-id'});
 
     expect(target1.smbCredential).toBeInstanceOf(Model);
     expect(target1.smbCredential?.entityType).toEqual('credential');
@@ -91,9 +99,15 @@ describe('Target model tests', () => {
   });
 
   test('should parse snmp credentials', () => {
-    const target1 = Target.fromElement({snmp_credential: {_id: '123'}});
-    const target2 = Target.fromElement({snmp_credential: {_id: ''}});
-    const target3 = Target.fromElement({});
+    const target1 = Target.fromElement({
+      _id: 'test-id',
+      snmp_credential: {_id: '123'},
+    });
+    const target2 = Target.fromElement({
+      _id: 'test-id',
+      snmp_credential: {_id: ''},
+    });
+    const target3 = Target.fromElement({_id: 'test-id'});
 
     expect(target1.snmpCredential).toBeInstanceOf(Model);
     expect(target1.snmpCredential?.entityType).toEqual('credential');
@@ -103,10 +117,17 @@ describe('Target model tests', () => {
   });
 
   test('should parse ssh credentials', () => {
-    const target1 = Target.fromElement({ssh_credential: {_id: '123'}});
-    const target2 = Target.fromElement({ssh_credential: {_id: ''}});
-    const target3 = Target.fromElement({});
+    const target1 = Target.fromElement({
+      _id: 'test-id',
+      ssh_credential: {_id: '123'},
+    });
+    const target2 = Target.fromElement({
+      _id: 'test-id',
+      ssh_credential: {_id: ''},
+    });
+    const target3 = Target.fromElement({_id: 'test-id'});
     const target4 = Target.fromElement({
+      _id: 'test-id',
       ssh_credential: {_id: '456', port: 2222},
     });
 
@@ -122,9 +143,15 @@ describe('Target model tests', () => {
   });
 
   test('should parse ssh elevate credentials', () => {
-    const target1 = Target.fromElement({ssh_elevate_credential: {_id: '123'}});
-    const target2 = Target.fromElement({ssh_elevate_credential: {_id: ''}});
-    const target3 = Target.fromElement({});
+    const target1 = Target.fromElement({
+      _id: 'test-id',
+      ssh_elevate_credential: {_id: '123'},
+    });
+    const target2 = Target.fromElement({
+      _id: 'test-id',
+      ssh_elevate_credential: {_id: ''},
+    });
+    const target3 = Target.fromElement({_id: 'test-id'});
 
     expect(target1.sshElevateCredential).toBeInstanceOf(Model);
     expect(target1.sshElevateCredential?.entityType).toEqual('credential');
@@ -134,9 +161,15 @@ describe('Target model tests', () => {
   });
 
   test('should parse esxi credentials', () => {
-    const target1 = Target.fromElement({esxi_credential: {_id: '123'}});
-    const target2 = Target.fromElement({esxi_credential: {_id: ''}});
-    const target3 = Target.fromElement({});
+    const target1 = Target.fromElement({
+      _id: 'test-id',
+      esxi_credential: {_id: '123'},
+    });
+    const target2 = Target.fromElement({
+      _id: 'test-id',
+      esxi_credential: {_id: ''},
+    });
+    const target3 = Target.fromElement({_id: 'test-id'});
 
     expect(target1.esxiCredential).toBeInstanceOf(Model);
     expect(target1.esxiCredential?.entityType).toEqual('credential');
@@ -146,9 +179,15 @@ describe('Target model tests', () => {
   });
 
   test('should parse krb5 credentials', () => {
-    const target1 = Target.fromElement({krb5_credential: {_id: '123'}});
-    const target2 = Target.fromElement({krb5_credential: {_id: ''}});
-    const target3 = Target.fromElement({});
+    const target1 = Target.fromElement({
+      _id: 'test-id',
+      krb5_credential: {_id: '123'},
+    });
+    const target2 = Target.fromElement({
+      _id: 'test-id',
+      krb5_credential: {_id: ''},
+    });
+    const target3 = Target.fromElement({_id: 'test-id'});
 
     expect(target1.krb5Credential).toBeInstanceOf(Model);
     expect(target1.krb5Credential?.entityType).toEqual('credential');
@@ -158,11 +197,9 @@ describe('Target model tests', () => {
   });
 
   test('should parse hosts or return empty array', () => {
-    const elem = {
-      hosts: '123.456.789.42, 987.654.321.1',
-    };
+    const elem = {_id: 'test-id', hosts: '123.456.789.42, 987.654.321.1'};
     const target1 = Target.fromElement(elem);
-    const target2 = Target.fromElement({hosts: ''});
+    const target2 = Target.fromElement({_id: 'test-id', hosts: ''});
 
     expect(target1.hosts).toEqual(['123.456.789.42', '987.654.321.1']);
     expect(target2.hosts).toEqual([]);
@@ -170,26 +207,36 @@ describe('Target model tests', () => {
 
   test('should parse exclude_hosts or return empty array', () => {
     const elem = {
+      _id: 'test-id',
       exclude_hosts: '123.456.789.42, 987.654.321.1',
     };
     const target1 = Target.fromElement(elem);
-    const target2 = Target.fromElement({exclude_hosts: ''});
+    const target2 = Target.fromElement({_id: 'test-id', exclude_hosts: ''});
 
     expect(target1.excludeHosts).toEqual(['123.456.789.42', '987.654.321.1']);
     expect(target2.excludeHosts).toEqual([]);
   });
 
   test('should parse max_hosts', () => {
-    const target = Target.fromElement({max_hosts: 42});
+    const target = Target.fromElement({_id: 'test-id', max_hosts: 42});
 
     expect(target.maxHosts).toEqual(42);
   });
 
   test('should parse allowSimultaneousIps', () => {
-    const target1 = Target.fromElement({allow_simultaneous_ips: 1});
-    const target2 = Target.fromElement({allow_simultaneous_ips: 0});
-    // @ts-expect-error
-    const target3 = Target.fromElement({allow_simultaneous_ips: 'foo'});
+    const target1 = Target.fromElement({
+      _id: 'test-id',
+      allow_simultaneous_ips: 1,
+    });
+    const target2 = Target.fromElement({
+      _id: 'test-id',
+      allow_simultaneous_ips: 0,
+    });
+    const target3 = Target.fromElement({
+      _id: 'test-id',
+      // @ts-expect-error
+      allow_simultaneous_ips: 'foo',
+    });
 
     expect(target1.allowSimultaneousIPs).toEqual(true);
     expect(target2.allowSimultaneousIPs).toEqual(false);
@@ -197,10 +244,19 @@ describe('Target model tests', () => {
   });
 
   test('should parse reverse_lookup_only', () => {
-    const target1 = Target.fromElement({reverse_lookup_only: 0});
-    const target2 = Target.fromElement({reverse_lookup_only: 1});
-    // @ts-expect-error
-    const target3 = Target.fromElement({reverse_lookup_only: 'foo'});
+    const target1 = Target.fromElement({
+      _id: 'test-id',
+      reverse_lookup_only: 0,
+    });
+    const target2 = Target.fromElement({
+      _id: 'test-id',
+      reverse_lookup_only: 1,
+    });
+    const target3 = Target.fromElement({
+      _id: 'test-id',
+      // @ts-expect-error
+      reverse_lookup_only: 'foo',
+    });
 
     expect(target1.reverseLookupOnly).toEqual(false);
     expect(target2.reverseLookupOnly).toEqual(true);
@@ -208,10 +264,19 @@ describe('Target model tests', () => {
   });
 
   test('should parse reverse_lookup_unify', () => {
-    const target1 = Target.fromElement({reverse_lookup_unify: 0});
-    const target2 = Target.fromElement({reverse_lookup_unify: 1});
-    // @ts-expect-error
-    const target3 = Target.fromElement({reverse_lookup_unify: 'foo'});
+    const target1 = Target.fromElement({
+      _id: 'test-id',
+      reverse_lookup_unify: 0,
+    });
+    const target2 = Target.fromElement({
+      _id: 'test-id',
+      reverse_lookup_unify: 1,
+    });
+    const target3 = Target.fromElement({
+      _id: 'test-id',
+      // @ts-expect-error
+      reverse_lookup_unify: 'foo',
+    });
 
     expect(target1.reverseLookupUnify).toEqual(false);
     expect(target2.reverseLookupUnify).toEqual(true);
@@ -220,6 +285,7 @@ describe('Target model tests', () => {
 
   test('should parse tasks', () => {
     const target1 = Target.fromElement({
+      _id: 'test-id',
       tasks: {
         task: [
           {
@@ -229,6 +295,7 @@ describe('Target model tests', () => {
       },
     });
     const target2 = Target.fromElement({
+      _id: 'test-id',
       tasks: {
         task: {_id: '123'},
       },
@@ -249,6 +316,7 @@ describe('Target model tests', () => {
 
   test('should parse tasks with usage_type', () => {
     const target = Target.fromElement({
+      _id: 'test-id',
       tasks: {
         task: [
           {
@@ -283,21 +351,29 @@ describe('Target model tests', () => {
   });
 
   test('should parse alive_tests', () => {
-    const target = Target.fromElement({alive_tests: {alive_test: ICMP_PING}});
+    const target = Target.fromElement({
+      _id: 'test-id',
+      alive_tests: {alive_test: ICMP_PING},
+    });
     expect(target.aliveTests).toEqual([ICMP_PING]);
 
     const target1 = Target.fromElement({
+      _id: 'test-id',
       alive_tests: {alive_test: [ICMP_PING, ARP_PING]},
     });
     expect(target1.aliveTests).toEqual([ICMP_PING, ARP_PING]);
 
-    const target2 = Target.fromElement({alive_tests: {}});
+    const target2 = Target.fromElement({_id: 'test-id', alive_tests: {}});
     expect(target2.aliveTests).toEqual([]);
 
-    const target3 = Target.fromElement({alive_tests: {alive_test: []}});
+    const target3 = Target.fromElement({
+      _id: 'test-id',
+      alive_tests: {alive_test: []},
+    });
     expect(target3.aliveTests).toEqual([]);
 
     const target4 = Target.fromElement({
+      _id: 'test-id',
       alive_tests: {alive_test: HOST_DISCOVERY_IPV6},
     });
     expect(target4.aliveTests).toEqual([HOST_DISCOVERY_IPV6]);
