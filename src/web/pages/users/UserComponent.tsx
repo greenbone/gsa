@@ -1,46 +1,71 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import {type ReactNode, useState} from 'react';
+import type Model from 'gmp/models/model';
+import type Settings from 'gmp/models/settings';
+import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import UserDialog from 'web/pages/users/Dialog';
-import PropTypes from 'web/utils/prop-types';
+import UserDialog, {type UserDialogSaveData} from 'web/pages/users/Dialog';
 
-const UserComponent = props => {
-  const {
-    children,
-    onCloned,
-    onCloneError,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onSaved,
-    onSaveError,
-  } = props;
+interface UserComponentRenderProps {
+  clone: (entity: User) => Promise<void>;
+  create: (user?: User) => Promise<void>;
+  delete: (entity: User) => Promise<void>;
+  download: (entity: User) => Promise<void>;
+  edit: (user?: User) => Promise<void>;
+  save?: (data: UserDialogSaveData) => Promise<void | unknown>;
+}
+
+interface UserComponentProps {
+  children: (props: UserComponentRenderProps) => ReactNode;
+  onCloneError?: (error: Error) => void;
+  onCloned?: (response: unknown) => void;
+  onCreateError?: (error: Error) => void;
+  onCreated?: (response: unknown) => void;
+  onDeleteError?: (error: Error) => void;
+  onDeleted?: () => void;
+  onDownloadError?: (error: Error) => void;
+  onDownloaded?: OnDownloadedFunc;
+  onSaveError?: (error: Error) => void;
+  onSaved?: (response: unknown) => void;
+}
+
+const UserComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onSaved,
+  onSaveError,
+}: UserComponentProps) => {
   const gmp = useGmp();
   const [_] = useTranslation();
 
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [accessHosts, setAccessHosts] = useState();
-  const [comment, setComment] = useState();
-  const [groupIds, setGroupIds] = useState();
-  const [groups, setGroups] = useState();
-  const [hostsAllow, setHostsAllow] = useState();
-  const [name, setName] = useState();
-  const [oldName, setOldName] = useState();
-  const [roleIds, setRoleIds] = useState();
-  const [roles, setRoles] = useState();
-  const [settings, setSettings] = useState();
-  const [title, setTitle] = useState();
-  const [user, setUser] = useState();
+  const [accessHosts, setAccessHosts] = useState<string>();
+  const [comment, setComment] = useState<string>();
+  const [groupIds, setGroupIds] = useState<string[]>();
+  const [groups, setGroups] = useState<Model[]>();
+  const [hostsAllow, setHostsAllow] = useState<string>();
+  const [name, setName] = useState<string>();
+  const [oldName, setOldName] = useState<string>();
+  const [roleIds, setRoleIds] = useState<string[]>();
+  const [roles, setRoles] = useState<Model[]>();
+  const [settings, setSettings] = useState<Settings>();
+  const [title, setTitle] = useState<string>();
+  const [user, setUser] = useState<User>();
 
   const closeUserDialog = () => {
     setDialogVisible(false);
@@ -50,7 +75,7 @@ const UserComponent = props => {
     closeUserDialog();
   };
 
-  const openUserDialog = async user => {
+  const openUserDialog = async (user?: User) => {
     try {
       const [groupsResponse, rolesResponse, authSettingsResponse] =
         await Promise.all([
@@ -69,17 +94,21 @@ const UserComponent = props => {
       setDialogVisible(true);
 
       if (isDefined(user)) {
-        const newGroupIds = user.groups.map(group => group.id);
-        const newRoleIds = user.roles.map(role => role.id);
+        const newGroupIds = user.groups
+          .map(group => group.id)
+          .filter((id): id is string => isDefined(id));
+        const newRoleIds = user.roles
+          .map(role => role.id)
+          .filter((id): id is string => isDefined(id));
 
-        setAccessHosts(user.hosts.addresses.join(', '));
+        setAccessHosts(user.hosts?.addresses.join(', ') ?? '');
         setComment(user.comment);
         setGroupIds(newGroupIds);
-        setHostsAllow(user.hosts.allow);
+        setHostsAllow(user.hosts?.allow);
         setName(user.name);
         setOldName(user.name);
         setRoleIds(newRoleIds);
-        setTitle(_('Edit User {{- name}}', user));
+        setTitle(_('Edit User {{- name}}', {name: user.name ?? ''}));
         setUser(user);
       } else {
         setAccessHosts(undefined);
@@ -98,7 +127,13 @@ const UserComponent = props => {
   };
 
   return (
-    <EntityComponent
+    <EntityComponent<
+      User,
+      UserDialogSaveData,
+      unknown,
+      UserDialogSaveData,
+      unknown
+    >
       name="user"
       onCloneError={onCloneError}
       onCloned={onCloned}
@@ -117,8 +152,9 @@ const UserComponent = props => {
             ...other,
             create: openUserDialog,
             edit: openUserDialog,
+            save,
           })}
-          {dialogVisible && (
+          {dialogVisible && isDefined(settings) && (
             <UserDialog
               accessHosts={accessHosts}
               comment={comment}
@@ -133,7 +169,7 @@ const UserComponent = props => {
               title={title}
               user={user}
               onClose={handleCloseUserDialog}
-              onSave={d => {
+              onSave={(d: UserDialogSaveData) => {
                 const promise = isDefined(d.id) ? save(d) : create(d);
                 return promise.then(() => closeUserDialog());
               }}
@@ -143,20 +179,6 @@ const UserComponent = props => {
       )}
     </EntityComponent>
   );
-};
-
-UserComponent.propTypes = {
-  children: PropTypes.func.isRequired,
-  onCloneError: PropTypes.func,
-  onCloned: PropTypes.func,
-  onCreateError: PropTypes.func,
-  onCreated: PropTypes.func,
-  onDeleteError: PropTypes.func,
-  onDeleted: PropTypes.func,
-  onDownloadError: PropTypes.func,
-  onDownloaded: PropTypes.func,
-  onSaveError: PropTypes.func,
-  onSaved: PropTypes.func,
 };
 
 export default UserComponent;

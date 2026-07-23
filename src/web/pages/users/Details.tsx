@@ -1,14 +1,14 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {
-  AUTH_METHOD_LDAP,
-  AUTH_METHOD_RADIUS,
   ACCESS_ALLOW_ALL,
   ACCESS_DENY_ALL,
+  AUTH_METHOD_LDAP,
+  AUTH_METHOD_RADIUS,
+  type default as User,
 } from 'gmp/models/user';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
@@ -18,20 +18,32 @@ import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/prop-types';
+import useTranslation, {type TranslateFunc} from 'web/hooks/useTranslation';
 
-export const convert_auth_method = (auth_method, _) => {
-  if (auth_method === AUTH_METHOD_LDAP) {
+type UserHosts = NonNullable<User['hosts']>;
+
+interface UserDetailsProps {
+  entity: User;
+  links?: boolean;
+}
+
+export const convert_auth_method = (
+  authMethod: User['authMethod'],
+  _: TranslateFunc,
+) => {
+  if (authMethod === AUTH_METHOD_LDAP) {
     return _('LDAP');
   }
-  if (auth_method === AUTH_METHOD_RADIUS) {
+  if (authMethod === AUTH_METHOD_RADIUS) {
     return _('RADIUS');
   }
   return _('Local');
 };
 
-export const convert_allow = ({addresses, allow}, _) => {
+export const convert_allow = (
+  {addresses = [], allow}: Partial<UserHosts> = {},
+  _: TranslateFunc,
+) => {
   if (allow === ACCESS_ALLOW_ALL) {
     if (addresses.length === 0) {
       return _('Allow all');
@@ -51,9 +63,9 @@ export const convert_allow = ({addresses, allow}, _) => {
   return '';
 };
 
-const UserDetails = ({entity, links = true}) => {
+const UserDetails = ({entity, links = true}: UserDetailsProps) => {
   const [_] = useTranslation();
-  const {authMethod, comment, groups = [], hosts = {}, roles = []} = entity;
+  const {authMethod, comment, groups = [], hosts, roles = []} = entity;
   return (
     <Layout grow flex="column">
       <InfoTable>
@@ -71,7 +83,10 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>{_('Roles')}</TableData>
             <TableData>
               <HorizontalSep>
-                {roles.map(role => {
+                {roles.map((role, index) => {
+                  if (!role.id) {
+                    return <span key={`role-${index}`}>{role.name}</span>;
+                  }
                   return (
                     <span key={role.id}>
                       <DetailsLink id={role.id} textOnly={!links} type="role">
@@ -88,7 +103,10 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>{_('Groups')}</TableData>
             <TableData>
               <HorizontalSep>
-                {groups.map(group => {
+                {groups.map((group, index) => {
+                  if (!group.id) {
+                    return <span key={`group-${index}`}>{group.name}</span>;
+                  }
                   return (
                     <span key={group.id}>
                       <DetailsLink
@@ -109,7 +127,10 @@ const UserDetails = ({entity, links = true}) => {
           <TableRow>
             <TableData>{_('Host Access')}</TableData>
             <TableData>
-              {convert_allow(hosts, _).replace(/&#x2F;/g, '/')}
+              {convert_allow(hosts ?? {addresses: []}, _).replace(
+                /&#x2F;/g,
+                '/',
+              )}
             </TableData>
           </TableRow>
 
@@ -121,11 +142,6 @@ const UserDetails = ({entity, links = true}) => {
       </InfoTable>
     </Layout>
   );
-};
-
-UserDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default UserDetails;

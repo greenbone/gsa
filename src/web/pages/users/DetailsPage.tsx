@@ -1,9 +1,11 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Gmp from 'gmp/gmp';
+import type Permission from 'gmp/models/permission';
+import type User from 'gmp/models/user';
 import {UserIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -21,11 +23,12 @@ import TabsContainer from 'web/components/tab/TabsContainer';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
-import {goToDetails, goToList} from 'web/entity/navigation';
+import {goToDetails, goToList, type NavigateFunc} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsSubjectFilter,
@@ -34,11 +37,30 @@ import useTranslation from 'web/hooks/useTranslation';
 import UserDetails from 'web/pages/users/Details';
 import UserComponent from 'web/pages/users/UserComponent';
 import {
-  selector as permissionsSelector,
   loadEntities as loadPermissions,
+  selector as permissionsSelector,
 } from 'web/store/entities/permissions';
-import {selector, loadEntity} from 'web/store/entities/users';
-import PropTypes from 'web/utils/prop-types';
+import {loadEntity, selector} from 'web/store/entities/users';
+
+interface ToolBarIconsProps {
+  entity: User;
+  onUserCloneClick: (user: User) => void | Promise<void>;
+  onUserCreateClick: () => void | Promise<void>;
+  onUserDeleteClick: (user: User) => void | Promise<void>;
+  onUserDownloadClick: (user: User) => void | Promise<void>;
+  onUserEditClick: (user: User) => void | Promise<void>;
+}
+
+interface PageProps {
+  entity: User;
+  isLoading?: boolean;
+  permissions?: Permission[];
+  navigate: NavigateFunc;
+  onChanged: () => void;
+  onDownloaded?: OnDownloadedFunc;
+  onError: (error: Error) => void;
+}
+
 const ToolBarIcons = ({
   entity,
   onUserCloneClick,
@@ -46,7 +68,7 @@ const ToolBarIcons = ({
   onUserDeleteClick,
   onUserDownloadClick,
   onUserEditClick,
-}) => {
+}: ToolBarIconsProps) => {
   const [_] = useTranslation();
 
   return (
@@ -78,55 +100,57 @@ const ToolBarIcons = ({
   );
 };
 
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onUserCloneClick: PropTypes.func.isRequired,
-  onUserCreateClick: PropTypes.func.isRequired,
-  onUserDeleteClick: PropTypes.func.isRequired,
-  onUserDownloadClick: PropTypes.func.isRequired,
-  onUserEditClick: PropTypes.func.isRequired,
-};
-
 const Page = ({
   entity,
+  isLoading = true,
   permissions = [],
+  navigate,
   onChanged,
   onDownloaded,
   onError,
-
-  ...props
-}) => {
+  ...otherProps
+}: PageProps) => {
   const [_] = useTranslation();
 
   return (
     <UserComponent
       onCloneError={onError}
-      onCloned={goToDetails('user', props)}
-      onCreated={goToDetails('user', props)}
+      onCloned={(response: unknown) =>
+        goToDetails('user', navigate)(response as {data: {id: string}})
+      }
+      onCreated={(response: unknown) =>
+        goToDetails('user', navigate)(response as {data: {id: string}})
+      }
       onDeleteError={onError}
-      onDeleted={goToList('users', props)}
+      onDeleted={goToList('users', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onSaved={onChanged}
     >
-      {({clone, create, delete: delete_func, download, edit, save}) => (
+      {({clone, create, delete: deleteFunc, download, edit}) => (
         <EntityPage
-          {...props}
+          {...otherProps}
           entity={entity}
+          isLoading={isLoading}
           sectionIcon={<UserIcon size="large" />}
           title={_('User')}
-          toolBarIcons={ToolBarIcons}
-          onUserCloneClick={clone}
-          onUserCreateClick={create}
-          onUserDeleteClick={delete_func}
-          onUserDownloadClick={download}
-          onUserEditClick={edit}
-          onUserSaveClick={save}
+          toolBarIcons={
+            <ToolBarIcons
+              entity={entity}
+              onUserCloneClick={clone}
+              onUserCreateClick={create}
+              onUserDeleteClick={deleteFunc}
+              onUserDownloadClick={download}
+              onUserEditClick={edit}
+            />
+          }
         >
           {() => {
             return (
-              <React.Fragment>
-                <PageTitle title={_('User: {{name}}', {name: entity.name})} />
+              <>
+                <PageTitle
+                  title={_('User: {{name}}', {name: entity.name ?? ''})}
+                />
                 <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
                     <TabList align={['start', 'stretch']}>
@@ -164,7 +188,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>
@@ -173,25 +197,17 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-};
-
-const load = gmp => {
+const load = (gmp: Gmp) => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
+  return (id: string) => dispatch =>
     Promise.all([
       dispatch(loadEntityFunc(id)),
       dispatch(loadPermissionsFunc(permissionsSubjectFilter(id))),
     ]);
 };
 
-const mapStateToProps = (rootState, {id}) => {
+const mapStateToProps = (rootState: unknown, {id}: {id: string}) => {
   const permissionsSel = permissionsSelector(rootState);
   return {
     permissions: permissionsSel.getEntities(permissionsSubjectFilter(id)),

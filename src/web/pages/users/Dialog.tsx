@@ -1,9 +1,12 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
+import {useState} from 'react';
+import {type CapabilitiesEntityType} from 'gmp/capabilities/capabilities';
+import type Model from 'gmp/models/model';
+import type Settings from 'gmp/models/settings';
 import {
   ACCESS_ALLOW_ALL,
   ACCESS_DENY_ALL,
@@ -11,6 +14,7 @@ import {
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_PASSWORD,
   AUTH_METHOD_RADIUS,
+  type default as User,
 } from 'gmp/models/user';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -26,7 +30,47 @@ import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import PropTypes from 'web/utils/prop-types';
+
+interface AuthMethodSetting {
+  enabled?: boolean;
+}
+
+interface ControlledDialogValues {
+  role_ids: string[];
+}
+
+export interface UserDialogSaveData {
+  id?: string;
+  access_hosts: string;
+  auth_method: string;
+  comment: string;
+  group_ids: string[];
+  groups?: Model[];
+  hosts_allow: string;
+  name: string;
+  old_name?: string;
+  password: string;
+  role_ids: string[];
+  roles?: Model[];
+}
+
+interface UserDialogProps {
+  roleIds?: string[];
+  accessHosts?: string;
+  comment?: string;
+  groups?: Model[];
+  groupIds?: string[];
+  hostsAllow?: string;
+  name?: string;
+  oldName?: string;
+  password?: string;
+  roles?: Model[];
+  settings: Settings;
+  title?: string;
+  user?: User;
+  onClose: () => void;
+  onSave: (data: UserDialogSaveData) => void | Promise<void>;
+}
 
 const Dialog = ({
   roleIds: initialRoleIds = [],
@@ -44,7 +88,7 @@ const Dialog = ({
   user,
   onClose,
   onSave,
-}) => {
+}: UserDialogProps) => {
   const [_] = useTranslation();
   const username = useUserName();
   const capabilities = useCapabilities();
@@ -55,11 +99,13 @@ const Dialog = ({
     setConfirmationDialogVisibleSuperAdmin,
   ] = useState(false);
   const [noRoleConfirmed, setNoRoleConfirmed] = useState(false);
-  const [superAdminData, setSuperAdminData] = useState({});
+  const [superAdminData, setSuperAdminData] = useState<
+    UserDialogSaveData | undefined
+  >(undefined);
   const [roleIds, setRoleIds] = useState(initialRoleIds);
 
-  name = name || _('Unnamed');
-  title = title || _('New User');
+  const dialogName = name || _('Unnamed');
+  const dialogTitle = title || _('New User');
 
   const openConfirmationDialog = () => {
     setConfirmationDialogVisible(true);
@@ -84,15 +130,17 @@ const Dialog = ({
 
   const handleResumeClickSuperAdmin = () => {
     closeConfirmationDialogSuperAdmin();
-    return onSave(superAdminData);
+    if (isDefined(superAdminData)) {
+      return onSave(superAdminData);
+    }
   };
 
-  const handleRoleIdsChange = value => {
+  const handleRoleIdsChange = (value: string[]) => {
     setNoRoleConfirmed(false);
     setRoleIds(value);
   };
 
-  const handleSaveClick = userData => {
+  const handleSaveClick = (userData: UserDialogSaveData) => {
     if (roleIds.length > 0 || noRoleConfirmed) {
       /*
        * You reach this point, if you have at least one role in the user data
@@ -117,7 +165,7 @@ const Dialog = ({
 
   const isEdit = isDefined(user);
 
-  const data = {
+  const data: UserDialogSaveData = {
     ...user,
     access_hosts: accessHosts,
     auth_method:
@@ -128,33 +176,37 @@ const Dialog = ({
     group_ids: groupIds,
     groups,
     hosts_allow: hostsAllow,
-    name,
+    name: dialogName,
     old_name: oldName,
     password,
+    role_ids: roleIds,
     roles,
   };
 
-  const controlledValues = {
+  const controlledValues: ControlledDialogValues = {
     role_ids: roleIds,
   };
 
   const rolesOptions = map(roles, role => ({
-    label: role.name,
-    value: role.id,
+    label: role.name ?? '',
+    value: role.id ?? '',
   }));
 
   const groupsOptions = map(groups, group => ({
-    label: group.name,
-    value: group.id,
+    label: group.name ?? '',
+    value: group.id ?? '',
   }));
 
-  const hasLdapEnabled = settings.get('method:ldap_connect').enabled;
-  const hasRadiusEnabled = settings.get('method:radius_connect').enabled;
+  const hasLdapEnabled =
+    (settings.get('method:ldap_connect') as AuthMethodSetting).enabled === true;
+  const hasRadiusEnabled =
+    (settings.get('method:radius_connect') as AuthMethodSetting).enabled ===
+    true;
 
   return (
-    <SaveDialog
+    <SaveDialog<ControlledDialogValues, UserDialogSaveData>
       defaultValues={data}
-      title={title}
+      title={dialogTitle}
       values={controlledValues}
       onClose={onClose}
       onSave={handleSaveClick}
@@ -178,7 +230,7 @@ const Dialog = ({
           </FormGroup>
 
           {!isEdit && (
-            <FormGroup flex="column" title={_('Authentication')}>
+            <FormGroup direction="column" title={_('Authentication')}>
               <Row>
                 <Radio
                   checked={state.auth_method === AUTH_METHOD_PASSWORD}
@@ -262,7 +314,7 @@ const Dialog = ({
               )}
             </FormGroup>
           )}
-          {capabilities.mayAccess('roles') && (
+          {capabilities.mayAccess('roles' as CapabilitiesEntityType) && (
             <FormGroup title={_('Roles')}>
               <MultiSelect
                 items={rolesOptions}
@@ -273,7 +325,7 @@ const Dialog = ({
             </FormGroup>
           )}
 
-          {capabilities.mayAccess('groups') && (
+          {capabilities.mayAccess('groups' as CapabilitiesEntityType) && (
             <FormGroup title={_('Groups')}>
               <MultiSelect
                 items={groupsOptions}
@@ -344,31 +396,6 @@ const Dialog = ({
       )}
     </SaveDialog>
   );
-};
-
-Dialog.propTypes = {
-  accessHosts: PropTypes.string,
-  authMethod: PropTypes.oneOf([
-    AUTH_METHOD_LDAP,
-    AUTH_METHOD_NEW_PASSWORD,
-    AUTH_METHOD_PASSWORD,
-    AUTH_METHOD_RADIUS,
-  ]),
-  comment: PropTypes.string,
-  groupIds: PropTypes.array,
-  groups: PropTypes.array,
-  hostsAllow: PropTypes.oneOf([ACCESS_ALLOW_ALL, ACCESS_DENY_ALL]),
-  id: PropTypes.id,
-  name: PropTypes.string,
-  oldName: PropTypes.string,
-  password: PropTypes.string,
-  roleIds: PropTypes.array,
-  roles: PropTypes.array,
-  settings: PropTypes.settings.isRequired,
-  title: PropTypes.string,
-  user: PropTypes.model,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default Dialog;

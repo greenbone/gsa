@@ -1,12 +1,16 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import {type ComponentType, type ReactNode, useState} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import {connect} from 'react-redux';
-import {USERS_FILTER_FILTER} from 'gmp/models/filter';
+import type CollectionCounts from 'gmp/collection/collection-counts';
+import type Gmp from 'gmp/gmp';
+import type Rejection from 'gmp/http/rejection';
+import {USERS_FILTER_FILTER, type default as Filter} from 'gmp/models/filter';
+import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
@@ -15,12 +19,16 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer, {
+  type WithEntitiesContainerComponentProps,
+} from 'web/entities/withEntitiesContainer';
+import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
 import ConfirmDeleteDialog from 'web/pages/users/ConfirmDeleteDialog';
+import {type UserDialogSaveData} from 'web/pages/users/Dialog';
 import UsersTable from 'web/pages/users/Table';
 import UserComponent from 'web/pages/users/UserComponent';
 import UserFilterDialog from 'web/pages/users/UserFilterDialog';
@@ -30,10 +38,65 @@ import {
   loadEntities,
 } from 'web/store/entities/users';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/prop-types';
-import SelectionType from 'web/utils/selection-type';
+import type SelectionTypeType from 'web/utils/selection-type';
 
-export const UsersListPageToolBarIcons = ({onUserCreateClick}) => {
+interface UsersListPageToolBarIconsProps {
+  onUserCreateClick: () => void | Promise<void>;
+}
+
+export interface UsersListPageProps extends WithEntitiesContainerComponentProps<User> {
+  allUsers: User[];
+  entitiesCounts: CollectionCounts;
+  filter: Filter;
+  loadAll: () => void;
+}
+
+interface UsersEntitiesPageProps {
+  dialogConfig: {
+    useCustomDialog: boolean;
+    dialogProcessing: boolean;
+    customDialogElement: ReactNode;
+  };
+  entitiesSelected?: Set<User>;
+  selectionType: SelectionTypeType;
+  onChanged: () => void;
+  onDeleteBulk: () => void | Promise<void>;
+  onDownloadBulk: () => Promise<void>;
+  onDownloaded: OnDownloadedFunc;
+  onEntityDeselected: (entity: User) => void;
+  onEntitySelected: (entity: User) => void;
+  onError: (error: Error | Rejection) => void;
+  onFilterChanged: (newFilter: Filter) => void;
+  onFilterCreated: (newFilter: Filter) => void;
+  onFilterRemoved: () => void;
+  onFilterReset: () => void;
+  onFirstClick: () => void;
+  onLastClick: () => void;
+  onNextClick: () => void;
+  onPreviousClick: () => void;
+  onSelectionTypeChange: (selectionType: SelectionTypeType) => void;
+  onTagsBulk: () => void;
+  onUserCloneClick: (user: User) => void | Promise<void>;
+  onUserCreateClick: () => void | Promise<void>;
+  onUserDeleteClick: (user?: User) => void | Promise<void>;
+  onUserDownloadClick: (user: User) => void | Promise<void>;
+  onUserEditClick: (user: User) => void | Promise<void>;
+  onUserSaveClick?: (data: UserDialogSaveData) => void | Promise<unknown>;
+}
+
+interface ConfirmDeleteDialogProps {
+  deleteUsers: User[];
+  error?: string;
+  inheritorUsers: User[];
+  onErrorClose: () => void;
+}
+
+const TypedConfirmDeleteDialog =
+  ConfirmDeleteDialog as unknown as ComponentType<ConfirmDeleteDialogProps>;
+
+export const UsersListPageToolBarIcons = ({
+  onUserCreateClick,
+}: UsersListPageToolBarIconsProps) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
   return (
@@ -48,10 +111,6 @@ export const UsersListPageToolBarIcons = ({onUserCreateClick}) => {
       )}
     </IconDivider>
   );
-};
-
-UsersListPageToolBarIcons.propTypes = {
-  onUserCreateClick: PropTypes.func.isRequired,
 };
 
 const UsersListPage = ({
@@ -77,7 +136,7 @@ const UsersListPage = ({
   onFilterReset,
   onSelectionTypeChange,
   onTagsBulk,
-}) => {
+}: UsersListPageProps) => {
   const [_] = useTranslation();
   const gmp = useGmp();
 
@@ -85,9 +144,9 @@ const UsersListPage = ({
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [deleteUsers, setDeleteUsers] = useState([]);
-  const [title, setTitle] = useState();
-  const [deleteDialogError, setDeleteDialogError] = useState();
+  const [deleteUsers, setDeleteUsers] = useState<User[]>([]);
+  const [title, setTitle] = useState<string>();
+  const [deleteDialogError, setDeleteDialogError] = useState<string>();
 
   const [getFirst, getLast, getNext, getPrevious] = usePagination(
     filter,
@@ -105,39 +164,41 @@ const UsersListPage = ({
     setDeleteDialogError(undefined);
   };
 
-  const handleDeleteUser = ({deleteUsers, inheritorId}) => {
+  const handleDeleteUser = ({
+    deleteUsers,
+    inheritorId,
+  }: {
+    deleteUsers: User[];
+    inheritorId?: string;
+  }) => {
     let inheritor = inheritorId;
     if (inheritor === '--') {
       inheritor = undefined;
     }
-
-    if (deleteUsers.length === 1) {
-      const {id} = deleteUsers[0];
-      return gmp.user.delete({id, inheritorId: inheritor}).then(onChanged);
-    }
-    return gmp.users
-      .delete(deleteUsers, {inheritor_id: inheritor})
-      .then(onChanged);
+    const deleteOptions = isDefined(inheritor) ? {inheritor_id: inheritor} : {};
+    return gmp.users.delete(deleteUsers, deleteOptions).then(onChanged);
   };
 
-  const openConfirmDeleteDialog = async user => {
+  const openConfirmDeleteDialog = async (user?: User) => {
     setDeleteDialogError(undefined);
     try {
       loadAll();
     } catch (error) {
-      onError(error);
+      onError(error instanceof Error ? error : new Error(String(error)));
     }
 
     if (isDefined(user)) {
       setConfirmDeleteDialogVisible(true);
       setDeleteUsers([user]);
-      setTitle(_(`Confirm deletion of user {{- name}}`, user));
+      setTitle(
+        _(`Confirm deletion of user {{- name}}`, {name: user.name ?? ''}),
+      );
     } else {
-      let deleteUsers;
+      let deleteUsers: User[] = [];
       if (selectionType === SelectionType.SELECTION_USER) {
-        deleteUsers = [...entitiesSelected];
+        deleteUsers = isDefined(entitiesSelected) ? [...entitiesSelected] : [];
       } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-        deleteUsers = entities;
+        deleteUsers = entities ?? [];
       } else {
         const resp = await gmp.users.getAll({filter});
         deleteUsers = resp.data;
@@ -173,7 +234,9 @@ const UsersListPage = ({
       } catch (error) {
         setIsLoading(false);
         setDeleteDialogError(
-          error.message || 'An error occurred during deletion',
+          error instanceof Error
+            ? error.message || 'An error occurred during deletion'
+            : 'An error occurred during deletion',
         );
       }
     } else {
@@ -200,7 +263,7 @@ const UsersListPage = ({
       {({clone, create, download, edit, save}) => (
         <>
           <PageTitle title={_('Users')} />
-          <EntitiesPage
+          <EntitiesPage<User, UsersEntitiesPageProps>
             createFilterType="user"
             dialogConfig={{
               useCustomDialog: true,
@@ -208,7 +271,7 @@ const UsersListPage = ({
               customDialogElement: confirmDeleteDialogVisible && (
                 <ConfirmationDialog
                   content={
-                    <ConfirmDeleteDialog
+                    <TypedConfirmDeleteDialog
                       deleteUsers={deleteUsers}
                       error={deleteDialogError}
                       inheritorUsers={inheritorUsers}
@@ -218,7 +281,7 @@ const UsersListPage = ({
                   loading={isLoading}
                   rightButtonAction={DELETE_ACTION}
                   rightButtonTitle={_('Delete')}
-                  title={title}
+                  title={title ?? ''}
                   onClose={handleCloseConfirmDeleteDialog}
                   onResumeClick={handleSaveClick}
                 />
@@ -267,44 +330,19 @@ const UsersListPage = ({
   );
 };
 
-UsersListPage.propTypes = {
-  allUsers: PropTypes.array,
-  entities: PropTypes.array,
-  entitiesCounts: PropTypes.object,
-  entitiesError: PropTypes.object,
-  entitiesSelected: PropTypes.set,
-  filter: PropTypes.filter,
-  isLoading: PropTypes.bool,
-  loadAll: PropTypes.func.isRequired,
-  selectionType: PropTypes.string.isRequired,
-  onChanged: PropTypes.func.isRequired,
-  onDeleteBulk: PropTypes.func,
-  onDownloadBulk: PropTypes.func,
-  onDownloaded: PropTypes.func.isRequired,
-  onEntityDeselected: PropTypes.func,
-  onEntitySelected: PropTypes.func,
-  onError: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
-  onFilterCreated: PropTypes.func,
-  onFilterRemoved: PropTypes.func,
-  onFilterReset: PropTypes.func,
-  onSelectionTypeChange: PropTypes.func,
-  onTagsBulk: PropTypes.func,
-};
-
-const mapStateToProps = state => {
+const mapStateToProps = (state: unknown): {allUsers: User[]} => {
   const selector = entitiesSelector(state);
   return {
     allUsers: selector.getAllEntities(),
   };
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
+const mapDispatchToProps = (dispatch, {gmp}: {gmp: Gmp}) => ({
   loadAll: () => dispatch(loadAllEntities(gmp)()),
 });
 
 export default compose(
-  withEntitiesContainer('user', {
+  withEntitiesContainer<User>('user', {
     entitiesSelector,
     loadEntities,
   }),
