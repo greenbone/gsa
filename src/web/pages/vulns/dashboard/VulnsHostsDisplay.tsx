@@ -190,31 +190,41 @@ const VulnsHostsDisplayInner = ({
   }, []);
 
   return (
-    <DataDisplay<
-      {groups?: GroupData[]},
-      VulnsHostsDisplayProps,
-      State,
-      HostDataPoint
-    >
-      {...props}
-      dataTransform={handleTransform}
-      filter={filter}
-      title={() =>
-        _('Vulnerabilities by Hosts (Total: {{count}})', {
-          count: totalRef.current,
-        })
-      }
-    >
-      {({width, height, data, svgRef}) => (
-        <HostsBarChart
-          data={data as HostDataPoint[]}
-          height={height}
-          svgRef={svgRef}
-          width={width}
-          onDataClick={isDefined(onFilterChanged) ? handleDataClick : undefined}
-        />
+    <VulnsHostsLoader filter={filter}>
+      {loaderProps => (
+        <DataDisplay<
+          {groups?: GroupData[]},
+          VulnsHostsDisplayProps,
+          State,
+          HostDataPoint
+        >
+          {...props}
+          {...(loaderProps as {
+            data: {groups?: GroupData[]};
+            isLoading: boolean;
+          })}
+          dataTransform={handleTransform}
+          filter={filter}
+          title={() =>
+            _('Vulnerabilities by Hosts (Total: {{count}})', {
+              count: totalRef.current,
+            })
+          }
+        >
+          {({width, height, data, svgRef}) => (
+            <HostsBarChart
+              data={data as HostDataPoint[]}
+              height={height}
+              svgRef={svgRef}
+              width={width}
+              onDataClick={
+                isDefined(onFilterChanged) ? handleDataClick : undefined
+              }
+            />
+          )}
+        </DataDisplay>
       )}
-    </DataDisplay>
+    </VulnsHostsLoader>
   );
 };
 

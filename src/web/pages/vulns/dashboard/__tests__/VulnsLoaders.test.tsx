@@ -4,12 +4,18 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
+import BaseFilter from 'gmp/models/filter/base-filter';
 import {
   VULNS_HOSTS,
   VULNS_SEVERITY,
   vulnsHostsLoader,
   vulnsSeverityLoader,
 } from 'web/pages/vulns/dashboard/VulnsLoaders';
+import {
+  DASHBOARD_DATA_LOADING_ERROR,
+  DASHBOARD_DATA_LOADING_REQUEST,
+  DASHBOARD_DATA_LOADING_SUCCESS,
+} from 'web/store/dashboard/data/actions';
 
 describe('Vulns Loaders', () => {
   test('should export severity data ID', () => {
@@ -28,31 +34,103 @@ describe('Vulns Loaders', () => {
     expect(typeof vulnsHostsLoader).toBe('function');
   });
 
-  test('vulnsSeverityLoader should call gmp.vulns.getSeverityAggregates', () => {
-    const mockData = {data: [{value: 5.0, count: 10}]};
-    const mockGetSeverityAggregates = testing.fn().mockResolvedValue(mockData);
+  test('vulnsSeverityLoader should load and dispatch severity aggregates', () => {
+    const data = [{value: 5, count: 10}];
+    const mockGetSeverityAggregates = testing.fn().mockResolvedValue({data});
     const gmp = {
       vulns: {
         getSeverityAggregates: mockGetSeverityAggregates,
       },
     };
-    const filter = {toFilterString: () => 'first=1 rows=10'};
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const dispatch = testing.fn();
+    const getState = testing.fn();
 
-    const loaderFunc = vulnsSeverityLoader({gmp, filter});
-    expect(typeof loaderFunc).toBe('function');
+    return vulnsSeverityLoader({gmp, filter})(dispatch, getState).then(() => {
+      expect(mockGetSeverityAggregates).toHaveBeenCalledWith({filter});
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: DASHBOARD_DATA_LOADING_REQUEST,
+        id: VULNS_SEVERITY,
+        filter,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: DASHBOARD_DATA_LOADING_SUCCESS,
+        id: VULNS_SEVERITY,
+        filter,
+        data,
+      });
+    });
   });
 
-  test('vulnsHostsLoader should call gmp.vulns.getHostAggregates', () => {
-    const mockData = {data: [{value: 1, count: 5}]};
-    const mockGetHostAggregates = testing.fn().mockResolvedValue(mockData);
+  test('vulnsSeverityLoader should dispatch an error when loading fails', () => {
+    const error = new Error('An error');
+    const mockGetSeverityAggregates = testing.fn().mockRejectedValue(error);
+    const gmp = {
+      vulns: {
+        getSeverityAggregates: mockGetSeverityAggregates,
+      },
+    };
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const dispatch = testing.fn();
+    const getState = testing.fn();
+
+    return vulnsSeverityLoader({gmp, filter})(dispatch, getState).then(() => {
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: DASHBOARD_DATA_LOADING_ERROR,
+        id: VULNS_SEVERITY,
+        filter,
+        error,
+      });
+    });
+  });
+
+  test('vulnsHostsLoader should load and dispatch host aggregates', () => {
+    const data = [{value: 1, count: 5}];
+    const mockGetHostAggregates = testing.fn().mockResolvedValue({data});
     const gmp = {
       vulns: {
         getHostAggregates: mockGetHostAggregates,
       },
     };
-    const filter = {toFilterString: () => 'first=1 rows=10'};
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const dispatch = testing.fn();
+    const getState = testing.fn();
 
-    const loaderFunc = vulnsHostsLoader({gmp, filter});
-    expect(typeof loaderFunc).toBe('function');
+    return vulnsHostsLoader({gmp, filter})(dispatch, getState).then(() => {
+      expect(mockGetHostAggregates).toHaveBeenCalledWith({filter});
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: DASHBOARD_DATA_LOADING_REQUEST,
+        id: VULNS_HOSTS,
+        filter,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: DASHBOARD_DATA_LOADING_SUCCESS,
+        id: VULNS_HOSTS,
+        filter,
+        data,
+      });
+    });
+  });
+
+  test('vulnsHostsLoader should dispatch an error when loading fails', () => {
+    const error = new Error('An error');
+    const mockGetHostAggregates = testing.fn().mockRejectedValue(error);
+    const gmp = {
+      vulns: {
+        getHostAggregates: mockGetHostAggregates,
+      },
+    };
+    const filter = BaseFilter.fromString('first=1 rows=10');
+    const dispatch = testing.fn();
+    const getState = testing.fn();
+
+    return vulnsHostsLoader({gmp, filter})(dispatch, getState).then(() => {
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: DASHBOARD_DATA_LOADING_ERROR,
+        id: VULNS_HOSTS,
+        filter,
+        error,
+      });
+    });
   });
 });
