@@ -3,22 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {_, _l} from 'gmp/locale/lang';
-import type Vulnerability from 'gmp/models/vulnerability';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import createEntitiesFooter, {
-  type CreateEntitiesFooterProps,
-} from 'web/entities/createEntitiesFooter';
-import createEntitiesTable from 'web/entities/createEntitiesTable';
-import VulnsRow from 'web/pages/vulns/VulnsRow';
+import useTranslation from 'web/hooks/useTranslation';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
-type RowProps = React.ComponentProps<typeof VulnsRow>;
-
-interface HeaderProps {
+export interface VulnerabilitiesTableHeaderProps {
   sort?: boolean;
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;
@@ -27,21 +18,23 @@ interface HeaderProps {
   onSortChange?: (sortBy: string) => void;
 }
 
-const Header = ({
+const VulnerabilitiesTableHeader = ({
   sort = true,
   currentSortBy,
   currentSortDir,
   actionsColumn,
   hideColumns = {},
   onSortChange,
-}: HeaderProps) => {
+}: VulnerabilitiesTableHeaderProps) => {
+  const [_] = useTranslation();
   return (
     <TableHeader>
       <TableRow>
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'name' : undefined}
+          sort={sort}
+          sortBy="name"
           title={_('Name')}
           width="40%"
           onSortChange={onSortChange}
@@ -50,7 +43,8 @@ const Header = ({
           <TableHead
             currentSortBy={currentSortBy}
             currentSortDir={currentSortDir}
-            sortBy={sort ? 'oldest' : undefined}
+            sort={sort}
+            sortBy="oldest"
             title={_('Oldest Result')}
             width="15%"
             onSortChange={onSortChange}
@@ -60,7 +54,8 @@ const Header = ({
           <TableHead
             currentSortBy={currentSortBy}
             currentSortDir={currentSortDir}
-            sortBy={sort ? 'newest' : undefined}
+            sort={sort}
+            sortBy="newest"
             title={_('Newest Result')}
             width="15%"
             onSortChange={onSortChange}
@@ -69,7 +64,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'severity' : undefined}
+          sort={sort}
+          sortBy="severity"
           title={_('Severity')}
           width="8%"
           onSortChange={onSortChange}
@@ -77,7 +73,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'qod' : undefined}
+          sort={sort}
+          sortBy="qod"
           title={_('QoD')}
           width="4%"
           onSortChange={onSortChange}
@@ -85,7 +82,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'results' : undefined}
+          sort={sort}
+          sortBy="results"
           title={_('Results')}
           width="5%"
           onSortChange={onSortChange}
@@ -93,7 +91,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'hosts' : undefined}
+          sort={sort}
+          sortBy="hosts"
           title={_('Hosts')}
           width="5%"
           onSortChange={onSortChange}
@@ -104,23 +103,4 @@ const Header = ({
   );
 };
 
-const Footer = createEntitiesFooter({
-  span: 8,
-  download: 'vulnerabilities.xml',
-});
-
-export const VulnsTable = createEntitiesTable<
-  Vulnerability,
-  CreateEntitiesFooterProps<Vulnerability>,
-  HeaderProps,
-  RowProps
->({
-  emptyTitle: _l('No Vulnerabilities available'),
-  header: Header,
-  footer: Footer,
-  row: VulnsRow,
-  // @ts-expect-error toggleDetailsIcon is not in CreateEntitiesTableOptions but is passed to EntitiesTable
-  toggleDetailsIcon: false,
-});
-
-export default VulnsTable;
+export default VulnerabilitiesTableHeader;

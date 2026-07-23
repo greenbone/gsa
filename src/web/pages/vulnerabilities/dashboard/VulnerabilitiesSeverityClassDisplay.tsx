@@ -9,10 +9,10 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-import {VulnsSeverityLoader} from 'web/pages/vulns/dashboard/VulnsLoaders';
+import {VulnerabilitiesSeverityLoader} from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders';
 
-export const VulnsSeverityDisplay = createDisplay({
-  loaderComponent: VulnsSeverityLoader,
+export const VulnerabilitiesSeverityDisplay = createDisplay({
+  loaderComponent: VulnerabilitiesSeverityLoader,
   displayComponent: SeverityClassDisplay,
   dataTitles: [_l('Severity Class'), _l('# of Vulnerabilities')],
   title: ({data: tdata}) =>
@@ -20,12 +20,12 @@ export const VulnsSeverityDisplay = createDisplay({
       count: tdata.total,
     }),
   displayId: 'vuln-by-severity-class',
-  displayName: 'VulnsSeverityDisplay',
+  displayName: 'VulnerabilitiesSeverityDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
 } as Parameters<typeof createDisplay>[0]);
 
-export const VulnsSeverityTableDisplay = createDisplay({
-  loaderComponent: VulnsSeverityLoader,
+export const VulnerabilitiesSeverityTableDisplay = createDisplay({
+  loaderComponent: VulnerabilitiesSeverityLoader,
   displayComponent: SeverityClassTableDisplay,
   dataTitles: [_l('Severity Class'), _l('# of Vulnerabilities')],
   title: ({data: tdata}) =>
@@ -33,17 +33,21 @@ export const VulnsSeverityTableDisplay = createDisplay({
       count: tdata.total,
     }),
   displayId: 'vuln-by-severity-class-table',
-  displayName: 'VulnsSeverityTableDisplay',
+  displayName: 'VulnerabilitiesSeverityTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
 } as Parameters<typeof createDisplay>[0]);
 
-registerDisplay(VulnsSeverityDisplay.displayId, VulnsSeverityDisplay, {
-  title: _l('Chart: Vulnerabilities by Severity Class'),
-});
+registerDisplay(
+  VulnerabilitiesSeverityDisplay.displayId,
+  VulnerabilitiesSeverityDisplay,
+  {
+    title: _l('Chart: Vulnerabilities by Severity Class'),
+  },
+);
 
 registerDisplay(
-  VulnsSeverityTableDisplay.displayId,
-  VulnsSeverityTableDisplay,
+  VulnerabilitiesSeverityTableDisplay.displayId,
+  VulnerabilitiesSeverityTableDisplay,
   {
     title: _l('Table: Vulnerabilities by Severity Class'),
   },

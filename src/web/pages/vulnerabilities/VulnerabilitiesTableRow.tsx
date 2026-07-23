@@ -15,22 +15,21 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
 import {type SelectionTypeType} from 'web/utils/SelectionType';
 
-export interface RowProps {
+export interface VulnerabilitiesTableRowProps {
   entity: Vulnerability;
   links?: boolean;
-  onToggleDetailsClick?: (entity: Vulnerability, id: string) => void;
   selectionType?: SelectionTypeType;
   onEntityDeselected?: (entity: Vulnerability) => void;
   onEntitySelected?: (entity: Vulnerability) => void;
 }
 
-const Row = ({
+const VulnerabilitiesTableRow = ({
   entity,
   links = true,
   selectionType,
   onEntityDeselected,
   onEntitySelected,
-}: RowProps) => {
+}: VulnerabilitiesTableRowProps) => {
   const {results = {}, hosts = {}} = entity;
   return (
     <TableRow>
@@ -71,4 +70,4 @@ const Row = ({
   );
 };
 
-export default Row;
+export default VulnerabilitiesTableRow;

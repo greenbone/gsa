@@ -13,18 +13,12 @@ import {
   within,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Vulnerability from 'gmp/models/vulnerability';
 import {createSession} from 'gmp/testing';
-import VulnsListPage from 'web/pages/vulns/VulnsListPage';
+import VulnerabilitiesListPage from 'web/pages/vulnerabilities/VulnerabilitiesListPage';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-
-vi.mock('web/pages/vulns/dashboard', () => ({
-  __esModule: true,
-  default: () => null,
-  VULNS_DASHBOARD_ID: 'vulns-dashboard',
-}));
 
 const createVulnerability = (id = 'vuln-1', name = 'CVE-2026-0001') =>
   Vulnerability.fromElement({
@@ -46,7 +40,7 @@ const createGmp = ({
   getVulns = testing.fn().mockResolvedValue({
     data: [createVulnerability()],
     meta: {
-      filter: BaseFilter.fromString('first=1 rows=10'),
+      filter: QueryFilter.fromString('first=1 rows=10'),
       counts: new CollectionCounts({
         first: 1,
         all: 1,
@@ -58,6 +52,13 @@ const createGmp = ({
   }),
   exportByFilter = testing.fn().mockResolvedValue({data: '<xml />'}),
   exportByIds = testing.fn().mockResolvedValue({data: '<xml />'}),
+  getAggregates = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: QueryFilter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
 } = {}) => ({
   settings: {
     manualUrl: 'https://docs.greenbone.net',
@@ -66,6 +67,8 @@ const createGmp = ({
   session: createSession({token: 'token'}),
   vulns: {
     get: getVulns,
+    getSeverityAggregates: getAggregates,
+    getHostAggregates: getAggregates,
     deleteByFilter: testing.fn().mockResolvedValue({}),
     delete: testing.fn().mockResolvedValue({}),
     exportByFilter,
@@ -75,7 +78,7 @@ const createGmp = ({
     getSetting: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(),
+        filter: QueryFilter.fromString(),
         counts: new CollectionCounts(),
       },
     }),
@@ -84,7 +87,7 @@ const createGmp = ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(),
+        filter: QueryFilter.fromString(),
         counts: new CollectionCounts(),
       },
     }),
@@ -94,7 +97,7 @@ const createGmp = ({
   },
 });
 
-describe('VulnsListPage tests', () => {
+describe('VulnerabilitiesListPage tests', () => {
   test('exports selected vulnerabilities when "Apply to selection" is chosen', async () => {
     const exportByFilter = testing.fn().mockResolvedValue({data: '<xml />'});
     const exportByIds = testing.fn().mockResolvedValue({data: '<xml />'});
@@ -104,7 +107,6 @@ describe('VulnsListPage tests', () => {
       capabilities: true,
       gmp,
       store: true,
-      router: true,
     });
 
     store.dispatch(
@@ -116,11 +118,11 @@ describe('VulnsListPage tests', () => {
     store.dispatch(
       defaultFilterLoadingActions.success(
         'vulnerability',
-        BaseFilter.fromString('first=1 rows=10'),
+        QueryFilter.fromString('first=1 rows=10'),
       ),
     );
 
-    render(<VulnsListPage />);
+    render(<VulnerabilitiesListPage />);
     await screen.findByText('CVE-2026-0001');
 
     const tableFooter = within(screen.queryTableFooter() as HTMLElement);
@@ -149,7 +151,7 @@ describe('VulnsListPage tests', () => {
       length: 10,
       rows: 10,
     });
-    const listFilter = BaseFilter.fromString('first=11 rows=10');
+    const listFilter = QueryFilter.fromString('first=11 rows=10');
     const getVulns = testing.fn().mockResolvedValue({
       data: [createVulnerability()],
       meta: {
@@ -163,7 +165,6 @@ describe('VulnsListPage tests', () => {
       capabilities: true,
       gmp,
       store: true,
-      router: true,
     });
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '10'}}));
@@ -171,7 +172,7 @@ describe('VulnsListPage tests', () => {
       defaultFilterLoadingActions.success('vulnerability', listFilter),
     );
 
-    render(<VulnsListPage />);
+    render(<VulnerabilitiesListPage />);
     await screen.findByText('CVE-2026-0001');
 
     getVulns.mockClear();

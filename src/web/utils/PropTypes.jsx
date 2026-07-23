@@ -10,6 +10,7 @@ import EntityCommand from 'gmp/commands/entity';
 import Gmp from 'gmp/gmp';
 import {isDate, isDuration} from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Model from 'gmp/models/model';
 import Settings from 'gmp/models/settings';
 import {isDefined} from 'gmp/utils/identity';
@@ -106,7 +107,10 @@ const counts = ReactPropTypes.shape({
 
 const set = ReactPropTypes.instanceOf(Set);
 
-const filter = ReactPropTypes.instanceOf(Filter);
+const filter = ReactPropTypes.oneOfType([
+  ReactPropTypes.instanceOf(Filter),
+  ReactPropTypes.instanceOf(QueryFilter),
+]);
 
 const model = ReactPropTypes.instanceOf(Model);
 

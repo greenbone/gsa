@@ -6,7 +6,7 @@
 import React from 'react';
 import {_} from 'gmp/locale/lang';
 import BarChart from 'web/components/chart/Bar';
-import {type HostDataPoint} from 'web/pages/vulns/dashboard/VulnsHostsDisplay';
+import {type HostDataPoint} from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsDisplay';
 
 interface HostsBarChartProps {
   width: number;

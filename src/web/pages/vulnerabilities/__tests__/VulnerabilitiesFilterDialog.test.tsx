@@ -7,19 +7,28 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
-import VulnerabilityFilterDialog from 'web/pages/vulns/VulnsFilterDialog';
+import QueryFilter from 'gmp/models/filter/query-filter';
+
+import VulnerabilityFilterDialog from 'web/pages/vulnerabilities/VulnerabilitiesFilterDialog';
+
+const createGmp = ({
+  filterCreate = testing.fn(),
+  filterGet = testing.fn(),
+} = {}) => ({
+  filter: {
+    create: filterCreate,
+    get: filterGet,
+  },
+});
 
 describe('VulnerabilityFilterDialog tests', () => {
   test('should render filter dialog', () => {
     const handleClose = testing.fn();
     const handleFilterChanged = testing.fn();
     const handleFilterCreated = testing.fn();
-    const gmp = {
-      filter: {},
-    };
-    const filter = new BaseFilter();
+    const gmp = createGmp();
+    const filter = new QueryFilter();
     const {render} = rendererWith({capabilities: true, gmp});
 
     render(
@@ -39,16 +48,15 @@ describe('VulnerabilityFilterDialog tests', () => {
     const handleFilterChanged = testing.fn();
     const handleFilterCreated = testing.fn();
     const filter = new Filter({
+      id: 'test-id',
       terms: [new FilterTerm({keyword: 'name', value: 'test'})],
     });
     const newFilter = new Filter({id: 'new-filter'});
     const newFilterWithDetails = newFilter.set('rows', 10);
-    const gmp = {
-      filter: {
-        create: testing.fn().mockResolvedValue({data: newFilter}),
-        get: testing.fn().mockReturnValue({data: newFilterWithDetails}),
-      },
-    };
+    const gmp = createGmp({
+      filterCreate: testing.fn().mockResolvedValue({data: newFilter}),
+      filterGet: testing.fn().mockReturnValue({data: newFilterWithDetails}),
+    });
     const {render} = rendererWith({capabilities: true, gmp});
 
     render(
@@ -87,12 +95,12 @@ describe('VulnerabilityFilterDialog tests', () => {
     const handleClose = testing.fn();
     const handleFilterChanged = testing.fn();
     const handleFilterCreated = testing.fn();
-    const filter = new BaseFilter();
-    const gmp = {
-      filter: {
-        create: testing.fn().mockResolvedValue(new Filter({id: 'new-filter'})),
-      },
-    };
+    const filter = new QueryFilter();
+    const gmp = createGmp({
+      filterCreate: testing
+        .fn()
+        .mockResolvedValue(new Filter({id: 'new-filter'})),
+    });
     const {render} = rendererWith({capabilities: new Capabilities(), gmp});
 
     render(
@@ -110,12 +118,10 @@ describe('VulnerabilityFilterDialog tests', () => {
   });
 
   test('should render filter string', () => {
-    const filter = new Filter({
+    const filter = new QueryFilter({
       terms: [new FilterTerm({keyword: 'foo', value: 'bar', relation: '='})],
     });
-    const gmp = {
-      filter: {},
-    };
+    const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
     render(<VulnerabilityFilterDialog filter={filter} />);

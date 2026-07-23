@@ -19,7 +19,7 @@ interface UseGetVulnerabilitiesParams {
 
 interface UseMutationCallbacks {
   onSuccess?: () => void;
-  onError?: (error: Rejection) => void;
+  onError?: (error: Error) => void;
 }
 
 type VulnBulkInput = Vulnerability[] | FilterType;
@@ -36,7 +36,7 @@ export const useGetVulnerabilities = ({
   });
 };
 
-export const useBulkDeleteVulns = ({
+export const useBulkDeleteVulnerabilities = ({
   onError,
   onSuccess,
 }: UseMutationCallbacks) => {
@@ -57,7 +57,7 @@ export const useBulkDeleteVulns = ({
   });
 };
 
-export const useBulkExportVulns = ({
+export const useBulkExportVulnerabilities = ({
   onError,
   onSuccess,
 }: UseMutationCallbacks) => {

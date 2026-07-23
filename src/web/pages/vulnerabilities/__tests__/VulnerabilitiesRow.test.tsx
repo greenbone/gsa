@@ -7,7 +7,7 @@ import {describe, expect, test} from '@gsa/testing';
 import {rendererWithTableBody, screen} from 'web/testing';
 import Vulnerability from 'gmp/models/vulnerability';
 import {createSession} from 'gmp/testing';
-import VulnsRow from 'web/pages/vulns/VulnsRow';
+import VulnerabilitiesTableRow from 'web/pages/vulnerabilities/VulnerabilitiesTableRow';
 
 const createGmp = () => ({
   session: createSession(),
@@ -50,14 +50,14 @@ const createVulnerability = ({
     },
   });
 
-describe('VulnsRow tests', () => {
+describe('VulnerabilitiesTableRow tests', () => {
   test('should render vulnerability name as a details link', () => {
     const vuln = createVulnerability({id: '1', name: 'CVE-2024-0001'});
     const {render} = rendererWithTableBody({
       capabilities: true,
       gmp: createGmp(),
     });
-    render(<VulnsRow entity={vuln} />);
+    render(<VulnerabilitiesTableRow entity={vuln} />);
     const link = screen.getByRole('link', {name: 'CVE-2024-0001'});
     expect(link).toHaveAttribute('href', '/nvt/1');
   });
@@ -68,7 +68,7 @@ describe('VulnsRow tests', () => {
       capabilities: true,
       gmp: createGmp(),
     });
-    render(<VulnsRow entity={vuln} links={false} />);
+    render(<VulnerabilitiesTableRow entity={vuln} links={false} />);
     screen.getByText('CVE-2024-0001');
     expect(screen.queryByRole('link', {name: 'CVE-2024-0001'})).toBeNull();
   });
@@ -84,7 +84,7 @@ describe('VulnsRow tests', () => {
       capabilities: true,
       gmp: createGmp(),
     });
-    render(<VulnsRow entity={vuln} />);
+    render(<VulnerabilitiesTableRow entity={vuln} />);
     screen.getByText(/Jan 15, 2024/);
     screen.getByText(/Jun 20, 2024/);
   });
@@ -99,7 +99,7 @@ describe('VulnsRow tests', () => {
       capabilities: true,
       gmp: createGmp(),
     });
-    render(<VulnsRow entity={vuln} />);
+    render(<VulnerabilitiesTableRow entity={vuln} />);
     screen.getByText(/8\.5/);
   });
 
@@ -113,7 +113,7 @@ describe('VulnsRow tests', () => {
       capabilities: true,
       gmp: createGmp(),
     });
-    render(<VulnsRow entity={vuln} />);
+    render(<VulnerabilitiesTableRow entity={vuln} />);
     screen.getByText(/80/);
   });
 
@@ -127,7 +127,7 @@ describe('VulnsRow tests', () => {
       capabilities: true,
       gmp: createGmp(),
     });
-    render(<VulnsRow entity={vuln} />);
+    render(<VulnerabilitiesTableRow entity={vuln} />);
     const link = screen.getByRole('link', {name: '5'});
     expect(link).toHaveAttribute('href', '/results?filter=nvt%3D1');
   });
@@ -142,7 +142,7 @@ describe('VulnsRow tests', () => {
       capabilities: true,
       gmp: createGmp(),
     });
-    render(<VulnsRow entity={vuln} links={false} />);
+    render(<VulnerabilitiesTableRow entity={vuln} links={false} />);
     screen.getByText('5');
     expect(screen.queryByRole('link', {name: '5'})).toBeNull();
   });
@@ -157,7 +157,7 @@ describe('VulnsRow tests', () => {
       capabilities: true,
       gmp: createGmp(),
     });
-    render(<VulnsRow entity={vuln} />);
+    render(<VulnerabilitiesTableRow entity={vuln} />);
     const cells = screen.getAllByRole('cell');
     const lastCell = cells[cells.length - 2];
     expect(lastCell).toHaveTextContent('3');
@@ -174,7 +174,7 @@ describe('VulnsRow tests', () => {
       capabilities: true,
       gmp: createGmp(),
     });
-    render(<VulnsRow entity={vuln} />);
+    render(<VulnerabilitiesTableRow entity={vuln} />);
     screen.getByText('CVE-2024-0001');
   });
 });
