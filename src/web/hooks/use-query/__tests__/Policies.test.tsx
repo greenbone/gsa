@@ -6,8 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import type FilterType from 'gmp/models/filter/filter-type';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Policy from 'gmp/models/policy';
 import {createSession} from 'gmp/testing';
 import {useGetPolicy, useGetPolicies} from 'web/hooks/use-query/policies';
@@ -30,7 +30,7 @@ const policy2 = Policy.fromElement({
   permissions: {permission: [{name: 'everything'}]},
 });
 
-const filter = BaseFilter.fromString('name~test');
+const filter = QueryFilter.fromString('name~test');
 
 const SinglePolicyComponent = ({id}: {id: string}) => {
   const {data, isLoading, isError} = useGetPolicy({id});

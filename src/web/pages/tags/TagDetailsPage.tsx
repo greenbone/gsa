@@ -6,7 +6,7 @@
 import React from 'react';
 import {useQueryClient} from '@tanstack/react-query';
 import {useNavigate, useParams} from 'react-router';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Tag from 'gmp/models/tag';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
@@ -119,7 +119,7 @@ const TagDetailsPage = () => {
     id: id ?? '',
   });
 
-  const permFilter = BaseFilter.fromString(`resource_uuid=${id ?? ''}`).all();
+  const permFilter = QueryFilter.fromString(`resource_uuid=${id ?? ''}`).all();
   const {data: permissionsData} = useGetPermissions({
     filter: permFilter,
     enabled: Boolean(id),

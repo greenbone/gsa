@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
 
 describe('Empty Results Report tests', () => {
@@ -16,7 +16,7 @@ describe('Empty Results Report tests', () => {
     const onFilterRemoveClick = testing.fn();
     const onFilterRemoveSeverityClick = testing.fn();
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       'apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',
     );
 
@@ -71,7 +71,7 @@ describe('Empty Results Report tests', () => {
     const onFilterRemoveClick = testing.fn();
     const onFilterRemoveSeverityClick = testing.fn();
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       'apply_overrides=0 levels=hml rows=2 first=1 sort-reverse=severity',
     );
 
@@ -130,7 +130,7 @@ describe('Empty Results Report tests', () => {
     const onFilterRemoveClick = testing.fn();
     const onFilterRemoveSeverityClick = testing.fn();
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       'apply_overrides=0 levels=hmlg severity>50 rows=2 first=1 sort-reverse=severity',
     );
 
@@ -189,7 +189,7 @@ describe('Empty Results Report tests', () => {
     const onFilterRemoveClick = testing.fn();
     const onFilterRemoveSeverityClick = testing.fn();
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       'apply_overrides=0 levels=hmlg min_qod>70 rows=2 first=1 sort-reverse=severity',
     );
 
@@ -247,7 +247,7 @@ describe('Empty Results Report tests', () => {
     const onFilterRemoveClick = testing.fn();
     const onFilterRemoveSeverityClick = testing.fn();
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       'apply_overrides=0 levels=hml rows=2 severity>50 min_qod=70 first=1 sort-reverse=severity',
     );
 

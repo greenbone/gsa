@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Host from 'gmp/models/host';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
@@ -150,7 +150,7 @@ const createGmp = ({
   getPermissions = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),

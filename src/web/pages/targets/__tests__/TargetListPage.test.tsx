@@ -14,7 +14,7 @@ import {
   wait,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Target, {SCAN_CONFIG_DEFAULT} from 'gmp/models/target';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -73,7 +73,7 @@ const createGmp = ({
     Promise.resolve({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(),
+        filter: QueryFilter.fromString(),
         counts: new CollectionCounts(),
       },
     }),
@@ -81,7 +81,7 @@ const createGmp = ({
   getTargets = testing.fn().mockResolvedValue({
     data: [target],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -127,7 +127,7 @@ describe('TargetsListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('target', defaultSettingFilter),
@@ -140,8 +140,8 @@ describe('TargetsListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([target], filter, loadedFilter, counts),
     );
@@ -207,7 +207,7 @@ describe('TargetsListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('target', defaultSettingFilter),
@@ -220,8 +220,8 @@ describe('TargetsListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([target], filter, loadedFilter, counts),
     );
@@ -253,7 +253,7 @@ describe('TargetsListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('target', defaultSettingFilter),
@@ -266,8 +266,8 @@ describe('TargetsListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([target], filter, loadedFilter, counts),
     );
@@ -309,7 +309,7 @@ describe('TargetsListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('target', defaultSettingFilter),
@@ -322,8 +322,8 @@ describe('TargetsListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([target], filter, loadedFilter, counts),
     );

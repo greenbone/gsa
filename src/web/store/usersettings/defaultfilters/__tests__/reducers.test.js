@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import reducer from 'web/store/usersettings/defaultfilters/reducers';
 
@@ -26,7 +26,7 @@ describe('default filters reducers tests', () => {
   });
 
   test('should override isLoading when reducing a request action', () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const prevState = {
       foo: {
         isLoading: false,
@@ -58,7 +58,7 @@ describe('default filters reducers tests', () => {
   });
 
   test('should update state when reducing an error action', () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const prevState = {
       foo: {
         isLoading: true,
@@ -78,7 +78,7 @@ describe('default filters reducers tests', () => {
   });
 
   test('should reduce a success action', () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const prevState = {};
     const action = defaultFilterLoadingActions.success('foo', filter);
     const state = reducer(prevState, action);
@@ -91,8 +91,8 @@ describe('default filters reducers tests', () => {
   });
 
   test('should update state when reducing a success action', () => {
-    const oldFilter = BaseFilter.fromString('bar=foo');
-    const filter = BaseFilter.fromString('foo=bar');
+    const oldFilter = QueryFilter.fromString('bar=foo');
+    const filter = QueryFilter.fromString('foo=bar');
     const prevState = {
       foo: {
         isLoading: true,

@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import ReportHost from 'gmp/models/report/host';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
@@ -26,7 +26,7 @@ const getImgSrc = (row: HTMLTableRowElement): string => {
   return img.getAttribute('src') ?? '';
 };
 
-const filter = BaseFilter.fromString(
+const filter = QueryFilter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
@@ -182,7 +182,7 @@ describe('Report Hosts Tab tests', () => {
   });
 });
 
-const auditFilter = BaseFilter.fromString(
+const auditFilter = QueryFilter.fromString(
   'apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant',
 );
 

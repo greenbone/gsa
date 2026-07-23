@@ -4,7 +4,6 @@
  */
 
 import EntityModel, {parseEntityModelProperties} from 'gmp/models/entity-model';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import {
   type default as FilterTerm,
   parseFilterTermsFromString,
@@ -14,6 +13,7 @@ import {
   type default as FilterType,
   type FilterSortOrder,
 } from 'gmp/models/filter/filter-type';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -113,7 +113,7 @@ class Filter extends EntityModel implements FilterType {
   private _delegate(terms: FilterTerms, keepId = false) {
     return terms === this.filterTerms
       ? this
-      : new BaseFilter({
+      : new QueryFilter({
           id: keepId ? this.id : undefined,
           name: this.name,
           terms: [...terms.getAllTerms()],
@@ -283,59 +283,59 @@ class Filter extends EntityModel implements FilterType {
   }
 }
 
-export const ALL_FILTER = new BaseFilter().all();
-export const AGENTS_FILTER_FILTER = BaseFilter.fromString('type=agent');
+export const ALL_FILTER = new QueryFilter().all();
+export const AGENTS_FILTER_FILTER = QueryFilter.fromString('type=agent');
 export const AGENT_GROUPS_FILTER_FILTER =
-  BaseFilter.fromString('type=agent_group');
-export const AGENT_INSTALLERS_FILTER_FILTER = BaseFilter.fromString(
+  QueryFilter.fromString('type=agent_group');
+export const AGENT_INSTALLERS_FILTER_FILTER = QueryFilter.fromString(
   'type=agent_installer',
 );
-export const ALERTS_FILTER_FILTER = BaseFilter.fromString('type=alert');
-export const AUDITS_FILTER_FILTER = BaseFilter.fromString('type=task');
+export const ALERTS_FILTER_FILTER = QueryFilter.fromString('type=alert');
+export const AUDITS_FILTER_FILTER = QueryFilter.fromString('type=task');
 export const AUDIT_REPORTS_FILTER_FILTER =
-  BaseFilter.fromString('type=audit_report');
-export const CERTBUND_FILTER_FILTER = BaseFilter.fromString('type=info');
-export const CPES_FILTER_FILTER = BaseFilter.fromString('type=info');
+  QueryFilter.fromString('type=audit_report');
+export const CERTBUND_FILTER_FILTER = QueryFilter.fromString('type=info');
+export const CPES_FILTER_FILTER = QueryFilter.fromString('type=info');
 export const CREDENTIALS_FILTER_FILTER =
-  BaseFilter.fromString('type=credential');
-export const CVES_FILTER_FILTER = BaseFilter.fromString('type=info');
-export const DFNCERT_FILTER_FILTER = BaseFilter.fromString('type=info');
-export const FILTERS_FILTER_FILTER = BaseFilter.fromString('type=filter');
-export const GROUPS_FILTER_FILTER = BaseFilter.fromString('type=group');
-export const HOSTS_FILTER_FILTER = BaseFilter.fromString('type=host');
-export const NOTES_FILTER_FILTER = BaseFilter.fromString('type=note');
-export const NVTS_FILTER_FILTER = BaseFilter.fromString('type=info');
-export const OS_FILTER_FILTER = BaseFilter.fromString('type=os');
-export const OVERRIDES_FILTER_FILTER = BaseFilter.fromString('type=override');
-export const PORTLISTS_FILTER_FILTER = BaseFilter.fromString('type=port_list');
-export const POLICIES_FILTER_FILTER = BaseFilter.fromString('type=config');
+  QueryFilter.fromString('type=credential');
+export const CVES_FILTER_FILTER = QueryFilter.fromString('type=info');
+export const DFNCERT_FILTER_FILTER = QueryFilter.fromString('type=info');
+export const FILTERS_FILTER_FILTER = QueryFilter.fromString('type=filter');
+export const GROUPS_FILTER_FILTER = QueryFilter.fromString('type=group');
+export const HOSTS_FILTER_FILTER = QueryFilter.fromString('type=host');
+export const NOTES_FILTER_FILTER = QueryFilter.fromString('type=note');
+export const NVTS_FILTER_FILTER = QueryFilter.fromString('type=info');
+export const OS_FILTER_FILTER = QueryFilter.fromString('type=os');
+export const OVERRIDES_FILTER_FILTER = QueryFilter.fromString('type=override');
+export const PORTLISTS_FILTER_FILTER = QueryFilter.fromString('type=port_list');
+export const POLICIES_FILTER_FILTER = QueryFilter.fromString('type=config');
 export const PERMISSIONS_FILTER_FILTER =
-  BaseFilter.fromString('type=permission');
+  QueryFilter.fromString('type=permission');
 export const REPORT_CONFIGS_FILTER_FILTER =
-  BaseFilter.fromString('type=report_config');
+  QueryFilter.fromString('type=report_config');
 export const REPORT_FORMATS_FILTER_FILTER =
-  BaseFilter.fromString('type=report_format');
-export const REPORTS_FILTER_FILTER = BaseFilter.fromString('type=report');
-export const RESULTS_FILTER_FILTER = BaseFilter.fromString('type=result');
-export const ROLES_FILTER_FILTER = BaseFilter.fromString('type=role');
-export const SCANCONFIGS_FILTER_FILTER = BaseFilter.fromString('type=config');
-export const SCANNERS_FILTER_FILTER = BaseFilter.fromString('type=scanner');
-export const SCHEDULES_FILTER_FILTER = BaseFilter.fromString('type=schedule');
-export const SECINFO_FILTER_FILTER = BaseFilter.fromString('type=info');
-export const TARGETS_FILTER_FILTER = BaseFilter.fromString('type=target');
-export const TASKS_FILTER_FILTER = BaseFilter.fromString('type=task');
-export const TAGS_FILTER_FILTER = BaseFilter.fromString('type=tag');
-export const TICKETS_FILTER_FILTER = BaseFilter.fromString('type=ticket');
-export const TLS_CERTIFICATES_FILTER_FILTER = BaseFilter.fromString(
+  QueryFilter.fromString('type=report_format');
+export const REPORTS_FILTER_FILTER = QueryFilter.fromString('type=report');
+export const RESULTS_FILTER_FILTER = QueryFilter.fromString('type=result');
+export const ROLES_FILTER_FILTER = QueryFilter.fromString('type=role');
+export const SCANCONFIGS_FILTER_FILTER = QueryFilter.fromString('type=config');
+export const SCANNERS_FILTER_FILTER = QueryFilter.fromString('type=scanner');
+export const SCHEDULES_FILTER_FILTER = QueryFilter.fromString('type=schedule');
+export const SECINFO_FILTER_FILTER = QueryFilter.fromString('type=info');
+export const TARGETS_FILTER_FILTER = QueryFilter.fromString('type=target');
+export const TASKS_FILTER_FILTER = QueryFilter.fromString('type=task');
+export const TAGS_FILTER_FILTER = QueryFilter.fromString('type=tag');
+export const TICKETS_FILTER_FILTER = QueryFilter.fromString('type=ticket');
+export const TLS_CERTIFICATES_FILTER_FILTER = QueryFilter.fromString(
   'type=tls_certificate',
 );
-export const USERS_FILTER_FILTER = BaseFilter.fromString('type=user');
-export const VULNS_FILTER_FILTER = BaseFilter.fromString('type=vuln');
+export const USERS_FILTER_FILTER = QueryFilter.fromString('type=user');
+export const VULNS_FILTER_FILTER = QueryFilter.fromString('type=vuln');
 
 export const DEFAULT_FALLBACK_FILTER =
-  BaseFilter.fromString('sort=name first=1');
+  QueryFilter.fromString('sort=name first=1');
 
-export const RESET_FILTER = BaseFilter.fromString('first=1');
+export const RESET_FILTER = QueryFilter.fromString('first=1');
 
 export const DEFAULT_ROWS_PER_PAGE = 50;
 

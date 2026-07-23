@@ -8,8 +8,8 @@ import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {type TaskCommandCreateImportTaskParams} from 'gmp/commands/task';
 import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import type FilterType from 'gmp/models/filter/filter-type';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Report from 'gmp/models/report';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -53,7 +53,7 @@ interface ToolBarIconsProps {
 
 type ReportListPageProps = WithEntitiesContainerComponentProps<Report>;
 
-const CONTAINER_TASK_FILTER = BaseFilter.fromString('target=""');
+const CONTAINER_TASK_FILTER = QueryFilter.fromString('target=""');
 
 const ToolBarIcons = ({onUploadReportClick}: ToolBarIconsProps) => {
   const [_] = useTranslation();
@@ -161,7 +161,7 @@ const ReportListPage = ({
         replace: true,
       });
     } else {
-      const newFilter = filter ?? new BaseFilter();
+      const newFilter = filter ?? new QueryFilter();
       isDefined(onFilterChanged) &&
         onFilterChanged(newFilter.first().set('task_id', report?.task?.id));
       setBeforeSelectFilter(newFilter);
@@ -236,7 +236,7 @@ const reportsReloadInterval = ({entities = []}: {entities: Report[]}) =>
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;
 
-const FALLBACK_REPORT_LIST_FILTER = BaseFilter.fromString(
+const FALLBACK_REPORT_LIST_FILTER = QueryFilter.fromString(
   'sort-reverse=date first=1',
 );
 

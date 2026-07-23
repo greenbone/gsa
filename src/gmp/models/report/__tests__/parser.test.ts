@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   parseErrors,
   parseCvesFromEndpoint,
@@ -17,7 +17,7 @@ const emptyCollectionCounts = new CollectionCounts();
 
 describe('parseErrors', () => {
   test('should parse errors', () => {
-    const filter = BaseFilter.fromString('foo=bar rows=5');
+    const filter = QueryFilter.fromString('foo=bar rows=5');
     const report = {
       results: {
         result: [
@@ -123,7 +123,7 @@ describe('parseErrors', () => {
   });
 
   test('should parse empty errors', () => {
-    const filter = BaseFilter.fromString('foo=bar rows=5');
+    const filter = QueryFilter.fromString('foo=bar rows=5');
     const report = {};
     const errors = parseErrors(report, filter);
 
@@ -135,7 +135,7 @@ describe('parseErrors', () => {
 
 describe('parseCvesFromEndpoint', () => {
   test('should parse multiple cve elements', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
     const data = {
       cves: {
         cve: [
@@ -172,7 +172,7 @@ describe('parseCvesFromEndpoint', () => {
   });
 
   test('should handle a single cve element (not array)', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
     const data = {
       cves: {
         cve: {
@@ -194,7 +194,7 @@ describe('parseCvesFromEndpoint', () => {
   });
 
   test('should fall back to nvt __text when name child is absent', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
     const data = {
       cves: {
         cve: {
@@ -212,7 +212,7 @@ describe('parseCvesFromEndpoint', () => {
   });
 
   test('should return empty list when cves container is missing', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
 
     const result = parseCvesFromEndpoint({}, filter);
 
@@ -222,7 +222,7 @@ describe('parseCvesFromEndpoint', () => {
   });
 
   test('should use server count for counts.all when provided', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
     const data = {
       cves: {
         count: 999,
@@ -242,7 +242,7 @@ describe('parseCvesFromEndpoint', () => {
 
 describe('parseClosedCvesFromEndpoint', () => {
   test('should parse multiple closed_cve elements', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
     const data = {
       closed_cves: {
         closed_cve: [
@@ -279,7 +279,7 @@ describe('parseClosedCvesFromEndpoint', () => {
   });
 
   test('should handle a single closed_cve element (not array)', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
     const data = {
       closed_cves: {
         closed_cve: {
@@ -301,7 +301,7 @@ describe('parseClosedCvesFromEndpoint', () => {
   });
 
   test('should fall back to nvt __text when name child is absent', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
     const data = {
       closed_cves: {
         closed_cve: {
@@ -319,7 +319,7 @@ describe('parseClosedCvesFromEndpoint', () => {
   });
 
   test('should return empty list when closed_cves container is missing', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
 
     const result = parseClosedCvesFromEndpoint({}, filter);
 
@@ -329,7 +329,7 @@ describe('parseClosedCvesFromEndpoint', () => {
   });
 
   test('should use server count for counts.all when provided', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
     const data = {
       closed_cves: {
         count: 500,
@@ -347,7 +347,7 @@ describe('parseClosedCvesFromEndpoint', () => {
   });
 
   test('should build composite id from cve, host, and nvt oid', () => {
-    const filter = BaseFilter.fromString('first=1 rows=100');
+    const filter = QueryFilter.fromString('first=1 rows=100');
     const data = {
       closed_cves: {
         closed_cve: {

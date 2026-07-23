@@ -13,7 +13,7 @@ import {
   within,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import NVT from 'gmp/models/nvt';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -75,28 +75,28 @@ const createGmp = ({
   getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getNvts = testing.fn().mockResolvedValue({
     data: [nvt],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -149,7 +149,7 @@ describe('NvtsPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('nvt', defaultSettingFilter),
@@ -162,8 +162,8 @@ describe('NvtsPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([nvt], filter, loadedFilter, counts),
     );
@@ -241,7 +241,7 @@ describe('NvtsPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('nvt', defaultSettingFilter),
@@ -254,8 +254,8 @@ describe('NvtsPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([nvt], filter, loadedFilter, counts),
     );
@@ -279,7 +279,7 @@ describe('NvtsPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('nvt', defaultSettingFilter),
@@ -292,8 +292,8 @@ describe('NvtsPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([nvt], filter, loadedFilter, counts),
     );
@@ -329,7 +329,7 @@ describe('NvtsPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('nvt', defaultSettingFilter),
@@ -342,8 +342,8 @@ describe('NvtsPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([nvt], filter, loadedFilter, counts),
     );

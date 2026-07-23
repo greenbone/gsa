@@ -14,7 +14,7 @@ import {
   wait,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Override from 'gmp/models/override';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -67,28 +67,28 @@ const createGmp = ({
   getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getOverrides = testing.fn().mockResolvedValue({
     data: [override],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -140,7 +140,7 @@ describe('OverrideListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('override', defaultSettingFilter),
@@ -153,8 +153,8 @@ describe('OverrideListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([override], filter, loadedFilter, counts),
     );
@@ -229,7 +229,7 @@ describe('OverrideListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('override', defaultSettingFilter),
@@ -242,8 +242,8 @@ describe('OverrideListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([override], filter, loadedFilter, counts),
     );
@@ -273,7 +273,7 @@ describe('OverrideListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('override', defaultSettingFilter),
@@ -286,8 +286,8 @@ describe('OverrideListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([override], filter, loadedFilter, counts),
     );
@@ -329,7 +329,7 @@ describe('OverrideListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('override', defaultSettingFilter),
@@ -342,8 +342,8 @@ describe('OverrideListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([override], filter, loadedFilter, counts),
     );
@@ -383,7 +383,7 @@ describe('OverrideListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('override', defaultSettingFilter),
@@ -409,7 +409,7 @@ describe('OverrideListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('override', defaultSettingFilter),
@@ -434,7 +434,7 @@ describe('OverrideListPage tests', () => {
       length: 10,
       rows: 10,
     });
-    const listFilter = BaseFilter.fromString('first=11 rows=10');
+    const listFilter = QueryFilter.fromString('first=11 rows=10');
     const getOverrides = testing.fn().mockResolvedValue({
       data: overrides,
       meta: {

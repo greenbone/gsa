@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
 import withDownload from 'web/components/form/withDownload';
 import Reload, {
@@ -25,10 +25,10 @@ const defaultEntityReloadIntervalFunc = ({entity}) =>
 
 // get permissions assigned to the entity as resource
 export const permissionsResourceFilter = id =>
-  BaseFilter.fromString('resource_uuid=' + id).all();
+  QueryFilter.fromString('resource_uuid=' + id).all();
 
 export const permissionsSubjectFilter = id =>
-  BaseFilter.fromString(
+  QueryFilter.fromString(
     'subject_uuid=' +
       id +
       ' and not resource_uuid=""' +

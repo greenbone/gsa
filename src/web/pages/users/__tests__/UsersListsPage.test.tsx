@@ -14,7 +14,7 @@ import {
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -55,15 +55,15 @@ const createGmp = ({
   getUserResponse = {data: user},
   getUsersResponse = {
     data: [user],
-    meta: {filter: new BaseFilter(), counts: new CollectionCounts()},
+    meta: {filter: new QueryFilter(), counts: new CollectionCounts()},
   },
   getAllUsersResponse = {
     data: [user],
-    meta: {filter: new BaseFilter(), counts: new CollectionCounts()},
+    meta: {filter: new QueryFilter(), counts: new CollectionCounts()},
   },
   getFiltersResponse = {
     data: [],
-    meta: {filter: new BaseFilter(), counts: new CollectionCounts()},
+    meta: {filter: new QueryFilter(), counts: new CollectionCounts()},
   },
   cloneUser = testing.fn().mockResolvedValue(cloneUserResponse),
   deleteUser = testing.fn().mockResolvedValue(deleteUserResponse),
@@ -116,7 +116,7 @@ const createGmp = ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: new BaseFilter(),
+        filter: new QueryFilter(),
         counts: new CollectionCounts(),
       },
     }),
@@ -135,7 +135,7 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('user', defaultSettingFilter),
@@ -207,7 +207,7 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('user', defaultSettingFilter),
@@ -238,7 +238,7 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('user', defaultSettingFilter),
@@ -282,7 +282,7 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('user', defaultSettingFilter),
@@ -323,7 +323,7 @@ describe('UsersListPage tests', () => {
     const gmp = createGmp({
       getUsersResponse: {
         data: [user],
-        meta: {filter: new BaseFilter(), counts},
+        meta: {filter: new QueryFilter(), counts},
       },
     });
 
@@ -334,7 +334,7 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '10'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('user', defaultSettingFilter),
@@ -362,14 +362,14 @@ describe('UsersListPage tests', () => {
 
     const getUsers = testing.fn().mockResolvedValue({
       data: [user],
-      meta: {filter: BaseFilter.fromString('first=1 rows=10'), counts},
+      meta: {filter: QueryFilter.fromString('first=1 rows=10'), counts},
     });
 
     const gmp = createGmp({
       getUsers,
       getUsersResponse: {
         data: [user],
-        meta: {filter: BaseFilter.fromString('first=1 rows=10'), counts},
+        meta: {filter: QueryFilter.fromString('first=1 rows=10'), counts},
       },
     });
 
@@ -380,7 +380,7 @@ describe('UsersListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('first=1 rows=10');
+    const defaultSettingFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(loadingActions.success({rowsperpage: {value: '10'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('user', defaultSettingFilter),

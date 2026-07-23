@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import FilterProvider from 'web/entities/FilterProvider';
 import {pageFilter} from 'web/store/pages/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -14,8 +14,8 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
 describe('FilterProvider component tests', () => {
   test('should prefer search params filter over defaultSettingFilter', async () => {
-    const resultingFilter = BaseFilter.fromString('location=query rows=42');
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const resultingFilter = QueryFilter.fromString('location=query rows=42');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
 
     const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
@@ -48,13 +48,13 @@ describe('FilterProvider component tests', () => {
   });
 
   test('should prefer pageFilter over defaultSettingFilter', async () => {
-    const resultingFilter = BaseFilter.fromString('page=filter rows=42');
+    const resultingFilter = QueryFilter.fromString('page=filter rows=42');
 
-    const pFilter = BaseFilter.fromString('page=filter');
+    const pFilter = QueryFilter.fromString('page=filter');
 
-    const emptyFilter = BaseFilter.fromString('rows=42');
+    const emptyFilter = QueryFilter.fromString('rows=42');
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
 
     const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
@@ -90,13 +90,13 @@ describe('FilterProvider component tests', () => {
   test('should allow to set a pageName for loading the pageFilter', async () => {
     const gmpName = 'task';
     const pageName = 'foo-bar-baz';
-    const resultingFilter = BaseFilter.fromString('page=filter rows=42');
+    const resultingFilter = QueryFilter.fromString('page=filter rows=42');
 
-    const pFilter = BaseFilter.fromString('page=filter');
+    const pFilter = QueryFilter.fromString('page=filter');
 
-    const emptyFilter = BaseFilter.fromString('rows=42');
+    const emptyFilter = QueryFilter.fromString('rows=42');
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
 
     const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
@@ -134,11 +134,11 @@ describe('FilterProvider component tests', () => {
   });
 
   test('should use defaultSettingFilter', async () => {
-    const resultingFilter = BaseFilter.fromString('foo=bar rows=42');
+    const resultingFilter = QueryFilter.fromString('foo=bar rows=42');
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
 
-    const emptyFilter = BaseFilter.fromString('rows=42');
+    const emptyFilter = QueryFilter.fromString('rows=42');
 
     const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
@@ -171,11 +171,11 @@ describe('FilterProvider component tests', () => {
   });
 
   test('should use fallbackFilter if defaultSettingFilter could not be loaded', async () => {
-    const resultingFilter = BaseFilter.fromString('fall=back rows=42');
+    const resultingFilter = QueryFilter.fromString('fall=back rows=42');
 
-    const fallbackFilter = BaseFilter.fromString('fall=back');
+    const fallbackFilter = QueryFilter.fromString('fall=back');
 
-    const emptyFilter = BaseFilter.fromString('rows=42');
+    const emptyFilter = QueryFilter.fromString('rows=42');
 
     const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
@@ -213,9 +213,9 @@ describe('FilterProvider component tests', () => {
 
   test('should use fallbackFilter if given', async () => {
     // if no usersettings defaultFilter exists use the given fallbackFilter
-    const resultingFilter = BaseFilter.fromString('fall=back rows=42');
+    const resultingFilter = QueryFilter.fromString('fall=back rows=42');
 
-    const fallbackFilter = BaseFilter.fromString('fall=back');
+    const fallbackFilter = QueryFilter.fromString('fall=back');
 
     const getSetting = testing.fn().mockResolvedValue({});
     const subscribe = testing.fn();
@@ -285,9 +285,9 @@ describe('FilterProvider component tests', () => {
   test('should not overwrite rows keyword', async () => {
     // if rows= is set already, don't overwrite it. FilterProvider makes sure
     // that rows is always set to the usersettings rowsperpage.value
-    const resultingFilter = BaseFilter.fromString('fall=back rows=21');
+    const resultingFilter = QueryFilter.fromString('fall=back rows=21');
     // use fallbackFilter as sample
-    const fallbackFilter = BaseFilter.fromString('fall=back rows=21');
+    const fallbackFilter = QueryFilter.fromString('fall=back rows=21');
 
     const getSetting = testing.fn().mockResolvedValue({});
     const subscribe = testing.fn();
@@ -323,8 +323,8 @@ describe('FilterProvider component tests', () => {
   });
 
   test('should use default rows per page if rows per page setting could not be loaded', async () => {
-    const resultingFilter = BaseFilter.fromString('fall=back rows=50');
-    const fallbackFilter = BaseFilter.fromString('fall=back');
+    const resultingFilter = QueryFilter.fromString('fall=back rows=50');
+    const fallbackFilter = QueryFilter.fromString('fall=back');
 
     const getSetting = testing.fn().mockRejectedValue(new Error('an error'));
     const gmp = {

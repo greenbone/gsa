@@ -12,7 +12,7 @@ import {
   type PerformanceReport as PerformanceReportModel,
 } from 'gmp/commands/performance';
 import date, {type Date} from 'gmp/models/date';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   type default as Scanner,
   GREENBONE_SENSOR_SCANNER_TYPE,
@@ -57,7 +57,7 @@ interface SelectorProps {
   className?: string;
 }
 
-const SENSOR_SCANNER_FILTER = BaseFilter.fromString(
+const SENSOR_SCANNER_FILTER = QueryFilter.fromString(
   `type=${GREENBONE_SENSOR_SCANNER_TYPE}`,
 );
 

@@ -5,7 +5,7 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import AgentFilterDialog from 'web/pages/agents/AgentFilterDialog';
 
 const createGmp = ({
@@ -70,7 +70,7 @@ describe('AgentFilterDialog tests', () => {
   test('should render with existing filter', () => {
     const onFilterChanged = testing.fn();
 
-    const filter = BaseFilter.fromString('name~test');
+    const filter = QueryFilter.fromString('name~test');
 
     const gmp = createGmp();
 

@@ -11,7 +11,7 @@ import {
 } from 'gmp/commands/testing';
 import TlsCertificatesCommand from 'gmp/commands/tls-certificates';
 import {ALL_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import TlsCertificate from 'gmp/models/tls-certificate';
 
 describe('TlsCertificatesCommand tests', () => {
@@ -147,7 +147,7 @@ describe('TlsCertificatesCommand tests', () => {
     const response = createEntitiesResponse('tls_certificate', []);
     const fakeHttp = createHttp(response);
 
-    const filter = BaseFilter.fromString("certificate='foo'");
+    const filter = QueryFilter.fromString("certificate='foo'");
 
     const cmd = new TlsCertificatesCommand(fakeHttp);
     await cmd.exportByFilter(filter);

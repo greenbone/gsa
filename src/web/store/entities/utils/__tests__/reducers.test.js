@@ -9,7 +9,7 @@ import Rejection, {
   ResponseRejection,
   TimeoutRejection,
 } from 'gmp/http/rejection';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isFunction} from 'gmp/utils/identity';
 import {
   createEntitiesLoadingActions,
@@ -48,7 +48,7 @@ describe('entities reducers test', () => {
   test('should not override byId accidentially', () => {
     const actions = createEntitiesLoadingActions('foo');
     const reducer = createReducer('foo');
-    const filter = BaseFilter.fromString('byId');
+    const filter = QueryFilter.fromString('byId');
     const filterId = filterIdentifier(filter);
     const action = actions.success([{id: 'foo'}], filter);
     const state = {
@@ -91,7 +91,7 @@ describe('entities reducers test', () => {
   test('should not override default accidentially', () => {
     const actions = createEntitiesLoadingActions('foo');
     const reducer = createReducer('foo');
-    const filter = BaseFilter.fromString('default');
+    const filter = QueryFilter.fromString('default');
     const filterId = filterIdentifier(filter);
     const action = actions.success([{id: 'foo'}], filter);
     const state = {
@@ -150,7 +150,7 @@ describe('entities reducers test', () => {
     test('should set isLoading for filter', () => {
       const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
-      const filter = BaseFilter.fromString('name=foo');
+      const filter = QueryFilter.fromString('name=foo');
       const filterId = filterIdentifier(filter);
       const action = actions.request(filter);
 
@@ -167,9 +167,9 @@ describe('entities reducers test', () => {
     test('should set isLoading and not override existing state', () => {
       const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
-      const filter = BaseFilter.fromString('name=foo');
+      const filter = QueryFilter.fromString('name=foo');
       const filterId = filterIdentifier(filter);
-      const otherFilter = BaseFilter.fromString('name=bar');
+      const otherFilter = QueryFilter.fromString('name=bar');
       const otherFilterId = filterIdentifier(otherFilter);
       const action = actions.request(filter);
       const state = {
@@ -194,8 +194,8 @@ describe('entities reducers test', () => {
     test('should set isLoading and not override other properties', () => {
       const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
-      const filter = BaseFilter.fromString('name=foo');
-      const loadedFilter = BaseFilter.fromString('name=foo rows=10');
+      const filter = QueryFilter.fromString('name=foo');
+      const loadedFilter = QueryFilter.fromString('name=foo rows=10');
       const filterId = filterIdentifier(filter);
       const action = actions.request(filter);
       const counts = {first: 1};
@@ -291,10 +291,10 @@ describe('entities reducers test', () => {
     test('should not override other filters', () => {
       const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
-      const filter = BaseFilter.fromString('name=bar');
+      const filter = QueryFilter.fromString('name=bar');
       const filterId = filterIdentifier(filter);
       const counts = {first: 1};
-      const otherFilter = BaseFilter.fromString('name=foo');
+      const otherFilter = QueryFilter.fromString('name=foo');
       const otherFilterId = filterIdentifier(otherFilter);
       const otherCounts = {last: 22};
       const action = actions.success(
@@ -398,9 +398,9 @@ describe('entities reducers test', () => {
     test('should not override other filters', () => {
       const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
-      const filter = BaseFilter.fromString('name=bar');
+      const filter = QueryFilter.fromString('name=bar');
       const filterId = filterIdentifier(filter);
-      const otherFilter = BaseFilter.fromString('name=foo');
+      const otherFilter = QueryFilter.fromString('name=foo');
       const otherFilterId = filterIdentifier(otherFilter);
       const action = actions.error('An error', filter);
       const state = {
@@ -450,9 +450,9 @@ describe('entities reducers test', () => {
     test('should not reduce expected errors', () => {
       const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
-      const filter = BaseFilter.fromString('name=bar');
+      const filter = QueryFilter.fromString('name=bar');
       const filterId = filterIdentifier(filter);
-      const otherFilter = BaseFilter.fromString('name=foo');
+      const otherFilter = QueryFilter.fromString('name=foo');
       const otherFilterId = filterIdentifier(otherFilter);
       const rejection = new ResponseRejection({status: 401}, 'Another error');
       const action = actions.error(rejection, filter);

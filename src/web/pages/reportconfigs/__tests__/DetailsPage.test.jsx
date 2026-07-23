@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import ReportConfig from 'gmp/models/report-config';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -23,7 +23,7 @@ const reportConfig = ReportConfig.fromElement(mockReportConfig);
 const createGmp = ({
   getReportConfigResponse = new Response(reportConfig),
   getPermissionsResponse = new Response([], {
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
     counts: new CollectionCounts(),
   }),
   currentSettingsResponse = currentSettingsDefaultResponse,

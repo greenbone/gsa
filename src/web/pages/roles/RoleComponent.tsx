@@ -10,7 +10,7 @@ import {
   type RoleCommandSaveParams,
 } from 'gmp/commands/role';
 import type Rejection from 'gmp/http/rejection';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Permission from 'gmp/models/permission';
 import type Role from 'gmp/models/role';
 import {isDefined} from 'gmp/utils/identity';
@@ -212,7 +212,7 @@ const RoleComponent = ({
 
       try {
         const response = await gmp.permissions.getAll({
-          filter: BaseFilter.fromString(
+          filter: QueryFilter.fromString(
             `subject_type=role and subject_uuid=${roleId}`,
           ),
         });

@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Model from 'gmp/models/model';
 import ReportHost from 'gmp/models/report/host';
 import {
@@ -15,7 +15,7 @@ import {
 } from 'gmp/utils/severity';
 import AgentScanningHostsTable from 'web/pages/reports/details/host/AgentScanningHostsTable';
 
-const filter = BaseFilter.fromString('first=1 rows=10');
+const filter = QueryFilter.fromString('first=1 rows=10');
 
 const createMockHost = (overrides = {}) => {
   return ReportHost.fromElement({

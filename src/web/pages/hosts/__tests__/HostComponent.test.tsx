@@ -7,7 +7,7 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Host from 'gmp/models/host';
 
 import {type ModelElement} from 'gmp/models/model';
@@ -136,7 +136,7 @@ const createGmp = ({
   getPermissions = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),

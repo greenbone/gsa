@@ -4,8 +4,8 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import type FilterType from 'gmp/models/filter/filter-type';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {type ReportError} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorPanel from 'web/components/error/ErrorPanel';
@@ -43,7 +43,7 @@ const ErrorsTabWrapper = ({
   const [_] = useTranslation();
 
   const baseFilter = useMemo(() => {
-    const f = isDefined(filter) ? filter : new BaseFilter();
+    const f = isDefined(filter) ? filter : new QueryFilter();
     // Override sort: 'sort-reverse=error' maps to ascending A→Z via the
     // sortReverse=(sortDir==='asc') convention used in ReportEntitiesContainer
     return f.set('sort-reverse', 'error');

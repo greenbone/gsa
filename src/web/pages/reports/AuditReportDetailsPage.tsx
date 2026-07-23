@@ -15,7 +15,7 @@ import {
   type FilterType,
   RESET_FILTER,
 } from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -74,7 +74,7 @@ interface AuditReportCommand {
 
 const log = logger.getLogger('web.pages.reports.AuditReportDetailsPage');
 
-const DEFAULT_FILTER = BaseFilter.fromString(
+const DEFAULT_FILTER = QueryFilter.fromString(
   'levels=hmlg rows=100 min_qod=70 first=1 compliance_levels=yniu sort=compliant',
 );
 

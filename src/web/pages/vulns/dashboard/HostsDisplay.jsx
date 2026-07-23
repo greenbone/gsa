@@ -7,8 +7,8 @@ import React from 'react';
 import {format as d3format} from 'd3-format';
 import {_, _l} from 'gmp/locale/lang';
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import BarChart from 'web/components/chart/Bar';
@@ -133,8 +133,8 @@ export class VulnsHostsDisplay extends React.Component {
       ) {
         return;
       }
-      hostFilter = BaseFilter.fromTerm(startTerm).and(
-        BaseFilter.fromTerm(endTerm),
+      hostFilter = QueryFilter.fromTerm(startTerm).and(
+        QueryFilter.fromTerm(endTerm),
       );
     } else {
       let hostTerm;
@@ -151,7 +151,7 @@ export class VulnsHostsDisplay extends React.Component {
         return;
       }
 
-      hostFilter = BaseFilter.fromTerm(hostTerm);
+      hostFilter = QueryFilter.fromTerm(hostTerm);
     }
 
     const newFilter = isDefined(filter)

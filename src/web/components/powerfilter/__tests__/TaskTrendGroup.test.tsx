@@ -5,13 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {openSelectElement, screen, fireEvent, render} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import TaskTrendGroup from 'web/components/powerfilter/TaskTrendGroup';
 
 describe('Task Trend Selector Tests', () => {
   test('should render', () => {
     const onChange = testing.fn();
-    const filter = BaseFilter.fromString('trend=down');
+    const filter = QueryFilter.fromString('trend=down');
     const {element} = render(
       <TaskTrendGroup filter={filter} onChange={onChange} />,
     );
@@ -20,7 +20,7 @@ describe('Task Trend Selector Tests', () => {
 
   test('should return items', async () => {
     const onChange = testing.fn();
-    const filter = BaseFilter.fromString('trend=down');
+    const filter = QueryFilter.fromString('trend=down');
 
     render(<TaskTrendGroup filter={filter} onChange={onChange} />);
 
@@ -37,7 +37,7 @@ describe('Task Trend Selector Tests', () => {
 
   test('should parse filter', () => {
     const onChange = testing.fn();
-    const filter = BaseFilter.fromString('trend=same');
+    const filter = QueryFilter.fromString('trend=same');
 
     render(<TaskTrendGroup filter={filter} onChange={onChange} />);
 
@@ -47,7 +47,7 @@ describe('Task Trend Selector Tests', () => {
 
   test('should call onChange handler', async () => {
     const onChange = testing.fn();
-    const filter = BaseFilter.fromString('trend=down');
+    const filter = QueryFilter.fromString('trend=down');
 
     render(<TaskTrendGroup filter={filter} onChange={onChange} />);
 
@@ -62,7 +62,7 @@ describe('Task Trend Selector Tests', () => {
 
   test('should change value', async () => {
     const onChange = testing.fn();
-    const filter = BaseFilter.fromString('trend=down');
+    const filter = QueryFilter.fromString('trend=down');
 
     render(<TaskTrendGroup filter={filter} trend="up" onChange={onChange} />);
 

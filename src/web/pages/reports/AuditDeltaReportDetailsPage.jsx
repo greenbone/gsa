@@ -12,7 +12,7 @@ import {
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
@@ -57,11 +57,11 @@ import {generateFilename} from 'web/utils/Render';
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
-const DEFAULT_FILTER = BaseFilter.fromString(
+const DEFAULT_FILTER = QueryFilter.fromString(
   'levels=hmlg rows=100 min_qod=70 first=1 sort-reverse=compliant',
 );
 
-const REPORT_FORMATS_FILTER = BaseFilter.fromString(
+const REPORT_FORMATS_FILTER = QueryFilter.fromString(
   'active=1 and trust=1 rows=-1',
 );
 

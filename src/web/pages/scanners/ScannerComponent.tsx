@@ -13,8 +13,8 @@ import {
   type CredentialType,
   CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   type default as Scanner,
   type ScannerType,
@@ -84,7 +84,7 @@ const createCaCertificateFile = (name: string, certificate: string) =>
   new File([certificate], name, {type: MIME_TYPE_PEM});
 
 const createCredentialsFilter = (types: CredentialType[]) => {
-  return new BaseFilter({
+  return new QueryFilter({
     terms: types.map(
       credentialType =>
         new FilterTerm({

@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {pluralizeType} from 'gmp/utils/entity-type';
 import {isFunction} from 'gmp/utils/identity';
 import {types} from 'web/store/entities/utils/actions';
@@ -101,7 +101,7 @@ export const testEntitiesActions = (entityType, actions) => {
     });
 
     test('should create a load request action with filter', () => {
-      const filter = BaseFilter.fromString('type=abc');
+      const filter = QueryFilter.fromString('type=abc');
       const action = actions.request(filter);
 
       expect(action).toEqual({
@@ -121,7 +121,7 @@ export const testEntitiesActions = (entityType, actions) => {
     });
 
     test('should create a load success action with filter', () => {
-      const filter = BaseFilter.fromString('type=abc');
+      const filter = QueryFilter.fromString('type=abc');
       const action = actions.success(['foo', 'bar'], filter);
 
       expect(action).toEqual({
@@ -136,7 +136,7 @@ export const testEntitiesActions = (entityType, actions) => {
       'should create a load success action with default filter, ' +
         'loadedFilter and counts',
       () => {
-        const loadedFilter = BaseFilter.fromString('foo=bar');
+        const loadedFilter = QueryFilter.fromString('foo=bar');
         const counts = {first: 1};
         const action = actions.success(
           ['foo', 'bar'],
@@ -158,8 +158,8 @@ export const testEntitiesActions = (entityType, actions) => {
       'should create a load success action with filter, ' +
         'loadedFilter and counts',
       () => {
-        const filter = BaseFilter.fromString('type=abc');
-        const loadedFilter = BaseFilter.fromString('foo=bar');
+        const filter = QueryFilter.fromString('type=abc');
+        const loadedFilter = QueryFilter.fromString('foo=bar');
         const counts = {first: 1};
         const action = actions.success(
           ['foo', 'bar'],
@@ -188,7 +188,7 @@ export const testEntitiesActions = (entityType, actions) => {
     });
 
     test('should create a load error action with filter', () => {
-      const filter = BaseFilter.fromString('type=abc');
+      const filter = QueryFilter.fromString('type=abc');
       const action = actions.error('An error', filter);
 
       expect(action).toEqual({
@@ -204,8 +204,8 @@ export const testEntitiesActions = (entityType, actions) => {
 export const testLoadEntities = (entityType, loadEntities) => {
   describe(`${entityType} loadEntities function tests`, () => {
     test('should load all entities successfully', () => {
-      const filter = BaseFilter.fromString('myfilter');
-      const loadedFilter = BaseFilter.fromString('myfilter rows=100');
+      const filter = QueryFilter.fromString('myfilter');
+      const loadedFilter = QueryFilter.fromString('myfilter rows=100');
       const counts = {first: 1};
       const rootState = createState(entityType, {
         isLoading: {
@@ -260,7 +260,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
     });
 
     test('should not load all entities if isLoading is true', () => {
-      const filter = BaseFilter.fromString('myfilter');
+      const filter = QueryFilter.fromString('myfilter');
       const rootState = createState(entityType, {
         isLoading: {
           [filterIdentifier(filter)]: true,
@@ -287,7 +287,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
     });
 
     test('should fail loading all entities with an error', () => {
-      const filter = BaseFilter.fromString('myfilter');
+      const filter = QueryFilter.fromString('myfilter');
       const rootState = createState(entityType, {
         [filterIdentifier(filter)]: {
           isLoading: false,

@@ -7,7 +7,7 @@ import {useState, useEffect, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 import {ALL_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
@@ -58,7 +58,7 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE, generateFilename} from 'web/utils/Render';
 
-const REPORT_FORMATS_FILTER = BaseFilter.fromString(
+const REPORT_FORMATS_FILTER = QueryFilter.fromString(
   'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
 );
 

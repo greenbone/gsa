@@ -13,7 +13,7 @@ import {
   wait,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -54,14 +54,14 @@ const createGmp = ({
   getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -71,21 +71,21 @@ const createGmp = ({
   getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getTasks = testing.fn().mockResolvedValue({
     data: [task],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getReportFormats = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -135,7 +135,7 @@ describe('TaskListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('task', defaultSettingFilter),
@@ -148,8 +148,8 @@ describe('TaskListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([task], filter, loadedFilter, counts),
     );
@@ -253,7 +253,7 @@ describe('TaskListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('task', defaultSettingFilter),
@@ -266,8 +266,8 @@ describe('TaskListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success([task], filter, loadedFilter, counts),
     );

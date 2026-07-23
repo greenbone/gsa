@@ -5,12 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {openSelectElement, screen, fireEvent, render} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import TicketStatusGroup from 'web/components/powerfilter/TicketStatusGroup';
 
 describe('TicketStatusGroup tests', () => {
   test('should render', () => {
-    const filter = BaseFilter.fromString('status=Closed');
+    const filter = QueryFilter.fromString('status=Closed');
     const handleChange = testing.fn();
 
     const {element} = render(
@@ -24,7 +24,7 @@ describe('TicketStatusGroup tests', () => {
   });
 
   test('should allow to change value', async () => {
-    const filter = BaseFilter.fromString('status=Closed');
+    const filter = QueryFilter.fromString('status=Closed');
     const handleChange = testing.fn();
 
     render(
@@ -47,7 +47,7 @@ describe('TicketStatusGroup tests', () => {
   });
 
   test('should render title', () => {
-    const filter = BaseFilter.fromString('status=Open');
+    const filter = QueryFilter.fromString('status=Open');
     const handleChange = testing.fn();
 
     render(

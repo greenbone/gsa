@@ -12,7 +12,7 @@ import Credential, {
   PGP_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CredentialDetailsPage from 'web/pages/credentials/CredentialDetailsPage';
@@ -69,7 +69,7 @@ const createGmp = ({
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(),
+        filter: QueryFilter.fromString(),
         counts: new CollectionCounts(),
       },
     }),

@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {within, rendererWith, wait, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import StartPage from 'web/pages/start/StartPage';
 
 const manualUrl = 'test/';
@@ -15,7 +15,7 @@ const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -24,7 +24,7 @@ const getFilters = testing.fn().mockReturnValue(
 const getDashboardSetting = testing.fn().mockResolvedValue({
   data: {defaults: {foo: 'bar'}},
   meta: {
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
     counts: new CollectionCounts(),
   },
 });
@@ -34,7 +34,7 @@ const saveDashboardSetting = testing.fn().mockResolvedValue({foo: 'bar'});
 const getAggregates = testing.fn().mockResolvedValue({
   data: [],
   meta: {
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
     counts: new CollectionCounts(),
   },
 });

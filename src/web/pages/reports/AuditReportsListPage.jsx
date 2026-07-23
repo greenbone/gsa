@@ -6,7 +6,7 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
 import Filter, {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import DashboardControls from 'web/components/dashboard/Controls';
@@ -131,7 +131,7 @@ const reportsReloadInterval = ({entities = []}) =>
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;
 
-const FALLBACK_AUDIT_REPORT_LIST_FILTER = BaseFilter.fromString(
+const FALLBACK_AUDIT_REPORT_LIST_FILTER = QueryFilter.fromString(
   'report_compliance_levels=yniu sort-reverse=date first=1',
 );
 

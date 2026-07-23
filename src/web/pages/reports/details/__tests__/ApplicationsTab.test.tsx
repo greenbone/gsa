@@ -6,10 +6,10 @@
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import ApplicationsTab from 'web/pages/reports/details/application/ApplicationsTab';
 
-const filter = BaseFilter.fromString('first=1 rows=10');
+const filter = QueryFilter.fromString('first=1 rows=10');
 
 const createMockApplication = (overrides = {}) => ({
   id: 'app-default',

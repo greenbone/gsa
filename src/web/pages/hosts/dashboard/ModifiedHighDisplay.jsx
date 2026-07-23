@@ -6,8 +6,8 @@
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseInt, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import LineChart, {lineDataPropType} from 'web/components/chart/base/Line';
@@ -59,7 +59,7 @@ export class HostsModifiedHighDisplay extends React.Component {
     let {x: endDate} = end;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-    let newFilter = isDefined(filter) ? filter.copy() : new BaseFilter();
+    let newFilter = isDefined(filter) ? filter.copy() : new QueryFilter();
 
     if (isDefined(startDate)) {
       if (startDate.isSame(endDate)) {
@@ -72,7 +72,7 @@ export class HostsModifiedHighDisplay extends React.Component {
       );
 
       if (!newFilter.hasTerm(startTerm)) {
-        newFilter = newFilter.and(BaseFilter.fromTerm(startTerm));
+        newFilter = newFilter.and(QueryFilter.fromTerm(startTerm));
       }
     }
 
@@ -82,7 +82,7 @@ export class HostsModifiedHighDisplay extends React.Component {
       );
 
       if (!newFilter.hasTerm(endTerm)) {
-        newFilter = newFilter.and(BaseFilter.fromTerm(endTerm));
+        newFilter = newFilter.and(QueryFilter.fromTerm(endTerm));
       }
     }
 

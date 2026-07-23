@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {filterString, isFilterType} from 'gmp/models/filter/utils';
 
 describe('filterString function tests', () => {
@@ -18,17 +18,17 @@ describe('filterString function tests', () => {
   });
 
   test('should return the filter string from Filters', () => {
-    let filter = BaseFilter.fromString('foo bar');
+    let filter = QueryFilter.fromString('foo bar');
     expect(filterString(filter)).toEqual('foo bar');
 
-    filter = BaseFilter.fromString('name=foo and severity>1');
+    filter = QueryFilter.fromString('name=foo and severity>1');
     expect(filterString(filter)).toEqual('name=foo and severity>1');
   });
 });
 
 describe('isFilterType function tests', () => {
   test('should return true for Filter objects', () => {
-    const filter = BaseFilter.fromString('foo bar');
+    const filter = QueryFilter.fromString('foo bar');
     expect(isFilterType(filter)).toBe(true);
   });
 

@@ -5,7 +5,7 @@
 
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {setLocale} from 'gmp/locale/lang';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Report from 'gmp/models/report';
 import ReportHost from 'gmp/models/report/host';
 import ReportOperatingSystem from 'gmp/models/report/os';
@@ -313,7 +313,7 @@ export const getMockReport = () => {
     _id: '1234',
   });
 
-  const errorsCollection = parseErrors(report, BaseFilter.fromString());
+  const errorsCollection = parseErrors(report, QueryFilter.fromString());
 
   const os1 = new ReportOperatingSystem({
     id: 'cpe:/foo/bar',
@@ -336,7 +336,7 @@ export const getMockReport = () => {
       rows: 2,
       length: 2,
     }),
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
   };
 
   const cert1 = ReportTLSCertificate.fromElement(tlsCertificate1);
@@ -350,7 +350,7 @@ export const getMockReport = () => {
       rows: 2,
       length: 2,
     }),
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
   };
 
   const resultsCollection = {
@@ -362,7 +362,7 @@ export const getMockReport = () => {
       rows: report.result_count?.filtered ?? 0,
       length: report.result_count?.filtered ?? 0,
     }),
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
   };
 
   const portsCollection = {
@@ -374,7 +374,7 @@ export const getMockReport = () => {
       rows: report.ports?.count ?? 0,
       length: report.ports?.count ?? 0,
     }),
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
   };
 
   const applicationsCollection = {
@@ -386,7 +386,7 @@ export const getMockReport = () => {
       rows: report.apps?.count ?? 0,
       length: report.apps?.count ?? 0,
     }),
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
   };
 
   const cvesCollection = {
@@ -398,7 +398,7 @@ export const getMockReport = () => {
       rows: report.vulns?.count ?? 0,
       length: report.vulns?.count ?? 0,
     }),
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
   };
 
   const closedCvesCollection = {
@@ -410,7 +410,7 @@ export const getMockReport = () => {
       rows: report.closed_cves?.count ?? 0,
       length: report.closed_cves?.count ?? 0,
     }),
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
   };
 
   return {

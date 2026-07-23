@@ -12,7 +12,7 @@ import {
   wait,
 } from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Permission from 'gmp/models/permission';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
@@ -47,14 +47,14 @@ const createGmp = ({
   getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
   getPermissions = testing.fn().mockResolvedValue({
     data: [permission],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),
@@ -92,7 +92,7 @@ describe('PermissionListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('permission', defaultSettingFilter),
@@ -105,8 +105,8 @@ describe('PermissionListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success(
         [permission],
@@ -132,7 +132,7 @@ describe('PermissionListPage tests', () => {
       router: true,
     });
 
-    const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('permission', defaultSettingFilter),
@@ -145,8 +145,8 @@ describe('PermissionListPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = BaseFilter.fromString('first=1 rows=10');
-    const loadedFilter = BaseFilter.fromString('first=1 rows=10');
+    const filter = QueryFilter.fromString('first=1 rows=10');
+    const loadedFilter = QueryFilter.fromString('first=1 rows=10');
     store.dispatch(
       entitiesLoadingActions.success(
         [permission],

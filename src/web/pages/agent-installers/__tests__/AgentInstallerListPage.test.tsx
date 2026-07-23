@@ -8,7 +8,7 @@ import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import AgentInstaller from 'gmp/models/agent-installer';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import AgentInstallerListPage from 'web/pages/agent-installers/AgentInstallerListPage';
 
@@ -26,7 +26,7 @@ const createGmp = ({
   getAgentInstallers = testing.fn().mockResolvedValue({
     data: [makeInstaller('i1')],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts({
         first: 1,
         all: 1,
@@ -92,7 +92,7 @@ describe('AgentInstallerListPage tests', () => {
 
     const getAgentInstallers = testing.fn().mockResolvedValue({
       data: [],
-      meta: {filter: BaseFilter.fromString(), counts},
+      meta: {filter: QueryFilter.fromString(), counts},
     });
 
     const gmp = createGmp({getAgentInstallers});

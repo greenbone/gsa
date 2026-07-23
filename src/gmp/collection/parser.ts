@@ -7,10 +7,10 @@ import CollectionCounts, {
   type CollectionCountsOptions,
 } from 'gmp/collection/collection-counts';
 import logger from 'gmp/log';
-import BaseFilter, {
-  type FilterResponseElement,
-} from 'gmp/models/filter/base-filter';
 import type FilterType from 'gmp/models/filter/filter-type';
+import QueryFilter, {
+  type FilterResponseElement,
+} from 'gmp/models/filter/query-filter';
 import Model, {type Element} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {hasValue, isArray, isDefined} from 'gmp/utils/identity';
@@ -154,7 +154,7 @@ export function parseInfoCounts(response: InfoWithCounts) {
 }
 
 export function parseFilter(element: FilterElement): FilterType {
-  return BaseFilter.fromResponseElement(element.filters);
+  return QueryFilter.fromResponseElement(element.filters);
 }
 
 export function parseCounts<TElement = Element>(

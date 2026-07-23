@@ -6,7 +6,7 @@
 import {describe, test, expect, testing, type Mock} from '@gsa/testing';
 import {render, screen, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Result from 'gmp/models/result';
 import ReportEntitiesContainer, {
   type ReportEntitiesContainerRenderProps,
@@ -168,7 +168,7 @@ describe('ReportEntitiesContainer tests', () => {
     const result2 = new Result({id: '2', name: 'bar'});
     const results = [result1, result2];
     const counts = new CollectionCounts({rows: 10, filtered: 20});
-    const filter = BaseFilter.fromString('rows=5');
+    const filter = QueryFilter.fromString('rows=5');
     const expectedCounts = new CollectionCounts({
       rows: 5,
       filtered: 20,

@@ -11,7 +11,7 @@ import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import Agent from 'gmp/models/agent';
 import {type FilterType} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
@@ -21,7 +21,7 @@ import {map} from 'gmp/utils/array';
 
 const log = logger.getLogger('gmp.commands.agents');
 
-const AGENT_CONTROLLER_FILTER = BaseFilter.fromString(
+const AGENT_CONTROLLER_FILTER = QueryFilter.fromString(
   `scanner_type=${AGENT_CONTROLLER_SCANNER_TYPE} or scanner_type=${AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}`,
 );
 

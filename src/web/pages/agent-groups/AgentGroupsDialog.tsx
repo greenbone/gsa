@@ -5,7 +5,7 @@
 
 import {useState} from 'react';
 import type AgentGroup from 'gmp/models/agent-group';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   type default as Scanner,
   AGENT_CONTROLLER_SCANNER_TYPE,
@@ -45,7 +45,7 @@ interface AgentGroupsDialogDefaultValues {
 export type AgentGroupDialogData = AgentGroupsDialogDefaultValues &
   AgentGroupsDialogValues;
 
-const AGENT_CONTROLLERS_FILTER = BaseFilter.fromString(
+const AGENT_CONTROLLERS_FILTER = QueryFilter.fromString(
   `type=${AGENT_CONTROLLER_SCANNER_TYPE} or type=${AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}`,
 );
 
@@ -76,7 +76,7 @@ const AgentGroupsDialog = ({
     scannersData?.entities as RenderSelectItemProps[],
   );
 
-  const allAgentsFilter = BaseFilter.fromString('first=1 rows=-1');
+  const allAgentsFilter = QueryFilter.fromString('first=1 rows=-1');
   const {data: agentsData, isLoading: isLoadingAgents} = useGetAgents({
     filter: allAgentsFilter,
     scannerId: selectedAgentController,

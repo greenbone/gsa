@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Loader, {
   loadFunc,
   loaderPropTypes,
@@ -12,7 +12,7 @@ import Loader, {
 
 const TICKETS_LIST = 'tickets-list';
 
-const DEFAULT_FILTER = BaseFilter.fromString('sort-reverse=modified');
+const DEFAULT_FILTER = QueryFilter.fromString('sort-reverse=modified');
 
 const ticketsListLoader = loadFunc(
   ({gmp, filter = DEFAULT_FILTER}) =>

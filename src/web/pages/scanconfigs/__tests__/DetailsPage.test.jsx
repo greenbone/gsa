@@ -8,7 +8,7 @@ import {screen, rendererWith, fireEvent, wait, within} from 'web/testing';
 import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import ScanConfig from 'gmp/models/scan-config';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -128,14 +128,14 @@ const createGmp = ({
   getTagsResponse = {
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   },
   getPermissionsResponse = {
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   },

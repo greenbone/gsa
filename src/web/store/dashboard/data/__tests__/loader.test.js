@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   DASHBOARD_DATA_LOADING_REQUEST,
   DASHBOARD_DATA_LOADING_SUCCESS,
@@ -29,7 +29,7 @@ describe('loadFunc tests', () => {
     const func = testing.fn().mockResolvedValue(data);
 
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const props = {
       filter,
     };
@@ -56,7 +56,7 @@ describe('loadFunc tests', () => {
 
   test('should not load if data is already loading', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const filterString = filterIdentifier(filter);
     const state = createState({
       [id]: {
@@ -88,7 +88,7 @@ describe('loadFunc tests', () => {
 
   test('should fail loading dashboard data', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const dispatch = testing.fn();
     const getState = testing.fn();
     const func = testing.fn().mockRejectedValue('An error');

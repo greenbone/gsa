@@ -6,7 +6,7 @@
 import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Model from 'gmp/models/model';
 import type Note from 'gmp/models/note';
 import type Override from 'gmp/models/override';
@@ -305,7 +305,7 @@ export const TaskPermissions = withComponentDefaults<
 })(EntityPermissions<Task>);
 
 const taskIdFilter = (id: string) =>
-  BaseFilter.fromString(`task_id=${id}`).all();
+  QueryFilter.fromString(`task_id=${id}`).all();
 
 const mapStateToProps = (rootState: unknown, {id}: {id: string}) => {
   const permSel = permissionsSelector(rootState);

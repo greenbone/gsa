@@ -13,7 +13,7 @@ import {
   type FilterType,
   RESET_FILTER,
 } from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
@@ -92,7 +92,7 @@ const usePageFilter = (
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
     hasValue(locationQueryFilterString)
-      ? BaseFilter.fromString(locationQueryFilterString)
+      ? QueryFilter.fromString(locationQueryFilterString)
       : undefined,
   );
 
@@ -126,7 +126,7 @@ const usePageFilter = (
       dispatch(
         setPageFilter(
           pageName,
-          BaseFilter.fromString(locationQueryFilterString),
+          QueryFilter.fromString(locationQueryFilterString),
         ),
       );
     }

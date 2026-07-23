@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   receivedDashboardData,
   requestDashboardData,
@@ -40,7 +40,7 @@ describe('dashboard data reducers tests', () => {
 
   test('should handle request dashboard data with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('name=foo');
+    const filter = QueryFilter.fromString('name=foo');
     const filterString = filterIdentifier(filter);
     const action = requestDashboardData(id, filter);
 
@@ -73,7 +73,7 @@ describe('dashboard data reducers tests', () => {
   test('should handle receive dashboard data with filter', () => {
     const id = 'a1';
     const data = {foo: 'bar'};
-    const filter = BaseFilter.fromString('name=foo');
+    const filter = QueryFilter.fromString('name=foo');
     const filterString = filterIdentifier(filter);
     const action = receivedDashboardData(id, data, filter);
 
@@ -106,7 +106,7 @@ describe('dashboard data reducers tests', () => {
   test('should handle receive dashboard error with filter', () => {
     const id = 'a1';
     const error = 'An error occured';
-    const filter = BaseFilter.fromString('name=foo');
+    const filter = QueryFilter.fromString('name=foo');
     const filterString = filterIdentifier(filter);
     const action = receivedDashboardError(id, error, filter);
 

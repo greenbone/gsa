@@ -7,8 +7,8 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import type FilterType from 'gmp/models/filter/filter-type';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import {useGetAudit, useGetAudits} from 'web/hooks/use-query/audits';
 
@@ -28,7 +28,7 @@ const audit2 = Audit.fromElement({
   permissions: {permission: [{name: 'everything'}]},
 });
 
-const filter = BaseFilter.fromString('name~test');
+const filter = QueryFilter.fromString('name~test');
 
 const SingleAuditComponent = ({id}: {id: string}) => {
   const {data, isLoading, isError} = useGetAudit({id});

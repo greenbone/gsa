@@ -8,7 +8,7 @@ import EntitiesCommand from 'gmp/commands/entities';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
 import type Http from 'gmp/http/http';
 import Filter from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Model, {type Element} from 'gmp/models/model';
 
 class Foo extends Model {}
@@ -36,7 +36,7 @@ class FooWithAssetTypeCommand extends EntitiesCommand<Foo> {
 
 describe('EntitiesCommand tests', () => {
   test('should add filter parameter', async () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
     const cmd = new FooCommand(fakeHttp);
@@ -64,7 +64,7 @@ describe('EntitiesCommand tests', () => {
   });
 
   test('should prefer filter_id over filter parameter', async () => {
-    const filter = BaseFilter.fromResponseElement({
+    const filter = QueryFilter.fromResponseElement({
       _id: 'bar',
       keywords: {
         keyword: {relation: '=', value: 'bar', column: 'foo'},
@@ -107,7 +107,7 @@ describe('EntitiesCommand tests', () => {
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
 
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     const cmd = new FooCommand(fakeHttp);
     await cmd.exportByFilter(filter);
@@ -163,7 +163,7 @@ describe('EntitiesCommand tests', () => {
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
 
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     const cmd = new FooWithAssetTypeCommand(fakeHttp);
     await cmd.exportByFilter(filter);

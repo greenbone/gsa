@@ -12,7 +12,7 @@ import {
   wait,
 } from 'web/testing';
 import Filter from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import PortListsFilterDialog from 'web/pages/portlists/PortListFilterDialog';
 
 const newFilter = new Filter({
@@ -34,7 +34,7 @@ const gmp = {
 
 describe('PortListsFilterDialog tests', () => {
   test('should render dialog', () => {
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const {render} = rendererWith({capabilities: true, gmp});
     render(<PortListsFilterDialog filter={filter} />);
 
@@ -55,7 +55,7 @@ describe('PortListsFilterDialog tests', () => {
   });
 
   test('should call onFilterChanged when a filter is updated', async () => {
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const {render} = rendererWith({capabilities: true, gmp});
     const handleFilterChanged = testing.fn();
     render(
@@ -70,12 +70,12 @@ describe('PortListsFilterDialog tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleFilterChanged).toHaveBeenCalledWith(
-      BaseFilter.fromString('foo=bar'),
+      QueryFilter.fromString('foo=bar'),
     );
   });
 
   test('should call onFilterCreated when a new filter is saved', async () => {
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const {render} = rendererWith({capabilities: true, gmp});
     const handleFilterCreated = testing.fn();
     render(

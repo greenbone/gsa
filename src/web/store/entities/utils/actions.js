@@ -4,7 +4,7 @@
  */
 
 import {ALL_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {pluralizeType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -104,7 +104,7 @@ export const createLoadAllEntities =
     if (isDefined(filter)) {
       filter = isDefined(filter.toFilterString)
         ? filter.all()
-        : BaseFilter.fromString(filter).all();
+        : QueryFilter.fromString(filter).all();
     } else {
       filter = ALL_FILTER;
     }

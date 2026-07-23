@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import ScanConfigsCommand from 'gmp/commands/scan-configs';
 import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
 import {ALL_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import ScanConfig from 'gmp/models/scan-config';
 
 describe('ScanConfigsCommand tests', () => {
@@ -90,7 +90,7 @@ describe('ScanConfigsCommand tests', () => {
     const response = createEntitiesResponse('config', []);
     const fakeHttp = createHttp(response);
 
-    const filter = BaseFilter.fromString('name~foo');
+    const filter = QueryFilter.fromString('name~foo');
 
     const cmd = new ScanConfigsCommand(fakeHttp);
     await cmd.exportByFilter(filter);
