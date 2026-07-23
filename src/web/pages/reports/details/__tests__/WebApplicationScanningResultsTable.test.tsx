@@ -6,12 +6,12 @@
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Result from 'gmp/models/result';
 import {createSession} from 'gmp/testing';
 import WebApplicationScanningResultsTable from 'web/pages/reports/details/result/WebApplicationScanningResultsTable';
 
-const filter = BaseFilter.fromString('first=1 rows=10');
+const filter = QueryFilter.fromString('first=1 rows=10');
 
 const createGmp = () => ({
   settings: {

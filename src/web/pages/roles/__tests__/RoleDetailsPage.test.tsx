@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Permission from 'gmp/models/permission';
 import Role from 'gmp/models/role';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -90,7 +90,7 @@ const reloadInterval = 1;
 const manualUrl = 'test/';
 
 const setupStoreForRoleDetailsPage = store => {
-  const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+  const defaultSettingFilter = QueryFilter.fromString('foo=bar');
   store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
   store.dispatch(
     defaultFilterLoadingActions.success('role', defaultSettingFilter),
@@ -107,17 +107,17 @@ const setupStoreForRoleDetailsPage = store => {
   store.dispatch(
     entitiesLoadingActions.success(
       [role],
-      BaseFilter.fromString(),
-      BaseFilter.fromString(),
+      QueryFilter.fromString(),
+      QueryFilter.fromString(),
       counts,
     ),
   );
 
-  const permissionsSubjectFilter = BaseFilter.fromString(
+  const permissionsSubjectFilter = QueryFilter.fromString(
     'subject_uuid=12345 and not resource_uuid="" or resource_uuid=12345',
   ).all();
 
-  const generalPermissionsFilter = BaseFilter.fromString(
+  const generalPermissionsFilter = QueryFilter.fromString(
     'subject_uuid=12345 and resource_uuid=""',
   ).all();
 
@@ -148,7 +148,7 @@ const createGmp = ({
     Promise.resolve({
       data: [],
       meta: {
-        filter: BaseFilter.fromString(),
+        filter: QueryFilter.fromString(),
         counts: new CollectionCounts(),
       },
     }),
@@ -159,7 +159,7 @@ const createGmp = ({
   getPermissions = testing.fn().mockResolvedValue({
     data: [permission1, permission2],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),

@@ -17,7 +17,7 @@ import Response from 'gmp/http/response';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import {type EntityModelElement} from 'gmp/models/entity-model';
 import Filter from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Model from 'gmp/models/model';
 
 type FooElement = EntityModelElement;
@@ -72,7 +72,7 @@ describe('EntityCommand tests', () => {
   });
 
   test('should get entity with filter parameter', async () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const response = createEntityResponse('foo', {id: '123'});
     const fakeHttp = createHttp(response);
 
@@ -110,7 +110,7 @@ describe('EntityCommand tests', () => {
   });
 
   test('should get entity and prefer filter_id over filter parameter', async () => {
-    const filter = BaseFilter.fromResponseElement({
+    const filter = QueryFilter.fromResponseElement({
       _id: 'bar',
       keywords: {
         keyword: {relation: '=', value: 'bar', column: 'foo'},

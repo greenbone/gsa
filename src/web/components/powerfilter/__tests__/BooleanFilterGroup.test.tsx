@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, render, fireEvent} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
 
@@ -29,7 +29,7 @@ describe('BooleanFilterGroup tests', () => {
   });
 
   test("should check radio based on filter's value", () => {
-    const filter = BaseFilter.fromString('test=1');
+    const filter = QueryFilter.fromString('test=1');
     const {rerender} = render(
       <BooleanFilterGroup filter={filter} name="test" />,
     );

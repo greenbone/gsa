@@ -5,12 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent, screen} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import ComplianceLevelsFilterGroup from 'web/components/powerfilter/ComplianceLevelsGroup';
 
 describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   test('should call change handler', () => {
-    const filter = BaseFilter.fromString('report_compliance_levels=');
+    const filter = QueryFilter.fromString('report_compliance_levels=');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -46,7 +46,7 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   });
 
   test('should check checkbox', () => {
-    const filter = BaseFilter.fromString('report_compliance_levels=yn');
+    const filter = QueryFilter.fromString('report_compliance_levels=yn');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -77,8 +77,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   });
 
   test('should uncheck checkbox', () => {
-    const filter1 = BaseFilter.fromString('report_compliance_levels=yni');
-    const filter2 = BaseFilter.fromString('report_compliance_levels=yn');
+    const filter1 = QueryFilter.fromString('report_compliance_levels=yni');
+    const filter2 = QueryFilter.fromString('report_compliance_levels=yn');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     const {rerender} = render(
@@ -122,7 +122,7 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   });
 
   test('should be unchecked by default', () => {
-    const filter = BaseFilter.fromString();
+    const filter = QueryFilter.fromString();
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -153,7 +153,7 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   });
 
   test('should call remove handler', () => {
-    const filter = BaseFilter.fromString('report_compliance_levels=y');
+    const filter = QueryFilter.fromString('report_compliance_levels=y');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -191,7 +191,7 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
 
 describe('ComplianceLevelsFilterGroup audit results tests', () => {
   test('should call change handler', () => {
-    const filter = BaseFilter.fromString('compliance_levels=');
+    const filter = QueryFilter.fromString('compliance_levels=');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -226,7 +226,7 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
   });
 
   test('should check checkbox', () => {
-    const filter = BaseFilter.fromString('compliance_levels=yn');
+    const filter = QueryFilter.fromString('compliance_levels=yn');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -258,8 +258,8 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
   });
 
   test('should uncheck checkbox', () => {
-    const filter1 = BaseFilter.fromString('compliance_levels=yni');
-    const filter2 = BaseFilter.fromString('compliance_levels=yn');
+    const filter1 = QueryFilter.fromString('compliance_levels=yni');
+    const filter2 = QueryFilter.fromString('compliance_levels=yn');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     const {rerender} = render(
@@ -305,7 +305,7 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
   });
 
   test('should be unchecked by default', () => {
-    const filter = BaseFilter.fromString();
+    const filter = QueryFilter.fromString();
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -337,7 +337,7 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
   });
 
   test('should call remove handler', () => {
-    const filter = BaseFilter.fromString('compliance_levels=y');
+    const filter = QueryFilter.fromString('compliance_levels=y');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(

@@ -5,12 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {changeInputValue, fireEvent, rendererWith, screen} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import TagFilterDialog from 'web/pages/tags/TagFilterDialog';
 
 describe('TagFilterDialog tests', () => {
   test('should render dialog', () => {
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const gmp = {filter: {}};
     const {render} = rendererWith({capabilities: true, gmp});
 
@@ -37,7 +37,7 @@ describe('TagFilterDialog tests', () => {
   test('should call onFilterChanged on save', () => {
     const handleClose = testing.fn();
     const handleFilterChanged = testing.fn();
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const gmp = {filter: {}};
     const {render} = rendererWith({capabilities: true, gmp});
 
@@ -54,7 +54,7 @@ describe('TagFilterDialog tests', () => {
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(handleFilterChanged).toHaveBeenCalledWith(
-      BaseFilter.fromString('foo=bar'),
+      QueryFilter.fromString('foo=bar'),
     );
   });
 });

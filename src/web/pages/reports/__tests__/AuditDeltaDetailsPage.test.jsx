@@ -7,12 +7,12 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__fixtures__/MockAuditDeltaReport';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 
-const filter = BaseFilter.fromString(
+const filter = QueryFilter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
 );
 
@@ -44,7 +44,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
     get: testing.fn().mockResolvedValue({
       data: mockEntity.report?.results?.entities ?? [],
       meta: {
-        filter: BaseFilter.fromString(),
+        filter: QueryFilter.fromString(),
         counts: new CollectionCounts({
           filtered: 2,
           all: 2,
@@ -63,7 +63,7 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
         {ip: '109.876.54.322', id: '109.876.54.322', hostname: 'host3'},
       ],
       meta: {
-        filter: BaseFilter.fromString(),
+        filter: QueryFilter.fromString(),
         counts: new CollectionCounts({filtered: 3, all: 3, first: 1, rows: 10}),
       },
     }),

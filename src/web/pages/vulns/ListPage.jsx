@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {VulnerabilityIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -73,7 +73,7 @@ Page.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const FALLBACK_VULNS_LIST_FILTER = BaseFilter.fromString(
+const FALLBACK_VULNS_LIST_FILTER = QueryFilter.fromString(
   'sort-reverse=severity first=1',
 );
 

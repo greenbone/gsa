@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   DASHBOARD_DATA_LOADING_SUCCESS,
   DASHBOARD_DATA_LOADING_REQUEST,
@@ -26,7 +26,7 @@ describe('action tests', () => {
 
   test('should create an action to request dashboard data with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('name=foo');
+    const filter = QueryFilter.fromString('name=foo');
 
     expect(requestDashboardData(id, filter)).toEqual({
       id,
@@ -49,7 +49,7 @@ describe('action tests', () => {
   test('should create an action to receive dashboard data with filter', () => {
     const id = 'a1';
     const data = {foo: 'bar'};
-    const filter = BaseFilter.fromString('name=foo');
+    const filter = QueryFilter.fromString('name=foo');
 
     expect(receivedDashboardData(id, data, filter)).toEqual({
       id,
@@ -73,7 +73,7 @@ describe('action tests', () => {
   test('should create an action to receive an error with filter', () => {
     const id = 'a1';
     const error = 'An error occured';
-    const filter = BaseFilter.fromString('name=foo');
+    const filter = QueryFilter.fromString('name=foo');
 
     expect(receivedDashboardError(id, error, filter)).toEqual({
       id,

@@ -22,7 +22,7 @@ import type Http from 'gmp/http/http';
 import {type default as Response, type Meta} from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import {ALL_FILTER, type FilterType} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {type default as Model, type Element} from 'gmp/models/model';
 import {map, forEach} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -161,7 +161,7 @@ abstract class EntitiesCommand<
     if (!isDefined(filter)) {
       params.filter = ALL_FILTER;
     } else if (isString(filter)) {
-      params.filter = BaseFilter.fromString(filter).all();
+      params.filter = QueryFilter.fromString(filter).all();
     } else {
       params.filter = filter.all();
     }

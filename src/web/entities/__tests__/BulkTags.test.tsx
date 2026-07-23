@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, fireEvent, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
 import BulkTags from 'web/entities/BulkTags';
@@ -16,7 +16,7 @@ describe('BulkTags tests', () => {
   test('should render the BulkTags component', () => {
     const entities = [new Task({id: '1'}), new Task({id: '2'})];
     const entitiesCounts = new CollectionCounts({filtered: 2, all: 2});
-    const filter = BaseFilter.fromString();
+    const filter = QueryFilter.fromString();
     const selectedEntities = [];
     const onClose = testing.fn();
     const getAllTags = testing
@@ -43,7 +43,7 @@ describe('BulkTags tests', () => {
   test('should allow to tag all filtered entities', () => {
     const entities = [new Task({id: '1'}), new Task({id: '2'})];
     const entitiesCounts = new CollectionCounts({filtered: 2, all: 2});
-    const filter = BaseFilter.fromString();
+    const filter = QueryFilter.fromString();
     const selectedEntities = [];
     const onClose = testing.fn();
     const getAllTags = testing
@@ -70,7 +70,7 @@ describe('BulkTags tests', () => {
   test('should allow to tag tasks with a new tag', async () => {
     const entities = [new Task({id: '1'}), new Task({id: '2'})];
     const entitiesCounts = new CollectionCounts({filtered: 2, all: 2});
-    const filter = BaseFilter.fromString();
+    const filter = QueryFilter.fromString();
     const selectedEntities = [];
     const onClose = testing.fn();
     const createTag = testing.fn().mockResolvedValue({data: {id: '2'}});

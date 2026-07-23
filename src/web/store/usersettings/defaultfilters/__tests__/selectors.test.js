@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
 describe('getUserSettingsDefaultFilter selector tests', () => {
@@ -26,7 +26,7 @@ describe('getUserSettingsDefaultFilter selector tests', () => {
   });
 
   test('should select values with class entity type', () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     const state = {
       userSettings: {
@@ -55,7 +55,7 @@ describe('getUserSettingsDefaultFilter selector tests', () => {
   });
 
   test('should select values without class entity type', () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     const state = {
       userSettings: {

@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Result from 'gmp/models/result';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -100,11 +100,11 @@ const result = Result.fromElement({
 const createGmp = ({
   getResultResponse = new Response(result),
   getPermissionsResponse = new Response([], {
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
     counts: new CollectionCounts(),
   }),
   getUsersResponse = new Response([], {
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
     counts: new CollectionCounts(),
   }),
   currentSettingsResponse = currentSettingsDefaultResponse,

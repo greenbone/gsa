@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
 import BarChart from 'web/components/chart/Bar';
 import transformCvssData from 'web/components/dashboard/display/cvss/cvss-transform';
@@ -48,8 +48,8 @@ const CvssDisplay = ({
         return;
       }
 
-      statusFilter = BaseFilter.fromTerm(startTerm).and(
-        BaseFilter.fromTerm(endTerm),
+      statusFilter = QueryFilter.fromTerm(startTerm).and(
+        QueryFilter.fromTerm(endTerm),
       );
     } else {
       let statusTerm;
@@ -64,7 +64,7 @@ const CvssDisplay = ({
         return;
       }
 
-      statusFilter = BaseFilter.fromTerm(statusTerm);
+      statusFilter = QueryFilter.fromTerm(statusTerm);
     }
 
     const newFilter = isDefined(filter)

@@ -7,7 +7,7 @@ import {useState} from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
 import {type FilterType} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 
 const TestComponent = ({filter: initialFilter, changeFilter}) => {
@@ -36,7 +36,7 @@ const TestComponent = ({filter: initialFilter, changeFilter}) => {
 describe('useFilterSortBy', () => {
   test('should return the sort by field and direction', () => {
     const changeFilter = testing.fn();
-    const filter = BaseFilter.fromString('sort=field');
+    const filter = QueryFilter.fromString('sort=field');
 
     render(<TestComponent changeFilter={changeFilter} filter={filter} />);
 
@@ -45,7 +45,7 @@ describe('useFilterSortBy', () => {
   });
 
   test('should change the sort direction', () => {
-    const filter = BaseFilter.fromString('sort=field');
+    const filter = QueryFilter.fromString('sort=field');
     let currentFilter = filter;
     const changeFilter = testing.fn().mockImplementation(filter => {
       currentFilter = filter;
@@ -58,7 +58,7 @@ describe('useFilterSortBy', () => {
     fireEvent.click(screen.getByTestId('sortDirChange'));
 
     expect(changeFilter).toHaveBeenCalledWith(
-      BaseFilter.fromString('first=1 sort-reverse=field'),
+      QueryFilter.fromString('first=1 sort-reverse=field'),
     );
 
     // the filter is not in the state. so a rerender with the new filter is needed
@@ -72,7 +72,7 @@ describe('useFilterSortBy', () => {
 
   test('should handle undefined sort field', async () => {
     const changeFilter = testing.fn();
-    const filter = BaseFilter.fromString();
+    const filter = QueryFilter.fromString();
 
     render(<TestComponent changeFilter={changeFilter} filter={filter} />);
 
@@ -82,7 +82,7 @@ describe('useFilterSortBy', () => {
     fireEvent.click(screen.getByTestId('sortFieldChange'));
 
     expect(changeFilter).toHaveBeenCalledWith(
-      BaseFilter.fromString('first=1 sort=other-field'),
+      QueryFilter.fromString('first=1 sort=other-field'),
     );
     expect(screen.getByTestId('sortBy')).toHaveTextContent('other-field');
   });

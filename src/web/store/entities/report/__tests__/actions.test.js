@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isFunction} from 'gmp/utils/identity';
 import {
   auditReportActions,
@@ -93,7 +93,7 @@ describe('loadReport function tests', () => {
       },
     };
 
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     expect(loadReport).toBeDefined();
     expect(isFunction(loadReport)).toBe(true);
@@ -284,7 +284,7 @@ describe('report loadReportIfNeeded function tests', () => {
       },
     };
 
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     expect.assertions(7);
 
@@ -525,7 +525,7 @@ describe('loadReportWithThreshold tests', () => {
 
   test('should only load "simple" report with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const rootState = createState('report', {
       isLoading: {
         [reportIdentifier(id, filter)]: false,
@@ -587,7 +587,7 @@ describe('loadReportWithThreshold tests', () => {
 
   test('should load "full" report with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const rootState = createState('report', {
       isLoading: {
         [reportIdentifier(id, filter)]: false,
@@ -710,7 +710,7 @@ describe('loadReportWithThreshold tests', () => {
 
   test('should not load report if already loading with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const rootState = createState('report', {
       isLoading: {
         [reportIdentifier(id, filter)]: true,
@@ -832,7 +832,7 @@ describe('loadDeltaReport function tests', () => {
       },
     };
 
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     expect(loadDeltaReport).toBeDefined();
     expect(isFunction(loadDeltaReport)).toBe(true);
@@ -1003,7 +1003,7 @@ describe('loadAuditReport function tests', () => {
       },
     };
 
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     expect(loadAuditReport).toBeDefined();
     expect(isFunction(loadAuditReport)).toBe(true);
@@ -1194,7 +1194,7 @@ describe('report loadAuditReportIfNeeded function tests', () => {
       },
     };
 
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     expect.assertions(7);
 
@@ -1439,7 +1439,7 @@ describe('loadAuditReportWithThreshold tests', () => {
 
   test('should only load "simple" audit report with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const rootState = createState('auditreport', {
       isLoading: {
         [reportIdentifier(id, filter)]: false,
@@ -1502,7 +1502,7 @@ describe('loadAuditReportWithThreshold tests', () => {
 
   test('should load "full" audit report with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const rootState = createState('auditreport', {
       isLoading: {
         [reportIdentifier(id, filter)]: false,
@@ -1628,7 +1628,7 @@ describe('loadAuditReportWithThreshold tests', () => {
 
   test('should not audit load report if already loading with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const rootState = createState('auditreport', {
       isLoading: {
         [reportIdentifier(id, filter)]: true,
@@ -1757,7 +1757,7 @@ describe('loadDeltaAuditReport function tests', () => {
       },
     };
 
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
 
     expect(loadDeltaAuditReport).toBeDefined();
     expect(isFunction(loadDeltaReport)).toBe(true);

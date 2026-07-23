@@ -10,7 +10,7 @@ import {
   type default as Filter,
   type FilterType,
 } from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Report from 'gmp/models/report';
 import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
@@ -27,7 +27,7 @@ interface UseGetReportParams {
   refetchInterval?: number | false | RefetchIntervalFn<Report>;
 }
 
-const REPORT_FORMATS_FILTER = BaseFilter.fromString(
+const REPORT_FORMATS_FILTER = QueryFilter.fromString(
   'active=1 and trust=1 rows=-1',
 );
 

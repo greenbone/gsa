@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isFunction} from 'gmp/utils/identity';
 import {reportActions} from 'web/store/entities/report/actions';
 import {reportReducer} from 'web/store/entities/report/reducers';
@@ -37,7 +37,7 @@ describe('report reducer tests', () => {
 
   test('should reduce request action with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const action = reportActions.request(id, filter);
 
     expect(reportReducer(undefined, action)).toEqual({
@@ -68,7 +68,7 @@ describe('report reducer tests', () => {
 
   test('should reduce success action with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const action = reportActions.success(id, {data: 'foo'}, filter);
 
     expect(reportReducer(undefined, action)).toEqual({
@@ -86,8 +86,8 @@ describe('report reducer tests', () => {
 
   test('should reduce success action with simplified filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
-    const filter2 = BaseFilter.fromString('foo=bar first=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
+    const filter2 = QueryFilter.fromString('foo=bar first=10');
     const action = reportActions.success(id, {data: 'foo'}, filter2);
 
     const existingState = {
@@ -139,8 +139,8 @@ describe('report reducer tests', () => {
 
   test('should reduce error action with filter', () => {
     const id = 'a1';
-    const filter = BaseFilter.fromString('foo=bar rows=10');
-    const filter2 = BaseFilter.fromString('foo=bar first=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
+    const filter2 = QueryFilter.fromString('foo=bar first=10');
     const action = reportActions.error(id, 'Another error', filter2);
     const existingState = {
       byId: {

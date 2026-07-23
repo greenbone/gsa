@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
 import TagResourceList from 'web/pages/tags/TagResourceList';
@@ -36,7 +36,7 @@ describe('ResourceList tests', () => {
         get: testing.fn().mockResolvedValue({
           data: [createTask()],
           meta: {
-            filter: BaseFilter.fromString(),
+            filter: QueryFilter.fromString(),
             counts: new CollectionCounts(),
           },
         }),
@@ -62,7 +62,7 @@ describe('ResourceList tests', () => {
         get: testing.fn().mockResolvedValue({
           data: [],
           meta: {
-            filter: BaseFilter.fromString(),
+            filter: QueryFilter.fromString(),
             counts: new CollectionCounts(),
           },
         }),
@@ -86,7 +86,7 @@ describe('ResourceList tests', () => {
             createTask('task-3'),
           ],
           meta: {
-            filter: BaseFilter.fromString(),
+            filter: QueryFilter.fromString(),
             counts: new CollectionCounts(),
           },
         }),
@@ -104,7 +104,7 @@ describe('ResourceList tests', () => {
     const tag = createTag();
     const getTasks = testing.fn().mockResolvedValue({
       data: [createTask()],
-      meta: {filter: BaseFilter.fromString(), counts: new CollectionCounts()},
+      meta: {filter: QueryFilter.fromString(), counts: new CollectionCounts()},
     });
     const gmp = {
       tasks: {

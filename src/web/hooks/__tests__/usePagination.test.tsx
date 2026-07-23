@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import usePagination from 'web/hooks/usePagination';
 
 const TestComponent = ({filter, counts, changeFilter}) => {
@@ -26,7 +26,7 @@ const TestComponent = ({filter, counts, changeFilter}) => {
 
 describe('usePageFilter', () => {
   test('should change the filter for the first page', () => {
-    const filter = BaseFilter.fromString('first=10');
+    const filter = QueryFilter.fromString('first=10');
     const counts = {filtered: 100, rows: 10};
     const changeFilter = testing.fn();
 
@@ -40,11 +40,13 @@ describe('usePageFilter', () => {
 
     fireEvent.click(screen.getByTestId('first'));
 
-    expect(changeFilter).toHaveBeenCalledWith(BaseFilter.fromString('first=1'));
+    expect(changeFilter).toHaveBeenCalledWith(
+      QueryFilter.fromString('first=1'),
+    );
   });
 
   test('should change the filter for the last page', () => {
-    const filter = BaseFilter.fromString('first=10');
+    const filter = QueryFilter.fromString('first=10');
     const counts = {filtered: 100, rows: 10};
     const changeFilter = testing.fn();
 
@@ -59,12 +61,12 @@ describe('usePageFilter', () => {
     fireEvent.click(screen.getByTestId('last'));
 
     expect(changeFilter).toHaveBeenCalledWith(
-      BaseFilter.fromString('first=91'),
+      QueryFilter.fromString('first=91'),
     );
   });
 
   test('should change the filter for the next page', () => {
-    const filter = BaseFilter.fromString('first=10');
+    const filter = QueryFilter.fromString('first=10');
     const counts = {filtered: 100, rows: 10};
     const changeFilter = testing.fn();
 
@@ -79,12 +81,12 @@ describe('usePageFilter', () => {
     fireEvent.click(screen.getByTestId('next'));
 
     expect(changeFilter).toHaveBeenCalledWith(
-      BaseFilter.fromString('first=20 rows=10'),
+      QueryFilter.fromString('first=20 rows=10'),
     );
   });
 
   test('should change the filter for the previous page', () => {
-    const filter = BaseFilter.fromString('first=10');
+    const filter = QueryFilter.fromString('first=10');
     const counts = {filtered: 100, rows: 10};
     const changeFilter = testing.fn();
 
@@ -99,7 +101,7 @@ describe('usePageFilter', () => {
     fireEvent.click(screen.getByTestId('previous'));
 
     expect(changeFilter).toHaveBeenCalledWith(
-      BaseFilter.fromString('first=1 rows=10'),
+      QueryFilter.fromString('first=1 rows=10'),
     );
   });
 });

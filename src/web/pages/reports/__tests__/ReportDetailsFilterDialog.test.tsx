@@ -7,7 +7,7 @@ import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 
 const caps = new Capabilities(['everything']);
@@ -20,7 +20,7 @@ describe('Details Filter Dialog for Audit report', () => {
     const onFilterCreated = testing.fn();
     const onClose = testing.fn();
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       'apply_overrides=0 levels=hmlg rows=100 min_qod=70 first=1 sort=compliant',
     );
 
@@ -92,7 +92,7 @@ describe('Details Filter Dialog for Audit report', () => {
     const onFilterCreated = testing.fn();
     const onClose = testing.fn();
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       'apply_overrides=0 levels=hmlg rows=100 min_qod=70 first=1 sort=severity',
     );
 
@@ -171,7 +171,7 @@ describe('Details Filter Dialog for Audit report', () => {
     const onFilterCreated = testing.fn();
     const onClose = testing.fn();
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity result_hosts_only=0',
     );
 
@@ -214,7 +214,7 @@ describe('Details Filter Dialog for Audit report', () => {
     const onFilterCreated = testing.fn();
     const onClose = testing.fn();
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity result_hosts_only=1',
     );
 

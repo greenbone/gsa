@@ -7,7 +7,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useNavigate, useParams} from 'react-router';
 import type Gmp from 'gmp/gmp';
 import type Audit from 'gmp/models/audit';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
@@ -118,7 +118,7 @@ const Details = ({entity}: {entity: Audit}) => {
 };
 
 const permissionsResourceFilter = (id: string) =>
-  BaseFilter.fromString(`resource_uuid=${id}`).all();
+  QueryFilter.fromString(`resource_uuid=${id}`).all();
 
 const AuditDetailsPage = () => {
   const [_] = useTranslation();

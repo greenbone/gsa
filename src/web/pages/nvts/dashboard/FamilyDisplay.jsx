@@ -6,8 +6,8 @@
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
@@ -86,7 +86,7 @@ export class NvtsFamilyDisplay extends React.Component {
       if (isDefined(filter) && filter.hasTerm(familyTerm)) {
         return;
       }
-      familyFilter = BaseFilter.fromTerm(familyTerm);
+      familyFilter = QueryFilter.fromTerm(familyTerm);
     }
 
     const newFilter = isDefined(filter)

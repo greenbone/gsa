@@ -8,7 +8,7 @@ import {rendererWith, fireEvent, screen, within} from 'web/testing';
 import {Route, Routes} from 'react-router';
 import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Policy from 'gmp/models/policy';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -185,14 +185,14 @@ const createGmp = ({
   getTagsResponse = {
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   },
   getPermissionsResponse = {
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   },

@@ -9,7 +9,7 @@ import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {createSession} from 'gmp/testing';
@@ -144,13 +144,13 @@ const createGmp = ({
   getPolicyResponse = new Response(policy),
   getScheduleResponse = new Response(schedule),
   getReportFormatsResponse = new Response([], {
-    filter: BaseFilter.fromString(),
+    filter: QueryFilter.fromString(),
     counts: new CollectionCounts(),
   }),
   getPermissionsResponse = {
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   },

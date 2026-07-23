@@ -12,7 +12,7 @@ import {
   type FilterType,
   RESET_FILTER,
 } from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isFilterType} from 'gmp/models/filter/utils';
 import {KeyEvent} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -127,7 +127,7 @@ class PowerFilter extends React.Component<PowerFilterProps, PowerFilterState> {
     const {filter} = this.props;
     const {userFilterString} = this.state;
 
-    this.updateFilter(BaseFilter.fromString(userFilterString, filter));
+    this.updateFilter(QueryFilter.fromString(userFilterString, filter));
   }
 
   resetUserFilterString() {

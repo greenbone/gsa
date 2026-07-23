@@ -15,7 +15,7 @@ import {
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import dayjs from 'gmp/models/date';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
@@ -33,7 +33,7 @@ const getSetting = testing.fn().mockResolvedValue({filter: null});
 const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({
     data: [],
-    meta: {filter: BaseFilter.fromString(), counts: new CollectionCounts()},
+    meta: {filter: QueryFilter.fromString(), counts: new CollectionCounts()},
   }),
 );
 
@@ -59,7 +59,7 @@ const createGmp = ({
   getTags = testing.fn().mockResolvedValue({
     data: [createTag()],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts({
         first: 1,
         all: 1,
@@ -114,7 +114,7 @@ const setupStore = (store: ReturnType<typeof rendererWith>['store']) => {
   store.dispatch(
     defaultFilterLoadingActions.success(
       'tags',
-      BaseFilter.fromString('foo=bar'),
+      QueryFilter.fromString('foo=bar'),
     ),
   );
 };
@@ -167,7 +167,7 @@ describe('TagsListPage tests', () => {
       getTags: testing.fn().mockResolvedValue({
         data: [],
         meta: {
-          filter: BaseFilter.fromString(),
+          filter: QueryFilter.fromString(),
           counts: new CollectionCounts({
             first: 0,
             all: 0,

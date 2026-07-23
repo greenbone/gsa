@@ -12,7 +12,7 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import PortList from 'gmp/models/port-list';
 import {createSession} from 'gmp/testing';
 import EntitiesContainer from 'web/entities/EntitiesContainer';
@@ -38,7 +38,7 @@ const onDownload = testing.fn();
 
 const setup = gmp => {
   const {render} = rendererWith({gmp, store: true, router: true});
-  const initialFilter = new BaseFilter();
+  const initialFilter = new QueryFilter();
   render(
     <EntitiesContainer
       entities={[new PortList({id: '1', name: 'Port List 1'})]}

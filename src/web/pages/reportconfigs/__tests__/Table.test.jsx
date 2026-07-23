@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import ReportConfig from 'gmp/models/report-config';
 import {createSession} from 'gmp/testing';
 import Table from 'web/pages/reportconfigs/Table';
@@ -55,7 +55,7 @@ const counts = new CollectionCounts({
   rows: 2,
 });
 
-const filter = BaseFilter.fromString('rows=2');
+const filter = QueryFilter.fromString('rows=2');
 
 const createGmp = () => ({
   session: createSession(),

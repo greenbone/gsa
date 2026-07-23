@@ -6,7 +6,7 @@
 import {type CollectionList, parseFilter} from 'gmp/collection/parser';
 import {type Date} from 'gmp/models/date';
 import {type FilterType} from 'gmp/models/filter';
-import {type FilterKeyword} from 'gmp/models/filter/base-filter';
+import {type FilterKeyword} from 'gmp/models/filter/query-filter';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
 import {
   parseResults,

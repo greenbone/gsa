@@ -12,13 +12,13 @@ import {
   openSelectElement,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import DefaultFilterDialog from 'web/components/powerfilter/DefaultFilterDialog';
 
 describe('DefaultFilterDialog tests', () => {
   test('should render with children', () => {
     const {render} = rendererWith({capabilities: true});
-    const filter = BaseFilter.fromString('first=45 rows=100 sort=name');
+    const filter = QueryFilter.fromString('first=45 rows=100 sort=name');
     render(
       <DefaultFilterDialog
         filter={filter}
@@ -39,7 +39,7 @@ describe('DefaultFilterDialog tests', () => {
 
   test("should not render save named filter if capabilities don't allow it", () => {
     const {render} = rendererWith({capabilities: new Capabilities()});
-    const filter = BaseFilter.fromString('first=45 rows=100 sort=name');
+    const filter = QueryFilter.fromString('first=45 rows=100 sort=name');
     render(
       <DefaultFilterDialog
         filter={filter}
@@ -60,7 +60,7 @@ describe('DefaultFilterDialog tests', () => {
 
   test('should allow to change filter to save', () => {
     const {render} = rendererWith({capabilities: true});
-    const filter = BaseFilter.fromString('first=45 rows=100 sort=name');
+    const filter = QueryFilter.fromString('first=45 rows=100 sort=name');
     const handleValueChange = testing.fn();
     render(
       <DefaultFilterDialog
@@ -81,7 +81,7 @@ describe('DefaultFilterDialog tests', () => {
 
   test('should allow to change filter string', () => {
     const {render} = rendererWith({capabilities: true});
-    const filter = BaseFilter.fromString('first=45 rows=100 sort=name');
+    const filter = QueryFilter.fromString('first=45 rows=100 sort=name');
     const handleFilterStringChange = testing.fn();
     render(
       <DefaultFilterDialog
@@ -104,7 +104,7 @@ describe('DefaultFilterDialog tests', () => {
 
   test('should allow to change filter value', () => {
     const {render} = rendererWith({capabilities: true});
-    const filter = BaseFilter.fromString('first=45 rows=100 sort=name');
+    const filter = QueryFilter.fromString('first=45 rows=100 sort=name');
     const handleValueChange = testing.fn();
     render(
       <DefaultFilterDialog
@@ -127,7 +127,7 @@ describe('DefaultFilterDialog tests', () => {
 
   test('should allow to change sort by field', async () => {
     const {render} = rendererWith({capabilities: true});
-    const filter = BaseFilter.fromString('first=45 rows=100 sort=name');
+    const filter = QueryFilter.fromString('first=45 rows=100 sort=name');
     const handleSortByChange = testing.fn();
     render(
       <DefaultFilterDialog

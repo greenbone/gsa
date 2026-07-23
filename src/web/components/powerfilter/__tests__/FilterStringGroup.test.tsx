@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, render, changeInputValue} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
 
 describe('FilterStringGroup tests', () => {
@@ -20,7 +20,7 @@ describe('FilterStringGroup tests', () => {
   });
 
   test('should render filter', () => {
-    const filter = BaseFilter.fromString('test="value"');
+    const filter = QueryFilter.fromString('test="value"');
     render(<FilterStringGroup filter={filter} />);
     expect(screen.getByName('filter')).toHaveValue('test="value"');
   });

@@ -13,8 +13,8 @@ import {
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import TaskFilterDialog from 'web/pages/tasks/TaskFilterDialog';
 
 describe('TaskFilterDialog tests', () => {
@@ -25,7 +25,7 @@ describe('TaskFilterDialog tests', () => {
     const gmp = {
       filter: {},
     };
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const {render} = rendererWith({capabilities: true, gmp});
 
     render(
@@ -94,7 +94,7 @@ describe('TaskFilterDialog tests', () => {
     const handleClose = testing.fn();
     const handleFilterChanged = testing.fn();
     const handleFilterCreated = testing.fn();
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const gmp = {
       filter: {
         create: testing.fn().mockResolvedValue(new Filter({id: 'new-filter'})),

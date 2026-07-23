@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Permission from 'gmp/models/permission';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
@@ -62,7 +62,7 @@ const reloadInterval = 1;
 const manualUrl = 'test/';
 
 const setupStoreForPermissionDetailsPage = store => {
-  const defaultSettingFilter = BaseFilter.fromString('foo=bar');
+  const defaultSettingFilter = QueryFilter.fromString('foo=bar');
   store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
   store.dispatch(
     defaultFilterLoadingActions.success('permission', defaultSettingFilter),
@@ -79,8 +79,8 @@ const setupStoreForPermissionDetailsPage = store => {
   store.dispatch(
     entitiesLoadingActions.success(
       [permission],
-      BaseFilter.fromString(),
-      BaseFilter.fromString(),
+      QueryFilter.fromString(),
+      QueryFilter.fromString(),
       counts,
     ),
   );
@@ -94,7 +94,7 @@ const createGmp = ({
   getFilters = testing.fn().mockResolvedValue({
     data: [],
     meta: {
-      filter: BaseFilter.fromString(),
+      filter: QueryFilter.fromString(),
       counts: new CollectionCounts(),
     },
   }),

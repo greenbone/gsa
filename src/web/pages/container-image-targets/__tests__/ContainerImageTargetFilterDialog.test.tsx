@@ -12,12 +12,12 @@ import {
   wait,
 } from 'web/testing';
 import Filter from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import ContainerImageTargetFilterDialog from 'web/pages/container-image-targets/ContainerImageTargetFilterDialog';
 
 describe('ContainerImageTargetFilterDialog tests', () => {
   test('should render dialog with default fields', () => {
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const gmp = {filter: {}};
     const {render} = rendererWith({capabilities: true, gmp});
     render(<ContainerImageTargetFilterDialog filter={filter} />);
@@ -36,7 +36,7 @@ describe('ContainerImageTargetFilterDialog tests', () => {
   });
 
   test('should call onFilterChanged when filter is updated', () => {
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const handleFilterChanged = testing.fn();
     const gmp = {filter: {}};
     const {render} = rendererWith({capabilities: true, gmp});
@@ -51,12 +51,12 @@ describe('ContainerImageTargetFilterDialog tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleFilterChanged).toHaveBeenCalledWith(
-      BaseFilter.fromString('foo=bar'),
+      QueryFilter.fromString('foo=bar'),
     );
   });
 
   test('should call onFilterCreated when a new filter is saved', async () => {
-    const filter = new BaseFilter();
+    const filter = new QueryFilter();
     const newFilter = new Filter({
       id: 'new-filter-id',
       name: 'New Filter',

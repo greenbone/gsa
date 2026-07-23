@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import Link from 'web/components/link/Link';
 
 describe('Link tests', () => {
@@ -40,7 +40,7 @@ describe('Link tests', () => {
   });
 
   test('should route to url with filter on click', () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const {render} = rendererWith({
       router: true,
       showLocation: true,

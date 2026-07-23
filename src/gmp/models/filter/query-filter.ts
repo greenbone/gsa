@@ -74,7 +74,7 @@ export interface FilterResponseElement {
   term?: string;
 }
 
-interface BaseFilterParams {
+interface QueryFilterParams {
   id?: string;
   name?: string;
   terms?: FilterTerm[];
@@ -82,12 +82,12 @@ interface BaseFilterParams {
 
 export const UNKNOWN_FILTER_ID = '0';
 
-class BaseFilter implements FilterType {
+class QueryFilter implements FilterType {
   public readonly id?: string;
   public readonly name?: string;
   private readonly filterTerms: FilterTerms;
 
-  constructor({id, name, terms = []}: BaseFilterParams = {}) {
+  constructor({id, name, terms = []}: QueryFilterParams = {}) {
     this.id = id;
     this.name = name;
     this.filterTerms = new FilterTerms({terms});
@@ -108,7 +108,7 @@ class BaseFilter implements FilterType {
   private _delegate(terms: FilterTerms, keepId = false) {
     return terms === this.filterTerms
       ? this
-      : new BaseFilter({
+      : new QueryFilter({
           id: keepId ? this.id : undefined,
           name: this.name,
           terms: [...terms.getAllTerms()],
@@ -141,7 +141,7 @@ class BaseFilter implements FilterType {
       terms = parseFilterTermsFromString(element.term);
     }
 
-    return new BaseFilter({id, name, terms});
+    return new QueryFilter({id, name, terms});
   }
 
   /**
@@ -158,7 +158,7 @@ class BaseFilter implements FilterType {
       terms: parseFilterTermsFromString(filterString),
     }).mergeExtraKeywords(filter) as FilterTerms;
 
-    return new BaseFilter({
+    return new QueryFilter({
       terms: [...filterTerms.getAllTerms()],
     });
   }
@@ -171,7 +171,7 @@ class BaseFilter implements FilterType {
    * @returns The new Filter
    */
   static fromTerm(...term: FilterTerm[]) {
-    return new BaseFilter({
+    return new QueryFilter({
       terms: [...term],
     });
   }
@@ -292,4 +292,4 @@ class BaseFilter implements FilterType {
   }
 }
 
-export default BaseFilter;
+export default QueryFilter;

@@ -5,7 +5,7 @@
 
 import {useEffect, useState} from 'react';
 import styled from 'styled-components';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Model from 'gmp/models/model';
 import type Tag from 'gmp/models/tag';
 import {
@@ -40,7 +40,7 @@ const Spacer = styled.div`
 
 const Notification = ({id, resourceType}: NotificationProps) => {
   const [_] = useTranslation();
-  const filter = BaseFilter.fromString(`tag_id=${id}`);
+  const filter = QueryFilter.fromString(`tag_id=${id}`);
   const normalized = normalizeType(resourceType as NormalizeType);
   return (
     <Divider>
@@ -70,7 +70,7 @@ const TagResourceList = ({entity}: ResourceListProps) => {
       return;
     }
 
-    const filter = BaseFilter.fromString(
+    const filter = QueryFilter.fromString(
       `tag_id="${id}" rows=${MAX_RESOURCES}`,
     );
     const entitiesCommand = gmp[pluralizeType(resourceType)];

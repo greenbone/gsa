@@ -6,8 +6,8 @@
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import DonutChart from 'web/components/chart/Donut';
@@ -67,7 +67,7 @@ export class NvtsQodDisplay extends React.Component {
     if (isDefined(filter) && filter.hasTerm(qodTerm)) {
       return;
     }
-    const qodFilter = BaseFilter.fromTerm(qodTerm);
+    const qodFilter = QueryFilter.fromTerm(qodTerm);
 
     const newFilter = isDefined(filter)
       ? filter.copy().and(qodFilter)

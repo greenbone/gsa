@@ -6,7 +6,7 @@
 import {useMemo, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import styled from 'styled-components';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   type default as Scanner,
   AGENT_CONTROLLER_SCANNER_TYPE,
@@ -49,7 +49,7 @@ const AgentInstallInstructionsPage = () => {
     queryKey: ['agent-controllers'],
     queryFn: async () => {
       const response = await gmp.scanners.getAll({
-        filter: BaseFilter.fromString(
+        filter: QueryFilter.fromString(
           `type=${AGENT_CONTROLLER_SCANNER_TYPE} or type=${AGENT_CONTROLLER_SENSOR_SCANNER_TYPE}`,
         ),
       });

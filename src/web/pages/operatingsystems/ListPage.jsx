@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {OsSvgIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -102,7 +102,7 @@ Page.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-const FALLBACK_OS_LIST_FILTER = BaseFilter.fromString(
+const FALLBACK_OS_LIST_FILTER = QueryFilter.fromString(
   'sort-reverse=latest_severity first=1',
 );
 

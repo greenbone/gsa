@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/user';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   defaultFilterLoadingActions,
   USER_SETTINGS_DEFAULT_FILTER_LOADING_REQUEST,
@@ -25,7 +25,7 @@ describe('defaultFilterLoadingActions tests', () => {
   });
 
   test('should create a success action', () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const action = defaultFilterLoadingActions.success('foo', filter);
 
     expect(action).toEqual({
@@ -180,7 +180,7 @@ describe('loadUserSettingsDefaultFilter tests', () => {
   });
 
   test('should dispatch success', () => {
-    const filter = BaseFilter.fromString('foo=bar');
+    const filter = QueryFilter.fromString('foo=bar');
     const entityType = 'task';
     const getSetting = testing.fn().mockResolvedValue({
       data: {

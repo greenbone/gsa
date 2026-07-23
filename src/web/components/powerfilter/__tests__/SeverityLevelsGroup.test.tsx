@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   DEFAULT_SEVERITY_RATING,
   SEVERITY_RATING_CVSS_2,
@@ -21,7 +21,7 @@ describe('SeverityLevelsFilterGroup tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const filter = BaseFilter.fromString('levels=h');
+    const filter = QueryFilter.fromString('levels=h');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     const {element} = render(
@@ -42,7 +42,7 @@ describe('SeverityLevelsFilterGroup tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const filter = BaseFilter.fromString('levels=');
+    const filter = QueryFilter.fromString('levels=');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -67,7 +67,7 @@ describe('SeverityLevelsFilterGroup tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const filter = BaseFilter.fromString('levels=hm');
+    const filter = QueryFilter.fromString('levels=hm');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -91,8 +91,8 @@ describe('SeverityLevelsFilterGroup tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const filter1 = BaseFilter.fromString('levels=hm');
-    const filter2 = BaseFilter.fromString('levels=m');
+    const filter1 = QueryFilter.fromString('levels=hm');
+    const filter2 = QueryFilter.fromString('levels=m');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     const {rerender} = render(
@@ -125,7 +125,7 @@ describe('SeverityLevelsFilterGroup tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const filter = BaseFilter.fromString();
+    const filter = QueryFilter.fromString();
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -149,7 +149,7 @@ describe('SeverityLevelsFilterGroup tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const filter = BaseFilter.fromString('levels=h');
+    const filter = QueryFilter.fromString('levels=h');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -175,7 +175,7 @@ describe('SeverityLevelsFilterGroup tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const filter = BaseFilter.fromString('levels=c');
+    const filter = QueryFilter.fromString('levels=c');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(
@@ -198,7 +198,7 @@ describe('SeverityLevelsFilterGroup tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const filter = BaseFilter.fromString('levels=c');
+    const filter = QueryFilter.fromString('levels=c');
     const handleChange = testing.fn();
     const handleRemove = testing.fn();
     render(

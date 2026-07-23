@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
 import {MAX_HOSTS} from 'web/components/chart/HostsTopologyChart';
 import Loader, {
@@ -19,7 +19,7 @@ export const HOSTS_VULN_SCORE = 'hosts-vuln-score';
 
 const HOSTS_MAX_GROUPS = 10;
 
-const DEFAULT_TOPOLOGY_FILTER = BaseFilter.fromString(`rows=${MAX_HOSTS}`);
+const DEFAULT_TOPOLOGY_FILTER = QueryFilter.fromString(`rows=${MAX_HOSTS}`);
 
 export const hostsModifiedLoader = loadFunc(
   ({gmp, filter}) =>

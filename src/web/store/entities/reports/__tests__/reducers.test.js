@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {isFunction} from 'gmp/utils/identity';
 import {entitiesActions as actions} from 'web/store/entities/reports';
 import {reportsReducer} from 'web/store/entities/reports/reducers';
@@ -44,7 +44,7 @@ describe('report entities reducer tests', () => {
   });
 
   test('should reduce request action with filter', () => {
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const action = actions.request(filter);
 
     const previousState = {
@@ -102,7 +102,7 @@ describe('report entities reducer tests', () => {
   });
 
   test('should reduce success action with filter', () => {
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const action = actions.success([{id: 'foo'}], filter);
 
     const previousState = {
@@ -165,7 +165,7 @@ describe('report entities reducer tests', () => {
   });
 
   test('should reduce error action with filter', () => {
-    const filter = BaseFilter.fromString('foo=bar rows=10');
+    const filter = QueryFilter.fromString('foo=bar rows=10');
     const action = actions.error('An error', filter);
 
     const previousState = {

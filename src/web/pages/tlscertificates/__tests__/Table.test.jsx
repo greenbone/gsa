@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import TlsCertificate from 'gmp/models/tls-certificate';
 import {createSession} from 'gmp/testing';
 import Table from 'web/pages/tlscertificates/Table';
@@ -39,7 +39,7 @@ const counts = new CollectionCounts({
   rows: 1,
 });
 
-const filter = BaseFilter.fromString('rows=2');
+const filter = QueryFilter.fromString('rows=2');
 
 const createGmp = () => ({
   session: createSession({timezone: 'UTC'}),
