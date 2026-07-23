@@ -1,9 +1,10 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type ComponentType} from 'react';
+import type User from 'gmp/models/user';
 import {map} from 'gmp/utils/array';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import HorizontalSeparator from 'web/components/layout/HorizontalSep';
@@ -11,23 +12,40 @@ import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import {type RowComponentProps} from 'web/entities/EntitiesTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
-import withEntitiesActions from 'web/entities/withEntitiesActions';
+import withEntitiesActions, {
+  type WithEntitiesActionsComponentProps,
+} from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import {convert_auth_method, convert_allow} from 'web/pages/users/Details';
-import PropTypes from 'web/utils/prop-types';
+import {convert_allow, convert_auth_method} from 'web/pages/users/Details';
 
-const Actions = withEntitiesActions(
+interface RowActionHandlers {
+  onUserCloneClick?: (user: User) => void | Promise<void>;
+  onUserDeleteClick?: (user: User) => void | Promise<void>;
+  onUserDownloadClick?: (user: User) => void | Promise<void>;
+  onUserEditClick?: (user: User) => void | Promise<void>;
+}
+
+interface ActionsProps
+  extends WithEntitiesActionsComponentProps<User>, RowActionHandlers {}
+
+interface RowProps extends RowComponentProps<User>, RowActionHandlers {
+  actionsComponent?: ComponentType<ActionsProps>;
+  links?: boolean;
+}
+
+const Actions = withEntitiesActions<User, ActionsProps>(
   ({
     entity,
     onUserCloneClick,
     onUserEditClick,
     onUserDeleteClick,
     onUserDownloadClick,
-  }) => {
+  }: ActionsProps) => {
     const [_] = useTranslation();
 
     return (
@@ -50,7 +68,6 @@ const Actions = withEntitiesActions(
           mayClone={!entity.isSuperAdmin()}
           name="user"
           title={_('Clone User')}
-          value={entity}
           onClick={onUserCloneClick}
         />
         <ExportIcon
@@ -63,42 +80,45 @@ const Actions = withEntitiesActions(
   },
 );
 
-Actions.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onUserCloneClick: PropTypes.func.isRequired,
-  onUserDeleteClick: PropTypes.func.isRequired,
-  onUserDownloadClick: PropTypes.func.isRequired,
-  onUserEditClick: PropTypes.func.isRequired,
-};
-
 const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}) => {
+}: RowProps) => {
   const [_] = useTranslation();
-  const roles = map(entity.roles, role => (
-    <DetailsLink key={role.id} id={role.id} textOnly={!links} type="role">
-      {role.name}
-    </DetailsLink>
-  ));
+  const roles = map(entity.roles, (role, index) =>
+    role.id ? (
+      <DetailsLink key={role.id} id={role.id} textOnly={!links} type="role">
+        {role.name}
+      </DetailsLink>
+    ) : (
+      <span key={`role-${index}`}>{role.name}</span>
+    ),
+  );
 
-  const groups = map(entity.groups, group => (
-    <DetailsLink key={group.id} id={group.id} textOnly={!links} type="group">
-      {group.name}
-    </DetailsLink>
-  ));
+  const groups = map(entity.groups, (group, index) =>
+    group.id ? (
+      <DetailsLink key={group.id} id={group.id} textOnly={!links} type="group">
+        {group.name}
+      </DetailsLink>
+    ) : (
+      <span key={`group-${index}`}>{group.name}</span>
+    ),
+  );
 
   const authMethod = convert_auth_method(entity.authMethod, _);
-  const host_allow = convert_allow(entity.hosts, _).replace(/&#x2F;/g, '/');
+  const host_allow = convert_allow(entity.hosts ?? {addresses: []}, _).replace(
+    /&#x2F;/g,
+    '/',
+  );
   return (
     <TableRow>
       <EntityNameTableData
         displayName={_('User')}
         entity={entity}
-        link={links}
+        links={links}
         type="user"
         onToggleDetailsClick={onToggleDetailsClick}
       />
@@ -113,13 +133,6 @@ const Row = ({
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
-};
-
-Row.propTypes = {
-  actionsComponent: PropTypes.component,
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default Row;

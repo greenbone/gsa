@@ -1,9 +1,10 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
+import {useState} from 'react';
+import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
 import DialogContent from 'web/components/dialog/DialogContent';
 import DialogError from 'web/components/dialog/DialogError';
@@ -11,8 +12,20 @@ import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/prop-types';
 import {renderSelectItems} from 'web/utils/Render';
+
+interface ConfirmDeleteDialogState {
+  deleteUsers: User[];
+  inheritorId: string;
+}
+
+interface ConfirmDeleteDialogProps {
+  deleteUsers?: User[];
+  inheritorId?: string;
+  inheritorUsers?: User[];
+  error?: string;
+  onErrorClose?: () => void;
+}
 
 const ConfirmDeleteDialog = ({
   deleteUsers = [],
@@ -20,15 +33,17 @@ const ConfirmDeleteDialog = ({
   inheritorUsers,
   error,
   onErrorClose,
-}) => {
+}: ConfirmDeleteDialogProps) => {
   const [_] = useTranslation();
-  const [state, setState] = useState({
+  const [state, setState] = useState<ConfirmDeleteDialogState>({
     deleteUsers,
     inheritorId,
   });
 
-  const handleValueChange = (value, name) => {
-    setState(prevState => ({...prevState, [name]: value}));
+  const handleValueChange = (value: string, name?: string) => {
+    if (name === 'inheritorId') {
+      setState(prevState => ({...prevState, inheritorId: value}));
+    }
   };
 
   const handleErrorClose = () => {
@@ -39,7 +54,9 @@ const ConfirmDeleteDialog = ({
 
   let headline;
   if (deleteUsers.length === 1) {
-    headline = _('User {{name}} will be deleted.', {name: deleteUsers[0].name});
+    headline = _('User {{name}} will be deleted.', {
+      name: deleteUsers[0].name ?? '',
+    });
   } else if (deleteUsers.length > 1) {
     headline = _('{{count}} users will be deleted', {
       count: deleteUsers.length,
@@ -57,7 +74,12 @@ const ConfirmDeleteDialog = ({
       label: _('Current User'),
       value: 'self',
     },
-    ...renderSelectItems(inheritorUsers),
+    ...renderSelectItems(
+      (inheritorUsers ?? []).map(user => ({
+        id: user.id ?? '',
+        name: user.name ?? '',
+      })),
+    ),
   ];
 
   return (
@@ -84,14 +106,6 @@ const ConfirmDeleteDialog = ({
       </ErrorBoundary>
     </DialogContent>
   );
-};
-
-ConfirmDeleteDialog.propTypes = {
-  deleteUsers: PropTypes.array.isRequired,
-  error: PropTypes.string,
-  inheritorId: PropTypes.id,
-  inheritorUsers: PropTypes.array,
-  onErrorClose: PropTypes.func,
 };
 
 export default ConfirmDeleteDialog;

@@ -1,9 +1,10 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import {_l} from 'gmp/locale/lang';
+import type User from 'gmp/models/user';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
@@ -34,11 +35,11 @@ export const SORT_FIELDS = [
   },
 ];
 
-const UsersTable = createEntitiesTable({
+const UsersTable = createEntitiesTable<User>({
   emptyTitle: _l('No Users available'),
   header: Header,
   row: Row,
-  rowDetails: withRowDetails('user')(UserDetails),
+  rowDetails: withRowDetails<User>('user')(UserDetails),
   footer: createEntitiesFooter({
     download: 'users.xml',
     span: 7,
