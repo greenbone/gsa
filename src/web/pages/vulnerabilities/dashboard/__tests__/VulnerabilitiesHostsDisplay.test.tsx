@@ -5,20 +5,20 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import BaseFilter from 'gmp/models/filter/base-filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {getDisplay} from 'web/components/dashboard/Registry';
 import {
-  VulnsHostsDisplay,
-  VulnsHostsTableDisplay,
-} from 'web/pages/vulns/dashboard/VulnsHostsDisplay';
+  VulnerabilitiesHostsDisplay,
+  VulnerabilitiesHostsTableDisplay,
+} from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsDisplay';
 
 let loaderData: {groups?: {value: number; count: number; c_count: number}[]} = {
   groups: [],
 };
 
-vi.mock('web/pages/vulns/dashboard/VulnsLoaders', () => ({
+vi.mock('web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  VulnsHostsLoader: ({children}) =>
+  VulnerabilitiesHostsLoader: ({children}) =>
     children({data: loaderData, isLoading: false}),
 }));
 
@@ -41,38 +41,43 @@ vi.mock('web/components/dashboard/display/DataDisplay', () => ({
   },
 }));
 
-vi.mock('web/pages/vulns/dashboard/VulnsHostsBarChart', () => ({
-  default: ({data, onDataClick}) => (
-    <div data-testid="mock-bar-chart">
-      {data.map(d => (
-        <button
-          key={d.id}
-          onClick={() => onDataClick?.({filterValue: d.filterValue})}
-        >
-          bar-{d.x}
-        </button>
-      ))}
-    </div>
-  ),
-}));
+vi.mock(
+  'web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsBarChart',
+  () => ({
+    default: ({data, onDataClick}) => (
+      <div data-testid="mock-bar-chart">
+        {data.map(d => (
+          <button
+            key={d.id}
+            onClick={() => onDataClick?.({filterValue: d.filterValue})}
+          >
+            bar-{d.x}
+          </button>
+        ))}
+      </div>
+    ),
+  }),
+);
 
-describe('VulnsHostsDisplay', () => {
-  test('should export VulnsHostsDisplay', () => {
-    expect(VulnsHostsDisplay).toBeDefined();
-    expect(typeof VulnsHostsDisplay).toBe('function');
+describe('VulnerabilitiesHostsDisplay', () => {
+  test('should export VulnerabilitiesHostsDisplay', () => {
+    expect(VulnerabilitiesHostsDisplay).toBeDefined();
+    expect(typeof VulnerabilitiesHostsDisplay).toBe('function');
   });
 
   test('should have correct displayId', () => {
-    expect(VulnsHostsDisplay.displayId).toBe('vuln-by-hosts');
+    expect(VulnerabilitiesHostsDisplay.displayId).toBe('vuln-by-hosts');
   });
 
   test('should have displayName', () => {
-    expect(VulnsHostsDisplay.displayName).toContain('VulnsHostsDisplay');
+    expect(VulnerabilitiesHostsDisplay.displayName).toContain(
+      'VulnerabilitiesHostsDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {
-    const registered = getDisplay(VulnsHostsDisplay.displayId);
-    expect(registered?.component).toBe(VulnsHostsDisplay);
+    const registered = getDisplay(VulnerabilitiesHostsDisplay.displayId);
+    expect(registered?.component).toBe(VulnerabilitiesHostsDisplay);
     expect(String(registered?.title)).toBe('Chart: Vulnerabilities by Hosts');
   });
 
@@ -84,7 +89,7 @@ describe('VulnsHostsDisplay', () => {
       ],
     };
     const {render} = rendererWith();
-    render(<VulnsHostsDisplay />);
+    render(<VulnerabilitiesHostsDisplay />);
     screen.getByText(/Total: 2/);
   });
 
@@ -97,7 +102,7 @@ describe('VulnsHostsDisplay', () => {
     };
     const onFilterChanged = testing.fn();
     const {render} = rendererWith();
-    render(<VulnsHostsDisplay onFilterChanged={onFilterChanged} />);
+    render(<VulnerabilitiesHostsDisplay onFilterChanged={onFilterChanged} />);
 
     const bar = screen.getByRole('button', {name: 'bar-4-5'});
     bar.click();
@@ -112,7 +117,7 @@ describe('VulnsHostsDisplay', () => {
     loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
     const onFilterChanged = testing.fn();
     const {render} = rendererWith();
-    render(<VulnsHostsDisplay onFilterChanged={onFilterChanged} />);
+    render(<VulnerabilitiesHostsDisplay onFilterChanged={onFilterChanged} />);
 
     const bar = screen.getByRole('button', {name: 'bar-0'});
     bar.click();
@@ -125,10 +130,13 @@ describe('VulnsHostsDisplay', () => {
   test('should not call onFilterChanged if the filter already has the matching term', () => {
     loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
     const onFilterChanged = testing.fn();
-    const filter = BaseFilter.fromString('hosts=0');
+    const filter = QueryFilter.fromString('hosts=0');
     const {render} = rendererWith();
     render(
-      <VulnsHostsDisplay filter={filter} onFilterChanged={onFilterChanged} />,
+      <VulnerabilitiesHostsDisplay
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+      />,
     );
 
     const bar = screen.getByRole('button', {name: 'bar-0'});
@@ -140,32 +148,34 @@ describe('VulnsHostsDisplay', () => {
   test('should not throw when clicking a bar without onFilterChanged', () => {
     loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
     const {render} = rendererWith();
-    render(<VulnsHostsDisplay />);
+    render(<VulnerabilitiesHostsDisplay />);
 
     const bar = screen.getByRole('button', {name: 'bar-0'});
     expect(() => bar.click()).not.toThrow();
   });
 });
 
-describe('VulnsHostsTableDisplay', () => {
-  test('should export VulnsHostsTableDisplay', () => {
-    expect(VulnsHostsTableDisplay).toBeDefined();
-    expect(typeof VulnsHostsTableDisplay).toBe('function');
+describe('VulnerabilitiesHostsTableDisplay', () => {
+  test('should export VulnerabilitiesHostsTableDisplay', () => {
+    expect(VulnerabilitiesHostsTableDisplay).toBeDefined();
+    expect(typeof VulnerabilitiesHostsTableDisplay).toBe('function');
   });
 
   test('should have correct displayId', () => {
-    expect(VulnsHostsTableDisplay.displayId).toBe('vuln-by-hosts-table');
+    expect(VulnerabilitiesHostsTableDisplay.displayId).toBe(
+      'vuln-by-hosts-table',
+    );
   });
 
   test('should have displayName', () => {
-    expect(VulnsHostsTableDisplay.displayName).toContain(
-      'VulnsHostsTableDisplay',
+    expect(VulnerabilitiesHostsTableDisplay.displayName).toContain(
+      'VulnerabilitiesHostsTableDisplay',
     );
   });
 
   test('should be registered with the correct title', () => {
-    const registered = getDisplay(VulnsHostsTableDisplay.displayId);
-    expect(registered?.component).toBe(VulnsHostsTableDisplay);
+    const registered = getDisplay(VulnerabilitiesHostsTableDisplay.displayId);
+    expect(registered?.component).toBe(VulnerabilitiesHostsTableDisplay);
     expect(String(registered?.title)).toBe('Table: Vulnerabilities by Hosts');
   });
 });

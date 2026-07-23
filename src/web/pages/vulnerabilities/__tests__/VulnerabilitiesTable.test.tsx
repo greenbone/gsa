@@ -7,7 +7,7 @@ import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import Vulnerability from 'gmp/models/vulnerability';
 import {createSession} from 'gmp/testing';
-import VulnsTable from 'web/pages/vulns/VulnsTable';
+import VulnerabilitiesTable from 'web/pages/vulnerabilities/VulnerabilitiesTable';
 
 const createGmp = () => ({
   session: createSession(),
@@ -46,27 +46,27 @@ const createVulnerability = ({
     },
   });
 
-describe('VulnsTable tests', () => {
+describe('VulnerabilitiesTable tests', () => {
   test('should render without crashing', () => {
     const vulns = [
       createVulnerability({id: '1', name: 'CVE-2024-0001'}),
       createVulnerability({id: '2', name: 'CVE-2024-0002'}),
     ];
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
-    render(<VulnsTable entities={vulns} />);
+    render(<VulnerabilitiesTable entities={vulns} />);
     screen.getByRole('table');
   });
 
   test('should render the empty title when no vulnerabilities are available', () => {
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
-    render(<VulnsTable entities={[]} />);
+    render(<VulnerabilitiesTable entities={[]} />);
     screen.getByText('No Vulnerabilities available');
     expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
 
   test("should not render anything if vulnerabilities aren't available", () => {
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
-    const {container} = render(<VulnsTable />);
+    const {container} = render(<VulnerabilitiesTable />);
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
@@ -77,7 +77,7 @@ describe('VulnsTable tests', () => {
       createVulnerability({id: '2', name: 'CVE-2024-0002'}),
     ];
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
-    render(<VulnsTable entities={vulns} />);
+    render(<VulnerabilitiesTable entities={vulns} />);
     screen.getByText('CVE-2024-0001');
     screen.getByText('CVE-2024-0002');
     const rows = screen.queryAllByRole('row');
@@ -94,7 +94,7 @@ describe('VulnsTable tests', () => {
       hostsCount: 2,
     });
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
-    render(<VulnsTable entities={[vuln]} />);
+    render(<VulnerabilitiesTable entities={[vuln]} />);
     screen.getByText('CVE-2024-0001');
     screen.getByText('5');
     screen.getByText('2');
@@ -103,7 +103,7 @@ describe('VulnsTable tests', () => {
   test('should render details links for vulnerability names', () => {
     const vuln = createVulnerability({id: '1', name: 'CVE-2024-0001'});
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
-    render(<VulnsTable entities={[vuln]} />);
+    render(<VulnerabilitiesTable entities={[vuln]} />);
     const link = screen.getByRole('link', {name: 'CVE-2024-0001'});
     expect(link).toHaveAttribute('href', '/nvt/1');
   });
@@ -115,7 +115,7 @@ describe('VulnsTable tests', () => {
       resultsCount: 5,
     });
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
-    render(<VulnsTable entities={[vuln]} />);
+    render(<VulnerabilitiesTable entities={[vuln]} />);
     const resultsLink = screen.getByRole('link', {name: '5'});
     expect(resultsLink).toHaveAttribute('href', '/results?filter=nvt%3D1');
   });
@@ -123,7 +123,7 @@ describe('VulnsTable tests', () => {
   test('should render oldest and newest result dates', () => {
     const vuln = createVulnerability({id: '1', name: 'CVE-2024-0001'});
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
-    render(<VulnsTable entities={[vuln]} />);
+    render(<VulnerabilitiesTable entities={[vuln]} />);
     screen.getByText(/Jan 1, 2024/);
     screen.getByText(/Jun 1, 2024/);
   });

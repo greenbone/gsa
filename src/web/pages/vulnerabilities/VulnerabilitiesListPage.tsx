@@ -21,10 +21,10 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 import SubscriptionProvider from 'web/components/provider/SubscriptionProvider';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import {
-  useBulkDeleteVulns,
-  useBulkExportVulns,
+  useBulkDeleteVulnerabilities,
+  useBulkExportVulnerabilities,
   useGetVulnerabilities,
-} from 'web/hooks/use-query/vulns';
+} from 'web/hooks/use-query/vulnerabilities';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
@@ -32,10 +32,10 @@ import useSelection from 'web/hooks/useSelection';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import VulnerabilitiesDashboard, {
-  VULNS_DASHBOARD_ID,
-} from 'web/pages/vulns/dashboard';
-import VulnerabilityFilterDialog from 'web/pages/vulns/VulnsFilterDialog';
-import VulnsTable from 'web/pages/vulns/VulnsTable';
+  VULNERABILITIES_DASHBOARD_ID,
+} from 'web/pages/vulnerabilities/dashboard';
+import VulnerabilityFilterDialog from 'web/pages/vulnerabilities/VulnerabilitiesFilterDialog';
+import VulnerabilitiesTable from 'web/pages/vulnerabilities/VulnerabilitiesTable';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
@@ -70,7 +70,7 @@ const ToolBarIcons = () => {
   );
 };
 
-const VulnsPage = () => {
+const VulnerabilitiesPage = () => {
   const [_] = useTranslation();
 
   const [downloadRef, handleDownload] = useDownload();
@@ -116,8 +116,8 @@ const VulnsPage = () => {
     changeFilter,
   );
 
-  const bulkDelete = useBulkDeleteVulns({onError: showError});
-  const bulkExport = useBulkExportVulns({onError: showError});
+  const bulkDelete = useBulkDeleteVulnerabilities({onError: showError});
+  const bulkExport = useBulkExportVulnerabilities({onError: showError});
 
   const handleBulkDelete = useCallback(async () => {
     const input = resolveBulkInput(
@@ -190,7 +190,7 @@ const VulnsPage = () => {
           </SubscriptionProvider>
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
+          <DashboardControls dashboardId={VULNERABILITIES_DASHBOARD_ID} />
         )}
         entities={allEntities}
         entitiesCounts={entitiesCounts}
@@ -201,7 +201,7 @@ const VulnsPage = () => {
         isLoading={isLoading}
         sectionIcon={<VulnerabilityIcon size="large" />}
         table={
-          <VulnsTable
+          <VulnerabilitiesTable
             entities={allEntities}
             entitiesCounts={entitiesCounts}
             filter={filter}
@@ -238,4 +238,4 @@ const VulnsPage = () => {
   );
 };
 
-export default VulnsPage;
+export default VulnerabilitiesPage;

@@ -9,34 +9,42 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-import {VulnsSeverityLoader} from 'web/pages/vulns/dashboard/VulnsLoaders';
+import {VulnerabilitiesSeverityLoader} from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders';
 
-export const VulnsCvssDisplay = createDisplay({
-  loaderComponent: VulnsSeverityLoader,
+export const VulnerabilitiesCvssDisplay = createDisplay({
+  loaderComponent: VulnerabilitiesSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of Vulnerabilities'),
   title: ({data: tdata}) =>
     _('Vulnerabilities by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'vuln-by-cvss',
-  displayName: 'VulnsCvssDisplay',
+  displayName: 'VulnerabilitiesCvssDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
 } as Parameters<typeof createDisplay>[0]);
 
-export const VulnsCvssTableDisplay = createDisplay({
-  loaderComponent: VulnsSeverityLoader,
+export const VulnerabilitiesCvssTableDisplay = createDisplay({
+  loaderComponent: VulnerabilitiesSeverityLoader,
   displayComponent: CvssTableDisplay,
   dataTitles: [_l('Severity'), _l('# of Vulnerabilities')],
   title: ({data: tdata}) =>
     _('Vulnerabilities by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'vuln-by-cvss-table',
-  displayName: 'VulnsCvssTableDisplay',
+  displayName: 'VulnerabilitiesCvssTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
 } as Parameters<typeof createDisplay>[0]);
 
-registerDisplay(VulnsCvssDisplay.displayId, VulnsCvssDisplay, {
-  title: _l('Chart: Vulnerabilities by CVSS'),
-});
+registerDisplay(
+  VulnerabilitiesCvssDisplay.displayId,
+  VulnerabilitiesCvssDisplay,
+  {
+    title: _l('Chart: Vulnerabilities by CVSS'),
+  },
+);
 
-registerDisplay(VulnsCvssTableDisplay.displayId, VulnsCvssTableDisplay, {
-  title: _l('Table: Vulnerabilities by CVSS'),
-});
+registerDisplay(
+  VulnerabilitiesCvssTableDisplay.displayId,
+  VulnerabilitiesCvssTableDisplay,
+  {
+    title: _l('Table: Vulnerabilities by CVSS'),
+  },
+);

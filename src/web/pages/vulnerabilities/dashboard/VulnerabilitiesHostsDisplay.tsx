@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useRef} from 'react';
+import {useCallback, useRef} from 'react';
 import {format as d3format} from 'd3-format';
 import {_, _l} from 'gmp/locale/lang';
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
-import BaseFilter from 'gmp/models/filter/base-filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import {type default as FilterType} from 'gmp/models/filter/filter-type';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
@@ -24,8 +24,8 @@ import {
 } from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-import HostsBarChart from 'web/pages/vulns/dashboard/VulnsHostsBarChart';
-import {VulnsHostsLoader} from 'web/pages/vulns/dashboard/VulnsLoaders';
+import HostsBarChart from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsBarChart';
+import {VulnerabilitiesHostsLoader} from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders';
 
 interface BinConfig {
   min: number;
@@ -50,7 +50,7 @@ export interface HostDataPoint {
   filterValue: {start: number; end: number};
 }
 
-interface VulnsHostsDisplayProps extends DataDisplayProps<
+interface VulnerabilitiesHostsDisplayProps extends DataDisplayProps<
   {groups?: GroupData[]},
   State,
   HostDataPoint
@@ -124,11 +124,11 @@ const computeTotal = (data: {groups?: GroupData[]} = {}): number => {
   return groups.length > 0 ? Math.max(...groups.map(val => val.c_count)) : 0;
 };
 
-const VulnsHostsDisplayInner = ({
+const VulnerabilitiesHostsDisplayInner = ({
   filter,
   onFilterChanged,
   ...props
-}: VulnsHostsDisplayProps) => {
+}: VulnerabilitiesHostsDisplayProps) => {
   const totalRef = useRef(0);
 
   const handleDataClick = useCallback(
@@ -138,7 +138,7 @@ const VulnsHostsDisplayInner = ({
       }
       const {filterValue = {start: undefined, end: undefined}} = clickData;
       const {start, end} = filterValue;
-      let hostFilter: BaseFilter | undefined;
+      let hostFilter: QueryFilter | undefined;
 
       if (isDefined(start) && start > 0) {
         const startTerm = FilterTerm.fromString(`hosts>${start - 1}`);
@@ -150,8 +150,8 @@ const VulnsHostsDisplayInner = ({
         ) {
           return;
         }
-        hostFilter = BaseFilter.fromTerm(startTerm).and(
-          BaseFilter.fromTerm(endTerm),
+        hostFilter = QueryFilter.fromTerm(startTerm).and(
+          QueryFilter.fromTerm(endTerm),
         );
       } else {
         let hostTerm: FilterTerm | undefined;
@@ -168,7 +168,7 @@ const VulnsHostsDisplayInner = ({
           return;
         }
         if (isDefined(hostTerm)) {
-          hostFilter = BaseFilter.fromTerm(hostTerm);
+          hostFilter = QueryFilter.fromTerm(hostTerm);
         }
       }
 
@@ -190,11 +190,11 @@ const VulnsHostsDisplayInner = ({
   }, []);
 
   return (
-    <VulnsHostsLoader filter={filter}>
+    <VulnerabilitiesHostsLoader filter={filter}>
       {loaderProps => (
         <DataDisplay<
           {groups?: GroupData[]},
-          VulnsHostsDisplayProps,
+          VulnerabilitiesHostsDisplayProps,
           State,
           HostDataPoint
         >
@@ -224,25 +224,25 @@ const VulnsHostsDisplayInner = ({
           )}
         </DataDisplay>
       )}
-    </VulnsHostsLoader>
+    </VulnerabilitiesHostsLoader>
   );
 };
 
-const VulnsHostsDisplay = withFilterSelection({
+const VulnerabilitiesHostsDisplay = withFilterSelection({
   filtersFilter: VULNS_FILTER_FILTER,
-})(VulnsHostsDisplayInner);
+})(VulnerabilitiesHostsDisplayInner);
 
-VulnsHostsDisplay.displayId = 'vuln-by-hosts';
+VulnerabilitiesHostsDisplay.displayId = 'vuln-by-hosts';
 
-export {VulnsHostsDisplay};
+export {VulnerabilitiesHostsDisplay};
 
 const computeTotalForTable = (data: {groups?: GroupData[]} = {}): number => {
   const {groups = []} = data;
   return groups.length > 0 ? Math.max(...groups.map(val => val.c_count)) : 0;
 };
 
-export const VulnsHostsTableDisplay = createDisplay({
-  loaderComponent: VulnsHostsLoader,
+export const VulnerabilitiesHostsTableDisplay = createDisplay({
+  loaderComponent: VulnerabilitiesHostsLoader,
   displayComponent: DataTableDisplay,
   dataTransform: (data: {groups?: GroupData[]}) => transformHostsData(data),
   dataTitles: [_l('# of Hosts'), _l('# of Vulnerabilities')],
@@ -252,14 +252,22 @@ export const VulnsHostsTableDisplay = createDisplay({
       count: computeTotalForTable(originalData as {groups?: GroupData[]}),
     }),
   displayId: 'vuln-by-hosts-table',
-  displayName: 'VulnsHostsTableDisplay',
+  displayName: 'VulnerabilitiesHostsTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
 } as Parameters<typeof createDisplay>[0]);
 
-registerDisplay(VulnsHostsDisplay.displayId, VulnsHostsDisplay, {
-  title: _l('Chart: Vulnerabilities by Hosts'),
-});
+registerDisplay(
+  VulnerabilitiesHostsDisplay.displayId,
+  VulnerabilitiesHostsDisplay,
+  {
+    title: _l('Chart: Vulnerabilities by Hosts'),
+  },
+);
 
-registerDisplay(VulnsHostsTableDisplay.displayId, VulnsHostsTableDisplay, {
-  title: _l('Table: Vulnerabilities by Hosts'),
-});
+registerDisplay(
+  VulnerabilitiesHostsTableDisplay.displayId,
+  VulnerabilitiesHostsTableDisplay,
+  {
+    title: _l('Table: Vulnerabilities by Hosts'),
+  },
+);

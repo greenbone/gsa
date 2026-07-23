@@ -23,7 +23,7 @@ import {DEFAULT_DISPLAYS} from 'web/pages/start/NewDashboardDialog';
 import {type StartDashboardProps} from 'web/pages/start/types';
 import {TASKS_DISPLAYS} from 'web/pages/tasks/dashboard';
 import {TICKETS_DISPLAYS} from 'web/pages/tickets/dashboard';
-import {VULNS_DISPLAYS} from 'web/pages/vulns/dashboard';
+import {VULNERABILITIES_DISPLAYS} from 'web/pages/vulnerabilities/dashboard';
 
 const ALL_DISPLAYS = [
   ...TASKS_DISPLAYS,
@@ -31,7 +31,7 @@ const ALL_DISPLAYS = [
   ...RESULTS_DISPLAYS,
   ...NOTES_DISPLAYS,
   ...OVERRIDES_DISPLAYS,
-  ...VULNS_DISPLAYS,
+  ...VULNERABILITIES_DISPLAYS,
   ...HOSTS_DISPLAYS,
   ...OS_DISPLAYS,
   ...NVTS_DISPLAYS,
