@@ -16,7 +16,6 @@ export type XmlMeta = Meta;
 export interface Envelope {
   client_address?: string;
   i18n?: string;
-  session?: number;
   timezone?: string;
   token?: string;
   jwt?: string;

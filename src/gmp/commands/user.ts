@@ -446,7 +446,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     });
     const seconds = parseInt(response.data.message);
     return response.setData(
-      isDefined(seconds) ? date.unix(seconds) : undefined,
+      isDefined(seconds) ? date().add(seconds, 'seconds') : undefined,
     );
   }
 

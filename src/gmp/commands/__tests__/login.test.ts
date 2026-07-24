@@ -6,19 +6,21 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import LoginCommand from 'gmp/commands/login';
 import {createResponse, createHttp} from 'gmp/commands/testing';
-import {type Envelope} from 'gmp/http/transform/fast-xml';
 import date from 'gmp/models/date';
+import {type LoginData} from 'gmp/models/login';
 
 describe('LoginCommand tests', () => {
   test('should return Login model on successful login', async () => {
     testing.useFakeTimers();
-    const response = createResponse<Envelope>({
+    testing.setSystemTime(new Date('1970-01-01T00:00:00.000Z'));
+
+    const response = createResponse<LoginData>({
       token: 'abc123',
       timezone: 'UTC',
       i18n: 'en',
-      session: 3600,
       jwt: 'jwt_token',
       client_address: '127.0.0.123',
+      duration: 180, // 3 minutes
     });
     const fakeHttp = createHttp(response, {
       apiProtocol: 'https',
@@ -36,7 +38,7 @@ describe('LoginCommand tests', () => {
     expect(loginModel.token).toEqual('abc123');
     expect(loginModel.timezone).toEqual('UTC');
     expect(loginModel.locale).toEqual('en');
-    expect(loginModel.sessionTimeout).toEqual(date('1970-01-01T01:00:00.000Z'));
+    expect(loginModel.sessionTimeout).toEqual(date('1970-01-01T00:03:00.000Z'));
     expect(loginModel.jwt).toEqual('jwt_token');
 
     testing.useRealTimers();

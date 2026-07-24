@@ -9,7 +9,9 @@ import date, {type Date} from 'gmp/models/date';
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-export type LoginData = Envelope;
+export interface LoginData extends Envelope {
+  duration?: number;
+}
 type LoginElement = Response<LoginData>;
 
 class Login {
@@ -30,10 +32,10 @@ class Login {
     this.token = data.token;
     this.jwt = data.jwt;
 
-    const unixSeconds = parseInt(data.session);
+    const duration = parseInt(data.duration);
 
-    this.sessionTimeout = isDefined(unixSeconds)
-      ? date.unix(unixSeconds)
+    this.sessionTimeout = isDefined(duration)
+      ? date().add(duration, 'seconds')
       : undefined;
   }
 
