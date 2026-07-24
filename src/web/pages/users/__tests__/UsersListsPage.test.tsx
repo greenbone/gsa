@@ -9,7 +9,7 @@ import {
   getSelectItemElementsForSelect,
   rendererWith,
   screen,
-  wait,
+  waitFor,
   within,
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
@@ -143,11 +143,11 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-    await wait();
+    await screen.findByTitle('Help: Users');
 
     // Toolbar Icons
-    expect(screen.getByTitle('Help: Users')).toBeInTheDocument();
-    expect(screen.getByTitle('New User')).toBeInTheDocument();
+    screen.getByTitle('Help: Users');
+    screen.getByTitle('New User');
 
     const powerFilter = within(screen.getPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
@@ -159,43 +159,31 @@ describe('UsersListPage tests', () => {
     );
     expect(userFilterInput).toBeInTheDocument();
 
-    expect(screen.getByTitle('Update Filter')).toBeInTheDocument();
-    expect(screen.getByTitle('Remove Filter')).toBeInTheDocument();
-    expect(screen.getByTitle('Reset to Default Filter')).toBeInTheDocument();
-    expect(screen.getByTitle('Help: Powerfilter')).toBeInTheDocument();
-    expect(screen.getByTitle('Edit Filter')).toBeInTheDocument();
+    screen.getByTitle('Update Filter');
+    screen.getByTitle('Remove Filter');
+    screen.getByTitle('Reset to Default Filter');
+    screen.getByTitle('Help: Powerfilter');
+    screen.getByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
     // table column headers
-    expect(
-      screen.getByRole('columnheader', {name: /name/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('columnheader', {name: /roles/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('columnheader', {name: /groups/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('columnheader', {name: /host access/i}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('columnheader', {name: /actions/i}),
-    ).toBeInTheDocument();
+    screen.getByTestId('table-header-sort-by-name');
+    screen.getByTestId('table-header-sort-by-roles');
+    screen.getByTestId('table-header-sort-by-groups');
+    screen.getByTestId('table-header-sort-by-host_access');
+    screen.getByRole('columnheader', {name: 'Actions'});
 
     // table row contents
-    expect(
-      screen.getByRole('cell', {name: /user 1 \(test comment\)/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('cell', {name: /admin/i})).toBeInTheDocument();
-    expect(screen.getByRole('cell', {name: /group 1/i})).toBeInTheDocument();
+    screen.getByRole('cell', {name: 'user 1 (test comment) View Other Icon'});
+    screen.getByText('Admin');
+    screen.getByText('Group 1');
 
     // table row actions
-    expect(screen.getByTitle('Delete User')).toBeInTheDocument();
-    expect(screen.getByTitle('Edit User')).toBeInTheDocument();
-    expect(screen.getByTitle('Clone User')).toBeInTheDocument();
-    expect(screen.getByTitle('Export User')).toBeInTheDocument();
+    screen.getByTitle('Delete User');
+    screen.getByTitle('Edit User');
+    screen.getByTitle('Clone User');
+    screen.getByTitle('Export User');
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -215,7 +203,7 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-    await wait();
+  await screen.findByTitle('Export page contents');
 
     // export page contents
     const exportIcon = screen.getByTitle('Export page contents');
@@ -227,6 +215,33 @@ describe('UsersListPage tests', () => {
     fireEvent.click(deleteIcon);
     // Users use custom delete dialog, so just verify the icon exists
     expect(deleteIcon).toBeInTheDocument();
+  });
+
+  test('should open delete confirmation dialog for page contents', async () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    const defaultSettingFilter = QueryFilter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('user', defaultSettingFilter),
+    );
+
+    render(<UsersListPage />);
+
+  await screen.findByTitle('Delete page contents');
+
+    const deleteIcon = screen.getByTitle('Delete page contents');
+    fireEvent.click(deleteIcon);
+
+    await screen.findByText('Confirm deletion of users');
+    await screen.findByText('User user 1 will be deleted.');
+    screen.getByText('Current User');
   });
 
   test('should allow to bulk action on selected users', async () => {
@@ -246,7 +261,7 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-    await wait();
+  await screen.findByTitle('Export page contents');
 
     // change to apply to selection
     const tableFooter = within(screen.getTableFooter());
@@ -290,7 +305,7 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-    await wait();
+  await screen.findByTitle('Export page contents');
 
     // change to all filtered
     const tableFooter = within(screen.getTableFooter());
@@ -300,7 +315,7 @@ describe('UsersListPage tests', () => {
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered users
-    const exportIcon = screen.getAllByTitle('Export all filtered')[0];
+    const exportIcon = tableFooter.getByTitle('Export all filtered');
     fireEvent.click(exportIcon);
     expect(gmp.users.exportByFilter).toHaveBeenCalled();
 
@@ -342,13 +357,15 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getAllByTitle('First').length).toBeGreaterThan(0);
+    });
 
     // Check pagination controls are present
-    expect(screen.getAllByTitle('First')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Previous')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Next')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Last')[0]).toBeInTheDocument();
+    screen.getAllByTitle('First')[0];
+    screen.getAllByTitle('Previous')[0];
+    screen.getAllByTitle('Next')[0];
+    screen.getAllByTitle('Last')[0];
   });
 
   test('should call pagination handlers', async () => {
@@ -388,35 +405,29 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getAllByTitle('Next').length).toBeGreaterThan(0);
+    });
+    const initialCallCount = getUsers.mock.calls.length;
 
     // Test Next button
     const nextButton = screen.getAllByTitle('Next')[0];
-    expect(nextButton).toBeInTheDocument();
     fireEvent.click(nextButton);
-
-    await wait();
 
     // Test Previous button
     const previousButton = screen.getAllByTitle('Previous')[0];
-    expect(previousButton).toBeInTheDocument();
     fireEvent.click(previousButton);
-
-    await wait();
 
     // Test First button
     const firstButton = screen.getAllByTitle('First')[0];
-    expect(firstButton).toBeInTheDocument();
     fireEvent.click(firstButton);
-
-    await wait();
 
     // Test Last button
     const lastButton = screen.getAllByTitle('Last')[0];
-    expect(lastButton).toBeInTheDocument();
     fireEvent.click(lastButton);
-
-    await wait();
+    await waitFor(() => {
+      expect(getUsers.mock.calls.length).toBeGreaterThan(initialCallCount);
+    });
 
     // Verify that getUsers was called multiple times (initial load + pagination clicks)
     expect(getUsers).toHaveBeenCalled();
