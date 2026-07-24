@@ -13,10 +13,10 @@ describe('Login model tests', () => {
     const response = new Response<LoginData>({
       client_address: '1.2.3.4',
       i18n: 'en',
-      session: 12345,
       timezone: 'UTC',
       token: '123abc',
       version: '1337',
+      duration: 180, // 3 minutes
     });
     const login = Login.fromElement(response);
 

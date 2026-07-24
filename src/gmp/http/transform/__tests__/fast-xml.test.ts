@@ -16,7 +16,6 @@ const createEnvelopedXml = (xmlStr: string) =>
 <envelope>
   <client_address>1.2.3.4</client_address>
   <i18n>en</i18n>
-  <session>1234567890</session>
   <timezone>UTC</timezone>
   <token>abc123</token>
   <version>1.2.3</version>
@@ -27,7 +26,6 @@ const createEnvelopedXml = (xmlStr: string) =>
 const envelope: Envelope = {
   client_address: '1.2.3.4',
   i18n: 'en',
-  session: 1234567890,
   timezone: 'UTC',
   token: 'abc123',
   version: '1.2.3',
