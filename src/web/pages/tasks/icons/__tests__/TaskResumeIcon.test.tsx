@@ -60,6 +60,38 @@ describe('Task ResumeIcon component tests', () => {
     expect(element).not.toHaveAttribute('disabled');
   });
 
+  test('should render in active state for a stopped task with a real schedule', () => {
+    // Same shape as a task on an appliance: schedule delivered with icalendar,
+    // here without a duration limit (PT0S).
+    const caps = new Capabilities(['everything']);
+    const icalendar = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 22.4//EN
+BEGIN:VEVENT
+DTSTART:20260727T163200Z
+DURATION:PT0S
+END:VEVENT
+END:VCALENDAR
+`;
+    const task = Task.fromElement({
+      _id: 'test-id',
+      status: TASK_STATUS.stopped,
+      target: {_id: '123'},
+      permissions: {permission: [{name: 'everything'}]},
+      schedule: {_id: 'schedule1', icalendar, timezone: 'UTC'},
+    });
+    const clickHandler = testing.fn();
+
+    const {render} = rendererWith({capabilities: caps});
+    const {element} = render(<ResumeIcon task={task} onClick={clickHandler} />);
+
+    fireEvent.click(element);
+
+    expect(clickHandler).toHaveBeenCalledWith(task);
+    expect(element).toHaveAttribute('title', 'Resume');
+    expect(element).not.toHaveAttribute('disabled');
+  });
+
   test('should render in inactive state if wrong command level permissions are given', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
