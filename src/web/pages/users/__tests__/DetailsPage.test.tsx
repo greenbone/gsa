@@ -4,7 +4,8 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, within} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor, within} from 'web/testing';
+import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import Permission from 'gmp/models/permission';
@@ -12,8 +13,6 @@ import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import UserDetailsPage from 'web/pages/users/DetailsPage';
-import {entitiesLoadingActions as permissionsLoadingActions} from 'web/store/entities/permissions';
-import {entityLoadingActions} from 'web/store/entities/users';
 
 const user = User.fromElement({
   _id: '1234',
@@ -84,41 +83,43 @@ const createGmp = () => ({
     manualUrl: 'test/',
     reloadInterval: -1,
   },
-  session: createSession({timezone: 'CET', username: 'admin'}),
+  session: createSession({
+    token: 'test-token',
+    timezone: 'CET',
+    username: 'admin',
+  }),
 });
 
 describe('UserDetailsPage', () => {
-  test('should render details page with tabs', () => {
-    const {render, store} = rendererWith({
-      gmp: createGmp(),
+  test('should render details page with tabs', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({
+      gmp,
       capabilities: true,
       router: true,
+      route: '/user/1234',
       store: true,
     });
 
-    store.dispatch(entityLoadingActions.success('1234', user));
-    store.dispatch(
-      permissionsLoadingActions.success(
-        [permission],
-        QueryFilter.fromString(
-          'subject_uuid=1234 and not resource_uuid="" or resource_uuid=1234',
-        ).all(),
-        QueryFilter.fromString(
-          'subject_uuid=1234 and not resource_uuid="" or resource_uuid=1234',
-        ).all(),
-        new CollectionCounts({
-          first: 1,
-          all: 1,
-          filtered: 1,
-          length: 1,
-          rows: 10,
-        }),
-      ),
+    render(
+      <Routes>
+        <Route element={<UserDetailsPage />} path="/user/:id" />
+      </Routes>,
     );
 
-    render(<UserDetailsPage id="1234" />);
+    await screen.findByText('User: user 1');
+    await waitFor(() => {
+      expect(gmp.permissions.get).toHaveBeenCalled();
+    });
 
-    screen.getByText('User: user 1');
+    const expectedFilter = QueryFilter.fromString(
+      'subject_uuid=1234 and not resource_uuid="" or resource_uuid=1234',
+    ).all();
+    const permissionsFilter = gmp.permissions.get.mock.calls[0][0].filter;
+    expect(permissionsFilter.toFilterString()).toBe(
+      expectedFilter.toFilterString(),
+    );
+
     const tablist = screen.getByRole('tablist');
     const tabs = within(tablist);
     tabs.getByRole('tab', {name: 'Information'});
@@ -129,22 +130,30 @@ describe('UserDetailsPage', () => {
 
   test('should call clone and export commands from toolbar', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
+      route: '/user/1234',
       store: true,
     });
 
-    store.dispatch(entityLoadingActions.success('1234', user));
+    render(
+      <Routes>
+        <Route element={<UserDetailsPage />} path="/user/:id" />
+      </Routes>,
+    );
 
-    render(<UserDetailsPage id="1234" />);
-  const cloneIcon = await screen.findByTestId('clone-icon');
-
-  fireEvent.click(cloneIcon);
-    expect(gmp.user.clone).toHaveBeenCalledWith(user);
+    const cloneIcon = await screen.findByTestId('clone-icon');
 
     fireEvent.click(screen.getByTestId('export-icon'));
-    expect(gmp.user.export).toHaveBeenCalledWith(user);
+    await waitFor(() => {
+      expect(gmp.user.export).toHaveBeenCalledWith({id: user.id});
+    });
+
+    fireEvent.click(cloneIcon);
+    await waitFor(() => {
+      expect(gmp.user.clone).toHaveBeenCalledWith({id: user.id});
+    });
   });
 });

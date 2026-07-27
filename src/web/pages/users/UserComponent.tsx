@@ -8,8 +8,15 @@ import type Model from 'gmp/models/model';
 import type Settings from 'gmp/models/settings';
 import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
-import EntityComponent from 'web/entity/EntityComponent';
 import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import QueryEntityComponent from 'web/entity/QueryEntityComponent';
+import {
+  useCloneUser,
+  useCreateUser,
+  useDeleteUser,
+  useDownloadUser,
+  useSaveUser,
+} from 'web/hooks/use-query/users';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import UserDialog, {type UserDialogSaveData} from 'web/pages/users/Dialog';
@@ -66,6 +73,33 @@ const UserComponent = ({
   const [settings, setSettings] = useState<Settings>();
   const [title, setTitle] = useState<string>();
   const [user, setUser] = useState<User>();
+
+  const createMutation = useCreateUser({
+    onSuccess: onCreated,
+    onError: onCreateError,
+  });
+  const saveMutation = useSaveUser({
+    onSuccess: onSaved,
+    onError: onSaveError,
+  });
+  const cloneMutation = useCloneUser({
+    onSuccess: onCloned,
+    onError: onCloneError,
+  });
+  const deleteMutation = useDeleteUser({
+    onSuccess: () => onDeleted?.(),
+    onError: onDeleteError,
+  });
+  const downloadMutation = useDownloadUser({
+    onError: onDownloadError,
+  });
+  const downloadUser = async (id: string, entity: User) => {
+    const response = await downloadMutation.mutateAsync({id});
+    onDownloaded?.({
+      filename: `${entity.name ?? 'user'}.xml`,
+      data: response.data,
+    });
+  };
 
   const closeUserDialog = () => {
     setDialogVisible(false);
@@ -127,32 +161,25 @@ const UserComponent = ({
   };
 
   return (
-    <EntityComponent<
-      User,
-      UserDialogSaveData,
-      unknown,
-      UserDialogSaveData,
-      unknown
+    <QueryEntityComponent
+      cloneMutation={cloneMutation}
+      createMutation={createMutation}
+      deleteMutation={deleteMutation}
+      downloadById={downloadUser}
+      entityName="User"
+      mapCreateVariables={(data: UserDialogSaveData) => data}
+      mapSaveVariables={(data: UserDialogSaveData, id: string) => ({
+        ...data,
+        id,
+      })}
+      saveMutation={saveMutation}
     >
-      name="user"
-      onCloneError={onCloneError}
-      onCloned={onCloned}
-      onCreateError={onCreateError}
-      onCreated={onCreated}
-      onDeleteError={onDeleteError}
-      onDeleted={onDeleted}
-      onDownloadError={onDownloadError}
-      onDownloaded={onDownloaded}
-      onSaveError={onSaveError}
-      onSaved={onSaved}
-    >
-      {({save, create, ...other}) => (
+      {queryActions => (
         <>
           {children({
-            ...other,
+            ...queryActions,
             create: openUserDialog,
             edit: openUserDialog,
-            save,
           })}
           {dialogVisible && isDefined(settings) && (
             <UserDialog
@@ -170,14 +197,16 @@ const UserComponent = ({
               user={user}
               onClose={handleCloseUserDialog}
               onSave={(d: UserDialogSaveData) => {
-                const promise = isDefined(d.id) ? save(d) : create(d);
+                const promise = isDefined(d.id)
+                  ? queryActions.save(d)
+                  : queryActions.create(d);
                 return promise.then(() => closeUserDialog());
               }}
             />
           )}
         </>
       )}
-    </EntityComponent>
+    </QueryEntityComponent>
   );
 };
 

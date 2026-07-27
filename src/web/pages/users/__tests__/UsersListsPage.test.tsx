@@ -111,7 +111,7 @@ const createGmp = ({
     manualUrl,
     reloadInterval,
   },
-  session: createSession(),
+  session: createSession({token: 'test-token'}),
   permissions: {
     get: testing.fn().mockResolvedValue({
       data: [],
@@ -167,8 +167,10 @@ describe('UsersListPage tests', () => {
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
-    // table column headers
-    screen.getByTestId('table-header-sort-by-name');
+    // table column headers - wait for async data load
+    await waitFor(() => {
+      screen.getByTestId('table-header-sort-by-name');
+    });
     screen.getByTestId('table-header-sort-by-roles');
     screen.getByTestId('table-header-sort-by-groups');
     screen.getByTestId('table-header-sort-by-host_access');
@@ -203,12 +205,14 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-  await screen.findByTitle('Export page contents');
+    await screen.findByTitle('Export page contents');
 
     // export page contents
     const exportIcon = screen.getByTitle('Export page contents');
     fireEvent.click(exportIcon);
-    expect(gmp.users.exportByFilter).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(gmp.users.exportByFilter).toHaveBeenCalled();
+    });
 
     // delete page contents
     const deleteIcon = screen.getByTitle('Delete page contents');
@@ -234,7 +238,7 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-  await screen.findByTitle('Delete page contents');
+    await screen.findByTitle('Delete page contents');
 
     const deleteIcon = screen.getByTitle('Delete page contents');
     fireEvent.click(deleteIcon);
@@ -261,7 +265,7 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-  await screen.findByTitle('Export page contents');
+    await screen.findByTitle('Export page contents');
 
     // change to apply to selection
     const tableFooter = within(screen.getTableFooter());
@@ -279,7 +283,9 @@ describe('UsersListPage tests', () => {
     // export selected user
     const exportIcon = screen.getByTitle('Export selection');
     fireEvent.click(exportIcon);
-    expect(gmp.users.export).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(gmp.users.export).toHaveBeenCalled();
+    });
 
     // delete selected user
     const deleteIcon = screen.getByTitle('Delete selection');
@@ -305,7 +311,7 @@ describe('UsersListPage tests', () => {
 
     render(<UsersListPage />);
 
-  await screen.findByTitle('Export page contents');
+    await screen.findByTitle('Export page contents');
 
     // change to all filtered
     const tableFooter = within(screen.getTableFooter());
@@ -317,7 +323,9 @@ describe('UsersListPage tests', () => {
     // export all filtered users
     const exportIcon = tableFooter.getByTitle('Export all filtered');
     fireEvent.click(exportIcon);
-    expect(gmp.users.exportByFilter).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(gmp.users.exportByFilter).toHaveBeenCalled();
+    });
 
     // delete all filtered users
     const deleteIcon = screen.getByTitle('Delete all filtered');
@@ -362,10 +370,10 @@ describe('UsersListPage tests', () => {
     });
 
     // Check pagination controls are present
-    screen.getAllByTitle('First')[0];
-    screen.getAllByTitle('Previous')[0];
-    screen.getAllByTitle('Next')[0];
-    screen.getAllByTitle('Last')[0];
+    expect(screen.getAllByTitle('First').length).toBeGreaterThan(0);
+    expect(screen.getAllByTitle('Previous').length).toBeGreaterThan(0);
+    expect(screen.getAllByTitle('Next').length).toBeGreaterThan(0);
+    expect(screen.getAllByTitle('Last').length).toBeGreaterThan(0);
   });
 
   test('should call pagination handlers', async () => {
@@ -414,13 +422,28 @@ describe('UsersListPage tests', () => {
     const nextButton = screen.getAllByTitle('Next')[0];
     fireEvent.click(nextButton);
 
+    // Wait for table to re-render after Next click
+    await waitFor(() => {
+      expect(screen.getAllByTitle('Previous').length).toBeGreaterThan(0);
+    });
+
     // Test Previous button
     const previousButton = screen.getAllByTitle('Previous')[0];
     fireEvent.click(previousButton);
 
+    // Wait for table to re-render after Previous click
+    await waitFor(() => {
+      expect(screen.getAllByTitle('First').length).toBeGreaterThan(0);
+    });
+
     // Test First button
     const firstButton = screen.getAllByTitle('First')[0];
     fireEvent.click(firstButton);
+
+    // Wait for table to re-render after First click
+    await waitFor(() => {
+      expect(screen.getAllByTitle('Last').length).toBeGreaterThan(0);
+    });
 
     // Test Last button
     const lastButton = screen.getAllByTitle('Last')[0];
