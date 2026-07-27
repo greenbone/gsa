@@ -3,28 +3,41 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ComponentType, type ReactNode, useState} from 'react';
+import {type ComponentType, type ReactNode, useCallback, useState} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
-import {connect} from 'react-redux';
+import {useQueryClient} from '@tanstack/react-query';
 import type CollectionCounts from 'gmp/collection/collection-counts';
-import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';
-import {USERS_FILTER_FILTER, type default as Filter} from 'gmp/models/filter';
+import {
+  type FilterType,
+  RESET_FILTER,
+  USERS_FILTER_FILTER,
+} from 'gmp/models/filter';
 import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
+import Download from 'web/components/form/Download';
+import useDownload from 'web/components/form/useDownload';
 import {NewIcon, UserIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
+import DialogNotification from 'web/components/notification/DialogNotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import withEntitiesContainer, {
-  type WithEntitiesContainerComponentProps,
-} from 'web/entities/withEntitiesContainer';
 import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
+import {
+  type UserBulkInput,
+  useBulkDeleteUsers,
+  useBulkExportUsers,
+  useGetUsers,
+} from 'web/hooks/use-query/users';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useGmp from 'web/hooks/useGmp';
+import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
 import ConfirmDeleteDialog from 'web/pages/users/ConfirmDeleteDialog';
@@ -32,23 +45,11 @@ import {type UserDialogSaveData} from 'web/pages/users/Dialog';
 import UsersTable from 'web/pages/users/Table';
 import UserComponent from 'web/pages/users/UserComponent';
 import UserFilterDialog from 'web/pages/users/UserFilterDialog';
-import {
-  selector as entitiesSelector,
-  loadAllEntities,
-  loadEntities,
-} from 'web/store/entities/users';
-import compose from 'web/utils/compose';
-import type SelectionTypeType from 'web/utils/selection-type';
+import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
 interface UsersListPageToolBarIconsProps {
   onUserCreateClick: () => void | Promise<void>;
-}
-
-export interface UsersListPageProps extends WithEntitiesContainerComponentProps<User> {
-  allUsers: User[];
-  entitiesCounts: CollectionCounts;
-  filter: Filter;
-  loadAll: () => void;
 }
 
 interface UsersEntitiesPageProps {
@@ -58,6 +59,7 @@ interface UsersEntitiesPageProps {
     customDialogElement: ReactNode;
   };
   entitiesSelected?: Set<User>;
+  isUpdating?: boolean;
   selectionType: SelectionTypeType;
   onChanged: () => void;
   onDeleteBulk: () => void | Promise<void>;
@@ -66,8 +68,8 @@ interface UsersEntitiesPageProps {
   onEntityDeselected: (entity: User) => void;
   onEntitySelected: (entity: User) => void;
   onError: (error: Error | Rejection) => void;
-  onFilterChanged: (newFilter: Filter) => void;
-  onFilterCreated: (newFilter: Filter) => void;
+  onFilterChanged: (newFilter: FilterType) => void;
+  onFilterCreated: (newFilter: FilterType) => void;
   onFilterRemoved: () => void;
   onFilterReset: () => void;
   onFirstClick: () => void;
@@ -75,6 +77,7 @@ interface UsersEntitiesPageProps {
   onNextClick: () => void;
   onPreviousClick: () => void;
   onSelectionTypeChange: (selectionType: SelectionTypeType) => void;
+  onSortChange: (sortBy: string) => void;
   onTagsBulk: () => void;
   onUserCloneClick: (user: User) => void | Promise<void>;
   onUserCreateClick: () => void | Promise<void>;
@@ -82,6 +85,8 @@ interface UsersEntitiesPageProps {
   onUserDownloadClick: (user: User) => void | Promise<void>;
   onUserEditClick: (user: User) => void | Promise<void>;
   onUserSaveClick?: (data: UserDialogSaveData) => void | Promise<unknown>;
+  sortBy?: string;
+  sortDir?: SortDirectionType;
 }
 
 interface ConfirmDeleteDialogProps {
@@ -113,59 +118,119 @@ export const UsersListPageToolBarIcons = ({
   );
 };
 
-const UsersListPage = ({
-  allUsers = [],
-  entities,
-  entitiesCounts,
-  entitiesError,
-  entitiesSelected,
-  filter,
-  isLoading: isLoadingEntities,
-  loadAll,
-  selectionType,
-  onChanged,
-  onDeleteBulk,
-  onDownloadBulk,
-  onDownloaded,
-  onEntityDeselected,
-  onEntitySelected,
-  onError,
-  onFilterChanged,
-  onFilterCreated,
-  onFilterRemoved,
-  onFilterReset,
-  onSelectionTypeChange,
-  onTagsBulk,
-}: UsersListPageProps) => {
+const UsersListPageContent = () => {
   const [_] = useTranslation();
   const gmp = useGmp();
+  const queryClient = useQueryClient();
+  const {dialogState, closeDialog, showError} = useDialogNotification();
+  const [downloadRef, handleDownload] = useDownload();
+
+  const [filter, , {changeFilter, removeFilter, resetFilter}] = usePageFilter(
+    'user',
+    'user',
+    {
+      fallbackFilter: RESET_FILTER,
+    },
+  );
+
+  const {
+    data,
+    isLoading: isLoadingEntities,
+    isFetching: isUpdating,
+  } = useGetUsers({filter});
+  const entities = data?.entities;
+  const entitiesCounts = data?.entitiesCounts;
+  const entitiesError = undefined;
+
+  const {data: allUsersData} = useGetUsers({filter: undefined});
+  const allUsers = allUsersData?.entities ?? [];
+
+  const [selected, setSelected] = useState<Set<User>>(new Set());
+  const [selectionType, setSelectionType] = useState<SelectionTypeType>(
+    SelectionType.SELECTION_PAGE_CONTENTS,
+  );
+
+  const handleFilterChanged = useCallback(
+    (newFilter: FilterType) => {
+      changeFilter(newFilter);
+    },
+    [changeFilter],
+  );
+
+  const handleFilterRemoved = useCallback(() => {
+    removeFilter();
+  }, [removeFilter]);
+
+  const handleFilterReset = useCallback(() => {
+    resetFilter();
+  }, [resetFilter]);
+
+  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
+    filter,
+    changeFilter,
+  );
+
+  const [getFirst, getLast, getNext, getPrevious] = usePagination(
+    filter,
+    entitiesCounts ?? ({} as CollectionCounts),
+    handleFilterChanged,
+  );
+
+  const onChanged = useCallback(() => {
+    void queryClient.invalidateQueries({queryKey: ['get_users']});
+  }, [queryClient]);
+
+  const handleError = useCallback(
+    (error: Error | Rejection) => {
+      showError(error);
+    },
+    [showError],
+  );
+  const bulkDeleteUsersMutation = useBulkDeleteUsers({
+    onSuccess: () => onChanged(),
+    onError: handleError,
+  });
+  const bulkExportUsersMutation = useBulkExportUsers({
+    onError: handleError,
+  });
+
+  const handleEntitySelected = useCallback((entity: User) => {
+    setSelected(prev => new Set(prev).add(entity));
+  }, []);
+
+  const handleEntityDeselected = useCallback((entity: User) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.delete(entity);
+      return next;
+    });
+  }, []);
+
+  const handleSelectionTypeChange = useCallback((type: SelectionTypeType) => {
+    setSelectionType(type);
+    if (type !== SelectionType.SELECTION_USER) {
+      setSelected(new Set());
+    }
+  }, []);
 
   const [confirmDeleteDialogVisible, setConfirmDeleteDialogVisible] =
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const [deleteUsers, setDeleteUsers] = useState<User[]>([]);
   const [title, setTitle] = useState<string>();
   const [deleteDialogError, setDeleteDialogError] = useState<string>();
+  const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
 
-  const [getFirst, getLast, getNext, getPrevious] = usePagination(
-    filter,
-    entitiesCounts,
-    onFilterChanged,
-  );
+  const openTagsDialog = useCallback(() => {
+    setIsTagsDialogVisible(true);
+  }, []);
 
-  const closeConfirmDeleteDialog = () => {
-    setConfirmDeleteDialogVisible(false);
-  };
-
-  const handleCloseConfirmDeleteDialog = () => {
-    closeConfirmDeleteDialog();
-    setDeleteUsers([]);
-    setDeleteDialogError(undefined);
-  };
+  const closeTagsDialog = useCallback(() => {
+    setIsTagsDialogVisible(false);
+  }, []);
 
   const handleDeleteUser = ({
-    deleteUsers,
+    deleteUsers: usersToDelete,
     inheritorId,
   }: {
     deleteUsers: User[];
@@ -176,16 +241,14 @@ const UsersListPage = ({
       inheritor = undefined;
     }
     const deleteOptions = isDefined(inheritor) ? {inheritor_id: inheritor} : {};
-    return gmp.users.delete(deleteUsers, deleteOptions).then(onChanged);
+    return bulkDeleteUsersMutation.mutateAsync({
+      users: usersToDelete,
+      options: deleteOptions,
+    });
   };
 
   const openConfirmDeleteDialog = async (user?: User) => {
     setDeleteDialogError(undefined);
-    try {
-      loadAll();
-    } catch (error) {
-      onError(error instanceof Error ? error : new Error(String(error)));
-    }
 
     if (isDefined(user)) {
       setConfirmDeleteDialogVisible(true);
@@ -194,25 +257,23 @@ const UsersListPage = ({
         _(`Confirm deletion of user {{- name}}`, {name: user.name ?? ''}),
       );
     } else {
-      let deleteUsers: User[] = [];
+      let usersToDelete: User[] = [];
       if (selectionType === SelectionType.SELECTION_USER) {
-        deleteUsers = isDefined(entitiesSelected) ? [...entitiesSelected] : [];
+        usersToDelete = [...selected];
       } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-        deleteUsers = entities ?? [];
+        usersToDelete = entities ?? [];
       } else {
         const resp = await gmp.users.getAll({filter});
-        deleteUsers = resp.data;
+        usersToDelete = resp.data;
       }
       setConfirmDeleteDialogVisible(true);
-      setDeleteUsers(deleteUsers);
+      setDeleteUsers(usersToDelete);
       setTitle(_(`Confirm deletion of users`));
     }
   };
 
-  const deleteUserIds = deleteUsers.map(lUser => lUser.id);
-  const inheritorUsers = allUsers.filter(
-    user => !deleteUserIds.includes(user.id),
-  );
+  const deleteUserIds = new Set(deleteUsers.map(lUser => lUser.id));
+  const inheritorUsers = allUsers.filter(user => !deleteUserIds.has(user.id));
 
   const handleSaveClick = async () => {
     const data = {deleteUsers, inheritorId: '--'};
@@ -245,23 +306,65 @@ const UsersListPage = ({
     }
   };
 
+  const closeConfirmDeleteDialog = () => {
+    setConfirmDeleteDialogVisible(false);
+  };
+
+  const handleCloseConfirmDeleteDialog = () => {
+    closeConfirmDeleteDialog();
+    setDeleteUsers([]);
+    setDeleteDialogError(undefined);
+  };
+
   const handleErrorClose = () => {
     setDeleteDialogError(undefined);
   };
 
+  const handleDownloadBulk = useCallback(async () => {
+    let input: UserBulkInput;
+
+    if (selectionType === SelectionType.SELECTION_USER) {
+      input = [...selected];
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      input = filter;
+    } else {
+      input = filter.all();
+    }
+
+    showSuccessNotification('', _('Bulk download started.'));
+
+    try {
+      const response = await bulkExportUsersMutation.mutateAsync(input);
+      handleDownload({filename: 'users.xml', data: response.data});
+      showSuccessNotification('', _('Bulk download completed.'));
+    } catch (error) {
+      handleError(error instanceof Error ? error : new Error(String(error)));
+    }
+  }, [
+    selectionType,
+    selected,
+    filter,
+    bulkExportUsersMutation,
+    handleDownload,
+    handleError,
+    _,
+  ]);
+
   return (
     <UserComponent
-      onCloneError={onError}
+      onCloneError={handleError}
       onCloned={onChanged}
       onCreated={onChanged}
-      onDeleteError={onError}
+      onDeleteError={handleError}
       onDeleted={onChanged}
-      onDownloadError={onError}
-      onDownloaded={onDownloaded}
+      onDownloadError={handleError}
+      onDownloaded={handleDownload}
       onSaved={onChanged}
     >
       {({clone, create, download, edit, save}) => (
         <>
+          <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+          <Download ref={downloadRef} />
           <PageTitle title={_('Users')} />
           <EntitiesPage<User, UsersEntitiesPageProps>
             createFilterType="user"
@@ -290,33 +393,37 @@ const UsersListPage = ({
             entities={entities}
             entitiesCounts={entitiesCounts}
             entitiesError={entitiesError}
-            entitiesSelected={entitiesSelected}
+            entitiesSelected={selected}
             filter={filter}
             filterEditDialog={UserFilterDialog}
             filtersFilter={USERS_FILTER_FILTER}
             isLoading={isLoadingEntities}
+            isUpdating={isUpdating}
             sectionIcon={<UserIcon size="large" />}
             selectionType={selectionType}
+            sortBy={sortBy}
+            sortDir={sortDir}
             table={UsersTable}
             title={_('Users')}
             toolBarIcons={UsersListPageToolBarIcons}
             onChanged={onChanged}
             onDeleteBulk={openConfirmDeleteDialog}
-            onDownloadBulk={onDownloadBulk}
-            onDownloaded={onDownloaded}
-            onEntityDeselected={onEntityDeselected}
-            onEntitySelected={onEntitySelected}
-            onError={onError}
-            onFilterChanged={onFilterChanged}
-            onFilterCreated={onFilterCreated}
-            onFilterRemoved={onFilterRemoved}
-            onFilterReset={onFilterReset}
+            onDownloadBulk={handleDownloadBulk}
+            onDownloaded={handleDownload}
+            onEntityDeselected={handleEntityDeselected}
+            onEntitySelected={handleEntitySelected}
+            onError={handleError}
+            onFilterChanged={handleFilterChanged}
+            onFilterCreated={handleFilterChanged}
+            onFilterRemoved={handleFilterRemoved}
+            onFilterReset={handleFilterReset}
             onFirstClick={getFirst}
             onLastClick={getLast}
             onNextClick={getNext}
             onPreviousClick={getPrevious}
-            onSelectionTypeChange={onSelectionTypeChange}
-            onTagsBulk={onTagsBulk}
+            onSelectionTypeChange={handleSelectionTypeChange}
+            onSortChange={handleSortChange}
+            onTagsBulk={openTagsDialog}
             onUserCloneClick={clone}
             onUserCreateClick={create}
             onUserDeleteClick={openConfirmDeleteDialog}
@@ -324,27 +431,24 @@ const UsersListPage = ({
             onUserEditClick={edit}
             onUserSaveClick={save}
           />
+          {isTagsDialogVisible && (
+            <BulkTags
+              entities={entities ?? []}
+              entitiesCounts={entitiesCounts ?? ({} as CollectionCounts)}
+              filter={filter}
+              selectedEntities={[...selected]}
+              selectionType={selectionType}
+              onClose={closeTagsDialog}
+            />
+          )}
         </>
       )}
     </UserComponent>
   );
 };
 
-const mapStateToProps = (state: unknown): {allUsers: User[]} => {
-  const selector = entitiesSelector(state);
-  return {
-    allUsers: selector.getAllEntities(),
-  };
+const UsersListPage = () => {
+  return <UsersListPageContent />;
 };
 
-const mapDispatchToProps = (dispatch, {gmp}: {gmp: Gmp}) => ({
-  loadAll: () => dispatch(loadAllEntities(gmp)()),
-});
-
-export default compose(
-  withEntitiesContainer<User>('user', {
-    entitiesSelector,
-    loadEntities,
-  }),
-  connect(mapStateToProps, mapDispatchToProps),
-)(UsersListPage);
+export default UsersListPage;
