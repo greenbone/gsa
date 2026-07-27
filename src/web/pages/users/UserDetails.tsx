@@ -83,9 +83,9 @@ const UserDetails = ({entity, links = true}: UserDetailsProps) => {
             <TableData>{_('Roles')}</TableData>
             <TableData>
               <HorizontalSep>
-                {roles.map((role, index) => {
+                {roles.map(role => {
                   if (!role.id) {
-                    return <span key={`role-${index}`}>{role.name}</span>;
+                    return <span key={role.name}>{role.name}</span>;
                   }
                   return (
                     <span key={role.id}>
@@ -103,9 +103,9 @@ const UserDetails = ({entity, links = true}: UserDetailsProps) => {
             <TableData>{_('Groups')}</TableData>
             <TableData>
               <HorizontalSep>
-                {groups.map((group, index) => {
+                {groups.map(group => {
                   if (!group.id) {
-                    return <span key={`group-${index}`}>{group.name}</span>;
+                    return <span key={group.name}>{group.name}</span>;
                   }
                   return (
                     <span key={group.id}>
@@ -127,8 +127,8 @@ const UserDetails = ({entity, links = true}: UserDetailsProps) => {
           <TableRow>
             <TableData>{_('Host Access')}</TableData>
             <TableData>
-              {convertAllow(hosts ?? {addresses: []}, _).replace(
-                /&#x2F;/g,
+              {convertAllow(hosts ?? {addresses: []}, _).replaceAll(
+                '&#x2F;',
                 '/',
               )}
             </TableData>

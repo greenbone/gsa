@@ -12,16 +12,15 @@ import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import EntitiesActions from 'web/entities/EntitiesActions';
 import {type RowComponentProps} from 'web/entities/EntitiesTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
-import withEntitiesActions, {
-  type WithEntitiesActionsComponentProps,
-} from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import {convertAllow, convertAuthMethod} from 'web/pages/users/UserDetails';
+import {type SelectionTypeType} from 'web/utils/SelectionType';
 
 interface UsersRowActionHandlers {
   onUserCloneClick?: (user: User) => void | Promise<void>;
@@ -30,26 +29,41 @@ interface UsersRowActionHandlers {
   onUserEditClick?: (user: User) => void | Promise<void>;
 }
 
-interface UsersActionsProps
-  extends WithEntitiesActionsComponentProps<User>, UsersRowActionHandlers {}
+interface UsersActionsProps extends UsersRowActionHandlers {
+  entity: User;
+  onEntityDeselected?: (entity: User) => void;
+  onEntitySelected?: (entity: User) => void;
+  selectionType?: SelectionTypeType;
+}
 
 interface UsersTableRowProps
   extends RowComponentProps<User>, UsersRowActionHandlers {
   actionsComponent?: ComponentType<UsersActionsProps>;
   links?: boolean;
+  onEntityDeselected?: (entity: User) => void;
+  onEntitySelected?: (entity: User) => void;
+  selectionType?: SelectionTypeType;
 }
 
-const Actions = withEntitiesActions<User, UsersActionsProps>(
-  ({
-    entity,
-    onUserCloneClick,
-    onUserEditClick,
-    onUserDeleteClick,
-    onUserDownloadClick,
-  }: UsersActionsProps) => {
-    const [_] = useTranslation();
+const Actions = ({
+  entity,
+  onEntityDeselected,
+  onEntitySelected,
+  selectionType,
+  onUserCloneClick,
+  onUserEditClick,
+  onUserDeleteClick,
+  onUserDownloadClick,
+}: UsersActionsProps) => {
+  const [_] = useTranslation();
 
-    return (
+  return (
+    <EntitiesActions
+      entity={entity}
+      selectionType={selectionType}
+      onEntityDeselected={onEntityDeselected}
+      onEntitySelected={onEntitySelected}
+    >
       <IconDivider grow align="center">
         <DeleteIcon
           displayName={_('User')}
@@ -77,43 +91,49 @@ const Actions = withEntitiesActions<User, UsersActionsProps>(
           onClick={onUserDownloadClick}
         />
       </IconDivider>
-    );
-  },
-);
+    </EntitiesActions>
+  );
+};
 
 const UsersTableRow = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
+  onEntityDeselected,
+  onEntitySelected,
   onToggleDetailsClick,
-  ...props
+  onUserCloneClick,
+  onUserDeleteClick,
+  onUserDownloadClick,
+  onUserEditClick,
+  selectionType,
 }: UsersTableRowProps) => {
   const [_] = useTranslation();
-  const roles = map(entity.roles, (role, index) =>
+  const roles = map(entity.roles, role =>
     role.id ? (
       <DetailsLink key={role.id} id={role.id} textOnly={!links} type="role">
         {role.name}
       </DetailsLink>
     ) : (
-      <span key={`role-${index}`}>{role.name}</span>
+      <span key={role.name}>{role.name}</span>
     ),
   );
 
-  const groups = map(entity.groups, (group, index) =>
+  const groups = map(entity.groups, group =>
     group.id ? (
       <DetailsLink key={group.id} id={group.id} textOnly={!links} type="group">
         {group.name}
       </DetailsLink>
     ) : (
-      <span key={`group-${index}`}>{group.name}</span>
+      <span key={group.name}>{group.name}</span>
     ),
   );
 
   const authMethod = convertAuthMethod(entity.authMethod, _);
-  const host_allow = convertAllow(entity.hosts ?? {addresses: []}, _).replace(
-    /&#x2F;/g,
-    '/',
-  );
+  const host_allow = convertAllow(
+    entity.hosts ?? {addresses: []},
+    _,
+  ).replaceAll('&#x2F;', '/');
   return (
     <TableRow>
       <EntityNameTableData
@@ -131,7 +151,16 @@ const UsersTableRow = ({
       </TableData>
       <TableData>{host_allow}</TableData>
       <TableData>{authMethod}</TableData>
-      <ActionsComponent {...props} entity={entity} />
+      <ActionsComponent
+        entity={entity}
+        selectionType={selectionType}
+        onEntityDeselected={onEntityDeselected}
+        onEntitySelected={onEntitySelected}
+        onUserCloneClick={onUserCloneClick}
+        onUserDeleteClick={onUserDeleteClick}
+        onUserDownloadClick={onUserDownloadClick}
+        onUserEditClick={onUserEditClick}
+      />
     </TableRow>
   );
 };

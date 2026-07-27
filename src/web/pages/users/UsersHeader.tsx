@@ -7,28 +7,37 @@ import {type ReactElement} from 'react';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import withEntitiesHeader, {
-  type WithEntitiesHeaderComponentProps,
-} from 'web/entities/withEntitiesHeader';
 import useTranslation from 'web/hooks/useTranslation';
+import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
-interface UsersHeaderProps extends WithEntitiesHeaderComponentProps {
+interface UsersHeaderProps {
   actionsColumn?: ReactElement | null;
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;
+  selectionType?: SelectionTypeType;
   sort?: boolean;
   onSortChange?: (sortBy: string) => void;
 }
 
 const UsersHeader = ({
   actionsColumn,
+  selectionType,
   sort = true,
   currentSortBy,
   currentSortDir,
   onSortChange,
 }: UsersHeaderProps) => {
   const [_] = useTranslation();
+
+  let column = actionsColumn;
+  column ??=
+    selectionType === SelectionType.SELECTION_USER ? (
+      <TableHead width="6em">{_('Actions')}</TableHead>
+    ) : (
+      <TableHead align="center" title={_('Actions')} width="8%" />
+    );
+
   return (
     <TableHeader>
       <TableRow>
@@ -72,10 +81,10 @@ const UsersHeader = ({
           width="10%"
           onSortChange={onSortChange}
         />
-        {actionsColumn}
+        {column}
       </TableRow>
     </TableHeader>
   );
 };
 
-export default withEntitiesHeader<UsersHeaderProps>()(UsersHeader);
+export default UsersHeader;
