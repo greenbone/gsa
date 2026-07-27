@@ -36,6 +36,30 @@ describe('Task ResumeIcon component tests', () => {
     expect(element).not.toHaveComputedStyle('fill', Theme.inputBorderGray);
   });
 
+  test('should render in active state if a stopped task has a schedule', () => {
+    const caps = new Capabilities(['everything']);
+    const task = Task.fromElement({
+      _id: 'test-id',
+      status: TASK_STATUS.stopped,
+      schedule: {_id: 'schedule1'},
+      target: {_id: '123'},
+      permissions: {permission: [{name: 'everything'}]},
+    });
+    const clickHandler = testing.fn();
+
+    const {render} = rendererWith({capabilities: caps});
+
+    const {element} = render(<ResumeIcon task={task} onClick={clickHandler} />);
+
+    fireEvent.click(element);
+
+    // A schedule is the most common reason for a task to be stopped, so it
+    // must not be the reason why it cannot be resumed.
+    expect(clickHandler).toHaveBeenCalledWith(task);
+    expect(element).toHaveAttribute('title', 'Resume');
+    expect(element).not.toHaveAttribute('disabled');
+  });
+
   test('should render in inactive state if wrong command level permissions are given', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({

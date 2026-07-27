@@ -92,7 +92,7 @@ describe('Task StartIcon component tests', () => {
     expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
-  test('should render in inactive state if task is scheduled with a duration limit', () => {
+  test('should render in active state if task is scheduled with a duration limit', () => {
     const caps = new Capabilities(['everything']);
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -121,20 +121,20 @@ END:VCALENDAR
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<TaskStartIcon task={task} />);
+    const {element} = render(
+      <TaskStartIcon task={task} onClick={clickHandler} />,
+    );
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
 
     fireEvent.click(element);
 
-    expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveAttribute(
-      'title',
-      'Task cannot be started manually because the assigned schedule has a duration limit',
-    );
-    expect(element).toHaveAttribute('disabled');
-    expect(element).toHaveAttribute('data-disabled', 'true');
+    // The duration only limits runs that the scheduler started itself, so a
+    // manual start stays possible.
+    expect(clickHandler).toHaveBeenCalledWith(task);
+    expect(element).toHaveAttribute('title', 'Start');
+    expect(element).not.toHaveAttribute('disabled');
   });
 
   test('should render in inactive state if task is already active', () => {
