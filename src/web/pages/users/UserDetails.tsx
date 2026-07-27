@@ -27,7 +27,7 @@ interface UserDetailsProps {
   links?: boolean;
 }
 
-export const convert_auth_method = (
+export const convertAuthMethod = (
   authMethod: User['authMethod'],
   _: TranslateFunc,
 ) => {
@@ -40,7 +40,7 @@ export const convert_auth_method = (
   return _('Local');
 };
 
-export const convert_allow = (
+export const convertAllow = (
   {addresses = [], allow}: Partial<UserHosts> = {},
   _: TranslateFunc,
 ) => {
@@ -127,7 +127,7 @@ const UserDetails = ({entity, links = true}: UserDetailsProps) => {
           <TableRow>
             <TableData>{_('Host Access')}</TableData>
             <TableData>
-              {convert_allow(hosts ?? {addresses: []}, _).replace(
+              {convertAllow(hosts ?? {addresses: []}, _).replace(
                 /&#x2F;/g,
                 '/',
               )}
@@ -136,7 +136,7 @@ const UserDetails = ({entity, links = true}: UserDetailsProps) => {
 
           <TableRow>
             <TableData>{_('Authentication Type')}</TableData>
-            <TableData>{convert_auth_method(authMethod, _)}</TableData>
+            <TableData>{convertAuthMethod(authMethod, _)}</TableData>
           </TableRow>
         </TableBody>
       </InfoTable>

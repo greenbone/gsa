@@ -5,7 +5,7 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import Header from 'web/pages/users/Header';
+import UsersHeader from 'web/pages/users/UsersHeader';
 import SelectionType from 'web/utils/SelectionType';
 
 describe('users Header', () => {
@@ -15,7 +15,7 @@ describe('users Header', () => {
 
     render(
       <table>
-        <Header
+        <UsersHeader
           currentSortBy="name"
           currentSortDir="asc"
           selectionType={SelectionType.SELECTION_USER}
@@ -36,7 +36,7 @@ describe('users Header', () => {
     const {render} = rendererWith();
     render(
       <table>
-        <Header
+        <UsersHeader
           selectionType={SelectionType.SELECTION_USER}
           sort={false}
           onSortChange={testing.fn()}

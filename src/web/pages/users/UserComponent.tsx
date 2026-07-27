@@ -19,7 +19,7 @@ import {
 } from 'web/hooks/use-query/users';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import UserDialog, {type UserDialogSaveData} from 'web/pages/users/Dialog';
+import UserDialog, {type UserDialogSaveData} from 'web/pages/users/UsersDialog';
 
 interface UserComponentRenderProps {
   clone: (entity: User) => Promise<void>;

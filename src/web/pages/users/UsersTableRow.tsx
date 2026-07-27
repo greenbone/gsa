@@ -21,31 +21,32 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import {convert_allow, convert_auth_method} from 'web/pages/users/Details';
+import {convertAllow, convertAuthMethod} from 'web/pages/users/UserDetails';
 
-interface RowActionHandlers {
+interface UsersRowActionHandlers {
   onUserCloneClick?: (user: User) => void | Promise<void>;
   onUserDeleteClick?: (user: User) => void | Promise<void>;
   onUserDownloadClick?: (user: User) => void | Promise<void>;
   onUserEditClick?: (user: User) => void | Promise<void>;
 }
 
-interface ActionsProps
-  extends WithEntitiesActionsComponentProps<User>, RowActionHandlers {}
+interface UsersActionsProps
+  extends WithEntitiesActionsComponentProps<User>, UsersRowActionHandlers {}
 
-interface RowProps extends RowComponentProps<User>, RowActionHandlers {
-  actionsComponent?: ComponentType<ActionsProps>;
+interface UsersTableRowProps
+  extends RowComponentProps<User>, UsersRowActionHandlers {
+  actionsComponent?: ComponentType<UsersActionsProps>;
   links?: boolean;
 }
 
-const Actions = withEntitiesActions<User, ActionsProps>(
+const Actions = withEntitiesActions<User, UsersActionsProps>(
   ({
     entity,
     onUserCloneClick,
     onUserEditClick,
     onUserDeleteClick,
     onUserDownloadClick,
-  }: ActionsProps) => {
+  }: UsersActionsProps) => {
     const [_] = useTranslation();
 
     return (
@@ -80,13 +81,13 @@ const Actions = withEntitiesActions<User, ActionsProps>(
   },
 );
 
-const Row = ({
+const UsersTableRow = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}: RowProps) => {
+}: UsersTableRowProps) => {
   const [_] = useTranslation();
   const roles = map(entity.roles, (role, index) =>
     role.id ? (
@@ -108,8 +109,8 @@ const Row = ({
     ),
   );
 
-  const authMethod = convert_auth_method(entity.authMethod, _);
-  const host_allow = convert_allow(entity.hosts ?? {addresses: []}, _).replace(
+  const authMethod = convertAuthMethod(entity.authMethod, _);
+  const host_allow = convertAllow(entity.hosts ?? {addresses: []}, _).replace(
     /&#x2F;/g,
     '/',
   );
@@ -135,4 +136,4 @@ const Row = ({
   );
 };
 
-export default Row;
+export default UsersTableRow;

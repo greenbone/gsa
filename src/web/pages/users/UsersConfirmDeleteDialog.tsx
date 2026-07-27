@@ -14,12 +14,12 @@ import Select from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
 import {renderSelectItems} from 'web/utils/Render';
 
-interface ConfirmDeleteDialogState {
+interface UsersConfirmDeleteDialogState {
   deleteUsers: User[];
   inheritorId: string;
 }
 
-interface ConfirmDeleteDialogProps {
+interface UsersConfirmDeleteDialogProps {
   deleteUsers?: User[];
   inheritorId?: string;
   inheritorUsers?: User[];
@@ -27,15 +27,15 @@ interface ConfirmDeleteDialogProps {
   onErrorClose?: () => void;
 }
 
-const ConfirmDeleteDialog = ({
+const UsersConfirmDeleteDialog = ({
   deleteUsers = [],
   inheritorId = '--',
   inheritorUsers,
   error,
   onErrorClose,
-}: ConfirmDeleteDialogProps) => {
+}: UsersConfirmDeleteDialogProps) => {
   const [_] = useTranslation();
-  const [state, setState] = useState<ConfirmDeleteDialogState>({
+  const [state, setState] = useState<UsersConfirmDeleteDialogState>({
     deleteUsers,
     inheritorId,
   });
@@ -108,4 +108,4 @@ const ConfirmDeleteDialog = ({
   );
 };
 
-export default ConfirmDeleteDialog;
+export default UsersConfirmDeleteDialog;

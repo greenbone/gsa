@@ -13,7 +13,7 @@ import withEntitiesHeader, {
 import useTranslation from 'web/hooks/useTranslation';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
-interface HeaderProps extends WithEntitiesHeaderComponentProps {
+interface UsersHeaderProps extends WithEntitiesHeaderComponentProps {
   actionsColumn?: ReactElement | null;
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;
@@ -21,13 +21,13 @@ interface HeaderProps extends WithEntitiesHeaderComponentProps {
   onSortChange?: (sortBy: string) => void;
 }
 
-const Header = ({
+const UsersHeader = ({
   actionsColumn,
   sort = true,
   currentSortBy,
   currentSortDir,
   onSortChange,
-}: HeaderProps) => {
+}: UsersHeaderProps) => {
   const [_] = useTranslation();
   return (
     <TableHeader>
@@ -78,4 +78,4 @@ const Header = ({
   );
 };
 
-export default withEntitiesHeader<HeaderProps>()(Header);
+export default withEntitiesHeader<UsersHeaderProps>()(UsersHeader);

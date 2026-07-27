@@ -4,10 +4,10 @@
  */
 
 import {useQueryClient} from '@tanstack/react-query';
+import {useNavigate, useParams} from 'react-router';
 import {type FilterType} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type User from 'gmp/models/user';
-import {useNavigate, useParams} from 'react-router';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {UserIcon} from 'web/components/icon';
@@ -38,8 +38,8 @@ import EntityTags from 'web/entity/Tags';
 import {useGetPermissions} from 'web/hooks/use-query/permissions';
 import {useGetUser} from 'web/hooks/use-query/users';
 import useTranslation from 'web/hooks/useTranslation';
-import UserDetails from 'web/pages/users/Details';
 import UserComponent from 'web/pages/users/UserComponent';
+import UserDetails from 'web/pages/users/UserDetails';
 
 interface ToolBarIconsProps {
   entity: User;

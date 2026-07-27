@@ -8,7 +8,7 @@ import {rendererWith, screen} from 'web/testing';
 import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
 import TableData from 'web/components/table/TableData';
-import Row from 'web/pages/users/Row';
+import UsersTableRow from 'web/pages/users/UsersTableRow';
 
 const user = User.fromElement({
   _id: '1234',
@@ -40,7 +40,7 @@ describe('users Row', () => {
     render(
       <table>
         <tbody>
-          <Row
+          <UsersTableRow
             actionsComponent={() => <TableData>Custom Actions</TableData>}
             entity={user}
             links={false}

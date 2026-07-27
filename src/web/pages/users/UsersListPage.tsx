@@ -40,11 +40,11 @@ import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
 import useTranslation from 'web/hooks/useTranslation';
-import ConfirmDeleteDialog from 'web/pages/users/ConfirmDeleteDialog';
-import {type UserDialogSaveData} from 'web/pages/users/Dialog';
-import UsersTable from 'web/pages/users/Table';
 import UserComponent from 'web/pages/users/UserComponent';
 import UserFilterDialog from 'web/pages/users/UserFilterDialog';
+import UsersConfirmDeleteDialog from 'web/pages/users/UsersConfirmDeleteDialog';
+import {type UserDialogSaveData} from 'web/pages/users/UsersDialog';
+import UsersTable from 'web/pages/users/UsersTable';
 import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
@@ -97,7 +97,7 @@ interface ConfirmDeleteDialogProps {
 }
 
 const TypedConfirmDeleteDialog =
-  ConfirmDeleteDialog as unknown as ComponentType<ConfirmDeleteDialogProps>;
+  UsersConfirmDeleteDialog as unknown as ComponentType<ConfirmDeleteDialogProps>;
 
 export const UsersListPageToolBarIcons = ({
   onUserCreateClick,
