@@ -68,6 +68,25 @@ describe('AgentCommand tests', () => {
     expect(result).toBeUndefined();
   });
 
+  test('should not include update_to_latest if not provided', async () => {
+    const entityResponse = createActionResultResponse({id: '324'});
+    const http = createHttp(entityResponse);
+    const command = new AgentCommand(http);
+
+    await command.save({
+      agentsIds: ['324'],
+      authorized: true,
+    });
+
+    expect(http.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'modify_agent',
+        'agent_ids:': ['324'],
+        authorized: YES_VALUE,
+      },
+    });
+  });
+
   test('should allow to clone an agent', async () => {
     const entityResponse = createActionResultResponse({id: '999'});
     const http = createHttp(entityResponse);
