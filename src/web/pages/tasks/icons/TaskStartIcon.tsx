@@ -44,23 +44,10 @@ const TaskStartIcon = <TTask extends Audit | Task>({
     );
   }
 
-  if (
-    isDefined(task.schedule?.event?.duration) &&
-    task.schedule.event.event.duration.toSeconds() > 0
-  ) {
-    return (
-      <StartIcon
-        active={false}
-        title={_(
-          '{{type}} cannot be started manually' +
-            ' because the assigned schedule has a duration limit',
-          {
-            type: capitalizeFirstLetter(type),
-          },
-        )}
-      />
-    );
-  }
+  // A schedule with a duration limit used to block the manual start, because
+  // the scheduler ended such a run at the end of the window. It only does that
+  // for runs it started itself, so a manually started run is not affected and
+  // the action stays available.
 
   if (!task.isActive()) {
     return (
