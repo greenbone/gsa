@@ -72,7 +72,7 @@ interface UserDialogProps {
   onSave: (data: UserDialogSaveData) => void | Promise<void>;
 }
 
-const Dialog = ({
+const UsersDialog = ({
   roleIds: initialRoleIds = [],
   accessHosts = '',
   comment = '',
@@ -398,4 +398,4 @@ const Dialog = ({
   );
 };
 
-export default Dialog;
+export default UsersDialog;

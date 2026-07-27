@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import User from 'gmp/models/user';
-import ConfirmDeleteDialog from 'web/pages/users/ConfirmDeleteDialog';
+import UsersConfirmDeleteDialog from 'web/pages/users/UsersConfirmDeleteDialog';
 
 const user = User.fromElement({
   _id: '1234',
@@ -22,7 +22,10 @@ describe('ConfirmDeleteDialog', () => {
   test('should render single-user delete warning', () => {
     const {render} = rendererWith();
     render(
-      <ConfirmDeleteDialog deleteUsers={[user]} inheritorUsers={[inheritor]} />,
+      <UsersConfirmDeleteDialog
+        deleteUsers={[user]}
+        inheritorUsers={[inheritor]}
+      />,
     );
 
     screen.getByRole('heading', {name: 'User user 1 will be deleted.'});
@@ -33,7 +36,7 @@ describe('ConfirmDeleteDialog', () => {
   test('should render multi-user delete warning', () => {
     const {render} = rendererWith();
     render(
-      <ConfirmDeleteDialog
+      <UsersConfirmDeleteDialog
         deleteUsers={[user, inheritor]}
         inheritorUsers={[inheritor]}
       />,
@@ -46,7 +49,7 @@ describe('ConfirmDeleteDialog', () => {
     const onErrorClose = testing.fn();
     const {render} = rendererWith();
     render(
-      <ConfirmDeleteDialog
+      <UsersConfirmDeleteDialog
         deleteUsers={[user]}
         error="Delete failed"
         inheritorUsers={[inheritor]}

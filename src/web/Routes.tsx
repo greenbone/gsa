@@ -757,7 +757,7 @@ const loggedInRoutes = [
       {
         path: 'user/:id',
         lazy: async () => ({
-          Component: (await import('web/pages/users/DetailsPage')).default,
+          Component: (await import('web/pages/users/UserDetailsPage')).default,
         }),
       },
 

@@ -12,7 +12,7 @@ import Permission from 'gmp/models/permission';
 import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
-import UserDetailsPage from 'web/pages/users/DetailsPage';
+import UserDetailsPage from 'web/pages/users/UserDetailsPage';
 
 const user = User.fromElement({
   _id: '1234',

@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
-import UsersTable from 'web/pages/users/Table';
+import UsersTable from 'web/pages/users/UsersTable';
 
 const user = User.fromElement({
   _id: '1234',

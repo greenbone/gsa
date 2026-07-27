@@ -14,9 +14,9 @@ import User, {
 } from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
 import UserDetails, {
-  convert_allow,
-  convert_auth_method,
-} from 'web/pages/users/Details';
+  convertAllow,
+  convertAuthMethod,
+} from 'web/pages/users/UserDetails';
 
 const user = User.fromElement({
   _id: '1234',
@@ -38,20 +38,20 @@ const gmp = {
 
 describe('users details helpers', () => {
   test('should convert auth method labels', () => {
-    expect(convert_auth_method(AUTH_METHOD_LDAP, message => message)).toBe(
+    expect(convertAuthMethod(AUTH_METHOD_LDAP, message => message)).toBe(
       'LDAP',
     );
-    expect(convert_auth_method(AUTH_METHOD_RADIUS, message => message)).toBe(
+    expect(convertAuthMethod(AUTH_METHOD_RADIUS, message => message)).toBe(
       'RADIUS',
     );
-    expect(convert_auth_method(AUTH_METHOD_PASSWORD, message => message)).toBe(
+    expect(convertAuthMethod(AUTH_METHOD_PASSWORD, message => message)).toBe(
       'Local',
     );
   });
 
   test('should convert host access labels', () => {
     expect(
-      convert_allow(
+      convertAllow(
         {allow: ACCESS_ALLOW_ALL, addresses: ['127.0.0.1']},
         (message, options) =>
           message.replace('{{addresses}}', String(options?.addresses)),
@@ -59,16 +59,16 @@ describe('users details helpers', () => {
     ).toBe('Allow all and deny from 127.0.0.1');
 
     expect(
-      convert_allow(
+      convertAllow(
         {allow: ACCESS_DENY_ALL, addresses: ['127.0.0.1']},
         (message, options) =>
           message.replace('{{addresses}}', String(options?.addresses)),
       ),
     ).toBe('Deny all and allow from 127.0.0.1');
 
-    expect(
-      convert_allow({allow: ACCESS_ALLOW_ALL, addresses: []}, m => m),
-    ).toBe('Allow all');
+    expect(convertAllow({allow: ACCESS_ALLOW_ALL, addresses: []}, m => m)).toBe(
+      'Allow all',
+    );
   });
 });
 

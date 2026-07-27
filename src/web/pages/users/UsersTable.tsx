@@ -8,9 +8,9 @@ import type User from 'gmp/models/user';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
-import UserDetails from 'web/pages/users/Details';
-import Header from 'web/pages/users/Header';
-import Row from 'web/pages/users/Row';
+import UserDetails from 'web/pages/users/UserDetails';
+import UsersHeader from 'web/pages/users/UsersHeader';
+import UsersTableRow from 'web/pages/users/UsersTableRow';
 
 export const SORT_FIELDS = [
   {
@@ -37,8 +37,8 @@ export const SORT_FIELDS = [
 
 const UsersTable = createEntitiesTable<User>({
   emptyTitle: _l('No Users available'),
-  header: Header,
-  row: Row,
+  header: UsersHeader,
+  row: UsersTableRow,
   rowDetails: withRowDetails<User>('user')(UserDetails),
   footer: createEntitiesFooter({
     download: 'users.xml',
