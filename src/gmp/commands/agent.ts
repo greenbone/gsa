@@ -9,6 +9,7 @@ import logger from 'gmp/log';
 import Agent, {type AgentElement} from 'gmp/models/agent';
 import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 export interface AgentModifyParams {
   agentsIds: string[];
@@ -44,7 +45,9 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
       cmd: 'modify_agent',
       'agent_ids:': agentsIds,
       authorized: parseYesNo(authorized),
-      update_to_latest: parseYesNo(updateToLatest),
+      update_to_latest: isDefined(updateToLatest)
+        ? parseYesNo(updateToLatest)
+        : undefined,
       comment,
       interval_in_seconds: intervalInSeconds,
     };
