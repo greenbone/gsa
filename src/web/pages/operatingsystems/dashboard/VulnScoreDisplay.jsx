@@ -17,7 +17,7 @@ import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {OsVulnScoreLoader} from 'web/pages/operatingsystems/dashboard/Loaders';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/PropTypes';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';

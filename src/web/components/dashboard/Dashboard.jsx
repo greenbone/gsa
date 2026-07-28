@@ -30,7 +30,7 @@ import {
   setDashboardSettingDefaults,
 } from 'web/store/dashboard/settings/actions';
 import DashboardSettings from 'web/store/dashboard/settings/selectors';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';

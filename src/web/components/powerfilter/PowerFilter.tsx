@@ -24,7 +24,7 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';

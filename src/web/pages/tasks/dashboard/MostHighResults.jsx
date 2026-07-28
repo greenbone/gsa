@@ -17,7 +17,7 @@ import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TasksHighResultsLoader} from 'web/pages/tasks/dashboard/Loaders';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/PropTypes';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import withGmp from 'web/utils/withGmp';

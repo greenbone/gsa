@@ -41,7 +41,7 @@ import TagDialog from 'web/pages/tags/TagDialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
 import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';

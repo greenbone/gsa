@@ -14,7 +14,7 @@ import Reload, {
 } from 'web/components/loading/Reload';
 import withDialogNotification from 'web/components/notification/withDialogNotification';
 import EntityContainer from 'web/entity/Container';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import {updateDisplayName} from 'web/utils/display-name';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';

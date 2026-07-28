@@ -24,7 +24,7 @@ import EntitiesContainer, {
 } from 'web/entities/EntitiesContainer';
 import FilterProvider from 'web/entities/FilterProvider';
 import {pageFilter} from 'web/store/pages/actions';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import {updateDisplayName} from 'web/utils/display-name';
 import withGmp from 'web/utils/withGmp';
 
