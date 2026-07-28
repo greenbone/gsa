@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWithTable, screen, fireEvent} from 'web/testing';
 import OverrideTableHeader from 'web/pages/overrides/OverrideTableHeader';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('OverrideTableHeader tests', () => {
   test('should render the table header', () => {

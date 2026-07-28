@@ -36,7 +36,7 @@ import AgentComponent from 'web/pages/agents/AgentComponent';
 import AgentsFilterDialog from 'web/pages/agents/AgentFilterDialog';
 import AgentListPageToolBarIcons from 'web/pages/agents/AgentListPageToolBarIcons';
 import AgentTable from 'web/pages/agents/AgentTable';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const AgentListPage = () => {
   const [_] = useTranslation();

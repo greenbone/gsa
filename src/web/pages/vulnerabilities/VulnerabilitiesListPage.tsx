@@ -38,7 +38,7 @@ import VulnerabilityFilterDialog from 'web/pages/vulnerabilities/Vulnerabilities
 import VulnerabilitiesTable from 'web/pages/vulnerabilities/VulnerabilitiesTable';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename} from 'web/utils/Render';
-import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 
 type BulkInput = Vulnerability[] | FilterType;
 

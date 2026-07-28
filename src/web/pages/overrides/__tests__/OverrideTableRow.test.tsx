@@ -12,7 +12,7 @@ import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {shorten} from 'gmp/utils/string';
 import OverrideRow from 'web/pages/overrides/OverrideTableRow';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const createGmp = () => ({
   session: createSession(),

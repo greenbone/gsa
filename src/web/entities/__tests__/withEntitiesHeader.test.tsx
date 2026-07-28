@@ -10,7 +10,7 @@ import TableRow from 'web/components/table/TableRow';
 import withEntitiesHeader, {
   type WithEntitiesHeaderComponentProps,
 } from 'web/entities/withEntitiesHeader';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('withEntitiesHeader test', () => {
   const MockComponent = testing.fn(

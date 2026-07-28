@@ -38,7 +38,7 @@ import {loadEntities, selector} from 'web/store/entities/portlists';
 import {type EntitiesSelector} from 'web/store/entities/utils/selectors';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename} from 'web/utils/Render';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const getData = (filter: FilterType, eSelector: EntitiesSelector) => {
   const entities = eSelector.getEntities(filter);

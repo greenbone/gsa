@@ -13,7 +13,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import HostDialog from 'web/pages/hosts/Dialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import PropTypes from 'web/utils/prop-types';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const HostComponent = ({
   children,

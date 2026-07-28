@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableRow, screen} from 'web/testing';
 import Task from 'gmp/models/task';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('withEntitiesActions', () => {
   test('should render the wrapped component with EntitiesActions', () => {

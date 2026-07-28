@@ -36,7 +36,7 @@ import ContainerImageTargetsComponent from 'web/pages/container-image-targets/Co
 import ContainerImageTargetTable from 'web/pages/container-image-targets/ContainerImageTargetTable';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename} from 'web/utils/Render';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const ContainerImageTargetsListPageToolBarIcons = ({
   onContainerImageTargetCreateClick,

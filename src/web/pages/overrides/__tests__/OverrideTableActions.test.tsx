@@ -9,7 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Override from 'gmp/models/override';
 import {createSession} from 'gmp/testing';
 import OverrideTableActions from 'web/pages/overrides/OverrideTableActions';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const wrongCaps = new Capabilities(['get_overrides']);
 

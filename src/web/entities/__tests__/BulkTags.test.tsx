@@ -10,7 +10,7 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
 import BulkTags from 'web/entities/BulkTags';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('BulkTags tests', () => {
   test('should render the BulkTags component', () => {

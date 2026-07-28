@@ -14,7 +14,7 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import {type SelectionTypeType} from 'web/utils/SelectionType';
+import {type SelectionTypeType} from 'web/utils/selection-type';
 
 export interface RoleActionsProps {
   entity: Role;

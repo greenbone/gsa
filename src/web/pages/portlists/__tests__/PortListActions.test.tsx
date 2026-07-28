@@ -8,7 +8,7 @@ import {rendererWithTableRow, screen, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import PortList from 'gmp/models/port-list';
 import PortListActions from 'web/pages/portlists/PortListActions';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('PortListActions tests', () => {
   test('should render all action icons', () => {

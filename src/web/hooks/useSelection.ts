@@ -5,7 +5,7 @@
 
 import {useState, useCallback} from 'react';
 import {isDefined} from 'gmp/utils/identity';
-import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 
 /**
  * Hook to manage selection of entities

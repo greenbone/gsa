@@ -37,7 +37,7 @@ import WebApplicationTargetsComponent from 'web/pages/web-application-targets/We
 import WebApplicationTargetTable from 'web/pages/web-application-targets/WebApplicationTargetTable';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename} from 'web/utils/Render';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const WebApplicationTargetsListPageToolBarIcons = ({
   onWebApplicationTargetCreateClick,

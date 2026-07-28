@@ -13,7 +13,7 @@ import Scanner, {
 } from 'gmp/models/scanner';
 import {createSession} from 'gmp/testing';
 import ScannerTable from 'web/pages/scanners/ScannerTable';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const createGmp = () => ({
   session: createSession(),
