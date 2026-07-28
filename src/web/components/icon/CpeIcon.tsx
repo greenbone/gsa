@@ -5,14 +5,14 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import Image from 'web/components/img/Image';
-import Cpe from 'web/utils/Cpe';
+import findCPE from 'web/utils/cpes';
 
 interface CpeIconProps {
   name: string;
 }
 
 const CpeIcon = ({name}: CpeIconProps) => {
-  const cpe = Cpe.find(name);
+  const cpe = findCPE(name);
 
   const icon = isDefined(cpe) ? cpe.icon : 'cpe/other.svg';
 
