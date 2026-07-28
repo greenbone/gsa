@@ -5,7 +5,7 @@
 
 import React from 'react';
 import ErrorPanel from 'web/components/error/ErrorPanel';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withTranslation from 'web/utils/withTranslation';
 
 class ErrorBoundary extends React.Component {

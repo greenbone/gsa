@@ -12,7 +12,7 @@ import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const GroupDetails = ({entity, isSpecial}) => {
   const [_] = useTranslation();

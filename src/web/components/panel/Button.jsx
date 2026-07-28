@@ -7,7 +7,7 @@ import React from 'react';
 import styled from 'styled-components';
 import withLayout from 'web/components/layout/withLayout';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/Theme';
 
 const StyledButton = styled.button`

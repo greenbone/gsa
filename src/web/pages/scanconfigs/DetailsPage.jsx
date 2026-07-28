@@ -42,7 +42,7 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/scanconfigs';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 export const NvtFamilies = ({entity}) => {
   const [_] = useTranslation();

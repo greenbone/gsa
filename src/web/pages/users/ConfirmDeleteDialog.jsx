@@ -11,7 +11,7 @@ import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {renderSelectItems} from 'web/utils/Render';
 
 const ConfirmDeleteDialog = ({

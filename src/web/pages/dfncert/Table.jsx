@@ -14,7 +14,7 @@ import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import DfnCertAdvDetails from 'web/pages/dfncert/Details';
 import DfnCertAdvRow from 'web/pages/dfncert/Row';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Header = ({
   actionsColumn,

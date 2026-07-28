@@ -14,7 +14,7 @@ import {
 } from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 const SolutionType = ({type, displayTitleText = false}) => {
   const [_] = useTranslation();
   let IconComponent;

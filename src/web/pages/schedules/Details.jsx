@@ -16,7 +16,7 @@ import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import {renderDuration, renderRecurrence} from 'web/pages/schedules/Render';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const ScheduleDetails = ({entity}) => {
   const [_] = useTranslation();

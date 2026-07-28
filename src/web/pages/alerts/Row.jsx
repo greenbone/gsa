@@ -20,7 +20,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import Condition from 'web/pages/alerts/Condition';
 import Event from 'web/pages/alerts/Event';
 import Method from 'web/pages/alerts/Method';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 const Actions = withEntitiesActions(

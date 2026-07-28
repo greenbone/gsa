@@ -5,7 +5,7 @@
 
 import React from 'react';
 import logger from 'gmp/log';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const log = logger.getLogger('web.entity.container');
 

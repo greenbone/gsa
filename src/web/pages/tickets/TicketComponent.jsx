@@ -18,7 +18,7 @@ import {
   loadEntities as loadUsers,
   selector as usersSelector,
 } from 'web/store/entities/users';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const TicketComponent = ({
   children,

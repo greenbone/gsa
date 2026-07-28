@@ -10,7 +10,7 @@ import {isDefined} from 'gmp/utils/identity';
 import LineChart, {lineDataPropType} from 'web/components/chart/base/Line';
 import transformCreated from 'web/components/dashboard/display/created/CreatedTransform';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 class CreatedDisplay extends React.Component {
   constructor(...args) {

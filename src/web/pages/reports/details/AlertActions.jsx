@@ -21,7 +21,7 @@ import {
 } from 'web/store/usersettings/actions';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';

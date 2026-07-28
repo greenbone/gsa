@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import TextField from 'web/components/form/TextField';
 import {SearchIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/Theme';
 const StyledTextField = styled(TextField)`
   .mantine-Input-input {

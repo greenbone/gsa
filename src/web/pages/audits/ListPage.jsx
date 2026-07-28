@@ -20,7 +20,7 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/audits';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 export const ToolBarIcons = ({onAuditCreateClick}) => {
   const [_] = useTranslation();

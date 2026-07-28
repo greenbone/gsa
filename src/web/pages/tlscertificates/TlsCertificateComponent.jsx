@@ -10,7 +10,7 @@ import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useUserName from 'web/hooks/useUserName';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {createPEMCertificate} from 'web/utils/certificates';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {generateFilename} from 'web/utils/Render';
 
 const TlsCertificateComponent = ({

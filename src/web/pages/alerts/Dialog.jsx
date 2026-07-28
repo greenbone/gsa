@@ -58,7 +58,7 @@ import SeverityChangedConditionPart from 'web/pages/alerts/SeverityChangedCondit
 import SeverityLeastConditionPart from 'web/pages/alerts/SeverityLeastConditionPart';
 import TaskEventPart from 'web/pages/alerts/TaskEventPart';
 import TicketEventPart from 'web/pages/alerts/TicketEventPart';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {UNSET_VALUE} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 

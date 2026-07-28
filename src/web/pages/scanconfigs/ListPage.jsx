@@ -20,7 +20,7 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/scanconfigs';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 export const ToolBarIcons = ({
   onScanConfigCreateClick,
   onScanConfigImportClick,

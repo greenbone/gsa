@@ -15,7 +15,7 @@ import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import EntityInfo from 'web/entity/Info';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withTranslation from 'web/utils/withTranslation';
 
 const ErrorContent = styled.div`

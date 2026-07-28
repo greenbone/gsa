@@ -31,7 +31,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
 
 const Title = styled.div`

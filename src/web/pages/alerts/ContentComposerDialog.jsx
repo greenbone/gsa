@@ -14,7 +14,7 @@ import CheckBox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
 
 const ContentComposerDialog = ({

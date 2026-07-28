@@ -9,7 +9,7 @@ import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const FilterDialog = ({
   comment = '',

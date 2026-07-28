@@ -11,7 +11,7 @@ import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import {loadEntities, selector} from 'web/store/entities/filters';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';

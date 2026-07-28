@@ -11,7 +11,7 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {na} from 'web/utils/Render';
 
 const Row = ({

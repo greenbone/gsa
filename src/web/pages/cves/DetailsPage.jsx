@@ -35,7 +35,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import CveDetailsPageToolBarIcons from 'web/pages/cves/CveDetailsPageToolBarIcons';
 import CveDetails from 'web/pages/cves/Details';
 import {selector, loadEntity} from 'web/store/entities/cves';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Details = ({entity, links = true}) => {
   const [_] = useTranslation();

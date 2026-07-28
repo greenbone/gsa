@@ -31,7 +31,7 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import DfnCertAdvDetails from 'web/pages/dfncert/Details';
 import {selector, loadEntity} from 'web/store/entities/dfncerts';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => {
   const [_] = useTranslation();
 

@@ -11,7 +11,7 @@ import TrashDeleteIcon from 'web/components/icon/TrashDeleteIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/TableData';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const getRestorableDeletableForEntityType = {
   alert: entity => {

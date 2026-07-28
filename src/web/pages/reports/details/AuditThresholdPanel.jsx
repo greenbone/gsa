@@ -12,7 +12,7 @@ import updatingStyle from 'web/components/layout/updating-style';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const UpdatingDivider = styled(Divider)`
   ${updatingStyle}

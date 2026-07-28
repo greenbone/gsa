@@ -48,7 +48,7 @@ import {
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {UNSET_VALUE} from 'web/utils/Render';
 
 const selectVeriniceReportId = (reportFormats, reportId) => {

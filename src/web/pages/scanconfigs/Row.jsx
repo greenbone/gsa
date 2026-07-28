@@ -16,7 +16,7 @@ import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import ScanConfigTrend from 'web/pages/scanconfigs/ScanConfigTrend';
 import Settings from 'web/pages/scanconfigs/Settings';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {na} from 'web/utils/Render';
 
 const ScanConfigActions = withEntitiesActions(

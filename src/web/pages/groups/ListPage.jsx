@@ -20,7 +20,7 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/groups';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 const ToolBarIcons = ({onGroupCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

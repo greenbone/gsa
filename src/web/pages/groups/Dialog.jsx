@@ -12,7 +12,7 @@ import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Dialog = ({allUsers, group, title, onClose, onSave}) => {
   const [_] = useTranslation();

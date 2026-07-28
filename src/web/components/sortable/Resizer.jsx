@@ -7,7 +7,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {throttleAnimation} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/Theme';
 
 const ResizeContainer = styled.div`

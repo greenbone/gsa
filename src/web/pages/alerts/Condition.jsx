@@ -15,7 +15,7 @@ import {
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Condition = ({condition = {}, event}) => {
   const [_] = useTranslation();

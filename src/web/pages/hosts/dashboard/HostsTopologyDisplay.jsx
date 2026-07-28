@@ -14,7 +14,7 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import useGmp from 'web/hooks/useGmp';
 import {HostsTopologyLoader} from 'web/pages/hosts/dashboard/Loaders';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const transformTopologyData = (data = []) => {
   if (!hasValue(data)) {

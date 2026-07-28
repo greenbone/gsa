@@ -10,7 +10,7 @@ import Spinner from 'web/components/form/Spinner';
 import Layout from 'web/components/layout/Layout';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {renderSelectItems} from 'web/utils/Render';
 import withPrefix from 'web/utils/withPrefix';
 

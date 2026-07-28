@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 class State extends React.Component {
   constructor(...args) {

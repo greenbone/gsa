@@ -38,7 +38,7 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/users';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 const ToolBarIcons = ({
   entity,
   onUserCloneClick,

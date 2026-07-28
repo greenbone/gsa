@@ -26,7 +26,7 @@ import TableRow from 'web/components/table/TableRow';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import TagComponent from 'web/pages/tags/TagComponent';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withTranslation from 'web/utils/withTranslation';
 const SectionElementDivider = styled(Divider)`
   margin-bottom: 3px;

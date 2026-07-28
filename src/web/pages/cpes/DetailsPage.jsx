@@ -36,7 +36,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import CpeDetailsPageToolBarIcons from 'web/pages/cpes/CpeDetailsPageToolBarIcons';
 import CpeDetails from 'web/pages/cpes/Details';
 import {selector, loadEntity} from 'web/store/entities/cpes';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const CpeEntityInfo = ({entity}) => {
   const [_] = useTranslation();

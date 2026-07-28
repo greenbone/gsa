@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 export interface BlankLinkProps extends Omit<
   React.AnchorHTMLAttributes<HTMLAnchorElement>,

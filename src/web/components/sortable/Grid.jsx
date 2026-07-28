@@ -14,7 +14,7 @@ import Layout from 'web/components/layout/Layout';
 import EmptyRow from 'web/components/sortable/EmptyRow';
 import Item, {GRID_ITEM_MARGIN} from 'web/components/sortable/Item';
 import Row from 'web/components/sortable/Row';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const createNewRow = item => ({
   id: uuid(),

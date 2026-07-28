@@ -8,7 +8,7 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withPrefix from 'web/utils/withPrefix';
 
 const VALUE = 'Severity changed';

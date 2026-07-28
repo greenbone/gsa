@@ -27,7 +27,7 @@ import {
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NotesActiveDaysLoader} from 'web/pages/notes/dashboard/Loaders';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const MAX_BINS = 10; // if this is changed, activeDaysColorScale needs adjustment
 

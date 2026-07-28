@@ -9,7 +9,7 @@ import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportConfigDialog from 'web/pages/reportconfigs/Dialog';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const ReportConfigComponent = ({
   children,

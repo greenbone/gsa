@@ -22,7 +22,7 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const ReportFormatListParam = ({formats, idList, name, onValueChange}) => {
   const formatOptions = map(formats, format => ({

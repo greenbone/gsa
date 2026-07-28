@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Comment = ({text, children}) => {
   if (!isDefined(text)) {

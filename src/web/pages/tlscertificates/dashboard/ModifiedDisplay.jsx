@@ -18,7 +18,7 @@ import {totalCount} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TlsCertificatesModifiedLoader} from 'web/pages/tlscertificates/dashboard/Loaders';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 

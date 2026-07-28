@@ -26,7 +26,7 @@ import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Dialog = ({
   roleIds: initialRoleIds = [],

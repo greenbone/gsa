@@ -16,7 +16,7 @@ import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/DetailsBlock';
 import EntityLink from 'web/entity/Link';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const TicketDetails = ({entity, links = true}) => {
   const [_] = useTranslation();

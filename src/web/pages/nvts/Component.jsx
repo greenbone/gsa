@@ -7,7 +7,7 @@ import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import NoteComponent from 'web/pages/notes/NoteComponent';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const NvtComponent = ({children, onChanged, onDownloaded, onDownloadError}) => (
   <NoteComponent onCreated={onChanged} onSaved={onChanged}>

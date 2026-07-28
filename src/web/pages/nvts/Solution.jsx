@@ -10,7 +10,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
 import Pre from 'web/pages/nvts/Preformatted';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 const Solution = ({solutionDescription, solutionType}) => {
   const [_] = useTranslation();
   const hasSolution = isDefined(solutionDescription) || isDefined(solutionType);

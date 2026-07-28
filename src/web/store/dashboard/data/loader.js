@@ -13,7 +13,7 @@ import {
 } from 'web/store/dashboard/data/actions';
 import getDashboardData from 'web/store/dashboard/data/selectors';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withGmp from 'web/utils/withGmp';
 import withSubscription from 'web/utils/withSubscription';
 

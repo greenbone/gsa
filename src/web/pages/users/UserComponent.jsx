@@ -9,7 +9,7 @@ import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import UserDialog from 'web/pages/users/Dialog';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const UserComponent = props => {
   const {

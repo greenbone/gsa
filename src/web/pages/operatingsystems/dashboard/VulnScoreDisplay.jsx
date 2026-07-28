@@ -18,7 +18,7 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {OsVulnScoreLoader} from 'web/pages/operatingsystems/dashboard/Loaders';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 import withGmp from 'web/utils/withGmp';

@@ -16,7 +16,7 @@ import withRowDetails from 'web/entities/withRowDetails';
 import useGmp from 'web/hooks/useGmp';
 import CveDetails from 'web/pages/cves/Details';
 import CveRow from 'web/pages/cves/Row';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Header = ({
   actionsColumn,
