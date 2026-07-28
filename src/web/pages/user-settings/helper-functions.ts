@@ -4,7 +4,7 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import Languages from 'web/utils/Languages';
+import Languages from 'web/utils/languages';
 
 /**
  * Get the language name by its code
