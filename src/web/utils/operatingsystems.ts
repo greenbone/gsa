@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const operating_systems = [
+const OPERATING_SYSTEMS = [
   {
     pattern: 'cpe:/o:microsoft:windows_nt:4.0:sp1',
     title: 'Microsoft Windows 4.0 sp1',
@@ -1145,11 +1145,11 @@ const operating_systems = [
     title: 'Linux',
     icon: 'os_linux.svg',
   },
-];
+] as const;
 
-const osObject = {
-  operating_systems,
-  find: name => operating_systems.find(os => name.includes(os.pattern)),
-};
+const findOperatingSystem = (
+  name: string,
+): {pattern: string; title: string; icon: string} | undefined =>
+  OPERATING_SYSTEMS.find(os => name.includes(os.pattern));
 
-export default osObject;
+export default findOperatingSystem;

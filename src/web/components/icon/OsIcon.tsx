@@ -8,7 +8,7 @@ import Image from 'web/components/img/Image';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
-import OperatingSystems from 'web/utils/Os';
+import findOperatingSystem from 'web/utils/operatingsystems';
 
 interface OsIconProps {
   displayOsCpe?: boolean;
@@ -24,7 +24,7 @@ const OsIcon = ({
   osCpe,
 }: OsIconProps) => {
   const [_] = useTranslation();
-  const os = isString(osCpe) ? OperatingSystems.find(osCpe) : undefined;
+  const os = isString(osCpe) ? findOperatingSystem(osCpe) : undefined;
 
   let title: string | undefined;
   let osIcon: string | undefined;
