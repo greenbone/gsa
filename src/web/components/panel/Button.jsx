@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import withLayout from 'web/components/layout/withLayout';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 

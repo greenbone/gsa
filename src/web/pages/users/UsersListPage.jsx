@@ -29,7 +29,7 @@ import {
   loadAllEntities,
   loadEntities,
 } from 'web/store/entities/users';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 

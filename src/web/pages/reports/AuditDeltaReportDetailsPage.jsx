@@ -51,7 +51,7 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 

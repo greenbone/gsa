@@ -18,7 +18,7 @@ import {
   loadEntity as loadTlsCertificate,
   selector as tlsCertificateSelector,
 } from 'web/store/entities/tlscertificates';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';

@@ -19,7 +19,7 @@ import PowerFilter from 'web/components/powerfilter/PowerFilter';
 import Section from 'web/components/section/Section';
 import {type TranslateFunc} from 'web/hooks/useTranslation';
 import {loadAllEntities, selector} from 'web/store/entities/filters';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 

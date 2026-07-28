@@ -31,7 +31,7 @@ import PermissionMultipleDialog, {
   type PermissionMultipleDialogSaveData,
 } from 'web/pages/permissions/PermissionMultipleDialog';
 import PermissionsTable from 'web/pages/permissions/PermissionTable';
-import compose from 'web/utils/Compose';
+import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 
