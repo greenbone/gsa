@@ -40,7 +40,7 @@ import MaintenanceWindowSettingRow from 'web/pages/user-settings/MaintenanceWind
 import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';
 import useSettingSave from 'web/pages/user-settings/useSettingSave';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import Languages from 'web/utils/Languages';
+import Languages from 'web/utils/languages';
 
 interface GeneralSettingsProps {
   disableEditIcon?: boolean;
