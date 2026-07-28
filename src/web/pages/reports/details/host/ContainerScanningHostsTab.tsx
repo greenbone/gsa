@@ -14,7 +14,7 @@ import {
   makeCompareNumber,
   makeCompareSeverity,
   makeCompareString,
-} from 'web/utils/Sort';
+} from 'web/utils/sort';
 
 interface ContainerScanningHostsTabProps {
   audit?: boolean;
@@ -28,31 +28,43 @@ interface ContainerScanningHostsTabProps {
 }
 
 const containerScanningHostsSortFunctions = {
-  ip: makeCompareIp('ip'),
-  hostname: makeCompareString('hostname'),
-  portsCount: makeCompareNumber(entity => entity.portsCount),
-  appsCount: makeCompareNumber(entity => entity.details.appsCount),
-  distance: makeCompareNumber(entity => entity.details.distance),
-  os: makeCompareString(entity => entity.details.best_os_cpe),
-  critical: makeCompareNumber(entity => entity.result_counts.critical),
-  high: makeCompareNumber(entity => entity.result_counts.high),
-  medium: makeCompareNumber(entity => entity.result_counts.warning),
-  low: makeCompareNumber(entity => entity.result_counts.info),
-  log: makeCompareNumber(entity => entity.result_counts.log),
+  ip: makeCompareIp<ReportHost>('ip'),
+  hostname: makeCompareString<ReportHost>('hostname'),
+  portsCount: makeCompareNumber((entity: ReportHost) => entity.portsCount),
+  appsCount: makeCompareNumber(
+    (entity: ReportHost) => entity.details?.appsCount,
+  ),
+  distance: makeCompareNumber((entity: ReportHost) => entity.details?.distance),
+  os: makeCompareString((entity: ReportHost) => entity.details?.best_os_cpe),
+  critical: makeCompareNumber(
+    (entity: ReportHost) => entity.result_counts.critical,
+  ),
+  high: makeCompareNumber((entity: ReportHost) => entity.result_counts.high),
+  medium: makeCompareNumber(
+    (entity: ReportHost) => entity.result_counts.medium,
+  ),
+  low: makeCompareNumber((entity: ReportHost) => entity.result_counts.low),
+  log: makeCompareNumber((entity: ReportHost) => entity.result_counts.log),
   false_positive: makeCompareNumber(
-    entity => entity.result_counts.false_positive,
+    (entity: ReportHost) => entity.result_counts.false_positive,
   ),
   severity: makeCompareSeverity(),
-  start: makeCompareDate(entity => entity.start),
-  end: makeCompareDate(entity => entity.end),
-  total: makeCompareNumber(entity => entity.result_counts.total),
-  complianceYes: makeCompareNumber(entity => entity.complianceCounts.yes),
-  complianceNo: makeCompareNumber(entity => entity.complianceCounts.no),
-  complianceIncomplete: makeCompareNumber(
-    entity => entity.complianceCounts.incomplete,
+  start: makeCompareDate((entity: ReportHost) => entity.start),
+  end: makeCompareDate((entity: ReportHost) => entity.end),
+  total: makeCompareNumber((entity: ReportHost) => entity.result_counts.total),
+  complianceYes: makeCompareNumber(
+    (entity: ReportHost) => entity.complianceCounts.yes,
   ),
-  complianceTotal: makeCompareNumber(entity => entity.complianceCounts.total),
-  compliant: makeCompareString('hostCompliance'),
+  complianceNo: makeCompareNumber(
+    (entity: ReportHost) => entity.complianceCounts.no,
+  ),
+  complianceIncomplete: makeCompareNumber(
+    (entity: ReportHost) => entity.complianceCounts.incomplete,
+  ),
+  complianceTotal: makeCompareNumber(
+    (entity: ReportHost) => entity.complianceCounts.total,
+  ),
+  compliant: makeCompareString<ReportHost>('hostCompliance'),
 };
 
 const ContainerScanningHostsTab = ({

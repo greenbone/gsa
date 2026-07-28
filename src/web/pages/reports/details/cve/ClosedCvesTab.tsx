@@ -19,7 +19,7 @@ import {
   makeCompareIp,
   makeCompareSeverity,
   makeCompareString,
-} from 'web/utils/Sort';
+} from 'web/utils/sort';
 
 interface ClosedCvesTabProps {
   filter?: FilterType;
@@ -30,12 +30,12 @@ interface ClosedCvesTabProps {
 }
 
 export const closedCvesSortFunctions = {
-  cve: makeCompareString('cveId'),
+  cve: makeCompareString<ReportClosedCve>('cveId'),
   host: makeCompareIp((entity: ReportClosedCve) => entity.host?.ip),
   nvt: makeCompareString(
     (entity: ReportClosedCve) => entity.source?.description,
   ),
-  severity: makeCompareSeverity(),
+  severity: makeCompareSeverity<ReportClosedCve>(),
 };
 
 const ClosedCvesTabWrapper = ({

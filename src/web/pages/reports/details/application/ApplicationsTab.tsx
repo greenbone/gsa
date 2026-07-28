@@ -19,7 +19,7 @@ import {
   makeCompareNumber,
   makeCompareSeverity,
   makeCompareString,
-} from 'web/utils/Sort';
+} from 'web/utils/sort';
 
 interface ApplicationsTabProps {
   filter?: FilterType;
@@ -30,12 +30,12 @@ interface ApplicationsTabProps {
 }
 
 export const appsSortFunctions = {
-  name: makeCompareString('name'),
+  name: makeCompareString<ReportApp>('name'),
   hosts: makeCompareNumber((entity: ReportApp) => entity.hosts.count),
   occurrences: makeCompareNumber(
     (entity: ReportApp) => entity.occurrences.total,
   ),
-  severity: makeCompareSeverity(),
+  severity: makeCompareSeverity<ReportApp>(),
 };
 
 const ApplicationsTabWrapper = ({

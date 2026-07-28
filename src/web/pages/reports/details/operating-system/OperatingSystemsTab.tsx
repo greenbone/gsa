@@ -14,7 +14,7 @@ import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import OperatingSystemsTable from 'web/pages/reports/details/operating-system/OperatingSystemsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
-import {makeCompareNumber, makeCompareString} from 'web/utils/Sort';
+import {makeCompareNumber, makeCompareString} from 'web/utils/sort';
 
 interface OperatingSystemsTabWrapperProps {
   audit?: boolean;
@@ -43,7 +43,9 @@ type OperatingSystemsSortFunctions = {
 const operatingSystemsSortFunctions: OperatingSystemsSortFunctions = {
   name: makeCompareString('name'),
   cpe: makeCompareString('id'),
-  hosts: makeCompareNumber(entity => entity.hosts.count),
+  hosts: makeCompareNumber(
+    (entity: ReportOperatingSystem) => entity.hosts.count,
+  ),
   compliant: makeCompareString('compliance'),
 };
 

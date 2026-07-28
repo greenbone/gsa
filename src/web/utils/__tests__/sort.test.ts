@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import moment from 'gmp/models/date';
+import date, {type Date} from 'gmp/models/date';
 import {
   ipToNumber,
   getProperty,
@@ -15,7 +15,7 @@ import {
   makeCompareSeverity,
   makeCompareDate,
   makeComparePort,
-} from 'web/utils/Sort';
+} from 'web/utils/sort';
 
 describe('ipToNumber tests', () => {
   test('should convert ipv4 to number', () => {
@@ -56,19 +56,23 @@ describe('getProperty tests', () => {
 
   test('should return undefined for unknown properties', () => {
     expect(getProperty({value: 1}, 'foo')).toBeUndefined();
-    expect(getProperty({value: 1}, obj => obj.foo)).toBeUndefined();
-    expect(getProperty(undefined, obj => obj.foo)).toBeUndefined();
+    expect(
+      getProperty({value: 1}, (obj: {value: number; foo?: unknown}) => obj.foo),
+    ).toBeUndefined();
+    expect(
+      getProperty(undefined, (obj: {foo?: unknown} | undefined) => obj?.foo),
+    ).toBeUndefined();
   });
 });
 
 describe('getValue tests', () => {
   test('should return value for property', () => {
-    expect(getValue(v => v, {foo: 'bar'}, 'foo')).toEqual('bar');
+    expect(getValue((v: string) => v, {foo: 'bar'}, 'foo')).toEqual('bar');
     expect(
       getValue(
-        v => v,
+        (v: string) => v,
         {foo: 'bar'},
-        obj => obj.foo,
+        (obj: {foo: string}) => obj.foo,
       ),
     ).toEqual('bar');
   });
@@ -85,23 +89,33 @@ describe('getValue tests', () => {
   });
 
   test('should return undefined for unknown property', () => {
-    expect(getValue(v => v, {foo: 'bar'}, 'bar')).toBeUndefined();
+    expect(getValue((v: string) => v, {foo: 'bar'}, 'bar')).toBeUndefined();
     expect(
-      getValue(
-        v => v,
+      getValue<
+        {foo: string; bar?: string},
+        string | undefined,
+        string | undefined
+      >(
+        (v?: string) => v,
         {foo: 'bar'},
-        obj => obj.bar,
+        (obj: {foo: string; bar?: string}) => obj.bar,
       ),
     ).toBeUndefined();
   });
 
   test('should return default for unknown property', () => {
-    expect(getValue(v => v, {foo: 'bar'}, 'bar', 'ipsum')).toEqual('ipsum');
+    expect(getValue((v: string) => v, {foo: 'bar'}, 'bar', 'ipsum')).toEqual(
+      'ipsum',
+    );
     expect(
-      getValue(
-        v => v,
+      getValue<
+        {foo: string; bar?: string},
+        string | undefined,
+        string | undefined
+      >(
+        (v?: string) => v,
         {foo: 'bar'},
-        obj => obj.bar,
+        (obj: {foo: string; bar?: string}) => obj.bar,
         'ipsum',
       ),
     ).toEqual('ipsum');
@@ -187,7 +201,9 @@ describe('makeCompareNumber tests', () => {
       value: '1', // will be converted to number
     };
 
-    const compareValues = makeCompareNumber(obj => obj.value)();
+    const compareValues = makeCompareNumber(
+      (obj: {value?: number | string}) => obj.value,
+    )();
     expect(compareValues(objA, objB)).toEqual(-1);
     expect(compareValues(objB, objA)).toEqual(1);
     expect(compareValues(objA, objC)).toEqual(0);
@@ -208,7 +224,9 @@ describe('makeCompareNumber tests', () => {
       value: '1', // will be converted to number
     };
 
-    const compareValues = makeCompareNumber(obj => obj.value)(true);
+    const compareValues = makeCompareNumber(
+      (obj: {value?: number | string}) => obj.value,
+    )(true);
     expect(compareValues(objA, objB)).toEqual(1);
     expect(compareValues(objB, objA)).toEqual(-1);
     expect(compareValues(objA, objC)).toEqual(0);
@@ -231,7 +249,9 @@ describe('makeCompareIp tests', () => {
       value: 'foo',
     };
 
-    const compareValues = makeCompareIp(obj => obj.value)();
+    const compareValues = makeCompareIp<{value?: string}>(
+      (obj: {value?: string}) => obj.value,
+    )();
     expect(compareValues(objA, objB)).toEqual(-1);
     expect(compareValues(objB, objA)).toEqual(1);
     expect(compareValues(objA, objC)).toEqual(0);
@@ -252,7 +272,9 @@ describe('makeCompareIp tests', () => {
       value: 'foo',
     };
 
-    const compareValues = makeCompareIp(obj => obj.value)(true);
+    const compareValues = makeCompareIp((obj: {value?: string}) => obj.value)(
+      true,
+    );
     expect(compareValues(objA, objB)).toEqual(1);
     expect(compareValues(objB, objA)).toEqual(-1);
     expect(compareValues(objA, objC)).toEqual(0);
@@ -270,10 +292,14 @@ describe('makeCompareIp tests', () => {
       value: '192.168.1.1',
     };
     const objD = {
+      value: undefined,
       foo: 'bar',
     };
 
-    const compareValues = makeCompareIp('value', ipToNumber('192.168.1.99'))();
+    const compareValues = makeCompareIp(
+      'value',
+      ipToNumber('192.168.1.99') as number,
+    )();
     expect(compareValues(objA, objB)).toEqual(-1);
     expect(compareValues(objB, objA)).toEqual(1);
     expect(compareValues(objA, objC)).toEqual(0);
@@ -357,7 +383,9 @@ describe('makeCompareSeverity tests', () => {
       value: '1', // will be converted to number
     };
 
-    const compareValues = makeCompareSeverity(obj => obj.value)();
+    const compareValues = makeCompareSeverity(
+      (obj: {value?: string | number}) => obj.value,
+    )();
     expect(compareValues(objA, objB)).toEqual(-1);
     expect(compareValues(objB, objA)).toEqual(1);
     expect(compareValues(objA, objC)).toEqual(0);
@@ -368,17 +396,17 @@ describe('makeCompareSeverity tests', () => {
 describe('makeCompareDate tests', () => {
   test('should compare dates asc', () => {
     const objA = {
-      value: moment('2017-01-01'),
+      value: date('2017-01-01'),
     };
     const objB = {
-      value: moment('2018-01-01'),
+      value: date('2018-01-01'),
     };
     const objC = {
-      value: moment('2017-01-01'),
+      value: date('2017-01-01'),
     };
     const objD = {};
 
-    const compareValues = makeCompareDate(obj => obj.value)();
+    const compareValues = makeCompareDate((obj: {value?: Date}) => obj.value)();
     expect(compareValues(objA, objB)).toEqual(-1);
     expect(compareValues(objB, objA)).toEqual(1);
     expect(compareValues(objA, objC)).toEqual(0);
@@ -387,17 +415,19 @@ describe('makeCompareDate tests', () => {
 
   test('should compare dates desc', () => {
     const objA = {
-      value: moment('2017-01-01'),
+      value: date('2017-01-01'),
     };
     const objB = {
-      value: moment('2018-01-01'),
+      value: date('2018-01-01'),
     };
     const objC = {
-      value: moment('2017-01-01'),
+      value: date('2017-01-01'),
     };
     const objD = {};
 
-    const compareValues = makeCompareDate(obj => obj.value)(true);
+    const compareValues = makeCompareDate((obj: {value?: Date}) => obj.value)(
+      true,
+    );
     expect(compareValues(objA, objB)).toEqual(1);
     expect(compareValues(objB, objA)).toEqual(-1);
     expect(compareValues(objA, objC)).toEqual(0);
@@ -421,7 +451,9 @@ describe('makeComparePort tests', () => {
       value: 22,
     };
 
-    const compareValues = makeComparePort(obj => obj.value)();
+    const compareValues = makeComparePort(
+      (obj: {value?: number | string}) => obj.value,
+    )();
     expect(compareValues(objA, objB)).toEqual(-1);
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(1);
@@ -443,7 +475,9 @@ describe('makeComparePort tests', () => {
       value: 22,
     };
 
-    const compareValues = makeComparePort(obj => obj.value)(true);
+    const compareValues = makeComparePort(
+      (obj: {value?: number | string}) => obj.value,
+    )(true);
     expect(compareValues(objA, objB)).toEqual(1);
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(-1);
@@ -468,7 +502,9 @@ describe('makeComparePort tests', () => {
       value: 'foo',
     };
 
-    const compareValues = makeComparePort(obj => obj.value)();
+    const compareValues = makeComparePort(
+      (obj: {value?: number | string}) => obj.value,
+    )();
     expect(compareValues(objA, objB)).toEqual(-1);
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(1);

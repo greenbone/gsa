@@ -11,7 +11,7 @@ import Result from 'gmp/models/result';
 import ReportEntitiesContainer, {
   type ReportEntitiesContainerRenderProps,
 } from 'web/pages/reports/details/ReportEntitiesContainer';
-import {makeCompareString} from 'web/utils/Sort';
+import {makeCompareString} from 'web/utils/sort';
 import SortDirection from 'web/utils/sort-direction';
 
 const getRenderProps = (
