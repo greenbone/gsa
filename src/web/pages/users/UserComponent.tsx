@@ -8,13 +8,13 @@ import type Model from 'gmp/models/model';
 import type Settings from 'gmp/models/settings';
 import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
-import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
-import QueryEntityComponent from 'web/entity/QueryEntityComponent';
+import useEntityDownload, {
+  type OnDownloadedFunc,
+} from 'web/entity/hooks/useEntityDownload';
 import {
   useCloneUser,
   useCreateUser,
   useDeleteUser,
-  useDownloadUser,
   useSaveUser,
 } from 'web/hooks/use-query/users';
 import useGmp from 'web/hooks/useGmp';
@@ -90,16 +90,13 @@ const UserComponent = ({
     onSuccess: () => onDeleted?.(),
     onError: onDeleteError,
   });
-  const downloadMutation = useDownloadUser({
-    onError: onDownloadError,
-  });
-  const downloadUser = async (id: string, entity: User) => {
-    const response = await downloadMutation.mutateAsync({id});
-    onDownloaded?.({
-      filename: `${entity.name ?? 'user'}.xml`,
-      data: response.data,
-    });
-  };
+  const downloadUser = useEntityDownload<User>(
+    entity => gmp.user.export(entity),
+    {
+      onDownloaded,
+      onDownloadError,
+    },
+  );
 
   const closeUserDialog = () => {
     setDialogVisible(false);
@@ -160,53 +157,56 @@ const UserComponent = ({
     }
   };
 
+  const saveUser = async (data: UserDialogSaveData) => {
+    return saveMutation.mutateAsync({...data, id: data.id as string});
+  };
+
+  const cloneUser = async (entity: User) => {
+    await cloneMutation.mutateAsync({id: entity.id});
+  };
+
+  const deleteUser = async (entity: User) => {
+    await deleteMutation.mutateAsync({id: entity.id});
+  };
+
+  const downloadUserEntity = async (entity: User) => {
+    await downloadUser(entity);
+  };
+
   return (
-    <QueryEntityComponent
-      cloneMutation={cloneMutation}
-      createMutation={createMutation}
-      deleteMutation={deleteMutation}
-      downloadById={downloadUser}
-      entityName="User"
-      mapCreateVariables={(data: UserDialogSaveData) => data}
-      mapSaveVariables={(data: UserDialogSaveData, id: string) => ({
-        ...data,
-        id,
+    <>
+      {children({
+        clone: cloneUser,
+        create: openUserDialog,
+        delete: deleteUser,
+        download: downloadUserEntity,
+        edit: openUserDialog,
+        save: saveUser,
       })}
-      saveMutation={saveMutation}
-    >
-      {queryActions => (
-        <>
-          {children({
-            ...queryActions,
-            create: openUserDialog,
-            edit: openUserDialog,
-          })}
-          {dialogVisible && isDefined(settings) && (
-            <UserDialog
-              accessHosts={accessHosts}
-              comment={comment}
-              groupIds={groupIds}
-              groups={groups}
-              hostsAllow={hostsAllow}
-              name={name}
-              oldName={oldName}
-              roleIds={roleIds}
-              roles={roles}
-              settings={settings}
-              title={title}
-              user={user}
-              onClose={handleCloseUserDialog}
-              onSave={(d: UserDialogSaveData) => {
-                const promise = isDefined(d.id)
-                  ? queryActions.save(d)
-                  : queryActions.create(d);
-                return promise.then(() => closeUserDialog());
-              }}
-            />
-          )}
-        </>
+      {dialogVisible && isDefined(settings) && (
+        <UserDialog
+          accessHosts={accessHosts}
+          comment={comment}
+          groupIds={groupIds}
+          groups={groups}
+          hostsAllow={hostsAllow}
+          name={name}
+          oldName={oldName}
+          roleIds={roleIds}
+          roles={roles}
+          settings={settings}
+          title={title}
+          user={user}
+          onClose={handleCloseUserDialog}
+          onSave={(d: UserDialogSaveData) => {
+            const promise = isDefined(d.id)
+              ? saveUser(d)
+              : createMutation.mutateAsync(d);
+            return promise.then(() => closeUserDialog());
+          }}
+        />
       )}
-    </QueryEntityComponent>
+    </>
   );
 };
 

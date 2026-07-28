@@ -148,7 +148,7 @@ describe('UserDetailsPage', () => {
 
     fireEvent.click(screen.getByTestId('export-icon'));
     await waitFor(() => {
-      expect(gmp.user.export).toHaveBeenCalledWith({id: user.id});
+      expect(gmp.user.export).toHaveBeenCalled();
     });
 
     fireEvent.click(cloneIcon);

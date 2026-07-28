@@ -148,12 +148,14 @@ const UserDetailPage = () => {
       <Download ref={downloadRef} />
       <UserComponent
         onCloneError={onError}
-        onCloned={(response: unknown) =>
-          goToDetails('user', navigate)(response as {data: {id: string}})
-        }
-        onCreated={(response: unknown) =>
-          goToDetails('user', navigate)(response as {data: {id: string}})
-        }
+        onCloned={(response: unknown) => {
+          const id = (response as {id: string}).id;
+          goToDetails('user', navigate)({data: {id}});
+        }}
+        onCreated={(response: unknown) => {
+          const id = (response as {id: string}).id;
+          goToDetails('user', navigate)({data: {id}});
+        }}
         onDeleteError={onError}
         onDeleted={goToList('users', navigate)}
         onDownloadError={onError}
