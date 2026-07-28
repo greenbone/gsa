@@ -9,7 +9,7 @@ import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useUserName from 'web/hooks/useUserName';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {create_pem_certificate} from 'web/utils/Cert';
+import {createPEMCertificate} from 'web/utils/certificates';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 
@@ -54,7 +54,7 @@ const TlsCertificateComponent = ({
       return onDownloaded({
         filename,
         mimetype: 'application/x-x509-ca-cert',
-        data: create_pem_certificate(certificate),
+        data: createPEMCertificate(certificate),
       });
     });
   };
