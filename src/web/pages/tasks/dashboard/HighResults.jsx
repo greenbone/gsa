@@ -19,7 +19,7 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TasksHighResultsLoader} from 'web/pages/tasks/dashboard/Loaders';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {severityFormat} from 'web/utils/Render';
 import {resultSeverityRiskFactor, _NA} from 'web/utils/severity';
 import withGmp from 'web/utils/withGmp';

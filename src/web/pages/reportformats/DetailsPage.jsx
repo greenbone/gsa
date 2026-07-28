@@ -47,7 +47,7 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/reportformats';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {renderYesNo} from 'web/utils/Render';
 const ToolBarIcons = ({
   entity,

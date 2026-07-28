@@ -18,7 +18,7 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 
 const Row = ({

@@ -18,7 +18,7 @@ import withRowDetails from 'web/entities/withRowDetails';
 import {AgentIdTableHead} from 'web/pages/agents/components/AgentIdColumn';
 import HostDetails from 'web/pages/hosts/Details';
 import HostRow from 'web/pages/hosts/Row';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import SelectionType from 'web/utils/SelectionType';
 
 const Header = ({

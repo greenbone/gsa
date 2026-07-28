@@ -7,7 +7,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Container = styled.div`
   overflow: hidden;

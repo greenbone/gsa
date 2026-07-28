@@ -6,7 +6,7 @@
 import React from 'react';
 import styled, {keyframes} from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/Theme';
 
 const SnackbarContainer = styled.div`
@@ -120,7 +120,7 @@ class SnackbarCreator extends React.Component {
   }
 }
 
-/* message has to be an object to make it possible 
+/* message has to be an object to make it possible
 to distinguish two different inputs with the same text,
 for example clicking the same button twice */
 

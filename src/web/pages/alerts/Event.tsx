@@ -14,7 +14,7 @@ import {
 } from 'gmp/models/alert';
 import {isDefined} from 'gmp/utils/identity';
 import useTranslation, {type TranslateFunc} from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 interface EventProps {
   event?: AlertData;

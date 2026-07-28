@@ -55,7 +55,7 @@ import {
 } from 'web/store/entities/targets';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {UNSET_VALUE, generateFilename} from 'web/utils/Render';
 
 const REPORT_FORMATS_FILTER = QueryFilter.fromString(

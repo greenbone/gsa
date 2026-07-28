@@ -17,7 +17,7 @@ import TaskResumeIcon from 'web/pages/tasks/icons/TaskResumeIcon';
 import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
 import TaskStartIcon from 'web/pages/tasks/icons/TaskStartIcon';
 import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Actions = ({
   entity,

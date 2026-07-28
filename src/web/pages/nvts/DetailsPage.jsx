@@ -38,7 +38,7 @@ import {
   selector as overridesSelector,
   loadEntities as loadOverrides,
 } from 'web/store/entities/overrides';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Details = ({entity, notes = [], overrides = []}) => {
   const [_] = useTranslation();

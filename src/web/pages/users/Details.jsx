@@ -19,7 +19,7 @@ import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 export const convert_auth_method = (auth_method, _) => {
   if (auth_method === AUTH_METHOD_LDAP) {

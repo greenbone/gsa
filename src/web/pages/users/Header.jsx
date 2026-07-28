@@ -9,7 +9,7 @@ import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Header = ({
   actionsColumn,

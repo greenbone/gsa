@@ -14,7 +14,7 @@ import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import CertBundDetails from 'web/pages/certbund/Details';
 import CertBundRow from 'web/pages/certbund/Row';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Header = ({
   actionsColumn,

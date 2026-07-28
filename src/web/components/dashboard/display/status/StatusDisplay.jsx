@@ -10,7 +10,7 @@ import {isDefined} from 'gmp/utils/identity';
 import DonutChart from 'web/components/chart/Donut';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 class StatusDisplay extends React.Component {
   constructor(...args) {

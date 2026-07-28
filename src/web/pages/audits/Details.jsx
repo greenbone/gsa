@@ -27,7 +27,7 @@ import {
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';

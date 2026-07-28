@@ -52,7 +52,7 @@ import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {generateFilename} from 'web/utils/Render';
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');

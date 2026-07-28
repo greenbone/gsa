@@ -30,7 +30,7 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/schedules';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Page = ({
   entity,

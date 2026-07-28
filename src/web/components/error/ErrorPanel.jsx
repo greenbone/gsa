@@ -10,7 +10,7 @@ import {isDefined} from 'gmp/utils/identity';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/Theme';
 
 const ErrorDetails = styled.div`

@@ -30,7 +30,7 @@ import {
   loadEntities,
 } from 'web/store/entities/users';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import SelectionType from 'web/utils/SelectionType';
 
 export const UsersListPageToolBarIcons = ({onUserCreateClick}) => {

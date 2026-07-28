@@ -24,7 +24,7 @@ import EntityCloneIcon from 'web/entity/icon/CloneIcon';
 import EntityEditIcon from 'web/entity/icon/EditIcon';
 import EntityTrashIcon from 'web/entity/icon/TrashIcon';
 import TicketDetails from 'web/pages/tickets/Details';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {NA_VALUE} from 'web/utils/severity';
 
 export const FIELDS = [

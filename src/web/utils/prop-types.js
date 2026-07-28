@@ -114,8 +114,8 @@ const filter = ReactPropTypes.oneOfType([
 
 const model = ReactPropTypes.instanceOf(Model);
 
-const entitycommand = ReactPropTypes.instanceOf(EntityCommand);
-const entitiescommand = ReactPropTypes.instanceOf(EntitiesCommand);
+const entityCommand = ReactPropTypes.instanceOf(EntityCommand);
+const entitiesCommand = ReactPropTypes.instanceOf(EntitiesCommand);
 
 const capabilities = ReactPropTypes.instanceOf(Capabilities);
 
@@ -226,8 +226,8 @@ const gsaPropTypes = {
   componentOrFalse,
   componentOrElement,
   elementOrString,
-  entitycommand,
-  entitiescommand,
+  entitycommand: entityCommand,
+  entitiescommand: entitiesCommand,
   error,
   filter,
   gmp,

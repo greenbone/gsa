@@ -16,7 +16,7 @@ import withDialogNotification from 'web/components/notification/withDialogNotifi
 import EntityContainer from 'web/entity/Container';
 import compose from 'web/utils/compose';
 import {updateDisplayName} from 'web/utils/display-name';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 

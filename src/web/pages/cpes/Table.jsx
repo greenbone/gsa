@@ -14,7 +14,7 @@ import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import CpeDetails from 'web/pages/cpes/Details';
 import CpeRow from 'web/pages/cpes/Row';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Header = ({
   actionsColumn,

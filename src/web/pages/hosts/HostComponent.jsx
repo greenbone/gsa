@@ -12,7 +12,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import HostDialog from 'web/pages/hosts/Dialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import SelectionType from 'web/utils/SelectionType';
 
 const HostComponent = ({

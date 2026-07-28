@@ -11,7 +11,7 @@ import {shorten} from 'gmp/utils/string';
 import EntityComponent from 'web/entity/EntityComponent';
 import useCapabilities from 'web/hooks/useCapabilities';
 import FilterDialog from 'web/pages/filters/Dialog';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const FILTER_OPTIONS = [
   ['agent', _l('Agent')],

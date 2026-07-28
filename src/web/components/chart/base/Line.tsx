@@ -29,7 +29,7 @@ import LegendLine from 'web/components/chart/base/LegendLine';
 import Svg from 'web/components/chart/base/Svg';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/Theme';
 
 interface LineData {

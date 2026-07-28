@@ -23,7 +23,7 @@ import {
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NvtsQodLoader} from 'web/pages/nvts/dashboard/Loaders';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const transformQodData = (data = {}) => {
   const {groups = []} = data;

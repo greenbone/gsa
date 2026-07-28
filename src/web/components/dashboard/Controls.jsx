@@ -24,7 +24,7 @@ import {
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 

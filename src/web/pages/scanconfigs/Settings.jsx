@@ -8,7 +8,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {Settings2Icon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const EntitySettingsIcon = ({
   disabled,

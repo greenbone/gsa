@@ -21,7 +21,7 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import {AgentIdTableData} from 'web/pages/agents/components/AgentIdColumn';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withCapabilities from 'web/utils/withCapabilities';
 const Actions = compose(
   withCapabilities,

@@ -37,7 +37,7 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import CertBundAdvDetails from 'web/pages/certbund/Details';
 import {selector, loadEntity} from 'web/store/entities/certbund';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => {
   const [_] = useTranslation();

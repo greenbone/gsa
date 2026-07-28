@@ -16,7 +16,7 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/DetailsBlock';
 import useGmp from 'web/hooks/useGmp';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 
 const CVSS_PROPS = {

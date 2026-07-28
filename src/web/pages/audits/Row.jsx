@@ -21,7 +21,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import Actions from 'web/pages/audits/Actions';
 import AuditStatus from 'web/pages/tasks/TaskStatus';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const renderAuditReport = (report, links) => {
   if (!isDefined(report)) {

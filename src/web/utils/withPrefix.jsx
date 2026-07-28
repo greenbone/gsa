@@ -6,7 +6,7 @@
 import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import {updateDisplayName} from 'web/utils/display-name';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 export const withPrefix = Component => {
   const ComponentPrefixWrapper = ({prefix, ...props}) => {

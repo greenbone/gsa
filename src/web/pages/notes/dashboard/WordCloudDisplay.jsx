@@ -19,7 +19,7 @@ import {randomColor} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NotesWordCountLoader} from 'web/pages/notes/dashboard/Loaders';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const transformWordCountData = (data = {}) => {
   const {groups = []} = data;

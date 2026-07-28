@@ -15,7 +15,7 @@ import createEntitiesTable from 'web/entities/createEntitiesTable';
 import useTranslation from 'web/hooks/useTranslation';
 import {AgentIdTableHead} from 'web/pages/agents/components/AgentIdColumn';
 import AuditReportRow from 'web/pages/reports/AuditReportRow';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const AuditReportTableHeader = ({
   actionsColumn,

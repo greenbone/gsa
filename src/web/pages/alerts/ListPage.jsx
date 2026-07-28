@@ -19,7 +19,7 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/alerts';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withCapabilities from 'web/utils/withCapabilities';
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => {

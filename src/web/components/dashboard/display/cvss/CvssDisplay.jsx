@@ -12,7 +12,7 @@ import transformCvssData from 'web/components/dashboard/display/cvss/cvss-transf
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const CvssDisplay = ({
   filter,

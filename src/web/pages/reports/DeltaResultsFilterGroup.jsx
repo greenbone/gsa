@@ -8,7 +8,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import Divider from 'web/components/layout/Divider';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import withTranslation from 'web/utils/withTranslation';
 
 class DeltaStatesFilterGroup extends React.Component {

@@ -22,7 +22,7 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NvtsFamilyLoader} from 'web/pages/nvts/dashboard/Loaders';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {severityFormat} from 'web/utils/Render';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import withGmp from 'web/utils/withGmp';

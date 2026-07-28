@@ -18,7 +18,7 @@ import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import {convert_auth_method, convert_allow} from 'web/pages/users/Details';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Actions = withEntitiesActions(
   ({

@@ -13,7 +13,7 @@ import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
 import TlsCertificateRow from 'web/pages/tlscertificates/Row';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Header = ({sort = true, currentSortBy, currentSortDir, onSortChange}) => {
   return (

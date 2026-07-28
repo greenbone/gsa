@@ -18,7 +18,7 @@ import withRowDetails from 'web/entities/withRowDetails';
 import useGmp from 'web/hooks/useGmp';
 import NvtDetails from 'web/pages/nvts/NvtDetails';
 import NvtRow from 'web/pages/nvts/Row';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 
 const Header = ({
   actionsColumn,

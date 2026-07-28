@@ -46,7 +46,7 @@ import {loadEntity, selector} from 'web/store/entities/results';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/PropTypes';
+import PropTypes from 'web/utils/prop-types';
 import {generateFilename} from 'web/utils/Render';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 import withTranslation from 'web/utils/withTranslation';
