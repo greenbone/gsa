@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const cpes = [
+const CPES = [
   {
     pattern: 'cpe:/a:apache:http_server',
     icon: 'cpe/a:apache:http_server.svg',
@@ -168,10 +168,9 @@ const cpes = [
     pattern: 'cpe:/h:hp:',
     icon: 'os_hp.svg',
   },
-];
+] as const;
 
-const cpeObject = {
-  find: name => cpes.find(cpe => name.includes(cpe.pattern)),
-};
+const findCPE = (name: string): {pattern: string; icon: string} | undefined =>
+  CPES.find(cpe => name.includes(cpe.pattern));
 
-export default cpeObject;
+export default findCPE;
