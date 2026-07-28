@@ -8,7 +8,7 @@ import {rendererWithTableRow, screen, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Target from 'gmp/models/target';
 import TargetTableActions from 'web/pages/targets/TargetTableActions';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('TargetTableActions tests', () => {
   test('should render all action icons', () => {

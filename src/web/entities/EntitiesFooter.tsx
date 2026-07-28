@@ -21,7 +21,7 @@ import TableFooter from 'web/components/table/TableFooter';
 import TableRow from 'web/components/table/TableRow';
 import {type WithEntitiesFooterComponentProps} from 'web/entities/withEntitiesFooter';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 
 type DialogType = (typeof DIALOG_TYPES)[keyof typeof DIALOG_TYPES];
 

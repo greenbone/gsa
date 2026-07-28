@@ -36,7 +36,7 @@ import TagFilterDialog from 'web/pages/tags/TagFilterDialog';
 import TagTable from 'web/pages/tags/TagTable';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename} from 'web/utils/Render';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 interface ToolBarIconsProps {
   onTagCreateClick: () => void;

@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import {rendererWithTable, screen} from 'web/testing';
 import TableHead from 'web/components/table/TableHead';
 import createEntitiesHeader from 'web/entities/createEntitiesHeader';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('createEntitiesHeader test', () => {
   test('should render with default actions column', () => {

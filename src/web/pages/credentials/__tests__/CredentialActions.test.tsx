@@ -11,7 +11,7 @@ import Credential, {
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import CredentialActions from 'web/pages/credentials/CredentialActions';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('CredentialActions tests', () => {
   test('should render all action icons', () => {

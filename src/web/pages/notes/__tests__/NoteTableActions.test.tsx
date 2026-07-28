@@ -9,7 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Note from 'gmp/models/note';
 import {createSession} from 'gmp/testing';
 import NoteTableActions from 'web/pages/notes/NoteTableActions';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const wrongCaps = new Capabilities(['get_notes']);
 

@@ -19,7 +19,7 @@ import {AgentIdTableHead} from 'web/pages/agents/components/AgentIdColumn';
 import HostDetails from 'web/pages/hosts/Details';
 import HostRow from 'web/pages/hosts/Row';
 import PropTypes from 'web/utils/prop-types';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const Header = ({
   actionsColumn,

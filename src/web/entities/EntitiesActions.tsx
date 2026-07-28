@@ -6,7 +6,7 @@
 import {isDefined} from 'gmp/utils/identity';
 import TableData from 'web/components/table/TableData';
 import EntitySelection, {type Entity} from 'web/entities/EntitySelection';
-import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 
 export interface EntitiesActionsProps<TEntity> {
   children?: React.ReactNode;

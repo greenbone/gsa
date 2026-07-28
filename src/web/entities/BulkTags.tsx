@@ -14,7 +14,7 @@ import TagsDialog, {type TagsDialogData} from 'web/entities/TagsDialog';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import TagDialog, {type TagDialogState} from 'web/pages/tags/TagDialog';
-import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 
 interface BulkTagsProps<TEntity extends Model> {
   entities: TEntity[];

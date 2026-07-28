@@ -31,7 +31,7 @@ import {
 } from 'web/store/entities/users';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/prop-types';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 export const UsersListPageToolBarIcons = ({onUserCreateClick}) => {
   const capabilities = useCapabilities();

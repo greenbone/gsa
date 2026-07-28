@@ -16,7 +16,7 @@ import EnableUpdateToLatestIcon from 'web/components/icon/EnableUpdateToLatestIc
 import RevokeIcon from 'web/components/icon/RevokeIcon';
 import EntitiesFooter from 'web/entities/EntitiesFooter';
 import useTranslation from 'web/hooks/useTranslation';
-import type {SelectionTypeType} from 'web/utils/SelectionType';
+import type {SelectionTypeType} from 'web/utils/selection-type';
 
 type AgentBulkAction =
   'authorize' | 'revoke' | 'enableUpdateToLatest' | 'disableUpdateToLatest';

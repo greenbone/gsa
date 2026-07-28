@@ -10,7 +10,7 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import Credential from 'gmp/models/credential';
 import Scanner, {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
 import ScannerActions from 'web/pages/scanners/ScannerActions';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('ScannerActions tests', () => {
   test('should render all action icons', () => {

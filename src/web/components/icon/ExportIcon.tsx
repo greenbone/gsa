@@ -7,7 +7,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {FileOutputIcon} from 'web/components/icon';
 import {type DynamicIconProps} from 'web/components/icon/DynamicIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 
 export interface ExportIconProps<TValue = string> extends Omit<
   DynamicIconProps<TValue>,

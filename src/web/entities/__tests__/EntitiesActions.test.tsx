@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWithTableRow, fireEvent} from 'web/testing';
 import EntitiesActions from 'web/entities/EntitiesActions';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('EntitiesActions tests', () => {
   test('should render EntitySelection when selectionType is SELECTION_USER', () => {

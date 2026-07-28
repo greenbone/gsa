@@ -23,7 +23,7 @@ import AgentGroupsComponent from 'web/pages/agent-groups/AgentGroupsComponent';
 import AgentGroupsFilterDialog from 'web/pages/agent-groups/AgentGroupsFilterDialog';
 import AgentGroupsListPageToolBarIcons from 'web/pages/agent-groups/AgentGroupsListPageToolBarIcons';
 import AgentGroupsTable from 'web/pages/agent-groups/AgentGroupsTable';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 const AgentGroupsListPage = () => {
   const [_] = useTranslation();

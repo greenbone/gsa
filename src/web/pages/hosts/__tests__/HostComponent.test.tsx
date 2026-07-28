@@ -16,7 +16,7 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import HostsDialog from 'web/pages/hosts/Dialog';
 import HostWithTargetComponent from 'web/pages/hosts/HostComponent';
-import type SelectionType from 'web/utils/SelectionType';
+import type SelectionType from 'web/utils/selection-type';
 
 interface SelectionDialogData {
   entities: unknown[];

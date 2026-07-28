@@ -13,7 +13,7 @@ import Qod from 'web/components/qod/Qod';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
-import {type SelectionTypeType} from 'web/utils/SelectionType';
+import {type SelectionTypeType} from 'web/utils/selection-type';
 
 export interface VulnerabilitiesTableRowProps {
   entity: Vulnerability;

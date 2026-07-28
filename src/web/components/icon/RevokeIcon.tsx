@@ -7,7 +7,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {CircleMinusIcon as CircleMinusSvgIcon} from 'web/components/icon';
 import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 
 interface RevokeIconProps<
   TValue = string,

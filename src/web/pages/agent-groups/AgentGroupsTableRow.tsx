@@ -12,7 +12,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsActions, {
   type AgentGroupsActionsProps,
 } from 'web/pages/agent-groups/AgentGroupsActions';
-import {type SelectionTypeType} from 'web/utils/SelectionType';
+import {type SelectionTypeType} from 'web/utils/selection-type';
 
 // Props accepted by any pluggable actionsComponent (e.g. TrashActions),
 // in addition to what the default AgentGroupsActions component uses.
