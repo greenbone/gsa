@@ -39,7 +39,7 @@ import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import useGetEntity from 'web/queries/useGetEntity';
-import {create_pem_certificate} from 'web/utils/Cert';
+import {createPEMCertificate} from 'web/utils/certificates';
 import {generateFilename} from 'web/utils/Render';
 
 interface ReportComposerDefaults {
@@ -403,7 +403,7 @@ const AuditReportDetailsPage = () => {
       handleDownload({
         filename: 'tls-cert-' + cert.serial + '.pem',
         mimetype: 'application/x-x509-ca-cert',
-        data: create_pem_certificate(cert.data),
+        data: createPEMCertificate(cert.data),
       });
     },
     [handleDownload],
