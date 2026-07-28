@@ -24,9 +24,9 @@ export interface QoD {
 
 export type Properties = Record<string, unknown>;
 
-type NumberValue = string | number | undefined;
-type NumberReturn = undefined | number;
-type BooleanValue = NumberValue | boolean;
+export type NumberValue = string | number | undefined;
+export type NumberReturn = undefined | number;
+export type BooleanValue = NumberValue | boolean;
 
 export type YesNo = typeof YES_VALUE | typeof NO_VALUE;
 

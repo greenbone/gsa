@@ -14,7 +14,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import PortsTable from 'web/pages/reports/details/port/PortsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
-import {makeCompareNumber, makeCompareSeverity} from 'web/utils/Sort';
+import {makeCompareNumber, makeCompareSeverity} from 'web/utils/sort';
 
 interface PortsTabProps {
   reportId: string;
@@ -26,7 +26,7 @@ interface PortsTabProps {
 
 export const portsSortFunctions = {
   name: makeCompareNumber('number'),
-  hosts: makeCompareNumber(entity => entity.hosts.count),
+  hosts: makeCompareNumber((entity: ReportPort) => entity.hosts.count),
   severity: makeCompareSeverity(),
 };
 

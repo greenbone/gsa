@@ -18,7 +18,7 @@ import {
   makeCompareNumber,
   makeCompareSeverity,
   makeCompareString,
-} from 'web/utils/Sort';
+} from 'web/utils/sort';
 
 interface DeltaResultsTabProps {
   audit?: boolean;
@@ -43,17 +43,17 @@ interface DeltaResultsTabProps {
 
 const resultsSortFunctions = {
   delta: makeCompareString((entity: Result) => entity.delta?.delta_type),
-  created: makeCompareDate('creationTime'),
+  created: makeCompareDate<Result>('creationTime'),
   host: makeCompareIp((entity: Result) => entity.host?.name),
   hostname: makeCompareString((entity: Result) => entity.host?.hostname),
-  location: makeCompareString('port'),
+  location: makeCompareString<Result>('port'),
   qod: makeCompareNumber((entity: Result) => entity.qod?.value),
-  severity: makeCompareSeverity(),
+  severity: makeCompareSeverity<Result>(),
   solution_type: makeCompareString(
     (entity: Result) => (entity.information as Nvt | undefined)?.solution?.type,
   ),
-  vulnerability: makeCompareString('vulnerability'),
-  compliant: makeCompareString('compliance'),
+  vulnerability: makeCompareString<Result>('vulnerability'),
+  compliant: makeCompareString<Result>('compliance'),
   epss_score: makeCompareNumber(
     (entity: Result) => entity?.information?.epss?.maxEpss?.score,
     0,

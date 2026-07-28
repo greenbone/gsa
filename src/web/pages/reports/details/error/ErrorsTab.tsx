@@ -15,7 +15,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import ErrorsTable from 'web/pages/reports/details/error/ErrorsTable';
 import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import {type UseGetEntitiesReturn} from 'web/queries/useGetEntities';
-import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
+import {makeCompareIp, makeCompareString} from 'web/utils/sort';
 
 interface ErrorsTabWrapperProps {
   filter?: FilterType;
@@ -26,11 +26,11 @@ interface ErrorsTabWrapperProps {
 }
 
 export const errorsSortFunctions = {
-  error: makeCompareString('description'),
+  error: makeCompareString<ReportError>('description'),
   host: makeCompareIp((entity: ReportError) => entity.host?.ip),
   hostname: makeCompareString((entity: ReportError) => entity.host?.name),
   nvt: makeCompareString((entity: ReportError) => entity.nvt?.name),
-  port: makeCompareString('port'),
+  port: makeCompareString<ReportError>('port'),
 };
 
 const ErrorsTabWrapper = ({

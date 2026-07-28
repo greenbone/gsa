@@ -19,7 +19,7 @@ import {
   makeCompareIp,
   makeComparePort,
   makeCompareString,
-} from 'web/utils/Sort';
+} from 'web/utils/sort';
 
 interface TLSCertificatesTabProps {
   reportId: string;
@@ -31,13 +31,13 @@ interface TLSCertificatesTabProps {
 }
 
 export const tlsCertificatesSortFunctions = {
-  dn: makeCompareString('subjectDn'),
-  serial: makeCompareString('serial'),
-  notvalidbefore: makeCompareDate('activationTime'),
-  notvalidafter: makeCompareDate('expirationTime'),
-  ip: makeCompareIp('ip'),
-  hostname: makeCompareString('hostname'),
-  port: makeComparePort('port'),
+  dn: makeCompareString<ReportTLSCertificate>('subjectDn'),
+  serial: makeCompareString<ReportTLSCertificate>('serial'),
+  notvalidbefore: makeCompareDate<ReportTLSCertificate>('activationTime'),
+  notvalidafter: makeCompareDate<ReportTLSCertificate>('expirationTime'),
+  ip: makeCompareIp<ReportTLSCertificate>('ip'),
+  hostname: makeCompareString<ReportTLSCertificate>('hostname'),
+  port: makeComparePort<ReportTLSCertificate>('port'),
 };
 
 const TLSCertificatesTab = ({
@@ -102,7 +102,7 @@ const TLSCertificatesTab = ({
   } = data || {};
 
   return (
-    <ReportEntitiesContainer
+    <ReportEntitiesContainer<ReportTLSCertificate>
       counts={tlsCertificatesCounts}
       entities={tlsCertificates}
       filter={tlsCertificatesFilter}
