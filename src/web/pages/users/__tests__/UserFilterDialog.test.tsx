@@ -11,10 +11,11 @@ import {
   screen,
   waitFor,
 } from 'web/testing';
+import Filter from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import UserFilterDialog from 'web/pages/users/UserFilterDialog';
 
-const newFilter = new QueryFilter({
+const newFilter = new Filter({
   id: 'new-filter-id',
   name: 'New Filter',
 });
@@ -22,7 +23,7 @@ const newFilter = new QueryFilter({
 const gmp = {
   filter: {
     create: testing.fn().mockResolvedValue({
-      data: {id: 'new-filter-id', name: 'New Filter'},
+      data: newFilter,
     }),
     get: testing.fn().mockResolvedValue({
       data: newFilter,

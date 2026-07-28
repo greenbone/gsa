@@ -5,7 +5,8 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
-import type Model from 'gmp/models/model';
+import Group from 'gmp/models/group';
+import Role from 'gmp/models/role';
 import Settings from 'gmp/models/settings';
 import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
@@ -30,14 +31,14 @@ const authSettings = new Settings();
 authSettings.set('method:ldap_connect', {enabled: false});
 authSettings.set('method:radius_connect', {enabled: false});
 
-const groups = [User.fromElement({_id: 'group1', name: 'Group 1'}) as Model];
-const roles = [User.fromElement({_id: 'role1', name: 'Admin'}) as Model];
+const groups = [Group.fromElement({_id: 'group1', name: 'Group 1'})];
+const roles = [Role.fromElement({_id: 'role1', name: 'Admin'})];
 
 const createGmp = () => ({
   user: {
-    create: testing.fn().mockResolvedValue({id: 'created'}),
-    save: testing.fn().mockResolvedValue({id: 'saved'}),
-    clone: testing.fn().mockResolvedValue({id: 'cloned'}),
+    create: testing.fn().mockResolvedValue({data: {id: 'created'}}),
+    save: testing.fn().mockResolvedValue({data: {id: 'saved'}}),
+    clone: testing.fn().mockResolvedValue({data: {id: 'cloned'}}),
     delete: testing.fn().mockResolvedValue(undefined),
     export: testing.fn().mockResolvedValue({data: 'user-data'}),
     currentAuthSettings: testing.fn().mockResolvedValue({data: authSettings}),
