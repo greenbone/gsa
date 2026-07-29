@@ -5,17 +5,17 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import UsersHeader from 'web/pages/users/UsersTableHeader';
+import UsersTableHeader from 'web/pages/users/UsersTableHeader';
 import SelectionType from 'web/utils/selection-type';
 
-describe('UsersHeader', () => {
+describe('UsersTableHeader', () => {
   test('should render all user list columns with actions column', () => {
     const onSortChange = testing.fn();
     const {render} = rendererWith();
 
     render(
       <table>
-        <UsersHeader
+        <UsersTableHeader
           currentSortBy="name"
           currentSortDir="asc"
           selectionType={SelectionType.SELECTION_USER}
@@ -36,7 +36,7 @@ describe('UsersHeader', () => {
     const {render} = rendererWith();
     render(
       <table>
-        <UsersHeader
+        <UsersTableHeader
           selectionType={SelectionType.SELECTION_USER}
           sort={false}
           onSortChange={testing.fn()}
