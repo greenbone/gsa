@@ -34,7 +34,7 @@ const SchedulingFormGroup = ({
 
   const formGroup = (
     <FormGroup title={_('Scheduling')}>
-      <Row align={'end'} flex="row" gap={'lg'}>
+      <Row align="end" flex="row" gap="lg">
         <DatePicker
           label={_('Start Date')}
           name="startDate"
