@@ -512,7 +512,6 @@ const ScheduleDialog = ({
           );
           setStartDate(updatedDate);
           setStartTime(formatTimeForTimePicker(updatedDate));
-          onValueChange(updatedDate, 'startDate');
         };
 
         const handleEndDateChange = (newDate: DateType) => {
@@ -523,7 +522,6 @@ const ScheduleDialog = ({
           );
           setEndDate(updatedDate);
           setEndTime(formatTimeForTimePicker(updatedDate));
-          onValueChange(updatedDate, 'endDate');
         };
 
         return (
