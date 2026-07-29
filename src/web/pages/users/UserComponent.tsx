@@ -28,7 +28,7 @@ interface UserComponentRenderProps {
   delete: (entity: User) => Promise<void>;
   download: (entity: User) => Promise<void>;
   edit: (user: User) => Promise<void>;
-  save: (data: UserDialogSaveData) => Promise<EntityActionData>;
+  save: (data: UserDialogSaveData) => Promise<void>;
 }
 
 interface UserComponentProps {
@@ -42,7 +42,7 @@ interface UserComponentProps {
   onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
   onSaveError?: (error: Error) => void;
-  onSaved?: (response: EntityActionData) => void;
+  onSaved?: () => void;
 }
 
 const UserComponent = ({
@@ -159,7 +159,7 @@ const UserComponent = ({
   };
 
   const saveUser = async (data: UserDialogSaveData) => {
-    return saveMutation.mutateAsync({...data, id: data.id as string});
+    await saveMutation.mutateAsync({...data, id: data.id as string});
   };
 
   const cloneUser = async (entity: User) => {
@@ -172,6 +172,16 @@ const UserComponent = ({
 
   const downloadUserEntity = async (entity: User) => {
     await downloadUser(entity);
+  };
+
+  const handleUserDialogSave = async (data: UserDialogSaveData) => {
+    if (isDefined(data.id)) {
+      await saveUser(data);
+    } else {
+      await createMutation.mutateAsync(data);
+    }
+
+    closeUserDialog();
   };
 
   return (
@@ -199,12 +209,7 @@ const UserComponent = ({
           title={title}
           user={user}
           onClose={handleCloseUserDialog}
-          onSave={(d: UserDialogSaveData) => {
-            const promise = isDefined(d.id)
-              ? saveUser(d)
-              : createMutation.mutateAsync(d);
-            return promise.then(() => closeUserDialog());
-          }}
+          onSave={handleUserDialogSave}
         />
       )}
     </>

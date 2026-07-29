@@ -20,7 +20,7 @@ import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import {convertAllow, convertAuthMethod} from 'web/pages/users/UserDetails';
-import {type SelectionTypeType} from 'web/utils/SelectionType';
+import {type SelectionTypeType} from 'web/utils/selection-type';
 
 interface UsersRowActionHandlers {
   onUserCloneClick?: (user: User) => void | Promise<void>;
@@ -36,7 +36,7 @@ interface UsersActionsProps extends UsersRowActionHandlers {
   selectionType?: SelectionTypeType;
 }
 
-interface UsersTableRowProps
+export interface UsersTableRowProps
   extends RowComponentProps<User>, UsersRowActionHandlers {
   actionsComponent?: ComponentType<UsersActionsProps>;
   links?: boolean;
