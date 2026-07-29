@@ -555,9 +555,9 @@ describe('TaskActions tests', () => {
     expect(handleTaskStart).toHaveBeenCalledWith(task);
 
     const resumeIcon = screen.getByTestId('resume-icon');
-    expect(resumeIcon).toHaveAttribute('title', 'Task is scheduled');
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
     fireEvent.click(resumeIcon);
-    expect(handleTaskResume).not.toHaveBeenCalled();
+    expect(handleTaskResume).toHaveBeenCalledWith(task);
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute('title', 'Move Task to trashcan');

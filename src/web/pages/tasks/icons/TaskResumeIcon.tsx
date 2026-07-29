@@ -42,11 +42,6 @@ const TaskResumeIcon = <TTask extends Audit | Task>({
     );
   }
 
-  // An assigned schedule must not hide the resume action. A stopped or
-  // interrupted task keeps a resumable report, and gvmd accepts resume_task
-  // for a scheduled task just as well as for an unscheduled one. Hiding the
-  // action here left exactly those tasks unresumable that a schedule had
-  // stopped, which is the most common way for a task to end up stopped.
   if (task.isStopped() || task.isInterrupted()) {
     if (
       capabilities.mayOp('start_task') &&

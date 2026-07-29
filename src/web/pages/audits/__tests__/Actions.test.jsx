@@ -651,8 +651,8 @@ describe('Audit Actions tests', () => {
 
     const resumeIcon = screen.getByTestId('resume-icon');
     fireEvent.click(resumeIcon);
-    expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(resumeIcon).toHaveAttribute('title', 'Audit is scheduled');
+    expect(handleAuditResume).toHaveBeenCalledWith(audit);
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
   });
 
   console.warn = consoleError;

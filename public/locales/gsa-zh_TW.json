@@ -84,7 +84,6 @@
   "{{subjectType}} {{- subjectName}} may test Alert": "",
   "{{subjectType}} {{- subjectName}} may verify {{resourceType}}": "",
   "{{title}} {{filtered}} of {{all}}": "",
-  "{{type}} cannot be started manually because the assigned schedule has a duration limit": "",
   "{{type}} is already active": "",
   "{{type}} is for import only": "",
   "{{type}} is not stopped": "",

@@ -53,16 +53,12 @@ describe('Task ResumeIcon component tests', () => {
 
     fireEvent.click(element);
 
-    // A schedule is the most common reason for a task to be stopped, so it
-    // must not be the reason why it cannot be resumed.
     expect(clickHandler).toHaveBeenCalledWith(task);
     expect(element).toHaveAttribute('title', 'Resume');
     expect(element).not.toHaveAttribute('disabled');
   });
 
   test('should render in active state for a stopped task with a real schedule', () => {
-    // Same shape as a task on an appliance: schedule delivered with icalendar,
-    // here without a duration limit (PT0S).
     const caps = new Capabilities(['everything']);
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
