@@ -140,7 +140,6 @@ const TagDetailsPage = () => {
   if (!entity) {
     return (
       <EntityPage<Tag>
-        entity={undefined as unknown as Tag}
         entityType="tag"
         isLoading={isLoading}
         sectionIcon={<TagIcon size="large" />}

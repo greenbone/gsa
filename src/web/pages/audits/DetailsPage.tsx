@@ -164,7 +164,6 @@ const AuditDetailsPage = () => {
   if (!entity) {
     return (
       <EntityPage<Audit>
-        entity={undefined as unknown as Audit}
         entityType="audit"
         isLoading={isLoading}
         sectionIcon={<AuditIcon size="large" />}

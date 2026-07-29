@@ -42,7 +42,7 @@ interface EntityError {
 
 interface EntityPageProps<TEntity extends Model> {
   children: () => React.ReactNode;
-  entity: TEntity;
+  entity?: TEntity;
   entityError?: EntityError;
   entityType?: EntityType;
   infoComponent?:
@@ -77,15 +77,21 @@ const EntityPage = <TEntity extends Model>({
   sectionComponent: SectionComponent,
   entity,
   entityError,
-  entityType = getEntityType(entity),
+  entityType,
   isLoading = true,
   title,
   toolBarIcons: ToolBarIconsComponent,
   ...props
 }: EntityPageProps<TEntity>) => {
   const [_] = useTranslation();
+  const resolvedEntityType =
+    entityType ?? (isDefined(entity) ? getEntityType(entity) : undefined);
 
   const renderToolbarIcons = () => {
+    if (!isDefined(entity)) {
+      return null;
+    }
+
     if (ReactIs.isElement(ToolBarIconsComponent)) {
       return ToolBarIconsComponent;
     }
@@ -98,6 +104,10 @@ const EntityPage = <TEntity extends Model>({
   };
 
   const renderInfo = () => {
+    if (!isDefined(entity)) {
+      return null;
+    }
+
     if (!isDefined(InfoComponent)) {
       InfoComponent = EntityInfo;
     }
@@ -153,10 +163,10 @@ const EntityPage = <TEntity extends Model>({
         let content = _(
           '\nYou might have followed an incorrect link and the {{entity}} ' +
             'does not exist.',
-          {entity: typeName(entityType)},
+          {entity: typeName(resolvedEntityType)},
         );
 
-        if (entityType === 'cpe') {
+        if (resolvedEntityType === 'cpe') {
           content = _(
             '\nThis could have the following reasons:\n' +
               '1. The CPE might not be included in the official NVD CPE dictionary ' +
@@ -166,7 +176,7 @@ const EntityPage = <TEntity extends Model>({
           );
         }
 
-        if (entityType === 'cve') {
+        if (resolvedEntityType === 'cve') {
           content = _(
             '\nThis could have the following reasons:\n' +
               '1. The CVE might not be included in the SCAP database yet. ' +
@@ -177,14 +187,14 @@ const EntityPage = <TEntity extends Model>({
           );
         }
 
-        if (entityType === 'cpe' || entityType === 'cve') {
+        if (resolvedEntityType === 'cpe' || resolvedEntityType === 'cve') {
           return (
             <Message
               flex="column"
               message={_(
                 'The {{entity}} you were looking for could not be found.',
                 {
-                  entity: typeName(entityType),
+                  entity: typeName(resolvedEntityType),
                 },
               )}
             >
@@ -199,7 +209,7 @@ const EntityPage = <TEntity extends Model>({
             message={_(
               'The {{entity}} you were looking for could not be found.',
               {
-                entity: typeName(entityType),
+                entity: typeName(resolvedEntityType),
               },
             )}
           >
