@@ -130,10 +130,10 @@ const UsersTableRow = ({
   );
 
   const authMethod = convertAuthMethod(entity.authMethod, _);
-  const host_allow = convertAllow(
-    entity.hosts ?? {addresses: []},
-    _,
-  ).replaceAll('&#x2F;', '/');
+  const hostAllow = convertAllow(entity.hosts ?? {addresses: []}, _).replaceAll(
+    '&#x2F;',
+    '/',
+  );
   return (
     <TableRow>
       <EntityNameTableData
@@ -149,7 +149,7 @@ const UsersTableRow = ({
       <TableData>
         <HorizontalSeparator $wrap>{groups}</HorizontalSeparator>
       </TableData>
-      <TableData>{host_allow}</TableData>
+      <TableData>{hostAllow}</TableData>
       <TableData>{authMethod}</TableData>
       <ActionsComponent
         entity={entity}

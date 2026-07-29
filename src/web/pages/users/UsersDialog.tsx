@@ -314,7 +314,7 @@ const UsersDialog = ({
               )}
             </FormGroup>
           )}
-          {capabilities.mayAccess('roles' as CapabilitiesEntityType) && (
+          {capabilities.mayAccess('role') && (
             <FormGroup title={_('Roles')}>
               <MultiSelect
                 items={rolesOptions}

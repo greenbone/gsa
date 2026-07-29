@@ -5,9 +5,11 @@
 
 import {useQueryClient} from '@tanstack/react-query';
 import {useNavigate, useParams} from 'react-router';
+import {type EntityActionData} from 'gmp/commands/entity';
 import {type FilterType} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type User from 'gmp/models/user';
+import {isDefined} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {UserIcon} from 'web/components/icon';
@@ -41,7 +43,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import UserComponent from 'web/pages/users/UserComponent';
 import UserDetails from 'web/pages/users/UserDetails';
 
-interface ToolBarIconsProps {
+interface UserToolBarIconsProps {
   entity: User;
   onUserCloneClick: (user: User) => void | Promise<void>;
   onUserCreateClick: () => void | Promise<void>;
@@ -52,21 +54,17 @@ interface ToolBarIconsProps {
 
 const permissionsSubjectFilter = (id: string): FilterType =>
   QueryFilter.fromString(
-    'subject_uuid=' +
-      id +
-      ' and not resource_uuid=""' +
-      ' or resource_uuid=' +
-      id,
+    `subject_uuid=${id} and not resource_uuid="" or resource_uuid=${id}`,
   ).all();
 
-const ToolBarIcons = ({
+const UserToolBarIcons = ({
   entity,
   onUserCloneClick,
   onUserCreateClick,
   onUserDeleteClick,
   onUserDownloadClick,
   onUserEditClick,
-}: ToolBarIconsProps) => {
+}: UserToolBarIconsProps) => {
   const [_] = useTranslation();
 
   return (
@@ -98,7 +96,7 @@ const ToolBarIcons = ({
   );
 };
 
-const UserDetailPage = () => {
+const UserDetailsPage = () => {
   const [_] = useTranslation();
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
@@ -148,12 +146,12 @@ const UserDetailPage = () => {
       <Download ref={downloadRef} />
       <UserComponent
         onCloneError={onError}
-        onCloned={(response: unknown) => {
-          const id = (response as {id: string}).id;
+        onCloned={(response: EntityActionData) => {
+          const id = response.id;
           goToDetails('user', navigate)({data: {id}});
         }}
-        onCreated={(response: unknown) => {
-          const id = (response as {id: string}).id;
+        onCreated={(response: EntityActionData) => {
+          const id = response.id;
           goToDetails('user', navigate)({data: {id}});
         }}
         onDeleteError={onError}
@@ -169,7 +167,7 @@ const UserDetailPage = () => {
             sectionIcon={<UserIcon size="large" />}
             title={_('User')}
             toolBarIcons={
-              <ToolBarIcons
+              <UserToolBarIcons
                 entity={entity}
                 onUserCloneClick={clone}
                 onUserCreateClick={create}
@@ -220,7 +218,7 @@ const UserDetailPage = () => {
                     <TabLayout align={['start', 'end']} grow="1">
                       <TabList align={['start', 'stretch']}>
                         {tabs.map(({label, entities}) =>
-                          entities === undefined ? (
+                          !isDefined(entities) ? (
                             <Tab key={label}>{label}</Tab>
                           ) : (
                             <EntitiesTab key={label} entities={entities}>
@@ -249,4 +247,4 @@ const UserDetailPage = () => {
   );
 };
 
-export default UserDetailPage;
+export default UserDetailsPage;

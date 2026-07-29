@@ -44,7 +44,8 @@ const UsersHeader = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'name' : undefined}
+          sort={sort}
+          sortBy="name"
           title={_('Name')}
           width="20%"
           onSortChange={onSortChange}
@@ -52,7 +53,8 @@ const UsersHeader = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'roles' : undefined}
+          sort={sort}
+          sortBy="roles"
           title={_('Roles')}
           width="26%"
           onSortChange={onSortChange}
@@ -60,7 +62,8 @@ const UsersHeader = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'groups' : undefined}
+          sort={sort}
+          sortBy="groups"
           title={_('Groups')}
           width="26%"
           onSortChange={onSortChange}
@@ -68,7 +71,8 @@ const UsersHeader = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'host_access' : undefined}
+          sort={sort}
+          sortBy="host_access"
           title={_('Host Access')}
           width="10%"
           onSortChange={onSortChange}
@@ -76,7 +80,8 @@ const UsersHeader = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'ldap' : undefined}
+          sort={sort}
+          sortBy="ldap"
           title={_('Authentication Type')}
           width="10%"
           onSortChange={onSortChange}
