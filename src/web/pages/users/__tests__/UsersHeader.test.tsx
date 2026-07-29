@@ -5,10 +5,10 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import UsersHeader from 'web/pages/users/UsersHeader';
+import UsersHeader from 'web/pages/users/UsersTableHeader';
 import SelectionType from 'web/utils/SelectionType';
 
-describe('users Header', () => {
+describe('UsersHeader', () => {
   test('should render all user list columns with actions column', () => {
     const onSortChange = testing.fn();
     const {render} = rendererWith();

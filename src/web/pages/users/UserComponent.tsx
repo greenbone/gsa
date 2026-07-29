@@ -4,6 +4,7 @@
  */
 
 import {type ReactNode, useState} from 'react';
+import {type EntityActionData} from 'gmp/commands/entity';
 import type Model from 'gmp/models/model';
 import type Settings from 'gmp/models/settings';
 import type User from 'gmp/models/user';
@@ -26,21 +27,21 @@ interface UserComponentRenderProps {
   create: (user?: User) => Promise<void>;
   delete: (entity: User) => Promise<void>;
   download: (entity: User) => Promise<void>;
-  edit: (user?: User) => Promise<void>;
-  save?: (data: UserDialogSaveData) => Promise<void | unknown>;
+  edit: (user: User) => Promise<void>;
+  save: (data: UserDialogSaveData) => Promise<void>;
 }
 
 interface UserComponentProps {
   children: (props: UserComponentRenderProps) => ReactNode;
   onCloneError?: (error: Error) => void;
-  onCloned?: (response: unknown) => void;
+  onCloned?: (response: EntityActionData) => void;
   onCreateError?: (error: Error) => void;
   onCreated?: (response: unknown) => void;
   onDeleteError?: (error: Error) => void;
   onDeleted?: () => void;
   onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
-  onSaveError?: (error: Error) => void;
+  onSaveError?: () => void;
   onSaved?: (response: unknown) => void;
 }
 

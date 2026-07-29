@@ -83,18 +83,13 @@ const UserDetails = ({entity, links = true}: UserDetailsProps) => {
             <TableData>{_('Roles')}</TableData>
             <TableData>
               <HorizontalSep>
-                {roles.map(role => {
-                  if (!role.id) {
-                    return <span key={role.name}>{role.name}</span>;
-                  }
-                  return (
-                    <span key={role.id}>
-                      <DetailsLink id={role.id} textOnly={!links} type="role">
-                        {role.name}
-                      </DetailsLink>
-                    </span>
-                  );
-                })}
+                {roles.map(role => (
+                  <span key={role.id}>
+                    <DetailsLink id={role.id} textOnly={!links} type="role">
+                      {role.name}
+                    </DetailsLink>
+                  </span>
+                ))}
               </HorizontalSep>
             </TableData>
           </TableRow>
@@ -103,23 +98,18 @@ const UserDetails = ({entity, links = true}: UserDetailsProps) => {
             <TableData>{_('Groups')}</TableData>
             <TableData>
               <HorizontalSep>
-                {groups.map(group => {
-                  if (!group.id) {
-                    return <span key={group.name}>{group.name}</span>;
-                  }
-                  return (
-                    <span key={group.id}>
-                      <DetailsLink
-                        key={group.id}
-                        id={group.id}
-                        textOnly={!links}
-                        type="group"
-                      >
-                        {group.name}
-                      </DetailsLink>
-                    </span>
-                  );
-                })}
+                {groups.map(group => (
+                  <span key={group.id}>
+                    <DetailsLink
+                      key={group.id}
+                      id={group.id}
+                      textOnly={!links}
+                      type="group"
+                    >
+                      {group.name}
+                    </DetailsLink>
+                  </span>
+                ))}
               </HorizontalSep>
             </TableData>
           </TableRow>

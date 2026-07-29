@@ -34,7 +34,7 @@ const gmp = {
   session: createSession({username: 'admin'}),
 };
 
-describe('users Row', () => {
+describe('UsersTableRow', () => {
   test('should render row data and fallback names without ids', () => {
     const {render} = rendererWith({gmp, capabilities: true, router: true});
     render(

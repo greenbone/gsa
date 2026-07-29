@@ -9,7 +9,7 @@ import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
 import UserDetails from 'web/pages/users/UserDetails';
-import UsersHeader from 'web/pages/users/UsersHeader';
+import UsersHeader from 'web/pages/users/UsersTableHeader';
 import UsersTableRow from 'web/pages/users/UsersTableRow';
 
 export const SORT_FIELDS = [

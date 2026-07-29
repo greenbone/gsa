@@ -8,6 +8,7 @@ import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useQueryClient} from '@tanstack/react-query';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Rejection from 'gmp/http/rejection';
+import type Filter from 'gmp/models/filter';
 import {
   type FilterType,
   RESET_FILTER,
@@ -69,7 +70,7 @@ interface UsersEntitiesPageProps {
   onEntitySelected: (entity: User) => void;
   onError: (error: Error | Rejection) => void;
   onFilterChanged: (newFilter: FilterType) => void;
-  onFilterCreated: (newFilter: FilterType) => void;
+  onFilterCreated: (newFilter: Filter) => void;
   onFilterRemoved: () => void;
   onFilterReset: () => void;
   onFirstClick: () => void;
