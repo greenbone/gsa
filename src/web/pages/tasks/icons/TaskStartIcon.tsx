@@ -5,7 +5,6 @@
 
 import {type default as Audit} from 'gmp/models/audit';
 import {type default as Task, USAGE_TYPE} from 'gmp/models/task';
-import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import {StartIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
@@ -43,11 +42,6 @@ const TaskStartIcon = <TTask extends Audit | Task>({
       />
     );
   }
-
-  // A schedule with a duration limit used to block the manual start, because
-  // the scheduler ended such a run at the end of the window. It only does that
-  // for runs it started itself, so a manually started run is not affected and
-  // the action stays available.
 
   if (!task.isActive()) {
     return (

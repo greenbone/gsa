@@ -130,8 +130,6 @@ END:VCALENDAR
 
     fireEvent.click(element);
 
-    // The duration only limits runs that the scheduler started itself, so a
-    // manual start stays possible.
     expect(clickHandler).toHaveBeenCalledWith(task);
     expect(element).toHaveAttribute('title', 'Start');
     expect(element).not.toHaveAttribute('disabled');

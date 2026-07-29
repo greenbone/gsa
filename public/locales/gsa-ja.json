@@ -84,7 +84,6 @@
   "{{subjectType}} {{- subjectName}} may test Alert": "{{subjectType}} {{- subjectName}}はアラートをテストできます",
   "{{subjectType}} {{- subjectName}} may verify {{resourceType}}": "{{subjectType}} {{- subjectName}}は{{resourceType}}を検証できます",
   "{{title}} {{filtered}} of {{all}}": "{{title}} {{all}} 件中 {{filtered}} 件",
-  "{{type}} cannot be started manually because the assigned schedule has a duration limit": "割り当てられたスケジュールに実行時間の制限があるため、{{type}}を手動で開始できません",
   "{{type}} is already active": "{{type}}はすでにアクティブです",
   "{{type}} is for import only": "{{type}}はインポート専用です",
   "{{type}} is not stopped": "{{type}}は停止していません",
