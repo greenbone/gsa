@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {
   type ScanConfigFamilyTrends,
   type ScanConfigNvtsSelected,
@@ -33,7 +34,8 @@ interface ScanConfigNvtFamiliesProps {
   select: ScanConfigNvtsSelected;
   trend: ScanConfigFamilyTrends;
   onEditConfigFamilyClick?: (familyName: string) => void;
-  onValueChange: (value: ScanConfigFamilyTrends, name?: string) => void;
+  onTrendChange: (value: ScanConfigFamilyTrends) => void;
+  onSelectChange: (value: ScanConfigNvtsSelected) => void;
 }
 
 const ScanConfigNvtFamilies = ({
@@ -43,27 +45,37 @@ const ScanConfigNvtFamilies = ({
   trend,
   select,
   onEditConfigFamilyClick,
-  onValueChange,
+  onTrendChange,
+  onSelectChange,
 }: ScanConfigNvtFamiliesProps) => {
   const [_] = useTranslation();
-  const onTrendChange = (value: ScanConfigTrend, name?: string) => {
-    trend[name as string] = value;
-
-    onValueChange(trend, 'trend');
-  };
-  const onSelectChange = (value: YesNo, name: string) => {
-    const isToSelectWhole = WHOLE_SELECTION_FAMILIES.includes(name);
-    select[name] = value;
-    if (isToSelectWhole) {
-      onTrendChange(
-        value === YES_VALUE
-          ? SCANCONFIG_TREND_DYNAMIC
-          : SCANCONFIG_TREND_STATIC,
-        name,
-      );
-    }
-    onValueChange(select, 'select');
-  };
+  const handleTrendChange = useCallback(
+    (value: ScanConfigTrend, name?: string) => {
+      onTrendChange({
+        ...trend,
+        [name as string]: value,
+      });
+    },
+    [trend, onTrendChange],
+  );
+  const handleSelectChange = useCallback(
+    (value: YesNo, name: string) => {
+      const isToSelectWhole = WHOLE_SELECTION_FAMILIES.includes(name);
+      if (isToSelectWhole) {
+        handleTrendChange(
+          value === YES_VALUE
+            ? SCANCONFIG_TREND_DYNAMIC
+            : SCANCONFIG_TREND_STATIC,
+          name,
+        );
+      }
+      onSelectChange({
+        ...select,
+        [name]: value,
+      });
+    },
+    [select, onSelectChange, handleTrendChange],
+  );
   return (
     <Section
       foldable
@@ -98,8 +110,8 @@ const ScanConfigNvtFamilies = ({
                 title={editTitle}
                 trend={trend[name]}
                 onEditConfigFamilyClick={onEditConfigFamilyClick}
-                onSelectChange={onSelectChange}
-                onTrendChange={onTrendChange}
+                onSelectChange={handleSelectChange}
+                onTrendChange={handleTrendChange}
               />
             );
           })}

@@ -76,7 +76,8 @@ const unfoldSection = () => {
 describe('NvtFamilies tests', () => {
   test('should render nvt families section', () => {
     const handleEditConfigFamilyClick = testing.fn();
-    const handleValueChange = testing.fn();
+    const handleTendChange = testing.fn();
+    const handleSelectChange = testing.fn();
     const families = createFamilies();
     const configFamilies = createConfigFamilies();
     const select = createSelect();
@@ -90,7 +91,8 @@ describe('NvtFamilies tests', () => {
         select={select}
         trend={trend}
         onEditConfigFamilyClick={handleEditConfigFamilyClick}
-        onValueChange={handleValueChange}
+        onSelectChange={handleSelectChange}
+        onTrendChange={handleTendChange}
       />,
     );
 
@@ -142,7 +144,8 @@ describe('NvtFamilies tests', () => {
 
   test('should call onValueChange when changing a regular family', () => {
     const handleEditConfigFamilyClick = testing.fn();
-    const handleValueChange = testing.fn();
+    const handleSelectChange = testing.fn();
+    const handleTrendChange = testing.fn();
     const families = createFamilies();
     const configFamilies = createConfigFamilies();
     const select = createSelect();
@@ -156,7 +159,8 @@ describe('NvtFamilies tests', () => {
         select={select}
         trend={trend}
         onEditConfigFamilyClick={handleEditConfigFamilyClick}
-        onValueChange={handleValueChange}
+        onSelectChange={handleSelectChange}
+        onTrendChange={handleTrendChange}
       />,
     );
 
@@ -169,28 +173,23 @@ describe('NvtFamilies tests', () => {
 
     const trendRadios = familyRow.getAllByRole('radio');
     fireEvent.click(trendRadios[1]);
-    expect(handleValueChange).toHaveBeenCalledWith(
-      {
-        family1: SCANCONFIG_TREND_STATIC,
-        [WHOLE_SELECTION_FAMILIES[0]]: SCANCONFIG_TREND_STATIC,
-      },
-      'trend',
-    );
+    expect(handleTrendChange).toHaveBeenCalledWith({
+      family1: SCANCONFIG_TREND_STATIC,
+      [WHOLE_SELECTION_FAMILIES[0]]: SCANCONFIG_TREND_STATIC,
+    });
 
     const selectAllCheckbox = familyRow.getByRole('checkbox');
     fireEvent.click(selectAllCheckbox);
-    expect(handleValueChange).toHaveBeenCalledWith(
-      {
-        family1: NO_VALUE,
-        [WHOLE_SELECTION_FAMILIES[0]]: NO_VALUE,
-      },
-      'select',
-    );
+    expect(handleSelectChange).toHaveBeenCalledWith({
+      family1: NO_VALUE,
+      [WHOLE_SELECTION_FAMILIES[0]]: NO_VALUE,
+    });
   });
 
   test('should update trend and selection for whole-selection families', () => {
     const handleEditConfigFamilyClick = testing.fn();
-    const handleValueChange = testing.fn();
+    const handleSelectChange = testing.fn();
+    const handleTrendChange = testing.fn();
     const families = createFamilies();
     const configFamilies = createConfigFamilies();
     const select = createSelect();
@@ -205,7 +204,8 @@ describe('NvtFamilies tests', () => {
         select={select}
         trend={trend}
         onEditConfigFamilyClick={handleEditConfigFamilyClick}
-        onValueChange={handleValueChange}
+        onSelectChange={handleSelectChange}
+        onTrendChange={handleTrendChange}
       />,
     );
 
@@ -219,21 +219,13 @@ describe('NvtFamilies tests', () => {
     const selectAllCheckbox = familyRow.getByRole('checkbox');
     fireEvent.click(selectAllCheckbox);
 
-    expect(handleValueChange).toHaveBeenNthCalledWith(
-      1,
-      {
-        family1: SCANCONFIG_TREND_DYNAMIC,
-        [familyName]: SCANCONFIG_TREND_DYNAMIC,
-      },
-      'trend',
-    );
-    expect(handleValueChange).toHaveBeenNthCalledWith(
-      2,
-      {
-        family1: YES_VALUE,
-        [familyName]: YES_VALUE,
-      },
-      'select',
-    );
+    expect(handleTrendChange).toHaveBeenCalledWith({
+      family1: SCANCONFIG_TREND_DYNAMIC,
+      [familyName]: SCANCONFIG_TREND_DYNAMIC,
+    });
+    expect(handleSelectChange).toHaveBeenCalledWith({
+      family1: YES_VALUE,
+      [familyName]: YES_VALUE,
+    });
   });
 });
