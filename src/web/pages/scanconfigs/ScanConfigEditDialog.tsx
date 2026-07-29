@@ -354,6 +354,14 @@ const ScanConfigEditDialog = ({
       filteredScannerPreferences.length +
       filteredNvtPreferences.length;
 
+  const onSelectChange = useCallback((value: ScanConfigNvtsSelected) => {
+    setSelectValues(value);
+  }, []);
+
+  const onTrendChange = useCallback((value: ScanConfigFamilyTrends) => {
+    setTrendValues(value);
+  }, []);
+
   const handleSave = (
     values: ScanConfigEditDialogValues & ScanConfigEditDialogDefaultValues,
   ) => {
@@ -384,7 +392,7 @@ const ScanConfigEditDialog = ({
       onClose={onClose}
       onSave={handleSave}
     >
-      {({values: state, onValueChange}) => (
+      {() => (
         <>
           <BasicFieldsContainer
             initialComment={comment}
@@ -415,7 +423,8 @@ const ScanConfigEditDialog = ({
                   select={selectValues as ScanConfigNvtsSelected}
                   trend={trendValues as ScanConfigFamilyTrends}
                   onEditConfigFamilyClick={onEditConfigFamilyClick}
-                  onValueChange={onValueChange}
+                  onSelectChange={onSelectChange}
+                  onTrendChange={onTrendChange}
                 />
               )}
               {isLoadingConfig ? (
