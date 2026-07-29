@@ -24,7 +24,7 @@ interface UseGetUserParams {
   refetchInterval?: RefetchIntervalFn<User>;
 }
 
-interface UseUserMutationCallbacks<TResponse = EntityActionData | void> {
+interface UseUserMutationCallbacks<TResponse> {
   onSuccess?: (response: TResponse) => void;
   onError?: (error: Error) => void;
 }
@@ -84,7 +84,7 @@ export const useGetUser = ({id, refetchInterval}: UseGetUserParams) => {
 export const useCreateUser = ({
   onSuccess,
   onError,
-}: UseUserMutationCallbacks = {}) => {
+}: UseUserMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
   return useGmpMutation<UserCreateInput, EntityActionData>({
     gmpMethod: async data => {
@@ -104,7 +104,7 @@ export const useCreateUser = ({
 export const useSaveUser = ({
   onSuccess,
   onError,
-}: UseUserMutationCallbacks = {}) => {
+}: UseUserMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
   return useGmpMutation<UserSaveInput, EntityActionData>({
     gmpMethod: async data => {
@@ -125,7 +125,7 @@ export const useSaveUser = ({
 export const useCloneUser = ({
   onSuccess,
   onError,
-}: UseUserMutationCallbacks = {}) => {
+}: UseUserMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
   return useGmpMutation<{id: string}, EntityActionData>({
     gmpMethod: async ({id}: {id: string}) => {
@@ -141,7 +141,7 @@ export const useCloneUser = ({
 export const useDeleteUser = ({
   onSuccess,
   onError,
-}: UseUserMutationCallbacks = {}) => {
+}: UseUserMutationCallbacks<void> = {}) => {
   const gmp = useGmp();
   return useGmpMutation<{id: string; inheritorId?: string}, void>({
     gmpMethod: ({id, inheritorId}: {id: string; inheritorId?: string}) =>

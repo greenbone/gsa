@@ -215,12 +215,12 @@ const UserDetailsPage = () => {
                     <TabLayout align={['start', 'end']} grow="1">
                       <TabList align={['start', 'stretch']}>
                         {tabs.map(({label, entities}) =>
-                          !isDefined(entities) ? (
-                            <Tab key={label}>{label}</Tab>
-                          ) : (
+                          isDefined(entities) ? (
                             <EntitiesTab key={label} entities={entities}>
                               {label}
                             </EntitiesTab>
+                          ) : (
+                            <Tab key={label}>{label}</Tab>
                           ),
                         )}
                       </TabList>
