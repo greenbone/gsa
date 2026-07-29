@@ -6,8 +6,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
 import {useParams} from 'react-router';
-import type Response from 'gmp/http/response';
-import type {XmlMeta} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import type AuditReport from 'gmp/models/audit-report';
 import {
@@ -17,13 +15,14 @@ import {
 } from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
-import {isActive, type TaskStatus} from 'gmp/models/task';
+import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
+import {useGetAuditReport} from 'web/hooks/use-query/audit-report';
 import {
   useGetReportConfigs,
   useGetReportExportFileName,
@@ -38,7 +37,6 @@ import Page from 'web/pages/reports/AuditReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
-import useGetEntity from 'web/queries/useGetEntity';
 import {createPEMCertificate} from 'web/utils/certificates';
 import {generateFilename} from 'web/utils/Render';
 
@@ -60,10 +58,6 @@ interface ReportTargetRef {
 }
 
 interface AuditReportCommand {
-  get: (
-    params: {id: string},
-    options?: {filter?: string; details?: boolean},
-  ) => Promise<Response<AuditReport, XmlMeta>>;
   addAssets: (params: {id: string; filter?: string}) => Promise<unknown>;
   removeAssets: (params: {id: string; filter?: string}) => Promise<unknown>;
   download: (
@@ -99,29 +93,6 @@ const getTarget = (entity?: AuditReport) => {
 
 const getReportFilter = (entity?: AuditReport) => {
   return entity?.report?.filter;
-};
-
-const useGetAuditReport = ({
-  id,
-  filter,
-  refetchInterval,
-}: {
-  id: string;
-  filter?: FilterType;
-  refetchInterval?: number | false | ((data?: AuditReport) => number | false);
-}) => {
-  const gmp = useGmp();
-  const filterString = filter?.toFilterString();
-
-  return useGetEntity<AuditReport>({
-    gmpMethod: async ({id}) => {
-      return gmp.auditreport.get({id}, {filter, details: false});
-    },
-    queryId: 'get_audit_report',
-    queryKeyParts: [filterString],
-    id,
-    refetchInterval,
-  });
 };
 
 const AuditReportDetailsPage = () => {
@@ -161,7 +132,7 @@ const AuditReportDetailsPage = () => {
       if (!isDefined(entity) || !isDefined(entity.report)) {
         return false as const;
       }
-      return isActive(entity.report.scan_run_status as TaskStatus)
+      return isActive(entity.report.scan_run_status)
         ? gmp.settings.reloadIntervalActive
         : false;
     },
@@ -357,7 +328,7 @@ const AuditReportDetailsPage = () => {
 
       try {
         const response = await auditreport.download(
-          {id: entity.id as string},
+          {id: entity.id},
           {
             reportFormatId,
             filter: newFilter,
@@ -369,7 +340,7 @@ const AuditReportDetailsPage = () => {
           creationTime: entity.creationTime,
           extension,
           fileNameFormat: reportExportFileName,
-          id: entity.id as string,
+          id: entity.id,
           modificationTime: entity.modificationTime,
           reportFormat: reportFormat?.name,
           resourceName: entity.task?.name,
@@ -463,7 +434,7 @@ const AuditReportDetailsPage = () => {
             reportFilter={reportFilter}
             reportId={reportId}
             resetFilter={AUDIT_REPORT_RESET_FILTER}
-            showError={showError as (...args: unknown[]) => void}
+            showError={showError}
             showErrorMessage={showErrorMessage}
             showSuccessMessage={showSuccessMessage}
             task={isDefined(report) ? report.task : undefined}
