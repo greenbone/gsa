@@ -53,6 +53,7 @@ interface PortListDialogValues<TPortRange extends PortRange> {
 interface PortListsDialogDefaultValues {
   id: string | undefined;
   comment: string;
+  file?: File;
   fromFile: FromFile;
   name: string;
   portRange: string;

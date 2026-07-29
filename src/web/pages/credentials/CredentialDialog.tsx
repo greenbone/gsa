@@ -381,12 +381,7 @@ const CredentialDialog = ({
                 realm={state.realm}
                 validateKdc={validateKdc}
                 vaultId={state.vaultId}
-                onValueChange={(value, name) =>
-                  onValueChange(
-                    value as string | boolean | string[] | File | undefined,
-                    name,
-                  )
-                }
+                onValueChange={(value, name) => onValueChange(value, name)}
               />
             )}
 

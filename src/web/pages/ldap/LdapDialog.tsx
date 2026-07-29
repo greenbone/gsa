@@ -23,6 +23,7 @@ export type LdapDialogState = LdapDialogDefaultValues & LdapDialogValues;
 
 interface LdapDialogDefaultValues {
   authdn: string;
+  certificate?: File;
   ldapEnabled: boolean;
   ldapHost: string;
   ldapsOnly: boolean;
