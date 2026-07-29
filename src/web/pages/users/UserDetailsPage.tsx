@@ -103,6 +103,7 @@ const UserDetailsPage = () => {
   const queryClient = useQueryClient();
   const {dialogState, closeDialog, showError} = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
+  const {title: dialogTitle, message: dialogMessage} = dialogState;
 
   const {data: entity, isLoading} = useGetUser({id: id ?? ''});
 
@@ -145,7 +146,11 @@ const UserDetailsPage = () => {
 
   return (
     <>
-      <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+      <DialogNotification
+        message={dialogMessage}
+        title={dialogTitle}
+        onCloseClick={closeDialog}
+      />
       <Download ref={downloadRef} />
       <UserComponent
         onCloneError={onError}

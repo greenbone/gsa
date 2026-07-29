@@ -97,6 +97,7 @@ const UsersListPage = () => {
   const queryClient = useQueryClient();
   const {dialogState, closeDialog, showError} = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
+  const {title: dialogTitle, message: dialogMessage} = dialogState;
 
   const [filter, , {changeFilter, removeFilter, resetFilter}] = usePageFilter(
     'user',
@@ -336,7 +337,11 @@ const UsersListPage = () => {
     >
       {({clone, create, download, edit}) => (
         <>
-          <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+          <DialogNotification
+            message={dialogMessage}
+            title={dialogTitle}
+            onCloseClick={closeDialog}
+          />
           <Download ref={downloadRef} />
           <PageTitle title={_('Users')} />
           <EntitiesPage<User>

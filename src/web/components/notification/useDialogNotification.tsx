@@ -10,6 +10,11 @@ export interface ErrorWithMessage {
   message: string;
 }
 
+interface DialogState {
+  message?: string;
+  title?: string;
+}
+
 /**
  * Hook to handle the state for showing different types of messages in a dialog
  *
@@ -33,7 +38,7 @@ export interface ErrorWithMessage {
  * @returns Object containing the dialog state and functions to show different types of messages
  */
 const useDialogNotification = () => {
-  const [dialogState, setDialogState] = useState({});
+  const [dialogState, setDialogState] = useState<DialogState>({});
   const showMessage = useCallback(
     (message: string, subject: string = _('Message')) => {
       setDialogState(() => ({

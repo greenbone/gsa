@@ -18,9 +18,8 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
-import UsersListPage, {
-  UsersListPageToolBarIcons,
-} from 'web/pages/users/UsersListPage';
+import UsersListPage from 'web/pages/users/UsersListPage';
+import UsersListPageToolBarIcons from 'web/pages/users/UsersListPageToolBarIcons';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
@@ -132,7 +131,6 @@ describe('UsersListPage tests', () => {
       gmp,
       capabilities: true,
       store: true,
-      router: true,
     });
 
     const defaultSettingFilter = QueryFilter.fromString('foo=bar');
@@ -194,7 +192,6 @@ describe('UsersListPage tests', () => {
       gmp,
       capabilities: true,
       store: true,
-      router: true,
     });
 
     const defaultSettingFilter = QueryFilter.fromString('foo=bar');
@@ -227,7 +224,6 @@ describe('UsersListPage tests', () => {
       gmp,
       capabilities: true,
       store: true,
-      router: true,
     });
 
     const defaultSettingFilter = QueryFilter.fromString('foo=bar');
@@ -254,7 +250,6 @@ describe('UsersListPage tests', () => {
       gmp,
       capabilities: true,
       store: true,
-      router: true,
     });
 
     const defaultSettingFilter = QueryFilter.fromString('foo=bar');
@@ -300,7 +295,6 @@ describe('UsersListPage tests', () => {
       gmp,
       capabilities: true,
       store: true,
-      router: true,
     });
 
     const defaultSettingFilter = QueryFilter.fromString('foo=bar');
@@ -354,7 +348,6 @@ describe('UsersListPage tests', () => {
       gmp,
       capabilities: true,
       store: true,
-      router: true,
     });
 
     const defaultSettingFilter = QueryFilter.fromString('foo=bar');
@@ -402,7 +395,6 @@ describe('UsersListPage tests', () => {
       gmp,
       capabilities: true,
       store: true,
-      router: true,
     });
 
     const defaultSettingFilter = QueryFilter.fromString('first=1 rows=10');
@@ -468,7 +460,6 @@ describe('UsersListPage UsersListPageToolBarIcons test', () => {
     const {render} = rendererWith({
       gmp,
       capabilities: true,
-      router: true,
     });
 
     render(
@@ -491,7 +482,6 @@ describe('UsersListPage UsersListPageToolBarIcons test', () => {
     const {render} = rendererWith({
       gmp,
       capabilities: true,
-      router: true,
     });
 
     render(
@@ -514,7 +504,6 @@ describe('UsersListPage UsersListPageToolBarIcons test', () => {
     const {render} = rendererWith({
       gmp,
       capabilities: wrongCaps,
-      router: true,
     });
 
     render(
