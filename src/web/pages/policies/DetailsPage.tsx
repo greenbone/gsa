@@ -80,7 +80,6 @@ const PolicyDetailsPage = () => {
   if (!entity) {
     return (
       <EntityPage<Policy>
-        entity={undefined as unknown as Policy}
         entityType="policy"
         isLoading={isLoading}
         sectionIcon={<PolicyIcon size="large" />}

@@ -125,17 +125,20 @@ const UserDetailsPage = () => {
 
   const onDownloaded = handleDownload;
 
+  const handleEntityActionCompleted = (response: EntityActionData) => {
+    goToDetails('user', navigate)({data: {id: response.id}});
+  };
+
   if (!entity) {
     return (
       <EntityPage<User>
-        entity={undefined as unknown as User}
         entityType="user"
         isLoading={isLoading}
         sectionIcon={<UserIcon size="large" />}
         title={_('User')}
-        toolBarIcons={<div />}
+        toolBarIcons={<></>}
       >
-        {() => null}
+        {() => undefined}
       </EntityPage>
     );
   }
@@ -146,14 +149,8 @@ const UserDetailsPage = () => {
       <Download ref={downloadRef} />
       <UserComponent
         onCloneError={onError}
-        onCloned={(response: EntityActionData) => {
-          const id = response.id;
-          goToDetails('user', navigate)({data: {id}});
-        }}
-        onCreated={(response: EntityActionData) => {
-          const id = response.id;
-          goToDetails('user', navigate)({data: {id}});
-        }}
+        onCloned={handleEntityActionCompleted}
+        onCreated={handleEntityActionCompleted}
         onDeleteError={onError}
         onDeleted={goToList('users', navigate)}
         onDownloadError={onError}
