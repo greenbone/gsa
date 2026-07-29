@@ -227,7 +227,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
         id,
       });
       log.debug('Stopped task');
-      return await this.get({id});
     } catch (err) {
       log.error('An error occurred while stopping the task', id, err);
       throw err;
@@ -241,7 +240,6 @@ class TaskCommand extends EntityCommand<Task, TaskElement> {
         id,
       });
       log.debug('Resumed task');
-      return await this.get({id});
     } catch (err) {
       log.error('An error occurred while resuming the task', id, err);
       throw err;
