@@ -6,8 +6,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 import type Rejection from 'gmp/http/rejection';
-import type Response from 'gmp/http/response';
-import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type AgentGroup from 'gmp/models/agent-group';
 import date, {type Date} from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
@@ -135,7 +133,7 @@ interface TaskComponentProps {
   onModifyTaskWizardError?: (error: Error) => void;
   onModifyTaskWizardSaved?: () => void;
   onReportImported?: () => void;
-  onResumed?: (response: Response<Task, XmlMeta>) => void;
+  onResumed?: () => void;
   onResumeError?: (error: Error) => void;
   onSaved?: () => void;
   onSaveError?: (error: Error) => void;
@@ -449,30 +447,23 @@ const TaskComponent = ({
   };
 
   const handleTaskStop = (task: Task) => {
-    return actionFunction<void, Rejection>(
-      // @ts-expect-error
-      gmp.task.stop(task),
-      {
-        onSuccess: onStopped,
-        onError: onStopError,
-        successMessage: _('Task {{- name}} stopped successfully.', {
-          name: task.name as string,
-        }),
-      },
-    );
+    return actionFunction<void, Rejection>(gmp.task.stop(task), {
+      onSuccess: onStopped,
+      onError: onStopError,
+      successMessage: _('Task {{- name}} stopped successfully.', {
+        name: task.name as string,
+      }),
+    });
   };
 
   const handleTaskResume = (task: Task) => {
-    return actionFunction<Response<Task, XmlMeta>, Rejection>(
-      gmp.task.resume(task),
-      {
-        onSuccess: onResumed,
-        onError: onResumeError,
-        successMessage: _('Task {{- name}} resumed successfully.', {
-          name: task.name as string,
-        }),
-      },
-    );
+    return actionFunction<void, Rejection>(gmp.task.resume(task), {
+      onSuccess: onResumed,
+      onError: onResumeError,
+      successMessage: _('Task {{- name}} resumed successfully.', {
+        name: task.name as string,
+      }),
+    });
   };
 
   const handleTaskWizardNewClick = async () => {
