@@ -921,4 +921,130 @@ describe('TaskCommand tests', () => {
     });
     expect(result).toBeUndefined();
   });
+
+  test('should start a task when feed is not syncing', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {
+          feed: [
+            {
+              type: 'NVT',
+              sync_not_available: false,
+              version: 202502170647,
+            },
+            {
+              type: 'SCAP',
+              sync_not_available: false,
+              version: 202502170647,
+            },
+          ],
+        },
+      },
+    });
+    const actionResponse = createActionResultResponse();
+    const fakeHttp = {
+      request: testing
+        .fn()
+        .mockResolvedValueOnce(response)
+        .mockResolvedValueOnce(actionResponse),
+    } as unknown as Http;
+
+    const cmd = new TaskCommand(fakeHttp);
+    const result = await cmd.start({id: 'task1'});
+
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {
+      args: {
+        cmd: 'get_feeds',
+      },
+    });
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {
+      data: {
+        cmd: 'start_task',
+        task_id: 'task1',
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test('should throw an error when starting task with syncing feed', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {
+          feed: [
+            {
+              type: 'NVT',
+              currently_syncing: true,
+              sync_not_available: false,
+              version: 202502170647,
+            },
+          ],
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+
+    await expect(cmd.start({id: 'task1'})).rejects.toThrow(
+      'Feed is currently syncing. Please try again later.',
+    );
+  });
+
+  test('should stop a task', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const result = await cmd.stop({id: 'task1'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'stop_task',
+        task_id: 'task1',
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test('should throw an error when stopping a task fails', async () => {
+    const error = new Error('Failed to stop task');
+    const fakeHttp = {
+      request: testing.fn().mockRejectedValue(error),
+    } as unknown as Http;
+
+    const cmd = new TaskCommand(fakeHttp);
+
+    await expect(cmd.stop({id: 'task1'})).rejects.toThrow(
+      'Failed to stop task',
+    );
+  });
+
+  test('should resume a task', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TaskCommand(fakeHttp);
+    const result = await cmd.resume({id: 'task1'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'resume_task',
+        task_id: 'task1',
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test('should throw an error when resuming a task fails', async () => {
+    const error = new Error('Failed to resume task');
+    const fakeHttp = {
+      request: testing.fn().mockRejectedValue(error),
+    } as unknown as Http;
+
+    const cmd = new TaskCommand(fakeHttp);
+
+    await expect(cmd.resume({id: 'task1'})).rejects.toThrow(
+      'Failed to resume task',
+    );
+  });
 });
