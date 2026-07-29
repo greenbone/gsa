@@ -28,7 +28,7 @@ interface UserComponentRenderProps {
   delete: (entity: User) => Promise<void>;
   download: (entity: User) => Promise<void>;
   edit: (user: User) => Promise<void>;
-  save: (data: UserDialogSaveData) => Promise<void>;
+  save: (data: UserDialogSaveData) => Promise<EntityActionData>;
 }
 
 interface UserComponentProps {
@@ -36,13 +36,13 @@ interface UserComponentProps {
   onCloneError?: (error: Error) => void;
   onCloned?: (response: EntityActionData) => void;
   onCreateError?: (error: Error) => void;
-  onCreated?: (response: unknown) => void;
+  onCreated?: (response: EntityActionData) => void;
   onDeleteError?: (error: Error) => void;
   onDeleted?: () => void;
   onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
-  onSaveError?: () => void;
-  onSaved?: (response: unknown) => void;
+  onSaveError?: (error: Error) => void;
+  onSaved?: (response: EntityActionData) => void;
 }
 
 const UserComponent = ({

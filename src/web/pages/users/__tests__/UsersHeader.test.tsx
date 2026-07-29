@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import UsersHeader from 'web/pages/users/UsersTableHeader';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType from 'web/utils/selection-type';
 
 describe('UsersHeader', () => {
   test('should render all user list columns with actions column', () => {
