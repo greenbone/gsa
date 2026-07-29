@@ -7,6 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import AuditReportCommand from 'gmp/commands/audit-report';
 import {
   createHttp,
+  createResponse,
   createEntityResponse,
   createActionResultResponse,
   createHttpError,
@@ -183,5 +184,71 @@ describe('AuditReportCommand tests', () => {
       },
     });
     expect(resp.data.id).toEqual('foo');
+  });
+
+  test('should return audit report hosts', async () => {
+    const response = createResponse({
+      get_audit_report_hosts: {
+        get_audit_report_hosts_response: {
+          host: [
+            {
+              _id: 'host-1',
+              ip: 'host-ip-1',
+              hostname: 'host1.example.com',
+              start: '2019-06-03T11:00:00Z',
+              end: '2019-06-03T11:15:00Z',
+              result_count: {
+                page: 1,
+                high: {__text: 5, page: 1},
+                medium: {__text: 3, page: 1},
+                low: {__text: 0, page: 1},
+                log: {__text: 0, page: 1},
+                false_positive: {__text: 0, page: 1},
+              },
+              detail: [
+                {name: 'hostname', value: 'host1.example.com'},
+                {name: 'best_os_cpe', value: 'cpe:/o:linux'},
+              ],
+            },
+          ],
+          hosts: {count: 1},
+          filters: {
+            term: 'first=1 rows=100 sort=severity',
+            filter: {_id: ''},
+            keywords: {
+              keyword: [
+                {column: 'first', relation: '=', value: '1'},
+                {column: 'rows', relation: '=', value: '100'},
+                {column: 'sort', relation: '=', value: 'severity'},
+              ],
+            },
+          },
+        },
+      },
+    });
+
+    const fakeHttp = createHttp(response);
+    const cmd = new AuditReportCommand(fakeHttp);
+    const resp = await cmd.getHosts({report_id: 'r1'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_audit_report_hosts',
+        details: 1,
+        report_id: 'r1',
+      },
+    });
+
+    expect(resp.data).toHaveLength(1);
+  });
+
+  test('should throw error for invalid audit hosts response', async () => {
+    const response = createResponse({});
+    const fakeHttp = createHttp(response);
+    const cmd = new AuditReportCommand(fakeHttp);
+
+    await expect(cmd.getHosts({report_id: 'r1'})).rejects.toThrow(
+      'Invalid response: get_audit_report_hosts not found in response',
+    );
   });
 });
