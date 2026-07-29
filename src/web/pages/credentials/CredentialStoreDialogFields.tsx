@@ -30,7 +30,7 @@ interface CredentialStoreDialogFieldsProps {
   privacyHostIdentifier?: string;
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   authAlgorithm?: SNMPAuthAlgorithmType;
-  onValueChange: (value: unknown, name?: string) => void;
+  onValueChange: (value: string | string[] | undefined, name?: string) => void;
   validateKdc: (val: string) => boolean;
 }
 

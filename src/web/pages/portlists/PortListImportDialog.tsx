@@ -22,7 +22,7 @@ export type PortListImportDialogState = PortListImportDialogValues;
 const PortListImportDialog = ({onClose, onSave}: PortListImportDialogProps) => {
   const [_] = useTranslation();
   return (
-    <SaveDialog<PortListImportDialogValues>
+    <SaveDialog<{}, PortListImportDialogValues>
       buttonTitle={_('Import')}
       title={_('Import Port List')}
       onClose={onClose}
