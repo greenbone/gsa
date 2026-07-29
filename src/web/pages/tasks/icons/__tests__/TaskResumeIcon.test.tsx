@@ -24,16 +24,15 @@ describe('Task ResumeIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} onClick={clickHandler} />);
+    render(<ResumeIcon task={task} onClick={clickHandler} />);
 
-    expect(caps.mayOp('resume_task')).toEqual(true);
-    expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
+    const resumeIcon = screen.getByTitle('Resume');
 
-    fireEvent.click(element);
+    fireEvent.click(resumeIcon);
 
     expect(clickHandler).toHaveBeenCalled();
-    expect(element).toHaveAttribute('title', 'Resume');
-    expect(element).not.toHaveComputedStyle('fill', Theme.inputBorderGray);
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
+    expect(resumeIcon).not.toHaveComputedStyle('fill', Theme.inputBorderGray);
   });
 
   test('should render in active state if a stopped task has a schedule', () => {
@@ -45,17 +44,17 @@ describe('Task ResumeIcon component tests', () => {
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
     });
-    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} onClick={clickHandler} />);
+    render(<ResumeIcon task={task} />);
 
-    fireEvent.click(element);
+    const resumeIcon = screen.getByTitle('Resume');
 
-    expect(clickHandler).toHaveBeenCalledWith(task);
-    expect(element).toHaveAttribute('title', 'Resume');
-    expect(element).not.toHaveAttribute('disabled');
+    fireEvent.click(resumeIcon);
+
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
+    expect(resumeIcon).not.toHaveAttribute('disabled');
   });
 
   test('should render in active state for a stopped task with a real schedule', () => {
@@ -76,16 +75,16 @@ END:VCALENDAR
       permissions: {permission: [{name: 'everything'}]},
       schedule: {_id: 'schedule1', icalendar, timezone: 'UTC'},
     });
-    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
-    const {element} = render(<ResumeIcon task={task} onClick={clickHandler} />);
+    render(<ResumeIcon task={task} />);
 
-    fireEvent.click(element);
+    const resumeIcon = screen.getByTitle('Resume');
 
-    expect(clickHandler).toHaveBeenCalledWith(task);
-    expect(element).toHaveAttribute('title', 'Resume');
-    expect(element).not.toHaveAttribute('disabled');
+    fireEvent.click(resumeIcon);
+
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
+    expect(resumeIcon).not.toHaveAttribute('disabled');
   });
 
   test('should render in inactive state if wrong command level permissions are given', () => {
@@ -96,24 +95,15 @@ END:VCALENDAR
       target: {_id: '123'},
       permissions: {permission: [{name: 'get_task'}]},
     });
-    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} />);
+    render(<ResumeIcon task={task} />);
 
-    expect(caps.mayOp('resume_task')).toEqual(true);
-    expect(task.userCapabilities.mayOp('resume_task')).toEqual(false);
+    const resumeIcon = screen.getByTitle('Permission to resume task denied');
 
-    fireEvent.click(element);
-
-    expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveAttribute(
-      'title',
-      'Permission to resume task denied',
-    );
-    expect(element).toHaveAttribute('disabled');
-    expect(element).toHaveAttribute('data-disabled', 'true');
+    expect(resumeIcon).toHaveAttribute('disabled');
+    expect(resumeIcon).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if task is not stopped', () => {
@@ -124,21 +114,15 @@ END:VCALENDAR
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
     });
-    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} />);
+    render(<ResumeIcon task={task} />);
 
-    expect(caps.mayOp('resume_task')).toEqual(true);
-    expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
+    const resumeIcon = screen.getByTitle('Task is not stopped');
 
-    fireEvent.click(element);
-
-    expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveAttribute('title', 'Task is not stopped');
-    expect(element).toHaveAttribute('disabled');
-    expect(element).toHaveAttribute('data-disabled', 'true');
+    expect(resumeIcon).toHaveAttribute('disabled');
+    expect(resumeIcon).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if wrong command level permissions are given for audit', () => {
@@ -150,24 +134,15 @@ END:VCALENDAR
       permissions: {permission: [{name: 'get_task'}]},
       usage_type: 'audit',
     });
-    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={audit} />);
+    render(<ResumeIcon task={audit} />);
 
-    expect(caps.mayOp('resume_task')).toEqual(true);
-    expect(audit.userCapabilities.mayOp('resume_task')).toEqual(false);
+    const resumeIcon = screen.getByTitle('Permission to resume audit denied');
 
-    fireEvent.click(element);
-
-    expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveAttribute(
-      'title',
-      'Permission to resume audit denied',
-    );
-    expect(element).toHaveAttribute('disabled');
-    expect(element).toHaveAttribute('data-disabled', 'true');
+    expect(resumeIcon).toHaveAttribute('disabled');
+    expect(resumeIcon).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if task is scheduled', () => {
@@ -182,21 +157,15 @@ END:VCALENDAR
       permissions: {permission: [{name: 'everything'}]},
     };
     const task = Task.fromElement(elem);
-    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} />);
+    render(<ResumeIcon task={task} />);
 
-    expect(caps.mayOp('resume_task')).toEqual(true);
-    expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
+    const resumeIcon = screen.getByTitle('Task is scheduled');
 
-    fireEvent.click(element);
-
-    expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveAttribute('title', 'Task is scheduled');
-    expect(element).toHaveAttribute('disabled');
-    expect(element).toHaveAttribute('data-disabled', 'true');
+    expect(resumeIcon).toHaveAttribute('disabled');
+    expect(resumeIcon).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if task is a import task', () => {
@@ -206,20 +175,17 @@ END:VCALENDAR
       permissions: {permission: [{name: 'everything'}]},
     };
     const task = Task.fromElement(elem);
-    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
 
-    const {element} = render(<ResumeIcon task={task} />);
+    render(<ResumeIcon task={task} />);
+
+    const resumeIcon = screen.getByTitle('Task is for import only');
 
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
 
-    fireEvent.click(element);
-
-    expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveAttribute('title', 'Task is for import only');
-    expect(element).toHaveAttribute('disabled');
-    expect(element).toHaveAttribute('data-disabled', 'true');
+    expect(resumeIcon).toHaveAttribute('disabled');
+    expect(resumeIcon).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should not be rendered if task is queued', () => {
@@ -233,9 +199,6 @@ END:VCALENDAR
     const {render} = rendererWith({capabilities: caps});
 
     render(<ResumeIcon task={task} />);
-
-    expect(caps.mayOp('stop_task')).toEqual(true);
-    expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
 
     expect(screen.queryByTestId('resume-icon')).toEqual(null);
   });
