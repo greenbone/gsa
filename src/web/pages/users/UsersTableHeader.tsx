@@ -8,10 +8,10 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType, {type SelectionTypeType} from 'web/utils/SelectionType';
+import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
-interface UsersHeaderProps {
+export interface UsersHeaderProps {
   actionsColumn?: ReactElement | null;
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;

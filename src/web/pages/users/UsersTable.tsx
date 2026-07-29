@@ -5,12 +5,18 @@
 
 import {_l} from 'gmp/locale/lang';
 import type User from 'gmp/models/user';
-import createEntitiesFooter from 'web/entities/createEntitiesFooter';
+import createEntitiesFooter, {
+  type CreateEntitiesFooterProps,
+} from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
 import withRowDetails from 'web/entities/withRowDetails';
 import UserDetails from 'web/pages/users/UserDetails';
-import UsersHeader from 'web/pages/users/UsersTableHeader';
-import UsersTableRow from 'web/pages/users/UsersTableRow';
+import UsersHeader, {
+  type UsersHeaderProps,
+} from 'web/pages/users/UsersTableHeader';
+import UsersTableRow, {
+  type UsersTableRowProps,
+} from 'web/pages/users/UsersTableRow';
 
 export const SORT_FIELDS = [
   {
@@ -35,7 +41,12 @@ export const SORT_FIELDS = [
   },
 ];
 
-const UsersTable = createEntitiesTable<User>({
+const UsersTable = createEntitiesTable<
+  User,
+  CreateEntitiesFooterProps<User>,
+  UsersHeaderProps,
+  UsersTableRowProps
+>({
   emptyTitle: _l('No Users available'),
   header: UsersHeader,
   row: UsersTableRow,

@@ -3,12 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ComponentType, type ReactNode, useCallback, useState} from 'react';
+import {
+  type ComponentType,
+  type ReactElement,
+  useCallback,
+  useState,
+} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useQueryClient} from '@tanstack/react-query';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Rejection from 'gmp/http/rejection';
-import type Filter from 'gmp/models/filter';
 import {
   type FilterType,
   RESET_FILTER,
@@ -20,22 +24,18 @@ import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
-import {NewIcon, UserIcon} from 'web/components/icon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import IconDivider from 'web/components/layout/IconDivider';
+import {UserIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import {type OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import {
   type UserBulkInput,
   useBulkDeleteUsers,
   useBulkExportUsers,
   useGetUsers,
 } from 'web/hooks/use-query/users';
-import useCapabilities from 'web/hooks/useCapabilities';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
@@ -44,51 +44,10 @@ import useTranslation from 'web/hooks/useTranslation';
 import UserComponent from 'web/pages/users/UserComponent';
 import UserFilterDialog from 'web/pages/users/UserFilterDialog';
 import UsersConfirmDeleteDialog from 'web/pages/users/UsersConfirmDeleteDialog';
-import {type UserDialogSaveData} from 'web/pages/users/UsersDialog';
+import UsersListPageToolBarIcons from 'web/pages/users/UsersListPageToolBarIcons';
 import UsersTable from 'web/pages/users/UsersTable';
 import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 import {type SortDirectionType} from 'web/utils/sort-direction';
-
-interface UsersListPageToolBarIconsProps {
-  onUserCreateClick: () => void | Promise<void>;
-}
-
-interface UsersEntitiesPageProps {
-  dialogConfig: {
-    useCustomDialog: boolean;
-    dialogProcessing: boolean;
-    customDialogElement: ReactNode;
-  };
-  entitiesSelected?: Set<User>;
-  isUpdating?: boolean;
-  selectionType: SelectionTypeType;
-  onChanged: () => void;
-  onDeleteBulk: () => void | Promise<void>;
-  onDownloadBulk: () => Promise<void>;
-  onDownloaded: OnDownloadedFunc;
-  onEntityDeselected: (entity: User) => void;
-  onEntitySelected: (entity: User) => void;
-  onError: (error: Error | Rejection) => void;
-  onFilterChanged: (newFilter: FilterType) => void;
-  onFilterCreated: (newFilter: Filter) => void;
-  onFilterRemoved: () => void;
-  onFilterReset: () => void;
-  onFirstClick: () => void;
-  onLastClick: () => void;
-  onNextClick: () => void;
-  onPreviousClick: () => void;
-  onSelectionTypeChange: (selectionType: SelectionTypeType) => void;
-  onSortChange: (sortBy: string) => void;
-  onTagsBulk: () => void;
-  onUserCloneClick: (user: User) => void | Promise<void>;
-  onUserCreateClick: () => void | Promise<void>;
-  onUserDeleteClick: (user?: User) => void | Promise<void>;
-  onUserDownloadClick: (user: User) => void | Promise<void>;
-  onUserEditClick: (user: User) => void | Promise<void>;
-  onUserSaveClick?: (data: UserDialogSaveData) => void | Promise<unknown>;
-  sortBy?: string;
-  sortDir?: SortDirectionType;
-}
 
 interface ConfirmDeleteDialogProps {
   deleteUsers: User[];
@@ -97,29 +56,42 @@ interface ConfirmDeleteDialogProps {
   onErrorClose: () => void;
 }
 
+interface UsersTableElementProps {
+  dialogConfig: {
+    useCustomDialog: boolean;
+    customDialogElement?: ReactElement | null;
+    dialogProcessing?: boolean;
+  };
+  entities?: User[];
+  entitiesCounts?: CollectionCounts;
+  filter?: FilterType;
+  isUpdating?: boolean;
+  selectionType: SelectionTypeType;
+  sortBy?: string;
+  sortDir?: SortDirectionType;
+  onDeleteBulk: () => void | Promise<void>;
+  onDownloadBulk: () => Promise<void>;
+  onEntityDeselected: (entity: User) => void;
+  onEntitySelected: (entity: User) => void;
+  onFirstClick: () => void;
+  onLastClick: () => void;
+  onNextClick: () => void;
+  onPreviousClick: () => void;
+  onSelectionTypeChange: (selectionType: SelectionTypeType) => void;
+  onSortChange: (sortBy: string) => void;
+  onTagsBulk: () => void;
+  onUserCloneClick: (user: User) => void | Promise<void>;
+  onUserDeleteClick: (user?: User) => void | Promise<void>;
+  onUserDownloadClick: (user: User) => void | Promise<void>;
+  onUserEditClick: (user: User) => void | Promise<void>;
+}
+
 const TypedConfirmDeleteDialog =
   UsersConfirmDeleteDialog as unknown as ComponentType<ConfirmDeleteDialogProps>;
+const TypedUsersTable =
+  UsersTable as unknown as ComponentType<UsersTableElementProps>;
 
-export const UsersListPageToolBarIcons = ({
-  onUserCreateClick,
-}: UsersListPageToolBarIconsProps) => {
-  const capabilities = useCapabilities();
-  const [_] = useTranslation();
-  return (
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-users"
-        page="web-interface-access"
-        title={_('Help: Users')}
-      />
-      {capabilities.mayCreate('user') && (
-        <NewIcon title={_('New User')} onClick={onUserCreateClick} />
-      )}
-    </IconDivider>
-  );
-};
-
-const UsersListPageContent = () => {
+const UsersListPage = () => {
   const [_] = useTranslation();
   const gmp = useGmp();
   const queryClient = useQueryClient();
@@ -362,75 +334,78 @@ const UsersListPageContent = () => {
       onDownloaded={handleDownload}
       onSaved={onChanged}
     >
-      {({clone, create, download, edit, save}) => (
+      {({clone, create, download, edit}) => (
         <>
           <DialogNotification {...dialogState} onCloseClick={closeDialog} />
           <Download ref={downloadRef} />
           <PageTitle title={_('Users')} />
-          <EntitiesPage<User, UsersEntitiesPageProps>
+          <EntitiesPage<User>
             createFilterType="user"
-            dialogConfig={{
-              useCustomDialog: true,
-              dialogProcessing: isLoading,
-              customDialogElement: confirmDeleteDialogVisible && (
-                <ConfirmationDialog
-                  content={
-                    <TypedConfirmDeleteDialog
-                      deleteUsers={deleteUsers}
-                      error={deleteDialogError}
-                      inheritorUsers={inheritorUsers}
-                      onErrorClose={handleErrorClose}
-                    />
-                  }
-                  loading={isLoading}
-                  rightButtonAction={DELETE_ACTION}
-                  rightButtonTitle={_('Delete')}
-                  title={title ?? ''}
-                  onClose={handleCloseConfirmDeleteDialog}
-                  onResumeClick={handleSaveClick}
-                />
-              ),
-            }}
             entities={entities}
             entitiesCounts={entitiesCounts}
             entitiesError={entitiesError}
-            entitiesSelected={selected}
             filter={filter}
             filterEditDialog={UserFilterDialog}
             filtersFilter={USERS_FILTER_FILTER}
             isLoading={isLoadingEntities}
-            isUpdating={isUpdating}
             sectionIcon={<UserIcon size="large" />}
-            selectionType={selectionType}
-            sortBy={sortBy}
-            sortDir={sortDir}
-            table={UsersTable}
+            table={
+              <TypedUsersTable
+                dialogConfig={{
+                  useCustomDialog: true,
+                  dialogProcessing: isLoading,
+                  customDialogElement: confirmDeleteDialogVisible ? (
+                    <ConfirmationDialog
+                      content={
+                        <TypedConfirmDeleteDialog
+                          deleteUsers={deleteUsers}
+                          error={deleteDialogError}
+                          inheritorUsers={inheritorUsers}
+                          onErrorClose={handleErrorClose}
+                        />
+                      }
+                      loading={isLoading}
+                      rightButtonAction={DELETE_ACTION}
+                      rightButtonTitle={_('Delete')}
+                      title={title ?? ''}
+                      onClose={handleCloseConfirmDeleteDialog}
+                      onResumeClick={handleSaveClick}
+                    />
+                  ) : null,
+                }}
+                entities={entities}
+                entitiesCounts={entitiesCounts}
+                filter={filter}
+                isUpdating={isUpdating}
+                selectionType={selectionType}
+                sortBy={sortBy}
+                sortDir={sortDir}
+                onDeleteBulk={openConfirmDeleteDialog}
+                onDownloadBulk={handleDownloadBulk}
+                onEntityDeselected={handleEntityDeselected}
+                onEntitySelected={handleEntitySelected}
+                onFirstClick={getFirst}
+                onLastClick={getLast}
+                onNextClick={getNext}
+                onPreviousClick={getPrevious}
+                onSelectionTypeChange={handleSelectionTypeChange}
+                onSortChange={handleSortChange}
+                onTagsBulk={openTagsDialog}
+                onUserCloneClick={clone}
+                onUserDeleteClick={openConfirmDeleteDialog}
+                onUserDownloadClick={download}
+                onUserEditClick={edit}
+              />
+            }
             title={_('Users')}
-            toolBarIcons={UsersListPageToolBarIcons}
-            onChanged={onChanged}
-            onDeleteBulk={openConfirmDeleteDialog}
-            onDownloadBulk={handleDownloadBulk}
-            onDownloaded={handleDownload}
-            onEntityDeselected={handleEntityDeselected}
-            onEntitySelected={handleEntitySelected}
+            toolBarIcons={
+              <UsersListPageToolBarIcons onUserCreateClick={create} />
+            }
             onError={handleError}
             onFilterChanged={handleFilterChanged}
             onFilterCreated={handleFilterChanged}
             onFilterRemoved={handleFilterRemoved}
             onFilterReset={handleFilterReset}
-            onFirstClick={getFirst}
-            onLastClick={getLast}
-            onNextClick={getNext}
-            onPreviousClick={getPrevious}
-            onSelectionTypeChange={handleSelectionTypeChange}
-            onSortChange={handleSortChange}
-            onTagsBulk={openTagsDialog}
-            onUserCloneClick={clone}
-            onUserCreateClick={create}
-            onUserDeleteClick={openConfirmDeleteDialog}
-            onUserDownloadClick={download}
-            onUserEditClick={edit}
-            onUserSaveClick={save}
           />
           {isTagsDialogVisible && (
             <BulkTags
@@ -446,10 +421,6 @@ const UsersListPageContent = () => {
       )}
     </UserComponent>
   );
-};
-
-const UsersListPage = () => {
-  return <UsersListPageContent />;
 };
 
 export default UsersListPage;
