@@ -569,23 +569,25 @@ const ScheduleDialog = ({
                 onChange={setEndOpen}
               />
 
-              <DatePicker
-                disabled={state.endOpen}
-                label={_('End Date')}
-                name="endDate"
-                value={state.endDate}
-                onChange={handleEndDateChange}
-              />
+              <Row align="end" flex="row" gap="lg">
+                <DatePicker
+                  disabled={state.endOpen}
+                  label={_('End Date')}
+                  name="endDate"
+                  value={state.endDate}
+                  onChange={handleEndDateChange}
+                />
 
-              <TimePicker
-                disabled={state.endOpen}
-                label={_('End Time')}
-                name="endTime"
-                value={endTime}
-                onChange={(newEndTime: string) =>
-                  handleTimeChange(newEndTime, 'endTime')
-                }
-              />
+                <TimePicker
+                  disabled={state.endOpen}
+                  label={_('End Time')}
+                  name="endTime"
+                  value={endTime}
+                  onChange={(newEndTime: string) =>
+                    handleTimeChange(newEndTime, 'endTime')
+                  }
+                />
+              </Row>
             </FormGroup>
 
             <FormGroup title={_('Duration')}>
