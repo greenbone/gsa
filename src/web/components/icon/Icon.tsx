@@ -8,8 +8,8 @@ import 'whatwg-fetch';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import useIconSize from 'web/hooks/useIconSize';
+import {getImageURL} from 'web/utils/image-url';
 import Theme from 'web/utils/theme';
-import {get_img_url} from 'web/utils/Urls';
 
 interface StyledIconProps {
   $height: string;
@@ -73,7 +73,7 @@ const IconComponent = <TValue,>({
   const {width, height} = useIconSize(size);
 
   const loadImage = useCallback(async () => {
-    const iconPath = get_img_url(img);
+    const iconPath = getImageURL(img);
     try {
       const response = await fetch(iconPath);
       const resp = await response.text();
