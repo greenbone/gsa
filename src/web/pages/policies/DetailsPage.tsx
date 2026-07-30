@@ -57,7 +57,7 @@ const PolicyDetailsPage = () => {
   const {dialogState, closeDialog, showError} = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
 
-  const {data: entity, isLoading} = useGetPolicy({id: id ?? ''});
+  const {data: entity, isLoading, error} = useGetPolicy({id: id ?? ''});
 
   const permFilter = permissionsResourceFilter(id ?? '');
   const {data: permissionsData} = useGetPermissions({
@@ -77,20 +77,6 @@ const PolicyDetailsPage = () => {
 
   const onDownloaded = handleDownload;
 
-  if (!entity) {
-    return (
-      <EntityPage<Policy>
-        entityType="policy"
-        isLoading={isLoading}
-        sectionIcon={<PolicyIcon size="large" />}
-        title={_('Policy')}
-        toolBarIcons={<div />}
-      >
-        {() => null}
-      </EntityPage>
-    );
-  }
-
   return (
     <>
       <DialogNotification {...dialogState} onCloseClick={closeDialog} />
@@ -107,13 +93,16 @@ const PolicyDetailsPage = () => {
         {({clone, delete: deleteFunc, download, edit}) => (
           <EntityPage<Policy>
             entity={entity}
+            entityError={
+              error ? {status: 0, message: error.message} : undefined
+            }
             entityType="policy"
             isLoading={isLoading}
             sectionIcon={<PolicyIcon size="large" />}
             title={_('Policy')}
             toolBarIcons={
               <PolicyDetailsPageToolBarIcons
-                entity={entity}
+                entity={entity as Policy}
                 onPolicyCloneClick={clone}
                 onPolicyDeleteClick={deleteFunc}
                 onPolicyDownloadClick={download}
@@ -121,7 +110,7 @@ const PolicyDetailsPage = () => {
               />
             }
           >
-            {() => {
+            {entity => {
               const {preferences} = entity;
               const tabs = [
                 {

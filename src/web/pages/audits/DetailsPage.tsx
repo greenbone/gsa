@@ -138,7 +138,11 @@ const AuditDetailsPage = () => {
       : gmp.settings.reloadInterval;
   };
 
-  const {data: entity, isLoading} = useGetAudit({
+  const {
+    data: entity,
+    isLoading,
+    error,
+  } = useGetAudit({
     id: id ?? '',
     refetchInterval: getRefetchInterval,
   });
@@ -160,20 +164,6 @@ const AuditDetailsPage = () => {
   };
 
   const onDownloaded = handleDownload;
-
-  if (!entity) {
-    return (
-      <EntityPage<Audit>
-        entityType="audit"
-        isLoading={isLoading}
-        sectionIcon={<AuditIcon size="large" />}
-        title={_('Audit')}
-        toolBarIcons={<div />}
-      >
-        {() => null}
-      </EntityPage>
-    );
-  }
 
   return (
     <>
@@ -197,13 +187,16 @@ const AuditDetailsPage = () => {
         {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
           <EntityPage<Audit>
             entity={entity}
+            entityError={
+              error ? {status: 0, message: error.message} : undefined
+            }
             entityType="audit"
             isLoading={isLoading}
             sectionIcon={<AuditIcon size="large" />}
             title={_('Audit')}
             toolBarIcons={
               <AuditDetailsPageToolBarIcons
-                entity={entity}
+                entity={entity as Audit}
                 onAuditCloneClick={clone}
                 onAuditDeleteClick={deleteFunc}
                 onAuditDownloadClick={download}
@@ -214,7 +207,7 @@ const AuditDetailsPage = () => {
               />
             }
           >
-            {() => {
+            {entity => {
               const tabs = [
                 {
                   label: _('Information'),

@@ -4,7 +4,6 @@
  */
 
 import {useState} from 'react';
-import {type CapabilitiesEntityType} from 'gmp/capabilities/capabilities';
 import type Model from 'gmp/models/model';
 import type Settings from 'gmp/models/settings';
 import {
@@ -39,7 +38,7 @@ interface ControlledDialogValues {
   role_ids: string[];
 }
 
-export interface UserDialogSaveData {
+interface UserDialogDefaultValues {
   id?: string;
   access_hosts: string;
   auth_method: string;
@@ -50,9 +49,11 @@ export interface UserDialogSaveData {
   name: string;
   old_name?: string;
   password: string;
-  role_ids: string[];
   roles?: Model[];
 }
+
+export type UserDialogSaveData = ControlledDialogValues &
+  UserDialogDefaultValues;
 
 interface UserDialogProps {
   roleIds?: string[];
@@ -165,7 +166,7 @@ const UsersDialog = ({
 
   const isEdit = isDefined(user);
 
-  const data: UserDialogSaveData = {
+  const data: UserDialogDefaultValues = {
     ...user,
     access_hosts: accessHosts,
     auth_method:
@@ -179,7 +180,6 @@ const UsersDialog = ({
     name: dialogName,
     old_name: oldName,
     password,
-    role_ids: roleIds,
     roles,
   };
 
@@ -204,7 +204,7 @@ const UsersDialog = ({
     true;
 
   return (
-    <SaveDialog<ControlledDialogValues, UserDialogSaveData>
+    <SaveDialog<ControlledDialogValues, UserDialogDefaultValues>
       defaultValues={data}
       title={dialogTitle}
       values={controlledValues}
@@ -325,7 +325,7 @@ const UsersDialog = ({
             </FormGroup>
           )}
 
-          {capabilities.mayAccess('groups' as CapabilitiesEntityType) && (
+          {capabilities.mayAccess('group') && (
             <FormGroup title={_('Groups')}>
               <MultiSelect
                 items={groupsOptions}

@@ -41,7 +41,7 @@ interface EntityError {
 }
 
 interface EntityPageProps<TEntity extends Model> {
-  children: () => React.ReactNode;
+  children: (entity: TEntity) => React.ReactNode;
   entity?: TEntity;
   entityError?: EntityError;
   entityType?: EntityType;
@@ -149,7 +149,7 @@ const EntityPage = <TEntity extends Model>({
         img={sectionIcon}
         title={sectionTitle}
       >
-        {children()}
+        {children(entity as TEntity)}
       </SectionComponent>
     );
   };

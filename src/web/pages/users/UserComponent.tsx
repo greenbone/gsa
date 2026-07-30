@@ -24,7 +24,7 @@ import UserDialog, {type UserDialogSaveData} from 'web/pages/users/UsersDialog';
 
 interface UserComponentRenderProps {
   clone: (entity: User) => Promise<void>;
-  create: (user?: User) => Promise<void>;
+  create: () => Promise<void>;
   delete: (entity: User) => Promise<void>;
   download: (entity: User) => Promise<void>;
   edit: (user: User) => Promise<void>;
@@ -88,7 +88,7 @@ const UserComponent = ({
     onError: onCloneError,
   });
   const deleteMutation = useDeleteUser({
-    onSuccess: () => onDeleted?.(),
+    onSuccess: onDeleted,
     onError: onDeleteError,
   });
   const downloadUser = useEntityDownload<User>(
@@ -126,12 +126,8 @@ const UserComponent = ({
       setDialogVisible(true);
 
       if (isDefined(user)) {
-        const newGroupIds = user.groups
-          .map(group => group.id)
-          .filter((id): id is string => isDefined(id));
-        const newRoleIds = user.roles
-          .map(role => role.id)
-          .filter((id): id is string => isDefined(id));
+        const newGroupIds = user.groups.map(group => group.id);
+        const newRoleIds = user.roles.map(role => role.id);
 
         setAccessHosts(user.hosts?.addresses.join(', ') ?? '');
         setComment(user.comment);
