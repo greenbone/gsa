@@ -118,6 +118,9 @@ export interface NvtPreference {
   alt?: NvtPreferenceValue[];
 }
 
+export type SolutionTypeValue =
+  'Workaround' | 'Mitigation' | 'VendorFix' | 'NoneAvailable' | 'WillNotFix';
+
 interface Reference {
   ref: string;
   type: string;
@@ -129,7 +132,7 @@ interface Cert {
 }
 
 interface Solution {
-  type?: string;
+  type?: SolutionTypeValue;
   description?: string;
   method?: string;
 }
@@ -369,7 +372,9 @@ class Nvt extends Model {
       const solutionText = nvtElement.solution.__text;
       const solutionMethod = nvtElement.solution._method;
       ret.solution = {
-        type: isEmpty(solutionType) ? undefined : solutionType,
+        type: isEmpty(solutionType)
+          ? undefined
+          : (solutionType as SolutionTypeValue),
         description: isEmpty(solutionText) ? undefined : solutionText,
         method: isEmpty(solutionMethod) ? undefined : solutionMethod,
       };
