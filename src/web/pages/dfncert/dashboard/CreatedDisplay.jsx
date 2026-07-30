@@ -11,7 +11,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {DfnCertsCreatedLoader} from 'web/pages/dfncert/dashboard/Loaders';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 export const DfnCertsCreatedDisplay = createDisplay({
   loaderComponent: DfnCertsCreatedLoader,

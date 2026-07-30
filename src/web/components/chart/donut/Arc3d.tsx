@@ -13,7 +13,7 @@ import {
   PieTopPath,
   PieInnerPath,
 } from 'web/components/chart/donut/Paths';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface Arc3dData extends LegendData {
   value: number;

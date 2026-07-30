@@ -7,7 +7,7 @@ import React from 'react';
 import styled, {keyframes} from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/prop-types';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const SnackbarContainer = styled.div`
   position: fixed;

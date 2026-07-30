@@ -5,7 +5,7 @@
 
 import styled from 'styled-components';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface UserSettingsPasswordNotificationDivProps {
   color?: string;

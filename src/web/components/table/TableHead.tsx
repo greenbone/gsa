@@ -11,7 +11,7 @@ import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 import SortBy from 'web/components/sortby/SortBy';
 import useTranslation from 'web/hooks/useTranslation';
 import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface TableHeadProps extends Omit<LayoutProps, 'title'> {
   className?: string;

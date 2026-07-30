@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, render} from 'web/testing';
 import ProgressBar from 'web/components/bar/ProgressBar';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 describe('ProgressBar tests', () => {
   test('should render', () => {

@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 export const CommandWrapper = styled.div`
   position: relative;

@@ -9,7 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import ResumeIcon from 'web/pages/tasks/icons/TaskResumeIcon';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 describe('Task ResumeIcon component tests', () => {
   test('should render in active state with correct permissions', () => {

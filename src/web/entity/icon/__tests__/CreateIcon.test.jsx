@@ -8,7 +8,7 @@ import {screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task from 'gmp/models/task';
 import CreateIcon from 'web/entity/icon/CreateIcon';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 describe('Entity CreateIcon component tests', () => {
   test('should render in active state with correct permissions', () => {

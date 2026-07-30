@@ -9,7 +9,7 @@ import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
 import ToolTip from 'web/components/chart/base/Tooltip';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface BubbleChartData extends LegendData {
   value: number;

@@ -5,7 +5,7 @@
 
 import styled from 'styled-components';
 import useLanguage from 'web/hooks/useLanguage';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const Link = styled.a`
   color: ${Theme.mediumGray};

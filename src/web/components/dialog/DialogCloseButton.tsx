@@ -6,7 +6,7 @@
 import styled from 'styled-components';
 import useIconSize, {type IconSizeType} from 'web/hooks/useIconSize';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface StyledCloseButtonProps {
   $width: string;

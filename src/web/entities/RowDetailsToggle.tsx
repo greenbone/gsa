@@ -6,7 +6,7 @@
 import {type HTMLAttributes, type MouseEvent} from 'react';
 import styled from 'styled-components';
 import useClickHandler from 'web/components/form/useClickHandler';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface RowDetailsToggleProps<TValue> extends Omit<
   HTMLAttributes<HTMLSpanElement>,

@@ -8,7 +8,7 @@ import 'whatwg-fetch';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import useIconSize from 'web/hooks/useIconSize';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 import {get_img_url} from 'web/utils/Urls';
 
 interface StyledIconProps {

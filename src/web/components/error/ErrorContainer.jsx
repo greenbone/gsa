@@ -5,7 +5,7 @@
 
 import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const ErrorContainer = styled(Layout)`
   padding: 15px;

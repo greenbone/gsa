@@ -8,7 +8,7 @@ import {useDroppable} from '@dnd-kit/react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Resizer from 'web/components/sortable/Resizer';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface RowProps {
   children: React.ReactNode;

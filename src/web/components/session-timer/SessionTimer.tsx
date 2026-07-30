@@ -10,7 +10,7 @@ import {RefreshIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import useSessionTimeout from 'web/hooks/useSessionTimeout';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const SessionTimer = () => {
   const [sessionTimeout, renewSession] = useSessionTimeout();

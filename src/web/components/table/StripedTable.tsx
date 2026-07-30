@@ -5,7 +5,7 @@
 
 import styled from 'styled-components';
 import Table from 'web/components/table/Table';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const StripedTable = styled(Table)`
   & th,

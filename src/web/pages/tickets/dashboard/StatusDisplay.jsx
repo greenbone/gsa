@@ -13,7 +13,7 @@ import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay
 import {percent} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TicketsListLoader} from 'web/pages/tickets/dashboard/Loaders';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const ticketStatusColorScale = scaleOrdinal()
   .domain(Object.values(TICKET_STATUS).sort())

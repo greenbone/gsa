@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent, screen} from 'web/testing';
 import ToggleButton from 'web/components/form/ToggleButton';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 describe('ToggleButton tests', () => {
   test('should render', () => {

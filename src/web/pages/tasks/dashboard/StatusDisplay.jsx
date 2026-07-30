@@ -15,7 +15,7 @@ import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay
 import {totalCount, percent} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TaskStatusLoader} from 'web/pages/tasks/dashboard/Loaders';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const red = interpolateHcl('#d62728', '#ff9896');
 const green = interpolateHcl('#2ca02c', '#98df8a');

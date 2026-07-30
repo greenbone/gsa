@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import {throttleAnimation} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/prop-types';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const ResizeContainer = styled.div`
   cursor: row-resize;

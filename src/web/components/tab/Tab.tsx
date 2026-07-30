@@ -5,7 +5,7 @@
 
 import React, {type ReactNode, type MouseEvent} from 'react';
 import styled from 'styled-components';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 export interface TabProps {
   isActiveTab?: boolean;

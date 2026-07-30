@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {BACKGROUND_STATES} from 'web/components/bar/definitions';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface ProgressBarBoxProps {
   $boxBackground?: string;

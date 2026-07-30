@@ -11,7 +11,7 @@ import {
   SEVERITY_RATING_CVSS_3,
 } from 'gmp/utils/severity';
 import SeverityBar from 'web/components/bar/SeverityBar';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 describe('SeverityBar tests', () => {
   test('should render', () => {

@@ -6,7 +6,7 @@
 import React from 'react';
 import {useDraggable, useDroppable} from '@dnd-kit/react';
 import styled from 'styled-components';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface DropZoneProps {
   $isDropTarget: boolean;

@@ -20,7 +20,7 @@ import useGmp from 'web/hooks/useGmp';
 import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
 import useLoadFeatures from 'web/hooks/useLoadFeatures';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface PageProps {
   children: React.ReactNode;

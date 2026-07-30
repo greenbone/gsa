@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
 import MonthDaysSelect from 'web/pages/schedules/MonthDaysSelect';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 describe('MonthDaysSelect', () => {
   test('should render day buttons 1 through 28', () => {

@@ -18,7 +18,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
 import useSettingSave from 'web/pages/user-settings/useSettingSave';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface MaintenanceWindowSetting {
   id?: string;

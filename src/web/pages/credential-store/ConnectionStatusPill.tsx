@@ -11,7 +11,7 @@ import {
   ScheduleIcon,
 } from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 type ConnectionStatus = 'success' | 'failed' | 'testing' | undefined;
 

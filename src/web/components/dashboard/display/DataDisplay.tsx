@@ -16,7 +16,7 @@ import Display, {
 } from 'web/components/dashboard/display/Display';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 import withTranslation, {
   type WithTranslationComponentProps,
 } from 'web/utils/withTranslation';

@@ -9,7 +9,7 @@ import {isDefined, isString} from 'gmp/utils/identity';
 import Icon from 'web/components/icon/Icon';
 import Layout from 'web/components/layout/Layout';
 import withLayout from 'web/components/layout/withLayout';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface SectionHeaderProps {
   align?: string | [string, string];
