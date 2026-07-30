@@ -59,7 +59,7 @@ const StyledDiv = styled.div<StyledDivProps>`
   }
 `;
 
-const IconComponent = <TValue,>({
+const Icon = <TValue,>({
   active,
   to,
   value,
@@ -132,4 +132,4 @@ const IconComponent = <TValue,>({
   );
 };
 
-export default IconComponent;
+export default Icon;
