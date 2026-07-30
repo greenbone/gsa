@@ -21,7 +21,7 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/prop-types';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import withGmp from 'web/utils/withGmp';
-import {withRouter} from 'web/utils/withRouter';
+import withRouter from 'web/utils/withRouter';
 
 const format = d3format('0.2f');
 

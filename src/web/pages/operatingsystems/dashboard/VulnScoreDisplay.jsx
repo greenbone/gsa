@@ -22,7 +22,7 @@ import PropTypes from 'web/utils/prop-types';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 import withGmp from 'web/utils/withGmp';
-import {withRouter} from 'web/utils/withRouter';
+import withRouter from 'web/utils/withRouter';
 
 const ToolTip = styled.div`
   font-weight: normal;

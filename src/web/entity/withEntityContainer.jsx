@@ -18,7 +18,7 @@ import compose from 'web/utils/compose';
 import {updateDisplayName} from 'web/utils/display-name';
 import PropTypes from 'web/utils/prop-types';
 import withGmp from 'web/utils/withGmp';
-import {withRouter} from 'web/utils/withRouter';
+import withRouter from 'web/utils/withRouter';
 
 const defaultEntityReloadIntervalFunc = ({entity}) =>
   isDefined(entity) ? USE_DEFAULT_RELOAD_INTERVAL : NO_RELOAD;
