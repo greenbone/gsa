@@ -33,8 +33,8 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
       },
     }),
   },
-  reporthosts: {
-    get: testing.fn().mockResolvedValue({
+  auditreport: {
+    getHosts: testing.fn().mockResolvedValue({
       data: [
         {
           ip: '123.456.78.910',

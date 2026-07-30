@@ -34,7 +34,7 @@ import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
-import useReportSubEntities from 'web/hooks/use-query/use-report-sub-entities';
+import useAuditReportSubEntities from 'web/hooks/use-query/use-audit-report-sub-entities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import AuditThresholdPanel from 'web/pages/reports/details/AuditThresholdPanel';
@@ -161,7 +161,7 @@ const AuditReportDetailsContent = ({
     : ((scan_run_status as TaskStatus) ?? TASK_STATUS.unknown);
   const refetchInterval = isActive(status) ? undefined : false;
 
-  const reportEntities = useReportSubEntities({
+  const auditReportEntities = useAuditReportSubEntities({
     reportId,
     filter: reportFilter,
     refetchInterval,
@@ -257,7 +257,7 @@ const AuditReportDetailsContent = ({
       key: 'hosts',
       title: (
         <TabTitle
-          counts={reportEntities.hosts.data?.entitiesCounts}
+          counts={auditReportEntities.hosts.data?.entitiesCounts}
           title={_('Hosts')}
         />
       ),
@@ -266,10 +266,10 @@ const AuditReportDetailsContent = ({
         thresholdConfig,
         <HostsTabContent
           audit={true}
-          hostsData={reportEntities.hosts.data}
+          hostsData={auditReportEntities.hosts.data}
           isContainerScanning={false}
-          isHostsError={reportEntities.hosts.isError}
-          isHostsFetching={reportEntities.hosts.isFetching}
+          isHostsError={auditReportEntities.hosts.isError}
+          isHostsFetching={auditReportEntities.hosts.isFetching}
           reportFilter={effectiveReportFilter}
           reportId={reportId}
         />,
@@ -279,7 +279,7 @@ const AuditReportDetailsContent = ({
       key: 'os',
       title: (
         <TabTitle
-          counts={reportEntities.operatingSystems.data?.entitiesCounts}
+          counts={auditReportEntities.operatingSystems.data?.entitiesCounts}
           title={_('Operating Systems')}
         />
       ),
@@ -289,11 +289,11 @@ const AuditReportDetailsContent = ({
         <OperatingSystemsTab
           audit={true}
           filter={effectiveReportFilter}
-          isOperatingSystemsError={reportEntities.operatingSystems.isError}
+          isOperatingSystemsError={auditReportEntities.operatingSystems.isError}
           isOperatingSystemsFetching={
-            reportEntities.operatingSystems.isFetching
+            auditReportEntities.operatingSystems.isFetching
           }
-          operatingSystemsData={reportEntities.operatingSystems.data}
+          operatingSystemsData={auditReportEntities.operatingSystems.data}
           reportId={reportId}
         />,
       ),
@@ -302,7 +302,7 @@ const AuditReportDetailsContent = ({
       key: 'tlscerts',
       title: (
         <TabTitle
-          counts={reportEntities.tlsCertificates.data?.entitiesCounts}
+          counts={auditReportEntities.tlsCertificates.data?.entitiesCounts}
           title={_('TLS Certificates')}
         />
       ),
@@ -310,11 +310,13 @@ const AuditReportDetailsContent = ({
         _('TLS Certificates'),
         thresholdConfig,
         <TLSCertificatesTab
-          isTlsCertificatesError={reportEntities.tlsCertificates.isError}
-          isTlsCertificatesFetching={reportEntities.tlsCertificates.isFetching}
+          isTlsCertificatesError={auditReportEntities.tlsCertificates.isError}
+          isTlsCertificatesFetching={
+            auditReportEntities.tlsCertificates.isFetching
+          }
           reportFilter={effectiveReportFilter}
           reportId={reportId}
-          tlsCertificatesData={reportEntities.tlsCertificates.data}
+          tlsCertificatesData={auditReportEntities.tlsCertificates.data}
           onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
         />,
       ),
@@ -323,16 +325,16 @@ const AuditReportDetailsContent = ({
       key: 'errors',
       title: (
         <TabTitle
-          counts={reportEntities.errors.data?.entitiesCounts}
+          counts={auditReportEntities.errors.data?.entitiesCounts}
           title={_('Error Messages')}
         />
       ),
       panel: (
         <ErrorsTab
-          errorsData={reportEntities.errors.data}
+          errorsData={auditReportEntities.errors.data}
           filter={effectiveReportFilter}
-          isErrorsError={reportEntities.errors.isError}
-          isErrorsFetching={reportEntities.errors.isFetching}
+          isErrorsError={auditReportEntities.errors.isError}
+          isErrorsFetching={auditReportEntities.errors.isFetching}
           reportId={reportId}
         />
       ),
