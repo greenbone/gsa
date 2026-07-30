@@ -14,40 +14,40 @@ import {useNavigate, useSearchParams} from 'react-router';
  * to the current replacement pages
  */
 
-const OmpComponent = () => {
+const OmpPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const cmd = searchParams.get('cmd');
-    const info_type = searchParams.get('info_type');
-    const info_id = searchParams.get('info_id') || '';
+    const infoType = searchParams.get('info_type');
+    const infoId = searchParams.get('info_id') || '';
 
     if (cmd !== 'get_info') {
-      navigate('/notfound', {replace: true});
+      void navigate('/notfound', {replace: true});
       return;
     }
 
-    const id = encodeURIComponent(info_id);
+    const id = encodeURIComponent(infoId);
 
-    switch (info_type) {
+    switch (infoType) {
       case 'nvt':
-        navigate('/nvt/' + id, {replace: true});
+        void navigate(`/nvt/${id}`, {replace: true});
         break;
       case 'cve':
-        navigate('/cve/' + id, {replace: true});
+        void navigate(`/cve/${id}`, {replace: true});
         break;
       case 'cpe':
-        navigate('/cpe/' + id, {replace: true});
+        void navigate(`/cpe/${id}`, {replace: true});
         break;
       case 'cert_bund_adv':
-        navigate('/certbund/' + id, {replace: true});
+        void navigate(`/certbund/${id}`, {replace: true});
         break;
       case 'dfn_cert_adv':
-        navigate('/dfncert/' + id, {replace: true});
+        void navigate(`/dfncert/${id}`, {replace: true});
         break;
       default:
-        navigate('/notfound', {replace: true});
+        void navigate('/notfound', {replace: true});
         break;
     }
   }, [navigate, searchParams]);
@@ -55,4 +55,4 @@ const OmpComponent = () => {
   return null;
 };
 
-export default OmpComponent;
+export default OmpPage;

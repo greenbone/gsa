@@ -858,7 +858,7 @@ const router = createBrowserRouter([
       {
         path: 'omp',
         lazy: async () => ({
-          Component: (await import('web/pages/Omp')).default,
+          Component: (await import('web/pages/OmpPage')).default,
         }),
       },
       {
