@@ -7,7 +7,15 @@ import React from 'react';
 import styled from 'styled-components';
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/prop-types';
+
+interface AutoSizeProps {
+  children: (size: {width: number; height: number}) => React.ReactNode;
+}
+
+interface AutoSizeState {
+  width?: number;
+  height?: number;
+}
 
 const Container = styled.div`
   overflow: hidden;
@@ -23,19 +31,17 @@ const Container = styled.div`
  *
  * This component uses the render props pattern.
  */
-class AutoSize extends React.Component {
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-  };
+class AutoSize extends React.Component<AutoSizeProps, AutoSizeState> {
+  containerRef: React.RefObject<HTMLDivElement>;
 
-  constructor(...args) {
-    super(...args);
+  constructor(props: AutoSizeProps) {
+    super(props);
 
     this.state = {};
 
     this.handleResize = debounce(this.handleResize.bind(this), 100);
 
-    this.containerRef = React.createRef();
+    this.containerRef = React.createRef<HTMLDivElement>();
   }
 
   componentDidMount() {
@@ -52,7 +58,7 @@ class AutoSize extends React.Component {
     this.setState(this.getSize());
   }
 
-  getSize() {
+  getSize(): AutoSizeState {
     const {current: container} = this.containerRef;
 
     if (container === null) {
@@ -60,10 +66,7 @@ class AutoSize extends React.Component {
     }
 
     const {width, height} = container.getBoundingClientRect();
-    return {
-      width,
-      height,
-    };
+    return {width, height};
   }
 
   componentDidUpdate() {
@@ -76,7 +79,6 @@ class AutoSize extends React.Component {
 
   render() {
     const {children} = this.props;
-
     const {width, height} = this.state;
 
     // only call children if height and width are defined
