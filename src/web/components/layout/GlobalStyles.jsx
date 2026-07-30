@@ -4,7 +4,7 @@
  */
 
 import {createGlobalStyle} from 'styled-components';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -28,7 +28,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   a:visited {
-    color: revert;  
+    color: revert;
   }
 
   a:hover, a:focus {
@@ -81,7 +81,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .mantine-Notifications-root.width-before-scroll-bar[data-position='top-right'] {
-  top: calc(var(--header-height) + var(--mantine-spacing-md)); 
+  top: calc(var(--header-height) + var(--mantine-spacing-md));
 }
 `;
 

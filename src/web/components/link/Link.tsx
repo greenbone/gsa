@@ -8,7 +8,7 @@ import {type LinkProps as RLinkProps, Link as RLink} from 'react-router';
 import styled from 'styled-components';
 import {type FilterType} from 'gmp/models/filter';
 import {isDefined, isString} from 'gmp/utils/identity';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface WithTextOnlyProps {
   textOnly?: boolean;

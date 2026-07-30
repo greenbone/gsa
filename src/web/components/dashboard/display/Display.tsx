@@ -9,7 +9,7 @@ import DialogCloseButton from 'web/components/dialog/DialogCloseButton';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import Loading from 'web/components/loading/Loading';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 export interface DisplayProps {
   children: React.ReactNode;

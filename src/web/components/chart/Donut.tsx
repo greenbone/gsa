@@ -27,7 +27,7 @@ import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
 import {setRef} from 'web/utils/Render';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface EmptyDonutProps {
   left: number;

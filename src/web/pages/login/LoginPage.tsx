@@ -17,7 +17,7 @@ import Footer from 'web/components/structure/Footer';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import LoginForm from 'web/pages/login/LoginForm';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const log = logger.getLogger('web.login');
 

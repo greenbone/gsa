@@ -9,7 +9,7 @@ import ErrorContainer from 'web/components/error/ErrorContainer';
 import {AlertCircleIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout, {type LayoutProps} from 'web/components/layout/Layout';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface ErrorMessageProps extends LayoutProps {
   children?: React.ReactNode;

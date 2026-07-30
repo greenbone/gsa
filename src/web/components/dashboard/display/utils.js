@@ -18,7 +18,7 @@ import {
   NA,
   CRITICAL,
 } from 'web/utils/severity';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 /**
  * Calculates the total count from an array of groups.

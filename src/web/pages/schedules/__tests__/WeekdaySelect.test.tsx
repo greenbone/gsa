@@ -7,7 +7,7 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
 import {WeekDays} from 'gmp/models/event';
 import WeekDaySelect from 'web/pages/schedules/WeekdaySelect';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 describe('WeekDaySelect', () => {
   test('should render all 7 day toggle buttons', () => {

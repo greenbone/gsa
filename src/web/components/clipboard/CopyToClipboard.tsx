@@ -8,7 +8,7 @@ import {Tooltip} from '@mantine/core';
 import styled from 'styled-components';
 import {CheckIcon, CopyIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface CopyToClipboardProps {
   value: string;

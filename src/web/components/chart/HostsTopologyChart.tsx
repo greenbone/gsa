@@ -28,7 +28,7 @@ import {
   getSeverityLevelBoundaries,
   FALSE_POSITIVE_VALUE,
 } from 'web/utils/severity';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 import withTranslation from 'web/utils/withTranslation';
 
 interface SvgProps {

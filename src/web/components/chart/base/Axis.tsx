@@ -13,7 +13,7 @@ import {
 } from 'd3-axis';
 import type {ScaleBand, ScaleLinear, ScaleTime} from 'd3-scale';
 import {select} from 'd3-selection';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 type AxisDomainValue = string | number | Date;
 

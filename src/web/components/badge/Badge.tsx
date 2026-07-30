@@ -6,7 +6,7 @@
 import {useRef, useState, useEffect, type ReactNode} from 'react';
 import styled from 'styled-components';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface BadgeContainerProps {
   $margin?: number;

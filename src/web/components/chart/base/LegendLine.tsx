@@ -5,7 +5,7 @@
 
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface LegendLineProps {
   width?: number;

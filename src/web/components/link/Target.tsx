@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 /**
  * Can be used as link anchor. Offsets the target so that it doesn't hide

@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {render, screen} from 'web/testing';
 import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 describe('UserSettingsPasswordNotification', () => {
   test('should render nothing when all passwords are empty', () => {

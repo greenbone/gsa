@@ -11,7 +11,7 @@ import ErrorMessage from 'web/components/error/ErrorMessage';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/prop-types';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const ErrorDetails = styled.div`
   margin-top: 10px;

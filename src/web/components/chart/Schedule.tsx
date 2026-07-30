@@ -16,7 +16,7 @@ import ToolTip from 'web/components/chart/base/Tooltip';
 import path from 'web/components/chart/utils/Path';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/user-setting-time-date-formatters';
 
 interface FutureRun {

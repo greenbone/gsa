@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import withLayout from 'web/components/layout/withLayout';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/prop-types';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const StyledButton = styled.button`
   display: inline-block;

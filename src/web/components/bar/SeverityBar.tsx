@@ -19,7 +19,7 @@ import {
   LOG_VALUE,
   type ResultSeverityRiskFactor,
 } from 'web/utils/severity';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface SeverityBarProps {
   severity?: number | string;

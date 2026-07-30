@@ -11,7 +11,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TicketsListLoader} from 'web/pages/tickets/dashboard/Loaders';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 const transfromCreated = (tickets = []) => {

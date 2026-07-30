@@ -10,7 +10,7 @@ import {
 } from 'gmp/models/compliance';
 import {isDefined} from 'gmp/utils/identity';
 import ProgressBar from 'web/components/bar/ProgressBar';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface ComplianceBarProps {
   compliance?: ComplianceType;

@@ -18,7 +18,7 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {ReportsHighResultsLoader} from 'web/pages/reports/dashboard/Loaders';
 import PropTypes from 'web/utils/prop-types';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
 const transformHighResults = (data = {}) => {

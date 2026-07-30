@@ -7,7 +7,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {hasValue} from 'gmp/utils/identity';
 import Portal from 'web/components/portal/Portal';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 type ToolTipDisplayProps = React.HTMLAttributes<HTMLDivElement>;
 type ToolTipTargetElement = HTMLElement | SVGElement;

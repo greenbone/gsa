@@ -7,7 +7,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import ToolTip from 'web/components/chart/base/Tooltip';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface Arc2dData extends LegendData {
   value: number;

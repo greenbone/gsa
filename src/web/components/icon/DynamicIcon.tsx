@@ -9,7 +9,7 @@ import {type LucideIcon} from 'lucide-react';
 import {isDefined} from 'gmp/utils/identity';
 import useIconSize, {type IconSizeType} from 'web/hooks/useIconSize';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 export type ExtendedIconSize = IconSizeType | [string, string];
 

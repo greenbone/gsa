@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {XIcon} from 'web/components/icon';
 import Layout, {type LayoutProps} from 'web/components/layout/Layout';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface PanelProps extends LayoutProps {
   $isWarning?: boolean;

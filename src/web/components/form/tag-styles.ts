@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const tagStyles = {
   green: {

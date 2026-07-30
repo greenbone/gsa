@@ -5,7 +5,7 @@
 
 import {_} from 'gmp/locale/lang';
 import createLabel from 'web/components/label/Label';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 export const getConnectionStatusLabel = (status?: string) => {
   const connectionStatus = (status || 'unknown')

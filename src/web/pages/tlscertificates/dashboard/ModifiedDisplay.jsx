@@ -19,7 +19,7 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TlsCertificatesModifiedLoader} from 'web/pages/tlscertificates/dashboard/Loaders';
 import PropTypes from 'web/utils/prop-types';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 const transformModified = (data = {}) => {

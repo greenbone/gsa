@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, render} from 'web/testing';
 import ComplianceStatusBar from 'web/components/bar/ComplianceStatusBar';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 describe('ComplianceStatusBar tests', () => {
   test('should render', () => {

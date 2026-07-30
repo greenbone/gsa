@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface StyledProps extends React.HTMLAttributes<HTMLDivElement> {
   checked?: boolean;

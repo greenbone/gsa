@@ -8,7 +8,7 @@ import {type Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface Owner {
   name?: string;

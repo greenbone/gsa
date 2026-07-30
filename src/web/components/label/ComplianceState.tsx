@@ -5,7 +5,7 @@
 
 import {_l} from 'gmp/locale/lang';
 import createLabel from 'web/components/label/Label';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 const YesLabel = createLabel(
   Theme.complianceYes,

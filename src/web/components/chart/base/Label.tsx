@@ -4,7 +4,7 @@
  */
 
 import React, {forwardRef} from 'react';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 type LabelProps = React.SVGProps<SVGTextElement>;
 

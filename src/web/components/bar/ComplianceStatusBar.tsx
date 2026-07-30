@@ -5,7 +5,7 @@
 
 import ProgressBar from 'web/components/bar/ProgressBar';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface ComplianceStatusBarProps {
   complianceStatus?: string | number;

@@ -12,7 +12,7 @@ import Row from 'web/components/layout/Row';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface EditableSettingRowProps {
   title?: string;

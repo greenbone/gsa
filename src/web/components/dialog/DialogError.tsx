@@ -8,7 +8,7 @@ import {isDefined} from 'gmp/utils/identity';
 import DialogCloseButton from 'web/components/dialog/DialogCloseButton';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/Theme';
+import Theme from 'web/utils/theme';
 
 interface DialogErrorProps {
   error?: string;
