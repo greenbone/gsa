@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type ReactNode} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import MessageContainer from 'web/components/error/MessageContainer';
 import {StNonAvailableIcon} from 'web/components/icon';
@@ -11,13 +11,13 @@ import Divider from 'web/components/layout/Divider';
 import Layout, {type LayoutProps} from 'web/components/layout/Layout';
 
 interface MessageProps extends LayoutProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   'data-testid'?: string;
   details?: string;
   message: string;
 }
 
-const Message: React.FC<MessageProps> = ({
+const Message = ({
   message,
   details,
   children,
