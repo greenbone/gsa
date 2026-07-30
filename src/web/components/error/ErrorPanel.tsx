@@ -10,8 +10,15 @@ import {isDefined} from 'gmp/utils/identity';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/theme';
+
+interface ErrorPanelProps {
+  error?: Error;
+  info?: {
+    componentStack: string;
+  };
+  message: string;
+}
 
 const ErrorDetails = styled.div`
   margin-top: 10px;
@@ -26,7 +33,7 @@ const StyledPre = styled.pre`
   word-break: break-word;
 `;
 
-const ErrorPanel = ({error, message, info}) => {
+const ErrorPanel = ({error, message, info}: ErrorPanelProps) => {
   const [_] = useTranslation();
   const [showDetails, setShowDetails] = useState(false);
 
@@ -49,7 +56,7 @@ const ErrorPanel = ({error, message, info}) => {
           {showDetails ? _('Hide Error Details') : _('Show Error Details')}
         </OpenSightButton>
       )}
-      {showDetails && (
+      {isDefined(error) && showDetails && (
         <ErrorDetails>
           <Divider flex="column">
             <h3 data-testid="errorpanel-heading">
@@ -68,14 +75,6 @@ const ErrorPanel = ({error, message, info}) => {
       )}
     </ErrorMessage>
   );
-};
-
-ErrorPanel.propTypes = {
-  error: PropTypes.error,
-  info: PropTypes.shape({
-    componentStack: PropTypes.string,
-  }),
-  message: PropTypes.string.isRequired,
 };
 
 export default ErrorPanel;
