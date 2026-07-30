@@ -63,7 +63,7 @@ const Header = () => {
     <AppHeader
       ianaTimeZone={timezone}
       isLoggedIn={isLoggedIn}
-      isThemeSwitchVisible={false}
+      isThemeSwitchVisible={true}
       languageSwitch={<LanguageSwitch />}
       logo={logoComponent}
       logoLink="/dashboards"

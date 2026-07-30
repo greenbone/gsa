@@ -49,11 +49,21 @@ const Arc3d = <TData extends Arc3dData = Arc3dData>({
   onDataClick,
 }: Arc3dProps<TData>) => {
   const {color = Theme.lightGray, toolTip} = data;
-  let d3Color = d3color(String(color));
-  if (!d3Color) {
-    d3Color = d3color(Theme.lightGray);
+  let darker: any;
+  const colorStr = String(color);
+  if (colorStr.startsWith('var(')) {
+    if (colorStr === Theme.lightGray) {
+      darker = 'var(--gsa-lightGray-darker)';
+    } else {
+      darker = color;
+    }
+  } else {
+    let d3Color = d3color(colorStr);
+    if (!d3Color) {
+      d3Color = d3color('#e5e5e5');
+    }
+    darker = d3Color ? d3Color.darker() : '#e5e5e5';
   }
-  const darker = (d3Color as HSLColor | RGBColor).darker();
   return (
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (

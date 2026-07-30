@@ -32,8 +32,6 @@ export interface DynamicIconProps<TValue = string | undefined> extends Omit<
   onClick?: (value: TValue) => void | Promise<void>;
 }
 
-const inheritColor = undefined;
-
 export function DynamicIcon<TValue = string | undefined>({
   icon: Icon,
   ariaLabel,
@@ -41,7 +39,7 @@ export function DynamicIcon<TValue = string | undefined>({
   active = true,
   title,
   loadingTitle,
-  color = 'black',
+  color: rawColor = 'black',
   value,
   variant = 'transparent',
   dataTestId,
@@ -50,6 +48,7 @@ export function DynamicIcon<TValue = string | undefined>({
   onClick,
   ...restProps
 }: Readonly<DynamicIconProps<TValue>>) {
+  const color = rawColor === 'black' ? Theme.black : rawColor;
   const [_] = useTranslation();
   const [loading, setLoading] = useState(false);
   const {width, height} = useIconSize(size);
@@ -146,9 +145,9 @@ export function DynamicIcon<TValue = string | undefined>({
    * - SVG icons not from Lucide package
    */
 
-  const svgIconsStyle = !isLucide
-    ? {fill: !active ? 'var(--mantine-color-gray-5)' : inheritColor}
-    : inheritColor;
+  const svgIconsStyle: React.CSSProperties = {
+    fill: !active ? 'var(--mantine-color-gray-5)' : 'currentColor',
+  };
 
   if (forceStatic || (active && !isDefined(onClick))) {
     return renderSpanIcon(

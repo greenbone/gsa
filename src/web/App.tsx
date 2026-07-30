@@ -63,7 +63,7 @@ class App extends React.Component<{}> {
 
   render() {
     return (
-      <ThemeProvider defaultColorScheme="light">
+      <ThemeProvider defaultColorScheme="auto">
         <GlobalStyles />
         <ErrorBoundary message={_('An error occurred on this page')}>
           <GmpContext.Provider value={gmp}>

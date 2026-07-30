@@ -52,7 +52,7 @@ const StyledDiv = styled.div<{$activeTab?: boolean; disabled?: boolean}>`
     background-color: ${props =>
       props.$activeTab
         ? 'var(--app-navigation-link-active-background)'
-        : 'var(--mantine-color-gray-1, Theme.white)'};
+        : Theme.lightGray};
     color: ${props =>
       props.$activeTab
         ? 'var(--app-navigation-link-active-color)'
