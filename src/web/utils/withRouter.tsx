@@ -11,8 +11,19 @@ import {
 } from 'react-router';
 import {updateDisplayName} from 'web/utils/display-name';
 
-export const withRouter = Component => {
-  function ComponentWithRouterProp(props) {
+export interface WithRouterComponentProps {
+  location: ReturnType<typeof useLocation>;
+  navigate: ReturnType<typeof useNavigate>;
+  params: ReturnType<typeof useParams>;
+  searchParams: ReturnType<typeof useSearchParams>[0];
+}
+
+type WithRouterProps<TProps> = Omit<TProps, keyof WithRouterComponentProps>;
+
+const withRouter = <TProps extends WithRouterComponentProps>(
+  Component: React.ComponentType<TProps>,
+) => {
+  function ComponentWithRouterProp(props: WithRouterProps<TProps>) {
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
@@ -20,7 +31,7 @@ export const withRouter = Component => {
 
     return (
       <Component
-        {...props}
+        {...(props as TProps)}
         location={location}
         navigate={navigate}
         params={params}
@@ -31,3 +42,5 @@ export const withRouter = Component => {
 
   return updateDisplayName(ComponentWithRouterProp, Component, 'withRouter');
 };
+
+export default withRouter;
