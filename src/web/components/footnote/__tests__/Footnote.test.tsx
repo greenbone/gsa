@@ -4,21 +4,20 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {render} from 'web/testing';
+import {render, screen} from 'web/testing';
 import FootNote from 'web/components/footnote/Footnote';
 import Theme from 'web/utils/theme';
 
 describe('Footnote tests', () => {
-  test('should render footnote', () => {
-    const {element} = render(<FootNote />);
+  test('should apply mediumGray text color', () => {
+    render(<FootNote data-testid="footnote" />);
 
-    expect(element.tagName).toBe('DIV');
-    expect(element).toHaveColor(Theme.mediumGray);
+    expect(screen.getByTestId('footnote')).toHaveColor(Theme.mediumGray);
   });
 
   test('should render children', () => {
-    const {element} = render(<FootNote>Hello World</FootNote>);
+    render(<FootNote>Hello World</FootNote>);
 
-    expect(element).toHaveTextContent('Hello World');
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
   });
 });
