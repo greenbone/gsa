@@ -5,11 +5,20 @@
 
 import {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import TextField from 'web/components/form/TextField';
+import TextField, {type TextFieldProps} from 'web/components/form/TextField';
 import {SearchIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/theme';
+
+interface SearchBarProps extends Omit<
+  TextFieldProps<string>,
+  'onChange' | 'value'
+> {
+  matchesCount: number;
+  placeholder: string;
+  onSearch: (query: string) => void;
+}
+
 const StyledTextField = styled(TextField)`
   .mantine-Input-input {
     padding-left: 2.5rem;
@@ -26,7 +35,12 @@ const NoMatchesMessage = styled.p`
   border-radius: 0.25rem;
 `;
 
-const SearchBar = ({placeholder, onSearch, matchesCount, ...props}) => {
+const SearchBar = ({
+  placeholder,
+  onSearch,
+  matchesCount,
+  ...props
+}: SearchBarProps) => {
   const [_] = useTranslation();
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState(query);
@@ -53,19 +67,13 @@ const SearchBar = ({placeholder, onSearch, matchesCount, ...props}) => {
         placeholder={placeholder}
         title={_('Search')}
         value={query}
-        onChange={value => setQuery(value)}
+        onChange={value => setQuery(value as string)}
       />
       {matchesCount === 0 && (
         <NoMatchesMessage>{_('No matches found.')}</NoMatchesMessage>
       )}
     </>
   );
-};
-
-SearchBar.propTypes = {
-  matchesCount: PropTypes.number.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  onSearch: PropTypes.func.isRequired,
 };
 
 export default SearchBar;

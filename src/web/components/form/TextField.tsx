@@ -7,7 +7,7 @@ import {Input} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 import useValueChange from 'web/components/form/useValueChange';
 
-interface TextFieldProps<TValue> extends Omit<
+export interface TextFieldProps<TValue> extends Omit<
   React.ComponentPropsWithoutRef<typeof Input>,
   'onChange' | 'value'
 > {
