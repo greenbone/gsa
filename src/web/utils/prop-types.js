@@ -14,7 +14,12 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import Model from 'gmp/models/model';
 import Settings from 'gmp/models/settings';
 import {isDefined} from 'gmp/utils/identity';
-import warning from 'web/utils/Warning';
+
+const warning = (condition, ...args) => {
+  if (process.env.NODE_ENV !== 'production' && condition) {
+    console.warn(...args);
+  }
+};
 
 export const mayRequire = validator => {
   const wrapper = (...props) => {
