@@ -66,7 +66,7 @@ describe('LanguageDetector tests', () => {
       isSupportedCode: testing.fn().mockReturnValue(true),
     };
 
-    Object.defineProperty(global, 'navigator', {
+    Object.defineProperty(globalThis, 'navigator', {
       value: {language: 'en-US'},
       configurable: true,
     });
