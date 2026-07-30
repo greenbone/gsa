@@ -364,7 +364,10 @@ describe('OverrideDialog tests', () => {
     const activeRadios = activeGroup.getRadioInputs();
     expect(activeRadios).toHaveLength(4);
     expect(activeRadios[1]).toBeChecked();
-    expect(activeGroup.getAllByText('yes, until')).toHaveLength(2);
+    /* "yes, until <date>" for the existing end time, and the separate
+     * "yes, for the next <n> days" row. */
+    expect(activeGroup.getAllByText('yes, until')).toHaveLength(1);
+    expect(activeGroup.getByText('yes, for the next')).toBeInTheDocument();
 
     const newSeverityGroup = within(screen.getByTestId('group-new-severity'));
     const options = await getSelectItemElementsForSelect(
@@ -387,20 +390,20 @@ describe('OverrideDialog tests', () => {
     );
   });
 
-  test('should render DatePicker disabled by default and enabled when yes for next is selected', () => {
+  test('should render the days field disabled by default and enabled when yes for next is selected', () => {
     const onClose = testing.fn();
     const onSave = testing.fn();
     const {render} = rendererWith({gmp: createGmp()});
 
     render(<OverrideDialog tasks={tasks} onClose={onClose} onSave={onSave} />);
 
-    const datePicker = screen.getByTestId('datepicker-input');
-    expect(datePicker).toBeInTheDocument();
-    expect(datePicker).toBeDisabled();
+    const days = screen.getByTestId('active-days');
+    expect(days).toBeInTheDocument();
+    expect(days).toBeDisabled();
 
     const activeGroup = within(screen.getByTestId('group-active'));
     fireEvent.click(activeGroup.getRadioInputs()[1]);
 
-    expect(datePicker).not.toBeDisabled();
+    expect(days).not.toBeDisabled();
   });
 });

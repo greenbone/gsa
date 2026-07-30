@@ -15,8 +15,9 @@ import {
 } from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
-import DatePicker from 'web/components/form/DatePicker';
+import DaysDatePicker from 'web/components/form/DaysDatePicker';
 import FormGroup from 'web/components/form/FormGroup';
+import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
@@ -28,13 +29,26 @@ export interface ActiveItem {
 
 interface ActiveFormGroupProps {
   active?: Active;
+  days?: number;
   isEdit?: boolean;
   item?: ActiveItem;
   onValueChange: (value: string | number, name?: string) => void;
 }
 
+/**
+ * Number of whole days from today until the given date, at least one.
+ */
 export const computeDaysUntil = (targetDate: Date): number =>
   Math.max(1, targetDate.startOf('day').diff(date().startOf('day'), 'day'));
+
+/**
+ * The date that lies the given number of days ahead of today.
+ *
+ * The counterpart of computeDaysUntil, so that typing a number of days moves
+ * the calendar and picking a date fills in the number of days.
+ */
+export const computeEndDate = (days: number): Date =>
+  date().startOf('day').add(Math.max(1, days), 'day');
 
 export const handleEndDateChange = (
   newDate: Date,
@@ -47,6 +61,7 @@ export const handleEndDateChange = (
 
 const ActiveFormGroup = ({
   active,
+  days = DEFAULT_DAYS,
   isEdit = false,
   item,
   onValueChange,
@@ -56,6 +71,15 @@ const ActiveFormGroup = ({
   const [endDate, setEndDate] = useState(() =>
     isDefined(item?.endTime) ? item.endTime : date().add(DEFAULT_DAYS, 'day'),
   );
+
+  const forNextSelected = active === ACTIVE_YES_FOR_NEXT_VALUE;
+
+  const handleDaysChange = (value: number, name?: string) => {
+    /* Keep the calendar on the day the number points at, so that opening it
+     * again starts from what the field says. */
+    setEndDate(computeEndDate(value));
+    onValueChange(value, name ?? 'days');
+  };
 
   return (
     <FormGroup data-testid="group-active" title={_('Active')}>
@@ -83,14 +107,24 @@ const ActiveFormGroup = ({
         )}
       <Row>
         <Radio
-          checked={active === ACTIVE_YES_FOR_NEXT_VALUE}
+          checked={forNextSelected}
           name="active"
-          title={_('yes, until')}
+          title={_('yes, for the next')}
           value={ACTIVE_YES_FOR_NEXT_VALUE}
           onChange={onValueChange}
         />
-        <DatePicker
-          disabled={active !== ACTIVE_YES_FOR_NEXT_VALUE}
+        <NumberField
+          data-testid="active-days"
+          disabled={!forNextSelected}
+          min={1}
+          name="days"
+          value={days}
+          w={100}
+          onChange={handleDaysChange}
+        />
+        <span>{_('days')}</span>
+        <DaysDatePicker
+          disabled={!forNextSelected}
           minDate={date()}
           name="endDate"
           value={endDate}

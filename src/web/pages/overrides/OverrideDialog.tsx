@@ -272,6 +272,7 @@ const OverrideDialog = ({
 
             <ActiveFormGroup
               active={state.active}
+              days={state.days}
               isEdit={isEdit}
               item={override}
               onValueChange={onValueChange}

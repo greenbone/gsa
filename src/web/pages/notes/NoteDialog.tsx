@@ -208,6 +208,7 @@ const NoteDialog = ({
             )}
             <ActiveFormGroup
               active={state.active}
+              days={state.days}
               isEdit={isEdit}
               item={note}
               onValueChange={onValueChange}

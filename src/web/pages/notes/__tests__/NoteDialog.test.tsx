@@ -346,7 +346,10 @@ describe('NoteDialog tests', () => {
     const activeRadioInputs = activeFormGroup.getRadioInputs();
     expect(activeRadioInputs).toHaveLength(4);
     expect(activeRadioInputs[1]).toBeChecked();
-    expect(activeFormGroup.getAllByText('yes, until')).toHaveLength(2);
+    /* "yes, until <date>" for the existing end time, and the separate
+     * "yes, for the next <n> days" row. */
+    expect(activeFormGroup.getAllByText('yes, until')).toHaveLength(1);
+    expect(activeFormGroup.getByText('yes, for the next')).toBeInTheDocument();
     expect(activeFormGroup.getByText(/2026/)).toBeInTheDocument();
 
     fireEvent.click(nvtRadioInputs[1]);

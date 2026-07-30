@@ -15,6 +15,7 @@ import {
 import {createSession} from 'gmp/testing';
 import ActiveFormGroup, {
   computeDaysUntil,
+  computeEndDate,
   handleEndDateChange,
 } from 'web/pages/overrides/ActiveFormGroup';
 
@@ -48,6 +49,26 @@ describe('computeDaysUntil', () => {
   test('should return 1 for a past date', () => {
     const past = date().subtract(5, 'day');
     expect(computeDaysUntil(past)).toBe(1);
+  });
+});
+
+describe('computeEndDate', () => {
+  test('should return the day that many days ahead', () => {
+    expect(computeEndDate(30).format('YYYY-MM-DD')).toEqual(
+      date().startOf('day').add(30, 'day').format('YYYY-MM-DD'),
+    );
+  });
+
+  test('should round up to one day for zero and negative values', () => {
+    const tomorrow = date().startOf('day').add(1, 'day').format('YYYY-MM-DD');
+    expect(computeEndDate(0).format('YYYY-MM-DD')).toEqual(tomorrow);
+    expect(computeEndDate(-3).format('YYYY-MM-DD')).toEqual(tomorrow);
+  });
+
+  test('should be the inverse of computeDaysUntil', () => {
+    for (const days of [1, 7, 30, 365]) {
+      expect(computeDaysUntil(computeEndDate(days))).toBe(days);
+    }
   });
 });
 
@@ -140,7 +161,7 @@ describe('ActiveFormGroup tests', () => {
     expect(activeGroup.getByText(/2026/)).toBeInTheDocument();
   });
 
-  test('should render the DatePicker disabled by default and enabled when yes for next is selected', () => {
+  test('should render the days field and calendar disabled by default', () => {
     const onValueChange = testing.fn();
     const {render} = rendererWith({gmp: createGmp()});
 
@@ -151,8 +172,8 @@ describe('ActiveFormGroup tests', () => {
       />,
     );
 
-    const datePicker = screen.getByTestId('datepicker-input');
-    expect(datePicker).toBeDisabled();
+    expect(screen.getByTestId('active-days')).toBeDisabled();
+    expect(screen.getByTestId('days-datepicker-icon')).toBeDisabled();
 
     fireEvent.click(
       within(screen.getByTestId('group-active')).getRadioInputs()[1],
@@ -164,7 +185,7 @@ describe('ActiveFormGroup tests', () => {
     );
   });
 
-  test('should enable the DatePicker when active is yes for next', () => {
+  test('should enable the days field and the calendar when active is yes for next', () => {
     const onValueChange = testing.fn();
     const {render} = rendererWith({gmp: createGmp()});
 
@@ -175,7 +196,91 @@ describe('ActiveFormGroup tests', () => {
       />,
     );
 
-    expect(screen.getByTestId('datepicker-input')).not.toBeDisabled();
+    expect(screen.getByTestId('active-days')).not.toBeDisabled();
+    expect(screen.getByTestId('days-datepicker-icon')).not.toBeDisabled();
+  });
+
+  test('should show the days and open the calendar on the icon', () => {
+    const onValueChange = testing.fn();
+    const {render} = rendererWith({gmp: createGmp()});
+
+    render(
+      <ActiveFormGroup
+        active={ACTIVE_YES_FOR_NEXT_VALUE}
+        days={30}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    expect(screen.getByTestId('active-days')).toHaveValue('30');
+    expect(screen.queryByTestId('days-datepicker-dropdown')).toBeNull();
+
+    fireEvent.click(screen.getByTestId('days-datepicker-icon'));
+
+    expect(screen.getByTestId('days-datepicker-dropdown')).toBeInTheDocument();
+  });
+
+  test('should not open the calendar while yes for next is not selected', () => {
+    const onValueChange = testing.fn();
+    const {render} = rendererWith({gmp: createGmp()});
+
+    render(
+      <ActiveFormGroup
+        active={ACTIVE_YES_ALWAYS_VALUE}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId('days-datepicker-icon'));
+
+    expect(screen.queryByTestId('days-datepicker-dropdown')).toBeNull();
+  });
+
+  test('should write the days into the field when a day is picked in the calendar', () => {
+    /* Fixed clock so that the target day is in the month the calendar opens
+     * on and its number is unambiguous. */
+    testing.useFakeTimers();
+    testing.setSystemTime(new Date('2026-03-01T12:00:00Z'));
+
+    const onValueChange = testing.fn();
+    const {render} = rendererWith({gmp: createGmp()});
+
+    render(
+      <ActiveFormGroup
+        active={ACTIVE_YES_FOR_NEXT_VALUE}
+        days={10}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId('days-datepicker-icon'));
+    const dropdown = within(screen.getByTestId('days-datepicker-dropdown'));
+
+    /* 2026-03-21 is twenty days after the frozen today. */
+    fireEvent.click(dropdown.getByText('21'));
+
+    expect(onValueChange).toHaveBeenCalledWith(20, 'days');
+
+    testing.useRealTimers();
+  });
+
+  test('should pass on a typed number of days', () => {
+    const onValueChange = testing.fn();
+    const {render} = rendererWith({gmp: createGmp()});
+
+    render(
+      <ActiveFormGroup
+        active={ACTIVE_YES_FOR_NEXT_VALUE}
+        days={30}
+        onValueChange={onValueChange}
+      />,
+    );
+
+    fireEvent.change(screen.getByTestId('active-days'), {
+      target: {value: '45'},
+    });
+
+    expect(onValueChange).toHaveBeenCalledWith(45, 'days');
   });
 
   test('should call onValueChange when the no radio is clicked', () => {
