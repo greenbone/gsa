@@ -3,59 +3,139 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test} from '@gsa/testing';
-import {rendererWith, screen} from 'web/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
+import EverythingCapabilities from 'gmp/capabilities/everything';
+import Model from 'gmp/models/model';
 import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
-import TableData from 'web/components/table/TableData';
 import UsersTableRow from 'web/pages/users/UsersTableRow';
 
-const user = User.fromElement({
-  _id: '1234',
-  comment: 'test comment',
+const createUser = (props: {
+  id?: string;
+  name: string;
+  roles?: {_id: string; name: string}[];
+}) =>
+  new User({
+    id: props.id ?? '1234',
+    name: props.name,
+    comment: 'test comment',
+    roles: (props.roles ?? []).map(r => Model.fromElement(r, 'role')),
+    userCapabilities: new EverythingCapabilities(),
+  });
+
+const user = createUser({
   name: 'user 1',
-  role: [
+  roles: [
     {_id: '', name: 'Role without id'},
     {_id: 'role1', name: 'Admin'},
   ],
-  groups: {
-    group: [
-      {_id: '', name: 'Group without id'},
-      {_id: 'group1', name: 'Group 1'},
-    ],
-  },
-  hosts: {
-    __text: '192.168.1.1',
-    _allow: '0',
-  },
 });
 
-const gmp = {
+const superAdminUser = createUser({
+  id: '5678',
+  name: 'super admin',
+  roles: [{_id: '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5', name: 'Super Admin'}],
+});
+
+const createGmp = () => ({
   session: createSession({username: 'admin'}),
-};
+});
 
 describe('UsersTableRow', () => {
   test('should render row data and fallback names without ids', () => {
-    const {render} = rendererWith({gmp, capabilities: true, router: true});
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
     render(
-      <table>
-        <tbody>
-          <UsersTableRow
-            actionsComponent={() => <TableData>Custom Actions</TableData>}
-            entity={user}
-            links={false}
-          />
-        </tbody>
-      </table>,
+      <UsersTableRow
+        entity={user}
+        links={false}
+        onToggleDetailsClick={testing.fn()}
+      />,
     );
 
     screen.getByText('user 1');
     screen.getByText('Admin');
     screen.getByText('Role without id');
-    screen.getByText('Group 1');
-    screen.getByText('Group without id');
-    screen.getByText('Allow all and deny from 192.168.1.1');
-    screen.getByText('Local');
-    screen.getByText('Custom Actions');
+  });
+
+  test('should render action buttons', () => {
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
+    render(
+      <UsersTableRow
+        entity={user}
+        onToggleDetailsClick={testing.fn()}
+        onUserCloneClick={testing.fn()}
+        onUserDeleteClick={testing.fn()}
+        onUserDownloadClick={testing.fn()}
+        onUserEditClick={testing.fn()}
+      />,
+    );
+
+    screen.getByTitle('Delete User');
+    screen.getByTitle('Edit User');
+    screen.getByTitle('Clone User');
+    screen.getByTitle('Export User');
+  });
+
+  test('should call action handlers', () => {
+    const handleEdit = testing.fn();
+    const handleClone = testing.fn();
+    const handleDelete = testing.fn();
+    const handleDownload = testing.fn();
+
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
+    render(
+      <UsersTableRow
+        entity={user}
+        onToggleDetailsClick={testing.fn()}
+        onUserCloneClick={handleClone}
+        onUserDeleteClick={handleDelete}
+        onUserDownloadClick={handleDownload}
+        onUserEditClick={handleEdit}
+      />,
+    );
+
+    fireEvent.click(screen.getByTitle('Edit User'));
+    expect(handleEdit).toHaveBeenCalledWith(user);
+
+    fireEvent.click(screen.getByTitle('Clone User'));
+    expect(handleClone).toHaveBeenCalledWith(user);
+
+    fireEvent.click(screen.getByTitle('Delete User'));
+    expect(handleDelete).toHaveBeenCalledWith(user);
+
+    fireEvent.click(screen.getByTitle('Export User'));
+    expect(handleDownload).toHaveBeenCalledWith(user);
+  });
+
+  test('should not render clone button for super admin user', () => {
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
+    render(
+      <UsersTableRow
+        entity={superAdminUser}
+        onToggleDetailsClick={testing.fn()}
+        onUserCloneClick={testing.fn()}
+        onUserDeleteClick={testing.fn()}
+        onUserDownloadClick={testing.fn()}
+        onUserEditClick={testing.fn()}
+      />,
+    );
+
+    expect(screen.getByTitle('Clone User')).toBeDisabled();
+    screen.getByTitle('Delete User');
+    screen.getByTitle('Edit User');
+    screen.getByTitle('Export User');
   });
 });

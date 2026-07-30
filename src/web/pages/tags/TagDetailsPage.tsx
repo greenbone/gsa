@@ -115,7 +115,11 @@ const TagDetailsPage = () => {
   const {dialogState, closeDialog, showError} = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
 
-  const {data: entity, isLoading} = useGetTag({
+  const {
+    data: entity,
+    isLoading,
+    error,
+  } = useGetTag({
     id: id ?? '',
   });
 
@@ -136,20 +140,6 @@ const TagDetailsPage = () => {
   };
 
   const onDownloaded = handleDownload;
-
-  if (!entity) {
-    return (
-      <EntityPage<Tag>
-        entityType="tag"
-        isLoading={isLoading}
-        sectionIcon={<TagIcon size="large" />}
-        title={_('Tag')}
-        toolBarIcons={<div />}
-      >
-        {() => null}
-      </EntityPage>
-    );
-  }
 
   return (
     <>
@@ -180,13 +170,16 @@ const TagDetailsPage = () => {
         }) => (
           <EntityPage<Tag>
             entity={entity}
+            entityError={
+              error ? {status: 0, message: error.message} : undefined
+            }
             entityType="tag"
             isLoading={isLoading}
             sectionIcon={<TagIcon size="large" />}
             title={_('Tag')}
             toolBarIcons={
               <ToolBarIcons
-                entity={entity}
+                entity={entity as Tag}
                 onTagCloneClick={clone}
                 onTagCreateClick={create}
                 onTagDeleteClick={deleteFunc}
@@ -197,7 +190,7 @@ const TagDetailsPage = () => {
               />
             }
           >
-            {() => {
+            {entity => {
               return (
                 <>
                   <PageTitle

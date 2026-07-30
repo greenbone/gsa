@@ -4,7 +4,7 @@
  */
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import {parseCsv} from 'gmp/parser';
+import {parseCsv, parseXmlEncodedString} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -89,7 +89,7 @@ class User extends Model {
 
     if (isDefined(element.hosts)) {
       ret.hosts = {
-        addresses: parseCsv(element.hosts.__text),
+        addresses: parseCsv(element.hosts.__text).map(parseXmlEncodedString),
         allow: element.hosts._allow,
       };
     } else {

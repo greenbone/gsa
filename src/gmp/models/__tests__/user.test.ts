@@ -55,12 +55,12 @@ describe('User model tests', () => {
     const elem = {
       _id: '123',
       hosts: {
-        __text: '123.456.789.42, 987.654.321.1',
+        __text: '123.456.789.42, example.org&#x2F;path',
         _allow: '0',
       },
     };
     const res = {
-      addresses: ['123.456.789.42', '987.654.321.1'],
+      addresses: ['123.456.789.42', 'example.org/path'],
       allow: '0',
     };
     const res2 = {

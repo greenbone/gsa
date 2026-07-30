@@ -130,10 +130,7 @@ const UsersTableRow = ({
   );
 
   const authMethod = convertAuthMethod(entity.authMethod, _);
-  const hostAllow = convertAllow(entity.hosts ?? {addresses: []}, _).replaceAll(
-    '&#x2F;',
-    '/',
-  );
+  const hostAllow = convertAllow(entity.hosts ?? {addresses: []}, _);
   return (
     <TableRow>
       <EntityNameTableData

@@ -105,7 +105,7 @@ const UserDetailsPage = () => {
   const [downloadRef, handleDownload] = useDownload();
   const {title: dialogTitle, message: dialogMessage} = dialogState;
 
-  const {data: entity, isLoading} = useGetUser({id: id ?? ''});
+  const {data: entity, error, isLoading} = useGetUser({id: id ?? ''});
 
   const permFilter = permissionsSubjectFilter(id ?? '');
   const {data: permissionsData} = useGetPermissions({
@@ -130,20 +130,6 @@ const UserDetailsPage = () => {
     goToDetails('user', navigate)({data: {id: response.id}});
   };
 
-  if (!entity) {
-    return (
-      <EntityPage<User>
-        entityType="user"
-        isLoading={isLoading}
-        sectionIcon={<UserIcon size="large" />}
-        title={_('User')}
-        toolBarIcons={<></>}
-      >
-        {() => undefined}
-      </EntityPage>
-    );
-  }
-
   return (
     <>
       <DialogNotification
@@ -165,12 +151,16 @@ const UserDetailsPage = () => {
         {({clone, create, delete: deleteFunc, download, edit}) => (
           <EntityPage<User>
             entity={entity}
+            entityError={
+              error ? {status: 0, message: error.message} : undefined
+            }
+            entityType="user"
             isLoading={isLoading}
             sectionIcon={<UserIcon size="large" />}
             title={_('User')}
             toolBarIcons={
               <UserToolBarIcons
-                entity={entity}
+                entity={entity as User}
                 onUserCloneClick={clone}
                 onUserCreateClick={create}
                 onUserDeleteClick={deleteFunc}
@@ -179,7 +169,7 @@ const UserDetailsPage = () => {
               />
             }
           >
-            {() => {
+            {entity => {
               const tabs = [
                 {
                   label: _('Information'),
@@ -214,7 +204,9 @@ const UserDetailsPage = () => {
               return (
                 <>
                   <PageTitle
-                    title={_('User: {{name}}', {name: entity.name as string})}
+                    title={_('User: {{name}}', {
+                      name: entity.name as string,
+                    })}
                   />
                   <TabsContainer flex="column" grow="1">
                     <TabLayout align={['start', 'end']} grow="1">
