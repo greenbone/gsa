@@ -60,6 +60,7 @@ export const render = (ui: React.ReactNode) => {
     container: rtlContainer,
     baseElement,
     rerender,
+    unmount,
   } = reactTestingRender(<Main>{ui}</Main>);
 
   const container = rtlContainer.querySelector<HTMLElement>(
@@ -76,6 +77,7 @@ export const render = (ui: React.ReactNode) => {
     element: container?.firstChild as HTMLElement,
     rerender: (component: React.ReactNode) =>
       rerender(<Main>{component}</Main>),
+    unmount,
   };
 };
 

@@ -8,33 +8,39 @@ import ReactDOM from 'react-dom';
 import Logger from 'gmp/log';
 import {hasValue} from 'gmp/utils/identity';
 
-const log = Logger.getLogger('web.components.portal');
-
-let portal = document.getElementById('portals');
-
-if (!hasValue(portal)) {
-  const [body] = document.getElementsByTagName('body');
-
-  portal = document.createElement('div');
-  portal.setAttribute('id', 'portals');
-  body.appendChild(portal);
-
-  log.debug('Created portal', portal);
+interface PortalProps {
+  children?: React.ReactNode;
 }
 
-class Portal extends React.Component {
-  constructor(...args) {
-    super(...args);
+const log = Logger.getLogger('web.components.portal');
+
+let portalContainer = document.getElementById('portals');
+
+if (!hasValue(portalContainer)) {
+  const [body] = document.getElementsByTagName('body');
+
+  portalContainer = document.createElement('div');
+  portalContainer.setAttribute('id', 'portals');
+  body.appendChild(portalContainer);
+
+  log.debug('Created portal', portalContainer);
+}
+
+class Portal extends React.Component<PortalProps> {
+  element: HTMLDivElement;
+
+  constructor(props: PortalProps) {
+    super(props);
 
     this.element = document.createElement('div');
   }
 
   componentDidMount() {
-    portal.appendChild(this.element);
+    portalContainer?.appendChild(this.element);
   }
 
   componentWillUnmount() {
-    portal.removeChild(this.element);
+    portalContainer?.removeChild(this.element);
   }
 
   render() {
