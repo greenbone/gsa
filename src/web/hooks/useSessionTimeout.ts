@@ -28,6 +28,9 @@ const useSessionTimeout = (): [
   );
 
   const renewSessionAndUpdateTimeout = useCallback(async () => {
+    if (gmp.isLoggingOut() || !gmp.session.isLoggedIn()) {
+      return;
+    }
     const response = await gmp.user.renewSession();
     gmp.session.setSessionTimeout(response.data);
   }, [gmp]);

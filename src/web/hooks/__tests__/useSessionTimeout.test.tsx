@@ -27,6 +27,7 @@ const createGmp = ({
     renewSession,
   },
   session: createSession({sessionTimeout}),
+  isLoggingOut: testing.fn().mockReturnValue(false),
 });
 
 describe('useSessionTimeout tests', () => {

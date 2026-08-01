@@ -17,11 +17,13 @@ import useSessionTracker from 'web/hooks/useSessionTracker';
 const createGmp = ({
   newDate = date(),
   renewSession = testing.fn().mockResolvedValue({data: newDate}),
+  isLoggingOut = testing.fn().mockReturnValue(false),
 } = {}) => ({
   user: {
     renewSession,
   },
   session: createSession({sessionTimeout: newDate}),
+  isLoggingOut,
 });
 
 const TestSessionTracker = ({onClick}: {onClick?: () => void}) => {
@@ -84,6 +86,25 @@ describe('useSessionTracker', () => {
     gmp.user.renewSession.mockClear();
 
     fireEvent.click(nonButton);
+    expect(gmp.user.renewSession).not.toHaveBeenCalled();
+  });
+
+  test('should not renew session when the user is logging out', () => {
+    testing.useFakeTimers();
+    const gmp = createGmp({
+      isLoggingOut: testing.fn().mockReturnValue(true),
+    });
+    const {render} = rendererWith({
+      store: true,
+      gmp,
+    });
+
+    render(<TestSessionTracker />);
+    const btn = screen.getByTestId('session-btn');
+
+    gmp.user.renewSession.mockClear();
+
+    fireEvent.click(btn);
     expect(gmp.user.renewSession).not.toHaveBeenCalled();
   });
 
