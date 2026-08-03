@@ -50,14 +50,6 @@ export const CertBundCreatedTableDisplay = createDisplay({
   filtersFilter: CERTBUND_FILTER_FILTER,
 });
 
-registerDisplay(
-  CertBundCreatedTableDisplay.displayId,
-  CertBundCreatedTableDisplay,
-  {
-    title: _l('Table: CERT-Bund Advisories by Creation Time'),
-  },
-);
+registerDisplay(CertBundCreatedTableDisplay, _l('Table: CERT-Bund Advisories by Creation Time'));
 
-registerDisplay(CertBundCreatedDisplay.displayId, CertBundCreatedDisplay, {
-  title: _l('Chart: CERT-Bund Advisories by Creation Time'),
-});
+registerDisplay(CertBundCreatedDisplay, _l('Chart: CERT-Bund Advisories by Creation Time'));

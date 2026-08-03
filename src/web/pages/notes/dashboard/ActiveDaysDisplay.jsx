@@ -190,14 +190,6 @@ export const NotesActiveDaysTableDisplay = createDisplay({
   filtersFilter: NOTES_FILTER_FILTER,
 });
 
-registerDisplay(NotesActiveDaysDisplay.displayId, NotesActiveDaysDisplay, {
-  title: _l('Chart: Notes by Active Days'),
-});
+registerDisplay(NotesActiveDaysDisplay, _l('Chart: Notes by Active Days'));
 
-registerDisplay(
-  NotesActiveDaysTableDisplay.displayId,
-  NotesActiveDaysTableDisplay,
-  {
-    title: _l('Table: Notes by Active Days'),
-  },
-);
+registerDisplay(NotesActiveDaysTableDisplay, _l('Table: Notes by Active Days'));

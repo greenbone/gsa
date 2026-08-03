@@ -138,10 +138,6 @@ export const NvtsQodTableDisplay = createDisplay({
   filtersFilter: NVTS_FILTER_FILTER,
 });
 
-registerDisplay(NvtsQodDisplay.displayId, NvtsQodDisplay, {
-  title: _l('Chart: NVTs by QoD'),
-});
+registerDisplay(NvtsQodDisplay, _l('Chart: NVTs by QoD'));
 
-registerDisplay(NvtsQodTableDisplay.displayId, NvtsQodTableDisplay, {
-  title: _l('Table: NVTs by QoD'),
-});
+registerDisplay(NvtsQodTableDisplay, _l('Table: NVTs by QoD'));

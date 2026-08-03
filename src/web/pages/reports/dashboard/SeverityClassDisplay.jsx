@@ -32,14 +32,6 @@ export const ReportsSeverityTableDisplay = createDisplay({
   displayId: 'report-by-severity-class-table',
 });
 
-registerDisplay(ReportsSeverityDisplay.displayId, ReportsSeverityDisplay, {
-  title: _l('Chart: Reports by Severity Class'),
-});
+registerDisplay(ReportsSeverityDisplay, _l('Chart: Reports by Severity Class'));
 
-registerDisplay(
-  ReportsSeverityTableDisplay.displayId,
-  ReportsSeverityTableDisplay,
-  {
-    title: _l('Table: Reports by Severity Class'),
-  },
-);
+registerDisplay(ReportsSeverityTableDisplay, _l('Table: Reports by Severity Class'));

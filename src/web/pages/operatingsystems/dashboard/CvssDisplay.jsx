@@ -33,10 +33,6 @@ export const OsCvssTableDisplay = createDisplay({
   displayName: 'OsCvssTableDisplay',
 });
 
-registerDisplay(OsCvssTableDisplay.displayId, OsCvssTableDisplay, {
-  title: _l('Table: Operating Systems by CVSS'),
-});
+registerDisplay(OsCvssTableDisplay, _l('Table: Operating Systems by CVSS'));
 
-registerDisplay(OsCvssDisplay.displayId, OsCvssDisplay, {
-  title: _l('Chart: Operating Systems by CVSS'),
-});
+registerDisplay(OsCvssDisplay, _l('Chart: Operating Systems by CVSS'));

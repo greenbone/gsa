@@ -36,18 +36,6 @@ export const CertBundSeverityClassTableDisplay = createDisplay({
   filtersFilter: CERTBUND_FILTER_FILTER,
 });
 
-registerDisplay(
-  CertBundSeverityClassDisplay.displayId,
-  CertBundSeverityClassDisplay,
-  {
-    title: _l('Chart: CERT-Bund Advisories by Severity Class'),
-  },
-);
+registerDisplay(CertBundSeverityClassDisplay, _l('Chart: CERT-Bund Advisories by Severity Class'));
 
-registerDisplay(
-  CertBundSeverityClassTableDisplay.displayId,
-  CertBundSeverityClassTableDisplay,
-  {
-    title: _l('Table: CERT-Bund Advisories by Severity Class'),
-  },
-);
+registerDisplay(CertBundSeverityClassTableDisplay, _l('Table: CERT-Bund Advisories by Severity Class'));

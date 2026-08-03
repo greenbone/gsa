@@ -33,10 +33,6 @@ export const HostsCvssTableDisplay = createDisplay({
   displayName: 'HostsCvssTableDisplay',
 });
 
-registerDisplay(HostsCvssDisplay.displayId, HostsCvssDisplay, {
-  title: _l('Chart: Hosts by CVSS'),
-});
+registerDisplay(HostsCvssDisplay, _l('Chart: Hosts by CVSS'));
 
-registerDisplay(HostsCvssTableDisplay.displayId, HostsCvssTableDisplay, {
-  title: _l('Table: Hosts by CVSS'),
-});
+registerDisplay(HostsCvssTableDisplay, _l('Table: Hosts by CVSS'));

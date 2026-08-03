@@ -46,10 +46,6 @@ export const NotesCreatedTableDisplay = createDisplay({
   filtersFilter: NOTES_FILTER_FILTER,
 });
 
-registerDisplay(NotesCreatedDisplay.displayId, NotesCreatedDisplay, {
-  title: _l('Chart: Notes by Creation Time'),
-});
+registerDisplay(NotesCreatedDisplay, _l('Chart: Notes by Creation Time'));
 
-registerDisplay(NotesCreatedTableDisplay.displayId, NotesCreatedTableDisplay, {
-  title: _l('Table: Notes by Creation Time'),
-});
+registerDisplay(NotesCreatedTableDisplay, _l('Table: Notes by Creation Time'));

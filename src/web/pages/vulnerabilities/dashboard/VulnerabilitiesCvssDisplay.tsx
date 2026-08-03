@@ -33,18 +33,6 @@ export const VulnerabilitiesCvssTableDisplay = createDisplay({
   filtersFilter: VULNS_FILTER_FILTER,
 } as Parameters<typeof createDisplay>[0]);
 
-registerDisplay(
-  VulnerabilitiesCvssDisplay.displayId,
-  VulnerabilitiesCvssDisplay,
-  {
-    title: _l('Chart: Vulnerabilities by CVSS'),
-  },
-);
+registerDisplay(VulnerabilitiesCvssDisplay, _l('Chart: Vulnerabilities by CVSS'));
 
-registerDisplay(
-  VulnerabilitiesCvssTableDisplay.displayId,
-  VulnerabilitiesCvssTableDisplay,
-  {
-    title: _l('Table: Vulnerabilities by CVSS'),
-  },
-);
+registerDisplay(VulnerabilitiesCvssTableDisplay, _l('Table: Vulnerabilities by CVSS'));

@@ -33,10 +33,6 @@ export const TasksCvssTableDisplay = createDisplay({
   displayName: 'TasksCvssTableDisplay',
 });
 
-registerDisplay(TasksCvssDisplay.displayId, TasksCvssDisplay, {
-  title: _l('Chart: Tasks by CVSS'),
-});
+registerDisplay(TasksCvssDisplay, _l('Chart: Tasks by CVSS'));
 
-registerDisplay(TasksCvssTableDisplay.displayId, TasksCvssTableDisplay, {
-  title: _l('Table: Tasks by CVSS'),
-});
+registerDisplay(TasksCvssTableDisplay, _l('Table: Tasks by CVSS'));

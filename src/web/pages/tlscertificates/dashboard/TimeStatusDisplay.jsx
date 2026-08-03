@@ -74,10 +74,6 @@ export const TimeStatusTableDisplay = createDisplay({
     _('TLS Certificates by Status (Total: {{count}})', {count: tdata.total}),
 });
 
-registerDisplay(TimeStatusDisplay.displayId, TimeStatusDisplay, {
-  title: _l('Chart: TLS Certificates by Status'),
-});
+registerDisplay(TimeStatusDisplay, _l('Chart: TLS Certificates by Status'));
 
-registerDisplay(TimeStatusTableDisplay.displayId, TimeStatusTableDisplay, {
-  title: _l('Table: TLS Certificates by Status'),
-});
+registerDisplay(TimeStatusTableDisplay, _l('Table: TLS Certificates by Status'));

@@ -83,7 +83,7 @@ class DashboardControls extends React.Component {
       .filter(isDefined);
     const displayItems = displays.map(display => ({
       label: `${display.title}`,
-      value: display.displayId,
+      value: display.component.displayId,
     }));
     return (
       <React.Fragment>
@@ -108,7 +108,7 @@ class DashboardControls extends React.Component {
           <SaveDialog
             buttonTitle={_('Add')}
             defaultValues={{
-              displayId: first(displays).displayId,
+              displayId: first(displays).component.displayId,
             }}
             minHeight={163}
             title={_('Add new Dashboard Display')}

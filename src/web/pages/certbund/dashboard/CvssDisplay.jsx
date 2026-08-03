@@ -33,10 +33,6 @@ export const CertBundCvssTableDisplay = createDisplay({
   displayName: 'CertBundCvssTableDisplay',
 });
 
-registerDisplay(CertBundCvssDisplay.displayId, CertBundCvssDisplay, {
-  title: _l('Chart: CERT-Bund Advisories by CVSS'),
-});
+registerDisplay(CertBundCvssDisplay, _l('Chart: CERT-Bund Advisories by CVSS'));
 
-registerDisplay(CertBundCvssTableDisplay.displayId, CertBundCvssTableDisplay, {
-  title: _l('Table: CERT-Bund Advisories by CVSS'),
-});
+registerDisplay(CertBundCvssTableDisplay, _l('Table: CERT-Bund Advisories by CVSS'));

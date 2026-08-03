@@ -70,14 +70,6 @@ export const TicketsCreatedTableDisplay = createDisplay({
     _('Tickets by Creation Time (Total: {{count}})', {count: tdata.total}),
 });
 
-registerDisplay(TicketsCreatedDisplay.displayId, TicketsCreatedDisplay, {
-  title: _l('Chart: Tickets by Creation Time'),
-});
+registerDisplay(TicketsCreatedDisplay, _l('Chart: Tickets by Creation Time'));
 
-registerDisplay(
-  TicketsCreatedTableDisplay.displayId,
-  TicketsCreatedTableDisplay,
-  {
-    title: _l('Table: Tickets by Creation Time'),
-  },
-);
+registerDisplay(TicketsCreatedTableDisplay, _l('Table: Tickets by Creation Time'));

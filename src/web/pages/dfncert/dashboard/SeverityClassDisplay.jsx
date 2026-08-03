@@ -36,18 +36,6 @@ export const DfnCertSeverityClassTableDisplay = createDisplay({
   filtersFilter: DFNCERT_FILTER_FILTER,
 });
 
-registerDisplay(
-  DfnCertSeverityClassDisplay.displayId,
-  DfnCertSeverityClassDisplay,
-  {
-    title: _l('Chart: DFN-CERT Advisories by Severity Class'),
-  },
-);
+registerDisplay(DfnCertSeverityClassDisplay, _l('Chart: DFN-CERT Advisories by Severity Class'));
 
-registerDisplay(
-  DfnCertSeverityClassTableDisplay.displayId,
-  DfnCertSeverityClassTableDisplay,
-  {
-    title: _l('Table: DFN-CERT Advisories by Severity Class'),
-  },
-);
+registerDisplay(DfnCertSeverityClassTableDisplay, _l('Table: DFN-CERT Advisories by Severity Class'));

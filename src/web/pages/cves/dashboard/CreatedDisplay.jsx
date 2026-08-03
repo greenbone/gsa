@@ -46,10 +46,6 @@ export const CvesCreatedTableDisplay = createDisplay({
   filtersFilter: CVES_FILTER_FILTER,
 });
 
-registerDisplay(CvesCreatedTableDisplay.displayId, CvesCreatedTableDisplay, {
-  title: _l('Table: CVEs by Creation Time'),
-});
+registerDisplay(CvesCreatedTableDisplay, _l('Table: CVEs by Creation Time'));
 
-registerDisplay(CvesCreatedDisplay.displayId, CvesCreatedDisplay, {
-  title: _l('Chart: CVEs by Creation Time'),
-});
+registerDisplay(CvesCreatedDisplay, _l('Chart: CVEs by Creation Time'));

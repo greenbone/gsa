@@ -123,14 +123,6 @@ export const NotesWordCloudTableDisplay = createDisplay({
   filtersFilter: NOTES_FILTER_FILTER,
 });
 
-registerDisplay(NotesWordCloudDisplay.displayId, NotesWordCloudDisplay, {
-  title: _l('Chart: Notes Text Word Cloud'),
-});
+registerDisplay(NotesWordCloudDisplay, _l('Chart: Notes Text Word Cloud'));
 
-registerDisplay(
-  NotesWordCloudTableDisplay.displayId,
-  NotesWordCloudTableDisplay,
-  {
-    title: _l('Table: Notes Text Word Cloud'),
-  },
-);
+registerDisplay(NotesWordCloudTableDisplay, _l('Table: Notes Text Word Cloud'));

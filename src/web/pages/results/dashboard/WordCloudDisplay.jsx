@@ -122,14 +122,6 @@ export const ResultsWordCloudTableDisplay = createDisplay({
   displayName: 'ResultsWordCloudTableDisplay',
 });
 
-registerDisplay(ResultsWordCloudDisplay.displayId, ResultsWordCloudDisplay, {
-  title: _l('Chart: Results Vulnerability Word Cloud'),
-});
+registerDisplay(ResultsWordCloudDisplay, _l('Chart: Results Vulnerability Word Cloud'));
 
-registerDisplay(
-  ResultsWordCloudTableDisplay.displayId,
-  ResultsWordCloudTableDisplay,
-  {
-    title: _l('Table: Results Vulnerability Word Cloud'),
-  },
-);
+registerDisplay(ResultsWordCloudTableDisplay, _l('Table: Results Vulnerability Word Cloud'));

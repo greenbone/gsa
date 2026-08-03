@@ -32,14 +32,6 @@ export const CpesSeverityClassTableDisplay = createDisplay({
   filtersFilter: CPES_FILTER_FILTER,
 });
 
-registerDisplay(CpesSeverityClassDisplay.displayId, CpesSeverityClassDisplay, {
-  title: _l('Chart: CPEs by Severity Class'),
-});
+registerDisplay(CpesSeverityClassDisplay, _l('Chart: CPEs by Severity Class'));
 
-registerDisplay(
-  CpesSeverityClassTableDisplay.displayId,
-  CpesSeverityClassTableDisplay,
-  {
-    title: _l('Table: CPEs by Severity Class'),
-  },
-);
+registerDisplay(CpesSeverityClassTableDisplay, _l('Table: CPEs by Severity Class'));

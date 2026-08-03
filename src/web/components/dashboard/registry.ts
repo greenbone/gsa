@@ -8,24 +8,26 @@ import Logger from 'gmp/log';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 
-export interface RegisteredDisplay {
-  component: ComponentType;
-  title: ToString;
+export type DisplayComponent = ComponentType & {
   displayId: string;
+};
+
+export interface RegisteredDisplay {
+  component: DisplayComponent;
+  title: ToString;
 }
 
+export type DisplayRegistry = Record<string, RegisteredDisplay>;
+
 const log = Logger.getLogger('web.components.dashboard.registry');
-const registry: Record<string, RegisteredDisplay> = {};
+const registry: DisplayRegistry = {};
 
 export const registerDisplay = (
-  displayId: string,
-  component: ComponentType,
-  {title}: {title?: ToString} = {},
+  component: DisplayComponent,
+  title: ToString,
+  targetRegistry: DisplayRegistry = registry,
 ) => {
-  if (!isDefined(displayId)) {
-    log.error('Undefined id passed while registering display');
-    return;
-  }
+  const displayId = component?.displayId;
 
   if (!isDefined(component)) {
     log.error(
@@ -35,19 +37,25 @@ export const registerDisplay = (
     return;
   }
 
+  if (!isDefined(displayId)) {
+    log.error('Undefined id passed while registering display');
+    return;
+  }
+
   if (!isDefined(title)) {
     log.error('Undefined title passed while registering display', displayId);
     return;
   }
 
-  registry[displayId] = {
+  targetRegistry[displayId] = {
     component,
     title,
-    displayId,
   };
 
   log.debug('Registered display', displayId);
 };
 
-export const getDisplay = (displayId: string): RegisteredDisplay | undefined =>
-  registry[displayId];
+export const getDisplay = (
+  displayId: string,
+  targetRegistry: DisplayRegistry = registry,
+): RegisteredDisplay | undefined => targetRegistry[displayId];

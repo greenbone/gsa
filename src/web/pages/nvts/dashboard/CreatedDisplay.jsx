@@ -46,10 +46,6 @@ export const NvtsCreatedTableDisplay = createDisplay({
   filtersFilter: NVTS_FILTER_FILTER,
 });
 
-registerDisplay(NvtsCreatedDisplay.displayId, NvtsCreatedDisplay, {
-  title: _l('Chart: NVTs by Creation Time'),
-});
+registerDisplay(NvtsCreatedDisplay, _l('Chart: NVTs by Creation Time'));
 
-registerDisplay(NvtsCreatedTableDisplay.displayId, NvtsCreatedTableDisplay, {
-  title: _l('Table: NVTs by Creation Time'),
-});
+registerDisplay(NvtsCreatedTableDisplay, _l('Table: NVTs by Creation Time'));
