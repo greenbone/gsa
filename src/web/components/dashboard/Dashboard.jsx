@@ -20,7 +20,7 @@ import {
   getDisplaysById,
   removeDisplay,
   getRows,
-} from 'web/components/dashboard/Utils';
+} from 'web/components/dashboard/utils';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import Loading from 'web/components/loading/Loading';
 import SortableGrid from 'web/components/sortable/SortableGrid';

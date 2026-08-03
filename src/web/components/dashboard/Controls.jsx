@@ -12,7 +12,7 @@ import {
   addDisplayToSettings,
   canAddDisplay,
   getPermittedDisplayIds,
-} from 'web/components/dashboard/Utils';
+} from 'web/components/dashboard/utils';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
