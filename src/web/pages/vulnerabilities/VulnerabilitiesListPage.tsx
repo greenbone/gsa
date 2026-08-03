@@ -9,7 +9,7 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type FilterType, VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import type Vulnerability from 'gmp/models/vulnerability';
 import {getEntityType, pluralizeType} from 'gmp/utils/entity-type';
-import DashboardControls from 'web/components/dashboard/Controls';
+import DashboardControls from 'web/components/dashboard/DashboardControls';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {VulnerabilityIcon} from 'web/components/icon';

@@ -7,6 +7,7 @@ import {beforeEach, describe, expect, test} from '@gsa/testing';
 import {type ToString} from 'gmp/types';
 import {
   type DisplayComponent,
+  type DisplayRegistry,
   getDisplay,
   registerDisplay,
 } from 'web/components/dashboard/registry';
@@ -30,8 +31,11 @@ vi.mock('gmp/log', () => ({
 }));
 
 describe('dashboard registry', () => {
+  let displayRegistry: DisplayRegistry;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    displayRegistry = {};
   });
 
   const createDisplayComponent = (displayId?: string): DisplayComponent => {
@@ -42,9 +46,9 @@ describe('dashboard registry', () => {
     const displayId = 'dummy-valid';
     const DummyDisplay = createDisplayComponent(displayId);
 
-    registerDisplay(DummyDisplay, 'Dummy display');
+    registerDisplay(DummyDisplay, 'Dummy display', displayRegistry);
 
-    const display = getDisplay(displayId);
+    const display = getDisplay(displayId, displayRegistry);
 
     expect(display).toBeDefined();
     expect(display?.component).toBe(DummyDisplay);
@@ -58,39 +62,47 @@ describe('dashboard registry', () => {
     const unregisteredId = 'dummy-invalid-id';
     const DummyDisplay = createDisplayComponent();
 
-    registerDisplay(DummyDisplay, 'Dummy display');
+    registerDisplay(DummyDisplay, 'Dummy display', displayRegistry);
 
     expect(log.error).toHaveBeenCalledWith(
       'Undefined id passed while registering display',
     );
     expect(log.debug).not.toHaveBeenCalled();
-    expect(getDisplay(unregisteredId)).toBeUndefined();
+    expect(getDisplay(unregisteredId, displayRegistry)).toBeUndefined();
   });
 
   test('should log an error for undefined component', () => {
     const displayId = 'dummy-invalid-component';
 
-    registerDisplay(undefined as unknown as DisplayComponent, 'Dummy display');
+    registerDisplay(
+      undefined as unknown as DisplayComponent,
+      'Dummy display',
+      displayRegistry,
+    );
 
     expect(log.error).toHaveBeenCalledWith(
       'Undefined component passed while registering display',
       undefined,
     );
     expect(log.debug).not.toHaveBeenCalled();
-    expect(getDisplay(displayId)).toBeUndefined();
+    expect(getDisplay(displayId, displayRegistry)).toBeUndefined();
   });
 
   test('should log an error for undefined title', () => {
     const displayId = 'dummy-invalid-title';
     const DummyDisplay = createDisplayComponent(displayId);
 
-    registerDisplay(DummyDisplay, undefined as unknown as ToString);
+    registerDisplay(
+      DummyDisplay,
+      undefined as unknown as ToString,
+      displayRegistry,
+    );
 
     expect(log.error).toHaveBeenCalledWith(
       'Undefined title passed while registering display',
       displayId,
     );
     expect(log.debug).not.toHaveBeenCalled();
-    expect(getDisplay(displayId)).toBeUndefined();
+    expect(getDisplay(displayId, displayRegistry)).toBeUndefined();
   });
 });
