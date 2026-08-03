@@ -8,19 +8,19 @@ import {useDroppable} from '@dnd-kit/react';
 import styled from 'styled-components';
 import Theme from 'web/utils/theme';
 
-interface EmptyRowProps {
+interface SortableEmptyRowProps {
   children?: React.ReactNode;
   active?: boolean;
   height: number;
 }
 
-interface EmptyGridRowProps {
+interface StyledEmptyRowProps {
   $active: boolean;
   $isDropTarget: boolean;
   height: number;
 }
 
-const EmptyGridRow = styled.div<EmptyGridRowProps>`
+const StyledEmptyRow = styled.div<StyledEmptyRowProps>`
   margin: 8px 0px;
   min-height: 50px;
   display: ${props => (props.$active ? 'flex' : 'none')};
@@ -44,10 +44,14 @@ const EmptyGridRow = styled.div<EmptyGridRowProps>`
   }
 `;
 
-const EmptyRow = ({children, active = false, height}: EmptyRowProps) => {
+const SortableEmptyRow = ({
+  children,
+  active = false,
+  height,
+}: SortableEmptyRowProps) => {
   const {isDropTarget, ref} = useDroppable({id: 'empty'});
   return (
-    <EmptyGridRow
+    <StyledEmptyRow
       ref={ref}
       $active={active}
       $isDropTarget={isDropTarget}
@@ -55,8 +59,8 @@ const EmptyRow = ({children, active = false, height}: EmptyRowProps) => {
       height={height}
     >
       {children}
-    </EmptyGridRow>
+    </StyledEmptyRow>
   );
 };
 
-export default EmptyRow;
+export default SortableEmptyRow;

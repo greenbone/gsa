@@ -11,11 +11,11 @@ import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import {isDefined} from 'gmp/utils/identity';
 import AutoSize from 'web/components/layout/AutoSize';
 import Layout from 'web/components/layout/Layout';
-import EmptyRow from 'web/components/sortable/EmptyRow';
 import Item, {
   GRID_ITEM_MARGIN,
   type ItemRenderProps,
 } from 'web/components/sortable/Item';
+import SortableEmptyRow from 'web/components/sortable/SortableEmptyRow';
 import SortableRow from 'web/components/sortable/SortableRow';
 
 export interface SortableGridRow {
@@ -228,7 +228,10 @@ const SortableGrid = (props: GridProps) => {
               );
             })}
             {showEmptyRow && (
-              <EmptyRow active={isInteracting} height={emptyRowHeight} />
+              <SortableEmptyRow
+                active={isInteracting}
+                height={emptyRowHeight}
+              />
             )}
           </Layout>
         )}
