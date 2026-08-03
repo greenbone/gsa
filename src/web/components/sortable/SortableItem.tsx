@@ -8,23 +8,23 @@ import {useDraggable, useDroppable} from '@dnd-kit/react';
 import styled from 'styled-components';
 import Theme from 'web/utils/theme';
 
-interface DropZoneProps {
+interface StyledDropZoneProps {
   $isDropTarget: boolean;
 }
 
-interface GridItemProps {
+interface StyledItemProps {
   $isDragging: boolean;
 }
 
-export interface ItemRenderProps {
+export interface SortableItemRenderProps {
   id: string;
   height: number;
   width: number;
   dragHandleRef: (element: Element | null) => void;
 }
 
-interface ItemProps {
-  children: (props: ItemRenderProps) => React.ReactNode;
+interface SortableItemProps {
+  children: (props: SortableItemRenderProps) => React.ReactNode;
   id: string;
   index: number;
   rowId: string;
@@ -39,7 +39,7 @@ export const GRID_ITEM_MARGIN = {
   right: 8,
 };
 
-const DropZone = styled.div<DropZoneProps>`
+const StyledDropZone = styled.div<StyledDropZoneProps>`
   position: relative;
 
   &::after {
@@ -59,7 +59,7 @@ const DropZone = styled.div<DropZoneProps>`
   }
 `;
 
-const GridItem = styled.div<GridItemProps>`
+const StyledItem = styled.div<StyledItemProps>`
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
@@ -78,7 +78,13 @@ const GridItem = styled.div<GridItemProps>`
   transition: box-shadow 0.2s ease;
 `;
 
-const Item = ({children, index, id, rowId, ...props}: ItemProps) => {
+const SortableItem = ({
+  children,
+  index,
+  id,
+  rowId,
+  ...props
+}: SortableItemProps) => {
   const {
     ref: setDragRef,
     handleRef,
@@ -102,8 +108,8 @@ const Item = ({children, index, id, rowId, ...props}: ItemProps) => {
   });
 
   return (
-    <DropZone ref={ref} $isDropTarget={isDropTarget}>
-      <GridItem
+    <StyledDropZone ref={ref} $isDropTarget={isDropTarget}>
+      <StyledItem
         ref={setDragRef}
         $isDragging={isDragging}
         data-testid="grid-item"
@@ -113,9 +119,9 @@ const Item = ({children, index, id, rowId, ...props}: ItemProps) => {
           id,
           dragHandleRef: handleRef,
         })}
-      </GridItem>
-    </DropZone>
+      </StyledItem>
+    </StyledDropZone>
   );
 };
 
-export default Item;
+export default SortableItem;

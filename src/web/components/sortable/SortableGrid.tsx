@@ -11,11 +11,11 @@ import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import {isDefined} from 'gmp/utils/identity';
 import AutoSize from 'web/components/layout/AutoSize';
 import Layout from 'web/components/layout/Layout';
-import Item, {
-  GRID_ITEM_MARGIN,
-  type ItemRenderProps,
-} from 'web/components/sortable/Item';
 import SortableEmptyRow from 'web/components/sortable/SortableEmptyRow';
+import SortableItem, {
+  GRID_ITEM_MARGIN,
+  type SortableItemRenderProps,
+} from 'web/components/sortable/SortableItem';
 import SortableRow from 'web/components/sortable/SortableRow';
 
 export interface SortableGridRow {
@@ -25,7 +25,7 @@ export interface SortableGridRow {
 }
 
 interface GridProps {
-  children: (props: ItemRenderProps) => React.ReactNode;
+  children: (props: SortableItemRenderProps) => React.ReactNode;
   items?: SortableGridRow[];
   maxItemsPerRow?: number;
   maxRows?: number;
@@ -213,7 +213,7 @@ const SortableGrid = (props: GridProps) => {
                   onResize={h => handleRowResize(rowId, h)}
                 >
                   {rowItems.map((id, index) => (
-                    <Item
+                    <SortableItem
                       key={id}
                       height={itemHeight}
                       id={id}
@@ -222,7 +222,7 @@ const SortableGrid = (props: GridProps) => {
                       width={itemWidth}
                     >
                       {children}
-                    </Item>
+                    </SortableItem>
                   ))}
                 </SortableRow>
               );
