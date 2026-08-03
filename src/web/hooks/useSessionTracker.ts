@@ -26,8 +26,8 @@ const useSessionTracker = () => {
 
     const handleUserActivity = async () => {
       if (isCooldown) return;
-      await renewSession();
       isCooldown = true;
+      await renewSession();
       cooldownTimeoutId = setTimeout(() => {
         isCooldown = false;
       }, 10000);
