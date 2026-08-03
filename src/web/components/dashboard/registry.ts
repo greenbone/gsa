@@ -3,13 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type {ComponentType} from 'react';
 import Logger from 'gmp/log';
+import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 
-const log = Logger.getLogger('web.components.dashboard.registry');
-const registry = {};
+export interface RegisteredDisplay {
+  component: ComponentType;
+  title: ToString;
+  displayId: string;
+}
 
-export const registerDisplay = (displayId, component, {title}) => {
+const log = Logger.getLogger('web.components.dashboard.registry');
+const registry: Record<string, RegisteredDisplay> = {};
+
+export const registerDisplay = (
+  displayId: string,
+  component: ComponentType,
+  {title}: {title?: ToString} = {},
+) => {
   if (!isDefined(displayId)) {
     log.error('Undefined id passed while registering display');
     return;
@@ -37,4 +49,5 @@ export const registerDisplay = (displayId, component, {title}) => {
   log.debug('Registered display', displayId);
 };
 
-export const getDisplay = displayId => registry[displayId];
+export const getDisplay = (displayId: string): RegisteredDisplay | undefined =>
+  registry[displayId];

@@ -8,7 +8,7 @@ import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {CertBundSeverityLoader} from 'web/pages/certbund/dashboard/Loaders';
 
 export const CertBundCvssDisplay = createDisplay({

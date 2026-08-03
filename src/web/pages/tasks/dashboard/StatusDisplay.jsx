@@ -13,7 +13,7 @@ import DataTable from 'web/components/dashboard/display/DataTable';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';
 import {totalCount, percent} from 'web/components/dashboard/display/utils';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {TaskStatusLoader} from 'web/pages/tasks/dashboard/Loaders';
 import Theme from 'web/utils/theme';
 

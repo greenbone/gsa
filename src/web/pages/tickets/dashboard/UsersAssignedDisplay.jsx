@@ -10,7 +10,7 @@ import BubbleChart from 'web/components/chart/Bubble';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {TicketsListLoader} from 'web/pages/tickets/dashboard/Loaders';
 
 export const assignedUserColorScale = scaleLinear()

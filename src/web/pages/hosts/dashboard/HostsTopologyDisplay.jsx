@@ -11,7 +11,7 @@ import {isDefined, hasValue} from 'gmp/utils/identity';
 import HostsTopologyChart from 'web/components/chart/HostsTopologyChart';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import useGmp from 'web/hooks/useGmp';
 import {HostsTopologyLoader} from 'web/pages/hosts/dashboard/Loaders';
 import PropTypes from 'web/utils/prop-types';

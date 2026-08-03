@@ -9,7 +9,7 @@ import CreatedDisplay from 'web/components/dashboard/display/created/CreatedDisp
 import transformCreated from 'web/components/dashboard/display/created/CreatedTransform';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {NotesCreatedLoader} from 'web/pages/notes/dashboard/Loaders';
 import Theme from 'web/utils/theme';
 

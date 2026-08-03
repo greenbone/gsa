@@ -8,7 +8,7 @@ import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {ReportsSeverityLoader} from 'web/pages/reports/dashboard/Loaders';
 
 export const ReportsCvssDisplay = createDisplay({
