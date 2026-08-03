@@ -23,7 +23,7 @@ import {
 } from 'web/components/dashboard/Utils';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import Loading from 'web/components/loading/Loading';
-import Grid from 'web/components/sortable/Grid';
+import SortableGrid from 'web/components/sortable/SortableGrid';
 import {
   loadSettings,
   saveSettings,
@@ -252,7 +252,7 @@ class Dashboard extends React.Component {
 
     return (
       <ErrorBoundary message={_('An error occurred on this dashboard.')}>
-        <Grid
+        <SortableGrid
           items={convertDisplaysToGridItems(filterDisplays(rows, isAllowed))}
           maxItemsPerRow={maxItemsPerRow}
           maxRows={maxRows}
@@ -282,7 +282,7 @@ class Dashboard extends React.Component {
               />
             );
           }}
-        </Grid>
+        </SortableGrid>
       </ErrorBoundary>
     );
   }
