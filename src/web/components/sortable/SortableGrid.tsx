@@ -12,17 +12,35 @@ import {isDefined} from 'gmp/utils/identity';
 import AutoSize from 'web/components/layout/AutoSize';
 import Layout from 'web/components/layout/Layout';
 import EmptyRow from 'web/components/sortable/EmptyRow';
-import Item, {GRID_ITEM_MARGIN} from 'web/components/sortable/Item';
+import Item, {
+  GRID_ITEM_MARGIN,
+  type ItemRenderProps,
+} from 'web/components/sortable/Item';
 import Row from 'web/components/sortable/Row';
-import PropTypes from 'web/utils/prop-types';
 
-const createNewRow = item => ({
+export interface SortableGridRow {
+  id: string;
+  items: string[];
+  height?: number;
+}
+
+interface GridProps {
+  children: (props: ItemRenderProps) => React.ReactNode;
+  items?: SortableGridRow[];
+  maxItemsPerRow?: number;
+  maxRows?: number;
+  onChange: (items: SortableGridRow[]) => void;
+  onRowResize: (rowId: string, height: number) => void;
+}
+
+const createNewRow = (item: string): SortableGridRow => ({
   id: uuid(),
   height: DEFAULT_ROW_HEIGHT,
   items: [item],
 });
 
-const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
+const findRowIndex = (rows: SortableGridRow[], rowid: string) =>
+  rows.findIndex(row => row.id === rowid);
 
 const sensors = [
   PointerSensor.configure({
@@ -33,19 +51,21 @@ const sensors = [
   KeyboardSensor,
 ];
 
-const Grid = props => {
+const SortableGrid = (props: GridProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
-  const [dragSourceRowId, setDragSourceRowId] = useState(undefined);
+  const [dragSourceRowId, setDragSourceRowId] = useState<string | undefined>(
+    undefined,
+  );
 
-  const notifyChange = items => {
+  const notifyChange = (items: SortableGridRow[]) => {
     const {onChange} = props;
     if (isDefined(onChange)) {
       onChange(items);
     }
   };
 
-  const handleRowResize = (rowId, height) => {
+  const handleRowResize = (rowId: string, height: number) => {
     const {onRowResize} = props;
     if (isDefined(onRowResize)) {
       onRowResize(rowId, height);
@@ -147,11 +167,11 @@ const Grid = props => {
   let emptyRowHeight = DEFAULT_ROW_HEIGHT;
   if (isDragging) {
     const dragRow = items.find(row => row.id === dragSourceRowId);
-    const {height = DEFAULT_ROW_HEIGHT} = dragRow;
+    const {height = DEFAULT_ROW_HEIGHT} = dragRow ?? {};
     emptyRowHeight = height;
   }
-  const getRowHeight = row => row.height;
-  const getRowItems = row => row.items;
+  const getRowHeight = (row: SortableGridRow) => row.height;
+  const getRowItems = (row: SortableGridRow) => row.items;
   return (
     <DragDropProvider
       sensors={sensors}
@@ -217,19 +237,4 @@ const Grid = props => {
   );
 };
 
-const rowPropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(PropTypes.string).isRequired,
-  height: PropTypes.number,
-});
-
-Grid.propTypes = {
-  children: PropTypes.func.isRequired,
-  items: PropTypes.arrayOf(rowPropType),
-  maxItemsPerRow: PropTypes.number,
-  maxRows: PropTypes.number,
-  onChange: PropTypes.func.isRequired,
-  onRowResize: PropTypes.func.isRequired,
-};
-
-export default Grid;
+export default SortableGrid;
