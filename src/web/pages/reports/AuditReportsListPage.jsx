@@ -9,7 +9,7 @@ import Filter, {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import DashboardControls from 'web/components/dashboard/Controls';
+import DashboardControls from 'web/components/dashboard/DashboardControls';
 import {ReportIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';

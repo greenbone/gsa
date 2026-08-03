@@ -5,7 +5,7 @@
 
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 import type Note from 'gmp/models/note';
-import DashboardControls from 'web/components/dashboard/Controls';
+import DashboardControls from 'web/components/dashboard/DashboardControls';
 import {NoteIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {TLS_CERTIFICATES_FILTER_FILTER} from 'gmp/models/filter';
-import DashboardControls from 'web/components/dashboard/Controls';
+import DashboardControls from 'web/components/dashboard/DashboardControls';
 import {TlsCertificateIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Layout from 'web/components/layout/Layout';

@@ -224,7 +224,7 @@ const StartPage = () => {
   };
 
   const handleAddNewDisplay = (
-    oldSettings: DashboardSettings,
+    oldSettings: DashboardSettings | undefined,
     dashboardId: string,
     displayId: string,
   ) => {

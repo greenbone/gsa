@@ -13,7 +13,7 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import type Report from 'gmp/models/report';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import DashboardControls from 'web/components/dashboard/Controls';
+import DashboardControls from 'web/components/dashboard/DashboardControls';
 import {ReportIcon, UploadIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';

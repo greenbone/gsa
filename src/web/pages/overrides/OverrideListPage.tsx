@@ -5,7 +5,7 @@
 
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import type Override from 'gmp/models/override';
-import DashboardControls from 'web/components/dashboard/Controls';
+import DashboardControls from 'web/components/dashboard/DashboardControls';
 import {OverrideIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';

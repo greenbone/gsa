@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
-import DashboardControls from 'web/components/dashboard/Controls';
+import DashboardControls from 'web/components/dashboard/DashboardControls';
 import {TicketIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';

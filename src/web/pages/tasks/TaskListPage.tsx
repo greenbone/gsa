@@ -5,7 +5,7 @@
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import type Task from 'gmp/models/task';
-import DashboardControls from 'web/components/dashboard/Controls';
+import DashboardControls from 'web/components/dashboard/DashboardControls';
 import {TaskIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import {
