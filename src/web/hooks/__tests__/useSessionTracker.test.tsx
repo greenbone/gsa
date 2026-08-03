@@ -59,7 +59,7 @@ describe('useSessionTracker', () => {
     gmp.user.renewSession.mockClear();
 
     fireEvent.click(btn);
-    expect(gmp.user.renewSession).toHaveBeenCalledOnce();
+    expect(gmp.user.renewSession).not.toHaveBeenCalled();
     gmp.user.renewSession.mockClear();
 
     await runTimers();
@@ -133,6 +133,26 @@ describe('useSessionTracker', () => {
     gmp.user.renewSession.mockClear();
 
     fireEvent.drag(document);
+    expect(gmp.user.renewSession).toHaveBeenCalledOnce();
+  });
+
+  test('should renew session only once for rapid wheel events within the cooldown', () => {
+    testing.useFakeTimers();
+    const gmp = createGmp();
+    const {render} = rendererWith({
+      store: true,
+      gmp,
+    });
+
+    render(<TestSessionTracker />);
+
+    gmp.user.renewSession.mockClear();
+
+    fireEvent.wheel(document);
+    fireEvent.wheel(document);
+    fireEvent.wheel(document);
+    fireEvent.wheel(document);
+
     expect(gmp.user.renewSession).toHaveBeenCalledOnce();
   });
 });
