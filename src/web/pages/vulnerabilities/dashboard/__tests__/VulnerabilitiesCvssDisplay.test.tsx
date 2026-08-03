@@ -5,7 +5,7 @@
 
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import {getDisplay} from 'web/components/dashboard/Registry';
+import {getDisplay} from 'web/components/dashboard/registry';
 import {
   VulnerabilitiesCvssDisplay,
   VulnerabilitiesCvssTableDisplay,

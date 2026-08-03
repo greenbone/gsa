@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import {getDisplay} from 'web/components/dashboard/Registry';
+import {getDisplay} from 'web/components/dashboard/registry';
 import {
   VulnerabilitiesHostsDisplay,
   VulnerabilitiesHostsTableDisplay,

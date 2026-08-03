@@ -19,7 +19,7 @@ import DataTable from 'web/components/dashboard/display/DataTable';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {NvtsFamilyLoader} from 'web/pages/nvts/dashboard/Loaders';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/prop-types';

@@ -17,7 +17,7 @@ import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {randomColor} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {ResultsDescriptionWordCountLoader} from 'web/pages/results/dashboard/Loaders';
 import PropTypes from 'web/utils/prop-types';
 

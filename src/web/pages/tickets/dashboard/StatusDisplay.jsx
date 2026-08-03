@@ -11,7 +11,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';
 import {percent} from 'web/components/dashboard/display/utils';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {TicketsListLoader} from 'web/pages/tickets/dashboard/Loaders';
 import Theme from 'web/utils/theme';
 

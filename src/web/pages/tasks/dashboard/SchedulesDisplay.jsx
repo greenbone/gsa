@@ -13,7 +13,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTable from 'web/components/dashboard/display/DataTable';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {TasksSchedulesLoader} from 'web/pages/tasks/dashboard/Loaders';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/user-setting-time-date-formatters';
 

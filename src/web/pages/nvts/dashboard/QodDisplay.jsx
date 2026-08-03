@@ -21,7 +21,7 @@ import {
   qodColorScale,
 } from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {NvtsQodLoader} from 'web/pages/nvts/dashboard/Loaders';
 import PropTypes from 'web/utils/prop-types';
 

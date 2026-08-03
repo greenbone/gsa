@@ -11,7 +11,7 @@ import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import Logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import {getDisplay} from 'web/components/dashboard/Registry';
+import {getDisplay} from 'web/components/dashboard/registry';
 import {
   convertDefaultDisplays,
   convertDisplaysToGridItems,

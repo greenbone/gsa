@@ -25,7 +25,7 @@ import {
   activeDaysColorScale,
 } from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
-import {registerDisplay} from 'web/components/dashboard/Registry';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {NotesActiveDaysLoader} from 'web/pages/notes/dashboard/Loaders';
 import PropTypes from 'web/utils/prop-types';
 
