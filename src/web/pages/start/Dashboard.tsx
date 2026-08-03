@@ -5,7 +5,7 @@
 
 import {TranslatedDashboardControls as DashboardControls} from 'web/components/dashboard/Controls';
 import {TranslatedDashboard as Dashboard} from 'web/components/dashboard/Dashboard';
-import {canAddDisplay} from 'web/components/dashboard/Utils';
+import {canAddDisplay} from 'web/components/dashboard/utils';
 import Layout from 'web/components/layout/Layout';
 import {CERTBUND_DISPLAYS} from 'web/pages/certbund/dashboard';
 import {CPES_DISPLAYS} from 'web/pages/cpes/dashboard';

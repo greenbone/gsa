@@ -13,7 +13,7 @@ import {
   addDisplayToSettings,
   canAddDisplay,
   convertDefaultDisplays,
-} from 'web/components/dashboard/Utils';
+} from 'web/components/dashboard/utils';
 import {
   DashboardIcon,
   TrashcanIcon,
