@@ -7,7 +7,7 @@ import React, {useCallback, useRef} from 'react';
 import {useDroppable} from '@dnd-kit/react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import Resizer from 'web/components/sortable/Resizer';
+import SortableResizer from 'web/components/sortable/SortableResizer';
 import Theme from 'web/utils/theme';
 
 interface SortableRowProps {
@@ -80,7 +80,7 @@ const SortableRow = ({
       >
         {children}
       </StyledRow>
-      <Resizer onResize={handleResize} />
+      <SortableResizer onResize={handleResize} />
     </>
   );
 };

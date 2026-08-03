@@ -7,10 +7,13 @@ import React from 'react';
 import styled from 'styled-components';
 import {throttleAnimation} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/theme';
 
-const ResizeContainer = styled.div`
+interface SortableResizerProps {
+  onResize?: (diffY: number) => void;
+}
+
+const StyledResizeContainer = styled.div`
   cursor: row-resize;
   height: 10px;
   width: 100%;
@@ -21,20 +24,18 @@ const ResizeContainer = styled.div`
   align-items: center;
 `;
 
-const ResizeIcon = styled.span`
+const StyledResizeIcon = styled.span`
   height: 2px;
   width: 20px;
   border-top: 1px solid rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 `;
 
-class Resizer extends React.Component {
-  static propTypes = {
-    onResize: PropTypes.func,
-  };
+class SortableResizer extends React.Component<SortableResizerProps> {
+  startY = 0;
 
-  constructor(...args) {
-    super(...args);
+  constructor(props: SortableResizerProps) {
+    super(props);
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
@@ -43,7 +44,7 @@ class Resizer extends React.Component {
     this.notifyResize = throttleAnimation(this.notifyResize.bind(this));
   }
 
-  handleMouseDown(event) {
+  handleMouseDown(event: React.MouseEvent) {
     if (event.buttons & 1) {
       this.startY = event.pageY;
 
@@ -53,7 +54,7 @@ class Resizer extends React.Component {
     }
   }
 
-  handleMouseMove(event) {
+  handleMouseMove(event: MouseEvent) {
     const {onResize} = this.props;
 
     event.preventDefault();
@@ -63,15 +64,17 @@ class Resizer extends React.Component {
     }
   }
 
-  notifyResize(pageY) {
+  notifyResize(pageY: number) {
     const {onResize} = this.props;
 
     const diffY = pageY - this.startY;
     this.startY = pageY;
-    onResize(diffY);
+    if (isDefined(onResize)) {
+      onResize(diffY);
+    }
   }
 
-  handleMouseUp(event) {
+  handleMouseUp(event: MouseEvent) {
     document.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('mouseup', this.handleMouseUp);
     event.preventDefault();
@@ -84,11 +87,14 @@ class Resizer extends React.Component {
 
   render() {
     return (
-      <ResizeContainer data-testid="resizer" onMouseDown={this.handleMouseDown}>
-        <ResizeIcon />
-      </ResizeContainer>
+      <StyledResizeContainer
+        data-testid="resizer"
+        onMouseDown={this.handleMouseDown}
+      >
+        <StyledResizeIcon />
+      </StyledResizeContainer>
     );
   }
 }
 
-export default Resizer;
+export default SortableResizer;
