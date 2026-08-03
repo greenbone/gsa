@@ -47,7 +47,9 @@ describe('ProgressBar tests', () => {
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
     expect(actualValue).toContain('linear-gradient');
-    expect(actualValue).toContain(Theme.severityWarnYellow);
+    expect(actualValue).toBackgroundGradientContainColor(
+      Theme.severityWarnYellow,
+    );
   });
 
   test('should render background = error', () => {
@@ -56,7 +58,7 @@ describe('ProgressBar tests', () => {
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
     expect(actualValue).toContain('linear-gradient');
-    expect(actualValue).toContain(Theme.errorRed);
+    expect(actualValue).toBackgroundGradientContainColor(Theme.errorRed);
   });
 
   test('should render background = low', () => {
@@ -65,7 +67,7 @@ describe('ProgressBar tests', () => {
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
     expect(actualValue).toContain('linear-gradient');
-    expect(actualValue).toContain(Theme.severityLowBlue);
+    expect(actualValue).toBackgroundGradientContainColor(Theme.severityLowBlue);
   });
 
   test('should render background = new', () => {
@@ -74,7 +76,7 @@ describe('ProgressBar tests', () => {
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
     expect(actualValue).toContain('linear-gradient');
-    expect(actualValue).toContain(Theme.statusNewGreen);
+    expect(actualValue).toBackgroundGradientContainColor(Theme.statusNewGreen);
   });
 
   test('should render background = run', () => {
@@ -83,7 +85,7 @@ describe('ProgressBar tests', () => {
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
     expect(actualValue).toContain('linear-gradient');
-    expect(actualValue).toContain(Theme.statusRunGreen);
+    expect(actualValue).toBackgroundGradientContainColor(Theme.statusRunGreen);
   });
 
   test('should render background = log', () => {

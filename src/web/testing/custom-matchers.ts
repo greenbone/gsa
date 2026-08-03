@@ -123,12 +123,64 @@ function toHaveColor(this, element: HTMLElement, hex: string) {
   }
 }
 
+function toBackgroundGradientContainColor(
+  this,
+  actualValue: string,
+  hex: string,
+) {
+  const expectedColor = hexToRgb(hex);
+
+  const pass = actualValue.includes(expectedColor);
+
+  if (pass) {
+    return {
+      message: () =>
+        `expected background gradient not to contain color: ${hex} (${expectedColor}), but got ${actualValue}`,
+      pass: true,
+    };
+  } else {
+    return {
+      message: () =>
+        `expected background gradient to contain color: ${hex} (${expectedColor}), but got ${actualValue}`,
+      pass: false,
+    };
+  }
+}
+
+function toHaveStyleWithColor(
+  this,
+  element: HTMLElement,
+  property: string,
+  hex: string,
+) {
+  const actualValue = getComputedStyle(element).getPropertyValue(property);
+  const expectedColor = hexToRgb(hex);
+
+  const pass = actualValue.includes(expectedColor);
+
+  if (pass) {
+    return {
+      message: () =>
+        `expected element not to have ${property} containing color: ${hex} (${expectedColor}), but got ${actualValue}`,
+      pass: true,
+    };
+  } else {
+    return {
+      message: () =>
+        `expected element to have ${property} containing color: ${hex} (${expectedColor}), but got ${actualValue}`,
+      pass: false,
+    };
+  }
+}
+
 // Extend expect with custom matchers
 expect.extend({
   toHaveComputedStyle,
   toHaveBackgroundColor,
   toHaveBorderColor,
   toHaveColor,
+  toBackgroundGradientContainColor,
+  toHaveStyleWithColor,
 });
 
 // Declare custom matcher types for TypeScript
@@ -139,6 +191,8 @@ declare module 'vitest' {
     toHaveBackgroundColor(hex: string): T;
     toHaveBorderColor(hex: string): T;
     toHaveColor(hex: string): T;
+    toBackgroundGradientContainColor(hex: string): T;
+    toHaveStyleWithColor(property: string, hex: string): T;
   }
 
   interface AsymmetricMatchersContaining {
@@ -146,5 +200,7 @@ declare module 'vitest' {
     toHaveBackgroundColor(hex: string): unknown;
     toHaveBorderColor(hex: string): unknown;
     toHaveColor(hex: string): unknown;
+    toBackgroundGradientContainColor(hex: string): unknown;
+    toHaveStyleWithColor(property: string, hex: string): unknown;
   }
 }

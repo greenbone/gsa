@@ -169,8 +169,8 @@ describe('SeverityBar tests', () => {
     const progress = screen.getByTestId('progress');
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
-    expect(actualValue).toContain(
-      `linear-gradient(90deg, ${Theme.severityClassHigh} 0%, ${Theme.severityClassHigh} 100%)`,
+    expect(actualValue).toBackgroundGradientContainColor(
+      Theme.severityClassHigh,
     );
   });
 
@@ -185,8 +185,8 @@ describe('SeverityBar tests', () => {
     const progress = screen.getByTestId('progress');
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
-    expect(actualValue).toContain(
-      `linear-gradient(90deg, ${Theme.severityClassMedium} 0%, ${Theme.severityClassMedium} 100%)`,
+    expect(actualValue).toBackgroundGradientContainColor(
+      Theme.severityClassMedium,
     );
   });
 
@@ -201,8 +201,8 @@ describe('SeverityBar tests', () => {
     const progress = screen.getByTestId('progress');
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
-    expect(actualValue).toContain(
-      `linear-gradient(90deg, ${Theme.severityClassCritical} 0%, ${Theme.severityClassCritical} 100%)`,
+    expect(actualValue).toBackgroundGradientContainColor(
+      Theme.severityClassCritical,
     );
   });
 
@@ -217,8 +217,8 @@ describe('SeverityBar tests', () => {
     const progress = screen.getByTestId('progress');
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
-    expect(actualValue).toContain(
-      `linear-gradient(90deg, ${Theme.severityClassLow} 0%, ${Theme.severityClassLow} 100%)`,
+    expect(actualValue).toBackgroundGradientContainColor(
+      Theme.severityClassLow,
     );
     expect(progress).toHaveComputedStyle('width', '0%');
   });

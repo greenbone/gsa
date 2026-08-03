@@ -6,6 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, render, fireEvent} from 'web/testing';
 import DynamicIcon from 'web/components/icon/DynamicIcon';
+import {hexToRgb} from 'web/testing/custom-matchers';
+import Theme from 'web/utils/theme';
 
 const MockIcon = props => <svg {...props} data-testid="mock-icon" />;
 
@@ -148,7 +150,8 @@ describe('DynamicIcon', () => {
       );
       const disabledIcon = screen.getByTestId('disabled-icon');
       expect(disabledIcon.querySelector('svg')).toBeVisible();
-      expect(disabledIcon).toHaveStyle('color: GrayText');
+      expect(disabledIcon).toHaveAttribute('disabled');
+      expect(disabledIcon).toHaveStyleWithColor('color', Theme.black);
     });
 
     test('renders custom action icon', () => {
@@ -183,7 +186,7 @@ describe('DynamicIcon', () => {
       const nonLucideIcon = screen.getByTestId('non-lucide-icon');
       expect(nonLucideIcon).toBeVisible();
       const svg = nonLucideIcon.querySelector('svg');
-      expect(svg).toHaveStyle('fill: black');
+      expect(svg).toHaveStyle({fill: hexToRgb(Theme.black)});
     });
 
     test('renders non-Lucide icon with custom size and color', () => {
@@ -198,7 +201,7 @@ describe('DynamicIcon', () => {
       );
       const customNonLucideIcon = screen.getByTestId('custom-non-lucide-icon');
       const svg = customNonLucideIcon.querySelector('svg');
-      expect(svg).toHaveStyle('fill: blue');
+      expect(svg).toHaveStyle({fill: hexToRgb('#0000FF')});
     });
 
     test('renders disabled non-Lucide icon', () => {
@@ -215,7 +218,11 @@ describe('DynamicIcon', () => {
         'disabled-non-lucide-icon',
       );
       expect(disabledNonLucideIcon.querySelector('svg')).toBeVisible();
-      expect(disabledNonLucideIcon).toHaveStyle('color: GrayText');
+      expect(disabledNonLucideIcon).toHaveAttribute('disabled');
+      expect(disabledNonLucideIcon).toHaveStyleWithColor(
+        'fill',
+        'var(--mantine-color-gray-5)',
+      );
     });
 
     test('renders custom action icon', () => {

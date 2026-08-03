@@ -132,7 +132,6 @@ export function DynamicIcon<TValue = string | undefined>({
         />,
       );
     }
-
     return renderActionIcon(
       <Icon
         height={height}

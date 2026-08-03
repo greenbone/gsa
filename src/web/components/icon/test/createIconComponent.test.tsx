@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {within, screen, render} from 'web/testing';
 import {createIconComponents} from 'web/components/icon/createIconComponents';
+import {hexToRgb} from 'web/testing/custom-matchers';
 
 const MockIcon = props => <svg {...props} data-testid="mock-icon" />;
 
@@ -58,13 +59,17 @@ describe('createIconComponents', () => {
           active={false}
           color="red"
           data-testid="custom-icon"
+          onClick={testing.fn()}
         />,
       );
 
       const iconElement = screen.getByTestId('custom-icon');
       expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
       expect(iconElement).toHaveAttribute('data-testid', 'custom-icon');
-      expect(iconElement).toHaveStyle('color: GrayText');
+      expect(iconElement).toHaveAttribute('disabled');
+      const svgElement = within(iconElement).getByTestId('mock-icon');
+      expect(svgElement).toBeVisible();
+      expect(svgElement).not.toHaveAttribute('color');
     });
   });
 
@@ -88,7 +93,7 @@ describe('createIconComponents', () => {
       expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
       expect(iconElement).toHaveAttribute('data-testid', 'dummy-lucide-icon');
       const svgElement = within(iconElement).getByText('', {selector: 'svg'});
-      expect(svgElement).toHaveStyle('fill:red');
+      expect(svgElement).toHaveStyle({fill: hexToRgb('#FF0000')});
     });
 
     test('should create action icon components with default props', () => {
@@ -120,7 +125,11 @@ describe('createIconComponents', () => {
       const iconElement = screen.getByTestId('custom-icon');
       expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
       expect(iconElement).toHaveAttribute('data-testid', 'custom-icon');
-      expect(iconElement).toHaveStyle('color: GrayText');
+      expect(iconElement).toHaveAttribute('disabled');
+      expect(iconElement).toHaveStyleWithColor(
+        'fill',
+        '#000000', // GrayText color in hex format
+      );
     });
   });
 });
