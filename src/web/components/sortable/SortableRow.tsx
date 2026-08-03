@@ -10,7 +10,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Resizer from 'web/components/sortable/Resizer';
 import Theme from 'web/utils/theme';
 
-interface RowProps {
+interface SortableRowProps {
   children: React.ReactNode;
   dropDisabled?: boolean;
   height: number | string;
@@ -18,14 +18,14 @@ interface RowProps {
   onResize?: (height: number) => void;
 }
 
-interface GridRowProps {
+interface StyledRowProps {
   $height: number | string;
   $isDropTarget: boolean;
 }
 
 const MIN_HEIGHT = 175;
 
-const GridRow = styled.div<GridRowProps>`
+const StyledRow = styled.div<StyledRowProps>`
   display: flex;
   height: ${props => props.$height}px;
   min-height: ${MIN_HEIGHT}px;
@@ -39,7 +39,13 @@ const GridRow = styled.div<GridRowProps>`
   transition: all 0.2s ease;
 `;
 
-const Row = ({children, dropDisabled, id, height, onResize}: RowProps) => {
+const SortableRow = ({
+  children,
+  dropDisabled,
+  id,
+  height,
+  onResize,
+}: SortableRowProps) => {
   const rowRef = useRef<HTMLDivElement | null>(null);
 
   const handleResize = useCallback(
@@ -63,7 +69,7 @@ const Row = ({children, dropDisabled, id, height, onResize}: RowProps) => {
 
   return (
     <>
-      <GridRow
+      <StyledRow
         ref={element => {
           rowRef.current = element;
           ref(element);
@@ -73,10 +79,10 @@ const Row = ({children, dropDisabled, id, height, onResize}: RowProps) => {
         data-testid="grid-row"
       >
         {children}
-      </GridRow>
+      </StyledRow>
       <Resizer onResize={handleResize} />
     </>
   );
 };
 
-export default Row;
+export default SortableRow;
