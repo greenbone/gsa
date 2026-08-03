@@ -161,10 +161,6 @@ export const NvtsFamilyTableDisplay = createDisplay({
   filtersFilter: NVTS_FILTER_FILTER,
 });
 
-registerDisplay(NvtsFamilyDisplay.displayId, NvtsFamilyDisplay, {
-  title: _l('Chart: NVTs by Family'),
-});
+registerDisplay(NvtsFamilyDisplay, _l('Chart: NVTs by Family'));
 
-registerDisplay(NvtsFamilyTableDisplay.displayId, NvtsFamilyTableDisplay, {
-  title: _l('Table: NVTs by Family'),
-});
+registerDisplay(NvtsFamilyTableDisplay, _l('Table: NVTs by Family'));

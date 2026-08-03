@@ -32,14 +32,6 @@ export const TasksSeverityTableDisplay = createDisplay({
   filtersFilter: TASKS_FILTER_FILTER,
 });
 
-registerDisplay(
-  TasksSeverityTableDisplay.displayId,
-  TasksSeverityTableDisplay,
-  {
-    title: _l('Table: Tasks by Severity Class'),
-  },
-);
+registerDisplay(TasksSeverityTableDisplay, _l('Table: Tasks by Severity Class'));
 
-registerDisplay(TasksSeverityDisplay.displayId, TasksSeverityDisplay, {
-  title: _l('Chart: Tasks by Severity Class'),
-});
+registerDisplay(TasksSeverityDisplay, _l('Chart: Tasks by Severity Class'));

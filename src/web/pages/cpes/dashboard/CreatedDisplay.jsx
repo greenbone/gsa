@@ -46,10 +46,6 @@ export const CpesCreatedTableDisplay = createDisplay({
   filtersFilter: CPES_FILTER_FILTER,
 });
 
-registerDisplay(CpesCreatedDisplay.displayId, CpesCreatedDisplay, {
-  title: _l('Chart: CPEs by Creation Time'),
-});
+registerDisplay(CpesCreatedDisplay, _l('Chart: CPEs by Creation Time'));
 
-registerDisplay(CpesCreatedTableDisplay.displayId, CpesCreatedTableDisplay, {
-  title: _l('Table: CPEs by Creation Time'),
-});
+registerDisplay(CpesCreatedTableDisplay, _l('Table: CPEs by Creation Time'));

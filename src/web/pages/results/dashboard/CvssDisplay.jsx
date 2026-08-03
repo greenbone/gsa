@@ -33,10 +33,6 @@ export const ResultsCvssTableDisplay = createDisplay({
   filtersFilter: RESULTS_FILTER_FILTER,
 });
 
-registerDisplay(ResultsCvssDisplay.displayId, ResultsCvssDisplay, {
-  title: _l('Chart: Results by CVSS'),
-});
+registerDisplay(ResultsCvssDisplay, _l('Chart: Results by CVSS'));
 
-registerDisplay(ResultsCvssTableDisplay.displayId, ResultsCvssTableDisplay, {
-  title: _l('Table: Results by CVSS'),
-});
+registerDisplay(ResultsCvssTableDisplay, _l('Table: Results by CVSS'));

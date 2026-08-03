@@ -32,14 +32,6 @@ export const NvtsSeverityClassTableDisplay = createDisplay({
   filtersFilter: NVTS_FILTER_FILTER,
 });
 
-registerDisplay(NvtsSeverityClassDisplay.displayId, NvtsSeverityClassDisplay, {
-  title: _l('Chart: NVTs by Severity Class'),
-});
+registerDisplay(NvtsSeverityClassDisplay, _l('Chart: NVTs by Severity Class'));
 
-registerDisplay(
-  NvtsSeverityClassTableDisplay.displayId,
-  NvtsSeverityClassTableDisplay,
-  {
-    title: _l('Table: NVTs by Severity Class'),
-  },
-);
+registerDisplay(NvtsSeverityClassTableDisplay, _l('Table: NVTs by Severity Class'));

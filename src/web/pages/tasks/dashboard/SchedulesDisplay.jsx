@@ -76,14 +76,6 @@ export const TasksSchedulesTableDisplay = createDisplay({
   endDate: week,
 });
 
-registerDisplay(TasksSchedulesDisplay.displayId, TasksSchedulesDisplay, {
-  title: _l('Chart: Next Scheduled Tasks'),
-});
+registerDisplay(TasksSchedulesDisplay, _l('Chart: Next Scheduled Tasks'));
 
-registerDisplay(
-  TasksSchedulesTableDisplay.displayId,
-  TasksSchedulesTableDisplay,
-  {
-    title: _l('Table: Next Scheduled Tasks'),
-  },
-);
+registerDisplay(TasksSchedulesTableDisplay, _l('Table: Next Scheduled Tasks'));

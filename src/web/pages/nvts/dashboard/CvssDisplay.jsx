@@ -33,10 +33,6 @@ export const NvtsCvssTableDisplay = createDisplay({
   displayName: 'NvtsCvssTableDisplay',
 });
 
-registerDisplay(NvtsCvssDisplay.displayId, NvtsCvssDisplay, {
-  title: _l('Chart: NVTs by CVSS'),
-});
+registerDisplay(NvtsCvssDisplay, _l('Chart: NVTs by CVSS'));
 
-registerDisplay(NvtsCvssTableDisplay.displayId, NvtsCvssTableDisplay, {
-  title: _l('Table: NVTs by CVSS'),
-});
+registerDisplay(NvtsCvssTableDisplay, _l('Table: NVTs by CVSS'));

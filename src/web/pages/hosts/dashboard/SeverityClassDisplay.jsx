@@ -32,17 +32,5 @@ export const HostsSeverityClassTableDisplay = createDisplay({
   displayName: 'HostsSeverityClassTableDisplay',
 });
 
-registerDisplay(
-  HostsSeverityClassDisplay.displayId,
-  HostsSeverityClassDisplay,
-  {
-    title: _l('Chart: Hosts by Severity Class'),
-  },
-);
-registerDisplay(
-  HostsSeverityClassTableDisplay.displayId,
-  HostsSeverityClassTableDisplay,
-  {
-    title: _l('Table: Hosts by Severity Class'),
-  },
-);
+registerDisplay(HostsSeverityClassDisplay, _l('Chart: Hosts by Severity Class'));
+registerDisplay(HostsSeverityClassTableDisplay, _l('Table: Hosts by Severity Class'));

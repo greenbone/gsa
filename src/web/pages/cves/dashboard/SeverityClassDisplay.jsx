@@ -32,14 +32,6 @@ export const CvesSeverityClassTableDisplay = createDisplay({
   filtersFilter: CVES_FILTER_FILTER,
 });
 
-registerDisplay(CvesSeverityClassDisplay.displayId, CvesSeverityClassDisplay, {
-  title: _l('Chart: CVEs by Severity Class'),
-});
+registerDisplay(CvesSeverityClassDisplay, _l('Chart: CVEs by Severity Class'));
 
-registerDisplay(
-  CvesSeverityClassTableDisplay.displayId,
-  CvesSeverityClassTableDisplay,
-  {
-    title: _l('Table: CVEs by Severity Class'),
-  },
-);
+registerDisplay(CvesSeverityClassTableDisplay, _l('Table: CVEs by Severity Class'));

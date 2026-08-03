@@ -132,14 +132,6 @@ export const TasksHighResultsTableDisplay = createDisplay({
   filtersFilter: TASKS_FILTER_FILTER,
 });
 
-registerDisplay(TasksHighResultsDisplay.displayId, TasksHighResultsDisplay, {
-  title: _l('Chart: Tasks by High Results per Host'),
-});
+registerDisplay(TasksHighResultsDisplay, _l('Chart: Tasks by High Results per Host'));
 
-registerDisplay(
-  TasksHighResultsTableDisplay.displayId,
-  TasksHighResultsTableDisplay,
-  {
-    title: _l('Table: Tasks by High Results per Host'),
-  },
-);
+registerDisplay(TasksHighResultsTableDisplay, _l('Table: Tasks by High Results per Host'));

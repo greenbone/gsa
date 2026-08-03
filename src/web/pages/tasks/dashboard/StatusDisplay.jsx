@@ -99,10 +99,6 @@ export const TasksStatusTableDisplay = createDisplay({
   filtersFilter: TASKS_FILTER_FILTER,
 });
 
-registerDisplay(TasksStatusDisplay.displayId, TasksStatusDisplay, {
-  title: _l('Chart: Tasks by Status'),
-});
+registerDisplay(TasksStatusDisplay, _l('Chart: Tasks by Status'));
 
-registerDisplay(TasksStatusTableDisplay.displayId, TasksStatusTableDisplay, {
-  title: _l('Table: Tasks by Status'),
-});
+registerDisplay(TasksStatusTableDisplay, _l('Table: Tasks by Status'));

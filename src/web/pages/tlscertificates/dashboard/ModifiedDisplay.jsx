@@ -170,18 +170,6 @@ export const TlsCertificatesModifiedTableDisplay = createDisplay({
   displayName: 'TlsCertificatesModifiedTableDisplay',
 });
 
-registerDisplay(
-  TlsCertificatesModifiedDisplay.displayId,
-  TlsCertificatesModifiedDisplay,
-  {
-    title: _l('Chart: TLS Certificates by Modification Time'),
-  },
-);
+registerDisplay(TlsCertificatesModifiedDisplay, _l('Chart: TLS Certificates by Modification Time'));
 
-registerDisplay(
-  TlsCertificatesModifiedTableDisplay.displayId,
-  TlsCertificatesModifiedTableDisplay,
-  {
-    title: _l('Table: TLS Certificates by Modification Time'),
-  },
-);
+registerDisplay(TlsCertificatesModifiedTableDisplay, _l('Table: TLS Certificates by Modification Time'));

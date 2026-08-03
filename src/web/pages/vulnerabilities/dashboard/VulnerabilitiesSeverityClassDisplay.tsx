@@ -37,18 +37,6 @@ export const VulnerabilitiesSeverityTableDisplay = createDisplay({
   filtersFilter: VULNS_FILTER_FILTER,
 } as Parameters<typeof createDisplay>[0]);
 
-registerDisplay(
-  VulnerabilitiesSeverityDisplay.displayId,
-  VulnerabilitiesSeverityDisplay,
-  {
-    title: _l('Chart: Vulnerabilities by Severity Class'),
-  },
-);
+registerDisplay(VulnerabilitiesSeverityDisplay, _l('Chart: Vulnerabilities by Severity Class'));
 
-registerDisplay(
-  VulnerabilitiesSeverityTableDisplay.displayId,
-  VulnerabilitiesSeverityTableDisplay,
-  {
-    title: _l('Table: Vulnerabilities by Severity Class'),
-  },
-);
+registerDisplay(VulnerabilitiesSeverityTableDisplay, _l('Table: Vulnerabilities by Severity Class'));

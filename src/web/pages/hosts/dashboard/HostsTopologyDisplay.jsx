@@ -145,6 +145,4 @@ HostsTopologyDisplay.displayId = DISPLAY_ID;
 
 export default HostsTopologyDisplay;
 
-registerDisplay(DISPLAY_ID, HostsTopologyDisplay, {
-  title: _l('Chart: Hosts Topology'),
-});
+registerDisplay(HostsTopologyDisplay, _l('Chart: Hosts Topology'));

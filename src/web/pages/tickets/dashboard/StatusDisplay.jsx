@@ -71,14 +71,6 @@ export const TicketsStatusTableDisplay = createDisplay({
     _('Tickets by Status (Total: {{count}})', {count: tdata.total}),
 });
 
-registerDisplay(TicketsStatusDisplay.displayId, TicketsStatusDisplay, {
-  title: _l('Chart: Tickets by Status'),
-});
+registerDisplay(TicketsStatusDisplay, _l('Chart: Tickets by Status'));
 
-registerDisplay(
-  TicketsStatusTableDisplay.displayId,
-  TicketsStatusTableDisplay,
-  {
-    title: _l('Table: Tickets by Status'),
-  },
-);
+registerDisplay(TicketsStatusTableDisplay, _l('Table: Tickets by Status'));
