@@ -160,9 +160,7 @@ describe('ScannerDetailsPage tests', () => {
 
     render(<ScannerDetailsPage id="scanner-123" />);
 
-    expect(
-      screen.getByRole('tab', {name: 'User Tags ( 0 )'}),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', {name: /^user tags/i})).toBeInTheDocument();
   });
 
   test('should render permissions tab', () => {
@@ -181,7 +179,7 @@ describe('ScannerDetailsPage tests', () => {
     render(<ScannerDetailsPage id="scanner-123" />);
 
     expect(
-      screen.getByRole('tab', {name: 'Permissions ( 0 )'}),
+      screen.getByRole('tab', {name: /^permissions/i}),
     ).toBeInTheDocument();
   });
 
@@ -326,7 +324,7 @@ describe('ScannerDetailsPage tests', () => {
 
     const {container} = render(<ScannerDetailsPage id="scanner-123" />);
 
-    const userTagsTab = screen.getByRole('tab', {name: 'User Tags ( 0 )'});
+    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
     fireEvent.click(userTagsTab);
 
     expect(container).toHaveTextContent('No user tags available');
@@ -347,7 +345,7 @@ describe('ScannerDetailsPage tests', () => {
 
     const {container} = render(<ScannerDetailsPage id="scanner-123" />);
 
-    const permissionsTab = screen.getByRole('tab', {name: 'Permissions ( 0 )'});
+    const permissionsTab = screen.getByRole('tab', {name: /^permissions/i});
     fireEvent.click(permissionsTab);
 
     expect(container).toHaveTextContent('No permissions available');

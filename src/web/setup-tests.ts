@@ -12,6 +12,31 @@ import '@testing-library/jest-dom/vitest';
 import './testing/custom-matchers';
 import * as ResizeObserverModule from 'resize-observer-polyfill';
 
+/* https://github.com/jsdom/jsdom#virtual-consoles
+ * jsdom cannot parse some modern CSS.
+ * Logging "Could not parse CSS stylesheet" error for every unsupported rule.
+ * We can ignore these errors by removing the default listener.
+ */
+
+interface JSDOMVirtualConsole {
+  removeAllListeners: (event: string) => void;
+  on: (event: string, listener: (error: Error) => void) => void;
+}
+const virtualConsole = (
+  globalThis as unknown as {
+    jsdom?: {virtualConsole?: JSDOMVirtualConsole};
+  }
+).jsdom?.virtualConsole;
+if (virtualConsole) {
+  virtualConsole.removeAllListeners('jsdomError');
+  virtualConsole.on('jsdomError', (error: Error) => {
+    if (error?.message?.includes('Could not parse CSS stylesheet')) {
+      return;
+    }
+    console.error(error.message);
+  });
+}
+
 // Avoid "Error: Not implemented: navigation (except hash changes)"
 // It is caused by clicking on <a> elements in tests
 // https://stackoverflow.com/a/68038982/11044073

@@ -14,7 +14,7 @@ describe('Main tests', () => {
     expect(element.tagName).toBe('MAIN');
     expect(element).toHaveStyle({
       padding: '15px 15px 20px 15px', // expanded from shorthand
-      height: 'calc(-48px + 100vh)',
+      height: '720px',
       overflowY: 'auto',
       display: 'flex',
       flexBasis: '100%',

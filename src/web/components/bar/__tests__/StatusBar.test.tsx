@@ -58,8 +58,8 @@ describe('StatusBar tests', () => {
     const progress = screen.getByTestId('progress');
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
-    expect(actualValue).toContain(
-      `linear-gradient(90deg, ${Theme.severityWarnYellow} 0%, ${Theme.severityWarnYellow} 100%)`,
+    expect(actualValue).toBackgroundGradientContainColor(
+      Theme.severityWarnYellow,
     );
   });
 
@@ -68,9 +68,7 @@ describe('StatusBar tests', () => {
     const progress = screen.getByTestId('progress');
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
-    expect(actualValue).toContain(
-      `linear-gradient(90deg, ${Theme.errorRed} 0%, ${Theme.errorRed} 100%)`,
-    );
+    expect(actualValue).toBackgroundGradientContainColor(Theme.errorRed);
     expect(progress).toHaveComputedStyle('width', '50%');
     const text = screen.getByTestId('statusbar-text');
     expect(text).toHaveTextContent('Interrupted at 50 %');

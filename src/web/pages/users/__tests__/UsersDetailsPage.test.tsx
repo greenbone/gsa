@@ -123,8 +123,8 @@ describe('UserDetailsPage', () => {
     const tablist = screen.getByRole('tablist');
     const tabs = within(tablist);
     tabs.getByRole('tab', {name: 'Information'});
-    tabs.getByRole('tab', {name: 'User Tags ( 0 )'});
-    tabs.getByRole('tab', {name: 'Permissions ( 1 )'});
+    tabs.getByRole('tab', {name: 'User Tags(0)'});
+    tabs.getByRole('tab', {name: 'Permissions(1)'});
     screen.getByText('test comment');
   });
 

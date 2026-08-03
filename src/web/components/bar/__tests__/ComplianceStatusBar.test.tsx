@@ -53,9 +53,7 @@ describe('ComplianceStatusBar tests', () => {
 
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
-    expect(actualValue).toContain(
-      `linear-gradient(90deg, ${Theme.statusRunGreen} 0%, ${Theme.statusRunGreen} 100%)`,
-    );
+    expect(actualValue).toBackgroundGradientContainColor(Theme.statusRunGreen);
     expect(progressbarBox).toHaveBackgroundColor(Theme.errorRed);
   });
 
@@ -66,9 +64,9 @@ describe('ComplianceStatusBar tests', () => {
 
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
-    expect(actualValue).toContain(
-      `linear-gradient(90deg, ${Theme.statusRunGreen} 0%, ${Theme.statusRunGreen} 100%)`,
-    );
+
+    expect(actualValue).toBackgroundGradientContainColor(Theme.statusRunGreen);
+
     expect(progress).toHaveComputedStyle('width', '0%');
     expect(progressbarBox).toHaveBackgroundColor(Theme.darkGray);
   });

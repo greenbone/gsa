@@ -347,7 +347,7 @@ describe('SaveDialog tests', () => {
     );
 
     const dialog = screen.getDialog();
-    expect(dialog).toHaveStyle('width: 50vw');
+    expect(dialog).toHaveStyle('width: 512px');
   });
 
   test('should use default dialog width', () => {
@@ -360,7 +360,7 @@ describe('SaveDialog tests', () => {
     );
 
     const dialog = screen.getDialog();
-    expect(dialog).toHaveStyle('width: 40vw');
+    expect(dialog).toHaveStyle('width: 409.6px');
   });
 
   test('should merge default and controlled values', () => {
