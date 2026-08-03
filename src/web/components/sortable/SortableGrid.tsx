@@ -16,7 +16,7 @@ import Item, {
   GRID_ITEM_MARGIN,
   type ItemRenderProps,
 } from 'web/components/sortable/Item';
-import Row from 'web/components/sortable/Row';
+import SortableRow from 'web/components/sortable/SortableRow';
 
 export interface SortableGridRow {
   id: string;
@@ -205,7 +205,7 @@ const SortableGrid = (props: GridProps) => {
 
               const {id: rowId} = row;
               return (
-                <Row
+                <SortableRow
                   key={rowId}
                   dropDisabled={disabled}
                   height={height}
@@ -224,7 +224,7 @@ const SortableGrid = (props: GridProps) => {
                       {children}
                     </Item>
                   ))}
-                </Row>
+                </SortableRow>
               );
             })}
             {showEmptyRow && (
