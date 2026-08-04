@@ -72,4 +72,7 @@ export const TicketsCreatedTableDisplay = createDisplay({
 
 registerDisplay(TicketsCreatedDisplay, _l('Chart: Tickets by Creation Time'));
 
-registerDisplay(TicketsCreatedTableDisplay, _l('Table: Tickets by Creation Time'));
+registerDisplay(
+  TicketsCreatedTableDisplay,
+  _l('Table: Tickets by Creation Time'),
+);

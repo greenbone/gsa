@@ -13,7 +13,7 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import type Report from 'gmp/models/report';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {ReportIcon, UploadIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -189,7 +189,7 @@ const ReportListPage = ({
           <ReportsDashboard filter={filter} onFilterChanged={onFilterChanged} />
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
+          <DashboardControlsContainer dashboardId={REPORTS_DASHBOARD_ID} />
         )}
         entities={entities}
         filter={filter}

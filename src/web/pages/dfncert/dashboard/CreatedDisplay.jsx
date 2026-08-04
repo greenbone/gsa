@@ -50,6 +50,12 @@ export const DfnCertsCreatedTableDisplay = createDisplay({
   filtersFilter: DFNCERT_FILTER_FILTER,
 });
 
-registerDisplay(DfnCertsCreatedTableDisplay, _l('Table: DFN-CERT Advisories by Creation Time'));
+registerDisplay(
+  DfnCertsCreatedTableDisplay,
+  _l('Table: DFN-CERT Advisories by Creation Time'),
+);
 
-registerDisplay(DfnCertsCreatedDisplay, _l('Chart: DFN-CERT Advisories by Creation Time'));
+registerDisplay(
+  DfnCertsCreatedDisplay,
+  _l('Chart: DFN-CERT Advisories by Creation Time'),
+);

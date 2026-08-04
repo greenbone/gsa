@@ -76,4 +76,7 @@ export const TimeStatusTableDisplay = createDisplay({
 
 registerDisplay(TimeStatusDisplay, _l('Chart: TLS Certificates by Status'));
 
-registerDisplay(TimeStatusTableDisplay, _l('Table: TLS Certificates by Status'));
+registerDisplay(
+  TimeStatusTableDisplay,
+  _l('Table: TLS Certificates by Status'),
+);

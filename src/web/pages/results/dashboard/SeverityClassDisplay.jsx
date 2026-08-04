@@ -34,4 +34,7 @@ export const ResultsSeverityTableDisplay = createDisplay({
 
 registerDisplay(ResultsSeverityDisplay, _l('Chart: Results by Severity Class'));
 
-registerDisplay(ResultsSeverityTableDisplay, _l('Table: Results by Severity Class'));
+registerDisplay(
+  ResultsSeverityTableDisplay,
+  _l('Table: Results by Severity Class'),
+);

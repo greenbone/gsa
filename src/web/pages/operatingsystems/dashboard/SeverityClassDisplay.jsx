@@ -36,6 +36,12 @@ export const OsSeverityClassTableDisplay = createDisplay({
   filtersFilter: OS_FILTER_FILTER,
 });
 
-registerDisplay(OsSeverityClassDisplay, _l('Chart: Operating Systems by Severity Class'));
+registerDisplay(
+  OsSeverityClassDisplay,
+  _l('Chart: Operating Systems by Severity Class'),
+);
 
-registerDisplay(OsSeverityClassTableDisplay, _l('Table: Operating Systems by Severity Class'));
+registerDisplay(
+  OsSeverityClassTableDisplay,
+  _l('Table: Operating Systems by Severity Class'),
+);

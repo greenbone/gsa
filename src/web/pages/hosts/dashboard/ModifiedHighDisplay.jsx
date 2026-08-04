@@ -170,6 +170,12 @@ export const HostsModifiedHighTableDisplay = createDisplay({
   displayName: 'HostsModifiedHighTableDisplay',
 });
 
-registerDisplay(HostsModifiedHighDisplay, _l('Chart: Hosts (High) by Modification Time'));
+registerDisplay(
+  HostsModifiedHighDisplay,
+  _l('Chart: Hosts (High) by Modification Time'),
+);
 
-registerDisplay(HostsModifiedHighTableDisplay, _l('Table: Hosts (High) by Modification Time'));
+registerDisplay(
+  HostsModifiedHighTableDisplay,
+  _l('Table: Hosts (High) by Modification Time'),
+);

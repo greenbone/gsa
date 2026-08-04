@@ -5,7 +5,7 @@
 
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 import type Note from 'gmp/models/note';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {NoteIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -75,7 +75,7 @@ const NoteListPage = ({
               />
             )}
             dashboardControls={() => (
-              <DashboardControls dashboardId={NOTES_DASHBOARD_ID} />
+              <DashboardControlsContainer dashboardId={NOTES_DASHBOARD_ID} />
             )}
             entities={entities}
             entitiesCounts={entitiesCounts}

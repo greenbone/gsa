@@ -74,6 +74,12 @@ export const TicketsAssignedUsersTableDisplay = createDisplay({
     _('Tickets by Assigned User (Total: {{total}})', tdata),
 });
 
-registerDisplay(TicketsAssignedUsersDisplay, _l('Chart: Tickets by Assigned User'));
+registerDisplay(
+  TicketsAssignedUsersDisplay,
+  _l('Chart: Tickets by Assigned User'),
+);
 
-registerDisplay(TicketsAssignedUsersTableDisplay, _l('Table: Tickets by Assigned User'));
+registerDisplay(
+  TicketsAssignedUsersTableDisplay,
+  _l('Table: Tickets by Assigned User'),
+);

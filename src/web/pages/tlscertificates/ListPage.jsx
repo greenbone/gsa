@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {TLS_CERTIFICATES_FILTER_FILTER} from 'gmp/models/filter';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {TlsCertificateIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Layout from 'web/components/layout/Layout';
@@ -67,7 +67,9 @@ const Page = ({
               />
             )}
             dashboardControls={() => (
-              <DashboardControls dashboardId={TLS_CERTIFICATES_DASHBOARD_ID} />
+              <DashboardControlsContainer
+                dashboardId={TLS_CERTIFICATES_DASHBOARD_ID}
+              />
             )}
             filter={filter}
             filterEditDialog={TlsCertificateFilterDialog}

@@ -154,6 +154,12 @@ export const OsVulnScoreTableDisplay = createDisplay({
   filtersFilter: OS_FILTER_FILTER,
 });
 
-registerDisplay(OsVulnScoreDisplay, _l('Chart: Operating Systems by Vulnerability Score'));
+registerDisplay(
+  OsVulnScoreDisplay,
+  _l('Chart: Operating Systems by Vulnerability Score'),
+);
 
-registerDisplay(OsVulnScoreTableDisplay, _l('Table: Operating Systems by Vulnerability Score'));
+registerDisplay(
+  OsVulnScoreTableDisplay,
+  _l('Table: Operating Systems by Vulnerability Score'),
+);

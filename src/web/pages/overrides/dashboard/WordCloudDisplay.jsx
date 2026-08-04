@@ -123,6 +123,12 @@ export const OverridesWordCloudTableDisplay = createDisplay({
   filtersFilter: OVERRIDES_FILTER_FILTER,
 });
 
-registerDisplay(OverridesWordCloudDisplay, _l('Chart: Overrides Text Word Cloud'));
+registerDisplay(
+  OverridesWordCloudDisplay,
+  _l('Chart: Overrides Text Word Cloud'),
+);
 
-registerDisplay(OverridesWordCloudTableDisplay, _l('Table: Overrides Text Word Cloud'));
+registerDisplay(
+  OverridesWordCloudTableDisplay,
+  _l('Table: Overrides Text Word Cloud'),
+);

@@ -6,7 +6,7 @@
 import React from 'react';
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {OsSvgIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Layout from 'web/components/layout/Layout';
@@ -71,7 +71,7 @@ const Page = ({
               <OsDashboard filter={filter} onFilterChanged={onFilterChanged} />
             )}
             dashboardControls={() => (
-              <DashboardControls dashboardId={OS_DASHBOARD_ID} />
+              <DashboardControlsContainer dashboardId={OS_DASHBOARD_ID} />
             )}
             filter={filter}
             filterEditDialog={OperatingSystemFilterDialog}

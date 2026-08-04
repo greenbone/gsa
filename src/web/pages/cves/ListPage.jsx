@@ -6,7 +6,7 @@
 import React from 'react';
 import {CVES_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {CveIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -41,7 +41,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
           <CvesDashboard filter={filter} onFilterChanged={onFilterChanged} />
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={CVES_DASHBOARD_ID} />
+          <DashboardControlsContainer dashboardId={CVES_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={CveFilterDialog}

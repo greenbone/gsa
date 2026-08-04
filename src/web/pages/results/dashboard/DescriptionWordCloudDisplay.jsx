@@ -122,6 +122,12 @@ export const ResultsDescriptionWordCloudTableDisplay = createDisplay({
   filtersFilter: RESULTS_FILTER_FILTER,
 });
 
-registerDisplay(ResultsDescriptionWordCloudDisplay, _l('Chart: Results Description Word Cloud'));
+registerDisplay(
+  ResultsDescriptionWordCloudDisplay,
+  _l('Chart: Results Description Word Cloud'),
+);
 
-registerDisplay(ResultsDescriptionWordCloudTableDisplay, _l('Table: Results Description Word Cloud'));
+registerDisplay(
+  ResultsDescriptionWordCloudTableDisplay,
+  _l('Table: Results Description Word Cloud'),
+);

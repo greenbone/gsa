@@ -6,7 +6,7 @@
 import React from 'react';
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {ResultIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Layout from 'web/components/layout/Layout';
@@ -49,7 +49,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
           <ResultsDashboard filter={filter} onFilterChanged={onFilterChanged} />
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={RESULTS_DASHBOARD_ID} />
+          <DashboardControlsContainer dashboardId={RESULTS_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={ResultFilterDialog}

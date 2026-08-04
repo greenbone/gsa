@@ -34,4 +34,7 @@ export const NvtsSeverityClassTableDisplay = createDisplay({
 
 registerDisplay(NvtsSeverityClassDisplay, _l('Chart: NVTs by Severity Class'));
 
-registerDisplay(NvtsSeverityClassTableDisplay, _l('Table: NVTs by Severity Class'));
+registerDisplay(
+  NvtsSeverityClassTableDisplay,
+  _l('Table: NVTs by Severity Class'),
+);

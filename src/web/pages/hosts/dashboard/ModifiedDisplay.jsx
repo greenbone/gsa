@@ -169,4 +169,7 @@ export const HostsModifiedTableDisplay = createDisplay({
 
 registerDisplay(HostsModifiedDisplay, _l('Chart: Hosts by Modification Time'));
 
-registerDisplay(HostsModifiedTableDisplay, _l('Table: Hosts by Modification Time'));
+registerDisplay(
+  HostsModifiedTableDisplay,
+  _l('Table: Hosts by Modification Time'),
+);

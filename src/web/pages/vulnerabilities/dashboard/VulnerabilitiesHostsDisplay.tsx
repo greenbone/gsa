@@ -256,6 +256,12 @@ export const VulnerabilitiesHostsTableDisplay = createDisplay({
   filtersFilter: VULNS_FILTER_FILTER,
 } as Parameters<typeof createDisplay>[0]);
 
-registerDisplay(VulnerabilitiesHostsDisplay, _l('Chart: Vulnerabilities by Hosts'));
+registerDisplay(
+  VulnerabilitiesHostsDisplay,
+  _l('Chart: Vulnerabilities by Hosts'),
+);
 
-registerDisplay(VulnerabilitiesHostsTableDisplay, _l('Table: Vulnerabilities by Hosts'));
+registerDisplay(
+  VulnerabilitiesHostsTableDisplay,
+  _l('Table: Vulnerabilities by Hosts'),
+);

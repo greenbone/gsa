@@ -9,7 +9,7 @@ import Filter, {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {ReportIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -99,7 +99,9 @@ const AuditReportListPage = ({filter, onFilterChanged, onDelete, ...props}) => {
           />
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={AUDIT_REPORTS_DASHBOARD_ID} />
+          <DashboardControlsContainer
+            dashboardId={AUDIT_REPORTS_DASHBOARD_ID}
+          />
         )}
         filter={filter}
         filterEditDialog={AuditReportFilterDialog}

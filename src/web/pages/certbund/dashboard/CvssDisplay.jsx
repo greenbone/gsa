@@ -35,4 +35,7 @@ export const CertBundCvssTableDisplay = createDisplay({
 
 registerDisplay(CertBundCvssDisplay, _l('Chart: CERT-Bund Advisories by CVSS'));
 
-registerDisplay(CertBundCvssTableDisplay, _l('Table: CERT-Bund Advisories by CVSS'));
+registerDisplay(
+  CertBundCvssTableDisplay,
+  _l('Table: CERT-Bund Advisories by CVSS'),
+);
