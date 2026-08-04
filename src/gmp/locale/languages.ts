@@ -37,6 +37,10 @@ const Languages: LanguagesType = {
     name: 'Traditional Chinese',
     native_name: '繁體中文',
   },
+  it: {
+    name: 'Italian',
+    native_name: 'Italiano',
+  },
 } as const;
 
 export default Languages;
