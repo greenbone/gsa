@@ -37,12 +37,11 @@ const AgentTableRow = ({
   const [_] = useTranslation();
 
   const lastUpdateTitle = entity.lastUpdate?.toString() ?? _('Never');
+  const ipAddressesTitle = `${_('IP Addresses')}: ${entity.ipAddresses?.join(', ') ?? _('None')} `;
 
   return (
     <TableRow data-testid={dataTestId}>
-      <TableData title={entity.ipAddresses?.join(', ')}>
-        {entity.name}
-      </TableData>
+      <TableData title={ipAddressesTitle}>{entity.name}</TableData>
       <TableData>{entity.scanner?.name}</TableData>
       <TableData>
         <Divider flex="column">
@@ -55,7 +54,7 @@ const AgentTableRow = ({
         </Divider>
       </TableData>
       <TableData>{entity.operatingSystem}</TableData>
-      <TableData title={lastUpdateTitle}>
+      <TableData title={`${_('Last Contact')}: ${lastUpdateTitle} `}>
         {getConnectionStatusLabel(entity.connectionStatus)}
       </TableData>
       <TableData>{getAuthorizationLabel(entity.authorized)}</TableData>

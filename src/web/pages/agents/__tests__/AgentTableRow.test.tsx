@@ -80,7 +80,7 @@ describe('AgentTableRow tests', () => {
     const {render} = rendererWith({capabilities: true});
     render(<AgentTableRow entity={agent} />);
 
-    const lastUpdateCell = screen.getByTitle('Never');
+    const lastUpdateCell = screen.getByTitle('Last Contact: Never');
     expect(lastUpdateCell).toBeInTheDocument();
   });
 
@@ -123,5 +123,34 @@ describe('AgentTableRow tests', () => {
     fireEvent.click(screen.getByTestId('export-icon'));
 
     expect(onDownloadSupportBundle).toHaveBeenCalledWith(agent);
+  });
+
+  test('should include IP addresses in the name cell title when available', () => {
+    const agent = new Agent({
+      id: '1',
+      name: 'Agent 1',
+      authorized: true,
+      ipAddresses: ['192.168.0.1', '10.0.0.2'],
+      userCapabilities: new EverythingCapabilities(),
+    });
+
+    const {render} = rendererWith({capabilities: true});
+    render(<AgentTableRow entity={agent} />);
+
+    screen.getByTitle(/IP Addresses: 192.168.0.1, 10.0.0.2/);
+  });
+
+  test('should display "None" when ipAddresses is not provided', () => {
+    const agent = new Agent({
+      id: '1',
+      name: 'Agent 1',
+      authorized: true,
+      userCapabilities: new EverythingCapabilities(),
+    });
+
+    const {render} = rendererWith({capabilities: true});
+    render(<AgentTableRow entity={agent} />);
+
+    screen.getByTitle('IP Addresses: None');
   });
 });
