@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type OnNewDisplay} from 'web/components/dashboard/DashboardControls';
+import {type OnNewDisplayFunc} from 'web/components/dashboard/DashboardControls';
 
 export interface DashboardItem {
   id: string;
@@ -32,7 +32,7 @@ export interface StartDashboardProps {
   loadSettings?: (id: string, defaults: Record<string, unknown>) => void;
   saveSettings: (id: string, settings: Record<string, unknown>) => void;
   settings: DashboardSettings;
-  onNewDisplay: OnNewDisplay;
+  onNewDisplay: OnNewDisplayFunc;
   onResetDashboard: (id: string) => void;
   setDefaultSettings: (id: string, settings: Record<string, unknown>) => void;
   notify?: (message: string) => void;
