@@ -47,7 +47,7 @@ describe('withEntitiesFooter tests', () => {
         onTagsClick: mockProps.onTagsBulk,
         onTrashClick: mockProps.onDeleteBulk,
       }),
-      {},
+      undefined,
     );
   });
 
@@ -79,7 +79,7 @@ describe('withEntitiesFooter tests', () => {
         onDeleteClick: mockProps.onDeleteBulk,
         onTrashClick: mockProps.onDeleteBulk,
       }),
-      {},
+      undefined,
     );
   });
 
@@ -112,7 +112,7 @@ describe('withEntitiesFooter tests', () => {
         onDeleteClick: mockProps.onDeleteBulk,
         onTrashClick: mockProps.onDeleteBulk,
       }),
-      {},
+      undefined,
     );
   });
 
@@ -134,7 +134,7 @@ describe('withEntitiesFooter tests', () => {
         onEnableUpdateToLatestClick: expect.any(Function),
         onDisableUpdateToLatestClick: expect.any(Function),
       }),
-      {},
+      undefined,
     );
   });
 });

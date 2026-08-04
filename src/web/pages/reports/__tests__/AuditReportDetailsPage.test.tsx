@@ -185,12 +185,13 @@ describe('AuditReportDetailsPage', () => {
       const {render} = setupRenderer();
       renderPage(render);
 
-      await screen.findByRole('heading', {name: /Audit Report:/});
-      expect(
-        screen.getByRole('heading', {name: /Audit Report:/}),
-      ).toHaveTextContent(
-        'Audit Report:Mon, Jun 3, 2019 1:00 PM Central European Summer TimeDone',
-      );
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', {name: /Audit Report:/}),
+        ).toHaveTextContent(
+          'Audit Report:Mon, Jun 3, 2019 1:00 PM Central European Summer TimeDone',
+        );
+      });
     });
 
     test('should render all 7 tabs once entity is loaded', async () => {
@@ -264,7 +265,7 @@ describe('AuditReportDetailsPage', () => {
       const {render} = setupRenderer();
       renderPage(render);
 
-      await screen.findByTitle('Edit Filter');
+      await screen.findByRole('tablist');
       fireEvent.click(screen.getByTitle('Edit Filter'));
 
       await screen.findByRole('heading', {name: /Update Filter/});
@@ -274,7 +275,7 @@ describe('AuditReportDetailsPage', () => {
       const {render} = setupRenderer();
       renderPage(render);
 
-      await screen.findByTitle('Edit Filter');
+      await screen.findByRole('tablist');
       fireEvent.click(screen.getByTitle('Edit Filter'));
 
       await screen.findByRole('heading', {name: /Update Filter/});
