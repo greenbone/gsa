@@ -219,10 +219,8 @@ describe('DynamicIcon', () => {
       );
       expect(disabledNonLucideIcon.querySelector('svg')).toBeVisible();
       expect(disabledNonLucideIcon).toHaveAttribute('disabled');
-      expect(disabledNonLucideIcon).toHaveStyleWithColor(
-        'fill',
-        'var(--mantine-color-gray-5)',
-      );
+      const svg = disabledNonLucideIcon.querySelector('svg');
+      expect(svg).toHaveStyle({fill: 'var(--mantine-color-gray-5)'});
     });
 
     test('renders custom action icon', () => {
