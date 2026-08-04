@@ -24,7 +24,10 @@ const Tabs = (props: TabProps) => {
   const children = React.Children.map(props.children, child => {
     if (child && typeof child === 'object' && 'type' in child) {
       if (child.type === TabPanels) {
-        return React.cloneElement(child, {activeTab});
+        return React.cloneElement(
+          child as React.ReactElement<{activeTab: number}>,
+          {activeTab},
+        );
       } else if (child.type === TabList) {
         return child;
       }

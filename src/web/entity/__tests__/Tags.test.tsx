@@ -73,7 +73,13 @@ describe('EntityTags tests', () => {
     const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
-    render(<EntityTags entity={entity} />);
+    render(
+      <EntityTags
+        entity={entity}
+        onChanged={testing.fn()}
+        onError={testing.fn()}
+      />,
+    );
 
     screen.getByTitle('User Tags (2)');
     screen.getByText('Test Tag');
@@ -90,7 +96,13 @@ describe('EntityTags tests', () => {
     const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
-    render(<EntityTags entity={entity1} />);
+    render(
+      <EntityTags
+        entity={entity1}
+        onChanged={testing.fn()}
+        onError={testing.fn()}
+      />,
+    );
     screen.getByText('No user tags available');
   });
 
@@ -102,7 +114,13 @@ describe('EntityTags tests', () => {
     const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
-    render(<EntityTags entity={entity2} />);
+    render(
+      <EntityTags
+        entity={entity2}
+        onChanged={testing.fn()}
+        onError={testing.fn()}
+      />,
+    );
     screen.getByText('No user tags available');
   });
 
@@ -111,7 +129,13 @@ describe('EntityTags tests', () => {
     const gmp = createGmp();
     const {render} = rendererWith({capabilities: true, gmp});
 
-    render(<EntityTags entity={entity} />);
+    render(
+      <EntityTags
+        entity={entity}
+        onChanged={testing.fn()}
+        onError={testing.fn()}
+      />,
+    );
 
     // Check table structure
     screen.getByText('Name');
@@ -163,7 +187,13 @@ describe('EntityTags tests', () => {
     });
     const {render} = rendererWith({capabilities: true, gmp});
 
-    render(<EntityTags entity={entity} />);
+    render(
+      <EntityTags
+        entity={entity}
+        onChanged={testing.fn()}
+        onError={testing.fn()}
+      />,
+    );
 
     const editIcons = screen.getAllByTitle('Edit Tag');
     fireEvent.click(editIcons[0]);
@@ -185,7 +215,13 @@ describe('EntityTags tests', () => {
 
     const {render} = rendererWith({gmp, capabilities: true});
 
-    render(<EntityTags entity={entity} onChanged={handleChanged} />);
+    render(
+      <EntityTags
+        entity={entity}
+        onChanged={handleChanged}
+        onError={testing.fn()}
+      />,
+    );
 
     const removeIcons = screen.getAllByTestId('trashcan-icon');
     fireEvent.click(removeIcons[0]);

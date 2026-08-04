@@ -8,7 +8,10 @@ import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Theme from 'web/utils/theme';
 
-interface StyledProps extends React.HTMLAttributes<HTMLDivElement> {
+interface StyledProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onToggle'
+> {
   checked?: boolean;
   disabled?: boolean;
   width?: string;

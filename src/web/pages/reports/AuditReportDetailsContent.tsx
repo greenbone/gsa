@@ -101,7 +101,6 @@ const renderWithThreshold = (
     return (
       <AuditThresholdPanel
         entityType={entityType}
-        // @ts-expect-error
         filter={config.reportFilter}
         isUpdating={config.isUpdating}
         threshold={config.threshold}

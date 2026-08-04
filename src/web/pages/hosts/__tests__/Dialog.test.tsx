@@ -120,7 +120,14 @@ describe('HostsDialog component tests', () => {
 
     const {render} = rendererWith();
 
-    render(<HostsDialog onClose={handleClose} onSave={handleSave} />);
+    render(
+      <HostsDialog
+        host={undefined}
+        title=""
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
 
     const inputs = screen.queryTextInputs();
     expect(inputs[0]).toHaveAttribute('name', 'name');
@@ -157,7 +164,14 @@ describe('HostsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith();
-    render(<HostsDialog onClose={handleClose} onSave={handleSave} />);
+    render(
+      <HostsDialog
+        host={undefined}
+        title=""
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
 
     const commentInput = screen.getByName('comment');
     changeInputValue(commentInput, 'test comment');
@@ -176,7 +190,14 @@ describe('HostsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith();
-    render(<HostsDialog onClose={handleClose} onSave={handleSave} />);
+    render(
+      <HostsDialog
+        host={undefined}
+        title=""
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
 
     const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);

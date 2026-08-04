@@ -528,7 +528,9 @@ class HostsTopologyChart extends React.Component<
           </Layout>
         )}
         <Svg
-          ref={setRef(ref => (this.svg = ref), svgRef)}
+          ref={setRef(ref => {
+            this.svg = ref;
+          }, svgRef)}
           $dragging={dragging}
           height={height}
           width={width}

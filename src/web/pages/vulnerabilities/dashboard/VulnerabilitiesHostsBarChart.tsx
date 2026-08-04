@@ -12,7 +12,7 @@ interface HostsBarChartProps {
   width: number;
   height: number;
   data: HostDataPoint[];
-  svgRef: React.RefObject<SVGSVGElement>;
+  svgRef: React.RefObject<SVGSVGElement | null>;
   onDataClick?: (dataPoint: {
     x: number;
     y: number;

@@ -687,6 +687,8 @@ const PolicyComponent = ({
             )}
             {createPolicyDialogVisible && (
               <PolicyDialog
+                name=""
+                title=""
                 onClose={handleCloseCreatePolicyDialog}
                 onSave={async d => {
                   const promise = isDefined(d.id) ? save(d) : create(d);

@@ -180,7 +180,14 @@ describe('HostWithTargetComponent tests', () => {
       >
         {({edit}) => {
           editFn = edit;
-          return <HostsDialog onClose={handleClose} onSave={handleSave} />;
+          return (
+            <HostsDialog
+              host={undefined}
+              title=""
+              onClose={handleClose}
+              onSave={handleSave}
+            />
+          );
         }}
       </HostWithTargetComponent>,
     );

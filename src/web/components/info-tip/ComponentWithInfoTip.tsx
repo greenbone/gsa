@@ -9,7 +9,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface ComponentWithInfoTipProps {
   /** The component (TextField, NumberField, etc.) */
-  slot: ReactElement;
+  slot: ReactElement<Record<string, unknown>>;
   /** The help content to display in the infotip */
   helpContent: ReactNode;
   /** Aria label for the help button */
@@ -55,12 +55,14 @@ const ComponentWithInfoTip = ({
     </InfoTip>
   );
 
+  const slotProps = slot.props;
+
   // Clone the slot element and add the infoTip to its title
   const slotWithInfoTip = cloneElement(slot, {
-    ...slot.props,
-    title: slot.props.title ? (
+    ...slotProps,
+    title: slotProps.title ? (
       <>
-        {slot.props.title}
+        {slotProps.title}
         {infoTipElement}
       </>
     ) : (

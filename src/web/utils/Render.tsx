@@ -573,7 +573,6 @@ export const setRef =
       if (isFunction(rf)) {
         (rf as React.RefCallback<TRef>)(ref);
       } else if (isObject(rf) && isDefined(rf.current)) {
-        // @ts-expect-error
         (rf as React.RefObject<TRef>).current = ref;
       }
     }

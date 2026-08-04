@@ -71,8 +71,8 @@ const ToolTipDisplay = React.forwardRef(
 );
 
 class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
-  target: React.RefObject<ToolTipTargetElement>;
-  tooltip: React.RefObject<HTMLElement>;
+  target: React.RefObject<ToolTipTargetElement | null>;
+  tooltip: React.RefObject<HTMLElement | null>;
 
   constructor(props: ToolTipProps) {
     super(props);
