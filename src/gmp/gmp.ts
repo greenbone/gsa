@@ -120,6 +120,7 @@ class Gmp {
   private readonly http: Http;
   private readonly _login: LoginCommand;
   private _logoutListeners: Listener[];
+  private _isLoggingOut: boolean = false;
 
   public readonly agent: AgentCommand;
   public readonly agents: AgentsCommand;
@@ -346,6 +347,8 @@ class Gmp {
     const {token, timezone, locale, sessionTimeout, jwt} =
       await this._login.login(username, password);
 
+    this._isLoggingOut = false;
+
     this.session.login({
       jwt,
       locale,
@@ -360,6 +363,7 @@ class Gmp {
 
   public async doLogout() {
     if (this.session.isLoggedIn()) {
+      this._isLoggingOut = true;
       const url = this.buildUrl('logout');
       const args = {token: this.session.token};
 
@@ -376,6 +380,10 @@ class Gmp {
     }
 
     return Promise.resolve();
+  }
+
+  public isLoggingOut() {
+    return this._isLoggingOut;
   }
 
   public logout() {

@@ -26,8 +26,8 @@ const useSessionTracker = () => {
 
     const handleUserActivity = async () => {
       if (isCooldown) return;
-      await renewSession();
       isCooldown = true;
+      await renewSession();
       cooldownTimeoutId = setTimeout(() => {
         isCooldown = false;
       }, 10000);
@@ -50,15 +50,15 @@ const useSessionTracker = () => {
     const events = ['keypress', 'wheel', 'drag'];
 
     events.forEach(event => {
-      window.addEventListener(event, handleUserActivity);
+      globalThis.addEventListener(event, handleUserActivity);
     });
-    window.addEventListener('click', handleClick);
+    globalThis.addEventListener('click', handleClick);
 
     return () => {
       events.forEach(event => {
-        window.removeEventListener(event, handleUserActivity);
+        globalThis.removeEventListener(event, handleUserActivity);
       });
-      window.removeEventListener('click', handleClick);
+      globalThis.removeEventListener('click', handleClick);
       clearTimeout(cooldownTimeoutId);
       isCooldown = false;
     };

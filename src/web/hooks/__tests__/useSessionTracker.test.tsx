@@ -17,11 +17,13 @@ import useSessionTracker from 'web/hooks/useSessionTracker';
 const createGmp = ({
   newDate = date(),
   renewSession = testing.fn().mockResolvedValue({data: newDate}),
+  isLoggingOut = testing.fn().mockReturnValue(false),
 } = {}) => ({
   user: {
     renewSession,
   },
   session: createSession({sessionTimeout: newDate}),
+  isLoggingOut,
 });
 
 const TestSessionTracker = ({onClick}: {onClick?: () => void}) => {
@@ -57,7 +59,7 @@ describe('useSessionTracker', () => {
     gmp.user.renewSession.mockClear();
 
     fireEvent.click(btn);
-    expect(gmp.user.renewSession).toHaveBeenCalledOnce();
+    expect(gmp.user.renewSession).not.toHaveBeenCalled();
     gmp.user.renewSession.mockClear();
 
     await runTimers();
@@ -87,6 +89,25 @@ describe('useSessionTracker', () => {
     expect(gmp.user.renewSession).not.toHaveBeenCalled();
   });
 
+  test('should not renew session when the user is logging out', () => {
+    testing.useFakeTimers();
+    const gmp = createGmp({
+      isLoggingOut: testing.fn().mockReturnValue(true),
+    });
+    const {render} = rendererWith({
+      store: true,
+      gmp,
+    });
+
+    render(<TestSessionTracker />);
+    const btn = screen.getByTestId('session-btn');
+
+    gmp.user.renewSession.mockClear();
+
+    fireEvent.click(btn);
+    expect(gmp.user.renewSession).not.toHaveBeenCalled();
+  });
+
   test('should  renew session on keypress, wheel, and drag events with cooldown resets', async () => {
     testing.useFakeTimers();
     const gmp = createGmp();
@@ -112,6 +133,26 @@ describe('useSessionTracker', () => {
     gmp.user.renewSession.mockClear();
 
     fireEvent.drag(document);
+    expect(gmp.user.renewSession).toHaveBeenCalledOnce();
+  });
+
+  test('should renew session only once for rapid wheel events within the cooldown', () => {
+    testing.useFakeTimers();
+    const gmp = createGmp();
+    const {render} = rendererWith({
+      store: true,
+      gmp,
+    });
+
+    render(<TestSessionTracker />);
+
+    gmp.user.renewSession.mockClear();
+
+    fireEvent.wheel(document);
+    fireEvent.wheel(document);
+    fireEvent.wheel(document);
+    fireEvent.wheel(document);
+
     expect(gmp.user.renewSession).toHaveBeenCalledOnce();
   });
 });
