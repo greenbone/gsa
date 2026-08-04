@@ -6,7 +6,7 @@
 import React from 'react';
 import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {CertBundAdvIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -50,7 +50,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
           />
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID} />
+          <DashboardControlsContainer dashboardId={CERTBUND_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={CertBundFilterDialog}

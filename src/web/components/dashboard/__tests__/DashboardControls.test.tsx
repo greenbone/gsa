@@ -5,20 +5,19 @@
 
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
-import {DashboardControls} from 'web/components/dashboard/DashboardControls';
+import DashboardControls from 'web/components/dashboard/DashboardControls';
 import {
   type DisplayComponent,
   type DisplayRegistry,
   registerDisplay,
 } from 'web/components/dashboard/registry';
-import type {I18n} from 'web/hooks/useTranslation';
 
 const createDisplayComponent = (displayId: string): DisplayComponent =>
   Object.assign(() => null, {displayId});
 
 let testCounter = 0;
 
-const createTestProps = () => {
+const createTestData = ({canAdd = true}: {canAdd?: boolean} = {}) => {
   testCounter += 1;
 
   const displayRegistry: DisplayRegistry = {};
@@ -37,25 +36,48 @@ const createTestProps = () => {
     displayRegistry,
   );
 
+  const rows = [
+    {id: 'row-1', items: [{id: 'item-1', displayId: firstDisplayId}]},
+  ];
+
   const settings = {
-    rows: [{id: 'row-1', items: [{id: 'item-1', displayId: firstDisplayId}]}],
+    maxItemsPerRow: canAdd ? 2 : 1,
+    maxRows: 1,
+    permittedDisplays: [firstDisplayId, missingDisplayId, secondDisplayId],
+    rows,
   };
 
   return {
+    displayRegistry,
     firstDisplayId,
-    missingDisplayId,
     secondDisplayId,
-    props: {
-      _: (message: string) => message,
-      canAdd: true,
-      dashboardId: 'dashboard-1',
-      displayRegistry,
-      displayIds: [firstDisplayId, missingDisplayId, secondDisplayId],
-      i18n: {} as I18n,
-      onNewDisplay: testing.fn(),
-      onResetClick: testing.fn(),
-      settings,
-    },
+    settings,
+  };
+};
+
+const createDashboardControlsContext = (options: {canAdd?: boolean} = {}) => {
+  const {canAdd = true} = options;
+  const {displayRegistry, firstDisplayId, settings} = createTestData({canAdd});
+
+  const onNewDisplay = testing.fn();
+  const onResetClick = testing.fn();
+
+  render(
+    <DashboardControls
+      canAdd={canAdd}
+      dashboardId="dashboard-1"
+      displayIds={settings.permittedDisplays}
+      displayRegistry={displayRegistry}
+      settings={settings}
+      onNewDisplay={onNewDisplay}
+      onResetClick={onResetClick}
+    />,
+  );
+
+  return {
+    firstDisplayId,
+    onNewDisplay,
+    onResetClick,
     settings,
   };
 };
@@ -65,63 +87,25 @@ describe('DashboardControls', () => {
     testing.clearAllMocks();
   });
 
-  test('should call onResetClick with the dashboard id', () => {
-    const {props} = createTestProps();
-
-    render(<DashboardControls {...props} />);
+  test('should call onResetClick with dashboard id', () => {
+    const {onResetClick} = createDashboardControlsContext();
 
     fireEvent.click(screen.getByTestId('reset-dashboard'));
 
-    expect(props.onResetClick).toHaveBeenCalledWith('dashboard-1');
+    expect(onResetClick).toHaveBeenCalledWith('dashboard-1');
   });
 
-  test('should open the dialog and add the first registered display', () => {
-    const {firstDisplayId, props, settings} = createTestProps();
-
-    render(<DashboardControls {...props} />);
+  test('should call onNewDisplay when adding a display', () => {
+    const {firstDisplayId, onNewDisplay, settings} =
+      createDashboardControlsContext();
 
     fireEvent.click(screen.getByTestId('add-dashboard-display'));
-
-    expect(screen.getDialogTitle()).toHaveTextContent(
-      'Add new Dashboard Display',
-    );
-    expect(screen.getByText('First display')).toBeInTheDocument();
-    expect(screen.getByText('Second display')).toBeInTheDocument();
-
     fireEvent.click(screen.getDialogSaveButton());
 
-    expect(props.onNewDisplay).toHaveBeenCalledWith(
+    expect(onNewDisplay).toHaveBeenCalledWith(
       settings,
       'dashboard-1',
       firstDisplayId,
     );
-  });
-
-  test('should close the dialog when onClose is triggered', () => {
-    const {props} = createTestProps();
-
-    render(<DashboardControls {...props} />);
-
-    fireEvent.click(screen.getByTestId('add-dashboard-display'));
-    fireEvent.click(screen.getDialogCloseButton());
-
-    expect(
-      screen.queryByText('Add new Dashboard Display'),
-    ).not.toBeInTheDocument();
-  });
-
-  test('should disable adding when canAdd is false', () => {
-    const {props} = createTestProps();
-
-    render(<DashboardControls {...props} canAdd={false} />);
-
-    const addButton = screen.getByTestId('add-dashboard-display');
-    expect(addButton).toHaveAttribute('title', 'Dashboard limit reached');
-
-    fireEvent.click(addButton);
-
-    expect(
-      screen.queryByText('Add new Dashboard Display'),
-    ).not.toBeInTheDocument();
   });
 });

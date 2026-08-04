@@ -7,7 +7,7 @@ import React from 'react';
 import {useNavigate} from 'react-router';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {HostIcon, NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -91,7 +91,7 @@ const Page = ({
               />
             )}
             dashboardControls={() => (
-              <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
+              <DashboardControlsContainer dashboardId={HOSTS_DASHBOARD_ID} />
             )}
             entitiesCounts={entitiesCounts}
             filter={filter}

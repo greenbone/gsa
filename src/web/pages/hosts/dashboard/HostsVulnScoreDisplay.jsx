@@ -135,6 +135,12 @@ export const HostsVulnScoreTableDisplay = createDisplay({
   displayName: 'host-by-most-vulnerable-table',
 });
 
-registerDisplay(HostsVulnScoreDisplay, _l('Chart: Hosts by Vulnerability Score'));
+registerDisplay(
+  HostsVulnScoreDisplay,
+  _l('Chart: Hosts by Vulnerability Score'),
+);
 
-registerDisplay(HostsVulnScoreTableDisplay, _l('Table: Hosts by Vulnerability Score'));
+registerDisplay(
+  HostsVulnScoreTableDisplay,
+  _l('Table: Hosts by Vulnerability Score'),
+);

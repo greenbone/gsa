@@ -5,7 +5,7 @@
 
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import type Override from 'gmp/models/override';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {OverrideIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -77,7 +77,9 @@ const OverrideListPage = ({
               />
             )}
             dashboardControls={() => (
-              <DashboardControls dashboardId={OVERRIDES_DASHBOARD_ID} />
+              <DashboardControlsContainer
+                dashboardId={OVERRIDES_DASHBOARD_ID}
+              />
             )}
             entities={entities}
             entitiesCounts={entitiesCounts}

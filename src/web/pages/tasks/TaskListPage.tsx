@@ -5,7 +5,7 @@
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import type Task from 'gmp/models/task';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {TaskIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import {
@@ -109,7 +109,7 @@ const TaskListPage = ({
               />
             )}
             dashboardControls={() => (
-              <DashboardControls dashboardId={TASK_DASHBOARD_ID} />
+              <DashboardControlsContainer dashboardId={TASK_DASHBOARD_ID} />
             )}
             filter={filter}
             filterEditDialog={TaskFilterDialog}

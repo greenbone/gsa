@@ -190,6 +190,12 @@ export const OverridesActiveDaysTableDisplay = createDisplay({
   filtersFilter: OVERRIDES_FILTER_FILTER,
 });
 
-registerDisplay(OverridesActiveDaysDisplay, _l('Chart: Overrides by Active Days'));
+registerDisplay(
+  OverridesActiveDaysDisplay,
+  _l('Chart: Overrides by Active Days'),
+);
 
-registerDisplay(OverridesActiveDaysTableDisplay, _l('Table: Overrides by Active Days'));
+registerDisplay(
+  OverridesActiveDaysTableDisplay,
+  _l('Table: Overrides by Active Days'),
+);

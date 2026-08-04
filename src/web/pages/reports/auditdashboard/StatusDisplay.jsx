@@ -70,6 +70,12 @@ export const ReportComplianceTableDisplay = createDisplay({
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,
 });
 
-registerDisplay(ReportComplianceDisplay, _l('Chart: Audit Reports by Compliance'));
+registerDisplay(
+  ReportComplianceDisplay,
+  _l('Chart: Audit Reports by Compliance'),
+);
 
-registerDisplay(ReportComplianceTableDisplay, _l('Table: Audit Reports by Compliance'));
+registerDisplay(
+  ReportComplianceTableDisplay,
+  _l('Table: Audit Reports by Compliance'),
+);

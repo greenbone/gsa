@@ -34,4 +34,7 @@ export const CvesSeverityClassTableDisplay = createDisplay({
 
 registerDisplay(CvesSeverityClassDisplay, _l('Chart: CVEs by Severity Class'));
 
-registerDisplay(CvesSeverityClassTableDisplay, _l('Table: CVEs by Severity Class'));
+registerDisplay(
+  CvesSeverityClassTableDisplay,
+  _l('Table: CVEs by Severity Class'),
+);

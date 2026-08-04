@@ -146,6 +146,12 @@ export const ReportsHighResultsTableDisplay = createDisplay({
   displayId: 'report-by-high-results-table',
 });
 
-registerDisplay(ReportsHighResultsDisplay, _l('Chart: Reports with high Results'));
+registerDisplay(
+  ReportsHighResultsDisplay,
+  _l('Chart: Reports with high Results'),
+);
 
-registerDisplay(ReportsHighResultsTableDisplay, _l('Table: Reports with high Results'));
+registerDisplay(
+  ReportsHighResultsTableDisplay,
+  _l('Table: Reports with high Results'),
+);

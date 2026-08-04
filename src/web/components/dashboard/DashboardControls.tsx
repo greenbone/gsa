@@ -4,32 +4,18 @@
  */
 
 import {useState} from 'react';
-import {connect} from 'react-redux';
-import type Gmp from 'gmp/gmp';
 import {isDefined} from 'gmp/utils/identity';
 import {
   type DisplayRegistry,
   getDisplay,
 } from 'web/components/dashboard/registry';
-import {
-  addDisplayToSettings,
-  canAddDisplay,
-  type DashboardSettings,
-  getPermittedDisplayIds,
-} from 'web/components/dashboard/utils';
+import {type DashboardSettings} from 'web/components/dashboard/utils';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import {NewIcon, ResetIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import useTranslation from 'web/hooks/useTranslation';
-import {
-  resetSettings,
-  saveSettings,
-} from 'web/store/dashboard/settings/actions';
-import getDashboardSettings from 'web/store/dashboard/settings/selectors';
-import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
 
 export type OnNewDisplayFunc = (
   settings: DashboardSettings | undefined,
@@ -51,7 +37,7 @@ interface NewDisplayValues {
   displayId: string;
 }
 
-export const DashboardControls = ({
+const DashboardControls = ({
   canAdd,
   dashboardId,
   displayIds = [],
@@ -145,47 +131,4 @@ export const DashboardControls = ({
   );
 };
 
-const mapStateToProps = (
-  rootState: unknown,
-  {dashboardId}: {dashboardId: string},
-) => {
-  const settingsSelector = getDashboardSettings(rootState);
-  const settings = settingsSelector.getById(dashboardId);
-  return {
-    canAdd: canAddDisplay(settings),
-    displayIds: getPermittedDisplayIds(settings),
-    settings,
-  };
-};
-
-const addDisplay =
-  (gmp: Gmp) =>
-  (
-    settings: DashboardSettings | undefined,
-    dashboardId: string,
-    displayId: string,
-  ) => {
-    const newSettings = addDisplayToSettings(settings, displayId);
-    return saveSettings(gmp)(dashboardId, newSettings);
-  };
-
-const mapDispatchToProps = (
-  dispatch: (action: unknown) => unknown,
-  {gmp}: {gmp: Gmp},
-) => ({
-  onResetClick: (dashboardId: string) =>
-    dispatch(resetSettings(gmp)(dashboardId)),
-  onNewDisplay: (
-    settings: Record<string, unknown>,
-    dashboardId: string,
-    displayId: string,
-  ) =>
-    dispatch(
-      addDisplay(gmp)(settings as DashboardSettings, dashboardId, displayId),
-    ),
-});
-
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps as never),
-)(DashboardControls as never);
+export default DashboardControls;

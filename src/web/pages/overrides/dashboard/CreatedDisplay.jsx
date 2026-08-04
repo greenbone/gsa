@@ -34,7 +34,10 @@ export const OverridesCreatedDisplay = createDisplay({
   filtersFilter: OVERRIDES_FILTER_FILTER,
 });
 
-registerDisplay(OverridesCreatedDisplay, _l('Chart: Overrides by Creation Time'));
+registerDisplay(
+  OverridesCreatedDisplay,
+  _l('Chart: Overrides by Creation Time'),
+);
 
 export const OverridesCreatedTableDisplay = createDisplay({
   loaderComponent: OverridesCreatedLoader,
@@ -52,6 +55,12 @@ export const OverridesCreatedTableDisplay = createDisplay({
   filtersFilter: OVERRIDES_FILTER_FILTER,
 });
 
-registerDisplay(OverridesCreatedDisplay, _l('Chart: Overrides by Creation Time'));
+registerDisplay(
+  OverridesCreatedDisplay,
+  _l('Chart: Overrides by Creation Time'),
+);
 
-registerDisplay(OverridesCreatedTableDisplay, _l('Table: Overrides by Creation Time'));
+registerDisplay(
+  OverridesCreatedTableDisplay,
+  _l('Table: Overrides by Creation Time'),
+);

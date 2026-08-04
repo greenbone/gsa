@@ -6,7 +6,7 @@
 import React from 'react';
 import {CPES_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {CpeLogoIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -40,7 +40,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
           <CpesDashboard filter={filter} onFilterChanged={onFilterChanged} />
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={CPES_DASHBOARD_ID} />
+          <DashboardControlsContainer dashboardId={CPES_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={CpeFilterDialog}

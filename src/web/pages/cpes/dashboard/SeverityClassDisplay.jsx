@@ -34,4 +34,7 @@ export const CpesSeverityClassTableDisplay = createDisplay({
 
 registerDisplay(CpesSeverityClassDisplay, _l('Chart: CPEs by Severity Class'));
 
-registerDisplay(CpesSeverityClassTableDisplay, _l('Table: CPEs by Severity Class'));
+registerDisplay(
+  CpesSeverityClassTableDisplay,
+  _l('Table: CPEs by Severity Class'),
+);

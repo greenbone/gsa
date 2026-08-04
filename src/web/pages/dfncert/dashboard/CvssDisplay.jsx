@@ -35,4 +35,7 @@ export const DfnCertCvssTableDisplay = createDisplay({
 
 registerDisplay(DfnCertCvssDisplay, _l('Chart: DFN-CERT Advisories by CVSS'));
 
-registerDisplay(DfnCertCvssTableDisplay, _l('Table: DFN-CERT Advisories by CVSS'));
+registerDisplay(
+  DfnCertCvssTableDisplay,
+  _l('Table: DFN-CERT Advisories by CVSS'),
+);
