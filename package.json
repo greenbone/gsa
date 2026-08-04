@@ -83,7 +83,7 @@
     "@emnapi/runtime": "1.11.3",
     "@eslint/js": "^9.39.2",
     "@pandatix/js-cvss": "^0.4.4",
-    "@tanstack/eslint-plugin-query": "^5.100.14",
+    "@tanstack/eslint-plugin-query": "^5.101.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
