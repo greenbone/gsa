@@ -39,7 +39,7 @@ interface LegendProps<TData extends LegendData = LegendData> {
   onItemClick?: (d: TData) => void;
 }
 
-export type LegendRef = RefObject<HTMLElement>;
+export type LegendRef = RefObject<HTMLElement | null>;
 
 const StyledLegend = styled.div`
   padding: 5px 10px;

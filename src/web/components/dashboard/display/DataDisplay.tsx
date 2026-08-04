@@ -53,7 +53,7 @@ interface DataDisplayRenderProps<TData, TState extends State> {
   id: string;
   width: number;
   height: number;
-  svgRef: React.RefObject<SVGSVGElement>;
+  svgRef: React.RefObject<SVGSVGElement | null>;
   data: TData[];
   state: TState;
   setState: SetStateFunc<TState>;
@@ -185,8 +185,8 @@ class DataDisplay<
   TTransformedData,
   TTransformProps = Record<string, unknown>,
 > extends React.Component<TProps, DataDisplayState<TData, TTransformedData>> {
-  svgRef: React.RefObject<SVGSVGElement>;
-  downloadRef: React.RefObject<HTMLAnchorElement>;
+  svgRef: React.RefObject<SVGSVGElement | null>;
+  downloadRef: React.RefObject<HTMLAnchorElement | null>;
   downloadSvgUrl?: string;
   downloadCsvUrl?: string;
 

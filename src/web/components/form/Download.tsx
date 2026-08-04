@@ -59,7 +59,9 @@ class Download extends React.Component<DownloadProps> {
     const {filename} = this.props;
     return (
       <a
-        ref={ref => (this.anchor = ref)}
+        ref={ref => {
+          this.anchor = ref;
+        }}
         aria-hidden
         download={filename}
         style={{display: 'none'}}

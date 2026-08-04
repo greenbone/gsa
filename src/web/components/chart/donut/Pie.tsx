@@ -13,7 +13,7 @@ import PropTypes from 'web/utils/prop-types';
 const sortArcsByStartAngle = (a, b) => (a.startAngle > b.startAngle ? -1 : 1);
 
 const Pie = ({
-  className,
+  className = undefined,
   top = 0,
   left = 0,
   data,
@@ -21,8 +21,8 @@ const Pie = ({
   outerRadiusX,
   innerRadiusY,
   outerRadiusY,
-  padAngle,
-  pieSort,
+  padAngle = undefined,
+  pieSort = undefined,
   pieValue,
   arcsSort = sortArcsByStartAngle,
   children,

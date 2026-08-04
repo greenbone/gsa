@@ -172,12 +172,15 @@ const AuditDetailsPage = () => {
       <AuditComponent
         onCloneError={onError}
         onCloned={goToDetails('audit', navigate)}
+        onCreateError={onError}
+        onCreated={onChanged}
         onDeleteError={onError}
         onDeleted={goToList('audits', navigate)}
         onDownloadError={onError}
         onDownloaded={onDownloaded}
         onResumeError={onError}
         onResumed={onChanged}
+        onSaveError={onError}
         onSaved={onChanged}
         onStartError={onError}
         onStarted={onChanged}

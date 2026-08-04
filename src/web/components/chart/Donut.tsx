@@ -48,7 +48,7 @@ interface DonutChartProps<TData extends DonutChartData> {
   height: number;
   data?: TData[];
   innerRadius?: number;
-  svgRef?: React.RefObject<SVGSVGElement>;
+  svgRef?: React.RefObject<SVGSVGElement | null>;
   show3d?: boolean;
   showLegend?: boolean;
   onDataClick?: (data: TData) => void;
@@ -285,7 +285,9 @@ class DonutChart<
     return (
       <StyledLayout align={['start', 'start']}>
         <Svg
-          ref={setRef(svgRef as Ref<SVGSVGElement>, ref => (this.svg = ref))}
+          ref={setRef(svgRef as Ref<SVGSVGElement>, ref => {
+            this.svg = ref;
+          })}
           height={height}
           width={width}
         >

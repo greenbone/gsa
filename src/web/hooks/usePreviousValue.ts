@@ -22,7 +22,7 @@ import {useEffect, useRef} from 'react';
  * ```
  */
 const usePreviousValue = <TValue>(value: TValue) => {
-  const ref = useRef<TValue>(); // initially the previous value is undefined
+  const ref = useRef<TValue | undefined>(undefined); // initially the previous value is undefined
 
   useEffect(() => {
     // will be called AFTER the calling component has rendered

@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ReactNode, type ReactElement, cloneElement} from 'react';
+import {type ReactNode, cloneElement} from 'react';
 import HoverCard from 'web/components/hover-card/HoverCard';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface ComponentWithHoverCardProps {
   /** The component (TextField, NumberField, etc.) */
-  slot: ReactElement;
+  slot: React.ReactElement<Record<string, unknown>>;
   /** The help content to display in the hover card */
   helpContent: ReactNode;
   /** Aria label for the help button */
@@ -51,12 +51,13 @@ const ComponentWithHoverCard = ({
     </HoverCard>
   );
 
+  const slotProps = slot.props as Record<string, unknown>;
   // Clone the slot element and add the HoverCard to its title
   const slotWithHoverCard = cloneElement(slot, {
-    ...slot.props,
-    title: slot.props.title ? (
+    ...slotProps,
+    title: slotProps.title ? (
       <>
-        {slot.props.title}
+        {slotProps.title}
         {hoverCardElement}
       </>
     ) : (

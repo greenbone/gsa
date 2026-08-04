@@ -244,7 +244,7 @@ const LineChart = ({
   y2Line,
   onRangeSelected,
 }: LineChartProps) => {
-  const legendRef: LegendRef = useRef(null);
+  const legendRef: LegendRef = useRef<HTMLElement | null>(null);
   const svgElementRef = useRef<SVGSVGElement | null>(null);
 
   const [displayInfo, setDisplayInfo] = useState(false);
