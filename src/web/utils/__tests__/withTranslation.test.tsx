@@ -31,7 +31,7 @@ describe('withTranslation HOC', () => {
         i18n,
         someProp: 'test',
       }),
-      {},
+      undefined,
     );
     expect(screen.getByText('Tasks')).toBeInTheDocument();
   });

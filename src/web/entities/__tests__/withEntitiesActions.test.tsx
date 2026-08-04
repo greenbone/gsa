@@ -24,7 +24,10 @@ describe('withEntitiesActions', () => {
 
     render(<WrappedComponent entity={entity} someProp="test" />);
 
-    expect(MockComponent).toHaveBeenCalledWith({someProp: 'test', entity}, {});
+    expect(MockComponent).toHaveBeenCalledWith(
+      {someProp: 'test', entity},
+      undefined,
+    );
     expect(screen.getByText('Mock Component')).toBeInTheDocument();
   });
 

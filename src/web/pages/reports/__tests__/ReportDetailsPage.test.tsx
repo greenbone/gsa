@@ -185,10 +185,13 @@ describe('ReportDetailsPage tests', () => {
       const {render} = setupRenderer();
       renderPage(render);
 
-      await screen.findByRole('heading', {name: /Report:/});
-      expect(screen.getByRole('heading', {name: /Report:/})).toHaveTextContent(
-        'Mon, Jun 3, 2019 1:00 PMCentral European Summer TimeDone',
-      );
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', {name: /Report:/}),
+        ).toHaveTextContent(
+          'Mon, Jun 3, 2019 1:00 PMCentral European Summer TimeDone',
+        );
+      });
     });
 
     test('should render all 11 tabs once entity is loaded', async () => {
@@ -274,7 +277,7 @@ describe('ReportDetailsPage tests', () => {
       const {render} = setupRenderer();
       renderPage(render);
 
-      await screen.findByTitle('Edit Filter');
+      await screen.findByRole('tablist');
       fireEvent.click(screen.getByTitle('Edit Filter'));
 
       await screen.findByRole('heading', {name: /Update Filter/});
@@ -284,7 +287,7 @@ describe('ReportDetailsPage tests', () => {
       const {render} = setupRenderer();
       renderPage(render);
 
-      await screen.findByTitle('Edit Filter');
+      await screen.findByRole('tablist');
       fireEvent.click(screen.getByTitle('Edit Filter'));
 
       await screen.findByRole('heading', {name: /Update Filter/});
