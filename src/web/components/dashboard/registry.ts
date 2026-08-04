@@ -7,8 +7,26 @@ import type {ComponentType} from 'react';
 import Logger from 'gmp/log';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
+import {type DisplayProps as BaseDisplayProps} from 'web/components/dashboard/display/Display';
 
-export type DisplayComponent = ComponentType & {
+export interface DisplayState {
+  showLegend?: boolean;
+  show3d?: boolean;
+}
+
+type DisplayStateFunc = (state: DisplayState | undefined) => DisplayState;
+type DisplaySetStateFunc = (stateFunc: DisplayStateFunc) => void;
+
+interface DisplayProps extends BaseDisplayProps {
+  height: number;
+  id: string;
+  width: number;
+  state: DisplayState | undefined;
+  setState: DisplaySetStateFunc;
+  onFilterIdChanged: (filterId: string) => void;
+}
+
+export type DisplayComponent = ComponentType<DisplayProps> & {
   displayId: string;
 };
 

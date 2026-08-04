@@ -13,6 +13,7 @@ import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons'
 import Display, {
   DISPLAY_HEADER_HEIGHT,
   DISPLAY_BORDER_WIDTH,
+  type DisplayProps,
 } from 'web/components/dashboard/display/Display';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -69,7 +70,10 @@ export interface DataDisplayProps<
   TState extends State,
   TTransformedData = TData,
   TTransformProps = Record<string, unknown>,
-> extends WithTranslationComponentProps {
+>
+  extends
+    WithTranslationComponentProps,
+    Omit<DisplayProps, 'children' | 'title'> {
   data: TData;
   dataRow: (data: TTransformedData) => string[];
   dataTitles: string[];
@@ -82,8 +86,6 @@ export interface DataDisplayProps<
   ) => React.ReactNode;
   id: string;
   initialState: TState;
-  isLoading: boolean;
-  onRemoveClick: () => void;
   onSelectFilterClick: () => void;
   setState: SetStateFunc<TState>;
   showCsvDownload: boolean;

@@ -8,27 +8,28 @@ import {createDisplay, createRow} from 'gmp/commands/dashboards';
 import {isDefined, isArray} from 'gmp/utils/identity';
 
 export interface DashboardDisplay {
-  id: string;
   displayId: string;
+  id: string;
 }
 
 export interface DashboardRow {
-  id: string;
   height?: number;
+  id: string;
   items: DashboardDisplay[];
 }
 
 export interface GridItem {
-  id: string;
   height: number;
+  id: string;
   items: string[];
 }
 
 export interface DashboardSettings {
-  rows?: DashboardRow[];
-  permittedDisplays?: string[];
   maxItemsPerRow?: number;
   maxRows?: number;
+  permittedDisplays?: string[];
+  rows?: DashboardRow[];
+  title?: string;
 }
 
 export const getPermittedDisplayIds = (settings: DashboardSettings = {}) =>
