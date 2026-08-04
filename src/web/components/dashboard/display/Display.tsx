@@ -12,11 +12,11 @@ import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
 export interface DisplayProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   dragHandleRef?: (element: Element | null) => void;
+  isLoading?: boolean;
   title?: string;
   onRemoveClick: () => void;
-  isLoading?: boolean;
 }
 
 export const DISPLAY_HEADER_HEIGHT = 20;

@@ -3,9 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {TranslatedDashboard as Dashboard} from 'web/components/dashboard/Dashboard';
-import DashboardControls from 'web/components/dashboard/DashboardControls';
-import {canAddDisplay} from 'web/components/dashboard/utils';
+import {Dashboard} from 'web/components/dashboard/Dashboard';
+import DashboardControls, {
+  type OnNewDisplayFunc,
+} from 'web/components/dashboard/DashboardControls';
+import {
+  canAddDisplay,
+  type DashboardSettings,
+} from 'web/components/dashboard/utils';
 import Layout from 'web/components/layout/Layout';
 import {CERTBUND_DISPLAYS} from 'web/pages/certbund/dashboard';
 import {CPES_DISPLAYS} from 'web/pages/cpes/dashboard';
@@ -20,10 +25,20 @@ import {AUDIT_REPORTS_DISPLAYS} from 'web/pages/reports/auditdashboard';
 import {REPORTS_DISPLAYS} from 'web/pages/reports/dashboard';
 import {RESULTS_DISPLAYS} from 'web/pages/results/dashboard';
 import {DEFAULT_DISPLAYS} from 'web/pages/start/NewDashboardDialog';
-import {type StartDashboardProps} from 'web/pages/start/types';
 import {TASKS_DISPLAYS} from 'web/pages/tasks/dashboard';
 import {TICKETS_DISPLAYS} from 'web/pages/tickets/dashboard';
 import {VULNERABILITIES_DISPLAYS} from 'web/pages/vulnerabilities/dashboard';
+
+interface StartDashboardProps {
+  id: string;
+  loadSettings?: (id: string, defaults: DashboardSettings) => void;
+  saveSettings: (id: string, settings: DashboardSettings) => void;
+  settings: DashboardSettings;
+  onNewDisplay: OnNewDisplayFunc;
+  onResetDashboard: (id: string) => void;
+  setDefaultSettings: (id: string, settings: DashboardSettings) => void;
+  notify?: (message: string) => void;
+}
 
 const ALL_DISPLAYS = [
   ...TASKS_DISPLAYS,

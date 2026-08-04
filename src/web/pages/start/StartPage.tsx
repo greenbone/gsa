@@ -13,6 +13,7 @@ import {
   addDisplayToSettings,
   canAddDisplay,
   convertDefaultDisplays,
+  type DashboardSettings,
 } from 'web/components/dashboard/utils';
 import {
   DashboardIcon,
@@ -43,10 +44,6 @@ import EditDashboardDialog from 'web/pages/start/EditDashboardDialog';
 import NewDashboardDialog, {
   DEFAULT_DISPLAYS,
 } from 'web/pages/start/NewDashboardDialog';
-import {
-  type DashboardData,
-  type DashboardSettings,
-} from 'web/pages/start/types';
 import {loadSettings, saveSettings} from 'web/store/dashboard/settings/actions';
 import getDashboardSettingsSelector, {
   DashboardSetting,
@@ -206,14 +203,14 @@ const StartPage = () => {
 
   const handleSaveDashboardSettings = (
     dashboardId: string,
-    dashboardSettings: DashboardData,
+    dashboardSettings: DashboardSettings,
   ) => {
     updateDashboardSettings(dashboardId, dashboardSettings);
   };
 
   const handleSetDefaultSettings = (
     dashboardId: string,
-    defaultSettings: Record<string, unknown>,
+    defaultSettings: DashboardSettings,
   ) => {
     updateDashboardDefaults(dashboardId, defaultSettings);
   };
@@ -282,7 +279,7 @@ const StartPage = () => {
 
   const updateDashboardSettings = (
     dashboardId: string,
-    newSettings: DashboardData,
+    newSettings: DashboardSettings,
   ) => {
     const {byId = {}} = settings || {};
     const oldSettings = getDashboardSettings(dashboardId);
@@ -300,7 +297,7 @@ const StartPage = () => {
 
   const updateDashboardDefaults = (
     dashboardId: string,
-    newDefaults: Record<string, unknown>,
+    newDefaults: DashboardSettings,
   ) => {
     const {defaults = {}} = settings || {};
 
