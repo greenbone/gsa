@@ -2,9 +2,11 @@ name: 'CodeQL'
 
 on:
   push:
-    branches: [main, stable, oldstable]
+    branches:
+      - main
   pull_request:
-    branches: [main, stable, oldstable]
+    branches:
+      - main
     paths-ignore:
       - '**/*.md'
       - '**/*.txt'
@@ -27,22 +29,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ['javascript']
+        language:
+          - 'javascript'
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # 7.0.1
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@d1ba80a13dd99fba24a470575428917156a28b43 # 4.27.5
         with:
           languages: ${{ matrix.language }}
         # build between init and analyze ...
       - name: Install node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # 7.0.0
         with:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@d1ba80a13dd99fba24a470575428917156a28b43 # 4.27.5
