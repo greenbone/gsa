@@ -3,7 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
@@ -11,7 +18,7 @@ import {isDefined} from 'gmp/utils/identity';
 type Size = {width: number; height: number};
 
 interface AutoSizeProps {
-  children: (size: Size) => React.ReactNode;
+  children: (size: Size) => ReactNode;
   measure?: (container: HTMLElement) => Size;
 }
 
@@ -34,67 +41,66 @@ const Container = styled.div`
  *
  * This component uses the render props pattern.
  */
-class AutoSize extends React.Component<AutoSizeProps, AutoSizeState> {
-  containerRef: React.RefObject<HTMLDivElement>;
+const AutoSize = ({children, measure}: AutoSizeProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const measureRef = useRef(measure);
+  const [{width, height}, setSize] = useState<AutoSizeState>({});
 
-  constructor(props: AutoSizeProps) {
-    super(props);
+  useEffect(() => {
+    measureRef.current = measure;
+  }, [measure]);
 
-    this.state = {};
-
-    this.handleResize = debounce(this.handleResize.bind(this), 100);
-
-    this.containerRef = React.createRef<HTMLDivElement>();
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize, {passive: true});
-
-    this.setState(this.getSize());
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-  }
-
-  handleResize() {
-    this.setState(this.getSize());
-  }
-
-  getSize(): AutoSizeState {
-    const {current: container} = this.containerRef;
-    const {measure} = this.props;
+  const getSize = useCallback((): AutoSizeState => {
+    const {current: container} = containerRef;
 
     if (container === null) {
       return {};
     }
 
-    const {width, height} = measure
-      ? measure(container)
+    const currentMeasure = measureRef.current;
+    const {width, height} = currentMeasure
+      ? currentMeasure(container)
       : container.getBoundingClientRect();
     return {width, height};
-  }
+  }, []);
 
-  componentDidUpdate() {
-    const size = this.getSize();
+  const updateSize = useCallback(() => {
+    setSize(prevSize => {
+      const nextSize = getSize();
 
-    if (size.width !== this.state.width || size.height !== this.state.height) {
-      this.setState(size);
-    }
-  }
+      if (
+        nextSize.width === prevSize.width &&
+        nextSize.height === prevSize.height
+      ) {
+        return prevSize;
+      }
 
-  render() {
-    const {children} = this.props;
-    const {width, height} = this.state;
+      return nextSize;
+    });
+  }, [getSize]);
 
-    // only call children if height and width are defined
-    const shouldCallChildren = isDefined(height) && isDefined(width);
-    return (
-      <Container ref={this.containerRef}>
-        {shouldCallChildren && children({width, height})}
-      </Container>
-    );
-  }
-}
+  const handleResize = useMemo(() => debounce(updateSize, 100), [updateSize]);
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize, {passive: true});
+    updateSize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [handleResize, updateSize]);
+
+  useEffect(() => {
+    updateSize();
+  });
+
+  // only call children if height and width are defined
+  const shouldCallChildren = isDefined(height) && isDefined(width);
+  return (
+    <Container ref={containerRef}>
+      {shouldCallChildren && children({width, height})}
+    </Container>
+  );
+};
 
 export default AutoSize;
