@@ -8,8 +8,11 @@ import styled from 'styled-components';
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
+type Size = {width: number; height: number};
+
 interface AutoSizeProps {
-  children: (size: {width: number; height: number}) => React.ReactNode;
+  children: (size: Size) => React.ReactNode;
+  measure?: (container: HTMLElement) => Size;
 }
 
 interface AutoSizeState {
@@ -60,12 +63,15 @@ class AutoSize extends React.Component<AutoSizeProps, AutoSizeState> {
 
   getSize(): AutoSizeState {
     const {current: container} = this.containerRef;
+    const {measure} = this.props;
 
     if (container === null) {
       return {};
     }
 
-    const {width, height} = container.getBoundingClientRect();
+    const {width, height} = measure
+      ? measure(container)
+      : container.getBoundingClientRect();
     return {width, height};
   }
 
