@@ -39,6 +39,7 @@ import SortableGrid, {
   type SortableGridRow,
 } from 'web/components/sortable/SortableGrid';
 import {type SortableItemRenderProps} from 'web/components/sortable/SortableItem';
+import useLatestCallback from 'web/hooks/useLatestCallback';
 import useTranslation from 'web/hooks/useTranslation';
 import {
   loadSettings,
@@ -126,6 +127,9 @@ export const Dashboard = ({
   ...otherProps
 }: DashboardProps) => {
   const [_] = useTranslation();
+  const callLoadSettings = useLatestCallback(loadSettings);
+  const callSetDefaultSettings = useLatestCallback(setDefaultSettings);
+
   const components = useMemo(() => {
     const mappedComponents: Record<string, DisplayComponent> = {};
 
@@ -162,16 +166,16 @@ export const Dashboard = ({
       maxRows,
     };
 
-    setDefaultSettings(id, defaultDashboardSettings);
-    loadSettings(id, defaults);
+    callSetDefaultSettings(id, defaultDashboardSettings);
+    callLoadSettings(id, defaults);
   }, [
+    callLoadSettings,
+    callSetDefaultSettings,
     defaultDisplays,
     id,
-    loadSettings,
     maxItemsPerRow,
     maxRows,
     permittedDisplays,
-    setDefaultSettings,
   ]);
 
   const rows = getRowsFromSettings();
