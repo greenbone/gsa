@@ -20,6 +20,8 @@ import 'dayjs/locale/af';
 import 'dayjs/locale/ar';
 import 'dayjs/locale/de';
 import 'dayjs/locale/fr';
+import 'dayjs/locale/it';
+import 'dayjs/locale/ja';
 import 'dayjs/locale/pt-br';
 import 'dayjs/locale/ru';
 import 'dayjs/locale/tr';
