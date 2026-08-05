@@ -8,7 +8,6 @@ import {
   test,
   expect,
   testing,
-  vi,
   beforeEach,
   afterEach,
 } from '@gsa/testing';
@@ -30,13 +29,13 @@ const mockRect = (width: number, height: number) =>
 
 describe('AutoSize', () => {
   beforeEach(() => {
-    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(
-      mockRect(800, 600),
-    );
+    testing
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockReturnValue(mockRect(800, 600));
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    testing.restoreAllMocks();
   });
 
   test('should call the children render-prop with the measured size', async () => {
@@ -58,22 +57,22 @@ describe('AutoSize', () => {
   });
 
   test('should update dimensions when the window is resized', async () => {
-    vi.useFakeTimers();
+    testing.useFakeTimers();
     const children = testing.fn().mockReturnValue(null);
 
     render(<AutoSize>{children}</AutoSize>);
 
-    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(
-      mockRect(400, 300),
-    );
+    testing
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockReturnValue(mockRect(400, 300));
 
     await act(async () => {
       window.dispatchEvent(new Event('resize'));
-      vi.advanceTimersByTime(200);
+      testing.advanceTimersByTime(200);
     });
 
     expect(children).toHaveBeenCalledWith({width: 400, height: 300});
 
-    vi.useRealTimers();
+    testing.useRealTimers();
   });
 });
