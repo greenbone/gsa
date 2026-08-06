@@ -23,7 +23,7 @@ import withRowDetails from 'web/entities/withRowDetails';
 import EntityCloneIcon from 'web/entity/icon/CloneIcon';
 import EntityEditIcon from 'web/entity/icon/EditIcon';
 import EntityTrashIcon from 'web/entity/icon/TrashIcon';
-import TicketDetails from 'web/pages/tickets/Details';
+import TicketDetails from 'web/pages/tickets/TicketDetails';
 import PropTypes from 'web/utils/prop-types';
 import {NA_VALUE} from 'web/utils/severity';
 

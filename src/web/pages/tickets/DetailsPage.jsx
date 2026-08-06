@@ -38,7 +38,7 @@ import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import TicketDetails from 'web/pages/tickets/Details';
+import TicketDetails from 'web/pages/tickets/TicketDetails';
 import TicketComponent from 'web/pages/tickets/TicketComponent';
 import {
   selector as ticketSelector,

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type Ticket from 'gmp/models/ticket';
 import {isDefined} from 'gmp/utils/identity';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
@@ -16,14 +16,19 @@ import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/DetailsBlock';
 import EntityLink from 'web/entity/Link';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/prop-types';
 
-const TicketDetails = ({entity, links = true}) => {
+interface TicketDetailsProps {
+  entity: Ticket;
+  links?: boolean;
+}
+
+const TicketDetails = ({entity, links = true}: TicketDetailsProps) => {
   const [_] = useTranslation();
-  const {task = {}} = entity;
-  const taskIsInTrash = isDefined(task.isInTrash) ? task.isInTrash() : false;
+  const {task} = entity;
+  const taskIsInTrash = isDefined(task?.isInTrash) ? task.isInTrash() : false;
+
   return (
-    <React.Fragment>
+    <>
       {!entity.isOrphan() && (
         <DetailsBlock title={_('References')}>
           <InfoTable size="full">
@@ -86,7 +91,7 @@ const TicketDetails = ({entity, links = true}) => {
           </colgroup>
           <TableBody>
             {isDefined(entity.openTime) && (
-              <React.Fragment>
+              <>
                 <TableRow>
                   <TableData>{_('Opened')}</TableData>
                   <TableData>
@@ -99,10 +104,10 @@ const TicketDetails = ({entity, links = true}) => {
                     <Comment>{entity.openNote}</Comment>
                   </TableData>
                 </TableRow>
-              </React.Fragment>
+              </>
             )}
             {isDefined(entity.fixedTime) && (
-              <React.Fragment>
+              <>
                 <TableRow>
                   <TableData>{_('Fixed')}</TableData>
                   <TableData>
@@ -115,14 +120,14 @@ const TicketDetails = ({entity, links = true}) => {
                     <Comment>{entity.fixedNote}</Comment>
                   </TableData>
                 </TableRow>
-              </React.Fragment>
+              </>
             )}
-            {isDefined(entity.fixedVerifiedTime) && (
-              <React.Fragment>
+            {isDefined(entity.fixVerifiedTime) && (
+              <>
                 <TableRow>
                   <TableData>{_('Fix Verified')}</TableData>
                   <TableData>
-                    <DateTime date={entity.fixedVerifiedTime} />
+                    <DateTime date={entity.fixVerifiedTime} />
                   </TableData>
                 </TableRow>
                 <TableRow>
@@ -130,19 +135,19 @@ const TicketDetails = ({entity, links = true}) => {
                   <TableData>
                     <span>
                       <DetailsLink
-                        id={entity.fixedVerifiedReport.id}
+                        id={entity.fixVerifiedReport?.id ?? ''}
                         textOnly={!links}
                         type="report"
                       >
-                        <DateTime date={entity.fixedVerifiedReport.timestamp} />
+                        <DateTime date={entity.fixVerifiedReport?.timestamp} />
                       </DetailsLink>
                     </span>
                   </TableData>
                 </TableRow>
-              </React.Fragment>
+              </>
             )}
             {isDefined(entity.closedTime) && (
-              <React.Fragment>
+              <>
                 <TableRow>
                   <TableData>{_('Closed')}</TableData>
                   <TableData>
@@ -155,18 +160,13 @@ const TicketDetails = ({entity, links = true}) => {
                     <Comment>{entity.closedNote}</Comment>
                   </TableData>
                 </TableRow>
-              </React.Fragment>
+              </>
             )}
           </TableBody>
         </InfoTable>
       </DetailsBlock>
-    </React.Fragment>
+    </>
   );
-};
-
-TicketDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default TicketDetails;
