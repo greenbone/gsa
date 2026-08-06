@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
+import {type ToString} from 'gmp/types';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import Table from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
@@ -12,7 +12,12 @@ import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import PropTypes from 'web/utils/prop-types';
+
+interface DataTableProps<TData> {
+  dataTitles?: ToString[];
+  data: TData[];
+  dataRow: (row: TData) => ToString[];
+}
 
 const Margin = styled.div`
   margin: 10px;
@@ -22,7 +27,11 @@ const Margin = styled.div`
   overflow-y: auto;
 `;
 
-const DataTable = ({dataTitles = [], data = [], dataRow: rowFunc}) => (
+const DataTable = <TData,>({
+  dataTitles = [],
+  data = [],
+  dataRow: rowFunc,
+}: DataTableProps<TData>) => (
   <Margin>
     <Table>
       <TableHeader>
@@ -38,7 +47,7 @@ const DataTable = ({dataTitles = [], data = [], dataRow: rowFunc}) => (
           return (
             <TableRow key={i}>
               {rowData.map((value, j) => (
-                <TableData key={j}>{value}</TableData>
+                <TableData key={j}>{String(value)}</TableData>
               ))}
             </TableRow>
           );
@@ -47,11 +56,5 @@ const DataTable = ({dataTitles = [], data = [], dataRow: rowFunc}) => (
     </Table>
   </Margin>
 );
-
-DataTable.propTypes = {
-  data: PropTypes.array,
-  dataRow: PropTypes.func.isRequired,
-  dataTitles: PropTypes.arrayOf(PropTypes.toString),
-};
 
 export default DataTable;
