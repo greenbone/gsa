@@ -12,6 +12,9 @@ lerna-debug.log*
 dist/
 build/
 coverage/
+playwright-report/
+test-results/
+test-results-*/
 node_modules/
 
 public/config.js

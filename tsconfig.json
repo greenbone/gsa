@@ -11,7 +11,7 @@
     "allowJs": true,
     "checkJs": false,
     "noImplicitAny": false,
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "node"],
     "noEmit": true,
      "paths": {
       "gmp/*": ["./src/gmp/*"],
