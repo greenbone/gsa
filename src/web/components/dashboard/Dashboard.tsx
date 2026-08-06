@@ -5,7 +5,6 @@
 
 import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {type ThunkDispatch} from '@reduxjs/toolkit';
-import memoize from 'memoize-one';
 import {connect} from 'react-redux';
 import {type Action} from 'redux';
 import styled from 'styled-components';
@@ -186,11 +185,6 @@ export const Dashboard = ({
     return mappedComponents;
   }, [stablePermittedDisplays]);
 
-  const getDisplaysByIdMemoized = useMemo(
-    () => memoize((rows: DashboardRow[] = []) => getDisplaysById(rows)),
-    [],
-  );
-
   const getRowsFromSettings = useCallback(
     (defaultRows?: DashboardRow[]) =>
       getRows(settings, defaultRows) as DashboardRow[],
@@ -209,7 +203,7 @@ export const Dashboard = ({
   ]);
 
   const rows = getRowsFromSettings();
-  const displaysById = getDisplaysByIdMemoized(rows ?? []);
+  const displaysById = useMemo(() => getDisplaysById(rows ?? []), [rows]);
 
   const getDisplayComponent = useCallback(
     (displayId: string): DisplayComponent | undefined => components[displayId],
@@ -270,7 +264,7 @@ export const Dashboard = ({
   const handleItemsChange = useCallback(
     (gridItems: SortableGridRow[] = []) => {
       const currentRows = getRowsFromSettings() ?? [];
-      const currentDisplaysById = getDisplaysByIdMemoized(currentRows);
+      const currentDisplaysById = getDisplaysById(currentRows);
 
       updateRows(
         convertGridItemsToDisplays(
@@ -279,7 +273,7 @@ export const Dashboard = ({
         ),
       );
     },
-    [getDisplaysByIdMemoized, getRowsFromSettings, updateRows],
+    [getRowsFromSettings, updateRows],
   );
 
   const handleRemoveDisplay = useCallback(
