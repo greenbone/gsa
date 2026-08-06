@@ -4,9 +4,7 @@
  */
 
 import {expect, test, type BrowserContext, type Page} from '@playwright/test';
-
-const username = process.env.E2E_USERNAME;
-const password = process.env.E2E_PASSWORD;
+import {login, password, username} from '../credentials';
 
 interface MenuLink {
   href: string;
@@ -31,17 +29,6 @@ const isInternalMenuLink = (href: string) =>
 const normalizePath = (href: string) => {
   const parsed = new URL(href, 'http://localhost');
   return parsed.pathname;
-};
-
-const login = async (page: Page) => {
-  await page.goto('/login');
-
-  await page.locator('input[name="username"]').fill(username as string);
-  await page.locator('input[name="password"]').fill(password as string);
-  await page.getByTestId('login-button').click();
-
-  await expect(page).not.toHaveURL(/\/login(?:$|\?)/);
-  await expect(page.getByTestId('error')).toHaveCount(0);
 };
 
 const expandSidebarSections = async (page: Page) => {
@@ -151,8 +138,8 @@ test.describe('sidebar menu links', () => {
 
     await login(page);
 
-    await waitForSidebarLinks(page);
     await expandSidebarSections(page);
+    await waitForSidebarLinks(page);
     const menuLinks = await collectVisibleMenuLinks(page);
 
     expect(menuLinks.length).toBeGreaterThan(0);

@@ -5,6 +5,13 @@
 
 import {expect, test} from '@playwright/test';
 import {
+  credentialsRequiredMessage,
+  hasCredentials,
+  login,
+  password,
+  username,
+} from '../credentials';
+import {
   applyFilter,
   createUserFromCurrentPage,
   createUniqueUserName,
@@ -17,7 +24,6 @@ import {
   gotoUsersPage,
   isAscending,
   isDescending,
-  login,
   openListCreateDialog,
   openUserDetails,
   openUserDetailsFromListRow,
@@ -26,16 +32,11 @@ import {
   saveUserDialog,
   sortFieldByHeader,
   sortableHeaders,
-  username,
-  password,
   closeTopDialog,
 } from './users.helpers';
 
 test.describe('users page flows', () => {
-  test.skip(
-    !username || !password,
-    'Set E2E_USERNAME and E2E_PASSWORD in .env.e2e.local or shell environment.',
-  );
+  test.skip(!hasCredentials, credentialsRequiredMessage);
 
   test.beforeEach(async ({page}) => {
     await login(page);
