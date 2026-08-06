@@ -30,6 +30,7 @@ import CvesCommand from 'gmp/commands/cves';
 import DashboardCommand from 'gmp/commands/dashboards';
 import DfnCertAdvisoriesCommand from 'gmp/commands/dfn-cert-advisories';
 import DfnCertAdvisoryCommand from 'gmp/commands/dfn-cert-advisory';
+import FeedKeyCommand from 'gmp/commands/feed-key';
 import FeedStatusCommand from 'gmp/commands/feed-status';
 import FilterCommand from 'gmp/commands/filter';
 import FiltersCommand from 'gmp/commands/filters';
@@ -149,6 +150,7 @@ class Gmp {
   public readonly dashboard: DashboardCommand;
   public readonly dfncert: DfnCertAdvisoryCommand;
   public readonly dfncerts: DfnCertAdvisoriesCommand;
+  public readonly feedkey: FeedKeyCommand;
   public readonly feedstatus: FeedStatusCommand;
   public readonly filter: FilterCommand;
   public readonly filters: FiltersCommand;
@@ -341,6 +343,14 @@ class Gmp {
     this.vuln = new VulnerabilityCommand(this.http);
     this.vulns = new VulnerabilitiesCommand(this.http);
     this.wizard = new WizardCommand(this.http);
+    this.feedkey = new FeedKeyCommand(
+      this.http,
+      this.settings,
+      () => this.session.jwt,
+      async () => {
+        await this.user.renewSession();
+      },
+    );
   }
 
   public async login(username: string, password: string) {

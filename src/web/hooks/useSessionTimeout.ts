@@ -32,7 +32,7 @@ const useSessionTimeout = (): [
       return;
     }
     const response = await gmp.user.renewSession();
-    gmp.session.setSessionTimeout(response.data);
+    gmp.session.setSessionTimeout(response.data.timeout);
   }, [gmp]);
 
   return [sessionTimeout, renewSessionAndUpdateTimeout];
