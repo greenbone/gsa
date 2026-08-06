@@ -148,6 +148,24 @@ For HTTPS only the protocol property must be `'https'` accordingly.
 After changing the `config.js` file, the browser window should be reloaded
 manually.
 
+### Local Playwright E2E
+
+The Playwright end-to-end tests run against a locally running container. Start
+the container and make sure the GSA web application is available before running
+the tests.
+
+Install the Playwright browser once:
+
+```sh
+npx playwright install chromium
+```
+
+Run all end-to-end tests:
+
+```sh
+npm run test:e2e
+```
+
 ## Translations
 
 For translations and internationalization [i18next](https://www.i18next.com/) is
