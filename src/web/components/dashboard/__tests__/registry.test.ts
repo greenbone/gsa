@@ -3,7 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {beforeEach, describe, expect, test} from '@gsa/testing';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  test,
+  testing,
+} from '@gsa/testing';
+import Logger from 'gmp/log';
 import {type ToString} from 'gmp/types';
 import {
   type DisplayComponent,
@@ -12,30 +20,28 @@ import {
   registerDisplay,
 } from 'web/components/dashboard/registry';
 
-const {getLoggerMock, log} = vi.hoisted(() => {
-  const logger = {
-    debug: vi.fn(),
-    error: vi.fn(),
-  };
-
-  return {
-    getLoggerMock: vi.fn(() => logger),
-    log: logger,
-  };
-});
-
-vi.mock('gmp/log', () => ({
-  default: {
-    getLogger: getLoggerMock,
-  },
-}));
+const LOG_NAME = 'web.components.dashboard.registry';
 
 describe('dashboard registry', () => {
   let displayRegistry: DisplayRegistry;
+  const log = Logger.getLogger(LOG_NAME);
+  let originalDebug: (...args: unknown[]) => void;
+  let originalError: (...args: unknown[]) => void;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    testing.clearAllMocks();
+
+    originalDebug = log.debug;
+    originalError = log.error;
+    log.debug = testing.fn();
+    log.error = testing.fn();
+
     displayRegistry = {};
+  });
+
+  afterEach(() => {
+    log.debug = originalDebug;
+    log.error = originalError;
   });
 
   const createDisplayComponent = (displayId?: string): DisplayComponent => {
