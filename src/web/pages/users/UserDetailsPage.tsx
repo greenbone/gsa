@@ -144,6 +144,7 @@ const UserDetailsPage = () => {
         onCreated={handleEntityActionCompleted}
         onDeleteError={onError}
         onDeleted={goToList('users', navigate)}
+        onDialogError={onError}
         onDownloadError={onError}
         onDownloaded={onDownloaded}
         onSaved={onChanged}

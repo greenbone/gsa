@@ -107,4 +107,24 @@ describe('UserComponent', () => {
       expect(onSaved).toHaveBeenCalledWith({id: 'saved'});
     });
   });
+
+  test('should report errors while loading the user dialog', async () => {
+    const gmp = createGmp();
+    const error = new Error('Unable to load authentication settings');
+    gmp.user.currentAuthSettings.mockRejectedValue(error);
+    const onDialogError = testing.fn();
+    const {render} = rendererWith({gmp, capabilities: true, store: true});
+
+    render(
+      <UserComponent onDialogError={onDialogError}>
+        {({edit}) => <Button data-testid="open" onClick={() => edit(user)} />}
+      </UserComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await waitFor(() => {
+      expect(onDialogError).toHaveBeenCalledWith(error);
+    });
+    expect(screen.queryByText('Edit User user 1')).toBeNull();
+  });
 });
