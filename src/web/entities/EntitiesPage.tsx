@@ -63,8 +63,8 @@ interface EntitiesPageState {
 
 export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
   createFilterType: string;
-  dashboard?: () => React.ReactNode;
-  dashboardControls?: () => React.ReactNode;
+  dashboard?: React.ReactNode | (() => React.ReactNode);
+  dashboardControls?: React.ReactNode | (() => React.ReactNode);
   entities?: TModel[];
   entitiesCounts?: CollectionCounts;
   entitiesError?: Error;
@@ -168,9 +168,10 @@ class EntitiesPage<
       return null;
     }
 
-    const extra = isDefined(dashboardControls)
-      ? dashboardControls()
-      : undefined;
+    const extra =
+      typeof dashboardControls === 'function'
+        ? dashboardControls()
+        : dashboardControls;
     return (
       <SectionComponent
         className="entities-section"
@@ -179,7 +180,7 @@ class EntitiesPage<
         title={this.getSectionTitle()}
       >
         <Layout flex="column" grow="1">
-          {isDefined(dashboard) && dashboard()}
+          {typeof dashboard === 'function' ? dashboard() : dashboard}
           {isLoading && !isDefined(entities) ? <Loading /> : this.renderTable()}
         </Layout>
       </SectionComponent>

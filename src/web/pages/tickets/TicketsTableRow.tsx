@@ -26,12 +26,14 @@ import {type SelectionTypeType} from 'web/utils/selection-type';
 import {NA_VALUE} from 'web/utils/severity';
 
 interface TicketsRowActionHandlers {
+  onEntityDelete?: (ticket: Ticket) => void | Promise<void>;
+  onEntityRestore?: (ticket: Ticket) => void | Promise<void>;
   onTicketCloneClick?: (ticket: Ticket) => void | Promise<void>;
   onTicketDeleteClick?: (ticket: Ticket) => void | Promise<void>;
   onTicketEditClick?: (ticket: Ticket) => void | Promise<void>;
 }
 
-interface TicketsActionsProps extends TicketsRowActionHandlers {
+export interface TicketsActionsProps extends TicketsRowActionHandlers {
   entity: Ticket;
   onEntityDeselected?: (entity: Ticket) => void;
   onEntitySelected?: (entity: Ticket) => void;
@@ -94,7 +96,9 @@ const TicketsTableRow = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
+  onEntityDelete,
   onEntityDeselected,
+  onEntityRestore,
   onEntitySelected,
   onToggleDetailsClick,
   onTicketCloneClick,
@@ -146,7 +150,9 @@ const TicketsTableRow = ({
       <ActionsComponent
         entity={entity}
         selectionType={selectionType}
+        onEntityDelete={onEntityDelete}
         onEntityDeselected={onEntityDeselected}
+        onEntityRestore={onEntityRestore}
         onEntitySelected={onEntitySelected}
         onTicketCloneClick={onTicketCloneClick}
         onTicketDeleteClick={onTicketDeleteClick}

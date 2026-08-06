@@ -6,8 +6,12 @@
 import {type EntityActionData} from 'gmp/commands/entity';
 import type Response from 'gmp/http/response';
 import {type FilterType} from 'gmp/models/filter';
+import {
+  TICKET_STATUS,
+  type TicketStatus,
+  type TicketStatusValue,
+} from 'gmp/models/ticket';
 import type Ticket from 'gmp/models/ticket';
-import type {TicketStatusValue} from 'gmp/models/ticket';
 import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGetEntity from 'web/queries/useGetEntity';
@@ -40,6 +44,13 @@ interface TicketSaveInput {
   status: TicketStatusValue;
   userId: string;
 }
+
+const TICKET_STATUS_KEYS: Record<TicketStatusValue, TicketStatus> = {
+  [TICKET_STATUS.open]: 'open',
+  [TICKET_STATUS.fixed]: 'fixed',
+  [TICKET_STATUS.verified]: 'verified',
+  [TICKET_STATUS.closed]: 'closed',
+};
 
 export const useGetTickets = ({filter}: UseGetTicketsParams = {}) => {
   const gmp = useGmp();
@@ -83,7 +94,10 @@ export const useSaveTicket = ({
   const gmp = useGmp();
   return useGmpMutation<TicketSaveInput, EntityActionData>({
     gmpMethod: async data => {
-      const response = await gmp.ticket.save(data);
+      const response = await gmp.ticket.save({
+        ...data,
+        status: TICKET_STATUS_KEYS[data.status],
+      });
       return response.data;
     },
     invalidateQueryIds: ['get_tickets', 'get_ticket'],

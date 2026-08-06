@@ -53,6 +53,7 @@ import TagsTable from 'web/pages/tags/TagTable';
 import TargetsTable from 'web/pages/targets/TargetTable';
 import TasksTable from 'web/pages/tasks/TaskTable';
 import TicketsTable from 'web/pages/tickets/TicketsTable';
+import {type TicketsActionsProps} from 'web/pages/tickets/TicketsTableRow';
 import EmptyTrashButton from 'web/pages/trashcan/EmptyTrashButton';
 import TrashCanPageToolBarIcons from 'web/pages/trashcan/TrashCanPageToolBarIcons';
 import TrashCanTableContents from 'web/pages/trashcan/TrashCanTableContents';
@@ -74,6 +75,18 @@ const Col = styled.col`
 const hasEntities = (entities: Model[] | undefined): entities is Model[] => {
   return isDefined(entities) && entities.length > 0;
 };
+
+const TicketTrashActions = ({
+  entity,
+  onEntityDelete,
+  onEntityRestore,
+}: TicketsActionsProps) => (
+  <TrashActions
+    entity={entity}
+    onEntityDelete={onEntityDelete ?? (() => undefined)}
+    onEntityRestore={onEntityRestore ?? (() => undefined)}
+  />
+);
 
 const TrashCan = () => {
   const gmp = useGmp();
@@ -402,7 +415,11 @@ const TrashCan = () => {
           <span>
             <LinkTarget id="ticket" />
             <h1>{_('Tickets')}</h1>
-            <TicketsTable entities={trash.tickets} {...tableProps} />
+            <TicketsTable
+              entities={trash.tickets}
+              {...tableProps}
+              actionsComponent={TicketTrashActions}
+            />
           </span>
         )}
         {hasEntities(trash?.agentGroups) && (

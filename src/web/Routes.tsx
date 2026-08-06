@@ -701,13 +701,15 @@ const loggedInRoutes = [
       {
         path: 'tickets',
         lazy: async () => ({
-          Component: (await import('web/pages/tickets/ListPage')).default,
+          Component: (await import('web/pages/tickets/TicketsListPage'))
+            .default,
         }),
       },
       {
         path: 'ticket/:id',
         lazy: async () => ({
-          Component: (await import('web/pages/tickets/DetailsPage')).default,
+          Component: (await import('web/pages/tickets/TicketDetailsPage'))
+            .default,
         }),
       },
 
