@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor} from 'web/testing';
+import {rendererWith, screen, waitFor, fireEvent} from 'web/testing';
 import {vi} from 'vitest';
 import Dashboard, {
   DEFAULT_MAX_ITEMS_PER_ROW,
@@ -180,5 +181,105 @@ describe('Dashboard', () => {
     };
 
     expect(globals.__dashboardSortableGridCalls).toEqual([]);
+  });
+
+  test('should not reload settings when display props keep same content across rerenders', async () => {
+    const {dashboardId, defaultDisplays, gmp, permittedDisplays} =
+      createDashboardState();
+
+    const {render} = rendererWith({gmp, store: true});
+
+    const StablePropsTestComponent = () => {
+      // create new arrays on rerender to simulate prop changes,
+      // but keep the content the same
+      const [rerendered, setRerendered] = useState(false);
+      const currentDefaultDisplays = rerendered
+        ? [...defaultDisplays.map(row => [...row])]
+        : defaultDisplays;
+      const currentPermittedDisplays = rerendered
+        ? [...permittedDisplays]
+        : permittedDisplays;
+
+      return (
+        <>
+          <button
+            data-testid="rerender-dashboard"
+            type="button"
+            onClick={() => setRerendered(true)}
+          />
+          <Dashboard
+            defaultDisplays={currentDefaultDisplays}
+            id={dashboardId}
+            permittedDisplays={currentPermittedDisplays}
+          />
+        </>
+      );
+    };
+
+    render(<StablePropsTestComponent />);
+
+    await waitFor(() => {
+      expect(gmp.dashboard.getSetting).toHaveBeenCalledTimes(1);
+    });
+
+    fireEvent.click(screen.getByTestId('rerender-dashboard'));
+
+    await waitFor(() => {
+      expect(gmp.dashboard.getSetting).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  test('should reload settings when display props content changes', async () => {
+    const {
+      dashboardId,
+      defaultDisplayId,
+      defaultDisplays,
+      gmp,
+      permittedDisplays,
+    } = createDashboardState();
+    const extraDisplayId = `extra-${testCounter}`;
+
+    registerDisplay(createDisplayComponent(extraDisplayId), 'Extra display');
+
+    const {render} = rendererWith({gmp, store: true});
+
+    const ChangedPropsTestComponent = () => {
+      // create new arrays on rerender to simulate prop changes,
+      // and change the content of the arrays on rerender
+      const [rerendered, setRerendered] = useState(false);
+      const currentDefaultDisplays = rerendered
+        ? [[defaultDisplayId, extraDisplayId]]
+        : defaultDisplays;
+      const currentPermittedDisplays = rerendered
+        ? [...permittedDisplays, extraDisplayId]
+        : permittedDisplays;
+
+      return (
+        <>
+          <button
+            data-testid="rerender-with-changes"
+            type="button"
+            onClick={() => setRerendered(true)}
+          />
+          <Dashboard
+            defaultDisplays={currentDefaultDisplays}
+            id={dashboardId}
+            permittedDisplays={currentPermittedDisplays}
+          />
+        </>
+      );
+    };
+
+    render(<ChangedPropsTestComponent />);
+
+    await waitFor(() => {
+      expect(gmp.dashboard.getSetting).toHaveBeenCalledTimes(1);
+    });
+
+    fireEvent.click(screen.getByTestId('rerender-with-changes'));
+
+    await waitFor(() => {
+      expect(gmp.dashboard.getSetting).toHaveBeenCalledTimes(2);
+    });
   });
 });

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useMemo} from 'react';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {type ThunkDispatch} from '@reduxjs/toolkit';
 import memoize from 'memoize-one';
 import {connect} from 'react-redux';
@@ -129,11 +129,51 @@ export const Dashboard = ({
   const [_] = useTranslation();
   const callLoadSettings = useLatestCallback(loadSettings);
   const callSetDefaultSettings = useLatestCallback(setDefaultSettings);
+  const permittedDisplaysSignature = JSON.stringify(permittedDisplays ?? []);
+  const defaultDisplaysSignature = JSON.stringify(defaultDisplays ?? []);
+
+  const stablePermittedDisplaysRef = useRef(permittedDisplays ?? []);
+  const permittedDisplaysSignatureRef = useRef(permittedDisplaysSignature);
+  const defaultDashboardSettingsRef = useRef(
+    convertDefaultDisplays(defaultDisplays),
+  );
+  const defaultDisplaysSignatureRef = useRef(defaultDisplaysSignature);
+
+  // Update the stable permitted displays if the signature has changed
+  if (permittedDisplaysSignatureRef.current !== permittedDisplaysSignature) {
+    stablePermittedDisplaysRef.current = permittedDisplays ?? [];
+    permittedDisplaysSignatureRef.current = permittedDisplaysSignature;
+  }
+
+  // Update the default dashboard settings if the signature has changed
+  if (defaultDisplaysSignatureRef.current !== defaultDisplaysSignature) {
+    defaultDashboardSettingsRef.current =
+      convertDefaultDisplays(defaultDisplays);
+    defaultDisplaysSignatureRef.current = defaultDisplaysSignature;
+  }
+
+  const defaultDashboardSettings = defaultDashboardSettingsRef.current;
+  const stablePermittedDisplays = stablePermittedDisplaysRef.current;
+
+  const defaults = useMemo(
+    () => ({
+      ...defaultDashboardSettings,
+      permittedDisplays: stablePermittedDisplays,
+      maxItemsPerRow,
+      maxRows,
+    }),
+    [
+      defaultDashboardSettings,
+      maxItemsPerRow,
+      maxRows,
+      stablePermittedDisplays,
+    ],
+  );
 
   const components = useMemo(() => {
     const mappedComponents: Record<string, DisplayComponent> = {};
 
-    (permittedDisplays ?? []).forEach((displayId: string) => {
+    stablePermittedDisplays.forEach((displayId: string) => {
       const display = getDisplay(displayId);
 
       if (isDefined(display)) {
@@ -144,7 +184,7 @@ export const Dashboard = ({
     });
 
     return mappedComponents;
-  }, [permittedDisplays]);
+  }, [stablePermittedDisplays]);
 
   const getDisplaysByIdMemoized = useMemo(
     () => memoize((rows: DashboardRow[] = []) => getDisplaysById(rows)),
@@ -158,24 +198,14 @@ export const Dashboard = ({
   );
 
   useEffect(() => {
-    const defaultDashboardSettings = convertDefaultDisplays(defaultDisplays);
-    const defaults: DashboardSettings = {
-      ...defaultDashboardSettings,
-      permittedDisplays,
-      maxItemsPerRow,
-      maxRows,
-    };
-
     callSetDefaultSettings(id, defaultDashboardSettings);
     callLoadSettings(id, defaults);
   }, [
     callLoadSettings,
     callSetDefaultSettings,
-    defaultDisplays,
+    defaultDashboardSettings,
+    defaults,
     id,
-    maxItemsPerRow,
-    maxRows,
-    permittedDisplays,
   ]);
 
   const rows = getRowsFromSettings();
