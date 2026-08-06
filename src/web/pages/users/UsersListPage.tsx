@@ -331,6 +331,7 @@ const UsersListPage = () => {
       onCreated={onChanged}
       onDeleteError={handleError}
       onDeleted={onChanged}
+      onDialogError={handleError}
       onDownloadError={handleError}
       onDownloaded={handleDownload}
       onSaved={onChanged}

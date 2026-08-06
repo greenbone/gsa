@@ -4,9 +4,7 @@
  */
 
 import {expect, type Locator, type Page} from '@playwright/test';
-
-const username = process.env.E2E_USERNAME;
-const password = process.env.E2E_PASSWORD;
+import {randomInt} from 'node:crypto';
 const passwordDefault = 'e2e-password-123';
 
 const sortableHeaders = [
@@ -26,38 +24,7 @@ const sortFieldByHeader: Record<string, string> = {
 };
 
 const createUniqueUserName = (prefix: string) =>
-  `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-
-const login = async (page: Page) => {
-  await page.goto('/login');
-
-  const usernameInput = page.locator('input[name="username"]');
-  const passwordInput = page.locator('input[name="password"]');
-  const loginButton = page.getByTestId('login-button');
-
-  await expect(usernameInput).toBeVisible();
-  await expect(passwordInput).toBeVisible();
-
-  let loggedIn = false;
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    await usernameInput.fill(username as string);
-    await passwordInput.fill(password as string);
-    await loginButton.click();
-
-    try {
-      await expect(page).not.toHaveURL(/\/login(?:$|\?)/, {timeout: 7000});
-      loggedIn = true;
-      break;
-    } catch {
-      if (attempt === 1) {
-        throw new Error('Login failed after retry');
-      }
-    }
-  }
-
-  expect(loggedIn).toBe(true);
-  await expect(page.getByTestId('error')).toHaveCount(0);
-};
+  `${prefix}-${Date.now()}-${randomInt(10000)}`;
 
 const gotoUsersPage = async (page: Page) => {
   await page.goto('/users');
@@ -401,13 +368,10 @@ const isDescending = (values: string[]) =>
   );
 
 export {
-  username,
-  password,
   passwordDefault,
   sortableHeaders,
   sortFieldByHeader,
   createUniqueUserName,
-  login,
   gotoUsersPage,
   ensureUsersListAccess,
   getPowerFilterInput,
