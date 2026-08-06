@@ -12,7 +12,7 @@ import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
-import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
+import CreateTicketDialog from 'web/pages/tickets/TicketCreateDialog';
 import EditTicketDialog from 'web/pages/tickets/EditDialog';
 import {
   loadEntities as loadUsers,
