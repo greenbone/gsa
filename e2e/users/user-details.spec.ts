@@ -5,6 +5,12 @@
 
 import {expect, test} from '@playwright/test';
 import {
+  credentialsRequiredMessage,
+  hasCredentials,
+  password,
+  username,
+} from '../credentials';
+import {
   applyFilter,
   closeTopDialog,
   createUserFromCurrentPage,
@@ -20,14 +26,12 @@ import {
   resetFilter,
   saveUserDialog,
   userLinkByName,
-  username,
-  password,
 } from './users.helpers';
 
 test.describe('users page flows', () => {
   test.skip(
-    !username || !password,
-    'Set E2E_USERNAME and E2E_PASSWORD in .env.e2e.local or shell environment.',
+    !hasCredentials,
+    credentialsRequiredMessage,
   );
 
   test.beforeEach(async ({page}) => {

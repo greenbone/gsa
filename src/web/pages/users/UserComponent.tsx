@@ -39,6 +39,7 @@ interface UserComponentProps {
   onCreated?: (response: EntityActionData) => void;
   onDeleteError?: (error: Error) => void;
   onDeleted?: () => void;
+  onDialogError?: (error: Error) => void;
   onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
   onSaveError?: (error: Error) => void;
@@ -55,6 +56,7 @@ const UserComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
+  onDialogError,
   onSaved,
   onSaveError,
 }: UserComponentProps) => {
@@ -151,6 +153,9 @@ const UserComponent = ({
       }
     } catch (error) {
       console.error('Error loading user dialog data:', error);
+      onDialogError?.(
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   };
 

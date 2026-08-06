@@ -4,9 +4,7 @@
  */
 
 import {expect, test, type BrowserContext, type Page} from '@playwright/test';
-
-const username = process.env.E2E_USERNAME;
-const password = process.env.E2E_PASSWORD;
+import {password, username} from '../credentials';
 
 interface MenuLink {
   href: string;
@@ -151,8 +149,8 @@ test.describe('sidebar menu links', () => {
 
     await login(page);
 
-    await waitForSidebarLinks(page);
     await expandSidebarSections(page);
+    await waitForSidebarLinks(page);
     const menuLinks = await collectVisibleMenuLinks(page);
 
     expect(menuLinks.length).toBeGreaterThan(0);

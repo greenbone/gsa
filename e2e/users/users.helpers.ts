@@ -4,9 +4,8 @@
  */
 
 import {expect, type Locator, type Page} from '@playwright/test';
-
-const username = process.env.E2E_USERNAME;
-const password = process.env.E2E_PASSWORD;
+import {randomInt} from 'node:crypto';
+import {password, username} from '../credentials';
 const passwordDefault = 'e2e-password-123';
 
 const sortableHeaders = [
@@ -26,7 +25,7 @@ const sortFieldByHeader: Record<string, string> = {
 };
 
 const createUniqueUserName = (prefix: string) =>
-  `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  `${prefix}-${Date.now()}-${randomInt(10000)}`;
 
 const login = async (page: Page) => {
   await page.goto('/login');
@@ -401,8 +400,6 @@ const isDescending = (values: string[]) =>
   );
 
 export {
-  username,
-  password,
   passwordDefault,
   sortableHeaders,
   sortFieldByHeader,
