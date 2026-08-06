@@ -105,6 +105,38 @@ describe('TicketComponent', () => {
     });
   });
 
+  test('should close create dialog after creating a ticket', async () => {
+    const gmp = createGmp();
+    const onCreated = testing.fn();
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+    });
+    render(
+      <TicketComponent onCreated={onCreated}>
+        {({createFromResult}) => (
+          <Button
+            data-testid="open-create"
+            onClick={() => createFromResult({id: 'r1', name: 'Result 1'})}
+          />
+        )}
+      </TicketComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open-create'));
+    await screen.findByText(/Create new Ticket for Result/);
+    fireEvent.change(screen.getByRole('textbox', {name: 'Note'}), {
+      target: {value: 'Ticket note'},
+    });
+    fireEvent.click(screen.getDialogSaveButton());
+
+    await waitFor(() => {
+      expect(onCreated).toHaveBeenCalledWith({data: {id: 'created'}});
+      expect(screen.queryByText(/Create new Ticket for Result/)).toBeNull();
+    });
+  });
+
   test('should open and close edit dialog', async () => {
     const {render} = rendererWith({
       gmp: createGmp(),

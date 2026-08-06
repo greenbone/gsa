@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, within} from 'web/testing';
+import {rendererWith, fireEvent, screen, waitFor, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import QueryFilter from 'gmp/models/filter/query-filter';
@@ -127,7 +127,7 @@ const createGmp = ({
     reloadInterval,
     enableEPSS,
   },
-  session: createSession({timezone: 'CET'}),
+  session: createSession({timezone: 'CET', token: 'test-token'}),
   user: {
     currentSettings,
   },
@@ -370,6 +370,6 @@ describe('ResultDetailsPage tests', () => {
 
     // load users for create ticket dialog
     fireEvent.click(screen.getByTitle('Create new Ticket'));
-    expect(gmp.users.get).toHaveBeenCalled();
+    await waitFor(() => expect(gmp.users.get).toHaveBeenCalled());
   });
 });
