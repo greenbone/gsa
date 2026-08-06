@@ -13,7 +13,7 @@ import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import CreateTicketDialog from 'web/pages/tickets/TicketCreateDialog';
-import EditTicketDialog from 'web/pages/tickets/EditDialog';
+import TicketEditDialog from 'web/pages/tickets/TicketEditDialog';
 import {
   loadEntities as loadUsers,
   selector as usersSelector,
@@ -137,7 +137,7 @@ const TicketComponent = ({
             />
           )}
           {editDialogVisible && (
-            <EditTicketDialog
+            <TicketEditDialog
               closedNote={ticket.closedNote}
               fixedNote={ticket.fixedNote}
               openNote={ticket.openNote}

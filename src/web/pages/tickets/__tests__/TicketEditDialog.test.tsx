@@ -3,16 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
 import {
-  getSelectItemElementsForSelect,
-  screen,
-  render,
   fireEvent,
+  getSelectItemElementsForSelect,
+  rendererWith,
+  screen,
 } from 'web/testing';
 import {TICKET_STATUS} from 'gmp/models/ticket';
 import User from 'gmp/models/user';
-import EditTicketDialog from 'web/pages/tickets/EditDialog';
+import TicketEditDialog from 'web/pages/tickets/TicketEditDialog';
 
 const u1 = User.fromElement({
   _id: 'u1',
@@ -25,13 +25,14 @@ const u2 = User.fromElement({
 
 const users = [u1, u2];
 
-describe('EditTicketDialog component tests', () => {
+describe('TicketEditDialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <EditTicketDialog
+      <TicketEditDialog
         status={TICKET_STATUS.open}
         ticketId="t1"
         userId="u1"
@@ -48,8 +49,9 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <EditTicketDialog
+      <TicketEditDialog
         closedNote="Ticket has been closed"
         fixedNote="Ticket has been fixed"
         openNote="Ticket has been opened"
@@ -77,8 +79,9 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <EditTicketDialog
+      <TicketEditDialog
         closedNote="Ticket has been closed"
         fixedNote="Ticket has been fixed"
         openNote="Ticket has been opened"
@@ -92,7 +95,7 @@ describe('EditTicketDialog component tests', () => {
     );
 
     const saveButton = screen.getDialogSaveButton();
-    fireEvent.click(saveButton);
+    saveButton.click();
 
     expect(handleSave).toHaveBeenCalledWith({
       status: TICKET_STATUS.open,
@@ -108,8 +111,9 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <EditTicketDialog
+      <TicketEditDialog
         fixedNote="Ticket has been fixed"
         status={TICKET_STATUS.open}
         ticketId="t1"
@@ -126,7 +130,7 @@ describe('EditTicketDialog component tests', () => {
     fireEvent.click(selectItems[1]);
 
     const saveButton = screen.getDialogSaveButton();
-    fireEvent.click(saveButton);
+    saveButton.click();
 
     expect(handleSave).toHaveBeenCalledWith({
       status: TICKET_STATUS.fixed,
@@ -142,8 +146,9 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <EditTicketDialog
+      <TicketEditDialog
         openNote="Ticket has been opened"
         status={TICKET_STATUS.open}
         ticketId="t1"
@@ -160,7 +165,7 @@ describe('EditTicketDialog component tests', () => {
     fireEvent.click(selectItems[1]);
 
     const saveButton = screen.getDialogSaveButton();
-    fireEvent.click(saveButton);
+    saveButton.click();
 
     expect(handleSave).toHaveBeenCalledWith({
       status: TICKET_STATUS.open,
@@ -172,12 +177,13 @@ describe('EditTicketDialog component tests', () => {
     });
   });
 
-  test('should not save invalid form states and render error bubble', () => {
+  test('should not save invalid form states', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <EditTicketDialog
+      <TicketEditDialog
         openNote="Ticket has been opened."
         status={TICKET_STATUS.closed}
         ticketId="t1"
@@ -189,7 +195,7 @@ describe('EditTicketDialog component tests', () => {
     );
 
     const saveButton = screen.getDialogSaveButton();
-    fireEvent.click(saveButton);
+    saveButton.click();
     expect(handleSave).not.toHaveBeenCalled();
   });
 
@@ -197,8 +203,9 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <EditTicketDialog
+      <TicketEditDialog
         status={TICKET_STATUS.open}
         ticketId="t1"
         userId="u1"
@@ -209,7 +216,7 @@ describe('EditTicketDialog component tests', () => {
     );
 
     const closeButton = screen.getDialogCloseButton();
-    fireEvent.click(closeButton);
+    closeButton.click();
     expect(handleClose).toHaveBeenCalled();
   });
 });
