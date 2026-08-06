@@ -173,10 +173,12 @@ const UserDetailsPage = () => {
               const tabs = [
                 {
                   label: _('Information'),
+                  testId: 'user-details-tab-information',
                   panel: <UserDetails entity={entity} />,
                 },
                 {
                   label: _('User Tags'),
+                  testId: 'user-details-tab-tags',
                   entities: entity.userTags,
                   panel: (
                     <EntityTags
@@ -188,6 +190,7 @@ const UserDetailsPage = () => {
                 },
                 {
                   label: _('Permissions'),
+                  testId: 'user-details-tab-permissions',
                   entities: permissions,
                   panel: (
                     <EntityPermissions
@@ -211,13 +214,19 @@ const UserDetailsPage = () => {
                   <TabsContainer flex="column" grow="1">
                     <TabLayout align={['start', 'end']} grow="1">
                       <TabList align={['start', 'stretch']}>
-                        {tabs.map(({label, entities}) =>
+                        {tabs.map(({label, entities, testId}) =>
                           isDefined(entities) ? (
-                            <EntitiesTab key={label} entities={entities}>
+                            <EntitiesTab
+                              key={label}
+                              data-testid={testId}
+                              entities={entities}
+                            >
                               {label}
                             </EntitiesTab>
                           ) : (
-                            <Tab key={label}>{label}</Tab>
+                            <Tab key={label} data-testid={testId}>
+                              {label}
+                            </Tab>
                           ),
                         )}
                       </TabList>
