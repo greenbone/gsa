@@ -11,6 +11,7 @@ export interface TabProps {
   isActiveTab?: boolean;
   children?: ReactNode;
   className?: string;
+  'data-testid'?: string;
   disabled?: boolean;
   onActivateTab?: (event: MouseEvent<HTMLDivElement>) => void;
 }
@@ -70,6 +71,7 @@ const Tab = ({
   isActiveTab = false,
   children,
   className,
+  'data-testid': dataTestId,
   disabled = false,
   onActivateTab,
 }: TabProps) => (
@@ -77,6 +79,7 @@ const Tab = ({
     $activeTab={isActiveTab}
     aria-selected={isActiveTab}
     className={className}
+    data-testid={dataTestId}
     disabled={disabled}
     role="tab"
     onClick={disabled ? undefined : onActivateTab}
