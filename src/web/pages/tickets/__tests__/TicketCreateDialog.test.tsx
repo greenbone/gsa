@@ -3,16 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
 import {
   changeInputValue,
   getSelectItemElementsForSelect,
+  rendererWith,
   screen,
-  render,
-  fireEvent,
 } from 'web/testing';
 import User from 'gmp/models/user';
-import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
+import TicketCreateDialog from 'web/pages/tickets/TicketCreateDialog';
 
 const u1 = User.fromElement({
   _id: 'u1',
@@ -25,14 +24,15 @@ const u2 = User.fromElement({
 
 const users = [u1, u2];
 
-describe('CreateTicketDialog component tests', () => {
+describe('TicketCreateDialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleUserIdChange = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <CreateTicketDialog
+      <TicketCreateDialog
         resultId="r1"
         userId="u1"
         users={users}
@@ -50,8 +50,9 @@ describe('CreateTicketDialog component tests', () => {
     const handleSave = testing.fn();
     const handleUserIdChange = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <CreateTicketDialog
+      <TicketCreateDialog
         resultId="r1"
         userId="u1"
         users={users}
@@ -64,7 +65,7 @@ describe('CreateTicketDialog component tests', () => {
     const select = screen.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
     expect(selectItems.length).toEqual(2);
-    fireEvent.click(selectItems[1]);
+    selectItems[1].click();
     expect(handleUserIdChange).toHaveBeenCalledWith('u2', 'userId');
   });
 
@@ -73,8 +74,9 @@ describe('CreateTicketDialog component tests', () => {
     const handleSave = testing.fn();
     const handleUserIdChange = testing.fn();
 
+    const {render} = rendererWith({capabilities: true});
     render(
-      <CreateTicketDialog
+      <TicketCreateDialog
         resultId="r1"
         userId="u1"
         users={users}
@@ -85,7 +87,7 @@ describe('CreateTicketDialog component tests', () => {
     );
 
     const closeButton = screen.getDialogCloseButton();
-    fireEvent.click(closeButton);
+    closeButton.click();
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -94,27 +96,9 @@ describe('CreateTicketDialog component tests', () => {
     const handleSave = testing.fn();
     const handleUserIdChange = testing.fn();
 
-    const {baseElement} = render(
-      <CreateTicketDialog
-        resultId="r1"
-        userId="u1"
-        users={users}
-        onClose={handleClose}
-        onSave={handleSave}
-        onUserIdChange={handleUserIdChange}
-      />,
-    );
-
-    expect(baseElement).toBeVisible();
-  });
-
-  test('should allow to close the dialog', () => {
-    const handleClose = testing.fn();
-    const handleSave = testing.fn();
-    const handleUserIdChange = testing.fn();
-
+    const {render} = rendererWith({capabilities: true});
     render(
-      <CreateTicketDialog
+      <TicketCreateDialog
         resultId="r1"
         userId="u1"
         users={users}
@@ -124,32 +108,13 @@ describe('CreateTicketDialog component tests', () => {
       />,
     );
 
-    const closeButton = screen.getDialogCloseButton();
-    fireEvent.click(closeButton);
-    expect(handleClose).toHaveBeenCalled();
-  });
-
-  test('should allow to save the dialog', () => {
-    const handleClose = testing.fn();
-    const handleSave = testing.fn();
-    const handleUserIdChange = testing.fn();
-
-    const {baseElement} = render(
-      <CreateTicketDialog
-        resultId="r1"
-        userId="u1"
-        users={users}
-        onClose={handleClose}
-        onSave={handleSave}
-        onUserIdChange={handleUserIdChange}
-      />,
-    );
-
-    const noteInput = baseElement.querySelector('textarea');
+    const noteInput = screen.getByRole('textbox', {
+      name: 'Note',
+    });
     changeInputValue(noteInput, 'foobar');
 
     const saveButton = screen.getDialogSaveButton();
-    fireEvent.click(saveButton);
+    saveButton.click();
 
     expect(handleSave).toHaveBeenCalledWith({
       resultId: 'r1',
@@ -163,8 +128,9 @@ describe('CreateTicketDialog component tests', () => {
     const handleSave = testing.fn();
     const handleUserIdChange = testing.fn();
 
-    const {baseElement} = render(
-      <CreateTicketDialog
+    const {render} = rendererWith({capabilities: true});
+    render(
+      <TicketCreateDialog
         resultId="r1"
         userId="u1"
         users={users}
@@ -175,10 +141,12 @@ describe('CreateTicketDialog component tests', () => {
     );
 
     const saveButton = screen.getDialogSaveButton();
-    const noteInput = baseElement.querySelector('textarea');
+    const noteInput = screen.getByRole('textbox', {
+      name: 'Note',
+    });
     changeInputValue(noteInput, '');
 
-    fireEvent.click(saveButton);
+    saveButton.click();
     expect(handleSave).not.toHaveBeenCalled();
   });
 });
