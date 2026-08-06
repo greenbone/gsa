@@ -53,7 +53,7 @@ export const convertDefaultDisplays = (
   ),
 });
 
-export const removeDisplay = (rows: DashboardRow[] = [], id?: string) =>
+export const removeDisplay = (rows: DashboardRow[] = [], id: string) =>
   rows
     .map(row => ({...row, items: row.items.filter(item => item.id !== id)}))
     .filter(row => row.items.length > 0);
@@ -123,12 +123,12 @@ export const addDisplayToSettings = (
   const lastRow =
     isArray(currentRows) && currentRows.length > 0
       ? currentRows[currentRows.length - 1]
-      : {items: [] as DashboardDisplay[]};
+      : {id: uuidFunc(), items: []};
 
   const rows = isArray(currentRows) ? [...currentRows] : [];
   const display = createDisplay(displayId, undefined, uuidFunc);
 
-  let newRow;
+  let newRow: DashboardRow;
   if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
     newRow = createRow([display], undefined, uuidFunc);
   } else {
