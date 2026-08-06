@@ -147,7 +147,7 @@ describe('HostsCommand tests', () => {
         'bulk_selected:456': 1,
         cmd: 'bulk_export',
         resource_type: 'asset',
-        assetType: 'host',
+        asset_type: 'host',
         bulk_select: 1,
       },
     });
@@ -169,7 +169,7 @@ describe('HostsCommand tests', () => {
         'bulk_selected:456': 1,
         cmd: 'bulk_export',
         resource_type: 'asset',
-        assetType: 'host',
+        asset_type: 'host',
         bulk_select: 1,
       },
     });

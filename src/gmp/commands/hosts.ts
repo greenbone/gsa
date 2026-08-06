@@ -50,7 +50,7 @@ class HostsCommand extends EntitiesCommand<Host> {
     const data = {
       cmd: 'bulk_export',
       resource_type: this.name,
-      assetType: 'host',
+      asset_type: 'host',
       bulk_select: BULK_SELECT_BY_IDS,
     };
     for (const id of ids) {
