@@ -5,24 +5,60 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
+import type Gmp from 'gmp/gmp';
+import type Filter from 'gmp/models/filter';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import {loadEntities, selector} from 'web/store/entities/filters';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/prop-types';
-import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/Render';
+import {
+  type RenderSelectItemProps,
+  renderSelectItems,
+  UNSET_VALUE,
+} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 
-class FilterSelection extends React.Component {
-  constructor(...args) {
-    super(...args);
+interface FilterSelectionRenderProps {
+  filter?: Filter;
+  selectFilter: () => void;
+}
+
+interface StateProps {
+  filters?: Filter[];
+}
+
+interface DispatchProps {
+  loadFilters: () => void;
+}
+
+interface TranslationProps {
+  _: (text: string) => string;
+}
+
+interface FilterSelectionProps
+  extends StateProps, DispatchProps, TranslationProps {
+  children: (props: FilterSelectionRenderProps) => React.ReactNode;
+  filterId?: string;
+  filtersFilter: Filter;
+  onFilterIdChanged?: (filterId: string | undefined) => void;
+}
+
+interface FilterSelectionState {
+  showDialog: boolean;
+}
+
+class FilterSelection extends React.Component<
+  FilterSelectionProps,
+  FilterSelectionState
+> {
+  constructor(props: FilterSelectionProps) {
+    super(props);
 
     this.state = {
       showDialog: false,
-      filter: undefined,
     };
 
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
@@ -46,7 +82,7 @@ class FilterSelection extends React.Component {
     this.setState({showDialog: true});
   }
 
-  handleSaveDialog({filterId = UNSET_VALUE}) {
+  handleSaveDialog({filterId = UNSET_VALUE}: {filterId?: string}) {
     const {onFilterIdChanged} = this.props;
 
     this.closeDialog();
@@ -64,8 +100,9 @@ class FilterSelection extends React.Component {
     const filter = isDefined(filterId)
       ? filters.find(f => f.id === filterId)
       : undefined;
+
     return (
-      <React.Fragment>
+      <>
         {children({
           filter,
           selectFilter: this.handleOpenDialog,
@@ -84,16 +121,10 @@ class FilterSelection extends React.Component {
             {({values, onValueChange}) => (
               <FormGroup title={_('Filter')}>
                 <Select
-                  items={[
-                    {
-                      label: UNSET_LABEL,
-                      value: UNSET_VALUE,
-                    },
-                    ...filters.map(f => ({
-                      label: f.name,
-                      value: f.id,
-                    })),
-                  ]}
+                  items={renderSelectItems(
+                    filters as RenderSelectItemProps[],
+                    UNSET_VALUE,
+                  )}
                   name="filterId"
                   value={values.filterId}
                   onChange={onValueChange}
@@ -102,27 +133,15 @@ class FilterSelection extends React.Component {
             )}
           </SaveDialog>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
 
-FilterSelection.propTypes = {
-  children: PropTypes.func.isRequired,
-  filterId: PropTypes.id,
-  filters: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.id,
-      name: PropTypes.string,
-    }),
-  ),
-  filtersFilter: PropTypes.filter.isRequired,
-  loadFilters: PropTypes.func.isRequired,
-  onFilterIdChanged: PropTypes.func,
-  _: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state, {filtersFilter}) => {
+const mapStateToProps = (
+  state: unknown,
+  {filtersFilter}: {filtersFilter: Filter},
+): StateProps => {
   if (!isDefined(filtersFilter)) {
     return {
       filters: [],
@@ -130,13 +149,18 @@ const mapStateToProps = (state, {filtersFilter}) => {
   }
 
   const filterSelector = selector(state);
-  const filters = filterSelector.getEntities(filtersFilter);
+  const filters: Filter[] = filterSelector.getEntities(filtersFilter);
+
   return {
     filters: hasValue(filters) ? filters : [],
   };
 };
 
-const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
+const mapDispatchToProps = (
+  dispatch: unknown,
+  {gmp, filtersFilter}: {gmp: Gmp; filtersFilter: Filter},
+): DispatchProps => ({
+  // @ts-expect-error dispatch is a redux thunk
   loadFilters: () => dispatch(loadEntities(gmp)(filtersFilter)),
 });
 
