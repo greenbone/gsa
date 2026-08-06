@@ -3,59 +3,46 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {scaleOrdinal, scaleLinear} from 'd3-scale';
+import {scaleLinear, scaleOrdinal} from 'd3-scale';
 import {_l} from 'gmp/locale/lang';
 import {COMPLIANCE} from 'gmp/models/compliance';
 import {parseInt} from 'gmp/parser';
 import {
-  ERROR,
+  CRITICAL,
   DEBUG,
+  ERROR,
   FALSE_POSITIVE,
+  HIGH,
   LOG,
   LOW,
   MEDIUM,
-  HIGH,
   NA,
-  CRITICAL,
 } from 'web/utils/severity';
 import Theme from 'web/utils/theme';
 
-/**
- * Calculates the total count from an array of groups.
- *
- * @param {Array} groups - An array of group objects, each containing a `count` property.
- * @returns {number} The total count of all groups. Returns 0 if the array is empty.
- */
-export const totalCount = (groups = []) => {
+type GroupWithCount = {
+  count?: string | number;
+};
+
+export const totalCount = (groups: GroupWithCount[] = []): number => {
   if (groups.length === 0) {
     return 0;
   }
+
   return groups
-    .map(group => parseInt(group.count))
+    .map(group => parseInt(group.count) as number)
     .reduce((prev, cur) => prev + cur);
 };
 
-/**
- * Calculates the percentage of a count relative to a sum.
- *
- * @param {number|string} count - The count value to be converted to a percentage.
- * @param {number} sum - The total sum value.
- * @returns {string} The percentage value as a string with one decimal place.
- */
-export const percent = (count, sum) =>
-  ((parseInt(count) / sum) * 100).toFixed(1);
+export const percent = (count: string | number, sum: number): string =>
+  (((parseInt(count) as number) / sum) * 100).toFixed(1);
 
-/**
- * Generates a random RGB color code.
- *
- * @returns {string} A random hex color code in the format '#RRGGBB'.
- */
-export const randomColor = () => {
+export const randomColor = (): string => {
   const color = Math.floor(Math.random() * 0xffffff).toString(16);
   return '#' + color.padStart(6, '0');
 };
 
-export const activeDaysColorScale = scaleOrdinal()
+export const activeDaysColorScale = scaleOrdinal<number, string>()
   .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
   .range([
     '#01558e',
@@ -84,7 +71,7 @@ export const riskFactorColorScale = scaleOrdinal()
     Theme.severityClassCritical,
   ]);
 
-export const vulnsByHostsColorScale = scaleLinear()
+export const vulnsByHostsColorScale = scaleLinear<string>()
   .domain([0, 0.05, 0.25, 0.5, 0.75, 0.95, 1.0])
   .range([
     '#008644',
@@ -112,9 +99,9 @@ export const QOD_TYPES = {
   executable_version_unreliable: _l('Unreliable exec. version'),
   remote_vul: _l('Remote vulnerability'),
   exploit: _l('Exploit'),
-};
+} as const;
 
-export const qodColorScale = scaleOrdinal()
+export const qodColorScale = scaleOrdinal<number, string>()
   .domain([1, 30, 50, 70, 75, 80, 95, 97, 98, 99, 100])
   .range([
     '#011f4b',
@@ -156,7 +143,7 @@ export const SEC_INFO_TYPES = {
   cve: _l('CVEs'),
   dfn_cert_adv: _l('DFN-CERT Advisories'),
   nvt: _l('NVTs'),
-};
+} as const;
 
 export const secInfoTypeColorScale = scaleOrdinal()
   .domain(Object.keys(SEC_INFO_TYPES))
