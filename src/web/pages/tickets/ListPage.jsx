@@ -15,7 +15,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import TicketsDashboard, {
   TICKETS_DASHBOARD_ID,
 } from 'web/pages/tickets/dashboard';
-import Table from 'web/pages/tickets/Table';
+import Table from 'web/pages/tickets/TicketsTable';
 import TicketComponent from 'web/pages/tickets/TicketComponent';
 import TicketFilterDialog from 'web/pages/tickets/TicketFilterDialog';
 import {

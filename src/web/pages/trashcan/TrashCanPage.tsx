@@ -52,7 +52,7 @@ import SchedulesTable from 'web/pages/schedules/Table';
 import TagsTable from 'web/pages/tags/TagTable';
 import TargetsTable from 'web/pages/targets/TargetTable';
 import TasksTable from 'web/pages/tasks/TaskTable';
-import TicketsTable from 'web/pages/tickets/Table';
+import TicketsTable from 'web/pages/tickets/TicketsTable';
 import EmptyTrashButton from 'web/pages/trashcan/EmptyTrashButton';
 import TrashCanPageToolBarIcons from 'web/pages/trashcan/TrashCanPageToolBarIcons';
 import TrashCanTableContents from 'web/pages/trashcan/TrashCanTableContents';
