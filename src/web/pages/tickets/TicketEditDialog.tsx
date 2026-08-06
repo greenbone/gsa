@@ -3,23 +3,46 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
-import {TICKET_STATUS, TICKET_STATUS_TRANSLATIONS} from 'gmp/models/ticket';
+import {useState} from 'react';
+import {
+  TICKET_STATUS,
+  TICKET_STATUS_TRANSLATIONS,
+  TICKET_STATUSES,
+  type TicketStatusValue,
+} from 'gmp/models/ticket';
+import type User from 'gmp/models/user';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Select from 'web/components/form/Select';
 import TextArea from 'web/components/form/TextArea';
 import useFormValidation from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
 import useTranslation from 'web/hooks/useTranslation';
-import {editTicketRules as validationRules} from 'web/pages/tickets/validation-rules';
-import PropTypes from 'web/utils/prop-types';
+import {editTicketRules} from 'web/pages/tickets/validation-rules';
 import {renderSelectItems} from 'web/utils/Render';
 
-const STATUS = [TICKET_STATUS.open, TICKET_STATUS.fixed, TICKET_STATUS.closed];
+interface TicketEditDialogProps {
+  closedNote?: string;
+  fixedNote?: string;
+  openNote?: string;
+  ticketId: string;
+  title?: string;
+  status: TicketStatusValue;
+  userId: string;
+  users?: User[];
+  onClose: () => void;
+  onSave: (data: {
+    status: TicketStatusValue;
+    ticketId: string;
+    userId: string;
+    openNote: string;
+    closedNote: string;
+    fixedNote: string;
+  }) => void;
+}
 
 const fieldsToValidate = ['openNote', 'closedNote', 'fixedNote'];
 
-const EditTicketDialog = ({
+const TicketEditDialog = ({
   closedNote = '',
   fixedNote = '',
   openNote = '',
@@ -30,9 +53,9 @@ const EditTicketDialog = ({
   users,
   onClose,
   onSave,
-}) => {
+}: TicketEditDialogProps) => {
   const [_] = useTranslation();
-  const [error, setError] = useState();
+  const [error, setError] = useState<string | undefined>();
   const [formValues, handleValueChange] = useFormValues({
     ticketId,
     closedNote,
@@ -41,12 +64,18 @@ const EditTicketDialog = ({
     status,
     userId,
   });
-  const {errors, validate} = useFormValidation(validationRules, formValues, {
-    onValidationSuccess: onSave,
-    onValidationError: setError,
-    fieldsToValidate,
-  });
-  const STATUS_ITEMS = STATUS.map(ticketStatus => ({
+
+  const {errors, validate} = useFormValidation(
+    editTicketRules as never,
+    formValues,
+    {
+      onValidationSuccess: onSave,
+      onValidationError: setError,
+      fieldsToValidate,
+    },
+  );
+
+  const STATUS_ITEMS = TICKET_STATUSES.map(ticketStatus => ({
     value: ticketStatus,
     label: `${TICKET_STATUS_TRANSLATIONS[ticketStatus]}`,
   }));
@@ -59,7 +88,7 @@ const EditTicketDialog = ({
       title={title}
       values={formValues}
       onClose={onClose}
-      onErrorClose={() => setError()}
+      onErrorClose={() => setError(undefined)}
       onSave={validate}
     >
       {({values}) => (
@@ -72,7 +101,9 @@ const EditTicketDialog = ({
             onChange={handleValueChange}
           />
           <Select
-            items={renderSelectItems(users)}
+            items={renderSelectItems(
+              users?.map(user => ({id: user.id ?? '', name: user.name ?? ''})),
+            )}
             label={_('Assign To User')}
             name="userId"
             value={values.userId}
@@ -111,17 +142,4 @@ const EditTicketDialog = ({
   );
 };
 
-EditTicketDialog.propTypes = {
-  closedNote: PropTypes.string,
-  fixedNote: PropTypes.string,
-  openNote: PropTypes.string,
-  status: PropTypes.oneOf(STATUS),
-  ticketId: PropTypes.id.isRequired,
-  title: PropTypes.toString,
-  userId: PropTypes.id.isRequired,
-  users: PropTypes.arrayOf(PropTypes.model),
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-};
-
-export default EditTicketDialog;
+export default TicketEditDialog;

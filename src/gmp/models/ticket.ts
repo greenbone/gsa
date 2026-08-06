@@ -11,6 +11,8 @@ import {isDefined, isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 export type TicketStatus = keyof typeof TICKET_STATUS;
+export type TicketStatusValue =
+  (typeof TICKET_STATUS)[keyof typeof TICKET_STATUS];
 
 export interface TicketElement extends ModelElement {
   assigned_to?: {
@@ -85,6 +87,12 @@ export const TICKET_STATUS_TRANSLATIONS = {
   [TICKET_STATUS.verified]: _l('Fix Verified'),
   [TICKET_STATUS.closed]: _l('Closed'),
 } as const;
+
+export const TICKET_STATUSES: TicketStatusValue[] = [
+  TICKET_STATUS.open,
+  TICKET_STATUS.fixed,
+  TICKET_STATUS.closed,
+];
 
 export const getTranslatableTicketStatus = (status: TicketStatus) =>
   `${TICKET_STATUS_TRANSLATIONS[status]}`;

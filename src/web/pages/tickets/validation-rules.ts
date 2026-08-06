@@ -4,10 +4,8 @@
  */
 
 import {_} from 'gmp/locale/lang';
-import {TICKET_STATUS} from 'gmp/models/ticket';
+import {type TicketStatusValue} from 'gmp/models/ticket';
 import {shouldBeNonEmpty} from 'web/components/form/useFormValidation';
-
-type TicketStatusValue = (typeof TICKET_STATUS)[keyof typeof TICKET_STATUS];
 
 interface EditTicketValues {
   status: TicketStatusValue;
