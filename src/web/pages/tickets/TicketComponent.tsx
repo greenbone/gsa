@@ -5,8 +5,11 @@
 
 import {type ReactNode, useState} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
-import type Ticket from 'gmp/models/ticket';
-import {TICKET_STATUS, type TicketStatusValue} from 'gmp/models/ticket';
+import {
+  TICKET_STATUS,
+  type TicketStatusValue,
+  type default as Ticket,
+} from 'gmp/models/ticket';
 import type User from 'gmp/models/user';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
@@ -40,7 +43,7 @@ interface TicketComponentProps {
   onCloneError?: (error: Error) => void;
   onCloned?: (response: EntityActionData) => void;
   onCreateError?: (error: Error) => void;
-  onCreated?: (response: EntityActionData) => void;
+  onCreated?: (response: {data: EntityActionData}) => void;
   onDeleteError?: (error: Error) => void;
   onDeleted?: () => void;
   onDownloadError?: (error: Error) => void;
@@ -65,18 +68,19 @@ const TicketComponent = ({
   const gmp = useGmp();
   const [_] = useTranslation();
 
-  const {data: usersData} = useGetUsers();
-  const users = usersData?.entities ?? [];
-
   const [createDialogVisible, setCreateDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [usersEnabled, setUsersEnabled] = useState(false);
+
+  const {data: usersData} = useGetUsers({enabled: usersEnabled});
+  const users = usersData?.entities ?? [];
 
   const [result, setResult] = useState<{id: string; name?: string}>();
   const [ticket, setTicket] = useState<Ticket>();
   const [userId, setUserId] = useState<string>();
 
   const createMutation = useCreateTicket({
-    onSuccess: onCreated,
+    onSuccess: response => onCreated?.({data: response}),
     onError: onCreateError,
   });
   const saveMutation = useSaveTicket({
@@ -100,6 +104,7 @@ const TicketComponent = ({
   );
 
   const handleOpenCreateDialog = (resultData: {id: string; name?: string}) => {
+    setUsersEnabled(true);
     setResult(resultData);
     setCreateDialogVisible(true);
   };
@@ -110,6 +115,7 @@ const TicketComponent = ({
   };
 
   const handleOpenEditDialog = (ticketData: Ticket) => {
+    setUsersEnabled(true);
     setTicket(ticketData);
     setEditDialogVisible(true);
   };
@@ -120,20 +126,14 @@ const TicketComponent = ({
   };
 
   const handleOpenSolvedDialog = (ticketData: Ticket) => {
-    setTicket(
-      Object.assign({}, ticketData, {
-        status: TICKET_STATUS.fixed,
-      }) as Ticket,
-    );
+    setUsersEnabled(true);
+    setTicket({...ticketData, status: TICKET_STATUS.fixed} as Ticket);
     setEditDialogVisible(true);
   };
 
   const handleOpenClosedDialog = (ticketData: Ticket) => {
-    setTicket(
-      Object.assign({}, ticketData, {
-        status: TICKET_STATUS.closed,
-      }) as Ticket,
-    );
+    setUsersEnabled(true);
+    setTicket({...ticketData, status: TICKET_STATUS.closed} as Ticket);
     setEditDialogVisible(true);
   };
 

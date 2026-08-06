@@ -17,7 +17,8 @@
       "gmp/*": ["./src/gmp/*"],
       "web/*": ["./src/web/*"],
       "version": ["./src/version.js"],
-      "@gsa/testing": ["./src/testing.js"]
+      "@gsa/testing": ["./src/testing.js"],
+      "e2e/*": ["./e2e/*"]
     }
   },
   "include": ["src", "vitest.projects.ts"],

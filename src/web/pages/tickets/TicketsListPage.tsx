@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import {useCallback} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Rejection from 'gmp/http/rejection';
@@ -13,7 +13,7 @@ import {
   TICKETS_FILTER_FILTER,
 } from 'gmp/models/filter';
 import type Ticket from 'gmp/models/ticket';
-import DashboardControls from 'web/components/dashboard/Controls';
+import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {TicketIcon} from 'web/components/icon';
@@ -25,8 +25,10 @@ import SubscriptionProvider from 'web/components/provider/SubscriptionProvider';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import {useGetTickets} from 'web/hooks/use-query/tickets';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
+import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
+import useSelection from 'web/hooks/useSelection';
 import useTranslation from 'web/hooks/useTranslation';
 import TicketsDashboard, {
   TICKETS_DASHBOARD_ID,
@@ -34,7 +36,7 @@ import TicketsDashboard, {
 import TicketComponent from 'web/pages/tickets/TicketComponent';
 import TicketFilterDialog from 'web/pages/tickets/TicketFilterDialog';
 import TicketsTable from 'web/pages/tickets/TicketsTable';
-import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
+import SelectionType from 'web/utils/selection-type';
 
 interface ToolBarIconsProps {
   onTicketCreateClick?: () => void | Promise<void>;
@@ -69,7 +71,7 @@ const TicketsDashboardSection = ({
 );
 
 const TicketsDashboardControls = () => (
-  <DashboardControls dashboardId={TICKETS_DASHBOARD_ID} />
+  <DashboardControlsContainer dashboardId={TICKETS_DASHBOARD_ID} />
 );
 
 const TicketsListPage = () => {
@@ -110,17 +112,68 @@ const TicketsListPage = () => {
     handleFilterChanged,
   );
 
-  const [selectionType, setSelectionType] = useState<SelectionTypeType>(
-    SelectionType.SELECTION_PAGE_CONTENTS,
-  );
-
-  const handleSelectionTypeChange = (type: SelectionTypeType) => {
-    setSelectionType(type);
-  };
-
-  const onChanged = () => {
+  const onChanged = useCallback(() => {
     void queryClient.invalidateQueries({queryKey: ['get_tickets']});
-  };
+  }, [queryClient]);
+
+  const gmp = useGmp();
+  const {
+    selectionType,
+    selected: selectedEntities = [],
+    changeSelectionType,
+    select,
+    deselect,
+  } = useSelection<Ticket>();
+
+  const handleBulkDelete = useCallback(async () => {
+    let promise;
+    if (selectionType === SelectionType.SELECTION_USER) {
+      promise = gmp.tickets.delete(selectedEntities);
+    } else if (selectionType === SelectionType.SELECTION_FILTER) {
+      promise = gmp.tickets.deleteByFilter(filter.all());
+    } else {
+      promise = gmp.tickets.deleteByFilter(filter);
+    }
+
+    try {
+      await promise;
+      onChanged();
+    } catch (error) {
+      showError(error as Error);
+    }
+  }, [
+    filter,
+    gmp.tickets,
+    onChanged,
+    selectedEntities,
+    selectionType,
+    showError,
+  ]);
+
+  const handleBulkDownload = useCallback(async () => {
+    let promise;
+    if (selectionType === SelectionType.SELECTION_USER) {
+      promise = gmp.tickets.export(selectedEntities);
+    } else if (selectionType === SelectionType.SELECTION_FILTER) {
+      promise = gmp.tickets.exportByFilter(filter.all());
+    } else {
+      promise = gmp.tickets.exportByFilter(filter);
+    }
+
+    try {
+      const response = await promise;
+      handleDownload({filename: 'tickets.xml', data: response.data});
+    } catch (error) {
+      showError(error as Error);
+    }
+  }, [
+    filter,
+    gmp.tickets,
+    handleDownload,
+    selectedEntities,
+    selectionType,
+    showError,
+  ]);
 
   const handleError = (error: Error | Rejection) => {
     showError(error);
@@ -171,11 +224,15 @@ const TicketsListPage = () => {
                 selectionType={selectionType}
                 sortBy={sortBy}
                 sortDir={sortDir}
+                onDeleteBulk={handleBulkDelete}
+                onDownloadBulk={handleBulkDownload}
+                onEntityDeselected={deselect}
+                onEntitySelected={select}
                 onFirstClick={getFirst}
                 onLastClick={getLast}
                 onNextClick={getNext}
                 onPreviousClick={getPrevious}
-                onSelectionTypeChange={handleSelectionTypeChange}
+                onSelectionTypeChange={changeSelectionType}
                 onSortChange={handleSortChange}
                 onTicketCloneClick={clone}
                 onTicketDeleteClick={deleteTicket}
