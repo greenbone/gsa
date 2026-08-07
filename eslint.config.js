@@ -277,6 +277,12 @@ export default [
     },
   },
   {
+    files: ['e2e/**/*.ts'],
+    rules: {
+      'no-restricted-imports': 'off',
+    },
+  },
+  {
     plugins: {
       react: pluginReact,
       'react-hooks': pluginReactHooks,

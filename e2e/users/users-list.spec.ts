@@ -3,14 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {expect, test} from '@playwright/test';
-import {
-  credentialsRequiredMessage,
-  hasCredentials,
-  login,
-  password,
-  username,
-} from '../credentials';
+import {login} from 'e2e/credentials';
+import {expect, test} from 'e2e/fixtures';
 import {
   applyFilter,
   createUserFromCurrentPage,
@@ -33,11 +27,9 @@ import {
   sortFieldByHeader,
   sortableHeaders,
   closeTopDialog,
-} from './users.helpers';
+} from 'e2e/users/users-helpers';
 
 test.describe('users page flows', () => {
-  test.skip(!hasCredentials, credentialsRequiredMessage);
-
   test.beforeEach(async ({page}) => {
     await login(page);
     await gotoUsersPage(page);

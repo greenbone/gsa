@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {expect, test, type BrowserContext, type Page} from '@playwright/test';
-import {login, password, username} from '../credentials';
+import {login} from 'e2e/credentials';
+import {expect, test, type BrowserContext, type Page} from 'e2e/fixtures';
 
 interface MenuLink {
   href: string;
@@ -128,11 +128,6 @@ const navigateAndAssertPath = async (context: BrowserContext, href: string) => {
 };
 
 test.describe('sidebar menu links', () => {
-  test.skip(
-    !username || !password,
-    'Set E2E_USERNAME and E2E_PASSWORD in .env.e2e.local or shell environment.',
-  );
-
   test('all visible internal links navigate', async ({context, page}) => {
     test.setTimeout(120000);
 
