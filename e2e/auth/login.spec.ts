@@ -2,20 +2,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import {expect, test} from '@playwright/test';
-import {
-  credentialsRequiredMessage,
-  hasCredentials,
-  password,
-  username,
-} from '../credentials';
+
+import {password, username} from 'e2e/credentials';
+import {expect, test} from 'e2e/fixtures';
 
 test.describe('local login smoke', () => {
-  test.skip(
-    !hasCredentials,
-    credentialsRequiredMessage,
-  );
-
   test('logs in and leaves the login page', async ({page}) => {
     await page.goto('/login');
 
