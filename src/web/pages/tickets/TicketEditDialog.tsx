@@ -18,7 +18,7 @@ import useFormValidation from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
 import useTranslation from 'web/hooks/useTranslation';
 import {editTicketRules} from 'web/pages/tickets/validation-rules';
-import {renderSelectItems} from 'web/utils/Render';
+import {renderSelectItems, type RenderSelectItemProps} from 'web/utils/Render';
 
 interface TicketEditDialogProps {
   closedNote?: string;
@@ -101,9 +101,7 @@ const TicketEditDialog = ({
             onChange={handleValueChange}
           />
           <Select
-            items={renderSelectItems(
-              users?.map(user => ({id: user.id ?? '', name: user.name ?? ''})),
-            )}
+            items={renderSelectItems(users as RenderSelectItemProps[])}
             label={_('Assign To User')}
             name="userId"
             value={values.userId}

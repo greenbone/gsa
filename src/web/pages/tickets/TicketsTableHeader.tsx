@@ -5,6 +5,7 @@
 
 import {type ReactElement} from 'react';
 import {_l} from 'gmp/locale/lang';
+import {type ToString} from 'gmp/types';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
@@ -14,7 +15,7 @@ import {type SortDirectionType} from 'web/utils/sort-direction';
 
 export interface TicketField {
   name: string;
-  displayName: string;
+  displayName: ToString;
   width?: string;
   align?: 'left' | 'center' | 'right';
 }
@@ -29,21 +30,21 @@ export interface TicketsHeaderProps {
 }
 
 export const TICKET_FIELDS: TicketField[] = [
-  {name: 'name', displayName: String(_l('Vulnerability')), width: '20%'},
-  {name: 'severity', displayName: String(_l('Severity')), width: '10%'},
-  {name: 'host', displayName: String(_l('Host')), width: '15%'},
+  {name: 'name', displayName: _l('Vulnerability'), width: '20%'},
+  {name: 'severity', displayName: _l('Severity'), width: '10%'},
+  {name: 'host', displayName: _l('Host'), width: '15%'},
   {
     name: 'solution_type',
-    displayName: String(_l('Solution Type')),
+    displayName: _l('Solution Type'),
     width: '8%',
   },
-  {name: 'username', displayName: String(_l('Assigned User')), width: '15%'},
+  {name: 'username', displayName: _l('Assigned User'), width: '15%'},
   {
     name: 'modified',
-    displayName: String(_l('Modification Time')),
+    displayName: _l('Modification Time'),
     width: '15%',
   },
-  {name: 'status', displayName: String(_l('Status')), width: '10%'},
+  {name: 'status', displayName: _l('Status'), width: '10%'},
 ];
 
 const TicketsHeader = ({
