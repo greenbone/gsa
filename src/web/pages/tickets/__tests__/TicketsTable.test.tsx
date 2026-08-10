@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test} from '@gsa/testing';
+import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
@@ -35,14 +35,18 @@ const counts = new CollectionCounts({
 
 const filter = QueryFilter.fromString('rows=10 first=1');
 
-const gmp = {
+const createGmp = () => ({
   settings: {severityRating: 'CVSSv3'},
   session: createSession({username: 'admin'}),
-};
+});
 
 describe('TicketsTable', () => {
   test('should render table with actions column by default', () => {
-    const {render} = rendererWith({gmp, capabilities: true, router: true});
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      router: true,
+    });
     render(
       <TicketsTable
         entities={[ticket]}
@@ -52,15 +56,21 @@ describe('TicketsTable', () => {
     );
 
     const table = screen.getByRole('table');
-    within(table).getByRole('columnheader', {name: 'Actions'});
+    expect(
+      within(table).getByRole('columnheader', {name: 'Actions'}),
+    ).toBeInTheDocument();
   });
 
   test('should render empty state without entities', () => {
-    const {render} = rendererWith({gmp, capabilities: true, router: true});
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      router: true,
+    });
     render(
       <TicketsTable entities={[]} entitiesCounts={counts} filter={filter} />,
     );
 
-    screen.getByText('No tickets available');
+    expect(screen.getByText('No tickets available')).toBeVisible();
   });
 });

@@ -3,22 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {vi} from 'vitest';
-
-vi.mock('web/pages/tickets/dashboard', () => ({
-  default: () => null,
-  TICKETS_DASHBOARD_ID: 'ticket-dashboard',
-}));
-
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import {Route, Routes} from 'react-router';
+import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import Ticket from 'gmp/models/ticket';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import TicketsListPage from 'web/pages/tickets/TicketsListPage';
+
+vi.mock('web/pages/tickets/dashboard', () => ({
+  default: () => null,
+  TICKETS_DASHBOARD_ID: 'ticket-dashboard',
+}));
 
 const ticket = Ticket.fromElement({
   _id: 'tk1',

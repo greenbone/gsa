@@ -9,6 +9,7 @@ import {
   getSelectItemElementsForSelect,
   rendererWith,
   screen,
+  fireEvent,
 } from 'web/testing';
 import User from 'gmp/models/user';
 import TicketCreateDialog from 'web/pages/tickets/TicketCreateDialog';
@@ -64,7 +65,7 @@ describe('TicketCreateDialog component tests', () => {
 
     const select = screen.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    expect(selectItems.length).toEqual(2);
+    expect(selectItems).toHaveLength(2);
     selectItems[1].click();
     expect(handleUserIdChange).toHaveBeenCalledWith('u2', 'userId');
   });
@@ -114,7 +115,7 @@ describe('TicketCreateDialog component tests', () => {
     changeInputValue(noteInput, 'foobar');
 
     const saveButton = screen.getDialogSaveButton();
-    saveButton.click();
+    fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
       resultId: 'r1',
@@ -146,7 +147,7 @@ describe('TicketCreateDialog component tests', () => {
     });
     changeInputValue(noteInput, '');
 
-    saveButton.click();
+    fireEvent.click(saveButton);
     expect(handleSave).not.toHaveBeenCalled();
   });
 });
