@@ -7,6 +7,7 @@ import {type ReactNode, useState} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
 import {
   TICKET_STATUS,
+  type TicketStatus,
   type TicketStatusValue,
   type default as Ticket,
 } from 'gmp/models/ticket';
@@ -52,6 +53,28 @@ interface TicketComponentProps {
   onSaved?: () => void;
 }
 
+const getTicketEditStatus = (
+  status?: TicketStatus | TicketStatusValue,
+): TicketStatusValue => {
+  if (status === 'verified' || status === TICKET_STATUS.verified) {
+    return TICKET_STATUS.closed;
+  }
+
+  if (status === 'open') {
+    return TICKET_STATUS.open;
+  }
+
+  if (status === 'fixed') {
+    return TICKET_STATUS.fixed;
+  }
+
+  if (status === 'closed') {
+    return TICKET_STATUS.closed;
+  }
+
+  return status ?? TICKET_STATUS.open;
+};
+
 const TicketComponent = ({
   children,
   onCloned,
@@ -77,6 +100,9 @@ const TicketComponent = ({
 
   const [result, setResult] = useState<{id: string; name?: string}>();
   const [ticket, setTicket] = useState<Ticket>();
+  const [editStatus, setEditStatus] = useState<TicketStatusValue>(
+    TICKET_STATUS.open,
+  );
   const [userId, setUserId] = useState<string>();
 
   const createMutation = useCreateTicket({
@@ -117,6 +143,7 @@ const TicketComponent = ({
   const handleOpenEditDialog = (ticketData: Ticket) => {
     setUsersEnabled(true);
     setTicket(ticketData);
+    setEditStatus(getTicketEditStatus(ticketData.status));
     setEditDialogVisible(true);
   };
 
@@ -127,13 +154,15 @@ const TicketComponent = ({
 
   const handleOpenSolvedDialog = (ticketData: Ticket) => {
     setUsersEnabled(true);
-    setTicket({...ticketData, status: TICKET_STATUS.fixed} as Ticket);
+    setTicket(ticketData);
+    setEditStatus(TICKET_STATUS.fixed);
     setEditDialogVisible(true);
   };
 
   const handleOpenClosedDialog = (ticketData: Ticket) => {
     setUsersEnabled(true);
-    setTicket({...ticketData, status: TICKET_STATUS.closed} as Ticket);
+    setTicket(ticketData);
+    setEditStatus(TICKET_STATUS.closed);
     setEditDialogVisible(true);
   };
 
@@ -214,11 +243,7 @@ const TicketComponent = ({
           closedNote={ticket.closedNote}
           fixedNote={ticket.fixedNote}
           openNote={ticket.openNote}
-          status={
-            ticket.status === 'verified'
-              ? TICKET_STATUS.closed
-              : (ticket.status as TicketStatusValue)
-          }
+          status={editStatus}
           ticketId={ticket.id}
           title={_('Edit Ticket {{- name}}', {name: ticket.name ?? ''})}
           userId={ticket.assignedTo?.id ?? ''}
