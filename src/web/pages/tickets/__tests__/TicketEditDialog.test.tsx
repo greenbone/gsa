@@ -95,7 +95,7 @@ describe('TicketEditDialog component tests', () => {
     );
 
     const saveButton = screen.getDialogSaveButton();
-    saveButton.click();
+    fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
       status: TICKET_STATUS.open,
