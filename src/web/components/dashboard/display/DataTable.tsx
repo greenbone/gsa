@@ -36,8 +36,8 @@ const DataTable = <TData,>({
     <Table>
       <TableHeader>
         <TableRow>
-          {dataTitles.map((head, i) => (
-            <TableHead key={i}>{`${head}`}</TableHead>
+          {dataTitles.map(head => (
+            <TableHead key={String(head)}>{String(head)}</TableHead>
           ))}
         </TableRow>
       </TableHeader>
