@@ -6,7 +6,11 @@
 import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import {type Element} from 'gmp/models/model';
-import Ticket, {type TicketStatus, type TicketElement} from 'gmp/models/ticket';
+import Ticket, {
+  type TicketStatus,
+  type TicketStatusValue,
+  type TicketElement,
+} from 'gmp/models/ticket';
 import {isDefined} from 'gmp/utils/identity';
 
 interface CreateTicketArguments {
@@ -20,7 +24,7 @@ interface SaveTicketArguments {
   openNote?: string;
   fixedNote?: string;
   closedNote?: string;
-  status: TicketStatus;
+  status: TicketStatus | TicketStatusValue;
   userId: string;
 }
 
