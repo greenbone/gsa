@@ -8,14 +8,14 @@ import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import Ticket from 'gmp/models/ticket';
+import Ticket, {TICKET_STATUS} from 'gmp/models/ticket';
 import {createSession} from 'gmp/testing';
 import {useGetTicket, useGetTickets} from 'web/hooks/use-query/tickets';
 
 const ticket = Ticket.fromElement({
   _id: 'ticket-1',
   name: 'Test Ticket',
-  status: 'open',
+  status: TICKET_STATUS.open,
   assigned_to: {user: {_id: 'u1', name: 'admin'}},
   open_time: '2024-01-10T08:00:00Z',
   open_note: 'Ticket opened',
@@ -24,7 +24,7 @@ const ticket = Ticket.fromElement({
 const ticket2 = Ticket.fromElement({
   _id: 'ticket-2',
   name: 'Test Ticket 2',
-  status: 'fixed',
+  status: TICKET_STATUS.fixed,
   assigned_to: {user: {_id: 'u1', name: 'admin'}},
   fixed_time: '2024-01-12T09:00:00Z',
   fixed_note: 'Ticket fixed',

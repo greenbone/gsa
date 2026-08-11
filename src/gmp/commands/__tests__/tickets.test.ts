@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
 import TicketsCommand from 'gmp/commands/tickets';
 import {ALL_FILTER} from 'gmp/models/filter';
-import Ticket from 'gmp/models/ticket';
+import Ticket, {TICKET_STATUS} from 'gmp/models/ticket';
 
 describe('TicketsCommand tests', () => {
   test('should fetch all tickets', async () => {
@@ -59,7 +59,7 @@ describe('TicketsCommand tests', () => {
     const response = createEntitiesResponse('ticket', [
       {
         _id: '1',
-        status: 'open',
+        status: TICKET_STATUS.open,
       },
     ]);
 
@@ -75,7 +75,7 @@ describe('TicketsCommand tests', () => {
     expect(resp.data).toEqual([
       new Ticket({
         id: '1',
-        status: 'open',
+        status: TICKET_STATUS.open,
       }),
     ]);
   });

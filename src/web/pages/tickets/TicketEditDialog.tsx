@@ -7,7 +7,6 @@ import {useState} from 'react';
 import {
   TICKET_STATUS,
   TICKET_STATUS_TRANSLATIONS,
-  TICKET_STATUSES,
   type TicketStatusValue,
 } from 'gmp/models/ticket';
 import type User from 'gmp/models/user';
@@ -75,10 +74,14 @@ const TicketEditDialog = ({
     },
   );
 
-  const STATUS_ITEMS = TICKET_STATUSES.map(ticketStatus => ({
-    value: ticketStatus,
-    label: `${TICKET_STATUS_TRANSLATIONS[ticketStatus]}`,
-  }));
+  const STATUS_ITEMS = Object.entries(TICKET_STATUS_TRANSLATIONS)
+    // a user should not be able to set the status to "Fix Verified" when editing a ticket
+    // the status "Fix Verified" is only set by the system when a fix is verified, not by the user
+    .filter(([key, value]) => key !== TICKET_STATUS.verified)
+    .map(([ticketStatus, translation]) => ({
+      value: ticketStatus,
+      label: String(translation),
+    }));
 
   title = title || _('Edit Ticket');
 

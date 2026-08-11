@@ -16,7 +16,7 @@ import TicketComponent from 'web/pages/tickets/TicketComponent';
 const ticket = Ticket.fromElement({
   _id: 'tk1',
   name: 'Test Ticket',
-  status: 'open',
+  status: TICKET_STATUS.open,
   assigned_to: {user: {_id: 'u1', name: 'admin'}},
   open_time: '2024-01-10T08:00:00Z',
   open_note: 'Ticket opened',
@@ -164,7 +164,7 @@ describe('TicketComponent', () => {
     const verifiedTicket = Ticket.fromElement({
       _id: 'tk1',
       name: 'Verified Ticket',
-      status: 'verified',
+      status: TICKET_STATUS.verified,
     });
     const {render} = rendererWith({
       gmp: createGmp(),
@@ -193,7 +193,7 @@ describe('TicketComponent', () => {
     const fixedTicket = Ticket.fromElement({
       _id: 'tk1',
       name: 'Fixed Ticket',
-      status: 'fixed',
+      status: TICKET_STATUS.fixed,
     });
     const {render} = rendererWith({
       gmp: createGmp(),

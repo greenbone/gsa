@@ -211,7 +211,7 @@ const TicketsListPage = () => {
             entities={entities}
             entitiesCounts={entitiesCounts}
             filter={filter}
-            filterEditDialog={TicketFilterDialog as never}
+            filterEditDialog={TicketFilterDialog}
             filtersFilter={TICKETS_FILTER_FILTER}
             isLoading={isLoadingEntities}
             sectionIcon={<TicketIcon size="large" />}

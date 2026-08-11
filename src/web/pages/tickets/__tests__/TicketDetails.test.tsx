@@ -5,14 +5,14 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
-import Ticket from 'gmp/models/ticket';
+import Ticket, {TICKET_STATUS} from 'gmp/models/ticket';
 import {createSession} from 'gmp/testing';
 import TicketDetails from 'web/pages/tickets/TicketDetails';
 
 const ticket = Ticket.fromElement({
   _id: 'tk1',
   name: 'Test Ticket',
-  status: 'open',
+  status: TICKET_STATUS.open,
   assigned_to: {user: {_id: 'u1', name: 'admin'}},
   open_time: '2024-01-10T08:00:00Z',
   open_note: 'Ticket opened',
@@ -24,7 +24,7 @@ const ticket = Ticket.fromElement({
 const ticketWithStatuses = Ticket.fromElement({
   _id: 'tk2',
   name: 'Closed Ticket',
-  status: 'closed',
+  status: TICKET_STATUS.closed,
   assigned_to: {user: {_id: 'u1', name: 'admin'}},
   open_time: '2024-01-10T08:00:00Z',
   open_note: 'Ticket opened',
@@ -40,7 +40,7 @@ const ticketWithStatuses = Ticket.fromElement({
 const orphanTicket = Ticket.fromElement({
   _id: 'tk3',
   name: 'Orphan Ticket',
-  status: 'open',
+  status: TICKET_STATUS.open,
   orphan: 1,
 });
 

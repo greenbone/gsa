@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {testModel} from 'gmp/models/testing';
-import Ticket from 'gmp/models/ticket';
+import Ticket, {TICKET_STATUS} from 'gmp/models/ticket';
 import {parseDate} from 'gmp/parser';
 
 describe('Ticket Model tests', () => {
@@ -171,16 +171,28 @@ describe('Ticket Model tests', () => {
   });
 
   test('should parse status', () => {
-    const ticket = Ticket.fromElement({_id: 'test-id', status: 'open'});
-    expect(ticket.status).toEqual('open');
+    const ticket = Ticket.fromElement({
+      _id: 'test-id',
+      status: 'Open',
+    });
+    expect(ticket.status).toEqual(TICKET_STATUS.open);
 
-    const ticket2 = Ticket.fromElement({_id: 'test-id', status: 'closed'});
-    expect(ticket2.status).toEqual('closed');
+    const ticket2 = Ticket.fromElement({
+      _id: 'test-id',
+      status: 'Closed',
+    });
+    expect(ticket2.status).toEqual(TICKET_STATUS.closed);
 
-    const ticket3 = Ticket.fromElement({_id: 'test-id', status: 'fixed'});
-    expect(ticket3.status).toEqual('fixed');
+    const ticket3 = Ticket.fromElement({
+      _id: 'test-id',
+      status: 'Fixed',
+    });
+    expect(ticket3.status).toEqual(TICKET_STATUS.fixed);
 
-    const ticket4 = Ticket.fromElement({_id: 'test-id', status: 'verified'});
-    expect(ticket4.status).toEqual('verified');
+    const ticket4 = Ticket.fromElement({
+      _id: 'test-id',
+      status: 'Fix Verified',
+    });
+    expect(ticket4.status).toEqual(TICKET_STATUS.verified);
   });
 });

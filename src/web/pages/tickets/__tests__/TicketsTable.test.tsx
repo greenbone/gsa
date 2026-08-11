@@ -7,14 +7,14 @@ import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import Ticket from 'gmp/models/ticket';
+import Ticket, {TICKET_STATUS} from 'gmp/models/ticket';
 import {createSession} from 'gmp/testing';
 import TicketsTable from 'web/pages/tickets/TicketsTable';
 
 const ticket = Ticket.fromElement({
   _id: 'tk1',
   name: 'Test Vulnerability',
-  status: 'open',
+  status: TICKET_STATUS.open,
   severity: 8.5,
   host: '192.168.1.100',
   solution_type: 'VendorFix',
