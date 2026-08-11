@@ -6,8 +6,10 @@
 import {type EntityActionData} from 'gmp/commands/entity';
 import type Response from 'gmp/http/response';
 import {type FilterType} from 'gmp/models/filter';
-import type {TicketStatusValue} from 'gmp/models/ticket';
-import type Ticket from 'gmp/models/ticket';
+import {
+  type default as Ticket,
+  type TicketStatusValue,
+} from 'gmp/models/ticket';
 import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGetEntity from 'web/queries/useGetEntity';

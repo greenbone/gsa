@@ -10,6 +10,7 @@ import {
   createHttp,
 } from 'gmp/commands/testing';
 import TicketCommand from 'gmp/commands/ticket';
+import {TICKET_STATUS} from 'gmp/models/ticket';
 
 describe('TicketCommand tests', () => {
   test('should trim note when creating ticket', async () => {
@@ -75,7 +76,7 @@ describe('TicketCommand tests', () => {
     const cmd = new TicketCommand(fakeHttp);
     await cmd.save({
       id: 'foo',
-      status: 'fixed',
+      status: TICKET_STATUS.fixed,
       userId: 'u1',
       openNote: 'bar',
       fixedNote: 'bar',
@@ -85,7 +86,7 @@ describe('TicketCommand tests', () => {
       data: {
         cmd: 'save_ticket',
         ticket_id: 'foo',
-        ticket_status: 'fixed',
+        ticket_status: TICKET_STATUS.fixed,
         open_note: 'bar',
         fixed_note: 'bar',
         closed_note: 'bar',
@@ -100,7 +101,7 @@ describe('TicketCommand tests', () => {
     const cmd = new TicketCommand(fakeHttp);
     await cmd.save({
       id: 'foo',
-      status: 'fixed',
+      status: TICKET_STATUS.fixed,
       userId: 'u1',
       openNote: '   bar   ',
       fixedNote: '   bar   ',
@@ -110,7 +111,7 @@ describe('TicketCommand tests', () => {
       data: {
         cmd: 'save_ticket',
         ticket_id: 'foo',
-        ticket_status: 'fixed',
+        ticket_status: TICKET_STATUS.fixed,
         open_note: 'bar',
         fixed_note: 'bar',
         closed_note: 'bar',

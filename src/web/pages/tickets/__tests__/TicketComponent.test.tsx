@@ -6,7 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
-import Ticket from 'gmp/models/ticket';
+import Ticket, {TICKET_STATUS} from 'gmp/models/ticket';
 import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
@@ -76,7 +76,7 @@ describe('TicketComponent', () => {
     render(
       <TicketComponent>{() => <span>Child Content</span>}</TicketComponent>,
     );
-    screen.getByText('Child Content');
+    expect(screen.getByText('Child Content')).toBeInTheDocument();
   });
 
   test('should open and close create dialog', async () => {
@@ -158,6 +158,89 @@ describe('TicketComponent', () => {
     await waitFor(() => {
       expect(screen.queryByText(/Edit Ticket/)).toBeNull();
     });
+  });
+
+  test('should show closed status for a verified ticket', async () => {
+    const verifiedTicket = Ticket.fromElement({
+      _id: 'tk1',
+      name: 'Verified Ticket',
+      status: 'verified',
+    });
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      store: true,
+    });
+
+    render(
+      <TicketComponent>
+        {({edit}) => (
+          <Button
+            data-testid="open-edit"
+            onClick={() => edit(verifiedTicket)}
+          />
+        )}
+      </TicketComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open-edit'));
+    await screen.findByText(/Edit Ticket/);
+
+    expect(screen.getByName('status')).toHaveValue(TICKET_STATUS.closed);
+  });
+
+  test('should show fixed status for a fixed ticket', async () => {
+    const fixedTicket = Ticket.fromElement({
+      _id: 'tk1',
+      name: 'Fixed Ticket',
+      status: 'fixed',
+    });
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      store: true,
+    });
+
+    render(
+      <TicketComponent>
+        {({edit}) => (
+          <Button data-testid="open-edit" onClick={() => edit(fixedTicket)} />
+        )}
+      </TicketComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open-edit'));
+    await screen.findByText(/Edit Ticket/);
+
+    expect(screen.getByName('status')).toHaveValue(TICKET_STATUS.fixed);
+  });
+
+  test('should default to open status when a ticket has no status', async () => {
+    const ticketWithoutStatus = Ticket.fromElement({
+      _id: 'tk1',
+      name: 'Ticket without status',
+    });
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      capabilities: true,
+      store: true,
+    });
+
+    render(
+      <TicketComponent>
+        {({edit}) => (
+          <Button
+            data-testid="open-edit"
+            onClick={() => edit(ticketWithoutStatus)}
+          />
+        )}
+      </TicketComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open-edit'));
+    await screen.findByText(/Edit Ticket/);
+
+    expect(screen.getByName('status')).toHaveValue(TICKET_STATUS.open);
   });
 
   test('should open solve dialog with fixed status', async () => {
