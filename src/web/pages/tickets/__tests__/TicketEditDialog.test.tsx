@@ -126,11 +126,11 @@ describe('TicketEditDialog component tests', () => {
 
     const selects = screen.queryAllSelectElements();
     const selectItems = await getSelectItemElementsForSelect(selects[0]);
-    expect(selectItems.length).toEqual(3);
+    expect(selectItems).toHaveLength(3);
     fireEvent.click(selectItems[1]);
 
     const saveButton = screen.getDialogSaveButton();
-    saveButton.click();
+    fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
       status: TICKET_STATUS.fixed,
@@ -161,11 +161,11 @@ describe('TicketEditDialog component tests', () => {
 
     const selects = screen.queryAllSelectElements();
     const selectItems = await getSelectItemElementsForSelect(selects[1]);
-    expect(selectItems.length).toEqual(2);
+    expect(selectItems).toHaveLength(2);
     fireEvent.click(selectItems[1]);
 
     const saveButton = screen.getDialogSaveButton();
-    saveButton.click();
+    fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
       status: TICKET_STATUS.open,
@@ -195,7 +195,7 @@ describe('TicketEditDialog component tests', () => {
     );
 
     const saveButton = screen.getDialogSaveButton();
-    saveButton.click();
+    fireEvent.click(saveButton);
     expect(handleSave).not.toHaveBeenCalled();
   });
 
@@ -216,7 +216,7 @@ describe('TicketEditDialog component tests', () => {
     );
 
     const closeButton = screen.getDialogCloseButton();
-    closeButton.click();
+    fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
   });
 });

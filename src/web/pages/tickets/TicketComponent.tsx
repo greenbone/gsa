@@ -53,26 +53,23 @@ interface TicketComponentProps {
   onSaved?: () => void;
 }
 
-const getTicketEditStatus = (
-  status?: TicketStatus | TicketStatusValue,
-): TicketStatusValue => {
-  if (status === 'verified' || status === TICKET_STATUS.verified) {
-    return TICKET_STATUS.closed;
-  }
+const TICKET_EDIT_STATUS: Record<TicketStatus, TicketStatusValue> = {
+  open: TICKET_STATUS.open,
+  fixed: TICKET_STATUS.fixed,
+  verified: TICKET_STATUS.closed,
+  closed: TICKET_STATUS.closed,
+};
 
-  if (status === 'open') {
+const getTicketEditStatus = (status?: TicketStatus): TicketStatusValue => {
+  if (!status) {
     return TICKET_STATUS.open;
   }
 
-  if (status === 'fixed') {
-    return TICKET_STATUS.fixed;
+  if (status in TICKET_EDIT_STATUS) {
+    return TICKET_EDIT_STATUS[status];
   }
 
-  if (status === 'closed') {
-    return TICKET_STATUS.closed;
-  }
-
-  return status ?? TICKET_STATUS.open;
+  return status as TicketStatusValue;
 };
 
 const TicketComponent = ({
