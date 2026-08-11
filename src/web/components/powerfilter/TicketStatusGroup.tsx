@@ -4,17 +4,17 @@
  */
 
 import {type FilterType} from 'gmp/models/filter';
-import {TICKET_STATUS, type TicketStatus} from 'gmp/models/ticket';
+import {TICKET_STATUS, type TicketStatusValue} from 'gmp/models/ticket';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface TicketStatusFilterGroupProps {
-  status?: TicketStatus;
+  status?: TicketStatusValue;
   filter?: FilterType;
   name?: string;
-  onChange: (value: TicketStatus, name: string) => void;
+  onChange: (value: TicketStatusValue, name: string) => void;
 }
 
 const TicketStatusFilterGroup = ({
@@ -26,7 +26,7 @@ const TicketStatusFilterGroup = ({
   const [_] = useTranslation();
 
   if (isDefined(filter)) {
-    status = filter.get('status') as TicketStatus | undefined;
+    status = filter.get('status') as TicketStatusValue | undefined;
   }
 
   return (

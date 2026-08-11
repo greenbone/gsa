@@ -7,7 +7,6 @@ import {type ReactNode, useState} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
 import {
   TICKET_STATUS,
-  type TicketStatus,
   type TicketStatusValue,
   type default as Ticket,
 } from 'gmp/models/ticket';
@@ -53,14 +52,14 @@ interface TicketComponentProps {
   onSaved?: () => void;
 }
 
-const TICKET_EDIT_STATUS: Record<TicketStatus, TicketStatusValue> = {
-  open: TICKET_STATUS.open,
-  fixed: TICKET_STATUS.fixed,
-  verified: TICKET_STATUS.closed,
-  closed: TICKET_STATUS.closed,
+const TICKET_EDIT_STATUS: Record<TicketStatusValue, TicketStatusValue> = {
+  [TICKET_STATUS.open]: TICKET_STATUS.open,
+  [TICKET_STATUS.fixed]: TICKET_STATUS.fixed,
+  [TICKET_STATUS.verified]: TICKET_STATUS.closed,
+  [TICKET_STATUS.closed]: TICKET_STATUS.closed,
 };
 
-const getTicketEditStatus = (status?: TicketStatus): TicketStatusValue => {
+const getTicketEditStatus = (status?: TicketStatusValue): TicketStatusValue => {
   if (!status) {
     return TICKET_STATUS.open;
   }

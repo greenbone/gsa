@@ -10,7 +10,6 @@ import {parseSeverity, parseDate, parseText, type YesNo} from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export type TicketStatus = keyof typeof TICKET_STATUS;
 export type TicketStatusValue =
   (typeof TICKET_STATUS)[keyof typeof TICKET_STATUS];
 
@@ -43,7 +42,7 @@ export interface TicketElement extends ModelElement {
   location?: string;
   severity?: number;
   solution_type?: string;
-  status?: TicketStatus;
+  status?: TicketStatusValue;
   task?: {
     _id: string;
     name?: string;
@@ -70,7 +69,7 @@ interface TicketProperties extends ModelProperties {
   location?: string;
   severity?: number;
   solutionType?: string;
-  status?: TicketStatus;
+  status?: TicketStatusValue;
   task?: Model;
 }
 
@@ -88,13 +87,7 @@ export const TICKET_STATUS_TRANSLATIONS = {
   [TICKET_STATUS.closed]: _l('Closed'),
 } as const;
 
-export const TICKET_STATUSES: TicketStatusValue[] = [
-  TICKET_STATUS.open,
-  TICKET_STATUS.fixed,
-  TICKET_STATUS.closed,
-];
-
-export const getTranslatableTicketStatus = (status: TicketStatus) =>
+export const getTranslatableTicketStatus = (status: TicketStatusValue) =>
   `${TICKET_STATUS_TRANSLATIONS[status]}`;
 
 class Ticket extends Model {
@@ -116,7 +109,7 @@ class Ticket extends Model {
   readonly location?: string;
   readonly severity?: number;
   readonly solutionType?: string;
-  readonly status?: TicketStatus;
+  readonly status?: TicketStatusValue;
   readonly task?: Model;
 
   constructor({
