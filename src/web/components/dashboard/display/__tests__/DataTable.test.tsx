@@ -7,8 +7,8 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {render, screen} from 'web/testing';
 import DataTable from 'web/components/dashboard/display/DataTable';
 
-describe('DataTable', () => {
-  test('renders column headers and table rows', () => {
+describe('DataTable component tests', () => {
+  test('should render column headers and table rows', () => {
     const data = [
       {id: '1', name: 'Alpha', count: 3},
       {id: '2', name: 'Beta', count: 7},
@@ -33,7 +33,7 @@ describe('DataTable', () => {
     expect(dataRow).toHaveBeenNthCalledWith(2, data[1]);
   });
 
-  test('stringifies row values before rendering', () => {
+  test('should stringify row values before rendering', () => {
     const customValue = {
       toString: () => 'custom-value',
     };
@@ -50,7 +50,7 @@ describe('DataTable', () => {
     expect(screen.getByRole('cell', {name: '42'})).toBeVisible();
   });
 
-  test('renders no body rows for empty data', () => {
+  test('should render no body rows for empty data', () => {
     const dataRow = testing.fn();
 
     render(
@@ -60,6 +60,16 @@ describe('DataTable', () => {
     expect(
       screen.getByRole('columnheader', {name: 'Only Header'}),
     ).toBeVisible();
+    expect(screen.queryByRole('cell')).not.toBeInTheDocument();
+    expect(dataRow).not.toHaveBeenCalled();
+  });
+
+  test('should use empty defaults when data and titles are omitted', () => {
+    const dataRow = testing.fn();
+
+    render(<DataTable dataRow={dataRow} />);
+
+    expect(screen.queryByRole('columnheader')).not.toBeInTheDocument();
     expect(screen.queryByRole('cell')).not.toBeInTheDocument();
     expect(dataRow).not.toHaveBeenCalled();
   });

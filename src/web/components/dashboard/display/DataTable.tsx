@@ -13,9 +13,9 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 
-interface DataTableProps<TData> {
+export interface DataTableProps<TData> {
   dataTitles?: ToString[];
-  data: TData[];
+  data?: TData[];
   dataRow: (row: TData) => ToString[];
 }
 
