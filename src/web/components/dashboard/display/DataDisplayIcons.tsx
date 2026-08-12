@@ -12,12 +12,13 @@ import {
   LegendIcon,
   Toggle3dIcon,
 } from 'web/components/icon';
+
 interface DataDisplayIconsState {
   showLegend?: boolean;
 }
 
-interface DataDisplayIconsProps<S extends DataDisplayIconsState> {
-  setState: (func: StateFunc<S>) => S;
+export interface DataDisplayIconsProps<TState extends DataDisplayIconsState> {
+  setState: (func: StateFunc<TState>) => TState;
   showCsvDownload?: boolean;
   showSvgDownload?: boolean;
   showFilterSelection?: boolean;
@@ -31,24 +32,24 @@ interface DonutChartState extends DataDisplayIconsState {
   show3d: boolean;
 }
 
-type StateFunc<S> = (state: S) => S;
+type StateFunc<TState> = (state: TState) => TState;
 
-export const renderDonutChartIcons = <S extends DonutChartState>({
+export const renderDonutChartIcons = <TState extends DonutChartState>({
   setState,
   ...iconsProps
-}: DataDisplayIconsProps<S>): React.ReactNode => (
+}: DataDisplayIconsProps<TState>): React.ReactNode => (
   <>
     <DataDisplayIcons {...iconsProps} setState={setState} />
     <Toggle3dIcon
       title={_('Toggle 2D/3D view')}
       onClick={() => {
-        setState(({show3d}: S) => ({show3d: !show3d}) as S);
+        setState(({show3d}: TState) => ({show3d: !show3d}) as TState);
       }}
     />
   </>
 );
 
-const DataDisplayIcons = <S extends DataDisplayIconsState>({
+const DataDisplayIcons = <TState extends DataDisplayIconsState>({
   setState,
   showCsvDownload = true,
   showSvgDownload = true,
@@ -57,8 +58,8 @@ const DataDisplayIcons = <S extends DataDisplayIconsState>({
   onDownloadCsvClick,
   onDownloadSvgClick,
   onSelectFilterClick,
-}: DataDisplayIconsProps<S>) => (
-  <React.Fragment>
+}: DataDisplayIconsProps<TState>) => (
+  <>
     {showFilterSelection && (
       <FilterIcon title={_('Select Filter')} onClick={onSelectFilterClick} />
     )}
@@ -72,11 +73,13 @@ const DataDisplayIcons = <S extends DataDisplayIconsState>({
       <LegendIcon
         title={_('Toggle Legend')}
         onClick={() => {
-          setState(({showLegend}: S) => ({showLegend: !showLegend}) as S);
+          setState(
+            ({showLegend}: TState) => ({showLegend: !showLegend}) as TState,
+          );
         }}
       />
     )}
-  </React.Fragment>
+  </>
 );
 
 export default DataDisplayIcons;
