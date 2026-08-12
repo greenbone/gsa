@@ -47,6 +47,7 @@ updates:
       github-actions:
         patterns:
           - "actions/*"
+          - "github/*"
     ignore:
       - dependency-name: "greenbone/actions"
         update-types:
