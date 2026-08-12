@@ -3,13 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import equal from 'fast-deep-equal';
 import styled from 'styled-components';
 import {type FilterType} from 'gmp/models/filter';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
+import DataDisplayIcons, {
+  type DataDisplayIconsProps,
+} from 'web/components/dashboard/display/DataDisplayIcons';
 import Display, {
   DISPLAY_HEADER_HEIGHT,
   DISPLAY_BORDER_WIDTH,
@@ -21,6 +23,7 @@ import Theme from 'web/utils/theme';
 import withTranslation, {
   type WithTranslationComponentProps,
 } from 'web/utils/withTranslation';
+
 export interface State {
   showLegend?: boolean;
 }
@@ -37,16 +40,10 @@ type TitleFunc<TData> = ({
   isLoading?: boolean;
 }) => string;
 
-interface IconsRenderProps<TState extends State> {
+interface IconsRenderProps<
+  TState extends State,
+> extends DataDisplayIconsProps<TState> {
   state: TState;
-  setState: SetStateFunc<TState>;
-  showFilterSelection: boolean;
-  showCsvDownload: boolean;
-  showSvgDownload: boolean;
-  showToggleLegend: boolean;
-  onDownloadCsvClick: () => void;
-  onDownloadSvgClick: () => void;
-  onSelectFilterClick: () => void;
 }
 
 interface DataDisplayRenderProps<TData, TState extends State> {
@@ -70,10 +67,7 @@ export interface DataDisplayProps<
   TState extends State,
   TTransformedData = TData,
   TTransformProps = Record<string, unknown>,
->
-  extends
-    WithTranslationComponentProps,
-    Omit<DisplayProps, 'children' | 'title'> {
+> {
   data: TData;
   dataRow: (data: TTransformedData) => string[];
   dataTitles: string[];
@@ -97,6 +91,17 @@ export interface DataDisplayProps<
   title: TitleFunc<TTransformedData>;
   width: number;
 }
+
+interface DataDisplayWithTranslationProps<
+  TData,
+  TState extends State,
+  TTransformedData = TData,
+  TTransformProps = Record<string, unknown>,
+>
+  extends
+    WithTranslationComponentProps,
+    Omit<DisplayProps, 'children' | 'title'>,
+    DataDisplayProps<TData, TState, TTransformedData, TTransformProps> {}
 
 interface DataDisplayState<TData, TTransformedData> {
   data: TTransformedData[];
@@ -175,7 +180,7 @@ const renderIcons = props => {
 
 class DataDisplay<
   TData,
-  TProps extends DataDisplayProps<
+  TProps extends DataDisplayWithTranslationProps<
     TData,
     TState,
     TTransformedData,
@@ -216,7 +221,7 @@ class DataDisplay<
 
   static getDerivedStateFromProps<
     TData,
-    TProps extends DataDisplayProps<
+    TProps extends DataDisplayWithTranslationProps<
       TData,
       TState,
       TTransformedData,
@@ -250,7 +255,7 @@ class DataDisplay<
 
   static getTransformedData<
     TData,
-    TProps extends DataDisplayProps<
+    TProps extends DataDisplayWithTranslationProps<
       TData,
       TState,
       TTransformedData,
@@ -275,7 +280,7 @@ class DataDisplay<
   }
 
   shouldComponentUpdate(
-    nextProps: DataDisplayProps<
+    nextProps: DataDisplayWithTranslationProps<
       TData,
       TState,
       TTransformedData,
@@ -294,7 +299,7 @@ class DataDisplay<
   }
 
   hasFilterChanged(
-    nextProps: DataDisplayProps<
+    nextProps: DataDisplayWithTranslationProps<
       TData,
       TState,
       TTransformedData,
@@ -302,7 +307,6 @@ class DataDisplay<
     >,
   ): boolean {
     if (isDefined(this.props.filter)) {
-      // @ts-ignore-error
       return this.props.filter.equals(nextProps.filter);
     }
 
@@ -499,4 +503,17 @@ class DataDisplay<
   }
 }
 
-export default withTranslation(DataDisplay) as unknown as typeof DataDisplay;
+export default withTranslation(DataDisplay) as unknown as <
+  TData,
+  TProps extends DataDisplayProps<
+    TData,
+    TState,
+    TTransformedData,
+    TTransformProps
+  >,
+  TState extends State,
+  TTransformedData,
+  TTransformProps = Record<string, unknown>,
+>(
+  props: TProps,
+) => ReactNode;
