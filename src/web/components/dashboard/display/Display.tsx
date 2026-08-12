@@ -16,7 +16,7 @@ export interface DisplayProps {
   dragHandleRef?: (element: Element | null) => void;
   isLoading?: boolean;
   title?: string;
-  onRemoveClick: () => void;
+  onRemoveClick?: () => void;
 }
 
 export const DISPLAY_HEADER_HEIGHT = 20;
@@ -98,8 +98,13 @@ const DisplayTitle = styled.div`
   text-align: center;
 `;
 
-const Display = (props: DisplayProps) => {
-  const {children, dragHandleRef, title, onRemoveClick, isLoading} = props;
+const Display = ({
+  children,
+  dragHandleRef,
+  title,
+  onRemoveClick,
+  isLoading,
+}: DisplayProps) => {
   const [_] = useTranslation();
   return (
     <DisplayView>
