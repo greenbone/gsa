@@ -12,11 +12,11 @@ import {
   fireEvent,
   waitFor,
 } from 'web/testing';
+import {type NvtFamily} from 'gmp/commands/nvt-families';
 import {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
   type ScanConfigFamilies,
-  type ScanConfigFamily,
   type ScanConfigPreference,
 } from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -24,30 +24,22 @@ import ScanConfigEditDialog, {
   handleSearchChange,
 } from 'web/pages/scanconfigs/ScanConfigEditDialog';
 
-const families: ScanConfigFamily[] = [
+const families: NvtFamily[] = [
   {
     name: 'family1',
-    nvts: {
-      max: 1,
-    },
+    maxNvtCount: 1,
   },
   {
     name: 'family2',
-    nvts: {
-      max: 4,
-    },
+    maxNvtCount: 4,
   },
   {
     name: 'family3',
-    nvts: {
-      max: 2,
-    },
+    maxNvtCount: 2,
   },
   {
     name: 'family4',
-    nvts: {
-      max: 6,
-    },
+    maxNvtCount: 6,
   },
 ];
 
@@ -414,9 +406,9 @@ describe('ScanConfigEditDialog tests', () => {
     // `maxNvtCount`, not a `nvts.max` property. The select-all value must not
     // depend on that shape, otherwise it always resolves to NO_VALUE.
     const familiesWithoutNvtsMax = [
-      {name: 'family1'},
-      {name: 'family2'},
-    ] as unknown as ScanConfigFamily[];
+      {name: 'family1', maxNvtCount: 3},
+      {name: 'family2', maxNvtCount: 4},
+    ] satisfies NvtFamily[];
 
     const configFamiliesWithFullSelection: ScanConfigFamilies = {
       family1: {

@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen, within} from 'web/testing';
+import {type NvtFamily} from 'gmp/commands/nvt-families';
 import {
   type ScanConfigFamilyTrends,
   type ScanConfigNvtsSelected,
@@ -14,23 +15,18 @@ import {
   SCANCONFIG_TREND_STATIC,
   WHOLE_SELECTION_FAMILIES,
   type ScanConfigFamilies,
-  type ScanConfigFamily,
 } from 'gmp/models/scan-config';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import ScanConfigNvtFamilies from 'web/pages/scanconfigs/ScanConfigNvtFamilies';
 
-const createFamilies = (): ScanConfigFamily[] => [
+const createFamilies = (): NvtFamily[] => [
   {
     name: 'family1',
-    nvts: {
-      max: 5,
-    },
+    maxNvtCount: 5,
   },
   {
     name: WHOLE_SELECTION_FAMILIES[0],
-    nvts: {
-      max: 7,
-    },
+    maxNvtCount: 7,
   },
 ];
 
@@ -140,6 +136,28 @@ describe('NvtFamilies tests', () => {
 
     fireEvent.click(editButtons[0]);
     expect(handleEditConfigFamilyClick).toHaveBeenCalledWith('family1');
+  });
+
+  test('should render zero as the maximum for an empty family', () => {
+    render(
+      <ScanConfigNvtFamilies
+        configFamilies={{
+          empty: {
+            name: 'empty',
+            nvts: {count: 0, max: 0},
+            trend: SCANCONFIG_TREND_STATIC,
+          },
+        }}
+        families={[{name: 'empty', maxNvtCount: 5}]}
+        select={{empty: NO_VALUE}}
+        trend={{empty: SCANCONFIG_TREND_STATIC}}
+        onSelectChange={testing.fn()}
+        onTrendChange={testing.fn()}
+      />,
+    );
+
+    const section = unfoldSection();
+    expect(within(section).getByRole('cell', {name: '0 of 5'})).toBeVisible();
   });
 
   test('should call onValueChange when changing a regular family', () => {
