@@ -43,7 +43,7 @@
     "@dnd-kit/react": "^0.5.0",
     "@greenbone/ui-lib": "2.13.6-alpha0",
     "@mantine/core": "^8.3.16",
-    "@mantine/dates": "^8.3.16",
+    "@mantine/dates": "^9.5.1",
     "@mantine/notifications": "^8.3.16",
     "@reduxjs/toolkit": "^2.12.0",
     "@tanstack/react-query": "^5.101.4",
