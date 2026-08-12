@@ -11,6 +11,7 @@ import {
   memo,
   useRef,
 } from 'react';
+import {type NvtFamily} from 'gmp/commands/nvt-families';
 import {
   type ScanConfigFamilyTrends,
   type ScanConfigNvtsSelected,
@@ -79,7 +80,7 @@ interface ScanConfigEditDialogProps {
   editNvtDetailsTitle: string;
   editNvtFamiliesTitle: string;
   error?: string;
-  families?: ScanConfigFamily[];
+  families?: NvtFamily[];
   familySelectionUpdate?: FamilySelectionUpdate;
   isLoadingConfig?: boolean;
   isLoadingFamilies?: boolean;
@@ -100,7 +101,7 @@ const MemoizedNvtPreferences = memo(ScanConfigNvtPreferences);
 
 const createTrendAndSelect = (
   scanConfigFamilies: ScanConfigFamilies = {},
-  allFamilies: ScanConfigFamily[] = [],
+  allFamilies: NvtFamily[] = [],
 ) => {
   const trend = {};
   const select = {};

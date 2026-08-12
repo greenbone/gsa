@@ -4,6 +4,7 @@
  */
 
 import {useState} from 'react';
+import {type NvtFamily} from 'gmp/commands/nvt-families';
 import {
   type ScanConfigNvtsSelected,
   type ScanConfigFamilyNvt,
@@ -107,7 +108,7 @@ const ScanConfigComponent = ({
   const [importDialogVisible, setImportDialogVisible] = useState(false);
 
   const [config, setConfig] = useState<ScanConfig>();
-  const [families, setFamilies] = useState<ScanConfigFamily[]>();
+  const [families, setFamilies] = useState<NvtFamily[]>();
 
   const [familyName, setFamilyName] = useState<string>();
   const [familyNvts, setFamilyNvts] = useState<

@@ -4,6 +4,7 @@
  */
 
 import {useCallback} from 'react';
+import {type NvtFamily} from 'gmp/commands/nvt-families';
 import {
   type ScanConfigFamilyTrends,
   type ScanConfigNvtsSelected,
@@ -12,7 +13,6 @@ import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
   type ScanConfigFamilies,
-  type ScanConfigFamily,
   type ScanConfigTrend,
   WHOLE_SELECTION_FAMILIES,
 } from 'gmp/models/scan-config';
@@ -30,7 +30,7 @@ import ScanConfigNvtFamily from 'web/pages/scanconfigs/ScanConfigNvtFamily';
 interface ScanConfigNvtFamiliesProps {
   configFamilies: ScanConfigFamilies;
   editTitle?: string;
-  families?: ScanConfigFamily[];
+  families?: NvtFamily[];
   select: ScanConfigNvtsSelected;
   trend: ScanConfigFamilyTrends;
   onEditConfigFamilyClick?: (familyName: string) => void;
@@ -101,7 +101,7 @@ const ScanConfigNvtFamilies = ({
             return (
               <ScanConfigNvtFamily
                 key={name}
-                familyMaxNvtCount={family.nvts?.max}
+                familyMaxNvtCount={family.maxNvtCount}
                 familyName={family.name}
                 familyNvtCount={
                   isDefined(configFamily?.nvts) ? configFamily.nvts.count : 0
