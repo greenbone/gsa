@@ -13,6 +13,8 @@ import {
   testing,
 } from '@gsa/testing';
 import {render, screen} from 'web/testing';
+import Filter from 'gmp/models/filter';
+import {parseFilterTermsFromString} from 'gmp/models/filter/filter-term';
 import DataDisplay, {
   type DataDisplayProps,
   type State,
@@ -123,6 +125,71 @@ describe('DataDisplay component tests', () => {
         state: props.state,
       }),
     );
+  });
+
+  test('should rerender when the filter changes', () => {
+    const firstFilter = new Filter({
+      id: 'filter-1',
+      name: 'First filter',
+      terms: parseFilterTermsFromString('foo=one'),
+    });
+    const secondFilter = new Filter({
+      id: 'filter-2',
+      name: 'Second filter',
+      terms: parseFilterTermsFromString('foo=two'),
+    });
+    const props = createProps({
+      filter: firstFilter,
+      showFilterString: true,
+    });
+    const {rerender} = render(
+      <DataDisplay<TestData, TestProps, TestState, TestData> {...props} />,
+    );
+
+    expect(screen.getByText('First filter')).toBeInTheDocument();
+    expect(screen.getByText('foo=one')).toBeInTheDocument();
+
+    rerender(
+      <DataDisplay<TestData, TestProps, TestState, TestData>
+        {...props}
+        filter={secondFilter}
+        showFilterString={true}
+      />,
+    );
+
+    expect(screen.getByText('Second filter')).toBeInTheDocument();
+    expect(screen.getByText('foo=two')).toBeInTheDocument();
+  });
+
+  test('should not rerender when the filter is unchanged', () => {
+    const firstFilter = new Filter({
+      id: 'filter-1',
+      name: 'First filter',
+      terms: parseFilterTermsFromString('foo=one'),
+    });
+    const secondFilter = new Filter({
+      id: 'filter-1',
+      name: 'First filter',
+      terms: parseFilterTermsFromString('foo=one'),
+    });
+    const children = testing.fn(({data}) => (
+      <div data-testid="chart">{data[0].value}</div>
+    ));
+    const props = createProps({children, filter: firstFilter});
+    const {rerender} = render(
+      <DataDisplay<TestData, TestProps, TestState, TestData> {...props} />,
+    );
+
+    expect(children).toHaveBeenCalledTimes(1);
+
+    rerender(
+      <DataDisplay<TestData, TestProps, TestState, TestData>
+        {...props}
+        filter={secondFilter}
+      />,
+    );
+
+    expect(children).toHaveBeenCalledTimes(1);
   });
 
   test('should create a CSV download with escaped data', async () => {
