@@ -6,8 +6,10 @@
 import {type FilterType} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
+import {type SeverityRating} from 'gmp/utils/severity';
 import DonutChart from 'web/components/chart/Donut';
 import DataDisplay, {
+  type State,
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';
@@ -19,28 +21,24 @@ import transformSeverityData, {
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
 import useGmp from 'web/hooks/useGmp';
 
-interface SeverityClassDisplayProps extends DataDisplayProps<
+interface SeverityClassDisplayState extends State {
+  show3d: boolean;
+}
+
+type SeverityClassDisplayBaseProps = DataDisplayProps<
   SeverityData,
   SeverityClassDisplayState,
   SeverityClassData,
   TransformSeverityDataProps
-> {
+>;
+
+interface SeverityClassDisplayProps extends SeverityClassDisplayBaseProps {
   filter?: FilterType;
   onFilterChanged?: (filter: FilterType) => void;
 }
 
-interface SeverityClassDisplayState {
-  show3d: boolean;
-  showLegend?: boolean;
-}
-
-interface SeverityClassDataDisplayProps extends DataDisplayProps<
-  SeverityData,
-  SeverityClassDisplayState,
-  SeverityClassData,
-  TransformSeverityDataProps
-> {
-  severityRating: string;
+interface SeverityClassDataDisplayProps extends SeverityClassDisplayBaseProps {
+  severityRating: SeverityRating;
 }
 
 const SeverityClassDisplay = ({
