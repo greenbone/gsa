@@ -6,7 +6,9 @@
 import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import type FilterType from 'gmp/models/filter/filter-type';
-import FilterSelection from 'web/components/dashboard/display/FilterSelection';
+import useFilterSelection, {
+  type UseFilterSelectionProps,
+} from 'web/components/dashboard/display/useFilterSelection';
 import {updateDisplayName} from 'web/utils/display-name';
 
 export interface WithFilterSelectionInjectedProps {
@@ -36,24 +38,31 @@ const withFilterSelection =
     const FilterSelectionWrapper = ({
       showFilterSelection = false,
       ...props
-    }: WithFilterSelectionProps<TProps>) =>
-      showFilterSelection ? (
-        <FilterSelection filtersFilter={filtersFilter}>
-          {({filter, selectFilter}) => (
-            <Component
-              {...(props as TProps)}
-              filter={filter}
-              showFilterSelection={showFilterSelection}
-              onSelectFilterClick={selectFilter}
-            />
-          )}
-        </FilterSelection>
-      ) : (
-        <Component
-          {...(props as TProps)}
-          showFilterSelection={showFilterSelection}
-        />
+    }: WithFilterSelectionProps<TProps>) => {
+      const {filterId, onFilterIdChanged} = props as TProps &
+        UseFilterSelectionProps;
+      const {filter, selectFilter, filterSelectionDialog} = useFilterSelection({
+        filterId,
+        filtersFilter,
+        onFilterIdChanged,
+      });
+
+      return (
+        <>
+          <Component
+            {...(props as TProps)}
+            {...(showFilterSelection
+              ? {
+                  filter,
+                  onSelectFilterClick: selectFilter,
+                }
+              : {})}
+            showFilterSelection={showFilterSelection}
+          />
+          {filterSelectionDialog}
+        </>
       );
+    };
 
     return hoistStatics(
       updateDisplayName(

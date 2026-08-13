@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, render, screen, waitFor} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
@@ -52,7 +52,10 @@ const WrappedComponent = withFilterSelection({filtersFilter})(TestComponent);
 
 describe('withFilterSelection tests', () => {
   test('should render the wrapped component without filter selection by default', () => {
-    render(<WrappedComponent value="value" />);
+    const gmp = createGmp();
+    const {render: renderWithGmp} = rendererWith({gmp, store: true});
+
+    renderWithGmp(<WrappedComponent value="value" />);
 
     expect(screen.queryByTestId('filter-selection')).not.toBeInTheDocument();
     expect(screen.getByTestId('filter')).toHaveTextContent('none');
