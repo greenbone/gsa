@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, expect, test} from '@gsa/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
@@ -29,6 +29,15 @@ vi.mock('web/components/dashboard/display/cvss/CvssTableDisplay', () => ({
   ),
 }));
 
+const createGmp = () => ({
+  filters: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {filter: 'type=task', counts: {}},
+    }),
+  },
+});
+
 describe('VulnerabilitiesCvssDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(VulnerabilitiesCvssDisplay).toBeDefined();
@@ -46,7 +55,7 @@ describe('VulnerabilitiesCvssDisplay', () => {
   });
 
   test('should render the total vulnerabilities count in the title', () => {
-    const {render} = rendererWith();
+    const {render} = rendererWith({gmp: createGmp()});
     render(<VulnerabilitiesCvssDisplay />);
     screen.getByText(/Total: 42/);
   });
@@ -71,7 +80,7 @@ describe('VulnerabilitiesCvssTableDisplay', () => {
   });
 
   test('should render the total vulnerabilities count in the title', () => {
-    const {render} = rendererWith();
+    const {render} = rendererWith({gmp: createGmp()});
     render(<VulnerabilitiesCvssTableDisplay />);
     screen.getByText(/Total: 42/);
   });

@@ -83,7 +83,15 @@ export const createLoadEntities =
 
     dispatch(actions.request(filter));
 
-    return gmp[pluralizeType(entityType)].get({filter}).then(
+    const gmpCommand = gmp[pluralizeType(entityType)];
+
+    if (!isDefined(gmpCommand)) {
+      throw new Error(
+        `GMP entities command for entity type ${entityType} not found`,
+      );
+    }
+
+    return gmpCommand.get({filter}).then(
       response => {
         const {data, meta} = response;
         const {filter: loadedFilter, counts} = meta;
