@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, expect, test} from '@gsa/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
@@ -35,6 +35,15 @@ vi.mock(
   }),
 );
 
+const createGmp = () => ({
+  filters: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {filter: 'type=task', counts: {}},
+    }),
+  },
+});
+
 describe('VulnerabilitiesSeverityDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(VulnerabilitiesSeverityDisplay).toBeDefined();
@@ -56,7 +65,7 @@ describe('VulnerabilitiesSeverityDisplay', () => {
   });
 
   test('should render the total vulnerabilities count in the title', () => {
-    const {render} = rendererWith();
+    const {render} = rendererWith({gmp: createGmp()});
     render(<VulnerabilitiesSeverityDisplay />);
     screen.getByText(/Total: 17/);
   });
@@ -85,7 +94,7 @@ describe('VulnerabilitiesSeverityTableDisplay', () => {
   });
 
   test('should render the total vulnerabilities count in the title', () => {
-    const {render} = rendererWith();
+    const {render} = rendererWith({gmp: createGmp()});
     render(<VulnerabilitiesSeverityTableDisplay />);
     screen.getByText(/Total: 17/);
   });

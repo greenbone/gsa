@@ -59,6 +59,15 @@ vi.mock(
   }),
 );
 
+const createGmp = () => ({
+  filters: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {filter: 'type=task', counts: {}},
+    }),
+  },
+});
+
 describe('VulnerabilitiesHostsDisplay', () => {
   test('should export VulnerabilitiesHostsDisplay', () => {
     expect(VulnerabilitiesHostsDisplay).toBeDefined();
@@ -88,7 +97,7 @@ describe('VulnerabilitiesHostsDisplay', () => {
         {value: 4, count: 1, c_count: 2},
       ],
     };
-    const {render} = rendererWith();
+    const {render} = rendererWith({gmp: createGmp()});
     render(<VulnerabilitiesHostsDisplay />);
     screen.getByText(/Total: 2/);
   });
@@ -101,7 +110,7 @@ describe('VulnerabilitiesHostsDisplay', () => {
       ],
     };
     const onFilterChanged = testing.fn();
-    const {render} = rendererWith();
+    const {render} = rendererWith({gmp: createGmp()});
     render(<VulnerabilitiesHostsDisplay onFilterChanged={onFilterChanged} />);
 
     const bar = screen.getByRole('button', {name: 'bar-4-5'});
@@ -116,7 +125,7 @@ describe('VulnerabilitiesHostsDisplay', () => {
   test('should call onFilterChanged with a hosts=0 filter when clicking the zero-hosts bar', () => {
     loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
     const onFilterChanged = testing.fn();
-    const {render} = rendererWith();
+    const {render} = rendererWith({gmp: createGmp()});
     render(<VulnerabilitiesHostsDisplay onFilterChanged={onFilterChanged} />);
 
     const bar = screen.getByRole('button', {name: 'bar-0'});
@@ -131,7 +140,7 @@ describe('VulnerabilitiesHostsDisplay', () => {
     loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
     const onFilterChanged = testing.fn();
     const filter = QueryFilter.fromString('hosts=0');
-    const {render} = rendererWith();
+    const {render} = rendererWith({gmp: createGmp()});
     render(
       <VulnerabilitiesHostsDisplay
         filter={filter}
@@ -147,7 +156,7 @@ describe('VulnerabilitiesHostsDisplay', () => {
 
   test('should not throw when clicking a bar without onFilterChanged', () => {
     loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
-    const {render} = rendererWith();
+    const {render} = rendererWith({gmp: createGmp()});
     render(<VulnerabilitiesHostsDisplay />);
 
     const bar = screen.getByRole('button', {name: 'bar-0'});
