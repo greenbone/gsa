@@ -96,10 +96,7 @@ const transformSeverityData = (
 
   const boundaries = getSeverityLevelBoundaries(severityRating);
 
-  // @ts-expect-error
-  const transformedData: TransformedSeverityClassData = Object.values(
-    severityClasses,
-  )
+  const transformedData = Object.values(severityClasses)
     .toSorted(
       (a, b) =>
         severityRiskFactorToValue(a.riskFactor) -
@@ -172,9 +169,10 @@ const transformSeverityData = (
       };
     });
 
-  transformedData.total = sum;
+  const result = transformedData as TransformedSeverityClassData;
+  result.total = sum;
 
-  return transformedData;
+  return result;
 };
 
 export default transformSeverityData;
