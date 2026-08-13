@@ -325,7 +325,7 @@ class DataDisplay<
     >,
   ): boolean {
     if (isDefined(this.props.filter)) {
-      return this.props.filter.equals(nextProps.filter);
+      return !this.props.filter.equals(nextProps.filter);
     }
 
     return isDefined(nextProps.filter);
