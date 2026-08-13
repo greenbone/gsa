@@ -178,6 +178,24 @@ const renderIcons = <TState extends State>(props: IconsRenderProps<TState>) => {
   return <DataDisplayIcons {...props} />;
 };
 
+const createSvgUrl = (
+  height: number,
+  width: number,
+  svg: SVGSVGElement | null,
+) => {
+  const svgData = `<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+     "http://www.w3.org/TR/SVG/DTD/svg10.dtd">
+      <svg
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+        ${svg ? svg.innerHTML : ''}
+      </svg>`;
+
+  const svgBlob = new Blob([svgData], {type: 'image/svg+xml'});
+  return URL.createObjectURL(svgBlob);
+};
+
 class DataDisplay<
   TData,
   TProps extends DataDisplayWithTranslationProps<
@@ -313,23 +331,6 @@ class DataDisplay<
     return isDefined(nextProps.filter);
   }
 
-  createSvgUrl() {
-    const {current: svg} = this.svgRef;
-    const {height, width} = this.props;
-
-    const svgData = `<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
-     "http://www.w3.org/TR/SVG/DTD/svg10.dtd">
-      <svg
-       xmlns="http://www.w3.org/2000/svg"
-       xmlns:xlink="http://www.w3.org/1999/xlink"
-       viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
-        ${svg ? svg.innerHTML : ''}
-      </svg>`;
-
-    const svgBlob = new Blob([svgData], {type: 'image/svg+xml'});
-    return URL.createObjectURL(svgBlob);
-  }
-
   cleanupDownloadSvg() {
     if (isDefined(this.downloadSvgUrl)) {
       URL.revokeObjectURL(this.downloadSvgUrl);
@@ -363,7 +364,11 @@ class DataDisplay<
 
     this.cleanupDownloadSvg();
 
-    this.downloadSvgUrl = this.createSvgUrl();
+    this.downloadSvgUrl = createSvgUrl(
+      this.props.height,
+      this.props.width,
+      this.svgRef.current,
+    );
 
     download.setAttribute('href', this.downloadSvgUrl);
     download.setAttribute('download', 'chart.svg');
