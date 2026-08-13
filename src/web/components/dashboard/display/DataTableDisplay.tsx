@@ -15,7 +15,7 @@ import DataTable, {
 type DataTableDisplayRenderProps<TTransformedData> =
   DataTableProps<TTransformedData>;
 
-interface DataTableDisplayProps<
+export interface DataTableDisplayProps<
   TData,
   TState extends State = State,
   TTransformedData = TData,
