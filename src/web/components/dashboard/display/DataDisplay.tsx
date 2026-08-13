@@ -174,7 +174,7 @@ const DisplayBox = styled.div`
 
 const escapeCsv = (value: string) => '"' + `${value}`.replace(/"/g, '""') + '"';
 
-const renderIcons = props => {
+const renderIcons = <TState extends State>(props: IconsRenderProps<TState>) => {
   return <DataDisplayIcons {...props} />;
 };
 
