@@ -13,8 +13,8 @@ import {
 } from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
 import {vi} from 'vitest';
+import date from 'gmp/models/date';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import {parseDate} from 'gmp/parser';
 import {type LineData} from 'web/components/chart/base/Line';
 import transformCreated, {
   type CreatedDataPoint,
@@ -30,8 +30,8 @@ interface LineProbeProps {
 
 let selectSameDate = false;
 
-const startDate = parseDate('2024-01-15T12:00:00Z');
-const endDate = parseDate('2024-01-16T12:00:00Z');
+const startDate = date('2024-01-15T12:00:00Z');
+const endDate = date('2024-01-16T12:00:00Z');
 
 vi.mock('web/components/chart/base/Line', () => ({
   default: ({
@@ -113,7 +113,7 @@ describe('CreatedDisplay', () => {
     fireEvent.click(screen.getByTestId('range-select'));
 
     expect(onFilterChanged.mock.calls[0][0].toFilterString()).toBe(
-      'created>2024-01-15t13:00 and created<2024-01-16t13:00',
+      'created>2024-01-15t12:00:00Z and created<2024-01-16t12:00:00Z',
     );
   });
 
@@ -126,7 +126,7 @@ describe('CreatedDisplay', () => {
 
     expect(onFilterChanged).toHaveBeenCalledTimes(1);
     expect(onFilterChanged.mock.calls[0][0].toFilterString()).toBe(
-      'created>2024-01-14t13:00 and created<2024-01-16t13:00',
+      'created>2024-01-14t12:00:00Z and created<2024-01-16t12:00:00Z',
     );
   });
 
@@ -138,7 +138,7 @@ describe('CreatedDisplay', () => {
     fireEvent.click(screen.getByTestId('range-select'));
 
     expect(onFilterChanged.mock.calls[0][0].toFilterString()).toBe(
-      'status="active" and created>2024-01-15t13:00 and created<2024-01-16t13:00',
+      'status="active" and created>2024-01-15t12:00:00Z and created<2024-01-16t12:00:00Z',
     );
   });
 
