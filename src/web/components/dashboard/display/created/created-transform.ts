@@ -4,38 +4,41 @@
  */
 
 import {type Date} from 'gmp/models/date';
-import {parseInt, parseDate, type NumberReturn} from 'gmp/parser';
+import {parseInt, parseDate} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import {type LineData} from 'web/components/chart/base/Line';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
-interface CreatedDataGroup {
+export interface CreatedDataGroup {
   value: string;
   count: string;
   c_count: string;
 }
 
-interface CreatedData {
+export interface CreatedData {
   groups?: CreatedDataGroup[];
 }
 
-interface CreatedDataPoint {
-  label: string;
+export interface CreatedDataPoint extends LineData {
   x: Date;
-  y: NumberReturn;
-  y2: NumberReturn;
 }
 
 const transformCreated = (data: CreatedData = {}): CreatedDataPoint[] => {
   const {groups = []} = data;
-  return groups.map(group => {
-    const {value, count, c_count} = group;
-    const createdDate = parseDate(value) as Date;
-    return {
-      label: formattedUserSettingShortDate(createdDate) as string,
-      x: createdDate,
-      y: parseInt(count),
-      y2: parseInt(c_count),
-    };
-  });
+  return groups
+    .map(group => {
+      const {value, count, c_count} = group;
+      const createdDate = parseDate(value);
+      return {
+        label: formattedUserSettingShortDate(createdDate) as string,
+        x: createdDate,
+        y: parseInt(count),
+        y2: parseInt(c_count),
+      };
+    })
+    .filter(
+      ({x, y, y2}) => isDefined(x) && isDefined(y) && isDefined(y2),
+    ) as CreatedDataPoint[];
 };
 
 export default transformCreated;

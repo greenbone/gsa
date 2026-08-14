@@ -38,13 +38,13 @@ describe('transformCreated', () => {
     });
   });
 
-  test('should preserve undefined values for invalid counts', () => {
+  test('should omit groups with invalid counts', () => {
     const result = transformCreated({
       groups: [
         {value: '2024-01-15', count: 'invalid', c_count: 'also-invalid'},
       ],
     });
 
-    expect(result[0]).toMatchObject({y: undefined, y2: undefined});
+    expect(result).toEqual([]);
   });
 });
