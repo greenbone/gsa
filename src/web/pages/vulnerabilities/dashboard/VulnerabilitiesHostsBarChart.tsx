@@ -3,42 +3,34 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {_} from 'gmp/locale/lang';
-import BarChart from 'web/components/chart/Bar';
-import {type HostDataPoint} from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsDisplay';
+import BarChart, {type BarChartProps} from 'web/components/chart/Bar';
+import {type HostDataPoint} from 'web/pages/vulnerabilities/dashboard/hosts-transform';
 
-interface HostsBarChartProps {
-  width: number;
-  height: number;
-  data: HostDataPoint[];
-  svgRef: React.RefObject<SVGSVGElement | null>;
-  onDataClick?: (dataPoint: {
-    x: number;
-    y: number;
-    filterValue?: {start?: number; end?: number};
-  }) => void;
-}
+type VulnerabilitiesHostsBarChartDataPoint = HostDataPoint;
 
-const HostsBarChart = ({
+type VulnerabilitiesHostsBarChartProps = Omit<
+  BarChartProps<VulnerabilitiesHostsBarChartDataPoint>,
+  'xLabel' | 'yLabel' | 'showLegend' | 'onLegendItemClick'
+>;
+
+const VulnerabilitiesHostsBarChart = ({
   width,
   height,
   data,
   svgRef,
   onDataClick,
-}: HostsBarChartProps) => (
-  <BarChart
-    data={data.map(d => ({...d, x: Number(d.x)}))}
+}: VulnerabilitiesHostsBarChartProps) => (
+  <BarChart<VulnerabilitiesHostsBarChartDataPoint>
+    data={data}
     height={height}
     showLegend={false}
     svgRef={svgRef}
     width={width}
     xLabel={_('# of Hosts')}
     yLabel={_('# of Vulnerabilities')}
-    onDataClick={
-      onDataClick as ((dataPoint: {x: number; y: number}) => void) | undefined
-    }
+    onDataClick={onDataClick}
   />
 );
 
-export default HostsBarChart;
+export default VulnerabilitiesHostsBarChart;
