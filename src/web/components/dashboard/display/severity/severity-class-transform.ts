@@ -44,14 +44,14 @@ interface SeverityClasses {
   };
 }
 
-interface FilterValue {
+interface SeverityFilterValue {
   start?: string;
   end?: string;
 }
 
 export interface SeverityClassData extends LegendData {
   value: number;
-  filterValue: FilterValue;
+  filterValue: SeverityFilterValue;
 }
 
 interface TransformedSeverityClassData extends Array<SeverityClassData> {
@@ -110,7 +110,7 @@ const transformSeverityData = (
       let end: string;
       let start: string;
       let toolTip: string = '';
-      let filterValue: FilterValue = {};
+      let filterValue: SeverityFilterValue = {};
 
       switch (riskFactor) {
         case CRITICAL:
