@@ -3,16 +3,44 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type FilterType} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import QueryFilter from 'gmp/models/filter/query-filter';
+import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {type SeverityRating} from 'gmp/utils/severity';
 import BarChart from 'web/components/chart/Bar';
-import transformCvssData from 'web/components/dashboard/display/cvss/cvss-transform';
-import DataDisplay from 'web/components/dashboard/display/DataDisplay';
+import transformCvssData, {
+  type CvssData,
+  type CvssDataPoint,
+  type TransformCvssDataProps,
+} from 'web/components/dashboard/display/cvss/cvss-transform';
+import DataDisplay, {
+  type DataDisplayProps,
+  type State,
+} from 'web/components/dashboard/display/DataDisplay';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/prop-types';
+
+type CvssDisplayState = State;
+
+type CvssDataDisplayBaseProps = DataDisplayProps<
+  CvssData,
+  CvssDisplayState,
+  CvssDataPoint,
+  TransformCvssDataProps
+>;
+
+interface CvssDisplayProps extends CvssDataDisplayBaseProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+  xLabel?: string;
+  yLabel?: string;
+}
+
+interface CvssDataDisplayProps extends CvssDataDisplayBaseProps {
+  severityRating: SeverityRating;
+}
 
 const CvssDisplay = ({
   filter,
@@ -21,12 +49,12 @@ const CvssDisplay = ({
   xLabel,
   onFilterChanged,
   ...props
-}) => {
+}: CvssDisplayProps) => {
   const [_] = useTranslation();
   xLabel = xLabel || _('Severity');
   const gmp = useGmp();
   const severityRating = gmp.settings.severityRating;
-  const handleDataClick = data => {
+  const handleDataClick = (data: CvssDataPoint) => {
     if (!isDefined(onFilterChanged)) {
       return;
     }
@@ -34,9 +62,10 @@ const CvssDisplay = ({
     const {filterValue = {}} = data;
     const {start, end} = filterValue;
 
-    let statusFilter;
+    let statusFilter: FilterType;
 
-    if (isDefined(start) && isDefined(end) && start >= 0) {
+    const startValue = parseFloat(start);
+    if (isDefined(startValue) && isDefined(end) && startValue >= 0) {
       const startTerm = FilterTerm.fromString(`severity>${start}`);
       const endTerm = FilterTerm.fromString(`severity<${end}`);
 
@@ -52,13 +81,9 @@ const CvssDisplay = ({
         QueryFilter.fromTerm(endTerm),
       );
     } else {
-      let statusTerm;
-
-      if (isDefined(start)) {
-        statusTerm = FilterTerm.fromString(`severity=${start}`);
-      } else {
-        statusTerm = FilterTerm.fromString('severity=""');
-      }
+      const statusTerm = isDefined(start)
+        ? FilterTerm.fromString(`severity=${start}`)
+        : FilterTerm.fromString('severity=""');
 
       if (isDefined(filter) && filter.hasTerm(statusTerm)) {
         return;
@@ -74,7 +99,13 @@ const CvssDisplay = ({
     onFilterChanged(newFilter);
   };
   return (
-    <DataDisplay
+    <DataDisplay<
+      CvssData,
+      CvssDataDisplayProps,
+      CvssDisplayState,
+      CvssDataPoint,
+      TransformCvssDataProps
+    >
       {...props}
       dataTransform={transformCvssData}
       severityRating={severityRating}
@@ -83,7 +114,7 @@ const CvssDisplay = ({
     >
       {({width, height, data, svgRef}) => {
         return (
-          <BarChart
+          <BarChart<CvssDataPoint>
             data={data}
             height={height}
             showLegend={false}
@@ -99,14 +130,6 @@ const CvssDisplay = ({
       }}
     </DataDisplay>
   );
-};
-
-CvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-  title: PropTypes.func.isRequired,
-  xLabel: PropTypes.toString,
-  yLabel: PropTypes.toString,
-  onFilterChanged: PropTypes.func,
 };
 
 export default CvssDisplay;
