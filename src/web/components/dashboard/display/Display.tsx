@@ -101,9 +101,9 @@ const DisplayTitle = styled.div`
 const Display = ({
   children,
   dragHandleRef,
+  isLoading,
   title,
   onRemoveClick,
-  isLoading,
 }: DisplayProps) => {
   const [_] = useTranslation();
   return (
