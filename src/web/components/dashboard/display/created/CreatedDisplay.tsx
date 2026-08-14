@@ -52,7 +52,6 @@ const CreatedDisplay = ({
 
       let {x: startDate} = start;
       let {x: endDate} = end;
-      const dateFormat = 'YYYY-MM-DDTHH:mm';
 
       let newFilter = isDefined(filter) ? filter.copy() : new QueryFilter();
 
@@ -63,7 +62,7 @@ const CreatedDisplay = ({
         }
 
         const startTerm = FilterTerm.fromString(
-          `created>${startDate.format(dateFormat)}`,
+          `created>${startDate.utc().format()}`,
         );
 
         if (!newFilter.hasTerm(startTerm)) {
@@ -73,7 +72,7 @@ const CreatedDisplay = ({
 
       if (isDate(endDate)) {
         const endTerm = FilterTerm.fromString(
-          `created<${endDate.format(dateFormat)}`,
+          `created<${endDate.utc().format()}`,
         );
 
         if (!newFilter.hasTerm(endTerm)) {
