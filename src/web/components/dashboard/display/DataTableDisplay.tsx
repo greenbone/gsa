@@ -15,34 +15,49 @@ import DataTable, {
 type DataTableDisplayRenderProps<TTransformedData> =
   DataTableProps<TTransformedData>;
 
+type DataTableDisplayChildren<TTransformedData> = (
+  props: DataTableDisplayRenderProps<TTransformedData>,
+) => React.ReactNode;
+
 export interface DataTableDisplayProps<
   TData,
   TState extends State = State,
   TTransformedData = TData,
-  TTransformProps = Record<string, unknown>,
-> extends Omit<
-  DataDisplayProps<TData, TState, TTransformedData, TTransformProps>,
-  'children'
+  TTransformProps extends object = object,
+> extends DataDisplayProps<
+  TData,
+  TState,
+  TTransformedData,
+  TTransformProps,
+  DataTableDisplayChildren<TTransformedData>
 > {
   dataTitles: string[];
-  children?:
-    | ((
-        props: DataTableDisplayRenderProps<TTransformedData>,
-      ) => React.ReactNode)
-    | unknown;
 }
+
+type DataTableDisplayComponentProps<
+  TData,
+  TState extends State,
+  TTransformedData,
+  TTransformProps extends object,
+> = DataTableDisplayProps<TData, TState, TTransformedData, TTransformProps> &
+  TTransformProps;
 
 const DataTableDisplay = <
   TData,
   TState extends State = State,
   TTransformedData = TData,
-  TTransformProps = Record<string, unknown>,
+  TTransformProps extends object = object,
 >({
   children,
   dataRow,
   dataTitles,
   ...props
-}: DataTableDisplayProps<TData, TState, TTransformedData, TTransformProps>) => (
+}: DataTableDisplayComponentProps<
+  TData,
+  TState,
+  TTransformedData,
+  TTransformProps
+>) => (
   <DataDisplay<
     TData,
     DataDisplayProps<TData, TState, TTransformedData, TTransformProps>,
