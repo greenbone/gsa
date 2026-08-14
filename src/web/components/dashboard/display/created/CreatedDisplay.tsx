@@ -4,22 +4,43 @@
  */
 
 import React from 'react';
+import {isDate} from 'gmp/models/date';
+import {type FilterType} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
-import LineChart, {lineDataPropType} from 'web/components/chart/base/Line';
-import transformCreated from 'web/components/dashboard/display/created/created-transform';
-import DataDisplay from 'web/components/dashboard/display/DataDisplay';
-import PropTypes from 'web/utils/prop-types';
+import LineChart, {type LineData} from 'web/components/chart/base/Line';
+import transformCreated, {
+  type CreatedData,
+  type CreatedDataPoint,
+} from 'web/components/dashboard/display/created/created-transform';
+import DataDisplay, {
+  type DataDisplayProps,
+  type State,
+} from 'web/components/dashboard/display/DataDisplay';
 
-class CreatedDisplay extends React.Component {
-  constructor(...args) {
-    super(...args);
+interface CreatedDisplayProps extends DataDisplayProps<
+  CreatedData,
+  State,
+  CreatedDataPoint
+> {
+  filter?: FilterType;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+  y2AxisLabel?: string;
+  yLine?: {color: string; label: string};
+  y2Line?: {color: string; label: string};
+  onFilterChanged?: (filter: FilterType) => void;
+}
+
+class CreatedDisplay extends React.Component<CreatedDisplayProps> {
+  constructor(props: CreatedDisplayProps) {
+    super(props);
 
     this.handleRangeSelect = this.handleRangeSelect.bind(this);
   }
 
-  handleRangeSelect(start, end) {
+  handleRangeSelect(start: LineData, end: LineData) {
     const {filter, onFilterChanged} = this.props;
 
     if (!isDefined(onFilterChanged)) {
@@ -32,7 +53,7 @@ class CreatedDisplay extends React.Component {
 
     let newFilter = isDefined(filter) ? filter.copy() : new QueryFilter();
 
-    if (isDefined(startDate)) {
+    if (isDate(startDate) && isDate(endDate)) {
       if (startDate.isSame(endDate)) {
         startDate = startDate.clone().subtract(1, 'day');
         endDate = endDate.clone().add(1, 'day');
@@ -47,7 +68,7 @@ class CreatedDisplay extends React.Component {
       }
     }
 
-    if (isDefined(endDate)) {
+    if (isDate(endDate)) {
       const endTerm = FilterTerm.fromString(
         `created<${endDate.format(dateFormat)}`,
       );
@@ -73,11 +94,15 @@ class CreatedDisplay extends React.Component {
       ...props
     } = this.props;
     return (
-      <DataDisplay {...props} dataTransform={dataTransform} filter={filter}>
-        {({width, height, data: tdata, svgRef, state}) => (
+      <DataDisplay<CreatedData, CreatedDisplayProps, State, CreatedDataPoint>
+        {...props}
+        dataTransform={dataTransform}
+        filter={filter}
+      >
+        {({width, height, data, svgRef, state}) => (
           <LineChart
             timeline
-            data={tdata}
+            data={data}
             height={height}
             showLegend={state.showLegend}
             svgRef={svgRef}
@@ -96,16 +121,5 @@ class CreatedDisplay extends React.Component {
     );
   }
 }
-
-CreatedDisplay.propTypes = {
-  dataTransform: PropTypes.func,
-  filter: PropTypes.filter,
-  xAxisLabel: PropTypes.toString,
-  y2AxisLabel: PropTypes.toString,
-  y2Line: lineDataPropType,
-  yAxisLabel: PropTypes.toString,
-  yLine: lineDataPropType,
-  onFilterChanged: PropTypes.func,
-};
 
 export default CreatedDisplay;
