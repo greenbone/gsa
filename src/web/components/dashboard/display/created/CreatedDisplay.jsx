@@ -8,7 +8,7 @@ import FilterTerm from 'gmp/models/filter/filter-term';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
 import LineChart, {lineDataPropType} from 'web/components/chart/base/Line';
-import transformCreated from 'web/components/dashboard/display/created/CreatedTransform';
+import transformCreated from 'web/components/dashboard/display/created/created-transform';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import PropTypes from 'web/utils/prop-types';
 
