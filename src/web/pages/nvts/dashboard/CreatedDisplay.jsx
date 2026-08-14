@@ -5,8 +5,8 @@
 
 import {_, _l} from 'gmp/locale/lang';
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
+import transformCreated from 'web/components/dashboard/display/created/created-transform';
 import CreatedDisplay from 'web/components/dashboard/display/created/CreatedDisplay';
-import transformCreated from 'web/components/dashboard/display/created/CreatedTransform';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
