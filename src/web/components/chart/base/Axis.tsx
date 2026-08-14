@@ -24,6 +24,7 @@ type SupportedScale =
   | ScaleTime<number, number>;
 
 interface AxisProps {
+  dataTestId?: string;
   hideTickLabels?: boolean;
   label?: string;
   labelOffset?: number;
@@ -50,6 +51,7 @@ const AXIS_GENERATORS = {
 } as const;
 
 const Axis = ({
+  dataTestId,
   hideTickLabels = false,
   orientation = 'bottom',
   labelOffset = orientation === 'bottom' || orientation === 'top' ? 15 : 36,
@@ -144,7 +146,7 @@ const Axis = ({
   }
 
   return (
-    <g transform={`translate(${left}, ${top})`}>
+    <g data-testid={dataTestId} transform={`translate(${left}, ${top})`}>
       <g ref={axisRef} />
       {label && (
         <text
