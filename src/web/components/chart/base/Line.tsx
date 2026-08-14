@@ -32,7 +32,7 @@ import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/prop-types';
 import Theme from 'web/utils/theme';
 
-interface LineData {
+export interface LineData {
   x: number | GmpDate;
   y: number;
   y2: number;
