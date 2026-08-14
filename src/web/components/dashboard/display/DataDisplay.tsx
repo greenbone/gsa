@@ -432,7 +432,7 @@ class DataDisplay<
       showToggleLegend,
       onSelectFilterClick,
       onRemoveClick,
-      ...props
+      dragHandleRef,
     } = this.props;
 
     height = height - DISPLAY_HEADER_HEIGHT;
@@ -440,7 +440,6 @@ class DataDisplay<
 
     isLoading = isLoading && !isDefined(originalData);
 
-    const otherProps = excludeObjectProps(props, ownProps);
     const showCsvDownload = isDefined(dataRow) && isDefined(dataTitles);
 
     showFilterString = showFilterString && isDefined(filter);
@@ -452,10 +451,10 @@ class DataDisplay<
     const state = this.getCurrentState();
     return (
       <Display
+        dragHandleRef={dragHandleRef}
         isLoading={isLoading}
         title={`${title}`}
         onRemoveClick={onRemoveClick}
-        {...otherProps}
       >
         <DisplayBox>
           <Layout flex="column" grow="1">
