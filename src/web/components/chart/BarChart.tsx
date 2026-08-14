@@ -190,6 +190,7 @@ class BarChart<TData extends BarChartDataPoint> extends React.Component<
         <Svg ref={svgRef} height={height} width={width}>
           <Group left={marginLeft} top={margin.top}>
             <Axis
+              dataTestId="bar-chart-y-axis"
               label={String(yLabel)}
               left={0}
               numTicks={10}
@@ -199,6 +200,7 @@ class BarChart<TData extends BarChartDataPoint> extends React.Component<
               top={0}
             />
             <Axis
+              dataTestId="bar-chart-x-axis"
               hideTickLabels={hideTickLabels}
               label={String(xLabel)}
               orientation="bottom"
