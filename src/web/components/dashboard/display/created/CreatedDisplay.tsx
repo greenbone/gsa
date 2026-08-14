@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {useCallback} from 'react';
 import {isDate} from 'gmp/models/date';
 import {type FilterType} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
@@ -33,93 +33,84 @@ interface CreatedDisplayProps extends DataDisplayProps<
   onFilterChanged?: (filter: FilterType) => void;
 }
 
-class CreatedDisplay extends React.Component<CreatedDisplayProps> {
-  constructor(props: CreatedDisplayProps) {
-    super(props);
-
-    this.handleRangeSelect = this.handleRangeSelect.bind(this);
-  }
-
-  handleRangeSelect(start: LineData, end: LineData) {
-    const {filter, onFilterChanged} = this.props;
-
-    if (!isDefined(onFilterChanged)) {
-      return;
-    }
-
-    let {x: startDate} = start;
-    let {x: endDate} = end;
-    const dateFormat = 'YYYY-MM-DDTHH:mm';
-
-    let newFilter = isDefined(filter) ? filter.copy() : new QueryFilter();
-
-    if (isDate(startDate) && isDate(endDate)) {
-      if (startDate.isSame(endDate)) {
-        startDate = startDate.clone().subtract(1, 'day');
-        endDate = endDate.clone().add(1, 'day');
+const CreatedDisplay = ({
+  dataTransform = transformCreated,
+  filter,
+  xAxisLabel,
+  y2AxisLabel,
+  y2Line,
+  yAxisLabel,
+  yLine,
+  onFilterChanged,
+  ...props
+}: CreatedDisplayProps) => {
+  const handleRangeSelect = useCallback(
+    (start: LineData, end: LineData) => {
+      if (!isDefined(onFilterChanged)) {
+        return;
       }
 
-      const startTerm = FilterTerm.fromString(
-        `created>${startDate.format(dateFormat)}`,
-      );
+      let {x: startDate} = start;
+      let {x: endDate} = end;
+      const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-      if (!newFilter.hasTerm(startTerm)) {
-        newFilter = newFilter.and(QueryFilter.fromTerm(startTerm));
+      let newFilter = isDefined(filter) ? filter.copy() : new QueryFilter();
+
+      if (isDate(startDate) && isDate(endDate)) {
+        if (startDate.isSame(endDate)) {
+          startDate = startDate.clone().subtract(1, 'day');
+          endDate = endDate.clone().add(1, 'day');
+        }
+
+        const startTerm = FilterTerm.fromString(
+          `created>${startDate.format(dateFormat)}`,
+        );
+
+        if (!newFilter.hasTerm(startTerm)) {
+          newFilter = newFilter.and(QueryFilter.fromTerm(startTerm));
+        }
       }
-    }
 
-    if (isDate(endDate)) {
-      const endTerm = FilterTerm.fromString(
-        `created<${endDate.format(dateFormat)}`,
-      );
+      if (isDate(endDate)) {
+        const endTerm = FilterTerm.fromString(
+          `created<${endDate.format(dateFormat)}`,
+        );
 
-      if (!newFilter.hasTerm(endTerm)) {
-        newFilter = newFilter.and(QueryFilter.fromTerm(endTerm));
+        if (!newFilter.hasTerm(endTerm)) {
+          newFilter = newFilter.and(QueryFilter.fromTerm(endTerm));
+        }
       }
-    }
 
-    onFilterChanged(newFilter);
-  }
-
-  render() {
-    const {
-      dataTransform = transformCreated,
-      filter,
-      xAxisLabel,
-      yAxisLabel,
-      y2AxisLabel,
-      yLine,
-      y2Line,
-      onFilterChanged,
-      ...props
-    } = this.props;
-    return (
-      <DataDisplay<CreatedData, CreatedDisplayProps, State, CreatedDataPoint>
-        {...props}
-        dataTransform={dataTransform}
-        filter={filter}
-      >
-        {({width, height, data, svgRef, state}) => (
-          <LineChart
-            timeline
-            data={data}
-            height={height}
-            showLegend={state.showLegend}
-            svgRef={svgRef}
-            width={width}
-            xAxisLabel={xAxisLabel}
-            y2AxisLabel={y2AxisLabel}
-            y2Line={y2Line}
-            yAxisLabel={yAxisLabel}
-            yLine={yLine}
-            onRangeSelected={
-              isDefined(onFilterChanged) ? this.handleRangeSelect : undefined
-            }
-          />
-        )}
-      </DataDisplay>
-    );
-  }
-}
+      onFilterChanged(newFilter);
+    },
+    [filter, onFilterChanged],
+  );
+  return (
+    <DataDisplay<CreatedData, CreatedDisplayProps, State, CreatedDataPoint>
+      {...props}
+      dataTransform={dataTransform}
+      filter={filter}
+    >
+      {({width, height, data, svgRef, state}) => (
+        <LineChart
+          timeline
+          data={data}
+          height={height}
+          showLegend={state.showLegend}
+          svgRef={svgRef}
+          width={width}
+          xAxisLabel={xAxisLabel}
+          y2AxisLabel={y2AxisLabel}
+          y2Line={y2Line}
+          yAxisLabel={yAxisLabel}
+          yLine={yLine}
+          onRangeSelected={
+            isDefined(onFilterChanged) ? handleRangeSelect : undefined
+          }
+        />
+      )}
+    </DataDisplay>
+  );
+};
 
 export default CreatedDisplay;
