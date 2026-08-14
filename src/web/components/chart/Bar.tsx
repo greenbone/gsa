@@ -6,6 +6,7 @@
 import React from 'react';
 import {scaleBand, scaleLinear} from 'd3-scale';
 import styled from 'styled-components';
+import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/base/Axis';
 import Group from 'web/components/chart/base/Group';
@@ -19,22 +20,22 @@ import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
 
-interface BarChartDataPoint extends LegendData {
-  x: number;
+export interface BarChartDataPoint extends LegendData {
+  x: ToString;
   y: number;
 }
 
-interface BarChartProps {
-  width: number;
+export interface BarChartProps<TData extends BarChartDataPoint> {
+  data: TData[];
   height: number;
-  showLegend?: boolean;
   horizontal?: boolean;
+  showLegend?: boolean;
+  svgRef?: React.Ref<SVGSVGElement>;
+  width: number;
   xLabel?: string;
   yLabel?: string;
-  svgRef?: React.Ref<SVGSVGElement>;
-  data: BarChartDataPoint[];
-  onDataClick?: (dataPoint: BarChartDataPoint) => void;
-  onLegendItemClick?: (dataPoint: BarChartDataPoint) => void;
+  onDataClick?: (dataPoint: TData) => void;
+  onLegendItemClick?: (dataPoint: TData) => void;
 }
 
 interface BarChartState {
@@ -68,10 +69,13 @@ const tickFormat = (val: number | string | Date) => {
   return valStr;
 };
 
-class BarChart extends React.Component<BarChartProps, BarChartState> {
+class BarChart<TData extends BarChartDataPoint> extends React.Component<
+  BarChartProps<TData>,
+  BarChartState
+> {
   legendRef: LegendRef;
 
-  constructor(props: BarChartProps) {
+  constructor(props: BarChartProps<TData>) {
     super(props);
 
     this.legendRef = React.createRef();
@@ -81,7 +85,10 @@ class BarChart extends React.Component<BarChartProps, BarChartState> {
     };
   }
 
-  shouldComponentUpdate(nextProps: BarChartProps, nextState: BarChartState) {
+  shouldComponentUpdate(
+    nextProps: BarChartProps<TData>,
+    nextState: BarChartState,
+  ) {
     return (
       shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width
@@ -135,12 +142,12 @@ class BarChart extends React.Component<BarChartProps, BarChartState> {
     } = this.props;
     const {width} = this.state;
 
-    const xValues = data.map(d => d.x);
+    const xValues = data.map(d => String(d.x));
     const yValues = data.map(d => d.y);
     const yMax = Math.max(...yValues);
 
     const maxLabelLength = Math.max(
-      ...xValues.map(val => val.toString().length),
+      ...xValues.map(val => String(val).length),
       MAX_LABEL_LENGTH,
     );
 
@@ -158,7 +165,7 @@ class BarChart extends React.Component<BarChartProps, BarChartState> {
       maxHeight = maxHeight - LABEL_HEIGHT;
     }
 
-    const xScale = scaleBand<number>()
+    const xScale = scaleBand<string>()
       .rangeRound(horizontal ? [maxHeight, 0] : [0, maxWidth])
       .domain(xValues)
       .padding(0.125);
@@ -183,7 +190,7 @@ class BarChart extends React.Component<BarChartProps, BarChartState> {
         <Svg ref={svgRef} height={height} width={width}>
           <Group left={marginLeft} top={margin.top}>
             <Axis
-              label={`${yLabel}`}
+              label={String(yLabel)}
               left={0}
               numTicks={10}
               orientation="left"
@@ -193,14 +200,14 @@ class BarChart extends React.Component<BarChartProps, BarChartState> {
             />
             <Axis
               hideTickLabels={hideTickLabels}
-              label={`${xLabel}`}
+              label={String(xLabel)}
               orientation="bottom"
               scale={horizontal ? yScale : xScale}
               tickValues={tickValues}
               top={maxHeight}
             />
             {data.map(d => (
-              <ToolTip key={horizontal ? d.y : d.x} content={d.toolTip}>
+              <ToolTip key={horizontal ? d.y : String(d.x)} content={d.toolTip}>
                 {({targetRef, hide, show}) => (
                   <Group
                     onClick={
@@ -216,8 +223,8 @@ class BarChart extends React.Component<BarChartProps, BarChartState> {
                           : maxHeight - yScale(d.y)
                       }
                       width={horizontal ? yScale(d.y) : xScale.bandwidth()}
-                      x={horizontal ? 1 : xScale(d.x)}
-                      y={horizontal ? xScale(d.x) : yScale(d.y)}
+                      x={horizontal ? 1 : xScale(String(d.x))}
+                      y={horizontal ? xScale(String(d.x)) : yScale(d.y)}
                       onMouseEnter={show}
                       onMouseLeave={hide}
                     />
@@ -228,7 +235,7 @@ class BarChart extends React.Component<BarChartProps, BarChartState> {
           </Group>
         </Svg>
         {showLegend && data.length > 0 && (
-          <Legend<BarChartDataPoint>
+          <Legend<TData>
             data={data}
             legendRef={this.legendRef}
             onItemClick={onLegendItemClick}
