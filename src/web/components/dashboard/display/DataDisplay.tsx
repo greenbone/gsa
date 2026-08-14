@@ -59,14 +59,19 @@ interface DataDisplayRenderProps<TData, TState extends State> {
 type TransformFunc<
   TData,
   TTransformedData,
-  TTransformProps = Record<string, unknown>,
+  TTransformProps extends object = object,
 > = (data: TData, props: TTransformProps) => TTransformedData[];
+
+type DataDisplayChildren<TTransformedData, TState extends State> = (
+  props: DataDisplayRenderProps<TTransformedData, TState>,
+) => React.ReactNode;
 
 export interface DataDisplayProps<
   TData,
   TState extends State,
   TTransformedData = TData,
-  TTransformProps = Record<string, unknown>,
+  TTransformProps extends object = object,
+  TChildren = DataDisplayChildren<TTransformedData, TState>,
 > {
   data: TData;
   dataRow: (data: TTransformedData) => string[];
@@ -75,9 +80,7 @@ export interface DataDisplayProps<
   filter?: FilterType;
   height: number;
   icons: (props: IconsRenderProps<TState>) => React.ReactNode;
-  children: (
-    props: DataDisplayRenderProps<TTransformedData, TState>,
-  ) => React.ReactNode;
+  children?: TChildren;
   id: string;
   initialState: TState;
   onSelectFilterClick: () => void;
@@ -92,16 +95,14 @@ export interface DataDisplayProps<
   width: number;
 }
 
-interface DataDisplayWithTranslationProps<
+type DataDisplayWithTranslationProps<
   TData,
   TState extends State,
   TTransformedData = TData,
-  TTransformProps = Record<string, unknown>,
->
-  extends
-    WithTranslationComponentProps,
-    Omit<DisplayProps, 'children' | 'title'>,
-    DataDisplayProps<TData, TState, TTransformedData, TTransformProps> {}
+  TTransformProps extends object = object,
+> = WithTranslationComponentProps &
+  Omit<DisplayProps, 'children' | 'title'> &
+  DataDisplayProps<TData, TState, TTransformedData, TTransformProps>;
 
 interface DataDisplayState<TData, TTransformedData> {
   data: TTransformedData[];
@@ -206,7 +207,7 @@ class DataDisplay<
   >,
   TState extends State,
   TTransformedData,
-  TTransformProps = Record<string, unknown>,
+  TTransformProps extends object = object,
 > extends React.Component<TProps, DataDisplayState<TData, TTransformedData>> {
   svgRef: React.RefObject<SVGSVGElement | null>;
   downloadRef: React.RefObject<HTMLAnchorElement | null>;
@@ -247,7 +248,7 @@ class DataDisplay<
     >,
     TState extends State,
     TTransformedData,
-    TTransformProps = Record<string, unknown>,
+    TTransformProps extends object = object,
   >(nextProps: TProps, prevState: DataDisplayState<TData, TTransformedData>) {
     if (!equal(prevState.originalData, nextProps.data)) {
       // data has changed update transformed data
@@ -281,7 +282,7 @@ class DataDisplay<
     >,
     TState extends State,
     TTransformedData,
-    TTransformProps = Record<string, unknown>,
+    TTransformProps extends object = object,
   >(props: Readonly<TProps>) {
     const {data, dataTransform, ...other} = props;
 
@@ -518,7 +519,7 @@ export default withTranslation(DataDisplay) as unknown as <
   >,
   TState extends State,
   TTransformedData,
-  TTransformProps = Record<string, unknown>,
+  TTransformProps extends object = object,
 >(
   props: TProps,
 ) => ReactNode;

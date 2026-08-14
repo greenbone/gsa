@@ -39,6 +39,7 @@ describe('DataTableDisplay component tests', () => {
   test('should render DataTable fallback when children is not a function', () => {
     render(
       <DataTableDisplay<TestData> {...createProps()}>
+        {/* @ts-expect-error testing children as not a function */}
         <span>not a function</span>
       </DataTableDisplay>,
     );
