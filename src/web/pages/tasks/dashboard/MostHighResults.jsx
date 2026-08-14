@@ -89,7 +89,6 @@ export class TasksMostHighResultsDisplay extends React.Component {
                 horizontal
                 data={tdata}
                 height={height}
-                showLegend={false}
                 svgRef={svgRef}
                 width={width}
                 xLabel={_('Results per Host')}

@@ -112,7 +112,6 @@ export class OsVulnScoreDisplay extends React.Component {
                 horizontal
                 data={tdata}
                 height={height}
-                showLegend={false}
                 svgRef={svgRef}
                 width={width}
                 xLabel={_('Vulnerability (Severity) Score')}

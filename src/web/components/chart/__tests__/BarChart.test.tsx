@@ -10,14 +10,12 @@ import BarChart, {type BarChartDataPoint} from 'web/components/chart/BarChart';
 const data: BarChartDataPoint[] = [
   {
     color: '#008000',
-    label: 'First',
     toolTip: 'First bar',
     x: 'one',
     y: 10,
   },
   {
     color: '#0000aa',
-    label: 'Second',
     toolTip: 'Second bar',
     x: 'two',
     y: 20,
@@ -32,7 +30,6 @@ describe('BarChart', () => {
       <BarChart
         data={data}
         height={300}
-        showLegend={false}
         width={900}
         xLabel="X axis"
         yLabel="Y axis"
@@ -45,15 +42,6 @@ describe('BarChart', () => {
     expect(container).toHaveTextContent('Y axis');
   });
 
-  test('should render a legend when enabled', () => {
-    const {render} = rendererWith();
-
-    render(<BarChart showLegend data={data} height={300} width={900} />);
-
-    expect(screen.getByText('First')).toBeVisible();
-    expect(screen.getByText('Second')).toBeVisible();
-  });
-
   test('should call onDataClick with the clicked data point', () => {
     const onDataClick = testing.fn();
     const {render} = rendererWith();
@@ -62,7 +50,6 @@ describe('BarChart', () => {
       <BarChart
         data={data}
         height={300}
-        showLegend={false}
         width={900}
         onDataClick={onDataClick}
       />,
@@ -82,7 +69,6 @@ describe('BarChart', () => {
       <BarChart
         data={data}
         height={300}
-        showLegend={false}
         width={900}
         xLabel="X axis"
         yLabel="Y axis"
@@ -98,15 +84,7 @@ describe('BarChart', () => {
 
   test('should render horizontal bars', () => {
     const {render} = rendererWith();
-    render(
-      <BarChart
-        horizontal
-        data={data}
-        height={300}
-        showLegend={false}
-        width={900}
-      />,
-    );
+    render(<BarChart horizontal data={data} height={300} width={900} />);
 
     const horizontalXAxis = screen.getByTestId('bar-chart-x-axis');
     const horizontalYAxis = screen.getByTestId('bar-chart-y-axis');
@@ -117,25 +95,5 @@ describe('BarChart', () => {
     );
     expect(horizontalXAxis).not.toHaveTextContent('one');
     expect(horizontalYAxis).not.toHaveTextContent('10');
-  });
-
-  test('should call onLegendItemClick with the selected data point', () => {
-    const onLegendItemClick = testing.fn();
-    const {render} = rendererWith();
-
-    render(
-      <BarChart
-        showLegend
-        data={data}
-        height={300}
-        width={900}
-        onLegendItemClick={onLegendItemClick}
-      />,
-    );
-
-    fireEvent.click(screen.getByText('First'));
-
-    expect(onLegendItemClick).toHaveBeenCalledTimes(1);
-    expect(onLegendItemClick).toHaveBeenCalledWith(data[0]);
   });
 });

@@ -117,7 +117,6 @@ const CvssDisplay = ({
           <BarChart<CvssDataPoint>
             data={data}
             height={height}
-            showLegend={false}
             svgRef={svgRef}
             width={width}
             xLabel={xLabel}

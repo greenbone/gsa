@@ -24,7 +24,6 @@ const VulnerabilitiesHostsBarChart = ({
   <BarChart<VulnerabilitiesHostsBarChartDataPoint>
     data={data}
     height={height}
-    showLegend={false}
     svgRef={svgRef}
     width={width}
     xLabel={_('# of Hosts')}

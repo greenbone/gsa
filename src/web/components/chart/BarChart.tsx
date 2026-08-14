@@ -3,23 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState, type ReactNode} from 'react';
 import {scaleBand, scaleLinear} from 'd3-scale';
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/base/Axis';
 import Group from 'web/components/chart/base/Group';
-import Legend, {
-  type LegendData,
-  type LegendRef,
-} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
 import ToolTip from 'web/components/chart/base/Tooltip';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import Layout from 'web/components/layout/Layout';
 
-export interface BarChartDataPoint extends LegendData {
+export interface BarChartDataPoint {
+  color: ToString;
+  toolTip?: ReactNode;
   x: ToString;
   y: number;
 }
@@ -28,20 +26,16 @@ export interface BarChartProps<TData extends BarChartDataPoint> {
   data: TData[];
   height: number;
   horizontal?: boolean;
-  showLegend?: boolean;
   svgRef?: React.Ref<SVGSVGElement>;
   width: number;
   xLabel?: string;
   yLabel?: string;
   onDataClick?: (dataPoint: TData) => void;
-  onLegendItemClick?: (dataPoint: TData) => void;
 }
 
 const StyledLayout = styled(Layout)`
   overflow: hidden;
 `;
-
-const LEGEND_MARGIN = 20;
 
 const margin = {
   top: 20,
@@ -64,37 +58,29 @@ const tickFormat = (val: number | string | Date) => {
   return valStr;
 };
 
-const getWidth = (width: number, legend: HTMLElement | null): number => {
+const getWidth = (width: number): number => {
   width -= MENU_PLACEHOLDER_WIDTH;
-
-  if (legend !== null) {
-    width -= legend.getBoundingClientRect().width + LEGEND_MARGIN;
-  }
-
   return Math.max(width, MIN_WIDTH);
 };
 
 const BarChart = <TData extends BarChartDataPoint>({
   data = [],
-  showLegend = true,
   height,
   xLabel = '',
   yLabel = '',
   horizontal = false,
   svgRef,
   onDataClick,
-  onLegendItemClick,
   width,
 }: BarChartProps<TData>) => {
-  const legendRef: LegendRef = useRef(null);
-  const [chartWidth, setChartWidth] = useState(() => getWidth(width, null));
+  const [chartWidth, setChartWidth] = useState(() => getWidth(width));
 
   useEffect(() => {
-    const nextWidth = getWidth(width, legendRef.current);
+    const nextWidth = getWidth(width);
     setChartWidth(currentWidth =>
       currentWidth === nextWidth ? currentWidth : nextWidth,
     );
-  }, [data, showLegend, width]);
+  }, [data, width]);
 
   const xValues = data.map(d => String(d.x));
   const yValues = data.map(d => d.y);
@@ -188,13 +174,6 @@ const BarChart = <TData extends BarChartDataPoint>({
           ))}
         </Group>
       </Svg>
-      {showLegend && data.length > 0 && (
-        <Legend<TData>
-          data={data}
-          legendRef={legendRef}
-          onItemClick={onLegendItemClick}
-        />
-      )}
     </StyledLayout>
   );
 };
