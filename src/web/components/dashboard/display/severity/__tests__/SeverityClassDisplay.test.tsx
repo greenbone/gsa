@@ -17,7 +17,7 @@ interface DonutProbeProps {
   show3d?: boolean;
 }
 
-vi.mock('web/components/chart/Donut', () => ({
+vi.mock('web/components/chart/DonutChart', () => ({
   default: ({data = [], onDataClick, show3d}: DonutProbeProps) => (
     <div>
       <span data-testid="show-3d">{String(show3d)}</span>

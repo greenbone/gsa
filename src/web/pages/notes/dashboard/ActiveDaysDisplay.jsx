@@ -14,7 +14,7 @@ import {
 } from 'gmp/models/note';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import DonutChart from 'web/components/chart/Donut';
+import DonutChart from 'web/components/chart/DonutChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';

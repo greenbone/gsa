@@ -30,6 +30,7 @@ import {setRef} from 'web/utils/Render';
 import Theme from 'web/utils/theme';
 
 interface EmptyDonutProps {
+  'data-testid'?: string;
   left: number;
   top: number;
   innerRadiusX: number;
@@ -78,6 +79,7 @@ const emptyColor = Theme.lightGray;
 const darkEmptyColor = (d3color(emptyColor) as HSLColor | RGBColor).darker();
 
 const EmptyDonut = ({
+  'data-testid': dataTestId,
   left,
   top,
   innerRadiusX,
@@ -92,7 +94,7 @@ const EmptyDonut = ({
     .outerRadiusX(outerRadiusX)
     .outerRadiusY(outerRadiusY);
   return (
-    <Group left={left} top={top}>
+    <Group data-testid={dataTestId} left={left} top={top}>
       <PieInnerPath
         color={darkEmptyColor}
         donutHeight={donutHeight}
@@ -288,6 +290,7 @@ class DonutChart<
           ref={setRef(svgRef as Ref<SVGSVGElement>, ref => {
             this.svg = ref;
           })}
+          data-testid="donut-chart-svg"
           height={height}
           width={width}
         >
@@ -332,6 +335,7 @@ class DonutChart<
             </React.Fragment>
           ) : (
             <EmptyDonut
+              data-testid="donut-chart-empty"
               donutHeight={donutThickness}
               left={centerX}
               top={centerY}
