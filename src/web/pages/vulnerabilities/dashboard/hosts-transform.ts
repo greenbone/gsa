@@ -5,7 +5,6 @@
 
 import {format as d3format} from 'd3-format';
 import {parseFloat} from 'gmp/parser';
-import {type LegendData} from 'web/components/chart/base/Legend';
 import {
   percent,
   vulnsByHostsColorScale,
@@ -29,11 +28,13 @@ interface HostsFilterValue {
   end: number;
 }
 
-export interface HostDataPoint extends LegendData {
+export interface HostDataPoint {
+  color: string;
+  filterValue: HostsFilterValue;
+  id: number;
+  toolTip: string;
   x: string;
   y: number;
-  id: number;
-  filterValue: HostsFilterValue;
 }
 
 export interface HostsData {
@@ -91,7 +92,6 @@ const transformHostsData = (data: HostsData = {}): HostDataPoint[] => {
     return {
       x: binWidth > 1 ? `${min}-${max}` : String(min),
       y: yValue,
-      label: 'label',
       toolTip: `${min} - ${max}: ${yValue} (${format(percentValue)}%)`,
       color,
       id: max,
