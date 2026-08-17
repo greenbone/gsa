@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import type d3 from 'd3';
 import d3cloud, {type Word as d3Word} from 'd3-cloud';
 import {scaleLinear} from 'd3-scale';
@@ -32,13 +32,6 @@ interface WordCloudChartProps {
   onDataClick?: (filterValue: string) => void;
 }
 
-interface WordCloudChartState {
-  width?: number;
-  height?: number;
-  words?: Word[];
-  data?: WordCloudChartData[];
-}
-
 const margin = {
   top: 5,
   right: 5,
@@ -50,136 +43,104 @@ const DEFAULT_MAX_WORDS = 50;
 const MIN_FONT_SIZE = 8;
 const MAX_FONT_SIZE = 20;
 
-class WordCloudChart extends React.Component<
-  WordCloudChartProps,
-  WordCloudChartState
-> {
-  private cloud: Cloud;
+const createCloud = (onEnd: (words: Word[]) => void): Cloud =>
+  d3cloud<Word>()
+    .fontSize(d => d.size as number)
+    .rotate(0)
+    .padding(2)
+    .font('Sans')
+    .on('end', onEnd);
 
-  constructor(props: WordCloudChartProps) {
-    super(props);
+const createWords = (data: WordCloudChartData[]): Word[] => {
+  let values = data.map(d => d.value).sort();
 
-    this.state = {};
-
-    this.cloud = d3cloud<Word>()
-      .fontSize(d => d.size as number)
-      .rotate(0)
-      .padding(2)
-      .font('Sans')
-      .on('end', words => this.setState({words}));
+  if (values.length > DEFAULT_MAX_WORDS) {
+    values = values.slice(0, DEFAULT_MAX_WORDS);
   }
 
-  componentDidMount() {
-    const {data = []} = this.props;
-    if (data.length > 0) {
-      this.updateSize();
-      this.updateWords();
-      this.cloud.start();
-    }
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+
+  const wordScale = scaleLinear()
+    .domain([min, max])
+    .range([MIN_FONT_SIZE, MAX_FONT_SIZE]);
+
+  const origWords = data.map(word => ({
+    size: wordScale(word.value),
+    text: word.label,
+    color: word.color,
+    filterValue: word.filterValue,
+  })) as Word[];
+
+  return origWords;
+};
+
+const WordCloudChart = ({
+  data,
+  width,
+  height,
+  svgRef,
+  onDataClick,
+}: WordCloudChartProps) => {
+  const [words, setWords] = useState<Word[]>([]);
+  const cloudRef = useRef<Cloud | null>(null);
+
+  if (!cloudRef.current) {
+    cloudRef.current = createCloud(setWords);
   }
 
-  componentDidUpdate() {
-    if (
-      this.state.width !== this.props.width ||
-      this.state.height !== this.props.height
-    ) {
-      this.updateSize();
-    }
-    if (this.state.data !== this.props.data) {
-      // data has been changed => recalculate words
-      this.updateWords();
-    }
-    if (
-      this.state.width !== this.props.width ||
-      this.state.height !== this.props.height ||
-      this.state.data !== this.props.data
-    ) {
-      this.cloud.start();
-    }
-  }
-
-  updateWords() {
-    const {data} = this.props;
-
-    let values = data.map(d => d.value).sort();
-
-    if (values.length > DEFAULT_MAX_WORDS) {
-      values = values.slice(0, DEFAULT_MAX_WORDS);
-    }
-
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-
-    const wordScale = scaleLinear()
-      .domain([min, max])
-      .range([MIN_FONT_SIZE, MAX_FONT_SIZE]);
-
-    const origWords = data.map(word => ({
-      size: wordScale(word.value),
-      text: word.label,
-      color: word.color,
-      filterValue: word.filterValue,
-    })) as Word[];
-
-    // store to be rendered data in state
-    // this allows to check if we need to update words on next render phase
-    this.setState({data});
-
-    this.cloud.stop();
-    this.cloud.words(origWords);
-  }
-
-  updateSize() {
-    const {width, height} = this.props;
+  useEffect(() => {
+    const cloud = cloudRef.current as Cloud;
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
-    this.cloud.size([maxWidth, maxHeight]);
+    cloud.size([maxWidth, maxHeight]);
+    cloud.stop();
+    cloud.words(createWords(data));
+    if (data.length > 0) {
+      cloud.start();
+    } else {
+      setWords([]);
+    }
 
-    this.setState({
-      height,
-      width,
-    });
-  }
+    return () => {
+      cloud.stop();
+    };
+  }, [data, height, width]);
 
-  render() {
-    const {width, height, svgRef, onDataClick} = this.props;
-
-    const {words = []} = this.state;
-    return (
-      <Svg
-        ref={svgRef}
-        data-testid="word-cloud-chart-svg"
-        height={height}
-        width={width}
-      >
-        <Group left={width / 2 + margin.left} top={height / 2 + margin.top}>
-          {words.map(word => (
-            <Group
-              key={word.text}
-              data-testid={`word-cloud-word-${word.text}`}
-              onClick={
-                isDefined(onDataClick)
-                  ? () => onDataClick(word.filterValue)
-                  : undefined
-              }
+  return (
+    <Svg
+      ref={svgRef}
+      data-testid="word-cloud-chart-svg"
+      height={height}
+      width={width}
+    >
+      <Group left={width / 2 + margin.left} top={height / 2 + margin.top}>
+        {words.map(word => (
+          <Group
+            key={word.text}
+            data-testid={`word-cloud-word-${word.text}`}
+            onClick={
+              isDefined(onDataClick)
+                ? () => onDataClick(word.filterValue)
+                : undefined
+            }
+          >
+            <text
+              fill={word.color}
+              fontFamily={word.font}
+              fontSize={`${word.size}px`}
+              fontWeight={word.weight}
+              textAnchor="middle"
+              transform={`translate(${word.x},${word.y})rotate(${word.rotate})`}
             >
-              <text
-                fill={word.color}
-                fontFamily={word.font}
-                fontSize={`${word.size}px`}
-                fontWeight={word.weight}
-                textAnchor="middle"
-                transform={`translate(${word.x},${word.y})rotate(${word.rotate})`}
-              >
-                {word.text}
-              </text>
-            </Group>
-          ))}
-        </Group>
-      </Svg>
-    );
-  }
-}
+              {word.text}
+            </text>
+          </Group>
+        ))}
+      </Group>
+    </Svg>
+  );
+};
 
 export default WordCloudChart;
