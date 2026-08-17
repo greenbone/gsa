@@ -3,16 +3,54 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type ReactNode} from 'react';
 import {pie as d3pie} from 'd3-shape';
 import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
 import arc from 'web/components/chart/utils/Arc';
-import PropTypes from 'web/utils/prop-types';
+import {type Path} from 'web/components/chart/utils/Path';
 
-const sortArcsByStartAngle = (a, b) => (a.startAngle > b.startAngle ? -1 : 1);
+interface PieArc<TData> {
+  value: number;
+  startAngle: number;
+  endAngle: number;
+  padAngle: number;
+  data: TData;
+}
 
-const Pie = ({
+export interface PieRenderProps<TData> {
+  index: number;
+  x: number;
+  y: number;
+  path: Path;
+  startAngle: number;
+  endAngle: number;
+  padAngle: number;
+  data: TData;
+}
+
+export interface PieProps<TData> {
+  data: TData[];
+  outerRadiusX: number;
+  outerRadiusY?: number;
+  innerRadiusX?: number;
+  innerRadiusY?: number;
+  top?: number;
+  left?: number;
+  className?: string;
+  padAngle?: number;
+  pieSort?: (a: TData, b: TData) => number;
+  pieValue?: (datum: TData, index: number) => number;
+  arcsSort?: (a: PieArc<TData>, b: PieArc<TData>) => number;
+  children: (props: PieRenderProps<TData>) => ReactNode;
+}
+
+const sortArcsByStartAngle = <TData,>(
+  a: PieArc<TData>,
+  b: PieArc<TData>,
+): number => (a.startAngle > b.startAngle ? -1 : 1);
+
+const Pie = <TData,>({
   className = undefined,
   top = 0,
   left = 0,
@@ -26,7 +64,7 @@ const Pie = ({
   pieValue,
   arcsSort = sortArcsByStartAngle,
   children,
-}) => {
+}: PieProps<TData>) => {
   const arcPath = arc();
   arcPath.outerRadiusX(outerRadiusX);
 
@@ -42,7 +80,7 @@ const Pie = ({
     arcPath.outerRadiusY(outerRadiusY);
   }
 
-  const pie = d3pie();
+  const pie = d3pie<TData>();
 
   // don't sort values. default is descending
   pie.sortValues(null);
@@ -79,22 +117,6 @@ const Pie = ({
       })}
     </Group>
   );
-};
-
-Pie.propTypes = {
-  arcsSort: PropTypes.func,
-  children: PropTypes.func.isRequired,
-  className: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  innerRadiusX: PropTypes.number,
-  innerRadiusY: PropTypes.number,
-  left: PropTypes.number,
-  outerRadiusX: PropTypes.number.isRequired,
-  outerRadiusY: PropTypes.number,
-  padAngle: PropTypes.number,
-  pieSort: PropTypes.func,
-  pieValue: PropTypes.func,
-  top: PropTypes.number,
 };
 
 export default Pie;
