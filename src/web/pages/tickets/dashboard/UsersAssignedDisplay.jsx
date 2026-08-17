@@ -6,7 +6,7 @@
 import {scaleLinear} from 'd3-scale';
 import {_, _l} from 'gmp/locale/lang';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
-import BubbleChart from 'web/components/chart/Bubble';
+import BubbleChart from 'web/components/chart/BubbleChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';

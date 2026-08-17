@@ -12,7 +12,7 @@ import {parseFloat, parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import {isEmpty} from 'gmp/utils/string';
-import BubbleChart from 'web/components/chart/Bubble';
+import BubbleChart from 'web/components/chart/BubbleChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTable from 'web/components/dashboard/display/DataTable';
