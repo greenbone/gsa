@@ -5,7 +5,7 @@
 
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
-import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
+import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 import Table from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';

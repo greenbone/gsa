@@ -23,7 +23,7 @@ import {
 } from 'web/components/chart/donut/Paths';
 import Pie from 'web/components/chart/donut/Pie';
 import arc from 'web/components/chart/utils/Arc';
-import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
+import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
 import {setRef} from 'web/utils/Render';
