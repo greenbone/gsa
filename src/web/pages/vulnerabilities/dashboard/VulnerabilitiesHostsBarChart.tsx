@@ -4,7 +4,7 @@
  */
 
 import {_} from 'gmp/locale/lang';
-import BarChart, {type BarChartProps} from 'web/components/chart/Bar';
+import BarChart, {type BarChartProps} from 'web/components/chart/BarChart';
 import {type HostDataPoint} from 'web/pages/vulnerabilities/dashboard/hosts-transform';
 
 type VulnerabilitiesHostsBarChartDataPoint = HostDataPoint;

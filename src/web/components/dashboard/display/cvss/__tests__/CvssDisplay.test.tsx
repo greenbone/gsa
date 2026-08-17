@@ -28,7 +28,7 @@ interface BarProbeProps {
 let probeDataPoint: Omit<CvssDataPoint, 'filterValue'> | undefined;
 let probeValue = '7';
 
-vi.mock('web/components/chart/Bar', () => ({
+vi.mock('web/components/chart/BarChart', () => ({
   default: ({data = [], onDataClick, xLabel, yLabel}: BarProbeProps) => (
     <div>
       <span data-testid="data-count">{data.length}</span>

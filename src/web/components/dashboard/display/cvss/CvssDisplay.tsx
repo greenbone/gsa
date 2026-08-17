@@ -9,7 +9,7 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {type SeverityRating} from 'gmp/utils/severity';
-import BarChart from 'web/components/chart/Bar';
+import BarChart from 'web/components/chart/BarChart';
 import transformCvssData, {
   type CvssData,
   type CvssDataPoint,
