@@ -83,7 +83,7 @@
   "devDependencies": {
     "@emnapi/core": "1.11.3",
     "@emnapi/runtime": "1.11.3",
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@pandatix/js-cvss": "^0.4.4",
     "@playwright/test": "^1.62.1",
     "@tanstack/eslint-plugin-query": "^5.101.4",
@@ -106,7 +106,7 @@
     "@vitejs/plugin-react": "^6.0.5",
     "@vitest/coverage-v8": "^4.1.10",
     "@vitest/eslint-plugin": "^1.6.27",
-    "eslint": "^9.39.2",
+    "eslint": "^10.8.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-import": "^2.32.0",
