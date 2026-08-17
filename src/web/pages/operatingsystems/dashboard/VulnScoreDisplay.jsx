@@ -9,7 +9,7 @@ import {_, _l} from 'gmp/locale/lang';
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
-import BarChart from 'web/components/chart/Bar';
+import BarChart from 'web/components/chart/BarChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
