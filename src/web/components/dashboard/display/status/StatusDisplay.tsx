@@ -8,7 +8,7 @@ import {type FilterType} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
-import DonutChart, {type DonutChartData} from 'web/components/chart/Donut';
+import DonutChart, {type DonutChartData} from 'web/components/chart/DonutChart';
 import DataDisplay, {
   type DataDisplayProps,
   type State,

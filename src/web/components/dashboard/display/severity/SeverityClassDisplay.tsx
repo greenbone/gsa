@@ -7,7 +7,7 @@ import {type FilterType} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
 import {type SeverityRating} from 'gmp/utils/severity';
-import DonutChart from 'web/components/chart/Donut';
+import DonutChart from 'web/components/chart/DonutChart';
 import DataDisplay, {
   type State,
   type DataDisplayProps,
