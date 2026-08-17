@@ -13,6 +13,7 @@ import {
   PieTopPath,
   PieInnerPath,
 } from 'web/components/chart/donut/Paths';
+import {type Path} from 'web/components/chart/utils/Path';
 import Theme from 'web/utils/theme';
 
 interface Arc3dData extends LegendData {
@@ -26,7 +27,7 @@ interface Arc3dProps<TData extends Arc3dData> {
   outerRadiusX: number;
   outerRadiusY: number;
   donutHeight: number;
-  path: string;
+  path: Path;
   startAngle: number;
   endAngle: number;
   x: number;
@@ -58,6 +59,7 @@ const Arc3d = <TData extends Arc3dData = Arc3dData>({
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <Group
+          data-testid="arc-3d"
           onClick={isDefined(onDataClick) ? () => onDataClick(data) : undefined}
           onMouseEnter={show}
           onMouseLeave={hide}

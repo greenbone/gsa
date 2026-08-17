@@ -7,6 +7,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import ToolTip from 'web/components/chart/base/Tooltip';
+import {type Path} from 'web/components/chart/utils/Path';
 import Theme from 'web/utils/theme';
 
 interface Arc2dData extends LegendData {
@@ -15,7 +16,7 @@ interface Arc2dData extends LegendData {
 
 interface Arc2dProps<TData extends Arc2dData> {
   data: TData;
-  path: string;
+  path: Path;
   x: number;
   y: number;
   onDataClick?: (data: TData) => void;
@@ -33,11 +34,12 @@ const Arc2d = <TData extends Arc2dData = Arc2dData>({
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <Group
+          data-testid="arc-2d"
           onClick={isDefined(onDataClick) ? () => onDataClick(data) : undefined}
           onMouseEnter={show}
           onMouseLeave={hide}
         >
-          <path d={path} fill={String(color)} />
+          <path d={String(path)} fill={String(color)} />
           <circle // used as positioning ref for tooltips
             ref={targetRef as React.Ref<SVGCircleElement>}
             cx={x}
