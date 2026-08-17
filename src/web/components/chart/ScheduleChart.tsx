@@ -149,6 +149,7 @@ const Triangle = ({
         <path
           ref={targetRef as React.Ref<SVGPathElement>}
           d={String(d)}
+          data-testid="schedule-future-run"
           fill={Theme.darkGreen}
           opacity="0.5"
           stroke={Theme.darkGreen}
@@ -221,7 +222,12 @@ const ScheduleChart = ({
   const bandwidth = yScale.bandwidth();
   return (
     <Layout align={['start', 'start']}>
-      <Svg ref={svgRef} height={height} width={width}>
+      <Svg
+        ref={svgRef}
+        data-testid="schedule-chart-svg"
+        height={height}
+        width={width}
+      >
         <Group left={marginLeft} top={margin.top}>
           <Axis
             label={yAxisLabel}
@@ -242,7 +248,7 @@ const ScheduleChart = ({
           />
           <StrokeGradient />
           <FillGradient />
-          {schedules.map(d => {
+          {schedules.map((d, index) => {
             const {duration = 0, period = 0, start, label} = d;
 
             const startX = xScale(start);
@@ -264,10 +270,11 @@ const ScheduleChart = ({
             const endX = xScale(end.toDate());
             const rwidth = endX - startX;
             return (
-              <ToolTip key={d.label} content={d.toolTip}>
+              <ToolTip key={`${d.label}-${d.start.unix()}`} content={d.toolTip}>
                 {({targetRef, show, hide}) => (
                   <rect
                     ref={targetRef as React.Ref<SVGRectElement>}
+                    data-testid={`schedule-bar-${index}`}
                     fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
                     height={bandwidth}
                     stroke={hasDuration ? Theme.darkGreen : strokeGradientUrl}

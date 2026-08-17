@@ -8,7 +8,7 @@ import date from 'gmp/models/date';
 import {RecurrenceFrequency} from 'gmp/models/event';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import ScheduleChart from 'web/components/chart/Schedule';
+import ScheduleChart from 'web/components/chart/ScheduleChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTable from 'web/components/dashboard/display/DataTable';
