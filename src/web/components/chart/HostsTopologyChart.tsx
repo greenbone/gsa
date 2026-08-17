@@ -532,6 +532,7 @@ class HostsTopologyChart extends React.Component<
             this.svg = ref;
           }, svgRef)}
           $dragging={dragging}
+          data-testid="hosts-topology-svg"
           height={height}
           width={width}
           onMouseDown={this.handleMouseDown}
@@ -544,6 +545,7 @@ class HostsTopologyChart extends React.Component<
               return (
                 <line
                   key={link.index}
+                  data-testid={`hosts-topology-link-${link.index}`}
                   stroke={Theme.green}
                   x1={link.source.x}
                   x2={link.target.x}
@@ -574,6 +576,7 @@ class HostsTopologyChart extends React.Component<
                   <Circle
                     cx={host.x}
                     cy={host.y}
+                    data-testid={`hosts-topology-host-${host.id}`}
                     fill={this.hostFillColor(host)}
                     r={radius}
                     stroke={this.hostStrokeColor(host)}
