@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {type Ref} from 'react';
+import React, {useCallback, useEffect, useRef, useState, type Ref} from 'react';
 import {color as d3color, type HSLColor, type RGBColor} from 'd3-color';
 import styled from 'styled-components';
 import {hasValue, isDefined} from 'gmp/utils/identity';
@@ -24,7 +24,6 @@ import {
 import Pie from 'web/components/chart/donut/Pie';
 import arc from 'web/components/chart/utils/Arc';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
-import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
 import {setRef} from 'web/utils/Render';
 import Theme from 'web/utils/theme';
@@ -54,10 +53,6 @@ interface DonutChartProps<TData extends DonutChartData> {
   showLegend?: boolean;
   onDataClick?: (data: TData) => void;
   onLegendItemClick?: (item: TData) => void;
-}
-
-interface DonutChartState {
-  width: number;
 }
 
 const LEGEND_MARGIN = 20;
@@ -112,27 +107,23 @@ const EmptyDonut = ({
   );
 };
 
-class DonutChart<
-  TData extends DonutChartData = DonutChartData,
-> extends React.Component<DonutChartProps<TData>, DonutChartState> {
-  legendRef: LegendRef;
-  svg: SVGSVGElement | null = null;
+const DonutChart = <TData extends DonutChartData = DonutChartData>({
+  data = [],
+  innerRadius = 0,
+  height,
+  svgRef,
+  show3d = true,
+  showLegend = true,
+  width: propWidth,
+  onDataClick,
+  onLegendItemClick,
+}: DonutChartProps<TData>) => {
+  const legendRef: LegendRef = useRef<HTMLElement | null>(null);
+  const svgElementRef = useRef<SVGSVGElement | null>(null);
 
-  constructor(props: DonutChartProps<TData>) {
-    super(props);
-
-    this.legendRef = React.createRef();
-
-    this.state = {
-      width: this.getWidth(),
-    };
-  }
-
-  getWidth() {
-    let {width} = this.props;
-    const {current: legend} = this.legendRef;
-
-    width = width - MENU_PLACEHOLDER_WIDTH;
+  const getWidth = useCallback(() => {
+    let width = propWidth - MENU_PLACEHOLDER_WIDTH;
+    const {current: legend} = legendRef;
 
     if (legend !== null) {
       const {width: legendWidth} = legend.getBoundingClientRect();
@@ -144,62 +135,37 @@ class DonutChart<
     }
 
     return width;
-  }
+  }, [propWidth, legendRef]);
 
-  shouldComponentUpdate(
-    nextProps: DonutChartProps<TData>,
-    nextState: DonutChartState,
-  ) {
-    return (
-      shouldUpdate<DonutChartProps<TData>>(nextProps, this.props) ||
-      nextState.width !== this.state.width ||
-      nextProps.show3d !== this.props.show3d
-    );
-  }
+  const [chartWidth, setChartWidth] = useState(getWidth);
 
-  update() {
-    const width = this.getWidth();
-
-    if (width !== this.state.width) {
-      this.setState({width});
-    }
-    this.separateLabels();
-  }
-
-  componentDidUpdate() {
-    this.update();
-  }
-
-  componentDidMount() {
-    this.update();
-  }
-
-  separateLabels() {
-    if (!isDefined(this.svg)) {
+  const separateLabels = useCallback(() => {
+    const svg = svgElementRef.current;
+    if (!isDefined(svg)) {
       return;
     }
 
     let overlapFound = false;
 
-    let target;
-    let targetWidth;
-    let targetX;
-    let targetY;
-    let comparison;
-    let comparisonWidth;
-    let comparisonX;
-    let comparisonY;
+    let target: SVGTextContentElement;
+    let targetWidth: number;
+    let targetX: number;
+    let targetY: number;
+    let comparison: SVGTextContentElement;
+    let comparisonWidth: number;
+    let comparisonX: number;
+    let comparisonY: number;
 
     const SPACING = 15;
-    const labels = hasValue(this.svg)
-      ? [...this.svg.querySelectorAll('.pie-label')]
+    const labels = hasValue(svg)
+      ? [...svg.querySelectorAll<SVGTextContentElement>('.pie-label')]
       : [];
 
     labels.forEach(label => {
       target = label;
       targetWidth = target.getComputedTextLength();
-      targetX = target.getAttribute('x');
-      targetY = target.getAttribute('y');
+      targetX = Number(target.getAttribute('x'));
+      targetY = Number(target.getAttribute('y'));
 
       // compare target label with all other labels
 
@@ -209,8 +175,8 @@ class DonutChart<
           return;
         }
         comparisonWidth = comparison.getComputedTextLength();
-        comparisonX = comparison.getAttribute('x');
-        comparisonY = comparison.getAttribute('y');
+        comparisonX = Number(comparison.getAttribute('x'));
+        comparisonY = Number(comparison.getAttribute('y'));
 
         const deltaX = targetX - comparisonX;
         if (Math.abs(deltaX) * 2 > targetWidth + comparisonWidth) {
@@ -224,135 +190,141 @@ class DonutChart<
 
         overlapFound = true;
         const adjustment = deltaX > 0 ? 5 : -5;
-        target.setAttribute('x', Math.abs(targetX) + adjustment);
-        comparison.setAttribute('x', Math.abs(comparisonX) - adjustment);
+        target.setAttribute('x', String(Math.abs(targetX) + adjustment));
+        comparison.setAttribute(
+          'x',
+          String(Math.abs(comparisonX) - adjustment),
+        );
       });
     });
     if (overlapFound) {
-      this.separateLabels();
+      separateLabels();
     }
+  }, []);
+
+  useEffect(() => {
+    const newWidth = getWidth();
+    if (newWidth !== chartWidth) {
+      setChartWidth(newWidth);
+    }
+    separateLabels();
+  }, [
+    chartWidth,
+    data,
+    getWidth,
+    height,
+    innerRadius,
+    separateLabels,
+    show3d,
+    showLegend,
+  ]);
+
+  const horizontalMargin = margin.left + margin.right;
+  const verticalMargin = margin.top + margin.bottom;
+
+  // thickness of the donut
+  const donutThickness = show3d ? Math.min(height, chartWidth) / 8 : 0;
+
+  let donutWidth = chartWidth;
+  let donutHeight = height;
+
+  if (show3d && chartWidth / height > MIN_RATIO) {
+    // don't allow 3d donut to be stretch horizontally anymore
+    donutWidth = height * MIN_RATIO;
+  } else if (!show3d && chartWidth > height) {
+    // don't allow the 2d donut to be stretched horizontally
+    donutWidth = height;
+  }
+  if (height > chartWidth) {
+    // never stretch the donut chart vertically
+    donutHeight = chartWidth;
   }
 
-  render() {
-    const {width} = this.state;
-    const {
-      data = [],
-      innerRadius = 0,
-      height,
-      svgRef,
-      show3d = true,
-      showLegend = true,
-      onDataClick,
-      onLegendItemClick,
-    } = this.props;
+  // x,y position of the donut
+  const centerX = chartWidth / 2;
+  const centerY = (height - donutThickness) / 2;
 
-    const horizontalMargin = margin.left + margin.right;
-    const verticalMargin = margin.top + margin.bottom;
+  const outerRadiusX = donutWidth / 2 - horizontalMargin;
+  const outerRadiusY = (donutHeight - donutThickness) / 2 - verticalMargin;
+  const innerRadiusX = outerRadiusX * innerRadius;
+  const innerRadiusY = outerRadiusY * innerRadius;
 
-    // thickness of the donut
-    const donutThickness = show3d ? Math.min(height, width) / 8 : 0;
+  const donutProps = {
+    outerRadiusX,
+    outerRadiusY,
+    innerRadiusX,
+    innerRadiusY,
+  };
 
-    let donutWidth = width;
-    let donutHeight = height;
-
-    if (show3d && width / height > MIN_RATIO) {
-      // don't allow 3d donut to be stretch horizontally anymore
-      donutWidth = height * MIN_RATIO;
-    } else if (!show3d && width > height) {
-      // don't allow the 2d donut to be stretched horizontally
-      donutWidth = height;
-    }
-    if (height > width) {
-      // never stretch the donut chart vertically
-      donutHeight = width;
-    }
-
-    // x,y position of the donut
-    const centerX = width / 2;
-    const centerY = (height - donutThickness) / 2;
-
-    const outerRadiusX = donutWidth / 2 - horizontalMargin;
-    const outerRadiusY = (donutHeight - donutThickness) / 2 - verticalMargin;
-    const innerRadiusX = outerRadiusX * innerRadius;
-    const innerRadiusY = outerRadiusY * innerRadius;
-
-    const donutProps = {
-      outerRadiusX,
-      outerRadiusY,
-      innerRadiusX,
-      innerRadiusY,
-    };
-
-    const Arc = show3d ? Arc3d<TData> : Arc2d<TData>;
-    return (
-      <StyledLayout align={['start', 'start']}>
-        <Svg
-          ref={setRef(svgRef as Ref<SVGSVGElement>, ref => {
-            this.svg = ref;
-          })}
-          data-testid="donut-chart-svg"
-          height={height}
-          width={width}
-        >
-          {data.length > 0 ? (
-            <React.Fragment>
-              <Pie
-                data={data}
-                left={centerX}
-                pieValue={d => d.value}
-                top={centerY}
-                {...donutProps}
-              >
-                {({
-                  data: arcData,
-                  index,
-                  startAngle,
-                  endAngle,
-                  path: arcPath,
-                  x,
-                  y,
-                }) => (
-                  <Arc
-                    key={index}
-                    data={arcData}
-                    donutHeight={donutThickness}
-                    endAngle={endAngle}
-                    path={arcPath}
-                    startAngle={startAngle}
-                    x={x}
-                    y={y}
-                    {...donutProps}
-                    onDataClick={onDataClick}
-                  />
-                )}
-              </Pie>
-              <Labels<TData>
-                centerX={centerX}
-                centerY={centerY}
-                data={data}
-                {...donutProps}
-              />
-            </React.Fragment>
-          ) : (
-            <EmptyDonut
-              data-testid="donut-chart-empty"
-              donutHeight={donutThickness}
+  const Arc = show3d ? Arc3d<TData> : Arc2d<TData>;
+  return (
+    <StyledLayout align={['start', 'start']}>
+      <Svg
+        ref={setRef(svgRef as Ref<SVGSVGElement>, ref => {
+          svgElementRef.current = ref;
+        })}
+        data-testid="donut-chart-svg"
+        height={height}
+        width={chartWidth}
+      >
+        {data.length > 0 ? (
+          <>
+            <Pie
+              data={data}
               left={centerX}
+              pieValue={d => d.value}
               top={centerY}
               {...donutProps}
+            >
+              {({
+                data: arcData,
+                index,
+                startAngle,
+                endAngle,
+                path: arcPath,
+                x,
+                y,
+              }) => (
+                <Arc
+                  key={index}
+                  data={arcData}
+                  donutHeight={donutThickness}
+                  endAngle={endAngle}
+                  path={arcPath}
+                  startAngle={startAngle}
+                  x={x}
+                  y={y}
+                  {...donutProps}
+                  onDataClick={onDataClick}
+                />
+              )}
+            </Pie>
+            <Labels<TData>
+              centerX={centerX}
+              centerY={centerY}
+              data={data}
+              {...donutProps}
             />
-          )}
-        </Svg>
-        {data.length > 0 && showLegend && (
-          <Legend<TData>
-            data={data}
-            legendRef={this.legendRef}
-            onItemClick={onLegendItemClick}
+          </>
+        ) : (
+          <EmptyDonut
+            data-testid="donut-chart-empty"
+            donutHeight={donutThickness}
+            left={centerX}
+            top={centerY}
+            {...donutProps}
           />
         )}
-      </StyledLayout>
-    );
-  }
-}
+      </Svg>
+      {data.length > 0 && showLegend && (
+        <Legend<TData>
+          data={data}
+          legendRef={legendRef}
+          onItemClick={onLegendItemClick}
+        />
+      )}
+    </StyledLayout>
+  );
+};
 
 export default DonutChart;
