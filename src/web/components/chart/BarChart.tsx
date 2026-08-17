@@ -11,7 +11,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/base/Axis';
 import Group from 'web/components/chart/base/Group';
 import Svg from 'web/components/chart/base/Svg';
-import ToolTip from 'web/components/chart/base/Tooltip';
+import ToolTip from 'web/components/chart/base/ToolTip';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 import Layout from 'web/components/layout/Layout';
 

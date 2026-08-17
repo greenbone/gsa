@@ -12,7 +12,7 @@ import Axis from 'web/components/chart/base/Axis';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
-import ToolTip from 'web/components/chart/base/Tooltip';
+import ToolTip from 'web/components/chart/base/ToolTip';
 import path from 'web/components/chart/utils/Path';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';

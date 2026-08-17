@@ -8,7 +8,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
-import ToolTip from 'web/components/chart/base/Tooltip';
+import ToolTip from 'web/components/chart/base/ToolTip';
 import Theme from 'web/utils/theme';
 
 interface BubbleChartData extends LegendData {

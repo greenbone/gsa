@@ -7,7 +7,7 @@ import {color as d3color, type HSLColor, type RGBColor} from 'd3-color';
 import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
-import ToolTip from 'web/components/chart/base/Tooltip';
+import ToolTip from 'web/components/chart/base/ToolTip';
 import {
   PieOuterPath,
   PieTopPath,
