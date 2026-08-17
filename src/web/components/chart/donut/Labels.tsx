@@ -5,7 +5,7 @@
 
 import {type ReactNode} from 'react';
 import Label from 'web/components/chart/base/Label';
-import ToolTip from 'web/components/chart/base/Tooltip';
+import ToolTip from 'web/components/chart/base/ToolTip';
 import Pie from 'web/components/chart/donut/Pie';
 
 interface LabelData {
