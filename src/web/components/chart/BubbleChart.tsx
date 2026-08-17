@@ -61,7 +61,11 @@ const BubbleChart = ({
   const nodes = bubbles(root).leaves();
   return (
     <Svg ref={svgRef} height={height} width={width}>
-      <Group left={margin.left} top={margin.top}>
+      <Group
+        data-testid="bubble-chart-content"
+        left={margin.left}
+        top={margin.top}
+      >
         {hasBubbles ? (
           nodes.map((node, i) => {
             const {data: d, x, y, r} = node;
@@ -71,6 +75,7 @@ const BubbleChart = ({
                   const clippathId = 'clippath-' + i;
                   return (
                     <Group
+                      data-testid={`bubble-chart-bubble-${i}`}
                       left={x}
                       top={y}
                       onClick={
@@ -108,6 +113,7 @@ const BubbleChart = ({
           <circle
             cx={maxWidth / 2}
             cy={maxHeight / 2}
+            data-testid="bubble-chart-empty"
             fill={Theme.lightGray}
             r={maxHeight / 2}
           />
