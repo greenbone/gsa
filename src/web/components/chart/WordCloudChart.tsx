@@ -147,11 +147,17 @@ class WordCloudChart extends React.Component<
 
     const {words = []} = this.state;
     return (
-      <Svg ref={svgRef} height={height} width={width}>
+      <Svg
+        ref={svgRef}
+        data-testid="word-cloud-chart-svg"
+        height={height}
+        width={width}
+      >
         <Group left={width / 2 + margin.left} top={height / 2 + margin.top}>
           {words.map(word => (
             <Group
               key={word.text}
+              data-testid={`word-cloud-word-${word.text}`}
               onClick={
                 isDefined(onDataClick)
                   ? () => onDataClick(word.filterValue)
@@ -161,16 +167,10 @@ class WordCloudChart extends React.Component<
               <text
                 fill={word.color}
                 fontFamily={word.font}
-                fontSize={word.size + 'px'}
+                fontSize={`${word.size}px`}
                 fontWeight={word.weight}
                 textAnchor="middle"
-                transform={
-                  'translate(' +
-                  [word.x, word.y] +
-                  ')rotate(' +
-                  word.rotate +
-                  ')'
-                }
+                transform={`translate(${word.x},${word.y})rotate(${word.rotate})`}
               >
                 {word.text}
               </text>
