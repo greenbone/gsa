@@ -12,7 +12,7 @@ import Axis from 'web/components/chart/base/Axis';
 import Group from 'web/components/chart/base/Group';
 import Svg from 'web/components/chart/base/Svg';
 import ToolTip from 'web/components/chart/base/Tooltip';
-import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
+import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 import Layout from 'web/components/layout/Layout';
 
 export interface BarChartDataPoint {
