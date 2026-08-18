@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_} from 'gmp/locale/lang';
+import {_l} from 'gmp/locale/lang';
 import createLabel from 'web/components/label/Label';
 import Theme from 'web/utils/theme';
 
@@ -48,14 +48,21 @@ export const getConnectionStatusLabel = (status?: string) => {
   return <Label />;
 };
 
-export const getAuthorizationLabel = (authorized?: boolean) => {
-  const Label = createLabel(
-    authorized ? Theme.green : Theme.errorRed,
-    authorized ? Theme.green : Theme.errorRed,
-    'white',
-    'authorization-status-label',
-    authorized ? _('Yes') : _('No'),
-  );
+const AuthorizedLabelNo = createLabel(
+  Theme.errorRed,
+  Theme.errorRed,
+  Theme.white,
+  'authorization-status-label',
+  _l('No'),
+);
 
-  return <Label />;
-};
+const AuthorizedLabelYes = createLabel(
+  Theme.green,
+  Theme.green,
+  Theme.white,
+  'authorization-status-label',
+  _l('Yes'),
+);
+
+export const getAuthorizationLabel = (authorized?: boolean) =>
+  authorized ? <AuthorizedLabelYes /> : <AuthorizedLabelNo />;
