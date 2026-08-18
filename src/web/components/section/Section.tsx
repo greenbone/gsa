@@ -6,11 +6,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import {
+import {withFolding} from 'web/components/folding/Folding';
+import withFoldToggle, {
   type FoldToggleComponentProps,
-  withFolding,
-  withFoldToggle,
-} from 'web/components/folding/Folding';
+} from 'web/components/folding/withFoldToggle';
 import FoldStateIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
 import SectionHeader from 'web/components/section/SectionHeader';
