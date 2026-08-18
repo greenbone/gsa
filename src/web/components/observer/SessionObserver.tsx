@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import Logger from 'gmp/log';
 import date, {type Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
-import useInstanceVariable from 'web/hooks/useInstanceVariable';
 import useSessionTimeout from 'web/hooks/useSessionTimeout';
 
 interface PingProps {
@@ -24,48 +23,48 @@ const DELAY = 5 * 1000; // 5 seconds in milliseconds
 
 const Ping = ({sessionTimeout}: PingProps) => {
   const gmp = useGmp();
-  const [timer, setTimer] = useInstanceVariable<Timer | undefined>(undefined);
+  const timerRef = useRef<Timer | undefined>(undefined);
 
   const handlePing = useCallback(async () => {
     log.debug('pinging server to check session');
-    setTimer(undefined);
+    timerRef.current = undefined;
     try {
       await gmp.user.ping();
     } catch {
       // the session might have expired and we will get a 401 here
     }
-  }, [gmp, setTimer]);
+  }, [gmp]);
 
   const clearTimer = useCallback(() => {
-    if (isDefined(timer)) {
-      log.debug('clearing ping timer', timer);
+    if (isDefined(timerRef.current)) {
+      log.debug('clearing ping timer', timerRef.current);
 
-      globalThis.clearTimeout(timer);
+      globalThis.clearTimeout(timerRef.current);
 
-      setTimer(undefined);
+      timerRef.current = undefined;
     }
-  }, [timer, setTimer]);
+  }, []);
 
   const startTimer = useCallback(() => {
-    if (isDefined(timer)) {
+    if (isDefined(timerRef.current)) {
       return;
     }
 
     const timeout = sessionTimeout.diff(date()) + DELAY;
 
     if (timeout > 0) {
-      const timer = globalThis.setTimeout(handlePing, timeout);
-      setTimer(timer);
+      const timeoutId = globalThis.setTimeout(handlePing, timeout);
+      timerRef.current = timeoutId;
 
       log.debug(
         'started ping timer',
-        timer,
+        timeoutId,
         'timeout',
         timeout,
         'milliseconds',
       );
     }
-  }, [handlePing, sessionTimeout, setTimer, timer]);
+  }, [handlePing, sessionTimeout]);
 
   useEffect(() => {
     startTimer();
