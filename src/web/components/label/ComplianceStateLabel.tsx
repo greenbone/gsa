@@ -22,6 +22,7 @@ const NoLabel = createLabel(
   'compliance-state-no',
   _l('No'),
 );
+
 const IncompleteLabel = createLabel(
   Theme.complianceIncomplete,
   Theme.complianceIncomplete,
@@ -29,6 +30,7 @@ const IncompleteLabel = createLabel(
   'compliance-state-incomplete',
   _l('Incomplete'),
 );
+
 const UndefinedLabel = createLabel(
   Theme.complianceUndefined,
   Theme.complianceUndefined,
@@ -37,11 +39,11 @@ const UndefinedLabel = createLabel(
   _l('Undefined'),
 );
 
-export const ComplianceStateLabels = {
+const ComplianceStateLabel = {
   Yes: YesLabel,
   No: NoLabel,
   Incomplete: IncompleteLabel,
   Undefined: UndefinedLabel,
 };
 
-export default ComplianceStateLabels;
+export default ComplianceStateLabel;
