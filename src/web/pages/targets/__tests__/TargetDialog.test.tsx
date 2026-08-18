@@ -188,7 +188,6 @@ describe('TargetDialog tests', () => {
         credentials={credentials}
         excludeHosts={''}
         hosts="123.455.67.434"
-        inUse={false}
         name="target"
         reverseLookupOnly={false}
         reverseLookupUnify={false}
@@ -294,7 +293,6 @@ describe('TargetDialog tests', () => {
         credentials={credentials}
         excludeHosts=""
         hosts="123.455.67.434"
-        inUse={false}
         name="target"
         reverseLookupOnly={false}
         reverseLookupUnify={true}
@@ -331,7 +329,6 @@ describe('TargetDialog tests', () => {
       excludeHosts: '',
       hosts: '123.455.67.434',
       hostsCount: undefined,
-      inUse: false,
       name: 'ross',
       port: 22,
       portListId: DEFAULT_PORT_LIST_ID,
@@ -362,7 +359,6 @@ describe('TargetDialog tests', () => {
         credentials={credentials}
         excludeHosts=""
         hosts="123.455.67.434"
-        inUse={false}
         name="target"
         reverseLookupOnly={false}
         reverseLookupUnify={false}
@@ -402,7 +398,6 @@ describe('TargetDialog tests', () => {
         credentials={credentials}
         excludeHosts=""
         hosts="123.455.67.434"
-        inUse={false}
         name="target"
         reverseLookupOnly={false}
         reverseLookupUnify={false}
@@ -475,7 +470,6 @@ describe('TargetDialog tests', () => {
           credentials={credentials}
           excludeHosts=""
           hosts="123.455.67.434"
-          inUse={false}
           krb5CredentialId="2345"
           name="target"
           reverseLookupOnly={false}
@@ -520,7 +514,6 @@ describe('TargetDialog tests', () => {
         credentials={credentials}
         excludeHosts=""
         hosts="123.455.67.434"
-        inUse={false}
         name="target"
         reverseLookupOnly={false}
         reverseLookupUnify={false}
@@ -546,7 +539,7 @@ describe('TargetDialog tests', () => {
     expect(selectItems[1]).toHaveTextContent('ssh_key');
   });
 
-  test('should disable editing certain fields if target is in use', () => {
+  test('should allow editing a target that a task refers to', () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
@@ -562,7 +555,6 @@ describe('TargetDialog tests', () => {
         credentials={credentials}
         excludeHosts=""
         hosts="123.455.67.434"
-        inUse={true}
         name="target"
         reverseLookupOnly={false}
         reverseLookupUnify={false}
@@ -579,28 +571,26 @@ describe('TargetDialog tests', () => {
     expect(screen.getDialogContent()).toHaveTextContent('Elevate privileges');
 
     const newIcons = screen.queryAllByTitle('Create a new credential');
-    expect(newIcons.length).toBe(0); // no new credential can be created
+    expect(newIcons.length).toBeGreaterThan(0);
+
+    const hostsField = screen.getByName('hosts');
+    expect(hostsField).toHaveValue('123.455.67.434');
+    expect(hostsField).not.toBeDisabled();
 
     const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
-
     expect(selects[0]).toHaveValue(DEFAULT_PORT_LIST_NAME);
-    expect(selects[0]).toBeDisabled();
 
-    expect(selects[1]).toHaveValue('username+password');
-    expect(selects[1]).toBeDisabled();
-
-    expect(selects[2]).toHaveValue('up2');
-    expect(selects[2]).toBeDisabled();
-
-    expect(selects[3]).toHaveValue('');
-    expect(selects[3]).toBeDisabled();
-
-    expect(selects[4]).toHaveValue('');
-    expect(selects[4]).toBeDisabled();
-
-    expect(selects[5]).toHaveValue('');
-    expect(selects[5]).toBeDisabled();
+    // snmpCredentialId is left out: it has no matching credential here and a
+    // Select without items disables itself
+    for (const name of [
+      'portListId',
+      'sshCredentialId',
+      'smbCredentialId',
+      'esxiCredentialId',
+    ]) {
+      expect(screen.getByName(name)).not.toBeDisabled();
+    }
   });
 
   test('should allow to close the dialog', () => {
@@ -664,7 +654,6 @@ describe('TargetDialog tests', () => {
       hostsCount: 10,
       hostsFilter,
       id: undefined,
-      inUse: false,
       name: 'Unnamed',
       port: 22,
       portListId: DEFAULT_PORT_LIST_ID,
@@ -717,7 +706,6 @@ describe('TargetDialog tests', () => {
         render(
           <TargetDialog
             credentials={credentials}
-            inUse={false}
             onNewCredentialsClick={handleCreate}
           />,
         );

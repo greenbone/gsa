@@ -142,7 +142,6 @@ const TargetComponent = ({
     string | undefined
   >(undefined);
   const [name, setName] = useState<string | undefined>(undefined);
-  const [inUse, setInUse] = useState<boolean>(false);
   const [excludeHosts, setExcludeHosts] = useState<string | undefined>(
     undefined,
   );
@@ -229,7 +228,6 @@ const TargetComponent = ({
       setSshElevateCredentialId(entity.sshElevateCredential?.id);
       setPortListId(entity.portList?.id);
       setName(entity.name);
-      setInUse(entity.isInUse());
       setExcludeHosts(entity.excludeHosts?.join(', '));
       setHosts(entity.hosts.join(', '));
       setReverseLookupOnly(entity.reverseLookupOnly);
@@ -251,7 +249,6 @@ const TargetComponent = ({
       setSshCredentialId(undefined);
       setSshElevateCredentialId(undefined);
       setPortListId(DEFAULT_PORT_LIST_ID);
-      setInUse(false);
       setExcludeHosts(undefined);
       setHosts(undefined);
       setReverseLookupOnly(undefined);
@@ -367,19 +364,10 @@ const TargetComponent = ({
 
   const handleSaveClick = async (data: TargetDialogData) => {
     const promise = isDefined(data.id)
-      ? handleEntitySave(
-          data.inUse
-            ? {
-                id: data.id as string,
-                comment: data.comment,
-                aliveTests: data.aliveTests,
-                name: data.name,
-              }
-            : {
-                ...data,
-                id: data.id as string,
-              },
-        )
+      ? handleEntitySave({
+          ...data,
+          id: data.id as string,
+        })
       : handleEntityCreate(data);
     await promise;
     closeTargetDialog();
@@ -422,7 +410,6 @@ const TargetComponent = ({
           hostsCount={hostsCount}
           hostsFilter={hostsFilter}
           id={targetId}
-          inUse={inUse}
           krb5CredentialId={krb5CredentialId}
           name={name}
           port={port}

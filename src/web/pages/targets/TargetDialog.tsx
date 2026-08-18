@@ -95,7 +95,6 @@ interface TargetDialogDefaultValues {
   hosts: string;
   hostsCount?: number;
   hostsFilter?: Filter;
-  inUse: boolean;
   name: string;
   port: number;
   reverseLookupOnly: boolean;
@@ -117,7 +116,6 @@ interface TargetDialogProps {
   hostsCount?: number;
   hostsFilter?: Filter;
   id?: string;
-  inUse?: boolean;
   name?: string;
   port?: number;
   portListId?: string;
@@ -171,7 +169,6 @@ const TargetDialog = ({
   hostsCount,
   hostsFilter,
   id,
-  inUse = false,
   name,
   port = DEFAULT_PORT,
   portListId = DEFAULT_PORT_LIST_ID,
@@ -388,7 +385,6 @@ const TargetDialog = ({
         hosts,
         hostsCount,
         hostsFilter,
-        inUse,
         name,
         port,
         reverseLookupOnly,
@@ -435,14 +431,13 @@ const TargetDialog = ({
               <Row>
                 <Radio
                   checked={state.targetSource === 'manual'}
-                  disabled={inUse}
                   name="targetSource"
                   title={_('Manual')}
                   value="manual"
                   onChange={onValueChange}
                 />
                 <TextField
-                  disabled={inUse || state.targetSource !== 'manual'}
+                  disabled={state.targetSource !== 'manual'}
                   grow="1"
                   name="hosts"
                   value={state.hosts}
@@ -452,14 +447,13 @@ const TargetDialog = ({
               <Row>
                 <Radio
                   checked={state.targetSource === 'file'}
-                  disabled={inUse}
                   name="targetSource"
                   title={_('From file')}
                   value="file"
                   onChange={onValueChange}
                 />
                 <FileField
-                  disabled={inUse || state.targetSource !== 'file'}
+                  disabled={state.targetSource !== 'file'}
                   grow="1"
                   name="file"
                   value={state.file}
@@ -471,7 +465,6 @@ const TargetDialog = ({
                 {state.hostsCount && (
                   <Radio
                     checked={state.targetSource === 'asset_hosts'}
-                    disabled={inUse}
                     name="targetSource"
                     title={_('From host assets ({{count}} hosts)', {
                       count: state.hostsCount,
@@ -487,14 +480,13 @@ const TargetDialog = ({
               <Row>
                 <Radio
                   checked={state.targetExcludeSource === 'manual'}
-                  disabled={inUse}
                   name="targetExcludeSource"
                   title={_('Manual')}
                   value="manual"
                   onChange={onValueChange}
                 />
                 <TextField
-                  disabled={inUse || state.targetExcludeSource !== 'manual'}
+                  disabled={state.targetExcludeSource !== 'manual'}
                   grow="1"
                   name="excludeHosts"
                   value={state.excludeHosts}
@@ -504,14 +496,13 @@ const TargetDialog = ({
               <Row>
                 <Radio
                   checked={state.targetExcludeSource === 'file'}
-                  disabled={inUse}
                   name="targetExcludeSource"
                   title={_('From file')}
                   value="file"
                   onChange={onValueChange}
                 />
                 <FileField
-                  disabled={inUse || state.targetExcludeSource !== 'file'}
+                  disabled={state.targetExcludeSource !== 'file'}
                   grow="1"
                   name="excludeFile"
                   value={state.excludeFile}
@@ -527,7 +518,6 @@ const TargetDialog = ({
             >
               <YesNoRadio<boolean>
                 convert={parseBoolean}
-                disabled={inUse}
                 name="allowSimultaneousIPs"
                 noValue={false}
                 value={state.allowSimultaneousIPs}
@@ -539,7 +529,6 @@ const TargetDialog = ({
             {capabilities.mayAccess('portlist') && (
               <FormGroup direction="row" title={_('Port List')}>
                 <Select
-                  disabled={inUse}
                   grow="1"
                   items={renderSelectItems(
                     portLists as RenderSelectItemProps[],
@@ -548,7 +537,7 @@ const TargetDialog = ({
                   value={state.portListId}
                   onChange={onPortListChange}
                 />
-                {!inUse && capabilities.mayCreate('portlist') && (
+                {capabilities.mayCreate('portlist') && (
                   <NewIcon
                     title={_('Create a new port list')}
                     onClick={onNewPortListClick}
@@ -637,7 +626,6 @@ const TargetDialog = ({
                       isDefined(state.sshCredentialId) &&
                       state.sshCredentialId !== UNSET_VALUE
                     }
-                    disabled={inUse}
                     grow="1"
                     items={renderSelectItems(
                       sshCredentials as RenderSelectItemProps[],
@@ -649,23 +637,20 @@ const TargetDialog = ({
                   />
                   {_('on port')}
                   <NumberField
-                    disabled={inUse}
                     name="port"
                     value={state.port}
                     onChange={onValueChange}
                   />
-                  {!inUse && (
-                    <NewIcon<NewCredentialData>
-                      data-testid="new-icon-ssh"
-                      title={_('Create a new credential')}
-                      value={NEW_SSH}
-                      onClick={
-                        onNewCredentialsClick as (
-                          value?: NewCredentialData,
-                        ) => void
-                      }
-                    />
-                  )}
+                  <NewIcon<NewCredentialData>
+                    data-testid="new-icon-ssh"
+                    title={_('Create a new credential')}
+                    value={NEW_SSH}
+                    onClick={
+                      onNewCredentialsClick as (
+                        value?: NewCredentialData,
+                      ) => void
+                    }
+                  />
                 </Row>
                 {isDefined(state.sshCredentialId) &&
                   state.sshCredentialId !== UNSET_VALUE && (
@@ -683,7 +668,6 @@ const TargetDialog = ({
                           isDefined(state.sshElevateCredentialId) &&
                           state.sshElevateCredentialId !== UNSET_VALUE
                         }
-                        disabled={inUse}
                         grow="1"
                         items={renderSelectItems(
                           elevateUpCredentials as RenderSelectItemProps[],
@@ -693,17 +677,15 @@ const TargetDialog = ({
                         value={state.sshElevateCredentialId}
                         onChange={onSshElevateCredentialChange}
                       />
-                      {!inUse && (
-                        <NewIcon<NewCredentialData>
-                          title={_('Create a new credential')}
-                          value={NEW_SSH_ELEVATE}
-                          onClick={
-                            onNewCredentialsClick as (
-                              value?: NewCredentialData,
-                            ) => void
-                          }
-                        />
-                      )}
+                      <NewIcon<NewCredentialData>
+                        title={_('Create a new credential')}
+                        value={NEW_SSH_ELEVATE}
+                        onClick={
+                          onNewCredentialsClick as (
+                            value?: NewCredentialData,
+                          ) => void
+                        }
+                      />
                     </Row>
                   )}
               </FormGroup>
@@ -719,9 +701,8 @@ const TargetDialog = ({
                   }
                   data-testid="krb5-credential-select"
                   disabled={
-                    inUse ||
-                    (isDefined(state.smbCredentialId) &&
-                      state.smbCredentialId !== UNSET_VALUE)
+                    isDefined(state.smbCredentialId) &&
+                    state.smbCredentialId !== UNSET_VALUE
                   }
                   grow="1"
                   items={renderSelectItems(
@@ -732,7 +713,7 @@ const TargetDialog = ({
                   value={state.krb5CredentialId}
                   onChange={onKrb5CredentialChange}
                 />
-                {!inUse && hasPermissionToCreateCredential && (
+                {hasPermissionToCreateCredential && (
                   <NewIcon<NewCredentialData>
                     title={_('Create a new credential')}
                     value={NEW_KRB5}
@@ -756,9 +737,8 @@ const TargetDialog = ({
                   }
                   data-testid="smb-credential-select"
                   disabled={
-                    inUse ||
-                    (isDefined(state.krb5CredentialId) &&
-                      state.krb5CredentialId !== UNSET_VALUE)
+                    isDefined(state.krb5CredentialId) &&
+                    state.krb5CredentialId !== UNSET_VALUE
                   }
                   grow="1"
                   items={renderSelectItems(
@@ -769,7 +749,7 @@ const TargetDialog = ({
                   value={state.smbCredentialId}
                   onChange={onSmbCredentialChange}
                 />
-                {!inUse && hasPermissionToCreateCredential && (
+                {hasPermissionToCreateCredential && (
                   <NewIcon<NewCredentialData>
                     data-testid="new-icon-smb"
                     title={_('Create a new credential')}
@@ -792,7 +772,6 @@ const TargetDialog = ({
                     isDefined(state.esxiCredentialId) &&
                     state.esxiCredentialId !== UNSET_VALUE
                   }
-                  disabled={inUse}
                   grow="1"
                   items={renderSelectItems(
                     upCredentials as RenderSelectItemProps[],
@@ -802,7 +781,7 @@ const TargetDialog = ({
                   value={state.esxiCredentialId}
                   onChange={onEsxiCredentialChange}
                 />
-                {!inUse && hasPermissionToCreateCredential && (
+                {hasPermissionToCreateCredential && (
                   <NewIcon<NewCredentialData>
                     data-testid="new-icon-esxi"
                     title={_('Create a new credential')}
@@ -825,7 +804,6 @@ const TargetDialog = ({
                     isDefined(state.snmpCredentialId) &&
                     state.snmpCredentialId !== UNSET_VALUE
                   }
-                  disabled={inUse}
                   grow="1"
                   items={renderSelectItems(
                     snmpCredentials as RenderSelectItemProps[],
@@ -835,7 +813,7 @@ const TargetDialog = ({
                   value={state.snmpCredentialId}
                   onChange={onSnmpCredentialChange}
                 />
-                {!inUse && hasPermissionToCreateCredential && (
+                {hasPermissionToCreateCredential && (
                   <NewIcon<NewCredentialData>
                     data-testid="new-icon-snmp"
                     title={_('Create a new credential')}
@@ -853,7 +831,6 @@ const TargetDialog = ({
             <FormGroup title={_('Reverse Lookup Only')}>
               <YesNoRadio<boolean>
                 convert={parseBoolean}
-                disabled={inUse}
                 name="reverseLookupOnly"
                 noValue={false}
                 value={state.reverseLookupOnly}
@@ -865,7 +842,6 @@ const TargetDialog = ({
             <FormGroup title={_('Reverse Lookup Unify')}>
               <YesNoRadio<boolean>
                 convert={parseBoolean}
-                disabled={inUse}
                 name="reverseLookupUnify"
                 noValue={false}
                 value={state.reverseLookupUnify}
