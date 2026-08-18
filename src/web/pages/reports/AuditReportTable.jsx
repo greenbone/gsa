@@ -6,7 +6,7 @@
 import React from 'react';
 import {_l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
-import ComplianceState from 'web/components/label/ComplianceState';
+import ComplianceStateLabel from 'web/components/label/ComplianceStateLabel';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
@@ -74,7 +74,7 @@ const AuditReportTableHeader = ({
           width="5%"
           onSortChange={onSortChange}
         >
-          <ComplianceState.Yes />
+          <ComplianceStateLabel.Yes />
         </TableHead>
         <TableHead
           currentSortBy={currentSortBy}
@@ -84,7 +84,7 @@ const AuditReportTableHeader = ({
           width="5%"
           onSortChange={onSortChange}
         >
-          <ComplianceState.No />
+          <ComplianceStateLabel.No />
         </TableHead>
         <TableHead
           currentSortBy={currentSortBy}
@@ -94,7 +94,7 @@ const AuditReportTableHeader = ({
           width="5%"
           onSortChange={onSortChange}
         >
-          <ComplianceState.Incomplete />
+          <ComplianceStateLabel.Incomplete />
         </TableHead>
         {isDefined(actionsColumn) ? (
           actionsColumn

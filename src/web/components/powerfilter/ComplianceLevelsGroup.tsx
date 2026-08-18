@@ -7,7 +7,7 @@ import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
-import ComplianceStateLabels from 'web/components/label/ComplianceState';
+import ComplianceStateLabel from 'web/components/label/ComplianceStateLabel';
 import IconDivider from 'web/components/layout/IconDivider';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -74,28 +74,28 @@ const ComplianceLevelsFilterGroup = ({
           name="y"
           onChange={handleComplianceChange}
         />
-        <ComplianceStateLabels.Yes />
+        <ComplianceStateLabel.Yes />
         <Checkbox
           checked={complianceLevels.includes('n')}
           data-testid="compliance-checkbox-no"
           name="n"
           onChange={handleComplianceChange}
         />
-        <ComplianceStateLabels.No />
+        <ComplianceStateLabel.No />
         <Checkbox
           checked={complianceLevels.includes('i')}
           data-testid="compliance-checkbox-incomplete"
           name="i"
           onChange={handleComplianceChange}
         />
-        <ComplianceStateLabels.Incomplete />
+        <ComplianceStateLabel.Incomplete />
         <Checkbox
           checked={complianceLevels.includes('u')}
           data-testid="compliance-checkbox-undefined"
           name="u"
           onChange={handleComplianceChange}
         />
-        <ComplianceStateLabels.Undefined />
+        <ComplianceStateLabel.Undefined />
       </IconDivider>
     </FormGroup>
   );
