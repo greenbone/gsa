@@ -21,6 +21,9 @@ interface UseGetEntityParams<TModel extends Model> {
   id: string;
   queryKeyParts?: unknown[];
   refetchInterval?: number | false | RefetchIntervalFn<TModel>;
+  staleTime?: number | ((query: {state: {data: TModel | undefined}}) => number);
+  keepPreviousData?: boolean;
+  gcTime?: number;
 }
 
 const useGetEntity = <TModel extends Model>({
@@ -29,6 +32,9 @@ const useGetEntity = <TModel extends Model>({
   id,
   queryKeyParts,
   refetchInterval,
+  staleTime,
+  keepPreviousData = false,
+  gcTime,
 }: UseGetEntityParams<TModel>) => {
   const gmp = useGmp();
   const token = useSessionToken();
@@ -47,6 +53,12 @@ const useGetEntity = <TModel extends Model>({
       return response.data;
     },
     refetchInterval: resolvedRefetchInterval,
+    staleTime,
+    gcTime,
+    placeholderData: keepPreviousData
+      ? (previousData, previousQuery) =>
+          previousQuery?.queryKey[2] === id ? previousData : undefined
+      : undefined,
   });
 };
 

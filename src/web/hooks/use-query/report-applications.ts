@@ -11,12 +11,14 @@ interface UseGetReportApplicationsParams {
   reportId: string;
   filter?: FilterType;
   refetchInterval?: number | false;
+  staleTime?: number;
 }
 
 export const useGetReportApplications = ({
   reportId,
   filter = undefined,
   refetchInterval = undefined,
+  staleTime,
 }: UseGetReportApplicationsParams) => {
   const gmp = useGmp();
 
@@ -31,6 +33,7 @@ export const useGetReportApplications = ({
     enabled: Boolean(reportId),
     keepPreviousData: true,
     refetchInterval,
+    staleTime,
   });
 };
 

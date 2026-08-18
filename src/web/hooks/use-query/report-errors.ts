@@ -11,12 +11,14 @@ interface UseGetReportErrorsParams {
   reportId: string;
   filter?: FilterType;
   refetchInterval?: number | false;
+  staleTime?: number;
 }
 
 export const useGetReportErrors = ({
   reportId,
   filter = undefined,
   refetchInterval = undefined,
+  staleTime,
 }: UseGetReportErrorsParams) => {
   const gmp = useGmp();
 
@@ -31,6 +33,7 @@ export const useGetReportErrors = ({
     enabled: Boolean(reportId),
     keepPreviousData: true,
     refetchInterval,
+    staleTime,
   });
 };
 

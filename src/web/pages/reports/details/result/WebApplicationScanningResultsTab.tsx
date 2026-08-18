@@ -49,6 +49,7 @@ const WebApplicationScanningResultsTab = ({
 
   const {data, isLoading, isFetching, isError, error} = useGetResults({
     filter: resultsFilter,
+    staleTime: Infinity,
     refetchInterval: isActive(status)
       ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
       : NO_RELOAD,

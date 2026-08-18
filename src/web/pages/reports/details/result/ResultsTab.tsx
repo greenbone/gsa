@@ -77,6 +77,7 @@ const ResultsTabWrapper = ({
 
   const {data, isLoading, isFetching, isError, error} = useGetResults({
     filter: resultsFilter,
+    staleTime: Infinity,
     refetchInterval: isActive(status)
       ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
       : NO_RELOAD,
@@ -120,7 +121,7 @@ const ResultsTabWrapper = ({
     return <Loading />;
   }
 
-  const {entities: results = [], entitiesCounts: resultsCounts} = data || {};
+  const {entities: results = [], entitiesCounts: resultsCounts} = data ?? {};
 
   const displayedFilter = resultsFilter.delete('_and_report_id');
 
