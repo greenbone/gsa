@@ -5,14 +5,14 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {render, screen} from 'web/testing';
-import Toolbar from 'web/components/bar/Toolbar';
+import ToolBar from 'web/components/bar/ToolBar';
 
 describe('Toolbar tests', () => {
   test('should render with children', () => {
     render(
-      <Toolbar>
+      <ToolBar>
         <button>Test Button</button>
-      </Toolbar>,
+      </ToolBar>,
     );
 
     const toolbar = screen.getByTestId('toolbar');
