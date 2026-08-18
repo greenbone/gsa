@@ -12,12 +12,14 @@ interface UseGetReportPortsParams {
   reportId: string;
   filter?: FilterType;
   refetchInterval?: number | false;
+  staleTime?: number;
 }
 
 export const useGetReportPorts = ({
   reportId,
   filter = undefined,
   refetchInterval = undefined,
+  staleTime,
 }: UseGetReportPortsParams) => {
   const gmp = useGmp();
 
@@ -32,6 +34,7 @@ export const useGetReportPorts = ({
     enabled: Boolean(reportId),
     keepPreviousData: true,
     refetchInterval,
+    staleTime,
   });
 };
 

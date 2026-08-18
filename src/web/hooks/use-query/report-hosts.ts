@@ -11,12 +11,14 @@ interface UseGetReportHostsParams {
   reportId: string;
   filter?: FilterType;
   refetchInterval?: number | false;
+  staleTime?: number;
 }
 
 export const useGetReportHosts = ({
   reportId,
   filter = undefined,
   refetchInterval = undefined,
+  staleTime,
 }: UseGetReportHostsParams) => {
   const gmp = useGmp();
 
@@ -31,6 +33,7 @@ export const useGetReportHosts = ({
     refetchInterval,
     enabled: Boolean(reportId),
     keepPreviousData: true,
+    staleTime,
   });
 };
 

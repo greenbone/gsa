@@ -13,6 +13,7 @@ import useGetEntities, {
 
 interface UseGetResultsParams {
   filter?: FilterType;
+  staleTime?: number;
   refetchInterval?:
     number | false | RefetchIntervalFn<UseGetEntitiesReturn<Result>>;
 }
@@ -26,6 +27,7 @@ interface UseGetResultsParams {
  */
 export const useGetResults = ({
   filter = undefined,
+  staleTime,
   refetchInterval = undefined,
 }: UseGetResultsParams = {}) => {
   const gmp = useGmp();
@@ -36,6 +38,7 @@ export const useGetResults = ({
     filter,
     keepPreviousData: true,
     refetchInterval,
+    staleTime,
   });
 };
 

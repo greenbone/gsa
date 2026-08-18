@@ -28,29 +28,43 @@ interface UseReportSubEntitiesParams {
   reportId: string;
   filter?: FilterType;
   refetchInterval?: number | false;
+  staleTime?: number;
 }
 
 const useReportSubEntities = ({
   reportId,
   filter = undefined,
   refetchInterval = undefined,
+  staleTime,
 }: UseReportSubEntitiesParams): ReportSubEntities => ({
-  hosts: useGetReportHosts({reportId, filter, refetchInterval}),
-  ports: useGetReportPorts({reportId, filter, refetchInterval}),
-  applications: useGetReportApplications({reportId, filter, refetchInterval}),
+  hosts: useGetReportHosts({reportId, filter, refetchInterval, staleTime}),
+  ports: useGetReportPorts({reportId, filter, refetchInterval, staleTime}),
+  applications: useGetReportApplications({
+    reportId,
+    filter,
+    refetchInterval,
+    staleTime,
+  }),
   operatingSystems: useGetReportOperatingSystems({
     reportId,
     filter,
     refetchInterval,
+    staleTime,
   }),
-  cves: useGetReportCves({reportId, filter, refetchInterval}),
-  closedCves: useGetReportClosedCves({reportId, filter, refetchInterval}),
+  cves: useGetReportCves({reportId, filter, refetchInterval, staleTime}),
+  closedCves: useGetReportClosedCves({
+    reportId,
+    filter,
+    refetchInterval,
+    staleTime,
+  }),
   tlsCertificates: useGetReportTlsCertificates({
     reportId,
     filter,
     refetchInterval,
+    staleTime,
   }),
-  errors: useGetReportErrors({reportId, filter, refetchInterval}),
+  errors: useGetReportErrors({reportId, filter, refetchInterval, staleTime}),
 });
 
 export default useReportSubEntities;

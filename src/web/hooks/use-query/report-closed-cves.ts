@@ -11,12 +11,14 @@ interface UseGetReportClosedCvesParams {
   reportId: string;
   filter?: FilterType;
   refetchInterval?: number | false;
+  staleTime?: number;
 }
 
 export const useGetReportClosedCves = ({
   reportId,
   filter = undefined,
   refetchInterval = false,
+  staleTime,
 }: UseGetReportClosedCvesParams) => {
   const gmp = useGmp();
 
@@ -31,6 +33,7 @@ export const useGetReportClosedCves = ({
     refetchInterval,
     enabled: Boolean(reportId),
     keepPreviousData: true,
+    staleTime,
   });
 };
 

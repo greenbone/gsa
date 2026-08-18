@@ -12,12 +12,14 @@ interface UseGetReportTlsCertificatesParams {
   reportId: string;
   filter?: FilterType;
   refetchInterval?: number | false;
+  staleTime?: number;
 }
 
 export const useGetReportTlsCertificates = ({
   reportId,
   filter = undefined,
   refetchInterval = undefined,
+  staleTime,
 }: UseGetReportTlsCertificatesParams) => {
   const gmp = useGmp();
 
@@ -32,6 +34,7 @@ export const useGetReportTlsCertificates = ({
     enabled: Boolean(reportId),
     keepPreviousData: true,
     refetchInterval,
+    staleTime,
   });
 };
 

@@ -150,6 +150,7 @@ const ReportDetailsContent = ({
     reportId,
     filter: reportFilter,
     refetchInterval,
+    staleTime: Infinity,
   });
 
   if (!hasReport && isDefined(reportError)) {

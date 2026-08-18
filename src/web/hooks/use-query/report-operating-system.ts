@@ -12,12 +12,14 @@ interface UseGetReportOperatingSystemsParams {
   reportId: string;
   filter?: FilterType;
   refetchInterval?: number | false;
+  staleTime?: number;
 }
 
 export const useGetReportOperatingSystems = ({
   reportId,
   filter,
   refetchInterval = undefined,
+  staleTime,
 }: UseGetReportOperatingSystemsParams) => {
   const gmp = useGmp();
 
@@ -32,6 +34,7 @@ export const useGetReportOperatingSystems = ({
     enabled: Boolean(reportId),
     keepPreviousData: true,
     refetchInterval,
+    staleTime,
   });
 };
 

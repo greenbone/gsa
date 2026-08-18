@@ -36,6 +36,8 @@ interface UseGetEntitiesParams<
   refetchInterval?:
     number | false | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
   keepPreviousData?: boolean;
+  staleTime?: number;
+  gcTime?: number;
 }
 
 const useGetEntities = <
@@ -48,6 +50,8 @@ const useGetEntities = <
   enabled = true,
   refetchInterval = undefined,
   keepPreviousData = false,
+  staleTime,
+  gcTime,
 }: UseGetEntitiesParams<TModel, TInput>) => {
   const gmp = useGmp();
   const token = useSessionToken();
@@ -73,6 +77,13 @@ const useGetEntities = <
       };
     },
     refetchInterval: resolvedRefetchInterval,
+    staleTime:
+      staleTime ?? (resolvedRefetchInterval === false ? Infinity : undefined),
+    gcTime:
+      gcTime ??
+      (staleTime === Infinity || resolvedRefetchInterval === false
+        ? Infinity
+        : undefined),
     placeholderData: keepPreviousData
       ? previousData => previousData
       : undefined,

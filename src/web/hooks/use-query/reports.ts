@@ -14,6 +14,7 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import type Report from 'gmp/models/report';
 import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
+import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
@@ -47,6 +48,24 @@ export const useGetReport = ({
     queryKeyParts: [filterString],
     id,
     refetchInterval,
+    keepPreviousData: true,
+    /**
+     * We added gcTime: 2 hours, to avoid the report being garbage collected too early.
+     * This is important because the report might still be needed for further display,
+     * even if it is not actively being used at the moment.
+     * The staleTime function checks if the report is defined and if its scan_run_status is not active.
+     * If both conditions are met, it returns Infinity,
+     * indicating that the report should not be considered stale and should not be garbage collected.
+     * Otherwise, it returns 0, allowing the report to be garbage collected if it is no longer needed.
+     */
+    gcTime: 120 * 60 * 1000,
+    staleTime: query => {
+      const report = query.state.data;
+      return isDefined(report?.report) &&
+        !isActive(report.report.scan_run_status)
+        ? Infinity
+        : 0;
+    },
   });
 };
 
