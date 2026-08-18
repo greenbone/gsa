@@ -129,7 +129,6 @@ const EntityPage = <TEntity extends Model>({
 
   const renderSection = () => {
     if (!isDefined(SectionComponent)) {
-      // @ts-expect-error
       SectionComponent = Section;
     }
     if (SectionComponent === false) {
@@ -142,7 +141,6 @@ const EntityPage = <TEntity extends Model>({
     }
 
     return (
-      // @ts-expect-error
       <SectionComponent
         className="entity-section"
         extra={renderInfo()}
