@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import {hasValue} from 'gmp/utils/identity';
 import Portal from 'web/components/portal/Portal';
@@ -22,10 +22,6 @@ interface ToolTipRenderProps {
 interface ToolTipProps {
   content?: React.ReactNode;
   children: (args: ToolTipRenderProps) => React.ReactNode;
-}
-
-interface ToolTipState {
-  visible: boolean;
 }
 
 const ToolTipText = styled.div`
@@ -70,74 +66,46 @@ const ToolTipDisplay = React.forwardRef(
   ),
 );
 
-class ToolTip extends React.Component<ToolTipProps, ToolTipState> {
-  target: React.RefObject<ToolTipTargetElement | null>;
-  tooltip: React.RefObject<HTMLElement | null>;
+const ToolTip = ({children, content}: ToolTipProps) => {
+  const [visible, setVisible] = useState(false);
+  const target = useRef<ToolTipTargetElement | null>(null);
+  const tooltip = useRef<HTMLElement | null>(null);
 
-  constructor(props: ToolTipProps) {
-    super(props);
+  const show = () => setVisible(true);
+  const hide = () => setVisible(false);
 
-    this.state = {
-      visible: false,
-    };
-
-    this.hide = this.hide.bind(this);
-    this.show = this.show.bind(this);
-
-    this.target = React.createRef();
-    this.tooltip = React.createRef();
-  }
-
-  show() {
-    this.setState({visible: true});
-  }
-
-  hide() {
-    this.setState({visible: false});
-  }
-
-  setPosition() {
-    const target = this.target.current;
-    const tooltip = this.tooltip.current;
-
-    if (!hasValue(target) || !hasValue(tooltip)) {
-      // ensure both refs have been set to not crash
+  useEffect(() => {
+    if (!visible) {
       return;
     }
 
-    const rect = target.getBoundingClientRect();
-    const top = rect.top - tooltip.offsetHeight + window.scrollY;
-    const left =
-      rect.left + (rect.width - tooltip.offsetWidth) / 2 + window.scrollX;
-
-    tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${left}px`;
-  }
-
-  componentDidUpdate() {
-    if (this.state.visible) {
-      this.setPosition();
+    const targetElement = target.current;
+    const tooltipElement = tooltip.current;
+    if (!hasValue(targetElement) || !hasValue(tooltipElement)) {
+      return;
     }
-  }
 
-  render() {
-    const {children, content} = this.props;
-    const {visible} = this.state;
-    return (
-      <>
-        {content && visible && (
-          <Portal>
-            <ToolTipDisplay ref={this.tooltip}>{content}</ToolTipDisplay>
-          </Portal>
-        )}
-        {children({
-          show: this.show,
-          hide: this.hide,
-          targetRef: this.target,
-        })}
-      </>
-    );
-  }
-}
+    const rect = targetElement.getBoundingClientRect();
+    const top = rect.top - tooltipElement.offsetHeight + window.scrollY;
+    const left =
+      rect.left +
+      (rect.width - tooltipElement.offsetWidth) / 2 +
+      window.scrollX;
+
+    tooltipElement.style.top = `${top}px`;
+    tooltipElement.style.left = `${left}px`;
+  }, [visible]);
+
+  return (
+    <>
+      {content && visible && (
+        <Portal>
+          <ToolTipDisplay ref={tooltip}>{content}</ToolTipDisplay>
+        </Portal>
+      )}
+      {children({show, hide, targetRef: target})}
+    </>
+  );
+};
 
 export default ToolTip;
