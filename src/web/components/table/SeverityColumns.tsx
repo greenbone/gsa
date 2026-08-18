@@ -4,7 +4,7 @@
  */
 
 import {_} from 'gmp/locale/lang';
-import SeverityClassLabel from 'web/components/label/SeverityClass';
+import SeverityClassLabel from 'web/components/label/SeverityClassLabel';
 
 type EntityWithCounts = {
   result_counts?: Record<string, number>;

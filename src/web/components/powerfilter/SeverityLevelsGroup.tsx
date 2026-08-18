@@ -9,7 +9,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
-import SeverityClassLabel from 'web/components/label/SeverityClass';
+import SeverityClassLabel from 'web/components/label/SeverityClassLabel';
 import IconDivider from 'web/components/layout/IconDivider';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
