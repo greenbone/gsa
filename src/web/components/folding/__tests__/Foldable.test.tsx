@@ -1,27 +1,19 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
+import Foldable from 'web/components/folding/Foldable';
 import {FoldState} from 'web/components/folding/Folding';
-import withFolding from 'web/components/folding/withFolding';
 
-const DummyComponent = (props: React.HTMLAttributes<HTMLDivElement>) => (
-  <div {...props}>Dummy Component</div>
-);
-
-const FoldableComponent = withFolding(DummyComponent);
-
-describe('withFolding', () => {
-  test('should update the display name', () => {
-    expect(FoldableComponent.displayName).toBe('withFolding(DummyComponent)');
-  });
-
+describe('Foldable', () => {
   test('should use the default fold state and forward props', () => {
     const {element} = render(
-      <FoldableComponent className="dummy-component" data-testid="dummy" />,
+      <Foldable className="dummy-component" data-testid="dummy">
+        Dummy Component
+      </Foldable>,
     );
 
     expect(element).toHaveStyle({display: 'block', height: 'auto'});
@@ -41,29 +33,29 @@ describe('withFolding', () => {
     [FoldState.UNFOLDING_START, 'block', '1px'],
     [FoldState.UNFOLDED, 'block', 'auto'],
   ])('should apply %s folding styles', (foldState, display, height) => {
-    const {element, rerender} = render(
-      <FoldableComponent foldState={foldState} />,
-    );
+    const {element, rerender} = render(<Foldable foldState={foldState} />);
 
     expect(element).toHaveStyle({display, height});
 
-    rerender(<FoldableComponent foldState={FoldState.UNFOLDED} />);
+    rerender(<Foldable foldState={FoldState.UNFOLDED} />);
   });
 
   test('should hide folded content and show it when unfolded', () => {
     const {rerender} = render(
-      <FoldableComponent foldState={FoldState.FOLDED} />,
+      <Foldable foldState={FoldState.FOLDED}>Dummy Component</Foldable>,
     );
     expect(screen.getByText('Dummy Component')).not.toBeVisible();
 
-    rerender(<FoldableComponent foldState={FoldState.UNFOLDED} />);
+    rerender(
+      <Foldable foldState={FoldState.UNFOLDED}>Dummy Component</Foldable>,
+    );
     expect(screen.getByText('Dummy Component')).toBeVisible();
   });
 
   test('should call onFoldStepEnd after a transition', () => {
     const onFoldStepEnd = testing.fn();
     const {element} = render(
-      <FoldableComponent
+      <Foldable
         foldState={FoldState.FOLDING_START}
         onFoldStepEnd={onFoldStepEnd}
       />,

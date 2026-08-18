@@ -6,10 +6,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
+import Foldable from 'web/components/folding/Foldable';
 import useFoldToggle, {
   type UseFoldToggleProps,
 } from 'web/components/folding/useFoldToggle';
-import withFolding from 'web/components/folding/withFolding';
 import FoldStateIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
 import SectionHeader from 'web/components/section/SectionHeader';
@@ -24,8 +24,6 @@ interface SectionProps extends UseFoldToggleProps {
   img?: React.ReactNode;
   title?: string;
 }
-
-const FoldableLayout = withFolding(Layout);
 
 const FoldLayout = styled(Layout)`
   margin-left: 3px;
@@ -69,13 +67,9 @@ const Section = ({
     <section className={className} data-testid={dataTestId}>
       {header}
       {foldable ? (
-        <FoldableLayout
-          foldState={foldState}
-          grow="1"
-          onFoldStepEnd={onFoldStepEnd}
-        >
-          {children}
-        </FoldableLayout>
+        <Foldable foldState={foldState} onFoldStepEnd={onFoldStepEnd}>
+          <Layout grow="1">{children}</Layout>
+        </Foldable>
       ) : (
         children
       )}
