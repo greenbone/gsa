@@ -9,7 +9,7 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
-import {getConnectionStatusLabel} from 'web/components/label/AgentsState';
+import {getConnectionStatusLabel} from 'web/components/label/AgentsStateLabel';
 import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
 import Row from 'web/components/layout/Row';

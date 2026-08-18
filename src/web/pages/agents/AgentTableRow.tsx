@@ -7,7 +7,7 @@ import type Agent from 'gmp/models/agent';
 import {
   getConnectionStatusLabel,
   getAuthorizationLabel,
-} from 'web/components/label/AgentsState';
+} from 'web/components/label/AgentsStateLabel';
 import Divider from 'web/components/layout/Divider';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
