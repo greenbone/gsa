@@ -21,6 +21,15 @@ export const hexToRgb = (hex: string): string => {
   return `rgb(${Number.parseInt(result[1], 16)}, ${Number.parseInt(result[2], 16)}, ${Number.parseInt(result[3], 16)})`;
 };
 
+export const cssColorToRgb = (color: string): string => {
+  const element = document.createElement('div');
+  element.style.color = color;
+  document.body.appendChild(element);
+  const computedColor = getComputedStyle(element).color;
+  element.remove();
+  return computedColor;
+};
+
 /**
  * Custom matcher to check computed style property
  */
@@ -50,74 +59,74 @@ function toHaveComputedStyle(
 }
 
 /**
- * Custom matcher to check computed background color against hex value
+ * Custom matcher to check computed background color
  */
-function toHaveBackgroundColor(this, element: HTMLElement, hex: string) {
+function toHaveBackgroundColor(this, element: HTMLElement, color: string) {
   const actualValue =
     getComputedStyle(element).getPropertyValue('background-color');
-  const expectedValue = hexToRgb(hex);
+  const expectedValue = cssColorToRgb(color);
 
   const pass = actualValue === expectedValue;
 
   if (pass) {
     return {
       message: () =>
-        `expected element not to have background-color: ${hex} (${expectedValue}), but got ${actualValue}`,
+        `expected element not to have background-color: ${color} (${expectedValue}), but got ${actualValue}`,
       pass: true,
     };
   } else {
     return {
       message: () =>
-        `expected element to have background-color: ${hex} (${expectedValue}), but got ${actualValue}`,
+        `expected element to have background-color: ${color} (${expectedValue}), but got ${actualValue}`,
       pass: false,
     };
   }
 }
 
 /**
- * Custom matcher to check computed border color against hex value
+ * Custom matcher to check computed border color
  */
-function toHaveBorderColor(this, element: HTMLElement, hex: string) {
+function toHaveBorderColor(this, element: HTMLElement, color: string) {
   const actualValue =
     getComputedStyle(element).getPropertyValue('border-color');
-  const expectedValue = hexToRgb(hex);
+  const expectedValue = cssColorToRgb(color);
 
   const pass = actualValue === expectedValue;
 
   if (pass) {
     return {
       message: () =>
-        `expected element not to have border-color: ${hex} (${expectedValue}), but got ${actualValue}`,
+        `expected element not to have border-color: ${color} (${expectedValue}), but got ${actualValue}`,
       pass: true,
     };
   } else {
     return {
       message: () =>
-        `expected element to have border-color: ${hex} (${expectedValue}), but got ${actualValue}`,
+        `expected element to have border-color: ${color} (${expectedValue}), but got ${actualValue}`,
       pass: false,
     };
   }
 }
 
 /**
- * Custom matcher to check computed text color against hex value
+ * Custom matcher to check computed text color
  */
-function toHaveColor(this, element: HTMLElement, hex: string) {
+function toHaveColor(this, element: HTMLElement, color: string) {
   const actualValue = getComputedStyle(element).getPropertyValue('color');
-  const expectedValue = hexToRgb(hex);
+  const expectedValue = cssColorToRgb(color);
 
   const pass = actualValue === expectedValue;
 
   if (pass) {
     return {
       message: () =>
-        `expected element not to have color: ${hex} (${expectedValue}), but got ${actualValue}`,
+        `expected element not to have color: ${color} (${expectedValue}), but got ${actualValue}`,
       pass: true,
     };
   } else {
     return {
       message: () =>
-        `expected element to have color: ${hex} (${expectedValue}), but got ${actualValue}`,
+        `expected element to have color: ${color} (${expectedValue}), but got ${actualValue}`,
       pass: false,
     };
   }
