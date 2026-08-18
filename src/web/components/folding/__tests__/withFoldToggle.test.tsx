@@ -33,6 +33,12 @@ const FoldToggleComponent = withFoldToggle(DummyComponent);
 const getFoldState = () => screen.getByTestId('foldState').textContent;
 
 describe('withFoldToggle', () => {
+  test('should update the wrapper display name', () => {
+    expect(FoldToggleComponent.displayName).toBe(
+      'withFoldToggle(DummyComponent)',
+    );
+  });
+
   test('should use the default fold state and forward public props', () => {
     render(<FoldToggleComponent label="Test label" />);
 

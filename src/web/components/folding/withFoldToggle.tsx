@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useCallback, useState} from 'react';
+import hoistStatics from 'hoist-non-react-statics';
 import {FoldState, type FoldStateType} from 'web/components/folding/Folding';
+import {updateDisplayName} from 'web/utils/display-name';
 
 interface FoldToggleProps {
   initialFoldState?: FoldStateType;
@@ -16,107 +18,80 @@ export interface FoldToggleComponentProps {
   onFoldToggle: () => void;
 }
 
+type FoldTogglePublicProps<TProps extends FoldToggleComponentProps> = Omit<
+  TProps,
+  keyof FoldToggleComponentProps
+> &
+  FoldToggleProps;
+
 /**
  * HOC to add fold parent functionality to a component.
  */
 const withFoldToggle = <TProps extends FoldToggleComponentProps>(
   Component: React.ComponentType<TProps>,
 ) => {
-  type PublicProps = Omit<TProps, keyof FoldToggleComponentProps> &
-    FoldToggleProps;
+  const FoldToggleWrapper = (props: FoldTogglePublicProps<TProps>) => {
+    const [foldState, setFoldState] = useState(
+      props.initialFoldState ?? FoldState.UNFOLDED,
+    );
 
-  class FoldToggleWrapper extends React.Component<
-    PublicProps,
-    {foldState: FoldStateType}
-  > {
-    constructor(props: PublicProps) {
-      super(props);
-
-      const {initialFoldState = FoldState.UNFOLDED} = props;
-
-      this.state = {
-        foldState: initialFoldState,
-      };
-
-      this.handleFoldStepEnd = this.handleFoldStepEnd.bind(this);
-      this.handleFoldToggle = this.handleFoldToggle.bind(this);
-    }
-
-    handleFoldToggle() {
-      this.setState(({foldState}) => {
-        let newFoldState: FoldStateType;
-
-        switch (foldState) {
+    const handleFoldToggle = useCallback(() => {
+      setFoldState(currentFoldState => {
+        switch (currentFoldState) {
           case FoldState.FOLDED:
-            newFoldState = FoldState.UNFOLDING_START;
-            break;
+            return FoldState.UNFOLDING_START;
           case FoldState.UNFOLDED:
-            newFoldState = FoldState.FOLDING_START;
-            break;
+            return FoldState.FOLDING_START;
           case FoldState.UNFOLDING_START:
-            newFoldState = FoldState.FOLDED;
-            break;
+            return FoldState.FOLDED;
           case FoldState.FOLDING_START:
-            newFoldState = FoldState.UNFOLDED;
-            break;
+            return FoldState.UNFOLDED;
           case FoldState.UNFOLDING:
-            newFoldState = FoldState.FOLDING;
-            break;
+            return FoldState.FOLDING;
           case FoldState.FOLDING:
-            newFoldState = FoldState.UNFOLDING;
-            break;
+            return FoldState.UNFOLDING;
           default:
-            newFoldState = FoldState.UNFOLDED;
+            return FoldState.UNFOLDED;
         }
-        return {foldState: newFoldState};
       });
-    }
+    }, []);
 
-    handleFoldStepEnd() {
-      this.setState(({foldState}) => {
-        let newFoldState: FoldStateType;
-
-        switch (foldState) {
+    const handleFoldStepEnd = useCallback(() => {
+      setFoldState(currentFoldState => {
+        switch (currentFoldState) {
           case FoldState.FOLDED:
-            newFoldState = FoldState.FOLDED;
-            break;
+            return FoldState.FOLDED;
           case FoldState.UNFOLDED:
-            newFoldState = FoldState.UNFOLDED;
-            break;
+            return FoldState.UNFOLDED;
           case FoldState.UNFOLDING_START:
-            newFoldState = FoldState.UNFOLDING;
-            break;
+            return FoldState.UNFOLDING;
           case FoldState.FOLDING_START:
-            newFoldState = FoldState.FOLDING;
-            break;
+            return FoldState.FOLDING;
           case FoldState.UNFOLDING:
-            newFoldState = FoldState.UNFOLDED;
-            break;
+            return FoldState.UNFOLDED;
           case FoldState.FOLDING:
-            newFoldState = FoldState.FOLDED;
-            break;
+            return FoldState.FOLDED;
           default:
-            newFoldState = FoldState.UNFOLDED;
+            return FoldState.UNFOLDED;
         }
-        return {foldState: newFoldState};
       });
-    }
+    }, []);
 
-    render() {
-      const {...other} = this.props;
-      const {foldState} = this.state;
-      const componentProps = {
-        ...(other as Omit<TProps, keyof FoldToggleComponentProps>),
-        foldState,
-        onFoldStepEnd: this.handleFoldStepEnd,
-        onFoldToggle: this.handleFoldToggle,
-      } as TProps;
+    const {...other} = props;
+    const componentProps = {
+      ...(other as Omit<TProps, keyof FoldToggleComponentProps>),
+      foldState,
+      onFoldStepEnd: handleFoldStepEnd,
+      onFoldToggle: handleFoldToggle,
+    } as TProps;
 
-      return <Component {...componentProps} />;
-    }
-  }
+    return <Component {...componentProps} />;
+  };
 
-  return FoldToggleWrapper;
+  return hoistStatics(
+    updateDisplayName(FoldToggleWrapper, Component, 'withFoldToggle'),
+    Component,
+  );
 };
 
 export default withFoldToggle;
