@@ -13,7 +13,7 @@ import {
 } from 'web/components/folding/Folding';
 import FoldStateIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
-import SectionHeader from 'web/components/section/Header';
+import SectionHeader from 'web/components/section/SectionHeader';
 
 interface SectionProps extends FoldToggleComponentProps {
   children?: React.ReactNode;

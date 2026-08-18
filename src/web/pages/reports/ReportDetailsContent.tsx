@@ -21,8 +21,8 @@ import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import SectionHeader from 'web/components/section/Header';
 import Section from 'web/components/section/Section';
+import SectionHeader from 'web/components/section/SectionHeader';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
 import TabList from 'web/components/tab/TabList';
