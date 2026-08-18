@@ -41,4 +41,19 @@ describe('LegendLine tests', () => {
     expect(svg).toHaveAttribute('height', '15');
     expect(svg).toHaveAttribute('width', '20');
   });
+
+  test('should center the default line with default styling', () => {
+    const {render} = rendererWith();
+
+    render(<LegendLine color="#008000" height={20} width={40} />);
+
+    const line = screen.getByTestId('main-container').querySelector('line');
+    expect(line).toHaveAttribute('stroke', '#008000');
+    expect(line).toHaveAttribute('stroke-width', '1');
+    expect(line).toHaveAttribute('x1', '0');
+    expect(line).toHaveAttribute('x2', '40');
+    expect(line).toHaveAttribute('y1', '10');
+    expect(line).toHaveAttribute('y2', '10');
+    expect(line).not.toHaveAttribute('stroke-dasharray');
+  });
 });
