@@ -50,7 +50,7 @@ const FalsePositiveLabel = createLabel(
   _l('False Pos.'),
 );
 
-export const SeverityClassLabels = {
+export const SeverityClassLabel = {
   Critical: CriticalLabel,
   High: HighLabel,
   Medium: MediumLabel,
@@ -59,4 +59,4 @@ export const SeverityClassLabels = {
   FalsePositive: FalsePositiveLabel,
 };
 
-export default SeverityClassLabels;
+export default SeverityClassLabel;
