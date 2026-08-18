@@ -7,7 +7,7 @@ import {type RefObject, type ReactNode, type Ref} from 'react';
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
-import LegendLabel from 'web/components/chart/base/LagendLabel';
+import LegendLabel from 'web/components/chart/base/LegendLabel';
 import {DEFAULT_SHAPE_SIZE} from 'web/components/chart/base/LegendLine';
 import ToolTip, {type ToolTipRef} from 'web/components/chart/base/ToolTip';
 import Theme from 'web/utils/theme';

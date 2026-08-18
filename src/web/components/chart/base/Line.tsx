@@ -19,12 +19,12 @@ import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/base/Axis';
 import Group from 'web/components/chart/base/Group';
-import LegendLabel from 'web/components/chart/base/LagendLabel';
 import Legend, {
   Item,
   type LegendData,
   type LegendRef,
 } from 'web/components/chart/base/Legend';
+import LegendLabel from 'web/components/chart/base/LegendLabel';
 import LegendLine from 'web/components/chart/base/LegendLine';
 import Svg from 'web/components/chart/base/Svg';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
