@@ -11,7 +11,7 @@ import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import Toolbar from 'web/components/bar/Toolbar';
+import ToolBar from 'web/components/bar/ToolBar';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
@@ -278,10 +278,10 @@ class EntitiesPage<
 
   renderToolbar() {
     return (
-      <Toolbar>
+      <ToolBar>
         {this.renderToolbarIcons()}
         {this.renderPowerFilter()}
-      </Toolbar>
+      </ToolBar>
     );
   }
 

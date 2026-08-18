@@ -15,7 +15,7 @@ import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive, TASK_STATUS, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
-import ToolBar from 'web/components/bar/Toolbar';
+import ToolBar from 'web/components/bar/ToolBar';
 import DateTime from 'web/components/date/DateTime';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import {ReportIcon} from 'web/components/icon';

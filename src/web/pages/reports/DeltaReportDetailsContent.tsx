@@ -17,7 +17,7 @@ import type ReportTask from 'gmp/models/report/task';
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
-import ToolBar from 'web/components/bar/Toolbar';
+import ToolBar from 'web/components/bar/ToolBar';
 import DateTime from 'web/components/date/DateTime';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import {ReportIcon} from 'web/components/icon';

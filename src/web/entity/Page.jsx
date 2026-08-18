@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import {typeName} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import Toolbar from 'web/components/bar/Toolbar';
+import ToolBar from 'web/components/bar/ToolBar';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Message from 'web/components/error/Message';
 import Layout from 'web/components/layout/Layout';
@@ -162,7 +162,7 @@ class EntityPage extends React.Component {
 
     return (
       <Layout align="start" flex="column" grow="1">
-        <Toolbar>{this.renderToolbarIcons()}</Toolbar>
+        <ToolBar>{this.renderToolbarIcons()}</ToolBar>
         {this.renderSection()}
       </Layout>
     );

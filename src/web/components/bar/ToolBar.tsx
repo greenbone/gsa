@@ -7,11 +7,11 @@ import {type ReactNode} from 'react';
 import Layout from 'web/components/layout/Layout';
 import IconSizeProvider from 'web/components/provider/IconSizeProvider';
 
-interface ToolbarProps {
+interface ToolBarProps {
   children?: ReactNode;
 }
 
-const Toolbar = ({children}: ToolbarProps) => {
+const ToolBar = ({children}: ToolBarProps) => {
   return (
     <IconSizeProvider size="small">
       <Layout flex align={['space-between', 'start']} data-testid="toolbar">
@@ -21,4 +21,4 @@ const Toolbar = ({children}: ToolbarProps) => {
   );
 };
 
-export default Toolbar;
+export default ToolBar;

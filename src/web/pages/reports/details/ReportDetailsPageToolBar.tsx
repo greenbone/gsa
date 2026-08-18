@@ -6,7 +6,7 @@
 import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
-import ToolBar from 'web/components/bar/Toolbar';
+import ToolBar from 'web/components/bar/ToolBar';
 import Layout from 'web/components/layout/Layout';
 import Powerfilter from 'web/components/powerfilter/PowerFilter';
 import ReportDetailsToolBarIcons from 'web/pages/reports/details/ReportDetailsPageToolBarIcons';
