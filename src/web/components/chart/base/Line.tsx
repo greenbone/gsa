@@ -103,12 +103,12 @@ const LINE_HEIGHT = 15;
 
 const Text = styled.text`
   font-size: 12px;
-  fill: ${Theme.white};
+  fill: ${Theme.black};
 `;
 
 const LabelTitle = styled.text`
   font-size: 13px;
-  fill: ${Theme.white};
+  fill: ${Theme.black};
   font-family: monospace;
 `;
 
@@ -408,18 +408,21 @@ const LineChart = ({
         <CrispEdgesLine x1={x} x2={x} y1={0} y2={maxHeight(height)} />
         <Group left={x + infoMargin} top={mouseY}>
           <rect
-            fill={Theme.mediumGray}
+            fill={Theme.white}
             height={infoHeight + 2 * itemMargin}
-            opacity="0.75"
+            rx="4"
+            stroke={Theme.mediumDarkGray}
+            strokeWidth="1"
             width={infoWidth + 3 * itemMargin}
             x={0}
             y={0}
           />
           <rect
-            fill={Theme.white}
+            fill={Theme.darkGreen}
             height={infoHeight + 2 * itemMargin}
-            width={15 + 2 * itemMargin}
-            x={itemMargin}
+            rx="2"
+            width={3}
+            x={0}
             y={0}
           />
           <Group left={2 * itemMargin} textAnchor="end" top={LINE_HEIGHT}>
