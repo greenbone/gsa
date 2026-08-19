@@ -165,6 +165,8 @@ const BarChart = <TData extends BarChartDataPoint>({
                     width={horizontal ? yScale(d.y) : xScale.bandwidth()}
                     x={horizontal ? 1 : xScale(String(d.x))}
                     y={horizontal ? xScale(String(d.x)) : yScale(d.y)}
+                    rx="4"
+                    ry="4"
                     onMouseEnter={show}
                     onMouseLeave={hide}
                   />

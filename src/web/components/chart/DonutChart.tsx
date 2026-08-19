@@ -4,7 +4,7 @@
  */
 
 import React, {useCallback, useEffect, useRef, useState, type Ref} from 'react';
-import {color as d3color, type HSLColor, type RGBColor} from 'd3-color';
+import {arc as d3arc} from 'd3-shape';
 import styled from 'styled-components';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
@@ -14,15 +14,7 @@ import Legend, {
 } from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
 import Arc2d from 'web/components/chart/donut/Arc2d';
-import Arc3d from 'web/components/chart/donut/Arc3d';
-import Labels from 'web/components/chart/donut/Labels';
-import {
-  PieInnerPath,
-  PieTopPath,
-  PieOuterPath,
-} from 'web/components/chart/donut/Paths';
 import Pie from 'web/components/chart/donut/Pie';
-import arc from 'web/components/chart/utils/Arc';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 import Layout from 'web/components/layout/Layout';
 import {setRef} from 'web/utils/Render';
@@ -56,8 +48,8 @@ interface DonutChartProps<TData extends DonutChartData> {
 }
 
 const LEGEND_MARGIN = 20;
-const MIN_RATIO = 2.0;
 const MIN_WIDTH = 200;
+const DEFAULT_INNER_RADIUS = 0.65;
 
 const StyledLayout = styled(Layout)`
   overflow: hidden;
@@ -71,48 +63,31 @@ const margin = {
 };
 
 const emptyColor = Theme.lightGray;
-const darkEmptyColor = (d3color(emptyColor) as HSLColor | RGBColor).darker();
 
 const EmptyDonut = ({
   'data-testid': dataTestId,
   left,
   top,
   innerRadiusX,
-  innerRadiusY,
   outerRadiusX,
-  outerRadiusY,
-  donutHeight,
 }: EmptyDonutProps) => {
-  const donutArc = arc()
-    .innerRadiusX(innerRadiusX)
-    .innerRadiusY(innerRadiusY)
-    .outerRadiusX(outerRadiusX)
-    .outerRadiusY(outerRadiusY);
+  const donutArc = d3arc()
+    .innerRadius(innerRadiusX)
+    .outerRadius(outerRadiusX)
+    .cornerRadius(4)({startAngle: 0, endAngle: 2 * Math.PI});
   return (
     <Group data-testid={dataTestId} left={left} top={top}>
-      <PieInnerPath
-        color={darkEmptyColor}
-        donutHeight={donutHeight}
-        innerRadiusX={innerRadiusX}
-        innerRadiusY={innerRadiusY}
-      />
-      <PieTopPath color={emptyColor} path={donutArc.path()} />
-      <PieOuterPath
-        color={darkEmptyColor}
-        donutHeight={donutHeight}
-        outerRadiusX={outerRadiusX}
-        outerRadiusY={outerRadiusY}
-      />
+      <path d={String(donutArc)} fill={emptyColor} />
     </Group>
   );
 };
 
 const DonutChart = <TData extends DonutChartData = DonutChartData>({
   data = [],
-  innerRadius = 0,
+  innerRadius = DEFAULT_INNER_RADIUS,
   height,
   svgRef,
-  show3d = true,
+  show3d = false,
   showLegend = true,
   width: propWidth,
   onDataClick,
@@ -138,6 +113,7 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
   }, [propWidth, legendRef]);
 
   const [chartWidth, setChartWidth] = useState(getWidth);
+  const [hoveredData, setHoveredData] = useState<TData | undefined>();
 
   const separateLabels = useCallback(() => {
     const svg = svgElementRef.current;
@@ -220,43 +196,23 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
   ]);
 
   const horizontalMargin = margin.left + margin.right;
-  const verticalMargin = margin.top + margin.bottom;
-
-  // thickness of the donut
-  const donutThickness = show3d ? Math.min(height, chartWidth) / 8 : 0;
-
-  let donutWidth = chartWidth;
-  let donutHeight = height;
-
-  if (show3d && chartWidth / height > MIN_RATIO) {
-    // don't allow 3d donut to be stretch horizontally anymore
-    donutWidth = height * MIN_RATIO;
-  } else if (!show3d && chartWidth > height) {
-    // don't allow the 2d donut to be stretched horizontally
-    donutWidth = height;
-  }
-  if (height > chartWidth) {
-    // never stretch the donut chart vertically
-    donutHeight = chartWidth;
-  }
+  const donutWidth = Math.min(chartWidth, height);
+  const radius = donutWidth / 2 - horizontalMargin;
 
   // x,y position of the donut
   const centerX = chartWidth / 2;
-  const centerY = (height - donutThickness) / 2;
+  const centerY = height / 2;
 
-  const outerRadiusX = donutWidth / 2 - horizontalMargin;
-  const outerRadiusY = (donutHeight - donutThickness) / 2 - verticalMargin;
-  const innerRadiusX = outerRadiusX * innerRadius;
-  const innerRadiusY = outerRadiusY * innerRadius;
+  const outerRadiusX = radius;
+  const innerRadiusX = radius * innerRadius;
 
   const donutProps = {
     outerRadiusX,
-    outerRadiusY,
     innerRadiusX,
-    innerRadiusY,
+    outerRadiusY: outerRadiusX,
+    innerRadiusY: innerRadiusX,
   };
 
-  const Arc = show3d ? Arc3d<TData> : Arc2d<TData>;
   return (
     <StyledLayout align={['start', 'start']}>
       <Svg
@@ -272,6 +228,7 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
             <Pie
               data={data}
               left={centerX}
+              padAngle={0.03}
               pieValue={d => d.value}
               top={centerY}
               {...donutProps}
@@ -285,31 +242,40 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
                 x,
                 y,
               }) => (
-                <Arc
+                <Arc2d
                   key={index}
                   data={arcData}
-                  donutHeight={donutThickness}
                   endAngle={endAngle}
-                  path={arcPath}
-                  startAngle={startAngle}
                   x={x}
                   y={y}
+                  innerRadius={innerRadiusX}
+                  outerRadius={outerRadiusX}
+                  path={arcPath}
+                  startAngle={startAngle}
+                  onHover={setHoveredData}
                   {...donutProps}
                   onDataClick={onDataClick}
                 />
               )}
             </Pie>
-            <Labels<TData>
-              centerX={centerX}
-              centerY={centerY}
-              data={data}
-              {...donutProps}
-            />
+            <text
+              data-testid="donut-chart-center-label"
+              dy=".33em"
+              fill={Theme.darkGray}
+              fontSize={Theme.Font.default}
+              fontWeight="bold"
+              textAnchor="middle"
+              x={centerX}
+              y={centerY}
+            >
+              {hoveredData
+                ? `Value: ${hoveredData.value}`
+                : `Total: ${data.reduce((total, datum) => total + datum.value, 0)}`}
+            </text>
           </>
         ) : (
           <EmptyDonut
             data-testid="donut-chart-empty"
-            donutHeight={donutThickness}
             left={centerX}
             top={centerY}
             {...donutProps}

@@ -32,15 +32,30 @@ const props = {
 };
 
 describe('Arc3d', () => {
-  test('should render the 3D arc paths and tooltip target', () => {
+  test('should render a flat arc and tooltip target', () => {
     const {render} = rendererWith();
 
     render(<Arc3d {...props} />);
 
-    const arc = screen.getByTestId('arc-3d');
-    expect(arc.querySelectorAll('path')).toHaveLength(3);
+    const arc = screen.getByTestId('arc-2d');
+    expect(arc.querySelectorAll('path')).toHaveLength(1);
+    expect(arc.querySelector('path')).toHaveAttribute('fill', '#008000');
     expect(arc.querySelector('circle')).toHaveAttribute('cx', '5');
     expect(arc.querySelector('circle')).toHaveAttribute('cy', '6');
+  });
+
+  test('should notify when hovering the arc', () => {
+    const onHover = testing.fn();
+    const {render} = rendererWith();
+
+    render(<Arc3d {...props} onHover={onHover} />);
+
+    const arc = screen.getByTestId('arc-2d');
+    fireEvent.mouseEnter(arc);
+    expect(onHover).toHaveBeenLastCalledWith(data);
+
+    fireEvent.mouseLeave(arc);
+    expect(onHover).toHaveBeenLastCalledWith(undefined);
   });
 
   test('should call onDataClick with the arc data', () => {
@@ -49,7 +64,7 @@ describe('Arc3d', () => {
 
     render(<Arc3d {...props} onDataClick={onDataClick} />);
 
-    fireEvent.click(screen.getByTestId('arc-3d'));
+    fireEvent.click(screen.getByTestId('arc-2d'));
 
     expect(onDataClick).toHaveBeenCalledExactlyOnceWith(data);
   });

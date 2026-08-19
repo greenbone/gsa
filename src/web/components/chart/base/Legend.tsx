@@ -70,6 +70,7 @@ const Rect = styled.div<RectProps>`
   width: ${DEFAULT_SHAPE_SIZE}px;
   height: 10px;
   background-color: ${props => props.color};
+  border-radius: 4px;
 `;
 
 const Legend = <TData extends LegendData = LegendData>({
