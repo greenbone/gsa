@@ -33,6 +33,7 @@ describe('ToolTip', () => {
     expect(screen.queryByText('Tooltip content')).not.toBeInTheDocument();
     fireEvent.click(screen.getByTestId('target'));
     expect(screen.getByText('Tooltip content')).toBeVisible();
+    expect(screen.getByTestId('target')).toHaveStyle({cursor: 'pointer'});
   });
 
   test('should hide content when the target is no longer hovered', () => {

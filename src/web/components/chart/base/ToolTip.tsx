@@ -26,32 +26,28 @@ interface ToolTipProps {
 
 const ToolTipText = styled.div`
   box-sizing: border-box;
-  font-weight: bold;
-  padding: 3px;
-  background: ${Theme.darkGray};
-  color: ${Theme.white};
-  border-radius: 2px;
-  line-height: 1;
+  max-width: min(320px, calc(100vw - 24px));
+  padding: 8px 11px;
+  background: ${Theme.white};
+  border: 1px solid ${Theme.mediumDarkGray};
+  border-left: 3px solid ${Theme.darkGreen};
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
+  color: ${Theme.black};
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 `;
 
 ToolTipText.displayName = 'ToolTipText';
-
-const ToolTipArrow = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  line-height: 1;
-  font-size: 10px;
-  color: ${Theme.darkGray};
-`;
-
-ToolTipArrow.displayName = 'ToolTipArrow';
 
 const ToolTipContainer = styled.div`
   position: absolute;
   pointer-events: none;
   display: flex;
   flex-direction: column;
+  max-width: calc(100vw - 24px);
   z-index: ${Theme.Layers.onTop};
 `;
 
@@ -61,7 +57,6 @@ const ToolTipDisplay = React.forwardRef(
   ({children, ...props}: ToolTipDisplayProps, ref: React.Ref<HTMLElement>) => (
     <ToolTipContainer ref={ref as React.RefObject<HTMLDivElement>} {...props}>
       <ToolTipText>{children}</ToolTipText>
-      <ToolTipArrow>▼</ToolTipArrow>
     </ToolTipContainer>
   ),
 );
@@ -73,6 +68,12 @@ const ToolTip = ({children, content}: ToolTipProps) => {
 
   const show = () => setVisible(true);
   const hide = () => setVisible(false);
+  const setTarget = (element: ToolTipTargetElement | null) => {
+    target.current = element;
+    if (element) {
+      element.style.cursor = 'pointer';
+    }
+  };
 
   useEffect(() => {
     if (!visible) {
@@ -87,10 +88,15 @@ const ToolTip = ({children, content}: ToolTipProps) => {
 
     const rect = targetElement.getBoundingClientRect();
     const top = rect.top - tooltipElement.offsetHeight + window.scrollY;
-    const left =
+    const centeredLeft =
       rect.left +
       (rect.width - tooltipElement.offsetWidth) / 2 +
       window.scrollX;
+    const maxLeft = window.innerWidth - tooltipElement.offsetWidth - 12;
+    const left = Math.min(
+      maxLeft + window.scrollX,
+      Math.max(12 + window.scrollX, centeredLeft),
+    );
 
     tooltipElement.style.top = `${top}px`;
     tooltipElement.style.left = `${left}px`;
@@ -103,7 +109,7 @@ const ToolTip = ({children, content}: ToolTipProps) => {
           <ToolTipDisplay ref={tooltip}>{content}</ToolTipDisplay>
         </Portal>
       )}
-      {children({show, hide, targetRef: target})}
+      {children({show, hide, targetRef: setTarget})}
     </>
   );
 };
