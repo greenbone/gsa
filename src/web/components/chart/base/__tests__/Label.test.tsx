@@ -18,8 +18,9 @@ describe('Label', () => {
     const label = screen.getByText('Label text');
     expect(label).toHaveClass('pie-label');
     expect(label).toHaveAttribute('dy', '.33em');
-    expect(label).toHaveAttribute('fill', Theme.dialogGray);
-    expect(label).toHaveAttribute('font-size', Theme.Font.default);
+    expect(label).toHaveAttribute('fill', Theme.darkGray);
+    expect(label).toHaveAttribute('font-family', 'Verdana, sans-serif');
+    expect(label).toHaveAttribute('font-size', '11');
     expect(label).toHaveAttribute('font-weight', 'bold');
     expect(label).toHaveAttribute('text-anchor', 'middle');
   });

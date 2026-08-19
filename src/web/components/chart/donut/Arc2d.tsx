@@ -4,8 +4,6 @@
  */
 
 import {arc as d3arc} from 'd3-shape';
-import {select} from 'd3-selection';
-import 'd3-transition';
 import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
@@ -44,7 +42,6 @@ const Arc2d = <TData extends Arc2dData = Arc2dData>({
   onHover,
 }: Arc2dProps<TData>) => {
   const {color = Theme.lightGray, toolTip} = data;
-  const arcRef = React.useRef<SVGPathElement | null>(null);
   const hasD3Geometry =
     isDefined(innerRadius) &&
     isDefined(outerRadius) &&
@@ -56,16 +53,6 @@ const Arc2d = <TData extends Arc2dData = Arc2dData>({
       .outerRadius(radius)
       .padAngle(0.03)
       .cornerRadius(4)({startAngle, endAngle});
-  const transitionArc = (radius: number) => {
-    if (!hasD3Geometry || !arcRef.current) {
-      return;
-    }
-    select(arcRef.current)
-      .transition()
-      .duration(200)
-      .attr('d', renderArc(radius));
-  };
-
   return (
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
@@ -75,16 +62,13 @@ const Arc2d = <TData extends Arc2dData = Arc2dData>({
           onMouseEnter={() => {
             show();
             onHover?.(data);
-            transitionArc((outerRadius as number) * 1.04);
           }}
           onMouseLeave={() => {
             hide();
             onHover?.(undefined);
-            transitionArc(outerRadius as number);
           }}
         >
           <path
-            ref={arcRef}
             d={String(hasD3Geometry ? renderArc(outerRadius as number) : path)}
             fill={String(color)}
           />

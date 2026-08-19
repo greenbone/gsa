@@ -48,4 +48,28 @@ describe('Arc2d', () => {
 
     expect(onDataClick).toHaveBeenCalledExactlyOnceWith(data);
   });
+
+  test('should keep the path geometry stable while hovering', () => {
+    const {render} = rendererWith();
+
+    render(
+      <Arc2d
+        data={data}
+        endAngle={Math.PI}
+        innerRadius={20}
+        outerRadius={40}
+        path={arcPath}
+        startAngle={0}
+        x={5}
+        y={6}
+      />,
+    );
+
+    const arc = screen.getByTestId('arc-2d');
+    const pathBeforeHover = arc.querySelector('path')?.getAttribute('d');
+
+    fireEvent.mouseEnter(arc);
+
+    expect(arc.querySelector('path')).toHaveAttribute('d', pathBeforeHover);
+  });
 });
