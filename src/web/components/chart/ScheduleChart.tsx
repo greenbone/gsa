@@ -281,6 +281,8 @@ const ScheduleChart = ({
                     width={rwidth}
                     x={startX}
                     y={yScale(label)}
+                    rx="4"
+                    ry="4"
                     onMouseEnter={show}
                     onMouseLeave={hide}
                   />
