@@ -13,6 +13,7 @@ import {
   type DisplayState,
   getDisplay,
   type DisplayComponent,
+  type DisplayProps,
 } from 'web/components/dashboard/registry';
 import {
   convertDefaultDisplays,
@@ -39,6 +40,14 @@ import useTranslation from 'web/hooks/useTranslation';
 interface DashboardDisplay extends DashboardDisplayData {
   filterId?: string;
   state?: DisplayState;
+}
+
+interface DashboardDisplayProps extends DisplayProps {
+  filter?: FilterType;
+  notify?: (message: string) => void;
+  showFilterSelection?: boolean;
+  showFilterString?: boolean;
+  onFilterChanged?: (filter: FilterType) => void;
 }
 
 interface DashboardRow extends Omit<DashboardRowData, 'items'> {
@@ -81,15 +90,20 @@ const RowPlaceHolder = styled.div`
 const DashboardView = ({
   defaultDisplays,
   error,
+  filter,
   id,
   isLoading,
   loadSettings,
   maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
   maxRows = DEFAULT_MAX_ROWS,
+  notify,
   permittedDisplays,
   saveSettings,
   setDefaultSettings,
   settings,
+  showFilterSelection = false,
+  showFilterString = false,
+  onFilterChanged,
 }: DashboardViewProps) => {
   const [_] = useTranslation();
   const callLoadSettings = useLatestCallback(loadSettings);
@@ -170,7 +184,8 @@ const DashboardView = ({
   const displaysById = useMemo(() => getDisplaysById(rows ?? []), [rows]);
 
   const getDisplayComponent = useCallback(
-    (displayId: string): DisplayComponent | undefined => components[displayId],
+    (displayId: string): DisplayComponent<DashboardDisplayProps> | undefined =>
+      components[displayId],
     [components],
   );
 
@@ -324,13 +339,18 @@ const DashboardView = ({
             <Component
               {...displayProps}
               dragHandleRef={dragHandleRef}
+              filter={filter}
               height={height}
               id={displayId}
+              notify={notify}
               setState={stateFunc =>
                 handleSetDisplayState(displayId, stateFunc)
               }
+              showFilterSelection={showFilterSelection}
+              showFilterString={showFilterString}
               state={state}
               width={width}
+              onFilterChanged={onFilterChanged}
               onFilterIdChanged={filterId =>
                 handleUpdateDisplay(displayId, {filterId})
               }
