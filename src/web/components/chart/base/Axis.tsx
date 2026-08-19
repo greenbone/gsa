@@ -11,6 +11,7 @@ import {
   axisTop,
   type AxisScale,
 } from 'd3-axis';
+import {format as d3format} from 'd3-format';
 import type {ScaleBand, ScaleLinear, ScaleTime} from 'd3-scale';
 import {select} from 'd3-selection';
 import Theme from 'web/utils/theme';
@@ -43,12 +44,19 @@ const FONT_SIZE = 10;
 
 const DEFAULT_TICK_LENGTH = 8;
 
+const standardFormat = d3format('.2~s');
+
 const AXIS_GENERATORS = {
   bottom: axisBottom,
   top: axisTop,
   left: axisLeft,
   right: axisRight,
 } as const;
+
+const isTimeScale = (
+  scale: SupportedScale,
+): scale is ScaleTime<number, number> =>
+  'invert' in scale && scale.invert(0) instanceof Date;
 
 const Axis = ({
   dataTestId,
@@ -86,6 +94,10 @@ const Axis = ({
 
     if (tickFormat) {
       generator.tickFormat(value => tickFormat(value));
+    } else if (!isTimeScale(scale)) {
+      generator.tickFormat(value =>
+        typeof value === 'number' ? standardFormat(value) : String(value),
+      );
     }
 
     if (tickValues) {
