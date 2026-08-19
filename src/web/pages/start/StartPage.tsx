@@ -4,7 +4,7 @@
  */
 
 import {useState, useEffect, useCallback, useMemo} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import {v4 as uuid} from 'uuid';
 import {isDefined} from 'gmp/utils/identity';
@@ -37,6 +37,7 @@ import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
 import useGmp from 'web/hooks/useGmp';
+import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import ConfirmRemoveDialog from 'web/pages/start/ConfirmRemoveDialog';
 import EditDashboardDialog from 'web/pages/start/EditDashboardDialog';
@@ -110,7 +111,9 @@ const StartPage = () => {
     [dispatch, gmp],
   );
 
-  const settingsSelector = useSelector(getDashboardSettingsSelector);
+  const settingsSelector = useShallowEqualSelector(
+    getDashboardSettingsSelector,
+  );
   const settings = settingsSelector.getById(DASHBOARD_ID);
   const isLoading = settingsSelector.getIsLoading(DASHBOARD_ID);
 
