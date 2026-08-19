@@ -72,7 +72,7 @@ export interface DataDisplayProps<
   TTransformedData = TData,
   TTransformProps extends object = object,
   TChildren = DataDisplayChildren<TTransformedData, TState>,
-> {
+> extends Omit<DisplayProps, 'children' | 'title'> {
   data: TData;
   dataRow: (data: TTransformedData) => string[];
   dataTitles: string[];
@@ -101,7 +101,6 @@ type DataDisplayWithTranslationProps<
   TTransformedData = TData,
   TTransformProps extends object = object,
 > = WithTranslationComponentProps &
-  Omit<DisplayProps, 'children' | 'title'> &
   DataDisplayProps<TData, TState, TTransformedData, TTransformProps>;
 
 interface DataDisplayState<TData, TTransformedData> {
