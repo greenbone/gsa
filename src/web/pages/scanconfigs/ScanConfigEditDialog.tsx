@@ -296,8 +296,16 @@ const ScanConfigEditDialog = ({
     );
   }, [familySelectionUpdate]);
 
-  // trend and select are created only once and only after the whole config is loaded
-  if (!isDefined(trendValues) && !isDefined(selectValues) && !isLoadingConfig) {
+  // trend and select are created only once, and only after the config and the
+  // list of families have both arrived. Without the families the selection
+  // covers no family at all, and saving such a selection deselects every NVT.
+  if (
+    !isDefined(trendValues) &&
+    !isDefined(selectValues) &&
+    !isLoadingConfig &&
+    !isLoadingFamilies &&
+    isDefined(families)
+  ) {
     const {trend, select} = createTrendAndSelect(configFamilies, families);
     setTrendValues(trend);
     setSelectValues(select);
@@ -307,12 +315,21 @@ const ScanConfigEditDialog = ({
     scannerId,
   };
 
+  // While the selection is unknown the family part of the form is left out of
+  // the request. The backend reads a missing selection as "no family selected"
+  // and would drop every NVT of the config.
+  const hasFamilySelection = isDefined(trendValues) && isDefined(selectValues);
+
   const controlledData = {
     id: configId,
     scannerPreferenceValues,
-    select: selectValues,
-    trend: trendValues,
-    familyTrend: configFamiliesTrend,
+    ...(hasFamilySelection
+      ? {
+          select: selectValues,
+          trend: trendValues,
+          familyTrend: configFamiliesTrend,
+        }
+      : {}),
   };
 
   const notification =
