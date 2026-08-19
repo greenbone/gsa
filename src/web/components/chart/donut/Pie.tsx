@@ -10,7 +10,7 @@ import Group from 'web/components/chart/base/Group';
 import arc from 'web/components/chart/utils/Arc';
 import {type Path} from 'web/components/chart/utils/Path';
 
-interface PieArc<TData> {
+export interface PieArc<TData> {
   value: number;
   startAngle: number;
   endAngle: number;
@@ -19,6 +19,7 @@ interface PieArc<TData> {
 }
 
 export interface PieRenderProps<TData> {
+  arc: PieArc<TData>;
   index: number;
   x: number;
   y: number;
@@ -105,6 +106,7 @@ const Pie = <TData,>({
       {arcs.map((currentArc, i) => {
         const {x, y} = arcPath.centroid(currentArc);
         return children({
+          arc: currentArc,
           index: i,
           x,
           y,
