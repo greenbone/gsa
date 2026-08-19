@@ -20,10 +20,14 @@ import {
   registerDisplay,
 } from 'web/components/dashboard/registry';
 
+interface TestDisplayProps {
+  value: string;
+}
+
 const LOG_NAME = 'web.components.dashboard.registry';
 
 describe('dashboard registry', () => {
-  let displayRegistry: DisplayRegistry;
+  let displayRegistry: DisplayRegistry<TestDisplayProps>;
   const log = Logger.getLogger(LOG_NAME);
   let originalDebug: (...args: unknown[]) => void;
   let originalError: (...args: unknown[]) => void;
@@ -44,7 +48,9 @@ describe('dashboard registry', () => {
     log.error = originalError;
   });
 
-  const createDisplayComponent = (displayId?: string): DisplayComponent => {
+  const createDisplayComponent = (
+    displayId?: string,
+  ): DisplayComponent<TestDisplayProps> => {
     return Object.assign(() => null, {displayId} as {displayId: string});
   };
 
@@ -52,9 +58,13 @@ describe('dashboard registry', () => {
     const displayId = 'dummy-valid';
     const DummyDisplay = createDisplayComponent(displayId);
 
-    registerDisplay(DummyDisplay, 'Dummy display', displayRegistry);
+    registerDisplay<TestDisplayProps>(
+      DummyDisplay,
+      'Dummy display',
+      displayRegistry,
+    );
 
-    const display = getDisplay(displayId, displayRegistry);
+    const display = getDisplay<TestDisplayProps>(displayId, displayRegistry);
 
     expect(display).toBeDefined();
     expect(display?.component).toBe(DummyDisplay);
@@ -68,20 +78,26 @@ describe('dashboard registry', () => {
     const unregisteredId = 'dummy-invalid-id';
     const DummyDisplay = createDisplayComponent();
 
-    registerDisplay(DummyDisplay, 'Dummy display', displayRegistry);
+    registerDisplay<TestDisplayProps>(
+      DummyDisplay,
+      'Dummy display',
+      displayRegistry,
+    );
 
     expect(log.error).toHaveBeenCalledWith(
       'Undefined id passed while registering display',
     );
     expect(log.debug).not.toHaveBeenCalled();
-    expect(getDisplay(unregisteredId, displayRegistry)).toBeUndefined();
+    expect(
+      getDisplay<TestDisplayProps>(unregisteredId, displayRegistry),
+    ).toBeUndefined();
   });
 
   test('should log an error for undefined component', () => {
     const displayId = 'dummy-invalid-component';
 
-    registerDisplay(
-      undefined as unknown as DisplayComponent,
+    registerDisplay<TestDisplayProps>(
+      undefined as unknown as DisplayComponent<TestDisplayProps>,
       'Dummy display',
       displayRegistry,
     );
@@ -91,14 +107,16 @@ describe('dashboard registry', () => {
       undefined,
     );
     expect(log.debug).not.toHaveBeenCalled();
-    expect(getDisplay(displayId, displayRegistry)).toBeUndefined();
+    expect(
+      getDisplay<TestDisplayProps>(displayId, displayRegistry),
+    ).toBeUndefined();
   });
 
   test('should log an error for undefined title', () => {
     const displayId = 'dummy-invalid-title';
     const DummyDisplay = createDisplayComponent(displayId);
 
-    registerDisplay(
+    registerDisplay<TestDisplayProps>(
       DummyDisplay,
       undefined as unknown as ToString,
       displayRegistry,
@@ -109,6 +127,8 @@ describe('dashboard registry', () => {
       displayId,
     );
     expect(log.debug).not.toHaveBeenCalled();
-    expect(getDisplay(displayId, displayRegistry)).toBeUndefined();
+    expect(
+      getDisplay<TestDisplayProps>(displayId, displayRegistry),
+    ).toBeUndefined();
   });
 });

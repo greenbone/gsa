@@ -17,7 +17,7 @@ export interface DisplayState {
 type DisplayStateFunc = (state: DisplayState | undefined) => DisplayState;
 type DisplaySetStateFunc = (stateFunc: DisplayStateFunc) => void;
 
-interface DisplayProps extends BaseDisplayProps {
+export interface DisplayProps extends BaseDisplayProps {
   height: number;
   id: string;
   width: number;
@@ -26,24 +26,27 @@ interface DisplayProps extends BaseDisplayProps {
   onFilterIdChanged: (filterId: string) => void;
 }
 
-export type DisplayComponent = ComponentType<DisplayProps> & {
+export type DisplayComponent<TProps = DisplayProps> = ComponentType<TProps> & {
   displayId: string;
 };
 
-export interface RegisteredDisplay {
-  component: DisplayComponent;
+export interface RegisteredDisplay<TProps = DisplayProps> {
+  component: DisplayComponent<TProps>;
   title: ToString;
 }
 
-export type DisplayRegistry = Record<string, RegisteredDisplay>;
+export type DisplayRegistry<TProps = DisplayProps> = Record<
+  string,
+  RegisteredDisplay<TProps>
+>;
 
 const log = Logger.getLogger('web.components.dashboard.registry');
 const registry: DisplayRegistry = {};
 
-export const registerDisplay = (
-  component: DisplayComponent,
+export const registerDisplay = <TProps = DisplayProps>(
+  component: DisplayComponent<TProps>,
   title: ToString,
-  targetRegistry: DisplayRegistry = registry,
+  targetRegistry: DisplayRegistry<TProps> = registry as DisplayRegistry<TProps>,
 ) => {
   const displayId = component?.displayId;
 
@@ -73,7 +76,7 @@ export const registerDisplay = (
   log.debug('Registered display', displayId);
 };
 
-export const getDisplay = (
+export const getDisplay = <TProps = DisplayProps>(
   displayId: string,
-  targetRegistry: DisplayRegistry = registry,
-): RegisteredDisplay | undefined => targetRegistry[displayId];
+  targetRegistry: DisplayRegistry<TProps> = registry as DisplayRegistry<TProps>,
+): RegisteredDisplay<TProps> | undefined => targetRegistry[displayId];
