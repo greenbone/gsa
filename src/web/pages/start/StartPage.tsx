@@ -39,11 +39,11 @@ import TabsContainer from 'web/components/tab/TabsContainer';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ConfirmRemoveDialog from 'web/pages/start/ConfirmRemoveDialog';
-import Dashboard from 'web/pages/start/Dashboard';
 import EditDashboardDialog from 'web/pages/start/EditDashboardDialog';
 import NewDashboardDialog, {
   DEFAULT_DISPLAYS,
 } from 'web/pages/start/NewDashboardDialog';
+import StartDashboard from 'web/pages/start/StartDashboard';
 import {loadSettings, saveSettings} from 'web/store/dashboard/settings/actions';
 import getDashboardSettingsSelector, {
   DashboardSetting,
@@ -405,7 +405,7 @@ const StartPage = () => {
                     <TabPanel key={id}>
                       <SubscriptionProvider>
                         {({notify}) => (
-                          <Dashboard
+                          <StartDashboard
                             id={id}
                             notify={notify}
                             saveSettings={handleSaveDashboardSettings}

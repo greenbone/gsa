@@ -4,7 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {within, rendererWith, wait, screen} from 'web/testing';
+import {
+  within,
+  rendererWith,
+  wait,
+  screen,
+  fireEvent,
+  waitFor,
+} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import StartPage from 'web/pages/start/StartPage';
@@ -39,28 +46,34 @@ const getAggregates = testing.fn().mockResolvedValue({
   },
 });
 
+const createGmp = (
+  getSetting = getDashboardSetting,
+  saveSetting = saveDashboardSetting,
+) => ({
+  tasks: {
+    getSeverityAggregates: getAggregates,
+    getStatusAggregates: getAggregates,
+  },
+  cves: {
+    getCreatedAggregates: getAggregates,
+  },
+  nvts: {
+    getSeverityAggregates: getAggregates,
+  },
+  filters: {
+    get: getFilters,
+  },
+  dashboard: {
+    getSetting,
+    saveSetting,
+  },
+  settings: {manualUrl},
+});
+
 describe('StartPage tests', () => {
-  test('should render full StartPage', async () => {
-    const gmp = {
-      tasks: {
-        getSeverityAggregates: getAggregates,
-        getStatusAggregates: getAggregates,
-      },
-      cves: {
-        getCreatedAggregates: getAggregates,
-      },
-      nvts: {
-        getSeverityAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-        saveSetting: saveDashboardSetting,
-      },
-      settings: {manualUrl},
-    };
+  test('should render a loading indicator while dashboard settings are loading', () => {
+    const getSetting = testing.fn().mockResolvedValue({});
+    const gmp = createGmp(getSetting);
 
     const {render} = rendererWith({
       gmp,
@@ -68,32 +81,43 @@ describe('StartPage tests', () => {
       router: true,
     });
 
-    const {baseElement} = render(<StartPage />);
+    render(<StartPage />);
+
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
+    expect(getSetting).toHaveBeenCalledWith(
+      'd97eca9f-0386-4e5d-88f2-0ed7f60c0646',
+    );
+  });
+
+  test('should render full StartPage', async () => {
+    const gmp = createGmp();
+
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+    });
+
+    render(<StartPage />);
 
     await wait();
 
     const displays = screen.getAllByTestId('grid-item');
-    const spans = baseElement.querySelectorAll('span');
+    const newButtons = screen.getAllByRole('button', {name: 'New Icon'});
+    expect(newButtons).toHaveLength(2);
 
     // Toolbar Icons
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: Dashboards',
-    );
+    expect(screen.getByTitle('Help: Dashboards')).toBeInTheDocument();
 
     // Tabs
-    expect(spans[3]).toHaveTextContent('Overview');
-    expect(screen.getByTestId('add-dashboard')).toHaveAttribute(
-      'title',
-      'Add new Dashboard',
+    expect(screen.getByRole('tab', {name: /Overview/})).toHaveTextContent(
+      'Overview',
     );
+    expect(screen.getByTitle('Add new Dashboard')).toBeInTheDocument();
 
     // Dashboard Controls
-    expect(screen.getByTestId('add-dashboard-display')).toHaveAttribute(
-      'title',
-      'Add new Dashboard Display',
-    );
-    expect(screen.getByTestId('reset-dashboard')).toHaveAttribute(
+    expect(screen.getByTitle('Add new Dashboard Display')).toBeInTheDocument();
+    expect(screen.getByRole('button', {name: 'Reset Icon'})).toHaveAttribute(
       'title',
       'Reset to Defaults',
     );
@@ -168,5 +192,36 @@ describe('StartPage tests', () => {
     expect(
       withinNvtsBySeverityClass.getByTestId('toggle-3d-icon'),
     ).toHaveAttribute('title', 'Toggle 2D/3D view');
+  });
+
+  test('should reset the active dashboard to its defaults', async () => {
+    const gmp = createGmp();
+
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+    });
+
+    render(<StartPage />);
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', {name: 'Reset Icon'}),
+      ).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByRole('button', {name: 'Reset Icon'}));
+
+    await waitFor(() => expect(saveDashboardSetting).toHaveBeenCalled());
+    expect(saveDashboardSetting).toHaveBeenCalledWith(
+      'd97eca9f-0386-4e5d-88f2-0ed7f60c0646',
+      expect.objectContaining({
+        byId: expect.objectContaining({
+          '84fbe9f5-8ad4-43f0-9712-850182abb003': expect.objectContaining({
+            rows: expect.any(Array),
+          }),
+        }),
+      }),
+    );
   });
 });
