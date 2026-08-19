@@ -4,7 +4,6 @@
  */
 
 import SaveDialog from 'web/components/dialog/SaveDialog';
-import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
@@ -130,25 +129,23 @@ const NewDashboardDialog = ({
     >
       {({values, onValueChange}) => (
         <>
-          <FormGroup title={_('Dashboard Title')}>
-            <TextField
-              maxLength={MAX_TITLE_LENGTH}
-              name="title"
-              value={values.title}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Initial Displays')}>
-            <Select
-              items={uniqueDisplayChoices.map(({label, key}) => ({
-                label,
-                value: key,
-              }))}
-              name="defaultDisplays"
-              value={values.defaultDisplays}
-              onChange={onValueChange}
-            />
-          </FormGroup>
+          <TextField
+            maxLength={MAX_TITLE_LENGTH}
+            name="title"
+            title={_('Dashboard Title')}
+            value={values.title}
+            onChange={onValueChange}
+          />
+          <Select
+            items={uniqueDisplayChoices.map(({label, key}) => ({
+              label,
+              value: key,
+            }))}
+            label={_('Initial Displays')}
+            name="defaultDisplays"
+            value={values.defaultDisplays}
+            onChange={onValueChange}
+          />
         </>
       )}
     </SaveDialog>
