@@ -7,6 +7,7 @@ import {useState} from 'react';
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor, fireEvent} from 'web/testing';
 import {vi} from 'vitest';
+import {type FilterType} from 'gmp/models/filter';
 import DashboardView, {
   DEFAULT_MAX_ITEMS_PER_ROW,
   DEFAULT_MAX_ROWS,
@@ -144,6 +145,76 @@ describe('DashboardView', () => {
     ]);
     expect(lastCall.maxItemsPerRow).toBe(DEFAULT_MAX_ITEMS_PER_ROW);
     expect(lastCall.maxRows).toBe(DEFAULT_MAX_ROWS);
+  });
+
+  test('should forward display props to the registered display component', async () => {
+    const {
+      dashboardId,
+      defaultDisplays,
+      loadSettings,
+      permittedDisplays,
+      saveSettings,
+      setDefaultSettings,
+      settings,
+    } = createDashboardState();
+    const filter = {} as FilterType;
+    const notify = testing.fn();
+    const onFilterChanged = testing.fn();
+    const {render} = rendererWith({store: true});
+
+    render(
+      <DashboardView
+        showFilterSelection
+        showFilterString
+        defaultDisplays={defaultDisplays}
+        filter={filter}
+        id={dashboardId}
+        isLoading={false}
+        loadSettings={loadSettings}
+        notify={notify}
+        permittedDisplays={permittedDisplays}
+        saveSettings={saveSettings}
+        setDefaultSettings={setDefaultSettings}
+        settings={settings}
+        onFilterChanged={onFilterChanged}
+      />,
+    );
+
+    await waitFor(() => expect(loadSettings).toHaveBeenCalledTimes(1));
+
+    const lastCall = globalThis.__dashboardSortableGridCalls?.at(-1) as {
+      children: (props: {
+        dragHandleRef: () => void;
+        height: number;
+        id: string;
+        width: number;
+      }) => React.ReactElement;
+    };
+    const dragHandleRef = testing.fn();
+    const display = lastCall.children({
+      dragHandleRef,
+      height: 100,
+      id: `item-view-${testCounter}`,
+      width: 200,
+    });
+    const displayProps = display.props as Record<string, unknown>;
+
+    expect(displayProps).toEqual(
+      expect.objectContaining({
+        dragHandleRef,
+        filter,
+        height: 100,
+        id: `item-view-${testCounter}`,
+        notify,
+        onFilterChanged,
+        showFilterSelection: true,
+        showFilterString: true,
+        width: 200,
+      }),
+    );
+    expect(displayProps.onFilterIdChanged).toEqual(expect.any(Function));
+    expect(displayProps.onRemoveClick).toEqual(expect.any(Function));
+    expect(displayProps.setState).toEqual(expect.any(Function));
   });
 
   test('should render a loading indicator', () => {
