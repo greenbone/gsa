@@ -4,7 +4,6 @@
  */
 
 import SaveDialog from 'web/components/dialog/SaveDialog';
-import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 import {MAX_TITLE_LENGTH} from 'web/pages/start/NewDashboardDialog';
@@ -34,15 +33,14 @@ const EditDashboardDialog = ({
       onSave={onSave}
     >
       {({values, onValueChange}) => (
-        <FormGroup title={_('Dashboard Title')}>
-          <TextField
-            grow="1"
-            maxLength={MAX_TITLE_LENGTH}
-            name="dashboardTitle"
-            value={values.dashboardTitle}
-            onChange={onValueChange}
-          />
-        </FormGroup>
+        <TextField
+          grow="1"
+          maxLength={MAX_TITLE_LENGTH}
+          name="dashboardTitle"
+          title={_('Dashboard Title')}
+          value={values.dashboardTitle}
+          onChange={onValueChange}
+        />
       )}
     </SaveDialog>
   );
