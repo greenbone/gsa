@@ -59,6 +59,18 @@ describe('Axis tests', () => {
     );
   });
 
+  test('should format large numeric tick values compactly', () => {
+    const scale = scaleLinear().range([0, 100]).domain([0, 1250000]);
+    const mainContainer = renderAxis({
+      orientation: 'bottom',
+      scale,
+      tickValues: [0, 1250000],
+    });
+
+    const tickTexts = Array.from(mainContainer.querySelectorAll('.tick text'));
+    expect(tickTexts.map(tick => tick.textContent)).toEqual(['0', '1.3M']);
+  });
+
   test('should render a top axis label with the expected position', () => {
     const scale = scaleLinear().range([0, 200]).domain([0, 100]);
     renderAxis({
