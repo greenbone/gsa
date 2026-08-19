@@ -308,6 +308,76 @@ describe('ScanConfigEditDialog tests', () => {
     });
   });
 
+  test('should not send a family selection before the families are loaded', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+
+    // The config and the family list are fetched in parallel. When the config
+    // arrives first the family list is still undefined, and a selection built
+    // from it would cover no family at all - which the backend reads as
+    // "deselect every NVT".
+    const props = {
+      comment: 'bar',
+      configFamilies,
+      configId: 'c1',
+      editNvtDetailsTitle: 'Edit Scan Config NVT Details',
+      editNvtFamiliesTitle: 'Edit Scan Config Family',
+      isLoadingScanners: false,
+      name: 'Config',
+      nvtPreferences,
+      scannerPreferences,
+      title: 'Edit Scan Config',
+      onClose: handleClose,
+      onSave: handleSave,
+    };
+
+    const {render} = rendererWith({capabilities: true, router: true});
+    const {rerender} = render(
+      <ScanConfigEditDialog
+        {...props}
+        isLoadingConfig={false}
+        isLoadingFamilies={true}
+      />,
+    );
+
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(handleSave).toHaveBeenCalledWith({
+      comment: 'bar',
+      id: 'c1',
+      name: 'Config',
+      scannerId: undefined,
+      scannerPreferenceValues: {
+        scannerpref0: 0,
+      },
+    });
+
+    handleSave.mockClear();
+
+    rerender(
+      <ScanConfigEditDialog
+        {...props}
+        families={families}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+      />,
+    );
+
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(handleSave).toHaveBeenCalledWith({
+      comment: 'bar',
+      id: 'c1',
+      name: 'Config',
+      scannerId: undefined,
+      scannerPreferenceValues: {
+        scannerpref0: 0,
+      },
+      select,
+      trend,
+    });
+  });
+
   test('should allow to close the dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
