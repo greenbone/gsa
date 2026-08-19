@@ -65,6 +65,8 @@ const DisplayView = styled.div`
   flex-basis: 0;
   background-color: ${Theme.white};
   position: relative;
+  border-radius: 8px;
+  overflow: hidden;
 `;
 
 const DisplayContent = styled.div`
@@ -74,6 +76,8 @@ const DisplayContent = styled.div`
   border-left: 1px solid ${Theme.lightGray};
   border-right: 1px solid ${Theme.lightGray};
   border-bottom: 1px solid ${Theme.lightGray};
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   overflow: hidden;
 `;
 

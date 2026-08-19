@@ -3,10 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ReactNode} from 'react';
+import React, {useMemo, type ReactNode} from 'react';
+import {arc as d3arc, pie as d3pie} from 'd3-shape';
 import Label from 'web/components/chart/base/Label';
 import ToolTip from 'web/components/chart/base/ToolTip';
-import Pie from 'web/components/chart/donut/Pie';
+import Pie, {type PieArc} from 'web/components/chart/donut/Pie';
+import Theme from 'web/utils/theme';
 
 interface LabelData {
   value: number;
@@ -23,7 +25,56 @@ interface LabelsProps<TData extends LabelData> {
   outerRadiusY?: number;
 }
 
-const MIN_ANGLE_FOR_LABELS = 0.15;
+const LABEL_RADIUS_OFFSET = 10;
+const LABEL_X = 95;
+const LABEL_GAP = 16;
+
+interface LabelPosition {
+  isRightSide: boolean;
+  y: number;
+}
+
+const resolveLabelPositions = <TData extends LabelData>(
+  data: TData[],
+  innerRadius: number,
+  outerRadius: number,
+): LabelPosition[] => {
+  const pie = d3pie<TData>().sortValues(null).value(d => d.value);
+  const arcs = pie(data).sort((a, b) =>
+    a.startAngle > b.startAngle ? -1 : 1,
+  );
+  const outerArc = d3arc<{
+    startAngle: number;
+    endAngle: number;
+  }>()
+    .innerRadius(outerRadius + LABEL_RADIUS_OFFSET)
+    .outerRadius(outerRadius + LABEL_RADIUS_OFFSET);
+  const positions = arcs.map(currentArc => ({
+    isRightSide:
+      (currentArc.startAngle + currentArc.endAngle) / 2 < Math.PI,
+    y: outerArc.centroid(currentArc)[1],
+  }));
+
+  [true, false].forEach(isRightSide => {
+    const sidePositions = positions
+      .map((position, index) => ({position, index}))
+      .filter(({position}) => position.isRightSide === isRightSide)
+      .sort((a, b) => a.position.y - b.position.y);
+
+    sidePositions.forEach((entry, index) => {
+      if (index === 0) {
+        return;
+      }
+      const previous = sidePositions[index - 1].position;
+      entry.position.y = Math.max(
+        entry.position.y,
+        previous.y + LABEL_GAP,
+      );
+    });
+  });
+
+  return positions;
+};
 
 const Labels = <TData extends LabelData = LabelData>({
   data,
@@ -33,40 +84,68 @@ const Labels = <TData extends LabelData = LabelData>({
   outerRadiusX,
   innerRadiusY,
   outerRadiusY,
-}: LabelsProps<TData>) => (
-  <Pie
-    data={data}
-    innerRadiusX={innerRadiusX}
-    innerRadiusY={innerRadiusY}
-    left={centerX}
-    outerRadiusX={outerRadiusX}
-    outerRadiusY={outerRadiusY}
-    pieValue={d => d.value}
-    top={centerY}
-  >
-    {({data: arcData, index, startAngle, endAngle, x, y}) => {
-      const angleAbs = Math.abs(startAngle - endAngle);
-      if (angleAbs < MIN_ANGLE_FOR_LABELS) {
-        return null;
-      }
+}: LabelsProps<TData>) => {
+  const labelPositions = useMemo(
+    () =>
+      resolveLabelPositions(data, innerRadiusX ?? 0, outerRadiusX),
+    [data, innerRadiusX, outerRadiusX],
+  );
+
+  return (
+    <Pie
+      data={data}
+      innerRadiusX={innerRadiusX}
+      innerRadiusY={innerRadiusY}
+      left={centerX}
+      outerRadiusX={outerRadiusX}
+      outerRadiusY={outerRadiusY}
+      pieValue={d => d.value}
+      top={centerY}
+    >
+      {({arc: currentArc, data: arcData, index}) => {
+      const arc = d3arc<PieArc<TData>>()
+        .innerRadius(innerRadiusX ?? 0)
+        .outerRadius(outerRadiusX);
+      const outerArc = d3arc<PieArc<TData>>()
+        .innerRadius(outerRadiusX + LABEL_RADIUS_OFFSET)
+        .outerRadius(outerRadiusX + LABEL_RADIUS_OFFSET);
+      const arcPoint = arc.centroid(currentArc);
+      const outerArcPoint = outerArc.centroid(currentArc);
+      const {isRightSide, y} = labelPositions[index];
+      const labelPoint = [isRightSide ? LABEL_X : -LABEL_X, y];
+      const points = [arcPoint, outerArcPoint, labelPoint]
+        .map(point => point.join(','))
+        .join(' ');
       return (
         <ToolTip key={index} content={arcData.toolTip}>
           {({targetRef, hide, show}) => (
-            <Label
-              key={index}
-              ref={targetRef as React.Ref<SVGElement>}
-              x={x}
-              y={y}
-              onMouseEnter={show}
-              onMouseLeave={hide}
-            >
-              {arcData.value}
-            </Label>
+            <g>
+              <polyline
+                fill="none"
+                points={points}
+                stroke="#BFBFBF"
+                strokeWidth="1px"
+              />
+              <Label
+                ref={targetRef as React.Ref<SVGElement>}
+                fill={Theme.darkGray}
+                fontFamily="Verdana, sans-serif"
+                fontSize="11px"
+                fontWeight="bold"
+                textAnchor={isRightSide ? 'start' : 'end'}
+                transform={`translate(${labelPoint.join(',')})`}
+                onMouseEnter={show}
+                onMouseLeave={hide}
+              >
+                {arcData.value}
+              </Label>
+            </g>
           )}
         </ToolTip>
       );
-    }}
-  </Pie>
-);
+      }}
+    </Pie>
+  );
+};
 
 export default Labels;

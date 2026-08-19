@@ -59,13 +59,15 @@ describe('DonutChart', () => {
     expect(screen.queryByText('First')).not.toBeInTheDocument();
   });
 
-  test('should render a center total and flat arcs', () => {
+  test('should render section values and flat arcs', () => {
     const {render} = rendererWith();
 
     render(<DonutChart data={data} height={300} show3d={false} width={400} />);
 
     const svg = screen.getByTestId('donut-chart-svg');
-    expect(svg).toHaveTextContent('Total: 30');
+    expect(svg).toHaveTextContent('10');
+    expect(svg).toHaveTextContent('20');
+    expect(svg.querySelectorAll('.pie-label')).toHaveLength(2);
     expect(svg.querySelectorAll('path')).toHaveLength(2);
     expect(screen.queryByTestId('donut-chart-empty')).not.toBeInTheDocument();
   });

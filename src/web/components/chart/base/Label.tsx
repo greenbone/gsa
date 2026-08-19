@@ -14,8 +14,9 @@ const Label = forwardRef<SVGElement, LabelProps>(
       ref={ref as React.Ref<SVGTextElement>}
       className="pie-label"
       dy=".33em"
-      fill={Theme.dialogGray} // to have labels a bit visible on white background
-      fontSize={Theme.Font.default}
+      fill={Theme.darkGray}
+      fontFamily="Verdana, sans-serif"
+      fontSize="11"
       fontWeight="bold"
       textAnchor="middle"
       {...props}

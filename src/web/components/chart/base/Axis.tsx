@@ -26,6 +26,7 @@ type SupportedScale =
 
 interface AxisProps {
   dataTestId?: string;
+  hideDomain?: boolean;
   hideTickLabels?: boolean;
   label?: string;
   labelOffset?: number;
@@ -60,6 +61,7 @@ const isTimeScale = (
 
 const Axis = ({
   dataTestId,
+  hideDomain = false,
   hideTickLabels = false,
   orientation = 'bottom',
   labelOffset = orientation === 'bottom' || orientation === 'top' ? 15 : 36,
@@ -120,9 +122,13 @@ const Axis = ({
 
     // Add class names for external styling
     sel.select('.domain').classed('axis-line', true);
+    if (hideDomain) {
+      sel.select('.domain').remove();
+    }
     sel.selectAll('.tick').classed('axis-tick', true);
   }, [
     scale,
+    hideDomain,
     orientation,
     numTicks,
     rangePadding,
