@@ -5,7 +5,7 @@ import {defineConfig} from 'vite';
 import eslintPlugin from 'vite-plugin-eslint2';
 import svgrPlugin from 'vite-plugin-svgr';
 
-const projectRootDir = path.resolve(__dirname);
+const projectRootDir = import.meta.dirname;
 
 // https://vitejs.dev/config/
 export default defineConfig({
