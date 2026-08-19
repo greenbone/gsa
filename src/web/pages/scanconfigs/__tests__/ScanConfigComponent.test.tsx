@@ -425,7 +425,7 @@ describe('ScanConfigComponent', () => {
       });
     });
 
-    test('should only save name and comment when config is in use', async () => {
+    test('should save the family selection of a config that a task uses', async () => {
       const {gmp} = createGmp({
         getScanConfig: testing.fn().mockResolvedValue({data: configInUse}),
         saveScanConfig: testing.fn().mockResolvedValue({}),
@@ -453,6 +453,7 @@ describe('ScanConfigComponent', () => {
             name: 'In-Use Config',
             comment: 'In use comment',
             id: 'c1',
+            select: {family1: YES_VALUE, family2: NO_VALUE},
           }),
         );
       });

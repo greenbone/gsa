@@ -20,14 +20,12 @@ import {
 import {
   SCANCONFIG_TREND_STATIC,
   type ScanConfigPreference,
-  type ScanConfigUsageType,
   type ScanConfigFamilies,
   type ScanConfigFamily,
   type ScanConfigTrend,
 } from 'gmp/models/scan-config';
 import {YES_VALUE, NO_VALUE, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import DialogInlineNotification from 'web/components/dialog/DialogInlineNotification';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import TextField from 'web/components/form/TextField';
 import Loading from 'web/components/loading/Loading';
@@ -76,7 +74,6 @@ interface ScanConfigEditDialogProps {
   configId: string;
   configFamilies?: ScanConfigFamilies;
   configFamiliesTrend?: ScanConfigTrend;
-  configIsInUse?: boolean;
   editNvtDetailsTitle: string;
   editNvtFamiliesTitle: string;
   error?: string;
@@ -90,7 +87,6 @@ interface ScanConfigEditDialogProps {
   scannerPreferences?: ScanConfigPreference[];
   scannerId?: string;
   title: string;
-  usageType?: ScanConfigUsageType;
   onClose: () => void;
   onEditConfigFamilyClick?: (familyName: string) => void;
   onEditNvtDetailsClick?: (nvtOid: string) => void;
@@ -221,7 +217,6 @@ const ScanConfigEditDialog = ({
   configId,
   configFamilies = {},
   configFamiliesTrend,
-  configIsInUse = false,
   editNvtDetailsTitle,
   editNvtFamiliesTitle,
   error,
@@ -235,7 +230,6 @@ const ScanConfigEditDialog = ({
   scannerPreferences,
   scannerId,
   title,
-  usageType = 'scan',
   onClose,
   onEditConfigFamilyClick,
   onEditNvtDetailsClick,
@@ -332,15 +326,6 @@ const ScanConfigEditDialog = ({
       : {}),
   };
 
-  const notification =
-    usageType === 'policy'
-      ? _(
-          'The policy is currently in use by one or more audits, therefore only name and comment can be modified.',
-        )
-      : _(
-          'The scan config is currently in use by one or more tasks, therefore only name and comment can be modified.',
-        );
-
   const handleSearchChangeCallback = useCallback(
     query => {
       handleSearchChange(
@@ -425,46 +410,38 @@ const ScanConfigEditDialog = ({
             )}
             onSearch={handleSearchChangeCallback}
           />
-          {configIsInUse ? (
-            <DialogInlineNotification data-testid="inline-notification">
-              {notification}
-            </DialogInlineNotification>
+          {isLoadingConfig || isLoadingFamilies ? (
+            <Loading />
           ) : (
-            <>
-              {isLoadingConfig || isLoadingFamilies ? (
-                <Loading />
-              ) : (
-                <ScanConfigNvtFamilies
-                  configFamilies={configFamilies}
-                  editTitle={editNvtFamiliesTitle}
-                  families={filteredFamilies}
-                  select={selectValues as ScanConfigNvtsSelected}
-                  trend={trendValues as ScanConfigFamilyTrends}
-                  onEditConfigFamilyClick={onEditConfigFamilyClick}
-                  onSelectChange={onSelectChange}
-                  onTrendChange={onTrendChange}
-                />
-              )}
-              {isLoadingConfig ? (
-                <Loading />
-              ) : (
-                <ScanConfigScannerPreferences
-                  preferences={filteredScannerPreferences}
-                  values={scannerPreferenceValues}
-                  onValuesChange={dispatch}
-                />
-              )}
+            <ScanConfigNvtFamilies
+              configFamilies={configFamilies}
+              editTitle={editNvtFamiliesTitle}
+              families={filteredFamilies}
+              select={selectValues as ScanConfigNvtsSelected}
+              trend={trendValues as ScanConfigFamilyTrends}
+              onEditConfigFamilyClick={onEditConfigFamilyClick}
+              onSelectChange={onSelectChange}
+              onTrendChange={onTrendChange}
+            />
+          )}
+          {isLoadingConfig ? (
+            <Loading />
+          ) : (
+            <ScanConfigScannerPreferences
+              preferences={filteredScannerPreferences}
+              values={scannerPreferenceValues}
+              onValuesChange={dispatch}
+            />
+          )}
 
-              {isLoadingConfig ? (
-                <Loading />
-              ) : (
-                <MemoizedNvtPreferences
-                  editTitle={editNvtDetailsTitle}
-                  preferences={filteredNvtPreferences}
-                  onEditNvtDetailsClick={onEditNvtDetailsClick}
-                />
-              )}
-            </>
+          {isLoadingConfig ? (
+            <Loading />
+          ) : (
+            <MemoizedNvtPreferences
+              editTitle={editNvtDetailsTitle}
+              preferences={filteredNvtPreferences}
+              onEditNvtDetailsClick={onEditNvtDetailsClick}
+            />
           )}
         </>
       )}

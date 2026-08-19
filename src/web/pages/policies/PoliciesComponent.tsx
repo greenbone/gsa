@@ -398,14 +398,7 @@ const PolicyComponent = ({
   };
 
   const handleSavePolicy = async (data: ScanConfigEditDialogData) => {
-    const {name, comment, id} = data;
-    let saveData = data;
-
-    if (policy?.isInUse()) {
-      saveData = {name, comment, id};
-    }
-
-    await gmp.policy.save(saveData);
+    await gmp.policy.save(data);
     closeEditPolicyDialog();
   };
 
@@ -702,7 +695,6 @@ const PolicyComponent = ({
                 comment={policy.comment}
                 configFamilies={policy.families}
                 configId={policy.id as string}
-                configIsInUse={policy.isInUse()}
                 editNvtDetailsTitle={_('Edit Policy NVT Details')}
                 editNvtFamiliesTitle={_('Edit Policy Family')}
                 families={families}
@@ -714,7 +706,6 @@ const PolicyComponent = ({
                 scannerId={scannerId}
                 scannerPreferences={policy.preferences.scanner}
                 title={title as string}
-                usageType="policy"
                 onClose={handleCloseEditPolicyDialog}
                 onEditConfigFamilyClick={openEditPolicyFamilyDialog}
                 onEditNvtDetailsClick={openEditNvtDetailsDialog}

@@ -261,13 +261,7 @@ const ScanConfigComponent = ({
   };
 
   const handleSaveScanConfig = async data => {
-    const {name, comment, id} = data;
-    let saveData = data;
-    if (isDefined(config) && config.isInUse()) {
-      saveData = {name, comment, id};
-    }
-
-    await gmp.scanconfig.save(saveData);
+    await gmp.scanconfig.save(data);
     return closeEditConfigDialog();
   };
 
@@ -462,7 +456,6 @@ const ScanConfigComponent = ({
                   configFamilies={config.families}
                   configFamiliesTrend={config.families?.trend}
                   configId={config.id as string}
-                  configIsInUse={config.isInUse()}
                   editNvtDetailsTitle={_('Edit Scan Config NVT Details')}
                   editNvtFamiliesTitle={_('Edit Scan Config Family')}
                   error={editScanConfigDialogError}
