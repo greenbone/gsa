@@ -292,7 +292,7 @@ const DashboardView = ({
     );
   }
 
-  if (!isDefined(rows) && isLoading) {
+  if (!isDefined(rows) && (isLoading || !isDefined(settings))) {
     return (
       <RowPlaceHolder>
         <Loading />

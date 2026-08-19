@@ -244,6 +244,33 @@ describe('DashboardView', () => {
     expect(globalThis.__dashboardSortableGridCalls).toEqual([]);
   });
 
+  test('should render a loading indicator before settings load starts', () => {
+    const {
+      dashboardId,
+      defaultDisplays,
+      loadSettings,
+      permittedDisplays,
+      saveSettings,
+      setDefaultSettings,
+    } = createDashboardState();
+    const {render} = rendererWith({store: true});
+
+    render(
+      <DashboardView
+        defaultDisplays={defaultDisplays}
+        id={dashboardId}
+        isLoading={false}
+        loadSettings={loadSettings}
+        permittedDisplays={permittedDisplays}
+        saveSettings={saveSettings}
+        setDefaultSettings={setDefaultSettings}
+      />,
+    );
+
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
+    expect(globalThis.__dashboardSortableGridCalls).toEqual([]);
+  });
+
   test('should not reload when display props keep the same content', async () => {
     const {
       dashboardId,

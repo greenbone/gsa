@@ -309,6 +309,7 @@ class DataDisplay<
     return (
       nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
+      nextProps.isLoading !== this.props.isLoading ||
       nextState.data !== this.state.data ||
       nextProps.showFilterString !== this.props.showFilterString ||
       nextProps.state !== this.props.state ||
