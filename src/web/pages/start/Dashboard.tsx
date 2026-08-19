@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Dashboard} from 'web/components/dashboard/Dashboard';
 import DashboardControls, {
   type OnNewDisplayFunc,
 } from 'web/components/dashboard/DashboardControls';
+import DashboardView from 'web/components/dashboard/DashboardView';
 import {
   canAddDisplay,
   type DashboardSettings,
@@ -80,7 +80,7 @@ const StartDashboard = ({
           onResetClick={onResetDashboard}
         />
       </Layout>
-      <Dashboard
+      <DashboardView
         showFilterSelection
         showFilterString
         defaultDisplays={DEFAULT_DISPLAYS}
