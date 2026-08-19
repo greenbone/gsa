@@ -97,6 +97,30 @@ describe('DataDisplay component tests', () => {
     expect(screen.queryByTestId('chart')).not.toBeInTheDocument();
   });
 
+  test('should update the chart when loading state changes', () => {
+    const children = testing.fn(() => <div data-testid="chart" />);
+    const props = createProps({
+      children,
+      data: undefined as unknown as TestData,
+      dataTransform: () => [],
+    });
+    const {rerender} = render(
+      <DataDisplay<TestData, TestProps, TestState, TestData> {...props} />,
+    );
+
+    expect(screen.getByTestId('chart')).toBeInTheDocument();
+
+    rerender(
+      <DataDisplay<TestData, TestProps, TestState, TestData>
+        {...props}
+        isLoading={true}
+      />,
+    );
+
+    expect(screen.getByTestId('loading')).toBeVisible();
+    expect(screen.queryByTestId('chart')).not.toBeInTheDocument();
+  });
+
   test('should forward display settings and handlers to the icon renderer', () => {
     const icons = testing.fn(() => <div data-testid="icons" />);
     const props = createProps({
