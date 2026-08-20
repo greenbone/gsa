@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/base/Axis';
+import EmptyChart from 'web/components/chart/base/EmptyChart';
 import Group from 'web/components/chart/base/Group';
 import Svg from 'web/components/chart/base/Svg';
 import ToolTip from 'web/components/chart/base/ToolTip';
@@ -128,53 +129,57 @@ const BarChart = <TData extends BarChartDataPoint>({
   return (
     <StyledLayout align={['start', 'start']}>
       <Svg ref={svgRef} height={height} width={chartWidth}>
-        <Group left={marginLeft} top={margin.top}>
-          <Axis
-            dataTestId="bar-chart-y-axis"
-            label={String(yLabel)}
-            left={0}
-            numTicks={10}
-            orientation="left"
-            scale={horizontal ? xScale : yScale}
-            tickFormat={horizontal ? tickFormat : undefined}
-            top={0}
-          />
-          <Axis
-            dataTestId="bar-chart-x-axis"
-            hideTickLabels={hideTickLabels}
-            label={String(xLabel)}
-            orientation="bottom"
-            scale={horizontal ? yScale : xScale}
-            tickValues={tickValues}
-            top={maxHeight}
-          />
-          {data.map(d => (
-            <ToolTip key={horizontal ? d.y : String(d.x)} content={d.toolTip}>
-              {({targetRef, hide, show}) => (
-                <Group
-                  onClick={
-                    isDefined(onDataClick) ? () => onDataClick(d) : undefined
-                  }
-                >
-                  <rect
-                    ref={targetRef as React.Ref<SVGRectElement>}
-                    fill={String(d.color)}
-                    height={
-                      horizontal ? xScale.bandwidth() : maxHeight - yScale(d.y)
+        {data.length === 0 ? (
+          <EmptyChart data-testid="bar-chart-empty" height={height} width={chartWidth} />
+        ) : (
+          <Group left={marginLeft} top={margin.top}>
+            <Axis
+              dataTestId="bar-chart-y-axis"
+              label={String(yLabel)}
+              left={0}
+              numTicks={10}
+              orientation="left"
+              scale={horizontal ? xScale : yScale}
+              tickFormat={horizontal ? tickFormat : undefined}
+              top={0}
+            />
+            <Axis
+              dataTestId="bar-chart-x-axis"
+              hideTickLabels={hideTickLabels}
+              label={String(xLabel)}
+              orientation="bottom"
+              scale={horizontal ? yScale : xScale}
+              tickValues={tickValues}
+              top={maxHeight}
+            />
+            {data.map(d => (
+              <ToolTip key={horizontal ? d.y : String(d.x)} content={d.toolTip}>
+                {({targetRef, hide, show}) => (
+                  <Group
+                    onClick={
+                      isDefined(onDataClick) ? () => onDataClick(d) : undefined
                     }
-                    width={horizontal ? yScale(d.y) : xScale.bandwidth()}
-                    x={horizontal ? 1 : xScale(String(d.x))}
-                    y={horizontal ? xScale(String(d.x)) : yScale(d.y)}
-                    rx="4"
-                    ry="4"
-                    onMouseEnter={show}
-                    onMouseLeave={hide}
-                  />
-                </Group>
-              )}
-            </ToolTip>
-          ))}
-        </Group>
+                  >
+                    <rect
+                      ref={targetRef as React.Ref<SVGRectElement>}
+                      fill={String(d.color)}
+                      height={
+                        horizontal ? xScale.bandwidth() : maxHeight - yScale(d.y)
+                      }
+                      width={horizontal ? yScale(d.y) : xScale.bandwidth()}
+                      x={horizontal ? 1 : xScale(String(d.x))}
+                      y={horizontal ? xScale(String(d.x)) : yScale(d.y)}
+                      rx="4"
+                      ry="4"
+                      onMouseEnter={show}
+                      onMouseLeave={hide}
+                    />
+                  </Group>
+                )}
+              </ToolTip>
+            ))}
+          </Group>
+        )}
       </Svg>
     </StyledLayout>
   );

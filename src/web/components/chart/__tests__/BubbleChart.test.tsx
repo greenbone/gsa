@@ -24,13 +24,14 @@ const data = [
 ];
 
 describe('BubbleChart', () => {
-  test('should render a placeholder circle when there is no data', () => {
+  test('should render a clear empty state when there is no data', () => {
     const {render} = rendererWith();
 
     render(<BubbleChart height={300} width={400} />);
 
-    const emptyBubble = screen.getByTestId('bubble-chart-empty');
-    expect(emptyBubble).toHaveAttribute('fill', Theme.lightGray);
+    const emptyState = screen.getByTestId('bubble-chart-empty');
+    expect(emptyState).toHaveTextContent('No data available');
+    expect(emptyState).toHaveAttribute('aria-label', 'No data available');
   });
 
   test('should render bubble labels and clip paths for each data point', () => {

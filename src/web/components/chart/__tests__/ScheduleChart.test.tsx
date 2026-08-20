@@ -10,6 +10,16 @@ import ScheduleChart from 'web/components/chart/ScheduleChart';
 import Theme from 'web/utils/theme';
 
 describe('ScheduleChart component tests', () => {
+  test('should render a clear empty state when there is no data', () => {
+    const {render} = rendererWith();
+
+    render(<ScheduleChart data={[]} height={300} width={800} />);
+
+    expect(screen.getByTestId('schedule-chart-empty')).toHaveTextContent(
+      'No data available',
+    );
+  });
+
   test('should render schedule bars, gradients, and future run triangle markers', () => {
     const {render} = rendererWith();
 
@@ -45,6 +55,14 @@ describe('ScheduleChart component tests', () => {
       chart.querySelector('linearGradient#green_fill_gradient'),
     ).toBeInTheDocument();
     expect(chart.querySelectorAll('.axis-tick').length).toBeGreaterThan(0);
+    const rotatedTickLabel = Array.from(
+      chart.querySelectorAll('.axis-tick text'),
+    ).find(tick => tick.getAttribute('transform') === 'rotate(-30)');
+    expect(rotatedTickLabel).toBeDefined();
+    expect(rotatedTickLabel as SVGTextElement).toHaveAttribute(
+      'transform',
+      'rotate(-30)',
+    );
   });
 
   test('should render duration and period schedules with future-run markers', () => {

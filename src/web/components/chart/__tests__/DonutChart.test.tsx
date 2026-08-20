@@ -55,7 +55,9 @@ describe('DonutChart', () => {
     render(<DonutChart height={300} width={400} />);
 
     expect(screen.getByTestId('donut-chart-svg')).toBeInTheDocument();
-    expect(screen.getByTestId('donut-chart-empty')).toBeInTheDocument();
+    expect(screen.getByTestId('donut-chart-empty')).toHaveTextContent(
+      'No data available',
+    );
     expect(screen.queryByText('First')).not.toBeInTheDocument();
   });
 

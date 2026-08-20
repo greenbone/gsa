@@ -26,7 +26,7 @@ interface LabelsProps<TData extends LabelData> {
 }
 
 const LABEL_RADIUS_OFFSET = 10;
-const LABEL_X = 95;
+const LABEL_X = 85;
 const LABEL_GAP = 16;
 
 interface LabelPosition {
