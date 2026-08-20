@@ -18,7 +18,7 @@ export interface SelectItem {
 
 export interface SelectProps<TValue> extends Omit<
   React.ComponentPropsWithoutRef<typeof OpenSightSelect>,
-  'onChange' | 'value'
+  'onChange' | 'value' | 'title'
 > {
   allowDeselect?: boolean;
   'data-testid'?: string;

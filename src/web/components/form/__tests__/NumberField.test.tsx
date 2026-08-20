@@ -16,6 +16,21 @@ describe('NumberField tests', () => {
     expect(element).toHaveValue('1');
   });
 
+  test('should render the tooltip title', () => {
+    render(
+      <NumberField
+        data-testid="input"
+        toolTipTitle="The scanner uses a local connection and doesn't use a port"
+        value={1}
+      />,
+    );
+
+    expect(screen.getByTestId('input')).toHaveAttribute(
+      'title',
+      "The scanner uses a local connection and doesn't use a port",
+    );
+  });
+
   test('should call change handler', () => {
     const onChange = testing.fn();
     render(<NumberField data-testid="input" value={1} onChange={onChange} />);
