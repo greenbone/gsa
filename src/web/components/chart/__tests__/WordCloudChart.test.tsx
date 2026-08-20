@@ -61,6 +61,9 @@ describe('WordCloudChart', () => {
     render(<WordCloudChart data={[]} height={300} width={400} />);
 
     expect(screen.getByTestId('word-cloud-chart-svg')).toBeInTheDocument();
+    expect(screen.getByTestId('word-cloud-empty')).toHaveTextContent(
+      'No data available',
+    );
     expect(
       screen.queryByTestId('word-cloud-word-First'),
     ).not.toBeInTheDocument();

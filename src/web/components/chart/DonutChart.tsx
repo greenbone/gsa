@@ -6,6 +6,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {arc as d3arc, pie as d3pie} from 'd3-shape';
 import styled from 'styled-components';
+import EmptyChart from 'web/components/chart/base/EmptyChart';
 import Group from 'web/components/chart/base/Group';
 import Legend, {
   type LegendData,
@@ -16,15 +17,6 @@ import Arc2d from 'web/components/chart/donut/Arc2d';
 import Labels from 'web/components/chart/donut/Labels';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 import Layout from 'web/components/layout/Layout';
-import Theme from 'web/utils/theme';
-
-interface EmptyDonutProps {
-  'data-testid'?: string;
-  left: number;
-  top: number;
-  innerRadiusX: number;
-  outerRadiusX: number;
-}
 
 export interface DonutChartData extends LegendData {
   value: number;
@@ -55,26 +47,6 @@ const margin = {
   right: 20,
   bottom: 20,
   left: 20,
-};
-
-const emptyColor = Theme.lightGray;
-
-const EmptyDonut = ({
-  'data-testid': dataTestId,
-  left,
-  top,
-  innerRadiusX,
-  outerRadiusX,
-}: EmptyDonutProps) => {
-  const donutArc = d3arc()
-    .innerRadius(innerRadiusX)
-    .outerRadius(outerRadiusX)
-    .cornerRadius(4)({startAngle: 0, endAngle: 2 * Math.PI});
-  return (
-    <Group data-testid={dataTestId} left={left} top={top}>
-      <path d={String(donutArc)} fill={emptyColor} />
-    </Group>
-  );
 };
 
 const DonutChart = <TData extends DonutChartData = DonutChartData>({
@@ -184,11 +156,10 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
             />
           </>
         ) : (
-          <EmptyDonut
+          <EmptyChart
             data-testid="donut-chart-empty"
-            left={centerX}
-            top={centerY}
-            {...donutProps}
+            height={height}
+            width={chartWidth}
           />
         )}
       </Svg>

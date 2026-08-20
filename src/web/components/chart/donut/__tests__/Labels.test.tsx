@@ -45,6 +45,15 @@ describe('Labels', () => {
     expect(document.querySelectorAll('.pie-label')).toHaveLength(2);
   });
 
+  test('should keep external labels inside the chart edge', () => {
+    renderLabels([{toolTip: 'Single slice', value: 100}]);
+
+    expect(screen.getByText('100')).toHaveAttribute(
+      'transform',
+      'translate(-85,110)',
+    );
+  });
+
   test('should render no labels for an empty data set', () => {
     renderLabels([]);
 
