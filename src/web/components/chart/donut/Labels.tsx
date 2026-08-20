@@ -26,7 +26,7 @@ interface LabelsProps<TData extends LabelData> {
 }
 
 const LABEL_RADIUS_OFFSET = 10;
-const LABEL_X = 85;
+const LABEL_EDGE_OFFSET = 15;
 const LABEL_GAP = 16;
 
 interface LabelPosition {
@@ -115,7 +115,8 @@ const Labels = <TData extends LabelData = LabelData>({
         const arcPoint = arc.centroid(currentArc);
         const outerArcPoint = outerArc.centroid(currentArc);
         const {isRightSide, y} = labelPositions[index];
-        const labelPoint = [isRightSide ? LABEL_X : -LABEL_X, y];
+        const labelX = outerRadiusX + LABEL_EDGE_OFFSET;
+        const labelPoint = [isRightSide ? labelX : -labelX, y];
         const points = [arcPoint, outerArcPoint, labelPoint]
           .map(point => point.join(','))
           .join(' ');
