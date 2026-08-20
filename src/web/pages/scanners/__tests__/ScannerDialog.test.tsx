@@ -21,15 +21,38 @@ import {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
+  OPENVASD_SENSOR_SCANNER_TYPE,
   WEB_APPLICATION_SCANNER_TYPE,
 } from 'gmp/models/scanner';
-import ScannerDialog from 'web/pages/scanners/ScannerDialog';
+import ScannerDialog, {
+  isScannerTypeSupportingClientCertificates,
+} from 'web/pages/scanners/ScannerDialog';
 
 const createGmp = ({enableGreenboneSensor = true} = {}) => {
   return {settings: {enableGreenboneSensor}};
 };
 
 describe('ScannerDialog tests', () => {
+  test.each([
+    [OPENVAS_SCANNER_TYPE, true],
+    [OPENVASD_SCANNER_TYPE, true],
+    [OPENVASD_SENSOR_SCANNER_TYPE, true],
+    [AGENT_CONTROLLER_SCANNER_TYPE, true],
+    [CONTAINER_IMAGE_SCANNER_TYPE, true],
+    [WEB_APPLICATION_SCANNER_TYPE, true],
+    [CVE_SCANNER_TYPE, false],
+    [GREENBONE_SENSOR_SCANNER_TYPE, false],
+    [AGENT_CONTROLLER_SENSOR_SCANNER_TYPE, false],
+    [undefined, false],
+  ])(
+    'should report whether scanner type %s supports client certificates',
+    (scannerType, expected) => {
+      expect(isScannerTypeSupportingClientCertificates(scannerType)).toBe(
+        expected,
+      );
+    },
+  );
+
   test('should display defaults without scanner type provided', async () => {
     const gmp = createGmp({enableGreenboneSensor: false});
     const handleSave = testing.fn();
