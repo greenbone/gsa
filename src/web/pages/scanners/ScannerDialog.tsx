@@ -53,7 +53,6 @@ interface ScannerDialogProps {
 
 interface ScannerDialogDefaultValues {
   comment: string;
-  host: string;
   id?: string;
   name: string;
 }
@@ -61,14 +60,17 @@ interface ScannerDialogDefaultValues {
 interface ScannerDialogValues {
   caCertificate?: File;
   credentialId?: string;
+  host: string;
   type?: ScannerType;
-  port: number | '';
+  port?: number;
 }
 
 export type ScannerDialogState = ScannerDialogValues &
   ScannerDialogDefaultValues;
 
 const CA_CERTIFICATE_LINE = '-----BEGIN CERTIFICATE-----';
+
+const isLocalConnection = (host?: string) => host?.startsWith('/') ?? false;
 
 const updatePort = (scannerType: ScannerType | undefined) => {
   if (
@@ -88,7 +90,7 @@ const updatePort = (scannerType: ScannerType | undefined) => {
   ) {
     return 443;
   }
-  return '';
+  return undefined;
 };
 
 export const isScannerTypeSupportingClientCertificates = (
@@ -168,9 +170,10 @@ const ScannerDialog = ({
     },
   );
   const [userChangedPort, setUserChangedPort] = useState<boolean>(false);
-  const [scannerPort, setScannerPort] = useState<number | ''>(
-    () => port ?? updatePort(scannerType),
+  const [scannerPort, setScannerPort] = useState<number | undefined>(() =>
+    isLocalConnection(host) ? undefined : (port ?? updatePort(scannerType)),
   );
+  const [scannerHost, setScannerHost] = useState<string>(host);
 
   name = name || _('Unnamed');
   title = title || _('New Scanner');
@@ -250,7 +253,16 @@ const ScannerDialog = ({
   const handleScannerPortChange = (value: number) => {
     // allow to update the port automatically if the field is empty
     setUserChangedPort(!isEmpty(value));
-    setScannerPort(value);
+    setScannerPort(isEmpty(value) ? undefined : value);
+  };
+
+  const handleHostChange = (value: string) => {
+    setScannerHost(value);
+    if (isLocalConnection(value)) {
+      setScannerPort(undefined);
+    } else if (isEmpty(scannerPort)) {
+      setScannerPort(updatePort(scannerType));
+    }
   };
 
   const scannerTypesOptions = map(scannerTypes, scannerType => ({
@@ -267,6 +279,8 @@ const ScannerDialog = ({
     showScannerDetails &&
     isScannerTypeSupportingClientCertificates(scannerType);
 
+  const localConnection = isLocalConnection(scannerHost);
+
   if (isGreenboneSensorType || isAgentControllerSensorScannerType) {
     credentialId = undefined;
   }
@@ -274,7 +288,6 @@ const ScannerDialog = ({
     <SaveDialog<ScannerDialogValues, ScannerDialogDefaultValues>
       defaultValues={{
         comment,
-        host,
         id,
         name,
       }}
@@ -285,6 +298,7 @@ const ScannerDialog = ({
         credentialId,
         type: scannerType,
         port: scannerPort,
+        host: scannerHost,
       }}
       onClose={onClose}
       onSave={onSave}
@@ -322,17 +336,24 @@ const ScannerDialog = ({
                 name="host"
                 placeholder={_('Insert a Host name or IP address')}
                 title={_('Host')}
-                value={state.host}
-                onChange={onValueChange}
+                value={scannerHost}
+                onChange={handleHostChange}
               />
             )}
 
             {showPort && (
               <NumberField
-                disabled={scannerInUse}
+                disabled={scannerInUse || localConnection}
                 name="port"
                 placeholder={_('Insert a Port number')}
                 title={_('Port')}
+                toolTipTitle={
+                  localConnection
+                    ? _(
+                        "The scanner uses a local connection and doesn't use a port",
+                      )
+                    : undefined
+                }
                 value={state.port}
                 onChange={handleScannerPortChange}
               />

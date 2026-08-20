@@ -2126,6 +2126,7 @@
   "The scan did not collect any results": "Der Scan hat keine Ergebnisse gesammelt",
   "The scan is still running and no results have arrived yet": "Der Scan läuft noch und es sind noch keine Ergebnisse eingetroffen",
   "The scan just started and no results have arrived yet": "Der Scan hat gerade begonnen und es sind noch keine Ergebnisse eingetroffen",
+  "The scanner uses a local connection and doesn't use a port": "Der Scanner verwendet eine lokale Verbindung und keinen Port.",
   "The Second": "Jeden zweiten",
   "The Target and Task will be created using the defaults as configured in \"My Settings\".": "Beim Erstellen des Ziels und der Aufgabe wird die Standardauswahl verwendet, wie sie unter \"Eigene Einstellungen\" konfiguriert wurde.",
   "The target hosts could be regarded dead": "Der Ziel-Host kann als unerreichbar angesehen werden",
