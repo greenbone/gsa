@@ -28,6 +28,7 @@ export interface NumberFieldProps extends Omit<
   precision?: number | string;
   type?: 'int' | 'float';
   size?: 'sm' | 'md' | 'lg';
+  toolTipTitle?: string;
   value?: number | '';
 }
 
@@ -78,6 +79,7 @@ const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
       value,
       size = 'md',
       onChange,
+      toolTipTitle,
       ...props
     },
     ref,
@@ -121,6 +123,7 @@ const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
         size={size}
         step={parseFloat(step)}
         suffix={suffix}
+        title={toolTipTitle}
         type="text"
         value={value}
         onChange={handleChange}
