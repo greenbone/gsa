@@ -45,12 +45,32 @@ describe('Labels', () => {
     expect(document.querySelectorAll('.pie-label')).toHaveLength(2);
   });
 
-  test('should keep external labels inside the chart edge', () => {
+  test('should keep external labels outside the donut edge', () => {
     renderLabels([{toolTip: 'Single slice', value: 100}]);
 
     expect(screen.getByText('100')).toHaveAttribute(
       'transform',
-      'translate(-85,110)',
+      'translate(-115,110)',
+    );
+  });
+
+  test('should move labels outside the donut when it grows', () => {
+    const {render} = rendererWith();
+    render(
+      <Labels
+        centerX={150}
+        centerY={150}
+        data={[{toolTip: 'Single slice', value: 100}]}
+        innerRadiusX={191}
+        innerRadiusY={191}
+        outerRadiusX={294}
+        outerRadiusY={294}
+      />,
+    );
+
+    expect(screen.getByText('100')).toHaveAttribute(
+      'transform',
+      'translate(-309,304)',
     );
   });
 
