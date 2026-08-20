@@ -8,6 +8,23 @@ import {fireEvent, rendererWith, screen} from 'web/testing';
 import LineChart from 'web/components/chart/base/Line';
 
 describe('Line chart integration tests', () => {
+  test('should render a clear empty state when there is no data', () => {
+    const {render} = rendererWith();
+
+    render(
+      <LineChart
+        data={[]}
+        height={300}
+        width={400}
+        yLine={{color: '#008000', label: 'Primary'}}
+      />,
+    );
+
+    expect(screen.getByTestId('line-chart-empty')).toHaveTextContent(
+      'No data available',
+    );
+  });
+
   test('should render y and y2 line paths for multi-point data', () => {
     const {render} = rendererWith();
 

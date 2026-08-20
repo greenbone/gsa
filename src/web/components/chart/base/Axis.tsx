@@ -35,6 +35,7 @@ interface AxisProps {
   numTicks?: number;
   scale: SupportedScale;
   rangePadding?: number;
+  tickLabelRotation?: number;
   tickFormat?: (value: AxisDomainValue) => string;
   tickValues?: AxisDomainValue[];
   tickLength?: number;
@@ -72,6 +73,7 @@ const Axis = ({
   numTicks,
   scale,
   rangePadding,
+  tickLabelRotation = 0,
   tickFormat,
   tickValues,
 }: AxisProps) => {
@@ -116,6 +118,15 @@ const Axis = ({
       .attr('font-family', Theme.Font.default)
       .attr('font-size', FONT_SIZE);
 
+    if (tickLabelRotation !== 0) {
+      sel
+        .selectAll('.tick text')
+        .attr('text-anchor', tickLabelRotation < 0 ? 'end' : 'start')
+        .attr('transform', `rotate(${tickLabelRotation})`)
+        .attr('dx', tickLabelRotation < 0 ? '-0.5em' : '0.5em')
+        .attr('dy', '0.5em');
+    }
+
     if (hideTickLabels) {
       sel.selectAll('.tick text').remove();
     }
@@ -132,6 +143,7 @@ const Axis = ({
     orientation,
     numTicks,
     rangePadding,
+    tickLabelRotation,
     tickFormat,
     tickValues,
     tickLength,

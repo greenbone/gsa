@@ -18,6 +18,7 @@ import date, {type Date as GmpDate} from 'gmp/models/date';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/base/Axis';
+import EmptyChart from 'web/components/chart/base/EmptyChart';
 import Group from 'web/components/chart/base/Group';
 import Legend, {
   Item,
@@ -259,7 +260,7 @@ const LineChart = ({
 
     if (legend !== null) {
       const {width: legendWidth} = legend.getBoundingClientRect();
-      w = w - legendWidth - LEGEND_MARGIN;
+      w = propWidth - legendWidth - LEGEND_MARGIN;
     }
 
     if (w < MIN_WIDTH) {
@@ -509,7 +510,14 @@ const LineChart = ({
         onMouseMove={hasValue ? handleMouseMove : undefined}
         onMouseUp={showRange ? endRangeSelection : undefined}
       >
-        <Group left={margin.left} top={margin.top}>
+        {!hasValue ? (
+          <EmptyChart
+            data-testid="line-chart-empty"
+            height={height}
+            width={chartWidth}
+          />
+        ) : (
+          <Group left={margin.left} top={margin.top}>
           {isDefined(yLine) && (
             <Axis
               label={String(yAxisLabel)}
@@ -593,9 +601,10 @@ const LineChart = ({
           )}
           {renderInfo()}
           {renderRange()}
-        </Group>
+          </Group>
+        )}
       </Svg>
-      {hasLines && showLegend && (
+      {hasValue && hasLines && showLegend && (
         <Legend<LineProps> data={[yLine, y2Line]} legendRef={legendRef}>
           {({d, toolTipProps}) => (
             <Item

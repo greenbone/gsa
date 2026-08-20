@@ -8,6 +8,7 @@ import type d3 from 'd3';
 import d3cloud, {type Word as d3Word} from 'd3-cloud';
 import {scaleLinear} from 'd3-scale';
 import {isDefined} from 'gmp/utils/identity';
+import EmptyChart from 'web/components/chart/base/EmptyChart';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
@@ -115,30 +116,38 @@ const WordCloudChart = ({
       height={height}
       width={width}
     >
-      <Group left={width / 2 + margin.left} top={height / 2 + margin.top}>
-        {words.map(word => (
-          <Group
-            key={word.text}
-            data-testid={`word-cloud-word-${word.text}`}
-            onClick={
-              isDefined(onDataClick)
-                ? () => onDataClick(word.filterValue)
-                : undefined
-            }
-          >
-            <text
-              fill={word.color}
-              fontFamily={word.font}
-              fontSize={`${word.size}px`}
-              fontWeight={word.weight}
-              textAnchor="middle"
-              transform={`translate(${word.x},${word.y})rotate(${word.rotate})`}
+      {words.length > 0 ? (
+        <Group left={width / 2 + margin.left} top={height / 2 + margin.top}>
+          {words.map(word => (
+            <Group
+              key={word.text}
+              data-testid={`word-cloud-word-${word.text}`}
+              onClick={
+                isDefined(onDataClick)
+                  ? () => onDataClick(word.filterValue)
+                  : undefined
+              }
             >
-              {word.text}
-            </text>
-          </Group>
-        ))}
-      </Group>
+              <text
+                fill={word.color}
+                fontFamily={word.font}
+                fontSize={`${word.size}px`}
+                fontWeight={word.weight}
+                textAnchor="middle"
+                transform={`translate(${word.x},${word.y})rotate(${word.rotate})`}
+              >
+                {word.text}
+              </text>
+            </Group>
+          ))}
+        </Group>
+      ) : (
+        <EmptyChart
+          data-testid="word-cloud-empty"
+          height={height}
+          width={width}
+        />
+      )}
     </Svg>
   );
 };
