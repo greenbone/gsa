@@ -17,6 +17,7 @@ import {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   CONTAINER_IMAGE_SCANNER_TYPE,
+  CVE_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
@@ -178,6 +179,39 @@ describe('ScannerDialog tests', () => {
     });
   });
 
+  test('should render the new credential button for client certificate scanners', () => {
+    const gmp = createGmp();
+    const handleNewCredentialClick = testing.fn();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <ScannerDialog
+        type={OPENVAS_SCANNER_TYPE}
+        onNewCredentialClick={handleNewCredentialClick}
+      />,
+    );
+
+    const newCredentialButton = screen.getByTitle('Create a new Credential');
+    expect(newCredentialButton).toBeVisible();
+    fireEvent.click(newCredentialButton);
+    expect(handleNewCredentialClick).toHaveBeenCalled();
+  });
+
+  test('should not render credential fields for unsupported scanner types', () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(<ScannerDialog type={CVE_SCANNER_TYPE} />);
+
+    expect(
+      screen.queryByTitle('Create a new Credential'),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('textbox', {name: 'Credential'}),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
+  });
+
   test('should display defaults for openvasd scanner', async () => {
     const gmp = createGmp();
     const handleSave = testing.fn();
@@ -274,8 +308,9 @@ describe('ScannerDialog tests', () => {
 
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
     expect(scannerType).toHaveValue('Container Image Scanner');
-    expect(screen.queryByRole('textbox', {name: 'Credential'})).toHaveValue('');
-    expect(screen.queryByName('caCertificate')).toHaveValue('');
+    expect(screen.getByRole('textbox', {name: 'Credential'})).toHaveValue('');
+    expect(screen.getByName('caCertificate')).toHaveValue('');
+    expect(screen.getByTitle('Create a new Credential')).toBeVisible();
 
     fireEvent.click(screen.getDialogSaveButton());
     expect(handleSave).toHaveBeenCalledWith({
@@ -311,8 +346,9 @@ describe('ScannerDialog tests', () => {
 
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
     expect(scannerType).toHaveValue('Web Application Scanner');
-    expect(screen.queryByRole('textbox', {name: 'Credential'})).toHaveValue('');
-    expect(screen.queryByName('caCertificate')).toHaveValue('');
+    expect(screen.getByRole('textbox', {name: 'Credential'})).toHaveValue('');
+    expect(screen.getByName('caCertificate')).toHaveValue('');
+    expect(screen.getByTitle('Create a new Credential')).toBeVisible();
 
     fireEvent.click(screen.getDialogSaveButton());
     expect(handleSave).toHaveBeenCalledWith({
