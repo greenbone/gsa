@@ -4,6 +4,7 @@
  */
 
 import {useCallback, useEffect, useMemo, useRef} from 'react';
+import {Skeleton} from '@mantine/core';
 import styled from 'styled-components';
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import Logger from 'gmp/log';
@@ -29,7 +30,6 @@ import {
   type GridItem,
 } from 'web/components/dashboard/utils';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
-import Loading from 'web/components/loading/Loading';
 import SortableGrid, {
   type SortableGridRow,
 } from 'web/components/sortable/SortableGrid';
@@ -295,7 +295,7 @@ const DashboardView = ({
   if (!isDefined(rows) && (isLoading || !isDefined(settings))) {
     return (
       <RowPlaceHolder>
-        <Loading />
+        <Skeleton data-testid="loading" height="100%" width="100%" />
       </RowPlaceHolder>
     );
   }
