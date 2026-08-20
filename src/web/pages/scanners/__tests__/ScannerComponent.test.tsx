@@ -7,8 +7,15 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import Scanner, {
+  AGENT_CONTROLLER_SCANNER_TYPE,
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+  CONTAINER_IMAGE_SCANNER_TYPE,
+  CVE_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
+  OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
+  OPENVASD_SENSOR_SCANNER_TYPE,
+  WEB_APPLICATION_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -31,6 +38,95 @@ const createGmp = (object?: unknown) => {
 };
 
 describe('ScannerComponent tests', () => {
+  test.each([
+    OPENVAS_SCANNER_TYPE,
+    OPENVASD_SCANNER_TYPE,
+    AGENT_CONTROLLER_SCANNER_TYPE,
+    OPENVASD_SENSOR_SCANNER_TYPE,
+    CONTAINER_IMAGE_SCANNER_TYPE,
+    WEB_APPLICATION_SCANNER_TYPE,
+  ])(
+    'should open a client certificate credential dialog for scanner type %s',
+    async scannerType => {
+      const scanner = new Scanner({
+        id: '1234',
+        name: 'Test Scanner',
+        host: 'http://scanner-host',
+        port: 443,
+        scannerType,
+      });
+      const gmp = createGmp({
+        scanner: {
+          get: testing.fn().mockResolvedValue({data: scanner}),
+        },
+        credentials: {
+          getAll: testing.fn().mockResolvedValue({data: []}),
+        },
+      });
+      const {render} = rendererWith({capabilities: true, gmp, store: true});
+
+      render(
+        <ScannerComponent>
+          {({edit}) => (
+            <button onClick={() => edit(scanner)}>Open Scanner</button>
+          )}
+        </ScannerComponent>,
+      );
+
+      fireEvent.click(screen.getByRole('button', {name: 'Open Scanner'}));
+      await wait();
+
+      fireEvent.click(screen.getByTitle('Create a new Credential'));
+
+      expect(screen.getByText('New Credential')).toBeVisible();
+      expect(screen.getByRole('textbox', {name: 'Type'})).toHaveValue(
+        'Client Certificate',
+      );
+    },
+  );
+
+  test.each([
+    CVE_SCANNER_TYPE,
+    GREENBONE_SENSOR_SCANNER_TYPE,
+    AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+  ])(
+    'should not render credential fields or creation for scanner type %s',
+    async scannerType => {
+      const scanner = new Scanner({
+        id: '1234',
+        name: 'Test Scanner',
+        host: 'http://scanner-host',
+        port: 443,
+        scannerType,
+      });
+      const gmp = createGmp({
+        scanner: {
+          get: testing.fn().mockResolvedValue({data: scanner}),
+        },
+      });
+      const {render} = rendererWith({capabilities: true, gmp, store: true});
+
+      render(
+        <ScannerComponent>
+          {({edit}) => (
+            <button onClick={() => edit(scanner)}>Open Scanner</button>
+          )}
+        </ScannerComponent>,
+      );
+
+      fireEvent.click(screen.getByRole('button', {name: 'Open Scanner'}));
+      await wait();
+
+      expect(
+        screen.queryByTitle('Create a new Credential'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('textbox', {name: 'Credential'}),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
+    },
+  );
+
   test('should allow to clone a scanner', async () => {
     const scanner = new Scanner({
       id: '1234',
