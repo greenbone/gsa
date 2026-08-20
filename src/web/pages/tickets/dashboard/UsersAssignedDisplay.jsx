@@ -6,7 +6,7 @@
 import {scaleLinear} from 'd3-scale';
 import {_, _l} from 'gmp/locale/lang';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
-import BubbleChart from 'web/components/chart/BubbleChart';
+import DonutChart from 'web/components/chart/DonutChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
@@ -49,7 +49,7 @@ const transformUserAssignedData = (tickets = []) => {
 };
 
 export const TicketsAssignedUsersDisplay = createDisplay({
-  chartComponent: BubbleChart,
+  chartComponent: props => <DonutChart {...props} showLegend={false} />,
   dataTransform: transformUserAssignedData,
   displayComponent: DataDisplay,
   displayId: 'tickets-by-assigned-users',
