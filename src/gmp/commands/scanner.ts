@@ -13,6 +13,7 @@ import Scanner, {
   type ScannerElement,
   type ScannerType,
 } from 'gmp/models/scanner';
+import {isDefined} from 'gmp/utils/identity';
 
 export interface ScannerCommandCreateParams {
   name: string;
@@ -20,7 +21,7 @@ export interface ScannerCommandCreateParams {
   comment?: string;
   credentialId?: string;
   host: string;
-  port: number | '';
+  port?: number;
   type: ScannerType;
 }
 
@@ -86,7 +87,7 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
       comment,
       credential_id: credentialId,
       name,
-      port,
+      port: isDefined(port) ? port : '',
       scanner_host: host,
       scanner_type: type,
     };
@@ -113,7 +114,7 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
       credential_id: credentialId ?? '',
       id,
       name,
-      port,
+      port: isDefined(port) ? port : '',
       scanner_host: host,
       scanner_type: type,
     };
