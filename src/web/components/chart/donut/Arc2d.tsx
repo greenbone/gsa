@@ -18,7 +18,7 @@ interface Arc2dData extends LegendData {
 
 interface Arc2dProps<TData extends Arc2dData> {
   data: TData;
-  path: Path;
+  path?: Path;
   innerRadius?: number;
   outerRadius?: number;
   startAngle?: number;

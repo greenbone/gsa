@@ -4,7 +4,7 @@
  */
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {arc as d3arc} from 'd3-shape';
+import {arc as d3arc, pie as d3pie} from 'd3-shape';
 import styled from 'styled-components';
 import Group from 'web/components/chart/base/Group';
 import Legend, {
@@ -14,7 +14,6 @@ import Legend, {
 import Svg from 'web/components/chart/base/Svg';
 import Arc2d from 'web/components/chart/donut/Arc2d';
 import Labels from 'web/components/chart/donut/Labels';
-import Pie from 'web/components/chart/donut/Pie';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 import Layout from 'web/components/layout/Layout';
 import Theme from 'web/utils/theme';
@@ -134,6 +133,17 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
     innerRadiusY: innerRadiusX,
   };
 
+  const pie = d3pie<TData>()
+    .sortValues(null)
+    .value(d => d.value)
+    .padAngle(0.03);
+  const arcs = pie(data).sort((a, b) =>
+    a.startAngle > b.startAngle ? -1 : 1,
+  );
+  const arc = d3arc()
+    .innerRadius(innerRadiusX)
+    .outerRadius(outerRadiusX);
+
   return (
     <StyledLayout align={['start', 'start']}>
       <Svg
@@ -144,38 +154,25 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
       >
         {data.length > 0 ? (
           <>
-            <Pie
-              data={data}
-              left={centerX}
-              padAngle={0.03}
-              pieValue={d => d.value}
-              top={centerY}
-              {...donutProps}
-            >
-              {({
-                data: arcData,
-                index,
-                startAngle,
-                endAngle,
-                path: arcPath,
-                x,
-                y,
-              }) => (
+            <Group left={centerX} top={centerY}>
+              {arcs.map((currentArc, index) => {
+                const [x, y] = arc.centroid(currentArc);
+                return (
                 <Arc2d
-                  key={index}
-                  data={arcData}
-                  endAngle={endAngle}
+                  key={`${currentArc.startAngle}-${currentArc.endAngle}`}
+                  data={currentArc.data}
+                  endAngle={currentArc.endAngle}
                   innerRadius={innerRadiusX}
                   outerRadius={outerRadiusX}
-                  path={arcPath}
-                  startAngle={startAngle}
+                  startAngle={currentArc.startAngle}
                   x={x}
                   y={y}
                   {...donutProps}
                   onDataClick={onDataClick}
                 />
-              )}
-            </Pie>
+                );
+              })}
+            </Group>
             <Labels
               centerX={centerX}
               centerY={centerY}
@@ -199,6 +196,7 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
         <Legend<TData>
           data={data}
           legendRef={legendRef}
+          maxHeight={Math.max(0, height - 20)}
           onItemClick={onLegendItemClick}
         />
       )}
