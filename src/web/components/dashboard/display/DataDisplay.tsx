@@ -417,6 +417,7 @@ class DataDisplay<
       height,
       width,
       isLoading,
+      isLoadingSkeleton = true,
       showFilterString = false,
       showFilterSelection = false,
     } = this.props;
@@ -453,6 +454,7 @@ class DataDisplay<
       <Display
         dragHandleRef={dragHandleRef}
         isLoading={isLoading}
+        isLoadingSkeleton={isLoadingSkeleton}
         title={`${title}`}
         onRemoveClick={onRemoveClick}
       >
