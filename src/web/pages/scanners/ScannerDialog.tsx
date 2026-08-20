@@ -263,12 +263,10 @@ const ScannerDialog = ({
     scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
   const showScannerDetails = isDefined(scannerType);
   const showPort = showScannerDetails && !isGreenboneSensorType;
-  const showCredentialField =
+  const isClientCertificateSupported =
     showScannerDetails &&
     isScannerTypeSupportingClientCertificates(scannerType);
-  const showCaCertificateField =
-    showScannerDetails &&
-    isScannerTypeSupportingClientCertificates(scannerType);
+
   if (isGreenboneSensorType || isAgentControllerSensorScannerType) {
     credentialId = undefined;
   }
@@ -340,38 +338,38 @@ const ScannerDialog = ({
               />
             )}
 
-            {showCaCertificateField && (
-              <FileField
-                name="caCertificate"
-                placeholder={_('Upload CA Certificate')}
-                title={_('CA Certificate')}
-                value={state.caCertificate ?? null}
-                onChange={handleCaCertificateChange}
-              />
-            )}
+            {isClientCertificateSupported && (
+              <>
+                <FileField
+                  name="caCertificate"
+                  placeholder={_('Upload CA Certificate')}
+                  title={_('CA Certificate')}
+                  value={state.caCertificate ?? null}
+                  onChange={handleCaCertificateChange}
+                />
 
-            {showCredentialField && (
-              <FormGroup direction="row" title={_('Credential')}>
-                <Select
-                  allowDeselect
-                  clearable
-                  aria-label={_('Credential')}
-                  grow="1"
-                  items={renderSelectItems(
-                    credentials as RenderSelectItemProps[],
-                  )}
-                  name="credentialId"
-                  placeholder={_('Select a Credential')}
-                  value={credentialId ?? ''}
-                  onChange={(value: string) =>
-                    onCredentialChange && onCredentialChange(value)
-                  }
-                />
-                <NewIcon
-                  title={_('Create a new Credential')}
-                  onClick={onNewCredentialClick}
-                />
-              </FormGroup>
+                <FormGroup direction="row" title={_('Credential')}>
+                  <Select
+                    allowDeselect
+                    clearable
+                    aria-label={_('Credential')}
+                    grow="1"
+                    items={renderSelectItems(
+                      credentials as RenderSelectItemProps[],
+                    )}
+                    name="credentialId"
+                    placeholder={_('Select a Credential')}
+                    value={credentialId ?? ''}
+                    onChange={(value: string) =>
+                      onCredentialChange && onCredentialChange(value)
+                    }
+                  />
+                  <NewIcon
+                    title={_('Create a new Credential')}
+                    onClick={onNewCredentialClick}
+                  />
+                </FormGroup>
+              </>
             )}
           </>
         );
