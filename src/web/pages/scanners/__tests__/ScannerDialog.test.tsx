@@ -83,7 +83,7 @@ describe('ScannerDialog tests', () => {
       credentialId: undefined,
       type: undefined,
       id: undefined,
-      port: '',
+      port: undefined,
     });
   });
 
@@ -198,7 +198,7 @@ describe('ScannerDialog tests', () => {
       credentialId: undefined,
       type: OPENVAS_SCANNER_TYPE,
       id: undefined,
-      port: '',
+      port: undefined,
     });
   });
 
@@ -592,6 +592,38 @@ describe('ScannerDialog tests', () => {
     });
   });
 
+  test('should disable port for a local file path host', () => {
+    const gmp = createGmp({enableGreenboneSensor: false});
+    const handleSave = testing.fn();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <ScannerDialog
+        host="/var/run/ospd.sock"
+        type={OPENVAS_SCANNER_TYPE}
+        onSave={handleSave}
+      />,
+    );
+
+    const portInput = screen.getByName('port');
+    expect(portInput).toHaveValue('');
+    expect(portInput).toBeDisabled();
+    expect(
+      screen.getByTitle(
+        "The scanner uses a local connection and doesn't use a port",
+      ),
+    ).toBeVisible();
+
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        host: '/var/run/ospd.sock',
+        port: undefined,
+      }),
+    );
+  });
+
   test('should allow to close the dialog', async () => {
     const gmp = createGmp();
     const handleClose = testing.fn();
@@ -709,7 +741,7 @@ describe('ScannerDialog tests', () => {
       credentialId: undefined,
       type: OPENVAS_SCANNER_TYPE,
       id: undefined,
-      port: '',
+      port: undefined,
     });
   });
 

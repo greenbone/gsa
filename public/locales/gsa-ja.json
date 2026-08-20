@@ -2126,6 +2126,7 @@
   "The scan did not collect any results": "スキャンは結果を1件も収集しませんでした",
   "The scan is still running and no results have arrived yet": "スキャンはまだ実行中で、結果がまだ届いていません",
   "The scan just started and no results have arrived yet": "スキャンは開始したばかりで、結果がまだ届いていません",
+  "The scanner uses a local connection and doesn't use a port": "",
   "The Second": "第2",
   "The Target and Task will be created using the defaults as configured in \"My Settings\".": "ターゲットとタスクは、「マイ設定」で構成されたデフォルト値を使用して作成されます。",
   "The target hosts could be regarded dead": "ターゲットホストが停止中と見なされた可能性があります",

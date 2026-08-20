@@ -2126,6 +2126,7 @@
   "The scan did not collect any results": "扫描未收集任何结果",
   "The scan is still running and no results have arrived yet": "扫描仍在运行暂时没有任何结果",
   "The scan just started and no results have arrived yet": "扫描刚刚开始暂时没有任何结果",
+  "The scanner uses a local connection and doesn't use a port": "",
   "The Second": "第二周",
   "The Target and Task will be created using the defaults as configured in \"My Settings\".": "此扫描目标和任务将使用\"用户设置\"中的默认值创建.",
   "The target hosts could be regarded dead": "目标主机可以被视为非存活",
