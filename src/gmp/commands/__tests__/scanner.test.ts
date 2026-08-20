@@ -78,6 +78,66 @@ describe('ScannerCommand tests', () => {
     });
   });
 
+  test('should send an empty port when creating a scanner without a port', async () => {
+    const response = createActionResultResponse({
+      action: 'create_scanner',
+      id: '123',
+      message: 'Scanner created successfully',
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new ScannerCommand(fakeHttp);
+
+    await cmd.create({
+      name: 'Local Scanner',
+      host: '/var/run/ospd.sock',
+      type: OPENVASD_SCANNER_TYPE,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_scanner',
+        name: 'Local Scanner',
+        comment: '',
+        credential_id: undefined,
+        scanner_host: '/var/run/ospd.sock',
+        scanner_type: OPENVASD_SCANNER_TYPE,
+        port: '',
+        ca_pub: undefined,
+      },
+    });
+  });
+
+  test('should send an empty port when saving a scanner without a port', async () => {
+    const response = createActionResultResponse({
+      action: 'save_scanner',
+      id: '123',
+      message: 'Scanner updated successfully',
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new ScannerCommand(fakeHttp);
+
+    await cmd.save({
+      id: '123',
+      name: 'Local Scanner',
+      host: '/var/run/ospd.sock',
+      type: OPENVASD_SCANNER_TYPE,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_scanner',
+        ca_pub: '',
+        comment: '',
+        credential_id: '',
+        name: 'Local Scanner',
+        port: '',
+        scanner_host: '/var/run/ospd.sock',
+        scanner_id: '123',
+        scanner_type: OPENVASD_SCANNER_TYPE,
+      },
+    });
+  });
+
   test('should remove a credential when saving a scanner', async () => {
     const response = createActionResultResponse({
       action: 'save_scanner',
