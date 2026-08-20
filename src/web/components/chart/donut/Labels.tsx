@@ -5,9 +5,9 @@
 
 import React, {useMemo, type ReactNode} from 'react';
 import {arc as d3arc, pie as d3pie} from 'd3-shape';
+import Group from 'web/components/chart/base/Group';
 import Label from 'web/components/chart/base/Label';
 import ToolTip from 'web/components/chart/base/ToolTip';
-import Pie, {type PieArc} from 'web/components/chart/donut/Pie';
 import Theme from 'web/utils/theme';
 
 interface LabelData {
@@ -39,7 +39,10 @@ const resolveLabelPositions = <TData extends LabelData>(
   innerRadius: number,
   outerRadius: number,
 ): LabelPosition[] => {
-  const pie = d3pie<TData>().sortValues(null).value(d => d.value);
+  const pie = d3pie<TData>()
+    .sortValues(null)
+    .value(d => d.value)
+    .padAngle(0.03);
   const arcs = pie(data).sort((a, b) =>
     a.startAngle > b.startAngle ? -1 : 1,
   );
@@ -91,60 +94,63 @@ const Labels = <TData extends LabelData = LabelData>({
     [data, innerRadiusX, outerRadiusX],
   );
 
+  const pie = d3pie<TData>()
+    .sortValues(null)
+    .value(d => d.value)
+    .padAngle(0.03);
+  const arcs = pie(data).sort((a, b) =>
+    a.startAngle > b.startAngle ? -1 : 1,
+  );
+
   return (
-    <Pie
-      data={data}
-      innerRadiusX={innerRadiusX}
-      innerRadiusY={innerRadiusY}
-      left={centerX}
-      outerRadiusX={outerRadiusX}
-      outerRadiusY={outerRadiusY}
-      pieValue={d => d.value}
-      top={centerY}
-    >
-      {({arc: currentArc, data: arcData, index}) => {
-      const arc = d3arc<PieArc<TData>>()
-        .innerRadius(innerRadiusX ?? 0)
-        .outerRadius(outerRadiusX);
-      const outerArc = d3arc<PieArc<TData>>()
-        .innerRadius(outerRadiusX + LABEL_RADIUS_OFFSET)
-        .outerRadius(outerRadiusX + LABEL_RADIUS_OFFSET);
-      const arcPoint = arc.centroid(currentArc);
-      const outerArcPoint = outerArc.centroid(currentArc);
-      const {isRightSide, y} = labelPositions[index];
-      const labelPoint = [isRightSide ? LABEL_X : -LABEL_X, y];
-      const points = [arcPoint, outerArcPoint, labelPoint]
-        .map(point => point.join(','))
-        .join(' ');
-      return (
-        <ToolTip key={index} content={arcData.toolTip}>
-          {({targetRef, hide, show}) => (
-            <g>
-              <polyline
-                fill="none"
-                points={points}
-                stroke="#BFBFBF"
-                strokeWidth="1px"
-              />
-              <Label
-                ref={targetRef as React.Ref<SVGElement>}
-                fill={Theme.darkGray}
-                fontFamily="Verdana, sans-serif"
-                fontSize="11px"
-                fontWeight="bold"
-                textAnchor={isRightSide ? 'start' : 'end'}
-                transform={`translate(${labelPoint.join(',')})`}
-                onMouseEnter={show}
-                onMouseLeave={hide}
-              >
-                {arcData.value}
-              </Label>
-            </g>
-          )}
-        </ToolTip>
-      );
-      }}
-    </Pie>
+    <Group left={centerX} top={centerY}>
+      {arcs.map((currentArc, index) => {
+        const arcData = currentArc.data;
+        const arc = d3arc()
+          .innerRadius(innerRadiusX ?? 0)
+          .outerRadius(outerRadiusX);
+        const outerArc = d3arc()
+          .innerRadius(outerRadiusX + LABEL_RADIUS_OFFSET)
+          .outerRadius(outerRadiusX + LABEL_RADIUS_OFFSET);
+        const arcPoint = arc.centroid(currentArc);
+        const outerArcPoint = outerArc.centroid(currentArc);
+        const {isRightSide, y} = labelPositions[index];
+        const labelPoint = [isRightSide ? LABEL_X : -LABEL_X, y];
+        const points = [arcPoint, outerArcPoint, labelPoint]
+          .map(point => point.join(','))
+          .join(' ');
+        return (
+          <ToolTip
+            key={`${currentArc.startAngle}-${currentArc.endAngle}`}
+            content={arcData.toolTip}
+          >
+            {({targetRef, hide, show}) => (
+              <g>
+                <polyline
+                  fill="none"
+                  points={points}
+                  stroke="#BFBFBF"
+                  strokeWidth="1px"
+                />
+                <Label
+                  ref={targetRef as React.Ref<SVGElement>}
+                  fill={Theme.darkGray}
+                  fontFamily="Verdana, sans-serif"
+                  fontSize="11px"
+                  fontWeight="bold"
+                  textAnchor={isRightSide ? 'start' : 'end'}
+                  transform={`translate(${labelPoint.join(',')})`}
+                  onMouseEnter={show}
+                  onMouseLeave={hide}
+                >
+                  {arcData.value}
+                </Label>
+              </g>
+            )}
+          </ToolTip>
+        );
+      })}
+    </Group>
   );
 };
 
