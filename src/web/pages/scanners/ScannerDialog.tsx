@@ -91,6 +91,16 @@ const updatePort = (scannerType: ScannerType | undefined) => {
   return '';
 };
 
+export const isScannerTypeSupportingClientCertificates = (
+  scannerType: ScannerType | undefined,
+) =>
+  scannerType === OPENVAS_SCANNER_TYPE ||
+  scannerType === OPENVASD_SCANNER_TYPE ||
+  scannerType === OPENVASD_SENSOR_SCANNER_TYPE ||
+  scannerType === CONTAINER_IMAGE_SCANNER_TYPE ||
+  scannerType === WEB_APPLICATION_SCANNER_TYPE ||
+  scannerType === AGENT_CONTROLLER_SCANNER_TYPE;
+
 const ScannerDialog = ({
   comment = '',
   scannerInUse = false,
@@ -254,13 +264,11 @@ const ScannerDialog = ({
   const showScannerDetails = isDefined(scannerType);
   const showPort = showScannerDetails && !isGreenboneSensorType;
   const showCredentialField =
-    !isGreenboneSensorType &&
-    !isAgentControllerSensorScannerType &&
-    showScannerDetails;
+    showScannerDetails &&
+    isScannerTypeSupportingClientCertificates(scannerType);
   const showCaCertificateField =
-    !isGreenboneSensorType &&
-    !isAgentControllerSensorScannerType &&
-    showScannerDetails;
+    showScannerDetails &&
+    isScannerTypeSupportingClientCertificates(scannerType);
   if (isGreenboneSensorType || isAgentControllerSensorScannerType) {
     credentialId = undefined;
   }
