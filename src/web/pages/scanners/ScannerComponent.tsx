@@ -15,14 +15,7 @@ import {
 } from 'gmp/models/credential';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import {
-  type default as Scanner,
-  type ScannerType,
-  AGENT_CONTROLLER_SCANNER_TYPE,
-  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
-  OPENVASD_SCANNER_TYPE,
-  OPENVASD_SENSOR_SCANNER_TYPE,
-} from 'gmp/models/scanner';
+import {type default as Scanner, type ScannerType} from 'gmp/models/scanner';
 import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -44,7 +37,9 @@ import useUserName from 'web/hooks/useUserName';
 import CredentialDialog, {
   type CredentialDialogState,
 } from 'web/pages/credentials/CredentialDialog';
-import ScannerDialog from 'web/pages/scanners/ScannerDialog';
+import ScannerDialog, {
+  isScannerTypeSupportingClientCertificates,
+} from 'web/pages/scanners/ScannerDialog';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename} from 'web/utils/Render';
 
@@ -147,10 +142,7 @@ const ScannerComponent = ({
   const openScannerDialog = async (scanner?: Scanner) => {
     if (isDefined(scanner)) {
       const credentialTypes: CredentialType[] =
-        scanner.scannerType === OPENVASD_SCANNER_TYPE ||
-        scanner.scannerType === AGENT_CONTROLLER_SCANNER_TYPE ||
-        scanner.scannerType === OPENVASD_SENSOR_SCANNER_TYPE ||
-        scanner.scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE
+        isScannerTypeSupportingClientCertificates(scanner.scannerType)
           ? [CERTIFICATE_CREDENTIAL_TYPE]
           : [];
       const credentialsPromise =
