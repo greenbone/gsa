@@ -10,7 +10,6 @@ import {
   DownloadCsvIcon,
   FilterIcon,
   LegendIcon,
-  Toggle3dIcon,
 } from 'web/components/icon';
 
 interface DataDisplayIconsState {
@@ -38,15 +37,7 @@ export const renderDonutChartIcons = <TState extends DonutChartState>({
   setState,
   ...iconsProps
 }: DataDisplayIconsProps<TState>): React.ReactNode => (
-  <>
-    <DataDisplayIcons {...iconsProps} setState={setState} />
-    <Toggle3dIcon
-      title={_('Toggle 2D/3D view')}
-      onClick={() => {
-        setState(({show3d}: TState) => ({show3d: !show3d}) as TState);
-      }}
-    />
-  </>
+  <DataDisplayIcons {...iconsProps} setState={setState} />
 );
 
 const DataDisplayIcons = <TState extends DataDisplayIconsState>({

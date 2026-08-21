@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {Skeleton} from '@mantine/core';
 import styled from 'styled-components';
 import DialogCloseButton from 'web/components/dialog/DialogCloseButton';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
@@ -15,6 +16,7 @@ export interface DisplayProps {
   children?: React.ReactNode;
   dragHandleRef?: (element: Element | null) => void;
   isLoading?: boolean;
+  isLoadingSkeleton?: boolean;
   title?: string;
   onRemoveClick?: () => void;
 }
@@ -65,6 +67,8 @@ const DisplayView = styled.div`
   flex-basis: 0;
   background-color: ${Theme.white};
   position: relative;
+  border-radius: 8px;
+  overflow: hidden;
 `;
 
 const DisplayContent = styled.div`
@@ -74,6 +78,8 @@ const DisplayContent = styled.div`
   border-left: 1px solid ${Theme.lightGray};
   border-right: 1px solid ${Theme.lightGray};
   border-bottom: 1px solid ${Theme.lightGray};
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   overflow: hidden;
 `;
 
@@ -102,6 +108,7 @@ const Display = ({
   children,
   dragHandleRef,
   isLoading,
+  isLoadingSkeleton = false,
   title,
   onRemoveClick,
 }: DisplayProps) => {
@@ -127,7 +134,11 @@ const Display = ({
       </DisplayContent>
       {isLoading && (
         <DisplayOverlay>
-          <Loading />
+          {isLoadingSkeleton ? (
+            <Skeleton data-testid="loading" height="100%" width="100%" />
+          ) : (
+            <Loading />
+          )}
         </DisplayOverlay>
       )}
     </DisplayView>

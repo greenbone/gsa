@@ -309,6 +309,7 @@ class DataDisplay<
     return (
       nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
+      nextProps.isLoading !== this.props.isLoading ||
       nextState.data !== this.state.data ||
       nextProps.showFilterString !== this.props.showFilterString ||
       nextProps.state !== this.props.state ||
@@ -416,6 +417,7 @@ class DataDisplay<
       height,
       width,
       isLoading,
+      isLoadingSkeleton = true,
       showFilterString = false,
       showFilterSelection = false,
     } = this.props;
@@ -452,6 +454,7 @@ class DataDisplay<
       <Display
         dragHandleRef={dragHandleRef}
         isLoading={isLoading}
+        isLoadingSkeleton={isLoadingSkeleton}
         title={`${title}`}
         onRemoveClick={onRemoveClick}
       >

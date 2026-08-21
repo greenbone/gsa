@@ -16,6 +16,10 @@ interface RectProps {
   color: string;
 }
 
+interface StyledLegendProps {
+  $maxHeight?: number;
+}
+
 export interface LegendData {
   color: ToString;
   label: string;
@@ -35,17 +39,22 @@ interface LegendRenderProps<TData extends LegendData> {
 interface LegendProps<TData extends LegendData = LegendData> {
   children?: (props: LegendRenderProps<TData>) => ReactNode;
   data: TData[];
+  maxHeight?: number;
   legendRef?: LegendRef;
   onItemClick?: (d: TData) => void;
 }
 
 export type LegendRef = RefObject<HTMLElement | null>;
 
-const StyledLegend = styled.div`
+const StyledLegend = styled.div<StyledLegendProps>`
   padding: 5px 10px;
   margin: 10px 5px;
   display: flex;
   flex-direction: column;
+  max-height: ${({$maxHeight}) =>
+    $maxHeight === undefined ? undefined : `${$maxHeight}px`};
+  overflow-y: ${({$maxHeight}) =>
+    $maxHeight === undefined ? undefined : 'auto'};
   user-select: none;
   color: ${Theme.black};
   opacity: 0.75;
@@ -70,15 +79,20 @@ const Rect = styled.div<RectProps>`
   width: ${DEFAULT_SHAPE_SIZE}px;
   height: 10px;
   background-color: ${props => props.color};
+  border-radius: 4px;
 `;
 
 const Legend = <TData extends LegendData = LegendData>({
   data,
   children,
+  maxHeight,
   onItemClick,
   legendRef,
 }: LegendProps<TData>) => (
-  <StyledLegend ref={legendRef as Ref<HTMLDivElement>}>
+  <StyledLegend
+    ref={legendRef as Ref<HTMLDivElement>}
+    $maxHeight={maxHeight}
+  >
     {data.map(d => (
       <ToolTip key={d.label} content={d.toolTip}>
         {({targetRef, hide, show}) =>

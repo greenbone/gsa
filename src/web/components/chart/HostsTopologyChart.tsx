@@ -21,6 +21,7 @@ import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING, type SeverityRating} from 'gmp/utils/severity';
 import Group from 'web/components/chart/base/Group';
+import EmptyChart from 'web/components/chart/base/EmptyChart';
 import Layout from 'web/components/layout/Layout';
 import {type I18n, type TranslateFunc} from 'web/hooks/useTranslation';
 import {setRef} from 'web/utils/Render';
@@ -540,8 +541,17 @@ class HostsTopologyChart extends React.Component<
           onMouseUp={this.handleMouseUp}
           onWheel={this.handleMouseWheel}
         >
-          <Group left={translateX} scale={scale} top={translateY}>
-            {links.map(link => {
+          {hosts.length === 0 ? (
+            <Group left={translateX} scale={scale} top={translateY}>
+              <EmptyChart
+                data-testid="hosts-topology-empty"
+                height={height}
+                width={width}
+              />
+            </Group>
+          ) : (
+            <Group left={translateX} scale={scale} top={translateY}>
+              {links.map(link => {
               return (
                 <line
                   key={link.index}
@@ -554,7 +564,7 @@ class HostsTopologyChart extends React.Component<
                 />
               );
             })}
-            {hosts.map(host => {
+              {hosts.map(host => {
               const radius = host.isScanner ? SCANNER_RADIUS : HOST_RADIUS;
               return (
                 <React.Fragment key={host.id}>
@@ -589,8 +599,9 @@ class HostsTopologyChart extends React.Component<
                   />
                 </React.Fragment>
               );
-            })}
-          </Group>
+              })}
+            </Group>
+          )}
         </Svg>
       </Layout>
     );

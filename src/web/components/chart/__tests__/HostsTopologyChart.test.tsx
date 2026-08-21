@@ -36,6 +36,9 @@ describe('HostsTopologyChart', () => {
     render(<HostsTopologyChart {...createProps()} />);
 
     expect(screen.getByTestId('hosts-topology-svg')).toBeInTheDocument();
+    expect(screen.getByTestId('hosts-topology-empty')).toHaveTextContent(
+      'No data available',
+    );
     expect(
       screen.queryByTestId('hosts-topology-host-host-1'),
     ).not.toBeInTheDocument();

@@ -69,4 +69,16 @@ describe('Legend', () => {
     expect(screen.queryByText('First')).not.toBeInTheDocument();
     expect(screen.queryByText('Second')).not.toBeInTheDocument();
   });
+
+  test('should scroll when a maximum height is provided', () => {
+    const {render} = rendererWith();
+
+    render(<Legend data={data} maxHeight={200} />);
+
+    const legend = screen.getByText('First').parentElement?.parentElement;
+    expect(legend).toHaveStyle({
+      maxHeight: '200px',
+      overflowY: 'auto',
+    });
+  });
 });

@@ -55,11 +55,13 @@ describe('DonutChart', () => {
     render(<DonutChart height={300} width={400} />);
 
     expect(screen.getByTestId('donut-chart-svg')).toBeInTheDocument();
-    expect(screen.getByTestId('donut-chart-empty')).toBeInTheDocument();
+    expect(screen.getByTestId('donut-chart-empty')).toHaveTextContent(
+      'No data available',
+    );
     expect(screen.queryByText('First')).not.toBeInTheDocument();
   });
 
-  test('should render data labels and arcs', () => {
+  test('should render section values and flat arcs', () => {
     const {render} = rendererWith();
 
     render(<DonutChart data={data} height={300} show3d={false} width={400} />);
@@ -67,6 +69,7 @@ describe('DonutChart', () => {
     const svg = screen.getByTestId('donut-chart-svg');
     expect(svg).toHaveTextContent('10');
     expect(svg).toHaveTextContent('20');
+    expect(svg.querySelectorAll('.pie-label')).toHaveLength(2);
     expect(svg.querySelectorAll('path')).toHaveLength(2);
     expect(screen.queryByTestId('donut-chart-empty')).not.toBeInTheDocument();
   });
@@ -91,14 +94,14 @@ describe('DonutChart', () => {
     expect(screen.queryByText('Second')).not.toBeInTheDocument();
   });
 
-  test('should render 3D paths by default', () => {
+  test('should render flat paths by default', () => {
     const {render} = rendererWith();
 
     render(<DonutChart data={data} height={300} width={400} />);
 
     expect(
       screen.getByTestId('donut-chart-svg').querySelectorAll('path'),
-    ).toHaveLength(6);
+    ).toHaveLength(2);
   });
 
   test('should call onDataClick with the clicked slice data', () => {

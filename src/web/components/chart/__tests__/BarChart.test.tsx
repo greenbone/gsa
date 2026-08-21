@@ -23,6 +23,16 @@ const data: BarChartDataPoint[] = [
 ];
 
 describe('BarChart', () => {
+  test('should render a clear empty state when there is no data', () => {
+    const {render} = rendererWith();
+
+    render(<BarChart data={[]} height={300} width={900} />);
+
+    expect(screen.getByTestId('bar-chart-empty')).toHaveTextContent(
+      'No data available',
+    );
+  });
+
   test('should render one bar for each data point and axis labels', () => {
     const {render} = rendererWith();
 

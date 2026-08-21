@@ -40,7 +40,7 @@ describe('Axis tests', () => {
       top: 0,
     });
 
-    expect(mainContainer.querySelectorAll('.tick text').length).toEqual(0);
+    expect(mainContainer.querySelectorAll('.tick text')).toHaveLength(0);
   });
 
   test('should apply custom tick formatter', () => {
@@ -57,6 +57,18 @@ describe('Axis tests', () => {
     expect(tickTexts.every(node => node.textContent?.startsWith('v-'))).toBe(
       true,
     );
+  });
+
+  test('should format large numeric tick values compactly', () => {
+    const scale = scaleLinear().range([0, 100]).domain([0, 1250000]);
+    const mainContainer = renderAxis({
+      orientation: 'bottom',
+      scale,
+      tickValues: [0, 1250000],
+    });
+
+    const tickTexts = Array.from(mainContainer.querySelectorAll('.tick text'));
+    expect(tickTexts.map(tick => tick.textContent)).toEqual(['0', '1.3M']);
   });
 
   test('should render a top axis label with the expected position', () => {
@@ -83,5 +95,20 @@ describe('Axis tests', () => {
 
     const tickTexts = Array.from(mainContainer.querySelectorAll('.tick text'));
     expect(tickTexts.map(tick => tick.textContent)).toEqual(['0', '5', '10']);
+  });
+
+  test('should rotate tick labels when configured', () => {
+    const scale = scaleLinear().range([0, 100]).domain([0, 10]);
+    const mainContainer = renderAxis({
+      orientation: 'bottom',
+      scale,
+      tickLabelRotation: -30,
+    });
+
+    const tickLabel = mainContainer.querySelector('.tick text');
+    expect(tickLabel).toHaveAttribute('transform', 'rotate(-30)');
+    expect(tickLabel).toHaveAttribute('text-anchor', 'end');
+    expect(tickLabel).toHaveAttribute('dx', '-0.5em');
+    expect(tickLabel).toHaveAttribute('dy', '0.5em');
   });
 });

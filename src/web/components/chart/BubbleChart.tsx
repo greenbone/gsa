@@ -5,11 +5,11 @@
 
 import {pack, hierarchy} from 'd3-hierarchy';
 import {isDefined} from 'gmp/utils/identity';
+import EmptyChart from 'web/components/chart/base/EmptyChart';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
 import ToolTip from 'web/components/chart/base/ToolTip';
-import Theme from 'web/utils/theme';
 
 interface BubbleChartData extends LegendData {
   value: number;
@@ -70,7 +70,7 @@ const BubbleChart = ({
           nodes.map((node, i) => {
             const {data: d, x, y, r} = node;
             return (
-              <ToolTip key={i} content={d.toolTip}>
+              <ToolTip key={d.label} content={d.toolTip}>
                 {({targetRef, hide, show}) => {
                   const clippathId = 'clippath-' + i;
                   return (
@@ -110,12 +110,10 @@ const BubbleChart = ({
             );
           })
         ) : (
-          <circle
-            cx={maxWidth / 2}
-            cy={maxHeight / 2}
+          <EmptyChart
             data-testid="bubble-chart-empty"
-            fill={Theme.lightGray}
-            r={maxHeight / 2}
+            height={maxHeight}
+            width={maxWidth}
           />
         )}
       </Group>

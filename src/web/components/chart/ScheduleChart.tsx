@@ -9,6 +9,7 @@ import {type TranslateFunc} from 'gmp/locale';
 import date, {type Date as GmpDate} from 'gmp/models/date';
 import {shorten} from 'gmp/utils/string';
 import Axis from 'web/components/chart/base/Axis';
+import EmptyChart from 'web/components/chart/base/EmptyChart';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
@@ -228,77 +229,109 @@ const ScheduleChart = ({
         height={height}
         width={width}
       >
-        <Group left={marginLeft} top={margin.top}>
-          <Axis
-            label={yAxisLabel}
-            left={0}
-            orientation="left"
-            rangePadding={0}
-            scale={yScale}
-            tickFormat={tickFormat}
-            top={0}
+        {data.length === 0 ? (
+          <EmptyChart
+            data-testid="schedule-chart-empty"
+            height={height}
+            width={width}
           />
-          <Axis
-            label={yAxisLabel}
-            numTicks={7}
-            orientation="bottom"
-            rangePadding={0}
-            scale={xScale}
-            top={maxHeight}
-          />
-          <StrokeGradient />
-          <FillGradient />
-          {schedules.map((d, index) => {
-            const {duration = 0, period = 0, start, label} = d;
+        ) : (
+          <>
+            <Group left={marginLeft} top={margin.top}>
+              <Axis
+                left={0}
+                orientation="left"
+                rangePadding={0}
+                scale={yScale}
+                tickFormat={tickFormat}
+                top={0}
+              />
+              {yAxisLabel && (
+                <text
+                  className="axis-label"
+                  fill={Theme.darkGray}
+                  fontFamily={Theme.Font.default}
+                  fontSize={10}
+                  textAnchor="start"
+                  x={-45}
+                  y={-15}
+                >
+                  {yAxisLabel}
+                </text>
+              )}
+              <Axis
+                numTicks={7}
+                orientation="bottom"
+                rangePadding={0}
+                scale={xScale}
+                tickLabelRotation={-30}
+                top={maxHeight}
+              />
+              <StrokeGradient />
+              <FillGradient />
+              {schedules.map((d, index) => {
+                const {duration = 0, period = 0, start, label} = d;
 
-            const startX = xScale(start);
+                const startX = xScale(start);
 
-            let end = start.clone();
-            const hasDuration = duration > 0;
-            if (hasDuration) {
-              end = end.add(d.duration as number, 'seconds');
-            } else if (period > 0) {
-              end = end.add(Math.min(period, ONE_DAY), 'seconds');
-            } else {
-              end = end.add(1, 'day');
-            }
+                let end = start.clone();
+                const hasDuration = duration > 0;
+                if (hasDuration) {
+                  end = end.add(d.duration as number, 'seconds');
+                } else if (period > 0) {
+                  end = end.add(Math.min(period, ONE_DAY), 'seconds');
+                } else {
+                  end = end.add(1, 'day');
+                }
 
-            if (end.isAfter(resolvedEndDate)) {
-              end = resolvedEndDate;
-            }
+                if (end.isAfter(resolvedEndDate)) {
+                  end = resolvedEndDate;
+                }
 
-            const endX = xScale(end.toDate());
-            const rwidth = endX - startX;
-            return (
-              <ToolTip key={`${d.label}-${d.start.unix()}`} content={d.toolTip}>
-                {({targetRef, show, hide}) => (
-                  <rect
-                    ref={targetRef as React.Ref<SVGRectElement>}
-                    data-testid={`schedule-bar-${index}`}
-                    fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
-                    height={bandwidth}
-                    stroke={hasDuration ? Theme.darkGreen : strokeGradientUrl}
-                    width={rwidth}
-                    x={startX}
-                    y={yScale(label)}
-                    onMouseEnter={show}
-                    onMouseLeave={hide}
-                  />
-                )}
-              </ToolTip>
-            );
-          })}
-        </Group>
-        <Group left={width - margin.triangle - TRIANGLE_WIDTH} top={margin.top}>
-          {futureRuns.map(run => (
-            <Triangle
-              key={run.label}
-              height={bandwidth}
-              toolTip={getFutureRunLabel(run.futureRun, _)}
-              y={yScale(run.label)}
-            />
-          ))}
-        </Group>
+                const endX = xScale(end.toDate());
+                const rwidth = endX - startX;
+                return (
+                  <ToolTip
+                    key={`${d.label}-${d.start.unix()}`}
+                    content={d.toolTip}
+                  >
+                    {({targetRef, show, hide}) => (
+                      <rect
+                        ref={targetRef as React.Ref<SVGRectElement>}
+                        data-testid={`schedule-bar-${index}`}
+                        fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
+                        height={bandwidth}
+                        rx="4"
+                        ry="4"
+                        stroke={
+                          hasDuration ? Theme.darkGreen : strokeGradientUrl
+                        }
+                        width={rwidth}
+                        x={startX}
+                        y={yScale(label)}
+                        onMouseEnter={show}
+                        onMouseLeave={hide}
+                      />
+                    )}
+                  </ToolTip>
+                );
+              })}
+            </Group>
+            <Group
+              left={width - margin.triangle - TRIANGLE_WIDTH}
+              top={margin.top}
+            >
+              {futureRuns.map(run => (
+                <Triangle
+                  key={run.label}
+                  height={bandwidth}
+                  toolTip={getFutureRunLabel(run.futureRun, _)}
+                  y={yScale(run.label)}
+                />
+              ))}
+            </Group>
+          </>
+        )}
       </Svg>
     </Layout>
   );

@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {arc as d3arc} from 'd3-shape';
+import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
@@ -16,30 +18,60 @@ interface Arc2dData extends LegendData {
 
 interface Arc2dProps<TData extends Arc2dData> {
   data: TData;
-  path: Path;
+  path?: Path;
+  innerRadius?: number;
+  outerRadius?: number;
+  startAngle?: number;
+  endAngle?: number;
   x: number;
   y: number;
   onDataClick?: (data: TData) => void;
+  onHover?: (data: TData | undefined) => void;
 }
 
 const Arc2d = <TData extends Arc2dData = Arc2dData>({
   data,
   path,
+  innerRadius,
+  outerRadius,
+  startAngle,
+  endAngle,
   x,
   y,
   onDataClick,
+  onHover,
 }: Arc2dProps<TData>) => {
   const {color = Theme.lightGray, toolTip} = data;
+  const hasD3Geometry =
+    isDefined(innerRadius) &&
+    isDefined(outerRadius) &&
+    isDefined(startAngle) &&
+    isDefined(endAngle);
+  const renderArc = (radius: number) =>
+    d3arc()
+      .innerRadius(innerRadius ?? 0)
+      .outerRadius(radius)
+      .padAngle(0.03)
+      .cornerRadius(4)({startAngle, endAngle});
   return (
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <Group
           data-testid="arc-2d"
           onClick={isDefined(onDataClick) ? () => onDataClick(data) : undefined}
-          onMouseEnter={show}
-          onMouseLeave={hide}
+          onMouseEnter={() => {
+            show();
+            onHover?.(data);
+          }}
+          onMouseLeave={() => {
+            hide();
+            onHover?.(undefined);
+          }}
         >
-          <path d={String(path)} fill={String(color)} />
+          <path
+            d={String(hasD3Geometry ? renderArc(outerRadius as number) : path)}
+            fill={String(color)}
+          />
           <circle // used as positioning ref for tooltips
             ref={targetRef as React.Ref<SVGCircleElement>}
             cx={x}
