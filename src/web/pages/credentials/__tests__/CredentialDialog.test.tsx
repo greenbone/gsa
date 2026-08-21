@@ -12,6 +12,7 @@ import {
   within,
   rendererWith,
   fireEvent,
+  waitFor,
 } from 'web/testing';
 import Features from 'gmp/capabilities/features';
 import Credential, {
@@ -220,11 +221,16 @@ describe('CredentialDialog tests', () => {
 
     expect(select).toHaveValue('Username + SSH Key');
 
+    const username = screen.getByName('credentialLogin');
+    expect(username).toHaveValue('');
+
     const password = screen.getByName('passphrase');
     expect(password).toHaveValue('');
+    expect(screen.getByText('Passphrase for Private SSH Key')).toBeVisible();
 
     const privateKey = screen.getByName('privateKey');
     expect(privateKey).toHaveAttribute('type', 'file');
+    expect(screen.getByRole('button', {name: 'Private SSH Key'})).toBeVisible();
   });
 
   test('should disable private key field when autogenerate is enabled for Username + SSH Key', () => {
@@ -393,6 +399,84 @@ describe('CredentialDialog tests', () => {
     const passphrase = screen.getByName('passphrase');
     expect(passphrase).toHaveValue('');
     expect(passphrase).toHaveAttribute('type', 'password');
+    expect(screen.getByText('Passphrase for Client Private Key')).toBeVisible();
+  });
+
+  test('should save client certificate and unencrypted private key', async () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+    });
+    const handleSave = testing.fn();
+
+    render(
+      <CredentialDialog
+        credentialType={CERTIFICATE_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+        onSave={handleSave}
+      />,
+    );
+
+    const certificate = new File(
+      ['-----BEGIN CERTIFICATE-----\ncertificate'],
+      'certificate.pem',
+      {type: 'application/x-pem-file'},
+    );
+    const privateKey = new File(
+      ['-----BEGIN PRIVATE KEY-----\nprivate key'],
+      'private-key.pem',
+      {type: 'application/x-pem-file'},
+    );
+
+    fireEvent.change(screen.getByName('certificate'), {
+      target: {files: [certificate]},
+    });
+    fireEvent.change(screen.getByName('privateKey'), {
+      target: {files: [privateKey]},
+    });
+
+    await waitFor(() => {
+      expect(screen.getByName('passphrase')).toBeDisabled();
+    });
+
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        certificate,
+        credentialType: CERTIFICATE_CREDENTIAL_TYPE,
+        passphrase: undefined,
+        privateKey,
+      }),
+    );
+  });
+
+  test('should enable passphrase for encrypted client private key', async () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={CERTIFICATE_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+      />,
+    );
+
+    const privateKey = new File(
+      ['-----BEGIN ENCRYPTED PRIVATE KEY-----\nencrypted key'],
+      'encrypted-private-key.pem',
+      {type: 'application/x-pem-file'},
+    );
+    fireEvent.change(screen.getByName('privateKey'), {
+      target: {files: [privateKey]},
+    });
+
+    await waitFor(() => {
+      expect(screen.getByName('passphrase')).not.toBeDisabled();
+    });
+    expect(
+      screen.getByTitle('Passphrase for encrypted Client Private Key'),
+    ).toBeInTheDocument();
   });
 
   test('should handle replace password interactions correctly', () => {
