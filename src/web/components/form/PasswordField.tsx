@@ -18,6 +18,7 @@ interface PasswordFieldProps extends Omit<
   name?: string;
   placeholder?: string;
   title?: string;
+  toolTipTitle?: string;
   value?: string;
   onChange?: (value: string, name?: string) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -31,6 +32,7 @@ const PasswordField = ({
   name,
   placeholder,
   title,
+  toolTipTitle,
   value,
   onChange,
   onKeyDown,
@@ -48,6 +50,7 @@ const PasswordField = ({
       name={name}
       placeholder={placeholder}
       styles={{root: {flexGrow: grow}}}
+      title={toolTipTitle}
       value={value}
       onChange={handleChange}
       onKeyDown={onKeyDown}

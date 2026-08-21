@@ -50,6 +50,7 @@ interface CredentialDialogValues {
   certificate?: File | null;
   credentialType: CredentialType;
   hostIdentifier?: string;
+  passphrase?: string;
   privateKey?: File | null;
   privacyHostIdentifier?: string;
   publicKey?: File | null;
@@ -65,7 +66,6 @@ interface CredentialDialogDefaultValues {
   id?: string;
   kdcs?: string[];
   name: string;
-  passphrase?: string;
   password?: string;
   privacyAlgorithm?: SNMPPrivacyAlgorithmType;
   privacyHostIdentifier?: string;
@@ -109,6 +109,14 @@ const validateFile = async (
   errorMessage: string,
 ) => {
   const content = await file.text();
+  return validateContent(content, line, errorMessage);
+};
+
+const validateContent = (
+  content: string,
+  line: string | RegExp,
+  errorMessage: string,
+) => {
   if (!isString(content)) {
     throw new Error(errorMessage);
   }
@@ -122,7 +130,9 @@ const validateFile = async (
 
 const PGP_PUBLIC_KEY_LINE = '-----BEGIN PGP PUBLIC KEY BLOCK-----';
 const CLIENT_CERTIFICATE_LINE = '-----BEGIN CERTIFICATE-----';
-const CLIENT_PRIVATE_KEY_LINE = '-----BEGIN PRIVATE KEY-----';
+const CLIENT_ENCRYPTED_PRIVATE_KEY_LINE =
+  '-----BEGIN ENCRYPTED PRIVATE KEY-----';
+const CLIENT_PRIVATE_KEY_REGEX = /-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----/;
 const SSH_KEY_REGEX = /-----BEGIN \w+ PRIVATE KEY-----/;
 
 const CredentialDialog = ({
@@ -136,7 +146,7 @@ const CredentialDialog = ({
   credentialType: initialCredentialType,
   hostIdentifier,
   name,
-  passphrase,
+  passphrase: initialPassphrase,
   password,
   publicKey: initialPublicKey,
   privacyAlgorithm = SNMP_PRIVACY_ALGORITHM_AES,
@@ -151,7 +161,6 @@ const CredentialDialog = ({
   onSave,
 }: CredentialDialogProps) => {
   const [_] = useTranslation();
-
   title = title ?? _('New Credential');
   name = name ?? _('Unnamed');
 
@@ -173,11 +182,17 @@ const CredentialDialog = ({
   const [publicKey, setPublicKey] = useState<File | undefined | null>(
     initialPublicKey,
   );
+  const [passphrase, setPassphrase] = useState<string | undefined>(
+    initialPassphrase,
+  );
   const [changeCommunity, setChangeCommunity] = useState<boolean>(false);
   const [changePassphrase, setChangePassphrase] = useState<boolean>(false);
   const [changePassword, setChangePassword] = useState<boolean>(false);
   const [changePrivacyPassword, setChangePrivacyPassword] =
     useState<boolean>(false);
+  // if we don't know if the private key is encrypted, we assume it is, so that the user can change the passphrase if they want to
+  const [isEncryptedPrivateKey, setIsEncryptedPrivateKey] =
+    useState<boolean>(true);
 
   const isEdit = isDefined(credential);
 
@@ -233,11 +248,20 @@ const CredentialDialog = ({
   const handleClientKeyChange = async (file: File | undefined) => {
     try {
       if (isDefined(file)) {
-        await validateFile(
-          file,
-          CLIENT_PRIVATE_KEY_LINE,
+        const content = await file.text();
+        validateContent(
+          content,
+          CLIENT_PRIVATE_KEY_REGEX,
           _('Not a valid Client Private Key file'),
         );
+        if (content.startsWith(CLIENT_ENCRYPTED_PRIVATE_KEY_LINE)) {
+          setIsEncryptedPrivateKey(true);
+        } else {
+          setIsEncryptedPrivateKey(false);
+          setPassphrase(undefined);
+        }
+      } else {
+        setIsEncryptedPrivateKey(true);
       }
       setPrivateKey(file ?? null);
     } catch (error) {
@@ -315,7 +339,6 @@ const CredentialDialog = ({
         community,
         credentialLogin,
         name,
-        passphrase,
         password,
         privacyAlgorithm,
         privacyHostIdentifier,
@@ -331,6 +354,7 @@ const CredentialDialog = ({
       values={{
         autogenerate,
         credentialType: cType as CredentialType,
+        passphrase,
         publicKey,
         privateKey,
         certificate,
@@ -465,41 +489,19 @@ const CredentialDialog = ({
               </FormGroup>
             )}
 
-            {state.credentialType === CERTIFICATE_CREDENTIAL_TYPE && (
-              <FileField
-                name="certificate"
-                title={_('Client Certificate')}
-                value={state.certificate}
-                onChange={handleClientCertificateChange}
-              />
-            )}
-
-            {(state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-              state.credentialType === CERTIFICATE_CREDENTIAL_TYPE) && (
+            {state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
               <>
                 <FileField
                   disabled={state.autogenerate}
                   name="privateKey"
-                  title={
-                    state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE
-                      ? _('Private SSH Key')
-                      : _('Client Private Key')
-                  }
+                  title={_('Private SSH Key')}
                   value={state.privateKey}
-                  onChange={
-                    state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE
-                      ? handlePrivateKeyChange
-                      : handleClientKeyChange
-                  }
+                  onChange={handlePrivateKeyChange}
                 />
 
                 <FormGroup
                   direction="row"
-                  title={
-                    state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE
-                      ? _('Passphrase for Private SSH Key')
-                      : _('Passphrase for Client Private Key')
-                  }
+                  title={_('Passphrase for Private SSH Key')}
                 >
                   {isEdit && (
                     <Checkbox<boolean>
@@ -514,14 +516,63 @@ const CredentialDialog = ({
                   <PasswordField
                     autoComplete="new-password"
                     disabled={
-                      (state.autogenerate &&
-                        state.credentialType !== CERTIFICATE_CREDENTIAL_TYPE) ||
-                      (isEdit && !changePassphrase)
+                      state.autogenerate || (isEdit && !changePassphrase)
                     }
                     grow="1"
                     name="passphrase"
                     value={state.passphrase}
                     onChange={onValueChange}
+                  />
+                </FormGroup>
+              </>
+            )}
+
+            {state.credentialType === CERTIFICATE_CREDENTIAL_TYPE && (
+              <>
+                <FileField
+                  name="certificate"
+                  title={_('Client Certificate')}
+                  value={state.certificate}
+                  onChange={handleClientCertificateChange}
+                />
+                <FileField
+                  disabled={state.autogenerate}
+                  name="privateKey"
+                  title={_('Client Private Key')}
+                  value={state.privateKey}
+                  onChange={handleClientKeyChange}
+                />
+
+                <FormGroup
+                  direction="row"
+                  title={_('Passphrase for Client Private Key')}
+                >
+                  {isEdit && isEncryptedPrivateKey && (
+                    <Checkbox<boolean>
+                      checked={changePassphrase}
+                      checkedValue={true}
+                      name="changePassphrase"
+                      title={_('Replace existing passphrase with')}
+                      unCheckedValue={false}
+                      onChange={setChangePassphrase}
+                    />
+                  )}
+                  <PasswordField
+                    autoComplete="new-password"
+                    disabled={
+                      (isEdit && !changePassphrase) || !isEncryptedPrivateKey
+                    }
+                    grow="1"
+                    name="passphrase"
+                    toolTipTitle={
+                      isEncryptedPrivateKey
+                        ? _('Passphrase for encrypted Client Private Key')
+                        : _(
+                            'The client private key is not encrypted, so no passphrase is required',
+                          )
+                    }
+                    value={passphrase}
+                    onChange={setPassphrase}
                   />
                 </FormGroup>
               </>
