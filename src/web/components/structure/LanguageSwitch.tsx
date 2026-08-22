@@ -4,63 +4,68 @@
  */
 
 import {useState} from 'react';
-import {ActionIcon} from '@mantine/core';
-import {FlagDeIcon, FlagEnIcon} from '@greenbone/ui-lib';
+import {ActionIcon, Menu} from '@mantine/core';
 import {DEFAULT_LANGUAGE} from 'gmp/locale/lang';
+import Languages, {
+  type LanguageCode,
+  getLanguageCodes,
+  isLanguageCode,
+} from 'gmp/locale/languages';
+import LanguageFlag from 'web/components/structure/LanguageFlag';
 import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';
 
-type LanguageCode = 'en' | 'de';
+const languageCodes = getLanguageCodes();
 
-interface Languages {
-  EN: LanguageCode;
-  DE: LanguageCode;
-}
-
-const LANGUAGES: Languages = {
-  EN: DEFAULT_LANGUAGE as LanguageCode,
-  DE: 'de',
-};
-
-const getNextLanguage = (language: LanguageCode): LanguageCode =>
-  language === LANGUAGES.EN ? LANGUAGES.DE : LANGUAGES.EN;
-
-const LanguageSwitch: React.FC = () => {
+const LanguageSwitch = () => {
   const [language, setLanguage] = useLanguage();
   const [_] = useTranslation();
   const [isChangingLanguage, setIsChangingLanguage] = useState<boolean>(false);
 
-  const nextLanguage: LanguageCode = getNextLanguage(language as LanguageCode);
-  const titles: Record<LanguageCode, string> = {
-    en: _('Switch language to English'),
-    de: _('Switch language to German'),
-  };
-
-  const handleLanguageChange = async (): Promise<void> => {
+  const handleLanguageChange = async (
+    newLanguage: LanguageCode,
+  ): Promise<void> => {
     if (isChangingLanguage) {
       return;
     }
 
     try {
       setIsChangingLanguage(true);
-      await setLanguage(nextLanguage);
-    } catch (error) {
-      throw new Error(error instanceof Error ? error.message : String(error));
+      await setLanguage(newLanguage);
     } finally {
       setIsChangingLanguage(false);
     }
   };
 
+  const currentLanguage = isLanguageCode(language)
+    ? language
+    : DEFAULT_LANGUAGE;
+
   return (
-    <ActionIcon
-      color="neutral.0"
-      disabled={isChangingLanguage}
-      title={titles[nextLanguage]}
-      variant="transparent"
-      onClick={handleLanguageChange}
-    >
-      {nextLanguage === LANGUAGES.DE ? <FlagEnIcon /> : <FlagDeIcon />}
-    </ActionIcon>
+    <Menu>
+      <Menu.Target>
+        <ActionIcon
+          aria-label={_('Select language')}
+          color="neutral.0"
+          loading={isChangingLanguage}
+          title={_('Select language')}
+          variant="transparent"
+        >
+          <LanguageFlag language={currentLanguage} />
+        </ActionIcon>
+      </Menu.Target>
+      <Menu.Dropdown>
+        {languageCodes.map(code => (
+          <Menu.Item
+            key={code}
+            leftSection={<LanguageFlag language={code} />}
+            onClick={() => void handleLanguageChange(code)}
+          >
+            {Languages[code].native_name}
+          </Menu.Item>
+        ))}
+      </Menu.Dropdown>
+    </Menu>
   );
 };
 
