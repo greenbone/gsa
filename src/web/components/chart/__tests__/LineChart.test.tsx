@@ -87,6 +87,56 @@ describe('LineChart tests', () => {
     expect(xAxisTick).toHaveAttribute('text-anchor', 'end');
   });
 
+  test('should use the available width when the legend is hidden', () => {
+    const {render} = rendererWith();
+    const rendered = render(
+      <LineChart
+        data={[
+          {x: 1, y: 10, y2: 3, label: 'p1'},
+          {x: 2, y: 20, y2: 4, label: 'p2'},
+        ]}
+        height={300}
+        showLegend={false}
+        width={900}
+        y2Line={{color: '#0000aa', label: 'Second'}}
+        yLine={{color: '#00aa00', label: 'First'}}
+      />,
+    );
+
+    const svg = screen.getByTestId('main-container').querySelector('svg');
+    expect(svg).toHaveAttribute('width', '874');
+
+    rendered.rerender(
+      <LineChart
+        showLegend
+        data={[
+          {x: 1, y: 10, y2: 3, label: 'p1'},
+          {x: 2, y: 20, y2: 4, label: 'p2'},
+        ]}
+        height={300}
+        width={900}
+        y2Line={{color: '#0000aa', label: 'Second'}}
+        yLine={{color: '#00aa00', label: 'First'}}
+      />,
+    );
+    expect(svg).toHaveAttribute('width', '880');
+
+    rendered.rerender(
+      <LineChart
+        data={[
+          {x: 1, y: 10, y2: 3, label: 'p1'},
+          {x: 2, y: 20, y2: 4, label: 'p2'},
+        ]}
+        height={300}
+        showLegend={false}
+        width={900}
+        y2Line={{color: '#0000aa', label: 'Second'}}
+        yLine={{color: '#00aa00', label: 'First'}}
+      />,
+    );
+    expect(svg).toHaveAttribute('width', '874');
+  });
+
   test('should keep the hover info box within the plot bounds', () => {
     const {render} = rendererWith();
 

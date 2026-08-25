@@ -262,7 +262,7 @@ const LineChart = ({
     let w = propWidth - MENU_PLACEHOLDER_WIDTH;
     const {current: legend} = legendRef;
 
-    if (legend !== null) {
+    if (showLegend && legend !== null) {
       const {width: legendWidth} = legend.getBoundingClientRect();
       w = propWidth - legendWidth - LEGEND_MARGIN;
     }
@@ -272,7 +272,7 @@ const LineChart = ({
     }
 
     return w;
-  }, [propWidth]);
+  }, [propWidth, showLegend]);
 
   useEffect(() => {
     const newWidth = getCalculatedWidth();
