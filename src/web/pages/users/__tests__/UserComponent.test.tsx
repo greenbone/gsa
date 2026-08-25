@@ -34,7 +34,7 @@ authSettings.set('method:radius_connect', {enabled: false});
 const groups = [Group.fromElement({_id: 'group1', name: 'Group 1'})];
 const roles = [Role.fromElement({_id: 'role1', name: 'Admin'})];
 
-const createGmp = () => ({
+const createGmp = (username = 'admin') => ({
   user: {
     create: testing.fn().mockResolvedValue({data: {id: 'created'}}),
     save: testing.fn().mockResolvedValue({data: {id: 'saved'}}),
@@ -52,7 +52,7 @@ const createGmp = () => ({
   roles: {
     getAll: testing.fn().mockResolvedValue({data: roles}),
   },
-  session: createSession({username: 'admin'}),
+  session: createSession({username}),
 });
 
 describe('UserComponent', () => {
@@ -105,6 +105,67 @@ describe('UserComponent', () => {
     await waitFor(() => {
       expect(gmp.user.save).toHaveBeenCalled();
       expect(onSaved).toHaveBeenCalledWith({id: 'saved'});
+    });
+  });
+
+  test('should allow a non-superadmin to edit their own user account', async () => {
+    const gmp = createGmp('admin-2');
+    const admin = User.fromElement({
+      _id: 'admin-2-id',
+      name: 'admin-2',
+      role: {_id: 'role1', name: 'Admin'},
+      groups: {
+        group: [{_id: 'group1', name: 'Special group'}],
+      },
+    });
+    const {render} = rendererWith({gmp, capabilities: true, store: true});
+
+    render(
+      <UserComponent>
+        {({edit}) => <Button data-testid="open" onClick={() => edit(admin)} />}
+      </UserComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await screen.findByText('Edit User admin-2');
+
+    fireEvent.click(screen.getDialogSaveButton());
+    await waitFor(() => {
+      expect(gmp.user.save).toHaveBeenCalled();
+    });
+    expect(screen.queryByText('Save Super Admin User')).toBeNull();
+  });
+
+  test('should confirm before a superadmin edits their own user account', async () => {
+    const gmp = createGmp('superadmin');
+    const superadmin = User.fromElement({
+      _id: 'superadmin-id',
+      name: 'superadmin',
+      role: {
+        _id: '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5',
+        name: 'Super Admin',
+      },
+    });
+    const {render} = rendererWith({gmp, capabilities: true, store: true});
+
+    render(
+      <UserComponent>
+        {({edit}) => (
+          <Button data-testid="open" onClick={() => edit(superadmin)} />
+        )}
+      </UserComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await screen.findByText('Edit User superadmin');
+
+    fireEvent.click(screen.getDialogSaveButton());
+    await screen.findByText('Save Super Admin User');
+    expect(gmp.user.save).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', {name: 'OK'}));
+    await waitFor(() => {
+      expect(gmp.user.save).toHaveBeenCalled();
     });
   });
 
