@@ -95,6 +95,8 @@ export class HostsModifiedDisplay extends React.Component {
                 svgRef={svgRef}
                 width={width}
                 xAxisLabel={_('Time')}
+                xAxisLabelOffset={30}
+                xAxisLabelRotation={-20}
                 y2AxisLabel={_('Total Hosts')}
                 y2Line={{
                   color: Theme.darkGreenTransparent,

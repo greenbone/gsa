@@ -63,6 +63,8 @@ interface LineChartProps {
   timeline?: boolean;
   width: number;
   xAxisLabel?: ToString;
+  xAxisLabelOffset?: number;
+  xAxisLabelRotation?: number;
   yAxisLabel?: ToString;
   y2AxisLabel?: ToString;
   yLine?: LineProps;
@@ -239,6 +241,8 @@ const LineChart = ({
   timeline = false,
   width: propWidth,
   xAxisLabel,
+  xAxisLabelOffset,
+  xAxisLabelRotation,
   yAxisLabel,
   y2AxisLabel,
   yLine,
@@ -540,9 +544,11 @@ const LineChart = ({
             )}
             <Axis
               label={String(xAxisLabel)}
+              labelOffset={xAxisLabelOffset}
               numTicks={xAxisTicks}
               orientation="bottom"
               scale={xScale}
+              tickLabelRotation={xAxisLabelRotation}
               top={maxHeight(height)}
             />
             {isDefined(y2Line) && (
