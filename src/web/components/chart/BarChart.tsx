@@ -168,11 +168,8 @@ const BarChart = <TData extends BarChartDataPoint>({
               tickValues={tickValues}
               top={maxHeight}
             />
-            {data.map(d => (
-              <ToolTip
-                key={isHorizontal ? d.y : String(d.x)}
-                content={d.toolTip}
-              >
+            {data.map((d, index) => (
+              <ToolTip key={`${String(d.x)}-${index}`} content={d.toolTip}>
                 {({targetRef, hide, show}) => (
                   <Group
                     onClick={

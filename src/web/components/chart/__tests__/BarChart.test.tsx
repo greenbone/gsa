@@ -125,6 +125,22 @@ describe('BarChart', () => {
     expect(xAxis).not.toHaveTextContent('Very long category 1');
   });
 
+  test('should replace bars when overcrowding changes the orientation', () => {
+    const crowdedData = Array.from({length: 8}, (_, index) => ({
+      color: '#008000',
+      x: `Very long category ${index + 1}`,
+      y: 0,
+    }));
+    const {render} = rendererWith();
+    const rendered = render(<BarChart data={data} height={300} width={900} />);
+
+    rendered.rerender(<BarChart data={crowdedData} height={300} width={360} />);
+
+    const bars = screen.getByTestId('main-container').querySelectorAll('rect');
+    expect(bars).toHaveLength(crowdedData.length);
+    bars.forEach(bar => expect(bar).toHaveAttribute('x', '1'));
+  });
+
   test('should render horizontal bars', () => {
     const {render} = rendererWith();
     render(<BarChart horizontal data={data} height={300} width={900} />);
