@@ -5,16 +5,10 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
-import DataDisplayIcons, {
-  renderDonutChartIcons,
-} from 'web/components/dashboard/display/DataDisplayIcons';
+import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 
 interface TestState {
   showLegend: boolean;
-}
-
-interface DonutTestState extends TestState {
-  show3d: boolean;
 }
 
 describe('DataDisplayIcons component tests', () => {
@@ -74,28 +68,5 @@ describe('DataDisplayIcons component tests', () => {
     ) => TestState;
     expect(updateLegend({showLegend: false})).toEqual({showLegend: true});
     expect(updateLegend({showLegend: true})).toEqual({showLegend: false});
-  });
-});
-
-describe('renderDonutChartIcons', () => {
-  test('should render and toggle the 3D view icon', () => {
-    const setState = testing.fn();
-
-    render(renderDonutChartIcons<DonutTestState>({setState}));
-
-    expect(screen.getByTitle('Toggle 2D/3D view')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByTitle('Toggle 2D/3D view'));
-
-    expect(setState).toHaveBeenCalledTimes(1);
-    const toggle3d = setState.mock.calls[0][0] as (
-      state: DonutTestState,
-    ) => DonutTestState;
-    expect(toggle3d({showLegend: false, show3d: false})).toEqual({
-      show3d: true,
-    });
-    expect(toggle3d({showLegend: true, show3d: true})).toEqual({
-      show3d: false,
-    });
   });
 });

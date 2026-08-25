@@ -12,7 +12,7 @@ import DataDisplay, {
   type State,
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
-import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';
+import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import transformSeverityData, {
   type SeverityClassData,
   type SeverityData,
@@ -21,9 +21,7 @@ import transformSeverityData, {
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
 import useGmp from 'web/hooks/useGmp';
 
-interface SeverityClassDisplayState extends State {
-  show3d: boolean;
-}
+type SeverityClassDisplayState = State;
 
 type SeverityClassDisplayBaseProps = DataDisplayProps<
   SeverityData,
@@ -98,17 +96,14 @@ const SeverityClassDisplay = ({
       {...props}
       dataTransform={transformSeverityData}
       filter={filter}
-      icons={renderDonutChartIcons}
-      initialState={{
-        show3d: true,
-      }}
+      icons={DataDisplayIcons}
+      initialState={{}}
       severityRating={severityRating}
     >
       {({width, height, data, svgRef, state}) => (
         <DonutChart
           data={data}
           height={height}
-          show3d={state.show3d}
           showLegend={state.showLegend}
           svgRef={svgRef}
           width={width}

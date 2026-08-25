@@ -27,18 +27,7 @@ export interface DataDisplayIconsProps<TState extends DataDisplayIconsState> {
   onSelectFilterClick?: () => void;
 }
 
-interface DonutChartState extends DataDisplayIconsState {
-  show3d: boolean;
-}
-
 type StateFunc<TState> = (state: TState) => TState;
-
-export const renderDonutChartIcons = <TState extends DonutChartState>({
-  setState,
-  ...iconsProps
-}: DataDisplayIconsProps<TState>): React.ReactNode => (
-  <DataDisplayIcons {...iconsProps} setState={setState} />
-);
 
 const DataDisplayIcons = <TState extends DataDisplayIconsState>({
   setState,

@@ -11,7 +11,6 @@ import {type DisplayProps as BaseDisplayProps} from 'web/components/dashboard/di
 
 export interface DisplayState {
   showLegend?: boolean;
-  show3d?: boolean;
 }
 
 type DisplayStateFunc = (state: DisplayState | undefined) => DisplayState;

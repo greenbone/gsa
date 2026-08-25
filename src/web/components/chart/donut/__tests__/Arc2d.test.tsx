@@ -21,7 +21,11 @@ describe('Arc2d', () => {
   test('should render the arc path and tooltip target', () => {
     const {render} = rendererWith();
 
-    render(<Arc2d data={data} path={arcPath} x={5} y={6} />);
+    render(
+      <svg>
+        <Arc2d data={data} path={arcPath} x={5} y={6} />
+      </svg>,
+    );
 
     const arc = screen.getByTestId('arc-2d');
     expect(arc.querySelector('path')).toHaveAttribute('d', String(arcPath));
@@ -35,13 +39,15 @@ describe('Arc2d', () => {
     const {render} = rendererWith();
 
     render(
-      <Arc2d
-        data={data}
-        path={arcPath}
-        x={5}
-        y={6}
-        onDataClick={onDataClick}
-      />,
+      <svg>
+        <Arc2d
+          data={data}
+          path={arcPath}
+          x={5}
+          y={6}
+          onDataClick={onDataClick}
+        />
+      </svg>,
     );
 
     fireEvent.click(screen.getByTestId('arc-2d'));
@@ -53,16 +59,18 @@ describe('Arc2d', () => {
     const {render} = rendererWith();
 
     render(
-      <Arc2d
-        data={data}
-        endAngle={Math.PI}
-        innerRadius={20}
-        outerRadius={40}
-        path={arcPath}
-        startAngle={0}
-        x={5}
-        y={6}
-      />,
+      <svg>
+        <Arc2d
+          data={data}
+          endAngle={Math.PI}
+          innerRadius={20}
+          outerRadius={40}
+          path={arcPath}
+          startAngle={0}
+          x={5}
+          y={6}
+        />
+      </svg>,
     );
 
     const arc = screen.getByTestId('arc-2d');

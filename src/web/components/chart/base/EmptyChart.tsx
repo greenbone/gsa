@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { _ } from 'gmp/locale/lang';
+import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
 interface EmptyChartProps {
@@ -12,19 +12,26 @@ interface EmptyChartProps {
   width: number;
 }
 
-const EmptyChart = ({'data-testid': dataTestId, height, width}: EmptyChartProps) => (
-  <text
-    aria-label={_('No data available')}
-    data-testid={dataTestId}
-    dominantBaseline="middle"
-    fill={Theme.gray}
-    fontSize="14px"
-    textAnchor="middle"
-    x={width / 2}
-    y={height / 2}
-  >
-    {_('No data available')}
-  </text>
-);
+const EmptyChart = ({
+  'data-testid': dataTestId,
+  height,
+  width,
+}: EmptyChartProps) => {
+  const [_] = useTranslation();
+  return (
+    <text
+      aria-label={_('No data available')}
+      data-testid={dataTestId}
+      dominantBaseline="middle"
+      fill={Theme.mediumGray}
+      fontSize="14px"
+      textAnchor="middle"
+      x={width / 2}
+      y={height / 2}
+    >
+      {_('No data available')}
+    </text>
+  );
+};
 
 export default EmptyChart;

@@ -4,7 +4,7 @@
  */
 
 import React, {useMemo, type ReactNode} from 'react';
-import {arc as d3arc, pie as d3pie} from 'd3-shape';
+import {arc as d3arc, type PieArcDatum} from 'd3-shape';
 import Group from 'web/components/chart/base/Group';
 import Label from 'web/components/chart/base/Label';
 import ToolTip from 'web/components/chart/base/ToolTip';
@@ -16,7 +16,7 @@ interface LabelData {
 }
 
 interface LabelsProps<TData extends LabelData> {
-  data: TData[];
+  arcs: PieArcDatum<TData>[];
   centerX: number;
   centerY: number;
   innerRadiusX?: number;
@@ -25,27 +25,19 @@ interface LabelsProps<TData extends LabelData> {
   outerRadiusY?: number;
 }
 
-const LABEL_RADIUS_OFFSET = 10;
-const LABEL_EDGE_OFFSET = 15;
-const LABEL_GAP = 16;
-
 interface LabelPosition {
   isRightSide: boolean;
   y: number;
 }
 
+const LABEL_RADIUS_OFFSET = 10;
+const LABEL_EDGE_OFFSET = 15;
+const LABEL_GAP = 16;
+
 const resolveLabelPositions = <TData extends LabelData>(
-  data: TData[],
-  innerRadius: number,
+  arcs: PieArcDatum<TData>[],
   outerRadius: number,
 ): LabelPosition[] => {
-  const pie = d3pie<TData>()
-    .sortValues(null)
-    .value(d => d.value)
-    .padAngle(0.03);
-  const arcs = pie(data).sort((a, b) =>
-    a.startAngle > b.startAngle ? -1 : 1,
-  );
   const outerArc = d3arc<{
     startAngle: number;
     endAngle: number;
@@ -53,8 +45,7 @@ const resolveLabelPositions = <TData extends LabelData>(
     .innerRadius(outerRadius + LABEL_RADIUS_OFFSET)
     .outerRadius(outerRadius + LABEL_RADIUS_OFFSET);
   const positions = arcs.map(currentArc => ({
-    isRightSide:
-      (currentArc.startAngle + currentArc.endAngle) / 2 < Math.PI,
+    isRightSide: (currentArc.startAngle + currentArc.endAngle) / 2 < Math.PI,
     y: outerArc.centroid(currentArc)[1],
   }));
 
@@ -69,10 +60,7 @@ const resolveLabelPositions = <TData extends LabelData>(
         return;
       }
       const previous = sidePositions[index - 1].position;
-      entry.position.y = Math.max(
-        entry.position.y,
-        previous.y + LABEL_GAP,
-      );
+      entry.position.y = Math.max(entry.position.y, previous.y + LABEL_GAP);
     });
   });
 
@@ -80,7 +68,7 @@ const resolveLabelPositions = <TData extends LabelData>(
 };
 
 const Labels = <TData extends LabelData = LabelData>({
-  data,
+  arcs,
   centerX,
   centerY,
   innerRadiusX,
@@ -89,17 +77,8 @@ const Labels = <TData extends LabelData = LabelData>({
   outerRadiusY,
 }: LabelsProps<TData>) => {
   const labelPositions = useMemo(
-    () =>
-      resolveLabelPositions(data, innerRadiusX ?? 0, outerRadiusX),
-    [data, innerRadiusX, outerRadiusX],
-  );
-
-  const pie = d3pie<TData>()
-    .sortValues(null)
-    .value(d => d.value)
-    .padAngle(0.03);
-  const arcs = pie(data).sort((a, b) =>
-    a.startAngle > b.startAngle ? -1 : 1,
+    () => resolveLabelPositions(arcs, outerRadiusX),
+    [arcs, outerRadiusX],
   );
 
   return (

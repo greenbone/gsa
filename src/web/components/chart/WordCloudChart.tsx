@@ -8,7 +8,7 @@ import type d3 from 'd3';
 import d3cloud, {type Word as d3Word} from 'd3-cloud';
 import {scaleLinear} from 'd3-scale';
 import {isDefined} from 'gmp/utils/identity';
-import EmptyChart from 'web/components/chart/base/EmptyChart';
+import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
@@ -116,7 +116,12 @@ const WordCloudChart = ({
       height={height}
       width={width}
     >
-      {words.length > 0 ? (
+      <ChartWithEmptyState
+        data-testid="word-cloud-empty"
+        height={height}
+        isEmpty={words.length === 0}
+        width={width}
+      >
         <Group left={width / 2 + margin.left} top={height / 2 + margin.top}>
           {words.map(word => (
             <Group
@@ -141,13 +146,7 @@ const WordCloudChart = ({
             </Group>
           ))}
         </Group>
-      ) : (
-        <EmptyChart
-          data-testid="word-cloud-empty"
-          height={height}
-          width={width}
-        />
-      )}
+      </ChartWithEmptyState>
     </Svg>
   );
 };

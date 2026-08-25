@@ -50,10 +50,10 @@ describe('createDisplay tests', () => {
 
   test('should create a new item with props', () => {
     const uuid = testing.fn().mockReturnValue(1);
-    expect(createDisplay('foo1', {state: {show3d: true}}, uuid)).toEqual({
+    expect(createDisplay('foo1', {state: {showLegend: true}}, uuid)).toEqual({
       id: 1,
       displayId: 'foo1',
-      state: {show3d: true},
+      state: {showLegend: true},
     });
     expect(uuid).toHaveBeenCalled();
   });
@@ -132,13 +132,29 @@ describe('DashboardCommand tests', () => {
     const dashboardCommand = new DashboardCommand(http);
     await dashboardCommand.saveSetting('test-id', {
       name: 'Test Dashboard',
-      rows: [],
+      rows: [
+        {
+          height: 100,
+          id: 'row-id',
+          items: [
+            {
+              displayId: 'display-id',
+              id: 'display-id',
+              state: {show3d: true, showLegend: true} as {
+                show3d: boolean;
+                showLegend: boolean;
+              },
+            },
+          ],
+        },
+      ],
     });
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_setting',
         setting_id: 'test-id',
-        setting_value: '{"name":"Test Dashboard","rows":[]}',
+        setting_value:
+          '{"name":"Test Dashboard","rows":[{"height":100,"id":"row-id","items":[{"displayId":"display-id","id":"display-id","state":{"showLegend":true}}]}]}',
       },
     });
   });

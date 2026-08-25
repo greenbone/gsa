@@ -7,6 +7,7 @@ import {useState} from 'react';
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor, fireEvent} from 'web/testing';
 import {vi} from 'vitest';
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import {type FilterType} from 'gmp/models/filter';
 import DashboardView, {
   DEFAULT_MAX_ITEMS_PER_ROW,
@@ -241,6 +242,9 @@ describe('DashboardView', () => {
     );
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
+    expect(screen.getByTestId('loading').parentElement).toHaveStyle({
+      height: `${DEFAULT_ROW_HEIGHT}px`,
+    });
     expect(globalThis.__dashboardSortableGridCalls).toEqual([]);
   });
 

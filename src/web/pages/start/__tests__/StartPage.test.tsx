@@ -137,9 +137,6 @@ describe('StartPage tests', () => {
     expect(
       withinTasksBySeverityClass.getByTestId('legend-icon'),
     ).toHaveAttribute('title', 'Toggle Legend');
-    expect(
-      withinTasksBySeverityClass.getByTestId('toggle-3d-icon'),
-    ).toHaveAttribute('title', 'Toggle 2D/3D view');
 
     const tasksByStatus = displays[1];
     const withinTasksByStatus = within(tasksByStatus);
@@ -154,10 +151,6 @@ describe('StartPage tests', () => {
     expect(withinTasksByStatus.getByTestId('legend-icon')).toHaveAttribute(
       'title',
       'Toggle Legend',
-    );
-    expect(withinTasksByStatus.getByTestId('toggle-3d-icon')).toHaveAttribute(
-      'title',
-      'Toggle 2D/3D view',
     );
 
     const cvesByCreationTime = displays[2];
@@ -189,9 +182,6 @@ describe('StartPage tests', () => {
     expect(
       withinNvtsBySeverityClass.getByTestId('legend-icon'),
     ).toHaveAttribute('title', 'Toggle Legend');
-    expect(
-      withinNvtsBySeverityClass.getByTestId('toggle-3d-icon'),
-    ).toHaveAttribute('title', 'Toggle 2D/3D view');
   });
 
   test('should reset the active dashboard to its defaults', async () => {

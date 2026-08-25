@@ -6,7 +6,6 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import BubbleChart from 'web/components/chart/BubbleChart';
-import Theme from 'web/utils/theme';
 
 const data = [
   {

@@ -20,8 +20,8 @@ import equal from 'fast-deep-equal';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING, type SeverityRating} from 'gmp/utils/severity';
+import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
-import EmptyChart from 'web/components/chart/base/EmptyChart';
 import Layout from 'web/components/layout/Layout';
 import {type I18n, type TranslateFunc} from 'web/hooks/useTranslation';
 import {setRef} from 'web/utils/Render';
@@ -541,67 +541,66 @@ class HostsTopologyChart extends React.Component<
           onMouseUp={this.handleMouseUp}
           onWheel={this.handleMouseWheel}
         >
-          {hosts.length === 0 ? (
-            <Group left={translateX} scale={scale} top={translateY}>
-              <EmptyChart
-                data-testid="hosts-topology-empty"
-                height={height}
-                width={width}
-              />
-            </Group>
-          ) : (
-            <Group left={translateX} scale={scale} top={translateY}>
+          <Group left={translateX} scale={scale} top={translateY}>
+            <ChartWithEmptyState
+              data-testid="hosts-topology-empty"
+              height={height}
+              isEmpty={hosts.length === 0}
+              width={width}
+            >
               {links.map(link => {
-              return (
-                <line
-                  key={link.index}
-                  data-testid={`hosts-topology-link-${link.index}`}
-                  stroke={Theme.green}
-                  x1={link.source.x}
-                  x2={link.target.x}
-                  y1={link.source.y}
-                  y2={link.target.y}
-                />
-              );
-            })}
-              {hosts.map(host => {
-              const radius = host.isScanner ? SCANNER_RADIUS : HOST_RADIUS;
-              return (
-                <React.Fragment key={host.id}>
-                  {scale > TEXT_SCALE_THRESHOLD && (
-                    <text
-                      dominantBaseline="hanging"
-                      fill={
-                        isDefined(host.uuid) ? Theme.black : Theme.lightGray
-                      }
-                      fontSize="6px"
-                      fontWeight="normal"
-                      textAnchor="middle"
-                      x={host.x}
-                      y={host.y + 1 + radius}
-                    >
-                      {host.name}
-                    </text>
-                  )}
-                  <Circle
-                    cx={host.x}
-                    cy={host.y}
-                    data-testid={`hosts-topology-host-${host.id}`}
-                    fill={this.hostFillColor(host)}
-                    r={radius}
-                    stroke={this.hostStrokeColor(host)}
-                    strokeWidth={
-                      host.isScanner
-                        ? SCANNER_STROKE_WIDTH
-                        : DEFAULT_STROKE_WIDTH
-                    }
-                    onMouseDown={event => this.handleHostDragStart(event, host)}
+                return (
+                  <line
+                    key={link.index}
+                    data-testid={`hosts-topology-link-${link.index}`}
+                    stroke={Theme.green}
+                    x1={link.source.x}
+                    x2={link.target.x}
+                    y1={link.source.y}
+                    y2={link.target.y}
                   />
-                </React.Fragment>
-              );
+                );
               })}
-            </Group>
-          )}
+              {hosts.map(host => {
+                const radius = host.isScanner ? SCANNER_RADIUS : HOST_RADIUS;
+                return (
+                  <React.Fragment key={host.id}>
+                    {scale > TEXT_SCALE_THRESHOLD && (
+                      <text
+                        dominantBaseline="hanging"
+                        fill={
+                          isDefined(host.uuid) ? Theme.black : Theme.lightGray
+                        }
+                        fontSize="6px"
+                        fontWeight="normal"
+                        textAnchor="middle"
+                        x={host.x}
+                        y={host.y + 1 + radius}
+                      >
+                        {host.name}
+                      </text>
+                    )}
+                    <Circle
+                      cx={host.x}
+                      cy={host.y}
+                      data-testid={`hosts-topology-host-${host.id}`}
+                      fill={this.hostFillColor(host)}
+                      r={radius}
+                      stroke={this.hostStrokeColor(host)}
+                      strokeWidth={
+                        host.isScanner
+                          ? SCANNER_STROKE_WIDTH
+                          : DEFAULT_STROKE_WIDTH
+                      }
+                      onMouseDown={event =>
+                        this.handleHostDragStart(event, host)
+                      }
+                    />
+                  </React.Fragment>
+                );
+              })}
+            </ChartWithEmptyState>
+          </Group>
         </Svg>
       </Layout>
     );

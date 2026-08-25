@@ -18,7 +18,7 @@ import date, {type Date as GmpDate} from 'gmp/models/date';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/base/Axis';
-import EmptyChart from 'web/components/chart/base/EmptyChart';
+import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import Legend, {
   Item,
@@ -58,6 +58,7 @@ interface LineChartProps {
   data: LineData[];
   height: number;
   numTicks?: number;
+  showPointLabels?: boolean;
   showLegend?: boolean;
   svgRef?: React.Ref<SVGSVGElement>;
   timeline?: boolean;
@@ -234,6 +235,7 @@ const LineChart = ({
   data = [],
   height,
   numTicks,
+  showPointLabels = false,
   showLegend = true,
   svgRef,
   timeline = false,
@@ -339,23 +341,26 @@ const LineChart = ({
   );
 
   const endRangeSelection = useCallback(() => {
-    if (onRangeSelected && isDefined(rangeX) && isDefined(infoX)) {
-      const direction = infoX >= rangeX;
-      const startPoint = {
-        ...data.find<LineData>(findX(timeline, rangeX)),
-      } as LineData;
-      const endPoint = {
-        ...data.find<LineData>(findX(timeline, infoX)),
-      } as LineData;
+    try {
+      if (!onRangeSelected || !isDefined(rangeX) || !isDefined(infoX)) {
+        return;
+      }
 
-      if (direction) {
+      const startPoint = data.find(findX(timeline, rangeX));
+      const endPoint = data.find(findX(timeline, infoX));
+
+      if (!isDefined(startPoint) || !isDefined(endPoint)) {
+        return;
+      }
+
+      if (infoX >= rangeX) {
         onRangeSelected(startPoint, endPoint);
       } else {
         onRangeSelected(endPoint, startPoint);
       }
+    } finally {
+      setRangeX(undefined);
     }
-
-    setRangeX(undefined);
   }, [data, infoX, onRangeSelected, rangeX, timeline]);
 
   const hideInfo = useCallback(() => setDisplayInfo(false), []);
@@ -382,6 +387,12 @@ const LineChart = ({
   const hasLines = isDefined(yLine) && isDefined(y2Line);
   const showRange = hasValues && isDefined(onRangeSelected);
   const xAxisTicks = getXAxisTicks(chartWidth, numTicks);
+  const pointLabelStep = Math.max(
+    1,
+    Math.ceil(
+      data.length / Math.max(1, Math.floor(chartWidth / MIN_TICK_WIDTH)),
+    ),
+  );
 
   const renderInfo = () => {
     const lines = (isDefined(yLine) ? 1 : 0) + (isDefined(y2Line) ? 1 : 0);
@@ -404,11 +415,19 @@ const LineChart = ({
     const lineY = LINE_HEIGHT / 2;
     const lineLength = 15;
     const infoMargin = 20;
+    const infoBoxWidth = infoWidth + 3 * itemMargin;
+    const maxInfoLeft = Math.max(0, maxWidth(chartWidth) - infoBoxWidth);
+    const infoLeft = Math.min(Math.max(0, x + infoMargin), maxInfoLeft);
+    const infoTop = Math.min(
+      Math.max(0, mouseY ?? 0),
+      maxHeight(height) - infoHeight - 2 * itemMargin,
+    );
     return (
       <Group>
         <CrispEdgesLine x1={x} x2={x} y1={0} y2={maxHeight(height)} />
-        <Group left={x + infoMargin} top={mouseY}>
+        <Group left={infoLeft} top={infoTop}>
           <rect
+            data-testid="line-chart-info"
             fill={Theme.white}
             height={infoHeight + 2 * itemMargin}
             rx="4"
@@ -510,99 +529,127 @@ const LineChart = ({
         onMouseMove={hasValue ? handleMouseMove : undefined}
         onMouseUp={showRange ? endRangeSelection : undefined}
       >
-        {!hasValue ? (
-          <EmptyChart
-            data-testid="line-chart-empty"
-            height={height}
-            width={chartWidth}
-          />
-        ) : (
+        <ChartWithEmptyState
+          data-testid="line-chart-empty"
+          height={height}
+          isEmpty={!hasValue}
+          width={chartWidth}
+        >
           <Group left={margin.left} top={margin.top}>
-          {isDefined(yLine) && (
+            {isDefined(yLine) && (
+              <Axis
+                label={String(yAxisLabel)}
+                left={0}
+                numTicks={10}
+                orientation="left"
+                scale={yScale}
+                top={0}
+              />
+            )}
             <Axis
-              label={String(yAxisLabel)}
-              left={0}
-              numTicks={10}
-              orientation="left"
-              scale={yScale}
-              top={0}
+              label={String(xAxisLabel)}
+              numTicks={xAxisTicks}
+              orientation="bottom"
+              scale={xScale}
+              top={maxHeight(height)}
             />
-          )}
-          <Axis
-            label={String(xAxisLabel)}
-            numTicks={xAxisTicks}
-            orientation="bottom"
-            scale={xScale}
-            top={maxHeight(height)}
-          />
-          {isDefined(y2Line) && (
-            <Axis
-              label={String(y2AxisLabel)}
-              left={maxWidth(chartWidth)}
-              numTicks={10}
-              orientation="right"
-              scale={y2Scale}
-              top={0}
-            />
-          )}
-          {hasValues && (
-            <Group>
-              {isDefined(yLine) && (
-                <path
-                  d={
-                    d3Line<LineData>()
-                      .x(d => xScale(xValue(d)))
-                      .y(d => yScale(d.y))(data) ?? ''
+            {isDefined(y2Line) && (
+              <Axis
+                label={String(y2AxisLabel)}
+                left={maxWidth(chartWidth)}
+                numTicks={10}
+                orientation="right"
+                scale={y2Scale}
+                top={0}
+              />
+            )}
+            {hasValues && (
+              <Group>
+                {isDefined(yLine) && (
+                  <path
+                    d={
+                      d3Line<LineData>()
+                        .x(d => xScale(xValue(d)))
+                        .y(d => yScale(d.y))(data) ?? ''
+                    }
+                    fill="none"
+                    stroke={String(yLine.color)}
+                    strokeDasharray={yLine.dashArray}
+                    strokeWidth={
+                      isDefined(yLine.lineWidth) ? yLine.lineWidth : 1
+                    }
+                  />
+                )}
+                {isDefined(y2Line) && (
+                  <path
+                    d={
+                      d3Line<LineData>()
+                        .x(d => xScale(xValue(d)))
+                        .y(d => y2Scale(d.y2))(data) ?? ''
+                    }
+                    fill="none"
+                    stroke={String(y2Line.color)}
+                    strokeDasharray={y2Line.dashArray}
+                    strokeWidth={
+                      isDefined(y2Line.lineWidth) ? y2Line.lineWidth : 1
+                    }
+                  />
+                )}
+              </Group>
+            )}
+            {showPointLabels && hasValues && (
+              <Group>
+                {data.map((point, index) => {
+                  if (!point.label || index % pointLabelStep !== 0) {
+                    return null;
                   }
-                  fill="none"
-                  stroke={String(yLine.color)}
-                  strokeDasharray={yLine.dashArray}
-                  strokeWidth={isDefined(yLine.lineWidth) ? yLine.lineWidth : 1}
-                />
-              )}
-              {isDefined(y2Line) && (
-                <path
-                  d={
-                    d3Line<LineData>()
-                      .x(d => xScale(xValue(d)))
-                      .y(d => y2Scale(d.y2))(data) ?? ''
-                  }
-                  fill="none"
-                  stroke={String(y2Line.color)}
-                  strokeDasharray={y2Line.dashArray}
-                  strokeWidth={
-                    isDefined(y2Line.lineWidth) ? y2Line.lineWidth : 1
-                  }
-                />
-              )}
-            </Group>
-          )}
-          {hasOneValue && (
-            <Group>
-              {isDefined(yLine) && (
-                <Cross
-                  color={yLine.color}
-                  dashArray={yLine.dashArray}
-                  lineWidth={yLine.lineWidth}
-                  x={xScale(xValue(data[0]))}
-                  y={yScale(data[0].y)}
-                />
-              )}
-              {isDefined(y2Line) && (
-                <CrossY2
-                  color={y2Line.color}
-                  dashArray={y2Line.dashArray}
-                  lineWidth={y2Line.lineWidth}
-                  x={xScale(xValue(data[0]))}
-                  y={y2Scale(data[0].y2)}
-                />
-              )}
-            </Group>
-          )}
-          {renderInfo()}
-          {renderRange()}
+
+                  return (
+                    <text
+                      key={`${xValue(point)}-${point.label}`}
+                      dominantBaseline="auto"
+                      fill={Theme.darkGray}
+                      fontSize="11"
+                      textAnchor="middle"
+                      x={xScale(xValue(point))}
+                      y={
+                        isDefined(yLine)
+                          ? yScale(point.y) - 8
+                          : y2Scale(point.y2) - 8
+                      }
+                    >
+                      {point.label}
+                    </text>
+                  );
+                })}
+              </Group>
+            )}
+            {hasOneValue && (
+              <Group>
+                {isDefined(yLine) && (
+                  <Cross
+                    color={yLine.color}
+                    dashArray={yLine.dashArray}
+                    lineWidth={yLine.lineWidth}
+                    x={xScale(xValue(data[0]))}
+                    y={yScale(data[0].y)}
+                  />
+                )}
+                {isDefined(y2Line) && (
+                  <CrossY2
+                    color={y2Line.color}
+                    dashArray={y2Line.dashArray}
+                    lineWidth={y2Line.lineWidth}
+                    x={xScale(xValue(data[0]))}
+                    y={y2Scale(data[0].y2)}
+                  />
+                )}
+              </Group>
+            )}
+            {renderInfo()}
+            {renderRange()}
           </Group>
-        )}
+        </ChartWithEmptyState>
       </Svg>
       {hasValue && hasLines && showLegend && (
         <Legend<LineProps> data={[yLine, y2Line]} legendRef={legendRef}>
