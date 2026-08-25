@@ -6,14 +6,13 @@
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filter-term';
-import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseInt, parseFloat, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import LineChart from 'web/components/chart/base/Line';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import {createDateRangeFilter} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {ReportsHighResultsLoader} from 'web/pages/reports/dashboard/Loaders';
@@ -48,38 +47,19 @@ export class ReportsHighResultsDisplay extends React.Component {
       return;
     }
 
-    let {x: startDate} = start;
-    let {x: endDate} = end;
+    const {x: startDate} = start;
+    const {x: endDate} = end;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-    let newFilter = isDefined(filter) ? filter.copy() : new QueryFilter();
-
-    if (isDefined(startDate)) {
-      if (startDate.isSame(endDate)) {
-        startDate = startDate.clone().subtract(1, 'day');
-        endDate = endDate.clone().add(1, 'day');
-      }
-
-      const startTerm = FilterTerm.fromString(
-        `date>${startDate.format(dateFormat)}`,
-      );
-
-      if (!newFilter.hasTerm(startTerm)) {
-        newFilter = newFilter.and(QueryFilter.fromTerm(startTerm));
-      }
-    }
-
-    if (isDefined(endDate)) {
-      const endTerm = FilterTerm.fromString(
-        `date<${endDate.format(dateFormat)}`,
-      );
-
-      if (!newFilter.hasTerm(endTerm)) {
-        newFilter = newFilter.and(QueryFilter.fromTerm(endTerm));
-      }
-    }
-
-    onFilterChanged(newFilter);
+    onFilterChanged(
+      createDateRangeFilter({
+        endDate,
+        field: 'date',
+        filter,
+        formatDate: date => date.format(dateFormat),
+        startDate,
+      }),
+    );
   }
 
   render() {

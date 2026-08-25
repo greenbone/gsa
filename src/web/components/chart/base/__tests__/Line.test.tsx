@@ -54,40 +54,6 @@ describe('Line chart integration tests', () => {
     ).toBeInTheDocument();
   });
 
-  test('should render point labels only when enabled', () => {
-    const {render} = rendererWith();
-    const data = [
-      {x: 1, y: 10, y2: 3, label: 'First point'},
-      {x: 2, y: 20, y2: 4, label: 'Second point'},
-    ];
-
-    render(
-      <LineChart
-        data={data}
-        height={300}
-        showLegend={false}
-        width={900}
-        yLine={{color: '#00aa00', label: 'First'}}
-      />,
-    );
-
-    expect(screen.queryByText('First point')).not.toBeInTheDocument();
-
-    render(
-      <LineChart
-        showPointLabels
-        data={data}
-        height={300}
-        showLegend={false}
-        width={900}
-        yLine={{color: '#00aa00', label: 'First'}}
-      />,
-    );
-
-    expect(screen.getByText('First point')).toBeInTheDocument();
-    expect(screen.getByText('Second point')).toBeInTheDocument();
-  });
-
   test('should keep the hover info box within the plot bounds', () => {
     const {render} = rendererWith();
 

@@ -5,9 +5,13 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {COMPLIANCE} from 'gmp/models/compliance';
+import date from 'gmp/models/date';
+import FilterTerm from 'gmp/models/filter/filter-term';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   activeDaysColorScale,
   complianceColorScale,
+  createDateRangeFilter,
   percent,
   QOD_TYPES,
   qodColorScale,
@@ -33,6 +37,106 @@ import {
 import Theme from 'web/utils/theme';
 
 describe('display utils', () => {
+  describe('createDateRangeFilter', () => {
+    test('should add formatted start and end terms without mutating the filter', () => {
+      const filter = QueryFilter.fromString('rows=10');
+
+      const result = createDateRangeFilter({
+        endDate: date('2024-01-16T12:00:00Z'),
+        field: 'created',
+        filter,
+        formatDate: value => value.utc().format(),
+        startDate: date('2024-01-15T12:00:00Z'),
+      });
+
+      expect(filter.toFilterString()).toBe('rows=10');
+      expect(result).not.toBe(filter);
+      expect(result.hasTerm(FilterTerm.fromString('rows=10'))).toBe(true);
+      expect(
+        result.hasTerm(FilterTerm.fromString('created>2024-01-15T12:00:00Z')),
+      ).toBe(true);
+      expect(
+        result.hasTerm(FilterTerm.fromString('created<2024-01-16T12:00:00Z')),
+      ).toBe(true);
+    });
+
+    test('should honor the supplied date formatter', () => {
+      const startDate = date('2024-01-15T12:00:00Z');
+      const endDate = date('2024-01-16T12:00:00Z');
+      const formatDate = (value: typeof startDate) =>
+        value.format('YYYY-MM-DDTHH:mm');
+
+      const result = createDateRangeFilter({
+        endDate,
+        field: 'modified',
+        formatDate,
+        startDate,
+      });
+
+      expect(
+        result.hasTerm(
+          FilterTerm.fromString(`modified>${formatDate(startDate)}`),
+        ),
+      ).toBe(true);
+      expect(
+        result.hasTerm(
+          FilterTerm.fromString(`modified<${formatDate(endDate)}`),
+        ),
+      ).toBe(true);
+    });
+
+    test('should expand a single selected date by one day', () => {
+      const selectedDate = date('2024-01-15T12:00:00Z');
+      const formatDate = (value: typeof selectedDate) =>
+        value.format('YYYY-MM-DDTHH:mm');
+
+      const result = createDateRangeFilter({
+        endDate: selectedDate,
+        field: 'modified',
+        formatDate,
+        startDate: selectedDate,
+      });
+
+      expect(
+        result.hasTerm(
+          FilterTerm.fromString(
+            `modified>${formatDate(selectedDate.clone().subtract(1, 'day'))}`,
+          ),
+        ),
+      ).toBe(true);
+      expect(
+        result.hasTerm(
+          FilterTerm.fromString(
+            `modified<${formatDate(selectedDate.clone().add(1, 'day'))}`,
+          ),
+        ),
+      ).toBe(true);
+    });
+
+    test('should preserve existing date range terms', () => {
+      const startDate = date('2024-01-15T12:00:00Z');
+      const endDate = date('2024-01-16T12:00:00Z');
+      const formatDate = (value: typeof startDate) =>
+        value.format('YYYY-MM-DDTHH:mm');
+      const filter = new QueryFilter({
+        terms: [
+          FilterTerm.fromString(`date>${formatDate(startDate)}`),
+          FilterTerm.fromString(`date<${formatDate(endDate)}`),
+        ],
+      });
+
+      const result = createDateRangeFilter({
+        endDate,
+        field: 'date',
+        filter,
+        formatDate,
+        startDate,
+      });
+
+      expect(result.toFilterString()).toBe(filter.toFilterString());
+    });
+  });
+
   describe('totalCount', () => {
     test('should return 0 if groups is empty', () => {
       expect(totalCount([])).toBe(0);

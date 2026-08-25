@@ -6,8 +6,6 @@
 import {useCallback} from 'react';
 import {isDate} from 'gmp/models/date';
 import {type FilterType} from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filter-term';
-import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
 import LineChart, {type LineData} from 'web/components/chart/base/Line';
 import transformCreated, {
@@ -18,6 +16,7 @@ import DataDisplay, {
   type DataDisplayProps,
   type State,
 } from 'web/components/dashboard/display/DataDisplay';
+import {createDateRangeFilter} from 'web/components/dashboard/display/utils';
 
 interface CreatedDisplayProps extends DataDisplayProps<
   CreatedData,
@@ -50,37 +49,20 @@ const CreatedDisplay = ({
         return;
       }
 
-      let {x: startDate} = start;
-      let {x: endDate} = end;
-
-      let newFilter = isDefined(filter) ? filter.copy() : new QueryFilter();
+      const {x: startDate} = start;
+      const {x: endDate} = end;
 
       if (isDate(startDate) && isDate(endDate)) {
-        if (startDate.isSame(endDate)) {
-          startDate = startDate.clone().subtract(1, 'day');
-          endDate = endDate.clone().add(1, 'day');
-        }
-
-        const startTerm = FilterTerm.fromString(
-          `created>${startDate.utc().format()}`,
+        onFilterChanged(
+          createDateRangeFilter({
+            endDate,
+            field: 'created',
+            filter,
+            formatDate: date => date.utc().format(),
+            startDate,
+          }),
         );
-
-        if (!newFilter.hasTerm(startTerm)) {
-          newFilter = newFilter.and(QueryFilter.fromTerm(startTerm));
-        }
       }
-
-      if (isDate(endDate)) {
-        const endTerm = FilterTerm.fromString(
-          `created<${endDate.utc().format()}`,
-        );
-
-        if (!newFilter.hasTerm(endTerm)) {
-          newFilter = newFilter.and(QueryFilter.fromTerm(endTerm));
-        }
-      }
-
-      onFilterChanged(newFilter);
     },
     [filter, onFilterChanged],
   );

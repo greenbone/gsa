@@ -58,7 +58,6 @@ interface LineChartProps {
   data: LineData[];
   height: number;
   numTicks?: number;
-  showPointLabels?: boolean;
   showLegend?: boolean;
   svgRef?: React.Ref<SVGSVGElement>;
   timeline?: boolean;
@@ -235,7 +234,6 @@ const LineChart = ({
   data = [],
   height,
   numTicks,
-  showPointLabels = false,
   showLegend = true,
   svgRef,
   timeline = false,
@@ -387,12 +385,6 @@ const LineChart = ({
   const hasLines = isDefined(yLine) && isDefined(y2Line);
   const showRange = hasValues && isDefined(onRangeSelected);
   const xAxisTicks = getXAxisTicks(chartWidth, numTicks);
-  const pointLabelStep = Math.max(
-    1,
-    Math.ceil(
-      data.length / Math.max(1, Math.floor(chartWidth / MIN_TICK_WIDTH)),
-    ),
-  );
 
   const renderInfo = () => {
     const lines = (isDefined(yLine) ? 1 : 0) + (isDefined(y2Line) ? 1 : 0);
@@ -595,33 +587,6 @@ const LineChart = ({
                     }
                   />
                 )}
-              </Group>
-            )}
-            {showPointLabels && hasValues && (
-              <Group>
-                {data.map((point, index) => {
-                  if (!point.label || index % pointLabelStep !== 0) {
-                    return null;
-                  }
-
-                  return (
-                    <text
-                      key={`${xValue(point)}-${point.label}`}
-                      dominantBaseline="auto"
-                      fill={Theme.darkGray}
-                      fontSize="11"
-                      textAnchor="middle"
-                      x={xScale(xValue(point))}
-                      y={
-                        isDefined(yLine)
-                          ? yScale(point.y) - 8
-                          : y2Scale(point.y2) - 8
-                      }
-                    >
-                      {point.label}
-                    </text>
-                  );
-                })}
               </Group>
             )}
             {hasOneValue && (

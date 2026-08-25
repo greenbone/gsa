@@ -6,6 +6,10 @@
 import {scaleLinear, scaleOrdinal} from 'd3-scale';
 import {_l} from 'gmp/locale/lang';
 import {COMPLIANCE} from 'gmp/models/compliance';
+import {type Date as GmpDate} from 'gmp/models/date';
+import {type FilterType} from 'gmp/models/filter';
+import FilterTerm from 'gmp/models/filter/filter-term';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseInt} from 'gmp/parser';
 import {
   CRITICAL,
@@ -24,6 +28,14 @@ type GroupWithCount = {
   count?: string | number;
 };
 
+interface DateRangeFilterParams {
+  endDate: GmpDate;
+  field: 'created' | 'date' | 'modified';
+  filter?: FilterType;
+  formatDate: (date: GmpDate) => string;
+  startDate: GmpDate;
+}
+
 export const totalCount = (groups: GroupWithCount[] = []): number => {
   if (groups.length === 0) {
     return 0;
@@ -36,6 +48,36 @@ export const totalCount = (groups: GroupWithCount[] = []): number => {
 
 export const percent = (count: string | number, sum: number): string =>
   (((parseInt(count) as number) / sum) * 100).toFixed(1);
+
+export const createDateRangeFilter = ({
+  endDate: selectedEndDate,
+  field,
+  filter,
+  formatDate,
+  startDate: selectedStartDate,
+}: DateRangeFilterParams): FilterType => {
+  let startDate = selectedStartDate;
+  let endDate = selectedEndDate;
+
+  if (startDate.isSame(endDate)) {
+    startDate = startDate.clone().subtract(1, 'day');
+    endDate = endDate.clone().add(1, 'day');
+  }
+
+  let newFilter = filter?.copy() ?? new QueryFilter();
+  const startTerm = FilterTerm.fromString(`${field}>${formatDate(startDate)}`);
+  const endTerm = FilterTerm.fromString(`${field}<${formatDate(endDate)}`);
+
+  if (!newFilter.hasTerm(startTerm)) {
+    newFilter = newFilter.and(QueryFilter.fromTerm(startTerm));
+  }
+
+  if (!newFilter.hasTerm(endTerm)) {
+    newFilter = newFilter.and(QueryFilter.fromTerm(endTerm));
+  }
+
+  return newFilter;
+};
 
 export const randomColor = (): string => {
   const color = Math.floor(Math.random() * 0xffffff).toString(16);
