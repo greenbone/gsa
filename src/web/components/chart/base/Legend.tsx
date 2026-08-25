@@ -51,10 +51,8 @@ const StyledLegend = styled.div<StyledLegendProps>`
   margin: 10px 5px;
   display: flex;
   flex-direction: column;
-  max-height: ${({$maxHeight}) =>
-    $maxHeight === undefined ? undefined : `${$maxHeight}px`};
-  overflow-y: ${({$maxHeight}) =>
-    $maxHeight === undefined ? undefined : 'auto'};
+  max-height: ${({$maxHeight}) => isDefined($maxHeight) && `${$maxHeight}px`};
+  overflow-y: ${({$maxHeight}) => isDefined($maxHeight) && 'auto'};
   user-select: none;
   color: ${Theme.black};
   opacity: 0.75;

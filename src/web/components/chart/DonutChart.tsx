@@ -4,7 +4,7 @@
  */
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {arc as d3arc, pie as d3pie} from 'd3-shape';
+import {arc as d3arc, pie as d3pie, type PieArcDatum} from 'd3-shape';
 import styled from 'styled-components';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
@@ -108,7 +108,9 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
     .value(d => d.value)
     .padAngle(0.03);
   const arcs = pie(data).sort((a, b) => (a.startAngle > b.startAngle ? -1 : 1));
-  const arc = d3arc().innerRadius(innerRadiusX).outerRadius(outerRadiusX);
+  const arc = d3arc<unknown, PieArcDatum<TData>>()
+    .innerRadius(innerRadiusX)
+    .outerRadius(outerRadiusX);
 
   return (
     <StyledLayout align={['start', 'start']}>

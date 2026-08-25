@@ -38,10 +38,7 @@ const resolveLabelPositions = <TData extends LabelData>(
   arcs: PieArcDatum<TData>[],
   outerRadius: number,
 ): LabelPosition[] => {
-  const outerArc = d3arc<{
-    startAngle: number;
-    endAngle: number;
-  }>()
+  const outerArc = d3arc<unknown, PieArcDatum<TData>>()
     .innerRadius(outerRadius + LABEL_RADIUS_OFFSET)
     .outerRadius(outerRadius + LABEL_RADIUS_OFFSET);
   const positions = arcs.map(currentArc => ({
@@ -85,10 +82,10 @@ const Labels = <TData extends LabelData = LabelData>({
     <Group left={centerX} top={centerY}>
       {arcs.map((currentArc, index) => {
         const arcData = currentArc.data;
-        const arc = d3arc()
+        const arc = d3arc<unknown, PieArcDatum<TData>>()
           .innerRadius(innerRadiusX ?? 0)
           .outerRadius(outerRadiusX);
-        const outerArc = d3arc()
+        const outerArc = d3arc<unknown, PieArcDatum<TData>>()
           .innerRadius(outerRadiusX + LABEL_RADIUS_OFFSET)
           .outerRadius(outerRadiusX + LABEL_RADIUS_OFFSET);
         const arcPoint = arc.centroid(currentArc);

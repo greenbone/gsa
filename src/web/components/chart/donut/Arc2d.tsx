@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {arc as d3arc} from 'd3-shape';
+import {arc as d3arc, type DefaultArcObject} from 'd3-shape';
 import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
@@ -47,12 +47,17 @@ const Arc2d = <TData extends Arc2dData = Arc2dData>({
     isDefined(outerRadius) &&
     isDefined(startAngle) &&
     isDefined(endAngle);
-  const renderArc = (radius: number) =>
-    d3arc()
+  const renderArc = (radius: number, startAngle: number, endAngle: number) =>
+    d3arc<unknown, DefaultArcObject>()
       .innerRadius(innerRadius ?? 0)
       .outerRadius(radius)
       .padAngle(0.03)
-      .cornerRadius(4)({startAngle, endAngle});
+      .cornerRadius(4)({
+      innerRadius: 0,
+      outerRadius: radius,
+      startAngle,
+      endAngle,
+    });
   return (
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
@@ -69,7 +74,11 @@ const Arc2d = <TData extends Arc2dData = Arc2dData>({
           }}
         >
           <path
-            d={String(hasD3Geometry ? renderArc(outerRadius as number) : path)}
+            d={String(
+              hasD3Geometry
+                ? renderArc(outerRadius, startAngle, endAngle)
+                : path,
+            )}
             fill={String(color)}
           />
           <circle // used as positioning ref for tooltips

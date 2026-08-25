@@ -91,8 +91,8 @@ describe('Labels', () => {
 
   test('should render external labels with accessible typography', () => {
     renderLabels([
-      {color: '#C12C30', toolTip: 'Dark section', value: 50},
-      {color: '#F3B865', toolTip: 'Light section', value: 50},
+      {toolTip: 'Dark section', value: 50},
+      {toolTip: 'Light section', value: 50},
     ]);
 
     screen.getAllByText('50').forEach(label => {
