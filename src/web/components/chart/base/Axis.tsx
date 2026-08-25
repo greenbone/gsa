@@ -14,6 +14,7 @@ import {
 import {format as d3format} from 'd3-format';
 import type {ScaleBand, ScaleLinear, ScaleTime} from 'd3-scale';
 import {select} from 'd3-selection';
+import {isDefined} from 'gmp/utils/identity';
 import Theme from 'web/utils/theme';
 
 type AxisDomainValue = string | number | Date;
@@ -26,18 +27,29 @@ type SupportedScale =
 
 interface AxisProps {
   dataTestId?: string;
+  // Whether to hide the axis line (domain). Defaults to false.
   hideDomain?: boolean;
+  // Whether to hide the tick labels. Defaults to false.
   hideTickLabels?: boolean;
   label?: string;
+  // offset of the axis label from the axis line, in pixels. Defaults to 25 for horizontal axes and 36 for vertical axes.
   labelOffset?: number;
   left?: number;
   orientation?: 'bottom' | 'top' | 'left' | 'right';
+  // number of ticks to display on the axis. If not provided, the axis will automatically determine the number of ticks based on the scale and available space.
   numTicks?: number;
   scale: SupportedScale;
+  // padding between the axis line ticks and the tick labels, in pixels. Defaults to 10.
   rangePadding?: number;
+  // rotation of the tick labels, in degrees. Defaults to 0 (no rotation).
   tickLabelRotation?: number;
+  // function to format the tick labels. If not provided, the axis will use a default formatting based on the scale type.
   tickFormat?: (value: AxisDomainValue) => string;
+  // array of values to use for the axis ticks. If not provided, the axis will automatically generate tick values based on the scale and numTicks.
+  // If provided, the axis will only display ticks for the specified values.
+  // Overrides numTicks and tickFormat if provided.
   tickValues?: AxisDomainValue[];
+  // length of the axis ticks, in pixels. Defaults to 8.
   tickLength?: number;
   top?: number;
 }
@@ -87,11 +99,11 @@ const Axis = ({
     );
     generator.tickSize(tickLength);
 
-    if (numTicks !== undefined) {
+    if (isDefined(numTicks)) {
       generator.ticks(numTicks);
     }
 
-    if (rangePadding !== undefined) {
+    if (isDefined(rangePadding)) {
       // Keep compatibility with the old visx prop using the nearest d3-axis equivalent.
       generator.tickPadding(rangePadding);
     }

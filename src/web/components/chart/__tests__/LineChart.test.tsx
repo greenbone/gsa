@@ -54,6 +54,39 @@ describe('LineChart tests', () => {
     ).toBeInTheDocument();
   });
 
+  test('should apply x-axis label offset and tick label rotation', () => {
+    const {render} = rendererWith();
+
+    render(
+      <LineChart
+        data={[
+          {x: 1, y: 10, y2: 3},
+          {x: 2, y: 20, y2: 4},
+        ]}
+        height={300}
+        showLegend={false}
+        width={900}
+        xAxisLabel="X"
+        xAxisLabelOffset={30}
+        xAxisLabelRotation={-20}
+        yLine={{color: '#00aa00', label: 'First'}}
+      />,
+    );
+
+    const mainContainer = screen.getByTestId('main-container');
+    const axisLabels = Array.from(
+      mainContainer.querySelectorAll('.axis-label'),
+    );
+    const xAxisLabel = axisLabels.find(label => label.textContent === 'X');
+    const xAxisTick = Array.from(
+      mainContainer.querySelectorAll('.axis-tick text'),
+    ).find(tick => tick.hasAttribute('transform'));
+
+    expect(xAxisLabel).toHaveAttribute('y', '48');
+    expect(xAxisTick).toHaveAttribute('transform', 'rotate(-20)');
+    expect(xAxisTick).toHaveAttribute('text-anchor', 'end');
+  });
+
   test('should keep the hover info box within the plot bounds', () => {
     const {render} = rendererWith();
 
