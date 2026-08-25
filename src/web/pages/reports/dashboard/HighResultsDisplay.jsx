@@ -8,7 +8,7 @@ import {_, _l} from 'gmp/locale/lang';
 import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseInt, parseFloat, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import LineChart from 'web/components/chart/base/Line';
+import LineChart from 'web/components/chart/LineChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';

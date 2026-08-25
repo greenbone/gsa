@@ -7,7 +7,7 @@ import {useCallback} from 'react';
 import {isDate} from 'gmp/models/date';
 import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import LineChart, {type LineData} from 'web/components/chart/base/Line';
+import LineChart, {type LineData} from 'web/components/chart/LineChart';
 import transformCreated, {
   type CreatedData,
   type CreatedDataPoint,

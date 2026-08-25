@@ -6,7 +6,7 @@
 import {type Date} from 'gmp/models/date';
 import {parseInt, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import {type LineData} from 'web/components/chart/base/Line';
+import {type LineData} from 'web/components/chart/LineChart';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 export interface CreatedDataGroup {
