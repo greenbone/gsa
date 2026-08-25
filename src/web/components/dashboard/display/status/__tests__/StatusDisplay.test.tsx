@@ -11,14 +11,12 @@ import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay
 
 interface DonutProbeProps {
   data?: Array<{filterValue?: string}>;
-  show3d?: boolean;
   onDataClick?: (data: {filterValue?: string}) => void;
 }
 
 vi.mock('web/components/chart/DonutChart', () => ({
-  default: ({data = [], onDataClick, show3d}: DonutProbeProps) => (
+  default: ({data = [], onDataClick}: DonutProbeProps) => (
     <div>
-      <span data-testid="show-3d">{String(show3d)}</span>
       <span data-testid="data-count">{data.length}</span>
       <button
         data-testid="data-click"
@@ -38,27 +36,26 @@ const createProps = (overrides = {}) => ({
   height: 100,
   icons: () => null,
   id: 'status-display',
-  initialState: {show3d: true},
+  initialState: {},
   onRemoveClick: () => {},
   onSelectFilterClick: () => {},
   children: () => null,
-  setState: () => ({show3d: true}),
+  setState: () => ({}),
   showCsvDownload: false,
   showFilterSelection: false,
   showFilterString: false,
   showSvgDownload: false,
   showToggleLegend: true,
-  state: {show3d: true},
+  state: {},
   title: ({data}) => `Status (${data.length})`,
   width: 200,
   ...overrides,
 });
 
 describe('StatusDisplay', () => {
-  test('should render the donut with 3D enabled and transformed data', () => {
+  test('should render the donut with transformed data', () => {
     render(<StatusDisplay {...createProps()} />);
 
-    expect(screen.getByTestId('show-3d')).toHaveTextContent('true');
     expect(screen.getByTestId('data-count')).toHaveTextContent('1');
   });
 

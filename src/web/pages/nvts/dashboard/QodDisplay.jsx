@@ -13,7 +13,7 @@ import {isDefined} from 'gmp/utils/identity';
 import DonutChart from 'web/components/chart/DonutChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
-import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';
+import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {
   totalCount,
@@ -86,10 +86,8 @@ export class NvtsQodDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformQodData}
-            icons={renderDonutChartIcons}
-            initialState={{
-              show3d: true,
-            }}
+            icons={DataDisplayIcons}
+            initialState={{}}
             title={({data: tdata}) =>
               _('NVTs by QoD (Total: {{count}})', {count: tdata.total})
             }
@@ -98,7 +96,6 @@ export class NvtsQodDisplay extends React.Component {
               <DonutChart
                 data={tdata}
                 height={height}
-                show3d={state.show3d}
                 showLegend={state.showLegend}
                 svgRef={svgRef}
                 width={width}

@@ -9,7 +9,7 @@ import {type TranslateFunc} from 'gmp/locale';
 import date, {type Date as GmpDate} from 'gmp/models/date';
 import {shorten} from 'gmp/utils/string';
 import Axis from 'web/components/chart/base/Axis';
-import EmptyChart from 'web/components/chart/base/EmptyChart';
+import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
@@ -59,7 +59,7 @@ const ONE_DAY = 60 * 60 * 24;
 const margin = {
   top: 30,
   right: 40,
-  bottom: 40,
+  bottom: 60,
   left: 60,
   triangle: 10,
 } as const;
@@ -229,13 +229,12 @@ const ScheduleChart = ({
         height={height}
         width={width}
       >
-        {data.length === 0 ? (
-          <EmptyChart
-            data-testid="schedule-chart-empty"
-            height={height}
-            width={width}
-          />
-        ) : (
+        <ChartWithEmptyState
+          data-testid="schedule-chart-empty"
+          height={height}
+          isEmpty={data.length === 0}
+          width={width}
+        >
           <>
             <Group left={marginLeft} top={margin.top}>
               <Axis
@@ -331,7 +330,7 @@ const ScheduleChart = ({
               ))}
             </Group>
           </>
-        )}
+        </ChartWithEmptyState>
       </Svg>
     </Layout>
   );

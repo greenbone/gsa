@@ -5,15 +5,23 @@
 
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
+import {pie as d3pie} from 'd3-shape';
 import Labels from 'web/components/chart/donut/Labels';
+
+const createArcs = (data: Array<{value: number; toolTip: string}>) =>
+  d3pie<{value: number; toolTip: string}>()
+    .sortValues(null)
+    .value(d => d.value)
+    .padAngle(0.03)(data)
+    .sort((a, b) => (a.startAngle > b.startAngle ? -1 : 1));
 
 const renderLabels = (data: Array<{value: number; toolTip: string}>) => {
   const {render} = rendererWith();
   render(
     <Labels
+      arcs={createArcs(data)}
       centerX={150}
       centerY={150}
-      data={data}
       innerRadiusX={20}
       innerRadiusY={20}
       outerRadiusX={100}
@@ -58,9 +66,9 @@ describe('Labels', () => {
     const {render} = rendererWith();
     render(
       <Labels
+        arcs={createArcs([{toolTip: 'Single slice', value: 100}])}
         centerX={150}
         centerY={150}
-        data={[{toolTip: 'Single slice', value: 100}]}
         innerRadiusX={191}
         innerRadiusY={191}
         outerRadiusX={294}

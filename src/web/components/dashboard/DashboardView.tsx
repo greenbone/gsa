@@ -4,7 +4,6 @@
  */
 
 import {useCallback, useEffect, useMemo, useRef} from 'react';
-import {Skeleton} from '@mantine/core';
 import styled from 'styled-components';
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import Logger from 'gmp/log';
@@ -30,6 +29,7 @@ import {
   type GridItem,
 } from 'web/components/dashboard/utils';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
+import Loading from 'web/components/loading/Loading';
 import SortableGrid, {
   type SortableGridRow,
 } from 'web/components/sortable/SortableGrid';
@@ -78,10 +78,11 @@ export const DEFAULT_MAX_ROWS = 4;
 
 const log = Logger.getLogger('web.components.dashboard');
 
-const RowPlaceHolder = styled.div`
+const RowPlaceHolder = styled.div<{$height: number}>`
   display: flex;
   flex-grow: 1;
-  height: ${DEFAULT_ROW_HEIGHT};
+  width: 100%;
+  height: ${props => props.$height}px;
   justify-content: center;
   align-items: center;
   margin: 15px 0;
@@ -284,7 +285,7 @@ const DashboardView = ({
 
   if (isDefined(error) && !isLoading) {
     return (
-      <RowPlaceHolder>
+      <RowPlaceHolder $height={DEFAULT_ROW_HEIGHT}>
         {_('Could not load dashboard settings. Reason: {{error}}', {
           error: error.message,
         })}
@@ -293,9 +294,10 @@ const DashboardView = ({
   }
 
   if (!isDefined(rows) && (isLoading || !isDefined(settings))) {
+    const loadingRowCount = Math.max(defaultDisplays?.length ?? 0, 1);
     return (
-      <RowPlaceHolder>
-        <Skeleton data-testid="loading" height="100%" width="100%" />
+      <RowPlaceHolder $height={loadingRowCount * DEFAULT_ROW_HEIGHT}>
+        <Loading />
       </RowPlaceHolder>
     );
   }

@@ -64,7 +64,7 @@ describe('DonutChart', () => {
   test('should render section values and flat arcs', () => {
     const {render} = rendererWith();
 
-    render(<DonutChart data={data} height={300} show3d={false} width={400} />);
+    render(<DonutChart data={data} height={300} width={400} />);
 
     const svg = screen.getByTestId('donut-chart-svg');
     expect(svg).toHaveTextContent('10');
@@ -112,7 +112,6 @@ describe('DonutChart', () => {
       <DonutChart
         data={data}
         height={300}
-        show3d={false}
         width={400}
         onDataClick={onDataClick}
       />,

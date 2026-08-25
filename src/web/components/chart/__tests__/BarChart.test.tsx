@@ -92,6 +92,39 @@ describe('BarChart', () => {
     expect(verticalYAxis).toHaveTextContent('10');
   });
 
+  test('should render long categories on the y-axis automatically', () => {
+    const crowdedData = Array.from({length: 8}, (_, index) => ({
+      color: '#008000',
+      x: `Very long category ${index + 1}`,
+      y: index + 1,
+    }));
+    const {render} = rendererWith();
+
+    render(
+      <BarChart
+        data={crowdedData}
+        height={300}
+        width={360}
+        xLabel="Value"
+        yLabel="Category"
+      />,
+    );
+
+    const xAxis = screen.getByTestId('bar-chart-x-axis');
+    const yAxis = screen.getByTestId('bar-chart-y-axis');
+    const tickLabel = yAxis.querySelector('.tick text');
+
+    expect(yAxis).toHaveTextContent('Very long category 1');
+    expect(yAxis.querySelector('.axis-label')).toHaveTextContent('Category');
+    expect(yAxis.querySelector('.axis-label')).toHaveAttribute(
+      'transform',
+      'translate(-145, 110) rotate(-90)',
+    );
+    expect(tickLabel).not.toHaveAttribute('transform');
+    expect(xAxis).toHaveTextContent('0');
+    expect(xAxis).not.toHaveTextContent('Very long category 1');
+  });
+
   test('should render horizontal bars', () => {
     const {render} = rendererWith();
     render(<BarChart horizontal data={data} height={300} width={900} />);

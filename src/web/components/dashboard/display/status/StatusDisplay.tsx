@@ -13,15 +13,13 @@ import DataDisplay, {
   type DataDisplayProps,
   type State,
 } from 'web/components/dashboard/display/DataDisplay';
-import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';
+import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 
 interface StatusData extends DonutChartData {
   filterValue?: string;
 }
 
-interface StatusState extends State {
-  show3d: boolean;
-}
+type StatusState = State;
 
 interface StatusDisplayProps<TData = unknown> extends DataDisplayProps<
   TData,
@@ -64,16 +62,13 @@ const StatusDisplay = <TData,>({
     <DataDisplay<TData, StatusDisplayProps<TData>, StatusState, StatusData>
       {...props}
       filter={filter}
-      icons={renderDonutChartIcons}
-      initialState={{
-        show3d: true,
-      }}
+      icons={DataDisplayIcons}
+      initialState={{}}
     >
       {({width, height, data: tdata, svgRef, state}) => (
         <DonutChart<StatusData>
           data={tdata}
           height={height}
-          show3d={state.show3d}
           showLegend={state.showLegend}
           svgRef={svgRef}
           width={width}

@@ -13,6 +13,9 @@ import {isArray, isDefined} from 'gmp/utils/identity';
 
 interface DisplayState {
   showLegend?: boolean;
+}
+
+interface LegacyDisplayState extends DisplayState {
   show3d?: boolean;
 }
 
@@ -85,6 +88,55 @@ const convertLoadedSettings = <
   };
 };
 
+const normalizeDashboardSetting = (
+  setting: DashboardSetting,
+): DashboardSetting => ({
+  ...setting,
+  rows: setting.rows?.map(row => ({
+    ...row,
+    items: row.items.map(({state, ...display}) => ({
+      ...display,
+      state:
+        state &&
+        (({show3d: _show3d, ...supportedState}: LegacyDisplayState) =>
+          supportedState)(state),
+    })),
+  })),
+});
+
+const isDashboardSettings = (
+  settings: DashboardSetting | DashboardSettings,
+): settings is DashboardSettings =>
+  'byId' in settings || 'dashboards' in settings || 'defaults' in settings;
+
+const normalizeDashboardSettings = (
+  settings: DashboardSetting | DashboardSettings,
+): DashboardSetting | DashboardSettings => {
+  if (!isDashboardSettings(settings)) {
+    return normalizeDashboardSetting(settings);
+  }
+
+  return {
+    ...settings,
+    byId:
+      settings.byId &&
+      Object.fromEntries(
+        Object.entries(settings.byId).map(([id, setting]) => [
+          id,
+          normalizeDashboardSetting(setting),
+        ]),
+      ),
+    defaults:
+      settings.defaults &&
+      Object.fromEntries(
+        Object.entries(settings.defaults).map(([id, setting]) => [
+          id,
+          normalizeDashboardSetting(setting),
+        ]),
+      ),
+  };
+};
+
 class DashboardCommand extends HttpCommand {
   async getSetting(id: string) {
     const response = await this.httpGetWithTransform({
@@ -121,7 +173,7 @@ class DashboardCommand extends HttpCommand {
 
     await this.httpPostWithTransform({
       setting_id: id,
-      setting_value: JSON.stringify(settings),
+      setting_value: JSON.stringify(normalizeDashboardSettings(settings)),
       cmd: 'save_setting',
     });
   }

@@ -63,6 +63,11 @@ describe('ScheduleChart component tests', () => {
       'transform',
       'rotate(-30)',
     );
+
+    const bottomAxis = Array.from(chart.querySelectorAll('g')).find(
+      group => group.getAttribute('transform') === 'translate(0, 210)',
+    );
+    expect(bottomAxis).toBeDefined();
   });
 
   test('should render duration and period schedules with future-run markers', () => {

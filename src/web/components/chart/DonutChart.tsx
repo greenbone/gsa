@@ -6,7 +6,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {arc as d3arc, pie as d3pie} from 'd3-shape';
 import styled from 'styled-components';
-import EmptyChart from 'web/components/chart/base/EmptyChart';
+import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import Legend, {
   type LegendData,
@@ -28,7 +28,6 @@ interface DonutChartProps<TData extends DonutChartData> {
   data?: TData[];
   innerRadius?: number;
   svgRef?: React.RefObject<SVGSVGElement | null>;
-  show3d?: boolean;
   showLegend?: boolean;
   onDataClick?: (data: TData) => void;
   onLegendItemClick?: (item: TData) => void;
@@ -54,7 +53,6 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
   innerRadius = DEFAULT_INNER_RADIUS,
   height,
   svgRef,
-  show3d = false,
   showLegend = true,
   width: propWidth,
   onDataClick,
@@ -109,12 +107,8 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
     .sortValues(null)
     .value(d => d.value)
     .padAngle(0.03);
-  const arcs = pie(data).sort((a, b) =>
-    a.startAngle > b.startAngle ? -1 : 1,
-  );
-  const arc = d3arc()
-    .innerRadius(innerRadiusX)
-    .outerRadius(outerRadiusX);
+  const arcs = pie(data).sort((a, b) => (a.startAngle > b.startAngle ? -1 : 1));
+  const arc = d3arc().innerRadius(innerRadiusX).outerRadius(outerRadiusX);
 
   return (
     <StyledLayout align={['start', 'start']}>
@@ -124,44 +118,43 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
         height={height}
         width={chartWidth}
       >
-        {data.length > 0 ? (
+        <ChartWithEmptyState
+          data-testid="donut-chart-empty"
+          height={height}
+          isEmpty={data.length === 0}
+          width={chartWidth}
+        >
           <>
             <Group left={centerX} top={centerY}>
               {arcs.map((currentArc, index) => {
                 const [x, y] = arc.centroid(currentArc);
                 return (
-                <Arc2d
-                  key={`${currentArc.startAngle}-${currentArc.endAngle}`}
-                  data={currentArc.data}
-                  endAngle={currentArc.endAngle}
-                  innerRadius={innerRadiusX}
-                  outerRadius={outerRadiusX}
-                  startAngle={currentArc.startAngle}
-                  x={x}
-                  y={y}
-                  {...donutProps}
-                  onDataClick={onDataClick}
-                />
+                  <Arc2d
+                    key={`${currentArc.startAngle}-${currentArc.endAngle}`}
+                    data={currentArc.data}
+                    endAngle={currentArc.endAngle}
+                    innerRadius={innerRadiusX}
+                    outerRadius={outerRadiusX}
+                    startAngle={currentArc.startAngle}
+                    x={x}
+                    y={y}
+                    {...donutProps}
+                    onDataClick={onDataClick}
+                  />
                 );
               })}
             </Group>
             <Labels
+              arcs={arcs}
               centerX={centerX}
               centerY={centerY}
-              data={data}
               innerRadiusX={innerRadiusX}
               innerRadiusY={innerRadiusX}
               outerRadiusX={outerRadiusX}
               outerRadiusY={outerRadiusX}
             />
           </>
-        ) : (
-          <EmptyChart
-            data-testid="donut-chart-empty"
-            height={height}
-            width={chartWidth}
-          />
-        )}
+        </ChartWithEmptyState>
       </Svg>
       {data.length > 0 && showLegend && (
         <Legend<TData>

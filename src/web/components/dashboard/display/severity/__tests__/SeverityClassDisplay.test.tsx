@@ -14,13 +14,11 @@ import SeverityClassDisplay from 'web/components/dashboard/display/severity/Seve
 interface DonutProbeProps {
   data?: SeverityClassData[];
   onDataClick?: (data: SeverityClassData) => void;
-  show3d?: boolean;
 }
 
 vi.mock('web/components/chart/DonutChart', () => ({
-  default: ({data = [], onDataClick, show3d}: DonutProbeProps) => (
+  default: ({data = [], onDataClick}: DonutProbeProps) => (
     <div>
-      <span data-testid="show-3d">{String(show3d)}</span>
       <span data-testid="data-count">{data.length}</span>
       <button
         data-testid="data-click"
@@ -51,27 +49,26 @@ const createProps = (overrides = {}) => ({
   height: 100,
   icons: () => null,
   id: 'severity-display',
-  initialState: {show3d: true},
+  initialState: {},
   onSelectFilterClick: () => {},
   children: () => null,
-  setState: () => ({show3d: true}),
+  setState: () => ({}),
   showCsvDownload: false,
   showFilterSelection: false,
   showFilterString: false,
   showSvgDownload: false,
   showToggleLegend: true,
-  state: {show3d: true},
+  state: {},
   title: ({data}: {data: SeverityClassData[]}) => `Severity (${data.length})`,
   width: 200,
   ...overrides,
 });
 
 describe('SeverityClassDisplay', () => {
-  test('should render the donut with transformed data and 3D enabled', () => {
+  test('should render the donut with transformed data', () => {
     const {render} = rendererWith({gmp: createGmp()});
     render(<SeverityClassDisplay {...createProps()} />);
 
-    expect(screen.getByTestId('show-3d')).toHaveTextContent('true');
     expect(screen.getByTestId('data-count')).toHaveTextContent('1');
   });
 

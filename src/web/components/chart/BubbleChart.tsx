@@ -5,7 +5,7 @@
 
 import {pack, hierarchy} from 'd3-hierarchy';
 import {isDefined} from 'gmp/utils/identity';
-import EmptyChart from 'web/components/chart/base/EmptyChart';
+import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg from 'web/components/chart/base/Svg';
@@ -66,8 +66,13 @@ const BubbleChart = ({
         left={margin.left}
         top={margin.top}
       >
-        {hasBubbles ? (
-          nodes.map((node, i) => {
+        <ChartWithEmptyState
+          data-testid="bubble-chart-empty"
+          height={maxHeight}
+          isEmpty={!hasBubbles}
+          width={maxWidth}
+        >
+          {nodes.map((node, i) => {
             const {data: d, x, y, r} = node;
             return (
               <ToolTip key={d.label} content={d.toolTip}>
@@ -108,14 +113,8 @@ const BubbleChart = ({
                 }}
               </ToolTip>
             );
-          })
-        ) : (
-          <EmptyChart
-            data-testid="bubble-chart-empty"
-            height={maxHeight}
-            width={maxWidth}
-          />
-        )}
+          })}
+        </ChartWithEmptyState>
       </Group>
     </Svg>
   );

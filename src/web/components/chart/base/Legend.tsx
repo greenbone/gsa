@@ -89,10 +89,7 @@ const Legend = <TData extends LegendData = LegendData>({
   onItemClick,
   legendRef,
 }: LegendProps<TData>) => (
-  <StyledLegend
-    ref={legendRef as Ref<HTMLDivElement>}
-    $maxHeight={maxHeight}
-  >
+  <StyledLegend ref={legendRef as Ref<HTMLDivElement>} $maxHeight={maxHeight}>
     {data.map(d => (
       <ToolTip key={d.label} content={d.toolTip}>
         {({targetRef, hide, show}) =>
