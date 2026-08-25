@@ -5,9 +5,9 @@
 
 import {describe, test, testing, expect} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
-import LineChart from 'web/components/chart/base/Line';
+import LineChart from 'web/components/chart/LineChart';
 
-describe('Line chart integration tests', () => {
+describe('LineChart tests', () => {
   test('should render a clear empty state when there is no data', () => {
     const {render} = rendererWith();
 

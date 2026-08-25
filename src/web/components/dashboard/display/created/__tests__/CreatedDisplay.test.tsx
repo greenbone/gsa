@@ -15,7 +15,7 @@ import {fireEvent, render, screen} from 'web/testing';
 import {vi} from 'vitest';
 import date from 'gmp/models/date';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import {type LineData} from 'web/components/chart/base/Line';
+import {type LineData} from 'web/components/chart/LineChart';
 import transformCreated, {
   type CreatedDataPoint,
 } from 'web/components/dashboard/display/created/created-transform';
@@ -33,7 +33,7 @@ let selectSameDate = false;
 const startDate = date('2024-01-15T12:00:00Z');
 const endDate = date('2024-01-16T12:00:00Z');
 
-vi.mock('web/components/chart/base/Line', () => ({
+vi.mock('web/components/chart/LineChart', () => ({
   default: ({
     data = [],
     onRangeSelected,
