@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import Loader, {
-  loadFunc,
-  loaderPropTypes,
-} from 'web/components/dashboard/display/Loader';
+import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
 
 const TLS_CERTIFICATES_STATUS = 'tls-certificates-status';
 const TLS_CERTIFICATES_MODIFIED = 'tls-certificates-modification-time';
 
-const tlsCertificatesStatusLoader = loadFunc(
+const tlsCertificatesStatusLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.tlscertificates
       .getAll({
@@ -26,16 +22,14 @@ export const TlsCertificatesStatusLoader = ({children, filter}) => (
   <Loader
     dataId={TLS_CERTIFICATES_STATUS}
     filter={filter}
-    load={tlsCertificatesStatusLoader}
+    load={tlsCertificatesStatusLoadFunc}
     subscriptions={['tlscertificates.timer', 'tlscertificates.changed']}
   >
     {children}
   </Loader>
 );
 
-TlsCertificatesStatusLoader.propTypes = loaderPropTypes;
-
-export const tlsCertificatesModifiedLoader = loadFunc(
+export const tlsCertificatesModifiedLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.tlscertificates
       .getModifiedAggregates({
@@ -49,11 +43,9 @@ export const TlsCertificatesModifiedLoader = ({filter, children}) => (
   <Loader
     dataId={TLS_CERTIFICATES_MODIFIED}
     filter={filter}
-    load={tlsCertificatesModifiedLoader}
+    load={tlsCertificatesModifiedLoadFunc}
     subscriptions={['tlscertificates.timer', 'tlscertificates.changed']}
   >
     {children}
   </Loader>
 );
-
-TlsCertificatesModifiedLoader.propTypes = loaderPropTypes;

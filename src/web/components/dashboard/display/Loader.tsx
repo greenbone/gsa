@@ -70,7 +70,7 @@ export const loaderPropTypes = {
   filter: PropTypes.filter,
 };
 
-export const loadFunc =
+export const createLoadFunc =
   <TProps extends LoadFuncProps, TData>(
     func: (props: TProps) => Promise<TData>,
     id: string,

@@ -5,8 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
+import type Gmp from 'gmp/gmp';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import {Loader, loadFunc} from 'web/components/dashboard/display/Loader';
+import {
+  Loader,
+  createLoadFunc,
+  type LoadFuncProps,
+} from 'web/components/dashboard/display/Loader';
 import {
   DASHBOARD_DATA_LOADING_REQUEST,
   DASHBOARD_DATA_LOADING_SUCCESS,
@@ -14,9 +19,13 @@ import {
 } from 'web/store/dashboard/data/actions';
 import {filterIdentifier} from 'web/store/utils';
 
-const createState = (
-  state: Record<string, Record<string, {isLoading: boolean}>>,
-) => ({
+interface TestData {
+  foo: string;
+}
+
+type TestState = Record<string, Record<string, {isLoading: boolean}>>;
+
+const createState = (state: TestState): {dashboardData: TestState} => ({
   dashboardData: {
     ...state,
   },
@@ -248,25 +257,26 @@ describe('Loader component tests', () => {
   });
 });
 
-describe('loadFunc tests', () => {
+describe('createLoadFunc tests', () => {
   test('should request dashboard data successfully', () => {
-    const dispatch = testing.fn();
-    const getState = testing.fn();
-    const data = {
+    const data: TestData = {
       foo: 'bar',
     };
-    const func = testing.fn().mockResolvedValue(data);
+    const func = testing.fn((_props: LoadFuncProps): Promise<TestData> =>
+      Promise.resolve(data),
+    );
 
     const id = 'a1';
     const filter = QueryFilter.fromString('foo=bar');
-    const props = {
+    const props: LoadFuncProps = {
       filter,
+      gmp: {} as Gmp,
     };
+    const thunk = createLoadFunc(func, id)(props);
+    const dispatch = testing.fn() as Parameters<typeof thunk>[0];
+    const getState = testing.fn() as Parameters<typeof thunk>[1];
 
-    return loadFunc(
-      func,
-      id,
-    )(props)(dispatch, getState).then(() => {
+    return thunk(dispatch, getState).then(() => {
       expect(getState).toHaveBeenCalled();
       expect(func).toHaveBeenCalledWith(props);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
@@ -294,21 +304,24 @@ describe('loadFunc tests', () => {
         },
       },
     });
-    const dispatch = testing.fn();
-    const getState = testing.fn().mockReturnValue(state);
-    const data = {
+    const data: TestData = {
       foo: 'bar',
     };
-    const func = testing.fn().mockResolvedValue(data);
+    const func = testing.fn((_props: LoadFuncProps): Promise<TestData> =>
+      Promise.resolve(data),
+    );
 
-    const props = {
+    const props: LoadFuncProps = {
       filter,
+      gmp: {} as Gmp,
     };
+    const thunk = createLoadFunc(func, id)(props);
+    const dispatch = testing.fn() as Parameters<typeof thunk>[0];
+    const getState = testing.fn().mockReturnValue(state) as Parameters<
+      typeof thunk
+    >[1];
 
-    return loadFunc(
-      func,
-      id,
-    )(props)(dispatch, getState).then(() => {
+    return thunk(dispatch, getState).then(() => {
       expect(getState).toHaveBeenCalled();
       expect(func).not.toHaveBeenCalled();
       expect(dispatch).not.toHaveBeenCalled();
@@ -318,18 +331,19 @@ describe('loadFunc tests', () => {
   test('should fail loading dashboard data', () => {
     const id = 'a1';
     const filter = QueryFilter.fromString('foo=bar');
-    const dispatch = testing.fn();
-    const getState = testing.fn();
-    const func = testing.fn().mockRejectedValue('An error');
+    const func = testing.fn((_props: LoadFuncProps): Promise<TestData> =>
+      Promise.reject('An error'),
+    );
 
-    const props = {
+    const props: LoadFuncProps = {
       filter,
+      gmp: {} as Gmp,
     };
+    const thunk = createLoadFunc(func, id)(props);
+    const dispatch = testing.fn() as Parameters<typeof thunk>[0];
+    const getState = testing.fn() as Parameters<typeof thunk>[1];
 
-    return loadFunc(
-      func,
-      id,
-    )(props)(dispatch, getState).then(() => {
+    return thunk(dispatch, getState).then(() => {
       expect(getState).toHaveBeenCalled();
       expect(func).toHaveBeenCalledWith(props);
       expect(dispatch).toHaveBeenNthCalledWith(1, {

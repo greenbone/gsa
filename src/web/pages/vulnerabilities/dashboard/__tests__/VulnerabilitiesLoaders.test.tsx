@@ -9,8 +9,8 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   VULNS_HOSTS,
   VULNS_SEVERITY,
-  vulnerabilitiesHostsLoader,
-  vulnerabilitiesSeverityLoader,
+  vulnerabilitiesHostsLoadFunc,
+  vulnerabilitiesSeverityLoadFunc,
 } from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders';
 import {
   DASHBOARD_DATA_LOADING_ERROR,
@@ -30,11 +30,11 @@ describe('Vulnerabilities Loaders', () => {
   });
 
   test('should export vulnerabilitiesSeverityLoader as a function', () => {
-    expect(typeof vulnerabilitiesSeverityLoader).toBe('function');
+    expect(typeof vulnerabilitiesSeverityLoadFunc).toBe('function');
   });
 
   test('should export vulnerabilitiesHostsLoader as a function', () => {
-    expect(typeof vulnerabilitiesHostsLoader).toBe('function');
+    expect(typeof vulnerabilitiesHostsLoadFunc).toBe('function');
   });
 
   test('vulnerabilitiesSeverityLoader should load and dispatch severity aggregates', () => {
@@ -45,7 +45,7 @@ describe('Vulnerabilities Loaders', () => {
     const dispatch = testing.fn();
     const getState = testing.fn();
 
-    return vulnerabilitiesSeverityLoader({gmp, filter})(
+    return vulnerabilitiesSeverityLoadFunc({gmp, filter})(
       dispatch,
       getState,
     ).then(() => {
@@ -72,7 +72,7 @@ describe('Vulnerabilities Loaders', () => {
     const dispatch = testing.fn();
     const getState = testing.fn();
 
-    return vulnerabilitiesSeverityLoader({gmp, filter})(
+    return vulnerabilitiesSeverityLoadFunc({gmp, filter})(
       dispatch,
       getState,
     ).then(() => {
@@ -93,7 +93,7 @@ describe('Vulnerabilities Loaders', () => {
     const dispatch = testing.fn();
     const getState = testing.fn();
 
-    return vulnerabilitiesHostsLoader({gmp, filter})(dispatch, getState).then(
+    return vulnerabilitiesHostsLoadFunc({gmp, filter})(dispatch, getState).then(
       () => {
         expect(mockGetHostAggregates).toHaveBeenCalledWith({filter});
         expect(dispatch).toHaveBeenNthCalledWith(1, {
@@ -119,7 +119,7 @@ describe('Vulnerabilities Loaders', () => {
     const dispatch = testing.fn();
     const getState = testing.fn();
 
-    return vulnerabilitiesHostsLoader({gmp, filter})(dispatch, getState).then(
+    return vulnerabilitiesHostsLoadFunc({gmp, filter})(dispatch, getState).then(
       () => {
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: DASHBOARD_DATA_LOADING_ERROR,

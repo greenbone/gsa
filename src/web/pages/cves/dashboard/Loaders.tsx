@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import Loader, {
-  loadFunc,
-  loaderPropTypes,
-} from 'web/components/dashboard/display/Loader';
+import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
 
 export const CVES_SEVERITY = 'cves-severity';
 export const CVES_CREATED = 'cves-created';
 
-export const cveCreatedLoader = loadFunc(
+export const cveCreatedLoadFunc = createLoadFunc(
   ({gmp, filter}) => gmp.cves.getCreatedAggregates({filter}).then(r => r.data),
   CVES_CREATED,
 );
@@ -21,16 +17,14 @@ export const CvesCreatedLoader = ({filter, children}) => (
   <Loader
     dataId={CVES_CREATED}
     filter={filter}
-    load={cveCreatedLoader}
+    load={cveCreatedLoadFunc}
     subscriptions={['cves.timer', 'cves.changed']}
   >
     {children}
   </Loader>
 );
 
-CvesCreatedLoader.propTypes = loaderPropTypes;
-
-export const cveSeverityLoader = loadFunc(
+export const cveSeverityLoadFunc = createLoadFunc(
   ({gmp, filter}) => gmp.cves.getSeverityAggregates({filter}).then(r => r.data),
   CVES_SEVERITY,
 );
@@ -39,11 +33,9 @@ export const CvesSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={CVES_SEVERITY}
     filter={filter}
-    load={cveSeverityLoader}
+    load={cveSeverityLoadFunc}
     subscriptions={['cves.timer', 'cves.changed']}
   >
     {children}
   </Loader>
 );
-
-CvesSeverityLoader.propTypes = loaderPropTypes;

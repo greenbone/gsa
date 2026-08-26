@@ -16,7 +16,7 @@ import {
   percent,
 } from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {ReportCompianceLoader} from 'web/pages/reports/auditdashboard/Loaders';
+import {ReportComplianceLoader} from 'web/pages/reports/auditdashboard/Loaders';
 
 const transformStatusData = (data = {}) => {
   const {groups = []} = data;
@@ -51,13 +51,13 @@ export const ReportComplianceDisplay = createDisplay({
       count: tdata.total,
     }),
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,
-  loaderComponent: ReportCompianceLoader,
+  loaderComponent: ReportComplianceLoader,
 });
 
 export const ReportComplianceTableDisplay = createDisplay({
   chartComponent: DataTable,
   displayComponent: DataTableDisplay,
-  loaderComponent: ReportCompianceLoader,
+  loaderComponent: ReportComplianceLoader,
   dataTransform: transformStatusData,
   dataTitles: [_l('Status'), _l('# of Reports')],
   dataRow: row => [row.label, row.value],
