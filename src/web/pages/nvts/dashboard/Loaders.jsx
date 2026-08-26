@@ -7,7 +7,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const NVTS_FAMILY = 'nvt-family';
 export const NVTS_SEVERITY = 'nvt-severity';

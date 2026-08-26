@@ -6,7 +6,7 @@
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const REPORTS_COMPLIANCE = 'reports-compliance';
 

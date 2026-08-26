@@ -7,7 +7,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const TASKS_STATUS = 'tasks-status';
 export const TASKS_SEVERITY = 'tasks-severity';

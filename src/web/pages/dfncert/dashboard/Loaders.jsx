@@ -7,7 +7,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const DFNCERTS_CREATED = 'dfncerts-created';
 export const DFNCERTS_SEVERITY = 'dfncerts-severity';

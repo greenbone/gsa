@@ -4,6 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
+import type Gmp from 'gmp/gmp';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {
   VULNS_HOSTS,
@@ -16,6 +17,8 @@ import {
   DASHBOARD_DATA_LOADING_REQUEST,
   DASHBOARD_DATA_LOADING_SUCCESS,
 } from 'web/store/dashboard/data/actions';
+
+const createGmp = (vulns: Partial<Gmp['vulns']>) => ({vulns}) as unknown as Gmp;
 
 describe('Vulnerabilities Loaders', () => {
   test('should export severity data ID', () => {
@@ -37,11 +40,7 @@ describe('Vulnerabilities Loaders', () => {
   test('vulnerabilitiesSeverityLoader should load and dispatch severity aggregates', () => {
     const data = [{value: 5, count: 10}];
     const mockGetSeverityAggregates = testing.fn().mockResolvedValue({data});
-    const gmp = {
-      vulns: {
-        getSeverityAggregates: mockGetSeverityAggregates,
-      },
-    };
+    const gmp = createGmp({getSeverityAggregates: mockGetSeverityAggregates});
     const filter = QueryFilter.fromString('first=1 rows=10');
     const dispatch = testing.fn();
     const getState = testing.fn();
@@ -68,11 +67,7 @@ describe('Vulnerabilities Loaders', () => {
   test('vulnerabilitiesSeverityLoader should dispatch an error when loading fails', () => {
     const error = new Error('An error');
     const mockGetSeverityAggregates = testing.fn().mockRejectedValue(error);
-    const gmp = {
-      vulns: {
-        getSeverityAggregates: mockGetSeverityAggregates,
-      },
-    };
+    const gmp = createGmp({getSeverityAggregates: mockGetSeverityAggregates});
     const filter = QueryFilter.fromString('first=1 rows=10');
     const dispatch = testing.fn();
     const getState = testing.fn();
@@ -93,11 +88,7 @@ describe('Vulnerabilities Loaders', () => {
   test('vulnerabilitiesHostsLoader should load and dispatch host aggregates', () => {
     const data = [{value: 1, count: 5}];
     const mockGetHostAggregates = testing.fn().mockResolvedValue({data});
-    const gmp = {
-      vulns: {
-        getHostAggregates: mockGetHostAggregates,
-      },
-    };
+    const gmp = createGmp({getHostAggregates: mockGetHostAggregates});
     const filter = QueryFilter.fromString('first=1 rows=10');
     const dispatch = testing.fn();
     const getState = testing.fn();
@@ -123,11 +114,7 @@ describe('Vulnerabilities Loaders', () => {
   test('vulnerabilitiesHostsLoader should dispatch an error when loading fails', () => {
     const error = new Error('An error');
     const mockGetHostAggregates = testing.fn().mockRejectedValue(error);
-    const gmp = {
-      vulns: {
-        getHostAggregates: mockGetHostAggregates,
-      },
-    };
+    const gmp = createGmp({getHostAggregates: mockGetHostAggregates});
     const filter = QueryFilter.fromString('first=1 rows=10');
     const dispatch = testing.fn();
     const getState = testing.fn();

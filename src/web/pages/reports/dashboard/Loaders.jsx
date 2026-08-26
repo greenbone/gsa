@@ -7,7 +7,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const REPORTS_HIGH_RESULTS = 'reports-high-results';
 export const REPORTS_SEVERITY = 'reports-severity';

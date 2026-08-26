@@ -7,7 +7,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const OVERRIDES_ACTIVE_DAYS = 'overrides-active-days';
 export const OVERRIDES_CREATED = 'overrides-created';
