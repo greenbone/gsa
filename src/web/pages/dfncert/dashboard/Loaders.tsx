@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import Loader, {
-  loadFunc,
-  loaderPropTypes,
-} from 'web/components/dashboard/display/Loader';
+import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
 
 export const DFNCERTS_CREATED = 'dfncerts-created';
 export const DFNCERTS_SEVERITY = 'dfncerts-severity';
 
-export const dfnCertsCreatedLoader = loadFunc(
+export const dfnCertsCreatedLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.dfncerts.getCreatedAggregates({filter}).then(r => r.data),
   DFNCERTS_CREATED,
@@ -22,16 +18,14 @@ export const DfnCertsCreatedLoader = ({filter, children}) => (
   <Loader
     dataId={DFNCERTS_CREATED}
     filter={filter}
-    load={dfnCertsCreatedLoader}
+    load={dfnCertsCreatedLoadFunc}
     subscriptions={['dfncerts.timer', 'dfncerts.changed']}
   >
     {children}
   </Loader>
 );
 
-DfnCertsCreatedLoader.propTypes = loaderPropTypes;
-
-export const dfnCertSeverityLoader = loadFunc(
+export const dfnCertSeverityLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.dfncerts.getSeverityAggregates({filter}).then(r => r.data),
   DFNCERTS_SEVERITY,
@@ -41,11 +35,9 @@ export const DfnCertSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={DFNCERTS_SEVERITY}
     filter={filter}
-    load={dfnCertSeverityLoader}
+    load={dfnCertSeverityLoadFunc}
     subscriptions={['dfncerts.timer', 'dfncerts.changed']}
   >
     {children}
   </Loader>
 );
-
-DfnCertSeverityLoader.propTypes = loaderPropTypes;

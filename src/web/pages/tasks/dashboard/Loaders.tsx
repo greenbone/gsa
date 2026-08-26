@@ -3,29 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import Loader, {
-  loadFunc,
-  loaderPropTypes,
-} from 'web/components/dashboard/display/Loader';
+import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
 
 export const TASKS_STATUS = 'tasks-status';
 export const TASKS_SEVERITY = 'tasks-severity';
 export const TASKS_SCHEDULES = 'tasks-schedules';
 export const TASKS_HIGH_RESULTS = 'tasks-high-results';
 
-export const tasksStatusLoader = loadFunc(
+export const tasksStatusLoadFunc = createLoadFunc(
   ({gmp, filter}) => gmp.tasks.getStatusAggregates({filter}).then(r => r.data),
   TASKS_STATUS,
 );
 
-export const tasksSeverityLoader = loadFunc(
+export const tasksSeverityLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.tasks.getSeverityAggregates({filter}).then(r => r.data),
   TASKS_SEVERITY,
 );
 
-export const tasksSchedulesLoader = loadFunc(
+export const tasksSchedulesLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.tasks
       .getAll({
@@ -40,7 +36,7 @@ export const tasksSchedulesLoader = loadFunc(
 
 const MAX_HIGH_RESULT_TASKS_COUNT = 10;
 
-export const tasksHighResultsLoader = loadFunc(
+export const tasksHighResultsLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.tasks
       .getHighResultsAggregates({
@@ -55,50 +51,42 @@ export const TaskStatusLoader = ({children, filter}) => (
   <Loader
     dataId={TASKS_STATUS}
     filter={filter}
-    load={tasksStatusLoader}
+    load={tasksStatusLoadFunc}
     subscriptions={['tasks.timer', 'tasks.changed']}
   >
     {children}
   </Loader>
 );
-
-TaskStatusLoader.propTypes = loaderPropTypes;
 
 export const TasksSchedulesLoader = ({children, filter}) => (
   <Loader
     dataId={TASKS_SCHEDULES}
     filter={filter}
-    load={tasksSchedulesLoader}
+    load={tasksSchedulesLoadFunc}
     subscriptions={['tasks.timer', 'tasks.changed']}
   >
     {children}
   </Loader>
 );
-
-TasksSchedulesLoader.propTypes = loaderPropTypes;
 
 export const TasksSeverityLoader = ({children, filter}) => (
   <Loader
     dataId={TASKS_SEVERITY}
     filter={filter}
-    load={tasksSeverityLoader}
+    load={tasksSeverityLoadFunc}
     subscriptions={['tasks.timer', 'tasks.changed']}
   >
     {children}
   </Loader>
 );
-
-TasksSeverityLoader.propTypes = loaderPropTypes;
 
 export const TasksHighResultsLoader = ({children, filter}) => (
   <Loader
     dataId={TASKS_HIGH_RESULTS}
     filter={filter}
-    load={tasksHighResultsLoader}
+    load={tasksHighResultsLoadFunc}
     subscriptions={['tasks.timer', 'tasks.changed']}
   >
     {children}
   </Loader>
 );
-
-TasksHighResultsLoader.propTypes = loaderPropTypes;

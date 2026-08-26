@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import Loader, {
-  loadFunc,
-  loaderPropTypes,
-} from 'web/components/dashboard/display/Loader';
+import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
 
 export const OSS_SEVERITY = 'oss-severity';
 export const OSS_VULN_SCORE = 'oss-most-vulnerable';
 const OSS_MAX_GROUPS = 10;
 
-export const osAverageSeverityLoader = loadFunc(
+export const osAverageSeverityLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.operatingsystems
       .getAverageSeverityAggregates({filter})
@@ -25,16 +21,14 @@ export const OsAverageSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={OSS_SEVERITY}
     filter={filter}
-    load={osAverageSeverityLoader}
+    load={osAverageSeverityLoadFunc}
     subscriptions={['operatingsystems.timer', 'operatingsystems.changed']}
   >
     {children}
   </Loader>
 );
 
-OsAverageSeverityLoader.propTypes = loaderPropTypes;
-
-export const osVulnScoreLoader = loadFunc(
+export const osVulnScoreLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.operatingsystems
       .getVulnScoreAggregates({filter, max: OSS_MAX_GROUPS})
@@ -46,11 +40,9 @@ export const OsVulnScoreLoader = ({children, filter}) => (
   <Loader
     dataId={OSS_VULN_SCORE}
     filter={filter}
-    load={osVulnScoreLoader}
-    subscripions={['operatingsystems.timer', 'operatingsystems.changed']}
+    load={osVulnScoreLoadFunc}
+    subscriptions={['operatingsystems.timer', 'operatingsystems.changed']}
   >
     {children}
   </Loader>
 );
-
-OsVulnScoreLoader.propTypes = loaderPropTypes;

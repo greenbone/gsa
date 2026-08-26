@@ -3,18 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import Loader, {
-  loadFunc,
-  loaderPropTypes,
-} from 'web/components/dashboard/display/Loader';
+import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
 
 const TICKETS_LIST = 'tickets-list';
 
 const DEFAULT_FILTER = QueryFilter.fromString('sort-reverse=modified');
 
-const ticketsListLoader = loadFunc(
+const ticketsListLoadFunc = createLoadFunc(
   ({gmp, filter = DEFAULT_FILTER}) =>
     gmp.tickets
       .getAll({
@@ -28,11 +24,9 @@ export const TicketsListLoader = ({children, filter}) => (
   <Loader
     dataId={TICKETS_LIST}
     filter={filter}
-    load={ticketsListLoader}
+    load={ticketsListLoadFunc}
     subscriptions={['tickets.timer', 'tickets.changed']}
   >
     {children}
   </Loader>
 );
-
-TicketsListLoader.propTypes = loaderPropTypes;
