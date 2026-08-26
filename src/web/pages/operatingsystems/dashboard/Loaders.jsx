@@ -7,7 +7,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const OSS_SEVERITY = 'oss-severity';
 export const OSS_VULN_SCORE = 'oss-most-vulnerable';

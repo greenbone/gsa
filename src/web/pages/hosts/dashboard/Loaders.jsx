@@ -10,7 +10,7 @@ import {MAX_HOSTS} from 'web/components/chart/HostsTopologyChart';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const HOSTS_MODIFIED = 'hosts-modified';
 export const HOSTS_SEVERITY = 'hosts-severity';

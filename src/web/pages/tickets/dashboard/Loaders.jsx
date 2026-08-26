@@ -8,7 +8,7 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 const TICKETS_LIST = 'tickets-list';
 

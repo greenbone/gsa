@@ -7,7 +7,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const NOTES_ACTIVE_DAYS = 'notes-active-days';
 export const NOTES_CREATED = 'notes-created';

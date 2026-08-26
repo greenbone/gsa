@@ -7,7 +7,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 const TLS_CERTIFICATES_STATUS = 'tls-certificates-status';
 const TLS_CERTIFICATES_MODIFIED = 'tls-certificates-modification-time';

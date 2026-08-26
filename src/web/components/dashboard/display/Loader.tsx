@@ -4,7 +4,9 @@
  */
 
 import React from 'react';
+import {type Action, type ThunkDispatch} from '@reduxjs/toolkit';
 import {connect} from 'react-redux';
+import {type FilterType} from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {
   receivedDashboardData,
@@ -17,15 +19,62 @@ import PropTypes from 'web/utils/prop-types';
 import withGmp from 'web/utils/withGmp';
 import withSubscription from 'web/utils/withSubscription';
 
+export interface LoaderRenderProps<TData> {
+  data?: TData;
+  isLoading: boolean;
+}
+
+interface LoaderState<TData> {
+  data?: TData;
+}
+
+interface LoaderProps<TData> {
+  dataId: string;
+  filter?: FilterType;
+  subscriptions?: string[];
+  children?: (props: LoaderRenderProps<TData>) => React.ReactNode;
+}
+
+interface LoaderPropsWithLoadFunc<
+  TLoadFuncProps extends LoadFuncProps,
+  TData,
+> extends LoaderProps<TData> {
+  load: (
+    props: TLoadFuncProps & {dataId?: string},
+  ) => (dispatch: LoaderDispatch, getState: GetStateFunc) => Promise<void>;
+}
+
+interface LoaderPropsWithLoad<TData> extends LoaderProps<TData> {
+  data: TData;
+  isLoading: boolean;
+  load: () => void;
+  subscribe: (subscription: string, callback: () => void) => () => void;
+}
+
+export interface LoadFuncProps {
+  filter?: FilterType;
+}
+
+type GetStateFunc = () => unknown;
+
+type LoaderDispatch = ThunkDispatch<
+  Record<string, unknown>,
+  unknown,
+  Action<string>
+>;
+
 export const loaderPropTypes = {
   children: PropTypes.func,
   filter: PropTypes.filter,
 };
 
 export const loadFunc =
-  (func, id) =>
-  ({dataId = id, ...props}) =>
-  (dispatch, getState) => {
+  <TProps extends LoadFuncProps, TData>(
+    func: (props: TProps) => Promise<TData>,
+    id: string,
+  ) =>
+  ({dataId = id, ...props}: TProps & {dataId?: string}) =>
+  (dispatch: LoaderDispatch, getState: GetStateFunc) => {
     const rootState = getState();
     const state = getDashboardData(rootState);
 
@@ -38,16 +87,25 @@ export const loadFunc =
 
     dispatch(requestDashboardData(dataId, filter));
 
-    const promise = func(props);
+    const promise = func(props as TProps);
     return promise.then(
-      data => dispatch(receivedDashboardData(dataId, data, filter)),
-      error => dispatch(receivedDashboardError(dataId, error, filter)),
+      data => {
+        dispatch(receivedDashboardData(dataId, data, filter));
+      },
+      error => {
+        dispatch(receivedDashboardError(dataId, error, filter));
+      },
     );
   };
 
-class Loader extends React.Component {
-  constructor(...args) {
-    super(...args);
+export class Loader<TData> extends React.Component<
+  LoaderPropsWithLoad<TData>,
+  LoaderState<TData>
+> {
+  subscriptions: (() => void)[];
+
+  constructor(props: LoaderPropsWithLoad<TData>) {
+    super(props);
 
     this.subscriptions = [];
 
@@ -56,7 +114,7 @@ class Loader extends React.Component {
     this.load = this.load.bind(this);
   }
 
-  static getDerivedStateFromProps(props) {
+  static getDerivedStateFromProps(props: LoaderPropsWithLoad<unknown>) {
     const {data} = props;
     if (isDefined(data)) {
       // Only update data if data is set and keep latest set data in state.
@@ -101,7 +159,7 @@ class Loader extends React.Component {
     this.props.load();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: LoaderPropsWithLoad<TData>) {
     if (this.props.filter !== prevProps.filter) {
       this.load();
     }
@@ -110,22 +168,14 @@ class Loader extends React.Component {
   render() {
     const {children, isLoading} = this.props;
     const {data} = this.state;
-    return isDefined(children) && children({data, isLoading});
+    return isDefined(children) ? children({data, isLoading}) : null;
   }
 }
 
-Loader.propTypes = {
-  children: PropTypes.func,
-  data: PropTypes.any,
-  dataId: PropTypes.string.isRequired,
-  filter: PropTypes.filter,
-  isLoading: PropTypes.bool.isRequired,
-  load: PropTypes.func.isRequired,
-  subscribe: PropTypes.func.isRequired,
-  subscriptions: PropTypes.arrayOf(PropTypes.string),
-};
-
-const mapStateToProps = (rootState, {dataId, filter}) => {
+const mapStateToProps = (
+  rootState: unknown,
+  {dataId, filter}: {dataId: string; filter: FilterType},
+) => {
   const state = getDashboardData(rootState);
   return {
     data: state.getData(dataId, filter),
@@ -140,5 +190,8 @@ const mapDispatchToProps = (dispatch, {load, ...props}) => ({
 export default compose(
   withGmp,
   withSubscription,
+  // @ts-expect-error
   connect(mapStateToProps, mapDispatchToProps),
-)(Loader);
+)(Loader) as <TLoadFuncProps extends LoadFuncProps, TData>(
+  props: LoaderPropsWithLoadFunc<TLoadFuncProps, TData>,
+) => React.ReactNode;

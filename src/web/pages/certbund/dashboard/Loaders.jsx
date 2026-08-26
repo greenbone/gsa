@@ -7,7 +7,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from 'web/store/dashboard/data/loader';
+} from 'web/components/dashboard/display/Loader';
 
 export const CERTBUNDS_SEVERITY = 'certbunds-severity';
 export const CERTBUNDS_CREATED = 'certbunds-created';
