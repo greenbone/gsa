@@ -307,7 +307,7 @@ describe('useContainerImageTaskDialog', () => {
     expect(result.current.containerImageTaskDialogVisible).toBe(false);
   });
 
-  test('should save existing container image task successfully', async () => {
+  test('should save non-alterable container image task successfully', async () => {
     const saveResponse = {id: 'task-123'};
     const saveContainerImageTask = testing.fn().mockResolvedValue(saveResponse);
     const onContainerSaved = testing.fn();
@@ -355,11 +355,78 @@ describe('useContainerImageTaskDialog', () => {
       comment: 'Updated comment',
       inAssets: true,
       name: 'Updated Task',
+      ociImageTargetId: undefined,
+      scannerId: undefined,
+      alertIds: ['alert-3'],
+      scheduleId: 'schedule-456',
+      alterable: false,
+      applyOverrides: true,
+      autoDelete: AUTO_DELETE_NO,
+      autoDeleteData: 60,
+      minQod: 80,
+      schedulePeriods: false,
+      acceptInvalidCerts: false,
+      registryAllowInsecure: true,
+    });
+
+    expect(onContainerSaved).toHaveBeenCalledWith(saveResponse);
+    expect(onContainerSaveError).not.toHaveBeenCalled();
+    expect(result.current.containerImageTaskDialogVisible).toBe(false);
+  });
+
+  test('should save alterable container image task successfully', async () => {
+    const saveResponse = {id: 'task-123'};
+    const saveContainerImageTask = testing.fn().mockResolvedValue(saveResponse);
+    const onContainerSaved = testing.fn();
+    const onContainerSaveError = testing.fn();
+
+    const gmp = {
+      task: {
+        saveContainerImageTask,
+      },
+    };
+
+    const {renderHook} = rendererWith({gmp, store: true});
+    const {result} = renderHook(() =>
+      useContainerImageTaskDialog({
+        onContainerSaved,
+        onContainerSaveError,
+      }),
+    );
+
+    const taskData = {
+      id: 'task-123',
+      name: 'Updated Task',
+      comment: 'Updated comment',
+      inAssets: true,
       ociImageTargetId: 'target-456',
       scannerId: 'scanner-789',
       alertIds: ['alert-3'],
       scheduleId: 'schedule-456',
-      alterable: false,
+      alterable: true,
+      applyOverrides: true,
+      autoDelete: AUTO_DELETE_NO as typeof AUTO_DELETE_NO,
+      autoDeleteData: 60,
+      minQod: 80,
+      schedulePeriods: false,
+      acceptInvalidCerts: false,
+      registryAllowInsecure: true,
+    };
+
+    await act(async () => {
+      await result.current.handleSaveContainerImageTask(taskData);
+    });
+
+    expect(saveContainerImageTask).toHaveBeenCalledWith({
+      id: 'task-123',
+      comment: 'Updated comment',
+      inAssets: true,
+      name: 'Updated Task',
+      ociImageTargetId: 'target-456',
+      scannerId: 'scanner-789',
+      alertIds: ['alert-3'],
+      scheduleId: 'schedule-456',
+      alterable: true,
       applyOverrides: true,
       autoDelete: AUTO_DELETE_NO,
       autoDeleteData: 60,
