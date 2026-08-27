@@ -8,7 +8,7 @@ import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
 export const VULNS_SEVERITY = 'vulns-severity';
 export const VULNS_HOSTS = 'vulns-hosts';
 
-export const vulnerabilitiesSeverityLoadFunc = createLoadFunc(
+const vulnerabilitiesSeverityLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.vulns.getSeverityAggregates({filter}).then(r => r.data),
   VULNS_SEVERITY,
@@ -25,7 +25,7 @@ export const VulnerabilitiesSeverityLoader = ({filter, children}) => (
   </Loader>
 );
 
-export const vulnerabilitiesHostsLoadFunc = createLoadFunc(
+const vulnerabilitiesHostsLoadFunc = createLoadFunc(
   ({gmp, filter}) => gmp.vulns.getHostAggregates({filter}).then(r => r.data),
   VULNS_HOSTS,
 );

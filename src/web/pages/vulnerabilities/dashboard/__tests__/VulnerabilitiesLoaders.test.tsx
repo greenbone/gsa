@@ -3,22 +3,42 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type {ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
+import {rendererWith, waitFor} from 'web/testing';
 import type Gmp from 'gmp/gmp';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {
+  SubscriptionContext,
+  type SubscribeFunc,
+} from 'web/components/provider/SubscriptionProvider';
+import {
+  VulnerabilitiesHostsLoader,
+  VulnerabilitiesSeverityLoader,
   VULNS_HOSTS,
   VULNS_SEVERITY,
-  vulnerabilitiesHostsLoadFunc,
-  vulnerabilitiesSeverityLoadFunc,
 } from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders';
-import {
-  DASHBOARD_DATA_LOADING_ERROR,
-  DASHBOARD_DATA_LOADING_REQUEST,
-  DASHBOARD_DATA_LOADING_SUCCESS,
-} from 'web/store/dashboard/data/actions';
 
-const createGmp = (vulns: Partial<Gmp['vulns']>) => ({vulns}) as unknown as Gmp;
+const createGmp = (vulns: Partial<Gmp['vulns']>) =>
+  ({vulns}) as unknown as Record<string, unknown>;
+
+const renderWithSubscriptionContext = ({
+  gmp,
+  subscribe,
+  children,
+}: {
+  gmp: Record<string, unknown>;
+  subscribe: SubscribeFunc;
+  children: ReactElement;
+}) => {
+  const {render} = rendererWith({gmp, store: true});
+
+  return render(
+    <SubscriptionContext.Provider value={subscribe}>
+      {children}
+    </SubscriptionContext.Provider>,
+  );
+};
 
 describe('Vulnerabilities Loaders', () => {
   test('should export severity data ID', () => {
@@ -29,105 +49,63 @@ describe('Vulnerabilities Loaders', () => {
     expect(VULNS_HOSTS).toBe('vulns-hosts');
   });
 
-  test('should export vulnerabilitiesSeverityLoader as a function', () => {
-    expect(typeof vulnerabilitiesSeverityLoadFunc).toBe('function');
-  });
-
-  test('should export vulnerabilitiesHostsLoader as a function', () => {
-    expect(typeof vulnerabilitiesHostsLoadFunc).toBe('function');
-  });
-
-  test('vulnerabilitiesSeverityLoader should load and dispatch severity aggregates', () => {
+  test('should load severity aggregates and render them', async () => {
     const data = [{value: 5, count: 10}];
     const mockGetSeverityAggregates = testing.fn().mockResolvedValue({data});
     const gmp = createGmp({getSeverityAggregates: mockGetSeverityAggregates});
     const filter = QueryFilter.fromString('first=1 rows=10');
-    const dispatch = testing.fn();
-    const getState = testing.fn();
+    const subscribe = testing.fn().mockReturnValue(testing.fn());
+    const children = testing.fn().mockReturnValue(null);
 
-    return vulnerabilitiesSeverityLoadFunc({gmp, filter})(
-      dispatch,
-      getState,
-    ).then(() => {
+    renderWithSubscriptionContext({
+      gmp,
+      subscribe,
+      children: (
+        <VulnerabilitiesSeverityLoader filter={filter}>
+          {children}
+        </VulnerabilitiesSeverityLoader>
+      ),
+    });
+
+    await waitFor(() => {
       expect(mockGetSeverityAggregates).toHaveBeenCalledWith({filter});
-      expect(dispatch).toHaveBeenNthCalledWith(1, {
-        type: DASHBOARD_DATA_LOADING_REQUEST,
-        id: VULNS_SEVERITY,
-        filter,
-      });
-      expect(dispatch).toHaveBeenNthCalledWith(2, {
-        type: DASHBOARD_DATA_LOADING_SUCCESS,
-        id: VULNS_SEVERITY,
-        filter,
-        data,
-      });
+      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
     });
+
+    expect(subscribe).toHaveBeenCalledWith('vulns.timer', expect.any(Function));
+    expect(subscribe).toHaveBeenCalledWith(
+      'vulns.changed',
+      expect.any(Function),
+    );
   });
 
-  test('vulnerabilitiesSeverityLoader should dispatch an error when loading fails', () => {
-    const error = new Error('An error');
-    const mockGetSeverityAggregates = testing.fn().mockRejectedValue(error);
-    const gmp = createGmp({getSeverityAggregates: mockGetSeverityAggregates});
-    const filter = QueryFilter.fromString('first=1 rows=10');
-    const dispatch = testing.fn();
-    const getState = testing.fn();
-
-    return vulnerabilitiesSeverityLoadFunc({gmp, filter})(
-      dispatch,
-      getState,
-    ).then(() => {
-      expect(dispatch).toHaveBeenNthCalledWith(2, {
-        type: DASHBOARD_DATA_LOADING_ERROR,
-        id: VULNS_SEVERITY,
-        filter,
-        error,
-      });
-    });
-  });
-
-  test('vulnerabilitiesHostsLoader should load and dispatch host aggregates', () => {
+  test('should load host aggregates and render them', async () => {
     const data = [{value: 1, count: 5}];
     const mockGetHostAggregates = testing.fn().mockResolvedValue({data});
     const gmp = createGmp({getHostAggregates: mockGetHostAggregates});
     const filter = QueryFilter.fromString('first=1 rows=10');
-    const dispatch = testing.fn();
-    const getState = testing.fn();
+    const subscribe = testing.fn().mockReturnValue(testing.fn());
+    const children = testing.fn().mockReturnValue(null);
 
-    return vulnerabilitiesHostsLoadFunc({gmp, filter})(dispatch, getState).then(
-      () => {
-        expect(mockGetHostAggregates).toHaveBeenCalledWith({filter});
-        expect(dispatch).toHaveBeenNthCalledWith(1, {
-          type: DASHBOARD_DATA_LOADING_REQUEST,
-          id: VULNS_HOSTS,
-          filter,
-        });
-        expect(dispatch).toHaveBeenNthCalledWith(2, {
-          type: DASHBOARD_DATA_LOADING_SUCCESS,
-          id: VULNS_HOSTS,
-          filter,
-          data,
-        });
-      },
-    );
-  });
+    renderWithSubscriptionContext({
+      gmp,
+      subscribe,
+      children: (
+        <VulnerabilitiesHostsLoader filter={filter}>
+          {children}
+        </VulnerabilitiesHostsLoader>
+      ),
+    });
 
-  test('vulnerabilitiesHostsLoader should dispatch an error when loading fails', () => {
-    const error = new Error('An error');
-    const mockGetHostAggregates = testing.fn().mockRejectedValue(error);
-    const gmp = createGmp({getHostAggregates: mockGetHostAggregates});
-    const filter = QueryFilter.fromString('first=1 rows=10');
-    const dispatch = testing.fn();
-    const getState = testing.fn();
+    await waitFor(() => {
+      expect(mockGetHostAggregates).toHaveBeenCalledWith({filter});
+      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+    });
 
-    return vulnerabilitiesHostsLoadFunc({gmp, filter})(dispatch, getState).then(
-      () => {
-        expect(dispatch).toHaveBeenNthCalledWith(2, {
-          type: DASHBOARD_DATA_LOADING_ERROR,
-          id: VULNS_HOSTS,
-          filter,
-          error,
-        });
-      },
+    expect(subscribe).toHaveBeenCalledWith('vulns.timer', expect.any(Function));
+    expect(subscribe).toHaveBeenCalledWith(
+      'vulns.changed',
+      expect.any(Function),
     );
   });
 });
