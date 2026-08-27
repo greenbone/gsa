@@ -97,7 +97,7 @@ class TasksCommand extends EntitiesCommand<Task, GetTasksResponse> {
   getHighResultsAggregates({
     filter,
     max,
-  }: {filter?: Filter; max?: number} = {}) {
+  }: {filter?: FilterType; max?: number} = {}) {
     return this.getAggregates({
       filter,
       aggregate_type: 'task',
