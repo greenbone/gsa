@@ -8,7 +8,7 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import getDashboardData from 'web/store/dashboard/data/selectors';
 import {filterIdentifier} from 'web/store/utils';
 
-const createState = state => ({
+const createState = (state: Record<string, unknown> = {}) => ({
   dashboardData: {
     ...state,
   },
@@ -47,7 +47,7 @@ describe('dashboard data selector init tests', () => {
 describe('dashboard data selector isLoading tests', () => {
   test('should return true for isLoading', () => {
     const id = 'a1';
-    const filterString = filterIdentifier();
+    const filterString = filterIdentifier(undefined);
     const rootState = createState({
       [id]: {
         [filterString]: {
@@ -78,7 +78,7 @@ describe('dashboard data selector isLoading tests', () => {
 describe('dashboard data selector error tests', () => {
   test('should return error', () => {
     const id = 'a1';
-    const filterString = filterIdentifier();
+    const filterString = filterIdentifier(undefined);
     const rootState = createState({
       [id]: {
         [filterString]: {
@@ -109,6 +109,7 @@ describe('dashboard data selector error tests', () => {
 describe('dashboard data selector getData tests', () => {
   test('should return data', () => {
     const id = 'a1';
+    // @ts-expect-error
     const filterString = filterIdentifier();
     const rootState = createState({
       [id]: {
@@ -146,7 +147,7 @@ describe('dashboard data selector getData tests', () => {
 
   test('should return undefined if unknown id is passed', () => {
     const id = 'a1';
-    const filterString = filterIdentifier();
+    const filterString = filterIdentifier(undefined);
     const rootState = createState({
       [id]: {
         [filterString]: {
@@ -164,7 +165,7 @@ describe('dashboard data selector getData tests', () => {
   test('should return undefined if unknown filter is passed', () => {
     const id = 'a1';
     const filter = QueryFilter.fromString('foo=bar');
-    const filterString = filterIdentifier();
+    const filterString = filterIdentifier(undefined);
     const rootState = createState({
       [id]: {
         [filterString]: {
