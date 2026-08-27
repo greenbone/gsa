@@ -16,7 +16,6 @@ import {
 } from 'web/store/dashboard/data/actions';
 import getDashboardData from 'web/store/dashboard/data/selectors';
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/prop-types';
 import withGmp from 'web/utils/withGmp';
 import withSubscription from 'web/utils/withSubscription';
 
@@ -64,11 +63,6 @@ type LoaderDispatch = ThunkDispatch<
   unknown,
   Action<string>
 >;
-
-export const loaderPropTypes = {
-  children: PropTypes.func,
-  filter: PropTypes.filter,
-};
 
 export const createLoadFunc =
   <TProps extends LoadFuncProps, TData>(
