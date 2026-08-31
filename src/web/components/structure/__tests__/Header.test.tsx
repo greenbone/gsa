@@ -54,6 +54,11 @@ describe('Header tests', () => {
     await waitFor(() => {
       const logo = screen.getByTestId('Enterprise150');
       expect(logo).toBeVisible();
+
+      const logoLink = screen.getByTestId('header-logo-link');
+      expect(logoLink).toHaveAttribute('href', '/dashboards');
+      expect(logoLink.querySelector('svg')).toHaveAttribute('width', '150px');
+      expect(logoLink.querySelector('svg')).toHaveAttribute('height', '40px');
     });
 
     const manualLink = screen.getByTestId('manual-link');
