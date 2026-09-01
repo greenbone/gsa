@@ -14,6 +14,7 @@ import {EditIcon} from 'web/components/icon';
 import {type ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import useUserName from 'web/hooks/useUserName';
 
 interface EntityEdit extends WithEntityType {
   userCapabilities: {
@@ -45,6 +46,7 @@ const EntityEditIcon = <TEntity extends EntityEdit>({
 }: EntityEditIconProps<TEntity>) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
+  const username = useUserName();
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -54,7 +56,9 @@ const EntityEditIcon = <TEntity extends EntityEdit>({
   }
 
   const mayEdit =
-    capabilities?.mayEdit(name) && entity.userCapabilities.mayEdit(name);
+    capabilities?.mayEdit(name) &&
+    (entity.userCapabilities.mayEdit(name) ||
+      (name === 'user' && entity.name === username));
 
   const active = mayEdit && entity.isWritable() && !disabled;
 
