@@ -18,7 +18,6 @@ import Select from 'web/components/form/Select';
 import PageTitle from 'web/components/layout/PageTitle';
 import Row from 'web/components/layout/Row';
 import Loading from 'web/components/loading/Loading';
-import InfoPanel from 'web/components/panel/InfoPanel';
 import Section from 'web/components/section/Section';
 import useGetInstallInstructions from 'web/hooks/use-query/agent-install-instructions';
 import useGmp from 'web/hooks/useGmp';
@@ -66,13 +65,6 @@ const AgentInstallInstructionsPage = () => {
   const controllers = useMemo(() => controllersData ?? [], [controllersData]);
 
   const activeControllerId = selectedController ?? controllers[0]?.id;
-
-  const activeController = controllers.find(
-    controller => controller.id === activeControllerId,
-  );
-
-  const isAgentSensor =
-    activeController?.scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
 
   const {
     data: instructions,
@@ -140,32 +132,19 @@ const AgentInstallInstructionsPage = () => {
           <p>{_('No agent controllers available')}</p>
         )}
         {(instructionsLoading || controllersLoading) && <Loading />}
-        {isAgentSensor ? (
-          <InfoPanel
-            data-testid="agent-sensor-not-installed-warning"
-            heading={_('Agent Controller Not Installed Locally')}
-          >
-            {_(
-              'You selected an agent control not installed on this appliance. Please log in to the related sensor appliance and use the install instructions from there.',
-            )}
-          </InfoPanel>
-        ) : (
-          <>
-            {!instructionsLoading &&
-              !controllersLoading &&
-              !error &&
-              instructions && (
-                <>
-                  {instructions.sections.map(section => (
-                    <InstructionsSectionRenderer
-                      key={section.id}
-                      section={section}
-                    />
-                  ))}
-                </>
-              )}
-          </>
-        )}
+        {!instructionsLoading &&
+          !controllersLoading &&
+          !error &&
+          instructions && (
+            <>
+              {instructions.sections.map(section => (
+                <InstructionsSectionRenderer
+                  key={section.id}
+                  section={section}
+                />
+              ))}
+            </>
+          )}
       </Section>
     </>
   );
