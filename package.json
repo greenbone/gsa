@@ -46,7 +46,7 @@
     "@mantine/dates": "^8.3.16",
     "@mantine/notifications": "^8.3.16",
     "@reduxjs/toolkit": "^2.12.0",
-    "@tanstack/react-query": "^5.101.4",
+    "@tanstack/react-query": "^5.102.3",
     "@types/d3-transition": "3.0.9",
     "d3-axis": "^3.0.0",
     "d3-cloud": "^1.2.9",
