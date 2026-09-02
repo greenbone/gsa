@@ -283,6 +283,7 @@ export const TASK_STATUS = {
   uploading: 'Uploading',
   uploadinginterrupted: 'Uploading Interrupted',
   processing: 'Processing',
+  noresults: 'No results available',
   done: 'Done',
   unknown: 'Unknown',
 } as const;
@@ -307,6 +308,7 @@ const TASK_STATUS_TRANSLATIONS = {
   Done: _l('Done'),
   Queued: _l('Queued'),
   Processing: _l('Processing'),
+  'No results available': _l('No results available'),
   'Uploading Interrupted': _l('Interrupted'),
   Unknown: _l('Unknown'),
 } as const;

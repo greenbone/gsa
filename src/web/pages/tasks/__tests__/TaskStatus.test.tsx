@@ -51,6 +51,54 @@ describe('TaskStatus tests', () => {
     expect(detailslink).toHaveAttribute('href', '/report/42');
   });
 
+  test('should render no scan results yet for an agent task with an empty report', () => {
+    const task = Task.fromElement({
+      _id: 'test-id',
+      status: TASK_STATUS.done,
+      alterable: 0,
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+      agent_group: {_id: 'agent-group-id'},
+      last_report: {
+        report: {
+          _id: 'report-id',
+          result_count: {
+            false_positive: 0,
+            high: 0,
+            log: 0,
+            low: 0,
+            medium: 0,
+          },
+          severity: -99,
+        },
+      },
+    });
+
+    const {render} = rendererWith({capabilities: true});
+    render(<Status task={task} />);
+
+    const bar = screen.getByTestId('progressbar-box');
+    expect(bar).toHaveAttribute('title', TASK_STATUS.noresults);
+    expect(bar).toHaveTextContent(TASK_STATUS.noresults);
+  });
+
+  test('should render done for a regular task without a report', () => {
+    const task = Task.fromElement({
+      _id: 'test-id',
+      status: TASK_STATUS.done,
+      alterable: 0,
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+    });
+
+    const {render} = rendererWith({capabilities: true});
+    render(<Status task={task} />);
+
+    const bar = screen.getByTestId('progressbar-box');
+    expect(bar).toHaveAttribute('title', TASK_STATUS.done);
+    expect(bar).toHaveTextContent(TASK_STATUS.done);
+  });
+
   test('should render with current report', () => {
     const task = Task.fromElement({
       _id: 'test-id',

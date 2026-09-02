@@ -242,6 +242,44 @@ const createGmp = ({
 });
 
 describe('TaskDetailsPage tests', () => {
+  test('should display no results available for an agent task without findings', () => {
+    const gmp = createGmp();
+    const agentTask = Task.fromElement({
+      _id: 'agent-task-id',
+      owner: {name: 'admin'},
+      name: 'agent task',
+      status: TASK_STATUS.done,
+      agent_group: {_id: 'agent-group-id'},
+      last_report: {
+        report: {
+          _id: 'empty-report-id',
+          result_count: {
+            high: 0,
+            medium: 0,
+            low: 0,
+            log: 0,
+            false_positive: 0,
+          },
+          severity: -99,
+        },
+      },
+    });
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(entityLoadingActions.success(agentTask.id, agentTask));
+
+    render(<TaskDetailsPage id={agentTask.id} />);
+
+    const progressBar = screen.getByTestId('progressbar-box');
+    expect(progressBar).toHaveTextContent('No results available');
+  });
+
   test('should render full DetailsPage', () => {
     const gmp = createGmp();
 
