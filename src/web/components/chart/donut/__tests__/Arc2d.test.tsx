@@ -80,4 +80,23 @@ describe('Arc2d', () => {
 
     expect(arc.querySelector('path')).toHaveAttribute('d', pathBeforeHover);
   });
+
+  test('should dim the arc when requested', () => {
+    const {render} = rendererWith();
+
+    render(
+      <svg>
+        <Arc2d isDimmed data={data} path={arcPath} x={5} y={6} />
+      </svg>,
+    );
+
+    expect(screen.getByTestId('arc-2d').querySelector('path')).toHaveAttribute(
+      'fill',
+      '#008000',
+    );
+    expect(screen.getByTestId('arc-2d').querySelector('path')).toHaveAttribute(
+      'opacity',
+      '0.35',
+    );
+  });
 });
