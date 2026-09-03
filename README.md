@@ -148,6 +148,38 @@ For HTTPS only the protocol property must be `'https'` accordingly.
 After changing the `config.js` file, the browser window should be reloaded
 manually.
 
+### Linting
+
+GSA uses [Oxlint](https://oxc.rs/docs/guide/usage/linter) for JavaScript and
+TypeScript linting. The normal lint command uses the committed
+`oxlint-baseline.json` to acknowledge existing diagnostics while still failing
+for new diagnostics:
+
+```sh
+npm run lint
+```
+
+To inspect all current diagnostics without baseline filtering, run:
+
+```sh
+npm run lint:raw
+```
+
+When a warning has been reviewed and intentionally accepted, update the
+baseline explicitly:
+
+```sh
+npm run lint:baseline:update
+```
+
+Review changes to `oxlint-baseline.json` together with the code that caused
+them. Do not update the baseline to hide new warnings without reviewing them.
+
+During `npm run start`, TypeScript diagnostics are also reported in the
+development browser overlay through the Vite checker plugin. The existing
+`npm run type-check` command remains available for a complete command-line
+type check.
+
 ### Local Playwright E2E
 
 The Playwright end-to-end tests run against a locally running container. Start
