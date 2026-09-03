@@ -6,6 +6,7 @@
 import {useCallback, useLayoutEffect, useRef, useState} from 'react';
 import {arc as d3arc, pie as d3pie, type PieArcDatum} from 'd3-shape';
 import styled from 'styled-components';
+import {type ToString} from 'gmp/types';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import Legend, {
@@ -60,14 +61,6 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
 }: DonutChartProps<TData>) => {
   const legendRef: LegendRef = useRef<HTMLElement | null>(null);
 
-  const initialWidth = () => {
-    let width = propWidth - MENU_PLACEHOLDER_WIDTH;
-    if (width < MIN_WIDTH) {
-      width = MIN_WIDTH;
-    }
-    return width;
-  };
-
   const getWidth = useCallback(() => {
     let width = propWidth - MENU_PLACEHOLDER_WIDTH;
     const {current: legend} = legendRef;
@@ -84,7 +77,8 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
     return width;
   }, [propWidth, showLegend]);
 
-  const [chartWidth, setChartWidth] = useState(initialWidth);
+  const [chartWidth, setChartWidth] = useState(getWidth);
+  const [hoveredLabel, setHoveredLabel] = useState<ToString>();
 
   useLayoutEffect(() => {
     const newWidth = getWidth();
@@ -148,7 +142,12 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
                     x={x}
                     y={y}
                     {...donutProps}
+                    isDimmed={
+                      hoveredLabel !== undefined &&
+                      hoveredLabel !== currentArc.data.label
+                    }
                     onDataClick={onDataClick}
+                    onHover={hoveredData => setHoveredLabel(hoveredData?.label)}
                   />
                 );
               })}
@@ -157,6 +156,7 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
               arcs={arcs}
               centerX={centerX}
               centerY={centerY}
+              hoveredLabel={hoveredLabel}
               innerRadiusX={innerRadiusX}
               innerRadiusY={innerRadiusX}
               outerRadiusX={outerRadiusX}

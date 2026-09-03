@@ -27,6 +27,7 @@ interface Arc2dProps<TData extends Arc2dData> {
   y: number;
   onDataClick?: (data: TData) => void;
   onHover?: (data: TData | undefined) => void;
+  isDimmed?: boolean;
 }
 
 const Arc2d = <TData extends Arc2dData = Arc2dData>({
@@ -40,6 +41,7 @@ const Arc2d = <TData extends Arc2dData = Arc2dData>({
   y,
   onDataClick,
   onHover,
+  isDimmed = false,
 }: Arc2dProps<TData>) => {
   const {color = Theme.lightGray, toolTip} = data;
   const hasD3Geometry =
@@ -80,6 +82,8 @@ const Arc2d = <TData extends Arc2dData = Arc2dData>({
                 : path,
             )}
             fill={String(color)}
+            opacity={isDimmed ? 0.35 : 1}
+            style={{transition: 'opacity 180ms ease-in-out'}}
           />
           <circle // used as positioning ref for tooltips
             ref={targetRef as React.Ref<SVGCircleElement>}
