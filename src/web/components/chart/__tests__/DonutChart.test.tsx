@@ -125,13 +125,19 @@ describe('DonutChart', () => {
     expect(firstArc?.querySelector('path')).toHaveAttribute('fill', '#008000');
     expect(secondArc?.querySelector('path')).toHaveAttribute('fill', '#0000aa');
     expect(secondArc?.querySelector('path')).toHaveAttribute('opacity', '0.35');
-    expect(svg.querySelector('text')).toHaveAttribute('fill', '#4C4C4C');
-    expect(svg.querySelector('text + text')).toHaveAttribute('fill', '#e5e5e5');
+    expect(svg.querySelector('.pie-label')).toHaveAttribute('fill', '#e5e5e5');
+    expect(svg.querySelectorAll('.pie-label')[1]).toHaveAttribute(
+      'fill',
+      '#4C4C4C',
+    );
 
     fireEvent.mouseLeave(firstArc as HTMLElement);
 
     expect(secondArc?.querySelector('path')).toHaveAttribute('fill', '#0000aa');
-    expect(svg.querySelector('text + text')).toHaveAttribute('fill', '#4C4C4C');
+    expect(svg.querySelectorAll('.pie-label')[1]).toHaveAttribute(
+      'fill',
+      '#4C4C4C',
+    );
   });
 
   test('should call onDataClick with the clicked slice data', () => {

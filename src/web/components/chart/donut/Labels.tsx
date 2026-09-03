@@ -118,7 +118,7 @@ const Labels = <TData extends LabelData = LabelData>({
                 />
                 <Label
                   ref={targetRef as React.Ref<SVGElement>}
-                  fill={Theme.darkGray}
+                  fill={isDimmed ? Theme.lightGray : Theme.darkGray}
                   fontFamily="Verdana, sans-serif"
                   fontSize="11px"
                   fontWeight="bold"
