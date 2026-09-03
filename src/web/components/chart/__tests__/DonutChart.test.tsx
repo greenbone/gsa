@@ -104,6 +104,36 @@ describe('DonutChart', () => {
     ).toHaveLength(2);
   });
 
+  test('should dim other slices and labels while hovering a slice', () => {
+    const {render} = rendererWith();
+
+    render(<DonutChart data={data} height={300} width={400} />);
+
+    const svg = screen.getByTestId('donut-chart-svg');
+    const arcs = screen.getAllByTestId('arc-2d');
+    const firstArc = arcs.find(
+      arc => arc.querySelector('path')?.getAttribute('fill') === '#008000',
+    );
+    const secondArc = arcs.find(
+      arc => arc.querySelector('path')?.getAttribute('fill') === '#0000aa',
+    );
+    expect(firstArc).toBeDefined();
+    expect(secondArc).toBeDefined();
+
+    fireEvent.mouseEnter(firstArc as HTMLElement);
+
+    expect(firstArc?.querySelector('path')).toHaveAttribute('fill', '#008000');
+    expect(secondArc?.querySelector('path')).toHaveAttribute('fill', '#0000aa');
+    expect(secondArc?.querySelector('path')).toHaveAttribute('opacity', '0.35');
+    expect(svg.querySelector('text')).toHaveAttribute('fill', '#4C4C4C');
+    expect(svg.querySelector('text + text')).toHaveAttribute('fill', '#e5e5e5');
+
+    fireEvent.mouseLeave(firstArc as HTMLElement);
+
+    expect(secondArc?.querySelector('path')).toHaveAttribute('fill', '#0000aa');
+    expect(svg.querySelector('text + text')).toHaveAttribute('fill', '#4C4C4C');
+  });
+
   test('should call onDataClick with the clicked slice data', () => {
     const onDataClick = testing.fn();
     const {render} = rendererWith();

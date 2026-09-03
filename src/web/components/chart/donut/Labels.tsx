@@ -11,6 +11,7 @@ import ToolTip from 'web/components/chart/base/ToolTip';
 import Theme from 'web/utils/theme';
 
 interface LabelData {
+  label?: string;
   value: number;
   toolTip?: ReactNode;
 }
@@ -23,6 +24,7 @@ interface LabelsProps<TData extends LabelData> {
   outerRadiusX: number;
   innerRadiusY?: number;
   outerRadiusY?: number;
+  hoveredLabel?: string;
 }
 
 interface LabelPosition {
@@ -72,6 +74,7 @@ const Labels = <TData extends LabelData = LabelData>({
   outerRadiusX,
   innerRadiusY,
   outerRadiusY,
+  hoveredLabel,
 }: LabelsProps<TData>) => {
   const labelPositions = useMemo(
     () => resolveLabelPositions(arcs, outerRadiusX),
@@ -82,6 +85,8 @@ const Labels = <TData extends LabelData = LabelData>({
     <Group left={centerX} top={centerY}>
       {arcs.map((currentArc, index) => {
         const arcData = currentArc.data;
+        const isDimmed =
+          hoveredLabel !== undefined && arcData.label !== hoveredLabel;
         const arc = d3arc<unknown, PieArcDatum<TData>>()
           .innerRadius(innerRadiusX ?? 0)
           .outerRadius(outerRadiusX);
@@ -105,9 +110,11 @@ const Labels = <TData extends LabelData = LabelData>({
               <g>
                 <polyline
                   fill="none"
+                  opacity={isDimmed ? 0.35 : 1}
                   points={points}
                   stroke="#BFBFBF"
                   strokeWidth="1px"
+                  style={{transition: 'opacity 180ms ease-in-out'}}
                 />
                 <Label
                   ref={targetRef as React.Ref<SVGElement>}
@@ -115,6 +122,8 @@ const Labels = <TData extends LabelData = LabelData>({
                   fontFamily="Verdana, sans-serif"
                   fontSize="11px"
                   fontWeight="bold"
+                  opacity={isDimmed ? 0.35 : 1}
+                  style={{transition: 'opacity 180ms ease-in-out'}}
                   textAnchor={isRightSide ? 'start' : 'end'}
                   transform={`translate(${labelPoint.join(',')})`}
                   onMouseEnter={show}
