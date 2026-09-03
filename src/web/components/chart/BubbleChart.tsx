@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import {pack, hierarchy} from 'd3-hierarchy';
 import {isDefined} from 'gmp/utils/identity';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
@@ -35,6 +36,8 @@ type BubbleChartHierarchyData<
   TData extends BubbleChartData = BubbleChartData,
 > = TData | BubbleChartRoot<TData>;
 
+const HOVER_TRANSITION = 'opacity 180ms ease-in-out';
+
 const margin = {
   top: 5,
   right: 5,
@@ -49,6 +52,7 @@ const BubbleChart = <TData extends BubbleChartData = BubbleChartData>({
   svgRef,
   onDataClick,
 }: BubbleChartProps<TData>) => {
+  const [hoveredLabel, setHoveredLabel] = useState<string>();
   const maxWidth = width - margin.left - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
 
@@ -70,6 +74,15 @@ const BubbleChart = <TData extends BubbleChartData = BubbleChartData>({
   ).sum(d => d.value);
 
   const nodes = bubbles(root).leaves();
+  const hoveredNode = nodes.find(
+    node => String(node.data.label) === hoveredLabel,
+  );
+  const orderedNodes = isDefined(hoveredNode)
+    ? [
+        ...nodes.filter(node => node !== hoveredNode),
+        hoveredNode,
+      ]
+    : nodes;
   return (
     <Svg ref={svgRef} height={height} width={width}>
       <Group
@@ -83,15 +96,20 @@ const BubbleChart = <TData extends BubbleChartData = BubbleChartData>({
           isEmpty={!hasBubbles}
           width={maxWidth}
         >
-          {nodes.map((node, i) => {
+          {orderedNodes.map((node, index) => {
             const {data: d, x, y, r} = node;
             return (
-              <ToolTip key={String(d.label)} content={d.toolTip}>
+              <ToolTip
+                key={String(d.label)}
+                content={
+                  hoveredLabel === String(d.label) ? d.toolTip : undefined
+                }
+              >
                 {({targetRef, hide, show}) => {
-                  const clippathId = 'clippath-' + i;
+                  const clippathId = 'clippath-' + index;
                   return (
                     <Group
-                      data-testid={`bubble-chart-bubble-${i}`}
+                      data-testid={`bubble-chart-bubble-${index}`}
                       left={x}
                       top={y}
                       onClick={
@@ -99,10 +117,25 @@ const BubbleChart = <TData extends BubbleChartData = BubbleChartData>({
                           ? () => onDataClick(d as TData)
                           : undefined
                       }
-                      onMouseEnter={show}
-                      onMouseLeave={hide}
+                      onMouseEnter={() => {
+                        show();
+                        setHoveredLabel(String(d.label));
+                      }}
+                      onMouseLeave={() => {
+                        hide();
+                        setHoveredLabel(undefined);
+                      }}
                     >
-                      <circle fill={String(d.color)} r={r} />
+                      <circle
+                        fill={String(d.color)}
+                        opacity={
+                          hoveredLabel !== undefined && hoveredLabel !== d.label
+                            ? 0.35
+                            : 1
+                        }
+                        r={r}
+                        style={{transition: HOVER_TRANSITION}}
+                      />
 
                       <clipPath id={clippathId}>
                         {/* cut of text overflowing the circle */}
