@@ -51,6 +51,8 @@ const ToolTipContainer = styled.div`
   z-index: ${Theme.Layers.onTop};
 `;
 
+const TOOLTIP_OFFSET = 24;
+
 ToolTipContainer.displayName = 'ToolTipContainer';
 
 const ToolTipDisplay = React.forwardRef(
@@ -87,7 +89,8 @@ const ToolTip = ({children, content}: ToolTipProps) => {
     }
 
     const rect = targetElement.getBoundingClientRect();
-    const top = rect.top - tooltipElement.offsetHeight + window.scrollY;
+    const top =
+      rect.top - tooltipElement.offsetHeight - TOOLTIP_OFFSET + window.scrollY;
     const centeredLeft =
       rect.left +
       (rect.width - tooltipElement.offsetWidth) / 2 +

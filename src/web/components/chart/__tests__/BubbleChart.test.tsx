@@ -65,4 +65,50 @@ describe('BubbleChart', () => {
 
     expect(onDataClick).toHaveBeenCalledExactlyOnceWith(data[0]);
   });
+
+  test('should fade other bubbles while hovering a bubble', () => {
+    const {render} = rendererWith();
+
+    render(<BubbleChart data={data} height={300} width={400} />);
+
+    const firstBubble = screen.getByTestId('bubble-chart-bubble-0');
+    const secondBubble = screen.getByTestId('bubble-chart-bubble-1');
+    const firstCircle = firstBubble.querySelector('circle');
+    const secondCircle = secondBubble.querySelector('circle');
+    fireEvent.mouseEnter(firstBubble);
+
+    expect(firstCircle).toHaveAttribute('opacity', '1');
+    expect(screen.getAllByTestId(/bubble-chart-bubble-/).at(-1)).toBe(
+      firstBubble,
+    );
+    expect(secondCircle).toHaveAttribute('opacity', '0.35');
+    expect(secondCircle).toHaveAttribute('fill', '#0000aa');
+
+    fireEvent.mouseLeave(firstBubble);
+
+    expect(secondBubble.querySelector('circle')).toHaveAttribute(
+      'opacity',
+      '1',
+    );
+  });
+
+  test('should only show one tooltip while moving between bubbles', () => {
+    const {render} = rendererWith();
+
+    render(<BubbleChart data={data} height={300} width={400} />);
+
+    const firstBubble = screen.getByTestId('bubble-chart-bubble-0');
+    const secondBubble = screen.getByTestId('bubble-chart-bubble-1');
+
+    fireEvent.mouseEnter(firstBubble);
+    expect(screen.getAllByText('First bubble')).toHaveLength(1);
+
+    fireEvent.mouseEnter(secondBubble);
+    expect(screen.queryByText('First bubble')).not.toBeInTheDocument();
+    expect(screen.getAllByText('Second bubble')).toHaveLength(1);
+
+    fireEvent.mouseLeave(secondBubble);
+    expect(screen.queryByText('First bubble')).not.toBeInTheDocument();
+    expect(screen.queryByText('Second bubble')).not.toBeInTheDocument();
+  });
 });

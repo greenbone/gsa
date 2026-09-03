@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useMemo, type ReactNode} from 'react';
+import React, {useMemo, useState, type ReactNode} from 'react';
 import {scaleBand, scaleLinear} from 'd3-scale';
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
@@ -50,6 +50,7 @@ const LABEL_HEIGHT = 20;
 const MIN_WIDTH = 250;
 const APPROXIMATE_CHARACTER_WIDTH = 6;
 const AXIS_LABEL_GAP = 17;
+const HOVER_TRANSITION = 'opacity 180ms ease-in-out';
 
 const tickFormat = (val: number | string | Date) => {
   const valStr = String(val);
@@ -76,6 +77,7 @@ const BarChart = <TData extends BarChartDataPoint>({
   width,
 }: BarChartProps<TData>) => {
   const chartWidth = useMemo(() => getWidth(width), [width]);
+  const [hoveredBarIndex, setHoveredBarIndex] = useState<number>();
 
   const xValues = data.map(d => String(d.x));
   const yValues = data.map(d => d.y);
@@ -177,13 +179,26 @@ const BarChart = <TData extends BarChartDataPoint>({
                           ? xScale.bandwidth()
                           : maxHeight - yScale(d.y)
                       }
+                      opacity={
+                        hoveredBarIndex !== undefined &&
+                        hoveredBarIndex !== index
+                          ? 0.35
+                          : 1
+                      }
                       rx="4"
                       ry="4"
+                      style={{transition: HOVER_TRANSITION}}
                       width={isHorizontal ? yScale(d.y) : xScale.bandwidth()}
                       x={isHorizontal ? 1 : xScale(String(d.x))}
                       y={isHorizontal ? xScale(String(d.x)) : yScale(d.y)}
-                      onMouseEnter={show}
-                      onMouseLeave={hide}
+                      onMouseEnter={() => {
+                        show();
+                        setHoveredBarIndex(index);
+                      }}
+                      onMouseLeave={() => {
+                        hide();
+                        setHoveredBarIndex(undefined);
+                      }}
                     />
                   </Group>
                 )}
