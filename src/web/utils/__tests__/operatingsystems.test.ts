@@ -32,8 +32,12 @@ describe('findOperatingSystem tests', () => {
 
   test('should throw for non-string input', () => {
     // @ts-expect-error Testing invalid input
-    expect(() => findOperatingSystem(null)).toThrow();
+    expect(() => findOperatingSystem(null)).toThrow(
+      "Cannot read properties of null",
+    );
     // @ts-expect-error Testing invalid input
-    expect(() => findOperatingSystem(undefined)).toThrow();
+    expect(() => findOperatingSystem(undefined)).toThrow(
+      'Cannot read properties of undefined',
+    );
   });
 });

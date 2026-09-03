@@ -78,7 +78,7 @@ const CveDetails = ({entity}) => {
               .map(([name, title]) => (
                 <TableRow key={name}>
                   <TableData>{`${title}`}</TableData>
-                  {/* eslint-disable-next-line custom/no-dynamic-i18n */}
+                  {/* oxlint-disable-next-line gsa/no-dynamic-i18n */}
                   <TableData>{_(entity[name])}</TableData>
                 </TableRow>
               ))}

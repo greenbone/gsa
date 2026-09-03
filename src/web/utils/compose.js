@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable custom/filename-convention */
+/* gsa-lint-disable filename-convention */
 
 /**
  * Compose several HOCs

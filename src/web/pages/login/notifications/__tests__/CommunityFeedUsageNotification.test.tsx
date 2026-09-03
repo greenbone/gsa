@@ -14,7 +14,7 @@ import CommunityFeedUsageNotification, {
 } from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 
 vi.mock('@greenbone/ui-lib', () => ({
-  showNotification: vi.fn(),
+  showNotification: vi.fn<(...args: unknown[]) => void>(),
   // eslint-disable-next-line @typescript-eslint/naming-convention
   ThemeProvider: ({children}) => children,
   theme: {
@@ -23,7 +23,7 @@ vi.mock('@greenbone/ui-lib', () => ({
 }));
 
 vi.mock('@mantine/notifications', () => ({
-  updateNotification: vi.fn(),
+  updateNotification: vi.fn<(...args: unknown[]) => void>(),
 }));
 
 describe('CommunityFeedUsageNotification', () => {

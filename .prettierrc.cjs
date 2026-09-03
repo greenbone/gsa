@@ -1,4 +1,3 @@
-/* eslint-disable header/header */
 const config = {
   arrowParens: 'avoid',
   bracketSpacing: false,

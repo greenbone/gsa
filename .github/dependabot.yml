@@ -21,14 +21,9 @@ updates:
           - "@types/react-dom"
           - "@types/react-is"
           - "prop-types"
-      eslint:
+      oxlint:
         patterns:
-          - "eslint"
-          - "@eslint/*"
-      typescript-eslint:
-        patterns:
-          - "typescript-eslint"
-          - "@typescript-eslint/*"
+          - "oxlint"
       patch-updates:
         patterns:
           - "*"

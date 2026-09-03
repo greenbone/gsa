@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "import", "vitest"],
+  "jsPlugins": ["./eslint-script/oxlint-plugin.js"],
+  "rules": {
+    "gsa/camelcase": "warn",
+    "gsa/filename-convention": "warn",
+    "gsa/header": "error",
+    "gsa/jsx-sort-props": "warn",
+    "gsa/no-dynamic-i18n": "error",
+    "gsa/no-restricted-imports": "warn",
+    "gsa/ts-definitions-top": "warn"
+  },
+  "ignorePatterns": [
+    "build/**",
+    "node_modules/**",
+    "public/**",
+    "playwright-report/**",
+    "test-results/**"
+  ]
+}
