@@ -118,7 +118,7 @@ export default {
                   fixes.push(
                     fixer.insertTextAfter(
                       body[lastImport],
-                      '\n\n' + typeBlock + '\n'
+                      '\n\n' + typeBlock + '\n',
                     ),
                   );
                   return fixes;

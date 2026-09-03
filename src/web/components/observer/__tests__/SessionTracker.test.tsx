@@ -13,7 +13,7 @@ import SessionTracker, {
 } from 'web/components/observer/SessionTracker';
 
 vi.mock('@greenbone/ui-lib', () => ({
-  showNotification: vi.fn(),
+  showNotification: vi.fn<(...args: unknown[]) => void>(),
   // eslint-disable-next-line @typescript-eslint/naming-convention
   ThemeProvider: ({children}) => children,
   theme: {

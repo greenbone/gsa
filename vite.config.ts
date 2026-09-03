@@ -1,8 +1,8 @@
 import legacy from '@vitejs/plugin-legacy';
 import react from '@vitejs/plugin-react';
-import path from 'path';
+import path from 'node:path';
 import {defineConfig} from 'vite';
-import eslintPlugin from 'vite-plugin-eslint2';
+import checker from 'vite-plugin-checker';
 import svgrPlugin from 'vite-plugin-svgr';
 
 const projectRootDir = import.meta.dirname;
@@ -18,16 +18,17 @@ export default defineConfig({
   plugins: [
     react({include: /\.(mdx|js|jsx|ts|tsx)$/}),
     legacy(),
+    checker({
+      typescript: {
+        tsconfigPath: './tsconfig.json',
+      },
+    }),
     svgrPlugin({
       svgrOptions: {
         // https://react-svgr.com/docs/options/
         icon: true,
       },
       include: ['**/*.svg?react', '**/*.svg'],
-    }),
-    eslintPlugin({
-      cache: true,
-      cacheLocation: '.eslintcache',
     }),
   ],
   resolve: {
