@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {afterEach, describe, test, expect, testing} from '@gsa/testing';
 import {
   changeInputValue,
   screen,
   within,
   rendererWith,
   fireEvent,
-  waitFor,
+  act,
 } from 'web/testing';
 import {type NvtFamily} from 'gmp/commands/nvt-families';
 import {
@@ -120,6 +120,8 @@ const scannerPreferences = [
 ];
 
 describe('ScanConfigEditDialog tests', () => {
+  afterEach(() => testing.useRealTimers());
+
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
@@ -696,6 +698,8 @@ describe('ScanConfigEditDialog tests', () => {
   });
 
   test('should filter items based on search query', async () => {
+    testing.useFakeTimers();
+
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditConfigFamilyDialog = testing.fn();
@@ -731,11 +735,11 @@ describe('ScanConfigEditDialog tests', () => {
 
     expect(searchBar).toHaveValue('family4');
 
-    await waitFor(() => {
-      const rows = screen.getAllByRole('row');
-      expect(rows).toHaveLength(2);
-      expect(rows[1]).toHaveTextContent('family4');
-    });
+    await act(async () => testing.runAllTimers());
+
+    const rows = screen.getAllByRole('row');
+    expect(rows).toHaveLength(2);
+    expect(rows[1]).toHaveTextContent('family4');
 
     const familyTwo = screen.queryByText('family2');
     expect(familyTwo).not.toBeInTheDocument();
