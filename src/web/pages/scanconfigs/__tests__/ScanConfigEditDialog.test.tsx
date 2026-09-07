@@ -139,7 +139,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -182,7 +181,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -232,7 +230,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Policy"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -280,7 +277,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -326,7 +322,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -364,7 +359,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -435,7 +429,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={familiesWithoutNvtsMax}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         title="Edit Scan Config"
         onClose={handleClose}
@@ -472,7 +465,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         title="Edit Scan Config"
         onClose={handleClose}
@@ -494,7 +486,6 @@ describe('ScanConfigEditDialog tests', () => {
         familySelectionUpdate={{familyName: 'family1', select: NO_VALUE}}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         title="Edit Scan Config"
         onClose={handleClose}
@@ -533,7 +524,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -602,7 +592,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -657,7 +646,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -694,7 +682,6 @@ describe('ScanConfigEditDialog tests', () => {
       nvtPreferences,
       isLoadingConfig: false,
       isLoadingFamilies: false,
-      isLoadingScanners: false,
       expectedResultsCount: 8,
     },
     {
@@ -704,7 +691,6 @@ describe('ScanConfigEditDialog tests', () => {
       nvtPreferences,
       isLoadingConfig: true,
       isLoadingFamilies: true,
-      isLoadingScanners: true,
       expectedResultsCount: 1,
     },
     {
@@ -715,7 +701,6 @@ describe('ScanConfigEditDialog tests', () => {
       nvtPreferences: [],
       isLoadingConfig: false,
       isLoadingFamilies: false,
-      isLoadingScanners: false,
       expectedResultsCount: 0,
     },
   ])(
@@ -726,7 +711,6 @@ describe('ScanConfigEditDialog tests', () => {
       nvtPreferences,
       isLoadingConfig,
       isLoadingFamilies,
-      isLoadingScanners,
       expectedResultsCount,
     }) => {
       const handleClose = testing.fn();
@@ -746,7 +730,6 @@ describe('ScanConfigEditDialog tests', () => {
           families={families}
           isLoadingConfig={isLoadingConfig}
           isLoadingFamilies={isLoadingFamilies}
-          isLoadingScanners={isLoadingScanners}
           name="Config"
           nvtPreferences={nvtPreferences}
           scannerPreferences={scannerPreferences}
@@ -766,7 +749,7 @@ describe('ScanConfigEditDialog tests', () => {
       expect(searchBar).toHaveValue('family1');
 
       const resultsCount =
-        isLoadingConfig || isLoadingFamilies || isLoadingScanners
+        isLoadingConfig || isLoadingFamilies
           ? 1
           : families.length + scannerPreferences.length + nvtPreferences.length;
       expect(resultsCount).toBe(expectedResultsCount);
