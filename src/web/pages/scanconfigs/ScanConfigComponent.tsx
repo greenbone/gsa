@@ -297,8 +297,8 @@ const ScanConfigComponent = ({
   };
 
   const openEditConfigFamilyDialog = async (
-    familyNameValue,
-    configData = config,
+    familyNameValue: string,
+    configData: ScanConfig | undefined = config,
   ) => {
     setHasSelection(false);
     setEditConfigFamilyDialogVisible(true);

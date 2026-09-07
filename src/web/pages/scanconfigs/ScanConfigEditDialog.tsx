@@ -295,7 +295,12 @@ const ScanConfigEditDialog = ({
   }, [familySelectionUpdate]);
 
   // trend and select are created only once and only after the whole config is loaded
-  if (!isDefined(trendValues) && !isDefined(selectValues) && !isLoadingConfig) {
+  if (
+    !isDefined(trendValues) &&
+    !isDefined(selectValues) &&
+    !isLoadingConfig &&
+    !isLoadingFamilies
+  ) {
     const {trend, select} = createTrendAndSelect(configFamilies, families);
     setTrendValues(trend);
     setSelectValues(select);

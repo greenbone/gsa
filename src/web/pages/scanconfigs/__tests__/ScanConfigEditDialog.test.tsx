@@ -259,7 +259,7 @@ describe('ScanConfigEditDialog tests', () => {
     );
   });
 
-  test('should save data', () => {
+  test('should save data when loading flags are omitted', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditConfigFamilyDialog = testing.fn();
@@ -275,8 +275,6 @@ describe('ScanConfigEditDialog tests', () => {
         editNvtDetailsTitle="Edit Scan Config NVT Details"
         editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        isLoadingConfig={false}
-        isLoadingFamilies={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -289,6 +287,7 @@ describe('ScanConfigEditDialog tests', () => {
     );
 
     const saveButton = screen.getDialogSaveButton();
+    expect(saveButton).toBeEnabled();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -303,6 +302,74 @@ describe('ScanConfigEditDialog tests', () => {
       trend,
     });
   });
+
+  test.each(['isLoadingConfig', 'isLoadingFamilies'])(
+    'should prevent saving while %s is true and save loaded family selections afterwards',
+    loadingFlag => {
+      const handleClose = testing.fn();
+      const handleSave = testing.fn();
+
+      const props = {
+        comment: 'bar',
+        configId: 'c1',
+        editNvtDetailsTitle: 'Edit Scan Config NVT Details',
+        editNvtFamiliesTitle: 'Edit Scan Config Family',
+        name: 'Config',
+        nvtPreferences,
+        scannerPreferences,
+        title: 'Edit Scan Config',
+        onClose: handleClose,
+        onSave: handleSave,
+      };
+
+      const {render} = rendererWith({capabilities: true, router: true});
+      const {rerender} = render(
+        <ScanConfigEditDialog
+          {...props}
+          {...{[loadingFlag]: true}}
+          configFamilies={
+            loadingFlag === 'isLoadingConfig' ? undefined : configFamilies
+          }
+          families={loadingFlag === 'isLoadingFamilies' ? undefined : families}
+        />,
+      );
+
+      const saveButton = screen.getDialogSaveButton();
+      const closeButton = screen.getDialogCloseButton();
+      expect(saveButton).toBeDisabled();
+      expect(closeButton).toBeEnabled();
+
+      fireEvent.click(saveButton);
+      expect(handleSave).not.toHaveBeenCalled();
+
+      fireEvent.click(closeButton);
+      expect(handleClose).toHaveBeenCalledTimes(1);
+
+      rerender(
+        <ScanConfigEditDialog
+          {...props}
+          configFamilies={configFamilies}
+          families={families}
+        />,
+      );
+
+      expect(screen.getDialogSaveButton()).toBeEnabled();
+      fireEvent.click(screen.getDialogSaveButton());
+
+      expect(handleSave).toHaveBeenCalledTimes(1);
+      expect(handleSave).toHaveBeenCalledWith({
+        comment: 'bar',
+        id: 'c1',
+        name: 'Config',
+        scannerId: undefined,
+        scannerPreferenceValues: {
+          scannerpref0: 0,
+        },
+        select,
+        trend,
+      });
+    },
+  );
 
   test('should allow to close the dialog', () => {
     const handleClose = testing.fn();
