@@ -708,7 +708,6 @@ const PolicyComponent = ({
                 families={families}
                 isLoadingConfig={isLoadingPolicy}
                 isLoadingFamilies={isLoadingFamilies}
-                isLoadingScanners={isLoadingScanners}
                 name={policy.name as string}
                 nvtPreferences={policy.preferences.nvt}
                 scannerId={scannerId}

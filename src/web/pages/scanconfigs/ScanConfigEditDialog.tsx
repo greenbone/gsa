@@ -84,7 +84,6 @@ interface ScanConfigEditDialogProps {
   familySelectionUpdate?: FamilySelectionUpdate;
   isLoadingConfig?: boolean;
   isLoadingFamilies?: boolean;
-  isLoadingScanners?: boolean;
   name: string;
   nvtPreferences?: ScanConfigPreference[];
   scannerPreferences?: ScanConfigPreference[];
@@ -229,7 +228,6 @@ const ScanConfigEditDialog = ({
   familySelectionUpdate,
   isLoadingConfig = false,
   isLoadingFamilies = false,
-  isLoadingScanners = false,
   name,
   nvtPreferences,
   scannerPreferences,
@@ -348,7 +346,7 @@ const ScanConfigEditDialog = ({
     [families, scannerPreferences, nvtPreferences],
   );
 
-  const isLoading = isLoadingConfig || isLoadingFamilies || isLoadingScanners;
+  const isLoading = isLoadingConfig || isLoadingFamilies;
   const matchesCount = isLoading
     ? 1
     : filteredFamilies.length +
