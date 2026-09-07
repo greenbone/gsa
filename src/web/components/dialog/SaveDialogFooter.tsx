@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import DialogFooter from 'web/components/dialog/DialogTwoButtonFooter';
+import DialogTwoButtonFooter from 'web/components/dialog/DialogTwoButtonFooter';
 import MultiStepFooter from 'web/components/dialog/MultiStepFooter';
 
 interface SaveDialogFooterProps {
   multiStep: number;
   isLoading: boolean;
+  isSaving: boolean;
   prevDisabled: boolean;
   nextDisabled: boolean;
   buttonTitle: string;
@@ -21,6 +22,7 @@ interface SaveDialogFooterProps {
 const SaveDialogFooter = ({
   multiStep,
   isLoading,
+  isSaving,
   prevDisabled,
   nextDisabled,
   buttonTitle,
@@ -45,8 +47,9 @@ const SaveDialogFooter = ({
       onRightButtonClick={handleSaveClick}
     />
   ) : (
-    <DialogFooter
+    <DialogTwoButtonFooter
       isLoading={isLoading}
+      isSaving={isSaving}
       rightButtonTitle={buttonTitle}
       onLeftButtonClick={onClose}
       onRightButtonClick={handleSaveClick}
