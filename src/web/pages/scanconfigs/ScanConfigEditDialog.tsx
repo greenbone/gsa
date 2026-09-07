@@ -387,6 +387,7 @@ const ScanConfigEditDialog = ({
     <SaveDialog<ScanConfigEditDialogValues, ScanConfigEditDialogDefaultValues>
       defaultValues={uncontrolledData}
       error={error}
+      isLoading={isLoading}
       title={title}
       values={controlledData}
       width="900px"
