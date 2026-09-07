@@ -11,6 +11,7 @@ describe('SaveDialogFooter', () => {
   const defaultProps = {
     multiStep: 0,
     isLoading: false,
+    isSaving: false,
     prevDisabled: false,
     nextDisabled: false,
     buttonTitle: 'Save',
@@ -20,10 +21,58 @@ describe('SaveDialogFooter', () => {
     handleSaveClick: testing.fn(),
   };
 
-  test('renders DialogFooter when multiStep is 0', () => {
+  test('renders DialogTwoButtonFooter when multiStep is 0', () => {
     render(<SaveDialogFooter {...defaultProps} />);
     expect(screen.getByText('Save')).toBeInTheDocument();
   });
+
+  test.each([
+    {isLoading: false, isSaving: false},
+    {isLoading: true, isSaving: false},
+    {isLoading: false, isSaving: true},
+    {isLoading: true, isSaving: true},
+  ])(
+    'handles single-step buttons with isLoading=$isLoading and isSaving=$isSaving',
+    ({isLoading, isSaving}) => {
+      const onClose = testing.fn();
+      const handleSaveClick = testing.fn();
+
+      render(
+        <SaveDialogFooter
+          {...defaultProps}
+          handleSaveClick={handleSaveClick}
+          isLoading={isLoading}
+          isSaving={isSaving}
+          onClose={onClose}
+        />,
+      );
+
+      const cancelButton = screen.getByTestId('dialog-close-button');
+      const saveButton = screen.getByTestId('dialog-save-button');
+
+      if (isSaving) {
+        expect(cancelButton).toBeDisabled();
+      } else {
+        expect(cancelButton).toBeEnabled();
+      }
+
+      if (isLoading || isSaving) {
+        expect(saveButton).toHaveAttribute('data-loading', 'true');
+        expect(saveButton).toBeDisabled();
+      } else {
+        expect(saveButton).not.toHaveAttribute('data-loading');
+        expect(saveButton).toBeEnabled();
+      }
+
+      fireEvent.click(cancelButton);
+      fireEvent.click(saveButton);
+
+      expect(onClose).toHaveBeenCalledTimes(isSaving ? 0 : 1);
+      expect(handleSaveClick).toHaveBeenCalledTimes(
+        isLoading || isSaving ? 0 : 1,
+      );
+    },
+  );
 
   test('renders MultiStepFooter when multiStep is greater than 0', () => {
     render(<SaveDialogFooter {...defaultProps} multiStep={3} />);

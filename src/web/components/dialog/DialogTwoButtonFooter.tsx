@@ -13,6 +13,7 @@ interface DialogTwoButtonFooterProps {
   onLeftButtonClick?: () => void;
   onRightButtonClick?: () => void;
   isLoading?: boolean;
+  isSaving?: boolean;
   rightButtonAction?: typeof DELETE_ACTION;
 }
 
@@ -24,6 +25,7 @@ const DialogTwoButtonFooter = ({
   onLeftButtonClick,
   onRightButtonClick,
   isLoading = false,
+  isSaving = false,
   rightButtonAction,
 }: DialogTwoButtonFooterProps) => {
   const [_] = useTranslation();
@@ -33,7 +35,7 @@ const DialogTwoButtonFooter = ({
     <DialogFooterLayout align={['space-between', 'center']} shrink="0">
       <Button
         data-testid="dialog-close-button"
-        disabled={isLoading}
+        disabled={isSaving}
         variant={isRightButtonAction ? 'default' : 'outline'}
         onClick={onLeftButtonClick}
       >
@@ -41,7 +43,7 @@ const DialogTwoButtonFooter = ({
       </Button>
       <Button
         data-testid="dialog-save-button"
-        isLoading={isLoading}
+        isLoading={isSaving || isLoading}
         variant={isRightButtonAction ? 'danger' : 'filled'}
         onClick={onRightButtonClick}
       >
