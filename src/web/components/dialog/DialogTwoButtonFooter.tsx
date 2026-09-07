@@ -12,7 +12,6 @@ interface DialogTwoButtonFooterProps {
   rightButtonTitle: string;
   onLeftButtonClick?: () => void;
   onRightButtonClick?: () => void;
-  loading?: boolean;
   isLoading?: boolean;
   rightButtonAction?: typeof DELETE_ACTION;
 }
@@ -24,8 +23,7 @@ const DialogTwoButtonFooter = ({
   rightButtonTitle,
   onLeftButtonClick,
   onRightButtonClick,
-  loading = false,
-  isLoading = loading,
+  isLoading = false,
   rightButtonAction,
 }: DialogTwoButtonFooterProps) => {
   const [_] = useTranslation();

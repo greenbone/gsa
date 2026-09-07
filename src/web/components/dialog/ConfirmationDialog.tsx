@@ -41,7 +41,7 @@ const ConfirmationDialog = ({
     <Dialog
       footer={
         <DialogTwoButtonFooter
-          loading={loading}
+          isLoading={loading}
           rightButtonAction={rightButtonAction}
           rightButtonTitle={rightButtonTitle}
           onLeftButtonClick={onClose}
