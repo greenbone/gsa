@@ -101,6 +101,67 @@ describe('SaveDialog tests', () => {
     expect(handleSave).toHaveBeenCalledWith({name: 'test'});
   });
 
+  test('should allow canceling but prevent saving while loading', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+
+    render(
+      <SaveDialog
+        isLoading={true}
+        title="Test Dialog"
+        onClose={handleClose}
+        onSave={handleSave}
+      >
+        <div>Dialog content</div>
+      </SaveDialog>,
+    );
+
+    const saveButton = screen.getByTestId('dialog-save-button');
+    const cancelButton = screen.getByTestId('dialog-close-button');
+    expect(saveButton).toBeDisabled();
+    expect(saveButton).toHaveAttribute('data-loading', 'true');
+    expect(cancelButton).toBeEnabled();
+
+    fireEvent.click(saveButton);
+    fireEvent.click(cancelButton);
+
+    expect(handleSave).not.toHaveBeenCalled();
+    expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  test('should update the save button when isLoading changes', () => {
+    const handleSave = testing.fn();
+    const renderDialog = (isLoading: boolean) => (
+      <SaveDialog
+        defaultValues={{name: 'test'}}
+        isLoading={isLoading}
+        title="Test Dialog"
+        onSave={handleSave}
+      >
+        <div>Dialog content</div>
+      </SaveDialog>
+    );
+    const {rerender} = render(renderDialog(false));
+    const saveButton = screen.getByTestId('dialog-save-button');
+
+    expect(saveButton).toBeEnabled();
+    expect(saveButton).not.toHaveAttribute('data-loading');
+
+    rerender(renderDialog(true));
+
+    expect(saveButton).toBeDisabled();
+    expect(saveButton).toHaveAttribute('data-loading', 'true');
+    fireEvent.click(saveButton);
+    expect(handleSave).not.toHaveBeenCalled();
+
+    rerender(renderDialog(false));
+
+    expect(saveButton).toBeEnabled();
+    expect(saveButton).not.toHaveAttribute('data-loading');
+    fireEvent.click(saveButton);
+    expect(handleSave).toHaveBeenCalledExactlyOnceWith({name: 'test'});
+  });
+
   test('should update values when onValueChange is called', () => {
     const handleClose = testing.fn();
     const renderFn = testing.fn(({values, onValueChange}) => (
@@ -221,6 +282,11 @@ describe('SaveDialog tests', () => {
     await waitFor(() => {
       expect(handleError).toHaveBeenCalledWith(error);
     });
+    expect(screen.getByTestId('dialog-close-button')).toBeEnabled();
+    expect(screen.getByTestId('dialog-save-button')).toBeEnabled();
+    expect(screen.getByTestId('dialog-save-button')).not.toHaveAttribute(
+      'data-loading',
+    );
   });
 
   test('should display async error message in dialog', async () => {
@@ -244,16 +310,16 @@ describe('SaveDialog tests', () => {
     await waitFor(() => {
       expect(screen.getByText('Save failed')).toBeInTheDocument();
     });
+    expect(screen.getByTestId('dialog-close-button')).toBeEnabled();
+    expect(screen.getByTestId('dialog-save-button')).toBeEnabled();
+    expect(screen.getByTestId('dialog-save-button')).not.toHaveAttribute(
+      'data-loading',
+    );
   });
 
-  test('should not call onSave twice when clicked multiple times while loading', () => {
+  test('should disable save and cancel buttons while saving', () => {
     const handleClose = testing.fn();
-    const handleSave = testing.fn().mockImplementation(
-      () =>
-        new Promise(resolve => {
-          setTimeout(resolve, 1000);
-        }),
-    );
+    const handleSave = testing.fn(() => new Promise<void>(() => {}));
 
     render(
       <SaveDialog
@@ -267,9 +333,19 @@ describe('SaveDialog tests', () => {
     );
 
     fireEvent.click(screen.getByText('Save'));
+
+    expect(screen.getByTestId('dialog-save-button')).toBeDisabled();
+    expect(screen.getByTestId('dialog-save-button')).toHaveAttribute(
+      'data-loading',
+      'true',
+    );
+    expect(screen.getByTestId('dialog-close-button')).toBeDisabled();
+
     fireEvent.click(screen.getByText('Save'));
+    fireEvent.click(screen.getByText('Cancel'));
 
     expect(handleSave).toHaveBeenCalledTimes(1);
+    expect(handleClose).not.toHaveBeenCalled();
   });
 
   test('should render multi-step dialog', () => {

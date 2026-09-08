@@ -34,6 +34,7 @@ const StatusBar = ({
     status === TASK_STATUS.unknown ||
     status === TASK_STATUS.new ||
     status === TASK_STATUS.done ||
+    status === TASK_STATUS.noresults ||
     status === TASK_STATUS.import ||
     status === TASK_STATUS.stoprequested ||
     status === TASK_STATUS.deleterequested ||
@@ -67,7 +68,8 @@ const StatusBar = ({
   } else if (
     status === TASK_STATUS.uploading ||
     status === TASK_STATUS.import ||
-    status === TASK_STATUS.done
+    status === TASK_STATUS.done ||
+    status === TASK_STATUS.noresults
   ) {
     background = BACKGROUND_STATES.LOW;
   } else if (status === TASK_STATUS.new) {

@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {afterEach, describe, test, expect, testing} from '@gsa/testing';
 import {
   changeInputValue,
   screen,
   within,
   rendererWith,
   fireEvent,
-  waitFor,
+  act,
 } from 'web/testing';
 import {type NvtFamily} from 'gmp/commands/nvt-families';
 import {
@@ -120,6 +120,8 @@ const scannerPreferences = [
 ];
 
 describe('ScanConfigEditDialog tests', () => {
+  afterEach(() => testing.useRealTimers());
+
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
@@ -139,7 +141,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -182,7 +183,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -232,7 +232,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Policy"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -262,7 +261,7 @@ describe('ScanConfigEditDialog tests', () => {
     );
   });
 
-  test('should save data', () => {
+  test('should save data when loading flags are omitted', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditConfigFamilyDialog = testing.fn();
@@ -278,9 +277,6 @@ describe('ScanConfigEditDialog tests', () => {
         editNvtDetailsTitle="Edit Scan Config NVT Details"
         editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        isLoadingConfig={false}
-        isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -293,6 +289,7 @@ describe('ScanConfigEditDialog tests', () => {
     );
 
     const saveButton = screen.getDialogSaveButton();
+    expect(saveButton).toBeEnabled();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -307,6 +304,74 @@ describe('ScanConfigEditDialog tests', () => {
       trend,
     });
   });
+
+  test.each(['isLoadingConfig', 'isLoadingFamilies'])(
+    'should prevent saving while %s is true and save loaded family selections afterwards',
+    loadingFlag => {
+      const handleClose = testing.fn();
+      const handleSave = testing.fn();
+
+      const props = {
+        comment: 'bar',
+        configId: 'c1',
+        editNvtDetailsTitle: 'Edit Scan Config NVT Details',
+        editNvtFamiliesTitle: 'Edit Scan Config Family',
+        name: 'Config',
+        nvtPreferences,
+        scannerPreferences,
+        title: 'Edit Scan Config',
+        onClose: handleClose,
+        onSave: handleSave,
+      };
+
+      const {render} = rendererWith({capabilities: true, router: true});
+      const {rerender} = render(
+        <ScanConfigEditDialog
+          {...props}
+          {...{[loadingFlag]: true}}
+          configFamilies={
+            loadingFlag === 'isLoadingConfig' ? undefined : configFamilies
+          }
+          families={loadingFlag === 'isLoadingFamilies' ? undefined : families}
+        />,
+      );
+
+      const saveButton = screen.getDialogSaveButton();
+      const closeButton = screen.getDialogCloseButton();
+      expect(saveButton).toBeDisabled();
+      expect(closeButton).toBeEnabled();
+
+      fireEvent.click(saveButton);
+      expect(handleSave).not.toHaveBeenCalled();
+
+      fireEvent.click(closeButton);
+      expect(handleClose).toHaveBeenCalledTimes(1);
+
+      rerender(
+        <ScanConfigEditDialog
+          {...props}
+          configFamilies={configFamilies}
+          families={families}
+        />,
+      );
+
+      expect(screen.getDialogSaveButton()).toBeEnabled();
+      fireEvent.click(screen.getDialogSaveButton());
+
+      expect(handleSave).toHaveBeenCalledTimes(1);
+      expect(handleSave).toHaveBeenCalledWith({
+        comment: 'bar',
+        id: 'c1',
+        name: 'Config',
+        scannerId: undefined,
+        scannerPreferenceValues: {
+          scannerpref0: 0,
+        },
+        select,
+        trend,
+      });
+    },
+  );
 
   test('should allow to close the dialog', () => {
     const handleClose = testing.fn();
@@ -326,7 +391,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -364,7 +428,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -435,7 +498,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={familiesWithoutNvtsMax}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         title="Edit Scan Config"
         onClose={handleClose}
@@ -472,7 +534,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         title="Edit Scan Config"
         onClose={handleClose}
@@ -494,7 +555,6 @@ describe('ScanConfigEditDialog tests', () => {
         familySelectionUpdate={{familyName: 'family1', select: NO_VALUE}}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         title="Edit Scan Config"
         onClose={handleClose}
@@ -533,7 +593,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -602,7 +661,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -640,6 +698,8 @@ describe('ScanConfigEditDialog tests', () => {
   });
 
   test('should filter items based on search query', async () => {
+    testing.useFakeTimers();
+
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditConfigFamilyDialog = testing.fn();
@@ -657,7 +717,6 @@ describe('ScanConfigEditDialog tests', () => {
         families={families}
         isLoadingConfig={false}
         isLoadingFamilies={false}
-        isLoadingScanners={false}
         name="Config"
         nvtPreferences={nvtPreferences}
         scannerPreferences={scannerPreferences}
@@ -676,11 +735,11 @@ describe('ScanConfigEditDialog tests', () => {
 
     expect(searchBar).toHaveValue('family4');
 
-    await waitFor(() => {
-      const rows = screen.getAllByRole('row');
-      expect(rows).toHaveLength(2);
-      expect(rows[1]).toHaveTextContent('family4');
-    });
+    await act(async () => testing.runAllTimers());
+
+    const rows = screen.getAllByRole('row');
+    expect(rows).toHaveLength(2);
+    expect(rows[1]).toHaveTextContent('family4');
 
     const familyTwo = screen.queryByText('family2');
     expect(familyTwo).not.toBeInTheDocument();
@@ -694,7 +753,6 @@ describe('ScanConfigEditDialog tests', () => {
       nvtPreferences,
       isLoadingConfig: false,
       isLoadingFamilies: false,
-      isLoadingScanners: false,
       expectedResultsCount: 8,
     },
     {
@@ -704,7 +762,6 @@ describe('ScanConfigEditDialog tests', () => {
       nvtPreferences,
       isLoadingConfig: true,
       isLoadingFamilies: true,
-      isLoadingScanners: true,
       expectedResultsCount: 1,
     },
     {
@@ -715,7 +772,6 @@ describe('ScanConfigEditDialog tests', () => {
       nvtPreferences: [],
       isLoadingConfig: false,
       isLoadingFamilies: false,
-      isLoadingScanners: false,
       expectedResultsCount: 0,
     },
   ])(
@@ -726,7 +782,6 @@ describe('ScanConfigEditDialog tests', () => {
       nvtPreferences,
       isLoadingConfig,
       isLoadingFamilies,
-      isLoadingScanners,
       expectedResultsCount,
     }) => {
       const handleClose = testing.fn();
@@ -746,7 +801,6 @@ describe('ScanConfigEditDialog tests', () => {
           families={families}
           isLoadingConfig={isLoadingConfig}
           isLoadingFamilies={isLoadingFamilies}
-          isLoadingScanners={isLoadingScanners}
           name="Config"
           nvtPreferences={nvtPreferences}
           scannerPreferences={scannerPreferences}
@@ -766,7 +820,7 @@ describe('ScanConfigEditDialog tests', () => {
       expect(searchBar).toHaveValue('family1');
 
       const resultsCount =
-        isLoadingConfig || isLoadingFamilies || isLoadingScanners
+        isLoadingConfig || isLoadingFamilies
           ? 1
           : families.length + scannerPreferences.length + nvtPreferences.length;
       expect(resultsCount).toBe(expectedResultsCount);

@@ -31,6 +31,7 @@ interface SaveDialogProps<TValues, TDefaultValues> {
       ) => React.ReactNode);
   defaultValues?: TDefaultValues; // default values for uncontrolled values which are updated via the onValueChange function of the render props
   error?: string; // for errors controlled from parent (onErrorClose must be used if set)
+  isLoading?: boolean; // for loading state controlled from parent. disables the save button
   multiStep?: number; // number of steps for multi-step dialogs
   title: string;
   values?: TValues; // should be used for controlled values handles outside of the SaveDialog. They are expected to be updated via separate handler functions.
@@ -67,6 +68,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
   children,
   defaultValues,
   error,
+  isLoading = false,
   multiStep = 0,
   title,
   values,
@@ -79,7 +81,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
   const [_] = useTranslation();
   buttonTitle = buttonTitle || _('Save');
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [stateError, setStateError] = useState<string | undefined>(undefined);
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -93,11 +95,11 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
 
   useEffect(() => {
     setStateError(error);
-    setIsLoading(false);
+    setIsSaving(false);
   }, [error]);
 
   const setError = (err: Error) => {
-    setIsLoading(false);
+    setIsSaving(false);
 
     if (onError) {
       onError(err);
@@ -110,7 +112,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
     if (onSave && !isLoading) {
       const promise = onSave(state);
       if (isFunction(promise?.then)) {
-        setIsLoading(true);
+        setIsSaving(true);
         return promise.catch(error => setError(error));
       }
     }
@@ -134,6 +136,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
           currentStep={currentStep}
           handleSaveClick={() => handleSaveClick(childValues)}
           isLoading={isLoading}
+          isSaving={isSaving}
           multiStep={multiStep}
           nextDisabled={nextDisabled}
           prevDisabled={prevDisabled}

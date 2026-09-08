@@ -13,21 +13,62 @@ describe('DialogTwoButtonFooter tests', () => {
 
     expect(element).toBeInTheDocument();
 
-    // ensure button is rendered
-    screen.getByTestId('dialog-close-button');
+    expect(screen.getByTestId('dialog-close-button')).toBeEnabled();
 
     expect(screen.getByTestId('dialog-save-button')).toHaveTextContent('Foo');
+    expect(screen.getByTestId('dialog-save-button')).toBeEnabled();
+    expect(screen.getByTestId('dialog-save-button')).not.toHaveAttribute(
+      'data-loading',
+    );
   });
 
-  test('should render loading and disable cancel button', () => {
-    render(<DialogTwoButtonFooter loading={true} rightButtonTitle="Foo" />);
+  test.each([
+    {isLoading: false, isSaving: false},
+    {isLoading: true, isSaving: false},
+    {isLoading: false, isSaving: true},
+    {isLoading: true, isSaving: true},
+  ])(
+    'should handle buttons with isLoading=$isLoading and isSaving=$isSaving',
+    ({isLoading, isSaving}) => {
+      const onLeftButtonClick = testing.fn();
+      const onRightButtonClick = testing.fn();
 
-    // ensure button is rendered
-    screen.getByTestId('dialog-save-button');
+      render(
+        <DialogTwoButtonFooter
+          isLoading={isLoading}
+          isSaving={isSaving}
+          rightButtonTitle="Foo"
+          onLeftButtonClick={onLeftButtonClick}
+          onRightButtonClick={onRightButtonClick}
+        />,
+      );
 
-    const buttonLeft = screen.getByTestId('dialog-close-button');
-    expect(buttonLeft).toHaveAttribute('disabled');
-  });
+      const buttonLeft = screen.getByTestId('dialog-close-button');
+      const buttonRight = screen.getByTestId('dialog-save-button');
+
+      if (isSaving) {
+        expect(buttonLeft).toBeDisabled();
+      } else {
+        expect(buttonLeft).toBeEnabled();
+      }
+
+      if (isLoading || isSaving) {
+        expect(buttonRight).toHaveAttribute('data-loading', 'true');
+        expect(buttonRight).toBeDisabled();
+      } else {
+        expect(buttonRight).not.toHaveAttribute('data-loading');
+        expect(buttonRight).toBeEnabled();
+      }
+
+      fireEvent.click(buttonLeft);
+      fireEvent.click(buttonRight);
+
+      expect(onLeftButtonClick).toHaveBeenCalledTimes(isSaving ? 0 : 1);
+      expect(onRightButtonClick).toHaveBeenCalledTimes(
+        isLoading || isSaving ? 0 : 1,
+      );
+    },
+  );
 
   test('should render footer with default title', () => {
     render(<DialogTwoButtonFooter rightButtonTitle="Foo" />);

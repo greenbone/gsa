@@ -84,7 +84,6 @@ interface ScanConfigEditDialogProps {
   familySelectionUpdate?: FamilySelectionUpdate;
   isLoadingConfig?: boolean;
   isLoadingFamilies?: boolean;
-  isLoadingScanners?: boolean;
   name: string;
   nvtPreferences?: ScanConfigPreference[];
   scannerPreferences?: ScanConfigPreference[];
@@ -227,9 +226,8 @@ const ScanConfigEditDialog = ({
   error,
   families,
   familySelectionUpdate,
-  isLoadingConfig = true,
-  isLoadingFamilies = true,
-  isLoadingScanners = true,
+  isLoadingConfig = false,
+  isLoadingFamilies = false,
   name,
   nvtPreferences,
   scannerPreferences,
@@ -297,7 +295,12 @@ const ScanConfigEditDialog = ({
   }, [familySelectionUpdate]);
 
   // trend and select are created only once and only after the whole config is loaded
-  if (!isDefined(trendValues) && !isDefined(selectValues) && !isLoadingConfig) {
+  if (
+    !isDefined(trendValues) &&
+    !isDefined(selectValues) &&
+    !isLoadingConfig &&
+    !isLoadingFamilies
+  ) {
     const {trend, select} = createTrendAndSelect(configFamilies, families);
     setTrendValues(trend);
     setSelectValues(select);
@@ -348,7 +351,7 @@ const ScanConfigEditDialog = ({
     [families, scannerPreferences, nvtPreferences],
   );
 
-  const isLoading = isLoadingConfig || isLoadingFamilies || isLoadingScanners;
+  const isLoading = isLoadingConfig || isLoadingFamilies;
   const matchesCount = isLoading
     ? 1
     : filteredFamilies.length +
@@ -387,6 +390,7 @@ const ScanConfigEditDialog = ({
     <SaveDialog<ScanConfigEditDialogValues, ScanConfigEditDialogDefaultValues>
       defaultValues={uncontrolledData}
       error={error}
+      isLoading={isLoading}
       title={title}
       values={controlledData}
       width="900px"
