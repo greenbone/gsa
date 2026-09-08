@@ -5,18 +5,28 @@
 
 export const BROWSER_LANGUAGE = 'Browser Language';
 
-export const getLanguageCodes = () => Object.keys(Languages);
+export const LANGUAGE_CODES = [
+  'en',
+  'de',
+  'ja',
+  'zh_TW',
+  'zh_CN',
+  'it',
+] as const;
+
+export type LanguageCode = (typeof LANGUAGE_CODES)[number];
+
+export const isLanguageCode = (value: string): value is LanguageCode =>
+  LANGUAGE_CODES.includes(value as LanguageCode);
 
 export type Language = {
   readonly name: string;
   readonly native_name: string;
 };
 
-export type LanguagesType = {
-  readonly [code: string]: Language;
-};
+export type LanguagesType = Record<LanguageCode, Language>;
 
-const Languages: LanguagesType = {
+const Languages = {
   de: {
     name: 'German',
     native_name: 'Deutsch',
@@ -41,6 +51,8 @@ const Languages: LanguagesType = {
     name: 'Italian',
     native_name: 'Italiano',
   },
-} as const;
+} as const satisfies LanguagesType;
+
+export const getLanguageCodes = (): LanguageCode[] => [...LANGUAGE_CODES];
 
 export default Languages;
