@@ -148,7 +148,7 @@ const UsersDialog = ({
        * or you have already confirmed that you want to save the user data
        * without any role.
        */
-      if (isDefined(user) && username === user.name) {
+      if (isDefined(user) && username === user.name && user.isSuperAdmin()) {
         /*
          * You reach this point only as a Super Admin, when you try to save your
          * own personal user data. The confirmation dialog opens. The data can
