@@ -99,7 +99,7 @@ export const activeDaysColorScale = scaleOrdinal<number, string>()
     '#1b641b',
   ]);
 
-export const riskFactorColorScale = scaleOrdinal()
+export const riskFactorColorScale = scaleOrdinal<string, string>()
   .domain([ERROR, DEBUG, FALSE_POSITIVE, NA, LOG, LOW, MEDIUM, HIGH, CRITICAL])
   .range([
     '#800000',
