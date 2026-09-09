@@ -8,7 +8,7 @@ import equal from 'fast-deep-equal';
 import styled from 'styled-components';
 import {type FilterType} from 'gmp/models/filter';
 import {type ToString} from 'gmp/types';
-import {isDefined, isFunction} from 'gmp/utils/identity';
+import {hasValue, isDefined, isFunction} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import DataDisplayIcons, {
   type DataDisplayIconsProps,
@@ -397,6 +397,13 @@ class DataDisplay<
     const {data, title} = this.state;
 
     this.cleanupDownloadCsv();
+
+    if (!isDefined(dataTitles) || !hasValue(dataRow)) {
+      console.warn(
+        'DataDisplay: dataTitles or dataRow not defined, cannot download CSV',
+      );
+      return;
+    }
 
     const csvData = [
       escapeCsv(title),
