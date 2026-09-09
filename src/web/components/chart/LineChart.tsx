@@ -48,7 +48,7 @@ interface CrossProps {
   lineWidth?: number;
 }
 
-interface LineProps extends LegendData {
+export interface LineProps extends LegendData {
   dashArray?: string;
   lineWidth?: number;
   width?: number;
