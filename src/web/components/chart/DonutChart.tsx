@@ -77,6 +77,7 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
   }, [propWidth, legendRef]);
 
   const [chartWidth, setChartWidth] = useState(getWidth);
+  const [hoveredLabel, setHoveredLabel] = useState<string>();
 
   useEffect(() => {
     const newWidth = getWidth();
@@ -141,7 +142,12 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
                     x={x}
                     y={y}
                     {...donutProps}
+                    isDimmed={
+                      hoveredLabel !== undefined &&
+                      hoveredLabel !== currentArc.data.label
+                    }
                     onDataClick={onDataClick}
+                    onHover={hoveredData => setHoveredLabel(hoveredData?.label)}
                   />
                 );
               })}
@@ -150,6 +156,7 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
               arcs={arcs}
               centerX={centerX}
               centerY={centerY}
+              hoveredLabel={hoveredLabel}
               innerRadiusX={innerRadiusX}
               innerRadiusY={innerRadiusX}
               outerRadiusX={outerRadiusX}
