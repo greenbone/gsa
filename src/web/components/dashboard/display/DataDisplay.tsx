@@ -7,6 +7,7 @@ import React, {type ReactNode} from 'react';
 import equal from 'fast-deep-equal';
 import styled from 'styled-components';
 import {type FilterType} from 'gmp/models/filter';
+import {type ToString} from 'gmp/types';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import DataDisplayIcons, {
@@ -28,8 +29,17 @@ export interface State {
   showLegend?: boolean;
 }
 
-type StateFunc<TState extends State> = (state: TState) => TState;
-type SetStateFunc<TState extends State> = (func: StateFunc<TState>) => TState;
+export type DataRowFunc<TData> = (row: TData) => ToString[];
+export type DataTitles = ToString[];
+
+export type DisplayStateFunc<TState extends State> = (
+  state: TState | undefined,
+) => TState;
+
+export type DisplaySetStateFunc<TState extends State> = (
+  func: DisplayStateFunc<TState>,
+) => void;
+
 type TitleFunc<TData> = ({
   data,
   id,
@@ -46,6 +56,10 @@ interface IconsRenderProps<
   state: TState;
 }
 
+type IconsRenderFunc<TState extends State> = (
+  props: IconsRenderProps<TState>,
+) => ReactNode;
+
 interface DataDisplayRenderProps<TData, TState extends State> {
   id: string;
   width: number;
@@ -53,10 +67,10 @@ interface DataDisplayRenderProps<TData, TState extends State> {
   svgRef: React.RefObject<SVGSVGElement | null>;
   data: TData[];
   state: TState;
-  setState: SetStateFunc<TState>;
+  setState: DisplaySetStateFunc<TState>;
 }
 
-type TransformFunc<
+export type TransformFunc<
   TData,
   TTransformedData,
   TTransformProps extends object = object,
@@ -79,12 +93,12 @@ export interface DataDisplayProps<
   dataTransform: TransformFunc<TData, TTransformedData, TTransformProps>;
   filter?: FilterType;
   height: number;
-  icons: (props: IconsRenderProps<TState>) => React.ReactNode;
+  icons?: IconsRenderFunc<TState>;
   children?: TChildren;
   id: string;
   initialState: TState;
   onSelectFilterClick: () => void;
-  setState: SetStateFunc<TState>;
+  setState?: DisplaySetStateFunc<TState>;
   showCsvDownload: boolean;
   showFilterSelection: boolean;
   showFilterString: boolean;
@@ -404,8 +418,8 @@ class DataDisplay<
     }
   }
 
-  handleSetState(stateFunc: StateFunc<TState>): TState {
-    return this.props.setState((state: TState) =>
+  handleSetState(stateFunc: DisplayStateFunc<TState>): void {
+    this.props.setState?.((state: TState | undefined) =>
       stateFunc(this.getCurrentState(state)),
     );
   }
