@@ -2395,9 +2395,9 @@
       "code": "typescript(restrict-template-expressions)",
       "message": "Invalid type used in template literal expression.",
       "location": {
-        "line": 315,
+        "line": 317,
         "column": 6,
-        "offset": 7553
+        "offset": 7644
       },
       "sourceLine": "`${TASK_STATUS_TRANSLATIONS[status]}`;",
       "fingerprint": "src/gmp/models/task.ts|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|6|`${TASK_STATUS_TRANSLATIONS[status]}`;"
@@ -2571,30 +2571,6 @@
       "fingerprint": "src/web/components/chart/BarChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `TData[]` (not nullish). This default assignment will never be used.|10|data = [],"
     },
     {
-      "filename": "src/web/components/chart/base/Group.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 30,
-        "column": 5,
-        "offset": 677
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/chart/base/Group.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|5|{...props}"
-    },
-    {
-      "filename": "src/web/components/chart/base/Label.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 22,
-        "column": 7,
-        "offset": 578
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/chart/base/Label.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
       "filename": "src/web/components/chart/base/ToolTip.tsx",
       "code": "react(refs)",
       "message": "Cannot access refs during render",
@@ -2653,18 +2629,6 @@
       },
       "sourceLine": "{arcs.map((currentArc, index) => {",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|eslint(no-unused-vars)|Parameter 'index' is declared but never used. Unused parameters should start with a '_'.|38|{arcs.map((currentArc, index) => {"
-    },
-    {
-      "filename": "src/web/components/chart/DonutChart.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 143,
-        "column": 21,
-        "offset": 4034
-      },
-      "sourceLine": "{...donutProps}",
-      "fingerprint": "src/web/components/chart/DonutChart.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|21|{...donutProps}"
     },
     {
       "filename": "src/web/components/chart/DonutChart.tsx",
@@ -2773,18 +2737,6 @@
       },
       "sourceLine": "onMouseMove={this.handleMouseMove}",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|29|onMouseMove={this.handleMouseMove}"
-    },
-    {
-      "filename": "src/web/components/chart/LineChart.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 630,
-        "column": 15,
-        "offset": 17535
-      },
-      "sourceLine": "ref={toolTipProps.ref as React.Ref<HTMLDivElement>}",
-      "fingerprint": "src/web/components/chart/LineChart.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|15|ref={toolTipProps.ref as React.Ref<HTMLDivElement>}"
     },
     {
       "filename": "src/web/components/chart/LineChart.tsx",
@@ -3039,18 +2991,6 @@
       "fingerprint": "src/web/components/dashboard/display/__tests__/DataDisplay.test.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|40|const createObjectURL = window.URL.createObjectURL as ReturnType<"
     },
     {
-      "filename": "src/web/components/dashboard/display/__tests__/FilterSelectionDialog.test.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 30,
-        "column": 7,
-        "offset": 736
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/dashboard/display/__tests__/FilterSelectionDialog.test.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
       "filename": "src/web/components/dashboard/display/created/CreatedDisplay.tsx",
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `TransformFunc<CreatedData, CreatedDataPoint, object>` (not nullish). This default assignment will never be used.",
@@ -3187,9 +3127,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 90,
+        "line": 92,
         "column": 5,
-        "offset": 3181
+        "offset": 3293
       },
       "sourceLine": "setPrevDisabled(currentStep === 0);",
       "fingerprint": "src/web/components/dialog/SaveDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setPrevDisabled(currentStep === 0);"
@@ -3199,9 +3139,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 95,
+        "line": 97,
         "column": 5,
-        "offset": 3322
+        "offset": 3434
       },
       "sourceLine": "setStateError(error);",
       "fingerprint": "src/web/components/dialog/SaveDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setStateError(error);"
@@ -3211,24 +3151,12 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 112,
+        "line": 114,
         "column": 31,
-        "offset": 3710
+        "offset": 3820
       },
       "sourceLine": "if (isFunction(promise?.then)) {",
       "fingerprint": "src/web/components/dialog/SaveDialog.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|31|if (isFunction(promise?.then)) {"
-    },
-    {
-      "filename": "src/web/components/error/ErrorMessage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 31,
-        "column": 58,
-        "offset": 994
-      },
-      "sourceLine": "<Layout align={['center', 'center']} flex=\"column\" {...props}>",
-      "fingerprint": "src/web/components/error/ErrorMessage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|58|<Layout align={['center', 'center']} flex=\"column\" {...props}>"
     },
     {
       "filename": "src/web/components/form/__tests__/useFormValues.test.tsx",
@@ -3267,150 +3195,6 @@
       "fingerprint": "src/web/components/form/__tests__/useFormValues.test.tsx|react(refs)|Cannot access refs during render|6|ref.current++;"
     },
     {
-      "filename": "src/web/components/form/Button.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 47,
-        "column": 7,
-        "offset": 1064
-      },
-      "sourceLine": "{...other}",
-      "fingerprint": "src/web/components/form/Button.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...other}"
-    },
-    {
-      "filename": "src/web/components/form/Checkbox.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 48,
-        "column": 7,
-        "offset": 1299
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/form/Checkbox.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
-      "filename": "src/web/components/form/FileField.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 42,
-        "column": 7,
-        "offset": 967
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/form/FileField.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
-      "filename": "src/web/components/form/MultiSelect.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 112,
-        "column": 7,
-        "offset": 2889
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/form/MultiSelect.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
-      "filename": "src/web/components/form/NumberField.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 109,
-        "column": 9,
-        "offset": 2877
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/form/NumberField.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|{...props}"
-    },
-    {
-      "filename": "src/web/components/form/PasswordField.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 45,
-        "column": 7,
-        "offset": 1046
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/form/PasswordField.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
-      "filename": "src/web/components/form/Spinner.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 23,
-        "column": 7,
-        "offset": 584
-      },
-      "sourceLine": "ref={ref}",
-      "fingerprint": "src/web/components/form/Spinner.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|ref={ref}"
-    },
-    {
-      "filename": "src/web/components/form/TextField.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 50,
-        "column": 7,
-        "offset": 1096
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/form/TextField.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
-      "filename": "src/web/components/form/ToggleButton.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 64,
-        "column": 5,
-        "offset": 1365
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/form/ToggleButton.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|5|{...props}"
-    },
-    {
-      "filename": "src/web/components/icon/createIconComponents.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 55,
-        "column": 13,
-        "offset": 1436
-      },
-      "sourceLine": "{...otherProps}",
-      "fingerprint": "src/web/components/icon/createIconComponents.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|13|{...otherProps}"
-    },
-    {
-      "filename": "src/web/components/icon/DeleteIcon.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 46,
-        "column": 7,
-        "offset": 1370
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/icon/DeleteIcon.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
-      "filename": "src/web/components/icon/DynamicIcon.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 99,
-        "column": 9,
-        "offset": 2513
-      },
-      "sourceLine": "{...restProps}",
-      "fingerprint": "src/web/components/icon/DynamicIcon.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|{...restProps}"
-    },
-    {
       "filename": "src/web/components/icon/DynamicIcon.tsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
@@ -3423,54 +3207,6 @@
       "fingerprint": "src/web/components/icon/DynamicIcon.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|27|if (isDefined(result?.then)) {"
     },
     {
-      "filename": "src/web/components/icon/ExportIcon.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 39,
-        "column": 68,
-        "offset": 1296
-      },
-      "sourceLine": "<FileOutputIcon data-testid={dataTestId} title={downloadTitle} {...props} />",
-      "fingerprint": "src/web/components/icon/ExportIcon.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|68|<FileOutputIcon data-testid={dataTestId} title={downloadTitle} {...props} />"
-    },
-    {
-      "filename": "src/web/components/icon/GreenboneApplianceLogo.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 56,
-        "column": 64,
-        "offset": 1234
-      },
-      "sourceLine": "<LazyIconWrapper importPath={importPath} testId={testId} {...props} />",
-      "fingerprint": "src/web/components/icon/GreenboneApplianceLogo.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|64|<LazyIconWrapper importPath={importPath} testId={testId} {...props} />"
-    },
-    {
-      "filename": "src/web/components/icon/GreenboneApplianceLogo.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 43,
-        "column": 7,
-        "offset": 902
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/icon/GreenboneApplianceLogo.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
-      "filename": "src/web/components/icon/Icon.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 122,
-        "column": 7,
-        "offset": 2805
-      },
-      "sourceLine": "{...other}",
-      "fingerprint": "src/web/components/icon/Icon.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...other}"
-    },
-    {
       "filename": "src/web/components/icon/Icon.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
@@ -3481,30 +3217,6 @@
       },
       "sourceLine": "void loadImage();",
       "fingerprint": "src/web/components/icon/Icon.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|10|void loadImage();"
-    },
-    {
-      "filename": "src/web/components/icon/index.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 169,
-        "column": 9,
-        "offset": 5659
-      },
-      "sourceLine": "{...rest}",
-      "fingerprint": "src/web/components/icon/index.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|{...rest}"
-    },
-    {
-      "filename": "src/web/components/icon/TrashIcon.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 42,
-        "column": 7,
-        "offset": 1239
-      },
-      "sourceLine": "{...other}",
-      "fingerprint": "src/web/components/icon/TrashIcon.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...other}"
     },
     {
       "filename": "src/web/components/layout/AutoSize.tsx",
@@ -3529,18 +3241,6 @@
       },
       "sourceLine": "justify = 'flex-start',",
       "fingerprint": "src/web/components/layout/Column.tsx|eslint(no-unused-vars)|Parameter 'justify' is declared but never used. Unused parameters should start with a '_'.|3|justify = 'flex-start',"
-    },
-    {
-      "filename": "src/web/components/layout/Divider.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 57,
-        "column": 66,
-        "offset": 1312
-      },
-      "sourceLine": "<DividerComponent $margin={margin} flex={flex} grow={grow} {...props} />",
-      "fingerprint": "src/web/components/layout/Divider.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|66|<DividerComponent $margin={margin} flex={flex} grow={grow} {...props} />"
     },
     {
       "filename": "src/web/components/layout/withLayout.tsx",
@@ -3675,18 +3375,6 @@
       "fingerprint": "src/web/components/notification/FeedSyncNotification/hooks.ts|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setIsFeedSyncDialogOpened(true);"
     },
     {
-      "filename": "src/web/components/panel/InfoPanel.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 74,
-        "column": 7,
-        "offset": 1763
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/panel/InfoPanel.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
       "filename": "src/web/components/powerfilter/PowerFilter.tsx",
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `string` (not nullish). This default assignment will never be used.",
@@ -3807,54 +3495,6 @@
       "fingerprint": "src/web/components/provider/SubscriptionProvider.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|49|<SubscriptionContext.Provider value={this.handleSubscribe}>"
     },
     {
-      "filename": "src/web/components/sortable/__tests__/SortableEmptyRow.test.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 16,
-        "column": 38,
-        "offset": 489
-      },
-      "sourceLine": "<SortableEmptyRow height={200} {...props} />",
-      "fingerprint": "src/web/components/sortable/__tests__/SortableEmptyRow.test.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|38|<SortableEmptyRow height={200} {...props} />"
-    },
-    {
-      "filename": "src/web/components/sortable/__tests__/SortableGrid.test.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 28,
-        "column": 7,
-        "offset": 729
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/sortable/__tests__/SortableGrid.test.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...props}"
-    },
-    {
-      "filename": "src/web/components/sortable/__tests__/SortableItem.test.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 36,
-        "column": 9,
-        "offset": 891
-      },
-      "sourceLine": "{...props}",
-      "fingerprint": "src/web/components/sortable/__tests__/SortableItem.test.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|{...props}"
-    },
-    {
-      "filename": "src/web/components/sortable/__tests__/SortableRow.test.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 16,
-        "column": 68,
-        "offset": 508
-      },
-      "sourceLine": "<SortableRow height={200} id=\"row-1\" onResize={testing.fn()} {...props}>",
-      "fingerprint": "src/web/components/sortable/__tests__/SortableRow.test.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|68|<SortableRow height={200} id=\"row-1\" onResize={testing.fn()} {...props}>"
-    },
-    {
       "filename": "src/web/components/sortable/SortableResizer.tsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
@@ -3915,30 +3555,6 @@
       "fingerprint": "src/web/components/sortable/SortableResizer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|52|document.removeEventListener('mousemove', this.handleMouseMove);"
     },
     {
-      "filename": "src/web/components/tab/TabList.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 39,
-        "column": 28,
-        "offset": 981
-      },
-      "sourceLine": "<Layout role=\"tablist\" {...props}>",
-      "fingerprint": "src/web/components/tab/TabList.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|28|<Layout role=\"tablist\" {...props}>"
-    },
-    {
-      "filename": "src/web/components/table/TableData.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 29,
-        "column": 33,
-        "offset": 596
-      },
-      "sourceLine": "<StyledLayout flex=\"column\" {...other}>",
-      "fingerprint": "src/web/components/table/TableData.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|33|<StyledLayout flex=\"column\" {...other}>"
-    },
-    {
       "filename": "src/web/components/table/TableHead.tsx",
       "code": "eslint(no-unused-vars)",
       "message": "Parameter 'withBorder' is declared but never used. Unused parameters should start with a '_'.",
@@ -3961,18 +3577,6 @@
       },
       "sourceLine": "const MockComponent = testing.fn((props: MockProps) => (",
       "fingerprint": "src/web/entities/__tests__/withEntitiesActions.test.tsx|eslint(no-unused-vars)|Parameter 'props' is declared but never used. Unused parameters should start with a '_'.|39|const MockComponent = testing.fn((props: MockProps) => ("
-    },
-    {
-      "filename": "src/web/entities/createEntitiesTable.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 100,
-        "column": 7,
-        "offset": 2544
-      },
-      "sourceLine": "{...(props as EntitiesTableProps<",
-      "fingerprint": "src/web/entities/createEntitiesTable.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...(props as EntitiesTableProps<"
     },
     {
       "filename": "src/web/entities/EntitiesActions.tsx",
@@ -4347,42 +3951,6 @@
       "fingerprint": "src/web/entities/EntitiesPage.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|31|onFilterCreated={this.handleFilterCreated}"
     },
     {
-      "filename": "src/web/entities/EntitiesTable.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 249,
-        "column": 11,
-        "offset": 6800
-      },
-      "sourceLine": "key={entity.id}",
-      "fingerprint": "src/web/entities/EntitiesTable.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|11|key={entity.id}"
-    },
-    {
-      "filename": "src/web/entities/EntitiesTable.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 301,
-        "column": 9,
-        "offset": 8287
-      },
-      "sourceLine": "{...(props as unknown as TFooterProps)}",
-      "fingerprint": "src/web/entities/EntitiesTable.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|{...(props as unknown as TFooterProps)}"
-    },
-    {
-      "filename": "src/web/entities/EntitiesTable.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 291,
-        "column": 9,
-        "offset": 8013
-      },
-      "sourceLine": "{...(props as unknown as THeaderProps)}",
-      "fingerprint": "src/web/entities/EntitiesTable.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|{...(props as unknown as THeaderProps)}"
-    },
-    {
       "filename": "src/web/entity/Container.jsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
@@ -4417,18 +3985,6 @@
       },
       "sourceLine": "onSuccess: this.handleChanged,",
       "fingerprint": "src/web/entity/Container.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|23|onSuccess: this.handleChanged,"
-    },
-    {
-      "filename": "src/web/entity/EntityPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 100,
-        "column": 53,
-        "offset": 2654
-      },
-      "sourceLine": "return <ToolBarIconsComponent entity={entity} {...props} />;",
-      "fingerprint": "src/web/entity/EntityPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|53|return <ToolBarIconsComponent entity={entity} {...props} />;"
     },
     {
       "filename": "src/web/entity/EntityPage.tsx",
@@ -4525,18 +4081,6 @@
       },
       "sourceLine": "onPermissionEditClick={this.openPermissionDialog}",
       "fingerprint": "src/web/entity/EntityPermissions.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|41|onPermissionEditClick={this.openPermissionDialog}"
-    },
-    {
-      "filename": "src/web/entity/Page.jsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 37,
-        "column": 51,
-        "offset": 1157
-      },
-      "sourceLine": "return <ToolBarIconsComponent entity={entity} {...other} />;",
-      "fingerprint": "src/web/entity/Page.jsx|gsa(jsx-sort-props)|JSX properties should be sorted.|51|return <ToolBarIconsComponent entity={entity} {...other} />;"
     },
     {
       "filename": "src/web/entity/Tags.jsx",
@@ -5271,30 +4815,6 @@
       "fingerprint": "src/web/pages/cves/Details.jsx|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|34|<TableData>{`${title}`}</TableData>"
     },
     {
-      "filename": "src/web/pages/extras/TrashActions.jsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 171,
-        "column": 52,
-        "offset": 5217
-      },
-      "sourceLine": "<RestoreIcon name=\"restore\" value={entity} {...restoreprops} />",
-      "fingerprint": "src/web/pages/extras/TrashActions.jsx|gsa(jsx-sort-props)|JSX properties should be sorted.|52|<RestoreIcon name=\"restore\" value={entity} {...restoreprops} />"
-    },
-    {
-      "filename": "src/web/pages/extras/TrashActions.jsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 172,
-        "column": 55,
-        "offset": 5292
-      },
-      "sourceLine": "<TrashDeleteIcon name=\"delete\" value={entity} {...deleteprops} />",
-      "fingerprint": "src/web/pages/extras/TrashActions.jsx|gsa(jsx-sort-props)|JSX properties should be sorted.|55|<TrashDeleteIcon name=\"delete\" value={entity} {...deleteprops} />"
-    },
-    {
       "filename": "src/web/pages/groups/GroupComponent.jsx",
       "code": "typescript(no-floating-promises)",
       "message": "Promises must be awaited, add void operator to ignore.",
@@ -5413,18 +4933,6 @@
       },
       "sourceLine": "onRangeSelected={this.handleRangeSelect}",
       "fingerprint": "src/web/pages/hosts/dashboard/ModifiedHighDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|39|onRangeSelected={this.handleRangeSelect}"
-    },
-    {
-      "filename": "src/web/pages/hosts/DetailsPage.jsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 232,
-        "column": 36,
-        "offset": 7331
-      },
-      "sourceLine": "<HostDetails entity={entity} {...props} />",
-      "fingerprint": "src/web/pages/hosts/DetailsPage.jsx|gsa(jsx-sort-props)|JSX properties should be sorted.|36|<HostDetails entity={entity} {...props} />"
     },
     {
       "filename": "src/web/pages/hosts/HostComponent.jsx",
@@ -5751,18 +5259,6 @@
       "fingerprint": "src/web/pages/overrides/dashboard/WordCloudDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
     },
     {
-      "filename": "src/web/pages/overrides/OverrideComponent.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 289,
-        "column": 15,
-        "offset": 9036
-      },
-      "sourceLine": "{...initialProps}",
-      "fingerprint": "src/web/pages/overrides/OverrideComponent.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|15|{...initialProps}"
-    },
-    {
       "filename": "src/web/pages/overrides/OverrideDialog.tsx",
       "code": "typescript(restrict-template-expressions)",
       "message": "Invalid type used in template literal expression.",
@@ -6073,18 +5569,6 @@
       },
       "sourceLine": "preferences[name] = value;",
       "fingerprint": "src/web/pages/reportformats/Dialog.jsx|react(immutability)|This value cannot be modified|7|preferences[name] = value;"
-    },
-    {
-      "filename": "src/web/pages/reports/__tests__/AuditReportDetailsContent.test.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 147,
-        "column": 7,
-        "offset": 4575
-      },
-      "sourceLine": "{...overrideProps}",
-      "fingerprint": "src/web/pages/reports/__tests__/AuditReportDetailsContent.test.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|7|{...overrideProps}"
     },
     {
       "filename": "src/web/pages/reports/__tests__/AuditReportFilterDialog.test.tsx",
@@ -6592,18 +6076,6 @@
     },
     {
       "filename": "src/web/pages/results/DetailsPage.jsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 223,
-        "column": 40,
-        "offset": 9130
-      },
-      "sourceLine": "<ResultDetails entity={entity} {...props} />",
-      "fingerprint": "src/web/pages/results/DetailsPage.jsx|gsa(jsx-sort-props)|JSX properties should be sorted.|40|<ResultDetails entity={entity} {...props} />"
-    },
-    {
-      "filename": "src/web/pages/results/DetailsPage.jsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
@@ -6675,25 +6147,13 @@
       "fingerprint": "src/web/pages/scanconfigs/__tests__/DetailsPage.test.jsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|26|deleteConfigResponse = undefined,"
     },
     {
-      "filename": "src/web/pages/scanconfigs/DetailsPage.jsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 210,
-        "column": 42,
-        "offset": 7337
-      },
-      "sourceLine": "<ScanConfigDetails entity={entity} {...props} />",
-      "fingerprint": "src/web/pages/scanconfigs/DetailsPage.jsx|gsa(jsx-sort-props)|JSX properties should be sorted.|42|<ScanConfigDetails entity={entity} {...props} />"
-    },
-    {
       "filename": "src/web/pages/scanconfigs/ScanConfigComponent.tsx",
       "code": "eslint(no-unused-vars)",
       "message": "Parameter 'save' is declared but never used. Unused parameters should start with a '_'.",
       "location": {
         "line": 439,
         "column": 12,
-        "offset": 12333
+        "offset": 12365
       },
       "sourceLine": "{({save, create, ...other}) => {",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigComponent.tsx|eslint(no-unused-vars)|Parameter 'save' is declared but never used. Unused parameters should start with a '_'.|12|{({save, create, ...other}) => {"
@@ -6705,7 +6165,7 @@
       "location": {
         "line": 417,
         "column": 29,
-        "offset": 11765
+        "offset": 11797
       },
       "sourceLine": "} catch (error: Error | unknown) {",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigComponent.tsx|typescript(no-redundant-type-constituents)|'unknown' overrides all other types in this union type.|29|} catch (error: Error | unknown) {"
@@ -6715,9 +6175,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 269,
+        "line": 267,
         "column": 5,
-        "offset": 7145
+        "offset": 7088
       },
       "sourceLine": "setFilteredFamilies(families ?? []);",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setFilteredFamilies(families ?? []);"
@@ -6727,9 +6187,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 277,
+        "line": 275,
         "column": 5,
-        "offset": 7335
+        "offset": 7278
       },
       "sourceLine": "setFilteredNvtPreferences(nvtPreferences ?? []);",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setFilteredNvtPreferences(nvtPreferences ?? []);"
@@ -6739,9 +6199,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 273,
+        "line": 271,
         "column": 5,
-        "offset": 7225
+        "offset": 7168
       },
       "sourceLine": "setFilteredScannerPreferences(scannerPreferences ?? []);",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setFilteredScannerPreferences(scannerPreferences ?? []);"
@@ -6751,9 +6211,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 292,
+        "line": 290,
         "column": 5,
-        "offset": 7942
+        "offset": 7885
       },
       "sourceLine": "setSelectValues(currentSelect =>",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setSelectValues(currentSelect =>"
@@ -6975,18 +6435,6 @@
       "fingerprint": "src/web/pages/tags/TagResourceList.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setIsLoading(false);"
     },
     {
-      "filename": "src/web/pages/tags/TagTable.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 271,
-        "column": 32,
-        "offset": 7136
-      },
-      "sourceLine": "<Actions entity={entity} {...actionProps} />",
-      "fingerprint": "src/web/pages/tags/TagTable.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|32|<Actions entity={entity} {...actionProps} />"
-    },
-    {
       "filename": "src/web/pages/targets/__tests__/TargetDetails.test.tsx",
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.",
@@ -6997,42 +6445,6 @@
       },
       "sourceLine": "notExpectedLabels = [],",
       "fingerprint": "src/web/pages/targets/__tests__/TargetDetails.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.|27|notExpectedLabels = [],"
-    },
-    {
-      "filename": "src/web/pages/tasks/__tests__/AgentTaskDialog.test.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 58,
-        "column": 9,
-        "offset": 1595
-      },
-      "sourceLine": "{...commonHandlers()}",
-      "fingerprint": "src/web/pages/tasks/__tests__/AgentTaskDialog.test.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|{...commonHandlers()}"
-    },
-    {
-      "filename": "src/web/pages/tasks/__tests__/ContainerImageTaskDialog.test.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 84,
-        "column": 9,
-        "offset": 2248
-      },
-      "sourceLine": "{...commonHandlers()}",
-      "fingerprint": "src/web/pages/tasks/__tests__/ContainerImageTaskDialog.test.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|{...commonHandlers()}"
-    },
-    {
-      "filename": "src/web/pages/tasks/__tests__/TaskDialog.test.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 193,
-        "column": 9,
-        "offset": 5879
-      },
-      "sourceLine": "{...commonHandlers()}",
-      "fingerprint": "src/web/pages/tasks/__tests__/TaskDialog.test.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|{...commonHandlers()}"
     },
     {
       "filename": "src/web/pages/tasks/dashboard/CvssDisplay.jsx",
@@ -7273,246 +6685,6 @@
       },
       "sourceLine": "title: ({data: tdata = {}}) =>",
       "fingerprint": "src/web/pages/tlscertificates/dashboard/TimeStatusDisplay.jsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `unknown[]` (not nullish). This default assignment will never be used.|26|title: ({data: tdata = {}}) =>"
-    },
-    {
-      "filename": "src/web/pages/tlscertificates/DetailsPage.jsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 109,
-        "column": 46,
-        "offset": 4104
-      },
-      "sourceLine": "<TlsCertificateDetails entity={entity} {...props} />",
-      "fingerprint": "src/web/pages/tlscertificates/DetailsPage.jsx|gsa(jsx-sort-props)|JSX properties should be sorted.|46|<TlsCertificateDetails entity={entity} {...props} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 451,
-        "column": 15,
-        "offset": 15256
-      },
-      "sourceLine": "{...tableProps}",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|15|{...tableProps}"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 395,
-        "column": 46,
-        "offset": 13373
-      },
-      "sourceLine": "<TagsTable entities={trash.tags} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|46|<TagsTable entities={trash.tags} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 307,
-        "column": 48,
-        "offset": 10425
-      },
-      "sourceLine": "<NotesTable entities={trash.notes} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|48|<NotesTable entities={trash.notes} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 366,
-        "column": 48,
-        "offset": 12383
-      },
-      "sourceLine": "<RolesTable entities={trash.roles} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|48|<RolesTable entities={trash.roles} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 411,
-        "column": 48,
-        "offset": 13903
-      },
-      "sourceLine": "<TasksTable entities={trash.tasks} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|48|<TasksTable entities={trash.tasks} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 270,
-        "column": 50,
-        "offset": 9187
-      },
-      "sourceLine": "<AlertsTable entities={trash.alerts} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|50|<AlertsTable entities={trash.alerts} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 277,
-        "column": 50,
-        "offset": 9415
-      },
-      "sourceLine": "<AuditsTable entities={trash.audits} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|50|<AuditsTable entities={trash.audits} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 299,
-        "column": 50,
-        "offset": 10165
-      },
-      "sourceLine": "<GroupsTable entities={trash.groups} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|50|<GroupsTable entities={trash.groups} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 292,
-        "column": 52,
-        "offset": 9937
-      },
-      "sourceLine": "<FiltersTable entities={trash.filters} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|52|<FiltersTable entities={trash.filters} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 403,
-        "column": 52,
-        "offset": 13643
-      },
-      "sourceLine": "<TargetsTable entities={trash.targets} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|52|<TargetsTable entities={trash.targets} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 381,
-        "column": 53,
-        "offset": 12912
-      },
-      "sourceLine": "<ScannerTable entities={trash.scanners} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|53|<ScannerTable entities={trash.scanners} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 330,
-        "column": 54,
-        "offset": 11232
-      },
-      "sourceLine": "<PoliciesTable entities={trash.policies} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|54|<PoliciesTable entities={trash.policies} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 338,
-        "column": 55,
-        "offset": 11513
-      },
-      "sourceLine": "<PortListTable entities={trash.portLists} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|55|<PortListTable entities={trash.portLists} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 315,
-        "column": 56,
-        "offset": 10705
-      },
-      "sourceLine": "<OverridesTable entities={trash.overrides} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|56|<OverridesTable entities={trash.overrides} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 388,
-        "column": 56,
-        "offset": 13155
-      },
-      "sourceLine": "<SchedulesTable entities={trash.schedules} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|56|<SchedulesTable entities={trash.schedules} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 285,
-        "column": 59,
-        "offset": 9704
-      },
-      "sourceLine": "<CredentialTable entities={trash.credentials} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|59|<CredentialTable entities={trash.credentials} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 430,
-        "column": 60,
-        "offset": 14520
-      },
-      "sourceLine": "<AgentGroupsTable entities={trash.agentGroups} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|60|<AgentGroupsTable entities={trash.agentGroups} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 323,
-        "column": 60,
-        "offset": 10995
-      },
-      "sourceLine": "<PermissionsTable entities={trash.permissions} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|60|<PermissionsTable entities={trash.permissions} {...tableProps} />"
-    },
-    {
-      "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 373,
-        "column": 60,
-        "offset": 12638
-      },
-      "sourceLine": "<ScanConfigsTable entities={trash.scanConfigs} {...tableProps} />",
-      "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|60|<ScanConfigsTable entities={trash.scanConfigs} {...tableProps} />"
     },
     {
       "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
@@ -8137,18 +7309,6 @@
       },
       "sourceLine": "`${TRANSLATED_RISK_FACTORS[factor]}`;",
       "fingerprint": "src/web/utils/severity.ts|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|6|`${TRANSLATED_RISK_FACTORS[factor]}`;"
-    },
-    {
-      "filename": "src/web/utils/withTranslation.tsx",
-      "code": "gsa(jsx-sort-props)",
-      "message": "JSX properties should be sorted.",
-      "location": {
-        "line": 38,
-        "column": 9,
-        "offset": 1160
-      },
-      "sourceLine": "key={`translation-wrapper-${language}`}",
-      "fingerprint": "src/web/utils/withTranslation.tsx|gsa(jsx-sort-props)|JSX properties should be sorted.|9|key={`translation-wrapper-${language}`}"
     }
   ]
 }

@@ -46,9 +46,18 @@ export default {
       JSXOpeningElement(/** @type {any} */ node) {
         const attributes = node.attributes ?? [];
         for (let index = 1; index < attributes.length; index += 1) {
-          if (compareAttributes(attributes[index - 1], attributes[index]) > 0) {
+          const previousAttribute = attributes[index - 1];
+          const attribute = attributes[index];
+          if (
+            previousAttribute.type === 'JSXSpreadAttribute' ||
+            attribute.type === 'JSXSpreadAttribute'
+          ) {
+            continue;
+          }
+
+          if (compareAttributes(previousAttribute, attribute) > 0) {
             context.report({
-              node: attributes[index],
+              node: attribute,
               messageId: 'unsorted',
             });
             break;
