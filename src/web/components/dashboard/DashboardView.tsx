@@ -343,7 +343,6 @@ const DashboardView = ({
               dragHandleRef={dragHandleRef}
               filter={filter}
               height={height}
-              id={displayId}
               notify={notify}
               setState={stateFunc =>
                 handleSetDisplayState(displayId, stateFunc)

@@ -42,11 +42,9 @@ export type DisplaySetStateFunc<TState extends State> = (
 
 type TitleFunc<TData> = ({
   data,
-  id,
   isLoading,
 }: {
   data: TData[];
-  id: string;
   isLoading?: boolean;
 }) => string;
 
@@ -61,7 +59,6 @@ type IconsRenderFunc<TState extends State> = (
 ) => ReactNode;
 
 interface DataDisplayRenderProps<TData, TState extends State> {
-  id: string;
   width: number;
   height: number;
   svgRef: React.RefObject<SVGSVGElement | null>;
@@ -95,7 +92,6 @@ export interface DataDisplayProps<
   height: number;
   icons?: IconsRenderFunc<TState>;
   children?: TChildren;
-  id: string;
   initialState: TState;
   onSelectFilterClick: () => void;
   setState?: DisplaySetStateFunc<TState>;
@@ -243,7 +239,7 @@ class DataDisplay<
     this.state = {
       data,
       originalData: this.props.data,
-      title: this.props.title({data, id: this.props.id}),
+      title: this.props.title({data}),
     };
 
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
@@ -255,29 +251,28 @@ class DataDisplay<
     TData,
     TProps extends DataDisplayWithTranslationProps<
       TData,
-      TState,
       TTransformedData,
-      TTransformProps
+      TTransformProps,
+      TState
     >,
-    TState extends State,
-    TTransformedData,
+    TTransformedData extends Array<any>,
     TTransformProps extends object = object,
+    TState extends DisplayState = DisplayState,
   >(nextProps: TProps, prevState: DataDisplayState<TData, TTransformedData>) {
     if (!equal(prevState.originalData, nextProps.data)) {
       // data has changed update transformed data
       const data = DataDisplay.getTransformedData<
         TData,
         TProps,
-        TState,
         TTransformedData,
-        TTransformProps
+        TTransformProps,
+        TState
       >(nextProps);
       return {
         data,
         originalData: nextProps.data,
         title: nextProps.title({
           data,
-          id: nextProps.id,
           isLoading: nextProps.isLoading,
         }),
       };
@@ -444,7 +439,6 @@ class DataDisplay<
     const {_} = this.props;
     const {
       children,
-      id,
       dataTitles,
       dataRow,
       filter,
@@ -485,7 +479,6 @@ class DataDisplay<
                   <>
                     {isFunction(children)
                       ? children({
-                          id,
                           data: transformedData,
                           width,
                           height,
