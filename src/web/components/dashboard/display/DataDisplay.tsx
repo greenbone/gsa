@@ -95,7 +95,6 @@ export interface DataDisplayProps<
   initialState: TState;
   onSelectFilterClick: () => void;
   setState?: DisplaySetStateFunc<TState>;
-  showCsvDownload: boolean;
   showFilterSelection: boolean;
   showFilterString: boolean;
   showSvgDownload: boolean;
@@ -107,15 +106,15 @@ export interface DataDisplayProps<
 
 type DataDisplayWithTranslationProps<
   TData,
-  TState extends State,
-  TTransformedData = TData,
+  TTransformedData extends Array<any>,
   TTransformProps extends object = object,
+  TState extends DisplayState = DisplayState,
 > = WithTranslationComponentProps &
-  DataDisplayProps<TData, TState, TTransformedData, TTransformProps>;
+  DataDisplayProps<TData, TTransformedData, TTransformProps, TState>;
 
 interface DataDisplayState<TData, TTransformedData> {
-  data: TTransformedData[];
-  originalData: TData;
+  data: TTransformedData;
+  originalData?: TData;
   title: string;
 }
 
