@@ -13,6 +13,8 @@ written in [React](https://reactjs.org/).
 - [Releases](#releases)
 - [Installation](#installation)
 - [Developing](#developing)
+  - [Linting](#linting)
+  - [Local Playwright E2E](#local-playwright-e2e)
 - [Translations](#translations)
   - [Format](#format)
   - [Updating](#updating)
@@ -50,7 +52,7 @@ written in [React](https://reactjs.org/).
 
 All [release files](https://github.com/greenbone/gsa/releases) are signed with
 the [Greenbone Community Feed integrity key](https://community.greenbone.net/t/gcf-managing-the-digital-signatures/101).
-This gpg key can be downloaded at https://www.greenbone.net/GBCommunitySigningKey.asc
+This gpg key can be downloaded at <https://www.greenbone.net/GBCommunitySigningKey.asc>
 and the fingerprint is `8AE4 BE42 9B60 A59B 311C  2E73 9823 FAA6 0ED1 E580`.
 
 ## Installation
