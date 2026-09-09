@@ -133,6 +133,25 @@ describe('AgentCommand tests', () => {
       args: {
         cmd: 'get_agent_support_bundle',
         agent_uuid: '324',
+        encryption: 1,
+      },
+      responseType: 'arraybuffer',
+    });
+    expect(result).toBe(fakeFile);
+  });
+
+  test('should allow to download an unencrypted agent support bundle', async () => {
+    const fakeFile = new ArrayBuffer(8);
+    const http = createHttp(fakeFile);
+    const command = new AgentCommand(http);
+
+    const result = await command.downloadSupportBundle('324', false);
+
+    expect(http.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_agent_support_bundle',
+        agent_uuid: '324',
+        encryption: 0,
       },
       responseType: 'arraybuffer',
     });

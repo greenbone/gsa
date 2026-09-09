@@ -40,6 +40,11 @@ interface UseDownloadAgentSupportBundleParams {
   onError?: (error: Rejection) => void;
 }
 
+export interface DownloadAgentSupportBundleInput {
+  id: string;
+  encryption?: boolean;
+}
+
 export const useGetAgents = ({
   filter,
   scannerId,
@@ -233,8 +238,13 @@ export const useDownloadAgentSupportBundle = ({
 }: UseDownloadAgentSupportBundleParams = {}) => {
   const gmp = useGmp();
 
-  return useGmpMutation<string, Response<ArrayBuffer>, Rejection>({
-    gmpMethod: id => gmp.agent.downloadSupportBundle(id),
+  return useGmpMutation<
+    DownloadAgentSupportBundleInput,
+    Response<ArrayBuffer>,
+    Rejection
+  >({
+    gmpMethod: ({id, encryption}) =>
+      gmp.agent.downloadSupportBundle(id, encryption),
     onSuccess,
     onError,
   });

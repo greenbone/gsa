@@ -7,10 +7,13 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Agent from 'gmp/models/agent';
 import {AGENTS_FILTER_FILTER, type FilterType} from 'gmp/models/filter';
+import {parseBoolean} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import Download from 'web/components/form/Download';
+import FormGroup from 'web/components/form/FormGroup';
+import Radio from 'web/components/form/Radio';
 import useDownload from 'web/components/form/useDownload';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -44,6 +47,10 @@ const AgentListPage = () => {
     useState(false);
   const [deleteAgent, setDeleteAgent] = useState<Agent | undefined>(undefined);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [downloadAgent, setDownloadAgent] = useState<Agent | undefined>(
+    undefined,
+  );
+  const [downloadEncryption, setDownloadEncryption] = useState(true);
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const [agents, setAgents] = useState<Agent[] | undefined>(undefined);
   const [entitiesCounts, setEntitiesCounts] = useState<
@@ -196,22 +203,56 @@ const AgentListPage = () => {
     onError: showError,
   });
 
-  const handleDownloadSupportBundle = (agent: Agent) => {
-    downloadSupportBundleMutation.mutate(agent.id as string, {
-      onSuccess: response => {
-        const formatUtcTimestamp = (date = new Date()) =>
-          date
-            .toISOString()
-            .replace(/[-:]/g, '')
-            .replace(/\.\d{3}Z$/, 'Z');
+  const closeDownloadDialog = () => {
+    setDownloadAgent(undefined);
+    setDownloadEncryption(true);
+  };
 
-        handleDownload({
-          data: response.data,
-          filename: `support-bundle-${agent.agentId}-${formatUtcTimestamp()}.tar.gz.enc`,
-          mimetype: 'application/octet-stream',
-        });
+  const handleDownloadSupportBundle = (agent: Agent) => {
+    setDownloadAgent(agent);
+    setDownloadEncryption(true);
+  };
+
+  const handleDownloadSupportBundleWithFormat = (
+    agent: Agent,
+    encryption: boolean,
+    onSuccess?: () => void,
+  ) => {
+    if (!agent.id) {
+      return;
+    }
+
+    downloadSupportBundleMutation.mutate(
+      {id: agent.id, encryption},
+      {
+        onSuccess: response => {
+          const formatUtcTimestamp = (date = new Date()) =>
+            date
+              .toISOString()
+              .replace(/[-:]/g, '')
+              .replace(/\.\d{3}Z$/, 'Z');
+
+          handleDownload({
+            data: response.data,
+            filename: `support-bundle-${agent.agentId}-${formatUtcTimestamp()}${encryption ? '.tar.gz.enc' : '.tar.gz'}`,
+            mimetype: 'application/octet-stream',
+          });
+          onSuccess?.();
+        },
       },
-    });
+    );
+  };
+
+  const handleConfirmDownloadSupportBundle = () => {
+    if (!downloadAgent) {
+      return;
+    }
+
+    handleDownloadSupportBundleWithFormat(
+      downloadAgent,
+      downloadEncryption,
+      closeDownloadDialog,
+    );
   };
 
   const handleFilterChanged = useCallback(
@@ -350,6 +391,35 @@ const AgentListPage = () => {
                 title={_('Confirm Deletion')}
                 onClose={closeConfirmDeleteDialog}
                 onResumeClick={handleConfirmDelete}
+              />
+            )}
+            {downloadAgent && (
+              <ConfirmationDialog
+                content={
+                  <FormGroup title={_('Support Bundle Format')}>
+                    <Radio<boolean>
+                      checked={downloadEncryption}
+                      convert={parseBoolean}
+                      name="support-bundle-encryption"
+                      title={_('Encrypted support bundle')}
+                      value={true}
+                      onChange={setDownloadEncryption}
+                    />
+                    <Radio<boolean>
+                      checked={!downloadEncryption}
+                      convert={parseBoolean}
+                      name="support-bundle-encryption"
+                      title={_('Plain support bundle')}
+                      value={false}
+                      onChange={setDownloadEncryption}
+                    />
+                  </FormGroup>
+                }
+                loading={downloadSupportBundleMutation.isPending}
+                rightButtonTitle={_('Download')}
+                title={_('Download Agent Support Bundle')}
+                onClose={closeDownloadDialog}
+                onResumeClick={handleConfirmDownloadSupportBundle}
               />
             )}
             {isTagsDialogVisible && (
