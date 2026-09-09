@@ -338,8 +338,34 @@ describe('AgentListPage tests', () => {
 
     fireEvent.click(downloadIcons[0]);
 
+    expect(
+      screen.getByRole('radio', {name: 'Encrypted support bundle'}),
+    ).toBeChecked();
+    fireEvent.click(screen.getByTestId('dialog-save-button'));
+
     await wait();
 
-    expect(downloadSupportBundleMock).toHaveBeenCalledWith('1');
+    expect(downloadSupportBundleMock).toHaveBeenCalledWith('1', true);
+  });
+
+  test('should download a plain support bundle when selected', async () => {
+    const gmp = createGmp();
+
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+    });
+
+    render(<AgentListPage />);
+
+    await screen.findByText('Agent 1');
+
+    fireEvent.click(screen.getAllByTitle('Download Agent Support Bundle')[0]);
+    fireEvent.click(screen.getByRole('radio', {name: 'Plain support bundle'}));
+    fireEvent.click(screen.getByTestId('dialog-save-button'));
+
+    await wait();
+
+    expect(downloadSupportBundleMock).toHaveBeenCalledWith('1', false);
   });
 });
