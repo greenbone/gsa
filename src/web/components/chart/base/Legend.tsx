@@ -22,7 +22,7 @@ interface StyledLegendProps {
 
 export interface LegendData {
   color: ToString;
-  label: string;
+  label: ToString;
   toolTip?: ReactNode;
 }
 
@@ -89,7 +89,7 @@ const Legend = <TData extends LegendData = LegendData>({
 }: LegendProps<TData>) => (
   <StyledLegend ref={legendRef as Ref<HTMLDivElement>} $maxHeight={maxHeight}>
     {data.map(d => (
-      <ToolTip key={d.label} content={d.toolTip}>
+      <ToolTip key={String(d.label)} content={d.toolTip}>
         {({targetRef, hide, show}) =>
           isDefined(children) ? (
             children({
@@ -111,7 +111,7 @@ const Legend = <TData extends LegendData = LegendData>({
               onMouseLeave={hide}
             >
               <Rect color={String(d.color)} />
-              <LegendLabel>{d.label}</LegendLabel>
+              <LegendLabel>{String(d.label)}</LegendLabel>
             </Item>
           )
         }
