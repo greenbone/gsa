@@ -17,7 +17,27 @@
     "gsa/no-dynamic-i18n": "error",
     "gsa/no-restricted-imports": "warn",
     "gsa/ts-definitions-top": "warn",
-    "typescript/consistent-type-imports": "error"
+    "typescript/consistent-type-imports": "error",
+    "typescript/restrict-template-expressions": [
+      "error",
+      {
+        "allow": [
+          {
+            "from": "lib",
+            "name": [
+              "Error",
+              "URL",
+              "URLSearchParams"
+            ]
+          },
+          {
+            "from": "file",
+            "name": "ToString",
+            "path": "./src/gmp/types.ts"
+          }
+        ]
+      }
+    ]
   },
   "ignorePatterns": [
     "build/**",

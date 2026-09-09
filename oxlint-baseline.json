@@ -2835,18 +2835,6 @@
       "fingerprint": "src/web/components/chart/WordCloudChart.tsx|typescript(require-array-sort-compare)|Require 'compare' argument.|16|let values = data.map(d => d.value).sort();"
     },
     {
-      "filename": "src/web/components/dashboard/DashboardControls.tsx",
-      "code": "typescript(restrict-template-expressions)",
-      "message": "Invalid type used in template literal expression.",
-      "location": {
-        "line": 83,
-        "column": 15,
-        "offset": 2100
-      },
-      "sourceLine": "label: `${display.title}`,",
-      "fingerprint": "src/web/components/dashboard/DashboardControls.tsx|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|15|label: `${display.title}`,"
-    },
-    {
       "filename": "src/web/components/dashboard/DashboardView.tsx",
       "code": "react(refs)",
       "message": "Cannot access refs during render",
