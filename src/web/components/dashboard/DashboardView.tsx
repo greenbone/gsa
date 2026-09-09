@@ -37,34 +37,30 @@ import {type SortableItemRenderProps} from 'web/components/sortable/SortableItem
 import useLatestCallback from 'web/hooks/useLatestCallback';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface DashboardDisplay extends DashboardDisplayData {
-  filterId?: string;
-  state?: DisplayState;
-}
-
-interface DashboardDisplayProps extends DisplayProps {
+export interface DashboardDisplayProps extends DisplayProps {
   filter?: FilterType;
   notify?: (message: string) => void;
   showFilterSelection?: boolean;
   showFilterString?: boolean;
   onFilterChanged?: (filter: FilterType) => void;
+}
+
+interface DashboardDisplay extends DashboardDisplayData {
+  filterId?: string;
+  state?: DisplayState;
 }
 
 interface DashboardRow extends Omit<DashboardRowData, 'items'> {
   items: DashboardDisplay[];
 }
 
-interface DashboardViewProps {
+// The DashboardView forwards the DashboardDisplayProps to each individual display within the dashboard.
+interface DashboardViewProps extends DashboardDisplayProps {
   defaultDisplays?: string[][];
-  filter?: FilterType;
   id: string;
   maxItemsPerRow?: number;
   maxRows?: number;
   permittedDisplays: string[];
-  showFilterSelection?: boolean;
-  showFilterString?: boolean;
-  notify?: (message: string) => void;
-  onFilterChanged?: (filter: FilterType) => void;
   error?: Error;
   isLoading: boolean;
   loadSettings: (id: string, defaults: DashboardSettings) => void;
