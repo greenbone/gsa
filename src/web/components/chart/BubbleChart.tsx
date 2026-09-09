@@ -75,7 +75,7 @@ const BubbleChart = ({
           {nodes.map((node, i) => {
             const {data: d, x, y, r} = node;
             return (
-              <ToolTip key={d.label} content={d.toolTip}>
+              <ToolTip key={String(d.label)} content={d.toolTip}>
                 {({targetRef, hide, show}) => {
                   const clippathId = 'clippath-' + i;
                   return (
@@ -106,7 +106,7 @@ const BubbleChart = ({
                         fontWeight="normal"
                         textAnchor="middle"
                       >
-                        {d.label}
+                        {String(d.label)}
                       </text>
                     </Group>
                   );

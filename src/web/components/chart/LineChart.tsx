@@ -635,7 +635,7 @@ const LineChart = ({
                 lineWidth={d.width}
               />
               <LegendLabel>
-                {React.isValidElement(d.label) ? d.label : `${d.label}`}
+                {React.isValidElement(d.label) ? d.label : String(d.label)}
               </LegendLabel>
             </Item>
           )}

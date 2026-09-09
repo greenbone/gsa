@@ -87,11 +87,11 @@ const cloneSchedule = (d: ScheduleData, start: GmpDate, _: TranslateFunc) => {
   const toolTip =
     duration === 0
       ? _('{{name}} Start: {{date}}', {
-          name: d.label,
+          name: String(d.label),
           date: formattedUserSettingDateTimeWithTimeZone(start) as string,
         })
       : _('{{name}} Start: {{startDate}} End: {{endDate}}', {
-          name: d.label,
+          name: String(d.label),
           startDate: formattedUserSettingDateTimeWithTimeZone(start) as string,
           endDate: formattedUserSettingDateTimeWithTimeZone(
             start.clone().add(duration, 'seconds'),
@@ -196,7 +196,7 @@ const ScheduleChart = ({
 
   const yScale = scaleBand()
     .range([0, maxHeight])
-    .domain(yValues)
+    .domain(yValues.map(String))
     .padding(0.125);
 
   const futureRuns: FutureRun[] = [];
@@ -214,7 +214,7 @@ const ScheduleChart = ({
 
     if (futureRun > 0) {
       futureRuns.push({
-        label,
+        label: String(label),
         futureRun,
       });
     }
@@ -307,7 +307,7 @@ const ScheduleChart = ({
                         }
                         width={rwidth}
                         x={startX}
-                        y={yScale(label)}
+                        y={yScale(String(label))}
                         onMouseEnter={show}
                         onMouseLeave={hide}
                       />
