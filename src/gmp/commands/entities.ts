@@ -102,7 +102,8 @@ interface EntityCommandInputParams extends HttpCommandInputParams {
   id?: string;
 }
 
-interface TransformedAggregatesResponseData {
+// the transformed response data for get_aggregates requests
+export interface AggregatesResponseData {
   groups: Group[];
 }
 
@@ -281,7 +282,7 @@ abstract class EntitiesCommand<
       return newGroup;
     });
 
-    const ret: TransformedAggregatesResponseData = {
+    const ret: AggregatesResponseData = {
       groups: newGroups,
     };
 
