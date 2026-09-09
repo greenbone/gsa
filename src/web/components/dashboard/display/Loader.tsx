@@ -24,15 +24,18 @@ export interface LoaderRenderProps<TData> {
   isLoading: boolean;
 }
 
+export interface DisplayLoaderProps<TData> {
+  filter?: FilterType;
+  children?: (props: LoaderRenderProps<TData>) => React.ReactNode;
+}
+
 interface LoaderState<TData> {
   data?: TData;
 }
 
-interface LoaderProps<TData> {
+interface LoaderProps<TData> extends DisplayLoaderProps<TData> {
   dataId: string;
-  filter?: FilterType;
   subscriptions?: string[];
-  children?: (props: LoaderRenderProps<TData>) => React.ReactNode;
 }
 
 interface LoaderPropsWithLoadFunc<
