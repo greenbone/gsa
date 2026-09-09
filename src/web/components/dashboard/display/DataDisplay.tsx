@@ -402,10 +402,10 @@ class DataDisplay<
 
     const csvData = [
       escapeCsv(title),
-      dataTitles.map(t => escapeCsv(t)).join(','),
+      dataTitles.map(t => escapeCsv(String(t))).join(','),
       ...data.map(row =>
         dataRow(row)
-          .map(val => escapeCsv(val))
+          .map(val => escapeCsv(String(val)))
           .join(','),
       ),
     ].join('\n');
