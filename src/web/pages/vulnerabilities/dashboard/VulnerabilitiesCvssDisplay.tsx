@@ -13,14 +13,19 @@ import {VulnerabilitiesSeverityLoader} from 'web/pages/vulnerabilities/dashboard
 
 export const VulnerabilitiesCvssDisplay = createDisplay({
   loaderComponent: VulnerabilitiesSeverityLoader,
-  displayComponent: CvssDisplay,
-  yLabel: _l('# of Vulnerabilities'),
-  title: ({data: tdata}) =>
-    _('Vulnerabilities by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssDisplay
+      {...props}
+      title={({data}) =>
+        _('Vulnerabilities by CVSS (Total: {{count}})', {count: data.total})
+      }
+      yLabel={_l('# of Vulnerabilities')}
+    />
+  ),
   displayId: 'vuln-by-cvss',
   displayName: 'VulnerabilitiesCvssDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
-} as Parameters<typeof createDisplay>[0]);
+});
 
 export const VulnerabilitiesCvssTableDisplay = createDisplay({
   loaderComponent: VulnerabilitiesSeverityLoader,

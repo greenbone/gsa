@@ -126,7 +126,7 @@ export const TasksHighResultsTableDisplay = createDisplay({
   dataTitles: [_l('Task Name'), _l('High per Host'), _l('Severity')],
   dataRow: row => [row.label, row.value, row.severity],
   dataTransform: transformHighResultsData,
-  title: () => _l('Tasks by High Results per Host'),
+  title: () => _('Tasks by High Results per Host'),
   displayId: 'task-by-high-results-table',
   displayName: 'TasksHighResultsTableDisplay',
   filtersFilter: TASKS_FILTER_FILTER,

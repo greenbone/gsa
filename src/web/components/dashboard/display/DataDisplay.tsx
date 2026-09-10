@@ -13,11 +13,16 @@ import {excludeObjectProps} from 'gmp/utils/object';
 import DataDisplayIcons, {
   type DataDisplayIconsProps,
 } from 'web/components/dashboard/display/DataDisplayIcons';
-import Display, {
+import DisplayContainer, {
   DISPLAY_HEADER_HEIGHT,
   DISPLAY_BORDER_WIDTH,
+} from 'web/components/dashboard/display/DisplayContainer';
+import {
   type DisplayProps,
-} from 'web/components/dashboard/display/Display';
+  type DisplayState,
+  type DisplaySetStateFunc,
+  type DisplayStateFunc,
+} from 'web/components/dashboard/display';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import Theme from 'web/utils/theme';
@@ -25,83 +30,67 @@ import withTranslation, {
   type WithTranslationComponentProps,
 } from 'web/utils/withTranslation';
 
-export interface State {
-  showLegend?: boolean;
-}
-
 export type DataRowFunc<TData> = (row: TData) => ToString[];
 export type DataTitles = ToString[];
-
-export type DisplayStateFunc<TState extends State> = (
-  state: TState | undefined,
-) => TState;
-
-export type DisplaySetStateFunc<TState extends State> = (
-  func: DisplayStateFunc<TState>,
-) => void;
 
 type TitleFunc<TData> = ({
   data,
   isLoading,
 }: {
-  data: TData[];
+  data: TData;
   isLoading?: boolean;
 }) => string;
 
 interface IconsRenderProps<
-  TState extends State,
+  TState extends DisplayState,
 > extends DataDisplayIconsProps<TState> {
   state: TState;
 }
 
-type IconsRenderFunc<TState extends State> = (
+type IconsRenderFunc<TState extends DisplayState> = (
   props: IconsRenderProps<TState>,
 ) => ReactNode;
 
-interface DataDisplayRenderProps<TData, TState extends State> {
+interface DataDisplayRenderProps<TData, TState extends DisplayState> {
   width: number;
   height: number;
   svgRef: React.RefObject<SVGSVGElement | null>;
-  data: TData[];
+  data: TData;
   state: TState;
   setState: DisplaySetStateFunc<TState>;
 }
 
 export type TransformFunc<
   TData,
-  TTransformedData,
+  TTransformedData extends Array<any>,
   TTransformProps extends object = object,
-> = (data: TData, props: TTransformProps) => TTransformedData[];
+> = (data: TData | undefined, props: TTransformProps) => TTransformedData;
 
-type DataDisplayChildren<TTransformedData, TState extends State> = (
+type DataDisplayChildren<TTransformedData, TState extends DisplayState> = (
   props: DataDisplayRenderProps<TTransformedData, TState>,
 ) => React.ReactNode;
 
 export interface DataDisplayProps<
   TData,
-  TState extends State,
-  TTransformedData = TData,
+  TTransformedData extends Array<any>,
   TTransformProps extends object = object,
+  TState extends DisplayState = DisplayState,
   TChildren = DataDisplayChildren<TTransformedData, TState>,
-> extends Omit<DisplayProps, 'children' | 'title'> {
-  data: TData;
-  dataRow: (data: TTransformedData) => string[];
-  dataTitles: string[];
+> extends Omit<DisplayProps<TState>, 'children' | 'title'> {
+  data?: TData;
+  dataRow?: DataRowFunc<TTransformedData[number]>;
+  dataTitles?: DataTitles;
   dataTransform: TransformFunc<TData, TTransformedData, TTransformProps>;
   filter?: FilterType;
-  height: number;
   icons?: IconsRenderFunc<TState>;
   children?: TChildren;
-  initialState: TState;
-  onSelectFilterClick: () => void;
-  setState?: DisplaySetStateFunc<TState>;
-  showFilterSelection: boolean;
-  showFilterString: boolean;
-  showSvgDownload: boolean;
-  showToggleLegend: boolean;
-  state: TState;
+  initialState?: TState;
+  onSelectFilterClick?: () => void;
+  showFilterSelection?: boolean;
+  showFilterString?: boolean;
+  showSvgDownload?: boolean;
+  showToggleLegend?: boolean;
   title: TitleFunc<TTransformedData>;
-  width: number;
 }
 
 type DataDisplayWithTranslationProps<
@@ -183,7 +172,9 @@ const DisplayBox = styled.div`
 
 const escapeCsv = (value: string) => '"' + `${value}`.replace(/"/g, '""') + '"';
 
-const renderIcons = <TState extends State>(props: IconsRenderProps<TState>) => {
+const renderIcons = <TState extends DisplayState>(
+  props: IconsRenderProps<TState>,
+) => {
   return <DataDisplayIcons {...props} />;
 };
 
@@ -209,13 +200,13 @@ class DataDisplay<
   TData,
   TProps extends DataDisplayWithTranslationProps<
     TData,
-    TState,
     TTransformedData,
-    TTransformProps
+    TTransformProps,
+    TState
   >,
-  TState extends State,
-  TTransformedData,
+  TTransformedData extends Array<any>,
   TTransformProps extends object = object,
+  TState extends DisplayState = DisplayState,
 > extends React.Component<TProps, DataDisplayState<TData, TTransformedData>> {
   svgRef: React.RefObject<SVGSVGElement | null>;
   downloadRef: React.RefObject<HTMLAnchorElement | null>;
@@ -231,9 +222,9 @@ class DataDisplay<
     const data = DataDisplay.getTransformedData<
       TData,
       TProps,
-      TState,
       TTransformedData,
-      TTransformProps
+      TTransformProps,
+      TState
     >(this.props);
     this.state = {
       data,
@@ -283,13 +274,13 @@ class DataDisplay<
     TData,
     TProps extends DataDisplayWithTranslationProps<
       TData,
-      TState,
       TTransformedData,
-      TTransformProps
+      TTransformProps,
+      TState
     >,
-    TState extends State,
-    TTransformedData,
+    TTransformedData extends Array<any>,
     TTransformProps extends object = object,
+    TState extends DisplayState = DisplayState,
   >(props: Readonly<TProps>) {
     const {data, dataTransform, ...other} = props;
 
@@ -308,9 +299,9 @@ class DataDisplay<
   shouldComponentUpdate(
     nextProps: DataDisplayWithTranslationProps<
       TData,
-      TState,
       TTransformedData,
-      TTransformProps
+      TTransformProps,
+      TState
     >,
     nextState: DataDisplayState<TData, TTransformedData>,
   ) {
@@ -328,9 +319,9 @@ class DataDisplay<
   hasFilterChanged(
     nextProps: DataDisplayWithTranslationProps<
       TData,
-      TState,
       TTransformedData,
-      TTransformProps
+      TTransformProps,
+      TState
     >,
   ): boolean {
     if (isDefined(this.props.filter)) {
@@ -354,12 +345,12 @@ class DataDisplay<
     }
   }
 
-  getCurrentState(state: TState = this.props.state): TState {
+  getCurrentState(state: TState | undefined = this.props.state): TState {
     return {
       showLegend: true,
       ...this.props.initialState,
       ...state,
-    };
+    } as TState;
   }
 
   handleDownloadSvg() {
@@ -442,8 +433,8 @@ class DataDisplay<
       dataRow,
       filter,
       icons = renderIcons,
-      showSvgDownload,
-      showToggleLegend,
+      showSvgDownload = true,
+      showToggleLegend = true,
       onSelectFilterClick,
       onRemoveClick,
       dragHandleRef,
@@ -464,7 +455,7 @@ class DataDisplay<
     const showContent = height > 0 && width > 0; // > 0 also checks for null, undefined and null
     const state = this.getCurrentState();
     return (
-      <Display
+      <DisplayContainer
         dragHandleRef={dragHandleRef}
         isLoading={isLoading}
         title={`${title}`}
@@ -516,7 +507,7 @@ class DataDisplay<
           </Layout>
         </DisplayBox>
         <Download ref={this.downloadRef} />
-      </Display>
+      </DisplayContainer>
     );
   }
 }
@@ -525,13 +516,13 @@ export default withTranslation(DataDisplay) as unknown as <
   TData,
   TProps extends DataDisplayProps<
     TData,
-    TState,
     TTransformedData,
-    TTransformProps
+    TTransformProps,
+    TState
   >,
-  TState extends State,
-  TTransformedData,
+  TTransformedData extends Array<any>,
   TTransformProps extends object = object,
+  TState extends DisplayState = DisplayState,
 >(
   props: TProps,
 ) => ReactNode;

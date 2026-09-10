@@ -90,12 +90,16 @@ const Display = createDisplay({
   showToggleLegend: false,
 } as Parameters<typeof createDisplay>[0]);
 
+const renderDisplay = (props = {}) => {
+  const gmp = createGmp();
+  const {render, store} = rendererWith({gmp, store: true});
+  render(<Display height={200} width={200} {...props} />);
+  return {store};
+};
+
 describe('createDisplay tests', () => {
   test('should render the display and configured props', () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, store: true});
-
-    render(<Display />);
+    renderDisplay();
 
     expect(screen.getByTestId('filter')).toHaveTextContent('none');
     expect(screen.getByTestId('filter-term')).toHaveTextContent('severity');
@@ -108,31 +112,23 @@ describe('createDisplay tests', () => {
   });
 
   test('should use the provided filter when filter selection is disabled', () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, store: true});
     const fallbackFilter = new Filter({id: 'fallback', name: 'Fallback'});
 
-    render(<Display filter={fallbackFilter} />);
+    renderDisplay({filter: fallbackFilter});
 
     expect(screen.getByTestId('filter')).toHaveTextContent('Fallback');
     expect(screen.getByTestId('loader-filter')).toHaveTextContent('Fallback');
   });
 
   test('should pass loader props to the display', () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, store: true});
-
-    render(<Display />);
+    renderDisplay();
 
     expect(screen.getByTestId('data')).toHaveTextContent('test data');
     expect(screen.getByTestId('is-loading')).toHaveTextContent('false');
   });
 
   test('should open filter selection through the display callback', async () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, store: true});
-
-    render(<Display showFilterSelection />);
+    renderDisplay({showFilterSelection: true});
 
     fireEvent.click(screen.getByTestId('select-filter'));
 
@@ -142,17 +138,13 @@ describe('createDisplay tests', () => {
   });
 
   test('should call onFilterIdChanged after saving filter selection', async () => {
-    const gmp = createGmp();
     const onFilterIdChanged = testing.fn();
-    const {render, store} = rendererWith({gmp, store: true});
 
-    render(
-      <Display
-        showFilterSelection
-        filterId="f-2"
-        onFilterIdChanged={onFilterIdChanged}
-      />,
-    );
+    const {store} = renderDisplay({
+      showFilterSelection: true,
+      filterId: 'f-2',
+      onFilterIdChanged,
+    });
 
     store.dispatch({
       type: types.ENTITIES_LOADING_SUCCESS,
@@ -175,22 +167,18 @@ describe('createDisplay tests', () => {
   });
 
   test('should not render filter selection when disabled', () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, store: true});
-
-    render(<Display />);
-
+    renderDisplay();
     expect(screen.queryDialog()).not.toBeInTheDocument();
   });
 
   test('should prefer the filter from filter selection', async () => {
-    const gmp = createGmp();
-    const {render, store} = rendererWith({gmp, store: true});
     const fallbackFilter = new Filter({id: 'fallback', name: 'Fallback'});
 
-    render(
-      <Display showFilterSelection filter={fallbackFilter} filterId="f-2" />,
-    );
+    const {store} = renderDisplay({
+      showFilterSelection: true,
+      filter: fallbackFilter,
+      filterId: 'f-2',
+    });
 
     store.dispatch({
       type: types.ENTITIES_LOADING_SUCCESS,

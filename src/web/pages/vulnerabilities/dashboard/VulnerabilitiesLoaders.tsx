@@ -3,7 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
+import {type AggregatesResponseData} from 'gmp/commands/entities';
+import Loader, {
+  createLoadFunc,
+  type DisplayLoaderProps,
+} from 'web/components/dashboard/display/Loader';
+import {type SeverityData} from 'web/components/dashboard/display/severity/severity-class-transform';
 
 export const VULNS_SEVERITY = 'vulns-severity';
 export const VULNS_HOSTS = 'vulns-hosts';
@@ -14,7 +19,10 @@ const vulnerabilitiesSeverityLoadFunc = createLoadFunc(
   VULNS_SEVERITY,
 );
 
-export const VulnerabilitiesSeverityLoader = ({filter, children}) => (
+export const VulnerabilitiesSeverityLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<SeverityData>) => (
   <Loader
     dataId={VULNS_SEVERITY}
     filter={filter}
@@ -30,7 +38,10 @@ const vulnerabilitiesHostsLoadFunc = createLoadFunc(
   VULNS_HOSTS,
 );
 
-export const VulnerabilitiesHostsLoader = ({filter, children}) => (
+export const VulnerabilitiesHostsLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<AggregatesResponseData>) => (
   <Loader
     dataId={VULNS_HOSTS}
     filter={filter}

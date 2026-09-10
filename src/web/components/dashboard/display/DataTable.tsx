@@ -5,7 +5,9 @@
 
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
+import {isDefined} from 'gmp/utils/identity';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
+import {type DataRowFunc} from 'web/components/dashboard/display/DataDisplay';
 import Table from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
@@ -16,7 +18,7 @@ import TableRow from 'web/components/table/TableRow';
 export interface DataTableProps<TData> {
   dataTitles?: ToString[];
   data?: TData[];
-  dataRow: (row: TData) => ToString[];
+  dataRow?: DataRowFunc<TData>;
 }
 
 const Margin = styled.div`
@@ -43,7 +45,7 @@ const DataTable = <TData,>({
       </TableHeader>
       <TableBody>
         {data.map((row, i) => {
-          const rowData = rowFunc(row);
+          const rowData = isDefined(rowFunc) ? rowFunc(row) : [];
           return (
             <TableRow key={i}>
               {rowData.map((value, j) => (

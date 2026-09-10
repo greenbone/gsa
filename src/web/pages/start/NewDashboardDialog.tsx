@@ -7,7 +7,7 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
-import {CertBundCreatedDisplay} from 'web/pages/certbund/dashboard/CreatedDisplay';
+import {CertBundCreatedDisplay} from 'web/pages/certbund/dashboard/CertBundCreatedDisplay';
 import {CertBundCvssDisplay} from 'web/pages/certbund/dashboard/CvssDisplay';
 import {CvesCreatedDisplay} from 'web/pages/cves/dashboard/CreatedDisplay';
 import {CvesSeverityClassDisplay} from 'web/pages/cves/dashboard/SeverityClassDisplay';

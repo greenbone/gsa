@@ -9,7 +9,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {CertBundSeverityLoader} from 'web/pages/certbund/dashboard/Loaders';
+import {CertBundSeverityLoader} from 'web/pages/certbund/dashboard/CertBundLoaders';
 
 export const CertBundSeverityClassDisplay = createDisplay({
   loaderComponent: CertBundSeverityLoader,

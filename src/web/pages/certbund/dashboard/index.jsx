@@ -8,7 +8,7 @@ import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   CertBundCreatedDisplay,
   CertBundCreatedTableDisplay,
-} from 'web/pages/certbund/dashboard/CreatedDisplay';
+} from 'web/pages/certbund/dashboard/CertBundCreatedDisplay';
 import {
   CertBundCvssDisplay,
   CertBundCvssTableDisplay,

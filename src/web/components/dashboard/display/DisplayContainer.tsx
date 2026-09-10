@@ -11,11 +11,14 @@ import Loading from 'web/components/loading/Loading';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
-export interface DisplayProps {
+/**
+ * Props for the DisplayContainer component.
+ */
+export interface DisplayContainerProps {
   children?: React.ReactNode;
   dragHandleRef?: (element: Element | null) => void;
   isLoading?: boolean;
-  title?: string;
+  title?: React.ReactNode;
   onRemoveClick?: () => void;
 }
 
@@ -102,13 +105,13 @@ const DisplayTitle = styled.div`
   text-align: center;
 `;
 
-const Display = ({
+const DisplayContainer = ({
   children,
   dragHandleRef,
   isLoading,
   title,
   onRemoveClick,
-}: DisplayProps) => {
+}: DisplayContainerProps) => {
   const [_] = useTranslation();
   return (
     <DisplayView>
@@ -138,4 +141,4 @@ const Display = ({
   );
 };
 
-export default Display;
+export default DisplayContainer;
