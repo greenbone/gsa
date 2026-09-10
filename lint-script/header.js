@@ -4,7 +4,7 @@
  */
 
 const headerPattern =
-  /^\/\* SPDX-FileCopyrightText: \d{4} Greenbone AG\n \*\n \* SPDX-License-Identifier: AGPL-3\.0-or-later\n \*\//;
+  /^(?:#![^\r\n]*\r?\n)?\/\* SPDX-FileCopyrightText: \d{4} Greenbone AG\n \*\n \* SPDX-License-Identifier: AGPL-3\.0-or-later\n \*\//;
 
 export default {
   meta: {

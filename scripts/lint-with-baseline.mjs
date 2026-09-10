@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 
 import {readFile, writeFile} from 'node:fs/promises';
 import {dirname, resolve} from 'node:path';
@@ -34,9 +38,7 @@ const runOxlint = () =>
       stderr += chunk;
     });
     child.on('error', reject);
-    child.on('close', exitCode =>
-      resolvePromise({exitCode, stdout, stderr}),
-    );
+    child.on('close', exitCode => resolvePromise({exitCode, stdout, stderr}));
   });
 
 const getLocation = diagnostic => {
@@ -145,12 +147,18 @@ if (update) {
 
 const baseline = await loadBaseline();
 const current = new Map(diagnostics.map(item => [item.fingerprint, item]));
-const newDiagnostics = diagnostics.filter(item => !baseline.has(item.fingerprint));
+const newDiagnostics = diagnostics.filter(
+  item => !baseline.has(item.fingerprint),
+);
 const staleDiagnostics = [...baseline.values()].filter(
   item => !current.has(item.fingerprint),
 );
 
-if (newDiagnostics.length > 0 || staleDiagnostics.length > 0 || exitCode !== 0) {
+if (
+  newDiagnostics.length > 0 ||
+  staleDiagnostics.length > 0 ||
+  exitCode !== 0
+) {
   if (newDiagnostics.length > 0) {
     console.error(`\nNew Oxlint diagnostics (${newDiagnostics.length}):`);
     newDiagnostics.forEach(item => console.error(formatDiagnostic(item)));
