@@ -22,6 +22,7 @@ interface LegacyDisplayState extends DisplayState {
 interface Display {
   id: string;
   displayId: string;
+  filterId?: string;
   state?: DisplayState;
 }
 
