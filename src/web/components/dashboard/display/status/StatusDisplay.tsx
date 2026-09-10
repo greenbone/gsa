@@ -11,7 +11,6 @@ import {isDefined} from 'gmp/utils/identity';
 import DonutChart, {type DonutChartData} from 'web/components/chart/DonutChart';
 import DataDisplay, {
   type DataDisplayProps,
-  type State,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 
@@ -19,12 +18,9 @@ interface StatusData extends DonutChartData {
   filterValue?: string;
 }
 
-type StatusState = State;
-
 interface StatusDisplayProps<TData = unknown> extends DataDisplayProps<
   TData,
-  StatusState,
-  StatusData
+  StatusData[]
 > {
   filter?: FilterType;
   filterTerm?: string;
@@ -59,7 +55,7 @@ const StatusDisplay = <TData,>({
     [filter, filterTerm, onFilterChanged],
   );
   return (
-    <DataDisplay<TData, StatusDisplayProps<TData>, StatusState, StatusData>
+    <DataDisplay<TData, StatusDisplayProps<TData>, StatusData[]>
       {...props}
       filter={filter}
       icons={DataDisplayIcons}

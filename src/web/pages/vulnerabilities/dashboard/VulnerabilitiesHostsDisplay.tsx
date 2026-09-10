@@ -13,7 +13,6 @@ import {isDefined} from 'gmp/utils/identity';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
-  type State,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
@@ -27,8 +26,7 @@ import {VulnerabilitiesHostsLoader} from 'web/pages/vulnerabilities/dashboard/Vu
 
 interface VulnerabilitiesHostsDisplayProps extends DataDisplayProps<
   HostsData,
-  State,
-  HostDataPoint
+  HostDataPoint[]
 > {
   filter?: FilterType;
   onFilterChanged?: (filter: FilterType) => void;
@@ -99,7 +97,7 @@ const VulnerabilitiesHostsDisplayInner = ({
     [filter, onFilterChanged],
   );
 
-  const handleTransform = useCallback((data: HostsData) => {
+  const handleTransform = useCallback((data?: HostsData) => {
     totalRef.current = computeTotal(data);
     return transformHostsData(data);
   }, []);
@@ -110,8 +108,7 @@ const VulnerabilitiesHostsDisplayInner = ({
         <DataDisplay<
           HostsData,
           VulnerabilitiesHostsDisplayProps,
-          State,
-          HostDataPoint
+          HostDataPoint[]
         >
           {...props}
           {...(loaderProps as {

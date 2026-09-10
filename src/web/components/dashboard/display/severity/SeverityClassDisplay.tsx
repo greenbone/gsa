@@ -9,11 +9,11 @@ import {isDefined} from 'gmp/utils/identity';
 import {type SeverityRating} from 'gmp/utils/severity';
 import DonutChart from 'web/components/chart/DonutChart';
 import DataDisplay, {
-  type State,
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import transformSeverityData, {
+  type TransformedSeverityClassData,
   type SeverityClassData,
   type SeverityData,
   type TransformSeverityDataProps,
@@ -21,16 +21,16 @@ import transformSeverityData, {
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
 import useGmp from 'web/hooks/useGmp';
 
-type SeverityClassDisplayState = State;
-
 type SeverityClassDisplayBaseProps = DataDisplayProps<
   SeverityData,
-  SeverityClassDisplayState,
-  SeverityClassData,
+  TransformedSeverityClassData,
   TransformSeverityDataProps
 >;
 
-interface SeverityClassDisplayProps extends SeverityClassDisplayBaseProps {
+interface SeverityClassDisplayProps extends Omit<
+  SeverityClassDisplayBaseProps,
+  'dataTransform'
+> {
   filter?: FilterType;
   onFilterChanged?: (filter: FilterType) => void;
 }
@@ -89,8 +89,7 @@ const SeverityClassDisplay = ({
     <DataDisplay<
       SeverityData,
       SeverityClassDataDisplayProps,
-      SeverityClassDisplayState,
-      SeverityClassData,
+      TransformedSeverityClassData,
       TransformSeverityDataProps
     >
       {...props}

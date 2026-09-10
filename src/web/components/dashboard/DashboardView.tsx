@@ -10,10 +10,8 @@ import Logger from 'gmp/log';
 import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {
-  type DisplayState,
   getDisplay,
   type DisplayComponent,
-  type DisplayProps,
 } from 'web/components/dashboard/registry';
 import {
   convertDefaultDisplays,
@@ -36,7 +34,14 @@ import SortableGrid, {
 import {type SortableItemRenderProps} from 'web/components/sortable/SortableItem';
 import useLatestCallback from 'web/hooks/useLatestCallback';
 import useTranslation from 'web/hooks/useTranslation';
+import {
+  type DisplayProps,
+  type DisplayState,
+} from 'web/components/dashboard/display';
 
+/**
+ * Props a display component receives that is rendered within the dashboard view.
+ */
 export interface DashboardDisplayProps extends DisplayProps {
   filter?: FilterType;
   notify?: (message: string) => void;
@@ -55,7 +60,10 @@ interface DashboardRow extends Omit<DashboardRowData, 'items'> {
 }
 
 // The DashboardView forwards the DashboardDisplayProps to each individual display within the dashboard.
-interface DashboardViewProps extends DashboardDisplayProps {
+interface DashboardViewProps extends Omit<
+  DashboardDisplayProps,
+  'height' | 'width'
+> {
   defaultDisplays?: string[][];
   id: string;
   maxItemsPerRow?: number;
@@ -327,17 +335,21 @@ const DashboardView = ({
           const displaySettings = getDisplaySettings(displayId);
           if (!isDefined(displaySettings)) return null;
 
-          const {displayId: registeredDisplayId, ...displayProps} =
-            displaySettings;
+          const {
+            displayId: registeredDisplayId,
+            filterId,
+            state,
+            ...displayProps
+          } = displaySettings;
           const Component = getDisplayComponent(registeredDisplayId);
           if (!isDefined(Component)) return null;
 
-          const state = getDisplayState(displayId);
           return (
             <Component
               {...displayProps}
               dragHandleRef={dragHandleRef}
               filter={filter}
+              filterId={filterId}
               height={height}
               notify={notify}
               setState={stateFunc =>

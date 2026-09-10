@@ -45,7 +45,7 @@ export interface CvssDataPoint extends LegendData {
   filterValue?: CvssFilterValue;
 }
 
-interface TransformedCvssData extends Array<CvssDataPoint> {
+export interface TransformedCvssData extends Array<CvssDataPoint> {
   total: number;
 }
 
@@ -168,7 +168,7 @@ const transformCvssData = (
       };
     });
 
-  const result = transformedData as TransformedCvssData;
+  const result = transformedData as unknown as TransformedCvssData;
   result.total = sum;
 
   return result;

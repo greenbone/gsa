@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {_} from 'gmp/locale/lang';
 import {
   DownloadSvgIcon,
@@ -11,13 +10,14 @@ import {
   FilterIcon,
   LegendIcon,
 } from 'web/components/icon';
+import {type DisplaySetStateFunc} from 'web/components/dashboard/display';
 
 interface DataDisplayIconsState {
   showLegend?: boolean;
 }
 
 export interface DataDisplayIconsProps<TState extends DataDisplayIconsState> {
-  setState: (func: StateFunc<TState>) => TState;
+  setState: DisplaySetStateFunc<TState>;
   showCsvDownload?: boolean;
   showSvgDownload?: boolean;
   showFilterSelection?: boolean;
@@ -26,8 +26,6 @@ export interface DataDisplayIconsProps<TState extends DataDisplayIconsState> {
   onDownloadSvgClick?: () => void;
   onSelectFilterClick?: () => void;
 }
-
-type StateFunc<TState> = (state: TState) => TState;
 
 const DataDisplayIcons = <TState extends DataDisplayIconsState>({
   setState,
@@ -54,7 +52,8 @@ const DataDisplayIcons = <TState extends DataDisplayIconsState>({
         title={_('Toggle Legend')}
         onClick={() => {
           setState(
-            ({showLegend}: TState) => ({showLegend: !showLegend}) as TState,
+            (state: TState | undefined) =>
+              ({showLegend: !state?.showLegend}) as TState,
           );
         }}
       />

@@ -6,29 +6,37 @@
 import {useCallback} from 'react';
 import {isDate} from 'gmp/models/date';
 import {type FilterType} from 'gmp/models/filter';
+import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
-import LineChart, {type LineData} from 'web/components/chart/LineChart';
+import LineChart, {
+  type LineData,
+  type LineProps,
+} from 'web/components/chart/LineChart';
 import transformCreated, {
   type CreatedData,
   type CreatedDataPoint,
 } from 'web/components/dashboard/display/created/created-transform';
 import DataDisplay, {
+  type TransformFunc,
   type DataDisplayProps,
-  type State,
 } from 'web/components/dashboard/display/DataDisplay';
 import {createDateRangeFilter} from 'web/components/dashboard/display/utils';
 
-interface CreatedDisplayProps extends DataDisplayProps<
+type CreatedDataDisplayProps = DataDisplayProps<
   CreatedData,
-  State,
-  CreatedDataPoint
+  CreatedDataPoint[]
+>;
+
+export interface CreatedDisplayProps extends Omit<
+  CreatedDataDisplayProps,
+  'dataTransform' | 'children'
 > {
-  filter?: FilterType;
-  xAxisLabel?: string;
-  yAxisLabel?: string;
-  y2AxisLabel?: string;
-  yLine?: {color: string; label: string};
-  y2Line?: {color: string; label: string};
+  dataTransform?: TransformFunc<CreatedData, CreatedDataPoint[]>;
+  xAxisLabel?: ToString;
+  yAxisLabel?: ToString;
+  y2AxisLabel?: ToString;
+  yLine?: LineProps;
+  y2Line?: LineProps;
   onFilterChanged?: (filter: FilterType) => void;
 }
 
@@ -67,7 +75,7 @@ const CreatedDisplay = ({
     [filter, onFilterChanged],
   );
   return (
-    <DataDisplay<CreatedData, CreatedDisplayProps, State, CreatedDataPoint>
+    <DataDisplay<CreatedData, CreatedDataDisplayProps, CreatedDataPoint[]>
       {...props}
       dataTransform={dataTransform}
       filter={filter}
@@ -77,7 +85,7 @@ const CreatedDisplay = ({
           timeline
           data={data}
           height={height}
-          showLegend={state.showLegend}
+          showLegend={state?.showLegend}
           svgRef={svgRef}
           width={width}
           xAxisLabel={xAxisLabel}

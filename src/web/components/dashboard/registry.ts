@@ -7,42 +7,34 @@ import type {ComponentType} from 'react';
 import Logger from 'gmp/log';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
-import {type DisplayProps as BaseDisplayProps} from 'web/components/dashboard/display/Display';
+import {
+  type DisplayProps,
+  type DisplayState,
+} from 'web/components/dashboard/display';
 
-export interface DisplayState {
-  showLegend?: boolean;
-}
-
-type DisplayStateFunc = (state: DisplayState | undefined) => DisplayState;
-type DisplaySetStateFunc = (stateFunc: DisplayStateFunc) => void;
-
-export interface DisplayProps extends BaseDisplayProps {
-  height: number;
-  id: string;
-  width: number;
-  state: DisplayState | undefined;
-  setState: DisplaySetStateFunc;
-  onFilterIdChanged: (filterId: string) => void;
-}
-
-export type DisplayComponent<TProps = DisplayProps> = ComponentType<TProps> & {
+export type DisplayComponent<
+  TProps extends object = DisplayProps<DisplayState>,
+> = ComponentType<TProps> & {
   displayId: string;
 };
 
-export interface RegisteredDisplay<TProps = DisplayProps> {
+export interface RegisteredDisplay<
+  TProps extends object = DisplayProps<DisplayState>,
+> {
   component: DisplayComponent<TProps>;
   title: ToString;
 }
 
-export type DisplayRegistry<TProps = DisplayProps> = Record<
-  string,
-  RegisteredDisplay<TProps>
->;
+export type DisplayRegistry<
+  TProps extends object = DisplayProps<DisplayState>,
+> = Record<string, RegisteredDisplay<TProps>>;
 
 const log = Logger.getLogger('web.components.dashboard.registry');
 const registry: DisplayRegistry = {};
 
-export const registerDisplay = <TProps = DisplayProps>(
+export const registerDisplay = <
+  TProps extends object = DisplayProps<DisplayState>,
+>(
   component: DisplayComponent<TProps>,
   title: ToString,
   targetRegistry: DisplayRegistry<TProps> = registry as DisplayRegistry<TProps>,
@@ -75,7 +67,7 @@ export const registerDisplay = <TProps = DisplayProps>(
   log.debug('Registered display', displayId);
 };
 
-export const getDisplay = <TProps = DisplayProps>(
+export const getDisplay = <TProps extends object = DisplayProps<DisplayState>>(
   displayId: string,
   targetRegistry: DisplayRegistry<TProps> = registry as DisplayRegistry<TProps>,
 ): RegisteredDisplay<TProps> | undefined => targetRegistry[displayId];

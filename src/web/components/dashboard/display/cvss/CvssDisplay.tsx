@@ -7,35 +7,36 @@ import {type FilterType} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseFloat} from 'gmp/parser';
+import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
 import {type SeverityRating} from 'gmp/utils/severity';
 import BarChart from 'web/components/chart/BarChart';
 import transformCvssData, {
+  type TransformedCvssData,
   type CvssData,
   type CvssDataPoint,
   type TransformCvssDataProps,
 } from 'web/components/dashboard/display/cvss/cvss-transform';
 import DataDisplay, {
   type DataDisplayProps,
-  type State,
 } from 'web/components/dashboard/display/DataDisplay';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
-type CvssDisplayState = State;
-
 type CvssDataDisplayBaseProps = DataDisplayProps<
   CvssData,
-  CvssDisplayState,
-  CvssDataPoint,
+  TransformedCvssData,
   TransformCvssDataProps
 >;
 
-interface CvssDisplayProps extends CvssDataDisplayBaseProps {
+interface CvssDisplayProps extends Omit<
+  CvssDataDisplayBaseProps,
+  'dataTransform'
+> {
   filter?: FilterType;
   onFilterChanged?: (filter: FilterType) => void;
-  xLabel?: string;
-  yLabel?: string;
+  xLabel?: ToString;
+  yLabel?: ToString;
 }
 
 interface CvssDataDisplayProps extends CvssDataDisplayBaseProps {
@@ -102,8 +103,7 @@ const CvssDisplay = ({
     <DataDisplay<
       CvssData,
       CvssDataDisplayProps,
-      CvssDisplayState,
-      CvssDataPoint,
+      TransformedCvssData,
       TransformCvssDataProps
     >
       {...props}
@@ -119,8 +119,8 @@ const CvssDisplay = ({
             height={height}
             svgRef={svgRef}
             width={width}
-            xLabel={xLabel}
-            yLabel={yLabel}
+            xLabel={String(xLabel)}
+            yLabel={String(yLabel)}
             onDataClick={
               isDefined(onFilterChanged) ? handleDataClick : undefined
             }

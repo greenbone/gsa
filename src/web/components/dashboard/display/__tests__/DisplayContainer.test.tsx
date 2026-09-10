@@ -5,18 +5,18 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
-import Display from 'web/components/dashboard/display/Display';
+import DisplayContainer from 'web/components/dashboard/display/DisplayContainer';
 
 const ThrowError = () => {
   throw new Error('something went wrong');
 };
 
-describe('Display component tests', () => {
+describe('DisplayContainer component tests', () => {
   test('should render the title and children', () => {
     render(
-      <Display title="Chart title">
+      <DisplayContainer title="Chart title">
         <span>Chart content</span>
-      </Display>,
+      </DisplayContainer>,
     );
 
     expect(screen.getByText('Chart title')).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe('Display component tests', () => {
 
   test('should call the remove handler', () => {
     const onRemoveClick = testing.fn();
-    render(<Display onRemoveClick={onRemoveClick} />);
+    render(<DisplayContainer onRemoveClick={onRemoveClick} />);
 
     fireEvent.click(screen.getByTestId('close-button'));
 
@@ -37,7 +37,7 @@ describe('Display component tests', () => {
   });
 
   test('should render the loading overlay when loading', () => {
-    render(<Display isLoading={true} />);
+    render(<DisplayContainer isLoading={true} />);
 
     expect(screen.getByTestId('loading')).toBeVisible();
   });
@@ -46,9 +46,9 @@ describe('Display component tests', () => {
     testing.spyOn(console, 'error').mockImplementation(() => {});
     try {
       render(
-        <Display>
+        <DisplayContainer>
           <ThrowError />
-        </Display>,
+        </DisplayContainer>,
       );
     } finally {
       testing.restoreAllMocks();
@@ -61,7 +61,7 @@ describe('Display component tests', () => {
 
   test('should forward the drag handle ref', () => {
     const dragHandleRef = testing.fn();
-    render(<Display dragHandleRef={dragHandleRef} />);
+    render(<DisplayContainer dragHandleRef={dragHandleRef} />);
 
     expect(dragHandleRef).toHaveBeenCalledWith(expect.any(HTMLDivElement));
   });

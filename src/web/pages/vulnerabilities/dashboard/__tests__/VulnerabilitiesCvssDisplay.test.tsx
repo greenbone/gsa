@@ -56,7 +56,7 @@ describe('VulnerabilitiesCvssDisplay', () => {
 
   test('should render the total vulnerabilities count in the title', () => {
     const {render} = rendererWith({gmp: createGmp()});
-    render(<VulnerabilitiesCvssDisplay />);
+    render(<VulnerabilitiesCvssDisplay height={200} width={200} />);
     screen.getByText(/Total: 42/);
   });
 });
@@ -81,7 +81,7 @@ describe('VulnerabilitiesCvssTableDisplay', () => {
 
   test('should render the total vulnerabilities count in the title', () => {
     const {render} = rendererWith({gmp: createGmp()});
-    render(<VulnerabilitiesCvssTableDisplay />);
+    render(<VulnerabilitiesCvssTableDisplay height={200} width={200} />);
     screen.getByText(/Total: 42/);
   });
 });

@@ -3,7 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
+import {type AggregatesResponseData} from 'gmp/commands/entities';
+import {type CreatedData} from 'web/components/dashboard/display/created/created-transform';
+import Loader, {
+  createLoadFunc,
+  type DisplayLoaderProps,
+} from 'web/components/dashboard/display/Loader';
 
 export const CERTBUNDS_SEVERITY = 'certbunds-severity';
 export const CERTBUNDS_CREATED = 'certbunds-created';
@@ -14,7 +19,10 @@ export const certBundCreatedLoadFunc = createLoadFunc(
   CERTBUNDS_CREATED,
 );
 
-export const CertBundCreatedLoader = ({filter, children}) => (
+export const CertBundCreatedLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<CreatedData>) => (
   <Loader
     dataId={CERTBUNDS_CREATED}
     filter={filter}
@@ -31,7 +39,10 @@ export const certBundSeverityLoadFunc = createLoadFunc(
   CERTBUNDS_SEVERITY,
 );
 
-export const CertBundSeverityLoader = ({filter, children}) => (
+export const CertBundSeverityLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<AggregatesResponseData>) => (
   <Loader
     dataId={CERTBUNDS_SEVERITY}
     filter={filter}

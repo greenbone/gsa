@@ -1891,9 +1891,9 @@
       "code": "eslint(no-unused-vars)",
       "message": "Variable 'id' is declared but never used. Unused variables should start with a '_'.",
       "location": {
-        "line": 145,
+        "line": 146,
         "column": 12,
-        "offset": 3502
+        "offset": 3559
       },
       "sourceLine": "const {id, ...other} = params;",
       "fingerprint": "src/gmp/commands/entities.ts|eslint(no-unused-vars)|Variable 'id' is declared but never used. Unused variables should start with a '_'.|12|const {id, ...other} = params;"
@@ -2625,7 +2625,7 @@
       "location": {
         "line": 131,
         "column": 38,
-        "offset": 3524
+        "offset": 3548
       },
       "sourceLine": "{arcs.map((currentArc, index) => {",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|eslint(no-unused-vars)|Parameter 'index' is declared but never used. Unused parameters should start with a '_'.|38|{arcs.map((currentArc, index) => {"
@@ -2637,7 +2637,7 @@
       "location": {
         "line": 79,
         "column": 48,
-        "offset": 2143
+        "offset": 2149
       },
       "sourceLine": "const [chartWidth, setChartWidth] = useState(getWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(refs)|Cannot access refs during render|48|const [chartWidth, setChartWidth] = useState(getWidth);"
@@ -2649,7 +2649,7 @@
       "location": {
         "line": 84,
         "column": 7,
-        "offset": 2249
+        "offset": 2261
       },
       "sourceLine": "setChartWidth(newWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
@@ -2745,7 +2745,7 @@
       "location": {
         "line": 377,
         "column": 10,
-        "offset": 9557
+        "offset": 9564
       },
       "sourceLine": "(svgRef as React.MutableRefObject<SVGSVGElement | null>).current = ref;",
       "fingerprint": "src/web/components/chart/LineChart.tsx|react(immutability)|Cannot modify local variables after render completes|10|(svgRef as React.MutableRefObject<SVGSVGElement | null>).current = ref;"
@@ -2757,7 +2757,7 @@
       "location": {
         "line": 377,
         "column": 10,
-        "offset": 9557
+        "offset": 9564
       },
       "sourceLine": "(svgRef as React.MutableRefObject<SVGSVGElement | null>).current = ref;",
       "fingerprint": "src/web/components/chart/LineChart.tsx|react(immutability)|This value cannot be modified|10|(svgRef as React.MutableRefObject<SVGSVGElement | null>).current = ref;"
@@ -2769,7 +2769,7 @@
       "location": {
         "line": 280,
         "column": 7,
-        "offset": 6932
+        "offset": 6939
       },
       "sourceLine": "setChartWidth(newWidth);",
       "fingerprint": "src/web/components/chart/LineChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
@@ -2781,7 +2781,7 @@
       "location": {
         "line": 236,
         "column": 10,
-        "offset": 5725
+        "offset": 5732
       },
       "sourceLine": "data = [],",
       "fingerprint": "src/web/components/chart/LineChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `LineData[]` (not nullish). This default assignment will never be used.|10|data = [],"
@@ -2793,7 +2793,7 @@
       "location": {
         "line": 166,
         "column": 10,
-        "offset": 4451
+        "offset": 4467
       },
       "sourceLine": "data = [],",
       "fingerprint": "src/web/components/chart/ScheduleChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `ScheduleData[]` (not nullish). This default assignment will never be used.|10|data = [],"
@@ -2839,9 +2839,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 123,
+        "line": 128,
         "column": 31,
-        "offset": 3767
+        "offset": 3930
       },
       "sourceLine": "stablePermittedDisplaysRef.current = permittedDisplays ?? [];",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|31|stablePermittedDisplaysRef.current = permittedDisplays ?? [];"
@@ -2851,9 +2851,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 128,
+        "line": 133,
         "column": 32,
-        "offset": 3985
+        "offset": 4148
       },
       "sourceLine": "defaultDashboardSettingsRef.current =",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|32|defaultDashboardSettingsRef.current ="
@@ -2863,9 +2863,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 130,
+        "line": 135,
         "column": 32,
-        "offset": 4074
+        "offset": 4237
       },
       "sourceLine": "defaultDisplaysSignatureRef.current = defaultDisplaysSignature;",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|32|defaultDisplaysSignatureRef.current = defaultDisplaysSignature;"
@@ -2875,9 +2875,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 124,
+        "line": 129,
         "column": 34,
-        "offset": 3836
+        "offset": 3999
       },
       "sourceLine": "permittedDisplaysSignatureRef.current = permittedDisplaysSignature;",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|34|permittedDisplaysSignatureRef.current = permittedDisplaysSignature;"
@@ -2887,9 +2887,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 134,
+        "line": 139,
         "column": 35,
-        "offset": 4222
+        "offset": 4385
       },
       "sourceLine": "const stablePermittedDisplays = stablePermittedDisplaysRef.current;",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|35|const stablePermittedDisplays = stablePermittedDisplaysRef.current;"
@@ -2899,9 +2899,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 133,
+        "line": 138,
         "column": 36,
-        "offset": 4151
+        "offset": 4314
       },
       "sourceLine": "const defaultDashboardSettings = defaultDashboardSettingsRef.current;",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|36|const defaultDashboardSettings = defaultDashboardSettingsRef.current;"
@@ -2911,9 +2911,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 180,
+        "line": 185,
         "column": 5,
-        "offset": 5367
+        "offset": 5530
       },
       "sourceLine": "defaults,",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|5|defaults,"
@@ -2923,9 +2923,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 154,
+        "line": 159,
         "column": 5,
-        "offset": 4658
+        "offset": 4821
       },
       "sourceLine": "stablePermittedDisplays.forEach((displayId: string) => {",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|5|stablePermittedDisplays.forEach((displayId: string) => {"
@@ -2935,9 +2935,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 176,
+        "line": 181,
         "column": 6,
-        "offset": 5281
+        "offset": 5444
       },
       "sourceLine": "}, [",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|6|}, ["
@@ -2947,9 +2947,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 127,
+        "line": 132,
         "column": 7,
-        "offset": 3886
+        "offset": 4049
       },
       "sourceLine": "if (defaultDisplaysSignatureRef.current !== defaultDisplaysSignature) {",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|7|if (defaultDisplaysSignatureRef.current !== defaultDisplaysSignature) {"
@@ -2959,9 +2959,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 122,
+        "line": 127,
         "column": 7,
-        "offset": 3665
+        "offset": 3828
       },
       "sourceLine": "if (permittedDisplaysSignatureRef.current !== permittedDisplaysSignature) {",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|7|if (permittedDisplaysSignatureRef.current !== permittedDisplaysSignature) {"
@@ -2971,69 +2971,21 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 268,
+        "line": 266,
         "column": 40,
-        "offset": 7990
+        "offset": 7952
       },
       "sourceLine": "const createObjectURL = window.URL.createObjectURL as ReturnType<",
       "fingerprint": "src/web/components/dashboard/display/__tests__/DataDisplay.test.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|40|const createObjectURL = window.URL.createObjectURL as ReturnType<"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/created/CreatedDisplay.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `TransformFunc<CreatedData, CreatedDataPoint, object>` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 36,
-        "column": 19,
-        "offset": 1058
-      },
-      "sourceLine": "dataTransform = transformCreated,",
-      "fingerprint": "src/web/components/dashboard/display/created/CreatedDisplay.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `TransformFunc<CreatedData, CreatedDataPoint, object>` (not nullish). This default assignment will never be used.|19|dataTransform = transformCreated,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property is not nullish. This default assignment will never be used.",
-      "location": {
-        "line": 430,
-        "column": 15,
-        "offset": 10547
-      },
-      "sourceLine": "icons = renderIcons,",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property is not nullish. This default assignment will never be used.|15|icons = renderIcons,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property is not nullish. This default assignment will never be used.",
-      "location": {
-        "line": 420,
-        "column": 26,
-        "offset": 10358
-      },
-      "sourceLine": "showFilterString = false,",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property is not nullish. This default assignment will never be used.|26|showFilterString = false,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property is not nullish. This default assignment will never be used.",
-      "location": {
-        "line": 421,
-        "column": 29,
-        "offset": 10393
-      },
-      "sourceLine": "showFilterSelection = false,",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property is not nullish. This default assignment will never be used.|29|showFilterSelection = false,"
     },
     {
       "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 485,
+        "line": 493,
         "column": 36,
-        "offset": 12247
+        "offset": 12806
       },
       "sourceLine": "setState: this.handleSetState,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|36|setState: this.handleSetState,"
@@ -3043,9 +2995,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 473,
+        "line": 481,
         "column": 42,
-        "offset": 11919
+        "offset": 12478
       },
       "sourceLine": "setState: this.handleSetState,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|42|setState: this.handleSetState,"
@@ -3055,9 +3007,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 490,
+        "line": 498,
         "column": 46,
-        "offset": 12461
+        "offset": 13020
       },
       "sourceLine": "onDownloadCsvClick: this.handleDownloadCsv,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadCsvClick: this.handleDownloadCsv,"
@@ -3067,9 +3019,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 491,
+        "line": 499,
         "column": 46,
-        "offset": 12525
+        "offset": 13084
       },
       "sourceLine": "onDownloadSvgClick: this.handleDownloadSvg,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadSvgClick: this.handleDownloadSvg,"
@@ -3079,9 +3031,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 144,
+        "line": 147,
         "column": 60,
-        "offset": 3852
+        "offset": 3934
       },
       "sourceLine": "this.subscriptions.push(subscribe(subscription, this.load));",
       "fingerprint": "src/web/components/dashboard/display/Loader.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|60|this.subscriptions.push(subscribe(subscription, this.load));"
@@ -5163,18 +5115,6 @@
       "fingerprint": "src/web/pages/nvts/NvtReferences.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.|17|const {cves = [], certs = [], xrefs = []} = nvt;"
     },
     {
-      "filename": "src/web/pages/operatingsystems/dashboard/CvssDisplay.jsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `CvssDataPoint[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 30,
-        "column": 26,
-        "offset": 1202
-      },
-      "sourceLine": "title: ({data: tdata = {}}) =>",
-      "fingerprint": "src/web/pages/operatingsystems/dashboard/CvssDisplay.jsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `CvssDataPoint[]` (not nullish). This default assignment will never be used.|26|title: ({data: tdata = {}}) =>"
-    },
-    {
       "filename": "src/web/pages/operatingsystems/dashboard/VulnScoreDisplay.jsx",
       "code": "eslint(no-class-assign)",
       "message": "Unexpected re-assignment of class OsVulnScoreDisplay",
@@ -6435,18 +6375,6 @@
       "fingerprint": "src/web/pages/targets/__tests__/TargetDetails.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.|27|notExpectedLabels = [],"
     },
     {
-      "filename": "src/web/pages/tasks/dashboard/CvssDisplay.jsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `CvssDataPoint[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 29,
-        "column": 26,
-        "offset": 1132
-      },
-      "sourceLine": "title: ({data: tdata = {}}) =>",
-      "fingerprint": "src/web/pages/tasks/dashboard/CvssDisplay.jsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `CvssDataPoint[]` (not nullish). This default assignment will never be used.|26|title: ({data: tdata = {}}) =>"
-    },
-    {
       "filename": "src/web/pages/tasks/dashboard/HighResults.jsx",
       "code": "eslint(no-class-assign)",
       "message": "Unexpected re-assignment of class TasksHighResultsDisplay",
@@ -6529,42 +6457,6 @@
       },
       "sourceLine": "export const taskReloadInterval = ({entities = []}: {entities: Task[]}) =>",
       "fingerprint": "src/web/pages/tasks/TaskListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Task[]` (not nullish). This default assignment will never be used.|48|export const taskReloadInterval = ({entities = []}: {entities: Task[]}) =>"
-    },
-    {
-      "filename": "src/web/pages/tickets/dashboard/CreatedDisplay.jsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `unknown[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 69,
-        "column": 26,
-        "offset": 2416
-      },
-      "sourceLine": "title: ({data: tdata = {}}) =>",
-      "fingerprint": "src/web/pages/tickets/dashboard/CreatedDisplay.jsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `unknown[]` (not nullish). This default assignment will never be used.|26|title: ({data: tdata = {}}) =>"
-    },
-    {
-      "filename": "src/web/pages/tickets/dashboard/StatusDisplay.jsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `unknown[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 70,
-        "column": 26,
-        "offset": 2379
-      },
-      "sourceLine": "title: ({data: tdata = {}}) =>",
-      "fingerprint": "src/web/pages/tickets/dashboard/StatusDisplay.jsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `unknown[]` (not nullish). This default assignment will never be used.|26|title: ({data: tdata = {}}) =>"
-    },
-    {
-      "filename": "src/web/pages/tickets/dashboard/UsersAssignedDisplay.jsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `unknown[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 73,
-        "column": 26,
-        "offset": 2384
-      },
-      "sourceLine": "title: ({data: tdata = {}}) =>",
-      "fingerprint": "src/web/pages/tickets/dashboard/UsersAssignedDisplay.jsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `unknown[]` (not nullish). This default assignment will never be used.|26|title: ({data: tdata = {}}) =>"
     },
     {
       "filename": "src/web/pages/tickets/TicketDetails.tsx",
@@ -6661,18 +6553,6 @@
       },
       "sourceLine": "onRangeSelected={this.handleRangeSelect}",
       "fingerprint": "src/web/pages/tlscertificates/dashboard/ModifiedDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|39|onRangeSelected={this.handleRangeSelect}"
-    },
-    {
-      "filename": "src/web/pages/tlscertificates/dashboard/TimeStatusDisplay.jsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `unknown[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 73,
-        "column": 26,
-        "offset": 2545
-      },
-      "sourceLine": "title: ({data: tdata = {}}) =>",
-      "fingerprint": "src/web/pages/tlscertificates/dashboard/TimeStatusDisplay.jsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `unknown[]` (not nullish). This default assignment will never be used.|26|title: ({data: tdata = {}}) =>"
     },
     {
       "filename": "src/web/pages/trashcan/TrashCanPage.tsx",
@@ -7147,9 +7027,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `HostsFilterValue` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 54,
+        "line": 52,
         "column": 28,
-        "offset": 1923
+        "offset": 1902
       },
       "sourceLine": "const {filterValue = {start: undefined, end: undefined}} = clickData;",
       "fingerprint": "src/web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsDisplay.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `HostsFilterValue` (not nullish). This default assignment will never be used.|28|const {filterValue = {start: undefined, end: undefined}} = clickData;"

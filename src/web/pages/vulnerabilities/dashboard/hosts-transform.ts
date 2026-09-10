@@ -68,7 +68,9 @@ const calculateBins = (
   return bins;
 };
 
-const transformHostsData = (data: HostsData = {}): HostDataPoint[] => {
+const transformHostsData = (
+  data: HostsData | undefined = {},
+): HostDataPoint[] => {
   const {groups = []} = data ?? {};
   const totalVulns =
     groups.length > 0 ? Math.max(...groups.map(val => val.c_count)) : 0;

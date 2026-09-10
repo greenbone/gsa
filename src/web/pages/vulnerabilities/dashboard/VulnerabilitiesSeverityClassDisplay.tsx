@@ -13,29 +13,39 @@ import {VulnerabilitiesSeverityLoader} from 'web/pages/vulnerabilities/dashboard
 
 export const VulnerabilitiesSeverityDisplay = createDisplay({
   loaderComponent: VulnerabilitiesSeverityLoader,
-  displayComponent: SeverityClassDisplay,
-  dataTitles: [_l('Severity Class'), _l('# of Vulnerabilities')],
-  title: ({data: tdata}) =>
-    _('Vulnerabilities by Severity Class (Total: {{count}})', {
-      count: tdata.total,
-    }),
+  displayComponent: props => (
+    <SeverityClassDisplay
+      {...props}
+      dataTitles={[_l('Severity Class'), _l('# of Vulnerabilities')]}
+      title={({data}) =>
+        _('Vulnerabilities by Severity Class (Total: {{count}})', {
+          count: data.total,
+        })
+      }
+    />
+  ),
   displayId: 'vuln-by-severity-class',
   displayName: 'VulnerabilitiesSeverityDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
-} as Parameters<typeof createDisplay>[0]);
+});
 
 export const VulnerabilitiesSeverityTableDisplay = createDisplay({
   loaderComponent: VulnerabilitiesSeverityLoader,
-  displayComponent: SeverityClassTableDisplay,
-  dataTitles: [_l('Severity Class'), _l('# of Vulnerabilities')],
-  title: ({data: tdata}) =>
-    _('Vulnerabilities by Severity Class (Total: {{count}})', {
-      count: tdata.total,
-    }),
+  displayComponent: props => (
+    <SeverityClassTableDisplay
+      {...props}
+      dataTitles={[_l('Severity Class'), _l('# of Vulnerabilities')]}
+      title={({data}) =>
+        _('Vulnerabilities by Severity Class (Total: {{count}})', {
+          count: data.total,
+        })
+      }
+    />
+  ),
   displayId: 'vuln-by-severity-class-table',
   displayName: 'VulnerabilitiesSeverityTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
-} as Parameters<typeof createDisplay>[0]);
+});
 
 registerDisplay(
   VulnerabilitiesSeverityDisplay,

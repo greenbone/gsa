@@ -54,7 +54,7 @@ export interface SeverityClassData extends LegendData {
   filterValue: SeverityFilterValue;
 }
 
-interface TransformedSeverityClassData extends Array<SeverityClassData> {
+export interface TransformedSeverityClassData extends Array<SeverityClassData> {
   total: number;
 }
 
@@ -169,7 +169,7 @@ const transformSeverityData = (
       };
     });
 
-  const result = transformedData as TransformedSeverityClassData;
+  const result = transformedData as unknown as TransformedSeverityClassData;
   result.total = sum;
 
   return result;

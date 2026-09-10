@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type State} from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay, {
   type DataTableDisplayProps,
 } from 'web/components/dashboard/display/DataTableDisplay';
 import transformSeverityClassData, {
+  type TransformedSeverityClassData,
   type SeverityClassData,
   type SeverityData,
   type TransformSeverityDataProps,
@@ -16,8 +16,7 @@ import transformSeverityClassData, {
 type SeverityClassTableDisplayProps = Omit<
   DataTableDisplayProps<
     SeverityData,
-    State,
-    SeverityClassData,
+    TransformedSeverityClassData,
     TransformSeverityDataProps
   >,
   'dataRow' | 'dataTransform'
@@ -31,8 +30,7 @@ const severityClassDataRow = ({label, value}: SeverityClassData) => [
 const SeverityClassTableDisplay = (props: SeverityClassTableDisplayProps) => (
   <DataTableDisplay<
     SeverityData,
-    State,
-    SeverityClassData,
+    TransformedSeverityClassData,
     TransformSeverityDataProps
   >
     {...props}

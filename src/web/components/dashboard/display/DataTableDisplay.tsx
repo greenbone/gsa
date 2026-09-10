@@ -5,12 +5,12 @@
 
 import {isFunction} from 'gmp/utils/identity';
 import DataDisplay, {
-  type State,
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTable, {
   type DataTableProps,
 } from 'web/components/dashboard/display/DataTable';
+import {type DisplayState} from 'web/components/dashboard/display';
 
 type DataTableDisplayRenderProps<TTransformedData> =
   DataTableProps<TTransformedData>;
@@ -19,34 +19,32 @@ type DataTableDisplayChildren<TTransformedData> = (
   props: DataTableDisplayRenderProps<TTransformedData>,
 ) => React.ReactNode;
 
-export interface DataTableDisplayProps<
+export type DataTableDisplayProps<
   TData,
-  TState extends State = State,
-  TTransformedData = TData,
+  TTransformedData extends Array<any>,
   TTransformProps extends object = object,
-> extends DataDisplayProps<
+  TState extends DisplayState = DisplayState,
+> = DataDisplayProps<
   TData,
-  TState,
   TTransformedData,
   TTransformProps,
+  TState,
   DataTableDisplayChildren<TTransformedData>
-> {
-  dataTitles: string[];
-}
+>;
 
 type DataTableDisplayComponentProps<
   TData,
-  TState extends State,
-  TTransformedData,
+  TTransformedData extends Array<any>,
   TTransformProps extends object,
-> = DataTableDisplayProps<TData, TState, TTransformedData, TTransformProps> &
+  TState extends DisplayState,
+> = DataTableDisplayProps<TData, TTransformedData, TTransformProps, TState> &
   TTransformProps;
 
 const DataTableDisplay = <
   TData,
-  TState extends State = State,
-  TTransformedData = TData,
+  TTransformedData extends Array<any> = TData[],
   TTransformProps extends object = object,
+  TState extends DisplayState = DisplayState,
 >({
   children,
   dataRow,
@@ -54,16 +52,16 @@ const DataTableDisplay = <
   ...props
 }: DataTableDisplayComponentProps<
   TData,
-  TState,
   TTransformedData,
-  TTransformProps
+  TTransformProps,
+  TState
 >) => (
   <DataDisplay<
     TData,
-    DataDisplayProps<TData, TState, TTransformedData, TTransformProps>,
-    TState,
+    DataDisplayProps<TData, TTransformedData, TTransformProps, TState>,
     TTransformedData,
-    TTransformProps
+    TTransformProps,
+    TState
   >
     {...props}
     dataRow={dataRow}

@@ -6,40 +6,64 @@
 import {type ComponentType} from 'react';
 import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import {type LoaderRenderProps} from 'web/components/dashboard/display/Loader';
+import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
+import {
+  type LoaderRenderProps,
+  type DisplayLoaderProps,
+} from 'web/components/dashboard/display/Loader';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 
-interface LoaderProps<TData> {
-  filter?: FilterType;
-  children?: (props: LoaderRenderProps<TData>) => React.ReactNode;
-}
+type DashboardDisplayComponentProps = Omit<
+  DashboardDisplayProps,
+  // filterId and onFilterIdChanged are omitted because they are managed
+  // internally by the createDisplay function.
+  'filterId' | 'onFilterIdChanged'
+>;
 
-export type CreateDisplayProps<
-  TDisplayProps extends object,
+/**
+ * Props for a display component passed to the createDisplay function.
+ */
+export type DisplayProps<
   TData,
-  TChartData = unknown,
+  TChartData extends object = {},
+  TOtherProps extends object = {},
 > = {
-  chartComponent?: ComponentType<TChartData>;
+  filterTerm?: string;
+  children?: (props: TChartData) => React.ReactNode;
+  onSelectFilterClick?: () => void;
+} & DashboardDisplayComponentProps &
+  LoaderRenderProps<TData> &
+  TOtherProps;
+
+/**
+ * Props for the createDisplay function, including the to be used display and
+ * chart components, as well as loader and filter configurations.
+ */
+type CreateDisplayProps<
+  TDisplayProps extends DisplayProps<TData, TChartProps, TOtherProps>,
+  TData,
+  TChartProps extends object = {},
+  TOtherProps extends object = {},
+> = {
+  chartComponent?: ComponentType<TChartProps>;
   displayComponent: ComponentType<TDisplayProps>;
   displayId: string;
   displayName?: string;
   filterTerm?: string;
   filtersFilter: FilterType;
-  loaderComponent: ComponentType<LoaderProps<TData>>;
-} & TDisplayProps;
+  loaderComponent: ComponentType<DisplayLoaderProps<TData>>;
+} & TOtherProps;
 
-interface DisplayComponentProps {
-  filter?: FilterType;
-  filterId?: string;
-  showFilterSelection?: boolean;
-  onFilterIdChanged?: (filterId?: string) => void;
-  onSelectFilterClick?: () => void;
-}
-
+/**
+ * Creates a display component for the dashboard, to be rendered within a
+ * DisplayView combining a display component, optional chart component, loader,
+ * and filter selection.
+ */
 const createDisplay = <
-  TDisplayProps extends object,
+  TDisplayProps extends DisplayProps<TData, TChartProps, TOtherProps>,
   TData,
-  TChartData = unknown,
+  TChartProps extends object = {},
+  TOtherProps extends object = {},
 >({
   chartComponent: Chart,
   displayComponent: Display,
@@ -49,14 +73,14 @@ const createDisplay = <
   filterTerm,
   loaderComponent: Loader,
   ...other
-}: CreateDisplayProps<TDisplayProps, TData, TChartData>) => {
+}: CreateDisplayProps<TDisplayProps, TData, TChartProps, TOtherProps>) => {
   const DisplayComponent = ({
     showFilterSelection = false,
     filter,
     filterId,
     onFilterIdChanged,
     ...props
-  }: DisplayComponentProps) => {
+  }: DashboardDisplayProps) => {
     const {
       filter: selectedFilter,
       selectFilter,
@@ -71,23 +95,26 @@ const createDisplay = <
     return (
       <>
         <Loader filter={displayFilter}>
-          {loaderProps => (
-            <Display
-              {...(other as TDisplayProps)}
-              {...loaderProps}
-              {...props}
-              filter={displayFilter}
-              filterTerm={filterTerm}
-              showFilterSelection={showFilterSelection}
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {isDefined(Chart)
-                ? displayProps => <Chart {...displayProps} />
-                : null}
-            </Display>
-          )}
+          {loaderProps => {
+            const displayProps: TDisplayProps = {
+              ...props,
+              ...loaderProps,
+              ...other,
+              filter: displayFilter,
+              filterTerm,
+              showFilterSelection,
+              onSelectFilterClick: showFilterSelection
+                ? selectFilter
+                : undefined,
+            } as TDisplayProps;
+            return (
+              <Display {...displayProps}>
+                {isDefined(Chart)
+                  ? (chartProps: TChartProps) => <Chart {...chartProps} />
+                  : null}
+              </Display>
+            );
+          }}
         </Loader>
         {filterSelectionDialog}
       </>
