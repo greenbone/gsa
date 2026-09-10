@@ -108,71 +108,75 @@ const formatDiagnostic = diagnostic => {
   return `${diagnostic.filename}:${line}:${column} ${diagnostic.code}: ${diagnostic.message}`;
 };
 
-const {exitCode, stdout, stderr} = await runOxlint();
-if (stderr) {
-  process.stderr.write(stderr);
-}
+const main = async () => {
+  const {exitCode, stdout, stderr} = await runOxlint();
 
-let report;
-try {
-  report = JSON.parse(stdout);
-} catch (error) {
-  console.error('Unable to parse Oxlint JSON output.');
-  console.error(error.message);
-  process.exit(1);
-}
+  if (stderr) {
+    process.stderr.write(stderr);
+  }
 
-if (exitCode !== 0 && report.diagnostics.length === 0) {
-  process.exit(exitCode);
-}
+  let report;
+  try {
+    report = JSON.parse(stdout);
+  } catch (error) {
+    console.error('Unable to parse Oxlint JSON output.');
+    console.error(error.message);
+    process.exit(1);
+  }
 
-const diagnostics = await Promise.all(report.diagnostics.map(normalize));
-if (update) {
-  const uniqueDiagnostics = [
-    ...new Map(diagnostics.map(item => [item.fingerprint, item])).values(),
-  ];
-  const content = {
-    version: 1,
-    generatedBy: 'npm run lint:baseline:update',
-    diagnostics: uniqueDiagnostics.sort((left, right) =>
-      left.fingerprint.localeCompare(right.fingerprint),
-    ),
-  };
-  await writeFile(baselinePath, `${JSON.stringify(content, null, 2)}\n`);
-  console.log(
-    `Updated ${baselinePath} with ${uniqueDiagnostics.length} diagnostics.`,
+  if (exitCode !== 0 && report.diagnostics.length === 0) {
+    console.error(
+      `Oxlint exited with status ${exitCode} but produced no diagnostics.`,
+    );
+    process.exit(exitCode);
+  }
+
+  const diagnostics = await Promise.all(report.diagnostics.map(normalize));
+  if (update) {
+    const uniqueDiagnostics = [
+      ...new Map(diagnostics.map(item => [item.fingerprint, item])).values(),
+    ];
+    const content = {
+      version: 1,
+      generatedBy: 'npm run lint:baseline:update',
+      diagnostics: uniqueDiagnostics.sort((left, right) =>
+        left.fingerprint.localeCompare(right.fingerprint),
+      ),
+    };
+    await writeFile(baselinePath, `${JSON.stringify(content, null, 2)}\n`);
+    console.log(
+      `Updated ${baselinePath} with ${uniqueDiagnostics.length} diagnostics.`,
+    );
+    process.exit(exitCode === 0 ? 0 : 1);
+  }
+
+  const baseline = await loadBaseline();
+  const current = new Map(diagnostics.map(item => [item.fingerprint, item]));
+  const newDiagnostics = diagnostics.filter(
+    item => !baseline.has(item.fingerprint),
   );
-  process.exit(exitCode === 0 ? 0 : 1);
-}
+  const staleDiagnostics = [...baseline.values()].filter(
+    item => !current.has(item.fingerprint),
+  );
 
-const baseline = await loadBaseline();
-const current = new Map(diagnostics.map(item => [item.fingerprint, item]));
-const newDiagnostics = diagnostics.filter(
-  item => !baseline.has(item.fingerprint),
-);
-const staleDiagnostics = [...baseline.values()].filter(
-  item => !current.has(item.fingerprint),
-);
+  if (newDiagnostics.length > 0 || staleDiagnostics.length > 0) {
+    if (newDiagnostics.length > 0) {
+      console.error(`\nNew Oxlint diagnostics (${newDiagnostics.length}):`);
+      newDiagnostics.forEach(item => console.error(formatDiagnostic(item)));
+    }
+    if (staleDiagnostics.length > 0) {
+      console.error(`\nStale baseline entries (${staleDiagnostics.length}):`);
+      staleDiagnostics.forEach(item => console.error(formatDiagnostic(item)));
+    }
+    if (exitCode !== 0) {
+      console.error(`\nOxlint exited with status ${exitCode}.`);
+    }
+    process.exit(1);
+  }
 
-if (
-  newDiagnostics.length > 0 ||
-  staleDiagnostics.length > 0 ||
-  exitCode !== 0
-) {
-  if (newDiagnostics.length > 0) {
-    console.error(`\nNew Oxlint diagnostics (${newDiagnostics.length}):`);
-    newDiagnostics.forEach(item => console.error(formatDiagnostic(item)));
-  }
-  if (staleDiagnostics.length > 0) {
-    console.error(`\nStale baseline entries (${staleDiagnostics.length}):`);
-    staleDiagnostics.forEach(item => console.error(formatDiagnostic(item)));
-  }
-  if (exitCode !== 0) {
-    console.error(`\nOxlint exited with status ${exitCode}.`);
-  }
-  process.exit(1);
-}
+  console.log(
+    `Oxlint passed: ${diagnostics.length} existing diagnostics acknowledged.`,
+  );
+};
 
-console.log(
-  `Oxlint passed: ${diagnostics.length} existing diagnostics acknowledged.`,
-);
+await main();
