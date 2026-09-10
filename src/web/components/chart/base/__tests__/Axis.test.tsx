@@ -71,6 +71,24 @@ describe('Axis tests', () => {
     expect(tickTexts.map(tick => tick.textContent)).toEqual(['0', '1.3M']);
   });
 
+  test('should keep decimal tick values readable', () => {
+    const scale = scaleLinear().range([0, 100]).domain([0, 2]);
+    const mainContainer = renderAxis({
+      orientation: 'bottom',
+      scale,
+      tickValues: [0, 0.5, 1, 1.5, 2],
+    });
+
+    const tickTexts = Array.from(mainContainer.querySelectorAll('.tick text'));
+    expect(tickTexts.map(tick => tick.textContent)).toEqual([
+      '0',
+      '0.5',
+      '1',
+      '1.5',
+      '2',
+    ]);
+  });
+
   test('should render a top axis label with the expected position', () => {
     const scale = scaleLinear().range([0, 200]).domain([0, 100]);
     renderAxis({

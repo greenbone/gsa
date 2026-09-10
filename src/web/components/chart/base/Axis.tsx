@@ -58,7 +58,11 @@ const FONT_SIZE = 10;
 
 const DEFAULT_TICK_LENGTH = 8;
 
-const standardFormat = d3format('.2~s');
+const compactFormat = d3format('.2~s');
+const decimalFormat = d3format('.2~f');
+
+const standardFormat = (value: number): string =>
+  Math.abs(value) >= 1000 ? compactFormat(value) : decimalFormat(value);
 
 const AXIS_GENERATORS = {
   bottom: axisBottom,
