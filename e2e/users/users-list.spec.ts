@@ -24,6 +24,7 @@ import {
   resetFilter,
   rowByUserName,
   saveUserDialog,
+  selectMultipleItems,
   sortFieldByHeader,
   sortableHeaders,
   closeTopDialog,
@@ -100,6 +101,46 @@ test.describe('users page flows', () => {
     await expect(rowByUserName(page, editedUser)).toBeVisible();
 
     await deleteSingleUserFromList(page, editedUser);
+    await resetFilter(page);
+  });
+
+  test('saves multiple roles and groups when editing a user', async ({
+    page,
+  }) => {
+    const userName = createUniqueUserName('e2e-multiple-assignments');
+
+    await openListCreateDialog(page);
+    await createUserFromCurrentPage(page, userName);
+
+    const row = rowByUserName(page, userName);
+    await row.getByTitle('Edit User').first().click();
+    await expect(page.locator('input[name="name"]')).toBeVisible();
+
+    const roleLabels = await selectMultipleItems(page, 'Roles', 2);
+    const groupLabels = await selectMultipleItems(page, 'Groups', 2);
+    await saveUserDialog(page);
+
+    await applyFilter(page, `name=${userName}`);
+    await rowByUserName(page, userName).getByTitle('Edit User').first().click();
+    await expect(page.locator('input[name="name"]')).toBeVisible();
+    const rolesGroup = page
+      .locator('[data-testid="form-group"]')
+      .filter({hasText: 'Roles'})
+      .first();
+    for (const label of roleLabels) {
+      await expect(rolesGroup.getByText(label, {exact: true})).toBeVisible();
+    }
+
+    const groupsGroup = page
+      .locator('[data-testid="form-group"]')
+      .filter({hasText: 'Groups'})
+      .first();
+    for (const label of groupLabels) {
+      await expect(groupsGroup.getByText(label, {exact: true})).toBeVisible();
+    }
+
+    await closeTopDialog(page);
+    await deleteSingleUserFromList(page, userName);
     await resetFilter(page);
   });
 

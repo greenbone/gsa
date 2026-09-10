@@ -161,6 +161,45 @@ const selectRole = async (page: Page, roleName: string) => {
   await expect(rolesGroup.getByText(roleName, {exact: true})).toBeVisible();
 };
 
+const selectMultipleItems = async (
+  page: Page,
+  groupTitle: string,
+  numberOfItems: number,
+) => {
+  const formGroup = page
+    .locator('[data-testid="form-group"]')
+    .filter({hasText: groupTitle})
+    .first();
+  const input = formGroup.locator('[data-testid="multi-select"]').first();
+
+  await expect(input).toBeVisible();
+  await input.click();
+
+  const options = page.getByRole('option');
+  await expect(options.nth(numberOfItems - 1)).toBeVisible();
+
+  const labels: string[] = [];
+  for (let index = 0; index < numberOfItems; index += 1) {
+    labels.push(await options.nth(index).innerText());
+  }
+
+  for (const label of labels) {
+    const selectedItem = formGroup.getByText(label, {exact: true});
+
+    if ((await selectedItem.count()) === 0) {
+      await page.getByRole('option', {name: label, exact: true}).click();
+    }
+  }
+
+  await page.keyboard.press('Escape');
+
+  for (const label of labels) {
+    await expect(formGroup.getByText(label, {exact: true})).toBeVisible();
+  }
+
+  return labels;
+};
+
 // Saves the currently open user create/edit dialog.
 //
 // Creating a user without a role triggers a 'User without a role' confirmation
@@ -382,6 +421,7 @@ export {
   userLinkByName,
   openUserDetailsFromListRow,
   selectRole,
+  selectMultipleItems,
   saveUserDialog,
   openListCreateDialog,
   openDetailsCreateDialog,
