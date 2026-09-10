@@ -29,17 +29,15 @@ interface UseUserMutationCallbacks<TResponse> {
   onError?: (error: Error) => void;
 }
 
-type IdsInput = string | string[];
-
 interface UserCreateInput {
   access_hosts: string;
   auth_method: string;
   comment: string;
-  group_ids: IdsInput;
+  group_ids: string[];
   hosts_allow: string;
   name: string;
   password: string;
-  role_ids: IdsInput;
+  role_ids: string[];
 }
 
 interface UserSaveInput extends UserCreateInput {
@@ -53,9 +51,6 @@ interface BulkDeleteUsersInput {
 }
 
 export type UserBulkInput = User[] | FilterType;
-
-const toIdsArgument = (value: IdsInput): string =>
-  Array.isArray(value) ? value.join(',') : value;
 
 export const useGetUsers = ({
   filter,
@@ -90,8 +85,8 @@ export const useCreateUser = ({
     gmpMethod: async data => {
       const response = await gmp.user.create({
         ...data,
-        group_ids: toIdsArgument(data.group_ids),
-        role_ids: toIdsArgument(data.role_ids),
+        group_ids: data.group_ids,
+        role_ids: data.role_ids,
       });
       return response.data;
     },
@@ -111,8 +106,8 @@ export const useSaveUser = ({
       const response = await gmp.user.save({
         ...data,
         old_name: data.old_name ?? data.name,
-        group_ids: toIdsArgument(data.group_ids),
-        role_ids: toIdsArgument(data.role_ids),
+        group_ids: data.group_ids,
+        role_ids: data.role_ids,
       });
       return response.data;
     },

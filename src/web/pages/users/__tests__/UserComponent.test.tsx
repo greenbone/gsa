@@ -27,12 +27,33 @@ const user = User.fromElement({
   },
 });
 
+const userWithMultipleAssignments = User.fromElement({
+  _id: '5678',
+  name: 'user 2',
+  role: [
+    {_id: 'role1', name: 'Admin'},
+    {_id: 'role2', name: 'User'},
+  ],
+  groups: {
+    group: [
+      {_id: 'group1', name: 'Group 1'},
+      {_id: 'group2', name: 'Group 2'},
+    ],
+  },
+});
+
 const authSettings = new Settings();
 authSettings.set('method:ldap_connect', {enabled: false});
 authSettings.set('method:radius_connect', {enabled: false});
 
-const groups = [Group.fromElement({_id: 'group1', name: 'Group 1'})];
-const roles = [Role.fromElement({_id: 'role1', name: 'Admin'})];
+const groups = [
+  Group.fromElement({_id: 'group1', name: 'Group 1'}),
+  Group.fromElement({_id: 'group2', name: 'Group 2'}),
+];
+const roles = [
+  Role.fromElement({_id: 'role1', name: 'Admin'}),
+  Role.fromElement({_id: 'role2', name: 'User'}),
+];
 
 const createGmp = () => ({
   user: {
@@ -63,7 +84,7 @@ describe('UserComponent', () => {
       store: true,
     });
     render(<UserComponent>{() => <span>Child Content</span>}</UserComponent>);
-    screen.getByText('Child Content');
+    expect(screen.getByText('Child Content')).toBeInTheDocument();
   });
 
   test('should open and close user dialog', async () => {
@@ -104,6 +125,43 @@ describe('UserComponent', () => {
     fireEvent.click(screen.getDialogSaveButton());
     await waitFor(() => {
       expect(gmp.user.save).toHaveBeenCalled();
+      expect(gmp.user.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          group_ids: ['group1'],
+          role_ids: ['role1'],
+        }),
+      );
+      expect(onSaved).toHaveBeenCalledWith({id: 'saved'});
+    });
+  });
+
+  test('should save multiple roles and groups for an existing user', async () => {
+    const gmp = createGmp();
+    const onSaved = testing.fn();
+    const {render} = rendererWith({gmp, capabilities: true, store: true});
+
+    render(
+      <UserComponent onSaved={onSaved}>
+        {({edit}) => (
+          <Button
+            data-testid="open"
+            onClick={() => edit(userWithMultipleAssignments)}
+          />
+        )}
+      </UserComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await screen.findByText('Edit User user 2');
+
+    fireEvent.click(screen.getDialogSaveButton());
+    await waitFor(() => {
+      expect(gmp.user.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          group_ids: ['group1', 'group2'],
+          role_ids: ['role1', 'role2'],
+        }),
+      );
       expect(onSaved).toHaveBeenCalledWith({id: 'saved'});
     });
   });

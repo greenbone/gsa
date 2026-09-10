@@ -96,11 +96,11 @@ interface CreateArguments {
   access_hosts: string;
   auth_method: string;
   comment: string;
-  group_ids: string;
+  group_ids: string[];
   hosts_allow: string;
   name: string;
   password: string;
-  role_ids: string;
+  role_ids: string[];
 }
 
 interface SaveArguments {
@@ -108,12 +108,12 @@ interface SaveArguments {
   access_hosts: string;
   auth_method: string;
   comment: string;
-  group_ids: string;
+  group_ids: string[];
   hosts_allow: string;
   name: string;
   old_name: string;
   password: string;
-  role_ids: string;
+  role_ids: string[];
 }
 
 interface DeleteArguments {
