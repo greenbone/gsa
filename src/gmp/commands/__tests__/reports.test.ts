@@ -5,7 +5,11 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import ReportsCommand from 'gmp/commands/reports';
-import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
+import {
+  createHttp,
+  createEntitiesResponse,
+  createAggregatesResponse,
+} from 'gmp/commands/testing';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('ReportsCommand tests', () => {
@@ -54,5 +58,49 @@ describe('ReportsCommand tests', () => {
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
+  });
+
+  test('should return severity aggregates', async () => {
+    const response = createAggregatesResponse({
+      group: [{value: 'High', count: 2, c_count: 3}],
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new ReportsCommand(fakeHttp);
+
+    const result = await cmd.getSeverityAggregates({});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_aggregate',
+        aggregate_type: 'report',
+        group_column: 'severity',
+      },
+    });
+    expect(result.data).toEqual({
+      groups: [{value: 'High', count: 2, c_count: 3}],
+    });
+  });
+
+  test('should return high-result aggregates', async () => {
+    const response = createAggregatesResponse({
+      group: [{value: '2024-01-01', count: 1, c_count: 1}],
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new ReportsCommand(fakeHttp);
+
+    const result = await cmd.getHighResultsAggregates({});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_aggregate',
+        aggregate_type: 'report',
+        group_column: 'date',
+        'data_columns:0': 'high',
+        'data_columns:1': 'high_per_host',
+      },
+    });
+    expect(result.data).toEqual({
+      groups: [{value: '2024-01-01', count: 1, c_count: 1}],
+    });
   });
 });
