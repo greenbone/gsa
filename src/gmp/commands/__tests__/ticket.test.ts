@@ -55,6 +55,22 @@ describe('TicketCommand tests', () => {
     expect(data.id).toEqual('foo');
   });
 
+  test('should preserve an undefined note when creating a ticket', async () => {
+    const fakeHttp = createHttp(createActionResultResponse());
+    const cmd = new TicketCommand(fakeHttp);
+
+    await cmd.create({resultId: 'r1', userId: 'u1'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_ticket',
+        result_id: 'r1',
+        user_id: 'u1',
+        note: undefined,
+      },
+    });
+  });
+
   test('should return single ticket', async () => {
     const response = createEntityResponse('ticket', {_id: 'foo'});
     const fakeHttp = createHttp(response);
@@ -149,5 +165,19 @@ describe('TicketCommand tests', () => {
         resource_type: 'ticket',
       },
     });
+  });
+
+  test('should get the ticket element from the response root', () => {
+    const cmd = new TicketCommand(createHttp());
+    const ticket = {_id: 'foo', name: 'Ticket'};
+    const root = {
+      get_ticket: {
+        get_tickets_response: {
+          ticket,
+        },
+      },
+    };
+
+    expect(cmd.getElementFromRoot(root)).toEqual(ticket);
   });
 });
