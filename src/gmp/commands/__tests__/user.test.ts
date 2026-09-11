@@ -15,6 +15,11 @@ import UserCommand, {
   saveDefaultFilterSettingId,
   transformSettingName,
 } from 'gmp/commands/user';
+import {
+  AUTH_METHOD_LDAP,
+  AUTH_METHOD_NEW_PASSWORD,
+  AUTH_METHOD_RADIUS,
+} from 'gmp/models/user';
 
 describe('UserCommand tests', () => {
   test('should parse auth settings in currentAuthSettings', async () => {
@@ -106,6 +111,68 @@ describe('UserCommand tests', () => {
     expect(data?.value).toEqual('42');
   });
 
+  test('should return no setting if the response does not contain one', async () => {
+    const fakeHttp = createHttp(
+      createResponse({get_settings: {get_settings_response: {}}}),
+    );
+    const cmd = new UserCommand(fakeHttp);
+
+    const {data} = await cmd.getSetting('missing');
+
+    expect(data).toBeUndefined();
+  });
+
+  test('should parse all authentication setting variants', async () => {
+    const response = createResponse({
+      auth_settings: {
+        describe_auth_response: {
+          group: [
+            {
+              _name: 'ldap',
+              auth_conf_setting: [
+                {key: 'ldaps-only', value: true},
+                {key: 'custom', value: 'value'},
+                {
+                  key: 'certificate',
+                  value: 'present',
+                  certificate_info: {
+                    issuer: 'issuer',
+                    activation_time: '2024-01-01T00:00:00Z',
+                    expiration_time: '2025-01-01T00:00:00Z',
+                    md5_fingerprint: 'fingerprint',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    });
+    const cmd = new UserCommand(createHttp(response));
+
+    const {data: settings} = await cmd.currentAuthSettings();
+    const values = settings.get('ldap') as Record<string, unknown>;
+
+    expect(values.ldapsOnly).toBe(true);
+    expect(values.custom).toBe('value');
+    expect(values.certificateInfo).toMatchObject({
+      issuer: 'issuer',
+      md5Fingerprint: 'fingerprint',
+    });
+    expect(values.certificateInfo).toHaveProperty('activationTime');
+    expect(values.certificateInfo).toHaveProperty('expirationTime');
+  });
+
+  test('should handle missing authentication settings', async () => {
+    const cmd = new UserCommand(
+      createHttp(createResponse({auth_settings: {}})),
+    );
+
+    const {data: settings} = await cmd.currentAuthSettings();
+
+    expect(settings.has('ldap')).toBe(false);
+  });
+
   test('should allow to change password', async () => {
     const response = createActionResultResponse({
       action: 'Change Password',
@@ -120,6 +187,171 @@ describe('UserCommand tests', () => {
         password: 'newPassword',
       },
     });
+  });
+});
+
+describe('UserCommand user lifecycle actions', () => {
+  const user = {
+    access_hosts: 'localhost',
+    comment: 'comment',
+    group_ids: ['group-id'],
+    hosts_allow: '127.0.0.1',
+    name: 'user',
+    old_name: 'old-user',
+    password: 'password',
+    role_ids: ['role-id'],
+  };
+
+  test.each([
+    [AUTH_METHOD_LDAP, '1'],
+    [AUTH_METHOD_RADIUS, '2'],
+    ['password', '0'],
+  ])(
+    'maps %s authentication when creating a user',
+    async (authMethod, expected) => {
+      const fakeHttp = createHttp(createActionResultResponse());
+      const cmd = new UserCommand(fakeHttp);
+
+      await cmd.create({...user, auth_method: authMethod});
+
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: expect.objectContaining({
+          cmd: 'create_user',
+          auth_method: expected,
+          login: user.name,
+          'group_ids:': user.group_ids,
+          'role_ids:': user.role_ids,
+        }),
+      });
+    },
+  );
+
+  test.each([
+    [AUTH_METHOD_LDAP, '2'],
+    [AUTH_METHOD_RADIUS, '3'],
+    [AUTH_METHOD_NEW_PASSWORD, '1'],
+    ['password', '0'],
+  ])(
+    'maps %s authentication when saving a user',
+    async (authMethod, expected) => {
+      const fakeHttp = createHttp(createActionResultResponse());
+      const cmd = new UserCommand(fakeHttp);
+
+      await cmd.save({id: 'user-id', ...user, auth_method: authMethod});
+
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: expect.objectContaining({
+          cmd: 'save_user',
+          user_id: 'user-id',
+          modify_password: expected,
+          old_login: user.old_name,
+        }),
+      });
+    },
+  );
+
+  test('deletes a user and saves a setting', async () => {
+    const fakeHttp = createHttp(createResponse({success: true}));
+    const cmd = new UserCommand(fakeHttp);
+
+    await cmd.delete({id: 'user-id', inheritorId: 'inheritor-id'});
+    await cmd.saveSetting('setting-id', 42);
+
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {
+      data: {
+        cmd: 'delete_user',
+        user_id: 'user-id',
+        inheritor_id: 'inheritor-id',
+      },
+    });
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {
+      data: {
+        cmd: 'save_setting',
+        setting_id: 'setting-id',
+        setting_value: 42,
+      },
+    });
+  });
+});
+
+describe('UserCommand report composer defaults', () => {
+  const setting = (value?: string) =>
+    createResponse({
+      get_settings: {
+        get_settings_response: {
+          setting:
+            value === undefined
+              ? undefined
+              : {_id: 'id', name: 'defaults', value},
+        },
+      },
+    });
+
+  test('returns saved defaults when they contain valid JSON', async () => {
+    const cmd = new UserCommand(createHttp(setting('{"foo":"bar"}')));
+
+    const {data} = await cmd.getReportComposerDefaults();
+
+    expect(data).toEqual({foo: 'bar'});
+  });
+
+  test('returns empty defaults for missing or invalid saved values', async () => {
+    const missing = new UserCommand(createHttp(setting()));
+    const invalid = new UserCommand(createHttp(setting('not-json')));
+
+    expect((await missing.getReportComposerDefaults()).data).toEqual({});
+    expect((await invalid.getReportComposerDefaults()).data).toEqual({});
+  });
+
+  test('saves report composer defaults and applies the empty default', async () => {
+    const fakeHttp = createHttp(createActionResultResponse());
+    const cmd = new UserCommand(fakeHttp);
+
+    await cmd.saveReportComposerDefaults();
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: expect.objectContaining({
+        cmd: 'save_setting',
+        setting_value: '{}',
+      }),
+    });
+  });
+});
+
+describe('UserCommand session and root helpers', () => {
+  test('renews a session when the response contains seconds', async () => {
+    const fakeHttp = createHttp(createActionResultResponse({message: '60'}));
+    const cmd = new UserCommand(fakeHttp);
+
+    const {data} = await cmd.renewSession();
+
+    expect(data).toBeDefined();
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {cmd: 'renew_session'},
+    });
+  });
+
+  test('returns an undefined session date for an invalid duration', async () => {
+    const cmd = new UserCommand(
+      createHttp(createActionResultResponse({message: 'invalid'})),
+    );
+
+    expect((await cmd.renewSession()).data).toBeUndefined();
+  });
+
+  test('pings the server and extracts a user from the root', async () => {
+    const fakeHttp = createHttp(createResponse({success: true}));
+    const cmd = new UserCommand(fakeHttp);
+    const user = {name: 'user'};
+
+    await cmd.ping();
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {args: {cmd: 'ping'}});
+    expect(
+      cmd.getElementFromRoot({
+        get_user: {get_users_response: {user}},
+      }),
+    ).toBe(user);
   });
 });
 
