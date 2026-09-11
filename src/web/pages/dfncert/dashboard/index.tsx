@@ -3,20 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   DfnCertsCreatedDisplay,
   DfnCertsCreatedTableDisplay,
-} from 'web/pages/dfncert/dashboard/CreatedDisplay';
+} from 'web/pages/dfncert/dashboard/DfnCertCreatedDisplay';
 import {
   DfnCertCvssDisplay,
   DfnCertCvssTableDisplay,
-} from 'web/pages/dfncert/dashboard/CvssDisplay';
+} from 'web/pages/dfncert/dashboard/DfnCertCvssDisplay';
 import {
   DfnCertSeverityClassDisplay,
   DfnCertSeverityClassTableDisplay,
-} from 'web/pages/dfncert/dashboard/SeverityClassDisplay';
+} from 'web/pages/dfncert/dashboard/DfnCertSeverityClassDisplay';
+
+interface DfnCertDashboardProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+}
 
 export const DFNCERT_DASHBOARD_ID = '9812ea49-682d-4f99-b3cc-eca051d1ce59';
 
@@ -29,7 +34,7 @@ export const DFNCERT_DISPLAYS = [
   DfnCertSeverityClassTableDisplay.displayId,
 ];
 
-const DfnCertDashboard = props => (
+const DfnCertDashboard = (props: DfnCertDashboardProps) => (
   <Dashboard
     {...props}
     defaultDisplays={[

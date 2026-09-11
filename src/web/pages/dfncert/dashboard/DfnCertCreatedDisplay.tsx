@@ -10,25 +10,29 @@ import CreatedDisplay from 'web/components/dashboard/display/created/CreatedDisp
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {DfnCertsCreatedLoader} from 'web/pages/dfncert/dashboard/Loaders';
+import {DfnCertsCreatedLoader} from 'web/pages/dfncert/dashboard/DfnCertLoaders';
 import Theme from 'web/utils/theme';
 
 export const DfnCertsCreatedDisplay = createDisplay({
   loaderComponent: DfnCertsCreatedLoader,
-  displayComponent: CreatedDisplay,
-  title: () => _('DFN-CERT Advisories by Creation Time'),
-  yAxisLabel: _l('# of created DFN-CERT Advs'),
-  y2AxisLabel: _l('Total DFN-CERT Advs'),
-  xAxisLabel: _l('Time'),
-  yLine: {
-    color: Theme.darkGreenTransparent,
-    label: _l('Created DFN-CERT Advs'),
-  },
-  y2Line: {
-    color: Theme.darkGreenTransparent,
-    dashArray: '3, 2',
-    label: _l('Total DFN-CERT Advs'),
-  },
+  displayComponent: props => (
+    <CreatedDisplay
+      {...props}
+      title={() => _('DFN-CERT Advisories by Creation Time')}
+      xAxisLabel={_('Time')}
+      y2AxisLabel={_('Total DFN-CERT Advs')}
+      y2Line={{
+        color: Theme.darkGreenTransparent,
+        dashArray: '3, 2',
+        label: _('Total DFN-CERT Advs'),
+      }}
+      yAxisLabel={_('# of created DFN-CERT Advs')}
+      yLine={{
+        color: Theme.darkGreenTransparent,
+        label: _('Created DFN-CERT Advs'),
+      }}
+    />
+  ),
   displayId: 'dfn_cert_adv-by-created',
   displayName: 'DfnCertsCreatedDisplay',
   filtersFilter: DFNCERT_FILTER_FILTER,
@@ -36,15 +40,19 @@ export const DfnCertsCreatedDisplay = createDisplay({
 
 export const DfnCertsCreatedTableDisplay = createDisplay({
   loaderComponent: DfnCertsCreatedLoader,
-  displayComponent: DataTableDisplay,
-  title: () => _('DFN-CERT Advisories by Creation Time'),
-  dataTitles: [
-    _l('Creation Time'),
-    _l('# of DFN-CERT Advs'),
-    _l('Total DFN-CERT Advs'),
-  ],
-  dataRow: row => [row.label, row.y, row.y2],
-  dataTransform: transformCreated,
+  displayComponent: props => (
+    <DataTableDisplay
+      {...props}
+      dataRow={row => [row.label ?? '', row.y, row.y2]}
+      dataTitles={[
+        _('Creation Time'),
+        _('# of DFN-CERT Advs'),
+        _('Total DFN-CERT Advs'),
+      ]}
+      dataTransform={transformCreated}
+      title={() => _('DFN-CERT Advisories by Creation Time')}
+    />
+  ),
   displayId: 'dfn_cert_adv-by-created-table',
   displayName: 'DfnCertsCreatedTableDisplay',
   filtersFilter: DFNCERT_FILTER_FILTER,
