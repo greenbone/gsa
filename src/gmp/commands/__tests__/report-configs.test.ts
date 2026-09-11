@@ -5,7 +5,11 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {ReportConfigsCommand} from 'gmp/commands/report-configs';
-import {createHttp, createEntitiesResponse} from 'gmp/commands/testing';
+import {
+  createHttp,
+  createEntitiesResponse,
+  createResponse,
+} from 'gmp/commands/testing';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('ReportConfigsCommand tests', () => {
@@ -78,5 +82,14 @@ describe('ReportConfigsCommand tests', () => {
     });
     const {data} = resp;
     expect(data.length).toEqual(2);
+  });
+
+  test('should handle an incomplete report configs response', async () => {
+    const fakeHttp = createHttp(createResponse({}));
+    const cmd = new ReportConfigsCommand(fakeHttp);
+
+    const result = await cmd.get();
+
+    expect(result.data).toEqual([]);
   });
 });
