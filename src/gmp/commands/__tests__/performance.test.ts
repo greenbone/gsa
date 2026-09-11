@@ -58,6 +58,21 @@ describe('PerformanceReport', () => {
     expect(performanceReport.details?.duration).toBe(3600);
     expect(performanceReport.details?.text).toBe('Report content');
   });
+
+  test('should allow report details without timestamps', () => {
+    const performanceReport = new PerformanceReport({
+      name: 'Test Report',
+      title: 'Test Title',
+      report: {
+        _format: 'txt',
+        _duration: 60,
+        __text: 'Report content',
+      },
+    });
+
+    expect(performanceReport.details?.startTime).toBeUndefined();
+    expect(performanceReport.details?.endTime).toBeUndefined();
+  });
 });
 
 describe('PerformanceCommand', () => {
@@ -93,6 +108,15 @@ describe('PerformanceCommand', () => {
     const performanceCommand = new PerformanceCommand(fakeHttp);
 
     await expect(performanceCommand.getAll()).rejects.toThrow('Network error');
+  });
+
+  test('should throw an error when getAll returns no reports', async () => {
+    const fakeHttp = createHttp(createResponse({}));
+    const performanceCommand = new PerformanceCommand(fakeHttp);
+
+    await expect(performanceCommand.getAll()).rejects.toThrow(
+      'Invalid response data for system reports',
+    );
   });
 
   test('should fetch a specific performance report by name', async () => {
@@ -183,5 +207,41 @@ describe('PerformanceCommand', () => {
     expect(report.details?.endTime).toEqual(date('2024-01-01T01:00:00.000Z'));
     expect(report.details?.duration).toEqual(3600);
     expect(report.details?.text).toEqual('Report content');
+  });
+
+  test('should fetch a specific performance report with a duration', async () => {
+    const response = createResponse({
+      get_system_report: {
+        get_system_reports_response: {
+          system_report: {name: 'Report1', title: 'Title1'},
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+    const performanceCommand = new PerformanceCommand(fakeHttp);
+
+    await performanceCommand.get({
+      name: 'Report1',
+      duration: 3600,
+      sensorId: 'sensor-1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_system_report',
+        slave_id: 'sensor-1',
+        name: 'Report1',
+        duration: '3600',
+      },
+    });
+  });
+
+  test('should throw an error when get returns no report', async () => {
+    const fakeHttp = createHttp(createResponse({}));
+    const performanceCommand = new PerformanceCommand(fakeHttp);
+
+    await expect(performanceCommand.get({name: 'Report1'})).rejects.toThrow(
+      'Invalid response data for system report',
+    );
   });
 });
