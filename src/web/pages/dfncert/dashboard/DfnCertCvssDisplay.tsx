@@ -9,14 +9,21 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {DfnCertSeverityLoader} from 'web/pages/dfncert/dashboard/Loaders';
+import {DfnCertSeverityLoader} from 'web/pages/dfncert/dashboard/DfnCertLoaders';
 
 export const DfnCertCvssDisplay = createDisplay({
   loaderComponent: DfnCertSeverityLoader,
-  displayComponent: CvssDisplay,
-  yLabel: _l('# of DFN-CERT Advs'),
-  title: ({data: tdata}) =>
-    _('DFN-CERT Advisories by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssDisplay
+      {...props}
+      title={({data}) =>
+        _('DFN-CERT Advisories by CVSS (Total: {{count}})', {
+          count: data.total,
+        })
+      }
+      yLabel={_('# of DFN-CERT Advs')}
+    />
+  ),
   filtersFilter: DFNCERT_FILTER_FILTER,
   displayId: 'dfn_cert_adv-by-cvss',
   displayName: 'DfnCertCvssDisplay',
@@ -24,10 +31,15 @@ export const DfnCertCvssDisplay = createDisplay({
 
 export const DfnCertCvssTableDisplay = createDisplay({
   loaderComponent: DfnCertSeverityLoader,
-  displayComponent: CvssTableDisplay,
-  dataTitles: [_l('Severity'), _l('# of DFN-CERT Advisories')],
-  title: ({data: tdata}) =>
-    _('DFN-CERT Advisories by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssTableDisplay
+      {...props}
+      dataTitles={[_('Severity'), _('# of DFN-CERT Advisories')]}
+      title={({data}) =>
+        _('DFN-CERT Advisories by CVSS (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: DFNCERT_FILTER_FILTER,
   displayId: 'dfn_cert_adv-by-cvss-table',
   displayName: 'DfnCertCvssTableDisplay',
