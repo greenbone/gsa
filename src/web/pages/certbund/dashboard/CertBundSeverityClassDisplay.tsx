@@ -13,11 +13,16 @@ import {CertBundSeverityLoader} from 'web/pages/certbund/dashboard/CertBundLoade
 
 export const CertBundSeverityClassDisplay = createDisplay({
   loaderComponent: CertBundSeverityLoader,
-  displayComponent: SeverityClassDisplay,
-  title: ({data: tdata}) =>
-    _('CERT-Bund Advisories by Severity Class (Total: {{count}})', {
-      count: tdata.total,
-    }),
+  displayComponent: props => (
+    <SeverityClassDisplay
+      {...props}
+      title={({data}) =>
+        _('CERT-Bund Advisories by Severity Class (Total: {{count}})', {
+          count: data.total,
+        })
+      }
+    />
+  ),
   displayId: 'cert_bund_adv-by-severity-class',
   displayName: 'CertBundSeverityClassDisplay',
   filtersFilter: CERTBUND_FILTER_FILTER,
@@ -25,12 +30,17 @@ export const CertBundSeverityClassDisplay = createDisplay({
 
 export const CertBundSeverityClassTableDisplay = createDisplay({
   loaderComponent: CertBundSeverityLoader,
-  displayComponent: SeverityClassTableDisplay,
-  title: ({data: tdata}) =>
-    _('CERT-Bund Advisories by Severity Class (Total: {{count}})', {
-      count: tdata.total,
-    }),
-  dataTitles: [_l('Severity Class'), _l('# of CERT-Bund Advisories')],
+  displayComponent: props => (
+    <SeverityClassTableDisplay
+      {...props}
+      dataTitles={[_('Severity Class'), _('# of CERT-Bund Advisories')]}
+      title={({data}) =>
+        _('CERT-Bund Advisories by Severity Class (Total: {{count}})', {
+          count: data.total,
+        })
+      }
+    />
+  ),
   displayId: 'cert_bund_adv-by-severity-table',
   displayName: 'CertBundSeverityClassTableDisplay',
   filtersFilter: CERTBUND_FILTER_FILTER,

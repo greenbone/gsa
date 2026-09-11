@@ -8,7 +8,7 @@ import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 import {CertBundCreatedDisplay} from 'web/pages/certbund/dashboard/CertBundCreatedDisplay';
-import {CertBundCvssDisplay} from 'web/pages/certbund/dashboard/CvssDisplay';
+import {CertBundCvssDisplay} from 'web/pages/certbund/dashboard/CertBundCvssDisplay';
 import {CvesCreatedDisplay} from 'web/pages/cves/dashboard/CreatedDisplay';
 import {CvesSeverityClassDisplay} from 'web/pages/cves/dashboard/SeverityClassDisplay';
 import HostsTopologyDisplay from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
