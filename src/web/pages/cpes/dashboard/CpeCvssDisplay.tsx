@@ -9,14 +9,19 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {CpesSeverityLoader} from 'web/pages/cpes/dashboard/Loaders';
+import {CpesSeverityLoader} from 'web/pages/cpes/dashboard/CpeLoaders';
 
 export const CpesCvssDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,
-  displayComponent: CvssDisplay,
-  yLabel: _l('# of CPEs'),
-  title: ({data: tdata}) =>
-    _('CPEs by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssDisplay
+      {...props}
+      title={({data}) =>
+        _('CPEs by CVSS (Total: {{count}})', {count: data.total})
+      }
+      yLabel={_('# of CPEs')}
+    />
+  ),
   filtersFilter: CPES_FILTER_FILTER,
   displayId: 'cpe-by-cvss',
   displayName: 'CpesCvssDisplay',
@@ -24,10 +29,15 @@ export const CpesCvssDisplay = createDisplay({
 
 export const CpesCvssTableDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,
-  displayComponent: CvssTableDisplay,
-  dataTitles: [_l('Severity'), _l('# of CPEs')],
-  title: ({data: tdata}) =>
-    _('CPEs by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssTableDisplay
+      {...props}
+      dataTitles={[_('Severity'), _('# of CPEs')]}
+      title={({data}) =>
+        _('CPEs by CVSS (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: CPES_FILTER_FILTER,
   displayId: 'cpe-by-cvss-table',
   displayName: 'CpesCvssTableDisplay',
