@@ -9,6 +9,7 @@ import {
   createHttp,
   createEntityResponse,
   createActionResultResponse,
+  createResponse,
 } from 'gmp/commands/testing';
 
 describe('ReportConfigCommand tests', () => {
@@ -131,5 +132,25 @@ describe('ReportConfigCommand tests', () => {
         report_config_id: 'foo',
       },
     });
+  });
+
+  test('should get the report config element from the response root', () => {
+    const cmd = new ReportConfigCommand(createHttp());
+    const config = {_id: 'foo', name: 'Report Config'};
+    const root = {
+      get_report_config: {
+        get_report_configs_response: {
+          report_config: config,
+        },
+      },
+    };
+
+    expect(cmd.getElementFromRoot(root)).toEqual(config);
+  });
+
+  test('should return an empty report config for an incomplete response root', () => {
+    const cmd = new ReportConfigCommand(createHttp());
+
+    expect(cmd.getElementFromRoot(createResponse({}).data)).toEqual({});
   });
 });
