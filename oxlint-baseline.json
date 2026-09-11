@@ -175,9 +175,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 132,
+        "line": 150,
         "column": 17,
-        "offset": 3756
+        "offset": 4291
       },
       "sourceLine": "expect(http.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/agent.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|17|expect(http.request).toHaveBeenCalledWith('get', {"
@@ -247,9 +247,21 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 185,
+        "line": 175,
         "column": 21,
-        "offset": 5688
+        "offset": 5284
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith(",
+      "fingerprint": "src/gmp/commands/__tests__/alert.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith("
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/alert.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 247,
+        "column": 21,
+        "offset": 7518
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/alert.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -259,9 +271,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 107,
+        "line": 268,
         "column": 21,
-        "offset": 3256
+        "offset": 8199
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/alert.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -319,9 +331,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 236,
+        "line": 250,
         "column": 21,
-        "offset": 6513
+        "offset": 6787
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/audit.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -331,12 +343,36 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 201,
+        "line": 215,
         "column": 21,
-        "offset": 5456
+        "offset": 5730
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/audit.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/audit.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 317,
+        "column": 21,
+        "offset": 8602
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {",
+      "fingerprint": "src/gmp/commands/__tests__/audit.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/audit.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 323,
+        "column": 21,
+        "offset": 8754
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'get', {",
+      "fingerprint": "src/gmp/commands/__tests__/audit.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'get', {"
     },
     {
       "filename": "src/gmp/commands/__tests__/audits.test.ts",
@@ -487,9 +523,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 701,
+        "line": 770,
         "column": 21,
-        "offset": 22333
+        "offset": 24217
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/credential.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -499,12 +535,24 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 780,
+        "line": 849,
         "column": 21,
-        "offset": 24687
+        "offset": 26571
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/credential.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/credential.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 659,
+        "column": 21,
+        "offset": 20567
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(",
+      "fingerprint": "src/gmp/commands/__tests__/credential.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith("
     },
     {
       "filename": "src/gmp/commands/__tests__/credentials.test.ts",
@@ -571,9 +619,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 152,
+        "line": 267,
         "column": 17,
-        "offset": 4406
+        "offset": 7563
       },
       "sourceLine": "expect(http.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/dashboards.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|17|expect(http.request).toHaveBeenCalledWith('post', {"
@@ -619,9 +667,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 80,
+        "line": 360,
         "column": 21,
-        "offset": 2291
+        "offset": 10084
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/entities.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -631,12 +679,36 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 171,
+        "line": 274,
         "column": 21,
-        "offset": 4850
+        "offset": 7927
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/entities.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/entities.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 191,
+        "column": 21,
+        "offset": 5548
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {",
+      "fingerprint": "src/gmp/commands/__tests__/entities.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/entities.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 197,
+        "column": 21,
+        "offset": 5696
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {",
+      "fingerprint": "src/gmp/commands/__tests__/entities.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {"
     },
     {
       "filename": "src/gmp/commands/__tests__/entity.test.ts",
@@ -679,9 +751,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 58,
+        "line": 88,
         "column": 21,
-        "offset": 1603
+        "offset": 2369
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/filter.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -691,9 +763,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 93,
+        "line": 145,
         "column": 23,
-        "offset": 2700
+        "offset": 4093
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/filter.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|23|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -847,9 +919,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 31,
+        "line": 36,
         "column": 21,
-        "offset": 1011
+        "offset": 1091
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/login.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -1063,9 +1135,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 168,
+        "line": 229,
         "column": 21,
-        "offset": 5320
+        "offset": 7344
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/performance.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1087,9 +1159,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 59,
+        "line": 60,
         "column": 21,
-        "offset": 1920
+        "offset": 1958
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/permissions.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1099,9 +1171,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 81,
+        "line": 117,
         "column": 21,
-        "offset": 2656
+        "offset": 3689
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/permissions.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -1123,9 +1195,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 205,
+        "line": 259,
         "column": 21,
-        "offset": 5463
+        "offset": 6930
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/policy.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1135,9 +1207,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 149,
+        "line": 207,
         "column": 21,
-        "offset": 4085
+        "offset": 5736
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/policy.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -1159,9 +1231,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 132,
+        "line": 154,
         "column": 21,
-        "offset": 3767
+        "offset": 4403
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/report-applications.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1183,9 +1255,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 23,
+        "line": 24,
         "column": 21,
-        "offset": 677
+        "offset": 695
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/report-config.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1195,9 +1267,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 128,
+        "line": 129,
         "column": 21,
-        "offset": 3737
+        "offset": 3755
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/report-config.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -1207,9 +1279,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 73,
+        "line": 77,
         "column": 21,
-        "offset": 1877
+        "offset": 1902
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/report-configs.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1239,6 +1311,42 @@
       "fingerprint": "src/gmp/commands/__tests__/report-errors.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
     },
     {
+      "filename": "src/gmp/commands/__tests__/report-format.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 84,
+        "column": 21,
+        "offset": 2317
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
+      "fingerprint": "src/gmp/commands/__tests__/report-format.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/report-format.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 65,
+        "column": 21,
+        "offset": 1791
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
+      "fingerprint": "src/gmp/commands/__tests__/report-format.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/report-formats.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 55,
+        "column": 21,
+        "offset": 1655
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
+      "fingerprint": "src/gmp/commands/__tests__/report-formats.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
+    },
+    {
       "filename": "src/gmp/commands/__tests__/report-hosts.test.ts",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
@@ -1263,6 +1371,18 @@
       "fingerprint": "src/gmp/commands/__tests__/report-operating-system.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
     },
     {
+      "filename": "src/gmp/commands/__tests__/report-ports.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 126,
+        "column": 21,
+        "offset": 3637
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
+      "fingerprint": "src/gmp/commands/__tests__/report-ports.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
+    },
+    {
       "filename": "src/gmp/commands/__tests__/report-tls-certificates.test.ts",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
@@ -1279,21 +1399,57 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 46,
+        "line": 227,
         "column": 21,
-        "offset": 1294
+        "offset": 6410
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/report.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/report.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 178,
+        "column": 21,
+        "offset": 5065
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
+      "fingerprint": "src/gmp/commands/__tests__/report.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/report.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 152,
+        "column": 21,
+        "offset": 4417
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {",
+      "fingerprint": "src/gmp/commands/__tests__/report.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/report.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 159,
+        "column": 21,
+        "offset": 4594
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {",
+      "fingerprint": "src/gmp/commands/__tests__/report.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {"
     },
     {
       "filename": "src/gmp/commands/__tests__/reports.test.ts",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 48,
+        "line": 93,
         "column": 21,
-        "offset": 1276
+        "offset": 2479
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/reports.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1303,9 +1459,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 128,
+        "line": 162,
         "column": 21,
-        "offset": 4136
+        "offset": 5261
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/resource-names.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1339,9 +1495,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 49,
+        "line": 107,
         "column": 21,
-        "offset": 1375
+        "offset": 2851
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/role.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -1555,9 +1711,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 1029,
+        "line": 1125,
         "column": 21,
-        "offset": 30258
+        "offset": 33036
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/task.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -1567,9 +1723,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 955,
+        "line": 956,
         "column": 21,
-        "offset": 28290
+        "offset": 28322
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {",
       "fingerprint": "src/gmp/commands/__tests__/task.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'get', {"
@@ -1579,9 +1735,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 960,
+        "line": 961,
         "column": 21,
-        "offset": 28412
+        "offset": 28444
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {",
       "fingerprint": "src/gmp/commands/__tests__/task.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {"
@@ -1603,9 +1759,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 63,
+        "line": 79,
         "column": 21,
-        "offset": 1791
+        "offset": 2237
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/ticket.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1615,9 +1771,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 145,
+        "line": 161,
         "column": 21,
-        "offset": 3971
+        "offset": 4417
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/ticket.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -1699,9 +1855,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 53,
+        "line": 54,
         "column": 21,
-        "offset": 1743
+        "offset": 1791
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/trashcan.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -1711,9 +1867,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 192,
+        "line": 424,
         "column": 19,
-        "offset": 5212
+        "offset": 12125
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|19|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1723,9 +1879,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 318,
+        "line": 550,
         "column": 21,
-        "offset": 9439
+        "offset": 16352
       },
       "sourceLine": "expect(fakeHttp.request).not.toHaveBeenCalledWith(post, {",
       "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).not.toHaveBeenCalledWith(post, {"
@@ -1735,9 +1891,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 287,
+        "line": 519,
         "column": 21,
-        "offset": 8468
+        "offset": 15381
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledTimes(3);",
       "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledTimes(3);"
@@ -1747,9 +1903,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 97,
+        "line": 102,
         "column": 21,
-        "offset": 2664
+        "offset": 2769
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {",
       "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {"
@@ -1759,9 +1915,21 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 211,
+        "line": 349,
         "column": 21,
-        "offset": 5918
+        "offset": 10172
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('get', {args: {cmd: 'ping'}});",
+      "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('get', {args: {cmd: 'ping'}});"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/user.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 443,
+        "column": 21,
+        "offset": 12831
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
@@ -1771,9 +1939,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 306,
+        "line": 538,
         "column": 21,
-        "offset": 9067
+        "offset": 15980
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith(post, {",
       "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenCalledWith(post, {"
@@ -1783,9 +1951,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 256,
+        "line": 488,
         "column": 21,
-        "offset": 7283
+        "offset": 14196
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {",
       "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {"
@@ -1795,9 +1963,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 263,
+        "line": 495,
         "column": 21,
-        "offset": 7523
+        "offset": 14436
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {",
       "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {"
@@ -1807,12 +1975,24 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 270,
+        "line": 502,
         "column": 21,
-        "offset": 7773
+        "offset": 14686
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(3, 'post', {",
       "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(3, 'post', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/user.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 242,
+        "column": 23,
+        "offset": 6914
+      },
+      "sourceLine": "expect(fakeHttp.request).toHaveBeenCalledWith('post', {",
+      "fingerprint": "src/gmp/commands/__tests__/user.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|23|expect(fakeHttp.request).toHaveBeenCalledWith('post', {"
     },
     {
       "filename": "src/gmp/commands/__tests__/users.test.ts",
@@ -1875,13 +2055,37 @@
       "fingerprint": "src/gmp/commands/__tests__/web-application-target.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|17|expect(http.request).toHaveBeenCalledWith('post', {"
     },
     {
+      "filename": "src/gmp/commands/__tests__/web-application-targets.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 87,
+        "column": 17,
+        "offset": 2696
+      },
+      "sourceLine": "expect(http.request).toHaveBeenCalledWith('get', {",
+      "fingerprint": "src/gmp/commands/__tests__/web-application-targets.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|17|expect(http.request).toHaveBeenCalledWith('get', {"
+    },
+    {
+      "filename": "src/gmp/commands/__tests__/web-application-targets.test.ts",
+      "code": "typescript(unbound-method)",
+      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
+      "location": {
+        "line": 101,
+        "column": 17,
+        "offset": 3102
+      },
+      "sourceLine": "expect(http.request).toHaveBeenCalledWith('post', {",
+      "fingerprint": "src/gmp/commands/__tests__/web-application-targets.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|17|expect(http.request).toHaveBeenCalledWith('post', {"
+    },
+    {
       "filename": "src/gmp/commands/__tests__/wizard.test.ts",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 212,
+        "line": 262,
         "column": 17,
-        "offset": 6457
+        "offset": 7889
       },
       "sourceLine": "expect(http.request).toHaveBeenCalledWith('post', {",
       "fingerprint": "src/gmp/commands/__tests__/wizard.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|17|expect(http.request).toHaveBeenCalledWith('post', {"
@@ -1977,7 +2181,7 @@
       "location": {
         "line": 351,
         "column": 15,
-        "offset": 11378
+        "offset": 11386
       },
       "sourceLine": "comment = '',",
       "fingerprint": "src/gmp/commands/user.ts|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string` (not nullish). This default assignment will never be used.|15|comment = '',"
@@ -1989,7 +2193,7 @@
       "location": {
         "line": 359,
         "column": 16,
-        "offset": 11660
+        "offset": 11668
       },
       "sourceLine": "password = '', // needs to be included in httpPost, should be optional in gsad",
       "fingerprint": "src/gmp/commands/user.ts|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string` (not nullish). This default assignment will never be used.|16|password = '', // needs to be included in httpPost, should be optional in gsad"
@@ -2001,7 +2205,7 @@
       "location": {
         "line": 348,
         "column": 20,
-        "offset": 11274
+        "offset": 11282
       },
       "sourceLine": "access_hosts = '',",
       "fingerprint": "src/gmp/commands/user.ts|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string` (not nullish). This default assignment will never be used.|20|access_hosts = '',"
@@ -2625,7 +2829,7 @@
       "location": {
         "line": 131,
         "column": 38,
-        "offset": 3548
+        "offset": 3524
       },
       "sourceLine": "{arcs.map((currentArc, index) => {",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|eslint(no-unused-vars)|Parameter 'index' is declared but never used. Unused parameters should start with a '_'.|38|{arcs.map((currentArc, index) => {"
@@ -2637,7 +2841,7 @@
       "location": {
         "line": 79,
         "column": 48,
-        "offset": 2149
+        "offset": 2143
       },
       "sourceLine": "const [chartWidth, setChartWidth] = useState(getWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(refs)|Cannot access refs during render|48|const [chartWidth, setChartWidth] = useState(getWidth);"
@@ -2649,7 +2853,7 @@
       "location": {
         "line": 84,
         "column": 7,
-        "offset": 2261
+        "offset": 2249
       },
       "sourceLine": "setChartWidth(newWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
@@ -2839,9 +3043,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 128,
+        "line": 127,
         "column": 31,
-        "offset": 3930
+        "offset": 3909
       },
       "sourceLine": "stablePermittedDisplaysRef.current = permittedDisplays ?? [];",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|31|stablePermittedDisplaysRef.current = permittedDisplays ?? [];"
@@ -2851,9 +3055,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 133,
+        "line": 132,
         "column": 32,
-        "offset": 4148
+        "offset": 4127
       },
       "sourceLine": "defaultDashboardSettingsRef.current =",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|32|defaultDashboardSettingsRef.current ="
@@ -2863,9 +3067,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 135,
+        "line": 134,
         "column": 32,
-        "offset": 4237
+        "offset": 4216
       },
       "sourceLine": "defaultDisplaysSignatureRef.current = defaultDisplaysSignature;",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|32|defaultDisplaysSignatureRef.current = defaultDisplaysSignature;"
@@ -2875,9 +3079,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 129,
+        "line": 128,
         "column": 34,
-        "offset": 3999
+        "offset": 3978
       },
       "sourceLine": "permittedDisplaysSignatureRef.current = permittedDisplaysSignature;",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|34|permittedDisplaysSignatureRef.current = permittedDisplaysSignature;"
@@ -2887,9 +3091,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 139,
+        "line": 138,
         "column": 35,
-        "offset": 4385
+        "offset": 4364
       },
       "sourceLine": "const stablePermittedDisplays = stablePermittedDisplaysRef.current;",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|35|const stablePermittedDisplays = stablePermittedDisplaysRef.current;"
@@ -2899,9 +3103,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 138,
+        "line": 137,
         "column": 36,
-        "offset": 4314
+        "offset": 4293
       },
       "sourceLine": "const defaultDashboardSettings = defaultDashboardSettingsRef.current;",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|36|const defaultDashboardSettings = defaultDashboardSettingsRef.current;"
@@ -2911,9 +3115,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 185,
+        "line": 184,
         "column": 5,
-        "offset": 5530
+        "offset": 5509
       },
       "sourceLine": "defaults,",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|5|defaults,"
@@ -2923,9 +3127,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 159,
+        "line": 158,
         "column": 5,
-        "offset": 4821
+        "offset": 4800
       },
       "sourceLine": "stablePermittedDisplays.forEach((displayId: string) => {",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|5|stablePermittedDisplays.forEach((displayId: string) => {"
@@ -2935,9 +3139,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 181,
+        "line": 180,
         "column": 6,
-        "offset": 5444
+        "offset": 5423
       },
       "sourceLine": "}, [",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|6|}, ["
@@ -2947,9 +3151,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 132,
+        "line": 131,
         "column": 7,
-        "offset": 4049
+        "offset": 4028
       },
       "sourceLine": "if (defaultDisplaysSignatureRef.current !== defaultDisplaysSignature) {",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|7|if (defaultDisplaysSignatureRef.current !== defaultDisplaysSignature) {"
@@ -2959,9 +3163,9 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 127,
+        "line": 126,
         "column": 7,
-        "offset": 3828
+        "offset": 3807
       },
       "sourceLine": "if (permittedDisplaysSignatureRef.current !== permittedDisplaysSignature) {",
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|7|if (permittedDisplaysSignatureRef.current !== permittedDisplaysSignature) {"
@@ -2983,9 +3187,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 493,
+        "line": 489,
         "column": 36,
-        "offset": 12806
+        "offset": 12711
       },
       "sourceLine": "setState: this.handleSetState,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|36|setState: this.handleSetState,"
@@ -2995,9 +3199,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 481,
+        "line": 477,
         "column": 42,
-        "offset": 12478
+        "offset": 12383
       },
       "sourceLine": "setState: this.handleSetState,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|42|setState: this.handleSetState,"
@@ -3007,9 +3211,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 498,
+        "line": 494,
         "column": 46,
-        "offset": 13020
+        "offset": 12925
       },
       "sourceLine": "onDownloadCsvClick: this.handleDownloadCsv,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadCsvClick: this.handleDownloadCsv,"
@@ -3019,9 +3223,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 499,
+        "line": 495,
         "column": 46,
-        "offset": 13084
+        "offset": 12989
       },
       "sourceLine": "onDownloadSvgClick: this.handleDownloadSvg,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadSvgClick: this.handleDownloadSvg,"
@@ -4543,9 +4747,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 74,
+        "line": 81,
         "column": 5,
-        "offset": 2966
+        "offset": 3272
       },
       "sourceLine": "setAgents(previousAgents => {",
       "fingerprint": "src/web/pages/agents/AgentListPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setAgents(previousAgents => {"
@@ -4555,9 +4759,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Agent[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 93,
+        "line": 100,
         "column": 34,
-        "offset": 3482
+        "offset": 3788
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/agents/AgentListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Agent[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
