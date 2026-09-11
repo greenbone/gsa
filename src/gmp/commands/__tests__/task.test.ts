@@ -25,6 +25,7 @@ import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
   CONTAINER_IMAGE_SCANNER_TYPE,
+  WEB_APPLICATION_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {
   HOSTS_ORDERING_RANDOM,
@@ -1046,5 +1047,118 @@ describe('TaskCommand tests', () => {
     await expect(cmd.resume({id: 'task1'})).rejects.toThrow(
       'Failed to resume task',
     );
+  });
+
+  test('should create a web application task', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new TaskCommand(fakeHttp);
+
+    const result = await cmd.createWebApplicationTask({
+      addTag: true,
+      alterable: false,
+      applyOverrides: true,
+      autoDelete: AUTO_DELETE_KEEP,
+      comment: 'web task',
+      inAssets: true,
+      minQod: 70,
+      name: 'Web application task',
+      scannerId: 'scanner-1',
+      scheduleId: 'schedule-1',
+      schedulePeriods: true,
+      ajaxSpiderTimeout: 30,
+      scanMode: 'safe',
+      tagId: 'tag-1',
+      webApplicationTargetId: 'web-target-1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_web_application_task',
+        add_tag: 1,
+        'alert_ids:': [],
+        alterable: 0,
+        apply_overrides: 1,
+        ajax_spider_timeout: 30,
+        auto_delete_data: undefined,
+        auto_delete: AUTO_DELETE_KEEP,
+        comment: 'web task',
+        in_assets: 1,
+        min_qod: 70,
+        name: 'Web application task',
+        scanner_id: 'scanner-1',
+        scanner_type: WEB_APPLICATION_SCANNER_TYPE,
+        schedule_id: 'schedule-1',
+        schedule_periods: 1,
+        tag_id: 'tag-1',
+        scan_mode: 'safe',
+        usage_type: 'scan',
+        web_application_target_id: 'web-target-1',
+      },
+    });
+    expect(result.data.id).toEqual('foo');
+  });
+
+  test('should save a web application task', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new TaskCommand(fakeHttp);
+
+    const result = await cmd.saveWebApplicationTask({
+      alertIds: ['alert-1'],
+      alterable: true,
+      applyOverrides: false,
+      autoDelete: AUTO_DELETE_KEEP,
+      comment: 'updated web task',
+      id: 'task-1',
+      inAssets: false,
+      minQod: 80,
+      name: 'Updated web application task',
+      scannerId: 'scanner-1',
+      scheduleId: 'schedule-1',
+      schedulePeriods: false,
+      ajaxSpiderTimeout: 45,
+      scanMode: 'active',
+      webApplicationTargetId: 'web-target-1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_web_application_task',
+        'alert_ids:': ['alert-1'],
+        ajax_spider_timeout: 45,
+        alterable: 1,
+        apply_overrides: 0,
+        auto_delete_data: undefined,
+        auto_delete: AUTO_DELETE_KEEP,
+        comment: 'updated web task',
+        in_assets: 0,
+        min_qod: 80,
+        name: 'Updated web application task',
+        scanner_id: 'scanner-1',
+        scanner_type: WEB_APPLICATION_SCANNER_TYPE,
+        schedule_id: 'schedule-1',
+        schedule_periods: 0,
+        task_id: 'task-1',
+        scan_mode: 'active',
+        usage_type: 'scan',
+        web_application_target_id: 'web-target-1',
+      },
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test('should get the task element from the response root', () => {
+    const cmd = new TaskCommand(createHttp());
+    const task = {_id: 'task-1', name: 'Task'};
+    const root = {
+      get_task: {
+        get_tasks_response: {
+          task,
+        },
+      },
+    };
+
+    expect(cmd.getElementFromRoot(root)).toEqual(task);
   });
 });
