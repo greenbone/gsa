@@ -13,6 +13,7 @@ import {
   createActionResultResponse,
 } from 'gmp/commands/testing';
 import Permission from 'gmp/models/permission';
+import Model from 'gmp/models/model';
 
 describe('PermissionsCommand tests', () => {
   test('should fetch permissions with default params', async () => {
@@ -93,5 +94,41 @@ describe('PermissionsCommand tests', () => {
       },
     });
     expect(result).toBeUndefined();
+  });
+
+  test('should include related resources when creating permissions', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new PermissionsCommand(fakeHttp);
+    const related = [
+      new Model({id: 'related-1'}, 'host'),
+      new Model({id: 'related-2'}, 'task'),
+    ];
+
+    await cmd.create({
+      id: 'resource-id',
+      permission: 'write',
+      entityType: 'task',
+      subjectType: 'user',
+      includeRelated: '2',
+      related,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_permissions',
+        comment: '',
+        permission_type: 'write',
+        permission_group_id: undefined,
+        permission_role_id: undefined,
+        permission_user_id: undefined,
+        resource_id: 'resource-id',
+        resource_type: 'task',
+        subject_type: 'user',
+        include_related: '2',
+        'related:related-1': 'asset',
+        'related:related-2': 'task',
+      },
+    });
   });
 });
