@@ -10,25 +10,29 @@ import CreatedDisplay from 'web/components/dashboard/display/created/CreatedDisp
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {CvesCreatedLoader} from 'web/pages/cves/dashboard/Loaders';
+import {CvesCreatedLoader} from 'web/pages/cves/dashboard/CveLoaders';
 import Theme from 'web/utils/theme';
 
 export const CvesCreatedDisplay = createDisplay({
   loaderComponent: CvesCreatedLoader,
-  displayComponent: CreatedDisplay,
-  title: () => _('CVEs by Creation Time'),
-  yAxisLabel: _l('# of created CVEs'),
-  y2AxisLabel: _l('Total CVEs'),
-  xAxisLabel: _l('Time'),
-  yLine: {
-    color: Theme.darkGreenTransparent,
-    label: _l('Created CVEs'),
-  },
-  y2Line: {
-    color: Theme.darkGreenTransparent,
-    dashArray: '3, 2',
-    label: _l('Total CVEs'),
-  },
+  displayComponent: props => (
+    <CreatedDisplay
+      {...props}
+      title={() => _('CVEs by Creation Time')}
+      xAxisLabel={_('Time')}
+      y2AxisLabel={_('Total CVEs')}
+      y2Line={{
+        color: Theme.darkGreenTransparent,
+        dashArray: '3, 2',
+        label: _('Total CVEs'),
+      }}
+      yAxisLabel={_('# of created CVEs')}
+      yLine={{
+        color: Theme.darkGreenTransparent,
+        label: _('Created CVEs'),
+      }}
+    />
+  ),
   displayId: 'cve-by-created',
   displayName: 'CveCreatedDisplay',
   filtersFilter: CVES_FILTER_FILTER,
@@ -36,11 +40,15 @@ export const CvesCreatedDisplay = createDisplay({
 
 export const CvesCreatedTableDisplay = createDisplay({
   loaderComponent: CvesCreatedLoader,
-  displayComponent: DataTableDisplay,
-  title: () => _('CVEs by Creation Time'),
-  dataTitles: [_l('Creation Time'), _l('# of CVEs'), _l('Total CVEs')],
-  dataRow: row => [row.label, row.y, row.y2],
-  dataTransform: transformCreated,
+  displayComponent: props => (
+    <DataTableDisplay
+      {...props}
+      dataRow={row => [row.label ?? '', row.y, row.y2]}
+      dataTitles={[_l('Creation Time'), _l('# of CVEs'), _l('Total CVEs')]}
+      dataTransform={transformCreated}
+      title={() => _('CVEs by Creation Time')}
+    />
+  ),
   displayId: 'cve-by-created-table',
   displayName: 'CveCreatedTableDisplay',
   filtersFilter: CVES_FILTER_FILTER,
