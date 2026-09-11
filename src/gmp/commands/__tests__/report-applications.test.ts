@@ -103,6 +103,28 @@ describe('ReportApplicationsCommand tests', () => {
     expect(data).toHaveLength(0);
   });
 
+  test('should skip applications without a name', async () => {
+    const response = createResponse({
+      get_report_applications: {
+        get_report_applications_response: {
+          applications: {
+            application: [
+              {hosts_count: 1, occurrences: 1},
+              {name: 'cpe:/a:vendor:named:1.0'},
+            ],
+          },
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new ReportApplicationsCommand(fakeHttp);
+
+    const result = await cmd.get();
+
+    expect(result.data).toHaveLength(1);
+    expect(result.data[0].name).toBe('cpe:/a:vendor:named:1.0');
+  });
+
   test('should throw error for invalid response', async () => {
     const response = createResponse({});
 
