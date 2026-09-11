@@ -6,6 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import ResourceNamesCommand from 'gmp/commands/resource-names';
 import {createResponse, createHttp} from 'gmp/commands/testing';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {type EntityType} from 'gmp/utils/entity-type';
 
 const createResourceNamesResponse = ({
@@ -106,6 +107,39 @@ describe('ResourceNamesCommand tests', () => {
     });
     const {data} = resp;
     expect(data.length).toEqual(0);
+  });
+
+  test('should apply all terms to a string filter in getAll', async () => {
+    const response = createResourceNamesResponse({type: 'task'});
+    const fakeHttp = createHttp(response);
+    const cmd = new ResourceNamesCommand(fakeHttp);
+
+    await cmd.getAll({resourceType: 'task', filter: 'name=foo'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_resource_names',
+        filter: 'name=foo first=1 rows=-1',
+        resource_type: 'task',
+      },
+    });
+  });
+
+  test('should apply all terms to a filter object in getAll', async () => {
+    const response = createResourceNamesResponse({type: 'task'});
+    const fakeHttp = createHttp(response);
+    const cmd = new ResourceNamesCommand(fakeHttp);
+    const filter = QueryFilter.fromString('name=foo');
+
+    await cmd.getAll({resourceType: 'task', filter});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_resource_names',
+        filter: 'name=foo first=1 rows=-1',
+        resource_type: 'task',
+      },
+    });
   });
 
   test.each([
