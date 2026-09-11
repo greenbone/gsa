@@ -3,11 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, test, expect, beforeAll, afterAll} from '@gsa/testing';
 import AuditCommand from 'gmp/commands/audit';
 import {
   createActionResultResponse,
   createEntityResponse,
+  createHttpError,
+  createHttpMany,
   createHttp,
 } from 'gmp/commands/testing';
 import {
@@ -19,6 +21,18 @@ import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   AUTO_DELETE_KEEP,
 } from 'gmp/models/task';
+import logger, {type LogLevel} from 'gmp/log';
+
+let logLevel: LogLevel;
+
+beforeAll(() => {
+  logLevel = logger.level;
+  logger.setDefaultLevel('silent');
+});
+
+afterAll(() => {
+  logger.setDefaultLevel(logLevel);
+});
 
 describe('AuditCommand tests', () => {
   test('should create new audit', async () => {
@@ -241,5 +255,103 @@ describe('AuditCommand tests', () => {
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
+  });
+
+  test('should start audit and return the updated audit', async () => {
+    const fakeHttp = createHttpMany([
+      createActionResultResponse(),
+      createEntityResponse('task', {_id: 'audit1'}),
+    ]);
+
+    const cmd = new AuditCommand(fakeHttp);
+    const resp = await cmd.start({id: 'audit1'});
+
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {
+      data: {
+        cmd: 'start_task',
+        task_id: 'audit1',
+      },
+    });
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'get', {
+      args: {
+        cmd: 'get_task',
+        task_id: 'audit1',
+      },
+    });
+    expect(resp.data.id).toEqual('audit1');
+  });
+
+  test('should stop audit and return the updated audit', async () => {
+    const fakeHttp = createHttpMany([
+      createActionResultResponse(),
+      createEntityResponse('task', {_id: 'audit1'}),
+    ]);
+
+    const cmd = new AuditCommand(fakeHttp);
+    const resp = await cmd.stop({id: 'audit1'});
+
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {
+      data: {
+        cmd: 'stop_task',
+        task_id: 'audit1',
+      },
+    });
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'get', {
+      args: {
+        cmd: 'get_task',
+        task_id: 'audit1',
+      },
+    });
+    expect(resp.data.id).toEqual('audit1');
+  });
+
+  test('should resume audit and return the updated audit', async () => {
+    const fakeHttp = createHttpMany([
+      createActionResultResponse(),
+      createEntityResponse('task', {_id: 'audit1'}),
+    ]);
+
+    const cmd = new AuditCommand(fakeHttp);
+    const resp = await cmd.resume({id: 'audit1'});
+
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(1, 'post', {
+      data: {
+        cmd: 'resume_task',
+        task_id: 'audit1',
+      },
+    });
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'get', {
+      args: {
+        cmd: 'get_task',
+        task_id: 'audit1',
+      },
+    });
+    expect(resp.data.id).toEqual('audit1');
+  });
+
+  test('should rethrow errors from audit lifecycle actions', async () => {
+    const error = new Error('Failed to change audit state');
+
+    for (const action of ['start', 'stop', 'resume'] as const) {
+      const cmd = new AuditCommand(createHttpError(error));
+
+      await expect(cmd[action]({id: 'audit1'})).rejects.toThrow(
+        'Failed to change audit state',
+      );
+    }
+  });
+
+  test('should get the audit element from the response root', () => {
+    const cmd = new AuditCommand(createHttp());
+    const task = {id: 'audit1', name: 'Audit'};
+    const root = {
+      get_task: {
+        get_tasks_response: {
+          task,
+        },
+      },
+    };
+
+    expect(cmd.getElementFromRoot(root)).toEqual(task);
   });
 });
