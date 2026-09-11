@@ -387,4 +387,18 @@ describe('TargetCommand tests', () => {
     const {data} = resp;
     expect(data.id).toEqual('foo');
   });
+
+  test('should get the target element from the response root', () => {
+    const cmd = new TargetCommand(createHttp());
+    const target = {_id: 'target-1', name: 'Target'};
+    const root = {
+      get_target: {
+        get_targets_response: {
+          target,
+        },
+      },
+    };
+
+    expect(cmd.getElementFromRoot(root)).toEqual(target);
+  });
 });
