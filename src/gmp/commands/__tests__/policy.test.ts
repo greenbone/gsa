@@ -108,6 +108,21 @@ describe('PolicyCommand tests', () => {
     });
   });
 
+  test('should import a policy from XML', async () => {
+    const response = createResponse({});
+    const fakeHttp = createHttp(response);
+    const cmd = new PolicyCommand(fakeHttp);
+
+    await cmd.import({xml_file: '<config />'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'import_config',
+        xml_file: '<config />',
+      },
+    });
+  });
+
   test('should return single policy', async () => {
     const response = createEntityResponse('config', {_id: 'foo'});
     const fakeHttp = createHttp(response);
@@ -156,6 +171,45 @@ describe('PolicyCommand tests', () => {
         'preference:1.2.3:1:entry:Foo': 'bar',
         'preference:1.2.3:2:password:Bar': 'foo',
         timeout: 1,
+      },
+    });
+  });
+
+  test('should save a policy nvt without timeout or preferences', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new PolicyCommand(fakeHttp);
+
+    await cmd.savePolicyNvt({id: 'c1', oid: '1.2.3'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config_nvt',
+        config_id: 'c1',
+        oid: '1.2.3',
+        'preference:scanner:0:scanner:timeout.1.2.3': '',
+        timeout: 0,
+      },
+    });
+  });
+
+  test('should save policy family selections', async () => {
+    const response = createResponse({});
+    const fakeHttp = createHttp(response);
+    const cmd = new PolicyCommand(fakeHttp);
+
+    await cmd.savePolicyFamily({
+      id: 'c1',
+      familyName: 'Family Foo',
+      selected: {'Family Foo': YES_VALUE},
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_config_family',
+        config_id: 'c1',
+        family: 'Family Foo',
+        'nvt:Family Foo': 1,
       },
     });
   });
@@ -217,5 +271,19 @@ describe('PolicyCommand tests', () => {
     expect(nvts[1].severity).toEqual(2.2);
     expect(nvts[2].selected).toEqual(NO_VALUE);
     expect(nvts[2].severity).toEqual(3.3);
+  });
+
+  test('should get the policy element from the response root', () => {
+    const cmd = new PolicyCommand(createHttp());
+    const policy = {_id: 'c1', name: 'Policy'};
+    const root = {
+      get_config: {
+        get_configs_response: {
+          config: policy,
+        },
+      },
+    };
+
+    expect(cmd.getElementFromRoot(root)).toEqual(policy);
   });
 });
