@@ -423,6 +423,41 @@ describe('CredentialCommand tests', () => {
     expect(resp.data.id).toEqual('foo');
   });
 
+  test('should save a credential store', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+
+    await cmd.saveCredentialStore({
+      id: 'store-1',
+      name: 'credential-store',
+      vaultId: 'vault-1',
+      hostIdentifier: 'host-1',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_credential',
+        credential_id: 'store-1',
+        name: 'credential-store',
+        comment: undefined,
+        auth_algorithm: undefined,
+        certificate: undefined,
+        community: undefined,
+        credential_login: undefined,
+        credential_type: undefined,
+        passphrase: undefined,
+        password: undefined,
+        privacy_algorithm: undefined,
+        privacy_password: undefined,
+        private_key: undefined,
+        public_key: undefined,
+        vault_id: 'vault-1',
+        host_identifier: 'host-1',
+      },
+    });
+  });
+
   test('should save credential with all params', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
@@ -594,6 +629,40 @@ describe('CredentialCommand tests', () => {
     });
 
     expect(resp.data.id).toEqual('foo');
+  });
+
+  test('should save KRB5 credentials with empty KDC lists', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+
+    await cmd.saveKrb5({
+      id: 'krb5-id',
+      name: 'krb5-credential',
+      realm: 'EXAMPLE.COM',
+      kdcs: [],
+    });
+    await cmd.saveCredentialStoreKrb5({
+      id: 'store-krb5-id',
+      name: 'store-krb5-credential',
+      realm: 'EXAMPLE.COM',
+      kdcs: [],
+    });
+
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(
+      1,
+      'post',
+      expect.objectContaining({
+        data: expect.objectContaining({'kdcs:': ''}),
+      }),
+    );
+    expect(fakeHttp.request).toHaveBeenNthCalledWith(
+      2,
+      'post',
+      expect.objectContaining({
+        data: expect.objectContaining({'kdcs:': ''}),
+      }),
+    );
   });
 
   test('should save regular KRB5 credential with KDC validation', async () => {
