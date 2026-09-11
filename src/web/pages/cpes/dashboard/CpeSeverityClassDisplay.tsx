@@ -9,13 +9,18 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {CpesSeverityLoader} from 'web/pages/cpes/dashboard/Loaders';
+import {CpesSeverityLoader} from 'web/pages/cpes/dashboard/CpeLoaders';
 
 export const CpesSeverityClassDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,
-  displayComponent: SeverityClassDisplay,
-  title: ({data: tdata}) =>
-    _('CPEs by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <SeverityClassDisplay
+      {...props}
+      title={({data}) =>
+        _('CPEs by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   displayId: 'cpe-by-severity-class',
   displayName: 'CpesSeverityClassDisplay',
   filtersFilter: CPES_FILTER_FILTER,
@@ -23,10 +28,15 @@ export const CpesSeverityClassDisplay = createDisplay({
 
 export const CpesSeverityClassTableDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,
-  displayComponent: SeverityClassTableDisplay,
-  title: ({data: tdata}) =>
-    _('CPEs by Severity Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [_l('Severity Class'), _l('# of CPEs')],
+  displayComponent: props => (
+    <SeverityClassTableDisplay
+      {...props}
+      dataTitles={[_('Severity Class'), _('# of CPEs')]}
+      title={({data}) =>
+        _('CPEs by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   displayId: 'cpe-by-severity-table',
   displayName: 'CpesSeverityClassTableDisplay',
   filtersFilter: CPES_FILTER_FILTER,
