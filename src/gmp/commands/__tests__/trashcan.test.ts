@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
 import {createResponse, createHttp} from 'gmp/commands/testing';
 import TrashCanCommand from 'gmp/commands/trashcan';
+import type Http from 'gmp/http/http';
 
 describe('TrashCanCommand tests', () => {
   test('should allow to restore an entity', async () => {
@@ -185,6 +186,25 @@ describe('TrashCanCommand tests', () => {
     expect(data.data.ociImageTargets.length).toBe(2);
   });
 
+  test('should allow to get the trashcan contents including web application targets', async () => {
+    const response = createResponse({
+      get_trash: {
+        get_web_application_targets_response: {
+          web_application_target: [
+            {_id: 'web-target-1'},
+            {_id: 'web-target-2'},
+          ],
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new TrashCanCommand(fakeHttp);
+
+    const data = await cmd.get({webApplicationTargets: true});
+
+    expect(data.data.webApplicationTargets.length).toBe(2);
+  });
+
   test('should handle failed requests gracefully', async () => {
     const response = createResponse({
       get_trash: {
@@ -194,13 +214,28 @@ describe('TrashCanCommand tests', () => {
       },
     });
 
-    const fakeHttp = createHttp(response);
+    const fakeHttp = {
+      request: testing
+        .fn()
+        .mockRejectedValueOnce(new Error('alerts failed'))
+        .mockResolvedValue(response),
+    } as unknown as Http;
     const cmd = new TrashCanCommand(fakeHttp);
     const data = await cmd.get();
 
-    expect(data.data.alerts.length).toBe(1);
+    expect(data.data.alerts.length).toBe(0);
     expect(data.data.scanConfigs.length).toBe(0);
 
     expect(data.data).toHaveProperty('failedRequests');
+    expect(data.data.failedRequests).toEqual(['alerts']);
+  });
+
+  test('should throw when all trashcan requests fail', async () => {
+    const fakeHttp = {
+      request: testing.fn().mockRejectedValue(new Error('trash failed')),
+    } as unknown as Http;
+    const cmd = new TrashCanCommand(fakeHttp);
+
+    await expect(cmd.get()).rejects.toThrow('All trash can requests failed');
   });
 });
