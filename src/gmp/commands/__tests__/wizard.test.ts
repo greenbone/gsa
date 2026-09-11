@@ -4,7 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {createHttp, createResponse} from 'gmp/commands/testing';
+import {
+  createHttp,
+  createHttpError,
+  createResponse,
+} from 'gmp/commands/testing';
 import WizardCommand, {IMMEDIATELY_START_VALUE} from 'gmp/commands/wizard';
 import date from 'gmp/models/date';
 
@@ -123,6 +127,11 @@ describe('Wizard Command', () => {
                     _id: 'target2',
                   },
                 },
+                {
+                  _id: 'import-task',
+                  name: 'Import Task',
+                  usage_type: 'scan',
+                },
               ],
             },
           },
@@ -194,6 +203,47 @@ describe('Wizard Command', () => {
         name: 'quick_task',
       },
     });
+  });
+
+  test('should create an advanced task without a start date', async () => {
+    const http = createHttp(createResponse({}));
+    const wizard = new WizardCommand(http);
+
+    await wizard.runQuickTask({
+      autoStart: IMMEDIATELY_START_VALUE,
+      targetHosts: '127.0.0.1',
+      taskName: 'task',
+    });
+
+    expect(http.request).toHaveBeenCalledWith('post', {
+      data: expect.objectContaining({
+        'event_data:start_day': undefined,
+        'event_data:start_month': undefined,
+        'event_data:start_year': undefined,
+      }),
+    });
+  });
+
+  test('should rethrow errors when creating a quick first scan', async () => {
+    const error = new Error('quick first scan failed');
+    const wizard = new WizardCommand(createHttpError(error));
+
+    await expect(
+      wizard.runQuickFirstScan({hosts: '127.0.0.1'}),
+    ).rejects.toThrow(error);
+  });
+
+  test('should rethrow errors when creating an advanced task', async () => {
+    const error = new Error('quick task failed');
+    const wizard = new WizardCommand(createHttpError(error));
+
+    await expect(
+      wizard.runQuickTask({
+        autoStart: IMMEDIATELY_START_VALUE,
+        targetHosts: '127.0.0.1',
+        taskName: 'task',
+      }),
+    ).rejects.toThrow(error);
   });
 
   test('should modify a task', async () => {
