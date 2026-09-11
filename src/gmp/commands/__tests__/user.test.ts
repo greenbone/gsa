@@ -7,6 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import {
   createResponse,
   createHttp,
+  createHttpError,
   createActionResultResponse,
 } from 'gmp/commands/testing';
 import UserCommand, {
@@ -451,10 +452,7 @@ describe('UserCommand saveTimezone() tests', () => {
 
   test('should throw and log on httpPost error', async () => {
     const error = new Error('fail');
-    const fakeHttp = createHttp({});
-    fakeHttp.request = () => {
-      throw error;
-    };
+    const fakeHttp = createHttpError(error);
     const cmd = new UserCommand(fakeHttp);
     const settingValue = 'Europe/Berlin';
     await expect(cmd.saveTimezone(settingValue)).rejects.toThrow('fail');

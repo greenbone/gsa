@@ -4,9 +4,12 @@
  */
 
 import {testing} from '@gsa/testing';
+import type {Mock} from 'vitest';
 import {type default as Http, type HttpOptions} from 'gmp/http/http';
 import Response, {type Meta} from 'gmp/http/response';
 import {type Element} from 'gmp/models/model';
+
+type MockHttp = Http & {request: Mock};
 
 interface ActionResultResponse {
   action?: string;
@@ -118,7 +121,7 @@ export const createHttp = <TData = Element, TMeta extends Meta = Meta>(
   ({
     request: testing.fn().mockResolvedValue(response),
     ...options,
-  }) as unknown as Http;
+  }) as unknown as MockHttp;
 
 export const createHttpError = (
   error: Error,
@@ -127,7 +130,7 @@ export const createHttpError = (
   ({
     request: testing.fn().mockRejectedValue(error),
     ...options,
-  }) as unknown as Http;
+  }) as unknown as MockHttp;
 
 export const createHttpMany = (responses: Element[] | Response[]) => {
   let i = 0;
@@ -135,5 +138,5 @@ export const createHttpMany = (responses: Element[] | Response[]) => {
     request: testing
       .fn()
       .mockImplementation(() => Promise.resolve(responses[i++])),
-  } as unknown as Http;
+  } as unknown as MockHttp;
 };
