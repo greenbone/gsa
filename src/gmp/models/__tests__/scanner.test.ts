@@ -235,10 +235,25 @@ describe('Scanner model method tests', () => {
       id: 'test-id',
       scannerType: GREENBONE_SENSOR_SCANNER_TYPE,
     });
+    const scanner4 = new Scanner({
+      id: 'test-id',
+      scannerType: AGENT_CONTROLLER_SCANNER_TYPE,
+    });
+    const scanner5 = new Scanner({
+      id: 'test-id',
+      scannerType: AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
+    });
+    const scanner6 = new Scanner({
+      id: 'test-id',
+      scannerType: OPENVASD_SCANNER_TYPE,
+    });
 
     expect(scanner1.isCloneable()).toEqual(false);
     expect(scanner2.isCloneable()).toEqual(true);
     expect(scanner3.isCloneable()).toEqual(true);
+    expect(scanner4.isCloneable()).toEqual(false);
+    expect(scanner5.isCloneable()).toEqual(false);
+    expect(scanner6.isCloneable()).toEqual(false);
   });
 
   test('isWritable() should return correct true/false', () => {

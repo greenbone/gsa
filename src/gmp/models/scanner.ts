@@ -439,7 +439,9 @@ class Scanner extends Model {
   isCloneable() {
     return (
       this.scannerType !== CVE_SCANNER_TYPE &&
-      this.scannerType !== OPENVASD_SCANNER_TYPE
+      this.scannerType !== OPENVASD_SCANNER_TYPE &&
+      this.scannerType !== AGENT_CONTROLLER_SCANNER_TYPE &&
+      this.scannerType !== AGENT_CONTROLLER_SENSOR_SCANNER_TYPE
     );
   }
 
