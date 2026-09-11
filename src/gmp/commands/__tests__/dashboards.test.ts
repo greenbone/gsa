@@ -158,4 +158,118 @@ describe('DashboardCommand tests', () => {
       },
     });
   });
+
+  test('should normalize named and default dashboard settings', async () => {
+    const http = createHttp(createResponse({}));
+    const dashboardCommand = new DashboardCommand(http);
+
+    await dashboardCommand.saveSetting('test-id', {
+      name: 'Dashboard settings',
+      dashboards: ['dashboard-1'],
+      byId: {
+        'dashboard-1': {
+          title: 'Dashboard 1',
+          rows: [
+            {
+              height: 100,
+              id: 'row-1',
+              items: [
+                {
+                  displayId: 'display-1',
+                  id: 'display-1',
+                  state: {show3d: true, showLegend: false} as {
+                    show3d: boolean;
+                    showLegend: boolean;
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+      defaults: {
+        'dashboard-1': {
+          rows: [
+            {
+              height: 200,
+              id: 'row-2',
+              items: [
+                {
+                  displayId: 'display-2',
+                  id: 'display-2',
+                  state: {show3d: false, showLegend: true} as {
+                    show3d: boolean;
+                    showLegend: boolean;
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    });
+
+    expect(http.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_setting',
+        setting_id: 'test-id',
+        setting_value: JSON.stringify({
+          name: 'Dashboard settings',
+          dashboards: ['dashboard-1'],
+          byId: {
+            'dashboard-1': {
+              title: 'Dashboard 1',
+              rows: [
+                {
+                  height: 100,
+                  id: 'row-1',
+                  items: [
+                    {
+                      displayId: 'display-1',
+                      id: 'display-1',
+                      state: {showLegend: false},
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+          defaults: {
+            'dashboard-1': {
+              rows: [
+                {
+                  height: 200,
+                  id: 'row-2',
+                  items: [
+                    {
+                      displayId: 'display-2',
+                      id: 'display-2',
+                      state: {showLegend: true},
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        }),
+      },
+    });
+  });
+
+  test('should preserve dashboard settings without dashboard maps', async () => {
+    const http = createHttp(createResponse({}));
+    const dashboardCommand = new DashboardCommand(http);
+
+    await dashboardCommand.saveSetting('test-id', {
+      dashboards: ['dashboard-1'],
+    });
+
+    expect(http.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_setting',
+        setting_id: 'test-id',
+        setting_value: '{"dashboards":["dashboard-1"]}',
+      },
+    });
+  });
 });
