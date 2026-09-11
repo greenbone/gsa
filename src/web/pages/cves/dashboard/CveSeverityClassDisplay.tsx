@@ -9,13 +9,18 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {CvesSeverityLoader} from 'web/pages/cves/dashboard/Loaders';
+import {CvesSeverityLoader} from 'web/pages/cves/dashboard/CveLoaders';
 
 export const CvesSeverityClassDisplay = createDisplay({
   loaderComponent: CvesSeverityLoader,
-  displayComponent: SeverityClassDisplay,
-  title: ({data: tdata}) =>
-    _('CVEs by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <SeverityClassDisplay
+      {...props}
+      title={({data}) =>
+        _('CVEs by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   displayId: 'cve-by-severity-class',
   displayName: 'CvesSeverityClassDisplay',
   filtersFilter: CVES_FILTER_FILTER,
@@ -23,10 +28,15 @@ export const CvesSeverityClassDisplay = createDisplay({
 
 export const CvesSeverityClassTableDisplay = createDisplay({
   loaderComponent: CvesSeverityLoader,
-  displayComponent: SeverityClassTableDisplay,
-  title: ({data: tdata}) =>
-    _('CVEs by Severity Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [_l('Severity Class'), _l('# of CVEs')],
+  displayComponent: props => (
+    <SeverityClassTableDisplay
+      {...props}
+      dataTitles={[_('Severity Class'), _('# of CVEs')]}
+      title={({data}) =>
+        _('CVEs by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   displayId: 'cve-by-severity-table',
   displayName: 'CvesSeverityClassTableDisplay',
   filtersFilter: CVES_FILTER_FILTER,

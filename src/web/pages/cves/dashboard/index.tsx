@@ -3,20 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   CvesCreatedDisplay,
   CvesCreatedTableDisplay,
-} from 'web/pages/cves/dashboard/CreatedDisplay';
+} from 'web/pages/cves/dashboard/CveCreatedDisplay';
 import {
   CvesCvssDisplay,
   CvesCvssTableDisplay,
-} from 'web/pages/cves/dashboard/CvssDisplay';
+} from 'web/pages/cves/dashboard/CveCvssDisplay';
 import {
   CvesSeverityClassDisplay,
   CvesSeverityClassTableDisplay,
-} from 'web/pages/cves/dashboard/SeverityClassDisplay';
+} from 'web/pages/cves/dashboard/CveSeverityClassDisplay';
+
+interface CveDashboardProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+}
 
 export const CVES_DASHBOARD_ID = '815ddd2e-8654-46c7-a05b-d73224102240';
 
@@ -29,7 +34,7 @@ export const CVES_DISPLAYS = [
   CvesSeverityClassTableDisplay.displayId,
 ];
 
-const CvesDashboard = props => (
+const CvesDashboard = (props: CveDashboardProps) => (
   <Dashboard
     {...props}
     defaultDisplays={[
