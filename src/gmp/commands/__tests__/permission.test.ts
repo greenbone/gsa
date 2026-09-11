@@ -64,4 +64,18 @@ describe('PermissionCommand tests', () => {
     });
     expect(result.data).toEqual({id: '123'});
   });
+
+  test('should get the permission element from the response root', () => {
+    const cmd = new PermissionCommand(createHttp());
+    const permission = {_id: '123', name: 'Test Permission'};
+    const root = {
+      get_permission: {
+        get_permissions_response: {
+          permission,
+        },
+      },
+    };
+
+    expect(cmd.getElementFromRoot(root)).toEqual(permission);
+  });
 });
