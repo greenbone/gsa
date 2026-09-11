@@ -90,6 +90,40 @@ describe('AlertCommand tests', () => {
     expect(resp.data.id).toEqual('foo');
   });
 
+  test('should create alert with event, condition, and method data', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new AlertCommand(fakeHttp);
+
+    await cmd.create({
+      name: 'Detailed Alert',
+      event: EVENT_TYPE_NEW_SECINFO,
+      condition: CONDITION_TYPE_ALWAYS,
+      filter_id: 'filter-1',
+      method: METHOD_TYPE_EMAIL,
+      active: false,
+      method_data_to_address: 'user@example.com',
+      condition_data_severity: 5,
+      event_data_status: 'new',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_alert',
+        name: 'Detailed Alert',
+        comment: '',
+        active: 0,
+        event: EVENT_TYPE_NEW_SECINFO,
+        condition: CONDITION_TYPE_ALWAYS,
+        filter_id: 'filter-1',
+        method: METHOD_TYPE_EMAIL,
+        'method_data:to_address': 'user@example.com',
+        'condition_data:severity': 5,
+        'event_data:status': 'new',
+      },
+    });
+  });
+
   test('should save alert', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
@@ -119,6 +153,34 @@ describe('AlertCommand tests', () => {
     });
     const {data} = resp;
     expect(data.id).toEqual('foo');
+  });
+
+  test('should save alert report format and config selections', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new AlertCommand(fakeHttp);
+
+    await cmd.save({
+      id: 'alert-1',
+      name: 'Test Alert',
+      event: EVENT_TYPE_NEW_SECINFO,
+      condition: CONDITION_TYPE_ALWAYS,
+      filter_id: 'filter-1',
+      method: METHOD_TYPE_EMAIL,
+      active: true,
+      report_format_ids: ['format-1'],
+      report_config_ids: ['config-1'],
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith(
+      'post',
+      expect.objectContaining({
+        data: expect.objectContaining({
+          'report_format_ids:': ['format-1'],
+          'report_config_ids:': ['config-1'],
+        }),
+      }),
+    );
   });
 
   test('should allow to get new alert settings', async () => {
@@ -194,5 +256,21 @@ describe('AlertCommand tests', () => {
     expect(resp.data.credentials.length).toBe(2);
     expect(resp.data.tasks.length).toBe(2);
     expect(resp.data.filters.length).toBe(2);
+  });
+
+  test('should test an alert', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new AlertCommand(fakeHttp);
+
+    const result = await cmd.test({id: 'alert-1'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'test_alert',
+        alert_id: 'alert-1',
+      },
+    });
+    expect(result.data).toBeDefined();
   });
 });
