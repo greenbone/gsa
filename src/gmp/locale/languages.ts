@@ -41,6 +41,10 @@ const Languages: LanguagesType = {
     name: 'Italian',
     native_name: 'Italiano',
   },
+  sv: {
+    name: 'Swedish',
+    native_name: 'Svenska',
+  },
 } as const;
 
 export default Languages;
