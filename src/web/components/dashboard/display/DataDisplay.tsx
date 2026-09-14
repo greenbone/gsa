@@ -70,13 +70,13 @@ type DataDisplayChildren<TTransformedData, TState extends DisplayState> = (
   props: DataDisplayRenderProps<TTransformedData, TState>,
 ) => React.ReactNode;
 
-export interface DataDisplayProps<
+export type DataDisplayProps<
   TData,
   TTransformedData extends Array<any>,
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
   TChildren = DataDisplayChildren<TTransformedData, TState>,
-> extends Omit<DisplayProps<TState>, 'children' | 'title'> {
+> = Omit<DisplayProps<TState>, 'children' | 'title'> & {
   data?: TData;
   dataRow?: DataRowFunc<TTransformedData[number]>;
   dataTitles?: DataTitles;
@@ -91,7 +91,7 @@ export interface DataDisplayProps<
   showSvgDownload?: boolean;
   showToggleLegend?: boolean;
   title: TitleFunc<TTransformedData>;
-}
+} & TTransformProps;
 
 type DataDisplayWithTranslationProps<
   TData,
