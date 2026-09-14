@@ -14,6 +14,8 @@ import {
   forceY,
   type ForceLink,
   type Simulation,
+  type SimulationLinkDatum,
+  type SimulationNodeDatum,
 } from 'd3-force';
 import {scaleLinear, type ScaleLinear} from 'd3-scale';
 import equal from 'fast-deep-equal';
@@ -36,28 +38,37 @@ interface SvgProps {
   $dragging: boolean;
 }
 
-interface Link {
-  source: Host;
-  target: Host;
-  index: number;
+export interface HostsTopologyChartLink {
+  source: string;
+  target: string;
 }
 
-interface Host {
+interface Link extends SimulationLinkDatum<Host> {
+  source: Host;
+  target: Host;
+}
+
+export interface HostsTopologyChartHost {
+  id: string;
+  uuid?: string;
+  severity?: number;
+  name?: string;
+  isScanner?: boolean;
+  links: HostsTopologyChartLink[];
+}
+
+interface Host extends SimulationNodeDatum {
   id: string;
   uuid?: string;
   severity?: number;
   name?: string;
   isScanner?: boolean;
   links: Link[];
-  x: number;
-  y: number;
-  fx?: number;
-  fy?: number;
 }
 
 interface HostsTopologyChartState {
   hosts: Host[];
-  originalHosts?: Host[];
+  originalHosts?: HostsTopologyChartHost[];
   links: Link[];
   scale: number;
   translateX: number;
@@ -68,13 +79,13 @@ interface HostsTopologyChartState {
   linkForce?: ForceLink<Host, Link>;
 }
 
-interface HostsTopologyChartData {
-  hosts?: Host[];
-  links?: Link[];
+export interface HostsTopologyChartData {
+  hosts?: HostsTopologyChartHost[];
+  links?: HostsTopologyChartLink[];
 }
 
 interface HostsTopologyChartProps {
-  severityClass?: SeverityRating;
+  severityRating?: SeverityRating;
   height: number;
   width: number;
   data: HostsTopologyChartData;
@@ -204,7 +215,7 @@ class HostsTopologyChart extends React.Component<
       hostsCount: 0,
     };
 
-    this.colorScale = severityColorsGradientScale(this.props.severityClass);
+    this.colorScale = severityColorsGradientScale(this.props.severityRating);
 
     this.hostFillColor = this.hostFillColor.bind(this);
     this.hostStrokeColor = this.hostStrokeColor.bind(this);
@@ -245,8 +256,9 @@ class HostsTopologyChart extends React.Component<
     let {simulation, linkForce} = prevState;
 
     // always pass a copy of the hosts and links to d3 because it mutates them
-    const hostsCopy = copyHosts(hosts);
-    const linksCopy = copyArray(links);
+    // also the mutation changes the shape of the objects
+    const hostsCopy = copyHosts(hosts as unknown as Host[]);
+    const linksCopy = copyArray(links as unknown as Link[]);
 
     if (isDefined(simulation) && isDefined(linkForce)) {
       simulation.nodes(hostsCopy);
@@ -575,7 +587,7 @@ class HostsTopologyChart extends React.Component<
                         fontWeight="normal"
                         textAnchor="middle"
                         x={host.x}
-                        y={host.y + 1 + radius}
+                        y={(host.y ?? 0) + 1 + radius}
                       >
                         {host.name}
                       </text>
