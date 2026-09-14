@@ -103,6 +103,7 @@ interface HostDetail {
 interface HostDetails {
   best_os_cpe?: HostDetail;
   best_os_txt?: HostDetail;
+  traceroute?: HostDetail;
   [key: string]: HostDetail | undefined;
 }
 
