@@ -45,42 +45,45 @@ const DataTableDisplay = <
   TTransformedData extends Array<any> = TData[],
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
->({
-  children,
-  dataRow,
-  dataTitles,
-  ...props
-}: DataTableDisplayComponentProps<
-  TData,
-  TTransformedData,
-  TTransformProps,
-  TState
->) => (
-  <DataDisplay<
+>(
+  props: DataTableDisplayComponentProps<
     TData,
-    DataDisplayProps<TData, TTransformedData, TTransformProps, TState>,
     TTransformedData,
     TTransformProps,
     TState
-  >
-    {...props}
-    dataRow={dataRow}
-    dataTitles={dataTitles}
-    showSvgDownload={false}
-    showToggleLegend={false}
-  >
-    {({data}) =>
-      isFunction(children) ? (
-        children({
-          data,
-          dataRow,
-          dataTitles,
-        })
-      ) : (
-        <DataTable data={data} dataRow={dataRow} dataTitles={dataTitles} />
-      )
-    }
-  </DataDisplay>
-);
+  >,
+) => {
+  const {children, dataRow, dataTitles} = props;
+  return (
+    <DataDisplay<
+      TData,
+      DataTableDisplayComponentProps<
+        TData,
+        TTransformedData,
+        TTransformProps,
+        TState
+      >,
+      TTransformedData,
+      TTransformProps,
+      TState
+    >
+      {...props}
+      showSvgDownload={false}
+      showToggleLegend={false}
+    >
+      {({data}) =>
+        isFunction(children) ? (
+          children({
+            data,
+            dataRow,
+            dataTitles,
+          })
+        ) : (
+          <DataTable data={data} dataRow={dataRow} dataTitles={dataTitles} />
+        )
+      }
+    </DataDisplay>
+  );
+};
 
 export default DataTableDisplay;
