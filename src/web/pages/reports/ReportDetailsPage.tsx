@@ -15,6 +15,7 @@ import {
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type Report from 'gmp/models/report';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
+import {type ScannerType} from 'gmp/models/scanner';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
@@ -31,6 +32,7 @@ import {
 } from 'web/hooks/use-query/reports';
 import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
+import {useGetTasks} from 'web/hooks/use-query/tasks';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
@@ -195,6 +197,14 @@ const ReportDetailsPage = () => {
 
   // Derive counts from report entity
   const report = entity?.report;
+  const taskId = report?.task?.id;
+  const {data: tasksData} = useGetTasks({
+    enabled: isDefined(taskId),
+    filter: taskId ? QueryFilter.fromString(`id=${taskId}`) : undefined,
+  });
+  const scannerType: ScannerType | undefined =
+    tasksData?.entities.find(taskEntity => taskEntity.id === taskId)?.scanner
+      ?.scannerType ?? report?.task?.scanner?.scannerType;
 
   const resultsCounts = report?.result_count;
 
@@ -455,6 +465,7 @@ const ReportDetailsPage = () => {
             reportId={reportId}
             resetFilter={REPORT_RESET_FILTER}
             resultsCounts={resultsCounts}
+            scannerType={scannerType}
             showError={showError as (...args: unknown[]) => void}
             showErrorMessage={showErrorMessage}
             showSuccessMessage={showSuccessMessage}

@@ -8,6 +8,7 @@ import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
+import {type ScannerType} from 'gmp/models/scanner';
 import {isActive, TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
@@ -23,6 +24,7 @@ import {
 } from 'web/components/loading/Reload';
 import Section from 'web/components/section/Section';
 import SectionHeader from 'web/components/section/SectionHeader';
+import StatusCellContent from 'web/pages/reports/StatusCellContent';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
 import TabList from 'web/components/tab/TabList';
@@ -36,6 +38,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportDetailsPageToolBar from 'web/pages/reports/details/ReportDetailsPageToolBar';
 import {buildReportTabDefinitions} from 'web/pages/reports/details/ReportTabDefinitions';
+import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
 
 interface ThresholdConfig {
   showInitialLoading: boolean;
@@ -62,6 +65,7 @@ interface ReportDetailsContentProps {
   showErrorMessage: (message: string) => void;
   showSuccessMessage: (message: string) => void;
   task?: ReportTask;
+  scannerType?: ScannerType;
   onAddToAssetsClick: () => void;
   onError: (error: Error) => void;
   onFilterAddLogLevelClick: () => void;
@@ -78,7 +82,7 @@ interface ReportDetailsContentProps {
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
 }
 
-const Span = styled.span`
+const HeaderStatusCellContent = styled(StatusCellContent)`
   margin-top: 2px;
 `;
 
@@ -108,6 +112,7 @@ const ReportDetailsContent = ({
   showErrorMessage,
   showSuccessMessage,
   task,
+  scannerType,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
   onError,
@@ -182,9 +187,16 @@ const ReportDetailsContent = ({
       ) : (
         <HeaderContainer>
           <DateTime showTimezoneAsSeparateLine date={timestamp} />
-          <Span>
-            <StatusBar progress={progress} status={status} />
-          </Span>
+          <HeaderStatusCellContent
+            scannerContact={
+              <ReportScannerContact
+                isRunning={status === TASK_STATUS.running}
+                modificationTime={entity?.modificationTime}
+                scannerType={scannerType ?? task?.scanner?.scannerType}
+              />
+            }
+            statusBar={<StatusBar progress={progress} status={status} />}
+          />
         </HeaderContainer>
       )}
     </Divider>
@@ -214,6 +226,8 @@ const ReportDetailsContent = ({
       ? buildReportTabDefinitions({
           activeReport: report,
           activeFilter: reportFilter,
+          modificationTime: entity?.modificationTime,
+          scannerType,
           reportId,
           isImport,
           isAgentScanning,

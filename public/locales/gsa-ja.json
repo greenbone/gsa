@@ -1183,6 +1183,7 @@
   "Known Hosts": "既知のホスト",
   "Last": "最終",
   "Last Contact": "最終接続",
+  "Last contact {{seconds}} seconds ago": "",
   "Last Day": "過去1日",
   "Last Modified": "最終更新",
   "Last Report": "最新レポート",

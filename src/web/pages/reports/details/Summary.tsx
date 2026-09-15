@@ -12,6 +12,7 @@ import {
 import {type FilterType} from 'gmp/models/filter';
 import type AuditReportReport from 'gmp/models/report/audit-report';
 import type ReportReport from 'gmp/models/report/report';
+import {type ScannerType} from 'gmp/models/scanner';
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
@@ -20,6 +21,7 @@ import ErrorPanel from 'web/components/error/ErrorPanel';
 import Layout from 'web/components/layout/Layout';
 import updatingStyle from 'web/components/layout/updating-style';
 import DetailsLink from 'web/components/link/DetailsLink';
+import StatusCellContent from 'web/pages/reports/StatusCellContent';
 import Table from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
@@ -27,12 +29,15 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
+import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
 
 interface SummaryProps {
   audit?: boolean;
   filter?: FilterType;
   isUpdating?: boolean;
   links?: boolean;
+  modificationTime?: GmpDate;
+  scannerType?: ScannerType;
   report: ReportReport | AuditReportReport;
   reportId: string;
   reportError?: Error;
@@ -47,6 +52,8 @@ const Summary = ({
   filter,
   isUpdating = false,
   links = true,
+  modificationTime,
+  scannerType,
   report,
   reportId,
   reportError,
@@ -202,7 +209,16 @@ const Summary = ({
               {delta ? _('Scan Status Report 1') : _('Scan Status')}
             </TableData>
             <TableData>
-              <StatusBar progress={progress} status={status} />
+              <StatusCellContent
+                scannerContact={
+                  <ReportScannerContact
+                    isRunning={status === TASK_STATUS.running}
+                    modificationTime={modificationTime}
+                    scannerType={scannerType ?? task?.scanner?.scannerType}
+                  />
+                }
+                statusBar={<StatusBar progress={progress} status={status} />}
+              />
             </TableData>
           </TableRow>
           {delta && (

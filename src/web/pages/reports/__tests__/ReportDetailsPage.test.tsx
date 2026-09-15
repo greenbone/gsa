@@ -10,6 +10,9 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
+import Report from 'gmp/models/report';
+import {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
+import {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
@@ -93,6 +96,9 @@ const createGmp = () => ({
     addAssets: testing.fn().mockResolvedValue({}),
     removeAssets: testing.fn().mockResolvedValue({}),
     download: testing.fn().mockResolvedValue({data: 'report-blob-data'}),
+  },
+  tasks: {
+    get: testing.fn().mockResolvedValue(emptyCollectionResponse),
   },
   reporterrors: {
     get: testing.fn().mockResolvedValue({
@@ -225,6 +231,51 @@ describe('ReportDetailsPage tests', () => {
         'href',
         '/task/314',
       );
+    });
+
+    test('should request the corresponding task by id', async () => {
+      const gmp = createGmp();
+      const {render} = setupRenderer(gmp);
+      renderPage(render);
+
+      await waitFor(() => {
+        const taskRequest = gmp.tasks.get.mock.calls.find(
+          ([params]) => params?.filter?.toFilterString() === 'id=314',
+        );
+        expect(taskRequest).toBeDefined();
+      });
+    });
+
+    test('should render scanner contact for a running OpenVASD report', async () => {
+      const gmp = createGmp();
+      const runningReport = Report.fromElement({
+        _id: reportId,
+        modification_time: '2019-06-03T11:00:22Z',
+        report: {
+          _id: reportId,
+          scan_run_status: TASK_STATUS.running,
+          task: {
+            _id: '314',
+            name: 'foo',
+            target: {_id: '159'},
+          },
+        },
+      });
+      gmp.report.get = testing.fn().mockResolvedValue({data: runningReport});
+      gmp.tasks.get = testing.fn().mockResolvedValue({
+        ...emptyCollectionResponse,
+        data: [
+          {
+            id: '314',
+            scanner: {scannerType: OPENVASD_SCANNER_TYPE},
+          },
+        ],
+      });
+
+      const {render} = setupRenderer(gmp);
+      renderPage(render);
+
+      expect(await screen.findAllByTestId('scanner-contact')).toHaveLength(2);
     });
 
     test('should render Summary tab content by default', async () => {

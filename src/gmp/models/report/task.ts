@@ -4,6 +4,7 @@
  */
 
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
+import Scanner, {type ScannerElement} from 'gmp/models/scanner';
 import {parseProgressElement, type TextElement} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -17,6 +18,7 @@ interface ReportTaskElement extends ModelElement {
   target?: ModelElement;
   agent_group?: ModelElement;
   oci_image_target?: ModelElement;
+  scanner?: ScannerElement;
   web_application_target?: ModelElement;
 }
 
@@ -25,6 +27,7 @@ interface ReportTaskProperties extends ModelProperties {
   target?: Model;
   agentGroup?: Model;
   ociImageTarget?: Model;
+  scanner?: Scanner;
   webApplicationTarget?: Model;
 }
 
@@ -35,6 +38,7 @@ class ReportTask extends Model {
   readonly target?: Model;
   readonly agentGroup?: Model;
   readonly ociImageTarget?: Model;
+  readonly scanner?: Scanner;
   readonly webApplicationTarget?: Model;
 
   constructor({
@@ -42,6 +46,7 @@ class ReportTask extends Model {
     target,
     agentGroup,
     ociImageTarget,
+    scanner,
     webApplicationTarget,
     ...properties
   }: ReportTaskProperties) {
@@ -51,6 +56,7 @@ class ReportTask extends Model {
     this.target = target;
     this.agentGroup = agentGroup;
     this.ociImageTarget = ociImageTarget;
+    this.scanner = scanner;
     this.webApplicationTarget = webApplicationTarget;
   }
 
@@ -73,6 +79,11 @@ class ReportTask extends Model {
           element.oci_image_target as {_id: string},
           'ociimagetarget',
         );
+    const scanner = element.scanner;
+    copy.scanner =
+      isDefined(scanner) && !isEmpty(scanner._id)
+        ? Scanner.fromElement(scanner)
+        : undefined;
     copy.webApplicationTarget = isEmpty(element.web_application_target?._id)
       ? undefined
       : Model.fromElement(

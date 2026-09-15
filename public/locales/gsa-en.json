@@ -1183,6 +1183,7 @@
   "Known Hosts": "Known Hosts",
   "Last": "Last",
   "Last Contact": "Last Contact",
+  "Last contact {{seconds}} seconds ago": "Last contact {{seconds}} seconds ago",
   "Last Day": "Last Day",
   "Last Modified": "Last Modified",
   "Last Report": "Last Report",

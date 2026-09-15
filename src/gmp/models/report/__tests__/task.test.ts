@@ -5,6 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import ReportTask from 'gmp/models/report/task';
+import {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
 
 describe('ReportTask tests', () => {
   test('should use defaults', () => {
@@ -27,6 +28,25 @@ describe('ReportTask tests', () => {
     const task = ReportTask.fromElement({_id: 't1'});
 
     expect(task.id).toEqual('t1');
+  });
+
+  test('should parse scanner', () => {
+    const task = ReportTask.fromElement({
+      _id: 'test-id',
+      scanner: {_id: 'scanner-1', type: OPENVASD_SCANNER_TYPE},
+    });
+
+    expect(task.scanner?.id).toEqual('scanner-1');
+    expect(task.scanner?.scannerType).toEqual(OPENVASD_SCANNER_TYPE);
+  });
+
+  test('should ignore scanner without an id', () => {
+    const task = ReportTask.fromElement({
+      _id: 'test-id',
+      scanner: {_id: '', type: OPENVASD_SCANNER_TYPE},
+    });
+
+    expect(task.scanner).toBeUndefined();
   });
 
   test('container vs target vs agentGroup precedence', () => {

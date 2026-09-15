@@ -5,9 +5,11 @@
 
 import React from 'react';
 import _ from 'gmp/locale';
+import {type Date} from 'gmp/models/date';
 import {type FilterType} from 'gmp/models/filter';
 import type ReportReport from 'gmp/models/report/report';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
+import {type ScannerType} from 'gmp/models/scanner';
 import {type TaskStatus} from 'gmp/models/task';
 import Loading from 'web/components/loading/Loading';
 import EntityTags from 'web/entity/Tags';
@@ -43,6 +45,8 @@ interface TabDefinition {
 interface BuildReportTabDefinitionsParams {
   activeReport: ReportReport;
   activeFilter: FilterType;
+  modificationTime?: Date;
+  scannerType?: ScannerType;
   reportId: string;
   isImport: boolean;
   isAgentScanning: boolean;
@@ -121,6 +125,8 @@ export const renderWithThreshold = (
 export const buildReportTabDefinitions = ({
   activeReport,
   activeFilter,
+  modificationTime,
+  scannerType,
   reportId,
   isImport,
   isAgentScanning,
@@ -150,9 +156,11 @@ export const buildReportTabDefinitions = ({
         <Summary
           filter={activeFilter}
           isUpdating={isUpdating}
+          modificationTime={modificationTime}
           report={activeReport}
           reportError={undefined}
           reportId={reportId}
+          scannerType={scannerType}
         />
       ),
     },

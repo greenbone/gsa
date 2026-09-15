@@ -5,10 +5,12 @@
 
 import React from 'react';
 import type Report from 'gmp/models/report';
+import type Task from 'gmp/models/task';
 import {TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import StatusBar from 'web/components/bar/StatusBar';
+import StatusCellContent from 'web/pages/reports/StatusCellContent';
 import DateTime from 'web/components/date/DateTime';
 import {
   CircleXDeleteIcon,
@@ -26,6 +28,7 @@ import withEntitiesActions, {
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import {AgentIdTableData} from 'web/pages/agents/components/AgentIdColumn';
+import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
 
 interface ReportActionsProps extends WithEntitiesActionsComponentProps<Report> {
   selectedDeltaReport?: Report;
@@ -39,6 +42,7 @@ export interface ReportTableRowProps
     ReportActionsProps {
   actionsComponent?: React.ComponentType<ReportActionsProps>;
   links?: boolean;
+  tasks?: Task[];
 }
 
 const ReportActions = withEntitiesActions(
@@ -97,12 +101,15 @@ const ReportTableRow = ({
   actionsComponent: ActionsComponent = ReportActions,
   entity,
   links = true,
+  tasks,
   ...props
 }: ReportTableRowProps) => {
   const gmp = useGmp();
+  const [_] = useTranslation();
   const {report} = entity;
   const scan_run_status = report?.scan_run_status;
   const task = report?.task;
+  const fullTask = tasks?.find(taskEntity => taskEntity.id === task?.id);
 
   let status = scan_run_status;
   let progress: number | undefined = undefined;
@@ -130,7 +137,16 @@ const ReportTableRow = ({
         </span>
       </TableData>
       <TableData>
-        <StatusBar progress={progress} status={status} />
+        <StatusCellContent
+          scannerContact={
+            <ReportScannerContact
+              isRunning={status === TASK_STATUS.running}
+              modificationTime={entity.modificationTime}
+              scannerType={(fullTask ?? task)?.scanner?.scannerType}
+            />
+          }
+          statusBar={<StatusBar progress={progress} status={status} />}
+        />
       </TableData>
       <TableData>
         <span>

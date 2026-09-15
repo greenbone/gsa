@@ -1183,6 +1183,7 @@
   "Known Hosts": "已知主机",
   "Last": "尾页",
   "Last Contact": "上次联系",
+  "Last contact {{seconds}} seconds ago": "",
   "Last Day": "最后一天",
   "Last Modified": "最后修改",
   "Last Report": "最新报告",
