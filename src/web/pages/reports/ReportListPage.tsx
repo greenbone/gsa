@@ -4,14 +4,13 @@
  */
 
 import {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {type TaskCommandCreateImportTaskParams} from 'gmp/commands/task';
 import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type Report from 'gmp/models/report';
-import {isActive} from 'gmp/models/task';
+import {TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
 import {ReportIcon, UploadIcon} from 'web/components/icon';
@@ -27,7 +26,7 @@ import withEntitiesContainer, {
   type WithEntitiesContainerComponentProps,
 } from 'web/entities/withEntitiesContainer';
 import useGmp from 'web/hooks/useGmp';
-import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
+import {useGetTasks} from 'web/hooks/use-query/tasks';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportsDashboard, {
   REPORTS_DASHBOARD_ID,
@@ -42,10 +41,6 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/reports';
-import {
-  loadAllEntities as loadAllTasks,
-  selector as tasksSelector,
-} from 'web/store/entities/tasks';
 
 interface ToolBarIconsProps {
   onUploadReportClick?: () => void;
@@ -54,6 +49,23 @@ interface ToolBarIconsProps {
 type ReportListPageProps = WithEntitiesContainerComponentProps<Report>;
 
 const CONTAINER_TASK_FILTER = QueryFilter.fromString('target=""');
+
+export const getReportTaskFilter = (entities: Report[] = []) => {
+  const reportTaskIds = Array.from(
+    new Set(
+      entities
+        .filter(
+          entity => entity.report?.scan_run_status === TASK_STATUS.running,
+        )
+        .map(entity => entity.report?.task?.id)
+        .filter(isDefined),
+    ),
+  );
+
+  return reportTaskIds.length > 0
+    ? QueryFilter.fromString(`id=${reportTaskIds.join(',')}`)
+    : undefined;
+};
 
 const ToolBarIcons = ({onUploadReportClick}: ToolBarIconsProps) => {
   const [_] = useTranslation();
@@ -91,13 +103,17 @@ const ReportListPage = ({
   const [beforeSelectFilter, setBeforeSelectFilter] = useState<
     FilterType | undefined
   >(undefined);
-  const dispatch = useDispatch();
-  const tasks = useShallowEqualSelector(state =>
-    tasksSelector(state).getAllEntities(CONTAINER_TASK_FILTER),
-  );
-  const loadTasks = () =>
-    // @ts-expect-error
-    dispatch(loadAllTasks(gmp)(CONTAINER_TASK_FILTER)) as Promise<void>;
+  const {data: tasksData, refetch: refetchTasks} = useGetTasks({
+    filter: CONTAINER_TASK_FILTER,
+  });
+  const tasks = tasksData?.entities ?? [];
+  const taskFilter = getReportTaskFilter(entities);
+  const {data: reportTasksData} = useGetTasks({
+    enabled: isDefined(taskFilter),
+    filter: taskFilter,
+    staleTime: 30_000,
+  });
+  const reportTasks = reportTasksData?.entities ?? [];
 
   useEffect(() => {
     if (
@@ -115,7 +131,7 @@ const ReportListPage = ({
   };
 
   const openImportDialog = () => {
-    void loadTasks().then(() => {
+    void refetchTasks().then(() => {
       setImportDialogVisible(true);
     });
   };
@@ -144,7 +160,7 @@ const ReportListPage = ({
   ) => {
     const response = await gmp.task.createImportTask(data);
     const {data: task} = response;
-    void loadTasks();
+    void refetchTasks();
     setTaskId(task.id);
     closeContainerTaskDialog();
   };
@@ -202,6 +218,7 @@ const ReportListPage = ({
             entities={entities}
             filter={filter}
             selectedDeltaReport={selectedDeltaReport}
+            tasks={reportTasks}
             onReportDeleteClick={handleReportDeleteClick}
             onReportDeltaSelect={handleReportDeltaSelect}
           />

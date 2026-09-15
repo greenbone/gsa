@@ -14,6 +14,7 @@ import {
   type ReportResultCountElement,
 } from 'gmp/models/report/parser';
 import ReportTask from 'gmp/models/report/task';
+import {type ScannerElement} from 'gmp/models/scanner';
 import type Result from 'gmp/models/result';
 import {type TaskStatus} from 'gmp/models/task';
 import {parseSeverity, parseDate, type YesNo} from 'gmp/parser';
@@ -57,6 +58,7 @@ export interface ReportReportTaskElement {
   oci_image_target?: {
     _id: string;
   };
+  scanner?: ScannerElement;
 }
 
 export interface ReportReportElement extends ModelElement {
@@ -67,6 +69,7 @@ export interface ReportReportElement extends ModelElement {
     version?: string;
   };
   hosts?: {count?: number};
+  modification_time?: string;
   // only present if details are requested
   // required for delta reports
   results?: ReportResultsElement;

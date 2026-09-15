@@ -1183,6 +1183,7 @@
   "Known Hosts": "已知主機",
   "Last": "",
   "Last Contact": "",
+  "Last contact {{seconds}} seconds ago": "",
   "Last Day": "最後一日",
   "Last Modified": "已修改：",
   "Last Report": "",

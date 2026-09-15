@@ -5,6 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import ReportReport from 'gmp/models/report/report';
+import {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
 import {parseDate} from 'gmp/parser';
 
 describe('ReportReport tests', () => {
@@ -94,6 +95,19 @@ describe('ReportReport tests', () => {
     expect(report.task).toBeDefined();
     expect(report.task?.id).toEqual('task1');
     expect(report.task?.name).toEqual('Test Task');
+  });
+
+  test('should parse scanner in task', () => {
+    const report = ReportReport.fromElement({
+      _id: 'test-id',
+      task: {
+        _id: 'task1',
+        scanner: {_id: 'scanner-1', type: OPENVASD_SCANNER_TYPE},
+      },
+    });
+
+    expect(report.task?.scanner?.id).toEqual('scanner-1');
+    expect(report.task?.scanner?.scannerType).toEqual(OPENVASD_SCANNER_TYPE);
   });
 
   test('should parse delta report', () => {

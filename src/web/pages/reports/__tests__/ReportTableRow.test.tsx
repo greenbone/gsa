@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableBody, screen, fireEvent} from 'web/testing';
 import Report from 'gmp/models/report';
+import {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
 import {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
@@ -19,9 +20,62 @@ const createGmp = () => ({
 });
 
 describe('ReportTableRow tests', () => {
+  test('should render a contact indicator for an OpenVASD report', () => {
+    const report = Report.fromElement({
+      _id: '1',
+      modification_time: '2024-01-01T12:00:10Z',
+      report: {
+        _id: 'test-id',
+        scan_run_status: TASK_STATUS.running,
+        task: {
+          _id: 'task-1',
+          name: 'Task Name',
+          scanner: {_id: 'scanner-1', type: OPENVASD_SCANNER_TYPE},
+          target: {_id: 'target-1', name: 'Target Name'},
+        },
+      },
+    });
+
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
+    render(<ReportTableRow entity={report} />);
+
+    expect(screen.getByTestId('scanner-contact')).not.toHaveTextContent(
+      'Contacted',
+    );
+  });
+
+  test('should hide the contact indicator when the task is not running', () => {
+    const report = Report.fromElement({
+      _id: '1',
+      modification_time: '2024-01-01T12:00:10Z',
+      report: {
+        _id: 'test-id',
+        scan_run_status: TASK_STATUS.stopped,
+        task: {
+          _id: 'task-1',
+          name: 'Task Name',
+          scanner: {_id: 'scanner-1', type: OPENVASD_SCANNER_TYPE},
+          target: {_id: 'target-1', name: 'Target Name'},
+        },
+      },
+    });
+
+    const {render} = rendererWithTableBody({
+      capabilities: true,
+      gmp: createGmp(),
+    });
+    render(<ReportTableRow entity={report} />);
+
+    expect(screen.queryByTestId('scanner-contact')).not.toBeInTheDocument();
+  });
+
   test('should render the report row', () => {
     const report = Report.fromElement({
       _id: '1',
+      modification_time: '2024-01-01T12:00:10Z',
       report: {
         _id: 'test-id',
         timestamp: '2024-01-01T12:00:00Z',
