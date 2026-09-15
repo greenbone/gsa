@@ -7,7 +7,6 @@ import allowedSnakeCase from './allowedSnakeCase.js';
 import camelcase from './camelcase.js';
 import filenameConvention from './filename-convention.js';
 import header from './header.js';
-import importOrder from './import-order.js';
 import jsxSortProps from './jsx-sort-props.js';
 import namingConvention from './naming-convention.js';
 import noDynamicI18n from './no-dynamic-i18n.js';
@@ -23,7 +22,6 @@ export default {
     camelcase,
     'filename-convention': filenameConvention,
     header,
-    'import-order': importOrder,
     'jsx-sort-props': jsxSortProps,
     'naming-convention': namingConvention,
     'no-dynamic-i18n': noDynamicI18n,

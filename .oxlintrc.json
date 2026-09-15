@@ -27,7 +27,6 @@
     "gsa/camelcase": "warn",
     "gsa/filename-convention": "warn",
     "gsa/header": "error",
-    "gsa/import-order": "warn",
     "gsa/jsx-sort-props": "warn",
     "gsa/naming-convention": "off",
     "gsa/no-dynamic-i18n": "error",

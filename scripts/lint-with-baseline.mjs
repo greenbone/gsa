@@ -17,6 +17,17 @@ const sourceLines = new Map();
 
 const update = process.argv.includes('--update');
 const fix = process.argv.includes('--fix');
+const useColors =
+  !process.env.NO_COLOR &&
+  (process.env.FORCE_COLOR || process.stderr.isTTY === true);
+const colors = {
+  yellow: useColors ? '\u001b[33m' : '',
+  cyan: useColors ? '\u001b[36m' : '',
+  reset: useColors ? '\u001b[0m' : '',
+};
+
+const colorize = (color, text) =>
+  `${colors[color]}${text}${colors.reset}`;
 
 const runOxlint = () =>
   new Promise((resolvePromise, reject) => {
@@ -163,8 +174,16 @@ const main = async () => {
       newDiagnostics.forEach(item => console.error(formatDiagnostic(item)));
     }
     if (staleDiagnostics.length > 0) {
-      console.error(`\nStale baseline entries (${staleDiagnostics.length}):`);
+      console.error(
+        `\n${colorize('yellow', `Stale baseline entries (${staleDiagnostics.length}):`)}`,
+      );
       staleDiagnostics.forEach(item => console.error(formatDiagnostic(item)));
+      console.error(
+        colorize(
+          'cyan',
+          '\nThese diagnostics no longer occur. Review the changes, then run `npm run lint:baseline:update` to remove stale entries.',
+        ),
+      );
     }
     if (exitCode !== 0) {
       console.error(`\nOxlint exited with status ${exitCode}.`);
