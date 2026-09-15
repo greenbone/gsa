@@ -99,18 +99,6 @@
       "fingerprint": "src/gmp/commands/entities.ts|typescript(no-redundant-type-constituents)|unix_time is overridden by string in this union type.|18|data_type: 'unix_time' | 'integer' | 'text' | string;"
     },
     {
-      "filename": "src/gmp/commands/http.ts",
-      "code": "eslint(no-duplicate-imports)",
-      "message": "'gmp/http/http' import is duplicated",
-      "location": {
-        "line": 8,
-        "column": 54,
-        "offset": 234
-      },
-      "sourceLine": "import {type RequestOptions, type ResponseType} from 'gmp/http/http';",
-      "fingerprint": "src/gmp/commands/http.ts|eslint(no-duplicate-imports)|'gmp/http/http' import is duplicated|54|import {type RequestOptions, type ResponseType} from 'gmp/http/http';"
-    },
-    {
       "filename": "src/gmp/commands/info-entities.ts",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
@@ -319,9 +307,9 @@
       "code": "typescript(restrict-template-expressions)",
       "message": "Invalid type used in template literal expression.",
       "location": {
-        "line": 282,
+        "line": 283,
         "column": 6,
-        "offset": 9283
+        "offset": 9287
       },
       "sourceLine": "`${TYPE_NAMES[type]}`;",
       "fingerprint": "src/gmp/models/credential.ts|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|6|`${TYPE_NAMES[type]}`;"
@@ -463,9 +451,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `EntityModelElement[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 145,
+        "line": 149,
         "column": 43,
-        "offset": 3537
+        "offset": 3547
       },
       "sourceLine": "let {report_format: reportFormats = []} = value as {",
       "fingerprint": "src/gmp/models/report-format.ts|typescript(no-useless-default-assignment)|Default value is useless because the property has type `EntityModelElement[]` (not nullish). This default assignment will never be used.|43|let {report_format: reportFormats = []} = value as {"
@@ -475,9 +463,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `EntityModelElement[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 148,
+        "line": 152,
         "column": 50,
-        "offset": 3651
+        "offset": 3661
       },
       "sourceLine": "let {report_format: defaultReportFormats = []} = other.default as {",
       "fingerprint": "src/gmp/models/report-format.ts|typescript(no-useless-default-assignment)|Default value is useless because the property has type `EntityModelElement[]` (not nullish). This default assignment will never be used.|50|let {report_format: defaultReportFormats = []} = other.default as {"
@@ -1000,36 +988,12 @@
     },
     {
       "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "typescript(no-explicit-any)",
-      "message": "Unexpected `any`. Specify a different type.",
-      "location": {
-        "line": 523,
-        "column": 34,
-        "offset": 13739
-      },
-      "sourceLine": "TTransformedData extends Array<any>,",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(no-explicit-any)|Unexpected `any`. Specify a different type.|34|TTransformedData extends Array<any>,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "typescript(no-explicit-any)",
-      "message": "Unexpected `any`. Specify a different type.",
-      "location": {
-        "line": 281,
-        "column": 36,
-        "offset": 7263
-      },
-      "sourceLine": "TTransformedData extends Array<any>,",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(no-explicit-any)|Unexpected `any`. Specify a different type.|36|TTransformedData extends Array<any>,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
         "line": 489,
         "column": 36,
-        "offset": 12721
+        "offset": 12745
       },
       "sourceLine": "setState: this.handleSetState,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|36|setState: this.handleSetState,"
@@ -1041,7 +1005,7 @@
       "location": {
         "line": 477,
         "column": 42,
-        "offset": 12393
+        "offset": 12417
       },
       "sourceLine": "setState: this.handleSetState,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|42|setState: this.handleSetState,"
@@ -1053,7 +1017,7 @@
       "location": {
         "line": 494,
         "column": 46,
-        "offset": 12935
+        "offset": 12959
       },
       "sourceLine": "onDownloadCsvClick: this.handleDownloadCsv,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadCsvClick: this.handleDownloadCsv,"
@@ -1065,34 +1029,10 @@
       "location": {
         "line": 495,
         "column": 46,
-        "offset": 12999
+        "offset": 13023
       },
       "sourceLine": "onDownloadSvgClick: this.handleDownloadSvg,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadSvgClick: this.handleDownloadSvg,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataTableDisplay.tsx",
-      "code": "typescript(no-explicit-any)",
-      "message": "Unexpected `any`. Specify a different type.",
-      "location": {
-        "line": 45,
-        "column": 34,
-        "offset": 1252
-      },
-      "sourceLine": "TTransformedData extends Array<any> = TData[],",
-      "fingerprint": "src/web/components/dashboard/display/DataTableDisplay.tsx|typescript(no-explicit-any)|Unexpected `any`. Specify a different type.|34|TTransformedData extends Array<any> = TData[],"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataTableDisplay.tsx",
-      "code": "typescript(no-explicit-any)",
-      "message": "Unexpected `any`. Specify a different type.",
-      "location": {
-        "line": 37,
-        "column": 34,
-        "offset": 1014
-      },
-      "sourceLine": "TTransformedData extends Array<any>,",
-      "fingerprint": "src/web/components/dashboard/display/DataTableDisplay.tsx|typescript(no-explicit-any)|Unexpected `any`. Specify a different type.|34|TTransformedData extends Array<any>,"
     },
     {
       "filename": "src/web/components/dashboard/display/Loader.tsx",
@@ -2383,9 +2323,9 @@
       "code": "typescript(no-redundant-type-constituents)",
       "message": "\"\\\"SELECTION_FILTER\\\"\" | \"\\\"SELECTION_PAGE_CONTENTS\\\"\" | \"\\\"SELECTION_USER\\\"\" is overridden by string in this union type.",
       "location": {
-        "line": 24,
+        "line": 22,
         "column": 18,
-        "offset": 904
+        "offset": 902
       },
       "sourceLine": "selectionType: keyof typeof SelectionType | string;",
       "fingerprint": "src/web/pages/hosts/__tests__/HostComponent.test.tsx|typescript(no-redundant-type-constituents)|\"\\\"SELECTION_FILTER\\\"\" | \"\\\"SELECTION_PAGE_CONTENTS\\\"\" | \"\\\"SELECTION_USER\\\"\" is overridden by string in this union type.|18|selectionType: keyof typeof SelectionType | string;"
@@ -3643,9 +3583,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property is not nullish. This default assignment will never be used.",
       "location": {
-        "line": 400,
+        "line": 401,
         "column": 15,
-        "offset": 10942
+        "offset": 10950
       },
       "sourceLine": "endOpen = false,",
       "fingerprint": "src/web/pages/schedules/ScheduleDialog.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property is not nullish. This default assignment will never be used.|15|endOpen = false,"
@@ -3859,9 +3799,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 204,
+        "line": 199,
         "column": 5,
-        "offset": 7343
+        "offset": 7338
       },
       "sourceLine": "setTimezoneState(userTimezone as string);",
       "fingerprint": "src/web/pages/user-settings/GeneralSettings.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setTimezoneState(userTimezone as string);"
@@ -3883,9 +3823,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 69,
+        "line": 65,
         "column": 7,
-        "offset": 2270
+        "offset": 2266
       },
       "sourceLine": "setDefaultSeverityState(defaultSeverity.value);",
       "fingerprint": "src/web/pages/user-settings/SeveritySettings.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setDefaultSeverityState(defaultSeverity.value);"
@@ -3895,9 +3835,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 63,
+        "line": 59,
         "column": 7,
-        "offset": 2146
+        "offset": 2142
       },
       "sourceLine": "setDynamicSeverityState(value);",
       "fingerprint": "src/web/pages/user-settings/SeveritySettings.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setDynamicSeverityState(value);"
@@ -3907,9 +3847,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 84,
+        "line": 82,
         "column": 7,
-        "offset": 2751
+        "offset": 2749
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('alert')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('alert')),"
@@ -3919,9 +3859,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 86,
+        "line": 84,
         "column": 7,
-        "offset": 2838
+        "offset": 2836
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('auditreport')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('auditreport')),"
@@ -3931,9 +3871,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 138,
+        "line": 136,
         "column": 7,
-        "offset": 5160
+        "offset": 5158
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('certbund')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('certbund')),"
@@ -3943,9 +3883,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 134,
+        "line": 132,
         "column": 7,
-        "offset": 4990
+        "offset": 4988
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('cpe')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('cpe')),"
@@ -3955,9 +3895,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 90,
+        "line": 88,
         "column": 7,
-        "offset": 3023
+        "offset": 3021
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('credential')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('credential')),"
@@ -3967,9 +3907,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 136,
+        "line": 134,
         "column": 7,
-        "offset": 5075
+        "offset": 5073
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('cve')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('cve')),"
@@ -3979,9 +3919,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 140,
+        "line": 138,
         "column": 7,
-        "offset": 5250
+        "offset": 5248
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('dfncert')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('dfncert')),"
@@ -3991,9 +3931,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 92,
+        "line": 90,
         "column": 7,
-        "offset": 3115
+        "offset": 3113
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('filter')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('filter')),"
@@ -4003,9 +3943,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 94,
+        "line": 92,
         "column": 7,
-        "offset": 3203
+        "offset": 3201
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('group')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('group')),"
@@ -4015,9 +3955,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 96,
+        "line": 94,
         "column": 7,
-        "offset": 3290
+        "offset": 3288
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('host')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('host')),"
@@ -4027,9 +3967,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 98,
+        "line": 96,
         "column": 7,
-        "offset": 3376
+        "offset": 3374
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('note')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('note')),"
@@ -4039,9 +3979,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 142,
+        "line": 140,
         "column": 7,
-        "offset": 5339
+        "offset": 5337
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('nvt')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('nvt')),"
@@ -4051,9 +3991,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 100,
+        "line": 98,
         "column": 7,
-        "offset": 3462
+        "offset": 3460
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('operatingsystem')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('operatingsystem')),"
@@ -4063,9 +4003,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 102,
+        "line": 100,
         "column": 7,
-        "offset": 3559
+        "offset": 3557
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('override')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('override')),"
@@ -4075,9 +4015,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 104,
+        "line": 102,
         "column": 7,
-        "offset": 3649
+        "offset": 3647
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('permission')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('permission')),"
@@ -4087,9 +4027,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 106,
+        "line": 104,
         "column": 7,
-        "offset": 3741
+        "offset": 3739
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('portlist')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('portlist')),"
@@ -4099,9 +4039,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 108,
+        "line": 106,
         "column": 7,
-        "offset": 3831
+        "offset": 3829
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('report')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('report')),"
@@ -4111,9 +4051,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 110,
+        "line": 108,
         "column": 7,
-        "offset": 3919
+        "offset": 3917
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('reportformat')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('reportformat')),"
@@ -4123,9 +4063,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 112,
+        "line": 110,
         "column": 7,
-        "offset": 4013
+        "offset": 4011
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('result')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('result')),"
@@ -4135,9 +4075,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 114,
+        "line": 112,
         "column": 7,
-        "offset": 4101
+        "offset": 4099
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('role')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('role')),"
@@ -4147,9 +4087,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 88,
+        "line": 86,
         "column": 7,
-        "offset": 2931
+        "offset": 2929
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('scanconfig')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('scanconfig')),"
@@ -4159,9 +4099,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 116,
+        "line": 114,
         "column": 7,
-        "offset": 4187
+        "offset": 4185
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('scanner')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('scanner')),"
@@ -4171,9 +4111,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 118,
+        "line": 116,
         "column": 7,
-        "offset": 4276
+        "offset": 4274
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('schedule')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('schedule')),"
@@ -4183,9 +4123,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 120,
+        "line": 118,
         "column": 7,
-        "offset": 4366
+        "offset": 4364
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('tag')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('tag')),"
@@ -4195,9 +4135,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 122,
+        "line": 120,
         "column": 7,
-        "offset": 4451
+        "offset": 4449
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('target')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('target')),"
@@ -4207,9 +4147,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 124,
+        "line": 122,
         "column": 7,
-        "offset": 4539
+        "offset": 4537
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('task')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('task')),"
@@ -4219,9 +4159,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 126,
+        "line": 124,
         "column": 7,
-        "offset": 4625
+        "offset": 4623
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('ticket')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('ticket')),"
@@ -4231,9 +4171,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 128,
+        "line": 126,
         "column": 7,
-        "offset": 4713
+        "offset": 4711
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('tlscertificate')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('tlscertificate')),"
@@ -4243,9 +4183,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 130,
+        "line": 128,
         "column": 7,
-        "offset": 4809
+        "offset": 4807
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('user')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('user')),"
@@ -4255,9 +4195,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 132,
+        "line": 130,
         "column": 7,
-        "offset": 4895
+        "offset": 4893
       },
       "sourceLine": "dispatch(loadUserSettingsDefaultFilter(gmp)('vulnerability')),",
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('vulnerability')),"
@@ -4375,9 +4315,9 @@
       "code": "typescript(no-redundant-type-constituents)",
       "message": "0 | 1 is overridden by number in this union type.",
       "location": {
-        "line": 134,
+        "line": 136,
         "column": 11,
-        "offset": 3234
+        "offset": 3244
       },
       "sourceLine": "value?: YesNo | string | number | boolean | null,",
       "fingerprint": "src/web/utils/Render.tsx|typescript(no-redundant-type-constituents)|0 | 1 is overridden by number in this union type.|11|value?: YesNo | string | number | boolean | null,"

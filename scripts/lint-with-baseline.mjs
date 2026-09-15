@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {spawn} from 'node:child_process';
 import {readFile, writeFile} from 'node:fs/promises';
 import {dirname, resolve} from 'node:path';
-import {spawn} from 'node:child_process';
+import {createInterface} from 'node:readline/promises';
 import {fileURLToPath} from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -26,8 +27,9 @@ const colors = {
   reset: useColors ? '\u001b[0m' : '',
 };
 
-const colorize = (color, text) =>
-  `${colors[color]}${text}${colors.reset}`;
+const colorize = (color, text) => `${colors[color]}${text}${colors.reset}`;
+
+const isInteractive = process.stdin.isTTY && process.stdout.isTTY;
 
 const runOxlint = () =>
   new Promise((resolvePromise, reject) => {
@@ -116,6 +118,46 @@ const formatDiagnostic = diagnostic => {
   return `${diagnostic.filename}:${line}:${column} ${diagnostic.code}: ${diagnostic.message}`;
 };
 
+const updateBaseline = async diagnostics => {
+  const uniqueDiagnostics = [
+    ...new Map(diagnostics.map(item => [item.fingerprint, item])).values(),
+  ];
+  const content = {
+    version: 1,
+    generatedBy: 'npm run lint:baseline:update',
+    diagnostics: uniqueDiagnostics.sort((left, right) =>
+      left.fingerprint.localeCompare(right.fingerprint),
+    ),
+  };
+  await writeFile(baselinePath, `${JSON.stringify(content, null, 2)}\n`);
+  return uniqueDiagnostics.length;
+};
+
+const promptToUpdateBaseline = async diagnostics => {
+  if (!isInteractive) {
+    return false;
+  }
+
+  const readline = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  try {
+    const answer = await readline.question(
+      '\nRun `npm run lint:baseline:update` now? [y/N] ',
+    );
+    if (!/^y(es)?$/i.test(answer.trim())) {
+      return false;
+    }
+
+    const count = await updateBaseline(diagnostics);
+    console.log(`Updated ${baselinePath} with ${count} diagnostics.`);
+    return true;
+  } finally {
+    readline.close();
+  }
+};
+
 const main = async () => {
   const {exitCode, stdout, stderr} = await runOxlint();
 
@@ -141,21 +183,9 @@ const main = async () => {
 
   const diagnostics = await Promise.all(report.diagnostics.map(normalize));
   if (update) {
-    const uniqueDiagnostics = [
-      ...new Map(diagnostics.map(item => [item.fingerprint, item])).values(),
-    ];
-    const content = {
-      version: 1,
-      generatedBy: 'npm run lint:baseline:update',
-      diagnostics: uniqueDiagnostics.sort((left, right) =>
-        left.fingerprint.localeCompare(right.fingerprint),
-      ),
-    };
-    await writeFile(baselinePath, `${JSON.stringify(content, null, 2)}\n`);
+    const count = await updateBaseline(diagnostics);
     // oxlint-disable-next-line no-console
-    console.log(
-      `Updated ${baselinePath} with ${uniqueDiagnostics.length} diagnostics.`,
-    );
+    console.log(`Updated ${baselinePath} with ${count} diagnostics.`);
     process.exit(exitCode === 0 ? 0 : 1);
   }
 
@@ -181,9 +211,15 @@ const main = async () => {
       console.error(
         colorize(
           'cyan',
-          '\nThese diagnostics no longer occur. Review the changes, then run `npm run lint:baseline:update` to remove stale entries.',
+          '\nThese diagnostics no longer occur. Review the changes, then update the baseline to remove stale entries.',
         ),
       );
+    }
+    if (staleDiagnostics.length > 0) {
+      const updated = await promptToUpdateBaseline(diagnostics);
+      if (updated) {
+        process.exit(exitCode === 0 && newDiagnostics.length === 0 ? 0 : 1);
+      }
     }
     if (exitCode !== 0) {
       console.error(`\nOxlint exited with status ${exitCode}.`);
