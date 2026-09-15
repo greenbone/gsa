@@ -32,8 +32,8 @@ const createGmp = ({
       userinterfacedateformat: {value: 'YYYY-MM-DD'},
     },
   }),
-  guestUsername = undefined,
-  guestPassword = undefined,
+  guestUsername,
+  guestPassword,
 }: {
   clearToken?: () => void;
   login?: (username: string, password: string) => Promise<void>;

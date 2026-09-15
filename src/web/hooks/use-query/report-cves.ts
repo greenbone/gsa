@@ -16,7 +16,7 @@ interface UseGetReportCvesParams {
 
 export const useGetReportCves = ({
   reportId,
-  filter = undefined,
+  filter,
   refetchInterval = false,
   staleTime,
 }: UseGetReportCvesParams) => {

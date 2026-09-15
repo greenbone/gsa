@@ -18,7 +18,7 @@ interface UseGetReportOperatingSystemsParams {
 export const useGetReportOperatingSystems = ({
   reportId,
   filter,
-  refetchInterval = undefined,
+  refetchInterval,
   staleTime,
 }: UseGetReportOperatingSystemsParams) => {
   const gmp = useGmp();

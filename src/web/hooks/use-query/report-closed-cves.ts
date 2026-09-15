@@ -16,7 +16,7 @@ interface UseGetReportClosedCvesParams {
 
 export const useGetReportClosedCves = ({
   reportId,
-  filter = undefined,
+  filter,
   refetchInterval = false,
   staleTime,
 }: UseGetReportClosedCvesParams) => {

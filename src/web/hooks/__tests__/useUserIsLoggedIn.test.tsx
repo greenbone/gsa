@@ -8,9 +8,7 @@ import {rendererWith} from 'web/testing';
 import {createSession} from 'gmp/testing';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 
-const createGmp = ({
-  isLoggedIn = undefined,
-}: {isLoggedIn?: () => boolean} = {}) => ({
+const createGmp = ({isLoggedIn}: {isLoggedIn?: () => boolean} = {}) => ({
   session: createSession({isLoggedIn}),
 });
 

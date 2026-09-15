@@ -8,7 +8,7 @@ import _ from 'gmp/locale';
 class Rejection extends Error {
   readonly error?: Error;
 
-  constructor(message: string = _('Unknown Error'), error?: Error | undefined) {
+  constructor(message: string = _('Unknown Error'), error?: Error) {
     super(message);
     this.name = 'Rejection';
     this.error = error;

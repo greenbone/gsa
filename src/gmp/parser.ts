@@ -33,9 +33,7 @@ export type YesNo = typeof YES_VALUE | typeof NO_VALUE;
 const isText = (value: unknown): value is TextElement =>
   typeof value === 'object' && value !== null && '__text' in value;
 
-export const parseProgressElement = (
-  value?: string | number | undefined | TextElement,
-) => {
+export const parseProgressElement = (value?: string | number | TextElement) => {
   if (!isDefined(value)) {
     return 0;
   }
@@ -49,7 +47,7 @@ export const parseProgressElement = (
 };
 
 export const parseText = (
-  text?: TextElement | string | number | undefined,
+  text?: TextElement | string | number,
 ): string | undefined => {
   if (isText(text)) {
     text = text.__text;
@@ -179,7 +177,7 @@ export const setProperties = <P extends Properties, T>(
  * @returns A date instance (Not a js Date!)
  */
 export const parseDate = (
-  value?: string | GmpDate | Date | undefined,
+  value?: string | GmpDate | Date,
 ): GmpDate | undefined => (isDefined(value) ? createDate(value) : undefined);
 
 /**

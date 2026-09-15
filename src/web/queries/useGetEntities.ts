@@ -46,9 +46,9 @@ const useGetEntities = <
 >({
   gmpMethod,
   queryId,
-  filter = undefined,
+  filter,
   enabled = true,
-  refetchInterval = undefined,
+  refetchInterval,
   keepPreviousData = false,
   staleTime,
   gcTime,

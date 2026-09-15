@@ -8,7 +8,7 @@ import Loader, {
   createLoadFunc,
   type DisplayLoaderProps,
 } from 'web/components/dashboard/display/Loader';
-import type {SeverityData} from 'web/components/dashboard/display/severity/severity-class-transform';
+import {type SeverityData} from 'web/components/dashboard/display/severity/severity-class-transform';
 
 export const CERTBUNDS_SEVERITY = 'certbunds-severity';
 export const CERTBUNDS_CREATED = 'certbunds-created';

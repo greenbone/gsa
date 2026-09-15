@@ -17,8 +17,8 @@ interface UseGetReportPortsParams {
 
 export const useGetReportPorts = ({
   reportId,
-  filter = undefined,
-  refetchInterval = undefined,
+  filter,
+  refetchInterval,
   staleTime,
 }: UseGetReportPortsParams) => {
   const gmp = useGmp();

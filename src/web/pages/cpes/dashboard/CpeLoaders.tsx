@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type {CreatedData} from 'web/components/dashboard/display/created/created-transform';
+import {type CreatedData} from 'web/components/dashboard/display/created/created-transform';
 import Loader, {
   createLoadFunc,
   type DisplayLoaderProps,
 } from 'web/components/dashboard/display/Loader';
-import type {SeverityData} from 'web/components/dashboard/display/severity/severity-class-transform';
+import {type SeverityData} from 'web/components/dashboard/display/severity/severity-class-transform';
 
 export const CPES_CREATED = 'cpes-created';
 export const CPES_SEVERITY = 'cpes-severity';

@@ -10,7 +10,7 @@ import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import Filter, {type FilterModelElement} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import type {Element} from 'gmp/models/model';
+import {type Element} from 'gmp/models/model';
 import {isArray, isDefined} from 'gmp/utils/identity';
 
 interface FilterCountElement {

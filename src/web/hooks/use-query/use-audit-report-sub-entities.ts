@@ -24,8 +24,8 @@ interface UseAuditReportSubEntitiesParams {
 
 const useAuditReportSubEntities = ({
   reportId,
-  filter = undefined,
-  refetchInterval = undefined,
+  filter,
+  refetchInterval,
 }: UseAuditReportSubEntitiesParams): AuditReportSubEntities => ({
   hosts: useGetAuditReportHosts({reportId, filter, refetchInterval}),
   operatingSystems: useGetReportOperatingSystems({

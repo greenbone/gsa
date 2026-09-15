@@ -12,7 +12,7 @@ import {
   type AxisScale,
 } from 'd3-axis';
 import {format as d3format} from 'd3-format';
-import type {ScaleBand, ScaleLinear, ScaleTime} from 'd3-scale';
+import {type ScaleBand, type ScaleLinear, type ScaleTime} from 'd3-scale';
 import {select} from 'd3-selection';
 import {isDefined} from 'gmp/utils/identity';
 import Theme from 'web/utils/theme';

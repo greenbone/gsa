@@ -7,7 +7,7 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import type {ReportError} from 'gmp/models/report/parser';
+import {type ReportError} from 'gmp/models/report/parser';
 import ErrorsTable from 'web/pages/reports/details/error/ErrorsTable';
 
 const filter = QueryFilter.fromString('first=1 rows=10');

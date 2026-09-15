@@ -6,7 +6,7 @@
 import {v4 as uuid} from 'uuid';
 import {createDisplay, createRow} from 'gmp/commands/dashboards';
 import {isDefined, isArray} from 'gmp/utils/identity';
-import type {DisplayState} from 'web/components/dashboard/display';
+import {type DisplayState} from 'web/components/dashboard/display';
 
 export interface DashboardDisplay {
   displayId: string;

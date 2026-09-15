@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type {DisplayContainerProps} from 'web/components/dashboard/display/DisplayContainer';
+import {type DisplayContainerProps} from 'web/components/dashboard/display/DisplayContainer';
 
 /**
  * State for a Display component.

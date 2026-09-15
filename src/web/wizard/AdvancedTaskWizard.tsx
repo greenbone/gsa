@@ -16,7 +16,7 @@ import {
   smb_credential_filter,
   ssh_credential_filter,
 } from 'gmp/models/credential';
-import type {Date} from 'gmp/models/date';
+import {type Date} from 'gmp/models/date';
 import type ScanConfig from 'gmp/models/scan-config';
 import {first} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';

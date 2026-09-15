@@ -11,7 +11,7 @@ import {type FilterType} from 'gmp/models/filter';
 import {isFilterType} from 'gmp/models/filter/utils';
 import type Tag from 'gmp/models/tag';
 import useGmp from 'web/hooks/useGmp';
-import type {RefetchIntervalFn} from 'web/queries/helpers';
+import {type RefetchIntervalFn} from 'web/queries/helpers';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
 import useDeleteMutation from 'web/queries/useDeleteMutation';

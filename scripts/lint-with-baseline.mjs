@@ -144,6 +144,7 @@ const main = async () => {
       ),
     };
     await writeFile(baselinePath, `${JSON.stringify(content, null, 2)}\n`);
+    // oxlint-disable-next-line no-console
     console.log(
       `Updated ${baselinePath} with ${uniqueDiagnostics.length} diagnostics.`,
     );
@@ -174,6 +175,7 @@ const main = async () => {
     process.exit(1);
   }
 
+  // oxlint-disable-next-line no-console
   console.log(
     `Oxlint passed: ${diagnostics.length} existing diagnostics acknowledged.`,
   );

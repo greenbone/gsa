@@ -6,7 +6,7 @@
 import EntitiesCommand from 'gmp/commands/entities';
 import type Http from 'gmp/http/http';
 import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
-import type {Element} from 'gmp/models/model';
+import {type Element} from 'gmp/models/model';
 import ReportConfig from 'gmp/models/report-config';
 
 interface ReportConfigsResponseData extends XmlResponseData {

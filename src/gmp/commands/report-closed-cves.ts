@@ -4,15 +4,15 @@
  */
 
 import {parseFilter} from 'gmp/collection/parser';
-import type {EntitiesMeta} from 'gmp/commands/entities';
+import {type EntitiesMeta} from 'gmp/commands/entities';
 import HttpCommand, {
   type HttpCommandInputParams,
   type HttpCommandOptions,
 } from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
-import type {XmlResponseData} from 'gmp/http/transform/fast-xml';
-import type {FilterModelElement} from 'gmp/models/filter';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
+import {type FilterModelElement} from 'gmp/models/filter';
 import {
   parseClosedCvesFromEndpoint,
   type ClosedCvesEndpointData,

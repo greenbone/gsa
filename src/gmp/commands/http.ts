@@ -5,19 +5,19 @@
 
 import type CancelToken from 'gmp/cancel';
 import type Http from 'gmp/http/http';
-import type {RequestOptions, ResponseType} from 'gmp/http/http';
+import {type RequestOptions, type ResponseType} from 'gmp/http/http';
 import {ResponseRejection} from 'gmp/http/rejection';
-import type {Meta} from 'gmp/http/response';
+import {type Meta} from 'gmp/http/response';
 import transform, {
   type XmlMeta,
   type XmlResponseData,
 } from 'gmp/http/transform/fast-xml';
 import {type Transform} from 'gmp/http/transform/transform';
-import type {
-  Data,
-  HttpMethod,
-  UrlParams as Params,
-  UrlParamValue as ParamValue,
+import {
+  type Data,
+  type HttpMethod,
+  type UrlParams as Params,
+  type UrlParamValue as ParamValue,
 } from 'gmp/http/utils';
 import {type FilterType} from 'gmp/models/filter';
 import {filterString, isFilterType} from 'gmp/models/filter/utils';

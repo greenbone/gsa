@@ -46,7 +46,7 @@ const createGmp = ({
   createOciImageTarget = {id: 'created-id'},
   saveOciImageTarget = {id: 'saved-id'},
   cloneOciImageTarget = {id: 'cloned-id'},
-  deleteOciImageTarget = undefined,
+  deleteOciImageTarget,
   exportOciImageTarget = new Response('some-data'),
   createCredentialResponse = {data: {id: 'cred-id'}},
   createCredential = testing.fn().mockResolvedValue(createCredentialResponse),

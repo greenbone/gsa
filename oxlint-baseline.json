@@ -232,39 +232,15 @@
     },
     {
       "filename": "src/gmp/http/http.ts",
-      "code": "eslint(no-useless-rename)",
-      "message": "Do not rename import, export, or destructured assignments to the same name",
-      "location": {
-        "line": 20,
-        "column": 22,
-        "offset": 442
-      },
-      "sourceLine": "type HttpMethod as HttpMethod,",
-      "fingerprint": "src/gmp/http/http.ts|eslint(no-useless-rename)|Do not rename import, export, or destructured assignments to the same name|22|type HttpMethod as HttpMethod,"
-    },
-    {
-      "filename": "src/gmp/http/http.ts",
       "code": "typescript(no-this-alias)",
       "message": "Unexpected aliasing of 'this' to local variable.",
       "location": {
         "line": 86,
         "column": 11,
-        "offset": 2131
+        "offset": 2117
       },
       "sourceLine": "const self = this;",
       "fingerprint": "src/gmp/http/http.ts|typescript(no-this-alias)|Unexpected aliasing of 'this' to local variable.|11|const self = this;"
-    },
-    {
-      "filename": "src/gmp/http/rejection.ts",
-      "code": "typescript(no-duplicate-type-constituents)",
-      "message": "Explicit undefined is unnecessary on an optional parameter.",
-      "location": {
-        "line": 11,
-        "column": 69,
-        "offset": 255
-      },
-      "sourceLine": "constructor(message: string = _('Unknown Error'), error?: Error | undefined) {",
-      "fingerprint": "src/gmp/http/rejection.ts|typescript(no-duplicate-type-constituents)|Explicit undefined is unnecessary on an optional parameter.|69|constructor(message: string = _('Unknown Error'), error?: Error | undefined) {"
     },
     {
       "filename": "src/gmp/locale/__tests__/detector.test.ts",
@@ -435,42 +411,6 @@
       "fingerprint": "src/gmp/models/event.ts|typescript(no-useless-default-assignment)|Default value is useless because the property has type `number` (not nullish). This default assignment will never be used.|17|seconds = 0,"
     },
     {
-      "filename": "src/gmp/models/filter.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Using `= undefined` to make a parameter optional adds unnecessary runtime logic. Use the `?` optional syntax instead.",
-      "location": {
-        "line": 186,
-        "column": 40,
-        "offset": 4594
-      },
-      "sourceLine": "def: string | number | undefined = undefined,",
-      "fingerprint": "src/gmp/models/filter.ts|typescript(no-useless-default-assignment)|Using `= undefined` to make a parameter optional adds unnecessary runtime logic. Use the `?` optional syntax instead.|40|def: string | number | undefined = undefined,"
-    },
-    {
-      "filename": "src/gmp/models/filter/filter-terms.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Using `= undefined` to make a parameter optional adds unnecessary runtime logic. Use the `?` optional syntax instead.",
-      "location": {
-        "line": 229,
-        "column": 40,
-        "offset": 6046
-      },
-      "sourceLine": "def: string | number | undefined = undefined,",
-      "fingerprint": "src/gmp/models/filter/filter-terms.ts|typescript(no-useless-default-assignment)|Using `= undefined` to make a parameter optional adds unnecessary runtime logic. Use the `?` optional syntax instead.|40|def: string | number | undefined = undefined,"
-    },
-    {
-      "filename": "src/gmp/models/filter/query-filter.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Using `= undefined` to make a parameter optional adds unnecessary runtime logic. Use the `?` optional syntax instead.",
-      "location": {
-        "line": 209,
-        "column": 40,
-        "offset": 5416
-      },
-      "sourceLine": "def: string | number | undefined = undefined,",
-      "fingerprint": "src/gmp/models/filter/query-filter.ts|typescript(no-useless-default-assignment)|Using `= undefined` to make a parameter optional adds unnecessary runtime logic. Use the `?` optional syntax instead.|40|def: string | number | undefined = undefined,"
-    },
-    {
       "filename": "src/gmp/models/filter/utils.ts",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
@@ -607,48 +547,12 @@
       "code": "typescript(no-base-to-string)",
       "message": "'value' may use Object's default stringification format ('[object Object]') when stringified.",
       "location": {
-        "line": 232,
+        "line": 230,
         "column": 58,
-        "offset": 5495
+        "offset": 5454
       },
       "sourceLine": "return isEmpty(value as string) ? undefined : String(value);",
       "fingerprint": "src/gmp/parser.ts|typescript(no-base-to-string)|'value' may use Object's default stringification format ('[object Object]') when stringified.|58|return isEmpty(value as string) ? undefined : String(value);"
-    },
-    {
-      "filename": "src/gmp/parser.ts",
-      "code": "typescript(no-duplicate-type-constituents)",
-      "message": "Explicit undefined is unnecessary on an optional parameter.",
-      "location": {
-        "line": 37,
-        "column": 29,
-        "offset": 975
-      },
-      "sourceLine": "value?: string | number | undefined | TextElement,",
-      "fingerprint": "src/gmp/parser.ts|typescript(no-duplicate-type-constituents)|Explicit undefined is unnecessary on an optional parameter.|29|value?: string | number | undefined | TextElement,"
-    },
-    {
-      "filename": "src/gmp/parser.ts",
-      "code": "typescript(no-duplicate-type-constituents)",
-      "message": "Explicit undefined is unnecessary on an optional parameter.",
-      "location": {
-        "line": 182,
-        "column": 37,
-        "offset": 4069
-      },
-      "sourceLine": "value?: string | GmpDate | Date | undefined,",
-      "fingerprint": "src/gmp/parser.ts|typescript(no-duplicate-type-constituents)|Explicit undefined is unnecessary on an optional parameter.|37|value?: string | GmpDate | Date | undefined,"
-    },
-    {
-      "filename": "src/gmp/parser.ts",
-      "code": "typescript(no-duplicate-type-constituents)",
-      "message": "Explicit undefined is unnecessary on an optional parameter.",
-      "location": {
-        "line": 52,
-        "column": 42,
-        "offset": 1262
-      },
-      "sourceLine": "text?: TextElement | string | number | undefined,",
-      "fingerprint": "src/gmp/parser.ts|typescript(no-duplicate-type-constituents)|Explicit undefined is unnecessary on an optional parameter.|42|text?: TextElement | string | number | undefined,"
     },
     {
       "filename": "src/gmp/utils/__tests__/identity.test.ts",
@@ -673,18 +577,6 @@
       },
       "sourceLine": "const context = this;",
       "fingerprint": "src/gmp/utils/event.ts|typescript(no-this-alias)|Unexpected aliasing of 'this' to local variable.|11|const context = this;"
-    },
-    {
-      "filename": "src/gmp/utils/id.ts",
-      "code": "typescript(no-duplicate-type-constituents)",
-      "message": "Explicit undefined is unnecessary on an optional parameter.",
-      "location": {
-        "line": 35,
-        "column": 21,
-        "offset": 713
-      },
-      "sourceLine": "list?: TModel[] | undefined,",
-      "fingerprint": "src/gmp/utils/id.ts|typescript(no-duplicate-type-constituents)|Explicit undefined is unnecessary on an optional parameter.|21|list?: TModel[] | undefined,"
     },
     {
       "filename": "src/web/App.tsx",
@@ -2283,270 +2175,6 @@
       "fingerprint": "src/web/hooks/__tests__/useSessionTracker.test.tsx|eslint(no-unused-vars)|Parameter 'onClick' is declared but never used. Unused parameters should start with a '_'.|30|const TestSessionTracker = ({onClick}: {onClick?: () => void}) => {"
     },
     {
-      "filename": "src/web/hooks/__tests__/useUserIsLoggedIn.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 12,
-        "column": 16,
-        "offset": 335
-      },
-      "sourceLine": "isLoggedIn = undefined,",
-      "fingerprint": "src/web/hooks/__tests__/useUserIsLoggedIn.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|16|isLoggedIn = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/audit-report.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 46,
-        "column": 12,
-        "offset": 1234
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/audit-report.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/audit-report.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 47,
-        "column": 21,
-        "offset": 1265
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/audit-report.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-applications.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 19,
-        "column": 12,
-        "offset": 460
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-applications.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-applications.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 20,
-        "column": 21,
-        "offset": 491
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-applications.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-closed-cves.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 19,
-        "column": 12,
-        "offset": 456
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-closed-cves.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-cves.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 19,
-        "column": 12,
-        "offset": 444
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-cves.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-errors.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 19,
-        "column": 12,
-        "offset": 448
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-errors.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-errors.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 20,
-        "column": 21,
-        "offset": 479
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-errors.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-hosts.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 19,
-        "column": 12,
-        "offset": 446
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-hosts.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-hosts.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 20,
-        "column": 21,
-        "offset": 477
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-hosts.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-operating-system.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 21,
-        "column": 21,
-        "offset": 550
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-operating-system.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-ports.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 20,
-        "column": 12,
-        "offset": 500
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-ports.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-ports.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 21,
-        "column": 21,
-        "offset": 531
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-ports.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-tls-certificates.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 20,
-        "column": 12,
-        "offset": 541
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-tls-certificates.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/report-tls-certificates.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 21,
-        "column": 21,
-        "offset": 572
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/report-tls-certificates.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/results.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 29,
-        "column": 12,
-        "offset": 900
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/results.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/results.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 31,
-        "column": 21,
-        "offset": 944
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/results.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/use-audit-report-sub-entities.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 27,
-        "column": 12,
-        "offset": 941
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/use-audit-report-sub-entities.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/use-audit-report-sub-entities.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 28,
-        "column": 21,
-        "offset": 972
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/use-audit-report-sub-entities.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/use-report-sub-entities.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 36,
-        "column": 12,
-        "offset": 1443
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/hooks/use-query/use-report-sub-entities.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/hooks/use-query/use-report-sub-entities.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 37,
-        "column": 21,
-        "offset": 1474
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/hooks/use-query/use-report-sub-entities.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
-    },
-    {
       "filename": "src/web/hooks/useInstanceVariable.ts",
       "code": "react(refs)",
       "message": "Cannot access refs during render",
@@ -2757,22 +2385,10 @@
       "location": {
         "line": 94,
         "column": 6,
-        "offset": 2758
+        "offset": 2746
       },
       "sourceLine": "...props",
       "fingerprint": "src/web/pages/alerts/AlertComponent.jsx|eslint(no-unused-vars)|Parameter 'props' is declared but never used. Unused parameters should start with a '_'.|6|...props"
-    },
-    {
-      "filename": "src/web/pages/alerts/AlertComponent.jsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional parameters are already undefined by default.",
-      "location": {
-        "line": 71,
-        "column": 36,
-        "offset": 2263
-      },
-      "sourceLine": "const getValue = (data = {}, def = undefined) => {",
-      "fingerprint": "src/web/pages/alerts/AlertComponent.jsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional parameters are already undefined by default.|36|const getValue = (data = {}, def = undefined) => {"
     },
     {
       "filename": "src/web/pages/alerts/Dialog.jsx",
@@ -2835,18 +2451,6 @@
       "fingerprint": "src/web/pages/audits/AuditComponent.jsx|typescript(no-floating-promises)|Promises must be awaited, add void operator to ignore.|7|gmp.audit.stop(audit).then(onStopped, onStopError);"
     },
     {
-      "filename": "src/web/pages/container-image-targets/__tests__/ContainerImageTargetComponent.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 49,
-        "column": 26,
-        "offset": 1862
-      },
-      "sourceLine": "deleteOciImageTarget = undefined,",
-      "fingerprint": "src/web/pages/container-image-targets/__tests__/ContainerImageTargetComponent.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|26|deleteOciImageTarget = undefined,"
-    },
-    {
       "filename": "src/web/pages/container-image-targets/ContainerImageTargetRow.tsx",
       "code": "eslint(no-unused-vars)",
       "message": "Parameter 'onToggleDetailsClick' is declared but never used. Unused parameters should start with a '_'.",
@@ -2869,18 +2473,6 @@
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/container-image-targets/ContainerImageTargetsListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `OciImageTarget[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
-    },
-    {
-      "filename": "src/web/pages/credentials/__tests__/CredentialComponent.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 19,
-        "column": 30,
-        "offset": 820
-      },
-      "sourceLine": "deleteCredentialResponse = undefined,",
-      "fingerprint": "src/web/pages/credentials/__tests__/CredentialComponent.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|30|deleteCredentialResponse = undefined,"
     },
     {
       "filename": "src/web/pages/credentials/CredentialDetails.tsx",
@@ -3013,30 +2605,6 @@
       },
       "sourceLine": "void loadLdapAuthSettings();",
       "fingerprint": "src/web/pages/ldap/LdapPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|10|void loadLdapAuthSettings();"
-    },
-    {
-      "filename": "src/web/pages/login/__tests__/LoginPage.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 36,
-        "column": 19,
-        "offset": 904
-      },
-      "sourceLine": "guestPassword = undefined,",
-      "fingerprint": "src/web/pages/login/__tests__/LoginPage.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|19|guestPassword = undefined,"
-    },
-    {
-      "filename": "src/web/pages/login/__tests__/LoginPage.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 35,
-        "column": 19,
-        "offset": 875
-      },
-      "sourceLine": "guestUsername = undefined,",
-      "fingerprint": "src/web/pages/login/__tests__/LoginPage.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|19|guestUsername = undefined,"
     },
     {
       "filename": "src/web/pages/notes/dashboard/ActiveDaysDisplay.jsx",
@@ -3399,30 +2967,6 @@
       "fingerprint": "src/web/pages/performance/StartEndTimeSelection.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string` (not nullish). This default assignment will never be used.|14|timezone = '',"
     },
     {
-      "filename": "src/web/pages/policies/__tests__/DetailsPage.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 202,
-        "column": 26,
-        "offset": 4656
-      },
-      "sourceLine": "deletePolicyResponse = undefined,",
-      "fingerprint": "src/web/pages/policies/__tests__/DetailsPage.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|26|deletePolicyResponse = undefined,"
-    },
-    {
-      "filename": "src/web/pages/portlists/__tests__/PortListComponent.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 30,
-        "column": 28,
-        "offset": 897
-      },
-      "sourceLine": "deletePortListResponse = undefined,",
-      "fingerprint": "src/web/pages/portlists/__tests__/PortListComponent.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|28|deletePortListResponse = undefined,"
-    },
-    {
       "filename": "src/web/pages/portlists/PortListDetails.tsx",
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Model[]` (not nullish). This default assignment will never be used.",
@@ -3625,18 +3169,6 @@
       },
       "sourceLine": "const {getByTestId, getAllByRole} = within(filterGroup);",
       "fingerprint": "src/web/pages/reports/__tests__/AuditReportFilterDialog.test.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|25|const {getByTestId, getAllByRole} = within(filterGroup);"
-    },
-    {
-      "filename": "src/web/pages/reports/__tests__/DeltaReportDetailsContent.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 32,
-        "column": 20,
-        "offset": 1129
-      },
-      "sourceLine": "severityRating = undefined,",
-      "fingerprint": "src/web/pages/reports/__tests__/DeltaReportDetailsContent.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|20|severityRating = undefined,"
     },
     {
       "filename": "src/web/pages/reports/__tests__/ReportDetailsFilterDialog.test.tsx",
@@ -4167,18 +3699,6 @@
       "fingerprint": "src/web/pages/roles/RoleDetails.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.|40|const RoleDetails = ({entity: {users = [], comment}}: RoleDetailsProps) => {"
     },
     {
-      "filename": "src/web/pages/scanconfigs/__tests__/DetailsPage.test.jsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 146,
-        "column": 26,
-        "offset": 3306
-      },
-      "sourceLine": "deleteConfigResponse = undefined,",
-      "fingerprint": "src/web/pages/scanconfigs/__tests__/DetailsPage.test.jsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|26|deleteConfigResponse = undefined,"
-    },
-    {
       "filename": "src/web/pages/scanconfigs/ScanConfigComponent.tsx",
       "code": "eslint(no-unused-vars)",
       "message": "Parameter 'save' is declared but never used. Unused parameters should start with a '_'.",
@@ -4393,42 +3913,6 @@
       },
       "sourceLine": "const {items = []} = row;",
       "fingerprint": "src/web/pages/start/StartPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `DashboardDisplay[]` (not nullish). This default assignment will never be used.|22|const {items = []} = row;"
-    },
-    {
-      "filename": "src/web/pages/tags/__tests__/TagComponent.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 31,
-        "column": 23,
-        "offset": 931
-      },
-      "sourceLine": "deleteTagResponse = undefined,",
-      "fingerprint": "src/web/pages/tags/__tests__/TagComponent.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|23|deleteTagResponse = undefined,"
-    },
-    {
-      "filename": "src/web/pages/tags/__tests__/TagComponent.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 34,
-        "column": 23,
-        "offset": 1043
-      },
-      "sourceLine": "enableTagResponse = undefined,",
-      "fingerprint": "src/web/pages/tags/__tests__/TagComponent.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|23|enableTagResponse = undefined,"
-    },
-    {
-      "filename": "src/web/pages/tags/__tests__/TagComponent.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 35,
-        "column": 24,
-        "offset": 1077
-      },
-      "sourceLine": "disableTagResponse = undefined,",
-      "fingerprint": "src/web/pages/tags/__tests__/TagComponent.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|24|disableTagResponse = undefined,"
     },
     {
       "filename": "src/web/pages/tags/TagDialog.tsx",
@@ -5079,18 +4563,6 @@
       "fingerprint": "src/web/pages/user-settings/useUserSettingsActions.ts|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|7|dispatch(loadUserSettingsDefaultFilter(gmp)('vulnerability')),"
     },
     {
-      "filename": "src/web/pages/users/__tests__/UsersListsPage.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 51,
-        "column": 24,
-        "offset": 1533
-      },
-      "sourceLine": "deleteUserResponse = undefined,",
-      "fingerprint": "src/web/pages/users/__tests__/UsersListsPage.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|24|deleteUserResponse = undefined,"
-    },
-    {
       "filename": "src/web/pages/users/UserDetails.tsx",
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Model[]` (not nullish). This default assignment will never be used.",
@@ -5151,18 +4623,6 @@
       "fingerprint": "src/web/pages/vulnerabilities/VulnerabilitiesListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Vulnerability[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
     },
     {
-      "filename": "src/web/pages/web-application-targets/__tests__/WebApplicationTargetsComponent.test.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 42,
-        "column": 32,
-        "offset": 1596
-      },
-      "sourceLine": "deleteWebApplicationTarget = undefined,",
-      "fingerprint": "src/web/pages/web-application-targets/__tests__/WebApplicationTargetsComponent.test.tsx|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|32|deleteWebApplicationTarget = undefined,"
-    },
-    {
       "filename": "src/web/pages/web-application-targets/WebApplicationTargetRow.tsx",
       "code": "eslint(no-unused-vars)",
       "message": "Parameter 'onToggleDetailsClick' is declared but never used. Unused parameters should start with a '_'.",
@@ -5185,30 +4645,6 @@
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/web-application-targets/WebApplicationTargetsListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `WebApplicationTarget[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
-    },
-    {
-      "filename": "src/web/queries/useGetEntities.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 49,
-        "column": 12,
-        "offset": 1353
-      },
-      "sourceLine": "filter = undefined,",
-      "fingerprint": "src/web/queries/useGetEntities.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|12|filter = undefined,"
-    },
-    {
-      "filename": "src/web/queries/useGetEntities.ts",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because it is undefined. Optional properties are already undefined by default.",
-      "location": {
-        "line": 51,
-        "column": 21,
-        "offset": 1402
-      },
-      "sourceLine": "refetchInterval = undefined,",
-      "fingerprint": "src/web/queries/useGetEntities.ts|typescript(no-useless-default-assignment)|Default value is useless because it is undefined. Optional properties are already undefined by default.|21|refetchInterval = undefined,"
     },
     {
       "filename": "src/web/testing/custom-queries.ts",

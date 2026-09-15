@@ -5,13 +5,13 @@
 
 import {useState, useCallback} from 'react';
 import {CONTAINER_IMAGE_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
-import type {default as Task} from 'gmp/models/task';
+import {type default as Task} from 'gmp/models/task';
 import {parseBoolean} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {type EntityCreateResponse} from 'web/entity/hooks/useEntityCreate';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import type {ContainerImageTaskDialogData} from 'web/pages/tasks/ContainerImageTaskDialog';
+import {type ContainerImageTaskDialogData} from 'web/pages/tasks/ContainerImageTaskDialog';
 
 interface UseContainerImageTaskDialogProps {
   onContainerCreated?: (response: EntityCreateResponse) => void;

@@ -4,7 +4,7 @@
  */
 
 import {useCallback} from 'react';
-import type {WeekDays} from 'gmp/models/event';
+import {type WeekDays} from 'gmp/models/event';
 import {isDefined} from 'gmp/utils/identity';
 import ToggleButton from 'web/components/form/ToggleButton';
 import Divider from 'web/components/layout/Divider';

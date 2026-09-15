@@ -6,7 +6,7 @@
 import type Audit from 'gmp/models/audit';
 import {type FilterType} from 'gmp/models/filter';
 import useGmp from 'web/hooks/useGmp';
-import type {RefetchIntervalFn} from 'web/queries/helpers';
+import {type RefetchIntervalFn} from 'web/queries/helpers';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGetEntity from 'web/queries/useGetEntity';
 

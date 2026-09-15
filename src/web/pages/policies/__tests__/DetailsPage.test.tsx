@@ -199,6 +199,7 @@ const createGmp = ({
   getNvtFamiliesResponse = {},
   getScannersResponse = {data: scanners},
   clonePolicyResponse = {data: {id: 'cloned-id'}},
+  // oxlint-disable-next-line typescript/no-useless-default-assignment
   deletePolicyResponse = undefined,
   exportPolicyResponse = {data: 'some-data'},
   currentSettingsResponse = currentSettingsDefaultResponse,

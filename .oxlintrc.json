@@ -4,12 +4,23 @@
     "react",
     "typescript",
     "import",
-    "vitest"
+    "vitest",
+    "eslint",
   ],
   "jsPlugins": [
     "./lint-script/oxlint-plugin.js"
   ],
   "rules": {
+    "eslint/no-console": [
+      "warn",
+      {
+        "allow": [
+          "warn",
+          "error",
+          "info"
+        ]
+      }
+    ],
     "gsa/camelcase": "warn",
     "gsa/filename-convention": "warn",
     "gsa/header": "error",
@@ -17,7 +28,17 @@
     "gsa/no-dynamic-i18n": "error",
     "gsa/no-restricted-imports": "warn",
     "gsa/ts-definitions-top": "warn",
-    "typescript/consistent-type-imports": "error",
+    "import/consistent-type-specifier-style": [
+      "warn",
+      "prefer-inline"
+    ],
+    "typescript/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports",
+        "fixStyle": "inline-type-imports"
+      }
+    ],
     "typescript/restrict-template-expressions": [
       "error",
       {
@@ -36,6 +57,12 @@
             "path": "./src/gmp/types.ts"
           }
         ]
+      }
+    ],
+    "vitest/consistent-test-it": [
+      "error",
+      {
+        "fn": "test"
       }
     ]
   },

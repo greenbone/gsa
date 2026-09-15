@@ -24,8 +24,8 @@ interface UseGetAuditReportHostsParams {
 
 export const useGetAuditReport = ({
   id,
-  filter = undefined,
-  refetchInterval = undefined,
+  filter,
+  refetchInterval,
 }: UseGetAuditReportParams) => {
   const gmp = useGmp();
   const filterString = filter?.toFilterString();
@@ -43,8 +43,8 @@ export const useGetAuditReport = ({
 
 export const useGetAuditReportHosts = ({
   reportId,
-  filter = undefined,
-  refetchInterval = undefined,
+  filter,
+  refetchInterval,
 }: UseGetAuditReportHostsParams) => {
   const gmp = useGmp();
 

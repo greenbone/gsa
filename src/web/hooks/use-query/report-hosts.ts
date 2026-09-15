@@ -16,8 +16,8 @@ interface UseGetReportHostsParams {
 
 export const useGetReportHosts = ({
   reportId,
-  filter = undefined,
-  refetchInterval = undefined,
+  filter,
+  refetchInterval,
   staleTime,
 }: UseGetReportHostsParams) => {
   const gmp = useGmp();

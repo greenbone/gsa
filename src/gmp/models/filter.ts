@@ -181,10 +181,7 @@ class Filter extends EntityModel implements FilterType {
     return this.filterTerms.getAllTerms();
   }
 
-  get(
-    key: string,
-    def: string | number | undefined = undefined,
-  ): string | number | undefined {
+  get(key: string, def?: string | number): string | number | undefined {
     return this.filterTerms.get(key, def);
   }
 

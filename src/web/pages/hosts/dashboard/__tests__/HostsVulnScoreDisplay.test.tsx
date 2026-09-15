@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import type {ReactElement} from 'react';
+import {type ReactElement} from 'react';
 import {rendererWith, screen, waitFor} from 'web/testing';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {

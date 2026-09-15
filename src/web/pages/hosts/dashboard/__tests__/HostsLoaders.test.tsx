@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type {ReactElement} from 'react';
+import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, waitFor} from 'web/testing';
 import QueryFilter from 'gmp/models/filter/query-filter';

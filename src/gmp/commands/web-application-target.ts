@@ -6,7 +6,7 @@
 import EntityCommand, {type EntityActionResponse} from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import logger from 'gmp/log';
-import type {Element} from 'gmp/models/model';
+import {type Element} from 'gmp/models/model';
 import WebApplicationTarget from 'gmp/models/web-application-target';
 import {parseYesNo} from 'gmp/parser';
 

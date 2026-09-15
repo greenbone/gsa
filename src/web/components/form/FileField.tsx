@@ -4,7 +4,7 @@
  */
 
 import {useCallback} from 'react';
-import type {FileInputProps} from '@mantine/core';
+import {type FileInputProps} from '@mantine/core';
 import {FileInput} from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
 import useTranslation from 'web/hooks/useTranslation';

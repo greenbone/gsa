@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 import DashboardControls, {
   type OnNewDisplayFunc,
 } from 'web/components/dashboard/DashboardControls';
-import type {DisplayRegistry} from 'web/components/dashboard/registry';
+import {type DisplayRegistry} from 'web/components/dashboard/registry';
 import {
   addDisplayToSettings,
   canAddDisplay,

@@ -4,7 +4,7 @@
  */
 
 import {TimePicker} from '@greenbone/ui-lib';
-import type {Date} from 'gmp/models/date';
+import {type Date} from 'gmp/models/date';
 import Button from 'web/components/form/Button';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';

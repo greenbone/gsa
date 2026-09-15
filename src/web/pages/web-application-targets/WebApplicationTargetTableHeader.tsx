@@ -7,9 +7,9 @@ import {isDefined} from 'gmp/utils/identity';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import type {ActionsColumn} from 'web/entities/withEntitiesHeader';
+import {type ActionsColumn} from 'web/entities/withEntitiesHeader';
 import useTranslation from 'web/hooks/useTranslation';
-import type {SortDirectionType} from 'web/utils/sort-direction';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
 export interface WebApplicationTargetTableHeaderProps {
   actionsColumn?: ActionsColumn;

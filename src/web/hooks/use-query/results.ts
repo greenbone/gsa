@@ -6,7 +6,7 @@
 import {type FilterType} from 'gmp/models/filter';
 import type Result from 'gmp/models/result';
 import useGmp from 'web/hooks/useGmp';
-import type {RefetchIntervalFn} from 'web/queries/helpers';
+import {type RefetchIntervalFn} from 'web/queries/helpers';
 import useGetEntities, {
   type UseGetEntitiesReturn,
 } from 'web/queries/useGetEntities';
@@ -26,9 +26,9 @@ interface UseGetResultsParams {
  * @returns Query result with entities, entitiesCounts, and filter
  */
 export const useGetResults = ({
-  filter = undefined,
+  filter,
   staleTime,
-  refetchInterval = undefined,
+  refetchInterval,
 }: UseGetResultsParams = {}) => {
   const gmp = useGmp();
 

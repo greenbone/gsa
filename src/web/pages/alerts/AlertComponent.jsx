@@ -68,7 +68,7 @@ const selectVeriniceReportId = (reportFormats, reportId) => {
   return first(reportFormats).id;
 };
 
-const getValue = (data = {}, def = undefined) => {
+const getValue = (data = {}, def) => {
   const {value: val = def} = data;
   return val;
 };
