@@ -43,6 +43,7 @@
       "warn",
       "prefer-inline"
     ],
+    "react/exhaustive-deps": "warn",
     "typescript/consistent-type-imports": [
       "error",
       {
@@ -50,6 +51,8 @@
         "fixStyle": "inline-type-imports"
       }
     ],
+    "typescript/no-empty-interface": "warn",
+    "typescript/no-explicit-any": "warn",
     "typescript/restrict-template-expressions": [
       "error",
       {
