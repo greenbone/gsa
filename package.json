@@ -29,7 +29,7 @@
     "lint": "node scripts/lint-with-baseline.mjs",
     "lint:baseline:update": "node scripts/lint-with-baseline.mjs --update",
     "format": "prettier --write src",
-    "format-check": "prettier -l src",
+    "format-check": "prettier -l src e2e",
     "preview": "vite preview",
     "i18n-extract": "i18next-cli extract",
     "type-check": "tsc --noEmit",
