@@ -5,19 +5,15 @@
     "typescript",
     "import",
     "vitest",
-    "eslint",
+    "eslint"
   ],
   "jsPlugins": [
     "./lint-script/oxlint-plugin.js"
   ],
   "options": {
-    "typeAware": true,
+    "typeAware": true
   },
   "rules": {
-    "eslint/eqeqeq": [
-      "warn",
-      "always"
-    ],
     "eslint/no-console": [
       "warn",
       {
@@ -28,23 +24,46 @@
         ]
       }
     ],
-    "eslint/no-duplicate-imports": "warn",
-    "eslint/prefer-const": ["warn", {
-      "destructuring": "all"
-    }],
     "gsa/camelcase": "warn",
     "gsa/filename-convention": "warn",
     "gsa/header": "error",
+    "gsa/import-order": "warn",
     "gsa/jsx-sort-props": "warn",
+    "gsa/naming-convention": "off",
     "gsa/no-dynamic-i18n": "error",
     "gsa/no-restricted-imports": "warn",
+    "gsa/prop-types": "off",
     "gsa/ts-definitions-top": "warn",
+    "no-unused-vars": "off",
+    "eqeqeq": [
+      "warn",
+      "always"
+    ],
+    "no-console": [
+      "warn",
+      {
+        "allow": [
+          "warn",
+          "error",
+          "info"
+        ]
+      }
+    ],
+    "no-duplicate-imports": "warn",
+    "no-unused-expressions": [
+      "warn",
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true,
+        "allowTaggedTemplates": true
+      }
+    ],
+    "react/exhaustive-deps": "warn",
     "import/consistent-type-specifier-style": [
       "warn",
       "prefer-inline"
     ],
     "import/newline-after-import": ["warn", {"considerComments": true}],
-    "react/exhaustive-deps": "warn",
     "react/immutability": "error",
     "react/jsx-fragments": ["warn", "syntax"],
     "react/jsx-key": "warn",
@@ -60,6 +79,17 @@
     ],
     "typescript/no-empty-interface": "warn",
     "typescript/no-explicit-any": "warn",
+    "typescript/no-floating-promises": "warn",
+    "typescript/no-non-null-assertion": "warn",
+    "typescript/no-unused-vars": [
+      "warn",
+      {
+        "args": "none",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "vitest/no-disabled-tests": "off",
+    "vitest/no-focused-tests": "off",
     "typescript/restrict-template-expressions": [
       "error",
       {
@@ -88,11 +118,82 @@
     ],
     "vitest/valid-expect-in-promise": "error"
   },
+  "overrides": [
+    {
+      "files": [
+        "**/*.{js,mjs,cjs,jsx}"
+      ],
+      "rules": {
+        "gsa/camelcase": "warn",
+        "gsa/no-dynamic-i18n": "warn",
+        "gsa/prop-types": [
+          "warn",
+          {
+            "ignore": [
+              "children",
+              "className",
+              "location"
+            ]
+          }
+        ],
+        "no-unused-vars": [
+          "warn",
+          {
+            "args": "none",
+            "ignoreRestSiblings": true
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "**/*.ts",
+        "**/*.tsx"
+      ],
+      "rules": {
+        "gsa/camelcase": "off",
+        "gsa/no-dynamic-i18n": "error",
+        "gsa/naming-convention": "warn",
+        "typescript/no-unused-vars": [
+          "warn",
+          {
+            "args": "none",
+            "ignoreRestSiblings": true
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "e2e/**/*.ts"
+      ],
+      "rules": {
+        "gsa/no-restricted-imports": "off"
+      }
+    },
+    {
+      "files": [
+        "**/__tests__/**/*.{js,jsx,ts,tsx}",
+        "**/*.{spec,test}.{js,jsx,ts,tsx}"
+      ],
+      "rules": {
+        "vitest/no-disabled-tests": "warn",
+        "vitest/no-focused-tests": "error",
+        "vitest/no-identical-title": "error",
+        "gsa/prop-types": "off"
+      }
+    }
+  ],
   "ignorePatterns": [
     "build/**",
     "node_modules/**",
     "public/**",
     "playwright-report/**",
-    "test-results/**"
+    "test-results/**",
+    "i18next.config.ts",
+    "eslint.config.js",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "eslint-script/filename-convention.js"
   ]
 }
