@@ -1,0 +1,47 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "arrowParens": "avoid",
+  "bracketSpacing": false,
+  "bracketSameLine": false,
+  "semi": true,
+  "singleQuote": true,
+  "jsxSingleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "sortImports": {
+    "customGroups": [
+      {
+        "groupName": "react",
+        "elementNamePattern": ["react"]
+      },
+      {
+        "groupName": "ui-libraries",
+        "elementNamePattern": [
+          "@open-sight/ui-components-mantinev7",
+          "@mantine/core",
+          "@mantine/notifications"
+        ]
+      },
+      {
+        "groupName": "test-helpers",
+        "elementNamePattern": ["@gsa/testing", "web/testing"]
+      },
+      {
+        "groupName": "project-internal",
+        "elementNamePattern": ["gmp/**", "web/**"]
+      }
+    ],
+    "groups": [
+      "react",
+      "ui-libraries",
+      "test-helpers",
+      ["builtin", "external"],
+      "internal",
+      "project-internal"
+    ],
+    "ignoreCase": true,
+    "internalPattern": ["gmp/**", "web/**", "version", "@gsa/**"],
+    "newlinesBetween": false
+  }
+}
