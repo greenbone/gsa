@@ -21,7 +21,6 @@ import ErrorPanel from 'web/components/error/ErrorPanel';
 import Layout from 'web/components/layout/Layout';
 import updatingStyle from 'web/components/layout/updating-style';
 import DetailsLink from 'web/components/link/DetailsLink';
-import StatusCellContent from 'web/pages/reports/StatusCellContent';
 import Table from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
@@ -30,6 +29,7 @@ import TableRow from 'web/components/table/TableRow';
 import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
+import StatusCellContent from 'web/pages/reports/StatusCellContent';
 
 interface SummaryProps {
   audit?: boolean;

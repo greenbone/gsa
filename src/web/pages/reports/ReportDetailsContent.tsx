@@ -24,7 +24,6 @@ import {
 } from 'web/components/loading/Reload';
 import Section from 'web/components/section/Section';
 import SectionHeader from 'web/components/section/SectionHeader';
-import StatusCellContent from 'web/pages/reports/StatusCellContent';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
 import TabList from 'web/components/tab/TabList';
@@ -39,6 +38,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import ReportDetailsPageToolBar from 'web/pages/reports/details/ReportDetailsPageToolBar';
 import {buildReportTabDefinitions} from 'web/pages/reports/details/ReportTabDefinitions';
 import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
+import StatusCellContent from 'web/pages/reports/StatusCellContent';
 
 interface ThresholdConfig {
   showInitialLoading: boolean;
