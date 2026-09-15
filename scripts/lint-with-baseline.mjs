@@ -16,10 +16,15 @@ const oxlintArgs = ['--format', 'json', 'src', 'e2e'];
 const sourceLines = new Map();
 
 const update = process.argv.includes('--update');
+const fix = process.argv.includes('--fix');
 
 const runOxlint = () =>
   new Promise((resolvePromise, reject) => {
-    const child = spawn(oxlintPath, oxlintArgs, {cwd: root});
+    const child = spawn(
+      oxlintPath,
+      [...oxlintArgs, ...(fix ? ['--fix'] : [])],
+      {cwd: root},
+    );
     let stdout = '';
     let stderr = '';
 
