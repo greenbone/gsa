@@ -41,7 +41,7 @@ export const ToolBarIcons = () => {
 const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
   return (
-    <React.Fragment>
+    <>
       <PageTitle title={_('Results')} />
       <EntitiesPage
         {...props}
@@ -60,7 +60,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
         toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
       />
-    </React.Fragment>
+    </>
   );
 };
 

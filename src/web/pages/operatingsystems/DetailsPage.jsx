@@ -211,7 +211,7 @@ const Page = ({
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle
                   title={_('Operating System: {{name}}', {name: entity.name})}
                 />
@@ -252,7 +252,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>

@@ -125,7 +125,7 @@ const LdapAuthentication = () => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <PageTitle title={_('LDAP per-User Authentication')} />
       <Layout flex="column">
         {hasLdapSupport && <ToolBarIcons onOpenDialogClick={openDialog} />}
@@ -197,7 +197,7 @@ const LdapAuthentication = () => {
           onSave={handleSaveSettings}
         />
       )}
-    </React.Fragment>
+    </>
   );
 };
 

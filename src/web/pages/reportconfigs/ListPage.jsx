@@ -63,7 +63,7 @@ const ReportConfigsPage = ({onChanged, onDownloaded, onError, ...props}) => {
     >
       {({clone, delete: delete_func, download, edit, create: create_func}) => {
         return (
-          <React.Fragment>
+          <>
             <PageTitle title={_('Report Configs')} />
             <EntitiesPage
               {...props}
@@ -81,7 +81,7 @@ const ReportConfigsPage = ({onChanged, onDownloaded, onError, ...props}) => {
               onReportConfigDownloadClick={download}
               onReportConfigEditClick={edit}
             />
-          </React.Fragment>
+          </>
         );
       }}
     </ReportConfigComponent>

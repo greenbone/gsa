@@ -80,7 +80,7 @@ const Page = ({
         download,
         edit,
       }) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Hosts')} />
           <EntitiesPage
             {...props}
@@ -110,7 +110,7 @@ const Page = ({
             onTargetCreateFromHostClick={createtargetfromhost}
             onTargetCreateFromSelection={createtargetfromselection}
           />
-        </React.Fragment>
+        </>
       )}
     </HostComponent>
   );

@@ -22,7 +22,7 @@ const UseFormValuesTestComponent = () => {
   const [values, handleValueChange] = useFormValues({foo: 'bar'});
 
   return (
-    <React.Fragment>
+    <>
       <span data-testid="renderCount">{ref.current}</span>
       <span data-testid="fooValue">{values.foo}</span>
       <button
@@ -34,7 +34,7 @@ const UseFormValuesTestComponent = () => {
         value={values.foo}
         onChange={handleValueChange as (value: string, name?: string) => void}
       />
-    </React.Fragment>
+    </>
   );
 };
 

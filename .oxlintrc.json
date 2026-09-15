@@ -46,6 +46,7 @@
     "import/newline-after-import": ["warn", {"considerComments": true}],
     "react/exhaustive-deps": "warn",
     "react/immutability": "error",
+    "react/jsx-fragments": ["warn", "syntax"],
     "react/jsx-key": "warn",
     "react/jsx-no-duplicate-props": "error",
     "react/jsx-props-no-spread-multi": "error",

@@ -57,7 +57,7 @@ const FiltersPage = ({onChanged, onDownloaded, onError, ...props}) => {
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Filters')} />
 
           <EntitiesPage
@@ -78,7 +78,7 @@ const FiltersPage = ({onChanged, onDownloaded, onError, ...props}) => {
             onFilterEditClick={edit}
             onFilterSaveClick={save}
           />
-        </React.Fragment>
+        </>
       )}
     </FilterComponent>
   );

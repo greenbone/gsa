@@ -194,7 +194,7 @@ const CertBundAdvPage = ({
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle
                   title={_('CERT-Bund Advisory: {{title}}', {
                     title: entity.title,
@@ -225,7 +225,7 @@ const CertBundAdvPage = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>

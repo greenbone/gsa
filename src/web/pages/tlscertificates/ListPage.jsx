@@ -56,7 +56,7 @@ const Page = ({
       onDownloaded={onDownloaded}
     >
       {({delete: delete_func, download, exportFunc}) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('TLS Certificates')} />
           <EntitiesPage
             {...props}
@@ -84,7 +84,7 @@ const Page = ({
             onTlsCertificateDownloadClick={download}
             onTlsCertificateExportClick={exportFunc}
           />
-        </React.Fragment>
+        </>
       )}
     </TlsCertificateComponent>
   );
