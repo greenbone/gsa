@@ -59,7 +59,11 @@ interface ParamLabels {
   [key: string]: string | undefined;
 }
 type ParamType =
-  'report_format_list' | 'multi_selection' | 'integer' | 'boolean' | 'text';
+  | 'report_format_list'
+  | 'multi_selection'
+  | 'integer'
+  | 'boolean'
+  | 'text';
 
 interface ReportFormatElement extends ModelElement {
   alerts?: {

@@ -39,30 +39,6 @@
       "fingerprint": "src/gmp/__tests__/log.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|33|expect(isFunction(newLogger.setLevel)).toEqual(true);"
     },
     {
-      "filename": "src/gmp/commands/__tests__/audit.test.ts",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 24,
-        "column": 1,
-        "offset": 571
-      },
-      "sourceLine": "import logger, {type LogLevel} from 'gmp/log';",
-      "fingerprint": "src/gmp/commands/__tests__/audit.test.ts|gsa(import-order)|Imports should be ordered according to the project convention.|1|import logger, {type LogLevel} from 'gmp/log';"
-    },
-    {
-      "filename": "src/gmp/commands/__tests__/permissions.test.ts",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 16,
-        "column": 1,
-        "offset": 415
-      },
-      "sourceLine": "import Model from 'gmp/models/model';",
-      "fingerprint": "src/gmp/commands/__tests__/permissions.test.ts|gsa(import-order)|Imports should be ordered according to the project convention.|1|import Model from 'gmp/models/model';"
-    },
-    {
       "filename": "src/gmp/commands/__tests__/task.test.ts",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
@@ -85,18 +61,6 @@
       },
       "sourceLine": "expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {",
       "fingerprint": "src/gmp/commands/__tests__/task.test.ts|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|expect(fakeHttp.request).toHaveBeenNthCalledWith(2, 'post', {"
-    },
-    {
-      "filename": "src/gmp/commands/__tests__/web-application-targets.test.ts",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 8,
-        "column": 1,
-        "offset": 233
-      },
-      "sourceLine": "import {",
-      "fingerprint": "src/gmp/commands/__tests__/web-application-targets.test.ts|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {"
     },
     {
       "filename": "src/gmp/commands/entities.ts",
@@ -361,18 +325,6 @@
       },
       "sourceLine": "`${TYPE_NAMES[type]}`;",
       "fingerprint": "src/gmp/models/credential.ts|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|6|`${TYPE_NAMES[type]}`;"
-    },
-    {
-      "filename": "src/gmp/models/date.ts",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 19,
-        "column": 1,
-        "offset": 711
-      },
-      "sourceLine": "import 'dayjs/locale/af';",
-      "fingerprint": "src/gmp/models/date.ts|gsa(import-order)|Imports should be ordered according to the project convention.|1|import 'dayjs/locale/af';"
     },
     {
       "filename": "src/gmp/models/event.ts",
@@ -651,18 +603,6 @@
       "fingerprint": "src/web/components/bar/SeverityBar.tsx|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|16|title = `${_NA}`;"
     },
     {
-      "filename": "src/web/components/chart/__tests__/HostsTopologyChart.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 126
-      },
-      "sourceLine": "import {describe, expect, test} from '@gsa/testing';",
-      "fingerprint": "src/web/components/chart/__tests__/HostsTopologyChart.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test} from '@gsa/testing';"
-    },
-    {
       "filename": "src/web/components/chart/BarChart.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
@@ -685,18 +625,6 @@
       },
       "sourceLine": "data = [],",
       "fingerprint": "src/web/components/chart/BarChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `TData[]` (not nullish). This default assignment will never be used.|10|data = [],"
-    },
-    {
-      "filename": "src/web/components/chart/base/__tests__/Label.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 132
-      },
-      "sourceLine": "import {describe, expect, test} from '@gsa/testing';",
-      "fingerprint": "src/web/components/chart/base/__tests__/Label.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test} from '@gsa/testing';"
     },
     {
       "filename": "src/web/components/chart/base/ToolTip.tsx",
@@ -927,42 +855,6 @@
       "fingerprint": "src/web/components/chart/WordCloudChart.tsx|typescript(require-array-sort-compare)|Require 'compare' argument.|16|let values = data.map(d => d.value).sort();"
     },
     {
-      "filename": "src/web/components/dashboard/__tests__/Dashboard.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 131
-      },
-      "sourceLine": "import {beforeEach, describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/components/dashboard/__tests__/Dashboard.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {beforeEach, describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/components/dashboard/__tests__/DashboardView.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 131
-      },
-      "sourceLine": "import {beforeEach, describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/components/dashboard/__tests__/DashboardView.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {beforeEach, describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/components/dashboard/DashboardView.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 37,
-        "column": 1,
-        "offset": 1226
-      },
-      "sourceLine": "import {",
-      "fingerprint": "src/web/components/dashboard/DashboardView.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {"
-    },
-    {
       "filename": "src/web/components/dashboard/DashboardView.tsx",
       "code": "react(refs)",
       "message": "Cannot access refs during render",
@@ -1096,18 +988,6 @@
     },
     {
       "filename": "src/web/components/dashboard/display/__tests__/DataDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 20,
-        "column": 1,
-        "offset": 459
-      },
-      "sourceLine": "import {",
-      "fingerprint": "src/web/components/dashboard/display/__tests__/DataDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/__tests__/DataDisplay.test.tsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
@@ -1117,18 +997,6 @@
       },
       "sourceLine": "const createObjectURL = window.URL.createObjectURL as ReturnType<",
       "fingerprint": "src/web/components/dashboard/display/__tests__/DataDisplay.test.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|40|const createObjectURL = window.URL.createObjectURL as ReturnType<"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 20,
-        "column": 1,
-        "offset": 687
-      },
-      "sourceLine": "import {",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {"
     },
     {
       "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
@@ -1201,30 +1069,6 @@
       },
       "sourceLine": "onDownloadSvgClick: this.handleDownloadSvg,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadSvgClick: this.handleDownloadSvg,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplayIcons.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 239
-      },
-      "sourceLine": "import {type DisplaySetStateFunc} from 'web/components/dashboard/display';",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplayIcons.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {type DisplaySetStateFunc} from 'web/components/dashboard/display';"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataTableDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 344
-      },
-      "sourceLine": "import {type DisplayState} from 'web/components/dashboard/display';",
-      "fingerprint": "src/web/components/dashboard/display/DataTableDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {type DisplayState} from 'web/components/dashboard/display';"
     },
     {
       "filename": "src/web/components/dashboard/display/DataTableDisplay.tsx",
@@ -1323,42 +1167,6 @@
       "fingerprint": "src/web/components/dialog/SaveDialog.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|31|if (isFunction(promise?.then)) {"
     },
     {
-      "filename": "src/web/components/form/__tests__/Select.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 131
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/components/form/__tests__/Select.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/components/form/__tests__/useFormValidation.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 138
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/components/form/__tests__/useFormValidation.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/components/form/__tests__/useFormValues.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 136
-      },
-      "sourceLine": "import {describe, test, expect} from '@gsa/testing';",
-      "fingerprint": "src/web/components/form/__tests__/useFormValues.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect} from '@gsa/testing';"
-    },
-    {
       "filename": "src/web/components/form/__tests__/useFormValues.test.tsx",
       "code": "react(refs)",
       "message": "Cannot access refs during render",
@@ -1408,18 +1216,6 @@
     },
     {
       "filename": "src/web/components/icon/Icon.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 8,
-        "column": 1,
-        "offset": 186
-      },
-      "sourceLine": "import styled from 'styled-components';",
-      "fingerprint": "src/web/components/icon/Icon.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import styled from 'styled-components';"
-    },
-    {
-      "filename": "src/web/components/icon/Icon.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
@@ -1429,42 +1225,6 @@
       },
       "sourceLine": "void loadImage();",
       "fingerprint": "src/web/components/icon/Icon.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|10|void loadImage();"
-    },
-    {
-      "filename": "src/web/components/icon/index.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 91,
-        "column": 1,
-        "offset": 1589
-      },
-      "sourceLine": "import DeltaSecond from 'web/components/icon/svg/delta_second.svg?react';",
-      "fingerprint": "src/web/components/icon/index.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import DeltaSecond from 'web/components/icon/svg/delta_second.svg?react';"
-    },
-    {
-      "filename": "src/web/components/icon/index.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 103,
-        "column": 1,
-        "offset": 2346
-      },
-      "sourceLine": "import NewNote from 'web/components/icon/svg/new_note.svg?react';",
-      "fingerprint": "src/web/components/icon/index.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import NewNote from 'web/components/icon/svg/new_note.svg?react';"
-    },
-    {
-      "filename": "src/web/components/icon/index.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 115,
-        "column": 1,
-        "offset": 3147
-      },
-      "sourceLine": "import ReportFormat from 'web/components/icon/svg/report_format.svg?react';",
-      "fingerprint": "src/web/components/icon/index.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import ReportFormat from 'web/components/icon/svg/report_format.svg?react';"
     },
     {
       "filename": "src/web/components/layout/AutoSize.tsx",
@@ -1633,18 +1393,6 @@
       },
       "sourceLine": "isDefined(filter) ? this.handleResetClick : undefined",
       "fingerprint": "src/web/components/powerfilter/PowerFilter.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|isDefined(filter) ? this.handleResetClick : undefined"
-    },
-    {
-      "filename": "src/web/components/provider/__tests__/SubscriptionProvider.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 126
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/components/provider/__tests__/SubscriptionProvider.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
     },
     {
       "filename": "src/web/components/provider/SubscriptionProvider.tsx",
@@ -2223,30 +1971,6 @@
       "fingerprint": "src/web/entity/Tags.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|41|onClick={this.handleEditTag}"
     },
     {
-      "filename": "src/web/hooks/__tests__/useFilterSortBy.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 131
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/hooks/__tests__/useFilterSortBy.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/hooks/__tests__/useInstanceVariable.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 131
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/hooks/__tests__/useInstanceVariable.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
-    },
-    {
       "filename": "src/web/hooks/__tests__/usePageFilter.test.tsx",
       "code": "typescript(no-base-to-string)",
       "message": "'expectedFilter' will use Object's default stringification format ('[object Object]') when stringified.",
@@ -2293,42 +2017,6 @@
       },
       "sourceLine": "expect(result.current[0].toString()).toEqual(expectedFilter.toString());",
       "fingerprint": "src/web/hooks/__tests__/usePageFilter.test.tsx|typescript(no-base-to-string)|'result.current[0]' will use Object's default stringification format ('[object Object]') when stringified.|14|expect(result.current[0].toString()).toEqual(expectedFilter.toString());"
-    },
-    {
-      "filename": "src/web/hooks/__tests__/usePreviousValue.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 131
-      },
-      "sourceLine": "import {describe, test, expect} from '@gsa/testing';",
-      "fingerprint": "src/web/hooks/__tests__/usePreviousValue.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/hooks/__tests__/useShallowEqualSelector.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 134
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/hooks/__tests__/useShallowEqualSelector.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/hooks/__tests__/useTiming.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 131
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/hooks/__tests__/useTiming.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
     },
     {
       "filename": "src/web/hooks/useInstanceVariable.ts",
@@ -2583,90 +2271,6 @@
       "fingerprint": "src/web/pages/audits/AuditComponent.jsx|typescript(no-floating-promises)|Promises must be awaited, add void operator to ignore.|7|gmp.audit.stop(audit).then(onStopped, onStopError);"
     },
     {
-      "filename": "src/web/pages/certbund/dashboard/__tests__/CertBundCreatedDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/certbund/dashboard/__tests__/CertBundCreatedDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/certbund/dashboard/__tests__/CertBundCreatedDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/certbund/dashboard/__tests__/CertBundCreatedDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
-      "filename": "src/web/pages/certbund/dashboard/__tests__/CertBundCvssDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/certbund/dashboard/__tests__/CertBundCvssDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/certbund/dashboard/__tests__/CertBundCvssDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/certbund/dashboard/__tests__/CertBundCvssDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
-      "filename": "src/web/pages/certbund/dashboard/__tests__/CertBundLoaders.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/certbund/dashboard/__tests__/CertBundLoaders.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/certbund/dashboard/__tests__/CertBundSeverityClassDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/certbund/dashboard/__tests__/CertBundSeverityClassDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/certbund/dashboard/__tests__/CertBundSeverityClassDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/certbund/dashboard/__tests__/CertBundSeverityClassDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
       "filename": "src/web/pages/container-image-targets/ContainerImageTargetsListPage.tsx",
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `OciImageTarget[]` (not nullish). This default assignment will never be used.",
@@ -2677,90 +2281,6 @@
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/container-image-targets/ContainerImageTargetsListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `OciImageTarget[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
-    },
-    {
-      "filename": "src/web/pages/cpes/dashboard/__tests__/CpeCreatedDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/cpes/dashboard/__tests__/CpeCreatedDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/cpes/dashboard/__tests__/CpeCreatedDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/cpes/dashboard/__tests__/CpeCreatedDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
-      "filename": "src/web/pages/cpes/dashboard/__tests__/CpeCvssDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/cpes/dashboard/__tests__/CpeCvssDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/cpes/dashboard/__tests__/CpeCvssDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/cpes/dashboard/__tests__/CpeCvssDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
-      "filename": "src/web/pages/cpes/dashboard/__tests__/CpeLoaders.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/cpes/dashboard/__tests__/CpeLoaders.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/cpes/dashboard/__tests__/CpeSeverityClassDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/cpes/dashboard/__tests__/CpeSeverityClassDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/cpes/dashboard/__tests__/CpeSeverityClassDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/cpes/dashboard/__tests__/CpeSeverityClassDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
     },
     {
       "filename": "src/web/pages/credentials/CredentialDetails.tsx",
@@ -2799,90 +2319,6 @@
       "fingerprint": "src/web/pages/credentials/CredentialDetails.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.|12|kdcs = [],"
     },
     {
-      "filename": "src/web/pages/cves/dashboard/__tests__/CveCreatedDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/cves/dashboard/__tests__/CveCreatedDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/cves/dashboard/__tests__/CveCreatedDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/cves/dashboard/__tests__/CveCreatedDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
-      "filename": "src/web/pages/cves/dashboard/__tests__/CveCvssDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/cves/dashboard/__tests__/CveCvssDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/cves/dashboard/__tests__/CveCvssDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/cves/dashboard/__tests__/CveCvssDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
-      "filename": "src/web/pages/cves/dashboard/__tests__/CveLoaders.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/cves/dashboard/__tests__/CveLoaders.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/cves/dashboard/__tests__/CveSeverityClassDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/cves/dashboard/__tests__/CveSeverityClassDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/cves/dashboard/__tests__/CveSeverityClassDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/cves/dashboard/__tests__/CveSeverityClassDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
       "filename": "src/web/pages/cves/Details.jsx",
       "code": "typescript(restrict-template-expressions)",
       "message": "Invalid type used in template literal expression.",
@@ -2893,90 +2329,6 @@
       },
       "sourceLine": "<TableData>{`${title}`}</TableData>",
       "fingerprint": "src/web/pages/cves/Details.jsx|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|34|<TableData>{`${title}`}</TableData>"
-    },
-    {
-      "filename": "src/web/pages/dfncert/dashboard/__tests__/DfnCertCreatedDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/dfncert/dashboard/__tests__/DfnCertCreatedDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/dfncert/dashboard/__tests__/DfnCertCreatedDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/dfncert/dashboard/__tests__/DfnCertCreatedDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
-      "filename": "src/web/pages/dfncert/dashboard/__tests__/DfnCertCvssDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/dfncert/dashboard/__tests__/DfnCertCvssDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/dfncert/dashboard/__tests__/DfnCertCvssDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/dfncert/dashboard/__tests__/DfnCertCvssDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
-    },
-    {
-      "filename": "src/web/pages/dfncert/dashboard/__tests__/DfnCertLoaders.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/dfncert/dashboard/__tests__/DfnCertLoaders.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/dfncert/dashboard/__tests__/DfnCertSeverityClassDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/dfncert/dashboard/__tests__/DfnCertSeverityClassDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/dfncert/dashboard/__tests__/DfnCertSeverityClassDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 370
-      },
-      "sourceLine": "import {getDisplay} from 'web/components/dashboard/registry';",
-      "fingerprint": "src/web/pages/dfncert/dashboard/__tests__/DfnCertSeverityClassDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {getDisplay} from 'web/components/dashboard/registry';"
     },
     {
       "filename": "src/web/pages/extras/cvssV4/Metrics.jsx",
@@ -3027,18 +2379,6 @@
       "fingerprint": "src/web/pages/groups/GroupComponent.jsx|typescript(no-floating-promises)|Promises must be awaited, add void operator to ignore.|5|gmp.users.getAll().then(response => {"
     },
     {
-      "filename": "src/web/pages/hosts/__tests__/Dialog.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 126
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/hosts/__tests__/Dialog.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
-    },
-    {
       "filename": "src/web/pages/hosts/__tests__/HostComponent.test.tsx",
       "code": "typescript(no-redundant-type-constituents)",
       "message": "\"\\\"SELECTION_FILTER\\\"\" | \"\\\"SELECTION_PAGE_CONTENTS\\\"\" | \"\\\"SELECTION_USER\\\"\" is overridden by string in this union type.",
@@ -3051,126 +2391,6 @@
       "fingerprint": "src/web/pages/hosts/__tests__/HostComponent.test.tsx|typescript(no-redundant-type-constituents)|\"\\\"SELECTION_FILTER\\\"\" | \"\\\"SELECTION_PAGE_CONTENTS\\\"\" | \"\\\"SELECTION_USER\\\"\" is overridden by string in this union type.|18|selectionType: keyof typeof SelectionType | string;"
     },
     {
-      "filename": "src/web/pages/hosts/dashboard/__tests__/HostModifiedDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/hosts/dashboard/__tests__/HostModifiedDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/__tests__/HostModifiedHighDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/hosts/dashboard/__tests__/HostModifiedHighDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/__tests__/HostsCvssDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/hosts/dashboard/__tests__/HostsCvssDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/__tests__/HostSeverityClassDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/hosts/dashboard/__tests__/HostSeverityClassDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/__tests__/HostsLoaders.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 20,
-        "column": 1,
-        "offset": 536
-      },
-      "sourceLine": "import {",
-      "fingerprint": "src/web/pages/hosts/dashboard/__tests__/HostsLoaders.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/__tests__/HostsLoaders.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/hosts/dashboard/__tests__/HostsLoaders.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/__tests__/HostsTopologyDisplay.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/hosts/dashboard/__tests__/HostsTopologyDisplay.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostModifiedDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 29,
-        "column": 1,
-        "offset": 1147
-      },
-      "sourceLine": "import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostModifiedDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostModifiedDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 28,
-        "column": 1,
-        "offset": 1061
-      },
-      "sourceLine": "import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostModifiedDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostModifiedHighDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 28,
-        "column": 1,
-        "offset": 1061
-      },
-      "sourceLine": "import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostModifiedHighDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';"
-    },
-    {
       "filename": "src/web/pages/hosts/dashboard/HostsLoaders.tsx",
       "code": "eslint(no-unused-vars)",
       "message": "Identifier '_' is imported but never used.",
@@ -3181,90 +2401,6 @@
       },
       "sourceLine": "import _ from 'gmp/locale';",
       "fingerprint": "src/web/pages/hosts/dashboard/HostsLoaders.tsx|eslint(no-unused-vars)|Identifier '_' is imported but never used.|8|import _ from 'gmp/locale';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostsTopologyDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 8,
-        "column": 1,
-        "offset": 179
-      },
-      "sourceLine": "import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostsTopologyDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostsTopologyDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 22,
-        "column": 1,
-        "offset": 822
-      },
-      "sourceLine": "import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostsTopologyDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostsTopologyDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 21,
-        "column": 1,
-        "offset": 736
-      },
-      "sourceLine": "import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostsTopologyDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostsVulnScoreDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 26,
-        "column": 1,
-        "offset": 1058
-      },
-      "sourceLine": "import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostsVulnScoreDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostsVulnScoreDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 8,
-        "column": 1,
-        "offset": 177
-      },
-      "sourceLine": "import {useNavigate} from 'react-router';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostsVulnScoreDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {useNavigate} from 'react-router';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostsVulnScoreDisplay.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 25,
-        "column": 1,
-        "offset": 972
-      },
-      "sourceLine": "import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostsVulnScoreDisplay.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/index.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 17,
-        "column": 1,
-        "offset": 522
-      },
-      "sourceLine": "import {",
-      "fingerprint": "src/web/pages/hosts/dashboard/index.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {"
     },
     {
       "filename": "src/web/pages/hosts/Identifiers.jsx",
@@ -3289,18 +2425,6 @@
       },
       "sourceLine": "void loadLdapAuthSettings();",
       "fingerprint": "src/web/pages/ldap/LdapPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|10|void loadLdapAuthSettings();"
-    },
-    {
-      "filename": "src/web/pages/login/notifications/__tests__/CommunityFeedUsageNotification.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 8,
-        "column": 1,
-        "offset": 232
-      },
-      "sourceLine": "import {screen, rendererWith, wait} from 'web/testing';",
-      "fingerprint": "src/web/pages/login/notifications/__tests__/CommunityFeedUsageNotification.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {screen, rendererWith, wait} from 'web/testing';"
     },
     {
       "filename": "src/web/pages/notes/dashboard/ActiveDaysDisplay.jsx",
@@ -3832,18 +2956,6 @@
     },
     {
       "filename": "src/web/pages/reports/__tests__/AuditReportFilterDialog.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 126
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/reports/__tests__/AuditReportFilterDialog.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/reports/__tests__/AuditReportFilterDialog.test.tsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
@@ -3865,42 +2977,6 @@
       },
       "sourceLine": "const {getByTestId, getAllByRole} = within(filterGroup);",
       "fingerprint": "src/web/pages/reports/__tests__/AuditReportFilterDialog.test.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|25|const {getByTestId, getAllByRole} = within(filterGroup);"
-    },
-    {
-      "filename": "src/web/pages/reports/__tests__/AuditReportRow.test.jsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 126
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/reports/__tests__/AuditReportRow.test.jsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/reports/__tests__/AuditReportsListPage.test.jsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 126
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/reports/__tests__/AuditReportsListPage.test.jsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
-    },
-    {
-      "filename": "src/web/pages/reports/__tests__/ReportDetailsFilterDialog.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 126
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/reports/__tests__/ReportDetailsFilterDialog.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
     },
     {
       "filename": "src/web/pages/reports/__tests__/ReportDetailsFilterDialog.test.tsx",
@@ -4033,18 +3109,6 @@
       },
       "sourceLine": "onChange={this.handleDeltaStatesChange}",
       "fingerprint": "src/web/pages/reports/DeltaResultsFilterGroup.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|28|onChange={this.handleDeltaStatesChange}"
-    },
-    {
-      "filename": "src/web/pages/reports/details/__tests__/ResultsTab.test.jsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 126
-      },
-      "sourceLine": "import {describe, test, expect, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/reports/details/__tests__/ResultsTab.test.jsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, test, expect, testing} from '@gsa/testing';"
     },
     {
       "filename": "src/web/pages/reports/details/AlertActions.jsx",
@@ -4585,18 +3649,6 @@
       },
       "sourceLine": "endOpen = false,",
       "fingerprint": "src/web/pages/schedules/ScheduleDialog.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property is not nullish. This default assignment will never be used.|15|endOpen = false,"
-    },
-    {
-      "filename": "src/web/pages/start/NewDashboardDialog.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 16,
-        "column": 1,
-        "offset": 835
-      },
-      "sourceLine": "import {HostsModifiedDisplay} from 'web/pages/hosts/dashboard/HostModifiedDisplay';",
-      "fingerprint": "src/web/pages/start/NewDashboardDialog.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {HostsModifiedDisplay} from 'web/pages/hosts/dashboard/HostModifiedDisplay';"
     },
     {
       "filename": "src/web/pages/start/StartPage.tsx",
@@ -5247,18 +4299,6 @@
       "fingerprint": "src/web/pages/users/UsersDialog.tsx|typescript(no-misused-spread)|Using the spread operator on class instances will lose their class prototype.|5|...user,"
     },
     {
-      "filename": "src/web/pages/vulnerabilities/dashboard/__tests__/VulnerabilitiesLoaders.test.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 140
-      },
-      "sourceLine": "import {describe, expect, test, testing} from '@gsa/testing';",
-      "fingerprint": "src/web/pages/vulnerabilities/dashboard/__tests__/VulnerabilitiesLoaders.test.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {describe, expect, test, testing} from '@gsa/testing';"
-    },
-    {
       "filename": "src/web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsDisplay.tsx",
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `HostsFilterValue` (not nullish). This default assignment will never be used.",
@@ -5295,30 +4335,6 @@
       "fingerprint": "src/web/pages/web-application-targets/WebApplicationTargetsListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `WebApplicationTarget[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
     },
     {
-      "filename": "src/web/setup-tests.ts",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 10,
-        "column": 1,
-        "offset": 252
-      },
-      "sourceLine": "import '@testing-library/jest-dom/vitest';",
-      "fingerprint": "src/web/setup-tests.ts|gsa(import-order)|Imports should be ordered according to the project convention.|1|import '@testing-library/jest-dom/vitest';"
-    },
-    {
-      "filename": "src/web/setup-tests.ts",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 13,
-        "column": 1,
-        "offset": 381
-      },
-      "sourceLine": "import * as ResizeObserverModule from 'resize-observer-polyfill';",
-      "fingerprint": "src/web/setup-tests.ts|gsa(import-order)|Imports should be ordered according to the project convention.|1|import * as ResizeObserverModule from 'resize-observer-polyfill';"
-    },
-    {
       "filename": "src/web/testing/custom-queries.ts",
       "code": "typescript(no-base-to-string)",
       "message": "'container' will use Object's default stringification format ('[object Object]') when stringified.",
@@ -5341,18 +4357,6 @@
       },
       "sourceLine": "`Unable to find checkboxes within: ${container}.`,",
       "fingerprint": "src/web/testing/custom-queries.ts|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|44|`Unable to find checkboxes within: ${container}.`,"
-    },
-    {
-      "filename": "src/web/testing/Render.tsx",
-      "code": "gsa(import-order)",
-      "message": "Imports should be ordered according to the project convention.",
-      "location": {
-        "line": 7,
-        "column": 1,
-        "offset": 126
-      },
-      "sourceLine": "import {afterEach} from '@gsa/testing';",
-      "fingerprint": "src/web/testing/Render.tsx|gsa(import-order)|Imports should be ordered according to the project convention.|1|import {afterEach} from '@gsa/testing';"
     },
     {
       "filename": "src/web/utils/compose.js",

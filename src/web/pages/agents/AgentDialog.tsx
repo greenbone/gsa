@@ -15,7 +15,6 @@ import Layout from 'web/components/layout/Layout';
 import Row from 'web/components/layout/Row';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
-
 import AgentConfigurationSection, {
   DEFAULT_CRON_EXPRESSION,
   DEFAULT_HEARTBEAT_INTERVAL,

@@ -4,12 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import WebApplicationTargetsCommand from 'gmp/commands/web-application-targets';
 import {
   createEntitiesResponse,
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
+import WebApplicationTargetsCommand from 'gmp/commands/web-application-targets';
 import WebApplicationTarget from 'gmp/models/web-application-target';
 
 describe('WebApplicationTargetsCommand tests', () => {

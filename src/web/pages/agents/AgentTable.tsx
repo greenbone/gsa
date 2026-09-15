@@ -6,7 +6,6 @@
 import {_l} from 'gmp/locale/lang';
 import type Agent from 'gmp/models/agent';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-
 import AgentTableFooter, {
   type AgentTableFooterProps,
 } from 'web/pages/agents/AgentTableFooter';

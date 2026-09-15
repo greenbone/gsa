@@ -4,27 +4,27 @@
  */
 
 import {type ReactNode} from 'react';
-import styled from 'styled-components';
 import {useNavigate} from 'react-router';
+import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
 import {DEFAULT_SEVERITY_RATING, type SeverityRating} from 'gmp/utils/severity';
 import BarChart from 'web/components/chart/BarChart';
+import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import useGmp from 'web/hooks/useGmp';
 import {
   HostsVulnScoreLoader,
   type VulnScoreData,
 } from 'web/pages/hosts/dashboard/HostsLoaders';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
-import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 

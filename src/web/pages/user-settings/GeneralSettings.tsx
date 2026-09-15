@@ -4,7 +4,6 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-
 import {
   DATE_TIME_CATEGORY,
   DATE_TIME_FORMAT_OPTIONS,
@@ -12,14 +11,12 @@ import {
 } from 'gmp/locale/date';
 import {NO_VALUE, parseYesNo, YES_VALUE, type YesNo} from 'gmp/parser';
 import {isEmpty} from 'gmp/utils/string';
-
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
 import Select, {type SelectItem} from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
-
 import StripedTable from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
@@ -30,11 +27,9 @@ import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
-
 import useTranslation from 'web/hooks/useTranslation';
 import useUserTimezone from 'web/hooks/useUserTimezone';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
-
 import {getLangNameByCode} from 'web/pages/user-settings/helper-functions';
 import MaintenanceWindowSettingRow from 'web/pages/user-settings/MaintenanceWindowSettingRow';
 import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';

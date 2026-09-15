@@ -6,7 +6,6 @@
 import {useEffect} from 'react';
 import {notifications} from '@mantine/notifications';
 import {showNotification} from '@greenbone/ui-lib';
-
 import date from 'gmp/models/date';
 import useSessionTimeout from 'web/hooks/useSessionTimeout';
 import useSessionTracker from 'web/hooks/useSessionTracker';

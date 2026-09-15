@@ -11,7 +11,8 @@ import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 export type ScanConfigTrend =
-  typeof SCANCONFIG_TREND_DYNAMIC | typeof SCANCONFIG_TREND_STATIC;
+  | typeof SCANCONFIG_TREND_DYNAMIC
+  | typeof SCANCONFIG_TREND_STATIC;
 
 export type ScanConfigUsageType = 'policy' | 'scan';
 

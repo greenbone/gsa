@@ -4,13 +4,13 @@
  */
 
 import {isFunction} from 'gmp/utils/identity';
+import {type DisplayState} from 'web/components/dashboard/display';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTable, {
   type DataTableProps,
 } from 'web/components/dashboard/display/DataTable';
-import {type DisplayState} from 'web/components/dashboard/display';
 
 type DataTableDisplayRenderProps<TTransformedData extends Array<unknown>> =
   DataTableProps<TTransformedData[number]> & {

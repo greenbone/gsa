@@ -5,7 +5,6 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
-
 import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/user';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';

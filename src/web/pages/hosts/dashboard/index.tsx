@@ -6,15 +6,6 @@
 import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
-  HostsCvssDisplay,
-  HostsCvssTableDisplay,
-} from 'web/pages/hosts/dashboard/HostsCvssDisplay';
-import HostsTopologyDisplay from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
-import {
-  HostsVulnScoreDisplay,
-  HostsVulnScoreTableDisplay,
-} from 'web/pages/hosts/dashboard/HostsVulnScoreDisplay';
-import {
   HostsModifiedDisplay,
   HostsModifiedTableDisplay,
 } from 'web/pages/hosts/dashboard/HostModifiedDisplay';
@@ -23,9 +14,18 @@ import {
   HostsModifiedHighTableDisplay,
 } from 'web/pages/hosts/dashboard/HostModifiedHighDisplay';
 import {
+  HostsCvssDisplay,
+  HostsCvssTableDisplay,
+} from 'web/pages/hosts/dashboard/HostsCvssDisplay';
+import {
   HostsSeverityClassDisplay,
   HostsSeverityClassTableDisplay,
 } from 'web/pages/hosts/dashboard/HostSeverityClassDisplay';
+import HostsTopologyDisplay from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
+import {
+  HostsVulnScoreDisplay,
+  HostsVulnScoreTableDisplay,
+} from 'web/pages/hosts/dashboard/HostsVulnScoreDisplay';
 
 interface HostsDashboardProps {
   filter?: FilterType;

@@ -10,6 +10,10 @@ import Logger from 'gmp/log';
 import {type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {
+  type DisplayProps,
+  type DisplayState,
+} from 'web/components/dashboard/display';
+import {
   getDisplay,
   type DisplayComponent,
 } from 'web/components/dashboard/registry';
@@ -34,10 +38,6 @@ import SortableGrid, {
 import {type SortableItemRenderProps} from 'web/components/sortable/SortableItem';
 import useLatestCallback from 'web/hooks/useLatestCallback';
 import useTranslation from 'web/hooks/useTranslation';
-import {
-  type DisplayProps,
-  type DisplayState,
-} from 'web/components/dashboard/display';
 
 /**
  * Props a display component receives that is rendered within the dashboard view.

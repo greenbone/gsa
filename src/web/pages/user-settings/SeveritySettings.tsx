@@ -4,19 +4,15 @@
  */
 
 import {useEffect, useState, useMemo} from 'react';
-
 import {NO_VALUE, parseYesNo, YES_VALUE, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-
 import Checkbox from 'web/components/form/Checkbox';
 import Spinner from 'web/components/form/Spinner';
-
 import StripedTable from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';

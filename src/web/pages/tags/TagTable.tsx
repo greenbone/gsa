@@ -4,12 +4,10 @@
  */
 
 import React from 'react';
-
 import {_l} from 'gmp/locale/lang';
 import type Tag from 'gmp/models/tag';
 import {typeName} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
-
 import DateTime from 'web/components/date/DateTime';
 import {DisableIcon, EnableIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';

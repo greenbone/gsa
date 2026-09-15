@@ -14,13 +14,13 @@ import {
 import {render, screen} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import {parseFilterTermsFromString} from 'gmp/models/filter/filter-term';
-import DataDisplay, {
-  type DataDisplayProps,
-} from 'web/components/dashboard/display/DataDisplay';
 import {
   type DisplayState,
   type DisplayProps,
 } from 'web/components/dashboard/display';
+import DataDisplay, {
+  type DataDisplayProps,
+} from 'web/components/dashboard/display/DataDisplay';
 
 interface TestData {
   value: string;

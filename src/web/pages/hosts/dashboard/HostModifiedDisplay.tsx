@@ -9,11 +9,13 @@ import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseInt, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import LineChart, {type LineData} from 'web/components/chart/LineChart';
+import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   createDateRangeFilter,
   totalCount,
@@ -25,8 +27,6 @@ import {
 } from 'web/pages/hosts/dashboard/HostsLoaders';
 import Theme from 'web/utils/theme';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 
 type HostModifiedDataPoint = LineData;
 

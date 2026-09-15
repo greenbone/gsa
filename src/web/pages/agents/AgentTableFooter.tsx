@@ -19,7 +19,10 @@ import useTranslation from 'web/hooks/useTranslation';
 import {type SelectionTypeType} from 'web/utils/selection-type';
 
 type AgentBulkAction =
-  'authorize' | 'revoke' | 'enableUpdateToLatest' | 'disableUpdateToLatest';
+  | 'authorize'
+  | 'revoke'
+  | 'enableUpdateToLatest'
+  | 'disableUpdateToLatest';
 
 interface DialogConfig {
   title: string;

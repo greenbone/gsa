@@ -4,22 +4,22 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import type Host from 'gmp/models/host';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
+import type Host from 'gmp/models/host';
 import {isDefined} from 'gmp/utils/identity';
 import HostsTopologyChart, {
   type HostsTopologyChartHost,
   type HostsTopologyChartData,
   type HostsTopologyChartLink,
 } from 'web/components/chart/HostsTopologyChart';
+import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
+import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import useGmp from 'web/hooks/useGmp';
 import {HostsTopologyLoader} from 'web/pages/hosts/dashboard/HostsLoaders';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 
 type HostsTopologyDataDisplayProps = DataDisplayProps<
   Host[],

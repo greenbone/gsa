@@ -15,7 +15,9 @@ interface UseGetResultsParams {
   filter?: FilterType;
   staleTime?: number;
   refetchInterval?:
-    number | false | RefetchIntervalFn<UseGetEntitiesReturn<Result>>;
+    | number
+    | false
+    | RefetchIntervalFn<UseGetEntitiesReturn<Result>>;
 }
 
 /**

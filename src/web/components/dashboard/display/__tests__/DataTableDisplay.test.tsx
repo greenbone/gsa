@@ -5,7 +5,6 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, screen} from 'web/testing';
-
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 
 interface TestData {

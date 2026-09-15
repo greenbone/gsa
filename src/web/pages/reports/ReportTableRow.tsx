@@ -29,12 +29,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import {AgentIdTableData} from 'web/pages/agents/components/AgentIdColumn';
 import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
 
-interface ReportActionsProps extends WithEntitiesActionsComponentProps<Report> {
-  selectedDeltaReport?: Report;
-  onReportDeleteClick?: (report: Report) => Promise<void>;
-  onReportDeltaSelect?: (report: Report) => void;
-}
-
 export interface ReportTableRowProps
   extends
     WithEntitiesActionsProps<Report, ReportActionsProps>,
@@ -42,6 +36,12 @@ export interface ReportTableRowProps
   actionsComponent?: React.ComponentType<ReportActionsProps>;
   links?: boolean;
   tasks?: Task[];
+}
+
+interface ReportActionsProps extends WithEntitiesActionsComponentProps<Report> {
+  selectedDeltaReport?: Report;
+  onReportDeleteClick?: (report: Report) => Promise<void>;
+  onReportDeltaSelect?: (report: Report) => void;
 }
 
 const ReportActions = withEntitiesActions(

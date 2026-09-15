@@ -4,13 +4,13 @@
  */
 
 import {_} from 'gmp/locale/lang';
+import {type DisplaySetStateFunc} from 'web/components/dashboard/display';
 import {
   DownloadSvgIcon,
   DownloadCsvIcon,
   FilterIcon,
   LegendIcon,
 } from 'web/components/icon';
-import {type DisplaySetStateFunc} from 'web/components/dashboard/display';
 
 interface DataDisplayIconsState {
   showLegend?: boolean;

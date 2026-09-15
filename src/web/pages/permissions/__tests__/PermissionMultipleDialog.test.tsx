@@ -10,7 +10,6 @@ import {
   fireEvent,
   rendererWith,
 } from 'web/testing';
-
 import Group from 'gmp/models/group';
 import Model from 'gmp/models/model';
 import Role from 'gmp/models/role';

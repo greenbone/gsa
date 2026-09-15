@@ -12,8 +12,8 @@ import {
   createEntitiesResponse,
   createActionResultResponse,
 } from 'gmp/commands/testing';
-import Permission from 'gmp/models/permission';
 import Model from 'gmp/models/model';
+import Permission from 'gmp/models/permission';
 
 describe('PermissionsCommand tests', () => {
   test('should fetch permissions with default params', async () => {

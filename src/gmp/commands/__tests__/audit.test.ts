@@ -12,6 +12,7 @@ import {
   createHttpMany,
   createHttp,
 } from 'gmp/commands/testing';
+import logger, {type LogLevel} from 'gmp/log';
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -21,7 +22,6 @@ import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   AUTO_DELETE_KEEP,
 } from 'gmp/models/task';
-import logger, {type LogLevel} from 'gmp/log';
 
 let logLevel: LogLevel;
 

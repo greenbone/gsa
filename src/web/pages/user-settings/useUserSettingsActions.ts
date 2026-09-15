@@ -6,9 +6,7 @@
 import {useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 import {ALL_FILTER} from 'gmp/models/filter';
-
 import useGmp from 'web/hooks/useGmp';
-
 import {
   loadEntity as loadAlertAction,
   loadEntities as loadAlertsAction,
