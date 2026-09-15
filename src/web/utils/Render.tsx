@@ -120,11 +120,7 @@ export const renderComponent = <TProps extends {}>(
 ) => (Component ? <Component {...props} /> : null);
 
 export const renderChildren = (children: React.ReactNode) =>
-  React.Children.count(children) > 1 ? (
-    <React.Fragment>{children}</React.Fragment>
-  ) : (
-    children
-  );
+  React.Children.count(children) > 1 ? <>{children}</> : children;
 
 export const na = (value: string) => {
   return isEmpty(value) ? _('N/A') : value;

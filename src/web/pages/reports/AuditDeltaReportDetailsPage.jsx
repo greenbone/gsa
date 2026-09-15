@@ -351,7 +351,7 @@ const AuditDeltaReportDetails = props => {
   const {report} = entity || {};
 
   return (
-    <React.Fragment>
+    <>
       <TargetComponent onSaveError={handleError}>
         {({edit}) => (
           <DeltaReportDetailsContent
@@ -411,7 +411,7 @@ const AuditDeltaReportDetails = props => {
           onSave={handleReportDownload}
         />
       )}
-    </React.Fragment>
+    </>
   );
 };
 

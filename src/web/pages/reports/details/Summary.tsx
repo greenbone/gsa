@@ -179,10 +179,10 @@ const Summary = ({
               <TableData flex="row">
                 <DateTime date={scan_start} />
                 {isEnded && (
-                  <React.Fragment>
+                  <>
                     {' - '}
                     <DateTime date={scan_end} />
-                  </React.Fragment>
+                  </>
                 )}
               </TableData>
             </TableRow>
@@ -228,10 +228,10 @@ const Summary = ({
                 <DateTime date={delta_report?.scan_start} />
                 {isDefined(delta_report?.scan_end) &&
                   delta_report.scan_end.isValid() && (
-                    <React.Fragment>
+                    <>
                       {' - '}
                       <DateTime date={delta_report.scan_end} />
-                    </React.Fragment>
+                    </>
                   )}
               </TableData>
             </TableRow>

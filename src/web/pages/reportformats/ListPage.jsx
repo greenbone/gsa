@@ -56,7 +56,7 @@ const ReportFormatsPage = ({onChanged, onError, ...props}) => {
       onSaved={onChanged}
     >
       {({delete: delete_func, edit, import: import_func}) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Report Formats')} />
           <EntitiesPage
             {...props}
@@ -72,7 +72,7 @@ const ReportFormatsPage = ({onChanged, onError, ...props}) => {
             onReportFormatEditClick={edit}
             onReportFormatImportClick={import_func}
           />
-        </React.Fragment>
+        </>
       )}
     </ReportFormatComponent>
   );

@@ -63,7 +63,7 @@ const Page = ({
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit}) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Operating Systems')} />
           <EntitiesPage
             {...props}
@@ -89,7 +89,7 @@ const Page = ({
             onOsDownloadClick={download}
             onOsEditClick={edit}
           />
-        </React.Fragment>
+        </>
       )}
     </OsComponent>
   );

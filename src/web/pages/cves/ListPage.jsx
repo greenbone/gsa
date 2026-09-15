@@ -33,7 +33,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
 
   return (
-    <React.Fragment>
+    <>
       <PageTitle title={_('CVEs')} />
       <EntitiesPage
         {...props}
@@ -53,7 +53,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
         toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
       />
-    </React.Fragment>
+    </>
   );
 };
 

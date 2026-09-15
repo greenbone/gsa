@@ -69,7 +69,7 @@ const PoliciesPage = ({onChanged, onDownloaded, onError, ...props}) => {
         edit,
         import: importFunc,
       }) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Policies')} />
           <EntitiesPage
             {...props}
@@ -87,7 +87,7 @@ const PoliciesPage = ({onChanged, onDownloaded, onError, ...props}) => {
             onPolicyEditClick={edit}
             onPolicyImportClick={importFunc}
           />
-        </React.Fragment>
+        </>
       )}
     </PoliciesComponent>
   );

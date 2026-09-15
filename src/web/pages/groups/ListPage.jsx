@@ -63,7 +63,7 @@ const GroupsPage = ({
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Groups')} />
           <EntitiesPage
             {...props}
@@ -83,7 +83,7 @@ const GroupsPage = ({
             onGroupEditClick={edit}
             onGroupSaveClick={save}
           />
-        </React.Fragment>
+        </>
       )}
     </GroupComponent>
   );

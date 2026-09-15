@@ -139,7 +139,7 @@ class AlertActions extends React.Component {
     return (
       <AlertComponent onCreated={this.onAlertCreated} onError={showError}>
         {({create}) => (
-          <React.Fragment>
+          <>
             {mayAccessAlerts && (
               <IconDivider>
                 <StartIcon
@@ -166,7 +166,7 @@ class AlertActions extends React.Component {
                 onSave={this.handleTriggerAlert}
               />
             )}
-          </React.Fragment>
+          </>
         )}
       </AlertComponent>
     );

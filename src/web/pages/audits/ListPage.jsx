@@ -75,7 +75,7 @@ const Page = ({onChanged, onDownloaded, onError, ...props}) => {
         reportDownload,
         gcrFormatDefined,
       }) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Audits')} />
           <EntitiesPage
             {...props}
@@ -96,7 +96,7 @@ const Page = ({onChanged, onDownloaded, onError, ...props}) => {
             onError={onError}
             onReportDownloadClick={reportDownload}
           />
-        </React.Fragment>
+        </>
       )}
     </AuditComponent>
   );

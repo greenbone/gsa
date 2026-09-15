@@ -115,7 +115,7 @@ const FeedStatusDisplay = ({feed}: FeedStatusDisplayProps) => {
 const FeedStatus = ({feeds}: FeedStatusProps) => {
   const [_] = useTranslation();
   return (
-    <React.Fragment>
+    <>
       <PageTitle title={_('Feed Status')} />
       <Layout flex="column">
         <span>
@@ -228,7 +228,7 @@ const FeedStatus = ({feeds}: FeedStatusProps) => {
           </TableBody>
         </Table>
       </Layout>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -89,7 +89,7 @@ const AuditReportListPage = ({filter, onFilterChanged, onDelete, ...props}) => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <PageTitle title={_('Audit Reports')} />
       <EntitiesPage
         {...props}
@@ -116,7 +116,7 @@ const AuditReportListPage = ({filter, onFilterChanged, onDelete, ...props}) => {
         onReportDeleteClick={handleReportDeleteClick}
         onReportDeltaSelect={handleReportDeltaSelect}
       />
-    </React.Fragment>
+    </>
   );
 };
 

@@ -218,7 +218,7 @@ const TaskDetailsPage = ({
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle
                   title={_('Task: {{name}}', {name: entity.name as string})}
                 />
@@ -259,7 +259,7 @@ const TaskDetailsPage = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>

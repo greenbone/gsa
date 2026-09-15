@@ -63,7 +63,7 @@ const SchedulesPage = ({
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Schedules')} />
           <EntitiesPage
             {...props}
@@ -83,7 +83,7 @@ const SchedulesPage = ({
             onScheduleEditClick={edit}
             onScheduleSaveClick={save}
           />
-        </React.Fragment>
+        </>
       )}
     </ScheduleComponent>
   );

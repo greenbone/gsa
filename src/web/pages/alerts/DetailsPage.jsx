@@ -132,7 +132,7 @@ const Page = ({
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle title={_('Alert: {{name}}', {name: entity.name})} />
                 <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
@@ -174,7 +174,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>

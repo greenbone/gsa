@@ -187,7 +187,7 @@ const CvePage = ({
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle title={_('CVE: {{name}}', {name: entity.name})} />
                 <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
@@ -214,7 +214,7 @@ const CvePage = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>

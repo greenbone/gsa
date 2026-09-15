@@ -134,7 +134,7 @@ const DfnCertAdvPage = ({
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle
                   title={_('DFN-CERT Advisory: {{title}}', {
                     title: entity.title,
@@ -165,7 +165,7 @@ const DfnCertAdvPage = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>
