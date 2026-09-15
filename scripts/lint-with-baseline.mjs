@@ -12,18 +12,10 @@ import {fileURLToPath} from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const baselinePath = resolve(root, 'oxlint-baseline.json');
 const oxlintPath = resolve(root, 'node_modules/.bin/oxlint');
-const oxlintArgs = [
-  '--react-plugin',
-  '--import-plugin',
-  '--vitest-plugin',
-  '--type-aware',
-  '--format',
-  'json',
-  'src',
-  'e2e',
-];
-const update = process.argv.includes('--update');
+const oxlintArgs = ['--format', 'json', 'src', 'e2e'];
 const sourceLines = new Map();
+
+const update = process.argv.includes('--update');
 
 const runOxlint = () =>
   new Promise((resolvePromise, reject) => {

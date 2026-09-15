@@ -10,6 +10,9 @@
   "jsPlugins": [
     "./lint-script/oxlint-plugin.js"
   ],
+  "options": {
+    "typeAware": true,
+  },
   "rules": {
     "eslint/no-console": [
       "warn",
