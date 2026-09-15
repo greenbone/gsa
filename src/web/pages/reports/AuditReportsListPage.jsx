@@ -45,6 +45,9 @@ const ToolBarIcons = () => {
   );
 };
 
+export const getAuditDeltaReportPath = (reportId, deltaReportId) =>
+  `/audit-report/delta/${reportId}/${deltaReportId}`;
+
 const AuditReportListPage = ({filter, onFilterChanged, onDelete, ...props}) => {
   const [selectedDeltaReport, setSelectedDeltaReport] = useState();
   const [beforeSelectFilter, setBeforeSelectFilter] = useState();
@@ -68,9 +71,7 @@ const AuditReportListPage = ({filter, onFilterChanged, onDelete, ...props}) => {
     if (isDefined(selectedDeltaReport)) {
       onFilterChanged(beforeSelectFilter);
 
-      navigate(
-        '/auditreport/delta/' + selectedDeltaReport.id + '/' + report.id,
-      );
+      void navigate(getAuditDeltaReportPath(selectedDeltaReport.id, report.id));
     } else {
       if (!isDefined(filter)) {
         filter = new Filter();

@@ -3231,18 +3231,6 @@
       "fingerprint": "src/web/pages/reports/AuditReportsListPage.jsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setSelectedDeltaReport();"
     },
     {
-      "filename": "src/web/pages/reports/AuditReportsListPage.jsx",
-      "code": "typescript(no-floating-promises)",
-      "message": "Promises must be awaited, add void operator to ignore.",
-      "location": {
-        "line": 71,
-        "column": 7,
-        "offset": 2472
-      },
-      "sourceLine": "navigate(",
-      "fingerprint": "src/web/pages/reports/AuditReportsListPage.jsx|typescript(no-floating-promises)|Promises must be awaited, add void operator to ignore.|7|navigate("
-    },
-    {
       "filename": "src/web/pages/reports/dashboard/HighResultsDisplay.jsx",
       "code": "eslint(no-class-assign)",
       "message": "Unexpected re-assignment of class ReportsHighResultsDisplay",
