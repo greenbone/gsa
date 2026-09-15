@@ -3,10 +3,49 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import _ from 'gmp/locale';
 import QueryFilter from 'gmp/models/filter/query-filter';
+import type Host from 'gmp/models/host';
 import {isDefined} from 'gmp/utils/identity';
 import {MAX_HOSTS} from 'web/components/chart/HostsTopologyChart';
-import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
+import Loader, {
+  createLoadFunc,
+  type DisplayLoaderProps,
+} from 'web/components/dashboard/display/Loader';
+import {type SeverityData} from 'web/components/dashboard/display/severity/severity-class-transform';
+
+interface VulnScoreDataGroup {
+  stats?: {
+    severity?: {
+      max?: number;
+      mean?: number;
+    };
+  };
+  text: {
+    modified?: string;
+    name: string;
+  };
+  value: string;
+}
+
+export interface VulnScoreData {
+  groups?: VulnScoreDataGroup[];
+}
+
+interface HostModifiedSubGroup {
+  value: string;
+}
+
+interface HostModifiedGroup {
+  value: string;
+  count: number;
+  c_count: number;
+  subgroup?: HostModifiedSubGroup;
+}
+
+export interface HostModifiedData {
+  groups?: HostModifiedGroup[];
+}
 
 export const HOSTS_MODIFIED = 'hosts-modified';
 export const HOSTS_SEVERITY = 'hosts-severity';
@@ -17,13 +56,16 @@ const HOSTS_MAX_GROUPS = 10;
 
 const DEFAULT_TOPOLOGY_FILTER = QueryFilter.fromString(`rows=${MAX_HOSTS}`);
 
-export const hostsModifiedLoadFunc = createLoadFunc(
+const hostsModifiedLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.hosts.getModifiedAggregates({filter}).then(r => r.data),
   HOSTS_MODIFIED,
 );
 
-export const HostsModifiedLoader = ({filter, children}) => (
+export const HostsModifiedLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<HostModifiedData>) => (
   <Loader
     dataId={HOSTS_MODIFIED}
     filter={filter}
@@ -34,13 +76,16 @@ export const HostsModifiedLoader = ({filter, children}) => (
   </Loader>
 );
 
-export const hostsSeverityLoadFunc = createLoadFunc(
+const hostsSeverityLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.hosts.getSeverityAggregates({filter}).then(r => r.data),
   HOSTS_SEVERITY,
 );
 
-export const HostsSeverityLoader = ({filter, children}) => (
+export const HostsSeverityLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<SeverityData>) => (
   <Loader
     dataId={HOSTS_SEVERITY}
     filter={filter}
@@ -51,7 +96,7 @@ export const HostsSeverityLoader = ({filter, children}) => (
   </Loader>
 );
 
-export const hostsTopologyLoadFunc = createLoadFunc(async ({gmp, filter}) => {
+const hostsTopologyLoadFunc = createLoadFunc(async ({gmp, filter}) => {
   filter = isDefined(filter)
     ? filter.copy().set('rows', MAX_HOSTS)
     : DEFAULT_TOPOLOGY_FILTER;
@@ -59,7 +104,10 @@ export const hostsTopologyLoadFunc = createLoadFunc(async ({gmp, filter}) => {
   return r.data;
 }, HOSTS_TOPOLOGY);
 
-export const HostsTopologyLoader = ({filter, children}) => (
+export const HostsTopologyLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<Host[]>) => (
   <Loader
     dataId={HOSTS_TOPOLOGY}
     filter={filter}
@@ -70,7 +118,7 @@ export const HostsTopologyLoader = ({filter, children}) => (
   </Loader>
 );
 
-export const hostsVulnScoreLoadFunc = createLoadFunc(
+const hostsVulnScoreLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.hosts
       .getVulnScoreAggregates({filter, max: HOSTS_MAX_GROUPS})
@@ -78,7 +126,10 @@ export const hostsVulnScoreLoadFunc = createLoadFunc(
   HOSTS_VULN_SCORE,
 );
 
-export const HostsVulnScoreLoader = ({children, filter}) => (
+export const HostsVulnScoreLoader = ({
+  children,
+  filter,
+}: DisplayLoaderProps<VulnScoreData>) => (
   <Loader
     dataId={HOSTS_VULN_SCORE}
     filter={filter}

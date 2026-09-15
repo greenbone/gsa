@@ -9,13 +9,18 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {HostsSeverityLoader} from 'web/pages/hosts/dashboard/Loaders';
+import {HostsSeverityLoader} from 'web/pages/hosts/dashboard/HostsLoaders';
 
 export const HostsSeverityClassDisplay = createDisplay({
   loaderComponent: HostsSeverityLoader,
-  displayComponent: SeverityClassDisplay,
-  title: ({data: tdata}) =>
-    _('Hosts by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <SeverityClassDisplay
+      {...props}
+      title={({data}) =>
+        _('Hosts by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-severity-class',
   displayName: 'HostsSeverityClassDisplay',
@@ -23,10 +28,15 @@ export const HostsSeverityClassDisplay = createDisplay({
 
 export const HostsSeverityClassTableDisplay = createDisplay({
   loaderComponent: HostsSeverityLoader,
-  displayComponent: SeverityClassTableDisplay,
-  title: ({data: tdata}) =>
-    _('Hosts by Severity Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [_l('Severity Class'), _l('# of Hosts')],
+  displayComponent: props => (
+    <SeverityClassTableDisplay
+      {...props}
+      dataTitles={[_('Severity Class'), _('# of Hosts')]}
+      title={({data}) =>
+        _('Hosts by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-severity-class-table',
   displayName: 'HostsSeverityClassTableDisplay',

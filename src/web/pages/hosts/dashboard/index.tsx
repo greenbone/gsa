@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   HostsCvssDisplay,
   HostsCvssTableDisplay,
-} from 'web/pages/hosts/dashboard/CvssDisplay';
+} from 'web/pages/hosts/dashboard/HostsCvssDisplay';
 import HostsTopologyDisplay from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
 import {
   HostsVulnScoreDisplay,
@@ -17,15 +17,20 @@ import {
 import {
   HostsModifiedDisplay,
   HostsModifiedTableDisplay,
-} from 'web/pages/hosts/dashboard/ModifiedDisplay';
+} from 'web/pages/hosts/dashboard/HostModifiedDisplay';
 import {
   HostsModifiedHighDisplay,
   HostsModifiedHighTableDisplay,
-} from 'web/pages/hosts/dashboard/ModifiedHighDisplay';
+} from 'web/pages/hosts/dashboard/HostModifiedHighDisplay';
 import {
   HostsSeverityClassDisplay,
   HostsSeverityClassTableDisplay,
-} from 'web/pages/hosts/dashboard/SeverityClassDisplay';
+} from 'web/pages/hosts/dashboard/HostSeverityClassDisplay';
+
+interface HostsDashboardProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+}
 
 export const HOSTS_DASHBOARD_ID = 'd3f5f2de-a85b-43f2-a817-b127457cc8ba';
 
@@ -43,7 +48,7 @@ export const HOSTS_DISPLAYS = [
   HostsVulnScoreTableDisplay.displayId,
 ];
 
-const HostsDashboard = props => (
+const HostsDashboard = (props: HostsDashboardProps) => (
   <Dashboard
     {...props}
     defaultDisplays={[

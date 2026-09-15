@@ -3,30 +3,50 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
+import {type Date} from 'gmp/models/date';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseInt, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import LineChart, {lineDataPropType} from 'web/components/chart/LineChart';
+import LineChart, {type LineData} from 'web/components/chart/LineChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataDisplay from 'web/components/dashboard/display/DataDisplay';
+import DataDisplay, {
+  type DataDisplayProps,
+} from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {
   createDateRangeFilter,
   totalCount,
 } from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {HostsModifiedLoader} from 'web/pages/hosts/dashboard/Loaders';
-import PropTypes from 'web/utils/prop-types';
+import {
+  type HostModifiedData,
+  HostsModifiedLoader,
+} from 'web/pages/hosts/dashboard/HostsLoaders';
 import Theme from 'web/utils/theme';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
+import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
+import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 
-const transformModified = (data = {}) => {
+type HostModifiedDataPoint = LineData;
+
+interface TransformedHostModifiedData extends Array<HostModifiedDataPoint> {
+  total: number;
+}
+
+type HostModifiedDataDisplayProps = DataDisplayProps<
+  HostModifiedData,
+  TransformedHostModifiedData
+>;
+
+type HostModifiedDisplayProps = DashboardDisplayProps;
+
+const transformModified = (
+  data: HostModifiedData | undefined = {},
+): TransformedHostModifiedData => {
   const {groups = []} = data;
   const sum = totalCount(groups);
-  const tdata = groups.map(group => {
+  const transformedData = groups.map(group => {
     const {value, count, c_count} = group;
     const modified = parseDate(value);
     return {
@@ -37,59 +57,74 @@ const transformModified = (data = {}) => {
     };
   });
 
-  tdata.total = sum;
-  return tdata;
+  const result = transformedData as unknown as TransformedHostModifiedData;
+  result.total = sum;
+  return result;
 };
 
-export class HostsModifiedDisplay extends React.Component {
-  constructor(...args) {
-    super(...args);
+export const HostsModifiedDisplay = ({
+  filterId,
+  filter,
+  showFilterSelection,
+  onFilterIdChanged,
+  onFilterChanged,
+  ...props
+}: HostModifiedDisplayProps) => {
+  const {
+    filter: selectedFilter,
+    selectFilter,
+    filterSelectionDialog,
+  } = useFilterSelection({
+    filterId,
+    filtersFilter: HOSTS_FILTER_FILTER,
+    onFilterIdChanged,
+  });
+  const displayFilter = showFilterSelection ? selectedFilter : filter;
 
-    this.handleRangeSelect = this.handleRangeSelect.bind(this);
-  }
-
-  handleRangeSelect(start, end) {
-    const {filter, onFilterChanged} = this.props;
-
+  const handleRangeSelect = (start: LineData, end: LineData) => {
     if (!isDefined(onFilterChanged)) {
       return;
     }
 
-    const {x: startDate} = start;
-    const {x: endDate} = end;
+    const startDate = start.x as Date;
+    const endDate = end.x as Date;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
     onFilterChanged(
       createDateRangeFilter({
         endDate,
         field: 'modified',
-        filter,
+        filter: displayFilter,
         formatDate: date => date.format(dateFormat),
         startDate,
       }),
     );
-  }
+  };
 
-  render() {
-    const {filter, ...props} = this.props;
-    return (
+  return (
+    <>
       <HostsModifiedLoader filter={filter}>
         {loaderProps => (
-          <DataDisplay
+          <DataDisplay<
+            HostModifiedData,
+            HostModifiedDataDisplayProps,
+            TransformedHostModifiedData
+          >
             {...props}
             {...loaderProps}
             dataTransform={transformModified}
-            filter={filter}
-            title={({data: tdata}) =>
+            filter={displayFilter}
+            title={({data}) =>
               _('Hosts by Modification Time (Total: {{count}})', {
-                count: tdata.total,
+                count: data.total,
               })
             }
+            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
           >
-            {({width, height, data: tdata, svgRef, state}) => (
+            {({width, height, data, svgRef, state}) => (
               <LineChart
                 timeline
-                data={tdata}
+                data={data}
                 height={height}
                 showLegend={state.showLegend}
                 svgRef={svgRef}
@@ -108,44 +143,36 @@ export class HostsModifiedDisplay extends React.Component {
                   color: Theme.darkGreenTransparent,
                   label: _('Modified Hosts'),
                 }}
-                onRangeSelected={this.handleRangeSelect}
+                onRangeSelected={handleRangeSelect}
               />
             )}
           </DataDisplay>
         )}
       </HostsModifiedLoader>
-    );
-  }
-}
-
-HostsModifiedDisplay.propTypes = {
-  filter: PropTypes.filter,
-  xAxisLabel: PropTypes.string,
-  y2AxisLabel: PropTypes.string,
-  y2Line: lineDataPropType,
-  yAxisLabel: PropTypes.string,
-  yLine: lineDataPropType,
-  onFilterChanged: PropTypes.func,
+      {filterSelectionDialog}
+    </>
+  );
 };
-
-HostsModifiedDisplay = withFilterSelection({
-  filtersFilter: HOSTS_FILTER_FILTER,
-})(HostsModifiedDisplay);
 
 HostsModifiedDisplay.displayId = 'host-by-modification-time';
 
 export const HostsModifiedTableDisplay = createDisplay({
   loaderComponent: HostsModifiedLoader,
-  displayComponent: DataTableDisplay,
-  dataTransform: transformModified,
-  title: ({data: tdata}) =>
-    _('Hosts by Modification Time (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [
-    _l('Creation Time'),
-    _l('# of Modified Hosts'),
-    _l('Total Hosts'),
-  ],
-  dataRow: row => [row.label, row.y, row.y2],
+  displayComponent: props => (
+    <DataTableDisplay
+      {...props}
+      dataRow={row => [row.label ?? '', row.y, row.y2]}
+      dataTitles={[
+        _('Creation Time'),
+        _('# of Modified Hosts'),
+        _('Total Hosts'),
+      ]}
+      dataTransform={transformModified}
+      title={({data}) =>
+        _('Hosts by Modification Time (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-modification-time-table',
   displayName: 'HostsModifiedTableDisplay',
