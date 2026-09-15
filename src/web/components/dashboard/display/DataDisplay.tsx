@@ -62,7 +62,7 @@ interface DataDisplayRenderProps<TData, TState extends DisplayState> {
 
 export type TransformFunc<
   TData,
-  TTransformedData extends Array<any>,
+  TTransformedData extends Array<unknown>,
   TTransformProps extends object = object,
 > = (data: TData | undefined, props: TTransformProps) => TTransformedData;
 
@@ -72,7 +72,7 @@ type DataDisplayChildren<TTransformedData, TState extends DisplayState> = (
 
 export type DataDisplayProps<
   TData,
-  TTransformedData extends Array<any>,
+  TTransformedData extends Array<unknown>,
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
   TChildren = DataDisplayChildren<TTransformedData, TState>,
@@ -95,7 +95,7 @@ export type DataDisplayProps<
 
 type DataDisplayWithTranslationProps<
   TData,
-  TTransformedData extends Array<any>,
+  TTransformedData extends Array<unknown>,
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
 > = WithTranslationComponentProps &
@@ -204,7 +204,7 @@ class DataDisplay<
     TTransformProps,
     TState
   >,
-  TTransformedData extends Array<any>,
+  TTransformedData extends Array<unknown>,
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
 > extends React.Component<TProps, DataDisplayState<TData, TTransformedData>> {
@@ -245,7 +245,7 @@ class DataDisplay<
       TTransformProps,
       TState
     >,
-    TTransformedData extends Array<any>,
+    TTransformedData extends Array<unknown>,
     TTransformProps extends object = object,
     TState extends DisplayState = DisplayState,
   >(nextProps: TProps, prevState: DataDisplayState<TData, TTransformedData>) {
@@ -278,7 +278,7 @@ class DataDisplay<
       TTransformProps,
       TState
     >,
-    TTransformedData extends Array<any>,
+    TTransformedData extends Array<unknown>,
     TTransformProps extends object = object,
     TState extends DisplayState = DisplayState,
   >(props: Readonly<TProps>) {
@@ -520,7 +520,7 @@ export default withTranslation(DataDisplay) as unknown as <
     TTransformProps,
     TState
   >,
-  TTransformedData extends Array<any>,
+  TTransformedData extends Array<unknown>,
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
 >(
