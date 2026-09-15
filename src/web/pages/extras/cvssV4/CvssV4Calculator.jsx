@@ -21,6 +21,7 @@ import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
 import {createCvssConfigData} from 'web/pages/extras/cvssV4/cvss-config';
 import MetricsGroups from 'web/pages/extras/cvssV4/MetricsGroups';
+
 const StyledTextField = styled(TextField)`
   width: 180px;
 `;

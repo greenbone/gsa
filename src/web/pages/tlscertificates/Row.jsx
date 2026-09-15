@@ -16,6 +16,7 @@ import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/prop-types';
+
 const Div = styled.div`
   word-break: break-all;
 `;

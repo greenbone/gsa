@@ -17,6 +17,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/prop-types';
 import withCapabilities from 'web/utils/withCapabilities';
+
 const PoliciesActions = compose(
   withEntitiesActions,
   withCapabilities,

@@ -23,6 +23,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/dfncerts';
 import PropTypes from 'web/utils/prop-types';
+
 // DFN-CERT uses same filter dialog as CERT-Bund
 
 const ToolBarIcons = () => {

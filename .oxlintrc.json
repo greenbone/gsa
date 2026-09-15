@@ -43,6 +43,7 @@
       "warn",
       "prefer-inline"
     ],
+    "import/newline-after-import": ["warn", {"considerComments": true}],
     "react/exhaustive-deps": "warn",
     "react/immutability": "error",
     "react/jsx-key": "warn",

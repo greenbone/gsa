@@ -19,6 +19,7 @@ import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/prop-types';
+
 const Action = styled.a`
   cursor: pointer;
 `;

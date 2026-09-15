@@ -23,6 +23,7 @@ import Method from 'web/pages/alerts/Method';
 import PropTypes from 'web/utils/prop-types';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
+
 const Actions = withEntitiesActions(
   ({
     entity,
