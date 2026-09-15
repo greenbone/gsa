@@ -49,6 +49,9 @@
       }
     ],
     "no-duplicate-imports": "warn",
+    "eslint/prefer-const": ["warn", {
+      "destructuring": "all"
+    }],
     "no-unused-expressions": [
       "warn",
       {
