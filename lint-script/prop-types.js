@@ -107,7 +107,7 @@ export default {
       'FunctionDeclaration:exit'() {
         componentStack.pop();
       },
-      'FunctionExpression'(node) {
+      FunctionExpression(node) {
         const name = getComponentName(node);
         if (!name || !isComponentName(name)) {
           return;

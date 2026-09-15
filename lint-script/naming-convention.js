@@ -14,18 +14,17 @@ const isProperty = node => {
   const parent = node.parent;
 
   return (
-    (parent.type === 'MemberExpression' ||
+    ((parent.type === 'MemberExpression' ||
       parent.type === 'OptionalMemberExpression') &&
       parent.property === node &&
-      !parent.computed
-  ) || (
-    (parent.type === 'Property' ||
+      !parent.computed) ||
+    ((parent.type === 'Property' ||
       parent.type === 'MethodDefinition' ||
       parent.type === 'PropertyDefinition' ||
       parent.type === 'TSPropertySignature' ||
       parent.type === 'TSMethodSignature') &&
       parent.key === node &&
-      !parent.computed
+      !parent.computed)
   );
 };
 
@@ -35,7 +34,10 @@ const isImport = node => {
     if (parent.type === 'ImportDeclaration') {
       return true;
     }
-    if (parent.type !== 'ImportSpecifier' && parent.type !== 'ImportDefaultSpecifier') {
+    if (
+      parent.type !== 'ImportSpecifier' &&
+      parent.type !== 'ImportDefaultSpecifier'
+    ) {
       break;
     }
     parent = parent.parent;
@@ -57,15 +59,17 @@ const reportName = (context, node, formats, allowUnderscore = false) => {
       name = name.slice(0, -1);
     }
   }
-  const valid = name.length === 0 || formats.some(format => {
-    if (format === 'camelCase') {
-      return camelCase.test(name);
-    }
-    if (format === 'PascalCase') {
-      return pascalCase.test(name);
-    }
-    return upperCase.test(name);
-  });
+  const valid =
+    name.length === 0 ||
+    formats.some(format => {
+      if (format === 'camelCase') {
+        return camelCase.test(name);
+      }
+      if (format === 'PascalCase') {
+        return pascalCase.test(name);
+      }
+      return upperCase.test(name);
+    });
   if (!valid) {
     context.report({
       node,
