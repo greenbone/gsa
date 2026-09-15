@@ -18,7 +18,9 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
-import AuditReportListPage from 'web/pages/reports/AuditReportsListPage';
+import AuditReportListPage, {
+  getAuditDeltaReportPath,
+} from 'web/pages/reports/AuditReportsListPage';
 import {entitiesActions} from 'web/store/entities/auditreports';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
@@ -242,5 +244,11 @@ describe('AuditReportsPage tests', () => {
     await wait();
 
     testBulkDeleteDialog(screen, gmp.auditreports.deleteByFilter);
+  });
+
+  test('should build the delta report route', () => {
+    expect(getAuditDeltaReportPath('1234', '5678')).toBe(
+      '/audit-report/delta/1234/5678',
+    );
   });
 });
