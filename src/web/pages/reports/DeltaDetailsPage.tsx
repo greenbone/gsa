@@ -478,7 +478,7 @@ const DeltaReportDetails = () => {
 
   const handleFilterAddLogLevel = () => {
     if (!reportFilter) return;
-    let levels = reportFilter.get('levels', '');
+    const levels = reportFilter.get('levels', '');
     const levelsStr = String(levels);
     if (!levelsStr.includes('g')) {
       const newLevels = levelsStr + 'g';

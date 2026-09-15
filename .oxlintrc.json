@@ -14,6 +14,10 @@
     "typeAware": true,
   },
   "rules": {
+    "eslint/eqeqeq": [
+      "warn",
+      "always"
+    ],
     "eslint/no-console": [
       "warn",
       {
@@ -24,6 +28,10 @@
         ]
       }
     ],
+    "eslint/no-duplicate-imports": "warn",
+    "eslint/prefer-const": ["warn", {
+      "destructuring": "all"
+    }],
     "gsa/camelcase": "warn",
     "gsa/filename-convention": "warn",
     "gsa/header": "error",

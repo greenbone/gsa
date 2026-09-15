@@ -96,7 +96,7 @@ const TrashCan = () => {
     useState(false);
   const [isErrorEmptyingTrash, setIsErrorEmptyingTrash] = useState(false);
   const [isEmptyingTrash, setIsEmptyingTrash] = useState(false);
-  let [trash, setTrash] = useState<TrashCanGetData | undefined>();
+  const [trash, setTrash] = useState<TrashCanGetData | undefined>();
   const [_] = useTranslation();
   const {
     dialogState: notificationDialogState,

@@ -82,7 +82,7 @@ class Note extends Model {
   }
 
   static parseElement(element: NoteElement): NoteProperties {
-    let ret = super.parseElement(element) as NoteProperties;
+    const ret = super.parseElement(element) as NoteProperties;
 
     if (element.nvt) {
       ret.nvt = Nvt.fromElement({_id: 'test-id', nvt: element.nvt});

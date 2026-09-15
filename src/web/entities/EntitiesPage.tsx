@@ -162,7 +162,7 @@ class EntitiesPage<
     const {entities, isLoading, sectionIcon, dashboard, dashboardControls} =
       this.props;
 
-    let {section: SectionComponent = Section} = this.props;
+    const {section: SectionComponent = Section} = this.props;
 
     if (SectionComponent === false) {
       return null;
@@ -263,7 +263,7 @@ class EntitiesPage<
   }
 
   renderToolbarIcons() {
-    let {toolBarIcons: ToolBarIconsComponent, ...other} = this.props;
+    const {toolBarIcons: ToolBarIconsComponent, ...other} = this.props;
 
     if (!isDefined(ToolBarIconsComponent)) {
       return null;
