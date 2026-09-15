@@ -14,8 +14,8 @@ import {
   type ReportResultCountElement,
 } from 'gmp/models/report/parser';
 import ReportTask from 'gmp/models/report/task';
-import {type ScannerElement} from 'gmp/models/scanner';
 import type Result from 'gmp/models/result';
+import {type ScannerElement} from 'gmp/models/scanner';
 import {type TaskStatus} from 'gmp/models/task';
 import {parseSeverity, parseDate, type YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';

@@ -25,8 +25,8 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer, {
   type WithEntitiesContainerComponentProps,
 } from 'web/entities/withEntitiesContainer';
-import useGmp from 'web/hooks/useGmp';
 import {useGetTasks} from 'web/hooks/use-query/tasks';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportsDashboard, {
   REPORTS_DASHBOARD_ID,

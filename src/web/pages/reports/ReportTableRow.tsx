@@ -9,7 +9,6 @@ import {type default as Task, TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import StatusBar from 'web/components/bar/StatusBar';
-import StatusCellContent from 'web/pages/reports/StatusCellContent';
 import DateTime from 'web/components/date/DateTime';
 import {
   CircleXDeleteIcon,
@@ -28,6 +27,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import {AgentIdTableData} from 'web/pages/agents/components/AgentIdColumn';
 import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
+import StatusCellContent from 'web/pages/reports/StatusCellContent';
 
 export interface ReportTableRowProps
   extends
@@ -104,7 +104,6 @@ const ReportTableRow = ({
   ...props
 }: ReportTableRowProps) => {
   const gmp = useGmp();
-  const [_] = useTranslation();
   const {report} = entity;
   const scan_run_status = report?.scan_run_status;
   const task = report?.task;

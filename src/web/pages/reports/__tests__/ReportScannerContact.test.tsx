@@ -4,9 +4,9 @@
  */
 
 import {afterEach, describe, test, expect, testing} from '@gsa/testing';
+import {render, screen} from 'web/testing';
 import dayjs from 'gmp/models/date';
 import {OPENVASD_SCANNER_TYPE, OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
-import {render, screen} from 'web/testing';
 import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
 
 describe('ReportScannerContact tests', () => {

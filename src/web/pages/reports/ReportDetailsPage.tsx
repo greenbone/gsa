@@ -30,9 +30,9 @@ import {
   useGetReportFormats,
   useGetResultsFilters,
 } from 'web/hooks/use-query/reports';
+import {useGetTasks} from 'web/hooks/use-query/tasks';
 import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
-import {useGetTasks} from 'web/hooks/use-query/tasks';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
