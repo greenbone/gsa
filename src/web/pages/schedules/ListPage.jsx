@@ -21,6 +21,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/schedules';
 import PropTypes from 'web/utils/prop-types';
+
 export const ToolBarIcons = ({onScheduleCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

@@ -23,6 +23,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/prop-types';
+
 const ToolBarIcons = () => {
   const [_] = useTranslation();
 

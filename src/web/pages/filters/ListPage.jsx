@@ -21,6 +21,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/filters';
 import PropTypes from 'web/utils/prop-types';
+
 const ToolBarIcons = ({onFilterCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

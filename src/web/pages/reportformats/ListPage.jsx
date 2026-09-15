@@ -21,6 +21,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/prop-types';
+
 const ToolBarIcons = ({onReportFormatImportClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

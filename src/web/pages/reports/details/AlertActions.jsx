@@ -25,6 +25,7 @@ import PropTypes from 'web/utils/prop-types';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
+
 const log = logger.getLogger('web.report.alertactions');
 
 class AlertActions extends React.Component {

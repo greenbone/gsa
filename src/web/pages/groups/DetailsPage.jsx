@@ -39,6 +39,7 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/prop-types';
+
 const ToolBarIcons = ({
   entity,
   onGroupCloneClick,

@@ -5,6 +5,7 @@
 
 import {expect, type Locator, type Page} from '@playwright/test';
 import {randomInt} from 'node:crypto';
+
 const passwordDefault = 'e2e-password-123';
 
 const sortableHeaders = [

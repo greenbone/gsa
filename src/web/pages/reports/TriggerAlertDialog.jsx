@@ -19,6 +19,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import ThresholdMessage from 'web/pages/reports/ThresholdMessage';
 import PropTypes from 'web/utils/prop-types';
 import {renderSelectItems} from 'web/utils/Render';
+
 const TriggerAlertDialog = ({
   alertId,
   alerts = [],

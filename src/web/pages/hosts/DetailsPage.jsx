@@ -49,6 +49,7 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/prop-types';
+
 export const ToolBarIcons = ({
   entity,
   onHostCreateClick,

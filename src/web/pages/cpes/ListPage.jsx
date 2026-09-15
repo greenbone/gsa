@@ -21,6 +21,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/prop-types';
+
 export const ToolBarIcons = () => {
   const [_] = useTranslation();
   return (

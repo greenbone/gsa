@@ -25,6 +25,7 @@ import Layout from 'web/components/layout/Layout';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
+
 const StyledTextField = styled(TextField)`
   width: 180px;
 `;
