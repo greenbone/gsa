@@ -209,7 +209,7 @@ export const parseCvssV4MetricsFromVector = (
   if (!isDefined(cvssVector) || cvssVector.trim().length === 0) {
     return {};
   }
-  let ret = {};
+  const ret = {};
   const metrics = processVector(cvssVector);
 
   for (const metric in metrics) {

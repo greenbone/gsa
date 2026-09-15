@@ -515,7 +515,7 @@ describe('Filter tests', () => {
     });
 
     test('should not mutate original filter when calling next', () => {
-      let filter: FilterType = createFilterWithTerms('first=1 rows=10');
+      const filter: FilterType = createFilterWithTerms('first=1 rows=10');
       const copy = filter.next();
 
       expect(filter).not.toBe(copy);
@@ -557,7 +557,7 @@ describe('Filter tests', () => {
     });
 
     test('should not mutate original filter when calling first', () => {
-      let filter = createFilterWithTerms('first=99');
+      const filter = createFilterWithTerms('first=99');
       const copy = filter.first();
 
       expect(filter).not.toBe(copy);
@@ -597,7 +597,7 @@ describe('Filter tests', () => {
     });
 
     test('should not mutate original filter when calling previous', () => {
-      let filter = createFilterWithTerms('first=11 rows=10');
+      const filter = createFilterWithTerms('first=11 rows=10');
       const copy = filter.previous();
 
       expect(filter).not.toBe(copy);

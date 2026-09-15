@@ -241,7 +241,7 @@ describe('AlembavFireMethodPart tests', () => {
     const reportFormatsSelect = screen.getByRole<HTMLSelectElement>('textbox', {
       name: 'Report Formats',
     });
-    let reportFormatOptions =
+    const reportFormatOptions =
       await getSelectItemElementsForSelect(reportFormatsSelect);
     expect(reportFormatOptions).toHaveLength(2);
     expect(reportFormatOptions[0]).toHaveTextContent(

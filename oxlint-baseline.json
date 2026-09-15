@@ -555,18 +555,6 @@
       "fingerprint": "src/gmp/parser.ts|typescript(no-base-to-string)|'value' may use Object's default stringification format ('[object Object]') when stringified.|58|return isEmpty(value as string) ? undefined : String(value);"
     },
     {
-      "filename": "src/gmp/utils/__tests__/identity.test.ts",
-      "code": "eslint(no-unassigned-vars)",
-      "message": "'x' is always 'undefined' because it's never assigned.",
-      "location": {
-        "line": 299,
-        "column": 9,
-        "offset": 7137
-      },
-      "sourceLine": "let x;",
-      "fingerprint": "src/gmp/utils/__tests__/identity.test.ts|eslint(no-unassigned-vars)|'x' is always 'undefined' because it's never assigned.|9|let x;"
-    },
-    {
       "filename": "src/gmp/utils/event.ts",
       "code": "typescript(no-this-alias)",
       "message": "Unexpected aliasing of 'this' to local variable.",
@@ -1929,7 +1917,7 @@
       "location": {
         "line": 245,
         "column": 14,
-        "offset": 6437
+        "offset": 6439
       },
       "sourceLine": "? this.handleFilterEditClick",
       "fingerprint": "src/web/entities/EntitiesPage.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|14|? this.handleFilterEditClick"
@@ -1941,7 +1929,7 @@
       "location": {
         "line": 310,
         "column": 23,
-        "offset": 7992
+        "offset": 7996
       },
       "sourceLine": "onClose={this.handleFilterDialogCloseClick}",
       "fingerprint": "src/web/entities/EntitiesPage.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|23|onClose={this.handleFilterDialogCloseClick}"
@@ -1953,7 +1941,7 @@
       "location": {
         "line": 312,
         "column": 31,
-        "offset": 8094
+        "offset": 8098
       },
       "sourceLine": "onFilterCreated={this.handleFilterCreated}",
       "fingerprint": "src/web/entities/EntitiesPage.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|31|onFilterCreated={this.handleFilterCreated}"
@@ -4137,7 +4125,7 @@
       "location": {
         "line": 202,
         "column": 5,
-        "offset": 7081
+        "offset": 7083
       },
       "sourceLine": "loadTrash();",
       "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|loadTrash();"

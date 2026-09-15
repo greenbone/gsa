@@ -177,7 +177,7 @@ describe('Edit Report Config Dialog component tests', () => {
     const multiSelect = screen.getMultiSelectElements(content)[0];
     fireEvent.click(multiSelect);
 
-    let selectedItems = screen.getSelectedItems(document);
+    const selectedItems = screen.getSelectedItems(document);
     const deleteIcon = selectedItems[1].querySelector('button');
     fireEvent.click(deleteIcon);
 
@@ -420,7 +420,7 @@ describe('New Report Config Dialog component tests', () => {
     const multiSelect = content.getMultiSelectElements()[0];
     fireEvent.click(multiSelect);
 
-    let selectedItems = screen.getSelectedItems();
+    const selectedItems = screen.getSelectedItems();
 
     const closeBtnElement = within(selectedItems[0]).getByRole('button', {
       hidden: true,

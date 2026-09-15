@@ -4,8 +4,11 @@
  */
 
 import type CancelToken from 'gmp/cancel';
-import type Http from 'gmp/http/http';
-import {type RequestOptions, type ResponseType} from 'gmp/http/http';
+import {
+  type default as Http,
+  type RequestOptions,
+  type ResponseType,
+} from 'gmp/http/http';
 import {ResponseRejection} from 'gmp/http/rejection';
 import {type Meta} from 'gmp/http/response';
 import transform, {

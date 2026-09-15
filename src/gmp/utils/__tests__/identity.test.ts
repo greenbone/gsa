@@ -19,36 +19,36 @@ import {
 
 describe('isDefined function test', () => {
   test('should return false for undefined let variable', () => {
-    let x;
+    const x = undefined;
     expect(isDefined(x)).toBe(false);
   });
 
   test('should return true for defined let variable', () => {
-    let x = 1;
+    const x = 1;
     expect(isDefined(x)).toBe(true);
   });
 });
 
 describe('hasValue function test', () => {
   test('should return false for undefined let variable', () => {
-    let x;
+    const x = undefined;
     expect(hasValue(x)).toBe(false);
   });
 
   test('should return true for defined let variable', () => {
-    let x = 1;
+    const x = 1;
     expect(hasValue(x)).toBe(true);
   });
 
   test('should return false for null let variable', () => {
-    let x = null;
+    const x = null;
     expect(hasValue(x)).toBe(false);
   });
 });
 
 describe('isObject function test', () => {
   test('should return false for undefined variable', () => {
-    let x;
+    const x = undefined;
     expect(isObject(x)).toBe(false);
   });
 
@@ -80,7 +80,7 @@ describe('isObject function test', () => {
 
 describe('isString function test', () => {
   test('should return false for undefined variable', () => {
-    let x;
+    const x = undefined;
     expect(isString(x)).toBe(false);
   });
 
@@ -117,7 +117,7 @@ describe('isString function test', () => {
 
 describe('isArray function test', () => {
   test('should return false for undefined variable', () => {
-    let x;
+    const x = undefined;
     expect(isArray(x)).toBe(false);
   });
 
@@ -153,7 +153,7 @@ describe('isNull function tests', () => {
     expect(isNull(x)).toEqual(true);
   });
   test('should return false for undefined variable', () => {
-    let x;
+    const x = undefined;
     expect(isNull(x)).toEqual(false);
   });
   test('should return false for empty object variable', () => {
@@ -180,7 +180,7 @@ describe('isNull function tests', () => {
 
 describe('isNumber function test', () => {
   test('should return false for undefined variable', () => {
-    let x;
+    const x = undefined;
     expect(isNumber(x)).toBe(false);
   });
 
@@ -217,7 +217,7 @@ describe('isNumber function test', () => {
 
 describe('isFunction function test', () => {
   test('should return false for undefined variable', () => {
-    let x;
+    const x = undefined;
     expect(isFunction(x)).toBe(false);
   });
 
@@ -259,7 +259,7 @@ describe('isFunction function test', () => {
 
 describe('isJsDate function test', () => {
   test('should return false for undefined variable', () => {
-    let x;
+    const x = undefined;
     expect(isJsDate(x)).toBe(false);
   });
 
@@ -296,7 +296,7 @@ describe('isJsDate function test', () => {
 
 describe('isModelElement function test', () => {
   test('should return false for undefined variable', () => {
-    let x;
+    const x = undefined;
     expect(isModelElement(x)).toBe(false);
   });
 

@@ -24,7 +24,7 @@ describe('Arc class tests', () => {
   test('should match paths for full circle', () => {
     const a = arc().outerRadiusX(100);
 
-    let path = a.path().toString();
+    const path = a.path().toString();
     expect(path).toMatchSnapshot();
 
     a.innerRadiusX(50);
