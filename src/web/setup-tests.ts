@@ -4,13 +4,11 @@
  */
 
 import {testing} from '@gsa/testing';
-
 // eslint-disable-next-line no-restricted-imports
 import '../setup-tests';
 
 // setup additional matchers for vitest
 import '@testing-library/jest-dom/vitest';
-
 // eslint-disable-next-line no-restricted-imports
 import './testing/custom-matchers';
 import * as ResizeObserverModule from 'resize-observer-polyfill';

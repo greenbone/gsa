@@ -3,18 +3,18 @@
   "version": "28.3.2-dev1",
   "description": "Greenbone Security Assistant",
   "keywords": [
-    "openvas",
     "gmp",
-    "gsa",
     "greenbone",
-    "greenbone security assistant"
+    "greenbone security assistant",
+    "gsa",
+    "openvas"
   ],
+  "license": "AGPL-3.0+",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "repository": {
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
-  "license": "AGPL-3.0+",
   "type": "module",
   "scripts": {
     "test": "vitest",
@@ -28,18 +28,14 @@
     "lint:raw": "oxlint --react-plugin --import-plugin --vitest-plugin --type-aware --format json src e2e",
     "lint": "node scripts/lint-with-baseline.mjs",
     "lint:baseline:update": "node scripts/lint-with-baseline.mjs --update",
-    "format": "oxfmt src",
-    "format-check": "oxfmt --check src",
+    "format": "oxfmt src e2e",
+    "format-check": "oxfmt --check src e2e",
     "all-checks": "npm run i18n-extract && npm run lint && npm run type-check && npm run format",
     "preview": "vite preview",
     "i18n-extract": "i18next-cli extract",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
     "clear:node_modules": "rm -rf node_modules && npm ci"
-  },
-  "engines": {
-    "node": ">=22.0",
-    "npm": ">=11.0"
   },
   "dependencies": {
     "@dnd-kit/helpers": "^0.5.0",
@@ -120,5 +116,9 @@
     "vite-plugin-checker": "0.14.5",
     "vite-plugin-svgr": "^5.2.0",
     "vitest": "^4.0.17"
+  },
+  "engines": {
+    "node": ">=22.0",
+    "npm": ">=11.0"
   }
 }
