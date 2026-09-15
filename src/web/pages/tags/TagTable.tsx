@@ -26,7 +26,7 @@ import EntitiesActions, {
   type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
-import type {ActionsColumn} from 'web/entities/withEntitiesHeader';
+import {type ActionsColumn} from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
@@ -35,7 +35,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import TagDetails from 'web/pages/tags/TagDetails';
 import {renderYesNo} from 'web/utils/Render';
-import type {SortDirectionType} from 'web/utils/sort-direction';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
 export interface TagActionsProps extends Omit<
   EntitiesActionsProps<Tag>,

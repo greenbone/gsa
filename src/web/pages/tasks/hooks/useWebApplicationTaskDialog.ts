@@ -16,7 +16,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {type EntityCreateResponse} from 'web/entity/hooks/useEntityCreate';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import type {WebApplicationTaskDialogData} from 'web/pages/tasks/WebApplicationTaskDialog';
+import {type WebApplicationTaskDialogData} from 'web/pages/tasks/WebApplicationTaskDialog';
 
 interface UseWebApplicationTaskDialogProps {
   onWebAppCreated?: (response: EntityCreateResponse) => void;

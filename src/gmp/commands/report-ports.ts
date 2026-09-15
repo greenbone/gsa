@@ -5,15 +5,15 @@
 
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {parseFilter} from 'gmp/collection/parser';
-import type {EntitiesMeta} from 'gmp/commands/entities';
+import {type EntitiesMeta} from 'gmp/commands/entities';
 import HttpCommand, {
   type HttpCommandInputParams,
   type HttpCommandOptions,
 } from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
-import type {XmlResponseData} from 'gmp/http/transform/fast-xml';
-import type {FilterModelElement} from 'gmp/models/filter';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
+import {type FilterModelElement} from 'gmp/models/filter';
 import ReportPort from 'gmp/models/report/port';
 import {parseSeverity} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';

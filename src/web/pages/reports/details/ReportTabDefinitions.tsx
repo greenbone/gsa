@@ -11,7 +11,7 @@ import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {type TaskStatus} from 'gmp/models/task';
 import Loading from 'web/components/loading/Loading';
 import EntityTags from 'web/entity/Tags';
-import type {ReportSubEntities} from 'web/hooks/use-query/use-report-sub-entities';
+import {type ReportSubEntities} from 'web/hooks/use-query/use-report-sub-entities';
 import ApplicationsTab from 'web/pages/reports/details/application/ApplicationsTab';
 import ClosedCvesTab from 'web/pages/reports/details/cve/ClosedCvesTab';
 import CvesTab from 'web/pages/reports/details/cve/CvesTab';

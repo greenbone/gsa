@@ -4,7 +4,7 @@
  */
 
 import {testing} from '@gsa/testing';
-import type {Mock} from 'vitest';
+import {type Mock} from 'vitest';
 import {type default as Http, type HttpOptions} from 'gmp/http/http';
 import Response, {type Meta} from 'gmp/http/response';
 import {type Element} from 'gmp/models/model';

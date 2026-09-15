@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+// oxlint-disable typescript/no-useless-default-assignment
+
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import Response from 'gmp/http/response';

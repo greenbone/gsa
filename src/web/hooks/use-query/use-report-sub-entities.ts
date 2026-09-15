@@ -33,8 +33,8 @@ interface UseReportSubEntitiesParams {
 
 const useReportSubEntities = ({
   reportId,
-  filter = undefined,
-  refetchInterval = undefined,
+  filter,
+  refetchInterval,
   staleTime,
 }: UseReportSubEntitiesParams): ReportSubEntities => ({
   hosts: useGetReportHosts({reportId, filter, refetchInterval, staleTime}),

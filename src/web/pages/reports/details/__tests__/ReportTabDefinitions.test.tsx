@@ -6,8 +6,8 @@
 import {describe, expect, test} from '@gsa/testing';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type ReportReport from 'gmp/models/report/report';
-import type {TaskStatus} from 'gmp/models/task';
-import type {ReportSubEntities} from 'web/hooks/use-query/use-report-sub-entities';
+import {type TaskStatus} from 'gmp/models/task';
+import {type ReportSubEntities} from 'web/hooks/use-query/use-report-sub-entities';
 import {
   buildReportTabDefinitions,
   TAB_KEYS,

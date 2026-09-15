@@ -16,8 +16,8 @@ interface UseGetReportErrorsParams {
 
 export const useGetReportErrors = ({
   reportId,
-  filter = undefined,
-  refetchInterval = undefined,
+  filter,
+  refetchInterval,
   staleTime,
 }: UseGetReportErrorsParams) => {
   const gmp = useGmp();

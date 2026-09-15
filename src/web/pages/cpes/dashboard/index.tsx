@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type {FilterType} from 'gmp/models/filter';
+import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   CpesCreatedDisplay,

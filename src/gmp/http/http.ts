@@ -17,7 +17,7 @@ import {
   createFormData,
   type Data,
   type UrlParams as Params,
-  type HttpMethod as HttpMethod,
+  type HttpMethod,
 } from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';

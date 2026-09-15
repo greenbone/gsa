@@ -143,7 +143,7 @@ const createGmp = ({
   getScannersResponse = {data: scanners},
   getAllScanConfigsResponse = new Response([]),
   cloneConfigResponse = new Response({id: 'cloned-id'}),
-  deleteConfigResponse = undefined,
+  deleteConfigResponse,
   exportConfigResponse = new Response('some-data'),
   getConfig = testing.fn().mockResolvedValue(getConfigResponse),
   getTags = testing.fn().mockResolvedValue(getTagsResponse),

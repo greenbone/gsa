@@ -4,7 +4,7 @@
  */
 
 import {type CredentialStoreModifyParams} from 'gmp/commands/credential-store';
-import type {EntityActionResponse} from 'gmp/commands/entity';
+import {type EntityActionResponse} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type CredentialStore from 'gmp/models/credential-store';
 import {type FilterType} from 'gmp/models/filter';

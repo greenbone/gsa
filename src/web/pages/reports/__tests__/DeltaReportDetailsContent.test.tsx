@@ -29,7 +29,7 @@ const {entity: mockEntity} = getMockDeltaReport();
 
 const createGmp = ({
   reportResultsThreshold = 10,
-  severityRating = undefined,
+  severityRating,
 }: {
   reportResultsThreshold?: number;
   severityRating?: SeverityRating;

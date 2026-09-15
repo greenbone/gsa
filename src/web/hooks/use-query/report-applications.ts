@@ -16,8 +16,8 @@ interface UseGetReportApplicationsParams {
 
 export const useGetReportApplications = ({
   reportId,
-  filter = undefined,
-  refetchInterval = undefined,
+  filter,
+  refetchInterval,
   staleTime,
 }: UseGetReportApplicationsParams) => {
   const gmp = useGmp();

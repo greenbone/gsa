@@ -4,7 +4,7 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import type {ReportActiveCve} from 'gmp/models/report/parser';
+import {type ReportActiveCve} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import CveLink from 'web/components/link/CveLink';
@@ -15,7 +15,7 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-import type {SortDirectionType} from 'web/utils/sort-direction';
+import {type SortDirectionType} from 'web/utils/sort-direction';
 
 interface HeaderProps {
   currentSortDir?: SortDirectionType;

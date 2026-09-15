@@ -48,6 +48,7 @@ const manualUrl = 'test/';
 
 const createGmp = ({
   cloneUserResponse = {data: {id: 'foo'}},
+  // oxlint-disable-next-line typescript/no-useless-default-assignment
   deleteUserResponse = undefined,
   downloadUserResponse = {data: 'user-data'},
   exportUserResponse = {data: 'some-data'},

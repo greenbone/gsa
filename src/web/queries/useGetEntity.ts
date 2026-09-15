@@ -5,7 +5,7 @@
 
 import {useQuery} from '@tanstack/react-query';
 import type Response from 'gmp/http/response';
-import type {XmlMeta} from 'gmp/http/transform/fast-xml';
+import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type Model from 'gmp/models/model';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';

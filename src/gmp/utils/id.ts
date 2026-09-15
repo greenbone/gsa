@@ -32,7 +32,7 @@ export const includesId = <TModel extends Model>(
 };
 
 export const selectSaveId = <TModel extends Model>(
-  list?: TModel[] | undefined,
+  list?: TModel[],
   id?: string,
   emptyDefault?: string,
 ) => {

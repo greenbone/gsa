@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type {ComponentType} from 'react';
+import {type ComponentType} from 'react';
 import Logger from 'gmp/log';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';

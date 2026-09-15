@@ -5,11 +5,11 @@
 
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {parseFilter} from 'gmp/collection/parser';
-import type {EntitiesMeta} from 'gmp/commands/entities';
+import {type EntitiesMeta} from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
 import type Response from 'gmp/http/response';
-import type {XmlResponseData} from 'gmp/http/transform/fast-xml';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import AuditReport, {type AuditReportElement} from 'gmp/models/audit-report';
 import {
   ALL_FILTER,
@@ -19,7 +19,7 @@ import {
 import {filterString} from 'gmp/models/filter/utils';
 import {type Element} from 'gmp/models/model';
 import ReportHost from 'gmp/models/report/host';
-import type {ReportHostElement} from 'gmp/models/report/parser';
+import {type ReportHostElement} from 'gmp/models/report/parser';
 import {parseYesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';

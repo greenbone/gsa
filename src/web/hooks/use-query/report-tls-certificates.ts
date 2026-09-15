@@ -17,8 +17,8 @@ interface UseGetReportTlsCertificatesParams {
 
 export const useGetReportTlsCertificates = ({
   reportId,
-  filter = undefined,
-  refetchInterval = undefined,
+  filter,
+  refetchInterval,
   staleTime,
 }: UseGetReportTlsCertificatesParams) => {
   const gmp = useGmp();

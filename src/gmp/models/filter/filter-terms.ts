@@ -224,10 +224,7 @@ class FilterTerms implements FilterType {
    * @returns Returns the first FilterTerm value for the passed keyword
    *         or def if no FilterTerm for the keyword exists in this filter.
    */
-  get(
-    key: string,
-    def: string | number | undefined = undefined,
-  ): string | number | undefined {
+  get(key: string, def?: string | number): string | number | undefined {
     const term = this.getTerm(key);
     return isDefined(term) ? term.value : def;
   }

@@ -27,6 +27,7 @@ const currentSettings = testing
 const createGmp = ({
   getPortListResponse = defaultGetPortListResponse,
   createPortListResponse = {id: '123'},
+  // oxlint-disable-next-line typescript/no-useless-default-assignment
   deletePortListResponse = undefined,
   savePortListResponse = {id: '123'},
   clonePortListResponse = {id: '123'},

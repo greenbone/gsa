@@ -16,6 +16,7 @@ const defaultGetCredentialResponse = new Response(new Credential({id: '123'}));
 const createGmp = ({
   cloneCredentialResponse = {id: '123'},
   createCredentialResponse = {id: '123'},
+  // oxlint-disable-next-line typescript/no-useless-default-assignment
   deleteCredentialResponse = undefined,
   downloadCredentialResponse = {data: 'some-data'},
   downloadInstallerResponse = {data: 'some-data'},

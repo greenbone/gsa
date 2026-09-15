@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {FilterCommand} from 'gmp/commands/filter';
 import {createHttp, createActionResultResponse} from 'gmp/commands/testing';
-import type {EntityType} from 'gmp/utils/entity-type';
+import {type EntityType} from 'gmp/utils/entity-type';
 
 interface FilterResourceMapping {
   entityType: EntityType;

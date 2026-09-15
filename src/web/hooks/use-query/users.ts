@@ -9,7 +9,7 @@ import {type FilterType} from 'gmp/models/filter';
 import {isFilterType} from 'gmp/models/filter/utils';
 import type User from 'gmp/models/user';
 import useGmp from 'web/hooks/useGmp';
-import type {RefetchIntervalFn} from 'web/queries/helpers';
+import {type RefetchIntervalFn} from 'web/queries/helpers';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';

@@ -39,7 +39,7 @@ const createGmp = ({
   createWebApplicationTarget = {id: 'created-id'},
   saveWebApplicationTarget = {id: 'saved-id'},
   cloneWebApplicationTarget = {id: 'cloned-id'},
-  deleteWebApplicationTarget = undefined,
+  deleteWebApplicationTarget,
   exportWebApplicationTarget = new Response('some-data'),
   createCredential = testing.fn().mockResolvedValue({data: {id: 'cred-id'}}),
 }: CreateGmpParams = {}): {
