@@ -835,9 +835,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Host[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 509,
+        "line": 521,
         "column": 15,
-        "offset": 12585
+        "offset": 13046
       },
       "sourceLine": "hosts = [],",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Host[]` (not nullish). This default assignment will never be used.|15|hosts = [],"
@@ -847,9 +847,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `HostsTopologyChartData` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 222,
+        "line": 233,
         "column": 19,
-        "offset": 5550
+        "offset": 5911
       },
       "sourceLine": "const {data = {}} = nextProps;",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `HostsTopologyChartData` (not nullish). This default assignment will never be used.|19|const {data = {}} = nextProps;"
@@ -859,9 +859,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Link[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 510,
+        "line": 522,
         "column": 15,
-        "offset": 12603
+        "offset": 13064
       },
       "sourceLine": "links = [],",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Link[]` (not nullish). This default assignment will never be used.|15|links = [],"
@@ -871,9 +871,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 542,
+        "line": 554,
         "column": 25,
-        "offset": 13542
+        "offset": 14003
       },
       "sourceLine": "onWheel={this.handleMouseWheel}",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|25|onWheel={this.handleMouseWheel}"
@@ -883,9 +883,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 541,
+        "line": 553,
         "column": 27,
-        "offset": 13503
+        "offset": 13964
       },
       "sourceLine": "onMouseUp={this.handleMouseUp}",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|27|onMouseUp={this.handleMouseUp}"
@@ -895,9 +895,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 539,
+        "line": 551,
         "column": 29,
-        "offset": 13415
+        "offset": 13876
       },
       "sourceLine": "onMouseDown={this.handleMouseDown}",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|29|onMouseDown={this.handleMouseDown}"
@@ -907,9 +907,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 540,
+        "line": 552,
         "column": 29,
-        "offset": 13460
+        "offset": 13921
       },
       "sourceLine": "onMouseMove={this.handleMouseMove}",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|29|onMouseMove={this.handleMouseMove}"
@@ -1161,7 +1161,7 @@
       "location": {
         "line": 489,
         "column": 36,
-        "offset": 12711
+        "offset": 12721
       },
       "sourceLine": "setState: this.handleSetState,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|36|setState: this.handleSetState,"
@@ -1173,7 +1173,7 @@
       "location": {
         "line": 477,
         "column": 42,
-        "offset": 12383
+        "offset": 12393
       },
       "sourceLine": "setState: this.handleSetState,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|42|setState: this.handleSetState,"
@@ -1185,7 +1185,7 @@
       "location": {
         "line": 494,
         "column": 46,
-        "offset": 12925
+        "offset": 12935
       },
       "sourceLine": "onDownloadCsvClick: this.handleDownloadCsv,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadCsvClick: this.handleDownloadCsv,"
@@ -1197,7 +1197,7 @@
       "location": {
         "line": 495,
         "column": 46,
-        "offset": 12989
+        "offset": 12999
       },
       "sourceLine": "onDownloadSvgClick: this.handleDownloadSvg,",
       "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadSvgClick: this.handleDownloadSvg,"
@@ -2977,78 +2977,6 @@
       },
       "sourceLine": "getSetting = testing.fn().mockResolvedValue({",
       "fingerprint": "src/web/pages/hosts/__tests__/ListPage.test.jsx|eslint(no-unused-vars)|Parameter 'getSetting' is declared but never used. Unused parameters should start with a '_'.|3|getSetting = testing.fn().mockResolvedValue({"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostsTopologyDisplay.jsx",
-      "code": "typescript(no-floating-promises)",
-      "message": "Promises must be awaited, add void operator to ignore.",
-      "location": {
-        "line": 109,
-        "column": 5,
-        "offset": 2788
-      },
-      "sourceLine": "navigate(`/host/${data.id}`);",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostsTopologyDisplay.jsx|typescript(no-floating-promises)|Promises must be awaited, add void operator to ignore.|5|navigate(`/host/${data.id}`);"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/HostsVulnScoreDisplay.jsx",
-      "code": "typescript(no-floating-promises)",
-      "message": "Promises must be awaited, add void operator to ignore.",
-      "location": {
-        "line": 85,
-        "column": 5,
-        "offset": 2746
-      },
-      "sourceLine": "navigate(`/host/${data.id}`);",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostsVulnScoreDisplay.jsx|typescript(no-floating-promises)|Promises must be awaited, add void operator to ignore.|5|navigate(`/host/${data.id}`);"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/ModifiedDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class HostsModifiedDisplay",
-      "location": {
-        "line": 44,
-        "column": 14,
-        "offset": 1554
-      },
-      "sourceLine": "export class HostsModifiedDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/hosts/dashboard/ModifiedDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class HostsModifiedDisplay|14|export class HostsModifiedDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/ModifiedDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 111,
-        "column": 39,
-        "offset": 3507
-      },
-      "sourceLine": "onRangeSelected={this.handleRangeSelect}",
-      "fingerprint": "src/web/pages/hosts/dashboard/ModifiedDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|39|onRangeSelected={this.handleRangeSelect}"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/ModifiedHighDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class HostsModifiedHighDisplay",
-      "location": {
-        "line": 45,
-        "column": 14,
-        "offset": 1620
-      },
-      "sourceLine": "export class HostsModifiedHighDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/hosts/dashboard/ModifiedHighDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class HostsModifiedHighDisplay|14|export class HostsModifiedHighDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/hosts/dashboard/ModifiedHighDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 110,
-        "column": 39,
-        "offset": 3533
-      },
-      "sourceLine": "onRangeSelected={this.handleRangeSelect}",
-      "fingerprint": "src/web/pages/hosts/dashboard/ModifiedHighDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|39|onRangeSelected={this.handleRangeSelect}"
     },
     {
       "filename": "src/web/pages/hosts/HostComponent.jsx",

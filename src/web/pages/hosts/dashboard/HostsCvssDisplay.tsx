@@ -9,14 +9,19 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {HostsSeverityLoader} from 'web/pages/hosts/dashboard/Loaders';
+import {HostsSeverityLoader} from 'web/pages/hosts/dashboard/HostsLoaders';
 
 export const HostsCvssDisplay = createDisplay({
   loaderComponent: HostsSeverityLoader,
-  displayComponent: CvssDisplay,
-  yLabel: _l('# of Hosts'),
-  title: ({data: tdata}) =>
-    _('Hosts by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssDisplay
+      {...props}
+      title={({data}) =>
+        _('Hosts by CVSS (Total: {{count}})', {count: data.total})
+      }
+      yLabel={_('# of Hosts')}
+    />
+  ),
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-cvss',
   displayName: 'HostsCvssDisplay',
@@ -24,10 +29,15 @@ export const HostsCvssDisplay = createDisplay({
 
 export const HostsCvssTableDisplay = createDisplay({
   loaderComponent: HostsSeverityLoader,
-  displayComponent: CvssTableDisplay,
-  dataTitles: [_l('Severity'), _l('# of Hosts')],
-  title: ({data: tdata}) =>
-    _('Hosts by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssTableDisplay
+      {...props}
+      dataTitles={[_('Severity'), _('# of Hosts')]}
+      title={({data}) =>
+        _('Hosts by CVSS (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-cvss-table',
   displayName: 'HostsCvssTableDisplay',
