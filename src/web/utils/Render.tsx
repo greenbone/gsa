@@ -115,7 +115,9 @@ export const renderNvtName = (
 
 export const renderComponent = <TProps extends {}>(
   Component:
-    React.FunctionComponent<TProps> | React.ComponentClass<TProps> | string,
+    | React.FunctionComponent<TProps>
+    | React.ComponentClass<TProps>
+    | string,
   props: TProps = {} as TProps,
 ) => (Component ? <Component {...props} /> : null);
 

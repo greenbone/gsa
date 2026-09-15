@@ -9,7 +9,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import QueryFilter from 'gmp/models/filter/query-filter';
-
 import VulnerabilityFilterDialog from 'web/pages/vulnerabilities/VulnerabilitiesFilterDialog';
 
 const createGmp = ({

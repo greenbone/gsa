@@ -5,7 +5,6 @@
 
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
-
 import useTranslation from 'web/hooks/useTranslation';
 
 const AgentInstallersListPageToolBarIcons = () => {

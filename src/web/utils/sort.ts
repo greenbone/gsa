@@ -14,7 +14,9 @@ import {isDefined, isFunction} from 'gmp/utils/identity';
 
 type Comparable = string | number | boolean | bigint | Date | null | undefined;
 type PropertySelector<TObject, TReturn> =
-  keyof TObject | string | ((object: TObject) => TReturn);
+  | keyof TObject
+  | string
+  | ((object: TObject) => TReturn);
 type Compare<T> = (a: T, b: T) => number;
 type CompareFactory<T> = (reverse?: boolean) => Compare<T>;
 

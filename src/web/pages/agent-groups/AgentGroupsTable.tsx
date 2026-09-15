@@ -9,7 +9,6 @@ import createEntitiesFooter, {
   type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-
 import AgentGroupsTableHeader, {
   type AgentGroupsTableHeaderProps,
 } from 'web/pages/agent-groups/AgentGroupsTableHeader';

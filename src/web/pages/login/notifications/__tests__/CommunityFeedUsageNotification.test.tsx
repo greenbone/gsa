@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, beforeEach, testing} from '@gsa/testing';
 import {updateNotification} from '@mantine/notifications';
+import {describe, test, expect, beforeEach, testing} from '@gsa/testing';
 import {screen, rendererWith, wait} from 'web/testing';
 import {showNotification} from '@greenbone/ui-lib';
 import {vi} from 'vitest';

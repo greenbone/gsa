@@ -4,7 +4,6 @@
  */
 
 import {useEffect, useMemo, useState} from 'react';
-
 import {DEFAULT_SETTINGS} from 'gmp/commands/user';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {type EntityType} from 'gmp/utils/entity-type';
@@ -22,7 +21,6 @@ import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
 import useSettingSave from 'web/pages/user-settings/useSettingSave';
-
 import {selector as alertsSelector} from 'web/store/entities/alerts';
 import {selector as credentialsSelector} from 'web/store/entities/credentials';
 import {selector as portListsSelector} from 'web/store/entities/portlists';
@@ -31,7 +29,6 @@ import {selector as scannersSelector} from 'web/store/entities/scanners';
 import {selector as schedulesSelector} from 'web/store/entities/schedules';
 import {selector as targetsSelector} from 'web/store/entities/targets';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
 
 interface Setting<T> {

@@ -282,7 +282,8 @@ const ScheduleDialog = ({
       ? initialWeekdays
       : new WeekDays().setWeekDayFromDate(initialStartDate);
     const currentMonthlyDay = currentWeekdays.getSelectedWeekDay() as
-      WeekDay | undefined;
+      | WeekDay
+      | undefined;
     const currentMonthlyNth = currentMonthlyDay
       ? currentWeekdays.get(currentMonthlyDay)
       : undefined;

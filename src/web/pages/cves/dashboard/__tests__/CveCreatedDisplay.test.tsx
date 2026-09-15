@@ -6,11 +6,11 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
   type SubscribeFunc,
 } from 'web/components/provider/SubscriptionProvider';
-import {getDisplay} from 'web/components/dashboard/registry';
 import {
   CvesCreatedDisplay,
   CvesCreatedTableDisplay,

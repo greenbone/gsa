@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {render, screen} from 'web/testing';
 import i18n from 'i18next';
 import _ from 'gmp/locale';
-
 import withTranslation, {
   type WithTranslationComponentProps,
 } from 'web/utils/withTranslation';

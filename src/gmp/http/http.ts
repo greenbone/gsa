@@ -98,63 +98,62 @@ class Http {
     }
 
     let xhr: XMLHttpRequest;
-    const promise = new Promise<Response<TSuccessData, TSuccessMeta>>(function (
-      resolve,
-      reject,
-    ) {
-      xhr = new Http.XHR();
+    const promise = new Promise<Response<TSuccessData, TSuccessMeta>>(
+      function (resolve, reject) {
+        xhr = new Http.XHR();
 
-      xhr.onloadstart = function () {
-        // defer setting the responseType to avoid InvalidStateError with IE 11
-        if (isDefined(responseType)) {
-          xhr.responseType = responseType;
+        xhr.onloadstart = function () {
+          // defer setting the responseType to avoid InvalidStateError with IE 11
+          if (isDefined(responseType)) {
+            xhr.responseType = responseType;
+          }
+        };
+
+        xhr.open(method, url, true);
+
+        if (isDefined(jwt)) {
+          xhr.setRequestHeader('Authorization', `Bearer ${jwt}`);
         }
-      };
 
-      xhr.open(method, url, true);
-
-      if (isDefined(jwt)) {
-        xhr.setRequestHeader('Authorization', `Bearer ${jwt}`);
-      }
-
-      if (isDefined(self.timeout)) {
-        xhr.timeout = self.timeout;
-      }
-      xhr.withCredentials = true; // allow to set Cookies
-
-      xhr.onload = function () {
-        if (this.status >= 200 && this.status < 300) {
-          self.handleSuccess(resolve, reject, this);
-        } else {
-          self.handleResponseError(reject, this);
+        if (isDefined(self.timeout)) {
+          xhr.timeout = self.timeout;
         }
-      };
+        xhr.withCredentials = true; // allow to set Cookies
 
-      xhr.onerror = function () {
-        self.handleRequestError(reject, this);
-      };
+        xhr.onload = function () {
+          if (this.status >= 200 && this.status < 300) {
+            self.handleSuccess(resolve, reject, this);
+          } else {
+            self.handleResponseError(reject, this);
+          }
+        };
 
-      xhr.ontimeout = function () {
-        self.handleTimeout(reject, {url});
-      };
+        xhr.onerror = function () {
+          self.handleRequestError(reject, this);
+        };
 
-      xhr.onabort = function () {
-        log.debug('Canceled http request', method, url);
-      };
+        xhr.ontimeout = function () {
+          self.handleTimeout(reject, {url});
+        };
 
-      if (isDefined(cancelToken)) {
-        cancelToken.promise
-          .then(reason => {
-            xhr.abort();
-            reject(new CanceledRejection(reason));
-          })
-          .catch(error => {
-            log.error('Error handling cancel token promise', error);
-          });
-      }
+        xhr.onabort = function () {
+          log.debug('Canceled http request', method, url);
+        };
 
-      xhr.send(formdata);
-    });
+        if (isDefined(cancelToken)) {
+          cancelToken.promise
+            .then(reason => {
+              xhr.abort();
+              reject(new CanceledRejection(reason));
+            })
+            .catch(error => {
+              log.error('Error handling cancel token promise', error);
+            });
+        }
+
+        xhr.send(formdata);
+      },
+    );
 
     return promise;
   }

@@ -13,7 +13,10 @@ import {parseYesNo} from 'gmp/parser';
 import {isArray} from 'gmp/utils/identity';
 
 type ReportConfigParamValue =
-  string | number | boolean | Array<string | number | boolean>;
+  | string
+  | number
+  | boolean
+  | Array<string | number | boolean>;
 
 interface ReportConfigCreateArgs {
   comment?: string;

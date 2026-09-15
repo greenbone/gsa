@@ -10,6 +10,12 @@ import {type FilterType} from 'gmp/models/filter';
 import {type ToString} from 'gmp/types';
 import {hasValue, isDefined, isFunction} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
+import {
+  type DisplayProps,
+  type DisplayState,
+  type DisplaySetStateFunc,
+  type DisplayStateFunc,
+} from 'web/components/dashboard/display';
 import DataDisplayIcons, {
   type DataDisplayIconsProps,
 } from 'web/components/dashboard/display/DataDisplayIcons';
@@ -17,12 +23,6 @@ import DisplayContainer, {
   DISPLAY_HEADER_HEIGHT,
   DISPLAY_BORDER_WIDTH,
 } from 'web/components/dashboard/display/DisplayContainer';
-import {
-  type DisplayProps,
-  type DisplayState,
-  type DisplaySetStateFunc,
-  type DisplayStateFunc,
-} from 'web/components/dashboard/display';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import Theme from 'web/utils/theme';

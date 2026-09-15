@@ -9,7 +9,6 @@ import {useDispatch} from 'react-redux';
 import {transformSettingName} from 'gmp/commands/user';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-
 import {
   loadUserSettingDefault,
   loadUserSettingDefaults,

@@ -119,7 +119,11 @@ export interface NvtPreference {
 }
 
 export type SolutionTypeValue =
-  'Workaround' | 'Mitigation' | 'VendorFix' | 'NoneAvailable' | 'WillNotFix';
+  | 'Workaround'
+  | 'Mitigation'
+  | 'VendorFix'
+  | 'NoneAvailable'
+  | 'WillNotFix';
 
 interface Reference {
   ref: string;

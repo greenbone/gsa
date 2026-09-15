@@ -8,6 +8,10 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, waitFor} from 'web/testing';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {
+  SubscriptionContext,
+  type SubscribeFunc,
+} from 'web/components/provider/SubscriptionProvider';
+import {
   HOSTS_MODIFIED,
   HOSTS_SEVERITY,
   HOSTS_TOPOLOGY,
@@ -17,10 +21,6 @@ import {
   HostsTopologyLoader,
   HostsVulnScoreLoader,
 } from 'web/pages/hosts/dashboard/HostsLoaders';
-import {
-  SubscriptionContext,
-  type SubscribeFunc,
-} from 'web/components/provider/SubscriptionProvider';
 
 const createGmp = (hosts: Record<string, unknown>) => ({hosts});
 
