@@ -44,6 +44,11 @@
       "prefer-inline"
     ],
     "react/exhaustive-deps": "warn",
+    "react/immutability": "error",
+    "react/jsx-key": "warn",
+    "react/jsx-no-duplicate-props": "error",
+    "react/jsx-props-no-spread-multi": "error",
+    "typescript/consistent-type-exports": "warn",
     "typescript/consistent-type-imports": [
       "error",
       {
@@ -78,7 +83,8 @@
       {
         "fn": "test"
       }
-    ]
+    ],
+    "vitest/valid-expect-in-promise": "error"
   },
   "ignorePatterns": [
     "build/**",
