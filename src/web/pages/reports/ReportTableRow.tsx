@@ -5,8 +5,7 @@
 
 import React from 'react';
 import type Report from 'gmp/models/report';
-import type Task from 'gmp/models/task';
-import {TASK_STATUS, isActive} from 'gmp/models/task';
+import {type default as Task, TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import StatusBar from 'web/components/bar/StatusBar';
