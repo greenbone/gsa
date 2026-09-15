@@ -30,6 +30,7 @@
     "lint:baseline:update": "node scripts/lint-with-baseline.mjs --update",
     "format": "oxfmt src",
     "format-check": "oxfmt --check src",
+    "all-checks": "npm run i18n-extract && npm run lint && npm run type-check && npm run format",
     "preview": "vite preview",
     "i18n-extract": "i18next-cli extract",
     "type-check": "tsc --noEmit",
