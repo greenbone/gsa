@@ -111,7 +111,7 @@
     "i18next-cli": "^1.72.4",
     "jsdom": "30.0.1",
     "oxc-parser": "0.148.0",
-    "oxlint": "1.81.0",
+    "oxlint": "1.82.0",
     "oxlint-tsgolint": "7.0.2001",
     "prettier": "^3.9.6",
     "typescript": "7.0.2",
