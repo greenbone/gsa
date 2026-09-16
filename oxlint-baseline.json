@@ -3088,6 +3088,18 @@
     },
     {
       "filename": "src/web/pages/reports/details/application/ApplicationsTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 57,
+        "column": 5,
+        "offset": 1825
+      },
+      "sourceLine": "setAppsFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/application/ApplicationsTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setAppsFilter(baseFilter);"
+    },
+    {
+      "filename": "src/web/pages/reports/details/application/ApplicationsTab.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
@@ -3097,6 +3109,18 @@
       },
       "sourceLine": "setAppsFilter(baseFilter);",
       "fingerprint": "src/web/pages/reports/details/application/ApplicationsTab.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setAppsFilter(baseFilter);"
+    },
+    {
+      "filename": "src/web/pages/reports/details/cve/ClosedCvesTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 58,
+        "column": 5,
+        "offset": 1840
+      },
+      "sourceLine": "setClosedCvesFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/cve/ClosedCvesTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setClosedCvesFilter(baseFilter);"
     },
     {
       "filename": "src/web/pages/reports/details/cve/ClosedCvesTab.tsx",
@@ -3112,6 +3136,18 @@
     },
     {
       "filename": "src/web/pages/reports/details/cve/CvesTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 57,
+        "column": 5,
+        "offset": 1752
+      },
+      "sourceLine": "setCvesFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/cve/CvesTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setCvesFilter(baseFilter);"
+    },
+    {
+      "filename": "src/web/pages/reports/details/cve/CvesTab.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
@@ -3121,6 +3157,18 @@
       },
       "sourceLine": "setCvesFilter(baseFilter);",
       "fingerprint": "src/web/pages/reports/details/cve/CvesTab.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setCvesFilter(baseFilter);"
+    },
+    {
+      "filename": "src/web/pages/reports/details/error/ErrorsTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 55,
+        "column": 5,
+        "offset": 2016
+      },
+      "sourceLine": "setErrorsFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/error/ErrorsTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setErrorsFilter(baseFilter);"
     },
     {
       "filename": "src/web/pages/reports/details/error/ErrorsTab.tsx",
@@ -3136,6 +3184,18 @@
     },
     {
       "filename": "src/web/pages/reports/details/operating-system/OperatingSystemsTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 70,
+        "column": 5,
+        "offset": 2353
+      },
+      "sourceLine": "setOperatingSystemsFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/operating-system/OperatingSystemsTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setOperatingSystemsFilter(baseFilter);"
+    },
+    {
+      "filename": "src/web/pages/reports/details/operating-system/OperatingSystemsTab.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
@@ -3145,6 +3205,18 @@
       },
       "sourceLine": "setOperatingSystemsFilter(baseFilter);",
       "fingerprint": "src/web/pages/reports/details/operating-system/OperatingSystemsTab.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setOperatingSystemsFilter(baseFilter);"
+    },
+    {
+      "filename": "src/web/pages/reports/details/port/PortsTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 50,
+        "column": 5,
+        "offset": 1633
+      },
+      "sourceLine": "setPortsFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/port/PortsTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setPortsFilter(baseFilter);"
     },
     {
       "filename": "src/web/pages/reports/details/port/PortsTab.tsx",
@@ -3172,6 +3244,18 @@
     },
     {
       "filename": "src/web/pages/reports/details/result/ContainerScanningResultsTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 47,
+        "column": 5,
+        "offset": 1626
+      },
+      "sourceLine": "setResultsFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/result/ContainerScanningResultsTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setResultsFilter(baseFilter);"
+    },
+    {
+      "filename": "src/web/pages/reports/details/result/ContainerScanningResultsTab.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
@@ -3196,6 +3280,18 @@
     },
     {
       "filename": "src/web/pages/reports/details/result/ResultsTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 75,
+        "column": 5,
+        "offset": 2341
+      },
+      "sourceLine": "setResultsFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/result/ResultsTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setResultsFilter(baseFilter);"
+    },
+    {
+      "filename": "src/web/pages/reports/details/result/ResultsTab.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
@@ -3205,6 +3301,18 @@
       },
       "sourceLine": "setResultsFilter(baseFilter);",
       "fingerprint": "src/web/pages/reports/details/result/ResultsTab.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setResultsFilter(baseFilter);"
+    },
+    {
+      "filename": "src/web/pages/reports/details/result/WebApplicationScanningResultsTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 47,
+        "column": 5,
+        "offset": 1651
+      },
+      "sourceLine": "setResultsFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/result/WebApplicationScanningResultsTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setResultsFilter(baseFilter);"
     },
     {
       "filename": "src/web/pages/reports/details/result/WebApplicationScanningResultsTab.tsx",
@@ -3241,6 +3349,18 @@
       },
       "sourceLine": "isDefined(task?.isImport) && task.isImport()",
       "fingerprint": "src/web/pages/reports/details/Summary.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|isDefined(task?.isImport) && task.isImport()"
+    },
+    {
+      "filename": "src/web/pages/reports/details/tls-certificate/TlsCertificatesTab.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 66,
+        "column": 5,
+        "offset": 2455
+      },
+      "sourceLine": "setTlsCertificatesFilter(baseFilter);",
+      "fingerprint": "src/web/pages/reports/details/tls-certificate/TlsCertificatesTab.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setTlsCertificatesFilter(baseFilter);"
     },
     {
       "filename": "src/web/pages/reports/details/tls-certificate/TlsCertificatesTab.tsx",
@@ -3445,6 +3565,18 @@
       },
       "sourceLine": "setSelectValues(currentSelect =>",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setSelectValues(currentSelect =>"
+    },
+    {
+      "filename": "src/web/pages/scanconfigs/ScanConfigEditFamilyDialog.tsx",
+      "code": "react(no-deriving-state-in-effects)",
+      "message": "Values derived from props and state should be calculated during render, not in an effect",
+      "location": {
+        "line": 217,
+        "column": 5,
+        "offset": 6060
+      },
+      "sourceLine": "setSelectedNvts(selected);",
+      "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditFamilyDialog.tsx|react(no-deriving-state-in-effects)|Values derived from props and state should be calculated during render, not in an effect|5|setSelectedNvts(selected);"
     },
     {
       "filename": "src/web/pages/scanconfigs/ScanConfigEditFamilyDialog.tsx",
