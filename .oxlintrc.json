@@ -13,6 +13,7 @@
         "allow": ["warn", "error", "info"]
       }
     ],
+    "eslint/no-constructor-return": "error",
     "eslint/no-duplicate-imports": "warn",
     "eslint/no-unused-expressions": [
       "warn",
@@ -45,6 +46,7 @@
     "react/jsx-key": "warn",
     "react/jsx-no-duplicate-props": "error",
     "react/jsx-props-no-spread-multi": "error",
+    "react/no-danger": "error",
     "typescript/consistent-type-exports": "warn",
     "typescript/consistent-type-imports": [
       "error",
