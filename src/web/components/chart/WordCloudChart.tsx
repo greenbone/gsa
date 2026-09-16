@@ -53,7 +53,7 @@ const createCloud = (onEnd: (words: Word[]) => void): Cloud =>
     .on('end', onEnd);
 
 const createWords = (data: WordCloudChartData[]): Word[] => {
-  let values = data.map(d => d.value).sort();
+  let values = data.map(d => d.value).sort((a, b) => a - b);
 
   if (values.length > DEFAULT_MAX_WORDS) {
     values = values.slice(0, DEFAULT_MAX_WORDS);

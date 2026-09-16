@@ -669,7 +669,7 @@
       "location": {
         "line": 89,
         "column": 8,
-        "offset": 2097
+        "offset": 2105
       },
       "sourceLine": "if (!cloudRef.current) {",
       "fingerprint": "src/web/components/chart/WordCloudChart.tsx|react(refs)|Cannot access refs during render|8|if (!cloudRef.current) {"
@@ -681,22 +681,10 @@
       "location": {
         "line": 104,
         "column": 7,
-        "offset": 2510
+        "offset": 2518
       },
       "sourceLine": "setWords([]);",
       "fingerprint": "src/web/components/chart/WordCloudChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setWords([]);"
-    },
-    {
-      "filename": "src/web/components/chart/WordCloudChart.tsx",
-      "code": "typescript(require-array-sort-compare)",
-      "message": "Require 'compare' argument.",
-      "location": {
-        "line": 56,
-        "column": 16,
-        "offset": 1387
-      },
-      "sourceLine": "let values = data.map(d => d.value).sort();",
-      "fingerprint": "src/web/components/chart/WordCloudChart.tsx|typescript(require-array-sort-compare)|Require 'compare' argument.|16|let values = data.map(d => d.value).sort();"
     },
     {
       "filename": "src/web/components/dashboard/DashboardView.tsx",
