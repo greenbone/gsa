@@ -675,54 +675,6 @@
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Link[]` (not nullish). This default assignment will never be used.|15|links = [],"
     },
     {
-      "filename": "src/web/components/chart/HostsTopologyChart.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 555,
-        "column": 25,
-        "offset": 14046
-      },
-      "sourceLine": "onWheel={this.handleMouseWheel}",
-      "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|25|onWheel={this.handleMouseWheel}"
-    },
-    {
-      "filename": "src/web/components/chart/HostsTopologyChart.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 554,
-        "column": 27,
-        "offset": 14007
-      },
-      "sourceLine": "onMouseUp={this.handleMouseUp}",
-      "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|27|onMouseUp={this.handleMouseUp}"
-    },
-    {
-      "filename": "src/web/components/chart/HostsTopologyChart.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 552,
-        "column": 29,
-        "offset": 13919
-      },
-      "sourceLine": "onMouseDown={this.handleMouseDown}",
-      "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|29|onMouseDown={this.handleMouseDown}"
-    },
-    {
-      "filename": "src/web/components/chart/HostsTopologyChart.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 553,
-        "column": 29,
-        "offset": 13964
-      },
-      "sourceLine": "onMouseMove={this.handleMouseMove}",
-      "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|29|onMouseMove={this.handleMouseMove}"
-    },
-    {
       "filename": "src/web/components/chart/LineChart.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
@@ -913,54 +865,6 @@
       },
       "sourceLine": "const createObjectURL = window.URL.createObjectURL as ReturnType<",
       "fingerprint": "src/web/components/dashboard/display/__tests__/DataDisplay.test.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|40|const createObjectURL = window.URL.createObjectURL as ReturnType<"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 489,
-        "column": 36,
-        "offset": 12745
-      },
-      "sourceLine": "setState: this.handleSetState,",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|36|setState: this.handleSetState,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 477,
-        "column": 42,
-        "offset": 12417
-      },
-      "sourceLine": "setState: this.handleSetState,",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|42|setState: this.handleSetState,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 494,
-        "column": 46,
-        "offset": 12959
-      },
-      "sourceLine": "onDownloadCsvClick: this.handleDownloadCsv,",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadCsvClick: this.handleDownloadCsv,"
-    },
-    {
-      "filename": "src/web/components/dashboard/display/DataDisplay.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 495,
-        "column": 46,
-        "offset": 13023
-      },
-      "sourceLine": "onDownloadSvgClick: this.handleDownloadSvg,",
-      "fingerprint": "src/web/components/dashboard/display/DataDisplay.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|46|onDownloadSvgClick: this.handleDownloadSvg,"
     },
     {
       "filename": "src/web/components/dashboard/display/Loader.tsx",
