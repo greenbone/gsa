@@ -258,6 +258,16 @@ const LineChart = ({
   const [rangeX, setRangeX] = useState<number | GmpDate | undefined>();
   const [chartWidth, setChartWidth] = useState<number>(MIN_WIDTH);
 
+  const setSvgRefs = useCallback(
+    (element: SVGSVGElement | null) => {
+      svgElementRef.current = element;
+      if (svgRef) {
+        svgRef.current = element;
+      }
+    },
+    [svgRef],
+  );
+
   const getCalculatedWidth = useCallback(() => {
     let w = propWidth - MENU_PLACEHOLDER_WIDTH;
     const {current: legend} = legendRef;
@@ -367,19 +377,6 @@ const LineChart = ({
 
   const hideInfo = useCallback(() => setDisplayInfo(false), []);
   const showInfo = useCallback(() => setDisplayInfo(true), []);
-
-  const handleSvgRef = useCallback(
-    (ref: SVGSVGElement | null) => {
-      svgElementRef.current = ref;
-      if (typeof svgRef === 'function') {
-        svgRef(ref);
-      } else if (svgRef && typeof svgRef === 'object') {
-        // oxlint-disable-next-line react/immutability
-        (svgRef as React.RefObject<SVGSVGElement | null>).current = ref;
-      }
-    },
-    [svgRef],
-  );
 
   const xScale = getXScale(data, timeline, chartWidth);
   const yScale = getYScale(data, height);
@@ -517,7 +514,7 @@ const LineChart = ({
   return (
     <Layout align={['start', 'start']}>
       <Svg
-        ref={handleSvgRef}
+        ref={setSvgRefs}
         height={height}
         width={chartWidth}
         onMouseDown={showRange ? startRangeSelection : undefined}
