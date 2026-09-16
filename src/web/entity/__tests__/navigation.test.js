@@ -14,13 +14,13 @@ describe('goToDetails', () => {
   });
 
   test('should throw an error if navigate is not provided', () => {
-    expect(() => goToDetails('type')).toThrowError(
+    expect(() => goToDetails('type')).toThrow(
       'navigate function is required for goToDetails',
     );
-    expect(() => goToDetails('type', {})).toThrowError(
+    expect(() => goToDetails('type', {})).toThrow(
       'navigate function is required for goToDetails',
     );
-    expect(() => goToDetails('type', {navigation: true})).toThrowError(
+    expect(() => goToDetails('type', {navigation: true})).toThrow(
       'navigate function is required for goToDetails',
     );
   });
@@ -40,13 +40,13 @@ describe('goToList', () => {
   });
 
   test('should throw an error if navigate is not provided', () => {
-    expect(() => goToList('type')).toThrowError(
+    expect(() => goToList('type')).toThrow(
       'navigate function is required for goToList',
     );
-    expect(() => goToList('type', {})).toThrowError(
+    expect(() => goToList('type', {})).toThrow(
       'navigate function is required for goToList',
     );
-    expect(() => goToList('type', {navigation: true})).toThrowError(
+    expect(() => goToList('type', {navigation: true})).toThrow(
       'navigate function is required for goToList',
     );
   });

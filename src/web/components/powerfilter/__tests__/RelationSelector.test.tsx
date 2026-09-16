@@ -49,8 +49,8 @@ describe('Relation Selector Tests', () => {
 
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[1]);
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('=', undefined);
+    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith('=', undefined);
   });
 
   test('should change value', async () => {
@@ -65,8 +65,8 @@ describe('Relation Selector Tests', () => {
 
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[3]);
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('<', undefined);
+    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith('<', undefined);
   });
 
   test('should filter items', async () => {

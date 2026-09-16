@@ -20,8 +20,8 @@ describe('store utils module tests', () => {
       });
 
       expect(reducer(undefined, action)).toEqual({});
-      expect(foo).toBeCalledWith(undefined, action);
-      expect(bar).toBeCalledWith(undefined, action);
+      expect(foo).toHaveBeenCalledWith(undefined, action);
+      expect(bar).toHaveBeenCalledWith(undefined, action);
     });
 
     test('should pass state[reducerName] to reducers', () => {
@@ -39,8 +39,8 @@ describe('store utils module tests', () => {
       });
 
       expect(reducer(state, action)).toEqual({});
-      expect(foo).toBeCalledWith(1, action);
-      expect(bar).toBeCalledWith(2, action);
+      expect(foo).toHaveBeenCalledWith(1, action);
+      expect(bar).toHaveBeenCalledWith(2, action);
     });
 
     test('should combine state from reducers', () => {
@@ -61,8 +61,8 @@ describe('store utils module tests', () => {
         foo: 99,
         bar: 100,
       });
-      expect(foo).toBeCalledWith(1, action);
-      expect(bar).toBeCalledWith(2, action);
+      expect(foo).toHaveBeenCalledWith(1, action);
+      expect(bar).toHaveBeenCalledWith(2, action);
     });
 
     test('should drop unknown props from state', () => {
@@ -84,8 +84,8 @@ describe('store utils module tests', () => {
         foo: 99,
         bar: 100,
       });
-      expect(foo).toBeCalledWith(1, action);
-      expect(bar).toBeCalledWith(2, action);
+      expect(foo).toHaveBeenCalledWith(1, action);
+      expect(bar).toHaveBeenCalledWith(2, action);
     });
 
     test('should allow to return undefined from reducers', () => {
@@ -106,8 +106,8 @@ describe('store utils module tests', () => {
         foo: undefined,
         bar: undefined,
       });
-      expect(foo).toBeCalledWith(1, action);
-      expect(bar).toBeCalledWith(2, action);
+      expect(foo).toHaveBeenCalledWith(1, action);
+      expect(bar).toHaveBeenCalledWith(2, action);
     });
   });
 

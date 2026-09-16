@@ -199,11 +199,11 @@ describe('entities loading actions tests', () => {
       expect(isFunction(loadAllEntities)).toBe(true);
 
       return loadAllEntities(gmp)()(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(isLoadingEntities).toBeCalled();
-        expect(dispatch).not.toBeCalled();
-        expect(get).not.toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(selector).toHaveBeenCalledWith({foo: 'bar'});
+        expect(isLoadingEntities).toHaveBeenCalled();
+        expect(dispatch).not.toHaveBeenCalled();
+        expect(get).not.toHaveBeenCalled();
       });
     });
 
@@ -270,18 +270,18 @@ describe('entities loading actions tests', () => {
       expect(isFunction(loadAllEntities)).toBe(true);
 
       return loadAllEntities(gmp)(filter)(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(isLoadingEntities).toBeCalledWith(myFilterAll);
-        expect(get).toBeCalledWith({filter: myFilterAll});
-        expect(actions.request).toBeCalledWith(myFilterAll);
-        expect(actions.success).toBeCalledWith(
+        expect(getState).toHaveBeenCalled();
+        expect(selector).toHaveBeenCalledWith({foo: 'bar'});
+        expect(isLoadingEntities).toHaveBeenCalledWith(myFilterAll);
+        expect(get).toHaveBeenCalledWith({filter: myFilterAll});
+        expect(actions.request).toHaveBeenCalledWith(myFilterAll);
+        expect(actions.success).toHaveBeenCalledWith(
           'foo',
           myFilterAll,
           loadedFilter,
           counts,
         );
-        expect(actions.error).not.toBeCalled();
+        expect(actions.error).not.toHaveBeenCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
         expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_SUCCESS_ACTION'}]);
@@ -342,13 +342,13 @@ describe('entities loading actions tests', () => {
       expect(isFunction(loadAllEntities)).toBe(true);
 
       return loadAllEntities(gmp)(filter)(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(isLoadingEntities).toBeCalledWith(myFilterAll);
-        expect(actions.request).toBeCalledWith(myFilterAll);
-        expect(actions.success).not.toBeCalled();
-        expect(actions.error).toBeCalledWith('AnError', myFilterAll);
-        expect(get).toBeCalledWith({filter: myFilterAll});
+        expect(getState).toHaveBeenCalled();
+        expect(selector).toHaveBeenCalledWith({foo: 'bar'});
+        expect(isLoadingEntities).toHaveBeenCalledWith(myFilterAll);
+        expect(actions.request).toHaveBeenCalledWith(myFilterAll);
+        expect(actions.success).not.toHaveBeenCalled();
+        expect(actions.error).toHaveBeenCalledWith('AnError', myFilterAll);
+        expect(get).toHaveBeenCalledWith({filter: myFilterAll});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
         expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_ERROR_ACTION'}]);
@@ -385,11 +385,11 @@ describe('entities loading actions tests', () => {
       expect(isFunction(loadEntities)).toBe(true);
 
       return loadEntities(gmp)()(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(isLoadingEntities).toBeCalled();
-        expect(dispatch).not.toBeCalled();
-        expect(get).not.toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(selector).toHaveBeenCalledWith({foo: 'bar'});
+        expect(isLoadingEntities).toHaveBeenCalled();
+        expect(dispatch).not.toHaveBeenCalled();
+        expect(get).not.toHaveBeenCalled();
       });
     });
 
@@ -437,18 +437,18 @@ describe('entities loading actions tests', () => {
       expect(isFunction(loadEntities)).toBe(true);
 
       return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(isLoadingEntities).toBeCalledWith('myfilter');
-        expect(get).toBeCalledWith({filter: 'myfilter'});
-        expect(actions.request).toBeCalledWith('myfilter');
-        expect(actions.success).toBeCalledWith(
+        expect(getState).toHaveBeenCalled();
+        expect(selector).toHaveBeenCalledWith({foo: 'bar'});
+        expect(isLoadingEntities).toHaveBeenCalledWith('myfilter');
+        expect(get).toHaveBeenCalledWith({filter: 'myfilter'});
+        expect(actions.request).toHaveBeenCalledWith('myfilter');
+        expect(actions.success).toHaveBeenCalledWith(
           'foo',
           'myfilter',
           loadedFilter,
           counts,
         );
-        expect(actions.error).not.toBeCalled();
+        expect(actions.error).not.toHaveBeenCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
         expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_SUCCESS_ACTION'}]);
@@ -489,13 +489,13 @@ describe('entities loading actions tests', () => {
       expect(isFunction(loadEntities)).toBe(true);
 
       return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(isLoadingEntities).toBeCalledWith('myfilter');
-        expect(actions.request).toBeCalledWith('myfilter');
-        expect(actions.success).not.toBeCalled();
-        expect(actions.error).toBeCalledWith('AnError', 'myfilter');
-        expect(get).toBeCalledWith({filter: 'myfilter'});
+        expect(getState).toHaveBeenCalled();
+        expect(selector).toHaveBeenCalledWith({foo: 'bar'});
+        expect(isLoadingEntities).toHaveBeenCalledWith('myfilter');
+        expect(actions.request).toHaveBeenCalledWith('myfilter');
+        expect(actions.success).not.toHaveBeenCalled();
+        expect(actions.error).toHaveBeenCalledWith('AnError', 'myfilter');
+        expect(get).toHaveBeenCalledWith({filter: 'myfilter'});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
         expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_ERROR_ACTION'}]);
@@ -537,14 +537,14 @@ describe('entities loading actions tests', () => {
       expect(isFunction(loadEntity)).toBe(true);
 
       return loadEntity(gmp)(id)(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(isLoadingEntity).toBeCalledWith(id);
-        expect(dispatch).not.toBeCalled();
-        expect(actions.success).not.toBeCalled();
-        expect(actions.error).not.toBeCalled();
-        expect(actions.request).not.toBeCalled();
-        expect(get).not.toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(selector).toHaveBeenCalledWith({foo: 'bar'});
+        expect(isLoadingEntity).toHaveBeenCalledWith(id);
+        expect(dispatch).not.toHaveBeenCalled();
+        expect(actions.success).not.toHaveBeenCalled();
+        expect(actions.error).not.toHaveBeenCalled();
+        expect(actions.request).not.toHaveBeenCalled();
+        expect(get).not.toHaveBeenCalled();
       });
     });
 
@@ -583,16 +583,16 @@ describe('entities loading actions tests', () => {
       expect(isFunction(loadEntity)).toBe(true);
 
       return loadEntity(gmp)(id)(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(isLoadingEntity).toBeCalledWith(id);
-        expect(actions.request).toBeCalledWith(id);
-        expect(actions.success).toBeCalledWith(id, {id, name: 'foo'});
-        expect(actions.error).not.toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(selector).toHaveBeenCalledWith({foo: 'bar'});
+        expect(isLoadingEntity).toHaveBeenCalledWith(id);
+        expect(actions.request).toHaveBeenCalledWith(id);
+        expect(actions.success).toHaveBeenCalledWith(id, {id, name: 'foo'});
+        expect(actions.error).not.toHaveBeenCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
         expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_SUCCESS_ACTION'}]);
-        expect(get).toBeCalledWith({id});
+        expect(get).toHaveBeenCalledWith({id});
       });
     });
 
@@ -629,16 +629,16 @@ describe('entities loading actions tests', () => {
       expect(isFunction(loadEntity)).toBe(true);
 
       return loadEntity(gmp)(id)(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(isLoadingEntity).toBeCalledWith(id);
-        expect(actions.request).toBeCalledWith(id);
-        expect(actions.success).not.toBeCalled();
-        expect(actions.error).toBeCalledWith(id, 'An error');
+        expect(getState).toHaveBeenCalled();
+        expect(selector).toHaveBeenCalledWith({foo: 'bar'});
+        expect(isLoadingEntity).toHaveBeenCalledWith(id);
+        expect(actions.request).toHaveBeenCalledWith(id);
+        expect(actions.success).not.toHaveBeenCalled();
+        expect(actions.error).toHaveBeenCalledWith(id, 'An error');
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
         expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_ERROR_ACTION'}]);
-        expect(get).toBeCalledWith({id});
+        expect(get).toHaveBeenCalledWith({id});
       });
     });
   });

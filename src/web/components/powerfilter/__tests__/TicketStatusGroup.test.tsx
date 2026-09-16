@@ -43,7 +43,7 @@ describe('TicketStatusGroup tests', () => {
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[2]);
 
-    expect(handleChange).toBeCalledWith('"Fix Verified"', 'status');
+    expect(handleChange).toHaveBeenCalledWith('"Fix Verified"', 'status');
   });
 
   test('should render title', () => {

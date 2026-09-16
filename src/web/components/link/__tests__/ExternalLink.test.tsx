@@ -76,7 +76,7 @@ describe('ExternalLink tests', () => {
 
     const dialog = within(screen.getDialog());
     fireEvent.click(dialog.getByText('Follow Link'));
-    expect(window.open).toBeCalledWith(
+    expect(window.open).toHaveBeenCalledWith(
       'http://foo.bar',
       '_blank',
       'noopener, scrollbars=1, resizable=1',

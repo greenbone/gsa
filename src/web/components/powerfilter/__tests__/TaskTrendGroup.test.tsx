@@ -56,8 +56,8 @@ describe('Task Trend Selector Tests', () => {
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[0]);
 
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('up', 'trend');
+    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith('up', 'trend');
   });
 
   test('should change value', async () => {
@@ -73,8 +73,8 @@ describe('Task Trend Selector Tests', () => {
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[2]);
 
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('more', 'trend');
+    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith('more', 'trend');
   });
 
   test('should use title', () => {
