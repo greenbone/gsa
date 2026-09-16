@@ -663,30 +663,6 @@
       "fingerprint": "src/web/components/chart/LineChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
     },
     {
-      "filename": "src/web/components/chart/WordCloudChart.tsx",
-      "code": "react(refs)",
-      "message": "Cannot access refs during render",
-      "location": {
-        "line": 89,
-        "column": 8,
-        "offset": 2105
-      },
-      "sourceLine": "if (!cloudRef.current) {",
-      "fingerprint": "src/web/components/chart/WordCloudChart.tsx|react(refs)|Cannot access refs during render|8|if (!cloudRef.current) {"
-    },
-    {
-      "filename": "src/web/components/chart/WordCloudChart.tsx",
-      "code": "react(set-state-in-effect)",
-      "message": "Calling setState synchronously within an effect can trigger cascading renders",
-      "location": {
-        "line": 104,
-        "column": 7,
-        "offset": 2518
-      },
-      "sourceLine": "setWords([]);",
-      "fingerprint": "src/web/components/chart/WordCloudChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setWords([]);"
-    },
-    {
       "filename": "src/web/components/dashboard/DashboardView.tsx",
       "code": "react(refs)",
       "message": "Cannot access refs during render",

@@ -86,21 +86,22 @@ const WordCloudChart = ({
   const [words, setWords] = useState<Word[]>([]);
   const cloudRef = useRef<Cloud | null>(null);
 
-  if (!cloudRef.current) {
-    cloudRef.current = createCloud(setWords);
-  }
-
   useEffect(() => {
-    const cloud = cloudRef.current as Cloud;
+    if (!cloudRef.current) {
+      cloudRef.current = createCloud(setWords);
+    }
+    const cloud = cloudRef.current;
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
     cloud.size([maxWidth, maxHeight]);
     cloud.stop();
-    cloud.words(createWords(data));
-    if (data.length > 0) {
+    cloud.words(createWords(data ?? []));
+
+    if (isDefined(data) && data.length > 0) {
       cloud.start();
     } else {
+      // oxlint-disable-next-line react/set-state-in-effect
       setWords([]);
     }
 
