@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type TestingLibraryMatchers} from '@testing-library/jest-dom/matchers';
 import {expect} from 'vitest';
 
 /**
@@ -194,14 +195,13 @@ expect.extend({
 
 // Declare custom matcher types for TypeScript
 declare module 'vitest' {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  interface Assertion<T = any> {
-    toHaveComputedStyle(property: string, expectedValue: string): T;
-    toHaveBackgroundColor(hex: string): T;
-    toHaveBorderColor(hex: string): T;
-    toHaveColor(hex: string): T;
-    toBackgroundGradientContainColor(hex: string): T;
-    toHaveStyleWithColor(property: string, hex: string): T;
+  interface Assertion<R, T> extends TestingLibraryMatchers<unknown, R> {
+    toHaveComputedStyle(property: string, expectedValue: string): R;
+    toHaveBackgroundColor(hex: string): R;
+    toHaveBorderColor(hex: string): R;
+    toHaveColor(hex: string): R;
+    toBackgroundGradientContainColor(hex: string): R;
+    toHaveStyleWithColor(property: string, hex: string): R;
   }
 
   interface AsymmetricMatchersContaining {
