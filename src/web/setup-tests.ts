@@ -4,14 +4,16 @@
  */
 
 import {testing} from '@gsa/testing';
+import * as jestDomMatchers from '@testing-library/jest-dom/matchers';
 // eslint-disable-next-line no-restricted-imports import/no-unassigned-import
 import '../setup-tests';
-
-// setup additional matchers for vitest
-import '@testing-library/jest-dom/vitest';
+import * as ResizeObserverModule from 'resize-observer-polyfill';
 // eslint-disable-next-line no-restricted-imports import/no-unassigned-import
 import 'web/testing/custom-matchers';
-import * as ResizeObserverModule from 'resize-observer-polyfill';
+import {expect} from 'vitest';
+
+// setup additional matchers for vitest
+expect.extend(jestDomMatchers);
 
 /* https://github.com/jsdom/jsdom#virtual-consoles
  * jsdom cannot parse some modern CSS.
