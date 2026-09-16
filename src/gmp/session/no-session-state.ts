@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+// oxlint-disable import/no-cycle
+
 import {type Date} from 'gmp/models/date';
 import {
   type SessionLoginData,

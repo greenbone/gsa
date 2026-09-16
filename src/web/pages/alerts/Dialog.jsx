@@ -143,21 +143,6 @@ Please contact your local system administrator if you think you
 should not have received it.
 `;
 
-export const VFIRE_CALL_DESCRIPTION = `After the event $e,
-the following condition was met: $c
-
-This ticket includes reports in the following format(s):
-$r.
-
-Full details and other report formats are available on the scan engine.
-$t
-
-Note:
-This ticket was created automatically as a security scan escalation.
-Please contact your local system administrator if you think it
-was created or assigned erroneously.
-`;
-
 const DEFAULTS = {
   active: YES_VALUE,
   comment: '',

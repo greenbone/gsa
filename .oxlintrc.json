@@ -40,6 +40,7 @@
     "gsa/prop-types": "off",
     "import/consistent-type-specifier-style": ["warn", "prefer-inline"],
     "import/newline-after-import": ["warn", {"considerComments": false}],
+    "import/no-cycle": "error",
     "react/exhaustive-deps": "warn",
     "react/immutability": "error",
     "react/jsx-fragments": ["warn", "syntax"],
