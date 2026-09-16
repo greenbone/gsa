@@ -9,6 +9,7 @@ import ItalianFlag from 'web/components/icon/flags/ItalianFlag';
 import JapaneseFlag from 'web/components/icon/flags/JapaneseFlag';
 import {type LanguageFlagProps} from 'web/components/icon/flags/LanguageFlagFrame';
 import SimplifiedChineseFlag from 'web/components/icon/flags/SimplifiedChineseFlag';
+import SwedishFlag from 'web/components/icon/flags/SwedishFlag';
 import TraditionalChineseFlag from 'web/components/icon/flags/TraditionalChineseFlag';
 
 type LanguageFlagComponentProps = {
@@ -30,6 +31,7 @@ const flags = {
   zh_CN: SimplifiedChineseFlag,
   zh_TW: TraditionalChineseFlag,
   it: ItalianFlag,
+  sv: SwedishFlag,
 } satisfies Record<LanguageCode, React.ComponentType<LanguageFlagProps>>;
 
 const LanguageFlag = ({language}: LanguageFlagComponentProps) => {

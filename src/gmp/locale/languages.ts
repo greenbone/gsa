@@ -12,6 +12,7 @@ export const LANGUAGE_CODES = [
   'zh_TW',
   'zh_CN',
   'it',
+  'sv',
 ] as const;
 
 export type LanguageCode = (typeof LANGUAGE_CODES)[number];
