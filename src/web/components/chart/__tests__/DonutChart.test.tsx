@@ -94,6 +94,24 @@ describe('DonutChart', () => {
     expect(screen.queryByText('Second')).not.toBeInTheDocument();
   });
 
+  test('should update chart width when the legend is toggled', () => {
+    const {render} = rendererWith();
+    const rendered = render(
+      <DonutChart data={data} height={300} showLegend={false} width={900} />,
+    );
+
+    const svg = screen.getByTestId('donut-chart-svg');
+    expect(svg).toHaveAttribute('width', '874');
+
+    rendered.rerender(<DonutChart data={data} height={300} width={900} />);
+    expect(svg).toHaveAttribute('width', '854');
+
+    rendered.rerender(
+      <DonutChart data={data} height={300} showLegend={false} width={900} />,
+    );
+    expect(svg).toHaveAttribute('width', '874');
+  });
+
   test('should render flat paths by default', () => {
     const {render} = rendererWith();
 

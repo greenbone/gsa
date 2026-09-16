@@ -64,7 +64,7 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
     let width = propWidth - MENU_PLACEHOLDER_WIDTH;
     const {current: legend} = legendRef;
 
-    if (legend !== null) {
+    if (showLegend && legend !== null) {
       const {width: legendWidth} = legend.getBoundingClientRect();
       width = width - legendWidth - LEGEND_MARGIN;
     }
@@ -74,7 +74,7 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
     }
 
     return width;
-  }, [propWidth, legendRef]);
+  }, [propWidth, showLegend]);
 
   const [chartWidth, setChartWidth] = useState(getWidth);
 

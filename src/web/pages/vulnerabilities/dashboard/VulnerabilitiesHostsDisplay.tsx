@@ -117,6 +117,7 @@ const VulnerabilitiesHostsDisplayInner = ({
           })}
           dataTransform={handleTransform}
           filter={filter}
+          showToggleLegend={false}
           title={() =>
             _('Vulnerabilities by Hosts (Total: {{count}})', {
               count: totalRef.current,
