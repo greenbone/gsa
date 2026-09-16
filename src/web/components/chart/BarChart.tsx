@@ -24,7 +24,7 @@ export interface BarChartDataPoint {
 }
 
 export interface BarChartProps<TData extends BarChartDataPoint> {
-  data: TData[];
+  data?: TData[];
   height: number;
   horizontal?: boolean;
   svgRef?: SvgRef;

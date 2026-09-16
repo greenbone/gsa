@@ -89,7 +89,7 @@ interface HostsTopologyChartProps {
   severityRating?: SeverityRating;
   height: number;
   width: number;
-  data: HostsTopologyChartData;
+  data?: HostsTopologyChartData;
   svgRef?: SvgRef;
   _: TranslateFunc;
   i18n: I18n;

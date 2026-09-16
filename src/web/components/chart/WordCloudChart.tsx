@@ -26,7 +26,7 @@ interface WordCloudChartData extends LegendData {
 }
 
 interface WordCloudChartProps {
-  data: WordCloudChartData[];
+  data?: WordCloudChartData[];
   width: number;
   height: number;
   svgRef?: SvgRef;

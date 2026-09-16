@@ -45,7 +45,7 @@ interface ClonedScheduleData extends ScheduleData {
 }
 
 interface ScheduleChartProps {
-  data: ScheduleData[];
+  data?: ScheduleData[];
   height: number;
   svgRef?: SvgRef;
   width: number;

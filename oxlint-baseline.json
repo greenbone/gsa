@@ -597,22 +597,10 @@
       "location": {
         "line": 82,
         "column": 5,
-        "offset": 2120
+        "offset": 2118
       },
       "sourceLine": "setChartWidth(currentWidth =>",
       "fingerprint": "src/web/components/chart/BarChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setChartWidth(currentWidth =>"
-    },
-    {
-      "filename": "src/web/components/chart/BarChart.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `TData[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 69,
-        "column": 10,
-        "offset": 1855
-      },
-      "sourceLine": "data = [],",
-      "fingerprint": "src/web/components/chart/BarChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `TData[]` (not nullish). This default assignment will never be used.|10|data = [],"
     },
     {
       "filename": "src/web/components/chart/base/ToolTip.tsx",
@@ -645,7 +633,7 @@
       "location": {
         "line": 79,
         "column": 48,
-        "offset": 2143
+        "offset": 2127
       },
       "sourceLine": "const [chartWidth, setChartWidth] = useState(getWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(refs)|Cannot access refs during render|48|const [chartWidth, setChartWidth] = useState(getWidth);"
@@ -657,7 +645,7 @@
       "location": {
         "line": 84,
         "column": 7,
-        "offset": 2249
+        "offset": 2233
       },
       "sourceLine": "setChartWidth(newWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
@@ -667,9 +655,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Host[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 521,
+        "line": 522,
         "column": 15,
-        "offset": 13046
+        "offset": 13089
       },
       "sourceLine": "hosts = [],",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Host[]` (not nullish). This default assignment will never be used.|15|hosts = [],"
@@ -677,23 +665,11 @@
     {
       "filename": "src/web/components/chart/HostsTopologyChart.tsx",
       "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `HostsTopologyChartData` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 233,
-        "column": 19,
-        "offset": 5911
-      },
-      "sourceLine": "const {data = {}} = nextProps;",
-      "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `HostsTopologyChartData` (not nullish). This default assignment will never be used.|19|const {data = {}} = nextProps;"
-    },
-    {
-      "filename": "src/web/components/chart/HostsTopologyChart.tsx",
-      "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Link[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 522,
+        "line": 523,
         "column": 15,
-        "offset": 13064
+        "offset": 13107
       },
       "sourceLine": "links = [],",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Link[]` (not nullish). This default assignment will never be used.|15|links = [],"
@@ -703,9 +679,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 554,
+        "line": 555,
         "column": 25,
-        "offset": 14003
+        "offset": 14046
       },
       "sourceLine": "onWheel={this.handleMouseWheel}",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|25|onWheel={this.handleMouseWheel}"
@@ -715,9 +691,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 553,
+        "line": 554,
         "column": 27,
-        "offset": 13964
+        "offset": 14007
       },
       "sourceLine": "onMouseUp={this.handleMouseUp}",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|27|onMouseUp={this.handleMouseUp}"
@@ -727,9 +703,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 551,
+        "line": 552,
         "column": 29,
-        "offset": 13876
+        "offset": 13919
       },
       "sourceLine": "onMouseDown={this.handleMouseDown}",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|29|onMouseDown={this.handleMouseDown}"
@@ -739,9 +715,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 552,
+        "line": 553,
         "column": 29,
-        "offset": 13921
+        "offset": 13964
       },
       "sourceLine": "onMouseMove={this.handleMouseMove}",
       "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|29|onMouseMove={this.handleMouseMove}"
@@ -753,34 +729,10 @@
       "location": {
         "line": 280,
         "column": 7,
-        "offset": 6939
+        "offset": 6937
       },
       "sourceLine": "setChartWidth(newWidth);",
       "fingerprint": "src/web/components/chart/LineChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
-    },
-    {
-      "filename": "src/web/components/chart/LineChart.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `LineData[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 236,
-        "column": 10,
-        "offset": 5732
-      },
-      "sourceLine": "data = [],",
-      "fingerprint": "src/web/components/chart/LineChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `LineData[]` (not nullish). This default assignment will never be used.|10|data = [],"
-    },
-    {
-      "filename": "src/web/components/chart/ScheduleChart.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `ScheduleData[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 166,
-        "column": 10,
-        "offset": 4467
-      },
-      "sourceLine": "data = [],",
-      "fingerprint": "src/web/components/chart/ScheduleChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `ScheduleData[]` (not nullish). This default assignment will never be used.|10|data = [],"
     },
     {
       "filename": "src/web/components/chart/WordCloudChart.tsx",
@@ -789,7 +741,7 @@
       "location": {
         "line": 89,
         "column": 8,
-        "offset": 2105
+        "offset": 2097
       },
       "sourceLine": "if (!cloudRef.current) {",
       "fingerprint": "src/web/components/chart/WordCloudChart.tsx|react(refs)|Cannot access refs during render|8|if (!cloudRef.current) {"
@@ -801,7 +753,7 @@
       "location": {
         "line": 104,
         "column": 7,
-        "offset": 2518
+        "offset": 2510
       },
       "sourceLine": "setWords([]);",
       "fingerprint": "src/web/components/chart/WordCloudChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setWords([]);"
@@ -813,7 +765,7 @@
       "location": {
         "line": 56,
         "column": 16,
-        "offset": 1395
+        "offset": 1387
       },
       "sourceLine": "let values = data.map(d => d.value).sort();",
       "fingerprint": "src/web/components/chart/WordCloudChart.tsx|typescript(require-array-sort-compare)|Require 'compare' argument.|16|let values = data.map(d => d.value).sort();"
