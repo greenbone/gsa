@@ -24,6 +24,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING, type SeverityRating} from 'gmp/utils/severity';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
+import {type SvgRef} from 'web/components/chart/base/Svg';
 import Layout from 'web/components/layout/Layout';
 import {type I18n, type TranslateFunc} from 'web/hooks/useTranslation';
 import {setRef} from 'web/utils/Render';
@@ -89,7 +90,7 @@ interface HostsTopologyChartProps {
   height: number;
   width: number;
   data: HostsTopologyChartData;
-  svgRef: React.Ref<SVGSVGElement>;
+  svgRef?: SvgRef;
   _: TranslateFunc;
   i18n: I18n;
 }
